@@ -1,0 +1,799 @@
+package de.uib.configed.gui.ssh;
+
+import de.uib.opsicommand.sshcommand.*;
+import  de.uib.opsidatamodel.*;
+import de.uib.configed.*;
+import de.uib.configed.gui.*;
+import de.uib.utilities.logging.*;
+import java.awt.event.*;
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.border.*;
+import java.io.*;
+import java.util.*;
+import de.uib.utilities.swing.*;
+import java.beans.*;
+
+public class SSHConfigDialog extends /*javax.swing.JDialog */ FGeneralDialog
+{
+	private GroupLayout gpl;
+	private JPanel connectionPanel = new JPanel();
+	private JPanel settingsPanel = new JPanel();
+	private JPanel buttonPanel = new JPanel();
+
+	// private final JFileChooser fchooser = new JFileChooser();
+	private static JCheckBox cb_useDefault;
+	private static JCheckBox cb_useKeyfile;
+	private JCheckBox cb_useOutputColor;
+	private JCheckBox cb_execInBackground;
+	private JButton btn_save;
+	private JButton btn_openChooser;
+	private JButton btn_close;
+	private JButton btn_kill;
+
+	private JLabel lbl_serverConfig = new JLabel();
+	private JLabel lbl_keyfile = new JLabel();
+	private JLabel lbl_passphrase = new JLabel();
+	private JLabel lbl_host = new JLabel();
+	private JLabel lbl_user = new JLabel();
+	private JLabel lbl_passw = new JLabel();
+	private JLabel lbl_port = new JLabel();
+	private JLabel lbl_connectionState = new JLabel();
+
+	private ButtonGroup buttonGroup1;
+	private JRadioButton rb_passw;
+	private JRadioButton rb_keyfile;
+	
+	private static JComboBox<String> cb_host;
+	private static JTextField tf_keyfile;
+	private static JPasswordField tf_passphrase;
+	private static JTextField tf_user;
+	private static JTextField tf_port;
+	private static JPasswordField tf_passw;
+	private static boolean cb_useDefault_state;
+	private static boolean cb_useOutputColor_state;
+	private static boolean cb_execInBackground_state;
+	private MainFrame main;
+	private ConfigedMain configedMain;
+	private static SSHConfigDialog instance ;
+	private static SSHConnectExec connection = null;
+	private static SSHConnectionInfo connectionInfo = null;
+		
+
+	private SSHConfigDialog(Frame owner, ConfigedMain cmain)
+	{
+		super(null,configed.getResourceValue("MainFrame.jMenuSSHConfig"), false);
+		main = (MainFrame) owner;
+		configedMain = cmain;
+		connectionInfo = SSHConnectionInfo.getInstance();
+
+		//this.centerOn(main);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		init();
+		// pack();
+		this.setSize(500, 535);
+		this.setVisible (true);
+		cb_useDefault_state = cb_useDefault.isSelected();
+		cb_useOutputColor_state = cb_useOutputColor.isSelected();
+		cb_execInBackground_state = cb_execInBackground.isSelected();
+		if (Globals.isGlobalReadOnly())
+		{
+			setComponentsEnabled_RO(false);
+		}
+	}
+
+	public static SSHConfigDialog getInstance(Frame fr, ConfigedMain cmain)
+	{
+		if (instance == null) 
+			instance = new SSHConfigDialog(fr, cmain);
+		instance.setVisible(true);
+		checkComponents();
+		return instance;
+	}
+	
+	private void checkComponentStates()
+	{
+		boolean state = compareStates();
+		logging.debug(this, "checkComponentStates  identical " + state); //setBtn_save setEnabled " + !state);
+		//btn_save.setEnabled( !state );
+		setSSHState();
+	}
+	private boolean compareStates()
+	{
+		logging.debug(this, "compareStates " );
+		
+		if (connectionInfo.getHost() == null)
+		{
+			logging.info(this, "probably host not in hostsAllowed");
+			return false;
+		}
+		
+		if ( !cb_useDefault.isSelected())
+		{
+			if (! connectionInfo.getHost().equals(cb_host.getSelectedItem()))
+			{
+				logging.debug(this, "compareStates 1" );
+				return false;
+			}
+			if (! connectionInfo.getUser().equals(tf_user.getText()))
+			{
+				logging.debug(this, "compareStates 2" );
+				return false;
+			}
+			if (! connectionInfo.getPassw().equals(new String(tf_passw.getPassword())))
+			{
+				logging.debug(this, "compareStates 3" );
+				logging.debug(this, "connection.getPW " + connectionInfo.getPassw());
+				logging.debug(this, "tf.getPW " + new String(tf_passw.getPassword()));
+				return false;
+			}
+			if ( (! connectionInfo.getPort().equals(tf_port.getText()))
+				&& (!connectionInfo.usesKeyfile()))
+			{
+				logging.debug(this, "compareStates 4" );
+				return false;
+			}
+		}
+		else
+		{
+			logging.info(this, "compareStates 5 "  +  connectionInfo.getHost() + " <> " + configedMain.HOST );
+			if (! connectionInfo.getHost().equals(configedMain.HOST))
+			{
+				logging.info(this, "compareStates 5 "  +  connectionInfo.getHost() + " <> " + configedMain.HOST ) ;
+				return false;
+			}
+			if (! connectionInfo.getPort().equals(tf_port.getText()))
+			{
+				logging.debug(this, "compareStates 6" );
+				return false;
+			}
+			if (! connectionInfo.getUser().equals(configedMain.USER))
+			{
+				logging.debug(this, "compareStates 7" );
+				return false;
+			}
+			if ( (! connectionInfo.getPassw().equals(configedMain.PASSWORD))
+				&& (! connectionInfo.usesKeyfile()))
+			{
+				logging.debug(this, "compareStates 8" );
+				return false;
+			}
+		}
+		if ( connectionInfo.usesKeyfile() != (cb_useKeyfile.isSelected()))
+		{
+			logging.debug(this, "compareStates 9" );
+			return false;
+		}
+		else
+			if (cb_useKeyfile.isSelected())
+			{
+				try
+				{
+					// if (connectionInfo.getKeyfilePath() != null)
+						if (! connectionInfo.getKeyfilePath().equals(tf_keyfile.getText()))
+						{
+							logging.debug(this, "compareStates 10" );
+							return false;
+						}
+
+					String pp = new String(tf_passphrase.getText());
+					// if (connectionInfo.getKeyfilePassphrase() != null)
+						if (! connectionInfo.getKeyfilePassphrase().equals(pp))
+						{
+							logging.debug(this, "compareStates 11" );
+							return false;
+						}
+				} catch (Exception e)
+				{
+					logging.warning(this, "Error " + e);
+					logging.logTrace(e);
+				}
+			}
+
+		if (cb_useOutputColor != null ) {
+			logging.debug(this, "compareStates  (factory.ssh_colored_output != cb_useOutputColor.isSelected()) "
+				+    SSHCommandFactory.getInstance().ssh_colored_output + " != " + cb_useOutputColor.isSelected());
+			if (SSHCommandFactory.getInstance().ssh_colored_output != cb_useOutputColor.isSelected())
+			{
+				logging.debug(this, "compareStates 12" );
+				return false;
+			}
+		}
+		if (cb_execInBackground != null ) {
+			logging.debug(this, "compareStates  (factory.ssh_always_exec_in_background != cb_execInBackground.isSelected()) "
+				+  SSHCommandFactory.getInstance().ssh_always_exec_in_background + " != " + cb_execInBackground.isSelected());
+			if (SSHCommandFactory.getInstance().ssh_always_exec_in_background != cb_execInBackground.isSelected())
+			{
+				logging.debug(this, "compareStates 13" );
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private void setSSHState()
+	{
+		String str = SSHCommandFactory.getInstance().getConnectionState();
+		logging.info(this, "setSSHState " + str);
+		String labeltext = "<html><font color='blue'>" + str +"</font></html>";
+		
+		btn_save.setEnabled( !str.equals ( SSHCommandFactory.CONNECTED ) );
+		btn_kill.setEnabled( str.equals (SSHCommandFactory.CONNECTED)  );
+		
+		if (str.equals(SSHCommandFactory.CONNECTED))
+		{
+			labeltext = "<html><font color='green'>" + str +"</font></html>";
+		}
+		else 
+		{
+			if (str.equals(SSHCommandFactory.NOT_CONNECTED))
+				labeltext = "<html><font color='red'>" + str +"</font></html>";
+		}
+		lbl_connectionState.setText(labeltext);
+		logging.debug(this, "setSSHState setText " + labeltext);
+	}
+
+	protected void init() 
+	{
+		logging.info(this, "init ");
+		connectionPanel.setBackground(Globals.backLightBlue);
+		settingsPanel.setBackground(Globals.backLightBlue);
+		buttonPanel.setBackground(Globals.backLightBlue);
+		getContentPane().add(connectionPanel, BorderLayout.NORTH);
+		getContentPane().add(settingsPanel, BorderLayout.CENTER);
+		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		
+		GroupLayout connectionPanelLayout = new GroupLayout((JComponent)connectionPanel);
+		connectionPanel.setLayout(connectionPanelLayout);
+		GroupLayout settingsPanelLayout = new GroupLayout((JComponent)settingsPanel);
+		settingsPanel.setLayout(settingsPanelLayout);
+		
+		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
+		
+		connectionPanel.setBorder(BorderFactory.createTitledBorder(configed.getResourceValue("SSHConnection.Config.serverPanelTitle")));
+		connectionPanel.setPreferredSize(new java.awt.Dimension(400, 350));
+		
+		settingsPanel.setBorder(BorderFactory.createTitledBorder(configed.getResourceValue("SSHConnection.Config.settingsPanelTitle")));
+		{
+			lbl_host = new JLabel();
+			lbl_host.setText(configed.getResourceValue("SSHConnection.Config.jLabelHost"));
+			
+			cb_host = new JComboBox<String>();
+			String host = connectionInfo.getHost();
+			if (host == null) host = ConfigedMain.HOST;
+			cb_host.addItem(host);
+				
+			PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+			Set<String> depots = persist.getDepotPropertiesForPermittedDepots().keySet();
+			depots.remove(host); //remove login host name if identical with depot fqdn
+			for (String depot : depots)
+			{
+				cb_host.addItem( depot );
+			}
+		
+			logging.debug(this, "init host " + host);
+			cb_host.setSelectedItem(host);
+			
+			cb_host.addItemListener(new ItemListener()
+			{
+				@Override
+				public void itemStateChanged(ItemEvent e) 
+				{
+					checkComponentStates();
+				}
+			});
+		}
+		{
+			lbl_port = new JLabel();
+			lbl_port.setText(configed.getResourceValue("SSHConnection.Config.jLabelPort"));
+			tf_port = new JTextField( new CheckedDocument(/*allowedChars*/
+				 new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', } ,5 ),
+				String.valueOf("22"), 1 );
+			tf_port.getDocument().addDocumentListener(new DocumentListener()
+			{
+				public void insertUpdate(DocumentEvent e) {
+					checkComponentStates();
+				}
+				public void removeUpdate(DocumentEvent e) {
+					checkComponentStates();
+				}
+				public void changedUpdate(DocumentEvent e) {
+					//Plain text components do not fire these events
+				}
+			});
+		}
+		{
+			lbl_user = new JLabel();
+			lbl_user.setText(configed.getResourceValue("SSHConnection.Config.jLabelUser"));
+			tf_user = new JTextField();
+			tf_user.setText(connectionInfo.getUser());
+			tf_user.getDocument().addDocumentListener(new DocumentListener()
+			{
+				public void insertUpdate(DocumentEvent e) {
+					checkComponentStates();
+				}
+				public void removeUpdate(DocumentEvent e) {
+					checkComponentStates();
+				}
+				public void changedUpdate(DocumentEvent e) {
+					//Plain text components do not fire these events
+				}
+			});
+		}
+		{
+			lbl_passw = new JLabel();
+			lbl_passw.setText(configed.getResourceValue("SSHConnection.Config.jLabelPassword"));
+			tf_passw = new JPasswordField();
+			tf_passw.setText(connectionInfo.getPassw());
+			// SSHConnectionInfo.getInstance().setPassw(ConfigedMain.PASSWORD);
+			tf_passw.getDocument().addDocumentListener(new DocumentListener()
+			{
+				public void insertUpdate(DocumentEvent e) {
+					checkComponentStates();
+				}
+				public void removeUpdate(DocumentEvent e) {
+					checkComponentStates();
+				}
+				public void changedUpdate(DocumentEvent e) {
+					//Plain text components do not fire these events
+				}
+			});
+		}
+		{
+			btn_save = new IconButton( de.uib.configed.configed.getResourceValue("SSHConnection.Config.SaveConfiguration"),
+				"images/apply.png", "images/apply.png", "images/apply_disabled.png",false);
+			btn_save.setPreferredSize( Globals.smallButtonDimension );
+			
+			btn_close = new IconButton( de.uib.configed.configed.getResourceValue("SSHConnection.Config.CancelConfiguration"),
+				"images/cancel.png", "images/cancel_over.png", " ", true);
+			btn_close.setPreferredSize( Globals.smallButtonDimension );
+			
+			btn_kill = new IconButton( de.uib.configed.configed.getResourceValue("SSHConnection.Config.StopUsing") ,
+			"images/edit-delete.png", "images/edit-delete.png", "images/edit-delete_disabled.png", false);
+			btn_kill.setPreferredSize( Globals.smallButtonDimension );
+			
+			btn_kill.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						btn_kill.setEnabled(false);
+						
+						logging.info(this, "actionPerformed on btn_kill " + SSHCommandFactory.getInstance().getConnectionState());
+						
+						
+						SSHCommandFactory.getInstance().unsetConnection();
+						//if (SSHCommandFactory.getInstance().getConnectionState().equals( SSHCommandFactory.CONNECTED ) )
+						//	SSHCommandFactory.getInstance().getConnection().disconnect();
+						// there seems to be nothing got disconnect
+						setSSHState();
+					}
+				}
+			);
+
+			buttonPanel.add(btn_save);
+			buttonPanel.add(btn_kill);
+			
+			buttonPanel.add(new JLabel("            "));
+			
+			
+			logging.info(this, "actionlistener for button1 " + Globals.isGlobalReadOnly() );
+			if (!(Globals.isGlobalReadOnly()))
+			{
+				btn_save.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						logging.debug(this, "actionPerformed on button1");
+						doAction1();
+					}
+				});
+			}
+		}
+		{
+			btn_openChooser = new IconButton( de.uib.configed.configed.getResourceValue("SSHConnection.Config.SelectKeyFile"),
+				"images/folder_16.png", " ", "images/folder_16.png",true);
+			btn_openChooser.setPreferredSize(new Dimension(Globals.buttonWidth/4, Globals.buttonHeight));
+			if (!(Globals.isGlobalReadOnly()))
+				btn_openChooser.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						doActionOeffnen();
+					}
+				});
+		}
+		{
+			buttonPanel.add(btn_close);
+			btn_close.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent e)
+				{
+					doAction2();
+				}
+			});
+		}
+		{
+			lbl_keyfile = new JLabel();
+			lbl_keyfile.setText(configed.getResourceValue("SSHConnection.Config.jLabelKeyfile"));
+			tf_keyfile = new JTextField();
+			tf_keyfile.setText(connectionInfo.getKeyfilePath());
+			tf_keyfile.getDocument().addDocumentListener(new DocumentListener()
+			{
+				public void insertUpdate(DocumentEvent e) {
+					checkComponentStates();
+				}
+				public void removeUpdate(DocumentEvent e) {
+					checkComponentStates();
+				}
+				public void changedUpdate(DocumentEvent e) {
+					//Plain text components do not fire these events
+				}
+			});
+		}
+		{
+			lbl_passphrase = new JLabel();
+			lbl_passphrase.setText(configed.getResourceValue("SSHConnection.Config.jLabelPassphrase"));
+			tf_passphrase = new JPasswordField();
+			tf_passphrase.setEnabled(false);
+			tf_passphrase.setText(connectionInfo.getKeyfilePassphrase());
+			tf_passphrase.getDocument().addDocumentListener(new DocumentListener()
+			{
+				public void insertUpdate(DocumentEvent e) {
+					checkComponentStates();
+				}
+				public void removeUpdate(DocumentEvent e) {
+					checkComponentStates();
+				}
+				public void changedUpdate(DocumentEvent e) {
+					//Plain text components do not fire these events
+				}
+			});
+		}
+		{
+			cb_useKeyfile = new JCheckBox();
+			cb_useKeyfile.setText(configed.getResourceValue("SSHConnection.Config.useKeyfile"));
+			cb_useKeyfile.setSelected(false);
+			tf_passw.setEnabled(false);
+			tf_keyfile.setEnabled(false);
+			cb_useKeyfile.addItemListener(new ItemListener() 
+			{
+				@Override
+				public void itemStateChanged(ItemEvent e) 
+				{
+					Boolean value = false;
+					if(e.getStateChange() == ItemEvent.SELECTED) 
+					{
+						value = true;
+					}
+					if (!cb_useDefault.isSelected())
+						tf_passw.setEnabled(!value);
+					btn_openChooser.setEnabled(value);
+					tf_keyfile.setEnabled(value);
+					tf_passphrase.setEnabled(value);
+					checkComponentStates();
+				}
+			});
+		}
+		{
+			cb_useDefault = new JCheckBox();
+			cb_useDefault.setText(configed.getResourceValue("SSHConnection.Config.useDefaultAuthentication"));
+			cb_useDefault.setSelected(true);
+			
+			setComponentsEditable(false);
+			cb_useDefault.addItemListener(new ItemListener() 
+			{
+				@Override
+				public void itemStateChanged(ItemEvent e) 
+				{
+					if(e.getStateChange() == ItemEvent.SELECTED) 
+					{
+						setComponentsEditable(false);
+						cb_host.setSelectedItem(connectionInfo.getHost());
+						tf_user.setText(connectionInfo.getUser());
+						tf_passw.setText(connectionInfo.getPassw());
+						tf_port.setText(connectionInfo.getPort());
+					}
+					else setComponentsEditable(true);
+					checkComponentStates();
+				}
+			});
+			
+			
+			// if (configedMain.SSHKEY != null)
+			if (connectionInfo.getKeyfilePath() != "")
+				cb_useKeyfile.setSelected(true);
+			// {
+			// if (connectionInfo.getKeyfilePassphrase() != "")
+				// if (configedMain.SSHKEYPASS != null)
+			// 	{
+			// 		btn_openChooser.setEnabled(true);
+			// 		tf_passphrase.setEnabled(true);
+			// 		tf_passphrase.setText(ConfigedMain.SSHKEYPASS);
+			// 		connectionInfo.useKeyfile(true, tf_keyfile.getText(), new String(tf_passphrase.getPassword()));
+			// 	}
+			// 	connectionInfo.useKeyfile(true, tf_keyfile.getText());
+			// 	connectionInfo.setUserData((String) cb_host.getSelectedItem(), tf_user.getText(), new String(tf_passw.getPassword()), tf_port.getText() );
+			// }
+			cb_useOutputColor = new JCheckBox();
+			cb_useOutputColor.setText(configed.getResourceValue("SSHConnection.Config.coloredOutput"));
+			cb_useOutputColor.setToolTipText(configed.getResourceValue("SSHConnection.Config.coloredOutput.tooltip"));
+			cb_useOutputColor.setSelected(true);
+			SSHCommandFactory.getInstance().ssh_colored_output = true;
+			cb_useOutputColor.addItemListener(new ItemListener() 
+			{
+				@Override
+				public void itemStateChanged(ItemEvent e) 
+				{
+					checkComponentStates();
+				}
+			});
+
+			cb_execInBackground = new JCheckBox();
+			cb_execInBackground.setText(configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground"));
+			cb_execInBackground.setToolTipText(configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground.tooltip"));
+			cb_execInBackground.setSelected(SSHCommandFactory.getInstance().ssh_always_exec_in_background);
+			cb_execInBackground.addItemListener(new ItemListener() 
+			{
+				@Override
+				public void itemStateChanged(ItemEvent e) 
+				{
+					checkComponentStates();
+				}
+			});
+		}
+		logging.debug(this, "sshConfigDialog building layout ");
+		connectionPanelLayout.setHorizontalGroup(connectionPanelLayout.createSequentialGroup()
+			.addGroup(connectionPanelLayout.createParallelGroup()
+				.addComponent(cb_useDefault, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addGroup(connectionPanelLayout.createSequentialGroup()
+					.addGap(Globals.vGapSize*2)
+					.addGroup(connectionPanelLayout.createParallelGroup()
+						.addComponent(lbl_host,GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lbl_port,GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lbl_user,GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lbl_passw,GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						)
+					.addGap(Globals.vGapSize)
+					.addGroup(connectionPanelLayout.createParallelGroup()
+						.addComponent(cb_host,GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addComponent(tf_port,GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addComponent(tf_user,GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addComponent(tf_passw,GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+					)
+					.addGap(Globals.vGapSize)
+				)
+				.addGap(Globals.vGapSize)
+				.addComponent(cb_useKeyfile, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addGroup(connectionPanelLayout.createSequentialGroup()
+					.addGap(Globals.vGapSize*2)
+					.addGroup(connectionPanelLayout.createParallelGroup()
+						.addComponent(lbl_keyfile,GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lbl_passphrase,GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+					)
+					.addGap(Globals.vGapSize)
+					.addGroup(connectionPanelLayout.createParallelGroup()
+						.addGroup(connectionPanelLayout.createSequentialGroup()
+							.addComponent(tf_keyfile,GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+							.addComponent(btn_openChooser,GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						)
+						.addComponent(tf_passphrase,GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+					)
+					// .addGroup(connectionPanelLayout.createParallelGroup()
+					// )
+					.addGap(Globals.vGapSize)
+				)
+				.addGroup(connectionPanelLayout.createSequentialGroup()
+					.addComponent(lbl_connectionState, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				)
+			)
+			.addContainerGap()
+		);
+	
+		connectionPanelLayout.setVerticalGroup(connectionPanelLayout.createSequentialGroup()
+			.addGap(Globals.vGapSize)
+			.addComponent(cb_useDefault, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			.addGap(Globals.vGapSize)
+			.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				.addComponent(cb_host, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(lbl_host, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			)
+			.addGap(Globals.vGapSize)
+			.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				.addComponent(tf_port, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(lbl_port, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			)
+			.addGap(Globals.vGapSize)
+			.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				.addComponent(tf_user, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(lbl_user, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			)
+			.addGap(Globals.vGapSize)
+			.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				.addComponent(tf_passw, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(lbl_passw, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			)
+			.addGap(Globals.vGapSize)
+			.addComponent(cb_useKeyfile, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			.addGap(Globals.vGapSize)
+			.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				.addComponent(btn_openChooser, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(tf_keyfile, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(lbl_keyfile, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			)
+			.addGap(Globals.vGapSize)
+			.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				.addComponent(tf_passphrase, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(lbl_passphrase, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			)
+			.addGap(Globals.vGapSize)
+			.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				.addComponent(lbl_connectionState, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			)
+			.addGap(Globals.vGapSize)
+			.addContainerGap(70, 70)
+		);
+
+		settingsPanelLayout.setHorizontalGroup(settingsPanelLayout.createSequentialGroup()
+			.addGroup(settingsPanelLayout.createParallelGroup()
+				.addComponent(cb_useOutputColor,GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE )
+				.addComponent(cb_execInBackground,GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE )
+			)
+		);
+		settingsPanelLayout.setVerticalGroup(settingsPanelLayout.createSequentialGroup()
+			.addComponent(cb_useOutputColor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			.addGap(10)
+			.addComponent(cb_execInBackground, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+		);
+	}
+
+	private void setComponentsEnabled_RO(boolean value)
+	{
+		cb_useDefault.setEnabled(value);
+		cb_useOutputColor.setEnabled(value);		
+		cb_execInBackground.setEnabled(value);
+		setComponentsEditable(value);
+	}
+
+	public void setComponentsEditable(boolean value)
+	{
+		cb_host.setEnabled(value);
+		tf_port.setEnabled(value);
+		tf_user.setEnabled(value);
+		if ( cb_useKeyfile.isSelected() )
+			tf_passw.setEnabled(false);
+		else 
+		{
+			tf_passw.setEnabled(value);
+		}
+		if (cb_useDefault.isSelected())
+			tf_passw.setEnabled(false);
+	}
+
+
+
+	/* This method is called when button 1 is pressed */
+	public void doAction1()
+	{
+		logging.info(this, "doAction1  " );
+		setSSHState( );
+		
+		if (cb_useDefault.isSelected() )
+		{
+			logging.info(this, "doAction1  cb_useDefault.isSelected true");
+			if (!cb_useDefault_state)
+			// state has changed
+			{
+				connectionInfo.setUserData(
+					ConfigedMain.HOST,
+					ConfigedMain.USER,
+					ConfigedMain.PASSWORD,
+					SSHConnect.portSSH);
+			}
+			
+			cb_host.setSelectedItem(connectionInfo.getHost());
+			tf_user.setText(connectionInfo.getUser());
+			tf_port.setText(connectionInfo.getPort());
+			tf_passw.setText(connectionInfo.getPassw());
+		}
+		else 
+		{
+			logging.info(this, "doAction1  cb_useDefault.isSelected false");
+			String host = (String) cb_host.getSelectedItem();
+			logging.info(this, "doAction1 host " + host);
+			// if(((DefaultComboBoxModel)cb_host.getModel()).getIndexOf(host) == -1 )
+			// 	cb_host.addItem(host);
+
+			connectionInfo.setUserData(host, tf_user.getText(), new String(tf_passw.getPassword()), tf_port.getText() );
+		}
+		connectionInfo.useKeyfile(false);
+		if (cb_useKeyfile.isSelected())
+		{
+			logging.info(this, "doAction1  cb_useKeyfile.isSelected true");
+			logging.info(this, "set keyfile true keyfile " + tf_keyfile.getText());
+			connectionInfo.useKeyfile(true, tf_keyfile.getText(), new String(tf_passphrase.getPassword()));
+			tf_passw.setText("");
+			connectionInfo.setPassw("");
+		}
+		else {
+			tf_passphrase.setText("");
+			tf_keyfile.setText("");
+		}
+		
+		
+		//de.uib.utilities.thread.WaitCursor waitCursor = new  de.uib.utilities.thread.WaitCursor( this, "connect" );
+
+		SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
+
+		
+		factory.testConnection(connectionInfo.getUser(), connectionInfo.getHost()) ;
+		
+		//waitCursor.stop();
+		// factory.testConnection(tf_user.getText(), (String) cb_host.getSelectedItem()) ;
+		factory.ssh_colored_output = cb_useOutputColor.isSelected();
+		factory.ssh_always_exec_in_background = cb_execInBackground.isSelected();
+		cb_useDefault_state = cb_useDefault.isSelected();
+		checkComponentStates();
+		logging.info(this, "request focus");
+	}
+	/* This method gets called when button 2 is pressed */
+	public void doAction2()
+	{
+		logging.info(this, "doAction2 cb_host.getSelectedItem() " + cb_host.getSelectedItem());
+		
+		super.doAction2();
+	}
+	public void doActionOeffnen()
+	{
+		final JFileChooser chooser = new JFileChooser("Choose directory");
+		chooser.setPreferredSize( de.uib.utilities.Globals.filechooserSize );
+		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		// final File file = new File("/home");
+		// chooser.setCurrentDirectory(file);
+		String userDirLocation = System.getProperty(logging.envVariableForUserDirectory);
+		File userDir = new File(userDirLocation);
+		// default to user directory
+		chooser.setCurrentDirectory(userDir);
+
+		chooser.setFileHidingEnabled(false);
+		chooser.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent e)
+			{
+				if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
+				    || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
+					final File f = (File) e.getNewValue();
+				}
+			}
+		});
+
+		chooser.setVisible(true);
+		final int result = chooser.showOpenDialog(((Component) this));
+
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File inputVerzFile = chooser.getSelectedFile();
+			String inputVerzStr = inputVerzFile.getPath();
+			tf_keyfile.setText(inputVerzStr);
+		}
+		logging.info(this, "doActionOeffnen canceled");
+		chooser.setVisible(false);
+	}
+	private static void checkComponents()
+	{
+		if (cb_useDefault.isSelected() )
+		{
+			connectionInfo.setUserData(
+				//null, null, null, null);
+				ConfigedMain.HOST, //persist.getHostInfoCollections().getConfigServer(),
+				ConfigedMain.USER,
+				ConfigedMain.PASSWORD,
+				SSHConnect.portSSH
+				);
+			
+		}
+		cb_host.setSelectedItem(connectionInfo.getHost());
+		tf_user.setText(connectionInfo.getUser());
+		tf_passw.setText(connectionInfo.getPassw());
+		tf_port.setText(connectionInfo.getPort());
+	}
+}
