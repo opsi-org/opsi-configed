@@ -17,7 +17,6 @@ import java.util.*;
 import de.uib.messages.Messages;
 import de.uib.configed.gui.*;
 import de.uib.configed.gui.productpage.*;
-import de.uib.opsidatamodel.dbtable.*;
 import de.uib.utilities.*;
 import de.uib.utilities.datastructure.*;
 import de.uib.utilities.logging.*;

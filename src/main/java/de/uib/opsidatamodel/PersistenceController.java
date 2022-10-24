@@ -17,7 +17,6 @@ import de.uib.configed.*;
 import de.uib.configed.type.*;
 import de.uib.configed.type.licences.*;
 import de.uib.utilities.observer.*;
-import de.uib.opsidatamodel.dbtable.*;
 //import de.uib.opsidatamodel.permission.*;
 import de.uib.utilities.datastructure.*;
 import de.uib.utilities.logging.*;

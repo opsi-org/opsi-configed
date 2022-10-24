@@ -1,0 +1,287 @@
+package de.uib.configed.gui.ssh;
+
+import de.uib.configed.gui.*;
+import de.uib.opsicommand.*;
+import de.uib.opsicommand.sshcommand.*;
+import java.awt.event.*;
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.event.*;
+import java.io.*;
+import java.util.*;
+import java.nio.charset.Charset;
+import java.util.regex.*;
+import de.uib.configed.*;
+import de.uib.opsidatamodel.*;
+import de.uib.utilities.thread.WaitCursor;
+import de.uib.utilities.logging.*;
+import javax.swing.border.LineBorder.*;
+
+public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerParameterDialog
+{
+	private JPanel mainPanel = new JPanel();
+	private JPanel radioPanel = new JPanel();
+	private SSHPMInstallLocalPanel installLocalPanel;
+	private SSHPMInstallServerPanel installServerPanel;
+	private SSHPMInstallWgetPanel installWgetPanel;
+	private SSHPMInstallSettingsPanel installSettingsPanel;
+	private JLabel lbl_install = new JLabel();
+
+	private JRadioButton rb_local;
+	private JRadioButton rb_server;
+	private JRadioButton rb_wget;
+	private String fromMakeProductfile;
+	public SSHPackageManagerInstallParameterDialog()
+	{
+		this(null);
+	}
+	public SSHPackageManagerInstallParameterDialog(ConfigedMain m)
+	{
+		this(m, "");
+	}
+	public SSHPackageManagerInstallParameterDialog(ConfigedMain m, String fullPathToPackage)
+	{
+		super(
+			Globals.APPNAME + "  " +
+			configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.title"));
+
+		WaitCursor waitCursor = new WaitCursor(this.getContentPane());
+		main = m;
+		fromMakeProductfile = fullPathToPackage;
+		super.initButtons(this);
+		installLocalPanel = new SSHPMInstallLocalPanel();
+		installServerPanel = new SSHPMInstallServerPanel(fromMakeProductfile);
+		installWgetPanel = new SSHPMInstallWgetPanel();
+		installSettingsPanel = new SSHPMInstallSettingsPanel(this);
+		
+		initInstances();
+		init();
+		initLayout();
+
+		pack();	
+		this.setSize(new Dimension( frameWidth, frameHeight));
+		this.centerOn(de.uib.configed.Globals.mainFrame);
+		this.setVisible (true);
+		waitCursor.stop();
+	}
+	
+	
+	private void initInstances() {
+		ButtonGroup group = new ButtonGroup();
+
+		rb_local = new JRadioButton(configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelFromLocal"));
+		rb_server = new JRadioButton(configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelFromServer"));
+		rb_wget = new JRadioButton(configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetFrom"));
+		group.add(rb_local);
+		group.add(rb_server);
+		group.add(rb_wget);
+
+
+		if ( (fromMakeProductfile != null) && (!fromMakeProductfile.equals("")) ) {
+			rb_server.setSelected(true);
+			installLocalPanel.isOpen = true; // if true, it can be closed
+			installLocalPanel.close();
+
+			installServerPanel.isOpen = false; // if false it can be opened
+			installServerPanel.open();
+
+			installServerPanel.setPackagePath(fromMakeProductfile);
+		}
+		else {
+
+			rb_local.setSelected(true);
+			installLocalPanel.isOpen = false; // if false it can be opened
+			installLocalPanel.open();
+
+			installServerPanel.isOpen = true; // if true, it can be closed
+			installServerPanel.close();
+		}
+		installWgetPanel.isOpen = true;
+		installWgetPanel.close();
+			
+		
+
+
+		rb_local.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					installLocalPanel.open();
+					installServerPanel.close();
+					installWgetPanel.close();
+				}
+			}
+		);
+		rb_server.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					installLocalPanel.close();
+					installServerPanel.open();
+					installWgetPanel.close();
+				}
+			}
+		);
+		rb_wget.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					installLocalPanel.close();
+					installServerPanel.close();
+					installWgetPanel.open();
+				}
+			}
+		);
+	}
+
+	
+
+	private void initLayout() {
+		int PREF = GroupLayout.PREFERRED_SIZE;
+		int MAX = Short.MAX_VALUE;
+
+		GroupLayout radioPanelLayout = new GroupLayout(radioPanel);
+		radioPanel.setLayout(radioPanelLayout);
+		
+			
+		radioPanelLayout.setHorizontalGroup( radioPanelLayout.createParallelGroup()
+			.addGap(Globals.gapSize)
+			.addComponent(rb_local,  PREF, PREF, PREF)
+			.addComponent(installLocalPanel,  PREF, PREF, MAX)
+			.addComponent(rb_server,  PREF, PREF, PREF)
+			.addComponent(installServerPanel,  PREF, PREF, MAX)
+			.addComponent(rb_wget,  PREF, PREF, PREF)
+			.addComponent(installWgetPanel,  PREF, PREF, MAX)
+			.addGap(2*Globals.gapSize)
+		);
+
+		radioPanelLayout.setVerticalGroup( radioPanelLayout.createSequentialGroup()
+			.addGap(Globals.gapSize)
+			.addComponent(rb_local, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
+			.addComponent(installLocalPanel, PREF, PREF, PREF)
+			.addGap(Globals.gapSize)
+			.addComponent(rb_server, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
+			.addComponent(installServerPanel, PREF, PREF, PREF)
+			.addGap(Globals.gapSize)
+			.addComponent(rb_wget, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
+			.addComponent(installWgetPanel, PREF, PREF, PREF)
+			.addGap(Globals.gapSize)
+		);
+
+
+		GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
+		mainPanel.setLayout(mainPanelLayout);
+		mainPanelLayout.setHorizontalGroup(mainPanelLayout.createParallelGroup()
+			// .addGap(3*Globals.gapSize)
+			.addGroup(mainPanelLayout.createSequentialGroup()
+				.addGap(Globals.gapSize*2)
+				.addComponent(lbl_install, PREF, PREF, PREF)
+				.addGap(Globals.gapSize)
+			)
+			.addGap(Globals.gapSize)
+			.addGroup(mainPanelLayout.createSequentialGroup()
+				.addGap(Globals.gapSize)
+				.addComponent(radioPanel, PREF, PREF, MAX)
+				.addGap(Globals.gapSize)
+			)
+			.addGap(Globals.gapSize)
+			.addGroup(mainPanelLayout.createSequentialGroup()
+				.addGap(Globals.gapSize)
+				.addComponent(installSettingsPanel, PREF, PREF, PREF)
+				.addGap(Globals.gapSize)
+			)
+			// .addGap(3*Globals.gapSize)
+		);
+
+		mainPanelLayout.setVerticalGroup( mainPanelLayout.createSequentialGroup()
+			.addGap(2*Globals.gapSize)
+			.addComponent(lbl_install)
+			.addGap(Globals.gapSize)
+			.addComponent(radioPanel)
+			.addGap(Globals.gapSize)
+			.addComponent(installSettingsPanel)
+			.addGap(2*Globals.gapSize)
+		);
+	}
+ 
+	protected void init() {
+		radioPanel.setBackground(Globals.backLightBlue);
+		mainPanel.setBackground(Globals.backLightBlue);
+		buttonPanel.setBackground(Globals.backLightBlue);
+		
+		getContentPane().add(mainPanel, BorderLayout.CENTER);
+		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
+		radioPanel.setBorder(BorderFactory.createTitledBorder(""));
+		lbl_install.setText(configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelInstall"));
+	}
+	
+	@Override
+	public void doAction1() 
+	{
+		logging.info(this, " doAction1 install " );
+		boolean sequential = false;
+		final SSHConnectExec ssh = new SSHConnectExec();
+		SSHCommand_Template commands = new SSHCommand_Template();
+		commands.setMainName("PackageInstallation");
+		CommandOpsiPackageManagerInstall pmInstallCom;
+
+		if (rb_local.isSelected()) {
+			sequential = true;
+			CommandSFTPUpload sftpcom = installLocalPanel.getCommand();
+			if (sftpcom == null){
+				logging.warning(this, "No opsi-package given. 1");
+				return;
+			}
+			commands.addCommand(sftpcom);
+			pmInstallCom = SSHPMInstallServerPanel.getCommand(sftpcom.getFullTargetPath());
+			if (pmInstallCom == null){
+				logging.warning(this, "No url given. 2");
+				return;
+			}
+			if (pmInstallCom != null ) commands.addCommand(pmInstallCom);
+			else logging.warning(this, "ERROR 0 command = null");
+		}
+
+
+		else if (rb_server.isSelected()) {
+			pmInstallCom = installServerPanel.getCommand();
+			if (pmInstallCom == null){
+				logging.warning(this, "No opsi-package selected. 3");
+				return;
+			}
+			if (pmInstallCom != null) commands.addCommand( pmInstallCom );
+			else logging.warning(this,"ERROR 1 command = null");
+		}
+
+
+		else { //if (rb_wget.isSelected()) {
+			sequential = true;
+			
+			commands = installWgetPanel.getCommand(commands);
+			if (commands == null) {
+				logging.warning(this, "No opsi-package given.4");
+				return;
+			}
+
+			pmInstallCom = SSHPMInstallServerPanel.getCommand(installWgetPanel.getProduct());
+			logging.info(this, "c " + pmInstallCom);
+			if (pmInstallCom != null ) commands.addCommand(pmInstallCom);
+			else logging.warning(this, "ERROR 3 command = null");
+		}
+
+		
+		pmInstallCom = installSettingsPanel.updateCommand((CommandOpsiPackageManagerInstall) pmInstallCom);
+
+		try 
+		{
+			((SSHConnectExec)ssh).exec_template(commands, sequential);
+			((SSHConnectExec)ssh).getDialog().setVisible(true);
+			logging.info(this, "doAction1 end " );
+		} 
+		catch(Exception e)
+		{ 
+			logging.error(this, "doAction1 Exception while exec_template " + e);
+			logging.logTrace(e);
+		}
+	}
+
+}

@@ -22,7 +22,6 @@ import de.uib.configed.gui.productpage.*;
 import de.uib.configed.gui.licences.*;
 import de.uib.configed.groupaction.*;
 import de.uib.configed.productaction.*;
-import de.uib.opsidatamodel.dbtable.*;
 import de.uib.utilities.*;
 import de.uib.utilities.datastructure.*;
 import de.uib.utilities.logging.*;

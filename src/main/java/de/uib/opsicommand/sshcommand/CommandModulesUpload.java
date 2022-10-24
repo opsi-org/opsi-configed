@@ -1,0 +1,78 @@
+package de.uib.opsicommand.sshcommand;
+
+import java.util.ArrayList;
+import de.uib.configed.*;
+import de.uib.configed.gui.*;
+import de.uib.configed.gui.ssh.*;
+
+public class CommandModulesUpload extends CommandSFTPUpload
+// implements SSHCommandNeedParameter, SSHSFTPCommand, SSHCommand
+{
+	public String actually_modules_directory = "/etc/opsi/";
+	public String unofficial_modules_directory = "/etc/opsi/modules.d/";
+	static public String DEFAULT_FILENAME = "modules";
+	public CommandModulesUpload(String title)
+	{
+		setTitle(title);
+		title = "Modules Upload";
+		baseName = "Modules Upload";
+		command = "Modules Upload (via sftp)";
+		description = "# write modules file to opsi-server";
+		targetPath = "/etc/opsi/";
+		targetFilename = DEFAULT_FILENAME;
+	}
+	public CommandModulesUpload()
+	{
+		this("");
+	}
+
+	public String getTitle()
+	{return title;}
+	public String getDescription()
+	{
+		if (description.equals(""))
+			description = "copy " + sourcePath  + sourceFilename
+					+ " to " + targetPath  + targetFilename
+					+ " on connected server";
+		return description;
+	}
+
+
+	@Override
+	public String getId()
+	{
+		return "CommandModulesUpload";
+	}
+
+
+	@Override
+	public String getMenuText()
+	{
+		return configed.getResourceValue("SSHConnection.command.modulesupload");
+	}
+
+
+	@Override
+	public String getToolTipText()
+	{
+		return configed.getResourceValue("SSHConnection.command.modulesupload.tooltip");
+	}
+
+	@Override
+	public void startParameterGui()
+	{
+		dialog = new SSHModulesUploadDialog();
+	}
+	@Override
+	public void startParameterGui(ConfigedMain main)
+	{
+		// dialog = new SSHModulesUploadDialog(main);
+		dialog = new SSHModulesUploadDialog();
+	}
+
+	@Override
+	public FGeneralDialog  getDialog()
+	{
+		return dialog;
+	}
+}

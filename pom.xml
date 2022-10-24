@@ -13,6 +13,50 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>jsch</groupId>
+            <artifactId>jsch</artifactId>
+            <scope>system</scope>
+            <version>0.1.55</version>
+            <systemPath>${basedir}/lib/jsch-0.1.55.jar</systemPath>
+        </dependency>
+
+         <dependency>
+            <groupId>swingx</groupId>
+            <artifactId>swingx</artifactId>
+            <scope>system</scope>
+            <version>1.6</version>
+            <systemPath>${basedir}/lib/swingx-1.6.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-parent</artifactId>
+            <scope>system</scope>
+            <version>25</version>
+            <systemPath>${basedir}/lib/commons-io.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <scope>system</scope>
+            <version>5.4.5</version>
+            <systemPath>${basedir}/lib/itext-pdf.jar</systemPath>
+        </dependency>
+
+         <dependency>
+            <groupId>lz4</groupId>
+            <artifactId>lz4</artifactId>
+            <scope>system</scope>
+            <version>1.7.1</version>
+            <systemPath>${basedir}/lib/lz4.jar</systemPath>
+        </dependency>
+    </dependencies>
+
+
+
     <build>
         <plugins>
             <plugin>
@@ -36,6 +80,32 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <!-- Build an executable JAR -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <!-- here we specify that we want to use the main method within the App class -->
+                            <mainClass>de.uib.configed.configed</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <configuration>
+                    <mainClass>de.uib.configed.configed</mainClass>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 </project>
