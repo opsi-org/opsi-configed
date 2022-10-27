@@ -1,111 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>configed</groupId>
-    <artifactId>configed</artifactId>
+	<groupId>configed</groupId>
+	<artifactId>configed</artifactId>
     <packaging>jar</packaging>
-    <version>0.1.0</version>
+    <version>0.1.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>jsch</groupId>
-            <artifactId>jsch</artifactId>
-            <scope>system</scope>
-            <version>0.1.55</version>
-            <systemPath>${basedir}/lib/jsch-0.1.55.jar</systemPath>
-        </dependency>
-
-         <dependency>
-            <groupId>swingx</groupId>
-            <artifactId>swingx</artifactId>
-            <scope>system</scope>
-            <version>1.6</version>
-            <systemPath>${basedir}/lib/swingx-1.6.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-parent</artifactId>
-            <scope>system</scope>
-            <version>25</version>
-            <systemPath>${basedir}/lib/commons-io.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>itextpdf</artifactId>
-            <scope>system</scope>
-            <version>5.4.5</version>
-            <systemPath>${basedir}/lib/itext-pdf.jar</systemPath>
-        </dependency>
-
-         <dependency>
-            <groupId>lz4</groupId>
-            <artifactId>lz4</artifactId>
-            <scope>system</scope>
-            <version>1.7.1</version>
-            <systemPath>${basedir}/lib/lz4.jar</systemPath>
-        </dependency>
-    </dependencies>
-
-
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>de.uib.configed.configed</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <Built-By>Nils Otto</Built-By>
+                            <Class-Path>lib/commons-io.jar lib/itext-pdf.jar lib/jsch-0.1.55.jar lib/lz4-1.7.1.jar lib/swingx-1.6.jar</Class-Path>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
                 <executions>
                     <execution>
+                        <id>default-copy-resources</id>
                         <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <transformers>
-                                <transformer
-                                    implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>de.uib.configed.configed</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
 
             <plugin>
-                <!-- Build an executable JAR -->
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.0</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <!-- here we specify that we want to use the main method within the App class -->
-                            <mainClass>de.uib.configed.configed</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.7</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <includeScope>system</includeScope>
+                            <includeScope>compile</includeScope>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <configuration>
-                    <mainClass>de.uib.configed.configed</mainClass>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
             </plugin>
-
         </plugins>
     </build>
+
+    <dependencies>
+
+        <!-- https://mvnrepository.com/artifact/com.jcraft/jsch -->
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.55</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/org.swinglabs/swingx -->
+        <dependency>
+            <groupId>org.swinglabs</groupId>
+            <artifactId>swingx</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.4.5</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/org.lz4/lz4-java -->
+        <dependency>
+            <groupId>org.lz4</groupId>
+            <artifactId>lz4-java</artifactId>
+            <version>1.8.0</version>
+        </dependency>
+
+
+
+
+
+
+
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>
