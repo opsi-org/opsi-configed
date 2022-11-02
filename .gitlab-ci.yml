@@ -4,7 +4,7 @@ run_tests:
         - apt-get update && apt-get --assume-yes install maven
         - mvn -version
         - java -version
-        - apt-get install openjdk-8-jdk
+        - apt-get --assume-yes install openjdk-8-jdk
         - java -version
     script:
         - mvn compile
