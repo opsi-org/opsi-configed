@@ -3,5 +3,6 @@ run_tests:
     before_script:
         - apt-get update && apt-get --assume-yes install maven
         - mvn -version
+        - java -version
     script:
         - mvn compile
