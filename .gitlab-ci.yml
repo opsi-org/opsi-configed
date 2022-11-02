@@ -4,5 +4,8 @@ run_tests:
         - apt-get update && apt-get --assume-yes install maven
         - mvn -version
         - java -version
+        - echo $JAVA_HOME
+        - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+        - echo $JAVA_HOME
     script:
         - mvn compile
