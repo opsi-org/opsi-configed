@@ -8,10 +8,14 @@ stages:          # List of stages for jobs, and their order of execution
 compile_and_package:
   image: openjdk:8
   stage: build
+  before_script:
+    - apt-get update
+    - apt-get --assume-yes install maven openjdk-8-jdk
   script:
-    - mvn package -Dmaven.test.skip
+    - mvn package
   artifacts:
     name: 'configed-build'
     paths:
       - configed.jar
+      - configed.version
     expire_in: 2 day
