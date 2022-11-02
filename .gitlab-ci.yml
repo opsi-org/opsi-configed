@@ -1,0 +1,6 @@
+run_tests:
+    image: docker.uib.gmbh/opsi/dev/pybuilder:uib-python-default
+    before-script:
+        - apt-get update && apt-get install maven
+    script:
+        - mvn compile
