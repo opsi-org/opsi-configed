@@ -1,5 +1,13 @@
 run_tests:
     image: docker.uib.gmbh/opsi/dev/pybuilder:uib-python-default
+    
+    artifacts:
+        name: 'configed-build'
+        paths:
+         - configed.jar
+
+        expire_in: 2 day
+
 
     before_script:
         - apt-get update
