@@ -2,11 +2,8 @@ run_tests:
     image: docker.uib.gmbh/opsi/dev/pybuilder:uib-python-default
 
     before_script:
-        - apt-get update && apt-get --assume-yes install maven
-        - mvn -version
-        - java -version
-        - apt-get --assume-yes install openjdk-8-jdk
-        - java -version
+        - apt-get update
+        - apt-get --assume-yes install maven openjdk-8-jdk
 
     script:
         - mvn package -Dmaven.test.skip
