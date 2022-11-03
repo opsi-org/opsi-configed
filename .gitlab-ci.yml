@@ -6,6 +6,7 @@ stages:          # List of stages for jobs, and their order of execution
 
 
 compile_and_package:
+  image: docker.uib.gmbh/opsi/dev/pybuilder:uib-python-default
   stage: build
   before_script:
     - apt-get --assume-yes install maven openjdk-8-jdk
