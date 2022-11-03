@@ -10,4 +10,5 @@ compile_and_package:
     name: 'configed-build'
     paths:
       - target/configed-configed.jar
+      - target/lib/*
     expire_in: 2 day
