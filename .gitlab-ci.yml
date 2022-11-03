@@ -9,9 +9,6 @@ compile_and_package:
   image: openjdk:8
   stage: build
   before_script:
-    - apt-get install software-properties-common
-    - apt-add-repository 'deb http://security.debian.org/debian-security stretch/updates main'
-    - apt-get -y update && apt-get -y upgrade
     - apt-get --assume-yes install maven openjdk-8-jdk
   script:
     - mvn package -Dmaven.test.skip
