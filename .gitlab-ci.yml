@@ -9,5 +9,5 @@ compile_and_package:
   artifacts:
     name: 'configed-build'
     paths:
-      - configed.jar
+      - target/configed.jar
     expire_in: 2 day
