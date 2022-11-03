@@ -1,21 +1,13 @@
-image: docker.uib.gmbh/opsi/dev/pybuilder:uib-python-default
-
-
-stages:         
-  - build
-
-
 compile_and_package:
-  stage: build
+  image: docker.uib.gmbh/opsi/dev/pybuilder:uib-python-default
   before_script:
     - apt-get update
     - apt-get --assume-yes install maven openjdk-8-jdk
   script:
     - mvn package -Dmaven.test.skip
+
   artifacts:
     name: 'configed-build'
     paths:
-      - target/configed-configed.jar
-      - target/src
+      - target/configed-*-jar-with-dependencies.jar
     expire_in: 2 day
-
