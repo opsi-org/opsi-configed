@@ -6,7 +6,6 @@ stages:          # List of stages for jobs, and their order of execution
 
 
 compile_and_package:
-  image: openjdk:8
   stage: build
   before_script:
     - apt-get --assume-yes install maven openjdk-8-jdk
