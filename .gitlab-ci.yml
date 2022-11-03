@@ -9,8 +9,8 @@ compile_and_package:
   image: openjdk:8
   stage: build
   before_script:
-    - apt-get update
-    - apt-get --assume-yes install maven openjdk-8-jdk
+    - sudo apt-get update
+    - sudo apt-get --assume-yes install maven openjdk-8-jdk
   script:
     - mvn package -Dmaven.test.skip
 
