@@ -1,13 +1,5 @@
-image: docker.uib.gmbh/opsi/dev/pybuilder:uib-python-default
-
-
-stages:          # List of stages for jobs, and their order of execution
-  - build
-
-
 compile_and_package:
   image: docker.uib.gmbh/opsi/dev/pybuilder:uib-python-default
-  stage: build
   before_script:
     - apt-get --assume-yes install maven openjdk-8-jdk
   script:
@@ -17,5 +9,4 @@ compile_and_package:
     name: 'configed-build'
     paths:
       - configed.jar
-      - configed.version
     expire_in: 2 day
