@@ -15,25 +15,27 @@ import de.uib.messages.Messages;
 
 
 class TestTest {
+	
+	private final static String FILENAME_VALID_LOCALISATIONS = "valid_localisations.conf";
 
   Logger log = Logger.getGlobal();
 
   /**
-   * Testet, ob die Übersetzungsdateien vollständig sind in dem Sinne, dass
-   * in jeder Datei die gleichen Properties enthalten sind...
-   * Gibt bei Fehler an, welche Properties fehlen
+   * This Test checks if all translation files are complete, i.e.
+   * if they all contain the same keywords;
+   * Test fails if all files don't contain exactly the same keywords
+   * or if a translation-file cannot be found
    */
     @Test
     void testIfEverythingTranslated() {
-	  	assertTrue(true);
 
       Properties properties = new Properties();
-      InputStream is = Messages.class.getResourceAsStream("valid_localisations.conf");
+      InputStream is = Messages.class.getResourceAsStream(FILENAME_VALID_LOCALISATIONS);
 
       try {
         properties.load(is);
       } catch (Exception e) {
-        assertTrue(false, "Fehler beim laden von 'valid_localisations.conf'");
+        assertTrue(false, "cannot load file with valid localisations: " + FILENAME_VALID_LOCALISATIONS);
       }
       
       Set<String> keySet = properties.stringPropertyNames();
@@ -58,10 +60,11 @@ class TestTest {
 
 
     /**
-     * Vergleicht zwei property-Files und checkt ab ob sie
-     * die selben Übersetzungswörter haben
-     * @param first erste Sprache (Kürzel)
-     * @param second zweite Sprache (Kürzel)
+     * Compares the files for both languages and checks if they have
+     * exactly the same properties / translation strings;
+     * Test fails if one file is not complete
+     * @param code first for first language
+     * @param second code for second language
      */
     void compareTwoLocals(String first, String second) {
 
@@ -77,25 +80,35 @@ class TestTest {
       try {
         firstProperties.load(firstInputStream);
       } catch(Exception e) {
-        log.info("Localization " + firstFileName + " not found");
-        assertTrue(false);
+        assertTrue(false, "Localization " + firstFileName + " not found");
       }
 
       try {
         secondProperties.load(secondInputStream);
       } catch(Exception e) {
-        log.info("Localization " + secondFileName + " not found");
-        assertTrue(false);
+        assertTrue(false, "Localization " + secondFileName + " not found");
       }
-
-      Set<String> firstMinusSecond = new HashSet<>(firstProperties.stringPropertyNames());
-      firstMinusSecond.removeAll(secondProperties.stringPropertyNames());
-
-      assertTrue(firstMinusSecond.isEmpty(), "Folgende properties fehlen in " + secondFileName + ":\n" + firstMinusSecond.toString());
-
-      Set<String> secondMinusFirst = new HashSet<>(secondProperties.stringPropertyNames());
-      secondMinusFirst.removeAll(firstProperties.stringPropertyNames());
-
-      assertTrue(secondMinusFirst.isEmpty(), "Folgende properties fehlen in " + firstFileName + ":\n" + secondMinusFirst.toString());
+      
+      Set<String> firstSet = firstProperties.stringPropertyNames();
+      Set<String> secondSet = secondProperties.stringPropertyNames();
+      
+      // Checks for both sets if one contains properties that
+      // the other one does not contain
+      checkIfFirstSetComplete(firstSet, firstFileName, secondSet);
+      checkIfFirstSetComplete(secondSet, secondFileName, firstSet);
     }
+    
+    /**
+     * Checks if some elements from the second set are missing in the first set;
+     * test fails in that case
+     */
+    void checkIfFirstSetComplete(Set<String> firstSet, String firstFileName, Set<String> secondSet) {
+		
+		// Creates a set with the elements existing in secondSet,
+		// but missing in the firstSet
+		Set<String> differenceSet = new HashSet<>(secondSet);
+		differenceSet.removeAll(firstSet);
+		
+		assertTrue(differenceSet.isEmpty(), "The following properties are missing in " + firstFileName + ":\n" + differenceSet.toString());
+  }
 }
