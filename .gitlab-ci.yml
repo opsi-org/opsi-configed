@@ -15,14 +15,14 @@ compile_and_package:
   artifacts:
     name: 'configed-build'
     paths:
-      - target/configed-*-jar-with-dependencies.jar
+      - target/configed-4.2.15.1.1-SNAPSHOT-jar-with-dependencies.jar
     expire_in: 2 day
 
 
 signandupload:
   stage: sign
   script:
-    - opsi-dev-tool -l info --signserver-sign target/configed-*-jar-with-dependencies.jar
+    - opsi-dev-tool -l info --signserver-sign target/configed-4.2.15.1.1-SNAPSHOT-jar-with-dependencies.jar
 #    - version=$(cat configed.version)
 #    - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-tool -l info --binary-push configed.jar configed all all $version "$CI_JOB_ID"'
 #    - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-tool -l info --binary-push configed.jar configed all all $version'
