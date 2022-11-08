@@ -1,7 +1,6 @@
 package properties;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
 import java.util.HashSet;
@@ -9,7 +8,8 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Logger;
-import java.util.logging.Level;
+
+import org.junit.jupiter.api.Test;
 
 import de.uib.messages.Messages;
 
