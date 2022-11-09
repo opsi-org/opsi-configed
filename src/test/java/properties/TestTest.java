@@ -109,6 +109,6 @@ class TestTest {
 		Set<String> differenceSet = new HashSet<>(secondSet);
 		differenceSet.removeAll(firstSet);
 		
-		assertTrue(differenceSet.isEmpty(), "The following properties are missing in " + firstFileName + ":\n" + differenceSet.toString());
+		assertTrue(differenceSet.isEmpty(), "\nAt least " + differenceSet.size() + "  properties are missing in " + firstFileName + ":\n" + differenceSet.toString());
   }
 }
