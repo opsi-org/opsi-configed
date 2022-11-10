@@ -1,0 +1,10 @@
+{
+    "editor.formatOnSave": true,
+    "sonarlint.testFilePattern": "src/test/java/**",
+    "editor.defaultFormatter": "redhat.java",
+    "java.format.settings.url": ".vscode/java-formatter.xml",
+    "[java]": {
+        "editor.detectIndentation": false,
+        "editor.insertSpaces": false
+    },
+}
