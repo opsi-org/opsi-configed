@@ -13,34 +13,26 @@
 
 package de.uib.configed;
 
-import java.util.*;
-import de.uib.messages.Messages;
-import de.uib.configed.gui.*;
-import de.uib.configed.gui.productpage.*;
-import de.uib.utilities.*;
-import de.uib.utilities.datastructure.*;
-import de.uib.utilities.logging.*;
-import de.uib.utilities.swing.*;
-import de.uib.utilities.swing.list.*;
-import de.uib.utilities.table.*;
-import de.uib.utilities.table.gui.*;
-import de.uib.utilities.table.provider.*;
-import de.uib.utilities.table.updates.*;
-import de.uib.utilities.thread.WaitCursor;
-import de.uib.utilities.thread.WaitingCycle;
-import de.uib.opsidatamodel.*;
-import de.uib.opsidatamodel.datachanges.*;
-import de.uib.opsicommand.ConnectionState;
-import de.uib.configed.Globals;
-import de.uib.configed.type.*;
-import de.uib.opsidatamodel.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.text.MessageFormat;
-import javax.swing.event.*;
-import java.net.URL;
-import java.io.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.Vector;
+
+import javax.swing.Icon;
+import javax.swing.SwingUtilities;
+import javax.swing.event.TableModelListener;
+
+import de.uib.configed.gui.FSoftwarename2LicencePool;
+import de.uib.configed.gui.FTextArea;
+import de.uib.configed.gui.PanelDashControl;
+import de.uib.opsidatamodel.PersistenceController;
+import de.uib.utilities.logging.logging;
+import de.uib.utilities.table.GenTableModel;
+import de.uib.utilities.table.provider.DefaultTableProvider;
+import de.uib.utilities.table.provider.RetrieverMapSource;
+import de.uib.utilities.table.updates.TableUpdateCollection;
 
 
 public class ControlDash
