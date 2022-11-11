@@ -85,6 +85,7 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.provider.RowsProvider;
 import de.uib.utilities.table.provider.TableProvider;
 import de.uib.utilities.thread.WaitCursor;
+
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.DisplayMode;

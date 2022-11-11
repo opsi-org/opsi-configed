@@ -11,11 +11,12 @@
 
 package de.uib.configed.type;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Vector;
 
 import de.uib.opsidatamodel.productstate.ActionRequest;
-
-import de.uib.utilities.logging.*;
+import de.uib.utilities.logging.logging;
 
 //data source product table
 public class OpsiProductInfo extends OpsiPackage {
