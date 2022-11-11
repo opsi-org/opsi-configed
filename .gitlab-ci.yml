@@ -29,7 +29,7 @@ sonarqube-check:
     paths:
       - .sonar/cache
   script: 
-    - mvn sonar:sonar -Dsonar.projectKey=configed:configed || true
+    - mvn verify sonar:sonar -Dsonar.projectKey=configed:configed || true
   allow_failure: true
   only:
     - main # or the name of your main branch
