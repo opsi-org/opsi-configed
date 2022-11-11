@@ -9,134 +9,103 @@
  * License, version AGPLv3, as published by the Free Software Foundation
  *
  */
- 
+
 package de.uib.configed.groupaction;
 
-import java.util.*;
-import javax.swing.tree.*;
+import java.util.Set;
 
-import de.uib.configed.gui.*;
-import de.uib.configed.tree.*;
-import de.uib.utilities.tree.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 
 import de.uib.configed.HostsStatusInfo;
 import de.uib.configed.configed;
-import de.uib.configed.Globals;
+import de.uib.utilities.logging.logging;
 
-import de.uib.utilities.logging.*;
-
-
-public class ActivatedGroupModel
-{
+public class ActivatedGroupModel {
 	protected String groupName;
 	protected String groupDescription;
 	protected TreePath path;
 	protected DefaultMutableTreeNode node;
-	
+
 	protected Set<String> associatedClients;
-	
+
 	protected boolean active = false;
-	
+
 	private HostsStatusInfo hostsInfo;
-	
-	public ActivatedGroupModel(HostsStatusInfo hostsInfo)
-	{
+
+	public ActivatedGroupModel(HostsStatusInfo hostsInfo) {
 		this.hostsInfo = hostsInfo;
 	}
-	
-	public void setActive(boolean b)
-	{
+
+	public void setActive(boolean b) {
 		logging.info(this, "setActive " + b);
-		
+
 		active = b;
-		
-		if (b && groupName != null)
-		{
+
+		if (b && groupName != null) {
 			hostsInfo.setGroupName(groupName);
-			hostsInfo.setGroupClientsCount( associatedClients.size() );
+			hostsInfo.setGroupClientsCount(associatedClients.size());
 			configed.savedStates.saveGroupSelection.serialize(groupName);
 		}
-		
+
 	}
-	
-	public boolean isActive()
-	{
+
+	public boolean isActive() {
 		return active;
 	}
-	
-	public void setNode(String name, DefaultMutableTreeNode n, TreePath p)
-	{
+
+	public void setNode(String name, DefaultMutableTreeNode n, TreePath p) {
 		logging.info(this, "setNode " + name);
 		groupName = name;
 		node = n;
 		path = p;
 		hostsInfo.setGroupName(name);
 	}
-	
-	public void setDescription(String s)
-	{
+
+	public void setDescription(String s) {
 		groupDescription = s;
 	}
-	
-	public void setAssociatedClients (Set<String> clients)
-	{
+
+	public void setAssociatedClients(Set<String> clients) {
 		associatedClients = clients;
-		hostsInfo.setGroupClientsCount( clients.size() );
+		hostsInfo.setGroupClientsCount(clients.size());
 	}
-	
-	public Set<String> getAssociatedClients()
-	{
+
+	public Set<String> getAssociatedClients() {
 		return associatedClients;
 	}
-		
-	
-	public int getNumberOfClients()
-	{
+
+	public int getNumberOfClients() {
 		if (associatedClients == null)
 			return 0;
-		
+
 		return associatedClients.size();
 	}
-	
-	public String getGroupName()
-	{
+
+	public String getGroupName() {
 		return "" + groupName;
 	}
-	
-	public String getLabel()
-	{
-		if (
-			groupName != null 
-			&& groupDescription != null 
-			&& !groupDescription.equals(groupName)
-			&& !groupDescription.equals("")
-			)
-			return 
+
+	public String getLabel() {
+		if (groupName != null && groupDescription != null && !groupDescription.equals(groupName)
+				&& !groupDescription.equals(""))
+			return
 			//"<html><b>" + 
-			groupName 
-			//+ "</b> "
-			+  "  (" + groupDescription + ") "
+			groupName
+					//+ "</b> "
+					+ "  (" + groupDescription + ") "
 			//+ </html>"
 			;
-		
-		return 
-			""
-			//+ <html><b>" 
-			+ groupName 
-			//+ "</b></html>"
-			;
+
+		return ""
+				//+ <html><b>" 
+				+ groupName
+		//+ "</b></html>"
+		;
 	}
-	
-	public String getGroupDescription()
-	{
+
+	public String getGroupDescription() {
 		return "" + groupDescription;
 	}
-	
+
 }
-	
-	
-	
-	
-	
-	
-	

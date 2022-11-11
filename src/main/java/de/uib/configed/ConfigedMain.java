@@ -198,7 +198,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected String[] objectIds = new String[] {};
 	protected String[] selectedDepots = new String[] {};
 	protected String[] oldSelectedDepots;
-	protected Vector<String> selectedDepotsV = new Vector<String>();
+	protected Vector<String> selectedDepotsV = new Vector<>();
 
 	protected boolean anyDataChanged = false;
 
