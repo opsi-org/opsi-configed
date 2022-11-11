@@ -7,5 +7,5 @@
         "editor.detectIndentation": false,
         "editor.insertSpaces": false
     },
-    "java.saveActions.organizeImports": true,
+    "java.saveActions.organizeImports": true
 }
