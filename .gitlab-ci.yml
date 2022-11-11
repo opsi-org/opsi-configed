@@ -9,7 +9,7 @@ compile_and_package:
   image: maven:3.6.3-jdk-11
   stage: build
   script:
-    - mvn package -Dmaven.test.skip
+    - mvn package
 
   artifacts:
     name: 'configed-build'
@@ -29,8 +29,8 @@ sonarqube-check:
     paths:
       - .sonar/cache
   script: 
-    - mvn verify sonar:sonar -Dsonar.projectKey=configed:${CI_COMMIT_BRANCH} || true
-  allow_failure: true
+    - mvn verify sonar:sonar -Dsonar.projectKey=configed:configed
+  allow_failure: false
   only:
     - main # or the name of your main branch
 
