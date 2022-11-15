@@ -1,0 +1,105 @@
+.border-pane {
+	-fx-background-color: #FFFFFF;
+	-fx-padding: 10px;
+}
+
+.pane {
+	-fx-background-color: #FFFFFF;
+	-fx-padding: 10px;
+}
+
+.pane-hoverable:hover {
+	-fx-cursor: hand;
+	-fx-opacity: 0.7;
+}
+
+.choice-box {
+	-fx-background-color: transparent;
+}
+
+.hbox {
+	-fx-background-color: #FFFFFF;
+}
+
+.tree-view, .tree-cell {
+	-fx-background-color: #DCE4F2;
+}
+
+.list-cell:selected {
+	-fx-background-color: #CCDCEE;
+	-fx-text-background-color: #000000;
+}
+
+.list-view .virtual-flow .scroll-bar:vertical,
+.list-view .virtual-flow .scroll-bar:vertical .track,
+.list-view .virtual-flow .scroll-bar:vertical .track-background,
+.list-view .virtual-flow .scroll-bar:horizontal,
+.list-view .virtual-flow .scroll-bar:horizontal .track,
+.list-view .vritual-flow .scroll-bar:horizontal .track-background {
+	-fx-background-color: white;
+}
+
+.btn {
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+}
+
+.check-box .box {
+	-fx-background-color: transparent;
+	-fx-border-color: black;
+	-fx-border-radius: 3px;
+}
+
+.table-view {
+	-fx-background-color: transparent;
+}
+
+.table-view .column-header-background .filler {
+	-fx-background-color: transparent;
+}
+
+.table-view .corner {
+	-fx-background-color: transparent;
+}
+
+.table-view .column-header-background {
+	-fx-background-color: white;
+	-fx-background-radius: 7px 7px 0px 0px;
+	-fx-border-color: black;
+	-fx-border-width: 0px 0px 1px 0px;
+}
+
+.table-view .column-header {
+	-fx-background-color: transparent;
+}
+
+.table-view .column-header,
+.table-view .column-header .filler,
+.table-view .column-header-background .filler {
+	-fx-size: 50px;
+}
+
+.table-view .table-cell {
+	-fx-border-color: transparent;
+	-fx-padding: 2px 0px 2px 10px;
+}
+
+.table-row-cell:selected {
+	-fx-background-color: #CCDCEE;
+	-fx-background-insets: 0;
+	-fx-background-radius: 1;
+	-fx-text-background-color: #000000;
+}
+
+.table-view .virtual-flow .scroll-bar:vertical,
+.table-view .virtual-flow .scroll-bar:vertical .track,
+.table-view .virtual-flow .scroll-bar:vertical .track-background,
+.table-view .virtual-flow .scroll-bar:horizontal,
+.table-view .virtual-flow .scroll-bar:horizontal .track,
+.table-view .vritual-flow .scroll-bar:horizontal .track-background {
+	-fx-background-color: white;
+}
+
+.table-row-cell:expired {
+	-fx-background-color: red;
+}

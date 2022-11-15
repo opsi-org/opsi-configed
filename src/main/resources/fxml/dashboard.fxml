@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.uib.configed.dashboard.chart.ClientLastSeenComparison?>
+<?import de.uib.configed.dashboard.chart.InstalledOSComparison?>
+<?import de.uib.configed.dashboard.chart.LicenseStatusComparison?>
+<?import de.uib.configed.dashboard.chart.ModuleStatusComparison?>
+<?import de.uib.configed.dashboard.chart.ProductStatusComparison?>
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="894.0" prefWidth="1907.0" styleClass="primary-background" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox fx:id="dashboardSceneVBox" spacing="20.0" styleClass="primary-background">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                     <children>
+                        <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                           <center>
+                              <Label fx:id="depotsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="28.0" />
+                                 </font>
+                              </Label>
+                           </center>
+                           <bottom>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.depotTitle" BorderPane.alignment="CENTER" />
+                           </bottom>
+                        </BorderPane>
+                        <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                           <center>
+                              <Label fx:id="clientsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="28.0" />
+                                 </font>
+                              </Label>
+                           </center>
+                           <bottom>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.clientTitle" BorderPane.alignment="CENTER" />
+                           </bottom>
+                        </BorderPane>
+                        <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                           <center>
+                              <Label fx:id="productsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="28.0" />
+                                 </font>
+                              </Label>
+                           </center>
+                           <bottom>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.productTitle" BorderPane.alignment="CENTER" />
+                           </bottom>
+                        </BorderPane>
+                        <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                           <center>
+                              <Label fx:id="localbootProductsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="28.0" />
+                                 </font>
+                              </Label>
+                           </center>
+                           <bottom>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.localbootProductsTitle" BorderPane.alignment="CENTER" />
+                           </bottom>
+                        </BorderPane>
+                        <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                           <center>
+                              <Label fx:id="netbootProductsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="28.0" />
+                                 </font>
+                              </Label>
+                           </center>
+                           <bottom>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.netbootProductsTitle" BorderPane.alignment="CENTER" />
+                           </bottom>
+                        </BorderPane>
+                        <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                           <center>
+                              <Label fx:id="installedOSsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="28.0" />
+                                 </font>
+                              </Label>
+                           </center>
+                           <bottom>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.installedOSTitle" BorderPane.alignment="CENTER" />
+                           </bottom>
+                        </BorderPane>
+                        <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                           <center>
+                              <Label fx:id="modulesNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="28.0" />
+                                 </font>
+                              </Label>
+                           </center>
+                           <bottom>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.moduleTitle" BorderPane.alignment="CENTER" />
+                           </bottom>
+                        </BorderPane>
+                        <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                           <center>
+                              <Label fx:id="licensesNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="28.0" />
+                                 </font>
+                              </Label>
+                           </center>
+                           <bottom>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.licencesTitle" BorderPane.alignment="CENTER" />
+                           </bottom>
+                        </BorderPane>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="503.0" prefWidth="1867.0" spacing="20.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <VBox spacing="20.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <VBox prefHeight="379.0" prefWidth="342.0" spacing="10.0" styleClass="pane">
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.depotTitle">
+                                             <font>
+                                                <Font size="22.0" />
+                                             </font>
+                                          </Text>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="24.0" prefWidth="360.0" spacing="20.0">
+                                             <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.selectedDepotText" textOrigin="CENTER" HBox.hgrow="ALWAYS" />
+                                                <ChoiceBox fx:id="selectedDepotChoiceBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="24.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </HBox>
+                                          <GridPane VBox.vgrow="ALWAYS">
+                                             <columnConstraints>
+                                                <ColumnConstraints hgrow="ALWAYS" maxWidth="133.0" minWidth="10.0" prefWidth="133.0" />
+                                                <ColumnConstraints hgrow="ALWAYS" maxWidth="215.0" minWidth="10.0" prefWidth="189.0" />
+                                             </columnConstraints>
+                                             <rowConstraints>
+                                                <RowConstraints maxHeight="119.0" minHeight="10.0" prefHeight="64.0" vgrow="ALWAYS" />
+                                                <RowConstraints maxHeight="211.0" minHeight="10.0" prefHeight="186.0" vgrow="ALWAYS" />
+                                             </rowConstraints>
+                                             <children>
+                                                <Label text="%Dashboard.depot.type" GridPane.valignment="TOP" />
+                                                <Label text="%Dashboard.depot.description" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                                                <TextFlow prefHeight="7.0" prefWidth="195.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                                                   <children>
+                                                      <Text fx:id="depotTypeText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                                   </children>
+                                                </TextFlow>
+                                                <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+                                                   <children>
+                                                      <Text fx:id="depotDescriptionText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="100.0" />
+                                                   </children>
+                                                </TextFlow>
+                                             </children>
+                                          </GridPane>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </padding>
+                                    </VBox>
+                                    <VBox fx:id="productDataDisplayAreaVBox" prefHeight="326.0" prefWidth="349.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.productTitle">
+                                             <font>
+                                                <Font size="22.0" />
+                                             </font>
+                                          </Text>
+                                          <ProductStatusComparison fx:id="productStatusComparison" VBox.vgrow="ALWAYS" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </padding>
+                                       <styleClass>
+                                          <String fx:value="pane" />
+                                          <String fx:value="pane-hoverable" />
+                                       </styleClass>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <VBox fx:id="clientDataDisplayAreaVBox" prefHeight="397.0" prefWidth="492.0" spacing="10.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <Text fx:id="clientsTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.clientTitle">
+                                       <font>
+                                          <Font size="22.0" />
+                                       </font>
+                                    </Text>
+                                    <ClientLastSeenComparison fx:id="clientLastSeenComparison" VBox.vgrow="ALWAYS" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                                 <styleClass>
+                                    <String fx:value="pane" />
+                                    <String fx:value="pane-hoverable" />
+                                 </styleClass>
+                              </VBox>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="400.0" spacing="20.0" HBox.hgrow="SOMETIMES">
+                           <children>
+                              <VBox prefHeight="245.0" prefWidth="377.0" spacing="10.0" styleClass="pane" VBox.vgrow="SOMETIMES">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.installedOSTitle">
+                                       <font>
+                                          <Font size="19.0" />
+                                       </font>
+                                    </Text>
+                                    <InstalledOSComparison fx:id="installedOSComparison" VBox.vgrow="ALWAYS" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox fx:id="moduleDataDisplayAreaVBox" prefHeight="158.0" prefWidth="465.0" styleClass="pane" VBox.vgrow="SOMETIMES">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.moduleTitle">
+                                       <font>
+                                          <Font size="22.0" />
+                                       </font>
+                                    </Text>
+                                    <ModuleStatusComparison fx:id="moduleStatusComparison" VBox.vgrow="ALWAYS" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox fx:id="licenseDataDisplayAreaVBox" prefHeight="347.0" prefWidth="269.0" VBox.vgrow="SOMETIMES">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.licencesTitle">
+                                       <font>
+                                          <Font size="22.0" />
+                                       </font>
+                                    </Text>
+                                    <LicenseStatusComparison fx:id="licenseStatusComparison" VBox.vgrow="ALWAYS" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                                 <styleClass>
+                                    <String fx:value="pane" />
+                                    <String fx:value="pane-hoverable" />
+                                 </styleClass>
+                              </VBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </VBox>
+            <VBox fx:id="dataLoadingScreenVBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" visible="false">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.retrievingData">
+                     <font>
+                        <Font size="32.0" />
+                     </font>
+                  </Text>
+                  <ProgressBar prefWidth="200.0" />
+               </children>
+            </VBox>
+         </children>
+      </StackPane>
+   </children>
+   <stylesheets>
+      <URL value="@../css/default.css" />
+      <URL value="@../css/elements.css" />
+      <URL value="@../css/charts.css" />
+   </stylesheets>
+</AnchorPane>

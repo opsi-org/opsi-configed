@@ -1,0 +1,8 @@
+.primary-background {
+	-fx-background-color: #DCE4F2;
+}
+
+#root {
+	-fx-background-color: #E6E6FA;
+	-fx-padding: 10px;
+}

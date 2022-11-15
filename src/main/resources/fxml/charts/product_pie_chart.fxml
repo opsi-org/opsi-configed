@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<fx:root type="StackPane" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <PieChart fx:id="productComparisonPieChart" animated="false" labelLineLength="10.0" legendSide="RIGHT" legendVisible="false" prefHeight="338.0" prefWidth="331.0" />
+      <Text fx:id="productsNoDataText" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" visible="false">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Text>
+   </children>
+</fx:root>

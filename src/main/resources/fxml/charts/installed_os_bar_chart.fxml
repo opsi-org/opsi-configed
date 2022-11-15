@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<fx:root type="StackPane" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <BarChart fx:id="installedOSComparisonBarChart" animated="false" legendVisible="false" prefHeight="338.0" prefWidth="339.0">
+         <xAxis>
+            <CategoryAxis side="BOTTOM" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis side="LEFT" />
+         </yAxis>
+      </BarChart>
+      <Text fx:id="installedOSNoDataText" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" visible="false">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Text>
+   </children>
+</fx:root>
