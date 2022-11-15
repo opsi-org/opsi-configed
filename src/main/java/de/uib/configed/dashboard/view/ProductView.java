@@ -48,7 +48,7 @@ public class ProductView implements View
 
 	public ProductView(JFXPanel fxPanel) throws IOException
 	{
-		FXMLLoader fxmlLoader = new FXMLLoader(ProductView.class.getResource("/resources/fxml/views/product_view.fxml"), Messages.getResource());
+		FXMLLoader fxmlLoader = new FXMLLoader(ProductView.class.getResource("/fxml/views/product_view.fxml"), Messages.getResource());
 		fxmlLoader.setController(this);
 
 		Parent root = fxmlLoader.load();

@@ -20,7 +20,7 @@ public class ClientLastSeenComparison extends StackPane implements DataChangeLis
 
 	public ClientLastSeenComparison()
 	{
-		FXMLLoader fxmlLoader = new FXMLLoader(ClientLastSeenComparison.class.getResource("/resources/fxml/charts/client_last_seen_bar_chart.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(ClientLastSeenComparison.class.getResource("/fxml/charts/client_last_seen_bar_chart.fxml"));
 		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
 

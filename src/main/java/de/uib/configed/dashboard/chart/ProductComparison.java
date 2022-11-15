@@ -20,7 +20,7 @@ public class ProductComparison extends StackPane implements DataChangeListener
 
 	public ProductComparison()
 	{
-		FXMLLoader fxmlLoader = new FXMLLoader(ProductComparison.class.getResource("/resources/fxml/charts/product_pie_chart.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(ProductComparison.class.getResource("/fxml/charts/product_pie_chart.fxml"));
 		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
 

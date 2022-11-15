@@ -51,7 +51,7 @@ public class ClientView implements View
 
 	public ClientView(JFXPanel fxPanel) throws IOException
 	{
-		FXMLLoader fxmlLoader = new FXMLLoader(ClientView.class.getResource("/resources/fxml/views/client_view.fxml"), Messages.getResource());
+		FXMLLoader fxmlLoader = new FXMLLoader(ClientView.class.getResource("/fxml/views/client_view.fxml"), Messages.getResource());
 		fxmlLoader.setController(this);
 
 		Parent root = fxmlLoader.load();

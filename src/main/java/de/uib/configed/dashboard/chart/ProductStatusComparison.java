@@ -19,7 +19,7 @@ public class ProductStatusComparison extends StackPane implements DataChangeList
 
 	public ProductStatusComparison()
 	{
-		FXMLLoader fxmlLoader = new FXMLLoader(ProductStatusComparison.class.getResource("/resources/fxml/charts/product_status_bar_chart.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(ProductStatusComparison.class.getResource("/fxml/charts/product_status_bar_chart.fxml"));
 		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
 

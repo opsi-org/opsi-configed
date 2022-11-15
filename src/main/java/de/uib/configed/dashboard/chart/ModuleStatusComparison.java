@@ -22,7 +22,7 @@ public class ModuleStatusComparison extends StackPane implements DataChangeListe
 
 	public ModuleStatusComparison()
 	{
-		FXMLLoader fxmlLoader = new FXMLLoader(ModuleStatusComparison.class.getResource("/resources/fxml/charts/module_pie_chart.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(ModuleStatusComparison.class.getResource("/fxml/charts/module_pie_chart.fxml"));
 		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
 

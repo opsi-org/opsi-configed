@@ -56,7 +56,7 @@ public class MainView implements View
 
 	public MainView(JFXPanel fxPanel) throws IOException
 	{
-		FXMLLoader fxmlLoader = new FXMLLoader(MainView.class.getResource("/resources/fxml/dashboard.fxml"), Messages.getResource());
+		FXMLLoader fxmlLoader = new FXMLLoader(MainView.class.getResource("/fxml/dashboard.fxml"), Messages.getResource());
 		fxmlLoader.setController(this);
 		Parent root = fxmlLoader.load();
 
