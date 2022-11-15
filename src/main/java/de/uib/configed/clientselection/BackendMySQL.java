@@ -12,7 +12,6 @@ import org.json.*;
 import de.uib.opsidatamodel.*;
 import java.util.concurrent.TimeUnit;
 import de.uib.configed.clientselection.MySQL;
-import de.uib.configed.clientselection.backends.database.DbConnect2;
 import java.sql.*;
 import java.util.*;
 import de.uib.utilities.logging.*;
