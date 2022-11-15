@@ -40,7 +40,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 	private javax.swing.JLabel jLabelProductAdvice;
 	private javax.swing.JLabel jLabelProductDescription;
 	protected javax.swing.JLabel jLabelProductID;
-	protected javax.swing.JLabel jLabelProductVersion;
+	protected javax.swing.JTextField jLabelProductVersion;
 	protected javax.swing.JLabel jLabelLabelProductVersion;
 	protected javax.swing.JLabel jLabelProductName;
 	
@@ -103,7 +103,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		//jTextField_SelectedClients = new javax.swing.JTextField();
 		jLabelProductName = new javax.swing.JLabel();
 		jLabelProductID = new javax.swing.JLabel();
-		jLabelProductVersion = new javax.swing.JLabel();
+		jLabelProductVersion = new javax.swing.JTextField();
 		jLabelLabelProductVersion = new javax.swing.JLabel();
 		//jLabelPackageVersion = new javax.swing.JLabel();
 		jLabelProductDescription = new javax.swing.JLabel();
@@ -137,10 +137,13 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		jLabelProductName.setFont(Globals.defaultFontBold);
 		
 		
-		jLabelLabelProductVersion.setText("");
 		jLabelLabelProductVersion.setFont(Globals.defaultFontBig);
 		jLabelLabelProductVersion.setText(configed.getResourceValue("ProductInfoPane.jLabelProductVersion") + " ");
+		
 		jLabelProductVersion.setFont(Globals.defaultFontBold);
+		jLabelProductVersion.setBorder(null);
+		jLabelProductVersion.setEditable(false);
+		jLabelProductVersion.setBackground(null);
 		
 		jLabelProductDescription.setFont(Globals.defaultFontStandardBold);
 		jLabelProductDescription.setPreferredSize(new Dimension (prefHSize, Globals.lineHeight));

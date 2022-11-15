@@ -54,12 +54,21 @@ public class DataStubNOM extends DataStub
 	
 	
 	//===================================================
-
+	
 	@Override
-	public boolean test()
+	public boolean canCallMySQL()
+	//can only return true if overriden in a subclass
+	{
+		return false;
+	}
+
+	/*
+	@Override
+	protected boolean test()
 	{
 		return true;
 	}
+	*/
 
 	//===================================================
 	protected Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos;

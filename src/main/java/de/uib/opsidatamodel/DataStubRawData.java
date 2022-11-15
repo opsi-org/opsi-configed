@@ -85,10 +85,33 @@ public class DataStubRawData extends DataStubNOM
 	}
 		
 		
-		
-	
 	@Override
-	public boolean test()
+	public boolean canCallMySQL()
+	{
+		boolean result = false;
+		
+		//test if we can access any table
+		
+		String query = "select  *  from " +  SWAuditClientEntry.DB_TABLE_NAME  
+					+ " LIMIT 1 "; 
+		
+		logging.info(this, "test, query " + query);
+		
+		result
+					= persist.exec.doCall(
+						new OpsiMethodCall(
+							"getRawData",
+							new Object[]{query}
+							)
+						);
+					
+		logging.info(this, "test result " + result);
+		return result;	
+	}
+	
+	/*
+	@Override
+	protected boolean test()
 	{
 		if (!super.test())
 			return false;
@@ -111,6 +134,7 @@ public class DataStubRawData extends DataStubNOM
 		logging.info(this, "test result " + result);
 		return result;	
 	}
+	*/
 	
 	protected String giveWhereOR(String colName, java.util.List<String> values)
 	{

@@ -109,7 +109,15 @@ implements FocusListener
 		
 		myListeners = new ArrayList<ActionListener>();
 		
-		textLabel = new JLabel(text);
+		textLabel = null;
+		try{
+			textLabel = new JLabel(text);
+		}
+		catch(java.lang.ClassCastException ignore)
+		{
+			textLabel = new JLabel(text);
+		}
+			
 		textFont = textLabel.getFont();
 		defaultTextAttributes = textFont.getAttributes();
 		focusedTextAttributes = new HashMap(defaultTextAttributes);

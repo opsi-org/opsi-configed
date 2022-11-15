@@ -23,10 +23,10 @@ import de.uib.utilities.logging.*;
 public class FEditText extends FEdit
 			implements DocumentListener, MouseListener
 {
-	private javax.swing.JScrollPane scrollpane;
-	private javax.swing.JTextArea textarea;
+	protected javax.swing.JScrollPane scrollpane;
+	protected javax.swing.JTextArea textarea;
 
-	private boolean singleLine;
+	protected boolean singleLine;
 	
 	protected boolean standalone = true;
 	static int count = 0;

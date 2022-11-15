@@ -91,6 +91,14 @@ public class SSHCommand_Template implements SSHCommand,
 		logging.debug(this, "SSHCommand_Template commandlist" + this.commandlistToString());
 	}
 
+	public SSHCommand_Template(SSHCommand_Template orig)
+	{
+		this(orig.getId(), orig.getCommandsRaw(), orig.getMenuText(), orig.needSudo(), orig.getParentMenuText(), 
+			orig.getToolTipText(), orig.getPriority());
+		logging.debug(this, "SSHCommand_Template this " + this.toString());
+		logging.debug(this, "SSHCommand_Template commandlist" + this.commandlistToString());
+	}
+
 
 	@Override 
 	/** 
@@ -127,6 +135,7 @@ public class SSHCommand_Template implements SSHCommand,
 		{
 			for (String c: c_list)
 			{
+				//c_list.add("echo READY");
 				SSHCommand sshc = new Empty_Command( getId(),  c,  getMenuText(),  needSudo());
 				ssh_command.add(sshc);
 				if (firstInitCommands)
@@ -290,6 +299,10 @@ public class SSHCommand_Template implements SSHCommand,
 			if (!((comstr==null) || (comstr.trim().equals(""))))
 				commands_string_list.add(c.getCommandRaw());
 		}
+		
+		//commands_string_list.add("echo ... ");
+		//commands_string_list.add("echo READY");
+		
 		return commands_string_list;
 	}
 

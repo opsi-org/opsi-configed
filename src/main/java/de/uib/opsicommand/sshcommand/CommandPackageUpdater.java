@@ -105,7 +105,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 		}
 		setCommand(baseName + verbosity + repo + action);
 		if (needSudo() && action!="list") return SSHCommandFactory.getInstance().sudo_text +" "+ command + " 2>&1";
-		return command + " 2>&1";
+		return command + " 2>&1"; //the output redirection semms not to produce a jsch input
 	}
 	/**
 	* Sets the given command

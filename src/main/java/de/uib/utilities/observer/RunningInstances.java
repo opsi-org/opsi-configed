@@ -72,6 +72,11 @@ public class RunningInstances<T>
 		return instances.keySet();
 	}
 	
+	public int size()
+	{
+		return instances.keySet().size();
+	}
+	
 	public boolean isEmpty()
 	{
 		boolean result = instances.keySet().isEmpty();

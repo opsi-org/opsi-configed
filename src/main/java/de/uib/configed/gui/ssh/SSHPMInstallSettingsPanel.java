@@ -243,9 +243,14 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		}
 		else
 		{
-			if (selectedDepots.contains(persist.DEPOT_SELECTION_NODEPOTS))
+			if (selectedDepots.contains(
+					//configed.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS")
+					persist.DEPOT_SELECTION_NODEPOTS
+					)
+					
+				)
 			{
-				depotParameter = persist.DEPOT_SELECTION_NODEPOTS;
+				depotParameter = "";// persist.DEPOT_SELECTION_NODEPOTS;
 			}
 			else if (selectedDepots.contains(persist.DEPOT_SELECTION_ALL))
 			{
@@ -288,7 +293,10 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		basicCommand.setProperty(cb_properties.isSelected());
 		basicCommand.setUpdateInstalled(checkb_updateInstalled.isSelected());
 		basicCommand.setSetupInstalled(checkb_setupInstalled.isSelected());
-		basicCommand.setDepotForPInstall( tf_selecteddepots.getText() );
+		if ( tf_selecteddepots.getText().contains( configed.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS") ) )
+			basicCommand.setDepotForPInstall( "" );
+		else
+			basicCommand.setDepotForPInstall( tf_selecteddepots.getText() );
 		return basicCommand;
 	}
 }

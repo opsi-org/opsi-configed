@@ -309,7 +309,8 @@ public class PanelStateSwitch extends JPanel
 		
 		logging.info(this, "setValueByString " + producedValue);
 		
-		if (enumSetter != null) enumSetter.setValue( producedValue );
+		if (enumSetter != null)
+			enumSetter.setValue( producedValue );
 	}
 }
 	

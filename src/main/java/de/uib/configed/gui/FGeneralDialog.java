@@ -14,6 +14,8 @@ import javax.swing.*;
 import java.awt.event.*;
 import de.uib.utilities.logging.*;
 import de.uib.utilities.swing.*;
+import de.uib.utilities.observer.RunningInstancesObserver;
+import de.uib.utilities.observer.RunningInstances;
 
 public class FGeneralDialog extends JDialog
 			implements ActionListener, KeyListener, MouseListener
@@ -159,12 +161,17 @@ public class FGeneralDialog extends JDialog
 		DEFAULT = d;
 	}
 	
-	protected void registerWithRunningInstances()
+	public void registerWithRunningInstances()
 	{
-		logging.info(this, "registerWithRunningInstances");
+		//logging.info(this, "running instances " + FEditObject.runningInstances.size());
+		logging.info(this, "registerWithRunningInstances " + wantToBeRegisteredWithRunningInstances() );
 		//if ( !isModal() )
 		if (wantToBeRegisteredWithRunningInstances() )
+		{
 			FEditObject.runningInstances.add(this, "");
+			//logging.info(this, "added to running instances " + this);
+		}
+		logging.info(this, "running instances " + FEditObject.runningInstances.size());
 	}
 		
 
@@ -235,6 +242,8 @@ public class FGeneralDialog extends JDialog
 	}
 	/*
 		registerWithRunningInstances();
+		
+	
 
 		setIconImage (Globals.mainIcon);
 

@@ -92,7 +92,7 @@ public class DepotsList extends JList<String>
 		setSelectionInterval(0, getModel().getSize() - 1);
 		getSelectionModel().setValueIsAdjusting(false);
 	}
-		
+
 	
 	public void addToSelection(java.util.List<String> depots)
 	{

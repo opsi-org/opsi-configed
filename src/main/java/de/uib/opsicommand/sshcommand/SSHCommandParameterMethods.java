@@ -20,10 +20,18 @@ import de.uib.configed.*;
 import de.uib.configed.gui.*;
 import de.uib.configed.gui.ssh.*;
 import java.util.*;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.awt.*;
+import java.awt.event.*;
+import java.lang.Thread;
+import java.lang.reflect.InvocationTargetException;
+
 import javax.swing.*;
 // import org.json.*;
 import de.uib.utilities.logging.*;
+import de.uib.utilities.ssh.SSHOutputCollector;
 import de.uib.opsidatamodel.*;
 /**
 * This Class handles  SSHCommands.
@@ -49,6 +57,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	public static final String method_getSelectedDepotIPs = configed.getResourceValue("SSHConnection.CommandControl.method.getSelectedDepotIPs");
 	public static final String method_getConfigServerName = configed.getResourceValue("SSHConnection.CommandControl.method.getConfigServerName");
 	public static final String method_getConnectedSSHServerName = configed.getResourceValue("SSHConnection.CommandControl.method.getConnectedSSHServerName");
+	public static final String method_optionSelection = configed.getResourceValue("SSHConnection.CommandControl.method.optionSelection");
 
 
 	public static Map<String, String> methods = new HashMap<String, String>(){{
@@ -59,6 +68,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		put(method_getSelectedDepotIPs, "getSelectedDepotIPs");
 		put(method_getConfigServerName, "getConfigServerName");
 		put(method_getConnectedSSHServerName, "getConnectedSSHServerName");
+		put(method_optionSelection, "ssh://path/to/file");
 	}};
 	private String[] formats;
 
@@ -170,11 +180,12 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	{
 		String[] splitted_parameter = splitParameter(param);
 		String result = callMethod(splitted_parameter[0], splitted_parameter[1]);
+		result = result.contains("ssh://") ? result.replace("ssh://", "") : result;
 		if (result == null)
 			return configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed");
 		return result;
 	}
-	
+
 	private void init()
 	{
 		formats = new String[9];
@@ -258,6 +269,11 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		{
 			result = formatResult(getConfig_sshserverName(), format);
 		}
+		else if (method.contains("ssh://"))
+		{
+			result = getSelectedValue(method);
+			logging.info(this, "callMethod replace \"" + method + "\" with \"" + result + "\"");
+		}
 		else if (format.equals(""))
 		{
 			result = getUserText(method, outputDia);
@@ -266,6 +282,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 
 		return result;
 	}
+
 	private String formatResult(String result, String format)
 	{
 		String[] strarr= new String[1];
@@ -503,5 +520,142 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 			}
 		}
 		return depotIPs;
+	}
+
+	private ValueSelectorList fillValueSelectorList(final List<String> values)
+	{
+		final DepotsList valueList = new DepotsList(PersistenceControllerFactory.getPersistenceController());
+		valueList.setVisible(true);
+		final Map<String, Object> extendedInfo = new TreeMap<>();
+		final Map<String, Map<String, Object>> info = new TreeMap<>();
+		final Vector<String> data = new Vector<>();
+
+		for (final String val : values)
+		{
+			extendedInfo.put(val, val);
+			info.put(val, extendedInfo);
+			data.add(val);
+		}
+		
+		valueList.setListData(data);
+		valueList.setInfo(info);
+
+		final ValueSelectorList valueSelectorList = new ValueSelectorList(valueList, true, PersistenceControllerFactory.getPersistenceController());
+		valueSelectorList.setVisible(true);
+
+		return valueSelectorList;
+	}
+
+	private JOptionPane createValueSelectorDialog(final ValueSelectorList valueSelectorList)
+	{
+		final JScrollPane valueScrollPane = valueSelectorList.getScrollpaneDepotslist();
+		final JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		panel.add(valueSelectorList, BorderLayout.NORTH);
+		panel.add(valueScrollPane, BorderLayout.CENTER);
+
+		final JOptionPane opPane = new JOptionPane(
+			new Object[] {
+				panel
+			}, 
+			JOptionPane.QUESTION_MESSAGE,
+			JOptionPane.OK_CANCEL_OPTION)
+		{
+			@Override
+			public void selectInitialValue()
+			{
+				super.selectInitialValue();
+				((Component) valueScrollPane).requestFocusInWindow();
+			}
+		};
+
+		opPane.addHierarchyListener(new HierarchyListener() {
+			public void hierarchyChanged(HierarchyEvent e) {
+				Window window = SwingUtilities.getWindowAncestor(opPane);
+				if (window instanceof Dialog) {
+					Dialog dialog = (Dialog)window;
+					if (!dialog.isResizable()) {
+						dialog.setResizable(true);
+					}
+				}
+			}
+		});
+
+		final JDialog jdialog = opPane.createDialog(opPane, 
+			de.uib.configed.Globals.APPNAME);
+		jdialog.setSize(400, 250);
+		jdialog.setVisible(true);
+
+		return opPane;
+	}
+
+	private String getSelectedValue(String method)
+	{
+		if (method.equals("ssh://path/to/file"))
+		{
+			final List<String> values = new ArrayList<>();
+			values.add("Test 1");
+			values.add("Test 2");
+			values.add("Test 3");
+			final ValueSelectorList valueSelectorList =  fillValueSelectorList(values);
+			final JOptionPane opPane = createValueSelectorDialog(valueSelectorList);
+
+			if ( ((Integer)opPane.getValue()) == JOptionPane.OK_OPTION)
+				return valueSelectorList.getSelectedValue();
+
+			return "";
+		}
+
+		SSHOutputCollector.getInstance().removeAllValues();
+		final SSHConnect caller = new SSHConnect(main);
+
+		final String scriptFile = method.replace("ssh://", "");
+		final LinkedList<String> commands = new LinkedList<>();
+		commands.add(scriptFile);
+		SSHCommand_Template cmd = new SSHCommand_Template("", commands, "", false, "", "", 0);
+
+		final SSHCommand cmdScript = parseParameter(cmd, caller);
+		final ScriptExecutioner exe = new ScriptExecutioner(cmdScript);
+		exe.execute();
+
+		return exe.getValue();
+	}
+
+	private class ScriptExecutioner
+	{
+		private String value;
+		private SSHCommand cmd;
+		private SSHOutputCollector sshOutputCollector;
+
+		public ScriptExecutioner(SSHCommand cmd)
+		{
+			this.cmd = cmd;
+
+			this.sshOutputCollector = SSHOutputCollector.getInstance();
+		}
+
+		public String getValue()
+		{
+			return value;
+		}
+
+		public void execute()
+		{
+			new SSHConnectExec(main, cmd);
+
+			final List<String> values = sshOutputCollector.getValues();
+			value = retrieveSelectedValue(values);
+		}
+
+		private String retrieveSelectedValue(List<String> values)
+		{
+			final ValueSelectorList valueSelectorList = fillValueSelectorList(values);
+			final JOptionPane opPane = createValueSelectorDialog(valueSelectorList);
+
+			if ( ((Integer)opPane.getValue()) == JOptionPane.OK_OPTION)
+				return valueSelectorList.getSelectedValue();
+
+			return null;
+		}
 	}
 }

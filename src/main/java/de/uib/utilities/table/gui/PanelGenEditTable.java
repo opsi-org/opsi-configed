@@ -476,6 +476,7 @@ public class PanelGenEditTable extends JPanel
 		titlePane.setBackground( Globals.backgroundWhite );
 		//popupMenu = new JPopupMenu();
 		theTable = new de.uib.utilities.table.JTableWithToolTips();
+		//theTable = new JTable();
 		theTable.setRowHeight(de.uib.utilities.Globals.tableRowHeight);
 		//new de.uib.utilities.table.JTableWithContextMenu(popupMenu);
 
@@ -494,7 +495,7 @@ public class PanelGenEditTable extends JPanel
 		scrollpane = new javax.swing.JScrollPane();
 		//scrollpane.addMouseListener(new utils.PopupMouseListener(popupMenu)); DOES NOT WORK
 
-
+		
 		if (switchLineColors)
 			theTable.setDefaultRenderer(Object.class, new StandardTableCellRenderer());
 		else
@@ -506,7 +507,7 @@ public class PanelGenEditTable extends JPanel
 		theTable.setShowHorizontalLines(true);
 		theTable.setGridColor(Color.WHITE);
 
-
+		
 		theTable.getTableHeader().setDefaultRenderer
 		(
 		    new ColorHeaderCellRenderer(theTable.getTableHeader().getDefaultRenderer())
@@ -687,7 +688,7 @@ public class PanelGenEditTable extends JPanel
 
 	public void reload()
 	{
-		logging.info(this, "reload()");
+		logging.info(this, "in PanelGenEditTable reload()");
 		WaitCursor waitCursor = new WaitCursor(this);
 		tableModel.requestReload();
 		tableModel.reset();
@@ -818,6 +819,7 @@ public class PanelGenEditTable extends JPanel
 
 
 			case POPUP_RELOAD:
+				//logging.info(this, "reload popup worked");
 				menuItemReload = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.reload"),
 				                                        de.uib.configed.Globals.createImageIcon("images/reload16.png", ""));
 				//menuItemReload.setPreferredSize(Globals.buttonDimension);

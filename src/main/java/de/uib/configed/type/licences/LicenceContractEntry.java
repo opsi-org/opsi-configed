@@ -1,5 +1,4 @@
 package de.uib.configed.type.licences;
-
 import java.util.*;
 import de.uib.configed.type.*;
 import de.uib.utilities.logging.*;

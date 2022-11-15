@@ -3,7 +3,7 @@ package de.uib.opsicommand.sshcommand;
  * configed - configuration editor for client work stations in opsi
  * (open pc server integration) www.opsi.org
  *
- * Copyright (C) 2000-2017 uib.de
+ * Copyright (C) 2000-2022 uib.de
  *
  * This program is free software; you can redistribute it 
  * and / or modify it under the terms of the GNU General Public
@@ -46,7 +46,7 @@ public class SSHConnect
 	/** If needed the root password **/
 	protected String pw_root;
 	private JSch jsch= null;  
-	protected Session session = null;
+	protected static Session session = null;
 	protected ConfigedMain main;
 	
 	SSHCommandFactory factory = SSHCommandFactory.getInstance();
@@ -95,13 +95,21 @@ public class SSHConnect
 	**/
 	protected boolean isConnected()
 	{
-		logging.info(this, "isConnected session" + session);
+		boolean result = false;
+	
 		if (session != null)
 		{
-			logging.info(this, "isConnected session.isConnected " + session.isConnected());
-			if (session.isConnected()) return true;
+			if (session.isConnected())
+			{
+				result = true;
+			}
 		}
-		return false;
+		
+		logging.info(this, "isConnected session.isConnected " + result);
+		if (!result && factory.successfulConnectObservedCount > 0)
+			logging.info( "No SSH connection after successful connections: " + factory.successfulConnectObservedCount 
+				+ "\n" + "check server authentication configuration"); 
+		return result;
 	}
 
 	/**
@@ -209,7 +217,8 @@ public class SSHConnect
 		{
 			jsch=new JSch(); 
 			connectionInfo.checkUserData();
-			logging.info(this, "connect host " + connectionInfo.getHost());
+			logging.info(this, "connect user@host " + connectionInfo.getUser() + "@" + connectionInfo.getHost());
+			logging.debug(this, "connect with password log version " + connectionInfo.getShortPassw());
 			logging.info(this, "connect to login host " +  
 				( ConfigedMain.HOST.equals( connectionInfo.getHost() ) ) );
 			logging.info(this, "connect user " + connectionInfo.getUser());
@@ -229,7 +238,9 @@ public class SSHConnect
 			{
 				session = jsch.getSession(connectionInfo.getUser(),
 					connectionInfo.getHost(), Integer.valueOf(connectionInfo.getPort()));
-				logging.info(this, "connect this.password " + 
+				logging.info(this, "connect this.password " 
+					//+ connectionInfo.getPassw() + " " 
+					+ 
 					SSHCommandFactory.getInstance().confidential );
 				
 				session.setPassword(connectionInfo.getPassw());
@@ -237,26 +248,45 @@ public class SSHConnect
 					+ connectionInfo.usesKeyfile() + " use password …");
 			}
 			// session.setTimeout(10000);
-			session.setConfig("StrictHostKeyChecking", "no");
-			int timeo = 1000;
+			//session.setConfig("StrictHostKeyChecking", "no");
+			
+			Properties config = new Properties();
+			config.put("StrictHostKeyChecking", "no");
+			//config.put("PreferredAuthentications", "password");
+			jsch.setConfig(config);
+			
+			//session.setConfig("kex", "diffie-hellman-group1-sha1"); //hope, that this will prevent session ending
+			//cf https://stackoverflow.com/questions/37280442/jsch-0-1-53-session-connect-throws-end-of-io-stream-read
+			//int timeo = 4000;
+			int timeo = 10000;
+			
 			logging.info(this, "we try to connect with timeout " + timeo);
 			
 						session.connect(timeo);
 						logging.info(this, "we did connect " + connectionInfo);
-			//session.connect(10000);
 			logging.info(this, "connect " + connectionInfo);
 
-
+			factory.successfulConnectObservedCount++;
+			
 			return true;
 		}
 		catch (com.jcraft.jsch.JSchException authfail)
 		{
 			retriedTimes_auth =  retry(retriedTimes_auth, authfail);
-			if (retriedTimes_auth >=3 ) 
+			if (retriedTimes_auth >=2 ) 
 			{
 				logging.warning(this, "connect Authentication failed. " + authfail);
+				if (factory.successfulConnectObservedCount > 0)
+			
+					logging.error( "authentication failed after successful authentifications: " 
+					+  factory.successfulConnectObservedCount 
+					+ "\n" + "\n" + "check server authentication configuration"
+					+ "\n" + "\n"); 
+				
 				return false;
-			}else connect(command);
+				
+			}else 
+				connect(command);
 		}
 		catch (Exception e)
 		{
@@ -325,7 +355,11 @@ public class SSHConnect
 	public void disconnect()
 	{
 		if (isConnected())
-			session.disconnect();
+		{
+			SSHCommandFactory.getInstance().unsetConnection();
+			session.disconnect();	
+		}
+	
 		logging.debug(this, "disconnect");
 	}
 }

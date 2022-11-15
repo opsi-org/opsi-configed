@@ -101,7 +101,7 @@ public class SSHConfigDialog extends /*javax.swing.JDialog */ FGeneralDialog
 	}
 	private boolean compareStates()
 	{
-		logging.debug(this, "compareStates " );
+		logging.info(this, "compareStates " );
 		
 		if (connectionInfo.getHost() == null)
 		{
@@ -137,10 +137,10 @@ public class SSHConfigDialog extends /*javax.swing.JDialog */ FGeneralDialog
 		}
 		else
 		{
-			logging.info(this, "compareStates 5 "  +  connectionInfo.getHost() + " <> " + configedMain.HOST );
+			//logging.info(this, "compareStates 5 "  +  connectionInfo.getHost() + " <> " + configedMain.HOST );
 			if (! connectionInfo.getHost().equals(configedMain.HOST))
 			{
-				logging.info(this, "compareStates 5 "  +  connectionInfo.getHost() + " <> " + configedMain.HOST ) ;
+				logging.info(this, "compareStates 5 >"  +  connectionInfo.getHost() + "<     <>    >" + configedMain.HOST + "<" ) ;
 				return false;
 			}
 			if (! connectionInfo.getPort().equals(tf_port.getText()))
@@ -160,9 +160,16 @@ public class SSHConfigDialog extends /*javax.swing.JDialog */ FGeneralDialog
 				return false;
 			}
 		}
+		
+		logging.debug(this, "compareStates until now == ");
+		/*return true;
+		*/
+		
+		
+		
 		if ( connectionInfo.usesKeyfile() != (cb_useKeyfile.isSelected()))
 		{
-			logging.debug(this, "compareStates 9" );
+			logging.info(this, "compareStates 9" );
 			return false;
 		}
 		else
@@ -209,6 +216,7 @@ public class SSHConfigDialog extends /*javax.swing.JDialog */ FGeneralDialog
 				return false;
 			}
 		}
+		
 		return true;
 	}
 

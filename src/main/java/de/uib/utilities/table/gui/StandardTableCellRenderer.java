@@ -62,6 +62,7 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer
 			((JLabel)jc).setToolTipText(tooltipText);
 			
 			//logging.info(this, "row " + row + " currentRow " + currentRow); 
+			//System.out.println("row " + row + " col " + column + " tooltip " + jc.getToolTipText());
 			
 			if (row == currentRow)
 			{

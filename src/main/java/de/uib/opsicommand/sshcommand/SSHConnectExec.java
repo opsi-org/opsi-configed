@@ -20,6 +20,7 @@ import de.uib.configed.*;
 import de.uib.configed.gui.*;
 import de.uib.configed.gui.ssh.*;
 import de.uib.utilities.*;
+import de.uib.utilities.ssh.*;
 import de.uib.utilities.thread.WaitCursor;
 import de.uib.utilities.logging.*;
 
@@ -72,7 +73,7 @@ public class SSHConnectExec extends SSHConnect
 		FOUND_ERROR = false;
 		main = m;
 		//setDialog(SSHConnectionExecDialog.getInstance());
-		if (main != null) connect(sshcommand);
+		// if (main != null) connect(sshcommand);
 		logging.info(this, "SSHConnectExec main " + main );
 		//logging.info(this, "created, with sshcommand " + sshcommand);
 		logging.info(this, "SSHConnectExec sshcommand " + sshcommand.getSecuredCommand());
@@ -86,16 +87,38 @@ public class SSHConnectExec extends SSHConnect
 	
 	public void starting(SSHCommand sshcommand)
 	{
-		if (!(isConnected())) connect(sshcommand);
+		// if (!(isConnected())) connect(sshcommand);
+		if (!(isConnected()))
+		{
+			final SSHCommandFactory factory = SSHCommandFactory.getInstance(main);
+			logging.error(this, configed.getResourceValue("SSHConnection.not_connected.message") + " " + factory.getConnectionState());
+			return;
+		}
+
 		try 
 		{
 			if (!(de.uib.configed.Globals.isGlobalReadOnly()))
 			{
 				logging.info(this, "starting, sshcommand isMultiCommand " +  sshcommand.isMultiCommand());
 				
-				if (sshcommand instanceof SSHCommand_Template) exec_template((SSHCommand_Template) sshcommand);
-				else if (sshcommand.isMultiCommand()) exec_list((SSHMultiCommand)sshcommand);
-				else exec(sshcommand); 
+				if (sshcommand instanceof SSHCommand_Template) 
+				{
+					logging.info(this, "exec_template " + sshcommand + ": " + sshcommand.getCommand());
+					exec_template((SSHCommand_Template) sshcommand);
+				}
+				else
+				{
+					if (sshcommand.isMultiCommand())
+					{
+						logging.info(this, "exec_list " + sshcommand + ": " + sshcommand.getCommand());
+						exec_list((SSHMultiCommand)sshcommand);
+					}
+					else
+					{
+						logging.info(this, "exec " + sshcommand + ": " + sshcommand.getCommand());
+						exec(sshcommand);
+					}
+				}
 			}
 			else
 			{
@@ -110,7 +133,7 @@ public class SSHConnectExec extends SSHConnect
 		}
 		finally
 		{
-			disconnect();
+			// disconnect();
 			System.gc();
 		}
 	}
@@ -195,6 +218,7 @@ public class SSHConnectExec extends SSHConnect
 			for (int i=0; i< anzahlCommands; i++)
 			{
 				String com = ((SSHCommand_Template) commands).getOriginalCommands().get(i).getCommandRaw();
+				com = "(" + (i+1) + ")  " + com; 
 				// if (i == anzahlCommands-1) 
 				// {
 				// // 	final_dia.append("                 ", com);
@@ -209,7 +233,7 @@ public class SSHConnectExec extends SSHConnect
 			try {
 
 				final_dia.appendLater("\n\n\n" + new Date());
-				final_dia.appendLater("\n["+ configed.getResourceValue("SSHConnection.Exec.dialog.commandlist").trim() +"]    " + defaultCommandsString + "\n\n");
+				final_dia.appendLater("\n["+ configed.getResourceValue("SSHConnection.Exec.dialog.commandlist").trim() +"]\n" + defaultCommandsString + "\n\n");
 				if (SSHCommandFactory.getInstance(main).ssh_always_exec_in_background)
 				{
 					multiDialog.setVisible(false);
@@ -257,18 +281,20 @@ public class SSHConnectExec extends SSHConnect
 							"" + configed.getResourceValue("SSHConnection.Exec.exitClosed"));
 						}
 						
+						//wrong place final_dia.appendLater("\nREADY\n");
+						
 					}
 				//} .start();
 				logging.info(this, "exec_list command after starting " + commands);
 				logging.info(this, "exec_list commandToExec " + commandToExec);
-				System.gc();
+				//System.gc();
 			} 
 			catch (Exception e) 
 			{ logging.warning("exception: " + e);}
 			
 			finally
 			{
-				disconnect();
+				// disconnect();
 				System.gc();
 			}
 		}
@@ -641,6 +667,8 @@ public class SSHConnectExec extends SSHConnect
 						}
 						buf.append(str);
 					}
+					//buf.append("echo READY");
+					//buf.append("\n");
 					if(channel.isClosed() || interruptChannel ||  interruptChannelWorker)
 					{
 						if ((in.available()>0) && (!interruptChannel)) continue; 
@@ -704,6 +732,7 @@ public class SSHConnectExec extends SSHConnect
 		protected void process(java.util.List<String> chunks) 
 		{
 			logging.info(this, "chunks " + chunks.size());
+			final SSHOutputCollector sshOutputCollector = SSHOutputCollector.getInstance();
 
 			if (outputDialog != null)
 			{
@@ -712,9 +741,12 @@ public class SSHConnectExec extends SSHConnect
 				for (String line: chunks) 
 				{
 					logging.debug(this, "process " + line);
+					sshOutputCollector.appendValue(line);
 					outputDialog.append(getCommandName(), line + "\n");
 					// outputDialog.append("\n");
 				}
+				
+				//outputDialog.append(getCommandName(), "\n a chunk completed  \n");
 			}
 		}
 		
@@ -742,6 +774,7 @@ public class SSHConnectExec extends SSHConnect
 		protected void done() 
 		{
 			logging.info(this, "done");
+			if (outputDialog != null) outputDialog.append(getCommandName(), "\n... READY  \n\n");
 			if (responseButton != null)
 				responseButton.setEnabled( true );
 			

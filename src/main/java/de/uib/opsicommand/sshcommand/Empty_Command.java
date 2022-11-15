@@ -278,16 +278,25 @@ public class Empty_Command implements SSHCommand
 	@Override
 	public String getCommand()
 	{
+		String result = "";
+		
 		if (needSudo()) 
 		{
 			if (command.contains("2>&1"))
-				return SSHCommandFactory.getInstance().sudo_text +" "+ command;
-			return SSHCommandFactory.getInstance().sudo_text +" "+ command + " 2>&1";
+				result = SSHCommandFactory.getInstance().sudo_text +" "+ command;
+			else 
+				result = SSHCommandFactory.getInstance().sudo_text +" "+ command + " 2>&1";
 		}
 		else
+		{
 			if (command.contains("2>&1"))
-				return command ;
-			return command + " 2>&1";
+				result = command ;
+			else 
+				result = command + "  2>&1";
+		}
+		
+		return result;
+		
 	}
 	
 	/**

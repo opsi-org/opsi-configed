@@ -70,6 +70,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog
 		}
 		else
 		*/
+		if (instance == null)
 		{
 			instance = getNewInstance();
 		}
@@ -201,7 +202,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog
 		
 		append( line );
 		
-		/*
+	    /*	
 		SwingUtilities.invokeLater( new Thread(){
 				public void run()
 				{
@@ -209,7 +210,8 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog
 				}
 			}
 		);
-		*/
+        */
+		
 	}
 	
 	

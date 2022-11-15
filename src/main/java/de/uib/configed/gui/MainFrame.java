@@ -62,6 +62,7 @@ import de.uib.utilities.datapanel.*;
 import de.uib.utilities.logging.*;
 import de.uib.utilities.observer.RunningInstancesObserver;
 import de.uib.opsicommand.sshcommand.*;
+import de.uib.opsidatamodel.modulelicense.*;
 
 //import de.uib.utilities.StringvaluedObject;
 
@@ -439,6 +440,8 @@ public class MainFrame extends JFrame
 	PanelTabbedDocuments showLogfiles;
 
 	JPanel jPanel_Schalterstellung;
+	
+	public de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo fDialogOpsiLicensingInfo;
 
 	//protected ProductInfoPane  localbootProductInfo;
 	//protected ProductInfoPane  netbootProductInfo;
@@ -472,7 +475,7 @@ public class MainFrame extends JFrame
 	boolean shiftpressed = false;
 	//TableColumnModel clientlistColumnModel;
 	JLabel jLabel_Hostinfos = new JLabel();
-	FlowLayout flowLayout1 = new FlowLayout();
+	//FlowLayout flowLayout1 = new FlowLayout();
 	JLabel jLabelPath = new JLabel();
 	private boolean starting = true;
 	//JLabel jLabelDepot = new JLabel(configed.getResourceValue("MainFrame.jLabelDepot"));//"Depot(s): ");
@@ -1583,17 +1586,20 @@ public class MainFrame extends JFrame
 					jMenuItem.setText(com.getMenuText());
 					logging.info(this, "ssh command menuitem text " + com.getMenuText());
 					jMenuItem.setToolTipText(com.getToolTipText());
-					jMenuItem.addActionListener(new ActionListener()
-					{
-						public void actionPerformed(ActionEvent e)
-						{
+					jMenuItem.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
 							if (factory.getConnectionState().equals(factory.NOT_CONNECTED))
 								logging.error(this, configed.getResourceValue("SSHConnection.not_connected.message") + " " + factory.getConnectionState());
 							else if (factory.getConnectionState().equals(factory.CONNECTION_NOT_ALLOWED))
 								logging.error(this, configed.getResourceValue("SSHConnection.CONNECTION_NOT_ALLOWED.message"));
 							else if (factory.getConnectionState().equals(factory.UNKNOWN))
 								logging.error(this, configed.getResourceValue("SSHConnection.not_connected.message") + " " + factory.getConnectionState());
-							else remoteSSHExecAction(com);
+							else  {
+								// Create new instance of the same command, so that further
+								// modifications would not affect the original command.
+								final SSHCommand_Template c = new SSHCommand_Template(com);
+								remoteSSHExecAction(c);
+							}
 						}
 					});
 
@@ -4205,15 +4211,25 @@ public class MainFrame extends JFrame
 
 	public void showPopupOnClientsAction ()
 	{
-		FEditText fText = new FEditText("", configed.getResourceValue("MainFrame.writePopupMessage"))
-		                  {
-			                  protected void commit(){
-				                  super.commit();
-				                  main.showPopupOnSelectedClients(getText());
-			                  }
-		                  };
+		FEditTextWithExtra fText = new FEditTextWithExtra(
+			"",
+			configed.getResourceValue("MainFrame.writePopupMessage"),
+			configed.getResourceValue("MainFrame.writePopupDuration")
+		)
+		{
+			protected void commit(){
+				super.commit();
+				Float duration = 0.0f;
+				if (!getExtra().isEmpty())
+				{
+					duration = Float.parseFloat(getExtra());
+				}
+				main.showPopupOnSelectedClients(getText(), duration);
+			}
+		};
 
-		fText.setAreaDimension(new Dimension(350, 150));
+		fText.setTitle(configed.getResourceValue("MainFrame.popupFrameTitle"));
+		fText.setAreaDimension(new Dimension(350, 130));
 		fText.init();
 		fText.setVisible(true);
 		fText.centerOn(this);
@@ -4626,10 +4642,6 @@ public class MainFrame extends JFrame
 	
 	
 	
-	
-	
-	
-	
 	// ------------------- 
 	
 
@@ -4743,21 +4755,60 @@ public class MainFrame extends JFrame
 
 	private void showOpsiModules()
 	{
-		FTextArea f = new FTextArea(this, configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), true, 1);
-		StringBuffer message = new StringBuffer();
-		Map<String, Object> modulesInfo = main.getPersistenceController().getOpsiModulesInfos();
-
-		int count = 0;
-		for (String key : modulesInfo.keySet() )
+		/*
+		de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo 
+			f = 
+			 new de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo(
+			null, //owner frame
+			"Licensing Information", //title getInstance
+			false, //modal
+			
+			new String[]{
+		        "ok",
+		        "cancel"
+		      },
+		      
+		    new Icon[]{
+		        Globals.createImageIcon( "images/checked_withoutbox_blue14.png", "" ),
+		        Globals.createImageIcon( "images/cancel16_small.png", "" )
+		    },
+			1, //lastButtonNo,with "1" we get only the first button
+			1050, 600,
+			true, //lazylayout, i.e, we have a chance to define components and use them for the layout
+			null //addPanel predefined
+			);
+			
+		*/
+		
+		
+		if ( main.getPersistenceController().getOpsiLicensingInfoVersion() == LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD )
 		{
-			count++;
-			message.append("\n " + key + ": " + modulesInfo.get(key) );
+			
+			FTextArea f = new FTextArea(this, configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), true, 1);
+			StringBuffer message = new StringBuffer();
+			Map<String, Object> modulesInfo = main.getPersistenceController().getOpsiModulesInfos();
+	
+			int count = 0;
+			for (String key : modulesInfo.keySet() )
+			{
+				count++;
+				message.append("\n " + key + ": " + modulesInfo.get(key) );
+			}
+			f.setSize(new Dimension(300, 50 + count * 25));
+	
+	
+			f.setMessage(message.toString());
+			f.setVisible(true);
 		}
-		f.setSize(new Dimension(300, 50 + count * 25));
-
-
-		f.setMessage(message.toString());
-		f.setVisible(true);
+		
+		
+		else 
+		{
+			callOpsiLicensingInfo();
+	
+		}
+		
+		
 	}
 
 	private void showInfoPage()
@@ -4772,6 +4823,37 @@ public class MainFrame extends JFrame
 	
 	
 
+	public void callOpsiLicensingInfo()
+	{
+	
+		if (fDialogOpsiLicensingInfo == null)  
+		{
+			
+			fDialogOpsiLicensingInfo 
+			= new de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo(
+			null, //owner frame
+			//title 
+			configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"),
+			false, //modal
+			
+			new String[]{
+				configed.getResourceValue("Dash.close"),
+				//,"cancel"
+			  },
+			  
+			new Icon[]{
+				//Globals.createImageIcon( "images/checked_withoutbox_blue14.png", "" ),
+				Globals.createImageIcon( "images/cancel16_small.png", "" )
+			},
+			1, //lastButtonNo,with "1" we get only the first button
+			900, 680,
+			true, //lazylayout, i.e, we have a chance to define components and use them for the layout
+			null //addPanel predefined
+			);
+		}
+		else 
+			fDialogOpsiLicensingInfo.setVisible( true );
+	}
 
 
 	//----------------------------------------------------------------------------------------

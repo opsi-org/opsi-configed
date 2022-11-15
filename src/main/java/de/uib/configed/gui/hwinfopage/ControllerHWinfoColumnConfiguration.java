@@ -441,6 +441,8 @@ public class ControllerHWinfoColumnConfiguration
 
 		logging.info(this, "add this item to items for configIdent " + col.configIdent );
 		
+		logging.info(this, "add this item to items for configIdent " + col.configIdent );
+		
 		if (tableConfigUpdates == null)
 		{
 			 tableConfigUpdates = new HashMap<String, Boolean>();

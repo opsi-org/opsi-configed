@@ -12,11 +12,15 @@
 package de.uib.opsidatamodel;
 // This file has dos format (use "dos2unix" command in terminal to transfere to unix)
 import java.util.*;
+
+import org.json.JSONObject;
+
 import de.uib.opsicommand.*;
 import de.uib.configed.*;
 import de.uib.configed.type.*;
 import de.uib.configed.type.licences.*;
 import de.uib.utilities.observer.*;
+import de.uib.opsidatamodel.dbtable.*;
 //import de.uib.opsidatamodel.permission.*;
 import de.uib.utilities.datastructure.*;
 import de.uib.utilities.logging.*;
@@ -139,6 +143,7 @@ public abstract class PersistenceController
 		PROPERTYCLASSES_SERVER = new TreeMap<String, String>();
 		PROPERTYCLASSES_SERVER.put( "", "general configuration items");
 		PROPERTYCLASSES_SERVER.put( "clientconfig", "network configuration");
+		PROPERTYCLASSES_SERVER.put( de.uib.opsidatamodel.modulelicense.LicensingInfoMap.CONFIG_KEY, "opsi module status display"); 
 		PROPERTYCLASSES_SERVER.put( ControlDash.CONFIG_KEY, "dash configuration");
 		PROPERTYCLASSES_SERVER.put( AdditionalQuery.CONFIG_KEY, "<html><p>sql queries can be defined here<br />- for purposes other than are fulfilled by the standard tables</p></html>");
 		PROPERTYCLASSES_SERVER.put( MetaConfig.CONFIG_KEY, "default configuration for other properties");
@@ -224,7 +229,10 @@ public abstract class PersistenceController
 
 	public abstract void checkConfiguration();
 
-	protected abstract boolean sourceAccept();
+	//protected abstract boolean sourceAccept();
+	
+	
+	public abstract boolean canCallMySQL();
 
 	/* error handling convenience methods */
 	//public abstract List getErrorList ();
@@ -408,13 +416,17 @@ public abstract class PersistenceController
 
 	public abstract java.util.List<String> fireOpsiclientdEventOnClients (String event, String[] clientIds);
 
-	public abstract java.util.List<String> showPopupOnClients (String message, String[] clientIds);
+	public abstract java.util.List<String> showPopupOnClients (String message, String[] clientIds, Float seconds);
 
 	public abstract java.util.List<String> shutdownClients (String[] clientIds);
 
 	public abstract java.util.List<String> rebootClients (String[] clientIds);
 
 	public abstract Map<String, Object> reachableInfo(String[] clientIds);
+
+	public abstract Map<String, Integer> getInstalledOsOverview();
+	public abstract Map<String, Object> getLicensingInfo();
+	public abstract List<Map<String, Object>> getModules();
 
 	public abstract Map<String, String> sessionInfo(String[] clientIds);
 
@@ -565,6 +577,11 @@ public abstract class PersistenceController
 	public abstract void productDataRequestRefresh();
 
 	/* listings of all products and their properties */
+
+	public abstract List<String> getAllProductNames(String depotId);
+
+	public abstract List<String> getProvidedLocalbootProducts(String depotId);
+	public abstract List<String> getProvidedNetbootProducts(String depotId);
 
 	public abstract List<String> getAllLocalbootProductNames (String depotId);
 
@@ -724,7 +741,7 @@ public abstract class PersistenceController
    /* information about the service  */
     	//public abstract void mapOfMethodSignaturesRequestRefresh(); we dont need update this
 
-	public abstract List getMethodSignature(String methodname);
+	public abstract List<String> getMethodSignature(String methodname);
 
 
 	public abstract String getBackendInfos();
@@ -992,10 +1009,16 @@ public abstract class PersistenceController
 	public abstract Date getOpsiExpiresDate();
 
 	public abstract void retrieveOpsiModules();
+	
+	public abstract void showLicInfoWarnings();
 
 	public abstract Map<String, Object> getOpsiModulesInfos();
 	
-	public abstract Map<String, Object> getOpsiLicensingInfo();
+	public abstract String getOpsiLicensingInfoVersion();
+
+	public abstract void opsiLicensingInfoRequestRefresh();
+	
+	public abstract JSONObject getOpsiLicensingInfo();
 	
 	public abstract String getCustomer();
 

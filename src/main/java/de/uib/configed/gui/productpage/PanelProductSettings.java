@@ -30,6 +30,10 @@ import java.util.*;
 
 import javax.swing.table.*;
 
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+
 import java.io.File;
 
 import de.uib.utilities.table.ExporterToPDF;

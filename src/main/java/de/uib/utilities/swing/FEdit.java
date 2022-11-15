@@ -54,6 +54,8 @@ public class FEdit extends javax.swing.JDialog
 	
 	public FEdit(String initialText, String hint)
 	{
+		super((Dialog) null);
+		
 		logging.debug(this, " FEdit constructed for >>" + initialText + "<< title " + hint);
 		setIconImage (Globals.mainIcon);
 		//initComponents();

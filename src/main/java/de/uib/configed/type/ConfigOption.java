@@ -44,7 +44,8 @@ public class ConfigOption extends RetrievedMap
 		{
 			if (retrieved.get("defaultValues") instanceof org.json.JSONArray)
 			{
-				logging.warning(this, "gotdefaultvalues "
+
+				logging.info(this, "gotdefaultvalues unexpectedly "
 				+ retrieved.get("defaultValues").getClass() + " "
 				+ retrieved.get("defaultValues")	);
 				put("defaultValues", ( (org.json.JSONArray)retrieved.get("defaultValues") ).toList());

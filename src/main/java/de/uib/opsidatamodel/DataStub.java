@@ -46,7 +46,9 @@ import de.uib.utilities.table.*;
 public abstract class DataStub
 {
 	
-	abstract public boolean test();
+	//abstract protected boolean test();
+	
+	abstract public boolean canCallMySQL();
 	
 	abstract public void productDataRequestRefresh();
 	

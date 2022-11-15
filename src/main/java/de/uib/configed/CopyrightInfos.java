@@ -39,9 +39,9 @@ public class CopyrightInfos
         infos.add("iText® 5.4.5 ©2000-2013 pdf library");
         infos.add("licensed by AGPL");
         infos.add("");
-        infos.add("jSch 0.1.52. SSH library");
+        infos.add("jSch 0.1.55 SSH library");
         infos.add("licensed by BSD-style library");
-        infos.add("Copyright(c) 2002-2015 Atsuhiko Yamanaka, JCraft,Inc");
+        infos.add("Copyright(c) 2002-2022 Atsuhiko Yamanaka, JCraft,Inc");
         infos.add("");
         infos.add("SwingX extension of Swing");
         infos.add("licenced by GNU LESSER GENERAL PUBLIC LICENSE");

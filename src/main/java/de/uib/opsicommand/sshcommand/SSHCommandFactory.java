@@ -72,6 +72,8 @@ public class SSHCommandFactory
 	final public static String menuNew = configed.getResourceValue("SSHConnection.CommandControl.menuText_newCommand");
 	/** default position is 0 **/
 	final public int position_default = 0;
+	
+	public static int successfulConnectObservedCount = 0;
 
 	/** default parameter replace id beginns with <<<  **/
 	// public static String replacement_default_1 = "<<<";
@@ -304,6 +306,8 @@ public class SSHCommandFactory
 			{
 				// Achtung Reihenfolge könnte sich ändern !" toList = ArrayList! JsonArray muss nicht sortiert sein!"
 				LinkedList com_commands = new LinkedList ( ((JSONArray)map.get(command_map_commands)).toList() );
+				com_commands.add("echo ... ");
+				com_commands.add("echo READY");
 				com.setCommands(com_commands);
 			}
 			list_knownMenus.add(com.getMenuText());

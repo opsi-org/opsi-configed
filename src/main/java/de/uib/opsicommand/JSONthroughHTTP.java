@@ -613,11 +613,11 @@ public class JSONthroughHTTP extends JSONExecutioner
 					if (connection.getHeaderField("Content-Encoding") != null)
 					{
 						gzipped = connection.getHeaderField("Content-Encoding").equalsIgnoreCase("gzip");
-						logging.info(this, "gzipped " + gzipped);
+						logging.debug(this, "gzipped " + gzipped);
 						deflated = connection.getHeaderField("Content-Encoding").equalsIgnoreCase("deflate");
-						logging.info(this, "deflated " + deflated);
+						logging.debug(this, "deflated " + deflated);
 						lz4compressed = connection.getHeaderField("Content-Encoding").equalsIgnoreCase("lz4");
-						logging.info(this, "lz4compressed " + lz4compressed);
+						logging.debug(this, "lz4compressed " + lz4compressed);
 					}
 					
 					

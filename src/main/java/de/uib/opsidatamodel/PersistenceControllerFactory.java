@@ -116,7 +116,7 @@ public class PersistenceControllerFactory
 			if (connected)
 			{
 				logging.info("factory: check source accepted");
-				boolean sourceAccepted = persistControl.sourceAccept();
+				boolean sourceAccepted = persistControl.canCallMySQL();
 				logging.info("factory: source accepted " + sourceAccepted);
 				
 				if (sqlAndGetRows && !sourceAccepted)

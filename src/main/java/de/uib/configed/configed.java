@@ -1,40 +1,23 @@
 package de.uib.configed;
 
-import de.uib.messages.Messages;
-import de.uib.opsicommand.ConnectionState;
-import de.uib.opsidatamodel.PersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.messages.*;
 import de.uib.utilities.PropertiesStore;
-import de.uib.utilities.logging.UncaughtExceptionHandler;
-import de.uib.utilities.logging.logging;
-import de.uib.utilities.savedstates.SavedStates;
-
-import java.awt.Color;
+import de.uib.utilities.logging.*;
+import javax.swing.UIManager;
+import javax.swing.*;
+import java.util.*;
 import java.awt.Toolkit;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Formatter;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.Properties;
-import java.util.Set;
-import java.util.TreeSet;
-import javax.swing.JApplet;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import java.awt.*;
+import utils.*;
+import de.uib.opsidatamodel.*;
+import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
+import de.uib.opsicommand.ConnectionState;
+import de.uib.utilities.savedstates.*;
 
 public class configed {
-
 	public static final boolean isApplet = false; // we dont support applet mode anywhere
 	public static boolean useHalt = false;
 
@@ -45,130 +28,111 @@ public class configed {
 
 	public static boolean sshconnect_onstart = false;
 
-	public static final String usageInfo = "\n" + "\tconfiged [OPTIONS] \n" + "\t\twhere an OPTION may be \n";
+	public final static String usageInfo = "\n" +
+			"\tconfiged [OPTIONS] \n" +
+			"\t\twhere an OPTION may be \n";
 	/*
 	 * "-l LOC, \t--locale LOC \t\t\t(Set locale LOC (format: <language>_<country>)) \n"
 	 * +
 	 * "-h HOST, \t--host HOST \t\t\t(Configuration server HOST to connect to, --help shows the command usage) \n"
-	 * + "-u NAME, \t--user NAME \t\t\t(user for authentication) \n" +
+	 * +
+	 * "-u NAME, \t--user NAME \t\t\t(user for authentication) \n" +
 	 * "-p PASSWORD, \t--password PASSWORD\t\t(password for authentication) \n" +
 	 * "-c CLIENT, \t--client CLIENT \t\t(CLIENT to preselect) + \n" +
 	 * "-t INDEX, \t--tab INDEX\t\t\t(Start with tab number INDEX, index counting starts with 0, works only if a CLIENT is preselected ) + \n"
-	 * + "-d PATH, \t--logdirectory PATH \t\t(Directory for the log files) \n" +
+	 * +
+	 * "-d PATH, \t--logdirectory PATH \t\t(Directory for the log files) \n" +
 	 * "-qs [SAVEDSEARCH_NAME], \t\t--querysavedsearch [SAVEDSEARCH_NAME]\t\t(On command line: tell saved host searches list resp. the search result for [SAVEDSEARCH_NAME])\n"
 	 * +
 	 * //"-qsj, \t--querysavedsearchjson \t(CLI: same as querysavedsearch, but output as jsonlist)\n"
 	 * +
 	 * "--gzip \t\t\t\t\t\t(Activate gzip transmission of data from opsi server) \n"
-	 * + "--version \t\t\t\t\t(Tell configed version)\n" +
+	 * +
+	 * "--version \t\t\t\t\t(Tell configed version)\n" +
 	 * "--help \t\t\t\t\t\t(Give this help)\n" +
 	 * "--loglevel L \t\t\t\t\t(Set logging level L, L is a number >= " +
 	 * logging.LEVEL_FATAL + ", <= " + logging.LEVEL_DEBUG + ") \n" ;
 	 */
 
-	public static final String[][] usageLines = new String[][] {
-			new String[] { "-l LOC", "--locale LOC",
-					"Set locale LOC (format: <language>_<country>). DEFAULT: System.locale", },
-			new String[] { "-h HOST", "--host HOST",
-					"Configuration server HOST to connect to. DEFAULT: choose interactive", },
-			new String[] { "-u NAME", "--user NAME", "user for authentication. DEFAULT: give interactive", },
-			new String[] { "-p PASSWORD", "--password PASSWORD",
-					"password for authentication. DEFAULT: give interactive ", },
-			new String[] { "-c CLIENT", "--client CLIENT", "CLIENT to preselect.  DEFAULT: no client selected", },
-			new String[] { "-g CLIENTGROUP", "--group CLIENTGROUP",
-					"CLIENTGROUP to preselect. DEFAULT: last selected group reselected", },
-			new String[] { "-t INDEX", "--tab INDEX",
-					"Start with tab number INDEX, index counting starts with 0, works only if a CLIENT is preselected. DEFAULT 0", },
-			new String[] { "-d PATH", "--logdirectory PATH",
-					"Directory for the log files. DEFAULT: an opsi log directory, dependent on system and user privileges, lookup in /help/logfile", },
-			new String[] { "-s PATH", "--savedstates PATH",
-					"Directory for the files which keep states specific for a server connection. DEFAULT: Similar to log directory", },
-			new String[] { "-r REFRESHMINUTES", "--refreshminutes REFRESHMINUTES",
-					"Refresh data every REFRESHMINUTES  (where this feature is implemented, 0 = never).DEFAULT: 0", },
-			new String[] { "-qs [SAVEDSEARCH_NAME]", "--querysavedsearch [SAVEDSEARCH_NAME]",
-					"On command line: tell saved host searches list resp. the search result for [SAVEDSEARCH_NAME])", },
-			// "-qsj, \t--querysavedsearchjson \t(CLI: same as querysavedsearch, but output
-			// as jsonlist)\n" +
+	public final static String[][] usageLines = new String[][]{
+	            new String[]{"-l LOC", 				"--locale LOC", 						"Set locale LOC (format: <language>_<country>). DEFAULT: System.locale"},
+	            new String[]{"-h HOST", 				"--host HOST", 						"Configuration server HOST to connect to. DEFAULT: choose interactive"},
+	            new String[]{"-u NAME", 			"--user NAME",						"user for authentication. DEFAULT: give interactive"},
+	            new String[]{"-p PASSWORD", 		"--password PASSWORD",				"password for authentication. DEFAULT: give interactive "},
+	            new String[]{"-c CLIENT", 			"--client CLIENT", 					"CLIENT to preselect.  DEFAULT: no client selected"},
+	            new String[]{"-g CLIENTGROUP", 		"--group CLIENTGROUP", 			"CLIENTGROUP to preselect. DEFAULT: last selected group reselected"},
+	            new String[]{"-t INDEX",				"--tab INDEX",						"Start with tab number INDEX, index counting starts with 0, works only if a CLIENT is preselected. DEFAULT 0"},
+	            new String[]{"-d PATH", 				"--logdirectory PATH", 			"Directory for the log files. DEFAULT: an opsi log directory, dependent on system and user privileges, lookup in /help/logfile"},
+	            new String[]{"-s PATH", 				"--savedstates PATH", 				"Directory for the files which keep states specific for a server connection. DEFAULT: Similar to log directory"},
+	            
+	            new String[]{"-r REFRESHMINUTES", 	"--refreshminutes REFRESHMINUTES", 	"Refresh data every REFRESHMINUTES  (where this feature is implemented, 0 = never).DEFAULT: 0"},
+	            new String[]{"-qs [SAVEDSEARCH_NAME]", "--querysavedsearch [SAVEDSEARCH_NAME]","On command line: tell saved host searches list resp. the search result for [SAVEDSEARCH_NAME])"},
+	             //"-qsj, \t--querysavedsearchjson \t(CLI: same as querysavedsearch, but output as jsonlist)\n" +
+	             
+	            new String[]{"-qg SAVEDSEARCH_NAME GROUP_NAME", "--definegroupbysearch SAVEDSEARCH_NAME GROUP_NAME","On command line: populate existing group GROUP_NAME with clients resulting frim search SAVEDSEARCH_NAME"},
+	            new String[]{"--initUserRoles", "", "On command line, perform  the complete initialization of user roles if something was changed"},
+	            
+	            new String[]{"--gzip [y/n]", "", "Activate compressed transmission of data from opsi server yes/no. DEFAULT: y"},
+	            new String[]{"--sslversion PREFERRED_SSL_VERSION", "", "Try to use this SSL/ TLS version. DEFAULT: Automatic selection"},
+	            new String[]{"--use_tls_cipher CIPHER_RFC_NAME", "",  "Encoding TLS  via this algorithm. DEFAULT: Automatic selection"}, // via one of the listed algorithms, format [\"a\",\"b\",..]"},
+	            new String[]{"--ssh-immediate-connect [y/n]",	"", "Try to create a SSH connection on start. DEFAULT: " + getYNforBoolean( sshconnect_onstart ) + ""},
+	            new String[]{"--ssh-key SSHKEY",				"", "Full path with filename from sshkey used for authentication on ssh server"},
+	            new String[]{"--ssh-passphrase PASSPHRASE",		"", "Passphrase for given sshkey used for authentication on ssh server"},
+	            new String[]{"--version", "",  "Tell configed version"},
+	            new String[]{"--collect_queries_until_no N", "", "Collect the first N queries; N = " 
+	            	+  de.uib.opsicommand.OpsiMethodCall.maxCollectSize + " (DEFAULT).  -1 meaning 'no collect'. 0 meaning 'infinite' "},
+	            new String[]{"--help", "", "Give this help"},
+	            new String[]{"--loglevel L", "",  "Set logging level L, L is a number >= " +  logging.LEVEL_FATAL + ", <= " + logging.LEVEL_DEBUG + " . DEFAULT: " + de.uib.utilities.logging.logging.AKT_DEBUG_LEVEL},
+	            new String[]{"--halt", "",  "Use  first occurring debug halt point that may be in the code"},
+	            //new String[]{"--sqlgethashes", "", "Use sql statements with getHashes where implemented in PersistenceController "},
+	            new String[]{"--sqlgetrows", "", "Force use sql statements by getRawData"},
+	            new String[]{"--nosqlrawdata", "", "Avoid getRawData"},
+	            // new String[]{"--synced", "", "Load table first and do only sync afterwards "},
+	            //new String[]{"--dblocal", "", "Tries to make use of an embedded local database "},
+	            //new String[]{"--dblocalnew", "", "Tries to make use of an embedded local database after renewing it"},
+	            // new String[]{"--sqldirect", "", "Use direct sql access if possible in PersistenceController "}
+	            //new String[]{"--sqldirect-cleanup-auditsoftware", "", "Use direct sql access if possible in PersistenceController "},
+	            new String[]{"--localizationfile EXTRA_LOCALIZATION_FILENAME", "", "For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: " + localizationFilenameRegex.replace("...*\\", "LOCALENAME")},
+	            new String[]{"--localizationstrings", "", "For translation work, show internal labels together with the strings of selected localization"}
+	            ,
+	            new String[]{"--swaudit-pdf FILE_WITH_CLIENT_IDS_EACH_IN_A_LINE [OUTPUT_PATH]", "", "export pdf swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)"}
+	             ,
+	            new String[]{"--swaudit-csv FILE_WITH_CLIENT_IDS_EACH_IN_A_LINE [OUTPUT_PATH]", "", "export csv swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)"}
+	        
+	        
 
-			new String[] { "-qg SAVEDSEARCH_NAME GROUP_NAME", "--definegroupbysearch SAVEDSEARCH_NAME GROUP_NAME",
-					"On command line: populate existing group GROUP_NAME with clients resulting frim search SAVEDSEARCH_NAME", },
-			new String[] { "--initUserRoles", "",
-					"On command line, perform  the complete initialization of user roles if something was changed", },
-			new String[] { "--gzip [y/n]", "",
-					"Activate compressed transmission of data from opsi server yes/no. DEFAULT: y", },
-			new String[] { "--sslversion PREFERRED_SSL_VERSION", "",
-					"Try to use this SSL/ TLS version. DEFAULT: Automatic selection", },
-			new String[] { "--use_tls_cipher CIPHER_RFC_NAME", "",
-					"Encoding TLS  via this algorithm. DEFAULT: Automatic selection", }, // via one of the listed
-																							// algorithms, format
-																							// [\"a\",\"b\",..]"},
-			new String[] { "--ssh-immediate-connect [y/n]", "",
-					"Try to create a SSH connection on start. DEFAULT: " + getYNforBoolean(sshconnect_onstart) + "", },
-			new String[] { "--ssh-key SSHKEY", "",
-					"Full path with filename from sshkey used for authentication on ssh server", },
-			new String[] { "--ssh-passphrase PASSPHRASE", "",
-					"Passphrase for given sshkey used for authentication on ssh server", },
-			new String[] { "--version", "", "Tell configed version" },
-			new String[] { "--collect_queries_until_no N", "",
-					"Collect the first N queries; N = " + de.uib.opsicommand.OpsiMethodCall.maxCollectSize
-							+ " (DEFAULT).  -1 meaning 'no collect'. 0 meaning 'infinite' ", },
-			new String[] { "--help", "", "Give this help" },
-			new String[] { "--loglevel L", "",
-					"Set logging level L, L is a number >= " + logging.LEVEL_FATAL + ", <= " + logging.LEVEL_DEBUG
-							+ " . DEFAULT: " + de.uib.utilities.logging.logging.AKT_DEBUG_LEVEL, },
-			new String[] { "--halt", "", "Use  first occurring debug halt point that may be in the code", },
-			// new String[]{"--sqlgethashes", "", "Use sql statements with getHashes where
-			// implemented in PersistenceController "},
-			new String[] { "--sqlgetrows", "", "Force use sql statements by getRawData", },
-			new String[] { "--nosqlrawdata", "", "Avoid getRawData" },
-			// new String[]{"--synced", "", "Load table first and do only sync afterwards
-			// "},
-			// new String[]{"--dblocal", "", "Tries to make use of an embedded local
-			// database "},
-			// new String[]{"--dblocalnew", "", "Tries to make use of an embedded local
-			// database after renewing it"},
-			// new String[]{"--sqldirect", "", "Use direct sql access if possible in
-			// PersistenceController "}
-			// new String[]{"--sqldirect-cleanup-auditsoftware", "", "Use direct sql access
-			// if possible in PersistenceController "},
-			new String[] { "--localizationfile EXTRA_LOCALIZATION_FILENAME", "",
-					"For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: "
-							+ localizationFilenameRegex.replace("...*\\", "LOCALENAME"), },
-			new String[] { "--localizationstrings", "",
-					"For translation work, show internal labels together with the strings of selected localization", },
-			new String[] { "--swaudit-pdf FILE_WITH_CLIENT_IDS_EACH_IN_A_LINE [OUTPUT_PATH]", "",
-					"export pdf swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)", },
-			new String[] { "--swaudit-csv FILE_WITH_CLIENT_IDS_EACH_IN_A_LINE [OUTPUT_PATH]", "",
-					"export csv swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)", },
-			// undocumented
-			// new String[]{"--me", "--testPersistenceControllerMethod", ""}
+	            //undocumented
+	            //new String[]{"--me", "--testPersistenceControllerMethod", ""}
 
-	};
+	        }
+	        ;
 
-	public static final Charset serverCharset = Charset.forName("UTF-8");
-	public static final String javaVersion = System.getProperty("java.version");
-	public static final String javaVendor = System.getProperty("java.vendor", "");
-	public static final LinkedHashMap<String, Object> javaSysExtraProperties = new LinkedHashMap<String, Object>();
-	public static final String systemSSLversion = System.getProperty("https.protocols");
-	public static final String STATEOFTHEART_SSL_VERSION = "TLSv1.2";
-	public static final String JAVA_1_7_DEFAUTL_SSL_VERSION = "TLSv1";
+
+	public final static Charset serverCharset = Charset.forName("UTF-8");
+	public final static String javaVersion = System.getProperty("java.version");
+	public final static String javaVendor = System.getProperty("java.vendor", "");
+	public final static LinkedHashMap<String, Object> javaSysExtraProperties = new LinkedHashMap<String, Object>();
+	public final static String systemSSLversion = System.getProperty("https.protocols");
+	public final static String STATEOFTHEART_SSL_VERSION = "TLSv1.2";
+	public final static String JAVA_1_7_DEFAUTL_SSL_VERSION = "TLSv1";
 	public static String PREFERRED_SSL_VERSION = STATEOFTHEART_SSL_VERSION;
 	public static String EXTRA_LOCALIZATION_FILENAME = null;
 	public static PropertiesStore extraLocalization;
 	public static boolean SHOW_LOCALIZATION_STRINGS = false;
-	public static boolean sslversionChecked = false; // set only once
+	public static boolean sslversionChecked = false; //set only once
 	protected static boolean serverCharset_equals_vm_charset = false;
 
-	private static JApplet appletHost; // is deprecated and always null
+	private static JApplet appletHost; //is deprecated and always null
 
 	public static ConfigedMain cm;
 
+
 	private static String locale = null;
-	private static String host = null;
+	private static String host  = null;
 	public static String user = null;
 	private static String password = null;
 	private static int loglevel = logging.AKT_DEBUG_LEVEL;
-
+	
 	public static String TLS_CIPHER_SUITE = "";
 	public static String sshkey = null;
 	public static String sshkeypassphrase = null;
@@ -180,15 +144,17 @@ public class configed {
 	private static String savedSearch = null;
 	private static boolean optionCLIDefineGroupBySearch = false;
 	private static String group = null;
-	private static boolean optionCLISwAuditPDF = false;
-	private static boolean optionCLISwAuditCSV = false;
-	private static String clientsFile = null;
+	private static boolean optionCLISwAuditPDF= false;
+	private static boolean optionCLISwAuditCSV= false;
+	private static String  clientsFile = null;
 	private static String outDir = null;
 
 	private static boolean optionPersistenceControllerMethodCall = false;
 	private static String methodCall = null;
-
+	
 	private static boolean optionCLIuserConfigProducing = false;
+	
+
 
 	public static SavedStates savedStates;
 	public static String savedStatesLocationName;
@@ -204,51 +170,56 @@ public class configed {
 	private static String paramClientgroup;
 	private static Integer paramTab;
 
-	// public static Locale LOCALE;
+	//public static Locale LOCALE;
 
-	// protected static ResourceBundle messages;
-	// protected static ResourceBundle messagesEN;
+	//protected static ResourceBundle messages;
+	//protected static ResourceBundle messagesEN;
+	
+	//--------------------------------------------------------------------------------------------------------
+	//exit codes
+	
+	public final static int NO_ERROR = 0;
+	public final static int ERROR_INVALID_OPTION = 1;
+	public final static int ERROR_MISSING_VALUE_FOR_OPTION = 2;
+	public final static int ERROR_UNSUPPORTED_CIPHERSUITE = 12;
+	
+	public final static int ERROR_CANNOT_READ_EXTRA_LOCALIZATION = 11;
+	
+	public final static int ERROR_OUT_OF_MEMORY = 21;
+	
+	//--------------------------------------------------------------------------------------------------------
+	
 
-	// --------------------------------------------------------------------------------------------------------
-	// exit codes
-
-	public static final int NO_ERROR = 0;
-	public static final int ERROR_INVALID_OPTION = 1;
-	public static final int ERROR_MISSING_VALUE_FOR_OPTION = 2;
-	public static final int ERROR_UNSUPPORTED_CIPHERSUITE = 12;
-
-	public static final int ERROR_CANNOT_READ_EXTRA_LOCALIZATION = 11;
-
-	public static final int ERROR_OUT_OF_MEMORY = 21;
-
-	// --------------------------------------------------------------------------------------------------------
-
-	private static String getYNforBoolean(Boolean b) {
-		if (b)
+	private static String getYNforBoolean(Boolean b)
+	{
+		if (b) 
 			return "y";
 		else
 			return "n";
 	}
-
-	private static String tabs(int count) {
+	
+	private static String tabs(int count)
+	{
 		StringBuffer buf = new StringBuffer("");
 		for (int j = 0; j < count; j++)
 			buf.append("\t");
 		return buf.toString();
 	}
 
-	protected static void usage() {
+	protected static void usage()
+	{
 		System.out.println();
 		System.out.println(" configed version " + Globals.VERSION + " " + Globals.VERDATE + " " + Globals.VERHASHTAG);
-
+		
 		System.out.println(usageInfo);
 
 		final int tabWidth = 8;
 		int length0 = 0;
 		int length1 = 0;
 
-		for (int i = 0; i < usageLines.length; i++) {
-			// we find max of fillTabs0, fillTabs1
+		for (int i = 0; i<usageLines.length; i++)
+		{
+			//we find max of fillTabs0, fillTabs1
 			int len = usageLines[i][0].length();
 
 			if (len > length0)
@@ -256,218 +227,288 @@ public class configed {
 
 			len = usageLines[i][1].length();
 
+
 			if (len > length1)
 				length1 = len;
 		}
 
+
 		int allTabs0 = 0;
-		if (length0 % tabWidth == 0)
+		if ( length0 % tabWidth == 0)
 			allTabs0 = length0 / tabWidth + 1;
 		else
 			allTabs0 = (int) (length0 / tabWidth) + 1;
 
 		int allTabs1 = 0;
-		if (length1 % tabWidth == 0)
+		if ( length1 % tabWidth == 0)
 			allTabs1 = length1 / tabWidth + 1;
 		else
 			allTabs1 = (int) (length1 / tabWidth) + 1;
 
-		for (int i = 0; i < usageLines.length; i++) {
-			// System.out.println("usageLines " + i + ", " + 0 + usageLines[i][0]);
+		for (int i = 0; i<usageLines.length; i++)
+		{
+			//System.out.println("usageLines " + i + ", " + 0 + usageLines[i][0]);
 
 			int startedTabs0 = (int) (usageLines[i][0].length() / tabWidth);
 			int startedTabs1 = (int) (usageLines[i][1].length() / tabWidth);
 
-			System.out.println("\t" + usageLines[i][0] + tabs(allTabs0 - startedTabs0) + usageLines[i][1]
-					+ tabs(allTabs1 - startedTabs1) + usageLines[i][2]);
-		}
 
+			System.out.println("\t" +
+			                   usageLines[i][0] + tabs(allTabs0 - startedTabs0) +
+			                   usageLines[i][1] + tabs(allTabs1 - startedTabs1) +
+			                   usageLines[i][2]
+			                  );
+		}
+		
 		System.out.println();
 		System.out.println();
+
 	}
 
-	protected static boolean isValue(String[] args, int i) {
-		// System.out.println( "isValue " + args[i] + " length " + args.length + " i " +
-		// i + " has - " + (args[i].indexOf('-') == 0) );
+	protected static boolean isValue(String[] args, int i)
+	{
+		//System.out.println( "isValue " + args[i] + " length " + args.length + " i " + i  + " has - " + (args[i].indexOf('-') == 0) );
 
-		if (i >= args.length || args[i].indexOf('-') == 0)
+		if ( i >= args.length ||  args[i].indexOf('-') == 0)
 			return false;
 
 		return true;
 	}
 
-	protected static String getArg(String[] args, int i) {
-		if (args.length <= i + 1 || args[i + 1].indexOf('-') == 0) {
+
+
+	protected static String getArg(String[] args, int i)
+	{
+		if ( args.length <= i+1 || args[i+1].indexOf('-') == 0 )
+		{
 			System.err.println("Missing value for option " + args[i]);
 			usage();
-			endApp(ERROR_MISSING_VALUE_FOR_OPTION);
+			endApp( ERROR_MISSING_VALUE_FOR_OPTION );
 		}
 		i++;
 		return args[i];
 	}
 
-	public static void startWithLocale() {
+	public static void startWithLocale()
+	{
 		logging.info("system information: ");
-
+		
+		
 		logging.info(" configed version " + Globals.VERSION + " " + Globals.VERDATE + " " + Globals.VERHASHTAG);
 		logging.info(" running by java version " + javaVersion);
-
-		Properties sysProperties = System.getProperties();
+		
+		Properties sysProperties =  System.getProperties();
 		Set<String> propNames = sysProperties.stringPropertyNames();
 		Set<String> priorizedNames = new HashSet<String>();
-
+		
 		LinkedHashSet<String> javaNames = new LinkedHashSet<String>();
-
+		
 		String s = "java.version";
-		if (propNames.contains(s)) {
-			// javaNames.add( s );
-			priorizedNames.add(s);
+		if ( propNames.contains( s ))
+		{
+			//javaNames.add( s );
+			priorizedNames.add (s);
 		}
-
+		
 		s = "java.vendor";
-		if (propNames.contains(s)) {
-			javaNames.add(s);
-			priorizedNames.add(s);
+		if (propNames.contains( s ))
+		{
+			javaNames.add( s );
+			priorizedNames.add (s);
 		}
-
+		
 		TreeSet<String> sortedJavaNames = new TreeSet<String>();
-
-		for (String name : propNames) {
-			if (name.indexOf("java") >= 0 && !priorizedNames.contains(name) && sysProperties.get(name) != null) {
-				sortedJavaNames.add(name);
+		
+		for (String name : propNames)
+		{
+			if ( name.indexOf( "java" ) >= 0  && !priorizedNames.contains( name) && sysProperties.get( name ) != null)
+			{
+				sortedJavaNames.add ( name );
 			}
 		}
-
-		for (String name : sortedJavaNames) {
-			javaNames.add(name);
+		
+		for (String name : sortedJavaNames)
+		{
+			javaNames.add (name );
 		}
-
-		for (String name : javaNames) {
-			Object value = sysProperties.get(name);
+		
+		for (String name : javaNames)
+		{
+			Object value = sysProperties.get( name );
 			String key = name;
-			if (key.length() > 5 && key.substring(0, 5).equals("java."))
-				key = key.substring(5); // omitting "java."
-
-			logging.info(key + ":: " + value);
-
-			javaSysExtraProperties.put(key, value);
+			if (key.length() >5 && key.substring(0,5).equals( "java." ))
+				key = key.substring(5) ; //omitting "java."
+				
+			logging.info(key +  ":: " + value);
+			
+			javaSysExtraProperties.put( key, value );
 		}
 
-		logging.info(
-				" we get max memory " + (new Formatter()).format("%,d MB", Runtime.getRuntime().maxMemory() / 1000000));
-		// System.exit(0);
+		
+	
+		logging.info(" we get max memory " + (new Formatter()).format("%,d MB", Runtime.getRuntime().maxMemory() / 1000000));
+		//System.exit(0);
 		sslversionCheck(true);
-		// logging.info("configed, start with Locale");
+		//logging.info("configed, start with Locale");
+		
 
+		de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.reset();
+		LicensingInfoMap.requestRefresh();
+			
 		cm = new ConfigedMain(appletHost, paramHost, paramUser, paramPassword);
 
-		// if (appletHost != null)
-		// ((configedApplet) appletHost).setMainController(cm);
+		//if (appletHost != null)
+		//	((configedApplet) appletHost).setMainController(cm);
 
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run()
+			{
 				cm.init();
 			}
 		});
 
 		/*
-		 * if (appletHost != null) {
-		 *
-		 * if (paramClient != null || paramClientgroup != null) { if (paramClientgroup
-		 * != null) cm.setGroup(paramClientgroup); if (paramClient !=
-		 * null)cm.setClient(paramClient);
-		 *
-		 * if (paramTab != null) cm.setVisualViewIndex(paramTab);
-		 *
-		 *
-		 * } } else { if (paramClient != null || paramClientgroup != null) { if
-		 * (paramClientgroup != null) cm.setGroup(paramClientgroup); if (paramClient !=
-		 * null)cm.setClient(paramClient);
-		 *
-		 * logging.info("set client " + paramClient);
-		 *
-		 *
-		 *
-		 * if (paramTab != null) cm.setVisualViewIndex(paramTab);
-		 *
-		 *
-		 * } }
-		 */
+		if (appletHost != null)
+		{
+			
+			if (paramClient != null || paramClientgroup  != null)
+			{
+				if (paramClientgroup != null) cm.setGroup(paramClientgroup);
+				if (paramClient != null)cm.setClient(paramClient);
+				
+				if (paramTab != null)
+					cm.setVisualViewIndex(paramTab);
+				
+				
+			}
+	}
+		else
+		{
+			if (paramClient != null || paramClientgroup  != null)
+			{
+				if (paramClientgroup != null) cm.setGroup(paramClientgroup);
+				if (paramClient != null)cm.setClient(paramClient);
+				
+				logging.info("set client " + paramClient);
+				
+				
+				
+				if (paramTab != null)
+					cm.setVisualViewIndex(paramTab);
+				
+				
+			}
+	}
+		*/
 
-		try {
+		
+
+		try
+		{
 			/*
-			 *
-			 * if (appletHost != null) { SwingUtilities.invokeLater( new Runnable(){ public
-			 * void run(){
-			 *
-			 * if (paramClient != null || paramClientgroup != null) { if (paramClientgroup
-			 * != null) cm.setGroup(paramClientgroup); if (paramClient !=
-			 * null)cm.setClient(paramClient); logging.info("set client " + paramClient);
-			 *
-			 * if (paramTab != null) cm.setVisualViewIndex(paramTab);
-			 *
-			 *
-			 * }
-			 *
-			 * } } ); } else
-			 */
+
+			if (appletHost != null)
+			{
+				SwingUtilities.invokeLater(
+				    new Runnable(){
+					    public void run(){
+
+						    if (paramClient != null || paramClientgroup  != null)
+						    {
+							    if (paramClientgroup != null) cm.setGroup(paramClientgroup);
+							    if (paramClient != null)cm.setClient(paramClient);
+							    logging.info("set client " + paramClient);
+
+							    if (paramTab != null)
+								    cm.setVisualViewIndex(paramTab);
+
+
+						    }
+
+					    }
+				    }
+				);
+			}
+			else
+			*/
 
 			{
-				SwingUtilities.invokeAndWait(new Runnable() {
-					public void run() {
-						if (paramClient != null || paramClientgroup != null) {
-							if (paramClientgroup != null)
-								cm.setGroup(paramClientgroup);
-							if (paramClient != null)
-								cm.setClient(paramClient);
-							logging.info("set client " + paramClient);
+				SwingUtilities.invokeAndWait(
+				    new Runnable(){
+					    public void run(){
 
-							if (paramTab != null)
-								cm.setVisualViewIndex(paramTab);
-						}
-					}
-				});
+						    if (paramClient != null || paramClientgroup  != null)
+						    {
+							    if (paramClientgroup != null) cm.setGroup(paramClientgroup);
+							    if (paramClient != null)cm.setClient(paramClient);
+							    logging.info("set client " + paramClient);
+
+							    if (paramTab != null)
+								    cm.setVisualViewIndex(paramTab);
+
+
+						    }
+
+					    }
+				    }
+				);
 			}
-		} catch (Exception ex) {
+		}
+		catch(Exception ex)
+		{
 			logging.info(" run " + ex);
 		}
+
 	}
 
+
+
 	/** construct the application */
-	public configed(JApplet appletHost, String paramLocale, String paramHost, String paramUser, String paramPassword,
-			final String paramClient, final String paramClientgroup, final Integer paramTab, String paramLogdirectory) {
+	public configed(JApplet appletHost, String paramLocale, String paramHost, String paramUser, String paramPassword, final String paramClient, final String paramClientgroup, final Integer paramTab, String paramLogdirectory)
+	{
+
 		UncaughtExceptionHandler errorHandler = new UncaughtExceptionHandlerLocalized();
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
 
-		System.out.println("starting " + getClass().getName());
-		System.out.println("default charset is " + Charset.defaultCharset().displayName());
-		System.out.println("server charset is configured as " + serverCharset);
+
+		System.out.println ("starting " + getClass().getName());
+		System.out.println ("default charset is " + Charset.defaultCharset().displayName());
+		System.out.println ("server charset is configured as "  + serverCharset);
 		System.out.println(" applet " + appletHost);
 
-		if (serverCharset.equals(Charset.defaultCharset())) {
+		if (serverCharset.equals(  Charset.defaultCharset() ) )
+		{
 			serverCharset_equals_vm_charset = true;
-			System.out.println("they are equal");
+			System.out.println ("they are equal");
 		}
 
 		configureUI();
 
 		String imageHandled = "(we start image retrieving)";
-		// System.out.println (imageHandled);
-		try {
+		//System.out.println (imageHandled);
+		try
+		{
 			String resourceS = "opsi.gif";
 			URL resource = Globals.class.getResource(resourceS);
-			if (resource == null) {
-				System.out.println("image resource " + resourceS + "  not found");
-			} else {
+			if (resource == null)
+			{
+				System.out.println ("image resource " + resourceS + "  not found");
+			}
+			else
+			{
 				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 				imageHandled = "setIconImage";
 			}
-		} catch (Exception ex) {
-			System.out.println("imageHandled failed: " + ex.toString());
 		}
+		catch(Exception ex)
+		{
+			System.out.println ("imageHandled failed: " + ex.toString());
+		}
+
 
 		System.out.println("--  option logdirectory " + logdirectory);
 		System.out.println("--  wantedDirectory " + logging.wantedDirectory);
+
 
 		// set wanted directory for logging
 		if (logdirectory != null)
@@ -477,34 +518,51 @@ public class configed {
 
 		System.out.println(" --  wantedDirectory " + logging.wantedDirectory);
 
+
 		String[] nameParts = getClass().getName().split("\\.");
-		if ((System.getenv(logging.windowsEnvVariableAppDataDirectory) != null) && (nameParts.length > 0)) {
-			logging.programSubDir = "" + nameParts[nameParts.length - 1];
-		} else if (nameParts.length > 0) {
-			logging.programSubDir = "." + nameParts[nameParts.length - 1];
+		if ( (System.getenv(logging.windowsEnvVariableAppDataDirectory) != null) && (nameParts.length>0) )
+		{
+			logging.programSubDir = "" + nameParts[nameParts.length-1];
 		}
+		else if (nameParts.length>0)
+		{
+			logging.programSubDir = "." + nameParts[nameParts.length-1];
+		}
+
+
 
 		// initialized in ConfigedMain
 		/*
-		 * File savedStatesDir = new File
-		 *
-		 * (System.getProperty(logging.envVariableForUserDirectory) + File.separator +
-		 * logging.programSubDir + File.separator + paramHost.replace(":", "_") );
-		 *
-		 * savedStatesDir.mkdirs();
-		 *
-		 * savedStates = new SavedStates(new File(savedStatesDir.toString() +
-		 * File.separator + savedStatesFilename));
-		 *
-		 * try{ savedStates.load(); } catch(IOException iox) { logging.info(this,
-		 * "saved states file could not be loades"); }
-		 */
+		File savedStatesDir = new File
+			
+			(System.getProperty(logging.envVariableForUserDirectory) + File.separator + logging.programSubDir + 
+			File.separator
+			+  paramHost.replace(":", "_")
+			);
+
+		savedStatesDir.mkdirs();
+
+		savedStates = new SavedStates(new File(savedStatesDir.toString()
+			+  File.separator + savedStatesFilename));
+
+		try{
+			savedStates.load();
+	}
+		catch(IOException iox)
+		{
+			logging.info(this, "saved states file could not be loades");
+	}
+		*/
+
+
 
 		// set locale
 		java.util.List<String> existingLocales = Messages.getLocaleNames();
 		Messages.setLocale(paramLocale);
 		logging.info("getLocales: " + existingLocales);
 		logging.info("selected locale characteristic " + Messages.getSelectedLocale());
+		
+		
 
 		configed.appletHost = appletHost;
 
@@ -515,411 +573,607 @@ public class configed {
 		configed.paramClient = paramClient;
 		configed.paramClientgroup = paramClientgroup;
 
+
 		startWithLocale();
 	}
 
-	protected void revalidate() {
+	protected void revalidate()
+	{
 		cm.initialTreeActivation();
 	}
 
-	protected static void processArgs(String[] args) {
+	protected static void processArgs ( String[] args )
+	{
 		/*
-		 * System.out.println("args:"); for (int i = 0; i < args.length; i++) {
-		 * System.out.println(args[i]); }
-		 */
-		// System.out.println("args " + Arrays.toString(args));
+		System.out.println("args:");
+		for (int i = 0; i < args.length; i++)
+		{
+			System.out.println(args[i]);
+	}
+		*/
+		//System.out.println("args " + Arrays.toString(args));
 		logging.writeToConsole("args " + Arrays.toString(args));
 
-		// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = true;
+		//de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = true;
 		de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
-
-		if (args.length == 2 && args[0].equals("--args")) {
+		
+		
+		if (args.length == 2 && args[0].equals("--args"))
+		{
 			args = args[1].split(";;");
 		}
 
-		for (int i = 0; i < args.length; i++) {
-			if (args[i].equals("--help")) {
+
+		for (int i = 0; i < args.length; i++)
+		{
+
+			if ( args[i].equals("--help") )
+			{
 				usage();
-				endApp(NO_ERROR);
+				endApp( NO_ERROR );
 			}
 		}
 
-		int firstPossibleNonOptionIndex = args.length - 1;
+
+		int firstPossibleNonOptionIndex = args.length -1;
+		
 
 		int i = 0;
-		while (i < args.length) {
+		while (i < args.length)
+		{
 			String arg = args[i];
-			// System.out.println("treat i, arg " + i + ", " + arg);
-
-			if (args[i].charAt(0) != '-') { // no option
-				if (i < firstPossibleNonOptionIndex) {
+			//System.out.println("treat  i, arg " + i + ", " + arg);
+			
+			if (args[i].charAt(0) != '-') //no option
+			{
+				if (i < firstPossibleNonOptionIndex)
+				{
 					usage();
-					endApp(NO_ERROR);
-				} else {
-					// savedSearch = args[i];
-					// methodCall = args[i];
-					// only one of them can be used
+					endApp( NO_ERROR );
+				}
+				else
+				{
+					//savedSearch = args[i];
+					//methodCall = args[i];
+					//only one of them can be used
 				}
 				i++;
-			} else { // options
-				// System.out.println(" option " + arg);
-				if (args[i].equals("-l") || args[i].equals("--locale")) {
+			}
+			else // options
+			
+			{
+				//System.out.println(" option  " + arg);
+				if ( args[i].equals("-l") || args[i].equals("--locale") )
+				{
 					locale = getArg(args, i);
-					i = i + 2;
-				} else if (args[i].equals("-h") || args[i].equals("--host")) {
+					i = i+2;
+				}
+				else if ( args[i].equals("-h") || args[i].equals("--host") )
+				{
 					host = getArg(args, i);
-					i = i + 2;
-				} else if (args[i].equals("-u") || args[i].equals("--user")) {
+					i = i+2;
+				}
+				else if ( args[i].equals("-u") || args[i].equals("--user") )
+				{
 					user = getArg(args, i);
-					i = i + 2;
-				} else if (args[i].equals("-p") || args[i].equals("--password")) {
+					i = i+2;
+				}
+				else if ( args[i].equals("-p") || args[i].equals("--password") )
+				{
 					password = getArg(args, i);
-					i = i + 2;
-				} else if (args[i].equals("-c") || args[i].equals("--client")) {
+					i = i+2;
+				}
+				else if ( args[i].equals("-c") || args[i].equals("--client") )
+				{
 					client = getArg(args, i);
-					i = i + 2;
-				} else if (args[i].equals("-g") || args[i].equals("--group")) {
+					i = i+2;
+				}
+
+				else if ( args[i].equals("-g") || args[i].equals("--group") )
+				{
 					clientgroup = getArg(args, i);
-					i = i + 2;
-				} else if (args[i].equals("-t") || args[i].equals("--tab")) {
+					i = i+2;
+				}
+
+				else if ( args[i].equals("-t") || args[i].equals("--tab") )
+				{
 					String tabS = getArg(args, i);
-					try {
-						tab = Integer.parseInt(tabS);
-					} catch (NumberFormatException ex) {
-						System.out.println("  \n\nArgument >" + tabS + "< has no integer format");
-						usage();
-						endApp(ERROR_INVALID_OPTION);
+					try
+					{
+						tab =  Integer.parseInt (tabS);
 					}
-					i = i + 2;
-				} else if (args[i].equals("-d") || args[i].equals("--logdirectory")) {
+					catch(NumberFormatException ex)
+					{
+						System.out.println ("  \n\nArgument >" + tabS + "< has no integer format");
+						usage();
+						endApp( ERROR_INVALID_OPTION );
+					}
+					i = i+2;
+				}
+				
+				else if ( args[i].equals("-d") || args[i].equals("--logdirectory") )
+				{
 					logdirectory = getArg(args, i);
 
-					i = i + 2;
-				} else if (args[i].equals("-s") || args[i].equals("--savedstates")) {
+					i = i+2;
+				}
+				
+				else if ( args[i].equals("-s") || args[i].equals("--savedstates") )
+				{
 					savedStatesLocationName = getArg(args, i);
 					String canonicalPath = null;
-					try {
-						canonicalPath = new File(savedStatesLocationName).getCanonicalPath();
-					} catch (IOException ex) {
-						System.out.println("savedstates argument " + ex);
+					try{
+						canonicalPath = new File( savedStatesLocationName ).getCanonicalPath(); 
+					}
+					catch( IOException ex )
+					{
+						System.out.println( "savedstates argument " + ex);
 					}
 					if (canonicalPath != null)
 						savedStatesLocationName = canonicalPath;
-
-					i = i + 2;
-				} else if (args[i].equals("-r") || args[i].equals("--refreshminutes")) {
+					
+					i = i+2;
+				}
+				
+				else if ( args[i].equals("-r") || args[i].equals("--refreshminutes") )
+				{
 					String test = getArg(args, i);
 
-					try {
+					try{
 						refreshMinutes = Integer.valueOf(test);
-					} catch (NumberFormatException ex) {
-						System.out.println("  \n\nArgument >" + test + "< has no integer format");
+					}
+					catch(NumberFormatException ex)
+					{
+						System.out.println ("  \n\nArgument >" + test + "< has no integer format");
 						usage();
-						endApp(ERROR_INVALID_OPTION);
+						endApp( ERROR_INVALID_OPTION );
 					}
 
-					i = i + 2;
-				} else if (args[i].equals("--use_tls_cipher")) {
+					i = i+2;
+				}
+				
+				else if ( args[i].equals("--use_tls_cipher") )
+				{
 					/*
-					 * ArrayList<String> ciphers = new ArrayList<String>(); boolean goOn = true;
-					 * i++;
-					 *
-					 * String s = getArg(args, i) if (s.length() < 2 || s.charAt(0) != '[]' ||
-					 * charAt(s.length-1) != ']') {
-					 * System.out.println(" no enclosing []  for cipher list "); usage(); endApp(
-					 * ERROR_INVALID_OPTION ); }
-					 */
-
+					ArrayList<String> ciphers = new ArrayList<String>();
+					boolean goOn = true;
+					i++;
+					
+					String s =  getArg(args, i)
+					if (s.length() < 2 || s.charAt(0) != '[]' || charAt(s.length-1) != ']')
+					{
+						System.out.println(" no enclosing []  for cipher list ");
+						usage();
+						endApp( ERROR_INVALID_OPTION );
+					}
+					*/
+					
 					TLS_CIPHER_SUITE = getArg(args, i);
+					
+					i = i+2;
+					
+				}
+						
+				
+				else if ( args[i].equals("--ssh-immediate-connect"))
+				{
+					//de.uib.opsicommand.sshcommand.SSHConnectionInfo 
+						//coninfo = de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance();
+						
+					//coninfo.setSSHActivateStatus(true);
+					
+					i = i+1;
 
-					i = i + 2;
-				} else if (args[i].equals("--ssh-immediate-connect")) {
-					// de.uib.opsicommand.sshcommand.SSHConnectionInfo
-					// coninfo = de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance();
-
-					// coninfo.setSSHActivateStatus(true);
-
-					i = i + 1;
-
-					if (isValue(args, i)) {
+					if (isValue(args, i))
+					{
 						if (args[i].toUpperCase().equals("Y"))
 							sshconnect_onstart = true;
-						// coninfo.setSSHActivateStatus(true);
+							//coninfo.setSSHActivateStatus(true);
 						else if (args[i].toUpperCase().equals("N"))
 							sshconnect_onstart = false;
-						// coninfo.setSSHActivateStatus(false);
-						else {
+							//coninfo.setSSHActivateStatus(false);
+						else
+						{
 							usage();
-							endApp(ERROR_INVALID_OPTION);
+							endApp( ERROR_INVALID_OPTION );
 						}
-						i = i + 1;
+						i = i+1;
 					}
-				} else if (args[i].equals("--ssh-key")) {
+				}
+				else if ( args[i].equals("--ssh-key") )
+				{
 					sshkey = getArg(args, i);
-					i = i + 2;
-				} else if (args[i].equals("--ssh-passphrase")) {
+					i = i+2;
+				}
+				else if ( args[i].equals("--ssh-passphrase") )
+				{
 					sshkeypassphrase = getArg(args, i);
-					i = i + 2;
-				} else if (args[i].equals("--gzip")) {
-					// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = true;
-					de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
-					i = i + 1;
-					// System.out.println ("gzip");
+					i = i+2;
+				}
 
-					if (isValue(args, i)) {
-						// System.out.println (args[i]);
+				else if (args[i].equals("--gzip") )
+				{
+					//de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = true;
+					de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
+					i = i+1;
+					//System.out.println ("gzip");
+
+					if (isValue(args, i))
+					{
+						//System.out.println (args[i]);
 						if (args[i].toUpperCase().equals("Y"))
-							de.uib.opsicommand.JSONthroughHTTP.compressTransmission = // de.uib.opsicommand.JSONthroughHTTP.gzipTransmission
-									// = true;
-									true;
+							//de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = true;
+							de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
 						else if (args[i].toUpperCase().equals("N"))
 							de.uib.opsicommand.JSONthroughHTTP.compressTransmission = false;
-						// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = false;
-						else {
+							//de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = false;
+						else
+						{
 							usage();
-							endApp(ERROR_INVALID_OPTION);
+							endApp( ERROR_INVALID_OPTION );
 						}
-						i = i + 1;
+						i = i+1;
 					}
-				} else if (args[i].equals("--sslversion")) {
+				}
+				
+				else if ( args[i].equals("--sslversion") )
+				{
 					PREFERRED_SSL_VERSION = getArg(args, i);
-					if (!args[i + 1].equalsIgnoreCase(STATEOFTHEART_SSL_VERSION)) {
-						PREFERRED_SSL_VERSION = args[i + 1];
+					if ( !args[i+1].equalsIgnoreCase( STATEOFTHEART_SSL_VERSION ) )
+					{
+						PREFERRED_SSL_VERSION = args[i+1];
 					}
-					sslversionCheck(false); // keep sslversion as set by this parameter
+					sslversionCheck( false ); //keep sslversion as set by this parameter
+					
+					i = i+2;
+				}
 
-					i = i + 2;
-				} else if (args[i].equals("-qs") || args[i].equals("--querysavedsearch")) {
+				else if (args[i].equals("-qs") || args[i].equals("--querysavedsearch") )
+				{
 					optionCLIQuerySearch = true;
 					savedSearch = getArg(args, i);
-					// System.out.println("treat i, arg " + args[i]);
+					//System.out.println("treat  i, arg " + args[i]);
 					i++;
-					// System.out.println("treat i, arg " + args[i]);
+					//System.out.println("treat  i, arg " + args[i]);
 					i++;
-					// System.out.println("treat i, arg " + args[i]);
-
-				} else if (args[i].equals("-qg") || args[i].equals("--definegroupbysearch")) {
+					//System.out.println("treat  i, arg " + args[i]);
+					
+				}
+				
+				else if (args[i].equals("-qg") || args[i].equals("--definegroupbysearch") )
+				{
 					optionCLIDefineGroupBySearch = true;
 					savedSearch = getArg(args, i);
 					i++;
 					group = getArg(args, i);
 					i++;
 					i++;
-					// System.out.println(" savedsearch, group " + savedSearch + ", " + group);
-				} else if (args[i].equals("--initUserRoles")) {
-					optionCLIuserConfigProducing = true;
-					// System.out.println("treat i, arg " + args[i]);
+					//System.out.println(" savedsearch, group " + savedSearch + ", " + group);
+				}
+				
+				else if (args[i].equals("--initUserRoles") )
+				{
+					optionCLIuserConfigProducing= true;
+					//System.out.println("treat  i, arg " + args[i]);
 					i++;
-				} else if (args[i].equals("-me") || args[i].equals("--testPersistenceControllerMethod")) {
+				}
+				
+				else if (args[i].equals("-me") || args[i].equals("--testPersistenceControllerMethod") )
+				{
 					optionPersistenceControllerMethodCall = true;
-					i = i + 1;
-				} else if (args[i].equals("--sqlgethashes")) {
+					i=i+1;
+				}
+
+				else if (args[i].equals("--sqlgethashes"))
+				{
 					de.uib.opsidatamodel.PersistenceControllerFactory.sqlAndGetHashes = true;
-					i = i + 1;
-				} else if (args[i].equals("--sqlgetrows")) {
+					i=i+1;
+				}
+
+				else if (args[i].equals("--sqlgetrows"))
+				{
 					de.uib.opsidatamodel.PersistenceControllerFactory.sqlAndGetRows = true;
-					i = i + 1;
-				} else if (args[i].equals("--nosqlrawdata")) {
+					i=i+1;
+				}
+				
+				else if (args[i].equals("--nosqlrawdata"))
+				{
 					de.uib.opsidatamodel.PersistenceControllerFactory.avoidSqlRawData = true;
-					i = i + 1;
-				} /*
-					 * else if (args[i].equals("--dblocal")) {
-					 * de.uib.opsidatamodel.PersistenceControllerFactory.localDB= true; i=i+1; }
-					 *
-					 * else if (args[i].equals("--dblocalnew")) {
-					 * de.uib.opsidatamodel.PersistenceControllerFactory.localDBResync= true; i=i+1;
-					 * }
-					 *
-					 * else if (args[i].equals("--synced")) {
-					 * de.uib.opsidatamodel.PersistenceControllerFactory.synced= true; i=i+1; }
-					 *
-					 * else if (args[i].equals("--sqldirect")) {
-					 * de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect = true; i=i+1; }
-					 */else if (args[i].equals("--sqldirect-cleanup-auditsoftware")) {
+					i=i+1;
+				}
+
+				/*
+				else if (args[i].equals("--dblocal"))
+				{
+					de.uib.opsidatamodel.PersistenceControllerFactory.localDB= true;
+					i=i+1;
+				}
+
+				else if (args[i].equals("--dblocalnew"))
+				{
+					de.uib.opsidatamodel.PersistenceControllerFactory.localDBResync= true;
+					i=i+1;
+				}
+
+				else if (args[i].equals("--synced"))
+				{
+					de.uib.opsidatamodel.PersistenceControllerFactory.synced= true;
+					i=i+1;
+				}
+
+				else if (args[i].equals("--sqldirect"))
+				{
 					de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect = true;
-					de.uib.opsidatamodel.PersistenceControllerFactory.directmethodcall = de.uib.opsidatamodel.PersistenceControllerFactory.directmethodcall_cleanupAuditsoftware;
-					i = i + 1;
-				} else if (args[i].equals("--version")) {
+					i=i+1;
+				}
+				*/
+				
+				else if (args[i].equals("--sqldirect-cleanup-auditsoftware"))
+				{
+					de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect = true;
+					de.uib.opsidatamodel.PersistenceControllerFactory.directmethodcall 
+					=   de.uib.opsidatamodel.PersistenceControllerFactory.directmethodcall_cleanupAuditsoftware;
+					i=i+1;
+				}
+
+				else if (args[i].equals("--version") )
+				{
 					System.out.println("configed version: " + Globals.VERSION + " (" + Globals.VERDATE + ") ");
 					System.exit(0);
-				} else if (args[i].equals("--help")) {
+				}
+
+				else if (args[i].equals("--help") )
+				{
 					usage();
 					System.exit(0);
-				} else if (args[i].equals("--collect_queries_until_no")) {
+				}
+
+				
+				else if ( args[i].equals("--collect_queries_until_no") )
+				{
 					String no = getArg(args, i);
-					try {
-						de.uib.opsicommand.OpsiMethodCall.maxCollectSize = Integer.parseInt(no);
-					} catch (NumberFormatException ex) {
-						System.out.println("  \n\nArgument >" + no + "< has no integer format");
+					try
+					{
+						de.uib.opsicommand.OpsiMethodCall.maxCollectSize  =  Integer.parseInt (no);
+					}
+					catch(NumberFormatException ex)
+					{
+						System.out.println ("  \n\nArgument >" + no+ "< has no integer format");
 						usage();
-						endApp(ERROR_INVALID_OPTION);
+						endApp( ERROR_INVALID_OPTION );
 					}
-					i = i + 2;
-				} else if (args[i].equals("--loglevel")) {
+					i = i+2;
+				}
+
+				else if (args[i].equals("--loglevel") )
+				{
 					String s = "?";
-					try {
+					try
+					{
 						s = getArg(args, i);
-						loglevel = Integer.valueOf(s);
-					} catch (NumberFormatException ex) {
-						System.out.println(" \n\nArgument >" + s + "< has no integer format");
+						loglevel =  Integer.valueOf( s );
 					}
-					i = i + 2;
-				} else if (args[i].equals("--localizationfile")) {
+					catch(NumberFormatException ex)
+					{
+						System.out.println (" \n\nArgument >" + s + "< has no integer format");
+					}
+					i = i+2;
+
+				}
+				
+				else if ( args[i].equals("--localizationfile") )
+				{
 					EXTRA_LOCALIZATION_FILENAME = getArg(args, i);
-
+					
 					boolean success = false;
-
-					String[] parts = null;
-
-					try {
-						File extraLocalizationFile = new File(EXTRA_LOCALIZATION_FILENAME);
-						if (!extraLocalizationFile.exists()) {
-							System.out.println("File not found: " + EXTRA_LOCALIZATION_FILENAME);
-						} else if (!extraLocalizationFile.canRead()) {
-							System.out.println("File not readable " + EXTRA_LOCALIZATION_FILENAME);
-						} else {
-							System.out.println(" ok " + localizationFilenameRegex + "? "
-									+ EXTRA_LOCALIZATION_FILENAME.matches("configed_...*\\.properties") + " --  "
-									+ EXTRA_LOCALIZATION_FILENAME.matches(localizationFilenameRegex));
-
+					
+					String[] parts = null; 
+					
+					try
+					{
+						File extraLocalizationFile = new File( EXTRA_LOCALIZATION_FILENAME );
+						if ( !extraLocalizationFile.exists() )
+						{
+							System.out.println("File not found: " +  EXTRA_LOCALIZATION_FILENAME);
+						}
+						else if ( !extraLocalizationFile.canRead() )
+						{
+							System.out.println("File not readable " +  EXTRA_LOCALIZATION_FILENAME);
+						}
+						else
+					
+						{
+							System.out.println ( " ok " + localizationFilenameRegex + "? " 
+								+ EXTRA_LOCALIZATION_FILENAME.matches("configed_...*\\.properties") 
+								+ " --  "
+								+ EXTRA_LOCALIZATION_FILENAME.matches( localizationFilenameRegex ));
+							
 							parts = EXTRA_LOCALIZATION_FILENAME.split("_");
-
-							System.out.println(" . " + parts[1] + " .. " + Arrays.toString(parts[1].split("\\.")));
-
-							if (!EXTRA_LOCALIZATION_FILENAME.matches(localizationFilenameRegex)) {
-								System.out.println("localization file does not have the expected format "
-										+ Messages.appname + "_LOCALE.properties");
-							} else {
-								extraLocalization = new PropertiesStore(extraLocalizationFile);
+							
+							System.out.println( " . " + parts[1] + " .. " + Arrays.toString(parts[1].split("\\.")) );
+							
+							
+							
+							if ( !EXTRA_LOCALIZATION_FILENAME.matches( localizationFilenameRegex ) )
+							{
+								System.out.println("localization file does not have the expected format " + Messages.appname + "_LOCALE.properties");
+							}
+							else
+							{
+								extraLocalization = new PropertiesStore( extraLocalizationFile );
 								extraLocalization.load();
-
+								
 								success = true;
 							}
 						}
-					} catch (Exception ex) {
-						System.out.println(EXTRA_LOCALIZATION_FILENAME + " problem " + ex);
+					}
+					catch( Exception ex )
+					{
+						System.out.println( EXTRA_LOCALIZATION_FILENAME + " problem " + ex);
 						ex.printStackTrace();
 					}
-
-					i = i + 2;
-
-					if (!success) {
+					
+					i = i+2;
+					
+					if (!success)
+					{
 						System.out.println(" ======================= ");
 						System.out.println(" ======================= ");
-
-						endApp(ERROR_CANNOT_READ_EXTRA_LOCALIZATION);
+						
+						endApp( ERROR_CANNOT_READ_EXTRA_LOCALIZATION );
 					}
-				} else if (args[i].equals("--localizationstrings")) {
+				}
+				
+				
+				else if (args[i].equals("--localizationstrings") )
+				{
 					SHOW_LOCALIZATION_STRINGS = true;
-					i = i + 1;
-				} else if (args[i].equals("--swaudit-pdf")) {
+					i = i+1;
+				}
+				
+				
+				
+				else if (args[i].equals("--swaudit-pdf") )
+				{
 					optionCLISwAuditPDF = true;
 					clientsFile = getArg(args, i);
-					i = i + 2;
-					if (args.length > i && args[i].charAt(0) != '-') {
+					i = i+2;
+					if (args.length > i && args[i].charAt(0) != '-')
+					{
 						outDir = args[i];
 						i = i + 1;
 					}
-				} else if (args[i].equals("--swaudit-csv")) {
+				}
+				
+				
+				
+				else if (args[i].equals("--swaudit-csv") )
+				{
 					optionCLISwAuditCSV = true;
 					clientsFile = getArg(args, i);
-					i = i + 2;
-					if (args.length > i && args[i].charAt(0) != '-') {
+					i = i+2;
+					if (args.length > i && args[i].charAt(0) != '-')
+					{
 						outDir = args[i];
 						i = i + 1;
 					}
-				} else if (args[i].equals("--halt")) {
+				}
+				
+				else if (args[i].equals("--halt") )
+				{
 					useHalt = true;
-					i = i + 1;
-				} else {
+					i = i+1;
+				}
+
+
+				else
+				{
 					System.out.println("an option is not valid: " + arg);
 					usage();
-					endApp(ERROR_INVALID_OPTION);
+					endApp( ERROR_INVALID_OPTION );
 				}
 			}
 		}
-
+		
 		logging.writeToConsole("configed: args recognized");
-
-		// System.exit(0);
-
-		// System.out.println( " AKT_DEBUG_LEVEL " + logging.AKT_DEBUG_LEVEL);
-		// System.out.println( " set AKT_DEBUG_LEVEL " + loglevel);
-		if (loglevel != logging.AKT_DEBUG_LEVEL) {
+		
+		//System.exit(0);
+		
+		//System.out.println( " AKT_DEBUG_LEVEL " + logging.AKT_DEBUG_LEVEL);
+		//System.out.println( " set AKT_DEBUG_LEVEL " + loglevel);
+		if (loglevel != logging.AKT_DEBUG_LEVEL)
+		{
 			if (optionCLIQuerySearch || optionCLIDefineGroupBySearch)
 				logging.setSuppressConsole(true);
-
+			
 			// ? is setting allowed
-			if (loglevel <= logging.LEVEL_DEBUG && loglevel >= logging.LEVEL_FATAL) {
+			if (      loglevel <= logging.LEVEL_DEBUG
+					  &&  loglevel >= logging.LEVEL_FATAL )
+			{
 				logging.setAktDebugLevel(loglevel);
-				System.out.println(" set AKT_DEBUG_LEVEL " + loglevel);
-			} else
+				System.out.println( " set AKT_DEBUG_LEVEL " + loglevel);
+				
+			}
+			else
 				logging.info(" valid log levels between " + logging.LEVEL_FATAL + " and " + logging.LEVEL_DEBUG);
-
+			
 			loglevel = logging.AKT_DEBUG_LEVEL;
+
 		}
 	}
 
-	public static String encodeStringFromService(String s) {
-		// logging.debug("configed: to encode " + s);
+	public static String encodeStringFromService( String s )
+	{
+		//logging.debug("configed: to encode " + s);
 
 		return s;
+
 		// change of encoding seems now not be necessary any more
 		/*
-		 * if (serverCharset_equals_vm_charset) return s;
-		 *
-		 *
-		 * if (s == null || s.equals("")) return s;
-		 *
-		 *
-		 *
-		 *
-		 * String result = new String ( s.getBytes( Charset.defaultCharset()),
-		 * serverCharset );
-		 *
-		 * logging.debug("configed: new encoding " + result);
-		 *
-		 * return result;
-		 */
+		if  (serverCharset_equals_vm_charset)
+			  return s;
+		  
+		 
+		if (s == null || s.equals(""))
+			return s;
+
+
+
+
+		String result = new String ( s.getBytes( Charset.defaultCharset()), serverCharset );
+
+		logging.debug("configed: new encoding " + result);
+
+		return result;
+		*/
+
 
 	}
 
-	public static String encodeStringForService(String s) {
+
+	public static String encodeStringForService( String s )
+	{
 		return s;
 		// change of encoding seems now not be necessary any more
 		/*
-		 * if (serverCharset_equals_vm_charset) return s;
-		 *
-		 * return new String ( s.getBytes( serverCharset), Charset.defaultCharset()) ;
-		 */
+		if  (serverCharset_equals_vm_charset)
+			  return s;
+		  
+		return   new String ( s.getBytes( serverCharset), Charset.defaultCharset()) ;
+		*/
 	}
 
-	public static boolean get_serverCharset_equals_vm_charset() {
+	public static boolean get_serverCharset_equals_vm_charset()
+	{
 		boolean b = serverCharset_equals_vm_charset;
 		return b;
 	}
-
-	public static void sslversionCheck(boolean correctingVersion) {
-		// do it only once and keep checked info globally
-
-		if (correctingVersion) {
-			if (javaVersion.startsWith("1.7") && !PREFERRED_SSL_VERSION.equals(JAVA_1_7_DEFAUTL_SSL_VERSION))
+	
+	public static void sslversionCheck(boolean correctingVersion)
+	{
+		//do it only once and keep checked info globally
+	
+		if (correctingVersion)
+		{
+			if ( javaVersion.startsWith("1.7") && !PREFERRED_SSL_VERSION.equals( JAVA_1_7_DEFAUTL_SSL_VERSION ) )
 				PREFERRED_SSL_VERSION = JAVA_1_7_DEFAUTL_SSL_VERSION;
 		}
-
-		if (!PREFERRED_SSL_VERSION.equals(STATEOFTHEART_SSL_VERSION))
-			logging.warning("call for a SSL Version " + PREFERRED_SSL_VERSION + "  different from the recommended "
-					+ STATEOFTHEART_SSL_VERSION);
-
+		
+		if ( !PREFERRED_SSL_VERSION.equals ( STATEOFTHEART_SSL_VERSION ) ) 
+			logging.warning("call for a SSL Version "  + PREFERRED_SSL_VERSION + "  different from the recommended " + STATEOFTHEART_SSL_VERSION);
+		
 		sslversionChecked = true;
 	}
-
-	public static void showExternalInfo(String s) {
-		try {
+	
+	
+	public static void showExternalInfo(String s)
+	{
+		
+		try{
 			File messagefile = File.createTempFile("configed", "html");
-
-			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(messagefile)));
-
+			
+			PrintWriter out = new PrintWriter( new BufferedWriter( new FileWriter( messagefile ) ) );
+			
 			out.println("<HTML>");
 			out.println("<title>opsi-configed message</title>");
 			out.println("<body>");
@@ -930,86 +1184,114 @@ public class configed {
 			out.println("</body>");
 			out.println("</HTML>");
 			out.close();
-
+			
 			{
 				Runtime rt = Runtime.getRuntime();
-				String osName = System.getProperty("os.name");
-				if (osName.toLowerCase().startsWith("win")) {
-					Process proc = rt.exec("cmd.exe /c start \"" + messagefile.getPath() + "\"");
-				} else { // Linux, we assume that there is a firefox and it will handle the url
-					String[] cmdarray = new String[] { "firefox", messagefile.getPath() };
+				String osName = System.getProperty("os.name" );
+				if(osName.toLowerCase().startsWith("win"))
+				{
+					Process proc = rt.exec("cmd.exe /c start \"" + messagefile.getPath()+ "\"");
+				}
+				else
+					//Linux, we assume that there is a firefox and it will handle the url
+				{
+					String[] cmdarray = new String[]{"firefox", messagefile.getPath()};
 					Process proc = rt.exec(cmdarray);
+					
 				}
 			}
-		} catch (Exception ex) {
+		}
+		catch(Exception ex)
+		{
 			System.out.println("configed showExternalInfo " + s);
 		}
 	}
+		
 
-	public static void endApp(int exitcode) {
-		if (savedStates != null) {
-			try {
+	public static void endApp(int exitcode)
+	{
+		if (savedStates != null)
+		{
+			try{
 				savedStates.store("states on finishing configed");
-			} catch (IOException iox) {
+			}
+			catch(IOException iox)
+			{
 				System.out.println("could not store saved states, " + iox);
 			}
 		}
 
-		// if (!isApplet)
+		//if (!isApplet)
 		{
 			de.uib.opsicommand.OpsiMethodCall.report();
-			logging.info("regularly exiting app with code " + exitcode);
-
-			if (exitcode == ERROR_OUT_OF_MEMORY) {
-				// showExternalInfo( "configed terminates ");
+			logging.info("regularly exiting app with code " + exitcode); 
+			
+			if (exitcode == ERROR_OUT_OF_MEMORY)
+			{
+				//showExternalInfo( "configed terminates ");
 				fErrorOutOfMemory.setVisible(true);
-			}
 
+			}
+			
 			System.exit(exitcode);
 		}
 	}
 
-	public static String getResourceValue(String key) {
-		String result = null;
-		try {
-			if (extraLocalization != null) {
-				result = extraLocalization.getProperty(key);
-				if (result == null)
-					logging.info("extraLocalization.getProperty null for key " + key);
-			}
 
+	public static String getResourceValue( String key )
+	{
+		String result = null;
+		try
+		{
+			if (extraLocalization != null)
+			{
+				result = extraLocalization.getProperty (key );
+				if (result == null) logging.info("extraLocalization.getProperty null for key " + key );
+			}
+			
 			if (result == null)
 				result = Messages.messages.getString(key);
-
-			if (SHOW_LOCALIZATION_STRINGS) {
+			
+				
+			if (SHOW_LOCALIZATION_STRINGS)
+			{
 				logging.info("LOCALIZE " + key + " by " + result);
 				result = "" + result + "[[" + key + "]]";
-				// result = " for " + Messages.getSelectedLocale() + " " + result + "[[" + key +
-				// "]]";
+				//result = " for "  + Messages.getSelectedLocale() + " " +  result + "[[" + key + "]]";
 			}
-		} catch (MissingResourceException mre) {
+		}
+		catch ( MissingResourceException mre)
+		{
 			// we return the key and log the problem:
 			logging.debug("Problem: " + mre.toString());
-			// System.out.println (" ----------- " + mre.toString());
+			//System.out.println (" ----------- " + mre.toString());
 
-			try {
+			try
+			{
 				result = Messages.messagesEN.getString(key);
-
-				if (SHOW_LOCALIZATION_STRINGS) {
+				
+				if (SHOW_LOCALIZATION_STRINGS)
+				{
 					logging.info("LOCALIZE " + key + " by " + result);
 					result = "" + result + "?? [[" + key + "]]";
-					// result = " for " + Messages.getSelectedLocale() + "
+					//result = " for "  + Messages.getSelectedLocale() + "
 				}
-			} catch (MissingResourceException mre2) {
-				logging.debug("Problem: " + mre2.toString());
-				// System.out.println (" ----------- " + mre2.toString());
 			}
-		} catch (Exception ex) {
+			catch ( MissingResourceException mre2)
+			{
+				logging.debug("Problem: " + mre2.toString());
+				//System.out.println (" ----------- " + mre2.toString());
+			}
+			
+			
+		}
+		catch (Exception ex)
+		{
 			logging.warning("messages not there");
 		}
-
+		
 		if (result == null)
-			result = key;
+				result = key;
 
 		return result;
 	}
@@ -1022,141 +1304,166 @@ public class configed {
 	 * Redistribution and use in source and binary forms, with or without
 	 * modification, are permitted provided that the following conditions are met:
 	 *
-	 * o Redistributions of source code must retain the above copyright notice, this
-	 * list of conditions and the following disclaimer.
+	 *  o Redistributions of source code must retain the above copyright notice,
+	 *    this list of conditions and the following disclaimer.
 	 *
-	 * o Redistributions in binary form must reproduce the above copyright notice,
-	 * this list of conditions and the following disclaimer in the documentation
-	 * and/or other materials provided with the distribution.
+	 *  o Redistributions in binary form must reproduce the above copyright notice,
+	 *    this list of conditions and the following disclaimer in the documentation
+	 *    and/or other materials provided with the distribution.
 	 *
-	 * o Neither the name of JGoodies Karsten Lentzsch nor the names of its
-	 * contributors may be used to endorse or promote products derived from this
-	 * software without specific prior written permission.
+	 *  o Neither the name of JGoodies Karsten Lentzsch nor the names of
+	 *    its contributors may be used to endorse or promote products derived
+	 *    from this software without specific prior written permission.
 	 *
 	 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-	 * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-	 * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-	 * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
-	 * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-	 * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-	 * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-	 * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-	 * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-	 * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-	 * POSSIBILITY OF SUCH DAMAGE.
+	 * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+	 * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+	 * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+	 * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+	 * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+	 * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+	 * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+	 * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+	 * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+	 * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	 */
+
 
 	/**
-	 *
-	 * private void configureUI() { UIManager.put(Options.USE_SYSTEM_FONTS_APP_KEY,
-	 * Boolean.TRUE); Options.setDefaultIconSize(new Dimension(18, 18));
-	 *
-	 * String lafName = LookUtils.IS_OS_WINDOWS_XP ?
-	 * Options.getCrossPlatformLookAndFeelClassName() :
-	 * Options.getSystemLookAndFeelClassName();
-	 *
-	 * try { UIManager.setLookAndFeel(lafName); } catch (Exception e) {
-	 * System.err.println("Can't set look & feel:" + e); } }
-	 *
-	 */
+	    
+	   private void configureUI() {
+	       UIManager.put(Options.USE_SYSTEM_FONTS_APP_KEY, Boolean.TRUE);
+	       Options.setDefaultIconSize(new Dimension(18, 18));
 
-	public static void configureUI() {
+	       String lafName =
+	           LookUtils.IS_OS_WINDOWS_XP
+	               ? Options.getCrossPlatformLookAndFeelClassName()
+	               : Options.getSystemLookAndFeelClassName();
+
+	       try {
+	           UIManager.setLookAndFeel(lafName);
+	       } catch (Exception e) {
+	           System.err.println("Can't set look & feel:" + e);
+	       }
+	   }
+
+	*/
+
+	public static void configureUI()
+	{
 		boolean trynimbus = true;
 		boolean found = false;
 
-		if (trynimbus) {
+		if (trynimbus)
+		{
 			try {
+				
 				/*
-				 * UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName());
-				 */
-
+				UIManager.setLookAndFeel(
+					UIManager.getSystemLookAndFeelClassName());
+				*/
+				
 				for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 					if ("Nimbus".equals(info.getName())) {
 						logging.info("setting Nimbus look&feel");
 						UIManager.setLookAndFeel(info.getClassName());
 						logging.info("Nimbus look&feel set, by " + info.getClassName());
 
-						// System.out.println(UIManager.getDefaults());
+						//System.out.println(UIManager.getDefaults());
 
 						Color defaultNimbusSelectionBackground = (Color) UIManager.get("nimbusSelectionBackground");
-						// UIManager.put("nimbusSelectionBackground",
-						// UIManager.get("nimbusLightBackground"));
+						//UIManager.put("nimbusSelectionBackground", UIManager.get("nimbusLightBackground"));
+
 
 						UIManager.put("Tree.selectionBackground", UIManager.get("controlHighlight"));
-						// was chosen: UIManager.put("nimbusSelectionBackground",
-						// UIManager.get("controlHighlight"));
-						// UIManager.put("Tree[Enabled+Selected].collapsedIconPainter", new
-						// javax.swing.text.DefaultHighlighter.DefaultHighlightPainter(java.awt.Color.yellow));
-						// UIManager.put("Tree.rendererMargins", new Insets(0,0,0,0));
+						//was chosen: UIManager.put("nimbusSelectionBackground", UIManager.get("controlHighlight"));
+						//UIManager.put("Tree[Enabled+Selected].collapsedIconPainter",  new javax.swing.text.DefaultHighlighter.DefaultHighlightPainter(java.awt.Color.yellow));
+						//UIManager.put("Tree.rendererMargins", new Insets(0,0,0,0));
 
-						// UIManager.put("Tree.drawHorizontalLines", true);
-						// UIManager.put("Tree.drawVerticalLines", true);
+						//UIManager.put("Tree.drawHorizontalLines", true);
+						//UIManager.put("Tree.drawVerticalLines", true);
 
 						UIManager.put("TreeUI", de.uib.configed.tree.ClientTreeUI.class.getName());
+
 
 						found = true;
 						break;
 					}
+					
 				}
 			} catch (javax.swing.UnsupportedLookAndFeelException e) {
 				// handle exception
-				System.out.println(e);
+				System.out.println (e);
 			} catch (ClassNotFoundException e) {
 				// handle exception
-				System.out.println(e);
+				System.out.println (e);
 			} catch (InstantiationException e) {
 				// handle exception
-				System.out.println(e);
+				System.out.println (e);
 			} catch (IllegalAccessException e) {
 				// handle exception
-				System.out.println(e);
+				System.out.println (e);
 			}
 		}
 
 		if (!found)
 			trynimbus = false;
 
-		if (!trynimbus) {
-			try {
+		if (!trynimbus)
+		{
+			try
+			{
 				UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-			} catch (Exception ex) {
-				System.out.println("UIManager.setLookAndFeel('javax.swing.plaf.metal.MetalLookAndFeel')," + ex);
+			}
+			catch(Exception ex)
+			{
+				System.out.println ("UIManager.setLookAndFeel('javax.swing.plaf.metal.MetalLookAndFeel')," +  ex);
 			}
 		}
-		// UIManager.put("SplitPane.dividerFocusColor", Globals.backBlue);
-		// UIManager.put("SplitPane.darkShadow", Globals.backBlue);
+
+
+		//UIManager.put("SplitPane.dividerFocusColor", Globals.backBlue);
+		//UIManager.put("SplitPane.darkShadow", Globals.backBlue);
 
 		/*
-		 * UIManager.put("ProgressBar.background", Globals.backLightBlue);
-		 * UIManager.put("ProgressBar.foreground", Globals.backLightBlue);
-		 * UIManager.put("ProgressBar.selectionBackground", Color.red);
-		 * UIManager.put("ProgressBar.selectionForeground", Globals.backLightBlue);
-		 */
-
-		// JPopupMenu.setDefaultLightWeightPopupEnabled(false);
-		// destroys some popups, saves others
+		UIManager.put("ProgressBar.background", Globals.backLightBlue); 
+			UIManager.put("ProgressBar.foreground", Globals.backLightBlue);
+			UIManager.put("ProgressBar.selectionBackground", Color.red);
+			UIManager.put("ProgressBar.selectionForeground", Globals.backLightBlue);
+			 */
+			 
+		//JPopupMenu.setDefaultLightWeightPopupEnabled(false);
+		//destroys some popups, saves others
 
 	}
 
-	private static void addMissingArgs() {
-		if (host == null)
-			host = de.uib.utilities.Globals.getCLIparam("Host: ", false);
-		if (user == null)
-			user = de.uib.utilities.Globals.getCLIparam("User: ", false);
-		if (password == null)
-			password = de.uib.utilities.Globals.getCLIparam("Password: ", true);
+	private static void addMissingArgs()
+	{
+		if( host == null )
+			host = de.uib.utilities.Globals.getCLIparam( "Host: ", false );
+		if( user == null )
+			user = de.uib.utilities.Globals.getCLIparam( "User: ", false );
+		if( password == null )
+			password = de.uib.utilities.Globals.getCLIparam( "Password: ", true );
+
 	}
 
-	public static de.uib.opsidatamodel.PersistenceController connect() {
+
+	
+
+	public static de.uib.opsidatamodel.PersistenceController connect()
+	{
 		Messages.setLocale("en");
-		de.uib.opsidatamodel.PersistenceController controller = de.uib.opsidatamodel.PersistenceControllerFactory
-				.getNewPersistenceController(host, user, password);
-		if (controller == null) {
+		de.uib.opsidatamodel.PersistenceController controller
+		= de.uib.opsidatamodel.PersistenceControllerFactory.getNewPersistenceController( host, user, password );
+		if( controller == null )
+		{
 			System.err.println("Authentication error.");
 			System.exit(1);
 		}
-
-		if (controller.getConnectionState().getState() != ConnectionState.CONNECTED) {
+		
+		if( controller.getConnectionState().getState() != ConnectionState.CONNECTED )
+		{
 			System.err.println("Authentication error.");
 			System.exit(1);
 		}
@@ -1164,158 +1471,213 @@ public class configed {
 		return controller;
 	}
 
-	/**
-	 * main-Methode
-	 */
-	public static void main(String[] args) {
+
+	/** main-Methode
+	*/
+	public static void main(String[] args)
+	{
+		
+		
 		de.uib.utilities.Globals.APPNAME = Globals.APPNAME;
 		de.uib.utilities.Globals.iconresourcename = Globals.iconresourcename;
 
-		// logging.init(); too early, variables not set
+
+		//logging.init(); too early, variables not set
 
 		processArgs(args);
-
-		logging.setLogfileMarker(host);
-
-		logging.setSuppressConsole(true); // has already start value true
-
+		
+		
+		logging.setLogfileMarker( host );
+		
+		logging.setSuppressConsole(true); //has already start value true
+		
 		logging.writeToConsole("initiating configed");
 
-		if (optionCLIQuerySearch) {
-			// System.out.println( "optionCLIQuerySearch" );
-			logging.writeToConsole("optionCLIQuerySearch");
+		
+		if (optionCLIQuerySearch)
+		{
+			//System.out.println( "optionCLIQuerySearch" );
+			logging.writeToConsole( "optionCLIQuerySearch" );
 			de.uib.configed.clientselection.SavedSearchQuery query = new de.uib.configed.clientselection.SavedSearchQuery();
-			// System.out.println( "query constructed " + query );
-
-			query.setArgs(host, user, password, savedSearch, null);
+			//System.out.println( "query constructed " + query );
+			
+			query.setArgs( host, user, password, savedSearch, null);
 			query.addMissingArgs();
-
-			// System.out.println( "run query ");
+			
+			//System.out.println( "run query "); 
 			query.runSearch(true);
 			System.exit(0);
-		} else if (optionCLIDefineGroupBySearch) {
+			
+		}
+		
+		else if (optionCLIDefineGroupBySearch)
+		{
 			logging.writeToConsole("optionCLIDefineGroupBySearch");
-			// group_getObjects // exists group?
-			// parentGroupId
-			// removeHostGroupElements
-			// addGroup
-			// addObject2Group
-
+			//group_getObjects // exists group?
+			//parentGroupId
+			//removeHostGroupElements
+			//addGroup
+			//addObject2Group
+			
 			de.uib.configed.clientselection.SavedSearchQuery query = new de.uib.configed.clientselection.SavedSearchQuery();
-			// System.out.println("configed: setArgs " + host + ", PASSWORD, " + savedSearch
-			// + ", " + group);
-			query.setArgs(host, user, password, savedSearch, group);
+			//System.out.println("configed: setArgs " + host + ", PASSWORD, " + savedSearch + ", " + group);
+			query.setArgs( host, user, password, savedSearch, group);
 			query.addMissingArgs();
 			java.util.List<String> newGroupMembers = query.runSearch(false);
-			// System.out.println( " newGroupMembers " + newGroupMembers );
-
-			query.populateHostGroup(newGroupMembers, group);
-			System.exit(0);
-		} else if (optionCLISwAuditPDF) {
-			de.uib.configed.gui.swinfopage.SwPdfExporter exporter = new de.uib.configed.gui.swinfopage.SwPdfExporter();
-			exporter.setArgs(host, user, password, clientsFile, outDir);
-			exporter.addMissingArgs();
-			exporter.run();
-
-			System.exit(0);
-		} else if (optionCLISwAuditCSV) {
-			de.uib.configed.gui.swinfopage.SWcsvExporter exporter = new de.uib.configed.gui.swinfopage.SWcsvExporter();
-			exporter.setArgs(host, user, password, clientsFile, outDir);
-			exporter.addMissingArgs();
-			exporter.run();
-
-			System.exit(0);
-		} else if (optionCLIuserConfigProducing) {
-			logging.setSuppressConsole(false);
-			logging.writeToConsole("UserConfigProducing");
-			logging.setAktDebugLevel(loglevel);
-
-			addMissingArgs();
-
-			PersistenceController persist = PersistenceControllerFactory.getNewPersistenceController(host, user,
-					password);
-
-			de.uib.opsidatamodel.permission.UserConfigProducing up = new de.uib.opsidatamodel.permission.UserConfigProducing(
-					false, // boolean notUsingDefaultUser,
-					host, // String configserver,
-					persist.getHostInfoCollections().getDepotNamesList(), // Collection<String> existingDepots,
-					persist.getHostGroupIds(), // Collection<String> existingHostgroups,
-					persist.getProductGroups().keySet(), // Collection<String> existingProductgroups,
-					// data. on which changes are based
-					persist.getConfigDefaultValues(), // Map<String, java.util.List<Object>> serverconfigValuesMap,
-					persist.getConfigOptions() // Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap
-			);
-
-			ArrayList<Object> newData = up.produce();
-			logging.writeToConsole("UserConfigProducing: newData " + newData);
-
+			//System.out.println( " newGroupMembers " + newGroupMembers );
+			
+			query.populateHostGroup( newGroupMembers, group);
 			System.exit(0);
 		}
-		logging.setSuppressConsole(false);
+		
+		else if (optionCLISwAuditPDF)
+		{
+			de.uib.configed.gui.swinfopage.SwPdfExporter exporter = new de.uib.configed.gui.swinfopage.SwPdfExporter( );
+			exporter.setArgs( host, user, password, clientsFile, outDir);
+			exporter.addMissingArgs();
+			exporter.run();
+			
+			System.exit(0);
+		}
+		
+		else if (optionCLISwAuditCSV)
+		{
+			de.uib.configed.gui.swinfopage.SWcsvExporter exporter = new de.uib.configed.gui.swinfopage.SWcsvExporter(  );
+			exporter.setArgs( host, user, password, clientsFile, outDir);
+			exporter.addMissingArgs();
+			exporter.run();
+			
+			System.exit(0);
+		}
+		
+		else if (optionCLIuserConfigProducing)
+		{
+			logging.setSuppressConsole( false );
+			logging.writeToConsole("UserConfigProducing");
+			logging.setAktDebugLevel( loglevel );
+			
+			addMissingArgs();
+			
+			
+			
+			PersistenceController persist = 
+			PersistenceControllerFactory.getNewPersistenceController (host, user, password);
+			
+			
+			
+			
+			de.uib.opsidatamodel.permission.UserConfigProducing up = new de.uib.opsidatamodel.permission.UserConfigProducing(
+				false, //boolean notUsingDefaultUser,
+	
+				host, //String configserver,
+				persist.getHostInfoCollections().getDepotNamesList(),//Collection<String> existingDepots,
+				persist.getHostGroupIds(),//Collection<String> existingHostgroups,
+				persist.getProductGroups().keySet(),//Collection<String> existingProductgroups,
+			
+				//data. on which changes are based
+				persist.getConfigDefaultValues(),//Map<String, java.util.List<Object>> serverconfigValuesMap,
+				persist.getConfigOptions()//Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap
+			);
+			
+			
+			ArrayList<Object> newData = up.produce();
+			logging.writeToConsole("UserConfigProducing: newData " + newData);
+			
+			System.exit(0);
+			
+		
+		
+		};
+	
+			
+		
+		
+		logging.setSuppressConsole( false );
 
-		if (optionPersistenceControllerMethodCall) {
+		if (optionPersistenceControllerMethodCall)
+		{
+
 			addMissingArgs();
 
 			PersistenceController controller = connect();
-			java.util.List<Map<String, Object>> opsiHosts = controller.HOST_read();
+			java.util.List<Map<String, Object>> opsiHosts= controller.HOST_read();
 
-			// System.out.println( "" + controller.getOpsiHostNames());
+			//System.out.println( "" + controller.getOpsiHostNames());
 			System.exit(0);
-			// System.out.println(" called me with " + host + ", " + user + ", " +
-			// methodCall);
-		}
 
-		if (de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect) {
+			//System.out.println(" called me with " + host + ", " + user + ",  " + methodCall);
+		}
+		
+		if (de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect)
+		{
 			if (logdirectory != null)
 				logging.wantedDirectory = logdirectory;
 			else
 				logging.wantedDirectory = "";
-
+			
 			addMissingArgs();
-
+			
 			PersistenceController controller = connect();
 			System.exit(0);
+
 		}
+			
+
 
 		String imageHandled = "(we start image retrieving)";
 
-		// System.out.println (imageHandled);
-		try {
-			String resourceS = de.uib.utilities.Globals.iconresourcename;
-			URL resource = de.uib.configed.Globals.class.getResource(resourceS);
-			if (resource == null) {
-				System.out.println("image resource " + resourceS + "  not found");
-			} else {
+
+		//System.out.println (imageHandled);
+		try
+		{
+			String resourceS =de.uib.utilities.Globals.iconresourcename;
+			URL resource =de.uib.configed.Globals.class.getResource(resourceS);
+			if (resource == null)
+			{
+				System.out.println ("image resource " + resourceS + "  not found");
+			}
+			else
+			{
 				de.uib.utilities.Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 				imageHandled = "setIconImage";
 			}
-		} catch (Exception ex) {
-			System.out.println("imageHandled failed: " + ex.toString());
+		}
+		catch(Exception ex)
+		{
+			System.out.println ("imageHandled failed: " + ex.toString());
 		}
 
 		// Turn on antialiasing for text (not for applets)
-		try {
+		try
+		{
 			System.setProperty("swing.aatext", "true");
-		} catch (Exception ex) {
+		}
+		catch(Exception ex)
+		{
 			logging.info(" setting property swing.aatext" + ex);
 		}
 
-		// showExternalInfo("hallo");
 
-		fErrorOutOfMemory = new de.uib.configed.gui.FTextArea(null, "configed", true, new String[] { "ok" }, 400, 400);
-
-		// fErrorOutOfMemory.setIconImage (Globals.mainIcon); //does not yet work
+		//showExternalInfo("hallo");
+		
+		fErrorOutOfMemory = new de.uib.configed.gui.FTextArea(null, "configed", 
+			true, new String[]{"ok"}, 400, 400);
+		
+		//fErrorOutOfMemory.setIconImage (Globals.mainIcon); //does not yet work
 		fErrorOutOfMemory.setContentBackground(Globals.darkOrange);
-
-		// we activate it in case of an appropriate error
-		// fErrorOutOfMemory.setVisible(true);
-
+		//we activate it in case of an appropriate error
+		//fErrorOutOfMemory.setVisible(true);
+		
 		fErrorOutOfMemory.setFont(Globals.defaultFontBig);
-		fErrorOutOfMemory.setMessage(
-				"\n\n" + de.uib.configed.configed.getResourceValue("configed.infoExitBecauseOfHeapOverflow"));
-		// "configed.infoExitBecauseOfHeapOverflow") );
-
+		fErrorOutOfMemory.setMessage( "\n\n" + de.uib.configed.configed.getResourceValue("configed.infoExitBecauseOfHeapOverflow") );
+			//"configed.infoExitBecauseOfHeapOverflow") );
+		
+		
+		
+		 
+		
 		new configed(null, // we dont construct it for an applet
-				locale, host, user, password, client, clientgroup, tab, logdirectory);
+		             locale, host, user, password, client, clientgroup, tab, logdirectory);
 	}
+
 }

@@ -93,12 +93,16 @@ public class JSONObjectX extends JSONObject
 							if (value instanceof java.lang.Boolean
 								||
 								value instanceof java.lang.String
+								|| 
+								value instanceof java.lang.Integer
 								)
+							{
 								map.put( key, value);
-								
+							}
 							else if (value instanceof org.json.JSONArray)
+							{
 								map.put( key,  ((JSONArray) value).toList() );
-							
+							}
 							else if (value instanceof org.json.JSONObject)
 							{
 								map.put( key, value);  //should only occur on the last level

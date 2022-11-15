@@ -28,8 +28,11 @@ public class JTableWithToolTips extends JTable
 	{
 		Component c = super.prepareRenderer(renderer, rowIndex, colIndex);
 		
+		//System.out.println("row, col: " + rowIndex +","+ colIndex + "c: " + c.getClass());
+		//System.out.println("test: " + (c instanceof JComponent));
 		if (c != null && c instanceof JComponent) 
 		{
+			JComponent jc = (JComponent) c;
 			String valstr = "";
 			
 			if (c instanceof JLabel)
@@ -43,10 +46,10 @@ public class JTableWithToolTips extends JTable
 				else if (val instanceof String)
 					valstr = (String) val;
 			}
-				
-			JComponent jc = (JComponent)c;
-			jc.setToolTipText(valstr);
-								
+
+			if(jc.getToolTipText() == null )
+				jc.setToolTipText(valstr);
+			return jc;
 		}
 		return c;
 	}

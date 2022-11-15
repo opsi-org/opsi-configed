@@ -1,17 +1,22 @@
 package de.uib.configed.gui;
 /**
  * NewClientDialog
- * Copyright:     Copyright (c) 2006-2021
+ * Copyright:     Copyright (c) 2006-2022
  * Organisation:  uib
- * @author Jan Schneider, Rupert Roeder, Anna Sucher
+ * @author Jan Schneider, Rupert Roeder, Anna Sucher, Naglis Vidziunas
  */
 
 
 import de.uib.configed.*;
+import de.uib.configed.csv.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.filechooser.*;
 import java.util.*;
 import de.uib.opsidatamodel.*;
 import de.uib.utilities.logging.*;
@@ -44,6 +49,11 @@ public class NewClientDialog extends FGeneralDialog
 	protected JCheckBox jCheckShutdownInstall;
 	protected Vector<String> depots;
 
+	protected JLabel jCSVTemplateLabel;
+	protected JButton jCSVTemplateButton;
+	protected JLabel jImportLabel;
+	protected JButton jImportButton;
+
 	protected Vector<String> groupList;
 	protected Vector<String> localbootProducts;
 	protected Vector<String> netbootProducts;
@@ -70,12 +80,13 @@ public class NewClientDialog extends FGeneralDialog
 
 	private NewClientDialog(ConfigedMain main, Vector<String> depots)
 	{
-		super (	null,
+		super (	Globals.mainFrame,
 		        configed.getResourceValue("NewClientDialog.title") + " (" + Globals.APPNAME + ")",
 		        false,
 		        new String[]{
 		            configed.getResourceValue("NewClientDialog.buttonCreate"),
-		            configed.getResourceValue("NewClientDialog.buttonClose") },
+		            configed.getResourceValue("NewClientDialog.buttonClose")
+		        },
 		        700, 600);
 		setDefaultCloseOperation (JDialog.HIDE_ON_CLOSE);
 		this.main = main;
@@ -168,6 +179,9 @@ public class NewClientDialog extends FGeneralDialog
 			model.addElement(group);
 		jComboPrimaryGroup.setModel(model);
 		jComboPrimaryGroup.setSelectedIndex(0);
+		
+		
+		
 	}
 	public void setProductNetbootList(Vector<String> productList)
 	{
@@ -217,6 +231,26 @@ public class NewClientDialog extends FGeneralDialog
 		gpl = new GroupLayout(panel);
 		panel.setLayout(gpl);
 		panel.setBackground(Globals.backLightBlue);
+
+		jCSVTemplateLabel = new JLabel(configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
+		jCSVTemplateButton = new JButton(configed.getResourceValue("NewClientDialog.csvTemplateButton"));
+		jCSVTemplateButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				createCSVTemplate();
+			}
+		});
+
+		jImportLabel = new JLabel(configed.getResourceValue("NewClientDialog.importLabel"));
+		jImportButton = new JButton(configed.getResourceValue("NewClientDialog.importButton"));
+		jImportButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				importCSV();
+			}
+		});
 
 		JLabel jLabelHostname = new JLabel();
 		jLabelHostname.setText( configed.getResourceValue("NewClientDialog.hostname") );
@@ -628,60 +662,57 @@ public class NewClientDialog extends FGeneralDialog
 			// .addGap(Globals.vGapSize,Globals.vGapSize,Globals.vGapSize)
 			
 		);
+
+		
+		GroupLayout northLayout = new GroupLayout(northPanel);
+		northPanel.setLayout(northLayout);
+		northPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6), BorderFactory.createLineBorder(new Color(122,138,153))));
+
+		northLayout.setHorizontalGroup(northLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+			.addGroup(northLayout.createSequentialGroup()
+			 	.addGap(Globals.hGapSize,Globals.hGapSize,Globals.hGapSize)
+				.addComponent(jCSVTemplateLabel)
+			 	.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+				.addComponent(jCSVTemplateButton, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE )
+			 	.addGap(Globals.minVGapSize,Globals.minVGapSize,Globals.minVGapSize)
+			)
+			.addGroup(northLayout.createSequentialGroup()
+			 	.addGap(Globals.hGapSize,Globals.hGapSize,Globals.hGapSize)
+				.addComponent(jImportLabel)
+			 	.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+				.addComponent(jImportButton, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE )
+			 	.addGap(Globals.minVGapSize,Globals.minVGapSize,Globals.minVGapSize)
+			)
+		);
+
+		northLayout.setVerticalGroup(northLayout.createSequentialGroup()
+			.addGap(Globals.minVGapSize,Globals.minVGapSize,Globals.minVGapSize)
+			.addGroup(northLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				.addComponent(jCSVTemplateLabel)
+				.addComponent(jCSVTemplateButton, Globals.buttonHeight,Globals.buttonHeight,Globals.buttonHeight)
+			)
+			.addGap(Globals.minVGapSize,Globals.minVGapSize,Globals.minVGapSize)
+			.addGroup(northLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(jImportLabel)
+				.addComponent(jImportButton, Globals.buttonHeight,Globals.buttonHeight,Globals.buttonHeight)
+			)
+			.addGap(Globals.minVGapSize,Globals.minVGapSize,Globals.minVGapSize)
+		);
+
 	
 		scrollpane.getViewport().add(panel);
 		pack();
 		centerOn(Globals.mainContainer);
 	}
 
-	
-	@Override
-	protected void preAction1()
+	private void createClient(final String hostname, final String selectedDomain,
+	                         final String depotID, final String description, final String inventorynumber, final String notes,
+	                         final String ipaddress, final String macaddress, 
+	                         final boolean shutdownInstall, final boolean uefiboot, final boolean wanConfig, 
+	                         final String group, final String netbootProduct, final String localbootProduct)
 	{
-		super.preAction1();
-		jButton1.setIcon( jButton1.getRunningActionIcon() ); 
-			//Globals.createImageIcon( "images/checked_box.png", "Client" ) );
-	}
-	
-	@Override
-	protected void postAction1()
-	{
-		super.postAction1();
-		jButton1.setIcon( jButton1.getDefaultIcon() );
-	}
-	
-	/* This method is called when button 1 is pressed */
-	@Override
-	public void doAction1()
-	{
-		logging.info(this, "doAction1");
-		
 		boolean goOn = true;
-		result = 1;
-		
-		//FTextArea fText = new FTextArea(Globals.mainFrame, "waiting", false, 0);
-		//fText.setVisible(true);
 
-		String hostname = jTextHostname.getText();
-		String selectedDomain = (String) jComboDomain.getSelectedItem();
-		String depotID = (String) jComboDepots.getSelectedItem();
-		String description = jTextDescription.getText();
-		String inventorynumber = jTextInventoryNumber.getText();
-		String notes = jTextNotes.getText().trim();
-		String macaddress = macAddressField.getText();
-		String ipaddress = ipAddressField.getText();
-		String group = (String) jComboPrimaryGroup.getSelectedItem();
-		String netbootProduct = (String) jComboNetboot.getSelectedItem();
-		String localbootProduct = (String) jComboLocalboot.getSelectedItem();
-
-		/*
-		System.out.println("hostname: " + hostname);
-		System.out.println("selectedDomain: " + selectedDomain);
-		System.out.println("description: " + description);
-		System.out.println("notes: " + notes);
-		System.out.println("macaddress: " + macaddress);
-		System.out.println("ipaddress: " + ipaddress);
-		*/
 		if (hostname == null || hostname.equals(""))
 		{
 			goOn = false; 
@@ -793,6 +824,272 @@ public class NewClientDialog extends FGeneralDialog
 				goOn = false; 
 		}
 
+		if (goOn)
+		{
+			main.createClient(hostname, selectedDomain, 
+				depotID, description, inventorynumber, notes, 
+				ipaddress, macaddress, shutdownInstall,
+				uefiboot, wanConfig, 
+				group, netbootProduct, localbootProduct
+			);
+			
+			Vector<String> editableDomains  = new Vector<String>();
+			ArrayList<Object> saveDomains = new ArrayList<Object>();
+			int order = 0;
+			saveDomains.add("" + order + ":" + selectedDomain);
+			editableDomains.add(selectedDomain);
+			logging.info(this, "createClient domains" + domains);
+			
+			domains.remove( selectedDomain );
+			
+			for (String domain : domains)
+			{
+				order++;
+				saveDomains.add("" + order + ":" + domain);
+				
+				editableDomains.add( domain );
+			}
+				
+			
+			logging.debug(this, "createClient editableDomains " + editableDomains);
+			main.setEditableDomains(editableDomains);
+			setDomains(editableDomains);
+			
+			
+			logging.debug(this, "createClient saveDomains " + saveDomains);
+			main.getPersistenceController().writeDomains(saveDomains);
+	
+			//creates dead product property (state) for newer client-agent-version
+			//therefore omitted
+			/*
+			
+			if (jCheckShutdownInstall.getSelectedObjects() != null)
+			{
+				main.setInstallByShutdownProductPropertyValue(opsiHostKey, true);
+			}
+			*/
+			
+		}
+	}
+
+	private void importCSV()
+	{
+		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("CSV (.csv)", "csv");
+		jFileChooser.addChoosableFileFilter(fileFilter);
+		jFileChooser.setAcceptAllFileFilterUsed(false);
+
+		int returnValue = jFileChooser.showOpenDialog(Globals.mainFrame);
+
+		if (returnValue == JFileChooser.APPROVE_OPTION)
+		{
+			String csvFile = jFileChooser.getSelectedFile().getAbsolutePath();
+			if (!csvFile.endsWith(".csv")) csvFile = csvFile.concat(".csv");
+			CSVImportDataDialog csvImportDataDialog = createCSVImportDataDialog(csvFile);
+
+			if (csvImportDataDialog == null)
+			{
+				return;
+			}
+
+			if (csvImportDataDialog.getResult() == 1)
+			{
+				CSVImportDataModifier modifier = csvImportDataDialog.getModifier();
+				Vector<Vector<Object>> rows = modifier.getRows();
+
+				rows.forEach(row ->
+				{
+					String hostname = (String) row.get(0);
+					String selectedDomain = (String) row.get(1);
+					String depotID = (String) row.get(2);
+					String description = (String) row.get(3);
+					String inventorynumber = (String) row.get(4);
+					String notes = (String) row.get(5);
+					String macaddress = (String) row.get(6);
+					String ipaddress = (String) row.get(7);
+					String group = (String) row.get(8);
+					String netbootProduct = (String) row.get(9);
+					String localbootProduct = (String) row.get(10);
+
+					if (!isBoolean((String) row.get(11)) || !isBoolean((String) row.get(12)) || !isBoolean((String) row.get(13)))
+					{
+						FTextArea fInfo = new FTextArea(
+							Globals.mainFrame,
+							configed.getResourceValue("NewClientDialog.nonBooleanValue.title") + " (" + Globals.APPNAME + ") ",
+							false,
+							new String[]{
+								configed.getResourceValue("FGeneralDialog.ok")
+							},
+							400, 200
+						);
+
+						StringBuffer message = new StringBuffer("");
+						message.append(configed.getResourceValue("NewClientDialog.nonBooleanValue.message"));
+						fInfo.setMessage(message.toString());
+						fInfo.setAlwaysOnTop(true);
+						fInfo.setVisible(true);
+
+						return;
+					}
+
+					boolean wanConfig = Boolean.parseBoolean((String) row.get(11));
+					boolean uefiboot = Boolean.parseBoolean((String) row.get(12));
+					boolean shutdownInstall = Boolean.parseBoolean((String) row.get(13));
+
+					createClient(hostname, selectedDomain,
+								 depotID, description, inventorynumber, notes,
+								 ipaddress, macaddress, shutdownInstall,
+								 uefiboot, wanConfig,
+								 group, netbootProduct, localbootProduct);
+				});
+			}
+		}
+	}
+
+	private boolean isBoolean(String bool)
+	{
+		return bool.isEmpty() ? true : bool.equalsIgnoreCase(Boolean.TRUE.toString()) || bool.equalsIgnoreCase(Boolean.FALSE.toString());
+	}
+
+	private CSVImportDataDialog createCSVImportDataDialog(String csvFile)
+	{
+		CSVFormat format = new CSVFormat();
+
+		try
+		{
+			String file = new String(Files.readAllBytes(Paths.get(csvFile)), StandardCharsets.UTF_8);
+
+			if (!file.isEmpty())
+			{
+				format.detectFormat(csvFile);
+			}
+		}
+		catch (IOException e)
+		{
+			logging.error(this, "Unable to read CSV file");
+		}
+
+		JPanel centerPanel = new JPanel();
+		Vector<String> columnNames = new Vector<>();
+
+		columnNames.add("hostname");
+		columnNames.add("selectedDomain");
+		columnNames.add("depotID");
+		columnNames.add("description");
+		columnNames.add("inventorynumber");
+		columnNames.add("notes");
+		columnNames.add("macaddress");
+		columnNames.add("ipaddress");
+		columnNames.add("group");
+		columnNames.add("netbootProduct");
+		columnNames.add("localbootProduct");
+		columnNames.add("wanConfig");
+		columnNames.add("uefiBoot");
+		columnNames.add("shutdownInstall");
+
+		if (format.hasHeader() && !format.hasExpectedHeaderNames(columnNames))
+		{
+			FTextArea fInfo = new FTextArea(
+				Globals.mainFrame,
+				configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.title")
+				+ " (" + Globals.APPNAME + ") ",
+				false,
+				new String[]{
+					configed.getResourceValue("FGeneralDialog.ok")
+				},
+				400, 200
+			);
+			StringBuffer message = new StringBuffer("");
+			message.append(configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.message") + " " + columnNames.toString().replace("[", "").replace("]", ""));
+			fInfo.setMessage(message.toString());
+			fInfo.centerOn(this);
+			fInfo.setAlwaysOnTop(true);
+			fInfo.setVisible(true);
+			return null;
+		}
+
+		CSVImportDataModifier modifier = new CSVImportDataModifier(csvFile, columnNames);
+		CSVImportDataDialog csvImportDataDialog = new CSVImportDataDialog(modifier, format);
+		centerPanel = csvImportDataDialog.initPanel();
+
+		if (centerPanel == null)
+		{
+			return null;
+		}
+
+		csvImportDataDialog.setCenterPaneInScrollpane(centerPanel);
+		csvImportDataDialog.setupLayout();
+		csvImportDataDialog.setDetectedOptions();
+		csvImportDataDialog.setVisible(true);
+
+		return csvImportDataDialog;
+	}
+
+	public void createCSVTemplate()
+	{
+		Vector<String> columnNames = new Vector<>();
+
+		columnNames.add("hostname");
+		columnNames.add("selectedDomain");
+		columnNames.add("depotID");
+		columnNames.add("description");
+		columnNames.add("inventorynumber");
+		columnNames.add("notes");
+		columnNames.add("macaddress");
+		columnNames.add("ipaddress");
+		columnNames.add("group");
+		columnNames.add("netbootProduct");
+		columnNames.add("localbootProduct");
+		columnNames.add("wanConfig");
+		columnNames.add("uefiBoot");
+		columnNames.add("shutdownInstall");
+
+		CSVTemplateCreatorDialog dialog = new CSVTemplateCreatorDialog(columnNames);
+		JPanel centerPanel = dialog.initPanel();
+
+		dialog.setCenterPaneInScrollpane(centerPanel);
+		dialog.setupLayout();
+		dialog.setVisible(true);
+	}
+
+	@Override
+	protected void preAction1()
+	{
+		super.preAction1();
+		jButton1.setIcon( jButton1.getRunningActionIcon() ); 
+			//Globals.createImageIcon( "images/checked_box.png", "Client" ) );
+	}
+	
+	@Override
+	protected void postAction1()
+	{
+		super.postAction1();
+		jButton1.setIcon( jButton1.getDefaultIcon() );
+	}
+	
+	/* This method is called when button 1 is pressed */
+	@Override
+	public void doAction1()
+	{
+		logging.info(this, "doAction1");
+
+		result = 1;
+
+		//FTextArea fText = new FTextArea(Globals.mainFrame, "waiting", false, 0);
+		//fText.setVisible(true);
+
+		String hostname = jTextHostname.getText();
+		String selectedDomain = (String) jComboDomain.getSelectedItem();
+		String depotID = (String) jComboDepots.getSelectedItem();
+		String description = jTextDescription.getText();
+		String inventorynumber = jTextInventoryNumber.getText();
+		String notes = jTextNotes.getText().trim();
+		String macaddress = macAddressField.getText();
+		String ipaddress = ipAddressField.getText();
+		String group = (String) jComboPrimaryGroup.getSelectedItem();
+		String netbootProduct = (String) jComboNetboot.getSelectedItem();
+		String localbootProduct = (String) jComboLocalboot.getSelectedItem();
+
 		if (main.getPersistenceController().isWithUEFI())
 		{
 			uefiboot = false;
@@ -810,60 +1107,19 @@ public class NewClientDialog extends FGeneralDialog
 				wanConfig = true;
 			}
 		}
-		
+
 		shutdownInstall = false;
 		if (jCheckShutdownInstall.getSelectedObjects() != null)
 		{
 		 	shutdownInstall = true;
 		}
 
-		if (goOn)
-		{
-			main.createClient(hostname, selectedDomain, 
-				depotID, description, inventorynumber, notes, 
-				ipaddress, macaddress, shutdownInstall,
-				uefiboot, wanConfig, 
-				group, netbootProduct, localbootProduct
-				);
-			
-			Vector<String> editableDomains  = new Vector<String>();
-			ArrayList<Object> saveDomains = new ArrayList<Object>();
-			int order = 0;
-			saveDomains.add( "" + order + ":" + selectedDomain );
-			editableDomains.add(selectedDomain);
-			logging.info(this, "doAction1 domains" + domains);
-			
-			domains.remove( selectedDomain );
-			
-			for (String domain : domains)
-			{
-				order++;
-				saveDomains.add( "" + order + ":" + domain );
-				
-				editableDomains.add( domain );
-			}
-				
-			
-			logging.debug(this, "doAction1 editableDomains " + editableDomains);
-			main.setEditableDomains( editableDomains );
-			setDomains(editableDomains);
-			
-			
-			logging.debug(this, "doAction1 saveDomains " + saveDomains);
-			main.getPersistenceController().writeDomains( saveDomains ); 
-	
-			//creates dead product property (state) for newer client-agent-version
-			//therefore omitted
-			/*
-			
-			if (jCheckShutdownInstall.getSelectedObjects() != null)
-			{
-				main.setInstallByShutdownProductPropertyValue(opsiHostKey, true);
-			}
-			*/
-			
-		}
-		//setVisible(false);
+		createClient(hostname, selectedDomain,
+			depotID, description, inventorynumber, notes,
+			ipaddress, macaddress, shutdownInstall,
+			uefiboot, wanConfig,
+			group, netbootProduct, localbootProduct
+		);
 	}
 
 	/* This method gets called when button 2 is pressed */

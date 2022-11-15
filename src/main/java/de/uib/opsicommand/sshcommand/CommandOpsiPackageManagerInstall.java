@@ -111,7 +111,7 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 
 	public void setOpsiproduct(String prod)
 	{
-		if (prod != "") opsiproduct = " -i " + prod;
+		if (prod != null && !prod.equals("")) opsiproduct = " -i " + prod;
 		else opsiproduct = "";
 	}
 

@@ -236,6 +236,45 @@ public class JSONReMapper
 
 	}
 
+	static public Map<String, Map<String, Map<String, Object>>> getMap3_Objects(Object retrieved)
+	{
+		HashMap<String, Map<String, Map<String, Object>>> result = new HashMap<String, Map<String, Map<String, Object>>>();
+		try
+		{
+			JSONObject jO = (JSONObject) retrieved;
+			HashMap<String, JSONObject> map0  = new HashMapX<String, JSONObject>(jO);
+			//logging.debug(this, " map0: " + map0);
+
+			Iterator iter0 = map0.keySet().iterator();
+			while (iter0.hasNext())
+			{
+				String key1 = (String) iter0.next();  //e.g. client
+				HashMap<String, JSONObject> map1 =new HashMapX<String, JSONObject>(  (JSONObject) map0.get(key1) ); //e.g. map of 1 client values
+				//logging.debug(this, " key1 " + key1 + " value " + map1);
+				HashMap<String, Map<String, Object>>  map1R = new HashMap<String, Map<String, Object>>(); // to produce
+
+				Iterator iter1 = map1.keySet().iterator();
+				while (iter1.hasNext())
+				{
+					String key2 = (String) iter1.next(); //e.g. product
+					HashMap<String, Object> map2 = new HashMapX<String, Object>((JSONObject) map1.get(key2), true); //e.g. product values;
+					//logging.debug(this, " key2 " + key2 + " value " + map2);
+					map1R.put(key2, map2);
+					//logging.debug(this, " map1R.get(key2) " + map1R.get(key2));
+				}
+
+				result.put(key1, map1R);
+			}
+		}
+		catch (Exception ex)
+		{
+			logging.debug(CLASSNAME + ".getMap3_String: " + ex.toString());
+		}
+
+		return result;
+
+	}
+
 	static public Map<String, Map<String, Map<String, Object>>> getMap3_Object(Object retrieved)
 	{
 		HashMap<String, Map<String, Map<String, Object>>> result = new HashMap<String, Map<String, Map<String, Object>>>();
@@ -325,11 +364,64 @@ public class JSONReMapper
 		return result;
 	}
 
+	static public List<Map<String, Object>> getListOfMaps(JSONArray retrieved)
+	{
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		List jsonList = null;
+
+		try
+		{
+			JSONArray jA = retrieved;
+			jsonList = new ArrayList();
+
+			if (jA != null)
+			{
+				for  (int i =0 ;  i < jA.length();  i++)
+				{
+					//logging.debug(this, "getJSONList, add item ---- " + jA.get(i));
+					jsonList.add (  jA.get(i) );
+				}
+			}
+
+			//logging.debug(this, "getJSONList, JSONArray " + jA);
+			//logging.debug(this, "getJSONList, produced size " + result.size());
+		}
+		catch (JSONException jex)
+		{
+			logging.error( "JSONReMapper: Exception on getting list " + jex.toString());
+		}
+
+		JSONObject item = null;
+
+		try
+		{
+
+			Iterator iter = jsonList.iterator();
+
+			int count = 0;
+			while (iter.hasNext())
+			{
+				count++;
+				item = (JSONObject) iter.next();
+				Map<String, Object> mapItem = (Map<String, Object>) JSONReMapper.deriveStandard( item );
+				result.add(mapItem);
+
+			}
+			assert jsonList.size() == result.size(): " getListOfMaps did not work, jsonList.size " + jsonList.size() + ", remapped " + result.size();
+		}
+		catch (Exception ex)
+		{
+			logging.error("JSONReMapper: Exception on reproducing  " + item + ", " + ex);
+		}
+
+		return result;
+	}
 
 	static public List<Map<String, Object>> getListOfMaps(Object retrieved)
 	{
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 		List jsonList = null;
+
 		try
 		{
 			JSONObject jO = (JSONObject) retrieved;

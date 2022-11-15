@@ -1362,8 +1362,4 @@ public class GenTableModel extends AbstractTableModel
 		
 		return super.toString() + info;
 	}
-
-
 }
-
-

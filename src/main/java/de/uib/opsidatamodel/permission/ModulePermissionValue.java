@@ -31,6 +31,11 @@ public class ModulePermissionValue
 		MODULE_CHECKED.put("mysql_backend", true);
 		MODULE_CHECKED.put("uefi", true);
 		MODULE_CHECKED.put("userroles", true);
+		MODULE_CHECKED.put("directory-connector",true);
+		MODULE_CHECKED.put("macos_agent",true);
+		MODULE_CHECKED.put("secureboot",true);
+		MODULE_CHECKED.put("win-vhd",true);
+		MODULE_CHECKED.put("os_install_by_wlan",true);
 	}
 	/*
 	public static final Map<String, Boolean> MODULE_PERMITTED;

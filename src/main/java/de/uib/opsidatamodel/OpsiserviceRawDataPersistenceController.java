@@ -53,11 +53,52 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 			dataStub = new DataStubRawData(this);
 	}
 	
+	@Override
+	public boolean isWithMySQL()
+	{
+		if ( !withMySQL ) 
+				//we use mysql since we are in this class 
+				//but are underlicensed
+		{
+			
+				javax.swing.SwingUtilities.invokeLater(new Thread(){
+					public void run()
+					{
+						/*
+						StringBuffer info = new StringBuffer("");
+						info.append(configed.getResourceValue("Permission.modules.clientcount.2"));
+						info.append(":\n");
+						for (String moduleInfo : missingModulesPermissionInfo)
+						{
+							info.append(moduleInfo);
+							info.append("\n");
+						}
+						*/
+						String warning = "limit for mysql backend reached";
+							
+							/*
+								String.format( 
+									//locale.
+									configed.getResourceValue("Permission.modules.clientcount.error"),
+									""  + countClientsInThisBlock , "" + key, "" + maxAllowedClientsForThisModule.getNumber()
+									);
+							*/
+						
+						
+						
+						logging.info(this, "missingModules " + warning);
+						de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.callInstanceWith( warning );
+					}
+				}
+			);
+		}
+		return true;
+	}
 	
 	@Override
 	public java.util.List<Map<java.lang.String,java.lang.Object>> HOST_read()
 	{
-			
+		
 		logging.debug(this, "HOST_read ");
 		String query = "select *  from HOST";
 		

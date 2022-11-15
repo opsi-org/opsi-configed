@@ -104,8 +104,8 @@ public class SSHCommandControlParameterMethodsPanel  extends JPanel
 			@Override
 			public void itemStateChanged(ItemEvent e) 
 			{
-				if  ( ((String)cb_parameter_methods.getSelectedItem())
-					.equals(configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv")) )
+				if  ( ((String)cb_parameter_methods.getSelectedItem()).equals(configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"))
+					|| ((String)cb_parameter_methods.getSelectedItem()).equals(configed.getResourceValue("SSHConnection.CommandControl.method.optionSelection")))
 				{
 					cb_parameter_formats.setEnabled(false);
 				}
@@ -216,11 +216,14 @@ public class SSHCommandControlParameterMethodsPanel  extends JPanel
 	public void doActionTestParam(JDialog caller)
 	{
 		String paramText =  "";
-		if  ( ((String)cb_parameter_methods.getSelectedItem()).equals(factory.getParameterHandler().method_interactiveElement) )
+		if  ( ((String)cb_parameter_methods.getSelectedItem()).equals(factory.getParameterHandler().method_interactiveElement)
+			|| ((String)cb_parameter_methods.getSelectedItem()).equals(factory.getParameterHandler().method_optionSelection))
 		{
+			System.out.println("CREATING PARAM TEXT... ");
 			paramText = factory.getParameterHandler().replacement_default_1
 					+ factory.getParameterHandler().getMethodFromName((String) cb_parameter_methods.getSelectedItem())
 					+ factory.getParameterHandler().replacement_default_2;
+			System.out.println("CREATED PARAM TEXT: " + paramText);
 		}
 		else 
 			paramText = factory.getParameterHandler().replacement_default_1
@@ -228,7 +231,7 @@ public class SSHCommandControlParameterMethodsPanel  extends JPanel
 				+ factory.getParameterHandler().param_splitter_default 
 				+ cb_parameter_formats.getSelectedItem()
 				+ factory.getParameterHandler().replacement_default_2;
-
+		System.out.println("PARAM TEXT: " + paramText);
 		try {
 			logging.info(this, "actionPerformed(testParamMethod) parameterText " + paramText);
 			String result = "echo \"{0}\"".replace("{0}", factory.getParameterHandler().testParameter(paramText));
@@ -243,6 +246,7 @@ public class SSHCommandControlParameterMethodsPanel  extends JPanel
 		}
 		catch (Exception ble)
 		{ 
+			ble.printStackTrace();
 			logging.warning(this, "Exception  testing parameter-method failed.");
 		}
 		if (caller != null) caller.setVisible(true);
@@ -252,7 +256,8 @@ public class SSHCommandControlParameterMethodsPanel  extends JPanel
 	{
 		String text = (String) component.getText();
 		String paramText =  "";
-		if  ( ((String)cb_parameter_methods.getSelectedItem()).equals(factory.getParameterHandler().method_interactiveElement) )
+		if  ( ((String)cb_parameter_methods.getSelectedItem()).equals(factory.getParameterHandler().method_interactiveElement)
+			|| ((String)cb_parameter_methods.getSelectedItem()).equals(factory.getParameterHandler().method_optionSelection))
 		{
 			paramText = factory.getParameterHandler().replacement_default_1
 					+ factory.getParameterHandler().getMethodFromName((String) cb_parameter_methods.getSelectedItem())

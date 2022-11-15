@@ -151,6 +151,11 @@ public class SearchTargetModelFromTable implements SearchTargetModel
 	public void setCursorRow(int row)
 	{
 		//int viewrow = table.convertRowIndexToView(row);
+		if (table.getRowCount() <= 0)
+		{
+			return;
+		}
+
 		int modelrow = table.convertRowIndexToModel(row);
 		
 		logging.info(this, "setCursorRow row, produced modelrow " +   modelrow );

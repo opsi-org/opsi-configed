@@ -49,6 +49,13 @@ public class SSHConnectionInfo {
 	public String getPassw() {
 		return ssh_connection_passw;
 	}
+	public String getShortPassw() {
+		String shortened = "x";
+		if (ssh_connection_passw.length() > 2)
+			shortened = ssh_connection_passw.charAt(0) + "..."; 
+		return shortened;
+	}
+	
 	public String getPort() {
 		return ssh_connection_port;
 	}

@@ -38,6 +38,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog
 	{
 		super(null,configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.title"), false);
 		this.command = command;
+		logging.info(this, "with command");
 		retrieve_repos();
 		init();
 		initLayout();
@@ -53,19 +54,28 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog
 			logging.logTrace(e);
 			
 		}
-		String[] lines = result.split("\n");
-		HashMap<String, String> repos = new HashMap<String, String>();
-		for (int i = 1; i < lines.length; i++){
-			String repostatus = lines[i].split(":")[0];
-
-			// escaping ansicodes
-			repostatus = repostatus.replaceAll("\\[[0-9];[0-9][0-9];[0-9][0-9]m", "");
-			repostatus = repostatus.replace( "", "").replace("\u001B", "");
-
-			String[] repo_status = repostatus.split("\\(");
-			repo_status[1] = repo_status[1].split("\\)")[0];
-			repos.put(repo_status[0], repo_status[1]);
-			command.setRepos(repos);
+		
+		if (result == null)
+		{
+			logging.error("retrieve repos " + "FAILED");
+			command.setRepos(null);
+		}
+		else
+		{
+			String[] lines = result.split("\n");
+			HashMap<String, String> repos = new HashMap<String, String>();
+			for (int i = 1; i < lines.length; i++){
+				String repostatus = lines[i].split(":")[0];
+	
+				// escaping ansicodes
+				repostatus = repostatus.replaceAll("\\[[0-9];[0-9][0-9];[0-9][0-9]m", "");
+				repostatus = repostatus.replace( "", "").replace("\u001B", "");
+	
+				String[] repo_status = repostatus.split("\\(");
+				repo_status[1] = repo_status[1].split("\\)")[0];
+				repos.put(repo_status[0], repo_status[1]);
+				command.setRepos(repos);
+			}
 		}
 		command.needSudo = true;
 	}
@@ -122,8 +132,18 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog
 				}
 			}
 		});
+		
+		
+		
+		if (command.getRepos() != null)
+		{
+			cb_repos = new JComboBox(command.getRepos().keySet().toArray());
+		}
+		else
+		{
+			cb_repos = new JComboBox();
+		}
 
-		cb_repos = new JComboBox(command.getRepos().keySet().toArray());
 		cb_repos.addItem(configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"));
 		cb_repos.setSelectedItem(configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"));
 		cb_actions.setEnabled(true);

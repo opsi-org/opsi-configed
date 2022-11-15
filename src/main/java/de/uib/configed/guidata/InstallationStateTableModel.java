@@ -142,6 +142,7 @@ implements ComboBoxModeller,
 	protected Vector<String> productNamesInDeliveryOrder;
 	
 	
+	protected ActionRequest actionInTreatment;
 	//protected boolean changeActionIsSet = false;
 	protected java.util.Set<String> missingProducts = new HashSet<String>();
 	
