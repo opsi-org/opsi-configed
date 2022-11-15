@@ -84,7 +84,7 @@ public class LicenseDisplayer
 
 	public void initAndShowGUI() throws IOException
 	{
-		FXMLLoader fxmlLoader = new FXMLLoader(LicenseDisplayer.class.getResource("/resources/fxml/dialogs/license_dialog.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(LicenseDisplayer.class.getResource("/fxml/dialogs/license_dialog.fxml"));
 		Parent root = fxmlLoader.load();
 		Scene scene = new Scene(root);
 		stage = new Stage();

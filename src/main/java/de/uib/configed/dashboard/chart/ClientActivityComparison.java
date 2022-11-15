@@ -20,7 +20,7 @@ public class ClientActivityComparison extends StackPane implements DataChangeLis
 
 	public ClientActivityComparison()
 	{
-		FXMLLoader fxmlLoader = new FXMLLoader(ClientActivityComparison.class.getResource("/resources/fxml/charts/client_activity_pie_chart.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(ClientActivityComparison.class.getResource("/fxml/charts/client_activity_pie_chart.fxml"));
 		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
 

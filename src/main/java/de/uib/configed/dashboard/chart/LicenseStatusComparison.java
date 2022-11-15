@@ -21,7 +21,7 @@ public class LicenseStatusComparison extends StackPane implements DataChangeList
 
 	public LicenseStatusComparison()
 	{
-		FXMLLoader fxmlLoader = new FXMLLoader(LicenseStatusComparison.class.getResource("/resources/fxml/charts/license_pie_chart.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(LicenseStatusComparison.class.getResource("/fxml/charts/license_pie_chart.fxml"));
 		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
 

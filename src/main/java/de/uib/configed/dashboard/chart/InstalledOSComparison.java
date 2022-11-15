@@ -22,7 +22,7 @@ public class InstalledOSComparison extends StackPane implements DataChangeListen
 
 	public InstalledOSComparison()
 	{
-		FXMLLoader fxmlLoader = new FXMLLoader(InstalledOSComparison.class.getResource("/resources/fxml/charts/installed_os_bar_chart.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(InstalledOSComparison.class.getResource("/fxml/charts/installed_os_bar_chart.fxml"));
 		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
 
