@@ -8,40 +8,74 @@
 
 package de.uib.utilities.table.gui;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Set;
+import java.util.Vector;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
+import javax.swing.DefaultRowSorter;
+import javax.swing.DropMode;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
-import java.util.*;
-
-import de.uib.utilities.swing.*;
-import de.uib.utilities.table.*;
-import de.uib.utilities.table.updates.*;
-import de.uib.utilities.Globals;
 import de.uib.configed.configed;
-import de.uib.utilities.*;
-import de.uib.utilities.logging.*;
+import de.uib.utilities.Globals;
+import de.uib.utilities.Mapping;
+import de.uib.utilities.logging.logging;
+import de.uib.utilities.swing.JMenuItemFormatted;
+import de.uib.utilities.swing.PanelLinedComponents;
+import de.uib.utilities.swing.PopupMenuTrait;
+import de.uib.utilities.table.CursorrowObserver;
+import de.uib.utilities.table.ExportTable;
+import de.uib.utilities.table.ExporterToCSV;
+import de.uib.utilities.table.ExporterToPDF;
+import de.uib.utilities.table.GenTableModel;
+import de.uib.utilities.table.RowNoTableModelFilterCondition;
+import de.uib.utilities.table.TableCellRendererByBoolean;
+import de.uib.utilities.table.TableCellRendererCurrency;
+import de.uib.utilities.table.TableCellRendererDate;
+import de.uib.utilities.table.TableModelFilter;
+import de.uib.utilities.table.updates.UpdateController;
 import de.uib.utilities.thread.WaitCursor;
 
 /**
- *
- * @author  roeder
+ * @author roeder
  */
-public class PanelGenEditTable extends JPanel
-			implements
-			ActionListener,
-			TableModelListener,
-			ListSelectionListener,
-			KeyListener,
-			MouseListener,
-			ComponentListener,
-			CursorrowObserver
-{
+public class PanelGenEditTable extends JPanel implements ActionListener, TableModelListener, ListSelectionListener,
+		KeyListener, MouseListener, ComponentListener, CursorrowObserver {
 	javax.swing.JFrame masterFrame = de.uib.configed.Globals.mainFrame;
-	
+
 	protected Comparator[] comparators;
 
 	protected javax.swing.JScrollPane scrollpane;
@@ -56,12 +90,12 @@ public class PanelGenEditTable extends JPanel
 	protected javax.swing.JLabel labelRowCount;
 	protected javax.swing.JLabel labelMarkedCount;
 	protected String textMarkedCount = "selected";
-	protected JPanel titlePane; 
+	protected JPanel titlePane;
 
 	private JTextField celleditorfield;
 
 	//protected Color backgroundColor = new Color(250, 250, 240);//Globals.backLightYellow;
-	protected Color backgroundColorEditFieldsSelected =  Globals.defaultTableCellSelectedBgColor;// new Color(206, 224, 235);// Color.white; //Globals.backLightYellow;//backLightGreen;
+	protected Color backgroundColorEditFieldsSelected = Globals.defaultTableCellSelectedBgColor;// new Color(206, 224, 235);// Color.white; //Globals.backLightYellow;//backLightGreen;
 	protected Color backgroundColorSelected = Globals.defaultTableCellSelectedBgColorNotEditable;
 
 	protected JPopupMenu popupMenu;
@@ -73,7 +107,7 @@ public class PanelGenEditTable extends JPanel
 	protected int maxTableWidth = Short.MAX_VALUE;
 
 	protected boolean editing = true;
-	
+
 	protected boolean deleteAllowed = true;
 
 	protected boolean switchLineColors = true;
@@ -86,8 +120,7 @@ public class PanelGenEditTable extends JPanel
 
 	protected TablesearchPane searchPane;
 
-	
-	protected RowNoTableModelFilterCondition filterBySelectionCondition; 
+	protected RowNoTableModelFilterCondition filterBySelectionCondition;
 	protected TableModelFilter filterBySelection;
 	protected boolean filteringActive = false;
 	protected boolean selectionEmpty = true;
@@ -100,53 +133,48 @@ public class PanelGenEditTable extends JPanel
 	protected int popupIndex = 0;
 
 	private int oldrowcount = -1;
-	
 
 	protected LinkedHashMap<Integer, SortOrder> sortDescriptor;
 	protected LinkedHashMap<Integer, SortOrder> specialSortDescriptor;
 
 	private ExportTable exportTable;
-	
 
 	public static final int POPUP_SEPARATOR = PopupMenuTrait.POPUP_SEPARATOR; //0
 	public static final int POPUP_DELETE_ROW = 1;
-	
+
 	public static final int POPUP_CANCEL = 3;
-	
+
 	public static final int POPUP_RELOAD = PopupMenuTrait.POPUP_RELOAD; //4
-	
+
 	public static final int POPUP_SORT_AGAIN = 5;
-	
+
 	public static final int POPUP_SAVE = PopupMenuTrait.POPUP_SAVE; //8
-	
+
 	public static final int POPUP_NEW_ROW = 11;
 	public static final int POPUP_COPY_ROW = 12;
 	public static final int POPUP_FLOATINGCOPY = PopupMenuTrait.POPUP_FLOATINGCOPY; //14
-	
+
 	public static final int POPUP_PDF = PopupMenuTrait.POPUP_PDF; //21
-	
+
 	public static final int POPUP_EXPORT_CSV = PopupMenuTrait.POPUP_EXPORT_CSV; //23
 	public static final int POPUP_EXPORT_SELECTED_CSV = PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV; //24
-	
+
 	public static final int POPUP_PRINT = PopupMenuTrait.POPUP_PRINT; //30
-	
+
 	//public static final int POPUP_TEST = POPUP_PRINT;
-	
-	
-	private static final HashMap<Integer, String> keyNames = new HashMap<Integer, String>(){
+
+	private static final HashMap<Integer, String> keyNames = new HashMap<Integer, String>() {
 		@Override
 		public String put(Integer key, String value)
 		//checking that not the same int key is used twice
 		{
-			if ( get(key) != null)
-			{
-				logging.error("duplicate key setting " + key + ", until now "+ get(key) + " now " + value);
+			if (get(key) != null) {
+				logging.error("duplicate key setting " + key + ", until now " + get(key) + " now " + value);
 			}
-			return super.put( key, value);
+			return super.put(key, value);
 		}
 	};
-				
-				
+
 	static {
 		keyNames.put(POPUP_DELETE_ROW, "POPUP_DELETE_ROW");
 		keyNames.put(POPUP_SAVE, "POPUP_SAVE");
@@ -163,96 +191,62 @@ public class PanelGenEditTable extends JPanel
 		keyNames.put(POPUP_FLOATINGCOPY, "POPUP_FLOATINGCOPY");
 		keyNames.put(POPUP_PDF, "POPUP_PDF");
 		//keyNames.put(POPUP_TEST, "POPUP_TEST");
-		
+
 	}
-	
-	private static final ArrayList<String> giveMenuitemNames(  java.util.List<Integer> popups )
-	{
+
+	private static final ArrayList<String> giveMenuitemNames(java.util.List<Integer> popups) {
 		ArrayList<String> result = new ArrayList<String>();
-		
-		for( int el : popups )
-		{
-			result.add( keyNames.get( el ) );
+
+		for (int el : popups) {
+			result.add(keyNames.get(el));
 		}
-		
+
 		return result;
 	}
-		
 
-	public static final int[] POPUPS_EDITABLE_TABLE =
-	    new int[]{
-	        POPUP_NEW_ROW,
-	        POPUP_COPY_ROW,
-	        POPUP_DELETE_ROW,
-	        POPUP_SAVE,
-	        POPUP_CANCEL,
-	        //POPUP_EXPORT_SELECTED_EXCEL,
-	        //POPUP_EXPORT_EXCEL,
-	        POPUP_RELOAD,
-	        POPUP_SORT_AGAIN
-	        //,
-	        //POPUP_PDF 
-	    };
-	public static final int[] POPUPS_EDITABLE_TABLE_PRINTABLE =
-	    new int[]{
-	        POPUP_NEW_ROW,
-	        POPUP_COPY_ROW,
-	        POPUP_DELETE_ROW,
-	        POPUP_SAVE,
-	        POPUP_CANCEL,
-	        POPUP_PRINT,
-	        POPUP_PDF,
-	        //POPUP_EXPORT_SELECTED_EXCEL,
-	        //POPUP_EXPORT_EXCEL,
-	        POPUP_RELOAD,
-	        POPUP_SORT_AGAIN
-	        //,
-	        //POPUP_PDF 
-	    };
-	public static final int[] POPUPS_NOT_EDITABLE_TABLE =
-	    new int[]{
-	        //POPUP_EXPORT_SELECTED_EXCEL,
-	        //POPUP_EXPORT_EXCEL,
-	        POPUP_RELOAD,
-	        POPUP_SORT_AGAIN
-	        //,
-	        //POPUP_PDF 
-	    };
-	public static final int[] POPUPS_NOT_EDITABLE_TABLE_PDF =
-	    new int[]{
-	        //POPUP_EXPORT_SELECTED_EXCEL,
-	        //POPUP_EXPORT_EXCEL,
-	        POPUP_RELOAD,
-	        POPUP_PDF,
-	        POPUP_SORT_AGAIN
-	    };
-	public static final int[] POPUPS_NOT_EDITABLE_TABLE_PRINTABLE =
-	    new int[]{
-	        POPUP_PRINT,
-	        POPUP_PDF,
-	        //POPUP_EXPORT_SELECTED_EXCEL,
-	        //POPUP_EXPORT_EXCEL,
-	        POPUP_RELOAD,
-	        POPUP_SORT_AGAIN
-	        //,
-	        //POPUP_PDF 
-	    };
-	public static final int[] POPUPS_MINIMAL =
-	    new int[]{
-	        POPUP_RELOAD,
-	        POPUP_SORT_AGAIN
-	        //,
-	        //POPUP_PDF 
-	        //POPUP_FLOATINGCOPY
+	public static final int[] POPUPS_EDITABLE_TABLE = new int[] { POPUP_NEW_ROW, POPUP_COPY_ROW, POPUP_DELETE_ROW,
+			POPUP_SAVE, POPUP_CANCEL,
+			//POPUP_EXPORT_SELECTED_EXCEL,
+			//POPUP_EXPORT_EXCEL,
+			POPUP_RELOAD, POPUP_SORT_AGAIN
+			//,
+			//POPUP_PDF 
+	};
+	public static final int[] POPUPS_EDITABLE_TABLE_PRINTABLE = new int[] { POPUP_NEW_ROW, POPUP_COPY_ROW,
+			POPUP_DELETE_ROW, POPUP_SAVE, POPUP_CANCEL, POPUP_PRINT, POPUP_PDF,
+			//POPUP_EXPORT_SELECTED_EXCEL,
+			//POPUP_EXPORT_EXCEL,
+			POPUP_RELOAD, POPUP_SORT_AGAIN
+			//,
+			//POPUP_PDF 
+	};
+	public static final int[] POPUPS_NOT_EDITABLE_TABLE = new int[] {
+			//POPUP_EXPORT_SELECTED_EXCEL,
+			//POPUP_EXPORT_EXCEL,
+			POPUP_RELOAD, POPUP_SORT_AGAIN
+			//,
+			//POPUP_PDF 
+	};
+	public static final int[] POPUPS_NOT_EDITABLE_TABLE_PDF = new int[] {
+			//POPUP_EXPORT_SELECTED_EXCEL,
+			//POPUP_EXPORT_EXCEL,
+			POPUP_RELOAD, POPUP_PDF, POPUP_SORT_AGAIN };
+	public static final int[] POPUPS_NOT_EDITABLE_TABLE_PRINTABLE = new int[] { POPUP_PRINT, POPUP_PDF,
+			//POPUP_EXPORT_SELECTED_EXCEL,
+			//POPUP_EXPORT_EXCEL,
+			POPUP_RELOAD, POPUP_SORT_AGAIN
+			//,
+			//POPUP_PDF 
+	};
+	public static final int[] POPUPS_MINIMAL = new int[] { POPUP_RELOAD, POPUP_SORT_AGAIN
+			//,
+			//POPUP_PDF 
+			//POPUP_FLOATINGCOPY
 
-	    };
-	    
-	private static final int[] POPUPS_EXPORT =
-		new int[]{
-			POPUP_SEPARATOR,
-			POPUP_EXPORT_CSV,
-			POPUP_EXPORT_SELECTED_CSV,
-		};
+	};
+
+	private static final int[] POPUPS_EXPORT = new int[] { POPUP_SEPARATOR, POPUP_EXPORT_CSV,
+			POPUP_EXPORT_SELECTED_CSV, };
 
 	protected java.util.List<Integer> internalpopups;
 
@@ -276,131 +270,110 @@ public class PanelGenEditTable extends JPanel
 
 	private boolean separatorAdded = false;
 
-
-	public PanelGenEditTable(String title, int maxTableWidth,
-	                         boolean editing, 
-	                         int generalPopupPosition, 	//if -1 dont use a standard popup
-	                         								//if > 0 the popup is added later after installing another popup
-	                         boolean switchLineColors, 
-	                         int[] popupsWanted,
-	                         boolean withTablesearchPane)
-	{
+	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition, //if -1 dont use a standard popup
+			//if > 0 the popup is added later after installing another popup
+			boolean switchLineColors, int[] popupsWanted, boolean withTablesearchPane) {
 		this.withTablesearchPane = withTablesearchPane;
 
-		menuItemsRequesting1SelectedLine = new Vector<JMenuItem> ();
+		menuItemsRequesting1SelectedLine = new Vector<JMenuItem>();
 		menuItemsRequestingMultiSelectedLines = new Vector<JMenuItem>();
 
-
 		this.generalPopupPosition = generalPopupPosition;
-		
+
 		this.internalpopups = new ArrayList<Integer>();
-		if (popupsWanted != null)
-		{
-			for (int j = 0; j < popupsWanted.length; j++)
-			{
+		if (popupsWanted != null) {
+			for (int j = 0; j < popupsWanted.length; j++) {
 				this.internalpopups.add(popupsWanted[j]);
 				logging.info(this, "add popup " + popupsWanted[j]);
 			}
-		}
-		else
-		{
+		} else {
 			this.internalpopups.add(POPUP_RELOAD);
 			//this.internalpopups.add(POPUP_PRINT);
 			this.internalpopups.add(POPUP_PDF);
 		}
-		
-		logging.info(this, "internalpopups " + giveMenuitemNames( internalpopups ));
-		
-		
-		this.internalpopups = supplementBefore(POPUP_RELOAD,
-				POPUPS_EXPORT, 
-				this.internalpopups);
-		
-		logging.info(this, "internalpopups supplemented " +  giveMenuitemNames( internalpopups ));
-		
+
+		logging.info(this, "internalpopups " + giveMenuitemNames(internalpopups));
+
+		this.internalpopups = supplementBefore(POPUP_RELOAD, POPUPS_EXPORT, this.internalpopups);
+
+		logging.info(this, "internalpopups supplemented " + giveMenuitemNames(internalpopups));
 
 		if (maxTableWidth > 0)
 			this.maxTableWidth = maxTableWidth;
 		if (title != null)
 			this.title = title;
 		this.editing = editing;
-		
+
 		if (!de.uib.configed.Globals.isServerFullPermission())
 			this.editing = false;
 
 		this.switchLineColors = switchLineColors;
 
 		initComponents();
-		if (generalPopupPosition == 0) 
+		if (generalPopupPosition == 0)
 			addPopupmenuStandardpart();
 		//if -1 dont use a standard popup
 		//if > 0 the popup is added later after installing another popup
-		
-		
-			/* test 
-			scrollpane.addMouseListener(new MouseAdapter(){
-					public void mouseClicked(MouseEvent e)
-					{
-						logging.info(this, "mouse clicked");
-					}
+
+		/* test 
+		scrollpane.addMouseListener(new MouseAdapter(){
+				public void mouseClicked(MouseEvent e)
+				{
+					logging.info(this, "mouse clicked");
 				}
-			);
-			*/
+			}
+		);
+		*/
 	}
 
-	public PanelGenEditTable(String title, int maxTableWidth,
-	                         boolean editing, int generalPopupPosition, boolean switchLineColors, int[] popupsWanted)
-	{
-		this(title,  maxTableWidth, editing, generalPopupPosition, switchLineColors, popupsWanted, false);
+	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition,
+			boolean switchLineColors, int[] popupsWanted) {
+		this(title, maxTableWidth, editing, generalPopupPosition, switchLineColors, popupsWanted, false);
 	}
 
-	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition, boolean switchLineColors)
-	{
+	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition,
+			boolean switchLineColors) {
 		this(title, maxTableWidth, editing, generalPopupPosition, switchLineColors, null);
 	}
 
-	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition){
+	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition) {
 		this(title, maxTableWidth, editing, generalPopupPosition, false);
 	}
 
-	public PanelGenEditTable(String title, int maxTableWidth, boolean editing){
+	public PanelGenEditTable(String title, int maxTableWidth, boolean editing) {
 		this(title, maxTableWidth, editing, 0);
 	}
 
-	public PanelGenEditTable(String title, int maxTableWidth){
+	public PanelGenEditTable(String title, int maxTableWidth) {
 		this(title, maxTableWidth, true);
 	}
 
-	public PanelGenEditTable(int maxTableWidth){
+	public PanelGenEditTable(int maxTableWidth) {
 		this("", maxTableWidth);
 	}
 
-	public PanelGenEditTable(){
+	public PanelGenEditTable() {
 		this(0);
 	}
 
 	//Override in subclasses; delegates to table header renderer
-	protected Object modifyHeaderValue(Object value)
-	{
+	protected Object modifyHeaderValue(Object value) {
 		return value;
 	}
 
-	
 	/**
-	* sets frame to return to e.g. from option dialogs
-	* @param javax.swing.JFrame 
-	*/
-	public void setMasterFrame( javax.swing.JFrame masterFrame)
-	{
+	 * sets frame to return to e.g. from option dialogs
+	 * 
+	 * @param javax.swing.JFrame
+	 */
+	public void setMasterFrame(javax.swing.JFrame masterFrame) {
 		this.masterFrame = masterFrame;
 		if (searchPane != null)
-			searchPane.setMasterFrame( masterFrame );
+			searchPane.setMasterFrame(masterFrame);
 
 	}
-	
 
-	public void requestFocus()
-	{
+	public void requestFocus() {
 		if (theTable != null)
 			theTable.requestFocus();
 
@@ -414,43 +387,34 @@ public class PanelGenEditTable extends JPanel
 		theTable.setAutoResizeMode(mode);
 	}
 
-
-	public void setUpdateController(UpdateController c)
-	{
+	public void setUpdateController(UpdateController c) {
 		myController = c;
 	}
 
-	public void addListSelectionListener(ListSelectionListener l)
-	{
+	public void addListSelectionListener(ListSelectionListener l) {
 		getListSelectionModel().addListSelectionListener(l);
 	}
 
-	public void removeListSelectionListener(ListSelectionListener l)
-	{
+	public void removeListSelectionListener(ListSelectionListener l) {
 		getListSelectionModel().removeListSelectionListener(l);
 	}
 
-	protected void initComponents()
-	{
+	protected void initComponents() {
 		setBackground(Globals.backgroundWhite);
 
 		addComponentListener(this);
 
 		buttonCommit = new de.uib.configed.gui.IconButton(
-		                   de.uib.configed.configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip") ,
-		                   "images/apply.png",
-		                   "images/apply_over.png",
-		                   "images/apply_disabled.png");
+				de.uib.configed.configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip"), "images/apply.png",
+				"images/apply_over.png", "images/apply_disabled.png");
 		//new javax.swing.JButton("save");
 		buttonCommit.setPreferredSize(Globals.smallButtonDimension);
 		if (!editing)
 			buttonCommit.setVisible(false);
 
 		buttonCancel = new de.uib.configed.gui.IconButton(
-		                   de.uib.configed.configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip") ,
-		                   "images/cancel.png",
-		                   "images/cancel_over.png",
-		                   "images/cancel_disabled.png");
+				de.uib.configed.configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"), "images/cancel.png",
+				"images/cancel_over.png", "images/cancel_disabled.png");
 		//new javax.swing.JButtonCancel("cancel");
 		buttonCancel.setPreferredSize(Globals.smallButtonDimension);
 		if (!editing)
@@ -470,17 +434,16 @@ public class PanelGenEditTable extends JPanel
 
 		labelMarkedCount = new JLabel("");
 		labelMarkedCount.setFont(Globals.defaultFontStandard);
-		
+
 		titlePane = new PanelLinedComponents();
 		titlePane.setVisible(false);
-		titlePane.setBackground( Globals.backgroundWhite );
+		titlePane.setBackground(Globals.backgroundWhite);
 		//popupMenu = new JPopupMenu();
 		theTable = new de.uib.utilities.table.JTableWithToolTips();
 		//theTable = new JTable();
 		theTable.setRowHeight(de.uib.utilities.Globals.tableRowHeight);
 		//new de.uib.utilities.table.JTableWithContextMenu(popupMenu);
 
-		
 		exportTable = new ExporterToCSV(theTable);
 
 		searchPane = new TablesearchPane(this, true, null);
@@ -489,13 +452,10 @@ public class PanelGenEditTable extends JPanel
 
 		theTable.getTableHeader().addMouseListener(this);
 
-
-
 		// add the popup to the scrollpane for the case that the table is empty
 		scrollpane = new javax.swing.JScrollPane();
 		//scrollpane.addMouseListener(new utils.PopupMouseListener(popupMenu)); DOES NOT WORK
 
-		
 		if (switchLineColors)
 			theTable.setDefaultRenderer(Object.class, new StandardTableCellRenderer());
 		else
@@ -503,26 +463,20 @@ public class PanelGenEditTable extends JPanel
 
 		theTable.addMouseListener(this);
 
-
 		theTable.setShowHorizontalLines(true);
 		theTable.setGridColor(Color.WHITE);
 
-		
-		theTable.getTableHeader().setDefaultRenderer
-		(
-		    new ColorHeaderCellRenderer(theTable.getTableHeader().getDefaultRenderer())
-		    {
+		theTable.getTableHeader()
+				.setDefaultRenderer(new ColorHeaderCellRenderer(theTable.getTableHeader().getDefaultRenderer()) {
 
-			    @Override
-			    protected Object modifyValue(Object value)
-			    {
-				    return modifyHeaderValue(value);
-			    }
+					@Override
+					protected Object modifyValue(Object value) {
+						return modifyHeaderValue(value);
+					}
 
+				}
 
-		    }
-
-		);
+				);
 
 		;
 
@@ -533,7 +487,6 @@ public class PanelGenEditTable extends JPanel
 
 		theTable.addKeyListener(this);
 
-
 		//setAwareOfSelectionListener(true);
 		getListSelectionModel().addListSelectionListener(this);
 
@@ -542,69 +495,61 @@ public class PanelGenEditTable extends JPanel
 
 		theTable.setAutoCreateRowSorter(false);
 
-		try{
+		try {
 			scrollpane = new javax.swing.JScrollPane();
 			scrollpane.setViewportView(theTable);
 			scrollpane.getViewport().setBackground(de.uib.utilities.Globals.backLightBlue);
-		}
-		catch( ClassCastException ex )
-		{
+		} catch (ClassCastException ex) {
 			// a strange Nimbus exception which occurs sometimes here
 			logging.warning(this, "strange exception on creating scrollpane " + ex);
-			
+
 			scrollpane = new javax.swing.JScrollPane();
 			scrollpane.setViewportView(theTable);
 			scrollpane.getViewport().setBackground(de.uib.utilities.Globals.backLightBlue);
-				
+
 		}
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
 
-		layout.setHorizontalGroup(
-		    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-		    .addGroup(layout.createSequentialGroup()
-		              .addGap(Globals.hGapSize/2, Globals.hGapSize/2, Globals.hGapSize/2)
-		              .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-		                        .addGroup(layout.createSequentialGroup()
-		                                  .addGap(Globals.hGapSize/2, Globals.hGapSize/2, Globals.hGapSize/2)
-		                                  .addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE,javax.swing.GroupLayout.PREFERRED_SIZE)
-		                                  //.addGap(Globals.hGapSize, 2* Globals.hGapSize, 2 * Globals.hGapSize)
-		                                  .addComponent(titlePane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE,Short.MAX_VALUE)
-		                                 )
-		                        .addComponent(searchPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE, maxTableWidth)//Short.MAX_VALUE)
-		                        .addComponent(scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 100, maxTableWidth)
-		                        .addGroup(layout.createSequentialGroup()
-		                                  .addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-		                                  .addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-		                                  .addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-		                                 )
-		                       )
-		              .addGap(Globals.hGapSize/2, Globals.hGapSize/2, Globals.hGapSize/2)
-		             )
-		);
+		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
+				.createSequentialGroup().addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup()
+								.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+								.addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								//.addGap(Globals.hGapSize, 2* Globals.hGapSize, 2 * Globals.hGapSize)
+								.addComponent(titlePane, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+						.addComponent(searchPane, javax.swing.GroupLayout.PREFERRED_SIZE,
+								javax.swing.GroupLayout.PREFERRED_SIZE, maxTableWidth)//Short.MAX_VALUE)
+						.addComponent(scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 100, maxTableWidth)
+						.addGroup(layout.createSequentialGroup()
+								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize).addComponent(buttonCancel,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE)))
+				.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)));
 
-		layout.setVerticalGroup(
-		    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-		    .addGroup(layout.createSequentialGroup()
-		              .addContainerGap()
-		              .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-		                        .addComponent(label, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-		                        .addComponent(titlePane, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-		                        )
-		              .addGap(Globals.vGapSize/2, Globals.vGapSize/2, Globals.vGapSize/2)
-		              .addComponent(searchPane)
-		              .addGap(Globals.vGapSize/2, Globals.vGapSize/2, Globals.vGapSize/2)
-		              .addComponent(scrollpane, 20, 100, Short.MAX_VALUE)
-		              .addGap(Globals.vGapSize/2, Globals.vGapSize/2, Globals.vGapSize/2)
-		              .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-		                        .addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-		                        .addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-		                        .addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-		                       )
-		              .addGap(Globals.vGapSize/2, Globals.vGapSize/2, Globals.vGapSize/2)
-		             )
-		);
+		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addContainerGap()
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+								.addComponent(label, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+								.addComponent(titlePane, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addComponent(searchPane)
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addComponent(scrollpane, 20, 100, Short.MAX_VALUE)
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize).addComponent(buttonCancel,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
 
 	}
 
@@ -614,43 +559,33 @@ public class PanelGenEditTable extends JPanel
 		theTable.setColumnSelectionAllowed(b);
 	}
 
-	public void setRowSelectionAllowed(boolean b)
-	{
+	public void setRowSelectionAllowed(boolean b) {
 		theTable.setRowSelectionAllowed(b);
 	}
-	
-	public void setDeleteAllowed(boolean b)
-	{
+
+	public void setDeleteAllowed(boolean b) {
 		deleteAllowed = b;
 	}
 
-
-
-	public void sortAgainAsConfigured()
-	{
+	public void sortAgainAsConfigured() {
 		logging.debug(this, "sortAgainAsConfigured " + specialSortDescriptor);
 
 		if (specialSortDescriptor != null && specialSortDescriptor.size() > 0)
 			sortDescriptor = specialSortDescriptor;
 
-		if (sortDescriptor != null && sortDescriptor.size() > 0 )
-		{
+		if (sortDescriptor != null && sortDescriptor.size() > 0) {
 			int selRow = getSelectedRow();
 
 			Object selVal = null;
-			if (selRow > -1 && tableModel.getKeyCol() > -1)
-			{
-				selVal = tableModel.getValueAt(
-				             theTable.convertRowIndexToModel(selRow), tableModel.getKeyCol()
-				         );
+			if (selRow > -1 && tableModel.getKeyCol() > -1) {
+				selVal = tableModel.getValueAt(theTable.convertRowIndexToModel(selRow), tableModel.getKeyCol());
 			}
 
 			setSortOrder(sortDescriptor);
-			((javax.swing.DefaultRowSorter)getRowSorter()).sort();
+			((javax.swing.DefaultRowSorter) getRowSorter()).sort();
 			setSorter();
 
-			if (selVal != null)
-			{
+			if (selVal != null) {
 				int viewRow = findViewRowFromValue(selVal, tableModel.getKeyCol());
 				moveToRow(viewRow);
 				setSelectedRow(viewRow);
@@ -658,8 +593,7 @@ public class PanelGenEditTable extends JPanel
 		}
 	}
 
-	public void requestReload()
-	{
+	public void requestReload() {
 		tableModel.requestReload();
 	}
 
@@ -667,8 +601,7 @@ public class PanelGenEditTable extends JPanel
 	reproduces data from source
 	if reload is requested data are loaded completely new
 	*/
-	public void reset()
-	{
+	public void reset() {
 		/*
 		int markCursorRowSave = -1; 
 		if (tableModel.gotMarkCursorRow())
@@ -677,17 +610,16 @@ public class PanelGenEditTable extends JPanel
 			logging.info(this, "reset, markCursorRowSave " +  markCursorRowSave");
 		}
 		*/
-		
+
 		tableModel.reset();
-		
+
 		/*
 		if (tableModel.gotMarkCursorRow())
 			tableModel.setCursorRow( markCursorRowSave );
 		*/
 	}
 
-	public void reload()
-	{
+	public void reload() {
 		logging.info(this, "in PanelGenEditTable reload()");
 		WaitCursor waitCursor = new WaitCursor(this);
 		tableModel.requestReload();
@@ -696,110 +628,87 @@ public class PanelGenEditTable extends JPanel
 		waitCursor.stop();
 	}
 
-	public void setTitle(String title)
-	{
+	public void setTitle(String title) {
 		logging.info(this, "setTitle " + title);
 		this.title = title;
 		label.setText(title);
 		//labelRowCount.setText(title + tableModel.getRowCount());
 	}
-	
-	public void setTitlePaneBackground( java.awt.Color c )
-	{
+
+	public void setTitlePaneBackground(java.awt.Color c) {
 		if (c == null)
-			titlePane.setBackground( de.uib.utilities.Globals.backgroundWhite );
+			titlePane.setBackground(de.uib.utilities.Globals.backgroundWhite);
 		else
-			titlePane.setBackground( c );
-	}
-		
-	
-	public void setTitlePane(JComponent[] components, int height)
-	{
-		titlePane.setVisible(true);
-		((PanelLinedComponents)titlePane).setComponents(components, height);
+			titlePane.setBackground(c);
 	}
 
-	
-	protected ArrayList<Integer>  supplementBefore(int insertpoint, 
-		final int[] injectKeys, final java.util.List<Integer> listOfKeys )
-	{
+	public void setTitlePane(JComponent[] components, int height) {
+		titlePane.setVisible(true);
+		((PanelLinedComponents) titlePane).setComponents(components, height);
+	}
+
+	protected ArrayList<Integer> supplementBefore(int insertpoint, final int[] injectKeys,
+			final java.util.List<Integer> listOfKeys) {
 		ArrayList<Integer> augmentedList = new ArrayList<Integer>();
-		
+
 		boolean found = false;
-		
-		Set<Integer> setOfKeys = new HashSet<Integer>(); 
-		
-		for( int key : listOfKeys )
-		{
-			if (key == insertpoint)
-			{
+
+		Set<Integer> setOfKeys = new HashSet<Integer>();
+
+		for (int key : listOfKeys) {
+			if (key == insertpoint) {
 				found = true;
-				
-				for (int type : injectKeys)
-				{
+
+				for (int type : injectKeys) {
 					//if ( augmentedList.indexOf( type ) == -1 )
-					if ( !setOfKeys.contains( type ) )
-					{
-						augmentedList.add( type );
-						setOfKeys.add( type );
+					if (!setOfKeys.contains(type)) {
+						augmentedList.add(type);
+						setOfKeys.add(type);
 					}
 				}
 			}
-			augmentedList.add( key );
-			setOfKeys.add( key );
+			augmentedList.add(key);
+			setOfKeys.add(key);
 		}
-		
-		if( !found )
-		{
-			for (int type : injectKeys)
-			{
-				if (!setOfKeys.contains( type ))
-				{
-					augmentedList.add( type );
-					setOfKeys.add( type );
+
+		if (!found) {
+			for (int type : injectKeys) {
+				if (!setOfKeys.contains(type)) {
+					augmentedList.add(type);
+					setOfKeys.add(type);
 				}
 			}
 		}
 		return augmentedList;
 	}
-			
-			
-	
-	protected void addPopupmenuStandardpart()
-	{
-		logging.info(this, "addPopupmenuStandardpart, internalpopups " + giveMenuitemNames( internalpopups));
-		
-		if (generalPopupPosition > 0)
-		//add separator if a real position is given
-			popupMenu.addSeparator();
-		
-		internalpopups = supplementBefore(POPUP_RELOAD,
-				POPUPS_EXPORT, 
-				internalpopups
-				);
-		
-		logging.info(this, "addPopupmenuStandardpart, supplemented internalpopups " + giveMenuitemNames( internalpopups) );
-		
 
-		for( int popuptype : internalpopups )
-		{
+	protected void addPopupmenuStandardpart() {
+		logging.info(this, "addPopupmenuStandardpart, internalpopups " + giveMenuitemNames(internalpopups));
+
+		if (generalPopupPosition > 0)
+			//add separator if a real position is given
+			popupMenu.addSeparator();
+
+		internalpopups = supplementBefore(POPUP_RELOAD, POPUPS_EXPORT, internalpopups);
+
+		logging.info(this,
+				"addPopupmenuStandardpart, supplemented internalpopups " + giveMenuitemNames(internalpopups));
+
+		for (int popuptype : internalpopups) {
 			//System.out.println ("....... popuptype " + popuptype);
-			switch (popuptype)
-			{
+			switch (popuptype) {
 			case POPUP_SEPARATOR:
-				addPopupItem( null );
+				addPopupItem(null);
 				break;
-				
-				
+
 			case POPUP_SAVE:
 				menuItemSave = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.saveData"));
 				menuItemSave.setEnabled(false);
-				menuItemSave.addActionListener(new ActionListener(){
-					                               public void actionPerformed(ActionEvent e)
-					                               {
-						                               commit();
-					                               }
-				                               });
+				menuItemSave.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						commit();
+					}
+				});
 				addPopupItem(menuItemSave);
 
 				break;
@@ -807,92 +716,81 @@ public class PanelGenEditTable extends JPanel
 			case POPUP_CANCEL:
 				menuItemCancel = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.abandonNewData"));
 				menuItemCancel.setEnabled(false);
-				menuItemCancel.addActionListener(new ActionListener(){
-					                                 public void actionPerformed(ActionEvent e)
-					                                 {
-						                                 cancel();
-					                                 }
-				                                 });
+				menuItemCancel.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						cancel();
+					}
+				});
 				addPopupItem(menuItemCancel);
 
 				break;
 
-
 			case POPUP_RELOAD:
 				//logging.info(this, "reload popup worked");
 				menuItemReload = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.reload"),
-				                                        de.uib.configed.Globals.createImageIcon("images/reload16.png", ""));
+						de.uib.configed.Globals.createImageIcon("images/reload16.png", ""));
 				//menuItemReload.setPreferredSize(Globals.buttonDimension);
 				//menuItemReload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)); does not work
-				menuItemReload.addActionListener(new ActionListener(){
-					                                 public void actionPerformed(ActionEvent e)
-					                                 {
-						                                 reload();
-					                                 }
-				                                 });
+				menuItemReload.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						reload();
+					}
+				});
 				if (popupIndex > 1)
 					popupMenu.addSeparator();
-				
+
 				addPopupItem(menuItemReload);
 
 				break;
 
-
 			case POPUP_SORT_AGAIN:
-				menuItemSortAgain = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.sortAsConfigured"));
-				menuItemSortAgain.addActionListener(new ActionListener(){
-					                                    public void actionPerformed(ActionEvent e)
-					                                    {
-						                                    sortAgainAsConfigured();
+				menuItemSortAgain = new JMenuItemFormatted(
+						configed.getResourceValue("PanelGenEditTable.sortAsConfigured"));
+				menuItemSortAgain.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						sortAgainAsConfigured();
 
-					                                    }
-				                                    });
+					}
+				});
 				//if (sortDescriptor != null)
 				addPopupItem(menuItemSortAgain);
 
 				break;
 
 			case POPUP_DELETE_ROW:
-				menuItemDeleteRelation = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.deleteRow"));
+				menuItemDeleteRelation = new JMenuItemFormatted(
+						configed.getResourceValue("PanelGenEditTable.deleteRow"));
 				menuItemDeleteRelation.setEnabled(false);
-				menuItemDeleteRelation.addActionListener(new ActionListener(){
-					        public void actionPerformed(ActionEvent e)
-					        {
-						        if (getSelectedRowCount() == 0)
-						        {
-							        JOptionPane.showMessageDialog( de.uib.configed.Globals.mainContainer,
-							                                       configed.getResourceValue("PanelGenEditTable.noRowSelected"),
-							                                       configed.getResourceValue("ConfigedMain.Licences.hint.title"),
-							                                       JOptionPane.OK_OPTION);
+				menuItemDeleteRelation.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if (getSelectedRowCount() == 0) {
+							JOptionPane.showMessageDialog(de.uib.configed.Globals.mainContainer,
+									configed.getResourceValue("PanelGenEditTable.noRowSelected"),
+									configed.getResourceValue("ConfigedMain.Licences.hint.title"),
+									JOptionPane.OK_OPTION);
 
-							        return;
-						        }
-						        else
-						        {
-						        	if (deleteAllowed)
-						        		tableModel.deleteRow(getSelectedRowInModelTerms());
-						        }
-					        }
-				        });
+							return;
+						} else {
+							if (deleteAllowed)
+								tableModel.deleteRow(getSelectedRowInModelTerms());
+						}
+					}
+				});
 				addPopupItem(menuItemDeleteRelation);
 
 				break;
 
 			case POPUP_PRINT:
 				menuItemPrint = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.print"));
-				menuItemPrint.addActionListener(new ActionListener(){
-					                                public void actionPerformed(ActionEvent e)
-					                                {
-						                                try
-						                                {
-							                                theTable.print();
-						                                }
-						                                catch (Exception ex)
-						                                {
-							                                logging.debugOut(logging.LEVEL_ERROR, "printing error " + ex);
-						                                }
-					                                }
-				                                });
+				menuItemPrint.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						try {
+							theTable.print();
+						} catch (Exception ex) {
+							logging.debugOut(logging.LEVEL_ERROR, "printing error " + ex);
+						}
+					}
+				});
 
 				/*
 				if (popupIndex > 1)
@@ -903,29 +801,25 @@ public class PanelGenEditTable extends JPanel
 
 				break;
 
-
 			case POPUP_FLOATINGCOPY:
 
-				menuItemFloatingCopy = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.floatingCopy"));
-				menuItemFloatingCopy.addActionListener(new ActionListener(){
-					                                       public void actionPerformed(ActionEvent e)
-					                                       {
-						                                       floatExternal();
-					                                       }
-				                                       })
-				;
-
+				menuItemFloatingCopy = new JMenuItemFormatted(
+						configed.getResourceValue("PanelGenEditTable.floatingCopy"));
+				menuItemFloatingCopy.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						floatExternal();
+					}
+				});
 
 				if (popupIndex > 1)
 					popupMenu.addSeparator();
-
 
 				addPopupItem(menuItemFloatingCopy);
 				break;
 
 			case POPUP_EXPORT_CSV:
 				menuItemExportCSV = exportTable.getMenuItemExport();
-				addPopupItem( menuItemExportCSV );
+				addPopupItem(menuItemExportCSV);
 
 				break;
 
@@ -935,39 +829,33 @@ public class PanelGenEditTable extends JPanel
 
 				break;
 
-			
-				
 			case POPUP_PDF:
 				menuItemPDF = new JMenuItemFormatted(configed.getResourceValue("FGeneralDialog.pdf"),
-				                                     de.uib.configed.Globals.createImageIcon("images/acrobat_reader16.png", ""));
-				menuItemPDF.addActionListener(new ActionListener(){
-					                              public void actionPerformed(ActionEvent e)
-					                              {
-						                              try
-						                              {
-							                              HashMap<String, String> metaData = new HashMap<String, String>();
-							                              metaData.put("header", title);
-							                              metaData.put("subject", "report of table");
-							                              metaData.put("keywords", "");
+						de.uib.configed.Globals.createImageIcon("images/acrobat_reader16.png", ""));
+				menuItemPDF.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						try {
+							HashMap<String, String> metaData = new HashMap<String, String>();
+							metaData.put("header", title);
+							metaData.put("subject", "report of table");
+							metaData.put("keywords", "");
 
-														  ExporterToPDF pdfExportTable = new ExporterToPDF(theTable);
-														  pdfExportTable.setMetaData(metaData);
-														  pdfExportTable.setPageSizeA4_Landscape();
-														  pdfExportTable.execute(null, true);
-														
-														  /* old pdf exporting
-							                              tableToPDF = new DocumentToPdf (null, metaData); //  no filename, metadata
-							                              tableToPDF.createContentElement("table", theTable);
-							                              tableToPDF.setPageSizeA4_Landscape();  //
-							                              tableToPDF.toPDF(); //   create Pdf
-														  **/
-						                              }
-						                              catch (Exception ex)
-						                              {
-							                              logging.debugOut(logging.LEVEL_ERROR, "pdf printing error " + ex);
-						                              }
-					                              }
-				                              });
+							ExporterToPDF pdfExportTable = new ExporterToPDF(theTable);
+							pdfExportTable.setMetaData(metaData);
+							pdfExportTable.setPageSizeA4_Landscape();
+							pdfExportTable.execute(null, true);
+
+							/* old pdf exporting
+							tableToPDF = new DocumentToPdf (null, metaData); //  no filename, metadata
+							tableToPDF.createContentElement("table", theTable);
+							tableToPDF.setPageSizeA4_Landscape();  //
+							tableToPDF.toPDF(); //   create Pdf
+							**/
+						} catch (Exception ex) {
+							logging.debugOut(logging.LEVEL_ERROR, "pdf printing error " + ex);
+						}
+					}
+				});
 				/*
 				if (popupIndex > 1)
 					popupMenu.addSeparator();
@@ -980,24 +868,21 @@ public class PanelGenEditTable extends JPanel
 		}
 	}
 
-	public void addPopupItem (JMenuItem item)
-	{
+	public void addPopupItem(JMenuItem item) {
 
-		if (popupMenu == null)
-		{
+		if (popupMenu == null) {
 			//for the first item, we create the menu
 			popupMenu = new JPopupMenu();
 			theTable.addMouseListener(new utils.PopupMouseListener(popupMenu));
 
 			// add the popup to the scrollpane if the table is empty
 			scrollpane.addMouseListener(new utils.PopupMouseListener(popupMenu));
-			
+
 		}
-		
-		if (item == null)
-		{
+
+		if (item == null) {
 			if (popupIndex > 1)
-					popupMenu.addSeparator();
+				popupMenu.addSeparator();
 			return;
 		}
 
@@ -1007,58 +892,47 @@ public class PanelGenEditTable extends JPanel
 		if (popupIndex == generalPopupPosition)
 			addPopupmenuStandardpart();
 
-
 	}
-	
-	public JScrollPane getTheScrollpane()
-	{
+
+	public JScrollPane getTheScrollpane() {
 		return scrollpane;
 	}
 
-
-	public void setSortOrder(LinkedHashMap<Integer,SortOrder> sortDescriptor)
-	{
+	public void setSortOrder(LinkedHashMap<Integer, SortOrder> sortDescriptor) {
 		this.sortDescriptor = sortDescriptor;
 		//setSorter();
 	}
 
-	protected java.util.List <RowSorter.SortKey> buildSortkeysFromColumns()
-	{
+	protected java.util.List<RowSorter.SortKey> buildSortkeysFromColumns() {
 		logging.debug(this, "buildSortkeysFromColumns,  sortDescriptor " + sortDescriptor);
-		java.util.List <RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
+		java.util.List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
 
 		if (tableModel.getColumnCount() == 0)
 			return null;
 
 		else if (sortDescriptor == null)
-			//default sorting
+		//default sorting
 		{
 			sortDescriptor = new LinkedHashMap<Integer, SortOrder>();
 
-			if (tableModel.getKeyCol() > -1)
-			{
-				try
-				{
+			if (tableModel.getKeyCol() > -1) {
+				try {
 					//sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
 					//sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 					sortKeys.add(new RowSorter.SortKey(tableModel.getKeyCol(), SortOrder.ASCENDING));
 
 					sortDescriptor.put(tableModel.getKeyCol(), SortOrder.ASCENDING);
-				}
-				catch(Exception ex)
-				{
+				} catch (Exception ex) {
 					logging.debug(this, "sortkey problem " + ex);
 				}
 
 			}
 
-			else if (tableModel.getFinalCols() != null && tableModel.getFinalCols().size() > 0)
-			{
-				Iterator<Integer> iter =  tableModel.getFinalCols().iterator();
+			else if (tableModel.getFinalCols() != null && tableModel.getFinalCols().size() > 0) {
+				Iterator<Integer> iter = tableModel.getFinalCols().iterator();
 				//sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
 				//sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
-				while (iter.hasNext())
-				{
+				while (iter.hasNext()) {
 					Integer col = iter.next();
 					sortKeys.add(new RowSorter.SortKey(col, SortOrder.ASCENDING));
 
@@ -1071,16 +945,14 @@ public class PanelGenEditTable extends JPanel
 
 		}
 
-		else
-		{
+		else {
 			/*Iterator iter =  sortkeysBaseColumns.iterator();
 			while (iter.hasNext())
-		{
-				sortKeys.add(new RowSorter.SortKey((Integer) iter.next(), SortOrder.ASCENDING));
-		}
-			*/
-			for (Integer col : sortDescriptor.keySet())
 			{
+				sortKeys.add(new RowSorter.SortKey((Integer) iter.next(), SortOrder.ASCENDING));
+			}
+			*/
+			for (Integer col : sortDescriptor.keySet()) {
 				sortKeys.add(new RowSorter.SortKey(col, sortDescriptor.get(col)));
 			}
 
@@ -1090,74 +962,56 @@ public class PanelGenEditTable extends JPanel
 
 	}
 
-	private void setSorter()
-	{
+	private void setSorter() {
 		logging.info(this, "setSorter");
 
 		if (tableModel == null)
 			return;
 
-		TableRowSorter<TableModel> sorter
-		= new TableRowSorter<TableModel> (tableModel)
-		  {
-			  protected boolean useToString(int column)
-			  {
-				  try{
-					  return super.useToString(column);
-				  }
-				  catch (Exception ex)
-				  {
-					  logging.debug(this, "column " + column + " ------------------- no way to string");
-					  return false;
-				  }
-			  }
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tableModel) {
+			protected boolean useToString(int column) {
+				try {
+					return super.useToString(column);
+				} catch (Exception ex) {
+					logging.debug(this, "column " + column + " ------------------- no way to string");
+					return false;
+				}
+			}
 
-			  public Comparator<?> getComparator(int column)
-			  {
-				  try{
-					  logging.debug(this, " comparator for col " + column + " is " + super.getComparator(column));
-					  return super.getComparator(column);
-				  }
-				  catch (Exception ex)
-				  {
-					  logging.warning(this, "column " + column + " ------------------- not getting comparator ");
-					  return null;
-				  }
-
-				  //NullPointerException at java.lang.Class.isAssignableFrom
-			  }
-		  }
-		  ;
-
-
-		if (sorter instanceof DefaultRowSorter)
-			//is always the case since TableRowSorter extends DefaultRowSorter
-		{
-			for (int j = 0; j < tableModel.getColumnCount(); j++)
-			{
-				//logging.info(this, " setSorter for column " + j + " classname " +  tableModel.getClassNames().get(j));
-				if (comparators[j] != null)
-				{
-					logging.info(this, " set sorter for column " + j + " " + comparators[j]);
-					//restore previously explicitly assigned comparator
-					((DefaultRowSorter) sorter).setComparator(j,
-					        comparators[j]);
+			public Comparator<?> getComparator(int column) {
+				try {
+					logging.debug(this, " comparator for col " + column + " is " + super.getComparator(column));
+					return super.getComparator(column);
+				} catch (Exception ex) {
+					logging.warning(this, "column " + column + " ------------------- not getting comparator ");
+					return null;
 				}
 
-				else
-					if (tableModel.getClassNames().get(j).equals("java.lang.Integer"))
-					{
-						//logging.info(this, " setSorter for column " + j + " IntComparatorForStrings");
-						((DefaultRowSorter) sorter).setComparator(j,
-						        new de.uib.utilities.IntComparatorForStrings());
-					}
+				//NullPointerException at java.lang.Class.isAssignableFrom
+			}
+		};
+
+		if (sorter instanceof DefaultRowSorter)
+		//is always the case since TableRowSorter extends DefaultRowSorter
+		{
+			for (int j = 0; j < tableModel.getColumnCount(); j++) {
+				//logging.info(this, " setSorter for column " + j + " classname " +  tableModel.getClassNames().get(j));
+				if (comparators[j] != null) {
+					logging.info(this, " set sorter for column " + j + " " + comparators[j]);
+					//restore previously explicitly assigned comparator
+					((DefaultRowSorter) sorter).setComparator(j, comparators[j]);
+				}
+
+				else if (tableModel.getClassNames().get(j).equals("java.lang.Integer")) {
+					//logging.info(this, " setSorter for column " + j + " IntComparatorForStrings");
+					((DefaultRowSorter) sorter).setComparator(j, new de.uib.utilities.IntComparatorForStrings());
+				}
 			}
 		}
 
-
 		//theTable.setRowSorter(sorter);
 
-		java.util.List <RowSorter.SortKey> sortKeys = buildSortkeysFromColumns();
+		java.util.List<RowSorter.SortKey> sortKeys = buildSortkeysFromColumns();
 
 		/*
 		if (sortKeys != null)
@@ -1166,23 +1020,20 @@ public class PanelGenEditTable extends JPanel
 				logging.info(this, "setSorter sortKey " + sortKey );
 		}
 		*/
-		if (sortKeys != null && sortKeys.size()>0)
+		if (sortKeys != null && sortKeys.size() > 0)
 			sorter.setSortKeys(sortKeys);
-		
-		theTable.setRowSorter(sorter);
 
+		theTable.setRowSorter(sorter);
 
 	}
 
-
-	public void setTableModel(GenTableModel m)
-	{
+	public void setTableModel(GenTableModel m) {
 		theTable.setRowSorter(null);
 		//just in case there was one
 
 		theTable.setModel(m);
 		tableModel = m;
-		tableModel.addCursorrowObserver( this );
+		tableModel.addCursorrowObserver(this);
 		//exportTable.setClassNames( m.getClassNames()	);
 		//exportTable = new ExportTable(theTable, m.getClassNames()	);
 
@@ -1194,12 +1045,12 @@ public class PanelGenEditTable extends JPanel
 		//logging.debug("---------  getColumnModel() size == 0 " + !theTable.getColumnModel().getColumns().hasMoreElements());
 		setDataChanged(false);
 		setCellRenderers();
-		
+
 		setModelFilteringBySelection();
 	}
 
 	/*
-
+	
 		TableRowSorter<TableModel> sorter
 		= new TableRowSorter<TableModel>(m)
 		  {
@@ -1214,7 +1065,7 @@ public class PanelGenEditTable extends JPanel
 					  return false;
 				  }
 			  }
-
+	
 			  public Comparator<?> getComparator(int column)
 			  {
 				  try{
@@ -1225,28 +1076,28 @@ public class PanelGenEditTable extends JPanel
 					  System.out.println ("------------------- not getting comparator ");
 					  return null;
 				  }
-
+	
 				  //NullPointerException at java.lang.Class.isAssignableFrom
 			  }
 		  }
 		  ;
 		theTable.setRowSorter(sorter);
-
+	
 		if (tableModel.getKeyCol() > -1)
 		{
-
+	
 			java.util.List <RowSorter.SortKey> sortKeys
 			= new ArrayList<RowSorter.SortKey>();
 			//sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
 			//sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 			sortKeys.add(new RowSorter.SortKey(tableModel.getKeyCol(), SortOrder.ASCENDING));
 			sorter.setSortKeys(sortKeys);
-
+	
 		}
-
+	
 		else if (tableModel.getFinalCols() != null && tableModel.getFinalCols().size() > 0)
 		{
-
+	
 			java.util.List <RowSorter.SortKey> sortKeys
 			= new ArrayList<RowSorter.SortKey>();
 			Iterator iter =  tableModel.getFinalCols().iterator();
@@ -1254,29 +1105,27 @@ public class PanelGenEditTable extends JPanel
 			//sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 			while (iter.hasNext())
 				sortKeys.add(new RowSorter.SortKey((Integer) iter.next(), SortOrder.ASCENDING));
-
+	
 			sorter.setSortKeys(sortKeys);
 		}
-
-
-
+	
+	
+	
 		//System.out.println ( "----------------------------- model row count " + m.getRowCount());
 		//System.out.println("---------  getColumnModel() size == 0 " + !theTable.getColumnModel().getColumns().hasMoreElements());
 		setDataChanged(false);
-
-}
+	
+	}
 	*/
 
 	/**
-	* set special comparator for a column
-	*/
-	public void setComparator(String colName, Comparator comparator)
-	{
+	 * set special comparator for a column
+	 */
+	public void setComparator(String colName, Comparator comparator) {
 		logging.info(this, "setComparator " + colName + " compare by " + comparator);
 		int modelCol = tableModel.getColumnNames().indexOf(colName);
 
-		if (modelCol < 0)
-		{
+		if (modelCol < 0) {
 			logging.warning(this, "invalid column name");
 			return;
 		}
@@ -1288,240 +1137,189 @@ public class PanelGenEditTable extends JPanel
 	}
 
 	/**
-	* 	set columns for which the searchpane shall work
-	*/
-	public void setSearchColumns(Integer[] cols)
-	{
-		if (!withTablesearchPane)
-		{
+	 * set columns for which the searchpane shall work
+	 */
+	public void setSearchColumns(Integer[] cols) {
+		if (!withTablesearchPane) {
 			logging.debug(this, "setSearchColumns: no search panel");
 			return;
 		}
 
 		searchPane.setSearchFields(cols);
 	}
-	
+
 	/**
-	* 	set all columns for column selection in search pane; requires the correct model is initialized
-	*/
-	public void setSearchColumnsAll()
-	{
-		if (!withTablesearchPane)
-		{
+	 * set all columns for column selection in search pane; requires the correct
+	 * model is initialized
+	 */
+	public void setSearchColumnsAll() {
+		if (!withTablesearchPane) {
 			logging.debug(this, "setSearchColumns: no search panel");
 			return;
 		}
 
-		searchPane.setSearchFieldsAll(); 
+		searchPane.setSearchFieldsAll();
 	}
-	
+
 	/**
-	* set if filter mode is reset on new search 
-	* (this is default but may be disabled for special 
-	* implementations of selection
-	* @parameter boolean
-	*/
-	public void setResetFilterModeOnNewSearch( boolean b)
-	{
-		if (!withTablesearchPane)
-		{
+	 * set if filter mode is reset on new search (this is default but may be
+	 * disabled for special implementations of selection
+	 * 
+	 * @parameter boolean
+	 */
+	public void setResetFilterModeOnNewSearch(boolean b) {
+		if (!withTablesearchPane) {
 			logging.debug(this, "setResetFilterModeOnNewSearch: no search panel");
 			return;
 		}
-		searchPane.setResetFilterModeOnNewSearch( b );
+		searchPane.setResetFilterModeOnNewSearch(b);
 	}
-	
 
 	/**
-	* set search mode 
-	* possible values 
-	*		TablesearchPane.FULL_TEXT_SEARCH
-	*		TablesearchPane.START_TEXT_SEARCH = 1;
-	*		TablesearchPane.REGEX_SEARCH
-	*/
-	public void setSearchMode(int a)
-	{
+	 * set search mode possible values TablesearchPane.FULL_TEXT_SEARCH
+	 * TablesearchPane.START_TEXT_SEARCH = 1; TablesearchPane.REGEX_SEARCH
+	 */
+	public void setSearchMode(int a) {
 		searchPane.setSearchMode(a);
 	}
-	
-	/**
-	* sets a filter symbol belonging to searchPane
-	* @parameter boolean
-	*/
-	public void showFilterIcon(boolean b)
-	{
-		searchPane.showFilterIcon( b );
-	}
-	
-	private void setFilteringActive(boolean b)
-	{
-		filteringActive = b;
-	}
-	
-	private void setModelFilteringBySelection()
-	{
-		if (
-			filteringActive 
-			&& 
-			tableModel != null
-			&& 
-			tableModel.getFilter(
-				SearchTargetModelFromTable.FILTER_BY_SELECTION
-				) == null
-			)
-		{
-			filterBySelectionCondition = new RowNoTableModelFilterCondition( theTable );
-			filterBySelection = new TableModelFilter( filterBySelectionCondition, false, false);
-			
-			tableModel.chainFilter(
-				SearchTargetModelFromTable.FILTER_BY_SELECTION,
-				filterBySelection
-				);
-		}
-	}
-		
-	
-	/**
-	* activates popupMark or this as well as popupMarkAndFilter in context menu
-	* @parameter boolean
-	*/
-	public void setFiltering( boolean b, boolean withFilterPopup )
-	{
-		if ( b )
-		{
-			setFilteringActive( b );
-			//lazy activation
-		}
-		searchPane.setFiltering( b, withFilterPopup );
-		
-	}
-	
-	
-	/**
-	* activates popupMark and popupMarkAndFilter in context menu
-	* @parameter boolean
-	*/
-	public void setFiltering( boolean b )
-	{
-		setFiltering( b, true );
-	}
-	
-	
-	/**
-	* sets an alternative ActionListener
-	* @parameter ActionListener
-	*/
-	public void setFiltermarkActionListener( ActionListener li )
-	{
-		searchPane.setFiltermarkActionListener( li );
-	}
-	
-			
-	/**
-	* sets an alternative tooltip for the filtermark
-	* @parameter String
-	*/
-	public void setFiltermarkToolTipText( String s)
-	{
-		searchPane.setFiltermarkToolTipText(s);
-	}
-	
-	
-	/**
-	* sets the filter symbol to filtered/not  filtered
-	* @ parameter boolean
-	*/
-	public void showFiltered(boolean b)
-	{
-		searchPane.setFilterMark( b );
-	}
-	
-	
 
 	/**
-	* set if a search results in a new selection
-	*/
-	public void setSearchSelectMode(boolean select)
-	{
+	 * sets a filter symbol belonging to searchPane
+	 * 
+	 * @parameter boolean
+	 */
+	public void showFilterIcon(boolean b) {
+		searchPane.showFilterIcon(b);
+	}
+
+	private void setFilteringActive(boolean b) {
+		filteringActive = b;
+	}
+
+	private void setModelFilteringBySelection() {
+		if (filteringActive && tableModel != null
+				&& tableModel.getFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION) == null) {
+			filterBySelectionCondition = new RowNoTableModelFilterCondition(theTable);
+			filterBySelection = new TableModelFilter(filterBySelectionCondition, false, false);
+
+			tableModel.chainFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION, filterBySelection);
+		}
+	}
+
+	/**
+	 * activates popupMark or this as well as popupMarkAndFilter in context menu
+	 * 
+	 * @parameter boolean
+	 */
+	public void setFiltering(boolean b, boolean withFilterPopup) {
+		if (b) {
+			setFilteringActive(b);
+			//lazy activation
+		}
+		searchPane.setFiltering(b, withFilterPopup);
+
+	}
+
+	/**
+	 * activates popupMark and popupMarkAndFilter in context menu
+	 * 
+	 * @parameter boolean
+	 */
+	public void setFiltering(boolean b) {
+		setFiltering(b, true);
+	}
+
+	/**
+	 * sets an alternative ActionListener
+	 * 
+	 * @parameter ActionListener
+	 */
+	public void setFiltermarkActionListener(ActionListener li) {
+		searchPane.setFiltermarkActionListener(li);
+	}
+
+	/**
+	 * sets an alternative tooltip for the filtermark
+	 * 
+	 * @parameter String
+	 */
+	public void setFiltermarkToolTipText(String s) {
+		searchPane.setFiltermarkToolTipText(s);
+	}
+
+	/**
+	 * sets the filter symbol to filtered/not filtered @ parameter boolean
+	 */
+	public void showFiltered(boolean b) {
+		searchPane.setFilterMark(b);
+	}
+
+	/**
+	 * set if a search results in a new selection
+	 */
+	public void setSearchSelectMode(boolean select) {
 		searchPane.setSelectMode(select);
 	}
 
 	/**
-	* transfer mappings to the searchpane
-	*/
-	public void setMapping(String columnName, Mapping<Integer, String> mapping)
-	{
+	 * transfer mappings to the searchpane
+	 */
+	public void setMapping(String columnName, Mapping<Integer, String> mapping) {
 		searchPane.setMapping(columnName, mapping);
 	}
-	
-	/**
-	
 
 	/**
-	* set predefinition of searchfield
-	*/
-	public void setSelectedSearchField(String field)
-	{
+	 * /** set predefinition of searchfield
+	 */
+	public void setSelectedSearchField(String field) {
 		searchPane.setSelectedSearchField(field);
 	}
 
-
 	/**
-	* should mark the columns which are editable after being generated 
-	*/
-	public void setEmphasizedColumns(int[] cols)
-	{
+	 * should mark the columns which are editable after being generated
+	 */
+	public void setEmphasizedColumns(int[] cols) {
 		if (cols == null)
 			return;
 
-
 		//System.out.println("---------  getColumnModel() size == 0 " + !theTable.getColumnModel().getColumns().hasMoreElements());
 
-		if (theTable.getColumnModel().getColumns().hasMoreElements())
-		{
+		if (theTable.getColumnModel().getColumns().hasMoreElements()) {
 			//System.out.println("---------  we have elements ");
-			for (int j = 0; j < cols.length; j++)
-			{
+			for (int j = 0; j < cols.length; j++) {
 				theTable.getColumnModel().getColumn(cols[j])
-				.setCellRenderer(new TableCellRendererConfigured(null, Globals.lightBlack , Globals.defaultTableCellBgColor1, Globals.defaultTableCellBgColor2, backgroundColorSelected, backgroundColorEditFieldsSelected));
+						.setCellRenderer(new TableCellRendererConfigured(null, Globals.lightBlack,
+								Globals.defaultTableCellBgColor1, Globals.defaultTableCellBgColor2,
+								backgroundColorSelected, backgroundColorEditFieldsSelected));
 			}
 		}
 	}
 
-	protected void setTimestampRenderer(String classname, javax.swing.table.TableColumn col)
-	{
+	protected void setTimestampRenderer(String classname, javax.swing.table.TableColumn col) {
 
 		if (classname.equals("java.sql.Timestamp"))
 			col.setCellRenderer(new TableCellRendererDate());
 
-
 	}
 
-	protected void setBigDecimalRenderer(String classname, javax.swing.table.TableColumn col)
-	{
+	protected void setBigDecimalRenderer(String classname, javax.swing.table.TableColumn col) {
 		if (classname.equals("java.math.BigDecimal"))
 			col.setCellRenderer(new TableCellRendererCurrency());
 
 	}
 
-	protected void setBooleanRenderer(String classname, javax.swing.table.TableColumn col)
-	{
+	protected void setBooleanRenderer(String classname, javax.swing.table.TableColumn col) {
 		if (classname.equals("java.lang.Boolean"))
 			col.setCellRenderer(new TableCellRendererByBoolean());
 
 	}
 
-
-
-	protected void setCellRenderers()
-	{
-		for (int i = 0; i < tableModel.getColumnCount(); i++)
-		{
+	protected void setCellRenderers() {
+		for (int i = 0; i < tableModel.getColumnCount(); i++) {
 			Class cl = tableModel.getColumnClass(i);
 			String name = tableModel.getColumnName(i);
 			TableColumn col = theTable.getColumn(name);
 			String classname = tableModel.getClassNames().get(i);
-
 
 			//logging.debug(this, "setCellrenderer i, name, class, classname "
 			//	+ i + ", " + name + ", " + cl + ", " + classname );
@@ -1530,89 +1328,75 @@ public class PanelGenEditTable extends JPanel
 			setBigDecimalRenderer(classname, col);
 			setBooleanRenderer(classname, col);
 			if (col.getCellRenderer() == null) //no special renderer set
-				col.setCellRenderer( new StandardTableCellRenderer() );
+				col.setCellRenderer(new StandardTableCellRenderer());
 
 		}
 	}
 
-
-	public void setDataChanged(boolean b)
-	{
+	public void setDataChanged(boolean b) {
 		logging.info(this, "setDataChanged " + b);
 		dataChanged = b;
 		buttonCommit.setEnabled(b);
-		if (menuItemSave != null) menuItemSave.setEnabled(b);
+		if (menuItemSave != null)
+			menuItemSave.setEnabled(b);
 		buttonCancel.setEnabled(b);
-		if (menuItemCancel != null) menuItemCancel.setEnabled(b);
+		if (menuItemCancel != null)
+			menuItemCancel.setEnabled(b);
 	}
 
-	public boolean isDataChanged()
-	{
+	public boolean isDataChanged() {
 		logging.info(this, "isDataChanged " + dataChanged);
 		return dataChanged;
 	}
 
-	public void stopCellEditing()
-	{
+	public void stopCellEditing() {
 		if (theTable.getCellEditor() != null)
-			//we are editing
+		//we are editing
 		{
 			logging.info(this, "we are editing a cell");
 			theTable.getCellEditor().stopCellEditing();
-		}
-		else
+		} else
 			logging.info(this, "no cell editing");
 	}
 
-
-	public void commit()
-	{
+	public void commit() {
 		stopCellEditing();
 
-		if ( myController == null )
+		if (myController == null)
 			return;
 
-		if ( myController.saveChanges() )
-		{
+		if (myController.saveChanges()) {
 			setDataChanged(false);
 		}
 	}
 
-	public void cancel()
-	{
-		if ( myController == null )
+	public void cancel() {
+		if (myController == null)
 			return;
 
-		if ( myController.cancelChanges() )
-		{
+		if (myController.cancelChanges()) {
 			setDataChanged(false);
 		}
 	}
 
-	protected void deleteCurrentRow()
-	{
+	protected void deleteCurrentRow() {
 		if (!deleteAllowed)
 			return;
-		
+
 		if (getSelectedRowCount() > 0)
 			tableModel.deleteRow(getSelectedRowInModelTerms());
 	}
 
-
-	public void setTableColumnInvisible( int col) {
+	public void setTableColumnInvisible(int col) {
 
 		TableColumn column = null;
-		try
-		{
+		try {
 			column = theTable.getColumnModel().getColumn(col);
-		}
-		catch(Exception ex)
-		{
+		} catch (Exception ex) {
 			logging.info(this, "setTableColumnInvisible  " + ex);
 		}
 
-		if (column != null)
-		{
+		if (column != null) {
 			logging.info(this, "setTableColumnInvisible col " + col);
 			column.setWidth(0);
 			column.setMaxWidth(100);
@@ -1624,119 +1408,92 @@ public class PanelGenEditTable extends JPanel
 
 	}
 
-
-	public  JTable getTheTable()
-	{
+	public JTable getTheTable() {
 		return theTable;
 	}
 
-	public GenTableModel getTableModel()
-	{
+	public GenTableModel getTableModel() {
 		return tableModel;
 	}
 
-	public TableColumnModel getColumnModel()
-	{
+	public TableColumnModel getColumnModel() {
 		return theTable.getColumnModel();
 	}
 
-	public ListSelectionModel getListSelectionModel()
-	{
+	public ListSelectionModel getListSelectionModel() {
 		return theTable.getSelectionModel();
 	}
-	
-	public TablesearchPane getTheSearchpane()
-	{
+
+	public TablesearchPane getTheSearchpane() {
 		return searchPane;
 	}
-	
 
 	/**
-	* set the selection model for the table conceived as a list
-	* the usage of any other model than the default ListSelectionModel.SINGLE_SELECTION
-	* may be not fully supported
-	*/
-	public void setListSelectionMode(int selectionMode)
-	{
+	 * set the selection model for the table conceived as a list the usage of
+	 * any other model than the default ListSelectionModel.SINGLE_SELECTION may
+	 * be not fully supported
+	 */
+	public void setListSelectionMode(int selectionMode) {
 		theTable.setSelectionMode(selectionMode);
 	}
 
-	public int getSelectedRowCount()
-	{
+	public int getSelectedRowCount() {
 		return theTable.getSelectedRowCount();
 	}
 
-	public int getSelectedRow()
-	{
+	public int getSelectedRow() {
 		return theTable.getSelectedRow();
 	}
 
-	public void setSelectedRow(int row)
-	{
+	public void setSelectedRow(int row) {
 		theTable.setRowSelectionInterval(row, row);
 		//System.out.println(" --- view row selected " + row);
 		showSelectedRow();
 	}
-	
-	public void setSelection( int[] selection )
-	{
-		logging.info(this, "setSelection --- " + java.util.Arrays.toString( selection ) );
+
+	public void setSelection(int[] selection) {
+		logging.info(this, "setSelection --- " + java.util.Arrays.toString(selection));
 		theTable.getSelectionModel().clearSelection();
-		for (int i = 0; i < selection.length ; i++)
-		{
+		for (int i = 0; i < selection.length; i++) {
 			theTable.getSelectionModel().addSelectionInterval(selection[i], selection[i]);
 		}
 	}
 
-	public void showSelectedRow()
-	{
+	public void showSelectedRow() {
 		int row = getSelectedRow();
 		if (row != -1)
 			theTable.scrollRectToVisible(theTable.getCellRect(row, 0, false));
 	}
 
-	public int getSelectedRowInModelTerms()
-	{
+	public int getSelectedRowInModelTerms() {
 		return theTable.convertRowIndexToModel(theTable.getSelectedRow());
 	}
 
-	public void setSelectedRowFromModel(int row)
-	{
-		theTable.setRowSelectionInterval(
-		    theTable.convertRowIndexToView(row),
-		    theTable.convertRowIndexToView(row)
-		);
+	public void setSelectedRowFromModel(int row) {
+		theTable.setRowSelectionInterval(theTable.convertRowIndexToView(row), theTable.convertRowIndexToView(row));
 
 		theTable.scrollRectToVisible(theTable.getCellRect(theTable.convertRowIndexToView(row), 0, true));
 	}
 
-
-	public void setValueAt(Object value, int row, int col)
-	{
+	public void setValueAt(Object value, int row, int col) {
 		tableModel.setValueAt(value, theTable.convertRowIndexToModel(row), theTable.convertColumnIndexToModel(col));
 	}
 
-
-	public Object getValueAt(int row, int col)
-	{
+	public Object getValueAt(int row, int col) {
 		//logging.info(this, "getValueAt row, col " + row + ", " + col);
-		try{
+		try {
 			return tableModel.getValueAt(theTable.convertRowIndexToModel(row), theTable.convertColumnIndexToModel(col));
-		}
-		catch (Exception ex)
-		{
+		} catch (Exception ex) {
 			return null;
 		}
 	}
 
-	public void selectedRowChanged()
-	{
+	public void selectedRowChanged() {
 		//logging.info(this, "selectedRowChanged");
 		//System.out.println(" new selected row ");
 	}
 
-	public void setAwareOfSelectionListener(boolean b)
-	{
+	public void setAwareOfSelectionListener(boolean b) {
 		logging.debug(this, "setAwareOfSelectionListener  " + b);
 		/*
 		if (b != awareOfSelectionListener)
@@ -1747,19 +1504,16 @@ public class PanelGenEditTable extends JPanel
 				getListSelectionModel().removeListSelectionListener(this);
 		}
 		*/
-			
+
 		awareOfSelectionListener = b;
-		
+
 	}
-	
-	public boolean isAwareOfSelectionListener()
-	{
+
+	public boolean isAwareOfSelectionListener() {
 		return awareOfSelectionListener;
 	}
-	
-	
-	public void setAwareOfTableChangedListener(boolean b)
-	{
+
+	public void setAwareOfTableChangedListener(boolean b) {
 		logging.debug(this, "setAwareOfTableChangedListener  " + b);
 		/*
 		if (b != awareOfTableChangedListener)
@@ -1770,20 +1524,16 @@ public class PanelGenEditTable extends JPanel
 				getListSelectionModel().removeListTableChangedListener(this);
 		}
 		*/
-			
+
 		awareOfTableChangedListener = b;
-		
+
 	}
-	
-	public boolean isAwareOfTableChangedListener()
-	{
+
+	public boolean isAwareOfTableChangedListener() {
 		return awareOfTableChangedListener;
 	}
-	
 
-
-	public java.util.List<String> getSelectedKeys()
-	{
+	public java.util.List<String> getSelectedKeys() {
 		ArrayList<String> result = new ArrayList<String>();
 		//logging.info(this, " getSelectedKeys()  we have key col " + tableModel.getKeyCol());
 
@@ -1792,38 +1542,26 @@ public class PanelGenEditTable extends JPanel
 
 		//logging.info(this, " getSelectedKeys()  selected rows " + Arrays.toString(theTable.getSelectedRows()));
 
-		if (tableModel.isUsingFilter( SearchTargetModelFromTable.FILTER_BY_SELECTION ) )
-		{
-			for (int i = 0; i < tableModel.getRowCount(); i++)
-			{
+		if (tableModel.isUsingFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION)) {
+			for (int i = 0; i < tableModel.getRowCount(); i++) {
 				result.add(
-					tableModel.getValueAt(  theTable.convertRowIndexToModel(i),
-											tableModel.getKeyCol()).toString()
-				);
+						tableModel.getValueAt(theTable.convertRowIndexToModel(i), tableModel.getKeyCol()).toString());
 			}
-		}
-		else 
-		{
-			for (int i = 0; i < theTable.getSelectedRows().length; i++)
-			{
+		} else {
+			for (int i = 0; i < theTable.getSelectedRows().length; i++) {
 				//logging.info(this, " getSelectedKeys() selected row " + theTable.getSelectedRows()[i] );
-				result.add(
-					tableModel.getValueAt(  theTable.convertRowIndexToModel(theTable.getSelectedRows()[i]),
-											tableModel.getKeyCol()).toString()
-				);
+				result.add(tableModel.getValueAt(theTable.convertRowIndexToModel(theTable.getSelectedRows()[i]),
+						tableModel.getKeyCol()).toString());
 			}
 		}
-		
+
 		//logging.info(this, " getSelectedKeys() +++  result " + result);
-	
-			
 
 		return result;
 
 	}
 
-	public void setSelectedValues( java.util.List<String> values, int col)
-	{
+	public void setSelectedValues(java.util.List<String> values, int col) {
 		//logging.info(this, "setSelectedValues for col " + col + " : " + values);
 		getListSelectionModel().clearSelection();
 
@@ -1836,8 +1574,7 @@ public class PanelGenEditTable extends JPanel
 
 		//System.out.println(" setSelectedValues for " + values);
 
-		while (iter.hasNext())
-		{
+		while (iter.hasNext()) {
 			int viewRow = findViewRowFromValue((String) iter.next(), col);
 			//System.out.println(" viewRow " + viewRow);
 			getListSelectionModel().addSelectionInterval(viewRow, viewRow);
@@ -1845,11 +1582,9 @@ public class PanelGenEditTable extends JPanel
 
 	}
 
-
-	protected int findViewRowFromValue(int startviewrow, Object value, int col)
-	{
-		logging.debug(this, "findViewRowFromValue startviewrow, value, col "
-		              + startviewrow + ", " + value + ", " + col);
+	protected int findViewRowFromValue(int startviewrow, Object value, int col) {
+		logging.debug(this,
+				"findViewRowFromValue startviewrow, value, col " + startviewrow + ", " + value + ", " + col);
 
 		if (value == null)
 			return -1;
@@ -1858,32 +1593,26 @@ public class PanelGenEditTable extends JPanel
 
 		boolean found = false;
 
-
 		int viewrow = 0;
 
 		if (startviewrow > 0)
 			viewrow = startviewrow;
 
-		while (!found && viewrow < tableModel.getRowCount())
-		{
-			Object compareValue =
-			    tableModel.getValueAt(
+		while (!found && viewrow < tableModel.getRowCount()) {
+			Object compareValue = tableModel.getValueAt(
 
-			        theTable.convertRowIndexToModel(viewrow),
-			        col
+					theTable.convertRowIndexToModel(viewrow), col
 
-			    );
+			);
 
 			//logging.debug(this, "findViewRowFromValue compare " + value + " to " + compareValue);
 
-			if 	(compareValue == null)
-			{
+			if (compareValue == null) {
 				if (val == null || val.equals(""))
 					found = true;
 			}
 
-			else
-			{
+			else {
 				String compareVal = compareValue.toString();
 
 				if (val.equals(compareVal))
@@ -1895,81 +1624,75 @@ public class PanelGenEditTable extends JPanel
 
 		}
 
-
-		if (found)
-		{
+		if (found) {
 			return viewrow;
 		}
 
 		return -1;
 	}
 
-	public int findViewRowFromValue(Object value, int col)
-	{
+	public int findViewRowFromValue(Object value, int col) {
 		return findViewRowFromValue(0, value, col);
 	}
 
-
 	/*
 	protected int findViewRowFromValue(String value, int col)
-{
-
+	{
+	
 		if (value == null)
 			return -1;
-
+	
 		boolean found = false;
-
+	
 		int viewrow = 0;
-
+	
 		while (!found && viewrow < tableModel.getRowCount())
 		{
-
+	
 			if (value.equals(
 			            tableModel.getValueAt(
-
+	
 			                theTable.convertRowIndexToModel(viewrow),
 			                col
-
+	
 			            ).toString())
 			   )
 				found = true;
 			else
 				viewrow++;
 		}
-
-
+	
+	
 		if (found)
 		{
 			return viewrow;
 		}
-
+	
 		return -1;
-}
+	}
 	*/
 
-	public boolean moveToValue(String value, int col)
-	{
+	public boolean moveToValue(String value, int col) {
 		return moveToValue(value, col, true);
 	}
 
-	public boolean moveToValue(String value, int col, boolean selecting)
-	{
+	public boolean moveToValue(String value, int col, boolean selecting) {
 		logging.info(this, "moveToValue " + value + " col " + col + " selecting " + selecting);
 		int viewrow = findViewRowFromValue(value, col);
 		if (viewrow > -1)
-			tableModel.setCursorRow( theTable.convertRowIndexToModel( viewrow ) );
+			tableModel.setCursorRow(theTable.convertRowIndexToModel(viewrow));
 		theTable.scrollRectToVisible(theTable.getCellRect(viewrow, col, false));
 
 		if (viewrow == -1)
 			return false;
 
-		if (selecting) setSelectedRow(viewrow);
+		if (selecting)
+			setSelectedRow(viewrow);
 
 		return true;
 	}
 
-	public boolean moveToKeyValue(String keyValue)
-	{
+	public boolean moveToKeyValue(String keyValue) {
 
 		boolean found = false;
 
@@ -1977,50 +1700,38 @@ public class PanelGenEditTable extends JPanel
 			return false;
 
 		//System.out.println(" -------------++----- keyValue " + keyValue);
-		if (tableModel.getKeyCol() > -1)
-		{
+		if (tableModel.getKeyCol() > -1) {
 			found = moveToValue(keyValue, tableModel.getKeyCol());
 		}
 
 		else
-			// try to use pseudokey
+		// try to use pseudokey
 		{
 			int viewrow = 0;
 
-			while (!found && viewrow < tableModel.getRowCount())
-			{
+			while (!found && viewrow < tableModel.getRowCount()) {
 				String[] partialkeys = new String[tableModel.getFinalCols().size()];
 
+				for (int j = 0; j < tableModel.getFinalCols().size(); j++) {
+					partialkeys[j] = tableModel
+							.getValueAt(theTable.convertRowIndexToModel(viewrow), tableModel.getFinalCols().get(j))
+							.toString();
+				} ;
 
-				for (int j = 0; j < tableModel.getFinalCols().size(); j++)
-				{
-					partialkeys[j] =
-					    tableModel.getValueAt(
-					        theTable.convertRowIndexToModel(viewrow),
-					        tableModel.getFinalCols().get(j)
-					    ).toString();
-				};
-
-				if (
-				    keyValue.equals(Globals.pseudokey(partialkeys))
-				)
+				if (keyValue.equals(Globals.pseudokey(partialkeys)))
 					found = true;
 				else
 					viewrow++;
 			}
 
-
-			if (found)
-			{
+			if (found) {
 				setSelectedRow(viewrow);
 			}
 
-			else
-			{
+			else {
 				//try value for col 0 as target for search
 				found = moveToValue(keyValue, 0);
 			}
-
 
 		}
 
@@ -2028,10 +1739,7 @@ public class PanelGenEditTable extends JPanel
 
 	}
 
-
-
-	public void moveToRow(int n)
-	{
+	public void moveToRow(int n) {
 		//logging.debug(this, "moveToRow " + n);
 		if (tableModel.getRowCount() == 0)
 			return;
@@ -2044,12 +1752,11 @@ public class PanelGenEditTable extends JPanel
 
 		theTable.scrollRectToVisible(theTable.getCellRect(n, 0, true));
 		theTable.setRowSelectionInterval(n, n);
-		tableModel.setCursorRow( theTable.convertRowIndexToModel( n) );
+		tableModel.setCursorRow(theTable.convertRowIndexToModel(n));
 		//logging.debug(this, "moveToRow success " + n + "getSelectedRowInModelTerms " + getSelectedRowInModelTerms());
 	}
 
-	public void moveToModelRow(int n)
-	{
+	public void moveToModelRow(int n) {
 		if (tableModel.getRowCount() == 0)
 			return;
 
@@ -2060,96 +1767,72 @@ public class PanelGenEditTable extends JPanel
 			return;
 
 		theTable.scrollRectToVisible(theTable.getCellRect(theTable.convertRowIndexToView(n), 0, true));
-		theTable.setRowSelectionInterval(
-		    theTable.convertRowIndexToView(n),
-		    theTable.convertRowIndexToView(n)
-		);
+		theTable.setRowSelectionInterval(theTable.convertRowIndexToView(n), theTable.convertRowIndexToView(n));
 	}
-	
-	
-	public boolean setCursorToFirstRow()
-	{
-		if (tableModel.getRowCount() > 0)
-		{
-			tableModel.setCursorRow( theTable.convertRowIndexToModel( 0 ) );
+
+	public boolean setCursorToFirstRow() {
+		if (tableModel.getRowCount() > 0) {
+			tableModel.setCursorRow(theTable.convertRowIndexToModel(0));
 			theTable.scrollRectToVisible(theTable.getCellRect(0, 0, true));
 		}
 
 		return true;
 	}
 
-	
-	public boolean setCursorToLastRow()
-	{
-		if (tableModel.getRowCount() > 0)
-		{
-			tableModel.setCursorRow( theTable.convertRowIndexToModel( tableModel.getRowCount() - 1  ) );
+	public boolean setCursorToLastRow() {
+		if (tableModel.getRowCount() > 0) {
+			tableModel.setCursorRow(theTable.convertRowIndexToModel(tableModel.getRowCount() - 1));
 			theTable.scrollRectToVisible(theTable.getCellRect(tableModel.getRowCount() - 1, 0, true));
 		}
 		return true;
 	}
 
-		
-	
-	public boolean advanceCursor(int d)
-	{
-		int viewCursorRow  = -1;
+	public boolean advanceCursor(int d) {
+		int viewCursorRow = -1;
 		if (tableModel.getCursorRow() > -1)
 			viewCursorRow = theTable.convertRowIndexToView(tableModel.getCursorRow());
-		
+
 		logging.info(this, "advanceCursor from " + viewCursorRow);
 		int nextViewCursorRow = viewCursorRow + d;
 		logging.info(this, "advanceCursor to " + nextViewCursorRow);
 		if (nextViewCursorRow < tableModel.getRowCount() && nextViewCursorRow >= 0)
-			tableModel.setCursorRow( theTable.convertRowIndexToModel( nextViewCursorRow) );
+			tableModel.setCursorRow(theTable.convertRowIndexToModel(nextViewCursorRow));
 		theTable.scrollRectToVisible(theTable.getCellRect(nextViewCursorRow, 0, true));
 
 		return true;
 	}
 
-	public boolean canNavigate()
-	{
-		return tableModel.getRowCount() > 0
-		       && getSelectedRowCount() == 1;
+	public boolean canNavigate() {
+		return tableModel.getRowCount() > 0 && getSelectedRowCount() == 1;
 	}
 
-	public boolean isFirstRow()
-	{
+	public boolean isFirstRow() {
 		return getSelectedRow() == 0;
 	}
 
-	public boolean isLastRow()
-	{
+	public boolean isLastRow() {
 		return getSelectedRow() == tableModel.getRowCount() - 1;
 	}
-	
-	
-	public void moveToLastRow()
-	{
-		moveToRow(tableModel.getRowCount()-1);
+
+	public void moveToLastRow() {
+		moveToRow(tableModel.getRowCount() - 1);
 	}
 
-	public void moveToFirstRow()
-	{
+	public void moveToFirstRow() {
 		moveToRow(0);
 	}
 
-	public void moveRowBy(int i)
-	{
+	public void moveRowBy(int i) {
 		//logging.debug(this, "moveRowBy " + i + " getSelectedRowCount " + getSelectedRowCount() + " selectedRow " + theTable.getSelectedRow());
 		if (getSelectedRowCount() != 1)
 			return;
 
 		int n = theTable.getSelectedRow();
 
-
-		if (i > 0)
-		{
+		if (i > 0) {
 			if (n + i < theTable.getRowCount())
 				n = n + i;
-		}
-		else if (i < 0)
-		{
+		} else if (i < 0) {
 			if (n + i >= 0)
 				n = n + i;
 		}
@@ -2157,54 +1840,38 @@ public class PanelGenEditTable extends JPanel
 		moveToRow(n);
 	}
 
-
-
-	public RowSorter getRowSorter()
-	{
+	public RowSorter getRowSorter() {
 		return theTable.getRowSorter();
 	}
 
-
 	//
 	// TableModelListener
-	public void tableChanged(TableModelEvent e)
-	{
+	public void tableChanged(TableModelEvent e) {
 		logging.debug(this, " tableChanged " + "source " + e.getSource() + " col " + e.getColumn());
-		if (tableModel != null)  logging.debug(this, "tableChanged,  whereas tableModel.getColMarkCursorRow() is " + tableModel.getColMarkCursorRow() );
-		
-		if (
-			!awareOfTableChangedListener
-			||
-			tableModel == null 
-			||  
-			((tableModel.getColMarkCursorRow() > -1) && (e.getColumn() == tableModel.getColMarkCursorRow()))
-			)
+		if (tableModel != null)
+			logging.debug(this,
+					"tableChanged,  whereas tableModel.getColMarkCursorRow() is " + tableModel.getColMarkCursorRow());
+
+		if (!awareOfTableChangedListener || tableModel == null
+				|| ((tableModel.getColMarkCursorRow() > -1) && (e.getColumn() == tableModel.getColMarkCursorRow())))
 			return;
-		else
-		{
+		else {
 			logging.info(this, " tableChanged, datachanged set to true");
 			setDataChanged(true);
-			if (tableModel != null && oldrowcount  !=  tableModel.getRowCount())
-			{
-				oldrowcount =  tableModel.getRowCount();
+			if (tableModel != null && oldrowcount != tableModel.getRowCount()) {
+				oldrowcount = tableModel.getRowCount();
 			}
 		}
-	
 
 	}
 
-
 	//
 	// ActionListener interface
-	public void actionPerformed(java.awt.event.ActionEvent e)
-	{
+	public void actionPerformed(java.awt.event.ActionEvent e) {
 		//logging.debug(this, "actionPerformed source " + e.getSource() );
-		if (e.getSource() == buttonCommit)
-		{
+		if (e.getSource() == buttonCommit) {
 			commit();
-		}
-		else if (e.getSource() == buttonCancel)
-		{
+		} else if (e.getSource() == buttonCancel) {
 			//System.out.println (" -------- buttonCancel " + e);
 			cancel();
 		}
@@ -2212,49 +1879,44 @@ public class PanelGenEditTable extends JPanel
 
 	//
 	// KeyListener interface
-	public void keyPressed(KeyEvent e)
-	{
-		if (e.getSource() == theTable)
-		{
+	public void keyPressed(KeyEvent e) {
+		if (e.getSource() == theTable) {
 			//System.out.println(" event on table " + e);
 			if (e.getKeyCode() == KeyEvent.VK_DELETE)
 				deleteCurrentRow();
 
 		}
 	}
-	public void keyReleased(KeyEvent e)
-	{
+
+	public void keyReleased(KeyEvent e) {
 		/*
 		if (e.getSource() == theTable)
 		{
 			System.out.println(" event on table " + e);
-	}
-		*/
-	}
-	public void keyTyped(KeyEvent e)
-	{
-		/*
-		if (e.getSource() == theTable)
-		{
-			System.out.println(" event on table " + e);
-	}
+		}
 		*/
 	}
 
+	public void keyTyped(KeyEvent e) {
+		/*
+		if (e.getSource() == theTable)
+		{
+			System.out.println(" event on table " + e);
+		}
+		*/
+	}
 
 	//
 	//ListSelectionListener
-	public void valueChanged(ListSelectionEvent e)
-	{
+	public void valueChanged(ListSelectionEvent e) {
 		logging.debug(this, "ListSelectionEvent " + e);
 		//Ignore extra messages.
-		if (e.getValueIsAdjusting()) return;
-			
-		logging.debug(this, "ListSelectionEvent not more adjusting");
-		
+		if (e.getValueIsAdjusting())
+			return;
 
-		ListSelectionModel lsm =
-		    (ListSelectionModel)e.getSource();
+		logging.debug(this, "ListSelectionEvent not more adjusting");
+
+		ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 
 		if (awareOfSelectionListener)
 			setDataChanged(true);
@@ -2265,73 +1927,76 @@ public class PanelGenEditTable extends JPanel
 			singleSelection = false;
 			if (menuItemDeleteRelation != null)
 				menuItemDeleteRelation.setEnabled(false);
-		}
-		else
-		{
+		} else {
 			selectionEmpty = false;
 			int selectedRow = lsm.getMinSelectionIndex();
-			if (followSelectionListener) selectedRowChanged();
+			if (followSelectionListener)
+				selectedRowChanged();
 			if (menuItemDeleteRelation != null)
 				menuItemDeleteRelation.setEnabled(true);
-			
+
 			singleSelection = (selectedRow == lsm.getMaxSelectionIndex());
 		}
-		
+
 		//getSelectedKeys(); //test output
 	}
-	
-	public boolean isSelectionEmpty()
-	{
+
+	public boolean isSelectionEmpty() {
 		return selectionEmpty;
 	}
-	
-	public boolean isSingleSelection()
-	{
+
+	public boolean isSingleSelection() {
 		return singleSelection;
 	}
-		
 
 	//MouseListener, hook for subclasses
-	public void mouseClicked(MouseEvent e)
-	{
+	public void mouseClicked(MouseEvent e) {
 		//logging.info(this, "mouse event " + e);
 		//logging.info(this, "row " + theTable.rowAtPoint(e.getPoint()) );
 	}
-	public void mouseEntered(MouseEvent e) {}
-	public void mouseExited(MouseEvent e) {}
-	public void mousePressed(MouseEvent e) {}
-	public void mouseReleased(MouseEvent e) {}
 
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}
+
+	public void mousePressed(MouseEvent e) {
+	}
+
+	public void mouseReleased(MouseEvent e) {
+	}
 
 	//ComponentListener for table
-	public void componentHidden(ComponentEvent e){}
-	public void componentMoved(ComponentEvent e){}
-	public void componentShown(ComponentEvent e){}
-	public void componentResized(ComponentEvent e)
-	{
+	public void componentHidden(ComponentEvent e) {
+	}
+
+	public void componentMoved(ComponentEvent e) {
+	}
+
+	public void componentShown(ComponentEvent e) {
+	}
+
+	public void componentResized(ComponentEvent e) {
 		showSelectedRow();
 	}
-	
+
 	//CursorrowObserver
-	public void rowUpdated(int modelrow)
-	{
-		logging.info(this, 	" in PanelGenEditTable rowUpdated to modelrow " + modelrow);
+	public void rowUpdated(int modelrow) {
+		logging.info(this, " in PanelGenEditTable rowUpdated to modelrow " + modelrow);
 	}
 
 	/*
 	* 	extract scrollpane for use in other components
 	*/
-	public JScrollPane getScrollPane()
-	{
+	public JScrollPane getScrollPane() {
 		return scrollpane;
 	}
 
-
-	protected void floatExternal()
-	{
+	protected void floatExternal() {
 
 		PanelGenEditTable copyOfMe;
-		de.uib.configed.gui.GeneralFrame  externalView;
+		de.uib.configed.gui.GeneralFrame externalView;
 
 		copyOfMe = new PanelGenEditTable(title, maxTableWidth, false);
 		//copyOfMe.setSoftwareInfo(hostId, swRows);
@@ -2345,6 +2010,5 @@ public class PanelGenEditTable extends JPanel
 
 		externalView.setVisible(true);
 	}
-
 
 }
