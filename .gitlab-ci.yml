@@ -9,7 +9,7 @@ compile_and_package:
   image: maven:3.6.3-jdk-11
   stage: build
   script:
-    - mvn package -Dmaven.test.skip
+    - mvn package
 
   artifacts:
     name: 'configed-build'
