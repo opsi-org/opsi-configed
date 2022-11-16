@@ -170,58 +170,58 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
-            <version>19</version>
+            <version>16</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>19</version>
+            <version>16</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-base -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>
-            <version>19</version>
+            <version>16</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>19</version>
+            <version>16</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-graphics -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
-            <version>19</version>
+            <version>16</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx</artifactId>
-            <version>19</version>
+            <version>16</version>
             <type>pom</type>
         </dependency>
 
-	<!-- https://mvnrepository.com/artifact/de.jensd/fontawesomefx-fontawesome -->
-	<dependency>
-	    <groupId>de.jensd</groupId>
-	    <artifactId>fontawesomefx-fontawesome</artifactId>
-	    <version>4.7.0-9.1.2</version>
-	</dependency>
+        <!-- https://mvnrepository.com/artifact/de.jensd/fontawesomefx-fontawesome -->
+        <dependency>
+            <groupId>de.jensd</groupId>
+            <artifactId>fontawesomefx-fontawesome</artifactId>
+            <version>4.7.0-9.1.2</version>
+        </dependency>
 
-	 <!-- https://mvnrepository.com/artifact/de.jensd/fontawesomefx-commons -->
-	<dependency>
-	    <groupId>de.jensd</groupId>
-	    <artifactId>fontawesomefx-commons</artifactId>
-	    <version>9.1.2</version>
-	</dependency>
+        <!-- https://mvnrepository.com/artifact/de.jensd/fontawesomefx-commons -->
+        <dependency>
+            <groupId>de.jensd</groupId>
+            <artifactId>fontawesomefx-commons</artifactId>
+            <version>9.1.2</version>
+        </dependency>
 
     </dependencies>
 </project>

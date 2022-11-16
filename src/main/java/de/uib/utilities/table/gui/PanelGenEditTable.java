@@ -69,9 +69,6 @@ import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.updates.UpdateController;
 import de.uib.utilities.thread.WaitCursor;
 
-/**
- * @author roeder
- */
 public class PanelGenEditTable extends JPanel implements ActionListener, TableModelListener, ListSelectionListener,
 		KeyListener, MouseListener, ComponentListener, CursorrowObserver {
 	javax.swing.JFrame masterFrame = de.uib.configed.Globals.mainFrame;
