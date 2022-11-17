@@ -21,6 +21,9 @@ compile_and_package:
   script:
     - echo $CONFIGED_VERSION
     - mvn package
+    - echo test
+    - echo $CONFIGED_VERSION
+
 
   artifacts:
     name: 'configed-build'
