@@ -58,3 +58,4 @@ signandupload:
     - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-tool -l info --binary-push $CONFIGED_JAR_PATH configed all all $version'
   needs:
     - trigger_opsiproduct_pipeline
+    - compile_and_package
