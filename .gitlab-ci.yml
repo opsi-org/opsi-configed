@@ -1,5 +1,6 @@
 image: docker.uib.gmbh/opsi/dev/pybuilder:uib-python-default
 
+
 stages:
   - make_opsiproduct
   - build
