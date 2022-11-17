@@ -1,7 +1,7 @@
 image: docker.uib.gmbh/opsi/dev/pybuilder:uib-python-default
 
 variables:
-  CONFIGED_VERSION: snapshot
+  CONFIGED_VERSION: $(sed -n 's,.*<version>\(.*\)</version>.*,\1,p' pom.xml | head -1)
 
 stages:
   - make_opsiproduct
