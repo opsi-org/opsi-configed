@@ -1,7 +1,5 @@
 image: docker.uib.gmbh/opsi/dev/pybuilder:uib-python-default
 
-variables:
-  CONFIGED_VERSION: $(sed -n 's,.*<version>\(.*\)</version>.*,\1,p' pom.xml | head -1)
 
 stages:
   - make_opsiproduct
@@ -19,16 +17,12 @@ compile_and_package:
   image: maven:3.6.3-jdk-11
   stage: build
   script:
-    - echo $CONFIGED_VERSION
+    - CONFIGED_VERSION: $(sed -n 's,.*<version>\(.*\)</version>.*,\1,p' pom.xml | head -1)
     - mvn package
-    - echo test
-    - echo $CONFIGED_VERSION
-
-
   artifacts:
     name: 'configed-build'
     paths:
-      - target/configed.jar
+      - target/configed-${CONFIGED_VERSION}-jar-with-dependencies.jar
     expire_in: 2 day
 
 
