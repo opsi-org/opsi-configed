@@ -52,10 +52,9 @@ sonarqube-check:
 signandupload:
   stage: sign
   script:
-    - opsi-dev-tool -l info --signserver-sign target/configed.jar || true
-    - version=$CONFIGED_VERSION
-    - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-tool -l info --binary-push $CONFIGED_JAR_PATH configed all all $version "$CI_JOB_ID"'
-    - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-tool -l info --binary-push $CONFIGED_JAR_PATH configed all all $version'
+    - opsi-dev-tool -l info --signserver-sign $CONFIGED_JAR_PATH
+    - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-tool -l info --binary-push $CONFIGED_JAR_PATH configed all all $CONFIGED_VERSION "$CI_JOB_ID"'
+    - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-tool -l info --binary-push $CONFIGED_JAR_PATH configed all all $CONFIGED_VERSION'
   needs:
     - trigger_opsiproduct_pipeline
     - compile_and_package
