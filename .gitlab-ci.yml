@@ -28,7 +28,7 @@ compile_and_package:
   artifacts:
     name: 'configed-build'
     paths:
-      - build.env
+      - "target/configed-${CONFIGED_VERSION}-jar-with-dependencies.jar"
     expire_in: 2 day
 
 
