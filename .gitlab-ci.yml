@@ -28,7 +28,7 @@ compile_and_package:
   artifacts:
     name: 'configed-build'
     paths:
-      - version.env
+      - build.env
     expire_in: 2 day
 
 
