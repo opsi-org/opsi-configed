@@ -105,7 +105,7 @@ public class BackendMySQL {
 
 	// Nimmt alle Clients und entfernt die gesuchten
 	public List<String> NOT(JSONArray children) throws Exception {
-		List<String> result = new ArrayList<String>(alle_hosts);
+		List<String> result = new ArrayList<>(alle_hosts);
 
 		List<String> c = getListFromJSONObject((JSONObject) children.get(0));
 
@@ -140,26 +140,26 @@ public class BackendMySQL {
 
 		try {
 			if (jsonObject.isNull("element")) {
+
 				JSONArray children;
 
 				switch (jsonObject.getString("operation")) {
 				case "OrOperation":
-					children = (JSONArray) jsonObject.getJSONArray("children");
+					children = jsonObject.getJSONArray("children");
 
 					return OR(children);
 
 				case "AndOperation":
-					children = (JSONArray) jsonObject.getJSONArray("children");
+					children = jsonObject.getJSONArray("children");
 
 					return AND(children);
 
 				case "NotOperation":
-					children = (JSONArray) jsonObject.getJSONArray("children");
+					children = jsonObject.getJSONArray("children");
 
 					return NOT(children);
 
 				case "SoftwareOperation": // PRODUCT
-					MySQL mySQL = new MySQL(hwConfig);
 
 					String where_clause = doJSONObject(jsonObject, true, MySQL.Type.NEW);
 					String inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
@@ -181,7 +181,6 @@ public class BackendMySQL {
 					return union(list1, list2);
 
 				case "PropertiesOperation":
-					mySQL = new MySQL(hwConfig);
 
 					where_clause = doJSONObject(jsonObject, true, MySQL.Type.NEW);
 					inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
@@ -210,7 +209,6 @@ public class BackendMySQL {
 					return union(list1, list2);
 
 				case "SoftwareWithPropertiesOperation":
-					mySQL = new MySQL(hwConfig);
 
 					where_clause = doJSONObject(jsonObject, true, MySQL.Type.NEW);
 					inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
@@ -259,7 +257,6 @@ public class BackendMySQL {
 					return union(union(list1, list2), union(list3, list4));
 
 				case "HardwareOperation":
-					mySQL = new MySQL(hwConfig);
 					abfrage = doJSONObject(jsonObject, true, MySQL.Type.NEW);
 
 					inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
@@ -270,7 +267,6 @@ public class BackendMySQL {
 					return getListFromSQL(abfrage);
 
 				case "SwAuditOperation":
-					mySQL = new MySQL(hwConfig);
 					abfrage = doJSONObject(jsonObject, true, MySQL.Type.NEW);
 
 					inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
