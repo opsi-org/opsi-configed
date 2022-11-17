@@ -52,7 +52,7 @@ sonarqube-check:
 signandupload:
   stage: sign
   script:
-    - opsi-dev-tool -l info --signserver-sign $CONFIGED_JAR_PATH
+    - opsi-dev-tool -l info --signserver-sign $CONFIGED_JAR_PATH || true
     - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-tool -l info --binary-push $CONFIGED_JAR_PATH configed all all $CONFIGED_VERSION "$CI_JOB_ID"'
     - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-tool -l info --binary-push $CONFIGED_JAR_PATH configed all all $CONFIGED_VERSION'
   needs:
