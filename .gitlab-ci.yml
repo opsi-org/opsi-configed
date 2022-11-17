@@ -12,7 +12,7 @@ trigger_opsiproduct_pipeline:
   script:
     - CONFIGED_VERSION=$(sed -n 's,.*<version>\(.*\)</version>.*,\1,p' pom.xml | head -1)
     - echo $CONFIGED_VERSION
-    - curl --request POST --form "token=$CI_JOB_TOKEN" --form ref=main --form "variables[CONFIGED_VERSION]=true" "https://gitlab.uib.gmbh/api/v4/projects/452/trigger/pipelineppß"
+    - curl --request POST --form "token=$CI_JOB_TOKEN" --form ref=main --form "variables[CONFIGED_VERSION]=true" "https://gitlab.uib.gmbh/api/v4/projects/452/trigger/pipeline"
 
 compile_and_package:
   image: maven:3.6.3-jdk-11
