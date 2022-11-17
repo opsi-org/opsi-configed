@@ -24,7 +24,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTextField;
 
 import org.jdesktop.swingx.JXPanel;
 
@@ -46,7 +45,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 	public javax.swing.JLabel jLabelPackageVersion;
 	private javax.swing.JLabel jLabelProductAdvice;
 	private javax.swing.JLabel jLabelProductDescription;
-	protected JTextField jLabelProductID;
+	protected javax.swing.JTextField jLabelProductID;
 	protected javax.swing.JTextField jLabelProductVersion;
 	protected javax.swing.JLabel jLabelLabelProductVersion;
 	protected javax.swing.JLabel jLabelProductName;

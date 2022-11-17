@@ -804,21 +804,23 @@ public class LicensingInfoMap {
 
 	private Map<String, Map<String, Map<String, Object>>> checkTimeWarning(
 			Map<String, Map<String, Map<String, Object>>> map) {
+
 		Map<String, Map<String, Map<String, Object>>> resultMap = map;
 
-		for (Map.Entry<String, Map<String, Object>> mod : resultMap.get(latestDateString).entrySet()) {
-			Map<String, Object> val = mod.getValue();
-			String modKey = mod.getKey();
+		if (resultMap.get(latestDateString) != null) {
+			for (Map.Entry<String, Map<String, Object>> mod : resultMap.get(latestDateString).entrySet()) {
+				Map<String, Object> val = mod.getValue();
+				String modKey = mod.getKey();
 
-			if (val.get(STATE).toString().equals(STATE_DAYS_WARNING)) {
-				if (resultMap.get(findNextChangeDate()).get(modKey).get(FUTURE_STATE).toString()
-						.equals(STATE_FUTURE_OKAY)) {
-					val.put(STATE, STATE_DAYS_OKAY);
-					currentTimeWarningModuleList.remove(modKey);
+				if (val.get(STATE).toString().equals(STATE_DAYS_WARNING)) {
+					if (resultMap.get(findNextChangeDate()).get(modKey).get(FUTURE_STATE).toString()
+							.equals(STATE_FUTURE_OKAY)) {
+						val.put(STATE, STATE_DAYS_OKAY);
+						currentTimeWarningModuleList.remove(modKey);
+					}
+
 				}
-
 			}
-
 		}
 
 		return resultMap;
