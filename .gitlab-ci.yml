@@ -5,7 +5,7 @@ stages:
   - build
   - analize
   - sign
-
+  
 
 trigger_opsiproduct_pipeline:
   stage: make_opsiproduct
