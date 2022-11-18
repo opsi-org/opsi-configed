@@ -12,17 +12,19 @@ compile_and_package:
   stage: build_and_analyze
   script:
     - CONFIGED_VERSION=$(sed -n 's,.*<version>\(.*\)</version>.*,\1,p' pom.xml | head -1)
-    - echo "CONFIGED_VERSION=$CONFIGED_VERSION" > build.env
-    - echo "CONFIGED_JAR_PATH=target/configed-${CONFIGED_VERSION}-jar-with-dependencies.jar" >> build.env
+    - echo "CONFIGED_VERSION=$CONFIGED_VERSION" > version.env
+    - echo "CONFIGED_JAR_PATH=target/configed-${CONFIGED_VERSION}-jar-with-dependencies.jar" > jar_path.env
     - export CONFIGED_JAR_PATH=$CONFIGED_JAR_PATH
     - mvn package
   artifacts:
     name: 'configed-build'
     paths:
-      - "$CONFIGED_JAR_PATH"
+      - jar_path.env
     expire_in: 2 day
     reports:
-      dotenv: build.env
+      dotenv:
+        - version.env
+        - jar_path.env
 
 
 sonarqube-check:
