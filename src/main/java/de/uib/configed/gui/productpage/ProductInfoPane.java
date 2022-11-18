@@ -42,7 +42,6 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 
 	private JXPanel productDescriptionsPanel;
 	private JXPanel bottomComponent;
-	public javax.swing.JLabel jLabelPackageVersion;
 	private javax.swing.JLabel jLabelProductAdvice;
 	private javax.swing.JLabel jLabelProductDescription;
 	protected javax.swing.JTextField jLabelProductID;
