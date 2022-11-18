@@ -11,10 +11,9 @@ compile_and_package:
   image: maven:3.6.3-jdk-11
   stage: build_and_analyze
   script:
-    - CONFIGED_VERSION=$(sed -n 's,.*<version>\(.*\)</version>.*,\1,p' pom.xml | head -1)
+    - export CONFIGED_VERSION=$(sed -n 's,.*<version>\(.*\)</version>.*,\1,p' pom.xml | head -1)
     - echo "CONFIGED_VERSION=$CONFIGED_VERSION" > version.env
     - echo "CONFIGED_JAR_PATH=target/configed-${CONFIGED_VERSION}-jar-with-dependencies.jar" > jar_path.env
-    - export CONFIGED_JAR_PATH=$CONFIGED_JAR_PATH
     - mvn package
   artifacts:
     name: 'configed-build'
