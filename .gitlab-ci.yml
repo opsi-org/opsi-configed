@@ -67,6 +67,9 @@ signandupload:
     reports:
       dotenv:
         - ci_job_id.env
+  only:
+    - main
+
 
 trigger_opsiproduct_pipeline:
   stage: make_opsiproduct
@@ -76,3 +79,5 @@ trigger_opsiproduct_pipeline:
     - set_variables
     - compile_and_package
     - signandupload
+  only:
+    - main
