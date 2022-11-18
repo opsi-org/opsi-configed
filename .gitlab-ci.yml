@@ -56,18 +56,22 @@ sonarqube-check:
 signandupload:
   stage: sign
   script:
+    - echo "CI_JOB_ID_CONFIGED=$CI_JOB_ID" > ci_job_id.env
     - opsi-dev-tool -l info --signserver-sign target/$CONFIGED_JAR_NAME
     - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-tool -l info --binary-push target/$CONFIGED_JAR_NAME configed all all $CONFIGED_VERSION "$CI_JOB_ID"'
     - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-tool -l info --binary-push target/$CONFIGED_JAR_NAME configed all all $CONFIGED_VERSION'
   needs:
     - set_variables
     - compile_and_package
-
+  artifacts:
+    reports:
+      dotenv:
+        - ci_job_id.env
 
 trigger_opsiproduct_pipeline:
   stage: make_opsiproduct
   script:
-    - curl --request POST --form "token=$CI_JOB_TOKEN" --form ref=main --form "variables[CI_JOB_ID_CONFIGED]=$CI_JOB_ID" --form "variables[CONFIGED_VERSION]=$CONFIGED_VERSION" --form "variables[CONFIGED_JAR_NAME]=$CONFIGED_JAR_NAME" "https://gitlab.uib.gmbh/api/v4/projects/452/trigger/pipeline"
+    - curl --request POST --form "token=$CI_JOB_TOKEN" --form ref=main --form "variables[CI_JOB_ID_CONFIGED]=$CI_JOB_ID_CONFIGED" --form "variables[CONFIGED_VERSION]=$CONFIGED_VERSION" --form "variables[CONFIGED_JAR_NAME]=$CONFIGED_JAR_NAME" "https://gitlab.uib.gmbh/api/v4/projects/452/trigger/pipeline"
   needs:
     - set_variables
     - compile_and_package
