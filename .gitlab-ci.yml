@@ -10,6 +10,7 @@ stages:
 
 set_variables:
   stage: set_variables
+  script:
     - CONFIGED_VERSION=$(sed -n 's,.*<version>\(.*\)</version>.*,\1,p' pom.xml | head -1)
     - CONFIGED_JAR_PATH="target/configed-${CONFIGED_VERSION}-jar-with-dependencies.jar"
     - echo "CONFIGED_VERSION=$CONFIGED_VERSION" > version.env
