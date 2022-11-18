@@ -2,41 +2,30 @@ image: docker.uib.gmbh/opsi/dev/pybuilder:uib-python-default
 
 
 stages:
-  - make_opsiproduct
-  - build
-  - analize
+  - build_and_analyze
   - sign
-  
-  
-trigger_opsiproduct_pipeline:
-  stage: make_opsiproduct
-  script:
-    - CONFIGED_VERSION=$(sed -n 's,.*<version>\(.*\)</version>.*,\1,p' pom.xml | head -1)
-    - echo "CONFIGED_VERSION=$CONFIGED_VERSION" > build.env
-    - echo "CONFIGED_JAR_PATH=target/configed-${CONFIGED_VERSION}-jar-with-dependencies.jar" >> build.env
-    - curl --request POST --form "token=$CI_JOB_TOKEN" --form ref=main --form "variables[CONFIGED_VERSION]=$CONFIGED_VERSION" "https://gitlab.uib.gmbh/api/v4/projects/452/trigger/pipeline"
-  artifacts:
-    reports:
-      dotenv: build.env
+  - make_opsiproduct
 
 
 compile_and_package:
   image: maven:3.6.3-jdk-11
-  stage: build
+  stage: build_and_analyze
   script:
+    - CONFIGED_VERSION=$(sed -n 's,.*<version>\(.*\)</version>.*,\1,p' pom.xml | head -1)
+    - echo "CONFIGED_VERSION=$CONFIGED_VERSION" > build.env
+    - echo "CONFIGED_JAR_PATH=target/configed-${CONFIGED_VERSION}-jar-with-dependencies.jar" >> build.env
     - mvn package
-    - echo $CONFIGED_VERSION
-  needs:
-    - trigger_opsiproduct_pipeline
   artifacts:
     name: 'configed-build'
     paths:
       - "$CONFIGED_JAR_PATH"
     expire_in: 2 day
+    reports:
+      dotenv: build.env
 
 
 sonarqube-check:
-  stage: analize
+  stage: build_and_analyze
   image: maven:3.6.3-jdk-11
   variables:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
@@ -58,5 +47,13 @@ signandupload:
     - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-tool -l info --binary-push $CONFIGED_JAR_PATH configed all all $CONFIGED_VERSION "$CI_JOB_ID"'
     - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-tool -l info --binary-push $CONFIGED_JAR_PATH configed all all $CONFIGED_VERSION'
   needs:
-    - trigger_opsiproduct_pipeline
     - compile_and_package
+
+
+trigger_opsiproduct_pipeline:
+  stage: make_opsiproduct
+  script:
+    - curl --request POST --form "token=$CI_JOB_TOKEN" --form ref=main --form "variables[CONFIGED_VERSION]=$CONFIGED_VERSION" "https://gitlab.uib.gmbh/api/v4/projects/452/trigger/pipeline"
+  needs:
+    - compile_and_package
+    - signandupload
