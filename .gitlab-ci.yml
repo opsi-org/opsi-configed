@@ -19,7 +19,7 @@ compile_and_package:
   artifacts:
     name: 'configed-build'
     paths:
-      - jar_path.env
+      - $CONFIGED_JAR_PATH
     expire_in: 2 day
     reports:
       dotenv:
