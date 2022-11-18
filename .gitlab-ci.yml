@@ -1,42 +1,44 @@
 image: docker.uib.gmbh/opsi/dev/pybuilder:uib-python-default
 
 
+
 stages:
-  - make_opsiproduct
-  - build
-  - analize
+  - set_variables
+  - build_and_analyze
   - sign
-  
-  
-trigger_opsiproduct_pipeline:
-  stage: make_opsiproduct
+  - make_opsiproduct
+
+
+set_variables:
+  stage: set_variables
   script:
     - CONFIGED_VERSION=$(sed -n 's,.*<version>\(.*\)</version>.*,\1,p' pom.xml | head -1)
-    - echo "CONFIGED_VERSION=$CONFIGED_VERSION" > build.env
-    - echo "CONFIGED_JAR_PATH=target/configed-${CONFIGED_VERSION}-jar-with-dependencies.jar" >> build.env
-    - curl --request POST --form "token=$CI_JOB_TOKEN" --form ref=main --form "variables[CONFIGED_VERSION]=$CONFIGED_VERSION" "https://gitlab.uib.gmbh/api/v4/projects/452/trigger/pipeline"
+    - CONFIGED_JAR_NAME="configed-${CONFIGED_VERSION}-jar-with-dependencies.jar"
+    - echo "CONFIGED_VERSION=$CONFIGED_VERSION" > version.env
+    - echo "CONFIGED_JAR_NAME=$CONFIGED_JAR_NAME"> jar_name.env
   artifacts:
     reports:
-      dotenv: build.env
+      dotenv:
+        - version.env
+        - jar_name.env
 
 
 compile_and_package:
   image: maven:3.6.3-jdk-11
-  stage: build
+  stage: build_and_analyze
   script:
     - mvn package
-    - echo $CONFIGED_VERSION
-  needs:
-    - trigger_opsiproduct_pipeline
   artifacts:
     name: 'configed-build'
     paths:
-      - "$CONFIGED_JAR_PATH"
+      - target/$CONFIGED_JAR_NAME
     expire_in: 2 day
+  needs:
+    - set_variables
 
 
 sonarqube-check:
-  stage: analize
+  stage: build_and_analyze
   image: maven:3.6.3-jdk-11
   variables:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
@@ -54,9 +56,23 @@ sonarqube-check:
 signandupload:
   stage: sign
   script:
-    - opsi-dev-tool -l info --signserver-sign $CONFIGED_JAR_PATH || true
-    - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-tool -l info --binary-push $CONFIGED_JAR_PATH configed all all $CONFIGED_VERSION "$CI_JOB_ID"'
-    - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-tool -l info --binary-push $CONFIGED_JAR_PATH configed all all $CONFIGED_VERSION'
+    - echo "CI_JOB_ID_CONFIGED=$CI_JOB_ID" > ci_job_id.env
+    - opsi-dev-tool -l info --signserver-sign target/$CONFIGED_JAR_NAME
+    - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-tool -l info --binary-push target/$CONFIGED_JAR_NAME configed all all $CONFIGED_VERSION "$CI_JOB_ID"'
+    - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-tool -l info --binary-push target/$CONFIGED_JAR_NAME configed all all $CONFIGED_VERSION'
   needs:
-    - trigger_opsiproduct_pipeline
+    - set_variables
     - compile_and_package
+  artifacts:
+    reports:
+      dotenv:
+        - ci_job_id.env
+
+trigger_opsiproduct_pipeline:
+  stage: make_opsiproduct
+  script:
+    - curl --request POST --form "token=$CI_JOB_TOKEN" --form ref=main --form "variables[CI_JOB_ID_CONFIGED]=$CI_JOB_ID_CONFIGED" --form "variables[CONFIGED_VERSION]=$CONFIGED_VERSION" --form "variables[CONFIGED_JAR_NAME]=$CONFIGED_JAR_NAME" "https://gitlab.uib.gmbh/api/v4/projects/452/trigger/pipeline"
+  needs:
+    - set_variables
+    - compile_and_package
+    - signandupload
