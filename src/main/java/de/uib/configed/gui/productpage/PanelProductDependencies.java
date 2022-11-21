@@ -41,7 +41,7 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 	private JLabel labelInfoProductDependenciesTable;
 	private JLabel labelInfoProductDependenciesTree;
 
-	private DependenciesTree dependenciesTree;
+	private DependenciesTreePanel dependenciesTreePanel;
 
 	private JScrollPane dependenciesPanel;
 	protected JTable dependenciesTable;
@@ -64,7 +64,7 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 		dependenciesPanel = new javax.swing.JScrollPane();
 		dependenciesTable = new JTable();
 
-		dependenciesTree = new DependenciesTree();
+		dependenciesTreePanel = new DependenciesTreePanel();
 
 		dependenciesTable.setBackground(Globals.backLightBlue);
 		dependenciesPanel.setViewportView(dependenciesTable);
@@ -85,16 +85,16 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
 						.addComponent(labelInfoProductDependenciesTree))
 
-				.addComponent(dependenciesTree, Globals.minHSize, Globals.prefHSize, Short.MAX_VALUE)
-				.addComponent(dependenciesTree.getDependenciesTreePathPanel(), Globals.minHSize, Globals.prefHSize,
+				.addComponent(dependenciesTreePanel, Globals.minHSize, Globals.prefHSize, Short.MAX_VALUE)
+				.addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(), Globals.minHSize, Globals.prefHSize,
 						Short.MAX_VALUE));
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
 				.addComponent(labelInfoProductDependenciesTable)
 				.addComponent(dependenciesPanel, 3 * Globals.minVSize, Globals.prefVSize, Short.MAX_VALUE)
 				.addComponent(labelInfoProductDependenciesTree)
-				.addComponent(dependenciesTree, 3 * Globals.minVSize, Globals.prefVSize, Short.MAX_VALUE)
-				.addComponent(dependenciesTree.getDependenciesTreePathPanel(), 2 * Globals.minVSize,
+				.addComponent(dependenciesTreePanel, 3 * Globals.minVSize, Globals.prefVSize, Short.MAX_VALUE)
+				.addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(), 2 * Globals.minVSize,
 						2 * Globals.minVSize,
 						2 * Globals.minVSize));
 
@@ -107,7 +107,7 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 
 		dependenciesTable.setModel(dependenciesModel.getRequirementsModel());
 
-		dependenciesTree.setDependenciesTreeModel(dependenciesModel.getDependenciesTreeModel());
+		dependenciesTreePanel.setDependenciesTreeModel(dependenciesModel.getDependenciesTreeModel());
 	}
 
 	public void setDependenciesModel(DependenciesModel dependenciesModel) {
@@ -119,7 +119,7 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 		dependenciesTable.setDefaultRenderer(Object.class,
 				dependenciesModel.getRequirementsModel().getTableCellRenderer());
 
-		dependenciesTree.setDependenciesTreeModel(dependenciesModel.getDependenciesTreeModel());
+		dependenciesTreePanel.setDependenciesTreeModel(dependenciesModel.getDependenciesTreeModel());
 	}
 
 	public void setEditValues(String productId, String depotId) {
@@ -131,7 +131,7 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 
 	@Override
 	public void updateProduct(String productId) {
-		dependenciesTree.updateTree();
+		dependenciesTreePanel.updateTree();
 	}
 
 	@Override
@@ -139,9 +139,9 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 		depotLabel.setText(configed.getResourceValue("PanelProductDependencies.Depot") + ": " + depotId);
 	}
 
-	public DependenciesTree getDependenciesTree() {
+	public DependenciesTreePanel getDependenciesTree() {
 
-		return dependenciesTree;
+		return dependenciesTreePanel;
 	}
 
 	public JTable getDependenciesTable() {

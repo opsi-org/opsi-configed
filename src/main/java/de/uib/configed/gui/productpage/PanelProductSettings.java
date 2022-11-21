@@ -39,6 +39,7 @@ import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
@@ -153,8 +154,6 @@ public class PanelProductSettings extends JSplitPane
 
 	TableCellRenderer propertiesTableCellRenderer;
 
-	private boolean packageGroupsVisible = false;
-
 	protected LinkedHashMap<String, Boolean> productDisplayFields;
 
 	protected java.util.List<? extends RowSorter.SortKey> currentSortKeys;
@@ -172,8 +171,7 @@ public class PanelProductSettings extends JSplitPane
 	protected ConfigedMain mainController;
 
 	public PanelProductSettings(String title, ConfigedMain mainController,
-			LinkedHashMap<String, Boolean> productDisplayFields,
-			boolean packageGroupsVisible) {
+			LinkedHashMap<String, Boolean> productDisplayFields) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		this.title = title;
 		this.mainController = mainController;
@@ -183,11 +181,6 @@ public class PanelProductSettings extends JSplitPane
 		setDividerLocation(fwidth_lefthanded);
 		setResizeWeight(0.5);
 
-	}
-
-	public PanelProductSettings(String title, ConfigedMain mainController,
-			LinkedHashMap<String, Boolean> productDisplayFields) {
-		this(title, mainController, productDisplayFields, false);
 	}
 
 	protected void initTopPane() {
@@ -217,7 +210,7 @@ public class PanelProductSettings extends JSplitPane
 
 		paneProducts.getViewport().add(tableProducts);
 		paneProducts.setPreferredSize(new Dimension(fwidth_lefthanded, fheight + 40));
-		paneProducts.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		tableProducts.setBackground(Globals.backgroundWhite);
 		tableProducts.setShowHorizontalLines(true);

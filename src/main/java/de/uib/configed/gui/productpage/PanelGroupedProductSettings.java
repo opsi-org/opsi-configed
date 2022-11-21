@@ -120,7 +120,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 
 	@Override
 	public Set<String> getSelectedIDs() {
-		HashSet<String> result = new HashSet();
+		Set<String> result = new HashSet<>();
 
 		int[] selection = tableProducts.getSelectedRows();
 
@@ -159,7 +159,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 		InstallationStateTableModelFiltered tModel = (InstallationStateTableModelFiltered) tableProducts.getModel();
 
 		activatePacketSelectionHandling(false);
-		((InstallationStateTableModelFiltered) tModel).setFilterFrom((Set) null);
+		((InstallationStateTableModelFiltered) tModel).setFilterFrom((Set<String>) null);
 		tableProducts.revalidate();
 		activatePacketSelectionHandling(true);
 	}

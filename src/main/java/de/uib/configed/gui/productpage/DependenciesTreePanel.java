@@ -18,28 +18,39 @@
 
 package de.uib.configed.gui.productpage;
 
-import de.uib.configed.*;
-import de.uib.utilities.logging.*;
-import de.uib.configed.guidata.DependenciesTreeModel;
-
-import java.awt.datatransfer.StringSelection;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
-import java.util.*;
-import java.awt.Color;
+import javax.swing.BorderFactory;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.DefaultTreeSelectionModel;
+import javax.swing.tree.TreePath;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.tree.*;
-import java.awt.event.*;
-import java.awt.Component;
-import de.uib.opsidatamodel.*;
+import de.uib.configed.Globals;
+import de.uib.configed.configed;
+import de.uib.configed.guidata.DependenciesTreeModel;
 
-public class DependenciesTree extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
-	
+public class DependenciesTreePanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
+
 	private DependenciesTreeModel dependenciesTreeModel;
-	
+
 	private JScrollPane dependenciesTreeScrollPanel;
 	private JRadioButton dependenciesNeedsButton;
 	private JRadioButton dependenciesNeededByButton;
@@ -47,165 +58,161 @@ public class DependenciesTree extends JPanel implements MouseListener, MouseMoti
 	private boolean treeAbhaengigkeiten = true;
 	private JTree dependenciesTree;
 	private JLabel dependenciesTreePathLabel;
-	
-	private JLabel label;
-	
+
 	private boolean isActive = false;
-	
-	public DependenciesTree() {
+
+	public DependenciesTreePanel() {
 		dependenciesTreeModel = null;
 		treeAbhaengigkeiten = true;
-		
+
 		initTree();
-		
+
 		initComponents();
 	}
-	
+
 	private void initTree() {
 		// Den Tree bauen
 		dependenciesTree = new JTree();
 		dependenciesTree.setToggleClickCount(0);
 		dependenciesTree.setBackground(Globals.backVeryLightBlue);
-		
+
 		dependenciesTree.addMouseListener(this);
 		dependenciesTree.addMouseMotionListener(this);
-		
-		
+
 		DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer() {
-			
+
 			@Override
 			public Component getTreeCellRendererComponent(final JTree tree, Object value,
-							boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-  
-				JLabel label = new JLabel(value.toString()); // (JLabel) super.getTreeCellRendererComponent(tree,value,sel,expanded,leaf,row,hasFocus);
-				
-				if(sel)
+					boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+
+				JLabel label = new JLabel(value.toString()); // (JLabel)
+																// super.getTreeCellRendererComponent(tree,value,sel,expanded,leaf,row,hasFocus);
+
+				if (sel)
 					label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 				else
-					label.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
-				
-				if(((DefaultMutableTreeNode)value).isRoot())
+					label.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
+				if (((DefaultMutableTreeNode) value).isRoot())
 					label.setIcon(null);
 				else
 					label.setIcon(null);
-				
+
 				return label;
 			}
 		};
-		
-		//Icon productIcon = Globals.createImageIcon("images/package.png", "" );
-		//renderer.setLeafIcon(null);//productIcon);
-		//renderer.setOpenIcon(null);
-		//renderer.setClosedIcon(null);
+
+		// Icon productIcon = Globals.createImageIcon("images/package.png", "" );
+		// renderer.setLeafIcon(null);//productIcon);
+		// renderer.setOpenIcon(null);
+		// renderer.setClosedIcon(null);
 		dependenciesTree.setCellRenderer(renderer);
-		
-		
+
 		DefaultTreeSelectionModel selectionModel = new DefaultTreeSelectionModel() {
-			
+
 			private void selectAllWithSameProductId(TreePath selectedPath) {
-				
+
 				String productIdOfSelectedPath = selectedPath.getLastPathComponent().toString();
-				
-				for(int i=0; i<dependenciesTree.getRowCount(); i++) {
+
+				for (int i = 0; i < dependenciesTree.getRowCount(); i++) {
 					TreePath path = dependenciesTree.getPathForRow(i);
-					
-					if(path.getLastPathComponent().toString().equals(productIdOfSelectedPath))
+
+					if (path.getLastPathComponent().toString().equals(productIdOfSelectedPath))
 						dependenciesTree.addSelectionPath(path);
 				}
 			}
-			
+
 			@Override
 			public void setSelectionPath(TreePath path) {
-				if(dependenciesTree.isPathSelected(path))
+				if (dependenciesTree.isPathSelected(path))
 					clearSelection();
-				
+
 				else {
 					clearSelection();
 					selectAllWithSameProductId(path);
 				}
 			}
 		};
-		
+
 		dependenciesTree.setSelectionModel(selectionModel);
 	}
-	
+
 	private void initComponents() {
-		
+
 		dependenciesTreeScrollPanel = new JScrollPane();
-		
-		dependenciesTreeScrollPanel.setViewportView(dependenciesTree); 
+
+		dependenciesTreeScrollPanel.setViewportView(dependenciesTree);
 		dependenciesTreeScrollPanel.getViewport().setBackground(Globals.backLightBlue);
-		
-		dependenciesNeedsButton = new JRadioButton(configed.getResourceValue("DependenciesTree.dependenciesNeedsButton"));
-		dependenciesNeededByButton = new JRadioButton(configed.getResourceValue("DependenciesTree.dependenciesNeededByButton"));
-		
+
+		dependenciesNeedsButton = new JRadioButton(
+				configed.getResourceValue("DependenciesTree.dependenciesNeedsButton"));
+		dependenciesNeededByButton = new JRadioButton(
+				configed.getResourceValue("DependenciesTree.dependenciesNeededByButton"));
+
 		copyListButton = new JButton(configed.getResourceValue("DependenciesTree.copyListButton"));
 		copyListButton.setFont(Globals.defaultFont);
 		copyListButton.setForeground(Globals.lightBlack);
-		
+
 		dependenciesTreePathLabel = new JLabel();
 		dependenciesTreePathLabel.setBorder(BorderFactory.createLineBorder(Globals.greyed, 1));
 		dependenciesTreePathLabel.setOpaque(true);
 		dependenciesTreePathLabel.setBackground(Globals.backVeryLightBlue);
-		
-		
+
 		dependenciesNeedsButton.addActionListener(this);
 		dependenciesNeededByButton.addActionListener(this);
-		
+
 		// Der Tree;
 		updateSelectedButtons();
-		
+
 		// Den Button verarbeiten
 		copyListButton.addActionListener(this);
-		
+
 		GroupLayout dependenciesTreeGroupLayout = new GroupLayout(this);
 		this.setLayout(dependenciesTreeGroupLayout);
-		
+
 		// Grouplayout des Fensters
 		dependenciesTreeGroupLayout.setHorizontalGroup(
-			dependenciesTreeGroupLayout.createSequentialGroup()
-				.addGroup(dependenciesTreeGroupLayout.createParallelGroup()
-					.addComponent(dependenciesNeedsButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addComponent(dependenciesNeededByButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addComponent(copyListButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				)
-				.addComponent(dependenciesTreeScrollPanel)
-		);
+				dependenciesTreeGroupLayout.createSequentialGroup()
+						.addGroup(dependenciesTreeGroupLayout.createParallelGroup()
+								.addComponent(dependenciesNeedsButton, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(dependenciesNeededByButton, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(copyListButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addComponent(dependenciesTreeScrollPanel));
 		dependenciesTreeGroupLayout.setVerticalGroup(
-			dependenciesTreeGroupLayout.createParallelGroup()
-			.addGroup(dependenciesTreeGroupLayout.createSequentialGroup()
-				.addComponent(dependenciesNeedsButton)
-				.addComponent(dependenciesNeededByButton)
-				.addGap(0, 0, Short.MAX_VALUE)
-				.addComponent(copyListButton, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-			)
-			.addComponent(dependenciesTreeScrollPanel)
-		);
+				dependenciesTreeGroupLayout.createParallelGroup()
+						.addGroup(dependenciesTreeGroupLayout.createSequentialGroup()
+								.addComponent(dependenciesNeedsButton)
+								.addComponent(dependenciesNeededByButton)
+								.addGap(0, 0, Short.MAX_VALUE)
+								.addComponent(copyListButton, Globals.buttonHeight, Globals.buttonHeight,
+										Globals.buttonHeight))
+						.addComponent(dependenciesTreeScrollPanel));
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		
-		if(event.getSource() == dependenciesNeedsButton) {
-			if(isActive) {
+
+		if (event.getSource() == dependenciesNeedsButton) {
+			if (isActive) {
 				treeAbhaengigkeiten = true;
-			
+
 				updateSelectedButtons();
 				updateTree();
 			}
-		}
-		else if(event.getSource() == dependenciesNeededByButton) {
-			if(isActive) {
+		} else if (event.getSource() == dependenciesNeededByButton) {
+			if (isActive) {
 				treeAbhaengigkeiten = false;
-			
+
 				updateSelectedButtons();
 				updateTree();
 			}
-		}
-		else if(event.getSource() == copyListButton) {
+		} else if (event.getSource() == copyListButton) {
 			DefaultMutableTreeNode root = (DefaultMutableTreeNode) dependenciesTree.getModel().getRoot();
-			
-			if(root != null) {
+
+			if (root != null) {
 				String myString = dependenciesTreeModel.getListOfTreeNodes(root);
 				StringSelection stringSelection = new StringSelection(myString);
 				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -213,78 +220,86 @@ public class DependenciesTree extends JPanel implements MouseListener, MouseMoti
 			}
 		}
 	}
-	
+
 	public JLabel getDependenciesTreePathPanel() {
 		return dependenciesTreePathLabel;
 	}
-	
+
 	private void updateSelectedButtons() {
 		dependenciesNeedsButton.setSelected(treeAbhaengigkeiten);
 		dependenciesNeededByButton.setSelected(!treeAbhaengigkeiten);
 	}
-	
+
 	public void setDependenciesTreeModel(DependenciesTreeModel dependenciesTreeModel) {
 		isActive = true;
-		
+
 		this.dependenciesTreeModel = dependenciesTreeModel;
 	}
-	
+
 	public void updateTree() {
-		DefaultMutableTreeNode dependenciesTreeNode = dependenciesTreeModel.getTreeNodeForProductDependencies(treeAbhaengigkeiten);
-		
+		DefaultMutableTreeNode dependenciesTreeNode = dependenciesTreeModel
+				.getTreeNodeForProductDependencies(treeAbhaengigkeiten);
+
 		updateTree(dependenciesTreeNode);
 	}
-	
+
 	private void updateTree(DefaultMutableTreeNode dependenciesTreeNode) {
 		dependenciesTree.setModel(new DefaultTreeModel(dependenciesTreeNode));
-		
+
 		// Expand the whole tree
-		for(int i=0; i<dependenciesTree.getRowCount(); i++)
+		for (int i = 0; i < dependenciesTree.getRowCount(); i++)
 			dependenciesTree.expandRow(i);
 	}
-	
+
 	private void setPathLabel(TreePath path) {
-		
-		if(path != null) {
+
+		if (path != null) {
 			String pathString = path.toString();
-		
+
 			pathString = pathString.substring(1, pathString.length() - 1);
 			pathString = pathString.replace(", ", " ▸ "); // ↦
-			
+
 			dependenciesTreePathLabel.setText(" " + pathString);
-		}
-		else
+		} else
 			clearPathLabel();
 	}
-	
+
 	private void clearPathLabel() {
 		dependenciesTreePathLabel.setText("");
 	}
-	
+
 	@Override
 	public void mouseEntered(MouseEvent event) {
 		setPathLabel(dependenciesTree.getPathForLocation(event.getX(), event.getY()));
 	}
-	
-	@Override
-	public void mouseClicked(MouseEvent event) {}
-	
-	@Override
-	public void mousePressed(MouseEvent event) {}
-	
-	@Override
-	public void mouseReleased(MouseEvent event) {	}
-	
+
 	@Override
 	public void mouseExited(MouseEvent event) {
 		clearPathLabel();
 	}
-	
+
 	@Override
 	public void mouseMoved(MouseEvent event) {
 		setPathLabel(dependenciesTree.getPathForLocation(event.getX(), event.getY()));
 	}
-	
+
 	@Override
-	public void mouseDragged(MouseEvent event) {}
+	public void mouseClicked(MouseEvent event) {
+		// Do nothing because MouseListener demands implementation
+	}
+
+	@Override
+	public void mousePressed(MouseEvent event) {
+		// Do nothing because MouseListener demands implementation
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent event) {
+		// Do nothing because MouseListener demands implementation
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent event) {
+		// Do nothing because MouseListener demands implementation
+	}
 }

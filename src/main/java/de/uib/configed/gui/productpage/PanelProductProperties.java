@@ -271,7 +271,7 @@ public class PanelProductProperties extends JSplitPane
 						 * 
 						 */
 
-						panelEditProperties.setDepotListData(depotsOfPackage, depotId, productEdited);
+						panelEditProperties.setDepotListData(depotsOfPackage, productEdited);
 
 					}
 				}
