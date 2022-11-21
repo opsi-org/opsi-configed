@@ -21,7 +21,7 @@ set_variables:
       dotenv:
         - version.env
         - jar_name.env
-
+    expire_in: 2 day
 
 compile_and_package:
   image: maven:3.6.3-jdk-11
@@ -67,6 +67,7 @@ signandupload:
     reports:
       dotenv:
         - ci_job_id.env
+    expire_in: 2 day
   only:
     - main
 
