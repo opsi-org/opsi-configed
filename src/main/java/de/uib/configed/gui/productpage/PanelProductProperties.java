@@ -1,10 +1,8 @@
 package de.uib.configed.gui.productpage;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JPopupMenu;
@@ -32,8 +30,6 @@ import javax.swing.table.TableCellRenderer;
  */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
-import de.uib.configed.guidata.ListMerger;
-import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.utilities.datapanel.AbstractEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
@@ -44,9 +40,9 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
 public class PanelProductProperties extends JSplitPane
-//implements RowSorterListener
+// implements RowSorterListener
 {
-	//JScrollPane paneProducts;
+	// JScrollPane paneProducts;
 	public PanelGenEditTable paneProducts;
 	protected OpsiPackage selectedOpsiPackage;
 	protected java.util.List<String> depotsOfPackage;
@@ -66,7 +62,8 @@ public class PanelProductProperties extends JSplitPane
 
 	protected TableCellRenderer propertiesTableCellRenderer;
 
-	//protected final Map<String,Object> emptyVisualData = new HashMap<String,Object>();
+	// protected final Map<String,Object> emptyVisualData = new
+	// HashMap<String,Object>();
 
 	protected LinkedHashMap<String, Boolean> productDisplayFields;
 
@@ -79,7 +76,6 @@ public class PanelProductProperties extends JSplitPane
 	public PanelProductProperties(ConfigedMain mainController) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		this.mainController = mainController;
-		this.productDisplayFields = productDisplayFields;
 		init();
 
 		setDividerLocation(fwidth_lefthanded);
@@ -87,8 +83,8 @@ public class PanelProductProperties extends JSplitPane
 	}
 
 	protected void init() {
-		//tableProducts = new JTable();
-		//tableProducts.setDragEnabled(true);
+		// tableProducts = new JTable();
+		// tableProducts.setDragEnabled(true);
 
 		selectedProducts = new ArrayList<String>();
 
@@ -124,10 +120,10 @@ public class PanelProductProperties extends JSplitPane
 				lsm.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 				if (lsm.isSelectionEmpty()) {
-					//initAllProperties();
+					// initAllProperties();
 					logging.info(this, "selected  no row ");
 
-					//infoPane.clearEditValue
+					// infoPane.clearEditValue
 				}
 
 				if (lsm.isSelectionEmpty() || lsm.getMinSelectionIndex() != lsm.getMaxSelectionIndex()) {
@@ -136,12 +132,12 @@ public class PanelProductProperties extends JSplitPane
 				} else
 					infoPane.setGrey(false);
 
-				//otherweise selectedRowChanged() works
+				// otherweise selectedRowChanged() works
 			}
 
 			@Override
 			public void selectedRowChanged()
-			//if we got a new selection
+			// if we got a new selection
 			{
 				super.selectedRowChanged();
 
@@ -170,26 +166,27 @@ public class PanelProductProperties extends JSplitPane
 						String productEdited = "" + theTable.getValueAt(row, columnNames.indexOf("productId"));
 
 						String depotId = ""
-						//+ theTable.getValueAt(row, columnNames.indexOf("depotId"))
+						// + theTable.getValueAt(row, columnNames.indexOf("depotId"))
 						;
 
 						logging.info(this, "selected  depotId, product: " + depotId + ", " + productEdited);
 
 						/*
-						logging.info(this, "package " + theTable.getValueAt(row, columnNames.indexOf("productId")) + "; "
-							+ theTable.getValueAt(row, columnNames.indexOf("productVersion")) + "; " 
-							+ theTable.getValueAt(row, columnNames.indexOf("packageVersion"))
-							);
-						*/
+						 * logging.info(this, "package " + theTable.getValueAt(row,
+						 * columnNames.indexOf("productId")) + "; "
+						 * + theTable.getValueAt(row, columnNames.indexOf("productVersion")) + "; "
+						 * + theTable.getValueAt(row, columnNames.indexOf("packageVersion"))
+						 * );
+						 */
 						/*
-						markAllWith(
-							row,
-							theTable.getValueAt(row, columnNames.indexOf("productId")),
-							theTable.getValueAt(row, columnNames.indexOf("productVersion")), 
-							theTable.getValueAt(row, columnNames.indexOf("packageVersion"))
-						);
-						*/
-						//depotsOfPackage.clear();
+						 * markAllWith(
+						 * row,
+						 * theTable.getValueAt(row, columnNames.indexOf("productId")),
+						 * theTable.getValueAt(row, columnNames.indexOf("productVersion")),
+						 * theTable.getValueAt(row, columnNames.indexOf("packageVersion"))
+						 * );
+						 */
+						// depotsOfPackage.clear();
 						java.util.List<String> depotsOfPackageAsRetrieved = new ArrayList<String>();
 
 						String versionInfo = "";
@@ -211,7 +208,7 @@ public class PanelProductProperties extends JSplitPane
 							retrieval = false;
 						}
 
-						if (retrieval //no exception
+						if (retrieval // no exception
 								&& (depotsOfPackageAsRetrieved == null))
 							retrieval = false;
 
@@ -226,14 +223,15 @@ public class PanelProductProperties extends JSplitPane
 						}
 
 						/*
-						selectedOpsiPackage = new OpsiPackage(
-							"" + theTable.getValueAt(row, columnNames.indexOf("productId")),
-							"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
-							"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")),
-							"" + theTable.getValueAt(row, columnNames.indexOf("productType"))
-						);
-						logging.info(this, "selected " + selectedOpsiPackage + "\ndepots "+ depotsOfPackage);
-						*/
+						 * selectedOpsiPackage = new OpsiPackage(
+						 * "" + theTable.getValueAt(row, columnNames.indexOf("productId")),
+						 * "" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
+						 * "" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")),
+						 * "" + theTable.getValueAt(row, columnNames.indexOf("productType"))
+						 * );
+						 * logging.info(this, "selected " + selectedOpsiPackage + "\ndepots "+
+						 * depotsOfPackage);
+						 */
 
 						logging.debug(this, "selectedRowChanged depotsOfPackage " + depotsOfPackage);
 
@@ -244,33 +242,34 @@ public class PanelProductProperties extends JSplitPane
 									"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
 									"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")),
 									depotsOfPackage.get(0));
-						} ;
+						}
+						;
 
 						/*
-							we leave setting the properties to panelEditProperties 
-						
-						Map<String, Object> visualData = mainController.getPersistenceController()
-								.getDefaultProductProperties(depotId).get(productEdited);
-						
-						//we could merge the properties for all marked depots 
-						//but prefer to display the properties for the selected depot
-						
-								
-						if (visualData == null) //no properties
-						{
-							//produce empty map
-							visualData = emptyVisualData; 
-						}
-						
-						propertiesPanel.setEditableMap(
-							
-							visualData,
-							
-							mainController.getPersistenceController()
-								.getProductPropertyOptionsMap(depotId, productEdited)
-							);
-							
-						*/
+						 * we leave setting the properties to panelEditProperties
+						 * 
+						 * Map<String, Object> visualData = mainController.getPersistenceController()
+						 * .getDefaultProductProperties(depotId).get(productEdited);
+						 * 
+						 * //we could merge the properties for all marked depots
+						 * //but prefer to display the properties for the selected depot
+						 * 
+						 * 
+						 * if (visualData == null) //no properties
+						 * {
+						 * //produce empty map
+						 * visualData = emptyVisualData;
+						 * }
+						 * 
+						 * propertiesPanel.setEditableMap(
+						 * 
+						 * visualData,
+						 * 
+						 * mainController.getPersistenceController()
+						 * .getProductPropertyOptionsMap(depotId, productEdited)
+						 * );
+						 * 
+						 */
 
 						panelEditProperties.setDepotListData(depotsOfPackage, depotId, productEdited);
 
@@ -280,123 +279,138 @@ public class PanelProductProperties extends JSplitPane
 			}
 
 			/*
-			private void markAllWith(int row, Object productId, Object productVersion, Object packageVersion)
-			{
-				depotsOfPackage.clear();
-				
-				followSelectionListener = false;
-				theTable.setRowSelectionInterval(row, row);
-				for (int i = 0; i < theTable.getRowCount(); i++)
-				{
-					if (
-						
-						theTable.getValueAt(i, columnNames.indexOf("productId")).equals(productId)
-						&&
-						theTable.getValueAt(i, columnNames.indexOf("productVersion")).equals(productVersion)
-						&&
-						theTable.getValueAt(i, columnNames.indexOf("packageVersion")).equals(packageVersion)
-					)
-					{
-						theTable.addRowSelectionInterval(i, i);
-						depotsOfPackage.add("" + theTable.getValueAt(i, columnNames.indexOf("depotId")));
-					}
-				}
-				theTable.addRowSelectionInterval(row,row);
-				followSelectionListener = true;
-			}
-			*/
+			 * private void markAllWith(int row, Object productId, Object productVersion,
+			 * Object packageVersion)
+			 * {
+			 * depotsOfPackage.clear();
+			 * 
+			 * followSelectionListener = false;
+			 * theTable.setRowSelectionInterval(row, row);
+			 * for (int i = 0; i < theTable.getRowCount(); i++)
+			 * {
+			 * if (
+			 * 
+			 * theTable.getValueAt(i, columnNames.indexOf("productId")).equals(productId)
+			 * &&
+			 * theTable.getValueAt(i,
+			 * columnNames.indexOf("productVersion")).equals(productVersion)
+			 * &&
+			 * theTable.getValueAt(i,
+			 * columnNames.indexOf("packageVersion")).equals(packageVersion)
+			 * )
+			 * {
+			 * theTable.addRowSelectionInterval(i, i);
+			 * depotsOfPackage.add("" + theTable.getValueAt(i,
+			 * columnNames.indexOf("depotId")));
+			 * }
+			 * }
+			 * theTable.addRowSelectionInterval(row,row);
+			 * followSelectionListener = true;
+			 * }
+			 */
 
-			private Map<String, Object> mergeProperties(
-					Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties, java.util.List depots,
-					String productId) {
-				Map<String, Object> result = new HashMap<String, Object>();
-
-				if (depots == null || depots.size() == 0)
-					return result;
-
-				//Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties = mainController.getPersistenceController().getDepot2product2properties();
-
-				Map<String, ConfigName2ConfigValue> propertiesDepot0 = depot2product2properties.get(depots.get(0));
-
-				if (depots.size() == 1) {
-					if (propertiesDepot0 == null || propertiesDepot0.get(productId) == null) {
-						//ready
-					} else {
-						result = propertiesDepot0.get(productId);
-					}
-				} else {
-					int n = 0;
-
-					while (n < depots.size() && (depot2product2properties.get(depots.get(n)) == null
-							|| depot2product2properties.get(depots.get(n)).get(productId) == null)) {
-						n++;
-					}
-
-					if (n == depots.size()) {
-						//ready
-					} else {
-						//create start mergers
-						ConfigName2ConfigValue properties = depot2product2properties.get(depots.get(n)).get(productId);
-
-						for (String key : properties.keySet()) {
-							java.util.List value = (java.util.List) properties.get(key);
-							result.put(key, new ListMerger(value));
-						}
-
-						//merge the other depots
-						for (int i = 1; i < depots.size(); i++) {
-							properties = depot2product2properties.get(depots.get(i)).get(productId);
-
-							for (String key : properties.keySet()) {
-								java.util.List value = (java.util.List) properties.get(key);
-								if (result.get(key) == null)
-								// we need a new property. it is not common
-								{
-									ListMerger merger = new ListMerger(value);
-									//logging.debug(this, " new property, merger " + merger);
-									merger.setHavingNoCommonValue();
-									result.put(key, merger);
-								} else {
-									ListMerger merger = (ListMerger) result.get(key);
-									result.put(key, merger.merge(value));
-								}
-							}
-						}
-					}
-				}
-
-				return result;
-
-			}
+			/*
+			 * private Map<String, Object> mergeProperties(
+			 * Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties,
+			 * java.util.List depots,
+			 * String productId) {
+			 * Map<String, Object> result = new HashMap<String, Object>();
+			 * 
+			 * if (depots == null || depots.size() == 0)
+			 * return result;
+			 * 
+			 * // Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties
+			 * =
+			 * // mainController.getPersistenceController().getDepot2product2properties();
+			 * 
+			 * Map<String, ConfigName2ConfigValue> propertiesDepot0 =
+			 * depot2product2properties.get(depots.get(0));
+			 * 
+			 * if (depots.size() == 1) {
+			 * if (propertiesDepot0 == null || propertiesDepot0.get(productId) == null) {
+			 * // ready
+			 * } else {
+			 * result = propertiesDepot0.get(productId);
+			 * }
+			 * } else {
+			 * int n = 0;
+			 * 
+			 * while (n < depots.size() && (depot2product2properties.get(depots.get(n)) ==
+			 * null
+			 * || depot2product2properties.get(depots.get(n)).get(productId) == null)) {
+			 * n++;
+			 * }
+			 * 
+			 * if (n == depots.size()) {
+			 * // ready
+			 * } else {
+			 * // create start mergers
+			 * ConfigName2ConfigValue properties =
+			 * depot2product2properties.get(depots.get(n)).get(productId);
+			 * 
+			 * for (String key : properties.keySet()) {
+			 * java.util.List value = (java.util.List) properties.get(key);
+			 * result.put(key, new ListMerger(value));
+			 * }
+			 * 
+			 * // merge the other depots
+			 * for (int i = 1; i < depots.size(); i++) {
+			 * properties = depot2product2properties.get(depots.get(i)).get(productId);
+			 * 
+			 * for (String key : properties.keySet()) {
+			 * java.util.List value = (java.util.List) properties.get(key);
+			 * if (result.get(key) == null)
+			 * // we need a new property. it is not common
+			 * {
+			 * ListMerger merger = new ListMerger(value);
+			 * // logging.debug(this, " new property, merger " + merger);
+			 * merger.setHavingNoCommonValue();
+			 * result.put(key, merger);
+			 * } else {
+			 * ListMerger merger = (ListMerger) result.get(key);
+			 * result.put(key, merger.merge(value));
+			 * }
+			 * }
+			 * }
+			 * }
+			 * }
+			 * 
+			 * return result;
+			 * 
+			 * }
+			 */
 
 		};
 
 		paneProducts.setTableModel(model);
-		//paneProducts.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		// paneProducts.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		paneProducts.setListSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		//paneProducts.setTableColumnInvisible( columnNames.indexOf( "depotId" ));
+		// paneProducts.setTableColumnInvisible( columnNames.indexOf( "depotId" ));
 
 		LinkedHashMap<Integer, SortOrder> sortDescriptor = new LinkedHashMap<Integer, SortOrder>();
-		sortDescriptor.put(columnNames.indexOf("productId"), SortOrder.ASCENDING); //productId
-		sortDescriptor.put(columnNames.indexOf("productVersion"), SortOrder.ASCENDING); //productId
-		sortDescriptor.put(columnNames.indexOf("packageVersion"), SortOrder.ASCENDING); //productId
-		//sortDescriptor.put(columnNames.indexOf("depotId"), SortOrder.ASCENDING); //productId
+		sortDescriptor.put(columnNames.indexOf("productId"), SortOrder.ASCENDING); // productId
+		sortDescriptor.put(columnNames.indexOf("productVersion"), SortOrder.ASCENDING); // productId
+		sortDescriptor.put(columnNames.indexOf("packageVersion"), SortOrder.ASCENDING); // productId
+		// sortDescriptor.put(columnNames.indexOf("depotId"), SortOrder.ASCENDING);
+		// //productId
 
 		paneProducts.setSortOrder(sortDescriptor);
 
 		setLeftComponent(paneProducts);
 
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, false, false);
-		//propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, true, true,  EditMapPanelX.PropertyHandlerType.REMOVE_CLIENT_SPECIFIC_VALUE );
+		// propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false,
+		// true, true, EditMapPanelX.PropertyHandlerType.REMOVE_CLIENT_SPECIFIC_VALUE );
 		logging.info(this, " created properties Panel, is  EditMapPanelX instance No. "
-				+ ((EditMapPanelX) propertiesPanel).objectCounter);
+				+ EditMapPanelX.objectCounter);
 		((EditMapPanelX) propertiesPanel)
 				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName().toString()));
 		propertiesPanel.registerDataChangedObserver(mainController.getGeneralDataChangedKeeper());
 		propertiesPanel.setStoreData(null);
 		propertiesPanel.setUpdateCollection(null);
 
-		//((EditMapPanelX) propertiesPanel).setPropertyHandlerType( EditMapPanelX.PropertyHandlerType.REMOVE_CLIENT_SPECIFIC_VALUE );
+		// ((EditMapPanelX) propertiesPanel).setPropertyHandlerType(
+		// EditMapPanelX.PropertyHandlerType.REMOVE_CLIENT_SPECIFIC_VALUE );
 
 		panelEditProperties = new PanelEditDepotProperties(mainController, propertiesPanel);
 		infoPane = new ProductInfoPane(mainController, panelEditProperties);
@@ -404,38 +418,40 @@ public class PanelProductProperties extends JSplitPane
 		infoPane.getPanelProductDependencies().setDependenciesModel(mainController.getDependenciesModel());
 
 		setRightComponent(infoPane);
-		//setDividerLocation(800);
+		// setDividerLocation(800);
 
-		//paneProducts.addMouseListener(new utils.PopupMouseListener(popup));
-		//tableProducts.addMouseListener(new utils.PopupMouseListener(popup));
+		// paneProducts.addMouseListener(new utils.PopupMouseListener(popup));
+		// tableProducts.addMouseListener(new utils.PopupMouseListener(popup));
 	}
-
-	/*
-	public void initAllProperties()
-	{
-		propertiesPanel.init();
-		infoPane.setInfo("");
-		infoPane.setAdvice("");
-	}
-	*/
 
 	/*
-	protected void reloadAction()
-	{
-		//mainController.requestReloadStatesAndActions();
-		//mainController.getPersistenceController().productPropertyDefinitionsRequestRefresh();
-		//mainController.getPersistenceController().productpropertiesRequestRefresh();
-		
-		mainController.resetView(mainController.getViewIndex());
-		mainController.setDataChanged(false);
-	}
-	
-	
-	public void requestReload()
-	{
-		paneProducts.requestReload();
-	}
-	
-	*/
+	 * public void initAllProperties()
+	 * {
+	 * propertiesPanel.init();
+	 * infoPane.setInfo("");
+	 * infoPane.setAdvice("");
+	 * }
+	 */
+
+	/*
+	 * protected void reloadAction()
+	 * {
+	 * //mainController.requestReloadStatesAndActions();
+	 * //mainController.getPersistenceController().
+	 * productPropertyDefinitionsRequestRefresh();
+	 * //mainController.getPersistenceController().productpropertiesRequestRefresh()
+	 * ;
+	 * 
+	 * mainController.resetView(mainController.getViewIndex());
+	 * mainController.setDataChanged(false);
+	 * }
+	 * 
+	 * 
+	 * public void requestReload()
+	 * {
+	 * paneProducts.requestReload();
+	 * }
+	 * 
+	 */
 
 }
