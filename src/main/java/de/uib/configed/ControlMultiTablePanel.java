@@ -2,114 +2,88 @@
  * Copyright (C) 2009 uib.de
  *
  */
- 
+
 package de.uib.configed;
 
-import java.util.*;
-import javax.swing.*;
-import de.uib.utilities.*;
-import de.uib.utilities.swing.tabbedpane.*;
-import de.uib.utilities.table.*;
-import de.uib.utilities.table.gui.*;
-import de.uib.configed.Globals;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-public abstract class ControlMultiTablePanel
-{
-	protected Vector<GenTableModel> tableModels 
-	= new Vector<GenTableModel>();
-	
-	protected Vector<PanelGenEditTable> tablePanes 
-	= new Vector<PanelGenEditTable>();
+import javax.swing.JOptionPane;
 
-	protected de.uib.utilities.table.updates.TableUpdateCollection updateCollection
-	= new de.uib.utilities.table.updates.TableUpdateCollection();
+import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
+import de.uib.utilities.table.GenTableModel;
+import de.uib.utilities.table.gui.PanelGenEditTable;
+
+public abstract class ControlMultiTablePanel {
+	protected List<GenTableModel> tableModels = new ArrayList<>();
+
+	protected List<PanelGenEditTable> tablePanes = new ArrayList<>();
+
+	protected de.uib.utilities.table.updates.TableUpdateCollection updateCollection = new de.uib.utilities.table.updates.TableUpdateCollection();
 
 	public abstract TabClientAdapter getTabClient();
-	
-	public Vector<GenTableModel> getTableModels()
-	{
+
+	public List<GenTableModel> getTableModels() {
 		return tableModels;
 	}
-	
-	public Vector<PanelGenEditTable> getTablePanes()
-	{
+
+	public List<PanelGenEditTable> getTablePanes() {
 		return tablePanes;
 	}
-	
+
 	public abstract void init();
-	
-	/** called by the MultiTablePanel reset method
-	* overwrite for the real content
-	*/
-	public void initializeVisualSettings()
-	{
+
+	/**
+	 * called by the MultiTablePanel reset method overwrite for the real content
+	 */
+	public void initializeVisualSettings() {
 	}
-	
-	public void refreshTables()
-	{
-		Iterator iterM = tableModels.iterator();
-		
-		while (iterM.hasNext())
-		{
-			GenTableModel m = (GenTableModel) iterM.next();
-			
+
+	public void refreshTables() {
+		Iterator<GenTableModel> iterM = tableModels.iterator();
+
+		while (iterM.hasNext()) {
+			GenTableModel m = iterM.next();
+
 			m.invalidate();
 			m.reset();
 		}
-		
-		Iterator iterP = tablePanes.iterator();
-		
-		while (iterP.hasNext())
-		{
-			PanelGenEditTable p = (PanelGenEditTable) iterP.next();
-			
+
+		Iterator<PanelGenEditTable> iterP = tablePanes.iterator();
+
+		while (iterP.hasNext()) {
+			PanelGenEditTable p = iterP.next();
+
 			p.setDataChanged(false);
 		}
 	}
-	
-	public boolean mayLeave()
-	{
-		//System.out.println(" ------------- check if may leave in " + this);
+
+	public boolean mayLeave() {
 		boolean change = false;
 		boolean result = false;
-		
-		Iterator iterP = tablePanes.iterator();
-		
-		
-		while (!change && iterP.hasNext())
-		{
-			PanelGenEditTable p = (PanelGenEditTable) iterP.next();
+
+		Iterator<PanelGenEditTable> iterP = tablePanes.iterator();
+
+		while (!change && iterP.hasNext()) {
+			PanelGenEditTable p = iterP.next();
 			change = p.isDataChanged();
 		}
-		
-		//System.out.println(" change " + true);
-		
-		if (change)
-		{
-			int returnedOption = JOptionPane.NO_OPTION;
-			
-			returnedOption = JOptionPane.showOptionDialog(	Globals.frame1, 
-								configed.getResourceValue("ControlMultiTablePanel.NotSavedChanges.text"),
-								configed.getResourceValue("ControlMultiTablePanel.NotSavedChanges.title"),
-								JOptionPane.YES_NO_OPTION,
-								JOptionPane.WARNING_MESSAGE,
-								null, null, null);
-								
+
+		if (change) {
+			int returnedOption = JOptionPane.showOptionDialog(Globals.frame1,
+					configed.getResourceValue("ControlMultiTablePanel.NotSavedChanges.text"),
+					configed.getResourceValue("ControlMultiTablePanel.NotSavedChanges.title"),
+					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+
 			if (returnedOption == JOptionPane.YES_OPTION)
 				result = true;
-			
+
 			Globals.frame1.setVisible(true);
-		}
-		else
+		} else
 			result = true;
-		
-		
+
 		return result;
 	}
-	
+
 }
-	
-	
-	
-	
-	
