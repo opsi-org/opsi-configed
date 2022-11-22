@@ -1,127 +1,136 @@
 package de.uib.configed.clientselection;
 
-import java.util.*;
-import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataBackend;
-import de.uib.configed.clientselection.operations.*;
-import de.uib.configed.clientselection.elements.*;
-import de.uib.configed.clientselection.serializers.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-import de.uib.opsidatamodel.*;
+import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataBackend;
+import de.uib.configed.clientselection.elements.SoftwareNameElement;
+import de.uib.configed.clientselection.operations.AndOperation;
+import de.uib.configed.clientselection.operations.HardwareOperation;
+import de.uib.configed.clientselection.operations.HostOperation;
+import de.uib.configed.clientselection.operations.NotOperation;
+import de.uib.configed.clientselection.operations.OrOperation;
+import de.uib.configed.clientselection.operations.PropertiesOperation;
+import de.uib.configed.clientselection.operations.SoftwareOperation;
+import de.uib.configed.clientselection.operations.SoftwareWithPropertiesOperation;
+import de.uib.configed.clientselection.operations.SwAuditOperation;
+import de.uib.configed.clientselection.serializers.OpsiDataSerializer;
+import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.SavedSearches;
 import de.uib.utilities.logging.logging;
-import de.uib.messages.Messages;
 
 /**
  * The SelectionManager is used by the gui to create the tree of operations.
  */
-public class SelectionManager
-{
-	public enum ConnectionStatus { And, Or, AndNot, OrNot };
+public class SelectionManager {
+	public enum ConnectionStatus {
+		And, Or, AndNot, OrNot
+	};
 
 	private List<SelectElement> elements;
 	private List<OperationWithStatus> groupWithStatusList;
-	private boolean hasSoftware=false;
-	private boolean hasHardware=false;
-	private boolean hasSwAudit=false;
-	private boolean isSerializedLoaded=false;
-	private SelectOperation loadedSearch=null;
+	private boolean hasSoftware = false;
+	private boolean hasHardware = false;
+	private boolean hasSwAudit = false;
+	private boolean isSerializedLoaded = false;
+	private SelectOperation loadedSearch = null;
 
 	private Backend backend;
 	private de.uib.configed.clientselection.Serializer serializer;
 
-	public SelectionManager( String backend )
-	{
-		if( backend == null || backend.isEmpty() )
+	public SelectionManager(String backend) {
+		if (backend == null || backend.isEmpty())
 			backend = "opsidata";
 
-		if( backend.equals("database") )
-			this.backend = OpsiDataBackend.getInstance(); 
-			//new /*DatabaseBackend()*/ OpsiDataBackend();
+		if (backend.equals("database"))
+			this.backend = OpsiDataBackend.getInstance();
+		// new /*DatabaseBackend()*/ OpsiDataBackend();
 		else
-			this.backend = OpsiDataBackend.getInstance(); 
-			//new OpsiDataBackend();
+			this.backend = OpsiDataBackend.getInstance();
+		// new OpsiDataBackend();
 
 		serializer = new OpsiDataSerializer(this);
 		groupWithStatusList = new LinkedList<OperationWithStatus>();
 	}
 
-	/** Create a new SoftwareNameElement, with the existing product IDs as enum data. */
-	public SoftwareNameElement getNewSoftwareNameElement()
-	{
+	/**
+	 * Create a new SoftwareNameElement, with the existing product IDs as enum data.
+	 */
+	public SoftwareNameElement getNewSoftwareNameElement() {
 		return new SoftwareNameElement(
-		           backend.getProductIDs()
-		       );
+				backend.getProductIDs());
 	}
 
 	/** Get the non-localized hardware list from the backend */
-	public Map<String, List<SelectElement> > getHardwareList()
-	{
+	public Map<String, List<SelectElement>> getHardwareList() {
 		return backend.getHardwareList();
 	}
 
 	/** Get the localized hardware list from the backend */
-	public Map<String, List<SelectElement> > getLocalizedHardwareList()
-	{
+	public Map<String, List<SelectElement>> getLocalizedHardwareList() {
 		return backend.getLocalizedHardwareList();
 	}
 
-	public Backend getBackend()
-	{
+	public Backend getBackend() {
 		return backend;
 	}
 
 	/** Next search, the manager should not use the loaded search data anymore. */
-	public void setChanged()
-	{
+	public void setChanged() {
 		isSerializedLoaded = false;
 	}
 
 	/** Save this group operation in the manager for a later build. */
-	public void addGroupOperation( String name, OperationWithStatus groupStatus, List<OperationWithStatus> operationsWithStatuses )
-	{
-		logging.debug( this, "Adding group operation " + name + " with " +operationsWithStatuses.toString() );
+	public void addGroupOperation(String name, OperationWithStatus groupStatus,
+			List<OperationWithStatus> operationsWithStatuses) {
+		logging.debug(this, "Adding group operation " + name + " with " + operationsWithStatuses.toString());
 
 		LinkedList<SelectOperation> tmpList = new LinkedList<SelectOperation>();
-		tmpList.add( build( operationsWithStatuses, new int[] {0} ) );
-		logging.debug(this, "addGroupOperation: " + name + " " + tmpList.size() + " " + tmpList.get(0) );
-		if( name.equals("Software") )
-			groupStatus.operation = new SoftwareOperation( tmpList );
-		else if (name.equals("Properties") )
-			groupStatus.operation = new PropertiesOperation( tmpList );
-		else if (name.equals("SoftwareWithProperties") )
-			groupStatus.operation = new SoftwareWithPropertiesOperation( tmpList );
-		else if( name.equals("Hardware") )
-			groupStatus.operation = new HardwareOperation( tmpList );
-		else if( name.equals("SwAudit") )
-			groupStatus.operation = new SwAuditOperation( tmpList );
-		else if( name.equals("Host") )
-			groupStatus.operation = new HostOperation( tmpList );
+		tmpList.add(build(operationsWithStatuses, new int[] { 0 }));
+		logging.debug(this, "addGroupOperation: " + name + " " + tmpList.size() + " " + tmpList.get(0));
+		if (name.equals("Software"))
+			groupStatus.operation = new SoftwareOperation(tmpList);
+		else if (name.equals("Properties"))
+			groupStatus.operation = new PropertiesOperation(tmpList);
+		else if (name.equals("SoftwareWithProperties"))
+			groupStatus.operation = new SoftwareWithPropertiesOperation(tmpList);
+		else if (name.equals("Hardware"))
+			groupStatus.operation = new HardwareOperation(tmpList);
+		else if (name.equals("SwAudit"))
+			groupStatus.operation = new SwAuditOperation(tmpList);
+		else if (name.equals("Host"))
+			groupStatus.operation = new HostOperation(tmpList);
 		else
 			throw new IllegalArgumentException(name + " is no valid group operation.");
-		groupWithStatusList.add( groupStatus );
+		groupWithStatusList.add(groupStatus);
 
-		if( name.equals("Software") )
+		if (name.equals("Software"))
 			hasSoftware = true;
-		if( name.equals("Hardware") )
+		if (name.equals("Hardware"))
 			hasHardware = true;
-		if( name.equals("SwAudit") )
+		if (name.equals("SwAudit"))
 			hasSwAudit = true;
 
 	}
 
-	/** Convert the operations into a list like it is used in the user interface class */
-	public List<OperationWithStatus> operationsAsList( SelectOperation top )
-	{
+	/**
+	 * Convert the operations into a list like it is used in the user interface
+	 * class
+	 */
+	public List<OperationWithStatus> operationsAsList(SelectOperation top) {
 		List<OperationWithStatus> owsList = new LinkedList<OperationWithStatus>();
-		if( top == null )
+		if (top == null)
 			owsList = groupWithStatusList;
 		else
-			owsList = reverseBuild( top, true );
+			owsList = reverseBuild(top, true);
 		return owsList;
 	}
 
 	/** Clear all temporary data storage */
-	public void clearOperations()
-	{
+	public void clearOperations() {
 		groupWithStatusList.clear();
 		hasSoftware = false;
 		hasHardware = false;
@@ -130,32 +139,28 @@ public class SelectionManager
 	}
 
 	/** Get the top operation and build it before, if necessary. */
-	public SelectOperation getTopOperation()
-	{
-		if( isSerializedLoaded )
+	public SelectOperation getTopOperation() {
+		if (isSerializedLoaded)
 			return loadedSearch;
-		return build( groupWithStatusList, new int[] {0} );
+		return build(groupWithStatusList, new int[] { 0 });
 	}
-
 
 	public List<String> selectClients() {
 		PersistenceController controller = PersistenceControllerFactory.getPersistenceController();
 		boolean withMySQL = controller.isWithMySQL()
-			&& controller.getGlobalBooleanConfigValue( 
-				PersistenceController.KEY_SEARCH_BY_SQL,
-				PersistenceController.DEFAULTVALUE_SEARCH_BY_SQL
-			);
-		
-		if(withMySQL) {
+				&& controller.getGlobalBooleanConfigValue(
+						PersistenceController.KEY_SEARCH_BY_SQL,
+						PersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
+
+		if (withMySQL) {
 			long startTime = System.nanoTime();
 			List<String> l = selectClientsSQL(controller);
-			logging.check(this, "select Clients with MySQL " + ((System.nanoTime() - startTime) / 1000000)) ;
+			logging.check(this, "select Clients with MySQL " + ((System.nanoTime() - startTime) / 1000000));
 			return l;
-		}
-		else  {
+		} else {
 			long startTime = System.nanoTime();
 			List<String> l = selectClientsLocal();
-			logging.check(this, "select Clients without ;MySQL " +  ((System.nanoTime() - startTime) / 1000000) ) ;
+			logging.check(this, "select Clients without ;MySQL " + ((System.nanoTime() - startTime) / 1000000));
 			return l;
 		}
 	}
@@ -163,218 +168,190 @@ public class SelectionManager
 	// Filter the clients and get the matching clients back with MySQL backend
 	public List<String> selectClientsSQL(PersistenceController controller) {
 		long startTime = System.nanoTime();
-		
+
 		SelectOperation operation = getTopOperation();
 		String json = serializer.getJson(operation);
-		
-		ArrayList<String> clientsSelected = new ArrayList<String> ();
-		
+
+		ArrayList<String> clientsSelected = new ArrayList<String>();
+
 		try {
-			
+
 			BackendMySQL backendMySQL = new BackendMySQL(controller);
 			List<String> list = backendMySQL.getClientListFromJSONString(json);
-			
-			
-			for(int i=0; i<list.size(); i++) {
+
+			for (int i = 0; i < list.size(); i++) {
 				clientsSelected.add(list.get(i));
 			}
-					
-		} catch(Exception e) {
-			for(int i=0; i<100; i++)
-				logging.error(this,"EXCEPTION");
+
+		} catch (Exception e) {
+			for (int i = 0; i < 100; i++)
+				logging.error(this, "EXCEPTION");
 		}
-		
+
 		return clientsSelected;
 	}
-	
+
 	// Filter the clients and get the matching clients back with old backend
-	public List<String> selectClientsLocal()
-	{
+	public List<String> selectClientsLocal() {
 		SelectOperation operation = getTopOperation();
-		if( operation == null )
-		{
+		if (operation == null) {
 			logging.info(this, "Nothing selected");
 			return null;
-		}
-		else
-		{
-			logging.info( "\n" + operation.printOperation("") );
+		} else {
+			logging.info("\n" + operation.printOperation(""));
 		}
 
-		ExecutableOperation selectOperation = backend.createExecutableOperation( operation );
+		ExecutableOperation selectOperation = backend.createExecutableOperation(operation);
 		logging.info(this, "selectClients, operation " + operation.getClassName());
-		logging.info(this, "" + ((SelectGroupOperation) operation).getChildOperations().size() );
-		return backend.checkClients( selectOperation, hasSoftware, hasHardware, hasSwAudit );
+		logging.info(this, "" + ((SelectGroupOperation) operation).getChildOperations().size());
+		return backend.checkClients(selectOperation, hasSoftware, hasHardware, hasSwAudit);
 	}
 
-	public void saveSearch( String name )
-	{
+	public void saveSearch(String name) {
 		saveSearch(name, "");
 	}
 
 	/** Save the current operation tree with the serializer */
-	public void saveSearch( String name, String description )
-	{
+	public void saveSearch(String name, String description) {
 		logging.debug(this, "saveSearch " + name);
 		SelectOperation operation = getTopOperation();
-		if( operation == null )
-			logging.debug( this, "Nothing selected" );
+		if (operation == null)
+			logging.debug(this, "Nothing selected");
 		else
-			serializer.save( operation, name, description );
+			serializer.save(operation, name, description);
 	}
 
-	public List<String> getSavedSearchesNames()
-	{
+	public List<String> getSavedSearchesNames() {
 		return serializer.getSaved();
 	}
 
-	public SavedSearches getSavedSearches()
-	{
+	public SavedSearches getSavedSearches() {
 		return serializer.getSavedSearches();
 	}
-	
-	/** Sets the given serialized search. It will replace the current operation tree. */
-	private void setSearch(SelectOperation search)
-	{
+
+	/**
+	 * Sets the given serialized search. It will replace the current operation tree.
+	 */
+	private void setSearch(SelectOperation search) {
 		loadedSearch = search;
 		isSerializedLoaded = true;
-		checkForGroupSearches( getTopOperation() );
-		groupWithStatusList = reverseBuild( getTopOperation(), true );
+		checkForGroupSearches(getTopOperation());
+		groupWithStatusList = reverseBuild(getTopOperation(), true);
 	}
-	
-	
-	/** Sets the given serialized search. It will replace the current operation tree. */
-	public void setSearch(String serialized)
-	{
+
+	/**
+	 * Sets the given serialized search. It will replace the current operation tree.
+	 */
+	public void setSearch(String serialized) {
 		logging.debug(this, "setSearch " + serialized);
 		clearOperations();
-		setSearch( serializer.deserialize( serialized) );
+		setSearch(serializer.deserialize(serialized));
 	}
-		
 
 	/** Load the given search. It will replace the current operation tree. */
-	public void loadSearch( String name )
-	{
+	public void loadSearch(String name) {
 		logging.info(this, "loadSearch " + name);
 		clearOperations();
-		if( name == null || name.isEmpty() )
-		{
+		if (name == null || name.isEmpty()) {
 			isSerializedLoaded = false;
 			return;
 		}
 		logging.info(this, "setSearch " + name);
-		setSearch( serializer.load( name ) );
+		setSearch(serializer.load(name));
 	}
 
-	public void removeSearch( String name )
-	{
-		serializer.remove( name );
+	public void removeSearch(String name) {
+		serializer.remove(name);
 	}
 
 	/* Build a operation tree from the temporary data given by the UI */
-	private SelectOperation build( List<OperationWithStatus> input, int[] currentPos )
-	{
+	private SelectOperation build(List<OperationWithStatus> input, int[] currentPos) {
 		logging.debug(this, "build counter: " + currentPos[0]);
-		logging.debug(this, "input size: " + input.size() );
-		if( input.isEmpty() )
+		logging.debug(this, "input size: " + input.size());
+		if (input.isEmpty())
 			return null;
 
 		LinkedList<SelectOperation> orConnections = new LinkedList<SelectOperation>();
 		LinkedList<SelectOperation> andConnections = new LinkedList<SelectOperation>();
-		boolean currentAnd=false;
+		boolean currentAnd = false;
 
-		while( currentPos[0]<input.size() )
-		{
+		while (currentPos[0] < input.size()) {
 			OperationWithStatus currentInput = input.get(currentPos[0]);
-			logging.debug( "Position: " + currentPos[0] );
-			logging.debug( "currentInput: " + currentInput.operation + currentInput.status + currentInput.parenthesisOpen + currentInput.parenthesisClose );
-			if( currentInput.parenthesisOpen )
-			{
+			logging.debug("Position: " + currentPos[0]);
+			logging.debug("currentInput: " + currentInput.operation + currentInput.status + currentInput.parenthesisOpen
+					+ currentInput.parenthesisClose);
+			if (currentInput.parenthesisOpen) {
 				currentInput.parenthesisOpen = false; // so we don't go one step deeper next time here, too
-				SelectOperation operation = build( input, currentPos );
-				logging.debug( "\n" + operation.printOperation("") );
+				SelectOperation operation = build(input, currentPos);
+				logging.debug("\n" + operation.printOperation(""));
 				currentPos[0]--;
 				currentInput = input.get(currentPos[0]);
 				currentInput.operation = operation;
 			}
-			if( currentInput.status == ConnectionStatus.Or || currentInput.status == ConnectionStatus.OrNot )
-			{
-				if( !currentAnd )
-				{
-					orConnections.add( parseNot(currentInput) );
-				}
-				else
-				{
-					andConnections.add( parseNot(currentInput) );
-					orConnections.add( new AndOperation( andConnections ) );
+			if (currentInput.status == ConnectionStatus.Or || currentInput.status == ConnectionStatus.OrNot) {
+				if (!currentAnd) {
+					orConnections.add(parseNot(currentInput));
+				} else {
+					andConnections.add(parseNot(currentInput));
+					orConnections.add(new AndOperation(andConnections));
 					andConnections.clear();
 				}
 				currentAnd = false;
-			}
-			else
-			{
-				andConnections.add( parseNot(currentInput) );
-				currentAnd=true;
+			} else {
+				andConnections.add(parseNot(currentInput));
+				currentAnd = true;
 			}
 			currentPos[0]++;
-			if( currentInput.parenthesisClose )
-			{
+			if (currentInput.parenthesisClose) {
 				currentInput.parenthesisClose = false;
 				break;
 			}
 		}
-		logging.debug(this, "After break: "+ currentPos[0]);
-		if( andConnections.size() == 1 )
-			orConnections.add( andConnections.get(0) );
-		else if( !andConnections.isEmpty() )
-			orConnections.add( new AndOperation( andConnections ) );
+		logging.debug(this, "After break: " + currentPos[0]);
+		if (andConnections.size() == 1)
+			orConnections.add(andConnections.get(0));
+		else if (!andConnections.isEmpty())
+			orConnections.add(new AndOperation(andConnections));
 
-		if( orConnections.size() == 1 )
+		if (orConnections.size() == 1)
 			return orConnections.get(0);
 
-		return new OrOperation( orConnections );
+		return new OrOperation(orConnections);
 	}
 
-	/* A reverse build, to be able to show a saved search in the UI. If isTopOperation == true,
-	 * there are no parentheses around the whole list */
-	private List<OperationWithStatus> reverseBuild( SelectOperation operation, boolean isTopOperation )
-	{
+	/*
+	 * A reverse build, to be able to show a saved search in the UI. If
+	 * isTopOperation == true,
+	 * there are no parentheses around the whole list
+	 */
+	private List<OperationWithStatus> reverseBuild(SelectOperation operation, boolean isTopOperation) {
 		LinkedList<OperationWithStatus> result = new LinkedList<OperationWithStatus>();
-		if( operation instanceof AndOperation )
-		{
-			for( SelectOperation op: ((AndOperation) operation).getChildOperations() )
-			{
-				result.addAll( reverseBuild( op, false ) );
+		if (operation instanceof AndOperation) {
+			for (SelectOperation op : ((AndOperation) operation).getChildOperations()) {
+				result.addAll(reverseBuild(op, false));
 			}
-			if( !isTopOperation )
-			{
+			if (!isTopOperation) {
 				result.getFirst().parenthesisOpen = true;
 				result.getLast().parenthesisClose = true;
 			}
-		}
-		else if( operation instanceof OrOperation && !((OrOperation) operation).getChildOperations().isEmpty() )
-		{
-			for( SelectOperation op: ((OrOperation) operation).getChildOperations() )
-			{
-				result.addAll( reverseBuild(op, false) );
-				if( result.getLast().status == ConnectionStatus.And )
+		} else if (operation instanceof OrOperation && !((OrOperation) operation).getChildOperations().isEmpty()) {
+			for (SelectOperation op : ((OrOperation) operation).getChildOperations()) {
+				result.addAll(reverseBuild(op, false));
+				if (result.getLast().status == ConnectionStatus.And)
 					result.getLast().status = ConnectionStatus.Or;
 				else
 					result.getLast().status = ConnectionStatus.OrNot;
 			}
-			if( result.getLast().status == ConnectionStatus.Or )
+			if (result.getLast().status == ConnectionStatus.Or)
 				result.getLast().status = ConnectionStatus.And;
 			else
 				result.getLast().status = ConnectionStatus.AndNot;
-			if( !isTopOperation )
-			{
+			if (!isTopOperation) {
 				result.getFirst().parenthesisOpen = true;
 				result.getLast().parenthesisClose = true;
 			}
-		}
-		else
-		{
-			result.add( reverseParseNot( operation, ConnectionStatus.And ) );
+		} else {
+			result.add(reverseParseNot(operation, ConnectionStatus.And));
 			result.getLast().parenthesisOpen = false;
 			result.getLast().parenthesisClose = false;
 		}
@@ -382,31 +359,26 @@ public class SelectionManager
 	}
 
 	/* Add a NotOperation if necessary */
-	private SelectOperation parseNot( OperationWithStatus operation )
-	{
-		if( operation.status == ConnectionStatus.And || operation.status == ConnectionStatus.Or )
+	private SelectOperation parseNot(OperationWithStatus operation) {
+		if (operation.status == ConnectionStatus.And || operation.status == ConnectionStatus.Or)
 			return operation.operation;
 
 		LinkedList<SelectOperation> arg = new LinkedList<SelectOperation>();
-		arg.add( operation.operation );
+		arg.add(operation.operation);
 
-		return new NotOperation( arg );
+		return new NotOperation(arg);
 	}
 
 	/* See if there's a NotOperation and replace the status accordingly. */
-	private OperationWithStatus reverseParseNot( SelectOperation operation, ConnectionStatus status )
-	{
+	private OperationWithStatus reverseParseNot(SelectOperation operation, ConnectionStatus status) {
 		OperationWithStatus ows = new OperationWithStatus();
-		if( operation instanceof NotOperation )
-		{
+		if (operation instanceof NotOperation) {
 			ows.operation = ((NotOperation) operation).getChildOperations().get(0);
-			if( status == ConnectionStatus.And )
+			if (status == ConnectionStatus.And)
 				ows.status = ConnectionStatus.AndNot;
 			else
 				ows.status = ConnectionStatus.OrNot;
-		}
-		else
-		{
+		} else {
 			ows.operation = operation;
 			ows.status = status;
 		}
@@ -414,23 +386,21 @@ public class SelectionManager
 	}
 
 	/* Check if there are any operations on some data groups. */
-	private void checkForGroupSearches( SelectOperation operation )
-	{
-		if( hasHardware && hasSoftware && hasSwAudit )
+	private void checkForGroupSearches(SelectOperation operation) {
+		if (hasHardware && hasSoftware && hasSwAudit)
 			return;
-		if( operation instanceof SoftwareOperation )
+		if (operation instanceof SoftwareOperation)
 			hasSoftware = true;
-		else if( operation instanceof HardwareOperation )
+		else if (operation instanceof HardwareOperation)
 			hasHardware = true;
-		else if( operation instanceof SwAuditOperation )
+		else if (operation instanceof SwAuditOperation)
 			hasSwAudit = true;
-		if( operation instanceof SelectGroupOperation )
-			for( SelectOperation child: ((SelectGroupOperation) operation).getChildOperations() )
-				checkForGroupSearches( child );
+		if (operation instanceof SelectGroupOperation)
+			for (SelectOperation child : ((SelectGroupOperation) operation).getChildOperations())
+				checkForGroupSearches(child);
 	}
 
-	static public class OperationWithStatus
-	{
+	static public class OperationWithStatus {
 		public SelectOperation operation;
 		public ConnectionStatus status;
 		public boolean parenthesisOpen;

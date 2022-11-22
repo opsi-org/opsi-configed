@@ -14,26 +14,37 @@
  * @author roeder
  */
 
-
 package de.uib.utilities.swing;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.*;
-import de.uib.utilities.*;
-import de.uib.utilities.swing.list.*;
-import de.uib.utilities.logging.*;
-import java.util.*;
-import de.uib.configed.Globals;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
+import javax.swing.CellEditor;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+import javax.swing.JPopupMenu;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.text.JTextComponent;
+
+import de.uib.configed.Globals;
+import de.uib.utilities.logging.logging;
+import de.uib.utilities.swing.list.StandardListCellRenderer;
 
 public class FEditList extends FEditObject
-			implements ListSelectionListener,
-			ActionListener, KeyListener,
-			MouseListener
-{
+		implements ListSelectionListener,
+		ActionListener, KeyListener,
+		MouseListener {
 	private javax.swing.JScrollPane scrollpane;
 	protected javax.swing.JList<Object> visibleList;
 
@@ -47,27 +58,24 @@ public class FEditList extends FEditObject
 	protected JPopupMenu popup;
 
 	private CellEditor celleditor;
-	
+
 	boolean singleSelectionMode;
 	boolean nullable;
 
-	public FEditList()
-	{
+	public FEditList() {
 		this(null);
 	}
 
-	public FEditList(JTextComponent tracker)
-	{
+	public FEditList(JTextComponent tracker) {
 		this(tracker, null);
 	}
 
-	public FEditList(JTextComponent tracker, CellEditor celleditor)
-	{
+	public FEditList(JTextComponent tracker, CellEditor celleditor) {
 		super("");
 		this.tracker = tracker;
 		this.celleditor = celleditor;
 
-		visibleList = new JList(); //new String[]{"a","b","c"});
+		visibleList = new JList(); // new String[]{"a","b","c"});
 		visibleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		visibleList.addListSelectionListener(this);
 		visibleList.setCellRenderer(new StandardListCellRenderer());
@@ -83,190 +91,168 @@ public class FEditList extends FEditObject
 		popup = new JPopupMenu();
 		visibleList.setComponentPopupMenu(popup);
 	}
-	
+
 	@Override
-	protected void createComponents()
-	{
+	protected void createComponents() {
 		super.createComponents();
-		
-		//we define buttonRemove in a different way since it is used only to clear selection
-		
+
+		// we define buttonRemove in a different way since it is used only to clear
+		// selection
+
 		buttonRemove = new de.uib.configed.gui.IconButton(
-		                   de.uib.configed.configed.getResourceValue("FEditObject.RemoveButtonTooltip") ,
-		                   "images/list-clear.png", "images/list-clear.png", "images/list-clear_disabled.png",true);
+				de.uib.configed.configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
+				"images/list-clear.png", "images/list-clear.png", "images/list-clear_disabled.png", true);
 		buttonRemove.setPreferredSize(new Dimension(buttonWidth, de.uib.utilities.Globals.buttonHeight));
 		buttonRemove.setVisible(false);
 	}
-		
 
 	@Override
-	protected void initComponents()
-	{
+	protected void initComponents() {
 		super.initComponents();
 		visibleList.addKeyListener(this);
 
 	}
 
-	public void setCellRenderer(ListCellRenderer render)
-	{
+	public void setCellRenderer(ListCellRenderer render) {
 		visibleList.setCellRenderer(render);
 	}
 
-	public void setListModel(ListModel model)
-	{
-		//logging.debug(this, "setListModel " + model);
+	public void setListModel(ListModel model) {
+		// logging.debug(this, "setListModel " + model);
 		visibleList.setModel(model);
 		initialModel = model;
 	}
 
-	public void setSelectionMode(int selectionMode)
-	{
-		//logging.debug(this, "setSelectionMode " + selectionMode);
+	public void setSelectionMode(int selectionMode) {
+		// logging.debug(this, "setSelectionMode " + selectionMode);
 		visibleList.setSelectionMode(selectionMode);
 		singleSelectionMode = (selectionMode == ListSelectionModel.SINGLE_SELECTION);
 	}
 
 	/**
-	* determines if a null selection is allowed (extension of selectionModel concept)
-	* @parameter boolean	
-	*/
-	public void setNullable( boolean b)
-	{
+	 * determines if a null selection is allowed (extension of selectionModel
+	 * concept)
+	 * 
+	 * @parameter boolean
+	 */
+	public void setNullable(boolean b) {
 		nullable = b;
 	}
 
-	public void setEditable(boolean b)
-	{
-		//logging.debug(this, "setEditable " + b);
+	public void setEditable(boolean b) {
+		// logging.debug(this, "setEditable " + b);
 		super.setEditable(b);
 		extraField.setVisible(b);
 		buttonRemove.setVisible(
-			b && !singleSelectionMode
-			);
-		//buttonRemove.setEnabled(b);
+				b && !singleSelectionMode);
+		// buttonRemove.setEnabled(b);
 		buttonAdd.setVisible(b);
 	}
 
-	protected Object getValueAt(Point location)
-	{
+	protected Object getValueAt(Point location) {
 		return visibleList.getModel().getElementAt(
-		           visibleList.locationToIndex( location )
-		       );
+				visibleList.locationToIndex(location));
 	}
 
-	protected void setExtraFieldToListValueAt(Point location)
-	{
-		String txt =  "" + getValueAt( location );
-		//visibleList.getModel().getElementAt( visibleList.locationToIndex( location ) );
-		//logging.debug(this, " location has text " + txt);
-		extraField.setText( txt );
+	protected void setExtraFieldToListValueAt(Point location) {
+		String txt = "" + getValueAt(location);
+		// visibleList.getModel().getElementAt( visibleList.locationToIndex( location )
+		// );
+		// logging.debug(this, " location has text " + txt);
+		extraField.setText(txt);
 		extraFieldChanged(false);
 	}
 
-	protected void addSelectedValues(java.util.List<Object> toSelect)
-	{
+	protected void addSelectedValues(java.util.List<Object> toSelect) {
 		if (toSelect == null)
 			return;
 
 		ListModel model = visibleList.getModel();
 
-		for (int i = 0; i<model.getSize(); i++)
-		{
+		for (int i = 0; i < model.getSize(); i++) {
 			Object element = model.getElementAt(i);
-			//logging.debug(this, "addSelectedValues, check element " + element + " no " + i);
+			// logging.debug(this, "addSelectedValues, check element " + element + " no " +
+			// i);
 
-			if (toSelect.contains(element))
-			{
-				//logging.debug(this, "setSelectedValues, adding " + element);
-				visibleList.addSelectionInterval(i,i);
+			if (toSelect.contains(element)) {
+				// logging.debug(this, "setSelectedValues, adding " + element);
+				visibleList.addSelectionInterval(i, i);
 			}
 		}
 
 		visibleList.ensureIndexIsVisible(visibleList.getMaxSelectionIndex());
-		
-		//buttonRemove.setEnabled(toSelect.size() > 0);
+
+		// buttonRemove.setEnabled(toSelect.size() > 0);
 	}
 
-	public void initSelection()
-	{
+	public void initSelection() {
 		if (visibleList.getModel().getSize() > 0)
 			visibleList.setSelectedIndex(0);
 	}
 
-	public void setSelectedValues(java.util.List<Object> toSelect)
-	{
-		//logging.debug(this, "setSelectedValues " + toSelect);
+	public void setSelectedValues(java.util.List<Object> toSelect) {
+		// logging.debug(this, "setSelectedValues " + toSelect);
 		initiallySelected = toSelect;
 
 		visibleList.clearSelection();
-		//logging.debug(this, "setSelectedValues , selection cleared");
+		// logging.debug(this, "setSelectedValues , selection cleared");
 		addSelectedValues(toSelect);
-		
-		//buttonRemove.setEnabled(toSelect.size() > 0);
-		//logging.debug(this, "setSelectedValues , selected values added");
+
+		// buttonRemove.setEnabled(toSelect.size() > 0);
+		// logging.debug(this, "setSelectedValues , selected values added");
 	}
 
-	public void setSelectedValue(Object ob)
-	{
-		//logging.debug(this, "setSelectedValue " + ob);
+	public void setSelectedValue(Object ob) {
+		// logging.debug(this, "setSelectedValue " + ob);
 		visibleList.setSelectedValue(ob, true);
 	}
 
-	private void addElementFromExtraField(Object element)
-	{
-		//logging.debug(this, "requested addElementFromExtraField >" + element + "<");
+	private void addElementFromExtraField(Object element) {
+		// logging.debug(this, "requested addElementFromExtraField >" + element + "<");
 		addElement(element);
-		
-		//extraField.removeActionListener(this); 
-		// extraField.setText(""); //an empty list value will always be created by what ever event
-		//extraField.addActionListener(this);
+
+		// extraField.removeActionListener(this);
+		// extraField.setText(""); //an empty list value will always be created by what
+		// ever event
+		// extraField.addActionListener(this);
 		extraFieldChanged(false);
 	}
 
-	protected void addElement(Object element)
-	{
-		//logging.debug(this, "requested addElement >" + element + "<");
+	protected void addElement(Object element) {
+		// logging.debug(this, "requested addElement >" + element + "<");
 		ListModel limo = visibleList.getModel();
-		if (limo instanceof DefaultListModel)
-		{
-			if (! ((DefaultListModel) limo).contains(element) )
-			{
+		if (limo instanceof DefaultListModel) {
+			if (!((DefaultListModel) limo).contains(element)) {
 				((DefaultListModel) limo).addElement(element);
-				java.util.List list = new ArrayList(); //getSelectedList();
+				java.util.List list = new ArrayList(); // getSelectedList();
 				list.add(element);
 				addSelectedValues(list);
 			}
-		}
-		else
-		{
+		} else {
 			logging.error(this, "for element adding required instance of DefaultListModel");
 		}
 
 	}
 
 	@Override
-	public Object getValue()
-	{
+	public Object getValue() {
 		return getSelectedList();
 	}
 
-	private void setTracker(Object s)
-	{
+	private void setTracker(Object s) {
 		if (tracker != null)
 			tracker.setText("" + s);
 	}
 
 	@Override
-	public void setStartValue(Object s)
-	{
-		//logging.debug(this, "setStartValue " + s);
+	public void setStartValue(Object s) {
+		// logging.debug(this, "setStartValue " + s);
 		super.setStartValue(s);
 		setTracker(s);
 	}
 
 	@Override
-	protected void cancel()
-	{
+	protected void cancel() {
 		setListModel(initialModel);
 		setSelectedValues(initiallySelected);
 
@@ -277,143 +263,117 @@ public class FEditList extends FEditObject
 	}
 
 	@Override
-	protected void commit()
-	{
+	protected void commit() {
 		logging.debug(this, "FEditList.commit");
 
-		if (Globals.forbidEditingTargetSpecific())
-		{
+		if (Globals.forbidEditingTargetSpecific()) {
 			logging.debug(this, "commit: forbidden");
 			cancel();
-		}
-		else
-		{
+		} else {
 			if (celleditor != null)
 				celleditor.stopCellEditing();
-			
-			//JOptionPane.showMessageDialog(null, " new val " + getValue() + " .. old  " + initialValue , "alert", JOptionPane.INFORMATION_MESSAGE);
-		
 
-			if (leaveOnCommit) leave();
+			// JOptionPane.showMessageDialog(null, " new val " + getValue() + " .. old " +
+			// initialValue , "alert", JOptionPane.INFORMATION_MESSAGE);
+
+			if (leaveOnCommit)
+				leave();
 		}
 	}
 
-
-	//======================
+	// ======================
 	// interface ActionListener
 	@Override
-	public void actionPerformed(java.awt.event.ActionEvent e)
-	{
+	public void actionPerformed(java.awt.event.ActionEvent e) {
 		super.actionPerformed(e);
 
-		if (e.getSource() == buttonAdd)
-		{
+		if (e.getSource() == buttonAdd) {
 			addElementFromExtraField(extraField.getText());
-		}
-		else if (e.getSource() == buttonRemove)
-		{
+		} else if (e.getSource() == buttonRemove) {
 			visibleList.clearSelection();
 		}
 	}
-	//======================
+	// ======================
 
-	//======================
+	// ======================
 	// interface KeyListener
 	@Override
-	public void keyPressed (KeyEvent e)
-	{
+	public void keyPressed(KeyEvent e) {
 		super.keyPressed(e);
 
-		if (e.getSource() == buttonAdd)
-		{
+		if (e.getSource() == buttonAdd) {
 			addElementFromExtraField(extraField.getText());
-		}
-		else if 	(e.getSource() == buttonRemove)
-		{
+		} else if (e.getSource() == buttonRemove) {
 			visibleList.clearSelection();
 		}
 	}
+
 	@Override
-	public void keyTyped (KeyEvent e)
-	{
+	public void keyTyped(KeyEvent e) {
 	}
+
 	@Override
-	public void keyReleased (KeyEvent e)
-	{
+	public void keyReleased(KeyEvent e) {
 	}
-	//======================
+	// ======================
 
-
-	//======================
-	//interface MouseListener
-	public void mousePressed(MouseEvent e)
-	{
+	// ======================
+	// interface MouseListener
+	public void mousePressed(MouseEvent e) {
 	}
 
-	public void  mouseClicked(MouseEvent e)
-	{
+	public void mouseClicked(MouseEvent e) {
 		if (e.getClickCount() > 1)
-			setExtraFieldToListValueAt( e.getPoint() );
+			setExtraFieldToListValueAt(e.getPoint());
 
 	}
 
-	public void  mouseEntered(MouseEvent e)
-	{
+	public void mouseEntered(MouseEvent e) {
 	}
 
-	public void  mouseExited(MouseEvent e)
-	{
+	public void mouseExited(MouseEvent e) {
 	}
 
-	public void  mouseReleased(MouseEvent e)
-	{}
-	//======================
-
+	public void mouseReleased(MouseEvent e) {
+	}
+	// ======================
 
 	@Override
-	public boolean init()
-	{
+	public boolean init() {
 		setStartValue(selValue);
 		return super.init();
 	}
 
-
-	public java.util.List getSelectedList()
-	{
+	public java.util.List getSelectedList() {
 		java.util.List result = new ArrayList();
 
 		ListModel model = visibleList.getModel();
 
-		for (int i = 0; i<model.getSize(); i++)
-		{
+		for (int i = 0; i < model.getSize(); i++) {
 			Object element = model.getElementAt(i);
 			if (visibleList.isSelectedIndex(i))
 				result.add(element);
 		}
-		
-		
+
 		return result;
 	}
-	
+
 	@Override
-	protected void initEditing()
-	{
+	protected void initEditing() {
 		super.initEditing();
 		logging.debug(this, "FEditList.initEditing");
 		buttonRemove.setEnabled(true);
 	}
 
-	//======================
-	//interface ListSelectionListener
-	public void valueChanged(ListSelectionEvent e)
-	{
+	// ======================
+	// interface ListSelectionListener
+	public void valueChanged(ListSelectionEvent e) {
 		java.util.List selectedList = getSelectedList();
-		//logging.info(this, "FEditList valueChanged ,  selected " + selectedList + " nullable? " + nullable);
-		if (
-			!nullable && 
-			selectedList.size() == 0)
-		{
-			//reset to some value
+		// logging.info(this, "FEditList valueChanged , selected " + selectedList + "
+		// nullable? " + nullable);
+		if (!nullable &&
+				selectedList.size() == 0) {
+			// reset to some value
 			initSelection();
 		}
 		setDataChanged(true);
@@ -422,9 +382,6 @@ public class FEditList extends FEditObject
 
 		buttonRemove.setEnabled(selectedList.size() > 0);
 	}
-	//======================
-
+	// ======================
 
 }
-
-

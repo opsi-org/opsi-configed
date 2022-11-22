@@ -7,10 +7,9 @@
  *	author Rupert Röder
  *
  */
- 
+
 package de.uib.utilities.table;
 
-public abstract class KeyRepresenter<K>
-{
+public abstract class KeyRepresenter<K> {
 	public abstract String represents(K key, RowStringMap rowMap);
 }

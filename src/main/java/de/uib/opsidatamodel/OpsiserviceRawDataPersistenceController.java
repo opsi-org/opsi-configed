@@ -48,31 +48,32 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 	@Override
 	public boolean isWithMySQL() {
 		if (!withMySQL)
-		//we use mysql since we are in this class 
-		//but are underlicensed
+		// we use mysql since we are in this class
+		// but are underlicensed
 		{
 
 			javax.swing.SwingUtilities.invokeLater(new Thread() {
 				public void run() {
 					/*
-					StringBuffer info = new StringBuffer("");
-					info.append(configed.getResourceValue("Permission.modules.clientcount.2"));
-					info.append(":\n");
-					for (String moduleInfo : missingModulesPermissionInfo)
-					{
-						info.append(moduleInfo);
-						info.append("\n");
-					}
-					*/
+					 * StringBuffer info = new StringBuffer("");
+					 * info.append(configed.getResourceValue("Permission.modules.clientcount.2"));
+					 * info.append(":\n");
+					 * for (String moduleInfo : missingModulesPermissionInfo)
+					 * {
+					 * info.append(moduleInfo);
+					 * info.append("\n");
+					 * }
+					 */
 					String warning = "limit for mysql backend reached";
 
 					/*
-						String.format( 
-							//locale.
-							configed.getResourceValue("Permission.modules.clientcount.error"),
-							""  + countClientsInThisBlock , "" + key, "" + maxAllowedClientsForThisModule.getNumber()
-							);
-					*/
+					 * String.format(
+					 * //locale.
+					 * configed.getResourceValue("Permission.modules.clientcount.error"),
+					 * "" + countClientsInThisBlock , "" + key, "" +
+					 * maxAllowedClientsForThisModule.getNumber()
+					 * );
+					 */
 
 					logging.info(this, "missingModules " + warning);
 					de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.callInstanceWith(warning);
@@ -88,8 +89,10 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 		logging.debug(this, "HOST_read ");
 		String query = "select *  from HOST";
 
-		//test for depot_restriction:
-		// SELECT CONFIG_VALUE.configId, CONFIG_STATE.objectId, CONFIG_STATE.values from CONFIG_VALUE, CONFIG_STATE where CONFIG_STATE.configId = CONFIG_VALUE.configId and CONFIG_STATE.configId =  'clientconfig.depot.id';
+		// test for depot_restriction:
+		// SELECT CONFIG_VALUE.configId, CONFIG_STATE.objectId, CONFIG_STATE.values from
+		// CONFIG_VALUE, CONFIG_STATE where CONFIG_STATE.configId =
+		// CONFIG_VALUE.configId and CONFIG_STATE.configId = 'clientconfig.depot.id';
 
 		TimeCheck timer = new TimeCheck(this, "HOST_read").start();
 
@@ -99,16 +102,18 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 		timer.stop();
 
 		for (Map<java.lang.String, java.lang.Object> entry : opsiHosts) {
-			//logging.info(this, "HOST_read " + entry);
+			// logging.info(this, "HOST_read " + entry);
 			Host.db2ServiceRowMap(entry);
-			//logging.info(this, "HOST_read " + entry);
+			// logging.info(this, "HOST_read " + entry);
 		}
 
-		//logging.info(this, "OpsiserviceRawDataPersistenceController opsiHosts " + opsiHosts);
+		// logging.info(this, "OpsiserviceRawDataPersistenceController opsiHosts " +
+		// opsiHosts);
 
-		//opsiHosts = super.HOST_read(); //test
+		// opsiHosts = super.HOST_read(); //test
 
-		//logging.info(this, "OpsiserviceNOMPersistenceController opsiHosts " + opsiHosts);
+		// logging.info(this, "OpsiserviceNOMPersistenceController opsiHosts " +
+		// opsiHosts);
 
 		return opsiHosts;
 	}

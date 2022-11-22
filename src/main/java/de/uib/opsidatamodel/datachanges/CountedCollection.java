@@ -1,8 +1,7 @@
 package de.uib.opsidatamodel.datachanges;
 
-import java.util.*;
+import java.util.Collection;
 
-interface CountedCollection extends Collection
-{
-   int accumulatedSize();
+interface CountedCollection extends Collection {
+	int accumulatedSize();
 }

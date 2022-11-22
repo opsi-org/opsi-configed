@@ -1,105 +1,91 @@
 package de.uib.configed.tree;
 
-import de.uib.configed.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Insets;
+
 import javax.swing.JTree;
-import javax.swing.tree.*;
+import javax.swing.tree.DefaultTreeCellRenderer;
 
+import de.uib.configed.Globals;
 
-public class IconNodeRenderer extends DefaultTreeCellRenderer
-{
+public class IconNodeRenderer extends DefaultTreeCellRenderer {
 	public static int labelWidth = 200;
 	public static int labelHeight = 20;
-	
-	public IconNodeRenderer()
-	{
+
+	public IconNodeRenderer() {
 		super();
 		setOpaque(true);
 		setForeground(Globals.lightBlack);
 		setTextSelectionColor(Globals.lightBlack);
 		setBackground(Color.white);
-		setBorder(new javax.swing.border.EmptyBorder( new Insets(0,0,0,0)));
+		setBorder(new javax.swing.border.EmptyBorder(new Insets(0, 0, 0, 0)));
 		setPreferredSize(new java.awt.Dimension(labelWidth, labelHeight));
 	}
-	
+
 	public Component getTreeCellRendererComponent(JTree tree, Object value,
-							boolean sel,
-							boolean expanded,
-							boolean leaf, 
-							int row,
-							boolean hasFocus)
-	{
-		if (value instanceof IconNode)
-		{
-		
+			boolean sel,
+			boolean expanded,
+			boolean leaf,
+			int row,
+			boolean hasFocus) {
+		if (value instanceof IconNode) {
+
 			String stringValue =
-				//configed.encodeStringFromService (
-					tree.convertValueToText(value, sel,expanded, leaf, row, hasFocus)
-				//	)
-				;
-				
-			
+					// configed.encodeStringFromService (
+					tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus)
+			// )
+			;
+
 			setText(stringValue);
-			
-			//adaption to size of bold font??
-			
-			
-			//Attention: must be a IconNode
-			IconNode node = (IconNode)value;
+
+			// adaption to size of bold font??
+
+			// Attention: must be a IconNode
+			IconNode node = (IconNode) value;
 			boolean enabled = tree.isEnabled();
 			setEnabled(enabled);
 			node.setEnabled(enabled);
-			
-			if (sel)
-			{
+
+			if (sel) {
 				setBackground(Globals.backLightBlue);
-				//setFont(Globals.defaultFontBold);
-				//setForeground(Color.blue);//Globals.unknownBlue);
-			}
-			else
-			{
+				// setFont(Globals.defaultFontBold);
+				// setForeground(Color.blue);//Globals.unknownBlue);
+			} else {
 				setBackground(Color.white);
-				//setBackground(Globals.backgroundWhite);
-				//setFont(Globals.defaultFontBig);
-				//setForeground(Globals.lightBlack);
+				// setBackground(Globals.backgroundWhite);
+				// setFont(Globals.defaultFontBig);
+				// setForeground(Globals.lightBlack);
 			}
-			
-			if (leaf)
-			{
+
+			if (leaf) {
 				setIcon(node.getLeafIcon());
-			}
-			else if (expanded)
-			{
+			} else if (expanded) {
 				setIcon(node.getOpenIcon());
-			}
-			else
-			{
+			} else {
 				setIcon(node.getClosedIcon());
 			}
-			
+
 			setComponentOrientation(tree.getComponentOrientation());
 			return this;
 		}
-		
+
 		return this;
-		
+
 		/*
-		Component c = super.getTreeCellRendererComponent(
-			tree, 
-			value,
-			sel,
-			expanded,
-			leaf, 
-			row,
-			hasFocus);
-		
-		//c.setBackground(Globals.backLightBlue);
-		
-		return c; 
-		
-		*/
+		 * Component c = super.getTreeCellRendererComponent(
+		 * tree,
+		 * value,
+		 * sel,
+		 * expanded,
+		 * leaf,
+		 * row,
+		 * hasFocus);
+		 * 
+		 * //c.setBackground(Globals.backLightBlue);
+		 * 
+		 * return c;
+		 * 
+		 */
 	}
 }

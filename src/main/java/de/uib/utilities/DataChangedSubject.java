@@ -4,11 +4,9 @@
 	* organization: uib.de
  * @author  R. Roeder 
  */
- 
+
 package de.uib.utilities;
- 
-public interface DataChangedSubject
-{
-	void registerDataChangedObserver( DataChangedObserver o);
+
+public interface DataChangedSubject {
+	void registerDataChangedObserver(DataChangedObserver o);
 }
- 

@@ -1,22 +1,15 @@
 package de.uib.configed.gui.ssh;
 
-import de.uib.configed.gui.*;
-import de.uib.opsicommand.*;
-import de.uib.opsicommand.sshcommand.*;
-import java.awt.event.*;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
-import java.io.*;
-import java.util.*;
-import java.nio.charset.Charset;
-import java.util.regex.*;
-import de.uib.configed.*;
-import de.uib.opsidatamodel.*;
-import de.uib.utilities.thread.WaitCursor;
-import de.uib.utilities.logging.*;
-import javax.swing.border.LineBorder.*;
+import java.util.Vector;
+
+import javax.swing.GroupLayout;
+import javax.swing.JPanel;
+
+import de.uib.configed.Globals;
+import de.uib.opsicommand.sshcommand.SSHCommandFactory;
+import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.utilities.logging.logging;
 
 public class SSHPMInstallPanel extends JPanel {
 	public boolean isOpen = false;
@@ -32,33 +25,33 @@ public class SSHPMInstallPanel extends JPanel {
 
 	PersistenceController persist;
 	protected String workbench;
+
 	public SSHPMInstallPanel() {
 		this.setBackground(Globals.backLightBlue);
 		additional_default_paths.addElement(factory.opsipathVarRepository);
 		persist = PersistenceControllerFactory.getPersistenceController();
-		if (persist == null) logging.info(this, "init PersistenceController null");
+		if (persist == null)
+			logging.info(this, "init PersistenceController null");
 		workbench = persist.configedWORKBENCH_defaultvalue;
-		if (workbench.charAt(workbench.length()-1) != '/')
+		if (workbench.charAt(workbench.length() - 1) != '/')
 			workbench = workbench + "/";
 	}
-
 
 	public void open() {
 		if (!isOpen) {
 			this.setSize(
-				this.getWidth(),
-				this.getHeight() + this.getHeight()
-			);
+					this.getWidth(),
+					this.getHeight() + this.getHeight());
 			isOpen = true;
 			this.setVisible(isOpen);
 		}
 	}
+
 	public void close() {
 		if (isOpen) {
 			this.setSize(
-				this.getWidth(),
-				this.getHeight() - this.getHeight()
-			);
+					this.getWidth(),
+					this.getHeight() - this.getHeight());
 			isOpen = false;
 			this.setVisible(isOpen);
 		}

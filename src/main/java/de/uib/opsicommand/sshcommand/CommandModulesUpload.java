@@ -1,9 +1,9 @@
 package de.uib.opsicommand.sshcommand;
 
-import java.util.ArrayList;
-import de.uib.configed.*;
-import de.uib.configed.gui.*;
-import de.uib.configed.gui.ssh.*;
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.configed;
+import de.uib.configed.gui.FGeneralDialog;
+import de.uib.configed.gui.ssh.SSHModulesUploadDialog;
 
 public class CommandModulesUpload extends CommandSFTPUpload
 // implements SSHCommandNeedParameter, SSHSFTPCommand, SSHCommand
@@ -11,8 +11,8 @@ public class CommandModulesUpload extends CommandSFTPUpload
 	public String actually_modules_directory = "/etc/opsi/";
 	public String unofficial_modules_directory = "/etc/opsi/modules.d/";
 	static public String DEFAULT_FILENAME = "modules";
-	public CommandModulesUpload(String title)
-	{
+
+	public CommandModulesUpload(String title) {
 		setTitle(title);
 		title = "Modules Upload";
 		baseName = "Modules Upload";
@@ -21,58 +21,51 @@ public class CommandModulesUpload extends CommandSFTPUpload
 		targetPath = "/etc/opsi/";
 		targetFilename = DEFAULT_FILENAME;
 	}
-	public CommandModulesUpload()
-	{
+
+	public CommandModulesUpload() {
 		this("");
 	}
 
-	public String getTitle()
-	{return title;}
-	public String getDescription()
-	{
+	public String getTitle() {
+		return title;
+	}
+
+	public String getDescription() {
 		if (description.equals(""))
-			description = "copy " + sourcePath  + sourceFilename
-					+ " to " + targetPath  + targetFilename
+			description = "copy " + sourcePath + sourceFilename
+					+ " to " + targetPath + targetFilename
 					+ " on connected server";
 		return description;
 	}
 
-
 	@Override
-	public String getId()
-	{
+	public String getId() {
 		return "CommandModulesUpload";
 	}
 
-
 	@Override
-	public String getMenuText()
-	{
+	public String getMenuText() {
 		return configed.getResourceValue("SSHConnection.command.modulesupload");
 	}
 
-
 	@Override
-	public String getToolTipText()
-	{
+	public String getToolTipText() {
 		return configed.getResourceValue("SSHConnection.command.modulesupload.tooltip");
 	}
 
 	@Override
-	public void startParameterGui()
-	{
+	public void startParameterGui() {
 		dialog = new SSHModulesUploadDialog();
 	}
+
 	@Override
-	public void startParameterGui(ConfigedMain main)
-	{
+	public void startParameterGui(ConfigedMain main) {
 		// dialog = new SSHModulesUploadDialog(main);
 		dialog = new SSHModulesUploadDialog();
 	}
 
 	@Override
-	public FGeneralDialog  getDialog()
-	{
+	public FGeneralDialog getDialog() {
 		return dialog;
 	}
 }

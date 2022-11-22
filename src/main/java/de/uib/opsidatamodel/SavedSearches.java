@@ -6,10 +6,26 @@ import de.uib.configed.type.SavedSearch;
 import de.uib.utilities.logging.logging;
 
 public class SavedSearches extends HashMap<String, SavedSearch> {
-	//public static final String SEARCHfailedAnyProduct = "{ \"version\" : \"2\", \"data\" : { \"element\" : null,  \"elementPath\" : null, \"operation\" : \"SoftwareOperation\", \"dataType\" : null, \"data\" : null,  \"children\" : [ { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : [ \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\", \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null } ] } }";
+	// public static final String SEARCHfailedAnyProduct = "{ \"version\" : \"2\",
+	// \"data\" : { \"element\" : null, \"elementPath\" : null, \"operation\" :
+	// \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [
+	// { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : [
+	// \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\",
+	// \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null } ] } }";
 	public static final String SEARCHfailedProduct = "{ \"version\" : \"2\", \"data\" : { \"element\" : null, \"elementPath\" : null, \"operation\" : \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [ { \"element\" : null, \"elementPath\" : null, \"operation\" : \"AndOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [ { \"element\" : \"SoftwareNameElement\", \"elementPath\" : [ \"Product\", \"Name\" ], \"operation\" : \"StringEqualsOperation\", \"dataType\" : TextType, \"data\" : \"%s\", \"children\" : null }, { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : [ \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\", \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null } ] } ] } }";
 	public static final String SEARCHfailedByTimeS = "{ \"version\" : \"2\", \"data\" : { \"element\" : null, \"elementPath\" : null, \"operation\" : \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [ { \"element\" : null, \"elementPath\" : null, \"operation\" : \"AndOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [ { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : [ \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\", \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null }, { \"element\" : \"SoftwareModificationTimeElement\", \"elementPath\" : [ \"Product\", \"Modification Time\" ], \"operation\" : \"DateGreaterOrEqualOperation\", \"dataType\" : DateType, \"data\" : \"%s\", \"children\" : null } ] } ] } }";
-	//public static final String SEARCHfailedByTimeTestS =  "{ \"version\" : \"2\", \"data\" : { \"element\" : null, \"elementPath\" : null, \"operation\" : \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [ { \"element\" : null, \"elementPath\" : null, \"operation\" : \"AndOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [ { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : [ \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\", \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null }, { \"element\" : \"SoftwareModificationTimeElement\", \"elementPath\" : [ \"Product\", \"Modification Time\" ], \"operation\" : \"DateGreaterOrEqualOperation\", \"dataType\" : DateType, \"data\" : \"2014-01-27\", \"children\" : null } ] } ] } }";
+	// public static final String SEARCHfailedByTimeTestS = "{ \"version\" : \"2\",
+	// \"data\" : { \"element\" : null, \"elementPath\" : null, \"operation\" :
+	// \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [
+	// { \"element\" : null, \"elementPath\" : null, \"operation\" :
+	// \"AndOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [ {
+	// \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : [
+	// \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\",
+	// \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null }, {
+	// \"element\" : \"SoftwareModificationTimeElement\", \"elementPath\" : [
+	// \"Product\", \"Modification Time\" ], \"operation\" :
+	// \"DateGreaterOrEqualOperation\", \"dataType\" : DateType, \"data\" :
+	// \"2014-01-27\", \"children\" : null } ] } ] } }";
 	public static final String SEARCHfailedAtAnyTimeS = "{ \"version\" : \"2\", \"data\" : { \"element\" : null, \"elementPath\" : null, \"operation\" : \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [ { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : [ \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\", \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null } ] } }";
 
 	public SavedSearches() {
@@ -28,18 +44,18 @@ public class SavedSearches extends HashMap<String, SavedSearch> {
 
 			int i = nextPartAt(rcPartOfKey);
 
-			//first level key
+			// first level key
 
 			if (i == -1) {
 				SavedSearch rc = retrieveRC(rcPartOfKey);
 				if (rc.getSerialization().equals(""))
 					rc.setSerialization(value);
 
-				//if serialized command is specified by an explicit command key, leave it
+				// if serialized command is specified by an explicit command key, leave it
 			}
 
 			else {
-				//second level key
+				// second level key
 
 				String name = rcPartOfKey.substring(0, i);
 
@@ -47,7 +63,7 @@ public class SavedSearches extends HashMap<String, SavedSearch> {
 
 				String remainder = rcPartOfKey.substring(i + 1);
 
-				//logging.debug(this, "checkIn, remainder " + remainder);
+				// logging.debug(this, "checkIn, remainder " + remainder);
 
 				i = nextPartAt(remainder);
 
@@ -56,13 +72,13 @@ public class SavedSearches extends HashMap<String, SavedSearch> {
 						rc.setDescription(value);
 
 					/*
-					else if (remainder.equals(SavedSearch.COMMAND_KEY))
-						rc.setSerialization(value);
-					*/
+					 * else if (remainder.equals(SavedSearch.COMMAND_KEY))
+					 * rc.setSerialization(value);
+					 */
 				}
 
 				else
-					//there are no 3rd level keys
+					// there are no 3rd level keys
 					logging.error("Remote control key has too many parts");
 			}
 

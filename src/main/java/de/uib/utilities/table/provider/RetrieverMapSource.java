@@ -5,37 +5,30 @@
  *	author Rupert Röder 
  *
  */
- 
+
 package de.uib.utilities.table.provider;
 
-import java.util.*;
-import java.sql.*;
-import de.uib.utilities.logging.*;
+import java.util.Vector;
 
 public class RetrieverMapSource extends MapSource
-// the map is not given via a parameter but by a pointer to a function 
+// the map is not given via a parameter but by a pointer to a function
 {
 	protected MapRetriever retriever;
-	
-	public RetrieverMapSource(Vector<String> columnNames, Vector<String> classNames, 
-		MapRetriever retriever, boolean rowCounting)
-	{
+
+	public RetrieverMapSource(Vector<String> columnNames, Vector<String> classNames,
+			MapRetriever retriever, boolean rowCounting) {
 		super(columnNames, classNames, null, rowCounting);
 		this.retriever = retriever;
 		rows = new Vector();
 	}
-	
-	public RetrieverMapSource(Vector<String> columnNames, Vector<String> classNames, MapRetriever retriever)
-	{
+
+	public RetrieverMapSource(Vector<String> columnNames, Vector<String> classNames, MapRetriever retriever) {
 		this(columnNames, classNames, retriever, false);
 	}
-	
-	
-	protected void fetchData()
-	{
+
+	protected void fetchData() {
 		table = retriever.retrieveMap();
-		//System.out.println ( " -------- RetrieverMapSource fetchData() : " +        table);
+		// System.out.println ( " -------- RetrieverMapSource fetchData() : " + table);
 		super.fetchData();
 	}
 }
-	

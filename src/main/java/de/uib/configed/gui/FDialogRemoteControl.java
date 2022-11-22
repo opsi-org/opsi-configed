@@ -1,202 +1,167 @@
 package de.uib.configed.gui;
 
-import de.uib.configed.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
+import java.awt.event.MouseEvent;
+import java.util.Map;
 
-import de.uib.utilities.logging.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
 
+import de.uib.utilities.logging.logging;
 
 public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList
-	implements DocumentListener
-{
+		implements DocumentListener {
 	Map<String, String> meanings;
 	Map<String, Boolean> editable;
 	String selText;
 
-	public FDialogRemoteControl()
-	{
-		//de.uib.configed.configed.getResourceValue("FEditObject.SaveButtonTooltip") 
+	public FDialogRemoteControl() {
+		// de.uib.configed.configed.getResourceValue("FEditObject.SaveButtonTooltip")
 		loggingPanel.setVisible(true);
 	}
-	
-	
-	public void setMeanings(Map<String, String> meanings)
-	{
+
+	public void setMeanings(Map<String, String> meanings) {
 		this.meanings = meanings;
 	}
-	
-	public void setEditable(Map<String, Boolean> editable)
-	{
+
+	public void setEditable(Map<String, Boolean> editable) {
 		this.editable = editable;
 	}
-	
-	public String getValue(String key)
-	{
+
+	public String getValue(String key) {
 		return meanings.get(key);
 	}
-	
-	
-	@Override 
+
+	@Override
 	protected void initExtraField()
-	//hack to modify settings from superclass
+	// hack to modify settings from superclass
 	{
-		//extraField.setText("");
+		// extraField.setText("");
 		checkSelected();
 	}
-	
+
 	@Override
-	protected void initComponents()
-	{	
+	protected void initComponents() {
 		super.initComponents();
-		
+
 		buttonCommit.createIconButton(
-			de.uib.configed.configed.getResourceValue("FDialogRemoteControl.SaveButtonTooltip"),
-			"images/executing_command_red_22.png",
-			"images/executing_command_red_22_over.png",
-			"images/executing_command_22_disabled.png",
-			true
-			);
-		
+				de.uib.configed.configed.getResourceValue("FDialogRemoteControl.SaveButtonTooltip"),
+				"images/executing_command_red_22.png",
+				"images/executing_command_red_22_over.png",
+				"images/executing_command_22_disabled.png",
+				true);
+
 		buttonCancel.createIconButton(
-			de.uib.configed.configed.getResourceValue("FDialogRemoteControl.CancelButtonTooltip"),
-			"images/cancel.png", 
-			"images/cancel_over.png",
-			"images/cancel_disabled.png",
-			true);
-			
+				de.uib.configed.configed.getResourceValue("FDialogRemoteControl.CancelButtonTooltip"),
+				"images/cancel.png",
+				"images/cancel_over.png",
+				"images/cancel_disabled.png",
+				true);
+
 		extraField.getDocument().addDocumentListener(this);
-		
-		
+
 	}
-	
-	
-	private void noText()
-	{
+
+	private void noText() {
 		extraField.setEditable(false);
 		extraField.setEnabled(false);
 		extraField.setText("");
 		selText = null;
 	}
-	
-	private void checkSelected()
-	{
-		if (visibleList.getSelectedValue() != null && selValue != null && !selValue.equals(""))
-		{
+
+	private void checkSelected() {
+		if (visibleList.getSelectedValue() != null && selValue != null && !selValue.equals("")) {
 			setDataChanged(true);
 		}
-		
-		else
-		{
+
+		else {
 			setDataChanged(false);
 			noText();
 		}
 	}
-	
-	public void resetValue()
-	{
+
+	public void resetValue() {
 		visibleList.setSelectedValue(selValue, true);
 		checkSelected();
 	}
-	
+
 	@Override
-	protected void createComponents()
-	{
+	protected void createComponents() {
 		super.createComponents();
 		extraField.setVisible(true);
 		extraField.addActionListener(this);
 	}
-	
-	
+
 	@Override
-	public void  mouseClicked(MouseEvent e)
-	{
-		//super.mouseClicked(e);
+	public void mouseClicked(MouseEvent e) {
+		// super.mouseClicked(e);
 		checkSelected();
-		
-		
-		
+
 		if (e.getClickCount() > 1)
 			commit();
-		
-		
-		
+
 	}
-	
-	                     
-	//======================
-	//interface ListSelectionListener
+
+	// ======================
+	// interface ListSelectionListener
 	@Override
-	public void valueChanged(ListSelectionEvent e)
-	{
+	public void valueChanged(ListSelectionEvent e) {
 		super.valueChanged(e);
-		
-		//Ignore extra messages.
-		if (e.getValueIsAdjusting()) return;
-		
+
+		// Ignore extra messages.
+		if (e.getValueIsAdjusting())
+			return;
+
 		checkSelected();
-		
-		
+
 		if (visibleList.getSelectedValue() != null)
 			selValue = visibleList.getSelectedValue();
-		
+
 		selText = "" + selValue;
-		
+
 		logging.debug(this, "valueChanged, selText " + selText);
 		logging.debug(this, "valueChanged, meanings.get(selText) " + meanings.get(selText));
-		
-		if (meanings != null && selText != null && meanings.get(selText) != null) 
-		{
+
+		if (meanings != null && selText != null && meanings.get(selText) != null) {
 			extraField.setText(meanings.get(selText));
 			extraField.setEditable(editable.get(selText));
 			extraField.setEnabled(editable.get(selText));
 		}
 	}
-	//======================
-	
-	
-	private void saveEditedText()
-	{
-		if (extraField.isEditable() && selText != null && !selText.equals("") && meanings.get(selText)!= null)
-		{
+	// ======================
+
+	private void saveEditedText() {
+		if (extraField.isEditable() && selText != null && !selText.equals("") && meanings.get(selText) != null) {
 			meanings.put(selText, extraField.getText());
 		}
 	}
-	
-	// DocumentListener 
-	//======================
-	public void changedUpdate(DocumentEvent e)
-	{
-		//logging.debug(this, "++ changedUpdate on " );
+
+	// DocumentListener
+	// ======================
+	public void changedUpdate(DocumentEvent e) {
+		// logging.debug(this, "++ changedUpdate on " );
 		saveEditedText();
 	}
-	
-	public void insertUpdate(DocumentEvent e)
-	{
-		//logging.debug(this, "++ insertUpdate on " );
+
+	public void insertUpdate(DocumentEvent e) {
+		// logging.debug(this, "++ insertUpdate on " );
 		saveEditedText();
 	}
-	
-	public void removeUpdate(DocumentEvent e)
-	{
-		//logging.debug(this, "++ removeUpdate on " );
+
+	public void removeUpdate(DocumentEvent e) {
+		// logging.debug(this, "++ removeUpdate on " );
 		saveEditedText();
 	}
-	//======================
-	
-	
-	//======================
+	// ======================
+
+	// ======================
 	// interface ActionListener
 	@Override
-	public void actionPerformed(java.awt.event.ActionEvent e)
-	{
+	public void actionPerformed(java.awt.event.ActionEvent e) {
 		super.actionPerformed(e);
-		
-		if(e.getSource() == extraField )
+
+		if (e.getSource() == extraField)
 			commit();
 	}
-	
+
 }

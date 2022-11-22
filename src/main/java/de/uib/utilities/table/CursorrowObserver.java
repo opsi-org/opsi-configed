@@ -6,10 +6,9 @@
  * License, version AGPLv3, as published by the Free Software Foundation
  *
  */
- 
+
 package de.uib.utilities.table;
- 
-public interface CursorrowObserver 
-{
+
+public interface CursorrowObserver {
 	public void rowUpdated(int modelrow);
-}	
+}

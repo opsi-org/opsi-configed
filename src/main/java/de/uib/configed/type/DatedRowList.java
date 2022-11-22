@@ -1,35 +1,29 @@
 package de.uib.configed.type;
 
-import java.util.*;
-import de.uib.configed.*;
-import de.uib.utilities.logging.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DatedRowList
-{
-	
+public class DatedRowList {
+
 	protected List<String[]> rowList;
 	protected String dateS;
-	
-	public DatedRowList()
-	{
+
+	public DatedRowList() {
 		rowList = new ArrayList<String[]>();
 		dateS = "";
 	}
-	
-	public DatedRowList(List<String[]> rowList, String dateS)
-	{
+
+	public DatedRowList(List<String[]> rowList, String dateS) {
 		this.rowList = rowList;
 		this.dateS = dateS;
 	}
-	
-	public List<String[]> getRows()
-	{
+
+	public List<String[]> getRows() {
 		return rowList;
 	}
-	
-	public String getDate()
-	{
+
+	public String getDate() {
 		return dateS;
 	}
-	
+
 }

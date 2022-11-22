@@ -1,17 +1,16 @@
 package de.uib.opsicommand.sshcommand;
 
-import java.util.ArrayList;
-import de.uib.configed.*;
-import de.uib.configed.gui.*;
-import de.uib.configed.gui.ssh.*;
-import de.uib.utilities.logging.*;
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.configed;
+import de.uib.configed.gui.FGeneralDialog;
+import de.uib.configed.gui.ssh.SSHRepositoryUploadDialog;
+import de.uib.utilities.logging.logging;
 
 public class CommandRepositoryUpload extends CommandSFTPUpload
 // implements SSHCommandNeedParameter, SSHSFTPCommand, SSHCommand
 {
 
-	public CommandRepositoryUpload(String title)
-	{
+	public CommandRepositoryUpload(String title) {
 		super();
 		setTitle(title);
 		title = "Repo-file Upload";
@@ -21,61 +20,56 @@ public class CommandRepositoryUpload extends CommandSFTPUpload
 		targetPath = "/etc/opsi/package-updater.repos.d/";
 		targetFilename = "";
 	}
-	public CommandRepositoryUpload()
-	{
+
+	public CommandRepositoryUpload() {
 		this("");
 	}
 
-	public String getTitle()
-	{return title;}
-	public String getDescription()
-	{
+	public String getTitle() {
+		return title;
+	}
+
+	public String getDescription() {
 		if (description.equals(""))
-			description = "copy " + sourcePath  + sourceFilename
-					+ " to " + targetPath  + targetFilename
+			description = "copy " + sourcePath + sourceFilename
+					+ " to " + targetPath + targetFilename
 					+ " on connected server";
 		return description;
 	}
 
-
 	@Override
-	public String getId()
-	{
+	public String getId() {
 		return "CommandRepositoryUpload";
 	}
 
-
 	@Override
-	public String getMenuText()
-	{
+	public String getMenuText() {
 		return configed.getResourceValue("SSHConnection.command.repoupload");
 	}
 
-
 	@Override
-	public String getToolTipText()
-	{
+	public String getToolTipText() {
 		return configed.getResourceValue("SSHConnection.command.repoupload.tooltip");
 	}
 
 	@Override
-	public void startParameterGui()
-	{
-		//dialog = new SSHRepositoryUploadDialog();
+	public void startParameterGui() {
+		// dialog = new SSHRepositoryUploadDialog();
 	}
+
 	@Override
-	public void startParameterGui(ConfigedMain main)
-	{
+	public void startParameterGui(ConfigedMain main) {
 		// dialog = new SSHRepositoryUploadDialog(main);
 
-		if (main.getOpsiVersion().length() == 0 || main.getOpsiVersion().charAt(0) == '<' || main.getOpsiVersion().compareTo("4.1") < 0){
+		if (main.getOpsiVersion().length() == 0 || main.getOpsiVersion().charAt(0) == '<'
+				|| main.getOpsiVersion().compareTo("4.1") < 0) {
 			logging.error(this, configed.getResourceValue("OpsiConfdVersionError").replace("{0}", "4.1.0"));
-		} else dialog = new SSHRepositoryUploadDialog();
+		} else
+			dialog = new SSHRepositoryUploadDialog();
 	}
 
 	@Override
-	public FGeneralDialog  getDialog()
-	{
+	public FGeneralDialog getDialog() {
 		return dialog;
 	}
 }

@@ -1,4 +1,12 @@
-package de.uib.utilities.swing; 
+package de.uib.utilities.swing;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /*
  * 
@@ -34,119 +42,109 @@ package de.uib.utilities.swing;
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
+ */
+import javax.swing.ImageIcon;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
-import de.uib.configed.*;
-import de.uib.utilities.logging.*;
+import de.uib.configed.Globals;
 
 public class CellRendererByIndex extends ImagePlusTextLabel
-                           implements ListCellRenderer {
+		implements ListCellRenderer {
 	private Font uhOhFont;
-	
+
 	protected Map<String, String> mapOfStrings;
 	protected Map<String, String> mapOfTooltips;
 	protected Map<String, ImageIcon> mapOfImages;
-	final static int imageDefaultWidth = 30; 
-	
-	public CellRendererByIndex(Map<String,String> mapOfStringValues, String imagesBase)
-	{
-		this( mapOfStringValues, imagesBase, imageDefaultWidth);
+	final static int imageDefaultWidth = 30;
+
+	public CellRendererByIndex(Map<String, String> mapOfStringValues, String imagesBase) {
+		this(mapOfStringValues, imagesBase, imageDefaultWidth);
 	}
-	
-	public CellRendererByIndex(Set<String> keySet, String imagesBase, int imageWidth)
-	{
+
+	public CellRendererByIndex(Set<String> keySet, String imagesBase, int imageWidth) {
 		super(imageWidth);
-		//System.out.println(" -------------  font " + getFont() );
+		// System.out.println(" ------------- font " + getFont() );
 		setOpaque(true);
-		//setHorizontalAlignment(LEFT);
-		//setVerticalAlignment(CENTER);
-		mapOfImages = new HashMap<String,ImageIcon>();
+		// setHorizontalAlignment(LEFT);
+		// setVerticalAlignment(CENTER);
+		mapOfImages = new HashMap<String, ImageIcon>();
 		mapOfStrings = new HashMap<String, String>();
-		
-		 //Load the item images 
-		if (imagesBase ==  null)
+
+		// Load the item images
+		if (imagesBase == null)
 			super.setIconVisible(false);
-		
-		else
-		{
+
+		else {
 			Iterator<String> iter = keySet.iterator();
-			while (iter.hasNext())
-			{
-				String key = iter.next(); 
+			while (iter.hasNext()) {
+				String key = iter.next();
 				String stringval = key;
 				mapOfStrings.put(key, key);
-				
+
 				ImageIcon image = null;
-				
-				if (imagesBase != null)
-				{
+
+				if (imagesBase != null) {
 					String imageFileString = imagesBase + "/" + stringval + ".png";
-						//System.out.println (" image file " + imageFileString);
-						
+					// System.out.println (" image file " + imageFileString);
+
 					image = de.uib.configed.Globals.createImageIcon(imageFileString, stringval);
-					if (image != null) mapOfImages.put(key, image);
+					if (image != null)
+						mapOfImages.put(key, image);
 				}
 			}
 		}
 		mapOfTooltips = mapOfStrings;
-		
+
 	}
 
-	public CellRendererByIndex(Map<String,String> mapOfStringValues, String imagesBase, int imageWidth) 
-	{
+	public CellRendererByIndex(Map<String, String> mapOfStringValues, String imagesBase, int imageWidth) {
 		this(mapOfStringValues, mapOfStringValues, imagesBase, imageWidth);
 	}
-	
-	public CellRendererByIndex(Map<String,String> mapOfStringValues, Map<String, String> mapOfDescriptions)
-	{	
+
+	public CellRendererByIndex(Map<String, String> mapOfStringValues, Map<String, String> mapOfDescriptions) {
 		this(mapOfStringValues, mapOfDescriptions, null, 0);
 	}
-	
+
 	public CellRendererByIndex(
-		Map<String,String> mapOfStringValues,
-		Map<String, String> mapOfDescriptions,
-		String imagesBase, int imageWidth)
-	
+			Map<String, String> mapOfStringValues,
+			Map<String, String> mapOfDescriptions,
+			String imagesBase, int imageWidth)
+
 	{
 		super(imageWidth);
-		//System.out.println(" -------------  font " + getFont() );
+		// System.out.println(" ------------- font " + getFont() );
 		setOpaque(true);
-		//setHorizontalAlignment(LEFT);
-		//setVerticalAlignment(CENTER);
+		// setHorizontalAlignment(LEFT);
+		// setVerticalAlignment(CENTER);
 		mapOfStrings = mapOfStringValues;
 		mapOfTooltips = mapOfDescriptions;
-		mapOfImages = new HashMap<String,ImageIcon>();
-		
-		
-		 //Load the item images 
-		if (imagesBase ==  null)
+		mapOfImages = new HashMap<String, ImageIcon>();
+
+		// Load the item images
+		if (imagesBase == null)
 			super.setIconVisible(false);
-		
-		else
-		{
+
+		else {
 			Iterator iter = mapOfStrings.entrySet().iterator();
-			while (iter.hasNext())
-			{
+			while (iter.hasNext()) {
 				Map.Entry entry = (Map.Entry) iter.next();
 				String key = (String) entry.getKey();
 				String stringval = (String) entry.getValue();
-				
+
 				ImageIcon image = null;
-				
-				if (key != null && stringval != null)
-				{
+
+				if (key != null && stringval != null) {
 					String imageFileString = imagesBase + "/" + stringval + ".png";
-					//System.out.println (" image file " + imageFileString);
-					
+					// System.out.println (" image file " + imageFileString);
+
 					image = de.uib.configed.Globals.createImageIcon(imageFileString, stringval);
-					if (image != null) mapOfImages.put(key, image);
+					if (image != null)
+						mapOfImages.put(key, image);
 				}
 			}
 		}
-		
+
 	}
 
 	/*
@@ -155,98 +153,93 @@ public class CellRendererByIndex extends ImagePlusTextLabel
 	 * to display the text and image.
 	 */
 	public Component getListCellRendererComponent(
-									   JList list,
-									   Object value,
-									   int index,
-									   boolean isSelected,
-									   boolean cellHasFocus) {
-		//Get the selected index. (The index param isn't
-		//always valid, so just use the value.)
+			JList list,
+			Object value,
+			int index,
+			boolean isSelected,
+			boolean cellHasFocus) {
+		// Get the selected index. (The index param isn't
+		// always valid, so just use the value.)
 
-		
 		/*
-		if (isSelected) {
-			setBackground(list.getSelectionBackground());
-			setForeground(list.getSelectionForeground());
-			//setForeground(java.awt.Color.black);
-		} else {
-			setBackground(list.getBackground());
-			setForeground(list.getForeground());
-			//setForeground(java.awt.Color.black);
-		}
-		*/
-		
-		
-	
+		 * if (isSelected) {
+		 * setBackground(list.getSelectionBackground());
+		 * setForeground(list.getSelectionForeground());
+		 * //setForeground(java.awt.Color.black);
+		 * } else {
+		 * setBackground(list.getBackground());
+		 * setForeground(list.getForeground());
+		 * //setForeground(java.awt.Color.black);
+		 * }
+		 */
+
 		Color background;
 		Color foreground;
-		
-		if (isSelected) 
-		{
+
+		if (isSelected) {
 			background = de.uib.configed.Globals.nimbusSelectionBackground;
 			foreground = Color.WHITE;
+		} else {
+			background = de.uib.configed.Globals.nimbusBackground;
+			foreground = de.uib.configed.Globals.nimbusSelectionBackground; // Color.WHITE; // Color.black;
 		}
-		else 
-		{
-			background =  de.uib.configed.Globals.nimbusBackground;
-			foreground =  de.uib.configed.Globals.nimbusSelectionBackground; //Color.WHITE; // Color.black;
-		};
-		
+		;
+
 		setBackground(background);
 		setForeground(foreground);
-		
-		
 
 		String selectedString = "";
 		ImageIcon selectedIcon = null;
 		String selectedTooltip = "";
 
-		
-		if (uhOhFont == null) { //lazily create this font
-			uhOhFont = list.getFont().deriveFont( (float) 10 ); // list.getFont().getSize() - 3); // Font.ITALIC);
+		if (uhOhFont == null) { // lazily create this font
+			uhOhFont = list.getFont().deriveFont((float) 10); // list.getFont().getSize() - 3); // Font.ITALIC);
 		}
 		setFont(uhOhFont);
-		
-		if (value != null)
-		{
-			if (mapOfStrings != null) selectedString = mapOfStrings.get(value);
-			if (mapOfImages != null) selectedIcon = mapOfImages.get(value);
-			if (mapOfTooltips != null) selectedTooltip = mapOfTooltips.get(value); 
-				
+
+		if (value != null) {
+			if (mapOfStrings != null)
+				selectedString = mapOfStrings.get(value);
+			if (mapOfImages != null)
+				selectedIcon = mapOfImages.get(value);
+			if (mapOfTooltips != null)
+				selectedTooltip = mapOfTooltips.get(value);
+
 		}
-		
-		if (selectedString == null) 
-			selectedString = "" +  value;
-			
+
+		if (selectedString == null)
+			selectedString = "" + value;
+
 		setIcon(selectedIcon);
 		setText(selectedString);
-		
-		
+
 		setToolTipText(selectedTooltip);
-		
+
 		setFont(Globals.defaultFont);
-		//de.uib.utilities.swing.CellAlternatingColorizer.colorize(this, isSelected, (index % 2 == 0), true);
-		
+		// de.uib.utilities.swing.CellAlternatingColorizer.colorize(this, isSelected,
+		// (index % 2 == 0), true);
+
 		/*
-		if (icon != null) {
-			setText(item);
-			setFont(list.getFont());
-		} else {
-			setUhOhText(item + " (no image available)",		list.getFont());
-			
-		}*/
+		 * if (icon != null) {
+		 * setText(item);
+		 * setFont(list.getFont());
+		 * } else {
+		 * setUhOhText(item + " (no image available)", list.getFont());
+		 * 
+		 * }
+		 */
 
 		return this;
 	}
 
 	/*
-	//Set the font and text when no image was found.
-	protected void setUhOhText(String uhOhText, Font normalFont) {
-		if (uhOhFont == null) { //lazily create this font
-			uhOhFont = normalFont.deriveFont(Font.ITALIC);
-		}
-		setFont(uhOhFont);
-		setText(uhOhText);
-	}
-	*/
+	 * //Set the font and text when no image was found.
+	 * protected void setUhOhText(String uhOhText, Font normalFont) {
+	 * if (uhOhFont == null) { //lazily create this font
+	 * uhOhFont = normalFont.deriveFont(Font.ITALIC);
+	 * }
+	 * setFont(uhOhFont);
+	 * setText(uhOhText);
+	 * }
+	 */
 }

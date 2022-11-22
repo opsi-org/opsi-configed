@@ -1,34 +1,32 @@
 package de.uib.opsidatamodel.productstate;
 
-import de.uib.utilities.logging.*;
-import java.awt.Color;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
+
 import de.uib.configed.Globals;
 
-
-public class TargetConfiguration
-{
+public class TargetConfiguration {
 	public final static String KEY = "targetConfiguration";
 
-	//conflicting entries from several clients
-	public final static int CONFLICT =-4;
+	// conflicting entries from several clients
+	public final static int CONFLICT = -4;
 
-	//no valid entry from service
+	// no valid entry from service
 	public final static int INVALID = -2;
 
-	//valid service states
+	// valid service states
 	public final static int UNDEFINED = 0;
 	public final static int INSTALLED = 1;
 	public final static int ALWAYS = 2;
 	public final static int FORBIDDEN = 4;
-	
-	//future
-	public final static int DISABLED = 5; //do not install or uninstall at the moment
+
+	// future
+	public final static int DISABLED = 5; // do not install or uninstall at the moment
 	public final static int INSTALL_NEWEST = 6; // look for the newest version and try to install it
-	
 
-
-	//mappings
+	// mappings
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
 	private static Map<String, String> label2displayLabel;
@@ -38,14 +36,10 @@ public class TargetConfiguration
 	private static Vector<String> labels;
 	private static String[] choiceLabels;
 
-
 	// instance variable
 	private int state = INVALID;
 
-
-
-	private static void checkCollections()
-	{
+	private static void checkCollections() {
 		if (states != null)
 			return;
 
@@ -81,7 +75,6 @@ public class TargetConfiguration
 		label2state.put("always", ALWAYS);
 		label2state.put("forbidden", FORBIDDEN);
 
-
 		label2displayLabel = new HashMap<String, String>();
 		label2displayLabel.put(Globals.CONFLICTSTATEstring, Globals.CONFLICTSTATEstring);
 		label2displayLabel.put(Globals.NOVALIDSTATEstring, Globals.NOVALIDSTATEstring);
@@ -98,37 +91,33 @@ public class TargetConfiguration
 		displayLabel2label.put("always", "always");
 		displayLabel2label.put("forbidden", "forbidden");
 
-		choiceLabels = new String[]{
-		                   label2displayLabel.get("undefined"),
-		                   label2displayLabel.get("installed"),
-		                   label2displayLabel.get("always"),
-		                   label2displayLabel.get("forbidden")
-		               };
+		choiceLabels = new String[] {
+				label2displayLabel.get("undefined"),
+				label2displayLabel.get("installed"),
+				label2displayLabel.get("always"),
+				label2displayLabel.get("forbidden")
+		};
 	}
 
-	public static Map<String, String> getLabel2DisplayLabel()
-	{
+	public static Map<String, String> getLabel2DisplayLabel() {
 		checkCollections();
 
 		return label2displayLabel;
 	}
 
-	public static boolean existsState(int state)
-	{
+	public static boolean existsState(int state) {
 		checkCollections();
 
 		return (states.contains(state));
 	}
 
-	public static boolean existsLabel(String label)
-	{
+	public static boolean existsLabel(String label) {
 		checkCollections();
 
 		return (labels.contains(label));
 	}
 
-	public static String getLabel( int state )
-	{
+	public static String getLabel(int state) {
 		checkCollections();
 
 		if (!existsState(state))
@@ -137,15 +126,13 @@ public class TargetConfiguration
 		return state2label.get(state);
 	}
 
-	public static Vector<String> getLabels()
-	{
+	public static Vector<String> getLabels() {
 		checkCollections();
 
 		return labels;
 	}
 
-	public static Integer getVal(String label)
-	{
+	public static Integer getVal(String label) {
 		checkCollections();
 
 		if (label == null || label.equals(""))
@@ -157,52 +144,41 @@ public class TargetConfiguration
 		return label2state.get(label);
 	}
 
-	public static String getDisplayLabel(int state)
-	{
+	public static String getDisplayLabel(int state) {
 		checkCollections();
 
-		return label2displayLabel.get(getLabel( state));
+		return label2displayLabel.get(getLabel(state));
 	}
 
-	public static final String[] getDisplayLabelsForChoice()
-	{
+	public static final String[] getDisplayLabelsForChoice() {
 		checkCollections();
-		//logging.debug("TargetConfiguration.getDisplayLabelsForChoice() " + logging.getStrings(choiceLabels));
+		// logging.debug("TargetConfiguration.getDisplayLabelsForChoice() " +
+		// logging.getStrings(choiceLabels));
 
 		return choiceLabels;
 	}
 
+	// instance methods
 
-
-
-	//instance methods
-
-	public int getVal()
-	{
+	public int getVal() {
 		return state;
 	}
 
-	public String getString()
-	{
+	public String getString() {
 		return getLabel(state);
 	}
 
-	public String toString()
-	{
+	public String toString() {
 		return getLabel(state);
 	}
-
 
 	// getting instances
-	public static TargetConfiguration produceFromDisplayLabel(String display)
-	{
+	public static TargetConfiguration produceFromDisplayLabel(String display) {
 		return produceFromLabel(
-		           displayLabel2label.get(display)
-		       );
+				displayLabel2label.get(display));
 	}
 
-	public static TargetConfiguration produceFromLabel(String label)
-	{
+	public static TargetConfiguration produceFromLabel(String label) {
 		checkCollections();
 
 		if (label == null)
@@ -211,44 +187,37 @@ public class TargetConfiguration
 		if (!labels.contains(label))
 			return new TargetConfiguration(INVALID);
 
-		//System.out.println(" --------  label " + label + " --- val  " + getVal(label));
-		//System.out.println(" --------  display " + new TargetConfiguration(getVal(label)));
-
+		// System.out.println(" -------- label " + label + " --- val " + getVal(label));
+		// System.out.println(" -------- display " + new
+		// TargetConfiguration(getVal(label)));
 
 		return new TargetConfiguration(getVal(label));
 	}
 
-
 	// constructor
-	public TargetConfiguration()
-	{
+	public TargetConfiguration() {
 	}
 
-	public TargetConfiguration(int t)
-	{
+	public TargetConfiguration(int t) {
 		if (existsState(t))
 			state = t;
 		else
 			state = INVALID;
 	}
 
-
-	public static void main(String[] args)
-	{
-		//System.out.println(" test TargetConfiguration.java");
+	public static void main(String[] args) {
+		// System.out.println(" test TargetConfiguration.java");
 		checkCollections();
 		Iterator iter = states.iterator();
 
 		int i = 0;
 
-		while (iter.hasNext())
-		{
+		while (iter.hasNext()) {
 			i++;
 			int state = (Integer) iter.next();
-			//System.out.println("state " + i + " : " + state + " label " + getLabel(state));
+			// System.out.println("state " + i + " : " + state + " label " +
+			// getLabel(state));
 		}
 	}
-
-
 
 }

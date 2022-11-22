@@ -1,19 +1,17 @@
 package de.uib.utilities.swing;
 
-import javax.swing.*;
+import javax.swing.JComponent;
 
-public interface MissingDataPanel
-{
+public interface MissingDataPanel {
 	void setMissingDataPanel(boolean b);
-	
-	/* Java 8
-	default void setMissingDataPanel(boolean b, JComponent c)
-	{
-		 setMissingDataPanel(b);
-	}
-	*/
-	
+
+	/*
+	 * Java 8
+	 * default void setMissingDataPanel(boolean b, JComponent c)
+	 * {
+	 * setMissingDataPanel(b);
+	 * }
+	 */
+
 	void setMissingDataPanel(boolean b, JComponent c);
 }
-	
-	

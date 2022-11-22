@@ -1,18 +1,22 @@
 package de.uib.configed.dashboard.collector;
 
-import java.time.*;
-import java.time.format.*;
-import java.time.temporal.*;
-import java.util.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import de.uib.configed.*;
-import de.uib.configed.dashboard.*;
-import de.uib.configed.type.*;
-import de.uib.opsidatamodel.*;
-import de.uib.utilities.logging.*;
+import de.uib.configed.configed;
+import de.uib.configed.dashboard.Helper;
+import de.uib.configed.type.HostInfo;
+import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.utilities.logging.logging;
 
-public class ClientData
-{
+public class ClientData {
 	private static Map<String, List<Client>> clients = new HashMap<>();
 	private static Map<String, List<String>> activeClients = new HashMap<>();
 	private static Map<String, List<String>> inactiveClients = new HashMap<>();
@@ -22,20 +26,16 @@ public class ClientData
 
 	private static PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
-	public static List<Client> getClients()
-	{
-		if (clients.isEmpty() || !clients.containsKey(selectedDepot))
-		{
+	public static List<Client> getClients() {
+		if (clients.isEmpty() || !clients.containsKey(selectedDepot)) {
 			return new ArrayList<>();
 		}
 
 		return new ArrayList<>(clients.get(selectedDepot));
 	}
 
-	private static void retrieveClients()
-	{
-		if (!clients.isEmpty())
-		{
+	private static void retrieveClients() {
+		if (!clients.isEmpty()) {
 			return;
 		}
 
@@ -45,16 +45,13 @@ public class ClientData
 
 		List<String> depots = new ArrayList<>(persist.getHostInfoCollections().getAllDepots().keySet());
 
-		for (String depot : depots)
-		{
+		for (String depot : depots) {
 			List<Client> clientsList = new ArrayList<>();
 
-			for (Map.Entry<String, HostInfo> entry : mapOfAllPCInfoMaps.entrySet())
-			{
+			for (Map.Entry<String, HostInfo> entry : mapOfAllPCInfoMaps.entrySet()) {
 				HostInfo hostInfo = entry.getValue();
 
-				if (hostInfo.getInDepot().equals(depot))
-				{
+				if (hostInfo.getInDepot().equals(depot)) {
 					Client client = new Client();
 					client.setHostname(hostInfo.getName());
 					client.setLastSeen(hostInfo.getLastSeen());
@@ -70,30 +67,24 @@ public class ClientData
 		clients.put(configed.getResourceValue("Dashboard.selection.allDepots"), allClients);
 	}
 
-	public static List<String> getActiveClients()
-	{
-		if (activeClients.isEmpty() || !activeClients.containsKey(selectedDepot))
-		{
+	public static List<String> getActiveClients() {
+		if (activeClients.isEmpty() || !activeClients.containsKey(selectedDepot)) {
 			return new ArrayList<>();
 		}
 
 		return new ArrayList<>(activeClients.get(selectedDepot));
 	}
 
-	public static List<String> getInactiveClients()
-	{
-		if (inactiveClients.isEmpty() || !inactiveClients.containsKey(selectedDepot))
-		{
+	public static List<String> getInactiveClients() {
+		if (inactiveClients.isEmpty() || !inactiveClients.containsKey(selectedDepot)) {
 			return new ArrayList<>();
 		}
 
 		return new ArrayList<>(inactiveClients.get(selectedDepot));
 	}
 
-	private static void retrieveClientActivityState()
-	{
-		if (!activeClients.isEmpty() && !inactiveClients.isEmpty())
-		{
+	private static void retrieveClientActivityState() {
+		if (!activeClients.isEmpty() && !inactiveClients.isEmpty()) {
 			return;
 		}
 
@@ -103,25 +94,19 @@ public class ClientData
 		Map<String, Object> reachableInfo = persist.reachableInfo(null);
 		List<String> depots = new ArrayList<>(persist.getHostInfoCollections().getAllDepots().keySet());
 
-		for (String depot : depots)
-		{
-			Map<String, Boolean> clients = persist.getHostInfoCollections().getPcListForDepots(new String[] {depot}, null);
+		for (String depot : depots) {
+			Map<String, Boolean> clients = persist.getHostInfoCollections().getPcListForDepots(new String[] { depot },
+					null);
 
 			List<String> activeClientsList = new ArrayList<>();
 			List<String> inactiveClientsList = new ArrayList<>();
 
-			if (!clients.isEmpty())
-			{
-				for (Map.Entry<String, Boolean> entry : clients.entrySet())
-				{
-					if (reachableInfo.containsKey(entry.getKey()))
-					{
-						if ((Boolean) reachableInfo.get(entry.getKey()))
-						{
+			if (!clients.isEmpty()) {
+				for (Map.Entry<String, Boolean> entry : clients.entrySet()) {
+					if (reachableInfo.containsKey(entry.getKey())) {
+						if ((Boolean) reachableInfo.get(entry.getKey())) {
 							activeClientsList.add(entry.getKey());
-						}
-						else
-						{
+						} else {
 							inactiveClientsList.add(entry.getKey());
 						}
 					}
@@ -139,20 +124,16 @@ public class ClientData
 		inactiveClients.put(configed.getResourceValue("Dashboard.selection.allDepots"), allInactiveClients);
 	}
 
-	public static Map<String, Integer> getLastSeenData()
-	{
-		if (clientLastSeen.isEmpty() || !clientLastSeen.containsKey(selectedDepot))
-		{
+	public static Map<String, Integer> getLastSeenData() {
+		if (clientLastSeen.isEmpty() || !clientLastSeen.containsKey(selectedDepot)) {
 			return new HashMap<>();
 		}
 
 		return new HashMap<>(clientLastSeen.get(selectedDepot));
 	}
 
-	private static void retrieveLastSeenData()
-	{
-		if (!Helper.mapsInMapAreEmpty(clientLastSeen))
-		{
+	private static void retrieveLastSeenData() {
+		if (!Helper.mapsInMapAreEmpty(clientLastSeen)) {
 			return;
 		}
 
@@ -164,52 +145,43 @@ public class ClientData
 		Map<String, HostInfo> mapOfAllPCInfoMaps = persist.getHostInfoCollections().getMapOfAllPCInfoMaps();
 		List<String> depots = new ArrayList<>(persist.getHostInfoCollections().getAllDepots().keySet());
 
-		for (String depot : depots)
-		{
+		for (String depot : depots) {
 			final Map<String, Integer> lastSeenData = new HashMap<>();
 			int fourteenOrLowerDays = 0;
 			int betweenFifteenAndThirtyDays = 0;
 			int moreThanThirtyDays = 0;
 
-			for (Map.Entry<String, HostInfo> entry : mapOfAllPCInfoMaps.entrySet())
-			{
-				if (entry.getValue().getInDepot().equals(depot))
-				{
-					if (entry.getValue().getLastSeen().trim().isEmpty())
-					{
+			for (Map.Entry<String, HostInfo> entry : mapOfAllPCInfoMaps.entrySet()) {
+				if (entry.getValue().getInDepot().equals(depot)) {
+					if (entry.getValue().getLastSeen().trim().isEmpty()) {
 						continue;
 					}
 
 					String date = entry.getValue().getLastSeen().substring(0, 10);
 
-					try
-					{
+					try {
 						final LocalDate lastSeenDate = LocalDate.parse(date, dtf);
 						final long days = ChronoUnit.DAYS.between(lastSeenDate, current);
 
-						if (days <= 14)
-						{
+						if (days <= 14) {
 							fourteenOrLowerDays++;
-						}
-						else if (days <= 30)
-						{
+						} else if (days <= 30) {
 							betweenFifteenAndThirtyDays++;
-						}
-						else
-						{
+						} else {
 							moreThanThirtyDays++;
 						}
-					}
-					catch (DateTimeParseException ex)
-					{
+					} catch (DateTimeParseException ex) {
 						logging.info("Date couldn't be parsed: " + date);
 					}
 
 				}
 
-				lastSeenData.put(configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays"), fourteenOrLowerDays);
-				lastSeenData.put(configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"), betweenFifteenAndThirtyDays);
-				lastSeenData.put(configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays"), moreThanThirtyDays);
+				lastSeenData.put(configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays"),
+						fourteenOrLowerDays);
+				lastSeenData.put(configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"),
+						betweenFifteenAndThirtyDays);
+				lastSeenData.put(configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays"),
+						moreThanThirtyDays);
 			}
 
 			clientLastSeen.put(depot, lastSeenData);
@@ -219,16 +191,14 @@ public class ClientData
 		clientLastSeen.put(configed.getResourceValue("Dashboard.selection.allDepots"), allClientLastSeen);
 	}
 
-	public static void clear()
-	{
+	public static void clear() {
 		clients.clear();
 		activeClients.clear();
 		inactiveClients.clear();
 		clientLastSeen.clear();
 	}
 
-	public static void retrieveData(String depot)
-	{
+	public static void retrieveData(String depot) {
 		selectedDepot = depot;
 
 		retrieveClientActivityState();

@@ -48,7 +48,7 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 		java.util.List<String> extraHostFields = persist.getServerConfigStrings(
 				PersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PanelLicencesReconciliation);
 
-		//--- panelLicencesReconciliation
+		// --- panelLicencesReconciliation
 		columnNames = new Vector<>();
 		classNames = new Vector<>();
 
@@ -66,7 +66,7 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 		final int index_SWinventory_used = columnNames.size() - 1;
 		logging.debug(this, "columnNames: " + columnNames);
 		logging.debug(this, "cols index_used_by_opsi  " + index_used_by_opsi + " , " + index_SWinventory_used);
-		//System.exit(0);
+		// System.exit(0);
 		classNames.add("java.lang.String");
 
 		classNames.add("java.lang.String");
@@ -89,7 +89,7 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 
 				thePanel.panelReconciliation, updateCollection);
 
-		//filter which guarantees that clients are only shown when they have entries 
+		// filter which guarantees that clients are only shown when they have entries
 		modelLicencesReconciliation.setFilterCondition(new TableModelFilterCondition() {
 			public void setFilter(TreeSet<Object> filterParam) {
 				// Implementing TableModelFilterCondition
@@ -112,16 +112,18 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 
 		// --- PopupMenu
 		/*
-		JMenuItemFormatted menuItemAddReconciliation = new JMenuItemFormatted("add Reconciliation");//configed.getResourceValue("ConfigedMain.Licences.NewLicencecontract"));
-		menuItemAddReconciliation.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e)
-			{
-			}
-		});
-		
-		thePanel.panelReconciliation.addPopupItem(menuItemAddReconciliation);
-		
-		*/
+		 * JMenuItemFormatted menuItemAddReconciliation = new
+		 * JMenuItemFormatted("add Reconciliation");//configed.getResourceValue(
+		 * "ConfigedMain.Licences.NewLicencecontract"));
+		 * menuItemAddReconciliation.addActionListener(new ActionListener(){
+		 * public void actionPerformed(ActionEvent e)
+		 * {
+		 * }
+		 * });
+		 * 
+		 * thePanel.panelReconciliation.addPopupItem(menuItemAddReconciliation);
+		 * 
+		 */
 
 		// special treatment of columns
 		javax.swing.table.TableColumn col;
@@ -136,7 +138,7 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 		col.setPreferredWidth(130);
 		col.setMaxWidth(200);
 
-		//updates
+		// updates
 		thePanel.panelReconciliation.setUpdateController(new MapItemsUpdateController(thePanel.panelReconciliation,
 				modelLicencesReconciliation, new MapBasedUpdater() {
 					public String sendUpdate(Map<String, Object> rowmap) {
@@ -158,7 +160,7 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 		thePanel.panelReconciliation.setSearchColumns(searchCols);
 		thePanel.panelReconciliation.setSearchSelectMode(true);
 
-		//thePanel.panelReconciliation.showFiltered( true );
+		// thePanel.panelReconciliation.showFiltered( true );
 
 	}
 }

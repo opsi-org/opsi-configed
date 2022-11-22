@@ -1,23 +1,21 @@
 package de.uib.configed.clientselection.operations;
 
-import de.uib.configed.clientselection.*;
+import de.uib.configed.clientselection.SelectData;
+import de.uib.configed.clientselection.SelectElement;
+import de.uib.configed.clientselection.SelectOperation;
 
-public class BigIntEqualsOperation extends SelectOperation
-{   
-    public BigIntEqualsOperation( SelectElement element )
-    {
-        super(element);
-    }
-    
-    @Override
-    public SelectData.DataType getDataType()
-    {
-        return SelectData.DataType.BigIntegerType;
-    }
-    
-    @Override
-    public String getOperationString()
-    {
-        return "=";
-    }
+public class BigIntEqualsOperation extends SelectOperation {
+	public BigIntEqualsOperation(SelectElement element) {
+		super(element);
+	}
+
+	@Override
+	public SelectData.DataType getDataType() {
+		return SelectData.DataType.BigIntegerType;
+	}
+
+	@Override
+	public String getOperationString() {
+		return "=";
+	}
 }

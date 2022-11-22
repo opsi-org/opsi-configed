@@ -8,10 +8,8 @@
 
 package de.uib.utilities.table.updates;
 
-
- 
-public interface UpdateController
-{
+public interface UpdateController {
 	boolean saveChanges();
+
 	boolean cancelChanges();
 }

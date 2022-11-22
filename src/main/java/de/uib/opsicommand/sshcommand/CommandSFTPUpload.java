@@ -1,13 +1,13 @@
 package de.uib.opsicommand.sshcommand;
 
 import java.util.ArrayList;
-import de.uib.configed.*;
-import de.uib.configed.gui.*;
-import de.uib.configed.gui.ssh.*;
+
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.gui.FGeneralDialog;
+import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 
 public class CommandSFTPUpload
-implements SSHCommandNeedParameter, SSHSFTPCommand, SSHCommand
-{
+		implements SSHCommandNeedParameter, SSHSFTPCommand, SSHCommand {
 	protected FGeneralDialog dialog;
 	private boolean needParameter = true;
 	private boolean isMultiCommand = false;
@@ -26,182 +26,204 @@ implements SSHCommandNeedParameter, SSHSFTPCommand, SSHCommand
 	public boolean overwriteMode = true;
 	boolean showOutputDialog = true;
 
-
-	public CommandSFTPUpload(String title)
-	{
+	public CommandSFTPUpload(String title) {
 		setTitle(title);
 		title = "File Upload";
 		baseName = "File Upload";
 		command = "File Upload (via sftp)";
 	}
-	public CommandSFTPUpload()
-	{
+
+	public CommandSFTPUpload() {
 	}
 
-	public boolean getShowOutputDialog()
-	{return showOutputDialog;}
+	public boolean getShowOutputDialog() {
+		return showOutputDialog;
+	}
 
-	public String getTitle()
-	{return title;}
-	public String getDescription()
-	{
+	public String getTitle() {
+		return title;
+	}
+
+	public String getDescription() {
 		if (description.equals(""))
-			description = "copy " + sourcePath  + sourceFilename
-					+ " to " + targetPath  + targetFilename
+			description = "copy " + sourcePath + sourceFilename
+					+ " to " + targetPath + targetFilename
 					+ " on connected server";
 		return description;
 	}
-	public String getFullTargetPath()
-	{return getTargetPath() + getTargetFilename();}
 
-	public String getTargetPath()
-	{return targetPath;}
-	public String getTargetFilename()
-	{return targetFilename;}
-	public String getFullSourcePath()
-	{return fullSourcePath;}
-	public String getSourcePath()
-	{return sourcePath;}
-	public String getSourceFilename()
-	{return sourceFilename;}
-	public boolean getOverwriteMode()
-	{return overwriteMode;}
+	public String getFullTargetPath() {
+		return getTargetPath() + getTargetFilename();
+	}
 
-	public void setTitle(String t)
-	{title = t;}
-	public void setDescription(String d)
-	{description = d;}
-	public void setTargetPath(String p)
-	{targetPath = p;}
-	public void setTargetFilename(String f)
-	{targetFilename = f;}
-	public void setSourcePath(String p)
-	{sourcePath = p;}
-	public void setSourceFilename(String f)
-	{sourceFilename = f;}
-	public void setFullSourcePath(String f)
-	{fullSourcePath = f;}
-	public void setOverwriteMode(boolean o)
-	{overwriteMode=o;}
+	public String getTargetPath() {
+		return targetPath;
+	}
 
+	public String getTargetFilename() {
+		return targetFilename;
+	}
+
+	public String getFullSourcePath() {
+		return fullSourcePath;
+	}
+
+	public String getSourcePath() {
+		return sourcePath;
+	}
+
+	public String getSourceFilename() {
+		return sourceFilename;
+	}
+
+	public boolean getOverwriteMode() {
+		return overwriteMode;
+	}
+
+	public void setTitle(String t) {
+		title = t;
+	}
+
+	public void setDescription(String d) {
+		description = d;
+	}
+
+	public void setTargetPath(String p) {
+		targetPath = p;
+	}
+
+	public void setTargetFilename(String f) {
+		targetFilename = f;
+	}
+
+	public void setSourcePath(String p) {
+		sourcePath = p;
+	}
+
+	public void setSourceFilename(String f) {
+		sourceFilename = f;
+	}
+
+	public void setFullSourcePath(String f) {
+		fullSourcePath = f;
+	}
+
+	public void setOverwriteMode(boolean o) {
+		overwriteMode = o;
+	}
 
 	@Override
 	/**
-	* Sets the command specific error text
-	**/
-	public String get_ERROR_TEXT()
-	{
+	 * Sets the command specific error text
+	 **/
+	public String get_ERROR_TEXT() {
 		return "ERROR";
 	}
 
 	@Override
-	public String getId()
-	{
+	public String getId() {
 		return "CommandFilesUpload";
 	}
 
 	@Override
-	public String getBasicName()
-	{
+	public String getBasicName() {
 		return baseName;
 	}
 
 	@Override
-	public boolean isMultiCommand()
-	{
+	public boolean isMultiCommand() {
 		return isMultiCommand;
 	}
+
 	@Override
-	public String getMenuText()
-	{
+	public String getMenuText() {
 		// return configed.getResourceValue("SSHConnection.command.modulesupload");
 		return "File Upload";
 	}
+
 	@Override
-	public String getSecureInfoInCommand()
-	{
+	public String getSecureInfoInCommand() {
 		// maybe null maybe sth
 		return null;
 	}
+
 	@Override
-	public String getSecuredCommand()
-	{
-		if ( (getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
-			return 	getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().confidential);
-		else return getCommand();
+	public String getSecuredCommand() {
+		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
+			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().confidential);
+		else
+			return getCommand();
 	}
+
 	@Override
-	public String getParentMenuText()
-	{
+	public String getParentMenuText() {
 		return null;
 	}
+
 	@Override
-	public String getToolTipText()
-	{
-		// return configed.getResourceValue("SSHConnection.command.modulesupload.tooltip");
+	public String getToolTipText() {
+		// return
+		// configed.getResourceValue("SSHConnection.command.modulesupload.tooltip");
 		return "";
 	}
+
 	@Override
-	public String getCommand()
-	{
+	public String getCommand() {
 		return "# this is no usually command";
 	}
-	@Override
-	public void setCommand(String c)
-	{ command = c; }
-
 
 	@Override
-	public boolean needSudo()
-	{
+	public void setCommand(String c) {
+		command = c;
+	}
+
+	@Override
+	public boolean needSudo() {
 		return needSudo;
 	}
+
 	@Override
-	public String getCommandRaw()
-	{
+	public String getCommandRaw() {
 		return command;
 	}
 
 	@Override
-	public int getPriority()
-	{
+	public int getPriority() {
 		return priority;
 	}
+
 	@Override
-	public boolean needParameter()
-	{
+	public boolean needParameter() {
 		return needParameter;
 	}
+
 	@Override
-	public void startParameterGui()
-	{
+	public void startParameterGui() {
 		// dialog = new SSHModulesUploadDialog();
 	}
+
 	@Override
-	public void startParameterGui(ConfigedMain main)
-	{
+	public void startParameterGui(ConfigedMain main) {
 		// dialog = new SSHModulesUploadDialog(main);
 		// dialog = new SSHModulesUploadDialog();
 	}
+
 	@Override
-	public SSHConnectionExecDialog startHelpDialog()
-	{
+	public SSHConnectionExecDialog startHelpDialog() {
 		return null;
 	}
 
 	@Override
-	public FGeneralDialog  getDialog()
-	{
+	public FGeneralDialog getDialog() {
 		return null;
 	}
 
 	@Override
-	public ArrayList<String> getParameterList()
-	{
+	public ArrayList<String> getParameterList() {
 		return null;
 	}
 
-	public String toString(){
+	public String toString() {
 		return "cp " + getSourcePath() + getSourceFilename() + " " + getTargetPath() + getTargetFilename();
 	}
 }

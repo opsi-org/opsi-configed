@@ -6,15 +6,14 @@
  * License, version AGPLv3, as published by the Free Software Foundation
  *
  */
- 
+
 package de.uib.utilities.observer;
 
-public interface DataLoadingObservable
-{
+public interface DataLoadingObservable {
 	public void registerDataLoadingObserver(DataLoadingObserver ob);
-	
+
 	public void unregisterDataLoadingObserver(DataLoadingObserver ob);
-	
+
 	public void notifyDataLoadingObservers(Object mesg);
-	
-}	
+
+}

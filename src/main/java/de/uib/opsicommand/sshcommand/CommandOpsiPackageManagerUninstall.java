@@ -1,11 +1,13 @@
 package de.uib.opsicommand.sshcommand;
-import de.uib.configed.*;
-import de.uib.configed.gui.*;
-import de.uib.configed.gui.ssh.*;
-import de.uib.utilities.logging.*;
 
-public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManager implements SSHCommandNeedParameter
-{
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.configed;
+import de.uib.configed.gui.FGeneralDialog;
+import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
+import de.uib.configed.gui.ssh.SSHPackageManagerUninstallParameterDialog;
+import de.uib.utilities.logging.logging;
+
+public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManager implements SSHCommandNeedParameter {
 	protected FGeneralDialog dialog = null;
 	private String command;
 	private boolean install;
@@ -16,130 +18,126 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 	String verbosity = " -vvv ";
 	String keepFiles = " ";
 	String freeInput = " ";
-	public CommandOpsiPackageManagerUninstall()
-	{
+
+	public CommandOpsiPackageManagerUninstall() {
 		command = "opsi-package-manager";
 	}
 
 	@Override
-	public String getId()
-	{
+	public String getId() {
 		return "CommandOpsiPackageManagerUninstall";
 	}
+
 	@Override
-	public String getMenuText()
-	{
+	public String getMenuText() {
 		return configed.getResourceValue("SSHConnection.command.opsipackagemanager_uninstall");
 	}
+
 	@Override
-	public String getParentMenuText()
-	{
+	public String getParentMenuText() {
 		// return "Package-Manager";
 		return super.getMenuText();
 	}
-	
+
 	@Override
-	public String getBasicName()
-	{
+	public String getBasicName() {
 		return "opsi-package-manager";
 	}
+
 	@Override
-	public String getToolTipText()
-	{
+	public String getToolTipText() {
 		return configed.getResourceValue("SSHConnection.command.opsipackagemanager_uninstall.tooltip");
 	}
+
 	@Override
-	public FGeneralDialog getDialog()
-	{
+	public FGeneralDialog getDialog() {
 		return dialog;
 	}
+
 	@Override
-	public void startParameterGui()
-	{
+	public void startParameterGui() {
 		dialog = new SSHPackageManagerUninstallParameterDialog();
 	}
+
 	@Override
-	public void startParameterGui(ConfigedMain main)
-	{
+	public void startParameterGui(ConfigedMain main) {
 		dialog = new SSHPackageManagerUninstallParameterDialog(main);
 	}
+
 	@Override
-	public SSHConnectionExecDialog startHelpDialog()
-	{
+	public SSHConnectionExecDialog startHelpDialog() {
 		SSHCommand command = new CommandHelp(this);
-		SSHConnectExec exec = new 
-			SSHConnectExec(
+		SSHConnectExec exec = new SSHConnectExec(
 				command
-				// SSHConnectionExecDialog.getInstance(
-					// configed.getResourceValue("SSHConnection.Exec.title") + " \""+command.getCommand() + "\" ",
-					// command
-					// )
-				)
-			;
-			
+		// SSHConnectionExecDialog.getInstance(
+		// configed.getResourceValue("SSHConnection.Exec.title") + "
+		// \""+command.getCommand() + "\" ",
+		// command
+		// )
+		);
+
 		// SSHConnectExec exec = new SSHConnectExec();
-		// exec.exec(command, true, new SSHConnectionExecDialog(command, configed.getResourceValue("SSHConnection.Exec.title") + " \""+command.getCommand() + "\" "));
+		// exec.exec(command, true, new SSHConnectionExecDialog(command,
+		// configed.getResourceValue("SSHConnection.Exec.title") + "
+		// \""+command.getCommand() + "\" "));
 		return (SSHConnectionExecDialog) exec.getDialog();
 	}
-	
-	public int getPriority()
-	{
+
+	public int getPriority() {
 		return priority;
 	}
 
 	@Override
-	public String getCommand()
-	{
+	public String getCommand() {
 		command = "opsi-package-manager -q " + verbosity + keepFiles + depots + freeInput + opsiproduct;
-		if (needSudo()) return SSHCommandFactory.getInstance().sudo_text+" "+ command + " 2>&1";
+		if (needSudo())
+			return SSHCommandFactory.getInstance().sudo_text + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
+
 	@Override
-	public String getCommandRaw()
-	{
+	public String getCommandRaw() {
 		return command;
 	}
-	
-	public void setKeepFiles(boolean kF)
-	{
-		if (kF) keepFiles = "  --keep-files ";
-		else keepFiles = "";
+
+	public void setKeepFiles(boolean kF) {
+		if (kF)
+			keepFiles = "  --keep-files ";
+		else
+			keepFiles = "";
 	}
 
-	public void setOpsiproduct(String prod)
-	{
-		if (prod!= null && !prod.equals("")) 
+	public void setOpsiproduct(String prod) {
+		if (prod != null && !prod.equals(""))
 			opsiproduct = " -r " + prod;
-		else 
+		else
 			opsiproduct = " ";
 	}
-	public void setDepot(String depotlist)
-	{
-		if (depotlist != null && !depotlist.equals("")) 
+
+	public void setDepot(String depotlist) {
+		if (depotlist != null && !depotlist.equals(""))
 			depots = " -d " + depotlist;
-		else 
+		else
 			depots = " ";
 	}
-	public void setVerbosity(int v_sum)
-	{
+
+	public void setVerbosity(int v_sum) {
 		String v = "v";
-		for (int i = 0; i < v_sum; i++) 
+		for (int i = 0; i < v_sum; i++)
 			v = v + "v";
 		verbosity = " -" + v + " ";
 	}
-	public void setFreeInput(String fI)
-	{
-		freeInput = " " + fI ;
+
+	public void setFreeInput(String fI) {
+		freeInput = " " + fI;
 	}
-	public boolean checkCommand()
-	{
-		if (opsiproduct == null || opsiproduct.trim().equals(""))
-		{
+
+	public boolean checkCommand() {
+		if (opsiproduct == null || opsiproduct.trim().equals("")) {
 			logging.info(this, "no product given");
 			return false;
 		}
 		return true;
 	}
-
 
 }

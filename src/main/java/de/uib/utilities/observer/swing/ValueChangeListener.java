@@ -1,50 +1,33 @@
 package de.uib.utilities.observer.swing;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-/*
-* ValueChangeListener.java
-* 
-* (c) uib 2012
-* GPL-licensed
-* authors Felix Rohrbach, Rupert Röder
-*
-*
-*/
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.*;
-import de.uib.configed.Globals;
-import de.uib.utilities.logging.*;
-
-public abstract class ValueChangeListener implements ActionListener, ChangeListener, DocumentListener
-{
+public abstract class ValueChangeListener implements ActionListener, ChangeListener, DocumentListener {
 	abstract protected void actOnChange();
-	
-	public void actionPerformed( ActionEvent event )
-	{
+
+	public void actionPerformed(ActionEvent event) {
 		actOnChange();
 	}
-	
-	public void stateChanged( ChangeEvent e )
-	{
+
+	public void stateChanged(ChangeEvent e) {
 		actOnChange();
 	}
-	
-	public void changedUpdate( DocumentEvent e )
-	{
+
+	public void changedUpdate(DocumentEvent e) {
 		actOnChange();
 	}
-	
-	public void insertUpdate( DocumentEvent e )
-	{
+
+	public void insertUpdate(DocumentEvent e) {
 		actOnChange();
 	}
-	
-	public void removeUpdate( DocumentEvent e )
-	{
+
+	public void removeUpdate(DocumentEvent e) {
 		actOnChange();
 	}
 }

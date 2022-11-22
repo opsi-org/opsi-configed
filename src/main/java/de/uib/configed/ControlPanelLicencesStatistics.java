@@ -38,7 +38,7 @@ public class ControlPanelLicencesStatistics extends ControlMultiTablePanel {
 		Vector<String> columnNames;
 		Vector<String> classNames;
 
-		//--- panelStatistics
+		// --- panelStatistics
 		columnNames = new Vector<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("licence_options");

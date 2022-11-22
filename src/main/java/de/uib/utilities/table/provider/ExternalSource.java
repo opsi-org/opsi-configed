@@ -5,58 +5,52 @@
  *	author Rupert Röder 
  *
  */
- 
- 
+
 package de.uib.utilities.table.provider;
 
-import java.util.*;
+import java.util.Vector;
 
 public class ExternalSource implements TableSource
-//adapter for external source for table data
+// adapter for external source for table data
 {
 	protected Vector<String> columnNames;
-	
+
 	protected Vector<String> classNames;
-	
+
 	protected boolean reloadRequested = true;
-	
+
 	protected RowsProvider rowsProvider;
-	
+
 	public ExternalSource(Vector<String> columnNames, Vector<String> classNames,
-		RowsProvider rowsProvider)
-	{
+			RowsProvider rowsProvider) {
 		this.columnNames = columnNames;
 		this.classNames = classNames;
 		this.rowsProvider = rowsProvider;
-		
+
 	}
-	
-	public Vector<String> retrieveColumnNames()
-	{
+
+	public Vector<String> retrieveColumnNames() {
 		return columnNames;
 	}
-	
-	public Vector<String> retrieveClassNames()
-	{
+
+	public Vector<String> retrieveClassNames() {
 		return classNames;
 	}
-	
-	public Vector<Vector<Object>> retrieveRows()
-	{
-		if (reloadRequested)
-		{
+
+	public Vector<Vector<Object>> retrieveRows() {
+		if (reloadRequested) {
 			rowsProvider.requestReload();
 			reloadRequested = false;
 		}
-		//System.out.println (" --- MapSource retrieveRows() rows.size(): " + rows.size());
+		// System.out.println (" --- MapSource retrieveRows() rows.size(): " +
+		// rows.size());
 		return rowsProvider.getRows();
 	}
-	
-	public void requestReload()
-	{
+
+	public void requestReload() {
 		reloadRequested = true;
 	}
-	
+
 	@Override
 	public String getRowCounterName() {
 		// TODO Auto-generated method stub
@@ -72,16 +66,13 @@ public class ExternalSource implements TableSource
 	@Override
 	public void setRowCounting(boolean b) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void structureChanged() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
-	
-	
+
 }

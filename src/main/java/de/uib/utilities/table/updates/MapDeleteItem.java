@@ -5,20 +5,18 @@
  *	author Rupert Röder 
  *
  */
- 
+
 package de.uib.utilities.table.updates;
 
-import java.util.*;
+import java.util.Vector;
 
-public class MapDeleteItem extends MapBasedTableEditItem
-{
-	public MapDeleteItem(Object source, int keyCol, Vector<String> columnNames, Vector<String> classNames, Vector<Object> rowV) 
-	{
+public class MapDeleteItem extends MapBasedTableEditItem {
+	public MapDeleteItem(Object source, int keyCol, Vector<String> columnNames, Vector<String> classNames,
+			Vector<Object> rowV) {
 		super(source, keyCol, columnNames, classNames, null, rowV);
 	}
-	
-	public boolean keyChanged()
-	{
+
+	public boolean keyChanged() {
 		return false;
 	}
 }

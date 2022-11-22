@@ -6,26 +6,19 @@
  * License, version AGPLv3, as published by the Free Software Foundation
  *
  */
- 
-package de.uib.utilities.observer;
-import de.uib.utilities.logging.*;
-import de.uib.configed.*;
 
+package de.uib.utilities.observer;
 
 /**
- * Observing RunningInstaces 
+ * Observing RunningInstaces
  * 
- * @version 2016/01/15                     
+ * @version 2016/01/15
  * @author Rupert Roeder
  */
 
-public interface RunningInstancesObserver<T>
-{
+public interface RunningInstancesObserver<T> {
 	public void executeCommandOnInstances(String command, java.util.Set<T> instances);
-	
+
 	public void instancesChanged(java.util.Set<T> instances);
-	
+
 }
-	
-	
-	

@@ -1,57 +1,53 @@
 package de.uib.opsidatamodel.datachanges;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
+
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.*;
-import java.util.*;
+import de.uib.utilities.logging.logging;
 
 /**
-*/   
-public  class HostUpdateCollection extends UpdateCollection 
-{
+*/
+public class HostUpdateCollection extends UpdateCollection {
 	PersistenceController persis;
-	
-	public HostUpdateCollection(Object persis)
-	{
-		super(new Vector(0)); 
+
+	public HostUpdateCollection(Object persis) {
+		super(new Vector(0));
 		setController(persis);
 	}
-	
-	public void setController(Object obj)
-	{
-		this.persis = (PersistenceController) obj;  
+
+	public void setController(Object obj) {
+		this.persis = (PersistenceController) obj;
 	}
-	
-	public boolean addAll(Collection c)
-	{
-		boolean  result = true;
-		
+
+	public boolean addAll(Collection c) {
+		boolean result = true;
+
 		Iterator it = c.iterator();
-		while (it.hasNext())
-		{
+		while (it.hasNext()) {
 			Map map = null;
 			Object obj = it.next();
-		
-			try
-			{
+
+			try {
 				map = (Map) obj;
 			}
-			
-			catch (ClassCastException ccex)
-			{
+
+			catch (ClassCastException ccex) {
 				result = false;
-				logging.debugOut(logging.LEVEL_ERROR, "wrong element type, found " + obj.getClass().getName() 
-																								 + ", expected a Map" );
+				logging.debugOut(logging.LEVEL_ERROR, "wrong element type, found " + obj.getClass().getName()
+						+ ", expected a Map");
 			}
-				
-			result = add (new HostUpdate(persis, map));
+
+			result = add(new HostUpdate(persis, map));
 		}
 		return result;
 	}
-	
-	public void clearElements()
-	{
+
+	public void clearElements() {
 		logging.debug(this, "clearElements()");
 		clear();
 	}
-		
+
 }

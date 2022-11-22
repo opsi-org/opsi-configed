@@ -1,61 +1,62 @@
 package de.uib.opsidatamodel.modulelicense;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+
+import javax.swing.BorderFactory;
+import javax.swing.GroupLayout;
+import javax.swing.Icon;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 /**
  * FGeneralDialogLicensingInfo
  * Copyright:     Copyright (c) 2001-2017,2020-2022
  * Organisation:  uib
  * @author Rupert Röder
  */
-
-import de.uib.configed.*;
-
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.border.Border;
-import javax.swing.table.TableModel;
-
-import java.awt.event.*;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.net.URLEncoder;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import de.uib.opsicommand.*;
+import de.uib.configed.Globals;
+import de.uib.configed.configed;
+import de.uib.configed.gui.FGeneralDialog;
+import de.uib.configed.gui.IconAsButton;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.*;
-import de.uib.utilities.swing.*;
-import de.uib.utilities.observer.RunningInstancesObserver;
-import de.uib.utilities.observer.RunningInstances;
-import de.uib.utilities.table.*;
-import de.uib.utilities.table.gui.*;
-import de.uib.utilities.table.updates.*;
-import de.uib.utilities.table.provider.*;
-import de.uib.configed.gui.*;
+import de.uib.utilities.logging.logging;
+import de.uib.utilities.swing.PanelLinedComponents;
+import de.uib.utilities.table.GenTableModel;
+import de.uib.utilities.table.gui.LicensingInfoPanelGenEditTable;
+import de.uib.utilities.table.gui.PanelGenEditTable;
+import de.uib.utilities.table.provider.MapSource;
+import de.uib.utilities.table.provider.TableSource;
+import de.uib.utilities.table.updates.GenericTableUpdateItemFactory;
+import de.uib.utilities.table.updates.TableUpdateCollection;
 
 public class FGeneralDialogLicensingInfo extends FGeneralDialog {
-	
+
 	public LicensingInfoPanelGenEditTable thePanel;
 	GenTableModel theModel;
 	PersistenceController persist;
 	LicensingInfoMap licenseMap;
-	
+
 	TableSource tableSource;
-	
+
 	Vector<String> columnNames = new Vector<String>();
 	Vector<String> classNames = new Vector<String>();
 	Map<String, Map> theSourceMap = new HashMap<String, Map>();
 	Map<String, Map<String, Map<String, Object>>> datesMap = new HashMap<>();
 	Map<String, Object> clientNumbers;
-	
-	public static boolean extendedView = false; //false; //used as initial value. 
-	
+
+	public static boolean extendedView = false; // false; //used as initial value.
+
 	JLabel clientTitle = new JLabel();
 	JLabel allClient = new JLabel();
 	JLabel allClientNum = new JLabel();
@@ -71,21 +72,19 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 	JLabel customerTitle = new JLabel();
 	Set customerSet;
 	JLabel customerNames = new JLabel();
-	
+
 	public FGeneralDialogLicensingInfo(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
 			int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
 		super(owner, title, modal, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout,
 				addPane);
-		//logging.info(this, "construct");
-		
-		
+		// logging.info(this, "construct");
+
 		persist = PersistenceControllerFactory.getPersistenceController();
 		PanelGenEditTable centerPanel = new PanelGenEditTable();
 		JPanel bottomPanel = new JPanel();
 
 		bottomPanel = this.initClientInfo();
 		centerPanel = this.initMainPanel();
-		
 
 		this.setCenterPaneInScrollpane(centerPanel);
 		this.setAdditionalPane(bottomPanel);
@@ -100,7 +99,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 	protected void allLayout() {
 		// super.allLayout();
 		// we could design an adapted layout and infuse it in guiInit
-		//logging.info(this, "allLayout");
+		// logging.info(this, "allLayout");
 
 		allpane.setBackground(de.uib.configed.Globals.backLightBlue); // Globals.nimbusBackground);///Globals.backgroundWhite);
 																		// //Globals.backLighter);//Globals.backgroundWhite);//(myHintYellow);
@@ -168,19 +167,18 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 						.addGap(Globals.hGapSize / 2, Globals.hGapSize, 2 * Globals.hGapSize)));
 
 	}
-	
-	private void retrieveData()
-	{
+
+	private void retrieveData() {
 		logging.info(this, "retrieveData extendedView " + extendedView);
-		LicensingInfoMap.setReduced( !extendedView );
+		LicensingInfoMap.setReduced(!extendedView);
 		licenseMap = LicensingInfoMap.getInstance();
 
 		columnNames = licenseMap.getColumnNames();
 		classNames = licenseMap.getClassNames();
 		theSourceMap = licenseMap.getTableMap();
-		
-		//logging.info(this, "retrieveData columnNames " + columnNames  );
-		
+
+		// logging.info(this, "retrieveData columnNames " + columnNames );
+
 		clientNumbers = licenseMap.getClientNumbersMap();
 		clientTitle.setText("<html>" + configed.getResourceValue("LicensingInfo.client.title") + "  ("
 				+ persist.getHostInfoCollections().getConfigServer() + ") </html>");
@@ -202,13 +200,12 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		customerNames.setText(
 				customerSet.toString().replace("[", "<html>").replace(", ", "<br>").replace("]", "</html>"));
 	}
-	
-	
+
 	protected PanelGenEditTable initMainPanel() {
 		// licenseMap = getLicensingInfoMap();
 		retrieveData();
-		
-		FGeneralDialogLicensingInfo ME =this;
+
+		FGeneralDialogLicensingInfo ME = this;
 
 		thePanel = new LicensingInfoPanelGenEditTable(
 				"", // title
@@ -229,58 +226,54 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				, false // with tableSearchPane
 
 		) {
-		
-			
-			
+
 			@Override
 			public void reload() {
 
 				logging.info(this, " LicInfoPanelGenTable reload, reduced " + !ME.extendedView);
-				//String oldNumber = "" + clientNumbers.get(LicensingInfoMap.All);
+				// String oldNumber = "" + clientNumbers.get(LicensingInfoMap.All);
 				persist.configOptionsRequestRefresh();
 				persist.opsiLicensingInfoRequestRefresh();
 				LicensingInfoMap.requestRefresh();
-				licenseMap = LicensingInfoMap.getInstance(persist.getOpsiLicensingInfo(), persist.getConfigDefaultValues(), !ME.extendedView);
+				licenseMap = LicensingInfoMap.getInstance(persist.getOpsiLicensingInfo(),
+						persist.getConfigDefaultValues(), !ME.extendedView);
 				retrieveData();
-				//String newNumber = "" + clientNumbers.get(LicensingInfoMap.All);
-				
+				// String newNumber = "" + clientNumbers.get(LicensingInfoMap.All);
+
 				tableSource = new MapSource(
 						columnNames, classNames,
 						theSourceMap,
 						false);
-						
-				//logging.info(this, "" + theSourceMap.get("mysql_backend"));
+
+				// logging.info(this, "" + theSourceMap.get("mysql_backend"));
 				buildModel();
-				
+
 				super.reload();
-				
-				//logging.info(this, "reload info " + oldNumber + " :: " + newNumber + ":: " + noAfterReload);
-				//ME.setVisible(false);
-				//initMainPanel();
-				//setVisible(true);
+
+				// logging.info(this, "reload info " + oldNumber + " :: " + newNumber + ":: " +
+				// noAfterReload);
+				// ME.setVisible(false);
+				// initMainPanel();
+				// setVisible(true);
 			}
 		};
 
-		//thePanel.setLicensingInfoMap(LicensingInfoMap.getInstance());
-		
-		
+		// thePanel.setLicensingInfoMap(LicensingInfoMap.getInstance());
+
 		thePanel.setMarkBoldHeaderCellRenderer();
-		
+
 		tableSource = new MapSource(
 				columnNames, classNames,
 				theSourceMap,
 				false);
 
-		
-	
 		buildModel();
-
 
 		thePanel.setTitle("opsi Modules Validation");
 		thePanel.setSize(500, 200);
 
 		thePanel.setUpdateController(null);
-		
+
 		thePanel.getTheTable().setRowSorter(null);
 
 		// thePanel.getColumnModel().getColumn(0).setPreferredWidth(100);
@@ -292,22 +285,31 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 	}
 
 	protected JPanel initClientInfo() {
-		
-		
+
 		retrieveData();
 
-		//JLabel orangeWarningLabel = new JLabel("<html>" + configed.getResourceValue("LicensingInfo.warning") + "</html>", Globals.createImageIcon("images/warning_orange.png", ""), 0);
-		JLabel orangeWarningLabel = new JLabel("<html>" + configed.getResourceValue("LicensingInfo.warning") + "</html>" );
+		// JLabel orangeWarningLabel = new JLabel("<html>" +
+		// configed.getResourceValue("LicensingInfo.warning") + "</html>",
+		// Globals.createImageIcon("images/warning_orange.png", ""), 0);
+		JLabel orangeWarningLabel = new JLabel(
+				"<html>" + configed.getResourceValue("LicensingInfo.warning") + "</html>");
 		orangeWarningLabel.setIcon(Globals.createImageIcon("images/warning_orange.png", ""));
 
-		JLabel redWarningLabel = new JLabel("<html>" + configed.getResourceValue("LicensingInfo.warning.over_limit") + "</html>" );
+		JLabel redWarningLabel = new JLabel(
+				"<html>" + configed.getResourceValue("LicensingInfo.warning.over_limit") + "</html>");
 		redWarningLabel.setIcon(Globals.createImageIcon("images/warning_red.png", ""));
-		//JLabel redWarningLevel = new JLabel("<html>" + configed.getResourceValue("LicensingInfo.warning.over_limit") + "</html>");
+		// JLabel redWarningLevel = new JLabel("<html>" +
+		// configed.getResourceValue("LicensingInfo.warning.over_limit") + "</html>");
 
-		//Map<String, List<Object>> configs = persist.getConfigDefaultValues();
-		JLabel warningLevelAbsolute = new JLabel("<html>" + configed.getResourceValue("LicensingInfo.warning.levels.client_absolute") + ": " + licenseMap.getClientLimitWarningAbsolute() + "</html>");
-		JLabel warningLevelPercent = new JLabel("<html>" + configed.getResourceValue("LicensingInfo.warning.levels.client_percent") + ": " + licenseMap.getClientLimitWarningPercent() + "</html>");
-		JLabel warningLevelDays = new JLabel("<html>" + configed.getResourceValue("LicensingInfo.warning.levels.days") + ": " + licenseMap.getClientLimitWarningDays() + "</html>");
+		// Map<String, List<Object>> configs = persist.getConfigDefaultValues();
+		JLabel warningLevelAbsolute = new JLabel(
+				"<html>" + configed.getResourceValue("LicensingInfo.warning.levels.client_absolute") + ": "
+						+ licenseMap.getClientLimitWarningAbsolute() + "</html>");
+		JLabel warningLevelPercent = new JLabel(
+				"<html>" + configed.getResourceValue("LicensingInfo.warning.levels.client_percent") + ": "
+						+ licenseMap.getClientLimitWarningPercent() + "</html>");
+		JLabel warningLevelDays = new JLabel("<html>" + configed.getResourceValue("LicensingInfo.warning.levels.days")
+				+ ": " + licenseMap.getClientLimitWarningDays() + "</html>");
 
 		Map<String, Object> clientNumbers = licenseMap.getClientNumbersMap();
 		JLabel clientTitle = new JLabel("<html>" + configed.getResourceValue("LicensingInfo.client.title") + "  ("
@@ -337,171 +339,156 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		checksum.setToolTipText(configed.getResourceValue("LicensingInfo.client.checksum.info"));
 		customerTitle.setFont(Globals.defaultFontBold);
 
-		//customerNames.setMinimumSize(new Dimension(250, 20));
-		//checksum.setMinimumSize(new Dimension(50, 20));
-		
+		// customerNames.setMinimumSize(new Dimension(250, 20));
+		// checksum.setMinimumSize(new Dimension(50, 20));
+
 		JLabel labelExtendedView = new JLabel(configed.getResourceValue("LicensingInfo.buttonExtendedView"));
 		JCheckBox checkExtendedView = new JCheckBox(
-			""
-			//Globals.createImageIcon( "images/checked_withoutbox_blue14.png", "" )
-			//,Globals.createImageIcon( "images/checked_void.png", "")
-			,extendedView);
-		
-		checkExtendedView.addActionListener( 
-			new ActionListener(){
-			
-				public void actionPerformed( ActionEvent e)
-				{
-					extendedView = checkExtendedView.isSelected();
-					logging.info(this, "extendedView " + extendedView + ", i.e. reduced " + !extendedView);
-					LicensingInfoMap.setReduced( !extendedView );
-					LicensingInfoMap.requestRefresh();
-					thePanel.reload();
-					
-				}
-			}
-		);
-		
-		
+				""
+				// Globals.createImageIcon( "images/checked_withoutbox_blue14.png", "" )
+				// ,Globals.createImageIcon( "images/checked_void.png", "")
+				, extendedView);
+
+		checkExtendedView.addActionListener(
+				new ActionListener() {
+
+					public void actionPerformed(ActionEvent e) {
+						extendedView = checkExtendedView.isSelected();
+						logging.info(this, "extendedView " + extendedView + ", i.e. reduced " + !extendedView);
+						LicensingInfoMap.setReduced(!extendedView);
+						LicensingInfoMap.requestRefresh();
+						thePanel.reload();
+
+					}
+				});
+
 		/*
-		IconButton buttonReload = new de.uib.configed.gui.IconButton(
-		                                de.uib.configed.configed.getResourceValue("GroupPanel.ReloadButtonTooltip") ,
-		                                "images/reload_blue16.png",
-		                                "images/reload_blue16.png",
-		                                " ",
-		                                true);
-		*/
-		
+		 * IconButton buttonReload = new de.uib.configed.gui.IconButton(
+		 * de.uib.configed.configed.getResourceValue("GroupPanel.ReloadButtonTooltip") ,
+		 * "images/reload_blue16.png",
+		 * "images/reload_blue16.png",
+		 * " ",
+		 * true);
+		 */
+
 		IconAsButton buttonReload = new IconAsButton(configed.getResourceValue("ClientSelectionDialog.buttonReload"),
-		                              "images/reload_blue16.png",
-		                              "images/reload_blue16.png", "images/reload_blue16.png", "images/reload_blue16.png"
-		                             );
-		
+				"images/reload_blue16.png",
+				"images/reload_blue16.png", "images/reload_blue16.png", "images/reload_blue16.png");
+
 		/*
-		JButton buttonReload = new JButton("", 
-			de.uib.configed.Globals.createImageIcon("images/reload16.png", "" )
-			);
-			
-		buttonReload.setPreferredSize( de.uib.configed.Globals.smallButtonDimension );
-		*/
-		
-		buttonReload.addActionListener( new ActionListener(){
-				public void actionPerformed(ActionEvent e)
-				{
-					//logging.info(this, "action performed " + e);
-					LicensingInfoMap.requestRefresh();
-					thePanel.reload();
-				}
+		 * JButton buttonReload = new JButton("",
+		 * de.uib.configed.Globals.createImageIcon("images/reload16.png", "" )
+		 * );
+		 * 
+		 * buttonReload.setPreferredSize( de.uib.configed.Globals.smallButtonDimension
+		 * );
+		 */
+
+		buttonReload.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// logging.info(this, "action performed " + e);
+				LicensingInfoMap.requestRefresh();
+				thePanel.reload();
 			}
-		);
-		
-		JComponent[] linedComponents = new JComponent[]{
-			buttonReload
-			,new JLabel("   ")
-			,checkExtendedView
-			,labelExtendedView
-			//,new JLabel("  ")
-			//,buttonReload
-			};
-			
-		
-		JPanel extraInfoPanel = new PanelLinedComponents( linedComponents );
+		});
+
+		JComponent[] linedComponents = new JComponent[] {
+				buttonReload, new JLabel("   "), checkExtendedView, labelExtendedView
+				// ,new JLabel(" ")
+				// ,buttonReload
+		};
+
+		JPanel extraInfoPanel = new PanelLinedComponents(linedComponents);
 		extraInfoPanel.setBackground(Globals.backgroundWhite);
 		extraInfoPanel.setOpaque(true);
-		
-		
-		//redWarningLevel.setPreferredSize(new Dimension(450, 50));
+
+		// redWarningLevel.setPreferredSize(new Dimension(450, 50));
 
 		JPanel panel = new JPanel();
 		GroupLayout gLayout = new GroupLayout(panel);
 		panel.setLayout(gLayout);
-		
+
 		gLayout.setAutoCreateGaps(true);
 		gLayout.setAutoCreateContainerGaps(true);
 
 		gLayout.setHorizontalGroup(
-			// 1
-			gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				// new
-				.addGroup(gLayout.createSequentialGroup()
-					.addComponent(redWarningLabel)
-					.addGap(20)
-					.addComponent(orangeWarningLabel)
-				)
-				.addGroup(gLayout.createSequentialGroup()
-					.addComponent(warningLevelAbsolute)
-					.addGap(15)
-					.addComponent(warningLevelPercent)
-					.addGap(15)
-					.addComponent(warningLevelDays)				
-				)
-			.addGroup(gLayout.createSequentialGroup()
-						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								/* 
-								// new
-								.addGroup(gLayout.createSequentialGroup()
-										.addComponent(overLimitWarningLabel)
-										.addGap(40)
-										.addComponent(closeToLimitWarningLabel)
-								)
-								*/
-								// a
-								.addComponent(clientTitle)
-								// b
-								.addGroup(gLayout.createSequentialGroup()
-										.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-												.addComponent(allClient)
-												.addComponent(macos)
-												.addComponent(linux)
-												.addComponent(windows))
-										.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-												.addComponent(allClientNum)
-												.addComponent(macosNum)
-												.addComponent(linuxNum)
-												.addComponent(windowsNum)))
-								// c
-								.addComponent(checksumTitle)
-								// d
-								.addComponent(checksum)
-								)
-						.addGap(60)
-						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								// x
-								.addComponent(customerTitle)
-								// z
+				// 1
+				gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+						// new
+						.addGroup(gLayout.createSequentialGroup()
+								.addComponent(redWarningLabel)
+								.addGap(20)
+								.addComponent(orangeWarningLabel))
+						.addGroup(gLayout.createSequentialGroup()
+								.addComponent(warningLevelAbsolute)
+								.addGap(15)
+								.addComponent(warningLevelPercent)
+								.addGap(15)
+								.addComponent(warningLevelDays))
+						.addGroup(gLayout.createSequentialGroup()
 								.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-										
-										//.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-										.addComponent(customerNames)
+										/*
+										 * // new
+										 * .addGroup(gLayout.createSequentialGroup()
+										 * .addComponent(overLimitWarningLabel)
+										 * .addGap(40)
+										 * .addComponent(closeToLimitWarningLabel)
+										 * )
+										 */
+										// a
+										.addComponent(clientTitle)
+										// b
+										.addGroup(gLayout.createSequentialGroup()
+												.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+														.addComponent(allClient)
+														.addComponent(macos)
+														.addComponent(linux)
+														.addComponent(windows))
+												.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+														.addComponent(allClientNum)
+														.addComponent(macosNum)
+														.addComponent(linuxNum)
+														.addComponent(windowsNum)))
+										// c
+										.addComponent(checksumTitle)
+										// d
+										.addComponent(checksum))
+								.addGap(60)
+								.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+										// x
+										.addComponent(customerTitle)
+										// z
+										.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+
+												// .addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+												.addComponent(customerNames)
 										// )
 										// .addComponent(moreInfo)
-								)
-								/* 
-								// c
-								.addComponent(checksumTitle)
-								// d
-								.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-										.addComponent(checksum)
-								//.addComponent(checksumInfo))
-								*/
-		)));
+										)
+								/*
+								 * // c
+								 * .addComponent(checksumTitle)
+								 * // d
+								 * .addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+								 * .addComponent(checksum)
+								 * //.addComponent(checksumInfo))
+								 */
+								)));
 
 		gLayout.setVerticalGroup(
 				gLayout.createSequentialGroup()
-						
+
 						// new
 						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 								.addComponent(redWarningLabel)
-								.addComponent(orangeWarningLabel)
-						)
+								.addComponent(orangeWarningLabel))
 						.addGap(15)
 						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 								.addComponent(warningLevelAbsolute)
 								.addComponent(warningLevelPercent)
-								.addComponent(warningLevelDays)
-						)
+								.addComponent(warningLevelDays))
 						.addGap(25)
-						
+
 						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 								// a
 								.addComponent(clientTitle)
@@ -509,79 +496,67 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 								// x
 								.addComponent(customerTitle))
 						.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-							.addGroup(gLayout.createSequentialGroup()
-								// b
-								.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-										.addGroup(gLayout.createSequentialGroup()
-												.addComponent(allClient)
-												.addComponent(macos)
-												.addComponent(linux)
-												.addComponent(windows))
-										.addGroup(gLayout.createSequentialGroup()
-												.addComponent(allClientNum)
-												.addComponent(macosNum)
-												.addComponent(linuxNum)
-												.addComponent(windowsNum)))
+								.addGroup(gLayout.createSequentialGroup()
+										// b
+										.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+												.addGroup(gLayout.createSequentialGroup()
+														.addComponent(allClient)
+														.addComponent(macos)
+														.addComponent(linux)
+														.addComponent(windows))
+												.addGroup(gLayout.createSequentialGroup()
+														.addComponent(allClientNum)
+														.addComponent(macosNum)
+														.addComponent(linuxNum)
+														.addComponent(windowsNum)))
+										.addGap(30)
+										.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+												// c
+												.addComponent(checksumTitle))
+										.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+												// d
+												.addGroup(gLayout.createSequentialGroup()
+														.addComponent(checksum))
+												// .addComponent(checksumInfo)
+												.addGap(20)))
 								.addGap(30)
-								.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-									// c
-									.addComponent(checksumTitle)
-								)
-								.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-									// d
-									.addGroup(gLayout.createSequentialGroup()
-											.addComponent(checksum))
-									// .addComponent(checksumInfo)
-								.addGap(20)
-							))
-							.addGap(30)
-							// y
-							.addGroup(gLayout.createSequentialGroup()
-									// y
-									.addGroup(gLayout.createSequentialGroup()
-											.addComponent(customerNames)
-									// .addComponent(moreInfo)
-									))
-						
-						//.addGap(20)
-						
+								// y
+								.addGroup(gLayout.createSequentialGroup()
+										// y
+										.addGroup(gLayout.createSequentialGroup()
+												.addComponent(customerNames)
+										// .addComponent(moreInfo)
+										))
+
+						// .addGap(20)
+
 						));
-		
-	
-		
-		
+
 		JPanel xPanel = new JPanel();
-		GroupLayout xLayout = new GroupLayout( xPanel );
-		xPanel.setLayout( xLayout );
+		GroupLayout xLayout = new GroupLayout(xPanel);
+		xPanel.setLayout(xLayout);
 		xPanel.setBackground(Globals.backgroundWhite);
 		xPanel.setOpaque(true);
-		
-		xLayout.setHorizontalGroup(
-			xLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent( extraInfoPanel)
-				.addComponent( panel)
-			);
-		
-				
-		xLayout.setVerticalGroup(
-			xLayout.createSequentialGroup()
-				.addComponent( extraInfoPanel)
-				.addGap(Globals.vGapSize)
-				.addComponent( panel)
-			);
-		
-		return xPanel;
-		
-		
 
+		xLayout.setHorizontalGroup(
+				xLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+						.addComponent(extraInfoPanel)
+						.addComponent(panel));
+
+		xLayout.setVerticalGroup(
+				xLayout.createSequentialGroup()
+						.addComponent(extraInfoPanel)
+						.addGap(Globals.vGapSize)
+						.addComponent(panel));
+
+		return xPanel;
 
 	}
-	
-	private void buildModel()
-	{
-		
+
+	private void buildModel() {
+
 		TableUpdateCollection updateCollection = new TableUpdateCollection();
-		
+
 		theModel = new GenTableModel(
 				null, // updateItemFactory,
 
@@ -613,34 +588,33 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		updateItemFactory.setClassNames(classNames);
 
 		thePanel.setTableModel(theModel);
-		
-	}	
-		
-	
+
+	}
 
 	public static void main(String[] args) {
 		/*
-		FGeneralDialogLicensingInfo f = new FGeneralDialogLicensingInfo(
-				null, // owner frame
-				"Licensing Information", // title
-				false, // modal
-
-				new String[] {
-						"ok",
-						"cancel"
-				},
-
-				new Icon[] {
-						Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-						Globals.createImageIcon("images/cancel16_small.png", "")
-				},
-				1, // lastButtonNo,with "1" we get only the first button
-				900, 580,
-				true, // lazylayout, i.e, we have a chance to define components and use them for the
-						// layout
-				null // addPanel predefined
-		);
-		*/
+		 * FGeneralDialogLicensingInfo f = new FGeneralDialogLicensingInfo(
+		 * null, // owner frame
+		 * "Licensing Information", // title
+		 * false, // modal
+		 * 
+		 * new String[] {
+		 * "ok",
+		 * "cancel"
+		 * },
+		 * 
+		 * new Icon[] {
+		 * Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
+		 * Globals.createImageIcon("images/cancel16_small.png", "")
+		 * },
+		 * 1, // lastButtonNo,with "1" we get only the first button
+		 * 900, 580,
+		 * true, // lazylayout, i.e, we have a chance to define components and use them
+		 * for the
+		 * // layout
+		 * null // addPanel predefined
+		 * );
+		 */
 		/*
 		 * PanelGenEditTable centerPanel = new PanelGenEditTable();
 		 * JPanel bottomPanel = new JPanel();

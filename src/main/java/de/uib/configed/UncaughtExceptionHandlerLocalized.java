@@ -35,13 +35,14 @@ public class UncaughtExceptionHandlerLocalized extends de.uib.utilities.logging.
 			}
 
 			else if (e.getMessage() == null)
-			//according to some internet info it could occure on ground of some optimization in the JIT compiler
+			// according to some internet info it could occure on ground of some
+			// optimization in the JIT compiler
 			{
 				logging.warning("exception with null message " + e);
 			}
 
 			else if (e.getMessage().indexOf("javax.swing.plaf.FontUIResource cannot be cast") > -1) {
-				//https://netbeans.org/bugzilla/show_bug.cgi?id=271611
+				// https://netbeans.org/bugzilla/show_bug.cgi?id=271611
 				logging.warning(errorText);
 			}
 

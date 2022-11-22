@@ -9,16 +9,12 @@
  * License, version AGPLv3, as published by the Free Software Foundation
  *
  */
- 
+
 package de.uib.utilities;
 
-public interface NameProducer
-{
+public interface NameProducer {
 	public String produceName();
-	
+
 	public String getDefaultName();
-	
 
 }
-
-

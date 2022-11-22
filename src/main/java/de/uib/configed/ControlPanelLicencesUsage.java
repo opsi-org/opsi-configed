@@ -66,7 +66,7 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 
 		if (result != null) {
 			thePanel.panelUsage.reload();
-			//thePanel.panelUsage.moveToValue(clientId, 0, true);
+			// thePanel.panelUsage.moveToValue(clientId, 0, true);
 			thePanel.panelUsage.moveToKeyValue(result);
 		} else {
 			thePanel.panelUsage.moveToValue(clientId, 0, true);
@@ -81,16 +81,17 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 	}
 
 	/*
-	protected Vector getChoicesAllHosts()
-	{
-		TreeSet set = new TreeSet();
-		set.add("");
-		set.addAll(new TreeMap( 
-				persist.getHostInfoCollections().getPcListForDepots( mainController.getSelectedDepots() ) 
-				).keySet());
-		return new Vector(set); 
-	}
-	*/
+	 * protected Vector getChoicesAllHosts()
+	 * {
+	 * TreeSet set = new TreeSet();
+	 * set.add("");
+	 * set.addAll(new TreeMap(
+	 * persist.getHostInfoCollections().getPcListForDepots(
+	 * mainController.getSelectedDepots() )
+	 * ).keySet());
+	 * return new Vector(set);
+	 * }
+	 */
 
 	@Override
 	public void initializeVisualSettings() {
@@ -103,7 +104,7 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 		Vector<String> columnNames;
 		Vector<String> classNames;
 
-		//--- panelLicencesUsage
+		// --- panelLicencesUsage
 		columnNames = new Vector<>();
 		columnNames.add(LicenceUsageEntry.clientIdKEY);
 		columnNames.add(LicenceUsageEntry.licenceIdKEY);
@@ -137,70 +138,76 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 
 		// --- PopupMenu
 		/*
-		JMenuItemFormatted menuItemAddUsage = new JMenuItemFormatted("add Usage");//configed.getResourceValue("ConfigedMain.Licences.NewLicencecontract"));
-		menuItemAddUsage.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e)
-			{
-			}
-		});
-		
-		thePanel.panelUsage.addPopupItem(menuItemAddUsage);
-		
-		
-		JMenuItemFormatted menuItemDeleteRelationLicenceUsage = new JMenuItemFormatted("delete usage");//configed.getResourceValue("ConfigedMain.Licences.NewLicencecontract"));
-		menuItemDeleteRelationLicenceUsage.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e)
-			{
-		
-				int selRowsCount = thePanel.panelUsage.getSelectedRowCount();
-				
-				if (selRowsCount == 0)
-				{
-					JOptionPane.showMessageDialog( mainController.licencesFrame,
-						  "keine Zeile ausgewählt", //configed.getResourceValue("ConfigedMain.Licences.noRowSelected"),
-						  configed.getResourceValue("ConfigedMain.Licences.hint.title"),
-						  JOptionPane.OK_OPTION);
-					
-					return;
-				}
-				else
-				{
-					modelLicencesUsage.deleteRow(thePanel.panelUsage.getSelectedRowInModelTerms());
-				}
-			}
-		});
-		
-		thePanel.panelUsage.addPopupItem(menuItemDeleteRelationLicenceUsage);
-		*/
+		 * JMenuItemFormatted menuItemAddUsage = new
+		 * JMenuItemFormatted("add Usage");//configed.getResourceValue(
+		 * "ConfigedMain.Licences.NewLicencecontract"));
+		 * menuItemAddUsage.addActionListener(new ActionListener(){
+		 * public void actionPerformed(ActionEvent e)
+		 * {
+		 * }
+		 * });
+		 * 
+		 * thePanel.panelUsage.addPopupItem(menuItemAddUsage);
+		 * 
+		 * 
+		 * JMenuItemFormatted menuItemDeleteRelationLicenceUsage = new
+		 * JMenuItemFormatted("delete usage");//configed.getResourceValue(
+		 * "ConfigedMain.Licences.NewLicencecontract"));
+		 * menuItemDeleteRelationLicenceUsage.addActionListener(new ActionListener(){
+		 * public void actionPerformed(ActionEvent e)
+		 * {
+		 * 
+		 * int selRowsCount = thePanel.panelUsage.getSelectedRowCount();
+		 * 
+		 * if (selRowsCount == 0)
+		 * {
+		 * JOptionPane.showMessageDialog( mainController.licencesFrame,
+		 * "keine Zeile ausgewählt",
+		 * //configed.getResourceValue("ConfigedMain.Licences.noRowSelected"),
+		 * configed.getResourceValue("ConfigedMain.Licences.hint.title"),
+		 * JOptionPane.OK_OPTION);
+		 * 
+		 * return;
+		 * }
+		 * else
+		 * {
+		 * modelLicencesUsage.deleteRow(thePanel.panelUsage.getSelectedRowInModelTerms()
+		 * );
+		 * }
+		 * }
+		 * });
+		 * 
+		 * thePanel.panelUsage.addPopupItem(menuItemDeleteRelationLicenceUsage);
+		 */
 
 		// special treatment of columns
 		javax.swing.table.TableColumn col;
 		col = thePanel.panelUsage.getColumnModel().getColumn(4);
 		col.setCellEditor(new de.uib.utilities.table.gui.CellEditor4TableText());
 
-		//updates
+		// updates
 		thePanel.panelUsage.setUpdateController(
 				new MapItemsUpdateController(thePanel.panelUsage, modelLicencesUsage, new MapBasedUpdater() {
 					public String sendUpdate(Map<String, Object> rowmap) {
-						return persist.editLicenceUsage((String) rowmap.get(LicenceUsageEntry.clientIdKEY), //"hostId"),
-								(String) rowmap.get(LicenceUsageEntry.licenceIdKEY), //"softwareLicenseId"),
-								(String) rowmap.get(LicenceUsageEntry.licencepoolIdKEY), //"licensePoolId"),
-								(String) rowmap.get(LicenceUsageEntry.licencekeyKEY), //"licenseKey"),
-								(String) rowmap.get(LicenceUsageEntry.notesKEY) //"notes")
+						return persist.editLicenceUsage((String) rowmap.get(LicenceUsageEntry.clientIdKEY), // "hostId"),
+								(String) rowmap.get(LicenceUsageEntry.licenceIdKEY), // "softwareLicenseId"),
+								(String) rowmap.get(LicenceUsageEntry.licencepoolIdKEY), // "licensePoolId"),
+								(String) rowmap.get(LicenceUsageEntry.licencekeyKEY), // "licenseKey"),
+								(String) rowmap.get(LicenceUsageEntry.notesKEY) // "notes")
 						);
 
 					}
 
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencesUsage.requestReload();
-						return persist.deleteLicenceUsage((String) rowmap.get(LicenceUsageEntry.clientIdKEY), //""hostId"),
-								(String) rowmap.get(LicenceUsageEntry.licenceIdKEY), //"softwareLicenseId"),
-								(String) rowmap.get(LicenceUsageEntry.licencepoolIdKEY) //"licensePoolId")
+						return persist.deleteLicenceUsage((String) rowmap.get(LicenceUsageEntry.clientIdKEY), // ""hostId"),
+								(String) rowmap.get(LicenceUsageEntry.licenceIdKEY), // "softwareLicenseId"),
+								(String) rowmap.get(LicenceUsageEntry.licencepoolIdKEY) // "licensePoolId")
 						);
 					}
 				}, updateCollection));
 
-		//--- panelLicencepools
+		// --- panelLicencepools
 		columnNames = new Vector<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
@@ -219,12 +226,12 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 		modelLicencepools.reset();
 		thePanel.panelLicencepools.setTableModel(modelLicencepools);
 
-		//combo clients
+		// combo clients
 		thePanel.setClientsSource(new de.uib.utilities.ComboBoxModeller() {
 			public ComboBoxModel<String> getComboBoxModel(int row, int column) {
 				List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(persist.getHostInfoCollections()
 						.getPcListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))
-								.keySet());
+						.keySet());
 
 				choicesAllHosts.set(0, "");
 

@@ -1,42 +1,40 @@
 package de.uib.configed.dashboard.chart;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.List;
 
-import javafx.fxml.*;
-import javafx.collections.*;
-import javafx.scene.chart.*;
-import javafx.scene.layout.*;
-import javafx.scene.text.*;
+import de.uib.configed.configed;
+import de.uib.configed.dashboard.DataChangeListener;
+import de.uib.configed.dashboard.collector.ClientData;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.chart.PieChart;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 
-import de.uib.configed.*;
-import de.uib.configed.dashboard.*;
-import de.uib.configed.dashboard.collector.*;
+public class ClientActivityComparison extends StackPane implements DataChangeListener {
+	@FXML
+	private Text clientsActivityNoDataText;
+	@FXML
+	private PieChart clientActivityComparisonPieChart;
 
-public class ClientActivityComparison extends StackPane implements DataChangeListener
-{
-	@FXML private Text clientsActivityNoDataText;
-	@FXML private PieChart clientActivityComparisonPieChart;
-
-	public ClientActivityComparison()
-	{
-		FXMLLoader fxmlLoader = new FXMLLoader(ClientActivityComparison.class.getResource("/fxml/charts/client_activity_pie_chart.fxml"));
+	public ClientActivityComparison() {
+		FXMLLoader fxmlLoader = new FXMLLoader(
+				ClientActivityComparison.class.getResource("/fxml/charts/client_activity_pie_chart.fxml"));
 		fxmlLoader.setRoot(this);
 		fxmlLoader.setController(this);
 
-		try
-		{
+		try {
 			fxmlLoader.load();
-		}
-		catch (IOException ioE)
-		{
+		} catch (IOException ioE) {
 			throw new RuntimeException(ioE);
 		}
 	}
 
 	@Override
-	public void display()
-	{
+	public void display() {
 		clientsActivityNoDataText.setText(configed.getResourceValue("Dashboard.noData"));
 		clientActivityComparisonPieChart.setTitle(configed.getResourceValue("Dashboard.clientActivityTitle"));
 
@@ -44,13 +42,10 @@ public class ClientActivityComparison extends StackPane implements DataChangeLis
 		List<String> activeClients = ClientData.getActiveClients();
 		List<String> inactiveClients = ClientData.getInactiveClients();
 
-		if (activeClients.isEmpty() && inactiveClients.isEmpty())
-		{
+		if (activeClients.isEmpty() && inactiveClients.isEmpty()) {
 			clientsActivityNoDataText.setVisible(true);
 			clientActivityComparisonPieChart.setLabelsVisible(false);
-		}
-		else
-		{
+		} else {
 			clientsActivityNoDataText.setVisible(false);
 			clientActivityComparisonPieChart.setLabelsVisible(true);
 		}
@@ -58,15 +53,18 @@ public class ClientActivityComparison extends StackPane implements DataChangeLis
 		int totalActiveClients = activeClients.size();
 		int totalInactiveClients = inactiveClients.size();
 
-		data.add(new PieChart.Data(String.format("%s %d", configed.getResourceValue("Dashboard.client.active"), totalActiveClients), totalActiveClients));
-		data.add(new PieChart.Data(String.format("%s %d", configed.getResourceValue("Dashboard.client.inactive"), totalInactiveClients), totalInactiveClients));
+		data.add(new PieChart.Data(
+				String.format("%s %d", configed.getResourceValue("Dashboard.client.active"), totalActiveClients),
+				totalActiveClients));
+		data.add(new PieChart.Data(
+				String.format("%s %d", configed.getResourceValue("Dashboard.client.inactive"), totalInactiveClients),
+				totalInactiveClients));
 
 		clientActivityComparisonPieChart.setData(data);
 	}
 
 	@Override
-	public void update(String selectedDepot)
-	{
+	public void update(String selectedDepot) {
 		ClientData.retrieveData(selectedDepot);
 	}
 }

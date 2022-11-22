@@ -257,7 +257,7 @@ public class LicensingInfoMap {
 		} catch (Exception ex) {
 			logging.error(CLASSNAME + " produceLicenses " + ex.toString());
 		}
-		//logging.info( " licenses result: " + result);
+		// logging.info( " licenses result: " + result);
 		return result;
 	}
 
@@ -461,7 +461,7 @@ public class LicensingInfoMap {
 			}
 			Collections.sort(dates);
 
-			//logging.info(this, " dates keys: " + dates);
+			// logging.info(this, " dates keys: " + dates);
 
 			Date latest = findLatestChangeDate(dates);
 
@@ -473,14 +473,14 @@ public class LicensingInfoMap {
 					if ((sdf.parse(key)).compareTo(latest) >= 0)
 						reducedDatesKeys.add(key);
 				}
-				//if(reducedDatesKeys != null)
+				// if(reducedDatesKeys != null)
 				dates = reducedDatesKeys;
 			}
 
 		} catch (Exception ex) {
 			logging.error(CLASSNAME + " produceDatesKeys : " + ex.toString() + ", ");
 		}
-		//logging.info(this, " dates keys: " + dates);
+		// logging.info(this, " dates keys: " + dates);
 		return dates;
 	}
 
@@ -512,15 +512,15 @@ public class LicensingInfoMap {
 				Map<String, Object> moduleToDate = new HashMap<String, Object>();
 				Map<String, Map<String, Object>> modulesMapToDate = new HashMap<>();
 
-				// iterate over date entries 
+				// iterate over date entries
 				modulesJSOb = dates.getJSONObject(key).getJSONObject(MODULES);
 				modulesJSObX = new JSONObjectX(modulesJSOb);
 				moduleToDate = modulesJSObX.getMap();
-				// iterate over module entries to every date entry 
+				// iterate over module entries to every date entry
 				// new: iterate over all known modules and fill empty ones with 0
-				//      also warning state should be none
+				// also warning state should be none
 				for (String currentModule : shownModules) {
-					//JSONObject moduleInfo = (JSONObject) moduleToDate.get(currentModule);
+					// JSONObject moduleInfo = (JSONObject) moduleToDate.get(currentModule);
 
 					JSONObject moduleInfo;
 					boolean available = availableModules.contains(currentModule);
@@ -596,12 +596,12 @@ public class LicensingInfoMap {
 		columnNames = new Vector<String>();
 		columnNames.add(configed.getResourceValue("LicensingInfo.modules"));
 		columnNames.add(configed.getResourceValue("LicensingInfo.available"));
-		//columnNames.add(configed.getResourceValue("LicensingInfo.info"));
+		// columnNames.add(configed.getResourceValue("LicensingInfo.info"));
 
 		classNames = new Vector<String>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
-		//classNames.add("java.lang.String");
+		// classNames.add("java.lang.String");
 
 		try {
 
@@ -612,13 +612,14 @@ public class LicensingInfoMap {
 
 			for (String currentModule : shownModules) {
 				Map<String, Object> line = new HashMap<String, Object>();
-				//String currentModule = availableModules.get(i).toString();
+				// String currentModule = availableModules.get(i).toString();
 
 				// 1st column
 				line.put(configed.getResourceValue("LicensingInfo.modules"), currentModule);
 
 				// 2nd column
-				//line.put(configed.getResourceValue("LicensingInfo.info"), configed.getResourceValue("LicensingInfo.info"));
+				// line.put(configed.getResourceValue("LicensingInfo.info"),
+				// configed.getResourceValue("LicensingInfo.info"));
 
 				// 3rd column
 				line.put(configed.getResourceValue("LicensingInfo.available"),
@@ -645,11 +646,11 @@ public class LicensingInfoMap {
 		String newest = null;
 		try {
 			LocalDate now = LocalDate.now();
-			//Date dateNow = sdf.parse("2022-04-06");  
+			// Date dateNow = sdf.parse("2022-04-06");
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 			for (String key : datesKeys) {
-				//System.out.println("key " + key);
+				// System.out.println("key " + key);
 				Date thisDate = sdf.parse(key);
 				if (dateNow.compareTo(thisDate) >= 0)
 					newest = key;
@@ -669,11 +670,11 @@ public class LicensingInfoMap {
 		Date newest = new Date();
 		try {
 			LocalDate now = LocalDate.now();
-			//Date dateNow = sdf.parse("2022-04-06");  
+			// Date dateNow = sdf.parse("2022-04-06");
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 			for (String key : dates) {
-				//System.out.println("key " + key);
+				// System.out.println("key " + key);
 				Date thisDate = sdf.parse(key);
 				if (dateNow.compareTo(thisDate) >= 0)
 					newest = thisDate;
@@ -708,8 +709,8 @@ public class LicensingInfoMap {
 		try {
 			LocalDate now = LocalDate.now();
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
-			//dateNow = sdf.parse("2023-05-01");
-			//Date nextChange = sdf.parse(findNextChangeDate());
+			// dateNow = sdf.parse("2023-05-01");
+			// Date nextChange = sdf.parse(findNextChangeDate());
 			Date date = sdf.parse(d);
 
 			long diffInMillies = Math.abs(date.getTime() - dateNow.getTime());
@@ -788,10 +789,10 @@ public class LicensingInfoMap {
 							| (futureNum != 0 && (clientNum * 100) / futureNum >= percentClientLimitWarning))
 						return STATE_CLOSE_TO_LIMIT;
 
-					/* 
-					if(daysLeft <= daysClientLimitWarning)
-					    return STATE_DAYS_WARNING;
-					*/
+					/*
+					 * if(daysLeft <= daysClientLimitWarning)
+					 * return STATE_DAYS_WARNING;
+					 */
 
 					return STATE_FUTURE_OKAY;
 				}
@@ -836,7 +837,8 @@ public class LicensingInfoMap {
 		if (configs.get(key) != null)
 			percentClientLimitWarning = Integer.parseInt((String) configs.get(key).get(0));
 
-		//System.out.println("warning levels: " + absolutClientLimitWarning + ", " + percentClientLimitWarning);
+		// System.out.println("warning levels: " + absolutClientLimitWarning + ", " +
+		// percentClientLimitWarning);
 	}
 
 	public ArrayList<String> getCloseToLimitModuleList() {
@@ -868,7 +870,7 @@ public class LicensingInfoMap {
 		result.put(FUTURE_OVER_LIMIT, futureOverLimitModuleList);
 		result.put(FUTURE_CLOSE_TO_LIMIT, futureCloseToLimitModuleList);
 
-		//System.exit(0);
+		// System.exit(0);
 		return result;
 	}
 
@@ -885,10 +887,10 @@ public class LicensingInfoMap {
 
 		result = currentOverLimitModuleList.size() > 0 || currentCloseToLimitModuleList.size() > 0
 				|| currentTimeWarningModuleList.size() > 0
-		//||
-		//futureOverLimitModuleList.size() > 0
-		//||
-		//futureOverLimitModuleList.size() > 0
+		// ||
+		// futureOverLimitModuleList.size() > 0
+		// ||
+		// futureOverLimitModuleList.size() > 0
 		;
 
 		logging.info(this, "warning exists " + result);

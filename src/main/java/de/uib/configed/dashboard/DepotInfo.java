@@ -1,32 +1,29 @@
 package de.uib.configed.dashboard;
 
-import java.util.*;
+import java.util.Map;
 
-import de.uib.configed.*;
-import de.uib.configed.dashboard.collector.*;
-import de.uib.configed.dashboard.view.*;
+import de.uib.configed.configed;
+import de.uib.configed.dashboard.collector.ClientData;
+import de.uib.configed.dashboard.collector.DepotData;
+import de.uib.configed.dashboard.collector.ProductData;
+import de.uib.configed.dashboard.view.MainView;
 
-public class DepotInfo implements DataChangeListener
-{
+public class DepotInfo implements DataChangeListener {
 	private MainView controller;
 	private String selectedDepot;
 
-	public DepotInfo(MainView controller)
-	{
+	public DepotInfo(MainView controller) {
 		this.controller = controller;
 	}
 
 	@Override
-	public void display()
-	{
-		if (controller.selectedDepotChoiceBox.getItems().size() == 0)
-		{
-			controller.selectedDepotChoiceBox.getItems().add(configed.getResourceValue("Dashboard.selection.allDepots"));
+	public void display() {
+		if (controller.selectedDepotChoiceBox.getItems().size() == 0) {
+			controller.selectedDepotChoiceBox.getItems()
+					.add(configed.getResourceValue("Dashboard.selection.allDepots"));
 			controller.selectedDepotChoiceBox.setValue(configed.getResourceValue("Dashboard.selection.allDepots"));
 			controller.selectedDepotChoiceBox.getItems().addAll(DepotData.getDepots().keySet());
-		}
-		else if (controller.selectedDepotChoiceBox.getItems().size() == 1)
-		{
+		} else if (controller.selectedDepotChoiceBox.getItems().size() == 1) {
 			controller.selectedDepotChoiceBox.getItems().addAll(DepotData.getDepots().keySet());
 		}
 
@@ -35,11 +32,13 @@ public class DepotInfo implements DataChangeListener
 
 		Map<String, Map<String, Object>> depots = DepotData.getDepots();
 
-		if (selectedDepot != null && !selectedDepot.equals(configed.getResourceValue("Dashboard.selection.allDepots")))
-		{
-			if (depots.get(selectedDepot).get("type") != null || !depots.get(selectedDepot).get("type").toString().isEmpty())
+		if (selectedDepot != null
+				&& !selectedDepot.equals(configed.getResourceValue("Dashboard.selection.allDepots"))) {
+			if (depots.get(selectedDepot).get("type") != null
+					|| !depots.get(selectedDepot).get("type").toString().isEmpty())
 				depotType = depots.get(selectedDepot).get("type").toString();
-			if (depots.get(selectedDepot).get("description") != null || !depots.get(selectedDepot).get("description").toString().isEmpty())
+			if (depots.get(selectedDepot).get("description") != null
+					|| !depots.get(selectedDepot).get("description").toString().isEmpty())
 				depotDescription = depots.get(selectedDepot).get("description").toString();
 		}
 
@@ -60,8 +59,7 @@ public class DepotInfo implements DataChangeListener
 	}
 
 	@Override
-	public void update(String selectedDepot)
-	{
+	public void update(String selectedDepot) {
 		this.selectedDepot = selectedDepot;
 		DepotData.retrieveData();
 	}

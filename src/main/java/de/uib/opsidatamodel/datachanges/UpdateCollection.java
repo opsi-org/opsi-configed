@@ -1,28 +1,26 @@
 package de.uib.opsidatamodel.datachanges;
 
-import java.util.*;
-import de.uib.utilities.logging.*;
+import java.util.Collection;
+import java.util.Iterator;
+
+import de.uib.utilities.logging.logging;
 
 /**
 */
 public class UpdateCollection
-			implements UpdateCommand, CountedCollection
-{
+		implements UpdateCommand, CountedCollection {
 
 	protected Collection<Object> implementor;
 
 	// we delegate all Collection methods to this object extending only add()
-	public UpdateCollection (Collection<Object> implementor)
-	{
+	public UpdateCollection(Collection<Object> implementor) {
 		this.implementor = implementor;
 	}
 
-	public boolean addAll(Collection c)
-	{
+	public boolean addAll(Collection c) {
 		boolean success = true;
-		Iterator it=c.iterator();
-		while (it.hasNext() && success)
-		{
+		Iterator it = c.iterator();
+		while (it.hasNext() && success) {
 			Object ob = it.next();
 			logging.debug(this, "addAll, element of Collection: " + ob);
 			if (!add(ob))
@@ -31,25 +29,21 @@ public class UpdateCollection
 		return success;
 	}
 
-	public void clear()
-	{
+	public void clear() {
 		logging.debug(this, "clear()");
 		Iterator it = implementor.iterator();
-		while (it.hasNext())
-		{
+		while (it.hasNext()) {
 			Object obj = it.next();
-			if (obj != null)
-			{
-				if    (obj instanceof Collection)
-					// a element of the collection is a collection, we do our best to clear recursively
+			if (obj != null) {
+				if (obj instanceof Collection)
+				// a element of the collection is a collection, we do our best to clear
+				// recursively
 				{
-					try
-					{
+					try {
 						logging.debug(this, "by recursion, we will clear " + obj);
 						((Collection) obj).clear();
 
-					}
-					catch (Exception ex) //perhaps not implemented
+					} catch (Exception ex) // perhaps not implemented
 					{
 					}
 				}
@@ -62,131 +56,111 @@ public class UpdateCollection
 	}
 
 	public void clearElements()
-	// *** perhaps we should instead implement a recursive empty which clears only the implementors but does not remove the elements
+	// *** perhaps we should instead implement a recursive empty which clears only
+	// the implementors but does not remove the elements
 	{
-		//logging.info(this, "clearElements()");
+		// logging.info(this, "clearElements()");
 
 		Iterator it = implementor.iterator();
-		while (it.hasNext())
-		{
+		while (it.hasNext()) {
 			Object obj = it.next();
-			if (obj != null)
-			{
-				//logging.info(this,"clearElements, element " + obj.getClass());
-				if    (obj instanceof UpdateCollection)
-					// a element of the collection is a collection, we do our best to clear recursively
+			if (obj != null) {
+				// logging.info(this,"clearElements, element " + obj.getClass());
+				if (obj instanceof UpdateCollection)
+				// a element of the collection is a collection, we do our best to clear
+				// recursively
 				{
-					try
-					{ ((UpdateCollection) obj).clearElements();
-					}
-					catch (Exception ex) //perhaps not implemented
+					try {
+						((UpdateCollection) obj).clearElements();
+					} catch (Exception ex) // perhaps not implemented
 					{
 					}
 				}
 			}
 		}
 	}
-	
-	public void revert()
-	{
+
+	public void revert() {
 		logging.info(this, "revert()");
 
 		Iterator it = implementor.iterator();
-		while (it.hasNext())
-		{
+		while (it.hasNext()) {
 			Object obj = it.next();
-			if (obj != null)
-			{
-				//logging.info(this,"revert, element " + obj.getClass());
-				if    (obj instanceof UpdateCollection)
-					// a element of the collection is a collection, we do our best to clear recursively
+			if (obj != null) {
+				// logging.info(this,"revert, element " + obj.getClass());
+				if (obj instanceof UpdateCollection)
+				// a element of the collection is a collection, we do our best to clear
+				// recursively
 				{
-					try
-					{ ((UpdateCollection) obj).revert();
-					}
-					catch (Exception ex) //perhaps not implemented
+					try {
+						((UpdateCollection) obj).revert();
+					} catch (Exception ex) // perhaps not implemented
 					{
 					}
 				}
 			}
 		}
 	}
-	
-	public void cancel()
-	{
+
+	public void cancel() {
 		revert();
 		clearElements();
 	}
-		
 
-	public boolean contains(Object o)
-	{
+	public boolean contains(Object o) {
 		return implementor.contains(o);
 	}
 
-	public boolean containsAll(Collection c)
-	{
+	public boolean containsAll(Collection c) {
 		return implementor.containsAll(c);
 	}
 
-	public boolean equals(Object o)
-	{
+	public boolean equals(Object o) {
 		return implementor.equals(o);
 	}
 
-	public int  hashCode()
-	{
+	public int hashCode() {
 		return implementor.hashCode();
 	}
 
-	public boolean isEmpty()
-	{
+	public boolean isEmpty() {
 		return implementor.isEmpty();
 	}
 
-	public Iterator iterator()
-	{
+	public Iterator iterator() {
 		return implementor.iterator();
 	}
 
-	public boolean remove(Object o)
-	{
+	public boolean remove(Object o) {
 		return implementor.remove(o);
 	}
 
-	public boolean removeAll(Collection c)
-	{
+	public boolean removeAll(Collection c) {
 		return implementor.removeAll(c);
 	}
 
-	public boolean retainAll(Collection c)
-	{
+	public boolean retainAll(Collection c) {
 		return implementor.retainAll(c);
 	}
 
-	public int size()
-	{
+	public int size() {
 		return implementor.size();
 	}
 
-	public Object[] toArray()
-	{
+	public Object[] toArray() {
 		return implementor.toArray();
 	}
 
-	public Object[] toArray(Object[] a)
-	{
+	public Object[] toArray(Object[] a) {
 		return implementor.toArray(a);
 	}
 
 	@SuppressWarnings("unused")
-	public boolean add (Object obj)
-	{
+	public boolean add(Object obj) {
 		logging.debug(this, "###### UpdateCollection add Object  " + obj);
-		if  ( !(obj instanceof UpdateCommand))
-		{
+		if (!(obj instanceof UpdateCommand)) {
 			logging.debugOut(logging.LEVEL_ERROR, "wrong element type, found" + obj.getClass().getName()
-			                 + ", expected an    + UpdateCommand");
+					+ ", expected an    + UpdateCommand");
 
 			return false;
 		}
@@ -194,34 +168,29 @@ public class UpdateCollection
 		if (obj == null)
 			return true;
 
-		return  implementor.add(obj);
+		return implementor.add(obj);
 	}
-	
+
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return implementor.toString();
 	}
 
-	public int accumulatedSize()
-	{
+	public int accumulatedSize() {
 		if (size() == 0)
 			return 0;
 
 		int result = 0;
 
 		Iterator it = implementor.iterator();
-		while (it.hasNext())
-		{
+		while (it.hasNext()) {
 			Object obj = it.next();
-			if (obj != null)
-			{
-				if    (obj instanceof CountedCollection)
-					// a element of the collection is a collection, we retrieve the size recursively
+			if (obj != null) {
+				if (obj instanceof CountedCollection)
+				// a element of the collection is a collection, we retrieve the size recursively
 				{
-					result = result + ((CountedCollection)obj).accumulatedSize();
-				}
-				else
+					result = result + ((CountedCollection) obj).accumulatedSize();
+				} else
 					// we found an 'ordinary' element and add 1
 					result++;
 			}
@@ -230,37 +199,32 @@ public class UpdateCollection
 		return result;
 	}
 
-	public Object getController( )
-	{
+	public Object getController() {
 		return null;
 	}
 
-	public void setController( Object cont)
-	{
+	public void setController(Object cont) {
 	}
 
 	/**
-	 doCall calls doCall on all members.
-	 This  will give a recursion for members being update collections themselves.
-	*/
-	public void doCall()
-	{
+	 * doCall calls doCall on all members.
+	 * This will give a recursion for members being update collections themselves.
+	 */
+	public void doCall() {
 		logging.debug(this, "doCall, element count: " + size());
-
 
 		if (size() == 0)
 			return;
 
 		Iterator it = implementor.iterator();
-		while (it.hasNext())
-		{
+		while (it.hasNext()) {
 			UpdateCommand theCommand = ((UpdateCommand) it.next());
-			//System.out.println ("----------- call updateCommand "  + theCommand);
+			// System.out.println ("----------- call updateCommand " + theCommand);
 			if (theCommand != null)
 				theCommand.doCall();
 		}
 
-		//  removeAll();  do it in the client
+		// removeAll(); do it in the client
 	}
 
 }

@@ -6,10 +6,9 @@
  * License, version AGPLv3, as published by the Free Software Foundation
  *
  */
- 
+
 package de.uib.utilities.observer;
 
-public interface DataRefreshedObserver
-{
+public interface DataRefreshedObserver {
 	public void gotNotification(Object mesg);
-}	
+}

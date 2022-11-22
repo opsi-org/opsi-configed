@@ -5,109 +5,88 @@
  *	author Rupert Röder
  *
  */
- 
 
 package de.uib.utilities.table;
-import java.util.*;
-import de.uib.utilities.logging.*;
 
-public class ChainedTableModelFilter extends TableModelFilter
-{
+import java.util.LinkedHashMap;
+import java.util.Vector;
+
+public class ChainedTableModelFilter extends TableModelFilter {
 	LinkedHashMap<String, TableModelFilter> chain;
-	
-	public ChainedTableModelFilter()
-	{
+
+	public ChainedTableModelFilter() {
 		chain = new LinkedHashMap<String, TableModelFilter>();
 	}
-		
-	public ChainedTableModelFilter set(String filterName, TableModelFilter filter)
-	{
+
+	public ChainedTableModelFilter set(String filterName, TableModelFilter filter) {
 		chain.put(filterName, filter);
 		return this;
 	}
-	
-	public void clear()
-	{
+
+	public void clear() {
 		chain.clear();
 	}
-	
-	public boolean hasFilterName(String name)
-	{
+
+	public boolean hasFilterName(String name) {
 		return chain.containsKey(name);
 	}
-	
-	
-	public TableModelFilter getElement(String name)
-	{
+
+	public TableModelFilter getElement(String name) {
 		return chain.get(name);
 	}
-	
+
 	@Override
-	public boolean isInUse()
-	{
+	public boolean isInUse() {
 		boolean result = false;
-		
-		for (String filterName : chain.keySet())
-		{
-			if (chain.get(filterName).isInUse())
-			{
+
+		for (String filterName : chain.keySet()) {
+			if (chain.get(filterName).isInUse()) {
 				result = true;
 				break;
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	@Override
-	public boolean test(Vector<Object> row)
-	{
+	public boolean test(Vector<Object> row) {
 		if (!inUse)
 			return true;
-		
+
 		boolean testresult = true;
-		
-		for (String filterName : chain.keySet())
-		{
-			if (chain.get(filterName).isInUse())
-			{
+
+		for (String filterName : chain.keySet()) {
+			if (chain.get(filterName).isInUse()) {
 				testresult = testresult && chain.get(filterName).test(row);
 			}
-			//logging.info(this, "test result, filtered by "  + filterName + ", "  + testresult);
+			// logging.info(this, "test result, filtered by " + filterName + ", " +
+			// testresult);
 		}
-		
-		if (inverted)
-		{
+
+		if (inverted) {
 			testresult = !testresult;
 		}
-		
-		
+
 		return testresult;
 	}
-			
-	public String getActiveFilters()
-	{
+
+	public String getActiveFilters() {
 		StringBuffer result = new StringBuffer();
-		
-		for (String filterName : chain.keySet())
-		{
-			if (chain.get(filterName).isInUse())
-			{
+
+		for (String filterName : chain.keySet()) {
+			if (chain.get(filterName).isInUse()) {
 				result.append(" - ");
 				result.append(filterName);
 			}
 		}
-		
+
 		return result.toString();
 	}
-		
-	
+
 	@Override
-	public String toString()
-	{
-		return  getClass().getName() + ", chain is: " + chain;
+	public String toString() {
+		return getClass().getName() + ", chain is: " + chain;
 	}
-	
+
 }
-			
-			

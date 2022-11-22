@@ -1,13 +1,18 @@
 package de.uib.configed.csv;
 
-import java.io.*;
-import java.util.*;
-import java.util.stream.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Stream;
 
-import de.uib.configed.csv.exceptions.*;
+import de.uib.configed.csv.exceptions.CSVException;
 
-public class CSVReader
-{
+public class CSVReader {
 	private static final CSVParser DEFAULT_PARSER = new CSVParser();
 	private static final int DEFAULT_START_LINE = 0;
 
@@ -19,29 +24,24 @@ public class CSVReader
 	private CSVScanner scanner;
 	private CSVParser parser;
 
-	public CSVReader(Reader reader)
-	{
+	public CSVReader(Reader reader) {
 		this(reader, DEFAULT_PARSER, DEFAULT_START_LINE, null);
 	}
 
-	public CSVReader(Reader reader, int startLine)
-	{
+	public CSVReader(Reader reader, int startLine) {
 		this(reader, DEFAULT_PARSER, startLine, null);
 	}
 
-	public CSVReader(Reader reader, CSVParser parser)
-	{
+	public CSVReader(Reader reader, CSVParser parser) {
 		this(reader, parser, DEFAULT_START_LINE, null);
 	}
 
-	public CSVReader(Reader reader, CSVParser parser, int startLine)
-	{
+	public CSVReader(Reader reader, CSVParser parser, int startLine) {
 		this(reader, parser, startLine, null);
 	}
 
-	public CSVReader(Reader reader, CSVParser parser, int startLine, List<String> headerNames)
-	{
-        this.reader = (reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader));
+	public CSVReader(Reader reader, CSVParser parser, int startLine, List<String> headerNames) {
+		this.reader = (reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader));
 		this.parser = parser;
 		this.format = parser.getFormat();
 		this.scanner = new CSVScanner(this.reader, format);
@@ -49,19 +49,16 @@ public class CSVReader
 		this.headerNames = headerNames;
 	}
 
-	public List<Map<String, Object>> readAll() throws CSVException, IOException
-	{
+	public List<Map<String, Object>> readAll() throws CSVException, IOException {
 		List<Map<String, Object>> result = new ArrayList<>();
 		String[] pendingLine = new String[] {};
 
-		if (format.hasHint())
-		{
+		if (format.hasHint()) {
 			reader.readLine();
 			startLine -= 1;
 		}
 
-		if (startLine != DEFAULT_START_LINE)
-		{
+		if (startLine != DEFAULT_START_LINE) {
 			skipTo(startLine);
 			startLine = DEFAULT_START_LINE;
 		}
@@ -69,24 +66,17 @@ public class CSVReader
 		scanner.scan();
 		List<List<CSVToken>> tokens = scanner.getTokens();
 
-		for (List<CSVToken> lineOfCSVToken : tokens)
-		{
+		for (List<CSVToken> lineOfCSVToken : tokens) {
 			String[] parsedLine = parser.parseLine(lineOfCSVToken);
 
-			if (parser.isMultiLine)
-			{
+			if (parser.isMultiLine) {
 				pendingLine = joinArrays(pendingLine, parsedLine);
-			}
-			else
-			{
-				if (pendingLine != null && pendingLine.length != 0)
-				{
+			} else {
+				if (pendingLine != null && pendingLine.length != 0) {
 					parsedLine = joinArrays(pendingLine, parsedLine);
 					result.add(createLineAsMap(parsedLine));
 					pendingLine = new String[] {};
-				}
-				else
-				{
+				} else {
 					result.add(createLineAsMap(parsedLine));
 				}
 			}
@@ -95,15 +85,12 @@ public class CSVReader
 		return result;
 	}
 
-	private Map<String, Object> createLineAsMap(String[] csvLine)
-	{
+	private Map<String, Object> createLineAsMap(String[] csvLine) {
 		List<String> headers = headerNames != null ? headerNames : format.getHeaders();
 		Map<String, Object> lineAsMap = new TreeMap<>();
 
-		for (int i = 0; i < csvLine.length; i++)
-		{
-			if (i >= headers.size())
-			{
+		for (int i = 0; i < csvLine.length; i++) {
+			if (i >= headers.size()) {
 				break;
 			}
 			lineAsMap.put(headers.get(i), csvLine[i]);
@@ -112,26 +99,21 @@ public class CSVReader
 		return lineAsMap;
 	}
 
-	public void skipTo(int startLine) throws IOException
-	{
-		for (int i = 1; i < startLine; i++)
-		{
+	public void skipTo(int startLine) throws IOException {
+		for (int i = 1; i < startLine; i++) {
 			String line = reader.readLine();
 
-			if (parser.isMultiLine(line))
-			{
+			if (parser.isMultiLine(line)) {
 				startLine++;
 			}
 		}
 	}
 
-	public void close() throws IOException
-	{
+	public void close() throws IOException {
 		reader.close();
 	}
 
-	private String[] joinArrays(String[] array1, String[] array2)
-	{
+	private String[] joinArrays(String[] array1, String[] array2) {
 		return Stream.concat(Arrays.stream(array1), Arrays.stream(array2)).toArray(String[]::new);
 	}
 }

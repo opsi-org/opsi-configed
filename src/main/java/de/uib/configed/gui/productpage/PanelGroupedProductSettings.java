@@ -1,5 +1,13 @@
 package de.uib.configed.gui.productpage;
 
+import java.awt.event.ActionEvent;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+
+import javax.swing.ListSelectionModel;
+
 /*
  * configed - configuration editor for client work stations in opsi
  * (open pc server integration) www.opsi.org
@@ -12,169 +20,124 @@ package de.uib.configed.gui.productpage;
  * version 2.1 of the License, or (at your option) any later version.
  *
  */
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.guidata.InstallationStateTableModelFiltered;
+import de.uib.configed.productgroup.ProductgroupPanel;
+import de.uib.utilities.logging.logging;
+import de.uib.utilities.swing.JMenuItemFormatted;
 
-import de.uib.configed.*;
-import de.uib.configed.gui.*;
-import de.uib.configed.productgroup.*;
-import de.uib.opsidatamodel.datachanges.*;
+public class PanelGroupedProductSettings extends PanelProductSettings {
 
-import javax.swing.*;
-import javax.swing.event.*;
+	// State reducedTo1stSelection
+	// List reductionList
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-
-import javax.swing.table.*;
-
-import java.io.File;
-
-import de.uib.utilities.swing.*;
-import de.uib.utilities.table.gui.*;
-import de.uib.utilities.datapanel.*;
-import de.uib.utilities.logging.*;
-import de.uib.configed.guidata.*;
-import de.uib.configed.gui.helper.*;
-import de.uib.opsidatamodel.productstate.*;
-
-
-public class PanelGroupedProductSettings extends PanelProductSettings
-{
-	
-	//State reducedTo1stSelection
-	//List reductionList
-	
-	
 	de.uib.configed.productgroup.ProductgroupPanel groupPanel;
-	
+
 	JMenuItemFormatted popupMarkHits;
-	
-	public PanelGroupedProductSettings(String title, ConfigedMain mainController, LinkedHashMap<String, Boolean> productDisplayFields,
-		boolean packageGroupsVisible)
-	{
+
+	public PanelGroupedProductSettings(String title, ConfigedMain mainController,
+			LinkedHashMap<String, Boolean> productDisplayFields,
+			boolean packageGroupsVisible) {
 		super(title, mainController, productDisplayFields);
-		//init(); // weg, wil redundant
+		// init(); // weg, wil redundant
 	}
-	
+
 	@Override
-	protected void producePopupMenu(final Map<String, Boolean> checkColumns)
-	{
-		
-		super.producePopupMenu( checkColumns );
+	protected void producePopupMenu(final Map<String, Boolean> checkColumns) {
+
+		super.producePopupMenu(checkColumns);
 		/*
-		popup.addSeparator();
-		popupMarkHits = new JMenuItemFormatted();
-		
-		popupMarkHits.setText( configed.getResourceValue("PanelGroupedProductSettings.markAllFoundItems") );
-		popupMarkHits.setFont(Globals.defaultFont);
-		popupMarkHits.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				groupPanel.markAllSearchResults();
-			}
-		});
-		
-		popup.add(popupMarkHits);
-		*/
+		 * popup.addSeparator();
+		 * popupMarkHits = new JMenuItemFormatted();
+		 * 
+		 * popupMarkHits.setText(
+		 * configed.getResourceValue("PanelGroupedProductSettings.markAllFoundItems") );
+		 * popupMarkHits.setFont(Globals.defaultFont);
+		 * popupMarkHits.addActionListener(new ActionListener()
+		 * {
+		 * public void actionPerformed(ActionEvent e)
+		 * {
+		 * groupPanel.markAllSearchResults();
+		 * }
+		 * });
+		 * 
+		 * popup.add(popupMarkHits);
+		 */
 	}
-		
-		
-	public PanelGroupedProductSettings(String title, ConfigedMain mainController, LinkedHashMap<String, Boolean> productDisplayFields)
-	{
+
+	public PanelGroupedProductSettings(String title, ConfigedMain mainController,
+			LinkedHashMap<String, Boolean> productDisplayFields) {
 		this(title, mainController, productDisplayFields, true);
 	}
-	
-	
-	protected void activatePacketSelectionHandling(boolean b)
-	{
+
+	protected void activatePacketSelectionHandling(boolean b) {
 		if (b)
 			tableProducts.getSelectionModel().addListSelectionListener(groupPanel);
 		else
 			tableProducts.getSelectionModel().removeListSelectionListener(groupPanel);
 	}
-	
-	public void setSearchFields(java.util.List<String> fieldList)
-	{
+
+	public void setSearchFields(java.util.List<String> fieldList) {
 		groupPanel.setSearchFields(fieldList);
 	}
-	
-			
+
 	@Override
-	protected void initTopPane()
-	{
-		if (tableProducts == null)
-		{
+	protected void initTopPane() {
+		if (tableProducts == null) {
 			logging.error(this, " tableProducts == null ");
 			System.exit(0);
 		}
 		topPane = new ProductgroupPanel(this, mainController, tableProducts);
 		topPane.setVisible(true);
 		groupPanel = (ProductgroupPanel) topPane;
-		groupPanel.setReloadActionHandler(  
-			 (ActionEvent ae )-> { 
-			 	 logging.info(this, " in top pane we got event reloadAction " + ae);
-			 	 reloadAction();
-			 }
-		);	
-		
-		groupPanel.setSaveAndExecuteActionHandler(  
-			 (ActionEvent ae )-> { 
-			 	 logging.info(this, " in top pane we got event saveAndExecuteAction " + ae);
-			 	 saveAndExecuteAction();
-			 }
-		);	
-			
+		groupPanel.setReloadActionHandler(
+				(ActionEvent ae) -> {
+					logging.info(this, " in top pane we got event reloadAction " + ae);
+					reloadAction();
+				});
+
+		groupPanel.setSaveAndExecuteActionHandler(
+				(ActionEvent ae) -> {
+					logging.info(this, " in top pane we got event saveAndExecuteAction " + ae);
+					saveAndExecuteAction();
+				});
+
 	}
-	
+
 	@Override
-	protected void init()
-	{
+	protected void init() {
 		super.init();
-	
+
 		activatePacketSelectionHandling(true);
 		tableProducts.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
 
-	
-		
 	public void setGroupsData(
-		final Map<String, Map<String, String>> data,
-		final Map<String, Set<String>> productGroupMembers
-		)
-	{
+			final Map<String, Map<String, String>> data,
+			final Map<String, Set<String>> productGroupMembers) {
 		groupPanel.setGroupsData(data, productGroupMembers);
 		showAll();
 	}
-	
-	public void setTableModel (InstallationStateTableModelFiltered istm)
-	{
+
+	public void setTableModel(InstallationStateTableModelFiltered istm) {
 		super.setTableModel(istm);
 	}
-	
-	
-	public void clearSelection()
-	{
+
+	public void clearSelection() {
 		tableProducts.clearSelection();
 	}
-	
+
 	@Override
-	public void setSelection(Set selectedIDs)
-	{
+	public void setSelection(Set selectedIDs) {
 		activatePacketSelectionHandling(false);
 		clearSelection();
-		if (selectedIDs != null)
-		{
-			if (selectedIDs.size() == 0 && tableProducts.getRowCount() > 0)
-			{
+		if (selectedIDs != null) {
+			if (selectedIDs.size() == 0 && tableProducts.getRowCount() > 0) {
 				tableProducts.addRowSelectionInterval(0, 0);
-				//show first product if no product given
+				// show first product if no product given
 				logging.info(this, "setSelection 0");
-			}
-			else
-			{
-				for (int row = 0; row < tableProducts.getRowCount(); row++)
-				{
+			} else {
+				for (int row = 0; row < tableProducts.getRowCount(); row++) {
 					Object productId = tableProducts.getValueAt(row, 0);
 					if (selectedIDs.contains(productId))
 						tableProducts.addRowSelectionInterval(row, row);
@@ -184,70 +147,58 @@ public class PanelGroupedProductSettings extends PanelProductSettings
 		activatePacketSelectionHandling(true);
 		groupPanel.findGroup(selectedIDs);
 	}
-	
+
 	@Override
-	public Set<String> getSelectedIDs()
-	{
+	public Set<String> getSelectedIDs() {
 		HashSet<String> result = new HashSet();
-		
+
 		int[] selection = tableProducts.getSelectedRows();
-		
-		
-		for (int i = 0; i < selection.length; i++)
-		{
+
+		for (int i = 0; i < selection.length; i++) {
 			result.add((String) tableProducts.getValueAt(selection[i], 0));
 		}
-		
+
 		return result;
 	}
-	
-	public void reduceToSet(Set<String> filter)
-	{
+
+	public void reduceToSet(Set<String> filter) {
 		activatePacketSelectionHandling(false);
-		//Set<String> testSet = new HashSet<String>();
-		//testSet.add("jedit");
-		InstallationStateTableModelFiltered tModel 
-			= (InstallationStateTableModelFiltered) tableProducts.getModel();
-		tModel.setFilterFrom( filter  );
-		
+		// Set<String> testSet = new HashSet<String>();
+		// testSet.add("jedit");
+		InstallationStateTableModelFiltered tModel = (InstallationStateTableModelFiltered) tableProducts.getModel();
+		tModel.setFilterFrom(filter);
+
 		logging.info(this, "reduceToSet  " + filter);
 		logging.info(this, "reduceToSet GuiIsFiltered " + groupPanel.getGuiIsFiltered());
-		
-		groupPanel.setGuiIsFiltered( 
-				filter != null && !filter.isEmpty() 
-				);
-			
+
+		groupPanel.setGuiIsFiltered(
+				filter != null && !filter.isEmpty());
+
 		tableProducts.revalidate();
 		activatePacketSelectionHandling(true);
 	}
-	
-	public void reduceToSelected()
-	{
+
+	public void reduceToSelected() {
 		Set<String> selection = getSelectedIDs();
-		logging.debug(this, "reduceToSelected: selectedIds  " + selection );
-		reduceToSet( selection );
+		logging.debug(this, "reduceToSelected: selectedIds  " + selection);
+		reduceToSet(selection);
 		setSelection(selection);
 	}
-	
-	public void noSelection()
-	{
-		InstallationStateTableModelFiltered tModel 
-			= (InstallationStateTableModelFiltered) tableProducts.getModel();
-		
+
+	public void noSelection() {
+		InstallationStateTableModelFiltered tModel = (InstallationStateTableModelFiltered) tableProducts.getModel();
+
 		activatePacketSelectionHandling(false);
 		((InstallationStateTableModelFiltered) tModel).setFilterFrom((Set) null);
 		tableProducts.revalidate();
 		activatePacketSelectionHandling(true);
 	}
-	
-	public void showAll()
-	{
+
+	public void showAll() {
 		Set<String> selection = getSelectedIDs();
 		noSelection();
-		setSelection(selection); 
-		
-	}
-	
-	
-}
+		setSelection(selection);
 
+	}
+
+}

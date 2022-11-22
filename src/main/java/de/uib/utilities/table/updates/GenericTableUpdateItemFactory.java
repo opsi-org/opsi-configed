@@ -5,78 +5,63 @@
  *	author Rupert Röder 
  *
  */
- 
+
 package de.uib.utilities.table.updates;
 
-import java.util.*;
+import java.util.Vector;
 
-public class GenericTableUpdateItemFactory extends TableUpdateItemFactory
-{
+public class GenericTableUpdateItemFactory extends TableUpdateItemFactory {
 	protected Vector<String> columnNames;
 	protected Vector<String> classNames;
 	protected int keyCol;
 	protected Object source;
-	
+
 	public GenericTableUpdateItemFactory(
 			Object source,
 			Vector<String> columnNames, Vector<String> classNames,
-			int keyCol)
-	{
+			int keyCol) {
 		this.columnNames = columnNames;
 		this.classNames = classNames;
 		this.keyCol = keyCol;
 		this.source = source;
 	}
-		
+
 	public GenericTableUpdateItemFactory(
 			Vector<String> columnNames, Vector<String> classNames,
-			int keyCol)
-	{
+			int keyCol) {
 		this(null, columnNames, classNames, keyCol);
 	}
-	
+
 	public GenericTableUpdateItemFactory(
-			int keyCol)
-	{
+			int keyCol) {
 		this(null, null, null, keyCol);
 	}
-	
-	public void setSource(Object source)
-	{
+
+	public void setSource(Object source) {
 		this.source = source;
 	}
-		
-	public void setClassNames(Vector<String> classNames)
-	{
+
+	public void setClassNames(Vector<String> classNames) {
 		this.classNames = classNames;
 	}
-	
-	public void setColumnNames(Vector<String> columnNames)
-	{
+
+	public void setColumnNames(Vector<String> columnNames) {
 		this.columnNames = columnNames;
 	}
-	
-	public TableEditItem produceUpdateItem(Vector oldValues, Vector rowV)
-	{
+
+	public TableEditItem produceUpdateItem(Vector oldValues, Vector rowV) {
 		return new GenericTableUpdateItem(
-			source, keyCol, columnNames, classNames, oldValues, rowV
-			);
+				source, keyCol, columnNames, classNames, oldValues, rowV);
 	}
-	
-	public TableEditItem produceInsertItem(Vector rowV)
-	{
+
+	public TableEditItem produceInsertItem(Vector rowV) {
 		return new GenericTableInsertItem(
-			source, keyCol, columnNames, classNames, rowV
-			);
+				source, keyCol, columnNames, classNames, rowV);
 	}
-	
-	public TableEditItem produceDeleteItem(Vector rowV)
-	{
+
+	public TableEditItem produceDeleteItem(Vector rowV) {
 		return new GenericTableDeleteItem(
-			source, keyCol, columnNames, classNames, rowV
-			);
+				source, keyCol, columnNames, classNames, rowV);
 	}
-	
-	
+
 }
-	

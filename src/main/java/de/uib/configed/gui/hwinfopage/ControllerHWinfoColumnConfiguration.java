@@ -10,564 +10,501 @@
  * author: Rupert Röder
  */
 
-
 package de.uib.configed.gui.hwinfopage;
 
-import de.uib.configed.*;
-import java.util.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.table.*;
-import javax.swing.table.*;
-import javax.swing.event.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Vector;
 
-import de.uib.configed.type.*;
-import de.uib.utilities.*;
-import de.uib.utilities.swing.*;
-import de.uib.utilities.swing.timeedit.*;
-import de.uib.utilities.table.*;
-import de.uib.utilities.table.gui.*;
-import de.uib.utilities.table.updates.*;
-import de.uib.utilities.table.provider.*;
+import javax.swing.DefaultCellEditor;
+import javax.swing.Icon;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.ListSelectionModel;
+import javax.swing.SortOrder;
+
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.configed;
+import de.uib.configed.type.OpsiHwAuditDeviceClass;
+import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.*;
+import de.uib.utilities.logging.logging;
+import de.uib.utilities.table.GenTableModel;
+import de.uib.utilities.table.gui.PanelGenEditTable;
+import de.uib.utilities.table.provider.DefaultTableProvider;
+import de.uib.utilities.table.provider.MapRetriever;
+import de.uib.utilities.table.provider.RetrieverMapSource;
+import de.uib.utilities.table.updates.MapBasedUpdater;
+import de.uib.utilities.table.updates.MapItemsUpdateController;
+import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
+import de.uib.utilities.table.updates.TableUpdateCollection;
 
-
-
-public class ControllerHWinfoColumnConfiguration
-{
+public class ControllerHWinfoColumnConfiguration {
 	public PanelGenEditTable panel;
 	private GenTableModel model;
 	TableUpdateCollection updateCollection;
-	
+
 	Vector<String> columnNames;
 	Vector<String> classNames;
 	public static final String colLineNo = configed.getResourceValue("HWinfoColumnConfiguration.colLineNo");
-	public static final String colHostVsItemAssigned = configed.getResourceValue("HWinfoColumnConfiguration.colHostVsItemAssigned");
-	public static final String valAssignedToHost = configed.getResourceValue("HWinfoColumnConfiguration.valAssignedToHost");
-	public static final String	valAssignedToHwItem = configed.getResourceValue("HWinfoColumnConfiguration.valAssignedToHwItem");
+	public static final String colHostVsItemAssigned = configed
+			.getResourceValue("HWinfoColumnConfiguration.colHostVsItemAssigned");
+	public static final String valAssignedToHost = configed
+			.getResourceValue("HWinfoColumnConfiguration.valAssignedToHost");
+	public static final String valAssignedToHwItem = configed
+			.getResourceValue("HWinfoColumnConfiguration.valAssignedToHwItem");
 	public static final String colUseInQuery = configed.getResourceValue("HWinfoColumnConfiguration.colUseInQuery");
-	public static final String colOpsiColumnName = configed.getResourceValue("HWinfoColumnConfiguration.colOpsiColumnName");
-	public static final String colOpsiDbColumnType = configed.getResourceValue("HWinfoColumnConfiguration.colOpsiDbColumnType");
+	public static final String colOpsiColumnName = configed
+			.getResourceValue("HWinfoColumnConfiguration.colOpsiColumnName");
+	public static final String colOpsiDbColumnType = configed
+			.getResourceValue("HWinfoColumnConfiguration.colOpsiDbColumnType");
 	public static final String colHwClass = configed.getResourceValue("HWinfoColumnConfiguration.colHwClass");
 	public static final String colLinuxQuery = configed.getResourceValue("HWinfoColumnConfiguration.colLinuxQuery");
 	public static final String colWMIQuery = configed.getResourceValue("HWinfoColumnConfiguration.colWMIQuery");
-	//public static final String colTellAgainHardwareClass = configed.getResourceValue("HWinfoColumnConfiguration.colTellAgainHardwareClass");
-	
-	
+	// public static final String colTellAgainHardwareClass =
+	// configed.getResourceValue("HWinfoColumnConfiguration.colTellAgainHardwareClass");
+
 	private Map<String, Map<String, Boolean>> updateItems;
-	
-	private class ColumnIdent
-	{
+
+	private class ColumnIdent {
 		String dbColumnName;
 		String hwClass;
 		String tableType;
 		String configIdent;
-		
-		
-		
-		ColumnIdent(String tableValue)
-		{
+
+		ColumnIdent(String tableValue) {
 			if (tableValue == null)
 				return;
-			
+
 			int indexCurly = tableValue.indexOf('{');
-			
-			if (indexCurly == -1)
-			{
+
+			if (indexCurly == -1) {
 				dbColumnName = tableValue.trim();
 				return;
 			}
-			
+
 			dbColumnName = tableValue.substring(0, indexCurly).trim();
 			String tableIdent = tableValue.substring(indexCurly + 1);
-			
-			
+
 			String checkType = OpsiHwAuditDeviceClass.hostAssignedTableType + "}";
-			
-			if (tableIdent.endsWith( checkType ))
-				tableType =  OpsiHwAuditDeviceClass.hostAssignedTableType;
-			else 
-			{
-				checkType = OpsiHwAuditDeviceClass.hwItemAssignedTableType +  "}";
-				if (tableIdent.endsWith( checkType ))
+
+			if (tableIdent.endsWith(checkType))
+				tableType = OpsiHwAuditDeviceClass.hostAssignedTableType;
+			else {
+				checkType = OpsiHwAuditDeviceClass.hwItemAssignedTableType + "}";
+				if (tableIdent.endsWith(checkType))
 					tableType = OpsiHwAuditDeviceClass.hwItemAssignedTableType;
 			}
-			
+
 			int indexUnderline = tableIdent.lastIndexOf("_");
 			hwClass = tableIdent.substring(0, indexUnderline);
-			
+
 			configIdent = hwClass + "_" + tableType;
-			
-			logging.debug(this, "from '" + tableValue + "' we get " 
-				+ " col name " + dbColumnName + " type " + tableType + " hw class " + hwClass);
-			
-		}		
-		
-		ColumnIdent(String hwClass, String tableType, String colName )
-		{
+
+			logging.debug(this, "from '" + tableValue + "' we get "
+					+ " col name " + dbColumnName + " type " + tableType + " hw class " + hwClass);
+
+		}
+
+		ColumnIdent(String hwClass, String tableType, String colName) {
 			this.dbColumnName = colName;
 			this.hwClass = hwClass;
 			this.tableType = tableType;
 		}
-		
-		String produceColumnCellValue()
-		{
+
+		String produceColumnCellValue() {
 			String result = dbColumnName + " {" + hwClass + "_" + tableType + "}";
 			logging.debug(this, "produceColumnCellValue " + result);
-			
+
 			return result;
 		}
-			
+
 		@Override
-		public String toString()
-		{
-			return 
-				"dbColumnName " + dbColumnName + " " +
-				"hwClass " + hwClass + " " +
-				"tableType " + tableType;
+		public String toString() {
+			return "dbColumnName " + dbColumnName + " " +
+					"hwClass " + hwClass + " " +
+					"tableType " + tableType;
 		}
-	}		
-	
-	
-	
+	}
+
 	ConfigedMain main;
 	protected PersistenceController persist;
-	
+
 	final static int keycol = 0;
-	
-	public ControllerHWinfoColumnConfiguration(ConfigedMain main, PersistenceController persist )
-	{
+
+	public ControllerHWinfoColumnConfiguration(ConfigedMain main, PersistenceController persist) {
 		this.main = main;
 		this.persist = persist;
-		
+
 		initPanel();
 		initModel();
 		updateItems = new HashMap<String, Map<String, Boolean>>();
-		
-		
+
 	}
-	
-	
-	
-	protected void initPanel()
-	{
-		panel = new PanelGenEditTable( "", //configed.getResourceValue("HardwareList"),
-			0, //maxTableWidth
-			true, //editing 
-			0, //generalPopupPosition 
-			false, 
-			//PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF,
-			new int[]{PanelGenEditTable.POPUP_RELOAD, PanelGenEditTable.POPUP_PDF},
-			true )
-		{
-			
-			
-			@Override 
-			public void commit()
-			{
-				super.commit(); //we collect for each changed line an update item
-				logging.info(this, "commit, we do the saving");
-				
-				logging.info(this, " we have got updateItems " + updateItems);
-				persist.saveHwColumnConfig( updateItems );
-				updateItems.clear();
-				
-			}
-				
-				
-			
-			
+
+	protected void initPanel() {
+		panel = new PanelGenEditTable("", // configed.getResourceValue("HardwareList"),
+				0, // maxTableWidth
+				true, // editing
+				0, // generalPopupPosition
+				false,
+				// PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF,
+				new int[] { PanelGenEditTable.POPUP_RELOAD, PanelGenEditTable.POPUP_PDF },
+				true) {
+
 			@Override
-			public void reload()
-			{
+			public void commit() {
+				super.commit(); // we collect for each changed line an update item
+				logging.info(this, "commit, we do the saving");
+
+				logging.info(this, " we have got updateItems " + updateItems);
+				persist.saveHwColumnConfig(updateItems);
+				updateItems.clear();
+
+			}
+
+			@Override
+			public void reload() {
 
 				persist.hwAuditConfRequestRefresh();
-				persist.configOptionsRequestRefresh(); 
+				persist.configOptionsRequestRefresh();
 				model.requestReload();
-				
+
 				persist.getConfigOptions();
-				
-				//super.reload();
-			
+
+				// super.reload();
+
 				model.reset();
-				setDataChanged( false );
-				
-				panel.moveToValue( "true", columnNames.indexOf( colUseInQuery ), true);
-				
+				setDataChanged(false);
+
+				panel.moveToValue("true", columnNames.indexOf(colUseInQuery), true);
+
 			}
-			
-			
+
 			/*
-			@Override
-			protected Object modifyHeaderValue(Object s)
-			{
-				 if (s != null && s instanceof String &&  ((String) s).startsWith(DELETE_PREFIX))
-				 {
-					 String modified = ((String) s).substring(DELETE_PREFIX.length());
-					 return modified;
-				 }
-				 
-				return s;
-			}
-			*/
-			
+			 * @Override
+			 * protected Object modifyHeaderValue(Object s)
+			 * {
+			 * if (s != null && s instanceof String && ((String)
+			 * s).startsWith(DELETE_PREFIX))
+			 * {
+			 * String modified = ((String) s).substring(DELETE_PREFIX.length());
+			 * return modified;
+			 * }
+			 * 
+			 * return s;
+			 * }
+			 */
+
 		};
-		
-			
-		panel.setMasterFrame( de.uib.configed.Globals.mainFrame );
+
+		panel.setMasterFrame(de.uib.configed.Globals.mainFrame);
 		panel.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		
-		panel.showFilterIcon( true ); //supply implementation of SearchTargetModelFromTable.setFiltered
-		panel.setFiltering( true );
-		panel.setDeleteAllowed( false );
-		//panel.getTheTable().setRowSorter(null);
-		
-		
+
+		panel.showFilterIcon(true); // supply implementation of SearchTargetModelFromTable.setFiltered
+		panel.setFiltering(true);
+		panel.setDeleteAllowed(false);
+		// panel.getTheTable().setRowSorter(null);
+
 	}
-	
-	
-	
-	protected void initModel()
-	{
-		
+
+	protected void initModel() {
+
 		updateCollection = new TableUpdateCollection();
 		columnNames = new Vector<String>();
-		columnNames.add( colLineNo );
-		columnNames.add( colHwClass );
-		columnNames.add( colLinuxQuery );
-		columnNames.add( colWMIQuery );
-		columnNames.add( colHostVsItemAssigned );
-		columnNames.add( colOpsiColumnName);
-		columnNames.add( colUseInQuery);
-		columnNames.add( colOpsiDbColumnType);
-		//columnNames.add( "UI Name");
-		//columnNames.add( "display type");
-		//columnNames.add( "report function");
-		//columnNames.add( colTellAgainHardwareClass );
-		
-		
+		columnNames.add(colLineNo);
+		columnNames.add(colHwClass);
+		columnNames.add(colLinuxQuery);
+		columnNames.add(colWMIQuery);
+		columnNames.add(colHostVsItemAssigned);
+		columnNames.add(colOpsiColumnName);
+		columnNames.add(colUseInQuery);
+		columnNames.add(colOpsiDbColumnType);
+		// columnNames.add( "UI Name");
+		// columnNames.add( "display type");
+		// columnNames.add( "report function");
+		// columnNames.add( colTellAgainHardwareClass );
+
 		classNames = new Vector<String>();
-		
-		//classNames.add("java.lang.Integer");
-		for (int i = 0; i < columnNames.size(); i++)
-		{
+
+		// classNames.add("java.lang.Integer");
+		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
-		
-		
 
-		
-		//GenericTableUpdateItemFactory updateItemFactory = new GenericTableUpdateItemFactory(0);
+		// GenericTableUpdateItemFactory updateItemFactory = new
+		// GenericTableUpdateItemFactory(0);
 
-		MapTableUpdateItemFactory updateItemFactory
-			=  new MapTableUpdateItemFactory(columnNames, classNames, keycol); 
-		
-		
+		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, classNames, keycol);
+
 		model = new GenTableModel(
-		            updateItemFactory,
+				updateItemFactory,
 
-		            //tableProvider
-		            //new de.uib.utilities.table.provider.DefaultTableProvider(sqlSource),
-		             new DefaultTableProvider(
-		             	 new RetrieverMapSource(columnNames, classNames,
-									new MapRetriever(){
-										public Map retrieveMap()
-										{
-											Map<String, Map<String, Object>> hwColumnConfig = getHwColumnConfig();
-											
-											return hwColumnConfig;
-										}
-									})
-		            ),
+				// tableProvider
+				// new de.uib.utilities.table.provider.DefaultTableProvider(sqlSource),
+				new DefaultTableProvider(
+						new RetrieverMapSource(columnNames, classNames,
+								new MapRetriever() {
+									public Map retrieveMap() {
+										Map<String, Map<String, Object>> hwColumnConfig = getHwColumnConfig();
 
-		            keycol,
+										return hwColumnConfig;
+									}
+								})),
 
-		            //final columns int array
-		            new int[]{keycol},
+				keycol,
 
-		            //table model listener
-		            panel,
+				// final columns int array
+				new int[] { keycol },
 
-		            // TableUpdateCollection updates
-		            updateCollection
-		        )
-			{
-				@Override
-				public boolean isCellEditable( int row, int col)
-				{
-					boolean result = super.isCellEditable(row, col);
-					
-					if (result)
-					{
-							
-						Object val = getValueAt( row, col ); 
-						if ( 
-							val == null
+				// table model listener
+				panel,
+
+				// TableUpdateCollection updates
+				updateCollection) {
+			@Override
+			public boolean isCellEditable(int row, int col) {
+				boolean result = super.isCellEditable(row, col);
+
+				if (result) {
+
+					Object val = getValueAt(row, col);
+					if (val == null
 							||
-							(
-								val instanceof String 
-								&&
-								((String)val).trim().equals("")
-							)
-							)
-						{
-							result = false;
-						}
+							(val instanceof String
+									&&
+									((String) val).trim().equals(""))) {
+						result = false;
 					}
-					
-					return result;
 				}
+
+				return result;
 			}
-							
-						
-						
-		
+		}
+
 		;
-		
-		updateItemFactory.setSource( model );
 
-		
+		updateItemFactory.setSource(model);
+
 		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = persist.getHwAuditDeviceClasses();
-		
-		//for (String hwClass : hwAuditDeviceClasses.keySet() )
-		
-		//updateItemFactory.setSource(model);
 
-		//model.reset();
+		// for (String hwClass : hwAuditDeviceClasses.keySet() )
+
+		// updateItemFactory.setSource(model);
+
+		// model.reset();
 		// we got metadata:
 
-		//columnNames = model.getColumnNames();
-		//classNames = model.getClassNames();
+		// columnNames = model.getColumnNames();
+		// classNames = model.getClassNames();
 
-		//updateItemFactory.setColumnNames(columnNames);
-		//updateItemFactory.setClassNames(classNames);
-		
-		model.setEditableColumns(new int[]{
-				//columnNames.indexOf ( colOpsiColumnName ),
-				columnNames.indexOf ( colUseInQuery )
-			});
-		
+		// updateItemFactory.setColumnNames(columnNames);
+		// updateItemFactory.setClassNames(classNames);
+
+		model.setEditableColumns(new int[] {
+				// columnNames.indexOf ( colOpsiColumnName ),
+				columnNames.indexOf(colUseInQuery)
+		});
 
 		panel.setTableModel(model);
-		panel.setEmphasizedColumns(new int[]{
-				//columnNames.indexOf ( colOpsiColumnName ),
-				columnNames.indexOf ( colUseInQuery )
-			});
+		panel.setEmphasizedColumns(new int[] {
+				// columnNames.indexOf ( colOpsiColumnName ),
+				columnNames.indexOf(colUseInQuery)
+		});
 
-		//panel.setTitle( "" );//configed.getResourceValue("PanelHWInfo.overview") );
-		
-		//Icon iconConfigure =  de.uib.configed.Globals.createImageIcon("images/config_pro.png", "");
-		
-		panel.setTitlePane(new JComponent[]{new JLabel( configed.getResourceValue("HWinfoColumnConfiguration.infoTitle") ) }, 20);
-		
-		panel.setTitlePaneBackground(  de.uib.utilities.Globals.backLightBlue );
-		
-		LinkedHashMap<Integer,SortOrder> sortDescriptor = new LinkedHashMap<Integer, SortOrder>();
-		
-		sortDescriptor.put(keycol , SortOrder.ASCENDING);
-		panel.setSortOrder( sortDescriptor );
-		
-		panel.setComparator(colLineNo, new de.uib.utilities.IntComparatorForObjects() );
-		
-		panel.reload();//now sorted
-			
+		// panel.setTitle( "" );//configed.getResourceValue("PanelHWInfo.overview") );
+
+		// Icon iconConfigure =
+		// de.uib.configed.Globals.createImageIcon("images/config_pro.png", "");
+
+		panel.setTitlePane(
+				new JComponent[] { new JLabel(configed.getResourceValue("HWinfoColumnConfiguration.infoTitle")) }, 20);
+
+		panel.setTitlePaneBackground(de.uib.utilities.Globals.backLightBlue);
+
+		LinkedHashMap<Integer, SortOrder> sortDescriptor = new LinkedHashMap<Integer, SortOrder>();
+
+		sortDescriptor.put(keycol, SortOrder.ASCENDING);
+		panel.setSortOrder(sortDescriptor);
+
+		panel.setComparator(colLineNo, new de.uib.utilities.IntComparatorForObjects());
+
+		panel.reload();// now sorted
+
 		javax.swing.table.TableColumn col;
-		col=panel.getColumnModel().getColumn(columnNames.indexOf( colLineNo ) );
+		col = panel.getColumnModel().getColumn(columnNames.indexOf(colLineNo));
 		col.setMaxWidth(80);
 		col.setHeaderValue("");
-		
-		col=panel.getColumnModel().getColumn( columnNames.indexOf( colUseInQuery ) );
+
+		col = panel.getColumnModel().getColumn(columnNames.indexOf(colUseInQuery));
 		col.setMaxWidth(80);
-		
+
 		Icon iconChecked = de.uib.configed.Globals.createImageIcon("images/checked_box_blue_14.png", "");
-		Icon iconUnchecked = de.uib.configed.Globals.createImageIcon("images/checked_box_blue_empty_14.png","");
+		Icon iconUnchecked = de.uib.configed.Globals.createImageIcon("images/checked_box_blue_empty_14.png", "");
 		Icon iconEmpty = de.uib.configed.Globals.createImageIcon("images/checked_void.png", "");
-		
-		
+
 		col.setCellRenderer(new de.uib.utilities.table.gui.BooleanIconTableCellRenderer(
-					iconChecked, iconUnchecked, iconEmpty,
-					true
-					)
-				);
-		
+				iconChecked, iconUnchecked, iconEmpty,
+				true));
+
 		JCheckBox useCheck = new JCheckBox(iconEmpty);
-		
-			
-		col.setCellEditor( new DefaultCellEditor( useCheck ) );
-		//checkbox is not visible, since any click 
-		//ends editing and lets immediately resurface the cell renderer
-		//this is not correct for keys, therefore we set the void icon
-		
+
+		col.setCellEditor(new DefaultCellEditor(useCheck));
+		// checkbox is not visible, since any click
+		// ends editing and lets immediately resurface the cell renderer
+		// this is not correct for keys, therefore we set the void icon
+
 		panel.setUpdateController(
-			new MapItemsUpdateController(
-				panel,
-				model,
-				new MapBasedUpdater(){
-					public String sendUpdate(Map<String, Object> rowmap){
-						//panel.sortAgainAsConfigured(); 
-						//we reset the original sorting because we need information from lines "above"
-						
-						logging.info(this, "within MapItemsUpdateController sendUpdate " + rowmap);
-						
-						buildUpdateItem( 
+				new MapItemsUpdateController(
+						panel,
+						model,
+						new MapBasedUpdater() {
+							public String sendUpdate(Map<String, Object> rowmap) {
+								// panel.sortAgainAsConfigured();
+								// we reset the original sorting because we need information from lines "above"
 
-							new ColumnIdent(  (String) rowmap.get (colOpsiColumnName) ),
-							 (Boolean) rowmap.get( colUseInQuery )
-							 );
-						
-						
-						return "";
-					}
-					public boolean sendDelete(Map<String, Object> rowmap){
-						logging.info(this, "within MapItemsUpdateController sendDelete " + rowmap);
-						// method is not used since we don*t delete rows
-						
-						return true;
-					}
-				},
-				updateCollection
-			)
-		);
-				
-		
+								logging.info(this, "within MapItemsUpdateController sendUpdate " + rowmap);
+
+								buildUpdateItem(
+
+										new ColumnIdent((String) rowmap.get(colOpsiColumnName)),
+										(Boolean) rowmap.get(colUseInQuery));
+
+								return "";
+							}
+
+							public boolean sendDelete(Map<String, Object> rowmap) {
+								logging.info(this, "within MapItemsUpdateController sendDelete " + rowmap);
+								// method is not used since we don*t delete rows
+
+								return true;
+							}
+						},
+						updateCollection));
+
 	}
-	
-	private void buildUpdateItem( ColumnIdent col, Boolean use)
-	{
-		logging.info(this, " buildUpdateItem value " + use + " for col ident " + col);  
-		
-		Map<String, Boolean> tableConfigUpdates = updateItems.get( col.configIdent );
 
-		logging.info(this, "add this item to items for configIdent " + col.configIdent );
-		
-		logging.info(this, "add this item to items for configIdent " + col.configIdent );
-		
-		if (tableConfigUpdates == null)
-		{
-			 tableConfigUpdates = new HashMap<String, Boolean>();
-			 updateItems.put( col.configIdent, tableConfigUpdates );
+	private void buildUpdateItem(ColumnIdent col, Boolean use) {
+		logging.info(this, " buildUpdateItem value " + use + " for col ident " + col);
+
+		Map<String, Boolean> tableConfigUpdates = updateItems.get(col.configIdent);
+
+		logging.info(this, "add this item to items for configIdent " + col.configIdent);
+
+		logging.info(this, "add this item to items for configIdent " + col.configIdent);
+
+		if (tableConfigUpdates == null) {
+			tableConfigUpdates = new HashMap<String, Boolean>();
+			updateItems.put(col.configIdent, tableConfigUpdates);
 		}
-		tableConfigUpdates.put( col.dbColumnName,  use  );
+		tableConfigUpdates.put(col.dbColumnName, use);
 	}
-			
-		
-	
-	private String formatLineNo(int no )
-	{
+
+	private String formatLineNo(int no) {
 		return "(" + no + ")";
 	}
-	
-	
-	
-	protected Map<String, Map<String, Object>> getHwColumnConfig()
-	{
+
+	protected Map<String, Map<String, Object>> getHwColumnConfig() {
 		Map<String, Map<String, Object>> result = new LinkedHashMap<String, Map<String, Object>>();
-		
+
 		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = persist.getHwAuditDeviceClasses();
 		int id = 0;
-		
-		for (String hwClass : hwAuditDeviceClasses.keySet() )
-		{
-			
-			OpsiHwAuditDeviceClass hwAuditDeviceClass = hwAuditDeviceClasses.get (hwClass );
-			java.util.List<OpsiHwAuditDevicePropertyType> deviceHostProperties = hwAuditDeviceClass.getDeviceHostProperties();
-			java.util.List<OpsiHwAuditDevicePropertyType> deviceHwItemProperties = hwAuditDeviceClass.getDeviceHwItemProperties();
-			
-			//hw class line
+
+		for (String hwClass : hwAuditDeviceClasses.keySet()) {
+
+			OpsiHwAuditDeviceClass hwAuditDeviceClass = hwAuditDeviceClasses.get(hwClass);
+			java.util.List<OpsiHwAuditDevicePropertyType> deviceHostProperties = hwAuditDeviceClass
+					.getDeviceHostProperties();
+			java.util.List<OpsiHwAuditDevicePropertyType> deviceHwItemProperties = hwAuditDeviceClass
+					.getDeviceHwItemProperties();
+
+			// hw class line
 			Map<String, Object> lineMap = new LinkedHashMap<String, Object>();
-			lineMap.put( colLineNo, formatLineNo(id) );
-			lineMap.put( colHwClass, hwClass );
-			lineMap.put( colLinuxQuery,hwAuditDeviceClass.getLinuxQuery() );
-			lineMap.put( colWMIQuery,hwAuditDeviceClass.getWmiQuery() );
-			
-			result.put(formatLineNo(id), lineMap); 
-			id++;
-			
-			//colHostVsItemAssigned line
-			lineMap = new LinkedHashMap<String, Object>();
-			lineMap.put( colLineNo , formatLineNo(id));
-			//lineMap.put(colTellAgainHardwareClass, hwClass);
-			
-			lineMap.put( colHostVsItemAssigned , valAssignedToHost );
-			
-			result.put(formatLineNo(id), lineMap); 
-			id++;
-			
-			for (OpsiHwAuditDevicePropertyType deviceProperty : deviceHostProperties )
-			{
-				
-				lineMap = new LinkedHashMap<String, Object>();
-				lineMap.put( colLineNo , formatLineNo(id));
-				//lineMap.put(colTellAgainHardwareClass, hwClass);
-				
-				ColumnIdent columnIdent = new ColumnIdent( 
-					hwClass,
-					OpsiHwAuditDeviceClass.hostAssignedTableType,
-					deviceProperty.getOpsiDbColumnName()
-				);
-					
-					
-				lineMap.put( colOpsiColumnName, columnIdent.produceColumnCellValue() );
-				lineMap.put( colOpsiDbColumnType, deviceProperty.getOpsiDbColumnType() );
-					
-				if (deviceProperty.getDisplayed() == null)
-					lineMap.put( colUseInQuery, "" + false);
-				else
-					lineMap.put( colUseInQuery, "" + deviceProperty.getDisplayed() );
-				
-				result.put(formatLineNo(id), lineMap); 
-				id++;
-			}
-			
-			lineMap = new LinkedHashMap<String, Object>();
-			lineMap.put( colLineNo , formatLineNo(id));
-			lineMap.put( colHostVsItemAssigned , valAssignedToHwItem );
-			
+			lineMap.put(colLineNo, formatLineNo(id));
+			lineMap.put(colHwClass, hwClass);
+			lineMap.put(colLinuxQuery, hwAuditDeviceClass.getLinuxQuery());
+			lineMap.put(colWMIQuery, hwAuditDeviceClass.getWmiQuery());
+
 			result.put(formatLineNo(id), lineMap);
-			//lineMap.put(colTellAgainHardwareClass, hwClass);
 			id++;
-			
-			for (OpsiHwAuditDevicePropertyType deviceProperty : deviceHwItemProperties )
-			{
+
+			// colHostVsItemAssigned line
+			lineMap = new LinkedHashMap<String, Object>();
+			lineMap.put(colLineNo, formatLineNo(id));
+			// lineMap.put(colTellAgainHardwareClass, hwClass);
+
+			lineMap.put(colHostVsItemAssigned, valAssignedToHost);
+
+			result.put(formatLineNo(id), lineMap);
+			id++;
+
+			for (OpsiHwAuditDevicePropertyType deviceProperty : deviceHostProperties) {
+
 				lineMap = new LinkedHashMap<String, Object>();
-				lineMap.put( colLineNo , formatLineNo(id));
-				
-				ColumnIdent columnIdent = new ColumnIdent( 
-					hwClass,
-					OpsiHwAuditDeviceClass.hwItemAssignedTableType,
-					deviceProperty.getOpsiDbColumnName()
-				);
-					
-				lineMap.put( colOpsiColumnName, columnIdent.produceColumnCellValue() );
-					
-				lineMap.put( colOpsiDbColumnType, deviceProperty.getOpsiDbColumnType() );
-				
-					
+				lineMap.put(colLineNo, formatLineNo(id));
+				// lineMap.put(colTellAgainHardwareClass, hwClass);
+
+				ColumnIdent columnIdent = new ColumnIdent(
+						hwClass,
+						OpsiHwAuditDeviceClass.hostAssignedTableType,
+						deviceProperty.getOpsiDbColumnName());
+
+				lineMap.put(colOpsiColumnName, columnIdent.produceColumnCellValue());
+				lineMap.put(colOpsiDbColumnType, deviceProperty.getOpsiDbColumnType());
+
 				if (deviceProperty.getDisplayed() == null)
-					lineMap.put( colUseInQuery, "" + false);
+					lineMap.put(colUseInQuery, "" + false);
 				else
-					lineMap.put( colUseInQuery, "" + deviceProperty.getDisplayed() );
-				
-				
-				result.put(formatLineNo(id), lineMap); 
+					lineMap.put(colUseInQuery, "" + deviceProperty.getDisplayed());
+
+				result.put(formatLineNo(id), lineMap);
 				id++;
 			}
-			
+
+			lineMap = new LinkedHashMap<String, Object>();
+			lineMap.put(colLineNo, formatLineNo(id));
+			lineMap.put(colHostVsItemAssigned, valAssignedToHwItem);
+
+			result.put(formatLineNo(id), lineMap);
+			// lineMap.put(colTellAgainHardwareClass, hwClass);
+			id++;
+
+			for (OpsiHwAuditDevicePropertyType deviceProperty : deviceHwItemProperties) {
+				lineMap = new LinkedHashMap<String, Object>();
+				lineMap.put(colLineNo, formatLineNo(id));
+
+				ColumnIdent columnIdent = new ColumnIdent(
+						hwClass,
+						OpsiHwAuditDeviceClass.hwItemAssignedTableType,
+						deviceProperty.getOpsiDbColumnName());
+
+				lineMap.put(colOpsiColumnName, columnIdent.produceColumnCellValue());
+
+				lineMap.put(colOpsiDbColumnType, deviceProperty.getOpsiDbColumnType());
+
+				if (deviceProperty.getDisplayed() == null)
+					lineMap.put(colUseInQuery, "" + false);
+				else
+					lineMap.put(colUseInQuery, "" + deviceProperty.getDisplayed());
+
+				result.put(formatLineNo(id), lineMap);
+				id++;
+			}
+
 		}
-		
+
 		/*
-		for (String lineNo : result.keySet())
-		{
-			logging.info(this, "getHwColumnConfig " + lineNo + ": " + result.get(lineNo) );
-		}
-		*/
-		
+		 * for (String lineNo : result.keySet())
+		 * {
+		 * logging.info(this, "getHwColumnConfig " + lineNo + ": " + result.get(lineNo)
+		 * );
+		 * }
+		 */
+
 		return result;
-		
+
 	}
-	
+
 }
-	
-	
-	

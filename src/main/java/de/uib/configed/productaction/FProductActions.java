@@ -9,102 +9,84 @@
  * License, version AGPLv3, as published by the Free Software Foundation
  *
  */
- 
+
 package de.uib.configed.productaction;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import utils.*;
-import javax.swing.*;
-import de.uib.configed.*;
-import de.uib.configed.gui.*;
-import de.uib.utilities.logging.*;
-import de.uib.utilities.swing.*;
-import de.uib.utilities.swing.tabbedpane.*;
-import de.uib.opsidatamodel.*;
+import javax.swing.GroupLayout;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
+import de.uib.configed.configed;
+import de.uib.opsidatamodel.PersistenceController;
+import de.uib.utilities.swing.Containership;
+import de.uib.utilities.swing.SecondaryFrame;
 
-public class FProductActions extends SecondaryFrame
-{
+public class FProductActions extends SecondaryFrame {
 	JPanel panelInstallOpsiPackage;
 	JPanel imageActionPanel;
 	JPanel panelCompleteWinProducts;
-	
+
 	JTextField fieldGroupname;
-	JTextField fieldInvolvedClientsCount; 
-	
-	
+	JTextField fieldInvolvedClientsCount;
+
 	JComboBox comboSelectImage;
-	
-	
+
 	PersistenceController persist;
-	ConfigedMain main; 
-	
+	ConfigedMain main;
+
 	int firstLabelWidth = 150;
 	int groupnameWidth = 300;
-	
-	public FProductActions(ConfigedMain main, PersistenceController persist, JFrame mainframe)
-	{
+
+	public FProductActions(ConfigedMain main, PersistenceController persist, JFrame mainframe) {
 		super();
-		
-		this.main =main; 
+
+		this.main = main;
 		this.persist = persist;
-		
+
 		define();
 		setGlobals(Globals.getMap());
 		setTitle(Globals.APPNAME + " " + configed.getResourceValue("FProductAction.title"));
-		
+
 	}
-	
-	
+
 	@Override
-	public void start()
-	{
+	public void start() {
 		super.start();
 	}
 
-	
-	protected void define()
-	{
+	protected void define() {
 		PanelInstallOpsiPackage panelInstallOpsiPackage = new PanelInstallOpsiPackage(main, persist, this);
-		
+
 		imageActionPanel = new JPanel();
-		//defineImageActionPanel(imageActionPanel);
-		
+		// defineImageActionPanel(imageActionPanel);
+
 		PanelCompleteWinProducts panelCompleteWinProducts = new PanelCompleteWinProducts(main, persist, this);
-		
-		
+
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
-		
+
 		layout.setVerticalGroup(layout.createSequentialGroup()
-			.addComponent(panelInstallOpsiPackage, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-			.addGap(Globals.vGapSize,Globals.vGapSize,Globals.vGapSize) 
-			.addComponent(panelCompleteWinProducts, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-			.addGap(Globals.vGapSize,Globals.vGapSize,Globals.vGapSize)
-			.addComponent(imageActionPanel, 100, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-		);
-		
+				.addComponent(panelInstallOpsiPackage, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+				.addComponent(panelCompleteWinProducts, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+				.addComponent(imageActionPanel, 100, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+
 		layout.setHorizontalGroup(layout.createParallelGroup()
-			.addComponent(panelInstallOpsiPackage, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-			.addComponent(panelCompleteWinProducts, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-			.addComponent(imageActionPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-		);
-		
-		Containership cs_all = new Containership (getContentPane());
-		cs_all.doForAllContainedCompisOfClass 
-		 ("setBackground", new Object[]{Globals.backLightBlue}, JPanel.class);
-		 
-		 cs_all.doForAllContainedCompisOfClass 
-		 ("setBackground", new Object[]{Globals.backgroundLightGrey}, javax.swing.text.JTextComponent.class);
-		
+				.addComponent(panelInstallOpsiPackage, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(panelCompleteWinProducts, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(imageActionPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+
+		Containership cs_all = new Containership(getContentPane());
+		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.backLightBlue }, JPanel.class);
+
+		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.backgroundLightGrey },
+				javax.swing.text.JTextComponent.class);
+
 	}
-	
-	
-	
-	
-	
-	
-	
+
 }

@@ -1,11 +1,10 @@
 package de.uib.opsicommand.sshcommand;
 
-import java.util.*;
-import de.uib.configed.*;
-import de.uib.configed.gui.*;
-import de.uib.configed.gui.ssh.*;
+import java.util.ArrayList;
 
-public class CommandHelp /*extends*/implements SSHCommand //, SSHCommandNeedParameter
+import de.uib.configed.gui.FGeneralDialog;
+
+public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeedParameter
 
 {
 	private String command;
@@ -16,142 +15,139 @@ public class CommandHelp /*extends*/implements SSHCommand //, SSHCommandNeedPara
 	private boolean needParameter = false;
 	private SSHCommand basicCommand;
 	protected FGeneralDialog dialog = null;
-	public CommandHelp( SSHCommand basicCommand)
-	{
+
+	public CommandHelp(SSHCommand basicCommand) {
 		this.basicCommand = basicCommand;
 		// command = this.basicCommand.getBasicName() + " --help";
 		this.dialog = this.basicCommand.getDialog();
 	}
-	
+
 	private boolean isMultiCommand = false;
-	
+
 	@Override
-	public boolean isMultiCommand()
-	{
+	public boolean isMultiCommand() {
 		return isMultiCommand;
 	}
+
 	@Override
-	public String getId()
-	{
+	public String getId() {
 		return basicCommand.getId();
 	}
+
 	@Override
-	public String getSecureInfoInCommand()
-	{
+	public String getSecureInfoInCommand() {
 		return null;
 	}
+
 	@Override
-	public String getSecuredCommand()
-	{
-		if ( (getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
-			return 	getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().confidential);
-		else return getCommand();
+	public String getSecuredCommand() {
+		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
+			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().confidential);
+		else
+			return getCommand();
 	}
 
-	@Override 
-	/** 
-	* Sets the command specific error text
-	**/
-	public String get_ERROR_TEXT()
-	{
+	@Override
+	/**
+	 * Sets the command specific error text
+	 **/
+	public String get_ERROR_TEXT() {
 		return "ERROR";
 	}
 
 	// @Override
 	// public String getBasicName()
 	// {
-	// 	return basicCommand.getBasicName();
+	// return basicCommand.getBasicName();
 	// }
-	
-	@Override
-	public String getMenuText()
-	{
-		return null;
-	}
-	@Override
-	public String getParentMenuText()
-	{
-		return null;
-	}
-	@Override
-	public String getToolTipText()
-	{
-		return null;
-	}
-	@Override
-	public String getCommand()
-	{
-		return ((SSHCommandNeedParameter) this.basicCommand).getBasicName() + " --help";
-	}
-	
-	/** 
-	* Sets the given command
-	* @param c (command): String
-	**/
-	public void setCommand(String c)
-	{ command = c; }
 
 	@Override
-	public String getCommandRaw()
-	{
+	public String getMenuText() {
+		return null;
+	}
+
+	@Override
+	public String getParentMenuText() {
+		return null;
+	}
+
+	@Override
+	public String getToolTipText() {
+		return null;
+	}
+
+	@Override
+	public String getCommand() {
+		return ((SSHCommandNeedParameter) this.basicCommand).getBasicName() + " --help";
+	}
+
+	/**
+	 * Sets the given command
+	 * 
+	 * @param c (command): String
+	 **/
+	public void setCommand(String c) {
+		command = c;
+	}
+
+	@Override
+	public String getCommandRaw() {
 		return basicCommand.getCommandRaw();
 	}
+
 	@Override
-	public boolean needSudo()
-	{
+	public boolean needSudo() {
 		return needSudo;
 	}
 
-	@Override 
-	public boolean needParameter()
-	{
+	@Override
+	public boolean needParameter() {
 		return needParameter;
 	}
+
 	@Override
-	public FGeneralDialog  getDialog()
-	{
+	public FGeneralDialog getDialog() {
 		return dialog;
 	}
 
 	@Override
-	public int getPriority()
-	{
+	public int getPriority() {
 		return 0;
 	}
 
-
 	@Override
-	public ArrayList<String> getParameterList()
-	{
+	public ArrayList<String> getParameterList() {
 		return null;
 	}
-// public void startParameterGui();
-// 	public void startParameterGui(ConfigedMain main);
-// 	public SSHConnectionExecDialog startHelpDialog();
+	// public void startParameterGui();
+	// public void startParameterGui(ConfigedMain main);
+	// public SSHConnectionExecDialog startHelpDialog();
 	// public String getBasicName()
 
 	// public LinkedList<CommandHelp_Row> getHelpLines()
 	// {
-	// 	return helpLinesSplitted;
+	// return helpLinesSplitted;
 	// }
 	// public void setHelpLines(LinkedList<CommandHelp_Row> lines)
 	// {
-	// 	helpLinesSplitted = lines;
+	// helpLinesSplitted = lines;
 	// }
 	// @Override
 	// public int getHelpColumns()
 	// {
-	// 	// if (packageManager) 
-	// 	// 	return ((CommandOpsiPackageManager)basicCommand).getHelpColumns;
-	// 	// return 0;
-	// 	return basicCommand.getHelpColumns();
+	// // if (packageManager)
+	// // return ((CommandOpsiPackageManager)basicCommand).getHelpColumns;
+	// // return 0;
+	// return basicCommand.getHelpColumns();
 	// }
 	// public String[] getRegexes()
 	// {
-	// 	final String[] regexes = new String[2];
-	// 	regexes[0] = "(-[\\w*],[ ])|(--[\\w*]*-[\\w*]*-[\\w*]*)|(--[\\w*]*-[\\w*]*)|(--[\\w*]*)";
-	// 	regexes[1] = "((<[\\w*]*>)|(<[\\w*]*-[\\w*]*>)|(<[\\w*]*-[\\w*]*-[\\w*]*>)) | ((<[\\w*]*>\\s\\.{3})|(<[\\w*]*-[\\w*]*>\\s\\.{3})|(<[\\w*]*-[\\w*]*-[\\w*]*>\\s\\.{3}))";
-	// 	return regexes;
+	// final String[] regexes = new String[2];
+	// regexes[0] = "(-[\\w*],[
+	// ])|(--[\\w*]*-[\\w*]*-[\\w*]*)|(--[\\w*]*-[\\w*]*)|(--[\\w*]*)";
+	// regexes[1] = "((<[\\w*]*>)|(<[\\w*]*-[\\w*]*>)|(<[\\w*]*-[\\w*]*-[\\w*]*>)) |
+	// ((<[\\w*]*>\\s\\.{3})|(<[\\w*]*-[\\w*]*>\\s\\.{3})|(<[\\w*]*-[\\w*]*-[\\w*]*>\\s\\.{3}))";
+	// return regexes;
 	// }
-	
+
 }

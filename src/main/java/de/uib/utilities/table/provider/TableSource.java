@@ -5,31 +5,31 @@
  *	author Rupert Röder 
  *
  */
- 
+
 package de.uib.utilities.table.provider;
 
-import java.util.*;
+import java.util.Vector;
 
-public interface TableSource
-{
-	public static int ROW_COUNT_START = 1; 
-	
+public interface TableSource {
+	public static int ROW_COUNT_START = 1;
+
 	Vector<String> retrieveColumnNames();
-	
+
 	Vector<String> retrieveClassNames();
-	
-	//we get a new version
+
+	// we get a new version
 	Vector<Vector<Object>> retrieveRows();
-	
-	//Map<String, java.util.List<String>> getFunction(Integer defIndex, Integer valIndex);
-	
+
+	// Map<String, java.util.List<String>> getFunction(Integer defIndex, Integer
+	// valIndex);
+
 	void setRowCounting(boolean b);
-	
+
 	boolean isRowCounting();
-	
+
 	String getRowCounterName();
-	
+
 	void requestReload();
-	
+
 	void structureChanged();
 }

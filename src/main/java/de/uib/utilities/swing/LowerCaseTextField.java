@@ -1,23 +1,18 @@
 package de.uib.utilities.swing;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.text.*;
-import de.uib.configed.*;
-import de.uib.utilities.logging.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.PlainDocument;
 
-public class LowerCaseTextField extends javax.swing.JTextField
-{
-	//from apidoc
+public class LowerCaseTextField extends javax.swing.JTextField {
+	// from apidoc
 
-	public LowerCaseTextField()
-	{
+	public LowerCaseTextField() {
 		super();
 	}
-	
-	public LowerCaseTextField(String s)
-	{
+
+	public LowerCaseTextField(String s) {
 		super(s);
 	}
 
@@ -26,11 +21,10 @@ public class LowerCaseTextField extends javax.swing.JTextField
 		return new LowerCaseDocument();
 	}
 
-
 	private static class LowerCaseDocument extends PlainDocument {
 
 		public void insertString(int offs, String str, AttributeSet a)
-		throws BadLocationException {
+				throws BadLocationException {
 
 			if (str == null) {
 				return;
@@ -43,8 +37,4 @@ public class LowerCaseTextField extends javax.swing.JTextField
 		}
 	}
 
-
-
 }
-
-

@@ -1,23 +1,26 @@
 package de.uib.utilities.swing;
 
 import java.awt.BorderLayout;
-import javax.swing.*;
 
-public class FEditTextWithExtra extends FEditText{
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+public class FEditTextWithExtra extends FEditText {
 
 	protected JPanel extra_panel;
 	protected JLabel extra_label;
 	protected JTextField extra_field;
 
-	public FEditTextWithExtra(String initialText, String hint, String extra_name)
-	{
+	public FEditTextWithExtra(String initialText, String hint, String extra_name) {
 		super(initialText, hint);
 		initFEditTextWithExtra(extra_name);
 		setSingleLine(false);
 	}
 
-	protected void initFEditTextWithExtra(String extra_name)
-	{
+	protected void initFEditTextWithExtra(String extra_name) {
 		extra_panel = new JPanel();
 		extra_label = new JLabel(extra_name);
 		extra_field = new JTextField();
@@ -37,8 +40,7 @@ public class FEditTextWithExtra extends FEditText{
 		setStartText(this.initialText);
 	}
 
-	public String getExtra()
-	{
+	public String getExtra() {
 		return extra_field.getText();
 	}
 }

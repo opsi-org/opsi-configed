@@ -64,29 +64,29 @@ public class DataStubNOM extends DataStub {
 		productDependenciesRequestRefresh();
 	}
 
-	//===================================================
+	// ===================================================
 
-	//netbootStatesAndActions
-	//localbootStatesAndActions
+	// netbootStatesAndActions
+	// localbootStatesAndActions
 
-	//===================================================
+	// ===================================================
 
 	@Override
 	public boolean canCallMySQL()
-	//can only return true if overriden in a subclass
+	// can only return true if overriden in a subclass
 	{
 		return false;
 	}
 
 	/*
-	@Override
-	protected boolean test()
-	{
-		return true;
-	}
-	*/
+	 * @Override
+	 * protected boolean test()
+	 * {
+	 * return true;
+	 * }
+	 */
 
-	//===================================================
+	// ===================================================
 	protected Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos;
 
 	@Override
@@ -111,9 +111,9 @@ public class DataStubNOM extends DataStub {
 			}
 
 			/*
-			attribs.remove(OpsiPackage.SERVICEkeyPRODUCT_ID);
-			attribs.add("id");
-			*/
+			 * attribs.remove(OpsiPackage.SERVICEkeyPRODUCT_ID);
+			 * attribs.add("id");
+			 */
 
 			for (String scriptKey : ActionRequest.getScriptKeys()) {
 				attribs.add(scriptKey);
@@ -132,19 +132,19 @@ public class DataStubNOM extends DataStub {
 			logging.debug(this, "retrieveProductInfos callAttributes " + Arrays.asList(callAttributes));
 
 			HashMap callFilter = new HashMap();
-			//callFilter.put("id", "acroread*");
+			// callFilter.put("id", "acroread*");
 
 			persist.notifyDataLoadingObservers(configed.getResourceValue("LoadingObserver.loadtable") + " product");
 
 			List<Map<String, Object>> retrievedList = persist.retrieveListOfMapsNOM(callAttributes, callFilter,
 					"product_getObjects");
 
-			//logging.info(this,  "retrieveProductInfos retrievedList " + retrievedList);
+			// logging.info(this, "retrieveProductInfos retrievedList " + retrievedList);
 
 			product2versionInfo2infos = new HashMap<String, Map<String, OpsiProductInfo>>();
 
 			for (Map<String, Object> m : retrievedList) {
-				//logging.info(this, "retrieveProductInfos " + m);
+				// logging.info(this, "retrieveProductInfos " + m);
 				String productId = "" + m.get(OpsiPackage.SERVICEkeyPRODUCT_ID0);
 				String versionInfo = OpsiPackage.produceVersionInfo("" + m.get(OpsiPackage.SERVICEkeyPRODUCT_VERSION),
 						"" + m.get(OpsiPackage.SERVICEkeyPACKAGE_VERSION));
@@ -159,59 +159,60 @@ public class DataStubNOM extends DataStub {
 				version2productInfos.put(versionInfo, productInfo);
 
 				/*
-				logging.info(this,  "retrieveProductInfos product  -  version2productInfos " + 
-					productId + "  -  " +
-					version2productInfos);
-				*/
+				 * logging.info(this, "retrieveProductInfos product  -  version2productInfos " +
+				 * productId + "  -  " +
+				 * version2productInfos);
+				 */
 
-				//System.exit(0);
+				// System.exit(0);
 
 			}
 
 			logging.debug(this, "retrieveProductInfos " + product2versionInfo2infos);
 
-			//lambda
+			// lambda
 			/*
-			
-			Map<String, List<Map<String, Object>>> pInfos = new HashMap<String, List<Map<String, Object>>>();
-			String keyP = "id";
-			
-			retrievedList.forEach(
-				m-> 
-					{
-						if ( pInfos.get( m.get(keyP ) ) == null )
-							pInfos.put( (String) m.get(keyP), new ArrayList<Map<String, Object>>() );
-					}
-			);
-			
-			retrievedList.forEach(
-				m-> pInfos.get( (String) m.get(keyP)).add( m )
-			);
-			*/
+			 * 
+			 * Map<String, List<Map<String, Object>>> pInfos = new HashMap<String,
+			 * List<Map<String, Object>>>();
+			 * String keyP = "id";
+			 * 
+			 * retrievedList.forEach(
+			 * m->
+			 * {
+			 * if ( pInfos.get( m.get(keyP ) ) == null )
+			 * pInfos.put( (String) m.get(keyP), new ArrayList<Map<String, Object>>() );
+			 * }
+			 * );
+			 * 
+			 * retrievedList.forEach(
+			 * m-> pInfos.get( (String) m.get(keyP)).add( m )
+			 * );
+			 */
 
 			/*
-			retrievedList.forEach(
-				m->
-					{
-						String p = (String) m.get(keyP);
-						if  (pInfos.get( p ) == null)
-							pInfos.put(p, new ArrayList<Map<String, Object>());
-						
-						List<Map<String, Object> list = pInfos.get( p );
-						list.add((Map<String, Object) m);
-					}
-				);
-				
-			*/
-			//logging.info(this, "lambda expression produced pInfos " + pInfos);
-			//System.exit(0);
+			 * retrievedList.forEach(
+			 * m->
+			 * {
+			 * String p = (String) m.get(keyP);
+			 * if (pInfos.get( p ) == null)
+			 * pInfos.put(p, new ArrayList<Map<String, Object>());
+			 * 
+			 * List<Map<String, Object> list = pInfos.get( p );
+			 * list.add((Map<String, Object) m);
+			 * }
+			 * );
+			 * 
+			 */
+			// logging.info(this, "lambda expression produced pInfos " + pInfos);
+			// System.exit(0);
 
 			persist.notifyDataRefreshedObservers("product");
 		}
 
 	}
 
-	//===================================================
+	// ===================================================
 
 	protected Object2Product2VersionList depot2LocalbootProducts;
 	protected Object2Product2VersionList depot2NetbootProducts;
@@ -339,13 +340,15 @@ public class DataStubNOM extends DataStub {
 				try {
 					productName = product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo())
 							.getProductName();
-					//productLockedInfo = product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo()).getLockedInfo();
+					// productLockedInfo =
+					// product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo()).getLockedInfo();
 
 					productRow.add(productName);
 					p.appendValues(productRow);
 
-					//logging.info(this, "retrieveProductsAllDepots package " + p + " name  " + productName;
-					//logging.info(this, "retrieveProductsAllDepots productRow " + productRow);
+					// logging.info(this, "retrieveProductsAllDepots package " + p + " name " +
+					// productName;
+					// logging.info(this, "retrieveProductsAllDepots productRow " + productRow);
 
 					if (depotsWithThisVersion.size() == 1)
 						productRows.add(productRow);
@@ -366,29 +369,30 @@ public class DataStubNOM extends DataStub {
 
 				}
 
-				//System.exit(0);
+				// System.exit(0);
 
 			}
 
 			/*
-			logging.debug(this, "retrieveDepotProducts localBoot | netBoot " 
-				+ "\n"+ depot2LocalbootProducts 
-				+ "\n"+ depot2NetbootProducts
-				);
-			*/
+			 * logging.debug(this, "retrieveDepotProducts localBoot | netBoot "
+			 * + "\n"+ depot2LocalbootProducts
+			 * + "\n"+ depot2NetbootProducts
+			 * );
+			 */
 
-			//logging.info(this, "retrieveProductsAllDepots  product2VersionInfo2Depots " + product2VersionInfo2Depots);
-			//System.exit(0);
+			// logging.info(this, "retrieveProductsAllDepots product2VersionInfo2Depots " +
+			// product2VersionInfo2Depots);
+			// System.exit(0);
 
 			persist.notifyDataRefreshedObservers("productOnDepot");
 		}
 
-		//logging.debug(this, "getRowsOfProducts " + productRows);
-		//System.exit(0);
+		// logging.debug(this, "getRowsOfProducts " + productRows);
+		// System.exit(0);
 
 	}
 
-	//===================================================
+	// ===================================================
 
 	protected Map<String, Map<String, Map<String, ListCellOptions>>> // depotId-->productId --> (propertyId --> value)
 	depot2Product2PropertyDefinitions;
@@ -410,8 +414,10 @@ public class DataStubNOM extends DataStub {
 		if (depot2Product2PropertyDefinitions == null) {
 			depot2Product2PropertyDefinitions = new HashMap<String, Map<String, Map<String, ListCellOptions>>>();
 
-			//HashMap<String, java.util.Set<String>> productListForProductID = new HashMap<String, java.util.Set<String>>();
-			//HashMap<String, java.util.Set<String>> productListForProductID_notUnique = new HashMap<String, java.util.Set<String>>();
+			// HashMap<String, java.util.Set<String>> productListForProductID = new
+			// HashMap<String, java.util.Set<String>>();
+			// HashMap<String, java.util.Set<String>> productListForProductID_notUnique =
+			// new HashMap<String, java.util.Set<String>>();
 
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " product property");
@@ -422,7 +428,7 @@ public class DataStubNOM extends DataStub {
 			List<Map<String, Object>> retrieved = persist.retrieveListOfMapsNOM(callAttributes, callFilter,
 					"productProperty_getObjects");
 
-			//logging.debug(this, "retrieved: " + retrieved);
+			// logging.debug(this, "retrieved: " + retrieved);
 
 			Iterator iter = retrieved.iterator();
 
@@ -430,7 +436,7 @@ public class DataStubNOM extends DataStub {
 
 				Map<String, Object> retrievedMap = (Map) iter.next();
 				Map<String, Object> adaptedMap = new HashMap<String, Object>(retrievedMap);
-				//rebuild JSON objects
+				// rebuild JSON objects
 				Iterator iterInner = retrievedMap.keySet().iterator();
 				while (iterInner.hasNext()) {
 					String key = (String) iterInner.next();
@@ -442,8 +448,10 @@ public class DataStubNOM extends DataStub {
 				String propertyId = (String) retrievedMap.get("propertyId");
 				String productId = (String) retrievedMap.get("productId");
 
-				//logging.debug(this, "############ product " + productId + "  property " + propertyId  + "  , retrieved map " + retrievedMap);
-				//logging.debug(this, "############ product " + productId + "  property " + propertyId  + "  , property map " + productPropertyMap);
+				// logging.debug(this, "############ product " + productId + " property " +
+				// propertyId + " , retrieved map " + retrievedMap);
+				// logging.debug(this, "############ product " + productId + " property " +
+				// propertyId + " , property map " + productPropertyMap);
 
 				String productVersion = (String) retrievedMap.get(OpsiPackage.SERVICEkeyPRODUCT_VERSION);
 				String packageVersion = (String) retrievedMap.get(OpsiPackage.SERVICEkeyPACKAGE_VERSION);
@@ -482,16 +490,17 @@ public class DataStubNOM extends DataStub {
 			}
 
 			logging.debug(this, "retrieveAllProductPropertyDefinitions ");
-			//+ depot2Product2PropertyDefinitions);
+			// + depot2Product2PropertyDefinitions);
 			persist.notifyDataRefreshedObservers("productProperty");
 
 		}
 
 	}
 
-	//===================================================
+	// ===================================================
 
-	protected Map<String, Map<String, java.util.List<Map<String, String>>>> // depotId-->productId --> (dependencyKey--> value)
+	protected Map<String, Map<String, java.util.List<Map<String, String>>>> // depotId-->productId --> (dependencyKey-->
+																			// value)
 	depot2product2dependencyInfos;
 
 	@Override
@@ -569,27 +578,32 @@ public class DataStubNOM extends DataStub {
 					dependencyInfo.put("requiredInstallationStatus", requiredInstallationStatus);
 					dependencyInfo.put("requirementType", requirementType);
 
-					//logging.info(this, "add dependencyInfo depot " + depot + "  product " + productId + ", "  + dependencyInfo);
+					// logging.info(this, "add dependencyInfo depot " + depot + " product " +
+					// productId + ", " + dependencyInfo);
 					dependencyInfos.add(dependencyInfo);
-					//logging.info(this, "dependencyInfos "+ dependencyInfos);
+					// logging.info(this, "dependencyInfos "+ dependencyInfos);
 				}
 			}
 
-			//logging.info(this, "retrieveAllProductDependencies  " + depot2product2dependencyInfos );
+			// logging.info(this, "retrieveAllProductDependencies " +
+			// depot2product2dependencyInfos );
 			persist.notifyDataRefreshedObservers("productDependency");
 
 		}
 
 	}
 
-	//===================================================
+	// ===================================================
 
 	protected java.util.List<Map<String, Object>> productPropertyStates;
-	protected java.util.List<Map<String, Object>> productPropertyDepotStates; //will only be refreshed when all product data are refreshed
+	protected java.util.List<Map<String, Object>> productPropertyDepotStates; // will only be refreshed when all product
+																				// data are refreshed
 
-	//protected Map<String, Map<String, Map<String, Object>>> host2product2properties_retrieved = new HashMap<String, Map<String, Map <String, Object>>>();
+	// protected Map<String, Map<String, Map<String, Object>>>
+	// host2product2properties_retrieved = new HashMap<String, Map<String, Map
+	// <String, Object>>>();
 	protected java.util.Set<String> hostsWithProductProperties;
-	//protected java.util.Set<String> depotsWithProductProperties;
+	// protected java.util.Set<String> depotsWithProductProperties;
 
 	public void productPropertyStatesRequestRefresh() {
 		logging.info(this, "productPropertyStatesRequestRefresh");
@@ -612,7 +626,9 @@ public class DataStubNOM extends DataStub {
 		return productPropertyDepotStates;
 	}
 
-	//public Map<String, Map<String, Map<String, Object>>> getHost2product2properties_retrieved  = new HashMap<String, Map<String, Map <String, Object>>>();
+	// public Map<String, Map<String, Map<String, Object>>>
+	// getHost2product2properties_retrieved = new HashMap<String, Map<String, Map
+	// <String, Object>>>();
 
 	public void fillProductPropertyStates(Collection<String> clients) {
 		logging.info(this, "fillProductPropertyStates for " + clients);
@@ -635,21 +651,23 @@ public class DataStubNOM extends DataStub {
 		}
 
 		/*
-		if (productPropertyDepotStates == null)
-		{
-			productPropertyDepotStates = produceProductPropertyStates(depots , null);
-			depotsWithProductProperties = depots;
-		}
-		else
-		{
-			productPropertyDepotStates = produceProductPropertyStates(depots , depotsWithProductProperties);
-		}
-		*/
+		 * if (productPropertyDepotStates == null)
+		 * {
+		 * productPropertyDepotStates = produceProductPropertyStates(depots , null);
+		 * depotsWithProductProperties = depots;
+		 * }
+		 * else
+		 * {
+		 * productPropertyDepotStates = produceProductPropertyStates(depots ,
+		 * depotsWithProductProperties);
+		 * }
+		 */
 
 		logging.info(this, "retrieveProductPropertyDepotStates ready  size " + productPropertyDepotStates.size());
 	}
 
-	// client is a set of added hosts, host represents the totality and will be updated as a side effect
+	// client is a set of added hosts, host represents the totality and will be
+	// updated as a side effect
 	protected java.util.List<Map<String, Object>> produceProductPropertyStates(final Collection<String> clients,
 			java.util.Set<String> hosts) {
 		logging.info(this, "produceProductPropertyStates new hosts " + clients + " old hosts " + hosts);
@@ -665,51 +683,51 @@ public class DataStubNOM extends DataStub {
 			newClients.removeAll(hosts);
 		}
 
-		//logging.info(this, "produceProductPropertyStates, new hosts " + clients);
+		// logging.info(this, "produceProductPropertyStates, new hosts " + clients);
 
 		java.util.List<Map<String, Object>> result = null;
 
 		if (newClients.size() == 0) {
-			//look if propstates is initialized
+			// look if propstates is initialized
 			result = new ArrayList<Map<String, Object>>();
 		} else {
 			hosts.addAll(newClients);
 
-			//logging.info(this, "produceProductPropertyStates, all hosts " + hosts);
+			// logging.info(this, "produceProductPropertyStates, all hosts " + hosts);
 
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " product property state");
-			String[] callAttributes = new String[] {};//"objectId","productId","propertyId", "values"};
+			String[] callAttributes = new String[] {};// "objectId","productId","propertyId", "values"};
 			HashMap callFilter = new HashMap();
 			callFilter.put("objectId", persist.exec.jsonArray(newClients));
 
 			result = persist.retrieveListOfMapsNOM(callAttributes, callFilter, "productPropertyState_getObjects");
-			//logging.info(this, "propstates: " + propstates);
+			// logging.info(this, "propstates: " + propstates);
 		}
 
 		logging.info(this, "produceProductPropertyStates for hosts " + hosts);
 		/*
-		for (Map<String, Object> m : result)
-		{
-			logging.info(this, "produceProductPropertyStates record " + m);
-		}
-		*/
+		 * for (Map<String, Object> m : result)
+		 * {
+		 * logging.info(this, "produceProductPropertyStates record " + m);
+		 * }
+		 */
 
 		return result;
 	}
 
-	//===================================================
+	// ===================================================
 	protected TreeMap<String, java.util.List<HWAuditClientEntry>> client2hwAuditHostEntries;
 	protected TreeMap<String, Map<String, java.util.List<HWAuditClientEntry>>> client2hwType2hwAuditHostEntries;
 
-	//===================================================
+	// ===================================================
 	protected TreeMap<String, SWAuditEntry> installedSoftwareInformation;
 	protected TreeMap<String, SWAuditEntry> installedSoftwareInformationForLicensing;
-	protected TreeMap<String, Set<String>> name2SWIdents; //giving the idents which have the name in their ident
+	protected TreeMap<String, Set<String>> name2SWIdents; // giving the idents which have the name in their ident
 	protected TreeMap<String, Map<String, String>> installedSoftwareName2SWinfo;
 	protected TreeMap<String, Map<String, Map<String, String>>> name2ident2infoWithPool;
-	protected ArrayList<String> softwareList; //List of idents of software
-	protected TreeMap<String, Integer> software2Number; //the same with a numbering index
+	protected ArrayList<String> softwareList; // List of idents of software
+	protected TreeMap<String, Integer> software2Number; // the same with a numbering index
 
 	@Override
 	public void installedSoftwareInformationRequestRefresh() {
@@ -740,7 +758,7 @@ public class DataStubNOM extends DataStub {
 
 			boolean infoFound = false;
 
-			//try reloading?
+			// try reloading?
 			int returnedOption = javax.swing.JOptionPane.NO_OPTION;
 			returnedOption = javax.swing.JOptionPane.showOptionDialog(de.uib.configed.Globals.mainFrame,
 					configed.getResourceValue("DataStub.reloadSoftwareInformation.text"),
@@ -791,16 +809,18 @@ public class DataStubNOM extends DataStub {
 
 			persist.notifyDataLoadingObservers(configed.getResourceValue("LoadingObserver.loadtable") + " software");
 
-			String[] callAttributes = new String[] { SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME), // "name", //key element
+			String[] callAttributes = new String[] { SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME), // "name", //key
+																										// element
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION), // "version",//key element
-					SWAuditEntry.key2serverKey.get(SWAuditEntry.SUBVERSION), //key element
-					SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE), //key element
-					SWAuditEntry.key2serverKey.get(SWAuditEntry.ARCHITECTURE), //key element
+					SWAuditEntry.key2serverKey.get(SWAuditEntry.SUBVERSION), // key element
+					SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE), // key element
+					SWAuditEntry.key2serverKey.get(SWAuditEntry.ARCHITECTURE), // key element
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.WINDOWSsOFTWAREid) };
 			HashMap callFilter = new HashMap();
 
 			List<Map<String, Object>> li = persist.retrieveListOfMapsNOM(callAttributes, callFilter,
-					"auditSoftware_getHashes");;
+					"auditSoftware_getHashes");
+			;
 
 			Iterator iter = li.iterator();
 
@@ -813,12 +833,12 @@ public class DataStubNOM extends DataStub {
 			int i = 0;
 			String testKey = "zypper";
 			logging.info(this, "getInstalledSoftwareInformation build map");
-			//ArrayList<String> foundEntries = new ArrayList<String>();
+			// ArrayList<String> foundEntries = new ArrayList<String>();
 
 			while (iter.hasNext()) {
 				i++;
 				Map retrievedEntry = (Map) iter.next();
-				//logging.info(this, "retrievedEntry " + retrievedEntry);
+				// logging.info(this, "retrievedEntry " + retrievedEntry);
 				SWAuditEntry entry = new SWAuditEntry(retrievedEntry);
 				String swName = entry.get(SWAuditEntry.NAME);
 
@@ -839,7 +859,7 @@ public class DataStubNOM extends DataStub {
 					String subversion = entry.get(SWAuditEntry.SUBVERSION);
 
 					for (String marker : linuxSubversionMarkers) {
-						//if (subversion.indexOf ( marker ) > -1 )
+						// if (subversion.indexOf ( marker ) > -1 )
 						if (subversion.startsWith(marker)) {
 							showForLicensing = false;
 							break;
@@ -852,14 +872,14 @@ public class DataStubNOM extends DataStub {
 					installedSoftwareInformationForLicensing.put(entry.getIdent(), entry);
 
 					/*
-					Set<String> containingThisName = name2SWIdents.get( swName );
-					if ( containingThisName == null )
-					{
-						containingThisName = new TreeSet<String>();
-						name2SWIdents.put( swName, containingThisName );
-					}
-					containingThisName.add( entry.getIdent() );
-					*/
+					 * Set<String> containingThisName = name2SWIdents.get( swName );
+					 * if ( containingThisName == null )
+					 * {
+					 * containingThisName = new TreeSet<String>();
+					 * name2SWIdents.put( swName, containingThisName );
+					 * }
+					 * containingThisName.add( entry.getIdent() );
+					 */
 
 					if (name2SWIdents.get(swName) == null)
 						name2SWIdents.put(swName, new TreeSet<String>());
@@ -883,15 +903,15 @@ public class DataStubNOM extends DataStub {
 					identInfoRow.put(SWAuditEntry.EXISTING_IDS, infoString);
 
 					/*
-					if (entry.getIdent().indexOf( "zypper" ) > -1)
-					{
-						i++;
-						logging.info(this, " check zypper i " + i + " info : "  + infoString);
-						
-					
-						logging.info(this, " check zypper i " + i + " infoRow : "  + identInfoRow );
-					}
-					*/
+					 * if (entry.getIdent().indexOf( "zypper" ) > -1)
+					 * {
+					 * i++;
+					 * logging.info(this, " check zypper i " + i + " info : " + infoString);
+					 * 
+					 * 
+					 * logging.info(this, " check zypper i " + i + " infoRow : " + identInfoRow );
+					 * }
+					 */
 
 					installedSoftwareName2SWinfo.put(swName, identInfoRow);
 
@@ -917,15 +937,16 @@ public class DataStubNOM extends DataStub {
 
 				}
 
-				//if (i == 4) break;
+				// if (i == 4) break;
 			}
 
 			/*
-			logging.info(this, "getInstalledSoftwareInformation, found for testKey " 
-				+ foundEntries.size());
-			logging.info(this, "getInstalledSoftwareInformation, found for testKey " + testKey + ":: " +
-				foundEntries);
-			*/
+			 * logging.info(this, "getInstalledSoftwareInformation, found for testKey "
+			 * + foundEntries.size());
+			 * logging.info(this, "getInstalledSoftwareInformation, found for testKey " +
+			 * testKey + ":: " +
+			 * foundEntries);
+			 */
 
 			softwareList = new ArrayList<String>(installedSoftwareInformation.keySet());
 
@@ -949,12 +970,12 @@ public class DataStubNOM extends DataStub {
 		}
 	}
 
-	//===================================================
+	// ===================================================
 
 	protected java.util.List<Map<String, Object>> softwareAuditOnClients;
 	protected Map<String, java.util.List<SWAuditClientEntry>> client2software;
 	protected Map<String, java.util.Set<String>> softwareIdent2clients;
-	//protected Map<Integer, java.util.List<String>> softwareId2clients; 
+	// protected Map<Integer, java.util.List<String>> softwareId2clients;
 
 	protected java.sql.Time SOFTWARE_CONFIG_last_entry = null;
 
@@ -964,31 +985,31 @@ public class DataStubNOM extends DataStub {
 		softwareAuditOnClients = null;
 		client2software = null;
 		softwareIdent2clients = null;
-		//softwareId2clients = null;
+		// softwareId2clients = null;
 	}
 
 	/*
-	public  java.util.List <Map<String, Object>> getSoftwareAuditOnClients()
-	{
-		logging.debug(this, "getSoftwareAuditOnClients");
-		retrieveSoftwareAuditOnClients0();
-		return softwareAuditOnClients;
-	}
-	*/
+	 * public java.util.List <Map<String, Object>> getSoftwareAuditOnClients()
+	 * {
+	 * logging.debug(this, "getSoftwareAuditOnClients");
+	 * retrieveSoftwareAuditOnClients0();
+	 * return softwareAuditOnClients;
+	 * }
+	 */
 
 	@Override
 	public void fillClient2Software(String client) {
 		logging.info(this, "fillClient2Software " + client);
 		if (client2software == null) {
 			retrieveSoftwareAuditOnClients(client);
-			//logging.info(this, "fillClient2Software " + client2software);
+			// logging.info(this, "fillClient2Software " + client2software);
 			return;
 		}
 
 		if (client2software.get(client) == null)
 			retrieveSoftwareAuditOnClients(client);
 
-		//logging.info(this, "fillClient2Software " + client2software);
+		// logging.info(this, "fillClient2Software " + client2software);
 	}
 
 	@Override
@@ -1002,7 +1023,7 @@ public class DataStubNOM extends DataStub {
 
 	@Override
 	public Map<String, java.util.List<SWAuditClientEntry>> getClient2Software()
-	//fill the clientlist by fill ...
+	// fill the clientlist by fill ...
 	{
 		logging.info(this, "getClient2Software  ============= ");
 		retrieveInstalledSoftwareInformation();
@@ -1010,35 +1031,36 @@ public class DataStubNOM extends DataStub {
 	}
 
 	/*
-	@Override
-	public  Map<Integer, java.util.List<String>> getSoftwareId2clients()
-	{
-		
-		//logging.info(this, "getSoftwareId2clients ============= ");
-	
-		if (softwareId2clients == null)
-			logging.info(this, "getSoftwareId2clients ============= null");
-		else
-		{
-			for (Integer key :   softwareId2clients.keySet())
-			{
-				logging.info(this, "getSoftwareId2clients ===== key " + key + " " 
-					+ softwareId2clients.get(key));
-			}
-		}
-		
-		return softwareId2clients;
-	}
-	*/
+	 * @Override
+	 * public Map<Integer, java.util.List<String>> getSoftwareId2clients()
+	 * {
+	 * 
+	 * //logging.info(this, "getSoftwareId2clients ============= ");
+	 * 
+	 * if (softwareId2clients == null)
+	 * logging.info(this, "getSoftwareId2clients ============= null");
+	 * else
+	 * {
+	 * for (Integer key : softwareId2clients.keySet())
+	 * {
+	 * logging.info(this, "getSoftwareId2clients ===== key " + key + " "
+	 * + softwareId2clients.get(key));
+	 * }
+	 * }
+	 * 
+	 * return softwareId2clients;
+	 * }
+	 */
 
 	@Override
 	public Map<String, java.util.Set<String>> getSoftwareIdent2clients()
-	//fill the clientlist by fill ...
+	// fill the clientlist by fill ...
 	{
 		for (String ident : softwareIdent2clients.keySet()) {
 
-			//logging.info(this, "getSoftwareIdent2clients = ident == size ===== " + ident + " ===== "
-			//+  softwareIdent2clients.get(ident).size() );
+			// logging.info(this, "getSoftwareIdent2clients = ident == size ===== " + ident
+			// + " ===== "
+			// + softwareIdent2clients.get(ident).size() );
 		}
 
 		return softwareIdent2clients;
@@ -1076,7 +1098,8 @@ public class DataStubNOM extends DataStub {
 
 		int stepSize = 100;
 
-		//if (client2software == null || softwareId2clients == null || newClients.size() > 0)
+		// if (client2software == null || softwareId2clients == null ||
+		// newClients.size() > 0)
 		if (client2software == null || softwareIdent2clients == null || newClients.size() > 0) {
 			int step = 1;
 			while (newClients.size() > 0) {
@@ -1087,15 +1110,17 @@ public class DataStubNOM extends DataStub {
 
 				newClients.removeAll(clientListForCall);
 
-				//logging.info(this, "retrieveSoftwareAuditOnClients for " + clientListForCall.size()  + " clients " + clientListForCall);
+				// logging.info(this, "retrieveSoftwareAuditOnClients for " +
+				// clientListForCall.size() + " clients " + clientListForCall);
 
-				//client2software = new HashMap<String, java.util.List<String>>();
+				// client2software = new HashMap<String, java.util.List<String>>();
 				if (client2software == null)
 					client2software = new HashMap<String, java.util.List<SWAuditClientEntry>>();
 
 				if (softwareIdent2clients == null)
 					softwareIdent2clients = new HashMap<String, java.util.Set<String>>();
-				//if (softwareId2clients == null) softwareId2clients = new HashMap<Integer, java.util.List<String>>();
+				// if (softwareId2clients == null) softwareId2clients = new HashMap<Integer,
+				// java.util.List<String>>();
 
 				persist.notifyDataLoadingObservers(
 						configed.getResourceValue("LoadingObserver.loadtable") + " software config, step " + step);
@@ -1130,11 +1155,12 @@ public class DataStubNOM extends DataStub {
 						String swIdent = clientEntry.getSWident();
 
 						/*
-						if (swIdent.startsWith("firefox"))
-						{
-							logging.info(this, " retrieveSoftwareAuditOnClient clientId : swIdent " + clientId + " : "  + swIdent);
-						}
-						*/
+						 * if (swIdent.startsWith("firefox"))
+						 * {
+						 * logging.info(this, " retrieveSoftwareAuditOnClient clientId : swIdent " +
+						 * clientId + " : " + swIdent);
+						 * }
+						 */
 
 						Set<String> clientsWithThisSW = softwareIdent2clients.get(swIdent);
 						if (clientsWithThisSW == null) {
@@ -1145,28 +1171,28 @@ public class DataStubNOM extends DataStub {
 						clientsWithThisSW.add(clientId);
 
 						/*
-						if (clientEntry.getSWid() == -1)
+						 * if (clientEntry.getSWid() == -1)
+						 * {
+						 * logging.info("Missing auditSoftware entry for swIdent " +
+						 * SWAuditClientEntry.produceSWident(item));
+						 * //item.put(SWAuditEntry.WINDOWSsOFTWAREid, "MISSING");
+						 * }
+						 * else
+						 */
 						{
-							logging.info("Missing auditSoftware entry for swIdent " + 
-								SWAuditClientEntry.produceSWident(item));
-							//item.put(SWAuditEntry.WINDOWSsOFTWAREid, "MISSING");
-						}
-						else
-						*/
-						{
-							if (clientId != null) //null not allowed in mysql
+							if (clientId != null) // null not allowed in mysql
 							{
 								java.util.List<SWAuditClientEntry> entries = client2software.get(clientId);
 
-								//variant1
+								// variant1
 								/*
-								if (entries == null)
-								{retrieveSoftwareAuditOnClients, start a request");
-								
-									entries = new LinkedList<SWAuditClientEntry>();
-									client2software.put(clientId, entries);
-								}
-								*/
+								 * if (entries == null)
+								 * {retrieveSoftwareAuditOnClients, start a request");
+								 * 
+								 * entries = new LinkedList<SWAuditClientEntry>();
+								 * client2software.put(clientId, entries);
+								 * }
+								 */
 								entries.add(clientEntry);
 							}
 
@@ -1193,10 +1219,10 @@ public class DataStubNOM extends DataStub {
 		}
 	}
 
-	//===================================================
+	// ===================================================
 
 	protected AuditSoftwareXLicencePool auditSoftwareXLicencePool;
-	//protected java.sql.Time CONFIG_STATE_last_entry = null;
+	// protected java.sql.Time CONFIG_STATE_last_entry = null;
 
 	@Override
 	public void auditSoftwareXLicencePoolRequestRefresh() {
@@ -1211,7 +1237,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	protected void retrieveAuditSoftwareXLicencePool()
-	//AUDIT_SOFTWARE_TO_LICENSE_POOL
+	// AUDIT_SOFTWARE_TO_LICENSE_POOL
 	{
 		if (auditSoftwareXLicencePool != null)
 			return;
@@ -1222,24 +1248,25 @@ public class DataStubNOM extends DataStub {
 				configed.getResourceValue("LoadingObserver.loadtable") + " AUDIT_SOFTWARE_TO_LICENSE_POOL");
 
 		List<Map<String, Object>> retrieved = persist.retrieveListOfMapsNOM(
-				AuditSoftwareXLicencePool.SERVICE_ATTRIBUTES, new HashMap(), //callFilter
+				AuditSoftwareXLicencePool.SERVICE_ATTRIBUTES, new HashMap(), // callFilter
 				"auditSoftwareToLicensePool_getObjects");
 
 		auditSoftwareXLicencePool = new AuditSoftwareXLicencePool(getSoftwareList());
 
 		for (Map<String, Object> map : retrieved) {
-			//logging.info(this, "retrieved map " + map);
+			// logging.info(this, "retrieved map " + map);
 
 			auditSoftwareXLicencePool.integrateRaw(map);
 		}
 
 		logging.info(this, "retrieveAuditSoftwareXLicencePool retrieved ");
-		//+ auditSoftwareXLicencePool);
+		// + auditSoftwareXLicencePool);
 
-		//logging.info(this, "retrieveAuditSoftwareXLicencePool by licencepool " + auditSoftwareXLicencePool.getFunctionBy(LicencepoolEntry.idKEY));
+		// logging.info(this, "retrieveAuditSoftwareXLicencePool by licencepool " +
+		// auditSoftwareXLicencePool.getFunctionBy(LicencepoolEntry.idKEY));
 	}
 
-	//===================================================
+	// ===================================================
 
 	protected Map<String, Map<String, Object>> hostConfigs;
 	protected java.sql.Time CONFIG_STATE_last_entry = null;
@@ -1277,7 +1304,7 @@ public class DataStubNOM extends DataStub {
 		for (Map<String, Object> listElement : retrieved) {
 			Object id = listElement.get("objectId");
 
-			//logging.info(this, "retrieveHostConfigs " + id);
+			// logging.info(this, "retrieveHostConfigs " + id);
 
 			if (id != null && id instanceof String && !id.equals("")) {
 				String hostId = (String) id;
@@ -1293,7 +1320,7 @@ public class DataStubNOM extends DataStub {
 
 				if (listElement.get("values") == null) {
 					configs1Host.put(configId, new ArrayList<Object>());
-					//is a data error but can occur
+					// is a data error but can occur
 				} else {
 
 					configs1Host.put(configId, ((org.json.JSONArray) (listElement.get("values"))).toList());
@@ -1310,9 +1337,9 @@ public class DataStubNOM extends DataStub {
 
 	}
 
-	//===================================================
+	// ===================================================
 	protected TreeMap<String, LicencepoolEntry> licencepools;
-	//protected java.sql.Time CONFIG_STATE_last_entry = null;
+	// protected java.sql.Time CONFIG_STATE_last_entry = null;
 
 	@Override
 	public void licencepoolsRequestRefresh() {
@@ -1349,19 +1376,19 @@ public class DataStubNOM extends DataStub {
 		}
 	}
 
-	//===================================================
+	// ===================================================
 	protected java.util.Map<String, LicenceContractEntry> licenceContracts;
-	//protected Table_LicenceContracts tableLicenceContracts; 
+	// protected Table_LicenceContracts tableLicenceContracts;
 
 	protected TreeMap<String, TreeSet<String>> contractsExpired;
-	// date in sql time format, contrad  ID
+	// date in sql time format, contrad ID
 	protected TreeMap<String, TreeSet<String>> contractsToNotify;
-	// date in sql time format, contrad  ID
+	// date in sql time format, contrad ID
 
 	@Override
 	public void licenceContractsRequestRefresh() {
 		logging.info(this, "licenceContractsRequestRefresh");
-		//tableLicenceContracts = null;
+		// tableLicenceContracts = null;
 		licenceContracts = null;
 		contractsExpired = null;
 		contractsToNotify = null;
@@ -1375,7 +1402,7 @@ public class DataStubNOM extends DataStub {
 
 	@Override
 	public TreeMap<String, TreeSet<String>> getLicenceContractsExpired()
-	// date in sql time format, contrad  ID
+	// date in sql time format, contrad ID
 	{
 		retrieveLicenceContracts();
 		return contractsExpired;
@@ -1383,14 +1410,14 @@ public class DataStubNOM extends DataStub {
 
 	@Override
 	public TreeMap<String, TreeSet<String>> getLicenceContractsToNotify()
-	// date in sql time format, contrad  ID
+	// date in sql time format, contrad ID
 	{
 		retrieveLicenceContracts();
 		return contractsToNotify;
 	}
 
 	protected void retrieveLicenceContracts()
-	//LICENSE_CONTRACT 
+	// LICENSE_CONTRACT
 	{
 		if (licenceContracts != null)
 			return;
@@ -1400,7 +1427,7 @@ public class DataStubNOM extends DataStub {
 		contractsToNotify = new TreeMap<String, TreeSet<String>>();
 		contractsExpired = new TreeMap<String, TreeSet<String>>();
 
-		//tableLicenceContracts = new Table_LicenceContracts();
+		// tableLicenceContracts = new Table_LicenceContracts();
 
 		if (persist.withLicenceManagement) {
 			persist.notifyDataLoadingObservers(
@@ -1444,9 +1471,9 @@ public class DataStubNOM extends DataStub {
 		}
 	}
 
-	//===================================================
+	// ===================================================
 	protected java.util.Map<String, LicenceEntry> licences;
-	//protected java.sql.Time CONFIG_STATE_last_entry = null;
+	// protected java.sql.Time CONFIG_STATE_last_entry = null;
 
 	@Override
 	public void licencesRequestRefresh() {
@@ -1461,7 +1488,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	protected void retrieveLicences()
-	//SOFTWARE_LICENSE
+	// SOFTWARE_LICENSE
 	{
 		if (licences != null)
 			return;
@@ -1481,9 +1508,9 @@ public class DataStubNOM extends DataStub {
 		}
 	}
 
-	//===================================================
+	// ===================================================
 	protected java.util.List<LicenceUsableForEntry> licenceUsabilities;
-	//protected java.sql.Time CONFIG_STATE_last_entry = null;
+	// protected java.sql.Time CONFIG_STATE_last_entry = null;
 
 	@Override
 	public void licenceUsabilitiesRequestRefresh() {
@@ -1498,7 +1525,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	protected void retrieveLicenceUsabilities()
-	//SOFTWARE_LICENSE_TO_LICENSE_POOL
+	// SOFTWARE_LICENSE_TO_LICENSE_POOL
 	{
 		if (licenceUsabilities != null)
 			return;
@@ -1520,9 +1547,9 @@ public class DataStubNOM extends DataStub {
 
 	}
 
-	//===================================================
+	// ===================================================
 	protected java.util.List<LicenceUsageEntry> licenceUsages;
-	//protected java.sql.Time CONFIG_STATE_last_entry = null;
+	// protected java.sql.Time CONFIG_STATE_last_entry = null;
 
 	@Override
 	public void licenceUsagesRequestRefresh() {
@@ -1537,7 +1564,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	protected void retrieveLicenceUsages()
-	//LICENSE_ON_CLIENT
+	// LICENSE_ON_CLIENT
 	{
 		logging.info(this, "retrieveLicenceUsages");
 		if (licenceUsages != null)
@@ -1560,7 +1587,7 @@ public class DataStubNOM extends DataStub {
 
 	}
 
-	//===================================================
+	// ===================================================
 	protected LicencePoolXOpsiProduct licencePoolXOpsiProduct;
 
 	@Override
@@ -1576,7 +1603,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	protected void retrieveLicencePoolXOpsiProduct()
-	//LICENSE_POOL
+	// LICENSE_POOL
 	{
 		if (licencePoolXOpsiProduct != null)
 			return;
@@ -1587,21 +1614,21 @@ public class DataStubNOM extends DataStub {
 				configed.getResourceValue("LoadingObserver.loadtable") + " PRODUCT_ID_TO_LICENSE_POOL");
 
 		List<Map<String, Object>> retrieved = persist.retrieveListOfMapsNOM(
-				LicencePoolXOpsiProduct.SERVICE_ATTRIBUTES_asArray, new HashMap(), //callFilter
+				LicencePoolXOpsiProduct.SERVICE_ATTRIBUTES_asArray, new HashMap(), // callFilter
 				"licensePool_getObjects");
-		//integrates two database calls
+		// integrates two database calls
 
 		licencePoolXOpsiProduct = new LicencePoolXOpsiProduct();
 
 		for (Map<String, Object> map : retrieved) {
-			//logging.info(this, "retrieved map " + map);
+			// logging.info(this, "retrieved map " + map);
 
 			licencePoolXOpsiProduct.integrateRawFromService(map);
 		}
 
 	}
 
-	//===================================================  client2HwRows
+	// =================================================== client2HwRows
 
 	protected Map<String, Map<String, Object>> client2HwRows;
 	protected java.sql.Time HW_INFO_last_entry = null;
@@ -1610,8 +1637,8 @@ public class DataStubNOM extends DataStub {
 	public void client2HwRowsRequestRefresh() {
 		logging.info(this, "client2HwRowsRequestRefresh");
 		client2HwRows = null;
-		//client2HwRowsColumnNames = null;
-		//client2HwRowsClassNames = null;
+		// client2HwRowsColumnNames = null;
+		// client2HwRowsClassNames = null;
 	}
 
 	@Override

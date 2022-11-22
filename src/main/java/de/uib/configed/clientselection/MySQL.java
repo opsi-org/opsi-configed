@@ -75,122 +75,122 @@ public class MySQL {
 
 				switch (json.getString("element")) {
 
-				// HOST
-				case "GroupElement":
-					group = true;
-					String operation = json.getString("elementPath");
-					if (operation.equals("Group"))
+					// HOST
+					case "GroupElement":
+						group = true;
+						String operation = json.getString("elementPath");
+						if (operation.equals("Group"))
+							return " a.groupId LIKE '" + data + "' ";
+
 						return " a.groupId LIKE '" + data + "' ";
 
-					return " a.groupId LIKE '" + data + "' ";
+					case "IPElement":
+						return " HOST.ipAddress LIKE '" + data + "' ";
 
-				case "IPElement":
-					return " HOST.ipAddress LIKE '" + data + "' ";
+					case "NameElement":
+						return " HOST.hostId LIKE '" + data + "' ";
 
-				case "NameElement":
-					return " HOST.hostId LIKE '" + data + "' ";
+					case "DescriptionElement":
+						return " HOST.description LIKE '" + data + "' ";
 
-				case "DescriptionElement":
-					return " HOST.description LIKE '" + data + "' ";
+					// opsi-Product
+					case "SoftwareNameElement":
+						product = true;
+						return " d.productId LIKE '" + data + "' ";
 
-				// opsi-Product
-				case "SoftwareNameElement":
-					product = true;
-					return " d.productId LIKE '" + data + "' ";
+					case "SoftwareInstallationStatusElement":
+						product = true;
+						return " IFNULL(d.installationStatus, '') LIKE '" + data + "' ";
 
-				case "SoftwareInstallationStatusElement":
-					product = true;
-					return " IFNULL(d.installationStatus, '') LIKE '" + data + "' ";
+					case "SoftwareActionResultElement":
+						product = true;
+						return " IFNULL(d.actionResult, '') LIKE '" + data + "' ";
 
-				case "SoftwareActionResultElement":
-					product = true;
-					return " IFNULL(d.actionResult, '') LIKE '" + data + "' ";
+					case "SoftwareRequestElement":
+						product = true;
+						return " IFNULL(d.actionRequest, '') LIKE '" + data + "' ";
 
-				case "SoftwareRequestElement":
-					product = true;
-					return " IFNULL(d.actionRequest, '') LIKE '" + data + "' ";
+					case "SoftwareActionProgressElement":
+						product = true;
+						return " IFNULL(d.actionProgress, '') LIKE '" + data + "' ";
 
-				case "SoftwareActionProgressElement":
-					product = true;
-					return " IFNULL(d.actionProgress, '') LIKE '" + data + "' ";
+					case "SoftwareLastActionElement":
+						product = true;
+						return " IFNULL(d.lastAction, '') LIKE '" + data + "' ";
 
-				case "SoftwareLastActionElement":
-					product = true;
-					return " IFNULL(d.lastAction, '') LIKE '" + data + "' ";
+					case "SoftwareVersionElement":
+						product = true;
+						return " IFNULL(d.productVersion, '') LIKE '" + data + "' ";
 
-				case "SoftwareVersionElement":
-					product = true;
-					return " IFNULL(d.productVersion, '') LIKE '" + data + "' ";
+					case "SoftwarePackageVersionElement":
+						product = true;
+						return " IFNULL(d.packageVersion, '') LIKE '" + data + "' ";
 
-				case "SoftwarePackageVersionElement":
-					product = true;
-					return " IFNULL(d.packageVersion, '') LIKE '" + data + "' ";
+					case "SoftwareModificationTimeElement":
+						product = true;
+						return getMySQL_SoftwareModificationTime(json.getString("operation"), data);
 
-				case "SoftwareModificationTimeElement":
-					product = true;
-					return getMySQL_SoftwareModificationTime(json.getString("operation"), data);
+					// Property
+					case "PropertyIdElement":
+						product = property = true;
+						return " h.propertyId LIKE '" + data + "' ";
 
-				// Property
-				case "PropertyIdElement":
-					product = property = true;
-					return " h.propertyId LIKE '" + data + "' ";
+					case "PropertyValueElement":
+						product = property = true;
 
-				case "PropertyValueElement":
-					product = property = true;
+						// In der Datenbank sind die 'values' immer in Anführungszeichen,
+						// Außnahme: true, false
+						if (data.equals("false") || data.equals("true"))
+							return " (h.values LIKE '%" + data + "%' OR h.values LIKE '\"%" + data + "\"%') ";
 
-					// In der Datenbank sind die 'values' immer in Anführungszeichen,
-					// Außnahme: true, false
-					if (data.equals("false") || data.equals("true"))
-						return " (h.values LIKE '%" + data + "%' OR h.values LIKE '\"%" + data + "\"%') ";
+						return " h.values LIKE '%\"" + data + "\"%' "; // 'data' should be part of the array
 
-					return " h.values LIKE '%\"" + data + "\"%' "; // 'data' should be part of the array
+					// Software-Inventur-Data
+					case "SwAuditNameElement":
+						software = true;
+						return " f.name LIKE '" + data + "' ";
 
-				// Software-Inventur-Data
-				case "SwAuditNameElement":
-					software = true;
-					return " f.name LIKE '" + data + "' ";
+					case "SwAuditVersionElement":
+						software = true;
+						return " f.version LIKE '" + data + "' ";
 
-				case "SwAuditVersionElement":
-					software = true;
-					return " f.version LIKE '" + data + "' ";
+					case "SwAuditSubversionElement":
+						software = true;
+						return " f.subVersion LIKE '" + data + "' ";
 
-				case "SwAuditSubversionElement":
-					software = true;
-					return " f.subVersion LIKE '" + data + "' ";
+					case "SwAuditArchitectureElement":
+						software = true;
+						return " f.architecture LIKE '" + data + "' ";
 
-				case "SwAuditArchitectureElement":
-					software = true;
-					return " f.architecture LIKE '" + data + "' ";
+					case "SwAuditLanguageElement":
+						software = true;
+						return " f.language LIKE '" + data + "' ";
 
-				case "SwAuditLanguageElement":
-					software = true;
-					return " f.language LIKE '" + data + "' ";
+					case "SwAuditSoftwareIdElement":
+						software = true;
+						return " g.WindowsSoftwareId LIKE '" + data + "' ";
 
-				case "SwAuditSoftwareIdElement":
-					software = true;
-					return " g.WindowsSoftwareId LIKE '" + data + "' ";
+					// Hardware
+					case "GenericTextElement":
+						hardware = true;
 
-				// Hardware
-				case "GenericTextElement":
-					hardware = true;
+						String abfrage = setHardware(json);
 
-					String abfrage = setHardware(json);
+						return " (" + abfrage + " LIKE '" + data + "') ";
 
-					return " (" + abfrage + " LIKE '" + data + "') ";
+					case "GenericBigIntegerElement":
+					case "GenericIntegerElement":
+						hardware = true;
 
-				case "GenericBigIntegerElement":
-				case "GenericIntegerElement":
-					hardware = true;
+						operation = json.getString("operation");
+						operation = getOperationFromElement(operation);
 
-					operation = json.getString("operation");
-					operation = getOperationFromElement(operation);
+						abfrage = setHardware(json);
 
-					abfrage = setHardware(json);
+						return " (" + abfrage + " " + operation + " '" + data + "') ";
 
-					return " (" + abfrage + " " + operation + " '" + data + "') ";
-
-				case "GenericDateElement":
-					break;
+					case "GenericDateElement":
+						break;
 				}
 
 			}
@@ -219,7 +219,8 @@ public class MySQL {
 		if (scope.equals("g"))
 			hardwareWithDevice = true;
 
-		return scope + "." + spaltenName + " NOT LIKE '' AND " + scope + "." + spaltenName; // LEERE FELDER NICHT ERLAUBEN
+		return scope + "." + spaltenName + " NOT LIKE '' AND " + scope + "." + spaltenName; // LEERE FELDER NICHT
+																							// ERLAUBEN
 	}
 
 	private Map<String, String> findSpalteInTabelle(String column, List values) {
@@ -243,28 +244,28 @@ public class MySQL {
 	private String getOperationFromElement(String operation) {
 
 		switch (operation) {
-		case "BigIntLessThanOperation":
-		case "IntLessThanOperation":
-			return "<";
+			case "BigIntLessThanOperation":
+			case "IntLessThanOperation":
+				return "<";
 
-		case "BigIntLessOrEqualOperation":
-		case "IntLessOrEqualOperation":
-			return "<=";
+			case "BigIntLessOrEqualOperation":
+			case "IntLessOrEqualOperation":
+				return "<=";
 
-		case "BigIntEqualsOperation":
-		case "IntEqualsOperation":
-			return "=";
+			case "BigIntEqualsOperation":
+			case "IntEqualsOperation":
+				return "=";
 
-		case "BigIntGreaterThanOperation":
-		case "IntGreaterThanOperation":
-			return ">";
+			case "BigIntGreaterThanOperation":
+			case "IntGreaterThanOperation":
+				return ">";
 
-		case "BigIntGreaterOrEqualOperation":
-		case "IntGreaterOrEqualOperation":
-			return ">=";
+			case "BigIntGreaterOrEqualOperation":
+			case "IntGreaterOrEqualOperation":
+				return ">=";
 
-		default:
-			return null;
+			default:
+				return null;
 		}
 	}
 
@@ -272,25 +273,25 @@ public class MySQL {
 	private String getMySQL_SoftwareModificationTime(String operation, String data) {
 		String expression = "";
 		switch (operation) {
-		case "DateGreaterThanOperation":
-			expression = ">";
-			break;
+			case "DateGreaterThanOperation":
+				expression = ">";
+				break;
 
-		case "DateGreaterOrEqualOperation":
-			expression = ">=";
-			break;
+			case "DateGreaterOrEqualOperation":
+				expression = ">=";
+				break;
 
-		case "DateEqualsOperation":
-			expression = "=";
-			break;
+			case "DateEqualsOperation":
+				expression = "=";
+				break;
 
-		case "DateLessOrEqualOperation":
-			expression = "<=";
-			break;
+			case "DateLessOrEqualOperation":
+				expression = "<=";
+				break;
 
-		case "DateLessThanOperation":
-			expression = "<";
-			break;
+			case "DateLessThanOperation":
+				expression = "<";
+				break;
 		}
 
 		return " DATE(d.modificationTime)" + expression + "'" + data + "'";
@@ -299,12 +300,12 @@ public class MySQL {
 	public static Type getType(JSONObject json) {
 		try {
 			switch (json.getString("operation")) {
-			case "OrOperation":
-				return Type.OR;
-			case "AndOperation":
-				return Type.AND;
-			case "NotOperation":
-				return Type.NOT;
+				case "OrOperation":
+					return Type.OR;
+				case "AndOperation":
+					return Type.AND;
+				case "NotOperation":
+					return Type.NOT;
 			}
 		} catch (Exception e) {
 			logging.warning("we did get type of operation from " + json);

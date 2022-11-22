@@ -70,7 +70,8 @@ public abstract class DataStub {
 
 	abstract public Object2Product2VersionList getDepot2NetbootProducts();
 
-	//abstract public HashMap<String, java.util.List<String>> getProductversion2Depots();
+	// abstract public HashMap<String, java.util.List<String>>
+	// getProductversion2Depots();
 
 	abstract public void productPropertyDefinitionsRequestRefresh();
 
@@ -86,8 +87,9 @@ public abstract class DataStub {
 
 	abstract public java.util.List<Map<String, Object>> getProductPropertyStates();
 
-	//abstract protected void productPropertyDepotStatesRequestRefresh();
-	//abstract public void fillProductPropertyDepotStates(Collection<String> clients);
+	// abstract protected void productPropertyDepotStatesRequestRefresh();
+	// abstract public void fillProductPropertyDepotStates(Collection<String>
+	// clients);
 	abstract public java.util.List<Map<String, Object>> getProductPropertyDepotStates(java.util.Set<String> depots);
 
 	abstract public void installedSoftwareInformationRequestRefresh();
@@ -114,7 +116,7 @@ public abstract class DataStub {
 
 	abstract public Map<String, java.util.List<SWAuditClientEntry>> getClient2Software();
 
-	//abstract public  Map<Integer, java.util.List<String>> getSoftwareId2clients();
+	// abstract public Map<Integer, java.util.List<String>> getSoftwareId2clients();
 	abstract public Map<String, java.util.Set<String>> getSoftwareIdent2clients();
 
 	abstract public void auditSoftwareXLicencePoolRequestRefresh();
@@ -124,9 +126,10 @@ public abstract class DataStub {
 	abstract public void hostConfigsRequestRefresh();
 
 	abstract public Map<String, Map<String, Object>> getConfigs();
-	//host -> (key -> value) 
-	//abstract public Map<String, Map<String, java.util.List<Object>>> getConfigValues();
-	//host;key -> valuelist
+	// host -> (key -> value)
+	// abstract public Map<String, Map<String, java.util.List<Object>>>
+	// getConfigValues();
+	// host;key -> valuelist
 
 	abstract public void licencepoolsRequestRefresh();
 
@@ -137,10 +140,10 @@ public abstract class DataStub {
 	abstract public Map<String, LicenceContractEntry> getLicenceContracts();
 
 	abstract public TreeMap<String, TreeSet<String>> getLicenceContractsExpired();
-	// date in sql time format, contrad  ID
+	// date in sql time format, contrad ID
 
 	abstract public TreeMap<String, TreeSet<String>> getLicenceContractsToNotify();
-	// date in sql time format, contrad  ID
+	// date in sql time format, contrad ID
 
 	abstract public void licencesRequestRefresh();
 

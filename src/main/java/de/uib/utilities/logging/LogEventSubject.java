@@ -4,11 +4,9 @@
 	* organization: uib.de
  * @author  R. Roeder 
  */
- 
+
 package de.uib.utilities.logging;
- 
-public interface LogEventSubject
-{
-	void registerLogEventObserver( LogEventObserver o);
+
+public interface LogEventSubject {
+	void registerLogEventObserver(LogEventObserver o);
 }
- 

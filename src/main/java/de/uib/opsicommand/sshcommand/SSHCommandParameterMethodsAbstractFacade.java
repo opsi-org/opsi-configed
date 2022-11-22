@@ -16,15 +16,17 @@ package de.uib.opsicommand.sshcommand;
  */
 
 /**
-* This Class handles  SSHCommands.
-**/
-public abstract class SSHCommandParameterMethodsAbstractFacade
-{
+ * This Class handles SSHCommands.
+ **/
+public abstract class SSHCommandParameterMethodsAbstractFacade {
 
 	public abstract String[] getSelected_clientnames();
+
 	public abstract String[] getSelected_depotnames();
+
 	// public abstract String getSelectedClientName();
 	public abstract String getConfig_serverName();
+
 	public abstract String getConfig_sshserverName();
 
 }

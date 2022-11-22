@@ -95,12 +95,12 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 	}
 
 	private void initComponents() {
-		//jTextField_SelectedClients = new javax.swing.JTextField();
+		// jTextField_SelectedClients = new javax.swing.JTextField();
 		jLabelProductName = new javax.swing.JLabel();
 		jLabelProductID = new javax.swing.JTextField();
 		jLabelProductVersion = new javax.swing.JTextField();
 		jLabelLabelProductVersion = new javax.swing.JLabel();
-		//jLabelPackageVersion = new javax.swing.JLabel();
+		// jLabelPackageVersion = new javax.swing.JLabel();
 		jLabelProductDescription = new javax.swing.JLabel();
 		jScrollPaneProductInfo = new javax.swing.JScrollPane();
 		jTextAreaProductInfo = new javax.swing.JTextArea();
@@ -116,14 +116,15 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		propertiesActivateButton = new JButton();
 
 		/*
-		jTextField_SelectedClients.setEditable(false);
-		jTextField_SelectedClients.setFont(Globals.defaultFontBig);
-		jTextField_SelectedClients.setText(" ");
-		jTextField_SelectedClients.setBackground(Globals.backgroundLightGrey);
-		*/
+		 * jTextField_SelectedClients.setEditable(false);
+		 * jTextField_SelectedClients.setFont(Globals.defaultFontBig);
+		 * jTextField_SelectedClients.setText(" ");
+		 * jTextField_SelectedClients.setBackground(Globals.backgroundLightGrey);
+		 */
 
-		//jLabelProductName.setFont(Globals.defaultFontBig);
-		//jLabelProductName.setText( configed.getResourceValue("MainFrame.labelProductId") );
+		// jLabelProductName.setFont(Globals.defaultFontBig);
+		// jLabelProductName.setText(
+		// configed.getResourceValue("MainFrame.labelProductId") );
 
 		jLabelProductID.setFont(Globals.defaultFontStandardBold);
 		jLabelProductID.setBorder(null);
@@ -155,7 +156,8 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 
 		jScrollPaneProductInfo.setViewportView(jTextAreaProductInfo);
 		jScrollPaneProductInfo.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		//jScrollPaneProductInfo.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		// jScrollPaneProductInfo.setVerticalScrollBarPolicy(
+		// JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		jScrollPaneProductInfo.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		jLabelProductAdvice.setText(configed.getResourceValue("ProductInfoPane.jLabelProductAdvice"));
@@ -172,7 +174,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 
 		jScrollPaneProductAdvice.setViewportView(jTextAreaProductAdvice);
 		jScrollPaneProductAdvice.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		//jScrollPaneProductAdvice.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		// jScrollPaneProductAdvice.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		jScrollPaneProductAdvice.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		dependenciesTextLabel.setText(configed.getResourceValue("ProductInfoPane.dependenciesTextLabel"));
@@ -236,19 +238,21 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 						.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(0, vGapSize, vGapSize)
-				//.addComponent(jLabelProductDescription, minLabelVSize, Globals.buttonHeight, Globals.buttonHeight)
-				//.addGap(minGapVSize, minGapVSize, minGapVSize)
+				// .addComponent(jLabelProductDescription, minLabelVSize, Globals.buttonHeight,
+				// Globals.buttonHeight)
+				// .addGap(minGapVSize, minGapVSize, minGapVSize)
 				.addComponent(jScrollPaneProductInfo, 0, prefVSize, prefVSize).addGap(0, 2 * vGapSize, 2 * vGapSize)
-				//.addComponent(jLabelProductAdvice, minLabelVSize, Globals.buttonHeight, Globals.buttonHeight)
-				//.addGap(minGapVSize, minGapVSize, minGapVSize)
+				// .addComponent(jLabelProductAdvice, minLabelVSize, Globals.buttonHeight,
+				// Globals.buttonHeight)
+				// .addGap(minGapVSize, minGapVSize, minGapVSize)
 				.addComponent(jScrollPaneProductAdvice, 0, prefVSize, prefVSize)
 
-		//.addComponent(panelProductDependencies, 0, 0, Short.MAX_VALUE)
+		// .addComponent(panelProductDependencies, 0, 0, Short.MAX_VALUE)
 		);
 
-		//setTopComponent(productDescriptionsPanel);
+		// setTopComponent(productDescriptionsPanel);
 
-		//treat the south panel
+		// treat the south panel
 		bottomComponent = new JXPanel();
 
 		GroupLayout layoutBottomComponent = new javax.swing.GroupLayout(bottomComponent);
@@ -294,7 +298,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 
 		this.setTopComponent(productDescriptionsPanel);
 		this.setBottomComponent(bottomComponent);
-		//setDividerLocation(250);
+		// setDividerLocation(250);
 
 	}
 
@@ -350,11 +354,13 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 	}
 
 	/*
-	public void setPackageVersion(String s)
-	{
-		jLabelPackageVersion.setText( configed.getResourceValue("MainFrame.JLabel_PackageVersion") + " " +  fillEmpty(s) );
-	}
-	*/
+	 * public void setPackageVersion(String s)
+	 * {
+	 * jLabelPackageVersion.setText(
+	 * configed.getResourceValue("MainFrame.JLabel_PackageVersion") + " " +
+	 * fillEmpty(s) );
+	 * }
+	 */
 
 	public void setID(String s) {
 		jLabelProductID.setText(s + ":");
@@ -385,10 +391,10 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 
 		setGrey(false);
 		setId(productId);
-		//setName(productTitle);
-		//setInfo(productInfo);
+		// setName(productTitle);
+		// setInfo(productInfo);
 		setProductVersion(productVersion + "-" + packageVersion);
-		//setAdvice(productHint);
+		// setAdvice(productHint);
 
 		if (mainController != null) {
 			String versionInfo = OpsiPackage.produceVersionInfo(productVersion, packageVersion);
@@ -417,9 +423,9 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 	}
 
 	//
-	//DataChangedObserver
+	// DataChangedObserver
 	public void dataHaveChanged(Object source) {
-		//logging.debug(this, "dataHaveChanged " + source );
+		// logging.debug(this, "dataHaveChanged " + source );
 		if (source instanceof de.uib.utilities.datapanel.EditMapPanelX) {
 			specificPropertiesExisting.put(productName, true);
 		}

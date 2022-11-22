@@ -5,18 +5,16 @@
  *	author Rupert Röder 
  *
  */
- 
+
 package de.uib.utilities.table.updates;
 
-import java.util.*;
+import java.util.Vector;
 
-public abstract class TableUpdateItemFactory
-{
+public abstract class TableUpdateItemFactory {
 	public abstract TableEditItem produceUpdateItem(Vector oldValues, Vector rowV);
-	
+
 	public abstract TableEditItem produceInsertItem(Vector rowV);
-	
+
 	public abstract TableEditItem produceDeleteItem(Vector rowV);
-	
+
 }
-	

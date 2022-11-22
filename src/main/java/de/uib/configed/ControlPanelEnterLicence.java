@@ -20,7 +20,7 @@ import de.uib.utilities.table.updates.TableUpdateCollection;
 import de.uib.utilities.thread.WaitCursor;
 
 public class ControlPanelEnterLicence extends ControlMultiTablePanel
-//tab new licence
+// tab new licence
 {
 	PanelEnterLicence thePanel;
 
@@ -32,7 +32,7 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 	public ConfigedMain mainController;
 
 	public ControlPanelEnterLicence(PersistenceController persist, ConfigedMain mainController) {
-		thePanel = new PanelEnterLicence(this); //extending TabClientAdapter
+		thePanel = new PanelEnterLicence(this); // extending TabClientAdapter
 		this.persist = persist;
 		this.mainController = mainController;
 		init();
@@ -219,7 +219,7 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 		fedNotes.setServedCellEditor(cellEditorLicenceContractNotes);
 		col.setCellEditor(cellEditorLicenceContractNotes);
 
-		//updates
+		// updates
 		thePanel.panelLicencecontracts.setUpdateController(new MapItemsUpdateController(thePanel.panelLicencecontracts,
 				modelLicencecontracts, new MapBasedUpdater() {
 					public String sendUpdate(Map<String, Object> rowmap) {

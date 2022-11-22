@@ -30,7 +30,7 @@ import de.uib.utilities.table.updates.TableEditItem;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
 public class ControlPanelEditLicences extends ControlMultiTablePanel
-//tab edit licence 
+// tab edit licence
 {
 
 	PanelEditLicences thePanel;
@@ -43,7 +43,7 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 	ConfigedMain mainController;
 
 	public ControlPanelEditLicences(PersistenceController persist, ConfigedMain mainController) {
-		thePanel = new PanelEditLicences(this); //extending TabClientAdapter
+		thePanel = new PanelEditLicences(this); // extending TabClientAdapter
 		this.persist = persist;
 		this.mainController = mainController;
 		init();
@@ -111,12 +111,12 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 
 			if (poolIds.size() <= 1)
 				poolIds.add("");
-			//hack, since combo box shows nothing otherwise
+			// hack, since combo box shows nothing otherwise
 
 			return new DefaultComboBoxModel<>(poolIds.toArray(String[]::new));
 		}));
 
-		//updates
+		// updates
 		thePanel.panelKeys.setUpdateController(
 				new MapItemsUpdateController(thePanel.panelKeys, modelLicencekeys, new MapBasedUpdater() {
 					public String sendUpdate(Map<String, Object> rowmap) {
@@ -179,7 +179,7 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 		col.setCellEditor(new AdaptingCellEditor(combo, (row, column) -> {
 			List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(persist.getHostInfoCollections()
 					.getPcListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))
-							.keySet());
+					.keySet());
 			choicesAllHosts.set(0, "");
 			return new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
 		}));
@@ -188,7 +188,7 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 		col.setCellEditor(new de.uib.utilities.table.gui.CellEditor4TableText(new FEditDate("", false),
 				FEditDate.AREA_DIMENSION));
 
-		//expiration date
+		// expiration date
 
 		// --- PopupMenu
 		JMenuItemFormatted menuItemAddLicence = new JMenuItemFormatted(

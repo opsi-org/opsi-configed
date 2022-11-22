@@ -31,13 +31,13 @@ public abstract class HostInfoCollections {
 
 	public abstract List<String> getOpsiHostNames();
 
-	public abstract Map<String, Map<String, Object>> getDepots();//only master depots
+	public abstract Map<String, Map<String, Object>> getDepots();// only master depots
 
 	public abstract Map<String, Map<String, Object>> getAllDepots();
 
-	public abstract LinkedList<String> getDepotNamesList(); //master depots in display order
+	public abstract LinkedList<String> getDepotNamesList(); // master depots in display order
 
-	//protected abstract Map<String, Boolean> getMapOfPCs();
+	// protected abstract Map<String, Boolean> getMapOfPCs();
 
 	public abstract Map<String, String> getMapPcBelongsToDepot();
 
@@ -50,9 +50,9 @@ public abstract class HostInfoCollections {
 	public abstract Map<String, Set<String>> getFNode2Treeparents();
 
 	public abstract void opsiHostsRequestRefresh();
-	//includes all refreshes
+	// includes all refreshes
 
-	//public abstract void pclistRequestRefresh();
+	// public abstract void pclistRequestRefresh();
 
 	public abstract void setDepotForClients(String[] clients, String depotId);
 
@@ -60,9 +60,9 @@ public abstract class HostInfoCollections {
 
 	public abstract void setLocalHostInfo(String hostId, String depotId, HostInfo hostInfo);
 
-	//valueFromConfigStateAsExpected
+	// valueFromConfigStateAsExpected
 
-	//public abstract void intersectWithMapOfPCs(List<String> clientSelection);
+	// public abstract void intersectWithMapOfPCs(List<String> clientSelection);
 
 	protected abstract void retrieveOpsiHosts();
 

@@ -1,8 +1,7 @@
 package de.uib.utilities.swing.tabbedpane;
 
-public interface TabClient
-{
+public interface TabClient {
 	void reset();
-	
+
 	boolean mayLeave();
 }

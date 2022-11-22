@@ -35,10 +35,11 @@ import de.uib.utilities.table.*;
 import de.uib.utilities.table.provider.*;
 import de.uib.utilities.table.updates.*;
 
-public class LicenseDisplayer
-{
-	@FXML private TextFlow textflow;
-	@FXML private Button closeButton;
+public class LicenseDisplayer {
+	@FXML
+	private TextFlow textflow;
+	@FXML
+	private Button closeButton;
 
 	private String message = "";
 	private PersistenceController persist;
@@ -46,49 +47,42 @@ public class LicenseDisplayer
 
 	private Stage stage;
 
-	public LicenseDisplayer()
-	{
+	public LicenseDisplayer() {
 		persist = PersistenceControllerFactory.getPersistenceController();
 	}
 
-	public void loadData()
-	{
+	public void loadData() {
 		Platform.runLater(
-			new Thread()
-			{
-				@Override
-				public void run()
-				{
-					message = "";
-					showInfo();
+				new Thread() {
+					@Override
+					public void run() {
+						message = "";
+						showInfo();
 
-					StringBuffer mess = new StringBuffer();
+						StringBuffer mess = new StringBuffer();
 
-					mess.append(showLicenceContractWarnings());
-					mess.append(calculateVariantLicencepools());
+						mess.append(showLicenceContractWarnings());
+						mess.append(calculateVariantLicencepools());
 
-					message = mess.toString();
-					showInfo();
-				}
-			}
-		);
+						message = mess.toString();
+						showInfo();
+					}
+				});
 	}
 
-	private void showInfo()
-	{
+	private void showInfo() {
 		final Text msg = new Text(message);
 		final ObservableList<Node> list = controller.textflow.getChildren();
 		list.clear();
 		list.add(msg);
 	}
 
-	public void initAndShowGUI() throws IOException
-	{
+	public void initAndShowGUI() throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(LicenseDisplayer.class.getResource("/fxml/dialogs/license_dialog.fxml"));
 		Parent root = fxmlLoader.load();
 		Scene scene = new Scene(root);
 		stage = new Stage();
-		
+
 		stage.getIcons().add(SwingFXUtils.toFXImage(Helper.toBufferedImage(Globals.mainIcon), null));
 		stage.setTitle(configed.getResourceValue("Dashboard.license.title"));
 		stage.setScene(scene);
@@ -99,14 +93,12 @@ public class LicenseDisplayer
 		loadData();
 	}
 
-	public void display()
-	{
+	public void display() {
 		stage.show();
 		loadData();
 	}
 
-	protected String  showLicenceContractWarnings()
-	{
+	protected String showLicenceContractWarnings() {
 		StringBuffer result = new StringBuffer();
 		TreeMap<String, TreeSet<String>> contractsExpired = persist.getLicenceContractsExpired();
 		TreeMap<String, TreeSet<String>> contractsToNotify = persist.getLicenceContractsToNotify();
@@ -118,10 +110,8 @@ public class LicenseDisplayer
 		result.append(configed.getResourceValue("Dash.expiredContracts"));
 		result.append(":  \n");
 
-		for (Map.Entry<String, TreeSet<String>> entry : contractsExpired.entrySet())
-		{
-			for (String ID : entry.getValue())
-			{
+		for (Map.Entry<String, TreeSet<String>> entry : contractsExpired.entrySet()) {
+			for (String ID : entry.getValue()) {
 				result.append(entry.getValue() + ": " + ID);
 				result.append("\n");
 			}
@@ -132,10 +122,8 @@ public class LicenseDisplayer
 		result.append(configed.getResourceValue("Dash.contractsToNotify"));
 		result.append(":  \n");
 
-		for (Map.Entry<String, TreeSet<String>> entry : contractsToNotify.entrySet())
-		{
-			for (String ID : entry.getValue())
-			{
+		for (Map.Entry<String, TreeSet<String>> entry : contractsToNotify.entrySet()) {
+			for (String ID : entry.getValue()) {
 				result.append(entry.getValue() + ": " + ID);
 				result.append("\n");
 			}
@@ -144,8 +132,7 @@ public class LicenseDisplayer
 		return result.toString();
 	}
 
-	protected String calculateVariantLicencepools()
-	{
+	protected String calculateVariantLicencepools() {
 		StringBuffer result = new StringBuffer();
 		GenTableModel modelSWnames;
 
@@ -159,8 +146,7 @@ public class LicenseDisplayer
 			columnNames.add(key);
 
 		classNames = new Vector<String>();
-		for (int i = 0; i < columnNames.size(); i++)
-		{
+		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
 
@@ -169,25 +155,21 @@ public class LicenseDisplayer
 		final TreeSet<String> namesWithVariantPools = new TreeSet<String>();
 
 		modelSWnames = new GenTableModel(
-			null,  //no updates
-			new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, classNames, () -> (Map) persist.getInstalledSoftwareName2SWinfo())
-			),
-			0,
-			new int[]{},
-			(TableModelListener)null, //panelSWnames ,
-			updateCollection
-		)
-		{
+				null, // no updates
+				new DefaultTableProvider(
+						new RetrieverMapSource(columnNames, classNames,
+								() -> (Map) persist.getInstalledSoftwareName2SWinfo())),
+				0,
+				new int[] {},
+				(TableModelListener) null, // panelSWnames ,
+				updateCollection) {
 			@Override
-			protected void initColumns()
-			{
+			protected void initColumns() {
 				super.initColumns();
 			}
 
 			@Override
-			public void produceRows()
-			{
+			public void produceRows() {
 				super.produceRows();
 
 				logging.info(this, "producing rows for modelSWnames");
@@ -195,26 +177,23 @@ public class LicenseDisplayer
 				namesWithVariantPools.clear();
 
 				int i = 0;
-				while (i < getRowCount())
-				{
-					String swName = (String) getValueAt(i,0 );
+				while (i < getRowCount()) {
+					String swName = (String) getValueAt(i, 0);
 
-					if ( checkExistNamesWithVariantLicencepools(swName))
-					{
-							//logging.info(this, "foundVariantLicencepoold  for " + swName);
-							namesWithVariantPools.add(swName);
-							foundVariantLicencepools++;
+					if (checkExistNamesWithVariantLicencepools(swName)) {
+						// logging.info(this, "foundVariantLicencepoold for " + swName);
+						namesWithVariantPools.add(swName);
+						foundVariantLicencepools++;
 					}
 
 					i++;
 				}
-				//myController.thePanel.setDisplaySimilarExist( foundVariantLicencepools );
+				// myController.thePanel.setDisplaySimilarExist( foundVariantLicencepools );
 				logging.info(this, "produced rows, foundVariantLicencepools " + foundVariantLicencepools);
 			}
 
 			@Override
-			public void reset()
-			{
+			public void reset() {
 				logging.info(this, "reset");
 				super.reset();
 			}
@@ -222,21 +201,19 @@ public class LicenseDisplayer
 
 		modelSWnames.produceRows();
 
-		//modelSWnames.requestReload();
+		// modelSWnames.requestReload();
 
 		Vector<Vector<Object>> specialrows = modelSWnames.getRows();
-		if (specialrows != null)
-		{
+		if (specialrows != null) {
 			logging.info(this, "initDashInfo, modelSWnames.getRows() size " + specialrows.size());
 		}
 
 		result.append("\n");
 		result.append("  ");
-		result.append(configed.getResourceValue("Dash.similarSWEntriesForLicencePoolExist") );
+		result.append(configed.getResourceValue("Dash.similarSWEntriesForLicencePoolExist"));
 		result.append(":  \n");
 
-		for (String name : namesWithVariantPools)
-		{
+		for (String name : namesWithVariantPools) {
 			result.append(name);
 			result.append("\n");
 		}
@@ -248,12 +225,12 @@ public class LicenseDisplayer
 	}
 
 	private java.util.Set<String> getRangeSWxLicencepool(String swName)
-	//nearly done in produceModelSWxLicencepool, but we collect the range of the model-map
+	// nearly done in produceModelSWxLicencepool, but we collect the range of the
+	// model-map
 	{
 		Set<String> range = new HashSet<String>();
 
-		for (String swID: persist.getName2SWIdents().get(swName))
-		{
+		for (String swID : persist.getName2SWIdents().get(swName)) {
 			String licpool = persist.getFSoftware2LicencePool(swID);
 
 			if (licpool == null)
@@ -265,13 +242,11 @@ public class LicenseDisplayer
 		return range;
 	}
 
-
-	private boolean checkExistNamesWithVariantLicencepools(String name)
-	{
+	private boolean checkExistNamesWithVariantLicencepools(String name) {
 		java.util.Set<String> range = getRangeSWxLicencepool(name);
 
 		if (range.size() > 1)
-			//&& range.contains( FSoftwarename2LicencePool.valNoLicencepool ))
+		// && range.contains( FSoftwarename2LicencePool.valNoLicencepool ))
 		{
 			logging.info(this, "checkExistNamesWithVariantLicencepools, found  for " + name + " :  " + range);
 			return true;
@@ -280,8 +255,7 @@ public class LicenseDisplayer
 	}
 
 	@FXML
-	public void close()
-	{
+	public void close() {
 		Stage currentStage = (Stage) closeButton.getScene().getWindow();
 		currentStage.close();
 	}

@@ -1,32 +1,24 @@
 package de.uib.opsidatamodel.productstate;
 
-import java.util.*;
+import java.util.HashMap;
 
-public class Config
-{
-	
+public class Config {
+
 	public HashMap<String, String> requiredActionForStatus;
-	
-	
+
 	private static Config instance;
-	
-	
-	
-	private Config()
-	{
+
+	private Config() {
 		requiredActionForStatus = new HashMap<String, String>();
 		requiredActionForStatus.put("installed", "setup");
 		requiredActionForStatus.put("not_installed", "uninstall");
 	}
-	
-	
-	public static Config getInstance()
-	{
+
+	public static Config getInstance() {
 		if (instance == null)
 			instance = new Config();
-	
+
 		return instance;
 	}
-	
-}
 
+}

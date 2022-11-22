@@ -1,33 +1,35 @@
 package de.uib.opsidatamodel.datachanges;
 
-import de.uib.configed.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
+
+import de.uib.configed.ConfigedMain;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.*;
-import java.util.*;
+import de.uib.utilities.logging.logging;
 
 /**
-*/   
-public  class ProductpropertiesUpdateCollection extends UpdateCollection
-{
+*/
+public class ProductpropertiesUpdateCollection extends UpdateCollection {
 	java.util.List<String> clients;
 	String productname;
 	PersistenceController persis;
 	ConfigedMain mainController;
 
-	public ProductpropertiesUpdateCollection (ConfigedMain mainController, Object persis, String[] clients, String productname)
-	{
+	public ProductpropertiesUpdateCollection(ConfigedMain mainController, Object persis, String[] clients,
+			String productname) {
 		this(mainController, persis, Arrays.asList(clients), productname);
 	}
-	
-	public ProductpropertiesUpdateCollection (ConfigedMain mainController, Object persis, java.util.List<String> clients, String productname)
-	{
+
+	public ProductpropertiesUpdateCollection(ConfigedMain mainController, Object persis, java.util.List<String> clients,
+			String productname) {
 		super(new Vector<Object>(0));
-		if (clients == null)
-		{
+		if (clients == null) {
 			this.clients = new ArrayList<String>();
-		}
-		else
-		{
+		} else {
 			this.clients = clients;
 		}
 		this.productname = productname;
@@ -35,58 +37,49 @@ public  class ProductpropertiesUpdateCollection extends UpdateCollection
 		this.mainController = mainController;
 	}
 
-	public void setController( Object obj)
-	{
+	public void setController(Object obj) {
 		this.persis = (PersistenceController) obj;
 	}
 
 	@Override
-	public boolean addAll(Collection c)
-	{
-		boolean  result = true;
-		
-		if (c.size() > 0)
-		{
+	public boolean addAll(Collection c) {
+		boolean result = true;
+
+		if (c.size() > 0) {
 			Iterator it = c.iterator();
 			Object ob = it.next();
-			logging.info(this, "addAll on collection of size " + c.size() + " of type " + ob.getClass() + " should produce values for all " + clients.size() + " hosts");
+			logging.info(this, "addAll on collection of size " + c.size() + " of type " + ob.getClass()
+					+ " should produce values for all " + clients.size() + " hosts");
 		}
-		
-		if (result &&  (c.size() != clients.size()))
-		{
+
+		if (result && (c.size() != clients.size())) {
 			result = false;
-			
-			
+
 			logging.error("list of data has size " + c.size()
-			                 + " differs from  length of clients list  " + clients.size() );
-			
+					+ " differs from  length of clients list  " + clients.size());
+
 		}
 
-
-		if (result)
-		{
+		if (result) {
 			Iterator it = c.iterator();
 			int i = 0;
-			while (it.hasNext())
-			{
+			while (it.hasNext()) {
 				Map map = null;
 				Object obj = it.next();
 
 				logging.debug(this, "addAll, element of Collection: " + obj);
 
-				try
-				{
+				try {
 					map = (Map) obj;
 				}
 
-				catch (ClassCastException ccex)
-				{
+				catch (ClassCastException ccex) {
 					result = false;
 					logging.debugOut(logging.LEVEL_ERROR, "wrong element type, found " + obj.getClass().getName()
-					                 + ", expected a Map" );
+							+ ", expected a Map");
 				}
 
-				result = add ( new ProductpropertiesUpdate(persis, clients.get(i), productname, map ));
+				result = add(new ProductpropertiesUpdate(persis, clients.get(i), productname, map));
 				i++;
 			}
 		}
@@ -95,48 +88,37 @@ public  class ProductpropertiesUpdateCollection extends UpdateCollection
 	}
 
 	@Override
-	public void clearElements()
-	{
+	public void clearElements() {
 		logging.debug(this, "clearElements()");
 		clear();
 	}
 
-
 	@Override
-	public void doCall()
-	{
+	public void doCall() {
 		super.doCall();
 		logging.debug(this, "doCall, after recursion");
 		persis.setProductproperties();
 
-
-		//mainController.requestReloadStatesAndActions();
-		//mainController.resetView(mainController.getViewIndex());
+		// mainController.requestReloadStatesAndActions();
+		// mainController.resetView(mainController.getViewIndex());
 	}
-	
+
 	@Override
-	public void revert()
-	{
-		for (Object ob : implementor)
-		{
-			if (ob instanceof ProductpropertiesUpdate)
-			{
+	public void revert() {
+		for (Object ob : implementor) {
+			if (ob instanceof ProductpropertiesUpdate) {
 				((ProductpropertiesUpdate) ob).revert();
-			}
-			else
-			{
+			} else {
 				logging.info(this, "revert: not a ProductpropertiesUpdate : " + ob);
 			}
 		}
 	}
-		
 
 	@Override
-	public boolean add (Object obj)
-	{
-		//System.out.println ("----------- adding to ProductPropertiesCollection "  + obj + " of class " + obj.getClass().getName());
+	public boolean add(Object obj) {
+		// System.out.println ("----------- adding to ProductPropertiesCollection " +
+		// obj + " of class " + obj.getClass().getName());
 		return super.add(obj);
 	}
 
 }
-

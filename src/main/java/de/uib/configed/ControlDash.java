@@ -87,7 +87,7 @@ public class ControlDash {
 				showInfo();
 			}
 		});
-		//.start();
+		// .start();
 	}
 
 	public void showInfo() {
@@ -153,7 +153,7 @@ public class ControlDash {
 				public void setVisible(boolean b) {
 					super.setVisible(b);
 					jButton1.requestFocus();
-					//registerWithRunningInstances();
+					// registerWithRunningInstances();
 				}
 
 				@Override
@@ -163,9 +163,9 @@ public class ControlDash {
 				}
 
 			};
-			//fDash.setAdditionalPane( new PanelDashInfo() );
+			// fDash.setAdditionalPane( new PanelDashInfo() );
 			fDash.checkAdditionalPane();
-			//fDash.setSize( new Dimension( 400, 500 ) );
+			// fDash.setSize( new Dimension( 400, 500 ) );
 
 			if (Globals.mainFrame != null) {
 				fDash.setLocation(Globals.mainFrame.getX() + Globals.locationDistanceX,
@@ -263,7 +263,7 @@ public class ControlDash {
 
 					i++;
 				}
-				//myController.thePanel.setDisplaySimilarExist( foundVariantLicencepools );
+				// myController.thePanel.setDisplaySimilarExist( foundVariantLicencepools );
 				logging.info(this, "produced rows, foundVariantLicencepools " + foundVariantLicencepools);
 			}
 
@@ -275,7 +275,7 @@ public class ControlDash {
 		};
 		modelSWnames.produceRows();
 
-		//modelSWnames.requestReload();
+		// modelSWnames.requestReload();
 
 		Vector<Vector<Object>> specialrows = modelSWnames.getRows();
 		if (specialrows != null) {
@@ -300,7 +300,8 @@ public class ControlDash {
 	}
 
 	private java.util.Set<String> getRangeSWxLicencepool(String swName)
-	//nearly done in produceModelSWxLicencepool, but we collect the range of the model-map
+	// nearly done in produceModelSWxLicencepool, but we collect the range of the
+	// model-map
 	{
 		Set<String> range = new HashSet<>();
 

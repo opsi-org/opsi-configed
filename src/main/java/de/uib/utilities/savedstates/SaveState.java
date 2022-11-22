@@ -1,43 +1,30 @@
 package de.uib.utilities.savedstates;
 
-import de.uib.messages.*;
-import de.uib.utilities.*;
-import de.uib.utilities.logging.*;
-import javax.swing.*;
-import java.util.*;
-import java.io.*;
-
-public abstract class SaveState
-{
+public abstract class SaveState {
 	String key;
 	Object defaultValue;
 	SavedStates states;
-	
-	SaveState()
-	{
+
+	SaveState() {
 	}
-	
-	public SaveState(String key, Object defaultValue, SavedStates states)
-	{
+
+	public SaveState(String key, Object defaultValue, SavedStates states) {
 		this.key = key;
 		this.defaultValue = defaultValue;
 		this.states = states;
 		// states.addKey(key, ""); //for classifiedpropertiesstore
 	}
-	
-	public void setDefaultValue(Object val)
-	{
+
+	public void setDefaultValue(Object val) {
 		defaultValue = val;
 	}
-	
-	public void serialize(Object ob)
-	{
+
+	public void serialize(Object ob) {
 		states.store();
-		//we store every time when we add an object
+		// we store every time when we add an object
 	}
-	
-	public Object deserialize()
-	{
+
+	public Object deserialize() {
 		return null;
 	}
 }

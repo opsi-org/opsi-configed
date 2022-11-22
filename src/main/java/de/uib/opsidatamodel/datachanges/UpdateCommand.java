@@ -1,9 +1,9 @@
 package de.uib.opsidatamodel.datachanges;
 
-interface UpdateCommand
-{
+interface UpdateCommand {
 	void doCall();
-	Object getController( );
-	void setController( Object cont);
-}
 
+	Object getController();
+
+	void setController(Object cont);
+}
