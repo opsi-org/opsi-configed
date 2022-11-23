@@ -200,6 +200,12 @@ public class Globals {
 	public static final int minVGapSize = 5;
 	public static final int minHGapSize = 5;
 
+	public static final int minVSize = 10;
+	public static final int prefVSize = 80;
+
+	public static final int minHSize = 50;
+	public static final int prefHSize = 80;
+
 	public static final int buttonHeight = 24;
 	public static final int lineHeight = 28;
 	public static final int smallHeight = 18;

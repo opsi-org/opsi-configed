@@ -217,10 +217,10 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		layoutDescriptionsPanel.setVerticalGroup(layoutDescriptionsPanel.createSequentialGroup()
 				.addComponent(jLabelProductID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.minGapVSize, Globals.minGapVSize, Globals.minGapVSize)
+				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
 				.addComponent(jLabelProductName, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.minGapVSize, Globals.minGapVSize, Globals.minGapVSize)
+				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
 				.addGroup(layoutDescriptionsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 						.addComponent(jLabelLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -248,44 +248,45 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		GroupLayout layoutBottomComponent = new javax.swing.GroupLayout(bottomComponent);
 		bottomComponent.setLayout(layoutBottomComponent);
 
-		layoutBottomComponent.setHorizontalGroup(layoutBottomComponent.createParallelGroup()
-				.addGroup(layoutBottomComponent.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(dependenciesActivateButton, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(dependenciesTextLabel, Globals.minHSize, GroupLayout.PREFERRED_SIZE,
+		layoutBottomComponent
+				.setHorizontalGroup(
+						layoutBottomComponent.createParallelGroup()
+								.addGroup(layoutBottomComponent.createSequentialGroup()
+										.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+										.addComponent(dependenciesActivateButton, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+										.addComponent(dependenciesTextLabel, Globals.minHSize,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(0, 0, Short.MAX_VALUE)
+										.addComponent(depotForDependenciesLabel, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize))
+
+								.addComponent(panelProductDependencies)
+
+								.addGroup(layoutBottomComponent.createSequentialGroup()
+										.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+										.addComponent(propertiesActivateButton)
+										.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+										.addComponent(panelEditProperties.getTitlePanel()))
+								.addComponent(panelEditProperties));
+
+		layoutBottomComponent.setVerticalGroup(layoutBottomComponent.createSequentialGroup()
+				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
+				.addGroup(layoutBottomComponent.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(dependenciesActivateButton, Globals.buttonHeight, Globals.buttonHeight,
+								Globals.buttonHeight)
+						.addComponent(dependenciesTextLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(0, 0, Short.MAX_VALUE)
 						.addComponent(depotForDependenciesLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize))
-
-				.addComponent(panelProductDependencies)
-
-				.addGroup(layoutBottomComponent.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(propertiesActivateButton)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+								GroupLayout.PREFERRED_SIZE))
+				.addComponent(panelProductDependencies, 0, 0, Short.MAX_VALUE)
+				.addGroup(layoutBottomComponent.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(propertiesActivateButton, Globals.buttonHeight, Globals.buttonHeight,
+								Globals.buttonHeight)
 						.addComponent(panelEditProperties.getTitlePanel()))
-				.addComponent(panelEditProperties));
-
-		layoutBottomComponent.setVerticalGroup(
-				layoutBottomComponent.createSequentialGroup()
-						.addGap(Globals.minGapVSize, Globals.minGapVSize, Globals.minGapVSize)
-						.addGroup(layoutBottomComponent.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(dependenciesActivateButton, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight)
-								.addComponent(dependenciesTextLabel, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(depotForDependenciesLabel, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addComponent(panelProductDependencies, 0, 0, Short.MAX_VALUE)
-						.addGroup(layoutBottomComponent.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(propertiesActivateButton, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight)
-								.addComponent(panelEditProperties.getTitlePanel()))
-						.addComponent(panelEditProperties, 0, 0, Short.MAX_VALUE));
+				.addComponent(panelEditProperties, 0, 0, Short.MAX_VALUE));
 
 		this.setTopComponent(productDescriptionsPanel);
 		this.setBottomComponent(bottomComponent);
