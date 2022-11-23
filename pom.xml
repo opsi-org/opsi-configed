@@ -184,6 +184,13 @@
             <artifactId>fontawesomefx-commons</artifactId>
             <version>9.1.2</version>
         </dependency>
+        
+        <!-- https://mvnrepository.com/artifact/com.atlassian.commonmark/commonmark -->
+        <dependency>
+            <groupId>com.atlassian.commonmark</groupId>
+            <artifactId>commonmark</artifactId>
+            <version>0.17.0</version>
+        </dependency>
 
     </dependencies>
 </project>
