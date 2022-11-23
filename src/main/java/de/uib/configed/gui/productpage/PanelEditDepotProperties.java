@@ -230,10 +230,10 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 	}
 
 	public void clearDepotListData() {
-		setDepotListData(new ArrayList<String>(), "", "");
+		setDepotListData(new ArrayList<String>(), "");
 	}
 
-	public void setDepotListData(java.util.List<String> depots, String selectedDepot, String productEdited) {
+	public void setDepotListData(java.util.List<String> depots, String productEdited) {
 
 		logging.info(this, "setDepotListData");
 		if (depots != null)
@@ -287,7 +287,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		 * visualDats = emptyVisualDt
 		 */
 
-		if (listDepots.getSelectedValuesList().size() != 0) {
+		if (!listDepots.getSelectedValuesList().isEmpty()) {
 			productPropertiesPanel.setEditableMap(
 
 					visualData,
@@ -345,7 +345,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 		Map<String, Object> result = new HashMap<String, Object>();
 
-		if (depots == null || depots.size() == 0)
+		if (depots == null || depots.isEmpty())
 			return result;
 
 		Map<String, ConfigName2ConfigValue> propertiesDepot0 = depot2product2properties.get(depots.get(0));
@@ -427,7 +427,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 		listDepots.setValueIsAdjusting(true);
 
-		if (listSelectedDepots == null || listSelectedDepots.size() == 0) {
+		if (listSelectedDepots == null || listSelectedDepots.isEmpty()) {
 			// mark all
 			listDepots.setSelectionInterval(0, listDepots.getModel().getSize() - 1);
 		} else {
@@ -451,6 +451,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 	}
 
 	// KeyListener
+	@Override
 	public void keyPressed(KeyEvent e) {
 		// logging.info(this, "keyPressed " + e);
 		if (e.getSource() == listDepots) {
@@ -458,13 +459,18 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		}
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
+		// Do nothing because KeyListener demands implementation
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
+		// Do nothing because KeyListener demands implementation
 	}
 
 	// MouseListener
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		logging.info(this, "mouseClicked " + e);
 		if (e.getSource() == listDepots) {
@@ -473,16 +479,23 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) {
+		// Do nothing because MouseListener demands implementation
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e) {
+		// Do nothing because MouseListener demands implementation
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
+		// Do nothing because MouseListener demands implementation
 	}
 
 	public void mouseReleased(MouseEvent e) {
+		// Do nothing because MouseListener demands implementation
 	}
 
 	// ActionListener

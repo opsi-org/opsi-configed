@@ -36,38 +36,8 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 	JMenuItemFormatted popupMarkHits;
 
 	public PanelGroupedProductSettings(String title, ConfigedMain mainController,
-			LinkedHashMap<String, Boolean> productDisplayFields,
-			boolean packageGroupsVisible) {
-		super(title, mainController, productDisplayFields);
-		// init(); // weg, wil redundant
-	}
-
-	@Override
-	protected void producePopupMenu(final Map<String, Boolean> checkColumns) {
-
-		super.producePopupMenu(checkColumns);
-		/*
-		 * popup.addSeparator();
-		 * popupMarkHits = new JMenuItemFormatted();
-		 * 
-		 * popupMarkHits.setText(
-		 * configed.getResourceValue("PanelGroupedProductSettings.markAllFoundItems") );
-		 * popupMarkHits.setFont(Globals.defaultFont);
-		 * popupMarkHits.addActionListener(new ActionListener()
-		 * {
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * groupPanel.markAllSearchResults();
-		 * }
-		 * });
-		 * 
-		 * popup.add(popupMarkHits);
-		 */
-	}
-
-	public PanelGroupedProductSettings(String title, ConfigedMain mainController,
 			LinkedHashMap<String, Boolean> productDisplayFields) {
-		this(title, mainController, productDisplayFields, true);
+		super(title, mainController, productDisplayFields);
 	}
 
 	protected void activatePacketSelectionHandling(boolean b) {
@@ -150,7 +120,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 
 	@Override
 	public Set<String> getSelectedIDs() {
-		HashSet<String> result = new HashSet();
+		Set<String> result = new HashSet<>();
 
 		int[] selection = tableProducts.getSelectedRows();
 
@@ -189,7 +159,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 		InstallationStateTableModelFiltered tModel = (InstallationStateTableModelFiltered) tableProducts.getModel();
 
 		activatePacketSelectionHandling(false);
-		((InstallationStateTableModelFiltered) tModel).setFilterFrom((Set) null);
+		((InstallationStateTableModelFiltered) tModel).setFilterFrom((Set<String>) null);
 		tableProducts.revalidate();
 		activatePacketSelectionHandling(true);
 	}

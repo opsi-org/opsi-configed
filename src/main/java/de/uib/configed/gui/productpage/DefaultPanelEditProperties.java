@@ -38,7 +38,7 @@ public abstract class DefaultPanelEditProperties extends JXPanel {
 
 	protected String productEdited;
 
-	public DefaultPanelEditProperties(ConfigedMain mainController,
+	protected DefaultPanelEditProperties(ConfigedMain mainController,
 			de.uib.utilities.datapanel.AbstractEditMapPanel productPropertiesPanel) {
 		super();
 		this.mainController = mainController;

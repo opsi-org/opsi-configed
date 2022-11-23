@@ -33,8 +33,6 @@ public class PanelEditClientProperties extends DefaultPanelEditProperties {
 
 	private JPanel titlePanel;
 
-	protected Map<String, Boolean> specificPropertiesExisting;
-
 	public PanelEditClientProperties(ConfigedMain mainController,
 			de.uib.utilities.datapanel.AbstractEditMapPanel productPropertiesPanel) {
 		super(mainController, productPropertiesPanel);
@@ -155,18 +153,6 @@ public class PanelEditClientProperties extends DefaultPanelEditProperties {
 	public void setSpecificPropertiesExisting(String productName, Map<String, Boolean> specificPropertiesExisting) {
 
 		setPropertyResetActivated(false);
-		this.specificPropertiesExisting = specificPropertiesExisting;
-		if (specificPropertiesExisting == null)
-			return;
-		if (productName == null)
-			return;
-		// logging.debug(this, " setSpecificPropertiesExisting
-		// specificPropertiesExisting, productName " + specificPropertiesExisting + ", "
-		// + productName);
-		// if (specificPropertiesExisting != null && productName != null)
-		// logging.debug(this," setSpecificPropertiesExisting
-		// specificPropertiesExisting.get(productName) " +
-		// specificPropertiesExisting.get(productName));
 		if (specificPropertiesExisting != null && productName != null
 				&& specificPropertiesExisting.get(productName) != null)
 			setPropertyResetActivated(specificPropertiesExisting.get(productName));

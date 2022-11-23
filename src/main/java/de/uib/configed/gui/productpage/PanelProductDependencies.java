@@ -48,17 +48,6 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 
 	private DependenciesModel dependenciesModel;
 
-	private int minLabelVSize = 0;
-	private int minTableVSize = 40;
-	private int minGapVSize = 2;
-	private int minVSize = 10;
-	private int prefVSize = 20;
-	private int vGapSize = 5;
-	private int hGapSize = 2;
-
-	private int minHSize = 50;
-	private int prefHSize = 80;
-
 	public PanelProductDependencies(ConfigedMain mainController, JLabel depotLabel) {
 		this.mainController = mainController;
 		this.depotLabel = depotLabel;
@@ -90,23 +79,24 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
 						.addComponent(labelInfoProductDependenciesTable))
 
-				.addComponent(dependenciesPanel, minHSize, prefHSize, Short.MAX_VALUE)
+				.addComponent(dependenciesPanel, Globals.minHSize, Globals.prefHSize, Short.MAX_VALUE)
 
 				.addGroup(layout.createSequentialGroup()
 						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
 						.addComponent(labelInfoProductDependenciesTree))
 
-				.addComponent(dependenciesTreePanel, minHSize, prefHSize, Short.MAX_VALUE)
-				.addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(), minHSize, prefHSize,
+				.addComponent(dependenciesTreePanel, Globals.minHSize, Globals.prefHSize, Short.MAX_VALUE)
+				.addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(), Globals.minHSize, Globals.prefHSize,
 						Short.MAX_VALUE));
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
 				.addComponent(labelInfoProductDependenciesTable)
-				.addComponent(dependenciesPanel, 3 * minVSize, 3 * prefVSize, Short.MAX_VALUE)
+				.addComponent(dependenciesPanel, 3 * Globals.minVSize, Globals.prefVSize, Short.MAX_VALUE)
 				.addComponent(labelInfoProductDependenciesTree)
-				.addComponent(dependenciesTreePanel, 3 * minVSize, 3 * prefVSize, Short.MAX_VALUE)
-				.addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(), minLabelVSize, prefVSize,
-						GroupLayout.PREFERRED_SIZE));
+				.addComponent(dependenciesTreePanel, 3 * Globals.minVSize, Globals.prefVSize, Short.MAX_VALUE)
+				.addComponent(dependenciesTreePanel.getDependenciesTreePathPanel(), 2 * Globals.minVSize,
+						2 * Globals.minVSize,
+						2 * Globals.minVSize));
 
 	}
 

@@ -105,16 +105,6 @@ public class DependenciesTreeModel {
 		initGraph(depotId);
 	}
 
-	private DefaultMutableTreeNode getTreeNodeForProductDependencies(String productId, boolean benoetigt) {
-
-		this.productId = productId;
-
-		if (graphIsInitialized)
-			return getTreeNodeForProductDependencies(benoetigt);
-		else
-			return null;
-	}
-
 	public DefaultMutableTreeNode getTreeNodeForProductDependencies(boolean benoetigt) {
 
 		logging.debug(this, productId + "-tree wird erstellt");
@@ -146,7 +136,7 @@ public class DependenciesTreeModel {
 		Collections.sort(sortedList);
 
 		String listAsString = "";
-		if (sortedList.size() > 0)
+		if (!sortedList.isEmpty())
 			listAsString += sortedList.remove(0);
 
 		for (String productId : sortedList)
@@ -227,7 +217,6 @@ public class DependenciesTreeModel {
 
 				for (Map<String, String> dependenciesElement : entry.getValue()) {
 					Object sec = productMap.get(dependenciesElement.get("requiredProductId"));
-					String requirementType = (String) dependenciesElement.get("requirementType");
 
 					if (sec == null)
 						continue;

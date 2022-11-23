@@ -1,10 +1,8 @@
 package de.uib.configed.gui.productpage;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JPopupMenu;
@@ -32,8 +30,6 @@ import javax.swing.table.TableCellRenderer;
  */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
-import de.uib.configed.guidata.ListMerger;
-import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.utilities.datapanel.AbstractEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
@@ -80,7 +76,6 @@ public class PanelProductProperties extends JSplitPane
 	public PanelProductProperties(ConfigedMain mainController) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		this.mainController = mainController;
-		this.productDisplayFields = productDisplayFields;
 		init();
 
 		setDividerLocation(fwidth_lefthanded);
@@ -96,12 +91,8 @@ public class PanelProductProperties extends JSplitPane
 		depotsOfPackage = new ArrayList<String>();
 
 		TableUpdateCollection updateCollection = new TableUpdateCollection();
-		GenTableModel model = new GenTableModel(
-				null,
-				mainController.globalProductsTableProvider,
-				-1,
-				(TableModelListener) paneProducts,
-				updateCollection);
+		GenTableModel model = new GenTableModel(null, mainController.globalProductsTableProvider, -1,
+				(TableModelListener) paneProducts, updateCollection);
 
 		final Vector<String> columnNames = model.getColumnNames();
 
@@ -172,8 +163,7 @@ public class PanelProductProperties extends JSplitPane
 						selectedOpsiPackage = null;
 						depotsOfPackage.clear();
 					} else {
-						String productEdited = ""
-								+ theTable.getValueAt(row, columnNames.indexOf("productId"));
+						String productEdited = "" + theTable.getValueAt(row, columnNames.indexOf("productId"));
 
 						String depotId = ""
 						// + theTable.getValueAt(row, columnNames.indexOf("depotId"))
@@ -209,12 +199,10 @@ public class PanelProductProperties extends JSplitPane
 
 							depotsOfPackageAsRetrieved = mainController.getPersistenceController()
 									.getProduct2VersionInfo2Depots()
-									.get(theTable.getValueAt(row, columnNames.indexOf("productId")))
-									.get(versionInfo);
+									.get(theTable.getValueAt(row, columnNames.indexOf("productId"))).get(versionInfo);
 
 							logging.info(this, "valueChanged  versionInfo (depotsOfPackageAsRetrieved == null)  "
-									+ versionInfo + " "
-									+ (depotsOfPackageAsRetrieved == null));
+									+ versionInfo + " " + (depotsOfPackageAsRetrieved == null));
 
 						} catch (Exception ex) {
 							retrieval = false;
@@ -250,8 +238,7 @@ public class PanelProductProperties extends JSplitPane
 						infoPane.clearEditing();
 						if (depotsOfPackage != null && depotsOfPackage.size() > 0) {
 
-							infoPane.setEditValues(
-									productEdited,
+							infoPane.setEditValues(productEdited,
 									"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
 									"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")),
 									depotsOfPackage.get(0));
@@ -284,7 +271,7 @@ public class PanelProductProperties extends JSplitPane
 						 * 
 						 */
 
-						panelEditProperties.setDepotListData(depotsOfPackage, depotId, productEdited);
+						panelEditProperties.setDepotListData(depotsOfPackage, productEdited);
 
 					}
 				}
@@ -322,72 +309,76 @@ public class PanelProductProperties extends JSplitPane
 			 * }
 			 */
 
-			private Map<String, Object> mergeProperties(
-					Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties,
-					java.util.List depots,
-					String productId) {
-				Map<String, Object> result = new HashMap<String, Object>();
-
-				if (depots == null || depots.size() == 0)
-					return result;
-
-				// Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties =
-				// mainController.getPersistenceController().getDepot2product2properties();
-
-				Map<String, ConfigName2ConfigValue> propertiesDepot0 = depot2product2properties.get(depots.get(0));
-
-				if (depots.size() == 1) {
-					if (propertiesDepot0 == null || propertiesDepot0.get(productId) == null) {
-						// ready
-					} else {
-						result = propertiesDepot0.get(productId);
-					}
-				} else {
-					int n = 0;
-
-					while (n < depots.size()
-							&&
-							(depot2product2properties.get(depots.get(n)) == null ||
-									depot2product2properties.get(depots.get(n)).get(productId) == null)) {
-						n++;
-					}
-
-					if (n == depots.size()) {
-						// ready
-					} else {
-						// create start mergers
-						ConfigName2ConfigValue properties = depot2product2properties.get(depots.get(n)).get(productId);
-
-						for (String key : properties.keySet()) {
-							java.util.List value = (java.util.List) properties.get(key);
-							result.put(key, new ListMerger(value));
-						}
-
-						// merge the other depots
-						for (int i = 1; i < depots.size(); i++) {
-							properties = depot2product2properties.get(depots.get(i)).get(productId);
-
-							for (String key : properties.keySet()) {
-								java.util.List value = (java.util.List) properties.get(key);
-								if (result.get(key) == null)
-								// we need a new property. it is not common
-								{
-									ListMerger merger = new ListMerger(value);
-									// logging.debug(this, " new property, merger " + merger);
-									merger.setHavingNoCommonValue();
-									result.put(key, merger);
-								} else {
-									ListMerger merger = (ListMerger) result.get(key);
-									result.put(key, merger.merge(value));
-								}
-							}
-						}
-					}
-				}
-
-				return result;
-
-			}
+			/*
+			 * private Map<String, Object> mergeProperties(
+			 * Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties,
+			 * java.util.List depots,
+			 * String productId) {
+			 * Map<String, Object> result = new HashMap<String, Object>();
+			 * 
+			 * if (depots == null || depots.size() == 0)
+			 * return result;
+			 * 
+			 * // Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties
+			 * =
+			 * // mainController.getPersistenceController().getDepot2product2properties();
+			 * 
+			 * Map<String, ConfigName2ConfigValue> propertiesDepot0 =
+			 * depot2product2properties.get(depots.get(0));
+			 * 
+			 * if (depots.size() == 1) {
+			 * if (propertiesDepot0 == null || propertiesDepot0.get(productId) == null) {
+			 * // ready
+			 * } else {
+			 * result = propertiesDepot0.get(productId);
+			 * }
+			 * } else {
+			 * int n = 0;
+			 * 
+			 * while (n < depots.size() && (depot2product2properties.get(depots.get(n)) ==
+			 * null
+			 * || depot2product2properties.get(depots.get(n)).get(productId) == null)) {
+			 * n++;
+			 * }
+			 * 
+			 * if (n == depots.size()) {
+			 * // ready
+			 * } else {
+			 * // create start mergers
+			 * ConfigName2ConfigValue properties =
+			 * depot2product2properties.get(depots.get(n)).get(productId);
+			 * 
+			 * for (String key : properties.keySet()) {
+			 * java.util.List value = (java.util.List) properties.get(key);
+			 * result.put(key, new ListMerger(value));
+			 * }
+			 * 
+			 * // merge the other depots
+			 * for (int i = 1; i < depots.size(); i++) {
+			 * properties = depot2product2properties.get(depots.get(i)).get(productId);
+			 * 
+			 * for (String key : properties.keySet()) {
+			 * java.util.List value = (java.util.List) properties.get(key);
+			 * if (result.get(key) == null)
+			 * // we need a new property. it is not common
+			 * {
+			 * ListMerger merger = new ListMerger(value);
+			 * // logging.debug(this, " new property, merger " + merger);
+			 * merger.setHavingNoCommonValue();
+			 * result.put(key, merger);
+			 * } else {
+			 * ListMerger merger = (ListMerger) result.get(key);
+			 * result.put(key, merger.merge(value));
+			 * }
+			 * }
+			 * }
+			 * }
+			 * }
+			 * 
+			 * return result;
+			 * 
+			 * }
+			 */
 
 		};
 
@@ -411,7 +402,7 @@ public class PanelProductProperties extends JSplitPane
 		// propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false,
 		// true, true, EditMapPanelX.PropertyHandlerType.REMOVE_CLIENT_SPECIFIC_VALUE );
 		logging.info(this, " created properties Panel, is  EditMapPanelX instance No. "
-				+ ((EditMapPanelX) propertiesPanel).objectCounter);
+				+ EditMapPanelX.objectCounter);
 		((EditMapPanelX) propertiesPanel)
 				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName().toString()));
 		propertiesPanel.registerDataChangedObserver(mainController.getGeneralDataChangedKeeper());

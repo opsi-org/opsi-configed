@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -1173,7 +1174,7 @@ public class ProductgroupPanel extends JPanel
 
 		logging.info(this, "handleCollectiveAction on " + comboAggregatedEditing.getSelectedItem());
 
-		ArrayList<String> saveSelectedProducts = associate.getSelectedProducts();
+		List<String> saveSelectedProducts = associate.getSelectedProducts();
 
 		logging.info(this, "handleCollectiveAction, selected products " + associate.getSelectedRowsInModelTerms());
 		logging.info(this, "handleCollectiveAction, selected products " + associate.getSelectedProducts());

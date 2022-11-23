@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
@@ -38,6 +39,7 @@ import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
@@ -72,6 +74,7 @@ import de.uib.configed.guidata.ColoredTableCellRenderer;
 import de.uib.configed.guidata.ColoredTableCellRendererByIndex;
 import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
+import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.ActionProgress;
 import de.uib.opsidatamodel.productstate.ActionResult;
@@ -151,8 +154,6 @@ public class PanelProductSettings extends JSplitPane
 
 	TableCellRenderer propertiesTableCellRenderer;
 
-	private boolean packageGroupsVisible = false;
-
 	protected LinkedHashMap<String, Boolean> productDisplayFields;
 
 	protected java.util.List<? extends RowSorter.SortKey> currentSortKeys;
@@ -170,8 +171,7 @@ public class PanelProductSettings extends JSplitPane
 	protected ConfigedMain mainController;
 
 	public PanelProductSettings(String title, ConfigedMain mainController,
-			LinkedHashMap<String, Boolean> productDisplayFields,
-			boolean packageGroupsVisible) {
+			LinkedHashMap<String, Boolean> productDisplayFields) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		this.title = title;
 		this.mainController = mainController;
@@ -183,11 +183,6 @@ public class PanelProductSettings extends JSplitPane
 
 	}
 
-	public PanelProductSettings(String title, ConfigedMain mainController,
-			LinkedHashMap<String, Boolean> productDisplayFields) {
-		this(title, mainController, productDisplayFields, false);
-	}
-
 	protected void initTopPane() {
 		topPane = new JPanel();
 		topPane.setVisible(true);
@@ -196,7 +191,7 @@ public class PanelProductSettings extends JSplitPane
 	protected void init() {
 		tableProducts = new JTable() {
 			public void setValueAt(Object value, int row, int column) {
-				ArrayList<String> saveSelectedProducts = getSelectedProducts();
+				List<String> saveSelectedProducts = getSelectedProducts();
 				// only in case of setting ActionRequest needed, since we there call
 				// fireTableDataChanged
 				super.setValueAt(value, row, column);
@@ -215,7 +210,7 @@ public class PanelProductSettings extends JSplitPane
 
 		paneProducts.getViewport().add(tableProducts);
 		paneProducts.setPreferredSize(new Dimension(fwidth_lefthanded, fheight + 40));
-		paneProducts.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		tableProducts.setBackground(Globals.backgroundWhite);
 		tableProducts.setShowHorizontalLines(true);
@@ -280,6 +275,7 @@ public class PanelProductSettings extends JSplitPane
 		// productTableCellRenderer = new ProductTableCellRendererDefault();
 
 		productNameTableCellRenderer = new StandardTableCellRenderer("") {
+			@Override
 			public Component getTableCellRendererComponent(
 					JTable table,
 					Object value, // value to display
@@ -289,7 +285,9 @@ public class PanelProductSettings extends JSplitPane
 					int column) {
 				Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-				if ((c == null) || !(c instanceof JComponent))
+				// Will be done if c==null is true since instanceof
+				// returns false if null
+				if (!(c instanceof JComponent))
 					return c;
 
 				JComponent jc = (JComponent) c;
@@ -341,6 +339,7 @@ public class PanelProductSettings extends JSplitPane
 			// overwrite the renderer in order to get the behaviour:
 			// - if the cell value is not empty or null, display the installing gif
 			// - write the cell value text as tooltip
+			@Override
 			public Component getTableCellRendererComponent(
 					JTable table,
 					Object value, // value to display
@@ -445,8 +444,8 @@ public class PanelProductSettings extends JSplitPane
 					int column) {
 				Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-				if (value != null
-						&& value instanceof String) {
+				// Safe since instanceof returns false if null
+				if (value instanceof String) {
 					String val = (String) value;
 					if (val.equals(""))
 						return c;
@@ -490,6 +489,7 @@ public class PanelProductSettings extends JSplitPane
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_installationInfo))
 
 		{
+			@Override
 			public Component getTableCellRendererComponent(
 					JTable table,
 					Object value, // value to display
@@ -499,8 +499,8 @@ public class PanelProductSettings extends JSplitPane
 					int column) {
 				Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-				if (value != null
-						&& value instanceof String) {
+				// Safe sind instanceof returns false if null
+				if (value instanceof String) {
 					String val = (String) value;
 					if (val.startsWith(
 							ActionResult.getLabel2DisplayLabel().get(ActionResult.getLabel(ActionResult.FAILED))))
@@ -555,9 +555,9 @@ public class PanelProductSettings extends JSplitPane
 		// false, false);
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, true, false);
 		logging.info(this, " created properties Panel, is  EditMapPanelX instance No. "
-				+ ((EditMapPanelX) propertiesPanel).objectCounter);
+				+ EditMapPanelX.objectCounter);
 		((EditMapPanelX) propertiesPanel)
-				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName().toString()));
+				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
 		propertiesPanel.registerDataChangedObserver(mainController.getGeneralDataChangedKeeper());
 		propertiesPanel.setActor(new AbstractEditMapPanel.Actor() {
 			@Override
@@ -599,8 +599,8 @@ public class PanelProductSettings extends JSplitPane
 
 	public void initAllProperties() {
 		propertiesPanel.init();
-		infoPane.setInfo("");
-		infoPane.setAdvice("");
+		infoPane.setProductInfo("");
+		infoPane.setProductAdvice("");
 	}
 
 	protected void producePopupMenu(final Map<String, Boolean> checkColumns) {
@@ -628,7 +628,7 @@ public class PanelProductSettings extends JSplitPane
 		itemOnDemand.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mainController.fireOpsiclientdEventOnSelectedClients(
-						mainController.getPersistenceController().OPSI_CLIENTD_EVENT_on_demand);
+						PersistenceController.OPSI_CLIENTD_EVENT_on_demand);
 			}
 		});
 		popup.add(itemOnDemand);
@@ -701,7 +701,6 @@ public class PanelProductSettings extends JSplitPane
 			public void actionPerformed(ActionEvent e) {
 				logging.info(this, "------------- create report");
 				HashMap<String, String> metaData = new HashMap<String, String>();
-				String disp_clients = "\n";
 
 				// TODO: getFilter
 				// display, if filter is active,
@@ -772,7 +771,7 @@ public class PanelProductSettings extends JSplitPane
 		popup.addSeparator();
 		popup.add(sub);
 
-		Iterator iter = checkColumns.keySet().iterator();
+		Iterator<String> iter = checkColumns.keySet().iterator();
 
 		while (iter.hasNext()) {
 			final String columnName = (String) iter.next();
@@ -867,7 +866,7 @@ public class PanelProductSettings extends JSplitPane
 		mainController.requestReloadStatesAndActions();
 
 		mainController.fireOpsiclientdEventOnSelectedClients(
-				mainController.getPersistenceController().OPSI_CLIENTD_EVENT_on_demand);
+				PersistenceController.OPSI_CLIENTD_EVENT_on_demand);
 
 	}
 
@@ -912,7 +911,7 @@ public class PanelProductSettings extends JSplitPane
 	public void setSelection(Set<String> selectedIDs) {
 		clearSelection();
 		if (selectedIDs != null) {
-			if (selectedIDs.size() == 0 && tableProducts.getRowCount() > 0) {
+			if (selectedIDs.isEmpty() && tableProducts.getRowCount() > 0) {
 				tableProducts.addRowSelectionInterval(0, 0);
 				// show first product if no product given
 				logging.info(this, "setSelection 0");
@@ -927,7 +926,7 @@ public class PanelProductSettings extends JSplitPane
 	}
 
 	public Set<String> getSelectedIDs() {
-		HashSet<String> result = new HashSet();
+		HashSet<String> result = new HashSet<>();
 
 		int[] selection = tableProducts.getSelectedRows();
 
@@ -942,7 +941,7 @@ public class PanelProductSettings extends JSplitPane
 		return tableProducts.convertRowIndexToModel(row);
 	}
 
-	public ArrayList<Integer> getSelectedRowsInModelTerms() {
+	public List<Integer> getSelectedRowsInModelTerms() {
 		int[] selection = tableProducts.getSelectedRows();
 		ArrayList<Integer> selectionInModelTerms = new ArrayList<Integer>(selection.length);
 		for (int i = 0; i < selection.length; i++) {
@@ -970,6 +969,7 @@ public class PanelProductSettings extends JSplitPane
 
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tableProducts.getModel()) {
 
+			@Override
 			protected boolean useToString(int column) {
 				try {
 					return super.useToString(column);
@@ -979,6 +979,7 @@ public class PanelProductSettings extends JSplitPane
 				}
 			}
 
+			@Override
 			public Comparator<?> getComparator(int column) {
 				try {
 					if (column == 0) {
@@ -1008,7 +1009,7 @@ public class PanelProductSettings extends JSplitPane
 		// ---
 
 		logging.debug(this, " tableProducts columns  count " + tableProducts.getColumnCount());
-		Enumeration enumer = tableProducts.getColumnModel().getColumns();
+		Enumeration<TableColumn> enumer = tableProducts.getColumnModel().getColumns();
 
 		while (enumer.hasMoreElements())
 			logging.debug(this, " tableProducts column  " + ((TableColumn) enumer.nextElement()).getHeaderValue());
@@ -1249,12 +1250,12 @@ public class PanelProductSettings extends JSplitPane
 
 	{
 		infoPane.setGrey(false);
-		infoPane.setId(productID);
-		infoPane.setName(productTitle);
-		infoPane.setInfo(productInfo);
+		infoPane.setProductId(productID);
+		infoPane.setProductName(productTitle);
+		infoPane.setProductInfo(productInfo);
 		infoPane.setProductVersion(productVersion);
 		// infoPane.setPackageVersion(productPackageversion);
-		infoPane.setAdvice(productHint);
+		infoPane.setProductAdvice(productHint);
 
 		Globals.checkCollection(this, "initEditing", "editableProductProperties ", editableProductProperties);
 		Globals.checkCollection(this, "initEditing", "productpropertyOptionsMap", productpropertyOptionsMap);
@@ -1315,12 +1316,12 @@ public class PanelProductSettings extends JSplitPane
 
 	}
 
-	public ArrayList<String> getSelectedProducts()
+	public List<String> getSelectedProducts()
 	// in model terms
 	{
-		ArrayList<Integer> selectedRows = getSelectedRowsInModelTerms();
+		List<Integer> selectedRows = getSelectedRowsInModelTerms();
 
-		ArrayList<String> selectedProducts = new ArrayList<String>();
+		List<String> selectedProducts = new ArrayList<>();
 
 		for (int row : selectedRows) {
 			selectedProducts.add((String) tableProducts.getModel().getValueAt(row, 0));
