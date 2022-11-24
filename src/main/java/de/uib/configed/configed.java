@@ -104,8 +104,8 @@ public class configed {
 					"Try to use this SSL/ TLS version. DEFAULT: Automatic selection" },
 			new String[] { "--use_tls_cipher CIPHER_RFC_NAME", "",
 					"Encoding TLS  via this algorithm. DEFAULT: Automatic selection" }, // via one of the listed
-																						// algorithms, format
-																						// [\"a\",\"b\",..]"},
+			// algorithms, format
+			// [\"a\",\"b\",..]"},
 			new String[] { "--ssh-immediate-connect [y/n]", "",
 					"Try to create a SSH connection on start. DEFAULT: " + getYNforBoolean(sshconnect_onstart) + "" },
 			new String[] { "--ssh-key SSHKEY", "",
@@ -556,6 +556,9 @@ public class configed {
 	}
 
 	protected static void processArgs(String[] args) {
+		//System.out.println(args.length);
+		/*for (int i = 0; i < args.length; i++)
+			System.out.println();*/
 		/*
 		 * System.out.println("args:");
 		 * for (int i = 0; i < args.length; i++)
@@ -585,7 +588,6 @@ public class configed {
 
 		int i = 0;
 		while (i < args.length) {
-			String arg = args[i];
 			// System.out.println("treat i, arg " + i + ", " + arg);
 
 			if (args[i].charAt(0) != '-') // no option
@@ -697,8 +699,8 @@ public class configed {
 							usage();
 							endApp(ERROR_INVALID_OPTION);
 						}
-						i = i + 1;
 					}
+					i = i + 1;
 				} else if (args[i].equals("--ssh-key")) {
 					sshkey = getArg(args, i);
 					i = i + 2;
@@ -723,8 +725,8 @@ public class configed {
 							usage();
 							endApp(ERROR_INVALID_OPTION);
 						}
-						i = i + 1;
 					}
+					i = i + 1;
 				} else if (args[i].equals("--sslversion")) {
 					PREFERRED_SSL_VERSION = getArg(args, i);
 					if (!args[i + 1].equalsIgnoreCase(STATEOFTHEART_SSL_VERSION)) {
@@ -736,19 +738,14 @@ public class configed {
 				} else if (args[i].equals("-qs") || args[i].equals("--querysavedsearch")) {
 					optionCLIQuerySearch = true;
 					savedSearch = getArg(args, i);
-					// System.out.println("treat i, arg " + args[i]);
-					i++;
-					// System.out.println("treat i, arg " + args[i]);
-					i++;
-					// System.out.println("treat i, arg " + args[i]);
+					i = i + 2;
 
 				} else if (args[i].equals("-qg") || args[i].equals("--definegroupbysearch")) {
 					optionCLIDefineGroupBySearch = true;
 					savedSearch = getArg(args, i);
 					i++;
 					group = getArg(args, i);
-					i++;
-					i++;
+					i = i + 2;
 					// System.out.println(" savedsearch, group " + savedSearch + ", " + group);
 				} else if (args[i].equals("--initUserRoles")) {
 					optionCLIuserConfigProducing = true;
@@ -893,13 +890,12 @@ public class configed {
 					useHalt = true;
 					i = i + 1;
 				} else {
-					System.out.println("an option is not valid: " + arg);
+					System.out.println("an option is not valid: " + args[i]);
 					usage();
 					endApp(ERROR_INVALID_OPTION);
 				}
 			}
 		}
-
 		logging.writeToConsole("configed: args recognized");
 
 		// System.exit(0);
@@ -1248,7 +1244,6 @@ public class configed {
 		de.uib.utilities.Globals.iconresourcename = Globals.iconresourcename;
 
 		// logging.init(); too early, variables not set
-
 		processArgs(args);
 
 		logging.setLogfileMarker(host);
