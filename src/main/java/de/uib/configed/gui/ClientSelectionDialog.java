@@ -105,10 +105,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	private JTableSelectionPanel selectionPanel;
 	private SavedSearchesDialog savedSearchesDialog;
 
-	// The font colors of the logical (AND,OR,NOT) buttons
-	private final Color selectedColor = Color.red;
-	private final Color deselectedColor = Color.gray;
-
 	private final boolean withMySQL;
 
 	private ConfigedMain main;
@@ -119,18 +115,14 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				configed.getResourceValue("ClientSelectionDialog.title")/* "Select clients" */ + " (" + Globals.APPNAME
 						+ ")",
 				false,
-				new String[] {
-						configed.getResourceValue("ClientSelectionDialog.buttonSet"),
+				new String[] { configed.getResourceValue("ClientSelectionDialog.buttonSet"),
 						configed.getResourceValue("ClientSelectionDialog.buttonReset"),
-						configed.getResourceValue("ClientSelectionDialog.buttonClose")
-				},
+						configed.getResourceValue("ClientSelectionDialog.buttonClose") },
 				750, 620);
 
 		PersistenceController controller = PersistenceControllerFactory.getPersistenceController();
-		this.withMySQL = controller.isWithMySQL()
-				&& controller.getGlobalBooleanConfigValue(
-						PersistenceController.KEY_SEARCH_BY_SQL,
-						PersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
+		this.withMySQL = controller.isWithMySQL() && controller.getGlobalBooleanConfigValue(
+				PersistenceController.KEY_SEARCH_BY_SQL, PersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 
 		logging.info(this, "use mysql " + withMySQL);
 
@@ -217,14 +209,14 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			// {
 			main.setVisualViewIndex(ConfigedMain.viewClients); // because of potential memory problems we switch to
 																// client view
-			// }
-			// }
-			// );
-			// }
-			// catch(InterruptedException iex)
-			// {
-			// logging.info(this. "setvisualindex " +iex);
-			// }
+																// }
+																// }
+																// );
+																// }
+																// catch(InterruptedException iex)
+																// {
+																// logging.info(this. "setvisualindex " +iex);
+																// }
 
 			if (manager != null)
 				clients = manager.selectClients();
@@ -270,8 +262,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		// loadSearchBox.setFont(Globals.defaultFont);
 
 		buttonReload = new IconAsButton(configed.getResourceValue("ClientSelectionDialog.buttonReload"),
-				"images/reload16.png",
-				"images/reload16_over.png", "images/reload16.png", "images/reload16_disabled.png");
+				"images/reload16.png", "images/reload16_over.png", "images/reload16.png",
+				"images/reload16_disabled.png");
 
 		buttonReload.setBackground(de.uib.utilities.Globals.backgroundLightGrey);
 
@@ -297,8 +289,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		});
 
 		buttonRestart = new IconAsButton(configed.getResourceValue("ClientSelectionDialog.buttonRestart"),
-				"images/reload16_red.png",
-				"images/reload16_over.png", "images/reload16.png", "images/reload16_disabled.png");
+				"images/reload16_red.png", "images/reload16_over.png", "images/reload16.png",
+				"images/reload16_disabled.png");
 
 		buttonRestart.setBackground(de.uib.utilities.Globals.backgroundLightGrey);
 
@@ -388,15 +380,10 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		hGroupElements = layout.createParallelGroup();
 		hGroupOperations = layout.createParallelGroup();
 		hGroupData = layout.createParallelGroup();
-		hMainGroup.addGroup(layout.createSequentialGroup()
-				.addGroup(hGroupParenthesisOpen).addGap(3)
-				.addGroup(hGroupNegate).addGap(5)
-				.addGroup(hGroupElements).addGap(5)
-				.addGroup(hGroupOperations).addGap(5)
-				.addGroup(hGroupData).addGap(3)
-				.addGroup(hGroupParenthesisClose).addGap(5)
-				.addGroup(hGroupConnections).addGap(5)
-				.addGroup(hGroupRemoveBtn));
+		hMainGroup.addGroup(layout.createSequentialGroup().addGroup(hGroupParenthesisOpen).addGap(3)
+				.addGroup(hGroupNegate).addGap(5).addGroup(hGroupElements).addGap(5).addGroup(hGroupOperations)
+				.addGap(5).addGroup(hGroupData).addGap(3).addGroup(hGroupParenthesisClose).addGap(5)
+				.addGroup(hGroupConnections).addGap(5).addGroup(hGroupRemoveBtn));
 		layout.setHorizontalGroup(hMainGroup);
 
 		// columns headline
@@ -800,40 +787,40 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		String text = null;
 		SelectData.DataType type = operation.getDataType();
 		switch (type) {
-			case DoubleType:
-			case TextType:
-				text = ((TextInputField) (group.dataComponent)).getText();
-				if (text.isEmpty())
-					return null;
-				data = text;
-				break;
-			case DateType:
-				text = ((TextInputField) (group.dataComponent)).getText();
-				if (text.isEmpty())
-					return null;
-				data = text;
-				break;
-			case IntegerType:
-				Integer value = (Integer) ((JSpinner) group.dataComponent).getValue();
-				if (value == 0)
-					return null;
-				data = value;
-				break;
-			case BigIntegerType:
-				Long value2 = (Long) ((SpinnerWithExt) group.dataComponent).getValue();
-				if (value2 == 0)
-					return null;
-				data = value2;
-				break;
-			case EnumType:
-				// String textEnum = ((JComboBox)
-				// group.dataComponent).getSelectedItem().toString();
-				String textEnum = ((TextInputField) group.dataComponent).getText();
-				if (textEnum.isEmpty())
-					return null;
-				data = textEnum;
-				break;
-			case NoneType:
+		case DoubleType:
+		case TextType:
+			text = ((TextInputField) (group.dataComponent)).getText();
+			if (text.isEmpty())
+				return null;
+			data = text;
+			break;
+		case DateType:
+			text = ((TextInputField) (group.dataComponent)).getText();
+			if (text.isEmpty())
+				return null;
+			data = text;
+			break;
+		case IntegerType:
+			Integer value = (Integer) ((JSpinner) group.dataComponent).getValue();
+			if (value == 0)
+				return null;
+			data = value;
+			break;
+		case BigIntegerType:
+			Long value2 = (Long) ((SpinnerWithExt) group.dataComponent).getValue();
+			if (value2 == 0)
+				return null;
+			data = value2;
+			break;
+		case EnumType:
+			// String textEnum = ((JComboBox)
+			// group.dataComponent).getSelectedItem().toString();
+			String textEnum = ((TextInputField) group.dataComponent).getText();
+			if (textEnum.isEmpty())
+				return null;
+			data = textEnum;
+			break;
+		case NoneType:
 		}
 
 		operation.setSelectData(new SelectData(data, type));
@@ -954,86 +941,79 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		if (operationIndex == -1)
 			return;
 		switch (sourceGroup.element.supportedOperations().get(operationIndex).getDataType()) {
-			case TextType:
-				TextInputField fieldText = new TextInputField("",
-						sourceGroup.element.getEnumData());
-				fieldText.setEditable(true);
-				fieldText.setSize(new Dimension(Globals.buttonWidth, Globals.lineHeight));
-				fieldText.setToolTipText(
-						/* "Use * as wildcard" */configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-				fieldText.addValueChangeListener(
-						new de.uib.utilities.observer.swing.ValueChangeListener() {
-							protected void actOnChange() {
-								buildParentheses();
-							}
-						});
-				sourceGroup.dataComponent = fieldText;
-				break;
-			case DoubleType:
-				// JTextField fieldDouble = new JTextField();
-				TextInputField fieldDouble = new TextInputField("");
-				fieldDouble.setSize(new Dimension(Globals.buttonWidth, Globals.lineHeight));
-				fieldDouble.setToolTipText(
-						/* "Use * as wildcard" */configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-				fieldDouble.addValueChangeListener(
-						new de.uib.utilities.observer.swing.ValueChangeListener() {
-							protected void actOnChange() {
-								buildParentheses();
-							}
-						});
-				sourceGroup.dataComponent = fieldDouble;
-				break;
-			case EnumType:
-				// JComboBox box = new JComboBox( sourceGroup.element.getEnumData( operation )
-				// );
-				TextInputField box = new TextInputField("", sourceGroup.element.getEnumData());
-				box.setEditable(true);
-				box.setToolTipText(configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-				// box.setSelectedItem("");
-				box.addValueChangeListener(
-						new de.uib.utilities.observer.swing.ValueChangeListener() {
-							protected void actOnChange() {
-								buildParentheses();
-							}
-						});
-				sourceGroup.dataComponent = box;
-				break;
-			case DateType:
-				TextInputField fieldDate = new TextInputField(null);
-				fieldDate.setSize(new Dimension(Globals.buttonWidth, Globals.lineHeight));
-				fieldDate.setToolTipText("yyyy-mm-dd");
-				fieldDate.addValueChangeListener(
-						new de.uib.utilities.observer.swing.ValueChangeListener() {
-							protected void actOnChange() {
-								buildParentheses();
-							}
-						});
-				sourceGroup.dataComponent = fieldDate;
-				break;
+		case TextType:
+			TextInputField fieldText = new TextInputField("", sourceGroup.element.getEnumData());
+			fieldText.setEditable(true);
+			fieldText.setSize(new Dimension(Globals.buttonWidth, Globals.lineHeight));
+			fieldText.setToolTipText(
+					/* "Use * as wildcard" */configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
+			fieldText.addValueChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
+				protected void actOnChange() {
+					buildParentheses();
+				}
+			});
+			sourceGroup.dataComponent = fieldText;
+			break;
+		case DoubleType:
+			// JTextField fieldDouble = new JTextField();
+			TextInputField fieldDouble = new TextInputField("");
+			fieldDouble.setSize(new Dimension(Globals.buttonWidth, Globals.lineHeight));
+			fieldDouble.setToolTipText(
+					/* "Use * as wildcard" */configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
+			fieldDouble.addValueChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
+				protected void actOnChange() {
+					buildParentheses();
+				}
+			});
+			sourceGroup.dataComponent = fieldDouble;
+			break;
+		case EnumType:
+			// JComboBox box = new JComboBox( sourceGroup.element.getEnumData( operation )
+			// );
+			TextInputField box = new TextInputField("", sourceGroup.element.getEnumData());
+			box.setEditable(true);
+			box.setToolTipText(configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
+			// box.setSelectedItem("");
+			box.addValueChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
+				protected void actOnChange() {
+					buildParentheses();
+				}
+			});
+			sourceGroup.dataComponent = box;
+			break;
+		case DateType:
+			TextInputField fieldDate = new TextInputField(null);
+			fieldDate.setSize(new Dimension(Globals.buttonWidth, Globals.lineHeight));
+			fieldDate.setToolTipText("yyyy-mm-dd");
+			fieldDate.addValueChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
+				protected void actOnChange() {
+					buildParentheses();
+				}
+			});
+			sourceGroup.dataComponent = fieldDate;
+			break;
 
-			case IntegerType:
-				JSpinner spinner = new JSpinner();
-				spinner.addChangeListener(
-						new de.uib.utilities.observer.swing.ValueChangeListener() {
-							protected void actOnChange() {
-								buildParentheses();
-							}
-						});
-				sourceGroup.dataComponent = spinner;
-				break;
-			case BigIntegerType:
-				SpinnerWithExt swx = new SpinnerWithExt();
-				swx.addChangeListener(
-						new de.uib.utilities.observer.swing.ValueChangeListener() {
-							protected void actOnChange() {
-								buildParentheses();
-							}
-						});
+		case IntegerType:
+			JSpinner spinner = new JSpinner();
+			spinner.addChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
+				protected void actOnChange() {
+					buildParentheses();
+				}
+			});
+			sourceGroup.dataComponent = spinner;
+			break;
+		case BigIntegerType:
+			SpinnerWithExt swx = new SpinnerWithExt();
+			swx.addChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
+				protected void actOnChange() {
+					buildParentheses();
+				}
+			});
 
-				sourceGroup.dataComponent = swx;
-				break;
-			case NoneType:
-				return;
+			sourceGroup.dataComponent = swx;
+			break;
+		case NoneType:
+			return;
 		}
 		sourceGroup.dataComponent.setMaximumSize(new Dimension(sourceGroup.dataComponent.getMaximumSize().width,
 				sourceGroup.dataComponent.getMinimumSize().height));
@@ -1072,27 +1052,27 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 			if (!childList.isEmpty()) {
 				switch (complex.type) {
-					case SoftwareGroup:
-						manager.addGroupOperation("Software", groupStatus, childList);
-						break;
+				case SoftwareGroup:
+					manager.addGroupOperation("Software", groupStatus, childList);
+					break;
 
-					case PropertiesGroup:
-						manager.addGroupOperation("Properties", groupStatus, childList);
-						break;
+				case PropertiesGroup:
+					manager.addGroupOperation("Properties", groupStatus, childList);
+					break;
 
-					case SoftwareWithPropertiesGroup:
-						manager.addGroupOperation("SoftwareWithProperties", groupStatus, childList);
-						break;
+				case SoftwareWithPropertiesGroup:
+					manager.addGroupOperation("SoftwareWithProperties", groupStatus, childList);
+					break;
 
-					case SwAuditGroup:
-						manager.addGroupOperation("SwAudit", groupStatus, childList);
-						break;
-					case HardwareGroup:
-						manager.addGroupOperation("Hardware", groupStatus, childList);
-						break;
-					case HostGroup:
-						manager.addGroupOperation("Host", groupStatus, childList);
-						break;
+				case SwAuditGroup:
+					manager.addGroupOperation("SwAudit", groupStatus, childList);
+					break;
+				case HardwareGroup:
+					manager.addGroupOperation("Hardware", groupStatus, childList);
+					break;
+				case HostGroup:
+					manager.addGroupOperation("Host", groupStatus, childList);
+					break;
 				}
 			}
 
@@ -1231,19 +1211,19 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	private void setConnectionTypes(AndOrSelectButtonByIcon andOr, IconAsButton not,
 			SelectionManager.ConnectionStatus status) {
 		switch (status) {
-			case And:
-				andOr.selectAnd();
-				break;
-			case Or:
-				andOr.selectOr();
-				break;
-			case AndNot:
-				andOr.selectAnd();
-				not.setActivated(true);
-				break;
-			case OrNot:
-				andOr.selectOr();
-				not.setActivated(true);
+		case And:
+			andOr.selectAnd();
+			break;
+		case Or:
+			andOr.selectOr();
+			break;
+		case AndNot:
+			andOr.selectAnd();
+			not.setActivated(true);
+			break;
+		case OrNot:
+			andOr.selectOr();
+			not.setActivated(true);
 		}
 	}
 
@@ -1436,12 +1416,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			box = new JComboBox(new String[] { "", "k", "M", "G", "T" });
 			box.setMinimumSize(new Dimension(50, 0));
 			GroupLayout layout = new GroupLayout(this);
-			layout.setVerticalGroup(layout.createParallelGroup()
-					.addComponent(spinner)
-					.addComponent(box));
-			layout.setHorizontalGroup(layout.createSequentialGroup()
-					.addComponent(spinner)
-					.addComponent(box));
+			layout.setVerticalGroup(layout.createParallelGroup().addComponent(spinner).addComponent(box));
+			layout.setHorizontalGroup(layout.createSequentialGroup().addComponent(spinner).addComponent(box));
 			setLayout(layout);
 			add(spinner);
 			add(box);
@@ -1468,10 +1444,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		public void actionPerformed(ActionEvent e) {
 			String text = saveNameField.getText();
 			if (text.isEmpty()) {
-				JOptionPane.showMessageDialog(saveButton,
-						configed.getResourceValue("ClientSelectionDialog.emptyName"),
-						configed.getResourceValue("ClientSelectionDialog.emptyNameTitle") + " ("
-								+ Globals.APPNAME + ")",
+				JOptionPane.showMessageDialog(saveButton, configed.getResourceValue("ClientSelectionDialog.emptyName"),
+						configed.getResourceValue("ClientSelectionDialog.emptyNameTitle") + " (" + Globals.APPNAME
+								+ ")",
 						JOptionPane.OK_OPTION);
 
 				toFront();
@@ -1480,10 +1455,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			}
 			// else if (!text.matches("[\\w_-]*"))
 			else if (!text.matches("[\\p{javaLowerCase}\\d_-]*")) {
-				JOptionPane.showMessageDialog(saveButton,
-						"wrong name", // configed.getResourceValue("ClientSelectionDialog.emptyName"),
+				JOptionPane.showMessageDialog(saveButton, "wrong name", // configed.getResourceValue("ClientSelectionDialog.emptyName"),
 						"error", // configed.getResourceValue("ClientSelectionDialog.emptyNameTitle") + " (" +
-									// Globals.APPNAME +")",
+						// Globals.APPNAME +")",
 						JOptionPane.OK_OPTION);
 
 				toFront();
