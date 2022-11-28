@@ -14,17 +14,25 @@
 package de.uib.configed.gui.productpage;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.HyperlinkEvent;
 
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 import org.jdesktop.swingx.JXPanel;
 
 import de.uib.configed.ConfigedMain;
@@ -62,7 +70,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 	private javax.swing.JScrollPane jScrollPaneProductAdvice;
 	private javax.swing.JScrollPane jScrollPaneProductInfo;
 	protected javax.swing.JTextArea jTextAreaProductAdvice;
-	protected javax.swing.JTextArea jTextAreaProductInfo;
+	protected JTextPane jTextAreaProductInfo;
 
 	protected String productName = "";
 	private Map<String, Boolean> specificPropertiesExisting;
@@ -91,7 +99,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		// jLabelPackageVersion = new javax.swing.JLabel();
 		jLabelProductDescription = new javax.swing.JLabel();
 		jScrollPaneProductInfo = new javax.swing.JScrollPane();
-		jTextAreaProductInfo = new javax.swing.JTextArea();
+		jTextAreaProductInfo = new javax.swing.JTextPane();
 		jLabelProductAdvice = new javax.swing.JLabel();
 		jScrollPaneProductAdvice = new javax.swing.JScrollPane();
 		jTextAreaProductAdvice = new javax.swing.JTextArea();
@@ -133,12 +141,67 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		jLabelProductDescription.setPreferredSize(new Dimension(Globals.prefHSize, Globals.lineHeight));
 		jLabelProductDescription.setText(configed.getResourceValue("ProductInfoPane.jLabelProductDescription"));
 
-		jTextAreaProductInfo.setColumns(20);
-		jTextAreaProductInfo.setRows(5);
+		//jTextAreaProductInfo.setColumns(20);
+		//jTextAreaProductInfo.setRows(5);
 
 		jTextAreaProductInfo.setEditable(false);
-		jTextAreaProductInfo.setWrapStyleWord(true);
-		jTextAreaProductInfo.setLineWrap(true);
+		jTextAreaProductInfo.setContentType("text/html");
+		jTextAreaProductInfo.addHyperlinkListener(e -> {
+			if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
+				Desktop desktop = Desktop.getDesktop();
+
+				// This will now try to open the standard browser with link;
+				// if not possible, try to open firefox with the link
+				// And if even that is not possible, show Message Dialog with link
+				if (desktop.isSupported(Desktop.Action.BROWSE)) {
+					try {
+						desktop.browse(e.getURL().toURI());
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				} else {
+					try {
+						Process process = new ProcessBuilder("firefox", e.getURL().toString()).start();
+
+						int exitVal = process.waitFor();
+						if (exitVal != 0) {
+							JTextPane pa = new JTextPane();
+							pa.setEditable(false);
+							pa.setText("Browser zum öffnen von \n" + e.getURL().toString()
+									+ "\nkann nicht gefunden werden. Bitte manuell durchführen");
+							JOptionPane.showMessageDialog(this, pa);
+						}
+					} catch (IOException ioe) {
+						JTextPane pa = new JTextPane();
+						pa.setEditable(false);
+						pa.setText("Browser zum öffnen von \n" + e.getURL().toString()
+								+ "\nkann nicht gefunden werden. Bitte manuell durchführen");
+						JOptionPane.showMessageDialog(this, pa);
+
+					} catch (InterruptedException ie) {
+						Thread.currentThread().interrupt();
+					}
+				}
+			}
+
+		});
+
+		//jTextAreaProductInfo.setWrapStyleWord(true);
+		//jTextAreaProductInfo.setLineWrap(true);
+		Parser parser = Parser.builder().build();
+		Node document = parser.parse(
+				"Das hier ist ein Abschnitt über Farben. Im folgenden Abschnitt möchten wir einige Beispiele für "
+						+ " Farben geben und anschließend noch weitere Ressourcen für weiterreichende Informationen geben.\n## Farben\n * Rot\n"
+						+ "* Grün\n" + "* Gelb\n"
+						+ "\nFür mehr Farben besuchen Sie doch unsere [Website](https://www.uib.de)");
+		HtmlRenderer renderer = HtmlRenderer.builder().build();
+		String html = renderer.render(document);
+
+		html = html.replace("<p>", "");
+		html = html.replace("</p>", "");
+
+		jTextAreaProductInfo.setText(html);
+
 		jTextAreaProductInfo.setFont(Globals.defaultFont);
 		jTextAreaProductInfo.setBackground(Globals.backgroundLightGrey);
 
@@ -332,7 +395,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 	}
 
 	public void setProductInfo(String s) {
-		jTextAreaProductInfo.setText(s);
+		//jTextAreaProductInfo.setText(s);
 		jTextAreaProductInfo.setCaretPosition(0);
 	}
 

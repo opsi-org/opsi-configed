@@ -50,14 +50,8 @@ public class AuditSoftwareXLicencePool extends Relation {
 		INTERFACED_ATTRIBUTES.add(SwID);
 	}
 
-	public final static String[] SERVICE_ATTRIBUTES = new String[] {
-			LicencepoolEntry.idSERVICEKEY,
-			SWAuditEntry.NAME,
-			SWAuditEntry.VERSION,
-			SWAuditEntry.SUBVERSION,
-			SWAuditEntry.LANGUAGE,
-			SWAuditEntry.ARCHITECTURE
-	};
+	public final static String[] SERVICE_ATTRIBUTES = new String[] { LicencepoolEntry.idSERVICEKEY, SWAuditEntry.NAME,
+			SWAuditEntry.VERSION, SWAuditEntry.SUBVERSION, SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE };
 
 	public AuditSoftwareXLicencePool(ArrayList<String> allRegisteredSoftware) {
 		super(ATTRIBUTES);
@@ -126,13 +120,12 @@ public class AuditSoftwareXLicencePool extends Relation {
 	 */
 
 	private String produceSWident(Map<String, Object> m) {
-		return de.uib.utilities.Globals.pseudokey(new String[] {
-				de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.NAME)),
-				de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.VERSION)),
-				de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.SUBVERSION)),
-				de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.LANGUAGE)),
-				de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.ARCHITECTURE))
-		});
+		return de.uib.utilities.Globals
+				.pseudokey(new String[] { de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.NAME)),
+						de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.VERSION)),
+						de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.SUBVERSION)),
+						de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.LANGUAGE)),
+						de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.ARCHITECTURE)) });
 	}
 
 	public static Map<String, String> produceMapFromSWident(String ident) {
@@ -166,8 +159,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 		 * logging.info(this, "integrateRaw " + m);
 		 */
 
-		rowmap.put(
-				LicencepoolEntry.idSERVICEKEY,
+		rowmap.put(LicencepoolEntry.idSERVICEKEY,
 				de.uib.utilities.Globals.getStringValue(m.get(LicencepoolEntry.idSERVICEKEY)));
 		add(rowmap);
 
