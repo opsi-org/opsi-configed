@@ -1,7 +1,6 @@
 image: docker.uib.gmbh/opsi/dev/pybuilder:uib-python-default
 
 
-
 stages:
   - set_variables
   - build_and_analyze
