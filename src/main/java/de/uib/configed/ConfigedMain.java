@@ -28,7 +28,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -47,7 +46,6 @@ import java.util.TreeSet;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JApplet;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -434,8 +432,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static String SSHKEY = null;
 	public static String SSHKEYPASS = null;
 
-	private JApplet appletHost = null;
-
 	public enum EditingTarget {
 		CLIENTS, DEPOTS, SERVER
 	}
@@ -444,8 +440,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// protected EditingTarget target = EditingTarget.CLIENTS;
 	public static EditingTarget editingTarget = EditingTarget.CLIENTS;
 
-	public ConfigedMain(JApplet appletHost, String host, String user, String password) {
-		this.appletHost = appletHost;
+	public ConfigedMain(String host, String user, String password) {
 		if (HOST == null) {
 			HOST = host;
 		}
@@ -996,31 +991,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		mainFrame.enableAfterLoading();
 
 		persist.showLicInfoWarnings();
-	}
-
-	public void showExternalDocument(String urlS) {
-		try {
-			URL url = new URL(urlS);
-			if (configed.isApplet) {
-				appletHost.getAppletContext().showDocument(url, "_blank");
-			}
-			// else {
-			// Runtime rt = Runtime.getRuntime();
-			// String osName = System.getProperty("os.name");
-			// if (osName.toLowerCase().startsWith("win")) {
-			// String title = "";
-			// Process proc = rt.exec("cmd.exe /c start \"" + title + "\" \"" +
-			// urlS.replace("\\", "\\\\") + "\"");
-			// } else
-			// //Linux, we assume that there is a firefox and it will handle the url
-			// {
-			// String[] cmdarray = new String[] { "firefox", urlS };
-			// Process proc = rt.exec(cmdarray);
-			// }
-			// }
-		} catch (Exception ex) {
-			logging.error("showExternalDocument error " + ex, ex);
-		}
 	}
 
 	public void setGroupLoading(boolean b) {
@@ -1753,19 +1723,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		selectionPanel.initSortKeys();
 
-		mainFrame = new MainFrame(appletHost, this, selectionPanel, depotsList, treeClients, multiDepot);
+		mainFrame = new MainFrame(this, selectionPanel, depotsList, treeClients, multiDepot);
 
 		// for passing it to message frames everywhere
 		Globals.mainFrame = mainFrame;
 
 		// setting the similar global values as well
-		if (configed.isApplet) {
-			Globals.container1 = appletHost.getContentPane();
-			Globals.mainContainer = appletHost;
-		} else {
-			Globals.container1 = mainFrame;
-			Globals.mainContainer = mainFrame;
-		}
+
+		Globals.container1 = mainFrame;
+		Globals.mainContainer = mainFrame;
 
 		/*
 		 * Map<String, Boolean> itemsToDisable = new HashMap<String, Boolean>();
@@ -1907,9 +1873,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		licencesFrame = new TabbedFrame(mainFrame, (TabController) this);
 
 		Globals.frame1 = licencesFrame;
-		if (!configed.isApplet) {
-			Globals.container1 = licencesFrame.getContentPane();
-		}
+		Globals.container1 = licencesFrame.getContentPane();
+
 		/*
 		 * is set beforehand:
 		 * else
@@ -6826,13 +6791,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		dialogRemoteControl.resetValue();
 
-		if (!configed.isApplet) {
-			dialogRemoteControl.setLocation((int) mainFrame.getX() + 40, (int) mainFrame.getY() + 40);
-			dialogRemoteControl.setSize(MainFrame.fwidth, mainFrame.getHeight() / 2);
-		} else {
-			dialogRemoteControl.setLocation((int) mainFrame.baseContainer.getX() + 40, (int) mainFrame.getY() + 40);
-			dialogRemoteControl.setSize(MainFrame.fwidth, mainFrame.baseContainer.getHeight() / 2);
-		}
+		dialogRemoteControl.setLocation((int) mainFrame.getX() + 40, (int) mainFrame.getY() + 40);
+		dialogRemoteControl.setSize(MainFrame.fwidth, mainFrame.getHeight() / 2);
 
 		dialogRemoteControl.setVisible(true);
 		dialogRemoteControl.setDividerLocation(0.8);
@@ -7069,10 +7029,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			clientSelectionDialog = new ClientSelectionDialog(this, selectionPanel, savedSearchesDialog);
 		}
 
-		if (configed.isApplet) {
-			clientSelectionDialog.setVisible(true);
-			clientSelectionDialog.setVisible(false);
-		}
 		// GroupsManager.getInstance(this).setVisible(true);
 		clientSelectionDialog.centerOn(Globals.mainContainer);
 		clientSelectionDialog.setVisible(true);
@@ -7427,8 +7383,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		if (mainFrame != null) {
-			if (configed.isApplet)
-				mainFrame.clear();
 
 			mainFrame.setVisible(false);
 			mainFrame.dispose();

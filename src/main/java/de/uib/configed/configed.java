@@ -19,7 +19,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.swing.JApplet;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -34,7 +33,6 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.savedstates.SavedStates;
 
 public class configed {
-	public static final boolean isApplet = false; // we dont support applet mode anywhere
 	public static boolean useHalt = false;
 
 	public static de.uib.utilities.swing.FLoadingWaiter fProgress;
@@ -163,8 +161,6 @@ public class configed {
 	public static boolean SHOW_LOCALIZATION_STRINGS = false;
 	public static boolean sslversionChecked = false; // set only once
 	protected static boolean serverCharset_equals_vm_charset = false;
-
-	private static JApplet appletHost; // is deprecated and always null
 
 	public static ConfigedMain cm;
 
@@ -364,10 +360,7 @@ public class configed {
 		de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
 
-		cm = new ConfigedMain(appletHost, paramHost, paramUser, paramPassword);
-
-		// if (appletHost != null)
-		// ((configedApplet) appletHost).setMainController(cm);
+		cm = new ConfigedMain(paramHost, paramUser, paramPassword);
 
 		SwingUtilities.invokeLater(() -> cm.init());
 
@@ -406,32 +399,6 @@ public class configed {
 		 */
 
 		try {
-			/*
-			 * 
-			 * if (appletHost != null)
-			 * {
-			 * SwingUtilities.invokeLater(
-			 * new Runnable(){
-			 * public void run(){
-			 * 
-			 * if (paramClient != null || paramClientgroup != null)
-			 * {
-			 * if (paramClientgroup != null) cm.setGroup(paramClientgroup);
-			 * if (paramClient != null)cm.setClient(paramClient);
-			 * logging.info("set client " + paramClient);
-			 * 
-			 * if (paramTab != null)
-			 * cm.setVisualViewIndex(paramTab);
-			 * 
-			 * 
-			 * }
-			 * 
-			 * }
-			 * }
-			 * );
-			 * }
-			 * else
-			 */
 
 			{
 				SwingUtilities.invokeAndWait(() -> {
@@ -458,7 +425,7 @@ public class configed {
 	}
 
 	/** construct the application */
-	public configed(JApplet appletHost, String paramLocale, String paramHost, String paramUser, String paramPassword,
+	public configed(String paramLocale, String paramHost, String paramUser, String paramPassword,
 			final String paramClient, final String paramClientgroup, final Integer paramTab, String paramLogdirectory) {
 
 		UncaughtExceptionHandler errorHandler = new UncaughtExceptionHandlerLocalized();
@@ -467,7 +434,6 @@ public class configed {
 		System.out.println("starting " + getClass().getName());
 		System.out.println("default charset is " + Charset.defaultCharset().displayName());
 		System.out.println("server charset is configured as " + serverCharset);
-		System.out.println(" applet " + appletHost);
 
 		if (serverCharset.equals(Charset.defaultCharset())) {
 			serverCharset_equals_vm_charset = true;
@@ -538,8 +504,6 @@ public class configed {
 		Messages.setLocale(paramLocale);
 		logging.info("getLocales: " + existingLocales);
 		logging.info("selected locale characteristic " + Messages.getSelectedLocale());
-
-		configed.appletHost = appletHost;
 
 		configed.paramHost = paramHost;
 		configed.paramUser = paramUser;
@@ -1346,7 +1310,6 @@ public class configed {
 
 			addMissingArgs();
 
-			PersistenceController controller = connect();
 			System.exit(0);
 		}
 
@@ -1384,7 +1347,6 @@ public class configed {
 				"\n\n" + de.uib.configed.configed.getResourceValue("configed.infoExitBecauseOfHeapOverflow"));
 		// "configed.infoExitBecauseOfHeapOverflow") );
 
-		new configed(null, // we dont construct it for an applet
-				locale, host, user, password, client, clientgroup, tab, logdirectory);
+		new configed(locale, host, user, password, client, clientgroup, tab, logdirectory);
 	}
 }

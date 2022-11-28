@@ -20,8 +20,8 @@ import de.uib.utilities.logging.logging;
  */
 
 public class Globals {
-	public static final String VERSION = "4.2.18.2";
-	public static final String VERDATE = "(2022/14/10)";
+	public static final String VERSION = "4.2.19.1";
+	public static final String VERDATE = "(2022/28/11)";
 
 	public static final String VERHASHTAG = "";
 
