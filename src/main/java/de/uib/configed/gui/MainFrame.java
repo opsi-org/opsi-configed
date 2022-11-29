@@ -139,19 +139,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	protected int dividerLocationCentralPane = 300;
 	protected int minHSizeTreePanel = 150;
 
-	public final static int fwidth = 800;
-	public final static int fheight = 600;
+	public static final int fwidth = 800;
+	public static final int fheight = 600;
 
-	final int fwidth_lefthanded = 420;
-	final int fwidth_righthanded = 200;// was fwidth - fwidth_lefthanded;
-	final int splitterLeftRight = 15;
+	private static final int fwidth_righthanded = 200;// was fwidth - fwidth_lefthanded;
 
-	final int dividerLocationClientTreeMultidepot = 200;
-	final int dividerLocationClientTreeSingledepot = 50;
-
-	final int labelproductselection_width = 200;
-	final int labelproductselection_height = 40;
-	final int line_height = 23;
+	private static final int dividerLocationClientTreeMultidepot = 200;
+	private static final int dividerLocationClientTreeSingledepot = 50;
 
 	// final int widthColumnServer = 110; //130;
 
@@ -177,7 +171,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	public static final String ITEM_DELETE_CLIENT = "remove client";
 	public static final String ITEM_FREE_LICENCES = "free licences for client";
 
-	Map<String, java.util.List<JMenuItem>> menuItemsHost;
+	private Map<String, java.util.List<JMenuItem>> menuItemsHost;
 
 	// Map<String, java.util.List<JMenuItem>> menuItemsOpsiclientdExtraEvent = new
 	// HashMap<String, java.util.List<JMenuItem>>();
@@ -218,12 +212,12 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	LinkedHashMap<String, Integer> labelledDelays;
 
-	Map<String, String> searchedTimeSpans;
-	Map<String, String> searchedTimeSpansText;
+	private Map<String, String> searchedTimeSpans;
+	private Map<String, String> searchedTimeSpansText;
 
 	// JCheckBoxMenuItem jCheckBoxMenuItem_displayClientList = new
 	// JCheckBoxMenuItem();
-	JCheckBoxMenuItem jCheckBoxMenuItem_showCreatedColumn = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem jCheckBoxMenuItem_showCreatedColumn = new JCheckBoxMenuItem();
 	JCheckBoxMenuItem jCheckBoxMenuItem_showWANactiveColumn = new JCheckBoxMenuItem();
 	JCheckBoxMenuItem jCheckBoxMenuItem_showIPAddressColumn = new JCheckBoxMenuItem();
 	JCheckBoxMenuItem jCheckBoxMenuItem_showInventoryNumberColumn = new JCheckBoxMenuItem();
@@ -458,14 +452,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JButton jButtonSaveList = new JButton();
 	JPanel jPanel_ButtonSaveList = new JPanel();
 	String[] options = new String[] { "off", "on", "setup" };
-	JComboBox jComboBoxProductValues = new JComboBox(options);
+	JComboBox<String> jComboBoxProductValues = new JComboBox<>(options);
 
 	JLabel jLabel_property = new JLabel();
 	ButtonGroup buttonGroupRequired = new ButtonGroup();
 	JRadioButton jRadioRequiredAll = new JRadioButton();
 	JRadioButton jRadioRequiredOff = new JRadioButton();
 
-	static private boolean inRefresh = false;
 	static private boolean settingSchalter = false;
 	JButton jBtnAllOff = new JButton();
 	// JButton jBtnCopyTemplate = new JButton();
@@ -478,7 +471,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JLabel jLabel_Hostinfos = new JLabel();
 	// FlowLayout flowLayout1 = new FlowLayout();
 	JLabel jLabelPath = new JLabel();
-	private boolean starting = true;
 	// JLabel jLabelDepot = new
 	// JLabel(configed.getResourceValue("MainFrame.jLabelDepot"));//"Depot(s): ");
 	JTextArea jFieldInDepot;
@@ -536,14 +528,16 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		GlassPane() {
 			super();
 			logging.debug(this, "glass pane initialized");
-			setVisible(true);
+			super.setVisible(true);
 			setOpaque(true);
 			addKeyListener(new KeyAdapter() {
+				@Override
 				public void keyTyped(KeyEvent e) {
 					logging.debug(this, "key typed on glass pane");
 				}
 			});
 			addMouseListener(new MouseAdapter() {
+				@Override
 				public void mouseClicked(MouseEvent e) {
 					logging.info(this, "mouse on glass pane");
 				}
@@ -551,6 +545,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		}
 
+		@Override
 		public void paintComponent(Graphics g) {
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) 0.5));
 
@@ -595,7 +590,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		UIManager.put("OptionPane.noButtonText", configed.getResourceValue("UIManager.noButtonText"));
 		UIManager.put("OptionPane.cancelButtonText", configed.getResourceValue("UIManager.cancelButtonText"));
 
-		FEditObject.runningInstances.addObserver((RunningInstancesObserver) this);
+		FEditObject.runningInstances.addObserver((RunningInstancesObserver<JDialog>) this);
 
 	}
 
@@ -684,6 +679,22 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		public void componentMoved(ComponentEvent e) {
 		}
 
+		public void componentResized(ComponentEvent e) {
+			logging.debug(this, "componentResized");
+
+			try {
+				repairSizes();
+			} catch (Exception ex) {
+				logging.info(this, "componentResized " + ex);
+			}
+			logging.debug(this, "componentResized ready");
+
+		}
+
+		@Override
+		public void componentShown(ComponentEvent e) {
+		}
+
 		private void moveDivider1(JSplitPane splitpane, JComponent rightpane, int min_right_width, int min_left_width,
 				int max_right_width) {
 			if (splitpane == null || rightpane == null)
@@ -704,44 +715,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				splitpane.setDividerLocation(dividerLocation + (sizeOfRightPanel - max_right_width));
 			}
 
-		}
-
-		private void moveDivider2(JSplitPane splitpane, JComponent rightpane, int min_left_width) {
-			if (splitpane == null || rightpane == null)
-				return;
-
-			int completeWidth = (int) splitpane.getSize().getWidth();
-			int sizeOfRightPanel = (int) rightpane.getSize().getWidth();
-			int preferred_right_width = (int) rightpane.getPreferredSize().getWidth();
-
-			// logging.info(this, "moveDivider2 preferred_right_width " +
-			// preferred_right_width);
-
-			int dividerabslocation = completeWidth - preferred_right_width - splitterLeftRight;
-
-			if (dividerabslocation < min_left_width)
-				dividerabslocation = min_left_width;
-
-			if (dividerabslocation > completeWidth - 20)
-				dividerabslocation = completeWidth - 20;
-
-			// result < 0 splitpane resets itself
-			splitpane.setDividerLocation(dividerabslocation);
-		}
-
-		public void componentResized(ComponentEvent e) {
-			logging.debug(this, "componentResized");
-
-			try {
-				repairSizes();
-			} catch (Exception ex) {
-				logging.info(this, "componentResized " + ex);
-			}
-			logging.debug(this, "componentResized ready");
-
-		}
-
-		public void componentShown(ComponentEvent e) {
 		}
 
 		public void repairSizes() {
@@ -809,30 +782,19 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuFile.setText(configed.getResourceValue("MainFrame.jMenuFile"));
 
 		jMenuFileExit.setText(configed.getResourceValue("MainFrame.jMenuFileExit"));
-		jMenuFileExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				exitAction();
-			}
-		});
+		jMenuFileExit.addActionListener((ActionEvent e) -> exitAction());
 
 		jMenuFileSaveConfigurations.setText(configed.getResourceValue("MainFrame.jMenuFileSaveConfigurations"));
 		jMenuFileSaveConfigurations.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-		jMenuFileSaveConfigurations.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				saveAction();
-			}
-		});
+		jMenuFileSaveConfigurations.addActionListener((ActionEvent e) -> saveAction());
 
 		jMenuFileReload.setText(configed.getResourceValue("MainFrame.jMenuFileReload"));
 		// jMenuFileReload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 
-		jMenuFileReload.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// System.out.println( " action event on jMenuFileReload ");
-				reloadAction();
-				if (iconButtonReloadLicenses.isEnabled())
-					reloadLicensesAction();
-			}
+		jMenuFileReload.addActionListener((ActionEvent e) -> {
+			reloadAction();
+			if (iconButtonReloadLicenses.isEnabled())
+				reloadLicensesAction();
 		});
 
 		jMenuFileLanguage.setText(configed.getResourceValue("MainFrame.jMenuFileChooseLanguage"));
@@ -857,18 +819,18 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			menuItem.setSelected(selectedLocale.equals(localeName));
 			jMenuFileLanguage.add(menuItem);
 			groupLanguages.add(menuItem);
-			menuItem.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					main.closeInstance(true);
-					de.uib.messages.Messages.setLocale(localeName);
-					new Thread() {
-						public void run() {
-							configed.startWithLocale();
-						}
-					}.start();
 
-					// we put it into to special thread to avoid invokeAndWait runtime error
-				}
+			menuItem.addActionListener((ActionEvent e) -> {
+				main.closeInstance(true);
+				de.uib.messages.Messages.setLocale(localeName);
+				new Thread() {
+					@Override
+					public void run() {
+						configed.startWithLocale();
+					}
+				}.start();
+
+				// we put it into to special thread to avoid invokeAndWait runtime error
 			});
 		}
 
@@ -936,40 +898,25 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jCheckBoxMenuItem_showCreatedColumn.setText(configed.getResourceValue("MainFrame.jMenuShowCreatedColumn"));
 		combinedMenuItemCreatedColumn.show(main.host_displayFields.get(HostInfo.created_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItem_showCreatedColumn.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				main.toggleColumnCreated();
-			}
-		});
+		jCheckBoxMenuItem_showCreatedColumn.addItemListener((ItemEvent e) -> main.toggleColumnCreated());
 
 		jCheckBoxMenuItem_showWANactiveColumn.setText(configed.getResourceValue("MainFrame.jMenuShowWanConfig"));
 		combinedMenuItemWANactiveColumn.show(main.host_displayFields.get(HostInfo.clientWanConfig_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItem_showWANactiveColumn.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				main.toggleColumnWANactive();
-			}
-		});
+		jCheckBoxMenuItem_showWANactiveColumn.addItemListener((ItemEvent e) -> main.toggleColumnWANactive());
 
 		jCheckBoxMenuItem_showIPAddressColumn.setText(configed.getResourceValue("MainFrame.jMenuShowIPAddressColumn"));
 		combinedMenuItemIPAddressColumn.show(main.host_displayFields.get(HostInfo.clientIpAddress_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItem_showIPAddressColumn.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				main.toggleColumnIPAddress();
-			}
-		});
+		jCheckBoxMenuItem_showIPAddressColumn.addItemListener((ItemEvent e) -> main.toggleColumnIPAddress());
 
 		jCheckBoxMenuItem_showHardwareAddressColumn
 				.setText(configed.getResourceValue("MainFrame.jMenuShowHardwareAddressColumn"));
 		combinedMenuItemHardwareAddressColumn
 				.show(main.host_displayFields.get(HostInfo.clientMacAddress_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItem_showHardwareAddressColumn.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				main.toggleColumnHardwareAddress();
-			}
-		});
+		jCheckBoxMenuItem_showHardwareAddressColumn
+				.addItemListener((ItemEvent e) -> main.toggleColumnHardwareAddress());
 
 		jCheckBoxMenuItem_showSessionInfoColumn
 				.setText(configed.getResourceValue("MainFrame.jMenuShowSessionInfoColumn"));
@@ -989,42 +936,26 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		combinedMenuItemInventoryNumberColumn
 				.show(main.host_displayFields.get(HostInfo.clientInventoryNumber_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItem_showInventoryNumberColumn.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				main.toggleColumnInventoryNumber();
-			}
-		});
+		jCheckBoxMenuItem_showInventoryNumberColumn
+				.addItemListener((ItemEvent e) -> main.toggleColumnInventoryNumber());
 
 		jCheckBoxMenuItem_showUefiBoot.setText(configed.getResourceValue("MainFrame.jMenuShowUefiBoot"));
 		combinedMenuItemUefiBootColumn.show(main.host_displayFields.get(HostInfo.clientUefiBoot_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItem_showUefiBoot.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				main.toggleColumnUEFIactive();
-				// popupShowUefiBoot.setState(main.host_displayFields.get(
-				// HostInfo.clientUefiBoot_DISPLAY_FIELD_LABEL ));
-			}
-		});
+		jCheckBoxMenuItem_showUefiBoot.addItemListener((ItemEvent e) -> main.toggleColumnUEFIactive());
 
 		jCheckBoxMenuItem_showInstallByShutdown
 				.setText(configed.getResourceValue("MainFrame.jMenuShowInstallByShutdown"));
 		combinedMenuItemUefiBootColumn
 				.show(main.host_displayFields.get(HostInfo.clientInstallByShutdown_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItem_showInstallByShutdown.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				main.toggleColumnInstallByShutdownActive();
-			}
-		});
+		jCheckBoxMenuItem_showInstallByShutdown
+				.addItemListener((ItemEvent e) -> main.toggleColumnInstallByShutdownActive());
 
 		jCheckBoxMenuItem_showDepotColumn.setText(configed.getResourceValue("MainFrame.jMenuShowDepotOfClient"));
 		combinedMenuItemDepotColumn.show(main.host_displayFields.get(HostInfo.depotOfClient_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItem_showDepotColumn.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				main.toggleColumnDepot();
-			}
-		});
+		jCheckBoxMenuItem_showDepotColumn.addItemListener((ItemEvent e) -> main.toggleColumnDepot());
 
 		/*
 		 * jCheckBoxMenuItem_displayClientList.setText(configed.getResourceValue(
@@ -1045,55 +976,31 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jMenuChangeDepot.setText(configed.getResourceValue("MainFrame.jMenuChangeDepot"));
 
-		jMenuChangeDepot.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				changeDepotAction();
-			}
-		});
+		jMenuChangeDepot.addActionListener((ActionEvent e) -> changeDepotAction());
 
 		jMenuChangeClientID.setText(configed.getResourceValue("MainFrame.jMenuChangeClientID"));
 
-		jMenuChangeClientID.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				changeClientIDAction();
-			}
-		});
+		jMenuChangeClientID.addActionListener((ActionEvent e) -> changeClientIDAction());
 
 		jMenuResetProductOnClientWithStates
 				.setText(configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithStates"));
 
-		jMenuResetProductOnClientWithStates.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				resetProductOnClientAction(true);
-			}
-		});
+		jMenuResetProductOnClientWithStates.addActionListener((ActionEvent e) -> resetProductOnClientAction(true));
 
 		jMenuResetProductOnClient
 				.setText(configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithoutStates"));
 
-		jMenuResetProductOnClient.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				resetProductOnClientAction(false);
-			}
-		});
+		jMenuResetProductOnClient.addActionListener((ActionEvent e) -> resetProductOnClientAction(false));
 
 		jMenuAddClient.setText(configed.getResourceValue("MainFrame.jMenuAddClient"));
-		jMenuAddClient.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				addClientAction();
-			}
-		});
+		jMenuAddClient.addActionListener((ActionEvent e) -> addClientAction());
 
 		menuItemsHost.get(ITEM_ADD_CLIENT).add(jMenuAddClient);
 
 		jMenuWakeOnLan = new JMenu(configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
 
 		jMenuDirectWOL.setText(configed.getResourceValue("MainFrame.jMenuWakeOnLan.direct"));
-		jMenuDirectWOL.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				wakeOnLanAction();
-			}
-		});
+		jMenuDirectWOL.addActionListener((ActionEvent e) -> wakeOnLanAction());
 
 		jMenuWakeOnLan.add(jMenuDirectWOL);
 
@@ -1107,21 +1014,19 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jMenuNewScheduledWOL.setText(configed.getResourceValue("MainFrame.jMenuWakeOnLan.scheduler"));
 		final MainFrame f = this;
-		jMenuNewScheduledWOL.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(f,
-						Globals.APPNAME + ": " + configed.getResourceValue("FStartWakeOnLan.title"), main);
-				fStartWakeOnLan.centerOn(f);
-				// fStartWakeOnLan.setup();
-				fStartWakeOnLan.setVisible(true);
-				fStartWakeOnLan.setPredefinedDelays(labelledDelays);
-				// logging.info(this, "hostSeparationByDepots "
-				// main.getPersistenceController().getHostSeparationByDepots(
-				// main.getSelectedClients() ) );
+		jMenuNewScheduledWOL.addActionListener((ActionEvent e) -> {
+			FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(f,
+					Globals.APPNAME + ": " + configed.getResourceValue("FStartWakeOnLan.title"), main);
+			fStartWakeOnLan.centerOn(f);
+			// fStartWakeOnLan.setup();
+			fStartWakeOnLan.setVisible(true);
+			fStartWakeOnLan.setPredefinedDelays(labelledDelays);
+			// logging.info(this, "hostSeparationByDepots "
+			// main.getPersistenceController().getHostSeparationByDepots(
+			// main.getSelectedClients() ) );
 
-				fStartWakeOnLan.setClients();
+			fStartWakeOnLan.setClients();
 
-			}
 		});
 
 		jMenuWakeOnLan.add(jMenuNewScheduledWOL);
@@ -1130,12 +1035,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jMenuShowScheduledWOL.setEnabled(false);
 		jMenuShowScheduledWOL.setText(configed.getResourceValue("MainFrame.jMenuWakeOnLan.showRunning"));
-		jMenuShowScheduledWOL.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				logging.info(this, "actionPerformed");
-				executeCommandOnInstances("arrange", FEditObject.runningInstances.getAll());
-			}
-
+		jMenuShowScheduledWOL.addActionListener((ActionEvent e) -> {
+			logging.info(this, "actionPerformed");
+			executeCommandOnInstances("arrange", FEditObject.runningInstances.getAll());
 		});
 
 		jMenuWakeOnLan.add(jMenuShowScheduledWOL);
@@ -1152,11 +1054,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		 */
 
 		jMenuDeletePackageCaches.setText(configed.getResourceValue("MainFrame.jMenuDeletePackageCaches"));
-		jMenuDeletePackageCaches.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				deletePackageCachesAction();
-			}
-		});
+		jMenuDeletePackageCaches.addActionListener((ActionEvent e) -> deletePackageCachesAction());
 
 		jMenuOpsiClientdEvent = new JMenu(configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 
@@ -1164,71 +1062,40 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			JMenuItem item = new JMenuItem(event);
 			item.setFont(Globals.defaultFont);
 
-			item.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					fireOpsiclientdEventAction(event);
-				}
-			});
+			item.addActionListener((ActionEvent e) -> fireOpsiclientdEventAction(event));
 
 			jMenuOpsiClientdEvent.add(item);
 		}
 
 		jMenuShowPopupMessage.setText(configed.getResourceValue("MainFrame.jMenuShowPopupMessage"));
-		jMenuShowPopupMessage.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				showPopupOnClientsAction();
-			}
-		});
+		jMenuShowPopupMessage.addActionListener((ActionEvent e) -> showPopupOnClientsAction());
 
 		jMenuShutdownClient.setText(configed.getResourceValue("MainFrame.jMenuShutdownClient"));
-		jMenuShutdownClient.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				shutdownClientsAction();
-			}
-		});
+		jMenuShutdownClient.addActionListener((ActionEvent e) -> shutdownClientsAction());
 
 		jMenuRequestSessionInfo.setText(configed.getResourceValue("MainFrame.jMenuRequestSessionInfo"));
-		jMenuRequestSessionInfo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				main.setColumnSessionInfo(true);
-				getSessionInfo();
-			}
+		jMenuRequestSessionInfo.addActionListener((ActionEvent e) -> {
+			main.setColumnSessionInfo(true);
+			getSessionInfo();
 		});
 
 		jMenuRebootClient.setText(configed.getResourceValue("MainFrame.jMenuRebootClient"));
-		jMenuRebootClient.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				rebootClientsAction();
-			}
-		});
+		jMenuRebootClient.addActionListener((ActionEvent e) -> rebootClientsAction());
 
 		jMenuDeleteClient.setText(configed.getResourceValue("MainFrame.jMenuDeleteClient"));
-		jMenuDeleteClient.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				deleteClientAction();
-			}
-		});
+		jMenuDeleteClient.addActionListener((ActionEvent e) -> deleteClientAction());
 
 		menuItemsHost.get(ITEM_DELETE_CLIENT).add(jMenuDeleteClient);
 
 		jMenuFreeLicences.setText(configed.getResourceValue("MainFrame.jMenuFreeLicences"));
-		jMenuFreeLicences.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				freeLicencesAction();
-			}
-		});
+		jMenuFreeLicences.addActionListener((ActionEvent e) -> freeLicencesAction());
 
 		menuItemsHost.get(ITEM_FREE_LICENCES).add(jMenuFreeLicences);
 
 		jMenuRemoteControl.setText(configed.getResourceValue("MainFrame.jMenuRemoteControl"));
 		jMenuRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
 		// produces a global reaction when pressing space
-		jMenuRemoteControl.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// logging.debug(this, "action event: " + e);
-				remoteControlAction();
-			}
-		});
+		jMenuRemoteControl.addActionListener((ActionEvent e) -> remoteControlAction());
 
 		jMenuClients.add(jMenuWakeOnLan);
 		jMenuClients.add(jMenuOpsiClientdEvent);
@@ -1276,19 +1143,19 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		String connectiondata = SSHConnectionInfo.getInstance().getUser() + "@"
 				+ SSHConnectionInfo.getInstance().getHost();
 
-		jMenuSSHConnection.setText(connectiondata.trim() + " " + factory.UNKNOWN);
+		jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.UNKNOWN);
 		jMenuSSHConnection.setForeground(Globals.unknownBlue);
-		if (status.equals(factory.NOT_CONNECTED)) {
+		if (status.equals(SSHCommandFactory.NOT_CONNECTED)) {
 			// jMenuSSHConnection.setForeground(Globals.actionRed);
 			jMenuSSHConnection.setForeground(Globals.lightBlack);
-			jMenuSSHConnection.setText(connectiondata.trim() + " " + factory.NOT_CONNECTED);
-		} else if (status.equals(factory.CONNECTION_NOT_ALLOWED)) {
+			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.NOT_CONNECTED);
+		} else if (status.equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED)) {
 			jMenuSSHConnection.setForeground(Globals.actionRed);
-			jMenuSSHConnection.setText(connectiondata.trim() + " " + factory.CONNECTION_NOT_ALLOWED);
+			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.CONNECTION_NOT_ALLOWED);
 
-		} else if (status.equals(factory.CONNECTED)) {
+		} else if (status.equals(SSHCommandFactory.CONNECTED)) {
 			jMenuSSHConnection.setForeground(Globals.okGreen);
-			jMenuSSHConnection.setText(connectiondata.trim() + " " + factory.CONNECTED);
+			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.CONNECTED);
 		}
 	}
 
@@ -1308,21 +1175,17 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		factory.setMainFrame(this);
 		JMenu menuOpsi = new JMenu();
-		menuOpsi.setText(factory.parentOpsi);
+		menuOpsi.setText(SSHCommandFactory.parentOpsi);
 
 		jMenuServer.removeAll();
-		jMenuServer.setText(factory.parentNull);
+		jMenuServer.setText(SSHCommandFactory.parentNull);
 		boolean isReadOnly = de.uib.configed.Globals.isGlobalReadOnly();
 		boolean methodsExists = factory.checkSSHCommandMethod();
 
 		logging.info(this, "setupMenuServer add configpage");
 		jMenuSSHConfig = new JMenuItem();
 		jMenuSSHConfig.setText(configed.getResourceValue("MainFrame.jMenuSSHConfig"));
-		jMenuSSHConfig.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				startSSHConfigAction();
-			}
-		});
+		jMenuSSHConfig.addActionListener((ActionEvent e) -> startSSHConfigAction());
 
 		jMenuSSHConnection.setEnabled(false);
 		if (configed.sshconnect_onstart)
@@ -1361,12 +1224,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			logging.info(this, "setupMenuServer add commandcontrol");
 			jMenuSSHCommandControl = new JMenuItem();
 			jMenuSSHCommandControl.setText(configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
-			jMenuSSHCommandControl.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-
-					startSSHControlAction();
-				}
-			});
+			jMenuSSHCommandControl.addActionListener((ActionEvent e) -> startSSHControlAction());
 		}
 		// SSHCommandControlDialog
 		// jMenuServer.add(jMenuRemoteExec);
@@ -1396,7 +1254,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		if (methodsExists) {
 			factory.retrieveSSHCommandListRequestRefresh();
-			java.util.List<SSHCommand_Template> sshcommands = factory.retrieveSSHCommandList();
+			factory.retrieveSSHCommandList();
 			java.util.LinkedHashMap<String, java.util.List<SSHCommand_Template>> sortedComs = factory
 					.getSSHCommandMapSortedByParent();
 
@@ -1410,12 +1268,12 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				JMenu parentMenu = new JMenu();
 				parentMenu.setText(parentMenuName);
 				logging.info(this, "ssh parent menu text " + parentMenuName);
-				if (parentMenuName == SSHCommandFactory.parentdefaultForOwnCommands) {
+				if (parentMenuName.equals(SSHCommandFactory.parentdefaultForOwnCommands)) {
 					parentMenu.setText("");
 					parentMenu.setIcon(Globals.createImageIcon("images/burger_menu_09.png", "..."));
 				}
 
-				if (!(parentMenuName.equals(factory.parentNull)))
+				if (!(parentMenuName.equals(SSHCommandFactory.parentNull)))
 					firstParentGroup = false;
 
 				for (final SSHCommand_Template com : list_com) {
@@ -1426,13 +1284,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 					jMenuItem.setToolTipText(com.getToolTipText());
 					jMenuItem.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
-							if (factory.getConnectionState().equals(factory.NOT_CONNECTED))
+							if (factory.getConnectionState().equals(SSHCommandFactory.NOT_CONNECTED))
 								logging.error(this, configed.getResourceValue("SSHConnection.not_connected.message")
 										+ " " + factory.getConnectionState());
-							else if (factory.getConnectionState().equals(factory.CONNECTION_NOT_ALLOWED))
+							else if (factory.getConnectionState().equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED))
 								logging.error(this,
 										configed.getResourceValue("SSHConnection.CONNECTION_NOT_ALLOWED.message"));
-							else if (factory.getConnectionState().equals(factory.UNKNOWN))
+							else if (factory.getConnectionState().equals(SSHCommandFactory.UNKNOWN))
 								logging.error(this, configed.getResourceValue("SSHConnection.not_connected.message")
 										+ " " + factory.getConnectionState());
 							else {
@@ -1444,11 +1302,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 						}
 					});
 
-					if (parentMenuName.equals(factory.parentNull)) {
+					if (parentMenuName.equals(SSHCommandFactory.parentNull)) {
 						jMenuServer.add(jMenuItem);
 					} else {
 						parentMenu.add(jMenuItem);
-						if (parentMenuName.equals(factory.parentOpsi)) {
+						if (parentMenuName.equals(SSHCommandFactory.parentOpsi)) {
 							menuOpsi = parentMenu;
 							jMenuServer.add(menuOpsi);
 						} else
@@ -1459,9 +1317,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 					if (commandsAreDeactivated)
 						jMenuItem.setEnabled(false);
 				}
-				if (firstParentGroup)
-					if (commands_exists)
-						jMenuServer.addSeparator();
+				if (firstParentGroup && commands_exists)
+					jMenuServer.addSeparator();
 
 				firstParentGroup = false;
 
@@ -1477,12 +1334,12 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			jMenuOpsiCommand.setToolTipText(command.getToolTipText());
 			jMenuOpsiCommand.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (factory.getConnectionState().equals(factory.NOT_CONNECTED))
+					if (factory.getConnectionState().equals(SSHCommandFactory.NOT_CONNECTED))
 						logging.error(this, configed.getResourceValue("SSHConnection.not_connected.message") + " "
 								+ factory.getConnectionState());
-					else if (factory.getConnectionState().equals(factory.CONNECTION_NOT_ALLOWED))
+					else if (factory.getConnectionState().equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED))
 						logging.error(this, configed.getResourceValue("SSHConnection.CONNECTION_NOT_ALLOWED.message"));
-					else if (factory.getConnectionState().equals(factory.UNKNOWN))
+					else if (factory.getConnectionState().equals(SSHCommandFactory.UNKNOWN))
 						logging.error(this, configed.getResourceValue("SSHConnection.not_connected.message") + " "
 								+ factory.getConnectionState());
 					else
@@ -1548,11 +1405,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jMenuClientselectionProductNotUptodateOrBroken.setText(configed
 				.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithOtherProductVersionOrUnknownState"));
-		jMenuClientselectionProductNotUptodateOrBroken.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				groupByNotCurrentProductVersionOrBrokenInstallation();
-			}
-		});
+		jMenuClientselectionProductNotUptodateOrBroken
+				.addActionListener((ActionEvent e) -> groupByNotCurrentProductVersionOrBrokenInstallation());
 
 		jMenuClientselectionFailedProduct
 				.setText(configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedForProduct"));
@@ -1561,12 +1415,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuClientselectionFailedInPeriod
 				.setText(configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedInTimespan"));
 
-		for (final String key : searchedTimeSpans.keySet()) {
-			JMenuItem item = new JMenuItemFormatted(searchedTimeSpansText.get(key));
+		for (final String value : searchedTimeSpans.values()) {
+			JMenuItem item = new JMenuItemFormatted(value);
 			item.setFont(Globals.defaultFont);
 
-			item.addActionListener(
-					(ActionEvent e) -> main.selectClientsByFailedAtSomeTimeAgo(searchedTimeSpans.get(key)));
+			item.addActionListener((ActionEvent e) -> main.selectClientsByFailedAtSomeTimeAgo(value));
 
 			jMenuClientselectionFailedInPeriod.add(item);
 		}
@@ -1587,11 +1440,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuClientselectionToggleClientFilter
 				.setText(configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
 		jMenuClientselectionToggleClientFilter.setState(false);
-		jMenuClientselectionToggleClientFilter.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				toggleClientFilterAction();
-			}
-		});
+		jMenuClientselectionToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
 
 		jMenuClientselection.add(jMenuClientselectionGetGroup);
 		jMenuClientselection.add(jMenuClientselectionGetSavedSearch);
@@ -1687,16 +1536,14 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuHelpInternalConfiguration.addActionListener((ActionEvent e) -> showBackendConfigurationAction());
 		jMenuHelp.add(jMenuHelpInternalConfiguration);
 
-		ActionListener selectLoglevelListener = new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				for (int i = 0; i < logging.LEVEL_DONT_SHOW_IT; i++) {
-					if (e.getSource() == rbLoglevelItems[i]) {
-						rbLoglevelItems[i].setSelected(true);
-						logging.setAktDebugLevel(i);
-					} else {
-						if (rbLoglevelItems[i] != null)
-							rbLoglevelItems[i].setSelected(false);
-					}
+		ActionListener selectLoglevelListener = (ActionEvent e) -> {
+			for (int i = 0; i < logging.LEVEL_DONT_SHOW_IT; i++) {
+				if (e.getSource() == rbLoglevelItems[i]) {
+					rbLoglevelItems[i].setSelected(true);
+					logging.setAktDebugLevel(i);
+				} else {
+					if (rbLoglevelItems[i] != null)
+						rbLoglevelItems[i].setSelected(false);
 				}
 			}
 		};
@@ -1722,20 +1569,14 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuHelpServerInfoPage.addActionListener((ActionEvent e) -> showInfoPage());
 
 		jMenuHelpLogfileLocation.setText(configed.getResourceValue("MainFrame.jMenuHelpLogfileLocation"));
-		showLogfileLocationAction();
+		jMenuHelpLogfileLocation.addActionListener((ActionEvent e) -> showLogfileLocationAction());
 
 		jMenuHelp.add(jMenuHelpLogfileLocation);
 
 		jMenuHelp.addSeparator();
 
 		jMenuHelpAbout.setText(configed.getResourceValue("MainFrame.jMenuHelpAbout"));
-		jMenuHelpAbout.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// main.getPersistenceController().makeConnection(); //just checking the
-				// connection
-				showAboutAction();
-			}
-		});
+		jMenuHelpAbout.addActionListener((ActionEvent e) -> showAboutAction());
 
 		jMenuHelp.add(jMenuHelpAbout);
 	}
@@ -1933,11 +1774,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		popupShowUefiBoot.setText(configed.getResourceValue("MainFrame.jMenuShowUefiBoot"));
 		combinedMenuItemUefiBootColumn.show(main.host_displayFields.get(HostInfo.clientUefiBoot_DISPLAY_FIELD_LABEL));
 
-		popupShowUefiBoot.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				main.toggleColumnUEFIactive();
-			}
-		});
+		popupShowUefiBoot.addItemListener((ItemEvent e) -> main.toggleColumnUEFIactive());
 
 		popupShowInstallByShutdownColumn.setText(configed.getResourceValue("MainFrame.jMenuShowInstallByShutdown"));
 		combinedMenuItemInstallByShutdownColumn
@@ -1982,26 +1819,20 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		final MainFrame f = this;
 		popupWakeOnLanScheduler.setText(configed.getResourceValue("MainFrame.jMenuWakeOnLan.scheduler"));
-		popupWakeOnLanScheduler.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(f,
-						Globals.APPNAME + ": " + configed.getResourceValue("FStartWakeOnLan.title"), main);
-				fStartWakeOnLan.centerOn(f);
-				// fStartWakeOnLan.setup();
-				fStartWakeOnLan.setVisible(true);
-				fStartWakeOnLan.setPredefinedDelays(labelledDelays);
+		popupWakeOnLanScheduler.addActionListener((ActionEvent e) -> {
+			FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(f,
+					Globals.APPNAME + ": " + configed.getResourceValue("FStartWakeOnLan.title"), main);
+			fStartWakeOnLan.centerOn(f);
+			// fStartWakeOnLan.setup();
+			fStartWakeOnLan.setVisible(true);
+			fStartWakeOnLan.setPredefinedDelays(labelledDelays);
 
-				fStartWakeOnLan.setClients();
-			}
+			fStartWakeOnLan.setClients();
 		});
 		popupWakeOnLan.add(popupWakeOnLanScheduler);
 
 		popupDeletePackageCaches.setText(configed.getResourceValue("MainFrame.jMenuDeletePackageCaches"));
-		popupDeletePackageCaches.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				deletePackageCachesAction();
-			}
-		});
+		popupDeletePackageCaches.addActionListener((ActionEvent e) -> deletePackageCachesAction());
 
 		// subOpsiClientdEvent = new JMenu("abcd");
 		// configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent")
@@ -2043,11 +1874,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		menuItemsHost.get(ITEM_DELETE_CLIENT).add(popupDeleteClient);
 
 		popupFreeLicences.setText(configed.getResourceValue("MainFrame.jMenuFreeLicences"));
-		popupFreeLicences.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				freeLicencesAction();
-			}
-		});
+		popupFreeLicences.addActionListener((ActionEvent e) -> freeLicencesAction());
 
 		menuItemsHost.get(ITEM_FREE_LICENCES).add(popupFreeLicences);
 
@@ -2084,11 +1911,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		popupSelectionToggleClientFilter.setState(false);
 		popupSelectionToggleClientFilter.setFont(Globals.defaultFontBig);
 
-		popupSelectionToggleClientFilter.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				toggleClientFilterAction();
-			}
-		});
+		popupSelectionToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
 
 		popupRebuildClientList.addActionListener((ActionEvent e) -> main.reloadHosts());
 
@@ -2191,10 +2014,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 			pdfExportTable.setMetaData(metaData);
 			pdfExportTable.setPageSizeA4_Landscape();
-			if (jTable.getSelectedRowCount() == 0)
-				pdfExportTable.execute(null, false);
-			else
-				pdfExportTable.execute(null, true);
+			pdfExportTable.execute(null, jTable.getSelectedRowCount() != 0);
 
 			/**
 			 * old pdf exporting tableToPDF = new DocumentToPdf (null,
@@ -4463,7 +4283,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	}
 
-	public void setHardwareInfo(Object hardwareInfo, String pc) {
+	public void setHardwareInfo(Object hardwareInfo) {
 		// logging.debug(this, "setHardwareInfo " + hardwareInfo);
 		// labelNoHardware.setText(configed.getResourceValue("MainFrame.NoHardwareConfiguration"));
 
@@ -4559,6 +4379,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			FTextArea fObsolete = new FTextArea((JFrame) Globals.frame1,
 					configed.getResourceValue("NewClientDialog.installByShutdown"), true,
 					new String[] { "ok", "cancel" }, 300, 200) {
+				@Override
 				protected boolean wantToBeRegisteredWithRunningInstances() {
 					return false;
 				}

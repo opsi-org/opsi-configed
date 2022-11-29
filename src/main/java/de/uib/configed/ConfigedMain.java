@@ -28,6 +28,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -4340,7 +4341,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					hwInfo = persist.getHardwareInfo(pcName, true);
 					hwInfoClientmap.put(pcName, hwInfo);
 				}
-				mainFrame.setHardwareInfo(hwInfo, pcName);
+				mainFrame.setHardwareInfo(hwInfo);
 			}
 
 			// waitCursor.stop();
@@ -5702,6 +5703,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					sleep(millisecs);
 				} catch (InterruptedException ex) {
 					logging.info(this, "Thread interrupted ");
+					Thread.currentThread().interrupt();
 				}
 			}
 		}
@@ -5713,22 +5715,18 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public void getReachableInfo(final boolean onlySelectedClients) {
 		final String[] selClients = selectedClients;
-		final ConfigedMain me = this;
 		logging.info(this, "we have sel clients " + selClients.length);
 
 		// we put this into a thread since it may never end in case of a name resolving
 		// problem
 		new Thread() {
+			@Override
 			public void run() {
 				// reachableUpdater.setSuspended(true);
 
 				if (fShowReachableInfo == null) {
 					fShowReachableInfo = new FShowList(null, Globals.APPNAME, false,
-							new String[] { configed.getResourceValue("ConfigedMain.reachableInfoCancel") }, 350, 100) {
-						public void doAction1() {
-							super.doAction1();
-						}
-					};
+							new String[] { configed.getResourceValue("ConfigedMain.reachableInfoCancel") }, 350, 100);
 					fShowReachableInfo.centerOn(Globals.mainContainer);
 				}
 
@@ -5751,7 +5749,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				try {
 					sleep(2000);
-				} catch (Exception ex) {
+				} catch (InterruptedException ex) {
+					Thread.currentThread().interrupt();
 				}
 
 				fShowReachableInfo.setVisible(false);
@@ -5805,19 +5804,16 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		try {
 			// leave the Event dispatching thread
 			new Thread() {
+				@Override
 				public void run() {
 					// disable the button
 					try {
-
-						SwingUtilities.invokeAndWait(new Thread() {
-							@Override
-							public void run() {
-								mainFrame.iconButtonSessionInfo.setEnabled(false);
-							}
-						});
-					} catch (Exception ex) {
+						SwingUtilities.invokeAndWait(() -> mainFrame.iconButtonSessionInfo.setEnabled(false));
+					} catch (InvocationTargetException ex) {
 						logging.info(this,
 								"invocation target or interrupt ex at  iconButtonSessionInfo.setEnabled(false) " + ex);
+					} catch (InterruptedException ie) {
+						Thread.currentThread().interrupt();
 					}
 
 					// handling the main perspective
@@ -5874,6 +5870,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 					// fetch the data in a separated thread
 					new Thread() {
+						@Override
 						public void run() {
 							logging.info(this, "thread started");
 
