@@ -26,10 +26,8 @@ import javax.swing.SwingUtilities;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.configed;
 import de.uib.configed.gui.DepotsList;
-import de.uib.configed.gui.MainFrame;
 import de.uib.configed.gui.ValueSelectorList;
 import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
-
 /*
  * configed - configuration editor for client work stations in opsi
  * (open pc server integration) www.opsi.org
@@ -62,7 +60,6 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	public static String param_splitter_default = "><";
 
 	private ConfigedMain main;
-	private MainFrame mainFrame;
 	private static SSHCommandParameterMethods instance;
 	// private String[] methods;
 	public static final String method_interactiveElement = configed
@@ -82,21 +79,20 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	public static final String method_optionSelection = configed
 			.getResourceValue("SSHConnection.CommandControl.method.optionSelection");
 
-	public static Map<String, String> methods = new HashMap<String, String>() {
-		{
-			put(method_interactiveElement, method_interactiveElement);
-			put(method_getSelectedClientNames, "getSelectedClientNames");
-			put(method_getSelectedClientIPs, "getSelectedClientIPs");
-			put(method_getSelectedDepotNames, "getSelectedDepotNames");
-			put(method_getSelectedDepotIPs, "getSelectedDepotIPs");
-			put(method_getConfigServerName, "getConfigServerName");
-			put(method_getConnectedSSHServerName, "getConnectedSSHServerName");
-			put(method_optionSelection, "ssh://path/to/file");
-		}
-	};
+	protected static final Map<String, String> methods = new HashMap<>();
+
 	private String[] formats;
 
 	private SSHCommandParameterMethods(ConfigedMain main) {
+		methods.put(method_interactiveElement, method_interactiveElement);
+		methods.put(method_getSelectedClientNames, "getSelectedClientNames");
+		methods.put(method_getSelectedClientIPs, "getSelectedClientIPs");
+		methods.put(method_getSelectedDepotNames, "getSelectedDepotNames");
+		methods.put(method_getSelectedDepotIPs, "getSelectedDepotIPs");
+		methods.put(method_getConfigServerName, "getConfigServerName");
+		methods.put(method_getConnectedSSHServerName, "getConnectedSSHServerName");
+		methods.put(method_optionSelection, "ssh://path/to/file");
+
 		this.main = main;
 		instance = this;
 		init();
@@ -212,8 +208,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	public String[] splitParameter(String m) {
 		logging.info(this, "splitParameter param " + m);
 		if ((m.startsWith(replacement_default_1)) && (m.contains(replacement_default_2))) {
-			m = m.replace(replacement_default_1, "")
-					.replace(replacement_default_2, "");
+			m = m.replace(replacement_default_1, "").replace(replacement_default_2, "");
 		}
 
 		logging.info(this, "splitParameter param " + m);
@@ -283,55 +278,54 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		String f = format.replaceAll(" ", "");
 		logging.info(this, "callMethod format f " + f);
 		switch (f) {
-			case "xyz":
-			case "xyz...":
-				formated_result = Arrays.toString(result).replace("[", "").replaceAll(",", " ").replace("]", "");
-				break;
-			case "x,y,z":
-			case "x,y,z,...":
-				formated_result = Arrays.toString(result).replace("[", "").replace("]", "");
-				break;
-			case "[x,y,z]":
-			case "[x,y,z,...]":
-				formated_result = Arrays.toString(result);
-				break;
+		case "xyz":
+		case "xyz...":
+			formated_result = Arrays.toString(result).replace("[", "").replaceAll(",", " ").replace("]", "");
+			break;
+		case "x,y,z":
+		case "x,y,z,...":
+			formated_result = Arrays.toString(result).replace("[", "").replace("]", "");
+			break;
+		case "[x,y,z]":
+		case "[x,y,z,...]":
+			formated_result = Arrays.toString(result);
+			break;
 
-			case "'x''y''z'":
-			case "'x''y''z''...'":
-				logging.info(this, "formatResult switch case [3] " + "'x''y''z''...'" + " || " + "'x''y''z'");
-				formated_result = createFormattedDataSourceString(result, "'", brackets_none, " ");
-				break;
-			case "'x','y','z'":
-			case "'x','y','z','...'":
-				logging.info(this, "formatResult switch case [3] " + "'x''y''z''...'" + " || " + "'x''y''z'");
-				formated_result = createFormattedDataSourceString(result, "'", brackets_none, ",");
-				break;
-			case "\"x\"\"y\"\"z\"":
-			case "\"x\"\"y\"\"z\"\"...\"":
-				logging.info(this,
-						"formatResult switch case [4] " + "\"x\"\"y\"\"z\"\"...\"" + " || " + "\"x\"\"y\"\"z\"");
-				formated_result = createFormattedDataSourceString(result, "\"", brackets_none, " ");
-				break;
-			case "\"x\",\"y\",\"z\"":
-			case "\"x\",\"y\",\"z\",\"...\"":
-				logging.info(this,
-						"formatResult switch case [5] " + "\"x\",\"y\",\"z\",\"...\"" + " || " + "\"x\",\"y\",\"z\"");
-				formated_result = createFormattedDataSourceString(result, "\"", brackets_none, ",");
-				break;
-			case "['x','y','z']":
-			case "['x','y','z','...']":
-				logging.info(this, "formatResult switch case [5] " + "['x','y','z']" + " || " + "['x','y','z','...']");
-				formated_result = createFormattedDataSourceString(result, "'", brackets_square, ",");
-				break;
-			case "[\"x\",\"y\",\"z\"]":
-			case "[\"x\",\"y\",\"z\",\"...\"]":
-				logging.info(this, "formatResult switch case [5] " + "[\"x\",\"y\",\"z\"]" + " || "
-						+ "[\"x\",\"y\",\"z\",\"...\"]");
-				formated_result = createFormattedDataSourceString(result, "\"", brackets_square, ",");
-				break;
-			default:
-				logging.warning(this, "cannot format into \"" + format + "\" with \"" + Arrays.toString(result) + "\"");
-				break;
+		case "'x''y''z'":
+		case "'x''y''z''...'":
+			logging.info(this, "formatResult switch case [3] " + "'x''y''z''...'" + " || " + "'x''y''z'");
+			formated_result = createFormattedDataSourceString(result, "'", brackets_none, " ");
+			break;
+		case "'x','y','z'":
+		case "'x','y','z','...'":
+			logging.info(this, "formatResult switch case [3] " + "'x''y''z''...'" + " || " + "'x''y''z'");
+			formated_result = createFormattedDataSourceString(result, "'", brackets_none, ",");
+			break;
+		case "\"x\"\"y\"\"z\"":
+		case "\"x\"\"y\"\"z\"\"...\"":
+			logging.info(this, "formatResult switch case [4] " + "\"x\"\"y\"\"z\"\"...\"" + " || " + "\"x\"\"y\"\"z\"");
+			formated_result = createFormattedDataSourceString(result, "\"", brackets_none, " ");
+			break;
+		case "\"x\",\"y\",\"z\"":
+		case "\"x\",\"y\",\"z\",\"...\"":
+			logging.info(this,
+					"formatResult switch case [5] " + "\"x\",\"y\",\"z\",\"...\"" + " || " + "\"x\",\"y\",\"z\"");
+			formated_result = createFormattedDataSourceString(result, "\"", brackets_none, ",");
+			break;
+		case "['x','y','z']":
+		case "['x','y','z','...']":
+			logging.info(this, "formatResult switch case [5] " + "['x','y','z']" + " || " + "['x','y','z','...']");
+			formated_result = createFormattedDataSourceString(result, "'", brackets_square, ",");
+			break;
+		case "[\"x\",\"y\",\"z\"]":
+		case "[\"x\",\"y\",\"z\",\"...\"]":
+			logging.info(this,
+					"formatResult switch case [5] " + "[\"x\",\"y\",\"z\"]" + " || " + "[\"x\",\"y\",\"z\",\"...\"]");
+			formated_result = createFormattedDataSourceString(result, "\"", brackets_square, ",");
+			break;
+		default:
+			logging.warning(this, "cannot format into \"" + format + "\" with \"" + Arrays.toString(result) + "\"");
+			break;
 		}
 		return formated_result;
 	}
@@ -356,9 +350,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	private String[] replaceElements(String[] strArrToReplace, String begin_end_ofElement) {
 		for (int i = 0; i < strArrToReplace.length; i++) {
 			strArrToReplace[i] = strArrToReplace[i].replace(strArrToReplace[i],
-					begin_end_ofElement
-							+ strArrToReplace[i]
-							+ begin_end_ofElement);
+					begin_end_ofElement + strArrToReplace[i] + begin_end_ofElement);
 			logging.info(this, "formatResult[] result[i] " + strArrToReplace[i]);
 		}
 		return strArrToReplace;
@@ -372,14 +364,11 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		logging.info(this, "createStringOfArray strArrToReplace.length " + strArrToReplace.length + "if statement: "
 				+ (strArrToReplace.length > 1));
 		if (strArrToReplace.length > 1) {
-			result = Arrays.toString(strArrToReplace)
-					.replace("[", begin_end_ofStr.split("x")[0])
-					.replaceAll(",", separator)
-					.replace("]", begin_end_ofStr.split("x")[1]);
+			result = Arrays.toString(strArrToReplace).replace("[", begin_end_ofStr.split("x")[0])
+					.replaceAll(",", separator).replace("]", begin_end_ofStr.split("x")[1]);
 		} else {
-			result = Arrays.toString(strArrToReplace)
-					.replace("[", begin_end_ofStr.split("x")[0])
-					.replace("]", begin_end_ofStr.split("x")[1]);
+			result = Arrays.toString(strArrToReplace).replace("[", begin_end_ofStr.split("x")[0]).replace("]",
+					begin_end_ofStr.split("x")[1]);
 		}
 		logging.info(this, "createStringOfArray result " + result);
 		return result;
@@ -399,22 +388,16 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		logging.debug(this, "getUserText text " + text);
 		final JTextField field = new JTextField();
 		// field.setEchoChar('*');
-		final JOptionPane opPane = new JOptionPane(
-				new Object[] {
-						new JLabel(text),
-						field
-				},
-				JOptionPane.QUESTION_MESSAGE,
-				JOptionPane.OK_CANCEL_OPTION) {
+		final JOptionPane opPane = new JOptionPane(new Object[] { new JLabel(text), field },
+				JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION) {
 			@Override
 			public void selectInitialValue() {
 				super.selectInitialValue();
 				((Component) field).requestFocusInWindow();
 			}
 		};
-		final JDialog jdialog = opPane.createDialog(dialog,
-				de.uib.configed.Globals.APPNAME + " "
-						+ configed.getResourceValue("SSHConnection.ParameterDialog.Input"));
+		final JDialog jdialog = opPane.createDialog(dialog, de.uib.configed.Globals.APPNAME + " "
+				+ configed.getResourceValue("SSHConnection.ParameterDialog.Input"));
 		jdialog.setSize(400, 150);
 		jdialog.setVisible(true);
 
@@ -531,11 +514,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		panel.add(valueSelectorList, BorderLayout.NORTH);
 		panel.add(valueScrollPane, BorderLayout.CENTER);
 
-		final JOptionPane opPane = new JOptionPane(
-				new Object[] {
-						panel
-				},
-				JOptionPane.QUESTION_MESSAGE,
+		final JOptionPane opPane = new JOptionPane(new Object[] { panel }, JOptionPane.QUESTION_MESSAGE,
 				JOptionPane.OK_CANCEL_OPTION) {
 			@Override
 			public void selectInitialValue() {
@@ -556,8 +535,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 			}
 		});
 
-		final JDialog jdialog = opPane.createDialog(opPane,
-				de.uib.configed.Globals.APPNAME);
+		final JDialog jdialog = opPane.createDialog(opPane, de.uib.configed.Globals.APPNAME);
 		jdialog.setSize(400, 250);
 		jdialog.setVisible(true);
 
