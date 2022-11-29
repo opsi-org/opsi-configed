@@ -1,6 +1,5 @@
 package de.uib.configed.gui;
 
-//import de.uib.opsidatamodel.PersistenceController;  // needed for update_version_display
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -49,7 +48,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
@@ -136,10 +134,8 @@ import de.uib.utilities.thread.WaitCursor;
 
 //import de.uib.utilities.StringvaluedObject;
 
-public class MainFrame extends JFrame
-		implements WindowListener, KeyListener, MouseListener, ActionListener,
-		RunningInstancesObserver<JDialog>,
-		ComponentListener {
+public class MainFrame extends JFrame implements WindowListener, KeyListener, MouseListener, ActionListener,
+		RunningInstancesObserver<JDialog>, ComponentListener {
 
 	protected int dividerLocationCentralPane = 300;
 	protected int minHSizeTreePanel = 150;
@@ -239,20 +235,15 @@ public class MainFrame extends JFrame
 	JCheckBoxMenuItem jCheckBoxMenuItem_showDepotColumn = new JCheckBoxMenuItem();
 	JMenuItem jMenuRemoteControl = new JMenuItem();
 
-	JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] {
-			jMenuResetProductOnClientWithStates,
-			jMenuResetProductOnClient,
-			jMenuAddClient,
-			jMenuDeleteClient,
-			jMenuFreeLicences,
+	JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProductOnClientWithStates,
+			jMenuResetProductOnClient, jMenuAddClient, jMenuDeleteClient, jMenuFreeLicences,
 			// jMenuWakeOnLan,
 			// jMenuShowPopupMessage,
 			// jMenuRequestSessionInfo,
 			// jMenuShutdownClient,
 			// jMenuRebootClient,
 			// jMenuOpsiClientdEvent,
-			jMenuChangeDepot,
-			jMenuChangeClientID,
+			jMenuChangeDepot, jMenuChangeClientID,
 			// jMenuRemoteControl
 	};
 
@@ -296,14 +287,12 @@ public class MainFrame extends JFrame
 	JMenuItemFormatted popupDeleteClient = new JMenuItemFormatted();
 	JMenuItemFormatted popupFreeLicences = new JMenuItemFormatted();
 	JMenuItemFormatted popupDeletePackageCaches = new JMenuItemFormatted();
-	JMenu popupWakeOnLan = new JMenu(
-			configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
+	JMenu popupWakeOnLan = new JMenu(configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
 	JMenuItemFormatted popupWakeOnLanDirect = new JMenuItemFormatted();
 	JMenuItemFormatted popupWakeOnLanScheduler = new JMenuItemFormatted();
 
 	// JMenu subOpsiClientdEvent = new JMenu();
-	JMenu menuPopupOpsiClientdEvent = new JMenu(
-			configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
+	JMenu menuPopupOpsiClientdEvent = new JMenu(configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 	JMenuItemFormatted popupShowPopupMessage = new JMenuItemFormatted();
 	JMenuItemFormatted popupRequestSessionInfo = new JMenuItemFormatted();
 	JMenuItemFormatted popupShutdownClient = new JMenuItemFormatted();
@@ -312,22 +301,13 @@ public class MainFrame extends JFrame
 	JMenuItemFormatted popupChangeClientID = new JMenuItemFormatted();
 	JMenuItemFormatted popupRemoteControl = new JMenuItemFormatted();
 
-	JMenuItemFormatted[] clientPopupsDependOnSelectionCount = new JMenuItemFormatted[] {
-			popupResetProductOnClient,
-			popupAddClient,
-			popupDeleteClient,
-			popupFreeLicences,
+	JMenuItemFormatted[] clientPopupsDependOnSelectionCount = new JMenuItemFormatted[] { popupResetProductOnClient,
+			popupAddClient, popupDeleteClient, popupFreeLicences,
 			// popupWakeOnLan,
-			popupShowPopupMessage,
-			popupRequestSessionInfo,
-			popupDeletePackageCaches,
-			popupRebootClient,
+			popupShowPopupMessage, popupRequestSessionInfo, popupDeletePackageCaches, popupRebootClient,
 			popupShutdownClient,
 			// menuPopupOpsiClientdEvent,
-			popupChangeDepot,
-			popupChangeClientID,
-			popupRemoteControl
-	};
+			popupChangeDepot, popupChangeClientID, popupRemoteControl };
 
 	// JCheckBoxMenuItem popupDisplayClientList = new JCheckBoxMenuItem();
 	JCheckBoxMenuItem popupShowCreatedColumn = new JCheckBoxMenuItem();
@@ -393,40 +373,31 @@ public class MainFrame extends JFrame
 	public IconButton iconButtonReachableInfo;
 	public IconButton iconButtonSessionInfo;
 
-	public CombinedMenuItem combinedMenuItemCreatedColumn = new CombinedMenuItem(
-			jCheckBoxMenuItem_showCreatedColumn,
+	public CombinedMenuItem combinedMenuItemCreatedColumn = new CombinedMenuItem(jCheckBoxMenuItem_showCreatedColumn,
 			popupShowCreatedColumn);
 
 	public CombinedMenuItem combinedMenuItemWANactiveColumn = new CombinedMenuItem(
-			jCheckBoxMenuItem_showWANactiveColumn,
-			popupShowWANactiveColumn);
+			jCheckBoxMenuItem_showWANactiveColumn, popupShowWANactiveColumn);
 
 	public CombinedMenuItem combinedMenuItemIPAddressColumn = new CombinedMenuItem(
-			jCheckBoxMenuItem_showIPAddressColumn,
-			popupShowIPAddressColumn);
+			jCheckBoxMenuItem_showIPAddressColumn, popupShowIPAddressColumn);
 
 	public CombinedMenuItem combinedMenuItemHardwareAddressColumn = new CombinedMenuItem(
-			jCheckBoxMenuItem_showHardwareAddressColumn,
-			popupShowHardwareAddressColumn);
+			jCheckBoxMenuItem_showHardwareAddressColumn, popupShowHardwareAddressColumn);
 
 	public CombinedMenuItem combinedMenuItemSessionInfoColumn = new CombinedMenuItem(
-			jCheckBoxMenuItem_showSessionInfoColumn,
-			popupShowSessionInfoColumn);
+			jCheckBoxMenuItem_showSessionInfoColumn, popupShowSessionInfoColumn);
 
 	public CombinedMenuItem combinedMenuItemInventoryNumberColumn = new CombinedMenuItem(
-			jCheckBoxMenuItem_showInventoryNumberColumn,
-			popupShowInventoryNumberColumn);
+			jCheckBoxMenuItem_showInventoryNumberColumn, popupShowInventoryNumberColumn);
 
-	public CombinedMenuItem combinedMenuItemUefiBootColumn = new CombinedMenuItem(
-			jCheckBoxMenuItem_showUefiBoot,
+	public CombinedMenuItem combinedMenuItemUefiBootColumn = new CombinedMenuItem(jCheckBoxMenuItem_showUefiBoot,
 			popupShowUefiBoot);
 
 	public CombinedMenuItem combinedMenuItemInstallByShutdownColumn = new CombinedMenuItem(
-			jCheckBoxMenuItem_showInstallByShutdown,
-			popupShowInstallByShutdownColumn);
+			jCheckBoxMenuItem_showInstallByShutdown, popupShowInstallByShutdownColumn);
 
-	public CombinedMenuItem combinedMenuItemDepotColumn = new CombinedMenuItem(
-			jCheckBoxMenuItem_showDepotColumn,
+	public CombinedMenuItem combinedMenuItemDepotColumn = new CombinedMenuItem(jCheckBoxMenuItem_showDepotColumn,
 			popupShowDepotColumn);
 
 	JPanel proceeding;
@@ -582,8 +553,7 @@ public class MainFrame extends JFrame
 		}
 
 		public void paintComponent(Graphics g) {
-			((Graphics2D) g).setComposite(
-					AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) 0.5));
+			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) 0.5));
 
 			g.setColor(new Color(230, 230, 250));
 			g.fillRect(0, 0, getWidth(), getHeight());
@@ -593,7 +563,7 @@ public class MainFrame extends JFrame
 
 	GlassPane glass;
 
-	public MainFrame(JApplet appletHost, ConfigedMain main, JTableSelectionPanel selectionPanel, DepotsList depotsList,
+	public MainFrame(ConfigedMain main, JTableSelectionPanel selectionPanel, DepotsList depotsList,
 			ClientTree treeClients, boolean multidepot) {
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); // we handle it in the window listener method
 
@@ -613,18 +583,13 @@ public class MainFrame extends JFrame
 		this.main = main;
 		addComponentListener(this);
 
-		if (!configed.isApplet) {
-			baseContainer = this.getContentPane();
-
-		} else {
-			baseContainer = appletHost.getContentPane();
-		}
+		baseContainer = this.getContentPane();
 
 		de.uib.utilities.Globals.masterFrame = baseContainer;
 
 		glass = new GlassPane();
 
-		guiInit(appletHost);
+		guiInit();
 		initData();
 
 		UIManager.put("OptionPane.yesButtonText", configed.getResourceValue("UIManager.yesButtonText"));
@@ -686,8 +651,8 @@ public class MainFrame extends JFrame
 		// (int)fwidth_righthanded/2 + 40, 130, fwidth_righthanded_compi + 80);
 	}
 
-	private void moveDivider1(JSplitPane splitpane, JComponent rightpane,
-			int min_right_width, int min_left_width, int max_right_width) {
+	private void moveDivider1(JSplitPane splitpane, JComponent rightpane, int min_right_width, int min_left_width,
+			int max_right_width) {
 		if (splitpane == null || rightpane == null)
 			return;
 
@@ -720,8 +685,8 @@ public class MainFrame extends JFrame
 		public void componentMoved(ComponentEvent e) {
 		}
 
-		private void moveDivider1(JSplitPane splitpane, JComponent rightpane,
-				int min_right_width, int min_left_width, int max_right_width) {
+		private void moveDivider1(JSplitPane splitpane, JComponent rightpane, int min_right_width, int min_left_width,
+				int max_right_width) {
 			if (splitpane == null || rightpane == null)
 				return;
 
@@ -925,10 +890,7 @@ public class MainFrame extends JFrame
 		jMenuFile.add(jMenuFileReload);
 		jMenuFile.add(jMenuFileLanguage);
 
-		if (!configed.isApplet) {
-			// jMenuFile.add(jMenuFileLanguage);
-			jMenuFile.add(jMenuFileExit);
-		}
+		jMenuFile.add(jMenuFileExit);
 	}
 
 	private void initMenuData() {
@@ -1125,16 +1087,14 @@ public class MainFrame extends JFrame
 
 		menuItemsHost.get(ITEM_ADD_CLIENT).add(jMenuAddClient);
 
-		jMenuWakeOnLan = new JMenu(
-				configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
+		jMenuWakeOnLan = new JMenu(configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
 
 		jMenuDirectWOL.setText(configed.getResourceValue("MainFrame.jMenuWakeOnLan.direct"));
-		jMenuDirectWOL.addActionListener(
-				new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						wakeOnLanAction();
-					}
-				});
+		jMenuDirectWOL.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				wakeOnLanAction();
+			}
+		});
 
 		jMenuWakeOnLan.add(jMenuDirectWOL);
 
@@ -1148,23 +1108,22 @@ public class MainFrame extends JFrame
 
 		jMenuNewScheduledWOL.setText(configed.getResourceValue("MainFrame.jMenuWakeOnLan.scheduler"));
 		final MainFrame f = this;
-		jMenuNewScheduledWOL.addActionListener(
-				new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(f,
-								Globals.APPNAME + ": " + configed.getResourceValue("FStartWakeOnLan.title"), main);
-						fStartWakeOnLan.centerOn(f);
-						// fStartWakeOnLan.setup();
-						fStartWakeOnLan.setVisible(true);
-						fStartWakeOnLan.setPredefinedDelays(labelledDelays);
-						// logging.info(this, "hostSeparationByDepots "
-						// main.getPersistenceController().getHostSeparationByDepots(
-						// main.getSelectedClients() ) );
+		jMenuNewScheduledWOL.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(f,
+						Globals.APPNAME + ": " + configed.getResourceValue("FStartWakeOnLan.title"), main);
+				fStartWakeOnLan.centerOn(f);
+				// fStartWakeOnLan.setup();
+				fStartWakeOnLan.setVisible(true);
+				fStartWakeOnLan.setPredefinedDelays(labelledDelays);
+				// logging.info(this, "hostSeparationByDepots "
+				// main.getPersistenceController().getHostSeparationByDepots(
+				// main.getSelectedClients() ) );
 
-						fStartWakeOnLan.setClients();
+				fStartWakeOnLan.setClients();
 
-					}
-				});
+			}
+		});
 
 		jMenuWakeOnLan.add(jMenuNewScheduledWOL);
 
@@ -1172,14 +1131,13 @@ public class MainFrame extends JFrame
 
 		jMenuShowScheduledWOL.setEnabled(false);
 		jMenuShowScheduledWOL.setText(configed.getResourceValue("MainFrame.jMenuWakeOnLan.showRunning"));
-		jMenuShowScheduledWOL.addActionListener(
-				new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						logging.info(this, "actionPerformed");
-						executeCommandOnInstances("arrange", FEditObject.runningInstances.getAll());
-					}
+		jMenuShowScheduledWOL.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				logging.info(this, "actionPerformed");
+				executeCommandOnInstances("arrange", FEditObject.runningInstances.getAll());
+			}
 
-				});
+		});
 
 		jMenuWakeOnLan.add(jMenuShowScheduledWOL);
 		// jMenuScheduledWOL.addSeparator();
@@ -1201,8 +1159,7 @@ public class MainFrame extends JFrame
 			}
 		});
 
-		jMenuOpsiClientdEvent = new JMenu(
-				configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
+		jMenuOpsiClientdEvent = new JMenu(configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 
 		for (final String event : main.getPersistenceController().getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItem(event);
@@ -1317,8 +1274,8 @@ public class MainFrame extends JFrame
 		SSHCommandFactory factory = SSHCommandFactory.getInstance(main);
 		// String connectiondata = factory.getConnection().getConnectedUser() + "@" +
 		// factory.getConnection().getConnectedHost();
-		String connectiondata = SSHConnectionInfo.getInstance().getUser()
-				+ "@" + SSHConnectionInfo.getInstance().getHost();
+		String connectiondata = SSHConnectionInfo.getInstance().getUser() + "@"
+				+ SSHConnectionInfo.getInstance().getHost();
 
 		jMenuSSHConnection.setText(connectiondata.trim() + " " + factory.UNKNOWN);
 		jMenuSSHConnection.setForeground(Globals.unknownBlue);
@@ -1342,8 +1299,8 @@ public class MainFrame extends JFrame
 
 	/**
 	 * Get existing (sorted) sshcommands and build the menu "server-konsole"
-	 * (include config, control and terminal dialog)
-	 * also check the depot configs for setting the field editable (or not)
+	 * (include config, control and terminal dialog) also check the depot
+	 * configs for setting the field editable (or not)
 	 **/
 	private void setupMenuServer() {
 		logging.info(this, "setupMenuServer ");
@@ -1434,10 +1391,8 @@ public class MainFrame extends JFrame
 		logging.info(this, "setupMenuServer getCurrentUserConfig " + UserConfig.getCurrentUserConfig());
 
 		boolean commandsAreDeactivated = (UserConfig.getCurrentUserConfig() == null
-				||
-				UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDS_ACTIVE) == null
-				||
-				!UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDS_ACTIVE));
+				|| UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDS_ACTIVE) == null
+				|| !UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDS_ACTIVE));
 		logging.info(this, "setupMenuServer commandsAreDeactivated " + commandsAreDeactivated);
 
 		if (methodsExists) {
@@ -1550,24 +1505,19 @@ public class MainFrame extends JFrame
 
 		boolean userConfigExists = UserConfig.getCurrentUserConfig() != null;
 
-		jMenuSSHConfig.setEnabled(
-				userConfigExists &&
-						UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_CONFIG_ACTIVE));
+		jMenuSSHConfig.setEnabled(userConfigExists
+				&& UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_CONFIG_ACTIVE));
 
 		logging.info(this, "setupMenuServer create/read command menu configs current user config "
 				+ UserConfig.getCurrentUserConfig());
-		jMenuSSHCommandControl.setEnabled(
-				userConfigExists &&
-						UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDCONTROL_ACTIVE));
+		jMenuSSHCommandControl.setEnabled(userConfigExists
+				&& UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDCONTROL_ACTIVE));
 
-		jMenuServer.setEnabled(
-				userConfigExists &&
-						!isReadOnly
-						// &&
-						// getBoolConfigValueForUser(PersistenceController.PARTKEY_USER_PRIVILEGE_SERVER_READWRITE,
-						// true, serverConfigs)
-						&&
-						UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_MENU_ACTIVE));
+		jMenuServer.setEnabled(userConfigExists && !isReadOnly
+		// &&
+		// getBoolConfigValueForUser(PersistenceController.PARTKEY_USER_PRIVILEGE_SERVER_READWRITE,
+		// true, serverConfigs)
+				&& UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_MENU_ACTIVE));
 	}
 
 	private void setupMenuGrouping() {
@@ -1625,8 +1575,8 @@ public class MainFrame extends JFrame
 			}
 		});
 
-		jMenuClientselectionFailedInPeriod.setText(
-				configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedInTimespan"));
+		jMenuClientselectionFailedInPeriod
+				.setText(configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedInTimespan"));
 
 		for (final String key : searchedTimeSpans.keySet()) {
 			JMenuItem item = new JMenuItemFormatted(searchedTimeSpansText.get(key));
@@ -1634,8 +1584,7 @@ public class MainFrame extends JFrame
 
 			item.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					main.selectClientsByFailedAtSomeTimeAgo(
-							searchedTimeSpans.get(key));
+					main.selectClientsByFailedAtSomeTimeAgo(searchedTimeSpans.get(key));
 				}
 			});
 
@@ -1692,20 +1641,18 @@ public class MainFrame extends JFrame
 		jMenuFrameWorkOnProducts.addActionListener(this);
 
 		jMenuFrameWorkOnGroups.setText(configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
-		jMenuFrameWorkOnGroups.setVisible(
-				main.getPersistenceController().isWithLocalImaging());
+		jMenuFrameWorkOnGroups.setVisible(main.getPersistenceController().isWithLocalImaging());
 		jMenuFrameWorkOnGroups.addActionListener(this);
 
 		jMenuFrameShowDialogs.setText(configed.getResourceValue("MainFrame.jMenuFrameShowDialogs"));
 		jMenuFrameShowDialogs.setEnabled(false);
-		jMenuFrameShowDialogs.addActionListener(
-				new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						logging.info(this, "actionPerformed");
-						executeCommandOnInstances("arrange", FEditObject.runningInstances.getAll());
-					}
+		jMenuFrameShowDialogs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				logging.info(this, "actionPerformed");
+				executeCommandOnInstances("arrange", FEditObject.runningInstances.getAll());
+			}
 
-				});
+		});
 
 		jMenuFrames.add(jMenuFrameLicences);
 		jMenuFrames.add(jMenuFrameWorkOnProducts);
@@ -1721,7 +1668,6 @@ public class MainFrame extends JFrame
 		jMenuHelpDoc.setText(configed.getResourceValue("MainFrame.jMenuDoc"));
 		jMenuHelpDoc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				main.showExternalDocument(Globals.opsiDocpage);
 			}
 		});
 		jMenuHelp.add(jMenuHelpDoc);
@@ -1729,7 +1675,7 @@ public class MainFrame extends JFrame
 		jMenuHelpForum.setText(configed.getResourceValue("MainFrame.jMenuForum"));
 		jMenuHelpForum.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				main.showExternalDocument(Globals.opsiForumpage);
+
 			}
 		});
 		jMenuHelp.add(jMenuHelpForum);
@@ -1737,16 +1683,14 @@ public class MainFrame extends JFrame
 		jMenuHelpSupport.setText(configed.getResourceValue("MainFrame.jMenuSupport"));
 		jMenuHelpSupport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				main.showExternalDocument(Globals.opsiSupportpage);
 			}
 		});
 		jMenuHelp.add(jMenuHelpSupport);
 
 		jMenuHelp.addSeparator();
 
-		jMenuHelpOpsiVersion.setText(
-				configed.getResourceValue("MainFrame.jMenuHelpOpsiService")
-						+ ": " + main.getOpsiVersion());
+		jMenuHelpOpsiVersion
+				.setText(configed.getResourceValue("MainFrame.jMenuHelpOpsiService") + ": " + main.getOpsiVersion());
 		jMenuHelpOpsiVersion.setEnabled(false);
 		jMenuHelpOpsiVersion.setForeground(Globals.lightBlack);
 
@@ -1872,56 +1816,34 @@ public class MainFrame extends JFrame
 		 * });
 		 */
 
-		iconButtonReload = new IconButton(
-				de.uib.configed.configed.getResourceValue("MainFrame.iconButtonReload"),
-				"images/reload.gif",
-				"images/reload_over.gif",
-				" ");
+		iconButtonReload = new IconButton(de.uib.configed.configed.getResourceValue("MainFrame.iconButtonReload"),
+				"images/reload.gif", "images/reload_over.gif", " ");
 
 		iconButtonReloadLicenses = new IconButton(
 				de.uib.configed.configed.getResourceValue("MainFrame.iconButtonReloadLicensesData"),
-				"images/reload_licenses.png",
-				"images/reload_licenses_over.png",
-				" ",
-				false);
+				"images/reload_licenses.png", "images/reload_licenses_over.png", " ", false);
 		iconButtonReloadLicenses.setVisible(false);
 
-		iconButtonNewClient = new IconButton(
-				de.uib.configed.configed.getResourceValue("MainFrame.iconButtonNewClient"),
-				"images/newClient.gif",
-				"images/newClient_over.gif",
-				" ");
+		iconButtonNewClient = new IconButton(de.uib.configed.configed.getResourceValue("MainFrame.iconButtonNewClient"),
+				"images/newClient.gif", "images/newClient_over.gif", " ");
 
-		iconButtonSetGroup = new IconButton(
-				de.uib.configed.configed.getResourceValue("MainFrame.iconButtonSetGroup"),
-				"images/setGroup.gif",
-				"images/setGroup_over.gif",
-				" ");
+		iconButtonSetGroup = new IconButton(de.uib.configed.configed.getResourceValue("MainFrame.iconButtonSetGroup"),
+				"images/setGroup.gif", "images/setGroup_over.gif", " ");
 		iconButtonSaveConfiguration = new IconButton(
 				de.uib.configed.configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
-				"images/apply_over.gif",
-				" ",
-				"images/apply_disabled.gif",
-				false);
+				"images/apply_over.gif", " ", "images/apply_disabled.gif", false);
 
 		iconButtonCancelChanges = new IconButton(
-				de.uib.configed.configed.getResourceValue("MainFrame.iconButtonCancelChanges"),
-				"images/cancel-32.png",
-				"images/cancel_over-32.png",
-				" ",
-				false);
+				de.uib.configed.configed.getResourceValue("MainFrame.iconButtonCancelChanges"), "images/cancel-32.png",
+				"images/cancel_over-32.png", " ", false);
 
 		iconButtonReachableInfo = new IconButton(
 				de.uib.configed.configed.getResourceValue("MainFrame.iconButtonReachableInfo"),
-				"images/new_networkconnection.png",
-				"images/new_networkconnection.png",
-				"images/new_networkconnection.png",
-				main.host_displayFields.get("clientConnected"));
+				"images/new_networkconnection.png", "images/new_networkconnection.png",
+				"images/new_networkconnection.png", main.host_displayFields.get("clientConnected"));
 
-		String[] waitingCircle = new String[] {
-				"images/systemusers_sessioninfo_activitycircle/loading_01.png",
-				"images/systemusers_sessioninfo_activitycircle/loading_02.png"
-		};
+		String[] waitingCircle = new String[] { "images/systemusers_sessioninfo_activitycircle/loading_01.png",
+				"images/systemusers_sessioninfo_activitycircle/loading_02.png" };
 		/*
 		 * {
 		 * "images/systemusers_sessioninfo_loadingcircle/loading_02.png",
@@ -1939,14 +1861,11 @@ public class MainFrame extends JFrame
 
 		iconButtonSessionInfo = new IconButton(
 				de.uib.configed.configed.getResourceValue("MainFrame.iconButtonSessionInfo"),
-				"images/system-users-query.png",
-				"images/system-users-query_over.png",
-				"images/system-users-query_over.png",
-				waitingCircle,
+				"images/system-users-query.png", "images/system-users-query_over.png",
+				"images/system-users-query_over.png", waitingCircle,
 				// new String[]{"images/system-users-query_waiting_full.png",
 				// "images/system-users-query_waiting_half.png"},
-				500,
-				main.host_displayFields.get("clientSessionInfo"));
+				500, main.host_displayFields.get("clientSessionInfo"));
 		iconButtonSessionInfo.setEnabled(true);
 
 		// iconButtonUptimeInfo = new IconButton(
@@ -1963,16 +1882,11 @@ public class MainFrame extends JFrame
 
 		iconButtonToggleClientFilter = new IconButton(
 				de.uib.configed.configed.getResourceValue("MainFrame.iconButtonToggleClientFilter"),
-				"images/view-filter_disabled-32.png",
-				"images/view-filter_over-32.png",
-				"images/view-filter-32.png",
+				"images/view-filter_disabled-32.png", "images/view-filter_over-32.png", "images/view-filter-32.png",
 				true);
 
-		iconButtonSaveGroup = new IconButton(
-				de.uib.configed.configed.getResourceValue("MainFrame.iconButtonSaveGroup"),
-				"images/saveGroup.gif",
-				"images/saveGroup_over.gif",
-				" ");
+		iconButtonSaveGroup = new IconButton(de.uib.configed.configed.getResourceValue("MainFrame.iconButtonSaveGroup"),
+				"images/saveGroup.gif", "images/saveGroup_over.gif", " ");
 
 		iconButtonReload.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -2034,17 +1948,12 @@ public class MainFrame extends JFrame
 	}
 
 	/**
-	 * Invoked when task's progress property changes.
-	 * 
-	 * public void propertyChange(PropertyChangeEvent evt) {
-	 * if ("progress" == evt.getPropertyName()) {
-	 * int progress = (Integer) evt.getNewValue();
-	 * proceeding.setIndeterminate(false);
-	 * proceeding.setValue(progress);
-	 * //taskOutput.append(String.format(
-	 * // "Completed %d%% of task.\n", progress));
-	 * }
-	 * }
+	 * Invoked when task's progress property changes. public void
+	 * propertyChange(PropertyChangeEvent evt) { if ("progress" ==
+	 * evt.getPropertyName()) { int progress = (Integer) evt.getNewValue();
+	 * proceeding.setIndeterminate(false); proceeding.setValue(progress);
+	 * //taskOutput.append(String.format( // "Completed %d%% of task.\n",
+	 * progress)); } }
 	 */
 	// ------------------------------------------------------------------------------------------
 	// context menus
@@ -2419,8 +2328,7 @@ public class MainFrame extends JFrame
 
 		popupClients.add(popupWakeOnLan);
 
-		menuPopupOpsiClientdEvent = new JMenu(
-				configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
+		menuPopupOpsiClientdEvent = new JMenu(configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 
 		for (final String event : main.getPersistenceController().getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItemFormatted(event);
@@ -2525,13 +2433,11 @@ public class MainFrame extends JFrame
 				pdfExportTable.execute(null, true);
 
 			/**
-			 * old pdf exporting
-			 * 
-			 * tableToPDF = new DocumentToPdf (null, metaData); // no filename, metadata
+			 * old pdf exporting tableToPDF = new DocumentToPdf (null,
+			 * metaData); // no filename, metadata
 			 * tableToPDF.createContentElement("table", jTable);
-			 * 
-			 * tableToPDF.setPageSizeA4_Landscape(); //
-			 * tableToPDF.toPDF(); // create Pdf
+			 * tableToPDF.setPageSizeA4_Landscape(); // tableToPDF.toPDF(); //
+			 * create Pdf
 			 */
 		} catch (Exception ex) {
 			logging.error("pdf printing error " + ex);
@@ -2577,9 +2483,8 @@ public class MainFrame extends JFrame
 		}
 	}
 
-	private void guiInit(JApplet appletHost) {
-		if (!configed.isApplet)
-			this.addWindowListener(this);
+	private void guiInit() {
+		this.addWindowListener(this);
 		this.setFont(Globals.defaultFont);
 		this.setIconImage(Globals.mainIcon);
 
@@ -2614,10 +2519,7 @@ public class MainFrame extends JFrame
 		jMenuBar1.add(jMenuFrames);
 		jMenuBar1.add(jMenuHelp);
 
-		if (appletHost == null)
-			this.setJMenuBar(jMenuBar1);
-		else
-			appletHost.setJMenuBar(jMenuBar1);
+		this.setJMenuBar(jMenuBar1);
 
 		setupPopupMenuClientsTab();
 		// setupPopupMenuLocalbootProductsTab();
@@ -2726,24 +2628,16 @@ public class MainFrame extends JFrame
 		scrollpaneNotes.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollpaneNotes.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-		macAddressField = new JTextEditorField(
-				new SeparatedDocument(
-						/* allowedChars */ new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c',
-								'd', 'e', 'f' },
-						12, ':', 2, true),
-				"",
-				17);
+		macAddressField = new JTextEditorField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3',
+				'4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':', 2, true), "", 17);
 		// new SeparatedField(6, 2, 2, ':', new char[] { '0', '1', '2', '3', '4', '5',
 		// '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' } );
 		macAddressField.addKeyListener(this);
 		macAddressField.addMouseListener(this);
 
-		ipAddressField = new JTextEditorField(
-				new SeparatedDocument(
-						/* allowedChars */ new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.' },
-						12, '.', 3, false),
-				"",
-				24);
+		ipAddressField = new JTextEditorField(new SeparatedDocument(
+				/* allowedChars */ new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.' }, 12, '.', 3,
+				false), "", 24);
 		ipAddressField.addKeyListener(this);
 		ipAddressField.addMouseListener(this);
 
@@ -2757,13 +2651,13 @@ public class MainFrame extends JFrame
 		selectedIcon = de.uib.configed.Globals.createImageIcon("images/checked.png", "");
 		nullIcon = de.uib.configed.Globals.createImageIcon("images/checked_box_mixed.png", "");
 
-		cbUefiBoot = new CheckedLabel(configed.getResourceValue("NewClientDialog.boottype"),
-				selectedIcon, unselectedIcon, nullIcon, false);
+		cbUefiBoot = new CheckedLabel(configed.getResourceValue("NewClientDialog.boottype"), selectedIcon,
+				unselectedIcon, nullIcon, false);
 		cbUefiBoot.addActionListener(this);
 		// JLabel labelWANConfig = new JLabel( configed.getResourceValue("vpnConfig" )
 		// );
-		cbWANConfig = new CheckedLabel(configed.getResourceValue("WAN Konfiguration"),
-				selectedIcon, unselectedIcon, nullIcon, false);
+		cbWANConfig = new CheckedLabel(configed.getResourceValue("WAN Konfiguration"), selectedIcon, unselectedIcon,
+				nullIcon, false);
 		cbWANConfig.setSelected(false);
 		cbWANConfig.setEnabled(true);
 		cbWANConfig.addActionListener(this);
@@ -2916,8 +2810,7 @@ public class MainFrame extends JFrame
 
 		layoutClientPane.setVerticalGroup(layoutClientPane.createSequentialGroup()
 				/////// HOST
-				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
-				.addComponent(labelHost)
+				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize).addComponent(labelHost)
 				.addComponent(labelHostID, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
 				/////// DESCRIPTION
 				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
@@ -3079,8 +2972,7 @@ public class MainFrame extends JFrame
 
 		);
 		JSplitPane splitpaneClientSelection = new JSplitPane(JSplitPane.VERTICAL_SPLIT, false,
-				depotListPresenter.getScrollpaneDepotslist(),
-				scrollpaneTreeClients);
+				depotListPresenter.getScrollpaneDepotslist(), scrollpaneTreeClients);
 
 		logging.info(this, "multidepot " + multidepot);
 		if (multidepot)
@@ -3098,52 +2990,51 @@ public class MainFrame extends JFrame
 		GroupLayout layoutPanelTreeClientSelection = new GroupLayout(panelTreeClientSelection);
 		panelTreeClientSelection.setLayout(layoutPanelTreeClientSelection);
 
-		layoutPanelTreeClientSelection.setHorizontalGroup(
-				layoutPanelTreeClientSelection.createSequentialGroup()
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
-						.addGroup(layoutPanelTreeClientSelection.createParallelGroup(GroupLayout.Alignment.LEADING)
+		layoutPanelTreeClientSelection.setHorizontalGroup(layoutPanelTreeClientSelection.createSequentialGroup()
+				.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+				.addGroup(layoutPanelTreeClientSelection.createParallelGroup(GroupLayout.Alignment.LEADING)
 
-								.addComponent(depotListPresenter, minHSizeTreePanel, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE)
+						.addComponent(depotListPresenter, minHSizeTreePanel, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
 
-								/*
-								 * .addGroup(layoutPanelTreeClientSelection.createSequentialGroup()
-								 * .addGap(10)
-								 * .addComponent(labelDepotServer, 50, GroupLayout.PREFERRED_SIZE,
-								 * Short.MAX_VALUE)
-								 * .addGap(10)
-								 * .addComponent(buttonSelectDepotsWithEqualProperties,
-								 * Globals.squareButtonWidth, GroupLayout.PREFERRED_SIZE,
-								 * GroupLayout.PREFERRED_SIZE)
-								 * .addComponent(buttonSelectDepotsAll, Globals.squareButtonWidth,
-								 * GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								 * //.addComponent(buttonCommitChangedDepotSelection,
-								 * GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								 * GroupLayout.PREFERRED_SIZE)
-								 * //.addComponent(buttonCancelChangedDepotSelection,
-								 * GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								 * GroupLayout.PREFERRED_SIZE)
-								 * .addGap(10, 10, 10)
-								 * )
-								 */
-								.addComponent(splitpaneClientSelection, minHSizeTreePanel, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE))
-						// .addGap(Globals.hGapSize/2, Globals.hGapSize/2, Globals.hGapSize/2)
-						// .addComponent(groupActionPanel, GroupLayout.PREFERRED_SIZE,
-						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2));
+						/*
+						 * .addGroup(layoutPanelTreeClientSelection.createSequentialGroup()
+						 * .addGap(10)
+						 * .addComponent(labelDepotServer, 50, GroupLayout.PREFERRED_SIZE,
+						 * Short.MAX_VALUE)
+						 * .addGap(10)
+						 * .addComponent(buttonSelectDepotsWithEqualProperties,
+						 * Globals.squareButtonWidth, GroupLayout.PREFERRED_SIZE,
+						 * GroupLayout.PREFERRED_SIZE)
+						 * .addComponent(buttonSelectDepotsAll, Globals.squareButtonWidth,
+						 * GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						 * //.addComponent(buttonCommitChangedDepotSelection,
+						 * GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						 * GroupLayout.PREFERRED_SIZE)
+						 * //.addComponent(buttonCancelChangedDepotSelection,
+						 * GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						 * GroupLayout.PREFERRED_SIZE)
+						 * .addGap(10, 10, 10)
+						 * )
+						 */
+						.addComponent(splitpaneClientSelection, minHSizeTreePanel, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE))
+				// .addGap(Globals.hGapSize/2, Globals.hGapSize/2, Globals.hGapSize/2)
+				// .addComponent(groupActionPanel, GroupLayout.PREFERRED_SIZE,
+				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2));
 
-		layoutPanelTreeClientSelection.setVerticalGroup(
-				layoutPanelTreeClientSelection.createParallelGroup(GroupLayout.Alignment.LEADING)
-						// .addComponent(groupActionPanel, Globals.vGapSize/2,
-						// GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+		layoutPanelTreeClientSelection.setVerticalGroup(layoutPanelTreeClientSelection
+				.createParallelGroup(GroupLayout.Alignment.LEADING)
+				// .addComponent(groupActionPanel, Globals.vGapSize/2,
+				// GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
-						.addGroup(layoutPanelTreeClientSelection.createSequentialGroup()
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-								.addComponent(depotListPresenter, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(splitpaneClientSelection, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
+				.addGroup(layoutPanelTreeClientSelection.createSequentialGroup()
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addComponent(depotListPresenter, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(splitpaneClientSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)));
 
 		jButtonServerConfiguration = new JButton("", Globals.createImageIcon("images/opsiconsole_deselected.png", ""));
 		jButtonServerConfiguration.setSelectedIcon(Globals.createImageIcon("images/opsiconsole.png", ""));
@@ -3213,37 +3104,34 @@ public class MainFrame extends JFrame
 		GroupLayout layoutIconPaneTargets = new GroupLayout(iconPaneTargets);
 		iconPaneTargets.setLayout(layoutIconPaneTargets);
 
-		layoutIconPaneTargets.setHorizontalGroup(
-				layoutIconPaneTargets.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addGroup(layoutIconPaneTargets.createSequentialGroup()
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+		layoutIconPaneTargets.setHorizontalGroup(layoutIconPaneTargets.createParallelGroup(GroupLayout.Alignment.CENTER)
+				.addGroup(layoutIconPaneTargets.createSequentialGroup()
+						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addComponent(jButtonClientsConfiguration, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						// .addComponent(jButtonWorkOnGroups, GroupLayout.PREFERRED_SIZE,
+						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						// .addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addComponent(jButtonDepotsConfiguration, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addComponent(jButtonServerConfiguration, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)));
+		layoutIconPaneTargets.setVerticalGroup(layoutIconPaneTargets.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(layoutIconPaneTargets.createSequentialGroup()
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGroup(layoutIconPaneTargets.createParallelGroup(GroupLayout.Alignment.BASELINE)
 								.addComponent(jButtonClientsConfiguration, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								// .addComponent(jButtonWorkOnGroups, GroupLayout.PREFERRED_SIZE,
-								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								// .addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
 								.addComponent(jButtonDepotsConfiguration, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
 								.addComponent(jButtonServerConfiguration, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)));
-		layoutIconPaneTargets.setVerticalGroup(
-				layoutIconPaneTargets.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(layoutIconPaneTargets.createSequentialGroup()
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-								.addGroup(layoutIconPaneTargets.createParallelGroup(GroupLayout.Alignment.BASELINE)
-										.addComponent(jButtonClientsConfiguration, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(jButtonDepotsConfiguration, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(jButtonServerConfiguration, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								// .addComponent(jButtonWorkOnGroups, GroupLayout.PREFERRED_SIZE,
-								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								)
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
+						// .addComponent(jButtonWorkOnGroups, GroupLayout.PREFERRED_SIZE,
+						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						).addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
 
 		iconPaneExtraFrames = new JPanel();
 		iconPaneExtraFrames.setBorder(new LineBorder(Globals.blueGrey, 1, true));
@@ -3251,8 +3139,8 @@ public class MainFrame extends JFrame
 		GroupLayout layoutIconPaneExtraFrames = new GroupLayout(iconPaneExtraFrames);
 		iconPaneExtraFrames.setLayout(layoutIconPaneExtraFrames);
 
-		layoutIconPaneExtraFrames.setHorizontalGroup(
-				layoutIconPaneExtraFrames.createParallelGroup(GroupLayout.Alignment.CENTER)
+		layoutIconPaneExtraFrames
+				.setHorizontalGroup(layoutIconPaneExtraFrames.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addGroup(layoutIconPaneExtraFrames.createSequentialGroup()
 								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
 								.addComponent(jButtonWorkOnGroups, GroupLayout.PREFERRED_SIZE,
@@ -3267,8 +3155,8 @@ public class MainFrame extends JFrame
 								.addComponent(jButtonLicences, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)));
-		layoutIconPaneExtraFrames.setVerticalGroup(
-				layoutIconPaneExtraFrames.createParallelGroup(GroupLayout.Alignment.LEADING)
+		layoutIconPaneExtraFrames
+				.setVerticalGroup(layoutIconPaneExtraFrames.createParallelGroup(GroupLayout.Alignment.LEADING)
 						.addGroup(layoutIconPaneExtraFrames.createSequentialGroup()
 								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
 								.addGroup(layoutIconPaneExtraFrames.createParallelGroup(GroupLayout.Alignment.BASELINE)
@@ -3287,8 +3175,8 @@ public class MainFrame extends JFrame
 		GroupLayout layoutIconPane0 = new GroupLayout(iconPane0);
 		iconPane0.setLayout(layoutIconPane0);
 
-		layoutIconPane0.setHorizontalGroup(
-				layoutIconPane0.createParallelGroup(GroupLayout.Alignment.LEADING)
+		layoutIconPane0
+				.setHorizontalGroup(layoutIconPane0.createParallelGroup(GroupLayout.Alignment.LEADING)
 						.addGroup(layoutIconPane0.createSequentialGroup()
 								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
 								.addComponent(iconPaneTargets, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -3297,16 +3185,15 @@ public class MainFrame extends JFrame
 								.addComponent(iconPaneExtraFrames, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)));
-		layoutIconPane0.setVerticalGroup(
-				layoutIconPane0.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addGroup(layoutIconPane0.createSequentialGroup()
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-								.addGroup(layoutIconPane0.createParallelGroup(GroupLayout.Alignment.CENTER)
-										.addComponent(iconPaneTargets, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(iconPaneExtraFrames, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
+		layoutIconPane0.setVerticalGroup(layoutIconPane0.createParallelGroup(GroupLayout.Alignment.CENTER)
+				.addGroup(layoutIconPane0.createSequentialGroup()
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGroup(layoutIconPane0.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(iconPaneTargets, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(iconPaneExtraFrames, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
 
 		setupIcons1();
 		iconPane1 = new JPanel();
@@ -3314,77 +3201,75 @@ public class MainFrame extends JFrame
 		GroupLayout layoutIconPane1 = new GroupLayout(iconPane1);
 		iconPane1.setLayout(layoutIconPane1);
 
-		layoutIconPane1.setHorizontalGroup(
-				layoutIconPane1.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(layoutIconPane1.createSequentialGroup()
-								.addGap(Globals.hGapSize / 2, Globals.hGapSize, Globals.hGapSize)
+		layoutIconPane1.setHorizontalGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(layoutIconPane1.createSequentialGroup()
+						.addGap(Globals.hGapSize / 2, Globals.hGapSize, Globals.hGapSize)
+						// .addComponent(buttonWindowStack, GroupLayout.PREFERRED_SIZE,
+						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						// .addGap(Globals.hGapSize/2, Globals.hGapSize/2, Globals.hGapSize/2)
+						.addComponent(iconButtonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addComponent(iconButtonReloadLicenses, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addComponent(iconButtonNewClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						// .addComponent(iconButtonSaveGroup, GroupLayout.PREFERRED_SIZE,
+						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						// .addGap(Globals.hGapSize/2, Globals.hGapSize/2, Globals.hGapSize/2)
+						.addComponent(iconButtonSetGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addComponent(iconButtonSaveConfiguration, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						// .addGap(2, 2, 2)
+						// .addComponent(iconButtonCancelChanges, GroupLayout.PREFERRED_SIZE,
+						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						// .addGap(2, 2, 2)
+						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addComponent(iconButtonToggleClientFilter, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addComponent(iconButtonReachableInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addComponent(iconButtonSessionInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize / 2, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
+						.addComponent(proceeding, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)));
+		layoutIconPane1.setVerticalGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(layoutIconPane1.createSequentialGroup()
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.CENTER)
 								// .addComponent(buttonWindowStack, GroupLayout.PREFERRED_SIZE,
 								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								// .addGap(Globals.hGapSize/2, Globals.hGapSize/2, Globals.hGapSize/2)
 								.addComponent(iconButtonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
 								.addComponent(iconButtonReloadLicenses, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
 								.addComponent(iconButtonNewClient, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
 								// .addComponent(iconButtonSaveGroup, GroupLayout.PREFERRED_SIZE,
 								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								// .addGap(Globals.hGapSize/2, Globals.hGapSize/2, Globals.hGapSize/2)
 								.addComponent(iconButtonSetGroup, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
 								.addComponent(iconButtonSaveConfiguration, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								// .addGap(2, 2, 2)
 								// .addComponent(iconButtonCancelChanges, GroupLayout.PREFERRED_SIZE,
 								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								// .addGap(2, 2, 2)
-								.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
-								.addComponent(iconButtonToggleClientFilter, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
 								.addComponent(iconButtonReachableInfo, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
 								.addComponent(iconButtonSessionInfo, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize / 2, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
+								.addComponent(iconButtonToggleClientFilter, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(proceeding, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)));
-		layoutIconPane1.setVerticalGroup(
-				layoutIconPane1.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(layoutIconPane1.createSequentialGroup()
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-								.addGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.CENTER)
-										// .addComponent(buttonWindowStack, GroupLayout.PREFERRED_SIZE,
-										// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(iconButtonReload, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(iconButtonReloadLicenses, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(iconButtonNewClient, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										// .addComponent(iconButtonSaveGroup, GroupLayout.PREFERRED_SIZE,
-										// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(iconButtonSetGroup, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(iconButtonSaveConfiguration, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										// .addComponent(iconButtonCancelChanges, GroupLayout.PREFERRED_SIZE,
-										// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(iconButtonReachableInfo, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(iconButtonSessionInfo, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(iconButtonToggleClientFilter, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(proceeding, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
+										GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
 
 		/*
 		 * iconBarPane = new JPanel();
@@ -3414,8 +3299,7 @@ public class MainFrame extends JFrame
 		c.gridy = 0;
 		iconBarPane.add(iconPane0, c);
 
-		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false,
-				panelTreeClientSelection,
+		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, panelTreeClientSelection,
 				jTabbedPaneConfigPanes);
 		centralPane.setDividerLocation(dividerLocationCentralPane);
 
@@ -3459,16 +3343,11 @@ public class MainFrame extends JFrame
 
 		panelClientlist.addMouseListener(new utils.PopupMouseListener(popupClients));
 
-		panel_Clientselection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				panelClientlist,
-				clientPane);
+		panel_Clientselection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelClientlist, clientPane);
 
-		jTabbedPaneConfigPanes.insertTab(
-				configed.getResourceValue("MainFrame.panel_Clientselection"),
-				Globals.createImageIcon("images/clientselection.png", ""),
-				panel_Clientselection,
-				configed.getResourceValue("MainFrame.panel_Clientselection"),
-				ConfigedMain.viewClients);
+		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_Clientselection"),
+				Globals.createImageIcon("images/clientselection.png", ""), panel_Clientselection,
+				configed.getResourceValue("MainFrame.panel_Clientselection"), ConfigedMain.viewClients);
 
 		panel_LocalbootProductsettings = new PanelGroupedProductSettings(
 				configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), main,
@@ -3496,19 +3375,14 @@ public class MainFrame extends JFrame
 		 * ;
 		 */
 
-		jTabbedPaneConfigPanes.insertTab(
-				configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
-				Globals.createImageIcon("images/package.png", ""),
-				panel_LocalbootProductsettings,
+		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
+				Globals.createImageIcon("images/package.png", ""), panel_LocalbootProductsettings,
 				configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
 				ConfigedMain.viewLocalbootProducts);
 
-		jTabbedPaneConfigPanes.insertTab(
-				configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
-				Globals.createImageIcon("images/bootimage.png", ""),
-				panel_NetbootProductsettings,
-				configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
-				ConfigedMain.viewNetbootProducts);
+		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
+				Globals.createImageIcon("images/bootimage.png", ""), panel_NetbootProductsettings,
+				configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), ConfigedMain.viewNetbootProducts);
 
 		panel_HostConfig = new PanelHostConfig() {
 			@Override
@@ -3533,21 +3407,15 @@ public class MainFrame extends JFrame
 
 		panel_HostConfig.registerDataChangedObserver(main.getHostConfigsDataChangedKeeper());
 
-		jTabbedPaneConfigPanes.insertTab(
-				configed.getResourceValue("MainFrame.jPanel_NetworkConfig"),
-				Globals.createImageIcon("images/config_pro.png", ""),
-				panel_HostConfig,
-				configed.getResourceValue("MainFrame.jPanel_NetworkConfig"),
-				ConfigedMain.viewNetworkconfiguration);
+		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_NetworkConfig"),
+				Globals.createImageIcon("images/config_pro.png", ""), panel_HostConfig,
+				configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), ConfigedMain.viewNetworkconfiguration);
 
 		showHardwareLog = new JPanel();
 
-		jTabbedPaneConfigPanes.insertTab(
-				configed.getResourceValue("MainFrame.jPanel_hardwareLog"),
-				Globals.createImageIcon("images/hwaudit.png", ""),
-				showHardwareLog,
-				configed.getResourceValue("MainFrame.jPanel_hardwareLog"),
-				ConfigedMain.viewHardwareInfo);
+		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_hardwareLog"),
+				Globals.createImageIcon("images/hwaudit.png", ""), showHardwareLog,
+				configed.getResourceValue("MainFrame.jPanel_hardwareLog"), ConfigedMain.viewHardwareInfo);
 
 		panelSWInfo = new PanelSWInfo(main) {
 			@Override
@@ -3581,12 +3449,9 @@ public class MainFrame extends JFrame
 		 * );
 		 */
 
-		jTabbedPaneConfigPanes.insertTab(
-				configed.getResourceValue("MainFrame.jPanel_softwareLog"),
-				Globals.createImageIcon("images/swaudit.png", ""),
-				showSoftwareLog,
-				configed.getResourceValue("MainFrame.jPanel_softwareLog"),
-				ConfigedMain.viewSoftwareInfo);
+		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_softwareLog"),
+				Globals.createImageIcon("images/swaudit.png", ""), showSoftwareLog,
+				configed.getResourceValue("MainFrame.jPanel_softwareLog"), ConfigedMain.viewSoftwareInfo);
 
 		showLogfiles = new PanelTabbedDocuments(Globals.logtypes,
 				// null)
@@ -3607,12 +3472,9 @@ public class MainFrame extends JFrame
 		 * );
 		 */
 
-		jTabbedPaneConfigPanes.insertTab(
-				configed.getResourceValue("MainFrame.jPanel_logfiles"),
-				Globals.createImageIcon("images/logfile.png", ""),
-				showLogfiles,
-				configed.getResourceValue("MainFrame.jPanel_logfiles"),
-				ConfigedMain.viewLog);
+		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_logfiles"),
+				Globals.createImageIcon("images/logfile.png", ""), showLogfiles,
+				configed.getResourceValue("MainFrame.jPanel_logfiles"), ConfigedMain.viewLog);
 
 		showLogfiles.addChangeListener(new javax.swing.event.ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -3640,17 +3502,15 @@ public class MainFrame extends JFrame
 		 * );
 		 */
 
-		jTabbedPaneConfigPanes.insertTab(
-				configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
-				Globals.createImageIcon("images/config_pro.png", ""),
-				panel_ProductProperties,
+		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
+				Globals.createImageIcon("images/config_pro.png", ""), panel_ProductProperties,
 				configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
 				ConfigedMain.viewProductProperties);
 
-		logging.info(this, "added tab  " + configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")
-				+ " index "
-				+ jTabbedPaneConfigPanes
-						.indexOfTab(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
+		logging.info(this,
+				"added tab  " + configed.getResourceValue("MainFrame.panel_ProductGlobalProperties") + " index "
+						+ jTabbedPaneConfigPanes
+								.indexOfTab(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
 
 		panel_HostProperties = new PanelHostProperties();
 		panel_HostProperties.registerDataChangedObserver(main.getGeneralDataChangedKeeper());
@@ -3664,15 +3524,11 @@ public class MainFrame extends JFrame
 		 * );
 		 */
 
-		jTabbedPaneConfigPanes.insertTab(
-				configed.getResourceValue("MainFrame.jPanel_HostProperties"),
-				Globals.createImageIcon("images/config_pro.png", ""),
-				panel_HostProperties,
-				configed.getResourceValue("MainFrame.jPanel_HostProperties"),
-				ConfigedMain.viewHostProperties);
+		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_HostProperties"),
+				Globals.createImageIcon("images/config_pro.png", ""), panel_HostProperties,
+				configed.getResourceValue("MainFrame.jPanel_HostProperties"), ConfigedMain.viewHostProperties);
 
-		logging.info(this, "added tab  " + configed.getResourceValue("MainFrame.jPanel_HostProperties")
-				+ " index "
+		logging.info(this, "added tab  " + configed.getResourceValue("MainFrame.jPanel_HostProperties") + " index "
 				+ jTabbedPaneConfigPanes.indexOfTab(configed.getResourceValue("MainFrame.jPanel_HostProperties")));
 
 		jTabbedPaneConfigPanes.setSelectedIndex(0);
@@ -3693,14 +3549,12 @@ public class MainFrame extends JFrame
 
 		Containership cspanel_LocalbootProductsettings = new Containership(panel_LocalbootProductsettings);
 		cspanel_LocalbootProductsettings.doForAllContainedCompisOfClass("setBackground",
-				new Object[] { Globals.backgroundLightGrey },
-				VerticalPositioner.class); // JPanel.class);
+				new Object[] { Globals.backgroundLightGrey }, VerticalPositioner.class); // JPanel.class);
 		panel_LocalbootProductsettings.setBackground(Globals.backgroundLightGrey);
 
 		Containership cspanel_NetbootProductsettings = new Containership(panel_NetbootProductsettings);
 		cspanel_NetbootProductsettings.doForAllContainedCompisOfClass("setBackground",
-				new Object[] { Globals.backgroundLightGrey },
-				VerticalPositioner.class); // JPanel.class);
+				new Object[] { Globals.backgroundLightGrey }, VerticalPositioner.class); // JPanel.class);
 		panel_NetbootProductsettings.setBackground(Globals.backgroundLightGrey);
 
 		// iconPane0.setBackground(Globals.backgroundLightGrey);
@@ -3796,9 +3650,7 @@ public class MainFrame extends JFrame
 	}
 
 	public void showPopupOnClientsAction() {
-		FEditTextWithExtra fText = new FEditTextWithExtra(
-				"",
-				configed.getResourceValue("MainFrame.writePopupMessage"),
+		FEditTextWithExtra fText = new FEditTextWithExtra("", configed.getResourceValue("MainFrame.writePopupMessage"),
 				configed.getResourceValue("MainFrame.writePopupDuration")) {
 			protected void commit() {
 				super.commit();
@@ -3953,13 +3805,8 @@ public class MainFrame extends JFrame
 		fList.setTitle(Globals.APPNAME + ": " + configed.getResourceValue("MainFrame.productSelection"));
 		fList.init();
 
-		if (!configed.isApplet) {
-			fList.setLocation((int) this.getX() + 40, (int) this.getY() + 40);
-			fList.setSize(fwidth / 2, this.getHeight());
-		} else {
-			fList.setLocation((int) baseContainer.getX() + 40, (int) baseContainer.getY() + 40);
-			fList.setSize(fwidth / 2, baseContainer.getHeight());
-		}
+		fList.setLocation((int) this.getX() + 40, (int) this.getY() + 40);
+		fList.setSize(fwidth / 2, this.getHeight());
 
 		fList.setModal(true);
 		fList.setVisible(true);
@@ -4050,8 +3897,7 @@ public class MainFrame extends JFrame
 				}
 			}
 
-			iconButtonNewClient.setEnabled(
-					!disabledClientMenuEntries.contains(ITEM_ADD_CLIENT));
+			iconButtonNewClient.setEnabled(!disabledClientMenuEntries.contains(ITEM_ADD_CLIENT));
 
 			if (!main.getPersistenceController().isCreateClientPermission()) {
 				jMenuAddClient.setEnabled(false);
@@ -4176,9 +4022,8 @@ public class MainFrame extends JFrame
 	public void showBackendConfigurationAction() {
 
 		FEditorPane backendInfoDialog = new FEditorPane(this,
-				Globals.APPNAME + ":  " + configed.getResourceValue("MainFrame.InfoInternalConfiguration"),
-				false, new String[] { configed.getResourceValue("MainFrame.InfoInternalConfiguration.close") },
-				800, 600);
+				Globals.APPNAME + ":  " + configed.getResourceValue("MainFrame.InfoInternalConfiguration"), false,
+				new String[] { configed.getResourceValue("MainFrame.InfoInternalConfiguration.close") }, 800, 600);
 		backendInfoDialog.insertHTMLTable(main.getBackendInfos(), "");
 		// backendInfoDialog.setSize (new Dimension (400, 400));
 
@@ -4203,18 +4048,14 @@ public class MainFrame extends JFrame
 
 	private void showLogfileLocationAction() {
 		// logging.info(this, "showLogfileLocationAction on " + this);
-		FTextArea info = new FTextArea((MainFrame) this, de.uib.configed.Globals.APPNAME + " " +
-				configed.getResourceValue("MainFrame.showLogFileInfoTitle"),
-				false, new String[] {
-						configed.getResourceValue("MainFrame.showLogFileCopyToClipboard"),
+		FTextArea info = new FTextArea((MainFrame) this,
+				de.uib.configed.Globals.APPNAME + " " + configed.getResourceValue("MainFrame.showLogFileInfoTitle"),
+				false,
+				new String[] { configed.getResourceValue("MainFrame.showLogFileCopyToClipboard"),
 						configed.getResourceValue("MainFrame.showLogFileOpen"),
-						configed.getResourceValue("MainFrame.showLogFileClose")
-				},
-				new Icon[] {
-						null,
-						de.uib.configed.Globals.createImageIcon("images/document-view16.png", ""),
-						de.uib.configed.Globals.createImageIcon("images/cancel16_small.png", "")
-				},
+						configed.getResourceValue("MainFrame.showLogFileClose") },
+				new Icon[] { null, de.uib.configed.Globals.createImageIcon("images/document-view16.png", ""),
+						de.uib.configed.Globals.createImageIcon("images/cancel16_small.png", "") },
 				500, 150) {
 			@Override
 			public void doAction1() {
@@ -4316,25 +4157,20 @@ public class MainFrame extends JFrame
 
 		if (fDialogOpsiLicensingInfo == null) {
 
-			fDialogOpsiLicensingInfo = new de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo(
-					null, // owner frame
+			fDialogOpsiLicensingInfo = new de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo(null, // owner frame
 					// title
-					configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"),
-					false, // modal
+					configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), false, // modal
 
-					new String[] {
-							configed.getResourceValue("Dash.close"),
+					new String[] { configed.getResourceValue("Dash.close"),
 					// ,"cancel"
 					},
 
 					new Icon[] {
 							// Globals.createImageIcon( "images/checked_withoutbox_blue14.png", "" ),
-							Globals.createImageIcon("images/cancel16_small.png", "")
-					},
+							Globals.createImageIcon("images/cancel16_small.png", "") },
 					1, // lastButtonNo,with "1" we get only the first button
-					900, 680,
-					true, // lazylayout, i.e, we have a chance to define components and use them for the
-							// layout
+					900, 680, true, // lazylayout, i.e, we have a chance to define components and use them for the
+					// layout
 					null // addPanel predefined
 			);
 		} else
@@ -4395,14 +4231,10 @@ public class MainFrame extends JFrame
 		logging.debug(this, "componentEvent " + e + " saving active " + savingFramePosition);
 
 		if (savingFramePosition) {
-			configed.savedStates.saveMainLocationX.serialize(
-					e.getComponent().getBounds().x, 0);
-			configed.savedStates.saveMainLocationY.serialize(
-					e.getComponent().getBounds().y, 0);
-			configed.savedStates.saveMainLocationWidth.serialize(
-					e.getComponent().getBounds().width, fwidth);
-			configed.savedStates.saveMainLocationHeight.serialize(
-					e.getComponent().getBounds().height, fheight);
+			configed.savedStates.saveMainLocationX.serialize(e.getComponent().getBounds().x, 0);
+			configed.savedStates.saveMainLocationY.serialize(e.getComponent().getBounds().y, 0);
+			configed.savedStates.saveMainLocationWidth.serialize(e.getComponent().getBounds().width, fwidth);
+			configed.savedStates.saveMainLocationHeight.serialize(e.getComponent().getBounds().height, fheight);
 		}
 
 	}
@@ -4522,9 +4354,7 @@ public class MainFrame extends JFrame
 			if (f != null) {
 				f.setVisible(true);
 				try {
-					f.setLocation(
-							getLocation().x + transpose,
-							getLocation().y + transpose);
+					f.setLocation(getLocation().x + transpose, getLocation().y + transpose);
 				} catch (Exception ex) {
 					logging.info(this, "arrangeWs, could not get location");
 				}
@@ -4555,9 +4385,9 @@ public class MainFrame extends JFrame
 	public void executeCommandOnInstances(String command, Set<JDialog> instances) {
 		logging.info(this, "executeCommandOnInstances " + command + " for count instances " + instances.size());
 		switch (command) {
-			case "arrange":
-				arrangeWs(instances);
-				break;
+		case "arrange":
+			arrangeWs(instances);
+			break;
 		}
 	}
 
@@ -4731,8 +4561,7 @@ public class MainFrame extends JFrame
 			for (String client : main.getSelectedClients()) {
 				Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
 
-				changedClientInfo.put(HostInfo.clientUefiBootKEY,
-						((Boolean) cbUefiBoot.isSelected()).toString());
+				changedClientInfo.put(HostInfo.clientUefiBootKEY, ((Boolean) cbUefiBoot.isSelected()).toString());
 
 				main.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 			}
@@ -4744,8 +4573,7 @@ public class MainFrame extends JFrame
 			for (String client : main.getSelectedClients()) {
 				Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
 
-				changedClientInfo.put(HostInfo.clientWanConfigKEY,
-						((Boolean) cbWANConfig.isSelected()).toString());
+				changedClientInfo.put(HostInfo.clientWanConfigKEY, ((Boolean) cbWANConfig.isSelected()).toString());
 				main.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 			}
 		} else if (e.getSource() == jButtonClientsConfiguration) {
@@ -4760,9 +4588,7 @@ public class MainFrame extends JFrame
 			main.setEditingTarget(ConfigedMain.EditingTarget.SERVER);
 		}
 
-		else if (e.getSource() == jButtonLicences
-				||
-				e.getSource() == jMenuFrameLicences) {
+		else if (e.getSource() == jButtonLicences || e.getSource() == jMenuFrameLicences) {
 			main.handleLicencesManagementRequest();
 			if (main.getPersistenceController().getGlobalBooleanConfigValue(
 					PersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
@@ -4778,16 +4604,12 @@ public class MainFrame extends JFrame
 			// System.exit ( 0 );
 		}
 
-		else if (e.getSource() == jButtonWorkOnGroups
-				||
-				e.getSource() == jMenuFrameWorkOnGroups) {
+		else if (e.getSource() == jButtonWorkOnGroups || e.getSource() == jMenuFrameWorkOnGroups) {
 			main.handleGroupActionRequest();
 
 		}
 
-		else if (e.getSource() == jButtonWorkOnProducts
-				||
-				e.getSource() == jMenuFrameWorkOnProducts) {
+		else if (e.getSource() == jButtonWorkOnProducts || e.getSource() == jMenuFrameWorkOnProducts) {
 			main.handleProductActionRequest();
 
 			// main.toggleLicencesFrame();
@@ -4836,45 +4658,45 @@ public class MainFrame extends JFrame
 
 	public void visualizeEditingTarget(ConfigedMain.EditingTarget t) {
 		switch (t) {
-			case CLIENTS:
-				jButtonClientsConfiguration.setSelected(true);
-				jButtonDepotsConfiguration.setSelected(false);
-				jButtonServerConfiguration.setSelected(false);
-				// System.out.println ( " 2 jButtonLicences == null " + (jButtonLicences ==
-				// null));
-				// jLabelLicences.setForeground (Globals.greyed);
-				break;
+		case CLIENTS:
+			jButtonClientsConfiguration.setSelected(true);
+			jButtonDepotsConfiguration.setSelected(false);
+			jButtonServerConfiguration.setSelected(false);
+			// System.out.println ( " 2 jButtonLicences == null " + (jButtonLicences ==
+			// null));
+			// jLabelLicences.setForeground (Globals.greyed);
+			break;
 
-			case DEPOTS:
-				jButtonDepotsConfiguration.setSelected(true);
-				jButtonServerConfiguration.setSelected(false);
-				jButtonClientsConfiguration.setSelected(false);
-				// jButtonLicences.setSelected(false);
-				// jLabelLicences.setForeground (Globals.greyed);
-				break;
+		case DEPOTS:
+			jButtonDepotsConfiguration.setSelected(true);
+			jButtonServerConfiguration.setSelected(false);
+			jButtonClientsConfiguration.setSelected(false);
+			// jButtonLicences.setSelected(false);
+			// jLabelLicences.setForeground (Globals.greyed);
+			break;
 
-			case SERVER:
-				jButtonServerConfiguration.setSelected(true);
-				jButtonDepotsConfiguration.setSelected(false);
-				jButtonClientsConfiguration.setSelected(false);
-				// jButtonLicences.setSelected(false);
-				// jLabelLicences.setForeground (Globals.greyed);
-				break;
+		case SERVER:
+			jButtonServerConfiguration.setSelected(true);
+			jButtonDepotsConfiguration.setSelected(false);
+			jButtonClientsConfiguration.setSelected(false);
+			// jButtonLicences.setSelected(false);
+			// jLabelLicences.setForeground (Globals.greyed);
+			break;
 
-			/*
-			 * case LICENCES:
-			 * System.out.println(" tabbed pane visible false");
-			 * jButtonServerConfiguration.setSelected(false);
-			 * jButtonClientsConfiguration.setSelected(false);
-			 * jButtonLicences.setSelected(true);
-			 * jLabelServerConfiguration.setForeground (Globals.greyed);
-			 * jLabelClientsConfiguration.setForeground (Globals.greyed);
-			 * jLabelLicences.setForeground (Globals.blue);
-			 * break;
-			 */
+		/*
+		 * case LICENCES:
+		 * System.out.println(" tabbed pane visible false");
+		 * jButtonServerConfiguration.setSelected(false);
+		 * jButtonClientsConfiguration.setSelected(false);
+		 * jButtonLicences.setSelected(true);
+		 * jLabelServerConfiguration.setForeground (Globals.greyed);
+		 * jLabelClientsConfiguration.setForeground (Globals.greyed);
+		 * jLabelLicences.setForeground (Globals.blue);
+		 * break;
+		 */
 
-			default:
-				break;
+		default:
+			break;
 		}
 	}
 
@@ -4992,12 +4814,11 @@ public class MainFrame extends JFrame
 				jTabbedPaneConfigPanes.indexOfTab(configed.getResourceValue("MainFrame.jPanel_softwareLog")),
 				showSoftwareLog);
 
-		SwingUtilities.invokeLater(
-				new Runnable() {
-					public void run() {
-						Globals.mainContainer.repaint();
-					}
-				});
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				Globals.mainContainer.repaint();
+			}
+		});
 	}
 
 	protected boolean handleInstallByShutdownChange(final boolean wantActive) {
@@ -5025,9 +4846,8 @@ public class MainFrame extends JFrame
 
 		ArrayList<String> shutdown_valueX = null;
 		try {
-			shutdown_valueX = (ArrayList) main.getPersistenceController().getProductproperties(
-					clientID, "opsi-client-agent")
-					.get("on_shutdown_install");
+			shutdown_valueX = (ArrayList) main.getPersistenceController()
+					.getProductproperties(clientID, "opsi-client-agent").get("on_shutdown_install");
 		} catch (Exception ex) {
 		}
 
@@ -5052,10 +4872,8 @@ public class MainFrame extends JFrame
 		} else {
 
 			FTextArea fObsolete = new FTextArea((JFrame) Globals.frame1,
-					configed.getResourceValue("NewClientDialog.installByShutdown"),
-					true,
-					new String[] { "ok", "cancel" },
-					300, 200) {
+					configed.getResourceValue("NewClientDialog.installByShutdown"), true,
+					new String[] { "ok", "cancel" }, 300, 200) {
 				protected boolean wantToBeRegisteredWithRunningInstances() {
 					return false;
 				}
@@ -5150,10 +4968,8 @@ public class MainFrame extends JFrame
 
 			};
 
-			fObsolete.setMessage("with opsi.client-agent up to 4.1 :\n\n"
-					+ "the property " + "on_shutdown_install" + " \n"
-					+ "has to be set,\n\n "
-					+ "any change requires a setup of the client agent\n"
+			fObsolete.setMessage("with opsi.client-agent up to 4.1 :\n\n" + "the property " + "on_shutdown_install"
+					+ " \n" + "has to be set,\n\n " + "any change requires a setup of the client agent\n"
 					+ "do it now?");
 
 			fObsolete.setVisible(true);
@@ -5179,17 +4995,15 @@ public class MainFrame extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			logging.info(this, "actionPerformed " +
-					"  showSoftwareLog_MultiClientReport.wantsWithMsUpdates  " +
-					showSoftwareLog_MultiClientReport.wantsWithMsUpdates());
+			logging.info(this, "actionPerformed " + "  showSoftwareLog_MultiClientReport.wantsWithMsUpdates  "
+					+ showSoftwareLog_MultiClientReport.wantsWithMsUpdates());
 
 			// save states now
 
 			configed.savedStates.saveSWauditExportFilePrefix
 					.serialize(showSoftwareLog_MultiClientReport.getExportfilePrefix());
 
-			String filepathStart = showSoftwareLog_MultiClientReport.getExportDirectory()
-					+ File.separator
+			String filepathStart = showSoftwareLog_MultiClientReport.getExportDirectory() + File.separator
 					+ showSoftwareLog_MultiClientReport.getExportfilePrefix();
 
 			String extension = "." + showSoftwareLog_MultiClientReport.wantsKindOfExport().toString().toLowerCase();
@@ -5234,9 +5048,7 @@ public class MainFrame extends JFrame
 						scandate = "__";
 				}
 
-				String filepath = filepathStart
-						+ client + "__scan_" + scandate
-						+ extension;
+				String filepath = filepathStart + client + "__scan_" + scandate + extension;
 				logging.debug(this, "actionPerformed, write to " + filepath);
 				panelSWInfo.setWriteToFile(filepath);
 
