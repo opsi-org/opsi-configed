@@ -30,7 +30,6 @@ public class SelectionManager {
 		And, Or, AndNot, OrNot
 	};
 
-	private List<SelectElement> elements;
 	private List<OperationWithStatus> groupWithStatusList;
 	private boolean hasSoftware = false;
 	private boolean hasHardware = false;
@@ -45,23 +44,18 @@ public class SelectionManager {
 		if (backend == null || backend.isEmpty())
 			backend = "opsidata";
 
-		if (backend.equals("database"))
-			this.backend = OpsiDataBackend.getInstance();
-		// new /*DatabaseBackend()*/ OpsiDataBackend();
-		else
-			this.backend = OpsiDataBackend.getInstance();
-		// new OpsiDataBackend();
+		this.backend = OpsiDataBackend.getInstance();
 
 		serializer = new OpsiDataSerializer(this);
 		groupWithStatusList = new LinkedList<OperationWithStatus>();
 	}
 
 	/**
-	 * Create a new SoftwareNameElement, with the existing product IDs as enum data.
+	 * Create a new SoftwareNameElement, with the existing product IDs as enum
+	 * data.
 	 */
 	public SoftwareNameElement getNewSoftwareNameElement() {
-		return new SoftwareNameElement(
-				backend.getProductIDs());
+		return new SoftwareNameElement(backend.getProductIDs());
 	}
 
 	/** Get the non-localized hardware list from the backend */
@@ -78,7 +72,9 @@ public class SelectionManager {
 		return backend;
 	}
 
-	/** Next search, the manager should not use the loaded search data anymore. */
+	/**
+	 * Next search, the manager should not use the loaded search data anymore.
+	 */
 	public void setChanged() {
 		isSerializedLoaded = false;
 	}
@@ -147,10 +143,8 @@ public class SelectionManager {
 
 	public List<String> selectClients() {
 		PersistenceController controller = PersistenceControllerFactory.getPersistenceController();
-		boolean withMySQL = controller.isWithMySQL()
-				&& controller.getGlobalBooleanConfigValue(
-						PersistenceController.KEY_SEARCH_BY_SQL,
-						PersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
+		boolean withMySQL = controller.isWithMySQL() && controller.getGlobalBooleanConfigValue(
+				PersistenceController.KEY_SEARCH_BY_SQL, PersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 
 		if (withMySQL) {
 			long startTime = System.nanoTime();
@@ -230,7 +224,8 @@ public class SelectionManager {
 	}
 
 	/**
-	 * Sets the given serialized search. It will replace the current operation tree.
+	 * Sets the given serialized search. It will replace the current operation
+	 * tree.
 	 */
 	private void setSearch(SelectOperation search) {
 		loadedSearch = search;
@@ -240,7 +235,8 @@ public class SelectionManager {
 	}
 
 	/**
-	 * Sets the given serialized search. It will replace the current operation tree.
+	 * Sets the given serialized search. It will replace the current operation
+	 * tree.
 	 */
 	public void setSearch(String serialized) {
 		logging.debug(this, "setSearch " + serialized);

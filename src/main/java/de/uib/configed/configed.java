@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -419,8 +420,11 @@ public class configed {
 					}
 				});
 			}
-		} catch (Exception ex) {
+		} catch (InvocationTargetException ex) {
 			logging.info(" run " + ex);
+		} catch (InterruptedException ie) {
+			logging.info(" run " + ie);
+			Thread.currentThread().interrupt();
 		}
 	}
 

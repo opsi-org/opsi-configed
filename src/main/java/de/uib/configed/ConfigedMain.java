@@ -40,6 +40,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -1619,7 +1620,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// we call this after we have a PersistenceController
 	protected void initMainFrame() {
-		boolean packFrame = false;
 
 		/*
 		 * java.util.List<String> serverList = persist.getServers();
@@ -1747,11 +1747,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// hwInfoFactory = new HwInfoFactory(hwAuditConf);
 
 		// rearranging visual components
-		if (packFrame) {
-			mainFrame.pack();
-		} else {
-			mainFrame.validate();
-		}
+
+		mainFrame.validate();
 
 		// center the frame:
 		// Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -1841,6 +1838,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				try {
 					Thread.sleep(1);
 				} catch (InterruptedException ex) {
+					Thread.currentThread().interrupt();
 				}
 
 				try {
@@ -2617,18 +2615,18 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected void setSelectedClientsArray(String[] a) {
+		if (a == null)
+			return;
+
 		logging.info(this, "setSelectedClientsArray " + a.length);
 		logging.info(this, "selectedClients up to now size " + logging.getSize(selectedClients));
 
 		// logging.info(this, "setSelectedClientsArray() to " + Arrays.toString(a));
 		selectedClients = a;
-		if (selectedClients == null) {
-			pcName = null;
-		} else if (selectedClients.length == 0) {
+		if (selectedClients.length == 0)
 			pcName = "";
-		} else {
+		else
 			pcName = selectedClients[0];
-		}
 
 		logging.info(this, "setSelectedClientsArray produced pcName " + pcName);
 
@@ -2642,7 +2640,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	/**
 	 * transports the selected values of the selection panel to the outer world
 	 */
-	public ArrayList<String> getSelectedClientsInTable() {
+	public List<String> getSelectedClientsInTable() {
 		if (selectionPanel == null) {
 			return new ArrayList<>();
 		}

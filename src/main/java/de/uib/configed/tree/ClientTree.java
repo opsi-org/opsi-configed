@@ -2231,7 +2231,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return result;
 	}
 
-	ArrayList<String> getSelectedClientsInTable() {
+	List<String> getSelectedClientsInTable() {
 		return main.getSelectedClientsInTable();
 	}
 

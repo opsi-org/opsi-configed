@@ -37,13 +37,13 @@ public abstract class Serializer {
 
 	protected SelectionManager manager;
 
-	public Serializer(SelectionManager manager) {
+	protected Serializer(SelectionManager manager) {
 		this.manager = manager;
 	}
 
 	/**
-	 * Save the given tree of operations under the given name.
-	 * If the name already exists, overwrite it.
+	 * Save the given tree of operations under the given name. If the name
+	 * already exists, overwrite it.
 	 */
 	public void save(SelectOperation topOperation, String name, String description) {
 		Map<String, Object> data = produceData(topOperation);
@@ -54,12 +54,12 @@ public abstract class Serializer {
 	/**
 	 * Get a list of the names of all saved searches.
 	 */
-	abstract public List<String> getSaved();
+	public abstract List<String> getSaved();
 
 	/**
 	 * Get the saved searches map
 	 */
-	abstract public SavedSearches getSavedSearches();
+	public abstract SavedSearches getSavedSearches();
 
 	public String getJson(SelectOperation topOperation) {
 		Map<String, Object> data = produceData(topOperation);
@@ -81,14 +81,15 @@ public abstract class Serializer {
 	 * reproduce a search
 	 */
 	public SelectOperation deserialize(Map<String, Object> data) {
+		if (data == null)
+			logging.warning(this, "data in Serializer.deserialize is null");
+
 		logging.info(this, "deserialize data " + data);
 		if (data.get("elementPath") != null) {
 			logging.info("deserialize, elementPath " + Arrays.toString((String[]) data.get("elementPath")));
 		}
 
 		try {
-			if (data == null)
-				return null;
 			SelectOperation operation = getOperation(data, null);
 			if (getSearchDataVersion() == 1) {
 				operation = checkForHostGroup(operation);
@@ -215,15 +216,15 @@ public abstract class Serializer {
 				// logging.info(this, "getOperation hardware elements " + elements );
 
 				for (SelectElement possibleElement : elements) {
-					logging.info(this, "getOperation possibleElement.getClassName() "
-							+ possibleElement + " compare with elementName " + elementName
-							+ " or perhaps with elementPathS " + elementPathS);
+					logging.info(this,
+							"getOperation possibleElement.getClassName() " + possibleElement
+									+ " compare with elementName " + elementName + " or perhaps with elementPathS "
+									+ elementPathS);
 
 					// if( possibleElement.getClassName().equals( elementName ) )
 					// originally, but is nonsense -------------------------------------------
 					if (possibleElement.getClassName().equals(elementName)
-							&&
-							Arrays.toString(possibleElement.getPathArray()).equals(elementPathS)) {
+							&& Arrays.toString(possibleElement.getPathArray()).equals(elementPathS)) {
 						element = possibleElement;
 						break;
 					}
