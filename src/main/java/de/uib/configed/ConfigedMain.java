@@ -2078,7 +2078,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			logging.info(this, "start with given credentials");
 			// dpass.activate();
 			// dpass.setVisible(true);
-			dpass.try_connecting();
+			dpass.tryConnecting();
 		}
 
 		if (persist == null || persist.getConnectionState().getState() != ConnectionState.CONNECTED) {

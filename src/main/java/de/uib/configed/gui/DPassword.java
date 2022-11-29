@@ -53,6 +53,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.border.Border;
@@ -83,11 +84,11 @@ public class DPassword extends JDialog // implements Runnable
 	private final String TESTSERVER = "";
 	private final String TESTUSER = "";
 	private final String TESTPASSWORD = "";
-	private final static int SECS_WAIT_FOR_CONNECTION = 100;
+	private static final int SECS_WAIT_FOR_CONNECTION = 100;
 	final long TIMEOUT_MS = SECS_WAIT_FOR_CONNECTION * 1000; // 5000 reproducable error
 	private boolean localApp;
 
-	private final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
+	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
 
 	ConfigedMain main; // controller
 	PersistenceController persis;
@@ -105,18 +106,13 @@ public class DPassword extends JDialog // implements Runnable
 			setIconImage(Globals.mainIcon);
 
 			addWindowListener(new WindowAdapter() {
+				@Override
 				public void windowClosing(WindowEvent e) {
-					if (persis != null) {
-						if (persis.getConnectionState().getState() == ConnectionState.STARTED_CONNECTING)
-							persis.setConnectionState(new ConnectionState(ConnectionState.INTERRUPTED)); // we stop the
-																											// connect
-																											// thread as
-																											// well
-					}
+					if (persis != null && persis.getConnectionState().getState() == ConnectionState.STARTED_CONNECTING)
+						// we stop the connect thread as well
+						persis.setConnectionState(new ConnectionState(ConnectionState.INTERRUPTED));
 
 					setCursor(saveCursor);
-					// System.out.println ("set " + persi.getConnectionState());
-
 				}
 			});
 			// setSize (350,100);
@@ -267,7 +263,6 @@ public class DPassword extends JDialog // implements Runnable
 
 	WaitCursor waitCursor;
 	boolean connected = false;
-	Globals dm;
 
 	Dimension screenSize;
 	WaitInfo waitInfo;
@@ -492,7 +487,7 @@ public class DPassword extends JDialog // implements Runnable
 		final JTextField fieldRefreshMinutes = new JTextField("" + configed.refreshMinutes);
 		fieldRefreshMinutes.setToolTipText(configed.getResourceValue("DPassword.pullReachableInfoTooltip"));
 		fieldRefreshMinutes.setPreferredSize(new Dimension(Globals.shortlabelDimension));
-		fieldRefreshMinutes.setHorizontalAlignment(JTextField.RIGHT);
+		fieldRefreshMinutes.setHorizontalAlignment(SwingConstants.RIGHT);
 		fieldRefreshMinutes.getDocument().addDocumentListener(new DocumentListener() {
 
 			private void setRefreshMinutes() {
@@ -536,21 +531,13 @@ public class DPassword extends JDialog // implements Runnable
 		jButtonCommit.setPreferredSize(new Dimension(100, 20));
 		jButtonCommit.setToolTipText("");
 		jButtonCommit.setSelected(true);
-		jButtonCommit.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				jButtonCommit_actionPerformed(e);
-			}
-		});
+		jButtonCommit.addActionListener(this::jButtonCommit_actionPerformed);
 
 		jButtonCancel.setText(configed.getResourceValue("DPassword.jButtonCancel"));
 		jButtonCancel.setMaximumSize(new Dimension(100, 20));
 		jButtonCancel.setPreferredSize(new Dimension(100, 20));
 		jButtonCancel.setToolTipText("");
-		jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				jButtonCancel_actionPerformed(e);
-			}
-		});
+		jButtonCancel.addActionListener(this::jButtonCancel_actionPerformed);
 
 		jPanelButtons.add(jButtonCommit);
 
@@ -733,7 +720,7 @@ public class DPassword extends JDialog // implements Runnable
 		// ??we dont need this wait cursor instance; and it seems not to finish
 		// correctly
 
-		try_connecting();
+		tryConnecting();
 		// waitInfo.toFront();
 	}
 	/*
@@ -752,8 +739,8 @@ public class DPassword extends JDialog // implements Runnable
 	 * }
 	 */
 
-	public void try_connecting() {
-		logging.info(this, "started  try_connecting");
+	public void tryConnecting() {
+		logging.info(this, "started  tryConnecting");
 		jButtonCommit.setEnabled(false);
 
 		// saveCursor = getCursor();
@@ -826,6 +813,7 @@ public class DPassword extends JDialog // implements Runnable
 			waitingTask.execute();
 
 			new Thread() {
+				@Override
 				public void run() {
 					logging.info(this, "get persis");
 					persis = PersistenceControllerFactory.getNewPersistenceController(
@@ -880,7 +868,8 @@ public class DPassword extends JDialog // implements Runnable
 				try {
 					Thread.sleep(interval);
 					waited = waited + interval;
-				} catch (Exception waitException) {
+				} catch (InterruptedException waitException) {
+					Thread.currentThread().interrupt();
 				}
 			}
 
@@ -901,188 +890,6 @@ public class DPassword extends JDialog // implements Runnable
 		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setHost((String) fieldHost.getSelectedItem());
 	}
 
-	/*
-	 * public void try_connecting()
-	 * {
-	 * logging.info(this, "started  try_connecting");
-	 * setCursor(new Cursor(Cursor.WAIT_CURSOR));
-	 * 
-	 * ConfigedMain.HOST = (String)fieldHost.getSelectedItem();
-	 * ConfigedMain.USER = fieldUser.getText();
-	 * ConfigedMain.PASSWORD = String.valueOf( passwordField.getPassword() );
-	 * logging.info(this, "invoking PersistenceControllerFactory host, user, " +
-	 * //.password " +
-	 * fieldHost.getSelectedItem() + ", " + fieldUser.getText()
-	 * //+ ", " + String.valueOf( passwordField.getPassword())
-	 * );
-	 * 
-	 * if (waitInfo != null)
-	 * {
-	 * waitInfo.dispose();
-	 * waitInfo = null;
-	 * }
-	 * 
-	 * final WaitInfoString waitInfoString = new WaitInfoString();
-	 * 
-	 * waitInfo = new WaitInfo( 10000 );
-	 * Dimension frameSize = waitInfo.getSize();
-	 * 
-	 * //center
-	 * waitInfo.setLocation ((screenSize.width - frameSize.width) / 2,
-	 * (screenSize.height - frameSize.height) / 2);
-	 * waitInfo.setVisible(true);
-	 * 
-	 * 
-	 * waitingTask = new
-	 * de.uib.utilities.thread.WaitingWorker((de.uib.utilities.thread.WaitingSleeper
-	 * )waitInfo);
-	 * //waitingTask.addPropertyChangeListener(this);
-	 * waitingTask.execute();
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * // we have to create yet another thread if we want to wait here if this call
-	 * comes back
-	 * 
-	 * new Thread(){
-	 * public void run(){
-	 * int waitMs = 200;
-	 * int numberOfWaitIntervals = SECS_WAIT_FOR_CONNECTION * 1000 / waitMs;
-	 * int countWait = 0;
-	 * 
-	 * int i = 0;
-	 * 
-	 * while (
-	 * (
-	 * PersistenceControllerFactory.getConnectionState().getState() ==
-	 * ConnectionState.UNDEFINED
-	 * ||
-	 * PersistenceControllerFactory.getConnectionState().getState()==
-	 * ConnectionState.STARTED_CONNECTING
-	 * )
-	 * && countWait < numberOfWaitIntervals
-	 * && waiting)
-	 * {
-	 * try
-	 * {
-	 * countWait++;
-	 * Thread.sleep (waitMs);
-	 * 
-	 * logging.info(this, "countWait " + countWait + " waited,  we are in state " +
-	 * " " + PersistenceControllerFactory.getConnectionState());
-	 * i++;
-	 * logging.debug(this, "waiting " + i);
-	 * 
-	 * 
-	 * }
-	 * catch (InterruptedException ex)
-	 * {
-	 * }
-	 * }
-	 * 
-	 * waiting = false;
-	 * 
-	 * 
-	 * 
-	 * logging.info(this, "countWait " + countWait + " waited,  we got to state " +
-	 * " " + PersistenceControllerFactory.getConnectionState());
-	 * }
-	 * }.start();
-	 * 
-	 * if (waitInfo == null)
-	 * logging.info(this, "waitInfo null");
-	 * 
-	 * else
-	 * {
-	 * setVisible(false);
-	 * logging.info(this, "waitInfo set visible");
-	 * waitInfo.setVisible(true);
-	 * //waitInfo.dispose();
-	 * //waitInfo = null;
-	 * }
-	 * 
-	 * persis = PersistenceControllerFactory.getNewPersistenceController
-	 * ((String) fieldHost.getSelectedItem(), fieldUser.getText(), String.valueOf(
-	 * passwordField.getPassword() ));
-	 * 
-	 * 
-	 * 
-	 * waiting = false; //the waitInfo thread can stop
-	 * logging.info(this, "waiting false");
-	 * 
-	 * waitCursor.stop();
-	 * 
-	 * if (waitInfo != null )
-	 * {
-	 * waitInfo.setVisible(false);
-	 * //waitInfo.dispose();
-	 * //waitInfo = null;
-	 * }
-	 * 
-	 * setCursor(saveCursor);
-	 * if (PersistenceControllerFactory.getConnectionState().getState() ==
-	 * ConnectionState.CONNECTED)
-	 * //if ( persis.getConnectionState().getState() == ConnectionState.CONNECTED )
-	 * {
-	 * //we can finish
-	 * logging.info(this, "connected");
-	 * 
-	 * main.setPersistenceController (persis);
-	 * 
-	 * MessageFormat messageFormatMainTitle = new MessageFormat(
-	 * configed.getResourceValue("ConfigedMain.appTitle") );
-	 * main.setAppTitle(
-	 * messageFormatMainTitle.format(
-	 * new Object[] { Globals.APPNAME, fieldHost.getSelectedItem(),
-	 * fieldUser.getText() } ) );
-	 * this.setVisible(false);
-	 * }
-	 * else
-	 * {
-	 * setVisible(true);
-	 * if (PersistenceControllerFactory.getConnectionState().getState() ==
-	 * ConnectionState.INTERRUPTED)
-	 * //if (persis.getConnectionState().getState() == ConnectionState.INTERRUPTED )
-	 * {
-	 * // return to password dialog
-	 * logging.info(this, "interrupted");
-	 * }
-	 * else
-	 * {
-	 * logging.info(this, "not connected, presumably not authorizeds");
-	 * 
-	 * MessageFormat messageFormatDialogContent = new MessageFormat(
-	 * configed.getResourceValue("DPassword.noConnectionMessageDialog.content") );
-	 * 
-	 * JOptionPane.showMessageDialog(
-	 * this,
-	 * messageFormatDialogContent.format(
-	 * new Object[] { persis.getConnectionState().getMessage() } ),
-	 * configed.getResourceValue("DPassword.noConnectionMessageDialog.title"),
-	 * JOptionPane.INFORMATION_MESSAGE);
-	 * }
-	 * 
-	 * 
-	 * passwordField.setText("");
-	 * if (PersistenceControllerFactory.getConnectionState().getMessage().indexOf
-	 * ("authorized") > -1 )
-	 * //if (persis.getConnectionState().getMessage().indexOf ("authorized") > -1 )
-	 * {
-	 * logging.info(this, "(not) authorized");
-	 * 
-	 * fieldUser.requestFocus();
-	 * fieldUser.setCaretPosition(fieldUser.getText().length());
-	 * }
-	 * else
-	 * {
-	 * fieldHost.requestFocus();
-	 * }
-	 * }
-	 * }
-	 */
-
 	void jButtonCommit_actionPerformed(ActionEvent e) {
 		ok_action();
 	}
@@ -1101,16 +908,7 @@ public class DPassword extends JDialog // implements Runnable
 		passwordField.requestFocus();
 	}
 
-	// paint-Methoden überschreiben, um beim Focus-Setzen das "letzte Wort" zu
-	// behalten
-	/*
-	 * public void paint(Graphics g)
-	 * {
-	 * super.paint(g);
-	 * passwordField.requestFocus();
-	 * }
-	 */
-
+	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		super.processWindowEvent(e);
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
@@ -1125,6 +923,7 @@ public class DPassword extends JDialog // implements Runnable
 			myHome = home;
 		}
 
+		@Override
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == 10) // Return
 			{

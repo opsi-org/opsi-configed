@@ -4,13 +4,11 @@ import java.awt.event.MouseEvent;
 import java.util.Map;
 
 import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 
 import de.uib.utilities.logging.logging;
 
-public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList
-		implements DocumentListener {
+public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 	Map<String, String> meanings;
 	Map<String, Boolean> editable;
 	String selText;
@@ -46,17 +44,12 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList
 
 		buttonCommit.createIconButton(
 				de.uib.configed.configed.getResourceValue("FDialogRemoteControl.SaveButtonTooltip"),
-				"images/executing_command_red_22.png",
-				"images/executing_command_red_22_over.png",
-				"images/executing_command_22_disabled.png",
-				true);
+				"images/executing_command_red_22.png", "images/executing_command_red_22_over.png",
+				"images/executing_command_22_disabled.png", true);
 
 		buttonCancel.createIconButton(
 				de.uib.configed.configed.getResourceValue("FDialogRemoteControl.CancelButtonTooltip"),
-				"images/cancel.png",
-				"images/cancel_over.png",
-				"images/cancel_disabled.png",
-				true);
+				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png", true);
 
 		extraField.getDocument().addDocumentListener(this);
 
@@ -138,16 +131,19 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList
 
 	// DocumentListener
 	// ======================
+	@Override
 	public void changedUpdate(DocumentEvent e) {
 		// logging.debug(this, "++ changedUpdate on " );
 		saveEditedText();
 	}
 
+	@Override
 	public void insertUpdate(DocumentEvent e) {
 		// logging.debug(this, "++ insertUpdate on " );
 		saveEditedText();
 	}
 
+	@Override
 	public void removeUpdate(DocumentEvent e) {
 		// logging.debug(this, "++ removeUpdate on " );
 		saveEditedText();

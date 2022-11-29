@@ -36,7 +36,7 @@ public class FOpsiLicenseMissingText extends FTextArea {
 	}
 
 	public static void callInstanceWith(String message) {
-		if (messages.size() == 0) {
+		if (messages.isEmpty()) {
 			messages.add(configed.getResourceValue("Permission.modules.infoheader"));
 		}
 

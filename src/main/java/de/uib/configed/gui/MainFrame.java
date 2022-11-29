@@ -1537,27 +1537,15 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		 */
 
 		jMenuClientselectionGetGroup.setText(configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
-		jMenuClientselectionGetGroup.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				callSelectionDialog();
-			}
-		});
+		jMenuClientselectionGetGroup.addActionListener((ActionEvent e) -> callSelectionDialog());
 
 		jMenuClientselectionGetSavedSearch
 				.setText(configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
-		jMenuClientselectionGetSavedSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				main.clientSelectionGetSavedSearch();
-			}
-		});
+		jMenuClientselectionGetSavedSearch.addActionListener((ActionEvent e) -> main.clientSelectionGetSavedSearch());
 
 		jMenuClientselectionProductNotUptodate
 				.setText(configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithOtherProductVersion"));
-		jMenuClientselectionProductNotUptodate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				groupByNotCurrentProductVersion();
-			}
-		});
+		jMenuClientselectionProductNotUptodate.addActionListener((ActionEvent e) -> groupByNotCurrentProductVersion());
 
 		jMenuClientselectionProductNotUptodateOrBroken.setText(configed
 				.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithOtherProductVersionOrUnknownState"));
@@ -1569,11 +1557,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jMenuClientselectionFailedProduct
 				.setText(configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedForProduct"));
-		jMenuClientselectionFailedProduct.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				groupByFailedProduct();
-			}
-		});
+		jMenuClientselectionFailedProduct.addActionListener((ActionEvent e) -> groupByFailedProduct());
 
 		jMenuClientselectionFailedInPeriod
 				.setText(configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedInTimespan"));
@@ -1582,11 +1566,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			JMenuItem item = new JMenuItemFormatted(searchedTimeSpansText.get(key));
 			item.setFont(Globals.defaultFont);
 
-			item.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					main.selectClientsByFailedAtSomeTimeAgo(searchedTimeSpans.get(key));
-				}
-			});
+			item.addActionListener(
+					(ActionEvent e) -> main.selectClientsByFailedAtSomeTimeAgo(searchedTimeSpans.get(key)));
 
 			jMenuClientselectionFailedInPeriod.add(item);
 		}
@@ -1665,26 +1646,14 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private void setupMenuHelp() {
 		jMenuHelp.setText(configed.getResourceValue("MainFrame.jMenuHelp"));
 
-		jMenuHelpDoc.setText(configed.getResourceValue("MainFrame.jMenuDoc"));
-		jMenuHelpDoc.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		jMenuHelpDoc.setText(configed.getResourceValue("MainFrame.jMenuDoc"));;
 		jMenuHelp.add(jMenuHelpDoc);
 
 		jMenuHelpForum.setText(configed.getResourceValue("MainFrame.jMenuForum"));
-		jMenuHelpForum.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-			}
-		});
 		jMenuHelp.add(jMenuHelpForum);
 
 		jMenuHelpSupport.setText(configed.getResourceValue("MainFrame.jMenuSupport"));
-		jMenuHelpSupport.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+
 		jMenuHelp.add(jMenuHelpSupport);
 
 		jMenuHelp.addSeparator();
@@ -1710,21 +1679,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				|| main.getOpsiVersion().compareTo("3.4") < 0) {
 			jMenuHelpOpsiModuleInformation.setEnabled(false);
 		} else {
-			jMenuHelpOpsiModuleInformation.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					showOpsiModules();
-				}
-			});
+			jMenuHelpOpsiModuleInformation.addActionListener((ActionEvent e) -> showOpsiModules());
 		}
 
 		jMenuHelp.add(jMenuHelpOpsiModuleInformation);
 
 		jMenuHelpInternalConfiguration.setText(configed.getResourceValue("MainFrame.jMenuHelpInternalConfiguration"));
-		jMenuHelpInternalConfiguration.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				showBackendConfigurationAction();
-			}
-		});
+		jMenuHelpInternalConfiguration.addActionListener((ActionEvent e) -> showBackendConfigurationAction());
 		jMenuHelp.add(jMenuHelpInternalConfiguration);
 
 		ActionListener selectLoglevelListener = new ActionListener() {
@@ -1759,20 +1720,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jMenuHelpServerInfoPage.setText("opsi server InfoPage");
 
-		jMenuHelpServerInfoPage.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				showInfoPage();
-			}
-		});
+		jMenuHelpServerInfoPage.addActionListener((ActionEvent e) -> showInfoPage());
 
 		jMenuHelpLogfileLocation.setText(configed.getResourceValue("MainFrame.jMenuHelpLogfileLocation"));
-		jMenuHelpLogfileLocation.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// main.getPersistenceController().makeConnection(); //just checking the
-				// connection
-				showLogfileLocationAction();
-			}
-		});
+		jMenuHelpLogfileLocation.addActionListener((ActionEvent e) -> showLogfileLocationAction());
 
 		jMenuHelp.add(jMenuHelpLogfileLocation);
 

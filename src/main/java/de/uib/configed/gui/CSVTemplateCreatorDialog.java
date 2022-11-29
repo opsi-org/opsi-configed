@@ -77,21 +77,11 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	private java.util.List<JCheckBox> headerButtons;
 
 	public CSVTemplateCreatorDialog(Vector<String> columnNames) {
-		super(Globals.mainFrame,
-				configed.getResourceValue("CSVTemplateCreatorDialog.title"),
-				false,
-				new String[] {
-						"ok",
-						"cancel"
-				},
-				new Icon[] {
-						Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-						Globals.createImageIcon("images/cancel16_small.png", "")
-				},
-				2,
-				1000, 400,
-				true,
-				null);
+		super(Globals.mainFrame, configed.getResourceValue("CSVTemplateCreatorDialog.title"), false,
+				new String[] { "ok", "cancel" },
+				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
+						Globals.createImageIcon("images/cancel16_small.png", "") },
+				2, 1000, 400, true, null);
 
 		this.columnNames = columnNames;
 	}
@@ -117,9 +107,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		GroupLayout allLayout = new GroupLayout(allpane);
 		allpane.setLayout(allLayout);
 
-		allLayout.setVerticalGroup(allLayout.createSequentialGroup()
-				.addGap(Globals.hGapSize)
-				.addComponent(centerPanel)
+		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.hGapSize).addComponent(centerPanel)
 				.addGap(Globals.hGapSize)
 				.addComponent(southPanel, Globals.lineHeight, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.hGapSize));
@@ -131,9 +119,8 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 								Short.MAX_VALUE)
 						.addGap(Globals.hGapSize / 2, Globals.hGapSize, 2 * Globals.hGapSize))
 				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize, 2 * Globals.hGapSize)
-						.addComponent(southPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
+						.addGap(Globals.hGapSize / 2, Globals.hGapSize, 2 * Globals.hGapSize).addComponent(southPanel,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.hGapSize / 2, Globals.hGapSize, 2 * Globals.hGapSize)));
 	}
 
@@ -150,10 +137,8 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 						.addComponent(jPanelButtonGrid, Globals.lineHeight, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.hGapSize / 2, Globals.hGapSize, Short.MAX_VALUE))
-				.addGroup(southLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize / 2)
-						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE)
-						.addGap(Globals.hGapSize / 2)));
+				.addGroup(southLayout.createSequentialGroup().addGap(Globals.hGapSize / 2)
+						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE).addGap(Globals.hGapSize / 2)));
 
 		southLayout.setVerticalGroup(southLayout.createSequentialGroup()
 				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
@@ -303,12 +288,10 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 						.addComponent(dataLabel, wLeftLabel, wLeftLabel, wLeftLabel)
 						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
 				.addGroup(centerLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(dataSelectionLabel)
+						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize).addComponent(dataSelectionLabel)
 						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
 				.addGroup(centerLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(headerOptionsPanel)
+						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize).addComponent(headerOptionsPanel)
 						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
 				.addGroup(centerLayout.createSequentialGroup()
 						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
@@ -323,26 +306,27 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
 						.addComponent(fieldSeparatorLabel, wLeftLabel, wLeftLabel, wLeftLabel)
 						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
-				.addGroup(centerLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(tabsOption, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(commaOption, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(semicolonOption, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(spaceOption, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(otherOption, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(otherSeparatorInput, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
+				.addGroup(
+						centerLayout.createSequentialGroup()
+								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+								.addComponent(tabsOption, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+								.addComponent(commaOption, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+								.addComponent(semicolonOption, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+								.addComponent(spaceOption, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+								.addComponent(otherOption, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+								.addComponent(otherSeparatorInput, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
 				.addGroup(centerLayout.createSequentialGroup()
 						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
 						.addComponent(stringSeparatorLabel, wLeftLabel, wLeftLabel, wLeftLabel)
@@ -350,18 +334,13 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 						.addComponent(stringSeparatorOptions, wLeftLabel, wLeftLabel, wLeftLabel)));
 
 		centerLayout.setVerticalGroup(centerLayout.createSequentialGroup()
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addComponent(dataLabel)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addComponent(dataSelectionLabel)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addComponent(headerOptionsPanel)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addComponent(csvFormatLabel)
+				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize).addComponent(dataLabel)
+				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize).addComponent(dataSelectionLabel)
+				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize).addComponent(headerOptionsPanel)
+				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize).addComponent(csvFormatLabel)
 				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
 				.addComponent(includeFormatHintOption, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addComponent(fieldSeparatorLabel)
+				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize).addComponent(fieldSeparatorLabel)
 				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
 				.addGroup(centerLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(tabsOption, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
@@ -373,9 +352,8 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 								Globals.buttonHeight))
 				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
 				.addGroup(centerLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(stringSeparatorLabel)
-						.addComponent(stringSeparatorOptions, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight))
+						.addComponent(stringSeparatorLabel).addComponent(stringSeparatorOptions, Globals.buttonHeight,
+								Globals.buttonHeight, Globals.buttonHeight))
 				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize));
 
 		return centerPanel;
