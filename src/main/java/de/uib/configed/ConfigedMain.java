@@ -1020,7 +1020,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			selectionPanel.moveToValue(getSelectedClients()[0], 0);
 		}
 
-		mainFrame.showHardwareAddressColumn(!visible);
 	}
 
 	public void setColumnSessionInfo(boolean b) {
@@ -6950,7 +6949,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (choiceDialog.getResult() == 1 && !choiceDialog.getResultString().equals("")) {
 			String newGroupName = choiceDialog.getResultString();
-			IconNode newGroupNode = treeClients.makeSubgroupAt(null, newGroupName);
+			IconNode newGroupNode = treeClients.makeSubgroupAt(null);
 			if (newGroupNode == null)
 				return;
 
@@ -6969,9 +6968,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void callDeleteGroupDialog() {
-		java.util.List groupList = persist.getHostGroupIds();
+		java.util.List<String> groupList = persist.getHostGroupIds();
 		Collections.sort(groupList);
-		Vector groupSelectionIds = new Vector(groupList);
+		Vector<String> groupSelectionIds = new Vector<>(groupList);
 
 		int i = groupSelectionIds.indexOf(groupname);
 

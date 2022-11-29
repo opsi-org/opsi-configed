@@ -48,6 +48,10 @@ public class Globals {
 																	// with background;
 
 	public static class ProductPackageVersionSeparator {
+
+		private ProductPackageVersionSeparator() {
+		}
+
 		public static String forDisplay() {
 			return "-";
 		}
@@ -258,11 +262,11 @@ public class Globals {
 	public static final Color CONFLICTSTATEcellcolor = new Color(255, 180, 180);
 	public static final String NOVALIDSTATEstring = "";// "invalid";
 
-	private static Map objects;
+	private static Map<String, Object> objects;
 
-	public static Map getMap() {
+	public static Map<String, Object> getMap() {
 		if (objects == null) {
-			objects = new HashMap();
+			objects = new HashMap<>();
 
 			objects.put("mainIcon", mainIcon);
 			objects.put("defaultFont", defaultFont);
@@ -277,14 +281,14 @@ public class Globals {
 	public static javax.swing.JFrame frame1; // can be changed
 	public static java.awt.Container container1; // can be changed
 
-	public static java.awt.Dimension helperFormDimension = new java.awt.Dimension(1100, 600);
+	public final static java.awt.Dimension helperFormDimension = new java.awt.Dimension(1100, 600);
 
-	public static int locationDistanceX = 150;
-	public static int locationDistanceY = 150;
+	public final static int locationDistanceX = 150;
+	public final static int locationDistanceY = 150;
 
-	public static int dialogFrameDefaultHeight = 400;
-	public static int dialogFrameDefaultWidth = 800;
-	public static java.awt.Dimension dialogFrameDefaultSize = new java.awt.Dimension(dialogFrameDefaultWidth,
+	public final static int dialogFrameDefaultHeight = 400;
+	public final static int dialogFrameDefaultWidth = 800;
+	public final static java.awt.Dimension dialogFrameDefaultSize = new java.awt.Dimension(dialogFrameDefaultWidth,
 			dialogFrameDefaultHeight);
 
 	public static String getResourceValue(String key) {
@@ -408,7 +412,7 @@ public class Globals {
 		sqlNow = sqlNow.substring(0, sqlNow.lastIndexOf(' '));
 
 		if (justNumbers)
-			sqlNow = sqlNow.replaceAll("-", "");
+			sqlNow = sqlNow.replace("-", "");
 
 		return sqlNow;
 	}

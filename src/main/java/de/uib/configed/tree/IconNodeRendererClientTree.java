@@ -30,12 +30,9 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 		setPreferredSize(new java.awt.Dimension(labelWidth, labelHeight));
 	}
 
-	public Component getTreeCellRendererComponent(JTree tree, Object value,
-			boolean sel,
-			boolean expanded,
-			boolean leaf,
-			int row,
-			boolean hasFocus) {
+	@Override
+	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
+			int row, boolean hasFocus) {
 		setBackground(Color.white);
 		if (value instanceof IconNode) {
 			String stringValue =
@@ -145,11 +142,8 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			 * }
 			 */
 
-			if (tree.getSelectionPath() != null
-					&&
-					node.equals(tree.getSelectionPath().getLastPathComponent())
-					&&
-					tree.hasFocus())
+			if (tree.getSelectionPath() != null && node.equals(tree.getSelectionPath().getLastPathComponent())
+					&& tree.hasFocus())
 
 			{
 				// logging.info(this, " we are at this place ");
@@ -166,14 +160,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			return this;
 		}
 
-		return super.getTreeCellRendererComponent(
-				tree,
-				value,
-				sel,
-				expanded,
-				leaf,
-				row,
-				hasFocus);
+		return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
 	}
 }

@@ -7,7 +7,6 @@ import java.awt.Container;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
@@ -1723,7 +1722,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuHelpServerInfoPage.addActionListener((ActionEvent e) -> showInfoPage());
 
 		jMenuHelpLogfileLocation.setText(configed.getResourceValue("MainFrame.jMenuHelpLogfileLocation"));
-		jMenuHelpLogfileLocation.addActionListener((ActionEvent e) -> showLogfileLocationAction());
+		showLogfileLocationAction();
 
 		jMenuHelp.add(jMenuHelpLogfileLocation);
 
@@ -1839,57 +1838,28 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		iconButtonSaveGroup = new IconButton(de.uib.configed.configed.getResourceValue("MainFrame.iconButtonSaveGroup"),
 				"images/saveGroup.gif", "images/saveGroup_over.gif", " ");
 
-		iconButtonReload.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				reloadAction();
-			}
+		iconButtonReload.addActionListener((ActionEvent e) -> reloadAction());
+
+		iconButtonReloadLicenses.addActionListener((ActionEvent e) -> reloadLicensesAction());
+
+		iconButtonNewClient.addActionListener((ActionEvent e) -> addClientAction());
+
+		iconButtonSetGroup.addActionListener((ActionEvent e) -> callSelectionDialog());
+
+		iconButtonSaveConfiguration.addActionListener((ActionEvent e) -> saveAction());
+
+		iconButtonCancelChanges.addActionListener((ActionEvent e) -> cancelAction());
+
+		iconButtonReachableInfo.addActionListener((ActionEvent e) -> getReachableInfo());
+
+		iconButtonSessionInfo.addActionListener((ActionEvent e) -> {
+			main.setColumnSessionInfo(true);
+			getSessionInfo();
 		});
-		iconButtonReloadLicenses.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				reloadLicensesAction();
-			}
-		});
-		iconButtonNewClient.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				addClientAction();
-			}
-		});
-		iconButtonSetGroup.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				callSelectionDialog();
-			}
-		});
-		iconButtonSaveConfiguration.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				saveAction();
-			}
-		});
-		iconButtonCancelChanges.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				cancelAction();
-			}
-		});
-		iconButtonReachableInfo.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				getReachableInfo(); // false );
-			}
-		});
-		iconButtonSessionInfo.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				main.setColumnSessionInfo(true);
-				getSessionInfo();
-			}
-		});
-		iconButtonToggleClientFilter.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				toggleClientFilterAction();
-			}
-		});
-		iconButtonSaveGroup.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				saveGroupAction();
-			}
-		});
+
+		iconButtonToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
+
+		iconButtonSaveGroup.addActionListener((ActionEvent e) -> saveGroupAction());
 
 		proceeding = new JPanel();
 		ActivityPanel activity = new ActivityPanel();
@@ -1930,59 +1900,35 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		popupShowCreatedColumn.setText(configed.getResourceValue("MainFrame.jMenuShowCreatedColumn"));
 		combinedMenuItemCreatedColumn.show(main.host_displayFields.get(HostInfo.created_DISPLAY_FIELD_LABEL));
 
-		popupShowCreatedColumn.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				main.toggleColumnCreated();
-			}
-		});
+		popupShowCreatedColumn.addItemListener((ItemEvent e) -> main.toggleColumnCreated());
 
 		popupShowWANactiveColumn.setText(configed.getResourceValue("MainFrame.jMenuShowWanConfig"));
 		combinedMenuItemWANactiveColumn.show(main.host_displayFields.get(HostInfo.clientWanConfig_DISPLAY_FIELD_LABEL));
 
-		popupShowWANactiveColumn.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				main.toggleColumnWANactive();
-			}
-		});
+		popupShowWANactiveColumn.addItemListener((ItemEvent e) -> main.toggleColumnWANactive());
 
 		popupShowIPAddressColumn.setText(configed.getResourceValue("MainFrame.jMenuShowIPAddressColumn"));
 		combinedMenuItemIPAddressColumn.show(main.host_displayFields.get(HostInfo.clientIpAddress_DISPLAY_FIELD_LABEL));
 
-		popupShowIPAddressColumn.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				main.toggleColumnIPAddress();
-			}
-		});
+		popupShowIPAddressColumn.addItemListener((ItemEvent e) -> main.toggleColumnIPAddress());
 
 		popupShowHardwareAddressColumn.setText(configed.getResourceValue("MainFrame.jMenuShowHardwareAddressColumn"));
 		combinedMenuItemHardwareAddressColumn
 				.show(main.host_displayFields.get(HostInfo.clientMacAddress_DISPLAY_FIELD_LABEL));
 
-		popupShowHardwareAddressColumn.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				main.toggleColumnHardwareAddress();
-			}
-		});
+		popupShowHardwareAddressColumn.addItemListener((ItemEvent e) -> main.toggleColumnHardwareAddress());
 
 		popupShowSessionInfoColumn.setText(configed.getResourceValue("MainFrame.jMenuShowSessionInfoColumn"));
 		combinedMenuItemSessionInfoColumn
 				.show(main.host_displayFields.get(HostInfo.clientSessionInfo_DISPLAY_FIELD_LABEL));
 
-		popupShowSessionInfoColumn.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				main.toggleColumnSessionInfo();
-			}
-		});
+		popupShowSessionInfoColumn.addItemListener((ItemEvent e) -> main.toggleColumnSessionInfo());
 
 		popupShowInventoryNumberColumn.setText(configed.getResourceValue("MainFrame.jMenuShowInventoryNumberColumn"));
 		combinedMenuItemInventoryNumberColumn
 				.show(main.host_displayFields.get(HostInfo.clientInventoryNumber_DISPLAY_FIELD_LABEL));
 
-		popupShowInventoryNumberColumn.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				main.toggleColumnInventoryNumber();
-			}
-		});
+		popupShowInventoryNumberColumn.addItemListener((ItemEvent e) -> main.toggleColumnInventoryNumber());
 
 		popupShowUefiBoot.setText(configed.getResourceValue("MainFrame.jMenuShowUefiBoot"));
 		combinedMenuItemUefiBootColumn.show(main.host_displayFields.get(HostInfo.clientUefiBoot_DISPLAY_FIELD_LABEL));
@@ -1997,73 +1943,41 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		combinedMenuItemInstallByShutdownColumn
 				.show(main.host_displayFields.get(HostInfo.clientInstallByShutdown_DISPLAY_FIELD_LABEL));
 
-		popupShowInstallByShutdownColumn.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				main.toggleColumnInstallByShutdownActive();
-			}
-		});
+		popupShowInstallByShutdownColumn.addItemListener((ItemEvent e) -> main.toggleColumnInstallByShutdownActive());
 
 		popupShowDepotColumn.setText(configed.getResourceValue("MainFrame.jMenuShowDepotOfClient"));
 		combinedMenuItemDepotColumn.show(main.host_displayFields.get(HostInfo.depotOfClient_DISPLAY_FIELD_LABEL));
 
-		popupShowDepotColumn.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				main.toggleColumnDepot();
-			}
-		});
+		popupShowDepotColumn.addItemListener((ItemEvent e) -> main.toggleColumnDepot());
 
 		popupChangeDepot.setText(configed.getResourceValue("MainFrame.jMenuChangeDepot"));
 
-		popupChangeDepot.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				changeDepotAction();
-			}
-		});
+		popupChangeDepot.addActionListener((ActionEvent e) -> changeDepotAction());
 
 		popupChangeClientID.setText(configed.getResourceValue("MainFrame.jMenuChangeClientID"));
 
-		popupChangeClientID.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				changeClientIDAction();
-			}
-		});
+		popupChangeClientID.addActionListener((ActionEvent e) -> changeClientIDAction());
 
 		popupResetProductOnClientWithStates
 				.setText(configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithStates"));
 
-		popupResetProductOnClientWithStates.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				resetProductOnClientAction(true);
-			}
-		});
+		popupResetProductOnClientWithStates.addActionListener((ActionEvent e) -> resetProductOnClientAction(true));
 
 		popupResetProductOnClient
 				.setText(configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithoutStates"));
 
-		popupResetProductOnClient.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				resetProductOnClientAction(false);
-			}
-		});
+		popupResetProductOnClient.addActionListener((ActionEvent e) -> resetProductOnClientAction(false));
 
 		popupAddClient.setText(configed.getResourceValue("MainFrame.jMenuAddClient"));
 
-		popupAddClient.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				addClientAction();
-			}
-		});
+		popupAddClient.addActionListener((ActionEvent e) -> addClientAction());
 
 		menuItemsHost.get(ITEM_ADD_CLIENT).add(popupAddClient);
 
 		popupWakeOnLan.setText(configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
 
 		popupWakeOnLanDirect.setText(configed.getResourceValue("MainFrame.jMenuWakeOnLan.direct"));
-		popupWakeOnLanDirect.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				wakeOnLanAction();
-			}
-		});
+		popupWakeOnLanDirect.addActionListener((ActionEvent e) -> wakeOnLanAction());
 		popupWakeOnLan.add(popupWakeOnLanDirect);
 
 		final MainFrame f = this;
@@ -2081,50 +1995,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			}
 		});
 		popupWakeOnLan.add(popupWakeOnLanScheduler);
-
-		/*
-		 * for (final String label : labelledDelays.keySet())
-		 * {
-		 * JMenuItem item = new JMenuItemFormatted( label );
-		 * item.setFont(Globals.defaultFont);
-		 * 
-		 * 
-		 * if (labelledDelays.get( label ) == 0)
-		 * {
-		 * item.addActionListener(new ActionListener()
-		 * {
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * wakeOnLanAction();
-		 * }
-		 * }
-		 * );
-		 * }
-		 * else
-		 * {
-		 * 
-		 * item.addActionListener(new ActionListener()
-		 * {
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * wakeOnLanActionWithDelay( labelledDelays.get( label ) );
-		 * }
-		 * }
-		 * );
-		 * }
-		 * 
-		 * popupWakeOnLan.add(item);
-		 * }
-		 * 
-		 * 
-		 * popupWakeOnLan.addActionListener(new ActionListener()
-		 * {
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * wakeOnLanAction();
-		 * }
-		 * });
-		 */
 
 		popupDeletePackageCaches.setText(configed.getResourceValue("MainFrame.jMenuDeletePackageCaches"));
 		popupDeletePackageCaches.addActionListener(new ActionListener() {
@@ -2156,40 +2026,19 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		 */
 
 		popupShowPopupMessage.setText(configed.getResourceValue("MainFrame.jMenuShowPopupMessage"));
-		popupShowPopupMessage.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				showPopupOnClientsAction();
-			}
-		});
+		popupShowPopupMessage.addActionListener((ActionEvent e) -> showPopupOnClientsAction());
 
 		popupRequestSessionInfo.setText(configed.getResourceValue("MainFrame.jMenuRequestSessionInfo"));
-		popupRequestSessionInfo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				main.setColumnSessionInfo(true);
-				getSessionInfo();
-			}
-		});
+		popupRequestSessionInfo.addActionListener((ActionEvent e) -> getSessionInfo());
 
 		popupShutdownClient.setText(configed.getResourceValue("MainFrame.jMenuShutdownClient"));
-		popupShutdownClient.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				shutdownClientsAction();
-			}
-		});
+		popupShutdownClient.addActionListener((ActionEvent e) -> shutdownClientsAction());
 
 		popupRebootClient.setText(configed.getResourceValue("MainFrame.jMenuRebootClient"));
-		popupRebootClient.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				rebootClientsAction();
-			}
-		});
+		popupRebootClient.addActionListener((ActionEvent e) -> rebootClientsAction());
 
 		popupDeleteClient.setText(configed.getResourceValue("MainFrame.jMenuDeleteClient"));
-		popupDeleteClient.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				deleteClientAction();
-			}
-		});
+		popupDeleteClient.addActionListener((ActionEvent e) -> deleteClientAction());
 
 		menuItemsHost.get(ITEM_DELETE_CLIENT).add(popupDeleteClient);
 
@@ -2205,37 +2054,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		popupRemoteControl.setText(configed.getResourceValue("MainFrame.jMenuRemoteControl"));
 
 		popupRemoteControl.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0));
-		popupRemoteControl.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				remoteControlAction();
-			}
-		});
-
-		/*
-		 * popupSelectionSaveGroup.setText(
-		 * configed.getResourceValue("MainFrame.jMenuClientselectionSaveGroup") );
-		 * popupSelectionSaveGroup.addActionListener(new ActionListener()
-		 * {
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * saveGroupAction();
-		 * }
-		 * });
-		 */
+		popupRemoteControl.addActionListener((ActionEvent e) -> remoteControlAction());
 
 		popupSelectionGetGroup.setText(configed.getResourceValue("MainFrame.jMenuClientselectionGetGroup"));
-		popupSelectionGetGroup.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				callSelectionDialog();
-			}
-		});
+		popupSelectionGetGroup.addActionListener((ActionEvent e) -> callSelectionDialog());
 
 		popupSelectionGetSavedSearch.setText(configed.getResourceValue("MainFrame.jMenuClientselectionGetSavedSearch"));
-		popupSelectionGetSavedSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				main.clientSelectionGetSavedSearch();
-			}
-		});
+		popupSelectionGetSavedSearch.addActionListener((ActionEvent e) -> main.clientSelectionGetSavedSearch());
 
 		/*
 		 * popupSelectionDeselect.setText(
@@ -2251,11 +2076,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		// pdf generating
 		popupCreatePdf.setText(configed.getResourceValue("FGeneralDialog.pdf"));
-		popupCreatePdf.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				createPdf();
-			}
-		});
+		popupCreatePdf.addActionListener((ActionEvent e) -> createPdf());
 		//
 
 		popupSelectionToggleClientFilter
@@ -2269,11 +2090,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			}
 		});
 
-		popupRebuildClientList.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				main.reloadHosts();
-			}
-		});
+		popupRebuildClientList.addActionListener((ActionEvent e) -> main.reloadHosts());
 
 		// ----
 
@@ -2285,11 +2102,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			JMenuItem item = new JMenuItemFormatted(event);
 			item.setFont(Globals.defaultFont);
 
-			item.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					fireOpsiclientdEventAction(event);
-				}
-			});
+			item.addActionListener((ActionEvent e) -> fireOpsiclientdEventAction(event));
 
 			menuPopupOpsiClientdEvent.add(item);
 		}
@@ -2395,22 +2208,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	private void setupPopupMenuHardwareAuditTab() {
-
-	}
-
-	private void setupPopupMenuSoftwareAuditTab() {
-
-	}
-
-	private void setupPopupMenuNetworkConfigTab() {
-
-	}
-
-	private void setupPopupMenuLogfilesTab() {
-
-	}
-
 	// ------------------------------------------------------------------------------------------
 	// ------------------------------------------------------------------------------------------
 
@@ -2473,12 +2270,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		this.setJMenuBar(jMenuBar1);
 
 		setupPopupMenuClientsTab();
-		// setupPopupMenuLocalbootProductsTab();
-		// setupPopupMenuNetbootProductsTab();
-		setupPopupMenuHardwareAuditTab();
-		setupPopupMenuSoftwareAuditTab();
-		setupPopupMenuNetworkConfigTab();
-		setupPopupMenuLogfilesTab();
 
 		// clientPane
 		clientPane = new JPanel();
@@ -2555,29 +2346,20 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jTextFieldInventoryNumber.addKeyListener(this);
 		jTextFieldInventoryNumber.addMouseListener(this);
 
-		jTextAreaNotes = new JTextArea() {
-			public void setText(String s) {
-				// logging.info(this, "setText original " + s);
-				// String t = s;
-				// t = s.replaceAll("\\\\n", System.getProperty("line.separator"));
-				// logging.info(this, "setText reproduced as " + t);
-				super.setText(s); // + "\nabc" );
-			}
-		};
+		jTextAreaNotes = new JTextArea();
 
 		jTextAreaNotes.setEditable(true);
 		jTextAreaNotes.setLineWrap(true);
 		jTextAreaNotes.setWrapStyleWord(true);
 		jTextAreaNotes.setFont(Globals.defaultFontBig);
 		GraphicsEnvironment.getLocalGraphicsEnvironment();
-		Font font = new Font("LucidaSans", Font.PLAIN, 40);
 		jTextAreaNotes.addKeyListener(this);
 		jTextAreaNotes.addMouseListener(this);
 
 		scrollpaneNotes = new JScrollPane(jTextAreaNotes);
 		scrollpaneNotes.setPreferredSize(Globals.textfieldDimension);
-		scrollpaneNotes.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollpaneNotes.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollpaneNotes.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollpaneNotes.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		macAddressField = new JTextEditorField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3',
 				'4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':', 2, true), "", 17);
@@ -2828,19 +2610,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		// jLabel_Productselection.setFont(Globals.defaultFontBig);
 		jCheckBoxSorted.setSelected(true);
 		jCheckBoxSorted.setText(configed.getResourceValue("MainFrame.jCheckBoxSorted"));
-		jCheckBoxSorted.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-			}
-		});
 
 		jButtonSaveList.setText(configed.getResourceValue("MainFrame.jButtonSaveList"));
 		jButtonSaveList.setBackground(Globals.backBlue);
-		jButtonSaveList.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				jButtonSaveList_actionPerformed(e);
-			}
-		});
+		jButtonSaveList.addActionListener(this::jButtonSaveList_actionPerformed);
 
 		jRadioRequiredAll.setMargin(new Insets(0, 0, 0, 0));
 		jRadioRequiredAll.setAlignmentY((float) 0.0);
@@ -2857,11 +2630,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		buttonGroupRequired.add(jRadioRequiredOff);
 
 		jComboBoxProductValues.setBackground(Globals.backBlue);
-		jComboBoxProductValues.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				jComboBoxProductValues_actionPerformed(e);
-			}
-		});
+		jComboBoxProductValues.addActionListener(this::jComboBoxProductValues_actionPerformed);
 
 		treeClients.setFont(Globals.defaultFont);
 		// treeClients.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
@@ -3349,6 +3118,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			}
 
 			// overwrite in subclasses
+			@Override
 			protected void saveHostConfig() {
 				super.saveHostConfig();
 				main.checkSaveAll(false);
@@ -3526,15 +3296,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	}
 
-	private void startSizing(int width, int height) {
-		logging.info(this, "startSizing width, height " + width + ", " + height);
-		setSize(width, height);
-
-		// splitterPanelClientSelection = fwidth_lefthanded + splitterLeftRight;
-		splitterPanelClientSelection = panel_Clientselection.getSize().width - prefClientPaneW;
-		panel_Clientselection.setDividerLocation(splitterPanelClientSelection);
-	}
-
 	public void showPopupClients() {
 
 		Rectangle rect = panelClientlist.getCellRect(panelClientlist.getSelectedRow(), 0, false);
@@ -3603,6 +3364,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	public void showPopupOnClientsAction() {
 		FEditTextWithExtra fText = new FEditTextWithExtra("", configed.getResourceValue("MainFrame.writePopupMessage"),
 				configed.getResourceValue("MainFrame.writePopupDuration")) {
+			@Override
 			protected void commit() {
 				super.commit();
 				Float duration = 0.0f;
@@ -3734,13 +3496,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	{
 		iconButtonReachableInfo.setEnabled(false);
 		try {
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					main.getReachableInfo(); // onlySelectedClients );
-					// iconButtonReachableInfo.setEnabled(true);
-					// will be called in thread which is spawn in main
-				}
-			});
+			SwingUtilities.invokeLater(main::getReachableInfo);
 		} catch (Exception ex) {
 			logging.debug(this, "Exception " + ex);
 		}
@@ -3752,7 +3508,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	private java.util.List<String> getProduct(Vector<String> completeList) {
 		FEditList fList = new FEditList();
-		fList.setListModel(new DefaultComboBoxModel(completeList));
+		fList.setListModel(new DefaultComboBoxModel<>(completeList));
 		fList.setTitle(Globals.APPNAME + ": " + configed.getResourceValue("MainFrame.productSelection"));
 		fList.init();
 
@@ -3770,7 +3526,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private void groupByNotCurrentProductVersion() {
 		java.util.List<String> products = getProduct(new Vector<String>(new TreeSet<String>(main.getProductNames())));
 
-		if (products.size() > 0)
+		if (!products.isEmpty())
 			main.selectClientsNotCurrentProductInstalled(products, false);
 		// java.util.Arrays.asList("javavm"));
 	}
@@ -3778,7 +3534,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private void groupByNotCurrentProductVersionOrBrokenInstallation() {
 		java.util.List<String> products = getProduct(new Vector<String>(new TreeSet<String>(main.getProductNames())));
 
-		if (products.size() > 0)
+		if (!products.isEmpty())
 			main.selectClientsNotCurrentProductInstalled(products, true);
 		// java.util.Arrays.asList("javavm"));
 	}
@@ -3786,7 +3542,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private void groupByFailedProduct() {
 		java.util.List<String> products = getProduct(new Vector<String>(new TreeSet<String>(main.getProductNames())));
 
-		if (products.size() > 0)
+		if (!products.isEmpty())
 			main.selectClientsWithFailedProduct(products);
 		// java.util.Arrays.asList("javavm"));
 	}
@@ -3935,21 +3691,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		 * popupShowIPAddressColumn.setState( b );
 		 * startItemListeners( popupShowIPAddressColumn, theListeners );
 		 */
-	}
-
-	public void showHardwareAddressColumn(Boolean b) {
-	}
-
-	public void showSessionInfoColumn(Boolean b) {
-	}
-
-	public void showInventoryNumberColumn(Boolean b) {
-	}
-
-	public void showUefiBoot(Boolean b) {
-	}
-
-	public void showDepotColumn(Boolean b) {
 	}
 
 	// -------------------
@@ -4335,11 +4076,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	public void executeCommandOnInstances(String command, Set<JDialog> instances) {
 		logging.info(this, "executeCommandOnInstances " + command + " for count instances " + instances.size());
-		switch (command) {
-		case "arrange":
+		if (command.equals("arrange"))
 			arrangeWs(instances);
-			break;
-		}
 	}
 
 	private void reactToHostDataChange(InputEvent e) {
@@ -4765,11 +4503,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				jTabbedPaneConfigPanes.indexOfTab(configed.getResourceValue("MainFrame.jPanel_softwareLog")),
 				showSoftwareLog);
 
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				Globals.mainContainer.repaint();
-			}
-		});
+		SwingUtilities.invokeLater(() -> Globals.mainContainer.repaint());
 	}
 
 	protected boolean handleInstallByShutdownChange(final boolean wantActive) {
@@ -4971,7 +4705,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 			for (String client : main.getSelectedClients()) {
 				Map<String, Map> tableData = main.getPersistenceController().retrieveSoftwareAuditData(client);
-				if (tableData == null || tableData.keySet().size() == 0)
+				if (tableData == null || tableData.isEmpty())
 					clientsWithoutScan.add(client);
 
 				/*
