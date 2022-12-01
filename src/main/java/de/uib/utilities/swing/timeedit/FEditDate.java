@@ -21,8 +21,7 @@ import de.uib.utilities.Globals;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.FEdit;
 
-public class FEditDate extends FEdit
-		implements /* DateEventObserver, */
+public class FEditDate extends FEdit implements /* DateEventObserver, */
 		org.jdesktop.swingx.event.DateSelectionListener, MouseListener, KeyListener
 
 {
@@ -93,7 +92,7 @@ public class FEditDate extends FEdit
 					newDate = java.sql.Timestamp.valueOf(s1);
 					logging.info(this, "after supplement setStartText(): " + s1);
 					dateEditor.setSelectionDate(newDate);
-					// System.out.println(" date parsed");
+					// logging.debug(" date parsed");
 					setDataChanged(false);
 				} catch (IllegalArgumentException ex) {
 					logging.warning("not valid date: " + s1);
@@ -188,7 +187,7 @@ public class FEditDate extends FEdit
 
 	// MouseListener
 	public void mouseClicked(MouseEvent e) {
-		// System.out.println(" MouseEvent " + e);
+		// logging.debug(" MouseEvent " + e);
 		if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2)
 			commit();
 

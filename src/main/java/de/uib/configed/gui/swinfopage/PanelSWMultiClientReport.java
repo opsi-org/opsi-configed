@@ -223,8 +223,7 @@ public class PanelSWMultiClientReport extends JPanel {
 
 		panelSelectExportType = new PanelStateSwitch(
 				configed.getResourceValue("PanelSWMultiClientReport.selectExportType"),
-				(Enum) PanelSWInfo.KindOfExport.PDF, PanelSWInfo.KindOfExport.values(),
-				PanelSWInfo.KindOfExport.class,
+				(Enum) PanelSWInfo.KindOfExport.PDF, PanelSWInfo.KindOfExport.values(), PanelSWInfo.KindOfExport.class,
 				(val -> {
 					logging.info(this, "change to " + val);
 					kindOfExport = (PanelSWInfo.KindOfExport) val;
@@ -269,14 +268,15 @@ public class PanelSWMultiClientReport extends JPanel {
 						.addComponent(fieldFilenamePrefix, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
 				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
 
-				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelFilenameInformation, Globals.lineHeight, Globals.lineHeight,
-								Globals.lineHeight))
+				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
+						labelFilenameInformation, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
 				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelWithMsUpdates, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
+				.addGroup(
+						glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(labelWithMsUpdates, Globals.lineHeight, Globals.lineHeight,
+										Globals.lineHeight)
+								.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelWithMsUpdates2, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
 						.addComponent(checkWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -327,40 +327,39 @@ public class PanelSWMultiClientReport extends JPanel {
 						.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
 						.addComponent(labelFilenameInformation, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGroup(glPreConfig.createSequentialGroup()
-						.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
-						.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(labelWithMsUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize))
-				.addGroup(glPreConfig.createSequentialGroup()
-						.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
-						.addComponent(checkWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(labelWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize))
+				.addGroup(
+						glPreConfig.createSequentialGroup()
+								.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
+								.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+								.addComponent(labelWithMsUpdates, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize))
+				.addGroup(
+						glPreConfig.createSequentialGroup()
+								.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
+								.addComponent(checkWithMsUpdates2, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+								.addComponent(labelWithMsUpdates2, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize))
 				.addGroup(glPreConfig.createSequentialGroup()
 						.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
 						.addComponent(checkAskForOverwrite, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(labelAskForOverwrite, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize).addComponent(labelAskForOverwrite,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
 		);
 
 		glGlobal.setVerticalGroup(glGlobal.createSequentialGroup()
 				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addGroup(glGlobal.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelSwauditMultiClientReport1, Globals.lineHeight, Globals.lineHeight,
-								Globals.lineHeight))
-				.addGroup(glGlobal.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelSwauditMultiClientReport2, Globals.lineHeight, Globals.lineHeight,
-								Globals.lineHeight))
+				.addGroup(glGlobal.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
+						labelSwauditMultiClientReport1, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
+				.addGroup(glGlobal.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
+						labelSwauditMultiClientReport2, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
 				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
 
 				.addComponent(subpanelPreConfig, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -368,41 +367,41 @@ public class PanelSWMultiClientReport extends JPanel {
 
 				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
 
-				.addGroup(glGlobal.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(buttonStart, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
+				.addGroup(glGlobal.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(buttonStart,
+						Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
 
 		);
 
-		glGlobal.setHorizontalGroup(glGlobal.createParallelGroup()
-				.addGap(3 * Globals.hGapSize, 3 * Globals.hGapSize, 3 * Globals.hGapSize)
-				.addGroup(glGlobal.createSequentialGroup()
-						.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
-						.addComponent(labelSwauditMultiClientReport1, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Short.MAX_VALUE))
+		glGlobal.setHorizontalGroup(
+				glGlobal.createParallelGroup().addGap(3 * Globals.hGapSize, 3 * Globals.hGapSize, 3 * Globals.hGapSize)
+						.addGroup(glGlobal.createSequentialGroup()
+								.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
+								.addComponent(labelSwauditMultiClientReport1, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.hGapSize, Globals.hGapSize, Short.MAX_VALUE))
 
-				.addGroup(glGlobal.createSequentialGroup()
-						.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
-						.addComponent(labelSwauditMultiClientReport2, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Short.MAX_VALUE))
-				.addGroup(glGlobal.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(subpanelPreConfig, 40, 40, Short.MAX_VALUE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize))
+						.addGroup(glGlobal.createSequentialGroup()
+								.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
+								.addComponent(labelSwauditMultiClientReport2, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.hGapSize, Globals.hGapSize, Short.MAX_VALUE))
+						.addGroup(glGlobal.createSequentialGroup()
+								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+								.addComponent(subpanelPreConfig, 40, 40, Short.MAX_VALUE)
+								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize))
 
-				.addGroup(glGlobal.createSequentialGroup()
-						.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
-						.addComponent(buttonStart, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(3 * Globals.hGapSize, 3 * Globals.hGapSize, 3 * Globals.hGapSize));
+						.addGroup(glGlobal.createSequentialGroup()
+								.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
+								.addComponent(buttonStart, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addGap(3 * Globals.hGapSize, 3 * Globals.hGapSize, 3 * Globals.hGapSize));
 	}
 
 	public static void main(String[] args) {
 		try {
 			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
 		} catch (Exception ex) {
-			System.out.println(" kein Nimbus " + ex);
+			logging.debug(" kein Nimbus " + ex);
 		}
 		JFrame f = new JFrame();
 		f.getContentPane().add(new PanelSWMultiClientReport());

@@ -18,9 +18,7 @@ public class MapBasedTableEditItem extends TableEditItem {
 	Vector<Object> oldValues;
 	Vector<Object> rowV;
 
-	public MapBasedTableEditItem(Object source,
-			int keyCol,
-			Vector<String> columnNames, Vector<String> classNames,
+	public MapBasedTableEditItem(Object source, int keyCol, Vector<String> columnNames, Vector<String> classNames,
 			Vector<Object> oldValues, Vector<Object> rowV) {
 		this.columnNames = columnNames;
 		this.classNames = classNames;
@@ -30,9 +28,7 @@ public class MapBasedTableEditItem extends TableEditItem {
 		this.keyCol = keyCol;
 	}
 
-	public MapBasedTableEditItem(Object source,
-			int keyCol,
-			Vector<String> columnNames, Vector<String> classNames,
+	public MapBasedTableEditItem(Object source, int keyCol, Vector<String> columnNames, Vector<String> classNames,
 			Vector<Object> rowV) {
 		this(source, keyCol, columnNames, classNames, null, rowV);
 	}
@@ -42,7 +38,7 @@ public class MapBasedTableEditItem extends TableEditItem {
 
 		for (int i = 0; i < columnNames.size(); i++) {
 			result.put(columnNames.get(i), rowV.get(i));
-			// System.out.println( "MapBasedTableEditItem.getRowAsMap(): " +
+			// logging.debug( "MapBasedTableEditItem.getRowAsMap(): " +
 			// columnNames.get(i) + ", " + rowV.get(i) );
 		}
 

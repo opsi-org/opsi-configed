@@ -89,9 +89,7 @@ public class ActionResult {
 		displayLabel2label.put("failed", "failed");
 		displayLabel2label.put("success", "successful");
 
-		choiceLabels = new String[] {
-				label2displayLabel.get("none")
-		};
+		choiceLabels = new String[] { label2displayLabel.get("none") };
 
 	}
 
@@ -162,8 +160,7 @@ public class ActionResult {
 
 	// getting instances
 	public static ActionResult produceFromDisplayLabel(String display) {
-		return produceFromLabel(
-				displayLabel2label.get(display));
+		return produceFromLabel(displayLabel2label.get(display));
 	}
 
 	public static ActionResult produceFromLabel(String label) {

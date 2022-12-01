@@ -254,8 +254,9 @@ public class ExporterToPDF extends ExportTable {
 			}
 		}
 
-		content.add(new Paragraph(de.uib.configed.configed.getResourceValue("DocumentExport.summonedBy") + ": "
-				+ userInitial + ", " + dateFormatter.format(new Date()), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		content.add(new Paragraph(
+				de.uib.configed.configed.getResourceValue("DocumentExport.summonedBy") + ": " + userInitial + ", " //$NON-NLS-3$
+						+ dateFormatter.format(new Date()), //$NON-NLS-2$ //$NON-NLS-3$
 				smallBold));
 		content.add(addEmptyLines(1));
 		return content;
@@ -308,16 +309,16 @@ public class ExporterToPDF extends ExportTable {
 						s = "";
 					}
 					switch (s) {
-						case "∞":
-							value = new PdfPCell(new Phrase("\u221e", symbol_font));
-							break;
-						case "true":
-							value = new PdfPCell(new Phrase("\u221a", symbol_font)); // radic
-							break;
-						case "false":
-							break;
-						default:
-							value = new PdfPCell(new Phrase(s, small));
+					case "∞":
+						value = new PdfPCell(new Phrase("\u221e", symbol_font));
+						break;
+					case "true":
+						value = new PdfPCell(new Phrase("\u221a", symbol_font)); // radic
+						break;
+					case "false":
+						break;
+					default:
+						value = new PdfPCell(new Phrase(s, small));
 					}
 					if (j % 2 == 0)
 						value.setBackgroundColor(evenBackground);
@@ -411,13 +412,11 @@ public class ExporterToPDF extends ExportTable {
 		 */
 		public void onCloseDocument(PdfWriter writer, Document document) {
 			ColumnText.showTextAligned(total, Element.ALIGN_LEFT,
-					new Phrase(String.valueOf(writer.getPageNumber() - 1)),
-					2, 2, 0);
+					new Phrase(String.valueOf(writer.getPageNumber() - 1)), 2, 2, 0);
 		}
 	}
 
-	public static PdfPTable createElement(javax.swing.table.AbstractTableModel tablemodel)
-			throws BadElementException {
+	public static PdfPTable createElement(javax.swing.table.AbstractTableModel tablemodel) throws BadElementException {
 
 		PdfPTable table = new PdfPTable(tablemodel.getColumnCount());
 		PdfPCell h;
@@ -458,17 +457,17 @@ public class ExporterToPDF extends ExportTable {
 				}
 				// div. symbols: http://severinghaus.org/projects/html-entities#LetSym
 				switch (s) {
-					case "∞":
-						value = new PdfPCell(new Phrase("\u221e", symbol_font));
-						break;
-					case "true":
-						value = new PdfPCell(new Phrase("\u221a", symbol_font)); // radic
-						// tests mit 2713 ; 22A8
-						break;
-					case "false":
-						break;
-					default:
-						value = new PdfPCell(new Phrase(s, small));
+				case "∞":
+					value = new PdfPCell(new Phrase("\u221e", symbol_font));
+					break;
+				case "true":
+					value = new PdfPCell(new Phrase("\u221a", symbol_font)); // radic
+					// tests mit 2713 ; 22A8
+					break;
+				case "false":
+					break;
+				default:
+					value = new PdfPCell(new Phrase(s, small));
 				}
 				if (j % 2 == 0)
 					value.setBackgroundColor(evenBackground);
@@ -478,7 +477,7 @@ public class ExporterToPDF extends ExportTable {
 				// value.setHorizontalAlignment(Element.ALIGN_CENTER);
 				// } else {
 				if (leftAlignmentlist.contains(i)) {
-					// System.out.println(" column " + i + "leftAlignmentList " +
+					// logging.debug(" column " + i + "leftAlignmentList " +
 					// leftAlignmentlist);
 					value.setHorizontalAlignment(Element.ALIGN_LEFT);
 				} else {
@@ -531,8 +530,7 @@ public class ExporterToPDF extends ExportTable {
 		return img;
 	}
 
-	private static PdfPCell createElement(String imageSource)
-			throws DocumentException, IOException {
+	private static PdfPCell createElement(String imageSource) throws DocumentException, IOException {
 		Image img = com.itextpdf.text.Image.getInstance(imageSource);
 		return new PdfPCell(img);
 	}

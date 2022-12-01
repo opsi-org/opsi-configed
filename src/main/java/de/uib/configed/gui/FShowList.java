@@ -74,7 +74,7 @@ public class FShowList extends FTextArea {
 
 	public void setFont(Font f) {
 		if (jTextArea1 == null) {
-			// System.out.println (" set Font called too early ");
+			// logging.debug (" set Font called too early ");
 		} else {
 			jTextArea1.setFont(f);
 		}
@@ -108,7 +108,7 @@ public class FShowList extends FTextArea {
 	}
 
 	public void doAction1() {
-		// System.out.println ("action2");
+		// logging.debug ("action2");
 		logging.clearErrorList();
 		if (owner != null)
 			owner.toFront();
@@ -116,7 +116,7 @@ public class FShowList extends FTextArea {
 	}
 
 	public void doAction2() {
-		// System.out.println ("action2");
+		// logging.debug ("action2");
 		// logging. clearErrorList();
 		super.doAction2();
 	}
@@ -125,7 +125,7 @@ public class FShowList extends FTextArea {
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
-			// System.out.println ("shift released");
+			// logging.debug ("shift released");
 		}
 
 		if (e.getKeyCode() == KeyEvent.VK_TAB && !shiftPressed) {

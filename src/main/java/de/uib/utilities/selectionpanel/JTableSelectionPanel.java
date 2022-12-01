@@ -108,7 +108,7 @@ public class JTableSelectionPanel extends JPanel
 					return super.getValueAt(row, col);
 				} catch (Exception ex) {
 
-					// System.out.println ("******** Exception in getValueAt: " + ex.toString());
+					// logging.debug ("******** Exception in getValueAt: " + ex.toString());
 					// ex.printStackTrace();
 					// after change of model (deleting of rows) the row sorter tries to rebuild
 					// itself but fails if no values are supplied
@@ -120,7 +120,7 @@ public class JTableSelectionPanel extends JPanel
 			/*
 			 * public void tableChanged(javax.swing.event.TableModelEvent ev)
 			 * {
-			 * System.out.println (" ------- tableChanged");
+			 * logging.debug (" ------- tableChanged");
 			 * super.tableChanged(ev);
 			 * 
 			 * }
@@ -284,31 +284,25 @@ public class JTableSelectionPanel extends JPanel
 		buttonInvertSelection = new JButton("", invertSelectionIcon);
 		buttonInvertSelection.setToolTipText(configed.getResourceValue("SearchPane.invertselection"));
 
-		buttonMarkAll.addActionListener(
-				(ActionEvent e) -> markAll());
+		buttonMarkAll.addActionListener((ActionEvent e) -> markAll());
 
-		buttonInvertSelection.addActionListener(
-				(ActionEvent e) -> main.invertClientselection());
+		buttonInvertSelection.addActionListener((ActionEvent e) -> main.invertClientselection());
 
 		JLabel labelSearchMode = new JLabel(configed.getResourceValue("JTableSelectionPanel.searchmode"));
 
 		comboSearchMode = new JComboBoxToolTip();
 
 		LinkedHashMap tooltipsMap = new LinkedHashMap();
-		tooltipsMap.put(
-				configed.getResourceValue("SearchPane.SearchMode.fulltext_with_alternatives"),
+		tooltipsMap.put(configed.getResourceValue("SearchPane.SearchMode.fulltext_with_alternatives"),
 				configed.getResourceValue("SearchPane.SearchMode.fulltext_with_alternatives.tooltip"));
 
-		tooltipsMap.put(
-				configed.getResourceValue("SearchPane.SearchMode.fulltext_one_string"),
+		tooltipsMap.put(configed.getResourceValue("SearchPane.SearchMode.fulltext_one_string"),
 				configed.getResourceValue("SearchPane.SearchMode.fulltext_one_string.tooltip"));
 
-		tooltipsMap.put(
-				configed.getResourceValue("SearchPane.SearchMode.starttext"),
+		tooltipsMap.put(configed.getResourceValue("SearchPane.SearchMode.starttext"),
 				configed.getResourceValue("SearchPane.SearchMode.starttext.tooltip"));
 
-		tooltipsMap.put(
-				configed.getResourceValue("SearchPane.SearchMode.regex"),
+		tooltipsMap.put(configed.getResourceValue("SearchPane.SearchMode.regex"),
 				configed.getResourceValue("SearchPane.SearchMode.regex.tooltip"));
 
 		logging.info(this, " comboSearchMode tooltipsMap " + tooltipsMap);
@@ -345,8 +339,8 @@ public class JTableSelectionPanel extends JPanel
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
 
-		layoutTopPane.setHorizontalGroup(
-				layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+		layoutTopPane
+				.setHorizontalGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 						.addGroup(layoutTopPane.createSequentialGroup()
 								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
 								// .addComponent(markReload, GroupLayout.PREFERRED_SIZE,
@@ -376,40 +370,34 @@ public class JTableSelectionPanel extends JPanel
 								.addComponent(comboSearchMode, 100, 200, 300)
 								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)));
 
-		layoutTopPane.setVerticalGroup(
-				layoutTopPane.createSequentialGroup()
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-						.addGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-								// .addComponent(markReload, 10, GroupLayout.PREFERRED_SIZE,
-								// GroupLayout.PREFERRED_SIZE)
-								.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(labelSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(fieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(buttonMarkAll, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(buttonInvertSelection, 10, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(labelSearchMode, 10, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(comboSearchMode, 10, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(comboSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2));
+		layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup()
+				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+				.addGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+						// .addComponent(markReload, 10, GroupLayout.PREFERRED_SIZE,
+						// GroupLayout.PREFERRED_SIZE)
+						.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(fieldSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonMarkAll, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonInvertSelection, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2));
 
 		JPanel leftPane = this;
 		GroupLayout layoutLeftPane = new GroupLayout(leftPane);
 		leftPane.setLayout(layoutLeftPane);
 
-		layoutLeftPane.setHorizontalGroup(
-				layoutLeftPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addComponent(topPane, hMin, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addComponent(scrollpane, hMin, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addComponent(topPane, hMin, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(scrollpane, hMin, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		layoutLeftPane.setVerticalGroup(
-				layoutLeftPane.createSequentialGroup()
-						.addComponent(topPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(scrollpane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup()
+				.addComponent(topPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(scrollpane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
 	/*
@@ -455,24 +443,18 @@ public class JTableSelectionPanel extends JPanel
 			GroupLayout mdLayout = new GroupLayout(mdPanel);
 			mdPanel.setLayout(mdLayout);
 
-			mdLayout.setVerticalGroup(mdLayout.createSequentialGroup()
-					.addGap(10, 10, Short.MAX_VALUE)
-					.addComponent(missingData0, 10, 80, 90)
-					.addComponent(missingData1, 10, 40, 90)
-					.addGap(10, 40, 40)
-					.addComponent(missingData2, 10, 40, 80)
+			mdLayout.setVerticalGroup(mdLayout.createSequentialGroup().addGap(10, 10, Short.MAX_VALUE)
+					.addComponent(missingData0, 10, 80, 90).addComponent(missingData1, 10, 40, 90).addGap(10, 40, 40)
+					.addComponent(missingData2, 10, 40, 80).addGap(10, 10, Short.MAX_VALUE));
+			mdLayout.setHorizontalGroup(mdLayout.createSequentialGroup().addGap(10, 10, Short.MAX_VALUE)
+					.addGroup(mdLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+							.addComponent(missingData0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+									GroupLayout.PREFERRED_SIZE)
+							.addComponent(missingData1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+									GroupLayout.PREFERRED_SIZE)
+							.addComponent(missingData2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+									GroupLayout.PREFERRED_SIZE))
 					.addGap(10, 10, Short.MAX_VALUE));
-			mdLayout.setHorizontalGroup(
-					mdLayout.createSequentialGroup()
-							.addGap(10, 10, Short.MAX_VALUE)
-							.addGroup(mdLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-									.addComponent(missingData0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE)
-									.addComponent(missingData1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE)
-									.addComponent(missingData2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE))
-							.addGap(10, 10, Short.MAX_VALUE));
 
 			scrollpane.getViewport().setView(mdPanel);
 		} else
@@ -493,7 +475,7 @@ public class JTableSelectionPanel extends JPanel
 	}
 
 	public int convertRowIndexToModel(int i) {
-		// System.out.println ( " ----- converting row index to model ");
+		// logging.debug ( " ----- converting row index to model ");
 		return table.convertRowIndexToModel(i);
 	}
 
@@ -691,16 +673,11 @@ public class JTableSelectionPanel extends JPanel
 		rowIndexMap = new TreeMap<String, Integer>();
 
 		while (row < getTableModel().getRowCount()) {
-			rowIndexMap.put(
-					(String) getTableModel().getValueAt(row, i),
-					row);
+			rowIndexMap.put((String) getTableModel().getValueAt(row, i), row);
 		}
 	}
 
-	public void setValueForKey(
-			Object value,
-			String key,
-			int colInModelTerms) {
+	public void setValueForKey(Object value, String key, int colInModelTerms) {
 		getTableModel().setValueAt(value, rowIndexMap.get(key), colInModelTerms);
 	}
 
@@ -729,10 +706,10 @@ public class JTableSelectionPanel extends JPanel
 		tm.addTableModelListener(table);
 		// ((AbstractTableModel) tm).fireTableStructureChanged();
 
-		logging.info(this, "setModel all hosts size " +
-				main.getPersistenceController().getHostInfoCollections().getMapOfAllPCInfoMaps().size());
+		logging.info(this, "setModel all hosts size "
+				+ main.getPersistenceController().getHostInfoCollections().getMapOfAllPCInfoMaps().size());
 
-		// System.out.println(" --- setting model, row count " + table.getRowCount());;
+		// logging.debug(" --- setting model, row count " + table.getRowCount());;
 
 		table.setModel(tm);
 
@@ -885,8 +862,7 @@ public class JTableSelectionPanel extends JPanel
 		// describe search parameters
 
 		boolean fulltext = (searchMode == TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES
-				||
-				searchMode == TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_ONE_STRING);
+				|| searchMode == TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_ONE_STRING);
 		// with another data configuration, it could be combined with regex
 
 		// get pattern for regex search mode if needed
@@ -913,14 +889,12 @@ public class JTableSelectionPanel extends JPanel
 
 			for (int j = 0; j < getTableModel().getColumnCount(); j++) {
 				if (colIndices != null // we dont compare all values (comparing all values is default)
-						&&
-						!colIndices.contains(j))
+						&& !colIndices.contains(j))
 					continue;
 
 				Object compareValue = getTableModel().getValueAt(
 
-						table.convertRowIndexToModel(viewrow),
-						table.convertColumnIndexToModel(j)
+						table.convertRowIndexToModel(viewrow), table.convertColumnIndexToModel(j)
 
 				);
 
@@ -935,31 +909,31 @@ public class JTableSelectionPanel extends JPanel
 					String compareVal = ("" + compareValue).toLowerCase();
 
 					switch (searchMode) {
-						case REGEX_SEARCHING: {
-							// logging.info(this, " try to match " + value + " with " + compareVal);
-							found = pattern.matcher(compareVal).matches();
-							break;
-						}
+					case REGEX_SEARCHING: {
+						// logging.info(this, " try to match " + value + " with " + compareVal);
+						found = pattern.matcher(compareVal).matches();
+						break;
+					}
 
-						case FULL_TEXT_SEARCHING_WITH_ALTERNATIVES: {
-							for (String word : alternativeWords) {
-								// logging.info(this, "findViewRowFromValue compare in column " + j + ", " +
-								// word+ " to " + compareVal);
-								found = (compareVal.indexOf(word) >= 0);
-								if (found)
-									break;
-							}
-							break;
+					case FULL_TEXT_SEARCHING_WITH_ALTERNATIVES: {
+						for (String word : alternativeWords) {
+							// logging.info(this, "findViewRowFromValue compare in column " + j + ", " +
+							// word+ " to " + compareVal);
+							found = (compareVal.indexOf(word) >= 0);
+							if (found)
+								break;
 						}
+						break;
+					}
 
-						case FULL_TEXT_SEARCHING_ONE_STRING: {
-							found = (compareVal.indexOf(valLower) >= 0);
-							break;
-						}
+					case FULL_TEXT_SEARCHING_ONE_STRING: {
+						found = (compareVal.indexOf(valLower) >= 0);
+						break;
+					}
 
-						default: {
-							found = compareVal.startsWith(valLower);
-						}
+					default: {
+						found = compareVal.startsWith(valLower);
+					}
 					}
 				}
 
@@ -1147,7 +1121,7 @@ public class JTableSelectionPanel extends JPanel
 		// table.requestFocus();
 		table.addRowSelectionInterval(row, row);
 		// debug logging.error("addSelectedRow " + row);
-		// System.out.println(" --- view row selected " + row);
+		// logging.debug(" --- view row selected " + row);
 		scrollRowToVisible(row);
 		// table.scrollRectToVisible(table.getCellRect(row, 0, false));
 	}
@@ -1163,7 +1137,7 @@ public class JTableSelectionPanel extends JPanel
 		// table.requestFocus();
 		table.setRowSelectionInterval(row, row);
 		// debug logging.error("setSelectedRow " + row);
-		// System.out.println(" --- view row selected " + row);
+		// logging.debug(" --- view row selected " + row);
 		scrollRowToVisible(row);
 		// table.scrollRectToVisible(table.getCellRect(row, 0, false));
 	}
@@ -1232,19 +1206,19 @@ public class JTableSelectionPanel extends JPanel
 
 		searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES;
 		switch (comboSearchMode.getSelectedIndex()) {
-			// case 0 :;
-			case 0:
-				searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES;
-				break;
-			case 1:
-				searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_ONE_STRING;
-				break;
-			case 2:
-				searchMode = TablesearchPane.SearchMode.START_TEXT_SEARCHING;
-				break;
-			case 3:
-				searchMode = TablesearchPane.SearchMode.REGEX_SEARCHING;
-				break;
+		// case 0 :;
+		case 0:
+			searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES;
+			break;
+		case 1:
+			searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_ONE_STRING;
+			break;
+		case 2:
+			searchMode = TablesearchPane.SearchMode.START_TEXT_SEARCHING;
+			break;
+		case 3:
+			searchMode = TablesearchPane.SearchMode.REGEX_SEARCHING;
+			break;
 		}
 
 		// foundrow = findViewRowFromValue(startrow, value, selectedCols,
@@ -1270,8 +1244,7 @@ public class JTableSelectionPanel extends JPanel
 			lastCountOfSearchWords = 0;
 		} else {
 			if (searchMode == TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES
-					&&
-					getWords(fieldSearch.getText()).size() > lastCountOfSearchWords)
+					&& getWords(fieldSearch.getText()).size() > lastCountOfSearchWords)
 				// when a new search word is added instead of extending one
 				// the condition is not refined but widened; and we have to start the search new
 				setSelectedRow(0);
@@ -1342,8 +1315,7 @@ public class JTableSelectionPanel extends JPanel
 				searchTheNextRow();
 		}
 
-		else if (e.getKeyCode() == KeyEvent.VK_I
-				&& e.isControlDown()) {
+		else if (e.getKeyCode() == KeyEvent.VK_I && e.isControlDown()) {
 			main.invertClientselection();
 		}
 

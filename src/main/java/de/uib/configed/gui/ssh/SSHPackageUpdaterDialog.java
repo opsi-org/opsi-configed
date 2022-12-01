@@ -184,21 +184,20 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	private void initLayout() {
 		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
 		inputPanel.setLayout(inputPanelLayout);
-		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup()
-				.addGap(Globals.gapSize)
-				.addGroup(inputPanelLayout.createParallelGroup()
-						.addComponent(lbl_info, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(lbl_repos, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.gapSize)
-				.addGroup(inputPanelLayout.createParallelGroup()
-						.addComponent(cb_actions, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE)
-						.addComponent(cb_repos, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE))
-				.addGap(Globals.gapSize));
+		inputPanelLayout
+				.setHorizontalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize)
+						.addGroup(inputPanelLayout.createParallelGroup()
+								.addComponent(lbl_info, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(lbl_repos, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.gapSize)
+						.addGroup(inputPanelLayout.createParallelGroup()
+								.addComponent(cb_actions, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE)
+								.addComponent(cb_repos, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE))
+						.addGap(Globals.gapSize));
 
-		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup()
-				.addGap(2 * Globals.gapSize)
+		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(2 * Globals.gapSize)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(lbl_info, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
 						.addComponent(cb_actions, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))

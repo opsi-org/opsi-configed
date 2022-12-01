@@ -40,8 +40,7 @@ public class UserConfigProducing {
 
 			String configserver,
 
-			Collection<String> existingDepots,
-			Collection<String> existingHostgroups,
+			Collection<String> existingDepots, Collection<String> existingHostgroups,
 			Collection<String> existingProductgroups,
 
 			// data. on which changes are based
@@ -59,8 +58,8 @@ public class UserConfigProducing {
 		this.serverconfigValuesMap = serverconfigValuesMap;
 		this.configOptionsMap = configOptionsMap;
 
-		logging.info(this, "create with existing collections depots, hostgroups, productgroups "
-				+ existingDepots.size() + " - " + existingHostgroups.size() + " - " + existingProductgroups.size());
+		logging.info(this, "create with existing collections depots, hostgroups, productgroups " + existingDepots.size()
+				+ " - " + existingHostgroups.size() + " - " + existingProductgroups.size());
 	}
 
 	public ArrayList<Object> produce() {
@@ -74,8 +73,8 @@ public class UserConfigProducing {
 			ConfigedMain.USER = configed.user;
 		}
 
-		logging.info(this, "we have got logged in user " + ConfigedMain.USER
-				+ " and configure based on it " + notUsingDefaultUser);
+		logging.info(this, "we have got logged in user " + ConfigedMain.USER + " and configure based on it "
+				+ notUsingDefaultUser);
 
 		if (notUsingDefaultUser && ConfigedMain.USER != null && !userparts.contains(ConfigedMain.USER)) {
 			logging.info(this, "supply logged in user");
@@ -140,8 +139,8 @@ public class UserConfigProducing {
 			} else {
 
 				if (key.startsWith(UserConfig.ALL_USER_KEY_START)) {
-					logging.info(this, "not delivered in this collection "
-							+ key.substring(UserConfig.START_USER_KEY.length()));
+					logging.info(this,
+							"not delivered in this collection " + key.substring(UserConfig.START_USER_KEY.length()));
 					// not delivered in this collection
 				} else {
 					String username = UserConfig.getUserFromKey(key);
@@ -170,12 +169,8 @@ public class UserConfigProducing {
 		logging.info(this, "all userNames " + userNames);
 	}
 
-	private void supplyConfigPermissionList(
-			final String configKeyUseList,
-			final boolean initialValue, // activate this feature by default?
-			final String configKeyList,
-			final List<Object> selectedValues,
-			final Set<Object> oldPossibleValues,
+	private void supplyConfigPermissionList(final String configKeyUseList, final boolean initialValue, // activate this feature by default?
+			final String configKeyList, final List<Object> selectedValues, final Set<Object> oldPossibleValues,
 			final Set<Object> currentPossibleValuesListed)
 	// produces readyObjects for this configKey(List)
 	{
@@ -203,7 +198,7 @@ public class UserConfigProducing {
 		if ((serverconfigValuesMap.get(configKeyList) == null)
 				|| !serverconfigValuesMap.get(configKeyList).equals(selectedValues)
 				|| !currentPossibleValuesListed.equals(oldPossibleValues)) // includes the case that there was no value
-																			// for the configKey at all
+																																																		// for the configKey at all
 		{
 			logging.info(this, "supplyPermissionList initialization or change");
 
@@ -247,12 +242,8 @@ public class UserConfigProducing {
 		UserConfig defaultUserConfig = new UserConfig(UserConfig.DEFAULT_ROLE_NAME);
 		String rolenameStartkey = UserConfig.KEY_USER_ROOT + "." + UserConfig.ROLE + ".{" + UserConfig.DEFAULT_ROLE_NAME
 				+ "}.";
-		supplyPermissionEntriesForAUser(
-				UserConfig.DEFAULT_ROLE_NAME,
-				rolenameStartkey,
-				false,
-				UserConfig.getArcheoConfig(),
-				defaultUserConfig);
+		supplyPermissionEntriesForAUser(UserConfig.DEFAULT_ROLE_NAME, rolenameStartkey, false,
+				UserConfig.getArcheoConfig(), defaultUserConfig);
 
 		logging.info(this, "supplyAllPermissionEntries defaultUserConfig " + defaultUserConfig);
 
@@ -272,11 +263,7 @@ public class UserConfigProducing {
 			rolenameStartkey = UserConfig.KEY_USER_ROOT + "." + UserConfig.ROLE + ".{" + rolename + "}.";
 			// separateServerConfigsTreeSection( rolenameStartkey );
 			UserConfig roleConfig = new UserConfig(rolename);
-			supplyPermissionEntriesForAUser(rolename,
-					rolenameStartkey,
-					false,
-					defaultUserConfig,
-					roleConfig);
+			supplyPermissionEntriesForAUser(rolename, rolenameStartkey, false, defaultUserConfig, roleConfig);
 
 			roleConfigs.put(rolename, roleConfig);
 		}
@@ -343,17 +330,14 @@ public class UserConfigProducing {
 
 			ArrayList<Object> possibleValuesRole = new ArrayList<Object>(possibleValuesSet);
 
-			Map<String, Object> itemRole = PersistenceController.createJSONConfig(
-					ConfigOption.TYPE.UnicodeConfig,
-					roleKey,
-					"which role should determine this users configuration",
-					false, // editable
+			Map<String, Object> itemRole = PersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig,
+					roleKey, "which role should determine this users configuration", false, // editable
 					false, // multivalue
 					selectedValuesRole, // defaultValues enry
 					possibleValuesRole);
 
-			logging.info(this, "supplyAllPermissionEntries possibleValuesRole, roleParts "
-					+ " " + possibleValuesRole + ", " + roleParts);
+			logging.info(this, "supplyAllPermissionEntries possibleValuesRole, roleParts " + " " + possibleValuesRole
+					+ ", " + roleParts);
 
 			// if( !( possibleValuesSet.equals( roleParts ) ) )
 			readyObjects.add(Executioner.jsonMap(itemRole));
@@ -361,11 +345,7 @@ public class UserConfigProducing {
 			UserConfig roleConfig = roleConfigs.get(roleToPlay);
 			// is defaultConfig if roleToPlay does not exist
 
-			supplyPermissionEntriesForAUser(username,
-					usernameStartkey,
-					followConfiguredRole,
-					roleConfig,
-					userConfig);
+			supplyPermissionEntriesForAUser(username, usernameStartkey, followConfiguredRole, roleConfig, userConfig);
 		}
 
 		logging.info(this, "readyObjects for userparts " + readyObjects.size());
@@ -377,12 +357,8 @@ public class UserConfigProducing {
 
 	}
 
-	private void supplyPermissionEntriesForAUser(
-			final String username,
-			final String startkey,
-			final Boolean prototypeObligatory,
-			final UserConfig prototypeConfig,
-			UserConfig userConfig) {
+	private void supplyPermissionEntriesForAUser(final String username, final String startkey,
+			final Boolean prototypeObligatory, final UserConfig prototypeConfig, UserConfig userConfig) {
 		logging.info(this, "supplyPermissionEntriesForAUser for user " + username + " with startkey " + startkey);
 		logging.info(this, "supplyPermissionEntriesForAUser for user, prototypeConfig " + prototypeConfig);
 
@@ -458,11 +434,8 @@ public class UserConfigProducing {
 				ArrayList<Object> selectedValuesRole = new ArrayList<Object>();
 				selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
 
-				Map<String, Object> itemRole = PersistenceController.createJSONConfig(
-						ConfigOption.TYPE.UnicodeConfig,
-						configKey,
-						"which role should determine this users configuration",
-						false, // editable
+				Map<String, Object> itemRole = PersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig,
+						configKey, "which role should determine this users configuration", false, // editable
 						false, // multivalue
 						selectedValuesRole, // defaultValues enry
 						selectedValuesRole);
@@ -494,14 +467,10 @@ public class UserConfigProducing {
 
 				userConfig.setValues(partkey, values);
 
-				item = PersistenceController.createJSONConfig(
-						ConfigOption.TYPE.UnicodeConfig,
-						configKey,
-						configKey, // description
+				item = PersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig, configKey, configKey, // description
 						false, // editable
 						false, // multivalue
-						values,
-						values // possibleValues
+						values, values // possibleValues
 
 				);
 
@@ -604,8 +573,7 @@ public class UserConfigProducing {
 		possibleValuesDepot = new ArrayList<Object>();
 		currentPossibleValuesDepotListed = new LinkedHashSet<Object>();
 
-		if (prototypeObligatory
-				|| serverconfigValuesMap.get(configKeyList) == null) {
+		if (prototypeObligatory || serverconfigValuesMap.get(configKeyList) == null) {
 			selectedValuesDepot = prototypeConfig.getValues(partkey);
 		} else {
 			selectedValuesDepot = serverconfigValuesMap.get(configKeyList);
@@ -614,8 +582,7 @@ public class UserConfigProducing {
 		userConfig.setValues(partkey, selectedValuesDepot);
 
 		if (configOptionsMap.get(configKeyList) == null
-				||
-				configOptionsMap.get(configKeyList).getPossibleValues() == null) {
+				|| configOptionsMap.get(configKeyList).getPossibleValues() == null) {
 			oldPossibleValuesDepot = new TreeSet<Object>();
 		} else {
 			oldPossibleValuesDepot = new HashSet<Object>(configOptionsMap.get(configKeyList).getPossibleValues());
@@ -645,11 +612,9 @@ public class UserConfigProducing {
 		logging.info(this,
 				"depots currentPossibleValuesDepotListed before supplying " + currentPossibleValuesDepotListed);
 
-		supplyConfigPermissionList(
-				configKeyUseList, // final
+		supplyConfigPermissionList(configKeyUseList, // final
 				// activate this feature by default?
-				defaultvalueForRestrictionUsage,
-				configKeyList, // final
+				defaultvalueForRestrictionUsage, configKeyList, // final
 				selectedValuesDepot, // final
 				oldPossibleValuesDepot, // final
 				currentPossibleValuesDepotListed);
@@ -673,8 +638,7 @@ public class UserConfigProducing {
 		currentPossibleValuesHostgroupListed = new LinkedHashSet<Object>();
 		possibleValuesHostgroup = new ArrayList<Object>();
 
-		if (prototypeObligatory
-				|| serverconfigValuesMap.get(configKeyList) == null) {
+		if (prototypeObligatory || serverconfigValuesMap.get(configKeyList) == null) {
 			selectedValuesHostgroup = prototypeConfig.getValues(partkey);
 		} else {
 			selectedValuesHostgroup = serverconfigValuesMap.get(configKeyList);
@@ -685,8 +649,7 @@ public class UserConfigProducing {
 		userConfig.setValues(partkey, selectedValuesHostgroup);
 
 		if (configOptionsMap.get(configKeyList) == null
-				||
-				configOptionsMap.get(configKeyList).getPossibleValues() == null) {
+				|| configOptionsMap.get(configKeyList).getPossibleValues() == null) {
 			oldPossibleValuesHostgroup = new TreeSet<Object>();
 		} else {
 			oldPossibleValuesHostgroup = new HashSet<Object>(configOptionsMap.get(configKeyList).getPossibleValues());
@@ -713,11 +676,9 @@ public class UserConfigProducing {
 		logging.info(this, "hostgroups currentPossibleValuesHostgroupListed before supplying for " + username + ": "
 				+ currentPossibleValuesHostgroupListed);
 
-		supplyConfigPermissionList(
-				configKeyUseList, // final
+		supplyConfigPermissionList(configKeyUseList, // final
 				// activate this feature by default?
-				defaultvalueForRestrictionUsage,
-				configKeyList, // final
+				defaultvalueForRestrictionUsage, configKeyList, // final
 				selectedValuesHostgroup, // final
 				oldPossibleValuesHostgroup, // final
 				currentPossibleValuesHostgroupListed);
@@ -741,8 +702,7 @@ public class UserConfigProducing {
 		currentPossibleValuesProductgroupsListed = new LinkedHashSet<Object>();
 		possibleValuesProductgroups = new ArrayList<Object>();
 
-		if (prototypeObligatory
-				|| serverconfigValuesMap.get(configKeyList) == null) {
+		if (prototypeObligatory || serverconfigValuesMap.get(configKeyList) == null) {
 			selectedValuesProductgroups = prototypeConfig.getValues(partkey);
 		} else {
 			selectedValuesProductgroups = serverconfigValuesMap.get(configKeyList);
@@ -751,8 +711,7 @@ public class UserConfigProducing {
 		userConfig.setValues(partkey, selectedValuesProductgroups);
 
 		if (configOptionsMap.get(configKeyList) == null
-				||
-				configOptionsMap.get(configKeyList).getPossibleValues() == null) {
+				|| configOptionsMap.get(configKeyList).getPossibleValues() == null) {
 			oldPossibleValuesProductgroups = new TreeSet<Object>();
 		} else {
 			oldPossibleValuesProductgroups = new HashSet<Object>(
@@ -777,11 +736,9 @@ public class UserConfigProducing {
 		logging.info(this, "productGroups currentPossibleValuesProductgroupsListed before supplying "
 				+ currentPossibleValuesProductgroupsListed);
 
-		supplyConfigPermissionList(
-				configKeyUseList, // final
+		supplyConfigPermissionList(configKeyUseList, // final
 				// activate this feature by default?
-				defaultvalueForRestrictionUsage,
-				configKeyList, // final
+				defaultvalueForRestrictionUsage, configKeyList, // final
 				selectedValuesProductgroups, // final
 				oldPossibleValuesProductgroups, // final
 				currentPossibleValuesProductgroupsListed);
@@ -835,13 +792,12 @@ public class UserConfigProducing {
 		String theServer = "";
 
 		logging.setSuppressConsole(false);
-		logging.writeToConsole("UserConfigProducing");
+		logging.debug("UserConfigProducing");
 
 		PersistenceController persist = PersistenceControllerFactory.getNewPersistenceController(theServer, "user",
 				"test");
 
-		UserConfigProducing up = new UserConfigProducing(
-				false, // boolean notUsingDefaultUser,
+		UserConfigProducing up = new UserConfigProducing(false, // boolean notUsingDefaultUser,
 
 				theServer, // String configserver,
 				persist.getHostInfoCollections().getDepotNamesList(), // Collection<String> existingDepots,
@@ -855,7 +811,7 @@ public class UserConfigProducing {
 		);
 
 		ArrayList<Object> newData = up.produce();
-		logging.writeToConsole("UserConfigProducing: newData " + newData);
+		logging.debug("UserConfigProducing: newData " + newData);
 
 	}
 

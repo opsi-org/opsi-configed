@@ -1,8 +1,8 @@
 package org.json;
 
 /**
- * Test class. This file is not formally a member of the org.json library.
- * It is just a casual test tool.
+ * Test class. This file is not formally a member of the org.json library. It is
+ * just a casual test tool.
  */
 public class Test {
 
@@ -21,31 +21,12 @@ public class Test {
 			System.out.println(j.toString());
 
 			jj = new JSONStringer();
-			s = jj.object()
-					.key("foo")
-					.value("bar")
-					.key("baz")
-					.array()
-					.object()
-					.key("quux")
-					.value("Thanks, Josh!")
-					.endObject()
-					.endArray()
-					.endObject()
-					.toString();
+			s = jj.object().key("foo").value("bar").key("baz").array().object().key("quux").value("Thanks, Josh!")
+					.endObject().endArray().endObject().toString();
 			System.out.println(s);
 
 			jj = new JSONStringer();
-			s = jj.object()
-					.key("a")
-					.array()
-					.array()
-					.array()
-					.value("b")
-					.endArray()
-					.endArray()
-					.endArray()
-					.endObject()
+			s = jj.object().key("a").array().array().array().value("b").endArray().endArray().endArray().endObject()
 					.toString();
 			System.out.println(s);
 
@@ -92,10 +73,8 @@ public class Test {
 
 			j = new JSONObject(
 					"/*comment*/{foo: [true, false,9876543210,    0.0, 1.00000001,  1.000000000001, 1.00000000000000001,"
-							+
-							" .00000000000000001, 2.00, 0.1, 2e100, -32,[],{}, \"string\"], " +
-							"  to   : null, op : 'Good'," +
-							"ten:10} postfix comment");
+							+ " .00000000000000001, 2.00, 0.1, 2e100, -32,[],{}, \"string\"], "
+							+ "  to   : null, op : 'Good'," + "ten:10} postfix comment");
 			j.put("String", "98.6");
 			j.put("JSONObject", new JSONObject());
 			j.put("JSONArray", new JSONArray());
@@ -191,25 +170,20 @@ public class Test {
 			System.out.println(HTTP.toString(j));
 			System.out.println("");
 
-			j = XML.toJSONObject("<?xml version='1.0' encoding='UTF-8'?>" + "\n\n" + "<SOAP-ENV:Envelope" +
-					" xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"" +
-					" xmlns:xsi=\"http://www.w3.org/1999/XMLSchema-instance\"" +
-					" xmlns:xsd=\"http://www.w3.org/1999/XMLSchema\">" +
-					"<SOAP-ENV:Body><ns1:doGoogleSearch" +
-					" xmlns:ns1=\"urn:GoogleSearch\"" +
-					" SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">" +
-					"<key xsi:type=\"xsd:string\">GOOGLEKEY</key> <q" +
-					" xsi:type=\"xsd:string\">'+search+'</q> <start" +
-					" xsi:type=\"xsd:int\">0</start> <maxResults" +
-					" xsi:type=\"xsd:int\">10</maxResults> <filter" +
-					" xsi:type=\"xsd:boolean\">true</filter> <restrict" +
-					" xsi:type=\"xsd:string\"></restrict> <safeSearch" +
-					" xsi:type=\"xsd:boolean\">false</safeSearch> <lr" +
-					" xsi:type=\"xsd:string\"></lr> <ie" +
-					" xsi:type=\"xsd:string\">latin1</ie> <oe" +
-					" xsi:type=\"xsd:string\">latin1</oe>" +
-					"</ns1:doGoogleSearch>" +
-					"</SOAP-ENV:Body></SOAP-ENV:Envelope>");
+			j = XML.toJSONObject("<?xml version='1.0' encoding='UTF-8'?>" + "\n\n" + "<SOAP-ENV:Envelope"
+					+ " xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\""
+					+ " xmlns:xsi=\"http://www.w3.org/1999/XMLSchema-instance\""
+					+ " xmlns:xsd=\"http://www.w3.org/1999/XMLSchema\">" + "<SOAP-ENV:Body><ns1:doGoogleSearch"
+					+ " xmlns:ns1=\"urn:GoogleSearch\""
+					+ " SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">"
+					+ "<key xsi:type=\"xsd:string\">GOOGLEKEY</key> <q"
+					+ " xsi:type=\"xsd:string\">'+search+'</q> <start" + " xsi:type=\"xsd:int\">0</start> <maxResults"
+					+ " xsi:type=\"xsd:int\">10</maxResults> <filter"
+					+ " xsi:type=\"xsd:boolean\">true</filter> <restrict"
+					+ " xsi:type=\"xsd:string\"></restrict> <safeSearch"
+					+ " xsi:type=\"xsd:boolean\">false</safeSearch> <lr" + " xsi:type=\"xsd:string\"></lr> <ie"
+					+ " xsi:type=\"xsd:string\">latin1</ie> <oe" + " xsi:type=\"xsd:string\">latin1</oe>"
+					+ "</ns1:doGoogleSearch>" + "</SOAP-ENV:Body></SOAP-ENV:Envelope>");
 			System.out.println(j.toString(2));
 			System.out.println(XML.toString(j));
 			System.out.println("");

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import de.uib.configed.Globals;
+import de.uib.utilities.logging.logging;
 
 public class ActionRequest {
 	public final static String KEY = "actionRequest";
@@ -125,8 +126,7 @@ public class ActionRequest {
 		for (String request : serviceValues) {
 			scriptKeys.add(request + "Script");
 			// scriptKey2state.put(request + "Script", serviceValue2state.get(request));
-			scriptKey2label.put(request + "Script",
-					state2label.get(serviceValue2state.get(request)));
+			scriptKey2label.put(request + "Script", state2label.get(serviceValue2state.get(request)));
 		}
 
 		label2state = new HashMap<String, Integer>();
@@ -165,15 +165,9 @@ public class ActionRequest {
 		displayLabel2label.put("once", "once");
 		displayLabel2label.put("custom", "custom");
 
-		choiceLabels = new String[] {
-				label2displayLabel.get("none"),
-				label2displayLabel.get("setup"),
-				label2displayLabel.get("update"),
-				label2displayLabel.get("uninstall"),
-				label2displayLabel.get("always"),
-				label2displayLabel.get("once"),
-				label2displayLabel.get("custom"),
-		};
+		choiceLabels = new String[] { label2displayLabel.get("none"), label2displayLabel.get("setup"),
+				label2displayLabel.get("update"), label2displayLabel.get("uninstall"), label2displayLabel.get("always"),
+				label2displayLabel.get("once"), label2displayLabel.get("custom"), };
 
 		label2textColor = new HashMap<String, Color>();
 		label2textColor.put("none", NONEcolor);
@@ -309,8 +303,7 @@ public class ActionRequest {
 
 	// getting instances
 	public static ActionRequest produceFromDisplayLabel(String display) {
-		return produceFromLabel(
-				displayLabel2label.get(display));
+		return produceFromLabel(displayLabel2label.get(display));
 	}
 
 	public static ActionRequest produceFromLabel(String label) {
@@ -337,7 +330,7 @@ public class ActionRequest {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(" test ActionRequest.java");
+		logging.debug(" test ActionRequest.java");
 		checkCollections();
 		Iterator iter = states.iterator();
 
@@ -346,7 +339,7 @@ public class ActionRequest {
 		while (iter.hasNext()) {
 			i++;
 			int state = (Integer) iter.next();
-			// System.out.println("state " + i + " : " + state + " label " +
+			// logging.debug("state " + i + " : " + state + " label " +
 			// getLabel(state));
 		}
 	}

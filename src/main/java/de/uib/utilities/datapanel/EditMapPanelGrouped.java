@@ -41,8 +41,7 @@ import de.uib.utilities.tree.SimpleTreeModel;
 import de.uib.utilities.tree.SimpleTreePath;
 import de.uib.utilities.tree.XTree;
 
-public class EditMapPanelGrouped extends DefaultEditMapPanel
-		implements TreeSelectionListener
+public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSelectionListener
 
 // works on a map of pairs of type String - List
 {
@@ -80,58 +79,42 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel
 		this(tableCellRenderer, keylistExtendible, keylistEditable, false);
 	}
 
-	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer,
-			boolean keylistExtendible,
-			boolean keylistEditable,
+	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
 			boolean reloadable) {
 		this(tableCellRenderer, keylistExtendible, keylistEditable, reloadable, (TreeMap<String, String>) null);
 	}
 
-	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer,
-			boolean keylistExtendible,
-			boolean keylistEditable,
-			boolean reloadable,
-			TreeMap<String, String> classesMap) {
-		this(tableCellRenderer, keylistExtendible, keylistEditable, reloadable,
-				classesMap, (AbstractEditMapPanel.Actor) null);
+	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
+			boolean reloadable, TreeMap<String, String> classesMap) {
+		this(tableCellRenderer, keylistExtendible, keylistEditable, reloadable, classesMap,
+				(AbstractEditMapPanel.Actor) null);
 	}
 
-	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer,
-			boolean keylistExtendible,
-			boolean keylistEditable,
-			boolean reloadable,
-			final AbstractEditMapPanel.Actor actor) {
-		this(tableCellRenderer, keylistExtendible, keylistEditable, reloadable,
-				null, actor);
+	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
+			boolean reloadable, final AbstractEditMapPanel.Actor actor) {
+		this(tableCellRenderer, keylistExtendible, keylistEditable, reloadable, null, actor);
 	}
 
-	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer,
-			boolean keylistExtendible,
-			boolean keylistEditable,
-			boolean reloadable,
-			TreeMap<String, String> classesMap,
-			final AbstractEditMapPanel.Actor actor) {
+	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
+			boolean reloadable, TreeMap<String, String> classesMap, final AbstractEditMapPanel.Actor actor) {
 		super(tableCellRenderer, keylistExtendible, keylistEditable, reloadable);
 		buildPanel();
 		this.actor = actor;
 		givenClasses = classesMap;
 
-		popupmenuAtRow = new PopupMenuTrait(new Integer[] {
-				PopupMenuTrait.POPUP_SAVE,
-				PopupMenuTrait.POPUP_RELOAD
-		}) {
+		popupmenuAtRow = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD }) {
 			public void action(int p) {
 				logging.debug(this, "( EditMapPanelGrouped ) popup " + p);
 
 				switch (p) {
-					case PopupMenuTrait.POPUP_RELOAD:
-						reload();
-						// actor.reloadData();
-						break;
+				case PopupMenuTrait.POPUP_RELOAD:
+					reload();
+					// actor.reloadData();
+					break;
 
-					case PopupMenuTrait.POPUP_SAVE:
-						actor.saveData();
-						break;
+				case PopupMenuTrait.POPUP_SAVE:
+					actor.saveData();
+					break;
 				}
 
 			}
@@ -157,9 +140,8 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel
 			// if (key.startsWith("user"))
 			// continue;
 
-			EditMapPanelX editMapPanel = new EditMapPanelX(
-					tableCellRenderer,
-					keylistExtendible, keylistEditable, reloadable) {
+			EditMapPanelX editMapPanel = new EditMapPanelX(tableCellRenderer, keylistExtendible, keylistEditable,
+					reloadable) {
 				// @Override
 				protected void reload() {
 					javax.swing.tree.TreePath p = tree.getSelectionPath();
@@ -180,30 +162,27 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel
 					logging.debug(this, " (EditMapPanelGrouped) definePopup ");
 					JPopupMenu result
 
-							= new PopupMenuTrait(new Integer[] {
-									PopupMenuTrait.POPUP_SAVE,
-									PopupMenuTrait.POPUP_RELOAD,
+							= new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD,
 									// PopupMenuTrait.POPUP_DELETE,
-									PopupMenuTrait.POPUP_PDF
-							})
+									PopupMenuTrait.POPUP_PDF })
 
 							{
 								public void action(int p) {
 									switch (p) {
-										case PopupMenuTrait.POPUP_RELOAD:
-											reload();
-											break;
-										/*
-										 * case PopupMenuTrait.POPUP_DELETE:
-										 * actor.deleteData();
-										 * break;
-										 */
-										case PopupMenuTrait.POPUP_SAVE:
-											actor.saveData();
-											break;
-										case PopupMenuTrait.POPUP_PDF:
-											createPDF();
-											break;
+									case PopupMenuTrait.POPUP_RELOAD:
+										reload();
+										break;
+									/*
+									 * case PopupMenuTrait.POPUP_DELETE:
+									 * actor.deleteData();
+									 * break;
+									 */
+									case PopupMenuTrait.POPUP_SAVE:
+										actor.saveData();
+										break;
+									case PopupMenuTrait.POPUP_PDF:
+										createPDF();
+										break;
 									}
 
 								}
@@ -288,7 +267,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel
 				property = listelem.get(0).toString();
 
 			values = new Vector();
-			// System.out.println(key + " :: " + property);
+			// logging.debug(key + " :: " + property);
 			// TODO search another possibility to exclude?
 			if (!key.contains("saved_search")) {
 				values.add(key);
@@ -349,14 +328,11 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel
 		GroupLayout layout = new GroupLayout(this);
 		setLayout(layout);
 
-		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addGap(hGap, hGap, hGap)
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(hGap, hGap, hGap)
 				.addComponent(splitPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(hGap, hGap, hGap));
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGap(vGap, vGap, vGap)
-				.addComponent(splitPane, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(vGap, vGap, vGap));
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(vGap, vGap, vGap)
+				.addComponent(splitPane, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(vGap, vGap, vGap));
 
 	}
 
@@ -424,8 +400,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel
 	}
 
 	/**
-	 * setting all data for displaying and editing
-	 * <br />
+	 * setting all data for displaying and editing <br />
 	 * 
 	 * @param Map visualdata - the source for the table model
 	 * @param Map optionsMap - the description for producing cell editors
@@ -454,11 +429,9 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel
 				// if (key.startsWith("user"))
 				// continue;
 
-				partialPanels.get(key).setEditableMap(
-						virtualLines.get(key), optionsMap);
+				partialPanels.get(key).setEditableMap(virtualLines.get(key), optionsMap);
 
-				partialPanels.get(key).mapTableModel.setObservers(
-						this.mapTableModel.getObservers());
+				partialPanels.get(key).mapTableModel.setObservers(this.mapTableModel.getObservers());
 
 			}
 

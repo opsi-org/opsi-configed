@@ -94,8 +94,7 @@ import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import de.uib.utilities.table.gui.DynamicCellEditor;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
 
-public class PanelProductSettings extends JSplitPane
-		implements RowSorterListener {
+public class PanelProductSettings extends JSplitPane implements RowSorterListener {
 
 	public static final java.util.List<RowSorter.SortKey> sortkeysDefault = new ArrayList<RowSorter.SortKey>();
 	static {
@@ -276,13 +275,9 @@ public class PanelProductSettings extends JSplitPane
 
 		productNameTableCellRenderer = new StandardTableCellRenderer("") {
 			@Override
-			public Component getTableCellRendererComponent(
-					JTable table,
-					Object value, // value to display
+			public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 					boolean isSelected, // is the cell selected
-					boolean hasFocus,
-					int row,
-					int column) {
+					boolean hasFocus, int row, int column) {
 				Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 				// Will be done if c==null is true since instanceof
@@ -292,8 +287,8 @@ public class PanelProductSettings extends JSplitPane
 
 				JComponent jc = (JComponent) c;
 
-				String stateChange = ((IFInstallationStateTableModel) (table.getModel())).getLastStateChange(
-						convertRowIndexToModel(row));
+				String stateChange = ((IFInstallationStateTableModel) (table.getModel()))
+						.getLastStateChange(convertRowIndexToModel(row));
 
 				// logging.debug(this, " ------ " + table.getModel().getValueAt(row, 0) + " -
 				// stateChange " + stateChange);
@@ -301,9 +296,8 @@ public class PanelProductSettings extends JSplitPane
 				if (stateChange == null)
 					stateChange = "";
 
-				stateChange = table.getValueAt(row, column).toString()
-						+ ", " + configed.getResourceValue("InstallationStateTableModel.lastStateChange") + ": "
-						+ stateChange;
+				stateChange = table.getValueAt(row, column).toString() + ", "
+						+ configed.getResourceValue("InstallationStateTableModel.lastStateChange") + ": " + stateChange;
 
 				jc.setToolTipText(stateChange);
 
@@ -318,17 +312,15 @@ public class PanelProductSettings extends JSplitPane
 		if (de.uib.configed.Globals.showIconsInProductTable)
 			iconsDir = "images/productstate/targetconfiguration";
 		targetConfigurationTableCellRenderer = new ColoredTableCellRendererByIndex(
-				de.uib.opsidatamodel.productstate.TargetConfiguration.getLabel2DisplayLabel(),
-				iconsDir,
-				false, InstallationStateTableModel.getColumnTitle(ProductState.KEY_targetConfiguration) + ": ");
+				de.uib.opsidatamodel.productstate.TargetConfiguration.getLabel2DisplayLabel(), iconsDir, false,
+				InstallationStateTableModel.getColumnTitle(ProductState.KEY_targetConfiguration) + ": ");
 
 		if (de.uib.configed.Globals.showIconsInProductTable)
 			iconsDir = "images/productstate/installationstatus";
 		installationStatusTableCellRenderer = new ColoredTableCellRendererByIndex(
 				de.uib.opsidatamodel.productstate.InstallationStatus.getLabel2TextColor(),
-				de.uib.opsidatamodel.productstate.InstallationStatus.getLabel2DisplayLabel(),
-				iconsDir,
-				false, InstallationStateTableModel.getColumnTitle(ProductState.KEY_installationStatus) + ": ");
+				de.uib.opsidatamodel.productstate.InstallationStatus.getLabel2DisplayLabel(), iconsDir, false,
+				InstallationStateTableModel.getColumnTitle(ProductState.KEY_installationStatus) + ": ");
 
 		class ActionProgressTableCellRenderer extends ColoredTableCellRendererByIndex {
 			ActionProgressTableCellRenderer(Map<String, String> mapOfStringValues, String imagesBase,
@@ -340,41 +332,34 @@ public class PanelProductSettings extends JSplitPane
 			// - if the cell value is not empty or null, display the installing gif
 			// - write the cell value text as tooltip
 			@Override
-			public Component getTableCellRendererComponent(
-					JTable table,
-					Object value, // value to display
+			public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 					boolean isSelected, // is the cell selected
-					boolean hasFocus,
-					int row,
-					int column) {
+					boolean hasFocus, int row, int column) {
 				// logging.debug(this, "value >" + value + "<");
 				Component result = null;
-				if (value != null && !value.equals("")
-						&& !value.toString().equals("null")
+				if (value != null && !value.equals("") && !value.toString().equals("null")
 						&& !value.toString().equalsIgnoreCase("none")
 						&& !value.toString().equalsIgnoreCase(Globals.CONFLICTSTATEstring)) {
 					result = super.getTableCellRendererComponent(table, "installing", isSelected, hasFocus, row,
 							column);
 
-					((JLabel) result).setToolTipText(
-							Globals.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
+					((JLabel) result)
+							.setToolTipText(Globals.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
 
 				} else if (value != null && value.toString().equalsIgnoreCase(Globals.CONFLICTSTATEstring)) {
 					result = super.getTableCellRendererComponent(table, Globals.CONFLICTSTATEstring, isSelected,
 							hasFocus, row, column);
 
-					((JLabel) result).setToolTipText(
-							Globals.fillStringToLength(tooltipPrefix + " " + Globals.CONFLICTSTATEstring + " ",
-									FILL_LENGTH));
+					((JLabel) result).setToolTipText(Globals
+							.fillStringToLength(tooltipPrefix + " " + Globals.CONFLICTSTATEstring + " ", FILL_LENGTH));
 				}
 
 				else {
 					result = super.getTableCellRendererComponent(table, "none", isSelected, hasFocus, row, column);
 
-					((JLabel) result).setToolTipText(
-							Globals.fillStringToLength(
-									tooltipPrefix + " " + ActionProgress.getDisplayLabel(ActionProgress.NONE) + " ",
-									FILL_LENGTH));
+					((JLabel) result).setToolTipText(Globals.fillStringToLength(
+							tooltipPrefix + " " + ActionProgress.getDisplayLabel(ActionProgress.NONE) + " ",
+							FILL_LENGTH));
 				}
 
 				return result;
@@ -385,39 +370,34 @@ public class PanelProductSettings extends JSplitPane
 			iconsDir = "images/productstate/actionprogress";
 
 		actionProgressTableCellRenderer = new ActionProgressTableCellRenderer(
-				de.uib.opsidatamodel.productstate.ActionProgress.getLabel2DisplayLabel(),
-				iconsDir,
-				false, InstallationStateTableModel.getColumnTitle(ProductState.KEY_actionProgress) + ": ");
+				de.uib.opsidatamodel.productstate.ActionProgress.getLabel2DisplayLabel(), iconsDir, false,
+				InstallationStateTableModel.getColumnTitle(ProductState.KEY_actionProgress) + ": ");
 
 		if (de.uib.configed.Globals.showIconsInProductTable)
 			iconsDir = "images/productstate/actionresult";
 
 		actionResultTableCellRenderer = new ColoredTableCellRendererByIndex(
-				de.uib.opsidatamodel.productstate.ActionResult.getLabel2DisplayLabel(),
-				iconsDir,
-				false, InstallationStateTableModel.getColumnTitle(ProductState.KEY_actionResult) + ": ");
+				de.uib.opsidatamodel.productstate.ActionResult.getLabel2DisplayLabel(), iconsDir, false,
+				InstallationStateTableModel.getColumnTitle(ProductState.KEY_actionResult) + ": ");
 
 		if (de.uib.configed.Globals.showIconsInProductTable)
 			iconsDir = "images/productstate/lastaction";
 
 		lastActionTableCellRenderer = new ColoredTableCellRendererByIndex(
-				de.uib.opsidatamodel.productstate.ActionRequest.getLabel2DisplayLabel(),
-				iconsDir,
-				false, InstallationStateTableModel.getColumnTitle(ProductState.KEY_lastAction) + ": ");
+				de.uib.opsidatamodel.productstate.ActionRequest.getLabel2DisplayLabel(), iconsDir, false,
+				InstallationStateTableModel.getColumnTitle(ProductState.KEY_lastAction) + ": ");
 
 		if (de.uib.configed.Globals.showIconsInProductTable)
 			iconsDir = "images/productstate/actionrequest";
 
 		actionRequestTableCellRenderer = new ColoredTableCellRendererByIndex(
 				de.uib.opsidatamodel.productstate.ActionRequest.getLabel2TextColor(),
-				de.uib.opsidatamodel.productstate.ActionRequest.getLabel2DisplayLabel(),
-				iconsDir,
-				false, InstallationStateTableModel.getColumnTitle(ProductState.KEY_actionRequest) + ": ");
+				de.uib.opsidatamodel.productstate.ActionRequest.getLabel2DisplayLabel(), iconsDir, false,
+				InstallationStateTableModel.getColumnTitle(ProductState.KEY_actionRequest) + ": ");
 
 		priorityclassTableCellRenderer = new ColoredTableCellRendererByIndex(
-				de.uib.opsidatamodel.productstate.ActionSequence.getLabel2DisplayLabel(),
-				null,
-				false, InstallationStateTableModel.getColumnTitle(ProductState.KEY_actionSequence) + ": "
+				de.uib.opsidatamodel.productstate.ActionSequence.getLabel2DisplayLabel(), null, false,
+				InstallationStateTableModel.getColumnTitle(ProductState.KEY_actionSequence) + ": "
 
 		);
 
@@ -435,13 +415,9 @@ public class PanelProductSettings extends JSplitPane
 
 		versionInfoTableCellRenderer = new ColoredTableCellRenderer(
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_versionInfo)) {
-			public Component getTableCellRendererComponent(
-					JTable table,
-					Object value, // value to display
+			public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 					boolean isSelected, // is the cell selected
-					boolean hasFocus,
-					int row,
-					int column) {
+					boolean hasFocus, int row, int column) {
 				Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 				// Safe since instanceof returns false if null
@@ -451,8 +427,7 @@ public class PanelProductSettings extends JSplitPane
 						return c;
 
 					if (val.equals(InstallationStateTableModel.CONFLICTstring)
-							||
-							val.equals(InstallationStateTableModel.unequalAddstring
+							|| val.equals(InstallationStateTableModel.unequalAddstring
 									+ InstallationStateTableModel.CONFLICTstring)) {
 						c.setBackground(Globals.CONFLICTSTATEcellcolor); // result.setForeground (lightBlack);
 						c.setForeground(Globals.CONFLICTSTATEcellcolor);
@@ -490,13 +465,9 @@ public class PanelProductSettings extends JSplitPane
 
 		{
 			@Override
-			public Component getTableCellRendererComponent(
-					JTable table,
-					Object value, // value to display
+			public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 					boolean isSelected, // is the cell selected
-					boolean hasFocus,
-					int row,
-					int column) {
+					boolean hasFocus, int row, int column) {
 				Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 				// Safe sind instanceof returns false if null
@@ -538,24 +509,21 @@ public class PanelProductSettings extends JSplitPane
 		GroupLayout layoutLeftPane = new GroupLayout(leftPane);
 		leftPane.setLayout(layoutLeftPane);
 
-		layoutLeftPane.setHorizontalGroup(
-				layoutLeftPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addComponent(topPane, hMin, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addComponent(paneProducts, hMin, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addComponent(topPane, hMin, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(paneProducts, hMin, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		layoutLeftPane.setVerticalGroup(
-				layoutLeftPane.createSequentialGroup()
-						.addComponent(topPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(paneProducts, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup()
+				.addComponent(topPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(paneProducts, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		setLeftComponent(leftPane);
 
 		// propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false,
 		// false, false);
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, true, false);
-		logging.info(this, " created properties Panel, is  EditMapPanelX instance No. "
-				+ EditMapPanelX.objectCounter);
+		logging.info(this, " created properties Panel, is  EditMapPanelX instance No. " + EditMapPanelX.objectCounter);
 		((EditMapPanelX) propertiesPanel)
 				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
 		propertiesPanel.registerDataChangedObserver(mainController.getGeneralDataChangedKeeper());
@@ -627,8 +595,8 @@ public class PanelProductSettings extends JSplitPane
 		itemOnDemand.setFont(Globals.defaultFont);
 		itemOnDemand.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				mainController.fireOpsiclientdEventOnSelectedClients(
-						PersistenceController.OPSI_CLIENTD_EVENT_on_demand);
+				mainController
+						.fireOpsiclientdEventOnSelectedClients(PersistenceController.OPSI_CLIENTD_EVENT_on_demand);
 			}
 		});
 		popup.add(itemOnDemand);
@@ -727,18 +695,15 @@ public class PanelProductSettings extends JSplitPane
 				pdfExportTable.execute(null, false); // create pdf // no filename, onlySelectedRows = false
 
 				/**
-				 * old PDF exporting
-				 * 
-				 * 
-				 * tableToPDF = new DocumentToPdf (null, metaData); // no filename, metadata
-				 * // set alignment left
-				 * ArrayList list = new ArrayList<Integer>();
-				 * list.add(0); // column
+				 * old PDF exporting tableToPDF = new DocumentToPdf (null,
+				 * metaData); // no filename, metadata // set alignment left
+				 * ArrayList list = new ArrayList<Integer>(); list.add(0); //
+				 * column
 				 * de.uib.utilities.pdf.DocumentElementToPdf.setAlignmentLeft(list);
 				 * // only relevant rows
-				 * tableToPDF.createContentElement("table", strippTable(tableProducts));
-				 * tableToPDF.setPageSizeA4_Landscape(); //
-				 * tableToPDF.toPDF();
+				 * tableToPDF.createContentElement("table",
+				 * strippTable(tableProducts));
+				 * tableToPDF.setPageSizeA4_Landscape(); // tableToPDF.toPDF();
 				 */
 			}
 		});
@@ -819,18 +784,18 @@ public class PanelProductSettings extends JSplitPane
 				actCol[i] = s;
 				jTable.getColumnName(i);
 				switch (jTable.getColumnName(i)) {
-					case "Stand":
-						if (!s.equals("not_installed"))
-							dontStrippIt = dontStrippIt || true;
-						break;
-					case "Report":
-						if (!s.equals(""))
-							dontStrippIt = dontStrippIt || true;
-						break;
-					case "Angefordert":
-						if (!s.equals("none"))
-							dontStrippIt = dontStrippIt || true;
-						break;
+				case "Stand":
+					if (!s.equals("not_installed"))
+						dontStrippIt = dontStrippIt || true;
+					break;
+				case "Report":
+					if (!s.equals(""))
+						dontStrippIt = dontStrippIt || true;
+					break;
+				case "Angefordert":
+					if (!s.equals("none"))
+						dontStrippIt = dontStrippIt || true;
+					break;
 
 				}
 			}
@@ -865,8 +830,7 @@ public class PanelProductSettings extends JSplitPane
 		mainController.checkSaveAll(false);
 		mainController.requestReloadStatesAndActions();
 
-		mainController.fireOpsiclientdEventOnSelectedClients(
-				PersistenceController.OPSI_CLIENTD_EVENT_on_demand);
+		mainController.fireOpsiclientdEventOnSelectedClients(PersistenceController.OPSI_CLIENTD_EVENT_on_demand);
 
 	}
 
@@ -1038,12 +1002,8 @@ public class PanelProductSettings extends JSplitPane
 			JComboBox targetCombo = new JComboBox();
 			targetCombo.setRenderer(standardListCellRenderer);
 			// targetColumn.setCellEditor(new AdaptingCellEditor(targetCombo, istm));
-			targetColumn.setCellEditor(
-					new AdaptingCellEditorValuesByIndex(
-							targetCombo,
-							istm,
-							de.uib.opsidatamodel.productstate.TargetConfiguration.getLabel2DisplayLabel(),
-							iconsDir));
+			targetColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(targetCombo, istm,
+					de.uib.opsidatamodel.productstate.TargetConfiguration.getLabel2DisplayLabel(), iconsDir));
 			targetColumn.setPreferredWidth(fwidth_column_productstate);
 			targetColumn.setCellRenderer(targetConfigurationTableCellRenderer);
 		}
@@ -1058,12 +1018,8 @@ public class PanelProductSettings extends JSplitPane
 			JComboBox statesCombo = new JComboBox();
 			statesCombo.setRenderer(standardListCellRenderer);
 			// statusColumn.setCellEditor(new AdaptingCellEditor(statesCombo, istm));
-			statusColumn.setCellEditor(
-					new AdaptingCellEditorValuesByIndex(
-							statesCombo,
-							istm,
-							de.uib.opsidatamodel.productstate.InstallationStatus.getLabel2DisplayLabel(),
-							iconsDir));
+			statusColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(statesCombo, istm,
+					de.uib.opsidatamodel.productstate.InstallationStatus.getLabel2DisplayLabel(), iconsDir));
 			statusColumn.setPreferredWidth(fwidth_column_productstate);
 			statusColumn.setCellRenderer(installationStatusTableCellRenderer);
 		}
@@ -1097,12 +1053,8 @@ public class PanelProductSettings extends JSplitPane
 
 			JComboBox actionsCombo = new JComboBox();
 			actionsCombo.setRenderer(standardListCellRenderer);
-			actionColumn.setCellEditor(
-					new AdaptingCellEditorValuesByIndex(
-							actionsCombo,
-							istm,
-							de.uib.opsidatamodel.productstate.ActionRequest.getLabel2DisplayLabel(),
-							iconsDir));
+			actionColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(actionsCombo, istm,
+					de.uib.opsidatamodel.productstate.ActionRequest.getLabel2DisplayLabel(), iconsDir));
 			actionColumn.setPreferredWidth(fwidth_column_productstate);
 			actionColumn.setCellRenderer(actionRequestTableCellRenderer); // productTableCellRenderer);
 		}
@@ -1173,7 +1125,7 @@ public class PanelProductSettings extends JSplitPane
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_packageVersion)) > -1) {
-			// System.out.println("******* colIndex for packageVersion " + colIndex);
+			// logging.debug("******* colIndex for packageVersion " + colIndex);
 			TableColumn packageversionColumn = tableProducts.getColumnModel().getColumn(colIndex);
 			packageversionColumn.setPreferredWidth(fwidth_column_packageversion);
 			packageversionColumn.setCellRenderer(packageversionTableCellRenderer);
@@ -1211,9 +1163,7 @@ public class PanelProductSettings extends JSplitPane
 
 			installationInfoCombo.setRenderer(standardListCellRenderer);
 
-			DynamicCellEditor cellEditor = new DynamicCellEditor(
-					installationInfoCombo,
-					istm,
+			DynamicCellEditor cellEditor = new DynamicCellEditor(installationInfoCombo, istm,
 					InstallationInfo.defaultDisplayValues);
 
 			installationInfoColumn.setCellEditor(cellEditor);
@@ -1223,17 +1173,12 @@ public class PanelProductSettings extends JSplitPane
 
 	}
 
-	public void initEditing(
-			String productID,
-			String productTitle,
-			String productInfo,
-			String productHint,
+	public void initEditing(String productID, String productTitle, String productInfo, String productHint,
 			String productVersion,
 			// String productPackageversion,
 			String productCreationTimestamp,
 
-			Map<String, Boolean> specificPropertiesExisting,
-			Collection storableProductProperties,
+			Map<String, Boolean> specificPropertiesExisting, Collection storableProductProperties,
 			Map editableProductProperties,
 
 			// editmappanelx
@@ -1263,8 +1208,7 @@ public class PanelProductSettings extends JSplitPane
 		propertiesPanel.setEditableMap(
 
 				// visualMap (merged for different clients)
-				editableProductProperties,
-				productpropertyOptionsMap
+				editableProductProperties, productpropertyOptionsMap
 
 		);
 
@@ -1280,8 +1224,7 @@ public class PanelProductSettings extends JSplitPane
 
 	public void clearEditing() {
 
-		initEditing(
-				"", // String productTitle,
+		initEditing("", // String productTitle,
 				"", // String productInfo,
 				"", // String productHint,
 				"", // String productVersion,

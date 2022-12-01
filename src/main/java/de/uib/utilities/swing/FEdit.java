@@ -32,8 +32,7 @@ import javax.swing.text.JTextComponent;
 import de.uib.utilities.Globals;
 import de.uib.utilities.logging.logging;
 
-public class FEdit extends javax.swing.JDialog
-		implements ActionListener, KeyListener {
+public class FEdit extends javax.swing.JDialog implements ActionListener, KeyListener {
 	protected Dimension areaDimension = new Dimension(100, 40);
 
 	protected String initialText = "";
@@ -90,11 +89,8 @@ public class FEdit extends javax.swing.JDialog
 		labelHint.setFont(Globals.defaultFontStandardBold);
 
 		buttonCommit = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip"),
-				"images/apply.png",
-				"images/apply_over.png",
-				"images/apply_disabled.png",
-				true) {
+				de.uib.configed.configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip"), "images/apply.png",
+				"images/apply_over.png", "images/apply_disabled.png", true) {
 			public void setEnabled(boolean b) {
 				super.setEnabled(b);
 				logging.debug(this, "setEnabled " + b);
@@ -104,8 +100,8 @@ public class FEdit extends javax.swing.JDialog
 		buttonCommit.setPreferredSize(new Dimension(40, de.uib.utilities.Globals.buttonHeight));
 
 		buttonCancel = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"),
-				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png", true);
+				de.uib.configed.configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"), "images/cancel.png",
+				"images/cancel_over.png", "images/cancel_disabled.png", true);
 		buttonCancel.setPreferredSize(new Dimension(40, de.uib.utilities.Globals.buttonHeight));
 
 		// buttonCancel.setEnabled( false );
@@ -138,55 +134,47 @@ public class FEdit extends javax.swing.JDialog
 
 		javax.swing.GroupLayout layout1 = new javax.swing.GroupLayout(framingPanel);
 		framingPanel.setLayout(layout1);
-		layout1.setHorizontalGroup(
-				layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(layout1.createSequentialGroup()
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-								.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addComponent(labelHint, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-										.addComponent(editingArea, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-										.addGroup(layout1.createSequentialGroup()
-												.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE)
-												// .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-												.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE)))
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
-		layout1.setVerticalGroup(
-				layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(layout1.createSequentialGroup()
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize, Globals.vGapSize)
+		layout1.setHorizontalGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layout1.createSequentialGroup()
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 								.addComponent(labelHint, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-								.addComponent(editingArea, 20, 80, Short.MAX_VALUE)
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-								.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								.addComponent(editingArea, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								.addGroup(layout1.createSequentialGroup()
 										.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
+										// .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
 										.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE))
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
+												javax.swing.GroupLayout.PREFERRED_SIZE)))
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
+		layout1.setVerticalGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layout1.createSequentialGroup()
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize, Globals.vGapSize)
+						.addComponent(labelHint, javax.swing.GroupLayout.PREFERRED_SIZE,
+								javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addComponent(editingArea, 20, 80, Short.MAX_VALUE)
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup()
-								.addContainerGap()
-								.addComponent(framingPanel, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addContainerGap()));
+		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(framingPanel,
+						javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addContainerGap()));
 		layout.setVerticalGroup(
 				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup()
-								.addContainerGap()
+						.addGroup(layout.createSequentialGroup().addContainerGap()
 								.addComponent(framingPanel, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 								.addContainerGap(20, 20)));
@@ -259,7 +247,7 @@ public class FEdit extends javax.swing.JDialog
 			logging.info(this, " editing area not filled with component");
 			// return false;
 		}
-		// System.out.println(" editingArea used by " +
+		// logging.debug(" editingArea used by " +
 		// editingArea.getComponent(0).getClass());
 		editingArea.getComponent(0).setPreferredSize(usableAreaSize);
 		initComponents();
@@ -352,13 +340,13 @@ public class FEdit extends javax.swing.JDialog
 		if (caller != null) {
 			callerFont = caller.getFont();
 			caller.setFont(callerFont.deriveFont(Font.ITALIC));
-			// System.out.println("set derived font");
+			// logging.debug("set derived font");
 		}
 	}
 
 	public void deactivate() {
 		if (caller != null) {
-			// System.out.println(" reset font ");
+			// logging.debug(" reset font ");
 			caller.setFont(callerFont);
 			caller.validate();
 		}
@@ -375,12 +363,12 @@ public class FEdit extends javax.swing.JDialog
 	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			cancel();
-			// System.out.println(" window closing, text " + getText());
+			// logging.debug(" window closing, text " + getText());
 		} else if (e.getID() == WindowEvent.WINDOW_ACTIVATED) {
-			// System.out.println(" window activated");
+			// logging.debug(" window activated");
 			enter();
 		} else if (e.getID() == WindowEvent.WINDOW_DEACTIVATED) {
-			// System.out.println(" window deactivated");
+			// logging.debug(" window deactivated");
 			// deactivate();
 
 		}
@@ -419,7 +407,7 @@ public class FEdit extends javax.swing.JDialog
 		if (e.getSource() == buttonCommit) {
 			commit();
 		} else if (e.getSource() == buttonCancel) {
-			// System.out.println (" -------- buttonCancel " + e);
+			// logging.debug (" -------- buttonCancel " + e);
 			cancel();
 		}
 

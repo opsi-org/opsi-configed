@@ -37,8 +37,7 @@ public abstract class SWExporter {
 	protected boolean askForOverwrite = false;
 	protected String filenamePrefix = "report_swaudit_";
 
-	protected final String usage = "\n" +
-			"configed_exporter [OPTIONS] [NAME]\n\n";
+	protected final String usage = "\n" + "configed_exporter [OPTIONS] [NAME]\n\n";
 
 	protected PersistenceController persist;
 
@@ -133,8 +132,8 @@ public abstract class SWExporter {
 
 					setWriteToFile(filepathStart + line + getExtension());
 
-					System.out.println(" outDir: " + outDir);
-					System.out.println(" filePath: " + filepathStart + line + getExtension());
+					logging.debug(" outDir: " + outDir);
+					logging.debug(" filePath: " + filepathStart + line + getExtension());
 					export();
 
 					line = in.readLine();
@@ -150,12 +149,12 @@ public abstract class SWExporter {
 	}
 
 	public void finish(int exitcode) {
-		System.err.println(de.uib.configed.ErrorCode.tell(exitcode));
+		logging.error(de.uib.configed.ErrorCode.tell(exitcode));
 		configed.endApp(exitcode);
 	}
 
 	private void showUsage() {
-		System.out.println(usage);
+		logging.debug(usage);
 	}
 
 	public void setWriteToFile(String path) {
@@ -211,32 +210,23 @@ public abstract class SWExporter {
 			finalColumns[i] = i;
 		}
 
-		modelSWInfo = new GenTableModel(
-				null, // no updates
-				new DefaultTableProvider(
-						new RetrieverMapSource(columnNames, classNames,
-								new MapRetriever() {
-									public Map<String, Map> retrieveMap() {
-										logging.info(this, "retrieving data for " + theHost);
-										Map<String, Map> tableData = persist.retrieveSoftwareAuditData(theHost);
+		modelSWInfo = new GenTableModel(null, // no updates
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					public Map<String, Map> retrieveMap() {
+						logging.info(this, "retrieving data for " + theHost);
+						Map<String, Map> tableData = persist.retrieveSoftwareAuditData(theHost);
 
-										if (tableData == null || tableData.keySet().size() == 0) {
-											scanInfo = de.uib.configed.configed
-													.getResourceValue("PanelSWInfo.noScanResult");
-										} else {
-											logging.debug(this, "retrieved size  " + tableData.keySet().size());
-											scanInfo = "Scan " +
-													persist.getLastSoftwareAuditModification(theHost);
-										}
+						if (tableData == null || tableData.keySet().size() == 0) {
+							scanInfo = de.uib.configed.configed.getResourceValue("PanelSWInfo.noScanResult");
+						} else {
+							logging.debug(this, "retrieved size  " + tableData.keySet().size());
+							scanInfo = "Scan " + persist.getLastSoftwareAuditModification(theHost);
+						}
 
-										logging.info(this, "retrieved size  " + tableData.keySet().size());
-										return tableData;
-									}
-								})),
-				-1,
-				finalColumns,
-				null,
-				null);
+						logging.info(this, "retrieved size  " + tableData.keySet().size());
+						return tableData;
+					}
+				})), -1, finalColumns, null, null);
 
 		;
 

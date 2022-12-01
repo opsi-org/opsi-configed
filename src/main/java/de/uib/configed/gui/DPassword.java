@@ -439,7 +439,7 @@ public class DPassword extends JDialog // implements Runnable
 		fieldUser.setText(TESTUSER);
 		fieldUser.addKeyListener(myKeyListener);
 		// fieldUser.setText(System.getProperty("user.name"));
-		// System.out.println(passwordField.getPassword());
+		// logging.debug(passwordField.getPassword());
 		fieldUser.setMargin(new Insets(0, 3, 0, 3));
 
 		jLabelPassword.setText(configed.getResourceValue("DPassword.jLabelPassword"));
@@ -650,7 +650,7 @@ public class DPassword extends JDialog // implements Runnable
 
 		String strOS = System.getProperty("os.name");
 		String osVersion = System.getProperty("os.version");
-		logging.debugOut(3, " OS " + strOS + "  Version " + osVersion);
+		logging.notice(" OS " + strOS + "  Version " + osVersion);
 		String host = TESTSERVER; // "";
 		/*
 		 * if (strOS.startsWith("Windows") && (osVersion.compareToIgnoreCase("4.0") >=
@@ -670,7 +670,7 @@ public class DPassword extends JDialog // implements Runnable
 
 		pack();
 
-		// System.out.println(" ---- host:" + host + "--");
+		// logging.debug(" ---- host:" + host + "--");
 		if (host.equals("")) {
 			setHost("localhost");
 			fieldHost.requestFocus();

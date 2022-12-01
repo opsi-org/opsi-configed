@@ -32,15 +32,14 @@ public class CmdLauncher {
 
 			Process proc = pb.start();
 
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					proc.getInputStream()));
+			BufferedReader br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
 			String line = null;
 			while ((line = br.readLine()) != null) {
-				// System.out.println(getSelectedClients()[J] + " >" + line);
+				// logging.debug(getSelectedClients()[J] + " >" + line);
 				// appendLog( ">" + line + "\n");
 			}
-			// System.out.println(getSelectedClients()[J] + " process exitValue " +
+			// logging.debug(getSelectedClients()[J] + " process exitValue " +
 			// proc.exitValue());
 		} catch (Exception ex) {
 			logging.error("Runtime error for command >>" + cmd + "<<, : " + ex, ex);

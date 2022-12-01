@@ -96,7 +96,7 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 
 		TimeCheck timer = new TimeCheck(this, "HOST_read").start();
 
-		logging.check(this, "HOST_read, query " + query);
+		logging.notice(this, "HOST_read, query " + query);
 		java.util.List<Map<java.lang.String, java.lang.Object>> opsiHosts = exec
 				.getListOfMaps(new OpsiMethodCall("getData", new Object[] { query }));
 		timer.stop();

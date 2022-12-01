@@ -650,7 +650,7 @@ public class LicensingInfoMap {
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 			for (String key : datesKeys) {
-				// System.out.println("key " + key);
+				// logging.debug("key " + key);
 				Date thisDate = sdf.parse(key);
 				if (dateNow.compareTo(thisDate) >= 0)
 					newest = key;
@@ -674,7 +674,7 @@ public class LicensingInfoMap {
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 			for (String key : dates) {
-				// System.out.println("key " + key);
+				// logging.debug("key " + key);
 				Date thisDate = sdf.parse(key);
 				if (dateNow.compareTo(thisDate) >= 0)
 					newest = thisDate;
@@ -837,7 +837,7 @@ public class LicensingInfoMap {
 		if (configs.get(key) != null)
 			percentClientLimitWarning = Integer.parseInt((String) configs.get(key).get(0));
 
-		// System.out.println("warning levels: " + absolutClientLimitWarning + ", " +
+		// logging.debug("warning levels: " + absolutClientLimitWarning + ", " +
 		// percentClientLimitWarning);
 	}
 

@@ -21,12 +21,12 @@ public class SWcsvExporter extends SWExporter {
 		String clientName = theHost;
 		logging.info(this, "------------- create csv report swaudit for " + clientName);
 
-		System.out.println("------------- create csv report swaudit for " + clientName);
+		logging.debug("------------- create csv report swaudit for " + clientName);
 
 		modelSWInfo.setSorting(0, true);
-		// System.out.println(" theHost " + clientName);
-		// System.out.println(" export file " + exportFilename);
-		// System.out.println(" model columns " + modelSWInfo.getColumnNames() );
+		// logging.debug(" theHost " + clientName);
+		// logging.debug(" export file " + exportFilename);
+		// logging.debug(" model columns " + modelSWInfo.getColumnNames() );
 
 		theTable.setModel(modelSWInfo);
 		exportTable.execute(exportFilename, false);

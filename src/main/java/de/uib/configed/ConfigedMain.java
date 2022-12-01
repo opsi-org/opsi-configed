@@ -524,10 +524,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		String result = "";
 
 		if (System.getenv(logging.windowsEnvVariableAppDataDirectory) != null) {
-			result = System.getenv(logging.windowsEnvVariableAppDataDirectory) + File.separator + logging.creatorDirName
-					+ File.separator + logging.programSubDir;
+			// Windows
+			result = System.getenv(logging.windowsEnvVariableAppDataDirectory) + File.separator + "opsi.org"
+					+ File.separator + "configed";
 		} else {
-			result = System.getProperty(logging.envVariableForUserDirectory) + File.separator + logging.programSubDir;
+			result = System.getProperty(logging.envVariableForUserDirectory) + File.separator + ".configed";
 		}
 
 		return result;
@@ -3122,7 +3123,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		dependenciesModel.setActualProduct(productEdited);
 
 		logging.debug(this, " --- mergedProductProperties " + mergedProductProperties);
-		// System.out.println ( " -- productEdited " + productEdited + " --- values map
+		// logging.debug( " -- productEdited " + productEdited + " --- values map
 		// " + persist.getProductPropertyValuesMap(productEdited));
 
 		/*
@@ -6719,10 +6720,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 								String line = null;
 								while ((line = br.readLine()) != null) {
-									// System.out.println(getSelectedClients()[J] + " >" + line);
+									// logging.debug(getSelectedClients()[J] + " >" + line);
 									appendLog(selected + " on " + targetClient + " >" + line + "\n");
 								}
-								// System.out.println(getSelectedClients()[J] + " process exitValue " +
+								//logging.debug(getSelectedClients()[J] + " process exitValue " +
 								// proc.exitValue());
 							} catch (Exception ex) {
 								logging.error("Runtime error for command >>" + cmd + "<<, : " + ex, ex);

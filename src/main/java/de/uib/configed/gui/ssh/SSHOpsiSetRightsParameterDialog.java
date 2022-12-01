@@ -109,8 +109,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	/* This method is called when button 1 is pressed */
 	public void doAction1() {
 		try {
-			commandopsisetrights.setDir(completion.combobox_getStringItem());
-			;
+			commandopsisetrights.setDir(completion.combobox_getStringItem());;
 			logging.info(this, "doAction1 opsi-set-rights with path: " + commandopsisetrights.getDir());
 			// we are in the event queure
 			new Thread() {
@@ -136,12 +135,10 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	private void initLayout() {
 		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
 		inputPanel.setLayout(inputPanelLayout);
-		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup()
-				.addGap(Globals.gapSize)
+		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize)
 				.addGroup(inputPanelLayout.createParallelGroup()
-						.addGroup(inputPanelLayout.createSequentialGroup()
-								.addComponent(lbl_info, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
+						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(lbl_info,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.gapSize)
 						.addGroup(inputPanelLayout.createSequentialGroup()
 								.addComponent(cb_autocompletion, Globals.buttonWidth, Globals.buttonWidth,
@@ -151,8 +148,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 						.addGap(Globals.gapSize))
 				.addGap(Globals.gapSize));
 
-		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup()
-				.addGap(Globals.gapSize)
+		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(lbl_info, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
 				.addGap(Globals.gapSize)

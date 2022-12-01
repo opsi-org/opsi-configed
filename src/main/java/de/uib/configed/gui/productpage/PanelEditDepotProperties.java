@@ -151,7 +151,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 				/*
 				 * // test
-				 * System.out.println(" action performed on buttonSetValuesFromPackage ");
+				 * logging.debug(" action performed on buttonSetValuesFromPackage ");
 				 * HashMap testdata = new HashMap();
 				 * testdata.put("test", "3");
 				 * testdata.put("loop", "200");

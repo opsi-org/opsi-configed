@@ -271,9 +271,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	private boolean separatorAdded = false;
 
 	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition, // if -1 dont
-																											// use a
-																											// standard
-																											// popup
+			// use a
+			// standard
+			// popup
 			// if > 0 the popup is added later after installing another popup
 			boolean switchLineColors, int[] popupsWanted, boolean withTablesearchPane) {
 		this.withTablesearchPane = withTablesearchPane;
@@ -702,178 +702,177 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				"addPopupmenuStandardpart, supplemented internalpopups " + giveMenuitemNames(internalpopups));
 
 		for (int popuptype : internalpopups) {
-			// System.out.println ("....... popuptype " + popuptype);
+			// logging.debug ("....... popuptype " + popuptype);
 			switch (popuptype) {
-				case POPUP_SEPARATOR:
-					addPopupItem(null);
-					break;
+			case POPUP_SEPARATOR:
+				addPopupItem(null);
+				break;
 
-				case POPUP_SAVE:
-					menuItemSave = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.saveData"));
-					menuItemSave.setEnabled(false);
-					menuItemSave.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							commit();
+			case POPUP_SAVE:
+				menuItemSave = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.saveData"));
+				menuItemSave.setEnabled(false);
+				menuItemSave.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						commit();
+					}
+				});
+				addPopupItem(menuItemSave);
+
+				break;
+
+			case POPUP_CANCEL:
+				menuItemCancel = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.abandonNewData"));
+				menuItemCancel.setEnabled(false);
+				menuItemCancel.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						cancel();
+					}
+				});
+				addPopupItem(menuItemCancel);
+
+				break;
+
+			case POPUP_RELOAD:
+				// logging.info(this, "reload popup worked");
+				menuItemReload = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.reload"),
+						de.uib.configed.Globals.createImageIcon("images/reload16.png", ""));
+				// menuItemReload.setPreferredSize(Globals.buttonDimension);
+				// menuItemReload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+				// does not work
+				menuItemReload.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						reload();
+					}
+				});
+				if (popupIndex > 1)
+					popupMenu.addSeparator();
+
+				addPopupItem(menuItemReload);
+
+				break;
+
+			case POPUP_SORT_AGAIN:
+				menuItemSortAgain = new JMenuItemFormatted(
+						configed.getResourceValue("PanelGenEditTable.sortAsConfigured"));
+				menuItemSortAgain.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						sortAgainAsConfigured();
+
+					}
+				});
+				// if (sortDescriptor != null)
+				addPopupItem(menuItemSortAgain);
+
+				break;
+
+			case POPUP_DELETE_ROW:
+				menuItemDeleteRelation = new JMenuItemFormatted(
+						configed.getResourceValue("PanelGenEditTable.deleteRow"));
+				menuItemDeleteRelation.setEnabled(false);
+				menuItemDeleteRelation.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if (getSelectedRowCount() == 0) {
+							JOptionPane.showMessageDialog(de.uib.configed.Globals.mainContainer,
+									configed.getResourceValue("PanelGenEditTable.noRowSelected"),
+									configed.getResourceValue("ConfigedMain.Licences.hint.title"),
+									JOptionPane.OK_OPTION);
+
+							return;
+						} else {
+							if (deleteAllowed)
+								tableModel.deleteRow(getSelectedRowInModelTerms());
 						}
-					});
-					addPopupItem(menuItemSave);
+					}
+				});
+				addPopupItem(menuItemDeleteRelation);
 
-					break;
+				break;
 
-				case POPUP_CANCEL:
-					menuItemCancel = new JMenuItemFormatted(
-							configed.getResourceValue("PanelGenEditTable.abandonNewData"));
-					menuItemCancel.setEnabled(false);
-					menuItemCancel.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							cancel();
+			case POPUP_PRINT:
+				menuItemPrint = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.print"));
+				menuItemPrint.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						try {
+							theTable.print();
+						} catch (Exception ex) {
+							logging.error("Printing error " + ex);
 						}
-					});
-					addPopupItem(menuItemCancel);
+					}
+				});
 
-					break;
+				/*
+				 * if (popupIndex > 1)
+				 * popupMenu.addSeparator();
+				 */
 
-				case POPUP_RELOAD:
-					// logging.info(this, "reload popup worked");
-					menuItemReload = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.reload"),
-							de.uib.configed.Globals.createImageIcon("images/reload16.png", ""));
-					// menuItemReload.setPreferredSize(Globals.buttonDimension);
-					// menuItemReload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
-					// does not work
-					menuItemReload.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							reload();
+				addPopupItem(menuItemPrint);
+
+				break;
+
+			case POPUP_FLOATINGCOPY:
+
+				menuItemFloatingCopy = new JMenuItemFormatted(
+						configed.getResourceValue("PanelGenEditTable.floatingCopy"));
+				menuItemFloatingCopy.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						floatExternal();
+					}
+				});
+
+				if (popupIndex > 1)
+					popupMenu.addSeparator();
+
+				addPopupItem(menuItemFloatingCopy);
+				break;
+
+			case POPUP_EXPORT_CSV:
+				menuItemExportCSV = exportTable.getMenuItemExport();
+				addPopupItem(menuItemExportCSV);
+
+				break;
+
+			case POPUP_EXPORT_SELECTED_CSV:
+				menuItemExportSelectedCSV = exportTable.getMenuItemExportSelected();
+				addPopupItem(menuItemExportSelectedCSV);
+
+				break;
+
+			case POPUP_PDF:
+				menuItemPDF = new JMenuItemFormatted(configed.getResourceValue("FGeneralDialog.pdf"),
+						de.uib.configed.Globals.createImageIcon("images/acrobat_reader16.png", ""));
+				menuItemPDF.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						try {
+							HashMap<String, String> metaData = new HashMap<String, String>();
+							metaData.put("header", title);
+							metaData.put("subject", "report of table");
+							metaData.put("keywords", "");
+
+							ExporterToPDF pdfExportTable = new ExporterToPDF(theTable);
+							pdfExportTable.setMetaData(metaData);
+							pdfExportTable.setPageSizeA4_Landscape();
+							pdfExportTable.execute(null, true);
+
+							/*
+							 * old pdf exporting
+							 * tableToPDF = new DocumentToPdf (null, metaData); // no filename, metadata
+							 * tableToPDF.createContentElement("table", theTable);
+							 * tableToPDF.setPageSizeA4_Landscape(); //
+							 * tableToPDF.toPDF(); // create Pdf
+							 **/
+						} catch (Exception ex) {
+							logging.error("PDF printing error " + ex);
 						}
-					});
-					if (popupIndex > 1)
-						popupMenu.addSeparator();
+					}
+				});
+				/*
+				 * if (popupIndex > 1)
+				 * popupMenu.addSeparator();
+				 */
 
-					addPopupItem(menuItemReload);
+				addPopupItem(menuItemPDF);
 
-					break;
-
-				case POPUP_SORT_AGAIN:
-					menuItemSortAgain = new JMenuItemFormatted(
-							configed.getResourceValue("PanelGenEditTable.sortAsConfigured"));
-					menuItemSortAgain.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							sortAgainAsConfigured();
-
-						}
-					});
-					// if (sortDescriptor != null)
-					addPopupItem(menuItemSortAgain);
-
-					break;
-
-				case POPUP_DELETE_ROW:
-					menuItemDeleteRelation = new JMenuItemFormatted(
-							configed.getResourceValue("PanelGenEditTable.deleteRow"));
-					menuItemDeleteRelation.setEnabled(false);
-					menuItemDeleteRelation.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							if (getSelectedRowCount() == 0) {
-								JOptionPane.showMessageDialog(de.uib.configed.Globals.mainContainer,
-										configed.getResourceValue("PanelGenEditTable.noRowSelected"),
-										configed.getResourceValue("ConfigedMain.Licences.hint.title"),
-										JOptionPane.OK_OPTION);
-
-								return;
-							} else {
-								if (deleteAllowed)
-									tableModel.deleteRow(getSelectedRowInModelTerms());
-							}
-						}
-					});
-					addPopupItem(menuItemDeleteRelation);
-
-					break;
-
-				case POPUP_PRINT:
-					menuItemPrint = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.print"));
-					menuItemPrint.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							try {
-								theTable.print();
-							} catch (Exception ex) {
-								logging.debugOut(logging.LEVEL_ERROR, "printing error " + ex);
-							}
-						}
-					});
-
-					/*
-					 * if (popupIndex > 1)
-					 * popupMenu.addSeparator();
-					 */
-
-					addPopupItem(menuItemPrint);
-
-					break;
-
-				case POPUP_FLOATINGCOPY:
-
-					menuItemFloatingCopy = new JMenuItemFormatted(
-							configed.getResourceValue("PanelGenEditTable.floatingCopy"));
-					menuItemFloatingCopy.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							floatExternal();
-						}
-					});
-
-					if (popupIndex > 1)
-						popupMenu.addSeparator();
-
-					addPopupItem(menuItemFloatingCopy);
-					break;
-
-				case POPUP_EXPORT_CSV:
-					menuItemExportCSV = exportTable.getMenuItemExport();
-					addPopupItem(menuItemExportCSV);
-
-					break;
-
-				case POPUP_EXPORT_SELECTED_CSV:
-					menuItemExportSelectedCSV = exportTable.getMenuItemExportSelected();
-					addPopupItem(menuItemExportSelectedCSV);
-
-					break;
-
-				case POPUP_PDF:
-					menuItemPDF = new JMenuItemFormatted(configed.getResourceValue("FGeneralDialog.pdf"),
-							de.uib.configed.Globals.createImageIcon("images/acrobat_reader16.png", ""));
-					menuItemPDF.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							try {
-								HashMap<String, String> metaData = new HashMap<String, String>();
-								metaData.put("header", title);
-								metaData.put("subject", "report of table");
-								metaData.put("keywords", "");
-
-								ExporterToPDF pdfExportTable = new ExporterToPDF(theTable);
-								pdfExportTable.setMetaData(metaData);
-								pdfExportTable.setPageSizeA4_Landscape();
-								pdfExportTable.execute(null, true);
-
-								/*
-								 * old pdf exporting
-								 * tableToPDF = new DocumentToPdf (null, metaData); // no filename, metadata
-								 * tableToPDF.createContentElement("table", theTable);
-								 * tableToPDF.setPageSizeA4_Landscape(); //
-								 * tableToPDF.toPDF(); // create Pdf
-								 **/
-							} catch (Exception ex) {
-								logging.debugOut(logging.LEVEL_ERROR, "pdf printing error " + ex);
-							}
-						}
-					});
-					/*
-					 * if (popupIndex > 1)
-					 * popupMenu.addSeparator();
-					 */
-
-					addPopupItem(menuItemPDF);
-
-					break;
+				break;
 			}
 		}
 	}
@@ -1055,7 +1054,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		setSorter();
 
-		// System.out.println ( "----------------------------- model row count " +
+		// logging.debug ( "----------------------------- model row count " +
 		// m.getRowCount());
 		// logging.debug("--------- getColumnModel() size == 0 " +
 		// !theTable.getColumnModel().getColumns().hasMoreElements());
@@ -1077,7 +1076,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	 * }
 	 * catch (Exception ex)
 	 * {
-	 * System.out.println ("------------------- no way to string");
+	 * logging.debug ("------------------- no way to string");
 	 * return false;
 	 * }
 	 * }
@@ -1089,7 +1088,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	 * }
 	 * catch (Exception ex)
 	 * {
-	 * System.out.println ("------------------- not getting comparator ");
+	 * logging.debug ("------------------- not getting comparator ");
 	 * return null;
 	 * }
 	 * 
@@ -1130,9 +1129,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	 * 
 	 * 
 	 * 
-	 * //System.out.println ( "----------------------------- model row count " +
+	 * //logging.debug ( "----------------------------- model row count " +
 	 * m.getRowCount());
-	 * //System.out.println("---------  getColumnModel() size == 0 " +
+	 * //logging.debug("---------  getColumnModel() size == 0 " +
 	 * !theTable.getColumnModel().getColumns().hasMoreElements());
 	 * setDataChanged(false);
 	 * 
@@ -1303,11 +1302,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		if (cols == null)
 			return;
 
-		// System.out.println("--------- getColumnModel() size == 0 " +
+		// logging.debug("--------- getColumnModel() size == 0 " +
 		// !theTable.getColumnModel().getColumns().hasMoreElements());
 
 		if (theTable.getColumnModel().getColumns().hasMoreElements()) {
-			// System.out.println("--------- we have elements ");
+			// logging.debug("--------- we have elements ");
 			for (int j = 0; j < cols.length; j++) {
 				theTable.getColumnModel().getColumn(cols[j])
 						.setCellRenderer(new TableCellRendererConfigured(null, Globals.lightBlack,
@@ -1469,7 +1468,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	public void setSelectedRow(int row) {
 		theTable.setRowSelectionInterval(row, row);
-		// System.out.println(" --- view row selected " + row);
+		// logging.debug(" --- view row selected " + row);
 		showSelectedRow();
 	}
 
@@ -1512,7 +1511,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	public void selectedRowChanged() {
 		// logging.info(this, "selectedRowChanged");
-		// System.out.println(" new selected row ");
+		// logging.debug(" new selected row ");
 	}
 
 	public void setAwareOfSelectionListener(boolean b) {
@@ -1597,11 +1596,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		Iterator iter = values.iterator();
 
-		// System.out.println(" setSelectedValues for " + values);
+		// logging.debug(" setSelectedValues for " + values);
 
 		while (iter.hasNext()) {
 			int viewRow = findViewRowFromValue((String) iter.next(), col);
-			// System.out.println(" viewRow " + viewRow);
+			// logging.debug(" viewRow " + viewRow);
 			getListSelectionModel().addSelectionInterval(viewRow, viewRow);
 		}
 
@@ -1725,7 +1724,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		if (keyValue == null)
 			return false;
 
-		// System.out.println(" -------------++----- keyValue " + keyValue);
+		// logging.debug(" -------------++----- keyValue " + keyValue);
 		if (tableModel.getKeyCol() > -1) {
 			found = moveToValue(keyValue, tableModel.getKeyCol());
 		}
@@ -1742,8 +1741,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 					partialkeys[j] = tableModel
 							.getValueAt(theTable.convertRowIndexToModel(viewrow), tableModel.getFinalCols().get(j))
 							.toString();
-				}
-				;
+				} ;
 
 				if (keyValue.equals(Globals.pseudokey(partialkeys)))
 					found = true;
@@ -1901,7 +1899,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		if (e.getSource() == buttonCommit) {
 			commit();
 		} else if (e.getSource() == buttonCancel) {
-			// System.out.println (" -------- buttonCancel " + e);
+			// logging.debug (" -------- buttonCancel " + e);
 			cancel();
 		}
 	}
@@ -1910,7 +1908,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	// KeyListener interface
 	public void keyPressed(KeyEvent e) {
 		if (e.getSource() == theTable) {
-			// System.out.println(" event on table " + e);
+			// logging.debug(" event on table " + e);
 			if (e.getKeyCode() == KeyEvent.VK_DELETE)
 				deleteCurrentRow();
 
@@ -1921,7 +1919,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		/*
 		 * if (e.getSource() == theTable)
 		 * {
-		 * System.out.println(" event on table " + e);
+		 * logging.debug(" event on table " + e);
 		 * }
 		 */
 	}
@@ -1930,7 +1928,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		/*
 		 * if (e.getSource() == theTable)
 		 * {
-		 * System.out.println(" event on table " + e);
+		 * logging.debug(" event on table " + e);
 		 * }
 		 */
 	}

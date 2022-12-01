@@ -107,7 +107,7 @@ public class FTextArea extends FGeneralDialog {
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
-			// System.out.println ("shift released");
+			// logging.debug ("shift released");
 		}
 
 		if (e.getKeyCode() == KeyEvent.VK_TAB && !shiftPressed) {

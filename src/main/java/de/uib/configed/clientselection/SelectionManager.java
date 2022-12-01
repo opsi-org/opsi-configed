@@ -149,12 +149,12 @@ public class SelectionManager {
 		if (withMySQL) {
 			long startTime = System.nanoTime();
 			List<String> l = selectClientsSQL(controller);
-			logging.check(this, "select Clients with MySQL " + ((System.nanoTime() - startTime) / 1000000));
+			logging.notice(this, "select Clients with MySQL " + ((System.nanoTime() - startTime) / 1000000));
 			return l;
 		} else {
 			long startTime = System.nanoTime();
 			List<String> l = selectClientsLocal();
-			logging.check(this, "select Clients without ;MySQL " + ((System.nanoTime() - startTime) / 1000000));
+			logging.notice(this, "select Clients without ;MySQL " + ((System.nanoTime() - startTime) / 1000000));
 			return l;
 		}
 	}

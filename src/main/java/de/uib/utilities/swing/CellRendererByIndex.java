@@ -49,8 +49,7 @@ import javax.swing.ListCellRenderer;
 
 import de.uib.configed.Globals;
 
-public class CellRendererByIndex extends ImagePlusTextLabel
-		implements ListCellRenderer {
+public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellRenderer {
 	private Font uhOhFont;
 
 	protected Map<String, String> mapOfStrings;
@@ -64,7 +63,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel
 
 	public CellRendererByIndex(Set<String> keySet, String imagesBase, int imageWidth) {
 		super(imageWidth);
-		// System.out.println(" ------------- font " + getFont() );
+		// logging.debug(" ------------- font " + getFont() );
 		setOpaque(true);
 		// setHorizontalAlignment(LEFT);
 		// setVerticalAlignment(CENTER);
@@ -86,7 +85,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel
 
 				if (imagesBase != null) {
 					String imageFileString = imagesBase + "/" + stringval + ".png";
-					// System.out.println (" image file " + imageFileString);
+					// logging.debug (" image file " + imageFileString);
 
 					image = de.uib.configed.Globals.createImageIcon(imageFileString, stringval);
 					if (image != null)
@@ -106,14 +105,12 @@ public class CellRendererByIndex extends ImagePlusTextLabel
 		this(mapOfStringValues, mapOfDescriptions, null, 0);
 	}
 
-	public CellRendererByIndex(
-			Map<String, String> mapOfStringValues,
-			Map<String, String> mapOfDescriptions,
+	public CellRendererByIndex(Map<String, String> mapOfStringValues, Map<String, String> mapOfDescriptions,
 			String imagesBase, int imageWidth)
 
 	{
 		super(imageWidth);
-		// System.out.println(" ------------- font " + getFont() );
+		// logging.debug(" ------------- font " + getFont() );
 		setOpaque(true);
 		// setHorizontalAlignment(LEFT);
 		// setVerticalAlignment(CENTER);
@@ -136,7 +133,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel
 
 				if (key != null && stringval != null) {
 					String imageFileString = imagesBase + "/" + stringval + ".png";
-					// System.out.println (" image file " + imageFileString);
+					// logging.debug (" image file " + imageFileString);
 
 					image = de.uib.configed.Globals.createImageIcon(imageFileString, stringval);
 					if (image != null)
@@ -152,11 +149,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel
 	 * to the selected value and returns the label, set up
 	 * to display the text and image.
 	 */
-	public Component getListCellRendererComponent(
-			JList list,
-			Object value,
-			int index,
-			boolean isSelected,
+	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
 			boolean cellHasFocus) {
 		// Get the selected index. (The index param isn't
 		// always valid, so just use the value.)
@@ -182,8 +175,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel
 		} else {
 			background = de.uib.configed.Globals.nimbusBackground;
 			foreground = de.uib.configed.Globals.nimbusSelectionBackground; // Color.WHITE; // Color.black;
-		}
-		;
+		} ;
 
 		setBackground(background);
 		setForeground(foreground);

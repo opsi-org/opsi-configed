@@ -401,10 +401,10 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		menuItemCreateNode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// System.out.println(" action performed on menuItemCreateNode, " + e);
-				// System.out.println(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
+				// logging.debug(" action performed on menuItemCreateNode, " + e);
+				// logging.debug(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
 				// );
-				// System.out.println(" mousePath " +
+				// logging.debug(" mousePath " +
 				// treePopupMouseListener.getPopupSourcePath() );
 				IconNode resultNode = makeSubgroupAt(treePopupMouseListener.getPopupSourcePath());
 				if (resultNode != null) {
@@ -424,10 +424,10 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			public void actionPerformed(ActionEvent e) {
 				editGroupNode(treePopupMouseListener.getPopupSourcePath());
 				/*
-				 * //System.out.println(" action performed on menuItemEditNode, " + e);
-				 * //System.out.println(" mouseRow " +
+				 * //logging.debug(" action performed on menuItemEditNode, " + e);
+				 * //logging.debug(" mouseRow " +
 				 * treePopupMouseListener.getPopupSourceRow() );
-				 * //System.out.println(" mousePath " +
+				 * //logging.debug(" mousePath " +
 				 * treePopupMouseListener.getPopupSourcePath() );
 				 * IconNode resultNode = makeSubgroupAt
 				 * (treePopupMouseListener.getPopupSourcePath()
@@ -450,10 +450,10 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		menuItemDeleteNode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// System.out.println(" action performed on menuItemDeleteNode, " + e);
-				// System.out.println(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
+				// logging.debug(" action performed on menuItemDeleteNode, " + e);
+				// logging.debug(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
 				// );
-				// System.out.println(" mousePath " +
+				// logging.debug(" mousePath " +
 				// treePopupMouseListener.getPopupSourcePath() );
 
 				deleteNode(
@@ -470,10 +470,10 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		menuItemDeleteGroupNode.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// System.out.println(" action performed on menuItemDeleteNode, " + e);
-				// System.out.println(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
+				// logging.debug(" action performed on menuItemDeleteNode, " + e);
+				// logging.debug(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
 				// );
-				// System.out.println(" mousePath " +
+				// logging.debug(" mousePath " +
 				// treePopupMouseListener.getPopupSourcePath() );
 
 				deleteNode(
@@ -490,10 +490,10 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		menuItemActivateElements.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// System.out.println(" action performed on menuItemActivateElements, " + e);
-				// System.out.println(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
+				// logging.debug(" action performed on menuItemActivateElements, " + e);
+				// logging.debug(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
 				// );
-				// System.out.println(" mousePath " +
+				// logging.debug(" mousePath " +
 				// treePopupMouseListener.getPopupSourcePath() );
 				// deleteNode(
 				// treePopupMouseListener.getPopupSourceRow() ,
@@ -523,10 +523,10 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		menuItemRemoveElements.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// System.out.println(" action performed on menuItemRemoveElements, " + e);
-				// System.out.println(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
+				// logging.debug(" action performed on menuItemRemoveElements, " + e);
+				// logging.debug(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
 				// );
-				// System.out.println(" mousePath " +
+				// logging.debug(" mousePath " +
 				// treePopupMouseListener.getPopupSourcePath() );
 
 				TreePath sourcePath = treePopupMouseListener.getPopupSourcePath();
@@ -586,11 +586,11 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	 * try {
 	 * for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 	 * if ("Nimbus".equals(info.getName())) {
-	 * System.out.println("setting Nimbus look&feel");
+	 * logging.debug("setting Nimbus look&feel");
 	 * UIManager.setLookAndFeel(info.getClassName());
-	 * System.out.println("Nimbus look&feel set");
+	 * logging.debug("Nimbus look&feel set");
 	 * 
-	 * //System.out.println(UIManager.getDefaults());
+	 * //logging.debug(UIManager.getDefaults());
 	 * 
 	 * Color defaultNimbusSelectionBackground = (Color)
 	 * UIManager.get("nimbusSelectionBackground");
@@ -607,7 +607,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	 * }
 	 * } catch (Exception e) {
 	 * // handle exception
-	 * System.out.println (e);
+	 * logging.debug (e);
 	 * }
 	 * }
 	 */
@@ -1148,7 +1148,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		groupGROUPS.put("groupId", GROUPS_NAME);
 		// groupGROUPS.put("parentGroupId", ALL_NAME);
 		groupGROUPS.put("description", "root of groups");
-		// System.out.println(" put " + GROUPS_NAME + " : " + GROUPS);
+		// logging.debug(" put " + GROUPS_NAME + " : " + GROUPS);
 		groupNodes.put(GROUPS_NAME, GROUPS);
 
 		groups.put(GROUPS_NAME, groupGROUPS);
@@ -1156,7 +1156,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		groupDIRECTORY.put("groupId", DIRECTORY_NAME);
 		// groupDIRECTORY.put("parentGroupId", ALL_NAME);
 		groupDIRECTORY.put("description", "root of directory");
-		// System.out.println(" put " + DIRECTORY_NAME + " : " + DIRECTORY);
+		// logging.debug(" put " + DIRECTORY_NAME + " : " + DIRECTORY);
 		groupNodes.put(DIRECTORY_NAME, DIRECTORY);
 
 		groups.put(DIRECTORY_NAME, groupDIRECTORY);
@@ -1884,7 +1884,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			// logging.debug(this, "selectOneNode groupSet, clientID " + groupSet + ", " +
 			// clientID);
 			FEditList fList = new FEditList(null);
-			fList.setListModel(new DefaultComboBoxModel<GroupNode>(new Vector<>(groupSet)));
+			fList.setListModel(new DefaultComboBoxModel<GroupNode>(new Vector<GroupNode>(groupSet)));
 			fList.setTitle(Globals.APPNAME + ":  " + configed.getResourceValue("ClientTree.DIRECTORYname") + " "
 					+ configed.getResourceValue("ClientTree.checkDIRECTORYAssignments"));
 			fList.setExtraLabel(configed.getResourceValue("ClientTree.severalLocationsAssigned") + " >> " + clientID

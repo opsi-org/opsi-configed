@@ -44,23 +44,23 @@ public class TabbedPaneX extends JPanel {
 			public void stateChanged(javax.swing.event.ChangeEvent e) {
 				int newVisualIndex = jTabbedPaneMain.getSelectedIndex();
 
-				// System.out.println(" new visual tab index " + newVisualIndex);
+				// logging.debug(" new visual tab index " + newVisualIndex);
 
 				Enum newS = tabOrder.elementAt(newVisualIndex);
 
-				// System.out.println(" new tab state " + newS);
+				// logging.debug(" new tab state " + newS);
 
 				// report state change request to controller and look, what it produces
 				Enum s = controller.reactToStateChangeRequest(newS);
 
-				// System.out.println(" controlled new tab state " + s);
+				// logging.debug(" controlled new tab state " + s);
 
 				// if the controller did not accept the new index set it back
 				// observe that we get a recursion since we initiate another state change
 				// the recursion breaks since newVisualIndex is identical with
 				// the old and does not yield a different value
 				if (newS != s) {
-					// System.out.println(" new tab index " + s);
+					// logging.debug(" new tab index " + s);
 					jTabbedPaneMain.setSelectedIndex(tabOrder.indexOf(s));
 				}
 			}
@@ -71,7 +71,7 @@ public class TabbedPaneX extends JPanel {
 	}
 
 	public void callExit() {
-		// System.out.println(" we want to close ");
+		// logging.debug(" we want to close ");
 		controller.exit();
 	}
 

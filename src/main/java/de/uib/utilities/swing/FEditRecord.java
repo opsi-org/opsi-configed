@@ -34,13 +34,13 @@ public class FEditRecord extends FEdit {
 		public void notifyObservers() {
 			// logging.debug(this, "notifyObservers ");
 			super.notifyObservers();
-			// System.out.println("notifyObservers ");
+			// logging.debug("notifyObservers ");
 		}
 
 		@Override
 		public void setChanged() {
 			// logging.debug(this, "setChanged");
-			// System.out.println("setChanged");
+			// logging.debug("setChanged");
 			super.setChanged();
 			setDataChanged(true);
 		}
@@ -67,16 +67,9 @@ public class FEditRecord extends FEdit {
 
 	}
 
-	public void setRecord(
-			LinkedHashMap<String, String> data,
-			Map<String, String> labels,
-			Map<String, String> hints,
+	public void setRecord(LinkedHashMap<String, String> data, Map<String, String> labels, Map<String, String> hints,
 			Map<String, Boolean> editable) {
-		recordPane.setData(
-				data,
-				labels,
-				hints,
-				editable);
+		recordPane.setData(data, labels, hints, editable);
 
 		recordPane.setObservableSubject(myObservable);
 

@@ -148,19 +148,15 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		GroupLayout layoutEmbed = new GroupLayout(embed);
 		embed.setLayout(layoutEmbed);
 
-		layoutEmbed.setHorizontalGroup(
-				layoutEmbed.createSequentialGroup()
-						.addGap(hGap, hGap, hGap)
-						.addComponent(table, javax.swing.GroupLayout.PREFERRED_SIZE,
-								javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(hGap, hGap, hGap));
+		layoutEmbed.setHorizontalGroup(layoutEmbed
+				.createSequentialGroup().addGap(hGap, hGap, hGap).addComponent(table,
+						javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addGap(hGap, hGap, hGap));
 
-		layoutEmbed.setVerticalGroup(
-				layoutEmbed.createSequentialGroup()
-						.addGap(vGap, vGap, vGap)
-						.addComponent(table, javax.swing.GroupLayout.PREFERRED_SIZE,
-								javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(vGap, vGap, vGap));
+		layoutEmbed.setVerticalGroup(layoutEmbed
+				.createSequentialGroup().addGap(vGap, vGap, vGap).addComponent(table,
+						javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addGap(vGap, vGap, vGap));
 
 		// embed.setBackground(Color.red);
 		jScrollPaneInfo = new JScrollPane(embed);
@@ -177,28 +173,20 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		GroupLayout layoutBase = new GroupLayout(this);
 		setLayout(layoutBase);
 
-		layoutBase.setHorizontalGroup(
-				layoutBase.createSequentialGroup()
-						.addGap(hGap, hGap, hGap)
-						.addGroup(layoutBase.createParallelGroup()
-								.addGroup(layoutBase.createSequentialGroup()
-										.addGap(hGap - 2, hGap - 2, hGap - 2)
-										.addComponent(panelByAuditInfo, 30, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-										.addGap(hGap - 2, hGap - 2, hGap - 2)
+		layoutBase.setHorizontalGroup(layoutBase.createSequentialGroup().addGap(hGap, hGap, hGap)
+				.addGroup(layoutBase.createParallelGroup()
+						.addGroup(layoutBase.createSequentialGroup().addGap(hGap - 2, hGap - 2, hGap - 2)
+								.addComponent(panelByAuditInfo, 30, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								.addGap(hGap - 2, hGap - 2, hGap - 2)
 
-								)
-								.addComponent(contentPane, 100, javax.swing.GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE))
-						.addGap(hGap, hGap, hGap));
+						).addComponent(contentPane, 100, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+				.addGap(hGap, hGap, hGap));
 
-		layoutBase.setVerticalGroup(
-				layoutBase.createSequentialGroup()
-						.addGap(vGap, vGap, vGap)
-						.addComponent(panelByAuditInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(vGap / 2, vGap / 2, vGap / 2)
-						.addComponent(contentPane, javax.swing.GroupLayout.PREFERRED_SIZE,
-								javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+		layoutBase.setVerticalGroup(layoutBase.createSequentialGroup().addGap(vGap, vGap, vGap)
+				.addComponent(panelByAuditInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(vGap / 2, vGap / 2, vGap / 2).addComponent(contentPane, javax.swing.GroupLayout.PREFERRED_SIZE,
+						javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 		// .addGap(vGap, vGap, vGap)
 		);
 
@@ -210,43 +198,43 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			{
 				public void action(int p) {
 					switch (p) {
-						case PopupMenuTrait.POPUP_RELOAD:
-							reload();
-							break;
+					case PopupMenuTrait.POPUP_RELOAD:
+						reload();
+						break;
 
-						case PopupMenuTrait.POPUP_FLOATINGCOPY:
-							floatExternal();
-							break;
-						case PopupMenuTrait.POPUP_PDF:
-							logging.info(this, "------------- create report");
-							// TODO letzter scan, Auswahl für den ByAudit-Treiberpfad???
-							HashMap<String, String> metaData = new HashMap<String, String>();
-							metaData.put("header", configed.getResourceValue("PanelHWInfo.createPDF.title"));
-							title = "";
-							if (main.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
-								title = title + "Depot: " + main.getHostsStatusInfo().getInvolvedDepots();
-							}
-							if (main.getHostsStatusInfo().getSelectedClientNames().length() != 0) {
-								title = title + "; Client: " + main.getHostsStatusInfo().getSelectedClientNames();
-							}
-							metaData.put("title", title);
-							metaData.put("keywords", "hardware infos");
+					case PopupMenuTrait.POPUP_FLOATINGCOPY:
+						floatExternal();
+						break;
+					case PopupMenuTrait.POPUP_PDF:
+						logging.info(this, "------------- create report");
+						// TODO letzter scan, Auswahl für den ByAudit-Treiberpfad???
+						HashMap<String, String> metaData = new HashMap<String, String>();
+						metaData.put("header", configed.getResourceValue("PanelHWInfo.createPDF.title"));
+						title = "";
+						if (main.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
+							title = title + "Depot: " + main.getHostsStatusInfo().getInvolvedDepots();
+						}
+						if (main.getHostsStatusInfo().getSelectedClientNames().length() != 0) {
+							title = title + "; Client: " + main.getHostsStatusInfo().getSelectedClientNames();
+						}
+						metaData.put("title", title);
+						metaData.put("keywords", "hardware infos");
 
-							ExporterToPDF pdfExportTable = new ExporterToPDF(CreateHWInfoTableModelComplete());
-							pdfExportTable.setMetaData(metaData);
-							pdfExportTable.setPageSizeA4_Landscape();
-							pdfExportTable.execute(null, false); // create pdf // no filename, onlyselectedRows=false
+						ExporterToPDF pdfExportTable = new ExporterToPDF(CreateHWInfoTableModelComplete());
+						pdfExportTable.setMetaData(metaData);
+						pdfExportTable.setPageSizeA4_Landscape();
+						pdfExportTable.execute(null, false); // create pdf // no filename, onlyselectedRows=false
 
-							/*
-							 * old pdf exporting
-							 * tableToPDF = new DocumentToPdf (null, metaData); // no filename, metadata
-							 * 
-							 * tableToPDF.createContentElement("table", CreateHWInfoTableModelComplete());
-							 * 
-							 * tableToPDF.setPageSizeA4_Landscape(); //
-							 * tableToPDF.toPDF(); //
-							 **/
-							break;
+						/*
+						 * old pdf exporting
+						 * tableToPDF = new DocumentToPdf (null, metaData); // no filename, metadata
+						 * 
+						 * tableToPDF.createContentElement("table", CreateHWInfoTableModelComplete());
+						 * 
+						 * tableToPDF.setPageSizeA4_Landscape(); //
+						 * tableToPDF.toPDF(); //
+						 **/
+						break;
 					}
 				}
 			};
@@ -302,7 +290,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		 * }
 		 * else
 		 * {
-		 * System.out.println("Couldn't find file: " + path);
+		 * logging.debug("Couldn't find file: " + path);
 		 * return null;
 		 * }
 		 */
@@ -508,17 +496,11 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			String hwClass = (String) hwClassMapping.get(hwClassUI);
 
 			// logging.debug(this, "scanNode hwClass " + hwClass);
-			if (hwClass != null
-					&& (hwClass.equals(class_COMPUTER_SYSTEM)
-							||
-							hwClass.equals(class_BASE_BOARD))) {
+			if (hwClass != null && (hwClass.equals(class_COMPUTER_SYSTEM) || hwClass.equals(class_BASE_BOARD))) {
 				logging.debug(this, "scanNode found  class_COMPUTER_SYSTEM or class_BASE_BOARD");
 				getDataForNode(node, true);
 
-				panelByAuditInfo.setByAuditFields(
-						vendorStringCOMPUTER_SYSTEM,
-						vendorStringBASE_BOARD,
-						modelString,
+				panelByAuditInfo.setByAuditFields(vendorStringCOMPUTER_SYSTEM, vendorStringBASE_BOARD, modelString,
 						productString);
 			}
 
@@ -573,9 +555,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		for (int i = 0; i < hwConfig.size(); i++) {
 			Map whc = (Map) hwConfig.get(i);
 			hwClassesUI[i] = (String) ((Map) whc.get("Class")).get("UI");
-			hwClassMapping.put(
-					hwClassesUI[i],
-					(String) ((Map) whc.get("Class")).get("Opsi"));
+			hwClassMapping.put(hwClassesUI[i], (String) ((Map) whc.get("Class")).get("Opsi"));
 			// logging.debug(this, "found hwclass " + hwClassesUI[i]);
 		}
 
@@ -647,8 +627,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				for (int k = 0; k < devices.size(); k++) {
 					if (names[j].equals((String) ((HashMap) devices.get(k)).get("displayName"))) {
 						IconNode iconNode = new IconNode(
-								encodeString(
-										(String) ((HashMap) devices.get(k)).get("displayName")));
+								encodeString((String) ((HashMap) devices.get(k)).get("displayName")));
 						iconNode.setClosedIcon(classIcon);
 						iconNode.setLeafIcon(classIcon);
 						iconNode.setOpenIcon(classIcon);

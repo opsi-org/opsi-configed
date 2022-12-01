@@ -46,8 +46,7 @@ import javax.swing.text.html.parser.ParserDelegator;
 
 import de.uib.utilities.logging.logging;
 
-public class FEditPane extends FEdit
-		implements DocumentListener, MouseListener, MouseMotionListener {
+public class FEditPane extends FEdit implements DocumentListener, MouseListener, MouseMotionListener {
 	public static final Dimension AREA_DIMENSION = new Dimension(600, 300);
 	public static final String WINDOWS_LINK_INTERPRETER = "explorer.exe";
 	public static final String LINUX_LINK_INTERPRETER = "firefox";
@@ -72,8 +71,7 @@ public class FEditPane extends FEdit
 	// static final Pattern linkpattern = Pattern.compile(".*.*");
 
 	public FEditPane(String initialText, String hint) {
-		super(initialText, hint);
-		;
+		super(initialText, hint);;
 		logging.info(this, " FEdit constructed for >>" + initialText + "<< title " + hint);
 
 		initFEditText();
@@ -428,27 +426,26 @@ public class FEditPane extends FEdit
 	}
 
 	public static void main(String[] args) {
-		System.out.println(" invoking " + FEditPane.class);
+		logging.debug(" invoking " + FEditPane.class);
 		final Html2Text html2t = new Html2Text();
 
-		SwingUtilities.invokeLater(
-				() -> {
-					logging.setSuppressConsole(false);
-					FEditPane f = new FEditPane("abc", "");
-					f.init(new Dimension(300, 200));
-					f.setVisible(true);
+		SwingUtilities.invokeLater(() -> {
+			logging.setSuppressConsole(false);
+			FEditPane f = new FEditPane("abc", "");
+			f.init(new Dimension(300, 200));
+			f.setVisible(true);
 
-					StringBuffer buf = new StringBuffer();
-					for (int i = 0; i < args.length; i++) {
-						buf.append(args[i]);
-						buf.append("\n");
-					}
+			StringBuffer buf = new StringBuffer();
+			for (int i = 0; i < args.length; i++) {
+				buf.append(args[i]);
+				buf.append("\n");
+			}
 
-					f.setStartText(buf.toString());
+			f.setStartText(buf.toString());
 
-					count++;
-					// System.out.println( "having " + count + " " + f.getText( ) );
-				});
+			count++;
+			// logging.debug( "having " + count + " " + f.getText( ) );
+		});
 
 	}
 
@@ -573,8 +570,7 @@ public class FEditPane extends FEdit
 			FontMetrics fm = c.getFontMetrics(c.getFont());
 			int baseline = alloc.y + alloc.height - fm.getDescent() + 1;
 			g.drawLine(alloc.x, baseline, alloc.x + alloc.width, baseline);
-			g.drawLine(alloc.x, baseline + 1, alloc.x + alloc.width,
-					baseline + 1);
+			g.drawLine(alloc.x, baseline + 1, alloc.x + alloc.width, baseline + 1);
 
 			return alloc;
 		}

@@ -33,8 +33,8 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 		if (result && (c.size() != objectIds.length)) {
 			result = false;
 			logging.warning(this, "object ids (not fitting to edited item) " + Arrays.toString(objectIds));
-			logging.error("list of data has size " + c.size()
-					+ " differs from  length of objectIds list  " + objectIds.length);
+			logging.error("list of data has size " + c.size() + " differs from  length of objectIds list  "
+					+ objectIds.length);
 
 		}
 
@@ -51,8 +51,7 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 
 				catch (ClassCastException ccex) {
 					result = false;
-					logging.debugOut(logging.LEVEL_ERROR, "wrong element type, found " + obj.getClass().getName()
-							+ ", expected a Map");
+					logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map");
 				}
 
 				logging.debug(this, "addAll for one obj, map " + map);
@@ -87,7 +86,7 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 	}
 
 	public boolean add(Object obj) {
-		// System.out.println ("----------- adding " + obj + " of class " +
+		// logging.debug ("----------- adding " + obj + " of class " +
 		// obj.getClass().getName());
 		return super.add(obj);
 	}

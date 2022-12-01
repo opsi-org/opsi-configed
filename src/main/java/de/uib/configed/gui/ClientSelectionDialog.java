@@ -815,6 +815,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			data = textEnum;
 			break;
 		case NoneType:
+		default:
 		}
 
 		operation.setSelectData(new SelectData(data, type));

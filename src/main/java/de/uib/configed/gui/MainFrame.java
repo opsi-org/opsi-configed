@@ -275,7 +275,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JMenu jMenuHelpLoglevel = new JMenu();
 	JMenuItem jMenuHelpLogfileLocation = new JMenuItem();
 
-	JRadioButtonMenuItem[] rbLoglevelItems = new JRadioButtonMenuItem[logging.LEVEL_DONT_SHOW_IT];
+	JRadioButtonMenuItem[] rbLoglevelItems = new JRadioButtonMenuItem[logging.LEVEL_SECRET + 1];
 
 	JPopupMenu popupClients = new JPopupMenu();
 	JMenuItemFormatted popupResetProductOnClientWithStates = new JMenuItemFormatted();
@@ -662,7 +662,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		int missingSpace = min_right_width - sizeOfRightPanel;
 		if (missingSpace > 0 && dividerLocation > min_left_width) {
 			splitpane.setDividerLocation(dividerLocation - missingSpace);
-			// System.out.println (" reset divider location ");
+			// logging.debug (" reset divider location ");
 		}
 
 		// logging.info(this, "moveDivider1 ");
@@ -711,7 +711,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			int missingSpace = min_right_width - sizeOfRightPanel;
 			if (missingSpace > 0 && dividerLocation > min_left_width) {
 				splitpane.setDividerLocation(dividerLocation - missingSpace);
-				// System.out.println (" reset divider location ");
+				// logging.debug (" reset divider location ");
 			}
 
 			// logging.info(this, "moveDivider1 ");
@@ -844,7 +844,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		 * {
 		 * public void actionPerformed(ActionEvent e)
 		 * {
-		 * //System.out.println( " action event on jMenuFileReload ");
+		 * //logging.debug( " action event on jMenuFileReload ");
 		 * main.closeInstance(true);
 		 * de.uib.messages.Messages.setLocale("tr");
 		 * configed.startWithLocale();
@@ -1541,10 +1541,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuHelp.add(jMenuHelpInternalConfiguration);
 
 		ActionListener selectLoglevelListener = (ActionEvent e) -> {
-			for (int i = 0; i < logging.LEVEL_DONT_SHOW_IT; i++) {
+			for (int i = 0; i < logging.LEVEL_SECRET; i++) {
 				if (e.getSource() == rbLoglevelItems[i]) {
 					rbLoglevelItems[i].setSelected(true);
-					logging.setAktDebugLevel(i);
+					logging.setLogLevel(i);
 				} else {
 					if (rbLoglevelItems[i] != null)
 						rbLoglevelItems[i].setSelected(false);
@@ -1554,14 +1554,14 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jMenuHelpLoglevel.setText(configed.getResourceValue("MainFrame.jMenuLoglevel"));
 
-		for (int i = logging.LEVEL_ERROR; i < logging.LEVEL_DONT_SHOW_IT; i++) {
-			rbLoglevelItems[i] = new JRadioButtonMenuItem("" + i);
-			String commented = configed.getResourceValue("MainFrame.jMenuLoglevel." + i);
-			if (!configed.getResourceValue("MainFrame.jMenuLoglevel." + i).equals("MainFrame.jMenuLoglevel." + i))
-				rbLoglevelItems[i].setText(commented);
+		for (int i = logging.LEVEL_NONE; i <= logging.LEVEL_SECRET; i++) {
+			rbLoglevelItems[i] = new JRadioButtonMenuItem("[" + i + "] " + logging.levelText(i).toLowerCase());
+			//String commented = configed.getResourceValue("MainFrame.jMenuLoglevel." + i);
+			//if (!configed.getResourceValue("MainFrame.jMenuLoglevel." + i).equals("MainFrame.jMenuLoglevel." + i))
+			//	rbLoglevelItems[i].setText(commented);
 
 			jMenuHelpLoglevel.add(rbLoglevelItems[i]);
-			if (i == logging.AKT_DEBUG_LEVEL)
+			if (i == logging.LOG_LEVEL_CONSOLE)
 				rbLoglevelItems[i].setSelected(true);
 
 			rbLoglevelItems[i].addActionListener(selectLoglevelListener);
@@ -1990,7 +1990,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	public void createPdf() {
 		TableModel tm = main.getSelectedClientsTableModel();
 		JTable jTable = new JTable(tm);
-		// System.out.println("Gruppe in createPDF: " + statusPane.getGroupName());
+		// logging.debug("Gruppe in createPDF: " + statusPane.getGroupName());
 		try {
 			HashMap<String, String> metaData = new HashMap<String, String>();
 			String title = configed.getResourceValue("MainFrame.ClientList");
@@ -3148,7 +3148,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	// -- helper methods for interaction
 	public void saveConfigurationsSetEnabled(boolean b) {
-		// System.out.println (" ------- we should now show in the menu that data have
+		// logging.debug (" ------- we should now show in the menu that data have
 		// changed");
 
 		if (Globals.isGlobalReadOnly() && b)
@@ -3705,7 +3705,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			 * currentkey =
 			 * currentkey.copyValueOf(currentkey.toCharArray(),0,currentkey.indexOf("="));
 			 * newvalue = jComboBoxProductValues.getSelectedItem().toString();
-			 * logging.debugOut(this, logging.LEVEL_DONT_SHOW_IT,
+			 * logging.debugOut(this, logging.LEVEL_NONE,
 			 * "jComboBoxProductValues_actionPerformed: set "+currentkey+"="+newvalue);
 			 * //dm.setPcProfileValueWithRequired
 			 * (currentkey,newvalue,jRadioRequiredAll.isSelected());
@@ -3958,7 +3958,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			}
 
 			else if (e.getSource() == macAddressField) {
-				// System.out.println (" -- key event from macAddressField , oldMacAddress " +
+				// logging.debug (" -- key event from macAddressField , oldMacAddress " +
 				// oldMacAddress
 				// + ", address " + macAddressField.getText() );
 				logging.debug(this, " keyPressed on macAddressField, text " + macAddressField.getText());
@@ -3974,7 +3974,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			}
 
 			else if (e.getSource() == ipAddressField) {
-				// System.out.println (" -- key event from macAddressField , oldMacAddress " +
+				// logging.debug (" -- key event from macAddressField , oldMacAddress " +
 				// oldMacAddress
 				// + ", address " + macAddressField.getText() );
 				logging.debug(this, " keyPressed on ipAddressField, text " + ipAddressField.getText());
@@ -4217,7 +4217,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			jButtonClientsConfiguration.setSelected(true);
 			jButtonDepotsConfiguration.setSelected(false);
 			jButtonServerConfiguration.setSelected(false);
-			// System.out.println ( " 2 jButtonLicences == null " + (jButtonLicences ==
+			// logging.debug ( " 2 jButtonLicences == null " + (jButtonLicences ==
 			// null));
 			// jLabelLicences.setForeground (Globals.greyed);
 			break;
@@ -4240,7 +4240,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		/*
 		 * case LICENCES:
+		<<<<<<< ours
 		 * System.out.println(" tabbed pane visible false");
+		=======
+		 * logging.debug(" tabbed pane visible false");
+		>>>>>>> theirs
 		 * jButtonServerConfiguration.setSelected(false);
 		 * jButtonClientsConfiguration.setSelected(false);
 		 * jButtonLicences.setSelected(true);
@@ -4345,7 +4349,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		/*
 		 * if (hardwareInfo instanceof Map)
 		 * {
-		 * //System.out.println
+		 * //logging.debug
 		 * (" ------------- we should get a version2 hardware info");
 		 * showHardwareLog_version2.setHardwareInfo( (Map) hardwareInfo);
 		 * showHardwareLog = showHardwareLog_version2;
@@ -4357,7 +4361,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		 * showHardwareLog = showHardwareLog_NotFound;
 		 */
 
-		// System.out.println("setComponentAt >>" +
+		// logging.debug("setComponentAt >>" +
 		// configed.getResourceValue("MainFrame.jPanel_hardwareLog") + "<<");
 		showHardwareLog = showHardwareLog_version2;
 		showHardwareInfo();

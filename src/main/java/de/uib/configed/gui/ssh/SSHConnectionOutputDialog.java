@@ -227,8 +227,8 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			// // buttonPanel.add(btn_close);
 			// btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 			btn_close = new de.uib.configed.gui.IconButton(
-					de.uib.configed.configed.getResourceValue("SSHConnection.buttonClose"),
-					"images/cancel.png", "images/cancel.png", "images/cancel.png", true);
+					de.uib.configed.configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
+					"images/cancel.png", "images/cancel.png", true);
 			// btn_test_command.setSize(new Dimension( Globals.graphicButtonWidth + 15
 			// ,Globals.lineHeight));
 			// btn_test_command.setSize(new Dimension( Globals.graphicButtonWidth + 15
@@ -295,8 +295,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 
 		@Override
 		public void replace(final FilterBypass fb, final int offset, final int length, final String text,
-				final AttributeSet attrs)
-				throws BadLocationException {
+				final AttributeSet attrs) throws BadLocationException {
 			if (!isReadOnly())
 				super.replace(fb, offset, length, text, attrs);
 		}
