@@ -24,12 +24,12 @@ set_variables:
     expire_in: 2 day
 
 compile_and_package:
-  image: maven:3.6.3-jdk-11
+  image: maven:3.8.6-openjdk-18
   stage: build_and_analyze
   script:
     - mvn package
-    - jdeps --class-path target/$CONFIGED_JAR_NAME_WITH_DEPS --recursive --ignore-missing-deps --list-deps target/$CONFIGED_JAR_NAME > target/module.deps || true
-    - exit 0
+    - jdeps --class-path target/$CONFIGED_JAR_NAME_WITH_DEPS --recursive --ignore-missing-deps --list-deps target/$CONFIGED_JAR_NAME > target/module.deps
+    - cat target/module.deps
   artifacts:
     name: 'configed-build'
     paths:
