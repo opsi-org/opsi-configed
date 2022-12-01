@@ -3522,7 +3522,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return activatedGroupModel;
 	}
 
-	public HashSet<String> getActiveParents() {
+	public Set<String> getActiveParents() {
 		if (treeClients == null)
 			return new HashSet<String>();
 

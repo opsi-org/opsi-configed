@@ -1954,14 +1954,12 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	public boolean isInDIRECTORY(DefaultMutableTreeNode node) {
 		TreeNode[] path = node.getPath();
-		boolean result = (path.length >= 2 && path[1] == DIRECTORY);
-		return result;
+		return (path.length >= 2 && path[1] == DIRECTORY);
 	}
 
 	public boolean isInGROUPS(DefaultMutableTreeNode node) {
 		TreeNode[] path = node.getPath();
-		boolean result = (path.length >= 2 && path[1] == GROUPS);
-		return result;
+		return (path.length >= 2 && path[1] == GROUPS);
 	}
 
 	/*
@@ -1984,7 +1982,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		boolean foundLoc = false;
 
-		Enumeration en = parent.children();
+		Enumeration<TreeNode> en = parent.children();
 
 		// ----- if ( node.getAllowsChildren() )
 		// for groups, we should look only for groups
@@ -2159,7 +2157,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return allParents;
 	}
 
-	public HashSet<String> getActiveParents() {
+	public Set<String> getActiveParents() {
 		if (activeParents == null)
 			initActiveParents();
 
@@ -2204,14 +2202,14 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return clientNodesInDIRECTORY.get(clientId);
 	}
 
-	public java.util.Set getLocationsInDIRECTORY(String clientId) {
+	public Set<GroupNode> getLocationsInDIRECTORY(String clientId) {
 		return locationsInDIRECTORY.get(clientId);
 	}
 
 	public DefaultMutableTreeNode getChildWithUserObjectString(String objectID, DefaultMutableTreeNode groupNode) {
 		// logging.debug(this, "getChildWithUserObjectString object in groupNode " +
 		// objectID + ", " + groupNode);
-		Enumeration enumer = groupNode.children();
+		Enumeration<TreeNode> enumer = groupNode.children();
 		DefaultMutableTreeNode result = null;
 
 		boolean foundAny = false;
