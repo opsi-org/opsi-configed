@@ -240,7 +240,7 @@ public class configed {
 	}
 
 	protected static void usage() {
-		System.out.println("configed version " + Globals.VERSION + " " + Globals.VERDATE + " " + Globals.VERHASHTAG);
+		System.out.println("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
 		System.out.println(usageInfo);
 
 		final int tabWidth = 8;
@@ -304,7 +304,7 @@ public class configed {
 	public static void startWithLocale() {
 		logging.info("system information: ");
 
-		logging.info(" configed version " + Globals.VERSION + " " + Globals.VERDATE + " " + Globals.VERHASHTAG);
+		logging.info(" configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
 		logging.info(" running by java version " + javaVersion);
 
 		Properties sysProperties = System.getProperties();
@@ -721,7 +721,7 @@ public class configed {
 					de.uib.opsidatamodel.PersistenceControllerFactory.directmethodcall = de.uib.opsidatamodel.PersistenceControllerFactory.directmethodcall_cleanupAuditsoftware;
 					i = i + 1;
 				} else if (args[i].equals("--version")) {
-					logging.debug("configed version: " + Globals.VERSION + " (" + Globals.VERDATE + ") ");
+					System.out.println("configed version: " + Globals.VERSION + " (" + Globals.VERDATE + ") ");
 					System.exit(0);
 				} else if (args[i].equals("--help")) {
 					usage();
@@ -823,7 +823,7 @@ public class configed {
 		logging.setLogLevelFile(loglevelFile);
 		logging.setLogfileMarker(host);
 		logging.init();
-		logging.essential("Configed version " + Globals.VERSION + " " + Globals.VERDATE + " starting");
+		logging.essential("Configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") starting");
 		if (optionCLIQuerySearch || optionCLIDefineGroupBySearch)
 			logging.setSuppressConsole(true);
 	}

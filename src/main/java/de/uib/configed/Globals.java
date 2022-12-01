@@ -21,7 +21,7 @@ import de.uib.utilities.logging.logging;
 
 public class Globals {
 	public static final String VERSION = "4.2.19.2";
-	public static final String VERDATE = "(2022-12-01)";
+	public static final String VERDATE = "2022-12-01";
 
 	public static final String VERHASHTAG = "";
 

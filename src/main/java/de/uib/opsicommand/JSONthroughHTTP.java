@@ -17,7 +17,9 @@ import java.util.zip.GZIPInputStream;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
@@ -671,3 +673,9 @@ public class JSONthroughHTTP extends JSONExecutioner {
 				new OpsiMethodCall("getProductStates_listOfHashes", new String[] { "pcbon1.uib.local" }));
 	}
 }
+
+	
+
+	
+
+	

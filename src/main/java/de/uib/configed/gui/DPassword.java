@@ -643,8 +643,8 @@ public class DPassword extends JDialog // implements Runnable
 		// Globals.VERDATE) );
 
 		MessageFormat messageFormatVersion = new MessageFormat(configed.getResourceValue("DPassword.jLabelVersion"));
-		jLabelVersion.setText(
-				messageFormatVersion.format(new Object[] { Globals.VERSION, Globals.VERDATE, Globals.VERHASHTAG }));
+		jLabelVersion.setText(messageFormatVersion
+				.format(new Object[] { Globals.VERSION, "(" + Globals.VERDATE + ")", Globals.VERHASHTAG }));
 
 		jLabelJavaVersion.setText(configed.javaVendor + " " + configed.javaVersion);
 
