@@ -14,25 +14,25 @@ import java.util.ArrayList;
 
 public class OpsiHwAuditDeviceClass {
 
-	public final static String CONFIG_KEY = "configed.usecolumns_hwaudit";
-	// public final static String HOST_ASSIGNED = "host_assigned";
-	// public final static String HWITEM_ASSIGNED = "hwitem_assigned";
-	public final static String hostAssignedTableType = "CONFIG";
-	public final static String hostAssignedTableTypeLower = hostAssignedTableType.toLowerCase();
-	public final static String hwItemAssignedTableType = "DEVICE";
-	public final static String hwItemAssignedTableTypeLower = hwItemAssignedTableType.toLowerCase();
+	public static final String CONFIG_KEY = "configed.usecolumns_hwaudit";
+	// public static final String HOST_ASSIGNED = "host_assigned";
+	// public static final String HWITEM_ASSIGNED = "hwitem_assigned";
+	public static final String hostAssignedTableType = "CONFIG";
+	public static final String hostAssignedTableTypeLower = hostAssignedTableType.toLowerCase();
+	public static final String hwItemAssignedTableType = "DEVICE";
+	public static final String hwItemAssignedTableTypeLower = hwItemAssignedTableType.toLowerCase();
 
-	public final static String CLASS_KEY = "Class";
-	public final static String OPSI_KEY = "Opsi";
-	public final static String WMI_KEY = "WMI";
-	public final static String LINUX_KEY = "Linux";
-	public final static String TYPE_KEY = "Type";
-	public final static String UI_KEY = "UI";
-	public final static String LIST_KEY = "Values";
-	public final static String SCOPE_KEY = "Scope";
+	public static final String CLASS_KEY = "Class";
+	public static final String OPSI_KEY = "Opsi";
+	public static final String WMI_KEY = "WMI";
+	public static final String LINUX_KEY = "Linux";
+	public static final String TYPE_KEY = "Type";
+	public static final String UI_KEY = "UI";
+	public static final String LIST_KEY = "Values";
+	public static final String SCOPE_KEY = "Scope";
 
-	public final static String firstseenColName = "firstseen";
-	public final static String lastseenColName = "lastseen";
+	public static final String firstseenColName = "firstseen";
+	public static final String lastseenColName = "lastseen";
 
 	protected String hwClassName;
 	protected String opsiDbTableIdentifier;

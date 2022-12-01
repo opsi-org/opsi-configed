@@ -110,12 +110,12 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	private int actionType = ActionRequest.INVALID;
 	protected JLabel labelSave;
 
-	final static String NO_GROUP_ID = configed.getResourceValue("GroupPanel.NO_GROUP_ID");
-	final static String SAVE_GROUP_ID = configed.getResourceValue("GroupPanel.SAVE_GROUP_ID");
-	final static String NO_GROUP_DESCRIPTION = configed.getResourceValue("GroupPanel.NO_GROUP_DESCRIPTION");
-	final static String EMPTIED_GROUPID = "";
-	final static String TEXT_SAVE = configed.getResourceValue("GroupPanel.TEXT_SAVE");
-	final static String TEXT_DELETE = configed.getResourceValue("GroupPanel.TEXT_DELETE");
+	static final String NO_GROUP_ID = configed.getResourceValue("GroupPanel.NO_GROUP_ID");
+	static final String SAVE_GROUP_ID = configed.getResourceValue("GroupPanel.SAVE_GROUP_ID");
+	static final String NO_GROUP_DESCRIPTION = configed.getResourceValue("GroupPanel.NO_GROUP_DESCRIPTION");
+	static final String EMPTIED_GROUPID = "";
+	static final String TEXT_SAVE = configed.getResourceValue("GroupPanel.TEXT_SAVE");
+	static final String TEXT_DELETE = configed.getResourceValue("GroupPanel.TEXT_DELETE");
 
 	protected Map<String, Map<String, String>> theData;
 

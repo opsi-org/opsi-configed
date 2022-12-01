@@ -109,8 +109,8 @@ import de.uib.utilities.table.ListCellOptions;
 public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	private static int callcount = 0;
 
-	private final static String EMPTYFIELD = "-";
-	private final static ArrayList NONE_LIST = new ArrayList() {
+	private static final String EMPTYFIELD = "-";
+	private static final ArrayList NONE_LIST = new ArrayList() {
 		public int size() {
 			return -1;
 		}
@@ -134,12 +134,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	/* ------------------------------------------ */
 
-	public final static String nameRequirementTypeBefore = "before";
-	public final static String nameRequirementTypeAfter = "after";
-	public final static String nameRequirementTypeNeutral = "";
-	public final static String nameRequirementTypeOnDeinstall = "on_deinstall";
+	public static final String nameRequirementTypeBefore = "before";
+	public static final String nameRequirementTypeAfter = "after";
+	public static final String nameRequirementTypeNeutral = "";
+	public static final String nameRequirementTypeOnDeinstall = "on_deinstall";
 
-	public final static String[] LICENSE_TYPES = new String[] { "VOLUME", "OEM", "RETAIL", "CONCURRENT" };
+	public static final String[] LICENSE_TYPES = new String[] { "VOLUME", "OEM", "RETAIL", "CONCURRENT" };
 
 	// Executioner exec; in superclass
 	// Executioner execBackground;
@@ -8289,8 +8289,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public java.util.List<String> getServerConfigStrings(String key) {
 		getConfigOptions();
 
-		java.util.ArrayList<String> result = de.uib.utilities.Globals.takeAsStringList(configDefaultValues.get(key));
-		return result;
+		return de.uib.utilities.Globals.takeAsStringList(configDefaultValues.get(key));
 	}
 
 	@Override

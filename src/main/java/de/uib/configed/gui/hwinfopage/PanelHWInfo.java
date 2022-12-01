@@ -39,18 +39,18 @@ import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import de.uib.utilities.tree.XTree;
 
 public class PanelHWInfo extends JPanel implements TreeSelectionListener {
-	public final static String class_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
-	public final static String class_BASE_BOARD = "BASE_BOARD";
+	public static final String class_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
+	public static final String class_BASE_BOARD = "BASE_BOARD";
 
-	public final static ArrayList<String> hwClassesForByAudit = new ArrayList<String>();
+	public static final ArrayList<String> hwClassesForByAudit = new ArrayList<String>();
 	static {
 		hwClassesForByAudit.add(class_COMPUTER_SYSTEM);
 		hwClassesForByAudit.add(class_BASE_BOARD);
 	}
 
-	public final static String key_VENDOR = "vendor";
-	public final static String key_MODEL = "model";
-	public final static String key_PRODUCT = "product";
+	public static final String key_VENDOR = "vendor";
+	public static final String key_MODEL = "model";
+	public static final String key_PRODUCT = "product";
 
 	protected Map hwInfo;
 	protected String treeRootTitle;
@@ -72,8 +72,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	protected HWInfoTableModel tableModel;
 	protected HashMap hwClassMapping;
 
-	protected final static String SCANPROPERTYNAME = "SCANPROPERTIES";
-	protected final static String SCANTIME = "scantime";
+	protected static final String SCANPROPERTYNAME = "SCANPROPERTIES";
+	protected static final String SCANTIME = "scantime";
 
 	protected String vendorStringCOMPUTER_SYSTEM;
 	protected String vendorStringBASE_BOARD;

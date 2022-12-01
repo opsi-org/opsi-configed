@@ -25,10 +25,10 @@ public class logging implements LogEventSubject
 
 	private static String logfileDelimiter = "configed";
 	private static String logfileMarker = null;
-	public final static String windowsEnvVariableAppDataDirectory = "APPDATA";
-	public final static String envVariableForUserDirectory = "user.home";
-	public final static String relativeLogDirWindows = "opsi.org" + File.separator + "log";
-	public final static String relativeLogDirUnix = ".configed";
+	public static final String windowsEnvVariableAppDataDirectory = "APPDATA";
+	public static final String envVariableForUserDirectory = "user.home";
+	public static final String relativeLogDirWindows = "opsi.org" + File.separator + "log";
+	public static final String relativeLogDirUnix = ".configed";
 	private static String extension = ".log";
 
 	public static final int LEVEL_SECRET = 9;
@@ -72,7 +72,7 @@ public class logging implements LogEventSubject
 	static private boolean LogFileInitialized = false;
 	static public boolean LogFileAvailable = false;
 
-	private final static int maxListedErrors = 20;
+	private static final int maxListedErrors = 20;
 	private static Vector<String> errorList;
 
 	static public FShowList fErrors;

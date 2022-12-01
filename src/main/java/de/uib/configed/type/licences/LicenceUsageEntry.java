@@ -21,13 +21,13 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 	 * | notes | varchar(1024) | YES | | NULL |
 	 */
 
-	public final static String identKEY = "ident";
-	public final static String idKEY = "license_on_client_id";
-	public final static String licencepoolIdKEY = "licensePoolId";
-	public final static String licenceIdKEY = "softwareLicenseId";
-	public final static String clientIdKEY = "clientId";
-	public final static String licencekeyKEY = "licenseKey";
-	public final static String notesKEY = "notes";
+	public static final String identKEY = "ident";
+	public static final String idKEY = "license_on_client_id";
+	public static final String licencepoolIdKEY = "licensePoolId";
+	public static final String licenceIdKEY = "softwareLicenseId";
+	public static final String clientIdKEY = "clientId";
+	public static final String licencekeyKEY = "licenseKey";
+	public static final String notesKEY = "notes";
 
 	public static final String opsiNOMtype = "LicenseOnClient";
 
@@ -45,11 +45,7 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 		KEYS.add(notesKEY);
 	}
 
-	public LicenceUsageEntry(
-			String hostId,
-			String softwareLicenceId,
-			String licencePoolId,
-			String licenceKey,
+	public LicenceUsageEntry(String hostId, String softwareLicenceId, String licencePoolId, String licenceKey,
 			String notes) {
 		super();
 		setAllowedAttributes(KEYS);
@@ -79,11 +75,7 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 		else
 			put(notesKEY, notes);
 
-		lic4pool = de.uib.configed.Globals.pseudokey(
-				new String[] {
-						get(licenceIdKEY),
-						get(licencepoolIdKEY)
-				});
+		lic4pool = de.uib.configed.Globals.pseudokey(new String[] { get(licenceIdKEY), get(licencepoolIdKEY) });
 	}
 
 	public LicenceUsageEntry(Map<String, Object> entry) {
@@ -105,11 +97,7 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 		if (get(licenceIdKEY) == null || get(licencepoolIdKEY) == null)
 			logging.warning(this, "missing values " + entry);
 
-		lic4pool = de.uib.configed.Globals.pseudokey(
-				new String[] {
-						get(licenceIdKEY),
-						get(licencepoolIdKEY)
-				});
+		lic4pool = de.uib.configed.Globals.pseudokey(new String[] { get(licenceIdKEY), get(licencepoolIdKEY) });
 	}
 
 	public String getId() {

@@ -9,9 +9,9 @@ import de.uib.utilities.datastructure.TableEntry;
 
 public class LicencepoolEntry extends TableEntry {
 
-	public final static String idSERVICEKEY = "licensePoolId";
-	public final static String idKEY = "id";
-	public final static String descriptionKEY = "description";
+	public static final String idSERVICEKEY = "licensePoolId";
+	public static final String idKEY = "id";
+	public static final String descriptionKEY = "description";
 
 	private static List<String> KEYS;
 	static {

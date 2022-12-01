@@ -37,7 +37,7 @@ public class MapSource implements TableSource
 
 	protected boolean reloadRequested = true;
 
-	final static Map<String, Object> class2defaultValue;
+	static final Map<String, Object> class2defaultValue;
 	static {
 		class2defaultValue = new HashMap<String, Object>();
 		class2defaultValue.put("java.lang.Boolean", false);

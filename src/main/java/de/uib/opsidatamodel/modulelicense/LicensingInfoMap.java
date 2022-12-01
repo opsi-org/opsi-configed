@@ -25,11 +25,11 @@ import de.uib.utilities.logging.logging;
 
 public class LicensingInfoMap {
 
-	private final static String CLASSNAME = LicensingInfoMap.class.getName();
+	private static final String CLASSNAME = LicensingInfoMap.class.getName();
 
-	public final static String OPSI_LICENSING_INFO_VERSION_OLD = "";
-	public final static String OPSI_LICENSING_INFO_VERSION = "2";
-	public final static String DISPLAY_INFINITE = "\u221E";
+	public static final String OPSI_LICENSING_INFO_VERSION_OLD = "";
+	public static final String OPSI_LICENSING_INFO_VERSION = "2";
+	public static final String DISPLAY_INFINITE = "\u221E";
 	final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 	private static Boolean reducedView = !FGeneralDialogLicensingInfo.extendedView;

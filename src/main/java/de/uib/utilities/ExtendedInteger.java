@@ -4,12 +4,12 @@ import de.uib.utilities.logging.logging;
 
 public class ExtendedInteger implements Comparable {
 
-	final static String infiniteImport = "infinite";
-	final static String sINFINITE = "INFINITE";
-	final static String displayInfinite = "\u221E";// "INF";
+	static final String infiniteImport = "infinite";
+	static final String sINFINITE = "INFINITE";
+	static final String displayInfinite = "\u221E";// "INF";
 
-	public final static ExtendedInteger INFINITE = new ExtendedInteger(sINFINITE);
-	public final static ExtendedInteger ZERO = new ExtendedInteger(0);
+	public static final ExtendedInteger INFINITE = new ExtendedInteger(sINFINITE);
+	public static final ExtendedInteger ZERO = new ExtendedInteger(0);
 
 	private Integer number;
 	private String value;

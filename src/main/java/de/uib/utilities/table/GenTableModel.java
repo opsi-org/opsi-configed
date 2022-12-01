@@ -59,7 +59,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	protected final ChainedTableModelFilter chainedFilter;
 	protected final TableModelFilter emptyFilter;
 	private TableModelFilter workingFilter;
-	public final static String DEFAULT_FILTER_NAME = "default";
+	public static final String DEFAULT_FILTER_NAME = "default";
 
 	// protected TableModelFilterCondition filterConditionShowOnlySelected;
 	public static String labelFilterConditionShowOnlySelected = "showOnlySelected";

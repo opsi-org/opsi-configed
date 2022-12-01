@@ -111,19 +111,19 @@ public class SSHCommandFactory {
 	/** all static commands which need run-time parameter **/
 	public static List<de.uib.opsicommand.sshcommand.SSHCommand> ssh_commands_param = new LinkedList<de.uib.opsicommand.sshcommand.SSHCommand>();
 
-	/** final static name of field "id" */
+	/** static final name of field "id" */
 	final public String command_map_id = "id";
-	/** final static name of field "menuText" */
+	/** static final name of field "menuText" */
 	final public String command_map_menuText = "menuText";
-	/** final static name of field "parentMenuText" */
+	/** static final name of field "parentMenuText" */
 	final public String command_map_parentMenuText = "parentMenuText";
-	/** final static name of field "tooltipText" */
+	/** static final name of field "tooltipText" */
 	final public String command_map_tooltipText = "tooltipText";
-	/** final static name of field "position" */
+	/** static final name of field "position" */
 	final public String command_map_position = "position";
-	/** final static name of field "needSudo" */
+	/** static final name of field "needSudo" */
 	final public String command_map_needSudo = "needSudo";
-	/** final static name of field "commands" */
+	/** static final name of field "commands" */
 	final public String command_map_commands = "commands";
 
 	SSHConnectExec connection = null;

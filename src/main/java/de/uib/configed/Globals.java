@@ -281,14 +281,14 @@ public class Globals {
 	public static javax.swing.JFrame frame1; // can be changed
 	public static java.awt.Container container1; // can be changed
 
-	public final static java.awt.Dimension helperFormDimension = new java.awt.Dimension(1100, 600);
+	public static final java.awt.Dimension helperFormDimension = new java.awt.Dimension(1100, 600);
 
-	public final static int locationDistanceX = 150;
-	public final static int locationDistanceY = 150;
+	public static final int locationDistanceX = 150;
+	public static final int locationDistanceY = 150;
 
-	public final static int dialogFrameDefaultHeight = 400;
-	public final static int dialogFrameDefaultWidth = 800;
-	public final static java.awt.Dimension dialogFrameDefaultSize = new java.awt.Dimension(dialogFrameDefaultWidth,
+	public static final int dialogFrameDefaultHeight = 400;
+	public static final int dialogFrameDefaultWidth = 800;
+	public static final java.awt.Dimension dialogFrameDefaultSize = new java.awt.Dimension(dialogFrameDefaultWidth,
 			dialogFrameDefaultHeight);
 
 	public static String getResourceValue(String key) {
@@ -417,11 +417,11 @@ public class Globals {
 		return sqlNow;
 	}
 
-	public final static ArrayList<Object> getNowTimeListValue() {
+	public static final ArrayList<Object> getNowTimeListValue() {
 		return getNowTimeListValue(null);
 	}
 
-	public final static ArrayList<Object> getNowTimeListValue(final String comment) {
+	public static final ArrayList<Object> getNowTimeListValue(final String comment) {
 		ArrayList<Object> result = new ArrayList<Object>();
 		// result. add( new Date().toString() );
 		String now = new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis()).toString();
@@ -512,9 +512,8 @@ public class Globals {
 		if (PersistenceControllerFactory.getPersistenceController() == null)
 			return false;
 
-		boolean result = PersistenceControllerFactory.getPersistenceController().isServerFullPermission();
+		return PersistenceControllerFactory.getPersistenceController().isServerFullPermission();
 
-		return result;
 	}
 
 	public static boolean forbidEditingTargetSpecific() {
@@ -549,7 +548,7 @@ public class Globals {
 		return result;
 	}
 
-	public final static String STARRED_STRING = "*****";
+	public static final String STARRED_STRING = "*****";
 
 	public static void main(String[] args) {
 		createImageIcon("images/cancel.png", "");

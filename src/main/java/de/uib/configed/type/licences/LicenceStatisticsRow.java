@@ -6,14 +6,14 @@ import de.uib.utilities.ExtendedInteger;
 
 public class LicenceStatisticsRow extends HashMap<String, String> {
 	// callkeys
-	public final static String idKEY = "licensePoolId";
-	public final static String licenseOptionsKEY = "licence_options";
-	public final static String usedByOpsiKEY = "used_by_opsi";
-	public final static String remainingOpsiKEY = "remaining_opsi";
-	public final static String swInventoryUsedKEY = "SWinventory_used";
-	public final static String swinventoryRemainingKEY = "SWinventory_remaining";
+	public static final String idKEY = "licensePoolId";
+	public static final String licenseOptionsKEY = "licence_options";
+	public static final String usedByOpsiKEY = "used_by_opsi";
+	public static final String remainingOpsiKEY = "remaining_opsi";
+	public static final String swInventoryUsedKEY = "SWinventory_used";
+	public static final String swinventoryRemainingKEY = "SWinventory_remaining";
 
-	private final static String ZERO = "0";
+	private static final String ZERO = "0";
 
 	protected ExtendedInteger allowedUsages;
 	protected Integer opsiUsages;
@@ -50,8 +50,7 @@ public class LicenceStatisticsRow extends HashMap<String, String> {
 		if (count != null) {
 			put(usedByOpsiKEY, count.toString());
 			opsiUsages = count;
-			put(remainingOpsiKEY,
-					(allowedUsages.add(-count)).getDisplay());
+			put(remainingOpsiKEY, (allowedUsages.add(-count)).getDisplay());
 		}
 	}
 
@@ -59,8 +58,7 @@ public class LicenceStatisticsRow extends HashMap<String, String> {
 		if (count != null) {
 			put(swInventoryUsedKEY, count.toString());
 			swInventoryUsages = count;
-			put(swinventoryRemainingKEY,
-					(allowedUsages.add(-count)).getDisplay());
+			put(swinventoryRemainingKEY, (allowedUsages.add(-count)).getDisplay());
 		}
 	}
 

@@ -85,9 +85,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		FULL_TEXT_SEARCHING_WITH_ALTERNATIVES, FULL_TEXT_SEARCHING_ONE_STRING, START_TEXT_SEARCHING, REGEX_SEARCHING
 	}
 
-	public final static int FULL_TEXT_SEARCH = 0;
-	public final static int START_TEXT_SEARCH = 1;
-	public final static int REGEX_SEARCH = 2;
+	public static final int FULL_TEXT_SEARCH = 0;
+	public static final int START_TEXT_SEARCH = 1;
+	public static final int REGEX_SEARCH = 2;
 
 	protected int preferredColumnIndex = 0; // real column index + 1, since for index 0 "all columns" entry is placed
 

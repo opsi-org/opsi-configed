@@ -10,31 +10,31 @@ import java.util.Vector;
 import de.uib.configed.Globals;
 
 public class InstallationStatus {
-	public final static String KEY = "installationStatus";
+	public static final String KEY = "installationStatus";
 
 	// conflicting entries from several clients
-	public final static int CONFLICT = -4;
+	public static final int CONFLICT = -4;
 
 	// no valid entry from service
-	public final static int INVALID = -2;
+	public static final int INVALID = -2;
 
 	// does not matter
-	public final static int UNDEFINED = -1;
+	public static final int UNDEFINED = -1;
 
 	// valid service states since 4.0
-	public final static int NOT_INSTALLED = 0;
-	public final static int INSTALLED = 1;
-	public final static int UNKNOWN = 2;
+	public static final int NOT_INSTALLED = 0;
+	public static final int INSTALLED = 1;
+	public static final int UNKNOWN = 2;
 
 	// compatibility mode for older opsi data, not more necessary
-	// public final static int FAILED = 4;
+	// public static final int FAILED = 4;
 
-	// public final static int INSTALLING = 3;
+	// public static final int INSTALLING = 3;
 
 	// textcolors
-	public final static Color NOT_INSTALLEDcolor = Globals.INVISIBLE;
-	public final static Color INSTALLEDcolor = Globals.okGreen;
-	public final static Color UNKNOWNcolor = Globals.unknownBlue;
+	public static final Color NOT_INSTALLEDcolor = Globals.INVISIBLE;
+	public static final Color INSTALLEDcolor = Globals.okGreen;
+	public static final Color UNKNOWNcolor = Globals.unknownBlue;
 
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;

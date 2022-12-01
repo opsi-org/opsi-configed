@@ -23,19 +23,19 @@ public class LicenceEntry extends TreeMap<String, Object>
 	 * | type | varchar(30) | NO | MUL | NULL |
 	 */
 
-	public final static String idSERVICEKEY = "id";
-	public final static String licenceContractIdSERVICEKEY = "licenseContractId";
-	public final static String boundToHostSERVICEKEY = "boundToHost";
-	public final static String maxInstallationsSERVICEKEY = "maxInstallations";
-	public final static String expirationDateSERVICEKEY = "expirationDate";
-	public final static String typeSERVICEKEY = "type";
+	public static final String idSERVICEKEY = "id";
+	public static final String licenceContractIdSERVICEKEY = "licenseContractId";
+	public static final String boundToHostSERVICEKEY = "boundToHost";
+	public static final String maxInstallationsSERVICEKEY = "maxInstallations";
+	public static final String expirationDateSERVICEKEY = "expirationDate";
+	public static final String typeSERVICEKEY = "type";
 
-	public final static String idKEY = "softwareLicenseId";
-	public final static String licenceContractIdKEY = "licenseContractId";
-	public final static String boundToHostKEY = "boundToHost";
-	public final static String maxInstallationsKEY = "maxInstallations";
-	public final static String expirationDateKEY = "expirationDate";
-	public final static String typeKEY = "licenseType";
+	public static final String idKEY = "softwareLicenseId";
+	public static final String licenceContractIdKEY = "licenseContractId";
+	public static final String boundToHostKEY = "boundToHost";
+	public static final String maxInstallationsKEY = "maxInstallations";
+	public static final String expirationDateKEY = "expirationDate";
+	public static final String typeKEY = "licenseType";
 
 	private static List<String> KEYS;
 	static {
@@ -49,18 +49,18 @@ public class LicenceEntry extends TreeMap<String, Object>
 
 	}
 
-	public final static String VOLUME = "VOLUME";
-	public final static String OEM = "OEM";
-	public final static String RETAIL = "RETAIL";
-	public final static String CONCURRENT = "CONCURRENT";
+	public static final String VOLUME = "VOLUME";
+	public static final String OEM = "OEM";
+	public static final String RETAIL = "RETAIL";
+	public static final String CONCURRENT = "CONCURRENT";
 
-	public final static String VOLUMEservice = "VolumeSoftwareLicense";
-	public final static String OEMservice = "OEMSoftwareLicense";
-	public final static String RETAILservice = "RetailSoftwareLicense";
-	public final static String CONCURRENTservice = "ConcurrentSoftwareLicense";
+	public static final String VOLUMEservice = "VolumeSoftwareLicense";
+	public static final String OEMservice = "OEMSoftwareLicense";
+	public static final String RETAILservice = "RetailSoftwareLicense";
+	public static final String CONCURRENTservice = "ConcurrentSoftwareLicense";
 
-	public final static String[] LICENCE_TYPES = new String[] { VOLUME, OEM, RETAIL, CONCURRENT };
-	private final static List<String> TYPE_LIST = Arrays.asList(LICENCE_TYPES);
+	public static final String[] LICENCE_TYPES = new String[] { VOLUME, OEM, RETAIL, CONCURRENT };
+	private static final List<String> TYPE_LIST = Arrays.asList(LICENCE_TYPES);
 
 	public static List<String> getKeys() {
 		return KEYS;
@@ -68,14 +68,14 @@ public class LicenceEntry extends TreeMap<String, Object>
 
 	private String translateTypeFromService(String servicetype) {
 		switch (servicetype) {
-			case VOLUMEservice:
-				return VOLUME;
-			case OEMservice:
-				return OEM;
-			case RETAILservice:
-				return RETAIL;
-			case CONCURRENTservice:
-				return CONCURRENT;
+		case VOLUMEservice:
+			return VOLUME;
+		case OEMservice:
+			return OEM;
+		case RETAILservice:
+			return RETAIL;
+		case CONCURRENTservice:
+			return CONCURRENT;
 
 		}
 
@@ -116,9 +116,8 @@ public class LicenceEntry extends TreeMap<String, Object>
 
 		else {
 			if (!(importedEntry.get(maxInstallationsSERVICEKEY) instanceof Integer)) {
-				logging.warning(this,
-						" " + importedEntry.get(idKEY) + " has not an integer for "
-								+ importedEntry.get(maxInstallationsSERVICEKEY));
+				logging.warning(this, " " + importedEntry.get(idKEY) + " has not an integer for "
+						+ importedEntry.get(maxInstallationsSERVICEKEY));
 			} else {
 				int val = (Integer) importedEntry.get(maxInstallationsSERVICEKEY);
 				if (val == 0)

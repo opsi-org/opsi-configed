@@ -115,8 +115,8 @@ public class HostInfo {
 
 	public static final String hostSubClassTag_OpsiClientPrototype = "OpsiPrototype";
 
-	final static String notLegalChars0 = ",:!@#$%^&',(){} ";
-	final static Set<Character> notLegalChars = new HashSet<Character>();
+	static final String notLegalChars0 = ",:!@#$%^&',(){} ";
+	static final Set<Character> notLegalChars = new HashSet<Character>();
 	static {
 		for (int i = 0; i < notLegalChars0.length(); i++) {
 			notLegalChars.add(notLegalChars0.charAt(i));

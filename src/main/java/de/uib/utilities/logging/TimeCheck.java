@@ -5,7 +5,7 @@ public class TimeCheck {
 	String mesg;
 	long startmillis;
 	static int loglevel = logging.LEVEL_NOTICE;
-	final static int maxShown = 500;
+	static final int maxShown = 500;
 
 	private static String shorten(String s) {
 		String result = "";

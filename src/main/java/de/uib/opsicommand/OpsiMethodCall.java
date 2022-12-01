@@ -15,15 +15,15 @@ public class OpsiMethodCall {
 	private String methodname;
 
 	private Object[] parameters;
-	public final static boolean BACKGROUND = true;
+	public static final boolean BACKGROUND = true;
 	private boolean background;
 
-	protected final static int defaultJsonId = 1;
+	protected static final int defaultJsonId = 1;
 
 	public static String extendRpcPath = "extend/configed";
 	private String rpcPath = "";// extendRpcPath;
 
-	public final static Vector<String> collectedCalls = new Vector<String>();
+	public static final Vector<String> collectedCalls = new Vector<String>();
 	public static int maxCollectSize = -1;
 
 	/*

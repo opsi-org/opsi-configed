@@ -8,25 +8,25 @@ import java.util.Vector;
 import de.uib.configed.Globals;
 
 public class LastAction {
-	public final static String KEY = "lastAction";
+	public static final String KEY = "lastAction";
 
 	// conflicting entries from several clients
-	public final static int CONFLICT = -4;
+	public static final int CONFLICT = -4;
 
 	// no valid entry from service
-	public final static int INVALID = -2;
+	public static final int INVALID = -2;
 
 	// product offers no actions
-	public final static int NOT_AVAILABLE = -6;
+	public static final int NOT_AVAILABLE = -6;
 
 	// valid service states
-	public final static int NONE = 0;
-	public final static int SETUP = 1;
-	public final static int UPDATE = 3;
-	public final static int UNINSTALL = 5;
-	public final static int ALWAYS = 7;
-	public final static int ONCE = 8;
-	public final static int CUSTOM = 11;
+	public static final int NONE = 0;
+	public static final int SETUP = 1;
+	public static final int UPDATE = 3;
+	public static final int UNINSTALL = 5;
+	public static final int ALWAYS = 7;
+	public static final int ONCE = 8;
+	public static final int CUSTOM = 11;
 
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;

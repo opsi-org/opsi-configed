@@ -150,7 +150,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static boolean dashEnabled = true;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
-	// final static String TEST_ACCESS_RESTRICTED_HOST_GROUP = "rupert";
+	// static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = "rupert";
 
 	static final String TEMPGROUPNAME = "";
 
@@ -290,9 +290,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// private Map<String, java.util.List<Map<String, Object>>> swInfoClientmap;
 	private Map<String, Object> hwInfoClientmap;
 
-	// public final static ActionRequestDisplay ardDefault = new
+	// public static final ActionRequestDisplay ardDefault = new
 	// ActionRequestDisplay();
-	// public final static ActionRequestDisplay ardNetboot = new
+	// public static final ActionRequestDisplay ardNetboot = new
 	// ActionRequestDisplay();
 
 	protected String myServer;

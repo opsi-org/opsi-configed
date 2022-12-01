@@ -17,7 +17,7 @@ public class SimpleTreeModel extends DefaultTreeModel
 
 {
 	java.util.LinkedHashMap<String, Object> virtualLines;
-	final static String noValue = "NONE";
+	static final String noValue = "NONE";
 
 	public final SimpleIconNode ROOT;
 

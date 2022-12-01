@@ -67,7 +67,7 @@ public class configed {
 	 * logging.LEVEL_CRITICAL + ", <= " + logging.LEVEL_DEBUG + ") \n" ;
 	 */
 
-	public final static String[][] usageLines = new String[][] {
+	public static final String[][] usageLines = new String[][] {
 			new String[] { "-l LOC", "--locale LOC",
 					"Set locale LOC (format: <language>_<country>). DEFAULT: System.locale" },
 			new String[] { "-h HOST", "--host HOST",
@@ -149,13 +149,13 @@ public class configed {
 
 	};
 
-	public final static Charset serverCharset = Charset.forName("UTF-8");
-	public final static String javaVersion = System.getProperty("java.version");
-	public final static String javaVendor = System.getProperty("java.vendor", "");
-	public final static LinkedHashMap<String, Object> javaSysExtraProperties = new LinkedHashMap<String, Object>();
-	public final static String systemSSLversion = System.getProperty("https.protocols");
-	public final static String STATEOFTHEART_SSL_VERSION = "TLSv1.2";
-	public final static String JAVA_1_7_DEFAUTL_SSL_VERSION = "TLSv1";
+	public static final Charset serverCharset = Charset.forName("UTF-8");
+	public static final String javaVersion = System.getProperty("java.version");
+	public static final String javaVendor = System.getProperty("java.vendor", "");
+	public static final LinkedHashMap<String, Object> javaSysExtraProperties = new LinkedHashMap<String, Object>();
+	public static final String systemSSLversion = System.getProperty("https.protocols");
+	public static final String STATEOFTHEART_SSL_VERSION = "TLSv1.2";
+	public static final String JAVA_1_7_DEFAUTL_SSL_VERSION = "TLSv1";
 	public static String PREFERRED_SSL_VERSION = STATEOFTHEART_SSL_VERSION;
 	public static String EXTRA_LOCALIZATION_FILENAME = null;
 	public static PropertiesStore extraLocalization;
@@ -891,33 +891,36 @@ public class configed {
 		try {
 			File messagefile = File.createTempFile("configed", "html");
 
-			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(messagefile)));
+			// try-with-resources so that writers will be closed and there's no leak
+			try (FileWriter fw = new FileWriter(messagefile);
+					BufferedWriter bw = new BufferedWriter(fw);
+					PrintWriter out = new PrintWriter(bw)) {
 
-			out.println("<HTML>");
-			out.println("<title>opsi-configed message</title>");
-			out.println("<body>");
-			out.println("<h1 center>opsi-configed</h1>");
-			out.println("<p center>opsi-configed closed</p>");
-			out.println("<p center>reason:</p>");
-			out.println("<p center>" + s + "</p>");
-			out.println("</body>");
-			out.println("</HTML>");
-			out.close();
+				out.println("<HTML>");
+				out.println("<title>opsi-configed message</title>");
+				out.println("<body>");
+				out.println("<h1 center>opsi-configed</h1>");
+				out.println("<p center>opsi-configed closed</p>");
+				out.println("<p center>reason:</p>");
+				out.println("<p center>" + s + "</p>");
+				out.println("</body>");
+				out.println("</HTML>");
 
-			// {
-			// Runtime rt = Runtime.getRuntime();
-			// String osName = System.getProperty("os.name");
-			// if (osName.toLowerCase().startsWith("win")) {
-			// Process proc = rt.exec("cmd.exe /c start \"" + messagefile.getPath() + "\"");
-			// } else
-			// //Linux, we assume that there is a firefox and it will handle the url
-			// {
-			// String[] cmdarray = new String[] { "firefox", messagefile.getPath() };
-			// Process proc = rt.exec(cmdarray);
+				// {
+				// Runtime rt = Runtime.getRuntime();
+				// String osName = System.getProperty("os.name");
+				// if (osName.toLowerCase().startsWith("win")) {
+				// Process proc = rt.exec("cmd.exe /c start \"" + messagefile.getPath() + "\"");
+				// } else
+				// //Linux, we assume that there is a firefox and it will handle the url
+				// {
+				// String[] cmdarray = new String[] { "firefox", messagefile.getPath() };
+				// Process proc = rt.exec(cmdarray);
 
-			// }
-			// }
-		} catch (Exception ex) {
+				// }
+				// }
+			}
+		} catch (IOException ex) {
 			logging.debug("configed showExternalInfo " + s);
 		}
 	}

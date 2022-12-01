@@ -15,26 +15,26 @@ public class LicencePoolXOpsiProduct extends Relation {
 	 * 
 	 */
 
-	public final static String licencepoolKEY = LicencepoolEntry.idSERVICEKEY;
-	public final static String productIdKEY = "productId";
-	public final static String idKEY = "id";
-	public final static String productsKEY = "productIds";
+	public static final String licencepoolKEY = LicencepoolEntry.idSERVICEKEY;
+	public static final String productIdKEY = "productId";
+	public static final String idKEY = "id";
+	public static final String productsKEY = "productIds";
 
-	public final static java.util.List<String> ATTRIBUTES;
+	public static final java.util.List<String> ATTRIBUTES;
 	static {
 		ATTRIBUTES = new LinkedList<String>();
 		ATTRIBUTES.add(licencepoolKEY);
 		ATTRIBUTES.add(productIdKEY);
 	}
 
-	public final static java.util.List<String> SERVICE_ATTRIBUTES;
+	public static final java.util.List<String> SERVICE_ATTRIBUTES;
 	static {
 		SERVICE_ATTRIBUTES = new LinkedList<String>();
 		SERVICE_ATTRIBUTES.add(idKEY);
 		SERVICE_ATTRIBUTES.add(productsKEY);
 	}
 
-	public final static String[] SERVICE_ATTRIBUTES_asArray;
+	public static final String[] SERVICE_ATTRIBUTES_asArray;
 	static {
 		SERVICE_ATTRIBUTES_asArray = SERVICE_ATTRIBUTES.toArray(new String[] {});
 	}

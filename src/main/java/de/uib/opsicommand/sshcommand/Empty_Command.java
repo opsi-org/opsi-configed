@@ -23,7 +23,7 @@ import de.uib.utilities.logging.logging;
  * This class represent a simple single command
  **/
 public class Empty_Command implements SSHCommand {
-	public final static String TESTCOMMAND = "pwd";
+	public static final String TESTCOMMAND = "pwd";
 	/** boolean needParameter = false **/
 	private boolean needParameter = false;
 	/** boolean isMultiCommand = true **/
