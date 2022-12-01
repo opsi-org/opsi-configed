@@ -61,10 +61,10 @@ signandupload:
   script:
     - echo "CI_JOB_ID_CONFIGED=$CI_JOB_ID" > ci_job_id.env
     - opsi-dev-tool -l info --signserver-sign target/$CONFIGED_JAR_NAME_WITH_DEPS
-    - mkdir files
-    - mv target/$CONFIGED_JAR_NAME_WITH_DEPS target/module.deps files/
-    - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-tool -l info --binary-push files configed all all $CONFIGED_VERSION "$CI_JOB_ID"'
-    - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-tool -l info --binary-push files configed all all $CONFIGED_VERSION'
+    - mkdir opsi-configed
+    - mv target/$CONFIGED_JAR_NAME_WITH_DEPS target/module.deps opsi-configed/
+    - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-tool -l info --binary-push opsi-configed configed all all $CONFIGED_VERSION "$CI_JOB_ID"'
+    - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-tool -l info --binary-push opsi-configed configed all all $CONFIGED_VERSION'
   needs:
     - set_variables
     - compile_and_package
