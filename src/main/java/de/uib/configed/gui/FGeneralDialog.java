@@ -44,8 +44,7 @@ import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.FEditObject;
 
-public class FGeneralDialog extends JDialog
-		implements ActionListener, KeyListener, MouseListener {
+public class FGeneralDialog extends JDialog implements ActionListener, KeyListener, MouseListener {
 
 	/*
 	 * public static class DialogCollector extends HashMap<FGeneralDialog, String>
@@ -509,8 +508,7 @@ public class FGeneralDialog extends JDialog
 						.addComponent(jPanelButtonGrid, Globals.lineHeight, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.hGapSize / 2, Globals.hGapSize, Short.MAX_VALUE))
-				.addGroup(southLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize / 2)
+				.addGroup(southLayout.createSequentialGroup().addGap(Globals.hGapSize / 2)
 						.addComponent(additionalPane, 50, 100, Short.MAX_VALUE)// GroupLayout.PREFERRED_SIZE)//Short.MAX_VALUE)
 						.addGap(Globals.hGapSize / 2)));
 
@@ -527,11 +525,9 @@ public class FGeneralDialog extends JDialog
 
 		allLayout.setVerticalGroup(allLayout.createSequentialGroup()
 				.addComponent(northPanel, Globals.lineHeight, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addComponent(scrollpane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(southPanel, 2 * Globals.lineHeight, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
-		allLayout.setHorizontalGroup(allLayout.createParallelGroup()
-				.addComponent(northPanel, 100, 300, Short.MAX_VALUE)
+				.addComponent(scrollpane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addComponent(southPanel,
+						2 * Globals.lineHeight, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		allLayout.setHorizontalGroup(allLayout.createParallelGroup().addComponent(northPanel, 100, 300, Short.MAX_VALUE)
 				.addGroup(allLayout.createSequentialGroup()
 						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
 						.addComponent(scrollpane, 100, 300, Short.MAX_VALUE)
@@ -627,14 +623,13 @@ public class FGeneralDialog extends JDialog
 			 */
 
 			if (Globals.mainFrame != null) {
-				setLocation(
-						(int) Globals.mainFrame.getX() + Globals.locationDistanceX,
+				setLocation((int) Globals.mainFrame.getX() + Globals.locationDistanceX,
 						(int) Globals.mainFrame.getY() + Globals.locationDistanceY);
 				logging.info(this, " ============================ ");
-				logging.info(this, "setLocation based on mainFrame.getX(), .. "
-						+ ((int) Globals.mainFrame.getX() + Globals.locationDistanceX)
-						+ ", " +
-						+((int) Globals.mainFrame.getY() + Globals.locationDistanceY));
+				logging.info(this,
+						"setLocation based on mainFrame.getX(), .. "
+								+ ((int) Globals.mainFrame.getX() + Globals.locationDistanceX) + ", "
+								+ +((int) Globals.mainFrame.getY() + Globals.locationDistanceY));
 			} else {
 
 				GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -689,7 +684,7 @@ public class FGeneralDialog extends JDialog
 	 * {
 	 * topPane = new JPanel();
 	 * topPane.setLayout(flowLayout1);
-	 * //System.out.println("FInfoDialog initTopPane is working");
+	 * //logging.debug("FInfoDialog initTopPane is working");
 	 * }
 	 */
 
@@ -746,18 +741,18 @@ public class FGeneralDialog extends JDialog
 		logging.debug(this, "key event " + e);
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = true;
-			// System.out.println ("shift pressed");
+			// logging.debug ("shift pressed");
 		} else {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_SPACE) {
 				if (e.getSource() == jButton1) {
-					// System.out.println (".... on Button1. ");
+					// logging.debug (".... on Button1. ");
 					// preAction1(); integrated in doAction1
 					// doAction1();
 					// comment out, Mon Sep 16 16:35:39 CEST 2019 @649 /Internet Time/
 					// since otherwise doAction1 is called twice on Enter
 				} else if (e.getSource() == jButton2) {
 					doAction2();
-					// System.out.println (".... on Button2 ");
+					// logging.debug (".... on Button2 ");
 				} else if (e.getSource() == jButton3) {
 					doAction3();
 				}
@@ -768,13 +763,13 @@ public class FGeneralDialog extends JDialog
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
-			// System.out.println ("shift released");
+			// logging.debug ("shift released");
 		}
 
 	}
 
 	public void keyTyped(KeyEvent e) {
-		// System.out.println ("KeyEvent ... " + e.getKeyChar) );
+		// logging.debug ("KeyEvent ... " + e.getKeyChar) );
 	}
 
 	// MouseListener
@@ -838,8 +833,7 @@ public class FGeneralDialog extends JDialog
 		glass.begin();
 	}
 
-	public static class FadingMirror extends JPanel
-			implements ActionListener {
+	public static class FadingMirror extends JPanel implements ActionListener {
 		private float opacity = 1f;
 		private float step = 0.3f;
 		private javax.swing.Timer fadeTimer;
@@ -900,8 +894,7 @@ public class FGeneralDialog extends JDialog
 		}
 
 		public void paintComponent(Graphics g) {
-			((Graphics2D) g).setComposite(
-					AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
+			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 
 			g.setColor(new Color(230, 230, 250));
 			g.fillRect(0, 0, getWidth(), getHeight());

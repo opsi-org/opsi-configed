@@ -13,8 +13,7 @@ import java.util.Vector;
 
 import de.uib.utilities.logging.logging;
 
-public class DefaultTableProvider
-		implements TableProvider {
+public class DefaultTableProvider implements TableProvider {
 	protected TableSource source;
 	protected Vector<String> columnNames;
 	protected Vector<String> classNames;
@@ -48,7 +47,7 @@ public class DefaultTableProvider
 	public Vector<Vector<Object>> getRows() {
 		logging.info(this, " -- getRows()");
 
-		// System.out.println( " rowsCopy == null " + (rowsCopy == null) );
+		// logging.debug( " rowsCopy == null " + (rowsCopy == null) );
 		if (rowsCopy == null)
 			resetRows();
 
@@ -82,7 +81,7 @@ public class DefaultTableProvider
 			isDecorated = true;
 		}
 
-		// System.out.println (" rows.size() " + rows.size());
+		// logging.debug (" rows.size() " + rows.size());
 
 		if (rows == null) {
 			logging.info(" no data rows retrieved ");
@@ -94,16 +93,16 @@ public class DefaultTableProvider
 			rowsCopy.add(row);
 		}
 
-		// System.out.println (" rowsCopy.size() " + rowsCopy.size());
+		// logging.debug (" rowsCopy.size() " + rowsCopy.size());
 	}
 
 	// should set the working copy as new original values
 	public void setWorkingCopyAsNewOriginalRows() {
-		/// System.out.println(" setWorkingCopyAsNewOriginalRows() ");
+		/// logging.debug(" setWorkingCopyAsNewOriginalRows() ");
 		// "deep" rows = rowsCopy:
 
 		if (rows == null) {
-			// System.out.println(" --- original rows null ");
+			// logging.debug(" --- original rows null ");
 			// in the following reset, we request a reload
 		}
 

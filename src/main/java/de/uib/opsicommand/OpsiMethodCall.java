@@ -76,8 +76,7 @@ public class OpsiMethodCall {
 	private void collectCall() {
 		if ((maxCollectSize < 0)
 				// -1 means deactivated
-				||
-				(maxCollectSize != 0 && collectedCalls.size() >= maxCollectSize)
+				|| (maxCollectSize != 0 && collectedCalls.size() >= maxCollectSize)
 		// 0 means infinite
 		)
 			return;
@@ -86,13 +85,13 @@ public class OpsiMethodCall {
 	}
 
 	public static void report() {
-		logging.check(
+		logging.debug(
 				"================================================   collected calls, maxCollectSize " + maxCollectSize);
 
 		for (String c : collectedCalls) {
-			logging.check(c);
+			logging.debug(c);
 		}
-		logging.check("================================================");
+		logging.debug("================================================");
 	}
 
 	public String getRpcPath() {

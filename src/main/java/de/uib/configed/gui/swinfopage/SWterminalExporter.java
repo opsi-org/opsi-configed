@@ -1,6 +1,7 @@
 package de.uib.configed.gui.swinfopage;
 
 import de.uib.opsidatamodel.PersistenceController;
+import de.uib.utilities.logging.logging;
 import de.uib.utilities.table.ExporterToTerminal;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
@@ -23,19 +24,19 @@ public class SWterminalExporter extends SWExporter {
 		// logging.info(this, "------------- create console report swaudit for " +
 		// clientName );
 
-		// System.out.println( "------------- create console report swaudit for " +
+		// logging.debug( "------------- create console report swaudit for " +
 		// clientName );
 
 		modelSWInfo.setSorting(0, true);
-		// System.out.println(" theHost " + clientName);
-		// System.out.println(" export file " + exportFilename);
-		// System.out.println(" model columns " + modelSWInfo.getColumnNames() );
+		// logging.debug(" theHost " + clientName);
+		// logging.debug(" export file " + exportFilename);
+		// logging.debug(" model columns " + modelSWInfo.getColumnNames() );
 
 		theTable.setModel(modelSWInfo);
 
-		System.out.println("");
-		System.out.println("SWaudit report for " + clientName);
-		System.out.println("");
+		logging.debug("");
+		logging.debug("SWaudit report for " + clientName);
+		logging.debug("");
 
 		exportTable.execute(null, onlySelectedRows);
 	}

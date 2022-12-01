@@ -24,7 +24,6 @@ import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
 /**
- *
  * @author Rupert Roeder
  */
 
@@ -71,18 +70,16 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		private final SSLSocketFactory delegate;
 		private HandshakeCompletedListener handshakeListener;
 
-		public SecureSSLSocketFactory(
-				SSLSocketFactory delegate, HandshakeCompletedListener handshakeListener) {
+		public SecureSSLSocketFactory(SSLSocketFactory delegate, HandshakeCompletedListener handshakeListener) {
 			this.delegate = delegate;
 			this.handshakeListener = handshakeListener;
 		}
 
 		@Override
-		public Socket createSocket(Socket s, String host, int port, boolean autoClose)
-				throws IOException {
+		public Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException {
 			SSLSocket socket = (SSLSocket) this.delegate.createSocket(s, host, port, autoClose);
-			logging.debug(this, "createSocket host, port: " + host + "," + port + " autoClose " + autoClose +
-					" enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
+			logging.debug(this, "createSocket host, port: " + host + "," + port + " autoClose " + autoClose
+					+ " enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
 
 			if (null != this.handshakeListener) {
 				socket.addHandshakeCompletedListener(this.handshakeListener);
@@ -92,11 +89,10 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		}
 
 		@Override
-		public Socket createSocket()
-				throws IOException {
+		public Socket createSocket() throws IOException {
 			SSLSocket socket = (SSLSocket) this.delegate.createSocket();
-			logging.debug(this, "createSocke " +
-					" enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
+			logging.debug(this,
+					"createSocke " + " enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
 			// on some connections there is, after some time, a javax.net.ssl.SSLException:
 			// SSL peer shut down incorrectl
 			// the standard enabled cipher suite seems to be TLS_RSA_WITH_AES_256_CBC_SHA256
@@ -113,11 +109,10 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		}
 
 		@Override
-		public Socket createSocket(InetAddress host, int port)
-				throws IOException {
+		public Socket createSocket(InetAddress host, int port) throws IOException {
 			SSLSocket socket = (SSLSocket) this.delegate.createSocket(host, port);
-			logging.debug(this, "createSocket host, port: " + host + "," + port +
-					" enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
+			logging.debug(this, "createSocket host, port: " + host + "," + port + " enabled cipher suites "
+					+ Arrays.toString(socket.getEnabledCipherSuites()));
 
 			if (null != this.handshakeListener) {
 				socket.addHandshakeCompletedListener(this.handshakeListener);
@@ -132,8 +127,8 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			SSLSocket socket = (SSLSocket) this.delegate.createSocket(address, port, localAddress, localPort);
 			logging.debug(this,
 					"createSocket adress, port, localAddress, localPort: " + address + "," + port + "," + localAddress
-							+ "," + localPort
-							+ " enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
+							+ "," + localPort + " enabled cipher suites "
+							+ Arrays.toString(socket.getEnabledCipherSuites()));
 
 			if (null != this.handshakeListener) {
 				socket.addHandshakeCompletedListener(this.handshakeListener);
@@ -143,11 +138,10 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		}
 
 		@Override
-		public Socket createSocket(String host, int port)
-				throws IOException {
+		public Socket createSocket(String host, int port) throws IOException {
 			SSLSocket socket = (SSLSocket) this.delegate.createSocket(host, port);
-			logging.debug(this, "createSocket host, port: " + host + "," + port +
-					" enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
+			logging.debug(this, "createSocket host, port: " + host + "," + port + " enabled cipher suites "
+					+ Arrays.toString(socket.getEnabledCipherSuites()));
 
 			if (null != this.handshakeListener) {
 				socket.addHandshakeCompletedListener(this.handshakeListener);
@@ -157,13 +151,10 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		}
 
 		@Override
-		public Socket createSocket(String host, int port, InetAddress localHost, int localPort)
-				throws IOException {
+		public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException {
 			SSLSocket socket = (SSLSocket) this.delegate.createSocket(host, port, localHost, localPort);
-			logging.debug(this,
-					"createSocket host, port, localHost, localPort: " + host + "," + port + "," + localHost + ","
-							+ localPort +
-							" enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
+			logging.debug(this, "createSocket host, port, localHost, localPort: " + host + "," + port + "," + localHost
+					+ "," + localPort + " enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
 
 			if (null != this.handshakeListener) {
 				socket.addHandshakeCompletedListener(this.handshakeListener);
@@ -266,7 +257,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			logging.debug("Exception " + ex);
 		}
 
-		// System.out.println( " omc " + omc + " encoded " + urlEnc);
+		// logging.debug( " omc " + omc + " encoded " + urlEnc);
 
 		// instance = new JSONthroughHTTPS ("194.31.185.160",
 		// "cn=admin,dc=uib,dc=local", "umwelt");

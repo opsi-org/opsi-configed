@@ -73,7 +73,9 @@ public class SSHCommandFactory {
 	private MainFrame mainFrame;
 	/** SSHCommandFactory instance **/
 	private static SSHCommandFactory instance;
-	/** List<Map<String,Object>> list elements are commands with key value pairs **/
+	/**
+	 * List<Map<String,Object>> list elements are commands with key value pairs
+	 **/
 	private java.util.List<Map<java.lang.String, java.lang.Object>> commandlist;
 	/** List<SSHCommand_Template> list elements are sshcommands **/
 	private java.util.List<SSHCommand_Template> sshcommand_list;
@@ -84,7 +86,9 @@ public class SSHCommandFactory {
 
 	/** static String for parent null ("Server-Konsole") **/
 	final public static String parentNull = configed.getResourceValue("MainFrame.jMenuServer");
-	/** static String defined as language independent parent for own commands **/
+	/**
+	 * static String defined as language independent parent for own commands
+	 **/
 	final public static String parentdefaultForOwnCommands = "...";
 	/** static String for specific parent ("opsi") **/
 	final public static String parentOpsi = configed.getResourceValue("MainFrame.jMenuOpsi");
@@ -169,8 +173,7 @@ public class SSHCommandFactory {
 	}
 
 	/**
-	 * Method allows only one instance
-	 * Design: Singelton-Pattern
+	 * Method allows only one instance Design: Singelton-Pattern
 	 * 
 	 * @param main {@link de.uib.configed.ConfigedMain} class
 	 * @return SSHCommandFactory instance
@@ -183,8 +186,7 @@ public class SSHCommandFactory {
 	}
 
 	/**
-	 * Method allows only one instance
-	 * Design: Singelton-Pattern
+	 * Method allows only one instance Design: Singelton-Pattern
 	 * 
 	 * @return SSHCommandFactory instance
 	 **/
@@ -292,9 +294,8 @@ public class SSHCommandFactory {
 	 **/
 	public SSHCommand_Template buildSSHCommand(String id, String pmt, String mt, String ttt, int p, boolean ns,
 			LinkedList<String> c) {
-		SSHCommand_Template com = new SSHCommand_Template(id,
-				c, // Achtung Reihenfolge der Elemente in Arrays c könnte sich ändern !" toList =
-					// ArrayList! JsonArray muss nicht sortiert sein!"
+		SSHCommand_Template com = new SSHCommand_Template(id, c, // Achtung Reihenfolge der Elemente in Arrays c könnte sich ändern !" toList =
+				// ArrayList! JsonArray muss nicht sortiert sein!"
 				mt, ns, pmt, ttt, p);
 		return com;
 	}
@@ -324,14 +325,10 @@ public class SSHCommandFactory {
 		// list_knownMenus.add( parentNull );
 
 		for (Map<java.lang.String, java.lang.Object> map : commandlist) {
-			SSHCommand_Template com = buildSSHCommand(
-					((String) map.get(command_map_id)),
-					((String) map.get(command_map_parentMenuText)),
-					((String) map.get(command_map_menuText)),
-					((String) map.get(command_map_tooltipText)),
-					((int) map.get(command_map_position)),
-					((boolean) map.get(command_map_needSudo)),
-					null);
+			SSHCommand_Template com = buildSSHCommand(((String) map.get(command_map_id)),
+					((String) map.get(command_map_parentMenuText)), ((String) map.get(command_map_menuText)),
+					((String) map.get(command_map_tooltipText)), ((int) map.get(command_map_position)),
+					((boolean) map.get(command_map_needSudo)), null);
 			if (map.get(command_map_commands) != null) {
 				// Achtung Reihenfolge könnte sich ändern !" toList = ArrayList! JsonArray muss
 				// nicht sortiert sein!"
@@ -498,10 +495,7 @@ public class SSHCommandFactory {
 			if (main.getPersistenceController().updateSSHCommand(jsonObjects)) // ;
 			{
 				((SSHCommand_Template) sshcommand_list
-						.get(
-								sshcommand_list.indexOf(
-										getSSHCommandByMenu(command.getMenuText()))))
-						.update(command);
+						.get(sshcommand_list.indexOf(getSSHCommandByMenu(command.getMenuText())))).update(command);
 				return true;
 			}
 		} else {
@@ -538,14 +532,10 @@ public class SSHCommandFactory {
 			logging.info(this, "isSSHCommandEqualSavedCommand with found " + ((SSHCommand_Template) sshcommand_list
 					.get(sshcommand_list.indexOf(getSSHCommandByMenu(command.getMenuText())))));
 			logging.info(this, "isSSHCommandEqualSavedCommand equals " + ((SSHCommand_Template) sshcommand_list
-					.get(sshcommand_list.indexOf(getSSHCommandByMenu(command.getMenuText()))))
-					.equals(command));
+					.get(sshcommand_list.indexOf(getSSHCommandByMenu(command.getMenuText())))).equals(command));
 
 			if (((SSHCommand_Template) sshcommand_list
-					.get(
-							sshcommand_list.indexOf(
-									getSSHCommandByMenu(command.getMenuText()))))
-					.equals(command)) {
+					.get(sshcommand_list.indexOf(getSSHCommandByMenu(command.getMenuText())))).equals(command)) {
 				return true;
 			} else
 				return false;

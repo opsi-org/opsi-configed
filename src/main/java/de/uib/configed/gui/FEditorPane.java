@@ -72,14 +72,14 @@ public class FEditorPane extends FGeneralDialog {
 
 	private static String hexNoForColorizing(int indentationCount) {
 		switch (indentationCount) {
-			case 0:
-				return "aa";
-			case 1:
-				return "cc";
-			case 2:
-				return "ff";
-			default:
-				return "ff";
+		case 0:
+			return "aa";
+		case 1:
+			return "cc";
+		case 2:
+			return "ff";
+		default:
+			return "ff";
 		}
 	}
 
@@ -104,7 +104,7 @@ public class FEditorPane extends FGeneralDialog {
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
-			// System.out.println ("shift released");
+			// logging.debug ("shift released");
 		}
 
 		if (e.getKeyCode() == KeyEvent.VK_TAB && !shiftPressed) {

@@ -26,8 +26,7 @@ import de.uib.utilities.table.provider.TableProvider;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 import de.uib.utilities.table.updates.TableUpdateItemFactory;
 
-public class GenTableModel extends AbstractTableModel
-		implements TableModelFunctions {
+public class GenTableModel extends AbstractTableModel implements TableModelFunctions {
 
 	protected int rowsLength;
 	protected int colsLength;
@@ -81,13 +80,9 @@ public class GenTableModel extends AbstractTableModel
 
 	CursorrowObserved cursorrowObservable;
 
-	public GenTableModel(
-			de.uib.utilities.table.updates.TableUpdateItemFactory itemFactory,
-			de.uib.utilities.table.provider.TableProvider dataProvider,
-			int keyCol,
-			int[] finalColumns,
-			TableModelListener l,
-			de.uib.utilities.table.updates.TableUpdateCollection updates) {
+	public GenTableModel(de.uib.utilities.table.updates.TableUpdateItemFactory itemFactory,
+			de.uib.utilities.table.provider.TableProvider dataProvider, int keyCol, int[] finalColumns,
+			TableModelListener l, de.uib.utilities.table.updates.TableUpdateCollection updates) {
 		this.tableName = tableName;
 		this.keyCol = keyCol;
 		this.updates = updates;
@@ -133,11 +128,8 @@ public class GenTableModel extends AbstractTableModel
 
 	}
 
-	public GenTableModel(
-			de.uib.utilities.table.updates.TableUpdateItemFactory itemFactory,
-			de.uib.utilities.table.provider.TableProvider dataProvider,
-			int keyCol,
-			TableModelListener l,
+	public GenTableModel(de.uib.utilities.table.updates.TableUpdateItemFactory itemFactory,
+			de.uib.utilities.table.provider.TableProvider dataProvider, int keyCol, TableModelListener l,
 			de.uib.utilities.table.updates.TableUpdateCollection updates) {
 		this(itemFactory, dataProvider, keyCol, null, l, updates);
 	}
@@ -371,8 +363,7 @@ public class GenTableModel extends AbstractTableModel
 			int col = sortCol;
 			int i = 0; // we use the index to get unique values in any col
 			for (Vector<Object> row : givenRows) {
-				mapRows.put(row.get(col).toString()
-						+ ":" + i, row);
+				mapRows.put(row.get(col).toString() + ":" + i, row);
 				i++;
 			}
 			rows = new Vector<Vector<Object>>();
@@ -464,9 +455,8 @@ public class GenTableModel extends AbstractTableModel
 	}
 
 	/**
-	 * sets data to the source values
-	 * (if model is not valid they are recollected)
-	 * clears update collection
+	 * sets data to the source values (if model is not valid they are
+	 * recollected) clears update collection
 	 */
 	public void reset() {
 		logging.info(this, "reset()");
@@ -555,9 +545,7 @@ public class GenTableModel extends AbstractTableModel
 		RowStringMap result = new RowStringMap();
 
 		for (int col = 0; col < getColumnNames().size(); col++) {
-			result.put(
-					getColumnName(col),
-					"" + getValueAt(row, col));
+			result.put(getColumnName(col), "" + getValueAt(row, col));
 		}
 
 		// logging.info(this, " getRowMap for modelrow " + row + ": " + result);
@@ -575,8 +563,7 @@ public class GenTableModel extends AbstractTableModel
 			else
 				value = "" + value;
 
-			result.put(
-					getColumnName(col), value);
+			result.put(getColumnName(col), value);
 		}
 
 		// logging.info(this, " getRowMap for modelrow " + row + ": " + result);
@@ -691,11 +678,7 @@ public class GenTableModel extends AbstractTableModel
 
 		if (
 
-		((rows.get(row)).get(col) == null
-				&&
-				(value == null
-						||
-						value.equals("")))
+		((rows.get(row)).get(col) == null && (value == null || value.equals("")))
 
 				||
 
@@ -744,12 +727,10 @@ public class GenTableModel extends AbstractTableModel
 			{
 				// we should not get any more to this code, since for this condition the value
 				// is marked as not editable
-				logging.debugOut(logging.LEVEL_WARNING, "key column cannot be edited after saving the data");
+				logging.warning("key column cannot be edited after saving the data");
 
-				javax.swing.JOptionPane.showMessageDialog(null,
-						"values in this column are fixed after saving the data",
-						"Information",
-						javax.swing.JOptionPane.OK_OPTION);
+				javax.swing.JOptionPane.showMessageDialog(null, "values in this column are fixed after saving the data",
+						"Information", javax.swing.JOptionPane.OK_OPTION);
 
 				return;
 			}
@@ -869,10 +850,8 @@ public class GenTableModel extends AbstractTableModel
 
 			logging.info(this, "no deletion of added rows");
 
-			javax.swing.JOptionPane.showMessageDialog(null,
-					"no deletion of added rows, please save or cancel editing",
-					"Information",
-					javax.swing.JOptionPane.OK_OPTION);
+			javax.swing.JOptionPane.showMessageDialog(null, "no deletion of added rows, please save or cancel editing",
+					"Information", javax.swing.JOptionPane.OK_OPTION);
 			return false;
 
 		}
@@ -1020,9 +999,7 @@ public class GenTableModel extends AbstractTableModel
 
 		setFilter(chainedFilter);
 
-		if (specialFilterCondition != null
-				||
-				saveUsingFilter)
+		if (specialFilterCondition != null || saveUsingFilter)
 
 		{
 			// we changed filtering and have to reproduce the rows
@@ -1137,9 +1114,7 @@ public class GenTableModel extends AbstractTableModel
 
 				String repr =
 
-						primarykeyTranslation.put(
-								key,
-								keyRepresenter.represents(key, getPrimarykey2Rowmap().get(key)));
+						primarykeyTranslation.put(key, keyRepresenter.represents(key, getPrimarykey2Rowmap().get(key)));
 			} catch (Exception ex) {
 				logging.info(this, "getPrimarykeyTranslation()  " + getValueAt(i, keyCol) + " " + ex);
 			}

@@ -17,12 +17,6 @@ public class UncaughtExceptionHandlerLocalized extends de.uib.utilities.logging.
 			}
 		}
 
-		Integer saveInjectedLogLevel = logging.getInjectedLogLevel();
-		logging.info(this, " " + this + " saveInjectedLogLevel " + saveInjectedLogLevel);
-		if (saveInjectedLogLevel != null)
-			logging.injectLogLevel(logging.LEVEL_INFO);
-		logging.info(this, " " + this + " injectedLogLevel " + logging.getInjectedLogLevel());
-
 		if (e instanceof Exception) {
 			logging.warning("Error in thread " + t);
 			logging.logTrace(e);
@@ -84,9 +78,5 @@ public class UncaughtExceptionHandlerLocalized extends de.uib.utilities.logging.
 			}
 
 		}
-
-		if (saveInjectedLogLevel != null)
-			logging.injectLogLevel(saveInjectedLogLevel);
-
 	}
 }

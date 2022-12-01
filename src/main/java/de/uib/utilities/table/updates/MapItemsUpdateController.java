@@ -22,10 +22,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 	MapBasedUpdater updater;
 	TableUpdateCollection updateCollection;
 
-	public MapItemsUpdateController(
-			PanelGenEditTable panel,
-			GenTableModel model,
-			MapBasedUpdater updater,
+	public MapItemsUpdateController(PanelGenEditTable panel, GenTableModel model, MapBasedUpdater updater,
 			TableUpdateCollection updateCollection) {
 		this.panel = panel;
 		this.tablemodel = model;
@@ -34,7 +31,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 	}
 
 	public boolean saveChanges() {
-		// System.out.println (" ------- update controller called ");
+		// logging.debug (" ------- update controller called ");
 		logging.debug(this, "saveChanges");
 
 		WaitCursor waitCursor = new WaitCursor(); // licencesFrame, licencesFrame.getCursor() );

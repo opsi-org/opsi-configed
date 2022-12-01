@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeSet;
 
+import de.uib.utilities.logging.logging;
+
 public class TreeSetBuddy extends TreeSet<String> {
 	public TreeSetBuddy(Collection<String> c) {
 		super(c);
@@ -30,7 +32,7 @@ public class TreeSetBuddy extends TreeSet<String> {
 		while (equal && iter.hasNext()) {
 			String str0 = iter.next();
 			String str1 = otherIter.next();
-			// System.out.println(" str0 -- str1 " + str0 + " --- " + str1);
+			// logging.debug(" str0 -- str1 " + str0 + " --- " + str1);
 
 			if (!str0.equals(str1))
 				equal = false;
@@ -88,10 +90,10 @@ public class TreeSetBuddy extends TreeSet<String> {
 		testWith();
 		testWithout();
 
-		System.out.println(" without knowledge");
+		logging.debug(" without knowledge");
 
 		startmillis = System.currentTimeMillis();
-		System.out.println(" startmillis " + startmillis);
+		logging.debug(" startmillis " + startmillis);
 
 		for (int i = 0; i < 100; i++) {
 			testWithout();
@@ -99,16 +101,16 @@ public class TreeSetBuddy extends TreeSet<String> {
 
 		endmillis = System.currentTimeMillis();
 
-		System.out.println("endmillis " + endmillis + " diff " + (endmillis - startmillis));
+		logging.debug("endmillis " + endmillis + " diff " + (endmillis - startmillis));
 
-		System.out.println(" withknowledge");
+		logging.debug(" withknowledge");
 		startmillis = System.currentTimeMillis();
 
 		for (int i = 0; i < 100; i++) {
 			testWith();
 		}
 		endmillis = System.currentTimeMillis();
-		System.out.println("endmillis " + endmillis + " diff " + (endmillis - startmillis));
+		logging.debug("endmillis " + endmillis + " diff " + (endmillis - startmillis));
 
 	}
 

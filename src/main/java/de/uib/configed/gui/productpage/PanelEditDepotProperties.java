@@ -95,39 +95,34 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		popupDepot = new JPopupMenu();
 		listDepots.setComponentPopupMenu(popupDepot);
 
-		buttonSelectWithEqualProperties = new JButton("",
-				Globals.createImageIcon("images/equalplus.png", ""));
+		buttonSelectWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
 
-		buttonSelectWithEqualProperties.setToolTipText(
-				configed.getResourceValue("ProductInfoPane.buttonSelectAllWithEqualProperties"));
+		buttonSelectWithEqualProperties
+				.setToolTipText(configed.getResourceValue("ProductInfoPane.buttonSelectAllWithEqualProperties"));
 		Globals.formatButtonSmallText(buttonSelectWithEqualProperties);
 		buttonSelectWithEqualProperties.addActionListener(this);
 
-		buttonSelectAll = new JButton("",
-				Globals.createImageIcon("images/plusplus.png", ""));
-		buttonSelectAll.setToolTipText(
-				configed.getResourceValue("ProductInfoPane.buttonSelectAll"));
+		buttonSelectAll = new JButton("", Globals.createImageIcon("images/plusplus.png", ""));
+		buttonSelectAll.setToolTipText(configed.getResourceValue("ProductInfoPane.buttonSelectAll"));
 		Globals.formatButtonSmallText(buttonSelectAll);
 		buttonSelectAll.addActionListener(this);
 
 		GroupLayout layoutPanelDepots = new GroupLayout(panelDepots);
 		panelDepots.setLayout(layoutPanelDepots);
 
-		layoutPanelDepots.setVerticalGroup(
-				layoutPanelDepots.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addComponent(scrollpaneDepots, GroupLayout.Alignment.LEADING, 0, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addComponent(buttonSelectWithEqualProperties, GroupLayout.Alignment.TRAILING,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonSelectAll, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		layoutPanelDepots.setVerticalGroup(layoutPanelDepots.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(scrollpaneDepots, GroupLayout.Alignment.LEADING, 0, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE)
+				.addComponent(buttonSelectWithEqualProperties, GroupLayout.Alignment.TRAILING,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(buttonSelectAll, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
-		layoutPanelDepots.setHorizontalGroup(
-				layoutPanelDepots.createSequentialGroup()
-						.addComponent(scrollpaneDepots, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addComponent(buttonSelectWithEqualProperties, 0, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonSelectAll, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		layoutPanelDepots.setHorizontalGroup(layoutPanelDepots.createSequentialGroup()
+				.addComponent(scrollpaneDepots, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(buttonSelectWithEqualProperties, 0, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(buttonSelectAll, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 		buttonSelectAll.setForeground(Globals.blue);
 		buttonSelectWithEqualProperties.setForeground(Globals.blue);
 		// buttonSelectAll.setBackground(Globals.backLightBlue);
@@ -143,10 +138,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 		buttonSetValuesFromPackage = new IconButton(
 				configed.getResourceValue("ProductInfoPane.buttonSetValuesFromPackage"),
-				"images/reset_network_defaults.png",
-				"images/reset_network_defaults_over.png",
-				" ",
-				true);
+				"images/reset_network_defaults.png", "images/reset_network_defaults_over.png", " ", true);
 
 		buttonSetValuesFromPackage.setPreferredSize(new Dimension(15, 30));
 
@@ -159,7 +151,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 				/*
 				 * // test
-				 * System.out.println(" action performed on buttonSetValuesFromPackage ");
+				 * logging.debug(" action performed on buttonSetValuesFromPackage ");
 				 * HashMap testdata = new HashMap();
 				 * testdata.put("test", "3");
 				 * testdata.put("loop", "200");
@@ -175,13 +167,12 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		javax.swing.GroupLayout layoutEditProperties = new javax.swing.GroupLayout(panelTop);
 		panelTop.setLayout(layoutEditProperties);
 
-		layoutEditProperties.setHorizontalGroup(
-				layoutEditProperties.createSequentialGroup()
-						.addComponent(panelDepots, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addComponent(buttonSetValuesFromPackage, 40, 40, 40));
+		layoutEditProperties.setHorizontalGroup(layoutEditProperties.createSequentialGroup()
+				.addComponent(panelDepots, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(buttonSetValuesFromPackage, 40, 40, 40));
 
-		layoutEditProperties.setVerticalGroup(
-				layoutEditProperties.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+		layoutEditProperties
+				.setVerticalGroup(layoutEditProperties.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
 						.addComponent(panelDepots, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addComponent(buttonSetValuesFromPackage, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
@@ -194,11 +185,11 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		GroupLayout layoutAll = new GroupLayout(this);
 		setLayout(layoutAll);
 
-		layoutAll.setVerticalGroup(layoutAll.createSequentialGroup()
-				.addComponent(splitter, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		layoutAll.setVerticalGroup(layoutAll.createSequentialGroup().addComponent(splitter, minHSize,
+				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		layoutAll.setHorizontalGroup(layoutAll.createParallelGroup()
-				.addComponent(splitter, minTableVSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		layoutAll.setHorizontalGroup(layoutAll.createParallelGroup().addComponent(splitter, minTableVSize,
+				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
 	private void initTitlePanel() {
@@ -207,15 +198,11 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		GroupLayout titleLayout = new GroupLayout(titlePanel);
 		titlePanel.setLayout(titleLayout);
 
-		titleLayout.setHorizontalGroup(
-				titleLayout.createParallelGroup()
-						.addComponent(jLabelEditDepotProductProperties, minHSize, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE));
+		titleLayout.setHorizontalGroup(titleLayout.createParallelGroup().addComponent(jLabelEditDepotProductProperties,
+				minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		titleLayout.setVerticalGroup(
-				titleLayout.createSequentialGroup()
-						.addComponent(jLabelEditDepotProductProperties, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		titleLayout.setVerticalGroup(titleLayout.createSequentialGroup().addComponent(jLabelEditDepotProductProperties,
+				GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 	}
 
 	@Override
@@ -272,8 +259,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 		Map<String, Object> visualData = mergeProperties(
 				mainController.getPersistenceController().getDepot2product2properties(),
-				listDepots.getSelectedValuesList(),
-				productEdited);
+				listDepots.getSelectedValuesList(), productEdited);
 
 		if (visualData == null) // no properties
 		{
@@ -293,9 +279,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 					visualData,
 
 					mainController.getPersistenceController()
-							.getProductPropertyOptionsMap(
-									listDepots.getSelectedValuesList().get(0),
-									productEdited));
+							.getProductPropertyOptionsMap(listDepots.getSelectedValuesList().get(0), productEdited));
 
 			// list of all property maps
 			java.util.List<ConfigName2ConfigValue> storableProperties = new ArrayList<ConfigName2ConfigValue>();
@@ -324,14 +308,10 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 			// updateCollection (the real updates)
 			ProductpropertiesUpdateCollection depotProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(
-					mainController,
-					mainController.getPersistenceController(),
-					listDepots.getSelectedValuesList(),
+					mainController, mainController.getPersistenceController(), listDepots.getSelectedValuesList(),
 					productEdited);
-			productPropertiesPanel.setUpdateCollection(
-					depotProductpropertiesUpdateCollection);
-			mainController.addToGlobalUpdateCollection(
-					depotProductpropertiesUpdateCollection);
+			productPropertiesPanel.setUpdateCollection(depotProductpropertiesUpdateCollection);
+			mainController.addToGlobalUpdateCollection(depotProductpropertiesUpdateCollection);
 
 		}
 
@@ -339,8 +319,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 	}
 
 	private Map<String, Object> mergeProperties(
-			Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties,
-			java.util.List<String> depots,
+			Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties, java.util.List<String> depots,
 			String productId) {
 
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -363,10 +342,8 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		} else {
 			int n = 0;
 
-			while (n < depots.size()
-					&&
-					(depot2product2properties.get(depots.get(n)) == null ||
-							depot2product2properties.get(depots.get(n)).get(productId) == null)) {
+			while (n < depots.size() && (depot2product2properties.get(depots.get(n)) == null
+					|| depot2product2properties.get(depots.get(n)).get(productId) == null)) {
 				n++;
 			}
 

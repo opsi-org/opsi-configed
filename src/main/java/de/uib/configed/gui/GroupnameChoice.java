@@ -28,8 +28,7 @@ import de.uib.utilities.swing.SurroundPanel;
 import de.uib.utilities.swing.VerticalPositioner;
 import de.uib.utilities.swing.XList;
 
-public class GroupnameChoice extends FGeneralDialog
-		implements DocumentListener, ListSelectionListener {
+public class GroupnameChoice extends FGeneralDialog implements DocumentListener, ListSelectionListener {
 
 	private ConfigedMain main;
 
@@ -86,10 +85,7 @@ public class GroupnameChoice extends FGeneralDialog
 
 		allpane.add(
 
-				new VerticalPositioner(
-						new SurroundPanel(groupnameField),
-						panelExistingGroups),
-				BorderLayout.NORTH);
+				new VerticalPositioner(new SurroundPanel(groupnameField), panelExistingGroups), BorderLayout.NORTH);
 
 		scrollpane.getViewport().add(groups);
 
@@ -123,7 +119,7 @@ public class GroupnameChoice extends FGeneralDialog
 			selIndex = -1;
 		}
 
-		// System.out.println ("text value changed selIndex " + selIndex + " ?? " +
+		// logging.debug ("text value changed selIndex " + selIndex + " ?? " +
 		// groups.getSelectedIndex());
 	}
 
@@ -146,8 +142,7 @@ public class GroupnameChoice extends FGeneralDialog
 		if (selIndex == -1)
 			return;
 
-		if (groupnameField.getText() == null
-				|| !groupnameField.getText().equals((String) groups.getSelectedValue())) {
+		if (groupnameField.getText() == null || !groupnameField.getText().equals((String) groups.getSelectedValue())) {
 			groupnameField.setText((String) groups.getSelectedValue());
 		}
 	}

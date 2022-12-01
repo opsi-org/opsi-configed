@@ -35,8 +35,7 @@ import javax.swing.Timer;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
-public class GeneralFrame extends JDialog
-		implements ActionListener, KeyListener {
+public class GeneralFrame extends JDialog implements ActionListener, KeyListener {
 	boolean shiftPressed = true;
 
 	protected FadingMirror glass;
@@ -200,9 +199,9 @@ public class GeneralFrame extends JDialog
 
 	// ActionListener
 	public void actionPerformed(ActionEvent e) {
-		// System.out.println ("ActionEvent ...... ");
+		// logging.debug ("ActionEvent ...... ");
 		if (e.getSource() == jButton1) {
-			// System.out.println (".... on Button1. ");
+			// logging.debug (".... on Button1. ");
 			doAction1();
 		}
 	}
@@ -216,8 +215,7 @@ public class GeneralFrame extends JDialog
 		glass.begin();
 	}
 
-	static class FadingMirror extends JPanel
-			implements ActionListener {
+	static class FadingMirror extends JPanel implements ActionListener {
 		private float opacity = 1f;
 		private float step = 0.3f;
 		private Timer fadeTimer;
@@ -273,8 +271,7 @@ public class GeneralFrame extends JDialog
 		}
 
 		public void paintComponent(Graphics g) {
-			((Graphics2D) g).setComposite(
-					AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
+			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 
 			g.setColor(new Color(230, 230, 250));
 			g.fillRect(0, 0, getWidth(), getHeight());

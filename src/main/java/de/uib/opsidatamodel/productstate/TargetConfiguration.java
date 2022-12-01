@@ -91,12 +91,8 @@ public class TargetConfiguration {
 		displayLabel2label.put("always", "always");
 		displayLabel2label.put("forbidden", "forbidden");
 
-		choiceLabels = new String[] {
-				label2displayLabel.get("undefined"),
-				label2displayLabel.get("installed"),
-				label2displayLabel.get("always"),
-				label2displayLabel.get("forbidden")
-		};
+		choiceLabels = new String[] { label2displayLabel.get("undefined"), label2displayLabel.get("installed"),
+				label2displayLabel.get("always"), label2displayLabel.get("forbidden") };
 	}
 
 	public static Map<String, String> getLabel2DisplayLabel() {
@@ -174,8 +170,7 @@ public class TargetConfiguration {
 
 	// getting instances
 	public static TargetConfiguration produceFromDisplayLabel(String display) {
-		return produceFromLabel(
-				displayLabel2label.get(display));
+		return produceFromLabel(displayLabel2label.get(display));
 	}
 
 	public static TargetConfiguration produceFromLabel(String label) {
@@ -187,8 +182,8 @@ public class TargetConfiguration {
 		if (!labels.contains(label))
 			return new TargetConfiguration(INVALID);
 
-		// System.out.println(" -------- label " + label + " --- val " + getVal(label));
-		// System.out.println(" -------- display " + new
+		// logging.debug(" -------- label " + label + " --- val " + getVal(label));
+		// logging.debug(" -------- display " + new
 		// TargetConfiguration(getVal(label)));
 
 		return new TargetConfiguration(getVal(label));
@@ -206,7 +201,7 @@ public class TargetConfiguration {
 	}
 
 	public static void main(String[] args) {
-		// System.out.println(" test TargetConfiguration.java");
+		// logging.debug(" test TargetConfiguration.java");
 		checkCollections();
 		Iterator iter = states.iterator();
 
@@ -215,7 +210,7 @@ public class TargetConfiguration {
 		while (iter.hasNext()) {
 			i++;
 			int state = (Integer) iter.next();
-			// System.out.println("state " + i + " : " + state + " label " +
+			// logging.debug("state " + i + " : " + state + " label " +
 			// getLabel(state));
 		}
 	}

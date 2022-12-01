@@ -57,11 +57,11 @@ public class SelectionManager {
 	}
 
 	/**
-	 * Create a new SoftwareNameElement, with the existing product IDs as enum data.
+	 * Create a new SoftwareNameElement, with the existing product IDs as enum
+	 * data.
 	 */
 	public SoftwareNameElement getNewSoftwareNameElement() {
-		return new SoftwareNameElement(
-				backend.getProductIDs());
+		return new SoftwareNameElement(backend.getProductIDs());
 	}
 
 	/** Get the non-localized hardware list from the backend */
@@ -78,7 +78,9 @@ public class SelectionManager {
 		return backend;
 	}
 
-	/** Next search, the manager should not use the loaded search data anymore. */
+	/**
+	 * Next search, the manager should not use the loaded search data anymore.
+	 */
 	public void setChanged() {
 		isSerializedLoaded = false;
 	}
@@ -147,20 +149,18 @@ public class SelectionManager {
 
 	public List<String> selectClients() {
 		PersistenceController controller = PersistenceControllerFactory.getPersistenceController();
-		boolean withMySQL = controller.isWithMySQL()
-				&& controller.getGlobalBooleanConfigValue(
-						PersistenceController.KEY_SEARCH_BY_SQL,
-						PersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
+		boolean withMySQL = controller.isWithMySQL() && controller.getGlobalBooleanConfigValue(
+				PersistenceController.KEY_SEARCH_BY_SQL, PersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 
 		if (withMySQL) {
 			long startTime = System.nanoTime();
 			List<String> l = selectClientsSQL(controller);
-			logging.check(this, "select Clients with MySQL " + ((System.nanoTime() - startTime) / 1000000));
+			logging.notice(this, "select Clients with MySQL " + ((System.nanoTime() - startTime) / 1000000));
 			return l;
 		} else {
 			long startTime = System.nanoTime();
 			List<String> l = selectClientsLocal();
-			logging.check(this, "select Clients without ;MySQL " + ((System.nanoTime() - startTime) / 1000000));
+			logging.notice(this, "select Clients without ;MySQL " + ((System.nanoTime() - startTime) / 1000000));
 			return l;
 		}
 	}
@@ -230,7 +230,8 @@ public class SelectionManager {
 	}
 
 	/**
-	 * Sets the given serialized search. It will replace the current operation tree.
+	 * Sets the given serialized search. It will replace the current operation
+	 * tree.
 	 */
 	private void setSearch(SelectOperation search) {
 		loadedSearch = search;
@@ -240,7 +241,8 @@ public class SelectionManager {
 	}
 
 	/**
-	 * Sets the given serialized search. It will replace the current operation tree.
+	 * Sets the given serialized search. It will replace the current operation
+	 * tree.
 	 */
 	public void setSearch(String serialized) {
 		logging.debug(this, "setSearch " + serialized);

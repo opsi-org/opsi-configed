@@ -26,9 +26,7 @@ import de.uib.utilities.ssh.SSHOutputCollector;
 import de.uib.utilities.thread.WaitCursor;
 
 /**
- * 
- * @inheritDoc
- *             Class for executing commands.
+ * @inheritDoc Class for executing commands.
  */
 public class SSHConnectExec extends SSHConnect {
 	protected SSHConnectionExecDialog outputDialog = null;
@@ -244,9 +242,8 @@ public class SSHConnectExec extends SSHConnect {
 						}
 					}
 					if (found_error) {
-						final_dia.appendLater(
-								"[" + configed.getResourceValue("SSHConnection.Exec.dialog.commandlist") + "]     " +
-										"" + configed.getResourceValue("SSHConnection.Exec.exitClosed"));
+						final_dia.appendLater("[" + configed.getResourceValue("SSHConnection.Exec.dialog.commandlist")
+								+ "]     " + "" + configed.getResourceValue("SSHConnection.Exec.exitClosed"));
 					}
 
 					// wrong place final_dia.appendLater("\nREADY\n");
@@ -335,11 +332,10 @@ public class SSHConnectExec extends SSHConnect {
 			if (SSHCommandFactory.getInstance(main).ssh_always_exec_in_background)
 				outputDialog.setVisible(false);
 			// outputDialog.append(getConnectedUser() + "@" + getConnectedHost() + "\n");
-			outputDialog.setTitle(
-					configed.getResourceValue("SSHConnection.Exec.title") + " "
-							+ configed.getResourceValue("SSHConnection.Exec.dialog.commandoutput")
-							+ "  (" + SSHConnectionInfo.getInstance().getUser()
-							+ "@" + SSHConnectionInfo.getInstance().getHost() + ")");
+			outputDialog.setTitle(configed.getResourceValue("SSHConnection.Exec.title") + " "
+					+ configed.getResourceValue("SSHConnection.Exec.dialog.commandoutput") + "  ("
+					+ SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost()
+					+ ")");
 			// + " ("+ this.user +"@"+this.host+")" );
 
 		} else
@@ -380,8 +376,7 @@ public class SSHConnectExec extends SSHConnect {
 		if (outputDialog != null)
 			if (s.length() > 0)
 				if (s != "\n") {
-					String t = outputDialog.ansiCodeInfo + s;
-					;
+					String t = outputDialog.ansiCodeInfo + s;;
 					// logging.info(this, t);
 					return t;
 				}
@@ -603,7 +598,7 @@ public class SSHConnectExec extends SSHConnect {
 								}
 							}
 						} else {
-							// System.out.println("withgui else in forloop");
+							// logging.debug("withgui else in forloop");
 							for (String line : str.split("\n"))
 								logging.debug(this, "line: " + line);
 						}

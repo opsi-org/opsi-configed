@@ -43,8 +43,7 @@ import de.uib.utilities.swing.JComboBoxToolTip;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.NavigationPanel;
 
-public class TablesearchPane extends JPanel
-		implements DocumentListener, KeyListener, ActionListener {
+public class TablesearchPane extends JPanel implements DocumentListener, KeyListener, ActionListener {
 	javax.swing.JFrame masterFrame = de.uib.configed.Globals.mainFrame;
 
 	JTextField fieldSearch;
@@ -83,10 +82,7 @@ public class TablesearchPane extends JPanel
 	JMenuItemFormatted popupEmptySearchfield;
 
 	public static enum SearchMode {
-		FULL_TEXT_SEARCHING_WITH_ALTERNATIVES,
-		FULL_TEXT_SEARCHING_ONE_STRING,
-		START_TEXT_SEARCHING,
-		REGEX_SEARCHING
+		FULL_TEXT_SEARCHING_WITH_ALTERNATIVES, FULL_TEXT_SEARCHING_ONE_STRING, START_TEXT_SEARCHING, REGEX_SEARCHING
 	}
 
 	public final static int FULL_TEXT_SEARCH = 0;
@@ -122,10 +118,10 @@ public class TablesearchPane extends JPanel
 	 * 
 	 * @param SearchTargetModel the model for delivering data and selecting
 	 * @param boolean           modifies the search function
-	 * @param int               gives the single column ( in natural counting) in
-	 *                          the case of single column search
-	 * @param String            saving of states is activated, the keys are tagged
-	 *                          with the parameter
+	 * @param int               gives the single column ( in natural counting)
+	 *                          in the case of single column search
+	 * @param String            saving of states is activated, the keys are
+	 *                          tagged with the parameter
 	 */
 	public TablesearchPane(SearchTargetModel targetModel, boolean withRegEx, int prefColNo,
 			String savedStatesObjectTag) {
@@ -172,8 +168,8 @@ public class TablesearchPane extends JPanel
 	/**
 	 * @param SearchTargetModel the model for delivering data and selecting
 	 * @param boolean           modifies the search function
-	 * @param String            saving of states is activated, the keys are tagged
-	 *                          with the parameter
+	 * @param String            saving of states is activated, the keys are
+	 *                          tagged with the parameter
 	 */
 	public TablesearchPane(SearchTargetModel targetModel, boolean withRegEx, String savedStatesObjectTag) {
 		this(targetModel, withRegEx, 0, savedStatesObjectTag);
@@ -186,8 +182,8 @@ public class TablesearchPane extends JPanel
 	 * 
 	 * @param JTable  the model for delivering data and selecting
 	 * @param boolean
-	 * @param String  saving of states is activated, the keys are tagged with the
-	 *                parameter
+	 * @param String  saving of states is activated, the keys are tagged with
+	 *                the parameter
 	 */
 	public TablesearchPane(PanelGenEditTable thePanel, boolean withRegEx, String savedStatesObjectTag) {
 		this(new SearchTargetModelFromTable(thePanel), withRegEx, savedStatesObjectTag);
@@ -199,20 +195,20 @@ public class TablesearchPane extends JPanel
 	 * 
 	 * @param JTable  the model for delivering data and selecting
 	 * @param boolean
-	 * @param String  saving of states is activated, the keys are tagged with the
-	 *                parameter
+	 * @param String  saving of states is activated, the keys are tagged with
+	 *                the parameter
 	 */
 	public TablesearchPane(JTable table, boolean withRegEx, String savedStatesObjectTag) {
 		this(new SearchTargetModelFromTable(table), withRegEx, savedStatesObjectTag);
 	}
 
 	/**
-	 * a search target model is produces from a JTable
-	 * the regex parameter default false is used
+	 * a search target model is produces from a JTable the regex parameter
+	 * default false is used
 	 * 
 	 * @param SearchTargetModel
-	 * @param String            saving of states is activated, the keys are tagged
-	 *                          with the parameter
+	 * @param String            saving of states is activated, the keys are
+	 *                          tagged with the parameter
 	 */
 	public TablesearchPane(SearchTargetModel targetModel, String savedStatesObjectTag) {
 		this(targetModel, false, savedStatesObjectTag);
@@ -220,8 +216,7 @@ public class TablesearchPane extends JPanel
 	}
 
 	/**
-	 * constructor only for testing purposes,
-	 * its use entails NPEs
+	 * constructor only for testing purposes, its use entails NPEs
 	 */
 	public TablesearchPane() {
 		this(null, null);
@@ -285,12 +280,9 @@ public class TablesearchPane extends JPanel
 	private boolean disabledSinceWeAreInFilteredMode() {
 		if (filteredMode) {
 			logging.info(this, "disabledSinceWeAreInFilteredMode masterFrame " + masterFrame);
-			JOptionPane.showOptionDialog(masterFrame,
-					configed.getResourceValue("SearchPane.filterIsSet.message"),
-					configed.getResourceValue("SearchPane.filterIsSet.title"),
-					JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.INFORMATION_MESSAGE,
-					null, null, null);
+			JOptionPane.showOptionDialog(masterFrame, configed.getResourceValue("SearchPane.filterIsSet.message"),
+					configed.getResourceValue("SearchPane.filterIsSet.title"), JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
 		}
 
@@ -299,12 +291,9 @@ public class TablesearchPane extends JPanel
 
 	/**
 	 * serve graphical filtermark
-	 *
 	 */
 	public void setFilterMark(boolean b) {
-		if (filtermark.isSelected() == null
-				||
-				filtermark.isSelected() != b)
+		if (filtermark.isSelected() == null || filtermark.isSelected() != b)
 
 			filtermark.setSelected(b);
 	}
@@ -414,8 +403,7 @@ public class TablesearchPane extends JPanel
 
 		if (saveSearchpaneProgressiveSearch != null)
 			active = (saveSearchpaneProgressiveSearch.deserializeAsInt() == 0);
-		checkmarkSearchProgressive = new CheckedLabel(selectedIconSearch, unselectedIconSearch,
-				active);
+		checkmarkSearchProgressive = new CheckedLabel(selectedIconSearch, unselectedIconSearch, active);
 		if (active)
 			searchInputType = SearchInputType.PROGRESSIVE;
 		else
@@ -552,9 +540,7 @@ public class TablesearchPane extends JPanel
 
 		// comboSearchFields = new JComboBox(new String[]{"alle Felder"});
 
-		comboSearchFields = new JComboBox(new String[] {
-				configed.getResourceValue("SearchPane.search.allfields")
-		});
+		comboSearchFields = new JComboBox(new String[] { configed.getResourceValue("SearchPane.search.allfields") });
 		comboSearchFields.setPreferredSize(Globals.lowerButtonDimension);
 		comboSearchFields.setFont(Globals.defaultFont);
 
@@ -573,15 +559,12 @@ public class TablesearchPane extends JPanel
 		 * "Suchausdruck mit symbolischen Zeichen" );
 		 */
 
-		tooltipsMap.put(
-				configed.getResourceValue("SearchPane.searchmode.fulltext"), // Index FULL_TEXT_SEARCH
+		tooltipsMap.put(configed.getResourceValue("SearchPane.searchmode.fulltext"), // Index FULL_TEXT_SEARCH
 				configed.getResourceValue("SearchPane.mode.fulltext.tooltip"));
-		tooltipsMap.put(
-				configed.getResourceValue("SearchPane.mode.starttext"), // Index START_TEXT_SEARCH
+		tooltipsMap.put(configed.getResourceValue("SearchPane.mode.starttext"), // Index START_TEXT_SEARCH
 				configed.getResourceValue("SearchPane.mode.starttext.tooltip"));
 		if (withRegEx)
-			tooltipsMap.put(
-					configed.getResourceValue("SearchPane.mode.regex"),
+			tooltipsMap.put(configed.getResourceValue("SearchPane.mode.regex"),
 					configed.getResourceValue("SearchPane.mode.regex.tooltip"));
 
 		try {
@@ -631,8 +614,7 @@ public class TablesearchPane extends JPanel
 		if (saveSearchpaneAllColumnsSearch != null)
 			active = (saveSearchpaneAllColumnsSearch.deserializeAsInt() == 0);
 
-		checkmarkAllColumns = new CheckedLabel(selectedIcon, unselectedIcon,
-				active);
+		checkmarkAllColumns = new CheckedLabel(selectedIcon, unselectedIcon, active);
 
 		checkmarkAllColumns.setToolTipText(configed.getResourceValue("SearchPane.checkmarkAllColumns.tooltip"));
 		checkmarkAllColumns.addActionListener(this);
@@ -653,8 +635,7 @@ public class TablesearchPane extends JPanel
 		if (saveSearchpaneFullTextSearch != null)
 			active = (saveSearchpaneFullTextSearch.deserializeAsInt() == 0);
 
-		checkmarkFullText = new CheckedLabel(selectedIcon, unselectedIcon,
-				active
+		checkmarkFullText = new CheckedLabel(selectedIcon, unselectedIcon, active
 		// true
 		);
 
@@ -670,71 +651,63 @@ public class TablesearchPane extends JPanel
 		this.setLayout(layoutTablesearchPane);
 
 		int checkedLabelWidth = 18;
-		layoutTablesearchPane.setHorizontalGroup(
-				layoutTablesearchPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(layoutTablesearchPane.createSequentialGroup()
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								.addComponent(markReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
-								.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
-								.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								.addComponent(fieldSearch, Globals.iconWidth, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE)
-								.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
-								.addComponent(filtermark, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
-								.addComponent(labelFilterMarkGap, Globals.hGapSize / 2, Globals.hGapSize / 2,
-										Globals.hGapSize / 2)
-								.addComponent(checkmarkSearchProgressive, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(checkmarkAllColumns, checkedLabelWidth, checkedLabelWidth,
-										checkedLabelWidth)
-								.addComponent(checkmarkFullText, checkedLabelWidth, checkedLabelWidth,
-										checkedLabelWidth)
-								.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
-								.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
-								.addComponent(comboSearchFields, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
-								.addComponent(comboSearchFieldsMode, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)));
+		layoutTablesearchPane.setHorizontalGroup(layoutTablesearchPane
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layoutTablesearchPane.createSequentialGroup()
+						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addComponent(markReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addComponent(fieldSearch, Globals.iconWidth, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addComponent(filtermark, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
+						.addComponent(labelFilterMarkGap, Globals.hGapSize / 2, Globals.hGapSize / 2,
+								Globals.hGapSize / 2)
+						.addComponent(checkmarkSearchProgressive, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(checkmarkAllColumns, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
+						.addComponent(checkmarkFullText, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
+						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addComponent(comboSearchFields, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addComponent(comboSearchFieldsMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)));
 
-		layoutTablesearchPane.setVerticalGroup(
-				layoutTablesearchPane.createSequentialGroup()
-						// .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-						.addGroup(layoutTablesearchPane.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-								.addComponent(markReload, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(labelSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(filtermark, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(labelFilterMarkGap, 10, 10, 10)
-								.addComponent(checkmarkAllColumns, 10, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(checkmarkFullText, 10, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(checkmarkSearch, 10, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(checkmarkSearchProgressive, 10, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(fieldSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(comboSearchFieldsMode, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(comboSearchFields, 10, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
+		layoutTablesearchPane.setVerticalGroup(layoutTablesearchPane.createSequentialGroup()
+				// .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+				.addGroup(layoutTablesearchPane.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+						.addComponent(markReload, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(filtermark, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelFilterMarkGap, 10, 10, 10)
+						.addComponent(checkmarkAllColumns, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(checkmarkFullText, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(checkmarkSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(checkmarkSearchProgressive, 10, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(fieldSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboSearchFieldsMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboSearchFields, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 		// .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
 		);
 
@@ -768,11 +741,8 @@ public class TablesearchPane extends JPanel
 				// logging.info(this, "setSearchFieldsAll, adding colname " + colname);
 			}
 
-			if ((saveSearchpaneAllColumnsSearch == null)
-					||
-					saveSearchpaneAllColumnsSearch.deserializeAsInt() == 0
-					||
-					preferredColumnIndex >= targetModel.getColumnCount())
+			if ((saveSearchpaneAllColumnsSearch == null) || saveSearchpaneAllColumnsSearch.deserializeAsInt() == 0
+					|| preferredColumnIndex >= targetModel.getColumnCount())
 				comboSearchFields.setSelectedIndex(0);
 			else
 				comboSearchFields.setSelectedIndex(preferredColumnIndex);
@@ -955,9 +925,8 @@ public class TablesearchPane extends JPanel
 
 		logging.debug(this,
 				"findViewRowFromValue(int startviewrow, Object value, Set colIndices, boolean fulltext, boolean regex): "
-						+ startviewrow + ", " + value + ", " + colIndices
-						+ ", " + fulltext + ", " + regex
-						+ ", " + combineCols);
+						+ startviewrow + ", " + value + ", " + colIndices + ", " + fulltext + ", " + regex + ", "
+						+ combineCols);
 
 		if (value == null)
 			return -1;
@@ -999,15 +968,12 @@ public class TablesearchPane extends JPanel
 				for (int j = 0; j < targetModel.getColumnCount(); j++) {
 
 					if (colIndices != null // we dont compare all values (comparing all values is default)
-							&&
-							!colIndices.contains(j))
+							&& !colIndices.contains(j))
 						continue;
 
 					int colJ = targetModel.getColForVisualCol(j);
 
-					Object valJ = targetModel.getValueAt(
-							targetModel.getRowForVisualRow(viewrow),
-							colJ
+					Object valJ = targetModel.getValueAt(targetModel.getRowForVisualRow(viewrow), colJ
 
 					);
 
@@ -1038,8 +1004,7 @@ public class TablesearchPane extends JPanel
 				for (int j = 0; j < targetModel.getColumnCount(); j++) {
 
 					if (colIndices != null // we dont compare all values (comparing all values is default)
-							&&
-							!colIndices.contains(j))
+							&& !colIndices.contains(j))
 
 						// if (j != 0) //test
 						continue;
@@ -1048,8 +1013,7 @@ public class TablesearchPane extends JPanel
 
 					Object compareValue = targetModel.getValueAt(
 
-							targetModel.getRowForVisualRow(viewrow),
-							colJ
+							targetModel.getRowForVisualRow(viewrow), colJ
 
 					);
 
@@ -1074,9 +1038,8 @@ public class TablesearchPane extends JPanel
 
 						else {
 							if (fulltext)
-								found = stringContainsParts(
-										targetModel.getColumnName(colJ),
-										compareVal, valParts).success;
+								found = stringContainsParts(targetModel.getColumnName(colJ), compareVal,
+										valParts).success;
 
 							/*
 							 * if (fulltext)
@@ -1087,9 +1050,7 @@ public class TablesearchPane extends JPanel
 
 							else {
 								// logging.info(this, "findViewRowFromValue not fullltext, startsWith ");
-								found = stringStartsWith(
-										targetModel.getColumnName(colJ),
-										compareVal, val);
+								found = stringStartsWith(targetModel.getColumnName(colJ), compareVal, val);
 								// logging.info(this, "findViewRowFromValue not fullltext, found " + found);
 							}
 
@@ -1547,14 +1508,14 @@ public class TablesearchPane extends JPanel
 
 	public static void main(String[] args) {
 		/*
-		 * System.out.println(" abc   contains äb " + stringContains("abc", "äb"));
-		 * System.out.println(" abcde  contains  è " + stringContains("abcde", "é"));
-		 * System.out.println(" abc  contains  c " + stringContains("abc", "'"));
+		 * logging.debug(" abc   contains äb " + stringContains("abc", "äb"));
+		 * logging.debug(" abcde  contains  è " + stringContains("abcde", "é"));
+		 * logging.debug(" abc  contains  c " + stringContains("abc", "'"));
 		 * 
 		 * 
-		 * System.out.println(" abc  starts with  ab " + stringStartsWith("abc", "ab"));
-		 * System.out.println(" abc  starts with  a " + stringStartsWith("abc", "a"));
-		 * System.out.println(" abc  starts with abc " + stringStartsWith("abc",
+		 * logging.debug(" abc  starts with  ab " + stringStartsWith("abc", "ab"));
+		 * logging.debug(" abc  starts with  a " + stringStartsWith("abc", "a"));
+		 * logging.debug(" abc  starts with abc " + stringStartsWith("abc",
 		 * "abc"));
 		 */
 	}

@@ -18,10 +18,8 @@ import javax.swing.table.TableCellEditor;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
-public class CellEditor4TableText
-		extends DefaultCellEditor
-		implements TableCellEditor
-		// , ActionListener
+public class CellEditor4TableText extends DefaultCellEditor implements TableCellEditor
+// , ActionListener
 		, MouseListener, KeyListener, FocusListener
 
 {
@@ -65,7 +63,7 @@ public class CellEditor4TableText
 	// ActionListener
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == editorContent) {
-			// System.out.println("action event occurred on editorContent");
+			// logging.debug("action event occurred on editorContent");
 			fireEditingStopped();
 		}
 
@@ -76,7 +74,7 @@ public class CellEditor4TableText
 	public void mouseClicked(MouseEvent e) {
 		if (e.getSource() == editorContent) {
 			if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
-				// System.out.println("double clicked");
+				// logging.debug("double clicked");
 				fEdit.setVisible(true);
 			}
 
@@ -98,7 +96,7 @@ public class CellEditor4TableText
 	// interface
 	// KeyListener
 	public void keyPressed(KeyEvent e) {
-		// System.out.println("key event " + e);
+		// logging.debug("key event " + e);
 		if (e.getSource() == editorContent) {
 			if (e.getKeyCode() == 32)
 				fEdit.setVisible(true);
@@ -135,11 +133,7 @@ public class CellEditor4TableText
 	}
 
 	// Implement the one method defined by TableCellEditor.
-	public Component getTableCellEditorComponent(JTable table,
-			Object value,
-			boolean isSelected,
-			int row,
-			int column) {
+	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		oldValue = (String) value;
 		fEdit.setCaller(editorContent);
 		fEdit.setStartText(oldValue);

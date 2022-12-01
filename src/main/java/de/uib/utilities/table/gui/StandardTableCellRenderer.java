@@ -32,13 +32,9 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 		currentRow = rowNumber;
 	}
 
-	public Component getTableCellRendererComponent(
-			JTable table,
-			Object value, // value to display
+	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 			boolean isSelected, // is the cell selected
-			boolean hasFocus,
-			int row,
-			int column) {
+			boolean hasFocus, int row, int column) {
 		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		if (c == null || !(c instanceof JComponent))
@@ -57,7 +53,7 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 			((JLabel) jc).setToolTipText(tooltipText);
 
 			// logging.info(this, "row " + row + " currentRow " + currentRow);
-			// System.out.println("row " + row + " col " + column + " tooltip " +
+			// logging.debug("row " + row + " col " + column + " tooltip " +
 			// jc.getToolTipText());
 
 			if (row == currentRow) {

@@ -532,10 +532,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		String result = "";
 
 		if (System.getenv(logging.windowsEnvVariableAppDataDirectory) != null) {
-			result = System.getenv(logging.windowsEnvVariableAppDataDirectory) + File.separator + logging.creatorDirName
-					+ File.separator + logging.programSubDir;
+			// Windows
+			result = System.getenv(logging.windowsEnvVariableAppDataDirectory) + File.separator + "opsi.org"
+					+ File.separator + "configed";
 		} else {
-			result = System.getProperty(logging.envVariableForUserDirectory) + File.separator + logging.programSubDir;
+			result = System.getProperty(logging.envVariableForUserDirectory) + File.separator + ".configed";
 		}
 
 		return result;
@@ -1344,66 +1345,64 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		mainFrame.visualizeEditingTarget(t);
 		// what else to do:
 		switch (t) {
-			case CLIENTS:
-				logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
+		case CLIENTS:
+			logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
 
-				mainFrame.setConfigPanesEnabled(true);
-				mainFrame.setConfigPaneEnabled(
-						mainFrame.getTabIndex(configed.getResourceValue("MainFrame.jPanel_HostProperties")), false);
-				mainFrame.setConfigPaneEnabled(
-						mainFrame.getTabIndex(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")),
-						false);
-				mainFrame.setVisualViewIndex(saveClientsViewIndex);// viewClients);
+			mainFrame.setConfigPanesEnabled(true);
+			mainFrame.setConfigPaneEnabled(
+					mainFrame.getTabIndex(configed.getResourceValue("MainFrame.jPanel_HostProperties")), false);
+			mainFrame.setConfigPaneEnabled(
+					mainFrame.getTabIndex(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), false);
+			mainFrame.setVisualViewIndex(saveClientsViewIndex);// viewClients);
 
-				logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
+			logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
 
-				if (!reachableUpdater.isInterrupted())
-					reachableUpdater.interrupt();
+			if (!reachableUpdater.isInterrupted())
+				reachableUpdater.interrupt();
 
-				if (preSaveSelectedClients != null && preSaveSelectedClients.size() > 0)
-					setSelectedClientsOnPanel(preSaveSelectedClients.toArray(new String[] {}));
+			if (preSaveSelectedClients != null && preSaveSelectedClients.size() > 0)
+				setSelectedClientsOnPanel(preSaveSelectedClients.toArray(new String[] {}));
 
-				break;
-			case DEPOTS:
-				logging.info(this, "setEditingTarget  DEPOTS");
+			break;
+		case DEPOTS:
+			logging.info(this, "setEditingTarget  DEPOTS");
 
-				if (!reachableUpdater.isInterrupted())
-					reachableUpdater.interrupt();
+			if (!reachableUpdater.isInterrupted())
+				reachableUpdater.interrupt();
 
-				initServer();
-				mainFrame.setConfigPanesEnabled(false);
-				// logging.debug(this, " getTabIndex " +
-				// (configed.getResourceValue("MainFrame.jPanel_NetworkConfig") ) );
-				mainFrame.setConfigPaneEnabled(
-						mainFrame.getTabIndex(configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
-				mainFrame.setConfigPaneEnabled(
-						mainFrame.getTabIndex(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")),
-						true);
-				// mainFrame.setVisualViewIndex(mainFrame.getTabIndex(configed.getResourceValue("MainFrame.jPanel_HostProperties")));
+			initServer();
+			mainFrame.setConfigPanesEnabled(false);
+			// logging.debug(this, " getTabIndex " +
+			// (configed.getResourceValue("MainFrame.jPanel_NetworkConfig") ) );
+			mainFrame.setConfigPaneEnabled(
+					mainFrame.getTabIndex(configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
+			mainFrame.setConfigPaneEnabled(
+					mainFrame.getTabIndex(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), true);
+			// mainFrame.setVisualViewIndex(mainFrame.getTabIndex(configed.getResourceValue("MainFrame.jPanel_HostProperties")));
 
-				logging.info(this, "setEditingTarget  call setVisualIndex  saved " + saveDepotsViewIndex + " resp. "
-						+ mainFrame.getTabIndex(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
+			logging.info(this, "setEditingTarget  call setVisualIndex  saved " + saveDepotsViewIndex + " resp. "
+					+ mainFrame.getTabIndex(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
 
-				mainFrame.setVisualViewIndex(saveDepotsViewIndex);
-				// mainFrame.getTabIndex(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
-				break;
-			case SERVER:
-				if (!reachableUpdater.isInterrupted())
-					reachableUpdater.interrupt();
+			mainFrame.setVisualViewIndex(saveDepotsViewIndex);
+			// mainFrame.getTabIndex(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
+			break;
+		case SERVER:
+			if (!reachableUpdater.isInterrupted())
+				reachableUpdater.interrupt();
 
-				initServer();
-				mainFrame.setConfigPanesEnabled(false);
-				// logging.debug(this, " getTabIndex " +
-				// (configed.getResourceValue("MainFrame.jPanel_NetworkConfig") ) );
-				mainFrame.setConfigPaneEnabled(
-						mainFrame.getTabIndex(configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
-				// mainFrame.setConfigPaneEnabled
-				// (mainFrame.getTabIndex(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")),
-				// true);
-				mainFrame.setVisualViewIndex(saveServerViewIndex);
-				break;
-			default:
-				break;
+			initServer();
+			mainFrame.setConfigPanesEnabled(false);
+			// logging.debug(this, " getTabIndex " +
+			// (configed.getResourceValue("MainFrame.jPanel_NetworkConfig") ) );
+			mainFrame.setConfigPaneEnabled(
+					mainFrame.getTabIndex(configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
+			// mainFrame.setConfigPaneEnabled
+			// (mainFrame.getTabIndex(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")),
+			// true);
+			mainFrame.setVisualViewIndex(saveServerViewIndex);
+			break;
+		default:
+			break;
 		}
 
 		resetView(viewIndex);
@@ -2472,8 +2471,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				String sessionValue = "";
 				if (sessionInfo.get(key) != null)
-					sessionValue = "" + sessionInfo.get(key);
-				;
+					sessionValue = "" + sessionInfo.get(key);;
 
 				rowmap.put(HostInfo.clientSessionInfo_DISPLAY_FIELD_LABEL, sessionValue);
 				rowmap.put(HostInfo.clientConnected_DISPLAY_FIELD_LABEL, (Boolean) reachableInfo.get(key));
@@ -2826,7 +2824,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				// de.uib.utilities.table.gui.CheckBoxTableCellRenderer());
 				column.setCellRenderer(new BooleanIconTableCellRenderer(
 						Globals.createImageIcon("images/checked_withoutbox.png", ""), null // Globals.createImageIcon("images/checked_box.png",
-																							// "")
+																																					// "")
 				));
 
 			}
@@ -2856,7 +2854,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				// de.uib.utilities.table.gui.CheckBoxTableCellRenderer());
 				column.setCellRenderer(new BooleanIconTableCellRenderer(
 						Globals.createImageIcon("images/checked_withoutbox.png", ""), null // Globals.createImageIcon("images/checked_box.png",
-																							// "")
+																																					// "")
 				));
 			}
 
@@ -2887,7 +2885,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				// de.uib.utilities.table.gui.CheckBoxTableCellRenderer());
 				column.setCellRenderer(new BooleanIconTableCellRenderer(
 						Globals.createImageIcon("images/checked_withoutbox.png", ""), null // Globals.createImageIcon("images/checked_box.png",
-																							// "")
+																																					// "")
 				));
 			}
 
@@ -3167,7 +3165,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		dependenciesModel.setActualProduct(productEdited);
 
 		logging.debug(this, " --- mergedProductProperties " + mergedProductProperties);
-		// System.out.println ( " -- productEdited " + productEdited + " --- values map
+		// logging.debug( " -- productEdited " + productEdited + " --- values map
 		// " + persist.getProductPropertyValuesMap(productEdited));
 
 		/*
@@ -3700,7 +3698,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (depots.size() > 1 && !persist.areDepotsSynchronous(depots)) {
 			JOptionPane.showMessageDialog(mainFrame, configed.getResourceValue("ConfigedMain.notSynchronous.text"), // "not
-																													// synchronous",
+					// synchronous",
 					configed.getResourceValue("ConfigedMain.notSynchronous.title"), JOptionPane.OK_OPTION);
 
 			return false;
@@ -4537,13 +4535,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// extra tasks not done by resetView
 	{
 		switch (viewIndex) {
-			case viewClients: {
-				checkErrorList();
-				// mainFrame.menuClientSelectionSetEnabled(true);
-				// mainFrame.deselectSetEnabled(true);
-				depotsList.setEnabled(true);
-				break;
-			}
+		case viewClients: {
+			checkErrorList();
+			// mainFrame.menuClientSelectionSetEnabled(true);
+			// mainFrame.deselectSetEnabled(true);
+			depotsList.setEnabled(true);
+			break;
+		}
 		}
 
 		return true;
@@ -4565,50 +4563,50 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		boolean result = true;
 
 		switch (viewIndex) {
-			case viewClients: {
-				break;
-			}
+		case viewClients: {
+			break;
+		}
 
-			case viewLocalbootProducts: {
-				result = setLocalbootProductsPage();
-				break;
-			}
+		case viewLocalbootProducts: {
+			result = setLocalbootProductsPage();
+			break;
+		}
 
-			case viewNetbootProducts: {
-				result = setNetbootProductsPage();
-				break;
-			}
+		case viewNetbootProducts: {
+			result = setNetbootProductsPage();
+			break;
+		}
 
-			case viewNetworkconfiguration: {
-				result = setNetworkconfigurationPage();
-				break;
-			}
+		case viewNetworkconfiguration: {
+			result = setNetworkconfigurationPage();
+			break;
+		}
 
-			case viewHardwareInfo: {
-				result = setHardwareInfoPage();
-				break;
-			}
+		case viewHardwareInfo: {
+			result = setHardwareInfoPage();
+			break;
+		}
 
-			case viewSoftwareInfo: {
-				result = setSoftwareInfoPage();
-				break;
-			}
+		case viewSoftwareInfo: {
+			result = setSoftwareInfoPage();
+			break;
+		}
 
-			case viewLog: {
-				result = setLogPage();
-				break;
-			}
+		case viewLog: {
+			result = setLogPage();
+			break;
+		}
 
-			case viewProductProperties: {
-				result = setProductPropertiesPage();
+		case viewProductProperties: {
+			result = setProductPropertiesPage();
 
-				break;
-			}
+			break;
+		}
 
-			case viewHostProperties: {
-				result = setHostPropertiesPage();
-				break;
-			}
+		case viewHostProperties: {
+			result = setHostPropertiesPage();
+			break;
+		}
 
 		}
 
@@ -4746,17 +4744,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				mainFrame.enableMenuItemsForClients(-1);
 
 			switch (editingTarget) {
-				case CLIENTS:
-					saveClientsViewIndex = viewIndex;
-					break;
+			case CLIENTS:
+				saveClientsViewIndex = viewIndex;
+				break;
 
-				case DEPOTS:
-					saveDepotsViewIndex = viewIndex;
-					break;
+			case DEPOTS:
+				saveDepotsViewIndex = viewIndex;
+				break;
 
-				case SERVER:
-					saveServerViewIndex = viewIndex;
-					break;
+			case SERVER:
+				saveServerViewIndex = viewIndex;
+				break;
 			}
 
 			if (result)
@@ -5543,19 +5541,19 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 			switch (returnedOption) {
-				case JOptionPane.YES_OPTION: {
-					result = 0;
-					break;
-				}
+			case JOptionPane.YES_OPTION: {
+				result = 0;
+				break;
+			}
 
-				case JOptionPane.NO_OPTION: {
-					result = 1;
-					break;
-				}
-				case JOptionPane.CANCEL_OPTION: {
-					result = 2;
-					break;
-				}
+			case JOptionPane.NO_OPTION: {
+				result = 1;
+				break;
+			}
+			case JOptionPane.CANCEL_OPTION: {
+				result = 2;
+				break;
+			}
 			}
 		}
 
@@ -6781,10 +6779,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 								String line = null;
 								while ((line = br.readLine()) != null) {
-									// System.out.println(getSelectedClients()[J] + " >" + line);
+									// logging.debug(getSelectedClients()[J] + " >" + line);
 									appendLog(selected + " on " + targetClient + " >" + line + "\n");
 								}
-								// System.out.println(getSelectedClients()[J] + " process exitValue " +
+								//logging.debug(getSelectedClients()[J] + " process exitValue " +
 								// proc.exitValue());
 							} catch (Exception ex) {
 								logging.error("Runtime error for command >>" + cmd + "<<, : " + ex, ex);

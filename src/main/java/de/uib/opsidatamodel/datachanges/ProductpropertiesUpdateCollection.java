@@ -55,8 +55,8 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 		if (result && (c.size() != clients.size())) {
 			result = false;
 
-			logging.error("list of data has size " + c.size()
-					+ " differs from  length of clients list  " + clients.size());
+			logging.error(
+					"list of data has size " + c.size() + " differs from  length of clients list  " + clients.size());
 
 		}
 
@@ -75,8 +75,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 
 				catch (ClassCastException ccex) {
 					result = false;
-					logging.debugOut(logging.LEVEL_ERROR, "wrong element type, found " + obj.getClass().getName()
-							+ ", expected a Map");
+					logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map");
 				}
 
 				result = add(new ProductpropertiesUpdate(persis, clients.get(i), productname, map));
@@ -116,7 +115,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 
 	@Override
 	public boolean add(Object obj) {
-		// System.out.println ("----------- adding to ProductPropertiesCollection " +
+		// logging.debug ("----------- adding to ProductPropertiesCollection " +
 		// obj + " of class " + obj.getClass().getName());
 		return super.add(obj);
 	}

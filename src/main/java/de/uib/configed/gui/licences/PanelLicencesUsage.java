@@ -24,8 +24,7 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
  * 
  * @author roeder
  */
-public class PanelLicencesUsage extends MultiTablePanel
-		implements ActionListener {
+public class PanelLicencesUsage extends MultiTablePanel implements ActionListener {
 	private JSplitPane splitPane;
 	private int splitPaneHMargin = 1;
 
@@ -75,10 +74,8 @@ public class PanelLicencesUsage extends MultiTablePanel
 	private void initSubPanel() {
 
 		panelLicencepools = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"),
-				tablesMaxWidth, false, 0,
-				false,
-				new int[] { PanelGenEditTable.POPUP_RELOAD });
+				configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), tablesMaxWidth, false, 0,
+				false, new int[] { PanelGenEditTable.POPUP_RELOAD });
 
 		panelGetAndAssignSL = new javax.swing.JPanel();
 		labelGetAndAssignSL = new javax.swing.JLabel(
@@ -96,36 +93,29 @@ public class PanelLicencesUsage extends MultiTablePanel
 		panelGetAndAssignSL.setLayout(panelGetAndAssignSLLayout);
 		panelGetAndAssignSLLayout.setHorizontalGroup(
 				panelGetAndAssignSLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(panelGetAndAssignSLLayout.createSequentialGroup()
-								.addGap(20, 20, 20)
+						.addGroup(panelGetAndAssignSLLayout.createSequentialGroup().addGap(20, 20, 20)
 								.addGroup(panelGetAndAssignSLLayout
 										.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 										.addGroup(panelGetAndAssignSLLayout.createSequentialGroup()
-												.addComponent(labelGetAndAssignSL)
-												.addGap(20, 20, 20)
+												.addComponent(labelGetAndAssignSL).addGap(20, 20, 20)
 												.addComponent(comboClient, javax.swing.GroupLayout.PREFERRED_SIZE, 263,
 														javax.swing.GroupLayout.PREFERRED_SIZE))
 										.addComponent(panelLicencepools, javax.swing.GroupLayout.Alignment.TRAILING, 20,
 												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 										.addComponent(buttonGet, buttonWidth, buttonWidth, buttonWidth))
 								.addGap(20, 20, 20)));
-		panelGetAndAssignSLLayout.setVerticalGroup(
-				panelGetAndAssignSLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelGetAndAssignSLLayout
-								.createSequentialGroup()
-								.addGap(5, 5, 5)
-								.addGroup(panelGetAndAssignSLLayout
-										.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(labelGetAndAssignSL, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addComponent(comboClient, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE))
-								.addGap(5, 5, 5)
-								.addComponent(panelLicencepools, lPoolHeight, lPoolHeight, Short.MAX_VALUE)
-								.addComponent(buttonGet, buttonHeight, buttonHeight, buttonHeight)
-								.addGap(5, 5, 5)));
+		panelGetAndAssignSLLayout.setVerticalGroup(panelGetAndAssignSLLayout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelGetAndAssignSLLayout.createSequentialGroup()
+						.addGap(5, 5, 5)
+						.addGroup(panelGetAndAssignSLLayout
+								.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(labelGetAndAssignSL, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(comboClient, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+						.addGap(5, 5, 5).addComponent(panelLicencepools, lPoolHeight, lPoolHeight, Short.MAX_VALUE)
+						.addComponent(buttonGet, buttonHeight, buttonHeight, buttonHeight).addGap(5, 5, 5)));
 
 	}
 
@@ -133,16 +123,12 @@ public class PanelLicencesUsage extends MultiTablePanel
 
 		// testfield = new JTextField(" ");
 
-		// System.out.println( "--------- init PanelLicencesUsage");
+		// logging.debug( "--------- init PanelLicencesUsage");
 
-		panelUsage = new PanelGenEditTable(configed.getResourceValue("ConfigedMain.Licences.SectiontitleUsage"),
-				0, true, 0, false,
-				new int[] {
-						PanelGenEditTable.POPUP_DELETE_ROW,
-						PanelGenEditTable.POPUP_SAVE,
-						PanelGenEditTable.POPUP_CANCEL,
-						PanelGenEditTable.POPUP_RELOAD
-				}, true // searchpane
+		panelUsage = new PanelGenEditTable(configed.getResourceValue("ConfigedMain.Licences.SectiontitleUsage"), 0,
+				true, 0, false, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
+						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
+				true // searchpane
 		);
 		panelUsage.setMasterFrame(de.uib.configed.Globals.frame1);
 		panelUsage.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -164,15 +150,15 @@ public class PanelLicencesUsage extends MultiTablePanel
 		this.setLayout(layout);
 		layout.setHorizontalGroup(
 				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-								.addContainerGap()
-								.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addContainerGap())
+						.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+								layout.createSequentialGroup().addContainerGap()
+										.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE,
+												Short.MAX_VALUE)
+										.addContainerGap())
 						.addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin));
 
-		layout.setVerticalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 		splitPane.setTopComponent(panelUsage);
 		splitPane.setBottomComponent(panelGetAndAssignSL);
 		setupSplit();

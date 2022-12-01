@@ -90,9 +90,7 @@ public class ActionProgress {
 		displayLabel2label.put("installing", "installing");
 		displayLabel2label.put("cached", "cached");
 
-		choiceLabels = new String[] {
-				label2displayLabel.get("none")
-		};
+		choiceLabels = new String[] { label2displayLabel.get("none") };
 
 	}
 
@@ -163,8 +161,7 @@ public class ActionProgress {
 
 	// getting instances
 	public static ActionProgress produceFromDisplayLabel(String display) {
-		return produceFromLabel(
-				displayLabel2label.get(display));
+		return produceFromLabel(displayLabel2label.get(display));
 	}
 
 	public static ActionProgress produceFromLabel(String label) {

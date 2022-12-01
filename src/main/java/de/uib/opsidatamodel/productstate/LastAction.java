@@ -116,9 +116,7 @@ public class LastAction {
 		displayLabel2label.put("once", "once");
 		displayLabel2label.put("custom", "custom");
 
-		choiceLabels = new String[] {
-				label2displayLabel.get("none")
-		};
+		choiceLabels = new String[] { label2displayLabel.get("none") };
 
 	}
 
@@ -189,8 +187,7 @@ public class LastAction {
 
 	// getting instances
 	public static LastAction produceFromDisplayLabel(String display) {
-		return produceFromLabel(
-				displayLabel2label.get(display));
+		return produceFromLabel(displayLabel2label.get(display));
 	}
 
 	public static LastAction produceFromLabel(String label) {

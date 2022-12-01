@@ -159,47 +159,40 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		setBackground(Globals.backLightBlue);
 		thisLayout = new GroupLayout((JComponent) this);
 		setLayout(thisLayout);
-		thisLayout.setHorizontalGroup(thisLayout.createSequentialGroup()
-				.addGap(lGap)
-				.addGroup(thisLayout.createParallelGroup()
-						.addGroup(thisLayout.createSequentialGroup()
-								.addGroup(thisLayout.createParallelGroup()
-										.addComponent(lbl_paramMethods, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lbl_paramFormats, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(Globals.minGapSize * 2)
-								.addGroup(thisLayout.createParallelGroup()
-										.addComponent(cb_parameter_methods, Globals.buttonWidth, Globals.buttonWidth,
-												3 * Globals.buttonWidth)
-										.addComponent(cb_parameter_formats, Globals.buttonWidth, Globals.buttonWidth,
-												3 * Globals.buttonWidth))
-								.addGap(Globals.minGapSize * 3, Globals.minGapSize * 3, Short.MAX_VALUE))
+		thisLayout.setHorizontalGroup(thisLayout.createSequentialGroup().addGap(lGap).addGroup(thisLayout
+				.createParallelGroup()
+				.addGroup(thisLayout.createSequentialGroup().addGroup(thisLayout.createParallelGroup()
+						.addComponent(lbl_paramMethods, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(lbl_paramFormats, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.minGapSize * 2)
+						.addGroup(thisLayout.createParallelGroup()
+								.addComponent(cb_parameter_methods, Globals.buttonWidth, Globals.buttonWidth,
+										3 * Globals.buttonWidth)
+								.addComponent(cb_parameter_formats, Globals.buttonWidth, Globals.buttonWidth,
+										3 * Globals.buttonWidth))
+						.addGap(Globals.minGapSize * 3, Globals.minGapSize * 3, Short.MAX_VALUE))
 
-						.addGroup(thisLayout.createSequentialGroup()
-								.addComponent(lbl_empty, 10, 10, Short.MAX_VALUE)
-								.addComponent(btn_test_param, de.uib.configed.Globals.iconWidth,
-										de.uib.configed.Globals.iconWidth, de.uib.configed.Globals.iconWidth)
-								.addComponent(btn_add_param, de.uib.configed.Globals.iconWidth,
-										de.uib.configed.Globals.iconWidth, de.uib.configed.Globals.iconWidth))
+				.addGroup(thisLayout.createSequentialGroup().addComponent(lbl_empty, 10, 10, Short.MAX_VALUE)
+						.addComponent(btn_test_param, de.uib.configed.Globals.iconWidth,
+								de.uib.configed.Globals.iconWidth, de.uib.configed.Globals.iconWidth)
+						.addComponent(btn_add_param, de.uib.configed.Globals.iconWidth,
+								de.uib.configed.Globals.iconWidth, de.uib.configed.Globals.iconWidth))
 
-				)
-				.addGap(rGap));
-		thisLayout.setVerticalGroup(thisLayout.createSequentialGroup()
-				.addGap(oGap * 2)
+		).addGap(rGap));
+		thisLayout.setVerticalGroup(thisLayout.createSequentialGroup().addGap(oGap * 2)
 				.addGroup(thisLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(cb_parameter_methods, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGroup(thisLayout.createSequentialGroup()
-								.addComponent(lbl_paramMethods, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)))
+						.addGroup(thisLayout.createSequentialGroup().addComponent(lbl_paramMethods,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
 				.addGap(Globals.minGapSize)
 				.addGroup(thisLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(cb_parameter_formats, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGroup(thisLayout.createSequentialGroup()
-								.addComponent(lbl_paramFormats, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)))
+						.addGroup(thisLayout.createSequentialGroup().addComponent(lbl_paramFormats,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
 				.addGap(Globals.minGapSize)
 				.addGroup(thisLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(btn_add_param, de.uib.configed.Globals.buttonHeight,
@@ -222,18 +215,17 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 				.equals(factory.getParameterHandler().method_interactiveElement)
 				|| ((String) cb_parameter_methods.getSelectedItem())
 						.equals(factory.getParameterHandler().method_optionSelection)) {
-			System.out.println("CREATING PARAM TEXT... ");
+			logging.debug("CREATING PARAM TEXT... ");
 			paramText = factory.getParameterHandler().replacement_default_1
 					+ factory.getParameterHandler().getMethodFromName((String) cb_parameter_methods.getSelectedItem())
 					+ factory.getParameterHandler().replacement_default_2;
-			System.out.println("CREATED PARAM TEXT: " + paramText);
+			logging.debug("CREATED PARAM TEXT: " + paramText);
 		} else
 			paramText = factory.getParameterHandler().replacement_default_1
 					+ factory.getParameterHandler().getMethodFromName((String) cb_parameter_methods.getSelectedItem())
-					+ factory.getParameterHandler().param_splitter_default
-					+ cb_parameter_formats.getSelectedItem()
+					+ factory.getParameterHandler().param_splitter_default + cb_parameter_formats.getSelectedItem()
 					+ factory.getParameterHandler().replacement_default_2;
-		System.out.println("PARAM TEXT: " + paramText);
+		logging.debug("PARAM TEXT: " + paramText);
 		try {
 			logging.info(this, "actionPerformed(testParamMethod) parameterText " + paramText);
 			String result = "echo \"{0}\"".replace("{0}", factory.getParameterHandler().testParameter(paramText));
@@ -241,8 +233,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 			String showThisText = "echo \"{0}\"".replace("{0}", paramText) + ":\n" + result;
 			if (result.equals(configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed")))
 				showThisText = configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed");
-			JOptionPane.showMessageDialog(main,
-					showThisText,
+			JOptionPane.showMessageDialog(main, showThisText,
 					configed.getResourceValue("SSHConnection.CommandControl.parameterTest.title"),
 					JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception ble) {
@@ -266,8 +257,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		} else
 			paramText = factory.getParameterHandler().replacement_default_1
 					+ factory.getParameterHandler().getMethodFromName((String) cb_parameter_methods.getSelectedItem())
-					+ factory.getParameterHandler().param_splitter_default
-					+ cb_parameter_formats.getSelectedItem()
+					+ factory.getParameterHandler().param_splitter_default + cb_parameter_formats.getSelectedItem()
 					+ factory.getParameterHandler().replacement_default_2;
 		try {
 			component.getDocument().insertString(component.getCaretPosition(), paramText, null);

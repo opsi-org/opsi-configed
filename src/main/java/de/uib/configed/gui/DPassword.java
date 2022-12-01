@@ -73,10 +73,8 @@ import de.uib.utilities.swing.ProgressBarPainter;
 import de.uib.utilities.thread.WaitCursor;
 
 /**
- * DPassword
- * description: A JDialog for logging in
- * copyright: Copyright (c) 2000-2016
- * organization: uib.de
+ * DPassword description: A JDialog for logging in copyright: Copyright (c)
+ * 2000-2016 organization: uib.de
  * 
  * @author D. Oertel; R. Roeder
  */
@@ -95,8 +93,7 @@ public class DPassword extends JDialog // implements Runnable
 	PersistenceController persis;
 	Cursor saveCursor;
 
-	class WaitInfo extends JFrame
-			implements de.uib.utilities.thread.WaitingSleeper {
+	class WaitInfo extends JFrame implements de.uib.utilities.thread.WaitingSleeper {
 		JLabel waitLabel;
 		JProgressBar waitingProgressBar;
 		long timeOutMillis;
@@ -118,7 +115,7 @@ public class DPassword extends JDialog // implements Runnable
 					}
 
 					setCursor(saveCursor);
-					// System.out.println ("set " + persi.getConnectionState());
+					// logging.debug ("set " + persi.getConnectionState());
 
 				}
 			});
@@ -146,8 +143,7 @@ public class DPassword extends JDialog // implements Runnable
 			JPanel cPanel = new JPanel();
 			GroupLayout cLayout = new GroupLayout(cPanel);
 			cPanel.setLayout(cLayout);
-			cLayout.setVerticalGroup(cLayout.createSequentialGroup()
-					.addGap(Globals.vGapSize)
+			cLayout.setVerticalGroup(cLayout.createSequentialGroup().addGap(Globals.vGapSize)
 					.addGroup(cLayout.createSequentialGroup()
 							.addGap(Globals.vGapSize / 2, Globals.vGapSize, Globals.vGapSize)
 							.addComponent(waitingProgressBar, Globals.progressBarHeight, Globals.progressBarHeight,
@@ -157,8 +153,7 @@ public class DPassword extends JDialog // implements Runnable
 									GroupLayout.PREFERRED_SIZE)
 							.addGap(Globals.vGapSize / 2, Globals.vGapSize, Globals.vGapSize))
 					.addGap(Globals.vGapSize / 2));
-			cLayout.setHorizontalGroup(cLayout.createSequentialGroup()
-					.addGap(Globals.hGapSize / 2)
+			cLayout.setHorizontalGroup(cLayout.createSequentialGroup().addGap(Globals.hGapSize / 2)
 					.addGroup(cLayout.createParallelGroup()
 							.addGroup(cLayout.createSequentialGroup()
 									.addGap(Globals.hGapSize, Globals.hGapSize, Short.MAX_VALUE)
@@ -201,9 +196,8 @@ public class DPassword extends JDialog // implements Runnable
 
 				MessageFormat messageFormatMainTitle = new MessageFormat(
 						configed.getResourceValue("ConfigedMain.appTitle"));
-				main.setAppTitle(
-						messageFormatMainTitle.format(
-								new Object[] { Globals.APPNAME, fieldHost.getSelectedItem(), fieldUser.getText() }));
+				main.setAppTitle(messageFormatMainTitle
+						.format(new Object[] { Globals.APPNAME, fieldHost.getSelectedItem(), fieldUser.getText() }));
 				this.setVisible(false);
 				main.loadDataAndGo();
 			} else {
@@ -219,12 +213,10 @@ public class DPassword extends JDialog // implements Runnable
 					MessageFormat messageFormatDialogContent = new MessageFormat(
 							configed.getResourceValue("DPassword.noConnectionMessageDialog.content"));
 
-					if (waitingTask != null
-							&& waitingTask.isTimeoutReached())
+					if (waitingTask != null && waitingTask.isTimeoutReached())
 						messageFormatDialogContent = new MessageFormat("Timeout in connecting");
 
-					JOptionPane.showMessageDialog(
-							this,
+					JOptionPane.showMessageDialog(this,
 							messageFormatDialogContent.format(
 									new Object[] { PersistenceControllerFactory.getConnectionState().getMessage() }),
 							configed.getResourceValue("DPassword.noConnectionMessageDialog.title"),
@@ -289,8 +281,7 @@ public class DPassword extends JDialog // implements Runnable
 
 	JLabel jLabelVersion = new JLabel();
 	JLabel jLabelJavaVersion = new JLabel();
-	JLabel jLabelLabelJavaVersion = new JLabel(
-			configed.getResourceValue("DPassword.jdkVersionBased"));
+	JLabel jLabelLabelJavaVersion = new JLabel(configed.getResourceValue("DPassword.jdkVersionBased"));
 
 	JLabel jLabelUser = new JLabel();
 	JTextField fieldUser = new JTextField();
@@ -373,11 +364,7 @@ public class DPassword extends JDialog // implements Runnable
 		this(frame, "", false, main);
 	}
 
-	static void addComponent(Container cont,
-			GridBagLayout gbl,
-			Component c,
-			int x, int y,
-			int width, int height,
+	static void addComponent(Container cont, GridBagLayout gbl, Component c, int x, int y, int width, int height,
 			double weightx, double weighty) {
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.BOTH;
@@ -457,7 +444,7 @@ public class DPassword extends JDialog // implements Runnable
 		fieldUser.setText(TESTUSER);
 		fieldUser.addKeyListener(myKeyListener);
 		// fieldUser.setText(System.getProperty("user.name"));
-		// System.out.println(passwordField.getPassword());
+		// logging.debug(passwordField.getPassword());
 		fieldUser.setMargin(new Insets(0, 3, 0, 3));
 
 		jLabelPassword.setText(configed.getResourceValue("DPassword.jLabelPassword"));
@@ -486,8 +473,7 @@ public class DPassword extends JDialog // implements Runnable
 				// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission =
 				de.uib.opsicommand.JSONthroughHTTP.compressTransmission = (e.getStateChange() == ItemEvent.SELECTED);
 
-				logging.debug(this, "itemStateChanged " + de.uib.opsicommand.JSONthroughHTTP.gzipTransmission);
-				;
+				logging.debug(this, "itemStateChanged " + de.uib.opsicommand.JSONthroughHTTP.gzipTransmission);;
 			}
 		});
 
@@ -538,12 +524,10 @@ public class DPassword extends JDialog // implements Runnable
 
 		jPanelParameters1 = new PanelLinedComponents(new JComponent[] {
 				// checkTrySSH, checkGzip
-				checkTrySSH, checkCompression
-		});
+				checkTrySSH, checkCompression });
 		jPanelParameters2 = new PanelLinedComponents(new JComponent[] {
 				new JLabel(configed.getResourceValue("DPassword.pullReachableInfo")), fieldRefreshMinutes,
-				new JLabel(configed.getResourceValue("DPassword.pullReachableInfoMinutes"))
-		});
+				new JLabel(configed.getResourceValue("DPassword.pullReachableInfoMinutes")) });
 
 		jPanelButtons.setLayout(flowLayoutButtons);
 
@@ -595,79 +579,61 @@ public class DPassword extends JDialog // implements Runnable
 				.addGap(Globals.lineHeight)
 				.addComponent(jLabelHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(2)
-				.addComponent(fieldHost, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+				.addGap(2).addComponent(fieldHost, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
 				.addGap(Globals.lineHeight)
 				.addComponent(jLabelUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(2)
-				.addComponent(fieldUser, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-				.addGap(2)
+				.addGap(2).addComponent(fieldUser, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight).addGap(2)
 				.addComponent(jLabelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(2)
-				.addComponent(passwordField, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+				.addGap(2).addComponent(passwordField, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
 				.addGap(Globals.lineHeight)
 				.addComponent(jPanelParameters1, (int) (1.2 * Globals.lineHeight), (int) (1.2 * Globals.lineHeight),
 						(int) (1.2 * Globals.lineHeight))
 				// .addComponent(jPanelParameters2, (int) (1.2 * Globals.lineHeight), (int) (1.2
 				// * Globals.lineHeight), (int) (1.2 * Globals.lineHeight))
-				.addGap(Globals.lineHeight)
-				.addComponent(jPanelButtons, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+				.addGap(Globals.lineHeight).addComponent(jPanelButtons, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
-		gpl.setHorizontalGroup(gpl.createParallelGroup()
-				.addGroup(gpl.createSequentialGroup()
-						.addGap(Globals.hGapSize, 40, Short.MAX_VALUE)
-						.addComponent(jLabelVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, 40, Short.MAX_VALUE))
-				.addGroup(gpl.createSequentialGroup()
-						.addGap(Globals.hGapSize, 40, Short.MAX_VALUE)
-						// .addGap(Globals.hGapSize)
-						.addComponent(jLabelLabelJavaVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2)
-						.addComponent(jLabelJavaVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, 40, Short.MAX_VALUE))
-				.addGroup(gpl.createSequentialGroup()
-						.addGap(Globals.vGapSize)
-						.addComponent(jLabelHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGroup(gpl.createSequentialGroup()
-						.addComponent(fieldHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
-				.addGroup(gpl.createSequentialGroup()
-						.addGap(Globals.vGapSize)
-						.addComponent(jLabelUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGroup(gpl.createSequentialGroup()
-						.addComponent(fieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
-				.addGroup(gpl.createSequentialGroup()
-						.addGap(Globals.vGapSize)
-						.addComponent(jLabelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGroup(gpl.createSequentialGroup()
-						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
-				.addGroup(gpl.createSequentialGroup()
-						.addGap(Globals.vGapSize)
-						.addComponent(jPanelParameters1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.vGapSize))
-				/*
-				 * .addGroup(gpl.createSequentialGroup()
-				 * .addGap(Globals.vGapSize)
-				 * .addComponent(jPanelParameters2, GroupLayout.PREFERRED_SIZE,
-				 * GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				 * )
-				 */
-				.addGroup(gpl.createSequentialGroup()
-						.addGap(Globals.vGapSize)
-						.addComponent(jPanelButtons, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)));
+		gpl.setHorizontalGroup(
+				gpl.createParallelGroup()
+						.addGroup(gpl.createSequentialGroup().addGap(Globals.hGapSize, 40, Short.MAX_VALUE)
+								.addComponent(jLabelVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.hGapSize, 40, Short.MAX_VALUE))
+						.addGroup(gpl.createSequentialGroup().addGap(Globals.hGapSize, 40, Short.MAX_VALUE)
+								// .addGap(Globals.hGapSize)
+								.addComponent(jLabelLabelJavaVersion, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.hGapSize / 2)
+								.addComponent(jLabelJavaVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.hGapSize, 40, Short.MAX_VALUE))
+						.addGroup(gpl.createSequentialGroup().addGap(Globals.vGapSize).addComponent(jLabelHost,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gpl.createSequentialGroup().addComponent(fieldHost, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+						.addGroup(gpl.createSequentialGroup().addGap(Globals.vGapSize).addComponent(jLabelUser,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gpl.createSequentialGroup().addComponent(fieldUser, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+						.addGroup(gpl.createSequentialGroup().addGap(Globals.vGapSize).addComponent(jLabelPassword,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gpl.createSequentialGroup().addComponent(passwordField, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+						.addGroup(gpl.createSequentialGroup().addGap(Globals.vGapSize)
+								.addComponent(jPanelParameters1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										Short.MAX_VALUE)
+								.addGap(Globals.vGapSize))
+						/*
+						 * .addGroup(gpl.createSequentialGroup()
+						 * .addGap(Globals.vGapSize)
+						 * .addComponent(jPanelParameters2, GroupLayout.PREFERRED_SIZE,
+						 * GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						 * )
+						 */
+						.addGroup(gpl.createSequentialGroup().addGap(Globals.vGapSize).addComponent(jPanelButtons,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
 
 		this.getContentPane().add(panel);
 
@@ -698,7 +664,7 @@ public class DPassword extends JDialog // implements Runnable
 
 		String strOS = System.getProperty("os.name");
 		String osVersion = System.getProperty("os.version");
-		logging.debugOut(3, " OS " + strOS + "  Version " + osVersion);
+		logging.notice(" OS " + strOS + "  Version " + osVersion);
 		String host = TESTSERVER; // "";
 		/*
 		 * if (strOS.startsWith("Windows") && (osVersion.compareToIgnoreCase("4.0") >=
@@ -718,7 +684,7 @@ public class DPassword extends JDialog // implements Runnable
 
 		pack();
 
-		// System.out.println(" ---- host:" + host + "--");
+		// logging.debug(" ---- host:" + host + "--");
 		if (host.equals("")) {
 			setHost("localhost");
 			fieldHost.requestFocus();
@@ -805,9 +771,7 @@ public class DPassword extends JDialog // implements Runnable
 		// + ", " + String.valueOf( passwordField.getPassword())
 		);
 
-		if (waitingTask != null
-				&&
-				!waitingTask.isReady()) {
+		if (waitingTask != null && !waitingTask.isReady()) {
 
 			logging.info(this, "old waiting task not ready");
 			return;
@@ -829,8 +793,7 @@ public class DPassword extends JDialog // implements Runnable
 		final Rectangle dim = de.uib.utilities.Globals.buildLocationOnDefaultDisplay(waitInfo.getSize().width,
 				waitInfo.getSize().height,
 
-				getSize().width + 80,
-				getSize().height + 40
+				getSize().width + 80, getSize().height + 40
 		// de.uib.utilities.Globals.smallFramesDistanceFromLeft,
 		// de.uib.utilities.Globals.smallFramesDistanceFromTop
 		);
@@ -915,8 +878,7 @@ public class DPassword extends JDialog // implements Runnable
 			long waited = 0;
 
 			while ((PersistenceControllerFactory.getConnectionState() == ConnectionState.ConnectionUndefined)
-					&&
-					waited < TIMEOUT_MS) {
+					&& waited < TIMEOUT_MS) {
 				try {
 					Thread.sleep(interval);
 					waited = waited + interval;

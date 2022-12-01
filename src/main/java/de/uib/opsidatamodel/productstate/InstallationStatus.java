@@ -115,9 +115,7 @@ public class InstallationStatus {
 		displayLabel2label.put("unknown", "unknown");
 		// displayLabel2label.put("installing", "installing");
 
-		choiceLabels = new String[] {
-				label2displayLabel.get("not_installed"),
-				label2displayLabel.get("installed"),
+		choiceLabels = new String[] { label2displayLabel.get("not_installed"), label2displayLabel.get("installed"),
 				label2displayLabel.get("unknown")
 				// label2displayLabel.get("failed"),
 				// label2displayLabel.get(Globals.NOVALIDSTATEstring)
@@ -211,8 +209,7 @@ public class InstallationStatus {
 
 	// getting instances
 	public static InstallationStatus produceFromDisplayLabel(String display) {
-		return produceFromLabel(
-				displayLabel2label.get(display));
+		return produceFromLabel(displayLabel2label.get(display));
 	}
 
 	public static InstallationStatus produceFromLabel(String label) {
@@ -224,8 +221,8 @@ public class InstallationStatus {
 		if (!labels.contains(label))
 			return new InstallationStatus(INVALID);
 
-		// System.out.println(" -------- label " + label + " --- val " + getVal(label));
-		// System.out.println(" -------- display " + new
+		// logging.debug(" -------- label " + label + " --- val " + getVal(label));
+		// logging.debug(" -------- display " + new
 		// InstallationStatus(getVal(label)));
 
 		return new InstallationStatus(getVal(label));
@@ -243,7 +240,7 @@ public class InstallationStatus {
 	}
 
 	public static void main(String[] args) {
-		// System.out.println(" test InstallationStatus.java");
+		// logging.debug(" test InstallationStatus.java");
 		checkCollections();
 		Iterator iter = states.iterator();
 
@@ -252,7 +249,7 @@ public class InstallationStatus {
 		while (iter.hasNext()) {
 			i++;
 			int state = (Integer) iter.next();
-			// System.out.println("state " + i + " : " + state + " label " +
+			// logging.debug("state " + i + " : " + state + " label " +
 			// getLabel(state));
 		}
 	}

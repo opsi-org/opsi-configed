@@ -24,8 +24,7 @@ import de.uib.utilities.DataChangedSubject;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.table.ListCellOptions;
 
-public class MapTableModel extends javax.swing.table.AbstractTableModel
-		implements DataChangedSubject {
+public class MapTableModel extends javax.swing.table.AbstractTableModel implements DataChangedSubject {
 
 	protected Vector<DataChangedObserver> observers;
 
@@ -124,8 +123,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel
 
 		for (String key : keys) {
 			if (key.startsWith(de.uib.opsidatamodel.permission.UserConfig.CONFIGKEY_STR_USER)
-					&&
-					key.endsWith(de.uib.opsidatamodel.permission.UserConfig.MODIFICATION_INFO_KEY)) {
+					&& key.endsWith(de.uib.opsidatamodel.permission.UserConfig.MODIFICATION_INFO_KEY)) {
 				modifiedKey = key;
 				break;
 			}
@@ -156,8 +154,8 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel
 	}
 
 	/**
-	 * set collection (e.g. of clients) where each member stores the changed data;
-	 * we assume that it is a collection of maps
+	 * set collection (e.g. of clients) where each member stores the changed
+	 * data; we assume that it is a collection of maps
 	 * 
 	 * @param Collection data
 	 */
@@ -280,14 +278,13 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel
 	public String getColumnName(int col) {
 		String result = "";
 		switch (col) {
-			case 0:
-				result = configed.getResourceValue("EditMapPanel.ColumnHeaderName");
-				break;
-			case 1:
-				result = configed.getResourceValue("EditMapPanel.ColumnHeaderValue");
-				break;
-		}
-		;
+		case 0:
+			result = configed.getResourceValue("EditMapPanel.ColumnHeaderName");
+			break;
+		case 1:
+			result = configed.getResourceValue("EditMapPanel.ColumnHeaderValue");
+			break;
+		};
 
 		return result;
 
@@ -313,48 +310,48 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel
 			return result;
 
 		switch (col) {
-			case 0:
-				result = key;
-				break;
-			case 1:
-				result = data.get(key);
-				/*
-				 * if (key.equals ("test456"))
-				 * {
-				 * logging.info(this, " result for " + key + ": " + result + " is null  " +
-				 * (result == null)
-				 * + " class " + result.getClass() + " equals null " + result.equals( null )
-				 * + " String value equals \"null\" " + (result.toString()).equals("null"));
-				 * if (result != null && result instanceof java.util.List)
-				 * {
-				 * logging.info(this, " result size for " + key + " " +
-				 * ((java.util.List)(result)).size());
-				 * if ( ((java.util.List)(result)).size() > 0)
-				 * logging.info(this, " result.get(0) for " + key + " is null " +
-				 * (((java.util.List)(result)).get(0) == null));
-				 * }
-				 * 
-				 * logging.info(this, " optionsMap for " + key + ": " + optionsMap.get(key) );
-				 * logging.info(this, " optionsMap for " + key + ": " +
-				 * optionsMap.get(key).getDefaultValues() );
-				 * }
-				 */
+		case 0:
+			result = key;
+			break;
+		case 1:
+			result = data.get(key);
+			/*
+			 * if (key.equals ("test456"))
+			 * {
+			 * logging.info(this, " result for " + key + ": " + result + " is null  " +
+			 * (result == null)
+			 * + " class " + result.getClass() + " equals null " + result.equals( null )
+			 * + " String value equals \"null\" " + (result.toString()).equals("null"));
+			 * if (result != null && result instanceof java.util.List)
+			 * {
+			 * logging.info(this, " result size for " + key + " " +
+			 * ((java.util.List)(result)).size());
+			 * if ( ((java.util.List)(result)).size() > 0)
+			 * logging.info(this, " result.get(0) for " + key + " is null " +
+			 * (((java.util.List)(result)).get(0) == null));
+			 * }
+			 * 
+			 * logging.info(this, " optionsMap for " + key + ": " + optionsMap.get(key) );
+			 * logging.info(this, " optionsMap for " + key + ": " +
+			 * optionsMap.get(key).getDefaultValues() );
+			 * }
+			 */
 
-				// if there is no true result left (probably because of eliminating the key) we
-				// deliver the default value
-				// logging.info(this, "getValueAt " + row + ", " + col + " result was " + result
-				// );
-				if (result != null && result instanceof java.util.List) {
-					java.util.List li = (java.util.List) result;
-					if (li.size() > 0 && li.get(0) == null && optionsMap != null) {
-						result = defaultData.get(key);
-						logging.info(this,
-								"getValueAt " + row + ", " + col + " result corrected for key  " + key + ": " + result);
-					}
+			// if there is no true result left (probably because of eliminating the key) we
+			// deliver the default value
+			// logging.info(this, "getValueAt " + row + ", " + col + " result was " + result
+			// );
+			if (result != null && result instanceof java.util.List) {
+				java.util.List li = (java.util.List) result;
+				if (li.size() > 0 && li.get(0) == null && optionsMap != null) {
+					result = defaultData.get(key);
+					logging.info(this,
+							"getValueAt " + row + ", " + col + " result corrected for key  " + key + ": " + result);
 				}
+			}
 
-				break;
-			// data.get (keys.get(row)).toString(); break;
+			break;
+		// data.get (keys.get(row)).toString(); break;
 		}
 
 		if (result == null)
@@ -369,10 +366,10 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel
 	 */
 	public Class getColumnClass(int c) {
 		switch (c) {
-			case 0:
-				return "".getClass();
-			case 1:
-				return java.util.List.class;
+		case 0:
+			return "".getClass();
+		case 1:
+			return java.util.List.class;
 		}
 		return Object.class;
 		// return getValueAt(0, c).getClass();
@@ -392,12 +389,9 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel
 		if (col < 1) {
 			return false;
 		} else {
-			if (keysOfReadOnlyEntries != null
-					&& keysOfReadOnlyEntries.contains(keys.get(row))
-					||
-					// (keys.get(row)).endsWith("modified")
-					editDenier != null
-							&& editDenier.apply(keys.get(row)))
+			if (keysOfReadOnlyEntries != null && keysOfReadOnlyEntries.contains(keys.get(row)) ||
+			// (keys.get(row)).endsWith("modified")
+					editDenier != null && editDenier.apply(keys.get(row)))
 				return false;
 			else
 				return true;
@@ -405,8 +399,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel
 	}
 
 	void weHaveChangedStoredMaps() {
-		if (!datachanged
-				|| updateCollection.size() == 0 // updateCollection has been emptied since last change
+		if (!datachanged || updateCollection.size() == 0 // updateCollection has been emptied since last change
 		) {
 			datachanged = true;
 			// tell it to all registered DataChangedObservers
@@ -493,9 +486,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel
 			return;
 		}
 
-		logging.info(this, "Setting value in table at " + row + "," + col
-				+ " to " + value
-				+ " (an instance of "
+		logging.info(this, "Setting value in table at " + row + "," + col + " to " + value + " (an instance of "
 				+ value.getClass() + ")");
 		// data[row][col] = value; //this is the trivial version
 		// actualPropName = (String) value;
@@ -543,9 +534,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel
 						// + ", " + rowModiTime + ", " + row);
 
 						if (rowModiTime > -1 && row != rowModiTime) {
-							setValueAt(
-									de.uib.configed.Globals.getNowTimeListValue(),
-									rowModiTime, 1);
+							setValueAt(de.uib.configed.Globals.getNowTimeListValue(), rowModiTime, 1);
 						}
 
 					}
@@ -556,12 +545,9 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel
 	}
 
 	/**
-	 * writing a new value into the row with a certain key
-	 * 
-	 * errors occur if the key is not among the given property names, or if a list
-	 * of allowed values is given and
-	 * the value is not among them
-	 * <br />
+	 * writing a new value into the row with a certain key errors occur if the
+	 * key is not among the given property names, or if a list of allowed values
+	 * is given and the value is not among them <br />
 	 * 
 	 * @param String key
 	 * @param Object value
@@ -576,15 +562,11 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel
 			return;
 		}
 
-		if (optionsMap.get(key) != null
-				&&
-				(optionsMap.get(key)) instanceof java.util.List) {
+		if (optionsMap.get(key) != null && (optionsMap.get(key)) instanceof java.util.List) {
 			java.util.List valuelist = (java.util.List) optionsMap.get(key);
 
-			if (valuelist.size() > 0
-					&&
-					valuelist.indexOf(value) == -1) {
-				// System.out.println("optionsMap.get(key) " + optionsMap.get(key));
+			if (valuelist.size() > 0 && valuelist.indexOf(value) == -1) {
+				// logging.debug("optionsMap.get(key) " + optionsMap.get(key));
 				logging.error("EditMapPanel: value not allowed: " + value);
 				return;
 			}

@@ -28,9 +28,8 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	private Vector<String> unfilteredD;
 	protected int[] unfilteredSelection;
 
-	public SearchTargetModelFromJList(
-			JList<String> jList,
-			final Vector<String> values, final Vector<String> descriptions) {
+	public SearchTargetModelFromJList(JList<String> jList, final Vector<String> values,
+			final Vector<String> descriptions) {
 
 		this.jList = jList;
 		unfilteredV = values;
@@ -133,7 +132,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 		jList.addSelectionInterval(row, row);
 		// jList.addSelectionInterval(row +2 , row + 2); //test
-		// System.out.println(" --- view row selected " + row);
+		// logging.debug(" --- view row selected " + row);
 		ensureRowIsVisible(row);
 	}
 
