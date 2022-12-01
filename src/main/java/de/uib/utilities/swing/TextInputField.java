@@ -10,8 +10,8 @@ package de.uib.utilities.swing;
 import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -22,8 +22,8 @@ public class TextInputField extends JPanel
 {
 
 	protected JTextField textfield;
-	protected JComboBox combo;
-	protected Vector<String> proposedValues;
+	protected JComboBox<String> combo;
+	protected ArrayList<String> proposedValues;
 	private Character[] orderedBeginChars;
 
 	public enum InputType {
@@ -55,7 +55,7 @@ public class TextInputField extends JPanel
 		this(initialValue, null);
 	}
 
-	public TextInputField(String initialValue, final Vector<String> proposedValues) {
+	public TextInputField(String initialValue, final ArrayList<String> proposedValues) {
 		super(new BorderLayout());
 
 		String initValue = initialValue;
@@ -63,8 +63,7 @@ public class TextInputField extends JPanel
 		inputType = InputType.VALUELIST;
 
 		if (proposedValues == null) {
-			this.proposedValues = new Vector<String>();
-			;
+			this.proposedValues = new ArrayList<String>();;
 
 			if (initialValue == null) {
 				inputType = InputType.DATE;
@@ -106,7 +105,7 @@ public class TextInputField extends JPanel
 		}
 
 		// combo = new JComboBoxSearching(this.proposedValues);
-		combo = new JComboBox(this.proposedValues);
+		combo = new JComboBox<>(this.proposedValues.toArray(new String[0]));
 		// logging.debug(this, "class of editor component "
 		// + combo.getEditor().getEditorComponent().getClass());
 
@@ -227,8 +226,7 @@ public class TextInputField extends JPanel
 
 	}
 
-	public void addValueChangeListener(
-			de.uib.utilities.observer.swing.ValueChangeListener listener) {
+	public void addValueChangeListener(de.uib.utilities.observer.swing.ValueChangeListener listener) {
 		combo.addActionListener(listener);
 		textfield.getDocument().addDocumentListener(listener);
 	}

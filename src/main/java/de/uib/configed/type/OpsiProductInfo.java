@@ -12,7 +12,7 @@ package de.uib.configed.type;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utilities.logging.logging;
@@ -69,11 +69,9 @@ public class OpsiProductInfo extends OpsiPackage {
 		}
 
 		hasUserLoginScript = (m.get(SERVICEkeyUSER_LOGIN_SCRIPT) != null
-				&&
-				!("" + m.get(SERVICEkeyUSER_LOGIN_SCRIPT)).equals(""));
+				&& !("" + m.get(SERVICEkeyUSER_LOGIN_SCRIPT)).equals(""));
 
-		logging.debug(this, "created with description " + description + "\n,"
-				+ " possible actions " + possibleActions
+		logging.debug(this, "created with description " + description + "\n," + " possible actions " + possibleActions
 				+ ", hasUserLoginScript " + hasUserLoginScript);
 		// System.exit(0);
 
@@ -106,20 +104,15 @@ public class OpsiProductInfo extends OpsiPackage {
 			return priority;
 	}
 
-	public Vector<Object> appendValues(Vector<Object> row) {
+	public ArrayList<Object> appendValues(ArrayList<Object> row) {
 		row.add(getProductName());
 		return row;
 	}
 
 	@Override
 	public String toString() {
-		return getClass().getName()
-				+ "{productId=" + productId
-				+ ";productName=" + productName + ";description=" + description
-				+ ";possibleActions" + possibleActions + ";hasUserLoginScript=" + hasUserLoginScript
-				+ ";priority=" + priority
-				+ ";description=" + description
-				+ ";advice=" + advice
-				+ "}";
+		return getClass().getName() + "{productId=" + productId + ";productName=" + productName + ";description="
+				+ description + ";possibleActions" + possibleActions + ";hasUserLoginScript=" + hasUserLoginScript
+				+ ";priority=" + priority + ";description=" + description + ";advice=" + advice + "}";
 	}
 }

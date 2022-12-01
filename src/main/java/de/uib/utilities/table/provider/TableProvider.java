@@ -8,18 +8,18 @@
 
 package de.uib.utilities.table.provider;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public interface TableProvider {
 
 	void setTableSource(TableSource source);
 
-	Vector<String> getColumnNames();
+	ArrayList<String> getColumnNames();
 
-	Vector<String> getClassNames();
+	ArrayList<String> getClassNames();
 
 	// should deliver a working copy of the data
-	Vector<Vector<Object>> getRows();
+	ArrayList<ArrayList<Object>> getRows();
 
 	// should set the working copy as new original data
 	void setWorkingCopyAsNewOriginalRows();
@@ -33,6 +33,6 @@ public interface TableProvider {
 	// should initiate reloading the metadata
 	void structureChanged();
 
-	// yields a column as ordered vector
-	Vector<String> getOrderedColumn(int col, boolean empty_allowed);
+	// yields a column as ordered ArrayList
+	ArrayList<String> getOrderedColumn(int col, boolean empty_allowed);
 }

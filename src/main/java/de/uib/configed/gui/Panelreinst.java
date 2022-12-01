@@ -11,7 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -26,8 +26,7 @@ import de.uib.configed.Globals;
 //import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.swing.SurroundPanel;
 
-public class Panelreinst extends JPanel
-		implements KeyListener, MouseListener, ActionListener {
+public class Panelreinst extends JPanel implements KeyListener, MouseListener, ActionListener {
 	final String callReinstmgr = "reinstmgr";
 	// private String unsetCommand = "";
 	// private String installCommand = "";
@@ -138,11 +137,8 @@ public class Panelreinst extends JPanel
 
 		textOut.setLineWrap(false);
 		textOut.setEditable(false);
-		panelContent.add(new SurroundPanel(
-				new JScrollPane(textOut,
-						JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-						JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS)),
-				BorderLayout.SOUTH);
+		panelContent.add(new SurroundPanel(new JScrollPane(textOut, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS)), BorderLayout.SOUTH);
 
 		add(panelContent);
 	}
@@ -171,9 +167,9 @@ public class Panelreinst extends JPanel
 
 	}
 
-	public void startFor(String pcName, Vector installImages) {
+	public void startFor(String pcName, ArrayList installImages) {
 		this.pcName = pcName;
-		comboImages.setModel(new DefaultComboBoxModel(installImages));
+		comboImages.setModel(new DefaultComboBoxModel<>(installImages.toArray()));
 		String installCommand = callReinstmgr;
 		fieldInstallCommand.setText(installCommand);
 		String unsetCommand = callReinstmgr + " unset " + pcName;

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -32,11 +31,11 @@ import de.uib.utilities.table.TableModelFilterCondition;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
+import de.uib.utilities.table.updates.MapBasedUpdater;
+import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.SelectionMemorizerUpdateController;
 import de.uib.utilities.table.updates.StrList2BooleanFunction;
-import de.uib.utilities.table.updates.MapItemsUpdateController;
-import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
 public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
@@ -49,8 +48,8 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 	TableModelFilterCondition windowsSoftwareFilterConditon_showOnlySelected; // we replace the filter from
 																				// GenTableModel
-	// static String labelWindowsSoftwareFilterCondition_showOnlySelected =
-	// "showOnlySelected";
+																				// static String labelWindowsSoftwareFilterCondition_showOnlySelected =
+																				// "showOnlySelected";
 	TableModelFilterCondition windowsSoftwareFilterCondition_dontShowAssociatedToOtherPool;
 	static String labelWindowsSoftwareFilterCondition_dontShowAssociatedToOtherPool = "restrictToNonAssociated";
 
@@ -174,7 +173,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 				rowMap.put("ID", ID);
 
-				Vector<String> identKeys = de.uib.configed.type.SWAuditEntry.KEYS_FOR_IDENT;
+				ArrayList<String> identKeys = de.uib.configed.type.SWAuditEntry.KEYS_FOR_IDENT;
 				if (rowValues.length != identKeys.size())
 					logging.warning(this, "illegal ID " + ID);
 				else {
@@ -433,14 +432,14 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 	public void init() {
 		updateCollection = new TableUpdateCollection();
 
-		Vector<String> columnNames;
-		Vector<String> classNames;
+		ArrayList<String> columnNames;
+		ArrayList<String> classNames;
 
 		// --- panelLicencepools
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryLicencepools = new MapTableUpdateItemFactory(modelLicencepools,
@@ -519,10 +518,10 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 				}, updateCollection));
 
 		// --- panelProductId2LPool
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("productId");
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryProductId2LPool = new MapTableUpdateItemFactory(modelProductId2LPool,
@@ -581,7 +580,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		JComboBox<String> comboLP1 = new JComboBox<>();
 		comboLP1.setFont(Globals.defaultFontBig);
 		col.setCellEditor(new de.uib.utilities.table.gui.AdaptingCellEditor(comboLP1, (row, column) -> {
-			return new DefaultComboBoxModel<>(new Vector<>(persist.getProductIds()));
+			return new DefaultComboBoxModel<>(persist.getProductIds().toArray());
 		}));
 
 		// updates
@@ -602,17 +601,17 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 		// --- panelRegisteredSoftware
 
-		columnNames = new Vector<>(de.uib.configed.type.SWAuditEntry.getDisplayKeys());
+		columnNames = new ArrayList<>(de.uib.configed.type.SWAuditEntry.getDisplayKeys());
 		columnNames.add(colMarkCursorRow, "CURSOR"); // introducing a column for displaying the cursor row
 
 		columnNames.remove("licenseKey");
 
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		for (int i = 0; i <= columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
-		classNames.setElementAt("java.lang.Boolean", colMarkCursorRow); // introducing a column for displaying the
-																		// cursor row
+		classNames.set(colMarkCursorRow, "java.lang.Boolean"); // introducing a column for displaying the
+																// cursor row
 
 		logging.info(this, "panelRegisteredSoftware constructed with (size) cols " + "(" + columnNames.size() + ") "
 				+ columnNames);
@@ -1041,16 +1040,16 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 		if (oldDirection != direction) {
 			switch (direction) {
-				case POOL2SOFTWARE:
-					thePanel.panelRegisteredSoftware.getTheSearchpane().showFilterIcon(true);
-					// thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(true);
-					break;
+			case POOL2SOFTWARE:
+				thePanel.panelRegisteredSoftware.getTheSearchpane().showFilterIcon(true);
+				// thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(true);
+				break;
 
-				case SOFTWARE2POOL:
-					thePanel.panelRegisteredSoftware.getTheSearchpane().showFilterIcon(false);
-					resetCounters(null);
-					thePanel.fieldCountAssignedInEditing.setText("");
-					break;
+			case SOFTWARE2POOL:
+				thePanel.panelRegisteredSoftware.getTheSearchpane().showFilterIcon(false);
+				resetCounters(null);
+				thePanel.fieldCountAssignedInEditing.setText("");
+				break;
 			}
 
 			logging.info(this, "switched to " + direction);

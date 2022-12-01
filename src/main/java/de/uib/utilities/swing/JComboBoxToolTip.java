@@ -3,7 +3,7 @@ package de.uib.utilities.swing;
 import java.awt.Component;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
@@ -29,17 +29,16 @@ public class JComboBoxToolTip extends javax.swing.JComboBox {
 
 	}
 
-	Vector<String> tooltips = new Vector<String>();
+	ArrayList<String> tooltips = new ArrayList<String>();
 
 	protected class NewComboBoxRenderer extends BasicComboBoxRenderer {
-		public Component getListCellRendererComponent(JList list, Object value,
-				int index, boolean isSelected, boolean cellHasFocus) {
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+				boolean cellHasFocus) {
 			if (isSelected) {
 				setBackground(listBackgroundColorSelected); // list.getSelectionBackground());
 				setForeground(listForegroundColor); // list.getSelectionForeground());
 				logging.debug(this, "index, tooltips " + index + ", " + tooltips);
-				if (-1 < index
-						&& index < tooltips.size() // we had an error only on linux with openjdk 8
+				if (-1 < index && index < tooltips.size() // we had an error only on linux with openjdk 8
 				) {
 					list.setToolTipText(tooltips.get(index));
 				}
@@ -76,7 +75,7 @@ public class JComboBoxToolTip extends javax.swing.JComboBox {
 
 		this.removeAllItems();
 
-		tooltips = new Vector<String>();
+		tooltips = new ArrayList<String>();
 
 		if (addE) {
 			addItem("");

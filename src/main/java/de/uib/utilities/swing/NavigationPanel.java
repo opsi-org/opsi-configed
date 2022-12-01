@@ -2,7 +2,7 @@ package de.uib.utilities.swing;
 
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -11,15 +11,14 @@ import javax.swing.JPanel;
 import de.uib.utilities.Globals;
 import de.uib.utilities.logging.logging;
 
-public class NavigationPanel extends JPanel
-		implements ActionListener {
+public class NavigationPanel extends JPanel implements ActionListener {
 
 	protected JButton nextButton;
 	protected JButton previousButton;
 	protected JButton firstButton;
 	protected JButton lastButton;
 
-	protected Vector<JButton> buttons;
+	protected ArrayList<JButton> buttons;
 
 	protected boolean hasNext;
 	protected boolean hasPrevious;
@@ -32,7 +31,7 @@ public class NavigationPanel extends JPanel
 	public NavigationPanel(String[] visibleButtons) {
 		initComponents();
 
-		buttons = new Vector<JButton>();
+		buttons = new ArrayList<JButton>();
 		buttons.add(nextButton);
 		buttons.add(previousButton);
 		buttons.add(firstButton);

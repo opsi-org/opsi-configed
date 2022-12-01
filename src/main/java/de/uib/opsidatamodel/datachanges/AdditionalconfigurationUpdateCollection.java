@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.logging.logging;
@@ -18,7 +18,7 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 	boolean masterConfig = false;
 
 	public AdditionalconfigurationUpdateCollection(Object persis, String[] objectIds) {
-		super(new Vector(0));
+		super(new ArrayList(0));
 		this.objectIds = objectIds;
 		setController(persis);
 	}

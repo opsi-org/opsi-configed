@@ -41,8 +41,8 @@ public class OpsiHwAuditDeviceClass {
 	protected String linuxQuery;
 	protected java.util.List<OpsiHwAuditDevicePropertyType> deviceHostProperties;
 	protected java.util.List<OpsiHwAuditDevicePropertyType> deviceHwItemProperties;
-	// protected java.util.Vector<String> usedHostColumns;
-	// protected java.util.Vector<String> usedHwItemColumns;
+	// protected java.util.ArrayList<String> usedHostColumns;
+	// protected java.util.ArrayList<String> usedHwItemColumns;
 	protected ConfigOption hostConfig;
 	protected ConfigOption hwItemConfig;
 	protected String hostConfigKey;
@@ -188,23 +188,23 @@ public class OpsiHwAuditDeviceClass {
 	}
 
 	/*
-	 * public void setUsedHostColumns(Vector<String> usedHostColumns )
+	 * public void setUsedHostColumns(ArrayList<String> usedHostColumns )
 	 * {
 	 * this.usedHostColumns = usedHostColumns;
 	 * }
 	 * 
 	 * 
-	 * public Vector<String> getUsedHostColumns()
+	 * public ArrayList<String> getUsedHostColumns()
 	 * {
 	 * return usedHostColumns;
 	 * }
 	 * 
-	 * public void setUsedHwItemColumns( Vector<String> usedHwItemColumns )
+	 * public void setUsedHwItemColumns( ArrayList<String> usedHwItemColumns )
 	 * {
 	 * this.usedHwItemColumns = usedHwItemColumns;
 	 * }
 	 * 
-	 * public Vector<String> getUsedHwItemColumns()
+	 * public ArrayList<String> getUsedHwItemColumns()
 	 * {
 	 * return usedHwItemColumns;
 	 * }

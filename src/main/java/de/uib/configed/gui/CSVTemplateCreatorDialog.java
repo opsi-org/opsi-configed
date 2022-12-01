@@ -13,7 +13,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Vector;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -73,10 +72,10 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	private JFormattedTextField otherSeparatorInput;
 	private JLabel stringSeparatorLabel;
 
-	private Vector<String> columnNames;
+	private ArrayList<String> columnNames;
 	private java.util.List<JCheckBox> headerButtons;
 
-	public CSVTemplateCreatorDialog(Vector<String> columnNames) {
+	public CSVTemplateCreatorDialog(ArrayList<String> columnNames) {
 		super(Globals.mainFrame, configed.getResourceValue("CSVTemplateCreatorDialog.title"), false,
 				new String[] { "ok", "cancel" },
 				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
@@ -461,7 +460,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	public void write(String csvFile) {
 		try {
 			CSVWriter writer = new CSVWriter(new FileWriter(csvFile), format);
-			Vector<String> headers = new Vector<>();
+			ArrayList<String> headers = new ArrayList<>();
 
 			headerButtons.forEach(header -> {
 				if (header.isSelected()) {

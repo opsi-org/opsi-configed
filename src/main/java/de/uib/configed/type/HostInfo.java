@@ -725,7 +725,7 @@ public class HostInfo {
 					"ConfigedMain.pclistTableModel." + HostInfo.clientInstallByShutdown_DISPLAY_FIELD_LABEL));
 
 			/*
-			 * Vector<String> columns = new Vector<String>();
+			 * ArrayList<String> columns = new ArrayList<String>();
 			 * for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++)
 			 * {
 			 * columns.add( selectionPanel.getTableModel().getColumnName( i ) );
@@ -754,7 +754,7 @@ public class HostInfo {
 					.getResourceValue("ConfigedMain.pclistTableModel." + HostInfo.clientUefiBoot_DISPLAY_FIELD_LABEL));
 
 			/*
-			 * Vector<String> columns = new Vector<String>();
+			 * ArrayList<String> columns = new ArrayList<String>();
 			 * for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++)
 			 * {
 			 * columns.add( selectionPanel.getTableModel().getColumnName( i ) );
@@ -783,7 +783,7 @@ public class HostInfo {
 					.getResourceValue("ConfigedMain.pclistTableModel." + HostInfo.clientWanConfig_DISPLAY_FIELD_LABEL));
 
 			/*
-			 * Vector<String> columns = new Vector<String>();
+			 * ArrayList<String> columns = new ArrayList<String>();
 			 * for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++)
 			 * {
 			 * columns.add( selectionPanel.getTableModel().getColumnName( i ) );

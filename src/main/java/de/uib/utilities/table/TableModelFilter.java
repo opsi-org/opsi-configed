@@ -8,7 +8,7 @@
 
 package de.uib.utilities.table;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import de.uib.utilities.logging.logging;
 
@@ -17,15 +17,11 @@ public class TableModelFilter {
 	boolean inverted = false;
 	boolean inUse = true;
 
-	public TableModelFilter(
-			TableModelFilterCondition condition) {
+	public TableModelFilter(TableModelFilterCondition condition) {
 		this(condition, false, true);
 	}
 
-	public TableModelFilter(
-			TableModelFilterCondition condition,
-			boolean inverted,
-			boolean used) {
+	public TableModelFilter(TableModelFilterCondition condition, boolean inverted, boolean used) {
 
 		this.condition = condition;
 		this.inverted = inverted;
@@ -61,7 +57,7 @@ public class TableModelFilter {
 		inverted = b;
 	}
 
-	public boolean test(Vector<Object> row) {
+	public boolean test(ArrayList<Object> row) {
 		if (!inUse || condition == null)
 			return true;
 
@@ -76,8 +72,7 @@ public class TableModelFilter {
 
 	@Override
 	public String toString() {
-		return getClass().getName()
-				+ " in use " + inUse + ", inverted " + inverted + " condition " + condition;
+		return getClass().getName() + " in use " + inUse + ", inverted " + inverted + " condition " + condition;
 	}
 
 }

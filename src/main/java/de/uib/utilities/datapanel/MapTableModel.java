@@ -15,7 +15,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.Vector;
 import java.util.function.Function;
 
 import de.uib.configed.configed;
@@ -26,7 +25,7 @@ import de.uib.utilities.table.ListCellOptions;
 
 public class MapTableModel extends javax.swing.table.AbstractTableModel implements DataChangedSubject {
 
-	protected Vector<DataChangedObserver> observers;
+	protected ArrayList<DataChangedObserver> observers;
 
 	protected Collection updateCollection;
 	protected Collection<Map<String, Object>> storeData;
@@ -47,7 +46,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	private SortedMap<String, Object> data; // shall be sorted
 	private Map<String, Object> oridata; // we keep the original data for writing back changed values
 	private Map<String, Object> defaultData; // the shadow default values of all data
-	private Vector<String> keys;
+	private ArrayList<String> keys;
 	private String modifiedKey;
 	private int rowModiTime;
 
@@ -56,7 +55,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	private boolean writeData = true;
 
 	public MapTableModel() {
-		observers = new Vector();
+		observers = new ArrayList();
 
 		/*
 		 * editDenier
@@ -102,7 +101,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			myCollator.setStrength(Collator.PRIMARY);
 			this.data = Collections.synchronizedSortedMap(new TreeMap(myCollator));
 			this.data.putAll(data);
-			keys = new Vector<String>(this.data.keySet());
+			keys = new ArrayList<String>(this.data.keySet());
 
 		}
 		oridata = data;
@@ -149,7 +148,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		datachanged = false; // starting with a new set of data
 	}
 
-	public Vector<String> getKeys() {
+	public ArrayList<String> getKeys() {
 		return keys;
 	}
 
@@ -213,7 +212,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		data.put(key, newval);
 		oridata.put(key, newval);
 		logging.debug(this, " keys " + keys);
-		keys = new Vector(data.keySet());
+		keys = new ArrayList(data.keySet());
 		logging.debug(this, " new keys  " + keys);
 		if (toStore)
 			putEntryIntoStoredMaps(key, newval, toStore);
@@ -230,7 +229,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		oridata.put(key, newval);
 
 		// Logging.debug(this, " keys " + keys);
-		keys = new Vector<String>(data.keySet());
+		keys = new ArrayList<String>(data.keySet());
 		// logging.debug(this, " new keys " + keys);
 		putEntryIntoStoredMaps(key, newval);
 		fireTableDataChanged();
@@ -240,7 +239,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		data.remove(key);
 		oridata.remove(key);
 		// logging.debug(this, "removeEntry, keys " + keys);
-		keys = new Vector(data.keySet());
+		keys = new ArrayList(data.keySet());
 		// logging.debug(this, "removeEntry, new keys " + keys);
 		removeEntryFromStoredMaps(key);
 		fireTableDataChanged();
@@ -577,15 +576,15 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 
 	// implementation of DataChangedSubject
 	public void registerDataChangedObserver(DataChangedObserver o) {
-		observers.addElement(o);
+		observers.add(o);
 	}
 
 	// for transport between a class family
-	Vector<DataChangedObserver> getObservers() {
+	ArrayList<DataChangedObserver> getObservers() {
 		return observers;
 	}
 
-	void setObservers(Vector<DataChangedObserver> observers) {
+	void setObservers(ArrayList<DataChangedObserver> observers) {
 		this.observers = observers;
 	}
 
@@ -593,7 +592,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		// logging.debug(this, " -- we notify our observers ");
 		logging.debug(this, "notifyChange, notify observers " + observers.size());
 		for (int i = 0; i < observers.size(); i++) {
-			(observers.elementAt(i)).dataHaveChanged(this);
+			(observers.get(i)).dataHaveChanged(this);
 		}
 
 	}

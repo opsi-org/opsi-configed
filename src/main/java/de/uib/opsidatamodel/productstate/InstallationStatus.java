@@ -5,7 +5,7 @@ import java.awt.Color;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import de.uib.configed.Globals;
 
@@ -42,8 +42,8 @@ public class InstallationStatus {
 	private static Map<String, String> displayLabel2label;
 	private static Map<String, Color> label2textColor;
 
-	private static Vector<Integer> states;
-	private static Vector<String> labels;
+	private static ArrayList<Integer> states;
+	private static ArrayList<String> labels;
 	private static String[] choiceLabels;
 
 	// instance variable
@@ -53,7 +53,7 @@ public class InstallationStatus {
 		if (states != null)
 			return;
 
-		states = new Vector<Integer>();
+		states = new ArrayList<Integer>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(UNDEFINED);
@@ -64,7 +64,7 @@ public class InstallationStatus {
 
 		// states.add(INSTALLING);
 
-		labels = new Vector<String>();
+		labels = new ArrayList<String>();
 		labels.add(Globals.CONFLICTSTATEstring);
 		labels.add(Globals.NOVALIDSTATEstring);
 		labels.add("undefined");
@@ -161,7 +161,7 @@ public class InstallationStatus {
 		return state2label.get(state);
 	}
 
-	public static Vector<String> getLabels() {
+	public static ArrayList<String> getLabels() {
 		checkCollections();
 
 		return labels;

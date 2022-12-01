@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
@@ -96,7 +96,7 @@ public class PanelSWInfo extends JPanel {
 		public void setFilter(TreeSet<Object> filter) {
 		}
 
-		public boolean test(Vector<Object> row) {
+		public boolean test(ArrayList<Object> row) {
 			String entry = (String) row.get(indexOfColWindowsSoftwareID);
 			boolean isKb = entry.startsWith("kb");
 
@@ -123,7 +123,7 @@ public class PanelSWInfo extends JPanel {
 		public void setFilter(TreeSet<Object> filter) {
 		}
 
-		public boolean test(Vector<Object> row) {
+		public boolean test(ArrayList<Object> row) {
 			String entry = (String) row.get(indexOfColWindowsSoftwareID);
 			boolean isKb = (patternWithKB.matcher(entry)).matches();
 
@@ -198,12 +198,12 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setSearchSelectMode(true);
 		panelTable.setSearchMode(TablesearchPane.FULL_TEXT_SEARCH);
 
-		Vector<String> columnNames;
-		Vector<String> classNames;
+		ArrayList<String> columnNames;
+		ArrayList<String> classNames;
 
-		columnNames = new Vector<String>(SWAuditClientEntry.KEYS);
+		columnNames = new ArrayList<String>(SWAuditClientEntry.KEYS);
 		columnNames.remove(0);
-		classNames = new Vector<String>();
+		classNames = new ArrayList<String>();
 		int[] finalColumns = new int[columnNames.size()];
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");

@@ -25,8 +25,7 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 
-public class FDialogTextfieldWithListSelection extends FGeneralDialog
-		implements ListSelectionListener
+public class FDialogTextfieldWithListSelection extends FGeneralDialog implements ListSelectionListener
 
 {
 	JList<String> theList;
@@ -38,8 +37,8 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog
 	String resultingText = null;
 
 	public FDialogTextfieldWithListSelection(JFrame owner, String title, boolean modal, String[] buttonList,
-			Icon[] icons, int lastButtonNo, int preferredWidth, int preferredHeight,
-			boolean lazyLayout, JPanel addPane) {
+			Icon[] icons, int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout,
+			JPanel addPane) {
 		super(owner, title, modal, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout,
 				addPane);
 	}
@@ -53,9 +52,9 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog
 		labelList = new JLabel(defs.getListLabel());
 		// labelList.setText( defs.getListLabel() );
 		labelList.setToolTipText(defs.getListLabelToolTip());
-		theList = new JList();
-		theList.setListData(defs.getListData());
-		if (defs.getListData() != null && defs.getListData().size() > 0)
+		theList = new JList<>();
+		theList.setListData((String[]) defs.getListData().toArray(new String[0]));
+		if (defs.getListData() != null && !defs.getListData().isEmpty())
 			theList.setSelectedIndex(0);
 		theList.addListSelectionListener(this);
 	}
@@ -88,8 +87,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog
 						.addComponent(jPanelButtonGrid, Globals.lineHeight, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.hGapSize / 2, Globals.hGapSize, Short.MAX_VALUE))
-				.addGroup(southLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize / 2)
+				.addGroup(southLayout.createSequentialGroup().addGap(Globals.hGapSize / 2)
 						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE)// GroupLayout.PREFERRED_SIZE)//Short.MAX_VALUE)
 						.addGap(Globals.hGapSize / 2)));
 
@@ -108,10 +106,8 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog
 		GroupLayout allLayout = new GroupLayout(allpane);
 		allpane.setLayout(allLayout);
 
-		allLayout.setVerticalGroup(allLayout.createSequentialGroup()
-				.addGap(Globals.hGapSize)
-				.addComponent(centerPanel, 100, 200, Short.MAX_VALUE)
-				.addGap(Globals.hGapSize)
+		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.hGapSize)
+				.addComponent(centerPanel, 100, 200, Short.MAX_VALUE).addGap(Globals.hGapSize)
 				// .addComponent(southPanel,300, 300, Short.MAX_VALUE)
 				.addComponent(southPanel, Globals.lineHeight, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.hGapSize));
@@ -123,9 +119,8 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog
 								Short.MAX_VALUE)
 						.addGap(Globals.hGapSize / 2, Globals.hGapSize, 2 * Globals.hGapSize))
 				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize, 2 * Globals.hGapSize)
-						.addComponent(southPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
+						.addGap(Globals.hGapSize / 2, Globals.hGapSize, 2 * Globals.hGapSize).addComponent(southPanel,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.hGapSize / 2, Globals.hGapSize, 2 * Globals.hGapSize)));
 
 	}
@@ -153,8 +148,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog
 		GroupLayout theLayout = new GroupLayout(thePanel);
 		thePanel.setLayout(theLayout);
 
-		theLayout.setVerticalGroup(theLayout.createSequentialGroup()
-				.addGap(Globals.vGapSize)
+		theLayout.setVerticalGroup(theLayout.createSequentialGroup().addGap(Globals.vGapSize)
 				.addGroup(theLayout.createParallelGroup()
 						.addComponent(labelField, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
 						.addComponent(theField, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
@@ -166,22 +160,17 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog
 				.addGap(Globals.vGapSize));
 
 		theLayout.setHorizontalGroup(theLayout.createParallelGroup()
-				.addGroup(theLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize)
+				.addGroup(theLayout.createSequentialGroup().addGap(Globals.hGapSize)
 						.addComponent(labelField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)// Globals.labelWidth, Globals.labelWidth *2,
-															// Globals.labelWidth *2 )
-						.addGap(Globals.hGapSize)
-						.addGap(Globals.hGapSize)
+						// Globals.labelWidth *2 )
+						.addGap(Globals.hGapSize).addGap(Globals.hGapSize)
 						.addComponent(theField, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE)
-						.addGap(Globals.hGapSize)
-						.addGap(Globals.hGapSize))
-				.addGroup(theLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize)
+						.addGap(Globals.hGapSize).addGap(Globals.hGapSize))
+				.addGroup(theLayout.createSequentialGroup().addGap(Globals.hGapSize)
 						.addComponent(labelList, Globals.labelWidth, Globals.labelWidth * 2, Globals.labelWidth * 2)
 						.addComponent(scrollpaneForList, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE)
-						.addGap(Globals.hGapSize)
-						.addGap(Globals.hGapSize))
+						.addGap(Globals.hGapSize).addGap(Globals.hGapSize))
 
 				.addGap(Globals.vGapSize));
 
@@ -225,24 +214,17 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog
 	// ======================
 
 	public static void main(String[] args) {
-		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(
-				null, // owner frame
+		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, // owner frame
 				"test FGeneralDialogTest", // title
 				false, // modal
 
-				new String[] {
-						"ok",
-						"cancel"
-				},
+				new String[] { "ok", "cancel" },
 
-				new Icon[] {
-						de.uib.configed.Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-						de.uib.configed.Globals.createImageIcon("images/cancel16_small.png", "")
-				},
+				new Icon[] { de.uib.configed.Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
+						de.uib.configed.Globals.createImageIcon("images/cancel16_small.png", "") },
 				1, // lastButtonNo,with "1" we get only the first button
-				600, 600,
-				true, // lazylayout, i.e, we have a chance to define components and use them for the
-						// layout
+				600, 600, true, // lazylayout, i.e, we have a chance to define components and use them for the
+				// layout
 				null // addPanel predefined
 		);
 

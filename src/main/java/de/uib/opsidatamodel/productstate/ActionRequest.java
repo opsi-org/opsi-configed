@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
@@ -50,12 +50,12 @@ public class ActionRequest {
 	private static Map<String, Color> label2textColor;
 	private static Map<String, Integer> serviceValue2state;
 
-	private static Vector<Integer> states;
-	private static Vector<Integer> possibleRequests;
-	private static Vector<String> labels;
+	private static ArrayList<Integer> states;
+	private static ArrayList<Integer> possibleRequests;
+	private static ArrayList<String> labels;
 	private static String[] choiceLabels;
-	private static Vector<String> serviceValues;
-	private static Vector<String> scriptKeys;
+	private static ArrayList<String> serviceValues;
+	private static ArrayList<String> scriptKeys;
 
 	private static Map<String, String> scriptKey2label;
 
@@ -66,7 +66,7 @@ public class ActionRequest {
 		if (states != null)
 			return;
 
-		states = new Vector<Integer>();
+		states = new ArrayList<Integer>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(NOT_AVAILABLE);
@@ -78,7 +78,7 @@ public class ActionRequest {
 		states.add(ONCE);
 		states.add(CUSTOM);
 
-		possibleRequests = new Vector<Integer>();
+		possibleRequests = new ArrayList<Integer>();
 		possibleRequests.add(SETUP);
 		possibleRequests.add(UPDATE);
 		possibleRequests.add(UNINSTALL);
@@ -86,7 +86,7 @@ public class ActionRequest {
 		possibleRequests.add(ONCE);
 		possibleRequests.add(CUSTOM);
 
-		labels = new Vector<String>();
+		labels = new ArrayList<String>();
 		labels.add(Globals.CONFLICTSTATEstring);
 		labels.add(Globals.NOVALIDSTATEstring);
 		labels.add("not_available");
@@ -118,8 +118,8 @@ public class ActionRequest {
 		serviceValue2state.put("once", ONCE);
 		serviceValue2state.put("custom", CUSTOM);
 
-		serviceValues = new Vector<String>(serviceValue2state.keySet());
-		scriptKeys = new Vector<String>();
+		serviceValues = new ArrayList<String>(serviceValue2state.keySet());
+		scriptKeys = new ArrayList<String>();
 		// scriptKey2state = new HashMap<String, Integer>();
 		scriptKey2label = new HashMap<String, String>();
 
@@ -180,17 +180,17 @@ public class ActionRequest {
 
 	}
 
-	public static Vector<Integer> getPossibleRequests() {
+	public static ArrayList<Integer> getPossibleRequests() {
 		checkCollections();
 		return possibleRequests;
 	}
 
-	public static Vector<String> getServiceValues() {
+	public static ArrayList<String> getServiceValues() {
 		checkCollections();
 		return serviceValues;
 	}
 
-	public static Vector<String> getScriptKeys() {
+	public static ArrayList<String> getScriptKeys() {
 		checkCollections();
 		return scriptKeys;
 	}
@@ -238,7 +238,7 @@ public class ActionRequest {
 		return state2label.get(state);
 	}
 
-	public static Vector<String> getLabels() {
+	public static ArrayList<String> getLabels() {
 		checkCollections();
 
 		return labels;

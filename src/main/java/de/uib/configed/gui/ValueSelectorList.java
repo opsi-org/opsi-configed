@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -34,7 +34,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 	// private JTextField searchField;
 	private TablesearchPane searchPane;
 
-	private Vector<? extends String> unfilteredV;
+	private ArrayList<? extends String> unfilteredV;
 
 	private boolean multidepot;
 
@@ -48,8 +48,8 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		this.multidepot = multidepot;
 		this.persist = persist;
 
-		Vector<String> values = new Vector<String>();
-		Vector<String> descriptions = new Vector<String>();
+		ArrayList<String> values = new ArrayList<String>();
+		ArrayList<String> descriptions = new ArrayList<String>();
 		Map<String, Map<String, Object>> depotInfo = valueList.getDepotInfo();
 
 		for (String depot : depotInfo.keySet()) {
@@ -60,8 +60,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 				descriptions.add((String) depotInfo.get(depot).get("description"));
 		}
 
-		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(
-				valueList, values, descriptions);
+		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(valueList, values, descriptions);
 
 		searchPane = new TablesearchPane(searchTargetModel, "depotlist");
 		searchPane.setSearchMode(TablesearchPane.FULL_TEXT_SEARCH);
@@ -75,8 +74,8 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * exports the scrollpane which is produced in this class but
-	 * displayed in other components
+	 * exports the scrollpane which is produced in this class but displayed in
+	 * other components
 	 *
 	 * @return a scrollpane which shows the depotslist
 	 */
@@ -126,18 +125,15 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		labelValue.setFont(Globals.defaultFontStandardBold);
 		// labelDepotServer.setFont(Globals.defaultFont);
 
-		buttonSelectValuesWithEqualProperties = new JButton("",
-				Globals.createImageIcon("images/equalplus.png", ""));
-		buttonSelectValuesWithEqualProperties.setToolTipText(
-				configed.getResourceValue("MainFrame.buttonSelectValuesWithEqualProperties"));
+		buttonSelectValuesWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
+		buttonSelectValuesWithEqualProperties
+				.setToolTipText(configed.getResourceValue("MainFrame.buttonSelectValuesWithEqualProperties"));
 		Globals.formatButtonSmallText(buttonSelectValuesWithEqualProperties);
 		buttonSelectValuesWithEqualProperties.addActionListener(this);
 		buttonSelectValuesWithEqualProperties.setEnabled(multidepot);
 
-		buttonSelectValuesAll = new JButton("",
-				Globals.createImageIcon("images/plusplus.png", ""));
-		buttonSelectValuesAll.setToolTipText(
-				configed.getResourceValue("MainFrame.buttonSelectValuesAll"));
+		buttonSelectValuesAll = new JButton("", Globals.createImageIcon("images/plusplus.png", ""));
+		buttonSelectValuesAll.setToolTipText(configed.getResourceValue("MainFrame.buttonSelectValuesAll"));
 		Globals.formatButtonSmallText(buttonSelectValuesAll);
 		buttonSelectValuesAll.addActionListener(this);
 		buttonSelectValuesAll.setEnabled(multidepot);
@@ -262,11 +258,9 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGap(5, 5, 10)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelValue, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(5, 5, 10)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(labelValue,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				// .addComponent(buttonSelectValuesWithEqualProperties,
 				// GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE,
 				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -277,15 +271,12 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				// .addComponent(buttonCancelChangedDepotSelection, GroupLayout.PREFERRED_SIZE,
 				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				)
-				.addGap(5, 5, 10)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+				).addGap(5, 5, 10).addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(searchPane, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
 				.addGap(5, 5, 10));
 
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-				.addGroup(layout.createSequentialGroup()
-						.addGap(10)
+				.addGroup(layout.createSequentialGroup().addGap(10)
 						.addComponent(labelValue, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						// .addGap(10)
 						// .addComponent(buttonSelectValuesWithEqualProperties,
@@ -298,10 +289,8 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 						// .addComponent(buttonCancelChangedDepotSelection, GroupLayout.PREFERRED_SIZE,
 						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(10, 10, 10))
-				.addGroup(layout.createSequentialGroup()
-						.addGap(5, 5, 5)
-						.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(5, 5, 5)));
+				.addGroup(layout.createSequentialGroup().addGap(5, 5, 5)
+						.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(5, 5, 5)));
 	}
 
 	boolean filtered = false;
@@ -311,9 +300,9 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 		if (!filtered) {
 			unfilteredV = valueList.getListData();
-			valueList.setListData(new Vector<String>(valueList.getSelectedValuesList()));
+			valueList.setListData(valueList.getSelectedValuesList().toArray(new String[0]));
 		} else
-			valueList.setListData(unfilteredV);
+			valueList.setListData(unfilteredV.toArray(new String[0]));
 
 		filtered = !filtered;
 

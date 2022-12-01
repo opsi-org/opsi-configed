@@ -42,7 +42,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	protected boolean withMovingSelectionDate = true;
 	protected boolean withTime = true;
 
-	// protected Vector<DateEventObserver> dateEventObservers;
+	// protected ArrayList<DateEventObserver> dateEventObservers;
 
 	public DateTimeEditor() {
 		this(true);
@@ -53,7 +53,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		this.withTime = withTime;
 		// setBorder(new javax.swing.border.EtchedBorder());
 
-		// dateEventObservers = new Vector<DateEventObserver>();
+		// dateEventObservers = new ArrayList<DateEventObserver>();
 
 		JPopupMenu popup = new JPopupMenu();
 

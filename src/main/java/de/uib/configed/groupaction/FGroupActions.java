@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -47,7 +46,7 @@ public class FGroupActions extends SecondaryFrame {
 	JTextField fieldGroupname;
 	JTextField fieldInvolvedClientsCount;
 
-	JComboBox comboSelectImage;
+	JComboBox<String> comboSelectImage;
 
 	java.util.List<String> associatedClients;
 
@@ -83,21 +82,17 @@ public class FGroupActions extends SecondaryFrame {
 	}
 
 	protected void setImages() {
-		Vector<String> imagesCollection = new Vector<String>();
+		ArrayList<String> imagesCollection = new ArrayList<String>();
 		// imagesCollection.add("");
 
-		imagesCollection.addAll(new TreeSet<String>(
-				persist.getCommonProductPropertyValues(
-						associatedClients,
-						persist.localImageRestoreProductKey,
-						persist.localImagesListPropertyKey)));
+		imagesCollection.addAll(new TreeSet<String>(persist.getCommonProductPropertyValues(associatedClients,
+				persist.localImageRestoreProductKey, persist.localImagesListPropertyKey)));
 
-		comboSelectImage.setModel(new DefaultComboBoxModel(imagesCollection));
+		comboSelectImage.setModel(new DefaultComboBoxModel<>(imagesCollection.toArray(new String[0])));
 	}
 
 	private void reload() {
-		setGroupLabelling(
-				main.getActivatedGroupModel().getLabel(),
+		setGroupLabelling(main.getActivatedGroupModel().getLabel(),
 				"" + main.getActivatedGroupModel().getNumberOfClients());
 
 		associatedClients = new ArrayList<String>(main.getActivatedGroupModel().getAssociatedClients());
@@ -117,11 +112,8 @@ public class FGroupActions extends SecondaryFrame {
 
 		WaitCursor waitCursor = new WaitCursor(this);
 
-		persist.setCommonProductPropertyValue(
-				main.getActivatedGroupModel().getAssociatedClients(),
-				persist.localImageRestoreProductKey,
-				persist.localImageToRestorePropertyKey,
-				values);
+		persist.setCommonProductPropertyValue(main.getActivatedGroupModel().getAssociatedClients(),
+				persist.localImageRestoreProductKey, persist.localImageToRestorePropertyKey, values);
 
 		Map<String, String> changedValues = new HashMap<String, String>();
 		changedValues.put(de.uib.opsidatamodel.productstate.ProductState.KEY_actionRequest, "setup");
@@ -129,10 +121,8 @@ public class FGroupActions extends SecondaryFrame {
 
 		persist.updateProductOnClients(
 				// associatedClients,
-				main.getActivatedGroupModel().getAssociatedClients(),
-				persist.localImageRestoreProductKey,
-				OpsiPackage.TYPE_NETBOOT,
-				changedValues);
+				main.getActivatedGroupModel().getAssociatedClients(), persist.localImageRestoreProductKey,
+				OpsiPackage.TYPE_NETBOOT, changedValues);
 
 		waitCursor.stop();
 		// if (comboSelectImage
@@ -159,9 +149,9 @@ public class FGroupActions extends SecondaryFrame {
 				.addComponent(imageActionPanel, 100, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize));
 
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addComponent(topPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(imageActionPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		layout.setHorizontalGroup(
+				layout.createParallelGroup().addComponent(topPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addComponent(imageActionPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		Containership cs_all = new Containership(getContentPane());
 		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.backLightBlue }, JPanel.class);
@@ -174,7 +164,7 @@ public class FGroupActions extends SecondaryFrame {
 	private void defineImageActionPanel(JPanel panel) {
 		JLabel labelCombo = new JLabel(configed.getResourceValue("FGroupAction.existingImages"));
 		// labelCombo.setPreferredSize(new Dimension(200, Globals.lineHeight));
-		comboSelectImage = new JComboBox();
+		comboSelectImage = new JComboBox<>();
 		// comboSelectImage.setPreferredSize(new Dimension(200, Globals.lineHeight));
 
 		JLabel topicLabel = new JLabel(configed.getResourceValue("FGroupAction.replayImage"));
@@ -190,10 +180,7 @@ public class FGroupActions extends SecondaryFrame {
 		});
 
 		IconButton buttonReload = new IconButton(configed.getResourceValue("FGroupAction.buttonReload"),
-				"images/reload16.png",
-				"images/reload16_over.png",
-				"images/reload16_disabled.png",
-				true);
+				"images/reload16.png", "images/reload16_over.png", "images/reload16_disabled.png", true);
 		// buttonReload.setPreferredSize(new Dimension(60, 40));
 		// buttonReload.setBackground(de.uib.utilities.Globals.backgroundLightGrey);
 
@@ -209,29 +196,27 @@ public class FGroupActions extends SecondaryFrame {
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGap(Globals.vGapSize, Globals.vGapSize * 3, Globals.vGapSize * 4)
-				.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize * 2)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+		layout.setVerticalGroup(
+				layout.createSequentialGroup().addGap(Globals.vGapSize, Globals.vGapSize * 3, Globals.vGapSize * 4)
+						.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboSelectImage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonSetup, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(buttonReload, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
-				.addGap(Globals.vGapSize, Globals.vGapSize * 3, Globals.vGapSize * 4));
+						.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize * 2)
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(labelCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(comboSelectImage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonSetup, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+								.addComponent(buttonReload, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
+						.addGap(Globals.vGapSize, Globals.vGapSize * 3, Globals.vGapSize * 4));
 
 		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize * 2, Short.MAX_VALUE)
+				.addGroup(layout.createSequentialGroup().addGap(Globals.hGapSize, Globals.hGapSize * 2, Short.MAX_VALUE)
 						.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.hGapSize, Globals.hGapSize * 2, Short.MAX_VALUE))
 
-				.addGroup(layout.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hFirstGap, Globals.hFirstGap)
+				.addGroup(layout.createSequentialGroup().addGap(Globals.hGapSize, Globals.hFirstGap, Globals.hFirstGap)
 						.addComponent(labelCombo, firstLabelWidth, firstLabelWidth, firstLabelWidth)
 						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
 						.addComponent(comboSelectImage, GroupLayout.PREFERRED_SIZE, Globals.buttonWidth * 2,
@@ -326,17 +311,17 @@ public class FGroupActions extends SecondaryFrame {
 								Globals.lineHeight))
 				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize * 2));
 
-		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addGap(Globals.hGapSize, Globals.hFirstGap, Globals.hFirstGap)
-				.addComponent(groupNameLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
-				.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-				.addComponent(fieldGroupname, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE)
-				.addGap(Globals.hGapSize, Globals.hGapSize * 2, Globals.hGapSize * 2)
-				.addComponent(clientsCountLabel, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize * 2)
-				.addComponent(fieldInvolvedClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize * 2));
+		layout.setHorizontalGroup(
+				layout.createSequentialGroup().addGap(Globals.hGapSize, Globals.hFirstGap, Globals.hFirstGap)
+						.addComponent(groupNameLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addComponent(fieldGroupname, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE)
+						.addGap(Globals.hGapSize, Globals.hGapSize * 2, Globals.hGapSize * 2)
+						.addComponent(clientsCountLabel, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize * 2)
+						.addComponent(fieldInvolvedClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize * 2));
 
 	}
 

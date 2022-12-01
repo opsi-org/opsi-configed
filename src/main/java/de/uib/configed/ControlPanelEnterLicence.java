@@ -2,7 +2,7 @@ package de.uib.configed;
 
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import de.uib.configed.gui.licences.PanelEnterLicence;
 import de.uib.configed.type.licences.LicenceEntry;
@@ -38,8 +38,8 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 		init();
 	}
 
-	public Vector<String> getChoicesAllHosts() {
-		return new Vector<>(new TreeMap<>(persist.getHostInfoCollections()
+	public ArrayList<String> getChoicesAllHosts() {
+		return new ArrayList<>(new TreeMap<>(persist.getHostInfoCollections()
 				.getPcListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients())).keySet());
 	}
 
@@ -69,15 +69,15 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 	public void init() {
 		updateCollection = new TableUpdateCollection();
 
-		Vector<String> columnNames;
-		Vector<String> classNames;
+		ArrayList<String> columnNames;
+		ArrayList<String> classNames;
 
 		// panelKeys
-		columnNames = new Vector<String>();
+		columnNames = new ArrayList<String>();
 		columnNames.add("softwareLicenseId");
 		columnNames.add("licensePoolId");
 		columnNames.add("licenseKey");
-		classNames = new Vector<String>();
+		classNames = new ArrayList<String>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
@@ -110,10 +110,10 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 				}, updateCollection));
 
 		// panelLicencepools
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryLicencepools = new MapTableUpdateItemFactory(modelLicencepools,
@@ -129,14 +129,14 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 		thePanel.panelLicencepools.setTableModel(modelLicencepools);
 
 		// panelLicencecontracts
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add("licenseContractId");
 		columnNames.add("partner");
 		columnNames.add("conclusionDate");
 		columnNames.add("notificationDate");
 		columnNames.add("expirationDate");
 		columnNames.add("notes");
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");

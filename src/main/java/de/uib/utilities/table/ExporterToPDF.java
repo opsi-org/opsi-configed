@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.JTable;
 
@@ -71,14 +71,14 @@ public class ExporterToPDF extends ExportTable {
 	private static Font small = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
 	private static ArrayList<Integer> leftAlignmentlist = new ArrayList<Integer>();
 
-	public ExporterToPDF(javax.swing.JTable table, Vector<String> classNames) {
+	public ExporterToPDF(javax.swing.JTable table, ArrayList<String> classNames) {
 		super(table, classNames);
 		extension = thisExtension;
 		writeToFile = defaultFilename;
 		document = new Document(PageSize.A4, mLeft, mRight, mTop, mBottom);
 	}
 
-	public ExporterToPDF(PanelGenEditTable table, Vector<String> classNames) {
+	public ExporterToPDF(PanelGenEditTable table, ArrayList<String> classNames) {
 		this(table.getTheTable(), classNames);
 	}
 

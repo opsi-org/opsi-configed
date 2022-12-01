@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import de.uib.configed.configed;
 import de.uib.configed.type.ConfigStateEntry;
@@ -759,7 +759,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		// z.B. hwClass is DISK_PARTITION
 
-		Vector<String> specificColumns = new Vector<String>(); // columns specific for the class
+		ArrayList<String> specificColumns = new ArrayList<String>(); // columns specific for the class
 		specificColumns.add(Host.idColumn);
 
 		StringBuffer buf = new StringBuffer("select HOST.hostId, ");

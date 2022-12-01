@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
@@ -57,15 +57,15 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 	public void init() {
 		updateCollection = new TableUpdateCollection();
 
-		Vector<String> columnNames;
-		Vector<String> classNames;
+		ArrayList<String> columnNames;
+		ArrayList<String> classNames;
 
 		// panelKeys
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add("softwareLicenseId");
 		columnNames.add("licensePoolId");
 		columnNames.add("licenseKey");
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
@@ -135,14 +135,14 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 				}, updateCollection));
 
 		// panelSoftwarelicences
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add(LicenceEntry.idKEY);
 		columnNames.add(LicenceEntry.licenceContractIdKEY);
 		columnNames.add(LicenceEntry.typeKEY);
 		columnNames.add(LicenceEntry.maxInstallationsKEY);
 		columnNames.add(LicenceEntry.boundToHostKEY);
 		columnNames.add(LicenceEntry.expirationDateKEY);
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
@@ -179,7 +179,7 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 		col.setCellEditor(new AdaptingCellEditor(combo, (row, column) -> {
 			List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(persist.getHostInfoCollections()
 					.getPcListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))
-					.keySet());
+							.keySet());
 			choicesAllHosts.set(0, "");
 			return new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
 		}));
@@ -265,14 +265,14 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 				}, updateCollection));
 
 		// panelLicencecontracts
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add("licenseContractId");
 		columnNames.add("partner");
 		columnNames.add("conclusionDate");
 		columnNames.add("notificationDate");
 		columnNames.add("expirationDate");
 		columnNames.add("notes");
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");

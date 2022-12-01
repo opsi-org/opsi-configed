@@ -8,21 +8,21 @@
 
 package de.uib.utilities.table.updates;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class MapDeliveryItem extends MapBasedTableEditItem {
-	Vector<String> columnNames;
-	Vector<String> classNames;
-	Vector<Object> oldValues;
-	Vector<Object> rowV;
+	ArrayList<String> columnNames;
+	ArrayList<String> classNames;
+	ArrayList<Object> oldValues;
+	ArrayList<Object> rowV;
 
-	public MapDeliveryItem(Object source, int keyCol, Vector<String> columnNames, Vector<String> classNames,
-			Vector<Object> oldValues, Vector<Object> rowV) {
+	public MapDeliveryItem(Object source, int keyCol, ArrayList<String> columnNames, ArrayList<String> classNames,
+			ArrayList<Object> oldValues, ArrayList<Object> rowV) {
 		super(source, keyCol, columnNames, classNames, oldValues, rowV);
 	}
 
-	public MapDeliveryItem(Object source, int keyCol, Vector<String> columnNames, Vector<String> classNames,
-			Vector<Object> rowV) {
+	public MapDeliveryItem(Object source, int keyCol, ArrayList<String> columnNames, ArrayList<String> classNames,
+			ArrayList<Object> rowV) {
 		this(source, keyCol, columnNames, classNames, null, rowV);
 	}
 

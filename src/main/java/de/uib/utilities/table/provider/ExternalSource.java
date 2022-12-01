@@ -8,35 +8,35 @@
 
 package de.uib.utilities.table.provider;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class ExternalSource implements TableSource
 // adapter for external source for table data
 {
-	protected Vector<String> columnNames;
+	protected ArrayList<String> columnNames;
 
-	protected Vector<String> classNames;
+	protected ArrayList<String> classNames;
 
 	protected boolean reloadRequested = true;
 
 	protected RowsProvider rowsProvider;
 
-	public ExternalSource(Vector<String> columnNames, Vector<String> classNames, RowsProvider rowsProvider) {
+	public ExternalSource(ArrayList<String> columnNames, ArrayList<String> classNames, RowsProvider rowsProvider) {
 		this.columnNames = columnNames;
 		this.classNames = classNames;
 		this.rowsProvider = rowsProvider;
 
 	}
 
-	public Vector<String> retrieveColumnNames() {
+	public ArrayList<String> retrieveColumnNames() {
 		return columnNames;
 	}
 
-	public Vector<String> retrieveClassNames() {
+	public ArrayList<String> retrieveClassNames() {
 		return classNames;
 	}
 
-	public Vector<Vector<Object>> retrieveRows() {
+	public ArrayList<ArrayList<Object>> retrieveRows() {
 		if (reloadRequested) {
 			rowsProvider.requestReload();
 			reloadRequested = false;

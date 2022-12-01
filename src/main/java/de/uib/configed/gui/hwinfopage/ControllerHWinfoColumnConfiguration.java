@@ -15,7 +15,7 @@ package de.uib.configed.gui.hwinfopage;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.Icon;
@@ -46,8 +46,8 @@ public class ControllerHWinfoColumnConfiguration {
 	private GenTableModel model;
 	TableUpdateCollection updateCollection;
 
-	Vector<String> columnNames;
-	Vector<String> classNames;
+	ArrayList<String> columnNames;
+	ArrayList<String> classNames;
 	public static final String colLineNo = configed.getResourceValue("HWinfoColumnConfiguration.colLineNo");
 	public static final String colHostVsItemAssigned = configed
 			.getResourceValue("HWinfoColumnConfiguration.colHostVsItemAssigned");
@@ -210,7 +210,7 @@ public class ControllerHWinfoColumnConfiguration {
 	protected void initModel() {
 
 		updateCollection = new TableUpdateCollection();
-		columnNames = new Vector<String>();
+		columnNames = new ArrayList<String>();
 		columnNames.add(colLineNo);
 		columnNames.add(colHwClass);
 		columnNames.add(colLinuxQuery);
@@ -224,7 +224,7 @@ public class ControllerHWinfoColumnConfiguration {
 		// columnNames.add( "report function");
 		// columnNames.add( colTellAgainHardwareClass );
 
-		classNames = new Vector<String>();
+		classNames = new ArrayList<String>();
 
 		// classNames.add("java.lang.Integer");
 		for (int i = 0; i < columnNames.size(); i++) {
