@@ -42,11 +42,12 @@ public class CopyrightInfos {
 		infos.add("licenced by GNU LESSER GENERAL PUBLIC LICENSE");
 		infos.add("Copyright (c) 2005-2006 Sun Microsystems, Inc.");
 		infos.add("");
-		infos.add("Tango Desktop Project");
-		infos.add("http://tango.freedesktop.org/Tango_Desktop_Project ");
-		infos.add("Public Domain");
+		infos.add("JavaFX");
+		infos.add("licenced by GNU General Public LICENSE v2.0");
 		infos.add("");
-
+		infos.add("FontAwesomeFX Icon Package");
+		infos.add("licenced by Apache 2.0 licenses");
+		infos.add("");
 	}
 
 	private CopyrightInfos() {
