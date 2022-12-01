@@ -780,16 +780,12 @@ public class configed {
 							}
 						}
 					} catch (Exception ex) {
-						logging.debug(EXTRA_LOCALIZATION_FILENAME + " problem " + ex);
-						ex.printStackTrace();
+						logging.error(EXTRA_LOCALIZATION_FILENAME + " problem", ex);
 					}
 
 					i = i + 2;
 
 					if (!success) {
-						logging.debug(" ======================= ");
-						logging.debug(" ======================= ");
-
 						endApp(ERROR_CANNOT_READ_EXTRA_LOCALIZATION);
 					}
 				} else if (args[i].equals("--localizationstrings")) {

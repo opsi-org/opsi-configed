@@ -240,7 +240,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 					+ Arrays.toString(sslFactory.getSupportedCipherSuites()));
 
 		} catch (Exception e) {
-			logging.logTrace(e);
+			logging.error("Error", e);
 		}
 
 		return sslFactory;

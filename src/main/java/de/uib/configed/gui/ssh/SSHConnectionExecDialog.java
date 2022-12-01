@@ -115,9 +115,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 					de.uib.configed.Globals.gapSize, true);
 			createLayout(mainPanelLayout, inputPanel, 0, 0, false);
 		} catch (Exception e) {
-			logging.warning(this, "initGui, exception occurred " + e);
-			logging.logTrace(e);
-
+			logging.warning(this, "initGui, exception occurred ", e);
 		}
 	}
 

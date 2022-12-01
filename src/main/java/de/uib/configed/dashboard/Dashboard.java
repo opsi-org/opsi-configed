@@ -51,8 +51,7 @@ public class Dashboard {
 			try {
 				initFX(fxPanel);
 			} catch (IOException ioE) {
-				ioE.printStackTrace();
-				logging.error(this, "Unable to open fxml file");
+				logging.error(this, "Unable to open fxml file", ioE);
 			}
 		});
 	}

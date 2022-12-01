@@ -465,8 +465,7 @@ public class SSHPackageManagerUninstallParameterDialog
 					execFinished = true;
 					logging.debug(this, "end exec thread");
 				} catch (Exception e) {
-					logging.warning(this, "doAction1, exception occurred " + e);
-					logging.logTrace(e);
+					logging.warning(this, "doAction1, exception occurred", e);
 				}
 			}
 		};
@@ -494,7 +493,6 @@ public class SSHPackageManagerUninstallParameterDialog
 		 * }
 		 * catch (Exception e)
 		 * {
-		 * e.printStackTrace();
 		 * }
 		 * }
 		 * };
@@ -504,8 +502,7 @@ public class SSHPackageManagerUninstallParameterDialog
 			execThread.start();
 			// reloadThread.start();
 		} catch (Exception e) {
-			logging.warning(this, "doAction1, exception occurred " + e);
-			logging.logTrace(e);
+			logging.warning(this, "doAction1, exception occurred", e);
 		}
 	}
 

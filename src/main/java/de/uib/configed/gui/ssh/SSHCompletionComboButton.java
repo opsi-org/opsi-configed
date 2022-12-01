@@ -237,7 +237,7 @@ public class SSHCompletionComboButton {
 					setItems(result, curdir);
 					enableComponents(true);
 				} catch (Exception e) {
-					logging.logTrace(e);
+					logging.error("getDirectoriesIn failed", e);
 				}
 			}
 		}.start();
@@ -275,7 +275,7 @@ public class SSHCompletionComboButton {
 					setItems(result, curdir);
 					enableComponents(true);
 				} catch (Exception e) {
-					logging.logTrace(e);
+					logging.error("getDirectoriesAndFilesIn failed", e);
 				}
 			}
 		}.start();

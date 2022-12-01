@@ -101,8 +101,7 @@ public class SSHConnectExec extends SSHConnect {
 							+ configed.getResourceValue("SSHConnection.Exec.cannotAsReadonly"));
 			}
 		} catch (Exception e) {
-			logging.error(this, "SSHConnectExec Exception " + e);
-			logging.logTrace(e);
+			logging.error(this, "SSHConnectExec Exception", e);
 		} finally {
 			// disconnect();
 			System.gc();
@@ -363,11 +362,9 @@ public class SSHConnectExec extends SSHConnect {
 			else
 				return task.get();
 		} catch (java.lang.NullPointerException npe) {
-			logging.error(this, "exec NullPointerException " + npe);
-			logging.logTrace(npe);
+			logging.error(this, "exec NullPointerException", npe);
 		} catch (Exception e) {
-			logging.error(this, "exec Exception " + e);
-			logging.logTrace(e);
+			logging.error(this, "exec Exception", e);
 		}
 		return null;
 	}
@@ -632,23 +629,20 @@ public class SSHConnectExec extends SSHConnect {
 			catch (JSchException jschex) {
 				if (retriedTimes >= 3) {
 					retriedTimes = 1;
-					logging.warning(this, "jsch exception " + jschex);
-					logging.logTrace(jschex);
+					logging.warning(this, "jsch exception", jschex);
 					publishError(jschex.toString());
 					return "";
 				} else {
-					logging.warning(this, "jsch exception " + jschex);
+					logging.warning(this, "jsch exception", jschex);
 					retriedTimes = retriedTimes + 1;
 					connect();
 					doInBackground();
 				}
 			} catch (IOException ex) {
-				logging.warning(this, "SSH IOException " + ex);
-				logging.logTrace(ex);
+				logging.warning(this, "SSH IOException", ex);
 				publishError(ex.toString());
 			} catch (Exception e) {
-				logging.warning(this, "SSH Exception " + e);
-				logging.logTrace(e);
+				logging.warning(this, "SSH Exception", e);
 				publishError(e.getMessage());
 			}
 			if (outputDialog != null)

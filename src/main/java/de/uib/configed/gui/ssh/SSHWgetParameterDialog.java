@@ -271,8 +271,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 						// btn_execute.setEnabled( true ) transferred to SwingWorker.done()
 
 					} catch (Exception e) {
-						logging.warning(this, "doAction1, exception occurred " + e);
-						logging.logTrace(e);
+						logging.warning(this, "doAction1, exception occurred", e);
 					}
 				}
 			}.start();

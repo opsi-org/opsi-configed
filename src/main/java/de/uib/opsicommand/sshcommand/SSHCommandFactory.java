@@ -476,8 +476,7 @@ public class SSHCommandFactory {
 			jsComMap.put(command_map_commands, jsComArrCom);
 			jsonObjects.add(jsComMap);
 		} catch (Exception e) {
-			logging.warning(this, "saveSSHCommand, exception occurred " + e);
-			logging.logTrace(e);
+			logging.warning(this, "saveSSHCommand, exception occurred", e);
 		}
 
 		if (list_knownMenus.contains(command.getMenuText())) {

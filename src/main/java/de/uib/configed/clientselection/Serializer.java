@@ -96,7 +96,6 @@ public abstract class Serializer {
 			}
 			return operation;
 		} catch (Exception e) {
-			// e.printStackTrace();
 			logging.error("deserialize error for data " + data + " message " + e.getMessage(), e);
 			return null;
 		}
@@ -131,7 +130,6 @@ public abstract class Serializer {
 		}
 
 		catch (Exception e) {
-			// e.printStackTrace();
 			logging.error(e.getMessage(), e);
 			return null;
 		}

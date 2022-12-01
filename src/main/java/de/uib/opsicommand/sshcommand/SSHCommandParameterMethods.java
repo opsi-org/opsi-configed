@@ -342,7 +342,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 			formated_result = createStringOfArray(strArr, begin_end_str, separator);
 			logging.info(this, "createFormattedDataSourceString[ ] formated_result " + formated_result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logging.error("Error", e);
 		}
 		return formated_result;
 	}

@@ -180,8 +180,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			saveNameField.setText(search.name);
 			saveDescriptionField.setText(search.description);
 		} catch (Exception exc) {
-			logging.logTrace(exc);
-			logging.error("Could not load search!");
+			logging.error("Could not load search!", exc);
 		}
 	}
 

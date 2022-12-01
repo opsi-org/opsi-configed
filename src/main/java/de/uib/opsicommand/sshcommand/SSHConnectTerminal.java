@@ -77,8 +77,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				String str = new String(buf, off, len, "UTF-8");
 				theDialog.append(str, theDialog.getInputField());
 			} catch (UnsupportedEncodingException ue) {
-				logging.warning(" UnsupportedEncodingException " + ue);
-				logging.logTrace(ue);
+				logging.warning("UnsupportedEncodingException", ue);
 			}
 		}
 	}
@@ -173,8 +172,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				Thread.sleep(1000);
 				exec(SOME_COMMAND + "\n");
 			} catch (Exception e) {
-				logging.error(this, "SSHConnectTerminal connect exception" + e);
-				logging.logTrace(e);
+				logging.error(this, "SSHConnectTerminal connect exception", e);
 			}
 		}
 	}
@@ -207,11 +205,9 @@ public class SSHConnectTerminal extends SSHConnect {
 				}
 				// else logging.info(this, "empty input text");
 			} catch (IOException ioe) {
-				logging.error(this, "SSHConnectTerminal exec ioexception " + ioe);
-				logging.logTrace(ioe);
+				logging.error(this, "SSHConnectTerminal exec ioexception", ioe);
 			} catch (Exception e) {
-				logging.error(this, "SSHConnectTerminal exec exception ");
-				logging.logTrace(e);
+				logging.error(this, "SSHConnectTerminal exec exception", e);
 			}
 			logging.info(this, " exec finished  " + text);
 
@@ -281,7 +277,7 @@ public class SSHConnectTerminal extends SSHConnect {
 			else
 				logging.warning(this, "Pipe closed");
 		} catch (Exception e2) {
-			logging.logTrace(e2);
+			logging.error("Error", e2);
 		}
 	}
 
@@ -398,7 +394,6 @@ public class SSHConnectTerminal extends SSHConnect {
 		// try{Thread.sleep(50);} catch(Exception ee){}
 		// // }
 		// // catch (IOException ioe)
-		// // { ioe.printStackTrace();}
 
 		// if (currentDirectory == null) return result;
 
@@ -423,8 +418,6 @@ public class SSHConnectTerminal extends SSHConnect {
 		// result = result + "\n" + result_dir;
 		// }
 		// catch (Exception ioe)
-		// { ioe.printStackTrace();}
-
 		// }
 		return result;
 	}

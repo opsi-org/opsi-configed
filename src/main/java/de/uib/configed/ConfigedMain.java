@@ -1512,7 +1512,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			 * catch (Exception ex)
 			 * {
 			 * logging.warning("valueChanged in ConfigedMain " + ex);
-			 * logging.logTrace(ex);
+			 * 
 			 * // "error occurred  "Ljava.lang.string cannot be cast do java.lang.string"
 			 * }
 			 * mainFrame.setClientInfoediting(true);
@@ -3644,8 +3644,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				initialTreeActivation();
 
 		} catch (Exception ex) {
-			logging.debug(this, "tree cannot be activated ");
-			logging.logTrace(ex);
+			logging.error(this, "Tree cannot be activated", ex);
 		}
 
 	}
@@ -3901,8 +3900,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 								.localizeColumns(getLocalbootProductDisplayFieldsList()));
 
 			} catch (Exception ex) {
-				logging.warning(" setLocalbootInstallationStateTableModel, exception Occurred" + ex);
-				logging.logTrace(ex);
+				logging.warning("setLocalbootInstallationStateTableModel, exception occurred: " + ex.getMessage(), ex);
 			}
 
 			// waitCursor.stop();

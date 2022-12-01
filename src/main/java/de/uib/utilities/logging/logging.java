@@ -58,9 +58,6 @@ public class logging implements LogEventSubject
 	public static Integer LOG_LEVEL_CONSOLE = LEVEL_WARNING;
 	public static Integer LOG_LEVEL_FILE = LEVEL_WARNING;
 
-	private static int logging_directory_not_yet_set__counter = 0;
-	final private static int logging_directory_not_yet_set__counter__maxDisplay = 20;
-
 	private static final java.text.SimpleDateFormat loggingDateFormat = new java.text.SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss.SSS");
 
@@ -68,7 +65,7 @@ public class logging implements LogEventSubject
 		return LEVEL_TO_NAME.get(level);
 	}
 
-	static private int AKT_LEVEL_FOR_SHOWING_MESSAGES = LEVEL_ERROR;
+	static private int MIN_LEVEL_FOR_SHOWING_MESSAGES = LEVEL_ERROR;
 
 	static private int numberOfKeptLogFiles = 3;
 	static private PrintWriter logFileWriter = null;
@@ -190,7 +187,7 @@ public class logging implements LogEventSubject
 	}
 
 	static private boolean showOnGUI(int level) {
-		return (level <= AKT_LEVEL_FOR_SHOWING_MESSAGES);
+		return (level <= MIN_LEVEL_FOR_SHOWING_MESSAGES);
 	}
 
 	static private String now() {
@@ -312,21 +309,20 @@ public class logging implements LogEventSubject
 		}
 	}
 
-	synchronized static public void log(Object caller, int level, String mesg) {
+	static public void log(Object caller, int level, String mesg, Throwable ex) {
+		log(level, mesg, caller, ex);
+	}
+
+	static public void log(Object caller, int level, String mesg) {
 		log(level, mesg, caller, null);
 	}
 
-	synchronized static public void log(int level, String mesg, Throwable ex) {
+	static public void log(int level, String mesg, Throwable ex) {
 		log(level, mesg, null, ex);
 	}
 
-	synchronized static public void log(int level, String mesg) {
+	static public void log(int level, String mesg) {
 		log(level, mesg, null, null);
-	}
-
-	public static void logTrace(Throwable ex) {
-		Exception e = (Exception) ex;
-		log(LEVEL_ERROR, e.getMessage(), e);
 	}
 
 	static public void secret(Object caller, String mesg) {
@@ -377,9 +373,12 @@ public class logging implements LogEventSubject
 		log(LEVEL_WARNING, mesg);
 	}
 
-	static public void warning(String mesg, Exception ex) {
-		logTrace(ex);
-		warning(mesg);
+	static public void warning(String mesg, Throwable ex) {
+		log(LEVEL_WARNING, mesg, ex);
+	}
+
+	static public void warning(Object caller, String mesg, Throwable ex) {
+		log(caller, LEVEL_WARNING, mesg, ex);
 	}
 
 	static public void error(Object caller, String mesg) {
@@ -390,14 +389,12 @@ public class logging implements LogEventSubject
 		log(LEVEL_ERROR, mesg);
 	}
 
-	static public void error(String mesg, Exception ex) {
-		logTrace(ex);
-		error(mesg);
+	static public void error(String mesg, Throwable ex) {
+		log(LEVEL_ERROR, mesg, ex);
 	}
 
-	static public void error(Object caller, String mesg, Exception ex) {
-		logTrace(ex);
-		error(caller, mesg);
+	static public void error(Object caller, String mesg, Throwable ex) {
+		log(caller, LEVEL_ERROR, mesg, ex);
 	}
 
 	static public void critical(Object caller, String mesg) {
@@ -408,9 +405,8 @@ public class logging implements LogEventSubject
 		log(LEVEL_CRITICAL, mesg);
 	}
 
-	static public void critical(Object caller, String mesg, Exception ex) {
-		logTrace(ex);
-		critical(caller, mesg);
+	static public void critical(Object caller, String mesg, Throwable ex) {
+		log(caller, LEVEL_CRITICAL, mesg, ex);
 	}
 
 	static public void essential(Object caller, String mesg) {
@@ -442,9 +438,8 @@ public class logging implements LogEventSubject
 		checkErrorList(null);
 	}
 
-	static public void checkErrorList(JFrame parentFrame)
-	// if errors Occurred show a window with the logged errors
-	{
+	static public void checkErrorList(JFrame parentFrame) {
+		// if errors Occurred show a window with the logged errors
 		// logging.debug("checkErrorList");
 		final JFrame f;
 		if (parentFrame == null)
@@ -475,7 +470,6 @@ public class logging implements LogEventSubject
 		}.start();
 
 		// parentFrame.setVisible(true);
-
 	}
 
 	static public String getErrorListAsLines() {
@@ -485,16 +479,6 @@ public class logging implements LogEventSubject
 				result.append("\n");
 				result.append(errorList.get(i));
 			}
-
-			/*
-			 * Object[] arr = errorList.toArray();
-			 * //for (int i = 0; i < errorList.size(); i++)
-			 * //produced an ArrayIndexOutOfBoundsException
-			 * {
-			 * result.append ("\n");
-			 * result.append (arr[i].toString());
-			 * }
-			 */
 		}
 
 		return result.toString();

@@ -245,8 +245,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 			((SSHConnectExec) ssh).getDialog().setVisible(true);
 			logging.info(this, "doAction1 end ");
 		} catch (Exception e) {
-			logging.error(this, "doAction1 Exception while exec_template " + e);
-			logging.logTrace(e);
+			logging.error(this, "doAction1 Exception while exec_template", e);
 		}
 	}
 

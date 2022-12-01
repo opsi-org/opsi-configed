@@ -81,11 +81,9 @@ public class SSHConnectSCP extends SSHConnectExec {
 			System.gc();
 			return task.get();
 		} catch (java.lang.NullPointerException npe) {
-			logging.error(this, "exec NullPointerException " + npe);
-			npe.printStackTrace();
+			logging.error(this, "exec NullPointerException", npe);
 		} catch (Exception e) {
-			logging.error(this, "exec Exception " + e);
-			e.printStackTrace();
+			logging.error(this, "exec Exception", e);
 		}
 		return null;
 	}
@@ -125,11 +123,9 @@ public class SSHConnectSCP extends SSHConnectExec {
 			// else
 			return task.get();
 		} catch (java.lang.NullPointerException npe) {
-			logging.error(this, "exec NullPointerException " + npe);
-			logging.logTrace(npe);
+			logging.error(this, "exec NullPointerException", npe);
 		} catch (Exception e) {
-			logging.error(this, "exec Exception " + e);
-			e.printStackTrace();
+			logging.error(this, "exec Exception", e);
 		}
 		return "end of method";
 	}
@@ -267,7 +263,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 				try {
 					Thread.sleep(2000);
 				} catch (Exception ee) {
-					logging.logTrace(ee);
+					logging.error("Error", ee);
 				}
 
 				publish("Copying finish ");
@@ -292,25 +288,22 @@ public class SSHConnectSCP extends SSHConnectExec {
 			catch (JSchException jschex) {
 				if (retriedTimes >= 3) {
 					retriedTimes = 1;
-					logging.warning(this, "jsch exception " + jschex);
-					logging.logTrace(jschex);
+					logging.warning(this, "jsch exception ", jschex);
 					publishError(jschex.toString());
 					FOUND_ERROR = true;
 					return "";
 				} else {
-					logging.warning(this, "jsch exception " + jschex);
+					logging.warning(this, "jsch exception ", jschex);
 					retriedTimes = retriedTimes + 1;
 					connect();
 					doInBackground();
 				}
 			} catch (IOException ex) {
-				logging.warning(this, "SSH IOException " + ex);
-				logging.logTrace(ex);
+				logging.warning(this, "SSH IOException", ex);
 				FOUND_ERROR = true;
 				publishError(ex.toString());
 			} catch (Exception e) {
-				logging.warning(this, "SSH Exception " + e);
-				logging.logTrace(e);
+				logging.warning(this, "SSH Exception", e);
 				FOUND_ERROR = true;
 				publishError(e.getMessage());
 			}
