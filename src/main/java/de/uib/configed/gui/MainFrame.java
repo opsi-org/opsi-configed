@@ -20,7 +20,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.InputEvent;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -30,6 +29,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -73,6 +73,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableModel;
@@ -94,6 +95,7 @@ import de.uib.configed.CopyrightInfos;
 import de.uib.configed.Globals;
 import de.uib.configed.HostsStatusInfo;
 import de.uib.configed.configed;
+import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.hwinfopage.ControllerHWinfoMultiClients;
 import de.uib.configed.gui.productpage.PanelGroupedProductSettings;
@@ -130,6 +132,8 @@ import de.uib.utilities.table.ExportTable;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.thread.WaitCursor;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 
 //import de.uib.utilities.StringvaluedObject;
 
@@ -524,6 +528,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	public Container baseContainer;
 
+	private LicenseDash licenseDash;
+
 	class GlassPane extends JComponent {
 		GlassPane() {
 			super();
@@ -691,7 +697,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		}
 
-		@Override
 		public void componentShown(ComponentEvent e) {
 		}
 
@@ -923,12 +928,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		combinedMenuItemSessionInfoColumn
 				.show(main.host_displayFields.get(HostInfo.clientSessionInfo_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItem_showSessionInfoColumn.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				logging.info(this, "toggleColumnSessionInfo by CheckBoxMenuItem");
-				main.toggleColumnSessionInfo();
+		jCheckBoxMenuItem_showSessionInfoColumn.addItemListener((ItemEvent e) -> {
+			logging.info(this, "toggleColumnSessionInfo by CheckBoxMenuItem");
+			main.toggleColumnSessionInfo();
 
-			}
 		});
 
 		jCheckBoxMenuItem_showInventoryNumberColumn
@@ -1333,6 +1336,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			jMenuOpsiCommand.setText(command.getMenuText());
 			jMenuOpsiCommand.setToolTipText(command.getToolTipText());
 			jMenuOpsiCommand.addActionListener(new ActionListener() {
+
 				public void actionPerformed(ActionEvent e) {
 					if (factory.getConnectionState().equals(SSHCommandFactory.NOT_CONNECTED))
 						logging.error(this, configed.getResourceValue("SSHConnection.not_connected.message") + " "
@@ -4105,8 +4109,14 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 			) {
 
-				main.initDashInfo(); // main.showDashInfo();
+				// main.initDashInfo(); // main.showDashInfo();
 				// logging.info(this, " show licences dash ");
+				if (licenseDash == null) {
+					licenseDash = new LicenseDash();
+					licenseDash.initAndShowGUI();
+				} else {
+					licenseDash.show();
+				}
 			}
 
 			// main.toggleLicencesFrame();
@@ -4150,6 +4160,42 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		 * }
 		 */
 
+	}
+
+	public class LicenseDash {
+		private final JFrame frame = new JFrame();
+		private LicenseDisplayer licenseDisplayer;
+
+		public void initAndShowGUI() {
+			final JFXPanel fxPanel = new JFXPanel();
+			frame.add(fxPanel);
+			frame.setIconImage(Globals.mainIcon);
+			frame.setTitle(configed.getResourceValue("Dashboard.licenseTitle"));
+			frame.setVisible(true);
+			frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+			Platform.runLater(() -> {
+				try {
+					initFX(fxPanel);
+				} catch (IOException ioE) {
+					ioE.printStackTrace();
+					logging.error(this, "Unable to open fxml file");
+				}
+			});
+		}
+
+		public void initFX(final JFXPanel fxPanel) throws IOException {
+			try {
+				licenseDisplayer = new LicenseDisplayer();
+				licenseDisplayer.initAndShowGUI();
+			} catch (IOException ioE) {
+				logging.debug(this, "Unable to open FXML file.");
+			}
+		}
+
+		public void show() {
+			licenseDisplayer.display();
+		}
 	}
 
 	public void enableAfterLoading() {
