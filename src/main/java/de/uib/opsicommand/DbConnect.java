@@ -26,11 +26,10 @@ public class DbConnect {
 			// new Driver();
 		}
 		// catch ( ClassNotFoundException e ) {
-		// e.printStackTrace();
 		// System.exit(1);
 		// }
 		catch (Exception e) {
-			e.printStackTrace();
+			logging.error("Error", e);
 			return;
 		}
 
@@ -44,16 +43,14 @@ public class DbConnect {
 			con = DriverManager.getConnection(url, user, password);
 			con.setAutoCommit(true);
 		} catch (SQLException e) {
-			logging.error(this, e.getMessage());
-			// e.printStackTrace();
+			logging.error(this, e.getMessage(), e);
 			con = null;
 
 			try {
 				con = DriverManager.getConnection(url, defaultUser, defaultPassword);
 				con.setAutoCommit(true);
 			} catch (SQLException e1) {
-				logging.error(this, e1.getMessage());
-				// e.printStackTrace();
+				logging.error(this, e1.getMessage(), e1);
 				con = null;
 			}
 
@@ -95,8 +92,7 @@ public class DbConnect {
 		try {
 			con.close();
 		} catch (SQLException e) {
-			logging.error("DbConnect: " + e.getMessage());
-			e.printStackTrace();
+			logging.error("DbConnect: " + e.getMessage(), e);
 		}
 		con = null;
 	}
@@ -108,8 +104,7 @@ public class DbConnect {
 			if (reply.next())
 				return true;
 		} catch (Exception e) {
-			logging.error("DbConnect: " + e.getMessage());
-			e.printStackTrace();
+			logging.error("DbConnect: " + e.getMessage(), e);
 		}
 		return false;
 	}

@@ -107,9 +107,7 @@ public class JTableSelectionPanel extends JPanel
 				try {
 					return super.getValueAt(row, col);
 				} catch (Exception ex) {
-
 					// logging.debug ("******** Exception in getValueAt: " + ex.toString());
-					// ex.printStackTrace();
 					// after change of model (deleting of rows) the row sorter tries to rebuild
 					// itself but fails if no values are supplied
 					// we get a null pointer exception

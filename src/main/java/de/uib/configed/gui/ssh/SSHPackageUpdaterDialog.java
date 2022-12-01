@@ -61,8 +61,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		try {
 			result = ssh.exec((SSHCommand) command, false /* =>without gui */ );
 		} catch (Exception e) {
-			logging.error(this, "ssh execution error: " + e);
-			logging.logTrace(e);
+			logging.error(this, "ssh execution error", e);
 
 		}
 
@@ -170,8 +169,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 			new SSHConnectExec((SSHCommand) command);
 			// cancel();
 		} catch (Exception e) {
-			logging.warning(this, "doAction1, exception occurred " + e);
-			logging.logTrace(e);
+			logging.warning(this, "doAction1, exception occurred", e);
 		}
 
 	}

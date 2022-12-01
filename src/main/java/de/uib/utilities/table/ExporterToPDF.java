@@ -138,7 +138,7 @@ public class ExporterToPDF extends ExportTable {
 					temp = File.createTempFile(defaultFilename.substring(0, defaultFilename.indexOf(".")), ".pdf");
 					filePath = temp.getAbsolutePath();
 				} catch (IOException e) {
-					logging.logTrace(e);
+					logging.error("Failed to create temp file", e);
 				}
 			}
 			try {
@@ -167,11 +167,9 @@ public class ExporterToPDF extends ExportTable {
 				document.close();
 
 			} catch (FileNotFoundException e) {
-				logging.error("file not found: " + fileName + " --- " + e);
-				logging.logTrace(e);
+				logging.error("file not found: " + fileName, e);
 			} catch (Exception exp) {
-				logging.error("file not found: " + fileName + " --- " + exp);
-				logging.logTrace(exp);
+				logging.error("file not found: " + fileName, exp);
 			}
 
 			if ((saveAction == false) && (temp.getAbsolutePath() != null)) {

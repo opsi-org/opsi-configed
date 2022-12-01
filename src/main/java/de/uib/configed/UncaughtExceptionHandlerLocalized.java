@@ -18,8 +18,7 @@ public class UncaughtExceptionHandlerLocalized extends de.uib.utilities.logging.
 		}
 
 		if (e instanceof Exception) {
-			logging.warning("Error in thread " + t);
-			logging.logTrace(e);
+			logging.warning("Error in thread " + t, e);
 
 			String errorText = configed.getResourceValue("UncaughtExceptionHandler.notForeseenError") + " "
 					+ ((Exception) e).getMessage();
@@ -67,12 +66,10 @@ public class UncaughtExceptionHandlerLocalized extends de.uib.utilities.logging.
 
 			else {
 				logging.error(
-						errorText + "\n" + configed.getResourceValue("UncaughtExceptionHandler.pleaseCheckLogfile"),
-						(Exception) e);
+						errorText + "\n" + configed.getResourceValue("UncaughtExceptionHandler.pleaseCheckLogfile"), e);
 			}
 		} else {
-			logging.logTrace(e);
-			logging.warning("Thread " + t + " - RunTime Error -  " + e);
+			logging.warning("Thread " + t + " - RunTime Error", e);
 			if (e instanceof java.lang.OutOfMemoryError) {
 				configed.endApp(configed.ERROR_OUT_OF_MEMORY);
 			}

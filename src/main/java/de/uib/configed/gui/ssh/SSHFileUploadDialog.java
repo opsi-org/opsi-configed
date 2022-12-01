@@ -326,7 +326,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 					.addGroup(v_parallelGroup) // parallelGroup can be overwritten by child classes
 			);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logging.error("Error", e);
 		}
 	}
 
@@ -376,8 +376,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 				fullcommand.addCommand(((SSHCommand) new CommandOpsiSetRights("")));
 			new SSHConnectExec(fullcommand);
 		} catch (Exception e) {
-			logging.warning(this, "doAction1, exception occurred " + e);
-			logging.logTrace(e);
+			logging.warning(this, "doAction1, exception occurred", e);
 		}
 	}
 

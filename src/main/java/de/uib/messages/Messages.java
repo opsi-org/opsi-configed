@@ -313,7 +313,6 @@ public class Messages {
 	 * catch(Exception ex)
 	 * {
 	 * logging.warning("Messages:, getLocales error: " + ex);
-	 * logging.logTrace(ex);
 	 * }
 	 * 
 	 * 

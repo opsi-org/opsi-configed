@@ -221,8 +221,7 @@ public class PersistenceControllerFactory {
 		}
 
 		catch (Exception ex) {
-			logging.logTrace(ex);
-			logging.error(ex.toString());
+			logging.error("Error", ex);
 
 			String errorInfo = ex.toString();
 

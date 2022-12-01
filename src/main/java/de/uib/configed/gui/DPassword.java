@@ -352,7 +352,7 @@ public class DPassword extends JDialog // implements Runnable
 			pack();
 			setVisible(true);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logging.error("Error", ex);
 		}
 	}
 
@@ -701,8 +701,7 @@ public class DPassword extends JDialog // implements Runnable
 		try {
 			containership.doForAllContainedCompis("setCursor", new Object[] { c });
 		} catch (Exception ex) {
-			logging.warning(this, "containership error " + ex);
-			logging.logTrace(ex);
+			logging.warning(this, "containership error", ex);
 		}
 
 		/*

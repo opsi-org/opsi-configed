@@ -415,7 +415,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 					.addGap(Globals.gapSize));
 
 		} catch (Exception e) {
-			logging.logTrace(e);
+			logging.error("Error", e);
 		}
 	}
 

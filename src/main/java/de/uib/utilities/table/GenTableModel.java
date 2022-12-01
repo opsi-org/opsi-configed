@@ -788,8 +788,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		try {
 			fireTableRowsInserted(rowsLength - 1, rowsLength - 1);
 		} catch (Exception ex) {
-			logging.logTrace(ex);
-			logging.info(this, "addRow exception " + ex + " row " + rowV);
+			logging.warning(this, "addRow exception " + ex + " row " + rowV, ex);
 		}
 
 		requestRefreshDerivedMaps();

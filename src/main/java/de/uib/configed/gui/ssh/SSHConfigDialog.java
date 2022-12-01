@@ -196,8 +196,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 					return false;
 				}
 			} catch (Exception e) {
-				logging.warning(this, "Error " + e);
-				logging.logTrace(e);
+				logging.warning(this, "Error", e);
 			}
 		}
 

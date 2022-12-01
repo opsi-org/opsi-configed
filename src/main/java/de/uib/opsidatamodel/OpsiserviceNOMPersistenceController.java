@@ -10961,8 +10961,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 
 		} catch (Exception ex) {
-			logging.logTrace(ex);
-			logging.warning("opsi module information problem: " + ex);
+			logging.warning("opsi module information problem", ex);
 		}
 
 		// if (missingModulesPermissionInfo.size() == 0)

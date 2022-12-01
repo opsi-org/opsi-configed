@@ -141,8 +141,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 				}
 			}
 		} catch (Exception anyException) {
-			logging.warning(this, "on running, caught some exception");
-			logging.logTrace(anyException);
+			logging.warning(this, "on running, caught some exception", anyException);
 		}
 
 	}

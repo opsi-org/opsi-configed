@@ -25,13 +25,9 @@ public class TableCellRendererCurrency extends ColorTableCellRenderer {
 		decimalFormat = NumberFormat.getCurrencyInstance();
 	}
 
-	public Component getTableCellRendererComponent(
-			JTable table,
-			Object value, // value to display
+	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 			boolean isSelected, // is the cell selected
-			boolean hasFocus,
-			int row,
-			int column) {
+			boolean hasFocus, int row, int column) {
 		Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		String selectedString = "";
@@ -43,8 +39,7 @@ public class TableCellRendererCurrency extends ColorTableCellRenderer {
 				double number = Double.valueOf((String) value);
 				selectedString = decimalFormat.format(number);
 			} catch (Exception ex) {
-				logging.debug(this, " format exception: " + ex);
-				// logging.logTrace(ex);
+				logging.warning(this, " format exception", ex);
 			}
 
 		} else {

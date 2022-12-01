@@ -237,8 +237,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 					configed.getResourceValue("SSHConnection.CommandControl.parameterTest.title"),
 					JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception ble) {
-			ble.printStackTrace();
-			logging.warning(this, "Exception  testing parameter-method failed.");
+			logging.warning(this, "Testing parameter-method failed.", ble);
 		}
 		if (caller != null)
 			caller.setVisible(true);

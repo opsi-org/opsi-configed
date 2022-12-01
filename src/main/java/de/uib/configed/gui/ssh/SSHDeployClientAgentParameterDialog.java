@@ -457,8 +457,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		try {
 			SSHConnectExec ssh = new SSHConnectExec((SSHCommand) commandDeployClientAgent);
 		} catch (Exception e) {
-			logging.warning(this, "doAction1, exception occurred " + e);
-			logging.logTrace(e);
+			logging.warning(this, "doAction1, exception occurred", e);
 		}
 	}
 

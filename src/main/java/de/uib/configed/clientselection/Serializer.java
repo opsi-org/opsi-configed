@@ -42,8 +42,8 @@ public abstract class Serializer {
 	}
 
 	/**
-	 * Save the given tree of operations under the given name.
-	 * If the name already exists, overwrite it.
+	 * Save the given tree of operations under the given name. If the name
+	 * already exists, overwrite it.
 	 */
 	public void save(SelectOperation topOperation, String name, String description) {
 		Map<String, Object> data = produceData(topOperation);
@@ -95,7 +95,6 @@ public abstract class Serializer {
 			}
 			return operation;
 		} catch (Exception e) {
-			// e.printStackTrace();
 			logging.error("deserialize error for data " + data + " message " + e.getMessage(), e);
 			return null;
 		}
@@ -130,7 +129,6 @@ public abstract class Serializer {
 		}
 
 		catch (Exception e) {
-			// e.printStackTrace();
 			logging.error(e.getMessage(), e);
 			return null;
 		}
@@ -215,15 +213,15 @@ public abstract class Serializer {
 				// logging.info(this, "getOperation hardware elements " + elements );
 
 				for (SelectElement possibleElement : elements) {
-					logging.info(this, "getOperation possibleElement.getClassName() "
-							+ possibleElement + " compare with elementName " + elementName
-							+ " or perhaps with elementPathS " + elementPathS);
+					logging.info(this,
+							"getOperation possibleElement.getClassName() " + possibleElement
+									+ " compare with elementName " + elementName + " or perhaps with elementPathS "
+									+ elementPathS);
 
 					// if( possibleElement.getClassName().equals( elementName ) )
 					// originally, but is nonsense -------------------------------------------
 					if (possibleElement.getClassName().equals(elementName)
-							&&
-							Arrays.toString(possibleElement.getPathArray()).equals(elementPathS)) {
+							&& Arrays.toString(possibleElement.getPathArray()).equals(elementPathS)) {
 						element = possibleElement;
 						break;
 					}

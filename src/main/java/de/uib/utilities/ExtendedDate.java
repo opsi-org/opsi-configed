@@ -21,7 +21,6 @@ public class ExtendedDate {
 		/*
 		 * catch( DateParseException ex )
 		 * {
-		 * logging.logTrace(ex);
 		 * logging.warning(this, " " + ex);
 		 * }
 		 */

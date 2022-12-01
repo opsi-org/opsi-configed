@@ -99,14 +99,8 @@ public class CSVImportDataModifier {
 				message.append(configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.message"));
 			}
 
-			FTextArea fInfo = new FTextArea(
-					Globals.mainFrame,
-					title + " (" + Globals.APPNAME + ") ",
-					false,
-					new String[] {
-							configed.getResourceValue("FGeneralDialog.ok")
-					},
-					400, 200);
+			FTextArea fInfo = new FTextArea(Globals.mainFrame, title + " (" + Globals.APPNAME + ") ", false,
+					new String[] { configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
 
 			fInfo.setMessage(message.toString());
 			fInfo.setAlwaysOnTop(true);
@@ -130,8 +124,7 @@ public class CSVImportDataModifier {
 		TableSource source = new MapSource(columnNames, classNames, theSourceMap, false);
 		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, classNames, 0);
 
-		GenTableModel model = new GenTableModel(
-				updateItemFactory, // updateItemFactory,
+		GenTableModel model = new GenTableModel(updateItemFactory, // updateItemFactory,
 				new de.uib.utilities.table.provider.DefaultTableProvider(source), // tableProvider
 				0, // keycol
 				new int[] {}, // final columns int array
@@ -184,8 +177,7 @@ public class CSVImportDataModifier {
 
 				writer.close();
 			} catch (IOException e) {
-				logging.error("Unable to write to the CSV file");
-				e.printStackTrace();
+				logging.error("Unable to write to the CSV file", e);
 			}
 
 			return writer.toString();

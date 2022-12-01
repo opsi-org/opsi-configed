@@ -628,8 +628,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 					}
 
 					catch (IOException iox) {
-						logging.info(this, "exception on receiving json " + iox);
-						logging.logTrace(iox);
+						logging.warning(this, "exception on receiving json", iox);
 						throw new JSONCommunicationException("receiving json");
 					} finally {
 						logging.debug(this, "handling finally receiving json close");
