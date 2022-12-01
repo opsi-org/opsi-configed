@@ -41,8 +41,7 @@ import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.thread.WaitCursor;
 
-public class PanelInstallOpsiPackage extends JPanel
-		implements NameProducer {
+public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 	int firstLabelWidth = Globals.firstLabelWidth;
 
@@ -50,7 +49,7 @@ public class PanelInstallOpsiPackage extends JPanel
 	JButton buttonSelectTmpDir;
 	JFileChooser chooserPackage;
 	JFileChooser chooserTmpDir;
-	JComboBox comboChooseDepot;
+	JComboBox<String> comboChooseDepot;
 	JButton buttonCallExecute;
 
 	String opsiPackagePathToHandleS = null;
@@ -131,9 +130,7 @@ public class PanelInstallOpsiPackage extends JPanel
 									+ configed.getResourceValue("InstallOpsiPackage.packageReinstall2"),
 							Globals.APPNAME + " "
 									+ configed.getResourceValue("InstallOpsiPackage.packageReinstallTitle"),
-							JOptionPane.YES_NO_OPTION,
-							JOptionPane.QUESTION_MESSAGE,
-							null, null, null);
+							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 					if (returnedOption == JOptionPane.YES_OPTION)
 						return true;
@@ -234,10 +231,8 @@ public class PanelInstallOpsiPackage extends JPanel
 			logging.info(this, "installPackage wrongly reporesult " + result);
 
 			if (result)
-				JOptionPane.showMessageDialog(rootFrame,
-						"Ready", // resultMessage,
-						configed.getResourceValue("InstallOpsiPackage.reportTitle"),
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,
+						configed.getResourceValue("InstallOpsiPackage.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
 
 		}
 	}
@@ -278,12 +273,12 @@ public class PanelInstallOpsiPackage extends JPanel
 
 	private void defineChoosers() {
 
-		comboChooseDepot = new JComboBox();
+		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.textfieldDimension);
 
 		logging.debug(this, "defineChoosers, depots: " + persist.getHostInfoCollections().getDepots());
 
-		comboChooseDepot.setModel(new DefaultComboBoxModel(main.getLinkedDepots()));
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray(new String[0])));
 		comboChooseDepot.setEnabled(false); // as long as we did not implement contacting a different depot
 
 		chooserPackage = new JFileChooser();
@@ -498,8 +493,8 @@ public class PanelInstallOpsiPackage extends JPanel
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
 				.addGap(Globals.vGapSize, Globals.vGapSize * 3, Globals.vGapSize * 4)
-				.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+				.addComponent(
+						topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize * 2)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(infoLabel, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
@@ -512,10 +507,9 @@ public class PanelInstallOpsiPackage extends JPanel
 						.addComponent(comboChooseDepot, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
 				// .addComponent(fieldDepotName, Globals.lineHeight, Globals.lineHeight,
 				// Globals.lineHeight)
-				)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(panelMountShare, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
+				).addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(panelMountShare,
+						Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
 				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(serverPathLabel, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
@@ -537,28 +531,26 @@ public class PanelInstallOpsiPackage extends JPanel
 				 * )
 				 */
 				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(buttonCallExecute, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(buttonCallExecute,
+						Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
 				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize * 2));
 
 		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize * 2, Short.MAX_VALUE)
+				.addGroup(layout.createSequentialGroup().addGap(Globals.hGapSize, Globals.hGapSize * 2, Short.MAX_VALUE)
 						.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.hGapSize, Globals.hGapSize * 2, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup()
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(infoLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(buttonCallChooserPackage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(fieldOpsiPackageName, Globals.buttonWidth * 2, Globals.buttonWidth * 2,
-								Short.MAX_VALUE)
-						.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup()
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
+				.addGroup(
+						layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addComponent(infoLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+								.addComponent(buttonCallChooserPackage, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addComponent(fieldOpsiPackageName, Globals.buttonWidth * 2, Globals.buttonWidth * 2,
+										Short.MAX_VALUE)
+								.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
+				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(serverLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
 						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
 						.addGap(Globals.graphicButtonWidth, Globals.graphicButtonWidth, Globals.graphicButtonWidth)
@@ -569,12 +561,10 @@ public class PanelInstallOpsiPackage extends JPanel
 						// GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
 
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
+				.addGroup(layout.createSequentialGroup().addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 
-				.addGroup(layout.createSequentialGroup()
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
+				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(serverPathLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
 						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
 						.addComponent(buttonCallChooserServerpath, GroupLayout.PREFERRED_SIZE,
@@ -582,8 +572,7 @@ public class PanelInstallOpsiPackage extends JPanel
 						.addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(fieldServerPath, Globals.buttonWidth * 2, Globals.buttonWidth * 2,
 								Short.MAX_VALUE)
-						.addGap(5, 5, 5)
-						.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
+						.addGap(5, 5, 5).addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
 				/*
 				 * .addGroup(layout.createSequentialGroup()
 				 * .addGap(hFirstGap, hFirstGap, hFirstGap)
@@ -609,13 +598,10 @@ public class PanelInstallOpsiPackage extends JPanel
 				 * .addGap(hFirstGap, hFirstGap, Short.MAX_VALUE)
 				 * )
 				 */
-				.addGroup(layout.createSequentialGroup()
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addGap(0, firstLabelWidth, firstLabelWidth)
-						.addGap(0, Globals.hGapSize, Globals.hGapSize)
+				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+						.addGap(0, firstLabelWidth, firstLabelWidth).addGap(0, Globals.hGapSize, Globals.hGapSize)
 						.addGap(0, Globals.graphicButtonWidth, Globals.graphicButtonWidth)
-						.addGap(0, hFirstGap, hFirstGap)
-						.addGap(0, Globals.buttonWidth * 2, Short.MAX_VALUE)
+						.addGap(0, hFirstGap, hFirstGap).addGap(0, Globals.buttonWidth * 2, Short.MAX_VALUE)
 						.addComponent(buttonCallExecute, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(hFirstGap, hFirstGap, Short.MAX_VALUE))

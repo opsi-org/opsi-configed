@@ -28,15 +28,14 @@ import javax.swing.JPanel;
 import de.uib.utilities.logging.logging;
 
 //a class similar to JCheckBox
-public class CheckedLabel extends JPanel
-		implements FocusListener
+public class CheckedLabel extends JPanel implements FocusListener
 // is an ObservedSubject for key and mouse actions
 
 {
-	final static int setCheckedOn = 1;
-	final static int setCheckedOff = 0;
-	final static String cmdSetCheckedOn = "cmdSetOn";
-	final static String cmdSetCheckedOff = "cmdSetOff";
+	static final int setCheckedOn = 1;
+	static final int setCheckedOff = 0;
+	static final String cmdSetCheckedOn = "cmdSetOn";
+	static final String cmdSetCheckedOff = "cmdSetOff";
 	protected boolean changeStateAutonomously = true;
 
 	protected JLabel selectedLabel;
@@ -242,14 +241,12 @@ public class CheckedLabel extends JPanel
 					if (selected == null || selected == true) {
 
 						ME.setSelected(false);
-						notifyActionListeners(
-								new ActionEvent(ME, setCheckedOff, cmdSetCheckedOff, new java.util.Date().getTime(),
-										0));
+						notifyActionListeners(new ActionEvent(ME, setCheckedOff, cmdSetCheckedOff,
+								new java.util.Date().getTime(), 0));
 					} else {
 						ME.setSelected(true);
-						notifyActionListeners(
-								new ActionEvent(ME, setCheckedOff, cmdSetCheckedOff, new java.util.Date().getTime(),
-										0));
+						notifyActionListeners(new ActionEvent(ME, setCheckedOff, cmdSetCheckedOff,
+								new java.util.Date().getTime(), 0));
 					}
 				}
 			}

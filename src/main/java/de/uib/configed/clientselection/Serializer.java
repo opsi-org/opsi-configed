@@ -24,16 +24,16 @@ import de.uib.utilities.logging.logging;
  * A serializer is able to save and load searches.
  */
 public abstract class Serializer {
-	public final static String elementNameGroup = "GroupElement";
-	public final static String elementNameGroupWithSubgroups = "GroupWithSubgroupsElement";
-	public final static String elementNameSoftwareNameElement = "SoftwareNameElement";
-	public final static String elementNameGeneric = "Generic";
+	public static final String elementNameGroup = "GroupElement";
+	public static final String elementNameGroupWithSubgroups = "GroupWithSubgroupsElement";
+	public static final String elementNameSoftwareNameElement = "SoftwareNameElement";
+	public static final String elementNameGeneric = "Generic";
 
-	public final static String keyElementName = "element";
-	public final static String keySubelementName = "refinedElement";
-	public final static String keyElementPath = "elementPath";
-	public final static String keyOperation = "operation";
-	public final static String keyDataType = "dataType";
+	public static final String keyElementName = "element";
+	public static final String keySubelementName = "refinedElement";
+	public static final String keyElementPath = "elementPath";
+	public static final String keyOperation = "operation";
+	public static final String keyDataType = "dataType";
 
 	protected SelectionManager manager;
 

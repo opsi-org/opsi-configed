@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -81,7 +81,7 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 	}
 
 	/*
-	 * protected Vector getChoicesAllHosts()
+	 * protected ArrayList getChoicesAllHosts()
 	 * {
 	 * TreeSet set = new TreeSet();
 	 * set.add("");
@@ -89,7 +89,7 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 	 * persist.getHostInfoCollections().getPcListForDepots(
 	 * mainController.getSelectedDepots() )
 	 * ).keySet());
-	 * return new Vector(set);
+	 * return new ArrayList(set);
 	 * }
 	 */
 
@@ -101,17 +101,17 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 	public void init() {
 		updateCollection = new TableUpdateCollection();
 
-		Vector<String> columnNames;
-		Vector<String> classNames;
+		ArrayList<String> columnNames;
+		ArrayList<String> classNames;
 
 		// --- panelLicencesUsage
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add(LicenceUsageEntry.clientIdKEY);
 		columnNames.add(LicenceUsageEntry.licenceIdKEY);
 		columnNames.add(LicenceUsageEntry.licencepoolIdKEY);
 		columnNames.add(LicenceUsageEntry.licencekeyKEY);
 		columnNames.add(LicenceUsageEntry.notesKEY);
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
@@ -208,10 +208,10 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 				}, updateCollection));
 
 		// --- panelLicencepools
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryLicencepools = new MapTableUpdateItemFactory(modelLicencepools,
@@ -231,7 +231,7 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 			public ComboBoxModel<String> getComboBoxModel(int row, int column) {
 				List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(persist.getHostInfoCollections()
 						.getPcListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))
-						.keySet());
+								.keySet());
 
 				choicesAllHosts.set(0, "");
 

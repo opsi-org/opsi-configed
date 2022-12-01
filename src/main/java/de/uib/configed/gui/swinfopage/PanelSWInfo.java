@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
@@ -89,14 +89,14 @@ public class PanelSWInfo extends JPanel {
 	String exportFilename = null;
 
 	JCheckBox checkWithMsUpdates;
-	final static String FILTER_MS_UPDATES = "withMsUpdates";
+	static final String FILTER_MS_UPDATES = "withMsUpdates";
 	int indexOfColWindowsSoftwareID;
 
 	de.uib.utilities.table.TableModelFilterCondition filterConditionWithMsUpdates = new de.uib.utilities.table.TableModelFilterCondition() {
 		public void setFilter(TreeSet<Object> filter) {
 		}
 
-		public boolean test(Vector<Object> row) {
+		public boolean test(ArrayList<Object> row) {
 			String entry = (String) row.get(indexOfColWindowsSoftwareID);
 			boolean isKb = entry.startsWith("kb");
 
@@ -115,7 +115,7 @@ public class PanelSWInfo extends JPanel {
 	};
 
 	JCheckBox checkWithMsUpdates2;
-	final static String FILTER_MS_UPDATES2 = "withMsUpdates2";
+	static final String FILTER_MS_UPDATES2 = "withMsUpdates2";
 
 	final java.util.regex.Pattern patternWithKB = java.util.regex.Pattern.compile("\\{.*\\}\\p{Punct}kb.*");
 
@@ -123,7 +123,7 @@ public class PanelSWInfo extends JPanel {
 		public void setFilter(TreeSet<Object> filter) {
 		}
 
-		public boolean test(Vector<Object> row) {
+		public boolean test(ArrayList<Object> row) {
 			String entry = (String) row.get(indexOfColWindowsSoftwareID);
 			boolean isKb = (patternWithKB.matcher(entry)).matches();
 
@@ -166,14 +166,11 @@ public class PanelSWInfo extends JPanel {
 
 		labelSuperTitle.setFont(de.uib.utilities.Globals.defaultFontBold);
 
-		panelTable = new PanelGenEditTable("title",
-				0, false, 0, true,
-				new int[] {
+		panelTable = new PanelGenEditTable("title", 0, false, 0, true, new int[] {
 				// PanelGenEditTable.POPUP_RELOAD,
 				// PanelGenEditTable.POPUP_FLOATINGCOPY,
 				// PanelGenEditTable.POPUP_PDF
-				},
-				true) {
+		}, true) {
 			/*
 			 * @Override
 			 * protected void floatExternal()
@@ -201,50 +198,41 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setSearchSelectMode(true);
 		panelTable.setSearchMode(TablesearchPane.FULL_TEXT_SEARCH);
 
-		Vector<String> columnNames;
-		Vector<String> classNames;
+		ArrayList<String> columnNames;
+		ArrayList<String> classNames;
 
-		columnNames = new Vector<String>(SWAuditClientEntry.KEYS);
+		columnNames = new ArrayList<String>(SWAuditClientEntry.KEYS);
 		columnNames.remove(0);
-		classNames = new Vector<String>();
+		classNames = new ArrayList<String>();
 		int[] finalColumns = new int[columnNames.size()];
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 			finalColumns[i] = i;
 		}
 
-		modelSWInfo = new GenTableModel(
-				null, // no updates
-				new DefaultTableProvider(
-						new RetrieverMapSource(columnNames, classNames,
-								new MapRetriever() {
-									public Map<String, Map> retrieveMap() {
-										logging.info(this, "retrieving data for " + hostId);
-										Map<String, Map> tableData = persist.retrieveSoftwareAuditData(hostId);
+		modelSWInfo = new GenTableModel(null, // no updates
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					public Map<String, Map> retrieveMap() {
+						logging.info(this, "retrieving data for " + hostId);
+						Map<String, Map> tableData = persist.retrieveSoftwareAuditData(hostId);
 
-										if (tableData == null || tableData.keySet().size() == 0) {
-											scanInfo = de.uib.configed.configed
-													.getResourceValue("PanelSWInfo.noScanResult");
-											title = scanInfo;
-										} else {
-											logging.debug(this, "retrieved size  " + tableData.keySet().size());
-											scanInfo = "Scan " +
-													persist.getLastSoftwareAuditModification(hostId);
-											title = scanInfo;
+						if (tableData == null || tableData.keySet().size() == 0) {
+							scanInfo = de.uib.configed.configed.getResourceValue("PanelSWInfo.noScanResult");
+							title = scanInfo;
+						} else {
+							logging.debug(this, "retrieved size  " + tableData.keySet().size());
+							scanInfo = "Scan " + persist.getLastSoftwareAuditModification(hostId);
+							title = scanInfo;
 
-										}
+						}
 
-										setSuperTitle(scanInfo);
+						setSuperTitle(scanInfo);
 
-										logging.debug(this, " got scanInfo " + scanInfo);
+						logging.debug(this, " got scanInfo " + scanInfo);
 
-										return tableData;
-									}
-								})),
-				-1,
-				finalColumns,
-				null,
-				null);
+						return tableData;
+					}
+				})), -1, finalColumns, null, null);
 
 		indexOfColWindowsSoftwareID = columnNames.indexOf(SWAuditEntry.WINDOWSsOFTWAREid);
 		modelSWInfo.chainFilter(FILTER_MS_UPDATES, new TableModelFilter(filterConditionWithMsUpdates));
@@ -285,29 +273,24 @@ public class PanelSWInfo extends JPanel {
 		GroupLayout layoutSubPanelTitle = new GroupLayout(subPanelTitle);
 		subPanelTitle.setLayout(layoutSubPanelTitle);
 
-		layoutSubPanelTitle.setHorizontalGroup(layoutSubPanelTitle.createSequentialGroup()
-				.addGap(hGap, hGap, hGap)
+		layoutSubPanelTitle.setHorizontalGroup(layoutSubPanelTitle.createSequentialGroup().addGap(hGap, hGap, hGap)
 				.addGroup(layoutSubPanelTitle.createParallelGroup()
 						.addComponent(labelSuperTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGroup(layoutSubPanelTitle.createSequentialGroup()
 								.addComponent(labelWithMSUpdates, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(hGap, hGap, hGap)
-								.addGap(hGap, hGap, hGap)
+								.addGap(hGap, hGap, hGap).addGap(hGap, hGap, hGap)
 								.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
 				.addGap(hGap, hGap, hGap)
 				.addGroup(layoutSubPanelTitle.createSequentialGroup()
 						.addComponent(labelWithMSUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(hGap, hGap, hGap)
-						.addGap(hGap, hGap, hGap)
-						.addComponent(checkWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
+						.addGap(hGap, hGap, hGap).addGap(hGap, hGap, hGap).addComponent(checkWithMsUpdates2,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(hGap, hGap, hGap));
-		layoutSubPanelTitle.setVerticalGroup(layoutSubPanelTitle.createSequentialGroup()
-				.addGap(vGap, vGap, vGap)
+		layoutSubPanelTitle.setVerticalGroup(layoutSubPanelTitle.createSequentialGroup().addGap(vGap, vGap, vGap)
 				.addComponent(labelSuperTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(vGap, vGap, vGap)
@@ -321,8 +304,7 @@ public class PanelSWInfo extends JPanel {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(checkWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(vGap, vGap, vGap)
-				.addGap(vGap, vGap, vGap));
+				.addGap(vGap, vGap, vGap).addGap(vGap, vGap, vGap));
 
 		// subPanelTitle.setBorder(BorderFactory.createLineBorder(de.uib.configed.Globals.blueGrey));
 
@@ -379,10 +361,9 @@ public class PanelSWInfo extends JPanel {
 		GroupLayout layoutEmbed = new GroupLayout(this);
 		setLayout(layoutEmbed);
 
-		layoutEmbed.setHorizontalGroup(
-				layoutEmbed.createSequentialGroup()
-						.addGap(hGap, hGap, hGap)
-						.addGroup(layoutEmbed.createParallelGroup()
+		layoutEmbed
+				.setHorizontalGroup(layoutEmbed
+						.createSequentialGroup().addGap(hGap, hGap, hGap).addGroup(layoutEmbed.createParallelGroup()
 								/*
 								 * .addGroup(layoutEmbed.createSequentialGroup()
 								 * .addGap(hGap, hGap, hGap)
@@ -401,54 +382,51 @@ public class PanelSWInfo extends JPanel {
 										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 						.addGap(hGap, hGap, hGap));
 
-		layoutEmbed.setVerticalGroup(
-				layoutEmbed.createSequentialGroup()
-						// .addGap(vGap, vGap, vGap)
-						// .addComponent(jlabelSuperTitle, hLabel, hLabel, hLabel)
-						// .addGap(vGap, vGap, vGap)
-						// .addComponent(scrollPaneSWInfo, javax.swing.GroupLayout.PREFERRED_SIZE,
-						// javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(vGap, vGap, vGap)
-						.addComponent(subPanelTitle, javax.swing.GroupLayout.PREFERRED_SIZE,
-								javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-						// .addComponent(subPanelButtons, javax.swing.GroupLayout.PREFERRED_SIZE,
-						// javax.swing.GroupLayout.PREFERRED_SIZE,
-						// javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addComponent(panelTable, javax.swing.GroupLayout.PREFERRED_SIZE,
-								javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(vGap, vGap, vGap));
+		layoutEmbed.setVerticalGroup(layoutEmbed.createSequentialGroup()
+				// .addGap(vGap, vGap, vGap)
+				// .addComponent(jlabelSuperTitle, hLabel, hLabel, hLabel)
+				// .addGap(vGap, vGap, vGap)
+				// .addComponent(scrollPaneSWInfo, javax.swing.GroupLayout.PREFERRED_SIZE,
+				// javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addGap(vGap, vGap, vGap)
+				.addComponent(subPanelTitle, javax.swing.GroupLayout.PREFERRED_SIZE,
+						javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+				// .addComponent(subPanelButtons, javax.swing.GroupLayout.PREFERRED_SIZE,
+				// javax.swing.GroupLayout.PREFERRED_SIZE,
+				// javax.swing.GroupLayout.PREFERRED_SIZE)
+				.addComponent(panelTable, javax.swing.GroupLayout.PREFERRED_SIZE,
+						javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addGap(vGap, vGap, vGap));
 
 		if (withPopup) {
-			popupTrait = new PopupMenuTrait(new Integer[] {
-					PopupMenuTrait.POPUP_EXPORT_CSV,
-					PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
+			popupTrait = new PopupMenuTrait(
+					new Integer[] { PopupMenuTrait.POPUP_EXPORT_CSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
 
-					PopupMenuTrait.POPUP_RELOAD,
-					PopupMenuTrait.POPUP_PDF,
+							PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,
 
-					PopupMenuTrait.POPUP_FLOATINGCOPY }) {
+							PopupMenuTrait.POPUP_FLOATINGCOPY }) {
 				public void action(int p) {
 
 					switch (p) {
-						case PopupMenuTrait.POPUP_RELOAD:
-							reload();
-							break;
+					case PopupMenuTrait.POPUP_RELOAD:
+						reload();
+						break;
 
-						case PopupMenuTrait.POPUP_FLOATINGCOPY:
-							floatExternalX();
-							break;
+					case PopupMenuTrait.POPUP_FLOATINGCOPY:
+						floatExternalX();
+						break;
 
-						case PopupMenuTrait.POPUP_PDF:
-							sendToPDF();
-							break;
+					case PopupMenuTrait.POPUP_PDF:
+						sendToPDF();
+						break;
 
-						case PopupMenuTrait.POPUP_EXPORT_CSV:
-							sendToCSV();
-							break;
+					case PopupMenuTrait.POPUP_EXPORT_CSV:
+						sendToCSV();
+						break;
 
-						case PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV:
-							sendToCSVonlySelected();
-							break;
+					case PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV:
+						sendToCSVonlySelected();
+						break;
 
 					}
 				}
@@ -533,14 +511,14 @@ public class PanelSWInfo extends JPanel {
 		csvExportTable.setAskForOverwrite(askForOverwrite);
 		String exportPath = exportFilename;
 		switch (kindOfExport) {
-			case CSV:
-				logging.info(this, "export to " + exportPath);
-				csvExportTable.execute(exportPath, false);
-				break;
+		case CSV:
+			logging.info(this, "export to " + exportPath);
+			csvExportTable.execute(exportPath, false);
+			break;
 
-			case PDF:
-				sendToPDF();
-				break;
+		case PDF:
+			sendToPDF();
+			break;
 		}
 	}
 
@@ -735,11 +713,9 @@ public class PanelSWInfo extends JPanel {
 	protected class SWInfoTableModel extends AbstractTableModel {
 		private java.util.List<String[]> data;
 		// private String dateS;
-		private final String[] header = {
-				configed.getResourceValue("PanelSWInfo.tableheader_displayName"),
+		private final String[] header = { configed.getResourceValue("PanelSWInfo.tableheader_displayName"),
 				configed.getResourceValue("PanelSWInfo.tableheader_softwareId"),
-				configed.getResourceValue("PanelSWInfo.tableheader_displayVersion")
-		};
+				configed.getResourceValue("PanelSWInfo.tableheader_displayVersion") };
 
 		public SWInfoTableModel() {
 			super();

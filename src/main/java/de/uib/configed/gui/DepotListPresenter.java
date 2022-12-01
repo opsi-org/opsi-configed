@@ -5,8 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -24,16 +24,12 @@ import de.uib.utilities.table.gui.SearchTargetModelFromJList;
 import de.uib.utilities.table.gui.TablesearchPane;
 
 /**
- * DepotListPresenter.java
- * Copyright (c) 2017
- * Organisation: uib
+ * DepotListPresenter.java Copyright (c) 2017 Organisation: uib
  * 
  * @author Rupert Röder
  */
 
-public class DepotListPresenter
-		extends JPanel
-		implements ActionListener {
+public class DepotListPresenter extends JPanel implements ActionListener {
 	private DepotsList depotslist;
 	private JScrollPane scrollpaneDepotslist;
 	// this will not be shown in this panel but exported for use in other panels
@@ -45,7 +41,7 @@ public class DepotListPresenter
 	// private JTextField searchField;
 	private TablesearchPane searchPane;
 
-	private Vector<? extends String> unfilteredV;
+	private ArrayList<? extends String> unfilteredV;
 
 	private boolean multidepot;
 
@@ -59,8 +55,8 @@ public class DepotListPresenter
 		this.multidepot = multidepot;
 		this.persist = persist;
 
-		Vector<String> values = new Vector<String>();
-		Vector<String> descriptions = new Vector<String>();
+		ArrayList<String> values = new ArrayList<String>();
+		ArrayList<String> descriptions = new ArrayList<String>();
 		Map<String, Map<String, Object>> depotInfo = depotsList.getDepotInfo();
 
 		for (String depot : depotInfo.keySet()) {
@@ -71,8 +67,7 @@ public class DepotListPresenter
 				descriptions.add((String) depotInfo.get(depot).get("description"));
 		}
 
-		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(
-				depotsList, values, descriptions);
+		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(depotsList, values, descriptions);
 
 		searchPane = new TablesearchPane(searchTargetModel, "depotlist");
 		searchPane.setSearchMode(TablesearchPane.FULL_TEXT_SEARCH);
@@ -86,8 +81,8 @@ public class DepotListPresenter
 	}
 
 	/**
-	 * exports the scrollpane which is produced in this class but
-	 * displayed in other components
+	 * exports the scrollpane which is produced in this class but displayed in
+	 * other components
 	 *
 	 * @return a scrollpane which shows the depotslist
 	 */
@@ -137,18 +132,15 @@ public class DepotListPresenter
 		labelDepotServer.setFont(Globals.defaultFontStandardBold);
 		// labelDepotServer.setFont(Globals.defaultFont);
 
-		buttonSelectDepotsWithEqualProperties = new JButton("",
-				Globals.createImageIcon("images/equalplus.png", ""));
-		buttonSelectDepotsWithEqualProperties.setToolTipText(
-				configed.getResourceValue("MainFrame.buttonSelectDepotsWithEqualProperties"));
+		buttonSelectDepotsWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
+		buttonSelectDepotsWithEqualProperties
+				.setToolTipText(configed.getResourceValue("MainFrame.buttonSelectDepotsWithEqualProperties"));
 		Globals.formatButtonSmallText(buttonSelectDepotsWithEqualProperties);
 		buttonSelectDepotsWithEqualProperties.addActionListener(this);
 		buttonSelectDepotsWithEqualProperties.setEnabled(multidepot);
 
-		buttonSelectDepotsAll = new JButton("",
-				Globals.createImageIcon("images/plusplus.png", ""));
-		buttonSelectDepotsAll.setToolTipText(
-				configed.getResourceValue("MainFrame.buttonSelectDepotsAll"));
+		buttonSelectDepotsAll = new JButton("", Globals.createImageIcon("images/plusplus.png", ""));
+		buttonSelectDepotsAll.setToolTipText(configed.getResourceValue("MainFrame.buttonSelectDepotsAll"));
 		Globals.formatButtonSmallText(buttonSelectDepotsAll);
 		buttonSelectDepotsAll.addActionListener(this);
 		buttonSelectDepotsAll.setEnabled(multidepot);
@@ -273,8 +265,7 @@ public class DepotListPresenter
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGap(5, 5, 10)
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(5, 5, 10)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelDepotServer, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -286,17 +277,13 @@ public class DepotListPresenter
 				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				// .addComponent(buttonCancelChangedDepotSelection, GroupLayout.PREFERRED_SIZE,
 				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				)
-				.addGap(5, 5, 10)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+				).addGap(5, 5, 10).addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(searchPane, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
 				.addGap(5, 5, 10));
 
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-				.addGroup(layout.createSequentialGroup()
-						.addGap(10)
-						.addComponent(labelDepotServer, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(10)
+				.addGroup(layout.createSequentialGroup().addGap(10)
+						.addComponent(labelDepotServer, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(10)
 						.addComponent(buttonSelectDepotsWithEqualProperties, Globals.squareButtonWidth,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonSelectDepotsAll, Globals.squareButtonWidth, GroupLayout.PREFERRED_SIZE,
@@ -306,10 +293,8 @@ public class DepotListPresenter
 						// .addComponent(buttonCancelChangedDepotSelection, GroupLayout.PREFERRED_SIZE,
 						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(10, 10, 10))
-				.addGroup(layout.createSequentialGroup()
-						.addGap(5, 5, 5)
-						.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(5, 5, 5)));
+				.addGroup(layout.createSequentialGroup().addGap(5, 5, 5)
+						.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(5, 5, 5)));
 	}
 
 	boolean filtered = false;
@@ -319,9 +304,9 @@ public class DepotListPresenter
 
 		if (!filtered) {
 			unfilteredV = depotslist.getListData();
-			depotslist.setListData(new Vector<String>(depotslist.getSelectedValuesList()));
+			depotslist.setListData(depotslist.getSelectedValuesList().toArray(new String[0]));
 		} else
-			depotslist.setListData(unfilteredV);
+			depotslist.setListData(unfilteredV.toArray(new String[0]));
 
 		filtered = !filtered;
 

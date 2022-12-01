@@ -3,34 +3,34 @@ package de.uib.opsidatamodel.productstate;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import de.uib.configed.Globals;
 
 public class ActionResult {
-	public final static String KEY = "actionResult";
+	public static final String KEY = "actionResult";
 
 	// conflicting entries from several clients
-	public final static int CONFLICT = -4;
+	public static final int CONFLICT = -4;
 
 	// no valid entry from service
-	public final static int INVALID = -2;
+	public static final int INVALID = -2;
 
 	// product offers no entry
-	public final static int NOT_AVAILABLE = -6;
+	public static final int NOT_AVAILABLE = -6;
 
 	// valid service states
-	public final static int NONE = 0;
-	public final static int FAILED = 2;
-	public final static int SUCCESSFUL = 4;
+	public static final int NONE = 0;
+	public static final int FAILED = 2;
+	public static final int SUCCESSFUL = 4;
 
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
 	private static Map<String, String> label2displayLabel;
 	private static Map<String, String> displayLabel2label;
 
-	private static Vector<Integer> states;
-	private static Vector<String> labels;
+	private static ArrayList<Integer> states;
+	private static ArrayList<String> labels;
 	private static String[] choiceLabels;
 
 	// instance variable
@@ -40,7 +40,7 @@ public class ActionResult {
 		if (states != null)
 			return;
 
-		states = new Vector<Integer>();
+		states = new ArrayList<Integer>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(NOT_AVAILABLE);
@@ -48,7 +48,7 @@ public class ActionResult {
 		states.add(FAILED);
 		states.add(SUCCESSFUL);
 
-		labels = new Vector<String>();
+		labels = new ArrayList<String>();
 		labels.add(Globals.CONFLICTSTATEstring);
 		labels.add(Globals.NOVALIDSTATEstring);
 		labels.add("not_available");
@@ -120,7 +120,7 @@ public class ActionResult {
 		return state2label.get(state);
 	}
 
-	public static Vector<String> getLabels() {
+	public static ArrayList<String> getLabels() {
 		checkCollections();
 
 		return labels;

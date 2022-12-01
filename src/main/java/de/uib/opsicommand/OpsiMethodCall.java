@@ -1,9 +1,9 @@
 package de.uib.opsicommand;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,15 +15,15 @@ public class OpsiMethodCall {
 	private String methodname;
 
 	private Object[] parameters;
-	public final static boolean BACKGROUND = true;
+	public static final boolean BACKGROUND = true;
 	private boolean background;
 
-	protected final static int defaultJsonId = 1;
+	protected static final int defaultJsonId = 1;
 
 	public static String extendRpcPath = "extend/configed";
 	private String rpcPath = "";// extendRpcPath;
 
-	public final static Vector<String> collectedCalls = new Vector<String>();
+	public static final ArrayList<String> collectedCalls = new ArrayList<String>();
 	public static int maxCollectSize = -1;
 
 	/*
@@ -213,7 +213,7 @@ public class OpsiMethodCall {
 			JSONArray joParams = new JSONArray();
 
 			/*
-			 * Vector v = new Vector();
+			 * ArrayList v = new ArrayList();
 			 * for (int i = 0; i<parameters.length; i++)
 			 * { v.add (parameters[i]);
 			 * }

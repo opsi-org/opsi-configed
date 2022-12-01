@@ -33,7 +33,7 @@ public class PersistenceControllerFactory {
 	public static boolean sqlDirect = false;
 
 	public static String directmethodcall = "";
-	public final static String directmethodcall_cleanupAuditsoftware = "cleanupAuditsoftware";
+	public static final String directmethodcall_cleanupAuditsoftware = "cleanupAuditsoftware";
 
 	/**
 	 * This creation method constructs a new Controller instance and lets a

@@ -36,12 +36,12 @@ public class OpsiUser {
 	private String description;
 	private java.sql.Timestamp lastchanged;
 
-	public final static String COL_ID = "user_id";
-	public final static String COL_NAME = "user_name";
-	public final static String COL_DESCRIPTION = "user_description";
-	public final static String COL_LASTCHANGED = "user_lastchanged";
+	public static final String COL_ID = "user_id";
+	public static final String COL_NAME = "user_name";
+	public static final String COL_DESCRIPTION = "user_description";
+	public static final String COL_LASTCHANGED = "user_lastchanged";
 
-	public final static String[] COLNAMES = new String[] { COL_ID, COL_NAME, COL_DESCRIPTION, COL_LASTCHANGED };
+	public static final String[] COLNAMES = new String[] { COL_ID, COL_NAME, COL_DESCRIPTION, COL_LASTCHANGED };
 
 	// public static OpsiUser ADMINUSER = new OpsiUser("adminuser", "default opsi
 	// administrator", null);

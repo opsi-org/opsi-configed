@@ -5,12 +5,12 @@ import java.util.Date;
 //import de.uib.utilities.logging.*;
 
 public class ExtendedDate {
-	final static String infiniteImport = "never";
-	final static String sINFINITE = "INFINITE";
-	// final static String displayInfinite = "\u221E";//"INF";
+	static final String infiniteImport = "never";
+	static final String sINFINITE = "INFINITE";
+	// static final String displayInfinite = "\u221E";//"INF";
 
-	final static public ExtendedDate INFINITE = new ExtendedDate(sINFINITE);
-	final static public ExtendedDate ZERO = new ExtendedDate("1900-01-01 00:00:0");
+	static final public ExtendedDate INFINITE = new ExtendedDate(sINFINITE);
+	static final public ExtendedDate ZERO = new ExtendedDate("1900-01-01 00:00:0");
 
 	private Date date;
 	private String sDate;

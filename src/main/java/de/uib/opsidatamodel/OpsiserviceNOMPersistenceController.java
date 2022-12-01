@@ -41,7 +41,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.Icon;
 
@@ -109,8 +108,8 @@ import de.uib.utilities.table.ListCellOptions;
 public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	private static int callcount = 0;
 
-	private final static String EMPTYFIELD = "-";
-	private final static ArrayList NONE_LIST = new ArrayList() {
+	private static final String EMPTYFIELD = "-";
+	private static final ArrayList NONE_LIST = new ArrayList() {
 		public int size() {
 			return -1;
 		}
@@ -134,12 +133,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	/* ------------------------------------------ */
 
-	public final static String nameRequirementTypeBefore = "before";
-	public final static String nameRequirementTypeAfter = "after";
-	public final static String nameRequirementTypeNeutral = "";
-	public final static String nameRequirementTypeOnDeinstall = "on_deinstall";
+	public static final String nameRequirementTypeBefore = "before";
+	public static final String nameRequirementTypeAfter = "after";
+	public static final String nameRequirementTypeNeutral = "";
+	public static final String nameRequirementTypeOnDeinstall = "on_deinstall";
 
-	public final static String[] LICENSE_TYPES = new String[] { "VOLUME", "OEM", "RETAIL", "CONCURRENT" };
+	public static final String[] LICENSE_TYPES = new String[] { "VOLUME", "OEM", "RETAIL", "CONCURRENT" };
 
 	// Executioner exec; in superclass
 	// Executioner execBackground;
@@ -240,11 +239,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	protected java.util.Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses;
 	protected OpsiHwAuditDevicePropertyTypes hwAuditDevicePropertyTypes;
 
-	protected Vector<String> hostColumnNames;
-	protected Vector<String> client2HwRowsColumnNames;
-	protected Vector<String> client2HwRowsJavaclassNames;
-	protected Vector<String> hwInfoClassNames;
-	protected Vector<String> hwTableNames;
+	protected ArrayList<String> hostColumnNames;
+	protected ArrayList<String> client2HwRowsColumnNames;
+	protected ArrayList<String> client2HwRowsJavaclassNames;
+	protected ArrayList<String> hwInfoClassNames;
+	protected ArrayList<String> hwTableNames;
 
 	// protected Map <String, Map> host2SWInformation;
 
@@ -257,7 +256,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		HostGroups addSpecialGroups() {
 			logging.debug(this, "addSpecialGroups check");
-			Vector<StringValuedRelationElement> groups = new Vector<StringValuedRelationElement>();
+			ArrayList<StringValuedRelationElement> groups = new ArrayList<StringValuedRelationElement>();
 
 			if (get(de.uib.configed.tree.ClientTree.DIRECTORY_PERSISTENT_NAME) == null)
 			// create
@@ -3689,19 +3688,19 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	/* multiclient hwinfo */
 
 	@Override
-	public Vector<String> getHostColumnNames() {
+	public ArrayList<String> getHostColumnNames() {
 		retrieveClient2HwRowsColumnNames();
 		return hostColumnNames;
 	}
 
 	@Override
-	public Vector<String> getClient2HwRowsColumnNames() {
+	public ArrayList<String> getClient2HwRowsColumnNames() {
 		retrieveClient2HwRowsColumnNames();
 		return client2HwRowsColumnNames;
 	}
 
 	@Override
-	public Vector<String> getClient2HwRowsJavaclassNames() {
+	public ArrayList<String> getClient2HwRowsJavaclassNames() {
 		retrieveClient2HwRowsColumnNames();
 		return client2HwRowsJavaclassNames;
 	}
@@ -3824,7 +3823,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	public Vector<String> getHwInfoClassNames() {
+	public ArrayList<String> getHwInfoClassNames() {
 		retrieveClient2HwRowsColumnNames();
 		logging.info(this, "getHwInfoClassNames " + hwInfoClassNames);
 		return hwInfoClassNames;
@@ -3857,7 +3856,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				+ (client2HwRowsColumnNames == null));
 		if (client2HwRowsColumnNames == null || client2HwRowsJavaclassNames == null || hwInfoClassNames == null) {
 
-			hostColumnNames = new Vector<String>();
+			hostColumnNames = new ArrayList<String>();
 
 			hostColumnNames.add(Host.idColumn); // "HOST.hostId");
 			hostColumnNames.add(Host.descriptionColumn);
@@ -3868,7 +3867,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			getConfigOptions();
 			// there is produced client2HwRowsColumnNames
 
-			client2HwRowsColumnNames = new Vector<String>(hostColumnNames);
+			client2HwRowsColumnNames = new ArrayList<String>(hostColumnNames);
 
 			for (String hwClassName : hwAuditDeviceClasses.keySet()) {
 				OpsiHwAuditDeviceClass hwAuditDeviceClass = hwAuditDeviceClasses.get(hwClassName);
@@ -3907,7 +3906,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			 * client2HwRowsColumnNames.add("HARDWARE_CONFIG_COMPUTER_SYSTEM.serialNumber");
 			 */
 
-			client2HwRowsJavaclassNames = new Vector<String>();
+			client2HwRowsJavaclassNames = new ArrayList<String>();
 			for (String col : client2HwRowsColumnNames) {
 				client2HwRowsJavaclassNames.add("java.lang.String");
 			}
@@ -3920,7 +3919,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					hwInfoClasses.add(className);
 			}
 
-			hwInfoClassNames = new Vector<String>(hwInfoClasses);
+			hwInfoClassNames = new ArrayList<String>(hwInfoClasses);
 
 			/*
 			 * hwInfoClassNames.add("BIOS");
@@ -4213,9 +4212,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	/*
-	 * public Vector getInstallImages()
+	 * public ArrayList getInstallImages()
 	 * {
-	 * return new Vector(
+	 * return new ArrayList(
 	 * exec.getListResult(
 	 * new OpsiMethodCall(
 	 * "getBootimages_list",
@@ -4388,8 +4387,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	public Vector<String> getWinProducts(String depotId, String depotProductDirectory) {
-		Vector<String> winProducts = new Vector<String>();
+	public ArrayList<String> getWinProducts(String depotId, String depotProductDirectory) {
+		ArrayList<String> winProducts = new ArrayList<String>();
 		if (depotProductDirectory == null)
 			return winProducts;
 
@@ -5000,7 +4999,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	public Vector<Vector<Object>> getProductRows() {
+	public ArrayList<ArrayList<Object>> getProductRows() {
 		return dataStub.getProductRows();
 	}
 
@@ -7152,8 +7151,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	public Vector<String> getDomains() {
-		Vector<String> result = new Vector<String>();
+	public ArrayList<String> getDomains() {
+		ArrayList<String> result = new ArrayList<String>();
 
 		if (configDefaultValues.get(configedGIVENDOMAINS_key) == null) {
 			logging.info(this, "no values found for   " + configedGIVENDOMAINS_key);
@@ -8289,8 +8288,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public java.util.List<String> getServerConfigStrings(String key) {
 		getConfigOptions();
 
-		java.util.ArrayList<String> result = de.uib.utilities.Globals.takeAsStringList(configDefaultValues.get(key));
-		return result;
+		return de.uib.utilities.Globals.takeAsStringList(configDefaultValues.get(key));
 	}
 
 	@Override
@@ -10635,7 +10633,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 		}
 
-		Vector<String> availableModules = licInfoMap.getAvailableModules();
+		ArrayList<String> availableModules = licInfoMap.getAvailableModules();
 
 		for (String mod : licInfoMap.getModules()) {
 			if (availableModules.indexOf(mod) == -1)

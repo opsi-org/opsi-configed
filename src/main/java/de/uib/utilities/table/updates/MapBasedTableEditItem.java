@@ -10,16 +10,16 @@ package de.uib.utilities.table.updates;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class MapBasedTableEditItem extends TableEditItem {
-	Vector<String> columnNames;
-	Vector<String> classNames;
-	Vector<Object> oldValues;
-	Vector<Object> rowV;
+	ArrayList<String> columnNames;
+	ArrayList<String> classNames;
+	ArrayList<Object> oldValues;
+	ArrayList<Object> rowV;
 
-	public MapBasedTableEditItem(Object source, int keyCol, Vector<String> columnNames, Vector<String> classNames,
-			Vector<Object> oldValues, Vector<Object> rowV) {
+	public MapBasedTableEditItem(Object source, int keyCol, ArrayList<String> columnNames, ArrayList<String> classNames,
+			ArrayList<Object> oldValues, ArrayList<Object> rowV) {
 		this.columnNames = columnNames;
 		this.classNames = classNames;
 		this.oldValues = oldValues;
@@ -28,8 +28,8 @@ public class MapBasedTableEditItem extends TableEditItem {
 		this.keyCol = keyCol;
 	}
 
-	public MapBasedTableEditItem(Object source, int keyCol, Vector<String> columnNames, Vector<String> classNames,
-			Vector<Object> rowV) {
+	public MapBasedTableEditItem(Object source, int keyCol, ArrayList<String> columnNames, ArrayList<String> classNames,
+			ArrayList<Object> rowV) {
 		this(source, keyCol, columnNames, classNames, null, rowV);
 	}
 

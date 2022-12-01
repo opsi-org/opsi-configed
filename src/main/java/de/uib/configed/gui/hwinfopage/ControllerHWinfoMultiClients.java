@@ -16,7 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -47,8 +47,8 @@ public class ControllerHWinfoMultiClients {
 	JButton buttonReload;
 	JButton buttonCopySelection;
 
-	Vector<String> columnNames;
-	Vector<String> classNames;
+	ArrayList<String> columnNames;
+	ArrayList<String> classNames;
 
 	TreeSet theFilterSet;
 
@@ -56,9 +56,9 @@ public class ControllerHWinfoMultiClients {
 	ConfigedMain main;
 	protected PersistenceController persist;
 
-	final static int keycol = 0;
-	final static String FILTER_SELECTED_CLIENTS = "visibleClients";
-	final static String DELETE_PREFIX = "HARDWARE_";
+	static final int keycol = 0;
+	static final String FILTER_SELECTED_CLIENTS = "visibleClients";
+	static final String DELETE_PREFIX = "HARDWARE_";
 
 	TableModelFilter tableModelFilter;
 
@@ -71,7 +71,7 @@ public class ControllerHWinfoMultiClients {
 			this.filter = filter;
 		}
 
-		public boolean test(Vector<Object> row) {
+		public boolean test(ArrayList<Object> row) {
 			if (filter == null || row == null || keycol >= row.size())
 				return true;
 
@@ -126,8 +126,7 @@ public class ControllerHWinfoMultiClients {
 		panel = new PanelGenEditTable("", // configed.getResourceValue("HardwareList"),
 				0, false, 0, false,
 				// new int[]{PanelGenEditTable.POPUP_RELOAD, PanelGenEditTable.POPUP_PDF},
-				PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF,
-				true) {
+				PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF, true) {
 			@Override
 			public void reload() {
 				// persist.configOptionsRequestRefresh();
@@ -175,17 +174,15 @@ public class ControllerHWinfoMultiClients {
 
 				// tableProvider
 				// new de.uib.utilities.table.provider.DefaultTableProvider(sqlSource),
-				new DefaultTableProvider(
-						new RetrieverMapSource(columnNames, classNames,
-								new MapRetriever() {
-									public Map retrieveMap() {
-										logging.info(this, "retrieveMap: getClient2HwRows");
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					public Map retrieveMap() {
+						logging.info(this, "retrieveMap: getClient2HwRows");
 
-										Map<String, Map<String, Object>> hwInfos = persist.getClient2HwRows(hosts);
+						Map<String, Map<String, Object>> hwInfos = persist.getClient2HwRows(hosts);
 
-										return hwInfos;
-									}
-								})),
+						return hwInfos;
+					}
+				})),
 
 				// keycol
 				0,
@@ -235,13 +232,11 @@ public class ControllerHWinfoMultiClients {
 		// Icon iconConfigure =
 		// de.uib.configed.Globals.createImageIcon("images/config_pro.png", "");
 		// buttonConfigureColumns = new JButton("...");
-		buttonConfigureColumns = new JButton("",
-				de.uib.configed.Globals.createImageIcon("images/configure16.png", ""));
+		buttonConfigureColumns = new JButton("", de.uib.configed.Globals.createImageIcon("images/configure16.png", ""));
 		buttonConfigureColumns.setToolTipText(configed.getResourceValue("PanelHWInfo.overview.configure"));
 		buttonConfigureColumns.setPreferredSize(de.uib.configed.Globals.smallButtonDimension);
 
-		buttonReload = new JButton("",
-				de.uib.configed.Globals.createImageIcon("images/reload16.png", ""));
+		buttonReload = new JButton("", de.uib.configed.Globals.createImageIcon("images/reload16.png", ""));
 		buttonReload.setToolTipText(configed.getResourceValue("PanelHWInfo.overview.loadNewConfiguration"));
 
 		buttonReload.setPreferredSize(de.uib.configed.Globals.smallButtonDimension);
@@ -273,14 +268,12 @@ public class ControllerHWinfoMultiClients {
 				ControllerHWinfoColumnConfiguration controllerHWinfoColumnConfiguration = new ControllerHWinfoColumnConfiguration(
 						main, persist);
 				if (fTable == null || ((FPanel) fTable).isLeft()) {
-					fTable = new FPanel(
-							"hardware classes / database columns",
+					fTable = new FPanel("hardware classes / database columns",
 							controllerHWinfoColumnConfiguration.panel,
 							// testpanel,
 							true);
 
-					fTable.setSize(new java.awt.Dimension(
-							de.uib.utilities.Globals.masterFrame.getSize().width - 50,
+					fTable.setSize(new java.awt.Dimension(de.uib.utilities.Globals.masterFrame.getSize().width - 50,
 							de.uib.utilities.Globals.masterFrame.getSize().height / 2));
 				}
 

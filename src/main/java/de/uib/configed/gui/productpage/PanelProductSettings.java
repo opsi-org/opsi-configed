@@ -20,7 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.DefaultRowSorter;
 import javax.swing.GroupLayout;
@@ -764,7 +764,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	protected JTable strippTable(JTable jTable) {
 		boolean dontStrippIt;
-		Vector<String[]> data = new Vector<String[]>();
+		ArrayList<String[]> data = new ArrayList<String[]>();
 		String[] headers = new String[jTable.getColumnCount()];
 		for (int i = 0; i < jTable.getColumnCount(); i++) {
 			headers[i] = jTable.getColumnName(i);

@@ -8,17 +8,15 @@
 
 package de.uib.utilities.table.updates;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class MapTableUpdateItemFactory extends TableUpdateItemFactory {
-	protected Vector<String> columnNames;
-	protected Vector<String> classNames;
+	protected ArrayList<String> columnNames;
+	protected ArrayList<String> classNames;
 	protected int keyCol;
 	protected Object source;
 
-	public MapTableUpdateItemFactory(
-			Object source,
-			Vector<String> columnNames, Vector<String> classNames,
+	public MapTableUpdateItemFactory(Object source, ArrayList<String> columnNames, ArrayList<String> classNames,
 			int keyCol) {
 		this.columnNames = columnNames;
 		this.classNames = classNames;
@@ -26,9 +24,7 @@ public class MapTableUpdateItemFactory extends TableUpdateItemFactory {
 		this.source = source;
 	}
 
-	public MapTableUpdateItemFactory(
-			Vector<String> columnNames, Vector<String> classNames,
-			int keyCol) {
+	public MapTableUpdateItemFactory(ArrayList<String> columnNames, ArrayList<String> classNames, int keyCol) {
 		this(null, columnNames, classNames, keyCol);
 	}
 
@@ -36,15 +32,15 @@ public class MapTableUpdateItemFactory extends TableUpdateItemFactory {
 		this.source = source;
 	}
 
-	public TableEditItem produceUpdateItem(Vector oldValues, Vector rowV) {
+	public TableEditItem produceUpdateItem(ArrayList oldValues, ArrayList rowV) {
 		return new MapDeliveryItem(source, keyCol, columnNames, classNames, oldValues, rowV);
 	}
 
-	public TableEditItem produceInsertItem(Vector rowV) {
+	public TableEditItem produceInsertItem(ArrayList rowV) {
 		return new MapDeliveryItem(source, keyCol, columnNames, classNames, rowV);
 	}
 
-	public TableEditItem produceDeleteItem(Vector rowV) {
+	public TableEditItem produceDeleteItem(ArrayList rowV) {
 		return new MapDeleteItem(source, keyCol, columnNames, classNames, rowV);
 	}
 

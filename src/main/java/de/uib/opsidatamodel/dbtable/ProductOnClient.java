@@ -9,17 +9,17 @@ import java.util.Map;
 import de.uib.opsidatamodel.productstate.ProductState;
 
 public class ProductOnClient extends Table {
-	public final static String tableName = "PRODUCT_ON_CLIENT";
+	public static final String tableName = "PRODUCT_ON_CLIENT";
 
-	public final static String LOCALBOOTid = "LocalbootProduct";
-	public final static String NETBOOTid = "NetbootProduct";
+	public static final String LOCALBOOTid = "LocalbootProduct";
+	public static final String NETBOOTid = "NetbootProduct";
 
-	public final static String CLIENTid = "clientId";
-	public final static String PRODUCTid = "productId";
-	public final static String PRODUCTtype = "productType";
+	public static final String CLIENTid = "clientId";
+	public static final String PRODUCTid = "productId";
+	public static final String PRODUCTtype = "productType";
 
-	private final static String localFilename = "productstates.configed";
-	// public final static String version = class.getName() + " " +
+	private static final String localFilename = "productstates.configed";
+	// public static final String version = class.getName() + " " +
 	// de.uib.configed.Globals.VERSION;
 
 	public static java.util.List<String> columns;

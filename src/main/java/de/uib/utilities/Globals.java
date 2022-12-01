@@ -14,9 +14,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import de.uib.utilities.logging.logging;
 
@@ -152,7 +153,7 @@ public class Globals {
 		return imageBaseAbsolute;
 	}
 
-	public final static String fileseparator = "/";
+	public static final String fileseparator = "/";
 
 	public static boolean isWindows() {
 		Runtime rt = Runtime.getRuntime();
@@ -186,11 +187,11 @@ public class Globals {
 		}
 	}
 
-	private static Map objects;
+	private static Map<String, Object> objects;
 
-	public static Map getMap() {
+	public static Map<String, Object> getMap() {
 		if (objects == null) {
-			objects = new HashMap();
+			objects = new HashMap<>();
 
 			objects.put("mainIcon", mainIcon);
 			objects.put("defaultFont", defaultFont);
@@ -297,7 +298,7 @@ public class Globals {
 		sqlNow = sqlNow.substring(0, sqlNow.lastIndexOf(' '));
 
 		if (justNumbers)
-			sqlNow = sqlNow.replaceAll("-", "");
+			sqlNow = sqlNow.replace("-", "");
 
 		return sqlNow;
 	}
@@ -334,10 +335,7 @@ public class Globals {
 		remMinutesS = formatlNumberUpTo99(remminutes);
 		hoursS = formatlNumberUpTo99(hours);
 
-		String result = "" + hoursS + ":" + remMinutesS + ":" + remSecondsS;
-		// logging.info(this, "giveTimeSpan for millis " + millis + " " + result);
-
-		return result;
+		return "" + hoursS + ":" + remMinutesS + ":" + remSecondsS;
 	}
 
 	public static String getStringValue(Object s) {
@@ -351,8 +349,8 @@ public class Globals {
 		return s.toString();
 	}
 
-	public static java.util.ArrayList<String> takeAsStringList(java.util.List<Object> list) {
-		java.util.ArrayList<String> result = new java.util.ArrayList<String>();
+	public static List<String> takeAsStringList(java.util.List<Object> list) {
+		List<String> result = new java.util.ArrayList<String>();
 
 		if (list == null)
 			return result;
@@ -364,12 +362,12 @@ public class Globals {
 		return result;
 	}
 
-	public final static String pseudokeySeparator = ";";
+	public static final String pseudokeySeparator = ";";
 
-	public static String pseudokey(Vector<Object> partialvalues) {
+	public static String pseudokey(ArrayList<Object> partialvalues) {
 		StringBuffer resultBuffer = new StringBuffer("");
 
-		if (partialvalues.size() > 0) {
+		if (!partialvalues.isEmpty()) {
 			resultBuffer.append(partialvalues.get(0));
 
 			for (int i = 1; i < partialvalues.size(); i++) {
@@ -396,8 +394,8 @@ public class Globals {
 		return resultBuffer.toString();
 	}
 
-	final static int tooltipLineLength = 50;
-	final static int uncertainty = 20;
+	static final int tooltipLineLength = 50;
+	static final int uncertainty = 20;
 
 	public static String wrapToHTML(String s) {
 		StringBuffer result = new StringBuffer("<html>");

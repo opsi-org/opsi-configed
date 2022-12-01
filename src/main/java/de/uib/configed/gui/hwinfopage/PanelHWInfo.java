@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
@@ -39,18 +38,18 @@ import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import de.uib.utilities.tree.XTree;
 
 public class PanelHWInfo extends JPanel implements TreeSelectionListener {
-	public final static String class_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
-	public final static String class_BASE_BOARD = "BASE_BOARD";
+	public static final String class_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
+	public static final String class_BASE_BOARD = "BASE_BOARD";
 
-	public final static ArrayList<String> hwClassesForByAudit = new ArrayList<String>();
+	public static final ArrayList<String> hwClassesForByAudit = new ArrayList<String>();
 	static {
 		hwClassesForByAudit.add(class_COMPUTER_SYSTEM);
 		hwClassesForByAudit.add(class_BASE_BOARD);
 	}
 
-	public final static String key_VENDOR = "vendor";
-	public final static String key_MODEL = "model";
-	public final static String key_PRODUCT = "product";
+	public static final String key_VENDOR = "vendor";
+	public static final String key_MODEL = "model";
+	public static final String key_PRODUCT = "product";
 
 	protected Map hwInfo;
 	protected String treeRootTitle;
@@ -72,8 +71,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	protected HWInfoTableModel tableModel;
 	protected HashMap hwClassMapping;
 
-	protected final static String SCANPROPERTYNAME = "SCANPROPERTIES";
-	protected final static String SCANTIME = "scantime";
+	protected static final String SCANPROPERTYNAME = "SCANPROPERTIES";
+	protected static final String SCANTIME = "scantime";
 
 	protected String vendorStringCOMPUTER_SYSTEM;
 	protected String vendorStringBASE_BOARD;
@@ -340,7 +339,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		return value + " " + unit;
 	}
 
-	private void expandRows(Vector<Integer> rows) {
+	private void expandRows(ArrayList<Integer> rows) {
 		tree.expandRows(rows);
 	}
 
@@ -710,7 +709,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		DefaultTableModel tableModelComplete = new DefaultTableModel();
 		JTable jTableComplete = new JTable(tableModelComplete);
 
-		Vector childValues;
+		ArrayList childValues;
 
 		tableModelComplete.addColumn(configed.getResourceValue("PanelHWInfo.createPDF.column_hardware"));
 		tableModelComplete.addColumn(configed.getResourceValue("PanelHWInfo.createPDF.column_device"));
@@ -727,7 +726,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			while (al_itr.hasNext()) {
 				HashMap hm = al_itr.next();
 				if (first) { // second column, first element
-					childValues = new Vector();
+					childValues = new ArrayList();
 					childValues.add(child.toString()); // first column
 					childValues.add(hm.get("displayName").toString());
 					Iterator hm_iter = (Iterator) hm.keySet().iterator();
@@ -740,19 +739,19 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 								childValues.add(hm.get(hm_key));
 								firstValue = false;
 							} else {
-								childValues = new Vector();
+								childValues = new ArrayList();
 								childValues.add("");
 								childValues.add("");
 								childValues.add(hwOpsiToUI.get(hm_key));
 								childValues.add(hm.get(hm_key));
 							}
-							tableModelComplete.addRow(childValues);
+							tableModelComplete.addRow(childValues.toArray());
 						}
 					}
 
 					first = false;
 				} else { // new row, first cell empty
-					childValues = new Vector();
+					childValues = new ArrayList();
 					childValues.add(""); // first column empty
 					childValues.add(hm.get("displayName").toString());
 					Iterator hm_iter = (Iterator) hm.keySet().iterator();
@@ -765,13 +764,13 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 								childValues.add(hwOpsiToUI.get(hm_key));
 								childValues.add(hm.get(hm_key));
 							} else {
-								childValues = new Vector();
+								childValues = new ArrayList();
 								childValues.add("");
 								childValues.add("");
 								childValues.add(hwOpsiToUI.get(hm_key));
 								childValues.add(hm.get(hm_key));
 							}
-							tableModelComplete.addRow(childValues);
+							tableModelComplete.addRow(childValues.toArray());
 						}
 					}
 

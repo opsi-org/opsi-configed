@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Vector;
 import java.util.regex.Pattern;
 
 import javax.swing.DefaultComboBoxModel;
@@ -76,7 +75,7 @@ public class JTableSelectionPanel extends JPanel
 	// CheckedLabel markReload;
 
 	JTextField fieldSearch;
-	JComboBox comboSearch;
+	JComboBox<String> comboSearch;
 	JComboBox comboSearchMode;
 
 	TablesearchPane.SearchMode searchMode;
@@ -330,7 +329,7 @@ public class JTableSelectionPanel extends JPanel
 		 * checkRegEx .setSelected(false);
 		 */
 
-		comboSearch = new JComboBox(
+		comboSearch = new JComboBox<>(
 				new String[] { configed.getResourceValue("ConfigedMain.pclistTableModel.allfields") });
 		comboSearch.setPreferredSize(Globals.buttonDimension);
 
@@ -537,7 +536,7 @@ public class JTableSelectionPanel extends JPanel
 	public void initColumnNames() {
 		// logging.info(this, "initColumnNames");
 		Object oldSelected = comboSearch.getSelectedItem();
-		Vector<String> comboSearchItems = new Vector<String>();
+		ArrayList<String> comboSearchItems = new ArrayList<String>();
 		comboSearchItems.add(configed.getResourceValue("ConfigedMain.pclistTableModel.allfields"));
 
 		try {
@@ -549,7 +548,7 @@ public class JTableSelectionPanel extends JPanel
 				comboSearchItems.add(table.getColumnName(j));
 			}
 
-			comboSearch.setModel(new DefaultComboBoxModel(comboSearchItems));
+			comboSearch.setModel(new DefaultComboBoxModel<>(comboSearchItems.toArray(new String[0])));
 
 			if (oldSelected != null)
 				comboSearch.setSelectedItem(oldSelected);
@@ -694,7 +693,7 @@ public class JTableSelectionPanel extends JPanel
 	public void setModel(TableModel tm) {
 		logging.info(this, "set model with column count " + tm.getColumnCount());
 		/*
-		 * Vector<String> cols = new Vector<String>();
+		 * ArrayList<String> cols = new ArrayList<String>();
 		 * for (int i = 0; i < tm.getColumnCount(); i++)
 		 * cols.add( tm.getColumnName(i) );
 		 * logging.info(this, "set model " + cols);

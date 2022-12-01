@@ -15,9 +15,9 @@ import de.uib.configed.Globals;
 import de.uib.configed.configed;
 
 public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
-	final static public String LBLUSER = "lbl_user";
-	final static public String LBLNEEDAUTH = "lbl_needAuthentication";
-	final static public String CBNEEDAUTH = "cb_needAuthentication";
+	static final public String LBLUSER = "lbl_user";
+	static final public String LBLNEEDAUTH = "lbl_needAuthentication";
+	static final public String CBNEEDAUTH = "cb_needAuthentication";
 
 	private JCheckBox cb_needAuthentication;
 	private JLabel lbl_user = new JLabel();
@@ -109,30 +109,23 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 
 				.addGap(de.uib.configed.Globals.gapSize)
 				.addGroup(layout.createParallelGroup()
-						.addGroup(layout.createSequentialGroup()
-								.addGap(de.uib.configed.Globals.gapSize * 2)
-								.addComponent(lbl_user, PREF, PREF, PREF)
-								.addGap(de.uib.configed.Globals.gapSize))
-						.addGroup(layout.createSequentialGroup()
-								.addGap(de.uib.configed.Globals.gapSize * 2)
-								.addComponent(lbl_pswd, PREF, PREF, PREF)
-								.addGap(de.uib.configed.Globals.gapSize)))
+						.addGroup(layout.createSequentialGroup().addGap(de.uib.configed.Globals.gapSize * 2)
+								.addComponent(lbl_user, PREF, PREF, PREF).addGap(de.uib.configed.Globals.gapSize))
+						.addGroup(layout.createSequentialGroup().addGap(de.uib.configed.Globals.gapSize * 2)
+								.addComponent(lbl_pswd, PREF, PREF, PREF).addGap(de.uib.configed.Globals.gapSize)))
 				.addGroup(layout.createParallelGroup()
 						.addComponent(tf_user, de.uib.configed.Globals.buttonWidth, de.uib.configed.Globals.buttonWidth,
 								de.uib.configed.Globals.buttonWidth * 2)
 						.addComponent(tf_pswd, de.uib.configed.Globals.buttonWidth, de.uib.configed.Globals.buttonWidth,
 								de.uib.configed.Globals.buttonWidth * 2)));
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGap(de.uib.configed.Globals.gapSize)
-				.addGroup(layout.createParallelGroup()
-						.addGap(de.uib.configed.Globals.gapSize)
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(de.uib.configed.Globals.gapSize)
+				.addGroup(layout.createParallelGroup().addGap(de.uib.configed.Globals.gapSize)
 						.addComponent(lbl_user, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
 						.addGap(de.uib.configed.Globals.gapSize)
 						.addComponent(tf_user, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
 						.addGap(de.uib.configed.Globals.gapSize))
-				.addGroup(layout.createParallelGroup()
-						.addGap(de.uib.configed.Globals.gapSize)
+				.addGroup(layout.createParallelGroup().addGap(de.uib.configed.Globals.gapSize)
 						.addComponent(lbl_pswd, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
 						.addGap(de.uib.configed.Globals.gapSize)
 						.addComponent(tf_pswd, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)

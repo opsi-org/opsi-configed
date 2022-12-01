@@ -77,14 +77,11 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	private javax.swing.JPanel panelTask;
 	private javax.swing.JPanel panelEnterKey;
 	private javax.swing.JPanel panelLicenceModel;
-	private javax.swing.JPanel jPanelLicencepool;
-	private javax.swing.JTable jTable2;
-	private javax.swing.JTable jTable3;
 	private javax.swing.JTextField jTextField_licenceID;
 	private javax.swing.JTextField jTextField_licenceType;
 	// private javax.swing.JFormattedTextField jTextField_maxInstallations;
 	private javax.swing.JTextField jTextField_maxInstallations;
-	private javax.swing.JComboBox comboClient;
+	private javax.swing.JComboBox<String> comboClient;
 	private javax.swing.JTextField jTextField_endOfLicence;
 	private javax.swing.JTextField jTextField_licenceContract;
 	private javax.swing.JTextField jTextFieldLKey;
@@ -93,7 +90,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 	protected de.uib.configed.ControlPanelEnterLicence enterLicenceController;
 
-	private ComboBoxModel emptyComboBoxModel = new DefaultComboBoxModel(new String[] { "" });
+	private ComboBoxModel<String> emptyComboBoxModel = new DefaultComboBoxModel<>(new String[] { "" });
 
 	/** Creates new form PanelEnterLicence */
 	public PanelEnterLicence(de.uib.configed.ControlPanelEnterLicence enterLicenceController) {
@@ -101,18 +98,14 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		this.enterLicenceController = enterLicenceController;
 		initComponents();
 		defineListeners();
-		addSettings();
 
 		final JPanel THIS = this;
 		addComponentListener(new ComponentAdapter() {
+			@Override
 			public void componentResized(ComponentEvent e) {
-				// logging.info(this, "size " + THIS.getSize());
+				// logging.info(this, "size " + THIS.getSize()); // TODO Can this be removed???
 			}
 		});
-
-	}
-
-	protected void addSettings() {
 
 	}
 
@@ -244,7 +237,8 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		// jTextField_maxInstallations.setValue(1);//setText("1");
 		jTextField_maxInstallations.setText("1");
 		jTextField_maxInstallations.setEditable(false);
-		comboClient.setModel(new DefaultComboBoxModel(enterLicenceController.getChoicesAllHosts()));
+		comboClient.setModel(
+				new DefaultComboBoxModel<>(enterLicenceController.getChoicesAllHosts().toArray(new String[0])));
 		comboClient.setEnabled(true);
 
 	}
@@ -336,7 +330,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		// jTextField_maxInstallations.setInputVerifier(new
 		// utils.FormattedTextFieldVerifier());
 
-		comboClient = new javax.swing.JComboBox();
+		comboClient = new javax.swing.JComboBox<>();
 		comboClient.setFont(Globals.defaultFontBig);
 		// org.jdesktop.swingx.autocomplete.AutoCompleteDecorator.decorate(combo);
 		// combo.setRenderer ();
@@ -348,6 +342,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		jTextField_endOfLicence.setEditable(false); // edit only via fEditDate
 		jTextField_endOfLicence.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				// logging.debug( " mouse clicked on textfield 5 ");
 				if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
@@ -374,9 +369,11 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 			}
 		});
 		jTextField_endOfLicence.addFocusListener(new FocusAdapter() {
+			@Override
 			public void focusGained(FocusEvent e) {
 			}
 
+			@Override
 			public void focusLost(FocusEvent e) {
 				if (fEditDate != null)
 					fEditDate.deactivate();
@@ -780,17 +777,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		enterLicenceController.saveNewLicence(m);
 
-	}
-
-	private boolean checkSelectionLicencepools() {
-		if (panelLicencepools.getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(enterLicenceController.mainController.licencesFrame,
-					configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectLicencepool"),
-					configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
-			return false;
-		}
-
-		return true;
 	}
 
 	// ActionListener

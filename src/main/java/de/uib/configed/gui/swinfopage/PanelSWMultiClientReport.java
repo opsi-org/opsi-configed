@@ -31,7 +31,7 @@ public class PanelSWMultiClientReport extends JPanel {
 	boolean withMsUpdates2 = false;
 	boolean askForOverwrite = false;
 
-	public final static String filenamePrefixDefault = "report_";
+	public static final String filenamePrefixDefault = "report_";
 
 	protected PanelStateSwitch panelSelectExportType;
 	protected PanelSWInfo.KindOfExport kindOfExport;

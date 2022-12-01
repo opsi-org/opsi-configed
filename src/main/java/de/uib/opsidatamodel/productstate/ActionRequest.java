@@ -6,42 +6,42 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 public class ActionRequest {
-	public final static String KEY = "actionRequest";
+	public static final String KEY = "actionRequest";
 
 	// conflicting entries from several clients
-	public final static int CONFLICT = -4;
+	public static final int CONFLICT = -4;
 
 	// no valid entry from service
-	public final static int INVALID = -2;
+	public static final int INVALID = -2;
 
 	// product offers no actions
-	public final static int NOT_AVAILABLE = -6;
+	public static final int NOT_AVAILABLE = -6;
 
 	// valid service states
-	public final static int NONE = 0;
-	public final static int SETUP = 1;
-	public final static int UPDATE = 3;
-	public final static int UNINSTALL = 5;
-	public final static int ALWAYS = 7;
-	public final static int ONCE = 8;
-	public final static int CUSTOM = 11;
-	public final static int LAST = CUSTOM;
+	public static final int NONE = 0;
+	public static final int SETUP = 1;
+	public static final int UPDATE = 3;
+	public static final int UNINSTALL = 5;
+	public static final int ALWAYS = 7;
+	public static final int ONCE = 8;
+	public static final int CUSTOM = 11;
+	public static final int LAST = CUSTOM;
 
 	// textcolors
-	public final static Color NONEcolor = Globals.INVISIBLE;
-	public final static Color SETUPcolor = Globals.actionRed;
-	public final static Color UPDATEcolor = Globals.actionRed;
-	public final static Color UNINSTALLcolor = Color.blue;
-	public final static Color ALWAYScolor = Globals.actionRed;
-	public final static Color ONCEcolor = Globals.actionRed;
-	public final static Color CUSTOMcolor = Globals.actionRed;
-	public final static Color LASTcolor = Color.black;
+	public static final Color NONEcolor = Globals.INVISIBLE;
+	public static final Color SETUPcolor = Globals.actionRed;
+	public static final Color UPDATEcolor = Globals.actionRed;
+	public static final Color UNINSTALLcolor = Color.blue;
+	public static final Color ALWAYScolor = Globals.actionRed;
+	public static final Color ONCEcolor = Globals.actionRed;
+	public static final Color CUSTOMcolor = Globals.actionRed;
+	public static final Color LASTcolor = Color.black;
 
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
@@ -50,12 +50,12 @@ public class ActionRequest {
 	private static Map<String, Color> label2textColor;
 	private static Map<String, Integer> serviceValue2state;
 
-	private static Vector<Integer> states;
-	private static Vector<Integer> possibleRequests;
-	private static Vector<String> labels;
+	private static ArrayList<Integer> states;
+	private static ArrayList<Integer> possibleRequests;
+	private static ArrayList<String> labels;
 	private static String[] choiceLabels;
-	private static Vector<String> serviceValues;
-	private static Vector<String> scriptKeys;
+	private static ArrayList<String> serviceValues;
+	private static ArrayList<String> scriptKeys;
 
 	private static Map<String, String> scriptKey2label;
 
@@ -66,7 +66,7 @@ public class ActionRequest {
 		if (states != null)
 			return;
 
-		states = new Vector<Integer>();
+		states = new ArrayList<Integer>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(NOT_AVAILABLE);
@@ -78,7 +78,7 @@ public class ActionRequest {
 		states.add(ONCE);
 		states.add(CUSTOM);
 
-		possibleRequests = new Vector<Integer>();
+		possibleRequests = new ArrayList<Integer>();
 		possibleRequests.add(SETUP);
 		possibleRequests.add(UPDATE);
 		possibleRequests.add(UNINSTALL);
@@ -86,7 +86,7 @@ public class ActionRequest {
 		possibleRequests.add(ONCE);
 		possibleRequests.add(CUSTOM);
 
-		labels = new Vector<String>();
+		labels = new ArrayList<String>();
 		labels.add(Globals.CONFLICTSTATEstring);
 		labels.add(Globals.NOVALIDSTATEstring);
 		labels.add("not_available");
@@ -118,8 +118,8 @@ public class ActionRequest {
 		serviceValue2state.put("once", ONCE);
 		serviceValue2state.put("custom", CUSTOM);
 
-		serviceValues = new Vector<String>(serviceValue2state.keySet());
-		scriptKeys = new Vector<String>();
+		serviceValues = new ArrayList<String>(serviceValue2state.keySet());
+		scriptKeys = new ArrayList<String>();
 		// scriptKey2state = new HashMap<String, Integer>();
 		scriptKey2label = new HashMap<String, String>();
 
@@ -180,17 +180,17 @@ public class ActionRequest {
 
 	}
 
-	public static Vector<Integer> getPossibleRequests() {
+	public static ArrayList<Integer> getPossibleRequests() {
 		checkCollections();
 		return possibleRequests;
 	}
 
-	public static Vector<String> getServiceValues() {
+	public static ArrayList<String> getServiceValues() {
 		checkCollections();
 		return serviceValues;
 	}
 
-	public static Vector<String> getScriptKeys() {
+	public static ArrayList<String> getScriptKeys() {
 		checkCollections();
 		return scriptKeys;
 	}
@@ -238,7 +238,7 @@ public class ActionRequest {
 		return state2label.get(state);
 	}
 
-	public static Vector<String> getLabels() {
+	public static ArrayList<String> getLabels() {
 		checkCollections();
 
 		return labels;

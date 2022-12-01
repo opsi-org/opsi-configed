@@ -40,7 +40,7 @@ public class SSHConnect {
 	/** Username for server to connected as **/
 	protected String user;
 	/** Port for server to connected as **/
-	public final static String default_port = "22";
+	public static final String default_port = "22";
 	public static String portSSH = default_port;
 	/** Password for server and username **/
 	protected String password;

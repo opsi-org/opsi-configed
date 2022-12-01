@@ -1,7 +1,8 @@
 package de.uib.configed.gui;
 
 import java.awt.Window;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.ListSelectionModel;
@@ -25,12 +26,9 @@ public class FDepotselectionList extends FGeneralDialog {
 	public FDepotselectionList(JDialog masterWindow) {
 		super(
 				// de.uib.configed.Globals.mainFrame,
-				masterWindow,
-				configed.getResourceValue("FDepotselectionList.title"),
-				new String[] {
-						configed.getResourceValue("FDepotselectionList.buttontake"),
-						configed.getResourceValue("FDepotselectionList.buttonclose")
-				},
+				masterWindow, configed.getResourceValue("FDepotselectionList.title"),
+				new String[] { configed.getResourceValue("FDepotselectionList.buttontake"),
+						configed.getResourceValue("FDepotselectionList.buttonclose") },
 				500, 300);
 		depotsList = new DepotsList(PersistenceControllerFactory.getPersistenceController());
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -50,11 +48,11 @@ public class FDepotselectionList extends FGeneralDialog {
 		scrollpane.getViewport().add(depotsList);
 	}
 
-	public void setListData(Vector<? extends String> v) {
-		depotsList.setListData(v);
+	public void setListData(ArrayList<? extends String> v) {
+		depotsList.setListData(v.toArray(new String[0]));
 	}
 
-	public Vector<? extends String> getListData() {
+	public List<? extends String> getListData() {
 		logging.info(this, "getListData() : " + depotsList.getListData());
 		return depotsList.getListData();
 	}

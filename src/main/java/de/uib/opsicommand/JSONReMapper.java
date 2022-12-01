@@ -19,9 +19,9 @@ import de.uib.utilities.logging.logging;
  */
 
 public class JSONReMapper {
-	private final static String CLASSNAME = JSONReMapper.class.getName();
+	private static final String CLASSNAME = JSONReMapper.class.getName();
 
-	public final static String NullRepresenter = "null";
+	public static final String NullRepresenter = "null";
 
 	public static String getErrorFromResponse(JSONObject retrieved) {
 		String errorMessage = null;

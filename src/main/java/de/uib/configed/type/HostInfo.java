@@ -115,8 +115,8 @@ public class HostInfo {
 
 	public static final String hostSubClassTag_OpsiClientPrototype = "OpsiPrototype";
 
-	final static String notLegalChars0 = ",:!@#$%^&',(){} ";
-	final static Set<Character> notLegalChars = new HashSet<Character>();
+	static final String notLegalChars0 = ",:!@#$%^&',(){} ";
+	static final Set<Character> notLegalChars = new HashSet<Character>();
 	static {
 		for (int i = 0; i < notLegalChars0.length(); i++) {
 			notLegalChars.add(notLegalChars0.charAt(i));
@@ -725,7 +725,7 @@ public class HostInfo {
 					"ConfigedMain.pclistTableModel." + HostInfo.clientInstallByShutdown_DISPLAY_FIELD_LABEL));
 
 			/*
-			 * Vector<String> columns = new Vector<String>();
+			 * ArrayList<String> columns = new ArrayList<String>();
 			 * for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++)
 			 * {
 			 * columns.add( selectionPanel.getTableModel().getColumnName( i ) );
@@ -754,7 +754,7 @@ public class HostInfo {
 					.getResourceValue("ConfigedMain.pclistTableModel." + HostInfo.clientUefiBoot_DISPLAY_FIELD_LABEL));
 
 			/*
-			 * Vector<String> columns = new Vector<String>();
+			 * ArrayList<String> columns = new ArrayList<String>();
 			 * for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++)
 			 * {
 			 * columns.add( selectionPanel.getTableModel().getColumnName( i ) );
@@ -783,7 +783,7 @@ public class HostInfo {
 					.getResourceValue("ConfigedMain.pclistTableModel." + HostInfo.clientWanConfig_DISPLAY_FIELD_LABEL));
 
 			/*
-			 * Vector<String> columns = new Vector<String>();
+			 * ArrayList<String> columns = new ArrayList<String>();
 			 * for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++)
 			 * {
 			 * columns.add( selectionPanel.getTableModel().getColumnName( i ) );

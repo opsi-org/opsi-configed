@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.opsidatamodel.PersistenceController;
@@ -26,7 +26,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 
 	public ProductpropertiesUpdateCollection(ConfigedMain mainController, Object persis, java.util.List<String> clients,
 			String productname) {
-		super(new Vector<Object>(0));
+		super(new ArrayList<Object>(0));
 		if (clients == null) {
 			this.clients = new ArrayList<String>();
 		} else {

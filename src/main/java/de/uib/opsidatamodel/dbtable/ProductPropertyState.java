@@ -4,14 +4,14 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class ProductPropertyState extends Table {
-	public final static String tableName = "PRODUCT_PROPERTY_STATE";
+	public static final String tableName = "PRODUCT_PROPERTY_STATE";
 
-	public final static String version = ProductPropertyState.class.getName() + " " + de.uib.configed.Globals.VERSION;
+	public static final String version = ProductPropertyState.class.getName() + " " + de.uib.configed.Globals.VERSION;
 
-	public final static String PRODUCT_ID = "productId";
-	public final static String PROPERTY_ID = "propertyId";
-	public final static String OBJECT_ID = "objectId";
-	public final static String VALUES = "values";
+	public static final String PRODUCT_ID = "productId";
+	public static final String PROPERTY_ID = "propertyId";
+	public static final String OBJECT_ID = "objectId";
+	public static final String VALUES = "values";
 
 	public static java.util.List<String> columns;
 	static {

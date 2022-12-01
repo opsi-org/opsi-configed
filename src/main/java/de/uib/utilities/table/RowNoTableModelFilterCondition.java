@@ -4,14 +4,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.JTable;
 
 import de.uib.utilities.logging.logging;
 
-public class RowNoTableModelFilterCondition
-		implements TableModelFilterCondition {
+public class RowNoTableModelFilterCondition implements TableModelFilterCondition {
 	// protected Map<String, Boolean> selectionInfo;
 	protected Map<Object, Boolean> selectionInfo;
 
@@ -24,7 +23,7 @@ public class RowNoTableModelFilterCondition
 	public void setFilter(TreeSet<Object> filter) {
 	}
 
-	public void setFilter(int[] modelRowNoFilter, final Vector<Vector<Object>> rows) {
+	public void setFilter(int[] modelRowNoFilter, final ArrayList<ArrayList<Object>> rows) {
 		logging.info(this, "setFilter int[]  " + modelRowNoFilter);
 		if (modelRowNoFilter != null)
 			logging.info(this, "setFilter as string " + Arrays.toString(modelRowNoFilter));
@@ -48,7 +47,7 @@ public class RowNoTableModelFilterCondition
 		// logging.info(this, "setFilter we have got selectionInfo " + selectionInfo);
 	}
 
-	public boolean test(Vector<Object> row) {
+	public boolean test(ArrayList<Object> row) {
 		// logging.info(this, "row " + row + " selectionInfo " + selectionInfo );
 
 		if (selectionInfo == null)

@@ -3,7 +3,7 @@ package de.uib.configed.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.Map;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,8 +34,8 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	public PanelGenEditTable panelGlobalSoftware;
 	private GenTableModel model;
 
-	public Vector<String> columnNames;
-	public Vector<String> classNames;
+	public ArrayList<String> columnNames;
+	public ArrayList<String> classNames;
 	TableUpdateCollection updateCollection;
 
 	protected int keyCol = 0;
@@ -47,13 +47,9 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	public FGlobalSoftwareInfo(JFrame owner, ControlPanelAssignToLPools myController) {
 		super(
 				// de.uib.configed.Globals.mainFrame,
-				owner,
-				configed.getResourceValue("FGlobalSoftwareInfo.title"),
-				false,
-				new String[] {
-						configed.getResourceValue("FGlobalSoftwareInfo.buttonRemove"),
-						configed.getResourceValue("FGlobalSoftwareInfo.buttonClose")
-				},
+				owner, configed.getResourceValue("FGlobalSoftwareInfo.title"), false,
+				new String[] { configed.getResourceValue("FGlobalSoftwareInfo.buttonRemove"),
+						configed.getResourceValue("FGlobalSoftwareInfo.buttonClose") },
 				10, 10); // initial size of super frame
 
 		this.myController = myController;
@@ -64,8 +60,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 				// configed.getResourceValue("ConfigedMain.LicenctiontitleWindowsSoftware2LPool"),
 				0, // width
 				false, // editing,
-				2,
-				true // switchLineColors
+				2, true // switchLineColors
 		);
 
 		allpane.add(panelGlobalSoftware, BorderLayout.CENTER);
@@ -79,10 +74,8 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		owner.setVisible(true);
 
 		jButton1.setEnabled(false);
-		jButton1.setIcon(
-				Globals.createImageIcon("images/edit-delete.png", ""));
-		jButton2.setIcon(
-				Globals.createImageIcon("images/cancel.png", ""));
+		jButton1.setIcon(Globals.createImageIcon("images/edit-delete.png", ""));
+		jButton2.setIcon(Globals.createImageIcon("images/cancel.png", ""));
 
 		initDataStructure();
 		// setTableModel(null);
@@ -103,30 +96,28 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	 */
 
 	protected void initDataStructure() {
-		columnNames = new Vector<String>();
+		columnNames = new ArrayList<String>();
 		columnNames.add("ID");
 		for (String key : de.uib.configed.type.SWAuditEntry.KEYS_FOR_IDENT)
 			columnNames.add(key);
 
-		classNames = new Vector<String>();
+		classNames = new ArrayList<String>();
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
 
 		updateCollection = new TableUpdateCollection();
 
-		panelGlobalSoftware.setListSelectionMode(
-				ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		panelGlobalSoftware.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		panelGlobalSoftware.addListSelectionListener(
-				new javax.swing.event.ListSelectionListener() {
-					public void valueChanged(ListSelectionEvent e) {
-						if (e.getValueIsAdjusting())
-							return;
+		panelGlobalSoftware.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				if (e.getValueIsAdjusting())
+					return;
 
-						jButton1.setEnabled(panelGlobalSoftware.getTheTable().getSelectedRowCount() > 0);
-					}
-				});
+				jButton1.setEnabled(panelGlobalSoftware.getTheTable().getSelectedRowCount() > 0);
+			}
+		});
 
 	}
 
@@ -134,24 +125,19 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		if (model == null)
 		// test
 		{
-			this.model = new GenTableModel(
-					null, // no updates
-					new DefaultTableProvider(
-							new RetrieverMapSource(columnNames, classNames,
-									new MapRetriever() {
-										public Map retrieveMap() {
-											persist.installedSoftwareInformationRequestRefresh();
-											return persist.getInstalledSoftwareInformation();
-										}
-									})
+			this.model = new GenTableModel(null, // no updates
+					new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+						public Map retrieveMap() {
+							persist.installedSoftwareInformationRequestRefresh();
+							return persist.getInstalledSoftwareInformation();
+						}
+					})
 					// ,
 
 					),
 
 					keyCol, // columnNames.indexOf("ID")
-					new int[] {},
-					(TableModelListener) panelGlobalSoftware,
-					updateCollection);
+					new int[] {}, (TableModelListener) panelGlobalSoftware, updateCollection);
 		} else
 			this.model = model;
 
@@ -162,22 +148,20 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	public void doAction1() {
 		logging.debug(this, "doAction1");
 
-		logging.info(this, "removeAssociations for "
-				+ " licencePool " + myController.getSelectedLicencePool()
+		logging.info(this, "removeAssociations for " + " licencePool " + myController.getSelectedLicencePool()
 				+ " selected SW keys " + panelGlobalSoftware.getSelectedKeys());
 
-		boolean success = persist.removeAssociations(
-				myController.getSelectedLicencePool(),
+		boolean success = persist.removeAssociations(myController.getSelectedLicencePool(),
 				panelGlobalSoftware.getSelectedKeys());
 
 		if (success) {
 			for (String key : panelGlobalSoftware.getSelectedKeys()) {
 				int row = panelGlobalSoftware.findViewRowFromValue(key, keyCol);
 				logging.info(this, "doAction1 key, " + key + ", row " + row);
-				logging.info(this, "doAction1 model row " +
-						panelGlobalSoftware.getTheTable().convertRowIndexToModel(row));
-				panelGlobalSoftware.getTableModel().deleteRow(
-						panelGlobalSoftware.getTheTable().convertRowIndexToModel(row));
+				logging.info(this,
+						"doAction1 model row " + panelGlobalSoftware.getTheTable().convertRowIndexToModel(row));
+				panelGlobalSoftware.getTableModel()
+						.deleteRow(panelGlobalSoftware.getTheTable().convertRowIndexToModel(row));
 			}
 			result = 1;
 		}

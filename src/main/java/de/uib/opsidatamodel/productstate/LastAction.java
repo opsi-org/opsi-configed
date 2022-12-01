@@ -3,38 +3,38 @@ package de.uib.opsidatamodel.productstate;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import de.uib.configed.Globals;
 
 public class LastAction {
-	public final static String KEY = "lastAction";
+	public static final String KEY = "lastAction";
 
 	// conflicting entries from several clients
-	public final static int CONFLICT = -4;
+	public static final int CONFLICT = -4;
 
 	// no valid entry from service
-	public final static int INVALID = -2;
+	public static final int INVALID = -2;
 
 	// product offers no actions
-	public final static int NOT_AVAILABLE = -6;
+	public static final int NOT_AVAILABLE = -6;
 
 	// valid service states
-	public final static int NONE = 0;
-	public final static int SETUP = 1;
-	public final static int UPDATE = 3;
-	public final static int UNINSTALL = 5;
-	public final static int ALWAYS = 7;
-	public final static int ONCE = 8;
-	public final static int CUSTOM = 11;
+	public static final int NONE = 0;
+	public static final int SETUP = 1;
+	public static final int UPDATE = 3;
+	public static final int UNINSTALL = 5;
+	public static final int ALWAYS = 7;
+	public static final int ONCE = 8;
+	public static final int CUSTOM = 11;
 
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
 	private static Map<String, String> label2displayLabel;
 	private static Map<String, String> displayLabel2label;
 
-	private static Vector<Integer> states;
-	private static Vector<String> labels;
+	private static ArrayList<Integer> states;
+	private static ArrayList<String> labels;
 	private static String[] choiceLabels;
 
 	// instance variable
@@ -44,7 +44,7 @@ public class LastAction {
 		if (states != null)
 			return;
 
-		states = new Vector<Integer>();
+		states = new ArrayList<Integer>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(NOT_AVAILABLE);
@@ -56,7 +56,7 @@ public class LastAction {
 		states.add(ONCE);
 		states.add(CUSTOM);
 
-		labels = new Vector<String>();
+		labels = new ArrayList<String>();
 		labels.add(Globals.CONFLICTSTATEstring);
 		labels.add(Globals.NOVALIDSTATEstring);
 		labels.add("not_available");
@@ -147,7 +147,7 @@ public class LastAction {
 		return state2label.get(state);
 	}
 
-	public static Vector<String> getLabels() {
+	public static ArrayList<String> getLabels() {
 		checkCollections();
 
 		return labels;

@@ -4,11 +4,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.JFrame;
 
@@ -25,10 +25,10 @@ public class logging implements LogEventSubject
 
 	private static String logfileDelimiter = "configed";
 	private static String logfileMarker = null;
-	public final static String windowsEnvVariableAppDataDirectory = "APPDATA";
-	public final static String envVariableForUserDirectory = "user.home";
-	public final static String relativeLogDirWindows = "opsi.org" + File.separator + "log";
-	public final static String relativeLogDirUnix = ".configed";
+	public static final String windowsEnvVariableAppDataDirectory = "APPDATA";
+	public static final String envVariableForUserDirectory = "user.home";
+	public static final String relativeLogDirWindows = "opsi.org" + File.separator + "log";
+	public static final String relativeLogDirUnix = ".configed";
 	private static String extension = ".log";
 
 	public static final int LEVEL_SECRET = 9;
@@ -72,12 +72,12 @@ public class logging implements LogEventSubject
 	static private boolean LogFileInitialized = false;
 	static public boolean LogFileAvailable = false;
 
-	private final static int maxListedErrors = 20;
-	private static Vector<String> errorList;
+	private static final int maxListedErrors = 20;
+	private static ArrayList<String> errorList;
 
 	static public FShowList fErrors;
 
-	protected static Vector<LogEventObserver> logEventObservers;
+	protected static ArrayList<LogEventObserver> logEventObservers;
 
 	public static void setSuppressConsole(boolean b) {
 		setLogLevelConsole(LEVEL_NONE);
@@ -177,8 +177,8 @@ public class logging implements LogEventSubject
 	}
 
 	synchronized static final public void init() {
-		errorList = new Vector<String>(maxListedErrors);
-		logEventObservers = new Vector<LogEventObserver>();
+		errorList = new ArrayList<String>(maxListedErrors);
+		logEventObservers = new ArrayList<LogEventObserver>();
 		initLogFile();
 	}
 
@@ -197,7 +197,7 @@ public class logging implements LogEventSubject
 
 	static private void addErrorToList(String mesg, String time) {
 		while (errorList.size() >= maxListedErrors) {
-			errorList.removeElementAt(0);
+			errorList.remove(0);
 		}
 		errorList.add(String.format("[%s] %s", time, mesg));
 

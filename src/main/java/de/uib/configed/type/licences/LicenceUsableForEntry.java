@@ -18,10 +18,10 @@ public class LicenceUsableForEntry extends HashMap<String, String> {
 	 * 
 	 */
 
-	public final static String idKEY = "id";
-	public final static String licenceIdKEY = "softwareLicenseId";
-	public final static String licencePoolIdKEY = "licensePoolId";
-	public final static String licencekeyKEY = "licenseKey";
+	public static final String idKEY = "id";
+	public static final String licenceIdKEY = "softwareLicenseId";
+	public static final String licencePoolIdKEY = "licensePoolId";
+	public static final String licencekeyKEY = "licenseKey";
 
 	private static List<String> KEYS;
 	static {
@@ -39,11 +39,7 @@ public class LicenceUsableForEntry extends HashMap<String, String> {
 		if (importedEntry.get(licenceIdKEY) == null || importedEntry.get(licencePoolIdKEY) == null)
 			logging.warning("LicenceUsableForEntry,  missing primary key in " + importedEntry);
 
-		String pseudokey = Globals.pseudokey(
-				new String[] {
-						entry.get(licenceIdKEY),
-						entry.get(licencePoolIdKEY)
-				});
+		String pseudokey = Globals.pseudokey(new String[] { entry.get(licenceIdKEY), entry.get(licencePoolIdKEY) });
 
 		entry.put(idKEY, pseudokey);
 

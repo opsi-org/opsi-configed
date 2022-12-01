@@ -9,7 +9,7 @@
 package de.uib.utilities.table.updates;
 
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.table.GenTableModel;
@@ -38,7 +38,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 
 		boolean success = true; // true until failure
 
-		Vector successfullInsertsWithNewKeys = new Vector<MapBasedTableEditItem>();
+		ArrayList successfullInsertsWithNewKeys = new ArrayList<MapBasedTableEditItem>();
 
 		Iterator iter = updateCollection.iterator();
 

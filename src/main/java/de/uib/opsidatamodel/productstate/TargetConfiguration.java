@@ -3,28 +3,28 @@ package de.uib.opsidatamodel.productstate;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import de.uib.configed.Globals;
 
 public class TargetConfiguration {
-	public final static String KEY = "targetConfiguration";
+	public static final String KEY = "targetConfiguration";
 
 	// conflicting entries from several clients
-	public final static int CONFLICT = -4;
+	public static final int CONFLICT = -4;
 
 	// no valid entry from service
-	public final static int INVALID = -2;
+	public static final int INVALID = -2;
 
 	// valid service states
-	public final static int UNDEFINED = 0;
-	public final static int INSTALLED = 1;
-	public final static int ALWAYS = 2;
-	public final static int FORBIDDEN = 4;
+	public static final int UNDEFINED = 0;
+	public static final int INSTALLED = 1;
+	public static final int ALWAYS = 2;
+	public static final int FORBIDDEN = 4;
 
 	// future
-	public final static int DISABLED = 5; // do not install or uninstall at the moment
-	public final static int INSTALL_NEWEST = 6; // look for the newest version and try to install it
+	public static final int DISABLED = 5; // do not install or uninstall at the moment
+	public static final int INSTALL_NEWEST = 6; // look for the newest version and try to install it
 
 	// mappings
 	private static Map<Integer, String> state2label;
@@ -32,8 +32,8 @@ public class TargetConfiguration {
 	private static Map<String, String> label2displayLabel;
 	private static Map<String, String> displayLabel2label;
 
-	private static Vector<Integer> states;
-	private static Vector<String> labels;
+	private static ArrayList<Integer> states;
+	private static ArrayList<String> labels;
 	private static String[] choiceLabels;
 
 	// instance variable
@@ -43,7 +43,7 @@ public class TargetConfiguration {
 		if (states != null)
 			return;
 
-		states = new Vector<Integer>();
+		states = new ArrayList<Integer>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(UNDEFINED);
@@ -51,7 +51,7 @@ public class TargetConfiguration {
 		states.add(ALWAYS);
 		states.add(FORBIDDEN);
 
-		labels = new Vector<String>();
+		labels = new ArrayList<String>();
 		labels.add(Globals.CONFLICTSTATEstring);
 		labels.add(Globals.NOVALIDSTATEstring);
 		labels.add("undefined");
@@ -122,7 +122,7 @@ public class TargetConfiguration {
 		return state2label.get(state);
 	}
 
-	public static Vector<String> getLabels() {
+	public static ArrayList<String> getLabels() {
 		checkCollections();
 
 		return labels;

@@ -14,13 +14,12 @@ package de.uib.configed.type;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import de.uib.utilities.logging.logging;
 
 //data source table productOnDepot
-public class OpsiPackage
-		implements Comparable {
+public class OpsiPackage implements Comparable {
 	protected String productId;
 	protected int productType;
 	protected String versionInfo;
@@ -51,9 +50,9 @@ public class OpsiPackage
 		SERVICE_KEYS.add(SERVICEkeyPRODUCT_TYPE);
 	}
 
-	public final static Vector<String> COLUMN_NAMES;
+	public static final ArrayList<String> COLUMN_NAMES;
 	static {
-		COLUMN_NAMES = new Vector<String>();
+		COLUMN_NAMES = new ArrayList<String>();
 		COLUMN_NAMES.add(DBkeyPRODUCT_ID);
 		COLUMN_NAMES.add(SERVICEkeyPRODUCT_VERSION);
 		COLUMN_NAMES.add(SERVICEkeyPACKAGE_VERSION);
@@ -62,7 +61,7 @@ public class OpsiPackage
 
 	}
 
-	// public class PackageRow extends Vector<Object>;
+	// public class PackageRow extends ArrayList<Object>;
 
 	public static final int TYPE_LOCALBOOT = 0;
 	public static final int TYPE_NETBOOT = 1;
@@ -103,10 +102,7 @@ public class OpsiPackage
 	}
 
 	public OpsiPackage(Map<String, Object> m) {
-		this(
-				"" + m.get(DBkeyPRODUCT_ID),
-				"" + m.get(SERVICEkeyPRODUCT_VERSION),
-				"" + m.get(SERVICEkeyPACKAGE_VERSION),
+		this("" + m.get(DBkeyPRODUCT_ID), "" + m.get(SERVICEkeyPRODUCT_VERSION), "" + m.get(SERVICEkeyPACKAGE_VERSION),
 				"" + m.get(SERVICEkeyPRODUCT_TYPE),
 				de.uib.utilities.Globals.interpretAsBoolean(m.get(SERVICEkeyLOCKED)));
 		logging.debug(this, "built from " + m);
@@ -148,7 +144,7 @@ public class OpsiPackage
 		return productType;
 	}
 
-	public Vector<Object> appendValues(Vector<Object> row) {
+	public ArrayList<Object> appendValues(ArrayList<Object> row) {
 		// row.add(getProductId());
 		row.add(giveProductType(getProductType()));
 		row.add(getProductVersion());
@@ -167,10 +163,10 @@ public class OpsiPackage
 
 	public static String giveProductType(int type) {
 		switch (type) {
-			case TYPE_LOCALBOOT:
-				return LOCALBOOT_PRODUCT_SERVER_STRING;
-			case TYPE_NETBOOT:
-				return NETBOOT_PRODUCT_SERVER_STRING;
+		case TYPE_LOCALBOOT:
+			return LOCALBOOT_PRODUCT_SERVER_STRING;
+		case TYPE_NETBOOT:
+			return NETBOOT_PRODUCT_SERVER_STRING;
 		}
 		return "error";
 	}
@@ -178,10 +174,8 @@ public class OpsiPackage
 	protected String buildRepresentation() {
 		return
 		// getClass().getName() +
-		"{"
-				+ DBkeyPRODUCT_ID + ":\"" + productId + "\";"
-				+ SERVICEkeyPRODUCT_TYPE + ":\"" + giveProductType(productType) + "\";"
-				+ VERSION_INFO + ":\"" + versionInfo
+		"{" + DBkeyPRODUCT_ID + ":\"" + productId + "\";" + SERVICEkeyPRODUCT_TYPE + ":\""
+				+ giveProductType(productType) + "\";" + VERSION_INFO + ":\"" + versionInfo
 				// + LOCKED + ":\" + locked
 				+ "\"}";
 	}

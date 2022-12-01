@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -37,7 +37,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	private JCheckBox checkb_setupInstalled;
 
 	public FDepotselectionList fDepotList;
-	private Vector<String> depots;
+	private ArrayList<String> depots;
 
 	public SSHPMInstallSettingsPanel() {
 		this(null);
@@ -112,9 +112,9 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	public void setFDepotList(JDialog dia) {
 		fDepotList = new FDepotselectionList(dia) {
 			@Override
-			public void setListData(Vector<? extends String> v) {
+			public void setListData(ArrayList<? extends String> v) {
 				if (v == null || v.size() == 0) {
-					setListData(new Vector<String>());
+					setListData(new ArrayList<String>());
 					jButton1.setEnabled(false);
 				} else {
 					super.setListData(v);
@@ -137,35 +137,26 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		GroupLayout layout = new GroupLayout(this);
 
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addGap(Globals.gapSize)
-				.addGroup(layout.createParallelGroup(center)
-						.addGroup(layout.createSequentialGroup()
-								.addGroup(layout.createParallelGroup()
-										.addGroup(layout.createSequentialGroup()
-												.addComponent(lbl_on, PREF, PREF, PREF)
-												.addGap(Globals.gapSize)
-												.addComponent(tf_selecteddepots, PREF, PREF, Short.MAX_VALUE))
-										.addComponent(lbl_verbosity, PREF, PREF, PREF)
-										.addComponent(lbl_properties, PREF, PREF, PREF)
-										.addComponent(lbl_setupInstalled, PREF, PREF, PREF)
-										.addComponent(lbl_updateInstalled, PREF, PREF, PREF))
-								.addGap(Globals.gapSize)
-								.addGroup(layout.createParallelGroup()
-										.addComponent(btn_depotselection, PREF, PREF, PREF) // Globals.iconWidth,
-																							// Globals.iconWidth,
-																							// Globals.iconWidth)
-										.addComponent(cb_verbosity, Globals.iconWidth, Globals.iconWidth,
-												Globals.iconWidth)
-										.addComponent(cb_properties, PREF, PREF, PREF)
-										.addComponent(checkb_setupInstalled, PREF, PREF, PREF)
-										.addComponent(checkb_updateInstalled, PREF, PREF, PREF))
-								.addGap(Globals.gapSize, Globals.gapSize, MAX)))
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.gapSize).addGroup(layout
+				.createParallelGroup(center)
+				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup()
+						.addGroup(layout.createSequentialGroup().addComponent(lbl_on, PREF, PREF, PREF)
+								.addGap(Globals.gapSize).addComponent(tf_selecteddepots, PREF, PREF, Short.MAX_VALUE))
+						.addComponent(lbl_verbosity, PREF, PREF, PREF).addComponent(lbl_properties, PREF, PREF, PREF)
+						.addComponent(lbl_setupInstalled, PREF, PREF, PREF)
+						.addComponent(lbl_updateInstalled, PREF, PREF, PREF)).addGap(Globals.gapSize)
+						.addGroup(layout.createParallelGroup().addComponent(btn_depotselection, PREF, PREF, PREF) // Globals.iconWidth,
+								// Globals.iconWidth,
+								// Globals.iconWidth)
+								.addComponent(cb_verbosity, Globals.iconWidth, Globals.iconWidth, Globals.iconWidth)
+								.addComponent(cb_properties, PREF, PREF, PREF)
+								.addComponent(checkb_setupInstalled, PREF, PREF, PREF)
+								.addComponent(checkb_updateInstalled, PREF, PREF, PREF))
+						.addGap(Globals.gapSize, Globals.gapSize, MAX)))
 				.addGap(Globals.gapSize));
 
 		layout.setVerticalGroup(
-				layout.createSequentialGroup()
-						.addGap(Globals.gapSize)
+				layout.createSequentialGroup().addGap(Globals.gapSize)
 						.addGroup(layout.createParallelGroup(center)
 								.addComponent(lbl_on, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
 								.addComponent(tf_selecteddepots, Globals.lineHeight, Globals.lineHeight,
@@ -195,8 +186,8 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 						.addGap(Globals.gapSize));
 	}
 
-	protected Vector<String> getAllowedInstallTargets() {
-		Vector<String> result = new java.util.Vector<String>();
+	protected ArrayList<String> getAllowedInstallTargets() {
+		ArrayList<String> result = new java.util.ArrayList<String>();
 
 		if (persist.isDepotsFullPermission()) {
 			tf_selecteddepots.setEditable(true);

@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import de.uib.configed.configed;
 import de.uib.configed.type.SWAuditClientEntry;
@@ -198,12 +198,12 @@ public abstract class SWExporter {
 		// filepathStart = exportDirectoryS + File.separator + prefix;
 		// setWriteToFile( filepathStart + hostId + ".pdf");
 
-		Vector<String> columnNames;
-		Vector<String> classNames;
+		ArrayList<String> columnNames;
+		ArrayList<String> classNames;
 
-		columnNames = new Vector<String>(SWAuditClientEntry.KEYS);
+		columnNames = new ArrayList<String>(SWAuditClientEntry.KEYS);
 		columnNames.remove(0);
-		classNames = new Vector<String>();
+		classNames = new ArrayList<String>();
 		int[] finalColumns = new int[columnNames.size()];
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");

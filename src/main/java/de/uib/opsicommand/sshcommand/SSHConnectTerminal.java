@@ -32,7 +32,7 @@ public class SSHConnectTerminal extends SSHConnect {
 	private KeyListener inputKeyListener = null;
 	private ActionListener connectionKeyListener = null;
 	private OutputStream out = null;
-	public final static String SOME_COMMAND = "/bin/bash"; // "opsi-admin --version";
+	public static final String SOME_COMMAND = "/bin/bash"; // "opsi-admin --version";
 	String currentDirectory = "";
 	boolean getCurrentDirectorySilent = false;
 

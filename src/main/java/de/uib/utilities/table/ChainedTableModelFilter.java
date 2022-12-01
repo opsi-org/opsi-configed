@@ -9,7 +9,7 @@
 package de.uib.utilities.table;
 
 import java.util.LinkedHashMap;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class ChainedTableModelFilter extends TableModelFilter {
 	LinkedHashMap<String, TableModelFilter> chain;
@@ -50,7 +50,7 @@ public class ChainedTableModelFilter extends TableModelFilter {
 	}
 
 	@Override
-	public boolean test(Vector<Object> row) {
+	public boolean test(ArrayList<Object> row) {
 		if (!inUse)
 			return true;
 

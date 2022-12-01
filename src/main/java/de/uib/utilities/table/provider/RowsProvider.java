@@ -8,7 +8,7 @@
 
 package de.uib.utilities.table.provider;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 /**
  * delivers rows which are externally stored
@@ -16,5 +16,5 @@ import java.util.Vector;
 public interface RowsProvider {
 	public void requestReload();
 
-	public Vector<Vector<Object>> getRows();
+	public ArrayList<ArrayList<Object>> getRows();
 }

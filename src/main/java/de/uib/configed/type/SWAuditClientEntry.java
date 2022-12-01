@@ -100,9 +100,9 @@ public class SWAuditClientEntry
 		locale.put(SWAuditEntry.WINDOWSsOFTWAREid, configed.getResourceValue("PanelSWInfo.tableheader_softwareId"));
 	}
 
-	public final static String DB_TABLE_NAME = "SOFTWARE_CONFIG";
+	public static final String DB_TABLE_NAME = "SOFTWARE_CONFIG";
 
-	public final static LinkedHashMap<String, String> DB_COLUMNS = new LinkedHashMap<String, String>();
+	public static final LinkedHashMap<String, String> DB_COLUMNS = new LinkedHashMap<String, String>();
 	static {
 		DB_COLUMNS.put(CLIENT_ID, DB_TABLE_NAME + "." + "clientId");
 		DB_COLUMNS.put(SWAuditEntry.NAME, DB_TABLE_NAME + "." + "name");
@@ -117,7 +117,7 @@ public class SWAuditClientEntry
 	}
 
 	/*
-	 * public final static LinkedHashMap<String, String> DB_COLUMNS = new
+	 * public static final LinkedHashMap<String, String> DB_COLUMNS = new
 	 * LinkedHashMap<String, String>();
 	 * static {
 	 * DB_COLUMNS.put("config_id", "INTEGER");
@@ -134,14 +134,14 @@ public class SWAuditClientEntry
 	 * }
 	 */
 
-	public final static List<String> DB_COLUMN_NAMES = new ArrayList<String>();
+	public static final List<String> DB_COLUMN_NAMES = new ArrayList<String>();
 	static {
 		for (String key : DB_COLUMNS.keySet()) {
 			DB_COLUMN_NAMES.add(DB_COLUMNS.get(key));
 		}
 	}
 
-	public final static int columnIndexLastStateChange = DB_COLUMN_NAMES.indexOf("modificationTime");
+	public static final int columnIndexLastStateChange = DB_COLUMN_NAMES.indexOf("modificationTime");
 
 	public SWAuditClientEntry(final java.util.List<String> keys, final java.util.List<String> values,
 			de.uib.opsidatamodel.PersistenceController controller) {
@@ -208,8 +208,7 @@ public class SWAuditClientEntry
 					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.VERSION))),
 					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.SUBVERSION))),
 					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.LANGUAGE))),
-					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE))),
-			});
+					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE))), });
 		} catch (Exception ex) {
 			logging.info("SWAuditClientEntry:: produceSWident keys -- value : " + keys + " -- " + values);
 
@@ -274,8 +273,8 @@ public class SWAuditClientEntry
 		int result = -1;
 
 		if (!swIdent.equals(element))
-			logging.warning(this, "getIndex gobal swIdent was assumed to be equal to element " + swIdent + ". "
-					+ element);
+			logging.warning(this,
+					"getIndex gobal swIdent was assumed to be equal to element " + swIdent + ". " + element);
 		// int result = software.indexOf( swIdent );
 		Integer j = software2Number.get(element);
 		// if (j != null && result != -1 && result != j) logging.warning(this,
@@ -340,8 +339,7 @@ public class SWAuditClientEntry
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.SUBVERSION)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE)),
-				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.ARCHITECTURE))
-		});
+				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.ARCHITECTURE)) });
 
 		// return result.toLowerCase();
 		return result;

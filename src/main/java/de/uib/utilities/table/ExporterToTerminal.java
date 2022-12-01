@@ -1,9 +1,9 @@
 package de.uib.utilities.table;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class ExporterToTerminal extends ExportTable {
-	public ExporterToTerminal(javax.swing.JTable table, Vector<String> classNames) {
+	public ExporterToTerminal(javax.swing.JTable table, ArrayList<String> classNames) {
 		super(table, classNames);
 	}
 
@@ -21,7 +21,7 @@ public class ExporterToTerminal extends ExportTable {
 		for (int rowI = 0; rowI < theTable.getRowCount(); rowI++) {
 			// logging.debug("selected? " + theTable.isRowSelected(rowI));
 			if (!selectedOnly || theTable.isRowSelected(rowI)) {
-				Vector<String> rowV = new Vector<String>();
+				ArrayList<String> rowV = new ArrayList<String>();
 				for (int colI = 0; colI < theTable.getColumnCount(); colI++) {
 					if (theTable.getValueAt(rowI, colI) != null) {
 						if (classNames == null || classNames.size() == 0) {

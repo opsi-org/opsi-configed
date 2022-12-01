@@ -11,9 +11,9 @@ public class DbConnect {
 	private final String driver = "com.mysql.jdbc.Driver";
 	// private String url = "jdbc:mysql://%s/opsi";
 	private String url = "jdbc:mysql://%s";
-	private final static String defaultDB = "opsi";
-	private final static String defaultUser = "opsi";
-	private final static String defaultPassword = "linux123"; // "opsi";
+	private static final String defaultDB = "opsi";
+	private static final String defaultUser = "opsi";
+	private static final String defaultPassword = "linux123"; // "opsi";
 	private static Connection con = null;
 
 	private static String server;

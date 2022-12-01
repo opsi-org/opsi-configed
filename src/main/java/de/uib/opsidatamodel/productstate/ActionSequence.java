@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ActionSequence {
-	public final static String KEY = "actionSequence";
+	public static final String KEY = "actionSequence";
 
 	private static Map<String, String> displayLabel2label;
 

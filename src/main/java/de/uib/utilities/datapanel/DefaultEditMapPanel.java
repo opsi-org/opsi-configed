@@ -11,7 +11,7 @@ import java.awt.BorderLayout;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -29,7 +29,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 	JComboBox editorfield;
 	TableCellEditor defaultCellEditor;
 
-	Vector<String> names;
+	ArrayList<String> names;
 	Map<String, ListCellOptions> optionsMap;
 	Map<String, String> descriptionsMap;
 	Map<String, Object> defaultsMap;
@@ -72,9 +72,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 		this(tableCellRenderer, keylistExtendible, keylistEditable, false);
 	}
 
-	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer,
-			boolean keylistExtendible,
-			boolean keylistEditable,
+	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
 			boolean reloadable) {
 		super(keylistExtendible, keylistEditable, reloadable);
 		this.tableCellRenderer = tableCellRenderer;
@@ -97,8 +95,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 	}
 
 	/**
-	 * setting all data for displaying and editing
-	 * <br />
+	 * setting all data for displaying and editing <br />
 	 * 
 	 * @param Map visualdata - the source for the table model
 	 * @param Map optionsMap - the description for producing cell editors
@@ -112,7 +109,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 		// logging.info(this, " setEditableMap: visualdata " + visualdata);
 		// logging.info(this, " setEditableMap: optionsMap " + optionsMap);
 
-		// from mapTableModel, we get back the sorted vector of property names:
+		// from mapTableModel, we get back the sorted ArrayList of property names:
 		names = mapTableModel.getKeys();
 
 		// logging.debug(this, " +++++++ visualdata " + visualdata);
@@ -193,11 +190,9 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 			if (names.indexOf(s) > -1) {
 				ok =
 
-						(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(
-								de.uib.configed.Globals.mainContainer,
+						(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(de.uib.configed.Globals.mainContainer,
 								"Ein Eintrag mit diesem Namen existiert bereits. Überschreiben des bisherigen Eintrags?",
-								de.uib.utilities.Globals.APPNAME,
-								JOptionPane.OK_CANCEL_OPTION));
+								de.uib.utilities.Globals.APPNAME, JOptionPane.OK_CANCEL_OPTION));
 			}
 
 		}
