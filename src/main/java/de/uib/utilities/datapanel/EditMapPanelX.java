@@ -291,7 +291,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 								propertyHandler = defaultPropertyHandler;
 								// logging.debug(this, "remove entry " + names.elementAt( table.getSelectedRow()
 								// ) );
-								removeProperty(names.get(table.getSelectedRow()));
+								removeProperty(names.elementAt(table.getSelectedRow()).toString());
 							}
 						}
 					}
@@ -315,7 +315,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 								propertyHandler = removingSpecificValuesPropertyHandler;
 								// logging.debug(this, "remove entry " + names.elementAt( table.getSelectedRow()
 								// ) );
-								removeProperty(names.get(table.getSelectedRow()).toString());
+								removeProperty(names.elementAt(table.getSelectedRow()).toString());
 							}
 						}
 					}
@@ -339,7 +339,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 								propertyHandler = settingDefaultValuesPropertyHandler;
 								// logging.debug(this, "remove entry " + names.elementAt( table.getSelectedRow()
 								// ) );
-								removeProperty(names.get(table.getSelectedRow()).toString());
+								removeProperty(names.elementAt(table.getSelectedRow()).toString());
 							}
 						}
 					}

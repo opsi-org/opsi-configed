@@ -1,6 +1,6 @@
 package de.uib.utilities.swing;
 
-import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JList;
 
@@ -13,8 +13,8 @@ public class XList extends JList // org.jdesktop.swingx.JXList
 		configure();
 	}
 
-	public XList(ArrayList<?> listData) {
-		super(listData.toArray());
+	public XList(Vector<?> listData) {
+		super(listData);
 		configure();
 	}
 

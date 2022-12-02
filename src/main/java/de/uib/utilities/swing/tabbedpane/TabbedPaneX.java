@@ -3,8 +3,8 @@ package de.uib.utilities.swing.tabbedpane;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
-import java.util.ArrayList;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.swing.Icon;
 import javax.swing.JPanel;
@@ -15,7 +15,7 @@ public class TabbedPaneX extends JPanel {
 
 	TabController controller;
 
-	ArrayList<Enum> tabOrder;
+	Vector<Enum> tabOrder;
 
 	Map globals;
 
@@ -38,7 +38,7 @@ public class TabbedPaneX extends JPanel {
 		setLayout(new BorderLayout());
 		jTabbedPaneMain = new JTabbedPane(JTabbedPane.TOP);
 
-		tabOrder = new ArrayList<Enum>();
+		tabOrder = new Vector<Enum>();
 
 		jTabbedPaneMain.addChangeListener(new javax.swing.event.ChangeListener() {
 			public void stateChanged(javax.swing.event.ChangeEvent e) {
@@ -46,7 +46,7 @@ public class TabbedPaneX extends JPanel {
 
 				// logging.debug(" new visual tab index " + newVisualIndex);
 
-				Enum newS = tabOrder.get(newVisualIndex);
+				Enum newS = tabOrder.elementAt(newVisualIndex);
 
 				// logging.debug(" new tab state " + newS);
 

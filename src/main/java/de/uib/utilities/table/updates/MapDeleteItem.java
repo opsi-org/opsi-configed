@@ -8,11 +8,11 @@
 
 package de.uib.utilities.table.updates;
 
-import java.util.ArrayList;
+import java.util.Vector;
 
 public class MapDeleteItem extends MapBasedTableEditItem {
-	public MapDeleteItem(Object source, int keyCol, ArrayList<String> columnNames, ArrayList<String> classNames,
-			ArrayList<Object> rowV) {
+	public MapDeleteItem(Object source, int keyCol, Vector<String> columnNames, Vector<String> classNames,
+			Vector<Object> rowV) {
 		super(source, keyCol, columnNames, classNames, null, rowV);
 	}
 

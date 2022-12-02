@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import de.uib.configed.configed;
 import de.uib.configed.type.ConfigOption;
@@ -216,7 +216,7 @@ public class DataStubNOM extends DataStub {
 
 	protected Object2Product2VersionList depot2LocalbootProducts;
 	protected Object2Product2VersionList depot2NetbootProducts;
-	protected ArrayList<ArrayList<Object>> productRows;
+	protected Vector<Vector<Object>> productRows;
 	protected Map<String, TreeSet<OpsiPackage>> depot2Packages;
 	protected Map<String, Map<String, java.util.List<String>>> product2VersionInfo2Depots;
 
@@ -232,7 +232,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	@Override
-	public ArrayList<ArrayList<Object>> getProductRows() {
+	public Vector<Vector<Object>> getProductRows() {
 		retrieveProductsAllDepots();
 		return productRows;
 	}
@@ -286,7 +286,7 @@ public class DataStubNOM extends DataStub {
 			depot2NetbootProducts = new Object2Product2VersionList();
 			product2VersionInfo2Depots = new HashMap<String, Map<String, java.util.List<String>>>();
 
-			productRows = new ArrayList<ArrayList<Object>>();
+			productRows = new Vector<Vector<Object>>();
 
 			depot2Packages = new HashMap<String, TreeSet<OpsiPackage>>();
 
@@ -330,7 +330,7 @@ public class DataStubNOM extends DataStub {
 				}
 				depotpackages.add(p);
 
-				ArrayList<Object> productRow = new ArrayList<Object>();
+				Vector<Object> productRow = new Vector<Object>();
 
 				productRow.add(p.getProductId());
 
@@ -810,7 +810,7 @@ public class DataStubNOM extends DataStub {
 			persist.notifyDataLoadingObservers(configed.getResourceValue("LoadingObserver.loadtable") + " software");
 
 			String[] callAttributes = new String[] { SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME), // "name", //key
-					// element
+																										// element
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION), // "version",//key element
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.SUBVERSION), // key element
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE), // key element
@@ -819,7 +819,8 @@ public class DataStubNOM extends DataStub {
 			HashMap callFilter = new HashMap();
 
 			List<Map<String, Object>> li = persist.retrieveListOfMapsNOM(callAttributes, callFilter,
-					"auditSoftware_getHashes");;
+					"auditSoftware_getHashes");
+			;
 
 			Iterator iter = li.iterator();
 

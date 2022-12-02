@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Date;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
@@ -18,7 +18,7 @@ public class ExporterToCSV extends ExportTable {
 	public static final Character stringDelimiter = '"';
 	protected static final String thisExtension = ".csv";
 
-	public ExporterToCSV(javax.swing.JTable table, ArrayList<String> classNames) {
+	public ExporterToCSV(javax.swing.JTable table, Vector<String> classNames) {
 		super(table, classNames);
 		extensionFilter = new javax.swing.filechooser.FileNameExtensionFilter("CSV", "csv");
 
@@ -55,8 +55,8 @@ public class ExporterToCSV extends ExportTable {
 	public void execute(String fileName, boolean onlySelectedRows) {
 
 		// logging.info(this, "toCSV classNames " + classNames );
-		logging.info(this, "toCSV fileName, onlySelectedRows, csvSep " + "\"" + fileName + "\", " + onlySelectedRows
-				+ "\", " + "\"" + csvSep + "\"");
+		logging.info(this, "toCSV fileName, onlySelectedRows, csvSep " +
+				"\"" + fileName + "\", " + onlySelectedRows + "\", " + "\"" + csvSep + "\"");
 
 		Boolean selectedOnly = checkSelection(onlySelectedRows);
 		if (selectedOnly == null)
@@ -91,7 +91,8 @@ public class ExporterToCSV extends ExportTable {
 				// write rows
 
 				for (int rowI = 0; rowI < theTable.getRowCount(); rowI++) {
-					logging.debug(this, "toCsv, handle row " + rowI + " selected " + theTable.isRowSelected(rowI)
+					logging.debug(this, "toCsv, handle row " + rowI + " selected "
+							+ theTable.isRowSelected(rowI)
 							+ " selectedOnly " + selectedOnly);
 
 					if (!selectedOnly || theTable.isRowSelected(rowI)) {
@@ -210,7 +211,8 @@ public class ExporterToCSV extends ExportTable {
 				os.close();
 
 			} catch (Exception ex) {
-				logging.error(configed.getResourceValue("ExportTable.error") + " " + ex.toString());
+				logging.error(configed.getResourceValue("ExportTable.error")
+						+ " " + ex.toString());
 			}
 		}
 

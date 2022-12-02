@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.Icon;
 import javax.swing.SwingUtilities;
@@ -222,16 +222,16 @@ public class ControlDash {
 
 		GenTableModel modelSWnames;
 
-		ArrayList<String> columnNames;
-		ArrayList<String> classNames;
+		Vector<String> columnNames;
+		Vector<String> classNames;
 
 		TableUpdateCollection updateCollection;
 
-		columnNames = new ArrayList<>();
+		columnNames = new Vector<>();
 		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS)
 			columnNames.add(key);
 
-		classNames = new ArrayList<>();
+		classNames = new Vector<>();
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
@@ -277,7 +277,7 @@ public class ControlDash {
 
 		// modelSWnames.requestReload();
 
-		ArrayList<ArrayList<Object>> specialrows = modelSWnames.getRows();
+		Vector<Vector<Object>> specialrows = modelSWnames.getRows();
 		if (specialrows != null) {
 			logging.info(this, "initDashInfo, modelSWnames.getRows() size " + specialrows.size());
 		}

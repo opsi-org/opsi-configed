@@ -8,15 +8,17 @@
 
 package de.uib.utilities.table.updates;
 
-import java.util.ArrayList;
+import java.util.Vector;
 
 public class GenericTableUpdateItemFactory extends TableUpdateItemFactory {
-	protected ArrayList<String> columnNames;
-	protected ArrayList<String> classNames;
+	protected Vector<String> columnNames;
+	protected Vector<String> classNames;
 	protected int keyCol;
 	protected Object source;
 
-	public GenericTableUpdateItemFactory(Object source, ArrayList<String> columnNames, ArrayList<String> classNames,
+	public GenericTableUpdateItemFactory(
+			Object source,
+			Vector<String> columnNames, Vector<String> classNames,
 			int keyCol) {
 		this.columnNames = columnNames;
 		this.classNames = classNames;
@@ -24,11 +26,14 @@ public class GenericTableUpdateItemFactory extends TableUpdateItemFactory {
 		this.source = source;
 	}
 
-	public GenericTableUpdateItemFactory(ArrayList<String> columnNames, ArrayList<String> classNames, int keyCol) {
+	public GenericTableUpdateItemFactory(
+			Vector<String> columnNames, Vector<String> classNames,
+			int keyCol) {
 		this(null, columnNames, classNames, keyCol);
 	}
 
-	public GenericTableUpdateItemFactory(int keyCol) {
+	public GenericTableUpdateItemFactory(
+			int keyCol) {
 		this(null, null, null, keyCol);
 	}
 
@@ -36,24 +41,27 @@ public class GenericTableUpdateItemFactory extends TableUpdateItemFactory {
 		this.source = source;
 	}
 
-	public void setClassNames(ArrayList<String> classNames) {
+	public void setClassNames(Vector<String> classNames) {
 		this.classNames = classNames;
 	}
 
-	public void setColumnNames(ArrayList<String> columnNames) {
+	public void setColumnNames(Vector<String> columnNames) {
 		this.columnNames = columnNames;
 	}
 
-	public TableEditItem produceUpdateItem(ArrayList oldValues, ArrayList rowV) {
-		return new GenericTableUpdateItem(source, keyCol, columnNames, classNames, oldValues, rowV);
+	public TableEditItem produceUpdateItem(Vector oldValues, Vector rowV) {
+		return new GenericTableUpdateItem(
+				source, keyCol, columnNames, classNames, oldValues, rowV);
 	}
 
-	public TableEditItem produceInsertItem(ArrayList rowV) {
-		return new GenericTableInsertItem(source, keyCol, columnNames, classNames, rowV);
+	public TableEditItem produceInsertItem(Vector rowV) {
+		return new GenericTableInsertItem(
+				source, keyCol, columnNames, classNames, rowV);
 	}
 
-	public TableEditItem produceDeleteItem(ArrayList rowV) {
-		return new GenericTableDeleteItem(source, keyCol, columnNames, classNames, rowV);
+	public TableEditItem produceDeleteItem(Vector rowV) {
+		return new GenericTableDeleteItem(
+				source, keyCol, columnNames, classNames, rowV);
 	}
 
 }

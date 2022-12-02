@@ -1,6 +1,6 @@
 package de.uib.configed.gui.hostconfigs;
 
-import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  *
@@ -11,9 +11,10 @@ import java.util.ArrayList;
 import de.uib.configed.configed;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
 
-public class FramingNewRole implements FramingTextfieldWithListselection {
+public class FramingNewRole
+		implements FramingTextfieldWithListselection {
 
-	ArrayList<String> list;
+	Vector<String> list;
 	String title;
 	String textfieldLabel;
 	String listLabel;
@@ -53,14 +54,14 @@ public class FramingNewRole implements FramingTextfieldWithListselection {
 	}
 
 	@Override
-	public void setListData(ArrayList<String> v) {
+	public void setListData(Vector<String> v) {
 		list = v;
 	}
 
 	@Override
-	public ArrayList<String> getListData() {
+	public Vector<String> getListData() {
 		if (list == null) {
-			list = new ArrayList<String>();
+			list = new Vector<String>();
 			list.add("B1");
 			list.add("B2");
 			list.add("B1");

@@ -1,7 +1,7 @@
 package de.uib.configed;
 
 import java.util.Map;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import de.uib.configed.gui.licences.PanelLicencesStatistics;
 import de.uib.opsidatamodel.PersistenceController;
@@ -35,18 +35,18 @@ public class ControlPanelLicencesStatistics extends ControlMultiTablePanel {
 	public void init() {
 		updateCollection = new TableUpdateCollection();
 
-		ArrayList<String> columnNames;
-		ArrayList<String> classNames;
+		Vector<String> columnNames;
+		Vector<String> classNames;
 
 		// --- panelStatistics
-		columnNames = new ArrayList<>();
+		columnNames = new Vector<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("licence_options");
 		columnNames.add("used_by_opsi");
 		columnNames.add("remaining_opsi");
 		columnNames.add("SWinventory_used");
 		columnNames.add("SWinventory_remaining");
-		classNames = new ArrayList<>();
+		classNames = new Vector<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");

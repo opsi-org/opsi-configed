@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import de.uib.utilities.logging.logging;
 
@@ -23,9 +23,9 @@ public class Mapping<K, V> {
 	protected Map<String, V> mapOfStrings;
 	protected boolean invertible;
 	protected Map<V, K> inverseMap;
-	protected ArrayList<K> domain;
-	protected ArrayList<V> range;
-	protected ArrayList<String> rangeAsStrings;
+	protected Vector<K> domain;
+	protected Vector<V> range;
+	protected Vector<String> rangeAsStrings;
 
 	public Mapping() {
 		this(null);
@@ -34,10 +34,10 @@ public class Mapping<K, V> {
 	public Mapping(Map<K, V> definingMap) {
 		map = new HashMap<K, V>();
 		inverseMap = new HashMap<V, K>();
-		domain = new ArrayList<K>();
-		range = new ArrayList<V>();
+		domain = new Vector<K>();
+		range = new Vector<V>();
 		mapOfStrings = new HashMap<String, V>();
-		rangeAsStrings = new ArrayList<String>();
+		rangeAsStrings = new Vector<String>();
 
 		defineBy(definingMap);
 	}
@@ -71,7 +71,7 @@ public class Mapping<K, V> {
 		return map.isEmpty();
 	}
 
-	public ArrayList<K> getDomain() {
+	public Vector<K> getDomain() {
 		return domain;
 	}
 
@@ -85,7 +85,7 @@ public class Mapping<K, V> {
 		return ts;
 	}
 
-	public ArrayList<V> getRange() {
+	public Vector<V> getRange() {
 		return range;
 	}
 
@@ -129,7 +129,8 @@ public class Mapping<K, V> {
 				logging.info(this, " " + k + " mapped to null in map " + m);
 			else
 
-				addPair(k, v);;
+				addPair(k, v);
+			;
 		}
 	}
 

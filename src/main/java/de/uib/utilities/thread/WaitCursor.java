@@ -10,7 +10,7 @@ import de.uib.utilities.swing.ActivityPanel;
 
 public class WaitCursor {
 
-	// static ArrayList<WaitCursor> instances = new ArrayList<WaitCursor> ();
+	// static Vector<WaitCursor> instances = new Vector<WaitCursor> ();
 	static private AtomicInteger objectCounting = new AtomicInteger();
 	static private boolean allStopped = false;
 
@@ -100,20 +100,21 @@ public class WaitCursor {
 				}
 			}.start();
 		} else {
-			javax.swing.SwingUtilities.invokeLater(new Thread() {
-				public void run() {
-					ActivityPanel.setActing(true);
+			javax.swing.SwingUtilities.invokeLater(
+					new Thread() {
+						public void run() {
+							ActivityPanel.setActing(true);
 
-					// logging.debug(this, " cursor carrying component " + c);
-					while (!ready && !allStopped) {
-						try {
-							Thread.sleep(200);
-							// logging.debug(this, "running wait cursor thread ");
-						} catch (InterruptedException ex) {
+							// logging.debug(this, " cursor carrying component " + c);
+							while (!ready && !allStopped) {
+								try {
+									Thread.sleep(200);
+									// logging.debug(this, "running wait cursor thread ");
+								} catch (InterruptedException ex) {
+								}
+							}
 						}
-					}
-				}
-			});
+					});
 		}
 
 	}
@@ -122,29 +123,32 @@ public class WaitCursor {
 		logging.info(this, " stop wait cursor " + objectNo + ", was located at (" + callLocation + ")");
 		ready = true;
 
-		javax.swing.SwingUtilities.invokeLater(new Thread() {
-			public void run() {
+		javax.swing.SwingUtilities.invokeLater(
+				new Thread() {
+					public void run() {
 
-				if (c != null)
-					c.setCursor(saveCursor);
+						if (c != null)
+							c.setCursor(saveCursor);
 
-				if (isStopped()) {
-					objectCounting.decrementAndGet();
-					logging.debug(this, "removing instance " + objectNo);
-					if (objectCounting.get() <= 0)
-					// if (instances.size() == 0)
-					{
-						logging.info(this, "seemed to be last living instance");
-						ActivityPanel.setActing(false);
-					} else {
-						logging.debug(this, " stopped wait cursor " + " instance " + objectNo + ", " + " still active  "
-								+ objectCounting + " the stopped cursor was initiated from " + callLocation
-						// + getInstancesNumbers()
-						);
+						if (isStopped()) {
+							objectCounting.decrementAndGet();
+							logging.debug(this, "removing instance " + objectNo);
+							if (objectCounting.get() <= 0)
+							// if (instances.size() == 0)
+							{
+								logging.info(this, "seemed to be last living instance");
+								ActivityPanel.setActing(false);
+							} else {
+								logging.debug(this, " stopped wait cursor "
+										+ " instance " + objectNo + ", "
+										+ " still active  " + objectCounting
+										+ " the stopped cursor was initiated from " + callLocation
+								// + getInstancesNumbers()
+								);
+							}
+						}
 					}
-				}
-			}
-		});
+				});
 
 	}
 
@@ -185,7 +189,7 @@ public class WaitCursor {
 		allStopped = true;
 
 		/*
-		 * ArrayList<WaitCursor> instancesCopy = new ArrayList<WaitCursor>();
+		 * Vector<WaitCursor> instancesCopy = new Vector<WaitCursor>();
 		 * for (WaitCursor instance : instances)
 		 * {
 		 * instancesCopy.add(instance);

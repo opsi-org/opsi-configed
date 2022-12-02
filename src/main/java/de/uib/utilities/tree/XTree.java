@@ -5,7 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.util.Enumeration;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JTree;
 import javax.swing.tree.TreeModel;
@@ -95,10 +95,10 @@ public class XTree extends JTree {
 
 	}
 
-	public ArrayList<Integer> getToggledRows(TreePath parent)
+	public Vector<Integer> getToggledRows(TreePath parent)
 	// make public
 	{
-		ArrayList<Integer> result = new ArrayList<Integer>();
+		Vector<Integer> result = new Vector<Integer>();
 		Enumeration<TreePath> enumer = super.getDescendantToggledPaths(parent);
 		while (enumer.hasMoreElements()) {
 			result.add(getRowForPath(enumer.nextElement()));
@@ -106,7 +106,7 @@ public class XTree extends JTree {
 		return result;
 	}
 
-	public void expandRows(ArrayList<Integer> rows) {
+	public void expandRows(Vector<Integer> rows) {
 		logging.debug(this, "expandRows " + rows.size());
 		for (Integer row : rows) {
 			// logging.debug(this, "expand row " + row);

@@ -8,13 +8,13 @@
 
 package de.uib.utilities.table.updates;
 
-import java.util.ArrayList;
+import java.util.Vector;
 
 public abstract class TableUpdateItemFactory {
-	public abstract TableEditItem produceUpdateItem(ArrayList oldValues, ArrayList rowV);
+	public abstract TableEditItem produceUpdateItem(Vector oldValues, Vector rowV);
 
-	public abstract TableEditItem produceInsertItem(ArrayList rowV);
+	public abstract TableEditItem produceInsertItem(Vector rowV);
 
-	public abstract TableEditItem produceDeleteItem(ArrayList rowV);
+	public abstract TableEditItem produceDeleteItem(Vector rowV);
 
 }

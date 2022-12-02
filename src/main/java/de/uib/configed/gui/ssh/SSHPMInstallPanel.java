@@ -1,6 +1,6 @@
 package de.uib.configed.gui.ssh;
 
-import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
@@ -21,14 +21,14 @@ public class SSHPMInstallPanel extends JPanel {
 
 	protected SSHCommandFactory factory = SSHCommandFactory.getInstance();
 
-	protected ArrayList<String> additional_default_paths = new ArrayList();
+	protected Vector<String> additional_default_paths = new Vector();
 
 	PersistenceController persist;
 	protected String workbench;
 
 	public SSHPMInstallPanel() {
 		this.setBackground(Globals.backLightBlue);
-		additional_default_paths.add(factory.opsipathVarRepository);
+		additional_default_paths.addElement(factory.opsipathVarRepository);
 		persist = PersistenceControllerFactory.getPersistenceController();
 		if (persist == null)
 			logging.info(this, "init PersistenceController null");
@@ -39,7 +39,9 @@ public class SSHPMInstallPanel extends JPanel {
 
 	public void open() {
 		if (!isOpen) {
-			this.setSize(this.getWidth(), this.getHeight() + this.getHeight());
+			this.setSize(
+					this.getWidth(),
+					this.getHeight() + this.getHeight());
 			isOpen = true;
 			this.setVisible(isOpen);
 		}
@@ -47,7 +49,9 @@ public class SSHPMInstallPanel extends JPanel {
 
 	public void close() {
 		if (isOpen) {
-			this.setSize(this.getWidth(), this.getHeight() - this.getHeight());
+			this.setSize(
+					this.getWidth(),
+					this.getHeight() - this.getHeight());
 			isOpen = false;
 			this.setVisible(isOpen);
 		}

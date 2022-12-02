@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -237,8 +238,8 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 		this.depots = depots;
 		this.productEdited = productEdited;
-		listDepots.setListData(depots.toArray(new String[0]));
-		// listDepots.setModel(new DefaultComboBoxModel(new ArrayList(depots)));
+		listDepots.setListData(new Vector<>(depots));
+		// listDepots.setModel(new DefaultComboBoxModel(new Vector(depots)));
 		// listDepots.setSelectedValue(selectedDepot, true);
 
 		resetSelectedDepots(depots);

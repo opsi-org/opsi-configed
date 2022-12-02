@@ -3,7 +3,7 @@ package de.uib.configed.gui.ssh;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
@@ -29,7 +29,7 @@ public class SSHCompletionComboButton {
 	private JComboBox combobox;
 	private JButton button;
 	private JTextField textfield;
-	private ArrayList<String> defaultvalues;
+	private Vector<String> defaultvalues;
 	private String search_specific_files;
 	private String combobox_default_path;
 	private final String root = "/";
@@ -45,12 +45,11 @@ public class SSHCompletionComboButton {
 		this(null, null, null);
 	}
 
-	public SSHCompletionComboButton(ArrayList<String> values) {
+	public SSHCompletionComboButton(Vector<String> values) {
 		this(values, null, null);
 	}
 
-	public SSHCompletionComboButton(ArrayList<String> values, String search_specific_files,
-			String combobox_default_path) {
+	public SSHCompletionComboButton(Vector<String> values, String search_specific_files, String combobox_default_path) {
 		logging.info(this, "instance created");
 		this.search_specific_files = search_specific_files;
 		this.combobox_default_path = combobox_default_path;
@@ -89,7 +88,7 @@ public class SSHCompletionComboButton {
 		init(null);
 	}
 
-	private void init(ArrayList<String> defvalues) {
+	private void init(Vector<String> defvalues) {
 		if (persist == null)
 			logging.info(this, "init PersistenceController null");
 		else
@@ -97,28 +96,28 @@ public class SSHCompletionComboButton {
 		if (opsiRepo.charAt(opsiRepo.length() - 1) != '/')
 			opsiRepo = opsiRepo + "/";
 		if (combobox_default_path != null) {
-			defaultvalues = new ArrayList();
-			defaultvalues.add(combobox_default_path);
-			defaultvalues.add(root);
-			defaultvalues.add(opsiRepo);
+			defaultvalues = new Vector();
+			defaultvalues.addElement(combobox_default_path);
+			defaultvalues.addElement(root);
+			defaultvalues.addElement(opsiRepo);
 			// defaultvalues.addElement(opsiVarRepository);
 		} else {
-			defaultvalues = new ArrayList();
-			defaultvalues.add(opsiRepo);
-			defaultvalues.add(root);
+			defaultvalues = new Vector();
+			defaultvalues.addElement(opsiRepo);
+			defaultvalues.addElement(root);
 			// defaultvalues.addElement(opsiVarRepository);
 		}
 		// Is element in defaultValues?
 		if (defvalues != null)
 			for (String elem : defvalues)
 				if ((elem != null) && (!elem.trim().equals("")))
-					defaultvalues.add(elem);
+					defaultvalues.addElement(elem);
 		logging.info(this, "init =======================================");
 		for (String elem : defaultvalues)
 			logging.debug(this, "init defaultvalues contains " + elem);
 	}
 
-	public ArrayList getDefaultValues() {
+	public Vector getDefaultValues() {
 		return defaultvalues;
 	}
 

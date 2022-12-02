@@ -39,6 +39,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -3329,9 +3330,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		main.callClientSelectionDialog();
 	}
 
-	private java.util.List<String> getProduct(ArrayList<String> completeList) {
+	private java.util.List<String> getProduct(Vector<String> completeList) {
 		FEditList fList = new FEditList();
-		fList.setListModel(new DefaultComboBoxModel<>(completeList.toArray(new String[0])));
+		fList.setListModel(new DefaultComboBoxModel<>(completeList));
 		fList.setTitle(Globals.APPNAME + ": " + configed.getResourceValue("MainFrame.productSelection"));
 		fList.init();
 
@@ -3347,8 +3348,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	private void groupByNotCurrentProductVersion() {
-		java.util.List<String> products = getProduct(
-				new ArrayList<String>(new TreeSet<String>(main.getProductNames())));
+		java.util.List<String> products = getProduct(new Vector<String>(new TreeSet<String>(main.getProductNames())));
 
 		if (!products.isEmpty())
 			main.selectClientsNotCurrentProductInstalled(products, false);
@@ -3356,8 +3356,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	private void groupByNotCurrentProductVersionOrBrokenInstallation() {
-		java.util.List<String> products = getProduct(
-				new ArrayList<String>(new TreeSet<String>(main.getProductNames())));
+		java.util.List<String> products = getProduct(new Vector<String>(new TreeSet<String>(main.getProductNames())));
 
 		if (!products.isEmpty())
 			main.selectClientsNotCurrentProductInstalled(products, true);
@@ -3365,8 +3364,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	private void groupByFailedProduct() {
-		java.util.List<String> products = getProduct(
-				new ArrayList<String>(new TreeSet<String>(main.getProductNames())));
+		java.util.List<String> products = getProduct(new Vector<String>(new TreeSet<String>(main.getProductNames())));
 
 		if (!products.isEmpty())
 			main.selectClientsWithFailedProduct(products);
@@ -4261,7 +4259,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 	}
 
-	public void producePanelReinstmgr(String pcname, ArrayList images) {
+	public void producePanelReinstmgr(String pcname, Vector images) {
 		panelReinstmgr.startFor(pcname, images);
 	}
 

@@ -7,9 +7,9 @@
 
 package de.uib.utilities.datapanel;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -80,7 +80,9 @@ public abstract class AbstractEditMapPanel extends JPanel {
 		// mapTableModel.setData(null);
 	}
 
-	public AbstractEditMapPanel(boolean keylistExtendible, boolean keylistEditable, boolean reloadable) {
+	public AbstractEditMapPanel(boolean keylistExtendible,
+			boolean keylistEditable,
+			boolean reloadable) {
 		this();
 		this.keylistExtendible = keylistExtendible;
 		this.keylistEditable = keylistEditable;
@@ -102,7 +104,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 		return mapTableModel;
 	}
 
-	public ArrayList<String> getNames() {
+	public Vector<String> getNames() {
 		return mapTableModel.getKeys();
 	}
 
@@ -115,8 +117,8 @@ public abstract class AbstractEditMapPanel extends JPanel {
 	}
 
 	/**
-	 * set collection (e.g. of clients) where each member stores the changed
-	 * data; we assume that it is a collection of maps
+	 * set collection (e.g. of clients) where each member stores the changed data;
+	 * we assume that it is a collection of maps
 	 * 
 	 * @param Collection data
 	 */
@@ -218,7 +220,8 @@ public abstract class AbstractEditMapPanel extends JPanel {
 	}
 
 	/**
-	 * setting all data for displaying and editing <br />
+	 * setting all data for displaying and editing
+	 * <br />
 	 * 
 	 * @param Map visualdata - the source for the table model
 	 * @param Map optionsMap - the description for producing cell editors
@@ -228,7 +231,8 @@ public abstract class AbstractEditMapPanel extends JPanel {
 	}
 
 	/**
-	 * setting a label <br />
+	 * setting a label
+	 * <br />
 	 * 
 	 * @param String s - label text
 	 */

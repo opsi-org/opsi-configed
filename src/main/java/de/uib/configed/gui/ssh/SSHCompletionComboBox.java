@@ -1,13 +1,17 @@
 package de.uib.configed.gui.ssh;
 
-import java.util.List;
+// import de.uib.opsicommand.*;
+// import de.uib.opsicommand.sshcommand.*;
+// import java.awt.event.*;
+// import java.awt.*;
+import java.util.Vector;
 
 import javax.swing.ComboBoxEditor;
 import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
-public class SSHCompletionComboBox<E> extends JComboBox<E> {
+public class SSHCompletionComboBox<E> extends JComboBox {
 
 	public SSHCompletionComboBox(ComboBoxModel<E> cbm) {
 		super(cbm);
@@ -17,8 +21,8 @@ public class SSHCompletionComboBox<E> extends JComboBox<E> {
 		super(v);
 	}
 
-	public SSHCompletionComboBox(List<E> v) {
-		super((E[]) v.toArray());
+	public SSHCompletionComboBox(Vector<E> v) {
+		super(v);
 	}
 
 	@Override

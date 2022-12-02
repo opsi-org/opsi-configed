@@ -3,7 +3,7 @@ package de.uib.opsidatamodel.productstate;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import de.uib.configed.Globals;
 
@@ -29,8 +29,8 @@ public class ActionProgress {
 	private static Map<String, String> label2displayLabel;
 	private static Map<String, String> displayLabel2label;
 
-	private static ArrayList<Integer> states;
-	private static ArrayList<String> labels;
+	private static Vector<Integer> states;
+	private static Vector<String> labels;
 	private static String[] choiceLabels;
 
 	// instance variable
@@ -40,7 +40,7 @@ public class ActionProgress {
 		if (states != null)
 			return;
 
-		states = new ArrayList<Integer>();
+		states = new Vector<Integer>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(NOT_AVAILABLE);
@@ -48,7 +48,7 @@ public class ActionProgress {
 		states.add(INSTALLING);
 		states.add(CACHED);
 
-		labels = new ArrayList<String>();
+		labels = new Vector<String>();
 		labels.add(Globals.CONFLICTSTATEstring);
 		labels.add(Globals.NOVALIDSTATEstring);
 		labels.add("not_available");
@@ -121,7 +121,7 @@ public class ActionProgress {
 		return state2label.get(state);
 	}
 
-	public static ArrayList<String> getLabels() {
+	public static Vector<String> getLabels() {
 		checkCollections();
 
 		return labels;

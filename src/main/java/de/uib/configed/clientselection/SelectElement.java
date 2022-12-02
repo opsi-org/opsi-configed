@@ -1,7 +1,7 @@
 package de.uib.configed.clientselection;
 
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * An Element is a property of clients. Each Element has a number of operations
@@ -14,8 +14,7 @@ public abstract class SelectElement {
 
 	/**
 	 * Create a new SelectElement. The path contains the group name, if this
-	 * element is in any group (like a hardware group) and the name of the
-	 * Element.
+	 * element is in any group (like a hardware group) and the name of the Element.
 	 */
 	public SelectElement(String[] path, String... localizedPath) {
 		this.path = path;
@@ -50,11 +49,12 @@ public abstract class SelectElement {
 	abstract public List<SelectOperation> supportedOperations();
 
 	/**
-	 * Returns the enumerated data, if there is any. This can be used to get a
-	 * list of possible values for the user.
+	 * Returns the enumerated data, if there is any. This can be used to get a list
+	 * of possible values
+	 * for the user.
 	 */
-	public ArrayList<String> getEnumData() {
-		return new ArrayList<String>();
+	public Vector<String> getEnumData() {
+		return new Vector<String>();
 	}
 
 	public boolean hasEnumData() {

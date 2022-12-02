@@ -38,7 +38,8 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 		if (tableType == null || hwClass == null)
 			return;
 
-		logging.info(this, "checkIn key " + key + " hwClass " + hwClass + " tableType " + tableType);
+		logging.info(this, "checkIn key " + key
+				+ " hwClass " + hwClass + " tableType " + tableType);
 
 		OpsiHwAuditDeviceClass auditDeviceClass = hwAuditDeviceClasses.get(hwClass.toUpperCase());
 
@@ -48,7 +49,7 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 
 		if (tableType == OpsiHwAuditDeviceClass.hostAssignedTableType) {
 			/*
-			 * ArrayList<String> usedHostColumns = new ArrayList<String>();
+			 * Vector<String> usedHostColumns = new Vector<String>();
 			 * for (Object value : valuesSet )
 			 * {
 			 * usedHostColumns.add( (String) value );
@@ -66,7 +67,7 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 
 		} else {
 			/*
-			 * ArrayList<String> usedHwItemColumns = new ArrayList<String>();
+			 * Vector<String> usedHwItemColumns = new Vector<String>();
 			 * for (Object value : valuesSet )
 			 * {
 			 * usedHwItemColumns.add( (String) value );

@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.Vector;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -488,7 +489,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		valueList.setVisible(true);
 		final Map<String, Object> extendedInfo = new TreeMap<>();
 		final Map<String, Map<String, Object>> info = new TreeMap<>();
-		final ArrayList<String> data = new ArrayList<>();
+		final Vector<String> data = new Vector<>();
 
 		for (final String val : values) {
 			extendedInfo.put(val, val);
@@ -496,7 +497,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 			data.add(val);
 		}
 
-		valueList.setListData(data.toArray(new String[0]));
+		valueList.setListData(data);
 		valueList.setInfo(info);
 
 		final ValueSelectorList valueSelectorList = new ValueSelectorList(valueList, true,

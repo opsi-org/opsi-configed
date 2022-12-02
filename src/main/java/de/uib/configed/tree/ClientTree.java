@@ -32,6 +32,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DropMode;
@@ -1883,7 +1884,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			// logging.debug(this, "selectOneNode groupSet, clientID " + groupSet + ", " +
 			// clientID);
 			FEditList fList = new FEditList(null);
-			fList.setListModel(new DefaultComboBoxModel<GroupNode>(groupSet.toArray(new GroupNode[0])));
+			fList.setListModel(new DefaultComboBoxModel<GroupNode>(new Vector<GroupNode>(groupSet)));
 			fList.setTitle(Globals.APPNAME + ":  " + configed.getResourceValue("ClientTree.DIRECTORYname") + " "
 					+ configed.getResourceValue("ClientTree.checkDIRECTORYAssignments"));
 			fList.setExtraLabel(configed.getResourceValue("ClientTree.severalLocationsAssigned") + " >> " + clientID

@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
@@ -62,7 +62,7 @@ public abstract class DataStub {
 
 	abstract public Map<String, TreeSet<OpsiPackage>> getDepot2Packages();
 
-	abstract public ArrayList<ArrayList<Object>> getProductRows();
+	abstract public Vector<Vector<Object>> getProductRows();
 
 	abstract public Map<String, Map<String, java.util.List<String>>> getProduct2VersionInfo2Depots();
 

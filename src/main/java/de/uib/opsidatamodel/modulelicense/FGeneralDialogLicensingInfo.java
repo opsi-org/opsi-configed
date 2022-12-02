@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -49,8 +49,8 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 	TableSource tableSource;
 
-	ArrayList<String> columnNames = new ArrayList<String>();
-	ArrayList<String> classNames = new ArrayList<String>();
+	Vector<String> columnNames = new Vector<String>();
+	Vector<String> classNames = new Vector<String>();
 	Map<String, Map> theSourceMap = new HashMap<String, Map>();
 	Map<String, Map<String, Map<String, Object>>> datesMap = new HashMap<>();
 	Map<String, Object> clientNumbers;
@@ -356,7 +356,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		JButton buttonReload = new JButton("",
 			de.uib.configed.Globals.createImageIcon("images/reload16.png", "" )
 			);
-		
+
 		buttonReload.setPreferredSize( de.uib.configed.Globals.smallButtonDimension );
 		*/
 
@@ -544,12 +544,12 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				null, // owner frame
 				"Licensing Information", // title
 				false, // modal
-		
+
 				new String[] {
 						"ok",
 						"cancel"
 				},
-		
+
 				new Icon[] {
 						Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
 						Globals.createImageIcon("images/cancel16_small.png", "")

@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
@@ -52,13 +52,13 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	public PanelGenEditTable panelSWnames;
 	public GenTableModel modelSWnames;
 
-	private ArrayList<String> columnNames;
-	private ArrayList<String> classNames;
+	private Vector<String> columnNames;
+	private Vector<String> classNames;
 
 	public PanelGenEditTable panelSWxLicencepool;
 	public GenTableModel modelSWxLicencepool;
-	private ArrayList<String> columnNamesSWxLicencepool;
-	private ArrayList<String> classNamesSWxLicencepool;
+	private Vector<String> columnNamesSWxLicencepool;
+	private Vector<String> classNamesSWxLicencepool;
 
 	private TableModelFilterCondition showOnlyNamesWithVariantLicences;
 	private TableModelFilterCondition showOnlyNamesWithoutLicences;
@@ -326,22 +326,22 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	}
 
 	protected void initDataStructure() {
-		columnNames = new ArrayList<String>();
+		columnNames = new Vector<String>();
 		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS)
 			columnNames.add(key);
 
-		classNames = new ArrayList<String>();
+		classNames = new Vector<String>();
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
 
 		updateCollection = new TableUpdateCollection();
 
-		columnNamesSWxLicencepool = new ArrayList<String>();
+		columnNamesSWxLicencepool = new Vector<String>();
 		columnNamesSWxLicencepool.add(AuditSoftwareXLicencePool.SwID);
 		columnNamesSWxLicencepool.add(LicencepoolEntry.idSERVICEKEY);
 
-		classNamesSWxLicencepool = new ArrayList<String>();
+		classNamesSWxLicencepool = new Vector<String>();
 		for (int i = 0; i < columnNamesSWxLicencepool.size(); i++) {
 			classNamesSWxLicencepool.add("java.lang.String");
 		}
@@ -351,7 +351,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			public void setFilter(TreeSet<Object> filter) {
 			}
 
-			public boolean test(ArrayList<Object> row) {
+			public boolean test(Vector<Object> row) {
 				// logging.info(this, "showOnlyNamesWithVariantLicences testing row " + row);
 				return getRangeSWxLicencepool((String) row.get(0)).size() > 1;
 			}
@@ -362,7 +362,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			public void setFilter(TreeSet<Object> filter) {
 			}
 
-			public boolean test(ArrayList<Object> row) {
+			public boolean test(Vector<Object> row) {
 				// logging.info(this, "showOnlyNamesWithoutLicences testing row " + row);
 				return checkExistNamesWithVariantLicencepools((String) row.get(0));
 			}

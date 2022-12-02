@@ -33,8 +33,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -317,8 +317,8 @@ public class DPassword extends JDialog // implements Runnable
 
 	}
 
-	public void setServers(ArrayList<String> hosts) {
-		fieldHost.setModel(new DefaultComboBoxModel(hosts.toArray()));
+	public void setServers(Vector<String> hosts) {
+		fieldHost.setModel(new DefaultComboBoxModel(hosts));
 		((JTextField) fieldHost.getEditor().getEditorComponent())
 				.setCaretPosition(((String) (fieldHost.getSelectedItem())).length());
 	}

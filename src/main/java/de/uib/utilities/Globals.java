@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import de.uib.utilities.logging.logging;
 
@@ -364,7 +364,7 @@ public class Globals {
 
 	public static final String pseudokeySeparator = ";";
 
-	public static String pseudokey(ArrayList<Object> partialvalues) {
+	public static String pseudokey(Vector<Object> partialvalues) {
 		StringBuffer resultBuffer = new StringBuffer("");
 
 		if (!partialvalues.isEmpty()) {

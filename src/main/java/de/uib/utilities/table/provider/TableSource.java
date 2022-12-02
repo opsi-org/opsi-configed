@@ -8,17 +8,17 @@
 
 package de.uib.utilities.table.provider;
 
-import java.util.ArrayList;
+import java.util.Vector;
 
 public interface TableSource {
 	public static int ROW_COUNT_START = 1;
 
-	ArrayList<String> retrieveColumnNames();
+	Vector<String> retrieveColumnNames();
 
-	ArrayList<String> retrieveClassNames();
+	Vector<String> retrieveClassNames();
 
 	// we get a new version
-	ArrayList<ArrayList<Object>> retrieveRows();
+	Vector<Vector<Object>> retrieveRows();
 
 	// Map<String, java.util.List<String>> getFunction(Integer defIndex, Integer
 	// valIndex);

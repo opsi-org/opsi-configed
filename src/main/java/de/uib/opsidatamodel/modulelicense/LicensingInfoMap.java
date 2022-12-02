@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.ArrayList;
+import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
@@ -36,18 +36,18 @@ public class LicensingInfoMap {
 	private JSONObject jOResult;
 	Map<String, List<Object>> configs;
 	private Map<String, Object> clientNumbersMap;
-	private ArrayList<ArrayList<String>> clientNumbersArrayList;
+	private Vector<Vector<String>> clientNumbersVector;
 	private Set customerIDs;
 	private Set customerNames;
 	private Map<String, Map<String, Object>> licenses;
-	private ArrayList<String> availableModules;
-	private ArrayList<String> knownModulesArrayList;
-	private ArrayList<String> obsoleteModules;
-	private ArrayList<String> shownModules;
+	private Vector<String> availableModules;
+	private Vector<String> knownModulesVector;
+	private Vector<String> obsoleteModules;
+	private Vector<String> shownModules;
 	private ArrayList<String> datesKeys;
 	private Map<String, Map<String, Map<String, Object>>> datesMap;
-	private ArrayList<String> columnNames;
-	private ArrayList<String> classNames;
+	private Vector<String> columnNames;
+	private Vector<String> classNames;
 	private Map<String, Map> tableMap;
 	private String latestDateString;
 	private String checksum;
@@ -63,7 +63,7 @@ public class LicensingInfoMap {
 	private Integer daysClientLimitWarning;
 	private Integer absolutClientLimitWarning;
 	private Integer percentClientLimitWarning;
-	private ArrayList<String> disabledWarningModules;
+	private Vector<String> disabledWarningModules;
 
 	public static final String RESULT = "result";
 	public static final String CLIENT_NUMBERS_INFO = "client_numbers";
@@ -183,11 +183,11 @@ public class LicensingInfoMap {
 		produceConfigs();
 		checksum = produceChecksum();
 		clientNumbersMap = produceClientNumbersMap();
-		clientNumbersArrayList = produceArrayListFromClientNumbersMap();
+		clientNumbersVector = produceVectorFromClientNumbersMap();
 		licenses = produceLicenses();
 		obsoleteModules = produceObsoleteModules();
 		availableModules = produceAvailableModules();
-		knownModulesArrayList = produceKnownModules();
+		knownModulesVector = produceKnownModules();
 		shownModules = produceShownModules();
 		datesKeys = produceDatesKeys();
 		latestDateString = findLatestChangeDateString();
@@ -220,17 +220,17 @@ public class LicensingInfoMap {
 		return result;
 	}
 
-	private ArrayList<ArrayList<String>> produceArrayListFromClientNumbersMap() {
-		ArrayList<ArrayList<String>> result = new ArrayList<>();
+	private Vector<Vector<String>> produceVectorFromClientNumbersMap() {
+		Vector<Vector<String>> result = new Vector<>();
 
 		for (Map.Entry<String, Object> entry : clientNumbersMap.entrySet()) {
-			ArrayList<String> line = new ArrayList<>();
+			Vector<String> line = new Vector<>();
 			line.add(entry.getKey());
 			line.add(entry.getValue().toString());
 
 			result.add(line);
 		}
-		ArrayList<String> line1 = new ArrayList<>();
+		Vector<String> line1 = new Vector<>();
 		line1.add(CHECKSUM);
 		line1.add(checksum);
 		result.add(line1);
@@ -303,8 +303,8 @@ public class LicensingInfoMap {
 		return customerNames;
 	}
 
-	private ArrayList<String> produceAvailableModules() {
-		ArrayList<String> result = new ArrayList<>();
+	private Vector<String> produceAvailableModules() {
+		Vector<String> result = new Vector<>();
 		JSONArray jsResult = new JSONArray();
 
 		try {
@@ -323,9 +323,9 @@ public class LicensingInfoMap {
 
 	}
 
-	private ArrayList<String> produceKnownModules() {
+	private Vector<String> produceKnownModules() {
 		JSONArray jsResult = new JSONArray();
-		ArrayList<String> result = new ArrayList<>();
+		Vector<String> result = new Vector<>();
 
 		try {
 			if (jOResult.has(KNOWN_MODULES)) {
@@ -346,9 +346,9 @@ public class LicensingInfoMap {
 		return result;
 	}
 
-	private ArrayList<String> produceObsoleteModules() {
+	private Vector<String> produceObsoleteModules() {
 		JSONArray jsResult = new JSONArray();
-		ArrayList<String> result = new ArrayList<>();
+		Vector<String> result = new Vector<>();
 
 		try {
 			if (jOResult.has(OBSOLETE_MODULES)) {
@@ -369,13 +369,13 @@ public class LicensingInfoMap {
 		return result;
 	}
 
-	private ArrayList<String> produceShownModules() {
+	private Vector<String> produceShownModules() {
 		if (!jOResult.has(OBSOLETE_MODULES))
 			return produceKnownModules();
 
-		ArrayList<String> result = new ArrayList<>();
+		Vector<String> result = new Vector<>();
 
-		for (String mod : knownModulesArrayList) {
+		for (String mod : knownModulesVector) {
 			if (!obsoleteModules.contains(mod))
 				result.add(mod);
 		}
@@ -398,7 +398,7 @@ public class LicensingInfoMap {
 				daysClientLimitWarning = config.getInt(CLIENT_LIMIT_WARNING_DAYS);
 
 				JSONArray tmp = config.getJSONArray(DISABLE_WARNING_FOR_MODULES);
-				ArrayList<String> result = new ArrayList<>();
+				Vector<String> result = new Vector<>();
 
 				for (int i = 0; i < tmp.length(); i++) {
 					result.add(tmp.getString(i));
@@ -593,12 +593,12 @@ public class LicensingInfoMap {
 	private Map<String, Map> produceTableMapFromDatesMap(Map<String, Map<String, Map<String, Object>>> datesM) {
 		Map<String, Map> resultMap = new HashMap<String, Map>();
 
-		columnNames = new ArrayList<String>();
+		columnNames = new Vector<String>();
 		columnNames.add(configed.getResourceValue("LicensingInfo.modules"));
 		columnNames.add(configed.getResourceValue("LicensingInfo.available"));
 		// columnNames.add(configed.getResourceValue("LicensingInfo.info"));
 
-		classNames = new ArrayList<String>();
+		classNames = new Vector<String>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		// classNames.add("java.lang.String");
@@ -914,8 +914,8 @@ public class LicensingInfoMap {
 		return clientNumbersMap;
 	}
 
-	public ArrayList<ArrayList<String>> getClientNumbersArrayList() {
-		return clientNumbersArrayList;
+	public Vector<Vector<String>> getClientNumbersVector() {
+		return clientNumbersVector;
 	}
 
 	public Set getCustomerIDSet() {
@@ -930,11 +930,11 @@ public class LicensingInfoMap {
 		return tableMap;
 	}
 
-	public ArrayList<String> getColumnNames() {
+	public Vector<String> getColumnNames() {
 		return columnNames;
 	}
 
-	public ArrayList<String> getClassNames() {
+	public Vector<String> getClassNames() {
 		return classNames;
 	}
 
@@ -942,11 +942,11 @@ public class LicensingInfoMap {
 		return datesMap;
 	}
 
-	public ArrayList<String> getModules() {
+	public Vector<String> getModules() {
 		return shownModules;
 	}
 
-	public ArrayList<String> getAvailableModules() {
+	public Vector<String> getAvailableModules() {
 		return availableModules;
 	}
 

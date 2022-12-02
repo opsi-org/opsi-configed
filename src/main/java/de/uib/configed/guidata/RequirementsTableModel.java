@@ -2,7 +2,7 @@ package de.uib.configed.guidata;
 
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -16,7 +16,8 @@ import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.utilities.logging.logging;
 
-public class RequirementsTableModel extends javax.swing.table.AbstractTableModel {
+public class RequirementsTableModel
+		extends javax.swing.table.AbstractTableModel {
 
 	final String initString = "";
 	private String actualProduct = "";
@@ -31,10 +32,10 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 	PersistenceController perCon;
 
-	protected static ArrayList<String> rowType;
+	protected static Vector<String> rowType;
 	protected static int noOfRowTypes;
 	static {
-		rowType = new ArrayList<String>();
+		rowType = new Vector<String>();
 		rowType.add("KEYROW");
 		rowType.add("SETUP REQUIREMENT");
 		rowType.add("UNINSTALL REQUIREMENT");
@@ -111,26 +112,27 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 	public String getColumnName(int col) {
 		String result = "";
 		switch (col) {
-		case 0:
-			result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requiredProduct");
-			break;
-		/*
-		 * case 1 : result = "Benötigt (=on)"; break;
-		 * case 2 : result = "Vorher benötigt"; break;
-		 * case 3 : result = "Danach benötigt"; break;
-		 * case 4 : result = "Bei deinstall"; break;
-		 */
-		case 1:
-			result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeDefault");
-			break;
-		case 2:
-			result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeBefore");
-			break;
-		case 3:
-			result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeAfter");
-			break;
-		// case 4 : result = "uninstall"; break;
-		};
+			case 0:
+				result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requiredProduct");
+				break;
+			/*
+			 * case 1 : result = "Benötigt (=on)"; break;
+			 * case 2 : result = "Vorher benötigt"; break;
+			 * case 3 : result = "Danach benötigt"; break;
+			 * case 4 : result = "Bei deinstall"; break;
+			 */
+			case 1:
+				result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeDefault");
+				break;
+			case 2:
+				result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeBefore");
+				break;
+			case 3:
+				result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeAfter");
+				break;
+			// case 4 : result = "uninstall"; break;
+		}
+		;
 
 		return result;
 
@@ -156,52 +158,54 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 		if (col == 0) {
 			switch (rowTypeIndex) {
 
-			case 0:
-				result = myKey;
-				break;
-			case 1:
-				result = indent + configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
-						+ " setup";
-				break;
-			case 2:
-				result = indent + configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
-						+ " uninstall";
-				break;
+				case 0:
+					result = myKey;
+					break;
+				case 1:
+					result = indent
+							+ configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
+							+ " setup";
+					break;
+				case 2:
+					result = indent
+							+ configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
+							+ " uninstall";
+					break;
 			}
 		}
 
 		else {
 			switch (col) {
-			case 1:
-				if (rowTypeIndex == 1) {
-					if (requMap != null) {
-						result = requMap.get(myKey);
-						break;
+				case 1:
+					if (rowTypeIndex == 1) {
+						if (requMap != null) {
+							result = requMap.get(myKey);
+							break;
+						}
+					} else if (rowTypeIndex == 2) {
+						if (requDeinstallMap != null) {
+							result = requDeinstallMap.get(myKey);
+							break;
+						}
 					}
-				} else if (rowTypeIndex == 2) {
-					if (requDeinstallMap != null) {
-						result = requDeinstallMap.get(myKey);
-						break;
-					}
-				}
 
-			case 2:
-				if (rowTypeIndex == 1) {
-					if (requBeforeMap != null) {
-						result = requBeforeMap.get(myKey);
-						break;
-					}
-				} else if (rowTypeIndex == 2)
-					result = impossible;
+				case 2:
+					if (rowTypeIndex == 1) {
+						if (requBeforeMap != null) {
+							result = requBeforeMap.get(myKey);
+							break;
+						}
+					} else if (rowTypeIndex == 2)
+						result = impossible;
 
-			case 3:
-				if (rowTypeIndex == 1) {
-					if (requAfterMap != null) {
-						result = requAfterMap.get(myKey);
-						break;
-					}
-				} else if (rowTypeIndex == 2)
-					result = impossible;
+				case 3:
+					if (rowTypeIndex == 1) {
+						if (requAfterMap != null) {
+							result = requAfterMap.get(myKey);
+							break;
+						}
+					} else if (rowTypeIndex == 2)
+						result = impossible;
 			}
 
 			if (result != null)
@@ -226,7 +230,8 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 	}
 
 	protected class MyTableCellRenderer extends DefaultTableCellRenderer {
-		public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+		public java.awt.Component getTableCellRendererComponent(
+				JTable table, Object value, boolean isSelected,
 				boolean hasFocus, int row, int column) {
 			MyColorizer colorizer = new MyColorizer(String.valueOf(value));
 
@@ -241,8 +246,8 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 			// warning
 			String cellValue = String.valueOf(value);
-			if ((column == 2 || column == 3)
-					&& (cellValue.equals("(" + InstallationStatus.getLabel(InstallationStatus.NOT_INSTALLED) + ":)")
+			if ((column == 2 || column == 3) &&
+					(cellValue.equals("(" + InstallationStatus.getLabel(InstallationStatus.NOT_INSTALLED) + ":)")
 							|| cellValue.equals("(:" + ActionRequest.getLabel(ActionRequest.UNINSTALL) + ")"))) {
 
 				((JLabel) cell).setIcon(Globals.createImageIcon("images/warning.png", "warning"));
@@ -280,17 +285,17 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 			// if (isSelected)
 			{
 				switch (kindOfRow) {
-				case 0:
-					cell.setBackground(Globals.backLightBlue);
-					break;
-				case 1:
-					cell.setBackground(Globals.backVeryLightBlue);
-					break;
-				case 2:
+					case 0:
+						cell.setBackground(Globals.backLightBlue);
+						break;
+					case 1:
+						cell.setBackground(Globals.backVeryLightBlue);
+						break;
+					case 2:
 
-					// cell.setBackground( Globals.backLighterBlue );
-					cell.setBackground(Globals.backVeryLightBlue);
-					break;
+						// cell.setBackground( Globals.backLighterBlue );
+						cell.setBackground(Globals.backVeryLightBlue);
+						break;
 				}
 			}
 			/*
@@ -324,9 +329,11 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 	protected class MyTableCellRendererWarning extends DefaultTableCellRenderer {
 		MyWarningColorizer colorizer = new MyWarningColorizer();
 
-		public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+		public java.awt.Component getTableCellRendererComponent(
+				JTable table, Object value, boolean isSelected,
 				boolean hasFocus, int row, int col) {
-			java.awt.Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+			java.awt.Component cell = super.getTableCellRendererComponent(
+					table, value, isSelected, hasFocus, row, col);
 
 			colorizer.colorize(cell, isSelected, row, col);
 

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Vector;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -105,7 +106,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	protected ConfigedMain main;
 
-	protected ArrayList productsV = null;
+	protected Vector productsV = null;
 
 	protected int onGoingCollectiveChangeEventCount = -1;
 
@@ -151,7 +152,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	protected Map<String, Map<String, Object>> globalProductInfos;
 	protected String theClient;
 	protected TreeSet<String> tsProductNames;
-	protected ArrayList<String> productNamesInDeliveryOrder;
+	protected Vector<String> productNamesInDeliveryOrder;
 
 	protected ActionRequest actionInTreatment;
 	// protected boolean changeActionIsSet = false;
@@ -260,7 +261,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		myCollator.setStrength(Collator.SECONDARY);
 
 		// logging.info(this, "listOfInstallableProducts " + listOfInstallableProducts);
-		productNamesInDeliveryOrder = new ArrayList<String>();
+		productNamesInDeliveryOrder = new Vector<String>();
 		if (listOfInstallableProducts != null) {
 			for (int i = 0; i < listOfInstallableProducts.size(); i++) {
 				String product = (String) listOfInstallableProducts.get(i);
@@ -270,7 +271,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		tsProductNames = new TreeSet<String>(myCollator);
 		tsProductNames.addAll(productNamesInDeliveryOrder);
-		productsV = new ArrayList(tsProductNames);
+		productsV = new Vector(tsProductNames);
 
 		logging.debug(this, "tsProductNames " + tsProductNames);
 
@@ -1500,7 +1501,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			 * values.add(InstallationInfo.FAILEDdisplayString);
 			 */
 
-			return new DefaultComboBoxModel(values.toArray());
+			return new DefaultComboBoxModel(new Vector(values));
 
 		}
 

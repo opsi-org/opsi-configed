@@ -3,7 +3,7 @@ package de.uib.configed.gui.productpage;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
@@ -94,7 +94,7 @@ public class PanelProductProperties extends JSplitPane
 		GenTableModel model = new GenTableModel(null, mainController.globalProductsTableProvider, -1,
 				(TableModelListener) paneProducts, updateCollection);
 
-		final ArrayList<String> columnNames = model.getColumnNames();
+		final Vector<String> columnNames = model.getColumnNames();
 
 		paneProducts = new PanelGenEditTable("", 0, false, 0, false, PanelGenEditTable.POPUPS_MINIMAL, true) {
 
@@ -242,7 +242,8 @@ public class PanelProductProperties extends JSplitPane
 									"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
 									"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")),
 									depotsOfPackage.get(0));
-						} ;
+						}
+						;
 
 						/*
 						 * we leave setting the properties to panelEditProperties
@@ -400,7 +401,8 @@ public class PanelProductProperties extends JSplitPane
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, false, false);
 		// propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false,
 		// true, true, EditMapPanelX.PropertyHandlerType.REMOVE_CLIENT_SPECIFIC_VALUE );
-		logging.info(this, " created properties Panel, is  EditMapPanelX instance No. " + EditMapPanelX.objectCounter);
+		logging.info(this, " created properties Panel, is  EditMapPanelX instance No. "
+				+ EditMapPanelX.objectCounter);
 		((EditMapPanelX) propertiesPanel)
 				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName().toString()));
 		propertiesPanel.registerDataChangedObserver(mainController.getGeneralDataChangedKeeper());

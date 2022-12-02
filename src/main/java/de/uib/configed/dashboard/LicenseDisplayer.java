@@ -52,21 +52,22 @@ public class LicenseDisplayer {
 	}
 
 	public void loadData() {
-		Platform.runLater(new Thread() {
-			@Override
-			public void run() {
-				message = "";
-				showInfo();
+		Platform.runLater(
+				new Thread() {
+					@Override
+					public void run() {
+						message = "";
+						showInfo();
 
-				StringBuffer mess = new StringBuffer();
+						StringBuffer mess = new StringBuffer();
 
-				mess.append(showLicenceContractWarnings());
-				mess.append(calculateVariantLicencepools());
+						mess.append(showLicenceContractWarnings());
+						mess.append(calculateVariantLicencepools());
 
-				message = mess.toString();
-				showInfo();
-			}
-		});
+						message = mess.toString();
+						showInfo();
+					}
+				});
 	}
 
 	private void showInfo() {
@@ -135,16 +136,16 @@ public class LicenseDisplayer {
 		StringBuffer result = new StringBuffer();
 		GenTableModel modelSWnames;
 
-		ArrayList<String> columnNames;
-		ArrayList<String> classNames;
+		Vector<String> columnNames;
+		Vector<String> classNames;
 
 		TableUpdateCollection updateCollection;
 
-		columnNames = new ArrayList<String>();
+		columnNames = new Vector<String>();
 		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS)
 			columnNames.add(key);
 
-		classNames = new ArrayList<String>();
+		classNames = new Vector<String>();
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
@@ -153,10 +154,14 @@ public class LicenseDisplayer {
 
 		final TreeSet<String> namesWithVariantPools = new TreeSet<String>();
 
-		modelSWnames = new GenTableModel(null, // no updates
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-						() -> (Map) persist.getInstalledSoftwareName2SWinfo())),
-				0, new int[] {}, (TableModelListener) null, // panelSWnames ,
+		modelSWnames = new GenTableModel(
+				null, // no updates
+				new DefaultTableProvider(
+						new RetrieverMapSource(columnNames, classNames,
+								() -> (Map) persist.getInstalledSoftwareName2SWinfo())),
+				0,
+				new int[] {},
+				(TableModelListener) null, // panelSWnames ,
 				updateCollection) {
 			@Override
 			protected void initColumns() {
@@ -198,7 +203,7 @@ public class LicenseDisplayer {
 
 		// modelSWnames.requestReload();
 
-		ArrayList<ArrayList<Object>> specialrows = modelSWnames.getRows();
+		Vector<Vector<Object>> specialrows = modelSWnames.getRows();
 		if (specialrows != null) {
 			logging.info(this, "initDashInfo, modelSWnames.getRows() size " + specialrows.size());
 		}

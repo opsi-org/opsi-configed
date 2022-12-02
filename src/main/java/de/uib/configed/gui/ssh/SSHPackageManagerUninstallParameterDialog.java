@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.TreeSet;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
@@ -65,7 +65,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 	FDepotselectionList fDepotList;
 
-	private ArrayList<String> possibleDepots;
+	private Vector<String> possibleDepots;
 
 	private CommandOpsiPackageManagerUninstall commandPMUninstall = new CommandOpsiPackageManagerUninstall();
 
@@ -88,9 +88,9 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		fDepotList = new FDepotselectionList(this) {
 			@Override
-			public void setListData(ArrayList<? extends String> v) {
+			public void setListData(Vector<? extends String> v) {
 				if (v == null || v.size() == 0) {
-					setListData(new ArrayList<String>());
+					setListData(new Vector<String>());
 					jButton1.setEnabled(false);
 				} else {
 					super.setListData(v);
@@ -183,10 +183,10 @@ public class SSHPackageManagerUninstallParameterDialog
 		return depotParameter;
 	}
 
-	protected ArrayList<String> getPossibleDepots() {
+	protected Vector<String> getPossibleDepots() {
 		String selectedProduct = (String) cb_opsiproducts.getSelectedItem();
 
-		ArrayList<String> result = new java.util.ArrayList<String>();
+		Vector<String> result = new java.util.Vector<String>();
 
 		if (persist.isDepotsFullPermission()) {
 			tf_selecteddepots.setEditable(true);

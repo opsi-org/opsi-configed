@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -88,7 +89,7 @@ public class PanelCompleteWinProducts extends JPanel
 	ConfigedMain main;
 	JFrame rootFrame;
 
-	ArrayList<String> winProducts;
+	Vector<String> winProducts;
 
 	public PanelCompleteWinProducts(ConfigedMain main, PersistenceController persist, JFrame root) {
 		this.main = main;
@@ -152,9 +153,9 @@ public class PanelCompleteWinProducts extends JPanel
 
 		smbMounted = new File(depotProductDirectory).exists();
 
-		ArrayList<String> winProducts = persist.getWinProducts(server, depotProductDirectory);
+		Vector<String> winProducts = persist.getWinProducts(server, depotProductDirectory);
 
-		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray(new String[0])));
+		comboChooseWinProduct.setModel(new DefaultComboBoxModel(winProducts));
 	}
 
 	private void defineChoosers() {
@@ -173,7 +174,7 @@ public class PanelCompleteWinProducts extends JPanel
 		comboChooseDepot = new JComboBox();
 		comboChooseDepot.setSize(Globals.textfieldDimension);
 
-		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray(new String[0])));
+		comboChooseDepot.setModel(new DefaultComboBoxModel(main.getLinkedDepots()));
 
 		comboChooseDepot.setEnabled(false);
 
@@ -369,8 +370,10 @@ public class PanelCompleteWinProducts extends JPanel
 					+ "/" + SmbConnect.directoryInstallFiles);
 			waitCursor.stop();
 
-			JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,
-					configed.getResourceValue("CompleteWinProduct.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(rootFrame,
+					"Ready", // resultMessage,
+					configed.getResourceValue("CompleteWinProduct.reportTitle"),
+					JOptionPane.INFORMATION_MESSAGE);
 
 			java.util.List<String> values = new ArrayList<String>();
 
@@ -404,12 +407,15 @@ public class PanelCompleteWinProducts extends JPanel
 				returnedOption = JOptionPane.showOptionDialog(rootFrame,
 						configed.getResourceValue("CompleteWinProducts.setChangedProductKey"),
 						configed.getResourceValue("CompleteWinProducts.questionSetProductKey"),
-						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE,
+						null, null, null);
 
 				if (returnedOption == JOptionPane.YES_OPTION) {
 					waitCursor = new WaitCursor(rootFrame);
 					logging.info(this, "setCommonProductPropertyValue " + depots + ", " + winProduct + ", " + values);
-					persist.setCommonProductPropertyValue(depots, winProduct, "productkey", values);
+					persist.setCommonProductPropertyValue(
+							depots, winProduct, "productkey", values);
 
 					waitCursor.stop();
 				}
@@ -443,19 +449,17 @@ public class PanelCompleteWinProducts extends JPanel
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
 				.addGap(Globals.vGapSize, Globals.vGapSize * 3, Globals.vGapSize * 4)
-				.addComponent(
-						topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize * 2)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelServer, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
 						.addComponent(comboChooseDepot, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
 				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-				.addGroup(
-						layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(labelWinProduct, Globals.lineHeight, Globals.lineHeight,
-										Globals.lineHeight)
-								.addComponent(comboChooseWinProduct, Globals.lineHeight, Globals.lineHeight,
-										Globals.lineHeight))
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(labelWinProduct, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+						.addComponent(comboChooseWinProduct, Globals.lineHeight, Globals.lineHeight,
+								Globals.lineHeight))
 				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelFolderWinPE, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
@@ -471,8 +475,8 @@ public class PanelCompleteWinProducts extends JPanel
 						.addComponent(fieldPathInstallFiles, Globals.lineHeight, Globals.lineHeight,
 								Globals.lineHeight))
 				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(panelMountShare,
-						Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(panelMountShare, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
 				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelTargetPath, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
@@ -482,17 +486,19 @@ public class PanelCompleteWinProducts extends JPanel
 						.addComponent(labelProductKey, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
 						.addComponent(fieldProductKey, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
 				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(buttonCallExecute,
-						Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(buttonCallExecute, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
 				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize * 2));
 
 		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup().addGap(Globals.hGapSize, Globals.hGapSize * 2, Short.MAX_VALUE)
+				.addGroup(layout.createSequentialGroup()
+						.addGap(Globals.hGapSize, Globals.hGapSize * 2, Short.MAX_VALUE)
 						.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.hGapSize, Globals.hGapSize * 2, Short.MAX_VALUE))
 
-				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+				.addGroup(layout.createSequentialGroup()
+						.addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(labelServer, firstLabelWidth, firstLabelWidth, firstLabelWidth)
 						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
 						.addGap(Globals.graphicButtonWidth, Globals.graphicButtonWidth, Globals.graphicButtonWidth)
@@ -501,7 +507,8 @@ public class PanelCompleteWinProducts extends JPanel
 								Globals.buttonWidth * 2)
 						.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
 
-				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+				.addGroup(layout.createSequentialGroup()
+						.addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(labelWinProduct, firstLabelWidth, firstLabelWidth, firstLabelWidth)
 						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
 						.addGap(Globals.graphicButtonWidth, Globals.graphicButtonWidth, Globals.graphicButtonWidth)
@@ -510,7 +517,8 @@ public class PanelCompleteWinProducts extends JPanel
 								Globals.buttonWidth * 2)
 						.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
 
-				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+				.addGroup(layout.createSequentialGroup()
+						.addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(labelFolderWinPE, firstLabelWidth, firstLabelWidth, firstLabelWidth)
 						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
 						.addComponent(buttonCallSelectFolderWinPE, Globals.graphicButtonWidth,
@@ -518,7 +526,8 @@ public class PanelCompleteWinProducts extends JPanel
 						.addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(fieldPathWinPE, Globals.buttonWidth * 2, Globals.buttonWidth * 2, Short.MAX_VALUE)
 						.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+				.addGroup(layout.createSequentialGroup()
+						.addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(labelFolderInstallFiles, firstLabelWidth, firstLabelWidth, firstLabelWidth)
 						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
 						.addComponent(buttonCallSelectFolderInstallFiles, Globals.graphicButtonWidth,
@@ -527,9 +536,11 @@ public class PanelCompleteWinProducts extends JPanel
 						.addComponent(fieldPathInstallFiles, Globals.buttonWidth * 2, Globals.buttonWidth * 2,
 								Short.MAX_VALUE)
 						.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup().addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE))
+				.addGroup(layout.createSequentialGroup()
+						.addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(labelTargetPath, firstLabelWidth, firstLabelWidth, firstLabelWidth)
 						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
 						.addGap(Globals.graphicButtonWidth, Globals.graphicButtonWidth, Globals.graphicButtonWidth)
@@ -537,7 +548,8 @@ public class PanelCompleteWinProducts extends JPanel
 						.addComponent(fieldTargetPath, Globals.buttonWidth * 2, Globals.buttonWidth * 2,
 								Short.MAX_VALUE)
 						.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+				.addGroup(layout.createSequentialGroup()
+						.addGap(hFirstGap, hFirstGap, hFirstGap)
 						.addComponent(labelProductKey, firstLabelWidth, firstLabelWidth, firstLabelWidth)
 						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
 						.addGap(Globals.graphicButtonWidth, Globals.graphicButtonWidth, Globals.graphicButtonWidth)
@@ -545,10 +557,13 @@ public class PanelCompleteWinProducts extends JPanel
 						.addComponent(fieldProductKey, Globals.buttonWidth * 2, Globals.buttonWidth * 2,
 								Globals.buttonWidth * 2)
 						.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addGap(0, firstLabelWidth, firstLabelWidth).addGap(0, Globals.hGapSize, Globals.hGapSize)
+				.addGroup(layout.createSequentialGroup()
+						.addGap(hFirstGap, hFirstGap, hFirstGap)
+						.addGap(0, firstLabelWidth, firstLabelWidth)
+						.addGap(0, Globals.hGapSize, Globals.hGapSize)
 						.addGap(0, Globals.graphicButtonWidth, Globals.graphicButtonWidth)
-						.addGap(0, hFirstGap, hFirstGap).addGap(0, Globals.buttonWidth * 2, Short.MAX_VALUE)
+						.addGap(0, hFirstGap, hFirstGap)
+						.addGap(0, Globals.buttonWidth * 2, Short.MAX_VALUE)
 						.addComponent(buttonCallExecute, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(hFirstGap, hFirstGap, Short.MAX_VALUE))

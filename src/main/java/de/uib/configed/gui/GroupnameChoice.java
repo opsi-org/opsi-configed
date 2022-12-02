@@ -3,7 +3,7 @@ package de.uib.configed.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -35,13 +35,13 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 	protected int selIndex = -1;
 
 	protected XList groups;
-	private ArrayList dataArrayList;
+	private Vector dataVector;
 
 	protected String resultString = "";
 
 	JTextField groupnameField;
 
-	public GroupnameChoice(String extraTitle, ConfigedMain main, ArrayList v, int selectedIndex) {
+	public GroupnameChoice(String extraTitle, ConfigedMain main, Vector v, int selectedIndex) {
 		super(null, extraTitle + " (" + Globals.APPNAME + ")", true, new String[] { "ok", "Close" }, 300, 200);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		try // in an applet context this is not possible without a security problem
@@ -52,7 +52,7 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 		}
 		this.main = main;
 
-		dataArrayList = v;
+		dataVector = v;
 
 		groups = new XList(v);
 		groups.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -113,7 +113,7 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 
 	protected void textvalueChanged() {
 
-		if (dataArrayList.contains(groupnameField.getText())) {
+		if (dataVector.contains(groupnameField.getText())) {
 			groups.setSelectedValue(groupnameField.getText(), true);
 			selIndex = groups.getSelectedIndex();
 		} else {

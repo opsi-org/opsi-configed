@@ -10,7 +10,7 @@ package de.uib.utilities.table.provider;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import de.uib.utilities.logging.logging;
 
@@ -27,13 +27,13 @@ public class MapSource implements TableSource
 
 	protected boolean rowCounting = false;
 
-	protected ArrayList<String> columnNames;
+	protected Vector<String> columnNames;
 
-	protected ArrayList<String> classNames;
+	protected Vector<String> classNames;
 
 	protected Map<String, Map> table;
 
-	protected ArrayList<ArrayList<Object>> rows;
+	protected Vector<Vector<Object>> rows;
 
 	protected boolean reloadRequested = true;
 
@@ -44,7 +44,7 @@ public class MapSource implements TableSource
 		class2defaultValue.put("java.lang.String", "");
 	}
 
-	public MapSource(ArrayList<String> columnNames, ArrayList<String> classNames, Map<String, Map> table,
+	public MapSource(Vector<String> columnNames, Vector<String> classNames, Map<String, Map> table,
 			boolean rowCounting) {
 		logging.info(this, "constructed with cols " + columnNames);
 		logging.info(this, "constructed with classes " + classNames);
@@ -56,11 +56,11 @@ public class MapSource implements TableSource
 			logging.info(this, "completed to classes " + classNames);
 		}
 		this.table = table;
-		rows = new ArrayList();
+		rows = new Vector();
 
 	}
 
-	public MapSource(ArrayList<String> columnNames, ArrayList<String> classNames, Map<String, Map> table) {
+	public MapSource(Vector<String> columnNames, Vector<String> classNames, Map<String, Map> table) {
 		this(columnNames, classNames, table, false);
 	}
 
@@ -76,7 +76,7 @@ public class MapSource implements TableSource
 		int rowCount = 0;
 
 		for (String key : table.keySet()) {
-			ArrayList vRow = new ArrayList();
+			Vector vRow = new Vector();
 
 			Map mRow = table.get(key);
 
@@ -157,15 +157,15 @@ public class MapSource implements TableSource
 		}
 	}
 
-	public ArrayList<String> retrieveColumnNames() {
+	public Vector<String> retrieveColumnNames() {
 		return columnNames;
 	}
 
-	public ArrayList<String> retrieveClassNames() {
+	public Vector<String> retrieveClassNames() {
 		return classNames;
 	}
 
-	public ArrayList<ArrayList<Object>> retrieveRows() {
+	public Vector<Vector<Object>> retrieveRows() {
 		logging.info(this, " -- retrieveRows");
 		if (reloadRequested) {
 			fetchData();

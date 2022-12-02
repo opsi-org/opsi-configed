@@ -1,9 +1,10 @@
 package de.uib.utilities.table;
 
 import java.util.TreeSet;
-import java.util.ArrayList;
+import java.util.Vector;
 
-public class DefaultTableModelFilterCondition implements TableModelFilterCondition {
+public class DefaultTableModelFilterCondition
+		implements TableModelFilterCondition {
 
 	protected TreeSet<? extends Object> filterSet;
 	protected int keyCol = -1;
@@ -31,7 +32,7 @@ public class DefaultTableModelFilterCondition implements TableModelFilterConditi
 		filterSet = filterParam;
 	}
 
-	public boolean test(ArrayList<Object> row) {
+	public boolean test(Vector<Object> row) {
 		// logging.info(this, "test " + row);
 
 		if (filterSet == null)
@@ -46,7 +47,7 @@ public class DefaultTableModelFilterCondition implements TableModelFilterConditi
 		return result;
 	}
 
-	public void setFilter(int[] rowNoFilter, final ArrayList<ArrayList<Object>> row) {
+	public void setFilter(int[] rowNoFilter, final Vector<Vector<Object>> row) {
 	}
 
 	public String toString() {

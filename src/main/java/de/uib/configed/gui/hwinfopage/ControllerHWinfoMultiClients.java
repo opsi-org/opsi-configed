@@ -16,7 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -47,8 +47,8 @@ public class ControllerHWinfoMultiClients {
 	JButton buttonReload;
 	JButton buttonCopySelection;
 
-	ArrayList<String> columnNames;
-	ArrayList<String> classNames;
+	Vector<String> columnNames;
+	Vector<String> classNames;
 
 	TreeSet theFilterSet;
 
@@ -71,7 +71,7 @@ public class ControllerHWinfoMultiClients {
 			this.filter = filter;
 		}
 
-		public boolean test(ArrayList<Object> row) {
+		public boolean test(Vector<Object> row) {
 			if (filter == null || row == null || keycol >= row.size())
 				return true;
 

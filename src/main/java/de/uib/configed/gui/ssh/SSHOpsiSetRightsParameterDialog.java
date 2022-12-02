@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 // import javax.swing.border.*;
 // import javax.swing.event.*;
 // import java.io.*;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -39,7 +39,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	private JButton btn_doAction;
 	private JButton btn_close;
 	private CommandOpsiSetRights commandopsisetrights;
-	private ArrayList<String> additional_default_paths = new ArrayList();
+	private Vector<String> additional_default_paths = new Vector();
 	private SSHCompletionComboButton completion;
 
 	public SSHOpsiSetRightsParameterDialog() {
@@ -57,7 +57,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		additional_default_paths.add(SSHCommandFactory.getInstance().opsipathVarDepot);
+		additional_default_paths.addElement(SSHCommandFactory.getInstance().opsipathVarDepot);
 		completion = new SSHCompletionComboButton(additional_default_paths);
 
 		inputPanel.setBackground(Globals.backLightBlue);

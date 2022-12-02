@@ -1,11 +1,11 @@
 package de.uib.utilities.table;
 
 import java.util.TreeSet;
-import java.util.ArrayList;
+import java.util.Vector;
 
 public interface TableModelFilterCondition {
 	public void setFilter(TreeSet<Object> filter);
 
-	public boolean test(ArrayList<Object> row);
-	// public void setFilter( int[] rowNoFilter, final ArrayList<ArrayList<Object>> rows);
+	public boolean test(Vector<Object> row);
+	// public void setFilter( int[] rowNoFilter, final Vector<Vector<Object>> rows);
 }

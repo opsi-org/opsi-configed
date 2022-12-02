@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
+import java.util.Vector;
 
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
@@ -69,9 +69,9 @@ public class SWAuditEntry extends TableEntry
 		KEYS_FOR_GUI_TABLES.add(WINDOWSsOFTWAREid);
 	}
 
-	public static ArrayList<String> KEYS_FOR_IDENT;
+	public static Vector<String> KEYS_FOR_IDENT;
 	static {
-		KEYS_FOR_IDENT = new ArrayList<String>();
+		KEYS_FOR_IDENT = new Vector<String>();
 		KEYS_FOR_IDENT.add(NAME);
 		KEYS_FOR_IDENT.add(VERSION);
 		KEYS_FOR_IDENT.add("subversion");
@@ -79,9 +79,9 @@ public class SWAuditEntry extends TableEntry
 		KEYS_FOR_IDENT.add(ARCHITECTURE);
 	}
 
-	public static ArrayList<String> ID_VARIANTS_COLS;
+	public static Vector<String> ID_VARIANTS_COLS;
 	static {
-		ID_VARIANTS_COLS = new ArrayList<String>();
+		ID_VARIANTS_COLS = new Vector<String>();
 		ID_VARIANTS_COLS.add(NAME);
 		ID_VARIANTS_COLS.add(EXISTING_IDS);
 
@@ -178,10 +178,18 @@ public class SWAuditEntry extends TableEntry
 			subversion = "";
 		put(key2serverKey.get(SUBVERSION), subversion);
 
-		ident = Globals.pseudokey(new String[] { get(NAME), // KEYS_FOR_IDENT.get(0) ...
-				get(VERSION), subversion, get(LANGUAGE), get(ARCHITECTURE) });
+		ident = Globals.pseudokey(new String[] {
+				get(NAME), // KEYS_FOR_IDENT.get(0) ...
+				get(VERSION),
+				subversion,
+				get(LANGUAGE),
+				get(ARCHITECTURE)
+		});
 
-		identReduced = Globals.pseudokey(new String[] { get(VERSION), get(ARCHITECTURE) });
+		identReduced = Globals.pseudokey(new String[] {
+				get(VERSION),
+				get(ARCHITECTURE)
+		});
 
 		/*
 		 * if (get(NAME).equals("Microsoft Windows XP (Service Pack 3)"))

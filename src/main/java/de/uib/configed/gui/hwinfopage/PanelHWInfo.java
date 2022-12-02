@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
@@ -339,7 +340,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		return value + " " + unit;
 	}
 
-	private void expandRows(ArrayList<Integer> rows) {
+	private void expandRows(Vector<Integer> rows) {
 		tree.expandRows(rows);
 	}
 
@@ -709,7 +710,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		DefaultTableModel tableModelComplete = new DefaultTableModel();
 		JTable jTableComplete = new JTable(tableModelComplete);
 
-		ArrayList childValues;
+		Vector childValues;
 
 		tableModelComplete.addColumn(configed.getResourceValue("PanelHWInfo.createPDF.column_hardware"));
 		tableModelComplete.addColumn(configed.getResourceValue("PanelHWInfo.createPDF.column_device"));
@@ -726,7 +727,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			while (al_itr.hasNext()) {
 				HashMap hm = al_itr.next();
 				if (first) { // second column, first element
-					childValues = new ArrayList();
+					childValues = new Vector();
 					childValues.add(child.toString()); // first column
 					childValues.add(hm.get("displayName").toString());
 					Iterator hm_iter = (Iterator) hm.keySet().iterator();
@@ -739,19 +740,19 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 								childValues.add(hm.get(hm_key));
 								firstValue = false;
 							} else {
-								childValues = new ArrayList();
+								childValues = new Vector();
 								childValues.add("");
 								childValues.add("");
 								childValues.add(hwOpsiToUI.get(hm_key));
 								childValues.add(hm.get(hm_key));
 							}
-							tableModelComplete.addRow(childValues.toArray());
+							tableModelComplete.addRow(childValues);
 						}
 					}
 
 					first = false;
 				} else { // new row, first cell empty
-					childValues = new ArrayList();
+					childValues = new Vector();
 					childValues.add(""); // first column empty
 					childValues.add(hm.get("displayName").toString());
 					Iterator hm_iter = (Iterator) hm.keySet().iterator();
@@ -764,13 +765,13 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 								childValues.add(hwOpsiToUI.get(hm_key));
 								childValues.add(hm.get(hm_key));
 							} else {
-								childValues = new ArrayList();
+								childValues = new Vector();
 								childValues.add("");
 								childValues.add("");
 								childValues.add(hwOpsiToUI.get(hm_key));
 								childValues.add(hm.get(hm_key));
 							}
-							tableModelComplete.addRow(childValues.toArray());
+							tableModelComplete.addRow(childValues);
 						}
 					}
 
