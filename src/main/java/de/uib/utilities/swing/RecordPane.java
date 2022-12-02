@@ -3,7 +3,6 @@ package de.uib.utilities.swing;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 /*
 * RecordPane.java
 * 
@@ -23,11 +22,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
+import de.uib.utilities.logging.logging;
 import de.uib.utilities.observer.ObservableSubject;
 import de.uib.utilities.observer.swing.JTextFieldObserved;
 
-public class RecordPane extends JPanel
-		implements KeyListener {
+public class RecordPane extends JPanel implements KeyListener {
 	protected int lineHeight = Globals.lineHeight;
 	protected int vGapSize = Globals.vGapSize;
 	protected int hGapSize = Globals.hGapSize;
@@ -40,7 +39,7 @@ public class RecordPane extends JPanel
 		@Override
 		public void notifyObservers() {
 			// logging.debug(this, "notifyObservers ");
-			System.out.println("RecordPane: notifyObservers ");
+			logging.debug("RecordPane: notifyObservers ");
 		}
 	}
 
@@ -61,16 +60,9 @@ public class RecordPane extends JPanel
 		// call of setData necessary
 	}
 
-	public RecordPane(
-			LinkedHashMap<String, String> data,
-			Map<String, String> labels,
-			Map<String, String> hints,
+	public RecordPane(LinkedHashMap<String, String> data, Map<String, String> labels, Map<String, String> hints,
 			Map<String, Boolean> editable) {
-		init(
-				data,
-				labels,
-				hints,
-				editable);
+		init(data, labels, hints, editable);
 	}
 
 	public void setObservableSubject(ObservableSubject editingNotifier) {
@@ -84,22 +76,12 @@ public class RecordPane extends JPanel
 		}
 	}
 
-	public void setData(
-			LinkedHashMap<String, String> data,
-			Map<String, String> labels,
-			Map<String, String> hints,
+	public void setData(LinkedHashMap<String, String> data, Map<String, String> labels, Map<String, String> hints,
 			Map<String, Boolean> editable) {
-		init(
-				data,
-				labels,
-				hints,
-				editable);
+		init(data, labels, hints, editable);
 	}
 
-	protected void init(
-			LinkedHashMap<String, String> data,
-			Map<String, String> labels,
-			Map<String, String> hints,
+	protected void init(LinkedHashMap<String, String> data, Map<String, String> labels, Map<String, String> hints,
 			Map<String, Boolean> editable) {
 		this.data = data;
 		this.labels = labels;
@@ -156,7 +138,7 @@ public class RecordPane extends JPanel
 
 			jTextField.addKeyListener(this);
 
-			// System.out.println(jTextField.getText() + " " + jTextField.isEditable());
+			// logging.debug(jTextField.getText() + " " + jTextField.isEditable());
 
 			datafields.put(key, jTextField);
 		}
@@ -166,14 +148,12 @@ public class RecordPane extends JPanel
 		GroupLayout.ParallelGroup hGroup = baseLayout.createParallelGroup();
 
 		for (String key : data.keySet()) {
-			hGroup.addGroup(
-					baseLayout.createSequentialGroup()
-							.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
-							.addComponent(labelfields.get(key), minLabelWidth, GroupLayout.PREFERRED_SIZE,
-									maxLabelWidth)
-							.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
-							.addComponent(datafields.get(key), minFieldWidth, GroupLayout.PREFERRED_SIZE, maxFieldWidth)
-							.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2));
+			hGroup.addGroup(baseLayout.createSequentialGroup()
+					.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+					.addComponent(labelfields.get(key), minLabelWidth, GroupLayout.PREFERRED_SIZE, maxLabelWidth)
+					.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+					.addComponent(datafields.get(key), minFieldWidth, GroupLayout.PREFERRED_SIZE, maxFieldWidth)
+					.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2));
 		}
 
 		baseLayout.setHorizontalGroup(hGroup);
@@ -183,10 +163,9 @@ public class RecordPane extends JPanel
 		vGroup.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize);
 		for (String key : data.keySet()) {
 			vGroup.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize);
-			vGroup.addGroup(
-					baseLayout.createParallelGroup()
-							.addComponent(labelfields.get(key), lineHeight, lineHeight, lineHeight)
-							.addComponent(datafields.get(key), lineHeight, lineHeight, lineHeight));
+			vGroup.addGroup(baseLayout.createParallelGroup()
+					.addComponent(labelfields.get(key), lineHeight, lineHeight, lineHeight)
+					.addComponent(datafields.get(key), lineHeight, lineHeight, lineHeight));
 		}
 		vGroup.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize);
 

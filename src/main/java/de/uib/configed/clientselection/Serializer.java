@@ -24,26 +24,26 @@ import de.uib.utilities.logging.logging;
  * A serializer is able to save and load searches.
  */
 public abstract class Serializer {
-	public final static String elementNameGroup = "GroupElement";
-	public final static String elementNameGroupWithSubgroups = "GroupWithSubgroupsElement";
-	public final static String elementNameSoftwareNameElement = "SoftwareNameElement";
-	public final static String elementNameGeneric = "Generic";
+	public static final String elementNameGroup = "GroupElement";
+	public static final String elementNameGroupWithSubgroups = "GroupWithSubgroupsElement";
+	public static final String elementNameSoftwareNameElement = "SoftwareNameElement";
+	public static final String elementNameGeneric = "Generic";
 
-	public final static String keyElementName = "element";
-	public final static String keySubelementName = "refinedElement";
-	public final static String keyElementPath = "elementPath";
-	public final static String keyOperation = "operation";
-	public final static String keyDataType = "dataType";
+	public static final String keyElementName = "element";
+	public static final String keySubelementName = "refinedElement";
+	public static final String keyElementPath = "elementPath";
+	public static final String keyOperation = "operation";
+	public static final String keyDataType = "dataType";
 
 	protected SelectionManager manager;
 
-	public Serializer(SelectionManager manager) {
+	protected Serializer(SelectionManager manager) {
 		this.manager = manager;
 	}
 
 	/**
-	 * Save the given tree of operations under the given name.
-	 * If the name already exists, overwrite it.
+	 * Save the given tree of operations under the given name. If the name
+	 * already exists, overwrite it.
 	 */
 	public void save(SelectOperation topOperation, String name, String description) {
 		Map<String, Object> data = produceData(topOperation);
@@ -54,12 +54,12 @@ public abstract class Serializer {
 	/**
 	 * Get a list of the names of all saved searches.
 	 */
-	abstract public List<String> getSaved();
+	public abstract List<String> getSaved();
 
 	/**
 	 * Get the saved searches map
 	 */
-	abstract public SavedSearches getSavedSearches();
+	public abstract SavedSearches getSavedSearches();
 
 	public String getJson(SelectOperation topOperation) {
 		Map<String, Object> data = produceData(topOperation);
@@ -81,21 +81,21 @@ public abstract class Serializer {
 	 * reproduce a search
 	 */
 	public SelectOperation deserialize(Map<String, Object> data) {
+		if (data == null)
+			logging.warning(this, "data in Serializer.deserialize is null");
+
 		logging.info(this, "deserialize data " + data);
 		if (data.get("elementPath") != null) {
 			logging.info("deserialize, elementPath " + Arrays.toString((String[]) data.get("elementPath")));
 		}
 
 		try {
-			if (data == null)
-				return null;
 			SelectOperation operation = getOperation(data, null);
 			if (getSearchDataVersion() == 1) {
 				operation = checkForHostGroup(operation);
 			}
 			return operation;
 		} catch (Exception e) {
-			// e.printStackTrace();
 			logging.error("deserialize error for data " + data + " message " + e.getMessage(), e);
 			return null;
 		}
@@ -130,7 +130,6 @@ public abstract class Serializer {
 		}
 
 		catch (Exception e) {
-			// e.printStackTrace();
 			logging.error(e.getMessage(), e);
 			return null;
 		}
@@ -215,15 +214,15 @@ public abstract class Serializer {
 				// logging.info(this, "getOperation hardware elements " + elements );
 
 				for (SelectElement possibleElement : elements) {
-					logging.info(this, "getOperation possibleElement.getClassName() "
-							+ possibleElement + " compare with elementName " + elementName
-							+ " or perhaps with elementPathS " + elementPathS);
+					logging.info(this,
+							"getOperation possibleElement.getClassName() " + possibleElement
+									+ " compare with elementName " + elementName + " or perhaps with elementPathS "
+									+ elementPathS);
 
 					// if( possibleElement.getClassName().equals( elementName ) )
 					// originally, but is nonsense -------------------------------------------
 					if (possibleElement.getClassName().equals(elementName)
-							&&
-							Arrays.toString(possibleElement.getPathArray()).equals(elementPathS)) {
+							&& Arrays.toString(possibleElement.getPathArray()).equals(elementPathS)) {
 						element = possibleElement;
 						break;
 					}

@@ -17,8 +17,6 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
@@ -35,8 +33,7 @@ import javax.swing.Timer;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
-public class GeneralFrame extends JDialog
-		implements ActionListener, KeyListener {
+public class GeneralFrame extends JDialog implements ActionListener {
 	boolean shiftPressed = true;
 
 	protected FadingMirror glass;
@@ -47,9 +44,6 @@ public class GeneralFrame extends JDialog
 	// JTextArea jTextArea1 = new JTextArea();
 	protected JButton jButton1 = new JButton();
 	// protected String button1Text = "close";
-
-	private static int defaultPreferredWidth = 250;
-	private static int defaultPreferredHeight = 150;
 
 	protected int preferredWidth;
 	protected int preferredHeight;
@@ -161,6 +155,7 @@ public class GeneralFrame extends JDialog
 
 	}
 
+	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
 		jButton1.requestFocus();
@@ -180,6 +175,7 @@ public class GeneralFrame extends JDialog
 	// Events
 	// window
 
+	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			result = DEFAULT;
@@ -188,21 +184,11 @@ public class GeneralFrame extends JDialog
 		super.processWindowEvent(e);
 	}
 
-	// KeyListener
-	public void keyPressed(KeyEvent e) {
-	}
-
-	public void keyReleased(KeyEvent e) {
-	}
-
-	public void keyTyped(KeyEvent e) {
-	}
-
 	// ActionListener
 	public void actionPerformed(ActionEvent e) {
-		// System.out.println ("ActionEvent ...... ");
+		// logging.debug ("ActionEvent ...... ");
 		if (e.getSource() == jButton1) {
-			// System.out.println (".... on Button1. ");
+			// logging.debug (".... on Button1. ");
 			doAction1();
 		}
 	}
@@ -216,8 +202,7 @@ public class GeneralFrame extends JDialog
 		glass.begin();
 	}
 
-	static class FadingMirror extends JPanel
-			implements ActionListener {
+	static class FadingMirror extends JPanel implements ActionListener {
 		private float opacity = 1f;
 		private float step = 0.3f;
 		private Timer fadeTimer;
@@ -272,9 +257,9 @@ public class GeneralFrame extends JDialog
 			repaint();
 		}
 
+		@Override
 		public void paintComponent(Graphics g) {
-			((Graphics2D) g).setComposite(
-					AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
+			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 
 			g.setColor(new Color(230, 230, 250));
 			g.fillRect(0, 0, getWidth(), getHeight());

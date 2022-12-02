@@ -62,7 +62,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 		String query = "select *  from HOST";
 		TimeCheck timer = new TimeCheck(this, "HOST_read").start();
 
-		logging.check(this, "HOST_read");
+		logging.notice(this, "HOST_read");
 		java.util.List<Map<java.lang.String, java.lang.Object>> opsiHosts = exec
 				.getListOfMaps(new OpsiMethodCall("getData", new Object[] { query }));
 		timer.stop();
@@ -108,7 +108,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 		String query = "select " + columns + " from PRODUCT_ON_CLIENT " + " where  productType = 'LocalbootProduct'"
 				+ " AND \n" + " ( " + giveWhereOR("clientId", clientIds) + ") ";
 
-		// System.out.println(query);
+		// logging.debug(query);
 		// System.exit(0);
 
 		// TimeCheck timer= new TimeCheck(this, "getLocalBootProductStatesNOM").start();

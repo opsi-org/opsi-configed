@@ -38,44 +38,40 @@ public class UserOpsipermission extends UserConfigModule {
 	public static String CONFIGKEY_STR_CREATECLIENT = "createclient";
 	public static String CONFIGKEY_STR_READONLY = "registered_readonly";
 
-	public final static String PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY = CONFIGKEY_STR_PRIVILEGE + "."
+	public static final String PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY = CONFIGKEY_STR_PRIVILEGE + "."
 			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_ALLHOSTS + "." + CONFIGKEY_STR_READONLY;
 	// privilege.host.all.readonly : boolean
-	public final static String PARTKEY_USER_PRIVILEGE_SERVER_READWRITE = CONFIGKEY_STR_PRIVILEGE + "."
+	public static final String PARTKEY_USER_PRIVILEGE_SERVER_READWRITE = CONFIGKEY_STR_PRIVILEGE + "."
 			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_SERVER + "." + CONFIGKEY_STR_READWRITE;
 	// privilege.host.opsiserver.readwrite boolean
 
-	public final static String PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED = CONFIGKEY_STR_PRIVILEGE + "."
+	public static final String PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED = CONFIGKEY_STR_PRIVILEGE + "."
 			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_DEPOT + "." + CONFIGKEY_STR_ACCESSCONTROLLED;
 	// privilege.host.depotaccess.configured; //boolean
-	public final static String PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE = CONFIGKEY_STR_PRIVILEGE + "."
+	public static final String PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE = CONFIGKEY_STR_PRIVILEGE + "."
 			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_DEPOT + "." + CONFIGKEY_STR_DEPOTLIST;
 	// privilege.host.depotaccess.depots : multivalue
 
-	public final static String PARTKEY_USER_PRIVILEGE_CREATECLIENT = CONFIGKEY_STR_PRIVILEGE + "." + CONFIGKEY_STR_HOST
+	public static final String PARTKEY_USER_PRIVILEGE_CREATECLIENT = CONFIGKEY_STR_PRIVILEGE + "." + CONFIGKEY_STR_HOST
 			+ "." + CONFIGKEY_STR_CREATECLIENT;
 
-	public final static String PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED = CONFIGKEY_STR_PRIVILEGE + "."
-			+ CONFIGKEY_STR_HOST
-			+ "." + CONFIGKEY_STR_HOSTGROUP + "." + CONFIGKEY_STR_ACCESSCONTROLLED;
+	public static final String PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED = CONFIGKEY_STR_PRIVILEGE + "."
+			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_HOSTGROUP + "." + CONFIGKEY_STR_ACCESSCONTROLLED;
 	// privilege.host.groupaccess.configured; //boolean
 
-	public final static String PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE = CONFIGKEY_STR_PRIVILEGE + "."
-			+ CONFIGKEY_STR_HOST
-			+ "." + CONFIGKEY_STR_HOSTGROUP + "." + CONFIGKEY_STR_HOSTGROUPLIST;
+	public static final String PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE = CONFIGKEY_STR_PRIVILEGE + "."
+			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_HOSTGROUP + "." + CONFIGKEY_STR_HOSTGROUPLIST;
 	// privilege.host.groupaccess.hostgroups : multivalue
 
-	public final static String PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED = CONFIGKEY_STR_PRIVILEGE
-			+ "." + CONFIGKEY_STR_PRODUCT
-			+ "." + CONFIGKEY_STR_PRODUCTGROUP + "." + CONFIGKEY_STR_ACCESSCONTROLLED;
+	public static final String PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED = CONFIGKEY_STR_PRIVILEGE
+			+ "." + CONFIGKEY_STR_PRODUCT + "." + CONFIGKEY_STR_PRODUCTGROUP + "." + CONFIGKEY_STR_ACCESSCONTROLLED;
 	// privilege.product.groupaccess.configured; //boolean
 
-	public final static String PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE = CONFIGKEY_STR_PRIVILEGE + "."
-			+ CONFIGKEY_STR_PRODUCT
-			+ "." + CONFIGKEY_STR_PRODUCTGROUP + "." + CONFIGKEY_STR_PRODUCTGROUPLIST;
+	public static final String PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE = CONFIGKEY_STR_PRIVILEGE + "."
+			+ CONFIGKEY_STR_PRODUCT + "." + CONFIGKEY_STR_PRODUCTGROUP + "." + CONFIGKEY_STR_PRODUCTGROUPLIST;
 	// privilege.product.groupaccess.productgroups : multivalue
 
-	public final static LinkedHashSet<String> BOOL_KEYS;
+	public static final LinkedHashSet<String> BOOL_KEYS;
 	static {
 		BOOL_KEYS = new LinkedHashSet<String>();
 		BOOL_KEYS.add(PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY);
@@ -89,8 +85,8 @@ public class UserOpsipermission extends UserConfigModule {
 
 	}
 
-	public final static HashSet<String> LIST_KEYS;
-	public final static HashMap<String, String> CORRESPONDENCE_TO_LIST_KEYS;
+	public static final HashSet<String> LIST_KEYS;
+	public static final HashMap<String, String> CORRESPONDENCE_TO_LIST_KEYS;
 	static {
 		CORRESPONDENCE_TO_LIST_KEYS = new HashMap<String, String>();
 		LIST_KEYS = new HashSet<String>();
@@ -111,7 +107,7 @@ public class UserOpsipermission extends UserConfigModule {
 
 	}
 
-	public final static UserOpsipermission DEFAULT;
+	public static final UserOpsipermission DEFAULT;
 
 	static {
 		logging.info("init ARCHEO for UserOpsipermission");

@@ -19,7 +19,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -27,6 +26,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 import javax.swing.event.ChangeListener;
 
 import de.uib.configed.ConfigedMain;
@@ -76,7 +76,6 @@ import de.uib.utilities.swing.TextInputField;
  * This dialog shows a number of options you can use to select specific clients.
  */
 public class ClientSelectionDialog extends FGeneralDialog {
-	private static ClientSelectionDialog instance = null;
 	private GroupLayout layout;
 	private GroupLayout.SequentialGroup vGroup;
 	private GroupLayout.ParallelGroup hGroupParenthesisClose;
@@ -88,8 +87,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	private GroupLayout.ParallelGroup hGroupOperations;
 	private GroupLayout.ParallelGroup hGroupData;
 	private JPanel contentPane;
-	private JComboBox newElementBox;
-	private JComboBox loadSearchBox;
+	private JComboBox<String> newElementBox;
 	private IconAsButton buttonReload;
 	private IconAsButton buttonRestart;
 	private JTextField saveNameField;
@@ -98,7 +96,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	// private JLabel savedSearchLabel;
 	// private JComboBox savedSearchBox;
 
-	private LinkedList<SelectElement> elements;
 	private LinkedList<ComplexGroup> complexElements;
 
 	private SelectionManager manager;
@@ -129,10 +126,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		this.main = main;
 		this.selectionPanel = selectionPanel;
 		this.savedSearchesDialog = savedSearchesDialog;
-		setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		manager = new SelectionManager("OpsiData");
-		elements = new LinkedList<SelectElement>();
-		complexElements = new LinkedList<ComplexGroup>();
+		complexElements = new LinkedList<>();
 		init();
 		pack();
 
@@ -184,11 +180,11 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			saveNameField.setText(search.name);
 			saveDescriptionField.setText(search.description);
 		} catch (Exception exc) {
-			logging.logTrace(exc);
-			logging.error("Could not load search!");
+			logging.error("Could not load search!", exc);
 		}
 	}
 
+	@Override
 	public void doAction1() {
 		logging.info(this, "doAction1");
 		List<String> clients = new ArrayList<String>();
@@ -230,6 +226,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		selectionPanel.setSelectedValues(clients);
 	}
 
+	@Override
 	public void doAction2() {
 		reset();
 	}
@@ -418,7 +415,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		hGroupConnections.addComponent(connectionLabel, GroupLayout.Alignment.CENTER);
 		// hGroupRemoveBtn.addComponent( removeLabel, GroupLayout.Alignment.CENTER );
 
-		newElementBox = new JComboBox(
+		newElementBox = new JComboBox<>(
 				new String[] { configed.getResourceValue("ClientSelectionDialog.newElementsBox") });
 		newElementBox.setFont(Globals.defaultFont);
 		// newElementBox.setLightWeightPopupEnabled(false);
@@ -435,7 +432,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		newElementBox.addItem(configed.getResourceValue("ClientSelectionDialog.swauditName"));
 
 		// hardware
-		List<String> hardwareList = new LinkedList(manager.getLocalizedHardwareList().keySet());
+		List<String> hardwareList = new LinkedList<>(manager.getLocalizedHardwareList().keySet());
 		Collections.sort(hardwareList);
 		for (String hardware : hardwareList)
 			newElementBox.addItem(hardware);
@@ -487,7 +484,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.elementLabel.setMaximumSize(new Dimension(result.elementLabel.getMaximumSize().width,
 				result.connectionType.getPreferredSize().height));
 		if (operations.length > 1) {
-			JComboBox box = new JComboBox();
+			JComboBox<String> box = new JComboBox<>();
 			for (SelectOperation op : operations)
 				box.addItem(op.getOperationString());
 			result.operationComponent = box;
@@ -787,13 +784,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		String text = null;
 		SelectData.DataType type = operation.getDataType();
 		switch (type) {
+		// Do the same for all three cases
 		case DoubleType:
 		case TextType:
-			text = ((TextInputField) (group.dataComponent)).getText();
-			if (text.isEmpty())
-				return null;
-			data = text;
-			break;
 		case DateType:
 			text = ((TextInputField) (group.dataComponent)).getText();
 			if (text.isEmpty())
@@ -821,6 +814,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			data = textEnum;
 			break;
 		case NoneType:
+		default:
 		}
 
 		operation.setSelectData(new SelectData(data, type));
@@ -915,7 +909,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	private void repairParentheses() {
-		Stack<ComplexGroup> stack = new Stack<ComplexGroup>();
+		Stack<ComplexGroup> stack = new Stack<>();
 		for (ComplexGroup complex : complexElements) {
 			if (complex.openParenthesis.isActivated() && complex.closeParenthesis.isActivated()) {
 				complex.openParenthesis.setActivated(false);
@@ -1077,8 +1071,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			}
 
 		}
-
-		System.out.println("Hallo");
 	}
 
 	/*
@@ -1227,23 +1219,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		}
 	}
 
-	/* Remove the input data from a simple group. */
-	private void resetGroup(SimpleGroup group) {
-		if (group.dataComponent instanceof TextInputField)
-			((TextInputField) group.dataComponent).setText("");
-		else if (group.dataComponent instanceof JComboBox)
-			((JComboBox) group.dataComponent).setSelectedItem("");
-		else if (group.dataComponent instanceof JSpinner)
-			((JSpinner) group.dataComponent).setValue(0);
-		else if (group.dataComponent instanceof SpinnerWithExt)
-			((SpinnerWithExt) group.dataComponent).setValue(0);
-		else
-			logging.warning(this, "Unknown data component: " + group.dataComponent);
-	}
-
 	private class SimpleGroup {
 		public SelectElement element;
-		public IconAsButton removeButton = null;
 		public IconAsButton negateButton;
 		public AndOrSelectButtonByIcon connectionType;
 		public JLabel elementLabel;
@@ -1298,14 +1275,14 @@ public class ClientSelectionDialog extends FGeneralDialog {
 					break;
 				}
 			}
-			if (complexElements.size() != 0)
+			if (!complexElements.isEmpty())
 				complexElements.getLast().connectionType.setVisible(false);
 		}
 	}
 
 	private class AddElementListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if (complexElements.size() != 0)
+			if (!complexElements.isEmpty())
 				complexElements.getLast().connectionType.setVisible(true);
 			int index = newElementBox.getSelectedIndex();
 			if (index == 0)
@@ -1328,15 +1305,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			newElementBox.setSelectedIndex(0);
 			complexElements.getLast().connectionType.setVisible(false);
 
-		}
-	}
-
-	private class LoadSearchListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			if (loadSearchBox.getSelectedIndex() == 0)
-				return;
-			loadSearch(loadSearchBox.getSelectedItem().toString());
-			loadSearchBox.setSelectedIndex(0);
 		}
 	}
 
@@ -1407,13 +1375,13 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	 */
 	private class SpinnerWithExt extends JPanel {
 		private JSpinner spinner;
-		private JComboBox box;
+		private JComboBox<String> box;
 
 		public SpinnerWithExt() {
 			spinner = new JSpinner(
-					new SpinnerNumberModel((Number) new Long(0), Long.MIN_VALUE, Long.MAX_VALUE, new Long(1)));
+					new SpinnerNumberModel((Number) Long.valueOf(0), Long.MIN_VALUE, Long.MAX_VALUE, Long.valueOf(1)));
 			spinner.setMinimumSize(new Dimension(0, 0));
-			box = new JComboBox(new String[] { "", "k", "M", "G", "T" });
+			box = new JComboBox<>(new String[] { "", "k", "M", "G", "T" });
 			box.setMinimumSize(new Dimension(50, 0));
 			GroupLayout layout = new GroupLayout(this);
 			layout.setVerticalGroup(layout.createParallelGroup().addComponent(spinner).addComponent(box));
@@ -1478,12 +1446,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			 * //savedSearchesDialog.resetModel();
 			 */
 
-		}
-	}
-
-	private class SavedBoxListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			// manager.loadSearch( (String) savedSearchBox.getSelectedItem() );
 		}
 	}
 }

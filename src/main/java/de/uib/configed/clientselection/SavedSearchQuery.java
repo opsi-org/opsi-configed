@@ -14,14 +14,11 @@ import de.uib.utilities.logging.logging;
  * This class is a little command line tool which can execute saved searches.
  */
 public class SavedSearchQuery {
-	private final String usage = "\n" +
-			"configed_savedsearch [OPTIONS] [NAME]\n\n" +
-			"Runs the given search NAME and returns the matching clients. " +
-			"If NAME is not set, list all available searches.\n\n" +
-			"OPTIONS:\n" +
-			"  -h\tConfiguration server to connect to\n" +
-			"  -u\tUsername for authentication\n" +
-			"  -p\tPassword for authentication\n";
+	private final String usage = "\n" + "configed_savedsearch [OPTIONS] [NAME]\n\n"
+			+ "Runs the given search NAME and returns the matching clients. "
+			+ "If NAME is not set, list all available searches.\n\n" + "OPTIONS:\n"
+			+ "  -h\tConfiguration server to connect to\n" + "  -u\tUsername for authentication\n"
+			+ "  -p\tPassword for authentication\n";
 
 	private String[] args;
 	private String host;
@@ -33,8 +30,8 @@ public class SavedSearchQuery {
 	private PersistenceController controller;
 
 	public SavedSearchQuery() {
-		logging.wantedDirectory = "";
-		logging.setAktDebugLevel(logging.LEVEL_BLACKOUT);
+		logging.setLogLevelFile(logging.LEVEL_NONE);
+		logging.setLogLevelConsole(logging.LEVEL_NONE);
 	}
 
 	/*
@@ -72,7 +69,7 @@ public class SavedSearchQuery {
 	}
 
 	public void showUsage() {
-		System.out.println(usage);
+		logging.debug(usage);
 	}
 
 	public void setArgs(String host, String user, String password, String searchName, String group) {
@@ -101,12 +98,12 @@ public class SavedSearchQuery {
 		controller = PersistenceControllerFactory.getNewPersistenceController(host, user, password);
 
 		if (controller == null) {
-			System.err.println("Authentication error.");
+			logging.error("Authentication error.");
 			System.exit(1);
 		}
 
 		if (controller.getConnectionState().getState() != ConnectionState.CONNECTED) {
-			System.err.println("Authentication error.");
+			logging.error("Authentication error.");
 			System.exit(1);
 		}
 
@@ -122,10 +119,10 @@ public class SavedSearchQuery {
 			return null;
 		}
 
-		// System.out.println("searches, searchName " + searches + ", " + searchName);
+		// logging.debug("searches, searchName " + searches + ", " + searchName);
 
 		if (!searches.contains(searchName)) {
-			System.err.println("Search not found.");
+			logging.error("Search not found.");
 			System.exit(2);
 		}
 
@@ -138,21 +135,21 @@ public class SavedSearchQuery {
 
 	public void populateHostGroup(java.util.List<String> hosts, String groupName) {
 		if (controller == null) {
-			System.err.println("controller not initialized");
+			logging.error("controller not initialized");
 			System.exit(3);
 		}
 
 		if (hosts == null) {
-			System.err.println("hosts collection not initialized");
+			logging.error("hosts collection not initialized");
 			System.exit(4);
 		}
 
 		Map<String, Map<String, String>> hostGroups = controller.getHostGroups();
 
-		// System.out.println(" hostGroups " + hostGroups);
+		// logging.debug(" hostGroups " + hostGroups);
 
 		if (!hostGroups.keySet().contains(groupName)) {
-			System.err.println("group not found");
+			logging.error("group not found");
 			System.exit(5);
 		}
 
@@ -161,7 +158,7 @@ public class SavedSearchQuery {
 				hostGroups.get(groupName));
 
 		if (!controller.deleteGroup(groupName)) {
-			System.err.println("delete group error, groupName " + groupName);
+			logging.error("delete group error, groupName " + groupName);
 			System.exit(6);
 		}
 
@@ -171,7 +168,7 @@ public class SavedSearchQuery {
 		 * 
 		 * 
 		 * try{
-		 * System.out.println(" ......... waiting ");
+		 * logging.debug(" ......... waiting ");
 		 * Thread.sleep(10000);
 		 * }
 		 * catch(Exception ex)
@@ -180,12 +177,12 @@ public class SavedSearchQuery {
 		 */
 
 		if (!controller.addGroup(saveGroupRelation)) {
-			System.err.println("add group error, group " + saveGroupRelation);
+			logging.error("add group error, group " + saveGroupRelation);
 			System.exit(7);
 		}
 
 		if (!controller.addHosts2Group(hosts, groupName)) {
-			System.err.println("addHosts2Group error, group " + groupName);
+			logging.error("addHosts2Group error, group " + groupName);
 			System.exit(8);
 		}
 
@@ -214,6 +211,6 @@ public class SavedSearchQuery {
 
 	private void printResult(List<String> result) {
 		for (String line : result)
-			System.out.println(line);
+			logging.debug(line);
 	}
 }

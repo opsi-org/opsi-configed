@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Vector;
@@ -21,8 +22,8 @@ import java.util.Vector;
 import de.uib.utilities.logging.logging;
 
 /**
- * This class contains global constants and functions for the library
- * Copyright: Copyright (c) uib 2001-2018
+ * This class contains global constants and functions for the library Copyright:
+ * Copyright (c) uib 2001-2018
  */
 
 public class Globals {
@@ -47,7 +48,7 @@ public class Globals {
 	 * 
 	 * // Iterate the font family names
 	 * for (int i=0; i<fontNames.length; i++) {
-	 * System.out.println("FONT ==>>> " + fontNames[i]);
+	 * logging.debug("FONT ==>>> " + fontNames[i]);
 	 * }
 	 */
 
@@ -152,7 +153,7 @@ public class Globals {
 		return imageBaseAbsolute;
 	}
 
-	public final static String fileseparator = "/";
+	public static final String fileseparator = "/";
 
 	public static boolean isWindows() {
 		Runtime rt = Runtime.getRuntime();
@@ -163,7 +164,7 @@ public class Globals {
 	public static java.net.URL getImageResourceURL(String relPath) {
 		String resourceS = imageBase + fileseparator + relPath;
 		java.net.URL imgURL = Globals.class.getResource(resourceS);
-		// System.out.println ( " ---- imgURL " + imgURL );
+		// logging.debug ( " ---- imgURL " + imgURL );
 		logging.info("getImageResourceURL  found for " + resourceS + " url: " + imgURL);
 		if (imgURL != null) {
 			return imgURL;
@@ -174,10 +175,10 @@ public class Globals {
 	}
 
 	public static javax.swing.ImageIcon createImageIcon(String path, String description) {
-		// System.out.println ( " ---- image path: " + imageBase + fileseparator + path
+		// logging.debug ( " ---- image path: " + imageBase + fileseparator + path
 		// );
 		java.net.URL imgURL = Globals.class.getResource(imageBase + fileseparator + path);
-		// System.out.println ( " ---- imgURL " + imgURL );
+		// logging.debug ( " ---- imgURL " + imgURL );
 		if (imgURL != null) {
 			return new javax.swing.ImageIcon(imgURL, description);
 		} else {
@@ -186,11 +187,11 @@ public class Globals {
 		}
 	}
 
-	private static Map objects;
+	private static Map<String, Object> objects;
 
-	public static Map getMap() {
+	public static Map<String, Object> getMap() {
 		if (objects == null) {
-			objects = new HashMap();
+			objects = new HashMap<>();
 
 			objects.put("mainIcon", mainIcon);
 			objects.put("defaultFont", defaultFont);
@@ -273,7 +274,7 @@ public class Globals {
 	public static String getSeconds() {
 		String sqlNow = new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis()).toString();
 
-		// System.out.println(" sqlNow " + sqlNow);
+		// logging.debug(" sqlNow " + sqlNow);
 		int i = sqlNow.lastIndexOf(' ');
 		String date = sqlNow.substring(0, i);
 		date = date.replace(' ', '-');
@@ -297,7 +298,7 @@ public class Globals {
 		sqlNow = sqlNow.substring(0, sqlNow.lastIndexOf(' '));
 
 		if (justNumbers)
-			sqlNow = sqlNow.replaceAll("-", "");
+			sqlNow = sqlNow.replace("-", "");
 
 		return sqlNow;
 	}
@@ -334,10 +335,7 @@ public class Globals {
 		remMinutesS = formatlNumberUpTo99(remminutes);
 		hoursS = formatlNumberUpTo99(hours);
 
-		String result = "" + hoursS + ":" + remMinutesS + ":" + remSecondsS;
-		// logging.info(this, "giveTimeSpan for millis " + millis + " " + result);
-
-		return result;
+		return "" + hoursS + ":" + remMinutesS + ":" + remSecondsS;
 	}
 
 	public static String getStringValue(Object s) {
@@ -351,8 +349,8 @@ public class Globals {
 		return s.toString();
 	}
 
-	public static java.util.ArrayList<String> takeAsStringList(java.util.List<Object> list) {
-		java.util.ArrayList<String> result = new java.util.ArrayList<String>();
+	public static List<String> takeAsStringList(java.util.List<Object> list) {
+		List<String> result = new java.util.ArrayList<String>();
 
 		if (list == null)
 			return result;
@@ -364,12 +362,12 @@ public class Globals {
 		return result;
 	}
 
-	public final static String pseudokeySeparator = ";";
+	public static final String pseudokeySeparator = ";";
 
 	public static String pseudokey(Vector<Object> partialvalues) {
 		StringBuffer resultBuffer = new StringBuffer("");
 
-		if (partialvalues.size() > 0) {
+		if (!partialvalues.isEmpty()) {
 			resultBuffer.append(partialvalues.get(0));
 
 			for (int i = 1; i < partialvalues.size(); i++) {
@@ -396,8 +394,8 @@ public class Globals {
 		return resultBuffer.toString();
 	}
 
-	final static int tooltipLineLength = 50;
-	final static int uncertainty = 20;
+	static final int tooltipLineLength = 50;
+	static final int uncertainty = 20;
 
 	public static String wrapToHTML(String s) {
 		StringBuffer result = new StringBuffer("<html>");
@@ -420,8 +418,7 @@ public class Globals {
 			de.uib.utilities.logging.logging.debug("Globals, separationString " + separationString);
 
 			while (!found && i < testspan) {
-				if (separationString.charAt(i) == ' '
-						|| separationString.charAt(i) == '\n'
+				if (separationString.charAt(i) == ' ' || separationString.charAt(i) == '\n'
 						|| separationString.charAt(i) == '\t') {
 					found = true;
 					if (separationString.charAt(i) == '\n')
@@ -455,7 +452,7 @@ public class Globals {
 	}
 
 	private static Integer stringCompareAsInt(String s1, String s2) throws NumberFormatException {
-		// System.out.println ( " compare int " + s1 + " " + s2 );
+		// logging.debug ( " compare int " + s1 + " " + s2 );
 		if (s1 == null && s2 == null)
 			return 0;
 		if (s1 == null)
@@ -477,14 +474,14 @@ public class Globals {
 
 		int val1 = Integer.valueOf(s1A);
 		int val2 = Integer.valueOf(s2A);
-		// System.out.println ( " compare int " + val1 + " " + val2 );
+		// logging.debug ( " compare int " + val1 + " " + val2 );
 		return val1 - val2;
 	}
 
 	public static Integer compareDottedNumberStrings(final String ver1, final String ver2)
 			throws NumberFormatException {
-		// System.out.println ( " ver1 " + ver1 );
-		// System.out.println ( " ver2 " + ver2 );
+		// logging.debug ( " ver1 " + ver1 );
+		// logging.debug ( " ver2 " + ver2 );
 
 		if (ver1 == null && ver2 == null)
 			return 0;
@@ -501,8 +498,8 @@ public class Globals {
 		String[] ver1parts = ver1A.split("\\.");
 		String[] ver2parts = ver2A.split("\\.");
 
-		// System.out.println ( " ver1parts " + Arrays.toString( ver1parts ) );
-		// System.out.println ( " ver2parts " + Arrays.toString( ver2parts ) );
+		// logging.debug ( " ver1parts " + Arrays.toString( ver1parts ) );
+		// logging.debug ( " ver2parts " + Arrays.toString( ver2parts ) );
 
 		int i = 0;
 		int result = 0;
@@ -571,25 +568,25 @@ public class Globals {
 		for (int c = 0; c < s.length(); c++) {
 			charsInLine++;
 			switch (s.charAt(c)) {
-				case ' ':
-					b.append("&nbsp;");
-					if (!indentDone)
-						lineIndent = lineIndent + 1;
-					break;
-				case '\t':
-					b.append("&nbsp;&nbsp;&nbsp;");
-					if (!indentDone)
-						lineIndent = lineIndent + 3;
-					break;
-				case '\n':
-					b.append("<br/>");
-					indentDone = false;
-					charsInLine = 0;
-					lineIndent = 0;
-					break;
-				default:
-					indentDone = true;
-					b.append(s.charAt(c));
+			case ' ':
+				b.append("&nbsp;");
+				if (!indentDone)
+					lineIndent = lineIndent + 1;
+				break;
+			case '\t':
+				b.append("&nbsp;&nbsp;&nbsp;");
+				if (!indentDone)
+					lineIndent = lineIndent + 3;
+				break;
+			case '\n':
+				b.append("<br/>");
+				indentDone = false;
+				charsInLine = 0;
+				lineIndent = 0;
+				break;
+			default:
+				indentDone = true;
+				b.append(s.charAt(c));
 			}
 			if (charsInLine >= maxLineLength) {
 				if (c + 1 < s.length()) {
@@ -804,18 +801,18 @@ public class Globals {
 		if (password)
 			return String.valueOf(con.readPassword()).trim();
 		Scanner sc = new Scanner(con.reader());
-		// System.out.println( "stop " + sc);
+		// logging.debug( "stop " + sc);
 		return sc.nextLine();
 		// return String.valueOf( System.console().readLine() ).trim();
 	}
 
 	public static void main(String[] args) {
 		// tests
-		// System.out.println(wrapToHTML(args[0]));
-		System.out.println("arguments given " + Arrays.toString(args));
-		// System.out.println(" result of lastpositionDifferenceForDotSeparatedNumbers "
+		// logging.debug(wrapToHTML(args[0]));
+		logging.debug("arguments given " + Arrays.toString(args));
+		// logging.debug(" result of lastpositionDifferenceForDotSeparatedNumbers "
 		// + lastpositionDifferenceForDotSeparatedNumbers(args[0], args[1]));
-		System.out.println(" result of compareDottedNumberStrings " + compareDottedNumberStrings(args[0], args[1]));
+		logging.debug(" result of compareDottedNumberStrings " + compareDottedNumberStrings(args[0], args[1]));
 	}
 
 }

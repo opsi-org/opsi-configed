@@ -29,21 +29,16 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 	protected Map<String, String> mapOfStrings;
 	protected Map<String, String> mapOfTooltips;
 	protected Map<String, ImageIcon> mapOfImages;
-	final static int imageDefaultWidth = 30;
+	static final int imageDefaultWidth = 30;
 	protected boolean showOnlyIcon = false;
 
-	public ListCellRendererByIndex(
-			Map<String, String> mapOfStringValues,
-			Map<String, String> mapOfDescriptions,
+	public ListCellRendererByIndex(Map<String, String> mapOfStringValues, Map<String, String> mapOfDescriptions,
 			String tooltipPrefix) {
 		this(mapOfStringValues, mapOfDescriptions, null, 0, false, tooltipPrefix);
 	}
 
-	public ListCellRendererByIndex(
-			Map<String, String> mapOfStringValues,
-			Map<String, String> mapOfDescriptions,
-			String imagesBase, int imageWidth,
-			boolean showOnlyIcon, String tooltipPrefix)
+	public ListCellRendererByIndex(Map<String, String> mapOfStringValues, Map<String, String> mapOfDescriptions,
+			String imagesBase, int imageWidth, boolean showOnlyIcon, String tooltipPrefix)
 
 	{
 		super(tooltipPrefix);
@@ -90,9 +85,7 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 
 	}
 
-	public Component getListCellRendererComponent(
-			JList list,
-			Object value, // value to display
+	public Component getListCellRendererComponent(JList list, Object value, // value to display
 			int index, // cell index
 			boolean isSelected, // is the cell selected
 			boolean cellHasFocus) // the list and the cell have the focus
@@ -117,8 +110,7 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 		JComponent jc = (JComponent) c;
 
 		if (jc instanceof JLabel) {
-			((JLabel) jc).setToolTipText(Globals.fillStringToLength(tooltipPrefix
-					+ " " + tooltip + " ", FILL_LENGTH));
+			((JLabel) jc).setToolTipText(Globals.fillStringToLength(tooltipPrefix + " " + tooltip + " ", FILL_LENGTH));
 		}
 
 		return jc;

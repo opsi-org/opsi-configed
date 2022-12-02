@@ -65,9 +65,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		setIconImage(Globals.mainIcon);
 		// additionalPane = pane;
 		// }
-		this.setSize(new Dimension(
-				de.uib.configed.Globals.dialogFrameDefaultWidth,
-				frameHeight));
+		this.setSize(new Dimension(de.uib.configed.Globals.dialogFrameDefaultWidth, frameHeight));
 		this.centerOn(de.uib.configed.Globals.mainFrame);
 		this.setBackground(Globals.backLightBlue);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -110,7 +108,6 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		// o_prod);
 		// } catch (Exception e)
 		// {
-		// e.printStackTrace();
 		// }
 
 		logging.info(this, "getRepositoriesFromConfigs opsiRepo " + opsiRepo);

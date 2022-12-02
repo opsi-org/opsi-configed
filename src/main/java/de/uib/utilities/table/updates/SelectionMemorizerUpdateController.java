@@ -21,12 +21,8 @@ public abstract class SelectionMemorizerUpdateController implements de.uib.utili
 	GenTableModel tablemodel;
 	StrList2BooleanFunction updater;
 
-	public SelectionMemorizerUpdateController(
-			PanelGenEditTable keysPanel,
-			int keyCol,
-			PanelGenEditTable panel,
-			GenTableModel tablemodel,
-			StrList2BooleanFunction updater) {
+	public SelectionMemorizerUpdateController(PanelGenEditTable keysPanel, int keyCol, PanelGenEditTable panel,
+			GenTableModel tablemodel, StrList2BooleanFunction updater) {
 		this.keysPanel = keysPanel;
 		this.keyCol = keyCol;
 		this.panel = panel;
@@ -37,7 +33,7 @@ public abstract class SelectionMemorizerUpdateController implements de.uib.utili
 	public boolean saveChanges() {
 		boolean success = true;
 
-		// System.out.println (" -- update controller called ");
+		// logging.debug (" -- update controller called ");
 
 		WaitCursor waitCursor = new WaitCursor();// Globals.masterFrame, this.getClass().getName() + ".saveChanges" );
 													// //licencesFrame, licencesFrame.getCursor() );
@@ -60,7 +56,7 @@ public abstract class SelectionMemorizerUpdateController implements de.uib.utili
 
 		String keyValue = keysPanel.getValueAt(keysPanel.getSelectedRow(), keyCol).toString();
 
-		// System.out.println(" --- set " + keyValue + ", " + panel.getSelectedKeys());
+		// logging.debug(" --- set " + keyValue + ", " + panel.getSelectedKeys());
 
 		success = updater.sendUpdate(keyValue, panel.getSelectedKeys());
 

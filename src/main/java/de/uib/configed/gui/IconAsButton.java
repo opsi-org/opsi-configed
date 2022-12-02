@@ -25,13 +25,12 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import de.uib.configed.Globals;
 
 /**
- *
  * a button-like panel
- *
  */
 public class IconAsButton extends JPanel implements MouseListener {
 
@@ -56,7 +55,6 @@ public class IconAsButton extends JPanel implements MouseListener {
 	public String description;
 
 	/**
-	 * 
 	 * @param desc           : a description used for tooltips and event action
 	 *                       performed
 	 * @param inactive       : the url for the image displayed if inactive
@@ -64,8 +62,8 @@ public class IconAsButton extends JPanel implements MouseListener {
 	 *                       hovering over the buttion
 	 * @param active         : the url for the image displayed if active
 	 * @param disabled       : the url for the disabled image
-	 * @param attentionImage : the url for the image displayed if active and shall
-	 *                       get special attention
+	 * @param attentionImage : the url for the image displayed if active and
+	 *                       shall get special attention
 	 */
 	public IconAsButton(String desc, String inactive, String over, String active, String attentionImage,
 			String disabled) {
@@ -74,13 +72,13 @@ public class IconAsButton extends JPanel implements MouseListener {
 		setOpaque(false);
 
 		setDisplay(desc, inactive, over, active, attentionImage, disabled);
-		label = new JLabel(iconInactive, JLabel.CENTER);
+		label = new JLabel(iconInactive, SwingConstants.CENTER);
 		label.setToolTipText(desc);
 
 		activated = false;
 		enabled = true;
 		mouseOver = false;
-		actionListeners = new ArrayList();
+		actionListeners = new ArrayList<>();
 
 		setLayout(new BorderLayout());
 		label.addMouseListener((MouseListener) this);
@@ -162,6 +160,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 		this.tooltipInactive = tipInactive;
 	}
 
+	@Override
 	public void setEnabled(boolean b) {
 
 		enabled = b;
@@ -172,6 +171,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 
 	}
 
+	@Override
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -226,7 +226,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 		return activated;
 	}
 
-	public ArrayList getActionListeners() {
+	public ArrayList<ActionListener> getActionListeners() {
 		return actionListeners;
 	}
 
@@ -254,8 +254,6 @@ public class IconAsButton extends JPanel implements MouseListener {
 	 *****************************/
 
 	public void mouseClicked(java.awt.event.MouseEvent e) {
-		int button = e.getButton();
-		Object src = e.getSource();
 
 		if (isEnabled()) {
 			ActionEvent action = new ActionEvent(this, 1, description);

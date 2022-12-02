@@ -33,11 +33,9 @@ import de.uib.utilities.swing.timeedit.FEditDate;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 /**
- * 
  * @author R. Röder
  */
-public class PanelEnterLicence extends MultiTablePanel
-		implements ActionListener {
+public class PanelEnterLicence extends MultiTablePanel implements ActionListener {
 
 	public PanelGenEditTable panelKeys;
 	public PanelGenEditTable panelLicencepools;
@@ -119,27 +117,25 @@ public class PanelEnterLicence extends MultiTablePanel
 	}
 
 	protected void defineListeners() {
-		panelLicencecontracts.getListSelectionModel().addListSelectionListener(
-				new ListSelectionListener() {
-					public void valueChanged(ListSelectionEvent e) {
-						// Ignore extra messages.
-						if (e.getValueIsAdjusting())
-							return;
+		panelLicencecontracts.getListSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				// Ignore extra messages.
+				if (e.getValueIsAdjusting())
+					return;
 
-						ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 
-						if (lsm.isSelectionEmpty()) {
-							// logging.debug(this, "no rows selected");
-						} else {
-							int selectedRow = lsm.getMinSelectionIndex();
-							String keyValue = panelLicencecontracts.getValueAt(
-									selectedRow, 0).toString();
+				if (lsm.isSelectionEmpty()) {
+					// logging.debug(this, "no rows selected");
+				} else {
+					int selectedRow = lsm.getMinSelectionIndex();
+					String keyValue = panelLicencecontracts.getValueAt(selectedRow, 0).toString();
 
-							if (jTextField_licenceContract.isEnabled())
-								jTextField_licenceContract.setText(keyValue);
-						}
-					}
-				});
+					if (jTextField_licenceContract.isEnabled())
+						jTextField_licenceContract.setText(keyValue);
+				}
+			}
+		});
 
 		licencePoolSelectionListener = new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
@@ -153,8 +149,8 @@ public class PanelEnterLicence extends MultiTablePanel
 				if (i > -1)
 					selectedLicencePool = panelLicencepools.getValueAt(i, 0).toString();
 
-				panelLicencepools.setTitle(
-						configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool")
+				panelLicencepools
+						.setTitle(configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool")
 								+ ": " + selectedLicencePool);
 			}
 		};
@@ -177,16 +173,14 @@ public class PanelEnterLicence extends MultiTablePanel
 		if (panelLicencepools.getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(enterLicenceController.mainController.licencesFrame,
 					configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectLicencepool"),
-					configed.getResourceValue("ConfigedMain.Licences.hint.title"),
-					JOptionPane.OK_OPTION);
+					configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return false;
 		}
 
 		if (panelLicencecontracts.getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(enterLicenceController.mainController.licencesFrame,
 					configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectLicencecontract"),
-					configed.getResourceValue("ConfigedMain.Licences.hint.title"),
-					JOptionPane.OK_OPTION);
+					configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return false;
 		}
 
@@ -275,14 +269,13 @@ public class PanelEnterLicence extends MultiTablePanel
 
 	private void initComponents() {
 		panelKeys = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"),
-				0, true, 0, false,
+				configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"), 0, true, 0, false,
 				new int[] {
 						// PanelGenEditTable.POPUP_DELETE_ROW,
 						// PanelGenEditTable.POPUP_SAVE,
 						// PanelGenEditTable.POPUP_CANCEL,
-						PanelGenEditTable.POPUP_RELOAD
-				}, false // searchpane
+						PanelGenEditTable.POPUP_RELOAD },
+				false // searchpane
 		);
 
 		panelKeys.setMasterFrame(de.uib.configed.Globals.frame1);
@@ -293,13 +286,8 @@ public class PanelEnterLicence extends MultiTablePanel
 		// panelKeys.setFiltering( true );
 
 		panelLicencepools = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool"),
-				maxHSize,
-				false,
-				0,
-				false,
-				new int[] { PanelGenEditTable.POPUP_RELOAD },
-				true // with tablesearchpane
+				configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool"), maxHSize, false, 0,
+				false, new int[] { PanelGenEditTable.POPUP_RELOAD }, true // with tablesearchpane
 		);
 
 		panelLicencepools.setMasterFrame(de.uib.configed.Globals.frame1);
@@ -310,14 +298,9 @@ public class PanelEnterLicence extends MultiTablePanel
 		// panelLicencepools.setFiltering( true );
 
 		panelLicencecontracts = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"),
-				0, true, 1, false,
-				new int[] {
-						PanelGenEditTable.POPUP_DELETE_ROW,
-						PanelGenEditTable.POPUP_SAVE,
-						PanelGenEditTable.POPUP_CANCEL,
-						PanelGenEditTable.POPUP_RELOAD
-				},
+				configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), 0, true, 1, false,
+				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
+						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true // with tablesearchpane
 		);
 		panelLicencecontracts.setMasterFrame(de.uib.configed.Globals.frame1);
@@ -366,7 +349,7 @@ public class PanelEnterLicence extends MultiTablePanel
 		jTextField_endOfLicence.setEditable(false); // edit only via fEditDate
 		jTextField_endOfLicence.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				// System.out.println( " mouse clicked on textfield 5 ");
+				// logging.debug( " mouse clicked on textfield 5 ");
 				if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
 					if (fEditDate == null)
 						fEditDate = new FEditDate(jTextField_endOfLicence.getText(), false);
@@ -479,42 +462,37 @@ public class PanelEnterLicence extends MultiTablePanel
 
 		javax.swing.GroupLayout panelLicenceModelLayout = new javax.swing.GroupLayout(panelLicenceModel);
 		panelLicenceModel.setLayout(panelLicenceModelLayout);
-		panelLicenceModelLayout.setHorizontalGroup(
-				panelLicenceModelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(panelLicenceModelLayout.createSequentialGroup()
-								.addContainerGap()
-								.addGroup(panelLicenceModelLayout
-										.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-										.addComponent(jLabelSLid4, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(jLabelSLid3, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(jLabelSLid2, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(jLabelSLid1, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-								// .addGap(5,5,5)
-								.addGroup(panelLicenceModelLayout
-										.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, true)
+		panelLicenceModelLayout.setHorizontalGroup(panelLicenceModelLayout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(panelLicenceModelLayout.createSequentialGroup().addContainerGap()
+						.addGroup(panelLicenceModelLayout
+								.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+								.addComponent(jLabelSLid4, javax.swing.GroupLayout.DEFAULT_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(jLabelSLid3, javax.swing.GroupLayout.DEFAULT_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(jLabelSLid2, javax.swing.GroupLayout.DEFAULT_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(jLabelSLid1, javax.swing.GroupLayout.DEFAULT_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+						// .addGap(5,5,5)
+						.addGroup(panelLicenceModelLayout
+								.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, true)
 
-										.addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelLicenceModelLayout
-												.createSequentialGroup()
-												.addGroup(panelLicenceModelLayout
-														.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
-																true)
-														.addComponent(comboClient, minFieldWidth, 208, Short.MAX_VALUE)
-														.addGroup(panelLicenceModelLayout.createSequentialGroup()
-																.addComponent(jTextField_maxInstallations,
-																		minFieldWidth, 112,
-																		javax.swing.GroupLayout.PREFERRED_SIZE)
-																.addGap(5, 5, 5)
-																.addComponent(jLabelSLid3info, minFieldWidth, 112,
-																		javax.swing.GroupLayout.PREFERRED_SIZE))
-														.addComponent(jTextField_licenceID, minFieldWidth, 208,
-																Short.MAX_VALUE)
-														.addComponent(jTextField_licenceType, minFieldWidth, 239,
-																javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addGroup(javax.swing.GroupLayout.Alignment.LEADING,
+										panelLicenceModelLayout.createSequentialGroup().addGroup(panelLicenceModelLayout
+												.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, true)
+												.addComponent(comboClient, minFieldWidth, 208, Short.MAX_VALUE)
+												.addGroup(panelLicenceModelLayout.createSequentialGroup()
+														.addComponent(jTextField_maxInstallations, minFieldWidth, 112,
+																javax.swing.GroupLayout.PREFERRED_SIZE)
+														.addGap(5, 5, 5).addComponent(jLabelSLid3info, minFieldWidth,
+																112, javax.swing.GroupLayout.PREFERRED_SIZE))
+												.addComponent(jTextField_licenceID, minFieldWidth, 208, Short.MAX_VALUE)
+												.addComponent(
+														jTextField_licenceType, minFieldWidth, 239,
+														javax.swing.GroupLayout.PREFERRED_SIZE))
 												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34,
 														Short.MAX_VALUE)
 												.addGroup(panelLicenceModelLayout
@@ -538,13 +516,12 @@ public class PanelEnterLicence extends MultiTablePanel
 																// .addGap(5,5,5)
 																.addComponent(jTextField_endOfLicence, minFieldWidth,
 																		200, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-								// .addContainerGap()
-								.addContainerGap(10, Short.MAX_VALUE)));
-		panelLicenceModelLayout.setVerticalGroup(
-				panelLicenceModelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+						// .addContainerGap()
+						.addContainerGap(10, Short.MAX_VALUE)));
+		panelLicenceModelLayout
+				.setVerticalGroup(panelLicenceModelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 						.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-								panelLicenceModelLayout.createSequentialGroup()
-										.addGap(0, 1, 3)
+								panelLicenceModelLayout.createSequentialGroup().addGap(0, 1, 3)
 										.addGroup(panelLicenceModelLayout
 												.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 												.addComponent(jLabelSLid1, minFieldHeight, Globals.lineHeight,
@@ -592,27 +569,23 @@ public class PanelEnterLicence extends MultiTablePanel
 
 		javax.swing.GroupLayout panelEnterKeyLayout = new javax.swing.GroupLayout(panelEnterKey);
 		panelEnterKey.setLayout(panelEnterKeyLayout);
-		panelEnterKeyLayout.setHorizontalGroup(
-				panelEnterKeyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(panelEnterKeyLayout.createSequentialGroup()
-								.addContainerGap()
-								.addComponent(jLabelLKey, javax.swing.GroupLayout.PREFERRED_SIZE, 133,
+		panelEnterKeyLayout.setHorizontalGroup(panelEnterKeyLayout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(panelEnterKeyLayout.createSequentialGroup().addContainerGap()
+						.addComponent(jLabelLKey, javax.swing.GroupLayout.PREFERRED_SIZE, 133,
+								javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addGap(5, 5, 5)
+						.addComponent(jTextFieldLKey, minFieldWidth, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(10, Short.MAX_VALUE)));
+		panelEnterKeyLayout.setVerticalGroup(panelEnterKeyLayout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(panelEnterKeyLayout.createSequentialGroup().addGap(0, 1, 5)
+						.addGroup(panelEnterKeyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(jLabelLKey, minFieldHeight, Globals.lineHeight,
 										javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addGap(5, 5, 5)
-								.addComponent(jTextFieldLKey, minFieldWidth, 326,
-										javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(10, Short.MAX_VALUE)));
-		panelEnterKeyLayout.setVerticalGroup(
-				panelEnterKeyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(panelEnterKeyLayout.createSequentialGroup()
-								.addGap(0, 1, 5)
-								.addGroup(panelEnterKeyLayout
-										.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(jLabelLKey, minFieldHeight, Globals.lineHeight,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addComponent(jTextFieldLKey, minFieldHeight, Globals.lineHeight,
-												javax.swing.GroupLayout.PREFERRED_SIZE))
-								.addGap(0, 1, 5)));
+								.addComponent(jTextFieldLKey, minFieldHeight, Globals.lineHeight,
+										javax.swing.GroupLayout.PREFERRED_SIZE))
+						.addGap(0, 1, 5)));
 
 		panelTask = new JPanel();
 		panelTask.setBackground(Globals.backgroundWhite);
@@ -620,97 +593,69 @@ public class PanelEnterLicence extends MultiTablePanel
 		javax.swing.GroupLayout layoutTask = new javax.swing.GroupLayout(panelTask);
 		panelTask.setLayout(layoutTask);
 
-		layoutTask.setHorizontalGroup(
-				layoutTask.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+		layoutTask.setHorizontalGroup(layoutTask.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layoutTask.createSequentialGroup().addGap(5, 5, 5).addGroup(layoutTask
+						.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 						.addGroup(layoutTask.createSequentialGroup()
-								.addGap(5, 5, 5)
 								.addGroup(layoutTask.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 										.addGroup(layoutTask.createSequentialGroup()
+												// .addGap(10, 10, 10)
 												.addGroup(layoutTask
 														.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-														.addGroup(layoutTask.createSequentialGroup()
-																// .addGap(10, 10, 10)
-																.addGroup(layoutTask.createParallelGroup(
-																		javax.swing.GroupLayout.Alignment.LEADING)
-																		.addComponent(panelLicencecontracts, 50, 300,
-																				maxHSize))))
-										// .addGap(10, 10, 10)
-										)
-										.addGroup(layoutTask.createSequentialGroup()
-												.addComponent(jButtonSend, javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addContainerGap(1587, Short.MAX_VALUE))
-										.addGroup(layoutTask.createSequentialGroup()
-												.addComponent(jButtonCreateStandard,
-														javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addGap(18, 18, 18)
-												.addComponent(jButtonCreateVolume,
-														javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addGap(18, 18, 18)
-												.addComponent(jButtonCreateOEM, javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addGap(18, 18, 18)
-												.addComponent(jButtonCreateConcurrent,
-														javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addContainerGap(1226, Short.MAX_VALUE))
-										.addGroup(layoutTask.createSequentialGroup()
-												.addGap(5, 5, 5)
-												.addComponent(jLabelTask)
-												.addContainerGap(1515, Short.MAX_VALUE))
-										.addGroup(layoutTask.createSequentialGroup()
-												.addGap(10, 10, 10)
-												.addComponent(jLabelConfigure)
-												.addContainerGap(1515, Short.MAX_VALUE))
-										.addGroup(layoutTask.createSequentialGroup()
-												.addGroup(layoutTask
-														.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-																true)
-														.addComponent(panelEnterKey,
-																javax.swing.GroupLayout.Alignment.LEADING,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																javax.swing.GroupLayout.DEFAULT_SIZE, maxHSize)
-														.addComponent(panelLicenceModel,
-																javax.swing.GroupLayout.Alignment.LEADING,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																javax.swing.GroupLayout.DEFAULT_SIZE, maxHSize))
-												.addGap(10, 10, 10)))));
-		layoutTask.setVerticalGroup(
-				layoutTask.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+														.addComponent(panelLicencecontracts, 50, 300, maxHSize))))
+						// .addGap(10, 10, 10)
+						)
 						.addGroup(layoutTask.createSequentialGroup()
-								.addGap(5, 5, 5)
-								.addComponent(jLabelTask)
-								.addGap(5, 5, 5)
-								.addComponent(panelLicencecontracts, minPanelTableHeight, minPanelTableHeight,
-										Short.MAX_VALUE)
-								.addGap(5, 5, 5)
-								.addComponent(jLabelConfigure)
-								.addGap(2, 2, 2)
-								.addGroup(layoutTask.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(jButtonCreateStandard, javax.swing.GroupLayout.PREFERRED_SIZE, 20,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addComponent(jButtonCreateOEM, javax.swing.GroupLayout.PREFERRED_SIZE, 20,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addComponent(jButtonCreateVolume, javax.swing.GroupLayout.PREFERRED_SIZE, 20,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addComponent(jButtonCreateConcurrent, javax.swing.GroupLayout.PREFERRED_SIZE,
-												20, javax.swing.GroupLayout.PREFERRED_SIZE))
-								.addGap(5, 5, 6)
-								.addComponent(panelLicenceModel, minVSize, javax.swing.GroupLayout.PREFERRED_SIZE,
+								.addComponent(jButtonSend, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addContainerGap(1587, Short.MAX_VALUE))
+						.addGroup(layoutTask.createSequentialGroup()
+								.addComponent(jButtonCreateStandard, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addGap(18, 18, 18)
+								.addComponent(jButtonCreateVolume, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addGap(18, 18, 18)
+								.addComponent(jButtonCreateOEM, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addGap(18, 18, 18)
+								.addComponent(jButtonCreateConcurrent, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addContainerGap(1226, Short.MAX_VALUE))
+						.addGroup(layoutTask.createSequentialGroup().addGap(5, 5, 5).addComponent(jLabelTask)
+								.addContainerGap(1515, Short.MAX_VALUE))
+						.addGroup(layoutTask.createSequentialGroup().addGap(10, 10, 10).addComponent(jLabelConfigure)
+								.addContainerGap(1515, Short.MAX_VALUE))
+						.addGroup(layoutTask.createSequentialGroup()
+								.addGroup(layoutTask
+										.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, true)
+										.addComponent(panelEnterKey, javax.swing.GroupLayout.Alignment.LEADING,
+												javax.swing.GroupLayout.DEFAULT_SIZE,
+												javax.swing.GroupLayout.DEFAULT_SIZE, maxHSize)
+										.addComponent(panelLicenceModel, javax.swing.GroupLayout.Alignment.LEADING,
+												javax.swing.GroupLayout.DEFAULT_SIZE,
+												javax.swing.GroupLayout.DEFAULT_SIZE, maxHSize))
+								.addGap(10, 10, 10)))));
+		layoutTask.setVerticalGroup(layoutTask.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layoutTask.createSequentialGroup().addGap(5, 5, 5).addComponent(jLabelTask).addGap(5, 5, 5)
+						.addComponent(panelLicencecontracts, minPanelTableHeight, minPanelTableHeight, Short.MAX_VALUE)
+						.addGap(5, 5, 5).addComponent(jLabelConfigure).addGap(2, 2, 2)
+						.addGroup(layoutTask.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(jButtonCreateStandard, javax.swing.GroupLayout.PREFERRED_SIZE, 20,
 										javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addGap(2, 2, 2)
-								.addComponent(panelEnterKey, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addGap(2, 2, 2)
-								.addComponent(jButtonSend, 20, 20, 20)
-								.addGap(5, 5, 5)));
+								.addComponent(jButtonCreateOEM, javax.swing.GroupLayout.PREFERRED_SIZE, 20,
+										javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(jButtonCreateVolume, javax.swing.GroupLayout.PREFERRED_SIZE, 20,
+										javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(jButtonCreateConcurrent, javax.swing.GroupLayout.PREFERRED_SIZE, 20,
+										javax.swing.GroupLayout.PREFERRED_SIZE))
+						.addGap(5, 5, 6)
+						.addComponent(panelLicenceModel, minVSize, javax.swing.GroupLayout.PREFERRED_SIZE,
+								javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addGap(2, 2, 2)
+						.addComponent(panelEnterKey, javax.swing.GroupLayout.PREFERRED_SIZE,
+								javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addGap(2, 2, 2).addComponent(jButtonSend, 20, 20, 20).addGap(5, 5, 5)));
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setResizeWeight(0.3f);
@@ -725,58 +670,48 @@ public class PanelEnterLicence extends MultiTablePanel
 
 		javax.swing.GroupLayout layoutTopPane = new javax.swing.GroupLayout((JPanel) topPane);
 		topPane.setLayout(layoutTopPane);
-		layoutTopPane.setHorizontalGroup(
-				layoutTopPane.createSequentialGroup()
-						.addGap(10, 10, 10)
-						.addComponent(panelLicencepools, javax.swing.GroupLayout.DEFAULT_SIZE,
-								javax.swing.GroupLayout.DEFAULT_SIZE, maxHSize)
-						.addGap(10, 10, 10));
-		layoutTopPane.setVerticalGroup(
-				layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(layoutTopPane.createSequentialGroup()
-								.addGap(5, 5, 5)
-								.addComponent(panelLicencepools, minPanelTableHeight, minPanelTableHeight,
-										Short.MAX_VALUE)
-								.addGap(5, 5, 5)));
+		layoutTopPane.setHorizontalGroup(layoutTopPane
+				.createSequentialGroup().addGap(10, 10, 10).addComponent(panelLicencepools,
+						javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, maxHSize)
+				.addGap(10, 10, 10));
+		layoutTopPane.setVerticalGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layoutTopPane.createSequentialGroup().addGap(5, 5, 5)
+						.addComponent(panelLicencepools, minPanelTableHeight, minPanelTableHeight, Short.MAX_VALUE)
+						.addGap(5, 5, 5)));
 
 		javax.swing.GroupLayout layoutBottomPane = new javax.swing.GroupLayout((JPanel) bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
-		layoutBottomPane.setHorizontalGroup(
-				layoutBottomPane.createSequentialGroup()
-						.addGap(10, 10, 10)
-						.addGroup(layoutBottomPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addGroup(layoutBottomPane.createSequentialGroup()
-										.addGap(10, 10, 10)
-										.addComponent(panelTask, javax.swing.GroupLayout.DEFAULT_SIZE, maxHSize,
-												maxHSize)
-										.addGap(10, 10, 10))
-								.addGroup(layoutBottomPane.createSequentialGroup()
-										.addGap(10, 10, 10)
-										.addComponent(panelKeys, javax.swing.GroupLayout.DEFAULT_SIZE, maxHSize,
-												maxHSize)
-										.addGap(10, 10, 10)))
-						.addGap(10, 10, 10));
-		layoutBottomPane.setVerticalGroup(
-				layoutBottomPane.createSequentialGroup()
-						.addGap(5, 5, 5)
-						.addComponent(panelTask, javax.swing.GroupLayout.PREFERRED_SIZE,
-								javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(10, 10, 10)
-						.addComponent(panelKeys, minPanelTableHeight - 2 * Globals.lineHeight,
-								minPanelTableHeight - 2 * Globals.lineHeight, Short.MAX_VALUE)
-						.addGap(5, 5, 5));
+		layoutBottomPane
+				.setHorizontalGroup(
+						layoutBottomPane.createSequentialGroup().addGap(10, 10, 10)
+								.addGroup(
+										layoutBottomPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+												.addGroup(layoutBottomPane.createSequentialGroup().addGap(10, 10, 10)
+														.addComponent(panelTask, javax.swing.GroupLayout.DEFAULT_SIZE,
+																maxHSize, maxHSize)
+														.addGap(10, 10, 10))
+												.addGroup(layoutBottomPane.createSequentialGroup().addGap(10, 10, 10)
+														.addComponent(panelKeys, javax.swing.GroupLayout.DEFAULT_SIZE,
+																maxHSize, maxHSize)
+														.addGap(10, 10, 10)))
+								.addGap(10, 10, 10));
+		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addGap(5, 5, 5)
+				.addComponent(panelTask, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE)
+				.addGap(10, 10, 10).addComponent(panelKeys, minPanelTableHeight - 2 * Globals.lineHeight,
+						minPanelTableHeight - 2 * Globals.lineHeight, Short.MAX_VALUE)
+				.addGap(5, 5, 5));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout((JPanel) this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin)
-				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-				.addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin));
+		layout.setHorizontalGroup(
+				layout.createSequentialGroup().addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin)
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+								.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+						.addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin));
 
-		layout.setVerticalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		/*
 		 * javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -831,8 +766,7 @@ public class PanelEnterLicence extends MultiTablePanel
 		m.get(LicenceEntry.licenceContractIdKEY);
 		m.put(LicenceEntry.typeKEY, jTextField_licenceType.getText());
 		m.put(LicenceEntry.maxInstallationsKEY,
-				LicenceEntry.produceNormalizedCount(
-						jTextField_maxInstallations.getText()));
+				LicenceEntry.produceNormalizedCount(jTextField_maxInstallations.getText()));
 		m.put(LicenceEntry.boundToHostKEY, comboClient.getSelectedItem().toString());
 		m.put(LicenceEntry.expirationDateKEY, jTextField_endOfLicence.getText());
 
@@ -852,8 +786,7 @@ public class PanelEnterLicence extends MultiTablePanel
 		if (panelLicencepools.getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(enterLicenceController.mainController.licencesFrame,
 					configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectLicencepool"),
-					configed.getResourceValue("ConfigedMain.Licences.hint.title"),
-					JOptionPane.OK_OPTION);
+					configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return false;
 		}
 

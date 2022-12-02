@@ -17,7 +17,7 @@ public class SimpleTreeModel extends DefaultTreeModel
 
 {
 	java.util.LinkedHashMap<String, Object> virtualLines;
-	final static String noValue = "NONE";
+	static final String noValue = "NONE";
 
 	public final SimpleIconNode ROOT;
 
@@ -172,8 +172,8 @@ public class SimpleTreeModel extends DefaultTreeModel
 	}
 
 	public static void main(String[] args) {
-		logging.wantedDirectory = args[0];
-		logging.AKT_DEBUG_LEVEL = logging.LEVEL_DEBUG;
+		logging.logDirectoryName = args[0];
+		logging.LOG_LEVEL_CONSOLE = logging.LEVEL_DEBUG;
 
 		de.uib.configed.configed.configureUI();
 
@@ -183,18 +183,14 @@ public class SimpleTreeModel extends DefaultTreeModel
 		SimpleTreeModel model = new SimpleTreeModel(example);
 		model.produce();
 
-		example = new HashSet<String>(
-				(Arrays.asList(new String[] { "",
-						"configed.saved_search",
-						"opsiclientd" })));
+		example = new HashSet<String>((Arrays.asList(new String[] { "", "configed.saved_search", "opsiclientd" })));
 		model = new SimpleTreeModel(example);
 		model.produce();
 
 		model = new SimpleTreeModel(example);
 		model.produce();
 
-		example = new HashSet<String>(
-				(Arrays.asList(new String[] { "a1.b1.c1", "a1.b2.d1", "a2.b1" })));
+		example = new HashSet<String>((Arrays.asList(new String[] { "a1.b1.c1", "a1.b2.d1", "a2.b1" })));
 
 		model = new SimpleTreeModel(example);
 		model.produce();

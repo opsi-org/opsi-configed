@@ -16,8 +16,7 @@ import de.uib.utilities.logging.logging;
 public class Autocomplete implements DocumentListener {
 
 	private static enum Mode {
-		INSERT,
-		COMPLETION
+		INSERT, COMPLETION
 	};
 
 	private JTextField textField;
@@ -57,7 +56,7 @@ public class Autocomplete implements DocumentListener {
 		try {
 			content = textField.getText(0, pos + 1);
 		} catch (BadLocationException e) {
-			logging.logTrace(e);
+			logging.error("Failed to get text", e);
 		}
 
 		// Find where the word starts

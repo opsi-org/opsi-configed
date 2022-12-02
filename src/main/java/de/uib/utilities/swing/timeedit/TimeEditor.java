@@ -10,6 +10,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 
 import de.uib.utilities.Globals;
+import de.uib.utilities.logging.logging;
 
 public class TimeEditor extends JPanel {
 	JLabel labelTime;
@@ -86,7 +87,7 @@ public class TimeEditor extends JPanel {
 		try {
 			result = Integer.parseInt((String) spinnerHour.getValue());
 		} catch (Exception ex) {
-			System.out.println("Time Editor exception " + spinnerHour.getValue() + ", " + ex);
+			logging.debug("Time Editor exception " + spinnerHour.getValue() + ", " + ex);
 		}
 
 		return result;
@@ -98,7 +99,7 @@ public class TimeEditor extends JPanel {
 		try {
 			result = Integer.parseInt((String) spinnerMin.getValue());
 		} catch (Exception ex) {
-			System.out.println("Time Editor exception  " + spinnerMin.getValue() + ", " + ex);
+			logging.debug("Time Editor exception  " + spinnerMin.getValue() + ", " + ex);
 		}
 
 		return result;

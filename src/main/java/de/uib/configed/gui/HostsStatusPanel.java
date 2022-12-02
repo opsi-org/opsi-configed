@@ -23,8 +23,7 @@ import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.Containership;
 
-public class HostsStatusPanel extends JPanel
-		implements HostsStatusInfo {
+public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 	public static final int maxClientnamesInField = 10;
 
 	JLabel labelAllClientsCount;
@@ -81,8 +80,8 @@ public class HostsStatusPanel extends JPanel
 			String involvedDepots) {
 		logging.info(this,
 				"updateValues clientsCount, selectedClientsCount " + clientsCount + ", " + selectedClientsCount);
-		logging.info(this, "updateValues clientsCount, selectedClientsCount "
-				+ clientsCount + ", " + selectedClientsCount);
+		logging.info(this,
+				"updateValues clientsCount, selectedClientsCount " + clientsCount + ", " + selectedClientsCount);
 		// resetReportedGroup();
 
 		// if (clientsCount != null)
@@ -106,9 +105,9 @@ public class HostsStatusPanel extends JPanel
 			 * {
 			 * fieldSelectedClientsNames.setSelectionColor(Color.yellow);
 			 * fieldSelectedClientsNames.setSelectionStart(oldSelectedClientNames.length());
-			 * System.out.println(" sel start " + oldSelectedClientNames.length());
+			 * logging.debug(" sel start " + oldSelectedClientNames.length());
 			 * fieldSelectedClientsNames.setSelectionEnd(selectedClientNames.length());
-			 * System.out.println(" sel end " + selectedClientNames.length());
+			 * logging.debug(" sel end " + selectedClientNames.length());
 			 * }
 			 */
 
@@ -116,7 +115,7 @@ public class HostsStatusPanel extends JPanel
 			// fieldSelectedClientsNames.setCaretPosition(0);
 			fieldSelectedClientsNames.setToolTipText(
 					"<html><body><p>" + selectedClientNames.replace(";\n", "<br\\ >") + "</p></body></html>");
-			// System.out.println("caret " + fieldSelectedClientsNames.getCaret());
+			// logging.debug("caret " + fieldSelectedClientsNames.getCaret());
 
 		}
 
@@ -168,8 +167,7 @@ public class HostsStatusPanel extends JPanel
 		fieldGroupActivated.setEditable(false);
 
 		labelAllClientsCount = new JLabel("");
-		labelAllClientsCount.setPreferredSize(
-				Globals.labelDimension);
+		labelAllClientsCount.setPreferredSize(Globals.labelDimension);
 
 		JLabel labelSelectedClientsCount = new JLabel(configed.getResourceValue("MainFrame.labelSelected"));
 		// labelSelectedClientsCount.setPreferredSize(Globals.shortlabelDimension);
@@ -207,64 +205,61 @@ public class HostsStatusPanel extends JPanel
 
 		initializeValues();
 
-		layoutStatusPane.setHorizontalGroup(
-				layoutStatusPane.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(labelAllClientsCount, 0, Globals.counterfieldWidth, Globals.counterfieldWidth)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize)
-						.addComponent(labelActivated, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize)
-						.addComponent(labelGroupActivated, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize)
-						.addComponent(fieldGroupActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize)
-						.addComponent(labelSelectedClientsNames, 0, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
-						.addComponent(fieldSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(labelSelectedClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize)
-						.addComponent(fieldActivatedClientsCount, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(labelInvolvedDepots, 2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(fieldInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addComponent(labelInvolvedDepots2, 2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize));
+		layoutStatusPane.setHorizontalGroup(layoutStatusPane.createSequentialGroup()
+				.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+				.addComponent(labelAllClientsCount, 0, Globals.counterfieldWidth, Globals.counterfieldWidth)
+				.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize)
+				.addComponent(labelActivated, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize)
+				.addComponent(labelGroupActivated, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize)
+				.addComponent(fieldGroupActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE)
+				.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize)
+				.addComponent(labelSelectedClientsNames, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+				.addComponent(fieldSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE)
+				.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+				.addComponent(labelSelectedClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize)
+				.addComponent(fieldActivatedClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+				.addComponent(labelInvolvedDepots, 2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(fieldInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE)
+				.addComponent(labelInvolvedDepots2, 2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize));
 
-		layoutStatusPane.setVerticalGroup(
-				layoutStatusPane.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addGroup(layoutStatusPane.createSequentialGroup()
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-								.addGroup(layoutStatusPane.createParallelGroup(GroupLayout.Alignment.BASELINE)
-										.addComponent(labelAllClientsCount, Globals.lineHeight, Globals.lineHeight,
-												Globals.lineHeight)
-										.addComponent(labelActivated, Globals.lineHeight, Globals.lineHeight,
-												Globals.lineHeight)
-										.addComponent(labelGroupActivated, Globals.lineHeight, Globals.lineHeight,
-												Globals.lineHeight)
-										.addComponent(fieldGroupActivated, Globals.lineHeight, Globals.lineHeight,
-												Globals.lineHeight)
-										.addComponent(labelSelectedClientsCount, Globals.lineHeight, Globals.lineHeight,
-												Globals.lineHeight)
-										.addComponent(fieldActivatedClientsCount, Globals.lineHeight,
-												Globals.lineHeight, Globals.lineHeight)
-										.addComponent(labelSelectedClientsNames, Globals.lineHeight, Globals.lineHeight,
-												Globals.lineHeight)
-										.addComponent(fieldSelectedClientsNames, Globals.lineHeight, Globals.lineHeight,
-												Globals.lineHeight)
-										.addComponent(labelInvolvedDepots, Globals.lineHeight, Globals.lineHeight,
-												Globals.lineHeight)
-										.addComponent(labelInvolvedDepots2, Globals.lineHeight, Globals.lineHeight,
-												Globals.lineHeight)
-										.addComponent(fieldInvolvedDepots, Globals.lineHeight, Globals.lineHeight,
-												Globals.lineHeight))
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
+		layoutStatusPane.setVerticalGroup(layoutStatusPane.createParallelGroup(GroupLayout.Alignment.CENTER)
+				.addGroup(layoutStatusPane.createSequentialGroup()
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGroup(layoutStatusPane.createParallelGroup(GroupLayout.Alignment.BASELINE)
+								.addComponent(labelAllClientsCount, Globals.lineHeight, Globals.lineHeight,
+										Globals.lineHeight)
+								.addComponent(labelActivated, Globals.lineHeight, Globals.lineHeight,
+										Globals.lineHeight)
+								.addComponent(labelGroupActivated, Globals.lineHeight, Globals.lineHeight,
+										Globals.lineHeight)
+								.addComponent(fieldGroupActivated, Globals.lineHeight, Globals.lineHeight,
+										Globals.lineHeight)
+								.addComponent(labelSelectedClientsCount, Globals.lineHeight, Globals.lineHeight,
+										Globals.lineHeight)
+								.addComponent(fieldActivatedClientsCount, Globals.lineHeight, Globals.lineHeight,
+										Globals.lineHeight)
+								.addComponent(labelSelectedClientsNames, Globals.lineHeight, Globals.lineHeight,
+										Globals.lineHeight)
+								.addComponent(fieldSelectedClientsNames, Globals.lineHeight, Globals.lineHeight,
+										Globals.lineHeight)
+								.addComponent(labelInvolvedDepots, Globals.lineHeight, Globals.lineHeight,
+										Globals.lineHeight)
+								.addComponent(labelInvolvedDepots2, Globals.lineHeight, Globals.lineHeight,
+										Globals.lineHeight)
+								.addComponent(fieldInvolvedDepots, Globals.lineHeight, Globals.lineHeight,
+										Globals.lineHeight))
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
 
 		/*
 		 * csStatusPane.doForAllContainedCompisOfClass

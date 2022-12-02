@@ -7,22 +7,21 @@ import javax.swing.ListSelectionModel;
 
 import de.uib.utilities.logging.logging;
 
-public class ConfigOption extends RetrievedMap
-		implements de.uib.utilities.table.ListCellOptions
+public class ConfigOption extends RetrievedMap implements de.uib.utilities.table.ListCellOptions
 
 // has a problem with type of defaultValues
 {
 
-	public final static String referenceID = "configId";
+	public static final String referenceID = "configId";
 
 	public enum TYPE {
 		BoolConfig, UnicodeConfig, UndefinedConfig
 	};
 	// UndefinedConfig should not occur
 
-	public final static String BOOL_TYPE = TYPE.BoolConfig.toString();
-	public final static String UNICODE_TYPE = TYPE.UnicodeConfig.toString();
-	public final static String UNDEFINED_TYPE = TYPE.UndefinedConfig.toString();
+	public static final String BOOL_TYPE = TYPE.BoolConfig.toString();
+	public static final String UNICODE_TYPE = TYPE.UnicodeConfig.toString();
+	public static final String UNDEFINED_TYPE = TYPE.UndefinedConfig.toString();
 
 	protected TYPE type;
 
@@ -44,8 +43,7 @@ public class ConfigOption extends RetrievedMap
 		else {
 			if (retrieved.get("defaultValues") instanceof org.json.JSONArray) {
 
-				logging.info(this, "gotdefaultvalues unexpectedly "
-						+ retrieved.get("defaultValues").getClass() + " "
+				logging.info(this, "gotdefaultvalues unexpectedly " + retrieved.get("defaultValues").getClass() + " "
 						+ retrieved.get("defaultValues"));
 				put("defaultValues", ((org.json.JSONArray) retrieved.get("defaultValues")).toList());
 			} else

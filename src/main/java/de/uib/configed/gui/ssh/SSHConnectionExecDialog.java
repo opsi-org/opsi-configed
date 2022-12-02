@@ -101,8 +101,8 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 			btn_killProcess.setToolTipText(configed.getResourceValue("SSHConnection.buttonKillProcess"));
 
 			btn_clear = new de.uib.configed.gui.IconButton(
-					de.uib.configed.configed.getResourceValue("SSHConnection.btn_clear"),
-					"images/user-trash.png", "images/user-trash.png", "images/user-trash.png", true);
+					de.uib.configed.configed.getResourceValue("SSHConnection.btn_clear"), "images/user-trash.png",
+					"images/user-trash.png", "images/user-trash.png", true);
 			btn_clear.setPreferredSize(new Dimension(de.uib.configed.Globals.graphicButtonWidth + 15,
 					de.uib.configed.Globals.buttonHeight + 3));
 			btn_clear.setToolTipText(configed.getResourceValue("SSHConnection.btn_clear"));
@@ -115,9 +115,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 					de.uib.configed.Globals.gapSize, true);
 			createLayout(mainPanelLayout, inputPanel, 0, 0, false);
 		} catch (Exception e) {
-			logging.warning(this, "initGui, exception occurred " + e);
-			logging.logTrace(e);
-
+			logging.warning(this, "initGui, exception occurred ", e);
 		}
 	}
 
@@ -147,22 +145,15 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 
 		verticalGroup.addGap(vgap).addComponent(comp);
 		if (addInputField)
-			verticalGroup.addGroup(layout.createParallelGroup()
-					.addGap(vgap, vgap, vgap)
-					.addComponent(btn_clear, pref, pref, pref)
-					.addComponent(btn_killProcess, pref, pref, pref)
-					.addComponent(btn_close, pref, pref, pref)
-					.addGap(vgap));
+			verticalGroup.addGroup(layout.createParallelGroup().addGap(vgap, vgap, vgap)
+					.addComponent(btn_clear, pref, pref, pref).addComponent(btn_killProcess, pref, pref, pref)
+					.addComponent(btn_close, pref, pref, pref).addGap(vgap));
 		verticalGroup.addGap(vgap);
 
 		ParallelGroup horizontalGroup = layout.createParallelGroup();
-		horizontalGroup.addGroup(layout.createSequentialGroup()
-				.addGap(hgap)
-				.addComponent(comp)
-				.addGap(hgap));
+		horizontalGroup.addGroup(layout.createSequentialGroup().addGap(hgap).addComponent(comp).addGap(hgap));
 		if (addInputField)
-			horizontalGroup.addGroup(layout.createSequentialGroup()
-					.addGap(hgap, hgap, max)
+			horizontalGroup.addGroup(layout.createSequentialGroup().addGap(hgap, hgap, max)
 					.addComponent(btn_clear, de.uib.configed.Globals.iconWidth, de.uib.configed.Globals.iconWidth,
 							de.uib.configed.Globals.iconWidth)
 					.addComponent(btn_killProcess, de.uib.configed.Globals.iconWidth, de.uib.configed.Globals.iconWidth,

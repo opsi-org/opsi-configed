@@ -25,11 +25,11 @@ import de.uib.utilities.logging.logging;
 
 public class LicensingInfoMap {
 
-	private final static String CLASSNAME = LicensingInfoMap.class.getName();
+	private static final String CLASSNAME = LicensingInfoMap.class.getName();
 
-	public final static String OPSI_LICENSING_INFO_VERSION_OLD = "";
-	public final static String OPSI_LICENSING_INFO_VERSION = "2";
-	public final static String DISPLAY_INFINITE = "\u221E";
+	public static final String OPSI_LICENSING_INFO_VERSION_OLD = "";
+	public static final String OPSI_LICENSING_INFO_VERSION = "2";
+	public static final String DISPLAY_INFINITE = "\u221E";
 	final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 	private static Boolean reducedView = !FGeneralDialogLicensingInfo.extendedView;
@@ -650,7 +650,7 @@ public class LicensingInfoMap {
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 			for (String key : datesKeys) {
-				// System.out.println("key " + key);
+				// logging.debug("key " + key);
 				Date thisDate = sdf.parse(key);
 				if (dateNow.compareTo(thisDate) >= 0)
 					newest = key;
@@ -674,7 +674,7 @@ public class LicensingInfoMap {
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 			for (String key : dates) {
-				// System.out.println("key " + key);
+				// logging.debug("key " + key);
 				Date thisDate = sdf.parse(key);
 				if (dateNow.compareTo(thisDate) >= 0)
 					newest = thisDate;
@@ -837,7 +837,7 @@ public class LicensingInfoMap {
 		if (configs.get(key) != null)
 			percentClientLimitWarning = Integer.parseInt((String) configs.get(key).get(0));
 
-		// System.out.println("warning levels: " + absolutClientLimitWarning + ", " +
+		// logging.debug("warning levels: " + absolutClientLimitWarning + ", " +
 		// percentClientLimitWarning);
 	}
 

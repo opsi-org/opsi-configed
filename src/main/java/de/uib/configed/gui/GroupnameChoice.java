@@ -5,11 +5,11 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.Vector;
 
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -28,8 +28,7 @@ import de.uib.utilities.swing.SurroundPanel;
 import de.uib.utilities.swing.VerticalPositioner;
 import de.uib.utilities.swing.XList;
 
-public class GroupnameChoice extends FGeneralDialog
-		implements DocumentListener, ListSelectionListener {
+public class GroupnameChoice extends FGeneralDialog implements DocumentListener, ListSelectionListener {
 
 	private ConfigedMain main;
 
@@ -44,7 +43,7 @@ public class GroupnameChoice extends FGeneralDialog
 
 	public GroupnameChoice(String extraTitle, ConfigedMain main, Vector v, int selectedIndex) {
 		super(null, extraTitle + " (" + Globals.APPNAME + ")", true, new String[] { "ok", "Close" }, 300, 200);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		try // in an applet context this is not possible without a security problem
 		{
 			setAlwaysOnTop(true);
@@ -86,10 +85,7 @@ public class GroupnameChoice extends FGeneralDialog
 
 		allpane.add(
 
-				new VerticalPositioner(
-						new SurroundPanel(groupnameField),
-						panelExistingGroups),
-				BorderLayout.NORTH);
+				new VerticalPositioner(new SurroundPanel(groupnameField), panelExistingGroups), BorderLayout.NORTH);
 
 		scrollpane.getViewport().add(groups);
 
@@ -101,12 +97,14 @@ public class GroupnameChoice extends FGeneralDialog
 		return resultString;
 	}
 
+	@Override
 	public void doAction1() {
 		result = 1;
 		resultString = groupnameField.getText();
 		leave();
 	}
 
+	@Override
 	public void doAction2() {
 		result = -1;
 		resultString = "";
@@ -123,7 +121,7 @@ public class GroupnameChoice extends FGeneralDialog
 			selIndex = -1;
 		}
 
-		// System.out.println ("text value changed selIndex " + selIndex + " ?? " +
+		// logging.debug ("text value changed selIndex " + selIndex + " ?? " +
 		// groups.getSelectedIndex());
 	}
 
@@ -146,8 +144,7 @@ public class GroupnameChoice extends FGeneralDialog
 		if (selIndex == -1)
 			return;
 
-		if (groupnameField.getText() == null
-				|| !groupnameField.getText().equals((String) groups.getSelectedValue())) {
+		if (groupnameField.getText() == null || !groupnameField.getText().equals((String) groups.getSelectedValue())) {
 			groupnameField.setText((String) groups.getSelectedValue());
 		}
 	}

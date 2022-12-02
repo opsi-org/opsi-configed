@@ -20,8 +20,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 		licensingInfoMap = lInfoMap;
 	}
 
-	public java.awt.Component getTableCellRendererComponent(
-			javax.swing.JTable table, Object value, boolean isSelected,
+	public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table, Object value, boolean isSelected,
 			boolean hasFocus, int row, int column) {
 		if (value.equals(LicensingInfoMap.UNLIMITED_NUMBER))
 			value = LicensingInfoMap.DISPLAY_INFINITE;
@@ -52,17 +51,13 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			/**
 			 * JButton infoButton = new JButton ("" + value,
 			 * Globals.createImageIcon("images/info_i.png", ""));
-			 * 
 			 * infoButton.setHorizontalTextPosition(SwingConstants.LEFT);
-			 * infoButton.repaint();
-			 * System.out.println("horz alignm: " + infoButton.getHorizontalAlignment());
-			 * System.out.println("horz text: " + infoButton.getHorizontalTextPosition());
-			 * infoButton.addActionListener(new ActionListener(){
-			 * public void actionPerformed(ActionEvent e)
-			 * {
-			 * System.out.println("BUTTON pressed");
-			 * }
-			 * });
+			 * infoButton.repaint(); logging.debug("horz alignm: " +
+			 * infoButton.getHorizontalAlignment()); logging.debug("horz text: "
+			 * + infoButton.getHorizontalTextPosition());
+			 * infoButton.addActionListener(new ActionListener(){ public void
+			 * actionPerformed(ActionEvent e) { logging.debug("BUTTON pressed");
+			 * } });
 			 */
 
 		}

@@ -26,10 +26,10 @@ public class AuditSoftwareXLicencePool extends Relation {
 
 	public ArrayList<String> registeredSoftware;
 
-	public final static String SwID = "swId";
+	public static final String SwID = "swId";
 
-	public final static java.util.List<String> ATTRIBUTES;
-	// public final static String[] ATTRIBUTES_asArray;
+	public static final java.util.List<String> ATTRIBUTES;
+	// public static final String[] ATTRIBUTES_asArray;
 	static {
 		ATTRIBUTES = new LinkedList<String>();
 		ATTRIBUTES.add(LicencepoolEntry.idSERVICEKEY);
@@ -44,13 +44,13 @@ public class AuditSoftwareXLicencePool extends Relation {
 		// ATTRIBUTES_asArray = ATTRIBUTES.toArray(new String[0]);
 	}
 
-	public final static java.util.List<String> INTERFACED_ATTRIBUTES;
+	public static final java.util.List<String> INTERFACED_ATTRIBUTES;
 	static {
 		INTERFACED_ATTRIBUTES = new LinkedList<String>(ATTRIBUTES);
 		INTERFACED_ATTRIBUTES.add(SwID);
 	}
 
-	public final static String[] SERVICE_ATTRIBUTES = new String[] { LicencepoolEntry.idSERVICEKEY, SWAuditEntry.NAME,
+	public static final String[] SERVICE_ATTRIBUTES = new String[] { LicencepoolEntry.idSERVICEKEY, SWAuditEntry.NAME,
 			SWAuditEntry.VERSION, SWAuditEntry.SUBVERSION, SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE };
 
 	public AuditSoftwareXLicencePool(ArrayList<String> allRegisteredSoftware) {
@@ -171,10 +171,10 @@ public class AuditSoftwareXLicencePool extends Relation {
 	public static void main(String[] args) {
 		if (args.length == 0) {
 			String sToSplit = "firefox;25.0-3.fc20;;;x64";
-			System.out.println(" no argument given, taken " + sToSplit);
-			System.out.println("getting map " + produceMapFromSWident(sToSplit));
+			logging.debug(" no argument given, taken " + sToSplit);
+			logging.debug("getting map " + produceMapFromSWident(sToSplit));
 		} else
-			System.out.println("getting map " + produceMapFromSWident(args[0]));
+			logging.debug("getting map " + produceMapFromSWident(args[0]));
 	}
 
 }

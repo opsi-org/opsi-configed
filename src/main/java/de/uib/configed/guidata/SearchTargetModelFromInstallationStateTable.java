@@ -146,7 +146,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 		}
 
 		table.setRowSelectionInterval(row, row);
-		// System.out.println(" --- view row selected " + row);
+		// logging.debug(" --- view row selected " + row);
 		ensureRowIsVisible(row);
 	}
 
@@ -157,7 +157,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 			return;
 
 		table.addRowSelectionInterval(row, row);
-		// System.out.println(" --- view row selected " + row);
+		// logging.debug(" --- view row selected " + row);
 		ensureRowIsVisible(row);
 	}
 
@@ -217,8 +217,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 			 */
 
 		} else {
-			panelProductSettings.showAll();
-			;
+			panelProductSettings.showAll();;
 
 			/*
 			 * model.setUsingFilter( FILTER_BY_SELECTION, false);

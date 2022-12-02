@@ -60,9 +60,8 @@ import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 
-public class LogPane extends JPanel
-		implements KeyListener, ActionListener {
-	public final static int defaultMaxShowLevel = 3;
+public class LogPane extends JPanel implements KeyListener, ActionListener {
+	public static final int defaultMaxShowLevel = 3;
 
 	// private int initialMaxShowLevel;
 
@@ -138,8 +137,7 @@ public class LogPane extends JPanel
 		}
 	}
 
-	protected class AdaptingSlider extends JSlider
-			implements ChangeListener {
+	protected class AdaptingSlider extends JSlider implements ChangeListener {
 		LinkedHashMap<Integer, JLabel> levelMap;
 		Hashtable<Integer, JLabel> levelDict;
 
@@ -202,34 +200,22 @@ public class LogPane extends JPanel
 			super(styles);
 		}
 
-		public void insertStringTruely(int offs,
-				String str,
-				AttributeSet a)
-				throws BadLocationException {
+		public void insertStringTruely(int offs, String str, AttributeSet a) throws BadLocationException {
 			super.insertString(offs, str, a);
 		}
 
 		@Override
-		public void insertString(int offs,
-				String str,
-				AttributeSet a)
-				throws BadLocationException {
+		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
 			return;
 		}
 
 		@Override
-		public void replace(int offset,
-				int length,
-				String text,
-				AttributeSet attrs)
-				throws BadLocationException {
+		public void replace(int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
 			return;
 		}
 
 		@Override
-		public void remove(int offs,
-				int len)
-				throws BadLocationException {
+		public void remove(int offs, int len) throws BadLocationException {
 			return;
 		}
 
@@ -278,10 +264,7 @@ public class LogPane extends JPanel
 		externalView.centerOn(Globals.mainFrame);
 
 		copyOfMe.setLevelWithoutAction(showLevel);
-		copyOfMe.setParsedText(lines,
-				lineLevels, lineStyles,
-				lineTypes, typesList,
-				showTypeRestricted, selTypeIndex,
+		copyOfMe.setParsedText(lines, lineLevels, lineStyles, lineTypes, typesList, showTypeRestricted, selTypeIndex,
 				maxExistingLevel);
 		copyOfMe.getTextComponent().setCaretPosition(jTextPane.getCaretPosition());
 		copyOfMe.adaptSlider();
@@ -508,8 +491,7 @@ public class LogPane extends JPanel
 
 				logging.debug(this, "MouseWheelEvent newIndex " + newIndex);
 
-				sliderLevel.setValue(
-						levelList.get(newIndex))
+				sliderLevel.setValue(levelList.get(newIndex))
 
 				;
 			}
@@ -633,73 +615,68 @@ public class LogPane extends JPanel
 		GroupLayout layoutCommandpane = new GroupLayout(commandpane);
 		commandpane.setLayout(layoutCommandpane);
 
-		layoutCommandpane.setHorizontalGroup(
-				layoutCommandpane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(layoutCommandpane.createSequentialGroup()
-								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-								.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-								.addComponent(jComboBoxSearch, Globals.buttonWidth, Globals.buttonWidth,
-										Short.MAX_VALUE)
-								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-								.addComponent(buttonSearch, Globals.buttonWidth / 2, Globals.buttonWidth / 2,
-										Globals.buttonWidth / 2)
-								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-								.addComponent(jCheckBoxCaseSensitive, Globals.buttonWidth, Globals.buttonWidth,
-										Globals.buttonWidth)
-								// .addGap(Globals.gapSize/2,Globals.gapSize/2,Globals.gapSize)
-								.addComponent(buttonFontPlus, Globals.graphicButtonWidth / 2,
-										Globals.graphicButtonWidth / 2, Globals.graphicButtonWidth / 2)
-								.addGap(Globals.gapSize / 2, Globals.gapSize / 2, Globals.gapSize / 2)
-								.addComponent(buttonFontMinus, Globals.graphicButtonWidth / 2,
-										Globals.graphicButtonWidth / 2, Globals.graphicButtonWidth / 2)
-								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-								.addComponent(labelDisplayRestriction, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-								.addComponent(comboType, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE)
-								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-								.addComponent(labelLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-								.addComponent(spinnerMinLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGroup(layoutCommandpane.createParallelGroup()
-										.addComponent(sliderLevel, sliderW, sliderW, sliderW)
-										.addComponent(sliderLevel0, sliderW, sliderW, sliderW))
-								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)));
+		layoutCommandpane.setHorizontalGroup(layoutCommandpane
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layoutCommandpane.createSequentialGroup()
+						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
+						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
+						.addComponent(jComboBoxSearch, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE)
+						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
+						.addComponent(buttonSearch, Globals.buttonWidth / 2, Globals.buttonWidth / 2,
+								Globals.buttonWidth / 2)
+						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
+						.addComponent(jCheckBoxCaseSensitive, Globals.buttonWidth, Globals.buttonWidth,
+								Globals.buttonWidth)
+						// .addGap(Globals.gapSize/2,Globals.gapSize/2,Globals.gapSize)
+						.addComponent(buttonFontPlus, Globals.graphicButtonWidth / 2, Globals.graphicButtonWidth / 2,
+								Globals.graphicButtonWidth / 2)
+						.addGap(Globals.gapSize / 2, Globals.gapSize / 2, Globals.gapSize / 2)
+						.addComponent(buttonFontMinus, Globals.graphicButtonWidth / 2, Globals.graphicButtonWidth / 2,
+								Globals.graphicButtonWidth / 2)
+						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
+						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
+						.addComponent(labelDisplayRestriction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
+						.addComponent(comboType, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE)
+						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
+						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
+						.addComponent(labelLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
+						.addComponent(spinnerMinLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGroup(layoutCommandpane.createParallelGroup()
+								.addComponent(sliderLevel, sliderW, sliderW, sliderW)
+								.addComponent(sliderLevel0, sliderW, sliderW, sliderW))
+						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)));
 
-		layoutCommandpane.setVerticalGroup(
-				layoutCommandpane.createSequentialGroup()
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-						.addGroup(layoutCommandpane.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-								.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(jComboBoxSearch, fieldH, fieldH, fieldH)
-								.addComponent(buttonSearch, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight)
-								.addComponent(jCheckBoxCaseSensitive, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight)
-								.addComponent(buttonFontPlus, Globals.graphicButtonWidth / 2,
-										Globals.graphicButtonWidth / 2, Globals.graphicButtonWidth / 2)
-								.addComponent(buttonFontMinus, Globals.graphicButtonWidth / 2,
-										Globals.graphicButtonWidth / 2, Globals.graphicButtonWidth / 2)
-								.addComponent(labelDisplayRestriction, Globals.lineHeight, Globals.lineHeight,
-										Globals.lineHeight)
-								.addComponent(comboType, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight)
-								.addComponent(labelLevel, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-								.addComponent(spinnerMinLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(sliderLevel, sliderH, sliderH, sliderH)
-								.addComponent(sliderLevel0, sliderH, sliderH, sliderH)
-						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						// GroupLayout.PREFERRED_SIZE )
-						)
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2));
+		layoutCommandpane.setVerticalGroup(layoutCommandpane.createSequentialGroup()
+				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+				.addGroup(layoutCommandpane.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jComboBoxSearch, fieldH, fieldH, fieldH)
+						.addComponent(buttonSearch, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
+						.addComponent(jCheckBoxCaseSensitive, Globals.buttonHeight, Globals.buttonHeight,
+								Globals.buttonHeight)
+						.addComponent(buttonFontPlus, Globals.graphicButtonWidth / 2, Globals.graphicButtonWidth / 2,
+								Globals.graphicButtonWidth / 2)
+						.addComponent(buttonFontMinus, Globals.graphicButtonWidth / 2, Globals.graphicButtonWidth / 2,
+								Globals.graphicButtonWidth / 2)
+						.addComponent(labelDisplayRestriction, Globals.lineHeight, Globals.lineHeight,
+								Globals.lineHeight)
+						.addComponent(comboType, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
+						.addComponent(labelLevel, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+						.addComponent(spinnerMinLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(sliderLevel, sliderH, sliderH, sliderH)
+						.addComponent(sliderLevel0, sliderH, sliderH, sliderH)
+				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				// GroupLayout.PREFERRED_SIZE )
+				).addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2));
 
 		add(commandpane, BorderLayout.SOUTH);
 
@@ -707,29 +684,28 @@ public class LogPane extends JPanel
 			popupMenu = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_SAVE,
 					PopupMenuTrait.POPUP_SAVE_AS_ZIP,
 					// PopupMenuTrait.POPUP_SAVE_LOADED_AS_ZIP,
-					PopupMenuTrait.POPUP_SAVE_ALL_AS_ZIP,
-					PopupMenuTrait.POPUP_FLOATINGCOPY }) {
+					PopupMenuTrait.POPUP_SAVE_ALL_AS_ZIP, PopupMenuTrait.POPUP_FLOATINGCOPY }) {
 				public void action(int p) {
 					switch (p) {
-						case PopupMenuTrait.POPUP_RELOAD:
-							reload();
-							break;
+					case PopupMenuTrait.POPUP_RELOAD:
+						reload();
+						break;
 
-						case PopupMenuTrait.POPUP_SAVE:
-							save();
-							break;
-						case PopupMenuTrait.POPUP_SAVE_AS_ZIP:
-							saveAsZip();
-							break;
-						case PopupMenuTrait.POPUP_SAVE_LOADED_AS_ZIP:
-							saveAllAsZip(false);
-							break;
-						case PopupMenuTrait.POPUP_SAVE_ALL_AS_ZIP:
-							saveAllAsZip(true);
-							break;
-						case PopupMenuTrait.POPUP_FLOATINGCOPY:
-							floatExternal();
-							break;
+					case PopupMenuTrait.POPUP_SAVE:
+						save();
+						break;
+					case PopupMenuTrait.POPUP_SAVE_AS_ZIP:
+						saveAsZip();
+						break;
+					case PopupMenuTrait.POPUP_SAVE_LOADED_AS_ZIP:
+						saveAllAsZip(false);
+						break;
+					case PopupMenuTrait.POPUP_SAVE_ALL_AS_ZIP:
+						saveAllAsZip(true);
+						break;
+					case PopupMenuTrait.POPUP_FLOATINGCOPY:
+						floatExternal();
+						break;
 					}
 
 				}
@@ -863,8 +839,8 @@ public class LogPane extends JPanel
 
 		Integer oldLevel = showLevel;
 		showLevel = level;
-		logging.info(this, "activateShowLevel level, oldLevel, maxExistingLevel " + level
-				+ " , " + oldLevel + ", " + maxExistingLevel);
+		logging.info(this, "activateShowLevel level, oldLevel, maxExistingLevel " + level + " , " + oldLevel + ", "
+				+ maxExistingLevel);
 
 		if (oldLevel != level && (level < maxExistingLevel || oldLevel < maxExistingLevel)) {
 			// emptyDocument();
@@ -1158,11 +1134,8 @@ public class LogPane extends JPanel
 		jTextPane.getCaret().setVisible(true);
 	}
 
-	private void setParsedText(final String[] lines,
-			final int[] lineLevels, final Style[] lineStyles,
-			final int[] lineTypes,
-			final java.util.List typesList,
-			boolean showTypeRestricted, int selTypeIndex,
+	private void setParsedText(final String[] lines, final int[] lineLevels, final Style[] lineStyles,
+			final int[] lineTypes, final java.util.List typesList, boolean showTypeRestricted, int selTypeIndex,
 			int maxExistingLevel) {
 		logging.debug(this, "setParsedText");
 		this.lines = lines;
@@ -1225,14 +1198,14 @@ public class LogPane extends JPanel
 				search();
 			}
 
-			else if (e.getSource() == jTextPane
-					&& (e.getKeyChar() == '+') && ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
+			else if (e.getSource() == jTextPane && (e.getKeyChar() == '+')
+					&& ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
 				logging.info(this, "Ctrl-Plus");
 				setFontSize("+");
 			}
 
-			else if (e.getSource() == jTextPane
-					&& (e.getKeyChar() == '-') && ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
+			else if (e.getSource() == jTextPane && (e.getKeyChar() == '-')
+					&& ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
 				logging.info(this, "Ctrl-Minus");
 				setFontSize("-");
 			}
@@ -1254,8 +1227,7 @@ public class LogPane extends JPanel
 
 			// f g h i j k l
 			// 6 7 8 9 10 11 12
-			if (e.getKeyChar() == 'n' || e.getKeyChar() == '\u000c'
-					|| e.getKeyCode() == KeyEvent.VK_F3) // "n", "ctrl-l", "F3" for repeat last search
+			if (e.getKeyChar() == 'n' || e.getKeyChar() == '\u000c' || e.getKeyCode() == KeyEvent.VK_F3) // "n", "ctrl-l", "F3" for repeat last search
 			{
 				search();
 			}
@@ -1409,8 +1381,7 @@ public class LogPane extends JPanel
 			FontMetrics fm = c.getFontMetrics(c.getFont());
 			int baseline = alloc.y + alloc.height - fm.getDescent() + 1;
 			g.drawLine(alloc.x, baseline, alloc.x + alloc.width, baseline);
-			g.drawLine(alloc.x, baseline + 1, alloc.x + alloc.width,
-					baseline + 1);
+			g.drawLine(alloc.x, baseline + 1, alloc.x + alloc.width, baseline + 1);
 
 			return alloc;
 		}

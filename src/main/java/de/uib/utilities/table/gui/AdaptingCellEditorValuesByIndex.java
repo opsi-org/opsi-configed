@@ -19,9 +19,7 @@ public class AdaptingCellEditorValuesByIndex extends DefaultCellEditor {
 	ComboBoxModeller cbm;
 	ComboBoxModel nullModel;
 
-	public AdaptingCellEditorValuesByIndex(
-			JComboBox cc,
-			ComboBoxModeller cbm,
+	public AdaptingCellEditorValuesByIndex(JComboBox cc, ComboBoxModeller cbm,
 			Map<String, String> universalMapOfStrings, // valid for every possible content of cbm
 			String imagesBase) {
 		super(cc);
@@ -33,11 +31,7 @@ public class AdaptingCellEditorValuesByIndex extends DefaultCellEditor {
 
 	}
 
-	public Component getTableCellEditorComponent(JTable table,
-			Object value,
-			boolean isSelected,
-			int row,
-			int column) {
+	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 
 		int modelRow = table.convertRowIndexToModel(row);
 		int modelColumn = table.convertColumnIndexToModel(column);
@@ -59,7 +53,7 @@ public class AdaptingCellEditorValuesByIndex extends DefaultCellEditor {
 			((JComponent) c).setToolTipText("" + value);
 
 		// c.setSize(100,20); has no effect
-		// System.out.println("this component active");
+		// logging.debug("this component active");
 		return c;
 	}
 

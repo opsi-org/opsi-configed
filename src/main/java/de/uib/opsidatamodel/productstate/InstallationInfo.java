@@ -3,23 +3,23 @@ package de.uib.opsidatamodel.productstate;
 import java.util.LinkedHashSet;
 
 public class InstallationInfo {
-	public final static String KEY = "installationInfo";
+	public static final String KEY = "installationInfo";
 
 	// valid states
-	public final static int NONE = 0;
-	public final static int FAILED = 2;
+	public static final int NONE = 0;
+	public static final int FAILED = 2;
 
-	public final static String NONEstring = "";
-	public final static String FAILEDstring = "failed";
-	public final static String SUCCESSstring = "success";
+	public static final String NONEstring = "";
+	public static final String FAILEDstring = "failed";
+	public static final String SUCCESSstring = "success";
 
-	public final static String NONEdisplayString = "none";
-	public final static String FAILEDdisplayString = "failed";
-	public final static String SUCCESSdisplayString = "success";
+	public static final String NONEdisplayString = "none";
+	public static final String FAILEDdisplayString = "failed";
+	public static final String SUCCESSdisplayString = "success";
 
-	public final static String MANUALLY = "manually set";
+	public static final String MANUALLY = "manually set";
 
-	public final static LinkedHashSet<String> defaultDisplayValues = new LinkedHashSet<String>();
+	public static final LinkedHashSet<String> defaultDisplayValues = new LinkedHashSet<String>();
 	static {
 		defaultDisplayValues.add(NONEdisplayString);
 		defaultDisplayValues.add(SUCCESSdisplayString);

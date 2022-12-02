@@ -14,21 +14,20 @@ public class PopupMouseListener extends MouseAdapter {
 	}
 
 	public void mousePressed(MouseEvent e) {
-		// System.out.println ( " mouse pressed ");
+		// logging.debug ( " mouse pressed ");
 		maybeShowPopup(e);
 
 	}
 
 	public void mouseReleased(MouseEvent e) {
 
-		// System.out.println ( " mouse released ");
+		// logging.debug ( " mouse released ");
 		maybeShowPopup(e);
 	}
 
 	protected void maybeShowPopup(MouseEvent e) {
 		if (e.isPopupTrigger()) {
-			popupMenu.show(e.getComponent(),
-					e.getX(), e.getY());
+			popupMenu.show(e.getComponent(), e.getX(), e.getY());
 		}
 	}
 }

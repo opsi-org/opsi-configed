@@ -58,16 +58,16 @@ public class IconNode extends DefaultMutableTreeNode {
 	}
 
 	public void setEnabled(boolean aFlag) {
-		if (aFlag == false) {
+		if (!aFlag) {
 			// Lazy creation: avoids unneccessary objects if the tree
 			// could not have disabled state.
-			if ((closedIcon != null) & (disabledClosedIcon == null)) {
+			if ((closedIcon != null) && (disabledClosedIcon == null)) {
 				disabledClosedIcon = createDisabledIcon(enabledClosedIcon);
 			}
 
 			setDisabledLeafIcon();
 
-			if ((openIcon != null) & (disabledOpenIcon == null)) {
+			if ((openIcon != null) && (disabledOpenIcon == null)) {
 				disabledOpenIcon = createDisabledIcon(enabledOpenIcon);
 			}
 			// end of lazy creation
@@ -86,7 +86,7 @@ public class IconNode extends DefaultMutableTreeNode {
 	 * Try to create grayed icon from aIcon and return it, or return null.
 	 */
 	private Icon createDisabledIcon(Icon anIcon) {
-		// System.out.println("lazy creation");
+		// logging.debug("lazy creation");
 		// copied from your example: e601. Creating a Gray Version of an Icon
 		if (anIcon instanceof ImageIcon) {
 			Image grayImage = GrayFilter.createDisabledImage(((ImageIcon) anIcon).getImage());

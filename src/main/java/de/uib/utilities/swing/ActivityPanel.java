@@ -13,8 +13,7 @@ import de.uib.utilities.Globals;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.thread.WaitCursor;
 
-public class ActivityPanel extends JPanel
-		implements Runnable {
+public class ActivityPanel extends JPanel implements Runnable {
 	Color[] colors;
 
 	Thread colorSwitching;
@@ -48,7 +47,6 @@ public class ActivityPanel extends JPanel
 	private static boolean acting = false;
 
 	/**
-	 *
 	 * Sets the state of the panals with background and border color
 	 * 
 	 * @param i number of selected panel of arraylist
@@ -102,8 +100,6 @@ public class ActivityPanel extends JPanel
 	// runnable
 	/**
 	 * endless loop
-	 *
-	 *
 	 */
 	public void run() {
 		int i = 0;
@@ -139,14 +135,13 @@ public class ActivityPanel extends JPanel
 					setState(i);
 					i = 0;
 					try {
-						Thread.sleep(2 * sleepingMS);
+						Thread.sleep((long) 2 * sleepingMS);
 					} catch (InterruptedException ignore) {
 					}
 				}
 			}
 		} catch (Exception anyException) {
-			logging.warning(this, "on running, caught some exception");
-			logging.logTrace(anyException);
+			logging.warning(this, "on running, caught some exception", anyException);
 		}
 
 	}
@@ -191,8 +186,7 @@ public class ActivityPanel extends JPanel
 							Thread.sleep(10000);
 							WaitCursor.stopAll();
 						} catch (Exception x) {
-						}
-						;
+						} ;
 						// WaitCursor.stopAll();
 					}
 				}

@@ -54,11 +54,10 @@ import de.uib.utilities.observer.DataLoadingObserver;
 import de.uib.utilities.observer.DataRefreshedObservable;
 import de.uib.utilities.observer.DataRefreshedObserver;
 
-public abstract class PersistenceController
-		implements DataRefreshedObservable, DataLoadingObservable {
-	public final static String CLIENT_GLOBAL_SEPARATOR = "/";
+public abstract class PersistenceController implements DataRefreshedObservable, DataLoadingObservable {
+	public static final String CLIENT_GLOBAL_SEPARATOR = "/";
 
-	public final static Set<String> KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT = new HashSet();
+	public static final Set<String> KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT = new HashSet();
 	{
 		KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT.add("type");
 		KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT.add("id");
@@ -72,92 +71,92 @@ public abstract class PersistenceController
 	public final String lastseenColName = "lastseen";
 	public final String lastseenVisibleColName = "HOST.last_scan_time";
 
-	public final static String KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT = "configed.productonclient_displayfields_localboot";
-	public final static String KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT = "configed.productonclient_displayfields_netboot";
-	public final static String KEY_HOST_DISPLAYFIELDS = "configed.host_displayfields";
-	public final static String KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PanelLicencesReconciliation = "configed.license_inventory_extradisplayfields";
+	public static final String KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT = "configed.productonclient_displayfields_localboot";
+	public static final String KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT = "configed.productonclient_displayfields_netboot";
+	public static final String KEY_HOST_DISPLAYFIELDS = "configed.host_displayfields";
+	public static final String KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PanelLicencesReconciliation = "configed.license_inventory_extradisplayfields";
 
-	public final static String KEY_SHOW_DASH_ON_PROGRAMSTART = ControlDash.CONFIG_KEY + ".show_dash_on_loaddata";
-	public final static Boolean DEFAULTVALUE_SHOW_DASH_ON_PROGRAMSTART = false;
-	public final static String KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT = ControlDash.CONFIG_KEY
+	public static final String KEY_SHOW_DASH_ON_PROGRAMSTART = ControlDash.CONFIG_KEY + ".show_dash_on_loaddata";
+	public static final Boolean DEFAULTVALUE_SHOW_DASH_ON_PROGRAMSTART = false;
+	public static final String KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT = ControlDash.CONFIG_KEY
 			+ ".show_dash_for_showlicenses";
-	public final static Boolean DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT = false;
+	public static final Boolean DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT = false;
 
-	public final static String KEY_SEARCH_BY_SQL = "configed.search_by_sql";
-	public final static Boolean DEFAULTVALUE_SEARCH_BY_SQL = true; // combines with question if mysql backend is working
+	public static final String KEY_SEARCH_BY_SQL = "configed.search_by_sql";
+	public static final Boolean DEFAULTVALUE_SEARCH_BY_SQL = true; // combines with question if mysql backend is working
 
-	public final static String KEY_DISABLED_CLIENT_ACTIONS = "configed.host_actions_disabled";
+	public static final String KEY_DISABLED_CLIENT_ACTIONS = "configed.host_actions_disabled";
 
-	public final static String KEY_OPSICLIENTD_EXTRA_EVENTS = "configed.opsiclientd_events";
-	public final static String OPSI_CLIENTD_EVENT_on_demand = "on_demand";
-	public final static String OPSI_CLIENTD_EVENT_silent_install = "silent_install";
+	public static final String KEY_OPSICLIENTD_EXTRA_EVENTS = "configed.opsiclientd_events";
+	public static final String OPSI_CLIENTD_EVENT_on_demand = "on_demand";
+	public static final String OPSI_CLIENTD_EVENT_silent_install = "silent_install";
 
-	public final static String KEY_PRODUCT_SORT_ALGORITHM = "product_sort_algorithm";
+	public static final String KEY_PRODUCT_SORT_ALGORITHM = "product_sort_algorithm";
 
-	public final static String KEY_CHOICES_FOR_WOL_DELAY = "wol_delays_sec";
+	public static final String KEY_CHOICES_FOR_WOL_DELAY = "wol_delays_sec";
 
-	public final static String localImageRestoreProductKey = "opsi-local-image-restore";
-	public final static String localImagesListPropertyKey = "imagefiles_list";
-	public final static String localImageToRestorePropertyKey = "imagefile";
+	public static final String localImageRestoreProductKey = "opsi-local-image-restore";
+	public static final String localImagesListPropertyKey = "imagefiles_list";
+	public static final String localImageToRestorePropertyKey = "imagefile";
 
-	public final static String CONFIG_DEPOT_ID = "clientconfig.depot.id";
-	public final static String KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN = "opsiclientd.event_on_shutdown.active";
-	public final static Boolean DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN = false;
+	public static final String CONFIG_DEPOT_ID = "clientconfig.depot.id";
+	public static final String KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN = "opsiclientd.event_on_shutdown.active";
+	public static final Boolean DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN = false;
 
-	public final static String KEY_SSH_DEFAULTWINUSER = "configed.ssh.deploy-client-agent.default.user";
-	public final static String KEY_SSH_DEFAULTWINUSER_defaultvalue = "Administrator";
-	public final static String KEY_SSH_DEFAULTWINPW = "configed.ssh.deploy-client-agent.default.password";
-	public final static String KEY_SSH_DEFAULTWINPW_defaultvalue = "";
+	public static final String KEY_SSH_DEFAULTWINUSER = "configed.ssh.deploy-client-agent.default.user";
+	public static final String KEY_SSH_DEFAULTWINUSER_defaultvalue = "Administrator";
+	public static final String KEY_SSH_DEFAULTWINPW = "configed.ssh.deploy-client-agent.default.password";
+	public static final String KEY_SSH_DEFAULTWINPW_defaultvalue = "";
 
-	public final static String configedWORKBENCH_key = "configed.workbench.default";
+	public static final String configedWORKBENCH_key = "configed.workbench.default";
 	public static String configedWORKBENCH_defaultvalue = "/var/lib/opsi/workbench/";
 	public static String packageServerDirectoryS = configedWORKBENCH_defaultvalue;
 
-	public final static String configedGIVENDOMAINS_key = "configed.domains_given";
+	public static final String configedGIVENDOMAINS_key = "configed.domains_given";
 
 	// wan meta configuration
-	public final static String WAN_PARTKEY = "wan_";
-	public final static String WAN_CONFIGURED_PARTKEY = "wan_mode_on";
-	public final static String NOT_WAN_CONFIGURED_PARTKEY = "wan_mode_off";
+	public static final String WAN_PARTKEY = "wan_";
+	public static final String WAN_CONFIGURED_PARTKEY = "wan_mode_on";
+	public static final String NOT_WAN_CONFIGURED_PARTKEY = "wan_mode_off";
 	protected Map<String, java.util.List<Object>> wanConfiguration;
 	protected Map<String, java.util.List<Object>> notWanConfiguration;
 	// keys for default wan configuration
-	public final static String CONFIG_CLIENTD_EVENT_GUISTARTUP = "opsiclientd.event_gui_startup.active";
-	public final static String CONFIG_CLIENTD_EVENT_GUISTARTUP_USERLOGGEDIN = "opsiclientd.event_gui_startup{user_logged_in}.active";
-	public final static String CONFIG_CLIENTD_EVENT_NET_CONNECTION = "opsiclientd.event_net_connection.active";
-	public final static String CONFIG_CLIENTD_EVENT_TIMER = "opsiclientd.event_timer.active";
+	public static final String CONFIG_CLIENTD_EVENT_GUISTARTUP = "opsiclientd.event_gui_startup.active";
+	public static final String CONFIG_CLIENTD_EVENT_GUISTARTUP_USERLOGGEDIN = "opsiclientd.event_gui_startup{user_logged_in}.active";
+	public static final String CONFIG_CLIENTD_EVENT_NET_CONNECTION = "opsiclientd.event_net_connection.active";
+	public static final String CONFIG_CLIENTD_EVENT_TIMER = "opsiclientd.event_timer.active";
 
-	public final static String CONFIG_DHCPD_FILENAME = "clientconfig.dhcpd.filename";
-	public final static String EFI_DHCPD_FILENAME = "linux/pxelinux.cfg/elilo.efi";
+	public static final String CONFIG_DHCPD_FILENAME = "clientconfig.dhcpd.filename";
+	public static final String EFI_DHCPD_FILENAME = "linux/pxelinux.cfg/elilo.efi";
 	// the current real value, but it is not necessary to configure it:
-	// public final static String EFI_DHCPD_FILENAME_SHIM =
+	// public static final String EFI_DHCPD_FILENAME_SHIM =
 	// "linux/pxelinux.cfg/shimx64.efi.signed";
 	// not more used:
-	// public final static String EFI_DHCPD_FILENAME_X86 =
+	// public static final String EFI_DHCPD_FILENAME_X86 =
 	// "linux/pxelinux.cfg/elilo-x86.efi";
-	public final static String EFI_DHCPD_NOT = "";
+	public static final String EFI_DHCPD_NOT = "";
 
-	// public final static String HOST_KEY_UEFI_BOOT = "uefi";
-	// public final static String ELILO_STRING = "elilo";
-	// public final static String SHIM_STRING = "shim";
-	public final static String EFI_STRING = "efi";
+	// public static final String HOST_KEY_UEFI_BOOT = "uefi";
+	// public static final String ELILO_STRING = "elilo";
+	// public static final String SHIM_STRING = "shim";
+	public static final String EFI_STRING = "efi";
 
-	public final static String KEY_USER_ROOT = "user"; // UserConfig.CONFIGKEY_STR_USER;
+	public static final String KEY_USER_ROOT = "user"; // UserConfig.CONFIGKEY_STR_USER;
 
-	public final static String KEY_USER_ROLE_ROOT = KEY_USER_ROOT + "." + "role";// UserConfig.
-	public final static String ALL_USER_KEY_START = KEY_USER_ROOT + ".{}.";// UserConfig.
+	public static final String KEY_USER_ROLE_ROOT = KEY_USER_ROOT + "." + "role";// UserConfig.
+	public static final String ALL_USER_KEY_START = KEY_USER_ROOT + ".{}.";// UserConfig.
 
-	public final static String KEY_USER_REGISTER = KEY_USER_ROOT + ".{}.register"; // boolean
+	public static final String KEY_USER_REGISTER = KEY_USER_ROOT + ".{}.register"; // boolean
 	public static Boolean KEY_USER_REGISTER_VALUE = null;
 
-	public final static String DEPOT_SELECTION_NODEPOTS = configed
+	public static final String DEPOT_SELECTION_NODEPOTS = configed
 			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS");
-	public final static String DEPOT_SELECTION_ALL = configed
+	public static final String DEPOT_SELECTION_ALL = configed
 			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL");
-	public final static String DEPOT_SELECTION_ALL_WHERE_INSTALLED = configed
+	public static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = configed
 			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL_WHERE_INSTALLED");
 
-	public final static java.util.List BOOLEAN_VALUES = new ArrayList<Boolean>();
+	public static final java.util.List BOOLEAN_VALUES = new ArrayList<Boolean>();
 	static {
 		BOOLEAN_VALUES.add(true);
 		BOOLEAN_VALUES.add(false);
@@ -234,23 +233,13 @@ public abstract class PersistenceController
 	}
 
 	/**
-	 * This creation method constructs a new Controller instance and lets a static
-	 * variable point to it
-	 * When next time we need a Controller we can choose if we take the already
-	 * constructed one - returned from the static method
-	 * getPersistenceController - or construct a new one
-	 * 
-	 * public static PersistenceController getNewPersistenceController (String
-	 * server, String user, String password)
-	 * {
-	 * return null;
-	 * }
-	 * 
-	 * 
-	 * public static PersistenceController getPersistenceController ()
-	 * {
-	 * return null;
-	 * }
+	 * This creation method constructs a new Controller instance and lets a
+	 * static variable point to it When next time we need a Controller we can
+	 * choose if we take the already constructed one - returned from the static
+	 * method getPersistenceController - or construct a new one public static
+	 * PersistenceController getNewPersistenceController (String server, String
+	 * user, String password) { return null; } public static
+	 * PersistenceController getPersistenceController () { return null; }
 	 */
 
 	public Executioner exec;
@@ -406,11 +395,9 @@ public abstract class PersistenceController
 
 	public abstract Boolean isUefiConfigured(String host);
 
-	public abstract boolean createClient(String hostname, String domainname,
-			String depotId,
-			String description, String inventorynumber, String notes, String ipaddress, String macaddress,
-			boolean shutdownInstall, boolean uefiBoot, boolean wan,
-			String group, String productNetboot, String productLocalboot);
+	public abstract boolean createClient(String hostname, String domainname, String depotId, String description,
+			String inventorynumber, String notes, String ipaddress, String macaddress, boolean shutdownInstall,
+			boolean uefiBoot, boolean wan, String group, String productNetboot, String productLocalboot);
 
 	public abstract boolean configureInstallByShutdown(String clientId, boolean shutdownInstal);
 
@@ -428,10 +415,8 @@ public abstract class PersistenceController
 
 	public abstract java.util.List<String> wakeOnLan(String[] hostIds);
 
-	public abstract java.util.List<String> wakeOnLan(
-			java.util.Set<String> hostIds,
-			Map<String, java.util.List<String>> hostSeparationByDepot,
-			Map<String, Executioner> execsByDepot);
+	public abstract java.util.List<String> wakeOnLan(java.util.Set<String> hostIds,
+			Map<String, java.util.List<String>> hostSeparationByDepot, Map<String, Executioner> execsByDepot);
 
 	public abstract java.util.List<String> fireOpsiclientdEventOnClients(String event, String[] clientIds);
 
@@ -717,10 +702,7 @@ public abstract class PersistenceController
 	public abstract boolean updateProductOnClients();
 
 	// update for the whole set of clients
-	public abstract boolean updateProductOnClients(
-			Set<String> clients,
-			String productName,
-			int productType,
+	public abstract boolean updateProductOnClients(Set<String> clients, String productName, int productType,
 			Map<String, String> changedValues);
 
 	public abstract boolean resetLocalbootProducts(String[] selectedClients, boolean withDependencies);
@@ -760,8 +742,7 @@ public abstract class PersistenceController
 	// java.util.List deleteCollection );
 	public abstract void setProductproperties();
 
-	public abstract void setCommonProductPropertyValue(
-			Set<String> clientNames, String productName, String propertyName,
+	public abstract void setCommonProductPropertyValue(Set<String> clientNames, String productName, String propertyName,
 			java.util.List<String> values);
 
 	/* information about the service */
@@ -866,61 +847,40 @@ public abstract class PersistenceController
 	// date in sql time format, contrad ID
 
 	// returns the ID of the edited data record
-	public abstract String editLicenceContract(
-			String licenseContractId,
-			String partner,
-			String conclusionDate,
-			String notificationDate,
-			String expirationDate,
-			String notes);
+	public abstract String editLicenceContract(String licenseContractId, String partner, String conclusionDate,
+			String notificationDate, String expirationDate, String notes);
 
 	public abstract boolean deleteLicenceContract(String licenseContractId);
 
 	public abstract Map<String, LicencepoolEntry> getLicencepools();
 
 	// returns the ID of the edited data record
-	public abstract String editLicencePool(
-			String licensePoolId,
-			String description);
+	public abstract String editLicencePool(String licensePoolId, String description);
 
 	public abstract boolean deleteLicencePool(String licensePoolId);
 
 	public abstract Map<String, LicenceEntry> getSoftwareLicences();
 
 	// returns the ID of the edited data record
-	public abstract String editSoftwareLicence(
-			String softwareLicenseId,
-			String licenceContractId,
-			String licenceType,
-			String maxInstallations,
-			String boundToHost,
-			String expirationDate);
+	public abstract String editSoftwareLicence(String softwareLicenseId, String licenceContractId, String licenceType,
+			String maxInstallations, String boundToHost, String expirationDate);
 
-	public abstract boolean deleteSoftwareLicence(
-			String softwareLicenseId);
+	public abstract boolean deleteSoftwareLicence(String softwareLicenseId);
 
 	public abstract Map<String, Map> getRelationsSoftwareL2LPool();
 
 	// returns the ID of the edited data record
-	public abstract String editRelationSoftwareL2LPool(
-			String softwareLicenseId,
-			String licensePoolId,
+	public abstract String editRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId,
 			String licenseKey);
 
-	public abstract boolean deleteRelationSoftwareL2LPool(
-			String softwareLicenseId,
-			String licensePoolId);
+	public abstract boolean deleteRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId);
 
 	public abstract Map<String, Map<String, String>> getRelationsProductId2LPool();
 
 	// returns an ID of the edited data record
-	public abstract String editRelationProductId2LPool(
-			String productId,
-			String licensePoolId);
+	public abstract String editRelationProductId2LPool(String productId, String licensePoolId);
 
-	public abstract boolean deleteRelationProductId2LPool(
-			String productId,
-			String licensePoolId);
+	public abstract boolean deleteRelationProductId2LPool(String productId, String licensePoolId);
 
 	public abstract void retrieveRelationsAuditSoftwareToLicencePools();
 
@@ -946,13 +906,9 @@ public abstract class PersistenceController
 
 	public abstract boolean removeAssociations(String licensePoolId, List<String> softwareIds);
 
-	public abstract boolean setWindowsSoftwareIds2LPool(
-			String licensePoolId,
-			List<String> softwareToAssign);
+	public abstract boolean setWindowsSoftwareIds2LPool(String licensePoolId, List<String> softwareToAssign);
 
-	public abstract boolean addWindowsSoftwareIds2LPool(
-			String licensePoolId,
-			List<String> softwareToAssign);
+	public abstract boolean addWindowsSoftwareIds2LPool(String licensePoolId, List<String> softwareToAssign);
 
 	/*
 	 * returns the ID of the edited data record
@@ -964,8 +920,8 @@ public abstract class PersistenceController
 	 * 
 	 */
 
-	public abstract String editPool2AuditSoftware(
-			String softwareID, String licensePoolID_old, String licensePoolID_new);
+	public abstract String editPool2AuditSoftware(String softwareID, String licensePoolID_old,
+			String licensePoolID_new);
 
 	public abstract Map<String, LicenceStatisticsRow> getLicenceStatistics();
 
@@ -1077,10 +1033,8 @@ public abstract class PersistenceController
 		return item;
 	}
 
-	public static ConfigOption createConfig(ConfigOption.TYPE type,
-			String key, String description, boolean editable, boolean multiValue,
-			java.util.List<Object> defaultValues,
-			java.util.List<Object> possibleValues) {
+	public static ConfigOption createConfig(ConfigOption.TYPE type, String key, String description, boolean editable,
+			boolean multiValue, java.util.List<Object> defaultValues, java.util.List<Object> possibleValues) {
 		Map<String, Object> item = createNOMitem(type.toString());
 
 		item.put("ident", key.toLowerCase());
@@ -1095,9 +1049,8 @@ public abstract class PersistenceController
 		return new ConfigOption(item);
 	}
 
-	public static Map<String, Object> createJSONConfig(ConfigOption.TYPE type,
-			String key, String description, boolean editable, boolean multiValue,
-			java.util.List<Object> defaultValues,
+	public static Map<String, Object> createJSONConfig(ConfigOption.TYPE type, String key, String description,
+			boolean editable, boolean multiValue, java.util.List<Object> defaultValues,
 			java.util.List<Object> possibleValues) {
 
 		Map<String, Object> item = createNOMitem(type.toString());
@@ -1122,10 +1075,8 @@ public abstract class PersistenceController
 		possibleValues.add(true);
 		possibleValues.add(false);
 
-		return createConfig(
-				ConfigOption.TYPE.BoolConfig,
-				key, description, false, false,
-				defaultValues, possibleValues);
+		return createConfig(ConfigOption.TYPE.BoolConfig, key, description, false, false, defaultValues,
+				possibleValues);
 	}
 
 	public static Map<String, Object> createJSONBoolConfig(String key, Boolean value, String description) {
@@ -1136,10 +1087,8 @@ public abstract class PersistenceController
 		possibleValues.add(true);
 		possibleValues.add(false);
 
-		return createJSONConfig(
-				ConfigOption.TYPE.BoolConfig,
-				key, description, false, false,
-				defaultValues, possibleValues);
+		return createJSONConfig(ConfigOption.TYPE.BoolConfig, key, description, false, false, defaultValues,
+				possibleValues);
 	}
 
 }

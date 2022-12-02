@@ -61,8 +61,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		try {
 			result = ssh.exec((SSHCommand) command, false /* =>without gui */ );
 		} catch (Exception e) {
-			logging.error(this, "ssh execution error: " + e);
-			logging.logTrace(e);
+			logging.error(this, "ssh execution error", e);
 
 		}
 
@@ -170,8 +169,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 			new SSHConnectExec((SSHCommand) command);
 			// cancel();
 		} catch (Exception e) {
-			logging.warning(this, "doAction1, exception occurred " + e);
-			logging.logTrace(e);
+			logging.warning(this, "doAction1, exception occurred", e);
 		}
 
 	}
@@ -184,21 +182,20 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	private void initLayout() {
 		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
 		inputPanel.setLayout(inputPanelLayout);
-		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup()
-				.addGap(Globals.gapSize)
-				.addGroup(inputPanelLayout.createParallelGroup()
-						.addComponent(lbl_info, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(lbl_repos, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.gapSize)
-				.addGroup(inputPanelLayout.createParallelGroup()
-						.addComponent(cb_actions, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE)
-						.addComponent(cb_repos, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE))
-				.addGap(Globals.gapSize));
+		inputPanelLayout
+				.setHorizontalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize)
+						.addGroup(inputPanelLayout.createParallelGroup()
+								.addComponent(lbl_info, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(lbl_repos, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.gapSize)
+						.addGroup(inputPanelLayout.createParallelGroup()
+								.addComponent(cb_actions, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE)
+								.addComponent(cb_repos, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE))
+						.addGap(Globals.gapSize));
 
-		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup()
-				.addGap(2 * Globals.gapSize)
+		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(2 * Globals.gapSize)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(lbl_info, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
 						.addComponent(cb_actions, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))

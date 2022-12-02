@@ -23,7 +23,7 @@ import de.uib.utilities.logging.logging;
  * This class represent a simple single command
  **/
 public class Empty_Command implements SSHCommand {
-	public final static String TESTCOMMAND = "pwd";
+	public static final String TESTCOMMAND = "pwd";
 	/** boolean needParameter = false **/
 	private boolean needParameter = false;
 	/** boolean isMultiCommand = true **/
@@ -253,12 +253,11 @@ public class Empty_Command implements SSHCommand {
 		logging.debug(this, "searchPlaceholder found " + tmp_1 + splitted_text + tmp_2);
 		myTmpCommand = myTmpCommand.replace(tmp_1 + splitted_text + tmp_2, "");
 		logging.debug(this, "searchPlaceholder myCommand_tmp " + myTmpCommand);
-		// System.out.println("my com now: : " + myTmpCommand);
+		// logging.debug("my com now: : " + myTmpCommand);
 		return tmp_1 + splitted_text + tmp_2;
 	}
 
 	/**
-	 * 
 	 * @return the placeholder count
 	 */
 	private int counterString(String s, String search) {

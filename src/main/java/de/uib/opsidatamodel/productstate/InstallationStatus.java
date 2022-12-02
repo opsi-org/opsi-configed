@@ -10,31 +10,31 @@ import java.util.Vector;
 import de.uib.configed.Globals;
 
 public class InstallationStatus {
-	public final static String KEY = "installationStatus";
+	public static final String KEY = "installationStatus";
 
 	// conflicting entries from several clients
-	public final static int CONFLICT = -4;
+	public static final int CONFLICT = -4;
 
 	// no valid entry from service
-	public final static int INVALID = -2;
+	public static final int INVALID = -2;
 
 	// does not matter
-	public final static int UNDEFINED = -1;
+	public static final int UNDEFINED = -1;
 
 	// valid service states since 4.0
-	public final static int NOT_INSTALLED = 0;
-	public final static int INSTALLED = 1;
-	public final static int UNKNOWN = 2;
+	public static final int NOT_INSTALLED = 0;
+	public static final int INSTALLED = 1;
+	public static final int UNKNOWN = 2;
 
 	// compatibility mode for older opsi data, not more necessary
-	// public final static int FAILED = 4;
+	// public static final int FAILED = 4;
 
-	// public final static int INSTALLING = 3;
+	// public static final int INSTALLING = 3;
 
 	// textcolors
-	public final static Color NOT_INSTALLEDcolor = Globals.INVISIBLE;
-	public final static Color INSTALLEDcolor = Globals.okGreen;
-	public final static Color UNKNOWNcolor = Globals.unknownBlue;
+	public static final Color NOT_INSTALLEDcolor = Globals.INVISIBLE;
+	public static final Color INSTALLEDcolor = Globals.okGreen;
+	public static final Color UNKNOWNcolor = Globals.unknownBlue;
 
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
@@ -115,9 +115,7 @@ public class InstallationStatus {
 		displayLabel2label.put("unknown", "unknown");
 		// displayLabel2label.put("installing", "installing");
 
-		choiceLabels = new String[] {
-				label2displayLabel.get("not_installed"),
-				label2displayLabel.get("installed"),
+		choiceLabels = new String[] { label2displayLabel.get("not_installed"), label2displayLabel.get("installed"),
 				label2displayLabel.get("unknown")
 				// label2displayLabel.get("failed"),
 				// label2displayLabel.get(Globals.NOVALIDSTATEstring)
@@ -211,8 +209,7 @@ public class InstallationStatus {
 
 	// getting instances
 	public static InstallationStatus produceFromDisplayLabel(String display) {
-		return produceFromLabel(
-				displayLabel2label.get(display));
+		return produceFromLabel(displayLabel2label.get(display));
 	}
 
 	public static InstallationStatus produceFromLabel(String label) {
@@ -224,8 +221,8 @@ public class InstallationStatus {
 		if (!labels.contains(label))
 			return new InstallationStatus(INVALID);
 
-		// System.out.println(" -------- label " + label + " --- val " + getVal(label));
-		// System.out.println(" -------- display " + new
+		// logging.debug(" -------- label " + label + " --- val " + getVal(label));
+		// logging.debug(" -------- display " + new
 		// InstallationStatus(getVal(label)));
 
 		return new InstallationStatus(getVal(label));
@@ -243,7 +240,7 @@ public class InstallationStatus {
 	}
 
 	public static void main(String[] args) {
-		// System.out.println(" test InstallationStatus.java");
+		// logging.debug(" test InstallationStatus.java");
 		checkCollections();
 		Iterator iter = states.iterator();
 
@@ -252,7 +249,7 @@ public class InstallationStatus {
 		while (iter.hasNext()) {
 			i++;
 			int state = (Integer) iter.next();
-			// System.out.println("state " + i + " : " + state + " label " +
+			// logging.debug("state " + i + " : " + state + " label " +
 			// getLabel(state));
 		}
 	}

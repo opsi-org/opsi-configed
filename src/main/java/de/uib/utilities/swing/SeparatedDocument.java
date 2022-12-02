@@ -17,7 +17,7 @@ public class SeparatedDocument extends CheckedDocument {
 		this.size = realSize + (int) (realSize / partsLength - 1);
 	}
 
-	// @Override
+	@Override
 	public String giveAllowedCharacters(String s, int offset) {
 		if (s == null)
 			return "";
@@ -42,10 +42,9 @@ public class SeparatedDocument extends CheckedDocument {
 	}
 
 	@Override
-	protected void applyMask(AttributeSet a, int insertOffs)
-			throws BadLocationException {
+	protected void applyMask(AttributeSet a) throws BadLocationException {
 		int oriLength = getLength();
-		insertOffs = 0;
+		int insertOffs = 0;
 		for (int i = 0; i < oriLength - 1; i++) {
 			if ((i % partsLength) == 0) {
 				insertOffs = insertOffs + partsLength;

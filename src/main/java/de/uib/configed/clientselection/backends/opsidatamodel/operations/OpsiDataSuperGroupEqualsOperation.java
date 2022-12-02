@@ -14,14 +14,14 @@ public class OpsiDataSuperGroupEqualsOperation extends OpsiDataStringEqualsOpera
 
 	@Override
 	public boolean doesMatch(Client client) {
-		// System.out.println( " ------------ ");
-		// System.out.println( " client " + client );
+		// logging.debug( " ------------ ");
+		// logging.debug( " client " + client );
 		OpsiDataClient oClient = (OpsiDataClient) client;
 		if (oClient.getSuperGroups() == null) {
 			if (!issuedTreeError) {
-				logging.writeToConsole(
+				logging.debug(
 						"Selection by tree structure not possible in headless mode, please remove this selection criterion.");
-				logging.writeToConsole("( The tree is built by the visual component.) ");
+				logging.debug("( The tree is built by the visual component.) ");
 				issuedTreeError = true;
 			}
 			return false;

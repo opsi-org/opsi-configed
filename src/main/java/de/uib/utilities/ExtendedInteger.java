@@ -2,15 +2,14 @@ package de.uib.utilities;
 
 import de.uib.utilities.logging.logging;
 
-public class ExtendedInteger
-		implements Comparable {
+public class ExtendedInteger implements Comparable {
 
-	final static String infiniteImport = "infinite";
-	final static String sINFINITE = "INFINITE";
-	final static String displayInfinite = "\u221E";// "INF";
+	static final String infiniteImport = "infinite";
+	static final String sINFINITE = "INFINITE";
+	static final String displayInfinite = "\u221E";// "INF";
 
-	public final static ExtendedInteger INFINITE = new ExtendedInteger(sINFINITE);
-	public final static ExtendedInteger ZERO = new ExtendedInteger(0);
+	public static final ExtendedInteger INFINITE = new ExtendedInteger(sINFINITE);
+	public static final ExtendedInteger ZERO = new ExtendedInteger(0);
 
 	private Integer number;
 	private String value;
@@ -159,67 +158,67 @@ public class ExtendedInteger
 		int result;
 
 		try {
-			System.out.println(" INFINITE.compareTo( INFINITE ) ");
+			logging.debug(" INFINITE.compareTo( INFINITE ) ");
 			result = INFINITE.compareTo(INFINITE);
-			System.out.println("" + result);
+			logging.debug("" + result);
 		} catch (Exception ex) {
-			System.out.println("" + ex);
+			logging.debug("" + ex);
 		}
 
 		try {
-			System.out.println(" INFINITE.compareTo( new ExtendedInteger( 20) ) ");
+			logging.debug(" INFINITE.compareTo( new ExtendedInteger( 20) ) ");
 			result = INFINITE.compareTo(new ExtendedInteger(20));
-			System.out.println("" + result);
+			logging.debug("" + result);
 		} catch (Exception ex) {
-			System.out.println("" + ex);
+			logging.debug("" + ex);
 		}
 
 		try {
-			System.out.println(" INFINITE.compareTo( new ExtendedInteger( -20) ) ");
+			logging.debug(" INFINITE.compareTo( new ExtendedInteger( -20) ) ");
 			result = INFINITE.compareTo(new ExtendedInteger(-20));
-			System.out.println("" + result);
+			logging.debug("" + result);
 		} catch (Exception ex) {
-			System.out.println("" + ex);
+			logging.debug("" + ex);
 		}
 
 		try {
-			System.out.println(" new ExtendedInteger( -20).compareTo( INFINITE)  ");
+			logging.debug(" new ExtendedInteger( -20).compareTo( INFINITE)  ");
 			result = new ExtendedInteger(-20).compareTo(INFINITE);
-			System.out.println("" + result);
+			logging.debug("" + result);
 		} catch (Exception ex) {
-			System.out.println("" + ex);
+			logging.debug("" + ex);
 		}
 
 		try {
-			System.out.println(" new ExtendedInteger( 20).new ExtendedInteger( 20) ) ");
+			logging.debug(" new ExtendedInteger( 20).new ExtendedInteger( 20) ) ");
 			result = new ExtendedInteger(20).compareTo(new ExtendedInteger(20));
-			System.out.println("" + result);
+			logging.debug("" + result);
 		} catch (Exception ex) {
-			System.out.println("" + ex);
+			logging.debug("" + ex);
 		}
 
 		try {
-			System.out.println(" new ExtendedInteger( 20).new ExtendedInteger( -20) ) ");
+			logging.debug(" new ExtendedInteger( 20).new ExtendedInteger( -20) ) ");
 			result = new ExtendedInteger(20).compareTo(new ExtendedInteger(-20));
-			System.out.println("" + result);
+			logging.debug("" + result);
 		} catch (Exception ex) {
-			System.out.println("" + ex);
+			logging.debug("" + ex);
 		}
 
 		try {
-			System.out.println(" new ExtendedInteger( 20).new ExtendedInteger( -20) ) ");
+			logging.debug(" new ExtendedInteger( 20).new ExtendedInteger( -20) ) ");
 			result = new ExtendedInteger(20).compareTo(new ExtendedInteger(-20));
-			System.out.println("" + result);
+			logging.debug("" + result);
 		} catch (Exception ex) {
-			System.out.println("" + ex);
+			logging.debug("" + ex);
 		}
 
 		try {
-			System.out.println(" new ExtendedInteger( 20).compareTo( INFINITE) ");
+			logging.debug(" new ExtendedInteger( 20).compareTo( INFINITE) ");
 			result = new ExtendedInteger(20).compareTo(INFINITE);
-			System.out.println("" + result);
+			logging.debug("" + result);
 		} catch (Exception ex) {
-			System.out.println("" + ex);
+			logging.debug("" + ex);
 		}
 	}
 

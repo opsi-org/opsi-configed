@@ -26,9 +26,7 @@ import de.uib.utilities.ssh.SSHOutputCollector;
 import de.uib.utilities.thread.WaitCursor;
 
 /**
- * 
- * @inheritDoc
- *             Class for executing commands.
+ * @inheritDoc Class for executing commands.
  */
 public class SSHConnectExec extends SSHConnect {
 	protected SSHConnectionExecDialog outputDialog = null;
@@ -103,8 +101,7 @@ public class SSHConnectExec extends SSHConnect {
 							+ configed.getResourceValue("SSHConnection.Exec.cannotAsReadonly"));
 			}
 		} catch (Exception e) {
-			logging.error(this, "SSHConnectExec Exception " + e);
-			logging.logTrace(e);
+			logging.error(this, "SSHConnectExec Exception", e);
 		} finally {
 			// disconnect();
 			System.gc();
@@ -244,9 +241,8 @@ public class SSHConnectExec extends SSHConnect {
 						}
 					}
 					if (found_error) {
-						final_dia.appendLater(
-								"[" + configed.getResourceValue("SSHConnection.Exec.dialog.commandlist") + "]     " +
-										"" + configed.getResourceValue("SSHConnection.Exec.exitClosed"));
+						final_dia.appendLater("[" + configed.getResourceValue("SSHConnection.Exec.dialog.commandlist")
+								+ "]     " + "" + configed.getResourceValue("SSHConnection.Exec.exitClosed"));
 					}
 
 					// wrong place final_dia.appendLater("\nREADY\n");
@@ -335,11 +331,10 @@ public class SSHConnectExec extends SSHConnect {
 			if (SSHCommandFactory.getInstance(main).ssh_always_exec_in_background)
 				outputDialog.setVisible(false);
 			// outputDialog.append(getConnectedUser() + "@" + getConnectedHost() + "\n");
-			outputDialog.setTitle(
-					configed.getResourceValue("SSHConnection.Exec.title") + " "
-							+ configed.getResourceValue("SSHConnection.Exec.dialog.commandoutput")
-							+ "  (" + SSHConnectionInfo.getInstance().getUser()
-							+ "@" + SSHConnectionInfo.getInstance().getHost() + ")");
+			outputDialog.setTitle(configed.getResourceValue("SSHConnection.Exec.title") + " "
+					+ configed.getResourceValue("SSHConnection.Exec.dialog.commandoutput") + "  ("
+					+ SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost()
+					+ ")");
 			// + " ("+ this.user +"@"+this.host+")" );
 
 		} else
@@ -367,11 +362,9 @@ public class SSHConnectExec extends SSHConnect {
 			else
 				return task.get();
 		} catch (java.lang.NullPointerException npe) {
-			logging.error(this, "exec NullPointerException " + npe);
-			logging.logTrace(npe);
+			logging.error(this, "exec NullPointerException", npe);
 		} catch (Exception e) {
-			logging.error(this, "exec Exception " + e);
-			logging.logTrace(e);
+			logging.error(this, "exec Exception", e);
 		}
 		return null;
 	}
@@ -380,8 +373,7 @@ public class SSHConnectExec extends SSHConnect {
 		if (outputDialog != null)
 			if (s.length() > 0)
 				if (s != "\n") {
-					String t = outputDialog.ansiCodeInfo + s;
-					;
+					String t = outputDialog.ansiCodeInfo + s;;
 					// logging.info(this, t);
 					return t;
 				}
@@ -603,7 +595,7 @@ public class SSHConnectExec extends SSHConnect {
 								}
 							}
 						} else {
-							// System.out.println("withgui else in forloop");
+							// logging.debug("withgui else in forloop");
 							for (String line : str.split("\n"))
 								logging.debug(this, "line: " + line);
 						}
@@ -637,23 +629,20 @@ public class SSHConnectExec extends SSHConnect {
 			catch (JSchException jschex) {
 				if (retriedTimes >= 3) {
 					retriedTimes = 1;
-					logging.warning(this, "jsch exception " + jschex);
-					logging.logTrace(jschex);
+					logging.warning(this, "jsch exception", jschex);
 					publishError(jschex.toString());
 					return "";
 				} else {
-					logging.warning(this, "jsch exception " + jschex);
+					logging.warning(this, "jsch exception", jschex);
 					retriedTimes = retriedTimes + 1;
 					connect();
 					doInBackground();
 				}
 			} catch (IOException ex) {
-				logging.warning(this, "SSH IOException " + ex);
-				logging.logTrace(ex);
+				logging.warning(this, "SSH IOException", ex);
 				publishError(ex.toString());
 			} catch (Exception e) {
-				logging.warning(this, "SSH Exception " + e);
-				logging.logTrace(e);
+				logging.warning(this, "SSH Exception", e);
 				publishError(e.getMessage());
 			}
 			if (outputDialog != null)

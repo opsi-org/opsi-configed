@@ -10,7 +10,7 @@ import de.uib.utilities.logging.logging;
 public class Table {
 	protected String highTimestampS = new Timestamp(0).toString();
 
-	public final static String versionKey = "table version";
+	public static final String versionKey = "table version";
 
 	// static String tableName = "HOST";
 	protected String localTablePath;

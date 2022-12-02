@@ -30,12 +30,9 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 		setPreferredSize(new java.awt.Dimension(labelWidth, labelHeight));
 	}
 
-	public Component getTreeCellRendererComponent(JTree tree, Object value,
-			boolean sel,
-			boolean expanded,
-			boolean leaf,
-			int row,
-			boolean hasFocus) {
+	@Override
+	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
+			int row, boolean hasFocus) {
 		setBackground(Color.white);
 		if (value instanceof IconNode) {
 			String stringValue =
@@ -53,7 +50,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			 * newSize.setSize(getPreferredSize().getWidth() * 1.3,
 			 * getPreferredSize().getHeight());
 			 * setPreferredSize(newSize);
-			 * System.out.println("--- newSize  " + stringValue + " *** " +
+			 * logging.debug("--- newSize  " + stringValue + " *** " +
 			 * newSize.getWidth());
 			 */
 
@@ -71,11 +68,11 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			// logging.info(this, "--- main.getSelectedClients().contains((stringValue) " +
 			// main.getSelectedClients().contains(stringValue));
 
-			// System.out.println (stringValue + " selected! ");
+			// logging.debug (stringValue + " selected! ");
 
 			if (!node.getAllowsChildren()) // client
 			{
-				// System.out.println( " main.getActiveTreeNodes().containsKey(value) " +
+				// logging.debug( " main.getActiveTreeNodes().containsKey(value) " +
 				// main.getActiveTreeNodes().containsKey(value) );
 				if (
 				// sel
@@ -145,11 +142,8 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			 * }
 			 */
 
-			if (tree.getSelectionPath() != null
-					&&
-					node.equals(tree.getSelectionPath().getLastPathComponent())
-					&&
-					tree.hasFocus())
+			if (tree.getSelectionPath() != null && node.equals(tree.getSelectionPath().getLastPathComponent())
+					&& tree.hasFocus())
 
 			{
 				// logging.info(this, " we are at this place ");
@@ -166,14 +160,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			return this;
 		}
 
-		return super.getTreeCellRendererComponent(
-				tree,
-				value,
-				sel,
-				expanded,
-				leaf,
-				row,
-				hasFocus);
+		return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
 	}
 }

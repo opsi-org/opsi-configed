@@ -18,7 +18,7 @@ public class Containership {
 
 	public Containership(java.awt.Container conti) {
 		theContainer = conti;
-		logging.debugOut(this, logging.LEVEL_DONT_SHOW_IT, "Containership initialized");
+		logging.debug("Containership initialized");
 	}
 
 	public void doForAllContainedCompis(String methodName, Object[] args) {
@@ -52,15 +52,13 @@ public class Containership {
 
 		cc = in.getComponentCount();
 
-		logging.debugOut(this, logging.LEVEL_DONT_SHOW_IT, "\n Number of Comps " + cc);
+		logging.debug("Number of Comps " + cc);
 
 		for (i = 0; i < cc; i++) {
 			theComp = in.getComponent(i);
 			theCompClass = theComp.getClass();
 
-			logging.debugOut(this, logging.LEVEL_DONT_SHOW_IT,
-					"  " + i + " " + theComp.getClass().getName()
-							+ "\n" + theComp.toString() + "\n");
+			logging.debug("  " + i + " " + theComp.getClass().getName() + "\n" + theComp.toString() + "\n");
 
 			if (selClass.isInstance(theComp)) // (selClass == theComp.getClass())
 			// theComp is an instance of selClass
@@ -71,20 +69,17 @@ public class Containership {
 						theMethod = theCompClass.getMethod(methodName, theArgsTypes);
 						theMethod.invoke(theComp, args);
 					} catch (Exception ex) {
-						logging.debugOut(this, logging.LEVEL_DONT_SHOW_IT,
-								methodName + ": not found >>>>> " + ex.toString() + "\n");
+						logging.debug(methodName + ": not found >>>>> " + ex.toString() + "\n");
 					}
 
 				}
 
-			}
-			;
+			} ;
 
 			if (java.awt.Container.class.isInstance(theComp))
 			// theComp is an instance of Container
 			{
-				logging.debugOut(this, logging.LEVEL_DONT_SHOW_IT,
-						"\n +++ recursion ");
+				logging.debug("+++ recursion ");
 				doForAllContained(methodName, args, theArgsTypes, selClass, (java.awt.Container) theComp);
 			}
 		}

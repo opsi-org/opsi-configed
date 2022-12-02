@@ -71,13 +71,9 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 	 * }
 	 */
 
-	public Component getTableCellRendererComponent(
-			JTable table,
-			Object value, // value to display
+	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 			boolean isSelected, // is the cell selected
-			boolean hasFocus,
-			int row,
-			int column) {
+			boolean hasFocus, int row, int column) {
 		Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		String selectedString = "";
@@ -131,7 +127,7 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 			((JLabel) result).setIcon(selectedIcon);
 			((JLabel) result).setToolTipText(
 					Globals.fillStringToLength(tooltipPrefix + " " + selectedString + " ", FILL_LENGTH));
-			// System.out.println("------ tooltip " + ((JLabel)result).getToolTipText());
+			// logging.debug("------ tooltip " + ((JLabel)result).getToolTipText());
 		}
 
 		// if (backgroundColor != null) result.setBackground (backgroundColor);

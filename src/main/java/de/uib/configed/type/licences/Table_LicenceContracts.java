@@ -22,21 +22,21 @@ public class Table_LicenceContracts extends Relation {
 	 * 
 	 */
 
-	public final static String idKEY = "id";
-	public final static String identKEY = "ident";
-	public final static String idDBKEY = "licenseContractId";
-	public final static String partnerKEY = "partner";
-	public final static String conclusionDateKEY = "conclusionDate";
-	public final static String notificationDateKEY = "notificationDate";
-	public final static String expirationDateKEY = "expirationDate";
-	public final static String notesKEY = "notes";
-	public final static String descriptionKEY = "description";
+	public static final String idKEY = "id";
+	public static final String identKEY = "ident";
+	public static final String idDBKEY = "licenseContractId";
+	public static final String partnerKEY = "partner";
+	public static final String conclusionDateKEY = "conclusionDate";
+	public static final String notificationDateKEY = "notificationDate";
+	public static final String expirationDateKEY = "expirationDate";
+	public static final String notesKEY = "notes";
+	public static final String descriptionKEY = "description";
 
 	public static final String opsiNOMtype = "LicenseContract";
 	public static final String typeKEY = "type";
 
-	public final static java.util.List<String> DB_ATTRIBUTES;
-	// public final static String[] ATTRIBUTES_asArray;
+	public static final java.util.List<String> DB_ATTRIBUTES;
+	// public static final String[] ATTRIBUTES_asArray;
 	static {
 		DB_ATTRIBUTES = new LinkedList<String>();
 		DB_ATTRIBUTES.add(idDBKEY);
@@ -48,7 +48,7 @@ public class Table_LicenceContracts extends Relation {
 		DB_ATTRIBUTES.add(descriptionKEY);
 	}
 
-	public final static java.util.List<String> INTERFACED_ATTRIBUTES;
+	public static final java.util.List<String> INTERFACED_ATTRIBUTES;
 	static {
 		INTERFACED_ATTRIBUTES = new LinkedList<String>();
 		INTERFACED_ATTRIBUTES.add(idDBKEY);
@@ -60,11 +60,10 @@ public class Table_LicenceContracts extends Relation {
 		// INTERFACED_ATTRIBUTES.add(descriptionKEY);
 	}
 
-	public final static java.util.List<String> ALLOWED_ATTRIBUTES;
-	// public final static String[] ATTRIBUTES_asArray;
+	public static final java.util.List<String> ALLOWED_ATTRIBUTES;
+	// public static final String[] ATTRIBUTES_asArray;
 	static {
-		ALLOWED_ATTRIBUTES = new LinkedList<String>(
-				DB_ATTRIBUTES);
+		ALLOWED_ATTRIBUTES = new LinkedList<String>(DB_ATTRIBUTES);
 		ALLOWED_ATTRIBUTES.add(idKEY);
 		ALLOWED_ATTRIBUTES.add(identKEY);
 		ALLOWED_ATTRIBUTES.add(typeKEY);

@@ -7,8 +7,7 @@ import de.uib.utilities.logging.logging;
 
 /**
 */
-public class UpdateCollection
-		implements UpdateCommand, CountedCollection {
+public class UpdateCollection implements UpdateCommand, CountedCollection {
 
 	protected Collection<Object> implementor;
 
@@ -159,8 +158,7 @@ public class UpdateCollection
 	public boolean add(Object obj) {
 		logging.debug(this, "###### UpdateCollection add Object  " + obj);
 		if (!(obj instanceof UpdateCommand)) {
-			logging.debugOut(logging.LEVEL_ERROR, "wrong element type, found" + obj.getClass().getName()
-					+ ", expected an    + UpdateCommand");
+			logging.error("Wrong element type, found" + obj.getClass().getName() + ", expected an UpdateCommand");
 
 			return false;
 		}
@@ -207,8 +205,8 @@ public class UpdateCollection
 	}
 
 	/**
-	 * doCall calls doCall on all members.
-	 * This will give a recursion for members being update collections themselves.
+	 * doCall calls doCall on all members. This will give a recursion for
+	 * members being update collections themselves.
 	 */
 	public void doCall() {
 		logging.debug(this, "doCall, element count: " + size());
@@ -219,7 +217,7 @@ public class UpdateCollection
 		Iterator it = implementor.iterator();
 		while (it.hasNext()) {
 			UpdateCommand theCommand = ((UpdateCommand) it.next());
-			// System.out.println ("----------- call updateCommand " + theCommand);
+			// logging.debug ("----------- call updateCommand " + theCommand);
 			if (theCommand != null)
 				theCommand.doCall();
 		}

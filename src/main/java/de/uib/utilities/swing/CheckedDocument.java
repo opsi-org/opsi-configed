@@ -42,7 +42,7 @@ public class CheckedDocument extends PlainDocument {
 		return result;
 	}
 
-	public String giveAllowedCharacters(String s, int offset) {
+	protected String giveAllowedCharacters(String s, int offset) {
 		// logging.info(this, "giveAllowedCharacters " + s + " " + offset);
 		if (s == null)
 			return "";
@@ -58,19 +58,16 @@ public class CheckedDocument extends PlainDocument {
 		return textBuf.toString();
 	}
 
-	protected void applyMask(AttributeSet a, int insertOffs)
-			throws BadLocationException {
+	protected void applyMask(AttributeSet a) throws BadLocationException {
 	}
 
-	protected void insertStringPlain(int offs, String s, AttributeSet a)
-			throws BadLocationException {
+	protected void insertStringPlain(int offs, String s, AttributeSet a) throws BadLocationException {
 		// logging.info(this, "insertStringPlain super is " +
 		// super.getClass().getName());
 		super.insertString(offs, s, a);
 	}
 
-	public void insertString(int offs, String s, AttributeSet a)
-			throws BadLocationException {
+	public void insertString(int offs, String s, AttributeSet a) throws BadLocationException {
 		// logging.info(this, "insertString s offs, size " + s + ", " + offs + ", " +
 		// size);
 
@@ -93,7 +90,7 @@ public class CheckedDocument extends PlainDocument {
 
 		insertStringPlain(offs, corrected, a);
 		if (checkMask)
-			applyMask(a, offs);
+			applyMask(a);
 	}
 
 }

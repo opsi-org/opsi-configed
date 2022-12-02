@@ -6,11 +6,9 @@ import java.awt.event.ActionListener;
 import de.uib.utilities.logging.logging;
 
 /**
- * Select AND or OR
- * Created for the ClientSelectionDialog.
+ * Select AND or OR Created for the ClientSelectionDialog.
  */
 public class AndOrSelectButtonByIcon extends IconAsButton {
-	private IconAsButton ib;
 
 	public AndOrSelectButtonByIcon() {
 		super("and/or", "images/boolean_and_or_disabled.png", "images/boolean_and_or_over.png",
@@ -34,13 +32,6 @@ public class AndOrSelectButtonByIcon extends IconAsButton {
 
 	public void selectOr() {
 		setActivated(true);
-	}
-
-	private void createActionEvents() {
-		for (ActionListener listener : actionListeners) {
-			ActionEvent myEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "AndOrSelectButtonByIcon");
-			listener.actionPerformed(myEvent);
-		}
 	}
 
 	private class ButtonActionListener implements ActionListener {

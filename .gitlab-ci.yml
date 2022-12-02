@@ -12,25 +12,29 @@ set_variables:
   stage: set_variables
   script:
     - CONFIGED_VERSION=$(sed -n 's,.*<version>\(.*\)</version>.*,\1,p' pom.xml | head -1)
-    - CONFIGED_JAR_NAME="configed-${CONFIGED_VERSION}-jar-with-dependencies.jar"
-    - echo "CONFIGED_VERSION=$CONFIGED_VERSION" > version.env
-    - echo "CONFIGED_JAR_NAME=$CONFIGED_JAR_NAME"> jar_name.env
+    - CONFIGED_JAR_NAME="configed-${CONFIGED_VERSION}.jar"
+    - CONFIGED_JAR_NAME_WITH_DEPS="configed-${CONFIGED_VERSION}-jar-with-dependencies.jar"
+    - echo "CONFIGED_VERSION=$CONFIGED_VERSION" > version-and-jar.env
+    - echo "CONFIGED_JAR_NAME=$CONFIGED_JAR_NAME" >> version-and-jar.env
+    - echo "CONFIGED_JAR_NAME_WITH_DEPS=$CONFIGED_JAR_NAME_WITH_DEPS" >> version-and-jar.env
   artifacts:
     reports:
       dotenv:
-        - version.env
-        - jar_name.env
+        - version-and-jar.env
     expire_in: 2 day
 
 compile_and_package:
-  image: maven:3.6.3-jdk-11
+  image: maven:3.8.6-openjdk-18
   stage: build_and_analyze
   script:
     - mvn package
+    - jdeps --class-path target/$CONFIGED_JAR_NAME_WITH_DEPS --recursive --ignore-missing-deps --list-deps target/$CONFIGED_JAR_NAME > target/module.deps
+    - cat target/module.deps
   artifacts:
     name: 'configed-build'
     paths:
-      - target/$CONFIGED_JAR_NAME
+      - target/$CONFIGED_JAR_NAME_WITH_DEPS
+      - target/module.deps
     expire_in: 2 day
   needs:
     - set_variables
@@ -56,9 +60,11 @@ signandupload:
   stage: sign
   script:
     - echo "CI_JOB_ID_CONFIGED=$CI_JOB_ID" > ci_job_id.env
-    - opsi-dev-tool -l info --signserver-sign target/$CONFIGED_JAR_NAME
-    - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-tool -l info --binary-push target/$CONFIGED_JAR_NAME configed all all $CONFIGED_VERSION "$CI_JOB_ID"'
-    - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-tool -l info --binary-push target/$CONFIGED_JAR_NAME configed all all $CONFIGED_VERSION'
+    - opsi-dev-tool -l info --signserver-sign target/$CONFIGED_JAR_NAME_WITH_DEPS
+    - mkdir opsi-configed
+    - mv target/$CONFIGED_JAR_NAME_WITH_DEPS target/module.deps opsi-configed/
+    - '[ "$CI_COMMIT_TAG" = "" ] && opsi-dev-tool -l info --binary-push opsi-configed configed all all $CONFIGED_VERSION "$CI_JOB_ID"'
+    - '[ "$CI_COMMIT_TAG" = "" ] || opsi-dev-tool -l info --binary-push opsi-configed configed all all $CONFIGED_VERSION'
   needs:
     - set_variables
     - compile_and_package
@@ -76,7 +82,7 @@ trigger_opsiproduct_pipeline:
   script:
     - '[ "$CI_COMMIT_TAG" = "" ] || CONFIGED_PRERELEASE_VERSION=""'
     - '[ "$CI_COMMIT_TAG" = "" ] && CONFIGED_PRERELEASE_VERSION="$CI_JOB_ID_CONFIGED"'
-    - curl --request POST --form "token=$CI_JOB_TOKEN" --form ref=master --form "variables[CONFIGED_PRERELEASE_VERSION]=$CONFIGED_PRERELEASE_VERSION" --form "variables[CONFIGED_VERSION]=$CONFIGED_VERSION" --form "variables[CONFIGED_JAR_NAME]=$CONFIGED_JAR_NAME" "https://gitlab.uib.gmbh/api/v4/projects/427/trigger/pipeline"
+    - curl --request POST --form "token=$CI_JOB_TOKEN" --form ref=master --form "variables[CONFIGED_PRERELEASE_VERSION]=$CONFIGED_PRERELEASE_VERSION" --form "variables[CONFIGED_VERSION]=$CONFIGED_VERSION" --form "variables[CONFIGED_JAR_NAME_WITH_DEPS]=$CONFIGED_JAR_NAME_WITH_DEPS" "https://gitlab.uib.gmbh/api/v4/projects/427/trigger/pipeline"
   needs:
     - set_variables
     - compile_and_package

@@ -32,7 +32,7 @@ public class SSHConnectTerminal extends SSHConnect {
 	private KeyListener inputKeyListener = null;
 	private ActionListener connectionKeyListener = null;
 	private OutputStream out = null;
-	public final static String SOME_COMMAND = "/bin/bash"; // "opsi-admin --version";
+	public static final String SOME_COMMAND = "/bin/bash"; // "opsi-admin --version";
 	String currentDirectory = "";
 	boolean getCurrentDirectorySilent = false;
 
@@ -40,11 +40,8 @@ public class SSHConnectTerminal extends SSHConnect {
 		super(main);
 		this.dialog = dialog;
 		if (dialog == null)
-			dialog = new SSHConnectionTerminalDialog(
-					configed.getResourceValue("MainFrame.jMenuSSHTerminal") + " "
-							+ SSHConnectionInfo.getInstance().getUser() + "@"
-							+ SSHConnectionInfo.getInstance().getHost(),
-					this,
+			dialog = new SSHConnectionTerminalDialog(configed.getResourceValue("MainFrame.jMenuSSHTerminal") + " "
+					+ SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost(), this,
 					false /* visible = false */
 			);
 		connect();
@@ -55,8 +52,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		dialog = new SSHConnectionTerminalDialog(
 				configed.getResourceValue("MainFrame.jMenuSSHTerminal") + " "
 						+ SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost(),
-				this,
-				false /* visible = false */
+				this, false /* visible = false */
 		);
 		connect();
 	}
@@ -81,8 +77,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				String str = new String(buf, off, len, "UTF-8");
 				theDialog.append(str, theDialog.getInputField());
 			} catch (UnsupportedEncodingException ue) {
-				logging.warning(" UnsupportedEncodingException " + ue);
-				logging.logTrace(ue);
+				logging.warning("UnsupportedEncodingException", ue);
 			}
 		}
 	}
@@ -98,8 +93,7 @@ public class SSHConnectTerminal extends SSHConnect {
 			try {
 				jsch = new JSch();
 				SSHConnectionInfo.getInstance().checkUserData();
-				session = jsch.getSession(
-						SSHConnectionInfo.getInstance().getUser(),
+				session = jsch.getSession(SSHConnectionInfo.getInstance().getUser(),
 						SSHConnectionInfo.getInstance().getHost(),
 						Integer.valueOf(SSHConnectionInfo.getInstance().getPort()));
 				logging.info(this, "connect user@host " + SSHConnectionInfo.getInstance().getUser() + "@"
@@ -178,8 +172,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				Thread.sleep(1000);
 				exec(SOME_COMMAND + "\n");
 			} catch (Exception e) {
-				logging.error(this, "SSHConnectTerminal connect exception" + e);
-				logging.logTrace(e);
+				logging.error(this, "SSHConnectTerminal connect exception", e);
 			}
 		}
 	}
@@ -212,11 +205,9 @@ public class SSHConnectTerminal extends SSHConnect {
 				}
 				// else logging.info(this, "empty input text");
 			} catch (IOException ioe) {
-				logging.error(this, "SSHConnectTerminal exec ioexception " + ioe);
-				logging.logTrace(ioe);
+				logging.error(this, "SSHConnectTerminal exec ioexception", ioe);
 			} catch (Exception e) {
-				logging.error(this, "SSHConnectTerminal exec exception ");
-				logging.logTrace(e);
+				logging.error(this, "SSHConnectTerminal exec exception", e);
 			}
 			logging.info(this, " exec finished  " + text);
 
@@ -243,7 +234,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		 * 
 		 * try
 		 * {
-		 * System.out.println("starting");
+		 * logging.debug("starting");
 		 * logging.info(this, "have we got System.out ? " + System.out.checkError());
 		 * File f = File.createTempFile("configedout_", ".tmp");
 		 * myOut = new PrintStream(f);
@@ -286,7 +277,7 @@ public class SSHConnectTerminal extends SSHConnect {
 			else
 				logging.warning(this, "Pipe closed");
 		} catch (Exception e2) {
-			logging.logTrace(e2);
+			logging.error("Error", e2);
 		}
 	}
 
@@ -379,8 +370,7 @@ public class SSHConnectTerminal extends SSHConnect {
 			// false);
 			result = ssh.exec(new Empty_Command(
 					// http://stackoverflow.com/questions/948008/linux-command-to-list-all-available-commands-and-aliases
-					SSHCommandFactory.getInstance().str_command_getLinuxCommands),
-					false, null, true, false);
+					SSHCommandFactory.getInstance().str_command_getLinuxCommands), false, null, true, false);
 			if (result == null)
 				logging.warning(this, "no commands could be found for autocompletion");
 
@@ -404,33 +394,30 @@ public class SSHConnectTerminal extends SSHConnect {
 		// try{Thread.sleep(50);} catch(Exception ee){}
 		// // }
 		// // catch (IOException ioe)
-		// // { ioe.printStackTrace();}
 
 		// if (currentDirectory == null) return result;
 
 		// currentDirectory = currentDirectory.replace("\n", "") + "/";
 		// String com = "ls -aldU " + currentDirectory + "./*";
-		// System.out.println("\n\nCommand: " + com);
+		// logging.debug("\n\nCommand: " + com);
 		// String result_ls = ssh.exec( new Empty_Command(com ),
 		// false, null, true, false);
-		// System.out.println("\ncurrentDirectory: " + currentDirectory + "./");
-		// System.out.println("result_ls: " + result_ls);
+		// logging.debug("\ncurrentDirectory: " + currentDirectory + "./");
+		// logging.debug("result_ls: " + result_ls);
 		// String[] arr_result_dir = result_ls.split("\n");
 		// String result_dir = "";
 
 		// for (String l : arr_result_dir)
 		// {
 		// String line = l; //.replace("\\","\\\\");
-		// System.out.println("line: " + line);
+		// logging.debug("line: " + line);
 		// String dir = "" + line.split(currentDirectory + "/",2)[1];
-		// System.out.println("DIR: " + dir);
+		// logging.debug("DIR: " + dir);
 		// result_dir = result_dir + dir + "\n";
 		// }
 		// result = result + "\n" + result_dir;
 		// }
 		// catch (Exception ioe)
-		// { ioe.printStackTrace();}
-
 		// }
 		return result;
 	}

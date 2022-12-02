@@ -13,20 +13,20 @@ public class ExporterToTerminal extends ExportTable {
 	}
 
 	public void execute(String fileName, boolean onlySelectedRows) {
-		// System.out.println("onlySelectedRows: "+ onlySelectedRows);
+		// logging.debug("onlySelectedRows: "+ onlySelectedRows);
 		Boolean selectedOnly = checkSelection(onlySelectedRows);
 		if (selectedOnly == null)
 			return;
 
 		for (int rowI = 0; rowI < theTable.getRowCount(); rowI++) {
-			// System.out.println("selected? " + theTable.isRowSelected(rowI));
+			// logging.debug("selected? " + theTable.isRowSelected(rowI));
 			if (!selectedOnly || theTable.isRowSelected(rowI)) {
 				Vector<String> rowV = new Vector<String>();
 				for (int colI = 0; colI < theTable.getColumnCount(); colI++) {
 					if (theTable.getValueAt(rowI, colI) != null) {
 						if (classNames == null || classNames.size() == 0) {
 							if (theTable.getValueAt(rowI, colI) instanceof String) {
-								// System.out.println(theTable.getValueAt(rowI, colI));
+								// logging.debug(theTable.getValueAt(rowI, colI));
 								rowV.add((String) theTable.getValueAt(rowI, colI));
 
 							}
@@ -40,8 +40,6 @@ public class ExporterToTerminal extends ExportTable {
 							System.out.print(", ");
 					}
 				}
-				System.out.println("");
-
 			}
 
 		}

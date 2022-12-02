@@ -13,17 +13,15 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	private String baseName = "/var/lib/opsi/depot/opsi-client-agent/opsi-deploy-client-agent";
 	protected FGeneralDialog dialog = null;
 	private boolean needingSudo = true;
-	private boolean needRoot = false;
 	private boolean pingIsRequired = true;
 	private boolean needParameter = true;
 	private boolean isMultiCommand = false;
-	private int helpColumns = 2;
 	private int priority = 105;
 
 	private String client = "";
 	private String user = "";
 	private String passw = "";
-	private String finalize_action = "";
+	private String finishAction = "";
 	private String keepClientOnFailure = "";
 	private String verbosity = "";
 
@@ -66,35 +64,35 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 		START_OCD, REBOOT, SHUTDOWN
 	};
 
-	public void finalize(FinalActionType actionType) {
+	public void finish(FinalActionType actionType) {
 		switch (actionType) {
-			case START_OCD:
-				finalize_action = " --start-opsiclientd ";
-				break;
-			case REBOOT:
-				finalize_action = " --reboot";
-				break;
-			case SHUTDOWN:
-				finalize_action = " --shutdown";
-				break;
-			default:
-				finalize_action = "";
+		case START_OCD:
+			finishAction = " --start-opsiclientd ";
+			break;
+		case REBOOT:
+			finishAction = " --reboot";
+			break;
+		case SHUTDOWN:
+			finishAction = " --shutdown";
+			break;
+		default:
+			finishAction = "";
 		}
 	}
 
-	public void finalize(String action) {
+	public void finish(String action) {
 		switch (action) {
-			case "startocd":
-				finalize_action = " --start-opsiclientd ";
-				break;
-			case "reboot":
-				finalize_action = " --reboot";
-				break;
-			case "shutdown":
-				finalize_action = " --shutdown";
-				break;
-			default:
-				finalize_action = "";
+		case "startocd":
+			finishAction = " --start-opsiclientd ";
+			break;
+		case "reboot":
+			finishAction = " --reboot";
+			break;
+		case "shutdown":
+			finishAction = " --shutdown";
+			break;
+		default:
+			finishAction = "";
 		}
 	}
 
@@ -120,7 +118,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 
 	@Override
 	public String getCommand() {
-		command = baseName + " " + verbosity + user + passw + finalize_action + keepClientOnFailure + getPingOption()
+		command = baseName + " " + verbosity + user + passw + finishAction + keepClientOnFailure + getPingOption()
 				+ client;
 		if (needSudo())
 			return SSHCommandFactory.getInstance().sudo_text + " " + command + " 2>&1";
@@ -188,8 +186,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	@Override
 	public SSHConnectionExecDialog startHelpDialog() {
 		SSHCommand command = new CommandHelp(this);
-		SSHConnectExec exec = new SSHConnectExec(
-				command
+		SSHConnectExec exec = new SSHConnectExec(command
 		/*
 		 * new SSHConnectionExecDialog(
 		 * configed.getResourceValue("SSHConnection.Exec.title") +

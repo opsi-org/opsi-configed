@@ -22,9 +22,7 @@ import org.jdesktop.swingx.calendar.DateSelectionModel;
 
 import de.uib.utilities.logging.logging;
 
-public class DateTimeEditor extends JPanel
-		implements
-		org.jdesktop.swingx.event.DateSelectionListener
+public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.DateSelectionListener
 
 {
 	protected JXMonthView monthView;
@@ -69,11 +67,10 @@ public class DateTimeEditor extends JPanel
 
 		popup.add(menuItemNow);
 
-		JMenuItem menuItemNull = new JMenuItem("Kein Datum");
-		;
+		JMenuItem menuItemNull = new JMenuItem("Kein Datum");;
 		menuItemNull.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// System.out.println( " action menu null ");
+				// logging.debug( " action menu null ");
 				monthView.getSelectionModel().clearSelection();
 				monthView.commitSelection();
 			}
@@ -145,37 +142,32 @@ public class DateTimeEditor extends JPanel
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		setLayout(layout);
 
-		layout.setHorizontalGroup(
-				layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup()
-								.addGap(1, 1, Short.MAX_VALUE)
-								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-										.addComponent(buttonBack, buttonW, buttonW, buttonW)
-										.addComponent(buttonYearBack, buttonW, buttonW, buttonW))
-								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								// GroupLayout.PREFERRED_SIZE)
-								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-										.addComponent(timeSetter, GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE)
-										.addComponent(monthView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE))
-								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-										.addComponent(buttonForward, buttonW, buttonW, buttonW)
-										.addComponent(buttonYearForward, buttonW, buttonW, buttonW))
-								.addGap(1, 1, Short.MAX_VALUE)));
-		layout.setVerticalGroup(
-				layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup()
-								.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-										.addGroup(layout.createSequentialGroup()
-												.addComponent(buttonBack, buttonH, buttonH, buttonH)
-												.addComponent(buttonYearBack, buttonH, buttonH, buttonH))
-										.addComponent(monthView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addGroup(layout.createSequentialGroup()
-												.addComponent(buttonForward, buttonH, buttonH, buttonH)
-												.addComponent(buttonYearForward, buttonH, buttonH, buttonH))
-										.addComponent(timeSetter, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))));
+		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addGap(1, 1, Short.MAX_VALUE)
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+								.addComponent(buttonBack, buttonW, buttonW, buttonW)
+								.addComponent(buttonYearBack, buttonW, buttonW, buttonW))
+						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						// GroupLayout.PREFERRED_SIZE)
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+								.addComponent(timeSetter, GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE)
+								.addComponent(monthView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+								.addComponent(buttonForward, buttonW, buttonW, buttonW)
+								.addComponent(buttonYearForward, buttonW, buttonW, buttonW))
+						.addGap(1, 1, Short.MAX_VALUE)));
+		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(layout
+				.createSequentialGroup()
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup().addComponent(buttonBack, buttonH, buttonH, buttonH)
+								.addComponent(buttonYearBack, buttonH, buttonH, buttonH))
+						.addComponent(monthView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGroup(layout.createSequentialGroup().addComponent(buttonForward, buttonH, buttonH, buttonH)
+								.addComponent(buttonYearForward, buttonH, buttonH, buttonH))
+						.addComponent(timeSetter, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))));
 
 		/*
 		 * layout.setHorizontalGroup(
@@ -348,7 +340,7 @@ public class DateTimeEditor extends JPanel
 		if (withMovingSelectionDate) {
 			if (calendar.getTime().equals(monthView.getFirstSelectionDate())) {
 				// avoid recursion
-				// System.out.println(" new time equal old time ");
+				// logging.debug(" new time equal old time ");
 			} else {
 				if (monthView.getFirstSelectionDate() != null)
 					calendar.setTime(monthView.getFirstSelectionDate());
@@ -378,18 +370,16 @@ public class DateTimeEditor extends JPanel
 	 */
 
 	/**
-	 * DateFormatSymbols returns an extra, empty value at the
-	 * end of the array of months. Remove it.
+	 * DateFormatSymbols returns an extra, empty value at the end of the array
+	 * of months. Remove it.
 	 */
 	static protected String[] getMonthStrings() {
 		String[] months = new java.text.DateFormatSymbols().getMonths();
 		int lastIndex = months.length - 1;
 
-		if (months[lastIndex] == null
-				|| months[lastIndex].length() <= 0) { // last item empty
+		if (months[lastIndex] == null || months[lastIndex].length() <= 0) { // last item empty
 			String[] monthStrings = new String[lastIndex];
-			System.arraycopy(months, 0,
-					monthStrings, 0, lastIndex);
+			System.arraycopy(months, 0, monthStrings, 0, lastIndex);
 			return monthStrings;
 		} else { // last item not empty
 			return months;
