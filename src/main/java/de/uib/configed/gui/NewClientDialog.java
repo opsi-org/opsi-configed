@@ -621,6 +621,10 @@ public class NewClientDialog extends FGeneralDialog
 		centerOn(Globals.mainContainer);
 	}
 
+	private void createClients(Vector<Vector<Object>> clients) {
+		main.createClients(clients);
+	}
+
 	private void createClient(final String hostname, final String selectedDomain, final String depotID,
 			final String description, final String inventorynumber, final String notes, final String ipaddress,
 			final String macaddress, final boolean shutdownInstall, final boolean uefiboot, final boolean wanConfig,
@@ -784,49 +788,9 @@ public class NewClientDialog extends FGeneralDialog
 				CSVImportDataModifier modifier = csvImportDataDialog.getModifier();
 				Vector<Vector<Object>> rows = modifier.getRows();
 
-				rows.forEach(row -> {
-					String hostname = (String) row.get(0);
-					String selectedDomain = (String) row.get(1);
-					String depotID = (String) row.get(2);
-					String description = (String) row.get(3);
-					String inventorynumber = (String) row.get(4);
-					String notes = (String) row.get(5);
-					String macaddress = (String) row.get(6);
-					String ipaddress = (String) row.get(7);
-					String group = (String) row.get(8);
-					String netbootProduct = (String) row.get(9);
-					String localbootProduct = (String) row.get(10);
-
-					if (!isBoolean((String) row.get(11)) || !isBoolean((String) row.get(12))
-							|| !isBoolean((String) row.get(13))) {
-						FTextArea fInfo = new FTextArea(Globals.mainFrame,
-								configed.getResourceValue("NewClientDialog.nonBooleanValue.title") + " ("
-										+ Globals.APPNAME + ") ",
-								false, new String[] { configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
-
-						StringBuffer message = new StringBuffer("");
-						message.append(configed.getResourceValue("NewClientDialog.nonBooleanValue.message"));
-						fInfo.setMessage(message.toString());
-						fInfo.setAlwaysOnTop(true);
-						fInfo.setVisible(true);
-
-						return;
-					}
-
-					boolean wanConfig = Boolean.parseBoolean((String) row.get(11));
-					boolean uefiboot = Boolean.parseBoolean((String) row.get(12));
-					boolean shutdownInstall = Boolean.parseBoolean((String) row.get(13));
-
-					createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress,
-							macaddress, shutdownInstall, uefiboot, wanConfig, group, netbootProduct, localbootProduct);
-				});
+				createClients(rows);
 			}
 		}
-	}
-
-	private boolean isBoolean(String bool) {
-		return bool.isEmpty() ? true
-				: bool.equalsIgnoreCase(Boolean.TRUE.toString()) || bool.equalsIgnoreCase(Boolean.FALSE.toString());
 	}
 
 	private CSVImportDataDialog createCSVImportDataDialog(String csvFile) {
