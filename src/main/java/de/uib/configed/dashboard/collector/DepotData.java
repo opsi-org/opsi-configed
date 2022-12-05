@@ -11,6 +11,9 @@ public class DepotData {
 
 	private static PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
+	private DepotData() {
+	}
+
 	public static Map<String, Map<String, Object>> getDepots() {
 		return new HashMap<>(depots);
 	}

@@ -30,7 +30,7 @@ public class DataObserver {
 		List<DataChangeListener> subscribers = listeners.get(type);
 		for (DataChangeListener subscriber : subscribers) {
 			subscriber.update(depot);
-			Platform.runLater(() -> subscriber.display());
+			Platform.runLater(subscriber::display);
 		}
 	}
 }
