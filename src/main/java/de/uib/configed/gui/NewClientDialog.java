@@ -340,9 +340,9 @@ public class NewClientDialog extends FGeneralDialog
 
 		JLabel jLabelIpAddress = new JLabel();
 		jLabelIpAddress.setText(configed.getResourceValue("NewClientDialog.IpAddress"));
-		ipAddressField = new JTextField(new SeparatedDocument(
-				/* allowedChars */ new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.' }, 12, '.', 3,
-				false), "", 24);
+		ipAddressField = new JTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4',
+				'5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' }, 28, Character.MIN_VALUE, 4, false),
+				"", 24);
 
 		labelShutdownDefault = new LabelChecked();
 		labelShutdownDefault.setText(configed.getResourceValue("NewClientDialog.installByShutdown") + " "
