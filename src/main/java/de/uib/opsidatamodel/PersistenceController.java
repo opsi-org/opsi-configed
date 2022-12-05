@@ -395,6 +395,8 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract Boolean isUefiConfigured(String host);
 
+	public abstract boolean createClients(Vector<Vector<Object>> clients);
+
 	public abstract boolean createClient(String hostname, String domainname, String depotId, String description,
 			String inventorynumber, String notes, String ipaddress, String macaddress, boolean shutdownInstall,
 			boolean uefiBoot, boolean wan, String group, String productNetboot, String productLocalboot);

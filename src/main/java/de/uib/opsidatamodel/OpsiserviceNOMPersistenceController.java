@@ -2329,6 +2329,126 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
+	public boolean createClients(Vector<Vector<Object>> clients) {
+		List<Object> clientsJsonObject = new ArrayList<>();
+		List<Object> productsNetbootJsonObject = new ArrayList<>();
+		List<Object> groupsJsonObject = new ArrayList<>();
+		List<Object> configStatesJsonObject = new ArrayList<>();
+
+		for (Vector<Object> client : clients) {
+			String hostname = (String) client.get(0);
+			String domainname = (String) client.get(1);
+			String depotId = (String) client.get(2);
+			String description = (String) client.get(3);
+			String inventorynumber = (String) client.get(4);
+			String notes = (String) client.get(5);
+			String macaddress = (String) client.get(6);
+			String ipaddress = (String) client.get(7);
+			String group = (String) client.get(8);
+			String productNetboot = (String) client.get(9);
+			boolean wanConfig = Boolean.parseBoolean((String) client.get(11));
+			boolean uefiBoot = Boolean.parseBoolean((String) client.get(12));
+			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(13));
+
+			String newClientId = hostname + "." + domainname;
+
+			Map<String, Object> hostItem = createNOMitem("OpsiClient");
+			hostItem.put(HostInfo.hostnameKEY, newClientId);
+			hostItem.put(HostInfo.clientDescriptionKEY, description);
+			hostItem.put(HostInfo.clientNotesKEY, notes);
+			hostItem.put(HostInfo.clientMacAddressKEY, macaddress);
+			hostItem.put(HostInfo.clientIpAddressKEY, ipaddress);
+			hostItem.put(HostInfo.clientInventoryNumberKEY, inventorynumber);
+
+			clientsJsonObject.add(exec.jsonMap(hostItem));
+
+			Map<String, Object> itemDepot = createNOMitem(ConfigStateEntry.TYPE);
+			List<String> valuesDepot = new ArrayList<>();
+			valuesDepot.add(depotId);
+			itemDepot.put(ConfigStateEntry.OBJECT_ID, newClientId);
+			itemDepot.put(ConfigStateEntry.VALUES, exec.jsonArray(valuesDepot));
+			itemDepot.put(ConfigStateEntry.CONFIG_ID, CONFIG_DEPOT_ID);
+
+			configStatesJsonObject.add(exec.jsonMap(itemDepot));
+
+			if (uefiBoot) {
+				configStatesJsonObject.add(createUefiJSONEntry(newClientId, EFI_DHCPD_FILENAME));
+			}
+
+			if (wanConfig) {
+				configStatesJsonObject = addWANConfigStates(newClientId, true, configStatesJsonObject);
+			}
+
+			if (shutdownInstall) {
+
+				List<Object> valuesShI = new ArrayList<>();
+				valuesShI.add(true);
+
+				Map<String, Object> itemShI = createNOMitem(ConfigStateEntry.TYPE);
+				itemShI.put(ConfigStateEntry.OBJECT_ID, newClientId);
+				itemShI.put(ConfigStateEntry.VALUES, exec.jsonArray(valuesShI));
+				itemShI.put(ConfigStateEntry.CONFIG_ID, KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
+
+				logging.info(this, "create client, config item for shutdownInstall " + itemShI);
+
+				configStatesJsonObject.add(exec.jsonMap(itemShI));
+			}
+
+			if (group != null && !group.isEmpty()) {
+				logging.info(this, "createClient" + " group " + group);
+				Map<String, Object> itemGroup = createNOMitem(Object2GroupEntry.TYPE_NAME);
+				itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
+				itemGroup.put(Object2GroupEntry.GROUP_ID_KEY, group);
+				itemGroup.put(Object2GroupEntry.MEMBER_KEY, newClientId);
+				groupsJsonObject.add(exec.jsonMap(itemGroup));
+			}
+
+			if (productNetboot != null && !productNetboot.isEmpty()) {
+				logging.info(this, "createClient" + " productNetboot " + productNetboot);
+				Map<String, Object> itemProducts = createNOMitem("ProductOnClient");
+				itemProducts.put(OpsiPackage.DBkeyPRODUCT_ID, productNetboot);
+				itemProducts.put(OpsiPackage.SERVICEkeyPRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
+				itemProducts.put("clientId", newClientId);
+				itemProducts.put(ProductState.key2servicekey.get(ProductState.KEY_actionRequest), "setup");
+				productsNetbootJsonObject.add(exec.jsonMap(itemProducts));
+			}
+
+			HostInfo hostInfo = new HostInfo(hostItem);
+			if (depotId == null || depotId.equals("")) {
+				depotId = getHostInfoCollections().getConfigServer();
+			}
+			hostInfo.setInDepot(depotId);
+			hostInfo.setUefiBoot(uefiBoot);
+			hostInfo.setWanConfig(wanConfig);
+			hostInfo.setShutdownInstall(shutdownInstall);
+
+			hostInfoCollections.setLocalHostInfo(newClientId, depotId, hostInfo);
+		}
+
+		OpsiMethodCall omc = new OpsiMethodCall("host_createObjects", new Object[] { exec.jsonArray(clientsJsonObject) });
+		boolean result = exec.doCall(omc);
+
+		if (result) {
+			if (!configStatesJsonObject.isEmpty()) {
+				omc = new OpsiMethodCall("configState_updateObjects", new Object[] { exec.jsonArray(configStatesJsonObject) });
+				result = exec.doCall(omc);
+			}
+
+			if (!groupsJsonObject.isEmpty()) {
+				omc = new OpsiMethodCall("objectToGroup_createObjects", new Object[] { exec.jsonArray(groupsJsonObject) });
+				result = exec.doCall(omc);
+			}
+
+			if (!productsNetbootJsonObject.isEmpty()) {
+				omc = new OpsiMethodCall("productOnClient_createObjects", new Object[] { exec.jsonArray(productsNetbootJsonObject) });
+				result = exec.doCall(omc);
+			}
+		}
+
+		return result;
+
+	}
+
 	public boolean createClient(String hostname, String domainname, String depotId, String description,
 			String inventorynumber, String notes, String ipaddress, String macaddress, boolean shutdownInstall,
 			boolean uefiBoot, boolean wanConfig, String group, String productNetboot, String productLocalboot) {

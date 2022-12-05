@@ -6289,6 +6289,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
+	public void createClients(Vector<Vector<Object>> clients) {
+		persist.createClients(clients);
+		persist.fObject2GroupsRequestRefresh();
+
+		refreshClientList();
+	}
+
 	public void createClient(final String hostname, final String domainname, final String depotID,
 			final String description, final String inventorynumber, final String notes, final String ipaddress,
 			final String macaddress, final boolean shutdownInstall, final boolean uefiBoot, final boolean wanConfig,
