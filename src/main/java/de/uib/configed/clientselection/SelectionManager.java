@@ -396,7 +396,7 @@ public class SelectionManager {
 				checkForGroupSearches(child);
 	}
 
-	static public class OperationWithStatus {
+	public static class OperationWithStatus {
 		public SelectOperation operation;
 		public ConnectionStatus status;
 		public boolean parenthesisOpen;

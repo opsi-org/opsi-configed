@@ -46,7 +46,7 @@ public class ConnectionState {
 	/**
 	 * get count of instances
 	 */
-	static public int getInstancesCount() {
+	public static int getInstancesCount() {
 		return instancesCount;
 	}
 

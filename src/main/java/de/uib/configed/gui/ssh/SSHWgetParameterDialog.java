@@ -54,8 +54,8 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	private JComboBox cb_verbosity;
 	private JTextField tf_freeInput;
 
-	final private int frameWidth = 800;
-	final private int frameHeight = 400;
+	private final int frameWidth = 800;
+	private final int frameHeight = 400;
 
 	private ConfigedMain main;
 	CommandWget commandWget = new CommandWget();

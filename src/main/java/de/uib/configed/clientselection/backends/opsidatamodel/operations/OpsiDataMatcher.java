@@ -37,5 +37,5 @@ public abstract class OpsiDataMatcher {
 		return checkData(realData);
 	}
 
-	abstract protected boolean checkData(final String realdata);
+	protected abstract boolean checkData(final String realdata);
 }

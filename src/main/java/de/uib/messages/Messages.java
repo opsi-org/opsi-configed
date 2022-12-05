@@ -29,8 +29,8 @@ public class Messages {
 	static java.util.Map<String, String> localeInfo;
 	static String selectedLocaleString;
 	static Locale myLocale = null;
-	static public ResourceBundle messages;
-	static public ResourceBundle messagesEN;
+	public static ResourceBundle messages;
+	public static ResourceBundle messagesEN;
 	static List<String> myLocaleCharacteristics;
 	static List<String> myLocaleCharacteristicsEN;
 

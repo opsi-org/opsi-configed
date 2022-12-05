@@ -138,21 +138,21 @@ public abstract class Serializer {
 	/**
 	 * Remove a saved search from the server
 	 */
-	abstract public void remove(String name);
+	public abstract void remove(String name);
 
 	/** Get the data for the given saved search */
-	abstract protected Map<String, Object> getData(String name) throws WrongVersionException;
+	protected abstract Map<String, Object> getData(String name) throws WrongVersionException;
 
 	/**
 	 * produce map format of serializiation object
 	 */
-	abstract protected Map<String, Object> decipher(String serialization) throws WrongVersionException;
+	protected abstract Map<String, Object> decipher(String serialization) throws WrongVersionException;
 
 	/** Save the search data with the given name. */
-	abstract protected void saveData(String name, String description, Map<String, Object> data);
+	protected abstract void saveData(String name, String description, Map<String, Object> data);
 
 	/** Get the data version of the currently loaded saved search */
-	abstract protected int getSearchDataVersion();
+	protected abstract int getSearchDataVersion();
 
 	/*
 	 * Care for finding a SelectElement

@@ -511,7 +511,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	/* software info */
 	public abstract ArrayList<String> getSoftwareList();
 
-	abstract public TreeMap<String, Integer> getSoftware2Number();
+	public abstract TreeMap<String, Integer> getSoftware2Number();
 
 	public abstract Map getSoftwareInfo(String clientId);
 
@@ -842,10 +842,10 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	/* licences */
 	public abstract Map<String, LicenceContractEntry> getLicenceContracts();
 
-	abstract public TreeMap<String, TreeSet<String>> getLicenceContractsExpired();
+	public abstract TreeMap<String, TreeSet<String>> getLicenceContractsExpired();
 	// date in sql time format, contrad ID
 
-	abstract public TreeMap<String, TreeSet<String>> getLicenceContractsToNotify();
+	public abstract TreeMap<String, TreeSet<String>> getLicenceContractsToNotify();
 	// date in sql time format, contrad ID
 
 	// returns the ID of the edited data record

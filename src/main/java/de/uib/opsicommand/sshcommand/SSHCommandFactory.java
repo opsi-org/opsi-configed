@@ -40,33 +40,33 @@ import de.uib.utilities.logging.logging;
  **/
 public class SSHCommandFactory {
 	/** final string commands for linux terminal **/
-	final public String str_replacement_dir = "*.dir.*";
+	public final String str_replacement_dir = "*.dir.*";
 	// http://stackoverflow.com/questions/948008/linux-command-to-list-all-available-commands-and-aliases
-	final public String str_command_getLinuxCommands = "COMMANDS=`echo -n $PATH | xargs -d : -I {} find {} -maxdepth 1 -executable -type f -printf '%P\\n'` ; ALIASES=`alias | cut -d '=' -f 1`; echo \"$COMMANDS\"$'\\n'\"$ALIASES\" | sort -u ";
-	final public String str_command_getDirectories = "ls --color=never -d *.dir.*/*/";
-	final public String str_command_getOpsiFiles = "ls --color=never *.dir.*/*.opsi";
-	final public String str_command_getVersions = "grep version: *.dir.* --max-count=2  ";
-	final public String str_command_catDir = "cat *.dir.*OPSI/control | grep \"id: \"";
-	final public String str_command_fileexists = "[ -f .filename. ] &&  rm .filename. && echo \"File .filename. removed\" || echo \"File did not exist\"";
-	final public String str_command_fileexists_notremove = "[ -d .filename. ] && echo \"File exists\" || echo \"File not exist\"";
-	// final public String str_command_filezsyncExists = "[ -f *.filename.*.zsync ]
+	public final String str_command_getLinuxCommands = "COMMANDS=`echo -n $PATH | xargs -d : -I {} find {} -maxdepth 1 -executable -type f -printf '%P\\n'` ; ALIASES=`alias | cut -d '=' -f 1`; echo \"$COMMANDS\"$'\\n'\"$ALIASES\" | sort -u ";
+	public final String str_command_getDirectories = "ls --color=never -d *.dir.*/*/";
+	public final String str_command_getOpsiFiles = "ls --color=never *.dir.*/*.opsi";
+	public final String str_command_getVersions = "grep version: *.dir.* --max-count=2  ";
+	public final String str_command_catDir = "cat *.dir.*OPSI/control | grep \"id: \"";
+	public final String str_command_fileexists = "[ -f .filename. ] &&  rm .filename. && echo \"File .filename. removed\" || echo \"File did not exist\"";
+	public final String str_command_fileexists_notremove = "[ -d .filename. ] && echo \"File exists\" || echo \"File not exist\"";
+	// public final String str_command_filezsyncExists = "[ -f *.filename.*.zsync ]
 	// && rm *.filename.*.zsync && echo \"File *.filename.*.zsync removed\" || echo
 	// \"File *.filename.*.zsync did not exist\"";
-	// final public String str_command_filemd5Exists = "[ -f *.filename.*.md5 ] &&
+	// public final String str_command_filemd5Exists = "[ -f *.filename.*.md5 ] &&
 	// rm *.filename.*.md5 && echo \"File *.filename.*.md5 removed\" || echo \"File
 	// *.filename.*.md5 did not exist\"";
-	final public String str_replacement_filename = ".filename.";
-	final public String str_file_exists = "File exists";
-	final public String str_file_not_exists = "File not exists";
+	public final String str_replacement_filename = ".filename.";
+	public final String str_file_exists = "File exists";
+	public final String str_file_not_exists = "File not exists";
 
-	final public String opsipathVarRepository = "/var/lib/opsi/repository/";
-	final public String opsipathVarDepot = "/var/lib/opsi/depot/";
-	// final public String str_command_comparemd5 = " if [ -z $((cat
+	public final String opsipathVarRepository = "/var/lib/opsi/repository/";
+	public final String opsipathVarDepot = "/var/lib/opsi/depot/";
+	// public final String str_command_comparemd5 = " if [ -z $((cat
 	// *.product.*.md5" + ") | grep $(md5sum *.product.* | head -n1 | cut -d \" \"
 	// -f1)) ] ; then echo \"*.md5notequal.*\"; else echo \"*.md5equal.*\"; fi";
-	// final public String str_replacement_product="*.product.*";
-	// final public String str_replacement_equal= "*.md5equal.*";
-	// final public String str_replacement_notequal= "*.md5notequal.*";
+	// public final String str_replacement_product="*.product.*";
+	// public final String str_replacement_equal= "*.md5equal.*";
+	// public final String str_replacement_notequal= "*.md5notequal.*";
 
 	/** ConfigedMain instance **/
 	private ConfigedMain main;
@@ -85,17 +85,17 @@ public class SSHCommandFactory {
 	private java.util.List<String> list_knownParents;
 
 	/** static String for parent null ("Server-Konsole") **/
-	final public static String parentNull = configed.getResourceValue("MainFrame.jMenuServer");
+	public static final String parentNull = configed.getResourceValue("MainFrame.jMenuServer");
 	/**
 	 * static String defined as language independent parent for own commands
 	 **/
-	final public static String parentdefaultForOwnCommands = "...";
+	public static final String parentdefaultForOwnCommands = "...";
 	/** static String for specific parent ("opsi") **/
-	final public static String parentOpsi = configed.getResourceValue("MainFrame.jMenuOpsi");
+	public static final String parentOpsi = configed.getResourceValue("MainFrame.jMenuOpsi");
 	/** static String for new command ("<Neuer Befehl>") **/
-	final public static String menuNew = configed.getResourceValue("SSHConnection.CommandControl.menuText_newCommand");
+	public static final String menuNew = configed.getResourceValue("SSHConnection.CommandControl.menuText_newCommand");
 	/** default position is 0 **/
-	final public int position_default = 0;
+	public final int position_default = 0;
 
 	public static int successfulConnectObservedCount = 0;
 
@@ -112,19 +112,19 @@ public class SSHCommandFactory {
 	public static List<de.uib.opsicommand.sshcommand.SSHCommand> ssh_commands_param = new LinkedList<de.uib.opsicommand.sshcommand.SSHCommand>();
 
 	/** static final name of field "id" */
-	final public String command_map_id = "id";
+	public final String command_map_id = "id";
 	/** static final name of field "menuText" */
-	final public String command_map_menuText = "menuText";
+	public final String command_map_menuText = "menuText";
 	/** static final name of field "parentMenuText" */
-	final public String command_map_parentMenuText = "parentMenuText";
+	public final String command_map_parentMenuText = "parentMenuText";
 	/** static final name of field "tooltipText" */
-	final public String command_map_tooltipText = "tooltipText";
+	public final String command_map_tooltipText = "tooltipText";
 	/** static final name of field "position" */
-	final public String command_map_position = "position";
+	public final String command_map_position = "position";
 	/** static final name of field "needSudo" */
-	final public String command_map_needSudo = "needSudo";
+	public final String command_map_needSudo = "needSudo";
 	/** static final name of field "commands" */
-	final public String command_map_commands = "commands";
+	public final String command_map_commands = "commands";
 
 	SSHConnectExec connection = null;
 	public static final String CONNECTED = configed.getResourceValue("SSHConnection.connected");
@@ -136,12 +136,12 @@ public class SSHCommandFactory {
 	// SSHCommandFactory.getInstance().sudo_text
 	public static String sudo_failed_text = configed.getResourceValue("SSHConnection.sudoFailedText");
 	public static String sudo_text = "sudo -S -p \"" + sudo_failed_text + "\" ";
-	final private String opsisetrights = "opsi-set-rights";
+	private final String opsisetrights = "opsi-set-rights";
 
-	final public String sshusr = "<<!sshuser!>>";
-	final public String sshhst = "<<!sshhost!>>";
+	public final String sshusr = "<<!sshuser!>>";
+	public final String sshhst = "<<!sshhost!>>";
 
-	final public String confidential = "***confidential***";
+	public final String confidential = "***confidential***";
 	ArrayList<String> createdProducts = new ArrayList<String>();
 
 	SSHCommandParameterMethods pmethodHandler = null;

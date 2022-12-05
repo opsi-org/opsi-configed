@@ -10,7 +10,7 @@ public class CommandModulesUpload extends CommandSFTPUpload
 {
 	public String actually_modules_directory = "/etc/opsi/";
 	public String unofficial_modules_directory = "/etc/opsi/modules.d/";
-	static public String DEFAULT_FILENAME = "modules";
+	public static String DEFAULT_FILENAME = "modules";
 
 	public CommandModulesUpload(String title) {
 		setTitle(title);
@@ -32,8 +32,7 @@ public class CommandModulesUpload extends CommandSFTPUpload
 
 	public String getDescription() {
 		if (description.equals(""))
-			description = "copy " + sourcePath + sourceFilename
-					+ " to " + targetPath + targetFilename
+			description = "copy " + sourcePath + sourceFilename + " to " + targetPath + targetFilename
 					+ " on connected server";
 		return description;
 	}

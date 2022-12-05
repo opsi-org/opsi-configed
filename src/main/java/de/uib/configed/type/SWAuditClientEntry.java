@@ -36,12 +36,12 @@ public class SWAuditClientEntry
  */
 
 {
-	final public static String CLIENT_ID = "clientId";
-	final public static String LICENCEkEY = "licenseKey";
-	final public static String LAST_MODIFICATION = "lastseen";
-	final public static String UNINSTALL_STRING = "uninstallString";
+	public static final String CLIENT_ID = "clientId";
+	public static final String LICENCEkEY = "licenseKey";
+	public static final String LAST_MODIFICATION = "lastseen";
+	public static final String UNINSTALL_STRING = "uninstallString";
 
-	final protected Map<String, String> data;
+	protected final Map<String, String> data;
 	protected java.util.ArrayList<String> software;
 	protected java.util.TreeMap<String, Integer> software2Number;
 	private static java.util.List<String> notFoundSoftwareIDs;

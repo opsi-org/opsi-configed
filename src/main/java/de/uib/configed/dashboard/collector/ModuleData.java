@@ -14,6 +14,9 @@ public class ModuleData {
 
 	private static PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
+	private ModuleData() {
+	}
+
 	public static List<String> getModules() {
 		return new ArrayList<>(modules);
 	}
@@ -39,8 +42,7 @@ public class ModuleData {
 	}
 
 	private static void retrieveModuleState() {
-		if (!activeModules.isEmpty() &&
-				!expiredModules.isEmpty()) {
+		if (!activeModules.isEmpty() && !expiredModules.isEmpty()) {
 			return;
 		}
 

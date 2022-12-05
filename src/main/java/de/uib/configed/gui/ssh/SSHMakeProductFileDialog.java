@@ -56,7 +56,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	private JPanel workbenchpanel;
 	private JPanel mainpanel;
 	private JPanel buttonPanel;
-	// final private int mainPanelHeight = 121;
+	// private final int mainPanelHeight = 121;
 
 	private JButton btn_advancedSettings;
 	private JButton btn_setRights;

@@ -11,7 +11,7 @@ package de.uib.utilities.table.updates;
 import java.util.Map;
 
 public abstract class MapBasedUpdater {
-	abstract public String sendUpdate(Map<String, Object> rowmap);
+	public abstract String sendUpdate(Map<String, Object> rowmap);
 
-	abstract public boolean sendDelete(Map<String, Object> rowmap);
+	public abstract boolean sendDelete(Map<String, Object> rowmap);
 }

@@ -72,8 +72,8 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 	private String defaultWinUser = "";
 
-	final private int frameWidth = 800;
-	final private int frameHight = 500;
+	private final int frameWidth = 800;
+	private final int frameHight = 500;
 	private CommandDeployClientAgent commandDeployClientAgent = new CommandDeployClientAgent();
 	private ConfigedMain main;
 

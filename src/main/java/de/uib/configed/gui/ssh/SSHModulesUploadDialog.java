@@ -15,7 +15,7 @@ import de.uib.utilities.logging.logging;
 public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 	private JLabel lbl_copy_to_modules_d;
 	private JCheckBox cb_copy_to_modules_d;
-	static private String title = configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.title");
+	private static String title = configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.title");
 
 	public SSHModulesUploadDialog() {
 		this(null);
@@ -30,8 +30,8 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 	}
 
 	/**
-	 * is called in the end of super.init()
-	 * init additionial components, which are needed in this dialog
+	 * is called in the end of super.init() init additionial components, which
+	 * are needed in this dialog
 	 */
 	@Override
 	protected void init_additional() {
@@ -43,13 +43,9 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 		cb_copy_to_modules_d.setSelected(false);
 
 		SSHConnectExec testFile = new SSHConnectExec();
-		String result = testFile.exec(new Empty_Command(
-				factory.str_command_fileexists_notremove
-						.replaceAll(
-								factory.str_replacement_filename,
-								((CommandModulesUpload) command).unofficial_modules_directory) // /etc/opsi/modules.d
-		),
-				false);
+		String result = testFile.exec(new Empty_Command(factory.str_command_fileexists_notremove.replaceAll(
+				factory.str_replacement_filename, ((CommandModulesUpload) command).unofficial_modules_directory) // /etc/opsi/modules.d
+		), false);
 		/*
 		 * if (result.trim().equals(factory.str_file_exists))
 		 * {
@@ -67,19 +63,15 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 	}
 
 	/**
-	 * is called at beginning of super.initGUI()
-	 * add additionial components to layout, which are needed in this dialog
+	 * is called at beginning of super.initGUI() add additionial components to
+	 * layout, which are needed in this dialog
 	 */
 	@Override
 	protected void initGUI_additional() {
-		h_parallelGroup = inputPanelLayout.createSequentialGroup()
-				.addGroup(inputPanelLayout.createParallelGroup()
-						.addGroup(inputPanelLayout.createSequentialGroup()
-								.addComponent(lbl_modules_from, PREF, PREF, PREF))
-						.addComponent(lbl_set_rights, PREF, PREF, PREF)
-						.addComponent(lbl_overwriteExisting, PREF, PREF, PREF)
-						.addComponent(lbl_copy_to_modules_d, PREF, PREF, PREF))
-				.addGap(Globals.gapSize)
+		h_parallelGroup = inputPanelLayout.createSequentialGroup().addGroup(inputPanelLayout.createParallelGroup()
+				.addGroup(inputPanelLayout.createSequentialGroup().addComponent(lbl_modules_from, PREF, PREF, PREF))
+				.addComponent(lbl_set_rights, PREF, PREF, PREF).addComponent(lbl_overwriteExisting, PREF, PREF, PREF)
+				.addComponent(lbl_copy_to_modules_d, PREF, PREF, PREF)).addGap(Globals.gapSize)
 				.addGroup(inputPanelLayout.createParallelGroup()
 						.addComponent(cb_setRights, Globals.iconWidth, Globals.iconWidth, Globals.iconWidth)
 						.addComponent(cb_overwriteExisting, Globals.iconWidth, Globals.iconWidth, Globals.iconWidth)

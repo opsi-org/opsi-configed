@@ -72,7 +72,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	protected SSHCommandFactory factory = SSHCommandFactory.getInstance();
 	protected SSHConnectionExecDialog dia;
 	protected ConfigedMain main;
-	static protected String wgetDefText;
+	protected static String wgetDefText;
 
 	protected int height = 410;
 	protected int width = 700;

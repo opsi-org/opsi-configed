@@ -12,8 +12,8 @@ import de.uib.utilities.Mapping;
 
 public interface TableModelFunctions<K> {
 	public class PairOfInt {
-		final public int col1;
-		final public int col2;
+		public final int col1;
+		public final int col2;
 
 		PairOfInt(int col1, int col2) {
 			this.col1 = col1;

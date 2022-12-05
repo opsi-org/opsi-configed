@@ -613,7 +613,7 @@ public class Globals {
 		return b.toString();
 	}
 
-	static private Rectangle getMaxDevice() {
+	private static Rectangle getMaxDevice() {
 		Rectangle result;
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice[] gs = ge.getScreenDevices();
@@ -635,7 +635,7 @@ public class Globals {
 		return result;
 	}
 
-	static private Rectangle getMinDevice() {
+	private static Rectangle getMinDevice() {
 		Rectangle result = getMaxDevice();
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice[] gs = ge.getScreenDevices();
@@ -658,7 +658,7 @@ public class Globals {
 		return result;
 	}
 
-	static public Rectangle buildLocationOnDefaultDisplay(int intendedWidth, int intendedHeight, int placementX,
+	public static Rectangle buildLocationOnDefaultDisplay(int intendedWidth, int intendedHeight, int placementX,
 			int placementY) {
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		GraphicsConfiguration gc = gd.getDefaultConfiguration();
@@ -670,7 +670,7 @@ public class Globals {
 
 	}
 
-	static public Rectangle buildLocationOnDefaultDisplay(int intendedWidth, int intendedHeight, int placementX) {
+	public static Rectangle buildLocationOnDefaultDisplay(int intendedWidth, int intendedHeight, int placementX) {
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		GraphicsConfiguration gc = gd.getDefaultConfiguration();
 		int x = gc.getBounds().x + placementX;
@@ -681,15 +681,15 @@ public class Globals {
 
 	}
 
-	static public Rectangle buildLocation(javax.swing.JFrame f, int placementX, int placementY) {
+	public static Rectangle buildLocation(javax.swing.JFrame f, int placementX, int placementY) {
 		return buildLocation(f, f.getWidth(), f.getHeight(), placementX, placementY);
 	}
 
-	static public Rectangle buildLocation(int intendedWidth, int intendedHeight, int placementX, int placementY) {
+	public static Rectangle buildLocation(int intendedWidth, int intendedHeight, int placementX, int placementY) {
 		return buildLocation(null, intendedWidth, intendedHeight, placementX, placementY);
 	}
 
-	static public Rectangle buildLocation(javax.swing.JFrame f, int intendedWidth, int intendedHeight, int placementX,
+	public static Rectangle buildLocation(javax.swing.JFrame f, int intendedWidth, int intendedHeight, int placementX,
 			int placementY) {
 
 		int width = intendedWidth;

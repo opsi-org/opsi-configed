@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import de.uib.configed.configed;
 import de.uib.configed.dashboard.Helper;
@@ -25,6 +26,9 @@ public class ClientData {
 	private static String selectedDepot;
 
 	private static PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+
+	private ClientData() {
+	}
 
 	public static List<Client> getClients() {
 		if (clients.isEmpty() || !clients.containsKey(selectedDepot)) {
@@ -95,19 +99,19 @@ public class ClientData {
 		List<String> depots = new ArrayList<>(persist.getHostInfoCollections().getAllDepots().keySet());
 
 		for (String depot : depots) {
-			Map<String, Boolean> clients = persist.getHostInfoCollections().getPcListForDepots(new String[] { depot },
-					null);
+			List<String> clients = persist.getHostInfoCollections().getMapOfAllPCInfoMaps().values().stream()
+					.filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName).collect(Collectors.toList());
 
 			List<String> activeClientsList = new ArrayList<>();
 			List<String> inactiveClientsList = new ArrayList<>();
 
 			if (!clients.isEmpty()) {
-				for (Map.Entry<String, Boolean> entry : clients.entrySet()) {
-					if (reachableInfo.containsKey(entry.getKey())) {
-						if ((Boolean) reachableInfo.get(entry.getKey())) {
-							activeClientsList.add(entry.getKey());
+				for (String client : clients) {
+					if (reachableInfo.containsKey(client)) {
+						if (Boolean.TRUE.equals(reachableInfo.get(client))) {
+							activeClientsList.add(client);
 						} else {
-							inactiveClientsList.add(entry.getKey());
+							inactiveClientsList.add(client);
 						}
 					}
 				}

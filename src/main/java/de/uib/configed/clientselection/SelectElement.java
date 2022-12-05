@@ -14,7 +14,8 @@ public abstract class SelectElement {
 
 	/**
 	 * Create a new SelectElement. The path contains the group name, if this
-	 * element is in any group (like a hardware group) and the name of the Element.
+	 * element is in any group (like a hardware group) and the name of the
+	 * Element.
 	 */
 	public SelectElement(String[] path, String... localizedPath) {
 		this.path = path;
@@ -46,12 +47,11 @@ public abstract class SelectElement {
 	}
 
 	/** A list of Operations this element supports. */
-	abstract public List<SelectOperation> supportedOperations();
+	public abstract List<SelectOperation> supportedOperations();
 
 	/**
-	 * Returns the enumerated data, if there is any. This can be used to get a list
-	 * of possible values
-	 * for the user.
+	 * Returns the enumerated data, if there is any. This can be used to get a
+	 * list of possible values for the user.
 	 */
 	public Vector<String> getEnumData() {
 		return new Vector<String>();
@@ -61,7 +61,7 @@ public abstract class SelectElement {
 		return false;
 	}
 
-	// abstract public SelectOperation createOperation( String operation, SelectData
+	// public abstract SelectOperation createOperation( String operation, SelectData
 	// data );
 
 	@Override

@@ -723,7 +723,7 @@ public class DPassword extends JDialog // implements Runnable
 		// waitInfo.toFront();
 	}
 	/*
-	 * static public PersistenceController producePersistenceController(String
+	 * public static PersistenceController producePersistenceController(String
 	 * server)
 	 * {
 	 * PersistenceController persis =
