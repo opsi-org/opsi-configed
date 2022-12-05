@@ -630,11 +630,23 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				// revert encryption of ":"
 				if (elementname.lastIndexOf("_") > -1) {
-					try {
-						port = Integer.valueOf((elementname.substring(elementname.lastIndexOf("_") + 1)).trim());
-						hostname = elementname.substring(0, elementname.lastIndexOf("_"));
-					} catch (Exception ex) {
-						logging.info(this, "no port found, should be NumberFormatException: " + ex);
+					elementname = elementname.replace("_", ":");
+					if (elementname.contains("[") && elementname.contains("]")) {
+						try {
+							port = Integer.valueOf(
+									(elementname.substring(elementname.lastIndexOf(":", elementname.indexOf("]")) + 1))
+											.trim());
+							hostname = elementname.substring(0, elementname.lastIndexOf(":", elementname.indexOf("]")));
+						} catch (Exception ex) {
+							logging.info(this, "no port found, should be NumberFormatException: " + ex);
+						}
+					} else {
+						try {
+							port = Integer.valueOf((elementname.substring(elementname.lastIndexOf(":") + 1)).trim());
+							hostname = elementname.substring(0, elementname.lastIndexOf(":"));
+						} catch (Exception ex) {
+							logging.info(this, "no port found, should be NumberFormatException: " + ex);
+						}
 					}
 
 					if (port != null) {

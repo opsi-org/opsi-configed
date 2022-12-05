@@ -25,7 +25,6 @@ import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.thread.WaitCursor;
 import net.jpountz.lz4.LZ4FrameInputStream;
-
 /*  Copyright (c) 2006-2016, 2021 uib.de
  
 Usage of this portion of software is allowed unter the restrictions of the GPL
@@ -34,7 +33,6 @@ Usage of this portion of software is allowed unter the restrictions of the GPL
 import utils.Base64OutputStream;
 
 /**
- *
  * @author Rupert Roeder, Jan Schneider
  */
 
@@ -74,26 +72,26 @@ public class JSONthroughHTTP extends JSONExecutioner {
 	}
 
 	/**
-	 * 
-	 * 
-	 * public JSONthroughHTTP ()
-	 * {
-	 * }
+	 * public JSONthroughHTTP () { }
 	 */
 
 	/**
 	 * @param host
 	 * @param username
 	 * @param password
-	 * 
 	 */
 	public JSONthroughHTTP(String host, String username, String password) {
 		this.host = host;
-		int idx = host.indexOf(':');
+		int idx = -1;
+		if (host.contains("[") && host.contains("]")) {
+			idx = host.indexOf(":", host.indexOf("]"));
+		} else {
+			idx = host.indexOf(":");
+		}
+
 		if (idx > -1) {
 			this.host = host.substring(0, idx);
-			this.portHTTP = this.portHTTPS = new java.lang.Integer(
-					host.substring(idx + 1, host.length())).intValue();
+			this.portHTTP = this.portHTTPS = new java.lang.Integer(host.substring(idx + 1, host.length())).intValue();
 		}
 		this.username = username;
 		this.password = password;
@@ -105,8 +103,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 		// StringBuffer result = new StringBuffer ("/json"); test of a modificated
 		// service
 
-		if (omc.getRpcPath() != null
-				&& !(omc.getRpcPath().equals(""))) {
+		if (omc.getRpcPath() != null && !(omc.getRpcPath().equals(""))) {
 			result.append("/");
 			result.append(omc.getRpcPath());
 		}
@@ -115,14 +112,13 @@ public class JSONthroughHTTP extends JSONExecutioner {
 	}
 
 	/**
-	 * This method takes hostname, port and the OpsiMethodCall rpcPatht transformed
-	 * to String in order to build an URL
-	 * as expected by the opsiconfd.
+	 * This method takes hostname, port and the OpsiMethodCall rpcPatht
+	 * transformed to String in order to build an URL as expected by the
+	 * opsiconfd.
 	 * <p>
 	 * The HTTPS subclass overwrites the method to modify "http" to "https".
 	 * 
 	 * @param omc
-	 * 
 	 */
 	protected String produceBaseURL(String rpcPath) {
 		return "http://" + host + ":" + portHTTP + rpcPath;
@@ -201,8 +197,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 
 	/**
 	 * Opening the connection. The method is prepared to be subclassed and take
-	 * additional
-	 * informations for the connection.
+	 * additional informations for the connection.
 	 */
 	protected HttpURLConnection produceConnection() throws java.io.IOException {
 		return (HttpURLConnection) serviceURL.openConnection();
@@ -296,7 +291,6 @@ public class JSONthroughHTTP extends JSONExecutioner {
 	 * This method receives the JSONObject via HTTP.
 	 * 
 	 * @param omc
-	 * 
 	 */
 
 	{
@@ -320,8 +314,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 		makeURL(omc);
 
 		// logging.check(this, "retrieveJSONObject " + omcList + " FROM " + serviceURL);
-		TimeCheck timeCheck = new TimeCheck(this, "retrieveJSONObject  FROM " + serviceURL
-				+ "  ++ " + omc);
+		TimeCheck timeCheck = new TimeCheck(this, "retrieveJSONObject  FROM " + serviceURL + "  ++ " + omc);
 		timeCheck.start();
 
 		HttpURLConnection connection = null;
@@ -379,8 +372,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 				if (i > -1) {
 					s = "\n\n" + s.substring(i) + "\n" + "In this SSL configuration, a connection is not possible";
 
-					logging.error(s);
-					;
+					logging.error(s);;
 					logging.checkErrorList(null);
 
 				}
@@ -396,9 +388,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 				BufferedWriter out = null;
 
 				try {
-					OutputStreamWriter writer = new OutputStreamWriter(
-							connection.getOutputStream(),
-							UTF8DEFAULT);
+					OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), UTF8DEFAULT);
 					out = new BufferedWriter(writer);
 					String json = produceJSONstring(omc);
 					logging.debug(this, "(POST) sending: " + json);
@@ -415,23 +405,16 @@ public class JSONthroughHTTP extends JSONExecutioner {
 							out.close();
 						} catch (IOException iox) {
 							logging.debug(this, "handling finally json request close " + iox);
-						}
-					;
+						} ;
 				}
 
 			}
 
 			/**
-			 * pausing for testing purposes
-			 * 
-			 * try
-			 * {
-			 * Thread.currentThread().sleep(10000);
-			 * }
-			 * catch (InterruptedException iex)
-			 * {
-			 * }
-			 * System.out.println (" retrieving 2 " + conStat);
+			 * pausing for testing purposes try {
+			 * Thread.currentThread().sleep(10000); } catch
+			 * (InterruptedException iex) { } System.out.println (" retrieving 2
+			 * " + conStat);
 			 */
 
 		}
@@ -515,8 +498,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 								in.close();
 							} catch (IOException iox) {
 								logging.info(this, "handling finally reading error stream " + iox);
-							}
-						;
+							} ;
 					}
 				}
 
