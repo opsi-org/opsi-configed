@@ -875,7 +875,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				logging.info(this, "retrieveOpsiHosts   depotNamesList size " + depotNamesList.size());
 
 			}
-
 		}
 
 		public Map<String, Set<String>> getFNode2Treeparents() {

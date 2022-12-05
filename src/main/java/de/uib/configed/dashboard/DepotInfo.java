@@ -18,7 +18,7 @@ public class DepotInfo implements DataChangeListener {
 
 	@Override
 	public void display() {
-		if (controller.selectedDepotChoiceBox.getItems().size() == 0) {
+		if (controller.selectedDepotChoiceBox.getItems().isEmpty()) {
 			controller.selectedDepotChoiceBox.getItems()
 					.add(configed.getResourceValue("Dashboard.selection.allDepots"));
 			controller.selectedDepotChoiceBox.setValue(configed.getResourceValue("Dashboard.selection.allDepots"));

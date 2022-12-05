@@ -18,6 +18,9 @@ public class LicenseData {
 
 	private static PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
+	private LicenseData() {
+	}
+
 	public static List<String> getLicenses() {
 		return new ArrayList<>(licenses);
 	}
