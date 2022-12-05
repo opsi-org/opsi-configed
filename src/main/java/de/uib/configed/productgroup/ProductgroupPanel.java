@@ -147,7 +147,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		protected boolean enabled = true;
 
-		abstract public void doAction();
+		public abstract void doAction();
 
 		public void changedUpdate(DocumentEvent e) {
 			if (enabled)

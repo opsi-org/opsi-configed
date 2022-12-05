@@ -50,124 +50,124 @@ import de.uib.utilities.table.ListCellOptions;
 
 public abstract class DataStub {
 
-	abstract public boolean canCallMySQL();
+	public abstract boolean canCallMySQL();
 
-	abstract public void productDataRequestRefresh();
+	public abstract void productDataRequestRefresh();
 
-	abstract public void product2versionInfoRequestRefresh();
+	public abstract void product2versionInfoRequestRefresh();
 
-	abstract public Map<String, Map<String, OpsiProductInfo>> getProduct2versionInfo2infos();
+	public abstract Map<String, Map<String, OpsiProductInfo>> getProduct2versionInfo2infos();
 
-	abstract public void productsAllDepotsRequestRefresh();
+	public abstract void productsAllDepotsRequestRefresh();
 
-	abstract public Map<String, TreeSet<OpsiPackage>> getDepot2Packages();
+	public abstract Map<String, TreeSet<OpsiPackage>> getDepot2Packages();
 
-	abstract public Vector<Vector<Object>> getProductRows();
+	public abstract Vector<Vector<Object>> getProductRows();
 
-	abstract public Map<String, Map<String, java.util.List<String>>> getProduct2VersionInfo2Depots();
+	public abstract Map<String, Map<String, java.util.List<String>>> getProduct2VersionInfo2Depots();
 
-	abstract public Object2Product2VersionList getDepot2LocalbootProducts();
+	public abstract Object2Product2VersionList getDepot2LocalbootProducts();
 
-	abstract public Object2Product2VersionList getDepot2NetbootProducts();
+	public abstract Object2Product2VersionList getDepot2NetbootProducts();
 
-	// abstract public HashMap<String, java.util.List<String>>
+	// public abstract HashMap<String, java.util.List<String>>
 	// getProductversion2Depots();
 
-	abstract public void productPropertyDefinitionsRequestRefresh();
+	public abstract void productPropertyDefinitionsRequestRefresh();
 
-	abstract public Map<String, Map<String, Map<String, ListCellOptions>>> getDepot2Product2PropertyDefinitions();
+	public abstract Map<String, Map<String, Map<String, ListCellOptions>>> getDepot2Product2PropertyDefinitions();
 
-	abstract public void productDependenciesRequestRefresh();
+	public abstract void productDependenciesRequestRefresh();
 
-	abstract public Map<String, Map<String, java.util.List<Map<String, String>>>> getDepot2product2dependencyInfos();
+	public abstract Map<String, Map<String, java.util.List<Map<String, String>>>> getDepot2product2dependencyInfos();
 
-	abstract public void productPropertyStatesRequestRefresh();
+	public abstract void productPropertyStatesRequestRefresh();
 
-	abstract public void fillProductPropertyStates(Collection<String> clients);
+	public abstract void fillProductPropertyStates(Collection<String> clients);
 
-	abstract public java.util.List<Map<String, Object>> getProductPropertyStates();
+	public abstract java.util.List<Map<String, Object>> getProductPropertyStates();
 
-	// abstract protected void productPropertyDepotStatesRequestRefresh();
-	// abstract public void fillProductPropertyDepotStates(Collection<String>
+	// protected abstract void productPropertyDepotStatesRequestRefresh();
+	// public abstract void fillProductPropertyDepotStates(Collection<String>
 	// clients);
-	abstract public java.util.List<Map<String, Object>> getProductPropertyDepotStates(java.util.Set<String> depots);
+	public abstract java.util.List<Map<String, Object>> getProductPropertyDepotStates(java.util.Set<String> depots);
 
-	abstract public void installedSoftwareInformationRequestRefresh();
+	public abstract void installedSoftwareInformationRequestRefresh();
 
-	abstract public ArrayList<String> getSoftwareList();
+	public abstract ArrayList<String> getSoftwareList();
 
-	abstract public TreeMap<String, Integer> getSoftware2Number();
+	public abstract TreeMap<String, Integer> getSoftware2Number();
 
-	abstract public String getSWident(Integer i);
+	public abstract String getSWident(Integer i);
 
-	abstract public TreeMap<String, SWAuditEntry> getInstalledSoftwareInformation();
+	public abstract TreeMap<String, SWAuditEntry> getInstalledSoftwareInformation();
 
-	abstract public TreeMap<String, SWAuditEntry> getInstalledSoftwareInformationForLicensing();
+	public abstract TreeMap<String, SWAuditEntry> getInstalledSoftwareInformationForLicensing();
 
-	abstract public TreeMap<String, Set<String>> getName2SWIdents();
+	public abstract TreeMap<String, Set<String>> getName2SWIdents();
 
-	abstract public TreeMap<String, Map<String, String>> getInstalledSoftwareName2SWinfo();
+	public abstract TreeMap<String, Map<String, String>> getInstalledSoftwareName2SWinfo();
 
-	abstract public void softwareAuditOnClientsRequestRefresh();
+	public abstract void softwareAuditOnClientsRequestRefresh();
 
-	abstract public void fillClient2Software(java.util.List<String> clients);
+	public abstract void fillClient2Software(java.util.List<String> clients);
 
-	abstract public void fillClient2Software(String client);
+	public abstract void fillClient2Software(String client);
 
-	abstract public Map<String, java.util.List<SWAuditClientEntry>> getClient2Software();
+	public abstract Map<String, java.util.List<SWAuditClientEntry>> getClient2Software();
 
-	// abstract public Map<Integer, java.util.List<String>> getSoftwareId2clients();
-	abstract public Map<String, java.util.Set<String>> getSoftwareIdent2clients();
+	// public abstract Map<Integer, java.util.List<String>> getSoftwareId2clients();
+	public abstract Map<String, java.util.Set<String>> getSoftwareIdent2clients();
 
-	abstract public void auditSoftwareXLicencePoolRequestRefresh();
+	public abstract void auditSoftwareXLicencePoolRequestRefresh();
 
-	abstract public AuditSoftwareXLicencePool getAuditSoftwareXLicencePool();
+	public abstract AuditSoftwareXLicencePool getAuditSoftwareXLicencePool();
 
-	abstract public void hostConfigsRequestRefresh();
+	public abstract void hostConfigsRequestRefresh();
 
-	abstract public Map<String, Map<String, Object>> getConfigs();
+	public abstract Map<String, Map<String, Object>> getConfigs();
 	// host -> (key -> value)
-	// abstract public Map<String, Map<String, java.util.List<Object>>>
+	// public abstract Map<String, Map<String, java.util.List<Object>>>
 	// getConfigValues();
 	// host;key -> valuelist
 
-	abstract public void licencepoolsRequestRefresh();
+	public abstract void licencepoolsRequestRefresh();
 
-	abstract public Map<String, LicencepoolEntry> getLicencepools();
+	public abstract Map<String, LicencepoolEntry> getLicencepools();
 
-	abstract public void licenceContractsRequestRefresh();
+	public abstract void licenceContractsRequestRefresh();
 
-	abstract public Map<String, LicenceContractEntry> getLicenceContracts();
+	public abstract Map<String, LicenceContractEntry> getLicenceContracts();
 
-	abstract public TreeMap<String, TreeSet<String>> getLicenceContractsExpired();
+	public abstract TreeMap<String, TreeSet<String>> getLicenceContractsExpired();
 	// date in sql time format, contrad ID
 
-	abstract public TreeMap<String, TreeSet<String>> getLicenceContractsToNotify();
+	public abstract TreeMap<String, TreeSet<String>> getLicenceContractsToNotify();
 	// date in sql time format, contrad ID
 
-	abstract public void licencesRequestRefresh();
+	public abstract void licencesRequestRefresh();
 
-	abstract public java.util.Map<String, LicenceEntry> getLicences();
+	public abstract java.util.Map<String, LicenceEntry> getLicences();
 
-	abstract public void licenceUsabilitiesRequestRefresh();
+	public abstract void licenceUsabilitiesRequestRefresh();
 
-	abstract public java.util.List<LicenceUsableForEntry> getLicenceUsabilities();
+	public abstract java.util.List<LicenceUsableForEntry> getLicenceUsabilities();
 
-	abstract public void licenceUsagesRequestRefresh();
+	public abstract void licenceUsagesRequestRefresh();
 
-	abstract public java.util.List<LicenceUsageEntry> getLicenceUsages();
+	public abstract java.util.List<LicenceUsageEntry> getLicenceUsages();
 
-	abstract public void licencePoolXOpsiProductRequestRefresh();
+	public abstract void licencePoolXOpsiProductRequestRefresh();
 
-	abstract public LicencePoolXOpsiProduct getLicencePoolXOpsiProduct();
+	public abstract LicencePoolXOpsiProduct getLicencePoolXOpsiProduct();
 
-	abstract public void client2HwRowsRequestRefresh();
+	public abstract void client2HwRowsRequestRefresh();
 
-	abstract protected void retrieveClient2HwRows(String[] hosts);
+	protected abstract void retrieveClient2HwRows(String[] hosts);
 
-	abstract public Map<String, Map<String, Object>> getClient2HwRows(String[] hosts);
+	public abstract Map<String, Map<String, Object>> getClient2HwRows(String[] hosts);
 
-	static public Set<String> linuxSWnameMarkers = new HashSet<String>();
+	public static Set<String> linuxSWnameMarkers = new HashSet<String>();
 	static {
 		linuxSWnameMarkers.add("linux");
 		linuxSWnameMarkers.add("Linux");
@@ -175,7 +175,7 @@ public abstract class DataStub {
 		linuxSWnameMarkers.add("ubuntu");
 		linuxSWnameMarkers.add("ubuntu");
 	}
-	static public Set<String> linuxSubversionMarkers = new HashSet<String>();
+	public static Set<String> linuxSubversionMarkers = new HashSet<String>();
 	static {
 		linuxSubversionMarkers.add("lin:");
 	}

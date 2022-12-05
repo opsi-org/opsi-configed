@@ -766,7 +766,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 	 * @param String key
 	 * @param Object value (if null then an empty String is the value)
 	 */
-	final protected void addProperty(String key, Object newval) {
+	protected final void addProperty(String key, Object newval) {
 		mapTableModel.addEntry(key, newval);
 		names = mapTableModel.getKeys();
 		// mapTableModel.fireTableDataChanged(); //called in MapTableModel

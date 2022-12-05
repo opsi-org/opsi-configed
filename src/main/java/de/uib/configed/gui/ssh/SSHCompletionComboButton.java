@@ -72,7 +72,7 @@ public class SSHCompletionComboButton {
 		this(null, search_specific_files, null);
 	}
 
-	final private void enableComponents(boolean value) {
+	private final void enableComponents(boolean value) {
 		combobox.setEnabled(value);
 		button.setEnabled(value);
 	}
@@ -287,7 +287,7 @@ public class SSHCompletionComboButton {
 		return contains;
 	}
 
-	final private void setItems(String result, final String curdir) {
+	private final void setItems(String result, final String curdir) {
 		if (result == null) {
 			logging.warning("getDirectoriesIn could not find directories in " + curdir);
 		} else {

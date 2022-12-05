@@ -463,7 +463,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JRadioButton jRadioRequiredAll = new JRadioButton();
 	JRadioButton jRadioRequiredOff = new JRadioButton();
 
-	static private boolean settingSchalter = false;
+	private static boolean settingSchalter = false;
 	JButton jBtnAllOff = new JButton();
 	// JButton jBtnCopyTemplate = new JButton();
 

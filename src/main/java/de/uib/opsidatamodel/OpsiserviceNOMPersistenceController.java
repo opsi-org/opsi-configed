@@ -107,7 +107,6 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.table.ListCellOptions;
 
 public class OpsiserviceNOMPersistenceController extends PersistenceController {
-	private static int callcount = 0;
 
 	private static final String EMPTYFIELD = "-";
 	private static final ArrayList NONE_LIST = new ArrayList() {
@@ -324,7 +323,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	protected JSONObject licensingInfo;
 	private LicensingInfoMap licInfoMap;
 	private String opsiLicensingInfoVersion;
-	private final String backendLicensingInfoMethodname = "backend_getLicensingInfo";
+	private static final String backendLicensingInfoMethodname = "backend_getLicensingInfo";
 
 	protected Date expiresDate;
 
@@ -1112,7 +1111,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	// @Override
-	final private boolean setAgainUserRegistration(final boolean userRegisterValueFromConfigs)
+	private final boolean setAgainUserRegistration(final boolean userRegisterValueFromConfigs)
 	// final in order to avoid deactiviating by override
 	{
 		logging.info(this, "setAgainUserRegistration, userRoles can be used " + withUserRoles);
@@ -1215,7 +1214,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	final public void checkConfiguration() {
+	public final void checkConfiguration() {
 		retrieveOpsiModules();
 		logging.info(this, "checkConfiguration, modules " + opsiModules);
 		initMembers();
@@ -1974,20 +1973,15 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public Boolean isInstallByShutdownConfigured(String host) {
-		Boolean result = getHostBooleanConfigValue(KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN, host, true, null);
-		// logging.debug(this, "isInstallByShutdownConfigured for host " + host + " is "
-		// + result);
-		return result;
+		return getHostBooleanConfigValue(KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN, host, true, null);
 	}
 
 	@Override
 	public Boolean isWanConfigured(String host) {
 		logging.warning(this, " isWanConfigured for host " + host);
 		logging.info(this, " isWanConfigured wanConfiguration  " + wanConfiguration);
-		Boolean result = findBooleanConfigurationComparingToDefaults(host, wanConfiguration);
 
-		return result;
-
+		return findBooleanConfigurationComparingToDefaults(host, wanConfiguration);
 	}
 
 	@Override
@@ -2425,22 +2419,26 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			hostInfoCollections.setLocalHostInfo(newClientId, depotId, hostInfo);
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall("host_createObjects", new Object[] { exec.jsonArray(clientsJsonObject) });
+		OpsiMethodCall omc = new OpsiMethodCall("host_createObjects",
+				new Object[] { exec.jsonArray(clientsJsonObject) });
 		boolean result = exec.doCall(omc);
 
 		if (result) {
 			if (!configStatesJsonObject.isEmpty()) {
-				omc = new OpsiMethodCall("configState_updateObjects", new Object[] { exec.jsonArray(configStatesJsonObject) });
+				omc = new OpsiMethodCall("configState_updateObjects",
+						new Object[] { exec.jsonArray(configStatesJsonObject) });
 				result = exec.doCall(omc);
 			}
 
 			if (!groupsJsonObject.isEmpty()) {
-				omc = new OpsiMethodCall("objectToGroup_createObjects", new Object[] { exec.jsonArray(groupsJsonObject) });
+				omc = new OpsiMethodCall("objectToGroup_createObjects",
+						new Object[] { exec.jsonArray(groupsJsonObject) });
 				result = exec.doCall(omc);
 			}
 
 			if (!productsNetbootJsonObject.isEmpty()) {
-				omc = new OpsiMethodCall("productOnClient_createObjects", new Object[] { exec.jsonArray(productsNetbootJsonObject) });
+				omc = new OpsiMethodCall("productOnClient_createObjects",
+						new Object[] { exec.jsonArray(productsNetbootJsonObject) });
 				result = exec.doCall(omc);
 			}
 		}
@@ -9445,7 +9443,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		KEY_USER_REGISTER_VALUE = null;
 	}
 
-	final private boolean isUserRegisterActivated() {
+	private final boolean isUserRegisterActivated() {
 		boolean result = false;
 
 		Map<String, java.util.List<Object>> serverPropertyMap = getConfigDefaultValues();
@@ -9457,7 +9455,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
-	final private boolean checkUserRolesModule() {
+	private final boolean checkUserRolesModule() {
 
 		if (KEY_USER_REGISTER_VALUE && !withUserRoles) {
 			KEY_USER_REGISTER_VALUE = false;
@@ -9498,7 +9496,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	// configurations and algorithms
-	final protected boolean applyUserConfiguration()
+	protected final boolean applyUserConfiguration()
 	// sets KEY_USER_REGISTER_VALUE
 	// should not be overwritten to avoid privileges confusion
 	{
@@ -11109,7 +11107,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	final public void retrieveOpsiModules() {
+	public final void retrieveOpsiModules() {
 		logging.info(this, "retrieveOpsiModules ");
 
 		licensingInfo = getOpsiLicensingInfo();

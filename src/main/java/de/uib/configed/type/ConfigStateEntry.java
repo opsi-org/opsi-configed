@@ -10,10 +10,10 @@ public class ConfigStateEntry extends HashMap<String, Object> {
 
 	public static final String DB_TABLE_NAME = "CONFIG_STATE";
 
-	final public static String ID = "config_state_id";
-	final public static String OBJECT_ID = "objectId";
-	final public static String CONFIG_ID = "configId";
-	final public static String VALUES = "values";
+	public static final String ID = "config_state_id";
+	public static final String OBJECT_ID = "objectId";
+	public static final String CONFIG_ID = "configId";
+	public static final String VALUES = "values";
 
 	public static final LinkedHashMap<String, String> DB_COLUMNS = new LinkedHashMap<String, String>();
 	static {

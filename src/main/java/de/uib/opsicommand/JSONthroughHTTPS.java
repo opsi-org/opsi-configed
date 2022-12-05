@@ -29,7 +29,7 @@ import de.uib.utilities.logging.logging;
 
 public class JSONthroughHTTPS extends JSONthroughHTTP {
 	protected final String CODING_TABLE = "UTF8";
-	static private SSLSocketFactory sslFactory;
+	private static SSLSocketFactory sslFactory;
 
 	/**
 	 * @param host

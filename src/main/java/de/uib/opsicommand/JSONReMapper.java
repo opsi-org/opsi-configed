@@ -152,7 +152,7 @@ public class JSONReMapper {
 		return responseFound;
 	}
 
-	static public Map<String, Map<String, Object>> getMap2_Object(Object retrieved) {
+	public static Map<String, Map<String, Object>> getMap2_Object(Object retrieved) {
 		HashMap<String, Map<String, Object>> result = new HashMap<String, Map<String, Object>>();
 		HashMap<String, Map<String, Object>> resultNull = new HashMap<String, Map<String, Object>>();
 
@@ -192,7 +192,7 @@ public class JSONReMapper {
 
 	}
 
-	static public Map<String, Map<String, Map<String, Object>>> getMap3_Objects(Object retrieved) {
+	public static Map<String, Map<String, Map<String, Object>>> getMap3_Objects(Object retrieved) {
 		HashMap<String, Map<String, Map<String, Object>>> result = new HashMap<String, Map<String, Map<String, Object>>>();
 		try {
 			JSONObject jO = (JSONObject) retrieved;
@@ -232,7 +232,7 @@ public class JSONReMapper {
 
 	}
 
-	static public Map<String, Map<String, Map<String, Object>>> getMap3_Object(Object retrieved) {
+	public static Map<String, Map<String, Map<String, Object>>> getMap3_Object(Object retrieved) {
 		HashMap<String, Map<String, Map<String, Object>>> result = new HashMap<String, Map<String, Map<String, Object>>>();
 		try {
 			JSONObject jO = (JSONObject) retrieved;
@@ -277,7 +277,7 @@ public class JSONReMapper {
 
 	}
 
-	static public List<Map<String, String>> getListOfStringMaps(Object retrieved) {
+	public static List<Map<String, String>> getListOfStringMaps(Object retrieved) {
 		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		List jsonList = null;
 		try {
@@ -312,7 +312,7 @@ public class JSONReMapper {
 		return result;
 	}
 
-	static public List<Map<String, Object>> getListOfMaps(JSONArray retrieved) {
+	public static List<Map<String, Object>> getListOfMaps(JSONArray retrieved) {
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 		List jsonList = null;
 
@@ -356,7 +356,7 @@ public class JSONReMapper {
 		return result;
 	}
 
-	static public List<Map<String, Object>> getListOfMaps(Object retrieved) {
+	public static List<Map<String, Object>> getListOfMaps(Object retrieved) {
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 		List jsonList = null;
 
@@ -392,7 +392,7 @@ public class JSONReMapper {
 		return result;
 	}
 
-	static public List<JSONObject> getListOfJSONObjects(JSONObject jO, String key) {
+	public static List<JSONObject> getListOfJSONObjects(JSONObject jO, String key) {
 		ArrayList<JSONObject> result = new ArrayList<JSONObject>();
 		JSONArray jA = jO.optJSONArray(key);
 
@@ -403,7 +403,7 @@ public class JSONReMapper {
 		return result;
 	}
 
-	static public List<List<String>> getListOfListsOfStrings(JSONObject jO, String key) {
+	public static List<List<String>> getListOfListsOfStrings(JSONObject jO, String key) {
 		List<List<String>> list0 = new ArrayList<List<String>>();
 		JSONArray jA = jO.optJSONArray(key);
 
@@ -429,7 +429,7 @@ public class JSONReMapper {
 		return list0;
 	}
 
-	static public List<List<String>> getJsonListOfStringLists(JSONObject jO, String key) {
+	public static List<List<String>> getJsonListOfStringLists(JSONObject jO, String key) {
 		ArrayList<List<String>> result = new ArrayList<List<String>>();
 
 		List<Object> list1 = getJsonList(jO, key);
@@ -465,7 +465,7 @@ public class JSONReMapper {
 		return result;
 	}
 
-	static public List getJsonList(JSONObject jO, String key) {
+	public static List getJsonList(JSONObject jO, String key) {
 		ArrayList result = new ArrayList();
 		try {
 			JSONArray jA = jO.optJSONArray(key);
@@ -487,7 +487,7 @@ public class JSONReMapper {
 		return result;
 	}
 
-	static public List<String> getJsonStringList(JSONObject jO, String key) {
+	public static List<String> getJsonStringList(JSONObject jO, String key) {
 		ArrayList<String> result = new ArrayList<String>();
 		try {
 			JSONArray jA = jO.optJSONArray(key);
@@ -508,7 +508,7 @@ public class JSONReMapper {
 		return result;
 	}
 
-	static public List getListResult(JSONObject jO) {
+	public static List getListResult(JSONObject jO) {
 		List result = new ArrayList();
 		try {
 			if (checkResponse(jO)) {
@@ -521,7 +521,7 @@ public class JSONReMapper {
 		return result;
 	}
 
-	static public Map<String, Object> getMap_Object(JSONObject jo)
+	public static Map<String, Object> getMap_Object(JSONObject jo)
 	// this method tries to return Java lists in comparison with getMapResult
 	{
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -541,7 +541,7 @@ public class JSONReMapper {
 		return result;
 	}
 
-	static public Map getMapResult(JSONObject jO)
+	public static Map getMapResult(JSONObject jO)
 	// yields possibly JSON objects and arrays as values
 	// compare getMap_Object
 	{
@@ -563,7 +563,7 @@ public class JSONReMapper {
 		return result;
 	}
 
-	static public List<String> getStringListResult(JSONObject jO) {
+	public static List<String> getStringListResult(JSONObject jO) {
 		List<String> result = new ArrayList<String>();
 		try {
 			if (checkResponse(jO)) {
@@ -577,7 +577,7 @@ public class JSONReMapper {
 		return result;
 	}
 
-	static public List<List<String>> getListOfStringLists(JSONObject jO) {
+	public static List<List<String>> getListOfStringLists(JSONObject jO) {
 		List<List<String>> result = new ArrayList<List<String>>();
 		try {
 			if (checkResponse(jO)) {
@@ -623,7 +623,7 @@ public class JSONReMapper {
 		}
 	}
 
-	static public Object deriveStandard(Object ob) {
+	public static Object deriveStandard(Object ob) {
 		if (ob == null)
 			return null;
 
@@ -664,7 +664,7 @@ public class JSONReMapper {
 			return ob;
 	}
 
-	static public boolean isNull(Object ob) {
+	public static boolean isNull(Object ob) {
 		if (ob == null)
 			return true;
 
@@ -677,18 +677,18 @@ public class JSONReMapper {
 		return false;
 	}
 
-	static public boolean equalsNull(String ob) {
+	public static boolean equalsNull(String ob) {
 		return ob == null || ob.equalsIgnoreCase("null");
 	}
 
-	static public String giveEmptyForNullString(String ob) {
+	public static String giveEmptyForNullString(String ob) {
 		if (ob == null || ob.equalsIgnoreCase("null"))
 			return "";
 		else
 			return ob;
 	}
 
-	static public Map<String, String> giveEmptyForNullString(Map<String, String> m) {
+	public static Map<String, String> giveEmptyForNullString(Map<String, String> m) {
 		for (String key : m.keySet()) {
 			if (isNull(m.get(key)))
 				m.put(key, "");
@@ -697,7 +697,7 @@ public class JSONReMapper {
 		return m;
 	}
 
-	static public Map<String, String> giveEmptyForNull(Map<String, Object> m) {
+	public static Map<String, String> giveEmptyForNull(Map<String, Object> m) {
 		// logging.info("giveEmptyForNull " + m);
 		HashMap<String, String> result = new HashMap<String, String>();
 		for (String key : m.keySet()) {

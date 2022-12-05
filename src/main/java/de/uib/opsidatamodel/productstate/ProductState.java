@@ -77,7 +77,7 @@ public class ProductState extends HashMap<String, String> {
 	public static final String KEY_position = "position";
 	public static final String KEY_productName = "productName";
 
-	final protected Map retrieved;
+	protected final Map retrieved;
 
 	public static final List<String> KEYS = new ArrayList<String>();
 	static {

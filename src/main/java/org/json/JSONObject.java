@@ -454,7 +454,7 @@ public class JSONObject {
 	 * @return A String.
 	 * @throws JSONException If n is a non-finite number.
 	 */
-	static public String numberToString(Number n) throws JSONException {
+	public static String numberToString(Number n) throws JSONException {
 		if (n == null) {
 			throw new JSONException("Null pointer");
 		}

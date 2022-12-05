@@ -23,7 +23,7 @@ public class JTextHideField extends javax.swing.JPanel {
 	JButton button;
 	boolean hiddenMode;
 	boolean multiValue;
-	// static final protected String hiddenS = "****";
+	// static protected final String hiddenS = "****";
 
 	class FixedDocument extends PlainDocument {
 

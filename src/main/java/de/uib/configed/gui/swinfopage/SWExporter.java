@@ -232,9 +232,9 @@ public abstract class SWExporter {
 
 	}
 
-	abstract public void export();
+	public abstract void export();
 
-	abstract protected String getExtension();
+	protected abstract String getExtension();
 
 	public void updateModel() {
 		logging.info(this, "update++");

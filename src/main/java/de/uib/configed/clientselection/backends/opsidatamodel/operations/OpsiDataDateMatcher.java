@@ -60,5 +60,5 @@ public abstract class OpsiDataDateMatcher extends OpsiDataMatcher {
 
 	}
 
-	abstract protected boolean compare(java.sql.Date date, java.sql.Date realdate);
+	protected abstract boolean compare(java.sql.Date date, java.sql.Date realdate);
 }
