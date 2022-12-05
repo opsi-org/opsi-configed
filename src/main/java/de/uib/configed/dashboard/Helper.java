@@ -8,11 +8,14 @@ import java.util.List;
 import java.util.Map;
 
 public class Helper {
+	private Helper() {
+	}
+
 	public static <T, V> List<T> combineListsFromMap(Map<V, List<T>> map) {
 		List<T> list = new ArrayList<>();
 
 		if (map.isEmpty()) {
-			return new ArrayList<T>();
+			return new ArrayList<>();
 		}
 
 		for (List<T> value : map.values()) {

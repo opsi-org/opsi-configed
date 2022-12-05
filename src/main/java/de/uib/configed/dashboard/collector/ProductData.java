@@ -31,9 +31,12 @@ public class ProductData {
 	private static String selectedDepot;
 	private static List<String> depots = new ArrayList<>(persist.getHostInfoCollections().getAllDepots().keySet());
 
+	private ProductData() {
+	}
+
 	public static List<String> getProducts() {
 		if (products.isEmpty() || !products.containsKey(selectedDepot)) {
-			return new ArrayList<String>();
+			return new ArrayList<>();
 		}
 
 		return new ArrayList<>(products.get(selectedDepot));
@@ -61,7 +64,7 @@ public class ProductData {
 
 	public static List<String> getNetbootProducts() {
 		if (netbootProducts.isEmpty() || !netbootProducts.containsKey(selectedDepot)) {
-			return new ArrayList<String>();
+			return new ArrayList<>();
 		}
 
 		return new ArrayList<>(netbootProducts.get(selectedDepot));
@@ -83,7 +86,7 @@ public class ProductData {
 
 	public static List<String> getLocalbootProducts() {
 		if (localbootProducts.isEmpty() || !localbootProducts.containsKey(selectedDepot)) {
-			return new ArrayList<String>();
+			return new ArrayList<>();
 		}
 
 		return new ArrayList<>(localbootProducts.get(selectedDepot));
@@ -142,11 +145,9 @@ public class ProductData {
 			Map<Product, Product> failedProductsList = new HashMap<>();
 			Map<Product, Product> unusedProductsList = new HashMap<>();
 
-			// Map<String, Boolean> clientsMap = persist.getHostInfoCollections()
-			// 		.getPcListForDepots(new String[] { depot }, null);
-			List<String> clientsMapp = persist.getHostInfoCollections().getMapOfAllPCInfoMaps().values().stream()
+			List<String> clientsMap = persist.getHostInfoCollections().getMapOfAllPCInfoMaps().values().stream()
 					.filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName).collect(Collectors.toList());
-			String[] clientIds = clientsMapp.toArray(new String[clientsMapp.size()]);// clientsMap.keySet().toArray(new String[clientsMap.size()]);
+			String[] clientIds = clientsMap.toArray(new String[clientsMap.size()]);
 			Map<String, java.util.List<Map<String, String>>> productsStatesAndActions = persist
 					.getMapOfProductStatesAndActions(clientIds);
 

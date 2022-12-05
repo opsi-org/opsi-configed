@@ -34,7 +34,7 @@ public class ClientLastSeenComparison extends StackPane implements DataChangeLis
 
 	@Override
 	public void display() {
-		XYChart.Series<Number, String> data = new XYChart.Series<Number, String>();
+		XYChart.Series<Number, String> data = new XYChart.Series<>();
 		Map<String, Integer> lastSeenData = ClientData.getLastSeenData();
 
 		clientsLastSeenNoDataText.setText(configed.getResourceValue("Dashboard.noData"));
@@ -46,22 +46,18 @@ public class ClientLastSeenComparison extends StackPane implements DataChangeLis
 			lastSeenData.put(configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays"), 0);
 		}
 
-		if (lastSeenData.values().stream().allMatch(v -> v == 0)) {
-			clientsLastSeenNoDataText.setVisible(true);
-		} else {
-			clientsLastSeenNoDataText.setVisible(false);
-		}
+		clientsLastSeenNoDataText.setVisible(lastSeenData.values().stream().allMatch(v -> v == 0));
 
 		data.getData()
-				.add(new XYChart.Data<Number, String>(
+				.add(new XYChart.Data<>(
 						lastSeenData.get(configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays")),
 						configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays")));
 		data.getData()
-				.add(new XYChart.Data<Number, String>(
+				.add(new XYChart.Data<>(
 						lastSeenData.get(configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays")),
 						configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays")));
 		data.getData()
-				.add(new XYChart.Data<Number, String>(
+				.add(new XYChart.Data<>(
 						lastSeenData.get(configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays")),
 						configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays")));
 

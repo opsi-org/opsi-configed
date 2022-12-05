@@ -41,13 +41,8 @@ public class ProductStatusComparison extends StackPane implements DataChangeList
 		Map<Product, Product> failedProducts = ProductData.getFailedProducts();
 		Map<Product, Product> unusedProducts = ProductData.getUnusedProducts();
 
-		if (installedProducts.isEmpty() &&
-				failedProducts.isEmpty() &&
-				unusedProducts.isEmpty()) {
-			productStatusNoDataText.setVisible(true);
-		} else {
-			productStatusNoDataText.setVisible(false);
-		}
+		productStatusNoDataText
+				.setVisible(installedProducts.isEmpty() && failedProducts.isEmpty() && unusedProducts.isEmpty());
 
 		int totalInstalledProducts = installedProducts.size();
 		int totalFailedProducts = failedProducts.size();

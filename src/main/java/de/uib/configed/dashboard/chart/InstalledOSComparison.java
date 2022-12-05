@@ -45,17 +45,12 @@ public class InstalledOSComparison extends StackPane implements DataChangeListen
 		int totalWindowsInstallations = ProductData.getTotalWindowsInstallations();
 		int totalMacOSInstallations = ProductData.getTotalMacOSInstallations();
 
-		if (totalLinuxInstallations == 0 &&
-				totalWindowsInstallations == 0 &&
-				totalMacOSInstallations == 0) {
-			installedOSNoDataText.setVisible(true);
-		} else {
-			installedOSNoDataText.setVisible(false);
-		}
+		installedOSNoDataText.setVisible(
+				totalLinuxInstallations == 0 && totalWindowsInstallations == 0 && totalMacOSInstallations == 0);
 
-		data.getData().add(new XYChart.Data<String, Number>(LINUX, ProductData.getTotalLinuxInstallations()));
-		data.getData().add(new XYChart.Data<String, Number>(WINDOWS, ProductData.getTotalWindowsInstallations()));
-		data.getData().add(new XYChart.Data<String, Number>(MACOS, ProductData.getTotalMacOSInstallations()));
+		data.getData().add(new XYChart.Data<>(LINUX, ProductData.getTotalLinuxInstallations()));
+		data.getData().add(new XYChart.Data<>(WINDOWS, ProductData.getTotalWindowsInstallations()));
+		data.getData().add(new XYChart.Data<>(MACOS, ProductData.getTotalMacOSInstallations()));
 
 		installedOSComparisonBarChart.getData().clear();
 		installedOSComparisonBarChart.getData().add(data);

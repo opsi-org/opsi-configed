@@ -27,6 +27,9 @@ public class ClientData {
 
 	private static PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
+	private ClientData() {
+	}
+
 	public static List<Client> getClients() {
 		if (clients.isEmpty() || !clients.containsKey(selectedDepot)) {
 			return new ArrayList<>();
@@ -98,8 +101,6 @@ public class ClientData {
 		for (String depot : depots) {
 			List<String> clients = persist.getHostInfoCollections().getMapOfAllPCInfoMaps().values().stream()
 					.filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName).collect(Collectors.toList());
-			// Map<String, Boolean> clients = persist.getHostInfoCollections().getPcListForDepots(new String[] { depot },
-			// 		null);
 
 			List<String> activeClientsList = new ArrayList<>();
 			List<String> inactiveClientsList = new ArrayList<>();
@@ -107,7 +108,7 @@ public class ClientData {
 			if (!clients.isEmpty()) {
 				for (String client : clients) {
 					if (reachableInfo.containsKey(client)) {
-						if ((Boolean) reachableInfo.get(client)) {
+						if (Boolean.TRUE.equals(reachableInfo.get(client))) {
 							activeClientsList.add(client);
 						} else {
 							inactiveClientsList.add(client);
