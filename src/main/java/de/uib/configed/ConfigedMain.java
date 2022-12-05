@@ -619,60 +619,16 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			subdirs = savedStatesLocation.listFiles(File::isDirectory);
 
 			for (File folder : subdirs) {
-				// logging.info(this, "readLocallySavedServerNames savedStates for folder " +
-				// folder);
-
 				File checkFile = new File(folder + File.separator + configed.savedStatesFilename);
 				String folderPath = folder.getPath();
 				String elementname = folderPath.substring(folderPath.lastIndexOf(File.separator) + 1);
-				String hostname = elementname;
-				Integer port = null;
 
 				// revert encryption of ":"
 				if (elementname.lastIndexOf("_") > -1) {
 					elementname = elementname.replace("_", ":");
-					if (elementname.contains("[") && elementname.contains("]")) {
-						try {
-							port = Integer.valueOf(
-									(elementname.substring(elementname.lastIndexOf(":", elementname.indexOf("]")) + 1))
-											.trim());
-							hostname = elementname.substring(0, elementname.lastIndexOf(":", elementname.indexOf("]")));
-						} catch (Exception ex) {
-							logging.info(this, "no port found, should be NumberFormatException: " + ex);
-						}
-					} else {
-						try {
-							port = Integer.valueOf((elementname.substring(elementname.lastIndexOf(":") + 1)).trim());
-							hostname = elementname.substring(0, elementname.lastIndexOf(":"));
-						} catch (Exception ex) {
-							logging.info(this, "no port found, should be NumberFormatException: " + ex);
-						}
-					}
-
-					if (port != null) {
-						elementname = hostname + ":" + port;
-					}
 				}
 
-				/*
-				 * SavedStates testSavedStates = new SavedStates(checkFile);
-				 * 
-				 * 
-				 * try{
-				 * testSavedStates.load();
-				 * }
-				 * catch(IOException iox)
-				 * {
-				 * logging.info(this, "saved states file could not be loades");
-				 * }
-				 * 
-				 * logging.info(this, "readLocallySavedServerNames savedStates for " +
-				 * elementname + " : " +testSavedStates);
-				 */
-
-				sortingmap.put(new java.sql.Timestamp(checkFile.lastModified()), elementname
-				// Integer.valueOf (testSavedStates.saveUsageCount.deserialize())
-				);
+				sortingmap.put(new java.sql.Timestamp(checkFile.lastModified()), elementname);
 			}
 		} catch (SecurityException ex) {
 			logging.warning("could not read file: " + ex);

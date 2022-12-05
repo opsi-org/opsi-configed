@@ -33,7 +33,7 @@ Usage of this portion of software is allowed unter the restrictions of the GPL
 import utils.Base64OutputStream;
 
 /**
- * @author Rupert Roeder, Jan Schneider
+ * @author Rupert Roeder, Jan Schneider, Naglis Vidziunas
  */
 
 public class JSONthroughHTTP extends JSONExecutioner {
@@ -91,7 +91,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 
 		if (idx > -1) {
 			this.host = host.substring(0, idx);
-			this.portHTTP = this.portHTTPS = new java.lang.Integer(host.substring(idx + 1, host.length())).intValue();
+			this.portHTTP = this.portHTTPS = Integer.parseInt(host.substring(idx + 1, host.length()));
 		}
 		this.username = username;
 		this.password = password;
