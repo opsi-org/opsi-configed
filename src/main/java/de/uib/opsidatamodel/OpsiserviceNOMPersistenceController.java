@@ -177,17 +177,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	protected String opsiDefaultDomain;
 
-	private List<Map<String, Object>> depotLocalbootProducts;
-	private List<Map<String, Object>> depotNetbootProducts;
-
 	protected Set<String> permittedProducts;
 
 	private List<String> localbootProductNames;
 	private List<String> netbootProductNames;
 
 	private Map<String, java.util.List<String>> possibleActions; // product-->possibleActions
-	private String saveDepotId;
-	private HashMap actionsToBeChanged;
 
 	protected String[] logtypes;
 
@@ -666,7 +661,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 							new String[] { configed.getResourceValue("PersistenceController.endApp") }, 500, 400);
 					f.setMessage(message);
 
-					f.show();
+					f.setVisible(true);
 
 					System.exit(1);
 				}
@@ -900,7 +895,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			return null;
 		}
 
-		public Map<String, Boolean> getPcListForDepots(String[] depots, Set<String> allowedClients) {
+		public Map<String, Boolean> getClientListForDepots(String[] depots, Set<String> allowedClients) {
 			retrieveOpsiHosts();
 
 			// if (mapOfPCs == null)
@@ -1091,7 +1086,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		logging.debug(this, "create");
 
-		hostInfoCollections = new DefaultHostInfoCollections();// this);
+		hostInfoCollections = new DefaultHostInfoCollections();
 
 		exec = new JSONthroughHTTPS(server, user, password);
 
@@ -4353,7 +4348,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		logging.info(this, "depotChange");
 		productGlobalInfos = null;
 		possibleActions = null;
-		saveDepotId = null;
 		productIds = null;
 		netbootProductNames = null;
 		localbootProductNames = null;

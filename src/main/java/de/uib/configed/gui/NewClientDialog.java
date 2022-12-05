@@ -91,7 +91,7 @@ public class NewClientDialog extends FGeneralDialog
 	private boolean shutdownInstall;
 	protected boolean multidepot;
 
-	protected java.util.List<String> existingHostNames;
+	private java.util.List<String> existingHostNames;
 
 	// private static boolean macAddressFieldVisible = false;
 	// private static boolean macAddressFieldVisibleSet = false;
@@ -666,102 +666,7 @@ public class NewClientDialog extends FGeneralDialog
 			final String description, final String inventorynumber, final String notes, final String ipaddress,
 			final String macaddress, final boolean shutdownInstall, final boolean uefiboot, final boolean wanConfig,
 			final String group, final String netbootProduct, final String localbootProduct) {
-		// boolean goOn = true;
 
-		// if (hostname == null || hostname.equals("")) {
-		// 	goOn = false;
-		// }
-		// if (selectedDomain == null || selectedDomain.equals("")) {
-		// 	goOn = false;
-		// }
-
-		// // logging.debug(this, "doAction1 host, existingHostNames.contains host " +
-		// // hostname + ". " + selectedDomain + ", "
-		// // +existingHostNames.contains(hostname + "." + selectedDomain));
-
-		// String opsiHostKey = "" + hostname + "." + selectedDomain;
-		// if (goOn && existingHostNames != null && existingHostNames.contains(opsiHostKey)) {
-
-		// 	if (depots.contains(opsiHostKey)) {
-		// 		JOptionPane.showMessageDialog(this,
-		// 				opsiHostKey + "\n" + configed.getResourceValue("NewClientDialog.OverwriteDepot.Message"),
-		// 				configed.getResourceValue("NewClientDialog.OverwriteDepot.Title") + " (" + Globals.APPNAME
-		// 						+ ")",
-		// 				JOptionPane.WARNING_MESSAGE);
-		// 		goOn = false;
-		// 	}
-
-		// 	FTextArea fQuestion = new FTextArea(Globals.mainFrame,
-		// 			configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question") + " (" + Globals.APPNAME
-		// 					+ ") ",
-		// 			true, new String[] { configed.getResourceValue("FGeneralDialog.no"),
-		// 					configed.getResourceValue("FGeneralDialog.yes") },
-		// 			350, 100);
-		// 	StringBuffer message = new StringBuffer("");
-		// 	message.append(configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message0"));
-		// 	message.append(" \"");
-		// 	message.append(opsiHostKey);
-		// 	message.append("\" \n");
-		// 	message.append(configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message1"));
-		// 	fQuestion.setMessage(message.toString());
-		// 	fQuestion.centerOn(this);
-		// 	fQuestion.setAlwaysOnTop(true);
-		// 	fQuestion.setVisible(true);
-
-		// 	if (fQuestion.getResult() == 1)
-		// 		goOn = false;
-
-		// }
-
-		// if (goOn && hostname.length() > 15) {
-		// 	FTextArea fQuestion = new FTextArea(Globals.mainFrame,
-		// 			configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question") + " ("
-		// 					+ Globals.APPNAME + ") ",
-		// 			true, new String[] { configed.getResourceValue("FGeneralDialog.no"),
-		// 					configed.getResourceValue("FGeneralDialog.yes") },
-		// 			350, 100);
-		// 	StringBuffer message = new StringBuffer("");
-		// 	message.append(configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Message"));
-		// 	// message.append(" \"");
-		// 	// message.append(hostname);
-		// 	// message.append("\" \n");
-		// 	fQuestion.setMessage(message.toString());
-		// 	fQuestion.centerOn(this);
-		// 	fQuestion.setAlwaysOnTop(true);
-		// 	fQuestion.setVisible(true);
-
-		// 	if (fQuestion.getResult() == 1)
-		// 		goOn = false;
-		// }
-
-		// boolean onlyNumbers = true;
-		// int i = 0;
-		// while (onlyNumbers && i < hostname.length()) {
-		// 	if (!Character.isDigit(hostname.charAt(i)))
-		// 		onlyNumbers = false;
-		// 	i++;
-		// }
-
-		// if (goOn && onlyNumbers) {
-		// 	FTextArea fQuestion = new FTextArea(Globals.mainFrame,
-		// 			configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Question") + " ("
-		// 					+ Globals.APPNAME + ") ",
-		// 			true, new String[] { configed.getResourceValue("FGeneralDialog.no"),
-		// 					configed.getResourceValue("FGeneralDialog.yes") },
-		// 			350, 100);
-		// 	StringBuffer message = new StringBuffer("");
-		// 	message.append(configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Message"));
-		// 	// message.append(" \"");
-		// 	// message.append(hostname);
-		// 	// message.append("\" \n");
-		// 	fQuestion.setMessage(message.toString());
-		// 	fQuestion.centerOn(this);
-		// 	fQuestion.setAlwaysOnTop(true);
-		// 	fQuestion.setVisible(true);
-
-		// 	if (fQuestion.getResult() == 1)
-		// 		goOn = false;
-		// }
 		boolean goOn = checkClientCorrectnes(hostname, selectedDomain);
 
 		if (goOn) {
@@ -790,16 +695,6 @@ public class NewClientDialog extends FGeneralDialog
 
 			logging.debug(this, "createClient saveDomains " + saveDomains);
 			main.getPersistenceController().writeDomains(saveDomains);
-
-			// creates dead product property (state) for newer client-agent-version
-			// therefore omitted
-			/*
-			 * 
-			 * if (jCheckShutdownInstall.getSelectedObjects() != null)
-			 * {
-			 * main.setInstallByShutdownProductPropertyValue(opsiHostKey, true);
-			 * }
-			 */
 
 		}
 	}

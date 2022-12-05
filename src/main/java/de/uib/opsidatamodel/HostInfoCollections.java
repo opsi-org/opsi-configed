@@ -45,7 +45,7 @@ public abstract class HostInfoCollections {
 
 	public abstract Map<String, HostInfo> getMapOfAllPCInfoMaps();
 
-	public abstract Map<String, Boolean> getPcListForDepots(String[] depots, Set<String> allowedClients);
+	public abstract Map<String, Boolean> getClientListForDepots(String[] depots, Set<String> allowedClients);
 
 	public abstract Map<String, Set<String>> getFNode2Treeparents();
 

@@ -4,9 +4,9 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JTree;
@@ -379,7 +379,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		if (values.length == 0)
 		// possibly transfer of a group node
 		{
-			ArrayList<TreePath> activePaths = tree.getActivePaths();
+			List<TreePath> activePaths = tree.getActivePaths();
 			if (activePaths != null && activePaths.size() == 1) {
 
 				String importID = (String) (((DefaultMutableTreeNode) (activePaths.get(0)).getLastPathComponent())

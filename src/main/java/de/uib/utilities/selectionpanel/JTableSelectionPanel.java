@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -508,7 +509,7 @@ public class JTableSelectionPanel extends JPanel
 
 	}
 
-	public TreeSet<String> getSelectedSet() {
+	public Set<String> getSelectedSet() {
 		TreeSet<String> result = new TreeSet<String>();
 
 		for (int i = 0; i < table.getRowCount(); i++) {
@@ -585,7 +586,7 @@ public class JTableSelectionPanel extends JPanel
 		ListSelectionModel lsm = table.getSelectionModel();
 		lsm.clearSelection();
 
-		if (valuesList == null || valuesList.size() == 0)
+		if (valuesList == null || valuesList.isEmpty())
 			return;
 
 		TreeSet<String> valuesSet = new TreeSet<String>(valuesList);
@@ -641,12 +642,9 @@ public class JTableSelectionPanel extends JPanel
 	}
 
 	public void setSelectedValues(String[] values) {
-		TreeSet<String> valueList = new TreeSet<String>();
-		for (int i = 0; i < values.length; i++) {
-			valueList.add(values[i]);
-		}
+		Set<String> valueSet = new TreeSet<>(Arrays.asList(values));
 
-		setSelectedValues(valueList);
+		setSelectedValues(valueSet);
 	}
 
 	public void selectAll() {

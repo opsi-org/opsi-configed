@@ -2059,7 +2059,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return pathToDIRECTORY;
 	}
 
-	public ArrayList<TreePath> getActivePaths() {
+	public List<TreePath> getActivePaths() {
 		return main.getActivePaths();
 	}
 

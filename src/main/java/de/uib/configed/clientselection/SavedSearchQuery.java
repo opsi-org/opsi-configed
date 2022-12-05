@@ -110,7 +110,7 @@ public class SavedSearchQuery {
 		Map<String, Map<java.lang.String, java.lang.Object>> depots = controller.getHostInfoCollections()
 				.getAllDepots();
 
-		controller.getHostInfoCollections().getPcListForDepots(depots.keySet().toArray(new String[0]), null);
+		controller.getHostInfoCollections().getClientListForDepots(depots.keySet().toArray(new String[0]), null);
 
 		SelectionManager manager = new SelectionManager(null);
 		java.util.List<String> searches = manager.getSavedSearchesNames();
