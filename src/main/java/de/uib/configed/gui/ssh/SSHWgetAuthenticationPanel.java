@@ -15,9 +15,9 @@ import de.uib.configed.Globals;
 import de.uib.configed.configed;
 
 public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
-	static public final String LBLUSER = "lbl_user";
-	static public final String LBLNEEDAUTH = "lbl_needAuthentication";
-	static public final String CBNEEDAUTH = "cb_needAuthentication";
+	public static final String LBLUSER = "lbl_user";
+	public static final String LBLNEEDAUTH = "lbl_needAuthentication";
+	public static final String CBNEEDAUTH = "cb_needAuthentication";
 
 	private JCheckBox cb_needAuthentication;
 	private JLabel lbl_user = new JLabel();
