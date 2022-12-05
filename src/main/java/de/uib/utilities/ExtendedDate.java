@@ -9,8 +9,8 @@ public class ExtendedDate {
 	static final String sINFINITE = "INFINITE";
 	// static final String displayInfinite = "\u221E";//"INF";
 
-	static public final ExtendedDate INFINITE = new ExtendedDate(sINFINITE);
-	static public final ExtendedDate ZERO = new ExtendedDate("1900-01-01 00:00:0");
+	public static final ExtendedDate INFINITE = new ExtendedDate(sINFINITE);
+	public static final ExtendedDate ZERO = new ExtendedDate("1900-01-01 00:00:0");
 
 	private Date date;
 	private String sDate;

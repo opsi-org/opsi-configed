@@ -373,7 +373,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	 * DateFormatSymbols returns an extra, empty value at the end of the array
 	 * of months. Remove it.
 	 */
-	static protected String[] getMonthStrings() {
+	protected static String[] getMonthStrings() {
 		String[] months = new java.text.DateFormatSymbols().getMonths();
 		int lastIndex = months.length - 1;
 

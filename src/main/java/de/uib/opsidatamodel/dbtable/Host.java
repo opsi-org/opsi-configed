@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Host extends Table {
-	static public final String tableName = "HOST";
-	static public final String idColumn = tableName + ".hostId";
-	static public final String hwAddressColumn = tableName + ".hardwareAdress";
-	static public final String descriptionColumn = tableName + ".description";
+	public static final String tableName = "HOST";
+	public static final String idColumn = tableName + ".hostId";
+	public static final String hwAddressColumn = tableName + ".hardwareAdress";
+	public static final String descriptionColumn = tableName + ".description";
 
 	public static java.util.List<String> columns;
 	static {
