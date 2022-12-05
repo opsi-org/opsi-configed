@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -622,13 +623,188 @@ public class NewClientDialog extends FGeneralDialog
 	}
 
 	private void createClients(Vector<Vector<Object>> clients) {
-		main.createClients(clients);
+		Iterator<Vector<Object>> iter = clients.iterator();
+		Vector<Vector<Object>> modifiedClients = new Vector<>();
+
+		while (iter.hasNext()) {
+			Vector<Object> client = iter.next();
+
+			String hostname = (String) client.get(0);
+			String selectedDomain = (String) client.get(1);
+
+			if (!isBoolean((String) client.get(11)) || !isBoolean((String) client.get(12))
+					|| !isBoolean((String) client.get(13))) {
+				FTextArea fInfo = new FTextArea(Globals.mainFrame,
+						configed.getResourceValue("NewClientDialog.nonBooleanValue.title") + " (" + Globals.APPNAME
+								+ ") ",
+						false, new String[] { configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
+
+				StringBuilder message = new StringBuilder("");
+				message.append(configed.getResourceValue("NewClientDialog.nonBooleanValue.message"));
+				fInfo.setMessage(message.toString());
+				fInfo.setAlwaysOnTop(true);
+				fInfo.setVisible(true);
+
+				return;
+			}
+
+			if (checkClientCorrectnes(hostname, selectedDomain)) {
+				// clients.remove(client);
+				modifiedClients.add(client);
+			}
+		}
+
+		main.createClients(modifiedClients);
+	}
+
+	private boolean isBoolean(String bool) {
+		return bool.isEmpty() || bool.equalsIgnoreCase(Boolean.TRUE.toString())
+				|| bool.equalsIgnoreCase(Boolean.FALSE.toString());
 	}
 
 	private void createClient(final String hostname, final String selectedDomain, final String depotID,
 			final String description, final String inventorynumber, final String notes, final String ipaddress,
 			final String macaddress, final boolean shutdownInstall, final boolean uefiboot, final boolean wanConfig,
 			final String group, final String netbootProduct, final String localbootProduct) {
+		// boolean goOn = true;
+
+		// if (hostname == null || hostname.equals("")) {
+		// 	goOn = false;
+		// }
+		// if (selectedDomain == null || selectedDomain.equals("")) {
+		// 	goOn = false;
+		// }
+
+		// // logging.debug(this, "doAction1 host, existingHostNames.contains host " +
+		// // hostname + ". " + selectedDomain + ", "
+		// // +existingHostNames.contains(hostname + "." + selectedDomain));
+
+		// String opsiHostKey = "" + hostname + "." + selectedDomain;
+		// if (goOn && existingHostNames != null && existingHostNames.contains(opsiHostKey)) {
+
+		// 	if (depots.contains(opsiHostKey)) {
+		// 		JOptionPane.showMessageDialog(this,
+		// 				opsiHostKey + "\n" + configed.getResourceValue("NewClientDialog.OverwriteDepot.Message"),
+		// 				configed.getResourceValue("NewClientDialog.OverwriteDepot.Title") + " (" + Globals.APPNAME
+		// 						+ ")",
+		// 				JOptionPane.WARNING_MESSAGE);
+		// 		goOn = false;
+		// 	}
+
+		// 	FTextArea fQuestion = new FTextArea(Globals.mainFrame,
+		// 			configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question") + " (" + Globals.APPNAME
+		// 					+ ") ",
+		// 			true, new String[] { configed.getResourceValue("FGeneralDialog.no"),
+		// 					configed.getResourceValue("FGeneralDialog.yes") },
+		// 			350, 100);
+		// 	StringBuffer message = new StringBuffer("");
+		// 	message.append(configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message0"));
+		// 	message.append(" \"");
+		// 	message.append(opsiHostKey);
+		// 	message.append("\" \n");
+		// 	message.append(configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message1"));
+		// 	fQuestion.setMessage(message.toString());
+		// 	fQuestion.centerOn(this);
+		// 	fQuestion.setAlwaysOnTop(true);
+		// 	fQuestion.setVisible(true);
+
+		// 	if (fQuestion.getResult() == 1)
+		// 		goOn = false;
+
+		// }
+
+		// if (goOn && hostname.length() > 15) {
+		// 	FTextArea fQuestion = new FTextArea(Globals.mainFrame,
+		// 			configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question") + " ("
+		// 					+ Globals.APPNAME + ") ",
+		// 			true, new String[] { configed.getResourceValue("FGeneralDialog.no"),
+		// 					configed.getResourceValue("FGeneralDialog.yes") },
+		// 			350, 100);
+		// 	StringBuffer message = new StringBuffer("");
+		// 	message.append(configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Message"));
+		// 	// message.append(" \"");
+		// 	// message.append(hostname);
+		// 	// message.append("\" \n");
+		// 	fQuestion.setMessage(message.toString());
+		// 	fQuestion.centerOn(this);
+		// 	fQuestion.setAlwaysOnTop(true);
+		// 	fQuestion.setVisible(true);
+
+		// 	if (fQuestion.getResult() == 1)
+		// 		goOn = false;
+		// }
+
+		// boolean onlyNumbers = true;
+		// int i = 0;
+		// while (onlyNumbers && i < hostname.length()) {
+		// 	if (!Character.isDigit(hostname.charAt(i)))
+		// 		onlyNumbers = false;
+		// 	i++;
+		// }
+
+		// if (goOn && onlyNumbers) {
+		// 	FTextArea fQuestion = new FTextArea(Globals.mainFrame,
+		// 			configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Question") + " ("
+		// 					+ Globals.APPNAME + ") ",
+		// 			true, new String[] { configed.getResourceValue("FGeneralDialog.no"),
+		// 					configed.getResourceValue("FGeneralDialog.yes") },
+		// 			350, 100);
+		// 	StringBuffer message = new StringBuffer("");
+		// 	message.append(configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Message"));
+		// 	// message.append(" \"");
+		// 	// message.append(hostname);
+		// 	// message.append("\" \n");
+		// 	fQuestion.setMessage(message.toString());
+		// 	fQuestion.centerOn(this);
+		// 	fQuestion.setAlwaysOnTop(true);
+		// 	fQuestion.setVisible(true);
+
+		// 	if (fQuestion.getResult() == 1)
+		// 		goOn = false;
+		// }
+		boolean goOn = checkClientCorrectnes(hostname, selectedDomain);
+
+		if (goOn) {
+			main.createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress,
+					macaddress, shutdownInstall, uefiboot, wanConfig, group, netbootProduct, localbootProduct);
+
+			Vector<String> editableDomains = new Vector<String>();
+			ArrayList<Object> saveDomains = new ArrayList<Object>();
+			int order = 0;
+			saveDomains.add("" + order + ":" + selectedDomain);
+			editableDomains.add(selectedDomain);
+			logging.info(this, "createClient domains" + domains);
+
+			domains.remove(selectedDomain);
+
+			for (String domain : domains) {
+				order++;
+				saveDomains.add("" + order + ":" + domain);
+
+				editableDomains.add(domain);
+			}
+
+			logging.debug(this, "createClient editableDomains " + editableDomains);
+			main.setEditableDomains(editableDomains);
+			setDomains(editableDomains);
+
+			logging.debug(this, "createClient saveDomains " + saveDomains);
+			main.getPersistenceController().writeDomains(saveDomains);
+
+			// creates dead product property (state) for newer client-agent-version
+			// therefore omitted
+			/*
+			 * 
+			 * if (jCheckShutdownInstall.getSelectedObjects() != null)
+			 * {
+			 * main.setInstallByShutdownProductPropertyValue(opsiHostKey, true);
+			 * }
+			 */
+
+		}
+	}
+
+	private boolean checkClientCorrectnes(String hostname, String selectedDomain) {
 		boolean goOn = true;
 
 		if (hostname == null || hostname.equals("")) {
@@ -726,44 +902,7 @@ public class NewClientDialog extends FGeneralDialog
 				goOn = false;
 		}
 
-		if (goOn) {
-			main.createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress,
-					macaddress, shutdownInstall, uefiboot, wanConfig, group, netbootProduct, localbootProduct);
-
-			Vector<String> editableDomains = new Vector<String>();
-			ArrayList<Object> saveDomains = new ArrayList<Object>();
-			int order = 0;
-			saveDomains.add("" + order + ":" + selectedDomain);
-			editableDomains.add(selectedDomain);
-			logging.info(this, "createClient domains" + domains);
-
-			domains.remove(selectedDomain);
-
-			for (String domain : domains) {
-				order++;
-				saveDomains.add("" + order + ":" + domain);
-
-				editableDomains.add(domain);
-			}
-
-			logging.debug(this, "createClient editableDomains " + editableDomains);
-			main.setEditableDomains(editableDomains);
-			setDomains(editableDomains);
-
-			logging.debug(this, "createClient saveDomains " + saveDomains);
-			main.getPersistenceController().writeDomains(saveDomains);
-
-			// creates dead product property (state) for newer client-agent-version
-			// therefore omitted
-			/*
-			 * 
-			 * if (jCheckShutdownInstall.getSelectedObjects() != null)
-			 * {
-			 * main.setInstallByShutdownProductPropertyValue(opsiHostKey, true);
-			 * }
-			 */
-
-		}
+		return goOn;
 	}
 
 	private void importCSV() {
