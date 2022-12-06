@@ -2471,11 +2471,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public void setClient(String clientName) {
 		logging.info(this, "setClient " + clientName);
 
-		logging.devel(this, clientName + "  setClient");
 		if (clientName == null)
 			setSelectedClientsOnPanel(new String[] {});
 		else {
-			logging.devel(this, "setClient2 " + Arrays.toString(new String[] { clientName }));
 			setSelectedClientsOnPanel(new String[] { clientName });
 			// implies:
 			// setSelectedClientsArray(new String[]{clientname});
@@ -6064,7 +6062,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected void refreshClientList(String selectClient) {
 		logging.info(this, "refreshClientList " + selectClient);
-		refreshClientList();
+		refreshClientListActivateALL();
 
 		if (selectClient != null) {
 			logging.debug(this, "set client refreshClientList");
@@ -6075,7 +6073,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected void refreshClientList(String[] selectClients) {
 		logging.info(this, "refreshClientList " + selectClients);
-		refreshClientList();
+		refreshClientListActivateALL();
 
 		if (selectClients != null) {
 			logging.debug(this, "set client refreshClientList");
@@ -6170,9 +6168,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			persist.getHostInfoCollections().addOpsiHostNames(createdClientNames);
 			persist.fObject2GroupsRequestRefresh();
 
-			refreshClientList(createdClientNames);
-			//activateGroup(ClientTree.ALL_NAME);
-			// Write clientnames into a Collection
+			refreshClientListActivateALL();
+			setClients(createdClientNames);
 		}
 	}
 
@@ -6194,8 +6191,14 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			persist.getHostInfoCollections().addOpsiHostName(newClientID);
 			persist.fObject2GroupsRequestRefresh();
 
-			logging.devel(this, group);
-			refreshClientList(newClientID);
+			refreshClientList();
+
+			// Activate group of created Client (and the group of all clients if no group specified)
+			if (!activateGroup(group))
+				activateGroup(ClientTree.ALL_NAME);
+
+			// Sets the client on the table
+			setClient(newClientID);
 		}
 	}
 
@@ -6871,11 +6874,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		} else
 			logging.info(this, " setSelectedClientsOnPanel selected null");
 
-		logging.devel(this, "asdf");
-		logging.devel(this, Boolean.toString(selected == null));
-		logging.devel(this, selected[0]);
-		logging.devel(this, Integer.toString(selected.length));
-		logging.devel(this, Arrays.toString(selected));
 		selectionPanel.removeListSelectionListener(this);
 		selectionPanel.setSelectedValues(selected);
 		setSelectedClientsArray(selected);
