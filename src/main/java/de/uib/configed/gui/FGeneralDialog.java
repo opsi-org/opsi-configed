@@ -728,6 +728,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	// Events
 	// window
 
+	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			result = DEFAULT;

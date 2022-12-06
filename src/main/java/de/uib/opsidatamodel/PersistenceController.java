@@ -411,6 +411,8 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void deleteClient(String hostId);
 
+	public abstract void deleteClients(String[] hostIds);
+
 	public abstract java.util.List<String> deletePackageCaches(String[] hostIds);
 
 	// public abstract void wakeOnLan (String hostId);

@@ -1033,6 +1033,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			opsiHostNames.add(newName);
 		}
 
+		public void addOpsiHostNames(String[] newNames) {
+			opsiHostNames.addAll(Arrays.asList(newNames));
+		}
+
 		public void updateLocalHostInfo(String hostId, String property, Object value)
 		// for table
 		{
@@ -2348,16 +2352,16 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			hostItem.put(HostInfo.clientIpAddressKEY, ipaddress);
 			hostItem.put(HostInfo.clientInventoryNumberKEY, inventorynumber);
 
-			clientsJsonObject.add(exec.jsonMap(hostItem));
+			clientsJsonObject.add(Executioner.jsonMap(hostItem));
 
 			Map<String, Object> itemDepot = createNOMitem(ConfigStateEntry.TYPE);
 			List<String> valuesDepot = new ArrayList<>();
 			valuesDepot.add(depotId);
 			itemDepot.put(ConfigStateEntry.OBJECT_ID, newClientId);
-			itemDepot.put(ConfigStateEntry.VALUES, exec.jsonArray(valuesDepot));
+			itemDepot.put(ConfigStateEntry.VALUES, Executioner.jsonArray(valuesDepot));
 			itemDepot.put(ConfigStateEntry.CONFIG_ID, CONFIG_DEPOT_ID);
 
-			configStatesJsonObject.add(exec.jsonMap(itemDepot));
+			configStatesJsonObject.add(Executioner.jsonMap(itemDepot));
 
 			if (uefiBoot) {
 				configStatesJsonObject.add(createUefiJSONEntry(newClientId, EFI_DHCPD_FILENAME));
@@ -2374,12 +2378,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				Map<String, Object> itemShI = createNOMitem(ConfigStateEntry.TYPE);
 				itemShI.put(ConfigStateEntry.OBJECT_ID, newClientId);
-				itemShI.put(ConfigStateEntry.VALUES, exec.jsonArray(valuesShI));
+				itemShI.put(ConfigStateEntry.VALUES, Executioner.jsonArray(valuesShI));
 				itemShI.put(ConfigStateEntry.CONFIG_ID, KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
 
 				logging.info(this, "create client, config item for shutdownInstall " + itemShI);
 
-				configStatesJsonObject.add(exec.jsonMap(itemShI));
+				configStatesJsonObject.add(Executioner.jsonMap(itemShI));
 			}
 
 			if (group != null && !group.isEmpty()) {
@@ -2388,7 +2392,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 				itemGroup.put(Object2GroupEntry.GROUP_ID_KEY, group);
 				itemGroup.put(Object2GroupEntry.MEMBER_KEY, newClientId);
-				groupsJsonObject.add(exec.jsonMap(itemGroup));
+				groupsJsonObject.add(Executioner.jsonMap(itemGroup));
 			}
 
 			if (productNetboot != null && !productNetboot.isEmpty()) {
@@ -2398,7 +2402,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				itemProducts.put(OpsiPackage.SERVICEkeyPRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 				itemProducts.put("clientId", newClientId);
 				itemProducts.put(ProductState.key2servicekey.get(ProductState.KEY_actionRequest), "setup");
-				productsNetbootJsonObject.add(exec.jsonMap(itemProducts));
+				productsNetbootJsonObject.add(Executioner.jsonMap(itemProducts));
 			}
 
 			HostInfo hostInfo = new HostInfo(hostItem);
@@ -2414,25 +2418,25 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		}
 
 		OpsiMethodCall omc = new OpsiMethodCall("host_createObjects",
-				new Object[] { exec.jsonArray(clientsJsonObject) });
+				new Object[] { Executioner.jsonArray(clientsJsonObject) });
 		boolean result = exec.doCall(omc);
 
 		if (result) {
 			if (!configStatesJsonObject.isEmpty()) {
 				omc = new OpsiMethodCall("configState_updateObjects",
-						new Object[] { exec.jsonArray(configStatesJsonObject) });
+						new Object[] { Executioner.jsonArray(configStatesJsonObject) });
 				result = exec.doCall(omc);
 			}
 
 			if (!groupsJsonObject.isEmpty()) {
 				omc = new OpsiMethodCall("objectToGroup_createObjects",
-						new Object[] { exec.jsonArray(groupsJsonObject) });
+						new Object[] { Executioner.jsonArray(groupsJsonObject) });
 				result = exec.doCall(omc);
 			}
 
 			if (!productsNetbootJsonObject.isEmpty()) {
 				omc = new OpsiMethodCall("productOnClient_createObjects",
-						new Object[] { exec.jsonArray(productsNetbootJsonObject) });
+						new Object[] { Executioner.jsonArray(productsNetbootJsonObject) });
 				result = exec.doCall(omc);
 			}
 		}
@@ -2635,12 +2639,16 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		hostInfoCollections.opsiHostsRequestRefresh();
 	}
 
-	/*
-	 * public void wakeOnLan (String hostId)
-	 * //opsi 3 comenuItemsOpsiclientdEventmpatibility
-	 * {
-	 * }
-	 */
+	public void deleteClients(String[] hostIds) {
+		if (globalReadOnly)
+			return;
+
+		for (String hostId : hostIds) {
+			OpsiMethodCall omc = new OpsiMethodCall("host_delete", new String[] { hostId });
+			exec.doCall(omc);
+		}
+		hostInfoCollections.opsiHostsRequestRefresh();
+	}
 
 	// hostControl methods
 	private java.util.List<String> collectErrorsFromResponsesByHost(Map responses, String callingMethodName) {

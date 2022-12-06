@@ -2638,8 +2638,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jButtonDash.setPreferredSize(Globals.modeSwitchDimension);
 		jButtonDash.setToolTipText("Dashboard");
 
-		jButtonDash.setEnabled(ConfigedMain.dashEnabled);
-		jButtonDash.setVisible(ConfigedMain.dashEnabled);
+		jButtonDash.setEnabled(ConfigedMain.DASH_ENABLED);
+		jButtonDash.setVisible(ConfigedMain.DASH_ENABLED);
 		jButtonDash.addActionListener(this);
 
 		iconPaneTargets = new JPanel();

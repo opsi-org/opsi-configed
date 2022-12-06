@@ -648,8 +648,8 @@ public class NewClientDialog extends FGeneralDialog
 				return;
 			}
 
-			if (checkClientCorrectnes(hostname, selectedDomain)) {
-				// clients.remove(client);
+			if (checkClientCorrectness(hostname, selectedDomain)) {
+				treatSelectedDomainForNewClient(selectedDomain);
 				modifiedClients.add(client);
 			}
 		}
@@ -667,39 +667,44 @@ public class NewClientDialog extends FGeneralDialog
 			final String macaddress, final boolean shutdownInstall, final boolean uefiboot, final boolean wanConfig,
 			final String group, final String netbootProduct, final String localbootProduct) {
 
-		boolean goOn = checkClientCorrectnes(hostname, selectedDomain);
-
-		if (goOn) {
+		if (checkClientCorrectness(hostname, selectedDomain)) {
 			main.createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress,
 					macaddress, shutdownInstall, uefiboot, wanConfig, group, netbootProduct, localbootProduct);
 
-			Vector<String> editableDomains = new Vector<String>();
-			ArrayList<Object> saveDomains = new ArrayList<Object>();
-			int order = 0;
-			saveDomains.add("" + order + ":" + selectedDomain);
-			editableDomains.add(selectedDomain);
-			logging.info(this, "createClient domains" + domains);
-
-			domains.remove(selectedDomain);
-
-			for (String domain : domains) {
-				order++;
-				saveDomains.add("" + order + ":" + domain);
-
-				editableDomains.add(domain);
-			}
-
-			logging.debug(this, "createClient editableDomains " + editableDomains);
-			main.setEditableDomains(editableDomains);
-			setDomains(editableDomains);
-
-			logging.debug(this, "createClient saveDomains " + saveDomains);
-			main.getPersistenceController().writeDomains(saveDomains);
-
+			treatSelectedDomainForNewClient(selectedDomain);
 		}
 	}
 
-	private boolean checkClientCorrectnes(String hostname, String selectedDomain) {
+	/*
+	 * Does things that should be done for the selected Domain of every new created
+	 * client; Don't really know what's happening here (TODO)
+	 */
+	private void treatSelectedDomainForNewClient(final String selectedDomain) {
+		Vector<String> editableDomains = new Vector<String>();
+		ArrayList<Object> saveDomains = new ArrayList<Object>();
+		int order = 0;
+		saveDomains.add("" + order + ":" + selectedDomain);
+		editableDomains.add(selectedDomain);
+		logging.info(this, "createClient domains" + domains);
+
+		domains.remove(selectedDomain);
+
+		for (String domain : domains) {
+			order++;
+			saveDomains.add("" + order + ":" + domain);
+
+			editableDomains.add(domain);
+		}
+
+		logging.debug(this, "createClient editableDomains " + editableDomains);
+		main.setEditableDomains(editableDomains);
+		setDomains(editableDomains);
+
+		logging.debug(this, "createClient saveDomains " + saveDomains);
+		main.getPersistenceController().writeDomains(saveDomains);
+	}
+
+	private boolean checkClientCorrectness(String hostname, String selectedDomain) {
 		boolean goOn = true;
 
 		if (hostname == null || hostname.equals("")) {

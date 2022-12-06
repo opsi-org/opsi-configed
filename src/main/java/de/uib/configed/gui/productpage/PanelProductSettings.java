@@ -16,7 +16,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -153,7 +152,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	TableCellRenderer propertiesTableCellRenderer;
 
-	protected LinkedHashMap<String, Boolean> productDisplayFields;
+	protected Map<String, Boolean> productDisplayFields;
 
 	protected java.util.List<? extends RowSorter.SortKey> currentSortKeys;
 
@@ -169,8 +168,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	protected ConfigedMain mainController;
 
-	public PanelProductSettings(String title, ConfigedMain mainController,
-			LinkedHashMap<String, Boolean> productDisplayFields) {
+	public PanelProductSettings(String title, ConfigedMain mainController, Map<String, Boolean> productDisplayFields) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		this.title = title;
 		this.mainController = mainController;
