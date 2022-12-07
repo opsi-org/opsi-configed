@@ -88,21 +88,19 @@
 
 
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
-        <!-- Neueste Version ist 2.11.0 - vielleicht verwenden? -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.4</version>
+            <version>2.11.0</version>
         </dependency>
 
 
         <!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
         <!-- Ab Version 7 kann es inkompatibel sein... zudem neue Lizenz laut Rupert-->
-        <!-- neuere Version 5.x.x verfügbar -->
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
-            <version>5.4.5</version>
+            <version>5.5.13.3</version>
         </dependency>
 
 
