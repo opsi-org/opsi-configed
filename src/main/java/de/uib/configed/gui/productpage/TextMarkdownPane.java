@@ -27,6 +27,8 @@ import org.commonmark.renderer.html.HtmlRenderer;
 
 public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 
+	private static final boolean IS_MARKDOWN_ACTIVE = false;
+
 	public TextMarkdownPane() {
 		super();
 
@@ -40,6 +42,12 @@ public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 
 	@Override
 	public void setText(String s) {
+
+		if (!IS_MARKDOWN_ACTIVE) {
+			super.setText(s);
+			return;
+		}
+
 		Parser parser = Parser.builder().build();
 		Node document = parser.parse(s);
 		HtmlRenderer renderer = HtmlRenderer.builder().build();
@@ -59,7 +67,7 @@ public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 			URL clickedURL = event.getURL();
 			String clickedString = clickedURL.toString();
 
-			// This will now try to open the standard browser with link;
+			// This will now try to open the standard browser with link.
 			// if not possible, try to open firefox with the link
 			// And if even that is not possible, show Message Dialog with link
 			if (desktop.isSupported(Desktop.Action.BROWSE)) {
