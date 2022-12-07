@@ -13,7 +13,7 @@ import javax.swing.text.JTextComponent;
  * FTextArea
  * Copyright:     Copyright (c) 2001-2005,2018,2021
  * Organisation:  uib
- * @author Rupert Röder
+ * @author Rupert Röder, Naglis Vidziunas
  * @version
  */
 import de.uib.configed.Globals;
@@ -62,7 +62,6 @@ public class FTextArea extends FGeneralDialog {
 				addPane);
 		initComponents();
 		init(preferredWidth, preferredHeight);
-
 	}
 
 	public void setMessage(String message) {
@@ -75,7 +74,7 @@ public class FTextArea extends FGeneralDialog {
 	}
 
 	private void init() {
-		init(700, 100);
+		init(Globals.DEFAULT_FTEXTAREA_WIDTH, Globals.DEFAULT_FTEXTAREA_HEIGHT);
 	}
 
 	@Override
@@ -88,43 +87,32 @@ public class FTextArea extends FGeneralDialog {
 		jTextArea1.setLineWrap(true);
 		jTextArea1.setWrapStyleWord(true);
 		jTextArea1.setOpaque(true);
-		// jTextArea1.setBackground(myHintYellow);
 		jTextArea1.setBackground(Globals.backgroundWhite);
 		jTextArea1.setText("          ");
 		jTextArea1.setEditable(false);
-		jTextArea1.setFont(Globals.defaultFontBig); // new java.awt.Font("Dialog", 0, 14));
+		jTextArea1.setFont(Globals.defaultFontBig);
 
 		scrollpane.getViewport().add(jTextArea1, null);
 
 		jTextArea1.addKeyListener(this);
 
 		pack();
-
 	}
 
-	// KeyListener
-
+	@Override
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
-			// logging.debug ("shift released");
 		}
 
-		if (e.getKeyCode() == KeyEvent.VK_TAB && !shiftPressed) {
-			if (e.getSource() == jTextArea1) {
+		if (e.getKeyCode() == KeyEvent.VK_TAB) {
+			if (!shiftPressed && e.getSource() == jTextArea1) {
 				jButton1.requestFocus();
 			}
-		}
 
-		if (e.getKeyCode() == KeyEvent.VK_TAB && shiftPressed) {
-			if (e.getSource() == jButton1) {
+			if (shiftPressed && e.getSource() == jButton1) {
 				jTextArea1.requestFocus();
 			}
 		}
 	}
-
-	public static void main(String[] args) {
-
-	}
-
 }
