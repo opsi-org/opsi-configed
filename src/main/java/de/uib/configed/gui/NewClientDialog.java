@@ -714,10 +714,6 @@ public class NewClientDialog extends FGeneralDialog
 			goOn = false;
 		}
 
-		// logging.debug(this, "doAction1 host, existingHostNames.contains host " +
-		// hostname + ". " + selectedDomain + ", "
-		// +existingHostNames.contains(hostname + "." + selectedDomain));
-
 		String opsiHostKey = "" + hostname + "." + selectedDomain;
 		if (goOn && existingHostNames != null && existingHostNames.contains(opsiHostKey)) {
 
@@ -734,9 +730,8 @@ public class NewClientDialog extends FGeneralDialog
 					configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question") + " (" + Globals.APPNAME
 							+ ") ",
 					true, new String[] { configed.getResourceValue("FGeneralDialog.no"),
-							configed.getResourceValue("FGeneralDialog.yes") },
-					350, 100);
-			StringBuffer message = new StringBuffer("");
+							configed.getResourceValue("FGeneralDialog.yes") });
+			StringBuilder message = new StringBuilder("");
 			message.append(configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message0"));
 			message.append(" \"");
 			message.append(opsiHostKey);
@@ -757,13 +752,9 @@ public class NewClientDialog extends FGeneralDialog
 					configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question") + " ("
 							+ Globals.APPNAME + ") ",
 					true, new String[] { configed.getResourceValue("FGeneralDialog.no"),
-							configed.getResourceValue("FGeneralDialog.yes") },
-					350, 100);
-			StringBuffer message = new StringBuffer("");
+							configed.getResourceValue("FGeneralDialog.yes") });
+			StringBuilder message = new StringBuilder("");
 			message.append(configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Message"));
-			// message.append(" \"");
-			// message.append(hostname);
-			// message.append("\" \n");
 			fQuestion.setMessage(message.toString());
 			fQuestion.centerOn(this);
 			fQuestion.setAlwaysOnTop(true);
@@ -775,7 +766,7 @@ public class NewClientDialog extends FGeneralDialog
 
 		boolean onlyNumbers = true;
 		int i = 0;
-		while (onlyNumbers && i < hostname.length()) {
+		while (onlyNumbers && hostname != null && i < hostname.length()) {
 			if (!Character.isDigit(hostname.charAt(i)))
 				onlyNumbers = false;
 			i++;
@@ -788,11 +779,8 @@ public class NewClientDialog extends FGeneralDialog
 					true, new String[] { configed.getResourceValue("FGeneralDialog.no"),
 							configed.getResourceValue("FGeneralDialog.yes") },
 					350, 100);
-			StringBuffer message = new StringBuffer("");
+			StringBuilder message = new StringBuilder("");
 			message.append(configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Message"));
-			// message.append(" \"");
-			// message.append(hostname);
-			// message.append("\" \n");
 			fQuestion.setMessage(message.toString());
 			fQuestion.centerOn(this);
 			fQuestion.setAlwaysOnTop(true);
@@ -867,7 +855,7 @@ public class NewClientDialog extends FGeneralDialog
 					configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.title") + " ("
 							+ Globals.APPNAME + ") ",
 					false, new String[] { configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
-			StringBuffer message = new StringBuffer("");
+			StringBuilder message = new StringBuilder("");
 			message.append(configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.message") + " "
 					+ columnNames.toString().replace("[", "").replace("]", ""));
 			fInfo.setMessage(message.toString());

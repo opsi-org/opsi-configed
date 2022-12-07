@@ -45,6 +45,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
@@ -6162,8 +6163,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			logging.debug(this, "createClients" + clients);
 			checkErrorList();
 
-			String[] createdClientNames = clients.stream().map(v -> (String) v.get(0) + "." + v.get(1)).toList()
-					.toArray(new String[clients.size()]);
+			String[] createdClientNames = clients.stream().map(v -> (String) v.get(0) + "." + v.get(1))
+					.collect(Collectors.toList()).toArray(new String[clients.size()]);
 
 			persist.getHostInfoCollections().addOpsiHostNames(createdClientNames);
 			persist.fObject2GroupsRequestRefresh();
