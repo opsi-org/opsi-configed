@@ -2638,8 +2638,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jButtonDash.setPreferredSize(Globals.modeSwitchDimension);
 		jButtonDash.setToolTipText("Dashboard");
 
-		jButtonDash.setEnabled(ConfigedMain.dashEnabled);
-		jButtonDash.setVisible(ConfigedMain.dashEnabled);
+		jButtonDash.setEnabled(ConfigedMain.DASH_ENABLED);
+		jButtonDash.setVisible(ConfigedMain.DASH_ENABLED);
 		jButtonDash.addActionListener(this);
 
 		iconPaneTargets = new JPanel();
@@ -3639,7 +3639,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				.getOpsiLicensingInfoVersion() == LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD) {
 
 			FTextArea f = new FTextArea(this, configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"),
-					true, 1);
+					true);
 			StringBuffer message = new StringBuffer();
 			Map<String, Object> modulesInfo = main.getPersistenceController().getOpsiModulesInfos();
 

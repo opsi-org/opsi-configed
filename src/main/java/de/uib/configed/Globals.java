@@ -85,6 +85,10 @@ public class Globals {
 	public static final Font defaultFontBig = new java.awt.Font("SansSerif", 0, 12);
 	public static final Font defaultFontBold = new java.awt.Font("SansSerif", Font.BOLD, 12);
 	public static final Font defaultFontTitle = new java.awt.Font("SansSerif", 0, 16);
+
+	public static final int DEFAULT_FTEXTAREA_HEIGHT = 200;
+	public static final int DEFAULT_FTEXTAREA_WIDTH = 350;
+
 	/*
 	 * // Get all font family names
 	 * GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();

@@ -778,7 +778,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		// logging.debug(this, "mousePressed, mouse ready "); //
 		// setSelectedClientsArray");
 
-		mouse_ready = false;
+		mouse_ready = true;
 
 		final java.awt.Cursor initialCursor = getCursor();
 		final JTree theTree = this;
@@ -790,7 +790,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		// public void run()
 		// {
 		theTree.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-		mouse_ready = main.treeClients_mouseAction(true, e);
+		main.treeClients_mouseAction(true, e);
 		theTree.setCursor(initialCursor);
 		// }
 		// }
@@ -2059,7 +2059,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return pathToDIRECTORY;
 	}
 
-	public ArrayList<TreePath> getActivePaths() {
+	public List<TreePath> getActivePaths() {
 		return main.getActivePaths();
 	}
 

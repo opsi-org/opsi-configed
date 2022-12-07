@@ -37,73 +37,15 @@ import javax.swing.JScrollPane;
  * FGeneralDialog
  * Copyright:     Copyright (c) 2001-2017,2020-2022
  * Organisation:  uib
- * @author Rupert Röder
+ * @author Rupert Röder, Nils Otto
+ * 
+ *  // TODO UNITE THE CONSTRUCTORS
  */
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.FEditObject;
 
 public class FGeneralDialog extends JDialog implements ActionListener, KeyListener, MouseListener {
-
-	/*
-	 * public static class DialogCollector extends HashMap<FGeneralDialog, String>
-	 * {
-	 * private java.util.List<DialogInstancesFollower> followers;
-	 * 
-	 * DialogCollector()
-	 * {
-	 * followers = new ArrayList<DialogInstancesFollower>();
-	 * }
-	 * 
-	 * public void addFollower(DialogInstancesFollower aFollower)
-	 * {
-	 * followers.add(aFollower);
-	 * }
-	 * 
-	 * public void removeFollower(DialogInstancesFollower aFollower)
-	 * {
-	 * followers.remove(aFollower);
-	 * }
-	 * 
-	 * 
-	 * @Override
-	 * public String put(FGeneralDialog key, String v)
-	 * {
-	 * String result = super.put(key, v);
-	 * for (DialogInstancesFollower aFollower : followers)
-	 * {
-	 * aFollower.instancesChanged();
-	 * }
-	 * return result;
-	 * }
-	 * 
-	 * 
-	 * @Override
-	 * public String remove(Object key)
-	 * {
-	 * String result = super.remove(key);
-	 * for (DialogInstancesFollower aFollower : followers)
-	 * {
-	 * aFollower.instancesChanged();
-	 * }
-	 * return result;
-	 * }
-	 * 
-	 * }
-	 * 
-	 * public static interface DialogInstancesFollower
-	 * {
-	 * public void instancesChanged();
-	 * 
-	 * public void actOnDialogInstances();
-	 * }
-	 * 
-	 * public static DialogCollector existingInstances;
-	 * 
-	 * static {existingInstances = new DialogCollector();}
-	 */
-
 	boolean shiftPressed = true;
 
 	protected FadingMirror glass;
@@ -113,7 +55,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	protected JPanel northPanel;
 	protected JPanel centerPanel;
 	protected JPanel southPanel;
-	// JTextArea jTextArea1 = new JTextArea();
 	protected IconButton jButton1 = new IconButton();
 	protected JButton jButton2 = new JButton();
 	protected JButton jButton3 = new JButton();
@@ -129,9 +70,9 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 	protected int additionalPaneMaxWidth = GroupLayout.PREFERRED_SIZE;
 
-	protected String button1Text = configed.getResourceValue("FGeneralDialog.ok");
-	protected String button2Text = configed.getResourceValue("FGeneralDialog.ignore");
-	protected String button3Text = configed.getResourceValue("FGeneralDialog.empty");
+	protected String button1Text;
+	protected String button2Text;
+	protected String button3Text;
 
 	protected String[] buttonNames;
 	protected Icon[] icons;
@@ -149,7 +90,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	protected JPanel additionalPane = new JPanel();
 	protected GridLayout gridLayout1 = new GridLayout();
 	protected FlowLayout flowLayout1 = new FlowLayout();
-	// JLabel jLabel1 = new JLabel();
 
 	protected java.awt.Window owner;
 
@@ -158,16 +98,29 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	public FGeneralDialog(JFrame owner, String title, JPanel pane) {
 		super(owner, false);
 		this.owner = owner;
+
 		logging.info(this, "created by constructor 1, owner " + owner);
 		registerWithRunningInstances();
-		this.owner = owner;
+		setIconImage(Globals.mainIcon);
 		setTitle(title);
 		setFont(Globals.defaultFont);
-		setIconImage(Globals.mainIcon);
 		additionalPane = pane;
 		checkAdditionalPane();
 		centerOn(owner);
+	}
 
+	public FGeneralDialog(JFrame owner, String title, boolean modal) {
+		super(owner, modal);
+		this.owner = owner;
+
+		logging.info(this, "created by constructor 2, owner " + owner);
+		registerWithRunningInstances();
+		setTitle(title);
+		setFont(Globals.defaultFont);
+		setIconImage(Globals.mainIcon);
+		checkAdditionalPane();
+		additionalPane.setVisible(false);
+		guiInit();
 	}
 
 	protected boolean wantToBeRegisteredWithRunningInstances() {
@@ -179,46 +132,12 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	public void registerWithRunningInstances() {
-		// logging.info(this, "running instances " +
-		// FEditObject.runningInstances.size());
 		logging.info(this, "registerWithRunningInstances " + wantToBeRegisteredWithRunningInstances());
-		// if ( !isModal() )
 		if (wantToBeRegisteredWithRunningInstances()) {
 			FEditObject.runningInstances.add(this, "");
-			// logging.info(this, "added to running instances " + this);
 		}
 		logging.info(this, "running instances " + FEditObject.runningInstances.size());
 	}
-
-	public FGeneralDialog(JFrame owner, String title, boolean modal) {
-		super(owner, modal);
-		this.owner = owner;
-		logging.info(this, "created by constructor 2, owner " + owner);
-		registerWithRunningInstances();
-		setTitle(title);
-		setFont(Globals.defaultFont);
-		setIconImage(Globals.mainIcon);
-		checkAdditionalPane();
-		additionalPane.setVisible(false);
-		guiInit();
-	}
-
-	public FGeneralDialog(JFrame owner, String title, boolean modal, int lastButtonNo) {
-		this(owner, title, modal,
-				new String[] { configed.getResourceValue("FGeneralDialog.ok"),
-						configed.getResourceValue("FGeneralDialog.ignore") },
-				lastButtonNo, defaultPreferredWidth, defaultPreferredHeight);
-	}
-
-	/*
-	 * public FInfoDialog(Frame owner, String title, String message, boolean modal,
-	 * int lastButtonNo)
-	 * {
-	 * this (owner, title, modal, lastButtonNo);
-	 * setMessage ();
-	 * }
-	 * 
-	 */
 
 	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList) {
 		this(owner, title, modal, buttonList, defaultPreferredWidth, defaultPreferredHeight);
@@ -226,11 +145,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
 			int preferredHeight) {
-		this(owner, title, modal, buttonList, buttonList.length, preferredWidth, preferredHeight);
-	}
-
-	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList, int lastButtonNo,
-			int preferredWidth, int preferredHeight) {
 		this(owner, title, modal, buttonList, null, buttonList.length, preferredWidth, preferredHeight);
 	}
 
@@ -252,42 +166,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		construct(title, modal, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout, addPane);
 	}
-	/*
-	 * registerWithRunningInstances();
-	 * 
-	 * 
-	 * 
-	 * setIconImage (Globals.mainIcon);
-	 * 
-	 * glass = new FadingMirror();
-	 * setGlassPane(glass);
-	 * 
-	 * if (lastButtonNo > -1)
-	 * this.noOfButtons = lastButtonNo;
-	 * this.buttonNames = buttonList;
-	 * 
-	 * this.icons = icons;
-	 * //if (icons != null)
-	 * //logging.info(this, " icons " + Arrays.toString( icons ));
-	 * initIcons();
-	 * setButtons();
-	 * 
-	 * 
-	 * this.preferredWidth = preferredWidth;
-	 * this.preferredHeight = preferredHeight;
-	 * 
-	 * 
-	 * setTitle (title);
-	 * setFont(Globals.defaultFont);
-	 * 
-	 * additionalPane = addPane;
-	 * 
-	 * if (!lazyLayout)
-	 * setupLayout();
-	 * //else we have to call setupGUI in a calling method
-	 * centerOn(owner);
-	 * }
-	 */
 
 	private void construct(String title, boolean modal, String[] buttonList, Icon[] icons, int lastButtonNo,
 			int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
@@ -295,22 +173,18 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		setIconImage(Globals.mainIcon);
 
-		// logging.info(this, "construct " + lastButtonNo + " buttons " +
-		// Arrays.toString( buttonList ));
-
 		glass = new FadingMirror();
 		setGlassPane(glass);
 
-		if (lastButtonNo > -1)
+		if (lastButtonNo > -1) {
 			this.noOfButtons = lastButtonNo;
-		else
+		} else {
 			this.noOfButtons = buttonList.length;
+		}
 
 		this.buttonNames = buttonList;
 
 		this.icons = icons;
-		// if (icons != null)
-		// logging.info(this, " icons " + Arrays.toString( icons ));
 		initIcons();
 		setButtons();
 
@@ -322,11 +196,11 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		additionalPane = addPane;
 
-		if (!lazyLayout)
+		if (!lazyLayout) {
+			// else we have to call setupLayout later explicitly
 			setupLayout();
-		// else we have to call setupLayout later explicitly
+		}
 		centerOn(owner);
-
 	}
 
 	public FGeneralDialog(java.awt.Window owner, String title, String[] buttonList, int preferredWidth,
@@ -334,38 +208,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		super(owner);
 		construct(title, false, buttonList, null, -1, preferredWidth, preferredHeight, false, null);
 	}
-
-	/*
-	 * public FGeneralDialog(int test, java.awt.Window owner, String title, String[]
-	 * buttonList, int preferredWidth, int preferredHeight)
-	 * {
-	 * super(owner);
-	 * this.owner = owner;
-	 * //super();??
-	 * logging.info(this, "created by constructor 4, owner " + owner);
-	 * registerWithRunningInstances();
-	 * 
-	 * setIconImage (Globals.mainIcon);
-	 * 
-	 * glass = new FadingMirror();
-	 * setGlassPane(glass);
-	 * 
-	 * this.noOfButtons = buttonList.length;
-	 * this.buttonNames = buttonList;
-	 * initIcons();
-	 * setButtons();
-	 * 
-	 * this.preferredWidth = preferredWidth;
-	 * this.preferredHeight = preferredHeight;
-	 * 
-	 * setTitle (title);
-	 * setFont(Globals.defaultFont);
-	 * 
-	 * guiInit();
-	 * 
-	 * 
-	 * }
-	 */
 
 	public int getResult() {
 		return result;
@@ -402,10 +244,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			additionalPane.setVisible(false);
 			additionalPane.add(new JLabel("~~~~"));
 		}
-		// else
-		// additionalPane.setBackground(Color.RED);
 
-		// additionalPane.setBackground( Color.BLUE );
 		return additionalPane;
 	}
 
@@ -423,22 +262,13 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 				icons[i] = null;
 			}
 		}
-
-		/*
-		 * not working yet
-		 * if ( icons[0] != null )
-		 * {
-		 * jButton1.setDefaultIcon( icons[0] );
-		 * jButton1.setRunningActionIcon( "images/waitingcircle.png" );
-		 * }
-		 */
-
 	}
 
 	protected void setButtons() {
 		logging.info(this, "setButtons and icons " + java.util.Arrays.asList(buttonNames));
+
 		button1Text = buttonNames[0];
-		jButton1.setText("hallo");
+		jButton1.setText(button1Text);
 		if (icons[0] != null) {
 			jButton1.setIcon(icons[0]);
 			((ImageIcon) icons[0]).setDescription(button1Text);
@@ -479,22 +309,14 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	protected void allLayout() {
-		// allpane = new JPanel();
-		// BorderLayout borderLayout1 = new BorderLayout();
-		// allpane.setLayout(borderLayout1);
-		allpane.setBackground(Globals.backLightBlue);// Globals.nimbusBackground);//Globals.backgroundWhite);//(myHintYellow);
+		allpane.setBackground(Globals.backLightBlue);
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
-		// allpane.setBorder(BorderFactory.createEtchedBorder());
-
-		// additionalPane.setBackground( Color.YELLOW );
 
 		northPanel = new JPanel();
 		northPanel.setOpaque(false);
 
 		southPanel = new JPanel();
 		southPanel.setOpaque(false);
-
-		// scrollpane = new JScrollPane();
 
 		scrollpane.setBackground(Color.white);
 		scrollpane.setOpaque(false);
@@ -509,8 +331,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.hGapSize / 2, Globals.hGapSize, Short.MAX_VALUE))
 				.addGroup(southLayout.createSequentialGroup().addGap(Globals.hGapSize / 2)
-						.addComponent(additionalPane, 50, 100, Short.MAX_VALUE)// GroupLayout.PREFERRED_SIZE)//Short.MAX_VALUE)
-						.addGap(Globals.hGapSize / 2)));
+						.addComponent(additionalPane, 50, 100, Short.MAX_VALUE).addGap(Globals.hGapSize / 2)));
 
 		southLayout.setVerticalGroup(southLayout.createSequentialGroup()
 				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
@@ -543,37 +364,29 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	private void guiInit() {
-		// scrollpane = new JScrollPane();
 		initComponents();
 		allLayout();
 		jButton1.setFont(Globals.defaultFont);
-		jButton1.setPreferredSize(new Dimension(Globals.buttonWidth, Globals.buttonHeight - 2));// (new Dimension(91,
-																								// 20));
+		jButton1.setPreferredSize(new Dimension(Globals.buttonWidth, Globals.buttonHeight - 2));
 		jButton1.setText(button1Text);
 		jButton2.setFont(Globals.defaultFont);
-		jButton2.setPreferredSize(new Dimension(Globals.buttonWidth, Globals.buttonHeight - 2));// (new Dimension(91,
-																								// 20));
+		jButton2.setPreferredSize(new Dimension(Globals.buttonWidth, Globals.buttonHeight - 2));
 		jButton2.setText(button2Text);
 		jButton3.setFont(Globals.defaultFont);
-		jButton3.setPreferredSize(new Dimension(Globals.buttonWidth, Globals.buttonHeight - 2));// (new Dimension(91,
-																								// 20));
+		jButton3.setPreferredSize(new Dimension(Globals.buttonWidth, Globals.buttonHeight - 2));
 		jButton3.setText(button3Text);
 		jPanelButtonGrid.setLayout(gridLayout1);
 
 		jPanelButtonGrid.setOpaque(false);
 
-		// getContentPane().add(allpane);
-
-		// southPanel.add(jPanelButtonGrid, null);
 		jPanelButtonGrid.add(jButton1, null);
-		// jPanelButtonGrid.add(jLabel1, null);
 		if (noOfButtons > 1) {
 			jPanelButtonGrid.add(jButton2, null);
 		}
-		if (noOfButtons > 2)
+		if (noOfButtons > 2) {
 			jPanelButtonGrid.add(jButton3, null);
+		}
 
-		// jTextArea1.addKeyListener(this);
 		jButton1.addKeyListener(this);
 		jButton2.addKeyListener(this);
 		jButton3.addKeyListener(this);
@@ -615,23 +428,15 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		if (!centerOnMaster) {
 			// center on Screen
-
-			/*
-			 * Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			 * startX = (screenSize.width - getSize().width)/ 2;
-			 * startY = (screenSize.height - getSize().height)/2;
-			 */
-
 			if (Globals.mainFrame != null) {
-				setLocation((int) Globals.mainFrame.getX() + Globals.locationDistanceX,
-						(int) Globals.mainFrame.getY() + Globals.locationDistanceY);
+				setLocation(Globals.mainFrame.getX() + Globals.locationDistanceX,
+						Globals.mainFrame.getY() + Globals.locationDistanceY);
 				logging.info(this, " ============================ ");
 				logging.info(this,
 						"setLocation based on mainFrame.getX(), .. "
-								+ ((int) Globals.mainFrame.getX() + Globals.locationDistanceX) + ", "
-								+ +((int) Globals.mainFrame.getY() + Globals.locationDistanceY));
+								+ (Globals.mainFrame.getX() + Globals.locationDistanceX) + ", "
+								+ +(Globals.mainFrame.getY() + Globals.locationDistanceY));
 			} else {
-
 				GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 				GraphicsConfiguration gc = gd.getDefaultConfiguration();
 
@@ -641,11 +446,9 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 				logging.info(this, " ============================ ");
 				logging.info(this, " !centerOnMaster, " + gc.getBounds());
 			}
-
 		} else {
-
-			logging.info(this, "centerOn  master.getX() " + ((int) master.getX()));
-			logging.info(this, "centerOn  master.getY() " + ((int) master.getY()));
+			logging.info(this, "centerOn  master.getX() " + (master.getX()));
+			logging.info(this, "centerOn  master.getY() " + (master.getY()));
 
 			logging.info(this, "centerOn (int) masterOnScreen.getX()  " + (int) masterOnScreen.getX());
 			logging.info(this, "centerOn (int) masterOnScreen.getY()  " + (int) masterOnScreen.getY());
@@ -662,32 +465,15 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			logging.info(this, "centerOn screenSize " + screenSize);
 
-			// if (startX + getSize().width > screenSize.width)
-			// startX = screenSize.width - getSize().width;
-
-			// if (startY + getSize().height > screenSize.height)
-			// startY = screenSize.height - getSize().height;
-
 			setLocation(startX, startY);
 
 			logging.info(this, " ============================ ");
 			logging.info(this, " centerOnMaster, startX, startY " + startX + ", " + startY);
-
-			// System.exit(0);
-
 		}
 
 	}
 
-	/*
-	 * private void initOther_protected()
-	 * {
-	 * topPane = new JPanel();
-	 * topPane.setLayout(flowLayout1);
-	 * //logging.debug("FInfoDialog initTopPane is working");
-	 * }
-	 */
-
+	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
 		jButton1.requestFocus();
@@ -728,6 +514,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	// Events
 	// window
 
+	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			result = DEFAULT;
@@ -741,7 +528,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		logging.debug(this, "key event " + e);
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = true;
-			// logging.debug ("shift pressed");
 		} else {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_SPACE) {
 				if (e.getSource() == jButton1) {
@@ -752,7 +538,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 					// since otherwise doAction1 is called twice on Enter
 				} else if (e.getSource() == jButton2) {
 					doAction2();
-					// logging.debug (".... on Button2 ");
 				} else if (e.getSource() == jButton3) {
 					doAction3();
 				}
@@ -763,13 +548,11 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
-			// logging.debug ("shift released");
 		}
 
 	}
 
 	public void keyTyped(KeyEvent e) {
-		// logging.debug ("KeyEvent ... " + e.getKeyChar) );
 	}
 
 	// MouseListener
@@ -796,21 +579,18 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		logging.debug(this, "mouseReleased");
 	}
 
-	protected void preAction1()
 	// activated by mouse and key listener events
-	{
+	protected void preAction1() {
 		logging.info(this, "preAction1");
 	}
 
-	protected void postAction1()
 	// executed at the end of action listener event
-	{
+	protected void postAction1() {
 		logging.info(this, "postAction1");
 	}
 
 	// ActionListener
 	public void actionPerformed(ActionEvent e) {
-		// logging.info(this, "ActionEvent ...... ");
 		if (e.getSource() == jButton1) {
 			preAction1();
 			doAction1();
@@ -866,8 +646,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			// logging.debug(this, "fade, opacity " + opacity);
-
 			if (vanishing) {
 				opacity -= step;
 				if (opacity < 0) {
@@ -893,6 +671,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			repaint();
 		}
 
+		@Override
 		public void paintComponent(Graphics g) {
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 
@@ -900,5 +679,4 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			g.fillRect(0, 0, getWidth(), getHeight());
 		}
 	}
-
 }

@@ -28,7 +28,7 @@ import de.uib.utilities.logging.logging;
 public class SelectionManager {
 	public enum ConnectionStatus {
 		And, Or, AndNot, OrNot
-	};
+	}
 
 	private List<OperationWithStatus> groupWithStatusList;
 	private boolean hasSoftware = false;
@@ -161,7 +161,6 @@ public class SelectionManager {
 
 	// Filter the clients and get the matching clients back with MySQL backend
 	public List<String> selectClientsSQL(PersistenceController controller) {
-		long startTime = System.nanoTime();
 
 		SelectOperation operation = getTopOperation();
 		String json = serializer.getJson(operation);

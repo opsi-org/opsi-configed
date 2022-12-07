@@ -230,8 +230,8 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 		thePanel.setClientsSource(new de.uib.utilities.ComboBoxModeller() {
 			public ComboBoxModel<String> getComboBoxModel(int row, int column) {
 				List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(persist.getHostInfoCollections()
-						.getPcListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))
-						.keySet());
+						.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))
+								.keySet());
 
 				choicesAllHosts.set(0, "");
 

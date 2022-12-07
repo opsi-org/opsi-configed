@@ -407,7 +407,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	}
 
 	public String getConfig_serverName() {
-		LinkedList<String> depots = main.getPersistenceController().getHostInfoCollections().getDepotNamesList();
+		List<String> depots = main.getPersistenceController().getHostInfoCollections().getDepotNamesList();
 		for (String depot : depots)
 			if (depot.startsWith(main.HOST)) {
 				logging.debug(this, "getConfig_serverName " + main.HOST);

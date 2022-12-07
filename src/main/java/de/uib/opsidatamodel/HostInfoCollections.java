@@ -9,7 +9,6 @@
 
 package de.uib.opsidatamodel;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,13 +28,15 @@ public abstract class HostInfoCollections {
 
 	public abstract void addOpsiHostName(String newName);
 
+	public abstract void addOpsiHostNames(String[] newNames);
+
 	public abstract List<String> getOpsiHostNames();
 
 	public abstract Map<String, Map<String, Object>> getDepots();// only master depots
 
 	public abstract Map<String, Map<String, Object>> getAllDepots();
 
-	public abstract LinkedList<String> getDepotNamesList(); // master depots in display order
+	public abstract List<String> getDepotNamesList(); // master depots in display order
 
 	// protected abstract Map<String, Boolean> getMapOfPCs();
 
@@ -45,7 +46,7 @@ public abstract class HostInfoCollections {
 
 	public abstract Map<String, HostInfo> getMapOfAllPCInfoMaps();
 
-	public abstract Map<String, Boolean> getPcListForDepots(String[] depots, Set<String> allowedClients);
+	public abstract Map<String, Boolean> getClientListForDepots(String[] depots, Set<String> allowedClients);
 
 	public abstract Map<String, Set<String>> getFNode2Treeparents();
 

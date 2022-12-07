@@ -40,7 +40,8 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 
 	public Vector<String> getChoicesAllHosts() {
 		return new Vector<>(new TreeMap<>(persist.getHostInfoCollections()
-				.getPcListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients())).keySet());
+				.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))
+						.keySet());
 	}
 
 	public void saveNewLicence(Map<String, String> m) {
