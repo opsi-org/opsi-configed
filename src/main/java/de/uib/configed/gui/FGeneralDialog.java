@@ -115,9 +115,9 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		logging.info(this, "created by constructor 2, owner " + owner);
 		registerWithRunningInstances();
-		setIconImage(Globals.mainIcon);
 		setTitle(title);
 		setFont(Globals.defaultFont);
+		setIconImage(Globals.mainIcon);
 		checkAdditionalPane();
 		additionalPane.setVisible(false);
 		guiInit();
@@ -137,26 +137,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			FEditObject.runningInstances.add(this, "");
 		}
 		logging.info(this, "running instances " + FEditObject.runningInstances.size());
-	}
-
-	public FGeneralDialog(JFrame owner, String title, boolean modal) {
-		super(owner, modal);
-		this.owner = owner;
-		logging.info(this, "created by constructor 2, owner " + owner);
-		registerWithRunningInstances();
-		setTitle(title);
-		setFont(Globals.defaultFont);
-		setIconImage(Globals.mainIcon);
-		checkAdditionalPane();
-		additionalPane.setVisible(false);
-		guiInit();
-	}
-
-	public FGeneralDialog(JFrame owner, String title, boolean modal, int lastButtonNo) {
-		this(owner, title, modal,
-				new String[] { configed.getResourceValue("FGeneralDialog.ok"),
-						configed.getResourceValue("FGeneralDialog.ignore") },
-				lastButtonNo, defaultPreferredWidth, defaultPreferredHeight);
 	}
 
 	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList) {
