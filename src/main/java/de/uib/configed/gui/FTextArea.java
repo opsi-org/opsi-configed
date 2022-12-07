@@ -27,13 +27,8 @@ public class FTextArea extends FGeneralDialog {
 		init();
 	}
 
-	public FTextArea(JFrame owner, String title, boolean modal, int lastButtonNo) {
-		super(owner, title, modal, lastButtonNo);
-		init();
-	}
-
-	public FTextArea(JFrame owner, String title, String message, boolean modal, int lastButtonNo) {
-		this(owner, title, modal, lastButtonNo);
+	public FTextArea(JFrame owner, String title, String message, boolean modal) {
+		this(owner, title, modal);
 		init();
 		setMessage(message);
 	}
@@ -98,6 +93,8 @@ public class FTextArea extends FGeneralDialog {
 
 		pack();
 	}
+
+	// KeyListener
 
 	@Override
 	public void keyReleased(KeyEvent e) {

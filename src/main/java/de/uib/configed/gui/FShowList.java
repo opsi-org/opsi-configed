@@ -28,14 +28,8 @@ public class FShowList extends FTextArea {
 		init();
 	}
 
-	public FShowList(JFrame owner, String title, boolean modal, int lastButtonNo) {
-		super(owner, title, modal, lastButtonNo);
-		this.owner = owner;
-		init();
-	}
-
-	public FShowList(JFrame owner, String title, String message, boolean modal, int lastButtonNo) {
-		this(owner, title, modal, lastButtonNo);
+	public FShowList(JFrame owner, String title, String message, boolean modal) {
+		this(owner, title, modal);
 		this.owner = owner;
 		init();
 		setMessage(message);
@@ -142,7 +136,7 @@ public class FShowList extends FTextArea {
 	}
 
 	public static final void main(String[] args) {
-		new FShowList(null, "configed", "configed Ende", true, 0).setVisible(true);
+		new FShowList(null, "configed", "configed Ende", true).setVisible(true);
 	}
 
 }

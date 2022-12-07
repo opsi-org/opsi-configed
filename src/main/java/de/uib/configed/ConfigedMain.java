@@ -147,10 +147,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int viewProductProperties = 7;
 	public static final int viewHostProperties = 8;
 
-	public static final boolean DASH_ENABLED = true;
+	// Dashboard disabled
+	public static final boolean DASH_ENABLED = false;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
-	// static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = "rupert";
 
 	static final String TEMPGROUPNAME = "";
 
@@ -1176,7 +1176,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (persist.isWithLocalImaging()) {
 			startGroupActionFrame();
 		} else {
-			FTextArea f = new FTextArea(mainFrame, Globals.APPNAME + " - Information", false, 0);
+			FTextArea f = new FTextArea(mainFrame, Globals.APPNAME + " - Information", false);
 			f.setMessage("not activated");// configed.getResourceValue("ConfigedMain.LicencemanagementNotActive"));
 			f.setSize(new Dimension(400, 400));
 			f.setVisible(true);
@@ -1188,7 +1188,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				+ " active " + activatedGroupModel.isActive());
 
 		if (!activatedGroupModel.isActive()) {
-			FTextArea f = new FTextArea(mainFrame, Globals.APPNAME + " - Information", false, 0);
+			FTextArea f = new FTextArea(mainFrame, Globals.APPNAME + " - Information", false);
 			f.setMessage("no group selected");// configed.getResourceValue("ConfigedMain.LicencemanagementNotActive"));
 			f.setSize(new Dimension(400, 400));
 			f.setVisible(true);

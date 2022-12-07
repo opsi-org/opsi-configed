@@ -280,7 +280,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 							// JOptionPane.showInternalMessageDialog( table,
 							// configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"));
 
-							FTextArea fAsk = new FTextArea(null, de.uib.utilities.Globals.APPNAME, "", true, 1);
+							FTextArea fAsk = new FTextArea(null, de.uib.utilities.Globals.APPNAME, "", true);
 							fAsk.setSize(new Dimension(200, 200));
 							fAsk.setModal(true);
 							fAsk.setMessage(configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"));
@@ -304,7 +304,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 							// JOptionPane.showInternalMessageDialog( table,
 							// configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"));
 
-							FTextArea fAsk = new FTextArea(null, de.uib.utilities.Globals.APPNAME, "", true, 1);
+							FTextArea fAsk = new FTextArea(null, de.uib.utilities.Globals.APPNAME, "", true);
 							fAsk.setSize(new Dimension(200, 200));
 							fAsk.setModal(true);
 							fAsk.setMessage(configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"));
@@ -328,7 +328,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 							// JOptionPane.showInternalMessageDialog( table,
 							// configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"));
 
-							FTextArea fAsk = new FTextArea(null, de.uib.utilities.Globals.APPNAME, "", true, 1);
+							FTextArea fAsk = new FTextArea(null, de.uib.utilities.Globals.APPNAME, "", true);
 							fAsk.setSize(new Dimension(200, 200));
 							fAsk.setModal(true);
 							fAsk.setMessage(configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"));

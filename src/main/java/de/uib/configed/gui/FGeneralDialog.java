@@ -37,10 +37,11 @@ import javax.swing.JScrollPane;
  * FGeneralDialog
  * Copyright:     Copyright (c) 2001-2017,2020-2022
  * Organisation:  uib
- * @author Rupert Röder
+ * @author Rupert Röder, Nils Otto
+ * 
+ *  // TODO UNITE THE CONSTRUCTORS
  */
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.FEditObject;
 
@@ -69,9 +70,9 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 	protected int additionalPaneMaxWidth = GroupLayout.PREFERRED_SIZE;
 
-	protected String button1Text = configed.getResourceValue("FGeneralDialog.ok");
-	protected String button2Text = configed.getResourceValue("FGeneralDialog.ignore");
-	protected String button3Text = configed.getResourceValue("FGeneralDialog.empty");
+	protected String button1Text;
+	protected String button2Text;
+	protected String button3Text;
 
 	protected String[] buttonNames;
 	protected Icon[] icons;
@@ -97,15 +98,29 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	public FGeneralDialog(JFrame owner, String title, JPanel pane) {
 		super(owner, false);
 		this.owner = owner;
+
 		logging.info(this, "created by constructor 1, owner " + owner);
 		registerWithRunningInstances();
-		this.owner = owner;
+		setIconImage(Globals.mainIcon);
 		setTitle(title);
 		setFont(Globals.defaultFont);
-		setIconImage(Globals.mainIcon);
 		additionalPane = pane;
 		checkAdditionalPane();
 		centerOn(owner);
+	}
+
+	public FGeneralDialog(JFrame owner, String title, boolean modal) {
+		super(owner, modal);
+		this.owner = owner;
+
+		logging.info(this, "created by constructor 2, owner " + owner);
+		registerWithRunningInstances();
+		setIconImage(Globals.mainIcon);
+		setTitle(title);
+		setFont(Globals.defaultFont);
+		checkAdditionalPane();
+		additionalPane.setVisible(false);
+		guiInit();
 	}
 
 	protected boolean wantToBeRegisteredWithRunningInstances() {
@@ -150,11 +165,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
 			int preferredHeight) {
-		this(owner, title, modal, buttonList, buttonList.length, preferredWidth, preferredHeight);
-	}
-
-	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList, int lastButtonNo,
-			int preferredWidth, int preferredHeight) {
 		this(owner, title, modal, buttonList, null, buttonList.length, preferredWidth, preferredHeight);
 	}
 
@@ -276,8 +286,9 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 	protected void setButtons() {
 		logging.info(this, "setButtons and icons " + java.util.Arrays.asList(buttonNames));
+
 		button1Text = buttonNames[0];
-		jButton1.setText("hallo");
+		jButton1.setText(button1Text);
 		if (icons[0] != null) {
 			jButton1.setIcon(icons[0]);
 			((ImageIcon) icons[0]).setDescription(button1Text);
