@@ -23,6 +23,7 @@ import java.util.TreeSet;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import de.uib.configed.gui.FTextArea;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsidatamodel.PersistenceController;
@@ -37,7 +38,6 @@ public class configed {
 	public static boolean useHalt = false;
 
 	public static de.uib.utilities.swing.FLoadingWaiter fProgress;
-	public static de.uib.configed.gui.FTextArea fErrorOutOfMemory;
 
 	private static final String localizationFilenameRegex = Messages.appname + "_...*\\.properties";
 
@@ -205,11 +205,6 @@ public class configed {
 	private static String paramClientgroup;
 	private static Integer paramTab;
 
-	// public static Locale LOCALE;
-
-	// protected static ResourceBundle messages;
-	// protected static ResourceBundle messagesEN;
-
 	// --------------------------------------------------------------------------------------------------------
 	// exit codes
 
@@ -221,6 +216,8 @@ public class configed {
 	public static final int ERROR_CANNOT_READ_EXTRA_LOCALIZATION = 11;
 
 	public static final int ERROR_OUT_OF_MEMORY = 21;
+
+	private static FTextArea fErrorOutOfMemory;
 
 	// --------------------------------------------------------------------------------------------------------
 
@@ -348,11 +345,13 @@ public class configed {
 			javaSysExtraProperties.put(key, value);
 		}
 
-		logging.info(
-				" we get max memory " + (new Formatter()).format("%,d MB", Runtime.getRuntime().maxMemory() / 1000000));
-		// System.exit(0);
+		// Try with resources so that it will be closed in implicit finally statement
+		try (Formatter formatter = new Formatter()) {
+			logging.info(
+					" we get max memory " + formatter.format("%,d MB", Runtime.getRuntime().maxMemory() / 1000000));
+		}
+
 		sslversionCheck(true);
-		// logging.info("configed, start with Locale");
 
 		de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
@@ -360,40 +359,6 @@ public class configed {
 		cm = new ConfigedMain(paramHost, paramUser, paramPassword);
 
 		SwingUtilities.invokeLater(() -> cm.init());
-
-		/*
-		 * if (appletHost != null)
-		 * {
-		 * 
-		 * if (paramClient != null || paramClientgroup != null)
-		 * {
-		 * if (paramClientgroup != null) cm.setGroup(paramClientgroup);
-		 * if (paramClient != null)cm.setClient(paramClient);
-		 * 
-		 * if (paramTab != null)
-		 * cm.setVisualViewIndex(paramTab);
-		 * 
-		 * 
-		 * }
-		 * }
-		 * else
-		 * {
-		 * if (paramClient != null || paramClientgroup != null)
-		 * {
-		 * if (paramClientgroup != null) cm.setGroup(paramClientgroup);
-		 * if (paramClient != null)cm.setClient(paramClient);
-		 * 
-		 * logging.info("set client " + paramClient);
-		 * 
-		 * 
-		 * 
-		 * if (paramTab != null)
-		 * cm.setVisualViewIndex(paramTab);
-		 * 
-		 * 
-		 * }
-		 * }
-		 */
 
 		try {
 
@@ -442,7 +407,6 @@ public class configed {
 
 		configureUI();
 
-		String imageHandled = "(we start image retrieving)";
 		// logging.debug (imageHandled);
 		try {
 			String resourceS = "opsi.gif";
@@ -451,7 +415,6 @@ public class configed {
 				logging.debug("image resource " + resourceS + "  not found");
 			} else {
 				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
-				imageHandled = "setIconImage";
 			}
 		} catch (Exception ex) {
 			logging.debug("imageHandled failed: " + ex.toString());
@@ -833,42 +796,14 @@ public class configed {
 
 		return s;
 
-		// change of encoding seems now not be necessary any more
-		/*
-		 * if (serverCharset_equals_vm_charset)
-		 * return s;
-		 * 
-		 * 
-		 * if (s == null || s.equals(""))
-		 * return s;
-		 * 
-		 * 
-		 * 
-		 * 
-		 * String result = new String ( s.getBytes( Charset.defaultCharset()),
-		 * serverCharset );
-		 * 
-		 * logging.debug("configed: new encoding " + result);
-		 * 
-		 * return result;
-		 */
-
 	}
 
 	public static String encodeStringForService(String s) {
 		return s;
-		// change of encoding seems now not be necessary any more
-		/*
-		 * if (serverCharset_equals_vm_charset)
-		 * return s;
-		 * 
-		 * return new String ( s.getBytes( serverCharset), Charset.defaultCharset()) ;
-		 */
 	}
 
 	public static boolean get_serverCharset_equals_vm_charset() {
-		boolean b = serverCharset_equals_vm_charset;
-		return b;
+		return serverCharset_equals_vm_charset;
 	}
 
 	public static void sslversionCheck(boolean correctingVersion) {
@@ -934,18 +869,16 @@ public class configed {
 			}
 		}
 
-		// if (!isApplet)
-		{
-			de.uib.opsicommand.OpsiMethodCall.report();
-			logging.info("regularly exiting app with code " + exitcode);
+		de.uib.opsicommand.OpsiMethodCall.report();
+		logging.info("regularly exiting app with code " + exitcode);
 
-			if (exitcode == ERROR_OUT_OF_MEMORY) {
-				// showExternalInfo( "configed terminates ");
-				fErrorOutOfMemory.setVisible(true);
-			}
+		if (exitcode == ERROR_OUT_OF_MEMORY) {
 
-			System.exit(exitcode);
+			fErrorOutOfMemory.setVisible(true);
 		}
+
+		System.exit(exitcode);
+
 	}
 
 	public static String getResourceValue(String key) {
@@ -992,7 +925,6 @@ public class configed {
 		if (result == null) {
 			result = key;
 		}
-
 		return result;
 	}
 
@@ -1191,6 +1123,7 @@ public class configed {
 			query.populateHostGroup(newGroupMembers, group);
 			System.exit(0);
 		} else if (optionCLISwAuditPDF) {
+			logging.debug("optionCLISwAuditPDF");
 			de.uib.configed.gui.swinfopage.SwPdfExporter exporter = new de.uib.configed.gui.swinfopage.SwPdfExporter();
 			exporter.setArgs(host, user, password, clientsFile, outDir);
 			exporter.addMissingArgs();
@@ -1198,6 +1131,7 @@ public class configed {
 
 			System.exit(0);
 		} else if (optionCLISwAuditCSV) {
+			logging.debug("optionCLISwAuditCSV");
 			de.uib.configed.gui.swinfopage.SWcsvExporter exporter = new de.uib.configed.gui.swinfopage.SWcsvExporter();
 			exporter.setArgs(host, user, password, clientsFile, outDir);
 			exporter.addMissingArgs();
@@ -1234,9 +1168,10 @@ public class configed {
 		}
 
 		if (optionPersistenceControllerMethodCall) {
+			logging.debug("optionPersistenceControllerMethodCall");
 			addMissingArgs();
 
-			PersistenceController controller = connect();
+			connect();
 
 			// logging.debug( "" + controller.getOpsiHostNames());
 			System.exit(0);
@@ -1246,6 +1181,7 @@ public class configed {
 		}
 
 		if (de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect) {
+			logging.debug("de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect");
 			logging.logDirectoryName = logdirectory;
 
 			addMissingArgs();
@@ -1273,19 +1209,14 @@ public class configed {
 			logging.info(" setting property swing.aatext" + ex);
 		}
 
-		// showExternalInfo("hallo");
+		fErrorOutOfMemory = new FTextArea(null, "configed", true, new String[] { "ok" }, 400, 400);
 
-		fErrorOutOfMemory = new de.uib.configed.gui.FTextArea(null, "configed", true, new String[] { "ok" }, 400, 400);
-
-		// fErrorOutOfMemory.setIconImage (Globals.mainIcon); //does not yet work
 		fErrorOutOfMemory.setContentBackground(Globals.darkOrange);
 		// we activate it in case of an appropriate error
-		// fErrorOutOfMemory.setVisible(true);
 
 		fErrorOutOfMemory.setFont(Globals.defaultFontBig);
-		fErrorOutOfMemory.setMessage(
-				"\n\n" + de.uib.configed.configed.getResourceValue("configed.infoExitBecauseOfHeapOverflow"));
-		// "configed.infoExitBecauseOfHeapOverflow") );
+		fErrorOutOfMemory
+				.setMessage("The program will be terminated,\nsince more memory is required than was assigned.");
 
 		new configed(locale, host, user, password, client, clientgroup, tab, logdirectory);
 	}

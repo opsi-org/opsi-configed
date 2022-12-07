@@ -27,13 +27,8 @@ public class FTextArea extends FGeneralDialog {
 		init();
 	}
 
-	public FTextArea(JFrame owner, String title, boolean modal, int lastButtonNo) {
-		super(owner, title, modal, lastButtonNo);
-		init();
-	}
-
-	public FTextArea(JFrame owner, String title, String message, boolean modal, int lastButtonNo) {
-		this(owner, title, modal, lastButtonNo);
+	public FTextArea(JFrame owner, String title, String message, boolean modal) {
+		this(owner, title, modal);
 		init();
 		setMessage(message);
 	}
@@ -88,11 +83,10 @@ public class FTextArea extends FGeneralDialog {
 		jTextArea1.setLineWrap(true);
 		jTextArea1.setWrapStyleWord(true);
 		jTextArea1.setOpaque(true);
-		// jTextArea1.setBackground(myHintYellow);
 		jTextArea1.setBackground(Globals.backgroundWhite);
 		jTextArea1.setText("          ");
 		jTextArea1.setEditable(false);
-		jTextArea1.setFont(Globals.defaultFontBig); // new java.awt.Font("Dialog", 0, 14));
+		jTextArea1.setFont(Globals.defaultFontBig);
 
 		scrollpane.getViewport().add(jTextArea1, null);
 
@@ -104,6 +98,7 @@ public class FTextArea extends FGeneralDialog {
 
 	// KeyListener
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
@@ -121,10 +116,6 @@ public class FTextArea extends FGeneralDialog {
 				jTextArea1.requestFocus();
 			}
 		}
-	}
-
-	public static void main(String[] args) {
-
 	}
 
 }

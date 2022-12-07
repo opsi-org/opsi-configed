@@ -1175,7 +1175,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (persist.isWithLocalImaging()) {
 			startGroupActionFrame();
 		} else {
-			FTextArea f = new FTextArea(mainFrame, Globals.APPNAME + " - Information", false, 0);
+			FTextArea f = new FTextArea(mainFrame, Globals.APPNAME + " - Information", false);
 			f.setMessage("not activated");// configed.getResourceValue("ConfigedMain.LicencemanagementNotActive"));
 			f.setSize(new Dimension(400, 400));
 			f.setVisible(true);
@@ -1187,7 +1187,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				+ " active " + activatedGroupModel.isActive());
 
 		if (!activatedGroupModel.isActive()) {
-			FTextArea f = new FTextArea(mainFrame, Globals.APPNAME + " - Information", false, 0);
+			FTextArea f = new FTextArea(mainFrame, Globals.APPNAME + " - Information", false);
 			f.setMessage("no group selected");// configed.getResourceValue("ConfigedMain.LicencemanagementNotActive"));
 			f.setSize(new Dimension(400, 400));
 			f.setVisible(true);
