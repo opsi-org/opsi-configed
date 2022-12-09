@@ -20,8 +20,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
 import javafx.embed.swing.JFXPanel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -88,20 +86,6 @@ public class ProductView implements View {
 	}
 
 	private void loadData() {
-		Service<Void> backgroundThread = new Service<>() {
-			@Override
-			protected Task<Void> createTask() {
-				return new Task<Void>() {
-					@Override
-					protected Void call() throws Exception {
-						ProductData.load();
-
-						return null;
-					}
-				};
-			}
-		};
-
 		productsNumberLabel.setText(String.valueOf(ProductData.getProducts().size()));
 		localbootProductsNumberLabel.setText(String.valueOf(ProductData.getLocalbootProducts().size()));
 		netbootProductsNumberLabel.setText(String.valueOf(ProductData.getNetbootProducts().size()));
@@ -126,27 +110,6 @@ public class ProductView implements View {
 		products.addAll(ProductData.getUnusedProducts().keySet());
 
 		final FilteredList<Product> filteredData = new FilteredList<>(FXCollections.observableArrayList(products));
-
-		// backgroundThread.setOnSucceeded(e -> {
-		// 	System.out.println("Done");
-		// 	Set<Product> unused = ProductData.getUnusedProducts().keySet();
-
-		// 	if (unused.isEmpty()) {
-		// 		System.out.println("There are no unused products");
-		// 	}
-
-		// 	unused.forEach(p -> System.out.println("Added product: " + p.getId()));
-		// 	products.addAll(unused);
-
-		// 	Platform.runLater(() -> {
-		// 		final FilteredList<Product> filtered = new FilteredList<>(FXCollections.observableArrayList(products));
-		// 		productTableView.setItems(filtered);
-		// 		productTableView.refresh();
-		// 	});
-		// });
-
-		// // ProductData.load();
-		// backgroundThread.start();
 
 		final ObjectProperty<Predicate<Product>> productIdFilter = new SimpleObjectProperty<>();
 		final ObjectProperty<Predicate<Product>> productStatusFilter = new SimpleObjectProperty<>();
