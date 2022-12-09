@@ -10,8 +10,7 @@ import javax.swing.ComboBoxModel;
 import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.logging;
 
-public class InstallationStateTableModelFiltered
-		extends InstallationStateTableModel
+public class InstallationStateTableModelFiltered extends InstallationStateTableModel
 
 {
 	private int[] filter;
@@ -26,21 +25,11 @@ public class InstallationStateTableModelFiltered
 	private de.uib.utilities.savedstates.SessionSaveSet filterSaver;
 
 	public InstallationStateTableModelFiltered(String[] selectedClients, ConfigedMain main,
-			Map<String, Map<String, Map<String, String>>> collectChangedStates,
-			List listOfInstallableProducts,
-			Map statesAndActions,
-			Map possibleActions,
-			Map<String, Map<String, Object>> productGlobalInfos,
-			List<String> displayColumns,
-			de.uib.utilities.savedstates.SessionSaveSet filterSaver) {
-		super(
-				selectedClients, main,
-				collectChangedStates,
-				listOfInstallableProducts,
-				statesAndActions,
-				possibleActions,
-				productGlobalInfos,
-				displayColumns);
+			Map<String, Map<String, Map<String, String>>> collectChangedStates, List listOfInstallableProducts,
+			Map statesAndActions, Map possibleActions, Map<String, Map<String, Object>> productGlobalInfos,
+			List<String> displayColumns, de.uib.utilities.savedstates.SessionSaveSet filterSaver) {
+		super(selectedClients, main, collectChangedStates, listOfInstallableProducts, statesAndActions, possibleActions,
+				productGlobalInfos, displayColumns);
 		// test setFilter(new int[]{4,8,9});
 		this.filterSaver = filterSaver;
 	}
@@ -57,8 +46,7 @@ public class InstallationStateTableModelFiltered
 
 	public void resetFilter() {
 		Set<String> filterSaved = (Set<String>) filterSaver.deserialize();
-		if (filterSaved == null
-				|| filterSaved.isEmpty()) {
+		if (filterSaved == null || filterSaved.isEmpty()) {
 			setFilterFrom((Set) null);
 		} else {
 			Set<String> products_only_in_filterset = new HashSet<String>(filterSaved);
@@ -168,9 +156,7 @@ public class InstallationStateTableModelFiltered
 	}
 
 	public void setValueAt(Object value, int row, int col) {
-		super.changeValueAt(value,
-				originRow(row),
-				col);
+		super.changeValueAt(value, originRow(row), col);
 		fireTableCellUpdated(row, col);
 	}
 

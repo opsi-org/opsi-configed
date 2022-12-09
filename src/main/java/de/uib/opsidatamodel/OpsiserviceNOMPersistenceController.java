@@ -4718,10 +4718,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public Map<String, java.util.List<Map<String, String>>> getMapOfProductStatesAndActions(String[] clientIds) {
 		logging.debug(this, "getMapOfProductStatesAndActions for : " + logging.getStrings(clientIds));
 
-		Map<String, java.util.List<Map<String, String>>> result = new HashMap<String, java.util.List<Map<String, String>>>();
+		Map<String, java.util.List<Map<String, String>>> result = new HashMap<>();
 
-		if (clientIds == null || clientIds.length == 0)
+		if (clientIds == null || clientIds.length == 0) {
 			return result;
+		}
 
 		Map<String, java.util.List<Map<String, String>>> states = getProductStatesNOM(clientIds);
 
@@ -4750,7 +4751,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	protected Map<String, java.util.List<Map<String, String>>> getProductStatesNOM(String[] clientIds) {
 		// logging.info(this, "getProductStatesNOM for " + Arrays.toString(clientIds));
 		String[] callAttributes = new String[] {};
-		HashMap callFilter = new HashMap();
+		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
 		callFilter.put("clientId", exec.jsonArray(java.util.Arrays.asList(clientIds)));
 		// callFilter.put("productType", LOCALBOOT_PRODUCT_SERVER_STRING);
@@ -4758,12 +4759,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		java.util.List<Map<java.lang.String, java.lang.Object>> productOnClients = exec.getListOfMaps(
 				new OpsiMethodCall("productOnClient_getHashes", new Object[] { callAttributes, callFilter }));
 
-		Map<String, java.util.List<Map<String, String>>> result = new HashMap<String, java.util.List<Map<String, String>>>();
-		for (Map m : productOnClients) {
+		Map<String, java.util.List<Map<String, String>>> result = new HashMap<>();
+		for (Map<String, Object> m : productOnClients) {
 			String client = (String) m.get("clientId");
 			java.util.List<Map<String, String>> states1Client = result.get(client);
 			if (states1Client == null) {
-				states1Client = new ArrayList<Map<String, String>>();
+				states1Client = new ArrayList<>();
 				result.put(client, states1Client);
 			}
 

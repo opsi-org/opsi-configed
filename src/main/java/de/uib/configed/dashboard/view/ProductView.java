@@ -20,6 +20,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.embed.swing.JFXPanel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -86,6 +88,20 @@ public class ProductView implements View {
 	}
 
 	private void loadData() {
+		Service<Void> backgroundThread = new Service<>() {
+			@Override
+			protected Task<Void> createTask() {
+				return new Task<Void>() {
+					@Override
+					protected Void call() throws Exception {
+						ProductData.load();
+
+						return null;
+					}
+				};
+			}
+		};
+
 		productsNumberLabel.setText(String.valueOf(ProductData.getProducts().size()));
 		localbootProductsNumberLabel.setText(String.valueOf(ProductData.getLocalbootProducts().size()));
 		netbootProductsNumberLabel.setText(String.valueOf(ProductData.getNetbootProducts().size()));
@@ -111,6 +127,27 @@ public class ProductView implements View {
 
 		final FilteredList<Product> filteredData = new FilteredList<>(FXCollections.observableArrayList(products));
 
+		// backgroundThread.setOnSucceeded(e -> {
+		// 	System.out.println("Done");
+		// 	Set<Product> unused = ProductData.getUnusedProducts().keySet();
+
+		// 	if (unused.isEmpty()) {
+		// 		System.out.println("There are no unused products");
+		// 	}
+
+		// 	unused.forEach(p -> System.out.println("Added product: " + p.getId()));
+		// 	products.addAll(unused);
+
+		// 	Platform.runLater(() -> {
+		// 		final FilteredList<Product> filtered = new FilteredList<>(FXCollections.observableArrayList(products));
+		// 		productTableView.setItems(filtered);
+		// 		productTableView.refresh();
+		// 	});
+		// });
+
+		// // ProductData.load();
+		// backgroundThread.start();
+
 		final ObjectProperty<Predicate<Product>> productIdFilter = new SimpleObjectProperty<>();
 		final ObjectProperty<Predicate<Product>> productStatusFilter = new SimpleObjectProperty<>();
 
@@ -118,20 +155,17 @@ public class ProductView implements View {
 			if (productSearchbarTextField.getText() == null)
 				return true;
 			return product.getId().contains(productSearchbarTextField.getText());
-		},
-				productSearchbarTextField.textProperty()));
+		}, productSearchbarTextField.textProperty()));
 		productStatusFilter.bind(Bindings.createObjectBinding(() -> product -> {
 			if (productStatusChoiceBox.getValue() == null)
 				return true;
 			return productStatusChoiceBox.getValue().equals(configed.getResourceValue("Dashboard.products.installed"))
-					&& product.getStatus().equals(configed.getResourceValue("Dashboard.products.installed")) ||
-					productStatusChoiceBox.getValue().equals(configed.getResourceValue("Dashboard.products.failed"))
+					&& product.getStatus().equals(configed.getResourceValue("Dashboard.products.installed"))
+					|| productStatusChoiceBox.getValue().equals(configed.getResourceValue("Dashboard.products.failed"))
 							&& product.getStatus().equals(configed.getResourceValue("Dashboard.products.failed"))
-					||
-					productStatusChoiceBox.getValue().equals(configed.getResourceValue("Dashboard.products.unused"))
+					|| productStatusChoiceBox.getValue().equals(configed.getResourceValue("Dashboard.products.unused"))
 							&& product.getStatus().equals(configed.getResourceValue("Dashboard.products.unused"));
-		},
-				productStatusChoiceBox.valueProperty()));
+		}, productStatusChoiceBox.valueProperty()));
 
 		filteredData.predicateProperty().bind(Bindings.createObjectBinding(
 				() -> productIdFilter.get().and(productStatusFilter.get()), productIdFilter, productStatusFilter));
@@ -163,10 +197,12 @@ public class ProductView implements View {
 		FilteredList<String> filteredData = new FilteredList<>(FXCollections.observableArrayList(data));
 
 		ObjectProperty<Predicate<String>> productDataFilter = new SimpleObjectProperty<>();
-		productDataFilter.bind(Bindings.createObjectBinding(
-				() -> product -> product.toLowerCase(Locale.ROOT)
-						.contains(searchbar.getText().toLowerCase(Locale.ROOT)),
-				searchbar.textProperty()));
+		productDataFilter
+				.bind(Bindings
+						.createObjectBinding(
+								() -> product -> product.toLowerCase(Locale.ROOT)
+										.contains(searchbar.getText().toLowerCase(Locale.ROOT)),
+								searchbar.textProperty()));
 
 		view.setItems(filteredData);
 
