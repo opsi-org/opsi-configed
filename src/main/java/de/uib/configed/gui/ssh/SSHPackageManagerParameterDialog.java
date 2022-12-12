@@ -52,7 +52,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 	protected ConfigedMain main;
 
 	public SSHPackageManagerParameterDialog(String title) {
-		super(null, title, null);
+		super(null, title);
 		// super(null,title, false);
 		// public FGeneralDialog(JFrame owner, String title, JPanel pane)
 		// {

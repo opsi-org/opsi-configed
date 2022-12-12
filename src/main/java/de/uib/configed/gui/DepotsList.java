@@ -24,8 +24,7 @@ import de.uib.configed.configed;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.logging.logging;
 
-public class DepotsList extends JList<String>
-		implements ComponentListener {
+public class DepotsList extends JList<String> implements ComponentListener {
 
 	MyListCellRenderer myListCellRenderer;
 	private Vector<? extends String> saveV;
@@ -148,9 +147,7 @@ public class DepotsList extends JList<String>
 			this.extendedInfo = extendedInfo;
 		}
 
-		public Component getListCellRendererComponent(
-				JList list,
-				Object value, // value to display
+		public Component getListCellRendererComponent(JList list, Object value, // value to display
 				int index, // cell index
 				boolean isSelected, // is the cell selected
 				boolean cellHasFocus // the list and the cell have the focus
@@ -184,8 +181,7 @@ public class DepotsList extends JList<String>
 
 				String depot = (String) value;
 				if (!persist.getDepotPermission(depot)) {
-					((JLabel) jc).setBackground(
-							de.uib.configed.Globals.backgroundLightGrey);
+					((JLabel) jc).setBackground(de.uib.configed.Globals.backgroundLightGrey);
 					((JLabel) jc).setToolTipText(
 							"Depot " + depot + " " + configed.getResourceValue("Permission.depot.not_accessible"));
 				} else

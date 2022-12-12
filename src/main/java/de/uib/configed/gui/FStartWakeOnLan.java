@@ -44,12 +44,10 @@ import de.uib.utilities.thread.WaitingWorker;
 //import java.beans.PropertyChangeEvent;
 //import java.beans.PropertyChangeListener;
 
-public class FStartWakeOnLan extends FGeneralDialog
-		implements de.uib.utilities.thread.WaitingSleeper
+public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.thread.WaitingSleeper
 // implements PropertyChangeListener
 {
-	public static RunningInstances<FStartWakeOnLan> runningInstances = new RunningInstances(
-			FStartWakeOnLan.class,
+	public static RunningInstances<FStartWakeOnLan> runningInstances = new RunningInstances(FStartWakeOnLan.class,
 			configed.getResourceValue("RunningInstances.askStop.text"));
 	String scheduleTitleStarter;
 	private LinkedHashMap<String, Integer> labelledDelays;
@@ -89,11 +87,9 @@ public class FStartWakeOnLan extends FGeneralDialog
 	ConfigedMain main;
 
 	public FStartWakeOnLan(Frame owner, String title, ConfigedMain main) {
-		super(null, title, false,
-				new String[]
-				// {"start", "cancel"},
-				{ configed.getResourceValue("FStartWakeOnLan.start"),
-						configed.getResourceValue("FStartWakeOnLan.cancel") },
+		super(null, title, false, new String[]
+		// {"start", "cancel"},
+		{ configed.getResourceValue("FStartWakeOnLan.start"), configed.getResourceValue("FStartWakeOnLan.cancel") },
 				750, 310);
 		this.main = main;
 		// scheduleTitleStarter = configed.getResourceValue("FStartWakeOnLan.creation");
@@ -142,8 +138,7 @@ public class FStartWakeOnLan extends FGeneralDialog
 	}
 
 	private String readTime(Calendar cal) {
-		String result = " (" + cal.get(Calendar.YEAR) + "-"
-				+ formatNaturalNumber((cal.get(Calendar.MONTH) + 1)) + "-"
+		String result = " (" + cal.get(Calendar.YEAR) + "-" + formatNaturalNumber((cal.get(Calendar.MONTH) + 1)) + "-"
 				+ formatNaturalNumber(cal.get(Calendar.DAY_OF_MONTH)) + ") "
 				+ formatNaturalNumber(cal.get(Calendar.HOUR_OF_DAY)) + ":"
 				+ formatNaturalNumber(cal.get(Calendar.MINUTE));
@@ -188,7 +183,7 @@ public class FStartWakeOnLan extends FGeneralDialog
 
 	@Override
 	protected void initComponents() {
-		super.initComponents();
+		super.checkAdditionalPane();
 
 		JPanel contentPane = new JPanel();
 		contentPane.setBackground(de.uib.configed.Globals.backLightBlue);
@@ -258,11 +253,10 @@ public class FStartWakeOnLan extends FGeneralDialog
 					.setDefaultFormatter(internationalFormatter);
 
 		} catch (Exception e) {
-		}
-		;
+		} ;
 
-		buttonSetNew = new IconButton(configed.getResourceValue("FStartWakeOnLan.buttonSetNew"),
-				"images/reload16.png", "images/reload16_over.png", "images/reload16_disabled.png");
+		buttonSetNew = new IconButton(configed.getResourceValue("FStartWakeOnLan.buttonSetNew"), "images/reload16.png",
+				"images/reload16_over.png", "images/reload16_disabled.png");
 		// buttonSetNew.setBackground(de.uib.utilities.de.uib.configed.Globals.backgroundLightGrey);
 		buttonSetNew.setToolTipText(configed.getResourceValue("FStartWakeOnLan.buttonSetNew.tooltip"));
 
@@ -356,23 +350,22 @@ public class FStartWakeOnLan extends FGeneralDialog
 		GroupLayout lPanelSpinnerDelay = new GroupLayout(panelSpinnerDelay);
 		panelSpinnerDelay.setLayout(lPanelSpinnerDelay);
 
-		lPanelSpinnerDelay.setVerticalGroup(lPanelSpinnerDelay.createParallelGroup()
-				.addComponent(spinnerDelay, de.uib.configed.Globals.buttonHeight, de.uib.configed.Globals.buttonHeight,
-						de.uib.configed.Globals.buttonHeight));
-		lPanelSpinnerDelay.setHorizontalGroup(lPanelSpinnerDelay.createSequentialGroup()
-				.addComponent(spinnerDelay, 2 * de.uib.configed.Globals.timeSpinnerWidth,
-						2 * de.uib.configed.Globals.timeSpinnerWidth, 2 * de.uib.configed.Globals.timeSpinnerWidth));
+		lPanelSpinnerDelay.setVerticalGroup(lPanelSpinnerDelay.createParallelGroup().addComponent(spinnerDelay,
+				de.uib.configed.Globals.buttonHeight, de.uib.configed.Globals.buttonHeight,
+				de.uib.configed.Globals.buttonHeight));
+		lPanelSpinnerDelay.setHorizontalGroup(lPanelSpinnerDelay.createSequentialGroup().addComponent(spinnerDelay,
+				2 * de.uib.configed.Globals.timeSpinnerWidth, 2 * de.uib.configed.Globals.timeSpinnerWidth,
+				2 * de.uib.configed.Globals.timeSpinnerWidth));
 
 		// contentPane.setBackground( java.awt.Color.BLUE );
 
 		GroupLayout lPanel = new GroupLayout(contentPane);
 		contentPane.setLayout(lPanel);
 
-		lPanel.setVerticalGroup(lPanel.createSequentialGroup()
-				.addGap(de.uib.configed.Globals.vGapSize)
-				.addGroup(lPanel.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(fieldTaskname, de.uib.configed.Globals.buttonHeight,
-								de.uib.configed.Globals.buttonHeight, de.uib.configed.Globals.buttonHeight))
+		lPanel.setVerticalGroup(lPanel.createSequentialGroup().addGap(de.uib.configed.Globals.vGapSize)
+				.addGroup(lPanel.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(fieldTaskname,
+						de.uib.configed.Globals.buttonHeight, de.uib.configed.Globals.buttonHeight,
+						de.uib.configed.Globals.buttonHeight))
 				.addGroup(lPanel.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(buttonRefreshTime, de.uib.configed.Globals.buttonHeight,
 								de.uib.configed.Globals.buttonHeight, de.uib.configed.Globals.buttonHeight)
@@ -461,10 +454,8 @@ public class FStartWakeOnLan extends FGeneralDialog
 						.addComponent(labelStarttime, 1 * de.uib.configed.Globals.buttonWidth,
 								2 * de.uib.configed.Globals.buttonWidth, 2 * de.uib.configed.Globals.buttonWidth)
 						.addGap(de.uib.configed.Globals.hGapSize, de.uib.configed.Globals.hGapSize, Short.MAX_VALUE))
-				.addGroup(lPanel.createSequentialGroup()
-						.addGap(de.uib.configed.Globals.hGapSize)
-						.addGap(de.uib.configed.Globals.buttonWidth)
-						.addGap(de.uib.configed.Globals.hGapSize)
+				.addGroup(lPanel.createSequentialGroup().addGap(de.uib.configed.Globals.hGapSize)
+						.addGap(de.uib.configed.Globals.buttonWidth).addGap(de.uib.configed.Globals.hGapSize)
 						.addComponent(labelClientCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(de.uib.configed.Globals.hGapSize / 2)
@@ -477,8 +468,7 @@ public class FStartWakeOnLan extends FGeneralDialog
 						.addComponent(fieldInvolvedDepotsCount, clientCountWidth, clientCountWidth, Short.MAX_VALUE)
 						.addGap(de.uib.configed.Globals.hGapSize))
 
-				.addGroup(lPanel.createSequentialGroup()
-						.addGap(de.uib.configed.Globals.hGapSize)
+				.addGroup(lPanel.createSequentialGroup().addGap(de.uib.configed.Globals.hGapSize)
 						.addComponent(waitingProgressBar, de.uib.configed.Globals.buttonWidth * 2,
 								de.uib.configed.Globals.buttonWidth * 2, Short.MAX_VALUE)
 						.addGap(de.uib.configed.Globals.hGapSize)
@@ -496,9 +486,8 @@ public class FStartWakeOnLan extends FGeneralDialog
 		if (spinnerDelay.getValue() == nullDelayValue) {
 			main.wakeUp(currentlySelectedClients, scheduleTitle);
 		} else {
-			main.wakeUpWithDelay(
-					labelledDelays.get((String) spinnerDelay.getValue()),
-					currentlySelectedClients, scheduleTitle);
+			main.wakeUpWithDelay(labelledDelays.get((String) spinnerDelay.getValue()), currentlySelectedClients,
+					scheduleTitle);
 		}
 
 		leave();
@@ -543,9 +532,7 @@ public class FStartWakeOnLan extends FGeneralDialog
 	}
 
 	public String setLabellingStrategy(long millisLevel) {
-		return " "
-				+ configed.getResourceValue("FStartWakeOnLan.timeLeft")
-				+ "  "
+		return " " + configed.getResourceValue("FStartWakeOnLan.timeLeft") + "  "
 				+ de.uib.utilities.Globals.giveTimeSpan(getWaitingMillis() - millisLevel);
 	}
 
@@ -556,8 +543,7 @@ public class FStartWakeOnLan extends FGeneralDialog
 		// super.doAction1(); //includes leave()
 
 		if (currentlySelectedClients == null || currentlySelectedClients.length == 0) {
-			JOptionPane.showMessageDialog(this,
-					configed.getResourceValue("FStartWakeOnLan.noClientsSelected.text"),
+			JOptionPane.showMessageDialog(this, configed.getResourceValue("FStartWakeOnLan.noClientsSelected.text"),
 					configed.getResourceValue("FStartWakeOnLan.noClientsSelected.title"),
 					JOptionPane.INFORMATION_MESSAGE);
 			return;
@@ -596,12 +582,9 @@ public class FStartWakeOnLan extends FGeneralDialog
 
 		if (waitingMode) {
 			int returnedOption = JOptionPane.NO_OPTION;
-			returnedOption = JOptionPane.showOptionDialog(this,
-					configed.getResourceValue("FStartWakeOnLan.allowClose"),
-					configed.getResourceValue("FStartWakeOnLan.allowClose.title"),
-					JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE,
-					null, null, null);
+			returnedOption = JOptionPane.showOptionDialog(this, configed.getResourceValue("FStartWakeOnLan.allowClose"),
+					configed.getResourceValue("FStartWakeOnLan.allowClose.title"), JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 			if (returnedOption == JOptionPane.YES_OPTION)
 				reallyLeave = true;

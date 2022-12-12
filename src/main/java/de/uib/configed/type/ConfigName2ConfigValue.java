@@ -51,8 +51,7 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 			// config options
 
 			if (!(retrieved.get(key) instanceof java.util.List)) {
-				logging.warning(this, "list expected , for key " + key + " found " +
-						retrieved.get(key));
+				logging.warning(this, "list expected , for key " + key + " found " + retrieved.get(key));
 				logging.error(this, "list expected , for key " + key);
 				// logging.debug(this, "key " + key + ", retrieved.get(key) " +
 				// retrieved.get(key));
@@ -70,7 +69,7 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 				// logging.debug(this, "key " + key + " configOption class : " +
 				// configOption.get("classname"));
 				if (configOption.get("classname").equals("java.lang.Boolean")) {
-					put(key, (Boolean) list.get(0));
+					put(key, list.get(0));
 				} else
 					put(key, list);
 			} else {

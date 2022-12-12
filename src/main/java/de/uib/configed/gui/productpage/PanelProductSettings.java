@@ -664,7 +664,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		createReport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				logging.info(this, "------------- create report");
-				HashMap<String, String> metaData = new HashMap<String, String>();
+				HashMap<String, String> metaData = new HashMap<>();
 
 				// TODO: getFilter
 				// display, if filter is active,

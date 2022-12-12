@@ -873,7 +873,6 @@ public class configed {
 		logging.info("regularly exiting app with code " + exitcode);
 
 		if (exitcode == ERROR_OUT_OF_MEMORY) {
-
 			fErrorOutOfMemory.setVisible(true);
 		}
 
