@@ -13,7 +13,7 @@ import javax.swing.text.JTextComponent;
  * FTextArea
  * Copyright:     Copyright (c) 2001-2005,2018,2021
  * Organisation:  uib
- * @author Rupert Röder
+- * @author Rupert Röder, Naglis Vidziunas
  * @version
  */
 import de.uib.configed.Globals;
@@ -70,7 +70,7 @@ public class FTextArea extends FGeneralDialog {
 	}
 
 	private void init() {
-		init(700, 100);
+		init(Globals.DEFAULT_FTEXTAREA_WIDTH, Globals.DEFAULT_FTEXTAREA_HEIGHT);
 	}
 
 	@Override
@@ -105,17 +105,11 @@ public class FTextArea extends FGeneralDialog {
 			// logging.debug ("shift released");
 		}
 
-		if (e.getKeyCode() == KeyEvent.VK_TAB && !shiftPressed) {
-			if (e.getSource() == jTextArea1) {
-				jButton1.requestFocus();
-			}
-		}
+		if (!shiftPressed && e.getSource() == jTextArea1 && e.getKeyCode() == KeyEvent.VK_TAB)
+			jButton1.requestFocus();
 
-		if (e.getKeyCode() == KeyEvent.VK_TAB && shiftPressed) {
-			if (e.getSource() == jButton1) {
-				jTextArea1.requestFocus();
-			}
-		}
+		if (shiftPressed && e.getSource() == jButton1 && e.getKeyCode() == KeyEvent.VK_TAB)
+			jTextArea1.requestFocus();
 	}
 
 }
