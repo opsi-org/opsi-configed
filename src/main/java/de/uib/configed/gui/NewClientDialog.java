@@ -588,7 +588,7 @@ public class NewClientDialog extends FGeneralDialog
 
 		);
 
-		GroupLayout northLayout = new GroupLayout(northPanel);
+		final GroupLayout northLayout = new GroupLayout(northPanel);
 		northPanel.setLayout(northLayout);
 		northPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6),
 				BorderFactory.createLineBorder(new Color(122, 138, 153))));

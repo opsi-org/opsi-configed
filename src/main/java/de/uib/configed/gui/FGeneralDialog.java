@@ -71,6 +71,10 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 	protected int additionalPaneMaxWidth = GroupLayout.PREFERRED_SIZE;
 
+	protected String button1Text = configed.getResourceValue("FGeneralDialog.ok");
+	protected String button2Text = configed.getResourceValue("FGeneralDialog.ignore");
+	protected String button3Text = configed.getResourceValue("FGeneralDialog.empty");
+
 	protected String[] buttonNames;
 	protected Icon[] icons;
 	protected String iconsLog;
@@ -262,6 +266,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		logging.info(this, "setButtons and icons " + java.util.Arrays.asList(buttonNames));
 
 		jButton1.setText(buttonNames[0]);
+		button1Text = buttonNames[0];
 		if (icons[0] != null) {
 			jButton1.setIcon(icons[0]);
 			((ImageIcon) icons[0]).setDescription(buttonNames[0]);
@@ -269,6 +274,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		if (noOfButtons > 1) {
 			jButton2.setText(buttonNames[1]);
+			button2Text = buttonNames[1];
 			if (icons[1] != null) {
 				jButton2.setIcon(icons[1]);
 				((ImageIcon) icons[1]).setDescription(buttonNames[1]);
@@ -277,6 +283,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		if (noOfButtons > 2) {
 			jButton3.setText(buttonNames[2]);
+			button3Text = buttonNames[2];
 			if (icons[2] != null) {
 				jButton3.setIcon(icons[2]);
 				((ImageIcon) icons[2]).setDescription(buttonNames[2]);
@@ -359,13 +366,13 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		allLayout();
 		jButton1.setFont(Globals.defaultFont);
 		jButton1.setPreferredSize(new Dimension(Globals.buttonWidth, Globals.buttonHeight - 2));
-		jButton1.setText(configed.getResourceValue("FGeneralDialog.ok"));
+		jButton1.setText(button1Text);
 		jButton2.setFont(Globals.defaultFont);
 		jButton2.setPreferredSize(new Dimension(Globals.buttonWidth, Globals.buttonHeight - 2));
-		jButton2.setText(configed.getResourceValue("FGeneralDialog.ignore"));
+		jButton2.setText(button2Text);
 		jButton3.setFont(Globals.defaultFont);
 		jButton3.setPreferredSize(new Dimension(Globals.buttonWidth, Globals.buttonHeight - 2));
-		jButton3.setText(configed.getResourceValue("FGeneralDialog.empty"));
+		jButton3.setText(button3Text);
 		jPanelButtonGrid.setLayout(gridLayout1);
 
 		jPanelButtonGrid.setOpaque(false);
