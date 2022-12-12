@@ -85,20 +85,17 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 		showAll();
 	}
 
-	public void setTableModel(InstallationStateTableModelFiltered istm) {
-		super.setTableModel(istm);
-	}
-
+	@Override
 	public void clearSelection() {
 		tableProducts.clearSelection();
 	}
 
 	@Override
-	public void setSelection(Set selectedIDs) {
+	public void setSelection(Set<String> selectedIDs) {
 		activatePacketSelectionHandling(false);
 		clearSelection();
 		if (selectedIDs != null) {
-			if (selectedIDs.size() == 0 && tableProducts.getRowCount() > 0) {
+			if (selectedIDs.isEmpty() && tableProducts.getRowCount() > 0) {
 				tableProducts.addRowSelectionInterval(0, 0);
 				// show first product if no product given
 				logging.info(this, "setSelection 0");

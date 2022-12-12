@@ -97,6 +97,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 
 		propertiesActivateButton = new JButton();
 
+		// do this so that you can mark and copy content of the label
 		jLabelProductID.setFont(Globals.defaultFontStandardBold);
 		jLabelProductID.setBorder(null);
 		jLabelProductID.setEditable(false);
@@ -107,6 +108,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		jLabelLabelProductVersion.setFont(Globals.defaultFontBig);
 		jLabelLabelProductVersion.setText(configed.getResourceValue("ProductInfoPane.jLabelProductVersion") + " ");
 
+		// do this so that you can mark and copy content of the label
 		jLabelProductVersion.setFont(Globals.defaultFontBold);
 		jLabelProductVersion.setBorder(null);
 		jLabelProductVersion.setEditable(false);
@@ -175,6 +177,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 						.addComponent(jScrollPaneProductAdvice, Globals.minHSize, Globals.prefHSize, Short.MAX_VALUE)
 
 		);
+
 		layoutDescriptionsPanel.setVerticalGroup(layoutDescriptionsPanel.createSequentialGroup()
 				.addComponent(jLabelProductID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -188,9 +191,9 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 						.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(0, Globals.vGapSize, Globals.vGapSize)
-				.addComponent(jScrollPaneProductInfo, 0, Globals.prefVSize, Globals.prefVSize)
+				.addComponent(jScrollPaneProductInfo, 0, Globals.prefVSize, Short.MAX_VALUE)
 				.addGap(0, Globals.vGapSize, Globals.vGapSize)
-				.addComponent(jScrollPaneProductAdvice, 0, Globals.prefVSize, Globals.prefVSize));
+				.addComponent(jScrollPaneProductAdvice, 0, Globals.prefVSize, Short.MAX_VALUE));
 
 		// treat the bottom panel
 		bottomComponent = new JXPanel();
@@ -283,7 +286,6 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 
 	public void setProductInfo(String s) {
 		jTextAreaProductInfo.setText(s);
-		jTextAreaProductInfo.setCaretPosition(0);
 	}
 
 	public void setProductId(String s) {

@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -95,7 +94,7 @@ import de.uib.utilities.table.gui.StandardTableCellRenderer;
 
 public class PanelProductSettings extends JSplitPane implements RowSorterListener {
 
-	public static final java.util.List<RowSorter.SortKey> sortkeysDefault = new ArrayList<RowSorter.SortKey>();
+	private static final java.util.List<RowSorter.SortKey> sortkeysDefault = new ArrayList<>();
 	static {
 		sortkeysDefault.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 	}
@@ -187,12 +186,13 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	protected void init() {
 		tableProducts = new JTable() {
+			@Override
 			public void setValueAt(Object value, int row, int column) {
 				List<String> saveSelectedProducts = getSelectedProducts();
 				// only in case of setting ActionRequest needed, since we there call
 				// fireTableDataChanged
 				super.setValueAt(value, row, column);
-				setSelection(new HashSet<String>(saveSelectedProducts));
+				setSelection(new HashSet<>(saveSelectedProducts));
 			}
 		};
 		tableProducts.setDragEnabled(true);
@@ -413,6 +413,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		versionInfoTableCellRenderer = new ColoredTableCellRenderer(
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_versionInfo)) {
+			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 					boolean isSelected, // is the cell selected
 					boolean hasFocus, int row, int column) {
@@ -591,12 +592,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		itemOnDemand = new JMenuItemFormatted();
 		itemOnDemand.setText(configed.getResourceValue("ConfigedMain.OpsiclientdEvent_on_demand"));
 		itemOnDemand.setFont(Globals.defaultFont);
-		itemOnDemand.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				mainController
-						.fireOpsiclientdEventOnSelectedClients(PersistenceController.OPSI_CLIENTD_EVENT_on_demand);
-			}
-		});
+		itemOnDemand.addActionListener((ActionEvent e) -> mainController
+				.fireOpsiclientdEventOnSelectedClients(PersistenceController.OPSI_CLIENTD_EVENT_on_demand));
+
 		popup.add(itemOnDemand);
 
 		itemSaveAndExecute = new JMenuItemFormatted();
@@ -737,7 +735,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		Iterator<String> iter = checkColumns.keySet().iterator();
 
 		while (iter.hasNext()) {
-			final String columnName = (String) iter.next();
+			final String columnName = iter.next();
 
 			if (columnName.equals("productId"))
 				// fixed column
@@ -747,13 +745,11 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			item.setText(InstallationStateTableModel.getColumnTitle(columnName));
 			item.setFont(Globals.defaultFont);
 			((JCheckBoxMenuItem) item).setState(checkColumns.get(columnName));
-			item.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					boolean oldstate = checkColumns.get(columnName);
-					checkColumns.put(columnName, !oldstate);
-					mainController.requestReloadStatesAndActions();
-					mainController.resetView(mainController.getViewIndex());
-				}
+			item.addItemListener((ItemEvent e) -> {
+				boolean oldstate = checkColumns.get(columnName);
+				checkColumns.put(columnName, !oldstate);
+				mainController.requestReloadStatesAndActions();
+				mainController.resetView(mainController.getViewIndex());
 			});
 
 			sub.add(item);
@@ -762,7 +758,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	protected JTable strippTable(JTable jTable) {
 		boolean dontStrippIt;
-		Vector<String[]> data = new Vector<String[]>();
+		Vector<String[]> data = new Vector<>();
 		String[] headers = new String[jTable.getColumnCount()];
 		for (int i = 0; i < jTable.getColumnCount(); i++) {
 			headers[i] = jTable.getColumnName(i);
@@ -784,15 +780,15 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				switch (jTable.getColumnName(i)) {
 				case "Stand":
 					if (!s.equals("not_installed"))
-						dontStrippIt = dontStrippIt || true;
+						dontStrippIt = true;
 					break;
 				case "Report":
 					if (!s.equals(""))
-						dontStrippIt = dontStrippIt || true;
+						dontStrippIt = true;
 					break;
 				case "Angefordert":
 					if (!s.equals("none"))
-						dontStrippIt = dontStrippIt || true;
+						dontStrippIt = true;
 					break;
 
 				}

@@ -27,7 +27,7 @@ import org.commonmark.renderer.html.HtmlRenderer;
 
 public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 
-	private static final boolean IS_MARKDOWN_ACTIVE = false;
+	private static final boolean IS_MARKDOWN_ACTIVE = true;
 
 	public TextMarkdownPane() {
 		super();
