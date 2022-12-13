@@ -39,24 +39,20 @@ public class DataStubDirectSQL extends DataStubRawData
 		logging.info(this,
 				"retrieveSoftwareAuditOnClients used memory on start " + de.uib.utilities.Globals.usedMemory());
 		retrieveInstalledSoftwareInformation();
-		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null "
-				+ (client2software == null)
+		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  clients count ======  " + clients.size());
 
 		java.util.List<String> newClients = new ArrayList<String>(clients);
 
 		if (client2software != null) {
-			logging.info(this, "retrieveSoftwareAuditOnClients client2Software.keySet size "
-					+ "   +++  " + client2software.keySet().size());
+			logging.info(this, "retrieveSoftwareAuditOnClients client2Software.keySet size " + "   +++  "
+					+ client2software.keySet().size());
 
 			newClients.removeAll(client2software.keySet());
 		}
 
-		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null "
-				+ (client2software == null)
+		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  new clients count  ====== " + newClients.size());
-
-		int stepSize = 100;
 
 		if (client2software == null || newClients.size() > 0) {
 
@@ -65,9 +61,7 @@ public class DataStubDirectSQL extends DataStubRawData
 			if (newClients.size() >= 50) {
 				clientSelection = "";
 			} else {
-				clientSelection = " AND ( "
-						+ giveWhereOR("clientId", newClients)
-						+ ") ";
+				clientSelection = " AND ( " + giveWhereOR("clientId", newClients) + ") ";
 			}
 
 			// logging.info(this, "retrieveSoftwareAuditOnClients for " +
@@ -88,8 +82,7 @@ public class DataStubDirectSQL extends DataStubRawData
 			columns = columns.substring(0, columns.length() - 1);
 
 			String query = "select " + columns + " from " + SWAuditClientEntry.DB_TABLE_NAME + " \n"
-					+ " where  state = 1 "
-					+ clientSelection;
+					+ " where  state = 1 " + clientSelection;
 
 			logging.info(this, "retrieveSoftwareAuditOnClients, query " + query);
 
@@ -99,8 +92,7 @@ public class DataStubDirectSQL extends DataStubRawData
 				TimeCheck timeCheck = new TimeCheck(this, "execute Query   " + query);
 				timeCheck.start();
 
-				java.sql.Statement stat = sqlConn.createStatement(
-						ResultSet.TYPE_SCROLL_INSENSITIVE,
+				java.sql.Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
 						ResultSet.CONCUR_READ_ONLY);
 
 				ResultSet rs = stat.executeQuery(query);
@@ -134,8 +126,8 @@ public class DataStubDirectSQL extends DataStubRawData
 
 					if (clientEntry.getSWid() == -1) {
 						logging.info("Missing auditSoftware entry for swIdent " + SWAuditClientEntry.DB_COLUMN_NAMES
-								+ "for values" +
-								SWAuditClientEntry.produceSWident(SWAuditClientEntry.DB_COLUMN_NAMES, row));
+								+ "for values"
+								+ SWAuditClientEntry.produceSWident(SWAuditClientEntry.DB_COLUMN_NAMES, row));
 						// item.put(SWAuditEntry.WINDOWSsOFTWAREid, "MISSING");
 					} else {
 						entries.add(clientEntry);

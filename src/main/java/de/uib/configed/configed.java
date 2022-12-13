@@ -1208,7 +1208,7 @@ public class configed {
 			logging.info(" setting property swing.aatext" + ex);
 		}
 
-		fErrorOutOfMemory = new FTextArea(null, "configed", true, new String[] { "ok" }, 400, 400);
+		fErrorOutOfMemory = new FTextArea(null, "configed", true, new String[] { "ok", "not ok" }, 400, 400);
 
 		fErrorOutOfMemory.setContentBackground(Globals.darkOrange);
 		// we activate it in case of an appropriate error
@@ -1216,6 +1216,8 @@ public class configed {
 		fErrorOutOfMemory.setFont(Globals.defaultFontBig);
 		fErrorOutOfMemory
 				.setMessage("The program will be terminated,\nsince more memory is required than was assigned.");
+
+		//fErrorOutOfMemory.setVisible(true);
 
 		new configed(locale, host, user, password, client, clientgroup, tab, logdirectory);
 	}

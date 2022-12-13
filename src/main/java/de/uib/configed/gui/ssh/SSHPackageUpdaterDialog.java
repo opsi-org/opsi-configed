@@ -29,13 +29,11 @@ import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.utilities.logging.logging;
 
 public class SSHPackageUpdaterDialog extends FGeneralDialog {
-	private GroupLayout layout;
 	private JPanel inputPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
 
 	private JLabel lbl_info;
 	private JLabel lbl_repos;
-	private JButton btn_searchDir;
 	private JComboBox cb_actions;
 	private JComboBox cb_repos;
 	private JButton btn_doAction;

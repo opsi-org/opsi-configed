@@ -1258,8 +1258,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		if (methodsExists) {
 			factory.retrieveSSHCommandListRequestRefresh();
 			factory.retrieveSSHCommandList();
-			java.util.LinkedHashMap<String, java.util.List<SSHCommand_Template>> sortedComs = factory
-					.getSSHCommandMapSortedByParent();
+			Map<String, java.util.List<SSHCommand_Template>> sortedComs = factory.getSSHCommandMapSortedByParent();
 
 			logging.debug(this, "setupMenuServer add commands to menu commands sortedComs " + sortedComs);
 			boolean firstParentGroup = true;
@@ -1372,6 +1371,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				+ UserConfig.getCurrentUserConfig());
 		jMenuSSHCommandControl.setEnabled(userConfigExists
 				&& UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDCONTROL_ACTIVE));
+
+		jMenuSSHCommandControl.setEnabled(true);
 
 		jMenuServer.setEnabled(userConfigExists && !isReadOnly
 		// &&

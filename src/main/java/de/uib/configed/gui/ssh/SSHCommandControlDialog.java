@@ -28,7 +28,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -113,7 +112,6 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	/** This instance / Design Patter: singelton **/
 	private static SSHCommandControlDialog instance;
 
-	private JCheckBox cb_aktivateHelp = new JCheckBox();
 	// private JButton btn_changeHelpPanelStatus;
 	private JButton btn_test_command;
 	/**
@@ -187,9 +185,9 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		commandlistPanel.setBackground(Globals.backLightBlue);
 		buttonPanel.setBackground(Globals.backLightBlue);
 
-		centerPanelLayout = new GroupLayout((JComponent) centerPanel);
-		controlPanelLayout = new GroupLayout((JComponent) controlPanel);
-		commandlistPanelLayout = new GroupLayout((JComponent) commandlistPanel);
+		centerPanelLayout = new GroupLayout(centerPanel);
+		controlPanelLayout = new GroupLayout(controlPanel);
+		commandlistPanelLayout = new GroupLayout(commandlistPanel);
 
 		getContentPane().add(controlPanel, BorderLayout.NORTH);
 		getContentPane().add(centerPanel, BorderLayout.CENTER);
@@ -335,11 +333,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			});
 		}
 		{
-			cb_needSudo.addItemListener(new ItemListener() {
-				public void itemStateChanged(ItemEvent e) {
-					checkAllTexts();
-				}
-			});
+			cb_needSudo.addItemListener((ItemEvent e) -> checkAllTexts());
 		}
 		{
 			tp_commands.getDocument().addDocumentListener(new DocumentListener() {
@@ -589,7 +583,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 				cb_parentMenuText.addItem(parent);
 
 		if ((selectedCommand == null) || (selectedCommand.trim().equals("")))
-			selectedCommand = factory.menuNew;
+			selectedCommand = SSHCommandFactory.menuNew;
 		cb_menuText.setSelectedItem(selectedCommand);
 	}
 
