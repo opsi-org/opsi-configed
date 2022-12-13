@@ -11,6 +11,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -202,13 +203,13 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			ks.load(null, null);
 			ks.setCertificateEntry(host, cer);
 
-			KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+			KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 			kmf.init(ks, new char[0]);
-			TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+			TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
 			tmf.init(ks);
 
 			SSLContext sslContext = SSLContext.getInstance("TLS");
-			sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+			sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
 
 			sslFactory = new SecureSSLSocketFactory(sslContext.getSocketFactory(), new MyHandshakeCompletedListener());
 		} catch (CertificateException e) {
