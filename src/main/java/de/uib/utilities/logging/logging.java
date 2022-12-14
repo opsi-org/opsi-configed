@@ -177,8 +177,8 @@ public class logging implements LogEventSubject
 	}
 
 	public static final synchronized void init() {
-		errorList = new Vector<String>(maxListedErrors);
-		logEventObservers = new Vector<LogEventObserver>();
+		errorList = new Vector<>(maxListedErrors);
+		logEventObservers = new Vector<>();
 		initLogFile();
 	}
 

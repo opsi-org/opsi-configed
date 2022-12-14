@@ -82,8 +82,8 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer() {
 
 			@Override
-			public Component getTreeCellRendererComponent(final JTree tree, Object value,
-					boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+			public Component getTreeCellRendererComponent(final JTree tree, Object value, boolean sel, boolean expanded,
+					boolean leaf, int row, boolean hasFocus) {
 
 				JLabel label = new JLabel(value.toString()); // (JLabel)
 																// super.getTreeCellRendererComponent(tree,value,sel,expanded,leaf,row,hasFocus);
@@ -138,7 +138,6 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 	}
 
 	private void initComponents() {
-
 		dependenciesTreeScrollPanel = new JScrollPane();
 
 		dependenciesTreeScrollPanel.setViewportView(dependenciesTree);
@@ -161,35 +160,29 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		dependenciesNeedsButton.addActionListener(this);
 		dependenciesNeededByButton.addActionListener(this);
 
-		// Der Tree;
+		// The tree
 		updateSelectedButtons();
 
-		// Den Button verarbeiten
 		copyListButton.addActionListener(this);
 
 		GroupLayout dependenciesTreeGroupLayout = new GroupLayout(this);
 		this.setLayout(dependenciesTreeGroupLayout);
 
-		// Grouplayout des Fensters
-		dependenciesTreeGroupLayout.setHorizontalGroup(
-				dependenciesTreeGroupLayout.createSequentialGroup()
-						.addGroup(dependenciesTreeGroupLayout.createParallelGroup()
-								.addComponent(dependenciesNeedsButton, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(dependenciesNeededByButton, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(copyListButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addComponent(dependenciesTreeScrollPanel));
-		dependenciesTreeGroupLayout.setVerticalGroup(
-				dependenciesTreeGroupLayout.createParallelGroup()
-						.addGroup(dependenciesTreeGroupLayout.createSequentialGroup()
-								.addComponent(dependenciesNeedsButton)
-								.addComponent(dependenciesNeededByButton)
-								.addGap(0, 0, Short.MAX_VALUE)
-								.addComponent(copyListButton, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight))
-						.addComponent(dependenciesTreeScrollPanel));
+		// Grouplayout
+		dependenciesTreeGroupLayout.setHorizontalGroup(dependenciesTreeGroupLayout.createSequentialGroup()
+				.addGroup(dependenciesTreeGroupLayout.createParallelGroup()
+						.addComponent(dependenciesNeedsButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(dependenciesNeededByButton, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(copyListButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addComponent(dependenciesTreeScrollPanel));
+		dependenciesTreeGroupLayout.setVerticalGroup(dependenciesTreeGroupLayout.createParallelGroup()
+				.addGroup(dependenciesTreeGroupLayout.createSequentialGroup().addComponent(dependenciesNeedsButton)
+						.addComponent(dependenciesNeededByButton).addGap(0, 0, Short.MAX_VALUE)
+						.addComponent(copyListButton, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
+				.addComponent(dependenciesTreeScrollPanel));
 	}
 
 	@Override

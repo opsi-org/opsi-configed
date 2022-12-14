@@ -404,7 +404,7 @@ public class SWAuditClientEntry
 	}
 
 	public String[] getExpandedData(Map<String, SWAuditEntry> installedSoftwareInformation, String swIdent) {
-		Map<String, String> dataMap = new HashMap<String, String>(data);
+		Map<String, String> dataMap = new HashMap<>(data);
 		dataMap.putAll(installedSoftwareInformation.get(swIdent));
 
 		String[] result = new String[KEYS.size()];

@@ -305,7 +305,7 @@ public class SSHCommandFactory {
 		list_knownMenus = new java.util.ArrayList<String>();
 		list_knownParents = new java.util.ArrayList<String>();
 
-		if (commandlist.size() > 0)
+		if (!commandlist.isEmpty())
 			list_knownParents.add(parentdefaultForOwnCommands);
 
 		// if (commandlist.size() > 0)
@@ -390,7 +390,7 @@ public class SSHCommandFactory {
 	 * @return java.util.LinkedHashMap<String,java.util.List<SSHCommand_Template>>
 	 *         sortedComs
 	 **/
-	public java.util.LinkedHashMap<String, java.util.List<SSHCommand_Template>> getSSHCommandMapSortedByParent() {
+	public Map<String, java.util.List<SSHCommand_Template>> getSSHCommandMapSortedByParent() {
 		if (commandlist == null)
 			commandlist = main.getPersistenceController().retrieveCommandList();
 

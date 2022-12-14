@@ -27,8 +27,6 @@ import org.commonmark.renderer.html.HtmlRenderer;
 
 public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 
-	private static final boolean IS_MARKDOWN_ACTIVE = false;
-
 	public TextMarkdownPane() {
 		super();
 
@@ -42,11 +40,6 @@ public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 
 	@Override
 	public void setText(String s) {
-
-		if (!IS_MARKDOWN_ACTIVE) {
-			super.setText(s);
-			return;
-		}
 
 		Parser parser = Parser.builder().build();
 		Node document = parser.parse(s);
