@@ -12,10 +12,6 @@
 
 package de.uib.configed.gui.productpage;
 
-import java.awt.Desktop;
-import java.io.IOException;
-import java.net.URL;
-
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.event.HyperlinkEvent;
@@ -24,6 +20,10 @@ import javax.swing.event.HyperlinkListener;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
+
+import javafx.application.Application;
+import javafx.application.HostServices;
+import javafx.stage.Stage;
 
 public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 
@@ -55,11 +55,25 @@ public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 	@Override
 	public void hyperlinkUpdate(HyperlinkEvent event) {
 		if (HyperlinkEvent.EventType.ACTIVATED.equals(event.getEventType())) {
-			Desktop desktop = Desktop.getDesktop();
+			Application appl = new Application() {
 
+				@Override
+				public void start(Stage primaryStage) throws Exception {
+					// TODO Auto-generated method stub
+
+				}
+
+			};
+			HostServices services = appl.getHostServices();
+			services.showDocument(event.getURL().toString());
+		}
+
+		/*if (HyperlinkEvent.EventType.ACTIVATED.equals(event.getEventType())) {
+			Desktop desktop = Desktop.getDesktop();
+		
 			URL clickedURL = event.getURL();
 			String clickedString = clickedURL.toString();
-
+		
 			// This will now try to open the standard browser with link.
 			// if not possible, try to open firefox with the link
 			// And if even that is not possible, show Message Dialog with link
@@ -71,20 +85,24 @@ public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 				}
 			} else {
 				try {
+					logging.info(this, "trying to open link with firefox, because Desktop.brose, not supported");
 					Process process = new ProcessBuilder("firefox", clickedString).start();
-
+		
 					// check if opening with firefox successful
 					if (process.waitFor() != 0) {
+						logging.trace(this, "firefox not available, show message frame");
 						openMessageDialogWithURL(clickedString);
 					}
 				} catch (IOException ioe) {
+					ioe.printStackTrace();
 					openMessageDialogWithURL(clickedString);
-
+		
 				} catch (InterruptedException ie) {
+					ie.printStackTrace();
 					Thread.currentThread().interrupt();
 				}
 			}
-		}
+		}*/
 
 	}
 
