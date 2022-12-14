@@ -191,17 +191,9 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		SSLSocketFactory sslFactory = null;
 
 		try {
-			File certificate = getLocalCertificate();
-			X509Certificate cer = instantiateCertificate(certificate);
-
-			if (cer == null) {
-				System.out.println("Couldn't instantiate certificate");
-				return null;
-			}
-
 			KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
 			ks.load(null, null);
-			ks.setCertificateEntry(host, cer);
+			loadCertificateToKeyStore(ks);
 
 			KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 			kmf.init(ks, new char[0]);
@@ -230,10 +222,24 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		return sslFactory;
 	}
 
-	private X509Certificate instantiateCertificate(File certificate) {
+	private void loadCertificateToKeyStore(KeyStore ks) {
+		X509Certificate certificate = getLocalCertificate();
+
+		if (certificate == null) {
+			return;
+		}
+
+		try {
+			ks.setCertificateEntry(host, certificate);
+		} catch (KeyStoreException e) {
+			logging.error(this, "unable to load certificate into a keystore");
+		}
+	}
+
+	private X509Certificate instantiateCertificate(File certificateFile) {
 		X509Certificate cert = null;
 
-		try (FileInputStream is = new FileInputStream(certificate)) {
+		try (FileInputStream is = new FileInputStream(certificateFile)) {
 			CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
 			cert = (X509Certificate) certFactory.generateCertificate(is);
 		} catch (CertificateException e) {
@@ -247,15 +253,15 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		return cert;
 	}
 
-	private File getLocalCertificate() {
+	private X509Certificate getLocalCertificate() {
 		String configPath = getConfigPath();
-		File certificate = new File(String.format("%s/opsi-ca-cert.pem", configPath));
+		File certificateFile = new File(String.format("%s/opsi-ca-cert.pem", configPath));
 
-		if (!certificate.exists()) {
+		if (!certificateFile.exists()) {
 			return null;
 		}
 
-		return certificate;
+		return instantiateCertificate(certificateFile);
 	}
 
 	private String getConfigPath() {

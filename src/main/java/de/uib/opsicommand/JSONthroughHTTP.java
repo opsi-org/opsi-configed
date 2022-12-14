@@ -1,5 +1,6 @@
 package de.uib.opsicommand;
 
+import java.awt.Cursor;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -8,12 +9,17 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.InflaterInputStream;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -25,45 +31,39 @@ import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.thread.WaitCursor;
 import net.jpountz.lz4.LZ4FrameInputStream;
+import utils.Base64OutputStream;
+
 /*  Copyright (c) 2006-2016, 2021 uib.de
  
 Usage of this portion of software is allowed unter the restrictions of the GPL
  
 */
-import utils.Base64OutputStream;
 
 /**
- * @author Rupert Roeder, Jan Schneider
+ * @author Rupert Roeder, Jan Schneider, Naglis Vidziunas
  */
 
 public class JSONthroughHTTP extends JSONExecutioner {
-	/*
-	 * static{
-	 * if (NONE == null)
-	 * NONE = new JSONthroughHTTP();
-	 * }
-	 */
 	int[] serverVersion = { 0, 0, 0, 0 };
 	public static boolean compressTransmission = false;
 	public static boolean gzipTransmission = false;
 	public static boolean lz4Transmission = false;
-	protected final int POST = 0;
-	protected final int GET = 1;
-	protected final String CODING_TABLE = "UTF8";
+	protected static final int POST = 0;
+	protected static final int GET = 1;
+	protected static final String CODING_TABLE = "UTF8";
 	protected String host;
 	protected String username;
 	protected String password;
 	protected int portHTTP = 4444;
-	public static final int defaultPort = 4447;
-	protected int portHTTPS = defaultPort;
-	// protected HttpURLConnection connection;
+	public static final int DEFAULT_PORT = 4447;
+	protected int portHTTPS = DEFAULT_PORT;
 	protected boolean startConnecting = false;
 	protected boolean endConnecting = false;
 	protected URL serviceURL;
 	protected String sessionId;
 	protected String lastSessionId;
 	protected int requestMethod = POST;
-	public final java.nio.charset.Charset UTF8DEFAULT = java.nio.charset.Charset.forName("UTF-8");
+	public static final Charset UTF8DEFAULT = StandardCharsets.UTF_8;
 
 	class JSONCommunicationException extends Exception {
 		JSONCommunicationException(String message) {
@@ -71,21 +71,12 @@ public class JSONthroughHTTP extends JSONExecutioner {
 		}
 	}
 
-	/**
-	 * public JSONthroughHTTP () { }
-	 */
-
-	/**
-	 * @param host
-	 * @param username
-	 * @param password
-	 */
 	public JSONthroughHTTP(String host, String username, String password) {
 		this.host = host;
 		int idx = host.indexOf(':');
 		if (idx > -1) {
 			this.host = host.substring(0, idx);
-			this.portHTTP = this.portHTTPS = new java.lang.Integer(host.substring(idx + 1, host.length())).intValue();
+			this.portHTTP = this.portHTTPS = Integer.parseInt(host.substring(idx + 1, host.length()));
 		}
 		this.username = username;
 		this.password = password;
@@ -93,9 +84,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 	}
 
 	protected String makeRpcPath(OpsiMethodCall omc) {
-		StringBuffer result = new StringBuffer("/rpc");
-		// StringBuffer result = new StringBuffer ("/json"); test of a modificated
-		// service
+		StringBuilder result = new StringBuilder("/rpc");
 
 		if (omc.getRpcPath() != null && !(omc.getRpcPath().equals(""))) {
 			result.append("/");
@@ -106,7 +95,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 	}
 
 	/**
-	 * This method takes hostname, port and the OpsiMethodCall rpcPatht
+	 * This method takes hostname, port and the OpsiMethodCall rpcPath
 	 * transformed to String in order to build an URL as expected by the
 	 * opsiconfd.
 	 * <p>
@@ -122,8 +111,6 @@ public class JSONthroughHTTP extends JSONExecutioner {
 		if (requestMethod == GET) {
 			try {
 				String urlEnc = URLEncoder.encode(json, "UTF8");
-				// logging.debug(this, "a JSONObject as URL encoded>> " + urlEnc);
-
 				urlS += "?" + urlEnc;
 			} catch (UnsupportedEncodingException ux) {
 				logging.error(this, ux.toString());
@@ -133,14 +120,11 @@ public class JSONthroughHTTP extends JSONExecutioner {
 		logging.debug(this, "we shall try to connect to " + urlS);
 		try {
 			serviceURL = new URL(urlS);
-		} catch (java.net.MalformedURLException ex) {
+		} catch (MalformedURLException ex) {
 			logging.error(urlS + " no legal URL, " + ex.toString());
 		}
 	}
 
-	/**
-	 * @param omc
-	 */
 	public void makeURL(OpsiMethodCall omc) {
 		logging.debug(this, "make url for " + omc);
 
@@ -154,22 +138,20 @@ public class JSONthroughHTTP extends JSONExecutioner {
 	}
 
 	protected String produceJSONstring(List<OpsiMethodCall> omcList) {
-		StringBuffer json = new StringBuffer("[");
+		StringBuilder json = new StringBuilder("[");
 		for (int i = 0; i < omcList.size(); i++) {
 			json.append(omcList.get(i).getJsonString());
-			if (i < omcList.size() - 1)
+			if (i < omcList.size() - 1) {
 				json.append(",");
+			}
 		}
 		json.append("]");
 		return json.toString();
 	}
 
-	/**
-	 * @param omcList
-	 */
 	public void makeURL(List<OpsiMethodCall> omcList) {
 		logging.debug(this, "make url for " + omcList);
-		if (omcList == null || omcList.size() == 0) {
+		if (omcList == null || omcList.isEmpty()) {
 			logging.error("missing method call");
 			return;
 		}
@@ -193,15 +175,14 @@ public class JSONthroughHTTP extends JSONExecutioner {
 	 * Opening the connection. The method is prepared to be subclassed and take
 	 * additional informations for the connection.
 	 */
-	protected HttpURLConnection produceConnection() throws java.io.IOException {
+	protected HttpURLConnection produceConnection() throws IOException {
 		return (HttpURLConnection) serviceURL.openConnection();
 	}
 
 	private void setGeneralRequestProperties(HttpURLConnection connection) {
 		String authorization = Base64OutputStream.encode(username + ":" + password);
 		connection.setRequestProperty("Authorization", "Basic " + authorization);
-		connection.setRequestProperty("X-opsi-session-lifetime", "900");
-		// has to be value between 1 and 43300 [sec]
+		connection.setRequestProperty("X-opsi-session-lifetime", "900"); // has to be value between 1 and 43300 [sec]
 
 		if (lz4Transmission) {
 			connection.setRequestProperty("Accept-Encoding", "lz4");
@@ -210,8 +191,6 @@ public class JSONthroughHTTP extends JSONExecutioner {
 		}
 
 		connection.setRequestProperty("User-Agent", Globals.APPNAME + " " + Globals.VERSION);
-		// connection.setRequestProperty("Connection", "close");
-
 	}
 
 	/*
@@ -263,51 +242,29 @@ public class JSONthroughHTTP extends JSONExecutioner {
 	 * 
 	 */
 
-	/*
-	 * public JSONObject retrieveJSONObject ( OpsiMethodCall omc )
-	 * {
-	 * ArrayList<OpsiMethodCall> omcList = new ArrayList<OpsiMethodCall>();
-	 * omcList.add(omc);
-	 * List<JSONObject> responseList = retrieveJSONObjects(omcList);
-	 * 
-	 * 
-	 * if (responseList == null)
-	 * return null;
-	 * 
-	 * return responseList.get(0);
-	 * }
-	 * 
-	 */
-
 	// synchronized
-	public JSONObject retrieveJSONObject(OpsiMethodCall omc)
 	/**
 	 * This method receives the JSONObject via HTTP.
 	 * 
 	 * @param omc
 	 */
-
-	{
+	public JSONObject retrieveJSONObject(OpsiMethodCall omc) {
 		boolean background = false;
 		logging.info(this, "retrieveJSONObjects started");
-		de.uib.utilities.thread.WaitCursor waitCursor = null;
+		WaitCursor waitCursor = null;
 
 		if (omc != null && !omc.isBackground()) {
-			waitCursor = new de.uib.utilities.thread.WaitCursor(null,
-					new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR), this.getClass().getName());
-		} else
+			waitCursor = new WaitCursor(null, new Cursor(Cursor.DEFAULT_CURSOR), this.getClass().getName());
+		} else {
 			background = true;
+		}
 
-		// ArrayList<JSONObject>result = null;
 		JSONObject result = null;
 
 		conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
 
-		// omcList.add(new OpsiMethodCall("authenticated", new Object[]{}));
-
 		makeURL(omc);
 
-		// logging.check(this, "retrieveJSONObject " + omcList + " FROM " + serviceURL);
 		TimeCheck timeCheck = new TimeCheck(this, "retrieveJSONObject  FROM " + serviceURL + "  ++ " + omc);
 		timeCheck.start();
 
@@ -320,9 +277,6 @@ public class JSONthroughHTTP extends JSONExecutioner {
 
 			setGeneralRequestProperties(connection);
 
-			// String authorization = Base64OutputStream.encode (username + ":" + password);
-			// connection.setRequestProperty ("Authorization", "Basic " + authorization);
-			// connection.setRequestProperty("Accept-Encoding", "gzip");
 			if (requestMethod == POST) {
 				connection.setRequestMethod("POST");
 				connection.setDoOutput(true);
@@ -332,17 +286,6 @@ public class JSONthroughHTTP extends JSONExecutioner {
 				connection.setRequestMethod("GET");
 			}
 
-			/*
-			 * //it would be an option:
-			 * // TLSv1.2 which is default since java 8 does sometimes not work with
-			 * opsiconfd for java8
-			 * if (configed.javaVersion.startsWith("1.8"))
-			 * {
-			 * logging.warning(this,"set TLSv1 in java 8");
-			 * System.setProperty("https.protocols", "TLSv1");
-			 * }
-			 */
-
 			logging.info(this, "retrieveJSONObject by connection " + connection);
 			logging.info(this, "retrieveJSONObject request properties " + connection.getRequestProperties());
 			logging.info(this, "retrieveJSONObject request method " + connection.getRequestMethod());
@@ -350,15 +293,11 @@ public class JSONthroughHTTP extends JSONExecutioner {
 
 			if (sessionId != null) {
 				connection.setRequestProperty("Cookie", sessionId);
-				// logging.debug ("Session id sent: " + sessionId);
 			}
-			// connection.setRequestProperty("User-Agent", Globals.APPNAME + " " +
-			// Globals.VERSION);
 			logging.info(this, "retrieveJSONObjects request old or " + " new session ");
 			logging.info(this, "retrieveJSONObjects connected " + " new session ");
 
 			try {
-
 				connection.connect();
 			} catch (Exception ex) {
 				String s = "" + ex;
@@ -366,68 +305,33 @@ public class JSONthroughHTTP extends JSONExecutioner {
 				if (i > -1) {
 					s = "\n\n" + s.substring(i) + "\n" + "In this SSL configuration, a connection is not possible";
 
-					logging.error(s);;
+					logging.error(s);
 					logging.checkErrorList(null);
-
 				}
 
 				throw (ex);
-				// System.exit(1);
 			}
 
-			if (connection instanceof HttpsURLConnection)
+			if (connection instanceof HttpsURLConnection) {
 				logging.info(this, "connection cipher suite " + ((HttpsURLConnection) connection).getCipherSuite());
+			}
 
 			if (requestMethod == POST) {
-				BufferedWriter out = null;
-
-				try {
-					OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), UTF8DEFAULT);
-					out = new BufferedWriter(writer);
+				try (OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), UTF8DEFAULT);
+						BufferedWriter out = new BufferedWriter(writer)) {
 					String json = produceJSONstring(omc);
 					logging.debug(this, "(POST) sending: " + json);
 					out.write(json);
 					out.flush();
-					out.close();
-					out = null;
 				} catch (IOException iox) {
 					logging.info(this, "exception on writing json request " + iox);
-				} finally {
-					logging.debug(this, "handling finally json request close,  out == null " + (out == null));
-					if (out != null)
-						try {
-							out.close();
-						} catch (IOException iox) {
-							logging.debug(this, "handling finally json request close " + iox);
-						} ;
 				}
-
 			}
-
-			/**
-			 * pausing for testing purposes try {
-			 * Thread.currentThread().sleep(10000); } catch
-			 * (InterruptedException iex) { } logging.debug (" retrieving 2 " +
-			 * conStat);
-			 */
-
-		}
-		/*
-		 * catch (java.net.NoRouteToHostException ex)
-		 * {
-		 * if (waitCursor != null) waitCursor.stop();
-		 * WaitCursor.stopAll();
-		 * conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
-		 * logging.error("no route to host, URL: " + serviceURL + " message " +
-		 * ex.toString());
-		 * return null;
-		 * }
-		 */
-
-		catch (IOException ex) {
+		} catch (IOException ex) {
 			if (!background) {
-				if (waitCursor != null)
+				if (waitCursor != null) {
 					waitCursor.stop();
+				}
 				WaitCursor.stopAll();
 			}
 			conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
@@ -435,8 +339,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 			return null;
 		}
 
-		if (conStat.getState() == ConnectionState.STARTED_CONNECTING) // we continue
-		{
+		if (conStat.getState() == ConnectionState.STARTED_CONNECTING) {
 			try {
 				logging.debug(this, "Response " + connection.getResponseCode() + " " + connection.getResponseMessage());
 
@@ -451,6 +354,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 							try {
 								serverVersion[i] = Integer.parseInt(versionParts[i]);
 							} catch (NumberFormatException nex) {
+								logging.error(this, "value is unparsable to int");
 							}
 						}
 					} else {
@@ -469,44 +373,33 @@ public class JSONthroughHTTP extends JSONExecutioner {
 					}
 				}
 
-				StringBuffer errorInfo = new StringBuffer("");
+				StringBuilder errorInfo = new StringBuilder("");
 
 				if (connection.getErrorStream() != null) {
-					BufferedReader in = null;
-					try {
-						in = new BufferedReader(new InputStreamReader(connection.getErrorStream(), UTF8DEFAULT));
+					try (BufferedReader in = new BufferedReader(
+							new InputStreamReader(connection.getErrorStream(), UTF8DEFAULT))) {
 						while (in.ready()) {
 							errorInfo.append(in.readLine());
 							errorInfo.append("  ");
 						}
-						in.close();
-					}
-
-					catch (IOException iox) {
+					} catch (IOException iox) {
 						logging.warning(this, "exception on reading error stream " + iox);
 						throw new JSONCommunicationException("error on reading error stream");
-					} finally {
-						logging.info(this, "handling finally reading error stream");
-						if (in != null)
-							try {
-								in.close();
-							} catch (IOException iox) {
-								logging.info(this, "handling finally reading error stream " + iox);
-							} ;
 					}
 				}
 
 				logging.debug(this, "response code: " + connection.getResponseCode());
 
-				if (connection.getResponseCode() == connection.HTTP_ACCEPTED
-						|| connection.getResponseCode() == connection.HTTP_OK) {
+				if (connection.getResponseCode() == HttpURLConnection.HTTP_ACCEPTED
+						|| connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 					conStat = new ConnectionState(ConnectionState.CONNECTED, "ok");
 				} else {
 					conStat = new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage());
-					if (connection.getResponseCode() != connection.HTTP_UNAUTHORIZED) // this case is handled by the
-																						// login routine
+					if (connection.getResponseCode() != HttpURLConnection.HTTP_UNAUTHORIZED) {
+						// this case is handled by the login routine
 						logging.error(this, "Response " + connection.getResponseCode() + " "
 								+ connection.getResponseMessage() + " " + errorInfo.toString());
+					}
 
 				}
 
@@ -517,16 +410,12 @@ public class JSONthroughHTTP extends JSONExecutioner {
 					if (cookieVal != null) {
 						lastSessionId = sessionId;
 						sessionId = cookieVal.substring(0, cookieVal.indexOf(";"));
-						// logging.debug( "Session id received:" + sessionId);
 
 						boolean gotNewSession = sessionId != null && !sessionId.equals(lastSessionId);
 
-						if (gotNewSession)
+						if (gotNewSession) {
 							logging.info(this, "retrieveJSONObjects " + " got new session ");
-
-						// "lastSessionId, sessionId: "
-						// + lastSessionId +", " + sessionId);
-
+						}
 					}
 
 					boolean gzipped = false;
@@ -553,121 +442,50 @@ public class JSONthroughHTTP extends JSONExecutioner {
 							// not valid gzippt, we take inflater
 							logging.info(this, "initiating InflaterInputStream");
 							InputStream str = connection.getInputStream();
-							stream = new java.util.zip.InflaterInputStream(str);
-						}
-
-						else {
+							stream = new InflaterInputStream(str);
+						} else {
 							logging.info(this, "initiating GZIPInputStream");
 							stream = new GZIPInputStream(connection.getInputStream()); // not working, if no GZIP
 						}
-
 					} else {
 						logging.info(this, "initiating plain input stream");
 						stream = connection.getInputStream();
 					}
 
-					logging.info(this, "guessContentType " + connection.guessContentTypeFromStream(stream));
+					logging.info(this, "guessContentType " + URLConnection.guessContentTypeFromStream(stream));
 
-					BufferedReader in = null;
 					String line;
-					int readCounter = 0;
-					try {
-						// reading in one line
-						in = new BufferedReader(new InputStreamReader(stream, UTF8DEFAULT));
+					try (BufferedReader in = new BufferedReader(new InputStreamReader(stream, UTF8DEFAULT))) {
 						line = in.readLine();
-
-						// reading in chunks for testing purposes
-
-						/*
-						 * StringBuffer buf = new StringBuffer();
-						 * 
-						 * char[] cBuf = new char[1000];
-						 * int maxRead = 999;
-						 * 
-						 * int readResult = in.read(cBuf, 0, maxRead);
-						 * while (readResult > 0)
-						 * {
-						 * buf.append(cBuf, 0, readResult);
-						 * StringBuffer buf1 = new StringBuffer();
-						 * buf1.append(cBuf, 0 , readResult);
-						 * logging.info(this, "temporarily read count  " + readResult);
-						 * readCounter = readCounter + readResult;
-						 * logging.info(this, "temporarily read count (total)  " + readResult + " ( " +
-						 * readCounter + " ) " );
-						 * logging.info(this, "temporarily read " + buf1);
-						 * readResult = in.read(cBuf, 0, maxRead);
-						 * }
-						 * line = buf.toString();
-						 */
 
 						logging.info(this, "received line of length " + line.length());
 						if (line != null) {
-							// result = new ArrayList<JSONObject>();
 							result = new JSONObject(line);
-							/*
-							 * if (omcList.size() > 1)
-							 * {
-							 * 
-							 * JSONArray combinedResult = new JSONArray (new JSONTokener(line));
-							 * 
-							 * for (int i = 0; i < combinedResult.length(); i++)
-							 * {
-							 * result.add((JSONObject) combinedResult.optJSONObject(i));
-							 * }
-							 * }
-							 * else
-							 * result.add(new JSONObject(line));
-							 */
 						}
 
 						line = in.readLine();
-						// logging.debug (line);
-						if (line != null)
+						if (line != null) {
 							logging.debug(this, "received second line of length " + line.length());
-
-					}
-
-					catch (IOException iox) {
+						}
+					} catch (IOException iox) {
 						logging.warning(this, "exception on receiving json", iox);
 						throw new JSONCommunicationException("receiving json");
-					} finally {
-						logging.debug(this, "handling finally receiving json close");
-						if (in != null) {
-							try {
-								in.close();
-							} catch (IOException iox) {
-								logging.info(this, "handling finally receiving json close " + iox);
-							}
-						}
 					}
-
-					// return result;
-
 				}
-			}
-
-			catch (Exception ex) {
-				if (waitCursor != null)
+			} catch (Exception ex) {
+				if (waitCursor != null) {
 					waitCursor.stop();
+				}
 				WaitCursor.stopAll();
 				logging.error(this, "Exception while data reading, " + ex.toString());
 			}
 		}
-		// logging.check(this, "retrieveJSONObject got result " + (result != null));
 
 		timeCheck.stop("retrieveJSONObject  got result " + (result != null) + " ");
 		logging.info(this, "retrieveJSONObject ready");
-		if (waitCursor != null)
+		if (waitCursor != null) {
 			waitCursor.stop();
+		}
 		return result;
-	}
-
-	public static void main(String[] args) {
-		String resulting = "";
-		JSONthroughHTTP instance;
-
-		instance = new JSONthroughHTTP("194.31.185.160", "cn=admin,dc=uib,dc=local", "umwelt");
-		instance.retrieveJSONObject(
-				new OpsiMethodCall("getProductStates_listOfHashes", new String[] { "pcbon1.uib.local" }));
 	}
 }
