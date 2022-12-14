@@ -29,7 +29,6 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
-import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
 /**
@@ -86,14 +85,10 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		public Socket createSocket() throws IOException {
 			SSLSocket socket = (SSLSocket) this.delegate.createSocket();
 			logging.debug(this,
-					"createSocke " + " enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
+					"createSocket " + " enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
 			// on some connections there is, after some time, a javax.net.ssl.SSLException:
 			// SSL peer shut down incorrectl
 			// the standard enabled cipher suite seems to be TLS_RSA_WITH_AES_256_CBC_SHA256
-
-			if (!configed.TLS_CIPHER_SUITE.equals(""))
-				socket.setEnabledCipherSuites(new String[] { configed.TLS_CIPHER_SUITE });
-			// TLS_RSA_WITH_AES_128_GCM_SHA256"}); // with this suit it seems to work
 
 			if (null != this.handshakeListener) {
 				socket.addHandshakeCompletedListener(this.handshakeListener);
