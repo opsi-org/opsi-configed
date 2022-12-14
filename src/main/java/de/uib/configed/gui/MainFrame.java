@@ -2892,7 +2892,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_Clientselection"),
 				Globals.createImageIcon("images/clientselection.png", ""), panel_Clientselection,
-				configed.getResourceValue("MainFrame.panel_Clientselection"), ConfigedMain.viewClients);
+				configed.getResourceValue("MainFrame.panel_Clientselection"), ConfigedMain.VIEW_CLIENTS);
 
 		panel_LocalbootProductsettings = new PanelGroupedProductSettings(
 				configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), main,
@@ -2923,11 +2923,12 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
 				Globals.createImageIcon("images/package.png", ""), panel_LocalbootProductsettings,
 				configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
-				ConfigedMain.viewLocalbootProducts);
+				ConfigedMain.VIEW_LOCALBOOT_PRODUCTS);
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
 				Globals.createImageIcon("images/bootimage.png", ""), panel_NetbootProductsettings,
-				configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), ConfigedMain.viewNetbootProducts);
+				configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
+				ConfigedMain.VIEW_NETBOOT_PRODUCTS);
 
 		panel_HostConfig = new PanelHostConfig() {
 			@Override
@@ -2939,7 +2940,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				main.getPersistenceController().configOptionsRequestRefresh();
 				// main.requestReloadConfigsForSelectedClients();
 				main.getPersistenceController().hostConfigsRequestRefresh();
-				main.resetView(ConfigedMain.viewNetworkconfiguration);
+				main.resetView(ConfigedMain.VIEW_NETWORK_CONFIGURATION);
 			}
 
 			// overwrite in subclasses
@@ -2955,13 +2956,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_NetworkConfig"),
 				Globals.createImageIcon("images/config_pro.png", ""), panel_HostConfig,
-				configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), ConfigedMain.viewNetworkconfiguration);
+				configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), ConfigedMain.VIEW_NETWORK_CONFIGURATION);
 
 		showHardwareLog = new JPanel();
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_hardwareLog"),
 				Globals.createImageIcon("images/hwaudit.png", ""), showHardwareLog,
-				configed.getResourceValue("MainFrame.jPanel_hardwareLog"), ConfigedMain.viewHardwareInfo);
+				configed.getResourceValue("MainFrame.jPanel_hardwareLog"), ConfigedMain.VIEW_HARDWARE_INFO);
 
 		panelSWInfo = new PanelSWInfo(main) {
 			@Override
@@ -2970,7 +2971,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				main.clearSwInfo();
 				main.getPersistenceController().installedSoftwareInformationRequestRefresh();
 				main.getPersistenceController().softwareAuditOnClientsRequestRefresh();
-				main.resetView(ConfigedMain.viewSoftwareInfo);
+				main.resetView(ConfigedMain.VIEW_SOFTWARE_INFO);
 			}
 		};
 
@@ -2997,7 +2998,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_softwareLog"),
 				Globals.createImageIcon("images/swaudit.png", ""), showSoftwareLog,
-				configed.getResourceValue("MainFrame.jPanel_softwareLog"), ConfigedMain.viewSoftwareInfo);
+				configed.getResourceValue("MainFrame.jPanel_softwareLog"), ConfigedMain.VIEW_SOFTWARE_INFO);
 
 		showLogfiles = new PanelTabbedDocuments(Globals.logtypes,
 				// null)
@@ -3020,7 +3021,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_logfiles"),
 				Globals.createImageIcon("images/logfile.png", ""), showLogfiles,
-				configed.getResourceValue("MainFrame.jPanel_logfiles"), ConfigedMain.viewLog);
+				configed.getResourceValue("MainFrame.jPanel_logfiles"), ConfigedMain.VIEW_LOG);
 
 		showLogfiles.addChangeListener(new javax.swing.event.ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -3051,7 +3052,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
 				Globals.createImageIcon("images/config_pro.png", ""), panel_ProductProperties,
 				configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
-				ConfigedMain.viewProductProperties);
+				ConfigedMain.VIEW_PRODUCT_PROPERTIES);
 
 		logging.info(this,
 				"added tab  " + configed.getResourceValue("MainFrame.panel_ProductGlobalProperties") + " index "
@@ -3072,7 +3073,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_HostProperties"),
 				Globals.createImageIcon("images/config_pro.png", ""), panel_HostProperties,
-				configed.getResourceValue("MainFrame.jPanel_HostProperties"), ConfigedMain.viewHostProperties);
+				configed.getResourceValue("MainFrame.jPanel_HostProperties"), ConfigedMain.VIEW_HOST_PROPERTIES);
 
 		logging.info(this, "added tab  " + configed.getResourceValue("MainFrame.jPanel_HostProperties") + " index "
 				+ jTabbedPaneConfigPanes.indexOfTab(configed.getResourceValue("MainFrame.jPanel_HostProperties")));
@@ -4273,7 +4274,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 					main.clearHwInfo();
 					// WaitCursor waitCursor = new WaitCursor(tree);
 					// otherwise we get a wait cursor only in table component
-					main.resetView(ConfigedMain.viewHardwareInfo);
+					main.resetView(ConfigedMain.VIEW_HARDWARE_INFO);
 				}
 			};
 		}

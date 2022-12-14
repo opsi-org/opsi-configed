@@ -35,6 +35,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -137,15 +138,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 {
 
-	public static final int viewClients = 0;
-	public static final int viewLocalbootProducts = 1;
-	public static final int viewNetbootProducts = 2;
-	public static final int viewNetworkconfiguration = 3;
-	public static final int viewHardwareInfo = 4;
-	public static final int viewSoftwareInfo = 5;
-	public static final int viewLog = 6;
-	public static final int viewProductProperties = 7;
-	public static final int viewHostProperties = 8;
+	public static final int VIEW_CLIENTS = 0;
+	public static final int VIEW_LOCALBOOT_PRODUCTS = 1;
+	public static final int VIEW_NETBOOT_PRODUCTS = 2;
+	public static final int VIEW_NETWORK_CONFIGURATION = 3;
+	public static final int VIEW_HARDWARE_INFO = 4;
+	public static final int VIEW_SOFTWARE_INFO = 5;
+	public static final int VIEW_LOG = 6;
+	public static final int VIEW_PRODUCT_PROPERTIES = 7;
+	public static final int VIEW_HOST_PROPERTIES = 8;
 
 	// Dashboard disabled
 	public static final boolean DASH_ENABLED = false;
@@ -194,7 +195,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected String[] objectIds = new String[] {};
 	protected String[] selectedDepots = new String[] {};
 	protected String[] oldSelectedDepots;
-	protected Vector<String> selectedDepotsV = new Vector<String>();
+	protected Vector<String> selectedDepotsV = new Vector<>();
 
 	protected boolean anyDataChanged = false;
 
@@ -217,7 +218,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected String productEdited = null; // null serves als marker that we were not editing products
 	protected Collection productProperties; // the properties for one product and all selected clients
-	protected de.uib.opsidatamodel.datachanges.UpdateCollection updateCollection = new UpdateCollection(new Vector());
+	protected de.uib.opsidatamodel.datachanges.UpdateCollection updateCollection = new UpdateCollection(new Vector<>());
 	protected HashMap clientProductpropertiesUpdateCollections;
 	/*
 	 * for each product:
@@ -348,10 +349,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public final Dimension licencesInitDimension = new Dimension(1200, 800);
 
-	protected int viewIndex = viewClients;
-	protected int saveClientsViewIndex = viewClients;
-	protected int saveDepotsViewIndex = viewProductProperties;
-	protected int saveServerViewIndex = viewNetworkconfiguration;
+	protected int viewIndex = VIEW_CLIENTS;
+	protected int saveClientsViewIndex = VIEW_CLIENTS;
+	protected int saveDepotsViewIndex = VIEW_PRODUCT_PROPERTIES;
+	protected int saveServerViewIndex = VIEW_NETWORK_CONFIGURATION;
 
 	// public enum MainTabState {CLIENT_SELECTION, LOCALBOOT_PRODUCTS,
 	// NETBOOT_PRODUCTS, NETWORK_CONFIG, HARDWARE_INVENT, SOFTWARE_INVENT};
@@ -368,10 +369,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		LICENCEPOOL, ENTER_LICENCE, EDIT_LICENCE, USAGE, RECONCILIATION, STATISTICS
 	}
 
-	protected Map<LicencesTabStatus, TabClient> licencesPanels = new HashMap<>();
+	protected Map<LicencesTabStatus, TabClient> licencesPanels = new EnumMap<>(LicencesTabStatus.class);
 	protected LicencesTabStatus licencesStatus;
 
-	protected Map<LicencesTabStatus, String> licencesPanelsTabNames = new HashMap<>();
+	protected Map<LicencesTabStatus, String> licencesPanelsTabNames = new EnumMap<>(LicencesTabStatus.class);
 
 	// ==================================================================
 	// TabController Interface
@@ -502,7 +503,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		setRebuiltClientListTableModel();
 
-		logging.debug(this, "initialTreeActivation	");
+		logging.debug(this, "initialTreeActivation\u0009"); // \u0009 is tab
 
 		SwingUtilities.invokeLater(() -> {
 			initialTreeActivation();
@@ -2649,10 +2650,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		clearLogPage();
 		clearSoftwareInfoPage();
 
-		if (getViewIndex() != viewClients) // change in selection not via clientpage (i.e. via tree)
+		if (getViewIndex() != VIEW_CLIENTS) // change in selection not via clientpage (i.e. via tree)
 		{
 			logging.debug(this, "getSelectedClients  " + logging.getStrings(getSelectedClients())
-					+ " ,  getViewIndex, viewClients: " + getViewIndex() + ", " + viewClients);
+					+ " ,  getViewIndex, viewClients: " + getViewIndex() + ", " + VIEW_CLIENTS);
 			int newViewIndex = getViewIndex();
 			resetView(newViewIndex);
 		}
@@ -4357,7 +4358,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// extra tasks not done by resetView
 	{
 		switch (viewIndex) {
-		case viewClients: {
+		case VIEW_CLIENTS: {
 			checkErrorList();
 			// mainFrame.menuClientSelectionSetEnabled(true);
 			// mainFrame.deselectSetEnabled(true);
@@ -4385,47 +4386,47 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		boolean result = true;
 
 		switch (viewIndex) {
-		case viewClients: {
+		case VIEW_CLIENTS: {
 			break;
 		}
 
-		case viewLocalbootProducts: {
+		case VIEW_LOCALBOOT_PRODUCTS: {
 			result = setLocalbootProductsPage();
 			break;
 		}
 
-		case viewNetbootProducts: {
+		case VIEW_NETBOOT_PRODUCTS: {
 			result = setNetbootProductsPage();
 			break;
 		}
 
-		case viewNetworkconfiguration: {
+		case VIEW_NETWORK_CONFIGURATION: {
 			result = setNetworkconfigurationPage();
 			break;
 		}
 
-		case viewHardwareInfo: {
+		case VIEW_HARDWARE_INFO: {
 			result = setHardwareInfoPage();
 			break;
 		}
 
-		case viewSoftwareInfo: {
+		case VIEW_SOFTWARE_INFO: {
 			result = setSoftwareInfoPage();
 			break;
 		}
 
-		case viewLog: {
+		case VIEW_LOG: {
 			result = setLogPage();
 			break;
 		}
 
-		case viewProductProperties: {
+		case VIEW_PRODUCT_PROPERTIES: {
 			result = setProductPropertiesPage();
 
 			break;
 		}
 
-		case viewHostProperties: {
+		case VIEW_HOST_PROPERTIES: {
 			result = setHostPropertiesPage();
 			break;
 		}
@@ -4470,7 +4471,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		logging.info(this, "setViewIndex anyDataChanged " + anyDataChanged);
 
-		if (anyDataChanged && (viewIndex == viewLocalbootProducts || viewIndex == viewNetbootProducts)) {
+		if (anyDataChanged && (viewIndex == VIEW_LOCALBOOT_PRODUCTS || viewIndex == VIEW_NETBOOT_PRODUCTS)) {
 			if (depotsList_selectionChanged) {
 				requestReloadStatesAndActions();
 			} else {
@@ -4483,11 +4484,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// we will only leave view 0 if a PC is selected
 
 		// check if change of view index to the value of visualViewIndex can be allowed
-		if (visualViewIndex != viewClients) {
+		if (visualViewIndex != VIEW_CLIENTS) {
 
-			if (!((visualViewIndex == viewClients)
-					|| ((visualViewIndex == viewNetworkconfiguration) && (editingTarget == EditingTarget.SERVER))
-					|| ((visualViewIndex == viewHostProperties) && (editingTarget == EditingTarget.DEPOTS)))) {
+			if (!((visualViewIndex == VIEW_CLIENTS)
+					|| ((visualViewIndex == VIEW_NETWORK_CONFIGURATION) && (editingTarget == EditingTarget.SERVER))
+					|| ((visualViewIndex == VIEW_HOST_PROPERTIES) && (editingTarget == EditingTarget.DEPOTS)))) {
 				logging.debug(this, " selected clients " + logging.getStrings(getSelectedClients()));
 
 				if (getSelectedClients() == null)
@@ -4499,7 +4500,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					JOptionPane.showMessageDialog(mainFrame,
 							configed.getResourceValue("ConfigedMain.pleaseSelectPc.text"),
 							configed.getResourceValue("ConfigedMain.pleaseSelectPc.title"), JOptionPane.OK_OPTION);
-					viewIndex = viewClients;
+					viewIndex = VIEW_CLIENTS;
 				}
 
 				/*
@@ -4521,7 +4522,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		{
 			viewIndex = visualViewIndex;
 
-			if (viewIndex != viewClients) {
+			if (viewIndex != VIEW_CLIENTS) {
 				// mainFrame.menuClientSelectionSetEnabled(false);
 				// mainFrame.deselectSetEnabled(false);
 
@@ -4551,7 +4552,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				logging.debug(" tab index could not be changed");
 			}
 
-			if (viewIndex == viewClients) {
+			if (viewIndex == VIEW_CLIENTS) {
 				if (reachableUpdater.isInterrupted())
 					reachableUpdater.interrupt();
 
@@ -5480,7 +5481,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				);
 
 				// boolean changed = false;
-				if (!suspended && editingTarget == EditingTarget.CLIENTS && viewIndex == viewClients) {
+				if (!suspended && editingTarget == EditingTarget.CLIENTS && viewIndex == VIEW_CLIENTS) {
 					// logging.debug(this, "updating");
 					try {
 						// we catch exceptions especially if we are on some updating process for the

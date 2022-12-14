@@ -203,7 +203,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			// new Runnable(){
 			// public void run()
 			// {
-			main.setVisualViewIndex(ConfigedMain.viewClients); // because of potential memory problems we switch to
+			main.setVisualViewIndex(ConfigedMain.VIEW_CLIENTS); // because of potential memory problems we switch to
 																// client view
 																// }
 																// }

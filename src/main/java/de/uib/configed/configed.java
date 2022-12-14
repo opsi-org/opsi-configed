@@ -362,25 +362,24 @@ public class configed {
 
 		try {
 
-			{
-				SwingUtilities.invokeAndWait(() -> {
-					if (paramClient != null || paramClientgroup != null) {
-						if (paramClientgroup != null) {
-							cm.setGroup(paramClientgroup);
-						}
-
-						if (paramClient != null) {
-							cm.setClient(paramClient);
-						}
-
-						logging.info("set client " + paramClient);
-
-						if (paramTab != null) {
-							cm.setVisualViewIndex(paramTab);
-						}
+			SwingUtilities.invokeAndWait(() -> {
+				if (paramClient != null || paramClientgroup != null) {
+					if (paramClientgroup != null) {
+						cm.setGroup(paramClientgroup);
 					}
-				});
-			}
+
+					if (paramClient != null) {
+						cm.setClient(paramClient);
+					}
+
+					logging.info("set client " + paramClient);
+
+					if (paramTab != null) {
+						cm.setVisualViewIndex(paramTab);
+					}
+				}
+			});
+
 		} catch (InvocationTargetException ex) {
 			logging.info(" run " + ex);
 		} catch (InterruptedException ie) {
@@ -603,10 +602,10 @@ public class configed {
 
 					if (isValue(args, i)) {
 						// logging.debug (args[i]);
-						if (args[i].toUpperCase().equals("Y")) {
+						if (args[i].equalsIgnoreCase("Y")) {
 							// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = true;
 							de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
-						} else if (args[i].toUpperCase().equals("N")) {
+						} else if (args[i].equalsIgnoreCase("N")) {
 							de.uib.opsicommand.JSONthroughHTTP.compressTransmission = false;
 							// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = false;
 						} else {
@@ -1208,7 +1207,7 @@ public class configed {
 			logging.info(" setting property swing.aatext" + ex);
 		}
 
-		fErrorOutOfMemory = new FTextArea(null, "configed", true, new String[] { "ok", "not ok" }, 400, 400);
+		fErrorOutOfMemory = new FTextArea(null, "configed", true, new String[] { "ok" }, 400, 400);
 
 		fErrorOutOfMemory.setContentBackground(Globals.darkOrange);
 		// we activate it in case of an appropriate error

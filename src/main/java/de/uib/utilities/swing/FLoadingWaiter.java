@@ -35,8 +35,8 @@ import de.uib.utilities.thread.WaitingWorker;
 public class FLoadingWaiter extends JFrame
 		implements WindowListener, de.uib.utilities.observer.DataLoadingObserver, WaitingSleeper {
 
-	private final long WAITING_MILLIS_FOR_LOADING = 50000;
-	private final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
+	private static final long WAITING_MILLIS_FOR_LOADING = 50000;
+	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
 	JProgressBar progressBar;
 	JLabel infoLabel;
 	protected String info;
@@ -50,8 +50,6 @@ public class FLoadingWaiter extends JFrame
 	// int max = 60;
 
 	int max = 200;
-
-	private boolean showing = true;
 
 	private WaitingWorker worker;
 
@@ -246,11 +244,6 @@ public class FLoadingWaiter extends JFrame
 	public void windowActivated(WindowEvent e) {
 	}
 
-	public void windowClosed(WindowEvent e) {
-		// logging.debug(" WindowEvent windowClosed ");
-		showing = false;
-	}
-
 	public void windowClosing(WindowEvent e) {
 		// sendingToFront = true;
 	}
@@ -267,6 +260,12 @@ public class FLoadingWaiter extends JFrame
 	}
 
 	public void windowOpened(WindowEvent e) {
+	}
+
+	@Override
+	public void windowClosed(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

@@ -8,7 +8,8 @@
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
  * License, version AGPLv3, as published by the Free Software Foundation
- 
+ * 
+ * @author roeder, Nils Otto
  */
 
 package de.uib.configed.gui.productpage;
@@ -34,9 +35,6 @@ import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
 import de.uib.utilities.logging.logging;
 
-/**
- * @author roeder
- */
 public class ProductInfoPane extends javax.swing.JSplitPane
 		implements de.uib.utilities.DataChangedObserver, ActionListener {
 

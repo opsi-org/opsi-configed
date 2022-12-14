@@ -23,7 +23,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
@@ -264,7 +263,6 @@ public class DPassword extends JDialog // implements Runnable
 	WaitCursor waitCursor;
 	boolean connected = false;
 
-	Dimension screenSize;
 	WaitInfo waitInfo;
 	de.uib.utilities.thread.WaitingWorker waitingTask;
 
@@ -340,15 +338,9 @@ public class DPassword extends JDialog // implements Runnable
 		super(frame, title, modal);
 		this.main = main;
 
-		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
-		try {
-			guiInit();
-			pack();
-			setVisible(true);
-		} catch (Exception ex) {
-			logging.error("Error", ex);
-		}
+		guiInit();
+		pack();
+		setVisible(true);
 	}
 
 	public DPassword(ConfigedMain main) {
@@ -395,7 +387,7 @@ public class DPassword extends JDialog // implements Runnable
 		jButtonCommit.setEnabled(true);
 	}
 
-	void guiInit() throws Exception {
+	void guiInit() {
 		MessageFormat messageFormatTitle = new MessageFormat(configed.getResourceValue("DPassword.title"));
 		setTitle(messageFormatTitle.format(new Object[] { Globals.APPNAME }));
 
@@ -416,12 +408,10 @@ public class DPassword extends JDialog // implements Runnable
 		// Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		// this.setLocation((screenSize.width - 450) / 2, 200);
 
-		logging.info(this, "smallFramesDistanceFromLeft " + de.uib.utilities.Globals.smallFramesDistanceFromLeft);
-
-		final Rectangle dim = de.uib.utilities.Globals.buildLocationOnDefaultDisplay(getSize().width, getSize().height,
+		/*final Rectangle dim = de.uib.utilities.Globals.buildLocationOnDefaultDisplay(getSize().width, getSize().height,
 				de.uib.utilities.Globals.smallFramesDistanceFromLeft,
 				de.uib.utilities.Globals.smallFramesDistanceFromTop);
-		this.setLocation(dim.x, dim.y);
+		this.setLocation(dim.x, dim.y);*/
 
 		jLabelHost.setText(configed.getResourceValue("DPassword.jLabelHost"));
 
@@ -679,6 +669,9 @@ public class DPassword extends JDialog // implements Runnable
 		}
 
 		saveCursor = getCursor();
+
+		// Sets the window on the main screen
+		setLocationRelativeTo(null);
 	}
 
 	@Override
