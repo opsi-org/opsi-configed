@@ -54,7 +54,6 @@ sonarqube-check:
     - mvn verify sonar:sonar -Dsonar.projectKey=configed || true
   only:
     - main # or the name of your main branch
-    - tags
 
 
 signandupload:
@@ -74,9 +73,6 @@ signandupload:
       dotenv:
         - ci_job_id.env
     expire_in: 2 day
-  only:
-    - main
-    - tags
 
 
 trigger_opsiproduct_pipeline:
@@ -89,6 +85,3 @@ trigger_opsiproduct_pipeline:
     - set_variables
     - compile_and_package
     - signandupload
-  only:
-    - main
-    - tags
