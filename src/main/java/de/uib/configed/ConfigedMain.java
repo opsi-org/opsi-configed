@@ -1831,8 +1831,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		final Rectangle dim = de.uib.utilities.Globals.buildLocation(mainFrame, width, height, 0, 0);
 
-		//logging.info(this, "setting mainframe visible");
-		//mainFrame.setVisible(true);
+		logging.info(this, "setting mainframe visible");
+		mainFrame.setLocationRelativeTo(configed.fProgress);
+		mainFrame.setVisible(true);
 		// mainFrame.pack();
 
 		SwingUtilities.invokeLater(new Runnable() {
