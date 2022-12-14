@@ -22,7 +22,6 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
@@ -80,11 +79,11 @@ import de.uib.utilities.thread.WaitCursor;
  */
 public class DPassword extends JDialog // implements Runnable
 {
-	private final String TESTSERVER = "";
-	private final String TESTUSER = "";
-	private final String TESTPASSWORD = "";
+	private static final String TESTSERVER = "";
+	private static final String TESTUSER = "";
+	private static final String TESTPASSWORD = "";
 	private static final int SECS_WAIT_FOR_CONNECTION = 100;
-	final long TIMEOUT_MS = SECS_WAIT_FOR_CONNECTION * 1000; // 5000 reproducable error
+	private static final long TIMEOUT_MS = SECS_WAIT_FOR_CONNECTION * 1000; // 5000 reproducable error
 	private boolean localApp;
 
 	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
@@ -93,12 +92,12 @@ public class DPassword extends JDialog // implements Runnable
 	PersistenceController persis;
 	Cursor saveCursor;
 
-	class WaitInfo extends JFrame implements de.uib.utilities.thread.WaitingSleeper {
+	private class WaitInfo extends JFrame implements de.uib.utilities.thread.WaitingSleeper {
 		JLabel waitLabel;
 		JProgressBar waitingProgressBar;
 		long timeOutMillis;
 
-		WaitInfo(long timeOutMillis) {
+		private WaitInfo(long timeOutMillis) {
 			logging.info(this, "created with timeout " + timeOutMillis);
 			this.timeOutMillis = timeOutMillis;
 
@@ -114,6 +113,7 @@ public class DPassword extends JDialog // implements Runnable
 					setCursor(saveCursor);
 				}
 			});
+
 			// setSize (350,100);
 			setTitle(Globals.APPNAME + " login");
 			waitLabel = new JLabel();
@@ -173,6 +173,8 @@ public class DPassword extends JDialog // implements Runnable
 			pack();
 			// setVisible(true);
 			setAlwaysOnTop(true);
+
+			setLocationRelativeTo(DPassword.this);
 		}
 
 		// interface WaitingSleeper
@@ -767,15 +769,6 @@ public class DPassword extends JDialog // implements Runnable
 		waitInfo.setVisible(true);
 
 		// locate
-
-		final Rectangle dim = de.uib.utilities.Globals.buildLocationOnDefaultDisplay(waitInfo.getSize().width,
-				waitInfo.getSize().height,
-
-				getSize().width + 80, getSize().height + 40
-		// de.uib.utilities.Globals.smallFramesDistanceFromLeft,
-		// de.uib.utilities.Globals.smallFramesDistanceFromTop
-		);
-		waitInfo.setLocation(dim.x, dim.y);
 
 		/*
 		 * GraphicsDevice gd =

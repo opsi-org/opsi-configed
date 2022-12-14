@@ -658,29 +658,6 @@ public class Globals {
 		return result;
 	}
 
-	public static Rectangle buildLocationOnDefaultDisplay(int intendedWidth, int intendedHeight, int placementX,
-			int placementY) {
-		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		GraphicsConfiguration gc = gd.getDefaultConfiguration();
-		int x = gc.getBounds().x + placementX;
-		int y = gc.getBounds().y + placementY;
-		logging.info(
-				"Globals: x " + gc.getBounds().x + " + " + placementX + ", y " + gc.getBounds().y + " + " + placementY);
-		return new Rectangle(x, y, intendedWidth, intendedHeight);
-
-	}
-
-	public static Rectangle buildLocationOnDefaultDisplay(int intendedWidth, int intendedHeight, int placementX) {
-		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		GraphicsConfiguration gc = gd.getDefaultConfiguration();
-		int x = gc.getBounds().x + placementX;
-		int y = gc.getBounds().y + (gc.getBounds().height) / 2;
-		logging.info("Globals: x " + gc.getBounds().x + " + " + placementX + ", y " + gc.getBounds().y
-				+ " + half of height: " + ((gc.getBounds().height) / 2));
-		return new Rectangle(x, y, intendedWidth, intendedHeight);
-
-	}
-
 	public static Rectangle buildLocation(javax.swing.JFrame f, int placementX, int placementY) {
 		return buildLocation(f, f.getWidth(), f.getHeight(), placementX, placementY);
 	}

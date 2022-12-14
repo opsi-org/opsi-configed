@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 /**
@@ -187,11 +186,8 @@ public class FLoadingWaiter extends JFrame
 		 * (gc.getBounds().height-getHeight()) / 2
 		 * );
 		 */
-		final Rectangle dim = de.uib.utilities.Globals.buildLocationOnDefaultDisplay(getSize().width, getSize().height,
-				de.uib.utilities.Globals.smallFramesDistanceFromLeft,
-				de.uib.utilities.Globals.smallFramesDistanceFromTop);
-		this.setLocation(dim.x, dim.y);
 
+		setLocationRelativeTo(null);
 	}
 
 	public void startWaiting() {

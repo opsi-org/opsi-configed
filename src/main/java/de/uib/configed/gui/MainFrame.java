@@ -3338,7 +3338,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		fList.setTitle(Globals.APPNAME + ": " + configed.getResourceValue("MainFrame.productSelection"));
 		fList.init();
 
-		fList.setLocation((int) this.getX() + 40, (int) this.getY() + 40);
+		fList.setLocation(this.getX() + 40, this.getY() + 40);
 		fList.setSize(fwidth / 2, this.getHeight());
 
 		fList.setModal(true);

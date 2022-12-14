@@ -1831,10 +1831,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		final Rectangle dim = de.uib.utilities.Globals.buildLocation(mainFrame, width, height, 0, 0);
 
-		mainFrame.setLocation(dim.x, dim.y);
-
-		logging.info(this, "setting mainframe visible");
-		mainFrame.setVisible(true);
+		//logging.info(this, "setting mainframe visible");
+		//mainFrame.setVisible(true);
 		// mainFrame.pack();
 
 		SwingUtilities.invokeLater(new Runnable() {
@@ -1848,9 +1846,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				try {
 					logging.info(this, "locateAndDisplay, setting mainframe visible in EventQueue");
 
-					mainFrame.setLocation(dim.x, dim.y);
+					mainFrame.setLocationRelativeTo(configed.fProgress);
 
-					// mainFrame.setLocation(dim.x, dim.y);
 					// mainFrame.panel_Clientselection.setDividerLocation(dim.width - 100);
 					mainFrame.setVisible(true);
 					mainFrame.setSize(dim.width + 2, dim.height); // corrects splitpane
