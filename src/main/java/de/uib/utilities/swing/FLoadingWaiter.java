@@ -1,6 +1,7 @@
 package de.uib.utilities.swing;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -66,6 +67,11 @@ public class FLoadingWaiter extends JFrame
 			gd.setColor(color);
 			gd.fillRect(0, 0, width, height);
 		}
+	}
+
+	public FLoadingWaiter(Component owner, String title) {
+		this(title);
+		setLocationRelativeTo(owner);
 	}
 
 	public FLoadingWaiter(String title, String startMessage) {
@@ -181,7 +187,6 @@ public class FLoadingWaiter extends JFrame
 		 * (gc.getBounds().height-getHeight()) / 2
 		 * );
 		 */
-
 		final Rectangle dim = de.uib.utilities.Globals.buildLocationOnDefaultDisplay(getSize().width, getSize().height,
 				de.uib.utilities.Globals.smallFramesDistanceFromLeft,
 				de.uib.utilities.Globals.smallFramesDistanceFromTop);

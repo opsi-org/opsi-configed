@@ -725,8 +725,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// }
 
 	public void loadDataAndGo() {
-
 		dpass.setVisible(false);
+
 		logging.clearErrorList();
 
 		// errors are already handled in login
@@ -747,7 +747,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		persist.syncTables();
 
-		configed.fProgress = new FLoadingWaiter(
+		configed.fProgress = new FLoadingWaiter(dpass,
 				Globals.APPNAME + " " + configed.getResourceValue("FWaitProgress.title"));
 		((de.uib.utilities.observer.DataLoadingObservable) persist).registerDataLoadingObserver(configed.fProgress);
 
