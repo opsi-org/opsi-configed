@@ -12,7 +12,6 @@
 
 package de.uib.configed.gui.productpage;
 
-import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
@@ -21,8 +20,8 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 
+import de.uib.utilities.logging.logging;
 import javafx.application.Application;
-import javafx.application.HostServices;
 import javafx.stage.Stage;
 
 public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
@@ -33,9 +32,6 @@ public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 		addHyperlinkListener(this);
 		setEditable(false);
 		setContentType("text/html");
-		setText("Das hier ist ein Abschnitt über Farben. Im folgenden Abschnitt möchten wir einige Beispiele für "
-				+ " Farben geben und anschließend noch weitere Ressourcen für weiterreichende Informationen geben.\n## Farben\n * Rot\n"
-				+ "* Grün\n" + "* Gelb\n" + "\nFür mehr Farben besuchen Sie doch unsere [Website](https://www.uib.de)");
 	}
 
 	@Override
@@ -54,64 +50,27 @@ public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 
 	@Override
 	public void hyperlinkUpdate(HyperlinkEvent event) {
-		if (HyperlinkEvent.EventType.ACTIVATED.equals(event.getEventType())) {
-			Application appl = new Application() {
+		logging.info(this, "Hyperlinkevent in Markdown, inputevent: " + event.getInputEvent());
+
+		String link = event.getURL().toString();
+
+		if (event.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
+
+			// Open Link in Browser
+			new Application() {
 
 				@Override
 				public void start(Stage primaryStage) throws Exception {
-					// TODO Auto-generated method stub
-
+					// Empty, because not needed
 				}
+			}.getHostServices().showDocument(link);
 
-			};
-			HostServices services = appl.getHostServices();
-			services.showDocument(event.getURL().toString());
+		} else if (event.getEventType().equals(HyperlinkEvent.EventType.ENTERED)) {
+			// Activate tooltip if mouse on link
+			setToolTipText(link);
+		} else if (event.getEventType().equals(HyperlinkEvent.EventType.EXITED)) {
+			// Deactivates tooltip
+			setToolTipText(null);
 		}
-
-		/*if (HyperlinkEvent.EventType.ACTIVATED.equals(event.getEventType())) {
-			Desktop desktop = Desktop.getDesktop();
-		
-			URL clickedURL = event.getURL();
-			String clickedString = clickedURL.toString();
-		
-			// This will now try to open the standard browser with link.
-			// if not possible, try to open firefox with the link
-			// And if even that is not possible, show Message Dialog with link
-			if (desktop.isSupported(Desktop.Action.BROWSE)) {
-				try {
-					desktop.browse(clickedURL.toURI());
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			} else {
-				try {
-					logging.info(this, "trying to open link with firefox, because Desktop.brose, not supported");
-					Process process = new ProcessBuilder("firefox", clickedString).start();
-		
-					// check if opening with firefox successful
-					if (process.waitFor() != 0) {
-						logging.trace(this, "firefox not available, show message frame");
-						openMessageDialogWithURL(clickedString);
-					}
-				} catch (IOException ioe) {
-					ioe.printStackTrace();
-					openMessageDialogWithURL(clickedString);
-		
-				} catch (InterruptedException ie) {
-					ie.printStackTrace();
-					Thread.currentThread().interrupt();
-				}
-			}
-		}*/
-
 	}
-
-	private void openMessageDialogWithURL(String clickedString) {
-		JTextPane pa = new JTextPane();
-		pa.setEditable(false);
-		pa.setText("Browser zum öffnen von \n" + clickedString
-				+ "\nkann nicht gefunden werden. Bitte manuell durchführen");
-		JOptionPane.showMessageDialog(this, pa);
-	}
-
 }
