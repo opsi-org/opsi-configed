@@ -44,8 +44,8 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	private int historyGetIndex = 0;
 	private Autocomplete autoComplete;
 	private boolean passwordMode = false;
-	private Dimension btn_dim = new Dimension(de.uib.configed.Globals.graphicButtonWidthX,
-			de.uib.configed.Globals.buttonHeight);
+	private Dimension btn_dim = new Dimension(de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH_X,
+			de.uib.configed.Globals.BUTTON_HEIGHT);
 	private Dimension thissize = new Dimension(810, 600);
 
 	private class TerminatingPanel extends JPanel {
@@ -56,8 +56,8 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 			// setBackground(java.awt.Color.GREEN);
 			setBackground(de.uib.configed.Globals.backLightBlue);
 			btn_close = new de.uib.configed.gui.IconButton(
-					de.uib.configed.configed.getResourceValue("SSHConnection.buttonClose"),
-					"images/cancel.png", "images/cancel.png", "images/cancel.png", true);
+					de.uib.configed.configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
+					"images/cancel.png", "images/cancel.png", true);
 			btn_close.addActionListener(closeListener);
 
 			btn_close.setPreferredSize(btn_dim);
@@ -65,17 +65,17 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 			GroupLayout layout = new GroupLayout(this);
 			setLayout(layout);
 
-			layout.setVerticalGroup(layout.createSequentialGroup()
-					.addGap(de.uib.configed.Globals.vGapSize)
-					.addComponent(btn_close, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-							GroupLayout.PREFERRED_SIZE)
-					.addGap(3 * de.uib.configed.Globals.vGapSize));
+			layout.setVerticalGroup(layout
+					.createSequentialGroup().addGap(de.uib.configed.Globals.VGAP_SIZE).addComponent(btn_close,
+							GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGap(3 * de.uib.configed.Globals.VGAP_SIZE));
 
-			layout.setHorizontalGroup(layout.createSequentialGroup()
-					.addGap(de.uib.configed.Globals.gapSize, de.uib.configed.Globals.gapSize, Short.MAX_VALUE)
-					.addComponent(btn_close, de.uib.configed.Globals.iconWidth, de.uib.configed.Globals.iconWidth,
-							de.uib.configed.Globals.iconWidth)
-					.addGap(de.uib.configed.Globals.gapSize));
+			layout.setHorizontalGroup(
+					layout.createSequentialGroup()
+							.addGap(de.uib.configed.Globals.GAP_SIZE, de.uib.configed.Globals.GAP_SIZE, Short.MAX_VALUE)
+							.addComponent(btn_close, de.uib.configed.Globals.ICON_WIDTH,
+									de.uib.configed.Globals.ICON_WIDTH, de.uib.configed.Globals.ICON_WIDTH)
+							.addGap(de.uib.configed.Globals.GAP_SIZE));
 
 		}
 	}
@@ -97,9 +97,8 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		});
 		this.terminal = terminal;
 		parameterPanel = new SSHCommandControlParameterMethodsPanel(this);
-		((SSHCommandControlParameterMethodsPanel) parameterPanel).setGapSize(
-				de.uib.configed.Globals.gapSize, de.uib.configed.Globals.gapSize,
-				de.uib.configed.Globals.gapSize, 0);
+		((SSHCommandControlParameterMethodsPanel) parameterPanel).setGapSize(de.uib.configed.Globals.GAP_SIZE,
+				de.uib.configed.Globals.GAP_SIZE, de.uib.configed.Globals.GAP_SIZE, 0);
 		((SSHCommandControlParameterMethodsPanel) parameterPanel).initLayout();
 		((SSHCommandControlParameterMethodsPanel) parameterPanel).repaint();
 		((SSHCommandControlParameterMethodsPanel) parameterPanel).revalidate();
@@ -184,22 +183,21 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		tf_command.requestFocus();
 
 		// some thread seems to prevent setting it directly
-		SwingUtilities.invokeLater(
-				new Thread() {
-					public void run() {
-						int timeoutRuns = 2;
-						int counter = 0;
-						while (!tf_command.hasFocus() && counter < timeoutRuns) {
-							counter++;
-							try {
-								Thread.sleep(100);
-							} catch (InterruptedException ex) {
-							}
-							tf_command.requestFocus();
-							logging.info(this, "repeated requestFocus " + counter + " times");
-						}
+		SwingUtilities.invokeLater(new Thread() {
+			public void run() {
+				int timeoutRuns = 2;
+				int counter = 0;
+				while (!tf_command.hasFocus() && counter < timeoutRuns) {
+					counter++;
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException ex) {
 					}
-				});
+					tf_command.requestFocus();
+					logging.info(this, "repeated requestFocus " + counter + " times");
+				}
+			}
+		});
 
 	}
 	/*
@@ -217,16 +215,13 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 	private void setOutSize() {
 		// printWindowSize();
-		double no_output_Height = (de.uib.configed.Globals.gapSize * 4)
-				+ tf_command.getHeight()
-				+ parameterPanel.getHeight()
-				+ btn_dim.getHeight()
-				+ terminatingPanel.getHeight();
+		double no_output_Height = (de.uib.configed.Globals.GAP_SIZE * 4) + tf_command.getHeight()
+				+ parameterPanel.getHeight() + btn_dim.getHeight() + terminatingPanel.getHeight();
 
 		this.thissize = this.getSize();
 		// double w = 900 - (de.uib.configed.Globals.gapSize*4);
 		// double h = 700 - no_output_Height;
-		double w = this.getSize().getWidth() - (de.uib.configed.Globals.gapSize * 4);
+		double w = this.getSize().getWidth() - (de.uib.configed.Globals.GAP_SIZE * 4);
 		double h = this.getSize().getHeight() - no_output_Height;
 		if (w > 1500)
 			w = 810;
@@ -321,8 +316,8 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 			}
 		};
 		tf_command.setPreferredSize(
-				new Dimension(de.uib.configed.Globals.firstLabelWidth + de.uib.configed.Globals.gapSize,
-						de.uib.configed.Globals.lineHeight));
+				new Dimension(de.uib.configed.Globals.FIRST_LABEL_WIDTH + de.uib.configed.Globals.GAP_SIZE,
+						de.uib.configed.Globals.LINE_HEIGHT));
 
 		setCLfocus();
 		// ((JTextField) tf_command).setCaretPosition(((JTextField)
@@ -367,8 +362,8 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 						}
 					});
 		btn_killProcess = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("SSHConnection.buttonKillProcess"),
-				"images/edit-delete.png", "images/edit-delete.png", "images/edit-delete.png", true);
+				de.uib.configed.configed.getResourceValue("SSHConnection.buttonKillProcess"), "images/edit-delete.png",
+				"images/edit-delete.png", "images/edit-delete.png", true);
 		btn_killProcess.setPreferredSize(btn_dim);
 		btn_killProcess.setToolTipText(configed.getResourceValue("SSHConnection.buttonKillProcess"));
 
@@ -435,13 +430,12 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		jScrollPane.setPreferredSize(output.getMaximumSize());
 
 		GroupLayout.Alignment leading = GroupLayout.Alignment.LEADING;
-		int gap = de.uib.configed.Globals.gapSize;
-		int mgap = de.uib.configed.Globals.minGapSize;
+		int gap = de.uib.configed.Globals.GAP_SIZE;
+		int mgap = de.uib.configed.Globals.MIN_GAP_SIZE;
 
 		lbl_command = new JLabel(configed.getResourceValue("SSHConnection.commandLine"));
 
-		konsolePanelLayout.setVerticalGroup(konsolePanelLayout.createSequentialGroup()
-				.addGap(gap)
+		konsolePanelLayout.setVerticalGroup(konsolePanelLayout.createSequentialGroup().addGap(gap)
 				.addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(gap)
 				.addGroup(konsolePanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -460,27 +454,25 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 				.addGap(gap));
 
 		konsolePanelLayout.setHorizontalGroup(konsolePanelLayout.createParallelGroup()
-				.addGroup(konsolePanelLayout.createSequentialGroup()
-						.addGap(gap)
+				.addGroup(konsolePanelLayout.createSequentialGroup().addGap(gap)
 						.addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
 						.addGap(gap))
-				.addGroup(konsolePanelLayout.createSequentialGroup()
-						.addGap(gap)
+				.addGroup(konsolePanelLayout.createSequentialGroup().addGap(gap)
 						.addComponent(lbl_command, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(cb_privat, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(gap)
-						.addComponent(tf_command, de.uib.configed.Globals.buttonWidth,
-								de.uib.configed.Globals.buttonWidth, Short.MAX_VALUE)
+						.addComponent(tf_command, de.uib.configed.Globals.BUTTON_WIDTH,
+								de.uib.configed.Globals.BUTTON_WIDTH, Short.MAX_VALUE)
 						.addGap(gap)
-						.addComponent(btn_executeCommand, de.uib.configed.Globals.iconWidth,
-								de.uib.configed.Globals.iconWidth, de.uib.configed.Globals.iconWidth)
-						.addComponent(btn_killProcess, de.uib.configed.Globals.iconWidth,
-								de.uib.configed.Globals.iconWidth, de.uib.configed.Globals.iconWidth)
-						.addComponent(btn_close, de.uib.configed.Globals.iconWidth, de.uib.configed.Globals.iconWidth,
-								de.uib.configed.Globals.iconWidth)
+						.addComponent(btn_executeCommand, de.uib.configed.Globals.ICON_WIDTH,
+								de.uib.configed.Globals.ICON_WIDTH, de.uib.configed.Globals.ICON_WIDTH)
+						.addComponent(btn_killProcess, de.uib.configed.Globals.ICON_WIDTH,
+								de.uib.configed.Globals.ICON_WIDTH, de.uib.configed.Globals.ICON_WIDTH)
+						.addComponent(btn_close, de.uib.configed.Globals.ICON_WIDTH, de.uib.configed.Globals.ICON_WIDTH,
+								de.uib.configed.Globals.ICON_WIDTH)
 						.addGap(gap)));
 		setCenterLayout();
 
@@ -488,17 +480,14 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 	private void setCenterLayout() {
 		mainPanelLayout.setAutoCreateGaps(true);
-		mainPanelLayout.setHorizontalGroup(mainPanelLayout.createParallelGroup()
-				.addComponent(this.inputPanel)
-				.addComponent(this.parameterPanel)
-				.addComponent(this.terminatingPanel)
+		mainPanelLayout.setHorizontalGroup(mainPanelLayout.createParallelGroup().addComponent(this.inputPanel)
+				.addComponent(this.parameterPanel).addComponent(this.terminatingPanel)
 
 		);
-		mainPanelLayout.setVerticalGroup(mainPanelLayout.createSequentialGroup()
-				.addComponent(this.inputPanel)
-				.addComponent(this.parameterPanel)
-				// .addGap(50)
-				.addComponent(this.terminatingPanel));
+		mainPanelLayout.setVerticalGroup(
+				mainPanelLayout.createSequentialGroup().addComponent(this.inputPanel).addComponent(this.parameterPanel)
+						// .addGap(50)
+						.addComponent(this.terminatingPanel));
 
 		this.setSize(this.getWidth(),
 				this.getHeight() + this.parameterPanel.getHeight() + this.terminatingPanel.getHeight());

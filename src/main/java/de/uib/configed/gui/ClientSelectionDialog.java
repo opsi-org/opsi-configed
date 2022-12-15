@@ -312,37 +312,37 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		});
 
 		GroupLayout.SequentialGroup saveHGroup = additionalLayout.createSequentialGroup();
-		saveHGroup.addGap(Globals.hGapSize);
+		saveHGroup.addGap(Globals.HGAP_SIZE);
 		saveHGroup.addComponent(saveNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 				GroupLayout.PREFERRED_SIZE);
-		saveHGroup.addGap(Globals.hGapSize / 2);
+		saveHGroup.addGap(Globals.HGAP_SIZE / 2);
 		saveHGroup.addComponent(saveNameField, 40, 100, 200);
-		saveHGroup.addGap(Globals.hGapSize);
+		saveHGroup.addGap(Globals.HGAP_SIZE);
 		saveHGroup.addComponent(saveDescriptionLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 				GroupLayout.PREFERRED_SIZE);
-		saveHGroup.addGap(Globals.hGapSize / 2);
+		saveHGroup.addGap(Globals.HGAP_SIZE / 2);
 		saveHGroup.addComponent(saveDescriptionField, 40, 200, Short.MAX_VALUE);
-		saveHGroup.addGap(Globals.hGapSize);
-		saveHGroup.addComponent(saveButton, Globals.buttonWidth, Globals.buttonWidth, Globals.buttonWidth);
-		saveHGroup.addGap(Globals.hGapSize);
+		saveHGroup.addGap(Globals.HGAP_SIZE);
+		saveHGroup.addComponent(saveButton, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH);
+		saveHGroup.addGap(Globals.HGAP_SIZE);
 		saveHGroup.addComponent(buttonReload, 20, 20, 20);
-		saveHGroup.addGap(Globals.hGapSize / 2);
+		saveHGroup.addGap(Globals.HGAP_SIZE / 2);
 		saveHGroup.addComponent(buttonRestart, 20, 20, 20);
 
 		// saveHGroup.addGap(Globals.hGapSize);
 		// saveHGroup.addComponent( loadSearchBox, Globals.buttonWidth,
 		// Globals.buttonWidth, Globals.buttonWidth);
-		saveHGroup.addGap(Globals.hGapSize);
+		saveHGroup.addGap(Globals.HGAP_SIZE);
 		additionalLayout.setHorizontalGroup(saveHGroup);
 
 		GroupLayout.ParallelGroup saveVGroup = additionalLayout.createParallelGroup(GroupLayout.Alignment.CENTER);
-		saveVGroup.addComponent(saveNameLabel, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight);
-		saveVGroup.addComponent(saveNameField, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight);
-		saveVGroup.addComponent(saveDescriptionLabel, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight);
-		saveVGroup.addComponent(saveDescriptionField, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight);
-		saveVGroup.addComponent(saveButton, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight);
-		saveVGroup.addComponent(buttonReload, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight);
-		saveVGroup.addComponent(buttonRestart, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight);
+		saveVGroup.addComponent(saveNameLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
+		saveVGroup.addComponent(saveNameField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
+		saveVGroup.addComponent(saveDescriptionLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
+		saveVGroup.addComponent(saveDescriptionField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
+		saveVGroup.addComponent(saveButton, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
+		saveVGroup.addComponent(buttonReload, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
+		saveVGroup.addComponent(buttonRestart, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
 		// saveVGroup.addComponent( loadSearchBox, Globals.lineHeight,
 		// Globals.lineHeight, Globals.lineHeight );
 		additionalLayout.setVerticalGroup(saveVGroup);
@@ -419,7 +419,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				new String[] { configed.getResourceValue("ClientSelectionDialog.newElementsBox") });
 		newElementBox.setFont(Globals.defaultFont);
 		// newElementBox.setLightWeightPopupEnabled(false);
-		newElementBox.setMaximumRowCount(Globals.comboBoxRowCount);
+		newElementBox.setMaximumRowCount(Globals.COMBOBOX_ROW_COUNT);
 		newElementBox.addItem(configed.getResourceValue("ClientSelectionDialog.hostName"));
 		newElementBox.addItem(configed.getResourceValue("ClientSelectionDialog.softwareName"));
 
@@ -443,8 +443,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		newElementBox.addActionListener(new AddElementListener());
 		// vMainGroup.addGap(2 * Globals.vGapSize);
-		vMainGroup.addComponent(newElementBox, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight);
-		hMainGroup.addComponent(newElementBox, Globals.buttonWidth, Globals.buttonWidth, 2 * Globals.buttonWidth);
+		vMainGroup.addComponent(newElementBox, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
+		hMainGroup.addComponent(newElementBox, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH);
 		contentPane.add(newElementBox);
 
 		// for( String name: manager.getSavedSearchesNames() )
@@ -938,7 +938,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		case TextType:
 			TextInputField fieldText = new TextInputField("", sourceGroup.element.getEnumData());
 			fieldText.setEditable(true);
-			fieldText.setSize(new Dimension(Globals.buttonWidth, Globals.lineHeight));
+			fieldText.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 			fieldText.setToolTipText(
 					/* "Use * as wildcard" */configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
 			fieldText.addValueChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
@@ -951,7 +951,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		case DoubleType:
 			// JTextField fieldDouble = new JTextField();
 			TextInputField fieldDouble = new TextInputField("");
-			fieldDouble.setSize(new Dimension(Globals.buttonWidth, Globals.lineHeight));
+			fieldDouble.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 			fieldDouble.setToolTipText(
 					/* "Use * as wildcard" */configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
 			fieldDouble.addValueChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
@@ -977,7 +977,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			break;
 		case DateType:
 			TextInputField fieldDate = new TextInputField(null);
-			fieldDate.setSize(new Dimension(Globals.buttonWidth, Globals.lineHeight));
+			fieldDate.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 			fieldDate.setToolTipText("yyyy-mm-dd");
 			fieldDate.addValueChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
 				protected void actOnChange() {
@@ -1011,7 +1011,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		}
 		sourceGroup.dataComponent.setMaximumSize(new Dimension(sourceGroup.dataComponent.getMaximumSize().width,
 				sourceGroup.dataComponent.getMinimumSize().height));
-		int minHeight = de.uib.configed.Globals.lineHeight;
+		int minHeight = de.uib.configed.Globals.LINE_HEIGHT;
 		sourceGroup.vRow.addComponent(sourceGroup.dataComponent, GroupLayout.Alignment.CENTER, minHeight, minHeight,
 				minHeight);
 		hGroupData.addComponent(sourceGroup.dataComponent, 100, 100, Short.MAX_VALUE);

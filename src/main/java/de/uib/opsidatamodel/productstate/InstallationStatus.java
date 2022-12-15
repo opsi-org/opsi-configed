@@ -65,8 +65,8 @@ public class InstallationStatus {
 		// states.add(INSTALLING);
 
 		labels = new Vector<String>();
-		labels.add(Globals.CONFLICTSTATEstring);
-		labels.add(Globals.NOVALIDSTATEstring);
+		labels.add(Globals.CONFLICT_STATE_STRING);
+		labels.add(Globals.NO_VALID_STATE_STRING);
 		labels.add("undefined");
 		labels.add("installed");
 		labels.add("not_installed");
@@ -75,8 +75,8 @@ public class InstallationStatus {
 		// labels.add("installing");
 
 		state2label = new HashMap<Integer, String>();
-		state2label.put(CONFLICT, Globals.CONFLICTSTATEstring);
-		state2label.put(INVALID, Globals.NOVALIDSTATEstring);
+		state2label.put(CONFLICT, Globals.CONFLICT_STATE_STRING);
+		state2label.put(INVALID, Globals.NO_VALID_STATE_STRING);
 		state2label.put(UNDEFINED, "undefined");
 		state2label.put(INSTALLED, "installed");
 		state2label.put(NOT_INSTALLED, "not_installed");
@@ -86,8 +86,8 @@ public class InstallationStatus {
 		// state2label.put(INSTALLING, "installing");
 
 		label2state = new HashMap<String, Integer>();
-		label2state.put(Globals.CONFLICTSTATEstring, CONFLICT);
-		label2state.put(Globals.NOVALIDSTATEstring, INVALID);
+		label2state.put(Globals.CONFLICT_STATE_STRING, CONFLICT);
+		label2state.put(Globals.NO_VALID_STATE_STRING, INVALID);
 		label2state.put("undefined", UNDEFINED);
 		label2state.put("installed", INSTALLED);
 		label2state.put("not_installed", NOT_INSTALLED);
@@ -96,8 +96,8 @@ public class InstallationStatus {
 		// label2state.put("installing", INSTALLING);
 
 		label2displayLabel = new HashMap<String, String>();
-		label2displayLabel.put(Globals.CONFLICTSTATEstring, Globals.CONFLICTSTATEstring);
-		label2displayLabel.put(Globals.NOVALIDSTATEstring, Globals.NOVALIDSTATEstring);
+		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
+		label2displayLabel.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		label2displayLabel.put("undefined", "undefined");
 		label2displayLabel.put("installed", "installed");
 		label2displayLabel.put("not_installed", "not_installed");
@@ -106,8 +106,8 @@ public class InstallationStatus {
 		// label2displayLabel.put("installing", "installing");
 
 		displayLabel2label = new HashMap<String, String>();
-		displayLabel2label.put(Globals.CONFLICTSTATEstring, Globals.CONFLICTSTATEstring);
-		displayLabel2label.put(Globals.NOVALIDSTATEstring, Globals.NOVALIDSTATEstring);
+		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
+		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		displayLabel2label.put("undefined", "undefined");
 		displayLabel2label.put("installed", "installed");
 		displayLabel2label.put("not_installed", "not_installed");

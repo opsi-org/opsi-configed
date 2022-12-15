@@ -41,10 +41,9 @@ import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.thread.WaitCursor;
 
-public class PanelInstallOpsiPackage extends JPanel
-		implements NameProducer {
+public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
-	int firstLabelWidth = Globals.firstLabelWidth;
+	int firstLabelWidth = Globals.FIRST_LABEL_WIDTH;
 
 	JButton buttonCallChooserPackage;
 	JButton buttonSelectTmpDir;
@@ -131,9 +130,7 @@ public class PanelInstallOpsiPackage extends JPanel
 									+ configed.getResourceValue("InstallOpsiPackage.packageReinstall2"),
 							Globals.APPNAME + " "
 									+ configed.getResourceValue("InstallOpsiPackage.packageReinstallTitle"),
-							JOptionPane.YES_NO_OPTION,
-							JOptionPane.QUESTION_MESSAGE,
-							null, null, null);
+							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 					if (returnedOption == JOptionPane.YES_OPTION)
 						return true;
@@ -234,10 +231,8 @@ public class PanelInstallOpsiPackage extends JPanel
 			logging.info(this, "installPackage wrongly reporesult " + result);
 
 			if (result)
-				JOptionPane.showMessageDialog(rootFrame,
-						"Ready", // resultMessage,
-						configed.getResourceValue("InstallOpsiPackage.reportTitle"),
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,
+						configed.getResourceValue("InstallOpsiPackage.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
 
 		}
 	}
@@ -494,131 +489,132 @@ public class PanelInstallOpsiPackage extends JPanel
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		int hFirstGap = Globals.hFirstGap;
+		int hFirstGap = Globals.HFIRST_GAP;
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGap(Globals.vGapSize, Globals.vGapSize * 3, Globals.vGapSize * 4)
-				.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize * 2)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(infoLabel, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(buttonCallChooserPackage, Globals.lineHeight, Globals.lineHeight,
-								Globals.lineHeight)
-						.addComponent(fieldOpsiPackageName, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(serverLabel, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(comboChooseDepot, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-				// .addComponent(fieldDepotName, Globals.lineHeight, Globals.lineHeight,
-				// Globals.lineHeight)
-				)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(panelMountShare, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(serverPathLabel, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(buttonCallChooserServerpath, Globals.lineHeight, Globals.lineHeight,
-								Globals.lineHeight)
-						.addComponent(fieldServerPath, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
-
-				/*
-				 * .addGap(Globals.vGapSize/2, Globals.vGapSize/2, Globals.vGapSize/2)
-				 * .addGroup( layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-				 * .addComponent(tmpdirLabel, Globals.lineHeight, Globals.lineHeight,
-				 * Globals.lineHeight)
-				 * .addComponent(buttonSelectTmpDir, Globals.lineHeight, Globals.lineHeight,
-				 * Globals.lineHeight)
-				 * .addComponent(fieldTmpDir, Globals.lineHeight, Globals.lineHeight,
-				 * Globals.lineHeight)
-				 * //.addComponent(fieldDepotName, Globals.lineHeight, Globals.lineHeight,
-				 * Globals.lineHeight)
-				 * )
-				 */
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(buttonCallExecute, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize * 2));
-
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize * 2, Short.MAX_VALUE)
+		layout.setVerticalGroup(
+				layout.createSequentialGroup().addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE * 3, Globals.VGAP_SIZE * 4)
 						.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize * 2, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup()
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(infoLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(buttonCallChooserPackage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(fieldOpsiPackageName, Globals.buttonWidth * 2, Globals.buttonWidth * 2,
-								Short.MAX_VALUE)
-						.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup()
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(serverLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addGap(Globals.graphicButtonWidth, Globals.graphicButtonWidth, Globals.graphicButtonWidth)
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(comboChooseDepot, Globals.buttonWidth * 2, Globals.buttonWidth * 2,
-								Globals.buttonWidth * 2)
-						// .addComponent(fieldDepotName, GroupLayout.PREFERRED_SIZE,
-						// GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
+						.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE * 2)
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(infoLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+								.addComponent(buttonCallChooserPackage, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(fieldOpsiPackageName, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT))
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(serverLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(comboChooseDepot, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+						// .addComponent(fieldDepotName, Globals.lineHeight, Globals.lineHeight,
+						// Globals.lineHeight)
+						).addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(panelMountShare,
+								Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(serverPathLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(buttonCallChooserServerpath, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(fieldServerPath, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT))
 
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
+						/*
+						 * .addGap(Globals.vGapSize/2, Globals.vGapSize/2, Globals.vGapSize/2)
+						 * .addGroup( layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						 * .addComponent(tmpdirLabel, Globals.lineHeight, Globals.lineHeight,
+						 * Globals.lineHeight)
+						 * .addComponent(buttonSelectTmpDir, Globals.lineHeight, Globals.lineHeight,
+						 * Globals.lineHeight)
+						 * .addComponent(fieldTmpDir, Globals.lineHeight, Globals.lineHeight,
+						 * Globals.lineHeight)
+						 * //.addComponent(fieldDepotName, Globals.lineHeight, Globals.lineHeight,
+						 * Globals.lineHeight)
+						 * )
+						 */
+						.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
+								buttonCallExecute, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+						.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE * 2));
 
-				.addGroup(layout.createSequentialGroup()
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(serverPathLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(buttonCallChooserServerpath, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(fieldServerPath, Globals.buttonWidth * 2, Globals.buttonWidth * 2,
-								Short.MAX_VALUE)
-						.addGap(5, 5, 5)
-						.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
-				/*
-				 * .addGroup(layout.createSequentialGroup()
-				 * .addGap(hFirstGap, hFirstGap, hFirstGap)
-				 * .addComponent(tmpdirLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
-				 * .addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-				 * .addComponent(buttonSelectTmpDir,Globals.graphicButtonWidth,
-				 * Globals.graphicButtonWidth, Globals.graphicButtonWidth)
-				 * .addGap(hFirstGap, hFirstGap, hFirstGap)
-				 * .addComponent(fieldTmpDir, Globals.buttonWidth *2 , Globals.buttonWidth*2,
-				 * Short.MAX_VALUE)
-				 * //.addComponent(fieldDepotName, GroupLayout.PREFERRED_SIZE,
-				 * GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				 * .addGap(Globals.hGapSize, Globals.hGapSize*3, Short.MAX_VALUE)
-				 * )
-				 */
+		layout.setHorizontalGroup(
+				layout.createParallelGroup()
+						.addGroup(layout.createSequentialGroup()
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 2, Short.MAX_VALUE)
+								.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 2, Short.MAX_VALUE))
+						.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addComponent(infoLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addComponent(buttonCallChooserPackage, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addComponent(fieldOpsiPackageName, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
+										Short.MAX_VALUE)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE))
+						.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addComponent(serverLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addGap(Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH,
+										Globals.GRAPHIC_BUTTON_WIDTH)
+								.addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addComponent(comboChooseDepot, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
+										Globals.BUTTON_WIDTH * 2)
+								// .addComponent(fieldDepotName, GroupLayout.PREFERRED_SIZE,
+								// GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE))
 
-				/*
-				 * links platziert
-				 * .addGroup(layout.createSequentialGroup()
-				 * .addGap(hFirstGap, hFirstGap, hFirstGap)
-				 * .addComponent(buttonCallExecute, GroupLayout.PREFERRED_SIZE,
-				 * GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				 * .addGap(hFirstGap, hFirstGap, Short.MAX_VALUE)
-				 * )
-				 */
-				.addGroup(layout.createSequentialGroup()
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addGap(0, firstLabelWidth, firstLabelWidth)
-						.addGap(0, Globals.hGapSize, Globals.hGapSize)
-						.addGap(0, Globals.graphicButtonWidth, Globals.graphicButtonWidth)
-						.addGap(0, hFirstGap, hFirstGap)
-						.addGap(0, Globals.buttonWidth * 2, Short.MAX_VALUE)
-						.addComponent(buttonCallExecute, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(hFirstGap, hFirstGap, Short.MAX_VALUE))
+						.addGroup(layout.createSequentialGroup().addComponent(panelMountShare,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+
+						.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addComponent(serverPathLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addComponent(buttonCallChooserServerpath, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addComponent(fieldServerPath, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
+										Short.MAX_VALUE)
+								.addGap(5, 5, 5).addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE))
+						/*
+						 * .addGroup(layout.createSequentialGroup()
+						 * .addGap(hFirstGap, hFirstGap, hFirstGap)
+						 * .addComponent(tmpdirLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+						 * .addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						 * .addComponent(buttonSelectTmpDir,Globals.graphicButtonWidth,
+						 * Globals.graphicButtonWidth, Globals.graphicButtonWidth)
+						 * .addGap(hFirstGap, hFirstGap, hFirstGap)
+						 * .addComponent(fieldTmpDir, Globals.buttonWidth *2 , Globals.buttonWidth*2,
+						 * Short.MAX_VALUE)
+						 * //.addComponent(fieldDepotName, GroupLayout.PREFERRED_SIZE,
+						 * GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						 * .addGap(Globals.hGapSize, Globals.hGapSize*3, Short.MAX_VALUE)
+						 * )
+						 */
+
+						/*
+						 * links platziert
+						 * .addGroup(layout.createSequentialGroup()
+						 * .addGap(hFirstGap, hFirstGap, hFirstGap)
+						 * .addComponent(buttonCallExecute, GroupLayout.PREFERRED_SIZE,
+						 * GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						 * .addGap(hFirstGap, hFirstGap, Short.MAX_VALUE)
+						 * )
+						 */
+						.addGroup(
+								layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+										.addGap(0, firstLabelWidth, firstLabelWidth)
+										.addGap(0, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+										.addGap(0, Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
+										.addGap(0, hFirstGap, hFirstGap)
+										.addGap(0, Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
+										.addComponent(buttonCallExecute, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(hFirstGap, hFirstGap, Short.MAX_VALUE))
 
 		);
 	}

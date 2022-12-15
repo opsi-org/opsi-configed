@@ -324,33 +324,33 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		southLayout.setHorizontalGroup(southLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(southLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize, Short.MAX_VALUE)
-						.addComponent(jPanelButtonGrid, Globals.lineHeight, GroupLayout.PREFERRED_SIZE,
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, Short.MAX_VALUE)
+						.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize, Short.MAX_VALUE))
-				.addGroup(southLayout.createSequentialGroup().addGap(Globals.hGapSize / 2)
-						.addComponent(additionalPane, 50, 100, Short.MAX_VALUE).addGap(Globals.hGapSize / 2)));
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, Short.MAX_VALUE))
+				.addGroup(southLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE / 2)
+						.addComponent(additionalPane, 50, 100, Short.MAX_VALUE).addGap(Globals.HGAP_SIZE / 2)));
 
 		southLayout.setVerticalGroup(southLayout.createSequentialGroup()
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-				.addComponent(additionalPane, Globals.lineHeight, GroupLayout.PREFERRED_SIZE,
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+				.addComponent(additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addComponent(jPanelButtonGrid, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2));
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
 		GroupLayout allLayout = new GroupLayout(allpane);
 		allpane.setLayout(allLayout);
 
 		allLayout.setVerticalGroup(allLayout.createSequentialGroup()
-				.addComponent(northPanel, Globals.lineHeight, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(northPanel, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(scrollpane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addComponent(southPanel,
-						2 * Globals.lineHeight, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+						2 * Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 		allLayout.setHorizontalGroup(allLayout.createParallelGroup().addComponent(northPanel, 100, 300, Short.MAX_VALUE)
 				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 						.addComponent(scrollpane, 100, 300, Short.MAX_VALUE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2))
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2))
 				.addComponent(southPanel, 100, 300, Short.MAX_VALUE));
 
 		getContentPane().add(allpane);
@@ -369,20 +369,20 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		jPanelButtonGrid.setOpaque(false);
 
 		jButton1.setFont(Globals.defaultFont);
-		jButton1.setPreferredSize(new Dimension(Globals.buttonWidth, Globals.buttonHeight - 2));
+		jButton1.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
 		jButton1.setText(button1Text == null ? configed.getResourceValue("FGeneralDialog.ok") : button1Text);
 		jPanelButtonGrid.add(jButton1, null);
 
 		if (noOfButtons > 1) {
 			jButton2.setFont(Globals.defaultFont);
-			jButton2.setPreferredSize(new Dimension(Globals.buttonWidth, Globals.buttonHeight - 2));
+			jButton2.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
 			jButton2.setText(button2Text == null ? configed.getResourceValue("FGeneralDialog.ignore") : button2Text);
 			jPanelButtonGrid.add(jButton2, null);
 
 		}
 		if (noOfButtons > 2) {
 			jButton3.setFont(Globals.defaultFont);
-			jButton3.setPreferredSize(new Dimension(Globals.buttonWidth, Globals.buttonHeight - 2));
+			jButton3.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
 			jButton3.setText(button3Text == null ? configed.getResourceValue("FGeneralDialog.empty") : button3Text);
 			jPanelButtonGrid.add(jButton3, null);
 		}
@@ -429,13 +429,13 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		if (!centerOnMaster) {
 			// center on Screen
 			if (Globals.mainFrame != null) {
-				setLocation(Globals.mainFrame.getX() + Globals.locationDistanceX,
-						Globals.mainFrame.getY() + Globals.locationDistanceY);
+				setLocation(Globals.mainFrame.getX() + Globals.LOCATION_DISTANCE_X,
+						Globals.mainFrame.getY() + Globals.LOCATION_DISTANCE_Y);
 				logging.info(this, " ============================ ");
 				logging.info(this,
 						"setLocation based on mainFrame.getX(), .. "
-								+ (Globals.mainFrame.getX() + Globals.locationDistanceX) + ", "
-								+ +(Globals.mainFrame.getY() + Globals.locationDistanceY));
+								+ (Globals.mainFrame.getX() + Globals.LOCATION_DISTANCE_X) + ", "
+								+ +(Globals.mainFrame.getY() + Globals.LOCATION_DISTANCE_Y));
 			} else {
 				GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 				GraphicsConfiguration gc = gd.getDefaultConfiguration();

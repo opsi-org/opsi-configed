@@ -261,50 +261,50 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		panelActionLayout
 				.setHorizontalGroup(
 						panelActionLayout.createParallelGroup()
-								.addGroup(panelActionLayout.createSequentialGroup().addGap(Globals.hGapSize)
+								.addGroup(panelActionLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
 										.addComponent(buttonRemoveAllAssignments, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.hGapSize)
+										.addGap(Globals.HGAP_SIZE)
 										.addComponent(
 												labelRemoveAllAssignments, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-										.addGap(Globals.hGapSize))
-								.addGroup(panelActionLayout.createSequentialGroup().addGap(Globals.hGapSize)
+										.addGap(Globals.HGAP_SIZE))
+								.addGroup(panelActionLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
 										.addComponent(buttonSetAllAssignmentsToGloballySelectedPool,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.hGapSize)
+										.addGap(Globals.HGAP_SIZE)
 										.addComponent(labelSetAllAssignmentsToGloballySelectedPool,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-										.addGap(Globals.hGapSize))
-								.addGroup(panelActionLayout.createSequentialGroup().addGap(Globals.hGapSize)
+										.addGap(Globals.HGAP_SIZE))
+								.addGroup(panelActionLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
 										.addComponent(buttonSetAllAssignmentsToPoolFromSelectedRow,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.hGapSize)
+										.addGap(Globals.HGAP_SIZE)
 										.addComponent(labelSetAllAssignmentsToPoolFromSelectedRow,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-										.addGap(Globals.hGapSize)));
+										.addGap(Globals.HGAP_SIZE)));
 
 		JPanel panelSWx = new JPanel();
 		GroupLayout layoutSWx = new GroupLayout(panelSWx);
 		panelSWx.setLayout(layoutSWx);
 
-		layoutSWx.setVerticalGroup(layoutSWx.createSequentialGroup().addGap(Globals.vGapSize)
-				.addComponent(panelSWxLicencepool, 100, 200, Short.MAX_VALUE).addGap(Globals.vGapSize)
-				.addComponent(panelAction, 70, 70, 100).addGap(Globals.vGapSize)
+		layoutSWx.setVerticalGroup(layoutSWx.createSequentialGroup().addGap(Globals.VGAP_SIZE)
+				.addComponent(panelSWxLicencepool, 100, 200, Short.MAX_VALUE).addGap(Globals.VGAP_SIZE)
+				.addComponent(panelAction, 70, 70, 100).addGap(Globals.VGAP_SIZE)
 
 		);
 
 		layoutSWx.setHorizontalGroup(layoutSWx.createParallelGroup()
-				.addGroup(layoutSWx.createSequentialGroup().addGap(Globals.hGapSize)
+				.addGroup(layoutSWx.createSequentialGroup().addGap(Globals.HGAP_SIZE)
 						.addComponent(panelAction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addGap(Globals.hGapSize))
+						.addGap(Globals.HGAP_SIZE))
 				.addGroup(layoutSWx
-						.createSequentialGroup().addGap(Globals.hGapSize).addComponent(panelSWxLicencepool,
+						.createSequentialGroup().addGap(Globals.HGAP_SIZE).addComponent(panelSWxLicencepool,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.hGapSize)));
+						.addGap(Globals.HGAP_SIZE)));
 
 		setAdditionalPane(panelSWx);
 		// setTableModelSWxLicencepool( "zypper" );

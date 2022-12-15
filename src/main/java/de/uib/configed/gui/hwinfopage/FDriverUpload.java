@@ -58,13 +58,13 @@ public class FDriverUpload extends SecondaryFrame {
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addComponent(panelDriverUpload, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize));
+		layout.setVerticalGroup(
+				layout.createSequentialGroup().addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+						.addComponent(panelDriverUpload, 30, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE));
 
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addComponent(panelDriverUpload, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(panelDriverUpload, 100,
+				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		Containership cs_all = new Containership(getContentPane());
 		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.backLightBlue }, JPanel.class);

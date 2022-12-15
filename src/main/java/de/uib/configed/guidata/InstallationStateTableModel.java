@@ -86,7 +86,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	public static final String EMPTYFIELD = "_";
 	// public static final String NOT_AVAILABLEstring = "--";
-	public static final String CONFLICTstring = Globals.CONFLICTSTATEstring;
+	public static final String CONFLICTstring = Globals.CONFLICT_STATE_STRING;
 
 	public static final Color backgroundGrey = new Color(220, 220, 220);
 	public static final Color conflictBackColor = backgroundGrey;
@@ -1026,14 +1026,14 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					} else {
 						if (newValUntilNow == null) {
 							if (!(getChangedState(clientId, prod, ProductState.KEY_actionRequest) == null)) {
-								newValUntilNow = de.uib.configed.Globals.CONFLICTSTATEstring;
+								newValUntilNow = de.uib.configed.Globals.CONFLICT_STATE_STRING;
 							}
 						} else {
 							if (newValUntilNow
 									.equals(getChangedState(clientId, prod, ProductState.KEY_actionRequest))) {
 								// it remains
 							} else {
-								newValUntilNow = de.uib.configed.Globals.CONFLICTSTATEstring;
+								newValUntilNow = de.uib.configed.Globals.CONFLICT_STATE_STRING;
 							}
 						}
 					}

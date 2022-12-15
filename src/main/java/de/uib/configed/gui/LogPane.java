@@ -71,7 +71,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected JLabel labelSearch;
 	// protected JTextField fieldSearch;
 	protected JComboBox jComboBoxSearch;
-	protected final int fieldH = Globals.lineHeight;
+	protected final int fieldH = Globals.LINE_HEIGHT;
 	protected JButton buttonSearch;
 	protected JCheckBox jCheckBoxCaseSensitive;
 	protected JButton buttonFontPlus;
@@ -618,65 +618,65 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		layoutCommandpane.setHorizontalGroup(layoutCommandpane
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(layoutCommandpane.createSequentialGroup()
-						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-						.addComponent(jComboBoxSearch, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE)
-						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-						.addComponent(buttonSearch, Globals.buttonWidth / 2, Globals.buttonWidth / 2,
-								Globals.buttonWidth / 2)
-						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-						.addComponent(jCheckBoxCaseSensitive, Globals.buttonWidth, Globals.buttonWidth,
-								Globals.buttonWidth)
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addComponent(jComboBoxSearch, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addComponent(buttonSearch, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH / 2,
+								Globals.BUTTON_WIDTH / 2)
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addComponent(jCheckBoxCaseSensitive, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+								Globals.BUTTON_WIDTH)
 						// .addGap(Globals.gapSize/2,Globals.gapSize/2,Globals.gapSize)
-						.addComponent(buttonFontPlus, Globals.graphicButtonWidth / 2, Globals.graphicButtonWidth / 2,
-								Globals.graphicButtonWidth / 2)
-						.addGap(Globals.gapSize / 2, Globals.gapSize / 2, Globals.gapSize / 2)
-						.addComponent(buttonFontMinus, Globals.graphicButtonWidth / 2, Globals.graphicButtonWidth / 2,
-								Globals.graphicButtonWidth / 2)
-						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
+						.addComponent(buttonFontPlus, Globals.GRAPHIC_BUTTON_WIDTH / 2,
+								Globals.GRAPHIC_BUTTON_WIDTH / 2, Globals.GRAPHIC_BUTTON_WIDTH / 2)
+						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
+						.addComponent(buttonFontMinus, Globals.GRAPHIC_BUTTON_WIDTH / 2,
+								Globals.GRAPHIC_BUTTON_WIDTH / 2, Globals.GRAPHIC_BUTTON_WIDTH / 2)
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(labelDisplayRestriction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-						.addComponent(comboType, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE)
-						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addComponent(comboType, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(labelLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(spinnerMinLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGroup(layoutCommandpane.createParallelGroup()
 								.addComponent(sliderLevel, sliderW, sliderW, sliderW)
 								.addComponent(sliderLevel0, sliderW, sliderW, sliderW))
-						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)));
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)));
 
 		layoutCommandpane.setVerticalGroup(layoutCommandpane.createSequentialGroup()
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 				.addGroup(layoutCommandpane.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
 						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jComboBoxSearch, fieldH, fieldH, fieldH)
-						.addComponent(buttonSearch, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(jCheckBoxCaseSensitive, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight)
-						.addComponent(buttonFontPlus, Globals.graphicButtonWidth / 2, Globals.graphicButtonWidth / 2,
-								Globals.graphicButtonWidth / 2)
-						.addComponent(buttonFontMinus, Globals.graphicButtonWidth / 2, Globals.graphicButtonWidth / 2,
-								Globals.graphicButtonWidth / 2)
-						.addComponent(labelDisplayRestriction, Globals.lineHeight, Globals.lineHeight,
-								Globals.lineHeight)
-						.addComponent(comboType, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(labelLevel, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+						.addComponent(buttonSearch, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(jCheckBoxCaseSensitive, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(buttonFontPlus, Globals.GRAPHIC_BUTTON_WIDTH / 2,
+								Globals.GRAPHIC_BUTTON_WIDTH / 2, Globals.GRAPHIC_BUTTON_WIDTH / 2)
+						.addComponent(buttonFontMinus, Globals.GRAPHIC_BUTTON_WIDTH / 2,
+								Globals.GRAPHIC_BUTTON_WIDTH / 2, Globals.GRAPHIC_BUTTON_WIDTH / 2)
+						.addComponent(labelDisplayRestriction, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT)
+						.addComponent(comboType, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(labelLevel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(spinnerMinLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(sliderLevel, sliderH, sliderH, sliderH)
 						.addComponent(sliderLevel0, sliderH, sliderH, sliderH)
 				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 				// GroupLayout.PREFERRED_SIZE )
-				).addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2));
+				).addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
 		add(commandpane, BorderLayout.SOUTH);
 

@@ -159,7 +159,7 @@ public class PanelHostConfig extends JPanel {
 				// .addComponent( header, GroupLayout.PREFERRED_SIZE,
 				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				// .addGap(5)
-				.addComponent(editMapPanel, de.uib.configed.Globals.lineHeight * 2, GroupLayout.PREFERRED_SIZE,
+				.addComponent(editMapPanel, de.uib.configed.Globals.LINE_HEIGHT * 2, GroupLayout.PREFERRED_SIZE,
 						Short.MAX_VALUE)
 		// .addGap(20)
 		);

@@ -32,25 +32,20 @@ public class ImagePlusTextLabel extends JPanel {
 		GroupLayout layout = new GroupLayout(this);
 		setLayout(layout);
 
-		layout.setHorizontalGroup(
-				layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup()
-								.addGap(2)
-								.addComponent(imagefield, imageWidth, imageWidth, imageWidth)
-								.addGap(2)
-								.addComponent(textlabel, 10, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addGap(2)))
+		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addGap(2)
+						.addComponent(imagefield, imageWidth, imageWidth, imageWidth).addGap(2)
+						.addComponent(textlabel, 10, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(2)))
 
 		;
 
-		layout.setVerticalGroup(
-				layout.createSequentialGroup()
-						// .addGap(1)
-						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(imagefield, Globals.lineHeight - 5, Globals.lineHeight - 5,
-										Globals.lineHeight - 5)
-								.addComponent(textlabel, Globals.lineHeight - 5, Globals.lineHeight - 5,
-										Globals.lineHeight - 5)));
+		layout.setVerticalGroup(layout.createSequentialGroup()
+				// .addGap(1)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+						.addComponent(imagefield, Globals.LINE_HEIGHT - 5, Globals.LINE_HEIGHT - 5,
+								Globals.LINE_HEIGHT - 5)
+						.addComponent(textlabel, Globals.LINE_HEIGHT - 5, Globals.LINE_HEIGHT - 5,
+								Globals.LINE_HEIGHT - 5)));
 
 	}
 

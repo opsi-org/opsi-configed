@@ -81,37 +81,30 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 		GroupLayout layout = new GroupLayout(this);
 
 		this.setLayout(layout);
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGap(2 * Globals.gapSize)
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE).addGroup(layout
+				.createParallelGroup(center)
+				.addComponent(lbl_uploadFrom, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(tf_path, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(btn_filechooser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
 				.addGroup(layout.createParallelGroup(center)
-						.addComponent(lbl_uploadFrom, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(tf_path, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(btn_filechooser, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight))
-				.addGroup(layout.createParallelGroup(center)
-						.addComponent(lbl_uploadTo, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(cb_autocompletion, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight)
-						.addComponent(btn_autocompletion, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight))
-				.addGap(2 * Globals.gapSize));
+						.addComponent(lbl_uploadTo, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(cb_autocompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(btn_autocompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
+				.addGap(2 * Globals.GAP_SIZE));
 
-		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addGap(2 * Globals.gapSize)
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
 
-				.addGroup(layout.createParallelGroup()
-						.addComponent(lbl_uploadFrom, PREF, PREF, PREF)
+				.addGroup(layout.createParallelGroup().addComponent(lbl_uploadFrom, PREF, PREF, PREF)
 						.addComponent(lbl_uploadTo, PREF, PREF, PREF))
-				.addGap(Globals.gapSize)
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(layout.createParallelGroup()
-						.addGroup(layout.createSequentialGroup()
-								.addComponent(tf_path, PREF, PREF, MAX)
-								.addComponent(btn_filechooser, Globals.buttonWidth, Globals.buttonWidth,
-										Globals.buttonWidth))
-						.addGroup(layout.createSequentialGroup()
-								.addComponent(cb_autocompletion, PREF, PREF, MAX)
+						.addGroup(layout.createSequentialGroup().addComponent(tf_path, PREF, PREF, MAX).addComponent(
+								btn_filechooser, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH))
+						.addGroup(layout.createSequentialGroup().addComponent(cb_autocompletion, PREF, PREF, MAX)
 								.addComponent(btn_autocompletion, PREF, PREF, PREF)))
-				.addGap(2 * Globals.gapSize));
+				.addGap(2 * Globals.GAP_SIZE));
 
 	}
 

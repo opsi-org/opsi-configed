@@ -39,9 +39,7 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 	private void initComponents() {
 
 		panelReconciliation = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleReconciliation"),
-				tablesMaxWidth,
-				false, // editing
+				configed.getResourceValue("ConfigedMain.Licences.SectiontitleReconciliation"), tablesMaxWidth, false, // editing
 				0, // popupPosition
 				true// switchLineColors
 				, null // default popups
@@ -55,28 +53,25 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout((JPanel) this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-								.addContainerGap()
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-										// for testing purposes:
-										// .addComponent(testfield, javax.swing.GroupLayout.Alignment.LEADING,
-										// javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-										// Short.MAX_VALUE)
-										.addComponent(panelReconciliation, javax.swing.GroupLayout.Alignment.LEADING,
-												javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addContainerGap()));
+		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup().addContainerGap()
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+								// for testing purposes:
+								// .addComponent(testfield, javax.swing.GroupLayout.Alignment.LEADING,
+								// javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+								// Short.MAX_VALUE)
+								.addComponent(panelReconciliation, javax.swing.GroupLayout.Alignment.LEADING,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE))
+						.addContainerGap()));
 		layout.setVerticalGroup(
 				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup()
-								.addContainerGap()
+						.addGroup(layout.createSequentialGroup().addContainerGap()
 								// .addComponent(testfield, javax.swing.GroupLayout.DEFAULT_SIZE,
 								// javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE)
 								.addComponent(panelReconciliation, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE,
 										Short.MAX_VALUE)
-								.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize))
+								.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE))
 
 		);
 	}

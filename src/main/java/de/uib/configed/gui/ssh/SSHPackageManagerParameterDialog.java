@@ -65,7 +65,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		setIconImage(Globals.mainIcon);
 		// additionalPane = pane;
 		// }
-		this.setSize(new Dimension(de.uib.configed.Globals.dialogFrameDefaultWidth, frameHeight));
+		this.setSize(new Dimension(de.uib.configed.Globals.DIALOG_FRAME_DEFAULT_WIDTH, frameHeight));
 		this.centerOn(de.uib.configed.Globals.mainFrame);
 		this.setBackground(Globals.backLightBlue);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

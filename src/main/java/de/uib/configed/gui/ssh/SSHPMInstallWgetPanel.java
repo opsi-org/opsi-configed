@@ -91,7 +91,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 		});
 
 		// perfekt für PMInstall
-		wgetAuthPanel.setLabelSizes(Globals.buttonWidth * 2, Globals.buttonHeight);
+		wgetAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH * 2, Globals.BUTTON_HEIGHT);
 
 		cb_includeZsync = new JCheckBox();
 		cb_includeZsync.setSelected(true);
@@ -111,26 +111,21 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 		});
 
 		cb_compareMD5 = new JCheckBox();
-		cb_compareMD5.setSelected(true);
-		;
+		cb_compareMD5.setSelected(true);;
 		cb_compareMD5.setToolTipText(configed.getResourceValue(
 				"SSHConnection.ParameterDialog.opsipackagemanager_install.jCheckBoxCompareMD5.tooltip"));
 	}
 
 	public SSHCommand_Template getCommand(SSHCommand_Template commands) {
-		if ((tf_url.getText() == null)
-				|| (tf_url.getText().trim().equals(""))
+		if ((tf_url.getText() == null) || (tf_url.getText().trim().equals(""))
 				|| (tf_url.getText().trim().equals(url_def_text)))
 			return null;
 
 		CommandWget wget = getWgetCommand();
 		if (wget != null) {
 			if (((JCheckBox) wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
-				wget.setAuthentication(" --no-check-certificate --user="
-						+ wgetAuthPanel.getUser()
-						+ " --password="
-						+ wgetAuthPanel.getPw()
-						+ " ");
+				wget.setAuthentication(" --no-check-certificate --user=" + wgetAuthPanel.getUser() + " --password="
+						+ wgetAuthPanel.getPw() + " ");
 			} else
 				wget.setAuthentication(" ");
 			commands.addCommand((SSHCommand) wget);
@@ -141,18 +136,14 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 			// ToDo: Folgender Parameter String (befehl) muss noch in die klasse
 			// sshcommandfactory ausgelagert werden
 			// if (commands != null)
-			commands.addCommand(new Empty_Command("md5_vergleich",
-					" if [ -z $((cat " + product + ".md5" + ") | " +
-							"grep $(md5sum " + product + "  | head -n1 | cut -d \" \" -f1)) ] ; " +
-							" then echo \""
-							+ configed.getResourceValue(
-									"SSHConnection.ParameterDialog.opsipackagemanager_install.md5sumsAreNotEqual")
-							+
-							"\"; else echo \""
-							+ configed.getResourceValue(
-									"SSHConnection.ParameterDialog.opsipackagemanager_install.md5sumsAreEqual")
-							+ "\"; fi",
-					"", false));
+			commands.addCommand(new Empty_Command("md5_vergleich", " if [ -z $((cat " + product + ".md5" + ") | "
+					+ "grep $(md5sum " + product + "  | head -n1 | cut -d \" \" -f1)) ] ; " + " then echo \""
+					+ configed.getResourceValue(
+							"SSHConnection.ParameterDialog.opsipackagemanager_install.md5sumsAreNotEqual")
+					+ "\"; else echo \""
+					+ configed.getResourceValue(
+							"SSHConnection.ParameterDialog.opsipackagemanager_install.md5sumsAreEqual")
+					+ "\"; fi", "", false));
 		}
 		return commands;
 	}
@@ -205,65 +196,58 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGap(2 * Globals.gapSize)
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
 				.addGroup(layout.createParallelGroup(baseline)
-						.addComponent(lbl_url, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(tf_url, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
+						.addComponent(lbl_url, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(tf_url, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
 				.addGroup(layout.createParallelGroup(baseline)
-						.addComponent(lbl_dir, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(cb_autocompletion, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight)
-						.addComponent(btn_autocompletion, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight))
+						.addComponent(lbl_dir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(cb_autocompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(btn_autocompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
 				.addGroup(layout.createParallelGroup(baseline)
-						.addComponent(lbl_includeZsync, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight)
-						.addComponent(cb_includeZsync, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(lbl_includeZsync2, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight))
+						.addComponent(lbl_includeZsync, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(cb_includeZsync, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(lbl_includeZsync2, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
 				.addGroup(layout.createParallelGroup(baseline)
-						.addComponent(lbl_compareMd5Sum, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight)
-						.addComponent(cb_compareMD5, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
+						.addComponent(lbl_compareMd5Sum, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(cb_compareMD5, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
 				.addGroup(layout.createParallelGroup(baseline)
-						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH), Globals.buttonHeight,
-								Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH), Globals.buttonHeight,
-								Globals.buttonHeight, Globals.buttonHeight))
-				.addGroup(layout.createParallelGroup(baseline)
-						.addComponent(wgetAuthPanel, PREF, PREF, PREF))
-				.addGap(2 * Globals.gapSize));
+						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH), Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH), Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGroup(layout.createParallelGroup(baseline).addComponent(wgetAuthPanel, PREF, PREF, PREF))
+				.addGap(2 * Globals.GAP_SIZE));
 
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup()
-						.addGap(2 * Globals.gapSize)
-						.addGroup(layout.createParallelGroup()
-								.addComponent(lbl_url, PREF, PREF, PREF)
-								.addComponent(lbl_dir, PREF, PREF, PREF)
-								.addComponent(lbl_includeZsync, PREF, PREF, PREF)
-								.addComponent(lbl_compareMd5Sum, PREF, PREF, PREF)
-								.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH), PREF, PREF,
-										PREF))
-						.addGap(Globals.gapSize)
-						.addGroup(layout.createParallelGroup()
+		layout.setHorizontalGroup(layout.createParallelGroup().addGroup(layout.createSequentialGroup()
+				.addGap(2 * Globals.GAP_SIZE)
+				.addGroup(layout.createParallelGroup().addComponent(lbl_url, PREF, PREF, PREF)
+						.addComponent(lbl_dir, PREF, PREF, PREF).addComponent(lbl_includeZsync, PREF, PREF, PREF)
+						.addComponent(lbl_compareMd5Sum, PREF, PREF, PREF)
+						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH), PREF, PREF, PREF))
+				.addGap(Globals.GAP_SIZE)
+				.addGroup(
+						layout.createParallelGroup()
+								.addGroup(layout.createSequentialGroup().addComponent(tf_url, Globals.BUTTON_WIDTH,
+										Globals.BUTTON_WIDTH, MAX))
 								.addGroup(layout.createSequentialGroup()
-										.addComponent(tf_url, Globals.buttonWidth, Globals.buttonWidth, MAX))
-								.addGroup(layout.createSequentialGroup()
-										.addComponent(cb_autocompletion, Globals.buttonWidth, Globals.buttonWidth, MAX)
+										.addComponent(cb_autocompletion, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+												MAX)
 										.addComponent(btn_autocompletion, PREF, PREF, PREF))
-								.addGroup(layout.createSequentialGroup()
-										.addComponent(cb_includeZsync, PREF, PREF, PREF)
-										.addGap(Globals.gapSize)
-										.addComponent(lbl_includeZsync2, PREF, PREF, PREF))
-								.addGroup(layout.createSequentialGroup()
-										.addComponent(cb_compareMD5, PREF, PREF, PREF))
-								.addGroup(layout.createSequentialGroup()
-										.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH), PREF,
-												PREF, PREF)))
-						.addGap(Globals.gapSize))
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(wgetAuthPanel, PREF, PREF, MAX))
-				.addGap(Globals.gapSize));
+								.addGroup(layout.createSequentialGroup().addComponent(cb_includeZsync, PREF, PREF, PREF)
+										.addGap(Globals.GAP_SIZE).addComponent(lbl_includeZsync2, PREF, PREF, PREF))
+								.addGroup(layout.createSequentialGroup().addComponent(cb_compareMD5, PREF, PREF, PREF))
+								.addGroup(layout.createSequentialGroup().addComponent(
+										wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH), PREF, PREF, PREF)))
+				.addGap(Globals.GAP_SIZE))
+				.addGroup(layout.createSequentialGroup().addComponent(wgetAuthPanel, PREF, PREF, MAX))
+				.addGap(Globals.GAP_SIZE));
 	}
 }

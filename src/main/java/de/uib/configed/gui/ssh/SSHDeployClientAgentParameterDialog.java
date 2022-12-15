@@ -264,8 +264,8 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			// "***"); //configed.getResourceValue("SSHConnection.passwordButtonText"));
 			// btn_showPassw.setPreferredSize(new Dimension(Globals.squareButtonWidth,
 			// Globals.buttonHeight));
-			btn_showPassw.setPreferredSize(new Dimension(de.uib.configed.Globals.graphicButtonWidth + 15,
-					de.uib.configed.Globals.buttonHeight));
+			btn_showPassw.setPreferredSize(new Dimension(de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH + 15,
+					de.uib.configed.Globals.BUTTON_HEIGHT));
 			btn_showPassw.setToolTipText(
 					configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.showPassword.tooltip"));
 			btn_showPassw.addActionListener(new ActionListener() {
@@ -486,39 +486,48 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		GroupLayout winAuthPanelLayout = new GroupLayout((JComponent) winAuthPanel);
 		winAuthPanel.setLayout(winAuthPanelLayout);
 
-		winAuthPanelLayout.setHorizontalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.gapSize)
-				.addGroup(winAuthPanelLayout.createParallelGroup(leading).addGroup(winAuthPanelLayout
-						.createSequentialGroup().addGap(Globals.gapSize)
-						.addComponent(lbl_user, Globals.buttonWidth, Globals.buttonWidth, Globals.buttonWidth)
-						.addGap(Globals.gapSize)
-						.addComponent(tf_user, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.gapSize).addGap(Globals.iconWidth).addGap(Globals.gapSize))
-						.addGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.gapSize)
-								.addComponent(lbl_passw, Globals.buttonWidth, Globals.buttonWidth, Globals.buttonWidth)
-								.addGap(Globals.gapSize)
-								.addComponent(tf_passw, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE)
-								.addGap(Globals.gapSize)
-								.addComponent(btn_showPassw, Globals.iconWidth, Globals.iconWidth, Globals.iconWidth)
-								.addGap(Globals.gapSize)))
-				.addGap(Globals.gapSize));
-		winAuthPanelLayout.setVerticalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.gapSize)
+		winAuthPanelLayout
+				.setHorizontalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addGroup(winAuthPanelLayout
+								.createParallelGroup(
+										leading)
+								.addGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+										.addComponent(lbl_user, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+												Globals.BUTTON_WIDTH)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(tf_user, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												Short.MAX_VALUE)
+										.addGap(Globals.GAP_SIZE).addGap(Globals.ICON_WIDTH).addGap(Globals.GAP_SIZE))
+								.addGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+										.addComponent(lbl_passw, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+												Globals.BUTTON_WIDTH)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(tf_passw, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+												Short.MAX_VALUE)
+										.addGap(Globals.GAP_SIZE)
+										.addComponent(btn_showPassw, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+												Globals.ICON_WIDTH)
+										.addGap(Globals.GAP_SIZE)))
+						.addGap(Globals.GAP_SIZE));
+		winAuthPanelLayout.setVerticalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(winAuthPanelLayout.createParallelGroup(center)
-						.addComponent(lbl_user, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(tf_user, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(Globals.gapSize)
+						.addComponent(lbl_user, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(tf_user, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(winAuthPanelLayout.createParallelGroup(center)
-						.addComponent(lbl_passw, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(tf_passw, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(btn_showPassw, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(Globals.gapSize));
+						.addComponent(lbl_passw, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(tf_passw, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(btn_showPassw, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
+				.addGap(Globals.GAP_SIZE));
 
 		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
 		inputPanel.setLayout(inputPanelLayout);
-		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize)
+		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup()
 						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(lbl_client, PREF, PREF, PREF)
-								.addGap(Globals.gapSize).addComponent(tf_client, PREF, PREF, Short.MAX_VALUE))
-						.addGap(Globals.gapSize)
+								.addGap(Globals.GAP_SIZE).addComponent(tf_client, PREF, PREF, Short.MAX_VALUE))
+						.addGap(Globals.GAP_SIZE)
 						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(lbl_userdata, PREF, PREF, PREF))
 						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(btn_copy_selected_clients, PREF,
 								PREF, PREF))
@@ -531,14 +540,14 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 												.addComponent(lbl_applySudo, PREF, PREF, PREF)
 												.addComponent(lbl_verbosity, PREF, PREF, PREF)
 												.addComponent(lbl_ignorePing, PREF, PREF, PREF))
-										.addGap(2 * Globals.gapSize)
+										.addGap(2 * Globals.GAP_SIZE)
 										.addGroup(inputPanelLayout.createParallelGroup().addComponent(panelFinalAction)
-												.addComponent(cb_applySudo, Globals.iconWidth, Globals.iconWidth,
-														Globals.iconWidth)
-												.addComponent(cb_ignorePing, Globals.iconWidth, Globals.iconWidth,
-														Globals.iconWidth)
-												.addComponent(cb_verbosity, Globals.iconWidth, Globals.iconWidth,
-														Globals.iconWidth))
+												.addComponent(cb_applySudo, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+														Globals.ICON_WIDTH)
+												.addComponent(cb_ignorePing, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+														Globals.ICON_WIDTH)
+												.addComponent(cb_verbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+														Globals.ICON_WIDTH))
 
 						// .addGap(Globals.gapSize)
 						)
@@ -548,37 +557,43 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 				// )
 				));
 
-		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize)
+		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						// .addGap(Globals.minGapSize)
-						.addComponent(lbl_client, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(tf_client, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
+						.addComponent(lbl_client, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(tf_client, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 				// .addGap(GroupLayout.PREFERRED_SIZE)
-				).addGap(Globals.gapSize)
+				).addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
-						btn_copy_selected_clients, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(Globals.gapSize * 2)
-				.addGroup(inputPanelLayout.createParallelGroup(leading).addComponent(lbl_userdata, Globals.buttonHeight,
-						Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(Globals.gapSize).addComponent(winAuthPanel, PREF, PREF, PREF).addGap(Globals.gapSize * 2)
+						btn_copy_selected_clients, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGap(Globals.GAP_SIZE * 2)
+				.addGroup(inputPanelLayout.createParallelGroup(leading).addComponent(lbl_userdata,
+						Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGap(Globals.GAP_SIZE).addComponent(winAuthPanel, PREF, PREF, PREF).addGap(Globals.GAP_SIZE * 2)
 
 				.addGroup(
 						inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(lbl_finalize, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight)
+								.addComponent(lbl_finalize, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT)
 								.addComponent(panelFinalAction))
 
-				.addGap(Globals.gapSize / 2)
+				.addGap(Globals.GAP_SIZE / 2)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_ignorePing, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(cb_ignorePing, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
+						.addComponent(lbl_ignorePing, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(cb_ignorePing, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_applySudo, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(cb_applySudo, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(Globals.gapSize)
+						.addComponent(lbl_applySudo, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(cb_applySudo, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_verbosity, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(cb_verbosity, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(Globals.gapSize));
+						.addComponent(lbl_verbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(cb_verbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
+				.addGap(Globals.GAP_SIZE));
 	}
 }

@@ -180,7 +180,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			((JCheckBox) wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH)).setSelected(false);
 			wgetAuthPanel.isOpen = true;
 			wgetAuthPanel.close();
-			wgetAuthPanel.setLabelSizes(Globals.buttonWidth + 67, Globals.buttonHeight);
+			wgetAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH + 67, Globals.BUTTON_HEIGHT);
 		}
 		{
 			// btn_help = new JButton();
@@ -294,7 +294,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		int MAX = Short.MAX_VALUE;
 		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup()
 
-				.addGap(de.uib.configed.Globals.gapSize)
+				.addGap(de.uib.configed.Globals.GAP_SIZE)
 
 				.addGroup(inputPanelLayout.createParallelGroup().addGroup(inputPanelLayout.createSequentialGroup()
 						.addGroup(inputPanelLayout.createParallelGroup().addComponent(lbl_url, PREF, PREF, PREF)
@@ -307,46 +307,51 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 								.addGroup(inputPanelLayout.createSequentialGroup().addComponent(tf_url, PREF, PREF,
 										Short.MAX_VALUE))
 								.addGroup(inputPanelLayout.createSequentialGroup()
-										.addComponent(cb_dir, de.uib.configed.Globals.buttonWidth,
-												de.uib.configed.Globals.buttonWidth, Short.MAX_VALUE)
+										.addComponent(cb_dir, de.uib.configed.Globals.BUTTON_WIDTH,
+												de.uib.configed.Globals.BUTTON_WIDTH, Short.MAX_VALUE)
 										.addComponent(btn_searchDir, PREF, PREF, PREF))
-								.addComponent(cb_verbosity, GroupLayout.Alignment.LEADING, Globals.iconWidth,
-										Globals.iconWidth, Globals.iconWidth)
+								.addComponent(cb_verbosity, GroupLayout.Alignment.LEADING, Globals.ICON_WIDTH,
+										Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 								.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
 										GroupLayout.Alignment.LEADING, PREF, PREF, PREF)
-								.addComponent(tf_freeInput, de.uib.configed.Globals.buttonWidth,
-										de.uib.configed.Globals.buttonWidth, Short.MAX_VALUE)))
+								.addComponent(tf_freeInput, de.uib.configed.Globals.BUTTON_WIDTH,
+										de.uib.configed.Globals.BUTTON_WIDTH, Short.MAX_VALUE)))
 						.addComponent(wgetAuthPanel, PREF, PREF, MAX))
-				.addGap(de.uib.configed.Globals.gapSize));
+				.addGap(de.uib.configed.Globals.GAP_SIZE));
 
 		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup()
-				.addGap(de.uib.configed.Globals.gapSize)
+				.addGap(de.uib.configed.Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(tf_url, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(lbl_url, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(de.uib.configed.Globals.gapSize)
+						.addComponent(tf_url, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(lbl_url, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGap(de.uib.configed.Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(btn_searchDir, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(cb_dir, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(lbl_dir, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(de.uib.configed.Globals.gapSize)
+						.addComponent(btn_searchDir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(cb_dir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(lbl_dir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGap(de.uib.configed.Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(cb_verbosity, GroupLayout.Alignment.LEADING, Globals.buttonHeight,
-								Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(lbl_verbosity, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(de.uib.configed.Globals.gapSize)
+						.addComponent(cb_verbosity, GroupLayout.Alignment.LEADING, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(lbl_verbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
+				.addGap(de.uib.configed.Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH), Globals.buttonHeight,
-								Globals.buttonHeight, Globals.buttonHeight)
+						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH), Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
-								GroupLayout.Alignment.LEADING, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight))
+								GroupLayout.Alignment.LEADING, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
 				.addComponent(wgetAuthPanel, PREF, PREF, PREF)
 
-				.addGap(de.uib.configed.Globals.gapSize)
-				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(tf_freeInput, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(lbl_freeInput, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(de.uib.configed.Globals.gapSize).addContainerGap(70, 70));
+				.addGap(de.uib.configed.Globals.GAP_SIZE)
+				.addGroup(
+						inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(tf_freeInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT)
+								.addComponent(lbl_freeInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT))
+				.addGap(de.uib.configed.Globals.GAP_SIZE).addContainerGap(70, 70));
 	}
 }

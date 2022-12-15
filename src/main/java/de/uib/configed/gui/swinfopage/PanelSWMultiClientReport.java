@@ -249,152 +249,156 @@ public class PanelSWMultiClientReport extends JPanel {
 		subpanelPreConfig.setLayout(glPreConfig);
 		glPreConfig.setVerticalGroup(glPreConfig.createSequentialGroup()
 
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 
 				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelExportDirectory, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(buttonCallSelectExportDirectory, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight)
-						.addComponent(fieldExportDirectory, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addComponent(labelExportDirectory, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT)
+						.addComponent(buttonCallSelectExportDirectory, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(fieldExportDirectory, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT))
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 
 				.addComponent(panelSelectExportType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 
 				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelFilenamePrefix, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(fieldFilenamePrefix, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addComponent(labelFilenamePrefix, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT)
+						.addComponent(fieldFilenamePrefix, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT))
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 
 				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
-						labelFilenameInformation, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-				.addGroup(
-						glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(labelWithMsUpdates, Globals.lineHeight, Globals.lineHeight,
-										Globals.lineHeight)
-								.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						labelFilenameInformation, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelWithMsUpdates2, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+						.addComponent(labelWithMsUpdates, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(labelWithMsUpdates2, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT)
 						.addComponent(checkWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 				.addGroup(glPreConfig.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelAskForOverwrite, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+						.addComponent(labelAskForOverwrite, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT)
 						.addComponent(checkAskForOverwrite, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize));
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE));
 
 		glPreConfig.setHorizontalGroup(glPreConfig.createParallelGroup()
 
 				.addGroup(glPreConfig.createSequentialGroup()
-						.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
-						.addComponent(labelExportDirectory, de.uib.configed.Globals.buttonWidth,
-								de.uib.configed.Globals.buttonWidth * 2, de.uib.configed.Globals.buttonWidth * 2)
+						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
+						.addComponent(labelExportDirectory, de.uib.configed.Globals.BUTTON_WIDTH,
+								de.uib.configed.Globals.BUTTON_WIDTH * 2, de.uib.configed.Globals.BUTTON_WIDTH * 2)
 
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 
-						.addComponent(buttonCallSelectExportDirectory, Globals.graphicButtonWidth,
-								Globals.graphicButtonWidth, Globals.graphicButtonWidth)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(fieldExportDirectory, 40, de.uib.configed.Globals.buttonWidth * 2,
+						.addComponent(buttonCallSelectExportDirectory, Globals.GRAPHIC_BUTTON_WIDTH,
+								Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(fieldExportDirectory, 40, de.uib.configed.Globals.BUTTON_WIDTH * 2,
 								Short.MAX_VALUE)
-						.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize))
+						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE))
 
 				.addGroup(glPreConfig.createSequentialGroup()
-						.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
+						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
 						.addComponent(panelSelectExportType, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 
 				.addGroup(glPreConfig.createSequentialGroup()
-						.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
-						.addComponent(labelFilenamePrefix, de.uib.configed.Globals.buttonWidth,
-								de.uib.configed.Globals.buttonWidth * 2, de.uib.configed.Globals.buttonWidth * 2)
+						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
+						.addComponent(labelFilenamePrefix, de.uib.configed.Globals.BUTTON_WIDTH,
+								de.uib.configed.Globals.BUTTON_WIDTH * 2, de.uib.configed.Globals.BUTTON_WIDTH * 2)
 
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 
-						.addGap(Globals.graphicButtonWidth, Globals.graphicButtonWidth, Globals.graphicButtonWidth)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(fieldFilenamePrefix, de.uib.configed.Globals.buttonWidth / 2,
-								de.uib.configed.Globals.buttonWidth, Short.MAX_VALUE / 2)
-						.addGap(20, de.uib.configed.Globals.buttonWidth, Short.MAX_VALUE / 2)
-						.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize))
+						.addGap(Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH,
+								Globals.GRAPHIC_BUTTON_WIDTH)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(fieldFilenamePrefix, de.uib.configed.Globals.BUTTON_WIDTH / 2,
+								de.uib.configed.Globals.BUTTON_WIDTH, Short.MAX_VALUE / 2)
+						.addGap(20, de.uib.configed.Globals.BUTTON_WIDTH, Short.MAX_VALUE / 2)
+						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE))
 				.addGroup(glPreConfig.createSequentialGroup()
-						.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
+						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
 						.addComponent(labelFilenameInformation, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGroup(
-						glPreConfig.createSequentialGroup()
-								.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
-								.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								.addComponent(labelWithMsUpdates, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize))
-				.addGroup(
-						glPreConfig.createSequentialGroup()
-								.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
-								.addComponent(checkWithMsUpdates2, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								.addComponent(labelWithMsUpdates2, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize))
 				.addGroup(glPreConfig.createSequentialGroup()
-						.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
+						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
+						.addComponent(checkWithMsUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(labelWithMsUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE))
+				.addGroup(glPreConfig.createSequentialGroup()
+						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
+						.addComponent(checkWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(labelWithMsUpdates2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE))
+				.addGroup(glPreConfig.createSequentialGroup()
+						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
 						.addComponent(checkAskForOverwrite, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize).addComponent(labelAskForOverwrite,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(labelAskForOverwrite, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
 
 		);
 
 		glGlobal.setVerticalGroup(glGlobal.createSequentialGroup()
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 				.addGroup(glGlobal.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
-						labelSwauditMultiClientReport1, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
+						labelSwauditMultiClientReport1, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				.addGroup(glGlobal.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
-						labelSwauditMultiClientReport2, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+						labelSwauditMultiClientReport2, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 
 				.addComponent(subpanelPreConfig, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 
 				.addGroup(glGlobal.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(buttonStart,
-						Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
+						Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
 
 		);
 
-		glGlobal.setHorizontalGroup(
-				glGlobal.createParallelGroup().addGap(3 * Globals.hGapSize, 3 * Globals.hGapSize, 3 * Globals.hGapSize)
-						.addGroup(glGlobal.createSequentialGroup()
-								.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
-								.addComponent(labelSwauditMultiClientReport1, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Short.MAX_VALUE))
+		glGlobal.setHorizontalGroup(glGlobal.createParallelGroup()
+				.addGap(3 * Globals.HGAP_SIZE, 3 * Globals.HGAP_SIZE, 3 * Globals.HGAP_SIZE)
+				.addGroup(glGlobal.createSequentialGroup()
+						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
+						.addComponent(labelSwauditMultiClientReport1, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE))
 
-						.addGroup(glGlobal.createSequentialGroup()
-								.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
-								.addComponent(labelSwauditMultiClientReport2, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Short.MAX_VALUE))
-						.addGroup(glGlobal.createSequentialGroup()
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+				.addGroup(glGlobal.createSequentialGroup()
+						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
+						.addComponent(labelSwauditMultiClientReport2, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE))
+				.addGroup(
+						glGlobal.createSequentialGroup().addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 								.addComponent(subpanelPreConfig, 40, 40, Short.MAX_VALUE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize))
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE))
 
-						.addGroup(glGlobal.createSequentialGroup()
-								.addGap(2 * Globals.hGapSize, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
-								.addComponent(buttonStart, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(3 * Globals.hGapSize, 3 * Globals.hGapSize, 3 * Globals.hGapSize));
+				.addGroup(glGlobal.createSequentialGroup()
+						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
+						.addComponent(buttonStart, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(3 * Globals.HGAP_SIZE, 3 * Globals.HGAP_SIZE, 3 * Globals.HGAP_SIZE));
 	}
 
 	public static void main(String[] args) {

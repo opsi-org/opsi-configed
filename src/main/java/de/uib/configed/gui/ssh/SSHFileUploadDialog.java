@@ -90,8 +90,8 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		wgetDefText = configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url");
 		init();
 		initGUI();
-		this.setSize(de.uib.configed.Globals.dialogFrameDefaultWidth,
-				de.uib.configed.Globals.dialogFrameDefaultHeight + 100);
+		this.setSize(de.uib.configed.Globals.DIALOG_FRAME_DEFAULT_WIDTH,
+				de.uib.configed.Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100);
 		this.centerOn(de.uib.configed.Globals.mainFrame);
 		this.setBackground(Globals.backLightBlue);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -126,7 +126,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		addListener(rb_local);
 
 		lbl_url = new JLabel();
-		wgetAuthPanel.setLabelSizes(Globals.buttonWidth + 90, Globals.buttonHeight);
+		wgetAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH + 90, Globals.BUTTON_HEIGHT);
 
 		lbl_url.setText(configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_url"));
 		lbl_overwriteExisting = new JLabel();
@@ -249,10 +249,11 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		h_parallelGroup = inputPanelLayout.createSequentialGroup().addGroup(inputPanelLayout.createParallelGroup()
 				.addGroup(inputPanelLayout.createSequentialGroup().addComponent(lbl_modules_from, PREF, PREF, PREF))
 				.addComponent(lbl_set_rights, PREF, PREF, PREF).addComponent(lbl_overwriteExisting, PREF, PREF, PREF))
-				.addGap(Globals.gapSize)
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup()
-						.addComponent(cb_setRights, Globals.iconWidth, Globals.iconWidth, Globals.iconWidth)
-						.addComponent(cb_overwriteExisting, Globals.iconWidth, Globals.iconWidth, Globals.iconWidth));
+						.addComponent(cb_setRights, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+						.addComponent(cb_overwriteExisting, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+								Globals.ICON_WIDTH));
 		v_parallelGroup = inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER);
 	}
 
@@ -264,64 +265,68 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 			inputPanel.setLayout(inputPanelLayout);
 
 			initGUI_additional();
-			inputPanelLayout.setHorizontalGroup(inputPanelLayout.createParallelGroup().addGap(Globals.gapSize).addGroup(
-					inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize * 2).addGroup(inputPanelLayout
-							.createParallelGroup().addGap(Globals.gapSize * 2)
-							.addGroup(inputPanelLayout.createSequentialGroup().addComponent(rb_local, PREF, PREF, MAX))
-							.addGap(Globals.gapSize * 2)
-							.addGroup(inputPanelLayout.createSequentialGroup()
-									.addComponent(rb_from_server, PREF, PREF, MAX))
-							.addGroup(inputPanelLayout.createSequentialGroup().addGroup(h_parallelGroup) // parallelGroup can be overwritten by child
-																																																																																																																																																// classes
-							)).addGap(Globals.gapSize))
-					.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize).addGroup(inputPanelLayout
-							.createParallelGroup().addGap(Globals.gapSize * 2)
-							.addGroup(GroupLayout.Alignment.LEADING,
-									inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize * 3)
-											.addComponent(tf_local_path, Globals.buttonWidth, Globals.buttonWidth, MAX)
-											.addGap(Globals.gapSize).addComponent(btn_filechooser, PREF, PREF, PREF)
-											.addGap(Globals.gapSize))
-							.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize * 3)
-									.addGroup(inputPanelLayout.createParallelGroup()
-											.addComponent(lbl_url, PREF, PREF, PREF)
-											.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
-													PREF, PREF, PREF))
-									.addGap(Globals.gapSize)
-									.addGroup(inputPanelLayout.createParallelGroup()
-											.addComponent(tf_url, Globals.buttonWidth, Globals.buttonWidth, MAX)
-											.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
-													PREF, PREF, PREF)))
-							.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize)
-									.addComponent(wgetAuthPanel, PREF, PREF, MAX)))
-							.addGap(Globals.gapSize))
-					.addGap(Globals.gapSize));
-			inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize)
-					.addComponent(lbl_modules_from, PREF, PREF, PREF).addGap(Globals.gapSize).addGap(Globals.gapSize)
-					.addComponent(rb_local, PREF, PREF, PREF).addGap(Globals.gapSize)
+			inputPanelLayout.setHorizontalGroup(inputPanelLayout.createParallelGroup().addGap(Globals.GAP_SIZE)
+					.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
+							.addGroup(inputPanelLayout.createParallelGroup().addGap(Globals.GAP_SIZE * 2)
+									.addGroup(inputPanelLayout
+											.createSequentialGroup().addComponent(rb_local, PREF, PREF, MAX))
+									.addGap(Globals.GAP_SIZE * 2)
+									.addGroup(inputPanelLayout.createSequentialGroup().addComponent(rb_from_server,
+											PREF, PREF, MAX))
+									.addGroup(inputPanelLayout.createSequentialGroup().addGroup(h_parallelGroup) // parallelGroup can be overwritten by child
+																																																																																																																																																			// classes
+									)).addGap(Globals.GAP_SIZE))
+					.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+							.addGroup(inputPanelLayout.createParallelGroup().addGap(Globals.GAP_SIZE * 2).addGroup(
+									GroupLayout.Alignment.LEADING,
+									inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
+											.addComponent(tf_local_path, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+													MAX)
+											.addGap(Globals.GAP_SIZE).addComponent(btn_filechooser, PREF, PREF, PREF)
+											.addGap(Globals.GAP_SIZE))
+									.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
+											.addGroup(inputPanelLayout.createParallelGroup()
+													.addComponent(lbl_url, PREF, PREF, PREF).addComponent(
+															wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
+															PREF, PREF, PREF))
+											.addGap(Globals.GAP_SIZE)
+											.addGroup(inputPanelLayout.createParallelGroup()
+													.addComponent(tf_url, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+															MAX)
+													.addComponent(
+															wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
+															PREF, PREF, PREF)))
+									.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+											.addComponent(wgetAuthPanel, PREF, PREF, MAX)))
+							.addGap(Globals.GAP_SIZE))
+					.addGap(Globals.GAP_SIZE));
+			inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+					.addComponent(lbl_modules_from, PREF, PREF, PREF).addGap(Globals.GAP_SIZE).addGap(Globals.GAP_SIZE)
+					.addComponent(rb_local, PREF, PREF, PREF).addGap(Globals.GAP_SIZE)
 					.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-							.addGap(Globals.gapSize * 3).addComponent(tf_local_path, PREF, PREF, PREF)
-							.addComponent(btn_filechooser, PREF, PREF, PREF).addGap(Globals.gapSize * 3))
-					.addGap(Globals.gapSize).addComponent(rb_from_server, PREF, PREF, PREF).addGap(Globals.gapSize)
+							.addGap(Globals.GAP_SIZE * 3).addComponent(tf_local_path, PREF, PREF, PREF)
+							.addComponent(btn_filechooser, PREF, PREF, PREF).addGap(Globals.GAP_SIZE * 3))
+					.addGap(Globals.GAP_SIZE).addComponent(rb_from_server, PREF, PREF, PREF).addGap(Globals.GAP_SIZE)
 					.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-							.addGap(Globals.gapSize * 3).addComponent(tf_url, PREF, PREF, PREF)
-							.addComponent(lbl_url, PREF, PREF, PREF).addGap(Globals.gapSize * 3))
+							.addGap(Globals.GAP_SIZE * 3).addComponent(tf_url, PREF, PREF, PREF)
+							.addComponent(lbl_url, PREF, PREF, PREF).addGap(Globals.GAP_SIZE * 3))
 					.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-							.addGap(Globals.gapSize * 3)
+							.addGap(Globals.GAP_SIZE * 3)
 							.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH), PREF, PREF, PREF)
 							.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH), PREF, PREF, PREF)
-							.addGap(Globals.gapSize * 3))
+							.addGap(Globals.GAP_SIZE * 3))
 					.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 
-							.addGap(Globals.gapSize).addComponent(wgetAuthPanel, PREF, PREF, PREF))
-					.addGap(Globals.gapSize * 2)
+							.addGap(Globals.GAP_SIZE).addComponent(wgetAuthPanel, PREF, PREF, PREF))
+					.addGap(Globals.GAP_SIZE * 2)
 					.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 							.addComponent(lbl_set_rights, PREF, PREF, PREF)
 							.addComponent(cb_setRights, PREF, PREF, PREF))
-					.addGap(Globals.gapSize)
+					.addGap(Globals.GAP_SIZE)
 					.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 							.addComponent(lbl_overwriteExisting, PREF, PREF, PREF)
 							.addComponent(cb_overwriteExisting, PREF, PREF, PREF))
-					.addGap(Globals.gapSize)
+					.addGap(Globals.GAP_SIZE)
 
 					.addGroup(v_parallelGroup) // parallelGroup can be overwritten by child classes
 			);

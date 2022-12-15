@@ -52,40 +52,40 @@ public class TargetConfiguration {
 		states.add(FORBIDDEN);
 
 		labels = new Vector<String>();
-		labels.add(Globals.CONFLICTSTATEstring);
-		labels.add(Globals.NOVALIDSTATEstring);
+		labels.add(Globals.CONFLICT_STATE_STRING);
+		labels.add(Globals.NO_VALID_STATE_STRING);
 		labels.add("undefined");
 		labels.add("installed");
 		labels.add("always");
 		labels.add("forbidden");
 
 		state2label = new HashMap<Integer, String>();
-		state2label.put(CONFLICT, Globals.CONFLICTSTATEstring);
-		state2label.put(INVALID, Globals.NOVALIDSTATEstring);
+		state2label.put(CONFLICT, Globals.CONFLICT_STATE_STRING);
+		state2label.put(INVALID, Globals.NO_VALID_STATE_STRING);
 		state2label.put(UNDEFINED, "undefined");
 		state2label.put(INSTALLED, "installed");
 		state2label.put(ALWAYS, "always");
 		state2label.put(FORBIDDEN, "forbidden");
 
 		label2state = new HashMap<String, Integer>();
-		label2state.put(Globals.CONFLICTSTATEstring, CONFLICT);
-		label2state.put(Globals.NOVALIDSTATEstring, INVALID);
+		label2state.put(Globals.CONFLICT_STATE_STRING, CONFLICT);
+		label2state.put(Globals.NO_VALID_STATE_STRING, INVALID);
 		label2state.put("undefined", UNDEFINED);
 		label2state.put("installed", INSTALLED);
 		label2state.put("always", ALWAYS);
 		label2state.put("forbidden", FORBIDDEN);
 
 		label2displayLabel = new HashMap<String, String>();
-		label2displayLabel.put(Globals.CONFLICTSTATEstring, Globals.CONFLICTSTATEstring);
-		label2displayLabel.put(Globals.NOVALIDSTATEstring, Globals.NOVALIDSTATEstring);
+		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
+		label2displayLabel.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		label2displayLabel.put("undefined", "undefined");
 		label2displayLabel.put("installed", "installed");
 		label2displayLabel.put("always", "always");
 		label2displayLabel.put("forbidden", "forbidden");
 
 		displayLabel2label = new HashMap<String, String>();
-		displayLabel2label.put(Globals.CONFLICTSTATEstring, Globals.CONFLICTSTATEstring);
-		displayLabel2label.put(Globals.NOVALIDSTATEstring, Globals.NOVALIDSTATEstring);
+		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
+		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		displayLabel2label.put("undefined", "undefined");
 		displayLabel2label.put("installed", "installed");
 		displayLabel2label.put("always", "always");
