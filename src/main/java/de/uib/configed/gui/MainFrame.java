@@ -3111,14 +3111,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		statusPane.setBackground(Globals.backLightBlue);
 		// clientPane.setBackground(Globals.backLightBlue);
 
-		setSize(F_WIDTH, F_HEIGHT);
-		glass.setSize(F_WIDTH, F_HEIGHT);
 		glass.setVisible(true);
 		glass.setOpaque(true);
 		setGlassPane(glass);
-
 		pack();
-
 	}
 
 	public void showPopupClients() {

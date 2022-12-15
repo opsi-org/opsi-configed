@@ -734,16 +734,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						false, new String[] { "ok" }, 350, 150);
 				fMessage.setMessage(configed.getResourceValue("Permission.modules.expires") + "\n" + opsiExpiresDate);
 				fMessage.setVisible(true);
-
-				/*
-				 * 
-				 * 
-				 * JOptionPane.showMessageDialog( mainFrame,
-				 * configed.getResourceValue("Permission.modules.expires")
-				 * + "\n" + opsiExpiresDate,
-				 * configed.getResourceValue("Permission.modules.title"),
-				 * JOptionPane.WARNING_MESSAGE);
-				 */
 			}
 		}
 
@@ -1751,28 +1741,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			logging.info(this, "display height " + i + ": " + dm.getHeight());
 		}
 
-		// final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		// int width = screenSize.width;
-		// int height = screenSize.height;
-
 		logging.info(this, "locateAndDisplay, startSizing with screen width, height " + wTaken + ", " + hTaken);
-
-		int wDiff = wTaken - 30 - MainFrame.F_WIDTH;
-		if (wDiff < 0) {
-			wDiff = 0;
-		}
-		int hDiff = hTaken - 30 - MainFrame.F_HEIGHT;
-		if (hDiff < 0) {
-			hDiff = 0;
-		}
-
-		// take 2/3 from space > MainFrame.fwidth, MainFrame.fheight
-		// after giving some pixels for taskbars
-
-		final int width = MainFrame.F_WIDTH + (wDiff * 2) / 3;
-		final int height = MainFrame.F_HEIGHT + (hDiff * 2) / 3;
-
-		// mainFrame.startSizing( dim.width, dim.height );
 
 		String savedX = configed.savedStates.saveMainLocationX.deserialize();
 		String savedY = configed.savedStates.saveMainLocationY.deserialize();
@@ -1787,22 +1756,26 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		de.uib.utilities.Globals.startY = null;
 
 		if (savedX != null && savedY != null) {
-			try {
-				de.uib.utilities.Globals.startX = Integer.valueOf(savedX);
-				de.uib.utilities.Globals.startY = Integer.valueOf(savedY);
+			de.uib.utilities.Globals.startX = Integer.valueOf(savedX);
+			de.uib.utilities.Globals.startY = Integer.valueOf(savedY);
 
-				de.uib.utilities.Globals.startWidth = Integer.valueOf(savedWidth);
-				de.uib.utilities.Globals.startHeight = Integer.valueOf(savedHeight);
-			} catch (Exception ex) {
-			}
+			de.uib.utilities.Globals.startWidth = Integer.valueOf(savedWidth);
+			de.uib.utilities.Globals.startHeight = Integer.valueOf(savedHeight);
 		}
 
-		final Rectangle dim = de.uib.utilities.Globals.buildLocation(mainFrame, width, height, 0, 0);
+		Rectangle screenRectangle = configed.fProgress.getGraphicsConfiguration().getBounds();
+
+		logging.info(this, "set size and location of mainFrame");
+
+		// weird formula for size
+		mainFrame.setSize(screenRectangle.width * 19 / 20 - 100, screenRectangle.height * 19 / 20 - 100);
+
+		// Center mainFrame on screen of configed.fProgress
+		mainFrame.setLocation((int) (screenRectangle.getCenterX() - mainFrame.getSize().getWidth() / 2),
+				(int) (screenRectangle.getCenterY() - mainFrame.getSize().getHeight() / 2));
 
 		logging.info(this, "setting mainframe visible");
-		mainFrame.setLocationRelativeTo(configed.fProgress);
 		mainFrame.setVisible(true);
-		// mainFrame.pack();
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -1815,12 +1788,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				try {
 					logging.info(this, "locateAndDisplay, setting mainframe visible in EventQueue");
 
-					mainFrame.setLocationRelativeTo(configed.fProgress);
-
 					// mainFrame.panel_Clientselection.setDividerLocation(dim.width - 100);
-					mainFrame.setVisible(true);
-					mainFrame.setSize(dim.width + 2, dim.height); // corrects splitpane
-					mainFrame.panel_Clientselection.setDividerLocation(dim.width - 100);
+					//mainFrame.setVisible(true);
+					//mainFrame.setSize(dim.width + 2, dim.height); // corrects splitpane
+					//mainFrame.panel_Clientselection.setDividerLocation(mainFrame.getWidth() - 100);
 					// mainFrame.repairSizes();
 					mainFrame.setSavingFramePosition(true);
 
@@ -1829,6 +1800,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 			}
 		});
+
 	}
 
 	protected void initLicencesFrame() {
@@ -1838,7 +1810,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				"initLicencesFrame");
 		// general
 
-		licencesFrame = new TabbedFrame(mainFrame, (TabController) this);
+		licencesFrame = new TabbedFrame(mainFrame, this);
 
 		Globals.frame1 = licencesFrame;
 		Globals.container1 = licencesFrame.getContentPane();

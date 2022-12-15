@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 /**
@@ -70,7 +71,12 @@ public class FLoadingWaiter extends JFrame
 
 	public FLoadingWaiter(Component owner, String title) {
 		this(title);
-		setLocationRelativeTo(owner);
+
+		logging.info(this, "set Loction of FLoadingWaiter in center of screen of owner");
+		Rectangle screenRectangle = owner.getGraphicsConfiguration().getBounds();
+		setLocation((int) (screenRectangle.getCenterX() - getSize().getWidth() / 2),
+				(int) (screenRectangle.getCenterY() - getSize().getHeight() / 2));
+
 		setAlwaysOnTop(true);
 	}
 

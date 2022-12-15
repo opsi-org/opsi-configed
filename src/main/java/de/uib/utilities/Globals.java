@@ -658,10 +658,6 @@ public class Globals {
 		return result;
 	}
 
-	public static Rectangle buildLocation(javax.swing.JFrame f, int placementX, int placementY) {
-		return buildLocation(f, f.getWidth(), f.getHeight(), placementX, placementY);
-	}
-
 	public static Rectangle buildLocation(int intendedWidth, int intendedHeight, int placementX, int placementY) {
 		return buildLocation(null, intendedWidth, intendedHeight, placementX, placementY);
 	}
