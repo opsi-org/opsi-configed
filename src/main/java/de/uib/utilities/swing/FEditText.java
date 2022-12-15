@@ -22,8 +22,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-public class FEditText extends FEdit
-		implements DocumentListener, MouseListener {
+import de.uib.utilities.logging.logging;
+
+public class FEditText extends FEdit implements DocumentListener, MouseListener {
 	protected javax.swing.JScrollPane scrollpane;
 	protected javax.swing.JTextArea textarea;
 
@@ -129,7 +130,7 @@ public class FEditText extends FEdit
 	public void mouseClicked(MouseEvent e) {
 		// logging.error(this, " " + textarea.getCaretPosition()+ "\n" + e);
 		if (standalone)
-			System.out.println(getText());
+			logging.debug(getText());
 	}
 
 	public void mouseEntered(MouseEvent e) {
@@ -150,17 +151,15 @@ public class FEditText extends FEdit
 	}
 
 	public static void main(String[] args) {
-		System.out.println(" invoking " + FEditText.class);
-		SwingUtilities.invokeLater(
-				() -> {
-					FEditText f = new FEditText(args[0], "");
-					f.init(new Dimension(300, 200));
-					f.setVisible(true);
-					f.setStartText(args[0]);
-					count++;
-					System.out.println("having " + count + " "
-							+ f.getText());
-				});
+		logging.debug(" invoking " + FEditText.class);
+		SwingUtilities.invokeLater(() -> {
+			FEditText f = new FEditText(args[0], "");
+			f.init(new Dimension(300, 200));
+			f.setVisible(true);
+			f.setStartText(args[0]);
+			count++;
+			logging.debug("having " + count + " " + f.getText());
+		});
 
 	}
 

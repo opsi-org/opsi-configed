@@ -9,7 +9,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 public abstract class ValueChangeListener implements ActionListener, ChangeListener, DocumentListener {
-	abstract protected void actOnChange();
+	protected abstract void actOnChange();
 
 	public void actionPerformed(ActionEvent event) {
 		actOnChange();

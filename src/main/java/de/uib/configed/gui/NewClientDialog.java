@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -90,7 +91,7 @@ public class NewClientDialog extends FGeneralDialog
 	private boolean shutdownInstall;
 	protected boolean multidepot;
 
-	protected java.util.List<String> existingHostNames;
+	private java.util.List<String> existingHostNames;
 
 	// private static boolean macAddressFieldVisible = false;
 	// private static boolean macAddressFieldVisibleSet = false;
@@ -306,14 +307,14 @@ public class NewClientDialog extends FGeneralDialog
 
 			public void insertUpdate(DocumentEvent e) {
 				try {
-					// System.out.println (" --------->" + e.getDocString newPiece =
+					// logging.debug (" --------->" + e.getDocString newPiece =
 					// e.getDocument().getText(e.getOffset(), e.getLength());
 					String newPiece = e.getDocument().getText(e.getOffset(), e.getLength());
 					logging.debug(this, " --------->" + newPiece + "<");
 
 					// if ( (e.getDocument().getText(e.getOffset(), e.getLength()) ).equals ("\t") )
 					if (newPiece.equals("\t")) {
-						// System.out.println ("tab");
+						// logging.debug ("tab");
 						macAddressField.requestFocus();
 					}
 				} catch (javax.swing.text.BadLocationException ex) {
@@ -587,7 +588,7 @@ public class NewClientDialog extends FGeneralDialog
 
 		);
 
-		GroupLayout northLayout = new GroupLayout(northPanel);
+		final GroupLayout northLayout = new GroupLayout(northPanel);
 		northPanel.setLayout(northLayout);
 		northPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6),
 				BorderFactory.createLineBorder(new Color(122, 138, 153))));
@@ -621,10 +622,89 @@ public class NewClientDialog extends FGeneralDialog
 		centerOn(Globals.mainContainer);
 	}
 
+	private void createClients(Vector<Vector<Object>> clients) {
+		Iterator<Vector<Object>> iter = clients.iterator();
+		Vector<Vector<Object>> modifiedClients = new Vector<>();
+
+		while (iter.hasNext()) {
+			Vector<Object> client = iter.next();
+
+			String hostname = (String) client.get(0);
+			String selectedDomain = (String) client.get(1);
+
+			if (!isBoolean((String) client.get(11)) || !isBoolean((String) client.get(12))
+					|| !isBoolean((String) client.get(13))) {
+				FTextArea fInfo = new FTextArea(Globals.mainFrame,
+						configed.getResourceValue("NewClientDialog.nonBooleanValue.title") + " (" + Globals.APPNAME
+								+ ") ",
+						false, new String[] { configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
+
+				StringBuilder message = new StringBuilder("");
+				message.append(configed.getResourceValue("NewClientDialog.nonBooleanValue.message"));
+				fInfo.setMessage(message.toString());
+				fInfo.setAlwaysOnTop(true);
+				fInfo.setVisible(true);
+
+				return;
+			}
+
+			if (checkClientCorrectness(hostname, selectedDomain)) {
+				treatSelectedDomainForNewClient(selectedDomain);
+				modifiedClients.add(client);
+			}
+		}
+
+		main.createClients(modifiedClients);
+	}
+
+	private boolean isBoolean(String bool) {
+		return bool.isEmpty() || bool.equalsIgnoreCase(Boolean.TRUE.toString())
+				|| bool.equalsIgnoreCase(Boolean.FALSE.toString());
+	}
+
 	private void createClient(final String hostname, final String selectedDomain, final String depotID,
 			final String description, final String inventorynumber, final String notes, final String ipaddress,
 			final String macaddress, final boolean shutdownInstall, final boolean uefiboot, final boolean wanConfig,
 			final String group, final String netbootProduct, final String localbootProduct) {
+
+		if (checkClientCorrectness(hostname, selectedDomain)) {
+			main.createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress,
+					macaddress, shutdownInstall, uefiboot, wanConfig, group, netbootProduct, localbootProduct);
+
+			treatSelectedDomainForNewClient(selectedDomain);
+		}
+	}
+
+	/*
+	 * Does things that should be done for the selected Domain of every new created
+	 * client; Don't really know what's happening here (TODO)
+	 */
+	private void treatSelectedDomainForNewClient(final String selectedDomain) {
+		Vector<String> editableDomains = new Vector<String>();
+		ArrayList<Object> saveDomains = new ArrayList<Object>();
+		int order = 0;
+		saveDomains.add("" + order + ":" + selectedDomain);
+		editableDomains.add(selectedDomain);
+		logging.info(this, "createClient domains" + domains);
+
+		domains.remove(selectedDomain);
+
+		for (String domain : domains) {
+			order++;
+			saveDomains.add("" + order + ":" + domain);
+
+			editableDomains.add(domain);
+		}
+
+		logging.debug(this, "createClient editableDomains " + editableDomains);
+		main.setEditableDomains(editableDomains);
+		setDomains(editableDomains);
+
+		logging.debug(this, "createClient saveDomains " + saveDomains);
+		main.getPersistenceController().writeDomains(saveDomains);
+	}
+
+	private boolean checkClientCorrectness(String hostname, String selectedDomain) {
 		boolean goOn = true;
 
 		if (hostname == null || hostname.equals("")) {
@@ -633,10 +713,6 @@ public class NewClientDialog extends FGeneralDialog
 		if (selectedDomain == null || selectedDomain.equals("")) {
 			goOn = false;
 		}
-
-		// logging.debug(this, "doAction1 host, existingHostNames.contains host " +
-		// hostname + ". " + selectedDomain + ", "
-		// +existingHostNames.contains(hostname + "." + selectedDomain));
 
 		String opsiHostKey = "" + hostname + "." + selectedDomain;
 		if (goOn && existingHostNames != null && existingHostNames.contains(opsiHostKey)) {
@@ -654,9 +730,8 @@ public class NewClientDialog extends FGeneralDialog
 					configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question") + " (" + Globals.APPNAME
 							+ ") ",
 					true, new String[] { configed.getResourceValue("FGeneralDialog.no"),
-							configed.getResourceValue("FGeneralDialog.yes") },
-					350, 100);
-			StringBuffer message = new StringBuffer("");
+							configed.getResourceValue("FGeneralDialog.yes") });
+			StringBuilder message = new StringBuilder("");
 			message.append(configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message0"));
 			message.append(" \"");
 			message.append(opsiHostKey);
@@ -677,13 +752,9 @@ public class NewClientDialog extends FGeneralDialog
 					configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question") + " ("
 							+ Globals.APPNAME + ") ",
 					true, new String[] { configed.getResourceValue("FGeneralDialog.no"),
-							configed.getResourceValue("FGeneralDialog.yes") },
-					350, 100);
-			StringBuffer message = new StringBuffer("");
+							configed.getResourceValue("FGeneralDialog.yes") });
+			StringBuilder message = new StringBuilder("");
 			message.append(configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Message"));
-			// message.append(" \"");
-			// message.append(hostname);
-			// message.append("\" \n");
 			fQuestion.setMessage(message.toString());
 			fQuestion.centerOn(this);
 			fQuestion.setAlwaysOnTop(true);
@@ -695,7 +766,7 @@ public class NewClientDialog extends FGeneralDialog
 
 		boolean onlyNumbers = true;
 		int i = 0;
-		while (onlyNumbers && i < hostname.length()) {
+		while (onlyNumbers && hostname != null && i < hostname.length()) {
 			if (!Character.isDigit(hostname.charAt(i)))
 				onlyNumbers = false;
 			i++;
@@ -708,11 +779,8 @@ public class NewClientDialog extends FGeneralDialog
 					true, new String[] { configed.getResourceValue("FGeneralDialog.no"),
 							configed.getResourceValue("FGeneralDialog.yes") },
 					350, 100);
-			StringBuffer message = new StringBuffer("");
+			StringBuilder message = new StringBuilder("");
 			message.append(configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Message"));
-			// message.append(" \"");
-			// message.append(hostname);
-			// message.append("\" \n");
 			fQuestion.setMessage(message.toString());
 			fQuestion.centerOn(this);
 			fQuestion.setAlwaysOnTop(true);
@@ -722,44 +790,7 @@ public class NewClientDialog extends FGeneralDialog
 				goOn = false;
 		}
 
-		if (goOn) {
-			main.createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress,
-					macaddress, shutdownInstall, uefiboot, wanConfig, group, netbootProduct, localbootProduct);
-
-			Vector<String> editableDomains = new Vector<String>();
-			ArrayList<Object> saveDomains = new ArrayList<Object>();
-			int order = 0;
-			saveDomains.add("" + order + ":" + selectedDomain);
-			editableDomains.add(selectedDomain);
-			logging.info(this, "createClient domains" + domains);
-
-			domains.remove(selectedDomain);
-
-			for (String domain : domains) {
-				order++;
-				saveDomains.add("" + order + ":" + domain);
-
-				editableDomains.add(domain);
-			}
-
-			logging.debug(this, "createClient editableDomains " + editableDomains);
-			main.setEditableDomains(editableDomains);
-			setDomains(editableDomains);
-
-			logging.debug(this, "createClient saveDomains " + saveDomains);
-			main.getPersistenceController().writeDomains(saveDomains);
-
-			// creates dead product property (state) for newer client-agent-version
-			// therefore omitted
-			/*
-			 * 
-			 * if (jCheckShutdownInstall.getSelectedObjects() != null)
-			 * {
-			 * main.setInstallByShutdownProductPropertyValue(opsiHostKey, true);
-			 * }
-			 */
-
-		}
+		return goOn;
 	}
 
 	private void importCSV() {
@@ -784,49 +815,9 @@ public class NewClientDialog extends FGeneralDialog
 				CSVImportDataModifier modifier = csvImportDataDialog.getModifier();
 				Vector<Vector<Object>> rows = modifier.getRows();
 
-				rows.forEach(row -> {
-					String hostname = (String) row.get(0);
-					String selectedDomain = (String) row.get(1);
-					String depotID = (String) row.get(2);
-					String description = (String) row.get(3);
-					String inventorynumber = (String) row.get(4);
-					String notes = (String) row.get(5);
-					String macaddress = (String) row.get(6);
-					String ipaddress = (String) row.get(7);
-					String group = (String) row.get(8);
-					String netbootProduct = (String) row.get(9);
-					String localbootProduct = (String) row.get(10);
-
-					if (!isBoolean((String) row.get(11)) || !isBoolean((String) row.get(12))
-							|| !isBoolean((String) row.get(13))) {
-						FTextArea fInfo = new FTextArea(Globals.mainFrame,
-								configed.getResourceValue("NewClientDialog.nonBooleanValue.title") + " ("
-										+ Globals.APPNAME + ") ",
-								false, new String[] { configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
-
-						StringBuffer message = new StringBuffer("");
-						message.append(configed.getResourceValue("NewClientDialog.nonBooleanValue.message"));
-						fInfo.setMessage(message.toString());
-						fInfo.setAlwaysOnTop(true);
-						fInfo.setVisible(true);
-
-						return;
-					}
-
-					boolean wanConfig = Boolean.parseBoolean((String) row.get(11));
-					boolean uefiboot = Boolean.parseBoolean((String) row.get(12));
-					boolean shutdownInstall = Boolean.parseBoolean((String) row.get(13));
-
-					createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress,
-							macaddress, shutdownInstall, uefiboot, wanConfig, group, netbootProduct, localbootProduct);
-				});
+				createClients(rows);
 			}
 		}
-	}
-
-	private boolean isBoolean(String bool) {
-		return bool.isEmpty() ? true
-				: bool.equalsIgnoreCase(Boolean.TRUE.toString()) || bool.equalsIgnoreCase(Boolean.FALSE.toString());
 	}
 
 	private CSVImportDataDialog createCSVImportDataDialog(String csvFile) {
@@ -864,7 +855,7 @@ public class NewClientDialog extends FGeneralDialog
 					configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.title") + " ("
 							+ Globals.APPNAME + ") ",
 					false, new String[] { configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
-			StringBuffer message = new StringBuffer("");
+			StringBuilder message = new StringBuilder("");
 			message.append(configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.message") + " "
 					+ columnNames.toString().replace("[", "").replace("]", ""));
 			fInfo.setMessage(message.toString());

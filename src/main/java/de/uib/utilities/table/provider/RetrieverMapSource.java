@@ -15,8 +15,8 @@ public class RetrieverMapSource extends MapSource
 {
 	protected MapRetriever retriever;
 
-	public RetrieverMapSource(Vector<String> columnNames, Vector<String> classNames,
-			MapRetriever retriever, boolean rowCounting) {
+	public RetrieverMapSource(Vector<String> columnNames, Vector<String> classNames, MapRetriever retriever,
+			boolean rowCounting) {
 		super(columnNames, classNames, null, rowCounting);
 		this.retriever = retriever;
 		rows = new Vector();
@@ -28,7 +28,7 @@ public class RetrieverMapSource extends MapSource
 
 	protected void fetchData() {
 		table = retriever.retrieveMap();
-		// System.out.println ( " -------- RetrieverMapSource fetchData() : " + table);
+		// logging.debug ( " -------- RetrieverMapSource fetchData() : " + table);
 		super.fetchData();
 	}
 }

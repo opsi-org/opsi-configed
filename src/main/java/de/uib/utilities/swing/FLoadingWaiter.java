@@ -1,12 +1,11 @@
 package de.uib.utilities.swing;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-
 /**
  * FLoadingWaiter
  * Copyright:     Copyright (c) 2016
@@ -34,13 +33,10 @@ import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 
 public class FLoadingWaiter extends JFrame
-		implements
-		WindowListener,
-		de.uib.utilities.observer.DataLoadingObserver,
-		WaitingSleeper {
+		implements WindowListener, de.uib.utilities.observer.DataLoadingObserver, WaitingSleeper {
 
-	private final long WAITING_MILLIS_FOR_LOADING = 50000;
-	private final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
+	private static final long WAITING_MILLIS_FOR_LOADING = 50000;
+	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
 	JProgressBar progressBar;
 	JLabel infoLabel;
 	protected String info;
@@ -54,8 +50,6 @@ public class FLoadingWaiter extends JFrame
 	// int max = 60;
 
 	int max = 200;
-
-	private boolean showing = true;
 
 	private WaitingWorker worker;
 
@@ -74,10 +68,14 @@ public class FLoadingWaiter extends JFrame
 		}
 	}
 
+	public FLoadingWaiter(Component owner, String title) {
+		this(title);
+		setLocationRelativeTo(owner);
+	}
+
 	public FLoadingWaiter(String title, String startMessage) {
 		this(title);
-		observingMesg = startMessage;
-		;
+		observingMesg = startMessage;;
 	}
 
 	public FLoadingWaiter(String title) {
@@ -146,20 +144,15 @@ public class FLoadingWaiter extends JFrame
 		ImageIcon icon = de.uib.configed.Globals.createImageIcon("images/configed_icon.png", "");
 		JLabel iconLabel = new JLabel(icon);
 
-		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-				.addComponent(iconLabel, 150, 150, 150)
-				.addGroup(layout.createSequentialGroup()
-						.addGap(10, 10, Short.MAX_VALUE)
-						.addComponent(infoLabel, 100, 300, Short.MAX_VALUE)
-						.addGap(10, 10, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup()
-						.addGap(10, 10, 30)
-						.addComponent(progressBar, 100, 350, Short.MAX_VALUE)
-						.addGap(10, 10, 30)));
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(iconLabel, 150, 150, 150)
-				.addComponent(progressBar, Globals.progressBarHeight, Globals.progressBarHeight,
-						Globals.progressBarHeight)
+		layout.setHorizontalGroup(
+				layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(iconLabel, 150, 150, 150)
+						.addGroup(layout.createSequentialGroup().addGap(10, 10, Short.MAX_VALUE)
+								.addComponent(infoLabel, 100, 300, Short.MAX_VALUE).addGap(10, 10, Short.MAX_VALUE))
+						.addGroup(layout.createSequentialGroup().addGap(10, 10, 30)
+								.addComponent(progressBar, 100, 350, Short.MAX_VALUE).addGap(10, 10, 30)));
+		layout.setVerticalGroup(layout
+				.createSequentialGroup().addComponent(iconLabel, 150, 150, 150).addComponent(progressBar,
+						Globals.progressBarHeight, Globals.progressBarHeight, Globals.progressBarHeight)
 				.addComponent(infoLabel, 30, 30, 30)
 
 		);
@@ -194,12 +187,7 @@ public class FLoadingWaiter extends JFrame
 		 * );
 		 */
 
-		final Rectangle dim = de.uib.utilities.Globals.buildLocationOnDefaultDisplay(
-				getSize().width, getSize().height,
-				de.uib.utilities.Globals.smallFramesDistanceFromLeft,
-				de.uib.utilities.Globals.smallFramesDistanceFromTop);
-		this.setLocation(dim.x, dim.y);
-
+		setLocationRelativeTo(null);
 	}
 
 	public void startWaiting() {
@@ -248,19 +236,13 @@ public class FLoadingWaiter extends JFrame
 
 	public String setLabellingStrategy(long millisLevel) {
 		logging.debug(this, "setLabellingStrategy millis " + millisLevel);
-		return "" + observingMesg
-				+ " " + waitInfoString.next(); // ??produces strings with ascii null
+		return "" + observingMesg + " " + waitInfoString.next(); // ??produces strings with ascii null
 		// + waitStrings[ longVal.intValue() % waitStrings.length];
 		// waitStrings[0];
 	}
 
 	// windowListener
 	public void windowActivated(WindowEvent e) {
-	}
-
-	public void windowClosed(WindowEvent e) {
-		// System.out.println(" WindowEvent windowClosed ");
-		showing = false;
 	}
 
 	public void windowClosing(WindowEvent e) {
@@ -275,10 +257,16 @@ public class FLoadingWaiter extends JFrame
 
 	public void windowIconified(WindowEvent e) {
 		// sendingToFront = false;
-		// System.out.println ("sendingToFront " + sendingToFront);
+		// logging.debug ("sendingToFront " + sendingToFront);
 	}
 
 	public void windowOpened(WindowEvent e) {
+	}
+
+	@Override
+	public void windowClosed(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

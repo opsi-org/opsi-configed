@@ -28,7 +28,7 @@ import de.uib.utilities.logging.logging;
 public class SelectionManager {
 	public enum ConnectionStatus {
 		And, Or, AndNot, OrNot
-	};
+	}
 
 	private List<OperationWithStatus> groupWithStatusList;
 	private boolean hasSoftware = false;
@@ -149,19 +149,18 @@ public class SelectionManager {
 		if (withMySQL) {
 			long startTime = System.nanoTime();
 			List<String> l = selectClientsSQL(controller);
-			logging.check(this, "select Clients with MySQL " + ((System.nanoTime() - startTime) / 1000000));
+			logging.notice(this, "select Clients with MySQL " + ((System.nanoTime() - startTime) / 1000000));
 			return l;
 		} else {
 			long startTime = System.nanoTime();
 			List<String> l = selectClientsLocal();
-			logging.check(this, "select Clients without ;MySQL " + ((System.nanoTime() - startTime) / 1000000));
+			logging.notice(this, "select Clients without ;MySQL " + ((System.nanoTime() - startTime) / 1000000));
 			return l;
 		}
 	}
 
 	// Filter the clients and get the matching clients back with MySQL backend
 	public List<String> selectClientsSQL(PersistenceController controller) {
-		long startTime = System.nanoTime();
 
 		SelectOperation operation = getTopOperation();
 		String json = serializer.getJson(operation);
@@ -396,7 +395,7 @@ public class SelectionManager {
 				checkForGroupSearches(child);
 	}
 
-	static public class OperationWithStatus {
+	public static class OperationWithStatus {
 		public SelectOperation operation;
 		public ConnectionStatus status;
 		public boolean parenthesisOpen;

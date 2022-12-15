@@ -24,16 +24,16 @@ import de.uib.utilities.logging.logging;
  * A serializer is able to save and load searches.
  */
 public abstract class Serializer {
-	public final static String elementNameGroup = "GroupElement";
-	public final static String elementNameGroupWithSubgroups = "GroupWithSubgroupsElement";
-	public final static String elementNameSoftwareNameElement = "SoftwareNameElement";
-	public final static String elementNameGeneric = "Generic";
+	public static final String elementNameGroup = "GroupElement";
+	public static final String elementNameGroupWithSubgroups = "GroupWithSubgroupsElement";
+	public static final String elementNameSoftwareNameElement = "SoftwareNameElement";
+	public static final String elementNameGeneric = "Generic";
 
-	public final static String keyElementName = "element";
-	public final static String keySubelementName = "refinedElement";
-	public final static String keyElementPath = "elementPath";
-	public final static String keyOperation = "operation";
-	public final static String keyDataType = "dataType";
+	public static final String keyElementName = "element";
+	public static final String keySubelementName = "refinedElement";
+	public static final String keyElementPath = "elementPath";
+	public static final String keyOperation = "operation";
+	public static final String keyDataType = "dataType";
 
 	protected SelectionManager manager;
 
@@ -96,7 +96,6 @@ public abstract class Serializer {
 			}
 			return operation;
 		} catch (Exception e) {
-			// e.printStackTrace();
 			logging.error("deserialize error for data " + data + " message " + e.getMessage(), e);
 			return null;
 		}
@@ -131,7 +130,6 @@ public abstract class Serializer {
 		}
 
 		catch (Exception e) {
-			// e.printStackTrace();
 			logging.error(e.getMessage(), e);
 			return null;
 		}
@@ -140,21 +138,21 @@ public abstract class Serializer {
 	/**
 	 * Remove a saved search from the server
 	 */
-	abstract public void remove(String name);
+	public abstract void remove(String name);
 
 	/** Get the data for the given saved search */
-	abstract protected Map<String, Object> getData(String name) throws WrongVersionException;
+	protected abstract Map<String, Object> getData(String name) throws WrongVersionException;
 
 	/**
 	 * produce map format of serializiation object
 	 */
-	abstract protected Map<String, Object> decipher(String serialization) throws WrongVersionException;
+	protected abstract Map<String, Object> decipher(String serialization) throws WrongVersionException;
 
 	/** Save the search data with the given name. */
-	abstract protected void saveData(String name, String description, Map<String, Object> data);
+	protected abstract void saveData(String name, String description, Map<String, Object> data);
 
 	/** Get the data version of the currently loaded saved search */
-	abstract protected int getSearchDataVersion();
+	protected abstract int getSearchDataVersion();
 
 	/*
 	 * Care for finding a SelectElement

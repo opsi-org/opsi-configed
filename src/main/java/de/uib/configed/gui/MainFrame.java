@@ -275,7 +275,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JMenu jMenuHelpLoglevel = new JMenu();
 	JMenuItem jMenuHelpLogfileLocation = new JMenuItem();
 
-	JRadioButtonMenuItem[] rbLoglevelItems = new JRadioButtonMenuItem[logging.LEVEL_DONT_SHOW_IT];
+	JRadioButtonMenuItem[] rbLoglevelItems = new JRadioButtonMenuItem[logging.LEVEL_SECRET + 1];
 
 	JPopupMenu popupClients = new JPopupMenu();
 	JMenuItemFormatted popupResetProductOnClientWithStates = new JMenuItemFormatted();
@@ -463,7 +463,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JRadioButton jRadioRequiredAll = new JRadioButton();
 	JRadioButton jRadioRequiredOff = new JRadioButton();
 
-	static private boolean settingSchalter = false;
+	private static boolean settingSchalter = false;
 	JButton jBtnAllOff = new JButton();
 	// JButton jBtnCopyTemplate = new JButton();
 
@@ -662,7 +662,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		int missingSpace = min_right_width - sizeOfRightPanel;
 		if (missingSpace > 0 && dividerLocation > min_left_width) {
 			splitpane.setDividerLocation(dividerLocation - missingSpace);
-			// System.out.println (" reset divider location ");
+			// logging.debug (" reset divider location ");
 		}
 
 		// logging.info(this, "moveDivider1 ");
@@ -711,7 +711,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			int missingSpace = min_right_width - sizeOfRightPanel;
 			if (missingSpace > 0 && dividerLocation > min_left_width) {
 				splitpane.setDividerLocation(dividerLocation - missingSpace);
-				// System.out.println (" reset divider location ");
+				// logging.debug (" reset divider location ");
 			}
 
 			// logging.info(this, "moveDivider1 ");
@@ -844,7 +844,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		 * {
 		 * public void actionPerformed(ActionEvent e)
 		 * {
-		 * //System.out.println( " action event on jMenuFileReload ");
+		 * //logging.debug( " action event on jMenuFileReload ");
 		 * main.closeInstance(true);
 		 * de.uib.messages.Messages.setLocale("tr");
 		 * configed.startWithLocale();
@@ -1258,8 +1258,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		if (methodsExists) {
 			factory.retrieveSSHCommandListRequestRefresh();
 			factory.retrieveSSHCommandList();
-			java.util.LinkedHashMap<String, java.util.List<SSHCommand_Template>> sortedComs = factory
-					.getSSHCommandMapSortedByParent();
+			Map<String, java.util.List<SSHCommand_Template>> sortedComs = factory.getSSHCommandMapSortedByParent();
 
 			logging.debug(this, "setupMenuServer add commands to menu commands sortedComs " + sortedComs);
 			boolean firstParentGroup = true;
@@ -1372,6 +1371,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				+ UserConfig.getCurrentUserConfig());
 		jMenuSSHCommandControl.setEnabled(userConfigExists
 				&& UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDCONTROL_ACTIVE));
+
+		jMenuSSHCommandControl.setEnabled(true);
 
 		jMenuServer.setEnabled(userConfigExists && !isReadOnly
 		// &&
@@ -1541,10 +1542,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuHelp.add(jMenuHelpInternalConfiguration);
 
 		ActionListener selectLoglevelListener = (ActionEvent e) -> {
-			for (int i = 0; i < logging.LEVEL_DONT_SHOW_IT; i++) {
+			for (int i = 0; i < logging.LEVEL_SECRET; i++) {
 				if (e.getSource() == rbLoglevelItems[i]) {
 					rbLoglevelItems[i].setSelected(true);
-					logging.setAktDebugLevel(i);
+					logging.setLogLevel(i);
 				} else {
 					if (rbLoglevelItems[i] != null)
 						rbLoglevelItems[i].setSelected(false);
@@ -1554,14 +1555,14 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jMenuHelpLoglevel.setText(configed.getResourceValue("MainFrame.jMenuLoglevel"));
 
-		for (int i = logging.LEVEL_ERROR; i < logging.LEVEL_DONT_SHOW_IT; i++) {
-			rbLoglevelItems[i] = new JRadioButtonMenuItem("" + i);
-			String commented = configed.getResourceValue("MainFrame.jMenuLoglevel." + i);
-			if (!configed.getResourceValue("MainFrame.jMenuLoglevel." + i).equals("MainFrame.jMenuLoglevel." + i))
-				rbLoglevelItems[i].setText(commented);
+		for (int i = logging.LEVEL_NONE; i <= logging.LEVEL_SECRET; i++) {
+			rbLoglevelItems[i] = new JRadioButtonMenuItem("[" + i + "] " + logging.levelText(i).toLowerCase());
+			//String commented = configed.getResourceValue("MainFrame.jMenuLoglevel." + i);
+			//if (!configed.getResourceValue("MainFrame.jMenuLoglevel." + i).equals("MainFrame.jMenuLoglevel." + i))
+			//	rbLoglevelItems[i].setText(commented);
 
 			jMenuHelpLoglevel.add(rbLoglevelItems[i]);
-			if (i == logging.AKT_DEBUG_LEVEL)
+			if (i == logging.LOG_LEVEL_CONSOLE)
 				rbLoglevelItems[i].setSelected(true);
 
 			rbLoglevelItems[i].addActionListener(selectLoglevelListener);
@@ -1990,7 +1991,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	public void createPdf() {
 		TableModel tm = main.getSelectedClientsTableModel();
 		JTable jTable = new JTable(tm);
-		// System.out.println("Gruppe in createPDF: " + statusPane.getGroupName());
+		// logging.debug("Gruppe in createPDF: " + statusPane.getGroupName());
 		try {
 			HashMap<String, String> metaData = new HashMap<String, String>();
 			String title = configed.getResourceValue("MainFrame.ClientList");
@@ -2638,8 +2639,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jButtonDash.setPreferredSize(Globals.modeSwitchDimension);
 		jButtonDash.setToolTipText("Dashboard");
 
-		jButtonDash.setEnabled(ConfigedMain.dashEnabled);
-		jButtonDash.setVisible(ConfigedMain.dashEnabled);
+		jButtonDash.setEnabled(ConfigedMain.DASH_ENABLED);
+		jButtonDash.setVisible(ConfigedMain.DASH_ENABLED);
 		jButtonDash.addActionListener(this);
 
 		iconPaneTargets = new JPanel();
@@ -2891,7 +2892,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_Clientselection"),
 				Globals.createImageIcon("images/clientselection.png", ""), panel_Clientselection,
-				configed.getResourceValue("MainFrame.panel_Clientselection"), ConfigedMain.viewClients);
+				configed.getResourceValue("MainFrame.panel_Clientselection"), ConfigedMain.VIEW_CLIENTS);
 
 		panel_LocalbootProductsettings = new PanelGroupedProductSettings(
 				configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), main,
@@ -2922,11 +2923,12 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
 				Globals.createImageIcon("images/package.png", ""), panel_LocalbootProductsettings,
 				configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
-				ConfigedMain.viewLocalbootProducts);
+				ConfigedMain.VIEW_LOCALBOOT_PRODUCTS);
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
 				Globals.createImageIcon("images/bootimage.png", ""), panel_NetbootProductsettings,
-				configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), ConfigedMain.viewNetbootProducts);
+				configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
+				ConfigedMain.VIEW_NETBOOT_PRODUCTS);
 
 		panel_HostConfig = new PanelHostConfig() {
 			@Override
@@ -2938,7 +2940,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				main.getPersistenceController().configOptionsRequestRefresh();
 				// main.requestReloadConfigsForSelectedClients();
 				main.getPersistenceController().hostConfigsRequestRefresh();
-				main.resetView(ConfigedMain.viewNetworkconfiguration);
+				main.resetView(ConfigedMain.VIEW_NETWORK_CONFIGURATION);
 			}
 
 			// overwrite in subclasses
@@ -2954,13 +2956,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_NetworkConfig"),
 				Globals.createImageIcon("images/config_pro.png", ""), panel_HostConfig,
-				configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), ConfigedMain.viewNetworkconfiguration);
+				configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), ConfigedMain.VIEW_NETWORK_CONFIGURATION);
 
 		showHardwareLog = new JPanel();
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_hardwareLog"),
 				Globals.createImageIcon("images/hwaudit.png", ""), showHardwareLog,
-				configed.getResourceValue("MainFrame.jPanel_hardwareLog"), ConfigedMain.viewHardwareInfo);
+				configed.getResourceValue("MainFrame.jPanel_hardwareLog"), ConfigedMain.VIEW_HARDWARE_INFO);
 
 		panelSWInfo = new PanelSWInfo(main) {
 			@Override
@@ -2969,7 +2971,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				main.clearSwInfo();
 				main.getPersistenceController().installedSoftwareInformationRequestRefresh();
 				main.getPersistenceController().softwareAuditOnClientsRequestRefresh();
-				main.resetView(ConfigedMain.viewSoftwareInfo);
+				main.resetView(ConfigedMain.VIEW_SOFTWARE_INFO);
 			}
 		};
 
@@ -2996,7 +2998,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_softwareLog"),
 				Globals.createImageIcon("images/swaudit.png", ""), showSoftwareLog,
-				configed.getResourceValue("MainFrame.jPanel_softwareLog"), ConfigedMain.viewSoftwareInfo);
+				configed.getResourceValue("MainFrame.jPanel_softwareLog"), ConfigedMain.VIEW_SOFTWARE_INFO);
 
 		showLogfiles = new PanelTabbedDocuments(Globals.logtypes,
 				// null)
@@ -3019,7 +3021,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_logfiles"),
 				Globals.createImageIcon("images/logfile.png", ""), showLogfiles,
-				configed.getResourceValue("MainFrame.jPanel_logfiles"), ConfigedMain.viewLog);
+				configed.getResourceValue("MainFrame.jPanel_logfiles"), ConfigedMain.VIEW_LOG);
 
 		showLogfiles.addChangeListener(new javax.swing.event.ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -3050,7 +3052,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
 				Globals.createImageIcon("images/config_pro.png", ""), panel_ProductProperties,
 				configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
-				ConfigedMain.viewProductProperties);
+				ConfigedMain.VIEW_PRODUCT_PROPERTIES);
 
 		logging.info(this,
 				"added tab  " + configed.getResourceValue("MainFrame.panel_ProductGlobalProperties") + " index "
@@ -3071,7 +3073,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_HostProperties"),
 				Globals.createImageIcon("images/config_pro.png", ""), panel_HostProperties,
-				configed.getResourceValue("MainFrame.jPanel_HostProperties"), ConfigedMain.viewHostProperties);
+				configed.getResourceValue("MainFrame.jPanel_HostProperties"), ConfigedMain.VIEW_HOST_PROPERTIES);
 
 		logging.info(this, "added tab  " + configed.getResourceValue("MainFrame.jPanel_HostProperties") + " index "
 				+ jTabbedPaneConfigPanes.indexOfTab(configed.getResourceValue("MainFrame.jPanel_HostProperties")));
@@ -3148,7 +3150,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	// -- helper methods for interaction
 	public void saveConfigurationsSetEnabled(boolean b) {
-		// System.out.println (" ------- we should now show in the menu that data have
+		// logging.debug (" ------- we should now show in the menu that data have
 		// changed");
 
 		if (Globals.isGlobalReadOnly() && b)
@@ -3336,7 +3338,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		fList.setTitle(Globals.APPNAME + ": " + configed.getResourceValue("MainFrame.productSelection"));
 		fList.init();
 
-		fList.setLocation((int) this.getX() + 40, (int) this.getY() + 40);
+		fList.setLocation(this.getX() + 40, this.getY() + 40);
 		fList.setSize(fwidth / 2, this.getHeight());
 
 		fList.setModal(true);
@@ -3639,7 +3641,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				.getOpsiLicensingInfoVersion() == LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD) {
 
 			FTextArea f = new FTextArea(this, configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"),
-					true, 1);
+					true);
 			StringBuffer message = new StringBuffer();
 			Map<String, Object> modulesInfo = main.getPersistenceController().getOpsiModulesInfos();
 
@@ -3705,7 +3707,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			 * currentkey =
 			 * currentkey.copyValueOf(currentkey.toCharArray(),0,currentkey.indexOf("="));
 			 * newvalue = jComboBoxProductValues.getSelectedItem().toString();
-			 * logging.debugOut(this, logging.LEVEL_DONT_SHOW_IT,
+			 * logging.debugOut(this, logging.LEVEL_NONE,
 			 * "jComboBoxProductValues_actionPerformed: set "+currentkey+"="+newvalue);
 			 * //dm.setPcProfileValueWithRequired
 			 * (currentkey,newvalue,jRadioRequiredAll.isSelected());
@@ -3958,7 +3960,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			}
 
 			else if (e.getSource() == macAddressField) {
-				// System.out.println (" -- key event from macAddressField , oldMacAddress " +
+				// logging.debug (" -- key event from macAddressField , oldMacAddress " +
 				// oldMacAddress
 				// + ", address " + macAddressField.getText() );
 				logging.debug(this, " keyPressed on macAddressField, text " + macAddressField.getText());
@@ -3974,7 +3976,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			}
 
 			else if (e.getSource() == ipAddressField) {
-				// System.out.println (" -- key event from macAddressField , oldMacAddress " +
+				// logging.debug (" -- key event from macAddressField , oldMacAddress " +
 				// oldMacAddress
 				// + ", address " + macAddressField.getText() );
 				logging.debug(this, " keyPressed on ipAddressField, text " + ipAddressField.getText());
@@ -4217,7 +4219,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			jButtonClientsConfiguration.setSelected(true);
 			jButtonDepotsConfiguration.setSelected(false);
 			jButtonServerConfiguration.setSelected(false);
-			// System.out.println ( " 2 jButtonLicences == null " + (jButtonLicences ==
+			// logging.debug ( " 2 jButtonLicences == null " + (jButtonLicences ==
 			// null));
 			// jLabelLicences.setForeground (Globals.greyed);
 			break;
@@ -4240,7 +4242,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		/*
 		 * case LICENCES:
+		<<<<<<< ours
 		 * System.out.println(" tabbed pane visible false");
+		=======
+		 * logging.debug(" tabbed pane visible false");
+		>>>>>>> theirs
 		 * jButtonServerConfiguration.setSelected(false);
 		 * jButtonClientsConfiguration.setSelected(false);
 		 * jButtonLicences.setSelected(true);
@@ -4268,7 +4274,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 					main.clearHwInfo();
 					// WaitCursor waitCursor = new WaitCursor(tree);
 					// otherwise we get a wait cursor only in table component
-					main.resetView(ConfigedMain.viewHardwareInfo);
+					main.resetView(ConfigedMain.VIEW_HARDWARE_INFO);
 				}
 			};
 		}
@@ -4345,7 +4351,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		/*
 		 * if (hardwareInfo instanceof Map)
 		 * {
-		 * //System.out.println
+		 * //logging.debug
 		 * (" ------------- we should get a version2 hardware info");
 		 * showHardwareLog_version2.setHardwareInfo( (Map) hardwareInfo);
 		 * showHardwareLog = showHardwareLog_version2;
@@ -4357,7 +4363,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		 * showHardwareLog = showHardwareLog_NotFound;
 		 */
 
-		// System.out.println("setComponentAt >>" +
+		// logging.debug("setComponentAt >>" +
 		// configed.getResourceValue("MainFrame.jPanel_hardwareLog") + "<<");
 		showHardwareLog = showHardwareLog_version2;
 		showHardwareInfo();

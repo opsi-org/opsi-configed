@@ -5,12 +5,12 @@ import java.util.Date;
 //import de.uib.utilities.logging.*;
 
 public class ExtendedDate {
-	final static String infiniteImport = "never";
-	final static String sINFINITE = "INFINITE";
-	// final static String displayInfinite = "\u221E";//"INF";
+	static final String infiniteImport = "never";
+	static final String sINFINITE = "INFINITE";
+	// static final String displayInfinite = "\u221E";//"INF";
 
-	final static public ExtendedDate INFINITE = new ExtendedDate(sINFINITE);
-	final static public ExtendedDate ZERO = new ExtendedDate("1900-01-01 00:00:0");
+	public static final ExtendedDate INFINITE = new ExtendedDate(sINFINITE);
+	public static final ExtendedDate ZERO = new ExtendedDate("1900-01-01 00:00:0");
 
 	private Date date;
 	private String sDate;
@@ -21,7 +21,6 @@ public class ExtendedDate {
 		/*
 		 * catch( DateParseException ex )
 		 * {
-		 * logging.logTrace(ex);
 		 * logging.warning(this, " " + ex);
 		 * }
 		 */
@@ -74,11 +73,7 @@ public class ExtendedDate {
 
 	@Override
 	public boolean equals(Object ob) {
-		return (this == ob)
-				||
-				(ob instanceof ExtendedDate
-						&&
-						toString().equals(ob.toString()));
+		return (this == ob) || (ob instanceof ExtendedDate && toString().equals(ob.toString()));
 	}
 
 	public Date getDate() {

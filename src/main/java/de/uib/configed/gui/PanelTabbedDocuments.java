@@ -36,7 +36,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 		textPanes = new LogPane[idents.length];
 
-		// System.out.println ( " ------------------------------ idents.length " +
+		// logging.debug ( " ------------------------------ idents.length " +
 		// idents.length);
 
 		for (int i = 0; i < idents.length; i++) {
@@ -98,8 +98,8 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 									loadDocument(idents[logNo]);
 								}
 
-								logging.info(this, "saveAllAsZip textPanes[" + logNo +
-										"].lines.length " + textPanes[logNo].lines.length);
+								logging.info(this, "saveAllAsZip textPanes[" + logNo + "].lines.length "
+										+ textPanes[logNo].lines.length);
 
 							}
 						}

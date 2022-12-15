@@ -9,9 +9,8 @@ import de.uib.utilities.logging.logging;
 
 /**
  * Each backend represents a data source, which can be used find out which
- * clients should be selected.
- * It also creates all operations, as the implementation may differ between the
- * data sources.
+ * clients should be selected. It also creates all operations, as the
+ * implementation may differ between the data sources.
  */
 public abstract class Backend {
 	private static Backend currentBackend = null;
@@ -27,9 +26,8 @@ public abstract class Backend {
 	protected boolean reloadRequested;
 
 	/**
-	 * Goes through the list of clients and filters them with operation. The boolean
-	 * arguments give hints which data
-	 * is needed.
+	 * Goes through the list of clients and filters them with operation. The
+	 * boolean arguments give hints which data is needed.
 	 */
 	public List<String> checkClients(ExecutableOperation operation, boolean hasSoftware, boolean hasHardware,
 			boolean hasSwAudit) {
@@ -52,10 +50,9 @@ public abstract class Backend {
 	}
 
 	/**
-	 * This function translates the operations tree with the root operation into an
-	 * executable operation tree
-	 * by replacing the non-executable operations with their backend-specific
-	 * executable operations.
+	 * This function translates the operations tree with the root operation into
+	 * an executable operation tree by replacing the non-executable operations
+	 * with their backend-specific executable operations.
 	 */
 	public ExecutableOperation createExecutableOperation(SelectOperation operation) {
 		logging.debug(this, "createFromOperationData " + operation.getClassName());
@@ -81,39 +78,39 @@ public abstract class Backend {
 	/**
 	 * Create a backend specific executable operation based on this operation.
 	 */
-	abstract protected SelectOperation createOperation(SelectOperation operation);
+	protected abstract SelectOperation createOperation(SelectOperation operation);
 
 	/**
-	 * Creates a backend specific executable operation based on this group operation
-	 * and the list of backend specific children.
+	 * Creates a backend specific executable operation based on this group
+	 * operation and the list of backend specific children.
 	 */
-	abstract protected SelectGroupOperation createGroupOperation(SelectGroupOperation operation,
+	protected abstract SelectGroupOperation createGroupOperation(SelectGroupOperation operation,
 			List<SelectOperation> operations);
 
 	/**
 	 * Get a list of all clients. These will be filtered later.
 	 */
-	abstract protected List<Client> getClients();
+	protected abstract List<Client> getClients();
 
 	/**
 	 * Get a list of all groups of this opsi installation.
 	 */
-	abstract public List<String> getGroups();
+	public abstract List<String> getGroups();
 
 	/**
 	 * Get a list of product IDs of the opsi products.
 	 */
-	abstract public TreeSet<String> getProductIDs();
+	public abstract TreeSet<String> getProductIDs();
 
 	/**
-	 * Get a map, with the hardware as key and a list of properties as value. The
-	 * key is in english.
+	 * Get a map, with the hardware as key and a list of properties as value.
+	 * The key is in english.
 	 */
-	abstract public Map<String, List<SelectElement>> getHardwareList();
+	public abstract Map<String, List<SelectElement>> getHardwareList();
 
 	/**
-	 * Get a map, with the hardware as key and a list of properties as value. The
-	 * key is localized.
+	 * Get a map, with the hardware as key and a list of properties as value.
+	 * The key is localized.
 	 */
-	abstract public Map<String, List<SelectElement>> getLocalizedHardwareList();
+	public abstract Map<String, List<SelectElement>> getLocalizedHardwareList();
 }

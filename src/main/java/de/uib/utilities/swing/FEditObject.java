@@ -34,8 +34,7 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.observer.RunningInstances;
 
-public class FEditObject extends javax.swing.JDialog
-		implements ActionListener, KeyListener, DocumentListener {
+public class FEditObject extends javax.swing.JDialog implements ActionListener, KeyListener, DocumentListener {
 	public static RunningInstances<JDialog> runningInstances = new RunningInstances(JDialog.class, "leaving dialog");
 
 	public Dimension areaDimension = new Dimension(300, 240);
@@ -101,25 +100,25 @@ public class FEditObject extends javax.swing.JDialog
 		// editingArea.addFocusListener(this);
 
 		buttonCommit = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("FEditObject.SaveButtonTooltip"),
-				"images/apply.png", "images/apply_over.png", "images/apply_disabled.png", true);
+				de.uib.configed.configed.getResourceValue("FEditObject.SaveButtonTooltip"), "images/apply.png",
+				"images/apply_over.png", "images/apply_disabled.png", true);
 		buttonCommit.setPreferredSize(new Dimension(buttonWidth, de.uib.utilities.Globals.buttonHeight));
 
 		buttonCancel = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("FEditObject.CancelButtonTooltip"),
-				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png", true);
+				de.uib.configed.configed.getResourceValue("FEditObject.CancelButtonTooltip"), "images/cancel.png",
+				"images/cancel_over.png", "images/cancel_disabled.png", true);
 		buttonCancel.setPreferredSize(new Dimension(buttonWidth, de.uib.utilities.Globals.buttonHeight));
 		buttonCancel.setEnabled(true);
 
 		buttonRemove = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
-				"images/list-remove.png", "images/list-remove.png", "images/list-remove_disabled.png", true);
+				de.uib.configed.configed.getResourceValue("FEditObject.RemoveButtonTooltip"), "images/list-remove.png",
+				"images/list-remove.png", "images/list-remove_disabled.png", true);
 		buttonRemove.setPreferredSize(new Dimension(buttonWidth, de.uib.utilities.Globals.buttonHeight));
 		buttonRemove.setVisible(false);
 
 		buttonAdd = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("FEditObject.AddButtonTooltip"),
-				"images/list-add.png", "images/list-add.png", "images/list-add_disabled.png", true);
+				de.uib.configed.configed.getResourceValue("FEditObject.AddButtonTooltip"), "images/list-add.png",
+				"images/list-add.png", "images/list-add_disabled.png", true);
 		buttonAdd.setPreferredSize(new Dimension(buttonWidth, de.uib.utilities.Globals.buttonHeight));
 		buttonAdd.setVisible(false);
 
@@ -175,55 +174,46 @@ public class FEditObject extends javax.swing.JDialog
 
 		javax.swing.GroupLayout layout1 = new javax.swing.GroupLayout(framingPanel);
 		framingPanel.setLayout(layout1);
-		layout1.setHorizontalGroup(
-				layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(layout1.createSequentialGroup()
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-								.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addComponent(editingArea, 60, javax.swing.GroupLayout.PREFERRED_SIZE,
+		layout1.setHorizontalGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layout1.createSequentialGroup()
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+								.addComponent(editingArea, 60, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								.addGroup(layout1.createSequentialGroup()
+										.addComponent(buttonCommit, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
+												javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addComponent(buttonCancel, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
+												javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.vGapSize, 2 * Globals.vGapSize, 2 * Globals.vGapSize)
+										.addComponent(buttonRemove, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
+												javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addComponent(buttonAdd, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
+												javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addComponent(extraField, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
 												Short.MAX_VALUE)
-										.addGroup(layout1.createSequentialGroup()
-												.addComponent(buttonCommit, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(buttonCancel, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addGap(Globals.vGapSize, 2 * Globals.vGapSize, 2 * Globals.vGapSize)
-												.addComponent(buttonRemove, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(buttonAdd, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(extraField, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
-														Short.MAX_VALUE)
-												.addComponent(extraLabel, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
-														Short.MAX_VALUE)))
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
-		layout1.setVerticalGroup(
-				layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(layout1.createSequentialGroup()
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-								.addComponent(editingArea, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-								.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addComponent(buttonRemove, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addComponent(extraField, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addComponent(extraLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE))
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
+										.addComponent(extraLabel, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
+												Short.MAX_VALUE)))
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
+		layout1.setVerticalGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layout1.createSequentialGroup()
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addComponent(editingArea, javax.swing.GroupLayout.PREFERRED_SIZE,
+								javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonRemove, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(extraField, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(extraLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
 
 		if (loggingPanel.isVisible()) {
 			splitPane.setTopComponent(framingPanel);
@@ -237,12 +227,10 @@ public class FEditObject extends javax.swing.JDialog
 					.addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin)
 					.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 							.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-					.addContainerGap()
-					.addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin));
+					.addContainerGap().addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin));
 
-			layout.setVerticalGroup(
-					layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-							.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+			layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+					.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		}
 
@@ -254,25 +242,20 @@ public class FEditObject extends javax.swing.JDialog
 			getContentPane().setLayout(layout);
 			layout.setHorizontalGroup(
 					layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-							.addGroup(layout.createSequentialGroup()
-									.addContainerGap()
+							.addGroup(layout.createSequentialGroup().addContainerGap()
 									.addComponent(framingPanel, 100, javax.swing.GroupLayout.DEFAULT_SIZE,
 											Short.MAX_VALUE)
 									.addContainerGap())
-							.addGroup(layout.createSequentialGroup()
-									.addContainerGap()
-									.addComponent(loggingPanel, 100, javax.swing.GroupLayout.PREFERRED_SIZE,
-											Short.MAX_VALUE)
-									.addContainerGap()));
-			layout.setVerticalGroup(
-					layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-							.addGroup(layout.createSequentialGroup()
-									.addContainerGap(20, 20)
-									.addComponent(framingPanel, javax.swing.GroupLayout.PREFERRED_SIZE,
+							.addGroup(layout
+									.createSequentialGroup().addContainerGap().addComponent(loggingPanel, 100,
 											javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-									.addComponent(loggingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 30,
-											Short.MAX_VALUE)
-									.addContainerGap(20, 20)));
+									.addContainerGap()));
+			layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+					.addGroup(layout.createSequentialGroup().addContainerGap(20, 20)
+							.addComponent(framingPanel, javax.swing.GroupLayout.PREFERRED_SIZE,
+									javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+							.addComponent(loggingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, Short.MAX_VALUE)
+							.addContainerGap(20, 20)));
 
 		}
 
@@ -303,12 +286,12 @@ public class FEditObject extends javax.swing.JDialog
 	}
 
 	public void setStartValue(Object s) {
-		// System.out.println("FEditObject.setStartText(): " + s);
+		// logging.debug("FEditObject.setStartText(): " + s);
 		initialValue = s;
 	}
 
 	public Object getValue() {
-		// System.out.println("FEditObject.getText()");
+		// logging.debug("FEditObject.getText()");
 		return initialValue;
 	}
 
@@ -381,7 +364,7 @@ public class FEditObject extends javax.swing.JDialog
 			logging.error(" editing area not filled with component");
 			return false;
 		}
-		// System.out.println(" editingArea used by " +
+		// logging.debug(" editingArea used by " +
 		// editingArea.getComponent(0).getClass());
 		editingArea.getComponent(0).setPreferredSize(usableAreaSize);
 		initComponents();
@@ -448,12 +431,12 @@ public class FEditObject extends javax.swing.JDialog
 			 * leave();
 			 */
 			cancel();
-			// System.out.println(" window closing, text " + getText());
+			// logging.debug(" window closing, text " + getText());
 		} else if (e.getID() == WindowEvent.WINDOW_ACTIVATED) {
-			// System.out.println(" window activated");
+			// logging.debug(" window activated");
 			enter();
 		} else if (e.getID() == WindowEvent.WINDOW_DEACTIVATED) {
-			// System.out.println(" window deactivated");
+			// logging.debug(" window deactivated");
 			// deactivate();
 
 		}
@@ -488,7 +471,7 @@ public class FEditObject extends javax.swing.JDialog
 		if (e.getSource() == buttonCommit) {
 			commit();
 		} else if (e.getSource() == buttonCancel) {
-			// System.out.println (" -------- buttonCancel " + e);
+			// logging.debug (" -------- buttonCancel " + e);
 			cancel();
 		}
 	}

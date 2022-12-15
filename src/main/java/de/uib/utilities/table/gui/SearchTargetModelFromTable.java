@@ -148,7 +148,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		}
 
 		table.setRowSelectionInterval(row, row);
-		// System.out.println(" --- view row selected " + row);
+		// logging.debug(" --- view row selected " + row);
 		ensureRowIsVisible(row);
 	}
 
@@ -159,7 +159,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 			return;
 
 		table.addRowSelectionInterval(row, row);
-		// System.out.println(" --- view row selected " + row);
+		// logging.debug(" --- view row selected " + row);
 		ensureRowIsVisible(row);
 	}
 
@@ -181,9 +181,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	private void returnToNotChanged(boolean wasChanged) {
 		// we are not interested in changes of model induced by selection
-		if (thePanel != null
-				&& !wasChanged
-				&& thePanel.isDataChanged()) {
+		if (thePanel != null && !wasChanged && thePanel.isDataChanged()) {
 			logging.info(this, "returnToNotChanged active ");
 			thePanel.setDataChanged(false);
 		}
@@ -220,8 +218,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 			logging.info(this, "setFiltered modelRowFilter " + java.util.Arrays.toString(modelRowFilter));
 
 			((de.uib.utilities.table.RowNoTableModelFilterCondition) (model.getFilter(FILTER_BY_SELECTION)
-					.getCondition()))
-					.setFilter(modelRowFilter, model.getRows());
+					.getCondition())).setFilter(modelRowFilter, model.getRows());
 
 			model.setUsingFilter(FILTER_BY_SELECTION, true);
 			model.reset();

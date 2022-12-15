@@ -28,14 +28,8 @@ public class FShowList extends FTextArea {
 		init();
 	}
 
-	public FShowList(JFrame owner, String title, boolean modal, int lastButtonNo) {
-		super(owner, title, modal, lastButtonNo);
-		this.owner = owner;
-		init();
-	}
-
-	public FShowList(JFrame owner, String title, String message, boolean modal, int lastButtonNo) {
-		this(owner, title, modal, lastButtonNo);
+	public FShowList(JFrame owner, String title, String message, boolean modal) {
+		this(owner, title, modal);
 		this.owner = owner;
 		init();
 		setMessage(message);
@@ -74,7 +68,7 @@ public class FShowList extends FTextArea {
 
 	public void setFont(Font f) {
 		if (jTextArea1 == null) {
-			// System.out.println (" set Font called too early ");
+			// logging.debug (" set Font called too early ");
 		} else {
 			jTextArea1.setFont(f);
 		}
@@ -108,7 +102,7 @@ public class FShowList extends FTextArea {
 	}
 
 	public void doAction1() {
-		// System.out.println ("action2");
+		// logging.debug ("action2");
 		logging.clearErrorList();
 		if (owner != null)
 			owner.toFront();
@@ -116,7 +110,7 @@ public class FShowList extends FTextArea {
 	}
 
 	public void doAction2() {
-		// System.out.println ("action2");
+		// logging.debug ("action2");
 		// logging. clearErrorList();
 		super.doAction2();
 	}
@@ -125,7 +119,7 @@ public class FShowList extends FTextArea {
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
-			// System.out.println ("shift released");
+			// logging.debug ("shift released");
 		}
 
 		if (e.getKeyCode() == KeyEvent.VK_TAB && !shiftPressed) {
@@ -141,8 +135,8 @@ public class FShowList extends FTextArea {
 		}
 	}
 
-	public final static void main(String[] args) {
-		new FShowList(null, "configed", "configed Ende", true, 0).setVisible(true);
+	public static final void main(String[] args) {
+		new FShowList(null, "configed", "configed Ende", true).setVisible(true);
 	}
 
 }

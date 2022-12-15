@@ -57,16 +57,13 @@ public abstract class Executioner {
 
 	public abstract Map<String, Map<String, Map<String, Object>>> getMap3_Object(OpsiMethodCall omc);
 
-	public abstract Map<String, Map<String, String>> getStringMappedObjectsByKey(
-			OpsiMethodCall omc, String key,
-			String[] sourceVars, String[] targetVars,
-			Map<String, String> translateValues);
+	public abstract Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
+			String[] sourceVars, String[] targetVars, Map<String, String> translateValues);
 
-	public abstract Map<String, Map<String, String>> getStringMappedObjectsByKey(
-			OpsiMethodCall omc, String key, String[] sourceVars, String[] targetVars);
+	public abstract Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
+			String[] sourceVars, String[] targetVars);
 
-	public abstract Map<String, Map<String, String>> getStringMappedObjectsByKey(
-			OpsiMethodCall omc, String key);
+	public abstract Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key);
 
 	public abstract Map getMapOfListsOfMaps(OpsiMethodCall omc);
 
@@ -83,5 +80,5 @@ public abstract class Executioner {
 	public abstract String getStringValueFromItem(Object s);
 
 	// public abstract Object deriveStandard(Object ob);
-	public final static Executioner NONE = new NONEexecutioner();
+	public static final Executioner NONE = new NONEexecutioner();
 }

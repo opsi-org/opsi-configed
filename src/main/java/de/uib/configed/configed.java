@@ -23,6 +23,7 @@ import java.util.TreeSet;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import de.uib.configed.gui.FTextArea;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsidatamodel.PersistenceController;
@@ -37,7 +38,6 @@ public class configed {
 	public static boolean useHalt = false;
 
 	public static de.uib.utilities.swing.FLoadingWaiter fProgress;
-	public static de.uib.configed.gui.FTextArea fErrorOutOfMemory;
 
 	private static final String localizationFilenameRegex = Messages.appname + "_...*\\.properties";
 
@@ -64,10 +64,10 @@ public class configed {
 	 * "--version \t\t\t\t\t(Tell configed version)\n" +
 	 * "--help \t\t\t\t\t\t(Give this help)\n" +
 	 * "--loglevel L \t\t\t\t\t(Set logging level L, L is a number >= " +
-	 * logging.LEVEL_FATAL + ", <= " + logging.LEVEL_DEBUG + ") \n" ;
+	 * logging.LEVEL_CRITICAL + ", <= " + logging.LEVEL_DEBUG + ") \n" ;
 	 */
 
-	public final static String[][] usageLines = new String[][] {
+	public static final String[][] usageLines = new String[][] {
 			new String[] { "-l LOC", "--locale LOC",
 					"Set locale LOC (format: <language>_<country>). DEFAULT: System.locale" },
 			new String[] { "-h HOST", "--host HOST",
@@ -117,8 +117,8 @@ public class configed {
 							+ " (DEFAULT).  -1 meaning 'no collect'. 0 meaning 'infinite' " },
 			new String[] { "--help", "", "Give this help" },
 			new String[] { "--loglevel L", "",
-					"Set logging level L, L is a number >= " + logging.LEVEL_FATAL + ", <= " + logging.LEVEL_DEBUG
-							+ " . DEFAULT: " + de.uib.utilities.logging.logging.AKT_DEBUG_LEVEL },
+					"Set logging level L, L is a number >= " + logging.LEVEL_NONE + ", <= " + logging.LEVEL_SECRET
+							+ " . DEFAULT: " + de.uib.utilities.logging.logging.LOG_LEVEL_CONSOLE },
 			new String[] { "--halt", "", "Use  first occurring debug halt point that may be in the code" },
 			// new String[]{"--sqlgethashes", "", "Use sql statements with getHashes where
 			// implemented in PersistenceController "},
@@ -149,13 +149,13 @@ public class configed {
 
 	};
 
-	public final static Charset serverCharset = Charset.forName("UTF-8");
-	public final static String javaVersion = System.getProperty("java.version");
-	public final static String javaVendor = System.getProperty("java.vendor", "");
-	public final static LinkedHashMap<String, Object> javaSysExtraProperties = new LinkedHashMap<String, Object>();
-	public final static String systemSSLversion = System.getProperty("https.protocols");
-	public final static String STATEOFTHEART_SSL_VERSION = "TLSv1.2";
-	public final static String JAVA_1_7_DEFAUTL_SSL_VERSION = "TLSv1";
+	public static final Charset serverCharset = Charset.forName("UTF-8");
+	public static final String javaVersion = System.getProperty("java.version");
+	public static final String javaVendor = System.getProperty("java.vendor", "");
+	public static final LinkedHashMap<String, Object> javaSysExtraProperties = new LinkedHashMap<String, Object>();
+	public static final String systemSSLversion = System.getProperty("https.protocols");
+	public static final String STATEOFTHEART_SSL_VERSION = "TLSv1.2";
+	public static final String JAVA_1_7_DEFAUTL_SSL_VERSION = "TLSv1";
 	public static String PREFERRED_SSL_VERSION = STATEOFTHEART_SSL_VERSION;
 	public static String EXTRA_LOCALIZATION_FILENAME = null;
 	public static PropertiesStore extraLocalization;
@@ -169,7 +169,8 @@ public class configed {
 	private static String host = null;
 	public static String user = null;
 	private static String password = null;
-	private static int loglevel = logging.AKT_DEBUG_LEVEL;
+	private static int loglevelConsole = logging.LOG_LEVEL_CONSOLE;
+	private static int loglevelFile = logging.LOG_LEVEL_FILE;
 
 	public static String TLS_CIPHER_SUITE = "";
 	public static String sshkey = null;
@@ -204,11 +205,6 @@ public class configed {
 	private static String paramClientgroup;
 	private static Integer paramTab;
 
-	// public static Locale LOCALE;
-
-	// protected static ResourceBundle messages;
-	// protected static ResourceBundle messagesEN;
-
 	// --------------------------------------------------------------------------------------------------------
 	// exit codes
 
@@ -220,6 +216,8 @@ public class configed {
 	public static final int ERROR_CANNOT_READ_EXTRA_LOCALIZATION = 11;
 
 	public static final int ERROR_OUT_OF_MEMORY = 21;
+
+	private static FTextArea fErrorOutOfMemory;
 
 	// --------------------------------------------------------------------------------------------------------
 
@@ -239,9 +237,7 @@ public class configed {
 	}
 
 	protected static void usage() {
-		System.out.println();
-		System.out.println(" configed version " + Globals.VERSION + " " + Globals.VERDATE + " " + Globals.VERHASHTAG);
-
+		System.out.println("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
 		System.out.println(usageInfo);
 
 		final int tabWidth = 8;
@@ -284,20 +280,17 @@ public class configed {
 			System.out.println("\t" + usageLines[i][0] + tabs(allTabs0 - startedTabs0) + usageLines[i][1]
 					+ tabs(allTabs1 - startedTabs1) + usageLines[i][2]);
 		}
-
-		System.out.println();
-		System.out.println();
 	}
 
 	protected static boolean isValue(String[] args, int i) {
-		// System.out.println( "isValue " + args[i] + " length " + args.length + " i " +
+		// logging.debug( "isValue " + args[i] + " length " + args.length + " i " +
 		// i + " has - " + (args[i].indexOf('-') == 0) );
 		return i >= args.length || args[i].indexOf('-') == 0;
 	}
 
 	protected static String getArg(String[] args, int i) {
 		if (args.length <= i + 1 || args[i + 1].indexOf('-') == 0) {
-			System.err.println("Missing value for option " + args[i]);
+			logging.error("Missing value for option " + args[i]);
 			usage();
 			endApp(ERROR_MISSING_VALUE_FOR_OPTION);
 		}
@@ -308,7 +301,7 @@ public class configed {
 	public static void startWithLocale() {
 		logging.info("system information: ");
 
-		logging.info(" configed version " + Globals.VERSION + " " + Globals.VERDATE + " " + Globals.VERHASHTAG);
+		logging.info(" configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
 		logging.info(" running by java version " + javaVersion);
 
 		Properties sysProperties = System.getProperties();
@@ -352,11 +345,13 @@ public class configed {
 			javaSysExtraProperties.put(key, value);
 		}
 
-		logging.info(
-				" we get max memory " + (new Formatter()).format("%,d MB", Runtime.getRuntime().maxMemory() / 1000000));
-		// System.exit(0);
+		// Try with resources so that it will be closed in implicit finally statement
+		try (Formatter formatter = new Formatter()) {
+			logging.info(
+					" we get max memory " + formatter.format("%,d MB", Runtime.getRuntime().maxMemory() / 1000000));
+		}
+
 		sslversionCheck(true);
-		// logging.info("configed, start with Locale");
 
 		de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
@@ -365,61 +360,26 @@ public class configed {
 
 		SwingUtilities.invokeLater(() -> cm.init());
 
-		/*
-		 * if (appletHost != null)
-		 * {
-		 * 
-		 * if (paramClient != null || paramClientgroup != null)
-		 * {
-		 * if (paramClientgroup != null) cm.setGroup(paramClientgroup);
-		 * if (paramClient != null)cm.setClient(paramClient);
-		 * 
-		 * if (paramTab != null)
-		 * cm.setVisualViewIndex(paramTab);
-		 * 
-		 * 
-		 * }
-		 * }
-		 * else
-		 * {
-		 * if (paramClient != null || paramClientgroup != null)
-		 * {
-		 * if (paramClientgroup != null) cm.setGroup(paramClientgroup);
-		 * if (paramClient != null)cm.setClient(paramClient);
-		 * 
-		 * logging.info("set client " + paramClient);
-		 * 
-		 * 
-		 * 
-		 * if (paramTab != null)
-		 * cm.setVisualViewIndex(paramTab);
-		 * 
-		 * 
-		 * }
-		 * }
-		 */
-
 		try {
 
-			{
-				SwingUtilities.invokeAndWait(() -> {
-					if (paramClient != null || paramClientgroup != null) {
-						if (paramClientgroup != null) {
-							cm.setGroup(paramClientgroup);
-						}
-
-						if (paramClient != null) {
-							cm.setClient(paramClient);
-						}
-
-						logging.info("set client " + paramClient);
-
-						if (paramTab != null) {
-							cm.setVisualViewIndex(paramTab);
-						}
+			SwingUtilities.invokeAndWait(() -> {
+				if (paramClient != null || paramClientgroup != null) {
+					if (paramClientgroup != null) {
+						cm.setGroup(paramClientgroup);
 					}
-				});
-			}
+
+					if (paramClient != null) {
+						cm.setClient(paramClient);
+					}
+
+					logging.info("set client " + paramClient);
+
+					if (paramTab != null) {
+						cm.setVisualViewIndex(paramTab);
+					}
+				}
+			});
+
 		} catch (InvocationTargetException ex) {
 			logging.info(" run " + ex);
 		} catch (InterruptedException ie) {
@@ -435,75 +395,34 @@ public class configed {
 		UncaughtExceptionHandler errorHandler = new UncaughtExceptionHandlerLocalized();
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
 
-		System.out.println("starting " + getClass().getName());
-		System.out.println("default charset is " + Charset.defaultCharset().displayName());
-		System.out.println("server charset is configured as " + serverCharset);
+		logging.debug("starting " + getClass().getName());
+		logging.debug("default charset is " + Charset.defaultCharset().displayName());
+		logging.debug("server charset is configured as " + serverCharset);
 
 		if (serverCharset.equals(Charset.defaultCharset())) {
 			serverCharset_equals_vm_charset = true;
-			System.out.println("they are equal");
+			logging.debug("they are equal");
 		}
 
 		configureUI();
 
-		String imageHandled = "(we start image retrieving)";
-		// System.out.println (imageHandled);
+		// logging.debug (imageHandled);
 		try {
 			String resourceS = "opsi.gif";
 			URL resource = Globals.class.getResource(resourceS);
 			if (resource == null) {
-				System.out.println("image resource " + resourceS + "  not found");
+				logging.debug("image resource " + resourceS + "  not found");
 			} else {
 				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
-				imageHandled = "setIconImage";
 			}
 		} catch (Exception ex) {
-			System.out.println("imageHandled failed: " + ex.toString());
+			logging.debug("imageHandled failed: " + ex.toString());
 		}
 
-		System.out.println("--  option logdirectory " + logdirectory);
-		System.out.println("--  wantedDirectory " + logging.wantedDirectory);
+		// Set directory for logging
+		logging.logDirectoryName = logdirectory;
 
-		// set wanted directory for logging
-		if (logdirectory != null)
-			logging.wantedDirectory = logdirectory;
-		else
-			logging.wantedDirectory = "";
-
-		System.out.println(" --  wantedDirectory " + logging.wantedDirectory);
-
-		String[] nameParts = getClass().getName().split("\\.");
-		if ((System.getenv(logging.windowsEnvVariableAppDataDirectory) != null) && (nameParts.length > 0)) {
-			logging.programSubDir = "" + nameParts[nameParts.length - 1];
-		} else if (nameParts.length > 0) {
-			logging.programSubDir = "." + nameParts[nameParts.length - 1];
-		}
-
-		// initialized in ConfigedMain
-		/*
-		 * File savedStatesDir = new File
-		 * 
-		 * (System.getProperty(logging.envVariableForUserDirectory) + File.separator +
-		 * logging.programSubDir +
-		 * File.separator
-		 * + paramHost.replace(":", "_")
-		 * );
-		 * 
-		 * savedStatesDir.mkdirs();
-		 * 
-		 * savedStates = new SavedStates(new File(savedStatesDir.toString()
-		 * + File.separator + savedStatesFilename));
-		 * 
-		 * try{
-		 * savedStates.load();
-		 * }
-		 * catch(IOException iox)
-		 * {
-		 * logging.info(this, "saved states file could not be loades");
-		 * }
-		 */
-
-		// set locale
+		// Set locale
 		java.util.List<String> existingLocales = Messages.getLocaleNames();
 		Messages.setLocale(paramLocale);
 		logging.info("getLocales: " + existingLocales);
@@ -524,18 +443,18 @@ public class configed {
 	}
 
 	protected static void processArgs(String[] args) {
-		//System.out.println(args.length);
+		//logging.debug(args.length);
 		/*for (int i = 0; i < args.length; i++)
-			System.out.println();*/
+			logging.debug();*/
 		/*
-		 * System.out.println("args:");
+		 * logging.debug("args:");
 		 * for (int i = 0; i < args.length; i++)
 		 * {
-		 * System.out.println(args[i]);
+		 * logging.debug(args[i]);
 		 * }
 		 */
-		// System.out.println("args " + Arrays.toString(args));
-		logging.writeToConsole("args " + Arrays.toString(args));
+		// logging.debug("args " + Arrays.toString(args));
+		logging.debug("args " + Arrays.toString(args));
 
 		// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = true;
 		de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
@@ -556,7 +475,7 @@ public class configed {
 
 		int i = 0;
 		while (i < args.length) {
-			// System.out.println("treat i, arg " + i + ", " + arg);
+			// logging.debug("treat i, arg " + i + ", " + arg);
 
 			if (args[i].charAt(0) != '-') // no option
 			{
@@ -572,7 +491,7 @@ public class configed {
 			} else // options
 
 			{
-				// System.out.println(" option " + arg);
+				// logging.debug(" option " + arg);
 				if (args[i].equals("-l") || args[i].equals("--locale")) {
 					locale = getArg(args, i);
 					i = i + 2;
@@ -596,7 +515,7 @@ public class configed {
 					try {
 						tab = Integer.parseInt(tabS);
 					} catch (NumberFormatException ex) {
-						System.out.println("  \n\nArgument >" + tabS + "< has no integer format");
+						logging.debug("  \n\nArgument >" + tabS + "< has no integer format");
 						usage();
 						endApp(ERROR_INVALID_OPTION);
 					}
@@ -611,7 +530,7 @@ public class configed {
 					try {
 						canonicalPath = new File(savedStatesLocationName).getCanonicalPath();
 					} catch (IOException ex) {
-						System.out.println("savedstates argument " + ex);
+						logging.debug("savedstates argument " + ex);
 					}
 					if (canonicalPath != null)
 						savedStatesLocationName = canonicalPath;
@@ -623,7 +542,7 @@ public class configed {
 					try {
 						refreshMinutes = Integer.valueOf(test);
 					} catch (NumberFormatException ex) {
-						System.out.println("  \n\nArgument >" + test + "< has no integer format");
+						logging.debug("  \n\nArgument >" + test + "< has no integer format");
 						usage();
 						endApp(ERROR_INVALID_OPTION);
 					}
@@ -638,7 +557,7 @@ public class configed {
 					 * String s = getArg(args, i)
 					 * if (s.length() < 2 || s.charAt(0) != '[]' || charAt(s.length-1) != ']')
 					 * {
-					 * System.out.println(" no enclosing []  for cipher list ");
+					 * logging.debug(" no enclosing []  for cipher list ");
 					 * usage();
 					 * endApp( ERROR_INVALID_OPTION );
 					 * }
@@ -679,14 +598,14 @@ public class configed {
 					// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = true;
 					de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
 					i = i + 1;
-					// System.out.println ("gzip");
+					// logging.debug ("gzip");
 
 					if (isValue(args, i)) {
-						// System.out.println (args[i]);
-						if (args[i].toUpperCase().equals("Y")) {
+						// logging.debug (args[i]);
+						if (args[i].equalsIgnoreCase("Y")) {
 							// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = true;
 							de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
-						} else if (args[i].toUpperCase().equals("N")) {
+						} else if (args[i].equalsIgnoreCase("N")) {
 							de.uib.opsicommand.JSONthroughHTTP.compressTransmission = false;
 							// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = false;
 						} else {
@@ -714,10 +633,10 @@ public class configed {
 					i++;
 					group = getArg(args, i);
 					i = i + 2;
-					// System.out.println(" savedsearch, group " + savedSearch + ", " + group);
+					// logging.debug(" savedsearch, group " + savedSearch + ", " + group);
 				} else if (args[i].equals("--initUserRoles")) {
 					optionCLIuserConfigProducing = true;
-					// System.out.println("treat i, arg " + args[i]);
+					// logging.debug("treat i, arg " + args[i]);
 					i++;
 				} else if (args[i].equals("-me") || args[i].equals("--testPersistenceControllerMethod")) {
 					optionPersistenceControllerMethodCall = true;
@@ -774,7 +693,7 @@ public class configed {
 					try {
 						de.uib.opsicommand.OpsiMethodCall.maxCollectSize = Integer.parseInt(no);
 					} catch (NumberFormatException ex) {
-						System.out.println("  \n\nArgument >" + no + "< has no integer format");
+						logging.debug("  \n\nArgument >" + no + "< has no integer format");
 						usage();
 						endApp(ERROR_INVALID_OPTION);
 					}
@@ -783,9 +702,9 @@ public class configed {
 					String s = "?";
 					try {
 						s = getArg(args, i);
-						loglevel = Integer.valueOf(s);
+						loglevelFile = loglevelConsole = Integer.valueOf(s);
 					} catch (NumberFormatException ex) {
-						System.out.println(" \n\nArgument >" + s + "< has no integer format");
+						logging.debug(" \n\nArgument >" + s + "< has no integer format");
 					}
 					i = i + 2;
 				} else if (args[i].equals("--localizationfile")) {
@@ -798,23 +717,23 @@ public class configed {
 					try {
 						File extraLocalizationFile = new File(EXTRA_LOCALIZATION_FILENAME);
 						if (!extraLocalizationFile.exists()) {
-							System.out.println("File not found: " + EXTRA_LOCALIZATION_FILENAME);
+							logging.debug("File not found: " + EXTRA_LOCALIZATION_FILENAME);
 						} else if (!extraLocalizationFile.canRead()) {
-							System.out.println("File not readable " + EXTRA_LOCALIZATION_FILENAME);
+							logging.debug("File not readable " + EXTRA_LOCALIZATION_FILENAME);
 						} else
 
 						{
-							System.out.println(" ok " + localizationFilenameRegex + "? "
+							logging.debug(" ok " + localizationFilenameRegex + "? "
 									+ EXTRA_LOCALIZATION_FILENAME.matches("configed_...*\\.properties") + " --  "
 									+ EXTRA_LOCALIZATION_FILENAME.matches(localizationFilenameRegex));
 
 							parts = EXTRA_LOCALIZATION_FILENAME.split("_");
 
-							System.out.println(" . " + parts[1] + " .. " + Arrays.toString(parts[1].split("\\.")));
+							logging.debug(" . " + parts[1] + " .. " + Arrays.toString(parts[1].split("\\.")));
 
 							if (!EXTRA_LOCALIZATION_FILENAME.matches(localizationFilenameRegex)) {
-								System.out.println("localization file does not have the expected format "
-										+ Messages.appname + "_LOCALE.properties");
+								logging.debug("localization file does not have the expected format " + Messages.appname
+										+ "_LOCALE.properties");
 							} else {
 								extraLocalization = new PropertiesStore(extraLocalizationFile);
 								extraLocalization.load();
@@ -823,16 +742,12 @@ public class configed {
 							}
 						}
 					} catch (Exception ex) {
-						System.out.println(EXTRA_LOCALIZATION_FILENAME + " problem " + ex);
-						ex.printStackTrace();
+						logging.error(EXTRA_LOCALIZATION_FILENAME + " problem", ex);
 					}
 
 					i = i + 2;
 
 					if (!success) {
-						System.out.println(" ======================= ");
-						System.out.println(" ======================= ");
-
 						endApp(ERROR_CANNOT_READ_EXTRA_LOCALIZATION);
 					}
 				} else if (args[i].equals("--localizationstrings")) {
@@ -858,33 +773,21 @@ public class configed {
 					useHalt = true;
 					i = i + 1;
 				} else {
-					System.out.println("an option is not valid: " + args[i]);
+					logging.debug("an option is not valid: " + args[i]);
 					usage();
 					endApp(ERROR_INVALID_OPTION);
 				}
 			}
 		}
-		logging.writeToConsole("configed: args recognized");
+		logging.debug("configed: args recognized");
 
-		// System.exit(0);
-
-		// System.out.println( " AKT_DEBUG_LEVEL " + logging.AKT_DEBUG_LEVEL);
-		// System.out.println( " set AKT_DEBUG_LEVEL " + loglevel);
-		if (loglevel != logging.AKT_DEBUG_LEVEL) {
-			if (optionCLIQuerySearch || optionCLIDefineGroupBySearch)
-				logging.setSuppressConsole(true);
-
-			// ? is setting allowed
-			if (loglevel <= logging.LEVEL_DEBUG && loglevel >= logging.LEVEL_FATAL) {
-				logging.setAktDebugLevel(loglevel);
-				System.out.println(" set AKT_DEBUG_LEVEL " + loglevel);
-
-			} else
-				logging.info(" valid log levels between " + logging.LEVEL_FATAL + " and " + logging.LEVEL_DEBUG);
-
-			loglevel = logging.AKT_DEBUG_LEVEL;
-
-		}
+		logging.setLogLevelConsole(loglevelConsole);
+		logging.setLogLevelFile(loglevelFile);
+		logging.setLogfileMarker(host);
+		logging.init();
+		logging.essential("Configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") starting");
+		if (optionCLIQuerySearch || optionCLIDefineGroupBySearch)
+			logging.setSuppressConsole(true);
 	}
 
 	public static String encodeStringFromService(String s) {
@@ -892,42 +795,14 @@ public class configed {
 
 		return s;
 
-		// change of encoding seems now not be necessary any more
-		/*
-		 * if (serverCharset_equals_vm_charset)
-		 * return s;
-		 * 
-		 * 
-		 * if (s == null || s.equals(""))
-		 * return s;
-		 * 
-		 * 
-		 * 
-		 * 
-		 * String result = new String ( s.getBytes( Charset.defaultCharset()),
-		 * serverCharset );
-		 * 
-		 * logging.debug("configed: new encoding " + result);
-		 * 
-		 * return result;
-		 */
-
 	}
 
 	public static String encodeStringForService(String s) {
 		return s;
-		// change of encoding seems now not be necessary any more
-		/*
-		 * if (serverCharset_equals_vm_charset)
-		 * return s;
-		 * 
-		 * return new String ( s.getBytes( serverCharset), Charset.defaultCharset()) ;
-		 */
 	}
 
 	public static boolean get_serverCharset_equals_vm_charset() {
-		boolean b = serverCharset_equals_vm_charset;
-		return b;
+		return serverCharset_equals_vm_charset;
 	}
 
 	public static void sslversionCheck(boolean correctingVersion) {
@@ -950,34 +825,37 @@ public class configed {
 		try {
 			File messagefile = File.createTempFile("configed", "html");
 
-			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(messagefile)));
+			// try-with-resources so that writers will be closed and there's no leak
+			try (FileWriter fw = new FileWriter(messagefile);
+					BufferedWriter bw = new BufferedWriter(fw);
+					PrintWriter out = new PrintWriter(bw)) {
 
-			out.println("<HTML>");
-			out.println("<title>opsi-configed message</title>");
-			out.println("<body>");
-			out.println("<h1 center>opsi-configed</h1>");
-			out.println("<p center>opsi-configed closed</p>");
-			out.println("<p center>reason:</p>");
-			out.println("<p center>" + s + "</p>");
-			out.println("</body>");
-			out.println("</HTML>");
-			out.close();
+				out.println("<HTML>");
+				out.println("<title>opsi-configed message</title>");
+				out.println("<body>");
+				out.println("<h1 center>opsi-configed</h1>");
+				out.println("<p center>opsi-configed closed</p>");
+				out.println("<p center>reason:</p>");
+				out.println("<p center>" + s + "</p>");
+				out.println("</body>");
+				out.println("</HTML>");
 
-			// {
-			// Runtime rt = Runtime.getRuntime();
-			// String osName = System.getProperty("os.name");
-			// if (osName.toLowerCase().startsWith("win")) {
-			// Process proc = rt.exec("cmd.exe /c start \"" + messagefile.getPath() + "\"");
-			// } else
-			// //Linux, we assume that there is a firefox and it will handle the url
-			// {
-			// String[] cmdarray = new String[] { "firefox", messagefile.getPath() };
-			// Process proc = rt.exec(cmdarray);
+				// {
+				// Runtime rt = Runtime.getRuntime();
+				// String osName = System.getProperty("os.name");
+				// if (osName.toLowerCase().startsWith("win")) {
+				// Process proc = rt.exec("cmd.exe /c start \"" + messagefile.getPath() + "\"");
+				// } else
+				// //Linux, we assume that there is a firefox and it will handle the url
+				// {
+				// String[] cmdarray = new String[] { "firefox", messagefile.getPath() };
+				// Process proc = rt.exec(cmdarray);
 
-			// }
-			// }
-		} catch (Exception ex) {
-			System.out.println("configed showExternalInfo " + s);
+				// }
+				// }
+			}
+		} catch (IOException ex) {
+			logging.debug("configed showExternalInfo " + s);
 		}
 	}
 
@@ -986,22 +864,19 @@ public class configed {
 			try {
 				savedStates.store("states on finishing configed");
 			} catch (IOException iox) {
-				System.out.println("could not store saved states, " + iox);
+				logging.debug("could not store saved states, " + iox);
 			}
 		}
 
-		// if (!isApplet)
-		{
-			de.uib.opsicommand.OpsiMethodCall.report();
-			logging.info("regularly exiting app with code " + exitcode);
+		de.uib.opsicommand.OpsiMethodCall.report();
+		logging.info("regularly exiting app with code " + exitcode);
 
-			if (exitcode == ERROR_OUT_OF_MEMORY) {
-				// showExternalInfo( "configed terminates ");
-				fErrorOutOfMemory.setVisible(true);
-			}
-
-			System.exit(exitcode);
+		if (exitcode == ERROR_OUT_OF_MEMORY) {
+			fErrorOutOfMemory.setVisible(true);
 		}
+
+		System.exit(exitcode);
+
 	}
 
 	public static String getResourceValue(String key) {
@@ -1027,7 +902,7 @@ public class configed {
 		} catch (MissingResourceException mre) {
 			// we return the key and log the problem:
 			logging.debug("Problem: " + mre.toString());
-			// System.out.println (" ----------- " + mre.toString());
+			// logging.debug (" ----------- " + mre.toString());
 
 			try {
 				result = Messages.messagesEN.getString(key);
@@ -1039,16 +914,15 @@ public class configed {
 				}
 			} catch (MissingResourceException mre2) {
 				logging.debug("Problem: " + mre2.toString());
-				// System.out.println (" ----------- " + mre2.toString());
+				// logging.debug (" ----------- " + mre2.toString());
 			}
 		} catch (Exception ex) {
-			logging.warning("messages not there");
+			logging.warning("Failed to message " + key + ": " + ex);
 		}
 
 		if (result == null) {
 			result = key;
 		}
-
 		return result;
 	}
 
@@ -1092,7 +966,7 @@ public class configed {
 	 * Options.getCrossPlatformLookAndFeelClassName() :
 	 * Options.getSystemLookAndFeelClassName(); try {
 	 * UIManager.setLookAndFeel(lafName); } catch (Exception e) {
-	 * System.err.println("Can't set look & feel:" + e); } }
+	 * logging.error("Can't set look & feel:" + e); } }
 	 */
 
 	public static void configureUI() {
@@ -1113,7 +987,7 @@ public class configed {
 					UIManager.setLookAndFeel(info.getClassName());
 					logging.info("Nimbus look&feel set, by " + info.getClassName());
 
-					// System.out.println(UIManager.getDefaults());
+					// logging.debug(UIManager.getDefaults());
 
 					// UIManager.put("nimbusSelectionBackground",
 					// UIManager.get("nimbusLightBackground"));
@@ -1136,16 +1010,16 @@ public class configed {
 			}
 		} catch (javax.swing.UnsupportedLookAndFeelException e) {
 			// handle exception
-			System.out.println(e);
+			logging.error("Failed to configure ui " + e);
 		} catch (ClassNotFoundException e) {
 			// handle exception
-			System.out.println(e);
+			logging.error("Failed to configure ui " + e);
 		} catch (InstantiationException e) {
 			// handle exception
-			System.out.println(e);
+			logging.error("Failed to configure ui " + e);
 		} catch (IllegalAccessException e) {
 			// handle exception
-			System.out.println(e);
+			logging.error("Failed to configure ui " + e);
 		}
 		// }
 
@@ -1157,7 +1031,7 @@ public class configed {
 			try {
 				UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 			} catch (Exception ex) {
-				System.out.println("UIManager.setLookAndFeel('javax.swing.plaf.metal.MetalLookAndFeel')," + ex);
+				logging.debug("UIManager.setLookAndFeel('javax.swing.plaf.metal.MetalLookAndFeel')," + ex);
 			}
 		}
 
@@ -1192,12 +1066,12 @@ public class configed {
 		de.uib.opsidatamodel.PersistenceController controller = de.uib.opsidatamodel.PersistenceControllerFactory
 				.getNewPersistenceController(host, user, password);
 		if (controller == null) {
-			System.err.println("Authentication error.");
+			logging.error("Authentication error.");
 			System.exit(1);
 		}
 
 		if (controller.getConnectionState().getState() != ConnectionState.CONNECTED) {
-			System.err.println("Authentication error.");
+			logging.error("Authentication error.");
 			System.exit(1);
 		}
 
@@ -1214,24 +1088,22 @@ public class configed {
 		// logging.init(); too early, variables not set
 		processArgs(args);
 
-		logging.setLogfileMarker(host);
-		logging.setSuppressConsole(true); // has already start value true
-		logging.writeToConsole("initiating configed");
+		logging.debug("initiating configed");
 
 		if (optionCLIQuerySearch) {
-			// System.out.println( "optionCLIQuerySearch" );
-			logging.writeToConsole("optionCLIQuerySearch");
+			// logging.debug( "optionCLIQuerySearch" );
+			logging.debug("optionCLIQuerySearch");
 			de.uib.configed.clientselection.SavedSearchQuery query = new de.uib.configed.clientselection.SavedSearchQuery();
-			// System.out.println( "query constructed " + query );
+			// logging.debug( "query constructed " + query );
 
 			query.setArgs(host, user, password, savedSearch, null);
 			query.addMissingArgs();
 
-			// System.out.println( "run query ");
+			// logging.debug( "run query ");
 			query.runSearch(true);
 			System.exit(0);
 		} else if (optionCLIDefineGroupBySearch) {
-			logging.writeToConsole("optionCLIDefineGroupBySearch");
+			logging.debug("optionCLIDefineGroupBySearch");
 			// group_getObjects // exists group?
 			// parentGroupId
 			// removeHostGroupElements
@@ -1239,16 +1111,17 @@ public class configed {
 			// addObject2Group
 
 			de.uib.configed.clientselection.SavedSearchQuery query = new de.uib.configed.clientselection.SavedSearchQuery();
-			// System.out.println("configed: setArgs " + host + ", PASSWORD, " + savedSearch
+			// logging.debug("configed: setArgs " + host + ", PASSWORD, " + savedSearch
 			// + ", " + group);
 			query.setArgs(host, user, password, savedSearch, group);
 			query.addMissingArgs();
 			java.util.List<String> newGroupMembers = query.runSearch(false);
-			// System.out.println( " newGroupMembers " + newGroupMembers );
+			// logging.debug( " newGroupMembers " + newGroupMembers );
 
 			query.populateHostGroup(newGroupMembers, group);
 			System.exit(0);
 		} else if (optionCLISwAuditPDF) {
+			logging.debug("optionCLISwAuditPDF");
 			de.uib.configed.gui.swinfopage.SwPdfExporter exporter = new de.uib.configed.gui.swinfopage.SwPdfExporter();
 			exporter.setArgs(host, user, password, clientsFile, outDir);
 			exporter.addMissingArgs();
@@ -1256,6 +1129,7 @@ public class configed {
 
 			System.exit(0);
 		} else if (optionCLISwAuditCSV) {
+			logging.debug("optionCLISwAuditCSV");
 			de.uib.configed.gui.swinfopage.SWcsvExporter exporter = new de.uib.configed.gui.swinfopage.SWcsvExporter();
 			exporter.setArgs(host, user, password, clientsFile, outDir);
 			exporter.addMissingArgs();
@@ -1263,9 +1137,9 @@ public class configed {
 
 			System.exit(0);
 		} else if (optionCLIuserConfigProducing) {
-			logging.setSuppressConsole(false);
-			logging.writeToConsole("UserConfigProducing");
-			logging.setAktDebugLevel(loglevel);
+			logging.debug("UserConfigProducing");
+			logging.setLogLevelConsole(loglevelConsole);
+			logging.setLogLevelFile(loglevelFile);
 
 			addMissingArgs();
 
@@ -1286,48 +1160,44 @@ public class configed {
 			);
 
 			ArrayList<Object> newData = up.produce();
-			logging.writeToConsole("UserConfigProducing: newData " + newData);
+			logging.debug("UserConfigProducing: newData " + newData);
 
 			System.exit(0);
 		}
 
-		logging.setSuppressConsole(false);
-
 		if (optionPersistenceControllerMethodCall) {
+			logging.debug("optionPersistenceControllerMethodCall");
 			addMissingArgs();
 
-			PersistenceController controller = connect();
+			connect();
 
-			// System.out.println( "" + controller.getOpsiHostNames());
+			// logging.debug( "" + controller.getOpsiHostNames());
 			System.exit(0);
 
-			// System.out.println(" called me with " + host + ", " + user + ", " +
+			// logging.debug(" called me with " + host + ", " + user + ", " +
 			// methodCall);
 		}
 
 		if (de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect) {
-			if (logdirectory != null) {
-				logging.wantedDirectory = logdirectory;
-			} else {
-				logging.wantedDirectory = "";
-			}
+			logging.debug("de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect");
+			logging.logDirectoryName = logdirectory;
 
 			addMissingArgs();
 
 			System.exit(0);
 		}
 
-		// System.out.println (imageHandled);
+		// logging.debug (imageHandled);
 		try {
 			String resourceS = de.uib.utilities.Globals.iconresourcename;
 			URL resource = de.uib.configed.Globals.class.getResource(resourceS);
 			if (resource == null) {
-				System.out.println("image resource " + resourceS + "  not found");
+				logging.debug("image resource " + resourceS + "  not found");
 			} else {
 				de.uib.utilities.Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 			}
 		} catch (Exception ex) {
-			System.out.println("imageHandled failed: " + ex.toString());
+			logging.debug("imageHandled failed: " + ex.toString());
 		}
 
 		// Turn on antialiasing for text (not for applets)
@@ -1337,19 +1207,16 @@ public class configed {
 			logging.info(" setting property swing.aatext" + ex);
 		}
 
-		// showExternalInfo("hallo");
+		fErrorOutOfMemory = new FTextArea(null, "configed", true, new String[] { "ok" }, 400, 400);
 
-		fErrorOutOfMemory = new de.uib.configed.gui.FTextArea(null, "configed", true, new String[] { "ok" }, 400, 400);
-
-		// fErrorOutOfMemory.setIconImage (Globals.mainIcon); //does not yet work
 		fErrorOutOfMemory.setContentBackground(Globals.darkOrange);
 		// we activate it in case of an appropriate error
-		// fErrorOutOfMemory.setVisible(true);
 
 		fErrorOutOfMemory.setFont(Globals.defaultFontBig);
-		fErrorOutOfMemory.setMessage(
-				"\n\n" + de.uib.configed.configed.getResourceValue("configed.infoExitBecauseOfHeapOverflow"));
-		// "configed.infoExitBecauseOfHeapOverflow") );
+		fErrorOutOfMemory
+				.setMessage("The program will be terminated,\nsince more memory is required than was assigned.");
+
+		//fErrorOutOfMemory.setVisible(true);
 
 		new configed(locale, host, user, password, client, clientgroup, tab, logdirectory);
 	}

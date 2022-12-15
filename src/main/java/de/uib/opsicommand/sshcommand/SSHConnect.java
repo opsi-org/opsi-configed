@@ -40,7 +40,7 @@ public class SSHConnect {
 	/** Username for server to connected as **/
 	protected String user;
 	/** Port for server to connected as **/
-	public final static String default_port = "22";
+	public static final String default_port = "22";
 	public static String portSSH = default_port;
 	/** Password for server and username **/
 	protected String password;
@@ -151,13 +151,9 @@ public class SSHConnect {
 		final JPasswordField passwordField = new JPasswordField(10);
 		passwordField.setEchoChar('*');
 		final JOptionPane opPane = new JOptionPane(
-				new Object[] {
-						new JLabel(configed.getResourceValue("SSHConnection.sudoPassw1")),
-						new JLabel(configed.getResourceValue("SSHConnection.sudoPassw2")),
-						passwordField
-				},
-				JOptionPane.QUESTION_MESSAGE,
-				JOptionPane.OK_CANCEL_OPTION) {
+				new Object[] { new JLabel(configed.getResourceValue("SSHConnection.sudoPassw1")),
+						new JLabel(configed.getResourceValue("SSHConnection.sudoPassw2")), passwordField },
+				JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION) {
 			@Override
 			public void selectInitialValue() {
 				super.selectInitialValue();
@@ -222,8 +218,7 @@ public class SSHConnect {
 			connectionInfo.checkUserData();
 			logging.info(this, "connect user@host " + connectionInfo.getUser() + "@" + connectionInfo.getHost());
 			logging.debug(this, "connect with password log version " + connectionInfo.getShortPassw());
-			logging.info(this, "connect to login host " +
-					(ConfigedMain.HOST.equals(connectionInfo.getHost())));
+			logging.info(this, "connect to login host " + (ConfigedMain.HOST.equals(connectionInfo.getHost())));
 			logging.info(this, "connect user " + connectionInfo.getUser());
 
 			if (connectionInfo.usesKeyfile()) {
@@ -231,21 +226,19 @@ public class SSHConnect {
 					jsch.addIdentity(connectionInfo.getKeyfilePath(), connectionInfo.getKeyfilePassphrase());
 				jsch.addIdentity(connectionInfo.getKeyfilePath());
 				logging.info(this, "connect this.keyfilepath " + connectionInfo.getKeyfilePath());
-				logging.info(this, "connect useKeyfile " + connectionInfo.usesKeyfile()
-						+ " addIdentity " + connectionInfo.getKeyfilePath());
-				session = jsch.getSession(connectionInfo.getUser(),
-						connectionInfo.getHost(), Integer.valueOf(connectionInfo.getPort()));
+				logging.info(this, "connect useKeyfile " + connectionInfo.usesKeyfile() + " addIdentity "
+						+ connectionInfo.getKeyfilePath());
+				session = jsch.getSession(connectionInfo.getUser(), connectionInfo.getHost(),
+						Integer.valueOf(connectionInfo.getPort()));
 			} else {
-				session = jsch.getSession(connectionInfo.getUser(),
-						connectionInfo.getHost(), Integer.valueOf(connectionInfo.getPort()));
+				session = jsch.getSession(connectionInfo.getUser(), connectionInfo.getHost(),
+						Integer.valueOf(connectionInfo.getPort()));
 				logging.info(this, "connect this.password "
 						// + connectionInfo.getPassw() + " "
-						+
-						SSHCommandFactory.getInstance().confidential);
+						+ SSHCommandFactory.getInstance().confidential);
 
 				session.setPassword(connectionInfo.getPassw());
-				logging.info(this, "connect useKeyfile "
-						+ connectionInfo.usesKeyfile() + " use password …");
+				logging.info(this, "connect useKeyfile " + connectionInfo.usesKeyfile() + " use password …");
 			}
 			// session.setTimeout(10000);
 			// session.setConfig("StrictHostKeyChecking", "no");
@@ -278,9 +271,8 @@ public class SSHConnect {
 				if (factory.successfulConnectObservedCount > 0)
 
 					logging.error("authentication failed after successful authentifications: "
-							+ factory.successfulConnectObservedCount
-							+ "\n" + "\n" + "check server authentication configuration"
-							+ "\n" + "\n");
+							+ factory.successfulConnectObservedCount + "\n" + "\n"
+							+ "check server authentication configuration" + "\n" + "\n");
 
 				return false;
 
@@ -301,8 +293,7 @@ public class SSHConnect {
 		if (retriedTimes >= 3) {
 			retriedTimes = 1;
 			// logging.error(this, "connect Exception " + e);
-			logging.warning(this, "" + e);
-			e.printStackTrace();
+			logging.warning(this, "Error", e);
 		} else {
 			logging.warning(this, "[" + retriedTimes + "] seems to be a session exception " + e);
 			retriedTimes = retriedTimes + 1;

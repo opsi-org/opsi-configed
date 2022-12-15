@@ -26,7 +26,7 @@ public class ConnectionState {
 		myState = state;
 		this.message = message;
 		instancesCount++;
-		// System.out.println("Setting connection state to: "+toString());
+		// logging.debug("Setting connection state to: "+toString());
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class ConnectionState {
 	/**
 	 * get count of instances
 	 */
-	static public int getInstancesCount() {
+	public static int getInstancesCount() {
 		return instancesCount;
 	}
 
@@ -68,6 +68,7 @@ public class ConnectionState {
 		return message;
 	}
 
+	@Override
 	public boolean equals(Object state) {
 		if (state instanceof Integer)
 			return (myState == (Integer) state);
@@ -86,22 +87,22 @@ public class ConnectionState {
 	 */
 	public String toString() {
 		switch (myState) {
-			case UNDEFINED:
-				return "Undefined state";
-			case INTERRUPTED:
-				return "Interrupted ";
-			case NOT_CONNECTED:
-				return "Not connected";
-			case STARTED_CONNECTING:
-				return "Started connecting";
-			case CONNECTED:
-				return "Connected";
-			case CLOSING:
-				return "Closing";
-			case ERROR:
-				return "Error";
-			default:
-				return "UNKNOWN State";
+		case UNDEFINED:
+			return "Undefined state";
+		case INTERRUPTED:
+			return "Interrupted ";
+		case NOT_CONNECTED:
+			return "Not connected";
+		case STARTED_CONNECTING:
+			return "Started connecting";
+		case CONNECTED:
+			return "Connected";
+		case CLOSING:
+			return "Closing";
+		case ERROR:
+			return "Error";
+		default:
+			return "UNKNOWN State";
 		}
 	}
 

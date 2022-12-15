@@ -180,8 +180,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			saveNameField.setText(search.name);
 			saveDescriptionField.setText(search.description);
 		} catch (Exception exc) {
-			logging.logTrace(exc);
-			logging.error("Could not load search!");
+			logging.error("Could not load search!", exc);
 		}
 	}
 
@@ -204,7 +203,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			// new Runnable(){
 			// public void run()
 			// {
-			main.setVisualViewIndex(ConfigedMain.viewClients); // because of potential memory problems we switch to
+			main.setVisualViewIndex(ConfigedMain.VIEW_CLIENTS); // because of potential memory problems we switch to
 																// client view
 																// }
 																// }
@@ -815,6 +814,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			data = textEnum;
 			break;
 		case NoneType:
+		default:
 		}
 
 		operation.setSelectData(new SelectData(data, type));

@@ -22,8 +22,6 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
@@ -81,11 +79,11 @@ import de.uib.utilities.thread.WaitCursor;
  */
 public class DPassword extends JDialog // implements Runnable
 {
-	private final String TESTSERVER = "";
-	private final String TESTUSER = "";
-	private final String TESTPASSWORD = "";
+	private static final String TESTSERVER = "";
+	private static final String TESTUSER = "";
+	private static final String TESTPASSWORD = "";
 	private static final int SECS_WAIT_FOR_CONNECTION = 100;
-	final long TIMEOUT_MS = SECS_WAIT_FOR_CONNECTION * 1000; // 5000 reproducable error
+	private static final long TIMEOUT_MS = SECS_WAIT_FOR_CONNECTION * 1000; // 5000 reproducable error
 	private boolean localApp;
 
 	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
@@ -94,12 +92,12 @@ public class DPassword extends JDialog // implements Runnable
 	PersistenceController persis;
 	Cursor saveCursor;
 
-	class WaitInfo extends JFrame implements de.uib.utilities.thread.WaitingSleeper {
+	private class WaitInfo extends JFrame implements de.uib.utilities.thread.WaitingSleeper {
 		JLabel waitLabel;
 		JProgressBar waitingProgressBar;
 		long timeOutMillis;
 
-		WaitInfo(long timeOutMillis) {
+		private WaitInfo(long timeOutMillis) {
 			logging.info(this, "created with timeout " + timeOutMillis);
 			this.timeOutMillis = timeOutMillis;
 
@@ -115,6 +113,7 @@ public class DPassword extends JDialog // implements Runnable
 					setCursor(saveCursor);
 				}
 			});
+
 			// setSize (350,100);
 			setTitle(Globals.APPNAME + " login");
 			waitLabel = new JLabel();
@@ -174,6 +173,8 @@ public class DPassword extends JDialog // implements Runnable
 			pack();
 			// setVisible(true);
 			setAlwaysOnTop(true);
+
+			setLocationRelativeTo(DPassword.this);
 		}
 
 		// interface WaitingSleeper
@@ -264,7 +265,6 @@ public class DPassword extends JDialog // implements Runnable
 	WaitCursor waitCursor;
 	boolean connected = false;
 
-	Dimension screenSize;
 	WaitInfo waitInfo;
 	de.uib.utilities.thread.WaitingWorker waitingTask;
 
@@ -340,15 +340,9 @@ public class DPassword extends JDialog // implements Runnable
 		super(frame, title, modal);
 		this.main = main;
 
-		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
-		try {
-			guiInit();
-			pack();
-			setVisible(true);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+		guiInit();
+		pack();
+		setVisible(true);
 	}
 
 	public DPassword(ConfigedMain main) {
@@ -395,7 +389,7 @@ public class DPassword extends JDialog // implements Runnable
 		jButtonCommit.setEnabled(true);
 	}
 
-	void guiInit() throws Exception {
+	void guiInit() {
 		MessageFormat messageFormatTitle = new MessageFormat(configed.getResourceValue("DPassword.title"));
 		setTitle(messageFormatTitle.format(new Object[] { Globals.APPNAME }));
 
@@ -416,12 +410,10 @@ public class DPassword extends JDialog // implements Runnable
 		// Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		// this.setLocation((screenSize.width - 450) / 2, 200);
 
-		logging.info(this, "smallFramesDistanceFromLeft " + de.uib.utilities.Globals.smallFramesDistanceFromLeft);
-
-		final Rectangle dim = de.uib.utilities.Globals.buildLocationOnDefaultDisplay(getSize().width, getSize().height,
+		/*final Rectangle dim = de.uib.utilities.Globals.buildLocationOnDefaultDisplay(getSize().width, getSize().height,
 				de.uib.utilities.Globals.smallFramesDistanceFromLeft,
 				de.uib.utilities.Globals.smallFramesDistanceFromTop);
-		this.setLocation(dim.x, dim.y);
+		this.setLocation(dim.x, dim.y);*/
 
 		jLabelHost.setText(configed.getResourceValue("DPassword.jLabelHost"));
 
@@ -439,7 +431,7 @@ public class DPassword extends JDialog // implements Runnable
 		fieldUser.setText(TESTUSER);
 		fieldUser.addKeyListener(myKeyListener);
 		// fieldUser.setText(System.getProperty("user.name"));
-		// System.out.println(passwordField.getPassword());
+		// logging.debug(passwordField.getPassword());
 		fieldUser.setMargin(new Insets(0, 3, 0, 3));
 
 		jLabelPassword.setText(configed.getResourceValue("DPassword.jLabelPassword"));
@@ -643,14 +635,14 @@ public class DPassword extends JDialog // implements Runnable
 		// Globals.VERDATE) );
 
 		MessageFormat messageFormatVersion = new MessageFormat(configed.getResourceValue("DPassword.jLabelVersion"));
-		jLabelVersion.setText(
-				messageFormatVersion.format(new Object[] { Globals.VERSION, Globals.VERDATE, Globals.VERHASHTAG }));
+		jLabelVersion.setText(messageFormatVersion
+				.format(new Object[] { Globals.VERSION, "(" + Globals.VERDATE + ")", Globals.VERHASHTAG }));
 
 		jLabelJavaVersion.setText(configed.javaVendor + " " + configed.javaVersion);
 
 		String strOS = System.getProperty("os.name");
 		String osVersion = System.getProperty("os.version");
-		logging.debugOut(3, " OS " + strOS + "  Version " + osVersion);
+		logging.notice(" OS " + strOS + "  Version " + osVersion);
 		String host = TESTSERVER; // "";
 		/*
 		 * if (strOS.startsWith("Windows") && (osVersion.compareToIgnoreCase("4.0") >=
@@ -670,7 +662,7 @@ public class DPassword extends JDialog // implements Runnable
 
 		pack();
 
-		// System.out.println(" ---- host:" + host + "--");
+		// logging.debug(" ---- host:" + host + "--");
 		if (host.equals("")) {
 			setHost("localhost");
 			fieldHost.requestFocus();
@@ -679,6 +671,9 @@ public class DPassword extends JDialog // implements Runnable
 		}
 
 		saveCursor = getCursor();
+
+		// Sets the window on the main screen
+		setLocationRelativeTo(null);
 	}
 
 	@Override
@@ -687,8 +682,7 @@ public class DPassword extends JDialog // implements Runnable
 		try {
 			containership.doForAllContainedCompis("setCursor", new Object[] { c });
 		} catch (Exception ex) {
-			logging.warning(this, "containership error " + ex);
-			logging.logTrace(ex);
+			logging.warning(this, "containership error", ex);
 		}
 
 		/*
@@ -724,7 +718,7 @@ public class DPassword extends JDialog // implements Runnable
 		// waitInfo.toFront();
 	}
 	/*
-	 * static public PersistenceController producePersistenceController(String
+	 * public static PersistenceController producePersistenceController(String
 	 * server)
 	 * {
 	 * PersistenceController persis =
@@ -775,15 +769,6 @@ public class DPassword extends JDialog // implements Runnable
 		waitInfo.setVisible(true);
 
 		// locate
-
-		final Rectangle dim = de.uib.utilities.Globals.buildLocationOnDefaultDisplay(waitInfo.getSize().width,
-				waitInfo.getSize().height,
-
-				getSize().width + 80, getSize().height + 40
-		// de.uib.utilities.Globals.smallFramesDistanceFromLeft,
-		// de.uib.utilities.Globals.smallFramesDistanceFromTop
-		);
-		waitInfo.setLocation(dim.x, dim.y);
 
 		/*
 		 * GraphicsDevice gd =

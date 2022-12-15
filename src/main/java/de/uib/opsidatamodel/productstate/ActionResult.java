@@ -8,21 +8,21 @@ import java.util.Vector;
 import de.uib.configed.Globals;
 
 public class ActionResult {
-	public final static String KEY = "actionResult";
+	public static final String KEY = "actionResult";
 
 	// conflicting entries from several clients
-	public final static int CONFLICT = -4;
+	public static final int CONFLICT = -4;
 
 	// no valid entry from service
-	public final static int INVALID = -2;
+	public static final int INVALID = -2;
 
 	// product offers no entry
-	public final static int NOT_AVAILABLE = -6;
+	public static final int NOT_AVAILABLE = -6;
 
 	// valid service states
-	public final static int NONE = 0;
-	public final static int FAILED = 2;
-	public final static int SUCCESSFUL = 4;
+	public static final int NONE = 0;
+	public static final int FAILED = 2;
+	public static final int SUCCESSFUL = 4;
 
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
@@ -89,9 +89,7 @@ public class ActionResult {
 		displayLabel2label.put("failed", "failed");
 		displayLabel2label.put("success", "successful");
 
-		choiceLabels = new String[] {
-				label2displayLabel.get("none")
-		};
+		choiceLabels = new String[] { label2displayLabel.get("none") };
 
 	}
 
@@ -162,8 +160,7 @@ public class ActionResult {
 
 	// getting instances
 	public static ActionResult produceFromDisplayLabel(String display) {
-		return produceFromLabel(
-				displayLabel2label.get(display));
+		return produceFromLabel(displayLabel2label.get(display));
 	}
 
 	public static ActionResult produceFromLabel(String label) {

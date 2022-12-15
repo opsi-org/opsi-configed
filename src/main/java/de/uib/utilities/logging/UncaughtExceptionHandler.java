@@ -8,19 +8,10 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 
 		de.uib.utilities.thread.WaitCursor.stopAll();
 
-		Integer saveInjectedLogLevel = logging.getInjectedLogLevel();
-		// System.out.println(" " + this + " saveInjectedLogLevel " +
-		// saveInjectedLogLevel);
-		if (saveInjectedLogLevel != null)
-			logging.injectLogLevel(logging.LEVEL_INFO);
-		// System.out.println(" " + this + " injectedLogLevel " +
-		// logging.getInjectedLogLevel());
-
 		if (e instanceof Exception) {
-			logging.warning("Error in thread " + t);
-			logging.logTrace((Exception) e);
-			logging.error("Not foreseen error: " + ((Exception) e).getMessage()
-					+ "\nplease check logfile");
+			Exception ex = (Exception) e;
+			logging.warning("Error in thread " + t, ex);
+			logging.error("Unhandled error: " + ex.getMessage() + "\nplease check logfile");
 		} else {
 
 			logging.warning("Thread " + t + " (RunTime Error)  " + e);
@@ -34,8 +25,5 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 			}
 
 		}
-
-		if (saveInjectedLogLevel != null)
-			logging.injectLogLevel(saveInjectedLogLevel);
 	}
 }

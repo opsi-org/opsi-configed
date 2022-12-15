@@ -19,10 +19,7 @@ public class DynamicCellEditor extends DefaultCellEditor {
 	ComboBoxModeller cbm;
 	ComboBoxModel nullModel;
 
-	public DynamicCellEditor(
-			JComboBox cc,
-			ComboBoxModeller cbm,
-			Set<String> knownKeys) {
+	public DynamicCellEditor(JComboBox cc, ComboBoxModeller cbm, Set<String> knownKeys) {
 		super(cc);
 		this.cc = cc;
 		this.cbm = cbm;
@@ -32,11 +29,7 @@ public class DynamicCellEditor extends DefaultCellEditor {
 
 	}
 
-	public Component getTableCellEditorComponent(JTable table,
-			Object value,
-			boolean isSelected,
-			int row,
-			int column) {
+	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 
 		int modelRow = table.convertRowIndexToModel(row);
 		int modelColumn = table.convertColumnIndexToModel(column);
@@ -58,7 +51,7 @@ public class DynamicCellEditor extends DefaultCellEditor {
 			((JComponent) c).setToolTipText("" + value);
 
 		// c.setSize(100,20); has no effect
-		// System.out.println("this component active");
+		// logging.debug("this component active");
 		return c;
 	}
 

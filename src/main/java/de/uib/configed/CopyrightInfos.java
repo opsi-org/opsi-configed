@@ -13,8 +13,8 @@ public class CopyrightInfos {
 	static {
 		infos = new java.util.ArrayList<>();
 
-		infos.add(de.uib.configed.Globals.APPNAME + "  Version " + de.uib.configed.Globals.VERSION + " "
-				+ de.uib.configed.Globals.VERDATE + " " + de.uib.configed.Globals.VERHASHTAG);
+		infos.add(de.uib.configed.Globals.APPNAME + "  Version " + de.uib.configed.Globals.VERSION + " ("
+				+ de.uib.configed.Globals.VERDATE + ") " + de.uib.configed.Globals.VERHASHTAG);
 		infos.add("_________________________________________________________________________________");
 		infos.add("");
 		infos.add(de.uib.configed.Globals.COPYRIGHT1);

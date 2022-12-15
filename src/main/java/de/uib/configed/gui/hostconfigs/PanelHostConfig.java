@@ -76,9 +76,8 @@ public class PanelHostConfig extends JPanel {
 	}
 
 	private void putUsersToPropertyclassesTreeMap() {
-		Map<String, Object> configs = PersistenceControllerFactory.getPersistenceController()
-				.getConfig(PersistenceControllerFactory.getPersistenceController().getHostInfoCollections()
-						.getConfigServer());
+		Map<String, Object> configs = PersistenceControllerFactory.getPersistenceController().getConfig(
+				PersistenceControllerFactory.getPersistenceController().getHostInfoCollections().getConfigServer());
 
 		for (Map.Entry<String, Object> entry : configs.entrySet()) {
 			String key = (String) entry.getKey();
@@ -107,15 +106,17 @@ public class PanelHostConfig extends JPanel {
 		putUsersToPropertyclassesTreeMap();
 
 		editMapPanel = new EditMapPanelGroupedForHostConfigs(
-				new de.uib.configed.gui.helper.PropertiesTableCellRenderer(),
-				keylistExtendible, entryRemovable, reloadable,
+				new de.uib.configed.gui.helper.PropertiesTableCellRenderer(), keylistExtendible, entryRemovable,
+				reloadable,
 				// serverEditing, serverEditing, true,
 				// PersistenceControllerFactory.getPersistenceController().PROPERTYCLASSES,
 				new AbstractEditMapPanel.Actor() {
+					@Override
 					protected void reloadData() {
 						reloadHostConfig();
 					}
 
+					@Override
 					protected void saveData() {
 						saveHostConfig();
 					}
@@ -145,34 +146,28 @@ public class PanelHostConfig extends JPanel {
 		GroupLayout planeLayout = new GroupLayout(this);
 		this.setLayout(planeLayout);
 
-		planeLayout.setHorizontalGroup(
-				planeLayout.createSequentialGroup()
-						// .addGap(de.uib.utilities.Globals.vGapSize)
-						.addGroup(planeLayout.createParallelGroup()
-								// .addComponent( header, GroupLayout.Alignment.CENTER )
-								.addComponent(editMapPanel))
+		planeLayout.setHorizontalGroup(planeLayout.createSequentialGroup()
+				// .addGap(de.uib.utilities.Globals.vGapSize)
+				.addGroup(planeLayout.createParallelGroup()
+						// .addComponent( header, GroupLayout.Alignment.CENTER )
+						.addComponent(editMapPanel))
 		// .addGap(de.uib.utilities.Globals.vGapSize)
 		);
 
-		planeLayout.setVerticalGroup(
-				planeLayout.createSequentialGroup()
-						// .addGap(20)
-						// .addComponent( header, GroupLayout.PREFERRED_SIZE,
-						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						// .addGap(5)
-						.addComponent(editMapPanel, de.uib.configed.Globals.lineHeight * 2, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
+		planeLayout.setVerticalGroup(planeLayout.createSequentialGroup()
+				// .addGap(20)
+				// .addComponent( header, GroupLayout.PREFERRED_SIZE,
+				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				// .addGap(5)
+				.addComponent(editMapPanel, de.uib.configed.Globals.lineHeight * 2, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE)
 		// .addGap(20)
 		);
 	}
 
-	public void initEditing(
-			String labeltext,
-			Map configVisualMap,
-			Map<String, de.uib.utilities.table.ListCellOptions> configOptions,
-			Collection collectionConfigStored,
-			AdditionalconfigurationUpdateCollection configurationUpdateCollection,
-			boolean optionsEditable,
+	public void initEditing(String labeltext, Map configVisualMap,
+			Map<String, de.uib.utilities.table.ListCellOptions> configOptions, Collection collectionConfigStored,
+			AdditionalconfigurationUpdateCollection configurationUpdateCollection, boolean optionsEditable,
 			TreeMap<String, String> classesMap) {
 		label.setText(labeltext);
 
@@ -183,9 +178,7 @@ public class PanelHostConfig extends JPanel {
 				// + " configOptions " + (configOptions)
 				+ " optionsEditable " + optionsEditable);
 		editMapPanel.setSubpanelClasses(classesMap);
-		editMapPanel.setEditableMap(
-				configVisualMap,
-				configOptions);
+		editMapPanel.setEditableMap(configVisualMap, configOptions);
 		editMapPanel.setStoreData(collectionConfigStored);
 		editMapPanel.setUpdateCollection(configurationUpdateCollection);
 
@@ -202,9 +195,7 @@ public class PanelHostConfig extends JPanel {
 		editMapPanel.registerDataChangedObserver(o);
 	}
 
-	protected void setEditableMap(
-			Map visualdata,
-			Map<String, ListCellOptions> optionsMap) {
+	protected void setEditableMap(Map visualdata, Map<String, ListCellOptions> optionsMap) {
 		editMapPanel.setEditableMap(visualdata, optionsMap);
 	}
 

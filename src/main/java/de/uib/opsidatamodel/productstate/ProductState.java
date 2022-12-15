@@ -18,7 +18,7 @@ public class ProductState extends HashMap<String, String> {
 		return DEFAULT;
 	}
 
-	public final static List<String> SERVICE_KEYS = new ArrayList<String>();
+	public static final List<String> SERVICE_KEYS = new ArrayList<String>();
 	static {// from 30_configed.conf
 		SERVICE_KEYS.add("modificationTime"); // lastStateChange");
 		SERVICE_KEYS.add("productId");
@@ -34,7 +34,7 @@ public class ProductState extends HashMap<String, String> {
 		SERVICE_KEYS.add("actionSequence");
 	}
 
-	public final static LinkedHashMap<String, String> DB_COLUMNS = new LinkedHashMap<String, String>();
+	public static final LinkedHashMap<String, String> DB_COLUMNS = new LinkedHashMap<String, String>();
 	static {
 		DB_COLUMNS.put("productId", "VARCHAR(50)");
 		DB_COLUMNS.put("productVersion", "VARCHAR(32)");
@@ -50,36 +50,36 @@ public class ProductState extends HashMap<String, String> {
 		DB_COLUMNS.put("modificationTime", "TIMESTAMP"); // lastStateChange");
 	}
 
-	public final static List<String> DB_COLUMN_NAMES = new ArrayList<String>(DB_COLUMNS.keySet());
+	public static final List<String> DB_COLUMN_NAMES = new ArrayList<String>(DB_COLUMNS.keySet());
 
-	public final static int columnIndexLastStateChange = DB_COLUMN_NAMES.indexOf("modificationTime");
+	public static final int columnIndexLastStateChange = DB_COLUMN_NAMES.indexOf("modificationTime");
 
 	// directly taken values
-	public final static String KEY_lastStateChange = "stateChange";
-	public final static String KEY_productVersion = "productVersion";
-	public final static String KEY_packageVersion = "packageVersion";
-	public final static String KEY_targetConfiguration = TargetConfiguration.KEY;
-	public final static String KEY_lastAction = LastAction.KEY;
-	public final static String KEY_installationStatus = InstallationStatus.KEY;
-	public final static String KEY_actionRequest = ActionRequest.KEY;
-	public final static String KEY_actionProgress = ActionProgress.KEY;
-	public final static String KEY_actionResult = ActionResult.KEY;
-	public final static String KEY_productId = "productId";
+	public static final String KEY_lastStateChange = "stateChange";
+	public static final String KEY_productVersion = "productVersion";
+	public static final String KEY_packageVersion = "packageVersion";
+	public static final String KEY_targetConfiguration = TargetConfiguration.KEY;
+	public static final String KEY_lastAction = LastAction.KEY;
+	public static final String KEY_installationStatus = InstallationStatus.KEY;
+	public static final String KEY_actionRequest = ActionRequest.KEY;
+	public static final String KEY_actionProgress = ActionProgress.KEY;
+	public static final String KEY_actionResult = ActionResult.KEY;
+	public static final String KEY_productId = "productId";
 
-	public final static String KEY_productPriority = "priority";
-	public final static String KEY_actionSequence = ActionSequence.KEY;
+	public static final String KEY_productPriority = "priority";
+	public static final String KEY_actionSequence = ActionSequence.KEY;
 
 	// transformed values
-	public final static String KEY_installationInfo = InstallationInfo.KEY;
-	public final static String KEY_versionInfo = "versionInfo";
+	public static final String KEY_installationInfo = InstallationInfo.KEY;
+	public static final String KEY_versionInfo = "versionInfo";
 
 	// additional values
-	public final static String KEY_position = "position";
-	public final static String KEY_productName = "productName";
+	public static final String KEY_position = "position";
+	public static final String KEY_productName = "productName";
 
-	final protected Map retrieved;
+	protected final Map retrieved;
 
-	public final static List<String> KEYS = new ArrayList<String>();
+	public static final List<String> KEYS = new ArrayList<String>();
 	static {
 		KEYS.add(KEY_productId);
 		KEYS.add(KEY_productName);
@@ -107,7 +107,7 @@ public class ProductState extends HashMap<String, String> {
 		KEYS.add(KEY_lastStateChange);
 	}
 
-	public final static Map<String, String> key2servicekey = new HashMap<String, String>();
+	public static final Map<String, String> key2servicekey = new HashMap<String, String>();
 	static {
 		key2servicekey.put(KEY_productId, "productId");
 		// key2servicekey.put(KEY_productName
@@ -288,9 +288,7 @@ public class ProductState extends HashMap<String, String> {
 		 * + " value  " + retrieved.get(key) + " class " +
 		 * retrieved.get(key).getClass());;
 		 */
-		if (retrieved.get(key) == null
-				||
-				(retrieved.get(key) instanceof String && retrieved.get(key).equals("null")))
+		if (retrieved.get(key) == null || (retrieved.get(key) instanceof String && retrieved.get(key).equals("null")))
 			return "";
 
 		String value = retrieved.get(key).toString();

@@ -15,7 +15,7 @@ public class ListMerger extends ArrayList {
 	public static Color noCommonKeyTextcolor = Globals.backBlue;
 	public static Color noCommonKeyBackcolor = Globals.backBlue;
 
-	public final static ListMerger NO_COMMON_VALUE = new ListMerger(new ArrayList<String>());
+	public static final ListMerger NO_COMMON_VALUE = new ListMerger(new ArrayList<String>());
 	static {
 		NO_COMMON_VALUE.setHavingNoCommonValue();
 	}

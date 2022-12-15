@@ -54,8 +54,8 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	private JComboBox cb_verbosity;
 	private JTextField tf_freeInput;
 
-	final private int frameWidth = 800;
-	final private int frameHeight = 400;
+	private final int frameWidth = 800;
+	private final int frameHeight = 400;
 
 	private ConfigedMain main;
 	CommandWget commandWget = new CommandWget();
@@ -256,8 +256,8 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 
 		commandWget.setDir((String) cb_dir.getSelectedItem());
 		if (((JCheckBox) wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
-			commandWget.setAuthentication(" --no-check-certificate --user=" + wgetAuthPanel.getUser()
-					+ " --password=" + wgetAuthPanel.getPw() + " ");
+			commandWget.setAuthentication(" --no-check-certificate --user=" + wgetAuthPanel.getUser() + " --password="
+					+ wgetAuthPanel.getPw() + " ");
 		} else
 			commandWget.setAuthentication(" ");
 		updateCommand();
@@ -271,8 +271,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 						// btn_execute.setEnabled( true ) transferred to SwingWorker.done()
 
 					} catch (Exception e) {
-						logging.warning(this, "doAction1, exception occurred " + e);
-						logging.logTrace(e);
+						logging.warning(this, "doAction1, exception occurred", e);
 					}
 				}
 			}.start();
@@ -297,29 +296,26 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 
 				.addGap(de.uib.configed.Globals.gapSize)
 
-				.addGroup(inputPanelLayout.createParallelGroup()
-						.addGroup(inputPanelLayout.createSequentialGroup()
-								.addGroup(inputPanelLayout.createParallelGroup()
-										.addComponent(lbl_url, PREF, PREF, PREF)
-										.addComponent(lbl_dir, PREF, PREF, PREF)
-										.addComponent(lbl_verbosity, PREF, PREF, PREF)
-										.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH), PREF,
-												PREF, PREF)
-										.addComponent(lbl_freeInput, PREF, PREF, PREF))
-								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-								.addGroup(inputPanelLayout.createParallelGroup()
-										.addGroup(inputPanelLayout.createSequentialGroup()
-												.addComponent(tf_url, PREF, PREF, Short.MAX_VALUE))
-										.addGroup(inputPanelLayout.createSequentialGroup()
-												.addComponent(cb_dir, de.uib.configed.Globals.buttonWidth,
-														de.uib.configed.Globals.buttonWidth, Short.MAX_VALUE)
-												.addComponent(btn_searchDir, PREF, PREF, PREF))
-										.addComponent(cb_verbosity, GroupLayout.Alignment.LEADING, Globals.iconWidth,
-												Globals.iconWidth, Globals.iconWidth)
-										.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
-												GroupLayout.Alignment.LEADING, PREF, PREF, PREF)
-										.addComponent(tf_freeInput, de.uib.configed.Globals.buttonWidth,
-												de.uib.configed.Globals.buttonWidth, Short.MAX_VALUE)))
+				.addGroup(inputPanelLayout.createParallelGroup().addGroup(inputPanelLayout.createSequentialGroup()
+						.addGroup(inputPanelLayout.createParallelGroup().addComponent(lbl_url, PREF, PREF, PREF)
+								.addComponent(lbl_dir, PREF, PREF, PREF).addComponent(lbl_verbosity, PREF, PREF, PREF)
+								.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH), PREF, PREF,
+										PREF)
+								.addComponent(lbl_freeInput, PREF, PREF, PREF))
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addGroup(inputPanelLayout.createParallelGroup()
+								.addGroup(inputPanelLayout.createSequentialGroup().addComponent(tf_url, PREF, PREF,
+										Short.MAX_VALUE))
+								.addGroup(inputPanelLayout.createSequentialGroup()
+										.addComponent(cb_dir, de.uib.configed.Globals.buttonWidth,
+												de.uib.configed.Globals.buttonWidth, Short.MAX_VALUE)
+										.addComponent(btn_searchDir, PREF, PREF, PREF))
+								.addComponent(cb_verbosity, GroupLayout.Alignment.LEADING, Globals.iconWidth,
+										Globals.iconWidth, Globals.iconWidth)
+								.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
+										GroupLayout.Alignment.LEADING, PREF, PREF, PREF)
+								.addComponent(tf_freeInput, de.uib.configed.Globals.buttonWidth,
+										de.uib.configed.Globals.buttonWidth, Short.MAX_VALUE)))
 						.addComponent(wgetAuthPanel, PREF, PREF, MAX))
 				.addGap(de.uib.configed.Globals.gapSize));
 
@@ -351,7 +347,6 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(tf_freeInput, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
 						.addComponent(lbl_freeInput, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(de.uib.configed.Globals.gapSize)
-				.addContainerGap(70, 70));
+				.addGap(de.uib.configed.Globals.gapSize).addContainerGap(70, 70));
 	}
 }

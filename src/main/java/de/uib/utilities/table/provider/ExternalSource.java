@@ -21,8 +21,7 @@ public class ExternalSource implements TableSource
 
 	protected RowsProvider rowsProvider;
 
-	public ExternalSource(Vector<String> columnNames, Vector<String> classNames,
-			RowsProvider rowsProvider) {
+	public ExternalSource(Vector<String> columnNames, Vector<String> classNames, RowsProvider rowsProvider) {
 		this.columnNames = columnNames;
 		this.classNames = classNames;
 		this.rowsProvider = rowsProvider;
@@ -42,7 +41,7 @@ public class ExternalSource implements TableSource
 			rowsProvider.requestReload();
 			reloadRequested = false;
 		}
-		// System.out.println (" --- MapSource retrieveRows() rows.size(): " +
+		// logging.debug (" --- MapSource retrieveRows() rows.size(): " +
 		// rows.size());
 		return rowsProvider.getRows();
 	}

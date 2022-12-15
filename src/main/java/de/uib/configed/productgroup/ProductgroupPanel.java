@@ -67,9 +67,7 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.JComboBoxToolTip;
 import de.uib.utilities.table.gui.TablesearchPane;
 
-public class ProductgroupPanel extends JPanel
-		implements
-		ListSelectionListener // for associated table
+public class ProductgroupPanel extends JPanel implements ListSelectionListener // for associated table
 		, ActionListener // for internal buttons
 		, ItemListener // for combos
 {
@@ -112,12 +110,12 @@ public class ProductgroupPanel extends JPanel
 	private int actionType = ActionRequest.INVALID;
 	protected JLabel labelSave;
 
-	final static String NO_GROUP_ID = configed.getResourceValue("GroupPanel.NO_GROUP_ID");
-	final static String SAVE_GROUP_ID = configed.getResourceValue("GroupPanel.SAVE_GROUP_ID");
-	final static String NO_GROUP_DESCRIPTION = configed.getResourceValue("GroupPanel.NO_GROUP_DESCRIPTION");
-	final static String EMPTIED_GROUPID = "";
-	final static String TEXT_SAVE = configed.getResourceValue("GroupPanel.TEXT_SAVE");
-	final static String TEXT_DELETE = configed.getResourceValue("GroupPanel.TEXT_DELETE");
+	static final String NO_GROUP_ID = configed.getResourceValue("GroupPanel.NO_GROUP_ID");
+	static final String SAVE_GROUP_ID = configed.getResourceValue("GroupPanel.SAVE_GROUP_ID");
+	static final String NO_GROUP_DESCRIPTION = configed.getResourceValue("GroupPanel.NO_GROUP_DESCRIPTION");
+	static final String EMPTIED_GROUPID = "";
+	static final String TEXT_SAVE = configed.getResourceValue("GroupPanel.TEXT_SAVE");
+	static final String TEXT_DELETE = configed.getResourceValue("GroupPanel.TEXT_DELETE");
 
 	protected Map<String, Map<String, String>> theData;
 
@@ -149,7 +147,7 @@ public class ProductgroupPanel extends JPanel
 
 		protected boolean enabled = true;
 
-		abstract public void doAction();
+		public abstract void doAction();
 
 		public void changedUpdate(DocumentEvent e) {
 			if (enabled)
@@ -250,8 +248,7 @@ public class ProductgroupPanel extends JPanel
 		}
 		descriptionFieldListener.setEnabled(true);
 
-		if ((!currentKey.equals(SAVE_GROUP_ID)
-				&& !currentKey.equals((String) groupsCombo.getSelectedItem()))) {
+		if ((!currentKey.equals(SAVE_GROUP_ID) && !currentKey.equals((String) groupsCombo.getSelectedItem()))) {
 			setDataChanged(true);
 		}
 
@@ -278,9 +275,7 @@ public class ProductgroupPanel extends JPanel
 		if (namesAndDescriptions.get(currentKey) != null)
 		// case we have an old key
 		{
-			if (productGroupMembers.get(currentKey) == null
-					||
-					((Set) productGroupMembers.get(currentKey)).size() == 0)
+			if (productGroupMembers.get(currentKey) == null || ((Set) productGroupMembers.get(currentKey)).size() == 0)
 			// there were no products assigned
 			{
 				if (selectedIDs.size() > 0)
@@ -289,8 +284,7 @@ public class ProductgroupPanel extends JPanel
 			} else
 			// there were products assigned
 			{
-				if (!productGroupMembers.get(currentKey).equals(
-						selectedIDs)) // but they are different
+				if (!productGroupMembers.get(currentKey).equals(selectedIDs)) // but they are different
 					result = true;
 			}
 		} else
@@ -337,9 +331,7 @@ public class ProductgroupPanel extends JPanel
 				// productGroupMembers.get(name));
 				// logging.debug(this, "findGroup(): compare to " + set);
 
-				if (productGroupMembers.get(name) != null
-						&&
-						productGroupMembers.get(name).equals(checkSet)) {
+				if (productGroupMembers.get(name) != null && productGroupMembers.get(name).equals(checkSet)) {
 					// avoid selection events in groupsCombo
 					setItemWithoutListener(name);
 					theSetFound = true;
@@ -398,8 +390,7 @@ public class ProductgroupPanel extends JPanel
 	}
 
 	protected void initData() {
-		searchPane = new TablesearchPane(
-				new SearchTargetModelFromInstallationStateTable(tableProducts, associate),
+		searchPane = new TablesearchPane(new SearchTargetModelFromInstallationStateTable(tableProducts, associate),
 				true, null);
 		searchPane.setFiltering(true);
 		searchPane.showFilterIcon(true); // filter icon inside searchpane
@@ -413,8 +404,7 @@ public class ProductgroupPanel extends JPanel
 		saveNameEditor = new JTextField("");
 
 		saveNameEditor.setEditable(true);
-		saveNameEditor.setToolTipText(
-				de.uib.configed.configed.getResourceValue("GroupPanel.GroupnameTooltip"));
+		saveNameEditor.setToolTipText(de.uib.configed.configed.getResourceValue("GroupPanel.GroupnameTooltip"));
 		// setGroupsData(null, null);
 		// Set<String> oldSet = groupPanel.getLastSelectedIDs();
 		setMembers();
@@ -432,30 +422,23 @@ public class ProductgroupPanel extends JPanel
 		buttonCommit.setPreferredSize(de.uib.utilities.Globals.newSmallButton);
 
 		buttonCancel = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("GroupPanel.CancelButtonTooltip"),
-				"images/cancel.png",
-				"images/cancel_over.png",
-				"images/cancel_disabled.png");
+				de.uib.configed.configed.getResourceValue("GroupPanel.CancelButtonTooltip"), "images/cancel.png",
+				"images/cancel_over.png", "images/cancel_disabled.png");
 		buttonCancel.addActionListener(this);
 		buttonCancel.setPreferredSize(de.uib.utilities.Globals.newSmallButton);
 
 		buttonDelete = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("GroupPanel.DeleteButtonTooltip"),
-				"images/edit-delete.png",
-				"images/edit-delete_over.png",
-				"images/edit-delete_disabled.png");
+				de.uib.configed.configed.getResourceValue("GroupPanel.DeleteButtonTooltip"), "images/edit-delete.png",
+				"images/edit-delete_over.png", "images/edit-delete_disabled.png");
 		buttonDelete.addActionListener(this);
 		buttonDelete.setPreferredSize(de.uib.utilities.Globals.newSmallButton);
 
 		buttonReloadProductStates = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("GroupPanel.ReloadButtonTooltip"),
-				"images/reload_blue16.png",
-				"images/reload_blue16.png",
-				" ",
-				true);
+				de.uib.configed.configed.getResourceValue("GroupPanel.ReloadButtonTooltip"), "images/reload_blue16.png",
+				"images/reload_blue16.png", " ", true);
 
-		buttonReloadProductStates.setToolTipText(
-				de.uib.configed.configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"));
+		buttonReloadProductStates
+				.setToolTipText(de.uib.configed.configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"));
 
 		buttonReloadProductStates.addActionListener(this);
 		buttonReloadProductStates.setPreferredSize(de.uib.utilities.Globals.newSmallButton);
@@ -481,13 +464,10 @@ public class ProductgroupPanel extends JPanel
 
 		buttonSaveAndExecute = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("ConfigedMain.savePOCAndExecute"),
-				"images/executing_command_blue-grey_16.png",
-				"images/executing_command_blue-grey_16.png",
-				" ",
-				true);
+				"images/executing_command_blue-grey_16.png", "images/executing_command_blue-grey_16.png", " ", true);
 
-		buttonSaveAndExecute.setToolTipText(
-				de.uib.configed.configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
+		buttonSaveAndExecute
+				.setToolTipText(de.uib.configed.configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
 
 		buttonSaveAndExecute.addActionListener(this);
 		buttonSaveAndExecute.setPreferredSize(de.uib.utilities.Globals.newSmallButton);
@@ -507,10 +487,7 @@ public class ProductgroupPanel extends JPanel
 
 		buttonCollectiveAction = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
-				"images/execute16_lightblue.png",
-				"images/execute16_lightblue.png",
-				" ",
-				true);
+				"images/execute16_lightblue.png", "images/execute16_lightblue.png", " ", true);
 
 		buttonCollectiveAction.setToolTipText(
 				de.uib.configed.configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"));
@@ -555,8 +532,7 @@ public class ProductgroupPanel extends JPanel
 		 * de.uib.configed.configed.getResourceValue(
 		 * "GroupPanel.comboAggregateProducts.defaultOption.tooltip"));
 		 */
-		values.put(
-				de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"),
+		values.put(de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"),
 				de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked.tooltip"));
 		// "setup (marked)", "set 'setup' for all marked products (if setup action
 		// exists)");
@@ -579,12 +555,10 @@ public class ProductgroupPanel extends JPanel
 		 * 
 		 * //"setup (failed)"
 		 */
-		values.put(
-				de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked"),
+		values.put(de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked"),
 				de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked.tooltip"));
 
-		values.put(
-				de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked"),
+		values.put(de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked"),
 				de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked.tooltip"));
 
 		// "uninstall (marked)", "set 'uninstall' for all marked products (if uninstall
@@ -602,10 +576,7 @@ public class ProductgroupPanel extends JPanel
 		// renderActionList.setUniformColor(
 		// Globals.backLightBlue, Globals.backVeryLightBlue
 		// );
-		renderActionList.setAlternatingColors(
-				Globals.backLightBlue,
-				Globals.backLightBlue,
-				Globals.backgroundLightGrey,
+		renderActionList.setAlternatingColors(Globals.backLightBlue, Globals.backLightBlue, Globals.backgroundLightGrey,
 				Globals.backgroundWhite);
 
 		listChooseAction.setCellRenderer(renderActionList);
@@ -637,24 +608,15 @@ public class ProductgroupPanel extends JPanel
 		GroupLayout surroundActionLayout = new GroupLayout(surroundScrollChooseAction);
 		surroundScrollChooseAction.setLayout(surroundActionLayout);
 
-		surroundActionLayout.setVerticalGroup(
-				surroundActionLayout.createSequentialGroup()
-						.addGap(30) // (int) (1.5 * Globals.lineHeight) ) for levelling the list when centering the
-									// components
-						.addComponent(labelStrip, 15, 15, 15)
-						.addComponent(scrollChooseAction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								3 * Globals.lineHeight));
+		surroundActionLayout.setVerticalGroup(surroundActionLayout.createSequentialGroup().addGap(30) // (int) (1.5 * Globals.lineHeight) ) for levelling the list when centering the
+				// components
+				.addComponent(labelStrip, 15, 15, 15).addComponent(scrollChooseAction, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, 3 * Globals.lineHeight));
 		surroundActionLayout.setHorizontalGroup(surroundActionLayout.createParallelGroup()
-				.addGroup(
-						surroundActionLayout.createSequentialGroup()
-								.addGap(2 * Globals.gapSize)
-								.addComponent(labelStrip, 2 * Globals.buttonWidth, 2 * Globals.buttonWidth,
-										Short.MAX_VALUE))
-				.addGroup(
-						surroundActionLayout.createSequentialGroup()
-								.addGap(2 * Globals.gapSize)
-								.addComponent(scrollChooseAction, 2 * Globals.buttonWidth, 2 * Globals.buttonWidth,
-										Short.MAX_VALUE)))
+				.addGroup(surroundActionLayout.createSequentialGroup().addGap(2 * Globals.gapSize)
+						.addComponent(labelStrip, 2 * Globals.buttonWidth, 2 * Globals.buttonWidth, Short.MAX_VALUE))
+				.addGroup(surroundActionLayout.createSequentialGroup().addGap(2 * Globals.gapSize).addComponent(
+						scrollChooseAction, 2 * Globals.buttonWidth, 2 * Globals.buttonWidth, Short.MAX_VALUE)))
 
 		;
 
@@ -686,12 +648,10 @@ public class ProductgroupPanel extends JPanel
 
 		buttonEditDialog = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("GroupPanel.EditButtonTooltip"),
-				"images/packagegroup_save.png",
-				"images/packagegroup_save_over.png",
+				"images/packagegroup_save.png", "images/packagegroup_save_over.png",
 				"images/packagegroup_save_disabled.png");
 		// buttonEditDialog.setPreferredSize(Globals.buttonDimension);
-		buttonEditDialog.setToolTips(
-				de.uib.configed.configed.getResourceValue("GroupPanel.EditButtonTooltipInactive"),
+		buttonEditDialog.setToolTips(de.uib.configed.configed.getResourceValue("GroupPanel.EditButtonTooltipInactive"),
 				de.uib.configed.configed.getResourceValue("GroupPanel.EditButtonTooltipActive"));
 		buttonEditDialog.addActionListener(this);
 		buttonEditDialog.setPreferredSize(de.uib.utilities.Globals.newSmallButton);
@@ -759,49 +719,45 @@ public class ProductgroupPanel extends JPanel
 		GroupLayout layoutPanelEdit = new GroupLayout(panelEdit);
 		panelEdit.setLayout(layoutPanelEdit);
 
-		layoutPanelEdit.setVerticalGroup(
-				layoutPanelEdit.createSequentialGroup()
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-						.addGroup(layoutPanelEdit.createParallelGroup(GroupLayout.Alignment.BASELINE)
-								.addComponent(labelSave, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(1, 1, 2)
-						.addGroup(layoutPanelEdit.createParallelGroup(GroupLayout.Alignment.BASELINE)
-								.addComponent(saveNameEditor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(descriptionField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(buttonDelete, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2));
+		layoutPanelEdit.setVerticalGroup(layoutPanelEdit.createSequentialGroup()
+				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+				.addGroup(layoutPanelEdit.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(labelSave,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGap(1, 1, 2)
+				.addGroup(layoutPanelEdit.createParallelGroup(GroupLayout.Alignment.BASELINE)
+						.addComponent(saveNameEditor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(descriptionField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonDelete, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2));
 
-		layoutPanelEdit.setHorizontalGroup(
-				layoutPanelEdit.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(layoutPanelEdit.createSequentialGroup()
-								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-								.addComponent(labelSave, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGroup(layoutPanelEdit.createSequentialGroup()
-								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-								.addComponent(saveNameEditor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										maxComboWidth)
-								.addGap(Globals.minGapSize / 2, Globals.minGapSize / 2, Globals.gapSize / 2)
-								.addComponent(descriptionField, minFieldWidth, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE)
-								.addGap(Globals.minGapSize, Globals.minGapSize, Globals.gapSize)
-								.addComponent(buttonDelete, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.minGapSize / 2, Globals.minGapSize / 2, Globals.gapSize / 2)
-								.addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.minGapSize / 2, Globals.minGapSize / 2, Globals.gapSize / 2)
-								.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)));
+		layoutPanelEdit.setHorizontalGroup(layoutPanelEdit
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layoutPanelEdit.createSequentialGroup()
+						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize).addComponent(labelSave,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGroup(layoutPanelEdit.createSequentialGroup()
+						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
+						.addComponent(saveNameEditor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								maxComboWidth)
+						.addGap(Globals.minGapSize / 2, Globals.minGapSize / 2, Globals.gapSize / 2)
+						.addComponent(descriptionField, minFieldWidth, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.minGapSize, Globals.minGapSize, Globals.gapSize)
+						.addComponent(buttonDelete, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.minGapSize / 2, Globals.minGapSize / 2, Globals.gapSize / 2)
+						.addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.minGapSize / 2, Globals.minGapSize / 2, Globals.gapSize / 2)
+						.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)));
 
 		setGroupEditing(false);
 
@@ -872,92 +828,84 @@ public class ProductgroupPanel extends JPanel
 		// separatingPlace.add( new JLabel("abc") );
 		// JLabel separatingPlace = new JLabel( " ---- ");
 
-		layoutMain.setVerticalGroup(
-				layoutMain.createSequentialGroup()
-						.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-						.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.BASELINE)
-								.addComponent(searchPane,
-										// Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						// GroupLayout.PREFERRED_SIZE)
-						.addComponent(separatingPlace, 1, 1, 1)
-						.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(labelSelectedGroup, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(groupsCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(buttonSaveAndExecute, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+		layoutMain.setVerticalGroup(layoutMain.createSequentialGroup()
+				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+				.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(searchPane,
+						// Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				// GroupLayout.PREFERRED_SIZE)
+				.addComponent(separatingPlace, 1, 1, 1)
+				.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(labelSelectedGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(groupsCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonSaveAndExecute, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 
-								// .addComponent(buttonCancelStateEditing, GroupLayout.PREFERRED_SIZE,
-								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								// .addComponent(buttonCollectiveAction, GroupLayout.PREFERRED_SIZE,
-								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								// .addGroup( layoutMain.createSequentialGroup()
-								// .addComponent(labelCollectiveAction, GroupLayout.PREFERRED_SIZE,
-								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						// .addComponent(buttonCancelStateEditing, GroupLayout.PREFERRED_SIZE,
+						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						// .addComponent(buttonCollectiveAction, GroupLayout.PREFERRED_SIZE,
+						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						// .addGroup( layoutMain.createSequentialGroup()
+						// .addComponent(labelCollectiveAction, GroupLayout.PREFERRED_SIZE,
+						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 
-								// .addGroup( layoutMain.createSequentialGroup()
-								// .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-								.addComponent(surroundScrollChooseAction, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, 3 * Globals.lineHeight)
-								.addComponent(buttonEditDialog, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
+						// .addGroup( layoutMain.createSequentialGroup()
+						// .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+						.addComponent(surroundScrollChooseAction, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, 3 * Globals.lineHeight)
+						.addComponent(buttonEditDialog, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+				// .addComponent(menuBarAggregateActions, GroupLayout.PREFERRED_SIZE,
+				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				).addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2).addComponent(panelEdit,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+
+		layoutMain.setHorizontalGroup(layoutMain.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layoutMain.createSequentialGroup()
+						// .addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
+						.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE))
+				.addGroup(layoutMain.createSequentialGroup().addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
+						.addComponent(buttonSaveAndExecute, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.minGapSize / 2, Globals.minGapSize / 2, Globals.gapSize / 2)
+						.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						// .addGap(0, Globals.gapSize/2, Globals.gapSize/2)
+						// .addComponent(buttonCancelStateEditing, GroupLayout.PREFERRED_SIZE,
+						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						// .addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize * 2)
+						.addGap(Globals.minGapSize / 2, Globals.minGapSize / 2, Globals.gapSize / 2)
+						// .addGroup( layoutMain.createParallelGroup( GroupLayout.Alignment.CENTER )
+						// .addComponent(labelCollectiveAction, GroupLayout.PREFERRED_SIZE,
+						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						// .addGap(0, Globals.gapSize/2, Globals.gapSize/2)
+						.addComponent(surroundScrollChooseAction, minComboWidth, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						// .addGap(0, Globals.gapSize/2, Globals.gapSize/2)
+						// .addComponent(buttonCollectiveAction, GroupLayout.PREFERRED_SIZE,
+						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.gapSize, Globals.gapSize, Short.MAX_VALUE)
 						// .addComponent(menuBarAggregateActions, GroupLayout.PREFERRED_SIZE,
 						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						)
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-						.addComponent(panelEdit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE));
+						// .addGap(Globals.gapSize, Globals.gapSize, Short.MAX_VALUE)
+						.addComponent(labelSelectedGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.minGapSize / 2, Globals.minGapSize / 2, Globals.gapSize / 2)
+						.addComponent(groupsCombo, minComboWidth, GroupLayout.PREFERRED_SIZE, maxComboWidth)
+						.addGap(0, Globals.minGapSize / 2, Globals.gapSize / 2)
+						.addComponent(buttonEditDialog, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize))
+				.addComponent(panelEdit, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
-		layoutMain.setHorizontalGroup(
-				layoutMain.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(layoutMain.createSequentialGroup()
-								// .addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-								.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE))
-						.addGroup(layoutMain.createSequentialGroup()
-								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-								.addComponent(buttonSaveAndExecute, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.minGapSize / 2, Globals.minGapSize / 2, Globals.gapSize / 2)
-								.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								// .addGap(0, Globals.gapSize/2, Globals.gapSize/2)
-								// .addComponent(buttonCancelStateEditing, GroupLayout.PREFERRED_SIZE,
-								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								// .addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize * 2)
-								.addGap(Globals.minGapSize / 2, Globals.minGapSize / 2, Globals.gapSize / 2)
-								// .addGroup( layoutMain.createParallelGroup( GroupLayout.Alignment.CENTER )
-								// .addComponent(labelCollectiveAction, GroupLayout.PREFERRED_SIZE,
-								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								// .addGap(0, Globals.gapSize/2, Globals.gapSize/2)
-								.addComponent(surroundScrollChooseAction, minComboWidth, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE)
-								// .addGap(0, Globals.gapSize/2, Globals.gapSize/2)
-								// .addComponent(buttonCollectiveAction, GroupLayout.PREFERRED_SIZE,
-								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.gapSize, Globals.gapSize, Short.MAX_VALUE)
-								// .addComponent(menuBarAggregateActions, GroupLayout.PREFERRED_SIZE,
-								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								// .addGap(Globals.gapSize, Globals.gapSize, Short.MAX_VALUE)
-								.addComponent(labelSelectedGroup, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.minGapSize / 2, Globals.minGapSize / 2, Globals.gapSize / 2)
-								.addComponent(groupsCombo, minComboWidth, GroupLayout.PREFERRED_SIZE, maxComboWidth)
-								.addGap(0, Globals.minGapSize / 2, Globals.gapSize / 2)
-								.addComponent(buttonEditDialog, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize))
-						.addComponent(panelEdit, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-						.addComponent(separatingPlace, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
+				.addComponent(separatingPlace, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 		);
 
@@ -982,10 +930,8 @@ public class ProductgroupPanel extends JPanel
 			String newDescription = descriptionField.getText();
 			Set selectedProducts = associate.getSelectedIDs();
 
-			logging.debug(this, "save: set groupname, description, assigned_products "
-					+ newGroupID + ", "
-					+ newDescription + ", "
-					+ selectedProducts);
+			logging.debug(this, "save: set groupname, description, assigned_products " + newGroupID + ", "
+					+ newDescription + ", " + selectedProducts);
 
 			// logging.debug(this, "save: newGroupID " + newGroupID);
 			Set<String> originalSelection = associate.getSelectedIDs();
@@ -998,9 +944,7 @@ public class ProductgroupPanel extends JPanel
 
 				FShowList fList = new FShowList(de.uib.configed.Globals.mainFrame, de.uib.configed.Globals.APPNAME,
 						true,
-						new String[] {
-								configed.getResourceValue("buttonYES"),
-								configed.getResourceValue("buttonNO") },
+						new String[] { configed.getResourceValue("buttonYES"), configed.getResourceValue("buttonNO") },
 						450, 400);
 
 				ArrayList<String> outlines = new ArrayList<String>();
@@ -1039,19 +983,16 @@ public class ProductgroupPanel extends JPanel
 		// logging.debug(this, "setMembers, productGroupMembers " +
 		// productGroupMembers);
 
-		if (productGroupMembers == null
-				|| groupsCombo == null)
+		if (productGroupMembers == null || groupsCombo == null)
 		// || productGroupMembers.get((String) groupsCombo.getSelectedItem()) == null)
 		{
 			associate.clearSelection();
 			return;
 		}
 
-		logging.debug(this, "group members "
-				+ productGroupMembers.get((String) groupsCombo.getSelectedItem()));
+		logging.debug(this, "group members " + productGroupMembers.get((String) groupsCombo.getSelectedItem()));
 
-		associate.setSelection(
-				(Set) productGroupMembers.get((String) groupsCombo.getSelectedItem()));
+		associate.setSelection((Set) productGroupMembers.get((String) groupsCombo.getSelectedItem()));
 	}
 
 	protected void setInternalGroupsData() {
@@ -1078,8 +1019,7 @@ public class ProductgroupPanel extends JPanel
 		clearChanges();
 	}
 
-	public void setGroupsData(
-			final Map<String, Map<String, String>> data,
+	public void setGroupsData(final Map<String, Map<String, String>> data,
 			final Map<String, Set<String>> productGroupMembers) {
 		logging.debug(this, "setGroupsData " + data);
 		setGroupEditing(false);
@@ -1115,7 +1055,7 @@ public class ProductgroupPanel extends JPanel
 		}
 
 		else if (e.getSource() == buttonCancel) {
-			// System.out.println (" -------- buttonCancel " + e);
+			// logging.debug (" -------- buttonCancel " + e);
 			cancel();
 		}
 
@@ -1201,8 +1141,7 @@ public class ProductgroupPanel extends JPanel
 				associate.getSelectedRowsInModelTerms().stream()
 						.peek(x -> logging.info(" row id " + x + " product " + insTableModel.getValueAt(x, 0)))
 						.forEach(x -> insTableModel.collectiveChangeActionRequest(
-								(String) insTableModel.getValueAt(x, 0),
-								new ActionRequest(actionType)));
+								(String) insTableModel.getValueAt(x, 0), new ActionRequest(actionType)));
 			}
 
 			insTableModel.finishCollectiveChange();
@@ -1296,9 +1235,7 @@ public class ProductgroupPanel extends JPanel
 			result = false;
 
 		if (result) {
-			boolean forbidden = proposedName.equals(SAVE_GROUP_ID)
-					||
-					proposedName.equals("")
+			boolean forbidden = proposedName.equals(SAVE_GROUP_ID) || proposedName.equals("")
 			// ||
 			// proposedName.indexOf(' ') >= 0
 			;

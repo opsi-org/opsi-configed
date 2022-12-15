@@ -19,12 +19,12 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 
 	protected JPopupMenu myMenu;
 
-	static public int createSubnodePosition = -1;
-	static public int editNodePosition = -1;
-	static public int deleteNodePosition = -1;
-	static public int deleteGroupNodePosition = -1;
-	static public int activateElementsPosition = -1;
-	static public int removeElementsPosition = -1;
+	public static int createSubnodePosition = -1;
+	public static int editNodePosition = -1;
+	public static int deleteNodePosition = -1;
+	public static int deleteGroupNodePosition = -1;
+	public static int activateElementsPosition = -1;
+	public static int removeElementsPosition = -1;
 
 	public TreePopupMouseListener(JPopupMenu popup, ClientTree tree, Integer acceptedMouseButton) {
 		super(popup);
@@ -80,11 +80,8 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 		if (
 		// nodeName.equals(ClientTree.FAILED_NAME)
 		// ||
-		nodeName.equals(ClientTree.ALL_NAME)
-				||
-				(((DefaultMutableTreeNode) clickNode.getParent()).getUserObject().toString().equals(ClientTree.ALL_NAME)
-						&&
-						!nodeName.equals(ClientTree.GROUPS_NAME)))
+		nodeName.equals(ClientTree.ALL_NAME) || (((DefaultMutableTreeNode) clickNode.getParent()).getUserObject()
+				.toString().equals(ClientTree.ALL_NAME) && !nodeName.equals(ClientTree.GROUPS_NAME)))
 
 			return false; // dont show here any menu
 

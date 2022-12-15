@@ -72,7 +72,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	protected SSHCommandFactory factory = SSHCommandFactory.getInstance();
 	protected SSHConnectionExecDialog dia;
 	protected ConfigedMain main;
-	static protected String wgetDefText;
+	protected static String wgetDefText;
 
 	protected int height = 410;
 	protected int width = 700;
@@ -208,13 +208,9 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		});
 		enableComponents(rb_from_server.isSelected());
 		SSHConnectExec testFile = new SSHConnectExec();
-		String result = testFile.exec(new Empty_Command(
-				factory.str_command_fileexists_notremove
-						.replaceAll(
-								factory.str_replacement_filename,
-								command.getTargetPath()) // /etc/opsi/modules.d
-		),
-				false);
+		String result = testFile.exec(new Empty_Command(factory.str_command_fileexists_notremove
+				.replaceAll(factory.str_replacement_filename, command.getTargetPath()) // /etc/opsi/modules.d
+		), false);
 		init_additional();
 		/*
 		 * init_additional in ModulesUploadDialog do something like
@@ -250,12 +246,9 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	}
 
 	protected void initGUI_additional() {
-		h_parallelGroup = inputPanelLayout.createSequentialGroup()
-				.addGroup(inputPanelLayout.createParallelGroup()
-						.addGroup(inputPanelLayout.createSequentialGroup()
-								.addComponent(lbl_modules_from, PREF, PREF, PREF))
-						.addComponent(lbl_set_rights, PREF, PREF, PREF)
-						.addComponent(lbl_overwriteExisting, PREF, PREF, PREF))
+		h_parallelGroup = inputPanelLayout.createSequentialGroup().addGroup(inputPanelLayout.createParallelGroup()
+				.addGroup(inputPanelLayout.createSequentialGroup().addComponent(lbl_modules_from, PREF, PREF, PREF))
+				.addComponent(lbl_set_rights, PREF, PREF, PREF).addComponent(lbl_overwriteExisting, PREF, PREF, PREF))
 				.addGap(Globals.gapSize)
 				.addGroup(inputPanelLayout.createParallelGroup()
 						.addComponent(cb_setRights, Globals.iconWidth, Globals.iconWidth, Globals.iconWidth)
@@ -271,70 +264,47 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 			inputPanel.setLayout(inputPanelLayout);
 
 			initGUI_additional();
-			inputPanelLayout.setHorizontalGroup(inputPanelLayout.createParallelGroup()
-					.addGap(Globals.gapSize)
-					.addGroup(inputPanelLayout.createSequentialGroup()
+			inputPanelLayout.setHorizontalGroup(inputPanelLayout.createParallelGroup().addGap(Globals.gapSize).addGroup(
+					inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize * 2).addGroup(inputPanelLayout
+							.createParallelGroup().addGap(Globals.gapSize * 2)
+							.addGroup(inputPanelLayout.createSequentialGroup().addComponent(rb_local, PREF, PREF, MAX))
 							.addGap(Globals.gapSize * 2)
-							.addGroup(inputPanelLayout.createParallelGroup()
-									.addGap(Globals.gapSize * 2)
-									.addGroup(inputPanelLayout.createSequentialGroup()
-											.addComponent(rb_local, PREF, PREF, MAX))
-									.addGap(Globals.gapSize * 2)
-									.addGroup(inputPanelLayout.createSequentialGroup()
-											.addComponent(rb_from_server, PREF, PREF, MAX))
-									.addGroup(inputPanelLayout.createSequentialGroup()
-											.addGroup(h_parallelGroup) // parallelGroup can be overwritten by child
-																		// classes
-									))
-							.addGap(Globals.gapSize))
-					.addGroup(inputPanelLayout.createSequentialGroup()
-							.addGap(Globals.gapSize)
-							.addGroup(inputPanelLayout.createParallelGroup()
-									.addGap(Globals.gapSize * 2)
-									.addGroup(GroupLayout.Alignment.LEADING, inputPanelLayout.createSequentialGroup()
-											.addGap(Globals.gapSize * 3)
+							.addGroup(inputPanelLayout.createSequentialGroup()
+									.addComponent(rb_from_server, PREF, PREF, MAX))
+							.addGroup(inputPanelLayout.createSequentialGroup().addGroup(h_parallelGroup) // parallelGroup can be overwritten by child
+																																																																																																																																																// classes
+							)).addGap(Globals.gapSize))
+					.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize).addGroup(inputPanelLayout
+							.createParallelGroup().addGap(Globals.gapSize * 2)
+							.addGroup(GroupLayout.Alignment.LEADING,
+									inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize * 3)
 											.addComponent(tf_local_path, Globals.buttonWidth, Globals.buttonWidth, MAX)
-											.addGap(Globals.gapSize)
-											.addComponent(btn_filechooser, PREF, PREF, PREF)
+											.addGap(Globals.gapSize).addComponent(btn_filechooser, PREF, PREF, PREF)
 											.addGap(Globals.gapSize))
-									.addGroup(inputPanelLayout.createSequentialGroup()
-											.addGap(Globals.gapSize * 3)
-											.addGroup(inputPanelLayout.createParallelGroup()
-													.addComponent(lbl_url, PREF, PREF, PREF)
-													.addComponent(
-															wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
-															PREF, PREF, PREF))
-											.addGap(Globals.gapSize)
-											.addGroup(inputPanelLayout.createParallelGroup()
-													.addComponent(tf_url, Globals.buttonWidth, Globals.buttonWidth, MAX)
-													.addComponent(
-															wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
-															PREF, PREF, PREF)))
-									.addGroup(inputPanelLayout.createSequentialGroup()
-											.addGap(Globals.gapSize)
-											.addComponent(wgetAuthPanel, PREF, PREF, MAX)))
+							.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize * 3)
+									.addGroup(inputPanelLayout.createParallelGroup()
+											.addComponent(lbl_url, PREF, PREF, PREF)
+											.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
+													PREF, PREF, PREF))
+									.addGap(Globals.gapSize)
+									.addGroup(inputPanelLayout.createParallelGroup()
+											.addComponent(tf_url, Globals.buttonWidth, Globals.buttonWidth, MAX)
+											.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
+													PREF, PREF, PREF)))
+							.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize)
+									.addComponent(wgetAuthPanel, PREF, PREF, MAX)))
 							.addGap(Globals.gapSize))
 					.addGap(Globals.gapSize));
-			inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup()
-					.addGap(Globals.gapSize)
-					.addComponent(lbl_modules_from, PREF, PREF, PREF)
-					.addGap(Globals.gapSize)
-					.addGap(Globals.gapSize)
-					.addComponent(rb_local, PREF, PREF, PREF)
-					.addGap(Globals.gapSize)
+			inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize)
+					.addComponent(lbl_modules_from, PREF, PREF, PREF).addGap(Globals.gapSize).addGap(Globals.gapSize)
+					.addComponent(rb_local, PREF, PREF, PREF).addGap(Globals.gapSize)
 					.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-							.addGap(Globals.gapSize * 3)
-							.addComponent(tf_local_path, PREF, PREF, PREF)
-							.addComponent(btn_filechooser, PREF, PREF, PREF)
-							.addGap(Globals.gapSize * 3))
-					.addGap(Globals.gapSize)
-					.addComponent(rb_from_server, PREF, PREF, PREF)
-					.addGap(Globals.gapSize)
+							.addGap(Globals.gapSize * 3).addComponent(tf_local_path, PREF, PREF, PREF)
+							.addComponent(btn_filechooser, PREF, PREF, PREF).addGap(Globals.gapSize * 3))
+					.addGap(Globals.gapSize).addComponent(rb_from_server, PREF, PREF, PREF).addGap(Globals.gapSize)
 					.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-							.addGap(Globals.gapSize * 3)
-							.addComponent(tf_url, PREF, PREF, PREF)
-							.addComponent(lbl_url, PREF, PREF, PREF)
-							.addGap(Globals.gapSize * 3))
+							.addGap(Globals.gapSize * 3).addComponent(tf_url, PREF, PREF, PREF)
+							.addComponent(lbl_url, PREF, PREF, PREF).addGap(Globals.gapSize * 3))
 					.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 							.addGap(Globals.gapSize * 3)
 							.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH), PREF, PREF, PREF)
@@ -342,8 +312,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 							.addGap(Globals.gapSize * 3))
 					.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 
-							.addGap(Globals.gapSize)
-							.addComponent(wgetAuthPanel, PREF, PREF, PREF))
+							.addGap(Globals.gapSize).addComponent(wgetAuthPanel, PREF, PREF, PREF))
 					.addGap(Globals.gapSize * 2)
 					.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 							.addComponent(lbl_set_rights, PREF, PREF, PREF)
@@ -357,7 +326,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 					.addGroup(v_parallelGroup) // parallelGroup can be overwritten by child classes
 			);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logging.error("Error", e);
 		}
 	}
 
@@ -375,8 +344,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 				return;
 			}
 		} else if (rb_from_server.isSelected()) {
-			if (tf_url.getText().equals("")
-					|| (tf_url.getText().equals(wgetDefText))) {
+			if (tf_url.getText().equals("") || (tf_url.getText().equals(wgetDefText))) {
 				logging.warning(this, "Please enter url to file.");
 				return;
 			}
@@ -394,11 +362,8 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 				wget.setUrl(tf_url.getText());
 
 				if (((JCheckBox) wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
-					wget.setAuthentication(" --no-check-certificate --user="
-							+ wgetAuthPanel.getUser()
-							+ " --password="
-							+ wgetAuthPanel.getPw()
-							+ " ");
+					wget.setAuthentication(" --no-check-certificate --user=" + wgetAuthPanel.getUser() + " --password="
+							+ wgetAuthPanel.getPw() + " ");
 				} else
 					wget.setAuthentication(" ");
 				fullcommand.addCommand((SSHCommand) wget);
@@ -411,8 +376,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 				fullcommand.addCommand(((SSHCommand) new CommandOpsiSetRights("")));
 			new SSHConnectExec(fullcommand);
 		} catch (Exception e) {
-			logging.warning(this, "doAction1, exception occurred " + e);
-			logging.logTrace(e);
+			logging.warning(this, "doAction1, exception occurred", e);
 		}
 	}
 

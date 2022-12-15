@@ -19,8 +19,7 @@ import java.util.Vector;
 import de.uib.utilities.logging.logging;
 
 //data source table productOnDepot
-public class OpsiPackage
-		implements Comparable {
+public class OpsiPackage implements Comparable {
 	protected String productId;
 	protected int productType;
 	protected String versionInfo;
@@ -51,7 +50,7 @@ public class OpsiPackage
 		SERVICE_KEYS.add(SERVICEkeyPRODUCT_TYPE);
 	}
 
-	public final static Vector<String> COLUMN_NAMES;
+	public static final Vector<String> COLUMN_NAMES;
 	static {
 		COLUMN_NAMES = new Vector<String>();
 		COLUMN_NAMES.add(DBkeyPRODUCT_ID);
@@ -103,10 +102,7 @@ public class OpsiPackage
 	}
 
 	public OpsiPackage(Map<String, Object> m) {
-		this(
-				"" + m.get(DBkeyPRODUCT_ID),
-				"" + m.get(SERVICEkeyPRODUCT_VERSION),
-				"" + m.get(SERVICEkeyPACKAGE_VERSION),
+		this("" + m.get(DBkeyPRODUCT_ID), "" + m.get(SERVICEkeyPRODUCT_VERSION), "" + m.get(SERVICEkeyPACKAGE_VERSION),
 				"" + m.get(SERVICEkeyPRODUCT_TYPE),
 				de.uib.utilities.Globals.interpretAsBoolean(m.get(SERVICEkeyLOCKED)));
 		logging.debug(this, "built from " + m);
@@ -167,10 +163,10 @@ public class OpsiPackage
 
 	public static String giveProductType(int type) {
 		switch (type) {
-			case TYPE_LOCALBOOT:
-				return LOCALBOOT_PRODUCT_SERVER_STRING;
-			case TYPE_NETBOOT:
-				return NETBOOT_PRODUCT_SERVER_STRING;
+		case TYPE_LOCALBOOT:
+			return LOCALBOOT_PRODUCT_SERVER_STRING;
+		case TYPE_NETBOOT:
+			return NETBOOT_PRODUCT_SERVER_STRING;
 		}
 		return "error";
 	}
@@ -178,10 +174,8 @@ public class OpsiPackage
 	protected String buildRepresentation() {
 		return
 		// getClass().getName() +
-		"{"
-				+ DBkeyPRODUCT_ID + ":\"" + productId + "\";"
-				+ SERVICEkeyPRODUCT_TYPE + ":\"" + giveProductType(productType) + "\";"
-				+ VERSION_INFO + ":\"" + versionInfo
+		"{" + DBkeyPRODUCT_ID + ":\"" + productId + "\";" + SERVICEkeyPRODUCT_TYPE + ":\""
+				+ giveProductType(productType) + "\";" + VERSION_INFO + ":\"" + versionInfo
 				// + LOCKED + ":\" + locked
 				+ "\"}";
 	}

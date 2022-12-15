@@ -20,8 +20,8 @@ import de.uib.utilities.logging.logging;
  */
 
 public class Globals {
-	public static final String VERSION = "4.2.19.1";
-	public static final String VERDATE = "(2022/28/11)";
+	public static final String VERSION = "4.2.19.4";
+	public static final String VERDATE = "2022-12-12";
 
 	public static final String VERHASHTAG = "";
 
@@ -85,6 +85,10 @@ public class Globals {
 	public static final Font defaultFontBig = new java.awt.Font("SansSerif", 0, 12);
 	public static final Font defaultFontBold = new java.awt.Font("SansSerif", Font.BOLD, 12);
 	public static final Font defaultFontTitle = new java.awt.Font("SansSerif", 0, 16);
+
+	public static final int DEFAULT_FTEXTAREA_HEIGHT = 200;
+	public static final int DEFAULT_FTEXTAREA_WIDTH = 350;
+
 	/*
 	 * // Get all font family names
 	 * GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -92,7 +96,7 @@ public class Globals {
 	 * 
 	 * // Iterate the font family names
 	 * for (int i=0; i<fontNames.length; i++) {
-	 * System.out.println("FONT ==>>> " + fontNames[i]);
+	 * logging.debug("FONT ==>>> " + fontNames[i]);
 	 * }
 	 */
 
@@ -281,14 +285,14 @@ public class Globals {
 	public static javax.swing.JFrame frame1; // can be changed
 	public static java.awt.Container container1; // can be changed
 
-	public final static java.awt.Dimension helperFormDimension = new java.awt.Dimension(1100, 600);
+	public static final java.awt.Dimension helperFormDimension = new java.awt.Dimension(1100, 600);
 
-	public final static int locationDistanceX = 150;
-	public final static int locationDistanceY = 150;
+	public static final int locationDistanceX = 150;
+	public static final int locationDistanceY = 150;
 
-	public final static int dialogFrameDefaultHeight = 400;
-	public final static int dialogFrameDefaultWidth = 800;
-	public final static java.awt.Dimension dialogFrameDefaultSize = new java.awt.Dimension(dialogFrameDefaultWidth,
+	public static final int dialogFrameDefaultHeight = 400;
+	public static final int dialogFrameDefaultWidth = 800;
+	public static final java.awt.Dimension dialogFrameDefaultSize = new java.awt.Dimension(dialogFrameDefaultWidth,
 			dialogFrameDefaultHeight);
 
 	public static String getResourceValue(String key) {
@@ -388,7 +392,7 @@ public class Globals {
 	public static String getSeconds() {
 		String sqlNow = new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis()).toString();
 
-		// System.out.println(" sqlNow " + sqlNow);
+		// logging.debug(" sqlNow " + sqlNow);
 		int i = sqlNow.lastIndexOf(' ');
 		String date = sqlNow.substring(0, i);
 		date = date.replace(' ', '-');
@@ -417,11 +421,11 @@ public class Globals {
 		return sqlNow;
 	}
 
-	public final static ArrayList<Object> getNowTimeListValue() {
+	public static final ArrayList<Object> getNowTimeListValue() {
 		return getNowTimeListValue(null);
 	}
 
-	public final static ArrayList<Object> getNowTimeListValue(final String comment) {
+	public static final ArrayList<Object> getNowTimeListValue(final String comment) {
 		ArrayList<Object> result = new ArrayList<Object>();
 		// result. add( new Date().toString() );
 		String now = new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis()).toString();
@@ -512,9 +516,8 @@ public class Globals {
 		if (PersistenceControllerFactory.getPersistenceController() == null)
 			return false;
 
-		boolean result = PersistenceControllerFactory.getPersistenceController().isServerFullPermission();
+		return PersistenceControllerFactory.getPersistenceController().isServerFullPermission();
 
-		return result;
 	}
 
 	public static boolean forbidEditingTargetSpecific() {
@@ -549,7 +552,7 @@ public class Globals {
 		return result;
 	}
 
-	public final static String STARRED_STRING = "*****";
+	public static final String STARRED_STRING = "*****";
 
 	public static void main(String[] args) {
 		createImageIcon("images/cancel.png", "");

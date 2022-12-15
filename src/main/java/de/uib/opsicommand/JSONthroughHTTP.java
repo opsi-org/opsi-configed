@@ -322,7 +322,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 			connection = produceConnection();
 			// the underlying network connection can be shared,
 			// only disconnect() may close the underlying socket
-			// System.out.println (" retrieving 1 " + conStat);
+			// logging.debug (" retrieving 1 " + conStat);
 
 			setGeneralRequestProperties(connection);
 
@@ -356,7 +356,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 
 			if (sessionId != null) {
 				connection.setRequestProperty("Cookie", sessionId);
-				// System.out.println ("Session id sent: " + sessionId);
+				// logging.debug ("Session id sent: " + sessionId);
 			}
 			// connection.setRequestProperty("User-Agent", Globals.APPNAME + " " +
 			// Globals.VERSION);
@@ -412,9 +412,10 @@ public class JSONthroughHTTP extends JSONExecutioner {
 
 			/**
 			 * pausing for testing purposes try {
-			 * Thread.currentThread().sleep(10000); } catch
+			 * Thread.currentThread().sleep(10000); } catch <<<<<<< HEAD
 			 * (InterruptedException iex) { } System.out.println (" retrieving 2
-			 * " + conStat);
+			 * " + conStat); ======= (InterruptedException iex) { }
+			 * logging.debug (" retrieving 2 " + conStat); >>>>>>> main
 			 */
 
 		}
@@ -523,7 +524,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 					if (cookieVal != null) {
 						lastSessionId = sessionId;
 						sessionId = cookieVal.substring(0, cookieVal.indexOf(";"));
-						// System.out.println( "Session id received:" + sessionId);
+						// logging.debug( "Session id received:" + sessionId);
 
 						boolean gotNewSession = sessionId != null && !sessionId.equals(lastSessionId);
 
@@ -627,15 +628,14 @@ public class JSONthroughHTTP extends JSONExecutioner {
 						}
 
 						line = in.readLine();
-						// System.out.println (line);
+						// logging.debug (line);
 						if (line != null)
 							logging.debug(this, "received second line of length " + line.length());
 
 					}
 
 					catch (IOException iox) {
-						logging.info(this, "exception on receiving json " + iox);
-						logging.logTrace(iox);
+						logging.warning(this, "exception on receiving json", iox);
 						throw new JSONCommunicationException("receiving json");
 					} finally {
 						logging.debug(this, "handling finally receiving json close");

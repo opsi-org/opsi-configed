@@ -37,7 +37,7 @@ public class MapSource implements TableSource
 
 	protected boolean reloadRequested = true;
 
-	final static Map<String, Object> class2defaultValue;
+	static final Map<String, Object> class2defaultValue;
 	static {
 		class2defaultValue = new HashMap<String, Object>();
 		class2defaultValue.put("java.lang.Boolean", false);
@@ -80,7 +80,7 @@ public class MapSource implements TableSource
 
 			Map mRow = table.get(key);
 
-			// System.out.println ( " -------- key '" + key + "', mRow = " + mRow );
+			// logging.debug ( " -------- key '" + key + "', mRow = " + mRow );
 
 			// vRow.add(key);
 			// previously we assumed that column 0 hold the key
@@ -99,7 +99,7 @@ public class MapSource implements TableSource
 					vRow.add(ob);
 
 					try {
-						// System.out.println( "??? is " + ob + " dyninstance class of " +
+						// logging.debug( "??? is " + ob + " dyninstance class of " +
 						// classNames.get(i));
 						Class cl = Class.forName(classNames.get(i));
 						if (!dynInstanceOf(ob, cl)) {
@@ -110,8 +110,8 @@ public class MapSource implements TableSource
 							logging.info(this, "class should be " + cl);
 						}
 					} catch (java.lang.NullPointerException ex) {
-						logging.warning(this, " " + ex + ", could not get dyninstance "
-								+ i + ", " + columnNames.get(i));
+						logging.warning(this,
+								" " + ex + ", could not get dyninstance " + i + ", " + columnNames.get(i));
 					} catch (Exception ex) {
 						logging.error("MapSource fetchData(): class " + classNames.get(i) + " not found, " + ex);
 					}
@@ -138,8 +138,8 @@ public class MapSource implements TableSource
 							else {
 								logging.warning(this,
 										"fetchData row " + mRow
-												+ " ob == null, possibly the column name is not correct, column "
-												+ i + ", " + columnNames.get(i));
+												+ " ob == null, possibly the column name is not correct, column " + i
+												+ ", " + columnNames.get(i));
 							}
 						}
 					}

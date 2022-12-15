@@ -33,24 +33,15 @@ public class PersistenceControllerFactory {
 	public static boolean sqlDirect = false;
 
 	public static String directmethodcall = "";
-	public final static String directmethodcall_cleanupAuditsoftware = "cleanupAuditsoftware";
+	public static final String directmethodcall_cleanupAuditsoftware = "cleanupAuditsoftware";
 
 	/**
-	 * This creation method constructs a new Controller instance and lets a static
-	 * variable point to it
-	 * When next time we need a Controller we can choose if we take the already
-	 * constructed one - returned from the static method
-	 * getPersistenceController - or construct a new one
+	 * This creation method constructs a new Controller instance and lets a
+	 * static variable point to it When next time we need a Controller we can
+	 * choose if we take the already constructed one - returned from the static
+	 * method getPersistenceController - or construct a new one
 	 */
 	public static PersistenceController getNewPersistenceController(String server, String user, String password) {
-		logging.writeToConsole("we have got loglevel " + logging.AKT_DEBUG_LEVEL);
-
-		// System.out.println("getNewPersistenceController");
-		if (logging.AKT_DEBUG_LEVEL > 0)
-			logging.setAktDebugLevel(logging.LEVEL_CHECK);
-
-		logging.writeToConsole("we have got loglevel " + logging.AKT_DEBUG_LEVEL);
-
 		logging.info("getNewPersistenceController");
 		if (staticPersistControl != null
 				&& staticPersistControl.getConnectionState().equals(ConnectionState.CONNECTED)) {
@@ -116,7 +107,6 @@ public class PersistenceControllerFactory {
 
 				if (sqlAndGetRows && !sourceAccepted) {
 					sqlAndGetRows = false;
-					persistControl = null;
 					persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
 				}
 
@@ -126,13 +116,11 @@ public class PersistenceControllerFactory {
 
 				if (persistControl.getOpsiVersion().compareTo(de.uib.configed.Globals.REQUIRED_SERVICE_VERSION) < 0) {
 					String errorInfo = configed.getResourceValue("PersistenceControllerFactory.requiredServiceVersion")
-							+ " " + Globals.REQUIRED_SERVICE_VERSION + ", "
-							+ "\n( " + configed.getResourceValue("PersistenceControllerFactory.foundServiceVersion")
-							+ " " + persistControl.getOpsiVersion() + " ) ";
+							+ " " + Globals.REQUIRED_SERVICE_VERSION + ", " + "\n( "
+							+ configed.getResourceValue("PersistenceControllerFactory.foundServiceVersion") + " "
+							+ persistControl.getOpsiVersion() + " ) ";
 
-					javax.swing.JOptionPane.showMessageDialog(Globals.mainContainer,
-							errorInfo,
-							Globals.APPNAME,
+					javax.swing.JOptionPane.showMessageDialog(Globals.mainContainer, errorInfo, Globals.APPNAME,
 							javax.swing.JOptionPane.OK_OPTION);
 
 					configed.endApp(1);
@@ -168,11 +156,8 @@ public class PersistenceControllerFactory {
 							continuing.value = true;
 
 							de.uib.configed.gui.FTextArea infodialog = new de.uib.configed.gui.FTextArea(
-									Globals.mainFrame,
-									Globals.APPNAME,
-									false, // we are not modal
-									new String[] { "ok" },
-									300, 200) {
+									Globals.mainFrame, Globals.APPNAME, false, // we are not modal
+									new String[] { "ok" }, 300, 200) {
 								@Override
 								public void doAction1() {
 									super.doAction1();
@@ -223,7 +208,6 @@ public class PersistenceControllerFactory {
 				if (sqlAndGetRows && !persistControl.isWithMySQL()) {
 					logging.info(" fall back to  " + OpsiserviceNOMPersistenceController.class);
 					sqlAndGetRows = false;
-					persistControl = null;
 					persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
 
 					persistControl.makeConnection();
@@ -235,14 +219,11 @@ public class PersistenceControllerFactory {
 		}
 
 		catch (Exception ex) {
-			logging.logTrace(ex);
-			logging.error(ex.toString());
+			logging.error("Error", ex);
 
 			String errorInfo = ex.toString();
 
-			javax.swing.JOptionPane.showMessageDialog(Globals.mainContainer,
-					errorInfo,
-					Globals.APPNAME,
+			javax.swing.JOptionPane.showMessageDialog(Globals.mainContainer, errorInfo, Globals.APPNAME,
 					javax.swing.JOptionPane.OK_OPTION);
 
 			configed.endApp(2);
@@ -261,8 +242,7 @@ public class PersistenceControllerFactory {
 
 	public static ConnectionState getConnectionState() {
 		if (staticPersistControl == null) {
-			logging.info("PersistenceControllerFactory getConnectionState, "
-					+ " staticPersistControl null");
+			logging.info("PersistenceControllerFactory getConnectionState, " + " staticPersistControl null");
 
 			return ConnectionState.ConnectionUndefined;
 		}

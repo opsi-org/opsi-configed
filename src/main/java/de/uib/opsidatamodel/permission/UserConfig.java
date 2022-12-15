@@ -34,32 +34,32 @@ import de.uib.utilities.logging.logging;
 public class UserConfig {
 	public static String CONFIGKEY_STR_USER = "user"; // de.uib.opsidatamodel.PersistenceController.KEY_USER_ROOT;
 
-	public final static String ROLE = "role";
+	public static final String ROLE = "role";
 
-	public final static String KEY_USER_ROOT = CONFIGKEY_STR_USER;
-	public final static String KEY_USER_ROLE_ROOT = KEY_USER_ROOT + "." + ROLE;
-	public final static String ALL_USER_KEY_START = KEY_USER_ROOT + ".{}.";
+	public static final String KEY_USER_ROOT = CONFIGKEY_STR_USER;
+	public static final String KEY_USER_ROLE_ROOT = KEY_USER_ROOT + "." + ROLE;
+	public static final String ALL_USER_KEY_START = KEY_USER_ROOT + ".{}.";
 
-	public final static String START_USER_KEY = UserConfig.KEY_USER_ROOT + ".{";
+	public static final String START_USER_KEY = UserConfig.KEY_USER_ROOT + ".{";
 
-	public final static String DEFAULT_ROLE_NAME = "default";
-	public final static String ARCHEO_ROLE_NAME = "archeo";
-	public final static String NONE_PROTOTYPE = "";
-	// public final static String RESTRICTED_ROLE_NAME = "restricted";
+	public static final String DEFAULT_ROLE_NAME = "default";
+	public static final String ARCHEO_ROLE_NAME = "archeo";
+	public static final String NONE_PROTOTYPE = "";
+	// public static final String RESTRICTED_ROLE_NAME = "restricted";
 
-	public final static String roleBranchPart = KEY_USER_ROLE_ROOT;
+	public static final String roleBranchPart = KEY_USER_ROLE_ROOT;
 
-	public final static String HAS_ROLE_ATTRIBUT = "has_role";
-	public final static String MODIFICATION_INFO_KEY = "modified";
+	public static final String HAS_ROLE_ATTRIBUT = "has_role";
+	public static final String MODIFICATION_INFO_KEY = "modified";
 
-	public final static ArrayList<Object> EMPTY_LIST = new ArrayList<Object>();
-	public final static ArrayList<Object> BOOLEAN_POSSIBLE_VALUES = new ArrayList<Object>();
+	public static final ArrayList<Object> EMPTY_LIST = new ArrayList<Object>();
+	public static final ArrayList<Object> BOOLEAN_POSSIBLE_VALUES = new ArrayList<Object>();
 	static {
 		BOOLEAN_POSSIBLE_VALUES.add(true);
 		BOOLEAN_POSSIBLE_VALUES.add(false);
 	}
 
-	public final static ArrayList<Object> ZERO_TIME;
+	public static final ArrayList<Object> ZERO_TIME;
 	static {
 		ZERO_TIME = new ArrayList<Object>();
 		ZERO_TIME.add("0000-00-00 00:00:00");
@@ -222,9 +222,8 @@ public class UserConfig {
 			if (username.equals(getArcheoConfig().getUserName())) {
 				logging.warning(this, "UserConfig : setting value for key " + key + " for default user ");
 			} else {
-				logging.warning(this,
-						"UserConfig : setting value for key " + key + " for user " + username + " to default value "
-								+ getArcheoConfig().getBooleanValue(key));
+				logging.warning(this, "UserConfig : setting value for key " + key + " for user " + username
+						+ " to default value " + getArcheoConfig().getBooleanValue(key));
 				val = getArcheoConfig().getBooleanValue(key);
 			}
 			booleanMap.put(key, val);

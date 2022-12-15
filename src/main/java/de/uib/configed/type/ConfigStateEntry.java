@@ -6,16 +6,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class ConfigStateEntry extends HashMap<String, Object> {
-	public final static String TYPE = "ConfigState";
+	public static final String TYPE = "ConfigState";
 
-	public final static String DB_TABLE_NAME = "CONFIG_STATE";
+	public static final String DB_TABLE_NAME = "CONFIG_STATE";
 
-	final public static String ID = "config_state_id";
-	final public static String OBJECT_ID = "objectId";
-	final public static String CONFIG_ID = "configId";
-	final public static String VALUES = "values";
+	public static final String ID = "config_state_id";
+	public static final String OBJECT_ID = "objectId";
+	public static final String CONFIG_ID = "configId";
+	public static final String VALUES = "values";
 
-	public final static LinkedHashMap<String, String> DB_COLUMNS = new LinkedHashMap<String, String>();
+	public static final LinkedHashMap<String, String> DB_COLUMNS = new LinkedHashMap<String, String>();
 	static {
 		DB_COLUMNS.put(ID, DB_TABLE_NAME + "." + ID);
 		DB_COLUMNS.put(CONFIG_ID, DB_TABLE_NAME + "." + CONFIG_ID);
@@ -25,14 +25,14 @@ public class ConfigStateEntry extends HashMap<String, Object> {
 
 	}
 
-	public final static List<String> DB_COLUMN_NAMES = new ArrayList<String>();
+	public static final List<String> DB_COLUMN_NAMES = new ArrayList<String>();
 	static {
 		for (String key : DB_COLUMNS.keySet()) {
 			DB_COLUMN_NAMES.add(DB_COLUMNS.get(key));
 		}
 	}
 
-	// public final static int columnIndexLastStateChange =
+	// public static final int columnIndexLastStateChange =
 	// DB_COLUMN_NAMES.indexOf("modificationTime");
 
 	public ConfigStateEntry(String configId, String hostId, java.util.List values) {

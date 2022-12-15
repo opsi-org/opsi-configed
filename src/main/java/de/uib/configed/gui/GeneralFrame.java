@@ -186,9 +186,9 @@ public class GeneralFrame extends JDialog implements ActionListener {
 
 	// ActionListener
 	public void actionPerformed(ActionEvent e) {
-		// System.out.println ("ActionEvent ...... ");
+		// logging.debug ("ActionEvent ...... ");
 		if (e.getSource() == jButton1) {
-			// System.out.println (".... on Button1. ");
+			// logging.debug (".... on Button1. ");
 			doAction1();
 		}
 	}

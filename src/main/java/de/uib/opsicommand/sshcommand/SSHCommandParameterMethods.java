@@ -342,7 +342,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 			formated_result = createStringOfArray(strArr, begin_end_str, separator);
 			logging.info(this, "createFormattedDataSourceString[ ] formated_result " + formated_result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logging.error("Error", e);
 		}
 		return formated_result;
 	}
@@ -407,7 +407,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	}
 
 	public String getConfig_serverName() {
-		LinkedList<String> depots = main.getPersistenceController().getHostInfoCollections().getDepotNamesList();
+		List<String> depots = main.getPersistenceController().getHostInfoCollections().getDepotNamesList();
 		for (String depot : depots)
 			if (depot.startsWith(main.HOST)) {
 				logging.debug(this, "getConfig_serverName " + main.HOST);

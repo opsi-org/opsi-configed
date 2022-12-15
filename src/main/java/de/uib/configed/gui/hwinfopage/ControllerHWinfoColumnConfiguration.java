@@ -103,8 +103,8 @@ public class ControllerHWinfoColumnConfiguration {
 
 			configIdent = hwClass + "_" + tableType;
 
-			logging.debug(this, "from '" + tableValue + "' we get "
-					+ " col name " + dbColumnName + " type " + tableType + " hw class " + hwClass);
+			logging.debug(this, "from '" + tableValue + "' we get " + " col name " + dbColumnName + " type " + tableType
+					+ " hw class " + hwClass);
 
 		}
 
@@ -123,16 +123,14 @@ public class ControllerHWinfoColumnConfiguration {
 
 		@Override
 		public String toString() {
-			return "dbColumnName " + dbColumnName + " " +
-					"hwClass " + hwClass + " " +
-					"tableType " + tableType;
+			return "dbColumnName " + dbColumnName + " " + "hwClass " + hwClass + " " + "tableType " + tableType;
 		}
 	}
 
 	ConfigedMain main;
 	protected PersistenceController persist;
 
-	final static int keycol = 0;
+	static final int keycol = 0;
 
 	public ControllerHWinfoColumnConfiguration(ConfigedMain main, PersistenceController persist) {
 		this.main = main;
@@ -151,8 +149,7 @@ public class ControllerHWinfoColumnConfiguration {
 				0, // generalPopupPosition
 				false,
 				// PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF,
-				new int[] { PanelGenEditTable.POPUP_RELOAD, PanelGenEditTable.POPUP_PDF },
-				true) {
+				new int[] { PanelGenEditTable.POPUP_RELOAD, PanelGenEditTable.POPUP_PDF }, true) {
 
 			@Override
 			public void commit() {
@@ -239,20 +236,17 @@ public class ControllerHWinfoColumnConfiguration {
 
 		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, classNames, keycol);
 
-		model = new GenTableModel(
-				updateItemFactory,
+		model = new GenTableModel(updateItemFactory,
 
 				// tableProvider
 				// new de.uib.utilities.table.provider.DefaultTableProvider(sqlSource),
-				new DefaultTableProvider(
-						new RetrieverMapSource(columnNames, classNames,
-								new MapRetriever() {
-									public Map retrieveMap() {
-										Map<String, Map<String, Object>> hwColumnConfig = getHwColumnConfig();
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					public Map retrieveMap() {
+						Map<String, Map<String, Object>> hwColumnConfig = getHwColumnConfig();
 
-										return hwColumnConfig;
-									}
-								})),
+						return hwColumnConfig;
+					}
+				})),
 
 				keycol,
 
@@ -271,11 +265,7 @@ public class ControllerHWinfoColumnConfiguration {
 				if (result) {
 
 					Object val = getValueAt(row, col);
-					if (val == null
-							||
-							(val instanceof String
-									&&
-									((String) val).trim().equals(""))) {
+					if (val == null || (val instanceof String && ((String) val).trim().equals(""))) {
 						result = false;
 					}
 				}
@@ -305,14 +295,12 @@ public class ControllerHWinfoColumnConfiguration {
 
 		model.setEditableColumns(new int[] {
 				// columnNames.indexOf ( colOpsiColumnName ),
-				columnNames.indexOf(colUseInQuery)
-		});
+				columnNames.indexOf(colUseInQuery) });
 
 		panel.setTableModel(model);
 		panel.setEmphasizedColumns(new int[] {
 				// columnNames.indexOf ( colOpsiColumnName ),
-				columnNames.indexOf(colUseInQuery)
-		});
+				columnNames.indexOf(colUseInQuery) });
 
 		// panel.setTitle( "" );//configed.getResourceValue("PanelHWInfo.overview") );
 
@@ -345,9 +333,8 @@ public class ControllerHWinfoColumnConfiguration {
 		Icon iconUnchecked = de.uib.configed.Globals.createImageIcon("images/checked_box_blue_empty_14.png", "");
 		Icon iconEmpty = de.uib.configed.Globals.createImageIcon("images/checked_void.png", "");
 
-		col.setCellRenderer(new de.uib.utilities.table.gui.BooleanIconTableCellRenderer(
-				iconChecked, iconUnchecked, iconEmpty,
-				true));
+		col.setCellRenderer(new de.uib.utilities.table.gui.BooleanIconTableCellRenderer(iconChecked, iconUnchecked,
+				iconEmpty, true));
 
 		JCheckBox useCheck = new JCheckBox(iconEmpty);
 
@@ -356,33 +343,27 @@ public class ControllerHWinfoColumnConfiguration {
 		// ends editing and lets immediately resurface the cell renderer
 		// this is not correct for keys, therefore we set the void icon
 
-		panel.setUpdateController(
-				new MapItemsUpdateController(
-						panel,
-						model,
-						new MapBasedUpdater() {
-							public String sendUpdate(Map<String, Object> rowmap) {
-								// panel.sortAgainAsConfigured();
-								// we reset the original sorting because we need information from lines "above"
+		panel.setUpdateController(new MapItemsUpdateController(panel, model, new MapBasedUpdater() {
+			public String sendUpdate(Map<String, Object> rowmap) {
+				// panel.sortAgainAsConfigured();
+				// we reset the original sorting because we need information from lines "above"
 
-								logging.info(this, "within MapItemsUpdateController sendUpdate " + rowmap);
+				logging.info(this, "within MapItemsUpdateController sendUpdate " + rowmap);
 
-								buildUpdateItem(
+				buildUpdateItem(
 
-										new ColumnIdent((String) rowmap.get(colOpsiColumnName)),
-										(Boolean) rowmap.get(colUseInQuery));
+						new ColumnIdent((String) rowmap.get(colOpsiColumnName)), (Boolean) rowmap.get(colUseInQuery));
 
-								return "";
-							}
+				return "";
+			}
 
-							public boolean sendDelete(Map<String, Object> rowmap) {
-								logging.info(this, "within MapItemsUpdateController sendDelete " + rowmap);
-								// method is not used since we don*t delete rows
+			public boolean sendDelete(Map<String, Object> rowmap) {
+				logging.info(this, "within MapItemsUpdateController sendDelete " + rowmap);
+				// method is not used since we don*t delete rows
 
-								return true;
-							}
-						},
-						updateCollection));
+				return true;
+			}
+		}, updateCollection));
 
 	}
 
@@ -446,9 +427,7 @@ public class ControllerHWinfoColumnConfiguration {
 				lineMap.put(colLineNo, formatLineNo(id));
 				// lineMap.put(colTellAgainHardwareClass, hwClass);
 
-				ColumnIdent columnIdent = new ColumnIdent(
-						hwClass,
-						OpsiHwAuditDeviceClass.hostAssignedTableType,
+				ColumnIdent columnIdent = new ColumnIdent(hwClass, OpsiHwAuditDeviceClass.hostAssignedTableType,
 						deviceProperty.getOpsiDbColumnName());
 
 				lineMap.put(colOpsiColumnName, columnIdent.produceColumnCellValue());
@@ -475,9 +454,7 @@ public class ControllerHWinfoColumnConfiguration {
 				lineMap = new LinkedHashMap<String, Object>();
 				lineMap.put(colLineNo, formatLineNo(id));
 
-				ColumnIdent columnIdent = new ColumnIdent(
-						hwClass,
-						OpsiHwAuditDeviceClass.hwItemAssignedTableType,
+				ColumnIdent columnIdent = new ColumnIdent(hwClass, OpsiHwAuditDeviceClass.hwItemAssignedTableType,
 						deviceProperty.getOpsiDbColumnName());
 
 				lineMap.put(colOpsiColumnName, columnIdent.produceColumnCellValue());

@@ -23,7 +23,7 @@ public class JTextHideField extends javax.swing.JPanel {
 	JButton button;
 	boolean hiddenMode;
 	boolean multiValue;
-	// final static protected String hiddenS = "****";
+	// static protected final String hiddenS = "****";
 
 	class FixedDocument extends PlainDocument {
 
@@ -38,8 +38,7 @@ public class JTextHideField extends javax.swing.JPanel {
 		}
 
 		@Override
-		public void insertString(int offs, String str, AttributeSet a)
-				throws BadLocationException {
+		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
 			super.remove(0, super.getLength());
 
 			super.insertString(0, fixed, a);

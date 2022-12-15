@@ -13,7 +13,7 @@ import javax.swing.text.JTextComponent;
  * FTextArea
  * Copyright:     Copyright (c) 2001-2005,2018,2021
  * Organisation:  uib
- * @author Rupert Röder
+- * @author Rupert Röder, Naglis Vidziunas
  * @version
  */
 import de.uib.configed.Globals;
@@ -27,13 +27,8 @@ public class FTextArea extends FGeneralDialog {
 		init();
 	}
 
-	public FTextArea(JFrame owner, String title, boolean modal, int lastButtonNo) {
-		super(owner, title, modal, lastButtonNo);
-		init();
-	}
-
-	public FTextArea(JFrame owner, String title, String message, boolean modal, int lastButtonNo) {
-		this(owner, title, modal, lastButtonNo);
+	public FTextArea(JFrame owner, String title, String message, boolean modal) {
+		this(owner, title, modal);
 		init();
 		setMessage(message);
 	}
@@ -60,7 +55,7 @@ public class FTextArea extends FGeneralDialog {
 			int preferredHeight, JPanel addPane) {
 		super(owner, title, modal, buttonList, icons, buttonList.length, preferredWidth, preferredHeight, false,
 				addPane);
-		initComponents();
+		checkAdditionalPane();
 		init(preferredWidth, preferredHeight);
 
 	}
@@ -75,7 +70,7 @@ public class FTextArea extends FGeneralDialog {
 	}
 
 	private void init() {
-		init(700, 100);
+		init(Globals.DEFAULT_FTEXTAREA_WIDTH, Globals.DEFAULT_FTEXTAREA_HEIGHT);
 	}
 
 	@Override
@@ -88,11 +83,10 @@ public class FTextArea extends FGeneralDialog {
 		jTextArea1.setLineWrap(true);
 		jTextArea1.setWrapStyleWord(true);
 		jTextArea1.setOpaque(true);
-		// jTextArea1.setBackground(myHintYellow);
 		jTextArea1.setBackground(Globals.backgroundWhite);
 		jTextArea1.setText("          ");
 		jTextArea1.setEditable(false);
-		jTextArea1.setFont(Globals.defaultFontBig); // new java.awt.Font("Dialog", 0, 14));
+		jTextArea1.setFont(Globals.defaultFontBig);
 
 		scrollpane.getViewport().add(jTextArea1, null);
 
@@ -104,27 +98,18 @@ public class FTextArea extends FGeneralDialog {
 
 	// KeyListener
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
-			// System.out.println ("shift released");
+			// logging.debug ("shift released");
 		}
 
-		if (e.getKeyCode() == KeyEvent.VK_TAB && !shiftPressed) {
-			if (e.getSource() == jTextArea1) {
-				jButton1.requestFocus();
-			}
-		}
+		if (!shiftPressed && e.getSource() == jTextArea1 && e.getKeyCode() == KeyEvent.VK_TAB)
+			jButton1.requestFocus();
 
-		if (e.getKeyCode() == KeyEvent.VK_TAB && shiftPressed) {
-			if (e.getSource() == jButton1) {
-				jTextArea1.requestFocus();
-			}
-		}
-	}
-
-	public static void main(String[] args) {
-
+		if (shiftPressed && e.getSource() == jButton1 && e.getKeyCode() == KeyEvent.VK_TAB)
+			jTextArea1.requestFocus();
 	}
 
 }

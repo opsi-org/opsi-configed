@@ -115,8 +115,8 @@ public class HostInfo {
 
 	public static final String hostSubClassTag_OpsiClientPrototype = "OpsiPrototype";
 
-	final static String notLegalChars0 = ",:!@#$%^&',(){} ";
-	final static Set<Character> notLegalChars = new HashSet<Character>();
+	static final String notLegalChars0 = ",:!@#$%^&',(){} ";
+	static final Set<Character> notLegalChars = new HashSet<Character>();
 	static {
 		for (int i = 0; i < notLegalChars0.length(); i++) {
 			notLegalChars.add(notLegalChars0.charAt(i));
@@ -127,7 +127,7 @@ public class HostInfo {
 	// https://support.microsoft.com/en-us/kb/909264
 	{
 
-		// System.out.println("checkADNamingConvention");
+		// logging.debug("checkADNamingConvention");
 		boolean result = true;
 		String hintMessage = null;
 
@@ -162,7 +162,7 @@ public class HostInfo {
 			}
 		}
 
-		// System.out.println( hintMessage );
+		// logging.debug( hintMessage );
 
 		return hintMessage;
 
@@ -270,57 +270,57 @@ public class HostInfo {
 
 	public void put(String key, Object value) {
 		switch (key) {
-			case depotOfClientKEY: {
-				depotOfClient = "" + value;
-				break;
-			}
-			case clientDescriptionKEY: {
-				clientDescription = "" + value;
-				break;
-			}
-			case clientInventoryNumberKEY: {
-				clientInventoryNumber = "" + value;
-				break;
-			}
-			case clientNotesKEY: {
-				clientNotes = "" + value;
-				break;
-			}
-			case clientOneTimePasswordKEY: {
-				clientOneTimePassword = "" + value;
-				break;
-			}
-			case clientMacAddressKEY: {
-				clientMacAddress = "" + value;
-				break;
-			}
-			case hostKeyKEY: {
-				hostKey = "" + value;
-				break;
-			}
-			case createdKEY: {
-				created = "" + value;
-				break;
-			}
-			case lastSeenKEY: {
-				lastSeen = "" + value;
-				break;
-			}
-			case clientUefiBootKEY: {
-				clientUefiBoot = (Boolean) value;
-				break;
-			}
-			case clientWanConfigKEY: {
-				clientWanConfig = (Boolean) value;
-				break;
-			}
-			case clientShutdownInstallKEY: {
-				clientShutdownInstall = (Boolean) value;
-				break;
-			}
-			default: {
-				logging.warning(this, "key " + key + " not expected");
-			}
+		case depotOfClientKEY: {
+			depotOfClient = "" + value;
+			break;
+		}
+		case clientDescriptionKEY: {
+			clientDescription = "" + value;
+			break;
+		}
+		case clientInventoryNumberKEY: {
+			clientInventoryNumber = "" + value;
+			break;
+		}
+		case clientNotesKEY: {
+			clientNotes = "" + value;
+			break;
+		}
+		case clientOneTimePasswordKEY: {
+			clientOneTimePassword = "" + value;
+			break;
+		}
+		case clientMacAddressKEY: {
+			clientMacAddress = "" + value;
+			break;
+		}
+		case hostKeyKEY: {
+			hostKey = "" + value;
+			break;
+		}
+		case createdKEY: {
+			created = "" + value;
+			break;
+		}
+		case lastSeenKEY: {
+			lastSeen = "" + value;
+			break;
+		}
+		case clientUefiBootKEY: {
+			clientUefiBoot = (Boolean) value;
+			break;
+		}
+		case clientWanConfigKEY: {
+			clientWanConfig = (Boolean) value;
+			break;
+		}
+		case clientShutdownInstallKEY: {
+			clientShutdownInstall = (Boolean) value;
+			break;
+		}
+		default: {
+			logging.warning(this, "key " + key + " not expected");
+		}
 		}
 	}
 
@@ -581,8 +581,7 @@ public class HostInfo {
 	 */
 
 	private int findCol(JTableSelectionPanel selectionPanel, String colName) {
-		return selectionPanel.getTableModel().findColumn(
-				colName
+		return selectionPanel.getTableModel().findColumn(colName
 		// configed.getResourceValue("ConfigedMain.pclistTableModel.clientDescription")
 		);
 	}
@@ -621,8 +620,7 @@ public class HostInfo {
 	}
 
 	public void showAndSaveInternally(JTableSelectionPanel selectionPanel, MainFrame mainFrame,
-			PersistenceController persist,
-			String client, Map<String, String> sourceOfChanges) {
+			PersistenceController persist, String client, Map<String, String> sourceOfChanges) {
 		if (client == null || client.equals("")) {
 			logging.warning(this, "show and save: no hostId given: " + sourceOfChanges);
 			return;
@@ -693,8 +691,7 @@ public class HostInfo {
 			if (col > -1)
 				selectionPanel.getTableModel().setValueAt(clientMacAddress, row, col);
 
-			mainFrame.setClientMacAddress(clientMacAddress);
-			; // restoring old value
+			mainFrame.setClientMacAddress(clientMacAddress);; // restoring old value
 
 			persist.setMacAddress(client, clientMacAddress);
 
@@ -710,8 +707,7 @@ public class HostInfo {
 			if (col > -1)
 				selectionPanel.getTableModel().setValueAt(clientIpAddress, row, col);
 
-			mainFrame.setClientIpAddress(clientIpAddress);
-			; // restoring old value
+			mainFrame.setClientIpAddress(clientIpAddress);; // restoring old value
 
 			persist.setIpAddress(client, clientIpAddress);
 
@@ -725,9 +721,8 @@ public class HostInfo {
 				shutdownInstall = true;
 			}
 
-			int col = findCol(selectionPanel,
-					configed.getResourceValue("ConfigedMain.pclistTableModel." +
-							HostInfo.clientInstallByShutdown_DISPLAY_FIELD_LABEL));
+			int col = findCol(selectionPanel, configed.getResourceValue(
+					"ConfigedMain.pclistTableModel." + HostInfo.clientInstallByShutdown_DISPLAY_FIELD_LABEL));
 
 			/*
 			 * Vector<String> columns = new Vector<String>();
@@ -755,9 +750,8 @@ public class HostInfo {
 				uefiboot = true;
 			}
 
-			int col = findCol(selectionPanel,
-					configed.getResourceValue("ConfigedMain.pclistTableModel." +
-							HostInfo.clientUefiBoot_DISPLAY_FIELD_LABEL));
+			int col = findCol(selectionPanel, configed
+					.getResourceValue("ConfigedMain.pclistTableModel." + HostInfo.clientUefiBoot_DISPLAY_FIELD_LABEL));
 
 			/*
 			 * Vector<String> columns = new Vector<String>();
@@ -785,9 +779,8 @@ public class HostInfo {
 				wanStandard = true;
 			}
 
-			int col = findCol(selectionPanel,
-					configed.getResourceValue("ConfigedMain.pclistTableModel." +
-							HostInfo.clientWanConfig_DISPLAY_FIELD_LABEL));
+			int col = findCol(selectionPanel, configed
+					.getResourceValue("ConfigedMain.pclistTableModel." + HostInfo.clientWanConfig_DISPLAY_FIELD_LABEL));
 
 			/*
 			 * Vector<String> columns = new Vector<String>();
@@ -818,10 +811,10 @@ public class HostInfo {
 		// shutdownInstall = "on";
 		// boolShutdownInstall = true;
 		// }
-		// // System.out.print("");System.out.println("");System.out.println("");
-		// // System.out.println("HostInfo showAndSave shutdownInstall " +
+		// // System.out.print("");logging.debug("");logging.debug("");
+		// // logging.debug("HostInfo showAndSave shutdownInstall " +
 		// shutdownInstall);
-		// // System.out.println("");System.out.println("");System.out.println("");
+		// // logging.debug("");logging.debug("");logging.debug("");
 
 		// String product = "opsi-client-agent";
 		// persist.setCommonProductPropertyValue( new HashSet(Arrays.asList(client)),
@@ -846,20 +839,9 @@ public class HostInfo {
 
 	@Override
 	public String toString() {
-		String result = "(" +
-				clientName + ";" +
-				depotOfClient + ";" +
-				clientDescription + ";" +
-				clientInventoryNumber + ";" +
-				clientOneTimePassword + ";" +
-				clientNotes + ";" +
-				clientMacAddress + ";" +
-				clientIpAddress + ";" +
-				lastSeen + ";" +
-				created + ";" +
-				clientUefiBoot + ";" +
-				clientWanConfig + ";" +
-				clientShutdownInstall
+		String result = "(" + clientName + ";" + depotOfClient + ";" + clientDescription + ";" + clientInventoryNumber
+				+ ";" + clientOneTimePassword + ";" + clientNotes + ";" + clientMacAddress + ";" + clientIpAddress + ";"
+				+ lastSeen + ";" + created + ";" + clientUefiBoot + ";" + clientWanConfig + ";" + clientShutdownInstall
 				+ ")";
 
 		return result;

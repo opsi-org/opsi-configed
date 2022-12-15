@@ -50,7 +50,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			 * newSize.setSize(getPreferredSize().getWidth() * 1.3,
 			 * getPreferredSize().getHeight());
 			 * setPreferredSize(newSize);
-			 * System.out.println("--- newSize  " + stringValue + " *** " +
+			 * logging.debug("--- newSize  " + stringValue + " *** " +
 			 * newSize.getWidth());
 			 */
 
@@ -68,11 +68,11 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			// logging.info(this, "--- main.getSelectedClients().contains((stringValue) " +
 			// main.getSelectedClients().contains(stringValue));
 
-			// System.out.println (stringValue + " selected! ");
+			// logging.debug (stringValue + " selected! ");
 
 			if (!node.getAllowsChildren()) // client
 			{
-				// System.out.println( " main.getActiveTreeNodes().containsKey(value) " +
+				// logging.debug( " main.getActiveTreeNodes().containsKey(value) " +
 				// main.getActiveTreeNodes().containsKey(value) );
 				if (
 				// sel

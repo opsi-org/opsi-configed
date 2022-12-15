@@ -74,9 +74,8 @@ public class SSHPackageManagerUninstallParameterDialog
 	}
 
 	public SSHPackageManagerUninstallParameterDialog(ConfigedMain m) {
-		super(
-				Globals.APPNAME + "  " +
-						configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"));
+		super(Globals.APPNAME + "  "
+				+ configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"));
 		frameWidth = 850;
 		frameHeight = 350;
 
@@ -201,11 +200,10 @@ public class SSHPackageManagerUninstallParameterDialog
 				// logging.info(this, " depot " + depot + " has products " +
 				// persist.getDepot2LocalbootProducts().get(depot).keySet());
 
-				if ((persist.getDepot2LocalbootProducts().get(depot) != null &&
-						persist.getDepot2LocalbootProducts().get(depot).keySet().contains(selectedProduct))
-						||
-						(persist.getDepot2NetbootProducts().get(depot) != null &&
-								persist.getDepot2NetbootProducts().get(depot).keySet().contains(selectedProduct))) {
+				if ((persist.getDepot2LocalbootProducts().get(depot) != null
+						&& persist.getDepot2LocalbootProducts().get(depot).keySet().contains(selectedProduct))
+						|| (persist.getDepot2NetbootProducts().get(depot) != null
+								&& persist.getDepot2NetbootProducts().get(depot).keySet().contains(selectedProduct))) {
 					logging.info(this, "taking this depot " + depot);
 					result.add(depot);
 				}
@@ -300,22 +298,19 @@ public class SSHPackageManagerUninstallParameterDialog
 			 * );
 			 */
 
-			cb_opsiproducts.addItemListener(
-					new ItemListener() {
-						@Override
-						public void itemStateChanged(ItemEvent e) {
-							tf_selecteddepots.setText("");
-							// tf_selecteddepots.setEnabled(false);
-							btn_execute.setEnabled(false);
-							tf_product.setText(
-									(String) cb_opsiproducts.getSelectedItem());
+			cb_opsiproducts.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					tf_selecteddepots.setText("");
+					// tf_selecteddepots.setEnabled(false);
+					btn_execute.setEnabled(false);
+					tf_product.setText((String) cb_opsiproducts.getSelectedItem());
 
-						}
-					});
+				}
+			});
 
-			buttonUpdateList = new IconAsButton("buttonUpdateList",
-					"images/reload16.png",
-					"images/reload16.png", "images/reload16.png", "images/reload16.png");
+			buttonUpdateList = new IconAsButton("buttonUpdateList", "images/reload16.png", "images/reload16.png",
+					"images/reload16.png", "images/reload16.png");
 			buttonUpdateList.setBackground(de.uib.utilities.Globals.backgroundLightGrey);
 			buttonUpdateList.setToolTipText(configed.getResourceValue(
 					"SSHConnection.ParameterDialog.opsipackagemanager_uninstall.JButtonUpdateList.tooltip"));
@@ -420,25 +415,20 @@ public class SSHPackageManagerUninstallParameterDialog
 	/* This method is called when button 1 is pressed */
 
 	private boolean confirmAction() {
-		FShowList fConfirmAction = new FShowList(
-				Globals.mainFrame, Globals.APPNAME + " "
+		FShowList fConfirmAction = new FShowList(Globals.mainFrame,
+				Globals.APPNAME + " "
 						+ configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"),
-				true,
-				new String[] { configed.getResourceValue("buttonCANCEL"),
-						configed.getResourceValue("buttonOK") },
+				true, new String[] { configed.getResourceValue("buttonCANCEL"), configed.getResourceValue("buttonOK") },
 				400, 200);
 
 		fConfirmAction.setMessage(
-				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.confirm")
-						+ "\n"
+				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.confirm") + "\n"
 						+ tf_product.getText()
 						// + cb_opsiproducts.getSelectedItem()
-						+ "\n\n"
-						+ configed
+						+ "\n\n" + configed
 								.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelOn")
 						// + "from depot(s)"
-						+ "\n\n"
-						+ tf_selecteddepots.getText());
+						+ "\n\n" + tf_selecteddepots.getText());
 
 		fConfirmAction.centerOn(this);
 		fConfirmAction.setAlwaysOnTop(true);
@@ -469,15 +459,13 @@ public class SSHPackageManagerUninstallParameterDialog
 				try {
 					logging.info(this, "start exec thread ");
 
-					SSHConnectExec ssh = new SSHConnectExec(
-							(SSHCommand) commandPMUninstall);
+					SSHConnectExec ssh = new SSHConnectExec((SSHCommand) commandPMUninstall);
 					// ssh.exec((SSHCommand) commandPMUninstall);
 					// cb_opsiproducts.removeItem( prod );
 					execFinished = true;
 					logging.debug(this, "end exec thread");
 				} catch (Exception e) {
-					logging.warning(this, "doAction1, exception occurred " + e);
-					logging.logTrace(e);
+					logging.warning(this, "doAction1, exception occurred", e);
 				}
 			}
 		};
@@ -505,7 +493,6 @@ public class SSHPackageManagerUninstallParameterDialog
 		 * }
 		 * catch (Exception e)
 		 * {
-		 * e.printStackTrace();
 		 * }
 		 * }
 		 * };
@@ -515,8 +502,7 @@ public class SSHPackageManagerUninstallParameterDialog
 			execThread.start();
 			// reloadThread.start();
 		} catch (Exception e) {
-			logging.warning(this, "doAction1, exception occurred " + e);
-			logging.logTrace(e);
+			logging.warning(this, "doAction1, exception occurred", e);
 		}
 	}
 
@@ -542,21 +528,18 @@ public class SSHPackageManagerUninstallParameterDialog
 		GroupLayout uninstallPanelLayout = new GroupLayout((JComponent) uninstallPanel);
 		uninstallPanel.setLayout(uninstallPanelLayout);
 		uninstallPanelLayout.setHorizontalGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(lbl_uninstall, pref, pref, max)
-				.addGap(Globals.gapSize * 2)
-				.addGroup(uninstallPanelLayout.createSequentialGroup()
-						.addGroup(uninstallPanelLayout.createParallelGroup()
+				.addComponent(lbl_uninstall, pref, pref, max).addGap(Globals.gapSize * 2)
+				.addGroup(uninstallPanelLayout
+						.createSequentialGroup().addGroup(uninstallPanelLayout.createParallelGroup()
 								// .addComponent(lbl_product,250, 250, 250)
-								.addGroup(uninstallPanelLayout.createSequentialGroup()
-										.addGap(5, 10, 20)
+								.addGroup(uninstallPanelLayout.createSequentialGroup().addGap(5, 10, 20)
 										.addComponent(cb_opsiproducts, Globals.buttonWidth, Globals.buttonWidth,
 												2 * Globals.buttonWidth)
 										.addGap(5, 5, 5)
 										// .addComponent(buttonUpdateList, 30, 30, 30)
 										.addGap(5, 10, 20))
 								.addGroup(uninstallPanelLayout.createSequentialGroup()
-										.addComponent(lbl_on, pref, pref, pref)
-										.addGap(5, 10, 10)
+										.addComponent(lbl_on, pref, pref, pref).addGap(5, 10, 10)
 										.addComponent(btn_depotselection, pref, pref, pref))
 								.addComponent(lbl_verbosity, pref, pref, pref)
 								.addComponent(lbl_keepFiles, pref, pref, pref))
@@ -582,39 +565,40 @@ public class SSHPackageManagerUninstallParameterDialog
 		// .addComponent(lbl_fullCommand, pref, pref,max)
 		);
 
-		uninstallPanelLayout.setVerticalGroup(uninstallPanelLayout.createSequentialGroup()
-				.addComponent(lbl_uninstall)
-				.addGap(Globals.gapSize)
+		uninstallPanelLayout.setVerticalGroup(
+				uninstallPanelLayout.createSequentialGroup().addComponent(lbl_uninstall).addGap(Globals.gapSize)
 
-				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(cb_opsiproducts, pref, pref, pref)
-						// .addComponent(buttonUpdateList, Globals.lineHeight, Globals.lineHeight,
-						// Globals.lineHeight)
-						.addComponent(tf_product, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
+						.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(cb_opsiproducts, pref, pref, pref)
+								// .addComponent(buttonUpdateList, Globals.lineHeight, Globals.lineHeight,
+								// Globals.lineHeight)
+								.addComponent(tf_product, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
 
-				.addGap(3 * Globals.gapSize)
+						.addGap(3 * Globals.gapSize)
 
-				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_on, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(btn_depotselection, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight)
-						.addComponent(tf_selecteddepots, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight))
+						.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(lbl_on, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
+								.addComponent(btn_depotselection, Globals.buttonHeight, Globals.buttonHeight,
+										Globals.buttonHeight)
+								.addComponent(tf_selecteddepots, Globals.buttonHeight, Globals.buttonHeight,
+										Globals.buttonHeight))
 
-				.addGap(3 * Globals.gapSize)
-				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_verbosity, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(cb_verbosity, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(Globals.minGapSize)
-				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_keepFiles, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						// .addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						// .addComponent(empty_lbl,pref,pref,pref)
-						.addComponent(checkb_keepFiles, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight)
-				// )
-				)
-				.addGap(Globals.gapSize)
+						.addGap(3 * Globals.gapSize)
+						.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(lbl_verbosity, Globals.buttonHeight, Globals.buttonHeight,
+										Globals.buttonHeight)
+								.addComponent(cb_verbosity, Globals.buttonHeight, Globals.buttonHeight,
+										Globals.buttonHeight))
+						.addGap(Globals.minGapSize)
+						.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(lbl_keepFiles, Globals.buttonHeight, Globals.buttonHeight,
+										Globals.buttonHeight)
+								// .addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								// .addComponent(empty_lbl,pref,pref,pref)
+								.addComponent(checkb_keepFiles, Globals.buttonHeight, Globals.buttonHeight,
+										Globals.buttonHeight)
+						// )
+						).addGap(Globals.gapSize)
 		// .addComponent(lbl_fullCommand)
 		);
 	}

@@ -72,7 +72,7 @@ public class SSHCompletionComboButton {
 		this(null, search_specific_files, null);
 	}
 
-	final private void enableComponents(boolean value) {
+	private final void enableComponents(boolean value) {
 		combobox.setEnabled(value);
 		button.setEnabled(value);
 	}
@@ -145,8 +145,7 @@ public class SSHCompletionComboButton {
 			combobox.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (combobox.getSelectedItem() != null
-							&&
-							((String) combobox.getSelectedItem()).endsWith(search_specific_files))
+							&& ((String) combobox.getSelectedItem()).endsWith(search_specific_files))
 						textfield.setText((String) combobox.getSelectedItem());
 					else
 						textfield.setText("");
@@ -238,7 +237,7 @@ public class SSHCompletionComboButton {
 					setItems(result, curdir);
 					enableComponents(true);
 				} catch (Exception e) {
-					logging.logTrace(e);
+					logging.error("getDirectoriesIn failed", e);
 				}
 			}
 		}.start();
@@ -276,7 +275,7 @@ public class SSHCompletionComboButton {
 					setItems(result, curdir);
 					enableComponents(true);
 				} catch (Exception e) {
-					logging.logTrace(e);
+					logging.error("getDirectoriesAndFilesIn failed", e);
 				}
 			}
 		}.start();
@@ -288,7 +287,7 @@ public class SSHCompletionComboButton {
 		return contains;
 	}
 
-	final private void setItems(String result, final String curdir) {
+	private final void setItems(String result, final String curdir) {
 		if (result == null) {
 			logging.warning("getDirectoriesIn could not find directories in " + curdir);
 		} else {
@@ -329,9 +328,7 @@ public class SSHCompletionComboButton {
 			super();
 		}
 
-		public Component getListCellRendererComponent(
-				JList list,
-				Object value, // value to display
+		public Component getListCellRendererComponent(JList list, Object value, // value to display
 				int index, // cell index
 				boolean isSelected, // is the cell selected
 				boolean cellHasFocus) // the list and the cell have the focus
@@ -353,8 +350,7 @@ public class SSHCompletionComboButton {
 				String basicPath = autocompletion.getBasicPath();
 				logging.debug(this, "(1)  basicPath " + basicPath + " getText " + getText);
 
-				if ((!basicPath.equals(""))
-						&& (!getText.equals(""))) // könnte eigtl raus. funktiniert sonst aber nicht...
+				if ((!basicPath.equals("")) && (!getText.equals(""))) // könnte eigtl raus. funktiniert sonst aber nicht...
 				{
 					if (basicPath.contains("//"))
 						basicPath = basicPath.replaceAll("//", "/");
@@ -366,9 +362,7 @@ public class SSHCompletionComboButton {
 						CellAlternatingColorizer.colorize(jc, isSelected, true, true);
 					}
 
-					if ((getText.startsWith(basicPath))
-							&& (!getText.equals(basicPath))
-							&& (!basicPath.equals(root))) {
+					if ((getText.startsWith(basicPath)) && (!getText.equals(basicPath)) && (!basicPath.equals(root))) {
 						lbl.setText(getText.replace(basicPath, ""));
 					}
 					logging.debug(this, "(2) basicPath " + basicPath + " getText " + getText);

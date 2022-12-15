@@ -7,37 +7,37 @@ import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
 public class UserSshConfig extends UserConfigModule {
-	// public final static String KEY_USER_SSH_REGISTER = "register.ssh";
-	// public final static String KEY_USER_SSH_REGISTER_description = "if false: do
+	// public static final String KEY_USER_SSH_REGISTER = "register.ssh";
+	// public static final String KEY_USER_SSH_REGISTER_description = "if false: do
 	// not create new user specific ssh configs (use defaults)";
 	// public static boolean KEY_USER_SSH_REGISTER_defaultvalue = false;
 
-	public final static String KEY_SSH_MENU_ACTIVE = "ssh.menu_serverconsole.active";
-	private final static String KEY_SSH_MENU_ACTIVE_description = configed
+	public static final String KEY_SSH_MENU_ACTIVE = "ssh.menu_serverconsole.active";
+	private static final String KEY_SSH_MENU_ACTIVE_description = configed
 			.getResourceValue("PersistenceController.SSH_MENU_ACTIVE");
 	// "activates the whole menu server-console" ;
 	// private static boolean KEY_SSH_MENU_ACTIVE_defaultvalue = true;
 
-	public final static String KEY_SSH_CONFIG_ACTIVE = "ssh.serverconfiguration.active";
-	private final static String KEY_SSH_CONFIG_ACTIVE_description = configed
+	public static final String KEY_SSH_CONFIG_ACTIVE = "ssh.serverconfiguration.active";
+	private static final String KEY_SSH_CONFIG_ACTIVE_description = configed
 			.getResourceValue("PersistenceController.SSH_CONFIG_ACTIVE");
 	// "activates menu to configure ssh connection" ;
 	// private static boolean KEY_SSH_CONFIG_ACTIVE_defaultvalue = true;
 
-	public final static String KEY_SSH_COMMANDCONTROL_ACTIVE = "ssh.commandmanagement.active";
-	private final static String KEY_SSH_COMMANDCONTROL_ACTIVE_description = configed
+	public static final String KEY_SSH_COMMANDCONTROL_ACTIVE = "ssh.commandmanagement.active";
+	private static final String KEY_SSH_COMMANDCONTROL_ACTIVE_description = configed
 			.getResourceValue("PersistenceController.SSH_CONTROL_ACTIVE");
 	// "activate the menu of command management";
 	// private static boolean KEY_SSH_COMMANDCONTROL_ACTIVE_defaultvalue = false;
 
-	// public final static String KEY_SSH_SHELL_ACTIVE = "ssh.terminal.active";
-	// public final static String KEY_SSH_SHELL_ACTIVE_description =
+	// public static final String KEY_SSH_SHELL_ACTIVE = "ssh.terminal.active";
+	// public static final String KEY_SSH_SHELL_ACTIVE_description =
 	// configed.getResourceValue("PersistenceController.SSH_SHELL_ACTIVE");
 	// = "activates terminal to ssh server";
 	// public static boolean KEY_SSH_SHELL_ACTIVE_defaultvalue = false;
 
-	public final static String KEY_SSH_COMMANDS_ACTIVE = "ssh.commands.active";
-	private final static String KEY_SSH_COMMANDS_ACTIVE_description = configed
+	public static final String KEY_SSH_COMMANDS_ACTIVE = "ssh.commands.active";
+	private static final String KEY_SSH_COMMANDS_ACTIVE_description = configed
 			.getResourceValue("PersistenceController.SSH_COMMANDS_ACTIVE");
 	// activate menus of all executable commands in menu server-console";
 	// private static boolean KEY_SSH_COMMANDS_ACTIVE_defaultvalue = true;
@@ -54,7 +54,7 @@ public class UserSshConfig extends UserConfigModule {
 		logging.info(" UserSshConfig BOOL_KEYS " + BOOL_KEYS);
 	}
 
-	public final static LinkedHashSet<String> LIST_KEYS;
+	public static final LinkedHashSet<String> LIST_KEYS;
 	static {
 		LIST_KEYS = new LinkedHashSet<String>();
 	}
@@ -68,7 +68,7 @@ public class UserSshConfig extends UserConfigModule {
 		configDescription.put(KEY_SSH_COMMANDS_ACTIVE, KEY_SSH_COMMANDS_ACTIVE_description);
 	}
 
-	public final static UserSshConfig DEFAULT;
+	public static final UserSshConfig DEFAULT;
 
 	static {
 		logging.info("init ARCHEO_ for UserSshConfig");

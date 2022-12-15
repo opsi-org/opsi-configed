@@ -810,7 +810,7 @@ public class DataStubNOM extends DataStub {
 			persist.notifyDataLoadingObservers(configed.getResourceValue("LoadingObserver.loadtable") + " software");
 
 			String[] callAttributes = new String[] { SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME), // "name", //key
-																										// element
+					// element
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION), // "version",//key element
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.SUBVERSION), // key element
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE), // key element
@@ -819,8 +819,7 @@ public class DataStubNOM extends DataStub {
 			HashMap callFilter = new HashMap();
 
 			List<Map<String, Object>> li = persist.retrieveListOfMapsNOM(callAttributes, callFilter,
-					"auditSoftware_getHashes");
-			;
+					"auditSoftware_getHashes");;
 
 			Iterator iter = li.iterator();
 
@@ -1100,10 +1099,10 @@ public class DataStubNOM extends DataStub {
 
 		// if (client2software == null || softwareId2clients == null ||
 		// newClients.size() > 0)
-		if (client2software == null || softwareIdent2clients == null || newClients.size() > 0) {
+		if (client2software == null || softwareIdent2clients == null || !newClients.isEmpty()) {
 			int step = 1;
-			while (newClients.size() > 0) {
-				java.util.List<String> clientListForCall = new ArrayList<String>();
+			while (!newClients.isEmpty()) {
+				java.util.List<String> clientListForCall = new ArrayList<>();
 
 				for (int i = 0; i < stepSize && i < newClients.size(); i++)
 					clientListForCall.add(newClients.get(i));
@@ -1115,10 +1114,10 @@ public class DataStubNOM extends DataStub {
 
 				// client2software = new HashMap<String, java.util.List<String>>();
 				if (client2software == null)
-					client2software = new HashMap<String, java.util.List<SWAuditClientEntry>>();
+					client2software = new HashMap<>();
 
 				if (softwareIdent2clients == null)
-					softwareIdent2clients = new HashMap<String, java.util.Set<String>>();
+					softwareIdent2clients = new HashMap<>();
 				// if (softwareId2clients == null) softwareId2clients = new HashMap<Integer,
 				// java.util.List<String>>();
 
@@ -1133,77 +1132,69 @@ public class DataStubNOM extends DataStub {
 				if (newClients != null)
 					callFilter.put("clientId", persist.exec.jsonArray(clientListForCall));
 
-				java.util.List<Map<String, Object>> softwareAuditOnClients = persist
-						.retrieveListOfMapsNOM(callAttributes, callFilter, "auditSoftwareOnClient_getHashes");
+				List<Map<String, Object>> softwareAuditOnClients = persist.retrieveListOfMapsNOM(callAttributes,
+						callFilter, "auditSoftwareOnClient_getHashes");
 
 				logging.info(this, "retrieveSoftwareAuditOnClients, finished a request, map size "
 						+ softwareAuditOnClients.size());
 
-				if (softwareAuditOnClients == null) {
-					logging.warning(this, "no auditSoftwareOnClient");
-				} else {
+				for (String clientId : clientListForCall) {
+					client2software.put(clientId, new LinkedList<>());
+				}
 
-					for (String clientId : clientListForCall) {
-						client2software.put(clientId, new LinkedList<SWAuditClientEntry>());
+				for (Map<String, Object> item : softwareAuditOnClients) {
+
+					SWAuditClientEntry clientEntry = new SWAuditClientEntry(item, persist);
+
+					String clientId = clientEntry.getClientId();
+					String swIdent = clientEntry.getSWident();
+
+					/*
+					 * if (swIdent.startsWith("firefox"))
+					 * {
+					 * logging.info(this, " retrieveSoftwareAuditOnClient clientId : swIdent " +
+					 * clientId + " : " + swIdent);
+					 * }
+					 */
+
+					Set<String> clientsWithThisSW = softwareIdent2clients.get(swIdent);
+					if (clientsWithThisSW == null) {
+						clientsWithThisSW = new HashSet<>();
+						softwareIdent2clients.put(swIdent, clientsWithThisSW);
 					}
 
-					for (Map<String, Object> item : softwareAuditOnClients) {
+					clientsWithThisSW.add(clientId);
 
-						SWAuditClientEntry clientEntry = new SWAuditClientEntry(item, persist);
-
-						String clientId = clientEntry.getClientId();
-						String swIdent = clientEntry.getSWident();
-
-						/*
-						 * if (swIdent.startsWith("firefox"))
-						 * {
-						 * logging.info(this, " retrieveSoftwareAuditOnClient clientId : swIdent " +
-						 * clientId + " : " + swIdent);
-						 * }
-						 */
-
-						Set<String> clientsWithThisSW = softwareIdent2clients.get(swIdent);
-						if (clientsWithThisSW == null) {
-							clientsWithThisSW = new HashSet<String>();
-							softwareIdent2clients.put(swIdent, clientsWithThisSW);
-						}
-
-						clientsWithThisSW.add(clientId);
-
-						/*
-						 * if (clientEntry.getSWid() == -1)
-						 * {
-						 * logging.info("Missing auditSoftware entry for swIdent " +
-						 * SWAuditClientEntry.produceSWident(item));
-						 * //item.put(SWAuditEntry.WINDOWSsOFTWAREid, "MISSING");
-						 * }
-						 * else
-						 */
+					/*
+					 * if (clientEntry.getSWid() == -1)
+					 * {
+					 * logging.info("Missing auditSoftware entry for swIdent " +
+					 * SWAuditClientEntry.produceSWident(item));
+					 * //item.put(SWAuditEntry.WINDOWSsOFTWAREid, "MISSING");
+					 * }
+					 * else
+					 */
+					{
+						if (clientId != null) // null not allowed in mysql
 						{
-							if (clientId != null) // null not allowed in mysql
-							{
-								java.util.List<SWAuditClientEntry> entries = client2software.get(clientId);
+							java.util.List<SWAuditClientEntry> entries = client2software.get(clientId);
 
-								// variant1
-								/*
-								 * if (entries == null)
-								 * {retrieveSoftwareAuditOnClients, start a request");
-								 * 
-								 * entries = new LinkedList<SWAuditClientEntry>();
-								 * client2software.put(clientId, entries);
-								 * }
-								 */
-								entries.add(clientEntry);
-							}
-
+							// variant1
+							/*
+							 * if (entries == null)
+							 * {retrieveSoftwareAuditOnClients, start a request");
+							 * 
+							 * entries = new LinkedList<SWAuditClientEntry>();
+							 * client2software.put(clientId, entries);
+							 * }
+							 */
+							entries.add(clientEntry);
 						}
-					}
 
+					}
 				}
 
 				logging.info(this, "retrieveSoftwareAuditOnClients client2software "); // + client2software);
-
-				softwareAuditOnClients = null;
 
 				step++;
 

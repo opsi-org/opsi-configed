@@ -6,6 +6,9 @@ import java.util.Map;
 public class ViewManager {
 	private static Map<String, View> views = new HashMap<>();
 
+	private ViewManager() {
+	}
+
 	public static void addView(String name, View view) {
 		views.put(name, view);
 	}

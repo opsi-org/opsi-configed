@@ -2,7 +2,6 @@ package de.uib.configed.gui.productpage;
 
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,7 +35,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 	JMenuItemFormatted popupMarkHits;
 
 	public PanelGroupedProductSettings(String title, ConfigedMain mainController,
-			LinkedHashMap<String, Boolean> productDisplayFields) {
+			Map<String, Boolean> productDisplayFields) {
 		super(title, mainController, productDisplayFields);
 	}
 
@@ -60,17 +59,15 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 		topPane = new ProductgroupPanel(this, mainController, tableProducts);
 		topPane.setVisible(true);
 		groupPanel = (ProductgroupPanel) topPane;
-		groupPanel.setReloadActionHandler(
-				(ActionEvent ae) -> {
-					logging.info(this, " in top pane we got event reloadAction " + ae);
-					reloadAction();
-				});
+		groupPanel.setReloadActionHandler((ActionEvent ae) -> {
+			logging.info(this, " in top pane we got event reloadAction " + ae);
+			reloadAction();
+		});
 
-		groupPanel.setSaveAndExecuteActionHandler(
-				(ActionEvent ae) -> {
-					logging.info(this, " in top pane we got event saveAndExecuteAction " + ae);
-					saveAndExecuteAction();
-				});
+		groupPanel.setSaveAndExecuteActionHandler((ActionEvent ae) -> {
+			logging.info(this, " in top pane we got event saveAndExecuteAction " + ae);
+			saveAndExecuteAction();
+		});
 
 	}
 
@@ -82,27 +79,23 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 		tableProducts.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
 
-	public void setGroupsData(
-			final Map<String, Map<String, String>> data,
+	public void setGroupsData(final Map<String, Map<String, String>> data,
 			final Map<String, Set<String>> productGroupMembers) {
 		groupPanel.setGroupsData(data, productGroupMembers);
 		showAll();
 	}
 
-	public void setTableModel(InstallationStateTableModelFiltered istm) {
-		super.setTableModel(istm);
-	}
-
+	@Override
 	public void clearSelection() {
 		tableProducts.clearSelection();
 	}
 
 	@Override
-	public void setSelection(Set selectedIDs) {
+	public void setSelection(Set<String> selectedIDs) {
 		activatePacketSelectionHandling(false);
 		clearSelection();
 		if (selectedIDs != null) {
-			if (selectedIDs.size() == 0 && tableProducts.getRowCount() > 0) {
+			if (selectedIDs.isEmpty() && tableProducts.getRowCount() > 0) {
 				tableProducts.addRowSelectionInterval(0, 0);
 				// show first product if no product given
 				logging.info(this, "setSelection 0");
@@ -141,8 +134,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 		logging.info(this, "reduceToSet  " + filter);
 		logging.info(this, "reduceToSet GuiIsFiltered " + groupPanel.getGuiIsFiltered());
 
-		groupPanel.setGuiIsFiltered(
-				filter != null && !filter.isEmpty());
+		groupPanel.setGuiIsFiltered(filter != null && !filter.isEmpty());
 
 		tableProducts.revalidate();
 		activatePacketSelectionHandling(true);

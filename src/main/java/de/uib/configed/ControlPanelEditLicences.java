@@ -178,8 +178,8 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 
 		col.setCellEditor(new AdaptingCellEditor(combo, (row, column) -> {
 			List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(persist.getHostInfoCollections()
-					.getPcListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))
-					.keySet());
+					.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))
+							.keySet());
 			choicesAllHosts.set(0, "");
 			return new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
 		}));

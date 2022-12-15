@@ -4,9 +4,9 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JTree;
@@ -109,17 +109,10 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		logging.debug(this, "canImport, dropOnThis  path " + Arrays.toString(dropObjectPath));
 		logging.debug(this, "canImport source path " + Arrays.toString(sourceObjectPath));
 
-		if (targetNode == null
-				||
-				targetNode.isImmutable()
-				||
-				(sourceGroupNode != null // group
-						&& !targetNode.allowsSubGroups())
-				||
-				(sourceGroupNode == null // no group
+		if (targetNode == null || targetNode.isImmutable() || (sourceGroupNode != null // group
+				&& !targetNode.allowsSubGroups()) || (sourceGroupNode == null // no group
 						&& targetNode.allowsOnlyGroupChilds())
-				||
-				(sourceGroupNode != null // group
+				|| (sourceGroupNode != null // group
 						&& sourceObjectPath.length > 1 && dropObjectPath.length > 1
 						&& !(sourceObjectPath[1].equals(dropObjectPath[1]))
 				// different group branchess
@@ -163,8 +156,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 			GroupNode parent = (GroupNode) dropThisVariant.getParent();
 
-			logging.debug(this, "getSourceActions,  dropThis " + dropThis
-					+ " parent " + parent);
+			logging.debug(this, "getSourceActions,  dropThis " + dropThis + " parent " + parent);
 
 			if (parent.isImmutable()) {
 				logging.debug(this, "getSourceActions dropObject is immutable, TransferHandler.NONE");
@@ -237,16 +229,14 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	// @Override
 	// public Icon getVisualRepresentation(Transferable t)
 
-	private boolean chooseMOVE(
-			TransferHandler.TransferSupport support,
-			String sourceGroupName,
-			TreePath dropPath,
+	private boolean chooseMOVE(TransferHandler.TransferSupport support, String sourceGroupName, TreePath dropPath,
 			boolean isLeaf) {
 		logging.info(this, "chooseMOVE  support " + support);
 		logging.info(this, "chooseMOVE  sourceGroupName, dropPath " + sourceGroupName + " , " + dropPath);
-		logging.info(this, "chooseMOVE support.getUserDropAction() == TransferHandler.MOVE "
-				+ (support.getUserDropAction() == TransferHandler.MOVE)
-				+ " support.getUserDropAction() " + support.getUserDropAction());
+		logging.info(this,
+				"chooseMOVE support.getUserDropAction() == TransferHandler.MOVE "
+						+ (support.getUserDropAction() == TransferHandler.MOVE) + " support.getUserDropAction() "
+						+ support.getUserDropAction());
 
 		boolean result = false;
 
@@ -256,9 +246,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		logging.info(this,
 				"chooseMOVE  stayInsideDIRECTORY,  stayInsideGROUPS " + stayInsideDIRECTORY + ", " + stayInsideGROUPS);
 
-		if (stayInsideDIRECTORY
-				||
-				(stayInsideGROUPS && !isLeaf)
+		if (stayInsideDIRECTORY || (stayInsideGROUPS && !isLeaf)
 		// stayInsideDIRECTORY || stayInsideGROUPS
 		// moving inside DIRECTORY or inside GROUPS
 
@@ -284,14 +272,8 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 	}
 
-	private void handleClientID(
-			String importID,
-			TransferHandler.TransferSupport support,
-			TreePath sourcePath,
-			GroupNode sourceParentNode,
-			String sourceParentID,
-			TreePath dropPath,
-			DefaultMutableTreeNode dropParentNode,
+	private void handleClientID(String importID, TransferHandler.TransferSupport support, TreePath sourcePath,
+			GroupNode sourceParentNode, String sourceParentID, TreePath dropPath, DefaultMutableTreeNode dropParentNode,
 			String dropParentID)
 
 	{
@@ -326,15 +308,9 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			moving = chooseMOVE(support, adaptedSourceParentID, dropPath, true);
 		}
 
-		tree.clientCopyOrMoveTo(
-				importID,
-				sourcePath,
-				adaptedSourceParentID,
-				adaptedSourceParentNode,
+		tree.clientCopyOrMoveTo(importID, sourcePath, adaptedSourceParentID, adaptedSourceParentNode,
 
-				dropParentNode,
-				dropPath,
-				dropParentID,
+				dropParentNode, dropPath, dropParentID,
 
 				moving);
 
@@ -381,13 +357,11 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		 * catch(java.security.AccessControlException ex)
 		 * {
 		 * logging.debug(this, "dropPath " + dropPath);
-		 * logging.logTrace(ex);
 		 * 
 		 * }
 		 * 
 		 * catch(Exception exx)
 		 * {
-		 * logging.logTrace(exx);
 		 * return false;
 		 * }
 		 * 
@@ -405,7 +379,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		if (values.length == 0)
 		// possibly transfer of a group node
 		{
-			ArrayList<TreePath> activePaths = tree.getActivePaths();
+			List<TreePath> activePaths = tree.getActivePaths();
 			if (activePaths != null && activePaths.size() == 1) {
 
 				String importID = (String) (((DefaultMutableTreeNode) (activePaths.get(0)).getLastPathComponent())
@@ -501,13 +475,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 				if (chooseMOVE(support, sourceParentID, dropPath, false))
 				// it is a group, and it will be moved, but only inside one partial tree
 				{
-					tree.moveGroupTo(
-							importID,
-							groupNode,
-							sourceParentNode,
-							dropParentNode,
-							dropPath,
-							dropParentID);
+					tree.moveGroupTo(importID, groupNode, sourceParentNode, dropParentNode, dropPath, dropParentID);
 
 				} else {
 					logging.info(this, "importData: this group will not be moved");
@@ -517,14 +485,8 @@ public class ClientTreeTransferHandler extends TransferHandler {
 				// client node
 				logging.debug(this, "importData handling client ID " + importID);
 
-				handleClientID(importID,
-						support,
-						sourcePath,
-						sourceParentNode,
-						sourceParentID,
-						dropPath,
-						dropParentNode,
-						dropParentID);
+				handleClientID(importID, support, sourcePath, sourceParentNode, sourceParentID, dropPath,
+						dropParentNode, dropParentID);
 
 			}
 

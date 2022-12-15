@@ -147,8 +147,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 				logging.debug(this, "tf.getPW " + new String(tf_passw.getPassword()));
 				return false;
 			}
-			if ((!connectionInfo.getPort().equals(tf_port.getText()))
-					&& (!connectionInfo.usesKeyfile())) {
+			if ((!connectionInfo.getPort().equals(tf_port.getText())) && (!connectionInfo.usesKeyfile())) {
 				logging.debug(this, "compareStates 4");
 				return false;
 			}
@@ -168,8 +167,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 				logging.debug(this, "compareStates 7");
 				return false;
 			}
-			if ((!connectionInfo.getPassw().equals(configedMain.PASSWORD))
-					&& (!connectionInfo.usesKeyfile())) {
+			if ((!connectionInfo.getPassw().equals(configedMain.PASSWORD)) && (!connectionInfo.usesKeyfile())) {
 				logging.debug(this, "compareStates 8");
 				return false;
 			}
@@ -198,8 +196,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 					return false;
 				}
 			} catch (Exception e) {
-				logging.warning(this, "Error " + e);
-				logging.logTrace(e);
+				logging.warning(this, "Error", e);
 			}
 		}
 
@@ -296,8 +293,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			lbl_port = new JLabel();
 			lbl_port.setText(configed.getResourceValue("SSHConnection.Config.jLabelPort"));
 			tf_port = new JTextField(new CheckedDocument(/* allowedChars */
-					new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', }, 5),
-					String.valueOf("22"), 1);
+					new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', }, 5), String.valueOf("22"), 1);
 			tf_port.getDocument().addDocumentListener(new DocumentListener() {
 				public void insertUpdate(DocumentEvent e) {
 					checkComponentStates();
@@ -545,8 +541,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 				.addGroup(connectionPanelLayout.createParallelGroup()
 						.addComponent(cb_useDefault, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addGroup(connectionPanelLayout.createSequentialGroup()
-								.addGap(Globals.vGapSize * 2)
+						.addGroup(connectionPanelLayout.createSequentialGroup().addGap(Globals.vGapSize * 2)
 								.addGroup(connectionPanelLayout.createParallelGroup()
 										.addComponent(lbl_host, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE)
@@ -570,8 +565,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 						.addGap(Globals.vGapSize)
 						.addComponent(cb_useKeyfile, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addGroup(connectionPanelLayout.createSequentialGroup()
-								.addGap(Globals.vGapSize * 2)
+						.addGroup(connectionPanelLayout.createSequentialGroup().addGap(Globals.vGapSize * 2)
 								.addGroup(connectionPanelLayout.createParallelGroup()
 										.addComponent(lbl_keyfile, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -589,13 +583,11 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 								// .addGroup(connectionPanelLayout.createParallelGroup()
 								// )
 								.addGap(Globals.vGapSize))
-						.addGroup(connectionPanelLayout.createSequentialGroup()
-								.addComponent(lbl_connectionState, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
+						.addGroup(connectionPanelLayout.createSequentialGroup().addComponent(lbl_connectionState,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
 				.addContainerGap());
 
-		connectionPanelLayout.setVerticalGroup(connectionPanelLayout.createSequentialGroup()
-				.addGap(Globals.vGapSize)
+		connectionPanelLayout.setVerticalGroup(connectionPanelLayout.createSequentialGroup().addGap(Globals.vGapSize)
 				.addComponent(cb_useDefault, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.vGapSize)
@@ -640,11 +632,10 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 						.addComponent(lbl_passphrase, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.vGapSize)
-				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(lbl_connectionState, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.vGapSize)
-				.addContainerGap(70, 70));
+				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(
+						lbl_connectionState, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.vGapSize).addContainerGap(70, 70));
 
 		settingsPanelLayout.setHorizontalGroup(settingsPanelLayout.createSequentialGroup()
 				.addGroup(settingsPanelLayout.createParallelGroup()
@@ -655,8 +646,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		settingsPanelLayout.setVerticalGroup(settingsPanelLayout.createSequentialGroup()
 				.addComponent(cb_useOutputColor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(10)
-				.addComponent(cb_execInBackground, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addGap(10).addComponent(cb_execInBackground, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
 	}
 
@@ -690,10 +680,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			if (!cb_useDefault_state)
 			// state has changed
 			{
-				connectionInfo.setUserData(
-						ConfigedMain.HOST,
-						ConfigedMain.USER,
-						ConfigedMain.PASSWORD,
+				connectionInfo.setUserData(ConfigedMain.HOST, ConfigedMain.USER, ConfigedMain.PASSWORD,
 						SSHConnect.portSSH);
 			}
 
@@ -785,9 +772,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			connectionInfo.setUserData(
 					// null, null, null, null);
 					ConfigedMain.HOST, // persist.getHostInfoCollections().getConfigServer(),
-					ConfigedMain.USER,
-					ConfigedMain.PASSWORD,
-					SSHConnect.portSSH);
+					ConfigedMain.USER, ConfigedMain.PASSWORD, SSHConnect.portSSH);
 
 		}
 		cb_host.setSelectedItem(connectionInfo.getHost());

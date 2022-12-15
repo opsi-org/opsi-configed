@@ -31,16 +31,16 @@ public class SWAuditEntry extends TableEntry
  */
 
 {
-	final public static String id = "ID";
-	final public static String NAME = "name";
-	final public static String VERSION = "version";
-	final public static String SUBVERSION = "subVersion";
-	final public static String ARCHITECTURE = "architecture";
-	final public static String LANGUAGE = "language";
-	final public static String WINDOWSsOFTWAREid = "windowsSoftwareID";
+	public static final String id = "ID";
+	public static final String NAME = "name";
+	public static final String VERSION = "version";
+	public static final String SUBVERSION = "subVersion";
+	public static final String ARCHITECTURE = "architecture";
+	public static final String LANGUAGE = "language";
+	public static final String WINDOWSsOFTWAREid = "windowsSoftwareID";
 
-	final public static String EXISTING_IDS = "(variants)";
-	// final public static String LICENCEPOOL_ASSIGNED= "licencepool";
+	public static final String EXISTING_IDS = "(variants)";
+	// public static final String LICENCEPOOL_ASSIGNED= "licencepool";
 	// should be LicencepoolEntry.idSERVICEKEY
 
 	private static List<String> KEYS;
@@ -87,7 +87,7 @@ public class SWAuditEntry extends TableEntry
 
 	}
 
-	final public static Map<String, String> key2serverKey;
+	public static final Map<String, String> key2serverKey;
 	static {
 		key2serverKey = new HashMap<String, String>();
 		key2serverKey.put(NAME, "name");
@@ -178,18 +178,10 @@ public class SWAuditEntry extends TableEntry
 			subversion = "";
 		put(key2serverKey.get(SUBVERSION), subversion);
 
-		ident = Globals.pseudokey(new String[] {
-				get(NAME), // KEYS_FOR_IDENT.get(0) ...
-				get(VERSION),
-				subversion,
-				get(LANGUAGE),
-				get(ARCHITECTURE)
-		});
+		ident = Globals.pseudokey(new String[] { get(NAME), // KEYS_FOR_IDENT.get(0) ...
+				get(VERSION), subversion, get(LANGUAGE), get(ARCHITECTURE) });
 
-		identReduced = Globals.pseudokey(new String[] {
-				get(VERSION),
-				get(ARCHITECTURE)
-		});
+		identReduced = Globals.pseudokey(new String[] { get(VERSION), get(ARCHITECTURE) });
 
 		/*
 		 * if (get(NAME).equals("Microsoft Windows XP (Service Pack 3)"))

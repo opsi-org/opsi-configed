@@ -8,13 +8,13 @@
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
  * License, version AGPLv3, as published by the Free Software Foundation
- 
+ * 
+ * @author roeder, Nils Otto
  */
 
 package de.uib.configed.gui.productpage;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.ScrollPaneConstants;
 
@@ -34,16 +35,11 @@ import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
 import de.uib.utilities.logging.logging;
 
-/**
- * @author roeder
- */
 public class ProductInfoPane extends javax.swing.JSplitPane
 		implements de.uib.utilities.DataChangedObserver, ActionListener {
 
 	private JXPanel productDescriptionsPanel;
 	private JXPanel bottomComponent;
-	private javax.swing.JLabel jLabelProductAdvice;
-	private javax.swing.JLabel jLabelProductDescription;
 	protected javax.swing.JTextField jLabelProductID;
 	protected javax.swing.JTextField jLabelProductVersion;
 	protected javax.swing.JLabel jLabelLabelProductVersion;
@@ -59,10 +55,8 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 	private JButton propertiesActivateButton;
 	private boolean isPanelEditPropertiesVisible = true;
 
-	private javax.swing.JScrollPane jScrollPaneProductAdvice;
-	private javax.swing.JScrollPane jScrollPaneProductInfo;
-	protected javax.swing.JTextArea jTextAreaProductAdvice;
-	protected javax.swing.JTextArea jTextAreaProductInfo;
+	protected TextMarkdownPane jTextAreaProductAdvice;
+	protected TextMarkdownPane jTextAreaProductInfo;
 
 	protected String productName = "";
 	private Map<String, Boolean> specificPropertiesExisting;
@@ -83,18 +77,16 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 	}
 
 	private void initComponents() {
-		// jTextField_SelectedClients = new javax.swing.JTextField();
 		jLabelProductName = new javax.swing.JLabel();
 		jLabelProductID = new javax.swing.JTextField();
 		jLabelProductVersion = new javax.swing.JTextField();
 		jLabelLabelProductVersion = new javax.swing.JLabel();
-		// jLabelPackageVersion = new javax.swing.JLabel();
-		jLabelProductDescription = new javax.swing.JLabel();
-		jScrollPaneProductInfo = new javax.swing.JScrollPane();
-		jTextAreaProductInfo = new javax.swing.JTextArea();
-		jLabelProductAdvice = new javax.swing.JLabel();
-		jScrollPaneProductAdvice = new javax.swing.JScrollPane();
-		jTextAreaProductAdvice = new javax.swing.JTextArea();
+
+		JScrollPane jScrollPaneProductInfo = new javax.swing.JScrollPane();
+		jTextAreaProductInfo = new TextMarkdownPane();
+
+		JScrollPane jScrollPaneProductAdvice = new javax.swing.JScrollPane();
+		jTextAreaProductAdvice = new TextMarkdownPane();
 
 		dependenciesActivateButton = new JButton();
 		dependenciesTextLabel = new JLabel();
@@ -103,17 +95,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 
 		propertiesActivateButton = new JButton();
 
-		/*
-		 * jTextField_SelectedClients.setEditable(false);
-		 * jTextField_SelectedClients.setFont(Globals.defaultFontBig);
-		 * jTextField_SelectedClients.setText(" ");
-		 * jTextField_SelectedClients.setBackground(Globals.backgroundLightGrey);
-		 */
-
-		// jLabelProductName.setFont(Globals.defaultFontBig);
-		// jLabelProductName.setText(
-		// configed.getResourceValue("MainFrame.labelProductId") );
-
+		// do this so that you can mark and copy content of the label
 		jLabelProductID.setFont(Globals.defaultFontStandardBold);
 		jLabelProductID.setBorder(null);
 		jLabelProductID.setEditable(false);
@@ -124,45 +106,24 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		jLabelLabelProductVersion.setFont(Globals.defaultFontBig);
 		jLabelLabelProductVersion.setText(configed.getResourceValue("ProductInfoPane.jLabelProductVersion") + " ");
 
+		// do this so that you can mark and copy content of the label
 		jLabelProductVersion.setFont(Globals.defaultFontBold);
 		jLabelProductVersion.setBorder(null);
 		jLabelProductVersion.setEditable(false);
 		jLabelProductVersion.setBackground(null);
 
-		jLabelProductDescription.setFont(Globals.defaultFontStandardBold);
-		jLabelProductDescription.setPreferredSize(new Dimension(Globals.prefHSize, Globals.lineHeight));
-		jLabelProductDescription.setText(configed.getResourceValue("ProductInfoPane.jLabelProductDescription"));
-
-		jTextAreaProductInfo.setColumns(20);
-		jTextAreaProductInfo.setRows(5);
-
-		jTextAreaProductInfo.setEditable(false);
-		jTextAreaProductInfo.setWrapStyleWord(true);
-		jTextAreaProductInfo.setLineWrap(true);
 		jTextAreaProductInfo.setFont(Globals.defaultFont);
 		jTextAreaProductInfo.setBackground(Globals.backgroundLightGrey);
 
 		jScrollPaneProductInfo.setViewportView(jTextAreaProductInfo);
 		jScrollPaneProductInfo.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		// jScrollPaneProductInfo.setVerticalScrollBarPolicy(
-		// JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		jScrollPaneProductInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-		jLabelProductAdvice.setText(configed.getResourceValue("ProductInfoPane.jLabelProductAdvice"));
-		jLabelProductAdvice.setFont(Globals.defaultFontStandardBold);
-
-		jTextAreaProductAdvice.setColumns(20);
-		jTextAreaProductAdvice.setRows(5);
-
-		jTextAreaProductAdvice.setEditable(false);
-		jTextAreaProductAdvice.setWrapStyleWord(true);
-		jTextAreaProductAdvice.setLineWrap(true);
 		jTextAreaProductAdvice.setFont(Globals.defaultFont);
 		jTextAreaProductAdvice.setBackground(Globals.backgroundLightGrey);
 
 		jScrollPaneProductAdvice.setViewportView(jTextAreaProductAdvice);
 		jScrollPaneProductAdvice.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		// jScrollPaneProductAdvice.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		jScrollPaneProductAdvice.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		dependenciesTextLabel.setText(configed.getResourceValue("ProductInfoPane.dependenciesTextLabel"));
@@ -214,6 +175,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 						.addComponent(jScrollPaneProductAdvice, Globals.minHSize, Globals.prefHSize, Short.MAX_VALUE)
 
 		);
+
 		layoutDescriptionsPanel.setVerticalGroup(layoutDescriptionsPanel.createSequentialGroup()
 				.addComponent(jLabelProductID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -227,22 +189,11 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 						.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(0, Globals.vGapSize, Globals.vGapSize)
-				// .addComponent(jLabelProductDescription, minLabelVSize, Globals.buttonHeight,
-				// Globals.buttonHeight)
-				// .addGap(minGapVSize, minGapVSize, minGapVSize)
-				.addComponent(jScrollPaneProductInfo, 0, Globals.prefVSize, Globals.prefVSize)
+				.addComponent(jScrollPaneProductInfo, 0, Globals.prefVSize, Short.MAX_VALUE)
 				.addGap(0, Globals.vGapSize, Globals.vGapSize)
-				// .addComponent(jLabelProductAdvice, minLabelVSize, Globals.buttonHeight,
-				// Globals.buttonHeight)
-				// .addGap(minGapVSize, minGapVSize, minGapVSize)
-				.addComponent(jScrollPaneProductAdvice, 0, Globals.prefVSize, Globals.prefVSize)
+				.addComponent(jScrollPaneProductAdvice, 0, Globals.prefVSize, Short.MAX_VALUE));
 
-		// .addComponent(panelProductDependencies, 0, 0, Short.MAX_VALUE)
-		);
-
-		// setTopComponent(productDescriptionsPanel);
-
-		// treat the south panel
+		// treat the bottom panel
 		bottomComponent = new JXPanel();
 
 		GroupLayout layoutBottomComponent = new javax.swing.GroupLayout(bottomComponent);
@@ -333,7 +284,6 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 
 	public void setProductInfo(String s) {
 		jTextAreaProductInfo.setText(s);
-		jTextAreaProductInfo.setCaretPosition(0);
 	}
 
 	public void setProductId(String s) {
@@ -405,5 +355,4 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 			specificPropertiesExisting.put(productName, true);
 		}
 	}
-
 }

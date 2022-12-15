@@ -28,12 +28,6 @@ public class FDialogSubTable extends FGeneralDialog {
 	}
 
 	@Override
-	public void setVisible(boolean b) {
-		super.setVisible(b);
-
-	}
-
-	@Override
 	protected void allLayout() {
 		// super.allLayout(); we define an adapted layout
 		logging.info(this, "allLayout");
@@ -60,8 +54,7 @@ public class FDialogSubTable extends FGeneralDialog {
 						.addComponent(jPanelButtonGrid, Globals.lineHeight, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.hGapSize / 2, Globals.hGapSize, Short.MAX_VALUE))
-				.addGroup(southLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize / 2)
+				.addGroup(southLayout.createSequentialGroup().addGap(Globals.hGapSize / 2)
 						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE)// GroupLayout.PREFERRED_SIZE)//Short.MAX_VALUE)
 						.addGap(Globals.hGapSize / 2)));
 
@@ -80,12 +73,9 @@ public class FDialogSubTable extends FGeneralDialog {
 		GroupLayout allLayout = new GroupLayout(allpane);
 		allpane.setLayout(allLayout);
 
-		allLayout.setVerticalGroup(allLayout.createSequentialGroup()
-				.addGap(Globals.hGapSize)
-				.addComponent(centerPanel, 200, 300, Short.MAX_VALUE)
-				.addGap(Globals.hGapSize)
-				.addComponent(southPanel, 300, 300, Short.MAX_VALUE)
-				.addGap(Globals.hGapSize));
+		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.hGapSize)
+				.addComponent(centerPanel, 200, 300, Short.MAX_VALUE).addGap(Globals.hGapSize)
+				.addComponent(southPanel, 300, 300, Short.MAX_VALUE).addGap(Globals.hGapSize));
 
 		allLayout.setHorizontalGroup(allLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(allLayout.createSequentialGroup()
@@ -94,9 +84,8 @@ public class FDialogSubTable extends FGeneralDialog {
 								Short.MAX_VALUE)
 						.addGap(Globals.hGapSize / 2, Globals.hGapSize, 2 * Globals.hGapSize))
 				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize, 2 * Globals.hGapSize)
-						.addComponent(southPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
+						.addGap(Globals.hGapSize / 2, Globals.hGapSize, 2 * Globals.hGapSize).addComponent(southPanel,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.hGapSize / 2, Globals.hGapSize, 2 * Globals.hGapSize)));
 
 	}

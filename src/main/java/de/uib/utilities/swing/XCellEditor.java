@@ -20,11 +20,7 @@ public class XCellEditor extends DefaultCellEditor {
 		super(combo);
 	}
 
-	public Component getTableCellEditorComponent(JTable table,
-			Object value,
-			boolean isSelected,
-			int row,
-			int column) {
+	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 
 		Component c = super.getTableCellEditorComponent(table, value, isSelected, row, column);
 
@@ -37,13 +33,12 @@ public class XCellEditor extends DefaultCellEditor {
 		} else {
 			background = Globals.nimbusBackground;
 			foreground = Color.black;
-		}
-		;
+		} ;
 
 		c.setBackground(background);
 		c.setForeground(foreground);
 
-		// System.out.println("XCellEditor active");
+		// logging.debug("XCellEditor active");
 		return c;
 	}
 

@@ -28,8 +28,7 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
  * 
  * @author roeder
  */
-public class PanelAssignToLPools extends MultiTablePanel
-		implements ChangeListener {
+public class PanelAssignToLPools extends MultiTablePanel implements ChangeListener {
 	public JTextField testfield; // for test purposes
 
 	private JLabel titleWindowsSoftware;
@@ -74,9 +73,9 @@ public class PanelAssignToLPools extends MultiTablePanel
 
 	protected int minVSize = 80;
 
-	// public final static String arrowRight = "►";
+	// public static final String arrowRight = "►";
 
-	public final static int tablesMaxWidth = 1000;
+	public static final int tablesMaxWidth = 1000;
 	protected int tablesMaxHeight = Short.MAX_VALUE;
 
 	/** Creates new form panelAssignToLPools */
@@ -102,12 +101,12 @@ public class PanelAssignToLPools extends MultiTablePanel
 		panelInfoConfigWindowsSoftware = new JPanel();
 		panelInfoConfigWindowsSoftware.setBackground(Globals.backgroundWhite);
 
-		titleWindowsSoftware = new JLabel(configed.getResourceValue(
-				"PanelAssignToLPools.Licences.SectiontitleWindowsSoftware2LPool"));
+		titleWindowsSoftware = new JLabel(
+				configed.getResourceValue("PanelAssignToLPools.Licences.SectiontitleWindowsSoftware2LPool"));
 		titleWindowsSoftware.setFont(Globals.defaultFontStandardBold);
 
-		titleWindowsSoftware2 = new JLabel(configed.getResourceValue(
-				"PanelAssignToLPools.Licences.SectiontitleWindowsSoftware2LPool.supplement"));
+		titleWindowsSoftware2 = new JLabel(
+				configed.getResourceValue("PanelAssignToLPools.Licences.SectiontitleWindowsSoftware2LPool.supplement"));
 		titleWindowsSoftware2.setFont(Globals.defaultFont);
 
 		labelSelectedLicencePoolId = new JLabel(
@@ -189,12 +188,11 @@ public class PanelAssignToLPools extends MultiTablePanel
 		// "PanelAssignToLPools.Licences.supplementSimilarSWEntries.button") );
 
 		buttonSupplementSimilar = new JButton(
-				configed.getResourceValue(
-						"PanelAssignToLPools.Licences.supplementSimilarSWEntries.button"),
+				configed.getResourceValue("PanelAssignToLPools.Licences.supplementSimilarSWEntries.button"),
 				Globals.createImageIcon("images/edit-table-insert-row-under.png", ""));
 
-		buttonSupplementSimilar.setToolTipText(configed.getResourceValue(
-				"PanelAssignToLPools.Licences.supplementSimilarSWEntries.tooltip"));
+		buttonSupplementSimilar.setToolTipText(
+				configed.getResourceValue("PanelAssignToLPools.Licences.supplementSimilarSWEntries.tooltip"));
 		buttonSupplementSimilar.setFont(Globals.defaultFont);
 
 		buttonSupplementSimilar.addActionListener(new ActionListener() {
@@ -227,8 +225,7 @@ public class PanelAssignToLPools extends MultiTablePanel
 
 		panelRadiobuttonsPreselectionForName2Pool = new PanelStateSwitch(
 				// "",//configed.getResourceValue("PanelAssignToLPools.SoftwareDirectionOfAssignment.title"),
-				null,
-				FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction.SHOW_ALL_NAMES, // start value
+				null, FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction.SHOW_ALL_NAMES, // start value
 				FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction.values(),
 				new String[] {
 						configed.getResourceValue(
@@ -236,11 +233,9 @@ public class PanelAssignToLPools extends MultiTablePanel
 						configed.getResourceValue(
 								"PanelAssignToLPools.Licences.supplementSimilarSWEntries.showOnlyNamesWithNotUniformAssignments"),
 						configed.getResourceValue(
-								"PanelAssignToLPools.Licences.supplementSimilarSWEntries.showOnlyNamesWithoutAssignments")
-				},
+								"PanelAssignToLPools.Licences.supplementSimilarSWEntries.showOnlyNamesWithoutAssignments") },
 
-				FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction.class,
-				null) {
+				FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction.class, null) {
 			@Override
 			protected void notifyChangeListeners(ChangeEvent e) {
 				fSoftwarename2LicencePool.setPreselectionForName2Pool(
@@ -258,15 +253,11 @@ public class PanelAssignToLPools extends MultiTablePanel
 		GroupLayout layoutNamebased = new GroupLayout(panelWorkNamebased);
 		panelWorkNamebased.setLayout(layoutNamebased);
 
-		layoutNamebased.setVerticalGroup(layoutNamebased.createSequentialGroup()
-				.addGap(5)
-				.addGroup(layoutNamebased.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-						.addComponent(labelSupplementSimilar, Globals.smallHeight, Globals.smallHeight,
-								Globals.smallHeight)
-						.addComponent(buttonSupplementSimilar, Globals.smallHeight, Globals.smallHeight,
-								Globals.smallHeight)
-						.addComponent(labelSimilarEntriesExist, Globals.smallHeight, Globals.smallHeight,
-								Globals.smallHeight))
+		layoutNamebased.setVerticalGroup(layoutNamebased.createSequentialGroup().addGap(5).addGroup(layoutNamebased
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+				.addComponent(labelSupplementSimilar, Globals.smallHeight, Globals.smallHeight, Globals.smallHeight)
+				.addComponent(buttonSupplementSimilar, Globals.smallHeight, Globals.smallHeight, Globals.smallHeight)
+				.addComponent(labelSimilarEntriesExist, Globals.smallHeight, Globals.smallHeight, Globals.smallHeight))
 				.addComponent(panelRadiobuttonsPreselectionForName2Pool, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(5));
@@ -283,8 +274,7 @@ public class PanelAssignToLPools extends MultiTablePanel
 						.addComponent(labelSimilarEntriesExist, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.hGapSize))
-				.addGroup(layoutNamebased.createSequentialGroup()
-						.addGap(Globals.hGapSize)
+				.addGroup(layoutNamebased.createSequentialGroup().addGap(Globals.hGapSize)
 						.addComponent(panelRadiobuttonsPreselectionForName2Pool, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.hGapSize / 2)));
@@ -295,8 +285,7 @@ public class PanelAssignToLPools extends MultiTablePanel
 				ControlPanelAssignToLPools.SoftwareDirectionOfAssignment.values(),
 				new String[] {
 						configed.getResourceValue("PanelAssignToLPools.SoftwareDirectionOfAssignment.POOL2SOFTWARE"),
-						configed.getResourceValue("PanelAssignToLPools.SoftwareDirectionOfAssignment.SOFTWARE2POOL")
-				},
+						configed.getResourceValue("PanelAssignToLPools.SoftwareDirectionOfAssignment.SOFTWARE2POOL") },
 
 				ControlPanelAssignToLPools.SoftwareDirectionOfAssignment.class,
 
@@ -312,15 +301,13 @@ public class PanelAssignToLPools extends MultiTablePanel
 		// );
 		GroupLayout layoutBorder = new GroupLayout(panelRadiobuttonsDirectionOfAssignmentX);
 		panelRadiobuttonsDirectionOfAssignmentX.setLayout(layoutBorder);
-		layoutBorder.setVerticalGroup(layoutBorder.createSequentialGroup()
-				.addGap(2, 5, 5)
-				.addComponent(panelRadiobuttonsDirectionOfAssignment, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+		layoutBorder.setVerticalGroup(layoutBorder
+				.createSequentialGroup().addGap(2, 5, 5).addComponent(panelRadiobuttonsDirectionOfAssignment,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(2, 5, 5));
 
 		layoutBorder.setHorizontalGroup(layoutBorder.createSequentialGroup() // createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGap(2, 5, 5)
-				.addComponent(panelRadiobuttonsDirectionOfAssignment, GroupLayout.PREFERRED_SIZE,
+				.addGap(2, 5, 5).addComponent(panelRadiobuttonsDirectionOfAssignment, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(2, 5, 5));
 
@@ -359,20 +346,17 @@ public class PanelAssignToLPools extends MultiTablePanel
 
 				));
 
-		layoutPanelInfo.setVerticalGroup(layoutPanelInfo.createSequentialGroup()
-				.addContainerGap()
-				.addGroup(layoutPanelInfo.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addComponent(titleWindowsSoftware, Globals.smallHeight, Globals.smallHeight,
-								Globals.smallHeight))
+		layoutPanelInfo.setVerticalGroup(layoutPanelInfo.createSequentialGroup().addContainerGap()
+				.addGroup(layoutPanelInfo.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+						titleWindowsSoftware, Globals.smallHeight, Globals.smallHeight, Globals.smallHeight))
 
 				.addGroup(layoutPanelInfo.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
 						.addComponent(labelSelectedLicencePoolId, Globals.smallHeight, Globals.smallHeight,
 								Globals.smallHeight)
 						.addComponent(fieldSelectedLicencePoolId, Globals.smallHeight, Globals.smallHeight,
 								Globals.smallHeight))
-				.addGroup(layoutPanelInfo.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addComponent(titleWindowsSoftware2, Globals.smallHeight, Globals.smallHeight,
-								Globals.smallHeight))
+				.addGroup(layoutPanelInfo.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+						titleWindowsSoftware2, Globals.smallHeight, Globals.smallHeight, Globals.smallHeight))
 				// .addGap(Globals.buttonHeight,Globals.buttonHeight, Short.MAX_VALUE)
 				// //corresponding to bottom config height
 				.addGap(Globals.hGapSize / 2, Globals.hGapSize, Globals.hGapSize)
@@ -387,23 +371,20 @@ public class PanelAssignToLPools extends MultiTablePanel
 
 		;
 
-		PanelStateSwitch panelRadiobuttonsSoftwareselectionX = new PanelStateSwitch(
-				null, // title
+		PanelStateSwitch panelRadiobuttonsSoftwareselectionX = new PanelStateSwitch(null, // title
 				ControlPanelAssignToLPools.SoftwareShowAllMeans.ALL,
 				ControlPanelAssignToLPools.SoftwareShowAllMeans.values(),
 
-				new String[] {
-						configed.getResourceValue("PanelAssignToLPools.radiobuttonALL"),
+				new String[] { configed.getResourceValue("PanelAssignToLPools.radiobuttonALL"),
 						configed.getResourceValue("PanelAssignToLPools.radiobuttonASSIGNED_OR_ASSIGNED_TO_NOTHING"),
-						configed.getResourceValue("PanelAssignToLPools.radiobuttonASSIGNED_TO_NOTHING")
-				},
+						configed.getResourceValue("PanelAssignToLPools.radiobuttonASSIGNED_TO_NOTHING") },
 
 				ControlPanelAssignToLPools.SoftwareShowAllMeans.class,
 
 				val -> {
 					logging.info(this, " produced " + val);
-					((ControlPanelAssignToLPools) controller).setSoftwareShowAllMeans(
-							(ControlPanelAssignToLPools.SoftwareShowAllMeans) val);
+					((ControlPanelAssignToLPools) controller)
+							.setSoftwareShowAllMeans((ControlPanelAssignToLPools.SoftwareShowAllMeans) val);
 				});
 
 		GroupLayout layoutPanelInfoConfig = new javax.swing.GroupLayout(panelInfoConfigWindowsSoftware);
@@ -456,65 +437,58 @@ public class PanelAssignToLPools extends MultiTablePanel
 								GroupLayout.PREFERRED_SIZE)
 
 				));
-		layoutPanelInfoConfig.setVerticalGroup(layoutPanelInfoConfig.createSequentialGroup()
-				.addContainerGap()
-				.addGap(Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight) // title height
-				.addGroup(layoutPanelInfoConfig.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-						.addComponent(labelCountAllWindowsSoftware, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight)
-						.addComponent(fieldCountAllWindowsSoftware, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight)
-						.addComponent(labelCountDisplayedWindowsSoftware, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight)
-						.addComponent(fieldCountDisplayedWindowsSoftware, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight)
-						.addComponent(labelCountNotAssignedSoftware, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight)
-						.addComponent(fieldCountNotAssignedSoftware, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight))
-				.addGap(3) // to get the level of the components of the left side
-				.addGroup(layoutPanelInfoConfig.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-						.addComponent(labelCountAssignedStatus, Globals.smallHeight, Globals.smallHeight,
-								Globals.smallHeight)
-						.addComponent(fieldCountAssignedStatus, Globals.smallHeight, Globals.smallHeight,
-								Globals.smallHeight)
-						.addComponent(labelCountAssignedInEditing, Globals.smallHeight, Globals.smallHeight,
-								Globals.smallHeight)
-						.addComponent(fieldCountAssignedInEditing, Globals.smallHeight, Globals.smallHeight,
-								Globals.smallHeight)
-						.addComponent(buttonShowAssignedNotExisting, Globals.smallHeight, Globals.smallHeight,
-								Globals.smallHeight))
-				.addGap(5, 5, 5)
+		layoutPanelInfoConfig
+				.setVerticalGroup(layoutPanelInfoConfig.createSequentialGroup().addContainerGap()
+						.addGap(Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight) // title height
+						.addGroup(layoutPanelInfoConfig.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+								.addComponent(labelCountAllWindowsSoftware, Globals.buttonHeight, Globals.buttonHeight,
+										Globals.buttonHeight)
+								.addComponent(fieldCountAllWindowsSoftware, Globals.buttonHeight, Globals.buttonHeight,
+										Globals.buttonHeight)
+								.addComponent(labelCountDisplayedWindowsSoftware, Globals.buttonHeight,
+										Globals.buttonHeight, Globals.buttonHeight)
+								.addComponent(fieldCountDisplayedWindowsSoftware, Globals.buttonHeight,
+										Globals.buttonHeight, Globals.buttonHeight)
+								.addComponent(labelCountNotAssignedSoftware, Globals.buttonHeight, Globals.buttonHeight,
+										Globals.buttonHeight)
+								.addComponent(fieldCountNotAssignedSoftware, Globals.buttonHeight, Globals.buttonHeight,
+										Globals.buttonHeight))
+						.addGap(3) // to get the level of the components of the left side
+						.addGroup(layoutPanelInfoConfig.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+								.addComponent(labelCountAssignedStatus, Globals.smallHeight, Globals.smallHeight,
+										Globals.smallHeight)
+								.addComponent(fieldCountAssignedStatus, Globals.smallHeight, Globals.smallHeight,
+										Globals.smallHeight)
+								.addComponent(labelCountAssignedInEditing, Globals.smallHeight, Globals.smallHeight,
+										Globals.smallHeight)
+								.addComponent(fieldCountAssignedInEditing, Globals.smallHeight, Globals.smallHeight,
+										Globals.smallHeight)
+								.addComponent(buttonShowAssignedNotExisting, Globals.smallHeight, Globals.smallHeight,
+										Globals.smallHeight))
+						.addGap(5, 5, 5)
 
-				.addComponent(panelRadiobuttonsSoftwareselectionX, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panelRadiobuttonsSoftwareselectionX, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 
-				/*
-				 * .addGroup(layoutPanelInfoConfig.createParallelGroup(javax.swing.GroupLayout.
-				 * Alignment.CENTER)
-				 * .addComponent(labelShowAssociationsToSelectedPoolOrNoPool,
-				 * Globals.buttonHeight,Globals.buttonHeight,Globals.buttonHeight)
-				 * .addComponent(checkShowOnlyAssociationsToSelectedPoolOrNoPool,
-				 * Globals.buttonHeight,Globals.buttonHeight,Globals.buttonHeight)
-				 * )
-				 */
-				.addContainerGap());
+						/*
+						 * .addGroup(layoutPanelInfoConfig.createParallelGroup(javax.swing.GroupLayout.
+						 * Alignment.CENTER)
+						 * .addComponent(labelShowAssociationsToSelectedPoolOrNoPool,
+						 * Globals.buttonHeight,Globals.buttonHeight,Globals.buttonHeight)
+						 * .addComponent(checkShowOnlyAssociationsToSelectedPoolOrNoPool,
+						 * Globals.buttonHeight,Globals.buttonHeight,Globals.buttonHeight)
+						 * )
+						 */
+						.addContainerGap());
 
 		panelLicencepools = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"),
-				tablesMaxWidth,
-				true,
-				1, // position of general popups
+				configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), tablesMaxWidth, true, 1, // position of general popups
 				false, // switchLineColors //does not matter
-				new int[] {
-						PanelGenEditTable.POPUP_DELETE_ROW,
-						PanelGenEditTable.POPUP_SAVE,
-						PanelGenEditTable.POPUP_CANCEL,
-						PanelGenEditTable.POPUP_RELOAD
+				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
+						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD
 				// ,
 				// PanelGenEditTable.POPUP_PDF
-				},
-				true // with tablesearchpane
+				}, true // with tablesearchpane
 		)
 
 		/*
@@ -542,16 +516,9 @@ public class PanelAssignToLPools extends MultiTablePanel
 		panelLicencepools.setMasterFrame(de.uib.configed.Globals.frame1);
 
 		panelProductId2LPool = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleProductId2LPool"),
-				tablesMaxWidth,
-				true,
-				1, false,
-				new int[] {
-						PanelGenEditTable.POPUP_DELETE_ROW,
-						PanelGenEditTable.POPUP_SAVE,
-						PanelGenEditTable.POPUP_CANCEL,
-						PanelGenEditTable.POPUP_RELOAD
-				},
+				configed.getResourceValue("ConfigedMain.Licences.SectiontitleProductId2LPool"), tablesMaxWidth, true, 1,
+				false, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
+						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true // with tablesearchpane
 		);
 
@@ -564,10 +531,9 @@ public class PanelAssignToLPools extends MultiTablePanel
 
 		javax.swing.GroupLayout layoutTopPane = new javax.swing.GroupLayout((JPanel) topPane);
 		topPane.setLayout(layoutTopPane);
-		layoutTopPane.setHorizontalGroup(
-				layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layoutTopPane.createSequentialGroup()
-								.addContainerGap()
+		layoutTopPane.setHorizontalGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+						layoutTopPane.createSequentialGroup().addContainerGap()
 								.addGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 										// for testing purposes:
 										// .addComponent(testfield, javax.swing.GroupLayout.Alignment.LEADING,
@@ -580,45 +546,39 @@ public class PanelAssignToLPools extends MultiTablePanel
 												javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 								.addContainerGap()));
-		layoutTopPane.setVerticalGroup(
-				layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(layoutTopPane.createSequentialGroup()
-								.addContainerGap()
-								// .addComponent(testfield, javax.swing.GroupLayout.DEFAULT_SIZE,
-								// javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE)
-								.addComponent(panelLicencepools, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE,
-										tablesMaxHeight)
-								// .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-								.addComponent(panelProductId2LPool, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE,
-										tablesMaxHeight)
+		layoutTopPane.setVerticalGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layoutTopPane.createSequentialGroup().addContainerGap()
+						// .addComponent(testfield, javax.swing.GroupLayout.DEFAULT_SIZE,
+						// javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE)
+						.addComponent(panelLicencepools, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE,
+								tablesMaxHeight)
+						// .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+						.addComponent(panelProductId2LPool, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE,
+								tablesMaxHeight)
 
-								.addContainerGap())
-						.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize));
+						.addContainerGap())
+				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize));
 
 		javax.swing.GroupLayout layoutBottomPane = new javax.swing.GroupLayout((JPanel) bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
 		bottomPane.setBackground(Globals.backgroundWhite);
 
-		layoutBottomPane.setHorizontalGroup(
-				layoutBottomPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+		layoutBottomPane
+				.setHorizontalGroup(layoutBottomPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 						.addGroup(layoutBottomPane.createSequentialGroup()
 								.addComponent(panelInfoWindowsSoftware, javax.swing.GroupLayout.DEFAULT_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addGap(Globals.minHGapSize, Globals.minHGapSize, 5 * Globals.hGapSize)
 								.addComponent(panelInfoConfigWindowsSoftware, javax.swing.GroupLayout.DEFAULT_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-						.addComponent(panelRegisteredSoftware)
-						.addComponent(panelRegisteredSoftware, javax.swing.GroupLayout.DEFAULT_SIZE,
-								javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
-		layoutBottomPane.setVerticalGroup(
-				layoutBottomPane.createSequentialGroup()
-						.addContainerGap()
-						.addGroup(layoutBottomPane.createParallelGroup(GroupLayout.Alignment.LEADING)
-								.addComponent(panelInfoWindowsSoftware)
-								.addComponent(panelInfoConfigWindowsSoftware))
-						.addComponent(panelRegisteredSoftware, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE,
-								Short.MAX_VALUE)
-						.addContainerGap());
+						.addComponent(panelRegisteredSoftware).addComponent(panelRegisteredSoftware,
+								javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+								Short.MAX_VALUE));
+		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addContainerGap()
+				.addGroup(layoutBottomPane.createParallelGroup(GroupLayout.Alignment.LEADING)
+						.addComponent(panelInfoWindowsSoftware).addComponent(panelInfoConfigWindowsSoftware))
+				.addComponent(panelRegisteredSoftware, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addContainerGap());
 
 		splitPane.setTopComponent(topPane);
 		splitPane.setBottomComponent(bottomPane);
@@ -628,16 +588,13 @@ public class PanelAssignToLPools extends MultiTablePanel
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout((JPanel) this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(
-				layout.createSequentialGroup()
-						.addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin)
+				layout.createSequentialGroup().addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin)
 						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 								.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-						.addContainerGap()
-						.addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin));
+						.addContainerGap().addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin));
 
-		layout.setVerticalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
 	public void setDisplaySimilarExist(boolean b) {
@@ -656,13 +613,11 @@ public class PanelAssignToLPools extends MultiTablePanel
 	// implement ChengeListener
 	public void stateChanged(ChangeEvent e) {
 		logging.info(this, " stateChanged " + e);
-		logging.info(this, " stateChanged modelSWnames filterinfo " +
-				fSoftwarename2LicencePool.modelSWnames.getFilterInfo());
-		String resetToSWname = (String) panelRegisteredSoftware.getValueAt(
-				panelRegisteredSoftware.getSelectedRow(),
+		logging.info(this,
+				" stateChanged modelSWnames filterinfo " + fSoftwarename2LicencePool.modelSWnames.getFilterInfo());
+		String resetToSWname = (String) panelRegisteredSoftware.getValueAt(panelRegisteredSoftware.getSelectedRow(),
 				panelRegisteredSoftware.getTableModel().getColumnNames().indexOf(SWAuditEntry.NAME));
-		logging.info(this, " stateChanged modelSWnames swname  >>" + resetToSWname
-				+ "<<");
+		logging.info(this, " stateChanged modelSWnames swname  >>" + resetToSWname + "<<");
 		fSoftwarename2LicencePool.modelSWnames.requestReload();
 		fSoftwarename2LicencePool.modelSWnames.reset();
 		if (fSoftwarename2LicencePool.modelSWxLicencepool == null)

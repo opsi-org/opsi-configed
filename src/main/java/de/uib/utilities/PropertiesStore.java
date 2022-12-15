@@ -17,7 +17,7 @@ public class PropertiesStore
 {
 	File myStore;
 
-	protected final static String keySeparator = "=";
+	protected static final String keySeparator = "=";
 
 	private HashMap<String, String> internalStore;
 
@@ -48,11 +48,7 @@ public class PropertiesStore
 			logging.debug(this, "line: " + line);
 			String trimmed = line.trim();
 
-			if (trimmed.length() == 0
-					||
-					trimmed.charAt(0) == '#'
-					||
-					trimmed.charAt(0) == ';') {
+			if (trimmed.length() == 0 || trimmed.charAt(0) == '#' || trimmed.charAt(0) == ';') {
 				// continue
 			} else {
 				int posSeparator = line.indexOf(keySeparator);
@@ -120,9 +116,8 @@ public class PropertiesStore
 
 		if (comments != null)
 			outLines.add("# " + comments);
-		outLines.add("# " +
-				java.text.DateFormat.getDateTimeInstance(
-						java.text.DateFormat.LONG, java.text.DateFormat.LONG).format(new Date()));
+		outLines.add("# " + java.text.DateFormat
+				.getDateTimeInstance(java.text.DateFormat.LONG, java.text.DateFormat.LONG).format(new Date()));
 		outLines.addAll(formOutputLines());
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter(myStore));

@@ -8,21 +8,21 @@ import java.util.Vector;
 import de.uib.configed.Globals;
 
 public class ActionProgress {
-	public final static String KEY = "actionProgress";
+	public static final String KEY = "actionProgress";
 
 	// conflicting entries from several clients
-	public final static int CONFLICT = -4;
+	public static final int CONFLICT = -4;
 
 	// no valid entry from service
-	public final static int INVALID = -2;
+	public static final int INVALID = -2;
 
 	// product offers no entry
-	public final static int NOT_AVAILABLE = -6;
+	public static final int NOT_AVAILABLE = -6;
 
 	// valid service states
-	public final static int NONE = 0;
-	public final static int INSTALLING = 1;
-	public final static int CACHED = 2;
+	public static final int NONE = 0;
+	public static final int INSTALLING = 1;
+	public static final int CACHED = 2;
 
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
@@ -90,9 +90,7 @@ public class ActionProgress {
 		displayLabel2label.put("installing", "installing");
 		displayLabel2label.put("cached", "cached");
 
-		choiceLabels = new String[] {
-				label2displayLabel.get("none")
-		};
+		choiceLabels = new String[] { label2displayLabel.get("none") };
 
 	}
 
@@ -163,8 +161,7 @@ public class ActionProgress {
 
 	// getting instances
 	public static ActionProgress produceFromDisplayLabel(String display) {
-		return produceFromLabel(
-				displayLabel2label.get(display));
+		return produceFromLabel(displayLabel2label.get(display));
 	}
 
 	public static ActionProgress produceFromLabel(String label) {

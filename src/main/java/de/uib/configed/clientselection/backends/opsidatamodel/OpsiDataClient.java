@@ -15,9 +15,9 @@ import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.logging.logging;
 
 public class OpsiDataClient implements Client {
-	public final static String HOSTINFO_MAP = "HostMap";
-	public final static String SOFTWARE_MAP = "SoftwareMap";
-	public final static String SWAUDIT_MAP = "SwAuditMap";
+	public static final String HOSTINFO_MAP = "HostMap";
+	public static final String SOFTWARE_MAP = "SoftwareMap";
+	public static final String SWAUDIT_MAP = "SwAuditMap";
 
 	private String hostId;
 	private Map infoMap;
@@ -55,8 +55,8 @@ public class OpsiDataClient implements Client {
 	}
 
 	/**
-	 * Set the existing opsi client groups with the client being a member of it or a
-	 * subgroup of it
+	 * Set the existing opsi client groups with the client being a member of it
+	 * or a subgroup of it
 	 */
 	public void setSuperGroups(Set<String> groups) {
 		superGroupsSet = groups;
@@ -67,8 +67,7 @@ public class OpsiDataClient implements Client {
 		this.productList = productList;
 
 		for (Object element : productList) {
-			productNames.add(
-					(String) ((Map) element).get("productId"));
+			productNames.add((String) ((Map) element).get("productId"));
 		}
 	}
 

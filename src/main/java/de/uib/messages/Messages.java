@@ -29,8 +29,8 @@ public class Messages {
 	static java.util.Map<String, String> localeInfo;
 	static String selectedLocaleString;
 	static Locale myLocale = null;
-	static public ResourceBundle messages;
-	static public ResourceBundle messagesEN;
+	public static ResourceBundle messages;
+	public static ResourceBundle messagesEN;
 	static List<String> myLocaleCharacteristics;
 	static List<String> myLocaleCharacteristicsEN;
 
@@ -101,17 +101,17 @@ public class Messages {
 		if (UTF8_HACK == null) {
 			String javaVersionOnlyNumbers0 = System.getProperty("java.version");
 			// test String javaVersionOnlyNumbers0 = "14-ea";
-			logging.writeToConsole("java version " + javaVersionOnlyNumbers0);
+			logging.debug("java version " + javaVersionOnlyNumbers0);
 			String javaVersionOnlyNumbers = javaVersionOnlyNumbers0.substring(0, lastIntIndex(javaVersionOnlyNumbers0));
 
 			if (javaVersionOnlyNumbers.length() < javaVersionOnlyNumbers0.length())
-				logging.writeToConsole("shortened to " + javaVersionOnlyNumbers);
+				logging.debug("shortened to " + javaVersionOnlyNumbers);
 
 			Integer differenceToJava9 = de.uib.utilities.Globals.compareDottedNumberStrings("9",
 					javaVersionOnlyNumbers);
-			logging.writeToConsole(" version difference to java 9 is: " + differenceToJava9);
+			logging.debug(" version difference to java 9 is: " + differenceToJava9);
 			UTF8_HACK = (differenceToJava9 > 0);
-			logging.writeToConsole(" we will use the UTF8 hack " + UTF8_HACK);
+			logging.debug(" we will use the UTF8 hack " + UTF8_HACK);
 		}
 	}
 
@@ -313,7 +313,6 @@ public class Messages {
 	 * catch(Exception ex)
 	 * {
 	 * logging.warning("Messages:, getLocales error: " + ex);
-	 * logging.logTrace(ex);
 	 * }
 	 * 
 	 * 

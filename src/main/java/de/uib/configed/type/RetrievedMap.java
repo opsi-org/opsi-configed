@@ -11,7 +11,7 @@ public class RetrievedMap extends HashMap<String, Object> {
 	public RetrievedMap(Map<String, Object> retrieved) {
 		super();
 		this.retrieved = retrieved;
-		classnames = new HashMap<String, String>();
+		classnames = new HashMap<>();
 		build();
 	}
 
@@ -19,9 +19,9 @@ public class RetrievedMap extends HashMap<String, Object> {
 		if (retrieved == null)
 			return;
 
-		Iterator iter = retrieved.keySet().iterator();
+		Iterator<String> iter = retrieved.keySet().iterator();
 		while (iter.hasNext()) {
-			String key = (String) iter.next();
+			String key = iter.next();
 			Object value = retrieved.get(key);
 			classnames.put(key, value.getClass().getName());
 			put(key, value);

@@ -1,12 +1,12 @@
 package de.uib.configed.type;
 
 public class Object2GroupEntry {
-	public final static String TYPE_NAME = "ObjectToGroup";
-	public final static String GROUP_TYPE_KEY = "groupType";
-	public final static String GROUP_TYPE_HOSTGROUP = "HostGroup";
-	public final static String GROUP_TYPE_PRODUCTGROUP = "ProductGroup";
-	public final static String GROUP_ID_KEY = "groupId";
-	public final static String MEMBER_KEY = "objectId";
+	public static final String TYPE_NAME = "ObjectToGroup";
+	public static final String GROUP_TYPE_KEY = "groupType";
+	public static final String GROUP_TYPE_HOSTGROUP = "HostGroup";
+	public static final String GROUP_TYPE_PRODUCTGROUP = "ProductGroup";
+	public static final String GROUP_ID_KEY = "groupId";
+	public static final String MEMBER_KEY = "objectId";
 
 	protected String groupType;
 	protected String groupId;

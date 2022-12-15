@@ -5,9 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import de.uib.configed.configed;
 import de.uib.configed.dashboard.Helper;
+import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 
@@ -29,9 +31,12 @@ public class ProductData {
 	private static String selectedDepot;
 	private static List<String> depots = new ArrayList<>(persist.getHostInfoCollections().getAllDepots().keySet());
 
+	private ProductData() {
+	}
+
 	public static List<String> getProducts() {
 		if (products.isEmpty() || !products.containsKey(selectedDepot)) {
-			return new ArrayList<String>();
+			return new ArrayList<>();
 		}
 
 		return new ArrayList<>(products.get(selectedDepot));
@@ -59,7 +64,7 @@ public class ProductData {
 
 	public static List<String> getNetbootProducts() {
 		if (netbootProducts.isEmpty() || !netbootProducts.containsKey(selectedDepot)) {
-			return new ArrayList<String>();
+			return new ArrayList<>();
 		}
 
 		return new ArrayList<>(netbootProducts.get(selectedDepot));
@@ -81,7 +86,7 @@ public class ProductData {
 
 	public static List<String> getLocalbootProducts() {
 		if (localbootProducts.isEmpty() || !localbootProducts.containsKey(selectedDepot)) {
-			return new ArrayList<String>();
+			return new ArrayList<>();
 		}
 
 		return new ArrayList<>(localbootProducts.get(selectedDepot));
@@ -126,9 +131,7 @@ public class ProductData {
 	}
 
 	private static void retrieveProductState() {
-		if (!installedProducts.isEmpty() &&
-				!failedProducts.isEmpty() &&
-				!unusedProducts.isEmpty()) {
+		if (!installedProducts.isEmpty() && !failedProducts.isEmpty() && !unusedProducts.isEmpty()) {
 			return;
 		}
 
@@ -142,9 +145,9 @@ public class ProductData {
 			Map<Product, Product> failedProductsList = new HashMap<>();
 			Map<Product, Product> unusedProductsList = new HashMap<>();
 
-			Map<String, Boolean> clientsMap = persist.getHostInfoCollections()
-					.getPcListForDepots(new String[] { depot }, null);
-			String[] clientIds = clientsMap.keySet().toArray(new String[clientsMap.size()]);
+			List<String> clientsMap = persist.getHostInfoCollections().getMapOfAllPCInfoMaps().values().stream()
+					.filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName).collect(Collectors.toList());
+			String[] clientIds = clientsMap.toArray(new String[clientsMap.size()]);
 			Map<String, java.util.List<Map<String, String>>> productsStatesAndActions = persist
 					.getMapOfProductStatesAndActions(clientIds);
 
@@ -232,8 +235,8 @@ public class ProductData {
 			} else {
 				allProducts.forEach(productId -> {
 					if (!installedProductsList.keySet().stream().anyMatch(p -> p.getId().equals(productId))
-							&& !failedProductsList.keySet().stream().anyMatch(p -> p.getId().equals(productId)) &&
-							!unusedProductsList.keySet().stream().anyMatch(p -> p.getId().equals(productId))) {
+							&& !failedProductsList.keySet().stream().anyMatch(p -> p.getId().equals(productId))
+							&& !unusedProductsList.keySet().stream().anyMatch(p -> p.getId().equals(productId))) {
 						Product product = new Product();
 						product.setId(productId);
 						product.setDepot(depot);
@@ -276,10 +279,8 @@ public class ProductData {
 	}
 
 	private static void retrieveInstalledOS() {
-		if (totalOSInstallations != 0 &&
-				totalLinuxInstallations != 0 &&
-				totalWindowsInstallations != 0 &&
-				totalMacOSInstallations != 0) {
+		if (totalOSInstallations != 0 && totalLinuxInstallations != 0 && totalWindowsInstallations != 0
+				&& totalMacOSInstallations != 0) {
 			return;
 		}
 
@@ -307,11 +308,16 @@ public class ProductData {
 	public static void retrieveData(String depot) {
 		selectedDepot = depot;
 
+		System.out.println("Retrieving localboot products");
 		retrieveLocalbootProducts();
+		System.out.println("Retrieving netboot products");
 		retrieveNetbootProducts();
+		System.out.println("Retrieving products");
 		retrieveProducts();
 
+		System.out.println("Retrieving installed products");
 		retrieveInstalledOS();
+		System.out.println("Retrieving product state");
 		retrieveProductState();
 	}
 }

@@ -244,6 +244,7 @@ public class ControlDash {
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
 						() -> (Map) persist.getInstalledSoftwareName2SWinfo())),
 				0, new int[] {}, (TableModelListener) null, updateCollection) {
+
 			@Override
 			public void produceRows() {
 				super.produceRows();

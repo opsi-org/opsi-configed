@@ -76,15 +76,13 @@ import de.uib.utilities.ComboBoxModeller;
 import de.uib.utilities.logging.logging;
 
 /**
- * Defining the TableModel for the product table for a specific client.
- * Since we here have the required data the class implements the ComboBoxModeler
- * for getting cell editors.
+ * Defining the TableModel for the product table for a specific client. Since we
+ * here have the required data the class implements the ComboBoxModeler for
+ * getting cell editors.
  */
-public class InstallationStateTableModel
-		extends javax.swing.table.AbstractTableModel
+public class InstallationStateTableModel extends javax.swing.table.AbstractTableModel
 
-		implements ComboBoxModeller,
-		IFInstallationStateTableModel {
+		implements ComboBoxModeller, IFInstallationStateTableModel {
 
 	public static final String EMPTYFIELD = "_";
 	// public static final String NOT_AVAILABLEstring = "--";
@@ -144,8 +142,8 @@ public class InstallationStateTableModel
 	protected Map<String, Map<String, Map<String, String>>> allClientsProductStates; // (clientId -> (productId ->
 																						// (product state key -> product
 																						// state value)))
-	// final protected Map<String, java.util.List<Map<String, String>>>
-	// allClientsProductlistsSaved;//clientId -> (productrows)
+																						// protected final Map<String, java.util.List<Map<String, String>>>
+																						// allClientsProductlistsSaved;//clientId -> (productrows)
 
 	protected PersistenceController persist;
 	protected Map<String, Map<String, Map<String, String>>> collectChangedStates;
@@ -233,12 +231,10 @@ public class InstallationStateTableModel
 	}
 
 	public InstallationStateTableModel(String[] selectedClients, ConfigedMain main,
-			Map<String, Map<String, Map<String, String>>> collectChangedStates,
-			List<String> listOfInstallableProducts,
+			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
 			Map<String, java.util.List<Map<String, String>>> statesAndActions,
 			Map<String, java.util.List<String>> possibleActions, // product-->possibleActions
-			Map<String, Map<String, Object>> productGlobalInfos,
-			List<String> displayColumns) {
+			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
 		logging.info(this, "creating an InstallationStateTableModel ");
 		if (statesAndActions == null)
 			logging.info(this, " statesAndActions null ");
@@ -388,13 +384,11 @@ public class InstallationStateTableModel
 					// clientId + ", stateAndAction " + stateAndAction);
 
 					if (colKey == ProductState.KEY_actionRequest) {
-						logging.debug(this, " ------------before   mixtovisualstate "
-								+ "product " + productId + " value " + stateAndAction.get(colKey));
+						logging.debug(this, " ------------before   mixtovisualstate " + "product " + productId
+								+ " value " + stateAndAction.get(colKey));
 					}
 
-					mixToVisualState(colKey, combinedVisualValues.get(colKey),
-							productId,
-							stateAndAction.get(colKey));
+					mixToVisualState(colKey, combinedVisualValues.get(colKey), productId, stateAndAction.get(colKey));
 					// logging.info(this, "produceVisualStates, clientId " + clientId + ",
 					// lastStateChange " + stateAndAction.get(ProductState.KEY_lastStateChange));
 					// logging.info(this, "produceVisualStates, clientId " + clientId + ",
@@ -457,13 +451,10 @@ public class InstallationStateTableModel
 					while (iter.hasNext()) {
 						String key = (String) iter.next();
 
-						if (key == ProductState.KEY_productPriority
-								||
-								key == ProductState.KEY_actionSequence) {
+						if (key == ProductState.KEY_productPriority || key == ProductState.KEY_actionSequence) {
 							mixToVisualState(key, combinedVisualValues.get(key), productId, priority);
 						} else {
-							mixToVisualState(key, combinedVisualValues.get(key),
-									productId,
+							mixToVisualState(key, combinedVisualValues.get(key), productId,
 									ProductState.getDEFAULT().get(key));
 						}
 					}
@@ -739,8 +730,7 @@ public class InstallationStateTableModel
 							actualProduct, existingRequest, state);
 					new Thread() {
 						public void run() {
-							javax.swing.JOptionPane.showMessageDialog(de.uib.configed.Globals.mainFrame,
-									infoOfChange,
+							javax.swing.JOptionPane.showMessageDialog(de.uib.configed.Globals.mainFrame, infoOfChange,
 									configed.getResourceValue(
 											"InstallationStateTableModel.contradictingProductRequirements.title"),
 									javax.swing.JOptionPane.WARNING_MESSAGE);
@@ -761,16 +751,15 @@ public class InstallationStateTableModel
 
 					final String errorInfo = String.format(
 							configed.getResourceValue("InstallationStateTableModel.contradictingProductRequirements1"),
-							actualProduct, product, state) +
-							String.format(
+							actualProduct, product, state)
+							+ String.format(
 									configed.getResourceValue(
 											"InstallationStateTableModel.contradictingProductRequirements2"),
 									existingRequest);
 
 					new Thread() {
 						public void run() {
-							javax.swing.JOptionPane.showMessageDialog(de.uib.configed.Globals.mainFrame,
-									errorInfo,
+							javax.swing.JOptionPane.showMessageDialog(de.uib.configed.Globals.mainFrame, errorInfo,
 									configed.getResourceValue(
 											"InstallationStateTableModel.contradictingProductRequirements.title"),
 									javax.swing.JOptionPane.WARNING_MESSAGE);
@@ -787,8 +776,7 @@ public class InstallationStateTableModel
 		// ", stateType " + stateType + ", state " + state);
 
 		logging.info(this, "checkForContradictingAssignments === onGoingCollectiveChangeEventCount: product2request "
-				+ onGoingCollectiveChangeEventCount + ": "
-				+ product2request);
+				+ onGoingCollectiveChangeEventCount + ": " + product2request);
 	}
 
 	private void setChangedState(String clientId, String product, String stateType, String state) {
@@ -1012,11 +1000,9 @@ public class InstallationStateTableModel
 		// show the new settings for all products after recursion
 
 		for (String prod : product2setOfClientsWithNewAction.keySet()) {
-			logging.debug(this,
-					"collectiveChangeActionRequest for product  " + prod + " changed product for client number : "
-							+ product2setOfClientsWithNewAction.get(prod).size());
-			logging.debug(this, "collectiveChangeActionRequest we have selected clients  "
-					+ selectedClients.length);
+			logging.debug(this, "collectiveChangeActionRequest for product  " + prod
+					+ " changed product for client number : " + product2setOfClientsWithNewAction.get(prod).size());
+			logging.debug(this, "collectiveChangeActionRequest we have selected clients  " + selectedClients.length);
 
 			// logging.info(this, "collectiveChangeActionRequest, set value valid if set for
 			// all clients " + ar + " for " + prod + " instead of " +
@@ -1447,7 +1433,7 @@ public class InstallationStateTableModel
 
 				actionsForProduct = actionList.toArray();
 
-				logging.debugOut(logging.LEVEL_DONT_SHOW_IT, " possible actions as array  " + actionsForProduct);
+				logging.debug("Possible actions as array  " + actionsForProduct);
 			}
 
 			if (actionsForProduct == null)
@@ -1606,95 +1592,95 @@ public class InstallationStateTableModel
 		// --------- corresponding preparedCol " + col );
 
 		switch (col) {
-			case 0:
-				result = actualProduct;
-				break;
+		case 0:
+			result = actualProduct;
+			break;
 
-			case 1:
-				result = globalProductInfos.get(actualProduct).get(ProductState.KEY_productName);
-				// combinedVisualValues.get(ProductState.KEY_productName).get(actualProduct);
-				// there we have not got the value
-				break;
+		case 1:
+			result = globalProductInfos.get(actualProduct).get(ProductState.KEY_productName);
+			// combinedVisualValues.get(ProductState.KEY_productName).get(actualProduct);
+			// there we have not got the value
+			break;
 
-			case 2:
-				result = combinedVisualValues.get(ProductState.KEY_targetConfiguration).get(actualProduct);
-				break;
+		case 2:
+			result = combinedVisualValues.get(ProductState.KEY_targetConfiguration).get(actualProduct);
+			break;
 
-			case 3:
-				// result = "" + states.get(actualProduct);
-				InstallationStatus is = InstallationStatus.produceFromLabel(
-						combinedVisualValues.get(ProductState.KEY_installationStatus).get(actualProduct));
-				result = InstallationStatus.getDisplayLabel(is.getVal());
-				break;
+		case 3:
+			// result = "" + states.get(actualProduct);
+			InstallationStatus is = InstallationStatus
+					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_installationStatus).get(actualProduct));
+			result = InstallationStatus.getDisplayLabel(is.getVal());
+			break;
 
-			case 4:
-				result = combinedVisualValues.get(ProductState.KEY_installationInfo).get(actualProduct);
-				break;
+		case 4:
+			result = combinedVisualValues.get(ProductState.KEY_installationInfo).get(actualProduct);
+			break;
 
-			case 5:
-				result = combinedVisualValues.get(ProductState.KEY_actionProgress).get(actualProduct);
-				break;
+		case 5:
+			result = combinedVisualValues.get(ProductState.KEY_actionProgress).get(actualProduct);
+			break;
 
-			case 6:
-				result = combinedVisualValues.get(ProductState.KEY_actionResult).get(actualProduct);
-				break;
+		case 6:
+			result = combinedVisualValues.get(ProductState.KEY_actionResult).get(actualProduct);
+			break;
 
-			case 7:
-				result = combinedVisualValues.get(ProductState.KEY_lastAction).get(actualProduct);
-				break;
+		case 7:
+			result = combinedVisualValues.get(ProductState.KEY_lastAction).get(actualProduct);
+			break;
 
-			case 8:
-				// result = (String) actions.get(actualProduct) ;
-				// if (actualProduct.equals("firefox"))
-				// logging.info(this, "value for firefox is " +
-				// combinedVisualValues.get(ProductState.KEY_actionRequest).get(actualProduct));
-				ActionRequest ar = ActionRequest.produceFromLabel(
-						combinedVisualValues.get(ProductState.KEY_actionRequest).get(actualProduct));
-				result = ActionRequest.getDisplayLabel(ar.getVal());
+		case 8:
+			// result = (String) actions.get(actualProduct) ;
+			// if (actualProduct.equals("firefox"))
+			// logging.info(this, "value for firefox is " +
+			// combinedVisualValues.get(ProductState.KEY_actionRequest).get(actualProduct));
+			ActionRequest ar = ActionRequest
+					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_actionRequest).get(actualProduct));
+			result = ActionRequest.getDisplayLabel(ar.getVal());
 
-				// logging.debug(this," --------- row, col " + row + ", " + col + " result " +
-				// result);
-				break;
+			// logging.debug(this," --------- row, col " + row + ", " + col + " result " +
+			// result);
+			break;
 
-			case 9:
-				result = combinedVisualValues.get(ProductState.KEY_productPriority).get(actualProduct);
-				break;
+		case 9:
+			result = combinedVisualValues.get(ProductState.KEY_productPriority).get(actualProduct);
+			break;
 
-			case 10:
-				result = combinedVisualValues.get(ProductState.KEY_actionSequence).get(actualProduct);
-				// logging.info(this, " actualProduct " + actualProduct + " , actionSequence " +
-				// result);
-				break;
+		case 10:
+			result = combinedVisualValues.get(ProductState.KEY_actionSequence).get(actualProduct);
+			// logging.info(this, " actualProduct " + actualProduct + " , actionSequence " +
+			// result);
+			break;
 
-			case 11:
-				result = productNamesInDeliveryOrder.indexOf(actualProduct); // ProductState.KEY_position
-				// logging.info(this, " actualProduct " + actualProduct + " , position " +
-				// result);
-				break;
+		case 11:
+			result = productNamesInDeliveryOrder.indexOf(actualProduct); // ProductState.KEY_position
+			// logging.info(this, " actualProduct " + actualProduct + " , position " +
+			// result);
+			break;
 
-			case 12:
-				String serverProductVersion = (String) getGlobalProductInfos().get(actualProduct)
-						.get(de.uib.opsidatamodel.productstate.ProductState.KEY_versionInfo);
-				result = combinedVisualValues.get(ProductState.KEY_versionInfo).get(actualProduct);
-				if (!(result == null) && !(result.equals(""))) {
-					if (!(serverProductVersion == null) && !(serverProductVersion.equals(result)))
-						result = unequalAddstring + result;
-				}
-				break;
+		case 12:
+			String serverProductVersion = (String) getGlobalProductInfos().get(actualProduct)
+					.get(de.uib.opsidatamodel.productstate.ProductState.KEY_versionInfo);
+			result = combinedVisualValues.get(ProductState.KEY_versionInfo).get(actualProduct);
+			if (!(result == null) && !(result.equals(""))) {
+				if (!(serverProductVersion == null) && !(serverProductVersion.equals(result)))
+					result = unequalAddstring + result;
+			}
+			break;
 
-			case 13:
-				result = combinedVisualValues.get(ProductState.KEY_productVersion).get(actualProduct);
-				break;
+		case 13:
+			result = combinedVisualValues.get(ProductState.KEY_productVersion).get(actualProduct);
+			break;
 
-			case 14:
-				result = combinedVisualValues.get(ProductState.KEY_packageVersion).get(actualProduct);
-				break;
+		case 14:
+			result = combinedVisualValues.get(ProductState.KEY_packageVersion).get(actualProduct);
+			break;
 
-			case 15:
-				result = combinedVisualValues.get(ProductState.KEY_lastStateChange).get(actualProduct);
-				// logging.debug(this, " -------(lastStateChange)-- row, col " + row + ", " +
-				// col + " result " + result);
-				break;
+		case 15:
+			result = combinedVisualValues.get(ProductState.KEY_lastStateChange).get(actualProduct);
+			// logging.debug(this, " -------(lastStateChange)-- row, col " + row + ", " +
+			// col + " result " + result);
+			break;
 
 		}
 
@@ -1754,10 +1740,8 @@ public class InstallationStateTableModel
 		if (value != null)
 			cl = value.getClass().toString();
 
-		logging.debug(this, "actual product " + actualProduct + ", setting value at " + row + "," + col
-				+ " to " + value
-				+ " (an instance of "
-				+ cl + ")");
+		logging.debug(this, "actual product " + actualProduct + ", setting value at " + row + "," + col + " to " + value
+				+ " (an instance of " + cl + ")");
 
 		infoIfNoClientsSelected();
 
@@ -1788,8 +1772,7 @@ public class InstallationStateTableModel
 				finishCollectiveChange();
 			}
 
-			else if (indexPreparedColumns[col] == preparedColumns.indexOf(
-					ProductState.KEY_installationInfo)) {
+			else if (indexPreparedColumns[col] == preparedColumns.indexOf(ProductState.KEY_installationInfo)) {
 				if (value.equals(InstallationInfo.NONEdisplayString))
 					value = InstallationInfo.NONEstring;
 
@@ -1806,8 +1789,7 @@ public class InstallationStateTableModel
 	}
 
 	/**
-	 * sets data to the original values
-	 * clears update collection
+	 * sets data to the original values clears update collection
 	 */
 	// it would require the existence of a complete deep copy of the original loaded
 	// data
