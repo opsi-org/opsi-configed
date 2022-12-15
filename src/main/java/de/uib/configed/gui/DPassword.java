@@ -18,7 +18,6 @@ import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -171,7 +170,6 @@ public class DPassword extends JDialog // implements Runnable
 			 */
 
 			pack();
-			setAlwaysOnTop(true);
 
 			setLocationRelativeTo(DPassword.this);
 		}
@@ -181,7 +179,6 @@ public class DPassword extends JDialog // implements Runnable
 		public void actAfterWaiting() {
 			// setCursor(saveCursor);
 			waitCursor.stop();
-			setVisible(false);
 
 			if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED) {
 				// we can finish
@@ -194,9 +191,7 @@ public class DPassword extends JDialog // implements Runnable
 				main.setAppTitle(messageFormatMainTitle
 						.format(new Object[] { Globals.APPNAME, fieldHost.getSelectedItem(), fieldUser.getText() }));
 				main.loadDataAndGo();
-			} else {
-				logging.devel(this, "asdf");
-				setVisible(true);
+			} else { // return to Passwordfield
 				if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
 					// return to password dialog
 					logging.info(this, "interrupted");
@@ -226,8 +221,11 @@ public class DPassword extends JDialog // implements Runnable
 					fieldHost.requestFocus();
 				}
 
-				activate();
+				setActivated(true);
 			}
+
+			// Deactivate WaitInfo, because we finished waiting
+			setVisible(false);
 		}
 
 		public JProgressBar getProgressBar() {
@@ -253,13 +251,11 @@ public class DPassword extends JDialog // implements Runnable
 		public String setLabellingStrategy(long millisLevel) {
 			return waitLabel.getText();
 		}
-
 	}
 
-	WaitCursor waitCursor;
+	private WaitCursor waitCursor;
 	boolean connected = false;
 
-	WaitInfo waitInfo;
 	de.uib.utilities.thread.WaitingWorker waitingTask;
 
 	JPanel panel;
@@ -330,21 +326,13 @@ public class DPassword extends JDialog // implements Runnable
 		passwordField.setText(password);
 	}
 
-	public DPassword(Frame frame, String title, boolean modal, ConfigedMain main) {
-		super(frame, title, modal);
+	public DPassword(ConfigedMain main) {
+		super();
 		this.main = main;
 
 		guiInit();
 		pack();
 		setVisible(true);
-	}
-
-	public DPassword(ConfigedMain main) {
-		this(null, "", false, main);
-	}
-
-	public DPassword(Frame frame, ConfigedMain main) {
-		this(frame, "", false, main);
 	}
 
 	static void addComponent(Container cont, GridBagLayout gbl, Component c, int x, int y, int width, int height,
@@ -361,26 +349,10 @@ public class DPassword extends JDialog // implements Runnable
 		cont.add(c);
 	}
 
-	/*
-	 * public void stopWaitInfo()
-	 * {
-	 * if (waitInfo != null)
-	 * {
-	 * waitInfo.setVisible(false);
-	 * logging.info(this, "set waitInfo visible false");
-	 * //if (waitInfo != null) waitInfo.dispose();
-	 * //waitInfo = null;
-	 * }
-	 * }
-	 */
-
-	public void activate() {
+	public void setActivated(boolean active) {
 		logging.info(this, "------------ activate");
 
-		// stopWaitInfo();
-
-		panel.setEnabled(true);
-		jButtonCommit.setEnabled(true);
+		setEnabled(active);
 	}
 
 	void guiInit() {
@@ -392,10 +364,7 @@ public class DPassword extends JDialog // implements Runnable
 		titledBorder1 = new TitledBorder("");
 
 		panel = new JPanel();
-		panel.setEnabled(false);
-		// panel.setMinimumSize(new Dimension(450, 250));
-		// panel.setPreferredSize(new Dimension(450, 250));
-		// panel.setToolTipText("");
+		//panel.setEnabled(false);
 
 		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 		panel.setBorder(padding);
@@ -635,7 +604,7 @@ public class DPassword extends JDialog // implements Runnable
 		String strOS = System.getProperty("os.name");
 		String osVersion = System.getProperty("os.version");
 		logging.notice(" OS " + strOS + "  Version " + osVersion);
-		String host = TESTSERVER; // "";
+		String host = TESTSERVER; // ""
 		/*
 		 * if (strOS.startsWith("Windows") && (osVersion.compareToIgnoreCase("4.0") >=
 		 * 0))
@@ -727,7 +696,8 @@ public class DPassword extends JDialog // implements Runnable
 
 	public void tryConnecting() {
 		logging.info(this, "started  tryConnecting");
-		jButtonCommit.setEnabled(false);
+		setActivated(false);
+		//jButtonCommit.setEnabled(false);
 
 		// saveCursor = getCursor();
 		// setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -749,15 +719,9 @@ public class DPassword extends JDialog // implements Runnable
 			return;
 		}
 
-		if (waitInfo != null) {
-			// klll old waitInfo
-			waitInfo.dispose();
-			waitInfo = null;
-		}
-
-		// final WaitInfoString waitInfoString = new WaitInfoString();
-
-		waitInfo = new WaitInfo(TIMEOUT_MS);
+		WaitInfo waitInfo = new WaitInfo(TIMEOUT_MS);
+		setActivated(false);
+		waitInfo.setAlwaysOnTop(true);
 		waitInfo.setVisible(true);
 
 		logging.info(this, "we are in EventDispatchThread " + SwingUtilities.isEventDispatchThread());
@@ -766,9 +730,9 @@ public class DPassword extends JDialog // implements Runnable
 		logging.info(this, "is local app  " + localApp);
 		if (localApp) {
 
-			waitInfo.setAlwaysOnTop(true);
+			//waitInfo.setAlwaysOnTop(true);
 			logging.info(this, "start WaitingWorker");
-			waitingTask = new de.uib.utilities.thread.WaitingWorker((de.uib.utilities.thread.WaitingSleeper) waitInfo);
+			waitingTask = new de.uib.utilities.thread.WaitingWorker(waitInfo);
 			// waitingTask.addPropertyChangeListener(this);
 			waitingTask.execute();
 

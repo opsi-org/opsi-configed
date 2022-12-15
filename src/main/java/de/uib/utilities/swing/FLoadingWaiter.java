@@ -71,6 +71,7 @@ public class FLoadingWaiter extends JFrame
 	public FLoadingWaiter(Component owner, String title) {
 		this(title);
 		setLocationRelativeTo(owner);
+		setAlwaysOnTop(true);
 	}
 
 	public FLoadingWaiter(String title, String startMessage) {

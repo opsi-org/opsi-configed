@@ -143,13 +143,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	protected int dividerLocationCentralPane = 300;
 	protected int minHSizeTreePanel = 150;
 
-	public static final int fwidth = 800;
-	public static final int fheight = 600;
+	public static final int F_WIDTH = 800;
+	public static final int F_HEIGHT = 600;
 
-	private static final int fwidth_righthanded = 200;// was fwidth - fwidth_lefthanded;
+	private static final int F_WIDTH_RIGHTHANDED = 200;// was fwidth - fwidth_lefthanded;
 
-	private static final int dividerLocationClientTreeMultidepot = 200;
-	private static final int dividerLocationClientTreeSingledepot = 50;
+	private static final int DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT = 200;
+	private static final int DIVIDER_LOCATION_CLIENT_TREE_SIGLE_DEPOT = 50;
 
 	// final int widthColumnServer = 110; //130;
 
@@ -635,8 +635,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		// clientPane.removeComponentListener(clientPaneComponentListener);
 		// panel_Clientselection.setDividerLocation(splitterPanelClientSelection);
 
-		moveDivider1(panel_Clientselection, clientPane, (int) (fwidth_righthanded * 0.2), 200,
-				(int) (fwidth_righthanded * 1.5));
+		moveDivider1(panel_Clientselection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
+				(int) (F_WIDTH_RIGHTHANDED * 1.5));
 
 		// clientPane.addComponentListener(clientPaneComponentListener);
 
@@ -733,8 +733,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			// clientPane.removeComponentListener(clientPaneComponentListener);
 			// panel_Clientselection.setDividerLocation(splitterPanelClientSelection);
 
-			moveDivider1(panel_Clientselection, clientPane, (int) (fwidth_righthanded * 0.2), 200,
-					(int) (fwidth_righthanded * 1.5));
+			moveDivider1(panel_Clientselection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
+					(int) (F_WIDTH_RIGHTHANDED * 1.5));
 
 			// clientPane.addComponentListener(clientPaneComponentListener);
 
@@ -2116,7 +2116,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		 * clientPane.addComponentListener( clientPaneComponentListener );
 		 */
 
-		clientPane.setPreferredSize(new Dimension(fwidth_righthanded, fheight + 40));
+		clientPane.setPreferredSize(new Dimension(F_WIDTH_RIGHTHANDED, F_HEIGHT + 40));
 		clientPane.setBorder(Globals.createPanelBorder());
 		// new LineBorder(Globals.backBlue, 2, true));
 		csClientPane = new Containership(clientPane);
@@ -2521,9 +2521,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		logging.info(this, "multidepot " + multidepot);
 		if (multidepot)
-			splitpaneClientSelection.setDividerLocation(dividerLocationClientTreeMultidepot);
+			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT);
 		else
-			splitpaneClientSelection.setDividerLocation(dividerLocationClientTreeSingledepot);
+			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_SIGLE_DEPOT);
 
 		// logging.info(this, "treeClients.getMaximumSize() " +
 		// treeClients.getMaximumSize());
@@ -3111,8 +3111,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		statusPane.setBackground(Globals.backLightBlue);
 		// clientPane.setBackground(Globals.backLightBlue);
 
-		setSize(fwidth, fheight);
-		glass.setSize(fwidth, fheight);
+		setSize(F_WIDTH, F_HEIGHT);
+		glass.setSize(F_WIDTH, F_HEIGHT);
 		glass.setVisible(true);
 		glass.setOpaque(true);
 		setGlassPane(glass);
@@ -3338,7 +3338,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		fList.init();
 
 		fList.setLocation(this.getX() + 40, this.getY() + 40);
-		fList.setSize(fwidth / 2, this.getHeight());
+		fList.setSize(F_WIDTH / 2, this.getHeight());
 
 		fList.setModal(true);
 		fList.setVisible(true);
@@ -3750,8 +3750,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		if (savingFramePosition) {
 			configed.savedStates.saveMainLocationX.serialize(e.getComponent().getBounds().x, 0);
 			configed.savedStates.saveMainLocationY.serialize(e.getComponent().getBounds().y, 0);
-			configed.savedStates.saveMainLocationWidth.serialize(e.getComponent().getBounds().width, fwidth);
-			configed.savedStates.saveMainLocationHeight.serialize(e.getComponent().getBounds().height, fheight);
+			configed.savedStates.saveMainLocationWidth.serialize(e.getComponent().getBounds().width, F_WIDTH);
+			configed.savedStates.saveMainLocationHeight.serialize(e.getComponent().getBounds().height, F_HEIGHT);
 		}
 
 	}

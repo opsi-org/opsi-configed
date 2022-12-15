@@ -1738,8 +1738,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice[] gs = ge.getScreenDevices();
 
-		int wTaken = MainFrame.fwidth;
-		int hTaken = MainFrame.fheight;
+		int wTaken = MainFrame.F_WIDTH;
+		int hTaken = MainFrame.F_HEIGHT;
 
 		for (int i = 0; i < gs.length; i++) {
 			DisplayMode dm = gs[i].getDisplayMode();
@@ -1757,11 +1757,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		logging.info(this, "locateAndDisplay, startSizing with screen width, height " + wTaken + ", " + hTaken);
 
-		int wDiff = wTaken - 30 - MainFrame.fwidth;
+		int wDiff = wTaken - 30 - MainFrame.F_WIDTH;
 		if (wDiff < 0) {
 			wDiff = 0;
 		}
-		int hDiff = hTaken - 30 - MainFrame.fheight;
+		int hDiff = hTaken - 30 - MainFrame.F_HEIGHT;
 		if (hDiff < 0) {
 			hDiff = 0;
 		}
@@ -1769,8 +1769,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// take 2/3 from space > MainFrame.fwidth, MainFrame.fheight
 		// after giving some pixels for taskbars
 
-		final int width = MainFrame.fwidth + (wDiff * 2) / 3;
-		final int height = MainFrame.fheight + (hDiff * 2) / 3;
+		final int width = MainFrame.F_WIDTH + (wDiff * 2) / 3;
+		final int height = MainFrame.F_HEIGHT + (hDiff * 2) / 3;
 
 		// mainFrame.startSizing( dim.width, dim.height );
 
@@ -2051,10 +2051,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (persist == null || persist.getConnectionState().getState() != ConnectionState.CONNECTED) {
 			logging.info(this, "become interactive");
-			dpass.setVisible(true);
-			dpass.activate();
-			dpass.setModal(true);
+			//dpass.activate();
 			dpass.setAlwaysOnTop(true);
+			dpass.setVisible(true);
 			// dpass will give back control and call loadDataAndGo
 		}
 
@@ -6582,7 +6581,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		dialogRemoteControl.resetValue();
 
 		dialogRemoteControl.setLocation((int) mainFrame.getX() + 40, (int) mainFrame.getY() + 40);
-		dialogRemoteControl.setSize(MainFrame.fwidth, mainFrame.getHeight() / 2);
+		dialogRemoteControl.setSize(MainFrame.F_WIDTH, mainFrame.getHeight() / 2);
 
 		dialogRemoteControl.setVisible(true);
 		dialogRemoteControl.setDividerLocation(0.8);
