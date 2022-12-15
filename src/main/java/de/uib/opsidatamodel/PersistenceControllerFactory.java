@@ -99,6 +99,10 @@ public class PersistenceControllerFactory {
 
 		boolean connected = persistControl.makeConnection();
 
+		if (persistControl.getConnectionState().getState() == ConnectionState.RETRY_CONNECTION) {
+			connected = persistControl.makeConnection();
+		}
+
 		try {
 			if (connected) {
 				logging.info("factory: check source accepted");

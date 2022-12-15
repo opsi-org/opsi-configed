@@ -3,10 +3,17 @@ package de.uib.opsicommand;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -27,7 +34,9 @@ import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 import de.uib.utilities.logging.logging;
 
@@ -36,6 +45,10 @@ import de.uib.utilities.logging.logging;
  */
 
 public class JSONthroughHTTPS extends JSONthroughHTTP {
+	private static final String CERTIFICATE_FILE_NAME = "opsi-ca-cert";
+	private static final String CERTIFICATE_FILE_EXTENSION = "pem";
+	private static final String CERTIFICATE_FILE = CERTIFICATE_FILE_NAME + "." + CERTIFICATE_FILE_EXTENSION;
+
 	public JSONthroughHTTPS(String host, String username, String password) {
 		super(host, username, password);
 	}
@@ -200,11 +213,10 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 
 			sslFactory = new SecureSSLSocketFactory(sslContext.getSocketFactory(), new MyHandshakeCompletedListener());
 		} catch (CertificateException e) {
-			e.printStackTrace();
+			logging.error(this, "something is wrong with the certificate");
 		} catch (KeyStoreException e) {
 			logging.error(this, "keystore wasn't initialized");
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
 			logging.error(this, "provider doesn't support algorithm");
 		} catch (UnrecoverableKeyException e) {
 			logging.error(this, "unable to provide key");
@@ -218,7 +230,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 	}
 
 	private void loadCertificateToKeyStore(KeyStore ks) {
-		X509Certificate certificate = getLocalCertificate();
+		X509Certificate certificate = getCertificate();
 
 		if (certificate == null) {
 			return;
@@ -228,6 +240,49 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			ks.setCertificateEntry(host, certificate);
 		} catch (KeyStoreException e) {
 			logging.error(this, "unable to load certificate into a keystore");
+		}
+	}
+
+	private X509Certificate getCertificate() {
+		String configPath = getConfigPath();
+		File certificateFile = new File(String.format("%s/opsi-ca-cert.pem", configPath));
+
+		if (trustAlways) {
+			certificateFile = downloadCertificateFile();
+			saveCertificate(certificateFile);
+		} else if (trustOnlyOnce) {
+			certificateFile = downloadCertificateFile();
+		}
+
+		if (certificateFile == null || !certificateFile.exists()) {
+			certificateExists = false;
+			return null;
+		} else {
+			certificateExists = true;
+		}
+
+		return instantiateCertificate(certificateFile);
+	}
+
+	private String getConfigPath() {
+		String result = "";
+
+		if (System.getenv(logging.windowsEnvVariableAppDataDirectory) != null) {
+			result = System.getenv(logging.windowsEnvVariableAppDataDirectory) + File.separator + "opsi.org"
+					+ File.separator + "configed";
+		} else {
+			result = System.getProperty(logging.envVariableForUserDirectory) + File.separator + ".configed";
+		}
+
+		return result;
+	}
+
+	private void saveCertificate(File certificateFile) {
+		try {
+			Files.copy(certificateFile.toPath(), new File(getConfigPath() + File.separator + CERTIFICATE_FILE).toPath(),
+					StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -248,27 +303,60 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		return cert;
 	}
 
-	private X509Certificate getLocalCertificate() {
-		String configPath = getConfigPath();
-		File certificateFile = new File(String.format("%s/opsi-ca-cert.pem", configPath));
+	private File downloadCertificateFile() {
+		SSLSocketFactory sslFactory = createDullSSLSocketFactory();
+		HttpsURLConnection.setDefaultSSLSocketFactory(sslFactory);
 
-		if (!certificateFile.exists()) {
-			return null;
+		URL url = null;
+		File tempCertFile = null;
+
+		try {
+			url = new URL(produceBaseURL("/ssl/" + CERTIFICATE_FILE));
+			tempCertFile = File.createTempFile(CERTIFICATE_FILE_NAME, "." + CERTIFICATE_FILE_EXTENSION);
+		} catch (MalformedURLException e1) {
+			logging.error(this, "url is malformed: " + url.toString());
+		} catch (IOException e) {
+			logging.error(this, "unable to create tmp certificate file");
 		}
 
-		return instantiateCertificate(certificateFile);
+		try (ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+				FileOutputStream fos = new FileOutputStream(tempCertFile)) {
+			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+		} catch (IOException e) {
+			logging.error(this, "unable to download certificate's content from specified url: " + url.toString());
+		}
+
+		return tempCertFile;
 	}
 
-	private String getConfigPath() {
-		String result = "";
+	private SSLSocketFactory createDullSSLSocketFactory() {
+		// Create a new trust manager that trust all certificates
+		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+				return new X509Certificate[0];
+			}
 
-		if (System.getenv(logging.windowsEnvVariableAppDataDirectory) != null) {
-			result = System.getenv(logging.windowsEnvVariableAppDataDirectory) + File.separator + "opsi.org"
-					+ File.separator + "configed";
-		} else {
-			result = System.getProperty(logging.envVariableForUserDirectory) + File.separator + ".configed";
+			public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {
+				// we skip certificate verification.
+			}
+
+			public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) {
+				// we skip certificate verification.
+			}
+		} };
+
+		SSLSocketFactory sslFactory = null;
+
+		try {
+			SSLContext sslContext = SSLContext.getInstance("TLS");
+			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+			sslFactory = new SecureSSLSocketFactory(sslContext.getSocketFactory(), new MyHandshakeCompletedListener());
+		} catch (NoSuchAlgorithmException e) {
+			logging.error(this, "provider doesn't support algorithm");
+		} catch (KeyManagementException e) {
+			logging.error(this, "failed to initialize SSL context");
 		}
 
-		return result;
+		return sslFactory;
 	}
 }

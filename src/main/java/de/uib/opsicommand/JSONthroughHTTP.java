@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
+import de.uib.configed.gui.FTextArea;
 import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.thread.WaitCursor;
@@ -64,6 +65,9 @@ public class JSONthroughHTTP extends JSONExecutioner {
 	protected String lastSessionId;
 	protected int requestMethod = POST;
 	public static final Charset UTF8DEFAULT = StandardCharsets.UTF_8;
+	protected boolean certificateExists = false;
+	protected boolean trustOnlyOnce = false;
+	protected boolean trustAlways = false;
 
 	class JSONCommunicationException extends Exception {
 		JSONCommunicationException(String message) {
@@ -335,7 +339,54 @@ public class JSONthroughHTTP extends JSONExecutioner {
 				WaitCursor.stopAll();
 			}
 			conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
-			logging.error("Exception on connecting, " + ex.toString());
+
+			FTextArea fErrorMsg = new FTextArea(Globals.mainFrame,
+					configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question") + " (" + Globals.APPNAME
+							+ ") ",
+					true,
+					new String[] { configed.getResourceValue(configed.getResourceValue("UIManager.cancelButtonText")),
+							configed.getResourceValue("JSONthroughHTTP.alwaysTrust"),
+							configed.getResourceValue("JSONthroughHTTP.trustOnlyOnce") },
+					420, 200);
+
+			if (!certificateExists) {
+				StringBuilder message = new StringBuilder("");
+				message.append(configed.getResourceValue("JSONthroughHTTP.certificateIsUnverified") + "\n");
+				message.append(configed.getResourceValue("JSONthroughHTTP.stillConnectToServer"));
+				message.append("\n\n\n");
+				message.append(configed.getResourceValue("JSONthroughHTTP.noCertificateFound"));
+				fErrorMsg.setMessage(message.toString());
+				fErrorMsg.setAlwaysOnTop(true);
+				fErrorMsg.setVisible(true);
+
+				if (fErrorMsg.getResult() == 2) {
+					trustAlways = true;
+					conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
+				} else if (fErrorMsg.getResult() == 3) {
+					trustOnlyOnce = true;
+					conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
+				}
+			} else if (ex.toString().contains("SSLHandshakeException")) {
+				StringBuilder message = new StringBuilder("");
+				message.append(configed.getResourceValue("JSONthroughHTTP.certificateIsInvalid") + "\n");
+				message.append(configed.getResourceValue("JSONthroughHTTP.stillConnectToServer"));
+				message.append("\n\n\n");
+				message.append(configed.getResourceValue("JSONthroughHTTP.unableToVerify"));
+				fErrorMsg.setMessage(message.toString());
+				fErrorMsg.setAlwaysOnTop(true);
+				fErrorMsg.setVisible(true);
+
+				if (fErrorMsg.getResult() == 2) {
+					trustAlways = true;
+					conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
+				} else if (fErrorMsg.getResult() == 3) {
+					trustOnlyOnce = true;
+					conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
+				}
+			} else {
+				logging.error("Exception on connecting, " + ex.toString());
+			}
+
 			return null;
 		}
 
