@@ -366,7 +366,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 					trustOnlyOnce = true;
 					conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
 				}
-			} else if (ex.toString().contains("SSLHandshakeException")) {
+			} else if (ex.toString().contains("SSLHandshakeException") || ex.toString().contains("SSLException")) {
 				StringBuilder message = new StringBuilder("");
 				message.append(configed.getResourceValue("JSONthroughHTTP.certificateIsInvalid") + "\n");
 				message.append(configed.getResourceValue("JSONthroughHTTP.stillConnectToServer"));

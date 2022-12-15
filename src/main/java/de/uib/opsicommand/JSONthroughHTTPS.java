@@ -38,6 +38,8 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
+import de.uib.configed.Globals;
+import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
 /**
@@ -45,10 +47,6 @@ import de.uib.utilities.logging.logging;
  */
 
 public class JSONthroughHTTPS extends JSONthroughHTTP {
-	private static final String CERTIFICATE_FILE_NAME = "opsi-ca-cert";
-	private static final String CERTIFICATE_FILE_EXTENSION = "pem";
-	private static final String CERTIFICATE_FILE = CERTIFICATE_FILE_NAME + "." + CERTIFICATE_FILE_EXTENSION;
-
 	public JSONthroughHTTPS(String host, String username, String password) {
 		super(host, username, password);
 	}
@@ -244,8 +242,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 	}
 
 	private X509Certificate getCertificate() {
-		String configPath = getConfigPath();
-		File certificateFile = new File(String.format("%s/opsi-ca-cert.pem", configPath));
+		File certificateFile = new File(configed.savedStatesLocationName, Globals.CERTIFICATE_FILE);
 
 		if (trustAlways) {
 			certificateFile = downloadCertificateFile();
@@ -264,22 +261,10 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		return instantiateCertificate(certificateFile);
 	}
 
-	private String getConfigPath() {
-		String result = "";
-
-		if (System.getenv(logging.windowsEnvVariableAppDataDirectory) != null) {
-			result = System.getenv(logging.windowsEnvVariableAppDataDirectory) + File.separator + "opsi.org"
-					+ File.separator + "configed";
-		} else {
-			result = System.getProperty(logging.envVariableForUserDirectory) + File.separator + ".configed";
-		}
-
-		return result;
-	}
-
 	private void saveCertificate(File certificateFile) {
 		try {
-			Files.copy(certificateFile.toPath(), new File(getConfigPath() + File.separator + CERTIFICATE_FILE).toPath(),
+			Files.copy(certificateFile.toPath(),
+					new File(configed.savedStatesLocationName + File.separator + Globals.CERTIFICATE_FILE).toPath(),
 					StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -311,8 +296,8 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		File tempCertFile = null;
 
 		try {
-			url = new URL(produceBaseURL("/ssl/" + CERTIFICATE_FILE));
-			tempCertFile = File.createTempFile(CERTIFICATE_FILE_NAME, "." + CERTIFICATE_FILE_EXTENSION);
+			url = new URL(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE));
+			tempCertFile = File.createTempFile(Globals.CERTIFICATE_FILE_NAME, "." + Globals.CERTIFICATE_FILE_EXTENSION);
 		} catch (MalformedURLException e1) {
 			logging.error(this, "url is malformed: " + url.toString());
 		} catch (IOException e) {

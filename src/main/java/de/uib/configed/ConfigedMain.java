@@ -608,6 +608,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (configed.savedStatesLocationName == null || (!success)) {
 			logging.info(this, "searching saved states in " + getSavedStatesDefaultLocation());
+			configed.savedStatesLocationName = getSavedStatesDefaultLocation();
 			savedStatesLocation = new File(getSavedStatesDefaultLocation());
 			savedStatesLocation.mkdirs();
 		}

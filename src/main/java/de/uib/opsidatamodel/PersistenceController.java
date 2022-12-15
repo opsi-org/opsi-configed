@@ -270,6 +270,8 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	protected abstract boolean makeConnection();
 
+	public abstract String getOpsiCACert();
+
 	/* connection state handling */
 	public abstract ConnectionState getConnectionState();
 
