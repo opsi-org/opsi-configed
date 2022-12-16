@@ -49,6 +49,8 @@ import de.uib.utilities.logging.logging;
  */
 
 public class JSONthroughHTTPS extends JSONthroughHTTP {
+	private static final boolean DISABLE_CERTIFICATE_VERIFICATION = true;
+
 	public JSONthroughHTTPS(String host, String username, String password) {
 		super(host, username, password);
 	}
@@ -65,7 +67,12 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 	protected HttpURLConnection produceConnection() throws IOException {
 		logging.info(this, "produceConnection, url; " + serviceURL);
 		HttpURLConnection connection = (HttpURLConnection) serviceURL.openConnection();
-		SSLSocketFactory sslFactory = createSSLSocketFactory();
+		SSLSocketFactory sslFactory = null;
+		if (DISABLE_CERTIFICATE_VERIFICATION) {
+			sslFactory = createDullSSLSocketFactory();
+		} else {
+			sslFactory = createSSLSocketFactory();
+		}
 		((HttpsURLConnection) connection).setSSLSocketFactory(sslFactory);
 		return connection;
 	}
