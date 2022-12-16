@@ -23,7 +23,9 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.net.ssl.HandshakeCompletedEvent;
 import javax.net.ssl.HandshakeCompletedListener;
@@ -227,22 +229,9 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 	}
 
 	private void loadCertificateToKeyStore(KeyStore ks) {
-		X509Certificate certificate = getCertificate();
+		List<File> certificates = getCertificates();
 
-		if (certificate == null) {
-			return;
-		}
-
-		try {
-			ks.setCertificateEntry(host, certificate);
-		} catch (KeyStoreException e) {
-			logging.error(this, "unable to load certificate into a keystore");
-		}
-	}
-
-	private X509Certificate getCertificate() {
-		File certificateFile = new File(configed.savedStatesLocationName, Globals.CERTIFICATE_FILE);
-
+		File certificateFile = null;
 		if (trustAlways) {
 			certificateFile = downloadCertificateFile();
 			saveCertificate(certificateFile);
@@ -250,20 +239,54 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			certificateFile = downloadCertificateFile();
 		}
 
-		if (certificateFile == null || !certificateFile.exists()) {
-			certificateExists = false;
-			return null;
-		} else {
-			certificateExists = true;
+		if ((trustAlways || trustOnlyOnce) && certificateFile == null) {
+			return;
 		}
 
-		return instantiateCertificate(certificateFile);
+		if (trustAlways || trustOnlyOnce) {
+			try {
+				X509Certificate certificate = instantiateCertificate(certificateFile);
+				String alias = host;
+				if (certificateFile.exists()) {
+					alias = certificateFile.getName().substring(0, certificateFile.getName().indexOf("-"));
+				}
+				ks.setCertificateEntry(alias, certificate);
+			} catch (KeyStoreException e) {
+				logging.error(this, "unable to load certificate into a keystore");
+			}
+		}
+
+		if (!certificates.isEmpty()) {
+			certificates.forEach(certificate -> {
+				try {
+					String alias = host;
+					if (certificate.exists()) {
+						alias = certificate.getName().substring(0, certificate.getName().indexOf("-"));
+					}
+					ks.setCertificateEntry(alias, instantiateCertificate(certificate));
+				} catch (KeyStoreException e) {
+					logging.error(this, "unable to load certificate into a keystore");
+				}
+			});
+		}
+	}
+
+	private List<File> getCertificates() {
+		File certificateDir = new File(configed.savedStatesLocationName);
+		File[] certificateFiles = certificateDir.listFiles((dir, filename) -> filename.endsWith(".pem"));
+
+		if (certificateFiles.length == 0) {
+			certificateExists = false;
+			return new ArrayList<>();
+		}
+
+		return Arrays.asList(certificateFiles);
 	}
 
 	private void saveCertificate(File certificateFile) {
 		try {
 			Files.copy(certificateFile.toPath(),
-					new File(configed.savedStatesLocationName + File.separator + Globals.CERTIFICATE_FILE).toPath(),
+					new File(configed.savedStatesLocationName, host + "-" + Globals.CERTIFICATE_FILE).toPath(),
 					StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			logging.error(this, "unable to save certificate");

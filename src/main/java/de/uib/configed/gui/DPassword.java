@@ -240,7 +240,8 @@ public class DPassword extends JDialog // implements Runnable
 		}
 
 		private void updateCertificate() {
-			File certificateFile = new File(configed.savedStatesLocationName, Globals.CERTIFICATE_FILE);
+			File certificateFile = new File(configed.savedStatesLocationName,
+					(String) fieldHost.getSelectedItem() + "-" + Globals.CERTIFICATE_FILE);
 
 			if (certificateFile.exists()) {
 				String certificateContent = persis.getOpsiCACert();
