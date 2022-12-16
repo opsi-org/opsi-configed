@@ -137,62 +137,51 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		GroupLayout layout = new GroupLayout(this);
 
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addGap(Globals.gapSize)
-				.addGroup(layout.createParallelGroup(center)
-						.addGroup(layout.createSequentialGroup()
-								.addGroup(layout.createParallelGroup()
-										.addGroup(layout.createSequentialGroup()
-												.addComponent(lbl_on, PREF, PREF, PREF)
-												.addGap(Globals.gapSize)
-												.addComponent(tf_selecteddepots, PREF, PREF, Short.MAX_VALUE))
-										.addComponent(lbl_verbosity, PREF, PREF, PREF)
-										.addComponent(lbl_properties, PREF, PREF, PREF)
-										.addComponent(lbl_setupInstalled, PREF, PREF, PREF)
-										.addComponent(lbl_updateInstalled, PREF, PREF, PREF))
-								.addGap(Globals.gapSize)
-								.addGroup(layout.createParallelGroup()
-										.addComponent(btn_depotselection, PREF, PREF, PREF) // Globals.iconWidth,
-																							// Globals.iconWidth,
-																							// Globals.iconWidth)
-										.addComponent(cb_verbosity, Globals.iconWidth, Globals.iconWidth,
-												Globals.iconWidth)
-										.addComponent(cb_properties, PREF, PREF, PREF)
-										.addComponent(checkb_setupInstalled, PREF, PREF, PREF)
-										.addComponent(checkb_updateInstalled, PREF, PREF, PREF))
-								.addGap(Globals.gapSize, Globals.gapSize, MAX)))
-				.addGap(Globals.gapSize));
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE).addGroup(layout
+				.createParallelGroup(center)
+				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup()
+						.addGroup(layout.createSequentialGroup().addComponent(lbl_on, PREF, PREF, PREF)
+								.addGap(Globals.GAP_SIZE).addComponent(tf_selecteddepots, PREF, PREF, Short.MAX_VALUE))
+						.addComponent(lbl_verbosity, PREF, PREF, PREF).addComponent(lbl_properties, PREF, PREF, PREF)
+						.addComponent(lbl_setupInstalled, PREF, PREF, PREF)
+						.addComponent(lbl_updateInstalled, PREF, PREF, PREF)).addGap(Globals.GAP_SIZE)
+						.addGroup(layout.createParallelGroup().addComponent(btn_depotselection, PREF, PREF, PREF) // Globals.iconWidth,
+								// Globals.iconWidth,
+								// Globals.iconWidth)
+								.addComponent(cb_verbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+								.addComponent(cb_properties, PREF, PREF, PREF)
+								.addComponent(checkb_setupInstalled, PREF, PREF, PREF)
+								.addComponent(checkb_updateInstalled, PREF, PREF, PREF))
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, MAX)))
+				.addGap(Globals.GAP_SIZE));
 
-		layout.setVerticalGroup(
-				layout.createSequentialGroup()
-						.addGap(Globals.gapSize)
-						.addGroup(layout.createParallelGroup(center)
-								.addComponent(lbl_on, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-								.addComponent(tf_selecteddepots, Globals.lineHeight, Globals.lineHeight,
-										Globals.lineHeight)
-								.addComponent(btn_depotselection, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight))
-						.addGroup(layout.createParallelGroup(center)
-								.addComponent(lbl_verbosity, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight)
-								.addComponent(cb_verbosity, leading, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight))
-						.addGroup(layout.createParallelGroup(center)
-								.addComponent(lbl_properties, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight)
-								.addComponent(cb_properties, leading, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight))
-						.addGroup(layout.createParallelGroup(center)
-								.addComponent(lbl_setupInstalled, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight)
-								.addComponent(checkb_setupInstalled, leading, Globals.buttonHeight,
-										Globals.buttonHeight, Globals.buttonHeight))
-						.addGroup(layout.createParallelGroup(center)
-								.addComponent(lbl_updateInstalled, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight)
-								.addComponent(checkb_updateInstalled, leading, Globals.buttonHeight,
-										Globals.buttonHeight, Globals.buttonHeight))
-						.addGap(Globals.gapSize));
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addGroup(layout.createParallelGroup(center)
+						.addComponent(lbl_on, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(tf_selecteddepots, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(btn_depotselection, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
+				.addGroup(layout.createParallelGroup(center)
+						.addComponent(lbl_verbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(cb_verbosity, leading, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
+				.addGroup(layout.createParallelGroup(center)
+						.addComponent(lbl_properties, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(cb_properties, leading, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
+				.addGroup(layout.createParallelGroup(center)
+						.addComponent(lbl_setupInstalled, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(checkb_setupInstalled, leading, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
+				.addGroup(layout.createParallelGroup(center)
+						.addComponent(lbl_updateInstalled, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(checkb_updateInstalled, leading, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
+				.addGap(Globals.GAP_SIZE));
 	}
 
 	protected Vector<String> getAllowedInstallTargets() {

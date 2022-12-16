@@ -23,8 +23,7 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.table.DefaultListCellOptions;
 import de.uib.utilities.table.ListCellOptions;
 
-public class PanelHostProperties extends JPanel
-		implements ItemListener {
+public class PanelHostProperties extends JPanel implements ItemListener {
 	// delegate
 	protected AbstractEditMapPanel editMapPanel;
 	protected JLabel label;
@@ -53,58 +52,41 @@ public class PanelHostProperties extends JPanel
 		GroupLayout headerLayout = new GroupLayout(header);
 		header.setLayout(headerLayout);
 
-		headerLayout.setHorizontalGroup(
-				headerLayout.createSequentialGroup()
-						.addGap(10)
-						.addComponent(label, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(10)
-						.addComponent(combo, 200, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(10));
+		headerLayout.setHorizontalGroup(headerLayout.createSequentialGroup().addGap(10)
+				.addComponent(label, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE).addGap(10)
+				.addComponent(combo, 200, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE).addGap(10));
 
 		headerLayout.setVerticalGroup(
-				headerLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(label)
-						.addComponent(combo));
+				headerLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(label).addComponent(combo));
 
 		GroupLayout planeLayout = new GroupLayout(this);
 		this.setLayout(planeLayout);
 
-		planeLayout.setHorizontalGroup(
-				planeLayout.createSequentialGroup()
-						.addGap(20)
-						.addGroup(planeLayout.createParallelGroup()
-								.addComponent(header, GroupLayout.Alignment.CENTER)
-								.addComponent(editMapPanel)
-						// .addComponent( editMapPanelStrings )
-						)
-						.addGap(20));
+		planeLayout.setHorizontalGroup(planeLayout.createSequentialGroup().addGap(20).addGroup(planeLayout
+				.createParallelGroup().addComponent(header, GroupLayout.Alignment.CENTER).addComponent(editMapPanel)
+		// .addComponent( editMapPanelStrings )
+		).addGap(20));
 
-		planeLayout.setVerticalGroup(
-				planeLayout.createSequentialGroup()
-						.addGap(20)
-						.addComponent(header, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(5)
-						.addComponent(editMapPanel, de.uib.configed.Globals.lineHeight * 2, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						// .addComponent( editMapPanelStrings, de.uib.configed.Globals.lineHeight * 2,
-						// GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE )
-						.addGap(20));
+		planeLayout.setVerticalGroup(planeLayout.createSequentialGroup().addGap(20)
+				.addComponent(header, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(5)
+				.addComponent(editMapPanel, de.uib.configed.Globals.LINE_HEIGHT * 2, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE)
+				// .addComponent( editMapPanelStrings, de.uib.configed.Globals.lineHeight * 2,
+				// GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE )
+				.addGap(20));
 	}
 
-	public void initMultipleHostsEditing(
-			String labeltext,
-			ComboBoxModel comboModel,
-			Map<String, Map<String, Object>> multipleMaps,
-			UpdateCollection updateCollection,
+	public void initMultipleHostsEditing(String labeltext, ComboBoxModel comboModel,
+			Map<String, Map<String, Object>> multipleMaps, UpdateCollection updateCollection,
 			Set<String> keysOfReadOnlyEntries) {
 		label.setText(labeltext);
 		activateCombo(comboModel);
 
 		// editMapPanel.setEditableMap(null, null);
 
-		logging.debug(this, "initMultipleHosts "
-				+ " configs  " + (multipleMaps)
+		logging.debug(this, "initMultipleHosts " + " configs  " + (multipleMaps)
 		// + " configOptions " + (configOptions)
 		);
 
@@ -156,9 +138,7 @@ public class PanelHostProperties extends JPanel
 		ArrayList editedMaps = new ArrayList(1);
 		editedMaps.add(multipleMaps.get(selectedItem));
 		logging.debug(this, "setMap " + multipleMaps.get(selectedItem));
-		editMapPanel.setEditableMap(
-				multipleMaps.get(selectedItem),
-				deriveOptionsMap(multipleMaps.get(selectedItem)));
+		editMapPanel.setEditableMap(multipleMaps.get(selectedItem), deriveOptionsMap(multipleMaps.get(selectedItem)));
 		editMapPanel.setStoreData(editedMaps);
 	}
 

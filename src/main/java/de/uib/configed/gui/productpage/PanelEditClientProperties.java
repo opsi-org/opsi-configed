@@ -69,7 +69,7 @@ public class PanelEditClientProperties extends DefaultPanelEditProperties {
 				.setHorizontalGroup(layoutEditProperties.createSequentialGroup().addGap(hGapSize, hGapSize, hGapSize)
 						.addGroup(layoutEditProperties.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 								.addGroup(layoutEditProperties.createSequentialGroup()
-										.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 										// .addComponent(jLabelProductProperties, minHSize, prefHSize,
 										// Short.MAX_VALUE)
 										.addGap(hGapSize, hGapSize, hGapSize)

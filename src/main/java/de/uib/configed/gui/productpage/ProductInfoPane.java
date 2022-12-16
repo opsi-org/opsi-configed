@@ -8,7 +8,8 @@
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
  * License, version AGPLv3, as published by the Free Software Foundation
- 
+ * 
+ * @author roeder, Nils Otto
  */
 
 package de.uib.configed.gui.productpage;
@@ -34,9 +35,6 @@ import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
 import de.uib.utilities.logging.logging;
 
-/**
- * @author roeder
- */
 public class ProductInfoPane extends javax.swing.JSplitPane
 		implements de.uib.utilities.DataChangedObserver, ActionListener {
 
@@ -157,43 +155,43 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		layoutDescriptionsPanel.setHorizontalGroup(
 				layoutDescriptionsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 
-						.addComponent(jLabelProductID, Globals.minHSize, Globals.prefHSize, Short.MAX_VALUE)
+						.addComponent(jLabelProductID, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
 
 						.addGroup(layoutDescriptionsPanel.createSequentialGroup()
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								.addComponent(jLabelProductName, Globals.minHSize, Globals.prefHSize, Short.MAX_VALUE)
-								.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize))
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addComponent(jLabelProductName, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
+								.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 
 						.addGroup(layoutDescriptionsPanel.createSequentialGroup()
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								.addComponent(jLabelLabelProductVersion, Globals.minHSize, GroupLayout.PREFERRED_SIZE,
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addComponent(jLabelLabelProductVersion, Globals.MIN_HSIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
-								.addComponent(jLabelProductVersion, Globals.minHSize, Globals.prefHSize,
+								.addComponent(jLabelProductVersion, Globals.MIN_HSIZE, Globals.PREF_HSIZE,
 										Short.MAX_VALUE)
-								.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize))
+								.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 
-						.addComponent(jScrollPaneProductInfo, Globals.minHSize, Globals.prefHSize, Short.MAX_VALUE)
+						.addComponent(jScrollPaneProductInfo, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
 
-						.addComponent(jScrollPaneProductAdvice, Globals.minHSize, Globals.prefHSize, Short.MAX_VALUE)
+						.addComponent(jScrollPaneProductAdvice, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
 
 		);
 
 		layoutDescriptionsPanel.setVerticalGroup(layoutDescriptionsPanel.createSequentialGroup()
 				.addComponent(jLabelProductID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addComponent(jLabelProductName, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addGroup(layoutDescriptionsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 						.addComponent(jLabelLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(0, Globals.vGapSize, Globals.vGapSize)
-				.addComponent(jScrollPaneProductInfo, 0, Globals.prefVSize, Short.MAX_VALUE)
-				.addGap(0, Globals.vGapSize, Globals.vGapSize)
-				.addComponent(jScrollPaneProductAdvice, 0, Globals.prefVSize, Short.MAX_VALUE));
+				.addGap(0, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+				.addComponent(jScrollPaneProductInfo, 0, Globals.PREF_VSIZE, Short.MAX_VALUE)
+				.addGap(0, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+				.addComponent(jScrollPaneProductAdvice, 0, Globals.PREF_VSIZE, Short.MAX_VALUE));
 
 		// treat the bottom panel
 		bottomComponent = new JXPanel();
@@ -205,39 +203,39 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 				.setHorizontalGroup(
 						layoutBottomComponent.createParallelGroup()
 								.addGroup(layoutBottomComponent.createSequentialGroup()
-										.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 										.addComponent(dependenciesActivateButton, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-										.addComponent(dependenciesTextLabel, Globals.minHSize,
+										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+										.addComponent(dependenciesTextLabel, Globals.MIN_HSIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addGap(0, 0, Short.MAX_VALUE)
 										.addComponent(depotForDependenciesLabel, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize))
+										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE))
 
 								.addComponent(panelProductDependencies)
 
 								.addGroup(layoutBottomComponent.createSequentialGroup()
-										.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 										.addComponent(propertiesActivateButton)
-										.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 										.addComponent(panelEditProperties.getTitlePanel()))
 								.addComponent(panelEditProperties));
 
 		layoutBottomComponent.setVerticalGroup(layoutBottomComponent.createSequentialGroup()
-				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addGroup(layoutBottomComponent.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(dependenciesActivateButton, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight)
+						.addComponent(dependenciesActivateButton, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
 						.addComponent(dependenciesTextLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(depotForDependenciesLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addComponent(panelProductDependencies, 0, 0, Short.MAX_VALUE)
 				.addGroup(layoutBottomComponent.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(propertiesActivateButton, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight)
+						.addComponent(propertiesActivateButton, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
 						.addComponent(panelEditProperties.getTitlePanel()))
 				.addComponent(panelEditProperties, 0, 0, Short.MAX_VALUE));
 

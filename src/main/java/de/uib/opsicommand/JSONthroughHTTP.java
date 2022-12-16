@@ -33,7 +33,7 @@ Usage of this portion of software is allowed unter the restrictions of the GPL
 import utils.Base64OutputStream;
 
 /**
- * @author Rupert Roeder, Jan Schneider
+ * @author Rupert Roeder, Jan Schneider, Naglis Vidziunas
  */
 
 public class JSONthroughHTTP extends JSONExecutioner {
@@ -82,10 +82,16 @@ public class JSONthroughHTTP extends JSONExecutioner {
 	 */
 	public JSONthroughHTTP(String host, String username, String password) {
 		this.host = host;
-		int idx = host.indexOf(':');
+		int idx = -1;
+		if (host.contains("[") && host.contains("]")) {
+			idx = host.indexOf(":", host.indexOf("]"));
+		} else {
+			idx = host.indexOf(":");
+		}
+
 		if (idx > -1) {
 			this.host = host.substring(0, idx);
-			this.portHTTP = this.portHTTPS = new java.lang.Integer(host.substring(idx + 1, host.length())).intValue();
+			this.portHTTP = this.portHTTPS = Integer.parseInt(host.substring(idx + 1, host.length()));
 		}
 		this.username = username;
 		this.password = password;
@@ -406,9 +412,10 @@ public class JSONthroughHTTP extends JSONExecutioner {
 
 			/**
 			 * pausing for testing purposes try {
-			 * Thread.currentThread().sleep(10000); } catch
-			 * (InterruptedException iex) { } logging.debug (" retrieving 2 " +
-			 * conStat);
+			 * Thread.currentThread().sleep(10000); } catch <<<<<<< HEAD
+			 * (InterruptedException iex) { } System.out.println (" retrieving 2
+			 * " + conStat); ======= (InterruptedException iex) { }
+			 * logging.debug (" retrieving 2 " + conStat); >>>>>>> main
 			 */
 
 		}

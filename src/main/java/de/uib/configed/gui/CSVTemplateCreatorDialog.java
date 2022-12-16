@@ -52,7 +52,7 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public class CSVTemplateCreatorDialog extends FGeneralDialog {
-	protected int wLeftLabel = Globals.buttonWidth + 20;
+	protected int wLeftLabel = Globals.BUTTON_WIDTH + 20;
 
 	private PanelGenEditTable thePanel;
 	private CSVFormat format;
@@ -107,21 +107,22 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		GroupLayout allLayout = new GroupLayout(allpane);
 		allpane.setLayout(allLayout);
 
-		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.hGapSize).addComponent(centerPanel)
-				.addGap(Globals.hGapSize)
-				.addComponent(southPanel, Globals.lineHeight, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.hGapSize));
+		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE).addComponent(centerPanel)
+				.addGap(Globals.HGAP_SIZE)
+				.addComponent(southPanel, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.HGAP_SIZE));
 
 		allLayout.setHorizontalGroup(allLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize, 2 * Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
 						.addComponent(centerPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize, 2 * Globals.hGapSize))
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE))
 				.addGroup(allLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize, 2 * Globals.hGapSize).addComponent(southPanel,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize, 2 * Globals.hGapSize)));
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
+						.addComponent(southPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)));
 	}
 
 	private JPanel createSouthPanel() {
@@ -133,20 +134,20 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 		southLayout.setHorizontalGroup(southLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(southLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize, Short.MAX_VALUE)
-						.addComponent(jPanelButtonGrid, Globals.lineHeight, GroupLayout.PREFERRED_SIZE,
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, Short.MAX_VALUE)
+						.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize, Short.MAX_VALUE))
-				.addGroup(southLayout.createSequentialGroup().addGap(Globals.hGapSize / 2)
-						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE).addGap(Globals.hGapSize / 2)));
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, Short.MAX_VALUE))
+				.addGroup(southLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE / 2)
+						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE).addGap(Globals.HGAP_SIZE / 2)));
 
 		southLayout.setVerticalGroup(southLayout.createSequentialGroup()
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-				.addComponent(additionalPane, Globals.lineHeight, GroupLayout.PREFERRED_SIZE,
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+				.addComponent(additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addComponent(jPanelButtonGrid, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2));
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
 		southPanel.setOpaque(false);
 		southPanel.setBackground(Color.white);
@@ -284,77 +285,80 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 		centerLayout.setHorizontalGroup(centerLayout.createParallelGroup()
 				.addGroup(centerLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(dataLabel, wLeftLabel, wLeftLabel, wLeftLabel)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				.addGroup(centerLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize).addComponent(dataSelectionLabel)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(dataSelectionLabel)
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				.addGroup(centerLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize).addComponent(headerOptionsPanel)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(headerOptionsPanel)
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				.addGroup(centerLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(csvFormatLabel, wLeftLabel, wLeftLabel, wLeftLabel)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				.addGroup(centerLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(includeFormatHintOption, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(includeFormatHintOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				.addGroup(centerLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(fieldSeparatorLabel, wLeftLabel, wLeftLabel, wLeftLabel)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
-				.addGroup(
-						centerLayout.createSequentialGroup()
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								.addComponent(tabsOption, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								.addComponent(commaOption, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								.addComponent(semicolonOption, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								.addComponent(spaceOption, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								.addComponent(otherOption, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								.addComponent(otherSeparatorInput, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				.addGroup(centerLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(tabsOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(commaOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(semicolonOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(spaceOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(otherOption, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(otherSeparatorInput, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
+				.addGroup(centerLayout.createSequentialGroup()
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(stringSeparatorLabel, wLeftLabel, wLeftLabel, wLeftLabel)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(stringSeparatorOptions, wLeftLabel, wLeftLabel, wLeftLabel)));
 
 		centerLayout.setVerticalGroup(centerLayout.createSequentialGroup()
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize).addComponent(dataLabel)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize).addComponent(dataSelectionLabel)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize).addComponent(headerOptionsPanel)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize).addComponent(csvFormatLabel)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addComponent(includeFormatHintOption, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize).addComponent(fieldSeparatorLabel)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE).addComponent(dataLabel)
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE).addComponent(dataSelectionLabel)
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE).addComponent(headerOptionsPanel)
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE).addComponent(csvFormatLabel)
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+				.addComponent(includeFormatHintOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						Globals.BUTTON_HEIGHT)
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE).addComponent(fieldSeparatorLabel)
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 				.addGroup(centerLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(tabsOption, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(commaOption, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(semicolonOption, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(spaceOption, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(otherOption, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(otherSeparatorInput, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight))
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+						.addComponent(tabsOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(commaOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(semicolonOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(spaceOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(otherOption, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(otherSeparatorInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 				.addGroup(centerLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(stringSeparatorLabel).addComponent(stringSeparatorOptions, Globals.buttonHeight,
-								Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize));
+						.addComponent(stringSeparatorLabel).addComponent(stringSeparatorOptions, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE));
 
 		return centerPanel;
 	}

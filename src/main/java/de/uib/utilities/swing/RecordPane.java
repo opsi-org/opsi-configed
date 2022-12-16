@@ -27,9 +27,9 @@ import de.uib.utilities.observer.ObservableSubject;
 import de.uib.utilities.observer.swing.JTextFieldObserved;
 
 public class RecordPane extends JPanel implements KeyListener {
-	protected int lineHeight = Globals.lineHeight;
-	protected int vGapSize = Globals.vGapSize;
-	protected int hGapSize = Globals.hGapSize;
+	protected int lineHeight = Globals.LINE_HEIGHT;
+	protected int vGapSize = Globals.VGAP_SIZE;
+	protected int hGapSize = Globals.HGAP_SIZE;
 	protected int minFieldWidth = 60;
 	protected int maxFieldWidth = Short.MAX_VALUE;
 	protected int minLabelWidth = 30;
@@ -149,25 +149,25 @@ public class RecordPane extends JPanel implements KeyListener {
 
 		for (String key : data.keySet()) {
 			hGroup.addGroup(baseLayout.createSequentialGroup()
-					.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+					.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 					.addComponent(labelfields.get(key), minLabelWidth, GroupLayout.PREFERRED_SIZE, maxLabelWidth)
-					.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+					.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 					.addComponent(datafields.get(key), minFieldWidth, GroupLayout.PREFERRED_SIZE, maxFieldWidth)
-					.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2));
+					.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2));
 		}
 
 		baseLayout.setHorizontalGroup(hGroup);
 
 		GroupLayout.SequentialGroup vGroup = baseLayout.createSequentialGroup();
 
-		vGroup.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize);
+		vGroup.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE);
 		for (String key : data.keySet()) {
-			vGroup.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize);
+			vGroup.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE);
 			vGroup.addGroup(baseLayout.createParallelGroup()
 					.addComponent(labelfields.get(key), lineHeight, lineHeight, lineHeight)
 					.addComponent(datafields.get(key), lineHeight, lineHeight, lineHeight));
 		}
-		vGroup.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize);
+		vGroup.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE);
 
 		baseLayout.setVerticalGroup(vGroup);
 

@@ -721,7 +721,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 				Point tablePoint = table.getLocationOnScreen();
 
 				fed.setLocation((int) tablePoint.getX() + (int) rect.getX() + 50,
-						(int) tablePoint.getY() + (int) rect.getY() + de.uib.configed.Globals.lineHeight);
+						(int) tablePoint.getY() + (int) rect.getY() + de.uib.configed.Globals.LINE_HEIGHT);
 				located = true;
 			} catch (Exception ex) {
 				logging.warning(this, "get location error " + ex);

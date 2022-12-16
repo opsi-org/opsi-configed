@@ -128,8 +128,8 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		logging.info(this, "SSHCommandControlDialog instance " + instance + " main " + main);
 		main = owner;
 		cmain = cm;
-		parameterPanel = new SSHCommandControlParameterMethodsPanel(this, Globals.gapSize * 3, Globals.gapSize * 3,
-				Globals.gapSize * 2, 0);
+		parameterPanel = new SSHCommandControlParameterMethodsPanel(this, Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 3,
+				Globals.GAP_SIZE * 2, 0);
 		init();
 		pack();
 		this.centerOn(owner);
@@ -203,9 +203,10 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 		setCenterLayout();
 
-		Dimension tf_dim = new Dimension(Globals.firstLabelWidth - Globals.graphicButtonWidth, Globals.buttonHeight);
-		Dimension tf_dim_long = new Dimension(Globals.firstLabelWidth, Globals.buttonHeight);
-		Dimension btn_dim = new Dimension(Globals.graphicButtonWidth, Globals.buttonHeight);
+		Dimension tf_dim = new Dimension(Globals.FIRST_LABEL_WIDTH - Globals.GRAPHIC_BUTTON_WIDTH,
+				Globals.BUTTON_HEIGHT);
+		Dimension tf_dim_long = new Dimension(Globals.FIRST_LABEL_WIDTH, Globals.BUTTON_HEIGHT);
+		Dimension btn_dim = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH, Globals.BUTTON_HEIGHT);
 
 		{
 			lbl_parentMenuText = new JLabel();
@@ -269,14 +270,14 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			lbl_priority.setPreferredSize(tf_dim);
 			tf_priority.setPreferredSize(btn_dim);
 			cb_needSudo.setSize(btn_dim);
-			btn_del.setSize(new Dimension(Globals.graphicButtonWidth + 15, Globals.buttonHeight));
+			btn_del.setSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
 			lbl_needSudo.setPreferredSize(tf_dim);
 			cb_needSudo.setPreferredSize(btn_dim);
 			tp_commands.setPreferredSize(tf_dim_long);
 			// btn_changeHelpPanelStatus.setPreferredSize(new
 			// Dimension(Globals.graphicButtonWidth + 15 ,Globals.buttonHeight));
-			btn_test_command.setPreferredSize(new Dimension(Globals.graphicButtonWidth + 15, Globals.buttonHeight));
-			btn_del.setPreferredSize(new Dimension(Globals.graphicButtonWidth + 15, Globals.buttonHeight));
+			btn_test_command.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
+			btn_del.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
 
 			cb_menuText.setEditable(true);
 			cb_parentMenuText.setEditable(true);
@@ -456,35 +457,35 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	private void initLayout() {
 		logging.debug(this, "initLayout ");
 		commandlistPanelLayout
-				.setHorizontalGroup(commandlistPanelLayout.createSequentialGroup().addGap(Globals.gapSize * 3)
+				.setHorizontalGroup(commandlistPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
 						.addGroup(commandlistPanelLayout.createParallelGroup()
 								.addGroup(commandlistPanelLayout.createSequentialGroup()
 										.addComponent(lbl_commands, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-										.addGap(Globals.gapSize).addComponent(btn_test_command,
+										.addGap(Globals.GAP_SIZE).addComponent(btn_test_command,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE)
 								// .addComponent(btn_changeHelpPanelStatus, GroupLayout.PREFERRED_SIZE,
 								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								).addGap(Globals.minGapSize).addComponent(tp_commands, GroupLayout.PREFERRED_SIZE,
+								).addGap(Globals.MIN_GAP_SIZE).addComponent(tp_commands, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-						.addGap(Globals.gapSize * 3));
+						.addGap(Globals.GAP_SIZE * 3));
 		commandlistPanelLayout.setVerticalGroup(commandlistPanelLayout.createSequentialGroup()
-				.addGap(Globals.gapSize * 2)
+				.addGap(Globals.GAP_SIZE * 2)
 				.addGroup(commandlistPanelLayout.createParallelGroup()
-						.addGroup(commandlistPanelLayout.createSequentialGroup().addGap(Globals.minGapSize)
+						.addGroup(commandlistPanelLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
 								.addComponent(lbl_commands, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.minGapSize).addComponent(btn_test_command, GroupLayout.PREFERRED_SIZE,
+						.addGap(Globals.MIN_GAP_SIZE).addComponent(btn_test_command, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.minGapSize)
+						.addGap(Globals.MIN_GAP_SIZE)
 				// .addComponent(btn_changeHelpPanelStatus, GroupLayout.PREFERRED_SIZE,
 				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				).addGap(Globals.minGapSize)
+				).addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(tp_commands, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addGap(Globals.gapSize * 1));
+				.addGap(Globals.GAP_SIZE * 1));
 
-		controlPanelLayout.setHorizontalGroup(controlPanelLayout.createSequentialGroup().addGap(Globals.gapSize * 3)
+		controlPanelLayout.setHorizontalGroup(controlPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
 				.addGroup(controlPanelLayout.createParallelGroup()
 						.addComponent(lbl_tooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -510,8 +511,8 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 								Short.MAX_VALUE)
 						.addComponent(cb_parentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE))
-				.addGap(Globals.gapSize * 3));
-		controlPanelLayout.setVerticalGroup(controlPanelLayout.createSequentialGroup().addGap(Globals.gapSize * 2)
+				.addGap(Globals.GAP_SIZE * 3));
+		controlPanelLayout.setVerticalGroup(controlPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
 				.addGroup(controlPanelLayout.createParallelGroup()
 						.addComponent(lbl_menuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -520,31 +521,31 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 						.addComponent(btn_del, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 
-				.addGap(Globals.minGapSize)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(controlPanelLayout.createParallelGroup()
 						.addComponent(cb_parentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(lbl_parentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.minGapSize)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(controlPanelLayout.createParallelGroup()
 						.addComponent(tf_tooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(lbl_tooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.minGapSize)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(controlPanelLayout.createParallelGroup()
 						.addComponent(lbl_priority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(tf_priority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.minGapSize)
+				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(controlPanelLayout.createParallelGroup()
 						.addComponent(lbl_needSudo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(cb_needSudo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.minGapSize).addGap(Globals.gapSize * 2));
+				.addGap(Globals.MIN_GAP_SIZE).addGap(Globals.GAP_SIZE * 2));
 	}
 
 	/**

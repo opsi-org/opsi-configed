@@ -35,33 +35,27 @@ public class PanelDashControl extends JPanel {
 		scrollpaneMessages.setBackground(Globals.backLightBlue);
 		messages.setBackground(Globals.backLightBlue);
 
-		showDashOnStartup = new JCheckBox(
-				configed.getResourceValue("Dash.showOnProgramStart"),
-				true);
+		showDashOnStartup = new JCheckBox(configed.getResourceValue("Dash.showOnProgramStart"), true);
 		showDashOnStartup.setFont(Globals.defaultFontSmall);
 
-		showDashOnStartup.addActionListener(
-				ae -> {
-					AbstractButton source = (AbstractButton) ae.getSource();
-					showDashOnStartupWasSetTo(source.isSelected());
-				});
+		showDashOnStartup.addActionListener(ae -> {
+			AbstractButton source = (AbstractButton) ae.getSource();
+			showDashOnStartupWasSetTo(source.isSelected());
+		});
 
-		showDashOnLicencesActivation = new JCheckBox(
-				configed.getResourceValue("Dash.showOnLicencesLoad"),
-				true);
+		showDashOnLicencesActivation = new JCheckBox(configed.getResourceValue("Dash.showOnLicencesLoad"), true);
 		showDashOnLicencesActivation.setFont(Globals.defaultFontSmall);
 
-		showDashOnLicencesActivation.addActionListener(
-				ae -> {
-					AbstractButton source = (AbstractButton) ae.getSource();
-					showDashOnLicencesActivationWasSetTo(source.isSelected());
-				});
+		showDashOnLicencesActivation.addActionListener(ae -> {
+			AbstractButton source = (AbstractButton) ae.getSource();
+			showDashOnLicencesActivationWasSetTo(source.isSelected());
+		});
 
 		dashLayout.setVerticalGroup(dashLayout.createSequentialGroup()
 				// .addComponent(scrollpaneMessages , 100, 100, Short.MAX_VALUE)
-				.addComponent(showDashOnStartup, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-				.addComponent(showDashOnLicencesActivation, Globals.buttonHeight, Globals.buttonHeight,
-						Globals.buttonHeight));
+				.addComponent(showDashOnStartup, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(showDashOnLicencesActivation, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						Globals.BUTTON_HEIGHT));
 		dashLayout.setHorizontalGroup(dashLayout.createParallelGroup()
 				// .addComponent( scrollpaneMessages, 300, 500, Short.MAX_VALUE)
 				.addComponent(showDashOnStartup, 100, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)

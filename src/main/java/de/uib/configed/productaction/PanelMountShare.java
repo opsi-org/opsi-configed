@@ -34,7 +34,7 @@ import de.uib.utilities.logging.logging;
 public class PanelMountShare extends JPanel {
 	static ArrayList<PanelMountShare> instances = new ArrayList<PanelMountShare>();
 
-	final int firstLabelWidth = Globals.firstLabelWidth;
+	final int firstLabelWidth = Globals.FIRST_LABEL_WIDTH;
 
 	PersistenceController persist;
 	ConfigedMain main;
@@ -107,41 +107,37 @@ public class PanelMountShare extends JPanel {
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		int hFirstGap = Globals.hFirstGap;
+		int hFirstGap = Globals.HFIRST_GAP;
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(mountShareLabel, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(buttonMountShare, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(mountShareDescriptionLabel, Globals.lineHeight, Globals.lineHeight,
-								Globals.lineHeight)));
+						.addComponent(mountShareLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(buttonMountShare, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(mountShareDescriptionLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT)));
 
 		if (leftBound >= 0) {
-			layout.setHorizontalGroup(layout.createParallelGroup()
-					.addGroup(layout.createSequentialGroup()
-							.addComponent(mountShareLabel, 0, 0, 0)
-							.addGap(leftBound, leftBound, leftBound)
-							.addComponent(buttonMountShare, de.uib.configed.Globals.graphicButtonWidth,
-									de.uib.configed.Globals.graphicButtonWidth,
-									de.uib.configed.Globals.graphicButtonWidth)
-							.addGap(hFirstGap, hFirstGap, hFirstGap)
-							.addComponent(mountShareDescriptionLabel, Globals.buttonWidth * 2, Globals.buttonWidth * 3,
-									Short.MAX_VALUE)
-							.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)));
+			layout.setHorizontalGroup(layout.createParallelGroup().addGroup(layout.createSequentialGroup()
+					.addComponent(mountShareLabel, 0, 0, 0).addGap(leftBound, leftBound, leftBound)
+					.addComponent(buttonMountShare, de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH,
+							de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH, de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH)
+					.addGap(hFirstGap, hFirstGap, hFirstGap).addComponent(mountShareDescriptionLabel,
+							Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 3, Short.MAX_VALUE)
+					.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)));
 		} else {
 
-			layout.setHorizontalGroup(layout.createParallelGroup()
-					.addGroup(layout.createSequentialGroup()
-							.addGap(hFirstGap, hFirstGap, hFirstGap)
-							.addComponent(mountShareLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
-							.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-							.addComponent(buttonMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-									GroupLayout.PREFERRED_SIZE)
-							.addGap(hFirstGap, hFirstGap, hFirstGap)
-							.addComponent(mountShareDescriptionLabel, Globals.buttonWidth * 2, Globals.buttonWidth * 2,
-									Short.MAX_VALUE)
-							.addGap(5, 5, 5)
-							.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE)));
+			layout.setHorizontalGroup(
+					layout.createParallelGroup()
+							.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+									.addComponent(mountShareLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+									.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+									.addComponent(buttonMountShare, GroupLayout.PREFERRED_SIZE,
+											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addGap(hFirstGap, hFirstGap, hFirstGap)
+									.addComponent(mountShareDescriptionLabel, Globals.BUTTON_WIDTH * 2,
+											Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
+									.addGap(5, 5, 5)
+									.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE)));
 		}
 	}
 
@@ -218,8 +214,7 @@ public class PanelMountShare extends JPanel {
 		if (!smbMounted && found)
 			initialMount();
 
-		smbMounted = found;
-		;
+		smbMounted = found;;
 
 		return smbMounted;
 	}
@@ -252,8 +247,7 @@ public class PanelMountShare extends JPanel {
 					checkAllConnections();
 				}
 			}
-		}
-				.start();
+		}.start();
 	}
 
 	/*

@@ -49,40 +49,40 @@ public class ActionResult {
 		states.add(SUCCESSFUL);
 
 		labels = new Vector<String>();
-		labels.add(Globals.CONFLICTSTATEstring);
-		labels.add(Globals.NOVALIDSTATEstring);
+		labels.add(Globals.CONFLICT_STATE_STRING);
+		labels.add(Globals.NO_VALID_STATE_STRING);
 		labels.add("not_available");
 		labels.add("none");
 		labels.add("failed");
 		labels.add("successful");
 
 		state2label = new HashMap<Integer, String>();
-		state2label.put(CONFLICT, Globals.CONFLICTSTATEstring);
-		state2label.put(INVALID, Globals.NOVALIDSTATEstring);
+		state2label.put(CONFLICT, Globals.CONFLICT_STATE_STRING);
+		state2label.put(INVALID, Globals.NO_VALID_STATE_STRING);
 		state2label.put(NOT_AVAILABLE, "not_available");
 		state2label.put(NONE, "none");
 		state2label.put(FAILED, "failed");
 		state2label.put(SUCCESSFUL, "successful");
 
 		label2state = new HashMap<String, Integer>();
-		label2state.put(Globals.CONFLICTSTATEstring, CONFLICT);
-		label2state.put(Globals.NOVALIDSTATEstring, INVALID);
+		label2state.put(Globals.CONFLICT_STATE_STRING, CONFLICT);
+		label2state.put(Globals.NO_VALID_STATE_STRING, INVALID);
 		label2state.put("not_available", NOT_AVAILABLE);
 		label2state.put("none", NONE);
 		label2state.put("failed", FAILED);
 		label2state.put("successful", SUCCESSFUL);
 
 		label2displayLabel = new HashMap<String, String>();
-		label2displayLabel.put(Globals.CONFLICTSTATEstring, Globals.CONFLICTSTATEstring);
-		label2displayLabel.put(Globals.NOVALIDSTATEstring, Globals.NOVALIDSTATEstring);
+		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
+		label2displayLabel.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		label2displayLabel.put("not_available", "not_available");
 		label2displayLabel.put("none", "none");
 		label2displayLabel.put("failed", "failed");
 		label2displayLabel.put("successful", "success");
 
 		displayLabel2label = new HashMap<String, String>();
-		displayLabel2label.put(Globals.CONFLICTSTATEstring, Globals.CONFLICTSTATEstring);
-		displayLabel2label.put(Globals.NOVALIDSTATEstring, Globals.NOVALIDSTATEstring);
+		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
+		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		displayLabel2label.put("not_available", "not_available");
 		displayLabel2label.put("none", "none");
 		displayLabel2label.put("always", "always");

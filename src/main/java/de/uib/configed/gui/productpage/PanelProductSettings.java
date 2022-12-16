@@ -337,19 +337,19 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				Component result = null;
 				if (value != null && !value.equals("") && !value.toString().equals("null")
 						&& !value.toString().equalsIgnoreCase("none")
-						&& !value.toString().equalsIgnoreCase(Globals.CONFLICTSTATEstring)) {
+						&& !value.toString().equalsIgnoreCase(Globals.CONFLICT_STATE_STRING)) {
 					result = super.getTableCellRendererComponent(table, "installing", isSelected, hasFocus, row,
 							column);
 
 					((JLabel) result)
 							.setToolTipText(Globals.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
 
-				} else if (value != null && value.toString().equalsIgnoreCase(Globals.CONFLICTSTATEstring)) {
-					result = super.getTableCellRendererComponent(table, Globals.CONFLICTSTATEstring, isSelected,
+				} else if (value != null && value.toString().equalsIgnoreCase(Globals.CONFLICT_STATE_STRING)) {
+					result = super.getTableCellRendererComponent(table, Globals.CONFLICT_STATE_STRING, isSelected,
 							hasFocus, row, column);
 
-					((JLabel) result).setToolTipText(Globals
-							.fillStringToLength(tooltipPrefix + " " + Globals.CONFLICTSTATEstring + " ", FILL_LENGTH));
+					((JLabel) result).setToolTipText(Globals.fillStringToLength(
+							tooltipPrefix + " " + Globals.CONFLICT_STATE_STRING + " ", FILL_LENGTH));
 				}
 
 				else {
@@ -428,8 +428,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					if (val.equals(InstallationStateTableModel.CONFLICTstring)
 							|| val.equals(InstallationStateTableModel.unequalAddstring
 									+ InstallationStateTableModel.CONFLICTstring)) {
-						c.setBackground(Globals.CONFLICTSTATEcellcolor); // result.setForeground (lightBlack);
-						c.setForeground(Globals.CONFLICTSTATEcellcolor);
+						c.setBackground(Globals.CONFLICT_STATE_CELL_COLOR); // result.setForeground (lightBlack);
+						c.setForeground(Globals.CONFLICT_STATE_CELL_COLOR);
 					} else {
 
 						String productId = (String) table.getModel().getValueAt(table.convertRowIndexToModel(row), 0);

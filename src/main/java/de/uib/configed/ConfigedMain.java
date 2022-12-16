@@ -35,6 +35,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -137,15 +138,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 {
 
-	public static final int viewClients = 0;
-	public static final int viewLocalbootProducts = 1;
-	public static final int viewNetbootProducts = 2;
-	public static final int viewNetworkconfiguration = 3;
-	public static final int viewHardwareInfo = 4;
-	public static final int viewSoftwareInfo = 5;
-	public static final int viewLog = 6;
-	public static final int viewProductProperties = 7;
-	public static final int viewHostProperties = 8;
+	public static final int VIEW_CLIENTS = 0;
+	public static final int VIEW_LOCALBOOT_PRODUCTS = 1;
+	public static final int VIEW_NETBOOT_PRODUCTS = 2;
+	public static final int VIEW_NETWORK_CONFIGURATION = 3;
+	public static final int VIEW_HARDWARE_INFO = 4;
+	public static final int VIEW_SOFTWARE_INFO = 5;
+	public static final int VIEW_LOG = 6;
+	public static final int VIEW_PRODUCT_PROPERTIES = 7;
+	public static final int VIEW_HOST_PROPERTIES = 8;
 
 	// Dashboard disabled
 	public static final boolean DASH_ENABLED = true;
@@ -194,7 +195,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected String[] objectIds = new String[] {};
 	protected String[] selectedDepots = new String[] {};
 	protected String[] oldSelectedDepots;
-	protected Vector<String> selectedDepotsV = new Vector<String>();
+	protected Vector<String> selectedDepotsV = new Vector<>();
 
 	protected boolean anyDataChanged = false;
 
@@ -217,7 +218,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected String productEdited = null; // null serves als marker that we were not editing products
 	protected Collection productProperties; // the properties for one product and all selected clients
-	protected de.uib.opsidatamodel.datachanges.UpdateCollection updateCollection = new UpdateCollection(new Vector());
+	protected de.uib.opsidatamodel.datachanges.UpdateCollection updateCollection = new UpdateCollection(new Vector<>());
 	protected HashMap clientProductpropertiesUpdateCollections;
 	/*
 	 * for each product:
@@ -348,10 +349,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public final Dimension licencesInitDimension = new Dimension(1200, 800);
 
-	protected int viewIndex = viewClients;
-	protected int saveClientsViewIndex = viewClients;
-	protected int saveDepotsViewIndex = viewProductProperties;
-	protected int saveServerViewIndex = viewNetworkconfiguration;
+	protected int viewIndex = VIEW_CLIENTS;
+	protected int saveClientsViewIndex = VIEW_CLIENTS;
+	protected int saveDepotsViewIndex = VIEW_PRODUCT_PROPERTIES;
+	protected int saveServerViewIndex = VIEW_NETWORK_CONFIGURATION;
 
 	// public enum MainTabState {CLIENT_SELECTION, LOCALBOOT_PRODUCTS,
 	// NETBOOT_PRODUCTS, NETWORK_CONFIG, HARDWARE_INVENT, SOFTWARE_INVENT};
@@ -368,10 +369,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		LICENCEPOOL, ENTER_LICENCE, EDIT_LICENCE, USAGE, RECONCILIATION, STATISTICS
 	}
 
-	protected Map<LicencesTabStatus, TabClient> licencesPanels = new HashMap<>();
+	protected Map<LicencesTabStatus, TabClient> licencesPanels = new EnumMap<>(LicencesTabStatus.class);
 	protected LicencesTabStatus licencesStatus;
 
-	protected Map<LicencesTabStatus, String> licencesPanelsTabNames = new HashMap<>();
+	protected Map<LicencesTabStatus, String> licencesPanelsTabNames = new EnumMap<>(LicencesTabStatus.class);
 
 	// ==================================================================
 	// TabController Interface
@@ -502,7 +503,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		setRebuiltClientListTableModel();
 
-		logging.debug(this, "initialTreeActivation	");
+		logging.debug(this, "initialTreeActivation\u0009"); // \u0009 is tab
 
 		SwingUtilities.invokeLater(() -> {
 			initialTreeActivation();
@@ -620,48 +621,16 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			subdirs = savedStatesLocation.listFiles(File::isDirectory);
 
 			for (File folder : subdirs) {
-				// logging.info(this, "readLocallySavedServerNames savedStates for folder " +
-				// folder);
-
 				File checkFile = new File(folder + File.separator + configed.savedStatesFilename);
 				String folderPath = folder.getPath();
 				String elementname = folderPath.substring(folderPath.lastIndexOf(File.separator) + 1);
-				String hostname = elementname;
-				Integer port = null;
 
 				// revert encryption of ":"
 				if (elementname.lastIndexOf("_") > -1) {
-					try {
-						port = Integer.valueOf((elementname.substring(elementname.lastIndexOf("_") + 1)).trim());
-						hostname = elementname.substring(0, elementname.lastIndexOf("_"));
-					} catch (Exception ex) {
-						logging.info(this, "no port found, should be NumberFormatException: " + ex);
-					}
-
-					if (port != null) {
-						elementname = hostname + ":" + port;
-					}
+					elementname = elementname.replace("_", ":");
 				}
 
-				/*
-				 * SavedStates testSavedStates = new SavedStates(checkFile);
-				 * 
-				 * 
-				 * try{
-				 * testSavedStates.load();
-				 * }
-				 * catch(IOException iox)
-				 * {
-				 * logging.info(this, "saved states file could not be loades");
-				 * }
-				 * 
-				 * logging.info(this, "readLocallySavedServerNames savedStates for " +
-				 * elementname + " : " +testSavedStates);
-				 */
-
-				sortingmap.put(new java.sql.Timestamp(checkFile.lastModified()), elementname
-				// Integer.valueOf (testSavedStates.saveUsageCount.deserialize())
-				);
+				sortingmap.put(new java.sql.Timestamp(checkFile.lastModified()), elementname);
 			}
 		} catch (SecurityException ex) {
 			logging.warning("could not read file: " + ex);
@@ -724,8 +693,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// }
 
 	public void loadDataAndGo() {
-
 		dpass.setVisible(false);
+
 		logging.clearErrorList();
 
 		// errors are already handled in login
@@ -746,7 +715,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		persist.syncTables();
 
-		configed.fProgress = new FLoadingWaiter(
+		configed.fProgress = new FLoadingWaiter(dpass,
 				Globals.APPNAME + " " + configed.getResourceValue("FWaitProgress.title"));
 		((de.uib.utilities.observer.DataLoadingObservable) persist).registerDataLoadingObserver(configed.fProgress);
 
@@ -765,16 +734,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						false, new String[] { "ok" }, 350, 150);
 				fMessage.setMessage(configed.getResourceValue("Permission.modules.expires") + "\n" + opsiExpiresDate);
 				fMessage.setVisible(true);
-
-				/*
-				 * 
-				 * 
-				 * JOptionPane.showMessageDialog( mainFrame,
-				 * configed.getResourceValue("Permission.modules.expires")
-				 * + "\n" + opsiExpiresDate,
-				 * configed.getResourceValue("Permission.modules.title"),
-				 * JOptionPane.WARNING_MESSAGE);
-				 */
 			}
 		}
 
@@ -1769,8 +1728,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice[] gs = ge.getScreenDevices();
 
-		int wTaken = MainFrame.fwidth;
-		int hTaken = MainFrame.fheight;
+		int wTaken = MainFrame.F_WIDTH;
+		int hTaken = MainFrame.F_HEIGHT;
 
 		for (int i = 0; i < gs.length; i++) {
 			DisplayMode dm = gs[i].getDisplayMode();
@@ -1782,28 +1741,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			logging.info(this, "display height " + i + ": " + dm.getHeight());
 		}
 
-		// final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		// int width = screenSize.width;
-		// int height = screenSize.height;
-
 		logging.info(this, "locateAndDisplay, startSizing with screen width, height " + wTaken + ", " + hTaken);
-
-		int wDiff = wTaken - 30 - MainFrame.fwidth;
-		if (wDiff < 0) {
-			wDiff = 0;
-		}
-		int hDiff = hTaken - 30 - MainFrame.fheight;
-		if (hDiff < 0) {
-			hDiff = 0;
-		}
-
-		// take 2/3 from space > MainFrame.fwidth, MainFrame.fheight
-		// after giving some pixels for taskbars
-
-		final int width = MainFrame.fwidth + (wDiff * 2) / 3;
-		final int height = MainFrame.fheight + (hDiff * 2) / 3;
-
-		// mainFrame.startSizing( dim.width, dim.height );
 
 		String savedX = configed.savedStates.saveMainLocationX.deserialize();
 		String savedY = configed.savedStates.saveMainLocationY.deserialize();
@@ -1818,23 +1756,26 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		de.uib.utilities.Globals.startY = null;
 
 		if (savedX != null && savedY != null) {
-			try {
-				de.uib.utilities.Globals.startX = Integer.valueOf(savedX);
-				de.uib.utilities.Globals.startY = Integer.valueOf(savedY);
+			de.uib.utilities.Globals.startX = Integer.valueOf(savedX);
+			de.uib.utilities.Globals.startY = Integer.valueOf(savedY);
 
-				de.uib.utilities.Globals.startWidth = Integer.valueOf(savedWidth);
-				de.uib.utilities.Globals.startHeight = Integer.valueOf(savedHeight);
-			} catch (Exception ex) {
-			}
+			de.uib.utilities.Globals.startWidth = Integer.valueOf(savedWidth);
+			de.uib.utilities.Globals.startHeight = Integer.valueOf(savedHeight);
 		}
 
-		final Rectangle dim = de.uib.utilities.Globals.buildLocation(mainFrame, width, height, 0, 0);
+		Rectangle screenRectangle = configed.fProgress.getGraphicsConfiguration().getBounds();
 
-		mainFrame.setLocation(dim.x, dim.y);
+		logging.info(this, "set size and location of mainFrame");
+
+		// weird formula for size
+		mainFrame.setSize(screenRectangle.width * 19 / 20 - 100, screenRectangle.height * 19 / 20 - 100);
+
+		// Center mainFrame on screen of configed.fProgress
+		mainFrame.setLocation((int) (screenRectangle.getCenterX() - mainFrame.getSize().getWidth() / 2),
+				(int) (screenRectangle.getCenterY() - mainFrame.getSize().getHeight() / 2));
 
 		logging.info(this, "setting mainframe visible");
 		mainFrame.setVisible(true);
-		// mainFrame.pack();
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -1847,13 +1788,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				try {
 					logging.info(this, "locateAndDisplay, setting mainframe visible in EventQueue");
 
-					mainFrame.setLocation(dim.x, dim.y);
-
-					// mainFrame.setLocation(dim.x, dim.y);
 					// mainFrame.panel_Clientselection.setDividerLocation(dim.width - 100);
-					mainFrame.setVisible(true);
-					mainFrame.setSize(dim.width + 2, dim.height); // corrects splitpane
-					mainFrame.panel_Clientselection.setDividerLocation(dim.width - 100);
+					//mainFrame.setVisible(true);
+					//mainFrame.setSize(dim.width + 2, dim.height); // corrects splitpane
+					//mainFrame.panel_Clientselection.setDividerLocation(mainFrame.getWidth() - 100);
 					// mainFrame.repairSizes();
 					mainFrame.setSavingFramePosition(true);
 
@@ -1862,6 +1800,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 			}
 		});
+
 	}
 
 	protected void initLicencesFrame() {
@@ -1871,7 +1810,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				"initLicencesFrame");
 		// general
 
-		licencesFrame = new TabbedFrame(mainFrame, (TabController) this);
+		licencesFrame = new TabbedFrame(mainFrame, this);
 
 		Globals.frame1 = licencesFrame;
 		Globals.container1 = licencesFrame.getContentPane();
@@ -2084,10 +2023,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (persist == null || persist.getConnectionState().getState() != ConnectionState.CONNECTED) {
 			logging.info(this, "become interactive");
-			dpass.setVisible(true);
-			dpass.activate();
-			dpass.setModal(true);
+			//dpass.activate();
 			dpass.setAlwaysOnTop(true);
+			dpass.setVisible(true);
 			// dpass will give back control and call loadDataAndGo
 		}
 
@@ -2649,10 +2587,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		clearLogPage();
 		clearSoftwareInfoPage();
 
-		if (getViewIndex() != viewClients) // change in selection not via clientpage (i.e. via tree)
+		if (getViewIndex() != VIEW_CLIENTS) // change in selection not via clientpage (i.e. via tree)
 		{
 			logging.debug(this, "getSelectedClients  " + logging.getStrings(getSelectedClients())
-					+ " ,  getViewIndex, viewClients: " + getViewIndex() + ", " + viewClients);
+					+ " ,  getViewIndex, viewClients: " + getViewIndex() + ", " + VIEW_CLIENTS);
 			int newViewIndex = getViewIndex();
 			resetView(newViewIndex);
 		}
@@ -4357,7 +4295,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// extra tasks not done by resetView
 	{
 		switch (viewIndex) {
-		case viewClients: {
+		case VIEW_CLIENTS: {
 			checkErrorList();
 			// mainFrame.menuClientSelectionSetEnabled(true);
 			// mainFrame.deselectSetEnabled(true);
@@ -4385,47 +4323,47 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		boolean result = true;
 
 		switch (viewIndex) {
-		case viewClients: {
+		case VIEW_CLIENTS: {
 			break;
 		}
 
-		case viewLocalbootProducts: {
+		case VIEW_LOCALBOOT_PRODUCTS: {
 			result = setLocalbootProductsPage();
 			break;
 		}
 
-		case viewNetbootProducts: {
+		case VIEW_NETBOOT_PRODUCTS: {
 			result = setNetbootProductsPage();
 			break;
 		}
 
-		case viewNetworkconfiguration: {
+		case VIEW_NETWORK_CONFIGURATION: {
 			result = setNetworkconfigurationPage();
 			break;
 		}
 
-		case viewHardwareInfo: {
+		case VIEW_HARDWARE_INFO: {
 			result = setHardwareInfoPage();
 			break;
 		}
 
-		case viewSoftwareInfo: {
+		case VIEW_SOFTWARE_INFO: {
 			result = setSoftwareInfoPage();
 			break;
 		}
 
-		case viewLog: {
+		case VIEW_LOG: {
 			result = setLogPage();
 			break;
 		}
 
-		case viewProductProperties: {
+		case VIEW_PRODUCT_PROPERTIES: {
 			result = setProductPropertiesPage();
 
 			break;
 		}
 
-		case viewHostProperties: {
+		case VIEW_HOST_PROPERTIES: {
 			result = setHostPropertiesPage();
 			break;
 		}
@@ -4470,7 +4408,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		logging.info(this, "setViewIndex anyDataChanged " + anyDataChanged);
 
-		if (anyDataChanged && (viewIndex == viewLocalbootProducts || viewIndex == viewNetbootProducts)) {
+		if (anyDataChanged && (viewIndex == VIEW_LOCALBOOT_PRODUCTS || viewIndex == VIEW_NETBOOT_PRODUCTS)) {
 			if (depotsList_selectionChanged) {
 				requestReloadStatesAndActions();
 			} else {
@@ -4483,11 +4421,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// we will only leave view 0 if a PC is selected
 
 		// check if change of view index to the value of visualViewIndex can be allowed
-		if (visualViewIndex != viewClients) {
+		if (visualViewIndex != VIEW_CLIENTS) {
 
-			if (!((visualViewIndex == viewClients)
-					|| ((visualViewIndex == viewNetworkconfiguration) && (editingTarget == EditingTarget.SERVER))
-					|| ((visualViewIndex == viewHostProperties) && (editingTarget == EditingTarget.DEPOTS)))) {
+			if (!((visualViewIndex == VIEW_CLIENTS)
+					|| ((visualViewIndex == VIEW_NETWORK_CONFIGURATION) && (editingTarget == EditingTarget.SERVER))
+					|| ((visualViewIndex == VIEW_HOST_PROPERTIES) && (editingTarget == EditingTarget.DEPOTS)))) {
 				logging.debug(this, " selected clients " + logging.getStrings(getSelectedClients()));
 
 				if (getSelectedClients() == null)
@@ -4499,7 +4437,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					JOptionPane.showMessageDialog(mainFrame,
 							configed.getResourceValue("ConfigedMain.pleaseSelectPc.text"),
 							configed.getResourceValue("ConfigedMain.pleaseSelectPc.title"), JOptionPane.OK_OPTION);
-					viewIndex = viewClients;
+					viewIndex = VIEW_CLIENTS;
 				}
 
 				/*
@@ -4521,7 +4459,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		{
 			viewIndex = visualViewIndex;
 
-			if (viewIndex != viewClients) {
+			if (viewIndex != VIEW_CLIENTS) {
 				// mainFrame.menuClientSelectionSetEnabled(false);
 				// mainFrame.deselectSetEnabled(false);
 
@@ -4551,7 +4489,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				logging.debug(" tab index could not be changed");
 			}
 
-			if (viewIndex == viewClients) {
+			if (viewIndex == VIEW_CLIENTS) {
 				if (reachableUpdater.isInterrupted())
 					reachableUpdater.interrupt();
 
@@ -5480,7 +5418,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				);
 
 				// boolean changed = false;
-				if (!suspended && editingTarget == EditingTarget.CLIENTS && viewIndex == viewClients) {
+				if (!suspended && editingTarget == EditingTarget.CLIENTS && viewIndex == VIEW_CLIENTS) {
 					// logging.debug(this, "updating");
 					try {
 						// we catch exceptions especially if we are on some updating process for the
@@ -6615,7 +6553,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		dialogRemoteControl.resetValue();
 
 		dialogRemoteControl.setLocation((int) mainFrame.getX() + 40, (int) mainFrame.getY() + 40);
-		dialogRemoteControl.setSize(MainFrame.fwidth, mainFrame.getHeight() / 2);
+		dialogRemoteControl.setSize(MainFrame.F_WIDTH, mainFrame.getHeight() / 2);
 
 		dialogRemoteControl.setVisible(true);
 		dialogRemoteControl.setDividerLocation(0.8);

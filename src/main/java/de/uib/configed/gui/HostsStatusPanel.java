@@ -206,60 +206,60 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		initializeValues();
 
 		layoutStatusPane.setHorizontalGroup(layoutStatusPane.createSequentialGroup()
-				.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-				.addComponent(labelAllClientsCount, 0, Globals.counterfieldWidth, Globals.counterfieldWidth)
-				.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize)
+				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+				.addComponent(labelAllClientsCount, 0, Globals.COUNTERFIELD_WIDTH, Globals.COUNTERFIELD_WIDTH)
+				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE)
 				.addComponent(labelActivated, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize)
+				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE)
 				.addComponent(labelGroupActivated, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize)
+				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE)
 				.addComponent(fieldGroupActivated, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						Short.MAX_VALUE)
-				.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize)
+				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE)
 				.addComponent(labelSelectedClientsNames, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 				.addComponent(fieldSelectedClientsNames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						Short.MAX_VALUE)
-				.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 				.addComponent(labelSelectedClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize)
+				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE)
 				.addComponent(fieldActivatedClientsCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 				.addComponent(labelInvolvedDepots, 2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(fieldInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						Short.MAX_VALUE)
 				.addComponent(labelInvolvedDepots2, 2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize));
+				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE));
 
 		layoutStatusPane.setVerticalGroup(layoutStatusPane.createParallelGroup(GroupLayout.Alignment.CENTER)
 				.addGroup(layoutStatusPane.createSequentialGroup()
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addGroup(layoutStatusPane.createParallelGroup(GroupLayout.Alignment.BASELINE)
-								.addComponent(labelAllClientsCount, Globals.lineHeight, Globals.lineHeight,
-										Globals.lineHeight)
-								.addComponent(labelActivated, Globals.lineHeight, Globals.lineHeight,
-										Globals.lineHeight)
-								.addComponent(labelGroupActivated, Globals.lineHeight, Globals.lineHeight,
-										Globals.lineHeight)
-								.addComponent(fieldGroupActivated, Globals.lineHeight, Globals.lineHeight,
-										Globals.lineHeight)
-								.addComponent(labelSelectedClientsCount, Globals.lineHeight, Globals.lineHeight,
-										Globals.lineHeight)
-								.addComponent(fieldActivatedClientsCount, Globals.lineHeight, Globals.lineHeight,
-										Globals.lineHeight)
-								.addComponent(labelSelectedClientsNames, Globals.lineHeight, Globals.lineHeight,
-										Globals.lineHeight)
-								.addComponent(fieldSelectedClientsNames, Globals.lineHeight, Globals.lineHeight,
-										Globals.lineHeight)
-								.addComponent(labelInvolvedDepots, Globals.lineHeight, Globals.lineHeight,
-										Globals.lineHeight)
-								.addComponent(labelInvolvedDepots2, Globals.lineHeight, Globals.lineHeight,
-										Globals.lineHeight)
-								.addComponent(fieldInvolvedDepots, Globals.lineHeight, Globals.lineHeight,
-										Globals.lineHeight))
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
+								.addComponent(labelAllClientsCount, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(labelActivated, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(labelGroupActivated, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(fieldGroupActivated, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(labelSelectedClientsCount, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(fieldActivatedClientsCount, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(labelSelectedClientsNames, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(fieldSelectedClientsNames, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(labelInvolvedDepots, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(labelInvolvedDepots2, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(fieldInvolvedDepots, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT))
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
 		/*
 		 * csStatusPane.doForAllContainedCompisOfClass

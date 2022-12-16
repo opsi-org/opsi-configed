@@ -21,8 +21,7 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 
 	public SSHPMInstallServerPanel(String fullPathToPackage) {
 		super();
-		autocompletion = new SSHCompletionComboButton(
-				additional_default_paths, ".opsi", fullPathToPackage);
+		autocompletion = new SSHCompletionComboButton(additional_default_paths, ".opsi", fullPathToPackage);
 
 		initComponents();
 		setPackagePath(fullPathToPackage);
@@ -67,34 +66,30 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 		GroupLayout layout = new GroupLayout(this);
 
 		this.setLayout(layout);
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGap(2 * Globals.gapSize)
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE).addGroup(layout
+				.createParallelGroup(center)
+				.addComponent(lbl_server_dir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(cb_autocompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(btn_autocompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
 				.addGroup(layout.createParallelGroup(center)
-						.addComponent(lbl_server_dir, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(cb_autocompletion, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight)
-						.addComponent(btn_autocompletion, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight))
-				.addGroup(layout.createParallelGroup(center)
-						.addComponent(lbl_opsi_product, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight)
-						.addComponent(tf_product, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(2 * Globals.gapSize));
+						.addComponent(lbl_opsi_product, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(tf_product, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGap(2 * Globals.GAP_SIZE));
 
-		layout.setHorizontalGroup(layout.createSequentialGroup()
-				.addGap(2 * Globals.gapSize)
-				.addGroup(layout.createParallelGroup()
-						.addComponent(lbl_server_dir, PREF, PREF, PREF)
-						.addGroup(layout.createSequentialGroup()
-								.addComponent(lbl_opsi_product, PREF, PREF, PREF)))
-				.addGap(Globals.gapSize)
-				.addGroup(layout.createParallelGroup()
-						.addGroup(layout.createSequentialGroup()
-								.addComponent(cb_autocompletion, Globals.buttonWidth, Globals.buttonWidth, MAX)
-								.addComponent(btn_autocompletion, PREF, PREF, PREF))
-						.addGroup(layout.createSequentialGroup()
-								.addComponent(tf_product, Globals.buttonWidth, Globals.buttonWidth, MAX)))
-				.addGap(2 * Globals.gapSize));
+		layout.setHorizontalGroup(
+				layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
+						.addGroup(layout.createParallelGroup().addComponent(lbl_server_dir, PREF, PREF, PREF).addGroup(
+								layout.createSequentialGroup().addComponent(lbl_opsi_product, PREF, PREF, PREF)))
+						.addGap(Globals.GAP_SIZE)
+						.addGroup(layout.createParallelGroup()
+								.addGroup(layout.createSequentialGroup()
+										.addComponent(cb_autocompletion, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+												MAX)
+										.addComponent(btn_autocompletion, PREF, PREF, PREF))
+								.addGroup(layout.createSequentialGroup().addComponent(tf_product, Globals.BUTTON_WIDTH,
+										Globals.BUTTON_WIDTH, MAX)))
+						.addGap(2 * Globals.GAP_SIZE));
 	}
 
 	public CommandOpsiPackageManagerInstall getCommand() {
