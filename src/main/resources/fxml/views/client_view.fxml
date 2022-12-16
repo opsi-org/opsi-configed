@@ -117,12 +117,12 @@
                            <children>
                               <VBox spacing="10.0">
                                  <children>
-                                    <HBox prefHeight="0.0" prefWidth="548.0" spacing="20.0" VBox.vgrow="ALWAYS">
+                                    <HBox prefHeight="0.0" prefWidth="548.0" spacing="20.0" VBox.vgrow="ALWAYS" alignment="CENTER">
                                        <children>
-                                          <CheckBox fx:id="clientActivityStatusCheckBox" mnemonicParsing="false" text="%Dashboard.clientActivityTitle" HBox.hgrow="ALWAYS" />
-                                          <ChoiceBox fx:id="clientActivityStatusChoiceBox" disable="true" prefWidth="150.0" HBox.hgrow="ALWAYS" />
-                                          <CheckBox fx:id="clientLastSeenCheckBox" mnemonicParsing="false" text="%Dashboard.lastSeenTitle" HBox.hgrow="ALWAYS" />
-                                          <ChoiceBox fx:id="clientLastSeenChoiceBox" disable="true" prefHeight="24.0" prefWidth="173.0" HBox.hgrow="ALWAYS" />
+                                          <Label mnemonicParsing="false" text="%Dashboard.clientActivityTitle" HBox.hgrow="ALWAYS" />
+                                          <ChoiceBox fx:id="clientActivityStatusChoiceBox" disable="false" prefWidth="150.0" HBox.hgrow="ALWAYS" />
+                                          <Label mnemonicParsing="false" text="%Dashboard.lastSeenTitle" HBox.hgrow="ALWAYS" />
+                                          <ChoiceBox fx:id="clientLastSeenChoiceBox" disable="false" prefHeight="24.0" prefWidth="173.0" HBox.hgrow="ALWAYS" />
                                        </children>
                                     </HBox>
                                     <TextField fx:id="clientSearchbarTextField" />

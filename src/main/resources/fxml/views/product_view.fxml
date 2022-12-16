@@ -112,9 +112,9 @@
                <children>
                   <VBox prefHeight="148.0" prefWidth="381.0" spacing="10.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <HBox spacing="10.0">
+                        <HBox spacing="10.0" alignment="CENTER">
                            <children>
-                              <CheckBox fx:id="productStatusCheckBox" mnemonicParsing="false" text="%Dashboard.product.status" />
+                              <Label mnemonicParsing="false" text="%Dashboard.product.status" />
                               <ChoiceBox fx:id="productStatusChoiceBox" prefWidth="150.0" />
                               <TextField fx:id="productSearchbarTextField" HBox.hgrow="ALWAYS" />
                            </children>
