@@ -49,7 +49,7 @@ import de.uib.utilities.logging.logging;
  */
 
 public class JSONthroughHTTPS extends JSONthroughHTTP {
-	private static final boolean DISABLE_CERTIFICATE_VERIFICATION = true;
+	private static final boolean DISABLE_CERTIFICATE_VERIFICATION = false;
 
 	public JSONthroughHTTPS(String host, String username, String password) {
 		super(host, username, password);
