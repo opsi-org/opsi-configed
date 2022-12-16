@@ -256,7 +256,6 @@ public class ProductData {
 				String hostname = entry.getKey();
 
 				entry.getValue().forEach(productId -> {
-					System.out.println("product: " + productId + " for " + hostname + " in " + depot);
 					Product product = new Product();
 					product.setDepot(depot);
 					product.setId(productId);
@@ -271,13 +270,11 @@ public class ProductData {
 						List<String> clientss = matchedProduct.get().getClients();
 						clientss.add(hostname);
 						product.setClients(clientss);
-						System.out.println("adding to existing");
 						unusedProductsList.replace(matchedProduct.get(), product);
 					} else {
 						List<String> clientss = new ArrayList<>();
 						clientss.add(hostname);
 						product.setClients(clientss);
-						System.out.println("adding as new");
 						unusedProductsList.put(product, product);
 					}
 				});
