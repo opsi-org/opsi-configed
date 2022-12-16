@@ -168,8 +168,8 @@ public class ControlDash {
 			// fDash.setSize( new Dimension( 400, 500 ) );
 
 			if (Globals.mainFrame != null) {
-				fDash.setLocation(Globals.mainFrame.getX() + Globals.locationDistanceX,
-						Globals.mainFrame.getY() + Globals.locationDistanceY);
+				fDash.setLocation(Globals.mainFrame.getX() + Globals.LOCATION_DISTANCE_X,
+						Globals.mainFrame.getY() + Globals.LOCATION_DISTANCE_Y);
 			}
 
 		}

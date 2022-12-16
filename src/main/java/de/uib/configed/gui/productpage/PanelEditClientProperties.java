@@ -2,7 +2,6 @@ package de.uib.configed.gui.productpage;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
@@ -47,60 +46,42 @@ public class PanelEditClientProperties extends DefaultPanelEditProperties {
 
 		buttonSetValuesFromServerDefaults = new IconButton(
 				configed.getResourceValue("ProductInfoPane.buttonSetValuesFromServerDefaults"),
-				"images/reset_network_defaults.png",
-				"images/reset_network_defaults_over.png",
-				" ",
-				true);
+				"images/reset_network_defaults.png", "images/reset_network_defaults_over.png", " ", true);
 
 		buttonSetValuesFromServerDefaults.setPreferredSize(new Dimension(15, 30));
 
-		buttonSetValuesFromServerDefaults.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				productPropertiesPanel.resetDefaults();
-
-			}
-		});
+		buttonSetValuesFromServerDefaults.addActionListener((ActionEvent e) -> productPropertiesPanel.resetDefaults());
 
 		buttonRemoveSpecificValues = new IconButton(
 				configed.getResourceValue("ProductInfoPane.buttonRemoveSpecificValues"),
 				"images/reset_network_eliminate.png", /* "images/edit-delete.png", */
 				"images/reset_network_eliminate_over.png", /* "images/edit-delete_over.png", */
-				"images/reset_network_eliminate_disabled.png",
-				true);
+				"images/reset_network_eliminate_disabled.png", true);
 
 		buttonRemoveSpecificValues.setPreferredSize(new Dimension(15, 30));
 
-		buttonRemoveSpecificValues.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				productPropertiesPanel.setVoid();
-			}
-		});
+		buttonRemoveSpecificValues.addActionListener((ActionEvent e) -> productPropertiesPanel.setVoid());
 
 		javax.swing.GroupLayout layoutEditProperties = new javax.swing.GroupLayout(this);
 		setLayout(layoutEditProperties);
 
-		layoutEditProperties.setHorizontalGroup(
-				layoutEditProperties.createSequentialGroup()
-						.addGap(hGapSize, hGapSize, hGapSize)
-						.addGroup(
-								layoutEditProperties.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addGroup(layoutEditProperties.createSequentialGroup()
-												.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-												// .addComponent(jLabelProductProperties, minHSize, prefHSize,
-												// Short.MAX_VALUE)
-												.addGap(hGapSize, hGapSize, hGapSize)
-												// .addComponent(buttonSetValuesFromServerDefaults, 20, 20, 20)
-												.addGap(2, 2, 2)
-										// .addComponent(buttonRemoveSpecificValues, 20, 20, 20)
-										)
-										.addComponent(productPropertiesPanel, minHSize, GroupLayout.PREFERRED_SIZE,
-												Short.MAX_VALUE))
+		layoutEditProperties
+				.setHorizontalGroup(layoutEditProperties.createSequentialGroup().addGap(hGapSize, hGapSize, hGapSize)
+						.addGroup(layoutEditProperties.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(layoutEditProperties.createSequentialGroup()
+										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+										// .addComponent(jLabelProductProperties, minHSize, prefHSize,
+										// Short.MAX_VALUE)
+										.addGap(hGapSize, hGapSize, hGapSize)
+										// .addComponent(buttonSetValuesFromServerDefaults, 20, 20, 20)
+										.addGap(2, 2, 2)
+								// .addComponent(buttonRemoveSpecificValues, 20, 20, 20)
+								).addComponent(productPropertiesPanel, minHSize, GroupLayout.PREFERRED_SIZE,
+										Short.MAX_VALUE))
 						.addGap(0, hGapSize, hGapSize));
 
-		layoutEditProperties.setVerticalGroup(
-				layoutEditProperties.createSequentialGroup()
-						.addGap(minGapVSize, vGapSize, vGapSize)
+		layoutEditProperties
+				.setVerticalGroup(layoutEditProperties.createSequentialGroup().addGap(minGapVSize, vGapSize, vGapSize)
 						.addGroup(layoutEditProperties.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
 						// .addComponent(jLabelProductProperties, 0, GroupLayout.PREFERRED_SIZE,
 						// GroupLayout.PREFERRED_SIZE)
@@ -108,10 +89,8 @@ public class PanelEditClientProperties extends DefaultPanelEditProperties {
 						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						// .addComponent(buttonRemoveSpecificValues, GroupLayout.PREFERRED_SIZE,
 						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						)
-						.addGap(minGapVSize, minGapVSize, minGapVSize)
-						.addComponent(productPropertiesPanel, minTableVSize, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE));
+						).addGap(minGapVSize, minGapVSize, minGapVSize).addComponent(productPropertiesPanel,
+								minTableVSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
 	private void initTitlePanel() {
@@ -120,22 +99,17 @@ public class PanelEditClientProperties extends DefaultPanelEditProperties {
 		GroupLayout titleLayout = new GroupLayout(titlePanel);
 		titlePanel.setLayout(titleLayout);
 
-		titleLayout.setHorizontalGroup(
-				titleLayout.createSequentialGroup()
-						.addComponent(jLabelProductProperties, minHSize, prefHSize, Short.MAX_VALUE)
-						.addGap(hGapSize, hGapSize, hGapSize)
-						.addComponent(buttonSetValuesFromServerDefaults, 20, 20, 20)
-						.addGap(2, 2, 2)
-						.addComponent(buttonRemoveSpecificValues, 20, 20, 20));
+		titleLayout.setHorizontalGroup(titleLayout.createSequentialGroup()
+				.addComponent(jLabelProductProperties, minHSize, prefHSize, Short.MAX_VALUE)
+				.addGap(hGapSize, hGapSize, hGapSize).addComponent(buttonSetValuesFromServerDefaults, 20, 20, 20)
+				.addGap(2, 2, 2).addComponent(buttonRemoveSpecificValues, 20, 20, 20));
 
-		titleLayout.setVerticalGroup(
-				titleLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelProductProperties, 0, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonSetValuesFromServerDefaults, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonRemoveSpecificValues, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		titleLayout.setVerticalGroup(titleLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+				.addComponent(jLabelProductProperties, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(buttonSetValuesFromServerDefaults, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(buttonRemoveSpecificValues, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 	}
 
 	@Override

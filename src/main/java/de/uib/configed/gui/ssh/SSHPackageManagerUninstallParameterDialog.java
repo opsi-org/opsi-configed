@@ -284,7 +284,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 			cb_opsiproducts = new JComboBoxSimpleToolTip();
 			cb_opsiproducts.setRenderer(new DefaultListCellRenderer());
-			cb_opsiproducts.setMaximumRowCount(Globals.comboBoxRowCount);
+			cb_opsiproducts.setMaximumRowCount(Globals.COMBOBOX_ROW_COUNT);
 
 			/*
 			 * cb_opsiproducts.addActionListener(new ActionListener(){
@@ -528,13 +528,13 @@ public class SSHPackageManagerUninstallParameterDialog
 		GroupLayout uninstallPanelLayout = new GroupLayout((JComponent) uninstallPanel);
 		uninstallPanel.setLayout(uninstallPanelLayout);
 		uninstallPanelLayout.setHorizontalGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(lbl_uninstall, pref, pref, max).addGap(Globals.gapSize * 2)
+				.addComponent(lbl_uninstall, pref, pref, max).addGap(Globals.GAP_SIZE * 2)
 				.addGroup(uninstallPanelLayout
 						.createSequentialGroup().addGroup(uninstallPanelLayout.createParallelGroup()
 								// .addComponent(lbl_product,250, 250, 250)
 								.addGroup(uninstallPanelLayout.createSequentialGroup().addGap(5, 10, 20)
-										.addComponent(cb_opsiproducts, Globals.buttonWidth, Globals.buttonWidth,
-												2 * Globals.buttonWidth)
+										.addComponent(cb_opsiproducts, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+												2 * Globals.BUTTON_WIDTH)
 										.addGap(5, 5, 5)
 										// .addComponent(buttonUpdateList, 30, 30, 30)
 										.addGap(5, 10, 20))
@@ -543,11 +543,11 @@ public class SSHPackageManagerUninstallParameterDialog
 										.addComponent(btn_depotselection, pref, pref, pref))
 								.addComponent(lbl_verbosity, pref, pref, pref)
 								.addComponent(lbl_keepFiles, pref, pref, pref))
-						.addGap(Globals.gapSize)
+						.addGap(Globals.GAP_SIZE)
 						.addGroup(uninstallPanelLayout.createParallelGroup(leading)
 								.addComponent(tf_product, pref, pref, max)
 								.addComponent(tf_selecteddepots, pref, pref, max)
-								.addComponent(cb_verbosity, Globals.iconWidth, Globals.iconWidth, Globals.iconWidth)
+								.addComponent(cb_verbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 								// .addGroup(uninstallPanelLayout.createParallelGroup()
 								// .addGroup(uninstallPanelLayout.createSequentialGroup()
 								// .addGap(Globals.gapSize*2 + Globals.minGapSize-2)
@@ -565,40 +565,40 @@ public class SSHPackageManagerUninstallParameterDialog
 		// .addComponent(lbl_fullCommand, pref, pref,max)
 		);
 
-		uninstallPanelLayout.setVerticalGroup(
-				uninstallPanelLayout.createSequentialGroup().addComponent(lbl_uninstall).addGap(Globals.gapSize)
+		uninstallPanelLayout.setVerticalGroup(uninstallPanelLayout.createSequentialGroup().addComponent(lbl_uninstall)
+				.addGap(Globals.GAP_SIZE)
 
-						.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(cb_opsiproducts, pref, pref, pref)
-								// .addComponent(buttonUpdateList, Globals.lineHeight, Globals.lineHeight,
-								// Globals.lineHeight)
-								.addComponent(tf_product, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
+				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(cb_opsiproducts, pref, pref, pref)
+						// .addComponent(buttonUpdateList, Globals.lineHeight, Globals.lineHeight,
+						// Globals.lineHeight)
+						.addComponent(tf_product, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 
-						.addGap(3 * Globals.gapSize)
+				.addGap(3 * Globals.GAP_SIZE)
 
-						.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(lbl_on, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-								.addComponent(btn_depotselection, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight)
-								.addComponent(tf_selecteddepots, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight))
+				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(lbl_on, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(btn_depotselection, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(tf_selecteddepots, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
 
-						.addGap(3 * Globals.gapSize)
-						.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(lbl_verbosity, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight)
-								.addComponent(cb_verbosity, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight))
-						.addGap(Globals.minGapSize)
-						.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(lbl_keepFiles, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight)
-								// .addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								// .addComponent(empty_lbl,pref,pref,pref)
-								.addComponent(checkb_keepFiles, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight)
-						// )
-						).addGap(Globals.gapSize)
+				.addGap(3 * Globals.GAP_SIZE)
+				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(lbl_verbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(cb_verbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
+				.addGap(Globals.MIN_GAP_SIZE)
+				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(lbl_keepFiles, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						// .addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						// .addComponent(empty_lbl,pref,pref,pref)
+						.addComponent(checkb_keepFiles, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+				// )
+				).addGap(Globals.GAP_SIZE)
 		// .addComponent(lbl_fullCommand)
 		);
 	}

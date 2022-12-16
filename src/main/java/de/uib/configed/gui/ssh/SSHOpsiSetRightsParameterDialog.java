@@ -134,28 +134,29 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	private void initLayout() {
 		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
 		inputPanel.setLayout(inputPanelLayout);
-		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize)
+		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup()
 						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(lbl_info,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.gapSize)
+						.addGap(Globals.GAP_SIZE)
 						.addGroup(inputPanelLayout.createSequentialGroup()
-								.addComponent(cb_autocompletion, Globals.buttonWidth, Globals.buttonWidth,
+								.addComponent(cb_autocompletion, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 										Short.MAX_VALUE)
 								.addComponent(btn_searchDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.gapSize))
-				.addGap(Globals.gapSize));
+						.addGap(Globals.GAP_SIZE))
+				.addGap(Globals.GAP_SIZE));
 
-		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize)
+		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_info, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(Globals.gapSize)
+						.addComponent(lbl_info, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(cb_autocompletion, Globals.buttonHeight, Globals.buttonHeight,
-								Globals.buttonHeight)
-						.addComponent(btn_searchDir, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(Globals.gapSize));
+						.addComponent(cb_autocompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(btn_searchDir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
+				.addGap(Globals.GAP_SIZE));
 
 		this.setSize(600, 200);
 		this.centerOn(de.uib.configed.Globals.mainFrame);

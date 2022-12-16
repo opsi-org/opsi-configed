@@ -20,8 +20,8 @@ import de.uib.utilities.logging.logging;
  */
 
 public class Globals {
-	public static final String VERSION = "4.2.19.2";
-	public static final String VERDATE = "2022-12-01";
+	public static final String VERSION = "4.2.20.1";
+	public static final String VERDATE = "2022-12-15";
 
 	public static final String VERHASHTAG = "";
 
@@ -107,10 +107,9 @@ public class Globals {
 	public static final Color backgroundWhite = new Color(245, 245, 245);
 	public static final Color backgroundGrey = new Color(220, 220, 220);
 	public static final Color backgroundLightGrey = new Color(230, 230, 230);
-	public static final Color backLightBlue = new Color(220, 228, 242); // new Color (210,216,232);
+	public static final Color backLightBlue = new Color(220, 228, 242);
 	public static final Color backLighterBlue = new Color(230, 230, 245);
 	public static final Color backVeryLightBlue = new Color(240, 240, 245);
-	// public static final Color backLight = new Color (220,230,230);
 	public static final Color backBlue = new Color(200, 200, 250);
 	public static final Color backYellow = new java.awt.Color(255, 255, 182);
 	public static final Color backLightYellow = new java.awt.Color(250, 248, 221);
@@ -201,56 +200,52 @@ public class Globals {
 		return new javax.swing.border.LineBorder(Globals.backBlue, 2, true);
 	}
 
-	public static final int toolTipInitialDelayMs = 1000;
-	public static final int toolTipDismissDelayMs = 20000;
-	public static final int toolTipReshowDelayMs = 0;
+	public static final int GAP_SIZE = 10;
+	public static final int MIN_GAP_SIZE = 5;
+	public static final int VGAP_SIZE = 10;
+	public static final int HGAP_SIZE = 10;
+	public static final int MIN_VGAP_SIZE = 5;
+	public static final int MIN_HGAP_SIZE = 5;
 
-	public static final int gapSize = 10;
-	public static final int minGapSize = 5;
-	public static final int vGapSize = 10;
-	public static final int hGapSize = 10;
-	public static final int minVGapSize = 5;
-	public static final int minHGapSize = 5;
+	public static final int MIN_VSIZE = 10;
+	public static final int PREF_VSIZE = 80;
 
-	public static final int minVSize = 10;
-	public static final int prefVSize = 80;
+	public static final int MIN_HSIZE = 50;
+	public static final int PREF_HSIZE = 80;
 
-	public static final int minHSize = 50;
-	public static final int prefHSize = 80;
+	public static final int BUTTON_HEIGHT = 24;
+	public static final int LINE_HEIGHT = 28;
+	public static final int SMALL_HEIGHT = 18;
+	public static final int PROGRESS_BAR_HEIGHT = 10;
+	public static final int BUTTON_WIDTH = 140;
+	public static final int ICON_WIDTH = 60;
+	public static final int LABEL_WIDTH = 80;
+	public static final int TIME_SPINNER_WIDTH = 50;
+	public static final int SQUARE_BUTTON_WIDTH = 24;
 
-	public static final int buttonHeight = 24;
-	public static final int lineHeight = 28;
-	public static final int smallHeight = 18;
-	public static final int progressBarHeight = 10;
-	public static final int buttonWidth = 140;
-	public static final int iconWidth = 60;
-	public static final int labelWidth = 80;
-	public static final int timeSpinnerWidth = 50;
-	public static final int squareButtonWidth = 24;
-
-	public static final Dimension buttonDimension = new Dimension(buttonWidth, buttonHeight);
-	public static final Dimension smallButtonDimension = new Dimension(buttonWidth / 2, buttonHeight);
-	public static final Dimension shortButtonDimension = new Dimension(buttonWidth / 4, buttonHeight);
-	public static final Dimension textfieldDimension = new Dimension(buttonWidth, lineHeight);
-	public static final Dimension labelDimension = new Dimension(labelWidth, lineHeight);
-	public static final Dimension shortlabelDimension = new Dimension(60, lineHeight);
-	public static final int counterfieldWidth = 160;
-	public static final Dimension counterfieldDimension = new Dimension(counterfieldWidth, lineHeight);
+	public static final Dimension buttonDimension = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);
+	public static final Dimension smallButtonDimension = new Dimension(BUTTON_WIDTH / 2, BUTTON_HEIGHT);
+	public static final Dimension shortButtonDimension = new Dimension(BUTTON_WIDTH / 4, BUTTON_HEIGHT);
+	public static final Dimension textfieldDimension = new Dimension(BUTTON_WIDTH, LINE_HEIGHT);
+	public static final Dimension labelDimension = new Dimension(LABEL_WIDTH, LINE_HEIGHT);
+	public static final Dimension shortlabelDimension = new Dimension(60, LINE_HEIGHT);
+	public static final int COUNTERFIELD_WIDTH = 160;
+	public static final Dimension counterfieldDimension = new Dimension(COUNTERFIELD_WIDTH, LINE_HEIGHT);
 
 	public static final Dimension modeSwitchDimension = new Dimension(50, 50);
 
-	public static int graphicButtonHeight = 40;
-	public static int graphicButtonWidth = 40;
-	public static int graphicButtonWidthX = 55;
+	public static final int GRAPHIC_BUTTON_HEIGHT = 40;
+	public static final int GRAPHIC_BUTTON_WIDTH = 40;
+	public static final int GRAPHIC_BUTTON_WIDTH_X = 55;
 
-	public static int checkBoxWidth = 20;
-	public static int comboBoxRowCount = 20;
+	public static final int CHECKBOX_WIDTH = 20;
+	public static final int COMBOBOX_ROW_COUNT = 20;
 
-	public static final Dimension graphicButtonDimension = new Dimension(graphicButtonWidth, graphicButtonHeight);
+	public static final Dimension graphicButtonDimension = new Dimension(GRAPHIC_BUTTON_WIDTH, GRAPHIC_BUTTON_HEIGHT);
 
 	// action form constants
-	public static int hFirstGap = hGapSize * 3;
-	public static int firstLabelWidth = 250;
+	public static final int HFIRST_GAP = HGAP_SIZE * 3;
+	public static final int FIRST_LABEL_WIDTH = 250;
 
 	public static final String[] logtypes = new String[] { "clientconnect", "instlog", "userlogin", "bootimage",
 			"opsiconfd" };
@@ -266,9 +261,9 @@ public class Globals {
 	// Toolkit.getDefaultToolkit().createImage(Globals.class.getResource("opsi.gif"));
 	// called in configed
 
-	public static final String CONFLICTSTATEstring = "mixed";
-	public static final Color CONFLICTSTATEcellcolor = new Color(255, 180, 180);
-	public static final String NOVALIDSTATEstring = "";// "invalid";
+	public static final String CONFLICT_STATE_STRING = "mixed";
+	public static final Color CONFLICT_STATE_CELL_COLOR = new Color(255, 180, 180);
+	public static final String NO_VALID_STATE_STRING = "";// "invalid"
 
 	private static Map<String, Object> objects;
 
@@ -291,13 +286,13 @@ public class Globals {
 
 	public static final java.awt.Dimension helperFormDimension = new java.awt.Dimension(1100, 600);
 
-	public static final int locationDistanceX = 150;
-	public static final int locationDistanceY = 150;
+	public static final int LOCATION_DISTANCE_X = 150;
+	public static final int LOCATION_DISTANCE_Y = 150;
 
-	public static final int dialogFrameDefaultHeight = 400;
-	public static final int dialogFrameDefaultWidth = 800;
-	public static final java.awt.Dimension dialogFrameDefaultSize = new java.awt.Dimension(dialogFrameDefaultWidth,
-			dialogFrameDefaultHeight);
+	public static final int DIALOG_FRAME_DEFAULT_HEIGHT = 400;
+	public static final int DIALOG_FRAME_DEFAULT_WIDTH = 800;
+	public static final java.awt.Dimension dialogFrameDefaultSize = new java.awt.Dimension(DIALOG_FRAME_DEFAULT_WIDTH,
+			DIALOG_FRAME_DEFAULT_HEIGHT);
 
 	public static String getResourceValue(String key) {
 		return configed.getResourceValue(key);

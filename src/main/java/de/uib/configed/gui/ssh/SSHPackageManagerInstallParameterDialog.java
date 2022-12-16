@@ -136,36 +136,36 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		radioPanel.setLayout(radioPanelLayout);
 
 		radioPanelLayout.setHorizontalGroup(
-				radioPanelLayout.createParallelGroup().addGap(Globals.gapSize).addComponent(rb_local, PREF, PREF, PREF)
+				radioPanelLayout.createParallelGroup().addGap(Globals.GAP_SIZE).addComponent(rb_local, PREF, PREF, PREF)
 						.addComponent(installLocalPanel, PREF, PREF, MAX).addComponent(rb_server, PREF, PREF, PREF)
 						.addComponent(installServerPanel, PREF, PREF, MAX).addComponent(rb_wget, PREF, PREF, PREF)
-						.addComponent(installWgetPanel, PREF, PREF, MAX).addGap(2 * Globals.gapSize));
+						.addComponent(installWgetPanel, PREF, PREF, MAX).addGap(2 * Globals.GAP_SIZE));
 
-		radioPanelLayout.setVerticalGroup(radioPanelLayout.createSequentialGroup().addGap(Globals.gapSize)
-				.addComponent(rb_local, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-				.addComponent(installLocalPanel, PREF, PREF, PREF).addGap(Globals.gapSize)
-				.addComponent(rb_server, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-				.addComponent(installServerPanel, PREF, PREF, PREF).addGap(Globals.gapSize)
-				.addComponent(rb_wget, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-				.addComponent(installWgetPanel, PREF, PREF, PREF).addGap(Globals.gapSize));
+		radioPanelLayout.setVerticalGroup(radioPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(rb_local, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(installLocalPanel, PREF, PREF, PREF).addGap(Globals.GAP_SIZE)
+				.addComponent(rb_server, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(installServerPanel, PREF, PREF, PREF).addGap(Globals.GAP_SIZE)
+				.addComponent(rb_wget, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(installWgetPanel, PREF, PREF, PREF).addGap(Globals.GAP_SIZE));
 
 		GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
 		mainPanel.setLayout(mainPanelLayout);
 		mainPanelLayout.setHorizontalGroup(mainPanelLayout.createParallelGroup()
 				// .addGap(3*Globals.gapSize)
-				.addGroup(mainPanelLayout.createSequentialGroup().addGap(Globals.gapSize * 2)
-						.addComponent(lbl_install, PREF, PREF, PREF).addGap(Globals.gapSize))
-				.addGap(Globals.gapSize)
-				.addGroup(mainPanelLayout.createSequentialGroup().addGap(Globals.gapSize)
-						.addComponent(radioPanel, PREF, PREF, MAX).addGap(Globals.gapSize))
-				.addGap(Globals.gapSize).addGroup(mainPanelLayout.createSequentialGroup().addGap(Globals.gapSize)
-						.addComponent(installSettingsPanel, PREF, PREF, PREF).addGap(Globals.gapSize))
+				.addGroup(mainPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
+						.addComponent(lbl_install, PREF, PREF, PREF).addGap(Globals.GAP_SIZE))
+				.addGap(Globals.GAP_SIZE)
+				.addGroup(mainPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(radioPanel, PREF, PREF, MAX).addGap(Globals.GAP_SIZE))
+				.addGap(Globals.GAP_SIZE).addGroup(mainPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(installSettingsPanel, PREF, PREF, PREF).addGap(Globals.GAP_SIZE))
 		// .addGap(3*Globals.gapSize)
 		);
 
-		mainPanelLayout.setVerticalGroup(mainPanelLayout.createSequentialGroup().addGap(2 * Globals.gapSize)
-				.addComponent(lbl_install).addGap(Globals.gapSize).addComponent(radioPanel).addGap(Globals.gapSize)
-				.addComponent(installSettingsPanel).addGap(2 * Globals.gapSize));
+		mainPanelLayout.setVerticalGroup(mainPanelLayout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
+				.addComponent(lbl_install).addGap(Globals.GAP_SIZE).addComponent(radioPanel).addGap(Globals.GAP_SIZE)
+				.addComponent(installSettingsPanel).addGap(2 * Globals.GAP_SIZE));
 	}
 
 	protected void init() {

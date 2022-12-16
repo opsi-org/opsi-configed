@@ -176,7 +176,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 		framingPanel.setLayout(layout1);
 		layout1.setHorizontalGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(layout1.createSequentialGroup()
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 								.addComponent(editingArea, 60, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 								.addGroup(layout1.createSequentialGroup()
@@ -184,7 +184,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 												javax.swing.GroupLayout.PREFERRED_SIZE)
 										.addComponent(buttonCancel, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.vGapSize, 2 * Globals.vGapSize, 2 * Globals.vGapSize)
+										.addGap(Globals.VGAP_SIZE, 2 * Globals.VGAP_SIZE, 2 * Globals.VGAP_SIZE)
 										.addComponent(buttonRemove, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
 										.addComponent(buttonAdd, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -193,13 +193,13 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 												Short.MAX_VALUE)
 										.addComponent(extraLabel, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
 												Short.MAX_VALUE)))
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 		layout1.setVerticalGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(layout1.createSequentialGroup()
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addComponent(editingArea, javax.swing.GroupLayout.PREFERRED_SIZE,
 								javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -213,7 +213,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addComponent(extraLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
 		if (loggingPanel.isVisible()) {
 			splitPane.setTopComponent(framingPanel);
@@ -337,7 +337,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 			// intHalf( getSize().getWidth() );
 			// startY = (int) masterOnScreen.getY() + intHalf ( master.getHeight() ) -
 			// intHalf( getSize().getHeight() );
-			startX = (int) masterOnScreen.getX() - (int) (getSize().getWidth()) - Globals.minHGapSize;
+			startX = (int) masterOnScreen.getX() - (int) (getSize().getWidth()) - Globals.MIN_HGAP_SIZE;
 			startY = (int) masterOnScreen.getY();
 
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

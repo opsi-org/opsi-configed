@@ -338,39 +338,38 @@ public class JTableSelectionPanel extends JPanel
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
 
-		layoutTopPane
-				.setHorizontalGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(layoutTopPane.createSequentialGroup()
-								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)
-								// .addComponent(markReload, GroupLayout.PREFERRED_SIZE,
-								// GroupLayout.PREFERRED_SIZE,GroupLayout.PREFERRED_SIZE)
-								// .addGap(Globals.minGapSize,Globals.minGapSize,Globals.minGapSize)
-								.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.minGapSize, Globals.minGapSize, Globals.minGapSize)
-								.addComponent(fieldSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE)
-								.addGap(Globals.minGapSize, Globals.minGapSize, Globals.minGapSize)
-								.addComponent(buttonMarkAll, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.minGapSize, Globals.minGapSize, Globals.minGapSize)
-								.addComponent(buttonInvertSelection, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.minGapSize, 2 * Globals.minGapSize, 2 * Globals.minGapSize)
-								.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.minGapSize, Globals.minGapSize, Globals.minGapSize)
-								.addComponent(comboSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.minGapSize, Globals.minGapSize, Globals.minGapSize)
-								.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.minGapSize, Globals.minGapSize, Globals.minGapSize)
-								.addComponent(comboSearchMode, 100, 200, 300)
-								.addGap(Globals.gapSize, Globals.gapSize, Globals.gapSize)));
+		layoutTopPane.setHorizontalGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layoutTopPane.createSequentialGroup()
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
+						// .addComponent(markReload, GroupLayout.PREFERRED_SIZE,
+						// GroupLayout.PREFERRED_SIZE,GroupLayout.PREFERRED_SIZE)
+						// .addGap(Globals.minGapSize,Globals.minGapSize,Globals.minGapSize)
+						.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+						.addComponent(fieldSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+						.addComponent(buttonMarkAll, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+						.addComponent(buttonInvertSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE, 2 * Globals.MIN_GAP_SIZE, 2 * Globals.MIN_GAP_SIZE)
+						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+						.addComponent(comboSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+						.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
+						.addComponent(comboSearchMode, 100, 200, 300)
+						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)));
 
 		layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup()
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 				.addGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
 						// .addComponent(markReload, 10, GroupLayout.PREFERRED_SIZE,
 						// GroupLayout.PREFERRED_SIZE)
@@ -383,7 +382,7 @@ public class JTableSelectionPanel extends JPanel
 						.addComponent(labelSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(comboSearchMode, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(comboSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2));
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
 		JPanel leftPane = this;
 		GroupLayout layoutLeftPane = new GroupLayout(leftPane);

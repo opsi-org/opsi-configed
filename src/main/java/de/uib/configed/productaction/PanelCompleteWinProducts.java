@@ -65,7 +65,7 @@ public class PanelCompleteWinProducts extends JPanel
 
 	// ==============
 
-	int firstLabelWidth = Globals.firstLabelWidth;
+	int firstLabelWidth = Globals.FIRST_LABEL_WIDTH;
 
 	JComboBox comboChooseDepot;
 	JComboBox comboChooseWinProduct;
@@ -370,10 +370,8 @@ public class PanelCompleteWinProducts extends JPanel
 					+ "/" + SmbConnect.directoryInstallFiles);
 			waitCursor.stop();
 
-			JOptionPane.showMessageDialog(rootFrame,
-					"Ready", // resultMessage,
-					configed.getResourceValue("CompleteWinProduct.reportTitle"),
-					JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,
+					configed.getResourceValue("CompleteWinProduct.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
 
 			java.util.List<String> values = new ArrayList<String>();
 
@@ -407,15 +405,12 @@ public class PanelCompleteWinProducts extends JPanel
 				returnedOption = JOptionPane.showOptionDialog(rootFrame,
 						configed.getResourceValue("CompleteWinProducts.setChangedProductKey"),
 						configed.getResourceValue("CompleteWinProducts.questionSetProductKey"),
-						JOptionPane.YES_NO_OPTION,
-						JOptionPane.QUESTION_MESSAGE,
-						null, null, null);
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 				if (returnedOption == JOptionPane.YES_OPTION) {
 					waitCursor = new WaitCursor(rootFrame);
 					logging.info(this, "setCommonProductPropertyValue " + depots + ", " + winProduct + ", " + values);
-					persist.setCommonProductPropertyValue(
-							depots, winProduct, "productkey", values);
+					persist.setCommonProductPropertyValue(depots, winProduct, "productkey", values);
 
 					waitCursor.stop();
 				}
@@ -445,128 +440,131 @@ public class PanelCompleteWinProducts extends JPanel
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		int hFirstGap = Globals.hFirstGap;
+		int hFirstGap = Globals.HFIRST_GAP;
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGap(Globals.vGapSize, Globals.vGapSize * 3, Globals.vGapSize * 4)
-				.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize * 2)
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE * 3, Globals.VGAP_SIZE * 4)
+				.addComponent(
+						topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE * 2)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelServer, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(comboChooseDepot, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addComponent(labelServer, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(comboChooseDepot, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+				.addGroup(
+						layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(labelWinProduct, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(comboChooseWinProduct, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT))
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelWinProduct, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(comboChooseWinProduct, Globals.lineHeight, Globals.lineHeight,
-								Globals.lineHeight))
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addComponent(labelFolderWinPE, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(buttonCallSelectFolderWinPE, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT)
+						.addComponent(fieldPathWinPE, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelFolderWinPE, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(buttonCallSelectFolderWinPE, Globals.lineHeight, Globals.lineHeight,
-								Globals.lineHeight)
-						.addComponent(fieldPathWinPE, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addComponent(labelFolderInstallFiles, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT)
+						.addComponent(buttonCallSelectFolderInstallFiles, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT)
+						.addComponent(fieldPathInstallFiles, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT))
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(panelMountShare,
+						Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelFolderInstallFiles, Globals.lineHeight, Globals.lineHeight,
-								Globals.lineHeight)
-						.addComponent(buttonCallSelectFolderInstallFiles, Globals.lineHeight, Globals.lineHeight,
-								Globals.lineHeight)
-						.addComponent(fieldPathInstallFiles, Globals.lineHeight, Globals.lineHeight,
-								Globals.lineHeight))
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+						.addComponent(labelTargetPath, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(fieldTargetPath, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(panelMountShare, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelTargetPath, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(fieldTargetPath, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelProductKey, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(fieldProductKey, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(buttonCallExecute, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize * 2));
+						.addComponent(labelProductKey, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(fieldProductKey, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(buttonCallExecute,
+						Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE * 2));
 
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize * 2, Short.MAX_VALUE)
-						.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize * 2, Short.MAX_VALUE))
+		layout.setHorizontalGroup(
+				layout.createParallelGroup()
+						.addGroup(layout.createSequentialGroup()
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 2, Short.MAX_VALUE)
+								.addComponent(topicLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 2, Short.MAX_VALUE))
 
-				.addGroup(layout.createSequentialGroup()
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(labelServer, firstLabelWidth, firstLabelWidth, firstLabelWidth)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addGap(Globals.graphicButtonWidth, Globals.graphicButtonWidth, Globals.graphicButtonWidth)
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(comboChooseDepot, Globals.buttonWidth * 2, Globals.buttonWidth * 2,
-								Globals.buttonWidth * 2)
-						.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
+						.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addComponent(labelServer, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addGap(Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH,
+										Globals.GRAPHIC_BUTTON_WIDTH)
+								.addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addComponent(comboChooseDepot, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
+										Globals.BUTTON_WIDTH * 2)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE))
 
-				.addGroup(layout.createSequentialGroup()
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(labelWinProduct, firstLabelWidth, firstLabelWidth, firstLabelWidth)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addGap(Globals.graphicButtonWidth, Globals.graphicButtonWidth, Globals.graphicButtonWidth)
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(comboChooseWinProduct, Globals.buttonWidth * 2, Globals.buttonWidth * 2,
-								Globals.buttonWidth * 2)
-						.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
+						.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addComponent(labelWinProduct, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addGap(Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH,
+										Globals.GRAPHIC_BUTTON_WIDTH)
+								.addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addComponent(comboChooseWinProduct, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
+										Globals.BUTTON_WIDTH * 2)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE))
 
-				.addGroup(layout.createSequentialGroup()
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(labelFolderWinPE, firstLabelWidth, firstLabelWidth, firstLabelWidth)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(buttonCallSelectFolderWinPE, Globals.graphicButtonWidth,
-								Globals.graphicButtonWidth, Globals.graphicButtonWidth)
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(fieldPathWinPE, Globals.buttonWidth * 2, Globals.buttonWidth * 2, Short.MAX_VALUE)
-						.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup()
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(labelFolderInstallFiles, firstLabelWidth, firstLabelWidth, firstLabelWidth)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(buttonCallSelectFolderInstallFiles, Globals.graphicButtonWidth,
-								Globals.graphicButtonWidth, Globals.graphicButtonWidth)
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(fieldPathInstallFiles, Globals.buttonWidth * 2, Globals.buttonWidth * 2,
-								Short.MAX_VALUE)
-						.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup()
-						.addComponent(panelMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup()
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(labelTargetPath, firstLabelWidth, firstLabelWidth, firstLabelWidth)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addGap(Globals.graphicButtonWidth, Globals.graphicButtonWidth, Globals.graphicButtonWidth)
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(fieldTargetPath, Globals.buttonWidth * 2, Globals.buttonWidth * 2,
-								Short.MAX_VALUE)
-						.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup()
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(labelProductKey, firstLabelWidth, firstLabelWidth, firstLabelWidth)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addGap(Globals.graphicButtonWidth, Globals.graphicButtonWidth, Globals.graphicButtonWidth)
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addComponent(fieldProductKey, Globals.buttonWidth * 2, Globals.buttonWidth * 2,
-								Globals.buttonWidth * 2)
-						.addGap(Globals.hGapSize, Globals.hGapSize * 3, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup()
-						.addGap(hFirstGap, hFirstGap, hFirstGap)
-						.addGap(0, firstLabelWidth, firstLabelWidth)
-						.addGap(0, Globals.hGapSize, Globals.hGapSize)
-						.addGap(0, Globals.graphicButtonWidth, Globals.graphicButtonWidth)
-						.addGap(0, hFirstGap, hFirstGap)
-						.addGap(0, Globals.buttonWidth * 2, Short.MAX_VALUE)
-						.addComponent(buttonCallExecute, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(hFirstGap, hFirstGap, Short.MAX_VALUE))
+						.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addComponent(labelFolderWinPE, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addComponent(buttonCallSelectFolderWinPE, Globals.GRAPHIC_BUTTON_WIDTH,
+										Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
+								.addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addComponent(fieldPathWinPE, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
+										Short.MAX_VALUE)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE))
+						.addGroup(
+								layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+										.addComponent(labelFolderInstallFiles, firstLabelWidth, firstLabelWidth,
+												firstLabelWidth)
+										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+										.addComponent(buttonCallSelectFolderInstallFiles, Globals.GRAPHIC_BUTTON_WIDTH,
+												Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
+										.addGap(hFirstGap, hFirstGap, hFirstGap)
+										.addComponent(fieldPathInstallFiles, Globals.BUTTON_WIDTH * 2,
+												Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
+										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE))
+						.addGroup(layout.createSequentialGroup().addComponent(panelMountShare,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+						.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addComponent(labelTargetPath, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addGap(Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH,
+										Globals.GRAPHIC_BUTTON_WIDTH)
+								.addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addComponent(fieldTargetPath, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
+										Short.MAX_VALUE)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE))
+						.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addComponent(labelProductKey, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addGap(Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH,
+										Globals.GRAPHIC_BUTTON_WIDTH)
+								.addGap(hFirstGap, hFirstGap, hFirstGap)
+								.addComponent(fieldProductKey, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
+										Globals.BUTTON_WIDTH * 2)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE))
+						.addGroup(
+								layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+										.addGap(0, firstLabelWidth, firstLabelWidth)
+										.addGap(0, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+										.addGap(0, Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
+										.addGap(0, hFirstGap, hFirstGap)
+										.addGap(0, Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
+										.addComponent(buttonCallExecute, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGap(hFirstGap, hFirstGap, Short.MAX_VALUE))
 
 		);
 	}

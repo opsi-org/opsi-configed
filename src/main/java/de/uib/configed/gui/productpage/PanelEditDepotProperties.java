@@ -9,7 +9,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Vector;
 
 import javax.swing.GroupLayout;
@@ -325,7 +327,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 			Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties, java.util.List<String> depots,
 			String productId) {
 
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 
 		if (depots == null || depots.isEmpty())
 			return result;
@@ -356,9 +358,9 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 				// create start mergers
 				ConfigName2ConfigValue properties = depot2product2properties.get(depots.get(n)).get(productId);
 
-				for (String key : properties.keySet()) {
-					java.util.List value = (java.util.List) properties.get(key);
-					result.put(key, new ListMerger(value));
+				for (Entry<String, Object> entry : properties.entrySet()) {
+					List value = (List) entry.getValue();
+					result.put(entry.getKey(), new ListMerger(value));
 				}
 
 				// merge the other depots
@@ -375,18 +377,18 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 						continue;
 					}
 
-					for (String key : properties.keySet()) {
-						java.util.List value = (java.util.List) properties.get(key);
-						if (result.get(key) == null)
+					for (Entry<String, Object> entry : properties.entrySet()) {
+						List value = (List) entry.getValue();
+						if (result.get(entry.getKey()) == null)
 						// we need a new property. it is not common
 						{
 							ListMerger merger = new ListMerger(value);
 							// logging.debug(this, " new property, merger " + merger);
 							merger.setHavingNoCommonValue();
-							result.put(key, merger);
+							result.put(entry.getKey(), merger);
 						} else {
-							ListMerger merger = (ListMerger) result.get(key);
-							result.put(key, merger.merge(value));
+							ListMerger merger = (ListMerger) result.get(entry.getKey());
+							result.put(entry.getKey(), merger.merge(value));
 						}
 					}
 				}
@@ -493,7 +495,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 	}
 
 	private void selectDepotsWithEqualProperties() {
-		String selectedDepot0 = (String) listDepots.getSelectedValue();
+		String selectedDepot0 = listDepots.getSelectedValue();
 
 		if (selectedDepot0 == null || selectedDepot0.equals(""))
 			return;

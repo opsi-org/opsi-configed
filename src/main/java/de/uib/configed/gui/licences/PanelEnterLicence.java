@@ -524,41 +524,41 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 								panelLicenceModelLayout.createSequentialGroup().addGap(0, 1, 3)
 										.addGroup(panelLicenceModelLayout
 												.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(jLabelSLid1, minFieldHeight, Globals.lineHeight,
+												.addComponent(jLabelSLid1, minFieldHeight, Globals.LINE_HEIGHT,
 														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(jTextField_licenceID, minFieldHeight, Globals.lineHeight,
+												.addComponent(jTextField_licenceID, minFieldHeight, Globals.LINE_HEIGHT,
 														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(jLabelSLid5, minFieldHeight, Globals.lineHeight,
+												.addComponent(jLabelSLid5, minFieldHeight, Globals.LINE_HEIGHT,
 														javax.swing.GroupLayout.PREFERRED_SIZE)
 												.addComponent(jTextField_endOfLicence, minFieldHeight,
-														Globals.lineHeight, javax.swing.GroupLayout.PREFERRED_SIZE))
+														Globals.LINE_HEIGHT, javax.swing.GroupLayout.PREFERRED_SIZE))
 										.addGap(0, 1, 3)
 										.addGroup(panelLicenceModelLayout
 												.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(jLabelSLid2, minFieldHeight, Globals.lineHeight,
+												.addComponent(jLabelSLid2, minFieldHeight, Globals.LINE_HEIGHT,
 														javax.swing.GroupLayout.PREFERRED_SIZE)
 												.addComponent(jTextField_licenceType, minFieldHeight,
-														Globals.lineHeight, javax.swing.GroupLayout.PREFERRED_SIZE))
+														Globals.LINE_HEIGHT, javax.swing.GroupLayout.PREFERRED_SIZE))
 										.addGap(0, 1, 3)
 										.addGroup(panelLicenceModelLayout
 												.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(jLabelSLid3, minFieldHeight, Globals.lineHeight,
+												.addComponent(jLabelSLid3, minFieldHeight, Globals.LINE_HEIGHT,
 														javax.swing.GroupLayout.PREFERRED_SIZE)
 												.addComponent(jTextField_maxInstallations, minFieldHeight,
-														Globals.lineHeight, javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(jLabelSLid3info, minFieldHeight, Globals.lineHeight,
+														Globals.LINE_HEIGHT, javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addComponent(jLabelSLid3info, minFieldHeight, Globals.LINE_HEIGHT,
 														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(jLabelSLid6, minFieldHeight, Globals.lineHeight,
+												.addComponent(jLabelSLid6, minFieldHeight, Globals.LINE_HEIGHT,
 														javax.swing.GroupLayout.PREFERRED_SIZE)
 												.addComponent(jTextField_licenceContract, minFieldHeight,
-														Globals.lineHeight, javax.swing.GroupLayout.PREFERRED_SIZE))
+														Globals.LINE_HEIGHT, javax.swing.GroupLayout.PREFERRED_SIZE))
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 										.addGap(0, 1, 3)
 										.addGroup(panelLicenceModelLayout
 												.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(jLabelSLid4, minFieldHeight, Globals.lineHeight,
+												.addComponent(jLabelSLid4, minFieldHeight, Globals.LINE_HEIGHT,
 														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(comboClient, minFieldHeight, Globals.lineHeight,
+												.addComponent(comboClient, minFieldHeight, Globals.LINE_HEIGHT,
 														javax.swing.GroupLayout.PREFERRED_SIZE))
 						// .addGap(0, 1, 3)
 						));
@@ -581,9 +581,9 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(panelEnterKeyLayout.createSequentialGroup().addGap(0, 1, 5)
 						.addGroup(panelEnterKeyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(jLabelLKey, minFieldHeight, Globals.lineHeight,
+								.addComponent(jLabelLKey, minFieldHeight, Globals.LINE_HEIGHT,
 										javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addComponent(jTextFieldLKey, minFieldHeight, Globals.lineHeight,
+								.addComponent(jTextFieldLKey, minFieldHeight, Globals.LINE_HEIGHT,
 										javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(0, 1, 5)));
 
@@ -698,8 +698,8 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addGap(5, 5, 5)
 				.addComponent(panelTask, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE,
 						Short.MAX_VALUE)
-				.addGap(10, 10, 10).addComponent(panelKeys, minPanelTableHeight - 2 * Globals.lineHeight,
-						minPanelTableHeight - 2 * Globals.lineHeight, Short.MAX_VALUE)
+				.addGap(10, 10, 10).addComponent(panelKeys, minPanelTableHeight - 2 * Globals.LINE_HEIGHT,
+						minPanelTableHeight - 2 * Globals.LINE_HEIGHT, Short.MAX_VALUE)
 				.addGap(5, 5, 5));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout((JPanel) this);

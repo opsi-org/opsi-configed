@@ -78,7 +78,13 @@ public class JSONthroughHTTP extends JSONExecutioner {
 
 	public JSONthroughHTTP(String host, String username, String password) {
 		this.host = host;
-		int idx = host.indexOf(':');
+		int idx = -1;
+		if (host.contains("[") && host.contains("]")) {
+			idx = host.indexOf(":", host.indexOf("]"));
+		} else {
+			idx = host.indexOf(":");
+		}
+
 		if (idx > -1) {
 			this.host = host.substring(0, idx);
 			this.portHTTP = this.portHTTPS = Integer.parseInt(host.substring(idx + 1, host.length()));

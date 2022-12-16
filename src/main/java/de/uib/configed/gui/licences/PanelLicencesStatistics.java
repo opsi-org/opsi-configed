@@ -67,7 +67,7 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 						// javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE)
 						.addComponent(panelStatistics, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						// .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-						.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize))
+						.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE))
 
 		);
 	}

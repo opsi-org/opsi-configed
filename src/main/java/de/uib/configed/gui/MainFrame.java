@@ -143,13 +143,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	protected int dividerLocationCentralPane = 300;
 	protected int minHSizeTreePanel = 150;
 
-	public static final int fwidth = 800;
-	public static final int fheight = 600;
+	public static final int F_WIDTH = 800;
+	public static final int F_HEIGHT = 600;
 
-	private static final int fwidth_righthanded = 200;// was fwidth - fwidth_lefthanded;
+	private static final int F_WIDTH_RIGHTHANDED = 200;// was fwidth - fwidth_lefthanded;
 
-	private static final int dividerLocationClientTreeMultidepot = 200;
-	private static final int dividerLocationClientTreeSingledepot = 50;
+	private static final int DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT = 200;
+	private static final int DIVIDER_LOCATION_CLIENT_TREE_SIGLE_DEPOT = 50;
 
 	// final int widthColumnServer = 110; //130;
 
@@ -635,8 +635,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		// clientPane.removeComponentListener(clientPaneComponentListener);
 		// panel_Clientselection.setDividerLocation(splitterPanelClientSelection);
 
-		moveDivider1(panel_Clientselection, clientPane, (int) (fwidth_righthanded * 0.2), 200,
-				(int) (fwidth_righthanded * 1.5));
+		moveDivider1(panel_Clientselection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
+				(int) (F_WIDTH_RIGHTHANDED * 1.5));
 
 		// clientPane.addComponentListener(clientPaneComponentListener);
 
@@ -733,8 +733,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			// clientPane.removeComponentListener(clientPaneComponentListener);
 			// panel_Clientselection.setDividerLocation(splitterPanelClientSelection);
 
-			moveDivider1(panel_Clientselection, clientPane, (int) (fwidth_righthanded * 0.2), 200,
-					(int) (fwidth_righthanded * 1.5));
+			moveDivider1(panel_Clientselection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
+					(int) (F_WIDTH_RIGHTHANDED * 1.5));
 
 			// clientPane.addComponentListener(clientPaneComponentListener);
 
@@ -1258,8 +1258,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		if (methodsExists) {
 			factory.retrieveSSHCommandListRequestRefresh();
 			factory.retrieveSSHCommandList();
-			java.util.LinkedHashMap<String, java.util.List<SSHCommand_Template>> sortedComs = factory
-					.getSSHCommandMapSortedByParent();
+			Map<String, java.util.List<SSHCommand_Template>> sortedComs = factory.getSSHCommandMapSortedByParent();
 
 			logging.debug(this, "setupMenuServer add commands to menu commands sortedComs " + sortedComs);
 			boolean firstParentGroup = true;
@@ -1372,6 +1371,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				+ UserConfig.getCurrentUserConfig());
 		jMenuSSHCommandControl.setEnabled(userConfigExists
 				&& UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDCONTROL_ACTIVE));
+
+		jMenuSSHCommandControl.setEnabled(true);
 
 		jMenuServer.setEnabled(userConfigExists && !isReadOnly
 		// &&
@@ -2115,7 +2116,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		 * clientPane.addComponentListener( clientPaneComponentListener );
 		 */
 
-		clientPane.setPreferredSize(new Dimension(fwidth_righthanded, fheight + 40));
+		clientPane.setPreferredSize(new Dimension(F_WIDTH_RIGHTHANDED, F_HEIGHT + 40));
 		clientPane.setBorder(Globals.createPanelBorder());
 		// new LineBorder(Globals.backBlue, 2, true));
 		csClientPane = new Containership(clientPane);
@@ -2257,50 +2258,50 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				/////// HOST
 				.addGroup(layoutClientPane.createSequentialGroup()
 						.addComponent(labelHost, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(labelHostID, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				/////// DESCRIPTION
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(labelClientDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(jTextFieldDescription, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				/////// INVENTORY NUMBER
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(labelClientInventoryNumber, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(jTextFieldInventoryNumber, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				/////// MAC ADDRESS
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(labelClientMacAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize)
-						.addComponent(macAddressField, Globals.firstLabelWidth, Globals.firstLabelWidth,
-								Globals.firstLabelWidth)
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
+						.addComponent(macAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
+								Globals.FIRST_LABEL_WIDTH)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 
 				/////// IP ADDRESS
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(labelClientIPAddress, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize)
-						.addComponent(ipAddressField, Globals.firstLabelWidth, Globals.firstLabelWidth,
-								Globals.firstLabelWidth)
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
+						.addComponent(ipAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
+								Globals.FIRST_LABEL_WIDTH)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 
 				/////// INSTALL BY SHUTDOWN
 
@@ -2318,77 +2319,77 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				 */
 
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(cbInstallByShutdown, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize))
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE))
 
 				/////// UEFI BOOT
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(cbUefiBoot, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize))
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE))
 				/////// WAN CONFIG
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(cbWANConfig, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize))
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE))
 
 				// .addGap(Globals.hGapSize,Globals.hGapSize,Globals.hGapSize)
 				/////// ONE TIME PASSWORD
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(labelOneTimePassword, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(jTextFieldOneTimePassword, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 
 				////// opsiHostKey
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(labelOpsiHostKey, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(jTextFieldHostKey, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 
 				/////// NOTES
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(labelClientNotes, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize))
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				.addGroup(layoutClientPane.createSequentialGroup()
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(scrollpaneNotes, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.minHGapSize, Globals.minHGapSize, Globals.minHGapSize)));
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)));
 
 		layoutClientPane.setVerticalGroup(layoutClientPane.createSequentialGroup()
 				/////// HOST
-				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize).addComponent(labelHost)
-				.addComponent(labelHostID, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE).addComponent(labelHost)
+				.addComponent(labelHostID, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				/////// DESCRIPTION
-				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addComponent(labelClientDescription)
-				.addComponent(jTextFieldDescription, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+				.addComponent(jTextFieldDescription, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				/////// INVENTORY NUMBER
-				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addComponent(labelClientInventoryNumber)
-				.addComponent(jTextFieldInventoryNumber, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+				.addComponent(jTextFieldInventoryNumber, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				/////// MAC ADDRESS
-				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addComponent(labelClientMacAddress)
-				.addComponent(macAddressField, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+				.addComponent(macAddressField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				/////// IP ADDRESS
 				.addComponent(labelClientIPAddress)
-				.addComponent(ipAddressField, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+				.addComponent(ipAddressField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 
 				////// INSTALL BY SHUTDOWN
-				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				// .addGap(Globals.minVGapSize,Globals.minVGapSize,Globals.minVGapSize)
-				.addComponent(cbInstallByShutdown, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+				.addComponent(cbInstallByShutdown, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 
 				/*
 				 * .addGroup( layoutClientPane.createParallelGroup(GroupLayout.Alignment.CENTER
@@ -2405,24 +2406,24 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				 */
 				/////// UEFI BOOT & WAN Config
 
-				.addComponent(cbUefiBoot, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+				.addComponent(cbUefiBoot, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				// .addGap(Globals.minVGapSize,Globals.minVGapSize,Globals.minVGapSize)
-				.addComponent(cbWANConfig, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+				.addComponent(cbWANConfig, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 
 				/////// ONE TIME PASSWORD
-				.addGap(Globals.minVGapSize * 2, Globals.minVGapSize * 2, Globals.minVGapSize * 2)
-				.addComponent(labelOneTimePassword, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-				.addComponent(jTextFieldOneTimePassword, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+				.addGap(Globals.MIN_VGAP_SIZE * 2, Globals.MIN_VGAP_SIZE * 2, Globals.MIN_VGAP_SIZE * 2)
+				.addComponent(labelOneTimePassword, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(jTextFieldOneTimePassword, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 
 				////// opsiHostKey
 				// .addGap(Globals.minVGapSize,Globals.minVGapSize,Globals.minVGapSize)
-				.addComponent(labelOpsiHostKey, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-				.addComponent(jTextFieldHostKey, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+				.addComponent(labelOpsiHostKey, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(jTextFieldHostKey, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 
 				/////// NOTES
-				.addGap(Globals.minVGapSize * 2, Globals.minVGapSize * 2, Globals.minVGapSize * 2)
+				.addGap(Globals.MIN_VGAP_SIZE * 2, Globals.MIN_VGAP_SIZE * 2, Globals.MIN_VGAP_SIZE * 2)
 				.addComponent(labelClientNotes)
-				.addComponent(scrollpaneNotes, Globals.lineHeight, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addComponent(scrollpaneNotes, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 		/**/
 
 		jPanel3.setBorder(BorderFactory.createEtchedBorder());
@@ -2520,9 +2521,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		logging.info(this, "multidepot " + multidepot);
 		if (multidepot)
-			splitpaneClientSelection.setDividerLocation(dividerLocationClientTreeMultidepot);
+			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT);
 		else
-			splitpaneClientSelection.setDividerLocation(dividerLocationClientTreeSingledepot);
+			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_SIGLE_DEPOT);
 
 		// logging.info(this, "treeClients.getMaximumSize() " +
 		// treeClients.getMaximumSize());
@@ -2535,7 +2536,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		panelTreeClientSelection.setLayout(layoutPanelTreeClientSelection);
 
 		layoutPanelTreeClientSelection.setHorizontalGroup(layoutPanelTreeClientSelection.createSequentialGroup()
-				.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 				.addGroup(layoutPanelTreeClientSelection.createParallelGroup(GroupLayout.Alignment.LEADING)
 
 						.addComponent(depotListPresenter, minHSizeTreePanel, GroupLayout.PREFERRED_SIZE,
@@ -2566,7 +2567,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				// .addGap(Globals.hGapSize/2, Globals.hGapSize/2, Globals.hGapSize/2)
 				// .addComponent(groupActionPanel, GroupLayout.PREFERRED_SIZE,
 				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2));
+				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2));
 
 		layoutPanelTreeClientSelection.setVerticalGroup(layoutPanelTreeClientSelection
 				.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -2574,7 +2575,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				// GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 				.addGroup(layoutPanelTreeClientSelection.createSequentialGroup()
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addComponent(depotListPresenter, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(splitpaneClientSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -2650,22 +2651,22 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		layoutIconPaneTargets.setHorizontalGroup(layoutIconPaneTargets.createParallelGroup(GroupLayout.Alignment.CENTER)
 				.addGroup(layoutIconPaneTargets.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(jButtonClientsConfiguration, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						// .addComponent(jButtonWorkOnGroups, GroupLayout.PREFERRED_SIZE,
 						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						// .addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
 						.addComponent(jButtonDepotsConfiguration, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(jButtonServerConfiguration, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)));
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)));
 		layoutIconPaneTargets.setVerticalGroup(layoutIconPaneTargets.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(layoutIconPaneTargets.createSequentialGroup()
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addGroup(layoutIconPaneTargets.createParallelGroup(GroupLayout.Alignment.BASELINE)
 								.addComponent(jButtonClientsConfiguration, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -2675,7 +2676,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						// .addComponent(jButtonWorkOnGroups, GroupLayout.PREFERRED_SIZE,
 						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						).addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
+						).addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
 		iconPaneExtraFrames = new JPanel();
 		iconPaneExtraFrames.setBorder(new LineBorder(Globals.blueGrey, 1, true));
@@ -2686,23 +2687,23 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		layoutIconPaneExtraFrames
 				.setHorizontalGroup(layoutIconPaneExtraFrames.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addGroup(layoutIconPaneExtraFrames.createSequentialGroup()
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 								.addComponent(jButtonWorkOnGroups, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 								.addComponent(jButtonWorkOnProducts, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 								.addComponent(jButtonDash, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 								.addComponent(jButtonLicences, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)));
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)));
 		layoutIconPaneExtraFrames
 				.setVerticalGroup(layoutIconPaneExtraFrames.createParallelGroup(GroupLayout.Alignment.LEADING)
 						.addGroup(layoutIconPaneExtraFrames.createSequentialGroup()
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+								.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 								.addGroup(layoutIconPaneExtraFrames.createParallelGroup(GroupLayout.Alignment.BASELINE)
 										.addComponent(jButtonWorkOnGroups, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -2712,32 +2713,31 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(jButtonLicences, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
+								.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
 		iconPane0 = new JPanel();
 
 		GroupLayout layoutIconPane0 = new GroupLayout(iconPane0);
 		iconPane0.setLayout(layoutIconPane0);
 
-		layoutIconPane0
-				.setHorizontalGroup(layoutIconPane0.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(layoutIconPane0.createSequentialGroup()
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								.addComponent(iconPaneTargets, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								.addComponent(iconPaneExtraFrames, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)));
+		layoutIconPane0.setHorizontalGroup(layoutIconPane0.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(layoutIconPane0.createSequentialGroup()
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(iconPaneTargets, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(iconPaneExtraFrames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)));
 		layoutIconPane0.setVerticalGroup(layoutIconPane0.createParallelGroup(GroupLayout.Alignment.CENTER)
 				.addGroup(layoutIconPane0.createSequentialGroup()
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addGroup(layoutIconPane0.createParallelGroup(GroupLayout.Alignment.CENTER)
 								.addComponent(iconPaneTargets, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addComponent(iconPaneExtraFrames, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
 		setupIcons1();
 		iconPane1 = new JPanel();
@@ -2747,47 +2747,47 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		layoutIconPane1.setHorizontalGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(layoutIconPane1.createSequentialGroup()
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						// .addComponent(buttonWindowStack, GroupLayout.PREFERRED_SIZE,
 						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						// .addGap(Globals.hGapSize/2, Globals.hGapSize/2, Globals.hGapSize/2)
 						.addComponent(iconButtonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 						.addComponent(iconButtonReloadLicenses, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 						.addComponent(iconButtonNewClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 						// .addComponent(iconButtonSaveGroup, GroupLayout.PREFERRED_SIZE,
 						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						// .addGap(Globals.hGapSize/2, Globals.hGapSize/2, Globals.hGapSize/2)
 						.addComponent(iconButtonSetGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 						.addComponent(iconButtonSaveConfiguration, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						// .addGap(2, 2, 2)
 						// .addComponent(iconButtonCancelChanges, GroupLayout.PREFERRED_SIZE,
 						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						// .addGap(2, 2, 2)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 						.addComponent(iconButtonToggleClientFilter, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 						.addComponent(iconButtonReachableInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 						.addComponent(iconButtonSessionInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, 2 * Globals.hGapSize, 2 * Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE / 2, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
 						.addComponent(proceeding, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)));
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)));
 		layoutIconPane1.setVerticalGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(layoutIconPane1.createSequentialGroup()
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.CENTER)
 								// .addComponent(buttonWindowStack, GroupLayout.PREFERRED_SIZE,
 								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -2813,7 +2813,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(proceeding, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
 		/*
 		 * iconBarPane = new JPanel();
@@ -2891,7 +2891,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_Clientselection"),
 				Globals.createImageIcon("images/clientselection.png", ""), panel_Clientselection,
-				configed.getResourceValue("MainFrame.panel_Clientselection"), ConfigedMain.viewClients);
+				configed.getResourceValue("MainFrame.panel_Clientselection"), ConfigedMain.VIEW_CLIENTS);
 
 		panel_LocalbootProductsettings = new PanelGroupedProductSettings(
 				configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), main,
@@ -2922,11 +2922,12 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
 				Globals.createImageIcon("images/package.png", ""), panel_LocalbootProductsettings,
 				configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
-				ConfigedMain.viewLocalbootProducts);
+				ConfigedMain.VIEW_LOCALBOOT_PRODUCTS);
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
 				Globals.createImageIcon("images/bootimage.png", ""), panel_NetbootProductsettings,
-				configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), ConfigedMain.viewNetbootProducts);
+				configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
+				ConfigedMain.VIEW_NETBOOT_PRODUCTS);
 
 		panel_HostConfig = new PanelHostConfig() {
 			@Override
@@ -2938,7 +2939,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				main.getPersistenceController().configOptionsRequestRefresh();
 				// main.requestReloadConfigsForSelectedClients();
 				main.getPersistenceController().hostConfigsRequestRefresh();
-				main.resetView(ConfigedMain.viewNetworkconfiguration);
+				main.resetView(ConfigedMain.VIEW_NETWORK_CONFIGURATION);
 			}
 
 			// overwrite in subclasses
@@ -2954,13 +2955,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_NetworkConfig"),
 				Globals.createImageIcon("images/config_pro.png", ""), panel_HostConfig,
-				configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), ConfigedMain.viewNetworkconfiguration);
+				configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), ConfigedMain.VIEW_NETWORK_CONFIGURATION);
 
 		showHardwareLog = new JPanel();
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_hardwareLog"),
 				Globals.createImageIcon("images/hwaudit.png", ""), showHardwareLog,
-				configed.getResourceValue("MainFrame.jPanel_hardwareLog"), ConfigedMain.viewHardwareInfo);
+				configed.getResourceValue("MainFrame.jPanel_hardwareLog"), ConfigedMain.VIEW_HARDWARE_INFO);
 
 		panelSWInfo = new PanelSWInfo(main) {
 			@Override
@@ -2969,7 +2970,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				main.clearSwInfo();
 				main.getPersistenceController().installedSoftwareInformationRequestRefresh();
 				main.getPersistenceController().softwareAuditOnClientsRequestRefresh();
-				main.resetView(ConfigedMain.viewSoftwareInfo);
+				main.resetView(ConfigedMain.VIEW_SOFTWARE_INFO);
 			}
 		};
 
@@ -2996,7 +2997,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_softwareLog"),
 				Globals.createImageIcon("images/swaudit.png", ""), showSoftwareLog,
-				configed.getResourceValue("MainFrame.jPanel_softwareLog"), ConfigedMain.viewSoftwareInfo);
+				configed.getResourceValue("MainFrame.jPanel_softwareLog"), ConfigedMain.VIEW_SOFTWARE_INFO);
 
 		showLogfiles = new PanelTabbedDocuments(Globals.logtypes,
 				// null)
@@ -3019,7 +3020,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_logfiles"),
 				Globals.createImageIcon("images/logfile.png", ""), showLogfiles,
-				configed.getResourceValue("MainFrame.jPanel_logfiles"), ConfigedMain.viewLog);
+				configed.getResourceValue("MainFrame.jPanel_logfiles"), ConfigedMain.VIEW_LOG);
 
 		showLogfiles.addChangeListener(new javax.swing.event.ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -3050,7 +3051,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
 				Globals.createImageIcon("images/config_pro.png", ""), panel_ProductProperties,
 				configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
-				ConfigedMain.viewProductProperties);
+				ConfigedMain.VIEW_PRODUCT_PROPERTIES);
 
 		logging.info(this,
 				"added tab  " + configed.getResourceValue("MainFrame.panel_ProductGlobalProperties") + " index "
@@ -3071,7 +3072,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_HostProperties"),
 				Globals.createImageIcon("images/config_pro.png", ""), panel_HostProperties,
-				configed.getResourceValue("MainFrame.jPanel_HostProperties"), ConfigedMain.viewHostProperties);
+				configed.getResourceValue("MainFrame.jPanel_HostProperties"), ConfigedMain.VIEW_HOST_PROPERTIES);
 
 		logging.info(this, "added tab  " + configed.getResourceValue("MainFrame.jPanel_HostProperties") + " index "
 				+ jTabbedPaneConfigPanes.indexOfTab(configed.getResourceValue("MainFrame.jPanel_HostProperties")));
@@ -3110,14 +3111,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		statusPane.setBackground(Globals.backLightBlue);
 		// clientPane.setBackground(Globals.backLightBlue);
 
-		setSize(fwidth, fheight);
-		glass.setSize(fwidth, fheight);
 		glass.setVisible(true);
 		glass.setOpaque(true);
 		setGlassPane(glass);
-
 		pack();
-
 	}
 
 	public void showPopupClients() {
@@ -3336,8 +3333,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		fList.setTitle(Globals.APPNAME + ": " + configed.getResourceValue("MainFrame.productSelection"));
 		fList.init();
 
-		fList.setLocation((int) this.getX() + 40, (int) this.getY() + 40);
-		fList.setSize(fwidth / 2, this.getHeight());
+		fList.setLocation(this.getX() + 40, this.getY() + 40);
+		fList.setSize(F_WIDTH / 2, this.getHeight());
 
 		fList.setModal(true);
 		fList.setVisible(true);
@@ -3749,8 +3746,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		if (savingFramePosition) {
 			configed.savedStates.saveMainLocationX.serialize(e.getComponent().getBounds().x, 0);
 			configed.savedStates.saveMainLocationY.serialize(e.getComponent().getBounds().y, 0);
-			configed.savedStates.saveMainLocationWidth.serialize(e.getComponent().getBounds().width, fwidth);
-			configed.savedStates.saveMainLocationHeight.serialize(e.getComponent().getBounds().height, fheight);
+			configed.savedStates.saveMainLocationWidth.serialize(e.getComponent().getBounds().width, F_WIDTH);
+			configed.savedStates.saveMainLocationHeight.serialize(e.getComponent().getBounds().height, F_HEIGHT);
 		}
 
 	}
@@ -3865,7 +3862,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		int transpose = 20;
 
 		for (java.awt.Window f : frames) {
-			transpose = transpose + Globals.lineHeight;
+			transpose = transpose + Globals.LINE_HEIGHT;
 
 			if (f != null) {
 				f.setVisible(true);
@@ -4272,7 +4269,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 					main.clearHwInfo();
 					// WaitCursor waitCursor = new WaitCursor(tree);
 					// otherwise we get a wait cursor only in table component
-					main.resetView(ConfigedMain.viewHardwareInfo);
+					main.resetView(ConfigedMain.VIEW_HARDWARE_INFO);
 				}
 			};
 		}

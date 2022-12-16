@@ -152,7 +152,7 @@ public class SSHCompletionComboButton {
 					combobox.setSelectedItem(combobox.getSelectedItem());
 				}
 			});
-		combobox.setMaximumRowCount(Globals.comboBoxRowCount);
+		combobox.setMaximumRowCount(Globals.COMBOBOX_ROW_COUNT);
 	}
 
 	private void initButton() {

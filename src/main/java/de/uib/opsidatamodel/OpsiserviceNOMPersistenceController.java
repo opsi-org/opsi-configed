@@ -1121,7 +1121,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		Boolean locallySavedValueUserRegister = null;
 		if (configed.savedStates == null) {
-			logging.warning(this, "savedStates.saveRegisterUser not initialized");
+			logging.trace(this, "savedStates.saveRegisterUser not initialized");
 
 		} else {
 			locallySavedValueUserRegister = configed.savedStates.saveRegisterUser.deserializeAsBoolean();
@@ -1228,7 +1228,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		createClientPermission = true;
 
 		KEY_USER_REGISTER_VALUE = isUserRegisterActivated();
-
 		boolean correctedUserRegisterVal = setAgainUserRegistration(KEY_USER_REGISTER_VALUE);
 
 		boolean setUserRegisterVal = !KEY_USER_REGISTER_VALUE && correctedUserRegisterVal;
@@ -1251,10 +1250,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			exec.doCall(omc);
 		}
 
-		String userToAdd = null;
-
-		if (applyUserSpecializedConfig())
-			userToAdd = user;
+		applyUserSpecializedConfig();
 
 		ArrayList<Object> readyConfigObjects = new UserConfigProducing(applyUserSpecializedConfig(),
 				getHostInfoCollections().getConfigServer(), getHostInfoCollections().getDepotNamesList(),
@@ -1981,8 +1977,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public Boolean isWanConfigured(String host) {
-		logging.warning(this, " isWanConfigured for host " + host);
-		logging.info(this, " isWanConfigured wanConfiguration  " + wanConfiguration);
+		logging.info(this, " isWanConfigured wanConfiguration  " + wanConfiguration + " for host " + host);
 
 		return findBooleanConfigurationComparingToDefaults(host, wanConfiguration);
 	}
@@ -4559,8 +4554,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		// depotId = "tst-srv-001.uib.local";
 		logging.info(this, "retrieveProductGlobalInfos , depot " + depotId);
 
-		productGlobalInfos = new HashMap<String, Map<String, Object>>();
-		possibleActions = new HashMap<String, List<String>>();
+		productGlobalInfos = new HashMap<>();
+		possibleActions = new HashMap<>();
 
 		for (String productId : dataStub.getProduct2versionInfo2infos().keySet()) {
 			if (dataStub.getProduct2versionInfo2infos().get(productId) == null)
@@ -4597,7 +4592,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 					possibleActions.put(productId, productInfo.getPossibleActions());
 
-					Map aProductInfo = new HashMap<String, Object>();
+					Map<String, Object> aProductInfo = new HashMap<>();
 
 					aProductInfo.put("actions", productInfo.getPossibleActions());
 
@@ -4624,7 +4619,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					aProductInfo.put(de.uib.opsidatamodel.productstate.ProductState.KEY_packageVersion,
 							productInfo.getPackageVersion());
 
-					aProductInfo.put(OpsiProductInfo.SERVICEkeyLOCKED, productInfo.getLockedInfo());
+					aProductInfo.put(OpsiPackage.SERVICEkeyLOCKED, productInfo.getLockedInfo());
 
 					logging.debug(this, "productInfo " + aProductInfo);
 					// System.exit(0);
@@ -4643,10 +4638,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	private void checkProductGlobalInfos(String depotId) {
 		logging.info(this, "checkProductGlobalInfos for Depot " + depotId);
-		if (!(theDepot.equals(depotId)))
+		if (!theDepot.equals(depotId))
 			logging.warning(this, "depot irregular, preset " + theDepot);
 		if (depotId == null || depotId.equals("")) {
-			logging.warning(this, "checkProductGlobalInfos called for no depot");
+			logging.notice(this, "checkProductGlobalInfos called for no depot");
 		}
 		logging.debug(this, "checkProductGlobalInfos depotId " + depotId + " productGlobaInfos  = null "
 				+ (productGlobalInfos == null) + " possibleActions = null " + (possibleActions == null));

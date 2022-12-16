@@ -349,25 +349,24 @@ public class configed {
 
 		try {
 
-			{
-				SwingUtilities.invokeAndWait(() -> {
-					if (paramClient != null || paramClientgroup != null) {
-						if (paramClientgroup != null) {
-							cm.setGroup(paramClientgroup);
-						}
-
-						if (paramClient != null) {
-							cm.setClient(paramClient);
-						}
-
-						logging.info("set client " + paramClient);
-
-						if (paramTab != null) {
-							cm.setVisualViewIndex(paramTab);
-						}
+			SwingUtilities.invokeAndWait(() -> {
+				if (paramClient != null || paramClientgroup != null) {
+					if (paramClientgroup != null) {
+						cm.setGroup(paramClientgroup);
 					}
-				});
-			}
+
+					if (paramClient != null) {
+						cm.setClient(paramClient);
+					}
+
+					logging.info("set client " + paramClient);
+
+					if (paramTab != null) {
+						cm.setVisualViewIndex(paramTab);
+					}
+				}
+			});
+
 		} catch (InvocationTargetException ex) {
 			logging.info(" run " + ex);
 		} catch (InterruptedException ie) {
@@ -571,10 +570,10 @@ public class configed {
 
 					if (isValue(args, i)) {
 						// logging.debug (args[i]);
-						if (args[i].toUpperCase().equals("Y")) {
+						if (args[i].equalsIgnoreCase("Y")) {
 							// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = true;
 							de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
-						} else if (args[i].toUpperCase().equals("N")) {
+						} else if (args[i].equalsIgnoreCase("N")) {
 							de.uib.opsicommand.JSONthroughHTTP.compressTransmission = false;
 							// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = false;
 						} else {
@@ -817,7 +816,6 @@ public class configed {
 		logging.info("regularly exiting app with code " + exitcode);
 
 		if (exitcode == ERROR_OUT_OF_MEMORY) {
-
 			fErrorOutOfMemory.setVisible(true);
 		}
 
@@ -1161,6 +1159,8 @@ public class configed {
 		fErrorOutOfMemory.setFont(Globals.defaultFontBig);
 		fErrorOutOfMemory
 				.setMessage("The program will be terminated,\nsince more memory is required than was assigned.");
+
+		//fErrorOutOfMemory.setVisible(true);
 
 		new configed(locale, host, user, password, client, clientgroup, tab, logdirectory);
 	}

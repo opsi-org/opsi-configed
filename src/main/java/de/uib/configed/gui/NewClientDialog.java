@@ -96,7 +96,7 @@ public class NewClientDialog extends FGeneralDialog
 	// private static boolean macAddressFieldVisible = false;
 	// private static boolean macAddressFieldVisibleSet = false;
 
-	protected int wLeftLabel = Globals.buttonWidth + 20;
+	protected int wLeftLabel = Globals.BUTTON_WIDTH + 20;
 
 	private NewClientDialog(ConfigedMain main, Vector<String> depots) {
 		super(Globals.mainFrame, configed.getResourceValue("NewClientDialog.title") + " (" + Globals.APPNAME + ")",
@@ -341,9 +341,9 @@ public class NewClientDialog extends FGeneralDialog
 
 		JLabel jLabelIpAddress = new JLabel();
 		jLabelIpAddress.setText(configed.getResourceValue("NewClientDialog.IpAddress"));
-		ipAddressField = new JTextField(new SeparatedDocument(
-				/* allowedChars */ new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.' }, 12, '.', 3,
-				false), "", 24);
+		ipAddressField = new JTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4',
+				'5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' }, 28, Character.MIN_VALUE, 4, false),
+				"", 24);
 
 		labelShutdownDefault = new LabelChecked();
 		labelShutdownDefault.setText(configed.getResourceValue("NewClientDialog.installByShutdown") + " "
@@ -392,113 +392,114 @@ public class NewClientDialog extends FGeneralDialog
 
 		gpl.setHorizontalGroup(gpl.createParallelGroup()
 				/////// HOSTNAME
-				.addGroup(gpl.createSequentialGroup()
-						.addGroup(gpl.createParallelGroup().addGroup(gpl.createSequentialGroup()
-								.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize).addComponent(
-										jLabelHostname, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE))
-								.addGroup(gpl.createSequentialGroup()
-										.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
-										.addComponent(jTextHostname, Globals.buttonWidth, Globals.buttonWidth,
-												Short.MAX_VALUE)))
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+				.addGroup(gpl.createSequentialGroup().addGroup(gpl.createParallelGroup()
+						.addGroup(gpl.createSequentialGroup()
+								.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE).addComponent(
+										jLabelHostname, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE))
+						.addGroup(gpl.createSequentialGroup()
+								.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
+								.addComponent(jTextHostname, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+										Short.MAX_VALUE)))
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addGroup(gpl.createParallelGroup()
 								.addGroup(gpl.createSequentialGroup()
-										.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-										.addComponent(jLabelDomainname, Globals.buttonWidth, Globals.buttonWidth,
+										.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+										.addComponent(jLabelDomainname, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 												Short.MAX_VALUE))
 								.addGroup(gpl.createSequentialGroup()
-										.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
-										.addComponent(jComboDomain, Globals.buttonWidth, Globals.buttonWidth,
+										.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
+										.addComponent(jComboDomain, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 												Short.MAX_VALUE)))
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				/////// DESCRIPTION + INVENTORY
-				.addGroup(gpl.createSequentialGroup().addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+				.addGroup(gpl.createSequentialGroup().addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(jLabelDescription, wLeftLabel, wLeftLabel, wLeftLabel)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(jTextDescription, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(jTextDescription, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
-				.addGroup(gpl.createSequentialGroup().addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
+				.addGroup(gpl.createSequentialGroup().addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(jLabelInventoryNumber, wLeftLabel, wLeftLabel, wLeftLabel)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(jTextInventoryNumber, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(jTextInventoryNumber, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 
 				/////// NOTES
-				.addGroup(gpl.createSequentialGroup().addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+				.addGroup(gpl.createSequentialGroup().addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 						.addComponent(jLabelNotes, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				.addGroup(gpl.createSequentialGroup()
-						.addGap(Globals.vGapSize - 2, Globals.vGapSize - 2, Globals.vGapSize - 2)
-						.addComponent(jTextNotes, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.vGapSize - 2, Globals.vGapSize - 2, Globals.vGapSize - 2))
+						.addGap(Globals.VGAP_SIZE - 2, Globals.VGAP_SIZE - 2, Globals.VGAP_SIZE - 2)
+						.addComponent(jTextNotes, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.VGAP_SIZE - 2, Globals.VGAP_SIZE - 2, Globals.VGAP_SIZE - 2))
 				/////// MAC-ADDRESS
-				.addGroup(gpl.createSequentialGroup().addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+				.addGroup(gpl.createSequentialGroup().addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 						.addComponent(jLabelMacAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-						.addComponent(labelInfoMac, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
+						.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+						.addComponent(labelInfoMac, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				.addGroup(gpl.createSequentialGroup()
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
-						.addComponent(macAddressField, Globals.firstLabelWidth, Globals.firstLabelWidth,
-								Globals.firstLabelWidth)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
-				.addGroup(gpl.createSequentialGroup().addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
+						.addComponent(macAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
+								Globals.FIRST_LABEL_WIDTH)
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
+				.addGroup(gpl.createSequentialGroup().addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 						.addComponent(jLabelIpAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-						.addComponent(labelInfoIP, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
+						.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+						.addComponent(labelInfoIP, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				.addGroup(gpl.createSequentialGroup()
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
-						.addComponent(ipAddressField, Globals.firstLabelWidth, Globals.firstLabelWidth,
-								Globals.firstLabelWidth)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
+						.addComponent(ipAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
+								Globals.FIRST_LABEL_WIDTH)
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				/////// InstallByShutdown
-				.addGroup(
-						gpl.createSequentialGroup().addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								.addComponent(labelShutdownDefault, 2 * Globals.buttonWidth, 3 * Globals.buttonWidth,
-										3 * Globals.buttonWidth)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								.addComponent(jCheckShutdownInstall, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE)
-								.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
+				.addGroup(gpl.createSequentialGroup().addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(labelShutdownDefault, 2 * Globals.BUTTON_WIDTH, 3 * Globals.BUTTON_WIDTH,
+								3 * Globals.BUTTON_WIDTH)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(jCheckShutdownInstall, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				/////// UEFI
-				.addGroup(gpl.createSequentialGroup().addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(labelUefiDefault, 2 * Globals.buttonWidth, 3 * Globals.buttonWidth,
-								3 * Globals.buttonWidth)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(jCheckUefi, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
+				.addGroup(gpl.createSequentialGroup().addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(labelUefiDefault, 2 * Globals.BUTTON_WIDTH, 3 * Globals.BUTTON_WIDTH,
+								3 * Globals.BUTTON_WIDTH)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(jCheckUefi, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				/////// WAN
-				.addGroup(gpl.createSequentialGroup().addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(labelWanDefault, 2 * Globals.buttonWidth, 3 * Globals.buttonWidth,
-								3 * Globals.buttonWidth)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(jCheckWan, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
+				.addGroup(gpl.createSequentialGroup().addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(labelWanDefault, 2 * Globals.BUTTON_WIDTH, 3 * Globals.BUTTON_WIDTH,
+								3 * Globals.BUTTON_WIDTH)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(jCheckWan, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				// depot
-				.addGroup(gpl.createSequentialGroup().addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+				.addGroup(gpl.createSequentialGroup().addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(jLabelDepot, wLeftLabel, wLeftLabel, wLeftLabel)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(jComboDepots, Globals.buttonWidth, Globals.buttonWidth, 2 * Globals.buttonWidth)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(jComboDepots, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+								2 * Globals.BUTTON_WIDTH)
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				// group
-				.addGroup(gpl.createSequentialGroup().addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+				.addGroup(gpl.createSequentialGroup().addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(labelPrimaryGroup, wLeftLabel, wLeftLabel, wLeftLabel)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(jComboPrimaryGroup, Globals.buttonWidth, Globals.buttonWidth,
-								2 * Globals.buttonWidth)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(jComboPrimaryGroup, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+								2 * Globals.BUTTON_WIDTH)
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				// netboot
-				.addGroup(gpl.createSequentialGroup().addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+				.addGroup(gpl.createSequentialGroup().addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(jLabelNetboot, wLeftLabel, wLeftLabel, wLeftLabel)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(jComboNetboot, Globals.buttonWidth, Globals.buttonWidth, 2 * Globals.buttonWidth)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(jComboNetboot, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+								2 * Globals.BUTTON_WIDTH)
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 		// localboot
 		// .addGroup( gpl.createSequentialGroup()
 		// .addGap(Globals.hGapSize,Globals.hGapSize,Globals.hGapSize)
@@ -512,70 +513,78 @@ public class NewClientDialog extends FGeneralDialog
 		);
 		gpl.setVerticalGroup(gpl.createSequentialGroup()
 				/////// HOSTNAME
-				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addGroup(gpl.createParallelGroup().addComponent(jLabelHostname).addComponent(jLabelDomainname))
-				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jTextHostname, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(jComboDomain, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
+				.addGroup(
+						gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(jTextHostname, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(jComboDomain, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT))
 				/////// DESCRIPTION
-				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(jLabelDescription)
-						.addComponent(jTextDescription, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
+						.addComponent(jTextDescription, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				/////// INVENTORY NUMBER
-				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(jLabelInventoryNumber)
-						.addComponent(jTextInventoryNumber, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
+						.addComponent(jTextInventoryNumber, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT))
 				/////// NOTES
-				.addGap(Globals.minVGapSize / 2, Globals.minVGapSize / 2, Globals.minVGapSize).addComponent(jLabelNotes)
-				.addComponent(jTextNotes)
+				.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE)
+				.addComponent(jLabelNotes).addComponent(jTextNotes)
 
 				/////// MAC-ADDRESS
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 				.addGroup(gpl.createParallelGroup().addComponent(jLabelMacAddress).addComponent(labelInfoMac))
-				.addComponent(macAddressField, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+				.addComponent(macAddressField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				/////// IP-ADDRESS
-				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addGroup(gpl.createParallelGroup().addComponent(jLabelIpAddress).addComponent(labelInfoIP))
-				.addComponent(ipAddressField, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+				.addComponent(ipAddressField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 
 				/////// SHUTDOWN
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addGroup(
-						gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(labelShutdownDefault, Globals.lineHeight, Globals.lineHeight,
-										Globals.lineHeight)
-								.addComponent(jCheckShutdownInstall, Globals.lineHeight, Globals.lineHeight,
-										Globals.lineHeight))
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(labelShutdownDefault, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT)
+						.addComponent(jCheckShutdownInstall, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT))
 
 				/////// UEFI
-				.addGap(Globals.minVGapSize / 2, Globals.minVGapSize / 2, Globals.minVGapSize / 2)
+				.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2)
 				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelUefiDefault, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(jCheckUefi, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
+						.addComponent(labelUefiDefault, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(jCheckUefi, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				/////// WAN
-				.addGap(Globals.minVGapSize / 2, Globals.minVGapSize / 2, Globals.minVGapSize / 2)
+				.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2)
 				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelWanDefault, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(jCheckWan, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
+						.addComponent(labelWanDefault, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(jCheckWan, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 
 				/////// depot
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelDepot, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(jComboDepots, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
-				/////// group
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 				.addGroup(
 						gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(labelPrimaryGroup, Globals.lineHeight, Globals.lineHeight,
-										Globals.lineHeight)
-								.addComponent(jComboPrimaryGroup, Globals.buttonHeight, Globals.buttonHeight,
-										Globals.buttonHeight))
+								.addComponent(jLabelDepot, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(jComboDepots, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT))
+				/////// group
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+				.addGroup(
+						gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(labelPrimaryGroup, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(jComboPrimaryGroup, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT))
 				/////// netboot
-				.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
-				.addGroup(gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jLabelNetboot, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(jComboNetboot, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2).addGroup(
+						gpl.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(jLabelNetboot, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(jComboNetboot, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT))
 		/////// localboot
 		// .addGap(Globals.vGapSize/2,Globals.vGapSize/2,Globals.vGapSize/2)
 		// .addGroup( gpl.createParallelGroup(GroupLayout.Alignment.CENTER )
@@ -588,34 +597,35 @@ public class NewClientDialog extends FGeneralDialog
 
 		);
 
-		GroupLayout northLayout = new GroupLayout(northPanel);
+		final GroupLayout northLayout = new GroupLayout(northPanel);
 		northPanel.setLayout(northLayout);
 		northPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6),
 				BorderFactory.createLineBorder(new Color(122, 138, 153))));
 
 		northLayout.setHorizontalGroup(northLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
 				.addGroup(northLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize).addComponent(jCSVTemplateLabel)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(jCSVTemplateButton, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(jCSVTemplateLabel)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(jCSVTemplateButton, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize))
-				.addGroup(
-						northLayout.createSequentialGroup().addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								.addComponent(jImportLabel).addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-								.addComponent(jImportButton, Globals.buttonWidth, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)));
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
+				.addGroup(northLayout.createSequentialGroup()
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(jImportLabel)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(jImportButton, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)));
 
 		northLayout.setVerticalGroup(northLayout.createSequentialGroup()
-				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addGroup(northLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(jCSVTemplateLabel).addComponent(jCSVTemplateButton, Globals.buttonHeight,
-								Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize)
+						.addComponent(jCSVTemplateLabel).addComponent(jCSVTemplateButton, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addGroup(northLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(jImportLabel)
-						.addComponent(jImportButton, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(Globals.minVGapSize, Globals.minVGapSize, Globals.minVGapSize));
+						.addComponent(jImportButton, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE));
 
 		scrollpane.getViewport().add(panel);
 		pack();

@@ -65,7 +65,7 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 
 		groupnameField = new JTextField();
 		groupnameField.setFont(Globals.defaultFontBold);
-		groupnameField.setPreferredSize(new Dimension(this.getWidth() * 9 / 10, Globals.lineHeight + 5));
+		groupnameField.setPreferredSize(new Dimension(this.getWidth() * 9 / 10, Globals.LINE_HEIGHT + 5));
 
 		groupnameField.getDocument().addDocumentListener(this);
 

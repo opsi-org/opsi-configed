@@ -46,7 +46,7 @@ public class DataStubRawData extends DataStubNOM {
 			String condition) {
 		StringBuilder sb = new StringBuilder("select");
 
-		if (columns == null || columns.size() == 0) {
+		if (columns == null || columns.isEmpty()) {
 			sb.append(" * ");
 		} else {
 			sb.append(" ");
@@ -117,7 +117,7 @@ public class DataStubRawData extends DataStubNOM {
 	 */
 
 	protected String giveWhereOR(String colName, java.util.List<String> values) {
-		if (values == null || values.size() == 0)
+		if (values == null || values.isEmpty())
 			return "true";
 
 		StringBuffer result = new StringBuffer(colName + " = '" + values.get(0) + "'");
@@ -186,7 +186,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		logging.debug(this, "produceProductPropertyStates, new hosts " + clients);
 
-		if (newClients.size() == 0) {
+		if (newClients.isEmpty()) {
 		} else {
 			hosts.addAll(newClients);
 
@@ -396,6 +396,7 @@ public class DataStubRawData extends DataStubNOM {
 	 * }
 	 */
 
+	@Override
 	protected void retrieveSoftwareAuditOnClients(final java.util.List<String> clients) {
 		logging.info(this,
 				"retrieveSoftwareAuditOnClients used memory on start " + de.uib.utilities.Globals.usedMemory());
@@ -404,7 +405,7 @@ public class DataStubRawData extends DataStubNOM {
 		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  clients count ======  " + clients.size());
 
-		java.util.List<String> newClients = new ArrayList<String>(clients);
+		java.util.List<String> newClients = new ArrayList<>(clients);
 
 		if (client2software != null) {
 			logging.info(this, "retrieveSoftwareAuditOnClients client2Software.keySet size " + "   +++  "
@@ -416,14 +417,12 @@ public class DataStubRawData extends DataStubNOM {
 		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  new clients count  ====== " + newClients.size());
 
-		int stepSize = 100;
-
 		int missingEntries = 0;
 
 		boolean fetchAll = true;
 		// if (client2software == null || softwareId2clients == null ||
 		// newClients.size() > 0)
-		if (client2software == null || softwareIdent2clients == null || newClients.size() > 0) {
+		if (client2software == null || softwareIdent2clients == null || !newClients.isEmpty()) {
 			String clientSelection = null;
 
 			if (newClients.size() >= 50) {
@@ -472,8 +471,8 @@ public class DataStubRawData extends DataStubNOM {
 
 			logging.info(this, "retrieveSoftwareAuditOnClients, finished a request");
 
-			if (rows == null || rows.size() == 0) {
-				logging.warning(this, "no auditSoftwareOnClient");
+			if (rows == null || rows.isEmpty()) {
+				logging.notice(this, "no auditSoftwareOnClient");
 			} else {
 
 				logging.info(this, "retrieveSoftwareAuditOnClients rows size " + rows.size());
@@ -498,7 +497,7 @@ public class DataStubRawData extends DataStubNOM {
 
 					java.util.List<SWAuditClientEntry> entries = client2software.get(clientId);
 					if (entries == null) {
-						entries = new LinkedList<SWAuditClientEntry>();
+						entries = new LinkedList<>();
 						client2software.put(clientId, entries);
 					}
 					// logging.info(this, "adding client entry among " + newClients.size() + " for
@@ -535,7 +534,7 @@ public class DataStubRawData extends DataStubNOM {
 					{
 						java.util.Set<String> clientsWithThisSW = softwareIdent2clients.get(swIdent);
 						if (clientsWithThisSW == null) {
-							clientsWithThisSW = new HashSet<String>();
+							clientsWithThisSW = new HashSet<>();
 
 							softwareIdent2clients.put(swIdent, clientsWithThisSW);
 						}
@@ -578,7 +577,7 @@ public class DataStubRawData extends DataStubNOM {
 				// the remaining clients are without software entry
 
 				for (String clientId : newClients) {
-					client2software.put(clientId, new LinkedList<SWAuditClientEntry>());
+					client2software.put(clientId, new LinkedList<>());
 				}
 
 			}
@@ -967,7 +966,6 @@ public class DataStubRawData extends DataStubNOM {
 			// client2ClassInfos);
 
 			if (client2ClassInfos != null) {
-				String lastseen = null;
 
 				for (String client : client2ClassInfos.keySet()) {
 					Map<String, Object> allInfosForAClient = client2HwRows.get(client);

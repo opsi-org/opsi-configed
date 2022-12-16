@@ -397,7 +397,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			btn_openChooser = new IconButton(
 					de.uib.configed.configed.getResourceValue("SSHConnection.Config.SelectKeyFile"),
 					"images/folder_16.png", " ", "images/folder_16.png", true);
-			btn_openChooser.setPreferredSize(new Dimension(Globals.buttonWidth / 4, Globals.buttonHeight));
+			btn_openChooser.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH / 4, Globals.BUTTON_HEIGHT));
 			if (!(Globals.isGlobalReadOnly()))
 				btn_openChooser.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -541,7 +541,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 				.addGroup(connectionPanelLayout.createParallelGroup()
 						.addComponent(cb_useDefault, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addGroup(connectionPanelLayout.createSequentialGroup().addGap(Globals.vGapSize * 2)
+						.addGroup(connectionPanelLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE * 2)
 								.addGroup(connectionPanelLayout.createParallelGroup()
 										.addComponent(lbl_host, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE)
@@ -551,7 +551,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 												GroupLayout.PREFERRED_SIZE)
 										.addComponent(lbl_passw, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE))
-								.addGap(Globals.vGapSize)
+								.addGap(Globals.VGAP_SIZE)
 								.addGroup(connectionPanelLayout.createParallelGroup()
 										.addComponent(cb_host, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												Short.MAX_VALUE)
@@ -561,17 +561,17 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 												Short.MAX_VALUE)
 										.addComponent(tf_passw, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												Short.MAX_VALUE))
-								.addGap(Globals.vGapSize))
-						.addGap(Globals.vGapSize)
+								.addGap(Globals.VGAP_SIZE))
+						.addGap(Globals.VGAP_SIZE)
 						.addComponent(cb_useKeyfile, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addGroup(connectionPanelLayout.createSequentialGroup().addGap(Globals.vGapSize * 2)
+						.addGroup(connectionPanelLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE * 2)
 								.addGroup(connectionPanelLayout.createParallelGroup()
 										.addComponent(lbl_keyfile, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(lbl_passphrase, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(Globals.vGapSize)
+								.addGap(Globals.VGAP_SIZE)
 								.addGroup(connectionPanelLayout.createParallelGroup()
 										.addGroup(connectionPanelLayout.createSequentialGroup()
 												.addComponent(tf_keyfile, GroupLayout.PREFERRED_SIZE,
@@ -582,42 +582,42 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 								// .addGroup(connectionPanelLayout.createParallelGroup()
 								// )
-								.addGap(Globals.vGapSize))
+								.addGap(Globals.VGAP_SIZE))
 						.addGroup(connectionPanelLayout.createSequentialGroup().addComponent(lbl_connectionState,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
 				.addContainerGap());
 
-		connectionPanelLayout.setVerticalGroup(connectionPanelLayout.createSequentialGroup().addGap(Globals.vGapSize)
+		connectionPanelLayout.setVerticalGroup(connectionPanelLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE)
 				.addComponent(cb_useDefault, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.vGapSize)
+				.addGap(Globals.VGAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(cb_host, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lbl_host, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.vGapSize)
+				.addGap(Globals.VGAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(tf_port, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lbl_port, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.vGapSize)
+				.addGap(Globals.VGAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(tf_user, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lbl_user, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.vGapSize)
+				.addGap(Globals.VGAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(tf_passw, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lbl_passw, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.vGapSize)
+				.addGap(Globals.VGAP_SIZE)
 				.addComponent(cb_useKeyfile, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.vGapSize)
+				.addGap(Globals.VGAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(btn_openChooser, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -625,17 +625,17 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lbl_keyfile, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.vGapSize)
+				.addGap(Globals.VGAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(tf_passphrase, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lbl_passphrase, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.vGapSize)
+				.addGap(Globals.VGAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(
 						lbl_connectionState, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE))
-				.addGap(Globals.vGapSize).addContainerGap(70, 70));
+				.addGap(Globals.VGAP_SIZE).addContainerGap(70, 70));
 
 		settingsPanelLayout.setHorizontalGroup(settingsPanelLayout.createSequentialGroup()
 				.addGroup(settingsPanelLayout.createParallelGroup()

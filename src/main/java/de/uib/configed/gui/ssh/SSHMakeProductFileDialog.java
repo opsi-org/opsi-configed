@@ -80,9 +80,9 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		filename = "";
 
-		this.setSize(new java.awt.Dimension(de.uib.configed.Globals.dialogFrameDefaultWidth + 100,
+		this.setSize(new java.awt.Dimension(de.uib.configed.Globals.DIALOG_FRAME_DEFAULT_WIDTH + 100,
 				// workbenchpanel.getHeight() + buttonPanel.getHeight()
-				de.uib.configed.Globals.dialogFrameDefaultHeight + 100));
+				de.uib.configed.Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100));
 		autocompletion.doButtonAction();
 		doSetActionGetVersions();
 		showAdvancedSettings();
@@ -283,7 +283,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			}
 
 			workbenchpanelLayout
-					.setHorizontalGroup(workbenchpanelLayout.createSequentialGroup().addGap(Globals.gapSize)
+					.setHorizontalGroup(workbenchpanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 							.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 									.addComponent(lbl_dir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 											GroupLayout.PREFERRED_SIZE)
@@ -295,26 +295,26 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 									.addComponent(lbl_removeExistingPackage, GroupLayout.PREFERRED_SIZE,
 											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(Globals.gapSize)
+							.addGap(Globals.GAP_SIZE)
 							.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-									.addComponent(cb_mainDir, de.uib.configed.Globals.buttonWidth,
-											2 * de.uib.configed.Globals.buttonWidth, Short.MAX_VALUE)
+									.addComponent(cb_mainDir, de.uib.configed.Globals.BUTTON_WIDTH,
+											2 * de.uib.configed.Globals.BUTTON_WIDTH, Short.MAX_VALUE)
 									.addComponent(lbl_versions_controlfile, GroupLayout.PREFERRED_SIZE,
 											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 									.addComponent(btn_setRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 											GroupLayout.PREFERRED_SIZE)
-									.addComponent(lbl_productVersion_controlfile, de.uib.configed.Globals.buttonWidth,
-											de.uib.configed.Globals.buttonWidth + 25, Short.MAX_VALUE)
-									.addComponent(lbl_packageVersion_controlfile, de.uib.configed.Globals.buttonWidth,
-											de.uib.configed.Globals.buttonWidth + 25, Short.MAX_VALUE)
+									.addComponent(lbl_productVersion_controlfile, de.uib.configed.Globals.BUTTON_WIDTH,
+											de.uib.configed.Globals.BUTTON_WIDTH + 25, Short.MAX_VALUE)
+									.addComponent(lbl_packageVersion_controlfile, de.uib.configed.Globals.BUTTON_WIDTH,
+											de.uib.configed.Globals.BUTTON_WIDTH + 25, Short.MAX_VALUE)
 
 									.addGroup(workbenchpanelLayout.createSequentialGroup()
 											.addComponent(cb_overwrite, GroupLayout.PREFERRED_SIZE,
 													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-											.addGap(Globals.gapSize)
+											.addGap(Globals.GAP_SIZE)
 											.addComponent(lbl_removeExistingPackage2, GroupLayout.PREFERRED_SIZE,
 													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
-							.addGap(Globals.gapSize)
+							.addGap(Globals.GAP_SIZE)
 							.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 									.addComponent(lbl_versions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 											GroupLayout.PREFERRED_SIZE)
@@ -327,7 +327,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 									.addComponent(btn_advancedSettings, GroupLayout.PREFERRED_SIZE,
 											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
 
-			workbenchpanelLayout.setVerticalGroup(workbenchpanelLayout.createSequentialGroup().addGap(Globals.gapSize)
+			workbenchpanelLayout.setVerticalGroup(workbenchpanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 					.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 							.addComponent(lbl_dir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE)
@@ -335,19 +335,19 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 									GroupLayout.PREFERRED_SIZE)
 							.addComponent(btn_searchDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE))
-					.addGap(Globals.gapSize)
+					.addGap(Globals.GAP_SIZE)
 					.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 							.addComponent(lbl_setRights_now, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE)
 							.addComponent(btn_setRights, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(Globals.gapSize).addGap(Globals.gapSize)
+					.addGap(Globals.GAP_SIZE).addGap(Globals.GAP_SIZE)
 					.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 							.addComponent(lbl_versions_controlfile, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addComponent(lbl_versions, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE))
-					.addGap(Globals.gapSize)
+					.addGap(Globals.GAP_SIZE)
 					.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 							.addComponent(lbl_productVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE)
@@ -355,7 +355,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 									GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addComponent(tf_productVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE))
-					.addGap(Globals.gapSize)
+					.addGap(Globals.GAP_SIZE)
 					.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 							.addComponent(lbl_packageVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE)
@@ -363,7 +363,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 									GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addComponent(tf_packageVersion, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(Globals.gapSize).addGap(Globals.gapSize)
+					.addGap(Globals.GAP_SIZE).addGap(Globals.GAP_SIZE)
 					.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 							.addComponent(lbl_removeExistingPackage, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -377,7 +377,8 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 			);
 
-			mainpanelLayout.setHorizontalGroup(mainpanelLayout.createSequentialGroup().addGap(Globals.gapSize)
+			mainpanelLayout.setHorizontalGroup(mainpanelLayout
+					.createSequentialGroup().addGap(Globals.GAP_SIZE)
 					.addGroup(mainpanelLayout.createParallelGroup()
 							.addComponent(lbl_zsync, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE)
@@ -385,7 +386,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 									GroupLayout.PREFERRED_SIZE)
 							.addComponent(lbl_setRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE))
-					.addGap(Globals.gapSize)
+					.addGap(Globals.GAP_SIZE)
 					.addGroup(mainpanelLayout.createParallelGroup()
 							.addComponent(cb_zsync, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE)
@@ -393,26 +394,26 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 									GroupLayout.PREFERRED_SIZE)
 							.addComponent(cb_setRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE))
-					.addGap(Globals.gapSize));
-			mainpanelLayout.setVerticalGroup(mainpanelLayout.createSequentialGroup().addGap(Globals.gapSize)
+					.addGap(Globals.GAP_SIZE));
+			mainpanelLayout.setVerticalGroup(mainpanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 					.addGroup(mainpanelLayout.createParallelGroup()
 							.addComponent(lbl_zsync, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE)
 							.addComponent(cb_zsync, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE))
-					.addGap(Globals.gapSize)
+					.addGap(Globals.GAP_SIZE)
 					.addGroup(mainpanelLayout.createParallelGroup()
 							.addComponent(lbl_md5sum, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE)
 							.addComponent(cb_md5sum, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE))
-					.addGap(Globals.gapSize)
+					.addGap(Globals.GAP_SIZE)
 					.addGroup(mainpanelLayout.createParallelGroup()
 							.addComponent(lbl_setRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE)
 							.addComponent(cb_setRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 									GroupLayout.PREFERRED_SIZE))
-					.addGap(Globals.gapSize));
+					.addGap(Globals.GAP_SIZE));
 
 		} catch (Exception e) {
 			logging.error("Error", e);

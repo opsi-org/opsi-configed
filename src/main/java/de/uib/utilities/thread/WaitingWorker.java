@@ -70,6 +70,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 				Thread.sleep(timeStepMillis);
 			} catch (InterruptedException ignore) {
 				logging.info(this, "InterruptedException");
+				Thread.currentThread().interrupt();
 			}
 
 			long nowMillis = new GregorianCalendar().getTimeInMillis();
@@ -94,8 +95,8 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 		}
 
 		logging.info(this,
-				" doInBackground finished: ready, stopped, elapsedMillis < waitingSleeper.getWaitingMillis() "
-						+ ready + ", " + stopped + ", " + (elapsedMillis >= waitingSleeper.getWaitingMillis()));
+				" doInBackground finished: ready, stopped, elapsedMillis < waitingSleeper.getWaitingMillis() " + ready
+						+ ", " + stopped + ", " + (elapsedMillis >= waitingSleeper.getWaitingMillis()));
 
 		if (timeoutReached)
 			logging.warning(this, " doInBackground finished, timeoutReached");

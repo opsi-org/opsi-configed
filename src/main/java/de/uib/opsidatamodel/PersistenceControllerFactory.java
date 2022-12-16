@@ -111,7 +111,6 @@ public class PersistenceControllerFactory {
 
 				if (sqlAndGetRows && !sourceAccepted) {
 					sqlAndGetRows = false;
-					persistControl = null;
 					persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
 				}
 
@@ -213,7 +212,6 @@ public class PersistenceControllerFactory {
 				if (sqlAndGetRows && !persistControl.isWithMySQL()) {
 					logging.info(" fall back to  " + OpsiserviceNOMPersistenceController.class);
 					sqlAndGetRows = false;
-					persistControl = null;
 					persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
 
 					persistControl.makeConnection();

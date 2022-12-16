@@ -13,7 +13,7 @@ import javax.swing.text.JTextComponent;
  * FTextArea
  * Copyright:     Copyright (c) 2001-2005,2018,2021
  * Organisation:  uib
- * @author Rupert Röder, Naglis Vidziunas
+- * @author Rupert Röder, Naglis Vidziunas
  * @version
  */
 import de.uib.configed.Globals;
@@ -55,8 +55,9 @@ public class FTextArea extends FGeneralDialog {
 			int preferredHeight, JPanel addPane) {
 		super(owner, title, modal, buttonList, icons, buttonList.length, preferredWidth, preferredHeight, false,
 				addPane);
-		initComponents();
+		checkAdditionalPane();
 		init(preferredWidth, preferredHeight);
+
 	}
 
 	public void setMessage(String message) {
@@ -92,6 +93,7 @@ public class FTextArea extends FGeneralDialog {
 		jTextArea1.addKeyListener(this);
 
 		pack();
+
 	}
 
 	// KeyListener
@@ -100,16 +102,14 @@ public class FTextArea extends FGeneralDialog {
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
+			// logging.debug ("shift released");
 		}
 
-		if (e.getKeyCode() == KeyEvent.VK_TAB) {
-			if (!shiftPressed && e.getSource() == jTextArea1) {
-				jButton1.requestFocus();
-			}
+		if (!shiftPressed && e.getSource() == jTextArea1 && e.getKeyCode() == KeyEvent.VK_TAB)
+			jButton1.requestFocus();
 
-			if (shiftPressed && e.getSource() == jButton1) {
-				jTextArea1.requestFocus();
-			}
-		}
+		if (shiftPressed && e.getSource() == jButton1 && e.getKeyCode() == KeyEvent.VK_TAB)
+			jTextArea1.requestFocus();
 	}
+
 }

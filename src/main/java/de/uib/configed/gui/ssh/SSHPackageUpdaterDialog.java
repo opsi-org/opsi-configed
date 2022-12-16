@@ -29,13 +29,11 @@ import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.utilities.logging.logging;
 
 public class SSHPackageUpdaterDialog extends FGeneralDialog {
-	private GroupLayout layout;
 	private JPanel inputPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
 
 	private JLabel lbl_info;
 	private JLabel lbl_repos;
-	private JButton btn_searchDir;
 	private JComboBox cb_actions;
 	private JComboBox cb_repos;
 	private JButton btn_doAction;
@@ -182,28 +180,27 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	private void initLayout() {
 		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
 		inputPanel.setLayout(inputPanelLayout);
-		inputPanelLayout
-				.setHorizontalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.gapSize)
-						.addGroup(inputPanelLayout.createParallelGroup()
-								.addComponent(lbl_info, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(lbl_repos, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.gapSize)
-						.addGroup(inputPanelLayout.createParallelGroup()
-								.addComponent(cb_actions, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE)
-								.addComponent(cb_repos, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE))
-						.addGap(Globals.gapSize));
+		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addGroup(inputPanelLayout.createParallelGroup()
+						.addComponent(lbl_info, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(lbl_repos, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE)
+				.addGroup(inputPanelLayout.createParallelGroup()
+						.addComponent(cb_actions, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
+						.addComponent(cb_repos, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE))
+				.addGap(Globals.GAP_SIZE));
 
-		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(2 * Globals.gapSize)
+		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_info, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(cb_actions, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(Globals.gapSize)
+						.addComponent(lbl_info, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(cb_actions, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_repos, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addComponent(cb_repos, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight))
-				.addGap(2 * Globals.gapSize));
+						.addComponent(lbl_repos, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(cb_repos, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGap(2 * Globals.GAP_SIZE));
 
 		this.setSize(600, 210);
 		this.centerOn(de.uib.configed.Globals.mainFrame);

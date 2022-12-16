@@ -107,28 +107,28 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createSequentialGroup()
 
-				.addGap(de.uib.configed.Globals.gapSize)
+				.addGap(de.uib.configed.Globals.GAP_SIZE)
 				.addGroup(layout.createParallelGroup()
-						.addGroup(layout.createSequentialGroup().addGap(de.uib.configed.Globals.gapSize * 2)
-								.addComponent(lbl_user, PREF, PREF, PREF).addGap(de.uib.configed.Globals.gapSize))
-						.addGroup(layout.createSequentialGroup().addGap(de.uib.configed.Globals.gapSize * 2)
-								.addComponent(lbl_pswd, PREF, PREF, PREF).addGap(de.uib.configed.Globals.gapSize)))
+						.addGroup(layout.createSequentialGroup().addGap(de.uib.configed.Globals.GAP_SIZE * 2)
+								.addComponent(lbl_user, PREF, PREF, PREF).addGap(de.uib.configed.Globals.GAP_SIZE))
+						.addGroup(layout.createSequentialGroup().addGap(de.uib.configed.Globals.GAP_SIZE * 2)
+								.addComponent(lbl_pswd, PREF, PREF, PREF).addGap(de.uib.configed.Globals.GAP_SIZE)))
 				.addGroup(layout.createParallelGroup()
-						.addComponent(tf_user, de.uib.configed.Globals.buttonWidth, de.uib.configed.Globals.buttonWidth,
-								de.uib.configed.Globals.buttonWidth * 2)
-						.addComponent(tf_pswd, de.uib.configed.Globals.buttonWidth, de.uib.configed.Globals.buttonWidth,
-								de.uib.configed.Globals.buttonWidth * 2)));
+						.addComponent(tf_user, de.uib.configed.Globals.BUTTON_WIDTH,
+								de.uib.configed.Globals.BUTTON_WIDTH, de.uib.configed.Globals.BUTTON_WIDTH * 2)
+						.addComponent(tf_pswd, de.uib.configed.Globals.BUTTON_WIDTH,
+								de.uib.configed.Globals.BUTTON_WIDTH, de.uib.configed.Globals.BUTTON_WIDTH * 2)));
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(de.uib.configed.Globals.gapSize)
-				.addGroup(layout.createParallelGroup().addGap(de.uib.configed.Globals.gapSize)
-						.addComponent(lbl_user, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addGap(de.uib.configed.Globals.gapSize)
-						.addComponent(tf_user, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addGap(de.uib.configed.Globals.gapSize))
-				.addGroup(layout.createParallelGroup().addGap(de.uib.configed.Globals.gapSize)
-						.addComponent(lbl_pswd, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addGap(de.uib.configed.Globals.gapSize)
-						.addComponent(tf_pswd, Globals.buttonHeight, Globals.buttonHeight, Globals.buttonHeight)
-						.addGap(de.uib.configed.Globals.gapSize)));
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(de.uib.configed.Globals.GAP_SIZE)
+				.addGroup(layout.createParallelGroup().addGap(de.uib.configed.Globals.GAP_SIZE)
+						.addComponent(lbl_user, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addGap(de.uib.configed.Globals.GAP_SIZE)
+						.addComponent(tf_user, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addGap(de.uib.configed.Globals.GAP_SIZE))
+				.addGroup(layout.createParallelGroup().addGap(de.uib.configed.Globals.GAP_SIZE)
+						.addComponent(lbl_pswd, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addGap(de.uib.configed.Globals.GAP_SIZE)
+						.addComponent(tf_pswd, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addGap(de.uib.configed.Globals.GAP_SIZE)));
 	}
 }

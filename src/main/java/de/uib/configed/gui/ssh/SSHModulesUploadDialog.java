@@ -71,11 +71,13 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 		h_parallelGroup = inputPanelLayout.createSequentialGroup().addGroup(inputPanelLayout.createParallelGroup()
 				.addGroup(inputPanelLayout.createSequentialGroup().addComponent(lbl_modules_from, PREF, PREF, PREF))
 				.addComponent(lbl_set_rights, PREF, PREF, PREF).addComponent(lbl_overwriteExisting, PREF, PREF, PREF)
-				.addComponent(lbl_copy_to_modules_d, PREF, PREF, PREF)).addGap(Globals.gapSize)
-				.addGroup(inputPanelLayout.createParallelGroup()
-						.addComponent(cb_setRights, Globals.iconWidth, Globals.iconWidth, Globals.iconWidth)
-						.addComponent(cb_overwriteExisting, Globals.iconWidth, Globals.iconWidth, Globals.iconWidth)
-						.addComponent(cb_copy_to_modules_d, Globals.iconWidth, Globals.iconWidth, Globals.iconWidth));
+				.addComponent(lbl_copy_to_modules_d, PREF, PREF, PREF)).addGap(Globals.GAP_SIZE).addGroup(
+						inputPanelLayout.createParallelGroup()
+								.addComponent(cb_setRights, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+								.addComponent(cb_overwriteExisting, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+										Globals.ICON_WIDTH)
+								.addComponent(cb_copy_to_modules_d, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+										Globals.ICON_WIDTH));
 		v_parallelGroup = inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 				.addComponent(lbl_copy_to_modules_d, PREF, PREF, PREF)
 				.addComponent(cb_copy_to_modules_d, PREF, PREF, PREF);

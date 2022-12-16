@@ -69,6 +69,7 @@ public class ConnectionState {
 		return message;
 	}
 
+	@Override
 	public boolean equals(Object state) {
 		if (state instanceof Integer)
 			return (myState == (Integer) state);
