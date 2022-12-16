@@ -60,7 +60,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 	 * Opening the connection and set the SSL parameters
 	 */
 	@Override
-	protected HttpURLConnection produceConnection() throws java.io.IOException {
+	protected HttpURLConnection produceConnection() throws IOException {
 		logging.info(this, "produceConnection, url; " + serviceURL);
 		HttpURLConnection connection = (HttpURLConnection) serviceURL.openConnection();
 		SSLSocketFactory sslFactory = createSSLSocketFactory();
@@ -68,9 +68,8 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		return connection;
 	}
 
-	private class SecureSSLSocketFactory extends SSLSocketFactory
 	// http://stackoverflow.com/questions/27075678/get-ssl-version-used-in-httpsurlconnection-java
-	{
+	private class SecureSSLSocketFactory extends SSLSocketFactory {
 		private final SSLSocketFactory delegate;
 		private HandshakeCompletedListener handshakeListener;
 
@@ -187,9 +186,9 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			} catch (SSLPeerUnverifiedException e) {
 				logging.error(this, "peer's identity wasn't verified");
 			}
+
 			logging.info(this, "protocol " + protocol + "  peerName " + peerName);
 			logging.info(this, "cipher suite " + cipherSuite);
-
 		}
 	}
 
@@ -221,7 +220,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		} catch (KeyManagementException e) {
 			logging.error(this, "failed to initialize SSL context");
 		} catch (IOException e) {
-			logging.error(this, "something is wrong with keystore data");
+			logging.error(this, "something is wrong with the keystore data");
 		}
 
 		return sslFactory;
@@ -267,7 +266,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 					new File(configed.savedStatesLocationName + File.separator + Globals.CERTIFICATE_FILE).toPath(),
 					StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logging.error(this, "unable to save certificate");
 		}
 	}
 
@@ -298,8 +297,8 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		try {
 			url = new URL(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE));
 			tempCertFile = File.createTempFile(Globals.CERTIFICATE_FILE_NAME, "." + Globals.CERTIFICATE_FILE_EXTENSION);
-		} catch (MalformedURLException e1) {
-			logging.error(this, "url is malformed: " + url.toString());
+		} catch (MalformedURLException e) {
+			logging.error(this, "url is malformed: " + url);
 		} catch (IOException e) {
 			logging.error(this, "unable to create tmp certificate file");
 		}
@@ -316,16 +315,17 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 
 	private SSLSocketFactory createDullSSLSocketFactory() {
 		// Create a new trust manager that trust all certificates
+		@SuppressWarnings("squid:S4830")
 		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
-			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+			public X509Certificate[] getAcceptedIssuers() {
 				return new X509Certificate[0];
 			}
 
-			public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {
+			public void checkClientTrusted(X509Certificate[] certs, String authType) {
 				// we skip certificate verification.
 			}
 
-			public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) {
+			public void checkServerTrusted(X509Certificate[] certs, String authType) {
 				// we skip certificate verification.
 			}
 		} };
@@ -334,7 +334,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 
 		try {
 			SSLContext sslContext = SSLContext.getInstance("TLS");
-			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+			sslContext.init(null, trustAllCerts, new SecureRandom());
 			sslFactory = new SecureSSLSocketFactory(sslContext.getSocketFactory(), new MyHandshakeCompletedListener());
 		} catch (NoSuchAlgorithmException e) {
 			logging.error(this, "provider doesn't support algorithm");

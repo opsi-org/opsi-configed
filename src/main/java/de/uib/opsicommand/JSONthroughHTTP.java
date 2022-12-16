@@ -22,6 +22,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLException;
 
 import org.json.JSONObject;
 
@@ -246,11 +247,8 @@ public class JSONthroughHTTP extends JSONExecutioner {
 	 * 
 	 */
 
-	// synchronized
 	/**
 	 * This method receives the JSONObject via HTTP.
-	 * 
-	 * @param omc
 	 */
 	public JSONObject retrieveJSONObject(OpsiMethodCall omc) {
 		boolean background = false;
@@ -277,7 +275,6 @@ public class JSONthroughHTTP extends JSONExecutioner {
 			connection = produceConnection();
 			// the underlying network connection can be shared,
 			// only disconnect() may close the underlying socket
-			// logging.debug (" retrieving 1 " + conStat);
 
 			setGeneralRequestProperties(connection);
 
@@ -331,7 +328,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 					logging.info(this, "exception on writing json request " + iox);
 				}
 			}
-		} catch (IOException ex) {
+		} catch (SSLException ex) {
 			if (!background) {
 				if (waitCursor != null) {
 					waitCursor.stop();
@@ -358,15 +355,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 				fErrorMsg.setMessage(message.toString());
 				fErrorMsg.setAlwaysOnTop(true);
 				fErrorMsg.setVisible(true);
-
-				if (fErrorMsg.getResult() == 2) {
-					trustAlways = true;
-					conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
-				} else if (fErrorMsg.getResult() == 3) {
-					trustOnlyOnce = true;
-					conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
-				}
-			} else if (ex.toString().contains("SSLHandshakeException") || ex.toString().contains("SSLException")) {
+			} else {
 				StringBuilder message = new StringBuilder("");
 				message.append(configed.getResourceValue("JSONthroughHTTP.certificateIsInvalid") + "\n");
 				message.append(configed.getResourceValue("JSONthroughHTTP.stillConnectToServer"));
@@ -375,17 +364,28 @@ public class JSONthroughHTTP extends JSONExecutioner {
 				fErrorMsg.setMessage(message.toString());
 				fErrorMsg.setAlwaysOnTop(true);
 				fErrorMsg.setVisible(true);
-
-				if (fErrorMsg.getResult() == 2) {
-					trustAlways = true;
-					conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
-				} else if (fErrorMsg.getResult() == 3) {
-					trustOnlyOnce = true;
-					conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
-				}
-			} else {
-				logging.error("Exception on connecting, " + ex.toString());
 			}
+
+			if (fErrorMsg.getResult() == 1) {
+				conStat = new ConnectionState(ConnectionState.INTERRUPTED);
+			} else if (fErrorMsg.getResult() == 2) {
+				trustAlways = true;
+				conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
+			} else if (fErrorMsg.getResult() == 3) {
+				trustOnlyOnce = true;
+				conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
+			}
+			return null;
+		} catch (IOException ex) {
+			if (!background) {
+				if (waitCursor != null) {
+					waitCursor.stop();
+				}
+				WaitCursor.stopAll();
+			}
+
+			conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
+			logging.error("Exception on connecting, " + ex.toString());
 
 			return null;
 		}
