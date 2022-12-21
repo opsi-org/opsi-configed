@@ -59,8 +59,8 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	protected Map<String, AbstractEditMapPanel> partialPanels;
 	protected TreeMap<String, Map<String, Object>> virtualLines;
 
-	protected int hGap = de.uib.utilities.Globals.hGapSize / 2;
-	protected int vGap = de.uib.utilities.Globals.vGapSize / 2;
+	protected int hGap = de.uib.utilities.Globals.HGAP_SIZE / 2;
+	protected int vGap = de.uib.utilities.Globals.VGAP_SIZE / 2;
 
 	public EditMapPanelGrouped() {
 		this(null);

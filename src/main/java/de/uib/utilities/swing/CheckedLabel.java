@@ -281,14 +281,14 @@ public class CheckedLabel extends JPanel implements FocusListener
 		setLayout(layout);
 
 		layout.setVerticalGroup(layout.createParallelGroup()
-				.addComponent(textLabel, de.uib.utilities.Globals.lineHeight, de.uib.utilities.Globals.lineHeight,
-						de.uib.utilities.Globals.lineHeight)
-				.addComponent(selectedLabel, de.uib.utilities.Globals.lineHeight, de.uib.utilities.Globals.lineHeight,
-						de.uib.utilities.Globals.lineHeight)
-				.addComponent(unselectedLabel, de.uib.utilities.Globals.lineHeight, de.uib.utilities.Globals.lineHeight,
-						de.uib.utilities.Globals.lineHeight)
-				.addComponent(nullLabel, de.uib.utilities.Globals.lineHeight, de.uib.utilities.Globals.lineHeight,
-						de.uib.utilities.Globals.lineHeight));
+				.addComponent(textLabel, de.uib.utilities.Globals.LINE_HEIGHT, de.uib.utilities.Globals.LINE_HEIGHT,
+						de.uib.utilities.Globals.LINE_HEIGHT)
+				.addComponent(selectedLabel, de.uib.utilities.Globals.LINE_HEIGHT, de.uib.utilities.Globals.LINE_HEIGHT,
+						de.uib.utilities.Globals.LINE_HEIGHT)
+				.addComponent(unselectedLabel, de.uib.utilities.Globals.LINE_HEIGHT,
+						de.uib.utilities.Globals.LINE_HEIGHT, de.uib.utilities.Globals.LINE_HEIGHT)
+				.addComponent(nullLabel, de.uib.utilities.Globals.LINE_HEIGHT, de.uib.utilities.Globals.LINE_HEIGHT,
+						de.uib.utilities.Globals.LINE_HEIGHT));
 
 		layout.setHorizontalGroup(layout.createSequentialGroup()
 				.addComponent(textLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

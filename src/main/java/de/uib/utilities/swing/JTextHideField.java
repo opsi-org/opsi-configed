@@ -93,19 +93,18 @@ public class JTextHideField extends javax.swing.JPanel {
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup()
-						.addGroup(layout.createParallelGroup()
-								.addComponent(invisibleField, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE)
-								.addComponent(visibleField, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE))
-						.addComponent(button, Globals.iconWidth, Globals.iconWidth, Globals.iconWidth)
-						.addGap(0, Globals.iconWidth, Globals.buttonWidth)));
+		layout.setHorizontalGroup(layout.createParallelGroup().addGroup(layout.createSequentialGroup()
+				.addGroup(layout.createParallelGroup()
+						.addComponent(invisibleField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
+						.addComponent(visibleField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE))
+				.addComponent(button, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+				.addGap(0, Globals.ICON_WIDTH, Globals.BUTTON_WIDTH)));
 
 		layout.setVerticalGroup(layout.createParallelGroup()
 				.addGroup(layout.createParallelGroup()
-						.addComponent(invisibleField, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(visibleField, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
-				.addComponent(button, Globals.lineHeight / 2, Globals.lineHeight / 2, Globals.lineHeight / 2));
+						.addComponent(invisibleField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(visibleField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+				.addComponent(button, Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2));
 	}
 
 	public void setHidden() {

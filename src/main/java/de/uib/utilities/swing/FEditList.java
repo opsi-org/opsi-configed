@@ -42,9 +42,7 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 
 public class FEditList extends FEditObject
-		implements ListSelectionListener,
-		ActionListener, KeyListener,
-		MouseListener {
+		implements ListSelectionListener, ActionListener, KeyListener, MouseListener {
 	private javax.swing.JScrollPane scrollpane;
 	protected javax.swing.JList<Object> visibleList;
 
@@ -100,9 +98,9 @@ public class FEditList extends FEditObject
 		// selection
 
 		buttonRemove = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
-				"images/list-clear.png", "images/list-clear.png", "images/list-clear_disabled.png", true);
-		buttonRemove.setPreferredSize(new Dimension(buttonWidth, de.uib.utilities.Globals.buttonHeight));
+				de.uib.configed.configed.getResourceValue("FEditObject.RemoveButtonTooltip"), "images/list-clear.png",
+				"images/list-clear.png", "images/list-clear_disabled.png", true);
+		buttonRemove.setPreferredSize(new Dimension(buttonWidth, de.uib.utilities.Globals.BUTTON_HEIGHT));
 		buttonRemove.setVisible(false);
 	}
 
@@ -143,15 +141,13 @@ public class FEditList extends FEditObject
 		// logging.debug(this, "setEditable " + b);
 		super.setEditable(b);
 		extraField.setVisible(b);
-		buttonRemove.setVisible(
-				b && !singleSelectionMode);
+		buttonRemove.setVisible(b && !singleSelectionMode);
 		// buttonRemove.setEnabled(b);
 		buttonAdd.setVisible(b);
 	}
 
 	protected Object getValueAt(Point location) {
-		return visibleList.getModel().getElementAt(
-				visibleList.locationToIndex(location));
+		return visibleList.getModel().getElementAt(visibleList.locationToIndex(location));
 	}
 
 	protected void setExtraFieldToListValueAt(Point location) {
@@ -371,8 +367,7 @@ public class FEditList extends FEditObject
 		java.util.List selectedList = getSelectedList();
 		// logging.info(this, "FEditList valueChanged , selected " + selectedList + "
 		// nullable? " + nullable);
-		if (!nullable &&
-				selectedList.size() == 0) {
+		if (!nullable && selectedList.size() == 0) {
 			// reset to some value
 			initSelection();
 		}

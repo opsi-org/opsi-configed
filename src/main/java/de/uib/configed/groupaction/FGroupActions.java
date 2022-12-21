@@ -226,8 +226,8 @@ public class FGroupActions extends SecondaryFrame {
 						.addGap(Globals.HGAP_SIZE * 2, Globals.HGAP_SIZE * 4, Globals.HGAP_SIZE * 4)
 						.addComponent(buttonSetup, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
 						.addGap(Globals.HGAP_SIZE * 2, Globals.HGAP_SIZE * 2, Globals.HGAP_SIZE * 2)
-						.addComponent(buttonReload, de.uib.utilities.Globals.iconWidth,
-								de.uib.utilities.Globals.iconWidth, de.uib.utilities.Globals.iconWidth)
+						.addComponent(buttonReload, de.uib.utilities.Globals.ICON_WIDTH,
+								de.uib.utilities.Globals.ICON_WIDTH, de.uib.utilities.Globals.ICON_WIDTH)
 						.addGap(Globals.HGAP_SIZE, Globals.HFIRST_GAP, Short.MAX_VALUE))
 		//////////////////////////////////////////////////////////////////////
 		);

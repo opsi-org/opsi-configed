@@ -56,16 +56,16 @@ public class SavedSearchesDialog extends FEditList {
 		super.createComponents();
 
 		// redefine buttonCommit
-		buttonCommit.setToolTipText(
-				de.uib.configed.configed.getResourceValue("SavedSearchesDialog.ExecuteButtonTooltip"));
+		buttonCommit
+				.setToolTipText(de.uib.configed.configed.getResourceValue("SavedSearchesDialog.ExecuteButtonTooltip"));
 		buttonCommit.setIcon(Globals.createImageIcon("images/executing_command_red_22.png", ""));
 		buttonCommit.setSelectedIcon(Globals.createImageIcon("images/executing_command_red_22.png", ""));// ("images/execute_over.png",
 																											// ""));
 		buttonCommit.setDisabledIcon(Globals.createImageIcon("images/execute_disabled.png", ""));
-		buttonCommit.setPreferredSize(new java.awt.Dimension(buttonWidth, de.uib.utilities.Globals.buttonHeight));
+		buttonCommit.setPreferredSize(new java.awt.Dimension(buttonWidth, de.uib.utilities.Globals.BUTTON_HEIGHT));
 
-		buttonCancel.setToolTipText(
-				de.uib.configed.configed.getResourceValue("SavedSearchesDialog.CancelButtonTooltip"));
+		buttonCancel
+				.setToolTipText(de.uib.configed.configed.getResourceValue("SavedSearchesDialog.CancelButtonTooltip"));
 
 	}
 
@@ -245,8 +245,8 @@ public class SavedSearchesDialog extends FEditList {
 			descMap.put(ele, savedSearches.get(ele).getDescription());
 		}
 
-		setCellRenderer(new de.uib.utilities.swing.list.ListCellRendererByIndex(
-				valueMap, descMap, null, -1, false, ""));
+		setCellRenderer(
+				new de.uib.utilities.swing.list.ListCellRendererByIndex(valueMap, descMap, null, -1, false, ""));
 
 		initSelection();
 

@@ -131,7 +131,7 @@ public class JTableSelectionPanel extends JPanel
 		table.setShowGrid(true);
 		table.setGridColor(Color.white);
 		table.setDefaultRenderer(Object.class, new StandardTableCellRenderer());
-		table.setRowHeight(de.uib.utilities.Globals.tableRowHeight);
+		table.setRowHeight(de.uib.utilities.Globals.TABLE_ROW_HEIGHT);
 		// sorter.setTableHeader(table.getTableHeader());
 		table.setAutoCreateRowSorter(true);
 

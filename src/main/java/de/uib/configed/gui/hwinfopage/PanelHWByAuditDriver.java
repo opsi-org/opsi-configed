@@ -19,9 +19,9 @@ import de.uib.utilities.swing.JTextShowField;
 public class PanelHWByAuditDriver extends JPanel {
 	protected JLabel jLabelTitle;
 
-	protected int hGap = de.uib.utilities.Globals.hGapSize / 2;
-	protected int vGap = de.uib.utilities.Globals.vGapSize / 2;
-	protected int hLabel = de.uib.utilities.Globals.buttonHeight;
+	protected int hGap = de.uib.utilities.Globals.HGAP_SIZE / 2;
+	protected int vGap = de.uib.utilities.Globals.VGAP_SIZE / 2;
+	protected int hLabel = de.uib.utilities.Globals.BUTTON_HEIGHT;
 
 	protected String byAuditPath;
 
@@ -91,7 +91,7 @@ public class PanelHWByAuditDriver extends JPanel {
 		// JPanel panelByAuditInfo= new JPanel();
 		GroupLayout layoutByAuditInfo = new GroupLayout(this);
 		this.setLayout(layoutByAuditInfo);
-		int lh = de.uib.utilities.Globals.lineHeight - 4;
+		int lh = de.uib.utilities.Globals.LINE_HEIGHT - 4;
 		layoutByAuditInfo.setVerticalGroup(layoutByAuditInfo.createSequentialGroup().addGap(vGap, vGap, vGap)
 				.addGroup(layoutByAuditInfo.createParallelGroup().addComponent(labelInfo, lh, lh, lh)
 						.addComponent(labelVendor, lh, lh, lh).addComponent(labelProduct, lh, lh, lh)
@@ -125,24 +125,24 @@ public class PanelHWByAuditDriver extends JPanel {
 				.addGap(hGap, hGap, hGap)
 				.addGroup(layoutByAuditInfo.createParallelGroup()
 						.addGroup(layoutByAuditInfo.createSequentialGroup().addGap(2, 2, 2).addComponent(labelVendor,
-								de.uib.utilities.Globals.buttonWidth / 2, de.uib.utilities.Globals.buttonWidth,
-								de.uib.utilities.Globals.buttonWidth * 2))
-						.addComponent(fieldVendor, de.uib.utilities.Globals.buttonWidth / 2,
-								de.uib.utilities.Globals.buttonWidth, de.uib.utilities.Globals.buttonWidth * 2)
-						.addComponent(fieldVendor2, de.uib.utilities.Globals.buttonWidth / 2,
-								de.uib.utilities.Globals.buttonWidth, de.uib.utilities.Globals.buttonWidth * 2))
+								de.uib.utilities.Globals.BUTTON_WIDTH / 2, de.uib.utilities.Globals.BUTTON_WIDTH,
+								de.uib.utilities.Globals.BUTTON_WIDTH * 2))
+						.addComponent(fieldVendor, de.uib.utilities.Globals.BUTTON_WIDTH / 2,
+								de.uib.utilities.Globals.BUTTON_WIDTH, de.uib.utilities.Globals.BUTTON_WIDTH * 2)
+						.addComponent(fieldVendor2, de.uib.utilities.Globals.BUTTON_WIDTH / 2,
+								de.uib.utilities.Globals.BUTTON_WIDTH, de.uib.utilities.Globals.BUTTON_WIDTH * 2))
 				.addGap(hGap, hGap, hGap)
 				.addGroup(layoutByAuditInfo
 						.createParallelGroup().addComponent(labelSeparator).addComponent(labelSeparator2))
 				.addGap(hGap, hGap, hGap)
 				.addGroup(layoutByAuditInfo.createParallelGroup()
 						.addGroup(layoutByAuditInfo.createSequentialGroup().addGap(2, 2, 2).addComponent(labelProduct,
-								de.uib.utilities.Globals.buttonWidth / 2, de.uib.utilities.Globals.buttonWidth,
-								de.uib.utilities.Globals.buttonWidth * 2))
-						.addComponent(fieldLabel, de.uib.utilities.Globals.buttonWidth / 2,
-								de.uib.utilities.Globals.buttonWidth, de.uib.utilities.Globals.buttonWidth * 2)
-						.addComponent(fieldLabel2, de.uib.utilities.Globals.buttonWidth / 2,
-								de.uib.utilities.Globals.buttonWidth, de.uib.utilities.Globals.buttonWidth * 2))
+								de.uib.utilities.Globals.BUTTON_WIDTH / 2, de.uib.utilities.Globals.BUTTON_WIDTH,
+								de.uib.utilities.Globals.BUTTON_WIDTH * 2))
+						.addComponent(fieldLabel, de.uib.utilities.Globals.BUTTON_WIDTH / 2,
+								de.uib.utilities.Globals.BUTTON_WIDTH, de.uib.utilities.Globals.BUTTON_WIDTH * 2)
+						.addComponent(fieldLabel2, de.uib.utilities.Globals.BUTTON_WIDTH / 2,
+								de.uib.utilities.Globals.BUTTON_WIDTH, de.uib.utilities.Globals.BUTTON_WIDTH * 2))
 
 				.addGap(5 * hGap, 10 * hGap, 10 * hGap)
 				.addComponent(buttonUploadDrivers, de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH,

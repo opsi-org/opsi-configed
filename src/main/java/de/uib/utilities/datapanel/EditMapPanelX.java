@@ -173,7 +173,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 
 		buildPanel();
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setRowHeight(de.uib.utilities.Globals.tableRowHeight);
+		table.setRowHeight(de.uib.utilities.Globals.TABLE_ROW_HEIGHT);
 
 		editableColumn = table.getColumnModel().getColumn(1);
 
@@ -518,7 +518,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		};
 
 		table.setDefaultRenderer(Object.class, colorized);
-		table.setRowHeight(de.uib.utilities.Globals.lineHeight);
+		table.setRowHeight(de.uib.utilities.Globals.LINE_HEIGHT);
 		table.setShowGrid(true);
 		table.setGridColor(Color.white);
 		// table.setBackground(de.uib.utilities.Globals.backNimbus);

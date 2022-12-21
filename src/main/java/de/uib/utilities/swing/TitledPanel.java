@@ -35,26 +35,26 @@ public class TitledPanel extends JPanel {
 
 		GroupLayout innerLayout = new GroupLayout(this);
 		this.setLayout(innerLayout);
-		innerLayout.setVerticalGroup(innerLayout.createSequentialGroup()
-				.addGap(2 * Globals.vGapSize, 3 * Globals.vGapSize, 3 * Globals.vGapSize)
-				.addComponent(label1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-				.addComponent(label2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.vGapSize, Globals.vGapSize, Short.MAX_VALUE));
-
-		innerLayout.setHorizontalGroup(innerLayout.createParallelGroup()
-				.addGroup(innerLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Short.MAX_VALUE)
+		innerLayout
+				.setVerticalGroup(innerLayout.createSequentialGroup()
+						.addGap(2 * Globals.VGAP_SIZE, 3 * Globals.VGAP_SIZE, 3 * Globals.VGAP_SIZE)
 						.addComponent(label1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Short.MAX_VALUE))
-				.addGroup(innerLayout.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Short.MAX_VALUE)
+						.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 						.addComponent(label2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Short.MAX_VALUE)));
+						.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Short.MAX_VALUE));
+
+		innerLayout.setHorizontalGroup(innerLayout.createParallelGroup().addGroup(innerLayout.createSequentialGroup()
+				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE)
+				.addComponent(label1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE))
+				.addGroup(innerLayout.createSequentialGroup()
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE)
+						.addComponent(label2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE)));
 
 	}
 }

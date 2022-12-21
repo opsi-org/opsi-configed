@@ -11,13 +11,9 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.text.DateFormat;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
-import java.util.Vector;
 
 import de.uib.utilities.logging.logging;
 
@@ -90,34 +86,32 @@ public class Globals {
 
 	public static final int dateFormatStylePattern = DateFormat.LONG;
 
-	public static final int vGapSize = 10;
-	public static final int hGapSize = 10;
+	public static final int VGAP_SIZE = 10;
+	public static final int HGAP_SIZE = 10;
 
-	public static final int buttonHeight = 24;
-	public static final int smallHeight = 18;
-	public static final int lineHeight = 28;
-	public static final int progressBarHeight = 10;
-	public static final int tableRowHeight = 16; // 16 seems to be the default, underscore are not visible; for lyinng
+	public static final int BUTTON_HEIGHT = 24;
+	public static final int SMALL_HEIGHT = 18;
+	public static final int LINE_HEIGHT = 28;
+	public static final int PROGRESS_BAR_HEIGHT = 10;
+	public static final int TABLE_ROW_HEIGHT = 16; // 16 seems to be the default, underscore are not visible; for lyinng
 													// inside table cells, 21 is necessary
-	public static final int buttonWidth = 140;
-	public static final int iconWidth = 60;
-	public static final int labelWidth = 80;
-	public static final int squareButtonWidth = 24;
+	public static final int BUTTON_WIDTH = 140;
+	public static final int ICON_WIDTH = 60;
+	public static final int LABEL_WIDTH = 80;
+	public static final int SQUARE_BUTTON_WIDTH = 24;
 
-	public static final Dimension buttonDimension = new Dimension(buttonWidth, buttonHeight);
-	public static final Dimension lowerButtonDimension = new Dimension(buttonWidth, buttonHeight - 4);
-	public static final Dimension smallButtonDimension = new Dimension(buttonWidth / 2, buttonHeight + 4);
-	public static final Dimension textfieldDimension = new Dimension(buttonWidth, lineHeight);
-	public static final Dimension labelDimension = new Dimension(labelWidth, lineHeight);
-	public static final Dimension shortlabelDimension = new Dimension(60, lineHeight);
-	public static final Dimension counterfieldDimension = new Dimension(60, lineHeight);
+	public static final Dimension buttonDimension = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);
+	public static final Dimension lowerButtonDimension = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT - 4);
+	public static final Dimension smallButtonDimension = new Dimension(BUTTON_WIDTH / 2, BUTTON_HEIGHT + 4);
+	public static final Dimension textfieldDimension = new Dimension(BUTTON_WIDTH, LINE_HEIGHT);
+	public static final Dimension labelDimension = new Dimension(LABEL_WIDTH, LINE_HEIGHT);
+	public static final Dimension shortlabelDimension = new Dimension(60, LINE_HEIGHT);
+	public static final Dimension counterfieldDimension = new Dimension(60, LINE_HEIGHT);
 	public static final Dimension newSmallButton = new Dimension(30, 30);
 	public static final Dimension filechooserSize = new Dimension(600, 400);
 
-	public static int smallFramesDistanceFromLeft = 80;
-	public static int smallFramesDistanceFromTop = 80;
-	public static int bigFramesDistanceFromLeft = 60;
-	public static int bigFramesDistanceFromTop = 40;
+	private static int bigFramesDistanceFromLeft = 60;
+	private static int bigFramesDistanceFromTop = 40;
 
 	// public static int smallFramesDistanceFromLeftOnDefaultDisplay;
 
@@ -143,62 +137,9 @@ public class Globals {
 	// mainIcon =
 	// Toolkit.getDefaultToolkit().createImage(ConfigedGlobals.class.getResource("opsi.gif"));
 
-	public static final String imageBase = "images";
-
-	public static String imageBaseAbsolute;
-
-	public static String getImagesBaseAbsolute() {
-		if (imageBaseAbsolute == null)
-			imageBaseAbsolute = Globals.class.getResource(imageBase).toString();
-		return imageBaseAbsolute;
-	}
-
-	public static final String fileseparator = "/";
-
 	public static boolean isWindows() {
-		Runtime rt = Runtime.getRuntime();
 		String osName = System.getProperty("os.name");
 		return osName.toLowerCase().startsWith("windows");
-	}
-
-	public static java.net.URL getImageResourceURL(String relPath) {
-		String resourceS = imageBase + fileseparator + relPath;
-		java.net.URL imgURL = Globals.class.getResource(resourceS);
-		// logging.debug ( " ---- imgURL " + imgURL );
-		logging.info("getImageResourceURL  found for " + resourceS + " url: " + imgURL);
-		if (imgURL != null) {
-			return imgURL;
-		} else {
-			logging.warning("Couldn't find file  " + relPath);
-			return null;
-		}
-	}
-
-	public static javax.swing.ImageIcon createImageIcon(String path, String description) {
-		// logging.debug ( " ---- image path: " + imageBase + fileseparator + path
-		// );
-		java.net.URL imgURL = Globals.class.getResource(imageBase + fileseparator + path);
-		// logging.debug ( " ---- imgURL " + imgURL );
-		if (imgURL != null) {
-			return new javax.swing.ImageIcon(imgURL, description);
-		} else {
-			logging.warning("Couldn't find file: " + path);
-			return null;
-		}
-	}
-
-	private static Map<String, Object> objects;
-
-	public static Map<String, Object> getMap() {
-		if (objects == null) {
-			objects = new HashMap<>();
-
-			objects.put("mainIcon", mainIcon);
-			objects.put("defaultFont", defaultFont);
-			objects.put("APPNAME", APPNAME);
-		}
-
-		return objects;
 	}
 
 	public static Boolean interpretAsBoolean(Object value) {
@@ -248,59 +189,6 @@ public class Globals {
 		}
 
 		throw new IllegalArgumentException(" " + value + " cannot be interpreted as boolean");
-	}
-
-	public static String driverType = "";
-
-	public static String formT(String timeExpression) {
-		if (driverType.equals("MSSQL"))
-			return " convert(datetime, " + timeExpression + ", 121) "; // MSSQL
-		else
-			return timeExpression; // standard
-		// return " convert(char(19, convert(datetime, " + timeExpression + ", 121),
-		// 121) "; //MSSQL, convert back to string
-
-	}
-
-	public static String getMinutes() {
-		String sqlNow = new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis()).toString();
-		sqlNow = sqlNow.substring(0, sqlNow.lastIndexOf(':'));
-		sqlNow = sqlNow.replace(' ', '-');
-		// sqlNow = sqlNow.replace(':', '-');
-
-		return sqlNow;
-	}
-
-	public static String getSeconds() {
-		String sqlNow = new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis()).toString();
-
-		// logging.debug(" sqlNow " + sqlNow);
-		int i = sqlNow.lastIndexOf(' ');
-		String date = sqlNow.substring(0, i);
-		date = date.replace(' ', '-');
-		String time = sqlNow.substring(i + 1);
-		time = time.substring(0, time.indexOf('.'));
-
-		return date + "_" + time;
-
-		/*
-		 * sqlNow = sqlNow.substring(0, sqlNow.indexOf('.'));
-		 * sqlNow = sqlNow.replace(' ', '-');
-		 * sqlNow.replace, sqlNow.lastIndexOf('_'));
-		 * sqlNow = sqlNow.replace(':', '-');
-		 * 
-		 * return sqlNow;
-		 */
-	}
-
-	public static String getDate(boolean justNumbers) {
-		String sqlNow = new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis()).toString();
-		sqlNow = sqlNow.substring(0, sqlNow.lastIndexOf(' '));
-
-		if (justNumbers)
-			sqlNow = sqlNow.replace("-", "");
-
-		return sqlNow;
 	}
 
 	public static Date getToday() {
@@ -363,21 +251,6 @@ public class Globals {
 	}
 
 	public static final String pseudokeySeparator = ";";
-
-	public static String pseudokey(Vector<Object> partialvalues) {
-		StringBuffer resultBuffer = new StringBuffer("");
-
-		if (!partialvalues.isEmpty()) {
-			resultBuffer.append(partialvalues.get(0));
-
-			for (int i = 1; i < partialvalues.size(); i++) {
-				resultBuffer.append(pseudokeySeparator);
-				resultBuffer.append("" + partialvalues.get(i));
-			}
-		}
-
-		return resultBuffer.toString();
-	}
 
 	public static String pseudokey(String[] partialvalues) {
 		StringBuffer resultBuffer = new StringBuffer("");
@@ -538,23 +411,6 @@ public class Globals {
 		return 0;
 	}
 
-	public static boolean checkCollection(Object source, String location, String cName, Collection c) {
-		boolean result = (c != null);
-		if (result) {
-			if (c instanceof Collection) {
-				logging.info(source.getClass().getName() + " " + cName + " has size  " + ((Collection) c).size());
-			} else if (c instanceof Map) {
-				logging.info(source.getClass().getName() + " " + cName + " has size  " + ((Map) c).size());
-			} else {
-				logging.info(source.getClass().getName() + " " + cName + " is neither a Collection nor a Map  ");
-				result = false;
-			}
-		} else
-			logging.info(source.getClass().getName() + " " + cName + " is null");
-
-		return result;
-	}
-
 	public static String makeHTMLlines(String s) {
 		if (s == null || s.trim().startsWith("<"))
 			return s;
@@ -613,33 +469,10 @@ public class Globals {
 		return b.toString();
 	}
 
-	private static Rectangle getMaxDevice() {
-		Rectangle result;
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		GraphicsDevice[] gs = ge.getScreenDevices();
-		result = new Rectangle(1, 1);
-		for (int j = 0; j < gs.length; j++) {
-			GraphicsDevice gd = gs[j];
-			GraphicsConfiguration[] gc = gd.getConfigurations();
-			for (int i = 0; i < gc.length; i++) {
-				int w = gc[i].getBounds().width;
-				int h = gc[i].getBounds().height;
-				// logging.info("maxBounds: compare " + result + " to " + gc[i].getBounds());
-				if (w > result.width || h > result.height)
-					result = new Rectangle(w, h);
-			}
-		}
-
-		logging.info("maxBounds: giving " + result);
-
-		return result;
-	}
-
 	private static Rectangle getMinDevice() {
-		Rectangle result = getMaxDevice();
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice[] gs = ge.getScreenDevices();
-		result = new Rectangle(1600, 1200);
+		Rectangle result = new Rectangle(1600, 1200);
 		for (int j = 0; j < gs.length; j++) {
 			GraphicsDevice gd = gs[j];
 			GraphicsConfiguration[] gc = gd.getConfigurations();

@@ -84,9 +84,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	protected PopupMenuTrait popupMenu;
 
-	protected int hGap = de.uib.utilities.Globals.hGapSize / 2;
-	protected int vGap = de.uib.utilities.Globals.vGapSize / 2;
-	protected int hLabel = de.uib.utilities.Globals.buttonHeight;
+	protected int hGap = de.uib.utilities.Globals.HGAP_SIZE / 2;
+	protected int vGap = de.uib.utilities.Globals.VGAP_SIZE / 2;
+	protected int hLabel = de.uib.utilities.Globals.BUTTON_HEIGHT;
 
 	protected IconNode selectedNode;
 

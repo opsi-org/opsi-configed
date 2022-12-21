@@ -71,9 +71,9 @@ public class PanelSWInfo extends JPanel {
 	protected Boolean askingForKindOfAction;
 	protected boolean askForOverwrite = true;
 
-	protected int hGap = de.uib.utilities.Globals.hGapSize / 2;
-	protected int vGap = de.uib.utilities.Globals.vGapSize / 2;
-	protected int hLabel = de.uib.utilities.Globals.buttonHeight;
+	protected int hGap = de.uib.utilities.Globals.HGAP_SIZE / 2;
+	protected int vGap = de.uib.utilities.Globals.VGAP_SIZE / 2;
+	protected int hLabel = de.uib.utilities.Globals.BUTTON_HEIGHT;
 
 	protected ConfigedMain mainController;
 	protected PersistenceController persist;
