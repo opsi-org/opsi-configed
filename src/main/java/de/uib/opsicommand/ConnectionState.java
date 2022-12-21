@@ -7,6 +7,7 @@ public class ConnectionState {
 	public static final int NOT_CONNECTED = 1;
 	public static final int STARTED_CONNECTING = 2;
 	public static final int CONNECTED = 3;
+	public static final int RETRY_CONNECTION = 4;
 	public static final int CLOSING = 5;
 	public static final int INTERRUPTED = 6;
 	public static final int ERROR = 10;
@@ -97,6 +98,8 @@ public class ConnectionState {
 			return "Started connecting";
 		case CONNECTED:
 			return "Connected";
+		case RETRY_CONNECTION:
+			return "Reconnecting";
 		case CLOSING:
 			return "Closing";
 		case ERROR:
@@ -120,7 +123,7 @@ public class ConnectionState {
 				Thread.sleep(waitMs);
 				logging.debug(this, "countWait " + countWait + " waited, thread " + Thread.currentThread().getName()
 						+ " " + this.toString());
-				secsWaited = (int) countWait / divisorSeconds;
+				secsWaited = countWait / divisorSeconds;
 			} catch (InterruptedException ex) {
 			}
 		}

@@ -47,6 +47,10 @@ public class Globals {
 	public static final Color INVISIBLE = new Color(11, 13, 17); // some value which shall be interpreted as identical
 																	// with background;
 
+	public static final String CERTIFICATE_FILE_NAME = "opsi-ca-cert";
+	public static final String CERTIFICATE_FILE_EXTENSION = "pem";
+	public static final String CERTIFICATE_FILE = CERTIFICATE_FILE_NAME + "." + CERTIFICATE_FILE_EXTENSION;
+
 	public static class ProductPackageVersionSeparator {
 
 		private ProductPackageVersionSeparator() {

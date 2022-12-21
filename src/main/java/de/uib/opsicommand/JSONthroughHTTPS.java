@@ -1,47 +1,61 @@
 package de.uib.opsicommand;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.Socket;
-import java.net.URLEncoder;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.net.ssl.HandshakeCompletedEvent;
 import javax.net.ssl.HandshakeCompletedListener;
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
 /**
- * @author Rupert Roeder
+ * @author Rupert Roeder, Naglis Vidziunas
  */
 
 public class JSONthroughHTTPS extends JSONthroughHTTP {
-	protected final String CODING_TABLE = "UTF8";
-	private static SSLSocketFactory sslFactory;
+	private static final boolean DISABLE_CERTIFICATE_VERIFICATION = false;
 
-	/**
-	 * @param host
-	 * @param username
-	 * @param password
-	 */
 	public JSONthroughHTTPS(String host, String username, String password) {
 		super(host, username, password);
-		// logging.info(this, "username " + username + ":" + password);
-		sslFactory = createDullSSLContext(); // produces sslFactory (which does not really look for certificates)
 	}
 
+	@Override
 	protected String produceBaseURL(String rpcPath) {
 		return "https://" + host + ":" + portHTTPS + rpcPath;
 	}
@@ -50,23 +64,21 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 	 * Opening the connection and set the SSL parameters
 	 */
 	@Override
-	protected HttpURLConnection produceConnection() throws java.io.IOException {
+	protected HttpURLConnection produceConnection() throws IOException {
 		logging.info(this, "produceConnection, url; " + serviceURL);
 		HttpURLConnection connection = (HttpURLConnection) serviceURL.openConnection();
+		SSLSocketFactory sslFactory = null;
+		if (DISABLE_CERTIFICATE_VERIFICATION) {
+			sslFactory = createDullSSLSocketFactory();
+		} else {
+			sslFactory = createSSLSocketFactory();
+		}
 		((HttpsURLConnection) connection).setSSLSocketFactory(sslFactory);
-		((HttpsURLConnection) connection).setHostnameVerifier(new DullHostnameVerifier());
 		return connection;
 	}
 
-	class DullHostnameVerifier implements HostnameVerifier {
-		public boolean verify(String hostname, SSLSession session) {
-			return true;
-		}
-	}
-
-	private class SecureSSLSocketFactory extends SSLSocketFactory
 	// http://stackoverflow.com/questions/27075678/get-ssl-version-used-in-httpsurlconnection-java
-	{
+	private class SecureSSLSocketFactory extends SSLSocketFactory {
 		private final SSLSocketFactory delegate;
 		private HandshakeCompletedListener handshakeListener;
 
@@ -92,14 +104,10 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		public Socket createSocket() throws IOException {
 			SSLSocket socket = (SSLSocket) this.delegate.createSocket();
 			logging.debug(this,
-					"createSocke " + " enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
+					"createSocket " + " enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
 			// on some connections there is, after some time, a javax.net.ssl.SSLException:
 			// SSL peer shut down incorrectl
 			// the standard enabled cipher suite seems to be TLS_RSA_WITH_AES_256_CBC_SHA256
-
-			if (!configed.TLS_CIPHER_SUITE.equals(""))
-				socket.setEnabledCipherSuites(new String[] { configed.TLS_CIPHER_SUITE });
-			// TLS_RSA_WITH_AES_128_GCM_SHA256"}); // with this suit it seems to work
 
 			if (null != this.handshakeListener) {
 				socket.addHandshakeCompletedListener(this.handshakeListener);
@@ -162,20 +170,16 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 
 			return socket;
 		}
-		// and so on for all the other createSocket methods of SSLSocketFactory.
 
 		@Override
 		public String[] getDefaultCipherSuites() {
-			// TODO: or your own preferences
 			return this.delegate.getDefaultCipherSuites();
 		}
 
 		@Override
 		public String[] getSupportedCipherSuites() {
-			// TODO: or your own preferences
 			return this.delegate.getSupportedCipherSuites();
 		}
-
 	}
 
 	public class MyHandshakeCompletedListener implements HandshakeCompletedListener {
@@ -189,79 +193,185 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			try {
 				peerName = session.getPeerPrincipal().getName();
 			} catch (SSLPeerUnverifiedException e) {
+				logging.error(this, "peer's identity wasn't verified");
 			}
+
 			logging.info(this, "protocol " + protocol + "  peerName " + peerName);
 			logging.info(this, "cipher suite " + cipherSuite);
-
 		}
 	}
 
-	protected SSLSocketFactory createDullSSLContext() {
+	private SSLSocketFactory createSSLSocketFactory() {
+		SSLSocketFactory sslFactory = null;
+
 		try {
-			SSLContext sslContext = null;
-			// create a trust manager that does not validate certificate chains
-			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
-				public X509Certificate[] getAcceptedIssuers() {
-					return null;
-				}
+			KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+			ks.load(null, null);
+			loadCertificateToKeyStore(ks);
 
-				public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {
-				}
+			KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+			kmf.init(ks, new char[0]);
+			TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+			tmf.init(ks);
 
-				public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) {
-				}
-			} };
+			SSLContext sslContext = SSLContext.getInstance("TLS");
+			sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
 
-			// install the all-trusting trust manager
-			// sslContext= SSLContext.getInstance("SSL");
-			// logging.info(this, "install ssl provider");
-			try {
-				// sslContext = SSLContext.getInstance("TLSv1.2", "SunJSSE");
-				logging.info(this, "try to install provider for " + configed.PREFERRED_SSL_VERSION);
-				sslContext = SSLContext.getInstance(configed.PREFERRED_SSL_VERSION, "SunJSSE");
-			} catch (Exception e) {
-				try {
-					logging.warning(this, "we did not install the requested provider, therefore we try with v1");
-					sslContext = SSLContext.getInstance("TLSv1", "SunJSSE");
-				} catch (Exception e1) {
-					// The TLS 1.0 provider should always be available.
-					logging.warning(this, "we did not install TLSv1.0 provider");
-					throw new AssertionError(e1);
-				}
-			}
-
-			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-			// sslFactory = sslContext.getSocketFactory();
 			sslFactory = new SecureSSLSocketFactory(sslContext.getSocketFactory(), new MyHandshakeCompletedListener());
-
-			logging.debug(this,
-					"SSLSocketFactory default cipher suites " + Arrays.toString(sslFactory.getDefaultCipherSuites()));
-			logging.debug(this, "SSLSocketFactory supported cipher suites "
-					+ Arrays.toString(sslFactory.getSupportedCipherSuites()));
-
-		} catch (Exception e) {
-			logging.error("Error", e);
+		} catch (CertificateException e) {
+			logging.error(this, "something is wrong with the certificate");
+		} catch (KeyStoreException e) {
+			logging.error(this, "keystore wasn't initialized");
+		} catch (NoSuchAlgorithmException e) {
+			logging.error(this, "provider doesn't support algorithm");
+		} catch (UnrecoverableKeyException e) {
+			logging.error(this, "unable to provide key");
+		} catch (KeyManagementException e) {
+			logging.error(this, "failed to initialize SSL context");
+		} catch (IOException e) {
+			logging.error(this, "something is wrong with the keystore data");
 		}
 
 		return sslFactory;
 	}
 
-	public static void main(String args[]) {
-		String resulting = "";
-		JSONthroughHTTPS instance;
-		OpsiMethodCall omc = new OpsiMethodCall("getProductStates_listOfHashes", new String[] { "pcbon1.uib.local" });
-		String urlEnc = "??";
-		try {
-			urlEnc = URLEncoder.encode(omc.getJsonString(), "UTF8");
-		} catch (Exception ex) {
-			logging.debug("Exception " + ex);
+	private void loadCertificateToKeyStore(KeyStore ks) {
+		List<File> certificates = getCertificates();
+
+		File certificateFile = null;
+		if (trustAlways) {
+			certificateFile = downloadCertificateFile();
+			saveCertificate(certificateFile);
+		} else if (trustOnlyOnce) {
+			certificateFile = downloadCertificateFile();
 		}
 
-		// logging.debug( " omc " + omc + " encoded " + urlEnc);
+		if ((trustAlways || trustOnlyOnce) && certificateFile == null) {
+			return;
+		}
 
-		// instance = new JSONthroughHTTPS ("194.31.185.160",
-		// "cn=admin,dc=uib,dc=local", "umwelt");
-		instance = new JSONthroughHTTPS("0.0.173.186", "root", "linux123");
-		instance.retrieveJSONObject(omc);
+		if (trustAlways || trustOnlyOnce) {
+			try {
+				X509Certificate certificate = instantiateCertificate(certificateFile);
+				String alias = host;
+				if (certificateFile.exists()) {
+					alias = certificateFile.getName().substring(0, certificateFile.getName().indexOf("-"));
+				}
+				ks.setCertificateEntry(alias, certificate);
+			} catch (KeyStoreException e) {
+				logging.error(this, "unable to load certificate into a keystore");
+			}
+		}
+
+		if (!certificates.isEmpty()) {
+			certificates.forEach(certificate -> {
+				try {
+					String alias = host;
+					if (certificate.exists()) {
+						alias = certificate.getName().substring(0, certificate.getName().indexOf("-"));
+					}
+					ks.setCertificateEntry(alias, instantiateCertificate(certificate));
+				} catch (KeyStoreException e) {
+					logging.error(this, "unable to load certificate into a keystore");
+				}
+			});
+		}
+	}
+
+	private List<File> getCertificates() {
+		File certificateDir = new File(configed.savedStatesLocationName);
+		File[] certificateFiles = certificateDir.listFiles((dir, filename) -> filename.endsWith(".pem"));
+
+		if (certificateFiles.length == 0) {
+			certificateExists = false;
+			return new ArrayList<>();
+		}
+
+		return Arrays.asList(certificateFiles);
+	}
+
+	private void saveCertificate(File certificateFile) {
+		try {
+			Files.copy(certificateFile.toPath(),
+					new File(configed.savedStatesLocationName, host + "-" + Globals.CERTIFICATE_FILE).toPath(),
+					StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			logging.error(this, "unable to save certificate");
+		}
+	}
+
+	private X509Certificate instantiateCertificate(File certificateFile) {
+		X509Certificate cert = null;
+
+		try (FileInputStream is = new FileInputStream(certificateFile)) {
+			CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
+			cert = (X509Certificate) certFactory.generateCertificate(is);
+		} catch (CertificateException e) {
+			logging.error(this, "unable to parse certificate (format is invalid)");
+		} catch (FileNotFoundException e) {
+			logging.error(this, "unable to find certificate");
+		} catch (IOException e) {
+			logging.error(this, "unable to close certificate");
+		}
+
+		return cert;
+	}
+
+	private File downloadCertificateFile() {
+		SSLSocketFactory sslFactory = createDullSSLSocketFactory();
+		HttpsURLConnection.setDefaultSSLSocketFactory(sslFactory);
+
+		URL url = null;
+		File tempCertFile = null;
+
+		try {
+			url = new URL(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE));
+			tempCertFile = File.createTempFile(Globals.CERTIFICATE_FILE_NAME, "." + Globals.CERTIFICATE_FILE_EXTENSION);
+		} catch (MalformedURLException e) {
+			logging.error(this, "url is malformed: " + url);
+		} catch (IOException e) {
+			logging.error(this, "unable to create tmp certificate file");
+		}
+
+		try (ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+				FileOutputStream fos = new FileOutputStream(tempCertFile)) {
+			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+		} catch (IOException e) {
+			logging.error(this, "unable to download certificate's content from specified url: " + url.toString());
+		}
+
+		return tempCertFile;
+	}
+
+	private SSLSocketFactory createDullSSLSocketFactory() {
+		// Create a new trust manager that trust all certificates
+		@SuppressWarnings("squid:S4830")
+		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+			public X509Certificate[] getAcceptedIssuers() {
+				return new X509Certificate[0];
+			}
+
+			public void checkClientTrusted(X509Certificate[] certs, String authType) {
+				// we skip certificate verification.
+			}
+
+			public void checkServerTrusted(X509Certificate[] certs, String authType) {
+				// we skip certificate verification.
+			}
+		} };
+
+		SSLSocketFactory sslFactory = null;
+
+		try {
+			SSLContext sslContext = SSLContext.getInstance("TLS");
+			sslContext.init(null, trustAllCerts, new SecureRandom());
+			sslFactory = new SecureSSLSocketFactory(sslContext.getSocketFactory(), new MyHandshakeCompletedListener());
+		} catch (NoSuchAlgorithmException e) {
+			logging.error(this, "provider doesn't support algorithm");
+		} catch (KeyManagementException e) {
+			logging.error(this, "failed to initialize SSL context");
+		}
+
+		return sslFactory;
 	}
 }

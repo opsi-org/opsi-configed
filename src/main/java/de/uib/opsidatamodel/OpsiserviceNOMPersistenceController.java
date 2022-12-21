@@ -1369,6 +1369,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	}
 
+	public String getOpsiCACert() {
+		OpsiMethodCall omc = new OpsiMethodCall("getOpsiCACert", new Object[0]);
+		return exec.getStringResult(omc);
+	}
+
 	/*
 	 * error handling convenience methods
 	 * public List getErrorList ()

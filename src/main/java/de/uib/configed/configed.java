@@ -99,12 +99,6 @@ public class configed {
 
 			new String[] { "--gzip [y/n]", "",
 					"Activate compressed transmission of data from opsi server yes/no. DEFAULT: y" },
-			new String[] { "--sslversion PREFERRED_SSL_VERSION", "",
-					"Try to use this SSL/ TLS version. DEFAULT: Automatic selection" },
-			new String[] { "--use_tls_cipher CIPHER_RFC_NAME", "",
-					"Encoding TLS  via this algorithm. DEFAULT: Automatic selection" }, // via one of the listed
-			// algorithms, format
-			// [\"a\",\"b\",..]"},
 			new String[] { "--ssh-immediate-connect [y/n]", "",
 					"Try to create a SSH connection on start. DEFAULT: " + getYNforBoolean(sshconnect_onstart) + "" },
 			new String[] { "--ssh-key SSHKEY", "",
@@ -154,13 +148,9 @@ public class configed {
 	public static final String javaVendor = System.getProperty("java.vendor", "");
 	public static final LinkedHashMap<String, Object> javaSysExtraProperties = new LinkedHashMap<String, Object>();
 	public static final String systemSSLversion = System.getProperty("https.protocols");
-	public static final String STATEOFTHEART_SSL_VERSION = "TLSv1.2";
-	public static final String JAVA_1_7_DEFAUTL_SSL_VERSION = "TLSv1";
-	public static String PREFERRED_SSL_VERSION = STATEOFTHEART_SSL_VERSION;
 	public static String EXTRA_LOCALIZATION_FILENAME = null;
 	public static PropertiesStore extraLocalization;
 	public static boolean SHOW_LOCALIZATION_STRINGS = false;
-	public static boolean sslversionChecked = false; // set only once
 	protected static boolean serverCharset_equals_vm_charset = false;
 
 	public static ConfigedMain cm;
@@ -172,7 +162,6 @@ public class configed {
 	private static int loglevelConsole = logging.LOG_LEVEL_CONSOLE;
 	private static int loglevelFile = logging.LOG_LEVEL_FILE;
 
-	public static String TLS_CIPHER_SUITE = "";
 	public static String sshkey = null;
 	public static String sshkeypassphrase = null;
 	private static String client = null;
@@ -350,8 +339,6 @@ public class configed {
 			logging.info(
 					" we get max memory " + formatter.format("%,d MB", Runtime.getRuntime().maxMemory() / 1000000));
 		}
-
-		sslversionCheck(true);
 
 		de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
@@ -548,25 +535,6 @@ public class configed {
 					}
 
 					i = i + 2;
-				} else if (args[i].equals("--use_tls_cipher")) {
-					/*
-					 * ArrayList<String> ciphers = new ArrayList<String>();
-					 * boolean goOn = true;
-					 * i++;
-					 * 
-					 * String s = getArg(args, i)
-					 * if (s.length() < 2 || s.charAt(0) != '[]' || charAt(s.length-1) != ']')
-					 * {
-					 * logging.debug(" no enclosing []  for cipher list ");
-					 * usage();
-					 * endApp( ERROR_INVALID_OPTION );
-					 * }
-					 */
-
-					TLS_CIPHER_SUITE = getArg(args, i);
-
-					i = i + 2;
-
 				} else if (args[i].equals("--ssh-immediate-connect")) {
 					// de.uib.opsicommand.sshcommand.SSHConnectionInfo
 					// coninfo = de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance();
@@ -614,14 +582,6 @@ public class configed {
 						}
 					}
 					i = i + 1;
-				} else if (args[i].equals("--sslversion")) {
-					PREFERRED_SSL_VERSION = getArg(args, i);
-					if (!args[i + 1].equalsIgnoreCase(STATEOFTHEART_SSL_VERSION)) {
-						PREFERRED_SSL_VERSION = args[i + 1];
-					}
-					sslversionCheck(false); // keep sslversion as set by this parameter
-
-					i = i + 2;
 				} else if (args[i].equals("-qs") || args[i].equals("--querysavedsearch")) {
 					optionCLIQuerySearch = true;
 					savedSearch = getArg(args, i);
@@ -803,22 +763,6 @@ public class configed {
 
 	public static boolean get_serverCharset_equals_vm_charset() {
 		return serverCharset_equals_vm_charset;
-	}
-
-	public static void sslversionCheck(boolean correctingVersion) {
-		// do it only once and keep checked info globally
-
-		if (correctingVersion
-				&& (javaVersion.startsWith("1.7") && !PREFERRED_SSL_VERSION.equals(JAVA_1_7_DEFAUTL_SSL_VERSION))) {
-			PREFERRED_SSL_VERSION = JAVA_1_7_DEFAUTL_SSL_VERSION;
-		}
-
-		if (!PREFERRED_SSL_VERSION.equals(STATEOFTHEART_SSL_VERSION)) {
-			logging.warning("call for a SSL Version " + PREFERRED_SSL_VERSION + "  different from the recommended "
-					+ STATEOFTHEART_SSL_VERSION);
-		}
-
-		sslversionChecked = true;
 	}
 
 	public static void showExternalInfo(String s) {
