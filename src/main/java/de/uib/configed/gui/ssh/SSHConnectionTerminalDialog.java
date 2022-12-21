@@ -31,6 +31,7 @@ import de.uib.opsicommand.sshcommand.SSHConnectTerminal;
 import de.uib.utilities.logging.logging;
 
 public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
+	private JLabel lbl_userhost = new JLabel();
 	private JTextField tf_command;
 	private JLabel lbl_command;
 	private JCheckBox cb_privat;
@@ -424,6 +425,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		logging.info(this, "createLayout ");
 		jScrollPane.setPreferredSize(output.getMaximumSize());
 
+		GroupLayout.Alignment leading = GroupLayout.Alignment.LEADING;
 		int gap = Globals.GAP_SIZE;
 		int mgap = Globals.MIN_GAP_SIZE;
 

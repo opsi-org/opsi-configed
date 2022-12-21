@@ -874,6 +874,8 @@ public class DataStubRawData extends DataStubNOM {
 				clientInfo.put(row.get(0), rowMap);
 			}
 
+			String lastDate = null;
+
 			for (int i = 1; i < specificColumns.size(); i++) {
 				Object value = rowMap.get(specificColumns.get(i));
 				String valInRow = row.get(i);

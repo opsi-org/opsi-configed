@@ -19,6 +19,7 @@ import de.uib.utilities.logging.logging;
 public class RequirementsTableModel extends javax.swing.table.AbstractTableModel {
 
 	final String initString = "";
+	private String actualProduct = "";
 	TreeSet keySet;
 	Object[] keyArray;
 	final Object[] zeroArray = new Object[] {};
@@ -63,6 +64,8 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 	}
 
 	public void setActualProduct(String depotId, String product) {
+		this.actualProduct = product;
+
 		keySet = null;
 		requMap = null;
 		requBeforeMap = null;

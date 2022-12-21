@@ -31,6 +31,7 @@ import java.util.Date;
 import de.uib.utilities.logging.logging;
 
 public class OpsiUser {
+	private Integer id;
 	private String name;
 	private String description;
 	private java.sql.Timestamp lastchanged;

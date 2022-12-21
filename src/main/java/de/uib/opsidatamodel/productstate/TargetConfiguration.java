@@ -205,7 +205,10 @@ public class TargetConfiguration {
 		checkCollections();
 		Iterator iter = states.iterator();
 
+		int i = 0;
+
 		while (iter.hasNext()) {
+			i++;
 			int state = (Integer) iter.next();
 			// logging.debug("state " + i + " : " + state + " label " +
 			// getLabel(state));

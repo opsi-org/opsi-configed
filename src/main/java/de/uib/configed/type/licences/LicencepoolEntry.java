@@ -20,8 +20,10 @@ public class LicencepoolEntry extends TableEntry {
 		KEYS.add(descriptionKEY);
 	}
 
+	private static Map<String, String> locale;
+
 	static {
-		new HashMap<String, String>();
+		locale = new HashMap<String, String>();
 	}
 
 	public static List<String> getKeys() {

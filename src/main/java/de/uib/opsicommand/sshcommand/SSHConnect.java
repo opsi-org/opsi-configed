@@ -247,7 +247,7 @@ public class SSHConnect {
 			Properties config = new Properties();
 			config.put("StrictHostKeyChecking", "no");
 			// config.put("PreferredAuthentications", "password");
-			JSch.setConfig(config);
+			jsch.setConfig(config);
 
 			// session.setConfig("kex", "diffie-hellman-group1-sha1"); //hope, that this
 			// will prevent session ending

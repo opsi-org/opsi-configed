@@ -143,6 +143,8 @@ public class RecordPane extends JPanel implements KeyListener {
 			datafields.put(key, jTextField);
 		}
 
+		Map<String, GroupLayout.SequentialGroup> vGroups = new HashMap<String, GroupLayout.SequentialGroup>();
+
 		GroupLayout.ParallelGroup hGroup = baseLayout.createParallelGroup();
 
 		for (String key : data.keySet()) {

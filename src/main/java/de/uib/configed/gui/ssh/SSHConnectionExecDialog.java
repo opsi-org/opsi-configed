@@ -43,9 +43,8 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 
 			this.setSize(900, 500);
 			logging.info(this, "SSHConnectionExecDialog built");
-			SSHCommandFactory.getInstance();
 			// this.setVisible(true);
-			if (SSHCommandFactory.ssh_always_exec_in_background == true)
+			if (SSHCommandFactory.getInstance().ssh_always_exec_in_background == true)
 				this.setVisible(false);
 			buildFrame = true;
 		}

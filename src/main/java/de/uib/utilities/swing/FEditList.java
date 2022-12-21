@@ -41,7 +41,8 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 
-public class FEditList extends FEditObject implements ListSelectionListener, KeyListener, MouseListener {
+public class FEditList extends FEditObject
+		implements ListSelectionListener, ActionListener, KeyListener, MouseListener {
 	private javax.swing.JScrollPane scrollpane;
 	protected javax.swing.JList<Object> visibleList;
 

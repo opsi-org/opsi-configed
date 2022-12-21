@@ -154,20 +154,20 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		} else {
 			// logging.info(this, "compareStates 5 " + connectionInfo.getHost() + " <> " +
 			// configedMain.HOST );
-			if (!connectionInfo.getHost().equals(ConfigedMain.HOST)) {
+			if (!connectionInfo.getHost().equals(configedMain.HOST)) {
 				logging.info(this,
-						"compareStates 5 >" + connectionInfo.getHost() + "<     <>    >" + ConfigedMain.HOST + "<");
+						"compareStates 5 >" + connectionInfo.getHost() + "<     <>    >" + configedMain.HOST + "<");
 				return false;
 			}
 			if (!connectionInfo.getPort().equals(tf_port.getText())) {
 				logging.debug(this, "compareStates 6");
 				return false;
 			}
-			if (!connectionInfo.getUser().equals(ConfigedMain.USER)) {
+			if (!connectionInfo.getUser().equals(configedMain.USER)) {
 				logging.debug(this, "compareStates 7");
 				return false;
 			}
-			if ((!connectionInfo.getPassw().equals(ConfigedMain.PASSWORD)) && (!connectionInfo.usesKeyfile())) {
+			if ((!connectionInfo.getPassw().equals(configedMain.PASSWORD)) && (!connectionInfo.usesKeyfile())) {
 				logging.debug(this, "compareStates 8");
 				return false;
 			}
@@ -750,6 +750,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			public void propertyChange(PropertyChangeEvent e) {
 				if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
 						|| e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
+					final File f = (File) e.getNewValue();
 				}
 			}
 		});

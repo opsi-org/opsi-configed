@@ -26,6 +26,8 @@ public class SavedSearchQuery {
 	private String user;
 	private String password;
 	private String searchName;
+	private String group;
+
 	private PersistenceController controller;
 
 	public SavedSearchQuery() {
@@ -77,6 +79,8 @@ public class SavedSearchQuery {
 		this.user = user;
 		this.password = password;
 		this.searchName = searchName;
+		this.group = group;
+		// System.exit(0);
 	}
 
 	public void addMissingArgs() {

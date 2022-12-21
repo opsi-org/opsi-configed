@@ -51,6 +51,7 @@ public class LicensingInfoMap {
 	private Map<String, Map> tableMap;
 	private String latestDateString;
 	private String checksum;
+	private Boolean closeToLimitWarning = false;
 	private Boolean overLimitWarning = false;
 	private ArrayList<String> currentCloseToLimitModuleList;
 	private ArrayList<String> currentOverLimitModuleList;

@@ -250,7 +250,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			lbl_commands.setText(configed.getResourceValue("SSHConnection.CommandControl.commands"));
 
 			cb_parentMenuText.addItem(factory.parentdefaultForOwnCommands); // parentNull
-			cb_menuText.addItem(SSHCommandFactory.menuNew);
+			cb_menuText.addItem(factory.menuNew);
 
 			cb_menuText.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.menuText.tooltip"));
 			tf_tooltipText

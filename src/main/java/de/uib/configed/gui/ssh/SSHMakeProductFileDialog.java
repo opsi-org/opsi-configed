@@ -492,6 +492,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		Empty_Command setRights = new Empty_Command("set-rights", "opsi-set-rights " + dir, "set-rights", true);
 		SSHConnectExec ssh = new SSHConnectExec();
 		SSHConnectionExecDialog.getInstance().setVisible(true);
+		String result = ssh.exec(setRights);
 	}
 
 	public void cancel() {

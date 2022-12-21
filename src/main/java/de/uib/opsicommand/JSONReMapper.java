@@ -295,7 +295,9 @@ public class JSONReMapper {
 
 			Iterator iter = jsonList.iterator();
 
+			int count = 0;
 			while (iter.hasNext()) {
+				count++;
 				item = (JSONObject) iter.next();
 				Map<String, String> mapItem = (Map<String, String>) JSONReMapper.deriveStandard(item);
 				result.add(mapItem);

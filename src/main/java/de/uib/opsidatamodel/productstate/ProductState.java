@@ -313,6 +313,9 @@ public class ProductState extends HashMap<String, String> {
 		 * case KEY_lastAction
 		 */
 
+		if (predefValue != null)
+			return predefValue;
+
 		return value;
 	}
 

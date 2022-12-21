@@ -339,6 +339,8 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 	protected void classify(Map<String, Object> data, TreeSet<String> classIds) {
 
+		TreeMap<String, Object> mydata = new TreeMap<String, Object>(data);
+
 		virtualLines = new TreeMap<String, Map<String, Object>>();
 
 		for (String id : classIds.descendingSet()) {

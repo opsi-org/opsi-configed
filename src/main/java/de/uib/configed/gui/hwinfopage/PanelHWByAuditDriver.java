@@ -65,6 +65,8 @@ public class PanelHWByAuditDriver extends JPanel {
 		fieldLabel2.setBackground(Globals.backgroundLightGrey);
 
 		JLabel labelInfo = new JLabel(configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabels"));
+		JLabel labelInfo2 = new JLabel(configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabels2"));
+
 		JLabel labelSeparator = new JLabel(" / ");
 		JLabel labelSeparator2 = new JLabel(" / ");
 		JLabel labelVendor = new JLabel(configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsVendor"));

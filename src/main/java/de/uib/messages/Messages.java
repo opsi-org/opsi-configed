@@ -18,6 +18,7 @@ import utils.ResourceBundleUtf8;
 
 public class Messages {
 	public static final String appname = "configed";
+	private static final String prefix = appname + "_";
 	private static String BUNDLE_NAME = "de/uib/messages/configed";
 	private static String EXTRA_LOCALE = null;
 	private static final String FILE_TYPE = "properties";

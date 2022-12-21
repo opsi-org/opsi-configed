@@ -70,6 +70,7 @@ public class JComboBoxToolTip extends javax.swing.JComboBox {
 	}
 
 	protected void setComboValues() {
+		Set iterableKeys;
 		String iterValue;
 		boolean addE = addEmpty && !selectValues.containsKey("");
 

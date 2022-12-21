@@ -32,7 +32,6 @@ import de.uib.opsicommand.sshcommand.CommandDeployClientAgent;
 import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.PanelStateSwitch;
 
@@ -102,9 +101,8 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	private void getDefaultAuthData() {
 		Map<String, Object> configs = main.getPersistenceController()
 				.getConfig(main.getPersistenceController().getHostInfoCollections().getConfigServer());
-		main.getPersistenceController();
 		ArrayList<Object> result_config_list = (ArrayList<Object>) configs
-				.get(PersistenceController.KEY_SSH_DEFAULTWINUSER);
+				.get(main.getPersistenceController().KEY_SSH_DEFAULTWINUSER);
 		if (result_config_list == null || result_config_list.size() == 0) {
 			// defaultWinUser =
 			// configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.defaultWinUser");

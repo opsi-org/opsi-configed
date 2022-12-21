@@ -153,10 +153,9 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 	}
 
 	public void append(String caller, String line) {
-		SSHCommandFactory.getInstance();
 		// if ((line == null) || (line.trim().length() <=0)) return;
 		// Color linecolor = Color.BLACK;
-		if (SSHCommandFactory.ssh_colored_output) {
+		if (SSHCommandFactory.getInstance().ssh_colored_output) {
 			if ((line != null) && (!line.trim().replaceAll("\\t", "").replaceAll(" ", "").equals("")))
 				for (Map.Entry entry : ansiCodeColors.entrySet())
 					line = findAnsiCodeColor(entry, (String) entry.getKey(), line);
@@ -208,6 +207,8 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			Style readonlyStyle = doc.addStyle("readonlyStyle", defaultStyle);
 
 			StyleConstants.setBackground(readonlyStyle, Color.GREEN);// Kein grün :(
+			Style style = doc.addStyle("StyleName", null);
+
 			// StyleConstants.setBackground(style, Color.blue);
 			StyleConstants.setForeground(readonlyStyle, Color.RED); // Was ist rot?
 

@@ -1139,6 +1139,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	public void updateSSHConnectedInfoMenu(String status) {
+		SSHCommandFactory factory = SSHCommandFactory.getInstance(main);
 		// String connectiondata = factory.getConnection().getConnectedUser() + "@" +
 		// factory.getConnection().getConnectedHost();
 		String connectiondata = SSHConnectionInfo.getInstance().getUser() + "@"

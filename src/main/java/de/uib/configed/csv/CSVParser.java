@@ -19,6 +19,8 @@ public class CSVParser {
 
 	private boolean inQuotes = false;
 	public boolean isMultiLine = false;
+	private boolean isFieldWithEmbeddedDoubleQuotes = false;
+
 	private boolean ignoreErrors = false;
 
 	private int pendingFieldCount = 0;

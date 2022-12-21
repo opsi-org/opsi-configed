@@ -32,6 +32,11 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		fieldGroupActivated.setText(s);
 	}
 
+	private void resetReportedGroup() {
+		logging.debug(this, "resetReportedGroup  - void");
+		// fieldGroupActivated.setText("");
+	}
+
 	public String getSelectedClientNames() {
 		return fieldSelectedClientsNames.getText();
 	}

@@ -23,7 +23,7 @@ public class TimeCheck {
 	private TimeCheck(Object caller, int loglevel, String mesg) {
 		this.caller = caller;
 		this.mesg = shorten(mesg);
-		TimeCheck.loglevel = loglevel;
+		this.loglevel = loglevel;
 	}
 
 	public TimeCheck(Object caller, String mesg) {

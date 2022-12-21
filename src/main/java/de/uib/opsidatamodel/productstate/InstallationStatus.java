@@ -248,6 +248,9 @@ public class InstallationStatus {
 
 		while (iter.hasNext()) {
 			i++;
+			int state = (Integer) iter.next();
+			// logging.debug("state " + i + " : " + state + " label " +
+			// getLabel(state));
 		}
 	}
 

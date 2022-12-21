@@ -24,6 +24,7 @@ public class SavedSearchesDialog extends FEditList {
 	private SelectionManager manager;
 	private List<String> result;
 	private DefaultListModel model;
+	private java.util.List<Object> saveSelValue;
 
 	public SavedSearchesDialog() {
 		setTitle(configed.getResourceValue("SavedSearchesDialog.title") + " (" + Globals.APPNAME + ")");

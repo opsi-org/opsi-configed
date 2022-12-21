@@ -19,6 +19,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	private boolean needSudo = false;
 	private boolean needParameter = true;
 	private boolean isMultiCommand = false;
+	private int helpColumns = 2;
 	private int priority = 110;
 
 	private String dir = " ";

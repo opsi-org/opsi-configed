@@ -23,6 +23,7 @@ public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
 		// logging.info(this, "setCellRenderers");
 		LicensingInfoMap lInfoMap = LicensingInfoMap.getInstance();
 		for (int i = 0; i < tableModel.getColumnCount(); i++) {
+			Class cl = tableModel.getColumnClass(i);
 			String name = tableModel.getColumnName(i);
 			TableColumn col = theTable.getColumn(name);
 			String classname = tableModel.getClassNames().get(i);

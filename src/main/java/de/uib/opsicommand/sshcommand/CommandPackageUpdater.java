@@ -15,8 +15,10 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	private String baseName = "opsi-package-updater";
 	protected FGeneralDialog dialog = null;
 	public boolean needSudo = false;
+	private boolean needRoot = false;
 	private boolean needParameter = true;
 	private boolean isMultiCommand = false;
+	private int helpColumns = 2;
 	private int priority = 105;
 
 	private String action = " list --repos";

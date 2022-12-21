@@ -33,6 +33,7 @@ import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.utilities.logging.logging;
 
 public class SSHWgetParameterDialog extends FGeneralDialog {
+	private GroupLayout layout;
 	private JPanel inputPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
 

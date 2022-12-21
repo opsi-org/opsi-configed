@@ -32,7 +32,6 @@ import javax.swing.text.JTextComponent;
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
-import de.uib.opsicommand.sshcommand.SSHCommandParameterMethods;
 import de.uib.utilities.logging.logging;
 
 public class SSHCommandControlParameterMethodsPanel extends JPanel {
@@ -210,9 +209,8 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 	public void doActionTestParam(JDialog caller) {
 		String paramText = "";
-		factory.getParameterHandler();
 		if (((String) cb_parameter_methods.getSelectedItem())
-				.equals(SSHCommandParameterMethods.method_interactiveElement)
+				.equals(factory.getParameterHandler().method_interactiveElement)
 				|| ((String) cb_parameter_methods.getSelectedItem())
 						.equals(factory.getParameterHandler().method_optionSelection)) {
 			logging.debug("CREATING PARAM TEXT... ");

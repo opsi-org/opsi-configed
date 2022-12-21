@@ -7,6 +7,7 @@ import de.uib.configed.gui.FGeneralDialog;
 public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeedParameter
 
 {
+	private String command;
 	// private String baseName = "";
 	// private LinkedList<CommandHelp_Row> helpLinesSplitted = null;
 	private boolean needSudo = false;
@@ -86,6 +87,7 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	 * @param c (command): String
 	 **/
 	public void setCommand(String c) {
+		command = c;
 	}
 
 	@Override

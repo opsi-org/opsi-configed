@@ -19,6 +19,8 @@ public class TabbedPaneX extends JPanel {
 
 	Map globals;
 
+	private int oldVisualIndex = -1;
+
 	public TabbedPaneX(TabController controller) {
 		this.controller = controller;
 		init();

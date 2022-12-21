@@ -9,6 +9,7 @@ import de.uib.utilities.logging.logging;
 
 public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager implements SSHCommandNeedParameter {
 	private String command;
+	private boolean install;
 	private int priority = 8;
 	protected FGeneralDialog dialog;
 	private boolean isMultiCommand = false;

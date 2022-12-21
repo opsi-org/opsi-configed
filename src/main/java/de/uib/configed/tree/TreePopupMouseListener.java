@@ -75,6 +75,8 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 		logging.debug(this, "checkAccepted clickNode.getParent() " + clickNode.getParent());
 
 		DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) (clickNode.getParent());
+		String parentName = parentNode.getUserObject().toString();
+
 		if (
 		// nodeName.equals(ClientTree.FAILED_NAME)
 		// ||

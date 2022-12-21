@@ -10,7 +10,8 @@ import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHOpsiSetRightsParameterDialog;
 import de.uib.utilities.logging.logging;
 
-public class CommandOpsiSetRights extends SSHCommand_Template implements SSHMultiCommand, SSHCommandNeedParameter {
+public class CommandOpsiSetRights extends SSHCommand_Template
+		implements SSHCommand, SSHMultiCommand, SSHCommandNeedParameter {
 	private String baseName = "opsi-set-rights ";
 	private String command = "opsi-set-rights ";
 	protected FGeneralDialog dialog = null;

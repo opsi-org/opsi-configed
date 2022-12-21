@@ -27,6 +27,8 @@ public class OpsiDataClient implements Client {
 	private List productList; // The products (a list of maps)
 	private List<String> productNames; // Like above, but just the productIDs
 	private List<SWAuditClientEntry> swauditList;
+	private PersistenceController controller;
+
 	private Map softwareValue; // current software to be checked
 	private Map swauditValue; // current swaudit to be checked
 	private Iterator<Map<String, Object>> hardwareIterator = null;
@@ -39,6 +41,7 @@ public class OpsiDataClient implements Client {
 		productNames = new ArrayList<String>();
 		swauditList = new LinkedList<SWAuditClientEntry>();
 		hardwareInfo = new LinkedList<Map<String, Object>>();
+		controller = null;
 	}
 
 	/** Set the map with the information about hosts */
@@ -75,6 +78,7 @@ public class OpsiDataClient implements Client {
 
 	/** Set the controller (to get the information) */
 	public void setController(PersistenceController controller) {
+		this.controller = controller;
 	}
 
 	/** Get a map by name */

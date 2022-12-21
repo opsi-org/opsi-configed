@@ -66,6 +66,8 @@ public class SimpleTreeModel extends DefaultTreeModel
 
 		if (dottedKeys != null) {
 			for (String key : dottedKeys) {
+				// logging.debug(this, "generateFrom key ------- " + key);
+				String partialKey = "";
 				String remainder = key;
 
 				int j = -1;
@@ -78,6 +80,7 @@ public class SimpleTreeModel extends DefaultTreeModel
 					allPathes.add(new SimpleTreePath(path));
 					// logging.debug(this, "add " + path);
 
+					partialKey = key.substring(0, k);
 					remainder = key.substring(k + 1);
 
 					// logging.debug(this, "generateFrom partial " + partialKey);

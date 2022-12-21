@@ -115,6 +115,15 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 			setStartText(initialText);
 	}
 
+	private String getSelectedDate() {
+		if (dateEditor.getSelectedSqlTime() == null)
+			return "";
+
+		String selectedDateTimeS = dateEditor.getSelectedSqlTime().toString();
+		// return only date part
+		return selectedDateTimeS.substring(0, selectedDateTimeS.indexOf(' '));
+	}
+
 	private String getSelectedDateTime() {
 		logging.debug(this, " getSelectedDateTime() : " + dateEditor.getSelectedSqlTime());
 

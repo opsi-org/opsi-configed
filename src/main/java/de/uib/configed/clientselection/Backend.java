@@ -13,6 +13,8 @@ import de.uib.utilities.logging.logging;
  * implementation may differ between the data sources.
  */
 public abstract class Backend {
+	private static Backend currentBackend = null;
+
 	/*
 	 * These variables tell you which data you have to fetch. E.g. if hasSoftware is
 	 * true, there is an software

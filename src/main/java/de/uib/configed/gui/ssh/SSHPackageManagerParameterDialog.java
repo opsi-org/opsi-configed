@@ -41,11 +41,12 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 	protected String defaultProduct = configed.getResourceValue("SSHConnection.ParameterDialog.defaultProduct");
 	protected String defaultDepot = configed.getResourceValue("SSHConnection.ParameterDialog.defaultDepot");
 
-	protected String opsiProd = PersistenceController.configedWORKBENCH_defaultvalue;// "/var/lib/opsi/workbench";
+	protected String opsiProd = persist.configedWORKBENCH_defaultvalue;// "/var/lib/opsi/workbench";
 	protected String opsiRepo = "/var/lib/opsi/repository/";
 	// protected String opsiRepo = "";// /var/lib/opsi/depot/";
 
-	private String configRepo = "repositotLocalUrl";
+	private String configRepo = "repositoryLocalUrl";
+	private String configDepot = "depotLocalUrl";
 
 	private static SSHPackageManagerParameterDialog instance;
 	protected ConfigedMain main;

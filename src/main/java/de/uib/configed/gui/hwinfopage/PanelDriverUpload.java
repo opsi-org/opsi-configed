@@ -299,7 +299,9 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		fieldServerPath.setForeground(Globals.greyed);
 
-		new JButton("", Globals.createImageIcon("images/folder_16.png", ""));;
+		JLabel labelMakeServerpath = new JLabel(configed.getResourceValue("PanelDriverUpload.labelMakeDir"));
+
+		buttonCallChooserServerpath = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserServerpath.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserServerpath.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallChooserServerpath.setToolTipText(configed.getResourceValue("PanelDriverUpload.determineServerPath"));

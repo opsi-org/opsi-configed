@@ -29,7 +29,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.FDialogTextfieldWithListSelection;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
-import de.uib.opsicommand.Executioner;
 import de.uib.opsicommand.OpsiMethodCall;
 //import de.uib.configed.guidata.ListMerger;
 import de.uib.opsidatamodel.PersistenceController;
@@ -628,7 +627,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 			if (newData.size() > 0) {
 
 				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-						new Object[] { Executioner.jsonArray(newData) });
+						new Object[] { persist.exec.jsonArray(newData) });
 
 				persist.exec.doCall(omc);
 			}

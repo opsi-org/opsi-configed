@@ -828,6 +828,13 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		// mapTableModel.fireTableDataChanged(); //called in MapTableModel
 	}
 
+	private Map testData() {
+		HashMap hm = new HashMap();
+		hm.put("key 1", "value 1");
+		hm.put("key 2", "value 2");
+		return hm;
+	}
+
 	public void stopEditing() {
 		if (table.isEditing()) // we prefer not to cancel cell editing
 		{

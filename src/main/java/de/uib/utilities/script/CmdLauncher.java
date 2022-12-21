@@ -34,7 +34,8 @@ public class CmdLauncher {
 
 			BufferedReader br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
-			while ((br.readLine()) != null) {
+			String line = null;
+			while ((line = br.readLine()) != null) {
 				// logging.debug(getSelectedClients()[J] + " >" + line);
 				// appendLog( ">" + line + "\n");
 			}

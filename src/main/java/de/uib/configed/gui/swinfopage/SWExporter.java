@@ -193,6 +193,8 @@ public abstract class SWExporter {
 		if (exportDirectory != null)
 			exportDirectoryS = exportDirectory.toString();
 
+		String prefix = "report_swinventory_";
+
 		// filepathStart = exportDirectoryS + File.separator + prefix;
 		// setWriteToFile( filepathStart + hostId + ".pdf");
 

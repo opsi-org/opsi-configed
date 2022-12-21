@@ -3933,7 +3933,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						configed.getResourceValue("PanelHostProperties.SelectHost"),
 						new DefaultComboBoxModel(new Vector(depotPropertiesForPermittedDepots.keySet())),
 						depotPropertiesForPermittedDepots, hostUpdateCollection,
-						PersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT
+						persist.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT
 
 				);
 

@@ -713,6 +713,10 @@ public class PanelSWInfo extends JPanel {
 
 	protected class SWInfoTableModel extends AbstractTableModel {
 		private java.util.List<String[]> data;
+		// private String dateS;
+		private final String[] header = { configed.getResourceValue("PanelSWInfo.tableheader_displayName"),
+				configed.getResourceValue("PanelSWInfo.tableheader_softwareId"),
+				configed.getResourceValue("PanelSWInfo.tableheader_displayVersion") };
 
 		public SWInfoTableModel() {
 			super();
