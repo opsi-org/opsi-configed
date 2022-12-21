@@ -66,7 +66,7 @@ public class CSVParser {
 	}
 
 	public List<String> parse(List<CSVToken> tokens) throws CSVException {
-		List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 		int fieldCount = (pendingFieldCount != 0) ? pendingFieldCount : 0;
 		pendingFieldCount = 0;
 

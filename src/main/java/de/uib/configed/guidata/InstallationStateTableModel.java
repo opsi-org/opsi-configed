@@ -173,7 +173,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	public static String getColumnTitle(String column) {
 		if (columnDict == null) {
-			columnDict = new HashMap<String, String>();
+			columnDict = new HashMap<>();
 			columnDict.put("productId", configed.getResourceValue("InstallationStateTableModel.productId"));
 			columnDict.put(ProductState.KEY_productName,
 					configed.getResourceValue("InstallationStateTableModel.productName"));
@@ -219,7 +219,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	}
 
 	public static java.util.List<String> localizeColumns(java.util.List<String> cols) {
-		java.util.List<String> result = new ArrayList<String>();
+		java.util.List<String> result = new ArrayList<>();
 
 		if (columnDict != null) {
 			for (String col : cols) {
@@ -305,7 +305,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 			for (int i = 0; i < productRowsList1client.size(); i++) {
 				Map<String, String> stateAndAction = productRowsList1client.get(i);
-				// new HashMap<String, String>(productRowsList1client.get(i));
+				// new HashMap<>(productRowsList1client.get(i));
 				// deep copy, but seems to be not complete, therefore not used
 				// if (clientId.equals("vbrupertwin7-64.uib.local"))
 				// logging.info(this, "stateAndAction " + stateAndAction);
@@ -343,7 +343,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		combinedVisualValues = new HashMap<String, Map<String, String>>();
 		for (String key : ProductState.KEYS) {
-			HashMap<String, String> combinedVisualValuesForOneColumn = new HashMap<String, String>();
+			HashMap<String, String> combinedVisualValuesForOneColumn = new HashMap<>();
 			combinedVisualValues.put(key, combinedVisualValuesForOneColumn);
 		}
 
@@ -535,7 +535,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	// builds index of the currently displayed columns in terms of the prepared
 	// columns (indexPreparedColumns)
 	private void initColumnNames(List<String> columnsToDisplay) {
-		preparedColumns = new ArrayList<String>();
+		preparedColumns = new ArrayList<>();
 		editablePreparedColumns = new boolean[16];
 
 		preparedColumns.add(0, ProductState.KEY_productId);
@@ -597,7 +597,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		logging.info(this, "columnsToDisplay: " + columnsToDisplay);
 
 		indexPreparedColumns = new int[columnsToDisplay.size()];
-		columnTitles = new ArrayList<String>();
+		columnTitles = new ArrayList<>();
 		{
 			Iterator iter = columnsToDisplay.iterator();
 			int j = 0;
@@ -662,7 +662,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		Map<String, String> changedStatesForProduct = (Map<String, String>) changedStatesForClient.get(product);
 		if (changedStatesForProduct == null) {
-			changedStatesForProduct = new HashMap<String, String>();
+			changedStatesForProduct = new HashMap<>();
 			changedStatesForClient.put(product, changedStatesForProduct);
 		}
 
@@ -699,7 +699,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		Map<String, String> product2request = changeEventCount2product2request.get(onGoingCollectiveChangeEventCount);
 
 		if (product2request == null) {
-			product2request = new HashMap<String, String>();
+			product2request = new HashMap<>();
 			changeEventCount2product2request.put(onGoingCollectiveChangeEventCount, product2request);
 
 		}
@@ -793,7 +793,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		Map<String, String> changedStatesForProduct = (Map<String, String>) changedStatesForClient.get(product);
 		if (changedStatesForProduct == null) {
-			changedStatesForProduct = new HashMap<String, String>();
+			changedStatesForProduct = new HashMap<>();
 			changedStatesForClient.put(product, changedStatesForProduct);
 		}
 
@@ -963,7 +963,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		Map<String, String> rowMapForaClient = productStates.get(productId);
 		if (rowMapForaClient == null) {
-			rowMapForaClient = new HashMap<String, String>();
+			rowMapForaClient = new HashMap<>();
 			productStates.put(productId, rowMapForaClient);
 		}
 		rowMapForaClient.put(ProductState.KEY_actionRequest, ar.toString());

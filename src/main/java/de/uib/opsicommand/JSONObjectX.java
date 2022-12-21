@@ -53,7 +53,7 @@ public class JSONObjectX extends JSONObject {
 		beingList = true;
 		hasElements = true;
 
-		map = new HashMap<String, Object>();
+		map = new HashMap<>();
 		try {
 			Iterator iter = master.keys();
 			// logging.debug(this, "keys " + master.keys());

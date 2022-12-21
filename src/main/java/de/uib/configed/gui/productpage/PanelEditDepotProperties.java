@@ -63,7 +63,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 	private JPanel titlePanel;
 
-	protected final Map<String, Object> emptyVisualData = new HashMap<String, Object>();
+	protected final Map<String, Object> emptyVisualData = new HashMap<>();
 
 	public PanelEditDepotProperties(ConfigedMain mainController,
 			de.uib.utilities.datapanel.AbstractEditMapPanel productPropertiesPanel) {
@@ -80,7 +80,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		// panelDepots.setBackground(Globals.backgroundLightGrey);
 		// panelDepots.setOpaque(true);
 
-		depots = new ArrayList<String>();
+		depots = new ArrayList<>();
 		listDepots = new JList<String>(); // new String[]{"a","b","c"});
 		listDepots.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		listDepots.addListSelectionListener(this);
@@ -89,7 +89,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 		listDepots.setCellRenderer(new StandardListCellRenderer());
 
-		listSelectedDepots = new ArrayList<String>();
+		listSelectedDepots = new ArrayList<>();
 
 		JScrollPane scrollpaneDepots = new javax.swing.JScrollPane();
 		scrollpaneDepots.setViewportView(listDepots);
@@ -200,7 +200,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 	}
 
 	public void clearDepotListData() {
-		setDepotListData(new ArrayList<String>(), "");
+		setDepotListData(new ArrayList<>(), "");
 	}
 
 	public void setDepotListData(java.util.List<String> depots, String productEdited) {

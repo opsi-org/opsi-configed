@@ -9,7 +9,7 @@ public class Config {
 	private static Config instance;
 
 	private Config() {
-		requiredActionForStatus = new HashMap<String, String>();
+		requiredActionForStatus = new HashMap<>();
 		requiredActionForStatus.put("installed", "setup");
 		requiredActionForStatus.put("not_installed", "uninstall");
 	}

@@ -140,7 +140,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		thePanel.fieldSelectedLicencePoolId.setText(poolID);
 		thePanel.fieldSelectedLicencePoolId.setToolTipText(poolID);
 
-		List<String> softwareIdsForPool = new ArrayList<String>();
+		List<String> softwareIdsForPool = new ArrayList<>();
 		if (poolID != null) {
 			softwareIdsForPool = persist.getSoftwareListByLicencePool(poolID);
 		}
@@ -221,7 +221,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		}
 
 		if (softwareIdsForPool == null)
-			softwareIdsForPool = new ArrayList<String>();
+			softwareIdsForPool = new ArrayList<>();
 
 		totalSWEntries = modelWindowsSoftwareIds.getRowCount();
 

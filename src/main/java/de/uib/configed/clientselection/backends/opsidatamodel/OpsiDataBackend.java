@@ -541,7 +541,7 @@ public class OpsiDataBackend extends Backend {
 		if (!hasSwAudit)
 			return result;
 
-		controller.fillClient2Software(new ArrayList<String>(clientMaps.keySet()));
+		controller.fillClient2Software(new ArrayList<>(clientMaps.keySet()));
 		result = controller.getClient2Software();
 		/*
 		 * for( Object obj: controller.getSoftwareAuditOnClients() )
@@ -569,7 +569,7 @@ public class OpsiDataBackend extends Backend {
 		hwConfig = controller.getOpsiHWAuditConf("en_");
 		hwConfigLocalized = controller.getOpsiHWAuditConf(locale);
 		logging.debug(this, "" + hwConfig);
-		hwUiToOpsi = new HashMap<String, String>();
+		hwUiToOpsi = new HashMap<>();
 		hwClassToValues = new HashMap<String, List>();
 
 		for (Object obj : hwConfig) {

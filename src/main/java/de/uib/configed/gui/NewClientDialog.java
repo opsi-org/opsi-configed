@@ -695,7 +695,7 @@ public class NewClientDialog extends FGeneralDialog
 	 */
 	private void treatSelectedDomainForNewClient(final String selectedDomain) {
 		Vector<String> editableDomains = new Vector<String>();
-		ArrayList<Object> saveDomains = new ArrayList<Object>();
+		ArrayList<Object> saveDomains = new ArrayList<>();
 		int order = 0;
 		saveDomains.add("" + order + ":" + selectedDomain);
 		editableDomains.add(selectedDomain);

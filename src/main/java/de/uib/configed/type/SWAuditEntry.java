@@ -45,7 +45,7 @@ public class SWAuditEntry extends TableEntry
 
 	private static List<String> KEYS;
 	static {
-		KEYS = new LinkedList<String>();
+		KEYS = new LinkedList<>();
 		KEYS.add(id);
 		KEYS.add(NAME);
 		KEYS.add(VERSION);
@@ -58,7 +58,7 @@ public class SWAuditEntry extends TableEntry
 
 	private static List<String> KEYS_FOR_GUI_TABLES;
 	static {
-		KEYS_FOR_GUI_TABLES = new LinkedList<String>();
+		KEYS_FOR_GUI_TABLES = new LinkedList<>();
 		KEYS_FOR_GUI_TABLES.add(id);
 		KEYS_FOR_GUI_TABLES.add(NAME);
 		KEYS_FOR_GUI_TABLES.add(VERSION);
@@ -89,7 +89,7 @@ public class SWAuditEntry extends TableEntry
 
 	public static final Map<String, String> key2serverKey;
 	static {
-		key2serverKey = new HashMap<String, String>();
+		key2serverKey = new HashMap<>();
 		key2serverKey.put(NAME, "name");
 		key2serverKey.put(VERSION, "version");
 		key2serverKey.put(SUBVERSION, "subVersion");
@@ -102,7 +102,7 @@ public class SWAuditEntry extends TableEntry
 	protected static Map<String, String> locale = new StringIdentityMap(KEYS);
 
 	public static void setLocale() {
-		// locale = new HashMap<String, String>();
+		// locale = new HashMap<>();
 		locale.put(id, "ID");
 		locale.put(NAME, configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
 		locale.put(VERSION, configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));

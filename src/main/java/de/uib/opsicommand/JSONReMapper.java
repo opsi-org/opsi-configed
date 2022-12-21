@@ -45,7 +45,7 @@ public class JSONReMapper {
 	}
 
 	public static Map<String, Object> getResponses(JSONObject retrieved) {
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 
 		Map<String, Object> result0 = getMapResult(retrieved);
 
@@ -413,7 +413,7 @@ public class JSONReMapper {
 				JSONArray element0 = jA.getJSONArray(i);
 				int size1 = element0.length();
 
-				List<String> list1 = new ArrayList<String>();
+				List<String> list1 = new ArrayList<>();
 
 				for (int j = 0; j < size1; j++) {
 					// logging.debug("element1 " + element0.get(j));
@@ -488,7 +488,7 @@ public class JSONReMapper {
 	}
 
 	public static List<String> getJsonStringList(JSONObject jO, String key) {
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<>();
 		try {
 			JSONArray jA = jO.optJSONArray(key);
 
@@ -524,7 +524,7 @@ public class JSONReMapper {
 	public static Map<String, Object> getMap_Object(JSONObject jo)
 	// this method tries to return Java lists in comparison with getMapResult
 	{
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 
 		try {
 			JSONObjectX jOX = new JSONObjectX(jo);
@@ -564,7 +564,7 @@ public class JSONReMapper {
 	}
 
 	public static List<String> getStringListResult(JSONObject jO) {
-		List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 		try {
 			if (checkResponse(jO)) {
 				result = JSONReMapper.getJsonStringList(jO, "result");
@@ -699,7 +699,7 @@ public class JSONReMapper {
 
 	public static Map<String, String> giveEmptyForNull(Map<String, Object> m) {
 		// logging.info("giveEmptyForNull " + m);
-		HashMap<String, String> result = new HashMap<String, String>();
+		HashMap<String, String> result = new HashMap<>();
 		for (String key : m.keySet()) {
 			if (isNull(m.get(key)))
 				result.put(key, "");

@@ -64,7 +64,7 @@ public class UserConfigProducing {
 	}
 
 	public ArrayList<Object> produce() {
-		readyObjects = new ArrayList<Object>();
+		readyObjects = new ArrayList<>();
 
 		java.util.Set<String> userparts = new TreeSet<String>();
 		java.util.Set<String> roleparts = new TreeSet<String>();
@@ -205,7 +205,7 @@ public class UserConfigProducing {
 
 			logging.info(this,
 					"supplyPermissionList add to currentPossibleValuesListed " + currentPossibleValuesListed);
-			ArrayList<Object> listOptions = new ArrayList<Object>(currentPossibleValuesListed);
+			ArrayList<Object> listOptions = new ArrayList<>(currentPossibleValuesListed);
 
 			logging.info(this, "supplyPermissionList products arraylist " + listOptions);
 
@@ -318,7 +318,7 @@ public class UserConfigProducing {
 					" for user " + username + " followConfiguredRole " + followConfiguredRole + ": " + roleToPlay);
 
 			// update role selection
-			ArrayList<Object> selectedValuesRole = new ArrayList<Object>();
+			ArrayList<Object> selectedValuesRole = new ArrayList<>();
 			if (configuredRole != null)
 				selectedValuesRole.add(configuredRole);
 			else
@@ -329,7 +329,7 @@ public class UserConfigProducing {
 				possibleValuesSet.add(configuredRole);
 			possibleValuesSet.add(UserConfig.NONE_PROTOTYPE);
 
-			ArrayList<Object> possibleValuesRole = new ArrayList<Object>(possibleValuesSet);
+			ArrayList<Object> possibleValuesRole = new ArrayList<>(possibleValuesSet);
 
 			Map<String, Object> itemRole = PersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig,
 					roleKey, "which role should determine this users configuration", false, // editable
@@ -432,7 +432,7 @@ public class UserConfigProducing {
 			java.util.List<Object> values = serverconfigValuesMap.get(configKey);
 
 			if (values == null || values.size() == 0 || !((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE)) {
-				ArrayList<Object> selectedValuesRole = new ArrayList<Object>();
+				ArrayList<Object> selectedValuesRole = new ArrayList<>();
 				selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
 
 				Map<String, Object> itemRole = PersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig,
@@ -571,7 +571,7 @@ public class UserConfigProducing {
 				.getBooleanValue(UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED);
 
 		logging.info(this, "configKeyUseList " + configKeyUseList + ", configKeyList " + configKeyList);
-		possibleValuesDepot = new ArrayList<Object>();
+		possibleValuesDepot = new ArrayList<>();
 		currentPossibleValuesDepotListed = new LinkedHashSet<Object>();
 
 		if (prototypeObligatory || serverconfigValuesMap.get(configKeyList) == null) {
@@ -608,7 +608,7 @@ public class UserConfigProducing {
 
 		}
 
-		userConfig.setPossibleValues(partkey, new ArrayList<Object>(currentPossibleValuesDepotListed));
+		userConfig.setPossibleValues(partkey, new ArrayList<>(currentPossibleValuesDepotListed));
 
 		logging.info(this,
 				"depots currentPossibleValuesDepotListed before supplying " + currentPossibleValuesDepotListed);
@@ -637,7 +637,7 @@ public class UserConfigProducing {
 				.getBooleanValue(UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED);
 
 		currentPossibleValuesHostgroupListed = new LinkedHashSet<Object>();
-		possibleValuesHostgroup = new ArrayList<Object>();
+		possibleValuesHostgroup = new ArrayList<>();
 
 		if (prototypeObligatory || serverconfigValuesMap.get(configKeyList) == null) {
 			selectedValuesHostgroup = prototypeConfig.getValues(partkey);
@@ -666,7 +666,7 @@ public class UserConfigProducing {
 
 		}
 
-		userConfig.setPossibleValues(partkey, new ArrayList<Object>(currentPossibleValuesHostgroupListed));
+		userConfig.setPossibleValues(partkey, new ArrayList<>(currentPossibleValuesHostgroupListed));
 
 		logging.info(this,
 				"hostGroups selectedValuesHostgroup before supplying for " + username + ": " + selectedValuesHostgroup);
@@ -701,7 +701,7 @@ public class UserConfigProducing {
 				.getBooleanValue(UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED);
 
 		currentPossibleValuesProductgroupsListed = new LinkedHashSet<Object>();
-		possibleValuesProductgroups = new ArrayList<Object>();
+		possibleValuesProductgroups = new ArrayList<>();
 
 		if (prototypeObligatory || serverconfigValuesMap.get(configKeyList) == null) {
 			selectedValuesProductgroups = prototypeConfig.getValues(partkey);
@@ -729,7 +729,7 @@ public class UserConfigProducing {
 			currentPossibleValuesProductgroupsListed.addAll(posVals);
 		}
 
-		userConfig.setPossibleValues(partkey, new ArrayList<Object>(currentPossibleValuesProductgroupsListed));
+		userConfig.setPossibleValues(partkey, new ArrayList<>(currentPossibleValuesProductgroupsListed));
 
 		logging.info(this, "productGroups selectedValuesProductgroups before supplying " + selectedValuesProductgroups);
 		logging.info(this, "productGroups oldPossibleValuesProductgroupsListed before supplying "

@@ -68,14 +68,14 @@ public class UserConfigModule {
 
 	public java.util.List<Object> getValues(String key) {
 		if (valuesMap.get(key) == null)
-			return new ArrayList<Object>();
+			return new ArrayList<>();
 
 		return valuesMap.get(key);
 	}
 
 	public java.util.List<Object> getPossibleValues(String key) {
 		if (possibleValuesMap.get(key) == null)
-			return new ArrayList<Object>();
+			return new ArrayList<>();
 
 		return valuesMap.get(key);
 	}

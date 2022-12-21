@@ -17,7 +17,7 @@ public class ProductPropertyState extends Table {
 
 	public static java.util.List<String> columns;
 	static {
-		columns = new ArrayList<String>();
+		columns = new ArrayList<>();
 		// columns.add("product_property_state_id");
 		columns.add(PRODUCT_ID);
 		columns.add(PROPERTY_ID);
@@ -36,7 +36,7 @@ public class ProductPropertyState extends Table {
 	public static java.util.List<String> primaryKey;
 	public static String primaryKeyString;
 	static {
-		primaryKey = new ArrayList<String>();
+		primaryKey = new ArrayList<>();
 		primaryKey.add("product_property_state_id");
 
 		StringBuffer sb = new StringBuffer("");

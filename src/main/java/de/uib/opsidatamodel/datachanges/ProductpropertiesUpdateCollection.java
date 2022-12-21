@@ -28,7 +28,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 			String productname) {
 		super(new Vector<Object>(0));
 		if (clients == null) {
-			this.clients = new ArrayList<String>();
+			this.clients = new ArrayList<>();
 		} else {
 			this.clients = clients;
 		}

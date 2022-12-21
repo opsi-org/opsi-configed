@@ -52,8 +52,8 @@ public class UserConfig {
 	public static final String HAS_ROLE_ATTRIBUT = "has_role";
 	public static final String MODIFICATION_INFO_KEY = "modified";
 
-	public static final ArrayList<Object> EMPTY_LIST = new ArrayList<Object>();
-	public static final ArrayList<Object> BOOLEAN_POSSIBLE_VALUES = new ArrayList<Object>();
+	public static final ArrayList<Object> EMPTY_LIST = new ArrayList<>();
+	public static final ArrayList<Object> BOOLEAN_POSSIBLE_VALUES = new ArrayList<>();
 	static {
 		BOOLEAN_POSSIBLE_VALUES.add(true);
 		BOOLEAN_POSSIBLE_VALUES.add(false);
@@ -61,7 +61,7 @@ public class UserConfig {
 
 	public static final ArrayList<Object> ZERO_TIME;
 	static {
-		ZERO_TIME = new ArrayList<Object>();
+		ZERO_TIME = new ArrayList<>();
 		ZERO_TIME.add("0000-00-00 00:00:00");
 	}
 
@@ -234,7 +234,7 @@ public class UserConfig {
 
 	public java.util.List<Object> getValues(String key) {
 		if (valuesMap.get(key) == null)
-			return new ArrayList<Object>();
+			return new ArrayList<>();
 
 		return valuesMap.get(key);
 	}
@@ -244,7 +244,7 @@ public class UserConfig {
 			return BOOLEAN_POSSIBLE_VALUES;
 
 		if (possibleValuesMap.get(key) == null)
-			return new ArrayList<Object>();
+			return new ArrayList<>();
 
 		return possibleValuesMap.get(key);
 	}

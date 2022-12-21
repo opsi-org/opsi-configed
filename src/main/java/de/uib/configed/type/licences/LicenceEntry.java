@@ -39,7 +39,7 @@ public class LicenceEntry extends TreeMap<String, Object>
 
 	private static List<String> KEYS;
 	static {
-		KEYS = new ArrayList<String>();
+		KEYS = new ArrayList<>();
 		KEYS.add(idKEY);
 		KEYS.add(licenceContractIdKEY);
 		KEYS.add(boundToHostKEY);

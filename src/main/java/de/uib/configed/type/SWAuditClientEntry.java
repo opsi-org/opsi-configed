@@ -62,7 +62,7 @@ public class SWAuditClientEntry
 
 	public static List<String> KEYS;
 	static {
-		KEYS = new LinkedList<String>();
+		KEYS = new LinkedList<>();
 		KEYS.add(SWAuditEntry.id);
 		KEYS.add(SWAuditEntry.NAME);
 		KEYS.add(SWAuditEntry.VERSION);
@@ -75,7 +75,7 @@ public class SWAuditClientEntry
 
 	private static List<String> KEYS_FOR_GUI_TABLES;
 	static {
-		KEYS_FOR_GUI_TABLES = new LinkedList<String>();
+		KEYS_FOR_GUI_TABLES = new LinkedList<>();
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.id);
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.NAME);
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.VERSION);
@@ -88,7 +88,7 @@ public class SWAuditClientEntry
 	protected static Map<String, String> locale = new StringIdentityMap(KEYS);
 
 	public static void setLocale() {
-		// locale = new HashMap<String, String>();
+		// locale = new HashMap<>();
 		locale.put(SWAuditEntry.id, "ID");
 		locale.put(SWAuditEntry.NAME, configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
 		locale.put(SWAuditEntry.VERSION, configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
@@ -134,7 +134,7 @@ public class SWAuditClientEntry
 	 * }
 	 */
 
-	public static final List<String> DB_COLUMN_NAMES = new ArrayList<String>();
+	public static final List<String> DB_COLUMN_NAMES = new ArrayList<>();
 	static {
 		for (String key : DB_COLUMNS.keySet()) {
 			DB_COLUMN_NAMES.add(DB_COLUMNS.get(key));
@@ -149,7 +149,7 @@ public class SWAuditClientEntry
 
 		startmillis1stPartOfConstructor = System.currentTimeMillis();
 
-		data = new HashMap<String, String>();
+		data = new HashMap<>();
 		/*
 		 * for (int i = 0; i < keys.size(); i++)
 		 * {
@@ -181,7 +181,7 @@ public class SWAuditClientEntry
 
 	public SWAuditClientEntry(final Map<String, Object> m, de.uib.opsidatamodel.PersistenceController controller) {
 		// logging.info(this, "create, map constructor");
-		data = new HashMap<String, String>();
+		data = new HashMap<>();
 		data.put(SWAuditEntry.id, Globals.produceNonNull(m.get(CLIENT_ID)));
 		swIdent = produceSWident(m);
 		this.controller = controller;
@@ -244,7 +244,7 @@ public class SWAuditClientEntry
 			controller.installedSoftwareInformationRequestRefresh();
 			software = controller.getSoftwareList();
 			lastUpdateTime = System.currentTimeMillis();
-			notFoundSoftwareIDs = new ArrayList<String>();
+			notFoundSoftwareIDs = new ArrayList<>();
 		} else
 			logging.warning(this, "updateSoftware: doing nothing since we just updated");
 	}
@@ -323,7 +323,7 @@ public class SWAuditClientEntry
 			if (swId == -1) {
 				logging.warning(this, "swIdent not found in softwarelist: " + swIdent);
 				if (notFoundSoftwareIDs == null)
-					notFoundSoftwareIDs = new ArrayList<String>();
+					notFoundSoftwareIDs = new ArrayList<>();
 				notFoundSoftwareIDs.add(swIdent);
 			}
 		}
@@ -397,7 +397,7 @@ public class SWAuditClientEntry
 	}
 
 	public Map<String, String> getExpandedMap(Map<String, SWAuditEntry> installedSoftwareInformation, String swIdent) {
-		Map<String, String> dataMap = new HashMap<String, String>(data);
+		Map<String, String> dataMap = new HashMap<>(data);
 		dataMap.putAll(installedSoftwareInformation.get(swIdent));
 		// logging.info( this, " getExpandedMap " + dataMap);
 		return dataMap;

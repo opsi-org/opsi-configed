@@ -22,14 +22,14 @@ public class LicencePoolXOpsiProduct extends Relation {
 
 	public static final java.util.List<String> ATTRIBUTES;
 	static {
-		ATTRIBUTES = new LinkedList<String>();
+		ATTRIBUTES = new LinkedList<>();
 		ATTRIBUTES.add(licencepoolKEY);
 		ATTRIBUTES.add(productIdKEY);
 	}
 
 	public static final java.util.List<String> SERVICE_ATTRIBUTES;
 	static {
-		SERVICE_ATTRIBUTES = new LinkedList<String>();
+		SERVICE_ATTRIBUTES = new LinkedList<>();
 		SERVICE_ATTRIBUTES.add(idKEY);
 		SERVICE_ATTRIBUTES.add(productsKEY);
 	}

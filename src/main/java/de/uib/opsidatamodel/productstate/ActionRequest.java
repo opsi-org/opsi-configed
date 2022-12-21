@@ -121,7 +121,7 @@ public class ActionRequest {
 		serviceValues = new Vector<String>(serviceValue2state.keySet());
 		scriptKeys = new Vector<String>();
 		// scriptKey2state = new HashMap<String, Integer>();
-		scriptKey2label = new HashMap<String, String>();
+		scriptKey2label = new HashMap<>();
 
 		for (String request : serviceValues) {
 			scriptKeys.add(request + "Script");
@@ -141,7 +141,7 @@ public class ActionRequest {
 		label2state.put("once", ONCE);
 		label2state.put("custom", CUSTOM);
 
-		label2displayLabel = new HashMap<String, String>();
+		label2displayLabel = new HashMap<>();
 		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
 		label2displayLabel.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		label2displayLabel.put("not_available", "not_available");
@@ -153,7 +153,7 @@ public class ActionRequest {
 		label2displayLabel.put("once", "once");
 		label2displayLabel.put("custom", "custom");
 
-		displayLabel2label = new HashMap<String, String>();
+		displayLabel2label = new HashMap<>();
 		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
 		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		displayLabel2label.put("not_available", "not_available");
@@ -276,7 +276,7 @@ public class ActionRequest {
 
 		return choiceLabels;
 		/*
-		 * ArrayList<String> list = new ArrayList<String>();
+		 * ArrayList<String> list = new ArrayList<>();
 		 * 
 		 * for (int i = NONE; i <= LAST; i++)
 		 * {

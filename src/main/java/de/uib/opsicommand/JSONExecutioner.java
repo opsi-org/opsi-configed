@@ -334,7 +334,7 @@ public abstract class JSONExecutioner extends Executioner {
 					if (translateValues != null && translateValues.get(keyOfItem) != null)
 						keyOfItem = translateValues.get(keyOfItem);
 
-					HashMap<String, String> detailMap = new HashMap<String, String>();
+					HashMap<String, String> detailMap = new HashMap<>();
 
 					if (sourceVars == null) {
 						// take original keys
@@ -560,7 +560,7 @@ public abstract class JSONExecutioner extends Executioner {
 
 	@Override
 	public Map<String, Object> getMapFromItem(Object s) {
-		HashMap<String, Object> result = new HashMap<String, Object>();
+		HashMap<String, Object> result = new HashMap<>();
 		if (s == null)
 			return result;
 

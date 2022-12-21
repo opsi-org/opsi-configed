@@ -97,8 +97,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		DIRECTORY_NAME = configed.getResourceValue("ClientTree.DIRECTORYname");
 		DIRECTORY_PERSISTENT_NAME = "clientdirectory";
 		DIRECTORY_NOT_ASSIGNED_NAME = configed.getResourceValue("ClientTree.NOTASSIGNEDname");
-		translationsToPersistentNames = new HashMap<String, String>();
-		translationsFromPersistentNames = new HashMap<String, String>();
+		translationsToPersistentNames = new HashMap<>();
+		translationsFromPersistentNames = new HashMap<>();
 		translationsToPersistentNames.put(DIRECTORY_NAME, DIRECTORY_PERSISTENT_NAME);
 		translationsFromPersistentNames.put(DIRECTORY_PERSISTENT_NAME, DIRECTORY_NAME);
 		topGroupNames = new HashSet<String>();
@@ -150,10 +150,10 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	protected TreePath pathToDIRECTORY;
 	protected TreePath pathToDIRECTORY_NOT_ASSIGNED;
 
-	protected final Map<String, String> groupALL = new HashMap<String, String>();
-	protected final Map<String, String> groupGROUPS = new HashMap<String, String>();
-	protected final Map<String, String> groupDIRECTORY = new HashMap<String, String>();
-	protected final Map<String, String> groupDIRECTORY_NOT_ASSIGNED = new HashMap<String, String>();
+	protected final Map<String, String> groupALL = new HashMap<>();
+	protected final Map<String, String> groupGROUPS = new HashMap<>();
+	protected final Map<String, String> groupDIRECTORY = new HashMap<>();
+	protected final Map<String, String> groupDIRECTORY_NOT_ASSIGNED = new HashMap<>();
 
 	public final GroupNode ROOT = new GroupNode("top");
 
@@ -1387,7 +1387,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		LinkedHashMap<String, String> groupData = new LinkedHashMap<String, String>();
 		groupData.put("groupname", groupId);
 		groupData.put("description", groups.get(groupId).get("description"));
-		HashMap<String, String> labels = new HashMap<String, String>();
+		HashMap<String, String> labels = new HashMap<>();
 		labels.put("groupname", configed.getResourceValue("ClientTree.editNode.label.groupname"));
 		labels.put("description", configed.getResourceValue("ClientTree.editNode.label.description"));
 		HashMap<String, Boolean> editable = new HashMap<String, Boolean>();
@@ -1446,7 +1446,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			LinkedHashMap<String, String> groupData = new LinkedHashMap<String, String>();
 			groupData.put("groupname", "");
 			groupData.put("description", "");
-			HashMap<String, String> labels = new HashMap<String, String>();
+			HashMap<String, String> labels = new HashMap<>();
 			labels.put("groupname", configed.getResourceValue("ClientTree.editNode.label.groupname"));
 			labels.put("description", configed.getResourceValue("ClientTree.editNode.label.description"));
 			HashMap<String, Boolean> editable = new HashMap<String, Boolean>();
@@ -2035,7 +2035,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	}
 
 	private ArrayList<String> enumerateLeafNodes(DefaultMutableTreeNode node) {
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<>();
 
 		Enumeration<TreeNode> e = node.breadthFirstEnumeration();
 

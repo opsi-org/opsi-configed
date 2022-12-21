@@ -322,7 +322,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	 **/
 	@Override
 	public LinkedList<String> getCommandsRaw() {
-		LinkedList<String> commands_string_list = new LinkedList<String>();
+		LinkedList<String> commands_string_list = new LinkedList<>();
 		for (SSHCommand c : ssh_command) {
 			String comstr = c.getCommandRaw();
 			if (!((comstr == null) || (comstr.trim().equals(""))))

@@ -105,7 +105,7 @@ public class DataStubNOM extends DataStub {
 		logging.debug(this, "retrieveProductInfos data == null " + (product2versionInfo2infos == null));
 
 		if (product2versionInfo2infos == null) {
-			ArrayList<String> attribs = new ArrayList<String>();
+			ArrayList<String> attribs = new ArrayList<>();
 
 			for (String key : OpsiPackage.SERVICE_KEYS) {
 				attribs.add(key);
@@ -319,7 +319,7 @@ public class DataStubNOM extends DataStub {
 				java.util.List depotsWithThisVersion = versionInfo2Depots.get(p.getVersionInfo());
 
 				if (depotsWithThisVersion == null) {
-					depotsWithThisVersion = new ArrayList<String>();
+					depotsWithThisVersion = new ArrayList<>();
 					versionInfo2Depots.put(p.getVersionInfo(), depotsWithThisVersion);
 				}
 				depotsWithThisVersion.add(depot);
@@ -436,7 +436,7 @@ public class DataStubNOM extends DataStub {
 			while (iter.hasNext()) {
 
 				Map<String, Object> retrievedMap = (Map) iter.next();
-				Map<String, Object> adaptedMap = new HashMap<String, Object>(retrievedMap);
+				Map<String, Object> adaptedMap = new HashMap<>(retrievedMap);
 				// rebuild JSON objects
 				Iterator iterInner = retrievedMap.keySet().iterator();
 				while (iterInner.hasNext()) {
@@ -570,7 +570,7 @@ public class DataStubNOM extends DataStub {
 						product2dependencyInfos.put(productId, dependencyInfos);
 					}
 
-					Map<String, String> dependencyInfo = new HashMap<String, String>();
+					Map<String, String> dependencyInfo = new HashMap<>();
 					dependencyInfo.put("action", action);
 					dependencyInfo.put("requiredProductId", requiredProductId);
 					dependencyInfo.put("requiredAction", requiredAction);
@@ -672,9 +672,9 @@ public class DataStubNOM extends DataStub {
 		logging.info(this, "produceProductPropertyStates new hosts " + clients + " old hosts " + hosts);
 		java.util.List<String> newClients = null;
 		if (clients == null)
-			newClients = new ArrayList<String>();
+			newClients = new ArrayList<>();
 		else
-			newClients = new ArrayList<String>(clients);
+			newClients = new ArrayList<>(clients);
 
 		if (hosts == null) {
 			hosts = new HashSet<String>();
@@ -831,7 +831,7 @@ public class DataStubNOM extends DataStub {
 			int i = 0;
 			String testKey = "zypper";
 			logging.info(this, "getInstalledSoftwareInformation build map");
-			// ArrayList<String> foundEntries = new ArrayList<String>();
+			// ArrayList<String> foundEntries = new ArrayList<>();
 
 			while (iter.hasNext()) {
 				i++;
@@ -946,7 +946,7 @@ public class DataStubNOM extends DataStub {
 			 * foundEntries);
 			 */
 
-			softwareList = new ArrayList<String>(installedSoftwareInformation.keySet());
+			softwareList = new ArrayList<>(installedSoftwareInformation.keySet());
 
 			logging.info(this,
 					"retrieveInstalledSoftwareInformation produced softwarelist with entries " + softwareList.size());
@@ -1058,11 +1058,11 @@ public class DataStubNOM extends DataStub {
 	}
 
 	protected void retrieveSoftwareAuditOnClients() {
-		retrieveSoftwareAuditOnClients(new ArrayList<String>());
+		retrieveSoftwareAuditOnClients(new ArrayList<>());
 	}
 
 	protected void retrieveSoftwareAuditOnClients(String client) {
-		java.util.List<String> clients = new ArrayList<String>();
+		java.util.List<String> clients = new ArrayList<>();
 		clients.add(client);
 		retrieveSoftwareAuditOnClients(clients);
 	}
@@ -1074,7 +1074,7 @@ public class DataStubNOM extends DataStub {
 		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  clients count ======  " + clients.size());
 
-		java.util.List<String> newClients = new ArrayList<String>(clients);
+		java.util.List<String> newClients = new ArrayList<>(clients);
 
 		if (client2software != null) {
 			logging.info(this, "retrieveSoftwareAuditOnClients client2Software.keySet size " + "   +++  "
@@ -1290,7 +1290,7 @@ public class DataStubNOM extends DataStub {
 				String hostId = (String) id;
 				Map<String, Object> configs1Host = hostConfigs.get(id);
 				if (configs1Host == null) {
-					configs1Host = new HashMap<String, Object>();
+					configs1Host = new HashMap<>();
 					hostConfigs.put(hostId, configs1Host);
 				}
 
@@ -1299,7 +1299,7 @@ public class DataStubNOM extends DataStub {
 				String configId = (String) listElement.get("configId");
 
 				if (listElement.get("values") == null) {
-					configs1Host.put(configId, new ArrayList<Object>());
+					configs1Host.put(configId, new ArrayList<>());
 					// is a data error but can occur
 				} else {
 

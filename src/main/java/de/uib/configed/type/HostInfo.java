@@ -87,7 +87,7 @@ public class HostInfo {
 
 	public static final LinkedList<String> ORDERING_DISPLAY_FIELDS;
 	static {
-		ORDERING_DISPLAY_FIELDS = new LinkedList<String>();
+		ORDERING_DISPLAY_FIELDS = new LinkedList<>();
 
 		ORDERING_DISPLAY_FIELDS.add(hostname_DISPLAY_FIELD_LABEL);
 		ORDERING_DISPLAY_FIELDS.add(clientDescription_DISPLAY_FIELD_LABEL);
@@ -205,7 +205,7 @@ public class HostInfo {
 	}
 
 	public HashMap<String, Object> getDisplayRowMap0() {
-		HashMap<String, Object> unordered = new HashMap<String, Object>();
+		HashMap<String, Object> unordered = new HashMap<>();
 
 		unordered.put(hostname_DISPLAY_FIELD_LABEL, clientName);
 		unordered.put(clientDescription_DISPLAY_FIELD_LABEL, clientDescription);
@@ -232,13 +232,13 @@ public class HostInfo {
 	}
 
 	public HashMap<String, Object> getDisplayRowMap() {
-		HashMap<String, Object> unordered = new HashMap<String, Object>(getDisplayRowMap0());
+		HashMap<String, Object> unordered = new HashMap<>(getDisplayRowMap0());
 		unordered.put(hostname_DISPLAY_FIELD_LABEL, clientName);
 		return unordered;
 	}
 
 	public HashMap<String, Object> getMap() {
-		HashMap<String, Object> unordered = new HashMap<String, Object>();
+		HashMap<String, Object> unordered = new HashMap<>();
 
 		unordered.put(depotOfClientKEY, depotOfClient);
 		unordered.put(clientDescriptionKEY, clientDescription);

@@ -34,7 +34,7 @@ public class MapBasedTableEditItem extends TableEditItem {
 	}
 
 	public Map<String, Object> getRowAsMap() {
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 
 		for (int i = 0; i < columnNames.size(); i++) {
 			result.put(columnNames.get(i), rowV.get(i));

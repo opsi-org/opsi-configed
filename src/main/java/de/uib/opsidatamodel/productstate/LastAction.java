@@ -92,7 +92,7 @@ public class LastAction {
 		label2state.put("once", ONCE);
 		label2state.put("custom", CUSTOM);
 
-		label2displayLabel = new HashMap<String, String>();
+		label2displayLabel = new HashMap<>();
 		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
 		label2displayLabel.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		label2displayLabel.put("not_available", "not_available");
@@ -104,7 +104,7 @@ public class LastAction {
 		label2displayLabel.put("once", "once");
 		label2displayLabel.put("custom", "custom");
 
-		displayLabel2label = new HashMap<String, String>();
+		displayLabel2label = new HashMap<>();
 		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
 		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		displayLabel2label.put("not_available", "not_available");

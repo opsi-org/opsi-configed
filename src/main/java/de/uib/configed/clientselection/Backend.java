@@ -37,7 +37,7 @@ public abstract class Backend {
 		List<Client> clients = getClients();
 		logging.debug(this, "Number of clients to filter: " + clients.size());
 
-		List<String> matchingClients = new LinkedList<String>();
+		List<String> matchingClients = new LinkedList<>();
 		for (Client client : clients) {
 			// logging.debug( this, "Checking client " +client.getId()+"..." );
 			if (operation.doesMatch(client)) {

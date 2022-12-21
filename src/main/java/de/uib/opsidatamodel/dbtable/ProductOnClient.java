@@ -24,7 +24,7 @@ public class ProductOnClient extends Table {
 
 	public static java.util.List<String> columns;
 	static {
-		columns = new ArrayList<String>(ProductState.DB_COLUMN_NAMES);
+		columns = new ArrayList<>(ProductState.DB_COLUMN_NAMES);
 		columns.add("clientId");
 		columns.add("productType");
 	}
@@ -39,7 +39,7 @@ public class ProductOnClient extends Table {
 	public static java.util.List<String> primaryKey;
 	public static String primaryKeyString;
 	static {
-		primaryKey = new ArrayList<String>();
+		primaryKey = new ArrayList<>();
 		primaryKey.add(CLIENTid);
 		primaryKey.add(PRODUCTid);
 		primaryKey.add(PRODUCTtype);
@@ -52,7 +52,7 @@ public class ProductOnClient extends Table {
 		primaryKeyString = sb.toString();
 	}
 
-	private static Map<String, String> key2servicekeyX = new HashMap<String, String>(ProductState.key2servicekey);
+	private static Map<String, String> key2servicekeyX = new HashMap<>(ProductState.key2servicekey);
 	static {
 		key2servicekeyX.put("clientId", "clientId");
 	}

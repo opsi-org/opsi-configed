@@ -26,7 +26,7 @@ public class PropertiesStore
 	}
 
 	public PropertiesStore(File store) {
-		internalStore = new HashMap<String, String>();
+		internalStore = new HashMap<>();
 		myStore = store;
 	}
 

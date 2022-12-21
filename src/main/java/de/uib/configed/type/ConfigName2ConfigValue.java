@@ -28,7 +28,7 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 		if (retrieved == null) {
 			// return;
 			// we should take default values even if we have not got any values
-			retrieved = new HashMap<String, Object>();
+			retrieved = new HashMap<>();
 		}
 
 		if (configOptions == null) {

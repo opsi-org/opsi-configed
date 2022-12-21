@@ -428,7 +428,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		if (str.equals(""))
 			return null;
 		String[] arr = str.split("\n");
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<>();
 		for (String s : arr)
 			result.add(s);
 		return result;

@@ -1039,7 +1039,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	// json generating
 
 	public static Map<String, Object> createNOMitem(String type) {
-		Map<String, Object> item = new HashMap<String, Object>();
+		Map<String, Object> item = new HashMap<>();
 		item.put("type", type);
 
 		return item;
@@ -1080,10 +1080,10 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	}
 
 	public static ConfigOption createBoolConfig(String key, Boolean value, String description) {
-		java.util.List<Object> defaultValues = new ArrayList<Object>();
+		java.util.List<Object> defaultValues = new ArrayList<>();
 		defaultValues.add(value);
 
-		java.util.List<Object> possibleValues = new ArrayList<Object>();
+		java.util.List<Object> possibleValues = new ArrayList<>();
 		possibleValues.add(true);
 		possibleValues.add(false);
 
@@ -1092,10 +1092,10 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	}
 
 	public static Map<String, Object> createJSONBoolConfig(String key, Boolean value, String description) {
-		java.util.List<Object> defaultValues = new ArrayList<Object>();
+		java.util.List<Object> defaultValues = new ArrayList<>();
 		defaultValues.add(value);
 
-		java.util.List<Object> possibleValues = new ArrayList<Object>();
+		java.util.List<Object> possibleValues = new ArrayList<>();
 		possibleValues.add(true);
 		possibleValues.add(false);
 

@@ -42,7 +42,7 @@ public class DataStubDirectSQL extends DataStubRawData
 		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  clients count ======  " + clients.size());
 
-		java.util.List<String> newClients = new ArrayList<String>(clients);
+		java.util.List<String> newClients = new ArrayList<>(clients);
 
 		if (client2software != null) {
 			logging.info(this, "retrieveSoftwareAuditOnClients client2Software.keySet size " + "   +++  "
@@ -109,7 +109,7 @@ public class DataStubDirectSQL extends DataStubRawData
 						client2software.put(clientId, entries);
 					}
 
-					row = new LinkedList<String>();
+					row = new LinkedList<>();
 
 					for (int i = 0; i < SWAuditClientEntry.DB_COLUMN_NAMES.size(); i++) {
 						row.add(rs.getString(i + 1));

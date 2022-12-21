@@ -43,7 +43,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	public static final String class_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
 	public static final String class_BASE_BOARD = "BASE_BOARD";
 
-	public static final ArrayList<String> hwClassesForByAudit = new ArrayList<String>();
+	public static final ArrayList<String> hwClassesForByAudit = new ArrayList<>();
 	static {
 		hwClassesForByAudit.add(class_COMPUTER_SYSTEM);
 		hwClassesForByAudit.add(class_BASE_BOARD);
@@ -210,7 +210,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					case PopupMenuTrait.POPUP_PDF:
 						logging.info(this, "------------- create report");
 						// TODO letzter scan, Auswahl für den ByAudit-Treiberpfad???
-						HashMap<String, String> metaData = new HashMap<String, String>();
+						HashMap<String, String> metaData = new HashMap<>();
 						metaData.put("header", configed.getResourceValue("PanelHWInfo.createPDF.title"));
 						title = "";
 						if (main.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
@@ -685,7 +685,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private void getLocalizedHashMap() {
 		String loc = "";
 
-		hwOpsiToUI = new HashMap<String, String>();
+		hwOpsiToUI = new HashMap<>();
 
 		for (Object obj : hwConfig) {
 			Map hardwareMap = (Map) obj;

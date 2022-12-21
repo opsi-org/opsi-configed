@@ -95,7 +95,7 @@ public class InstallationStatus {
 		label2state.put("unknown", UNKNOWN);
 		// label2state.put("installing", INSTALLING);
 
-		label2displayLabel = new HashMap<String, String>();
+		label2displayLabel = new HashMap<>();
 		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
 		label2displayLabel.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		label2displayLabel.put("undefined", "undefined");
@@ -105,7 +105,7 @@ public class InstallationStatus {
 		label2displayLabel.put("unknown", "unknown");
 		// label2displayLabel.put("installing", "installing");
 
-		displayLabel2label = new HashMap<String, String>();
+		displayLabel2label = new HashMap<>();
 		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
 		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		displayLabel2label.put("undefined", "undefined");

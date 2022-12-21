@@ -18,7 +18,7 @@ public class FOpsiLicenseMissingText extends FTextArea {
 
 	private static FOpsiLicenseMissingText instance;
 
-	private static ArrayList<String> messages = new ArrayList<String>();
+	private static ArrayList<String> messages = new ArrayList<>();
 
 	public FOpsiLicenseMissingText() {
 		super(Globals.mainFrame, configed.getResourceValue("Permission.modules.title"), false, new String[] { "ok" },

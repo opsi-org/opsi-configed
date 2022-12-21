@@ -127,8 +127,8 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 
 		// derive from optionsMap, opsi 4.0
 		{
-			descriptionsMap = new HashMap<String, String>();
-			defaultsMap = new HashMap<String, Object>();
+			descriptionsMap = new HashMap<>();
+			defaultsMap = new HashMap<>();
 
 			if (optionsMap != null) {
 				for (String key : optionsMap.keySet()) {

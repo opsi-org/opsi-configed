@@ -37,7 +37,7 @@ public class Messages {
 
 	private static String findSelectedLocale(String language, String country) {
 		String result = null;
-		myLocaleCharacteristics = new ArrayList<String>();
+		myLocaleCharacteristics = new ArrayList<>();
 		String characteristics = language + "_" + country;
 
 		myLocaleCharacteristics.add(characteristics);
@@ -143,7 +143,7 @@ public class Messages {
 			messagesEN = ResourceBundleUtf8.getBundle(BUNDLE_NAME, new Locale("en", "US"));
 		else
 			messagesEN = ResourceBundle.getBundle(BUNDLE_NAME, new Locale("en", "US"));
-		myLocaleCharacteristicsEN = new ArrayList<String>();
+		myLocaleCharacteristicsEN = new ArrayList<>();
 		myLocaleCharacteristicsEN.add("en_US");
 		myLocaleCharacteristicsEN.add("en");
 		return messagesEN;
@@ -276,7 +276,7 @@ public class Messages {
 	 * if (existingLocales != null)
 	 * return existingLocales;
 	 * 
-	 * existingLocales = new ArrayList<String>();
+	 * existingLocales = new ArrayList<>();
 	 * 
 	 * try
 	 * {

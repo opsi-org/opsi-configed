@@ -25,7 +25,7 @@ public class LicenceUsableForEntry extends HashMap<String, String> {
 
 	private static List<String> KEYS;
 	static {
-		KEYS = new ArrayList<String>();
+		KEYS = new ArrayList<>();
 		KEYS.add(licenceIdKEY);
 		KEYS.add(licencePoolIdKEY);
 		KEYS.add(licencekeyKEY);

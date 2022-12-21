@@ -44,7 +44,7 @@ public class OpsiPackage implements Comparable {
 
 	public static final ArrayList<String> SERVICE_KEYS; // those which form the primary keys
 	static {
-		SERVICE_KEYS = new ArrayList<String>();
+		SERVICE_KEYS = new ArrayList<>();
 		SERVICE_KEYS.add(SERVICEkeyPRODUCT_ID0);
 		SERVICE_KEYS.add(SERVICEkeyPRODUCT_VERSION);
 		SERVICE_KEYS.add(SERVICEkeyPACKAGE_VERSION);

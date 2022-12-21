@@ -94,7 +94,7 @@ public class FGroupActions extends SecondaryFrame {
 		setGroupLabelling(main.getActivatedGroupModel().getLabel(),
 				"" + main.getActivatedGroupModel().getNumberOfClients());
 
-		associatedClients = new ArrayList<String>(main.getActivatedGroupModel().getAssociatedClients());
+		associatedClients = new ArrayList<>(main.getActivatedGroupModel().getAssociatedClients());
 		setImages();
 	}
 
@@ -106,7 +106,7 @@ public class FGroupActions extends SecondaryFrame {
 
 		String image = (String) comboSelectImage.getSelectedItem();
 
-		ArrayList<String> values = new ArrayList<String>();
+		ArrayList<String> values = new ArrayList<>();
 		values.add(image); // selected from common product property values
 
 		WaitCursor waitCursor = new WaitCursor(this);
@@ -114,7 +114,7 @@ public class FGroupActions extends SecondaryFrame {
 		persist.setCommonProductPropertyValue(main.getActivatedGroupModel().getAssociatedClients(),
 				persist.localImageRestoreProductKey, persist.localImageToRestorePropertyKey, values);
 
-		Map<String, String> changedValues = new HashMap<String, String>();
+		Map<String, String> changedValues = new HashMap<>();
 		changedValues.put(de.uib.opsidatamodel.productstate.ProductState.KEY_actionRequest, "setup");
 		// ActionRequest.getLabel(ActionRequest.SETUP);
 
@@ -233,7 +233,7 @@ public class FGroupActions extends SecondaryFrame {
 
 		/*
 		 * persist.getCommonProductPropertyValues(
-		 * new ArrayList<String> (
+		 * new ArrayList<> (
 		 * main.getActivatedGroupModel().getAssociatedClients()
 		 * ),
 		 * persist.localImageRestoreProductKey,
@@ -243,7 +243,7 @@ public class FGroupActions extends SecondaryFrame {
 		 * 
 		 * 
 		 * //set common property
-		 * ArrayList<String> values = new ArrayList<String>();
+		 * ArrayList<String> values = new ArrayList<>();
 		 * values.add("win2000"); //selected from common product property values
 		 * 
 		 * persist.setCommonProductPropertyValue(
@@ -257,7 +257,7 @@ public class FGroupActions extends SecondaryFrame {
 		 * //set to update
 		 * 
 		 * 
-		 * Map<String, String> changedValues = new HashMap<String, String>();
+		 * Map<String, String> changedValues = new HashMap<>();
 		 * changedValues.put(de.uib.opsidatamodel.productstate.ProductState.
 		 * KEY_actionRequest, "setup");
 		 * //ActionRequest.getLabel(ActionRequest.SETUP);

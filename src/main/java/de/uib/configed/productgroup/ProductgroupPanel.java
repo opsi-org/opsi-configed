@@ -953,12 +953,12 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 						new String[] { configed.getResourceValue("buttonYES"), configed.getResourceValue("buttonNO") },
 						450, 400);
 
-				ArrayList<String> outlines = new ArrayList<String>();
+				ArrayList<String> outlines = new ArrayList<>();
 				outlines.add(configed.getResourceValue("GroupPanel,addAllDependentProducts"));
 				outlines.add("__________");
 				outlines.add("");
 				outlines.addAll(addedElements);
-				fList.setLines(new ArrayList<String>(outlines));
+				fList.setLines(new ArrayList<>(outlines));
 				fList.setVisible(true);
 
 				if (fList.getResult() == 1)
@@ -971,7 +971,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				result = true;
 
 				// modify internal model
-				HashMap group = new HashMap<String, String>();
+				HashMap group = new HashMap<>();
 				group.put("description", newDescription);
 				theData.put(newGroupID, group);
 

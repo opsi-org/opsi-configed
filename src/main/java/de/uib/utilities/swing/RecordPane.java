@@ -201,7 +201,7 @@ public class RecordPane extends JPanel implements KeyListener {
 		testdata.put("field2", "test2");
 		testdata.put("field3", "test3");
 
-		HashMap<String, String> labels = new HashMap<String, String>();
+		HashMap<String, String> labels = new HashMap<>();
 		labels.put("field1", "label1");
 		labels.put("field2", "label2");
 		labels.put("field3", "labelt3");

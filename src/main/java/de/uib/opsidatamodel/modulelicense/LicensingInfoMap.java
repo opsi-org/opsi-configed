@@ -178,7 +178,7 @@ public class LicensingInfoMap {
 		} catch (Exception ex) {
 			logging.error(CLASSNAME + " constructor " + ex);
 		}
-		datesKeys = new ArrayList<String>();
+		datesKeys = new ArrayList<>();
 		configs = configVals;
 		produceConfigs();
 		checksum = produceChecksum();
@@ -201,7 +201,7 @@ public class LicensingInfoMap {
 	}
 
 	private Map<String, Object> produceClientNumbersMap() {
-		HashMap<String, Object> result = new HashMap<String, Object>();
+		HashMap<String, Object> result = new HashMap<>();
 		try {
 			JSONObject client = jOResult.getJSONObject(CLIENT_NUMBERS_INFO);
 			JSONObjectX clientX = new JSONObjectX(client);
@@ -447,12 +447,12 @@ public class LicensingInfoMap {
 	}
 
 	private ArrayList<String> produceDatesKeys() {
-		ArrayList<String> dates = new ArrayList<String>();
+		ArrayList<String> dates = new ArrayList<>();
 
 		try {
 			JSONObject jsonDates = jOResult.getJSONObject(DATES);
 			JSONObjectX datesX = new JSONObjectX(jsonDates);
-			Map<String, Object> datesM = new HashMap<String, Object>();
+			Map<String, Object> datesM = new HashMap<>();
 
 			datesM = (Map<String, Object>) datesX.getMap();
 
@@ -465,7 +465,7 @@ public class LicensingInfoMap {
 
 			Date latest = findLatestChangeDate(dates);
 
-			ArrayList<String> reducedDatesKeys = new ArrayList<String>();
+			ArrayList<String> reducedDatesKeys = new ArrayList<>();
 
 			if (reducedView) {
 
@@ -509,7 +509,7 @@ public class LicensingInfoMap {
 			JSONObject dates = jOResult.getJSONObject(DATES);
 
 			for (String key : datesKeys) {
-				Map<String, Object> moduleToDate = new HashMap<String, Object>();
+				Map<String, Object> moduleToDate = new HashMap<>();
 				Map<String, Map<String, Object>> modulesMapToDate = new HashMap<>();
 
 				// iterate over date entries
@@ -611,7 +611,7 @@ public class LicensingInfoMap {
 			}
 
 			for (String currentModule : shownModules) {
-				Map<String, Object> line = new HashMap<String, Object>();
+				Map<String, Object> line = new HashMap<>();
 				// String currentModule = availableModules.get(i).toString();
 
 				// 1st column

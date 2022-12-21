@@ -353,8 +353,8 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 	protected void generateParts() {
 		super.generateParts();
 
-		theUsers = new LinkedList<String>();
-		theRoles = new LinkedList<String>();
+		theUsers = new LinkedList<>();
+		theRoles = new LinkedList<>();
 
 		theRoles.add(UserConfig.NONE_PROTOTYPE);
 

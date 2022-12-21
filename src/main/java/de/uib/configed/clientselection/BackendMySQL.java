@@ -450,7 +450,7 @@ public class BackendMySQL {
 	 * public List<String> getListFromSQL(String abfrage) {
 	 * 
 	 * 
-	 * ArrayList arrayList = new ArrayList<String>();
+	 * ArrayList arrayList = new ArrayList<>();
 	 * 
 	 * try {
 	 * ResultSet result = stat.executeQuery(abfrage);

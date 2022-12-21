@@ -108,7 +108,7 @@ public class CommandOpsiSetRights extends SSHCommand_Template
 
 	@Override
 	public LinkedList<String> getCommandsRaw() {
-		LinkedList<String> commands_string_list = new LinkedList<String>();
+		LinkedList<String> commands_string_list = new LinkedList<>();
 		for (SSHCommand c : ssh_command) {
 			String comstr = c.getCommandRaw();
 			if (!((comstr == null) || (comstr.trim().equals(""))))
@@ -164,7 +164,7 @@ public class CommandOpsiSetRights extends SSHCommand_Template
 	 */
 	@Override
 	public ArrayList<String> getParameterList() {
-		java.util.ArrayList<String> paramlist = new ArrayList<String>();
+		java.util.ArrayList<String> paramlist = new ArrayList<>();
 		String tmp_1 = SSHCommandFactory.getInstance().getParameterHandler().replacement_default_1;
 		String tmp_2 = SSHCommandFactory.getInstance().getParameterHandler().replacement_default_2;
 		if (command != null)

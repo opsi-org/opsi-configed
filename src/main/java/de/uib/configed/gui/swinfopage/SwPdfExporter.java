@@ -26,7 +26,7 @@ public class SwPdfExporter extends SWExporter {
 
 		logging.debug("------------- create pdf report swaudit for " + clientName);
 
-		HashMap<String, String> metaData = new HashMap<String, String>();
+		HashMap<String, String> metaData = new HashMap<>();
 
 		metaData.put("title", "Client " + clientName);
 		metaData.put("subtitle", scanInfo);

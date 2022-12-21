@@ -285,7 +285,7 @@ public abstract class Serializer {
 
 	/* Create data from the operation recursively. */
 	private Map<String, Object> produceData(SelectOperation operation) {
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		SelectElement element = operation.getElement();
 		if (element == null) {
 			map.put(keyElementName, null);

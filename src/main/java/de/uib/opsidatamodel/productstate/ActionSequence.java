@@ -10,7 +10,7 @@ public class ActionSequence {
 
 	private static void checkCollections() {
 		if (displayLabel2label == null)
-			displayLabel2label = new HashMap<String, String>();
+			displayLabel2label = new HashMap<>();
 
 		for (int i = -100; i <= 100; i++) {
 			String st = "" + i;

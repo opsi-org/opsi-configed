@@ -15,7 +15,7 @@ public class LicencepoolEntry extends TableEntry {
 
 	private static List<String> KEYS;
 	static {
-		KEYS = new ArrayList<String>();
+		KEYS = new ArrayList<>();
 		KEYS.add(idSERVICEKEY);
 		KEYS.add(descriptionKEY);
 	}
@@ -23,7 +23,7 @@ public class LicencepoolEntry extends TableEntry {
 	private static Map<String, String> locale;
 
 	static {
-		locale = new HashMap<String, String>();
+		locale = new HashMap<>();
 	}
 
 	public static List<String> getKeys() {

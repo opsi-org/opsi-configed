@@ -370,7 +370,7 @@ public class PanelCompleteWinProducts extends JPanel
 			JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,
 					configed.getResourceValue("CompleteWinProduct.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
 
-			java.util.List<String> values = new ArrayList<String>();
+			java.util.List<String> values = new ArrayList<>();
 
 			String productKey = fieldProductKey.getText().trim();
 			values.add(productKey);

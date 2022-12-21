@@ -18,7 +18,7 @@ public class ProductState extends HashMap<String, String> {
 		return DEFAULT;
 	}
 
-	public static final List<String> SERVICE_KEYS = new ArrayList<String>();
+	public static final List<String> SERVICE_KEYS = new ArrayList<>();
 	static {// from 30_configed.conf
 		SERVICE_KEYS.add("modificationTime"); // lastStateChange");
 		SERVICE_KEYS.add("productId");
@@ -50,7 +50,7 @@ public class ProductState extends HashMap<String, String> {
 		DB_COLUMNS.put("modificationTime", "TIMESTAMP"); // lastStateChange");
 	}
 
-	public static final List<String> DB_COLUMN_NAMES = new ArrayList<String>(DB_COLUMNS.keySet());
+	public static final List<String> DB_COLUMN_NAMES = new ArrayList<>(DB_COLUMNS.keySet());
 
 	public static final int columnIndexLastStateChange = DB_COLUMN_NAMES.indexOf("modificationTime");
 
@@ -79,7 +79,7 @@ public class ProductState extends HashMap<String, String> {
 
 	protected final Map retrieved;
 
-	public static final List<String> KEYS = new ArrayList<String>();
+	public static final List<String> KEYS = new ArrayList<>();
 	static {
 		KEYS.add(KEY_productId);
 		KEYS.add(KEY_productName);
@@ -107,7 +107,7 @@ public class ProductState extends HashMap<String, String> {
 		KEYS.add(KEY_lastStateChange);
 	}
 
-	public static final Map<String, String> key2servicekey = new HashMap<String, String>();
+	public static final Map<String, String> key2servicekey = new HashMap<>();
 	static {
 		key2servicekey.put(KEY_productId, "productId");
 		// key2servicekey.put(KEY_productName

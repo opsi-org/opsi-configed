@@ -530,7 +530,7 @@ public class PanelSWInfo extends JPanel {
 	public void sendToPDF() {
 		logging.info(this, "------------- create report swaudit for " + hostId + " check");
 
-		HashMap<String, String> metaData = new HashMap<String, String>();
+		HashMap<String, String> metaData = new HashMap<>();
 		MessageFormat mf = new MessageFormat(configed.getResourceValue("PanelSWInfo.jLabel_title"));
 		// metaData.put("header", " " + mf.format( new String[] { hostId,
 		// swRows.getDate()} ));

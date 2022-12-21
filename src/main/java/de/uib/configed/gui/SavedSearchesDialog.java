@@ -24,14 +24,13 @@ public class SavedSearchesDialog extends FEditList {
 	private SelectionManager manager;
 	private List<String> result;
 	private DefaultListModel model;
-	private java.util.List<Object> saveSelValue;
 
 	public SavedSearchesDialog() {
 		setTitle(configed.getResourceValue("SavedSearchesDialog.title") + " (" + Globals.APPNAME + ")");
 		setModal(false);
 		setLeaveOnCommit(false);
 		manager = new SelectionManager(null);
-		result = new LinkedList<String>();
+		result = new LinkedList<>();
 
 		model = new DefaultListModel();
 
@@ -232,8 +231,8 @@ public class SavedSearchesDialog extends FEditList {
 
 		de.uib.opsidatamodel.SavedSearches savedSearches = manager.getSavedSearches();
 		java.util.TreeSet<String> nameSet = new java.util.TreeSet<String>(manager.getSavedSearchesNames());
-		Map<String, String> valueMap = new HashMap<String, String>();
-		Map<String, String> descMap = new HashMap<String, String>();
+		Map<String, String> valueMap = new HashMap<>();
+		Map<String, String> descMap = new HashMap<>();
 
 		for (String ele : nameSet) {
 			model.addElement(ele);

@@ -61,7 +61,7 @@ public class UserSshConfig extends UserConfigModule {
 
 	public static HashMap<String, String> configDescription;
 	static {
-		configDescription = new HashMap<String, String>();
+		configDescription = new HashMap<>();
 		configDescription.put(KEY_SSH_MENU_ACTIVE, KEY_SSH_MENU_ACTIVE_description);
 		configDescription.put(KEY_SSH_CONFIG_ACTIVE, KEY_SSH_CONFIG_ACTIVE_description);
 		configDescription.put(KEY_SSH_COMMANDCONTROL_ACTIVE, KEY_SSH_COMMANDCONTROL_ACTIVE_description);

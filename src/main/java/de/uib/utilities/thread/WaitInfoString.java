@@ -22,7 +22,7 @@ public class WaitInfoString {
 	}
 
 	protected void init(String baseString) {
-		waitInfoList = new ArrayList<String>();
+		waitInfoList = new ArrayList<>();
 
 		waitInfoList.add(baseString + "       ");
 		waitInfoList.add(baseString + " .     ");

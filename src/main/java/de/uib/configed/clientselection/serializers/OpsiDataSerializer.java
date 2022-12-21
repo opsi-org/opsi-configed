@@ -27,7 +27,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 	public OpsiDataSerializer(SelectionManager manager) {
 		super(manager);
 		controller = PersistenceControllerFactory.getPersistenceController();
-		searches = new HashMap<String, String>();
+		searches = new HashMap<>();
 		searchDataVersion = dataVersion;
 	}
 
@@ -36,7 +36,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		HashSet<String> set = new HashSet<String>();
 		set.addAll(searches.keySet());
 		set.addAll(controller.getSavedSearches().keySet());
-		return new LinkedList<String>(set);
+		return new LinkedList<>(set);
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 
 	@Override
 	protected Map<String, Object> decipher(String serialization) throws WrongVersionException {
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		parser = new JsonParser(serialization);
 		try {
 			if (!parser.next() || parser.getPositionType() != JsonParser.PositionType.ObjectBegin)
@@ -181,7 +181,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 	}
 
 	private Map<String, Object> parseObject() {
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 		String name = null;
 		try {
 			while (parser.next()) {
@@ -213,7 +213,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 	}
 
 	private Object parseList(String name) {
-		List<Object> list = new LinkedList<Object>();
+		List<Object> list = new LinkedList<>();
 		boolean done = false;
 		try {
 			while (!done && parser.next()) {

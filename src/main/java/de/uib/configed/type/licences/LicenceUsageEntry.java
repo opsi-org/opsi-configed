@@ -36,7 +36,7 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 
 	private static List<String> KEYS;
 	static {
-		KEYS = new ArrayList<String>();
+		KEYS = new ArrayList<>();
 		KEYS.add(idKEY);
 
 		KEYS.add(licencepoolIdKEY);
@@ -126,7 +126,7 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 	}
 
 	public Map<String, Object> getNOMobject() {
-		Map<String, Object> m = new HashMap<String, Object>();
+		Map<String, Object> m = new HashMap<>();
 		m.put(clientIdKEY, getClientId());
 		m.put(licenceIdKEY, getLicenceId());
 		m.put(licencepoolIdKEY, getLicencepool());

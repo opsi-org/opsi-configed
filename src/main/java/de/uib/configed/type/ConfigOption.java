@@ -34,12 +34,12 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 	protected void build() {
 		// overwrite values
 		if (retrieved == null || retrieved.get("possibleValues") == null)
-			put("possibleValues", new ArrayList<Object>());
+			put("possibleValues", new ArrayList<>());
 		else
 			put("possibleValues", retrieved.get("possibleValues"));
 
 		if (retrieved == null || retrieved.get("defaultValues") == null)
-			put("defaultValues", new ArrayList<Object>());
+			put("defaultValues", new ArrayList<>());
 		else {
 			if (retrieved.get("defaultValues") instanceof org.json.JSONArray) {
 

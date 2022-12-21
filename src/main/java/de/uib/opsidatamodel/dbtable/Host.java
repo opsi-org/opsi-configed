@@ -13,7 +13,7 @@ public class Host extends Table {
 
 	public static java.util.List<String> columns;
 	static {
-		columns = new ArrayList<String>();
+		columns = new ArrayList<>();
 		columns.add("hostId");
 		columns.add("type");
 		columns.add("description");
@@ -56,12 +56,12 @@ public class Host extends Table {
 	public static java.util.List<String> primaryKey;
 	public static String primaryKeyString;
 	static {
-		primaryKey = new ArrayList<String>();
+		primaryKey = new ArrayList<>();
 		primaryKey.add("hostId");
 		primaryKeyString = primaryKey.get(0);
 	}
 
-	private static Map<String, String> key2servicekey = new HashMap<String, String>();
+	private static Map<String, String> key2servicekey = new HashMap<>();
 	static {
 		for (String key : columns) {
 			key2servicekey.put(key, key);

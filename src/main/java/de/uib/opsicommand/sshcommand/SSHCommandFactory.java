@@ -141,7 +141,7 @@ public class SSHCommandFactory {
 	public final String sshhst = "<<!sshhost!>>";
 
 	public final String confidential = "***confidential***";
-	ArrayList<String> createdProducts = new ArrayList<String>();
+	ArrayList<String> createdProducts = new ArrayList<>();
 
 	SSHCommandParameterMethods pmethodHandler = null;
 	SSHConnectionInfo connectionInfo = null;
@@ -215,7 +215,7 @@ public class SSHCommandFactory {
 		// de.uib.opsicommand.sshcommand.CommandOpsiSetRights() );
 		// SSHCommand csetrights = new
 		// de.uib.opsicommand.sshcommand.CommandOpsiSetRights();
-		// LinkedList<String> coms = new LinkedList<String>()
+		// LinkedList<String> coms = new LinkedList<>()
 		// {{
 		// add(csetrights.getCommandRaw());
 		// }};
@@ -441,7 +441,7 @@ public class SSHCommandFactory {
 	 * @return Map<String,Object> command
 	 **/
 	private Map<String, Object> buildCommandMap(SSHCommand_Template c) {
-		Map<String, Object> com = new HashMap<String, Object>();
+		Map<String, Object> com = new HashMap<>();
 		// com.put("id", c.getId());
 		com.put(command_map_menuText, c.getMenuText());
 		com.put(command_map_parentMenuText, c.getParentMenuText());
@@ -458,7 +458,7 @@ public class SSHCommandFactory {
 	 **/
 	public boolean saveSSHCommand(SSHCommand_Template command) {
 		logging.info(this, "saveSSHCommand command " + command.toString());
-		List<Object> jsonObjects = new ArrayList<Object>();
+		List<Object> jsonObjects = new ArrayList<>();
 		try {
 			JSONObject jsComMap = new JSONObject(buildCommandMap(command));
 			JSONArray jsComArrCom = new JSONArray(((SSHMultiCommand) command).getCommandsRaw());
@@ -529,7 +529,7 @@ public class SSHCommandFactory {
 	public void deleteSSHCommandByMenu(String menu) {
 		logging.info(this, "deleteSSHCommand menu " + menu);
 		// return
-		List<String> jsonObjects = new ArrayList<String>();
+		List<String> jsonObjects = new ArrayList<>();
 		jsonObjects.add(menu);
 		if (main.getPersistenceController().deleteSSHCommand(jsonObjects)) {
 			sshcommand_list.remove(getSSHCommandByMenu(menu));

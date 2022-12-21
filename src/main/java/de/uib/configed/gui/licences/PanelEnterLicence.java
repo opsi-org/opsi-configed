@@ -757,7 +757,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	}
 
 	public void saveCurrentLicenceData() {
-		HashMap<String, String> m = new HashMap<String, String>();
+		HashMap<String, String> m = new HashMap<>();
 
 		m.put(LicenceEntry.idKEY, jTextField_licenceID.getText());
 		m.get(LicenceEntry.licenceContractIdKEY);

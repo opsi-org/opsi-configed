@@ -990,7 +990,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			java.util.List<Object> associatedValues = result.get(val1);
 
 			if (associatedValues == null) {
-				associatedValues = new ArrayList<Object>();
+				associatedValues = new ArrayList<>();
 				result.put(val1, associatedValues);
 			}
 

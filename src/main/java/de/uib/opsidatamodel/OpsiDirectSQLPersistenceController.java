@@ -134,7 +134,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 					result.put(client, states1Client);
 				}
 
-				Map<String, String> rowMap = new HashMap<String, String>();
+				Map<String, String> rowMap = new HashMap<>();
 
 				for (String col : ProductState.DB_COLUMN_NAMES) {
 					if (rs.getString(col) == null)
@@ -207,7 +207,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 								rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE)) });
 
 				if (rowsSOFTWARE_ON_CLIENTS.get(ident) == null) {
-					Map<String, String> rowmap = new HashMap<String, String>();
+					Map<String, String> rowmap = new HashMap<>();
 
 					rowmap.put("name", rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.NAME)));
 
@@ -262,7 +262,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 						rs.getString("subversion"), rs.getString("language"), rs.getString("architecture") });
 
 				if (rowsSOFTWARE.get(ident) == null) {
-					Map<String, String> rowmap = new HashMap<String, String>();
+					Map<String, String> rowmap = new HashMap<>();
 
 					rowmap.put("name", rs.getString("name"));
 					rowmap.put("version", rs.getString("version"));
@@ -295,7 +295,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 		int sizeOfAllRemoves = swIdentsOnlyInSoftware.size();
 
-		ArrayList<String> removes = new ArrayList<String>(swIdentsOnlyInSoftware);
+		ArrayList<String> removes = new ArrayList<>(swIdentsOnlyInSoftware);
 
 		final int portionSize = 10;
 

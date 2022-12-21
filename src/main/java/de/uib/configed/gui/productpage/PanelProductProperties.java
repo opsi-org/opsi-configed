@@ -86,9 +86,9 @@ public class PanelProductProperties extends JSplitPane
 		// tableProducts = new JTable();
 		// tableProducts.setDragEnabled(true);
 
-		selectedProducts = new ArrayList<String>();
+		selectedProducts = new ArrayList<>();
 
-		depotsOfPackage = new ArrayList<String>();
+		depotsOfPackage = new ArrayList<>();
 
 		TableUpdateCollection updateCollection = new TableUpdateCollection();
 		GenTableModel model = new GenTableModel(null, mainController.globalProductsTableProvider, -1,
@@ -187,7 +187,7 @@ public class PanelProductProperties extends JSplitPane
 						 * );
 						 */
 						// depotsOfPackage.clear();
-						java.util.List<String> depotsOfPackageAsRetrieved = new ArrayList<String>();
+						java.util.List<String> depotsOfPackageAsRetrieved = new ArrayList<>();
 
 						String versionInfo = "";
 						boolean retrieval = true;
@@ -212,7 +212,7 @@ public class PanelProductProperties extends JSplitPane
 								&& (depotsOfPackageAsRetrieved == null))
 							retrieval = false;
 
-						depotsOfPackage = new LinkedList<String>();
+						depotsOfPackage = new LinkedList<>();
 
 						if (retrieval) {
 							for (String depot : mainController.getPersistenceController().getHostInfoCollections()
@@ -313,7 +313,7 @@ public class PanelProductProperties extends JSplitPane
 			 * Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties,
 			 * java.util.List depots,
 			 * String productId) {
-			 * Map<String, Object> result = new HashMap<String, Object>();
+			 * Map<String, Object> result = new HashMap<>();
 			 * 
 			 * if (depots == null || depots.size() == 0)
 			 * return result;

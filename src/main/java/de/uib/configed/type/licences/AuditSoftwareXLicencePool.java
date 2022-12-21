@@ -32,7 +32,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 	public static final java.util.List<String> ATTRIBUTES;
 	// public static final String[] ATTRIBUTES_asArray;
 	static {
-		ATTRIBUTES = new LinkedList<String>();
+		ATTRIBUTES = new LinkedList<>();
 		ATTRIBUTES.add(LicencepoolEntry.idSERVICEKEY);
 		// ATTRIBUTES.add(SwID);
 
@@ -47,7 +47,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 
 	public static final java.util.List<String> INTERFACED_ATTRIBUTES;
 	static {
-		INTERFACED_ATTRIBUTES = new LinkedList<String>(ATTRIBUTES);
+		INTERFACED_ATTRIBUTES = new LinkedList<>(ATTRIBUTES);
 		INTERFACED_ATTRIBUTES.add(SwID);
 	}
 
@@ -129,7 +129,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 	}
 
 	public static Map<String, String> produceMapFromSWident(String ident) {
-		Map<String, String> m = new HashMap<String, String>();
+		Map<String, String> m = new HashMap<>();
 		if (ident == null) {
 			logging.warning("produceMapFromSWident, ident null ");
 			return null;

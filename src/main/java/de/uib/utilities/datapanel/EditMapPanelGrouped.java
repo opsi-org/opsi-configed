@@ -215,7 +215,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		client = tree.getSelectionPath().getPathComponent(0).toString().trim(); // client name
 		// TODO get Depotname
 		logging.info(this, "------------- create report");
-		HashMap<String, String> metaData = new HashMap<String, String>();
+		HashMap<String, String> metaData = new HashMap<>();
 		metaData.put("header", configed.getResourceValue("EditMapPanelGrouped.createPDF.title"));
 		metaData.put("title", configed.getResourceValue("Client: " + client));
 		metaData.put("subject", "report of table");

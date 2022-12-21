@@ -2764,7 +2764,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		java.util.List<String> valuesToSelect = null;
 		if (selectValues != null)
-			valuesToSelect = new ArrayList<String>(selectValues);
+			valuesToSelect = new ArrayList<>(selectValues);
 
 		// if (valuesToSelect == null)
 		// Set valuesToSelect = selectionPanel.getSelectedSet();
@@ -3535,7 +3535,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected ArrayList<String> getLocalbootProductDisplayFieldsList() {
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<>();
 		Iterator iter = displayFieldsLocalbootProducts.keySet().iterator();
 		while (iter.hasNext()) {
 			String key = (String) iter.next();
@@ -3547,7 +3547,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected ArrayList<String> getNetbootProductDisplayFieldsList() {
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<>();
 		Iterator iter = displayFieldsNetbootProducts.keySet().iterator();
 		while (iter.hasNext()) {
 			String key = (String) iter.next();
@@ -3799,7 +3799,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private Map<String, Object> mergeMaps(ArrayList<Map<String, Object>> collection) {
-		HashMap<String, Object> mergedMap = new HashMap<String, Object>();
+		HashMap<String, Object> mergedMap = new HashMap<>();
 		if (collection == null || collection.size() == 0)
 			return mergedMap;
 
@@ -4094,7 +4094,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected void checkHwInfo() {
 		if (hwInfoClientmap == null)
-			hwInfoClientmap = new HashMap<String, Object>();
+			hwInfoClientmap = new HashMap<>();
 	}
 
 	public void clearHwInfo() {
@@ -4185,7 +4185,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected void clearLogPage() {
-		mainFrame.setLogfilePanel(new HashMap<String, String>());
+		mainFrame.setLogfilePanel(new HashMap<>());
 	}
 
 	public boolean updateLogPage(String logtype) {
@@ -4603,7 +4603,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public java.util.List<String> getAccessedDepots() {
-		ArrayList<String> accessedDepots = new ArrayList<String>();
+		ArrayList<String> accessedDepots = new ArrayList<>();
 		for (String depot : selectedDepotsV) {
 			if (persist.getDepotPermission(depot))
 				accessedDepots.add(depot);
@@ -4617,7 +4617,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public java.util.List<String> getAllProductNames() {
-		java.util.List<String> productnames = new ArrayList<String>(localbootProductnames);
+		java.util.List<String> productnames = new ArrayList<>(localbootProductnames);
 		productnames.addAll(netbootProductnames);
 
 		logging.info(this, "productnames " + productnames);
@@ -4629,7 +4629,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (depots == null)
 			return new String[] {};
 
-		return new ArrayList<String>(depots.keySet()).toArray(new String[] {});
+		return new ArrayList<>(depots.keySet()).toArray(new String[] {});
 	}
 
 	protected void fetchDepots() {
@@ -4652,10 +4652,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		/*
 		 * 
-		 * new LinkedList<String>();
+		 * new LinkedList<>();
 		 * depotNamesLinked.add(myServer);
 		 * 
-		 * Map<String, Object> configServerRecord = new HashMap<String, Object>();
+		 * Map<String, Object> configServerRecord = new HashMap<>();
 		 * configServerRecord.put("id", myServer);
 		 * configServerRecord.put("description", "opsi config server");
 		 * 
@@ -5510,7 +5510,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				fShowReachableInfo.setVisible(true);
 				fShowReachableInfo.glassTransparency(true, 200, 100, 0.005f);
 				fShowReachableInfo.toFront();
-				reachableInfo = new HashMap<String, Object>();
+				reachableInfo = new HashMap<>();
 
 				if (onlySelectedClients) {
 					logging.info(this, "we have sel clients " + selClients.length);
@@ -5573,7 +5573,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		mainFrame.iconButtonSessionInfo.setWaitingState(true);
 
-		sessionInfo = new HashMap<String, String>(); // no old values kept
+		sessionInfo = new HashMap<>(); // no old values kept
 
 		try {
 			// leave the Event dispatching thread
@@ -5872,7 +5872,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 * transferred to persistencecontroller
 	 * protected void setDepotForClients(String[] clients, String depotId)
 	 * {
-	 * Map<String, Object> values = new HashMap<String, Object>();
+	 * Map<String, Object> values = new HashMap<>();
 	 * ArrayList depots = new ArrayList();
 	 * values.put("clientconfig.depot.id", depots);
 	 * ConfigName2ConfigValue config = new ConfigName2ConfigValue(null);
@@ -6033,7 +6033,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			// if (status== setup)
 			// set.status= none
 
-			Map<String, String> productValues = new HashMap<String, String>();
+			Map<String, String> productValues = new HashMap<>();
 			productValues.put("actionRequest", setup);
 
 			for (String clientNames : getSelectedClients()) {
@@ -6063,7 +6063,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			// if (status== setup)
 			// set.status= none
 
-			Map<String, String> productValues = new HashMap<String, String>();
+			Map<String, String> productValues = new HashMap<>();
 			productValues.put("actionRequest", setup);
 
 			persist.updateProductOnClient(clientNames, product, OpsiPackage.TYPE_LOCALBOOT, productValues);
@@ -6413,7 +6413,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 							trans.setCommand(cmd);
 
-							HashMap<String, Object> values = new HashMap<String, Object>();
+							HashMap<String, Object> values = new HashMap<>();
 							values.put("%host%", targetClient);
 							String hostName = targetClient;
 							logging.info(this, " targetClient " + targetClient);
@@ -6487,7 +6487,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			Map<String, String> entries = new LinkedHashMap<String, String>();
 			Map<String, String> tooltips = new LinkedHashMap<String, String>();
-			Map<String, String> rcCommands = new HashMap<String, String>();
+			Map<String, String> rcCommands = new HashMap<>();
 			Map<String, Boolean> commandsEditable = new HashMap<String, Boolean>();
 
 			for (String key : remoteControls.keySet()) {

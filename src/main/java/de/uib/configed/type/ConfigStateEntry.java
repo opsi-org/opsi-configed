@@ -25,7 +25,7 @@ public class ConfigStateEntry extends HashMap<String, Object> {
 
 	}
 
-	public static final List<String> DB_COLUMN_NAMES = new ArrayList<String>();
+	public static final List<String> DB_COLUMN_NAMES = new ArrayList<>();
 	static {
 		for (String key : DB_COLUMNS.keySet()) {
 			DB_COLUMN_NAMES.add(DB_COLUMNS.get(key));

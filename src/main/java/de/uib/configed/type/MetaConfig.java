@@ -60,11 +60,11 @@ public abstract class MetaConfig {
 	 * )
 	 * {
 	 * if (readyObjects == null)
-	 * readyObjects = new ArrayList<Object>();
+	 * readyObjects = new ArrayList<>();
 	 * 
-	 * java.util.List<Object> defaultValues = new ArrayList<Object> ();
+	 * java.util.List<Object> defaultValues = new ArrayList<> ();
 	 * defaultValues.add(propertyName);
-	 * java.util.List<Object> propertyPossibleValues = new ArrayList<Object>();
+	 * java.util.List<Object> propertyPossibleValues = new ArrayList<>();
 	 * propertyPossibleValues.add(propertyName);
 	 * 
 	 * 
@@ -81,9 +81,9 @@ public abstract class MetaConfig {
 	 * readyObjects.add( exec.jsonMap(itemPropertyName) );
 	 * 
 	 * 
-	 * defaultValues = new ArrayList<Object> ();
+	 * defaultValues = new ArrayList<> ();
 	 * defaultValues.add(propertyType.toString());
-	 * propertyPossibleValues = new ArrayList<Object>();
+	 * propertyPossibleValues = new ArrayList<>();
 	 * propertyPossibleValues.add(propertyType.toString());
 	 * 
 	 * Map<String, Object> itemPropertyType

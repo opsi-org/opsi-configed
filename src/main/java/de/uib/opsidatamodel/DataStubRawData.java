@@ -175,9 +175,9 @@ public class DataStubRawData extends DataStubNOM {
 
 		java.util.List<String> newClients = null;
 		if (clients == null)
-			newClients = new ArrayList<String>();
+			newClients = new ArrayList<>();
 		else
-			newClients = new ArrayList<String>(clients);
+			newClients = new ArrayList<>(clients);
 
 		if (hosts == null) {
 			hosts = new HashSet<String>();
@@ -218,7 +218,7 @@ public class DataStubRawData extends DataStubNOM {
 			int counter = 0;
 
 			for (List<String> row : rows) {
-				Map<String, Object> m = new HashMap<String, Object>();
+				Map<String, Object> m = new HashMap<>();
 
 				m.put(ProductPropertyState.PRODUCT_ID, row.get(0));
 				m.put(ProductPropertyState.PROPERTY_ID, row.get(1));
@@ -256,7 +256,7 @@ public class DataStubRawData extends DataStubNOM {
 			 * logging.info(this, "sql " + row.get(i));
 			 * }
 			 * 
-			 * Map<String, Object> m = new HashMap<String, Object>();
+			 * Map<String, Object> m = new HashMap<>();
 			 * 
 			 * m.put( ProductPropertyState.PRODUCT_ID, row.get(0) );
 			 * m.put( ProductPropertyState.PROPERTY_ID, row.get(1) );
@@ -386,12 +386,12 @@ public class DataStubRawData extends DataStubNOM {
 	 * 
 	 * protected void retrieveSoftwareAuditOnClients()
 	 * {
-	 * retrieveSoftwareAuditOnClients(new ArrayList<String>());
+	 * retrieveSoftwareAuditOnClients(new ArrayList<>());
 	 * }
 	 * 
 	 * protected void retrieveSoftwareAuditOnClients(String client)
 	 * {
-	 * java.util.List<String> clients = new ArrayList<String>();
+	 * java.util.List<String> clients = new ArrayList<>();
 	 * clients.add(client);
 	 * retrieveSoftwareAuditOnClients(clients);
 	 * }
@@ -683,7 +683,7 @@ public class DataStubRawData extends DataStubNOM {
 
 				Map<String, Object> configs1Host = hostConfigs.get(hostId);
 				if (configs1Host == null) {
-					configs1Host = new HashMap<String, Object>();
+					configs1Host = new HashMap<>();
 					hostConfigs.put(hostId, configs1Host);
 				}
 
@@ -870,7 +870,7 @@ public class DataStubRawData extends DataStubNOM {
 		for (java.util.List<String> row : rows) {
 			Map<String, Object> rowMap = clientInfo.get(row.get(0));
 			if (rowMap == null) {
-				rowMap = new HashMap<String, Object>();
+				rowMap = new HashMap<>();
 				clientInfo.put(row.get(0), rowMap);
 			}
 
@@ -934,7 +934,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		// set default rows
 		for (String host : persist.getHostInfoCollections().getOpsiHostNames()) {
-			Map<String, Object> nearlyEmptyHwRow = new HashMap<String, Object>();
+			Map<String, Object> nearlyEmptyHwRow = new HashMap<>();
 			nearlyEmptyHwRow.put(Host.idColumn, host);
 
 			String hostDescription = "";

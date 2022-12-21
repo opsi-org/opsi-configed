@@ -88,7 +88,7 @@ public class UserOpsipermission extends UserConfigModule {
 	public static final HashSet<String> LIST_KEYS;
 	public static final HashMap<String, String> CORRESPONDENCE_TO_LIST_KEYS;
 	static {
-		CORRESPONDENCE_TO_LIST_KEYS = new HashMap<String, String>();
+		CORRESPONDENCE_TO_LIST_KEYS = new HashMap<>();
 		LIST_KEYS = new HashSet<String>();
 
 		CORRESPONDENCE_TO_LIST_KEYS.put(PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED,
@@ -121,12 +121,12 @@ public class UserOpsipermission extends UserConfigModule {
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED, false);
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED, false);
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_CREATECLIENT, true);
-		DEFAULT.setValues(PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE, new ArrayList<Object>());
-		DEFAULT.setValues(PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE, new ArrayList<Object>());
-		DEFAULT.setValues(PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE, new ArrayList<Object>());
-		DEFAULT.setPossibleValues(PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE, new ArrayList<Object>());
-		DEFAULT.setPossibleValues(PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE, new ArrayList<Object>());
-		DEFAULT.setPossibleValues(PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE, new ArrayList<Object>());
+		DEFAULT.setValues(PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE, new ArrayList<>());
+		DEFAULT.setValues(PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE, new ArrayList<>());
+		DEFAULT.setValues(PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE, new ArrayList<>());
+		DEFAULT.setPossibleValues(PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE, new ArrayList<>());
+		DEFAULT.setPossibleValues(PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE, new ArrayList<>());
+		DEFAULT.setPossibleValues(PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE, new ArrayList<>());
 	}
 
 	public UserOpsipermission(String uname) {

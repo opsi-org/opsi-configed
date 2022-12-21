@@ -1006,7 +1006,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		lineStyles = new Style[lines.length];
 
 		lineTypes = new int[lines.length];
-		typesList = new ArrayList<String>();
+		typesList = new ArrayList<>();
 
 		StringBlock nextBlock = new StringBlock();
 		StringBlock testBlock = new StringBlock();

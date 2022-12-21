@@ -187,7 +187,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	@Override
 	public void doAction1() {
 		logging.info(this, "doAction1");
-		List<String> clients = new ArrayList<String>();
+		List<String> clients = new ArrayList<>();
 
 		// de.uib.utilities.WaitCursor waitCursor = new
 		// de.uib.utilities.WaitCursor(this);

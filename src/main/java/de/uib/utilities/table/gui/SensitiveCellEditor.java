@@ -264,7 +264,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			 * {
 			 * logging.info(this,
 			 * "getCellEditorValue,  original class instance of java.util.List");
-			 * //ArrayList<String> li = new ArrayList<String>();
+			 * //ArrayList<String> li = new ArrayList<>();
 			 * //li.add("xxx");
 			 * //return li;
 			 * return list;
@@ -274,7 +274,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			if (java.util.List.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
 				// logging.info(this, "getCellEditorValue, original class instance of
 				// java.util.List");
-				// ArrayList<String> li = new ArrayList<String>();
+				// ArrayList<String> li = new ArrayList<>();
 				// li.add("xxx");
 				// return li;
 				return list;

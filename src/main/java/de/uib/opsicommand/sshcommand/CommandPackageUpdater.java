@@ -23,9 +23,9 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 	private String action = " list --repos";
 	private String repo = "";
-	private ArrayList<String> actionlist = new ArrayList<String>();
-	private HashMap<String, String> actionhash = new HashMap<String, String>();
-	private HashMap<String, String> repohash = new HashMap<String, String>();
+	private ArrayList<String> actionlist = new ArrayList<>();
+	private HashMap<String, String> actionhash = new HashMap<>();
+	private HashMap<String, String> repohash = new HashMap<>();
 	private String verbosity = " -v ";
 
 	public CommandPackageUpdater() {

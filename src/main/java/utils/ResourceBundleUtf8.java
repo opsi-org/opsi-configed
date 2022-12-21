@@ -20,7 +20,7 @@ public class ResourceBundleUtf8 {
 
 	private static class PropertyResourceBundleUtf8 extends ResourceBundle {
 
-		private final Map<String, String> valueByKey = new HashMap<String, String>();
+		private final Map<String, String> valueByKey = new HashMap<>();
 
 		private PropertyResourceBundleUtf8(PropertyResourceBundle pBundle) {
 			loadEntries(pBundle, valueByKey);

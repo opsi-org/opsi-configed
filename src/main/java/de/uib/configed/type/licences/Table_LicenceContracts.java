@@ -38,7 +38,7 @@ public class Table_LicenceContracts extends Relation {
 	public static final java.util.List<String> DB_ATTRIBUTES;
 	// public static final String[] ATTRIBUTES_asArray;
 	static {
-		DB_ATTRIBUTES = new LinkedList<String>();
+		DB_ATTRIBUTES = new LinkedList<>();
 		DB_ATTRIBUTES.add(idDBKEY);
 		DB_ATTRIBUTES.add(partnerKEY);
 		DB_ATTRIBUTES.add(conclusionDateKEY);
@@ -50,7 +50,7 @@ public class Table_LicenceContracts extends Relation {
 
 	public static final java.util.List<String> INTERFACED_ATTRIBUTES;
 	static {
-		INTERFACED_ATTRIBUTES = new LinkedList<String>();
+		INTERFACED_ATTRIBUTES = new LinkedList<>();
 		INTERFACED_ATTRIBUTES.add(idDBKEY);
 		INTERFACED_ATTRIBUTES.add(partnerKEY);
 		INTERFACED_ATTRIBUTES.add(conclusionDateKEY);
@@ -63,7 +63,7 @@ public class Table_LicenceContracts extends Relation {
 	public static final java.util.List<String> ALLOWED_ATTRIBUTES;
 	// public static final String[] ATTRIBUTES_asArray;
 	static {
-		ALLOWED_ATTRIBUTES = new LinkedList<String>(DB_ATTRIBUTES);
+		ALLOWED_ATTRIBUTES = new LinkedList<>(DB_ATTRIBUTES);
 		ALLOWED_ATTRIBUTES.add(idKEY);
 		ALLOWED_ATTRIBUTES.add(identKEY);
 		ALLOWED_ATTRIBUTES.add(typeKEY);

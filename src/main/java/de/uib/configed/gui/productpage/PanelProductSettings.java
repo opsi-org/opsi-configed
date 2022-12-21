@@ -201,7 +201,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		initTopPane();
 
-		selectedProducts = new ArrayList<String>();
+		selectedProducts = new ArrayList<>();
 
 		paneProducts = new JScrollPane();
 

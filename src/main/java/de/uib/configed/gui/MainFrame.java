@@ -1999,7 +1999,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		JTable jTable = new JTable(tm);
 		// logging.debug("Gruppe in createPDF: " + statusPane.getGroupName());
 		try {
-			HashMap<String, String> metaData = new HashMap<String, String>();
+			HashMap<String, String> metaData = new HashMap<>();
 			String title = configed.getResourceValue("MainFrame.ClientList");
 			// group: " + statusPane.getGroupName()
 			// jTable;
@@ -3806,7 +3806,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		Map<String, String> changedClientInfo = changedClientInfos.get(client);
 
 		if (changedClientInfo == null) {
-			changedClientInfo = new HashMap<String, String>();
+			changedClientInfo = new HashMap<>();
 			changedClientInfos.put(client, changedClientInfo);
 		}
 
@@ -4439,7 +4439,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		final Boolean activate = wantActive;
 
 		/*
-		 * final ArrayList<String> shutdown_value = new ArrayList<String>();
+		 * final ArrayList<String> shutdown_value = new ArrayList<>();
 		 * shutdown_value.add("off");
 		 * 
 		 * logging.info(this, "handleInstallByShutdownChange, old shutdown_value " +
@@ -4598,7 +4598,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 			panelSWInfo.setKindOfExport(showSoftwareLog_MultiClientReport.wantsKindOfExport());
 
-			java.util.List<String> clientsWithoutScan = new ArrayList<String>();
+			java.util.List<String> clientsWithoutScan = new ArrayList<>();
 
 			for (String client : main.getSelectedClients()) {
 				Map<String, Map> tableData = main.getPersistenceController().retrieveSoftwareAuditData(client);

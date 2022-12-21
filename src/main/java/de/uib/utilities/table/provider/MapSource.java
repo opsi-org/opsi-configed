@@ -39,7 +39,7 @@ public class MapSource implements TableSource
 
 	static final Map<String, Object> class2defaultValue;
 	static {
-		class2defaultValue = new HashMap<String, Object>();
+		class2defaultValue = new HashMap<>();
 		class2defaultValue.put("java.lang.Boolean", false);
 		class2defaultValue.put("java.lang.String", "");
 	}
