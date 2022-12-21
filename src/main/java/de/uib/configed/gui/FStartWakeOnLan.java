@@ -322,27 +322,11 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 				.addComponent(spinnerMinute, Globals.TIME_SPINNER_WIDTH, Globals.TIME_SPINNER_WIDTH,
 						Globals.TIME_SPINNER_WIDTH));
 
-		spinnerHour.addChangeListener(new javax.swing.event.ChangeListener() {
-			@Override
-			public void stateChanged(javax.swing.event.ChangeEvent e) {
-				// logging.info(this, "stateChanged " + spinnerHour.getValue() + " " +
-				// spinnerHour.getValue().getClass().getName());
+		spinnerHour.addChangeListener(changeEvent -> produceTargetTime(Calendar.HOUR_OF_DAY,
+				Integer.valueOf(spinnerHour.getValue().toString())));
 
-				produceTargetTime(Calendar.HOUR_OF_DAY, Integer.valueOf(spinnerHour.getValue().toString()));
-
-			}
-		});
-
-		spinnerMinute.addChangeListener(new javax.swing.event.ChangeListener() {
-			@Override
-			public void stateChanged(javax.swing.event.ChangeEvent e) {
-				// logging.info(this, "stateChanged " + spinnerMinute.getValue() + " " +
-				// spinnerMinute.getValue().getClass().getName());
-
-				produceTargetTime(Calendar.MINUTE, Integer.valueOf(spinnerMinute.getValue().toString()));
-
-			}
-		});
+		spinnerMinute.addChangeListener(changeEvent -> produceTargetTime(Calendar.MINUTE,
+				Integer.valueOf(spinnerMinute.getValue().toString())));
 
 		JPanel panelSpinnerDelay = new JPanel();
 		panelSpinnerDelay.setOpaque(false);

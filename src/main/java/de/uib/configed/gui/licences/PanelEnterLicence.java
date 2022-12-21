@@ -22,7 +22,6 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import de.uib.configed.Globals;
@@ -118,46 +117,38 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	}
 
 	protected void defineListeners() {
-		panelLicencecontracts.getListSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				// Ignore extra messages.
-				if (e.getValueIsAdjusting())
-					return;
+		panelLicencecontracts.getListSelectionModel().addListSelectionListener(listSelectionEvent -> {
+			// Ignore extra messages.
+			if (e.getValueIsAdjusting())
+				return;
 
-				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+			ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 
-				if (lsm.isSelectionEmpty()) {
-					// logging.debug(this, "no rows selected");
-				} else {
-					int selectedRow = lsm.getMinSelectionIndex();
-					String keyValue = panelLicencecontracts.getValueAt(selectedRow, 0).toString();
+			if (lsm.isSelectionEmpty()) {
+				// logging.debug(this, "no rows selected");
+			} else {
+				int selectedRow = lsm.getMinSelectionIndex();
+				String keyValue = panelLicencecontracts.getValueAt(selectedRow, 0).toString();
 
-					if (jTextField_licenceContract.isEnabled())
-						jTextField_licenceContract.setText(keyValue);
-				}
+				if (jTextField_licenceContract.isEnabled())
+					jTextField_licenceContract.setText(keyValue);
 			}
 		});
 
-		licencePoolSelectionListener = new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				if (e.getValueIsAdjusting())
-					return;
+		panelLicencepools.addListSelectionListener(listSelectionEvent -> {
+			if (listSelectionEvent.getValueIsAdjusting())
+				return;
 
-				int i = panelLicencepools.getSelectedRow();
+			int i = panelLicencepools.getSelectedRow();
 
-				selectedLicencePool = "";
+			selectedLicencePool = "";
 
-				if (i > -1)
-					selectedLicencePool = panelLicencepools.getValueAt(i, 0).toString();
+			if (i > -1)
+				selectedLicencePool = panelLicencepools.getValueAt(i, 0).toString();
 
-				panelLicencepools
-						.setTitle(configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool")
-								+ ": " + selectedLicencePool);
-			}
-		};
-		panelLicencepools.addListSelectionListener(licencePoolSelectionListener);
+			panelLicencepools.setTitle(configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool")
+					+ ": " + selectedLicencePool);
+		});
 
 	}
 

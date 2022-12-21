@@ -144,27 +144,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 		buttonSetValuesFromPackage.setPreferredSize(new Dimension(15, 30));
 
-		buttonSetValuesFromPackage.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				productPropertiesPanel.resetDefaults();
-
-				// productPropertiesPanel.setValues(productpropertiesDefaultsMap);
-
-				/*
-				 * // test
-				 * logging.debug(" action performed on buttonSetValuesFromPackage ");
-				 * HashMap testdata = new HashMap();
-				 * testdata.put("test", "3");
-				 * testdata.put("loop", "200");
-				 * testdata.put("addressbook_name", "2x");
-				 * 
-				 * productPropertiesPanel.setValues(testdata);
-				 */
-
-			}
-		});
+		buttonSetValuesFromPackage.addActionListener(actionEvent -> productPropertiesPanel.resetDefaults());
 
 		JPanel panelTop = new JPanel();
 		javax.swing.GroupLayout layoutEditProperties = new javax.swing.GroupLayout(panelTop);

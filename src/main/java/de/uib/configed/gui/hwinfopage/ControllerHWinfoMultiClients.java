@@ -36,7 +36,6 @@ import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 
 public class ControllerHWinfoMultiClients {
@@ -177,15 +176,10 @@ public class ControllerHWinfoMultiClients {
 
 				// tableProvider
 				// new de.uib.utilities.table.provider.DefaultTableProvider(sqlSource),
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
-					@Override
-					public Map retrieveMap() {
-						logging.info(this, "retrieveMap: getClient2HwRows");
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
+					logging.info(this, "retrieveMap: getClient2HwRows");
 
-						Map<String, Map<String, Object>> hwInfos = persist.getClient2HwRows(hosts);
-
-						return hwInfos;
-					}
+					return (Map) persist.getClient2HwRows(hosts);
 				})),
 
 				// keycol
@@ -245,49 +239,31 @@ public class ControllerHWinfoMultiClients {
 
 		buttonReload.setPreferredSize(Globals.smallButtonDimension);
 
-		buttonReload.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				logging.info(this, "action performed " + e);
-				rebuildModel();
-				/*
-				 * persist.configOptionsRequestRefresh();
-				 * persist.client2HwRowsRequestRefresh();
-				 * initModel();
-				 * panel.reset(); //we apply filter
-				 * //panel.getTableModel().fireTableStructureChanged();
-				 * //panel.reload();
-				 * //logging.info(this, "after reload: columns " +
-				 * panel.getTableModel().getColumnNames() );
-				 */
-			}
+		buttonReload.addActionListener(actionEvent -> {
+			logging.info(this, "action performed " + actionEvent);
+			rebuildModel();
 		});
 
 		// JPanel testpanel = new JPanel();
 		// testpanel.add( new JLabel ("hallo welt") );
 
-		buttonConfigureColumns.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				logging.info(this, "action performed " + e);
+		buttonConfigureColumns.addActionListener(actionEvent -> {
+			logging.info(this, "action performed " + actionEvent);
 
-				ControllerHWinfoColumnConfiguration controllerHWinfoColumnConfiguration = new ControllerHWinfoColumnConfiguration(
-						main, persist);
-				if (fTable == null || ((FPanel) fTable).isLeft()) {
-					fTable = new FPanel("hardware classes / database columns",
-							controllerHWinfoColumnConfiguration.panel,
-							// testpanel,
-							true);
+			ControllerHWinfoColumnConfiguration controllerHWinfoColumnConfiguration = new ControllerHWinfoColumnConfiguration(
+					main, persist);
+			if (fTable == null || ((FPanel) fTable).isLeft()) {
+				fTable = new FPanel("hardware classes / database columns", controllerHWinfoColumnConfiguration.panel,
+						// testpanel,
+						true);
 
-					fTable.setSize(new java.awt.Dimension(Globals.mainContainer.getSize().width - 50,
-							Globals.mainContainer.getSize().height / 2));
-				}
-
-				fTable.centerOnParent();
-
-				fTable.setVisible(true);
-
+				fTable.setSize(new java.awt.Dimension(Globals.mainContainer.getSize().width - 50,
+						Globals.mainContainer.getSize().height / 2));
 			}
+
+			fTable.centerOnParent();
+
+			fTable.setVisible(true);
 		});
 
 		buttonCopySelection = new JButton("", Globals.createImageIcon("images/memorize_selection.png", ""));

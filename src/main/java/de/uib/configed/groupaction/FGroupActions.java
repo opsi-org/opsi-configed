@@ -12,8 +12,6 @@
 
 package de.uib.configed.groupaction;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -173,28 +171,14 @@ public class FGroupActions extends SecondaryFrame {
 		JButton buttonSetup = new JButton(configed.getResourceValue("FGroupAction.buttonSetup"));
 		buttonSetup.setToolTipText(configed.getResourceValue("FGroupAction.buttonSetup.tooltip"));
 
-		buttonSetup.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// logging.info(this, "actionPerformed");
-				replay();
-			}
-		});
+		buttonSetup.addActionListener(actionEvent -> replay());
 
 		IconButton buttonReload = new IconButton(configed.getResourceValue("FGroupAction.buttonReload"),
 				"images/reload16.png", "images/reload16_over.png", "images/reload16_disabled.png", true);
 		// buttonReload.setPreferredSize(new Dimension(60, 40));
 		// buttonReload.setBackground(Globals.backgroundLightGrey);
 
-		buttonReload.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// logging.info(this, "actionPerformed");
-				reload();
-			}
-		}
-
-		);
+		buttonReload.addActionListener(actionEvent -> reload());
 
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);

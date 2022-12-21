@@ -152,7 +152,7 @@ public class CSVFormat {
 
 		private boolean containsEmptyFields() {
 			String tmp = line.replace(String.valueOf(stringSeparator), "");
-			return Arrays.stream(tmp.split(String.valueOf(fieldSeparator))).anyMatch(field -> field.isEmpty());
+			return Arrays.stream(tmp.split(String.valueOf(fieldSeparator))).anyMatch(String::isEmpty);
 		}
 
 		private boolean containsFieldsWithEmbeddedQuotes() {

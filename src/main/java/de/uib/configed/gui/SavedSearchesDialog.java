@@ -77,7 +77,6 @@ public class SavedSearchesDialog extends FEditList {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.debug(this, "actionPerformed");
-				// does not find the selected entry
 				removeSelectedEntry();
 			}
 		});
@@ -115,24 +114,16 @@ public class SavedSearchesDialog extends FEditList {
 		// remove.setIcon(Globals.createImageIcon("images/remove16.png",
 		// ""));
 		remove.setFont(Globals.defaultFont);
-		remove.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				logging.debug(this, "------------- remove action");
-				removeSelectedEntry();
-			}
+		remove.addActionListener(actionEvent -> {
+			logging.debug(this, "------------- remove action");
+			removeSelectedEntry();
 		});
 		popup.add(remove);
 
 		JMenuItem edit = new JMenuItemFormatted();
 		edit.setText(de.uib.configed.configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
 		edit.setFont(Globals.defaultFont);
-		edit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				editSearch(visibleList.getSelectedValue().toString());
-			}
-		});
+		edit.addActionListener(actionEvent -> editSearch(visibleList.getSelectedValue().toString()));
 		popup.add(edit);
 
 	}
@@ -161,7 +152,7 @@ public class SavedSearchesDialog extends FEditList {
 		if (e.getValueIsAdjusting())
 			return;
 
-		buttonCommit.setEnabled(getSelectedList().size() > 0);
+		buttonCommit.setEnabled(!getSelectedList().isEmpty());
 	}
 	// =====
 

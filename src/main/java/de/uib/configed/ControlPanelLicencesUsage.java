@@ -17,7 +17,6 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
@@ -122,12 +121,9 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 		MapTableUpdateItemFactory updateItemFactoryLicencesUsage = new MapTableUpdateItemFactory(modelLicencesUsage,
 				columnNames, classNames, 0);
 		modelLicencesUsage = new GenTableModel(updateItemFactoryLicencesUsage,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
-					@Override
-					public Map retrieveMap() {
-						persist.licencesUsageRequestRefresh();
-						return persist.getLicencesUsage();
-					}
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
+					persist.licencesUsageRequestRefresh();
+					return (Map) persist.getLicencesUsage();
 				})), -1, new int[] { 0, 1, 2 }, thePanel.panelUsage, updateCollection);
 		updateItemFactoryLicencesUsage.setSource(modelLicencesUsage);
 

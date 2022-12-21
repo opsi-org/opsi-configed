@@ -128,7 +128,6 @@ import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.ExternalSource;
-import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.provider.RowsProvider;
 import de.uib.utilities.table.provider.TableProvider;
@@ -376,23 +375,28 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// ==================================================================
 	// TabController Interface
+	@Override
 	public Enum getStartTabState() {
 		return LicencesTabStatus.LICENCEPOOL;
 	}
 
+	@Override
 	public TabClient getClient(Enum state) {
 		return licencesPanels.get(state);
 	}
 
+	@Override
 	public void addClient(Enum status, TabClient panel) {
 		licencesPanels.put((LicencesTabStatus) status, panel);
 		licencesFrame.addTab(status, licencesPanelsTabNames.get(status), (JComponent) panel);
 	}
 
+	@Override
 	public void removeClient(Enum status) {
 		licencesFrame.removeTab(status);
 	}
 
+	@Override
 	public Enum reactToStateChangeRequest(Enum newState) {
 		logging.debug(this, "reactToStateChangeRequest( newState: " + (LicencesTabStatus) newState + "), current state "
 				+ licencesStatus);
@@ -415,6 +419,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return licencesStatus;
 	}
 
+	@Override
 	public boolean exit() {
 		if (licencesFrame != null) {
 			licencesFrame.setVisible(false);// !
@@ -862,10 +867,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		globalProductsTableProvider = new DefaultTableProvider(
 				new ExternalSource(columnNames, classNames, new RowsProvider() {
+					@Override
 					public void requestReload() {
 						persist.productDataRequestRefresh();
 					}
 
+					@Override
 					public Vector<Vector<Object>> getRows() {
 						return persist.getProductRows();
 					}
@@ -1556,6 +1563,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	// ListSelectionListener for client list
+	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		// logging.info(this,"----ListSelectionEvent on client list");
 
@@ -1601,6 +1609,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			depotsListSelectionListener = new ListSelectionListener() {
 				private int counter = 0;
 
+				@Override
 				public void valueChanged(ListSelectionEvent e) {
 					counter++;
 					logging.info(this, "============ depotSelection event count  " + counter);
@@ -1779,6 +1788,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		mainFrame.setVisible(true);
 
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					Thread.sleep(1);
@@ -1839,11 +1849,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		classNames.add("java.lang.String");
 
 		licencePoolTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
-					public Map retrieveMap() {
-						return persist.getLicencepools();
-					}
-				}));
+				new RetrieverMapSource(columnNames, classNames, () -> (Map) persist.getLicencepools()));
 
 		persist.retrieveRelationsAuditSoftwareToLicencePools();
 
@@ -1857,11 +1863,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		classNames.add("java.lang.String");
 
 		licenceOptionsTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
-					public Map retrieveMap() {
-						return persist.getRelationsSoftwareL2LPool();
-					}
-				}));
+				new RetrieverMapSource(columnNames, classNames, () -> persist.getRelationsSoftwareL2LPool()));
 
 		columnNames = new Vector<>();
 		columnNames.add("licenseContractId");
@@ -1879,12 +1881,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		classNames.add("java.lang.String");
 
 		licenceContractsTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
-					public Map retrieveMap() {
-						// logging.debug(this, " --------- getLicenceContracts in retrieve Map");
-						return persist.getLicenceContracts();
-					}
-				}));
+				new RetrieverMapSource(columnNames, classNames, () -> (Map) persist.getLicenceContracts()));
 
 		columnNames = new Vector<>();
 		columnNames.add(LicenceEntry.idKEY);
@@ -1903,11 +1900,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		classNames.add("java.lang.String");
 
 		softwarelicencesTableProvider = new DefaultTableProvider(
-				new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
-					public Map retrieveMap() {
-						return persist.getSoftwareLicences();
-					}
-				}));
+				new RetrieverMapSource(columnNames, classNames, () -> (Map) persist.getSoftwareLicences()));
 
 		// panelAssignToLPools
 		licencesPanelsTabNames.put(LicencesTabStatus.LICENCEPOOL,
@@ -3933,7 +3926,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						configed.getResourceValue("PanelHostProperties.SelectHost"),
 						new DefaultComboBoxModel(new Vector(depotPropertiesForPermittedDepots.keySet())),
 						depotPropertiesForPermittedDepots, hostUpdateCollection,
-						persist.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT
+						PersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT
 
 				);
 
@@ -4012,7 +4005,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						"  " + myServer + " (configuration server)", (Map) additionalConfigs.get(0),
 						persist.getConfigOptions(), additionalConfigs, additionalconfigurationUpdateCollection, true,
 						// editableOptions
-						persist.PROPERTYCLASSES_SERVER);
+						PersistenceController.PROPERTYCLASSES_SERVER);
 
 				// waitCursor.stop();
 			}
@@ -4798,6 +4791,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (mainFrame != null) {
 			// by starting a thread the visual marker of changing in progress works
 			SwingUtilities.invokeLater(new Thread() {
+				@Override
 				public void run() {
 					mainFrame.setChangedDepotSelectionActive(true);
 					refreshClientListKeepingGroup();
@@ -4820,6 +4814,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (mainFrame != null) {
 			mainFrame.setChangedDepotSelectionActive(false);
 			SwingUtilities.invokeLater(new Thread() {
+				@Override
 				public void run() {
 					reloadData();
 				}
@@ -5050,6 +5045,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 */
 	public class GeneralDataChangedKeeper extends DataChangedKeeper {
 
+		@Override
 		public void dataHaveChanged(Object source) {
 			super.dataHaveChanged(source);
 			logging.info(this, "dataHaveChanged from " + source);
@@ -5632,32 +5628,29 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 							}
 
 							// finishing the task
-							SwingUtilities.invokeLater(new Runnable() {
+							SwingUtilities.invokeLater(() -> {
+								logging.info(this, "when sessioninfoFinished");
+								mainFrame.iconButtonSessionInfo.setWaitingState(false);
 
-								public void run() {
-									logging.info(this, "when sessioninfoFinished");
-									mainFrame.iconButtonSessionInfo.setWaitingState(false);
+								mainFrame.iconButtonSessionInfo.setEnabled(true);
 
-									mainFrame.iconButtonSessionInfo.setEnabled(true);
+								// update column
+								if (persist.getHost_displayFields().get("clientSessionInfo")) {
+									javax.swing.table.AbstractTableModel model = selectionPanel.getTableModel();
 
-									// update column
-									if (persist.getHost_displayFields().get("clientSessionInfo")) {
-										javax.swing.table.AbstractTableModel model = selectionPanel.getTableModel();
+									int col = model.findColumn(configed
+											.getResourceValue("ConfigedMain.pclistTableModel.clientSessionInfo"));
 
-										int col = model.findColumn(configed
-												.getResourceValue("ConfigedMain.pclistTableModel.clientSessionInfo"));
+									for (int row = 0; row < model.getRowCount(); row++) {
+										String clientId = (String) model.getValueAt(row, 0);
 
-										for (int row = 0; row < model.getRowCount(); row++) {
-											String clientId = (String) model.getValueAt(row, 0);
-
-											model.setValueAt(sessionInfo.get(clientId), row, col);
-										}
-
-										model.fireTableDataChanged();
-
-										setSelectedClientsOnPanel(selClients);
-
+										model.setValueAt(sessionInfo.get(clientId), row, col);
 									}
+
+									model.fireTableDataChanged();
+
+									setSelectedClientsOnPanel(selClients);
+
 								}
 							});
 						}
@@ -6402,6 +6395,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private class MyDialogRemoteControl extends FDialogRemoteControl {
 		public void appendLog(final String s) {
 			SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					if (s == null)
 						loggingArea.setText("");
@@ -6430,6 +6424,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					final String targetClient = getSelectedClients()[j];
 
 					new Thread() {
+						@Override
 						public void run() {
 							String cmd = getValue(selected);
 							// remoteControls.get(selected).getCommand();

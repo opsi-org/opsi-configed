@@ -1,7 +1,5 @@
 package de.uib.configed.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -192,13 +190,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		buttonRemoveAllAssignments.setPreferredSize(Globals.shortButtonDimension);
 		labelRemoveAllAssignments = new JLabel(
 				configed.getResourceValue("FSoftwarename2LicencePool.labelRemoveAllAssignments"));
-		buttonRemoveAllAssignments.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// panelSWxLicencepool.cancel();
-				panelSWxLicencepool.setDataChanged(setSWxColTo(valNoLicencepool));
-			}
-		});
+		buttonRemoveAllAssignments
+				.addActionListener(actionEvent -> panelSWxLicencepool.setDataChanged(setSWxColTo(valNoLicencepool)));
 
 		buttonSetAllAssignmentsToGloballySelectedPool = new JButton();
 		buttonSetAllAssignmentsToGloballySelectedPool.setEnabled(false);
@@ -206,13 +199,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		buttonSetAllAssignmentsToGloballySelectedPool.setIcon(Globals.createImageIcon("images/list-add-14.png", ""));
 		labelSetAllAssignmentsToGloballySelectedPool = new JLabel(
 				configed.getResourceValue("FSoftwarename2LicencePool.labelSetAllAssignmentsToGloballySelectedPool"));
-		buttonSetAllAssignmentsToGloballySelectedPool.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// panelSWxLicencepool.cancel();
-				panelSWxLicencepool.setDataChanged(setSWxColTo(globalLicencePool));
-			}
-		});
+		buttonSetAllAssignmentsToGloballySelectedPool
+				.addActionListener(actionEvent -> panelSWxLicencepool.setDataChanged(setSWxColTo(globalLicencePool)));
 
 		buttonSetAllAssignmentsToPoolFromSelectedRow = new JButton();
 		buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(false);
@@ -228,14 +216,9 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 																																												// row:
 																																												// ")
 																																												// ;
-		buttonSetAllAssignmentsToPoolFromSelectedRow.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// panelSWxLicencepool.cancel();
-				panelSWxLicencepool.setDataChanged(
-						setSWxColTo((String) panelSWxLicencepool.getValueAt(panelSWxLicencepool.getSelectedRow(), 1)));
-			}
-		});
+		buttonSetAllAssignmentsToPoolFromSelectedRow
+				.addActionListener(actionEvent -> panelSWxLicencepool.setDataChanged(
+						setSWxColTo((String) panelSWxLicencepool.getValueAt(panelSWxLicencepool.getSelectedRow(), 1))));
 
 		JPanel panelAction = new JPanel();
 		panelAction.setBackground(Globals.backgroundWhite);

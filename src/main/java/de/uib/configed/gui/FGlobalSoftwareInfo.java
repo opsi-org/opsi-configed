@@ -8,8 +8,6 @@ import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.TableModelListener;
 
 /**
  * FGlobalSoftwareInfo
@@ -26,7 +24,6 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
@@ -110,16 +107,10 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 
 		panelGlobalSoftware.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		panelGlobalSoftware.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				if (e.getValueIsAdjusting())
-					return;
-
+		panelGlobalSoftware.addListSelectionListener(listSelectionEvent -> {
+			if (!listSelectionEvent.getValueIsAdjusting())
 				jButton1.setEnabled(panelGlobalSoftware.getTheTable().getSelectedRowCount() > 0);
-			}
 		});
-
 	}
 
 	public void setTableModel(GenTableModel model) {
@@ -127,19 +118,16 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		// test
 		{
 			this.model = new GenTableModel(null, // no updates
-					new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
-						@Override
-						public Map retrieveMap() {
-							persist.installedSoftwareInformationRequestRefresh();
-							return persist.getInstalledSoftwareInformation();
-						}
+					new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
+						persist.installedSoftwareInformationRequestRefresh();
+						return (Map) persist.getInstalledSoftwareInformation();
 					})
 					// ,
 
 					),
 
 					keyCol, // columnNames.indexOf("ID")
-					new int[] {}, (TableModelListener) panelGlobalSoftware, updateCollection);
+					new int[] {}, panelGlobalSoftware, updateCollection);
 		} else
 			this.model = model;
 

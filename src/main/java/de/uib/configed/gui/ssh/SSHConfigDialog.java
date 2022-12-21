@@ -266,10 +266,10 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			lbl_host = new JLabel();
 			lbl_host.setText(configed.getResourceValue("SSHConnection.Config.jLabelHost"));
 
-			cb_host = new JComboBox<String>();
+			cb_host = new JComboBox<>();
 			String host = connectionInfo.getHost();
 			if (host == null)
-				host = ConfigedMain.HOST;
+				host = configedMain.HOST;
 			cb_host.addItem(host);
 
 			PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
@@ -700,7 +700,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			if (!cb_useDefault_state)
 			// state has changed
 			{
-				connectionInfo.setUserData(ConfigedMain.HOST, ConfigedMain.USER, ConfigedMain.PASSWORD,
+				connectionInfo.setUserData(configedMain.HOST, ConfigedMain.USER, ConfigedMain.PASSWORD,
 						SSHConnect.portSSH);
 			}
 

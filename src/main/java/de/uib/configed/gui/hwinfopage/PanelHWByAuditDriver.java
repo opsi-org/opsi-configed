@@ -1,8 +1,5 @@
 package de.uib.configed.gui.hwinfopage;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
@@ -76,12 +73,7 @@ public class PanelHWByAuditDriver extends JPanel {
 		buttonUploadDrivers.setSelectedIcon(Globals.createImageIcon("images/upload2product.png", ""));
 		buttonUploadDrivers.setToolTipText(configed.getResourceValue("PanelHWInfo.uploadDrivers"));
 
-		buttonUploadDrivers.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				startDriverUploadFrame();
-			}
-		});
+		buttonUploadDrivers.addActionListener(actionEvent -> startDriverUploadFrame());
 
 		selectionCOMPUTER_SYSTEN = new JRadioButton("", true);
 		selectionBASE_BOARD = new JRadioButton("");

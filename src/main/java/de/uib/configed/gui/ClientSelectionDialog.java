@@ -273,16 +273,14 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				buttonRestart.setEnabled(false);
 				Cursor saveCursor = dialog.getCursor();
 				dialog.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						setReloadRequested();
-						// main.callClientSelectionDialog();
-						// logging.info(this, "actionPerformed ready");
-						buttonReload.setEnabled(true);
-						buttonRestart.setEnabled(true);
-						dialog.setCursor(saveCursor);
-					}
+				SwingUtilities.invokeLater(() -> {
+					setReloadRequested();
+					// main.callClientSelectionDialog();
+					// logging.info(this, "actionPerformed ready");
+					buttonReload.setEnabled(true);
+					buttonRestart.setEnabled(true);
+					dialog.setCursor(saveCursor);
+
 				});
 			}
 		});
@@ -301,15 +299,13 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				buttonReload.setEnabled(false);
 				dialog.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						setReloadRequested();
-						// main.callClientSelectionDialog();
-						// logging.info(this, "actionPerformed ready");
-						main.callNewClientSelectionDialog();
-						// we lose all components of this dialog, there is nothing to reset
-					}
+				SwingUtilities.invokeLater(() -> {
+					setReloadRequested();
+					// main.callClientSelectionDialog();
+					// logging.info(this, "actionPerformed ready");
+					main.callNewClientSelectionDialog();
+					// we lose all components of this dialog, there is nothing to reset
+
 				});
 
 			}

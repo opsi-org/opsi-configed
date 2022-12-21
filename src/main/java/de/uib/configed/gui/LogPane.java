@@ -510,24 +510,20 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		comboType.setEnabled(false);
 		comboType.setEditable(false);
 
-		comboType.addActionListener(new ActionListener() {
+		comboType.addActionListener(actionEvent -> {
+			int oldSelTypeIndex = selTypeIndex;
+			Object selType = comboType.getSelectedItem();
+			if (selType == null || selType.equals(defaultType)) {
+				showTypeRestricted = false;
+				selTypeIndex = -1;
+			} else {
+				showTypeRestricted = true;
+				selTypeIndex = typesList.indexOf(selType);
+			}
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int oldSelTypeIndex = selTypeIndex;
-				Object selType = comboType.getSelectedItem();
-				if (selType == null || selType.equals(defaultType)) {
-					showTypeRestricted = false;
-					selTypeIndex = -1;
-				} else {
-					showTypeRestricted = true;
-					selTypeIndex = typesList.indexOf(selType);
-				}
-
-				if (selTypeIndex != oldSelTypeIndex) {
-					buildDocument();
-					highlighter.removeAllHighlights();
-				}
+			if (selTypeIndex != oldSelTypeIndex) {
+				buildDocument();
+				highlighter.removeAllHighlights();
 			}
 		});
 
@@ -789,15 +785,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		} catch (BadLocationException e) {
 		}
 		jTextPane.setDocument(document);
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				// jTextPane.setDocument(document); //if called here, ths cursor location is
-				// lost
-				// logging.debug(this, "buildDocument reset cursor");
-				jTextPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-			}
-		});
+		SwingUtilities.invokeLater(() -> jTextPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)));
 		// logging.debug(this, "Text set" );
 	}
 

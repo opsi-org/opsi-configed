@@ -14,7 +14,6 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelListener;
 
 import de.uib.configed.gui.FGlobalSoftwareInfo;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
@@ -30,7 +29,6 @@ import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.TableModelFilterCondition;
 import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
@@ -528,12 +526,9 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		MapTableUpdateItemFactory updateItemFactoryProductId2LPool = new MapTableUpdateItemFactory(modelProductId2LPool,
 				columnNames, classNames, 0);
 		modelProductId2LPool = new GenTableModel(updateItemFactoryProductId2LPool,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
-					@Override
-					public Map retrieveMap() {
-						return persist.getRelationsProductId2LPool();
-					}
-				})), -1, new int[] { 0, 1 }, thePanel.panelProductId2LPool, updateCollection);
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
+						() -> (Map) persist.getRelationsProductId2LPool())),
+				-1, new int[] { 0, 1 }, thePanel.panelProductId2LPool, updateCollection);
 		updateItemFactoryProductId2LPool.setSource(modelProductId2LPool);
 
 		tableModels.add(modelProductId2LPool);
@@ -581,9 +576,8 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		col = thePanel.panelProductId2LPool.getColumnModel().getColumn(1);
 		JComboBox<String> comboLP1 = new JComboBox<>();
 		comboLP1.setFont(Globals.defaultFontBig);
-		col.setCellEditor(new de.uib.utilities.table.gui.AdaptingCellEditor(comboLP1, (row, column) -> {
-			return new DefaultComboBoxModel<>(new Vector<>(persist.getProductIds()));
-		}));
+		col.setCellEditor(new de.uib.utilities.table.gui.AdaptingCellEditor(comboLP1,
+				(row, column) -> new DefaultComboBoxModel<>(new Vector<>(persist.getProductIds()))));
 
 		// updates
 		thePanel.panelProductId2LPool.setUpdateController(new MapItemsUpdateController(thePanel.panelProductId2LPool,
@@ -624,16 +618,14 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 		boolean withRowCounter = false;
 		modelWindowsSoftwareIds = new GenTableModel(null,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
-					@Override
-					public Map retrieveMap() {
-						persist.installedSoftwareInformationRequestRefresh();
-						return persist.getInstalledSoftwareInformationForLicensing();
-					}
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
+					persist.installedSoftwareInformationRequestRefresh();
+					return (Map) persist.getInstalledSoftwareInformationForLicensing();
+
 				}, withRowCounter)
 				// ,
 				), windowsSoftwareId_KeyCol /* columnNames.indexOf("ID") */, // key column
-				new int[] {}, (TableModelListener) thePanel.panelRegisteredSoftware, updateCollection);
+				new int[] {}, thePanel.panelRegisteredSoftware, updateCollection);
 
 		logging.info(this, "modelWindowsSoftwareIds row count " + modelWindowsSoftwareIds.getRowCount());
 		tableModels.add(modelWindowsSoftwareIds);

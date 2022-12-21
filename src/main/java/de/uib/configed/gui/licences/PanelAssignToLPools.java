@@ -168,12 +168,9 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		buttonShowAssignedNotExisting
 				.setToolTipText(configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing.tooltip"));
 		buttonShowAssignedNotExisting.setFont(Globals.defaultFont);
-		buttonShowAssignedNotExisting.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				fMissingSoftwareInfo.centerOn(Globals.frame1);
-				fMissingSoftwareInfo.setVisible(true);
-			}
+		buttonShowAssignedNotExisting.addActionListener(actionEvent -> {
+			fMissingSoftwareInfo.centerOn(Globals.frame1);
+			fMissingSoftwareInfo.setVisible(true);
 		});
 
 		labelSupplementSimilar = new JLabel(

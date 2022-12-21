@@ -207,26 +207,17 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		comboChooseDepot.setEnabled(false);
 
-		comboChooseDepot.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				selectedDepot = "" + comboChooseDepot.getSelectedItem();
-				logging.info(this, "actionPerformed  depot selected " + selectedDepot);
-
-				// buildSambaTarget(selectedDepot);
-
-			}
+		comboChooseDepot.addActionListener(actionEvent -> {
+			selectedDepot = "" + comboChooseDepot.getSelectedItem();
+			logging.info(this, "actionPerformed  depot selected " + selectedDepot);
 		});
 
 		comboChooseWinProduct = new JComboBox();
 		comboChooseWinProduct.setSize(Globals.textfieldDimension);
-		comboChooseWinProduct.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				winProduct = "" + comboChooseWinProduct.getSelectedItem();
-				logging.info(this, "winProduct  " + winProduct);
-				produceTarget();
-			}
+		comboChooseWinProduct.addActionListener(actionEvent -> {
+			winProduct = "" + comboChooseWinProduct.getSelectedItem();
+			logging.info(this, "winProduct  " + winProduct);
+			produceTarget();
 		});
 
 		chooserDriverPath = new JFileChooser();
@@ -343,18 +334,15 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		JLabel label_createDrivers = new JLabel(configed.getResourceValue("PanelDriverUpload.labelCreateDriverLinks"));
 		btnCreateDrivers = new JButton("", Globals.createImageIcon("images/run-build-file.png", ""));
 		btnCreateDrivers.setToolTipText(configed.getResourceValue("PanelDriverUpload.btnCreateDrivers.tooltip"));
-		btnCreateDrivers.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new SSHConnectExec(main,
-						// Empty_Command(String id, String c, String mt, boolean ns)
-						((SSHCommand) new Empty_Command("create_driver_links.py", // id not needed
-								"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem()
-										+ "/create_driver_links.py ",
-								"create_driver_links.py", // menutext - not needed
-								true // need sudo ?
-				)));
-			}
+		btnCreateDrivers.addActionListener(actionEvent -> {
+			new SSHConnectExec(main,
+					// Empty_Command(String id, String c, String mt, boolean ns)
+					new Empty_Command("create_driver_links.py", // id not needed
+							"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem()
+									+ "/create_driver_links.py ",
+							"create_driver_links.py", // menutext - not needed
+							true // need sudo ?
+			));
 		});
 
 		JLabel labelTargetPath = new JLabel(configed.getResourceValue("CompleteWinProducts.labelTargetPath"));
@@ -367,18 +355,15 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		final JPanel thisPanel = this;
 
-		buttonCallSelectDriverFiles.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int returnVal = chooserDriverPath.showOpenDialog(thisPanel);
+		buttonCallSelectDriverFiles.addActionListener(actionEvent -> {
+			int returnVal = chooserDriverPath.showOpenDialog(thisPanel);
 
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					String pathInstallFiles = chooserDriverPath.getSelectedFile().getPath();
-					fieldDriverPath.setText(pathInstallFiles);
-					fieldDriverPath.setCaretPosition(pathInstallFiles.length());
-				} else {
-					fieldDriverPath.setText("");
-				}
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				String pathInstallFiles = chooserDriverPath.getSelectedFile().getPath();
+				fieldDriverPath.setText(pathInstallFiles);
+				fieldDriverPath.setCaretPosition(pathInstallFiles.length());
+			} else {
+				fieldDriverPath.setText("");
 			}
 		});
 
@@ -386,7 +371,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 				configed.getResourceValue("PanelDriverUpload.byAuditDriverLocationPath"));
 		JLabel labelDriverLocationType = new JLabel(configed.getResourceValue("PanelDriverUpload.type"));
 
-		radioButtons = new Vector<RadioButtonIntegrationType>();
+		radioButtons = new Vector<>();
 
 		buttonStandard = new RadioButtonIntegrationType(configed.getResourceValue("PanelDriverUpload.type.standard"),
 				FileX.getLocalsystemPath(SmbConnect.DIRECTORY_DRIVERS));
