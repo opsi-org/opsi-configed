@@ -342,12 +342,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		buttonCallChooserPackage.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallChooserPackage.setToolTipText(configed.getResourceValue("InstallOpsiPackage.chooserPackage"));
 
-		buttonCallChooserPackage.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				choosePackage();
-			}
-		});
+		buttonCallChooserPackage.addActionListener(actionEvent -> choosePackage());
 
 		/*
 		 * buttonMountShare = new JButton("",
@@ -384,12 +379,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		buttonCallChooserServerpath.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallChooserServerpath.setToolTipText(configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
 
-		buttonCallChooserServerpath.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				chooseServerpath();
-			}
-		});
+		buttonCallChooserServerpath.addActionListener(actionEvent -> chooseServerpath());
 
 		fieldTmpDir = new JTextField(defaultTmpDir) {
 			@Override

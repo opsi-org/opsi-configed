@@ -322,17 +322,12 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		//,Globals.createImageIcon( "images/checked_void.png", "")
 				, extendedView);
 
-		checkExtendedView.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				extendedView = checkExtendedView.isSelected();
-				logging.info(this, "extendedView " + extendedView + ", i.e. reduced " + !extendedView);
-				LicensingInfoMap.setReduced(!extendedView);
-				LicensingInfoMap.requestRefresh();
-				thePanel.reload();
-
-			}
+		checkExtendedView.addActionListener(actionEvent -> {
+			extendedView = checkExtendedView.isSelected();
+			logging.info(this, "extendedView " + extendedView + ", i.e. reduced " + !extendedView);
+			LicensingInfoMap.setReduced(!extendedView);
+			LicensingInfoMap.requestRefresh();
+			thePanel.reload();
 		});
 
 		/*

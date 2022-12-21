@@ -1,9 +1,5 @@
 package de.uib.configed.gui.ssh;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.Vector;
 
 import javax.swing.GroupLayout;
@@ -25,7 +21,6 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	private JLabel lbl_on = new JLabel();
 	private JLabel lbl_updateInstalled = new JLabel();
 	private JLabel lbl_setupInstalled = new JLabel();
-	private JLabel lbl_overwriteExisting = new JLabel();
 	private JLabel lbl_properties = new JLabel();
 	private JLabel lbl_verbosity = new JLabel();
 
@@ -61,14 +56,11 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 		btn_depotselection = new JButton(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager.depotselection"));
-		btn_depotselection.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				initDepots();
-				if (btn_depotselection != null)
-					fDepotList.centerOn(btn_depotselection);
-				fDepotList.setVisible(true);
-			}
+		btn_depotselection.addActionListener(actionEvent -> {
+			initDepots();
+			if (btn_depotselection != null)
+				fDepotList.centerOn(btn_depotselection);
+			fDepotList.setVisible(true);
 		});
 
 		tf_selecteddepots = new JTextField();
@@ -79,42 +71,25 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		for (int i = 0; i < 5; i++)
 			cb_verbosity.addItem(i);
 		cb_verbosity.setSelectedItem(1);
-		cb_verbosity.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				// changeVerbosity();
-			}
-		});
 
 		cb_properties = new JCheckBox();
 		cb_properties.setSelected(true);
 		lbl_updateInstalled.setText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.updateInstalled"));
 		checkb_updateInstalled = new JCheckBox();
-		checkb_updateInstalled.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				// changeUpdateInstalled();
-			}
-		});
 
 		lbl_setupInstalled.setText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.setupInstalled"));
 		checkb_setupInstalled = new JCheckBox();
-		checkb_setupInstalled.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				// changeSetupInstalled();
-			}
-		});
+
 	}
 
 	public void setFDepotList(JDialog dia) {
 		fDepotList = new FDepotselectionList(dia) {
 			@Override
 			public void setListData(Vector<? extends String> v) {
-				if (v == null || v.size() == 0) {
-					setListData(new Vector<String>());
+				if (v == null || v.isEmpty()) {
+					setListData(new Vector<>());
 					jButton1.setEnabled(false);
 				} else {
 					super.setListData(v);

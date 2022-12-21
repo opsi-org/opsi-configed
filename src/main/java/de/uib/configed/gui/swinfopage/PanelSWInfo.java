@@ -1,7 +1,5 @@
 package de.uib.configed.gui.swinfopage;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -248,12 +246,7 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates = new JCheckBox("", withMsUpdates);
 		checkWithMsUpdates.setForeground(Globals.blue);
-		checkWithMsUpdates.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				setWithMsUpdatesValue(checkWithMsUpdates.isSelected());
-			}
-		});
+		checkWithMsUpdates.addItemListener(itemEvent -> setWithMsUpdatesValue(checkWithMsUpdates.isSelected()));
 		setWithMsUpdatesValue(withMsUpdates);
 
 		modelSWInfo.chainFilter(FILTER_MS_UPDATES2, new TableModelFilter(filterConditionWithMsUpdates2));
@@ -263,12 +256,7 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates2 = new JCheckBox("", withMsUpdates2);
 		checkWithMsUpdates2.setForeground(Globals.blue);
-		checkWithMsUpdates2.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				setWithMsUpdatesValue2(checkWithMsUpdates2.isSelected());
-			}
-		});
+		checkWithMsUpdates2.addItemListener(itemEvent -> setWithMsUpdatesValue2(checkWithMsUpdates2.isSelected()));
 		setWithMsUpdatesValue2(withMsUpdates2);
 
 		subPanelTitle = new JPanel();

@@ -1,8 +1,6 @@
 package de.uib.utilities.table;
 
 import java.awt.HeadlessException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -88,12 +86,7 @@ public abstract class ExportTable {
 				configed.getResourceValue("PanelGenEditTable.exportTableAsCSV")
 		// , Globals.createImageIcon("images/acrobat_reader16.png", "")
 		);
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				execute(null, false);
-			}
-		});
+		menuItem.addActionListener(actionEvent -> execute(null, false));
 		return menuItem;
 
 	}
@@ -108,13 +101,10 @@ public abstract class ExportTable {
 				configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV")
 		// , Globals.createImageIcon("images/acrobat_reader16.png", "")
 		);
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				boolean onlySelected = true;
-				logging.debug(this, "menuItemExportSelectedCSV " + onlySelected);
-				execute(null, onlySelected);
-			}
+		menuItem.addActionListener(actionEvent -> {
+			boolean onlySelected = true;
+			logging.debug(this, "menuItemExportSelectedCSV " + onlySelected);
+			execute(null, onlySelected);
 		});
 		return menuItem;
 	}

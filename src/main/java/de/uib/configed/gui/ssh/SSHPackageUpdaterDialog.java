@@ -1,10 +1,7 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 // import javax.swing.border.*;
 // import javax.swing.event.*;
 // import java.io.*;
@@ -55,7 +52,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		SSHConnectExec ssh = new SSHConnectExec();
 		String result = "";
 		try {
-			result = ssh.exec((SSHCommand) command, false /* =>without gui */ );
+			result = ssh.exec(command, false /* =>without gui */ );
 		} catch (Exception e) {
 			logging.error(this, "ssh execution error", e);
 
@@ -66,7 +63,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 			command.setRepos(null);
 		} else {
 			String[] lines = result.split("\n");
-			HashMap<String, String> repos = new HashMap<String, String>();
+			HashMap<String, String> repos = new HashMap<>();
 			for (int i = 1; i < lines.length; i++) {
 				String repostatus = lines[i].split(":")[0];
 
@@ -101,39 +98,23 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		btn_doAction.setText(configed.getResourceValue("SSHConnection.buttonExec"));
 		btn_doAction.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly()))
-			btn_doAction.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					logging.info(this, "btn_doAction pressed");
-					doAction1();
-				}
+			btn_doAction.addActionListener(actionEvent -> {
+				logging.info(this, "btn_doAction pressed");
+				doAction1();
 			});
 
 		btn_close = new JButton();
 		buttonPanel.add(btn_close);
 		btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 		btn_close.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
-		btn_close.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				cancel();
-			}
-		});
+		btn_close.addActionListener(actionEvent -> cancel());
 		setComponentsEnabled(!Globals.isGlobalReadOnly());
 
 		cb_actions = new JComboBox(command.getActionsText());
-		cb_actions.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if ((String) e.getItem() == configed
-						.getResourceValue("SSHConnection.command.opsipackageupdater.action.list")) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						cb_repos.setEnabled(false);
-					} else {
-						cb_repos.setEnabled(true);
-					}
-				}
-			}
+		cb_actions.addItemListener(itemEvent -> {
+			if (((String) itemEvent.getItem())
+					.equals(configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.list")))
+				cb_repos.setEnabled(itemEvent.getStateChange() != ItemEvent.SELECTED);
 		});
 
 		if (command.getRepos() != null) {

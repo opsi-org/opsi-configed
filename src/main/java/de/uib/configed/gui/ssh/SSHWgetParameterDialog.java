@@ -1,12 +1,8 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -14,11 +10,11 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
+import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -28,12 +24,10 @@ import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandWget;
 import de.uib.opsicommand.sshcommand.SSHCommand;
-import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.utilities.logging.logging;
 
 public class SSHWgetParameterDialog extends FGeneralDialog {
-	private GroupLayout layout;
 	private JPanel inputPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
 
@@ -54,12 +48,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	private JComboBox cb_verbosity;
 	private JTextField tf_freeInput;
 
-	private final int frameWidth = 800;
-	private final int frameHeight = 400;
-
-	private ConfigedMain main;
 	CommandWget commandWget = new CommandWget();
-	private SSHCommandFactory factory = SSHCommandFactory.getInstance();
 	SSHCompletionComboButton completion = new SSHCompletionComboButton();
 	private SSHWgetAuthenticationPanel wgetAuthPanel;
 
@@ -69,7 +58,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 
 	public SSHWgetParameterDialog(ConfigedMain m) {
 		super(null, configed.getResourceValue("SSHConnection.ParameterDialog.wget.title"), false);
-		main = m;
+
 		wgetAuthPanel = new SSHWgetAuthenticationPanel();
 		init();
 		initLayout();
@@ -77,7 +66,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		setSize(Globals.dialogFrameDefaultSize);
 		this.centerOn(Globals.mainFrame);
 		this.setBackground(Globals.backLightBlue);
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 		if (Globals.isGlobalReadOnly())
 			setComponentsEnabled_RO(false);
@@ -154,12 +143,9 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			for (int i = 0; i < 5; i++)
 				cb_verbosity.addItem(i);
 			cb_verbosity.setSelectedItem(1);
-			cb_verbosity.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					commandWget.setVerbosity(((int) cb_verbosity.getSelectedItem()));
-					updateCommand();
-				}
+			cb_verbosity.addItemListener(itemEvent -> {
+				commandWget.setVerbosity(((int) cb_verbosity.getSelectedItem()));
+				updateCommand();
 			});
 		}
 		{
@@ -195,37 +181,22 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			btn_help.setText(configed.getResourceValue("SSHConnection.buttonParameterInfo"));
 			btn_help.setToolTipText(configed.getResourceValue("SSHConnection.buttonParameterInfo.tooltip"));
 			buttonPanel.add(btn_help);
-			btn_help.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					doActionHelp();
-				}
-			});
+			btn_help.addActionListener(actionEvent -> doActionHelp());
 
 			btn_execute = new JButton();
 			buttonPanel.add(btn_execute);
 			btn_execute.setText(configed.getResourceValue("SSHConnection.buttonExec"));
 			btn_execute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
-			btn_execute.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if (!(Globals.isGlobalReadOnly())) {
-						doAction1();
-					}
-				}
+			btn_execute.addActionListener(actionEvent -> {
+				if (!(Globals.isGlobalReadOnly()))
+					doAction1();
 			});
 
 			btn_close = new JButton();
 			buttonPanel.add(btn_close);
 			btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 			btn_close.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
-			btn_close.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// doAction2();
-					cancel();
-				}
-			});
+			btn_close.addActionListener(actionEvent -> cancel());
 		}
 		{
 			lbl_fullCommand.setText("wget ");

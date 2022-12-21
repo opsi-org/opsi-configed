@@ -2,8 +2,6 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -325,12 +323,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			// configed.getResourceValue("SSHConnection.buttonHelp") );
 			// btn_copy_selected_clients.setText(configed.getResourceValue("SSHConnection.buttonHelp"));
 			// buttonPanel.add(btn_copy_selected_clients);
-			btn_copy_selected_clients.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					doCopySelectedClients();
-				}
-			});
+			btn_copy_selected_clients.addActionListener(actionEvent -> doCopySelectedClients());
 
 			btn_help = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
 			btn_help.setToolTipText(configed.getResourceValue("SSHConnection.buttonHelp"));

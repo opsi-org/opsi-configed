@@ -1,8 +1,5 @@
 package de.uib.utilities.swing;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -72,12 +69,9 @@ public class JTextHideField extends javax.swing.JPanel {
 		invisibleField.setEnabled(false);
 
 		button = new JButton(Globals.createImageIcon("images/eye_blue_open.png", "show"));
-		button.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (!multiValue)
-					toggleHidden();
-			}
+		button.addActionListener(actionEvent -> {
+			if (!multiValue)
+				toggleHidden();
 		});
 		button.setToolTipText(de.uib.configed.configed.getResourceValue("JTextHideField.toggleHide"));
 

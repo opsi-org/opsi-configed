@@ -9,7 +9,6 @@
 package de.uib.utilities.table.gui;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -713,12 +712,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			case POPUP_SAVE:
 				menuItemSave = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.saveData"));
 				menuItemSave.setEnabled(false);
-				menuItemSave.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						commit();
-					}
-				});
+				menuItemSave.addActionListener(actionEvent -> commit());
 				addPopupItem(menuItemSave);
 
 				break;
@@ -726,12 +720,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			case POPUP_CANCEL:
 				menuItemCancel = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.abandonNewData"));
 				menuItemCancel.setEnabled(false);
-				menuItemCancel.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						cancel();
-					}
-				});
+				menuItemCancel.addActionListener(actionEvent -> cancel());
 				addPopupItem(menuItemCancel);
 
 				break;
@@ -743,12 +732,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				// menuItemReload.setPreferredSize(Globals.buttonDimension);
 				// menuItemReload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 				// does not work
-				menuItemReload.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						reload();
-					}
-				});
+				menuItemReload.addActionListener(actionEvent -> reload());
 				if (popupIndex > 1)
 					popupMenu.addSeparator();
 
@@ -759,13 +743,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			case POPUP_SORT_AGAIN:
 				menuItemSortAgain = new JMenuItemFormatted(
 						configed.getResourceValue("PanelGenEditTable.sortAsConfigured"));
-				menuItemSortAgain.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						sortAgainAsConfigured();
-
-					}
-				});
+				menuItemSortAgain.addActionListener(actionEvent -> sortAgainAsConfigured());
 				// if (sortDescriptor != null)
 				addPopupItem(menuItemSortAgain);
 
@@ -775,21 +753,15 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				menuItemDeleteRelation = new JMenuItemFormatted(
 						configed.getResourceValue("PanelGenEditTable.deleteRow"));
 				menuItemDeleteRelation.setEnabled(false);
-				menuItemDeleteRelation.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						if (getSelectedRowCount() == 0) {
-							JOptionPane.showMessageDialog(Globals.mainContainer,
-									configed.getResourceValue("PanelGenEditTable.noRowSelected"),
-									configed.getResourceValue("ConfigedMain.Licences.hint.title"),
-									JOptionPane.OK_OPTION);
+				menuItemDeleteRelation.addActionListener(actionEvent -> {
+					if (getSelectedRowCount() == 0) {
+						JOptionPane.showMessageDialog(Globals.mainContainer,
+								configed.getResourceValue("PanelGenEditTable.noRowSelected"),
+								configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 
-							return;
-						} else {
-							if (deleteAllowed)
-								tableModel.deleteRow(getSelectedRowInModelTerms());
-						}
-					}
+						return;
+					} else if (deleteAllowed)
+						tableModel.deleteRow(getSelectedRowInModelTerms());
 				});
 				addPopupItem(menuItemDeleteRelation);
 
@@ -797,14 +769,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			case POPUP_PRINT:
 				menuItemPrint = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.print"));
-				menuItemPrint.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						try {
-							theTable.print();
-						} catch (Exception ex) {
-							logging.error("Printing error " + ex);
-						}
+				menuItemPrint.addActionListener(actionEvent -> {
+					try {
+						theTable.print();
+					} catch (Exception ex) {
+						logging.error("Printing error " + ex);
 					}
 				});
 
@@ -821,12 +790,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 				menuItemFloatingCopy = new JMenuItemFormatted(
 						configed.getResourceValue("PanelGenEditTable.floatingCopy"));
-				menuItemFloatingCopy.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						floatExternal();
-					}
-				});
+				menuItemFloatingCopy.addActionListener(actionEvent -> floatExternal());
 
 				if (popupIndex > 1)
 					popupMenu.addSeparator();
@@ -849,30 +813,27 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			case POPUP_PDF:
 				menuItemPDF = new JMenuItemFormatted(configed.getResourceValue("FGeneralDialog.pdf"),
 						Globals.createImageIcon("images/acrobat_reader16.png", ""));
-				menuItemPDF.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						try {
-							HashMap<String, String> metaData = new HashMap<String, String>();
-							metaData.put("header", title);
-							metaData.put("subject", "report of table");
-							metaData.put("keywords", "");
+				menuItemPDF.addActionListener(actionEvent -> {
+					try {
+						HashMap<String, String> metaData = new HashMap<>();
+						metaData.put("header", title);
+						metaData.put("subject", "report of table");
+						metaData.put("keywords", "");
 
-							ExporterToPDF pdfExportTable = new ExporterToPDF(theTable);
-							pdfExportTable.setMetaData(metaData);
-							pdfExportTable.setPageSizeA4_Landscape();
-							pdfExportTable.execute(null, true);
+						ExporterToPDF pdfExportTable = new ExporterToPDF(theTable);
+						pdfExportTable.setMetaData(metaData);
+						pdfExportTable.setPageSizeA4_Landscape();
+						pdfExportTable.execute(null, true);
 
-							/*
-							 * old pdf exporting
-							 * tableToPDF = new DocumentToPdf (null, metaData); // no filename, metadata
-							 * tableToPDF.createContentElement("table", theTable);
-							 * tableToPDF.setPageSizeA4_Landscape(); //
-							 * tableToPDF.toPDF(); // create Pdf
-							 **/
-						} catch (Exception ex) {
-							logging.error("PDF printing error " + ex);
-						}
+						/*
+						 * old pdf exporting
+						 * tableToPDF = new DocumentToPdf (null, metaData); // no filename, metadata
+						 * tableToPDF.createContentElement("table", theTable);
+						 * tableToPDF.setPageSizeA4_Landscape(); //
+						 * tableToPDF.toPDF(); // create Pdf
+						 **/
+					} catch (Exception ex) {
+						logging.error("PDF printing error " + ex);
 					}
 				});
 				/*

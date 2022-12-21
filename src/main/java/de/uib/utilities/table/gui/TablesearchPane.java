@@ -472,78 +472,51 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		buildMenuSearchfield();
 
 		popupSearch.setText("Suchen");
-		popupSearch.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				searchTheRow(selectMode);
-			}
-		});
+		popupSearch.addActionListener(actionEvent -> searchTheRow(selectMode));
 
 		// popupSearchNext.setText("Zum nächsten Treffer ( F3 ) ");
 		popupSearchNext.setText(configed.getResourceValue("SearchPane.popup.searchnext"));
 
-		popupSearchNext.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				searchNextRow(selectMode);
-			}
-		});
+		popupSearchNext.addActionListener(actionEvent -> searchNextRow(selectMode));
 
 		// popupNewSearch.setText("Suche neu starten");
 		popupNewSearch.setText(configed.getResourceValue("SearchPane.popup.searchnew"));
 
-		popupNewSearch.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// filtermark.setSelected(null);
-				targetModel.setFiltered(false);
-				if (resetFilterModeOnNewSearch)
-					setFilteredMode(false);
-				searchTheRow(0, selectMode);
-			}
+		popupNewSearch.addActionListener(actionEvent -> {
+			// filtermark.setSelected(null);
+			targetModel.setFiltered(false);
+			if (resetFilterModeOnNewSearch)
+				setFilteredMode(false);
+			searchTheRow(0, selectMode);
 		});
 
 		// popupMarkHits.setText("Mark all hits ( F5 ) ");
 		popupMarkHits.setText(configed.getResourceValue("SearchPane.popup.markall"));
 
-		popupMarkHits.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (!fieldSearch.getText().equals(""))
-					markAll();
-			}
+		popupMarkHits.addActionListener(actionEvent -> {
+			if (!fieldSearch.getText().equals(""))
+				markAll();
 		});
 
 		// popupMarkAndFilter.setText("Mark and filter ( F8 ) ");
 		popupMarkAndFilter.setText(configed.getResourceValue("SearchPane.popup.markAndFilter"));
 
-		popupMarkAndFilter.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				switchFilterOff();
-				markAllAndFilter();
-				switchFilterOn();
-			}
+		popupMarkAndFilter.addActionListener(actionEvent -> {
+			switchFilterOff();
+			markAllAndFilter();
+			switchFilterOn();
 		});
 
 		// popupEmptySearchfield.setText("Suchfeld leeren");
 		popupEmptySearchfield.setText(configed.getResourceValue("SearchPane.popup.empty"));
 
-		popupEmptySearchfield.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				fieldSearch.setText("");
-			}
-		});
+		popupEmptySearchfield.addActionListener(actionEvent -> fieldSearch.setText(""));
 
 		// fieldSearch.setComponentPopupMenu(searchMenu);
 
-		fieldSearch.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (searchInputType == SearchInputType.PROGRESSIVE)
-					searchNextRow(selectMode);
-			}
+		fieldSearch.addActionListener(actionEvent -> {
+			if (searchInputType == SearchInputType.PROGRESSIVE)
+				searchNextRow(selectMode);
 		});
 
 		// comboSearchFields = new JComboBox(new String[]{"alle Felder"});

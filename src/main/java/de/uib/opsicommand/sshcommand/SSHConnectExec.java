@@ -2,7 +2,6 @@ package de.uib.opsicommand.sshcommand;
 
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
@@ -518,17 +517,15 @@ public class SSHConnectExec extends SSHConnect {
 				final OutputStream out = channel.getOutputStream();
 				final InputStream in = channel.getInputStream();
 				channel.connect();
-				killProcessListener = new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						interruptChannel(channel);
-						disconnect();
-						interruptChannel = true;
-						interruptChannelWorker = true;
-						try {
-							Thread.sleep(50);
-						} catch (Exception ee) {
-						}
+				killProcessListener = actionEvent -> {
+					interruptChannel(channel);
+					disconnect();
+					interruptChannel = true;
+					interruptChannelWorker = true;
+					try {
+						Thread.sleep(50);
+					} catch (Exception ee) {
+						Thread.currentThread().interrupt();
 					}
 				};
 
@@ -538,8 +535,8 @@ public class SSHConnectExec extends SSHConnect {
 				byte[] tmp = new byte[size];
 				int progress = 0;
 				if (outputDialog != null) {
-					((SSHConnectionExecDialog) outputDialog).removeKillProcessListener(killProcessListener);
-					((SSHConnectionExecDialog) outputDialog).addKillProcessListener(killProcessListener);
+					(outputDialog).removeKillProcessListener(killProcessListener);
+					(outputDialog).addKillProcessListener(killProcessListener);
 					// publishInfo("result:" + outputDialog.ansiCodeEnd);
 					// publish("");
 					// outputDialog.setStartAnsi(Color.BLACK);
@@ -556,6 +553,7 @@ public class SSHConnectExec extends SSHConnect {
 							Thread.sleep(timeStepMillis);
 						} catch (InterruptedException ignore) {
 							logging.info(this, "InterruptedException");
+							Thread.currentThread().interrupt();
 						}
 
 						if (i < 0)

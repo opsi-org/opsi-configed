@@ -14,8 +14,6 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.plaf.synth.Region;
 import javax.swing.plaf.synth.SynthConstants;
 import javax.swing.plaf.synth.SynthContext;
@@ -42,12 +40,7 @@ public class ClippedTitleTabbedPane extends JTabbedPane {
 				initTabWidth();
 			}
 		});
-		addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				initTabWidth();
-			}
-		});
+		addChangeListener(changeEvent -> initTabWidth());
 	}
 
 	private Insets getTabInsets() {

@@ -3,7 +3,6 @@ package de.uib.configed.gui.ssh;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -99,21 +98,18 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 		cb_includeZsync.setSelected(true);
 		cb_includeZsync.setToolTipText(configed.getResourceValue(
 				"SSHConnection.ParameterDialog.opsipackagemanager_install.jCheckBoxIncludeZsync.tooltip"));
-		cb_includeZsync.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					cb_compareMD5.setSelected(true);
-					cb_compareMD5.setEnabled(true);
-				} else {
-					cb_compareMD5.setSelected(false);
-					cb_compareMD5.setEnabled(false);
-				}
+		cb_includeZsync.addItemListener(itemEvent -> {
+			if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
+				cb_compareMD5.setSelected(true);
+				cb_compareMD5.setEnabled(true);
+			} else {
+				cb_compareMD5.setSelected(false);
+				cb_compareMD5.setEnabled(false);
 			}
 		});
 
 		cb_compareMD5 = new JCheckBox();
-		cb_compareMD5.setSelected(true);;
+		cb_compareMD5.setSelected(true);
 		cb_compareMD5.setToolTipText(configed.getResourceValue(
 				"SSHConnection.ParameterDialog.opsipackagemanager_install.jCheckBoxCompareMD5.tooltip"));
 	}

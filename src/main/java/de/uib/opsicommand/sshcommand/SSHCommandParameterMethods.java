@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Window;
-import java.awt.event.HierarchyEvent;
-import java.awt.event.HierarchyListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -528,15 +526,12 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 			}
 		};
 
-		opPane.addHierarchyListener(new HierarchyListener() {
-			@Override
-			public void hierarchyChanged(HierarchyEvent e) {
-				Window window = SwingUtilities.getWindowAncestor(opPane);
-				if (window instanceof Dialog) {
-					Dialog dialog = (Dialog) window;
-					if (!dialog.isResizable()) {
-						dialog.setResizable(true);
-					}
+		opPane.addHierarchyListener(hierarchyEvent -> {
+			Window window = SwingUtilities.getWindowAncestor(opPane);
+			if (window instanceof Dialog) {
+				Dialog dialog = (Dialog) window;
+				if (!dialog.isResizable()) {
+					dialog.setResizable(true);
 				}
 			}
 		});

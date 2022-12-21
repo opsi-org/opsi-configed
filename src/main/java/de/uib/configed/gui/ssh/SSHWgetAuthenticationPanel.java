@@ -2,7 +2,6 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
@@ -48,14 +47,11 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 		lbl_needAuthentication.setToolTipText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.wget.needAuthentication.tooltip"));
 		cb_needAuthentication = new JCheckBox();
-		cb_needAuthentication.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if (e.getStateChange() == ItemEvent.SELECTED)
-					instance.open();
-				else
-					instance.close();
-			}
+		cb_needAuthentication.addItemListener(itemEvent -> {
+			if (itemEvent.getStateChange() == ItemEvent.SELECTED)
+				instance.open();
+			else
+				instance.close();
 		});
 		lbl_user.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.username"));
 		lbl_pswd.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.password"));

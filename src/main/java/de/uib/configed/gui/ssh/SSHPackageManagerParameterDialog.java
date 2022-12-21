@@ -1,8 +1,6 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.TreeMap;
 
@@ -129,26 +127,18 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 			btn_help = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
 			btn_help.setText(configed.getResourceValue("SSHConnection.buttonHelp"));
 			// buttonPanel.add(btn_help);
-			btn_help.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					doActionHelp(caller);
-				}
-			});
+			btn_help.addActionListener(actionEvent -> doActionHelp(caller));
 
 			btn_execute = new JButton();
 			buttonPanel.add(btn_execute);
 			btn_execute.setText(configed.getResourceValue("SSHConnection.buttonExec"));
 			btn_execute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 			if (!(Globals.isGlobalReadOnly()))
-				btn_execute.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						if (caller instanceof SSHPackageManagerUninstallParameterDialog)
-							((SSHPackageManagerUninstallParameterDialog) caller).doAction1();
-						else if (caller instanceof SSHPackageManagerInstallParameterDialog)
-							((SSHPackageManagerInstallParameterDialog) caller).doAction1();
-					}
+				btn_execute.addActionListener(actionEvent -> {
+					if (caller instanceof SSHPackageManagerUninstallParameterDialog)
+						((SSHPackageManagerUninstallParameterDialog) caller).doAction1();
+					else if (caller instanceof SSHPackageManagerInstallParameterDialog)
+						((SSHPackageManagerInstallParameterDialog) caller).doAction1();
 				});
 			btn_reload = new JButton();
 			buttonPanel.add(btn_reload);
@@ -156,26 +146,17 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 			btn_reload.setIcon(Globals.createImageIcon("images/reloadcomplete16.png", ""));
 			btn_reload.setToolTipText(configed.getResourceValue("SSHConnection.buttonPackagesReload.tooltip"));
 			if (!(Globals.isGlobalReadOnly()))
-				btn_reload.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						logging.debug(this, "ActionEvent on btn_reload");
-						main.reload();
-						consolidate();
-					}
+				btn_reload.addActionListener(actionEvent -> {
+					logging.debug(this, "ActionEvent on btn_reload");
+					main.reload();
+					consolidate();
 				});
 
 			btn_close = new JButton();
 			buttonPanel.add(btn_close);
 			btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 			btn_close.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
-			btn_close.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// doAction2();
-					cancel();
-				}
-			});
+			btn_close.addActionListener(actionEvent -> cancel());
 
 			setComponentsEnabled(!Globals.isGlobalReadOnly());
 		}

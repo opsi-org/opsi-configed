@@ -12,8 +12,6 @@
  */
 package de.uib.configed.tree;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -399,20 +397,11 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		TreePopupMouseListener.createSubnodePosition = 0;
 
-		menuItemCreateNode.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// logging.debug(" action performed on menuItemCreateNode, " + e);
-				// logging.debug(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
-				// );
-				// logging.debug(" mousePath " +
-				// treePopupMouseListener.getPopupSourcePath() );
-				IconNode resultNode = makeSubgroupAt(treePopupMouseListener.getPopupSourcePath());
-				if (resultNode != null) {
-					makeVisible(pathByAddingChild(treePopupMouseListener.getPopupSourcePath(), resultNode));
-					repaint();
-				}
-
+		menuItemCreateNode.addActionListener(actionEvent -> {
+			IconNode resultNode = makeSubgroupAt(treePopupMouseListener.getPopupSourcePath());
+			if (resultNode != null) {
+				makeVisible(pathByAddingChild(treePopupMouseListener.getPopupSourcePath(), resultNode));
+				repaint();
 			}
 		});
 		popupMenu.add(menuItemCreateNode);
@@ -421,103 +410,40 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		TreePopupMouseListener.editNodePosition = 1;
 
-		menuItemEditNode.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				editGroupNode(treePopupMouseListener.getPopupSourcePath());
-				/*
-				 * //logging.debug(" action performed on menuItemEditNode, " + e);
-				 * //logging.debug(" mouseRow " +
-				 * treePopupMouseListener.getPopupSourceRow() );
-				 * //logging.debug(" mousePath " +
-				 * treePopupMouseListener.getPopupSourcePath() );
-				 * IconNode resultNode = makeSubgroupAt
-				 * (treePopupMouseListener.getPopupSourcePath()
-				 * );
-				 * if (resultNode != null)
-				 * {
-				 * makeVisible( pathByAddingChild(treePopupMouseListener.getPopupSourcePath(),
-				 * resultNode) );
-				 * repaint();
-				 * }
-				 */
-
-			}
-		});
+		menuItemEditNode.addActionListener(actionEvent -> editGroupNode(treePopupMouseListener.getPopupSourcePath()));
 		popupMenu.add(menuItemEditNode);
 
 		JMenuItem menuItemDeleteNode = new JMenuItem(configed.getResourceValue("ClientTree.deleteNode"));
 
 		TreePopupMouseListener.deleteNodePosition = 2;
 
-		menuItemDeleteNode.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// logging.debug(" action performed on menuItemDeleteNode, " + e);
-				// logging.debug(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
-				// );
-				// logging.debug(" mousePath " +
-				// treePopupMouseListener.getPopupSourcePath() );
-
-				deleteNode(
-						// treePopupMouseListener.getPopupSourceRow() ,
-						treePopupMouseListener.getPopupSourcePath());
-
-			}
-		});
+		menuItemDeleteNode.addActionListener(actionEvent -> deleteNode(treePopupMouseListener.getPopupSourcePath()));
 		popupMenu.add(menuItemDeleteNode);
 
 		JMenuItem menuItemDeleteGroupNode = new JMenuItem(configed.getResourceValue("ClientTree.deleteGroupNode"));
 
 		TreePopupMouseListener.deleteGroupNodePosition = 3;
 
-		menuItemDeleteGroupNode.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// logging.debug(" action performed on menuItemDeleteNode, " + e);
-				// logging.debug(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
-				// );
-				// logging.debug(" mousePath " +
-				// treePopupMouseListener.getPopupSourcePath() );
-
-				deleteNode(
-						// treePopupMouseListener.getPopupSourceRow() ,
-						treePopupMouseListener.getPopupSourcePath());
-
-			}
-		});
+		menuItemDeleteGroupNode
+				.addActionListener(actionEvent -> deleteNode(treePopupMouseListener.getPopupSourcePath()));
 		popupMenu.add(menuItemDeleteGroupNode);
 
 		JMenuItem menuItemActivateElements = new JMenuItem(configed.getResourceValue("ClientTree.selectAllElements"));
 
 		TreePopupMouseListener.activateElementsPosition = 4;
 
-		menuItemActivateElements.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// logging.debug(" action performed on menuItemActivateElements, " + e);
-				// logging.debug(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
-				// );
-				// logging.debug(" mousePath " +
-				// treePopupMouseListener.getPopupSourcePath() );
-				// deleteNode(
-				// treePopupMouseListener.getPopupSourceRow() ,
-				// treePopupMouseListener.getPopupSourcePath()
-				// );
+		menuItemActivateElements.addActionListener(actionEvent -> {
 
-				TreePath sourcePath = treePopupMouseListener.getPopupSourcePath();
-				if (sourcePath != null
-						&& sourcePath.getPathComponent(sourcePath.getPathCount() - 1) instanceof GroupNode) {
-					// String nodeS = sourcePath.getPathComponent(sourcePath.getPathCount()
-					// -1).toString();
-					GroupNode node = (GroupNode) sourcePath.getPathComponent(sourcePath.getPathCount() - 1);
-					main.setGroup(node.toString());
-					// main.activateGroupByTree(node, sourcePath);
-					// logging.debug(this, "menuItemActivateElements " +
-					// treePopupMouseListener.getPopupSourcePath() + " node "
-					// + sourcePath.getPathComponent(sourcePath.getPathCount() -1));
-				}
-
+			TreePath sourcePath = treePopupMouseListener.getPopupSourcePath();
+			if (sourcePath != null && sourcePath.getPathComponent(sourcePath.getPathCount() - 1) instanceof GroupNode) {
+				// String nodeS = sourcePath.getPathComponent(sourcePath.getPathCount()
+				// -1).toString();
+				GroupNode node = (GroupNode) sourcePath.getPathComponent(sourcePath.getPathCount() - 1);
+				main.setGroup(node.toString());
+				// main.activateGroupByTree(node, sourcePath);
+				// logging.debug(this, "menuItemActivateElements " +
+				// treePopupMouseListener.getPopupSourcePath() + " node "
+				// + sourcePath.getPathComponent(sourcePath.getPathCount() -1));
 			}
 		});
 		popupMenu.add(menuItemActivateElements);
@@ -526,46 +452,39 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		TreePopupMouseListener.removeElementsPosition = 5;
 
-		menuItemRemoveElements.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// logging.debug(" action performed on menuItemRemoveElements, " + e);
-				// logging.debug(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
-				// );
-				// logging.debug(" mousePath " +
-				// treePopupMouseListener.getPopupSourcePath() );
+		menuItemRemoveElements.addActionListener(actionEvent -> {
+			// logging.debug(" action performed on menuItemRemoveElements, " + e);
+			// logging.debug(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
+			// );
+			// logging.debug(" mousePath " +
+			// treePopupMouseListener.getPopupSourcePath() );
 
-				TreePath sourcePath = treePopupMouseListener.getPopupSourcePath();
-				if (sourcePath != null
-						&& sourcePath.getPathComponent(sourcePath.getPathCount() - 1) instanceof GroupNode) {
-					// String nodeS = sourcePath.getPathComponent(sourcePath.getPathCount()
-					// -1).toString();
-					GroupNode node = (GroupNode) sourcePath.getPathComponent(sourcePath.getPathCount() - 1);
-					// main.setGroup(node.toString());
-					// main.activateGroupByTree(node, sourcePath);
-					// logging.info(this, "menuItemRemoveElements " +
-					// treePopupMouseListener.getPopupSourcePath() + " node "
-					// + sourcePath.getPathComponent(sourcePath.getPathCount() -1));
-					// logging.info(this, "menuItemRemoveElements from node " + node);
-					// enumerateLeafNodes(node) );
+			TreePath sourcePath = treePopupMouseListener.getPopupSourcePath();
+			if (sourcePath != null && sourcePath.getPathComponent(sourcePath.getPathCount() - 1) instanceof GroupNode) {
+				// String nodeS = sourcePath.getPathComponent(sourcePath.getPathCount()
+				// -1).toString();
+				GroupNode node = (GroupNode) sourcePath.getPathComponent(sourcePath.getPathCount() - 1);
+				// main.setGroup(node.toString());
+				// main.activateGroupByTree(node, sourcePath);
+				// logging.info(this, "menuItemRemoveElements " +
+				// treePopupMouseListener.getPopupSourcePath() + " node "
+				// + sourcePath.getPathComponent(sourcePath.getPathCount() -1));
+				// logging.info(this, "menuItemRemoveElements from node " + node);
+				// enumerateLeafNodes(node) );
 
-					Enumeration<TreeNode> enumer = node.breadthFirstEnumeration();
+				Enumeration<TreeNode> enumer = node.breadthFirstEnumeration();
 
-					java.util.List<DefaultMutableTreeNode> clientNodesToRemove = new ArrayList<DefaultMutableTreeNode>();
+				java.util.List<DefaultMutableTreeNode> clientNodesToRemove = new ArrayList<DefaultMutableTreeNode>();
 
-					while (enumer.hasMoreElements()) {
-						DefaultMutableTreeNode element = (DefaultMutableTreeNode) enumer.nextElement();
-						if (!element.getAllowsChildren())
-							clientNodesToRemove.add(element);
-					}
-
-					if (removeClientNodes(clientNodesToRemove)) {
-						main.setGroup(node.toString()); // refresh internal view
-					}
-					// else reload
-
+				while (enumer.hasMoreElements()) {
+					DefaultMutableTreeNode element = (DefaultMutableTreeNode) enumer.nextElement();
+					if (!element.getAllowsChildren())
+						clientNodesToRemove.add(element);
 				}
 
+				if (removeClientNodes(clientNodesToRemove)) {
+					main.setGroup(node.toString()); // refresh internal view
+				}
 			}
 		});
 		popupMenu.add(menuItemRemoveElements);
@@ -575,8 +494,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		addMouseListener(this);
 		// addMouseMotionListener(this);
 
-		locationsInDIRECTORY = new HashMap<String, Set<GroupNode>>();
-		clientNodesInDIRECTORY = new HashMap<String, DefaultMutableTreeNode>();
+		locationsInDIRECTORY = new HashMap<>();
+		clientNodesInDIRECTORY = new HashMap<>();
 		leafname2AllItsPaths = new Leafname2AllItsPaths();
 
 	}
@@ -1321,7 +1240,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 							List<String> memberList = group2Members.get(groupId);
 
 							if (memberList == null) {
-								memberList = new ArrayList<String>();
+								memberList = new ArrayList<>();
 							}
 
 							memberList.add(clientId);
@@ -1334,7 +1253,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		}
 
-		List<String> membersOfDIRECTORY_NOT_ASSIGNED = new ArrayList<String>();
+		List<String> membersOfDIRECTORY_NOT_ASSIGNED = new ArrayList<>();
 		group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, membersOfDIRECTORY_NOT_ASSIGNED);
 
 		// we build and link the groups
@@ -1355,13 +1274,13 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		// check produced DIRECTORY
 		for (int i = 0; i < x.length; i++) {
-			String clientId = (String) x[i];
+			String clientId = x[i];
 			checkDIRECTORY(clientId, null);
 		}
 
 		// build membersOfDIRECTORY_NOT_ASSIGNED
 		for (int i = 0; i < x.length; i++) {
-			String clientId = (String) x[i];
+			String clientId = x[i];
 			Set<GroupNode> hostingGroups = locationsInDIRECTORY.get(clientId);
 
 			// logging.debug(this, "associate, clientId hostingGroups " + clientId + " " +
@@ -1392,15 +1311,15 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		logging.info(this, "associateClientsToGroups, evaluate permittedHostGroups " + permittedHostGroups);
 
 		if (permittedHostGroups != null) {
-			allowedClients = new TreeSet<String>();
+			allowedClients = new TreeSet<>();
 
 			if (directlyAllowedGroups == null)
-				directlyAllowedGroups = new TreeSet<String>();
+				directlyAllowedGroups = new TreeSet<>();
 
 			for (String clientId : leafname2AllItsPaths.keySet()) {
 				for (SimpleTreePath path : leafname2AllItsPaths.get(clientId)) {
 					// if (path.contains("rupert"))
-					Set<String> pathElements = new TreeSet<String>(path);
+					Set<String> pathElements = new TreeSet<>(path);
 					int allElementsNumber = pathElements.size();
 					pathElements.removeAll(permittedHostGroups);// retained are the elements not permitted
 					int notPermittedNumber = pathElements.size();

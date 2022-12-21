@@ -179,26 +179,20 @@ public class PanelCompleteWinProducts extends JPanel
 
 		comboChooseDepot.setEnabled(false);
 
-		comboChooseDepot.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				selectedDepot = "" + comboChooseDepot.getSelectedItem();
-				logging.info(this, "actionPerformed  depot selected " + selectedDepot);
-				depots.clear();
-				depots.add(selectedDepot);
-				SmbConnect.getInstance().buildSambaTarget(selectedDepot, de.uib.connectx.SmbConnect.PRODUCT_SHARE_RW);
-				evaluateWinProducts();
-			}
+		comboChooseDepot.addActionListener(actionEvent -> {
+			selectedDepot = "" + comboChooseDepot.getSelectedItem();
+			logging.info(this, "actionPerformed  depot selected " + selectedDepot);
+			depots.clear();
+			depots.add(selectedDepot);
+			SmbConnect.getInstance().buildSambaTarget(selectedDepot, de.uib.connectx.SmbConnect.PRODUCT_SHARE_RW);
+			evaluateWinProducts();
 		});
 
 		comboChooseWinProduct = new JComboBox();
 		comboChooseWinProduct.setSize(Globals.textfieldDimension);
-		comboChooseWinProduct.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				winProduct = "" + comboChooseWinProduct.getSelectedItem();
-				produceTarget();
-			}
+		comboChooseWinProduct.addActionListener(actionEvent -> {
+			winProduct = "" + comboChooseWinProduct.getSelectedItem();
+			produceTarget();
 		});
 
 		// logging.debug(this, "defineChoosers, depots: " + persist.getWinProducts());
@@ -280,20 +274,16 @@ public class PanelCompleteWinProducts extends JPanel
 		buttonCallSelectFolderWinPE.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallSelectFolderWinPE.setToolTipText(configed.getResourceValue("CompleteWinProducts.chooserFolderPE"));
 
-		buttonCallSelectFolderWinPE.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		buttonCallSelectFolderWinPE.addActionListener(actionEvent -> {
 
-				int returnVal = chooserFolder.showOpenDialog(panel);
+			int returnVal = chooserFolder.showOpenDialog(panel);
 
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					String pathWinPE = chooserFolder.getSelectedFile().getPath();
-					fieldPathWinPE.setText(pathWinPE);
-					fieldPathWinPE.setCaretPosition(pathWinPE.length());
-				} else {
-					fieldPathWinPE.setText("");
-				}
-
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				String pathWinPE = chooserFolder.getSelectedFile().getPath();
+				fieldPathWinPE.setText(pathWinPE);
+				fieldPathWinPE.setCaretPosition(pathWinPE.length());
+			} else {
+				fieldPathWinPE.setText("");
 			}
 		});
 

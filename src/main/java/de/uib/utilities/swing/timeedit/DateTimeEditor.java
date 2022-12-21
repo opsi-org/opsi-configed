@@ -1,7 +1,6 @@
 package de.uib.utilities.swing.timeedit;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
@@ -58,25 +57,15 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		JPopupMenu popup = new JPopupMenu();
 
 		JMenuItem menuItemNow = new JMenuItem("Jetzt");
-		menuItemNow.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setDate();
-			}
-
-		});
+		menuItemNow.addActionListener(actionEvent -> setDate());
 
 		popup.add(menuItemNow);
 
 		JMenuItem menuItemNull = new JMenuItem("Kein Datum");;
-		menuItemNull.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// logging.debug( " action menu null ");
-				monthView.getSelectionModel().clearSelection();
-				monthView.commitSelection();
-			}
-
+		menuItemNull.addActionListener(actionEvent -> {
+			// logging.debug( " action menu null ");
+			monthView.getSelectionModel().clearSelection();
+			monthView.commitSelection();
 		});
 
 		popup.add(menuItemNull);
@@ -113,37 +102,17 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 		buttonBack = new JButton("<");
 		buttonBack.setBorder(new javax.swing.border.EmptyBorder(1, 1, 1, 1));
-		buttonBack.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				switchMonth(-1);
-			}
-		});
+		buttonBack.addActionListener(actionEvent -> switchMonth(-1));
 		buttonForward = new JButton(">");
 		buttonForward.setBorder(new javax.swing.border.EmptyBorder(1, 1, 1, 1));
-		buttonForward.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				switchMonth(+1);
-			}
-		});
+		buttonForward.addActionListener(actionEvent -> switchMonth(+1));
 
 		buttonYearBack = new JButton("<<");
 		buttonYearBack.setBorder(new javax.swing.border.EmptyBorder(1, 1, 1, 1));
-		buttonYearBack.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				switchYear(-1);
-			}
-		});
+		buttonYearBack.addActionListener(actionEvent -> switchYear(-1));
 		buttonYearForward = new JButton(">>");
 		buttonYearForward.setBorder(new javax.swing.border.EmptyBorder(1, 1, 1, 1));
-		buttonYearForward.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				switchYear(+1);
-			}
-		});
+		buttonYearForward.addActionListener(actionEvent -> switchYear(+1));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		setLayout(layout);

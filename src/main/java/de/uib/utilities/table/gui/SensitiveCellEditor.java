@@ -124,34 +124,19 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		field.setEditable(false);
 		listeditor.init();
 
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				// Rectangle rect = table.getCellRect(row, column, true);
-				// Point tablePoint = table.getLocationOnScreen();
+		SwingUtilities.invokeLater(() -> {
+			// Rectangle rect = table.getCellRect(row, column, true);
+			// Point tablePoint = table.getLocationOnScreen();
 
-				listeditor.setVisible(true);
-				listeditor.locateLeftTo(table); // Globals.mainContainer );
-				// listeditor.setLocation((int) tablePoint.getX() + (int) rect.getX() + 50,
-				// (int) tablePoint.getY() + (int) rect.getY() + Globals.lineHeight );
-			}
+			listeditor.setVisible(true);
+			listeditor.locateLeftTo(table);
 		});
 		// listeditor.setVisible(true);
 		usingListEditor = true;
 	}
 
 	public void hideListEditor() {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				// Rectangle rect = table.getCellRect(row, column, true);
-				// Point tablePoint = table.getLocationOnScreen();
-
-				listeditor.setVisible(false);
-				// listeditor.setLocation((int) tablePoint.getX() + (int) rect.getX() + 50,
-				// (int) tablePoint.getY() + (int) rect.getY() + Globals.lineHeight );
-			}
-		});
+		SwingUtilities.invokeLater(() -> listeditor.setVisible(false));
 	}
 
 	@Override

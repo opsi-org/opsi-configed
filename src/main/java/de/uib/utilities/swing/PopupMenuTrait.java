@@ -1,7 +1,5 @@
 package de.uib.utilities.swing;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 import javax.swing.JComponent;
@@ -193,12 +191,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 	protected void addItem(final int p) {
 		int i = listPopups.indexOf(p);
-		menuItems[i].addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				action(p);
-			}
-		});
+		menuItems[i].addActionListener(actionEvent -> action(p));
 
 		add(menuItems[i]);
 

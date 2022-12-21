@@ -3,8 +3,6 @@ package de.uib.configed.gui.ssh;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.TreeSet;
 import java.util.Vector;
 
@@ -246,12 +244,7 @@ public class SSHPackageManagerUninstallParameterDialog
 			for (int i = 0; i < 5; i++)
 				cb_verbosity.addItem(i);
 			cb_verbosity.setSelectedItem(1);
-			cb_verbosity.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					changeVerbosity();
-				}
-			});
+			cb_verbosity.addItemListener(itemEvent -> changeVerbosity());
 		}
 		{
 			// tf_freeInput = new JTextField();
@@ -265,12 +258,7 @@ public class SSHPackageManagerUninstallParameterDialog
 			lbl_keepFiles.setText(configed
 					.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelKeepFiles"));
 			checkb_keepFiles = new JCheckBox();
-			checkb_keepFiles.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					changeKeepFiles();
-				}
-			});
+			checkb_keepFiles.addItemListener(itemEvent -> changeKeepFiles());
 		}
 
 		{
@@ -298,15 +286,11 @@ public class SSHPackageManagerUninstallParameterDialog
 			 * );
 			 */
 
-			cb_opsiproducts.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					tf_selecteddepots.setText("");
-					// tf_selecteddepots.setEnabled(false);
-					btn_execute.setEnabled(false);
-					tf_product.setText((String) cb_opsiproducts.getSelectedItem());
-
-				}
+			cb_opsiproducts.addItemListener(itemEvent -> {
+				tf_selecteddepots.setText("");
+				// tf_selecteddepots.setEnabled(false);
+				btn_execute.setEnabled(false);
+				tf_product.setText((String) cb_opsiproducts.getSelectedItem());
 			});
 
 			buttonUpdateList = new IconAsButton("buttonUpdateList", "images/reload16.png", "images/reload16.png",
@@ -315,14 +299,9 @@ public class SSHPackageManagerUninstallParameterDialog
 			buttonUpdateList.setToolTipText(configed.getResourceValue(
 					"SSHConnection.ParameterDialog.opsipackagemanager_uninstall.JButtonUpdateList.tooltip"));
 
-			buttonUpdateList.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					logging.info(this, "actionPerformed");
-					resetProducts();
-					// setReloadRequested();
-					// main.callClientSelectionDialog();
-				}
+			buttonUpdateList.addActionListener(actionEvent -> {
+				logging.info(this, "actionPerformed");
+				resetProducts();
 			});
 
 		}

@@ -3,7 +3,6 @@ package de.uib.opsicommand.sshcommand;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -357,12 +356,7 @@ public class SSHCommandFactory {
 	public java.util.List<String> getSSHCommandMenuNames() {
 		if (commandlist == null)
 			commandlist = main.getPersistenceController().retrieveCommandList();
-		Collections.sort(list_knownMenus, new Comparator<String>() {
-			@Override
-			public int compare(String s1, String s2) {
-				return s1.compareToIgnoreCase(s2);
-			}
-		});
+		Collections.sort(list_knownMenus, (String s1, String s2) -> s1.compareToIgnoreCase(s2));
 		return list_knownMenus;
 	}
 
@@ -374,12 +368,7 @@ public class SSHCommandFactory {
 	public java.util.List<String> getSSHCommandMenuParents() {
 		if (commandlist == null)
 			commandlist = main.getPersistenceController().retrieveCommandList();
-		Collections.sort(list_knownParents, new Comparator<String>() {
-			@Override
-			public int compare(String s1, String s2) {
-				return s1.compareToIgnoreCase(s2);
-			}
-		});
+		Collections.sort(list_knownParents, (String s1, String s2) -> s1.compareToIgnoreCase(s2));
 		return list_knownParents;
 	}
 
