@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -174,13 +172,9 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			cb_applySudo = new JCheckBox("", commandDeployClientAgent.needSudo());
 			lbl_applySudo
 					.setText(configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.applySudo"));
-			cb_applySudo.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					commandDeployClientAgent.setNeedingSudo(!commandDeployClientAgent.needSudo());
-					updateCommand();
-
-				}
+			cb_applySudo.addItemListener(itemEvent -> {
+				commandDeployClientAgent.setNeedingSudo(!commandDeployClientAgent.needSudo());
+				updateCommand();
 			});
 		}
 
@@ -188,12 +182,9 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			cb_ignorePing = new JCheckBox("", !commandDeployClientAgent.isPingRequired());
 			lbl_ignorePing
 					.setText(configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.ignorePing"));
-			cb_ignorePing.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					commandDeployClientAgent.togglePingIsRequired();
-					updateCommand();
-				}
+			cb_ignorePing.addItemListener(itemEvent -> {
+				commandDeployClientAgent.togglePingIsRequired();
+				updateCommand();
 			});
 		}
 
@@ -204,12 +195,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			for (int i = 0; i < 5; i++)
 				cb_verbosity.addItem(i);
 			cb_verbosity.setSelectedItem(1);
-			cb_verbosity.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					changeVerbosity();
-				}
-			});
+			cb_verbosity.addItemListener(itemEvent -> changeVerbosity());
 		}
 		{
 			lbl_client.setText(
@@ -273,12 +259,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			btn_showPassw.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
 			btn_showPassw.setToolTipText(
 					configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.showPassword.tooltip"));
-			btn_showPassw.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					changeEchoChar();
-				}
-			});
+			btn_showPassw.addActionListener(actionEvent -> changeEchoChar());
 
 			tf_passw.getDocument().addDocumentListener(new DocumentListener() {
 				@Override
@@ -355,36 +336,20 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			btn_help.setToolTipText(configed.getResourceValue("SSHConnection.buttonHelp"));
 			btn_help.setText(configed.getResourceValue("SSHConnection.buttonHelp"));
 			// buttonPanel.add(btn_help);
-			btn_help.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					doActionHelp();
-				}
-			});
+			btn_help.addActionListener(actionEvent -> doActionHelp());
 
 			btn_execute = new JButton();
 			buttonPanel.add(btn_execute);
 			btn_execute.setText(configed.getResourceValue("SSHConnection.buttonExec"));
 			btn_execute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 			if (!(Globals.isGlobalReadOnly()))
-				btn_execute.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// if (!(Globals.isGlobalReadOnly()))
-						doAction1();
-					}
-				});
+				btn_execute.addActionListener(actionEvent -> doAction1());
 
 			btn_close = new JButton();
 			buttonPanel.add(btn_close);
 			btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 			btn_close.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
-			btn_close.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					cancel();
-				}
-			});
+			btn_close.addActionListener(actionEvent -> cancel());
 		}
 		{
 			lbl_fullCommand.setText("opsi-deploy-client-agent ");

@@ -1,8 +1,6 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 // import javax.swing.border.*;
 // import javax.swing.event.*;
 // import java.io.*;
@@ -26,7 +24,6 @@ import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.utilities.logging.logging;
 
 public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
-	private GroupLayout layout;
 	private JPanel inputPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
 
@@ -72,24 +69,16 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 		btn_doAction.setText(configed.getResourceValue("SSHConnection.buttonExec"));
 		btn_doAction.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly()))
-			btn_doAction.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					logging.info(this, "btn_doAction pressed");
-					doAction1();
-				}
+			btn_doAction.addActionListener(actionEvent -> {
+				logging.info(this, "btn_doAction pressed");
+				doAction1();
 			});
 
 		btn_close = new JButton();
 		buttonPanel.add(btn_close);
 		btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 		btn_close.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
-		btn_close.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				cancel();
-			}
-		});
+		btn_close.addActionListener(actionEvent -> cancel());
 		setComponentsEnabled(!Globals.isGlobalReadOnly());
 
 		btn_searchDir = completion.getButton();

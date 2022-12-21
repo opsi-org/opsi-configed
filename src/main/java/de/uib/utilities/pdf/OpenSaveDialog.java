@@ -1,7 +1,6 @@
 package de.uib.utilities.pdf;
 
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -71,18 +70,6 @@ public class OpenSaveDialog implements ActionListener {
 			saveAction = true;
 			leave();
 		}
-	}
-
-	public static void main(String[] args) {
-
-		Runnable r = new Runnable() {
-			@Override
-			public void run() {
-				new OpenSaveDialog("Open or Save PDF");
-			}
-		};
-		EventQueue.invokeLater(r);
-
 	}
 
 }

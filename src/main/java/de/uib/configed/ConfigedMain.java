@@ -6394,15 +6394,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private class MyDialogRemoteControl extends FDialogRemoteControl {
 		public void appendLog(final String s) {
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					if (s == null)
-						loggingArea.setText("");
-					else {
-						loggingArea.append(s);
-						loggingArea.setCaretPosition(loggingArea.getText().length());
-					}
+			SwingUtilities.invokeLater(() -> {
+				if (s == null)
+					loggingArea.setText("");
+				else {
+					loggingArea.append(s);
+					loggingArea.setCaretPosition(loggingArea.getText().length());
 				}
 			});
 		}

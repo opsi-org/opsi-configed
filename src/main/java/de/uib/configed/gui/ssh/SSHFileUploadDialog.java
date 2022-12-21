@@ -2,8 +2,6 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
@@ -171,20 +169,17 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		btn_filechooser.setPreferredSize(Globals.smallButtonDimension);
 		btn_filechooser.setToolTipText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.filechooser.tooltip"));
-		btn_filechooser.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int returnVal = filechooser_local.showOpenDialog(inputPanel);
+		btn_filechooser.addActionListener(actionEvent -> {
+			int returnVal = filechooser_local.showOpenDialog(inputPanel);
 
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					String path_modules = filechooser_local.getSelectedFile().getPath();
-					tf_local_path.setText(path_modules);
-					// command.setTargetFilename(filechooser_local.getSelectedFile().getName());
-					command.setFullSourcePath(path_modules);
-					tf_local_path.setCaretPosition(path_modules.length());
-				} else {
-					tf_local_path.setText("");
-				}
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				String path_modules = filechooser_local.getSelectedFile().getPath();
+				tf_local_path.setText(path_modules);
+				// command.setTargetFilename(filechooser_local.getSelectedFile().getName());
+				command.setFullSourcePath(path_modules);
+				tf_local_path.setCaretPosition(path_modules.length());
+			} else {
+				tf_local_path.setText("");
 			}
 		});
 		btn_execute = new JButton();
@@ -192,23 +187,13 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		btn_execute.setText(configed.getResourceValue("SSHConnection.buttonExec"));
 		btn_execute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly()))
-			btn_execute.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					doAction1();
-				}
-			});
+			btn_execute.addActionListener(actionEvent -> doAction1());
 
 		btn_close = new JButton();
 		buttonPanel.add(btn_close);
 		btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 		btn_close.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
-		btn_close.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				cancel();
-			}
-		});
+		btn_close.addActionListener(actionEvent -> cancel());
 		enableComponents(rb_from_server.isSelected());
 		SSHConnectExec testFile = new SSHConnectExec();
 		String result = testFile.exec(new Empty_Command(factory.str_command_fileexists_notremove
@@ -403,11 +388,6 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 
 	protected void addListener(Component comp) {
 		if (comp instanceof JRadioButton)
-			((JRadioButton) comp).addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					enableComponents(rb_from_server.isSelected());
-				}
-			});
+			((JRadioButton) comp).addActionListener(actionEvent -> enableComponents(rb_from_server.isSelected()));
 	}
 }

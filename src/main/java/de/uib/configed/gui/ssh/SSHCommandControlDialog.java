@@ -16,10 +16,6 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
@@ -284,23 +280,15 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			tf_priority.setColumns(4);
 
 			final JTextComponent editor = (JTextComponent) cb_menuText.getEditor().getEditorComponent();
-			cb_menuText.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					if (editor.getText().trim().equals(factory.menuNew)) {
-						editor.setSelectionStart(0);
-						editor.setSelectionEnd(editor.getText().length());
-					}
-					updateSelectedCommand(editor.getText());
-					checkAllTexts();
+			cb_menuText.addItemListener(itemEvent -> {
+				if (editor.getText().trim().equals(SSHCommandFactory.menuNew)) {
+					editor.setSelectionStart(0);
+					editor.setSelectionEnd(editor.getText().length());
 				}
+				updateSelectedCommand(editor.getText());
+				checkAllTexts();
 			});
-			cb_parentMenuText.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					checkAllTexts();
-				}
-			});
+			cb_parentMenuText.addItemListener(itemEvent -> checkAllTexts());
 		}
 		{
 
@@ -340,7 +328,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			});
 		}
 		{
-			cb_needSudo.addItemListener((ItemEvent e) -> checkAllTexts());
+			cb_needSudo.addItemListener(itemEvent -> checkAllTexts());
 		}
 		{
 			tp_commands.getDocument().addDocumentListener(new DocumentListener() {
@@ -371,67 +359,40 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			// });
 			showPanel();
 			if (!(Globals.isGlobalReadOnly()))
-				btn_test_command.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						doActionTestCommand();
-					}
-				});
+				btn_test_command.addActionListener(actionEvent -> doActionTestCommand());
 
 			final SSHCommandControlDialog caller = this;
 			if (!(Globals.isGlobalReadOnly()))
 				((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonTest()
-						.addActionListener(new ActionListener() {
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								((SSHCommandControlParameterMethodsPanel) parameterPanel).doActionTestParam(caller);
-							}
-						});
+						.addActionListener(actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel)
+								.doActionTestParam(caller));
 
 			if (!(Globals.isGlobalReadOnly()))
 				((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonAdd()
-						.addActionListener(new ActionListener() {
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								((SSHCommandControlParameterMethodsPanel) parameterPanel)
-										.doActionParamAdd((JTextComponent) tp_commands);
-							}
-						});
+						.addActionListener(actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel)
+								.doActionParamAdd(tp_commands));
 		}
 
 		updateLists(true);
 		updateSelectedCommand();
 		{
 			if (!(Globals.isGlobalReadOnly()))
-				btn_del.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						String menu = (String) cb_menuText.getSelectedItem();
-						factory.deleteSSHCommandByMenu(menu);
+				btn_del.addActionListener(actionEvent -> {
+					String menu = (String) cb_menuText.getSelectedItem();
+					factory.deleteSSHCommandByMenu(menu);
 
-						cb_menuText.setSelectedItem(factory.menuNew);
-						updateLists(true, factory.menuNew);
-						updateSelectedCommand(factory.menuNew);
-						factory.reloadServerMenu();
-					}
+					cb_menuText.setSelectedItem(factory.menuNew);
+					updateLists(true, factory.menuNew);
+					updateSelectedCommand(factory.menuNew);
+					factory.reloadServerMenu();
 				});
 		}
 		{
 			if (!(Globals.isGlobalReadOnly()))
-				btn_save.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						doAction1();
-					}
-				});
+				btn_save.addActionListener(actionEvent -> doAction1());
 		}
 		{
-			btn_close.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					doAction2();
-				}
-			});
+			btn_close.addActionListener(actionEvent -> doAction2());
 
 			buttonPanel.add(btn_save);
 			buttonPanel.add(btn_close);

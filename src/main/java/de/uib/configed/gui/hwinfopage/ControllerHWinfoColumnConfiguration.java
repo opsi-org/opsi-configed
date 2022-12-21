@@ -35,7 +35,6 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
@@ -241,14 +240,8 @@ public class ControllerHWinfoColumnConfiguration {
 
 				// tableProvider
 				// new de.uib.utilities.table.provider.DefaultTableProvider(sqlSource),
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
-					@Override
-					public Map retrieveMap() {
-						Map<String, Map<String, Object>> hwColumnConfig = getHwColumnConfig();
-
-						return hwColumnConfig;
-					}
-				})),
+				new DefaultTableProvider(
+						new RetrieverMapSource(columnNames, classNames, () -> (Map) getHwColumnConfig())),
 
 				keycol,
 

@@ -1,8 +1,6 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -156,13 +154,9 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 				btn_searchDir = autocompletion.getButton();
 				btn_searchDir.removeActionListener(btn_searchDir.getActionListeners()[0]);
-				btn_searchDir.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						autocompletion.doButtonAction();
-						doSetActionGetVersions();
-						// cb_mainDir.setEnabled(true);
-					}
+				btn_searchDir.addActionListener(actionEvent -> {
+					autocompletion.doButtonAction();
+					doSetActionGetVersions();
 				});
 			}
 			{
@@ -222,12 +216,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 						.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_advancedSettings"));
 				// btn_advancedSettings.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_advancedSettings.tooltip"));
 				if (!(Globals.isGlobalReadOnly()))
-					btn_advancedSettings.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							showAdvancedSettings(); // open and close
-						}
-					});
+					btn_advancedSettings.addActionListener(actionEvent -> showAdvancedSettings());
 
 				btn_advancedSettings.setPreferredSize(btn_searchDir.getPreferredSize());
 				tf_productVersion.setPreferredSize(btn_searchDir.getPreferredSize());
@@ -239,12 +228,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 				btn_setRights.setToolTipText(configed
 						.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights.tooltip"));
 				if (!(Globals.isGlobalReadOnly()))
-					btn_setRights.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							doExecSetRights();
-						}
-					});
+					btn_setRights.addActionListener(actionEvent -> doExecSetRights());
 			}
 			{
 				btn_toPackageManager = new JButton();
@@ -255,12 +239,9 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 						"SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager.tooltip"));
 
 				if (!(Globals.isGlobalReadOnly()))
-					btn_toPackageManager.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							if (main != null)
-								new SSHPackageManagerInstallParameterDialog(main, filename);
-						}
+					btn_toPackageManager.addActionListener(actionEvent -> {
+						if (main != null)
+							new SSHPackageManagerInstallParameterDialog(main, filename);
 					});
 
 				btn_exec = new JButton();
@@ -268,21 +249,12 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 				btn_exec.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 				btn_exec.setEnabled(false);
 				if (!(Globals.isGlobalReadOnly()))
-					btn_exec.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							doAction1();
-						}
-					});
+					btn_exec.addActionListener(actionEvent -> doAction1());
+
 				btn_cancel = new JButton();
 				btn_cancel.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 				btn_cancel.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
-				btn_cancel.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						cancel();
-					}
-				});
+				btn_cancel.addActionListener(actionEvent -> cancel());
 				buttonPanel.add(btn_exec);
 				buttonPanel.add(btn_toPackageManager);
 				buttonPanel.add(btn_cancel);

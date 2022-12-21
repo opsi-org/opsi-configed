@@ -39,7 +39,6 @@ import de.uib.configed.configed;
 import de.uib.configed.productaction.PanelMountShare;
 import de.uib.connectx.SmbConnect;
 import de.uib.opsicommand.sshcommand.Empty_Command;
-import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.FileX;
@@ -302,48 +301,37 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		buttonCallChooserServerpath.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallChooserServerpath.setToolTipText(configed.getResourceValue("PanelDriverUpload.determineServerPath"));
 
-		buttonCallChooserServerpath.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				chooseServerpath();
-			}
-		});
+		buttonCallChooserServerpath.addActionListener(actionEvent -> chooseServerpath());
 
 		JLabel label_showDrivers = new JLabel(configed.getResourceValue("PanelDriverUpload.labelShowDrivers"));
 		btnShowDrivers = new JButton("", Globals.createImageIcon("images/show-menu.png", ""));
 		btnShowDrivers.setToolTipText(configed.getResourceValue("PanelDriverUpload.btnShowDrivers.tooltip"));
-		btnShowDrivers.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new Thread() {
-					@Override
-					public void run() {
-						new SSHConnectExec(main,
-								// Empty_Command(String id, String c, String mt, boolean ns)
-								((SSHCommand) new Empty_Command("show_drivers.py", // id not needed
-										"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem()
-												+ "/show_drivers.py " + fieldClientname.getText(),
-										"show_drivers.py", // menuText - not needed
-										false // needSudo?
-						)));
-					}
-				}.start();
-			}
+		btnShowDrivers.addActionListener(actionEvent -> {
+			new Thread() {
+				@Override
+				public void run() {
+					new SSHConnectExec(main,
+							// Empty_Command(String id, String c, String mt, boolean ns)
+							(new Empty_Command("show_drivers.py", // id not needed
+									"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem()
+											+ "/show_drivers.py " + fieldClientname.getText(),
+									"show_drivers.py", // menuText - not needed
+									false // needSudo?
+					)));
+				}
+			}.start();
 		});
 
 		JLabel label_createDrivers = new JLabel(configed.getResourceValue("PanelDriverUpload.labelCreateDriverLinks"));
 		btnCreateDrivers = new JButton("", Globals.createImageIcon("images/run-build-file.png", ""));
 		btnCreateDrivers.setToolTipText(configed.getResourceValue("PanelDriverUpload.btnCreateDrivers.tooltip"));
-		btnCreateDrivers.addActionListener(actionEvent -> {
-			new SSHConnectExec(main,
-					// Empty_Command(String id, String c, String mt, boolean ns)
-					new Empty_Command("create_driver_links.py", // id not needed
-							"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem()
-									+ "/create_driver_links.py ",
-							"create_driver_links.py", // menutext - not needed
-							true // need sudo ?
-			));
-		});
+		btnCreateDrivers.addActionListener(actionEvent -> new SSHConnectExec(main,
+				// Empty_Command(String id, String c, String mt, boolean ns)
+				new Empty_Command("create_driver_links.py", // id not needed
+						"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem() + "/create_driver_links.py ",
+						"create_driver_links.py", // menutext - not needed
+						true // need sudo ?
+				)));
 
 		JLabel labelTargetPath = new JLabel(configed.getResourceValue("CompleteWinProducts.labelTargetPath"));
 		fieldServerPath = new JTextShowField(true);

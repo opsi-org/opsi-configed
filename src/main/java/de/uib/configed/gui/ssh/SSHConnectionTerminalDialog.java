@@ -5,8 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -22,7 +20,6 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
@@ -31,7 +28,6 @@ import de.uib.opsicommand.sshcommand.SSHConnectTerminal;
 import de.uib.utilities.logging.logging;
 
 public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
-	private JLabel lbl_userhost = new JLabel();
 	private JTextField tf_command;
 	private JLabel lbl_command;
 	private JCheckBox cb_privat;
@@ -40,7 +36,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	public JButton btn_killProcess;
 	private JButton btn_executeCommand;
 	private final SSHConnectTerminal terminal;
-	private ArrayList<String> commandHistory = new ArrayList<String>();
+	private ArrayList<String> commandHistory = new ArrayList<>();
 	private int historyAddIndex = 0;
 	private int historyGetIndex = 0;
 	private Autocomplete autoComplete;
@@ -182,20 +178,18 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		tf_command.requestFocus();
 
 		// some thread seems to prevent setting it directly
-		SwingUtilities.invokeLater(new Thread() {
-			@Override
-			public void run() {
-				int timeoutRuns = 2;
-				int counter = 0;
-				while (!tf_command.hasFocus() && counter < timeoutRuns) {
-					counter++;
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException ex) {
-					}
-					tf_command.requestFocus();
-					logging.info(this, "repeated requestFocus " + counter + " times");
+		SwingUtilities.invokeLater(() -> {
+			int timeoutRuns = 2;
+			int counter = 0;
+			while (!tf_command.hasFocus() && counter < timeoutRuns) {
+				counter++;
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException ex) {
+					Thread.currentThread().interrupt();
 				}
+				tf_command.requestFocus();
+				logging.info(this, "repeated requestFocus " + counter + " times");
 			}
 		});
 
@@ -325,43 +319,31 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		cb_privat = new JCheckBox(configed.getResourceValue("SSHConnection.passwordButtonText"));
 		cb_privat.setPreferredSize(btn_dim);
 		if (!(Globals.isGlobalReadOnly()))
-			cb_privat.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					if (passwordMode) {
-						changeEchoChar('*');
-						removeAutocompleteListener();
-						passwordMode = false;
-					} else {
-						changeEchoChar((char) 0);
-						if (terminal.commands_compgen != null)
-							setAutocompleteList(terminal.commands_compgen);
-						passwordMode = true;
-					}
-					setCLfocus();
+			cb_privat.addItemListener(itemEvent -> {
+				if (passwordMode) {
+					changeEchoChar('*');
+					removeAutocompleteListener();
+					passwordMode = false;
+				} else {
+					changeEchoChar((char) 0);
+					if (terminal.commands_compgen != null)
+						setAutocompleteList(terminal.commands_compgen);
+					passwordMode = true;
 				}
+				setCLfocus();
 			});
 		changeEchoChar((char) 0);
 		passwordMode = true;
 		final SSHConnectionTerminalDialog caller = this;
 		if (!(Globals.isGlobalReadOnly()))
-			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonTest()
-					.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							((SSHCommandControlParameterMethodsPanel) parameterPanel).doActionTestParam(caller);
-						}
-					});
+			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonTest().addActionListener(actionEvent -> {
+				((SSHCommandControlParameterMethodsPanel) parameterPanel).doActionTestParam(caller);
+			});
 
 		if (!(Globals.isGlobalReadOnly()))
 			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonAdd()
-					.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							((SSHCommandControlParameterMethodsPanel) parameterPanel)
-									.doActionParamAdd((JTextComponent) tf_command);
-						}
-					});
+					.addActionListener(actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel)
+							.doActionParamAdd(tf_command));
 		btn_killProcess = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("SSHConnection.buttonKillProcess"), "images/edit-delete.png",
 				"images/edit-delete.png", "images/edit-delete.png", true);
@@ -373,15 +355,12 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 				"images/execute_blue.png", "images/execute_blue.png", "images/execute_blue.png", true);
 		btn_executeCommand.setPreferredSize(btn_dim);
 		if (!(Globals.isGlobalReadOnly()))
-			btn_executeCommand.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					String text = getInputField().getText() + "\n";
-					if (terminal != null) {
-						terminal.exec(text);
-						getInputField().setText("");
-						setCLfocus();
-					}
+			btn_executeCommand.addActionListener(actionEvent -> {
+				String text = getInputField().getText() + "\n";
+				if (terminal != null) {
+					terminal.exec(text);
+					getInputField().setText("");
+					setCLfocus();
 				}
 			});
 
@@ -411,15 +390,14 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		if (autoComplete != null)
 			tf_command.getDocument().removeDocumentListener(autoComplete);
 
-		if (list != null) {
-			autoComplete = new Autocomplete(tf_command, list);
-			tf_command.getDocument().addDocumentListener(autoComplete);
+		autoComplete = new Autocomplete(tf_command, list);
+		tf_command.getDocument().addDocumentListener(autoComplete);
 
-			// Maps the tab key to the commit action, which finishes the autocomplete
-			// when given a suggestion
-			tf_command.getInputMap().put(KeyStroke.getKeyStroke("TAB"), COMMIT_ACTION);
-			tf_command.getActionMap().put(COMMIT_ACTION, autoComplete.new CommitAction());
-		}
+		// Maps the tab key to the commit action, which finishes the autocomplete
+		// when given a suggestion
+		tf_command.getInputMap().put(KeyStroke.getKeyStroke("TAB"), COMMIT_ACTION);
+		tf_command.getActionMap().put(COMMIT_ACTION, autoComplete.new CommitAction());
+
 	}
 
 	public void removeAutocompleteListener() {
@@ -431,9 +409,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		logging.info(this, "createLayout ");
 		jScrollPane.setPreferredSize(output.getMaximumSize());
 
-		GroupLayout.Alignment leading = GroupLayout.Alignment.LEADING;
 		int gap = Globals.GAP_SIZE;
-		int mgap = Globals.MIN_GAP_SIZE;
 
 		lbl_command = new JLabel(configed.getResourceValue("SSHConnection.commandLine"));
 

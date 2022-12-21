@@ -15,8 +15,6 @@ package de.uib.configed.gui.ssh;
  */
 
 import java.awt.Dimension;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -102,18 +100,14 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		// cb_parameter_methods.setLightWeightPopupEnabled(false);
 		cb_parameter_formats.setEnabled(false);
 
-		cb_parameter_methods.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if (((String) cb_parameter_methods.getSelectedItem())
-						.equals(configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"))
-						|| ((String) cb_parameter_methods.getSelectedItem()).equals(
-								configed.getResourceValue("SSHConnection.CommandControl.method.optionSelection"))) {
-					cb_parameter_formats.setEnabled(false);
-				} else {
-					cb_parameter_formats.setEnabled(true);
-				}
-			}
+		cb_parameter_methods.addItemListener(itemEvent -> {
+			boolean enabled = ((String) cb_parameter_methods.getSelectedItem())
+					.equals(configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"))
+					|| ((String) cb_parameter_methods.getSelectedItem())
+							.equals(configed.getResourceValue("SSHConnection.CommandControl.method.optionSelection"));
+
+			cb_parameter_formats.setEnabled(enabled);
+
 		});
 
 		btn_test_param = new de.uib.configed.gui.IconButton(

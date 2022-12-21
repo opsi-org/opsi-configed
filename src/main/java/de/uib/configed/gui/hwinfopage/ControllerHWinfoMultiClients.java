@@ -12,8 +12,6 @@
 
 package de.uib.configed.gui.hwinfopage;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -22,8 +20,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -272,28 +268,16 @@ public class ControllerHWinfoMultiClients {
 
 		buttonCopySelection.setToolTipText(configed.getResourceValue("PanelHWInfo.overview.getSelection"));
 
-		buttonCopySelection.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// logging.info(this, "action performed " + e);
-				// logging.info(this, "selection empty " + panel.isSelectionEmpty());
-				// panel.getSelectedKeys();
-				main.setSelectedClientsCollectionOnPanel(panel.getSelectedKeys(), true);
-			}
-		});
+		buttonCopySelection.addActionListener(
+				actionEvent -> main.setSelectedClientsCollectionOnPanel(panel.getSelectedKeys(), true));
 
 		panel.setTitlePane(new JComponent[] {
 				// buttonConfigureColumns, buttonReload }, 20 );
 				buttonReload, buttonCopySelection, new JLabel("       "), buttonConfigureColumns }, 20);
 		panel.setTitlePaneBackground(Globals.backLightBlue);
 
-		panel.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				// logging.info(this, "val changed " + e);
-				buttonCopySelection.setEnabled(!((ListSelectionModel) e.getSource()).isSelectionEmpty());
-			}
-		});
+		panel.addListSelectionListener(listSelectionEvent -> buttonCopySelection
+				.setEnabled(!((ListSelectionModel) listSelectionEvent.getSource()).isSelectionEmpty()));
 
 		javax.swing.table.TableColumn col;
 		col = panel.getColumnModel().getColumn(0);

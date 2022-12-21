@@ -2,7 +2,6 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.GroupLayout;
@@ -84,12 +83,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 		}
 
 		instance = new SSHConnectionExecDialog();
-		SwingUtilities.invokeLater(new Thread() {
-			@Override
-			public void run() {
-				instance.setVisible(true);
-			}
-		});
+		SwingUtilities.invokeLater(() -> instance.setVisible(true));
 		return instance;
 	}
 
@@ -107,12 +101,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 					"images/user-trash.png", "images/user-trash.png", true);
 			btn_clear.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3));
 			btn_clear.setToolTipText(configed.getResourceValue("SSHConnection.btn_clear"));
-			btn_clear.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					clear();
-				}
-			});
+			btn_clear.addActionListener(actionEvent -> clear());
 			createLayout(konsolePanelLayout, jScrollPane, Globals.GAP_SIZE, Globals.GAP_SIZE, true);
 			createLayout(mainPanelLayout, inputPanel, 0, 0, false);
 		} catch (Exception e) {

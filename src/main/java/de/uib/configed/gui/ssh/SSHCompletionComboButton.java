@@ -1,8 +1,6 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
@@ -142,16 +140,13 @@ public class SSHCompletionComboButton {
 			combobox.setSelectedItem(combobox_default_path);
 
 		if (search_specific_files != null && (!search_specific_files.equals("")))
-			combobox.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if (combobox.getSelectedItem() != null
-							&& ((String) combobox.getSelectedItem()).endsWith(search_specific_files))
-						textfield.setText((String) combobox.getSelectedItem());
-					else
-						textfield.setText("");
-					combobox.setSelectedItem(combobox.getSelectedItem());
-				}
+			combobox.addActionListener(actionEvent -> {
+				if (combobox.getSelectedItem() != null
+						&& ((String) combobox.getSelectedItem()).endsWith(search_specific_files))
+					textfield.setText((String) combobox.getSelectedItem());
+				else
+					textfield.setText("");
+				combobox.setSelectedItem(combobox.getSelectedItem());
 			});
 		combobox.setMaximumRowCount(Globals.COMBOBOX_ROW_COUNT);
 	}
@@ -159,12 +154,7 @@ public class SSHCompletionComboButton {
 	private void initButton() {
 		button.setText(configed.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button"));
 		button.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button.tooltip"));
-		button.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				doButtonAction();
-			}
-		});
+		button.addActionListener(actionEvent -> doButtonAction());
 	}
 
 	public void doButtonAction() {

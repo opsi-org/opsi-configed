@@ -233,54 +233,24 @@ public class JTableSelectionPanel extends JPanel
 		searchMenu.add(popupEmptySearchfield);
 
 		popupSearch.setText(configed.getResourceValue("JTableSelectionPanel.search"));
-		popupSearch.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				searchTheRow();
-			}
-		});
+		popupSearch.addActionListener(actionEvent -> searchTheRow());
 
 		popupSearchNext.setText(configed.getResourceValue("JTableSelectionPanel.searchnext") + " ( F3 ) ");
-		popupSearchNext.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				searchTheNextRow();
-			}
-		});
+		popupSearchNext.addActionListener(actionEvent -> searchTheNextRow());
 
 		popupNewSearch.setText(configed.getResourceValue("JTableSelectionPanel.searchnew"));
-		popupNewSearch.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				searchTheRow(0);
-			}
-		});
+		popupNewSearch.addActionListener(actionEvent -> searchTheRow(0));
 
 		popupMarkHits.setText(configed.getResourceValue("SearchPane.popup.markall"));// "JTableSelectionPanel.markall")
 																						// + " ( F5 ) ");
-		popupMarkHits.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				markAll();
-			}
-		});
+		popupMarkHits.addActionListener(actionEvent -> markAll());
 
 		popupEmptySearchfield.setText(configed.getResourceValue("JTableSelectionPanel.searchempty"));
-		popupEmptySearchfield.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				fieldSearch.setText("");
-			}
-		});
+		popupEmptySearchfield.addActionListener(actionEvent -> fieldSearch.setText(""));
 
 		fieldSearch.setComponentPopupMenu(searchMenu);
 
-		fieldSearch.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				searchTheNextRow();
-			}
-		});
+		fieldSearch.addActionListener(actionEvent -> searchTheNextRow());
 
 		Icon markAllIcon = Globals.createImageIcon("images/selection-all.png", "");
 		Icon invertSelectionIcon = Globals.createImageIcon("images/selection-invert.png", "");
@@ -297,7 +267,7 @@ public class JTableSelectionPanel extends JPanel
 
 		comboSearchMode = new JComboBoxToolTip();
 
-		LinkedHashMap tooltipsMap = new LinkedHashMap();
+		Map tooltipsMap = new LinkedHashMap();
 		tooltipsMap.put(configed.getResourceValue("SearchPane.SearchMode.fulltext_with_alternatives"),
 				configed.getResourceValue("SearchPane.SearchMode.fulltext_with_alternatives.tooltip"));
 

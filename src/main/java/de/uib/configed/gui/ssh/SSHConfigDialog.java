@@ -1,15 +1,11 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Set;
 
@@ -154,20 +150,20 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		} else {
 			// logging.info(this, "compareStates 5 " + connectionInfo.getHost() + " <> " +
 			// configedMain.HOST );
-			if (!connectionInfo.getHost().equals(configedMain.HOST)) {
+			if (!connectionInfo.getHost().equals(ConfigedMain.HOST)) {
 				logging.info(this,
-						"compareStates 5 >" + connectionInfo.getHost() + "<     <>    >" + configedMain.HOST + "<");
+						"compareStates 5 >" + connectionInfo.getHost() + "<     <>    >" + ConfigedMain.HOST + "<");
 				return false;
 			}
 			if (!connectionInfo.getPort().equals(tf_port.getText())) {
 				logging.debug(this, "compareStates 6");
 				return false;
 			}
-			if (!connectionInfo.getUser().equals(configedMain.USER)) {
+			if (!connectionInfo.getUser().equals(ConfigedMain.USER)) {
 				logging.debug(this, "compareStates 7");
 				return false;
 			}
-			if ((!connectionInfo.getPassw().equals(configedMain.PASSWORD)) && (!connectionInfo.usesKeyfile())) {
+			if ((!connectionInfo.getPassw().equals(ConfigedMain.PASSWORD)) && (!connectionInfo.usesKeyfile())) {
 				logging.debug(this, "compareStates 8");
 				return false;
 			}
@@ -269,7 +265,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			cb_host = new JComboBox<>();
 			String host = connectionInfo.getHost();
 			if (host == null)
-				host = configedMain.HOST;
+				host = ConfigedMain.HOST;
 			cb_host.addItem(host);
 
 			PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
@@ -282,12 +278,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			logging.debug(this, "init host " + host);
 			cb_host.setSelectedItem(host);
 
-			cb_host.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					checkComponentStates();
-				}
-			});
+			cb_host.addItemListener(itemEvent -> checkComponentStates());
 		}
 		{
 			lbl_port = new JLabel();
@@ -410,21 +401,11 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 					"images/folder_16.png", " ", "images/folder_16.png", true);
 			btn_openChooser.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH / 4, Globals.BUTTON_HEIGHT));
 			if (!(Globals.isGlobalReadOnly()))
-				btn_openChooser.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						doActionOeffnen();
-					}
-				});
+				btn_openChooser.addActionListener(actionEvent -> doActionOeffnen());
 		}
 		{
 			buttonPanel.add(btn_close);
-			btn_close.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					doAction2();
-				}
-			});
+			btn_close.addActionListener(actionEvent -> doAction2());
 		}
 		{
 			lbl_keyfile = new JLabel();
@@ -477,20 +458,17 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			cb_useKeyfile.setSelected(false);
 			tf_passw.setEnabled(false);
 			tf_keyfile.setEnabled(false);
-			cb_useKeyfile.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					Boolean value = false;
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						value = true;
-					}
-					if (!cb_useDefault.isSelected())
-						tf_passw.setEnabled(!value);
-					btn_openChooser.setEnabled(value);
-					tf_keyfile.setEnabled(value);
-					tf_passphrase.setEnabled(value);
-					checkComponentStates();
+			cb_useKeyfile.addItemListener(itemEvent -> {
+				Boolean value = false;
+				if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
+					value = true;
 				}
+				if (!cb_useDefault.isSelected())
+					tf_passw.setEnabled(!value);
+				btn_openChooser.setEnabled(value);
+				tf_keyfile.setEnabled(value);
+				tf_passphrase.setEnabled(value);
+				checkComponentStates();
 			});
 		}
 		{
@@ -499,19 +477,16 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			cb_useDefault.setSelected(true);
 
 			setComponentsEditable(false);
-			cb_useDefault.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						setComponentsEditable(false);
-						cb_host.setSelectedItem(connectionInfo.getHost());
-						tf_user.setText(connectionInfo.getUser());
-						tf_passw.setText(connectionInfo.getPassw());
-						tf_port.setText(connectionInfo.getPort());
-					} else
-						setComponentsEditable(true);
-					checkComponentStates();
-				}
+			cb_useDefault.addItemListener(itemEvent -> {
+				if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
+					setComponentsEditable(false);
+					cb_host.setSelectedItem(connectionInfo.getHost());
+					tf_user.setText(connectionInfo.getUser());
+					tf_passw.setText(connectionInfo.getPassw());
+					tf_port.setText(connectionInfo.getPort());
+				} else
+					setComponentsEditable(true);
+				checkComponentStates();
 			});
 
 			// if (configedMain.SSHKEY != null)
@@ -535,25 +510,15 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			cb_useOutputColor.setText(configed.getResourceValue("SSHConnection.Config.coloredOutput"));
 			cb_useOutputColor.setToolTipText(configed.getResourceValue("SSHConnection.Config.coloredOutput.tooltip"));
 			cb_useOutputColor.setSelected(true);
-			SSHCommandFactory.getInstance().ssh_colored_output = true;
-			cb_useOutputColor.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					checkComponentStates();
-				}
-			});
+			SSHCommandFactory.ssh_colored_output = true;
+			cb_useOutputColor.addItemListener(itemEvent -> checkComponentStates());
 
 			cb_execInBackground = new JCheckBox();
 			cb_execInBackground.setText(configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground"));
 			cb_execInBackground
 					.setToolTipText(configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground.tooltip"));
-			cb_execInBackground.setSelected(SSHCommandFactory.getInstance().ssh_always_exec_in_background);
-			cb_execInBackground.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					checkComponentStates();
-				}
-			});
+			cb_execInBackground.setSelected(SSHCommandFactory.ssh_always_exec_in_background);
+			cb_execInBackground.addItemListener(itemEvent -> checkComponentStates());
 		}
 		logging.debug(this, "sshConfigDialog building layout ");
 		connectionPanelLayout.setHorizontalGroup(connectionPanelLayout.createSequentialGroup()
@@ -767,18 +732,9 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		chooser.setCurrentDirectory(userDir);
 
 		chooser.setFileHidingEnabled(false);
-		chooser.addPropertyChangeListener(new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent e) {
-				if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
-						|| e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
-					final File f = (File) e.getNewValue();
-				}
-			}
-		});
 
 		chooser.setVisible(true);
-		final int result = chooser.showOpenDialog(((Component) this));
+		final int result = chooser.showOpenDialog(this);
 
 		if (result == JFileChooser.APPROVE_OPTION) {
 			File inputVerzFile = chooser.getSelectedFile();
