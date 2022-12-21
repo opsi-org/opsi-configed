@@ -117,12 +117,10 @@ public class SelectionManager {
 	 * class
 	 */
 	public List<OperationWithStatus> operationsAsList(SelectOperation top) {
-		List<OperationWithStatus> owsList = new LinkedList<OperationWithStatus>();
 		if (top == null)
-			owsList = groupWithStatusList;
+			return groupWithStatusList;
 		else
-			owsList = reverseBuild(top, true);
-		return owsList;
+			return reverseBuild(top, true);
 	}
 
 	/** Clear all temporary data storage */

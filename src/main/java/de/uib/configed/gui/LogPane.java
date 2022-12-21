@@ -729,7 +729,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	public void buildDocument() {
 		logging.debug(this, "building document");
-		final Cursor startingCursor = jTextPane.getCursor();
 		jTextPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		// Switch to an blank document temporarily to avoid repaints
 
@@ -1039,10 +1038,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			testBlock.setString(lines[i]);
 			nextBlock.forward(nextStartI, '[', ']');
 
-			int infoPart = 0;
-
 			if (nextBlock.hasFound()) {
-				infoPart++;
 				// logging.info(this, "parse found part " + infoPart);
 
 				nextStartI = nextBlock.getIEnd() + 1;
@@ -1055,7 +1051,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			}
 
 			if (nextBlock.hasFound()) {
-				infoPart++;
 				// logging.info(this, "parse found part " + infoPart);
 
 				nextStartI = nextBlock.getIEnd() + 1;
@@ -1063,7 +1058,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			}
 
 			if (nextBlock.hasFound()) {
-				infoPart++;
 				// logging.info(this, "parse found part " + infoPart);
 				type = nextBlock.getContent();
 

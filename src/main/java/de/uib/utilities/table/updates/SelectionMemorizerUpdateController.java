@@ -67,7 +67,4 @@ public abstract class SelectionMemorizerUpdateController implements de.uib.utili
 
 		return success;
 	}
-
-	@Override
-	public abstract boolean cancelChanges();
 }

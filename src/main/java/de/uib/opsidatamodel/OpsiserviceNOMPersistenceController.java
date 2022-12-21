@@ -11004,10 +11004,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					problemToIndicate = false;
 
 				if (problemToIndicate) {
-					if (key.equals("linux_agent"))
-						problemToIndicate = false;
-
-					else if (key.equals("userroles") && !isUserRegisterActivated())
+					if (key.equals("linux_agent") || (key.equals("userroles") && !isUserRegisterActivated()))
 						problemToIndicate = false;
 				}
 

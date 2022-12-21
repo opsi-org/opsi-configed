@@ -365,7 +365,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		}
 
 		String hwClassUI = path[1].toString();
-		String device = path[2].toString();
 		String hwClass = (String) hwClassMapping.get(hwClassUI);
 
 		if (hwClass != null && reduceScanToByAuditClasses && !hwClassesForByAudit.contains(hwClass))
@@ -475,7 +474,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		TreePath selectedPath = tree.getSelectionPath();
 		logging.debug(this, "selectedPath " + selectedPath);
-		int selectedRow = tree.getRowForPath(selectedPath);
 		if (!node.isLeaf()) {
 			tree.expandPath(selectedPath);
 		}
@@ -495,7 +493,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				return;
 			}
 			String hwClassUI = path[1].toString();
-			String device = path[2].toString();
 			String hwClass = (String) hwClassMapping.get(hwClassUI);
 
 			// logging.debug(this, "scanNode hwClass " + hwClass);

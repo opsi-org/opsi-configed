@@ -1502,10 +1502,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				depotsAdded.append(singleDepot);
 			}
 
-			if (iter.hasNext()) {
-				singleDepot = null;
-			}
-
 			while (iter.hasNext()) {
 				String appS = (String) iter.next();
 				depotsAdded.append(";\n");
@@ -2906,7 +2902,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				// merge the other clients
 				for (int i = 1; i < getSelectedClients().length; i++) {
-					productPropertiesFor1Client = new HashMap();
 					productPropertiesFor1Client = persist.getProductproperties(getSelectedClients()[i], productEdited);
 					// logging.debug(this, " ===== " + i + ": client " + getSelectedClients()[i]);
 					productProperties.add(productPropertiesFor1Client);
@@ -4844,9 +4839,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			selectionPanel.removeListSelectionListener(this); // deactivate temporarily listening to list selection
 																// events
 
-		// setEditingTarget(EditingTarget.CLIENTS);
-		// mainFrame.setVisualViewIndex(viewClients);
-		boolean saveFilterClientList = filterClientList;
 		// filterClientList = false;
 
 		if (dataReady)
@@ -5068,13 +5060,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				fAskSaveProductConfiguration.setVisible(true);
 
-				/*
-				 * try
-				 * {
-				 * fAskSaveProductConfiguration.setAlwaysOnTop(true);
-				 * }
-				 * catch(SecurityException secex)
-				 * {
+				/*GeneralDataChang
 				 * }
 				 */
 
@@ -5102,7 +5088,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			this.dataChanged = false;
 			// persist.depotProductPropertiesRequestRefresh();
 			// clearUpdateCollectionAndTell();
-			cancelUpdateCollection();
+			updateCollection.cancel();
 		}
 	}
 
@@ -6417,7 +6403,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				final String selected = "" + getSelectedList().get(0);
 
 				for (int j = 0; j < getSelectedClients().length; j++) {
-					final int J = j;
 					final String targetClient = getSelectedClients()[j];
 
 					new Thread() {
@@ -6566,6 +6551,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		logging.info(this, "startSSHOpsiServerExec isReadOnly false");
 		final ConfigedMain m = this;
 		new Thread() {
+			@Override
 			public void run() {
 				if (command.needParameter())
 					((SSHCommandNeedParameter) command).startParameterGui(m);
@@ -6587,13 +6573,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 * Starts the config dialog
 	 */
 	public void startSSHConfigDialog() {
-		// if (configed.sshkey != null)
-		// SSHConfigDialog sshConfig = SSHConfigDialog.getInstance(mainFrame, this,
-		// sshkey, readLocallySavedServerNames());
-		// else
-		// SSHConfigDialog sshConfig = SSHConfigDialog.getInstance(mainFrame, this,
-		// readLocallySavedServerNames());
-		SSHConfigDialog sshConfig = SSHConfigDialog.getInstance(mainFrame, this);
+		SSHConfigDialog.getInstance(mainFrame, this);
 	}
 
 	public SSHConfigDialog getSSHConfigDialog() {
@@ -6602,7 +6582,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	/** Starts the control dialog */
 	public void startSSHControlDialog() {
-		SSHCommandControlDialog sshControl = SSHCommandControlDialog.getInstance(this);
+		SSHCommandControlDialog.getInstance(this);
 	}
 
 	/** Starts the terminal */
@@ -7060,10 +7040,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// System.exit(0);
 
 		clearUpdateCollectionAndTell();
-	}
-
-	private void cancelUpdateCollection() {
-		updateCollection.cancel();
 	}
 
 	private void clearUpdateCollectionAndTell() {

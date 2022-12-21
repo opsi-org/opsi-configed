@@ -97,6 +97,47 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	}
 
 	class FileNameDocumentListener implements DocumentListener {
+		private boolean checkFiles() {
+			boolean result = false;
+
+			if (fieldServerPath != null && fieldDriverPath != null) {
+				try {
+					targetPath = new File(fieldServerPath.getText());
+					driverPath = new File(fieldDriverPath.getText());
+
+					stateServerPath = targetPath.isDirectory();
+					serverPathChecked.setSelected(stateServerPath);
+					logging.info(this, "checkFiles  stateServerPath targetPath " + targetPath);
+					logging.info(this, "checkFiles  stateServerPath driverPath " + driverPath);
+					logging.info(this, "checkFiles  stateServerPath isDirectory " + stateServerPath);
+
+					stateDriverPath = driverPath.exists();
+					driverPathChecked.setSelected(stateDriverPath);
+					logging.info(this, "checkFiles stateDriverPath " + stateDriverPath);
+
+					if (stateServerPath && stateDriverPath) {
+						result = true;
+					}
+				} catch (Exception ex) {
+					logging.info(this, "checkFiles " + ex);
+				}
+
+			}
+
+			logging.info(this, "checkFiles " + result);
+
+			if (buttonUploadDrivers != null) {
+				buttonUploadDrivers.setEnabled(result);
+
+				if (result)
+					buttonUploadDrivers.setToolTipText(configed.getResourceValue("PanelDriverUpload.execute"));
+				else
+					buttonUploadDrivers.setToolTipText("Treiber- bzw. Zielpfad noch nicht gefunden");
+			}
+
+			return result;
+		}
+
 		@Override
 		public void changedUpdate(DocumentEvent e) {
 			logging.debug(this, "changedUpdate ");
@@ -293,8 +334,6 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		fieldServerPath.getDocument().addDocumentListener(new FileNameDocumentListener());
 
 		fieldServerPath.setForeground(Globals.greyed);
-
-		JLabel labelMakeServerpath = new JLabel(configed.getResourceValue("PanelDriverUpload.labelMakeDir"));
 
 		buttonCallChooserServerpath = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserServerpath.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
@@ -665,9 +704,8 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		logging.info(this, "makePath for " + path);
 
 		if (path != null && !path.exists()) {
-			int returnedOption = JOptionPane.NO_OPTION;
 
-			returnedOption = JOptionPane.showOptionDialog(rootFrame,
+			int returnedOption = JOptionPane.showOptionDialog(rootFrame,
 					configed.getResourceValue("PanelDriverUpload.makeFilePath.text"),
 					configed.getResourceValue("PanelDriverUpload.makeFilePath.title"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE, null, null, null);
@@ -763,47 +801,6 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 	public void setDepot(String s) {
 		comboChooseDepot.setModel(new DefaultComboBoxModel(new String[] { s }));
-	}
-
-	private boolean checkFiles() {
-		boolean result = false;
-
-		if (fieldServerPath != null && fieldDriverPath != null) {
-			try {
-				targetPath = new File(fieldServerPath.getText());
-				driverPath = new File(fieldDriverPath.getText());
-
-				stateServerPath = targetPath.isDirectory();
-				serverPathChecked.setSelected(stateServerPath);
-				logging.info(this, "checkFiles  stateServerPath targetPath " + targetPath);
-				logging.info(this, "checkFiles  stateServerPath driverPath " + driverPath);
-				logging.info(this, "checkFiles  stateServerPath isDirectory " + stateServerPath);
-
-				stateDriverPath = driverPath.exists();
-				driverPathChecked.setSelected(stateDriverPath);
-				logging.info(this, "checkFiles stateDriverPath " + stateDriverPath);
-
-				if (stateServerPath && stateDriverPath) {
-					result = true;
-				}
-			} catch (Exception ex) {
-				logging.info(this, "checkFiles " + ex);
-			}
-
-		}
-
-		logging.info(this, "checkFiles " + result);
-
-		if (buttonUploadDrivers != null) {
-			buttonUploadDrivers.setEnabled(result);
-
-			if (result)
-				buttonUploadDrivers.setToolTipText(configed.getResourceValue("PanelDriverUpload.execute"));
-			else
-				buttonUploadDrivers.setToolTipText("Treiber- bzw. Zielpfad noch nicht gefunden");
-		}
-
-		return result;
 	}
 
 	private void produceTarget() {

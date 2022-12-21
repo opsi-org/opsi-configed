@@ -24,7 +24,4 @@ public abstract class MapUpdate implements UpdateCommand {
 	public Object getController() {
 		return persis;
 	}
-
-	@Override
-	public abstract void doCall();
 }

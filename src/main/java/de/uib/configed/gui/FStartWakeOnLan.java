@@ -550,8 +550,8 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		logging.info(this, "leave  waitingMode  " + waitingMode);
 
 		if (waitingMode) {
-			int returnedOption = JOptionPane.NO_OPTION;
-			returnedOption = JOptionPane.showOptionDialog(this, configed.getResourceValue("FStartWakeOnLan.allowClose"),
+			int returnedOption = JOptionPane.showOptionDialog(this,
+					configed.getResourceValue("FStartWakeOnLan.allowClose"),
 					configed.getResourceValue("FStartWakeOnLan.allowClose.title"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE, null, null, null);
 

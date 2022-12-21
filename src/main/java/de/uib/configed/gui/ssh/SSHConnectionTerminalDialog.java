@@ -336,9 +336,8 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		passwordMode = true;
 		final SSHConnectionTerminalDialog caller = this;
 		if (!(Globals.isGlobalReadOnly()))
-			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonTest().addActionListener(actionEvent -> 
-				((SSHCommandControlParameterMethodsPanel) parameterPanel).doActionTestParam(caller);
-			);
+			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonTest().addActionListener(
+					actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel).doActionTestParam(caller));
 
 		if (!(Globals.isGlobalReadOnly()))
 			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonAdd()

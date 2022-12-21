@@ -602,7 +602,6 @@ public class Globals {
 			de.uib.utilities.logging.logging.debug("Globals, remainder " + remainder);
 			if (remainder.length() <= tooltipLineLength) {
 				result.append(remainder.replace("\\n", "<br />"));
-				remainder = "";
 				break;
 			}
 			result.append(remainder.substring(0, tooltipLineLength).replace("\\n", "<br />"));

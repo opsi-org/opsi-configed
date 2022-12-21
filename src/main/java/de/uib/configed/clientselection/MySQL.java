@@ -13,9 +13,13 @@ public class MySQL {
 
 	public enum Type {
 		OR, AND, NOT, NEW
-	};
+	}
 
-	boolean group, product, property, software, hardware = false;
+	private boolean group = false;
+	private boolean product = false;
+	private boolean property = false;
+	private boolean software = false;
+	private boolean hardware = false;
 
 	private boolean hardwareWithDevice = false;
 	private String hardwareTableName = "";

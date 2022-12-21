@@ -166,13 +166,7 @@ public class CSVFormat {
 		public boolean detect() {
 			hasHeader = true;
 
-			if (containsDigits()) {
-				hasHeader = false;
-				return hasHeader;
-			} else if (containsEmptyFields()) {
-				hasHeader = false;
-				return hasHeader;
-			} else if (containsFieldsWithEmbeddedQuotes()) {
+			if (containsDigits() || containsEmptyFields() || containsFieldsWithEmbeddedQuotes()) {
 				hasHeader = false;
 				return hasHeader;
 			}

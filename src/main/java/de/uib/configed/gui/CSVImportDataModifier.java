@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.swing.RowSorter;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -256,7 +255,6 @@ public class CSVImportDataModifier {
 
 	private void disableRowSorting(PanelGenEditTable thePanel) {
 		TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(thePanel.getTheTable().getModel());
-		java.util.List<RowSorter.SortKey> sortKeys = thePanel.getRowSorter().getSortKeys();
 
 		int columnCount = thePanel.getTheTable().getColumnCount();
 

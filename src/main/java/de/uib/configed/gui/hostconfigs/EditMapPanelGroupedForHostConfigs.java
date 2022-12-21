@@ -542,10 +542,6 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		de.uib.opsidatamodel.PersistenceController persist = de.uib.opsidatamodel.PersistenceControllerFactory
 				.getPersistenceController();
 
-		String role = rolename;
-		if (role == null)
-			role = "";
-
 		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, // owner frame
 				"add user", // title
 				false, // modal
@@ -576,7 +572,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		};
 
 		FramingTextfieldWithListselection defs = new FramingNewUser();
-		defs.setListData(new Vector<String>(theRoles));
+		defs.setListData(new Vector<>(theRoles));
 
 		f.applyFraming(defs);
 
