@@ -20,15 +20,14 @@ import de.uib.utilities.logging.logging;
  */
 
 public class Globals {
-	public static final String VERSION = "4.2.19.4";
-	public static final String VERDATE = "2022-12-12";
+	public static final String VERSION = "4.2.19.5";
+	public static final String VERDATE = "2022-12-21";
 
 	public static final String VERHASHTAG = "";
 
 	public static final String ZERODATE = "";
 
 	public static final String REQUIRED_SERVICE_VERSION = "4.1.0";
-	// public static final String RECOMMENDED_OPSI_VERSION = "4.2.0";
 	public static final String MIN_SUPPORTED_OPSI_VERSION = "4.0";
 
 	public static final String COPYRIGHT1 = "Copyright (c) uib 2001 - 2022 (www.uib.de)";

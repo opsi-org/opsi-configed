@@ -1419,7 +1419,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuClientselectionFailedInPeriod
 				.setText(configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedInTimespan"));
 
-		for (final String value : searchedTimeSpans.values()) {
+		for (final String value : searchedTimeSpansText.values()) {
 			JMenuItem item = new JMenuItemFormatted(value);
 			item.setFont(Globals.defaultFont);
 
