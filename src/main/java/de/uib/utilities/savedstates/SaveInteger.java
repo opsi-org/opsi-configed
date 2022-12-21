@@ -13,8 +13,7 @@ public class SaveInteger extends SaveState {
 		if (minValue == null || value == null)
 			serialize(value);
 		else {
-			int val0 = value;
-			;
+			int val0 = value;;
 			if (val0 < minValue)
 				val0 = minValue;
 			serialize(val0);

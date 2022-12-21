@@ -13,12 +13,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
-/**
- * DepotList
- * Copyright:     Copyright (c) 2012-2017
- * Organisation:  uib
- * @author Rupert Röder
- */
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.opsidatamodel.PersistenceController;
@@ -181,7 +175,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 				String depot = (String) value;
 				if (!persist.getDepotPermission(depot)) {
-					((JLabel) jc).setBackground(de.uib.configed.Globals.backgroundLightGrey);
+					((JLabel) jc).setBackground(Globals.backgroundLightGrey);
 					((JLabel) jc).setToolTipText(
 							"Depot " + depot + " " + configed.getResourceValue("Permission.depot.not_accessible"));
 				} else

@@ -87,7 +87,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 					String imageFileString = imagesBase + "/" + stringval + ".png";
 					// logging.debug (" image file " + imageFileString);
 
-					image = de.uib.configed.Globals.createImageIcon(imageFileString, stringval);
+					image = Globals.createImageIcon(imageFileString, stringval);
 					if (image != null)
 						mapOfImages.put(key, image);
 				}
@@ -135,7 +135,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 					String imageFileString = imagesBase + "/" + stringval + ".png";
 					// logging.debug (" image file " + imageFileString);
 
-					image = de.uib.configed.Globals.createImageIcon(imageFileString, stringval);
+					image = Globals.createImageIcon(imageFileString, stringval);
 					if (image != null)
 						mapOfImages.put(key, image);
 				}
@@ -170,11 +170,11 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 		Color foreground;
 
 		if (isSelected) {
-			background = de.uib.configed.Globals.nimbusSelectionBackground;
+			background = Globals.nimbusSelectionBackground;
 			foreground = Color.WHITE;
 		} else {
-			background = de.uib.configed.Globals.nimbusBackground;
-			foreground = de.uib.configed.Globals.nimbusSelectionBackground; // Color.WHITE; // Color.black;
+			background = Globals.nimbusBackground;
+			foreground = Globals.nimbusSelectionBackground; // Color.WHITE; // Color.black;
 		} ;
 
 		setBackground(background);

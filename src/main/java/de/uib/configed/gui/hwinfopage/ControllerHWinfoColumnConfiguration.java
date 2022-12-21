@@ -198,7 +198,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 		};
 
-		panel.setMasterFrame(de.uib.configed.Globals.mainFrame);
+		panel.setMasterFrame(Globals.mainFrame);
 		panel.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panel.showFilterIcon(true); // supply implementation of SearchTargetModelFromTable.setFiltered
@@ -306,7 +306,7 @@ public class ControllerHWinfoColumnConfiguration {
 		// panel.setTitle( "" );//configed.getResourceValue("PanelHWInfo.overview") );
 
 		// Icon iconConfigure =
-		// de.uib.configed.Globals.createImageIcon("images/config_pro.png", "");
+		// Globals.createImageIcon("images/config_pro.png", "");
 
 		panel.setTitlePane(
 				new JComponent[] { new JLabel(configed.getResourceValue("HWinfoColumnConfiguration.infoTitle")) }, 20);
@@ -330,9 +330,9 @@ public class ControllerHWinfoColumnConfiguration {
 		col = panel.getColumnModel().getColumn(columnNames.indexOf(colUseInQuery));
 		col.setMaxWidth(80);
 
-		Icon iconChecked = de.uib.configed.Globals.createImageIcon("images/checked_box_blue_14.png", "");
-		Icon iconUnchecked = de.uib.configed.Globals.createImageIcon("images/checked_box_blue_empty_14.png", "");
-		Icon iconEmpty = de.uib.configed.Globals.createImageIcon("images/checked_void.png", "");
+		Icon iconChecked = Globals.createImageIcon("images/checked_box_blue_14.png", "");
+		Icon iconUnchecked = Globals.createImageIcon("images/checked_box_blue_empty_14.png", "");
+		Icon iconEmpty = Globals.createImageIcon("images/checked_void.png", "");
 
 		col.setCellRenderer(new de.uib.utilities.table.gui.BooleanIconTableCellRenderer(iconChecked, iconUnchecked,
 				iconEmpty, true));

@@ -8,6 +8,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
@@ -159,8 +160,7 @@ public class PanelHostConfig extends JPanel {
 				// .addComponent( header, GroupLayout.PREFERRED_SIZE,
 				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				// .addGap(5)
-				.addComponent(editMapPanel, de.uib.configed.Globals.LINE_HEIGHT * 2, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE)
+				.addComponent(editMapPanel, Globals.LINE_HEIGHT * 2, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 		// .addGap(20)
 		);
 	}

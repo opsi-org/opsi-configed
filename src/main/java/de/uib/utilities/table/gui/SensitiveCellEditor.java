@@ -22,8 +22,7 @@ import de.uib.utilities.swing.FEditList;
 import de.uib.utilities.table.DefaultListModelProducer;
 import de.uib.utilities.table.ListModelProducer;
 
-public class SensitiveCellEditor extends AbstractCellEditor
-		implements TableCellEditor, MouseListener {
+public class SensitiveCellEditor extends AbstractCellEditor implements TableCellEditor, MouseListener {
 	protected JTextField field;
 	// protected Object value;
 	protected FEditList listeditor;
@@ -131,7 +130,7 @@ public class SensitiveCellEditor extends AbstractCellEditor
 				// Point tablePoint = table.getLocationOnScreen();
 
 				listeditor.setVisible(true);
-				listeditor.locateLeftTo(table); // de.uib.configed.Globals.mainContainer );
+				listeditor.locateLeftTo(table); // Globals.mainContainer );
 				// listeditor.setLocation((int) tablePoint.getX() + (int) rect.getX() + 50,
 				// (int) tablePoint.getY() + (int) rect.getY() + Globals.lineHeight );
 			}
@@ -153,11 +152,7 @@ public class SensitiveCellEditor extends AbstractCellEditor
 		});
 	}
 
-	public Component getTableCellEditorComponent(JTable table,
-			Object value,
-			boolean isSelected,
-			int row,
-			int column) {
+	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 
 		logging.debug(this, "  celleditor working in " + row + ", " + column + " with value " + value + ", class "
 				+ value.getClass().getName());

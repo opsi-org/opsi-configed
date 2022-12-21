@@ -32,11 +32,11 @@ import de.uib.utilities.table.TableModelFilterCondition;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
+import de.uib.utilities.table.updates.MapBasedUpdater;
+import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.SelectionMemorizerUpdateController;
 import de.uib.utilities.table.updates.StrList2BooleanFunction;
-import de.uib.utilities.table.updates.MapItemsUpdateController;
-import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
 public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
@@ -160,7 +160,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		thePanel.buttonShowAssignedNotExisting
 				.setEnabled(persist.getUnknownSoftwareListForLicencePool(poolID).size() > 0);
 		if (thePanel.fMissingSoftwareInfo == null)
-			thePanel.fMissingSoftwareInfo = new FGlobalSoftwareInfo(de.uib.configed.Globals.frame1, this);
+			thePanel.fMissingSoftwareInfo = new FGlobalSoftwareInfo(Globals.frame1, this);
 
 		if (persist.getUnknownSoftwareListForLicencePool(poolID).size() > 0) {
 			Map<String, Object> missingSoftwareMap = new HashMap<>();
@@ -385,13 +385,9 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 					logging.info(
 							" software with ident \"" + key + "\" already associated to license pool " + otherPool);
 
-					FTextArea dialog = new FTextArea(de.uib.configed.Globals.frame1, Globals.APPNAME + " " + title,
-							true,
-							new String[] {
-									configed.getResourceValue(
-											"PanelAssignToLPools.warningSoftwareAlreadyAssigned.option1"),
-									configed.getResourceValue(
-											"PanelAssignToLPools.warningSoftwareAlreadyAssigned.option2") },
+					FTextArea dialog = new FTextArea(Globals.frame1, Globals.APPNAME + " " + title, true, new String[] {
+							configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.option1"),
+							configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned.option2") },
 							400, 200);
 					dialog.setMessage(info + "\n\n" + option);
 					dialog.setVisible(true);
@@ -852,10 +848,10 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 		// -- Softwarename --> LicencePool
 
-		logging.info(this, "frame Softwarename --> LicencePool  in " + de.uib.configed.Globals.frame1);
+		logging.info(this, "frame Softwarename --> LicencePool  in " + Globals.frame1);
 
 		final ControlPanelAssignToLPools contr = this;
-		thePanel.fSoftwarename2LicencePool = new FSoftwarename2LicencePool(de.uib.configed.Globals.frame1, contr);
+		thePanel.fSoftwarename2LicencePool = new FSoftwarename2LicencePool(Globals.frame1, contr);
 		thePanel.fSoftwarename2LicencePool.setTableModel(null); // test
 		thePanel.setDisplaySimilarExist(thePanel.fSoftwarename2LicencePool.checkExistNamesWithVariantLicencepools());
 		thePanel.fSoftwarename2LicencePool.setButtonsEnabled(true);

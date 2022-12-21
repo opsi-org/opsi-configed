@@ -38,8 +38,7 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 		if (tableType == null || hwClass == null)
 			return;
 
-		logging.info(this, "checkIn key " + key
-				+ " hwClass " + hwClass + " tableType " + tableType);
+		logging.info(this, "checkIn key " + key + " hwClass " + hwClass + " tableType " + tableType);
 
 		OpsiHwAuditDeviceClass auditDeviceClass = hwAuditDeviceClasses.get(hwClass.toUpperCase());
 

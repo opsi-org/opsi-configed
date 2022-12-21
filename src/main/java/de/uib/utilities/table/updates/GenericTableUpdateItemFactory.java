@@ -16,9 +16,7 @@ public class GenericTableUpdateItemFactory extends TableUpdateItemFactory {
 	protected int keyCol;
 	protected Object source;
 
-	public GenericTableUpdateItemFactory(
-			Object source,
-			Vector<String> columnNames, Vector<String> classNames,
+	public GenericTableUpdateItemFactory(Object source, Vector<String> columnNames, Vector<String> classNames,
 			int keyCol) {
 		this.columnNames = columnNames;
 		this.classNames = classNames;
@@ -26,14 +24,11 @@ public class GenericTableUpdateItemFactory extends TableUpdateItemFactory {
 		this.source = source;
 	}
 
-	public GenericTableUpdateItemFactory(
-			Vector<String> columnNames, Vector<String> classNames,
-			int keyCol) {
+	public GenericTableUpdateItemFactory(Vector<String> columnNames, Vector<String> classNames, int keyCol) {
 		this(null, columnNames, classNames, keyCol);
 	}
 
-	public GenericTableUpdateItemFactory(
-			int keyCol) {
+	public GenericTableUpdateItemFactory(int keyCol) {
 		this(null, null, null, keyCol);
 	}
 
@@ -50,18 +45,15 @@ public class GenericTableUpdateItemFactory extends TableUpdateItemFactory {
 	}
 
 	public TableEditItem produceUpdateItem(Vector oldValues, Vector rowV) {
-		return new GenericTableUpdateItem(
-				source, keyCol, columnNames, classNames, oldValues, rowV);
+		return new GenericTableUpdateItem(source, keyCol, columnNames, classNames, oldValues, rowV);
 	}
 
 	public TableEditItem produceInsertItem(Vector rowV) {
-		return new GenericTableInsertItem(
-				source, keyCol, columnNames, classNames, rowV);
+		return new GenericTableInsertItem(source, keyCol, columnNames, classNames, rowV);
 	}
 
 	public TableEditItem produceDeleteItem(Vector rowV) {
-		return new GenericTableDeleteItem(
-				source, keyCol, columnNames, classNames, rowV);
+		return new GenericTableDeleteItem(source, keyCol, columnNames, classNames, rowV);
 	}
 
 }

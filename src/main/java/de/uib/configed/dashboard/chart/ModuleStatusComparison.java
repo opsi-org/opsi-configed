@@ -41,9 +41,7 @@ public class ModuleStatusComparison extends StackPane implements DataChangeListe
 		List<String> expiredModules = ModuleData.getExpiredModules();
 		List<String> availableModules = ModuleData.getModules();
 
-		if (activeModules.isEmpty() &&
-				expiredModules.isEmpty() &&
-				availableModules.isEmpty()) {
+		if (activeModules.isEmpty() && expiredModules.isEmpty() && availableModules.isEmpty()) {
 			moduleStatusNoDataText.setVisible(true);
 			moduleStatusComparisonPieChart.setLabelsVisible(false);
 		} else {

@@ -3656,7 +3656,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					{
 						logging.info(this, "getSoftwareAudit,  not found client entry " + entry);
 						int returnedOption = javax.swing.JOptionPane.YES_OPTION;
-						returnedOption = javax.swing.JOptionPane.showOptionDialog(de.uib.configed.Globals.mainFrame,
+						returnedOption = javax.swing.JOptionPane.showOptionDialog(Globals.mainFrame,
 
 								configed.getResourceValue("PersistenceController.reloadSoftwareInformation.message")
 										+ " " + entry.getSWident()
@@ -10654,7 +10654,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public void showLicInfoWarnings() {
 		if (licInfoMap != null && licInfoMap.warningExists() && licInfoWarnings != null) {
 			licInfoWarnings.setVisible(true);
-			licInfoWarnings.centerOn(de.uib.configed.Globals.mainFrame);
+			licInfoWarnings.centerOn(Globals.mainFrame);
 		}
 	}
 
@@ -10695,7 +10695,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		} else {
 			if (licInfoMap.warningExists()) {
 				if (licInfoWarnings == null) {
-					licInfoWarnings = new FTextArea(de.uib.configed.Globals.mainFrame,
+					licInfoWarnings = new FTextArea(Globals.mainFrame,
 							configed.getResourceValue("Permission.modules.title"), false,
 							new String[] { configed.getResourceValue("Dash.close"),
 									configed.getResourceValue("Permission.modules.buttonGoToValidationTable") },
@@ -11063,7 +11063,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						 * 
 						 * 
 						 * javax.swing.JOptionPane.showMessageDialog(
-						 * de.uib.configed.Globals.mainContainer,
+						 * Globals.mainContainer,
 						 * info.toString(),
 						 * configed.getResourceValue("Permission.modules.title"),
 						 * javax.swing.JOptionPane.OK_OPTION);

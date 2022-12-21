@@ -78,12 +78,12 @@ public class HTTP {
 	 * ...}
 	 * </pre>
 	 * 
-	 * It does no further checking or conversion. It does not parse dates.
-	 * It does not do '%' transforms on URLs.
+	 * It does no further checking or conversion. It does not parse dates. It
+	 * does not do '%' transforms on URLs.
 	 * 
 	 * @param string An HTTP header string.
-	 * @return A JSONObject containing the elements and attributes
-	 *         of the XML string.
+	 * @return A JSONObject containing the elements and attributes of the XML
+	 *         string.
 	 * @throws JSONException
 	 */
 	public static JSONObject toJSONObject(String string) throws JSONException {
@@ -142,13 +142,12 @@ public class HTTP {
 	 * }
 	 * </pre>
 	 * 
-	 * Any other members of the JSONObject will be output as HTTP fields.
-	 * The result will end with two CRLF pairs.
+	 * Any other members of the JSONObject will be output as HTTP fields. The
+	 * result will end with two CRLF pairs.
 	 * 
 	 * @param o A JSONObject
 	 * @return An HTTP header string.
-	 * @throws JSONException if the object does not contain enough
-	 *                       information.
+	 * @throws JSONException if the object does not contain enough information.
 	 */
 	public static String toString(JSONObject o) throws JSONException {
 		Iterator keys = o.keys();
@@ -174,9 +173,8 @@ public class HTTP {
 		sb.append(CRLF);
 		while (keys.hasNext()) {
 			s = keys.next().toString();
-			if (!s.equals("HTTP-Version") && !s.equals("Status-Code") &&
-					!s.equals("Reason-Phrase") && !s.equals("Method") &&
-					!s.equals("Request-URI") && !o.isNull(s)) {
+			if (!s.equals("HTTP-Version") && !s.equals("Status-Code") && !s.equals("Reason-Phrase")
+					&& !s.equals("Method") && !s.equals("Request-URI") && !o.isNull(s)) {
 				sb.append(s);
 				sb.append(": ");
 				sb.append(o.getString(s));

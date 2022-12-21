@@ -9,8 +9,7 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.observer.DataEditListener;
 import de.uib.utilities.observer.ObservableSubject;
 
-public class JTextFieldObserved extends JTextField
-		implements KeyListener {
+public class JTextFieldObserved extends JTextField implements KeyListener {
 	protected String startText = "";
 
 	protected ObservableSubject globalEditingSubject;

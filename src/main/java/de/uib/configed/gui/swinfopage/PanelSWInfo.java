@@ -242,7 +242,7 @@ public class PanelSWInfo extends JPanel {
 		// modelSWInfo.toggleFilter( FILTER_MS_UPDATES );
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates = new JCheckBox("", withMsUpdates);
-		checkWithMsUpdates.setForeground(de.uib.configed.Globals.blue);
+		checkWithMsUpdates.setForeground(Globals.blue);
 		checkWithMsUpdates.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				setWithMsUpdatesValue(checkWithMsUpdates.isSelected());
@@ -256,7 +256,7 @@ public class PanelSWInfo extends JPanel {
 		// modelSWInfo.toggleFilter( FILTER_MS_UPDATES2 );
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates2 = new JCheckBox("", withMsUpdates2);
-		checkWithMsUpdates2.setForeground(de.uib.configed.Globals.blue);
+		checkWithMsUpdates2.setForeground(Globals.blue);
 		checkWithMsUpdates2.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				setWithMsUpdatesValue2(checkWithMsUpdates2.isSelected());
@@ -269,7 +269,7 @@ public class PanelSWInfo extends JPanel {
 		JLabel labelWithMSUpdates = new JLabel(configed.getResourceValue("PanelSWInfo.withMsUpdates"));
 		JLabel labelWithMSUpdates2 = new JLabel(configed.getResourceValue("PanelSWInfo.withMsUpdates2"));
 
-		subPanelTitle.setBackground(de.uib.configed.Globals.backLightBlue);
+		subPanelTitle.setBackground(Globals.backLightBlue);
 
 		GroupLayout layoutSubPanelTitle = new GroupLayout(subPanelTitle);
 		subPanelTitle.setLayout(layoutSubPanelTitle);
@@ -307,7 +307,7 @@ public class PanelSWInfo extends JPanel {
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(vGap, vGap, vGap).addGap(vGap, vGap, vGap));
 
-		// subPanelTitle.setBorder(BorderFactory.createLineBorder(de.uib.configed.Globals.blueGrey));
+		// subPanelTitle.setBorder(BorderFactory.createLineBorder(Globals.blueGrey));
 
 		panelTable.setTableModel(modelSWInfo);
 		panelTable.setSearchColumnsAll();
@@ -610,7 +610,7 @@ public class PanelSWInfo extends JPanel {
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());
-		externalView.centerOn(de.uib.configed.Globals.mainFrame);
+		externalView.centerOn(Globals.mainFrame);
 
 		externalView.setVisible(true);
 	}

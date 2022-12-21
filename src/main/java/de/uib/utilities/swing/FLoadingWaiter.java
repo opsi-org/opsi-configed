@@ -147,7 +147,7 @@ public class FLoadingWaiter extends JFrame
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 
-		ImageIcon icon = de.uib.configed.Globals.createImageIcon("images/configed_icon.png", "");
+		ImageIcon icon = Globals.createImageIcon("images/configed_icon.png", "");
 		JLabel iconLabel = new JLabel(icon);
 
 		layout.setHorizontalGroup(

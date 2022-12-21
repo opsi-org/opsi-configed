@@ -63,7 +63,7 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 						String imageFileString = imagesBase + "/" + key + ".png";
 						// logging.info(this, "key " + key + ", image file " + imageFileString);
 
-						image = de.uib.configed.Globals.createImageIcon(imageFileString, stringval);
+						image = Globals.createImageIcon(imageFileString, stringval);
 						// logging.info(this, "image found " + (image != null));
 
 						if (image == null)
@@ -72,7 +72,7 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 							imageFileString = imagesBase + "/" + stringval + ".gif";
 							// logging.info(this, " image file " + imageFileString);
 
-							image = de.uib.configed.Globals.createImageIcon(imageFileString, stringval);
+							image = Globals.createImageIcon(imageFileString, stringval);
 							// logging.info(this, "image found " + (image != null));
 						}
 

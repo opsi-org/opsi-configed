@@ -79,7 +79,7 @@ public class RunningInstances<T> {
 	public boolean askStop() {
 		reallyLeave = false;
 		int returnedOption = JOptionPane.NO_OPTION;
-		returnedOption = JOptionPane.showOptionDialog(de.uib.configed.Globals.mainFrame, askForLeave,
+		returnedOption = JOptionPane.showOptionDialog(Globals.mainFrame, askForLeave,
 				Globals.APPNAME + " " + configed.getResourceValue("ConfigedMain.Licences.AllowLeaveApp.title"),
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 

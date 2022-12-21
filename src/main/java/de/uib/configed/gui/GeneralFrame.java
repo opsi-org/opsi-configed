@@ -24,12 +24,6 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-/**
- * FGeneralDialog
- * Copyright:     Copyright (c) 2001-2013
- * Organisation:  uib
- * @author Rupert Röder
- */
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 

@@ -16,19 +16,14 @@ public class MapTableUpdateItemFactory extends TableUpdateItemFactory {
 	protected int keyCol;
 	protected Object source;
 
-	public MapTableUpdateItemFactory(
-			Object source,
-			Vector<String> columnNames, Vector<String> classNames,
-			int keyCol) {
+	public MapTableUpdateItemFactory(Object source, Vector<String> columnNames, Vector<String> classNames, int keyCol) {
 		this.columnNames = columnNames;
 		this.classNames = classNames;
 		this.keyCol = keyCol;
 		this.source = source;
 	}
 
-	public MapTableUpdateItemFactory(
-			Vector<String> columnNames, Vector<String> classNames,
-			int keyCol) {
+	public MapTableUpdateItemFactory(Vector<String> columnNames, Vector<String> classNames, int keyCol) {
 		this(null, columnNames, classNames, keyCol);
 	}
 

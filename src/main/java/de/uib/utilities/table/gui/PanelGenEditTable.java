@@ -71,7 +71,7 @@ import de.uib.utilities.thread.WaitCursor;
 
 public class PanelGenEditTable extends JPanel implements ActionListener, TableModelListener, ListSelectionListener,
 		KeyListener, MouseListener, ComponentListener, CursorrowObserver {
-	javax.swing.JFrame masterFrame = de.uib.configed.Globals.mainFrame;
+	javax.swing.JFrame masterFrame = Globals.mainFrame;
 
 	protected Comparator[] comparators;
 
@@ -307,7 +307,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			this.title = title;
 		this.editing = editing;
 
-		if (!de.uib.configed.Globals.isServerFullPermission())
+		if (!Globals.isServerFullPermission())
 			this.editing = false;
 
 		this.switchLineColors = switchLineColors;
@@ -736,7 +736,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			case POPUP_RELOAD:
 				// logging.info(this, "reload popup worked");
 				menuItemReload = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.reload"),
-						de.uib.configed.Globals.createImageIcon("images/reload16.png", ""));
+						Globals.createImageIcon("images/reload16.png", ""));
 				// menuItemReload.setPreferredSize(Globals.buttonDimension);
 				// menuItemReload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 				// does not work
@@ -773,7 +773,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				menuItemDeleteRelation.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						if (getSelectedRowCount() == 0) {
-							JOptionPane.showMessageDialog(de.uib.configed.Globals.mainContainer,
+							JOptionPane.showMessageDialog(Globals.mainContainer,
 									configed.getResourceValue("PanelGenEditTable.noRowSelected"),
 									configed.getResourceValue("ConfigedMain.Licences.hint.title"),
 									JOptionPane.OK_OPTION);
@@ -840,7 +840,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			case POPUP_PDF:
 				menuItemPDF = new JMenuItemFormatted(configed.getResourceValue("FGeneralDialog.pdf"),
-						de.uib.configed.Globals.createImageIcon("images/acrobat_reader16.png", ""));
+						Globals.createImageIcon("images/acrobat_reader16.png", ""));
 				menuItemPDF.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						try {
@@ -2034,7 +2034,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());
-		externalView.centerOn(de.uib.configed.Globals.mainFrame);
+		externalView.centerOn(Globals.mainFrame);
 
 		externalView.setVisible(true);
 	}

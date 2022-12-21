@@ -20,7 +20,7 @@ public class ProductOnClient extends Table {
 
 	private static final String localFilename = "productstates.configed";
 	// public static final String version = class.getName() + " " +
-	// de.uib.configed.Globals.VERSION;
+	// Globals.VERSION;
 
 	public static java.util.List<String> columns;
 	static {

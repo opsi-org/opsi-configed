@@ -9,13 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.text.JTextComponent;
 
-/**
- * FTextArea
- * Copyright:     Copyright (c) 2001-2005,2018,2021
- * Organisation:  uib
-- * @author Rupert Röder, Naglis Vidziunas
- * @version
- */
 import de.uib.configed.Globals;
 
 public class FTextArea extends FGeneralDialog {

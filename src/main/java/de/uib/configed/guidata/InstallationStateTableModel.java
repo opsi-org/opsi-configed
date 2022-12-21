@@ -730,7 +730,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 							actualProduct, existingRequest, state);
 					new Thread() {
 						public void run() {
-							javax.swing.JOptionPane.showMessageDialog(de.uib.configed.Globals.mainFrame, infoOfChange,
+							javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame, infoOfChange,
 									configed.getResourceValue(
 											"InstallationStateTableModel.contradictingProductRequirements.title"),
 									javax.swing.JOptionPane.WARNING_MESSAGE);
@@ -759,7 +759,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 					new Thread() {
 						public void run() {
-							javax.swing.JOptionPane.showMessageDialog(de.uib.configed.Globals.mainFrame, errorInfo,
+							javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame, errorInfo,
 									configed.getResourceValue(
 											"InstallationStateTableModel.contradictingProductRequirements.title"),
 									javax.swing.JOptionPane.WARNING_MESSAGE);
@@ -818,7 +818,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	public boolean infoIfNoClientsSelected() {
 
 		if (selectedClients.length == 0) {
-			javax.swing.JOptionPane.showMessageDialog(de.uib.configed.Globals.mainFrame,
+			javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame,
 					configed.getResourceValue("InstallationStateTableModel.noClientsSelected"),
 					configed.getResourceValue("InstallationStateTableModel.noClientsSelected.title"),
 					javax.swing.JOptionPane.INFORMATION_MESSAGE);
@@ -870,7 +870,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			/*
 			 * 
 			 * 
-			 * javax.swing.JOptionPane.showMessageDialog( de.uib.configed.Globals.mainFrame,
+			 * javax.swing.JOptionPane.showMessageDialog( Globals.mainFrame,
 			 * configed.getResourceValue("InstallationStateTableModel.requiredByProduct") +
 			 * "\n"
 			 * + productId + "\n\n"
@@ -908,7 +908,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				products.append("\n");
 			}
 
-			javax.swing.JOptionPane.showMessageDialog(de.uib.configed.Globals.mainFrame,
+			javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame,
 					configed.getResourceValue("InstallationStateTableModel.missingImplementationForActionRequest")
 							+ products,
 					configed.getResourceValue(
@@ -1026,14 +1026,14 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					} else {
 						if (newValUntilNow == null) {
 							if (!(getChangedState(clientId, prod, ProductState.KEY_actionRequest) == null)) {
-								newValUntilNow = de.uib.configed.Globals.CONFLICT_STATE_STRING;
+								newValUntilNow = Globals.CONFLICT_STATE_STRING;
 							}
 						} else {
 							if (newValUntilNow
 									.equals(getChangedState(clientId, prod, ProductState.KEY_actionRequest))) {
 								// it remains
 							} else {
-								newValUntilNow = de.uib.configed.Globals.CONFLICT_STATE_STRING;
+								newValUntilNow = Globals.CONFLICT_STATE_STRING;
 							}
 						}
 					}
@@ -1060,7 +1060,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			 * {
 			 * if (!mixInVal.equals( getChangedState(clientId, prod,
 			 * ProductState.KEY_actionRequest) ))
-			 * mixInVal = de.uib.configed.Globals.CONFLICTSTATEstring;
+			 * mixInVal = Globals.CONFLICTSTATEstring;
 			 * }
 			 * 
 			 * logging.info(this, "collectiveChangeActionRequest, set " + ar + " for " +
@@ -1148,7 +1148,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	 * }
 	 * 
 	 * 
-	 * javax.swing.JOptionPane.showMessageDialog( de.uib.configed.Globals.mainFrame,
+	 * javax.swing.JOptionPane.showMessageDialog( Globals.mainFrame,
 	 * configed.getResourceValue("InstallationStateTableModel.requiredByProduct") +
 	 * "\n"
 	 * + product + "\n\n"

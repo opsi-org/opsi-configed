@@ -74,11 +74,8 @@ public class JSONObjectX extends JSONObject {
 				if (!master.isNull(key)) {
 					Object value = master.get(key);
 
-					if (value instanceof java.lang.Boolean
-							||
-							value instanceof java.lang.String
-							||
-							value instanceof java.lang.Integer) {
+					if (value instanceof java.lang.Boolean || value instanceof java.lang.String
+							|| value instanceof java.lang.Integer) {
 						map.put(key, value);
 					} else if (value instanceof org.json.JSONArray) {
 						map.put(key, ((JSONArray) value).toList());

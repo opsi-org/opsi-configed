@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.logging;
 
@@ -75,7 +76,7 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 		else
 			put(notesKEY, notes);
 
-		lic4pool = de.uib.configed.Globals.pseudokey(new String[] { get(licenceIdKEY), get(licencepoolIdKEY) });
+		lic4pool = Globals.pseudokey(new String[] { get(licenceIdKEY), get(licencepoolIdKEY) });
 	}
 
 	public LicenceUsageEntry(Map<String, Object> entry) {
@@ -97,7 +98,7 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 		if (get(licenceIdKEY) == null || get(licencepoolIdKEY) == null)
 			logging.warning(this, "missing values " + entry);
 
-		lic4pool = de.uib.configed.Globals.pseudokey(new String[] { get(licenceIdKEY), get(licencepoolIdKEY) });
+		lic4pool = Globals.pseudokey(new String[] { get(licenceIdKEY), get(licencepoolIdKEY) });
 	}
 
 	public String getId() {
@@ -134,7 +135,7 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 	}
 
 	public static String produceKey(String hostId, String licencePoolId, String licenceId) {
-		return de.uib.configed.Globals.pseudokey(new String[] { hostId, licencePoolId, licenceId });
+		return Globals.pseudokey(new String[] { hostId, licencePoolId, licenceId });
 	}
 
 	public String getPseudoKey() {

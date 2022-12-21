@@ -31,17 +31,11 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	public CommandPackageUpdater() {
 		command = baseName;
 		actionlist.add("list");
-		actionhash.put(
-				configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.list"),
-				"list");
+		actionhash.put(configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.list"), "list");
 		actionlist.add("install");
-		actionhash.put(
-				configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.install"),
-				"install");
+		actionhash.put(configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.install"), "install");
 		actionlist.add("update");
-		actionhash.put(
-				configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.update"),
-				"update");
+		actionhash.put(configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.update"), "update");
 	}
 
 	@Override
@@ -157,8 +151,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	@Override
 	public SSHConnectionExecDialog startHelpDialog() {
 		SSHCommand command = new CommandHelp(this);
-		SSHConnectExec exec = new SSHConnectExec(
-				command
+		SSHConnectExec exec = new SSHConnectExec(command
 		/*
 		 * new SSHConnectionExecDialog(
 		 * configed.getResourceValue("SSHConnection.Exec.title") +

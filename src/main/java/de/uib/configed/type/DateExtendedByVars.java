@@ -37,8 +37,7 @@ public class DateExtendedByVars extends java.sql.Date {
 		i++;
 
 		if (i > s.length()) {
-			logging.info("OpsiDataDateMatcher interpretVar \"" + varDelimiter
-					+ "\" found at end of string");
+			logging.info("OpsiDataDateMatcher interpretVar \"" + varDelimiter + "\" found at end of string");
 			return s;
 		}
 

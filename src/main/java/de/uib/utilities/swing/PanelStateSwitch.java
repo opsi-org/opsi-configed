@@ -153,8 +153,8 @@ public class PanelStateSwitch extends JPanel {
 		ButtonGroup buttonGroup = new ButtonGroup();
 		groupedButtons = new LinkedHashMap<Enum, JRadioButton>();
 
-		ImageIcon activatedIcon = de.uib.configed.Globals.createImageIcon("images/checked_withoutbox.png", "");
-		ImageIcon deactivatedIcon = de.uib.configed.Globals.createImageIcon("images/checked_empty_withoutbox.png", "");
+		ImageIcon activatedIcon = Globals.createImageIcon("images/checked_withoutbox.png", "");
+		ImageIcon deactivatedIcon = Globals.createImageIcon("images/checked_empty_withoutbox.png", "");
 
 		for (Enum val : values) {
 			JRadioButton button = new JRadioButton(labels.get(val));
@@ -215,7 +215,7 @@ public class PanelStateSwitch extends JPanel {
 		GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
 		// this.setBorder(new
-		// javax.swing.border.LineBorder(de.uib.configed.Globals.blueGrey, 1, true));
+		// javax.swing.border.LineBorder(Globals.blueGrey, 1, true));
 
 		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
 		layout.setVerticalGroup(vGroup);

@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.type.ConfigOption;
 import de.uib.opsicommand.Executioner;
@@ -755,7 +756,7 @@ public class UserConfigProducing {
 		} else {
 			logging.info(this, "supplyPermissionEntriesForAUser added object(s) for saving, for username " + username
 					+ ": " + (readyObjects.size() - 1));
-			List<Object> timeVal = de.uib.configed.Globals.getNowTimeListValue("set by role prototype");
+			List<Object> timeVal = Globals.getNowTimeListValue("set by role prototype");
 
 			/*
 			 * ConfigOption itemModifyTime = PersistenceController.createConfig(

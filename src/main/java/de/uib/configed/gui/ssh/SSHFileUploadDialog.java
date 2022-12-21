@@ -90,9 +90,8 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		wgetDefText = configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url");
 		init();
 		initGUI();
-		this.setSize(de.uib.configed.Globals.DIALOG_FRAME_DEFAULT_WIDTH,
-				de.uib.configed.Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100);
-		this.centerOn(de.uib.configed.Globals.mainFrame);
+		this.setSize(Globals.DIALOG_FRAME_DEFAULT_WIDTH, Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100);
+		this.centerOn(Globals.mainFrame);
 		this.setBackground(Globals.backLightBlue);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		wgetAuthPanel.isOpen = true;
@@ -163,12 +162,12 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		filechooser_local.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 
 		filechooser_local.setDialogType(JFileChooser.OPEN_DIALOG);
-		filechooser_local.setDialogTitle(de.uib.configed.Globals.APPNAME + " "
+		filechooser_local.setDialogTitle(Globals.APPNAME + " "
 				+ configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.filechooser.title"));
 
-		btn_filechooser = new JButton("", de.uib.configed.Globals.createImageIcon("images/folder_16.png", ""));
-		btn_filechooser.setSelectedIcon(de.uib.configed.Globals.createImageIcon("images/folder_16.png", ""));
-		btn_filechooser.setPreferredSize(de.uib.configed.Globals.smallButtonDimension);
+		btn_filechooser = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
+		btn_filechooser.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
+		btn_filechooser.setPreferredSize(Globals.smallButtonDimension);
 		btn_filechooser.setToolTipText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.filechooser.tooltip"));
 		btn_filechooser.addActionListener(new ActionListener() {

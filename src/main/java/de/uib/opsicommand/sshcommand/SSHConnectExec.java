@@ -19,6 +19,7 @@ import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSchException;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.utilities.logging.logging;
@@ -79,7 +80,7 @@ public class SSHConnectExec extends SSHConnect {
 		}
 
 		try {
-			if (!(de.uib.configed.Globals.isGlobalReadOnly())) {
+			if (!(Globals.isGlobalReadOnly())) {
 				logging.info(this, "starting, sshcommand isMultiCommand " + sshcommand.isMultiCommand());
 
 				if (sshcommand instanceof SSHCommand_Template) {

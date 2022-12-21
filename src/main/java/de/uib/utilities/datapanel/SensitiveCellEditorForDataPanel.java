@@ -38,33 +38,25 @@ public class SensitiveCellEditorForDataPanel extends de.uib.utilities.table.gui.
 		return instance;
 	}
 
-	public Component getTableCellEditorComponent(JTable table,
-			Object value,
-			boolean isSelected,
-			int row,
-			int column) {
+	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		// we use data panel :
 		if (column == 1) {
 			String key = "" + table.getValueAt(row, 0);
 			if (Globals.isKeyForSecretValue(key)) {
-				if (de.uib.configed.Globals.isGlobalReadOnly()) {
+				if (Globals.isGlobalReadOnly()) {
 					logging.warning(this, configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
 					return null;
 				}
 
 				int returnedOption = JOptionPane.NO_OPTION;
 
-				returnedOption = JOptionPane.showOptionDialog(de.uib.configed.Globals.mainFrame,
+				returnedOption = JOptionPane.showOptionDialog(Globals.mainFrame,
 						configed.getResourceValue("SensitiveCellEditor.editHiddenText.text"),
 						Globals.APPNAME + " " + configed.getResourceValue("SensitiveCellEditor.editHiddenText.title"),
-						JOptionPane.YES_NO_CANCEL_OPTION,
-						JOptionPane.QUESTION_MESSAGE,
-						null,
-						new Object[] {
-								configed.getResourceValue("SensitiveCellEditor.editHiddenText.yes"),
+						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+						new Object[] { configed.getResourceValue("SensitiveCellEditor.editHiddenText.yes"),
 								configed.getResourceValue("SensitiveCellEditor.editHiddenText.no"),
-								configed.getResourceValue("SensitiveCellEditor.editHiddenText.cancel")
-						},
+								configed.getResourceValue("SensitiveCellEditor.editHiddenText.cancel") },
 						JOptionPane.YES_OPTION);
 
 				logging.info(this,
@@ -75,11 +67,7 @@ public class SensitiveCellEditorForDataPanel extends de.uib.utilities.table.gui.
 			}
 		}
 
-		return super.getTableCellEditorComponent(table,
-				value,
-				isSelected,
-				row,
-				column);
+		return super.getTableCellEditorComponent(table, value, isSelected, row, column);
 	}
 
 }

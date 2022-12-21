@@ -4,12 +4,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-/**
- * FShowList
- * Copyright:     Copyright (c) 2001-2006
- * Organisation:  uib
- * @author Rupert Röder
- */
 import de.uib.configed.Globals;
 
 /**

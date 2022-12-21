@@ -13,6 +13,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.utilities.DataChangedObserver;
@@ -71,9 +72,8 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 				.addComponent(header, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(5)
-				.addComponent(editMapPanel, de.uib.configed.Globals.LINE_HEIGHT * 2, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE)
-				// .addComponent( editMapPanelStrings, de.uib.configed.Globals.lineHeight * 2,
+				.addComponent(editMapPanel, Globals.LINE_HEIGHT * 2, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				// .addComponent( editMapPanelStrings, Globals.lineHeight * 2,
 				// GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE )
 				.addGap(20));
 	}

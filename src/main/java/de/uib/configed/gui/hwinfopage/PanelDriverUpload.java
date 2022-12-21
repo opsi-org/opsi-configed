@@ -52,8 +52,8 @@ import de.uib.utilities.thread.WaitCursor;
 
 public class PanelDriverUpload extends JPanel implements de.uib.utilities.NameProducer {
 
-	int firstLabelWidth = de.uib.configed.Globals.FIRST_LABEL_WIDTH;
-	int hFirstGap = de.uib.configed.Globals.HFIRST_GAP;
+	int firstLabelWidth = Globals.FIRST_LABEL_WIDTH;
+	int hFirstGap = Globals.HFIRST_GAP;
 
 	protected int hGap = Globals.HGAP_SIZE / 2;
 	protected int vGap = Globals.VGAP_SIZE / 2;
@@ -183,7 +183,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		label_uploading = new JLabel("uploading");
 		// waitingImage = new
-		// ImagePanel(de.uib.configed.Globals.createImage("images/waitingcircle.gif"));
+		// ImagePanel(Globals.createImage("images/waitingcircle.gif"));
 		// waitingImage.setVisible(true);
 		initComponents();
 
@@ -198,7 +198,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 	private void defineChoosers() {
 		comboChooseDepot = new JComboBox();
-		comboChooseDepot.setSize(de.uib.configed.Globals.textfieldDimension);
+		comboChooseDepot.setSize(Globals.textfieldDimension);
 
 		comboChooseDepot.setModel(new DefaultComboBoxModel(main.getLinkedDepots()));
 
@@ -215,7 +215,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		});
 
 		comboChooseWinProduct = new JComboBox();
-		comboChooseWinProduct.setSize(de.uib.configed.Globals.textfieldDimension);
+		comboChooseWinProduct.setSize(Globals.textfieldDimension);
 		comboChooseWinProduct.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				winProduct = "" + comboChooseWinProduct.getSelectedItem();
@@ -233,8 +233,8 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		// chooserDriverPath.setControlButtonsAreShown(false);
 
 		chooserDriverPath.setDialogType(JFileChooser.OPEN_DIALOG);
-		chooserDriverPath.setDialogTitle(de.uib.configed.Globals.APPNAME + " "
-				+ configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
+		chooserDriverPath.setDialogTitle(
+				Globals.APPNAME + " " + configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
 
 		chooserServerpath = new JFileChooser();
 		chooserServerpath.setPreferredSize(Globals.filechooserSize);
@@ -245,8 +245,8 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		// chooserServerpath.setControlButtonsAreShown(false);
 
 		chooserServerpath.setDialogType(JFileChooser.OPEN_DIALOG);
-		chooserServerpath.setDialogTitle(de.uib.configed.Globals.APPNAME + " "
-				+ configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
+		chooserServerpath.setDialogTitle(
+				Globals.APPNAME + " " + configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
 
 	}
 
@@ -288,26 +288,22 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		JLabel label_DepotServer = new JLabel(configed.getResourceValue("PanelDriverUpload.DepotServer"));
 		JLabel label_winProduct = new JLabel(configed.getResourceValue("PanelDriverUpload.labelWinProduct"));
 
-		buttonCallSelectDriverFiles = new JButton("",
-				de.uib.configed.Globals.createImageIcon("images/folder_16.png", ""));
-		buttonCallSelectDriverFiles
-				.setSelectedIcon(de.uib.configed.Globals.createImageIcon("images/folder_16.png", ""));
-		buttonCallSelectDriverFiles.setPreferredSize(de.uib.configed.Globals.graphicButtonDimension);
+		buttonCallSelectDriverFiles = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
+		buttonCallSelectDriverFiles.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
+		buttonCallSelectDriverFiles.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallSelectDriverFiles
 				.setToolTipText(configed.getResourceValue("PanelDriverUpload.hintDriverToIntegrate"));
 
 		fieldServerPath = new JTextShowField(true); // opsiWorkBenchDirectoryS );
 		fieldServerPath.getDocument().addDocumentListener(new FileNameDocumentListener());
 
-		fieldServerPath.setForeground(de.uib.configed.Globals.greyed);
+		fieldServerPath.setForeground(Globals.greyed);
 
 		JLabel labelMakeServerpath = new JLabel(configed.getResourceValue("PanelDriverUpload.labelMakeDir"));
 
-		buttonCallChooserServerpath = new JButton("",
-				de.uib.configed.Globals.createImageIcon("images/folder_16.png", ""));
-		buttonCallChooserServerpath
-				.setSelectedIcon(de.uib.configed.Globals.createImageIcon("images/folder_16.png", ""));
-		buttonCallChooserServerpath.setPreferredSize(de.uib.configed.Globals.graphicButtonDimension);
+		buttonCallChooserServerpath = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
+		buttonCallChooserServerpath.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
+		buttonCallChooserServerpath.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallChooserServerpath.setToolTipText(configed.getResourceValue("PanelDriverUpload.determineServerPath"));
 
 		buttonCallChooserServerpath.addActionListener(new ActionListener() {
@@ -317,7 +313,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		});
 
 		JLabel label_showDrivers = new JLabel(configed.getResourceValue("PanelDriverUpload.labelShowDrivers"));
-		btnShowDrivers = new JButton("", de.uib.configed.Globals.createImageIcon("images/show-menu.png", ""));
+		btnShowDrivers = new JButton("", Globals.createImageIcon("images/show-menu.png", ""));
 		btnShowDrivers.setToolTipText(configed.getResourceValue("PanelDriverUpload.btnShowDrivers.tooltip"));
 		btnShowDrivers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -337,7 +333,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		});
 
 		JLabel label_createDrivers = new JLabel(configed.getResourceValue("PanelDriverUpload.labelCreateDriverLinks"));
-		btnCreateDrivers = new JButton("", de.uib.configed.Globals.createImageIcon("images/run-build-file.png", ""));
+		btnCreateDrivers = new JButton("", Globals.createImageIcon("images/run-build-file.png", ""));
 		btnCreateDrivers.setToolTipText(configed.getResourceValue("PanelDriverUpload.btnCreateDrivers.tooltip"));
 		btnCreateDrivers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -422,7 +418,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		JPanel panelButtonGroup = new JPanel();
 		GroupLayout layoutButtonGroup = new GroupLayout(panelButtonGroup);
 		panelButtonGroup.setLayout(layoutButtonGroup);
-		panelButtonGroup.setBorder(new javax.swing.border.LineBorder(de.uib.configed.Globals.blueGrey, 1, true));
+		panelButtonGroup.setBorder(new javax.swing.border.LineBorder(Globals.blueGrey, 1, true));
 
 		layoutButtonGroup.setVerticalGroup(layoutButtonGroup.createSequentialGroup().addGap(vGap, vGap, vGap)
 				.addComponent(labelDriverLocationType, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
@@ -458,27 +454,27 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 												.addComponent(label_byAuditDriverLocationPath, 10,
 														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 												.addGap(hGap, hGap, hGap)
-												.addComponent(fieldByAuditPath, de.uib.configed.Globals.BUTTON_WIDTH,
-														de.uib.configed.Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
+												.addComponent(fieldByAuditPath, Globals.BUTTON_WIDTH,
+														Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
 												.addGap(hGap, hGap, hGap)))
 								.addGap(hGap, hGap, hGap)
 
 				);
 
 		driverPathChecked = new CheckedLabel(configed.getResourceValue("PanelDriverUpload.driverpathConnected"),
-				de.uib.configed.Globals.createImageIcon("images/checked_withoutbox.png", ""),
-				de.uib.configed.Globals.createImageIcon("images/checked_empty_withoutbox.png", ""), stateDriverPath);
+				Globals.createImageIcon("images/checked_withoutbox.png", ""),
+				Globals.createImageIcon("images/checked_empty_withoutbox.png", ""), stateDriverPath);
 
 		serverPathChecked = new CheckedLabel(configed.getResourceValue("PanelDriverUpload.targetdirConnected"),
-				de.uib.configed.Globals.createImageIcon("images/checked_withoutbox.png", "Z"),
-				de.uib.configed.Globals.createImageIcon("images/checked_empty_withoutbox.png", ""), true);
+				Globals.createImageIcon("images/checked_withoutbox.png", "Z"),
+				Globals.createImageIcon("images/checked_empty_withoutbox.png", ""), true);
 		// serverPathChecked.setEnabled(false);
 
-		buttonUploadDrivers = new JButton("", de.uib.configed.Globals.createImageIcon("images/upload2product.png", ""));
+		buttonUploadDrivers = new JButton("", Globals.createImageIcon("images/upload2product.png", ""));
 		buttonUploadDrivers.setEnabled(false);
-		buttonUploadDrivers.setSelectedIcon(de.uib.configed.Globals.createImageIcon("images/upload2product.png", ""));
+		buttonUploadDrivers.setSelectedIcon(Globals.createImageIcon("images/upload2product.png", ""));
 		// buttonUploadDrivers.setDisabledIcon(
-		// de.uib.configed.Globals.createImageIcon("images/waitingcircle.gif", "") );
+		// Globals.createImageIcon("images/waitingcircle.gif", "") );
 
 		buttonUploadDrivers.setEnabled(false);
 
@@ -488,7 +484,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 						+ fieldServerPath.getText());
 				final Color saveColor = buttonUploadDrivers.getBackground();
 				// final Icon saveIcon = buttonUploadDrivers.getIcon();
-				buttonUploadDrivers.setBackground(de.uib.configed.Globals.failedBackColor);
+				buttonUploadDrivers.setBackground(Globals.failedBackColor);
 				execute();
 				buttonUploadDrivers.setBackground(saveColor);
 			}
@@ -531,8 +527,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(2 * vGap, 3 * vGap, 3 * vGap)
 				.addComponent(panelMountShare, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				.addGap(de.uib.configed.Globals.VGAP_SIZE / 2, de.uib.configed.Globals.VGAP_SIZE / 2,
-						de.uib.configed.Globals.VGAP_SIZE / 2)
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelTargetPath, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(buttonCallChooserServerpath, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
@@ -554,109 +549,129 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 				// Globals.lineHeight, Globals.lineHeight)
 				).addGap(vGap, vGap * 2, vGap * 2));
 
-		layoutByAuditInfo.setHorizontalGroup(layoutByAuditInfo.createParallelGroup().addGroup(layoutByAuditInfo
-				.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
-				.addGroup(layoutByAuditInfo.createParallelGroup()
-						.addGroup(layoutByAuditInfo.createSequentialGroup()
-								.addComponent(label_topic, 5, wLeftText, wLeftText)
-								.addGap(hFirstGap, hFirstGap, hFirstGap)
-								// .addGap(de.uib.configed.Globals.graphicButtonWidth,
-								// de.uib.configed.Globals.graphicButtonWidth,
-								// de.uib.configed.Globals.graphicButtonWidth)
-								// .addGap(hFirstGap, hFirstGap, hFirstGap)
-								.addComponent(fieldClientname, de.uib.configed.Globals.BUTTON_WIDTH,
-										de.uib.configed.Globals.BUTTON_WIDTH, de.uib.configed.Globals.BUTTON_WIDTH * 2))
-						.addGroup(layoutByAuditInfo.createSequentialGroup().addComponent(panelMountShare,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(layoutByAuditInfo.createSequentialGroup().addComponent(label_DepotServer)
-								.addGap(hGap, hGap, hGap)
-								.addComponent(comboChooseDepot, de.uib.configed.Globals.BUTTON_WIDTH,
-										de.uib.configed.Globals.BUTTON_WIDTH, de.uib.configed.Globals.BUTTON_WIDTH * 2)
-								.addGap(hGap, hGap, hGap)
-								.addComponent(label_winProduct, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(hGap, hGap, hGap).addComponent(comboChooseWinProduct,
-										de.uib.configed.Globals.BUTTON_WIDTH, de.uib.configed.Globals.BUTTON_WIDTH * 2,
-										de.uib.configed.Globals.BUTTON_WIDTH * 3))
-						.addGroup(layoutByAuditInfo.createSequentialGroup()
-								.addComponent(label_showDrivers, de.uib.configed.Globals.BUTTON_WIDTH,
-										de.uib.configed.Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
-								.addGap(hGap, hGap, hGap).addComponent(btnShowDrivers,
-										de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH,
-										de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH,
-										de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH))
-						.addGroup(layoutByAuditInfo.createSequentialGroup()
-								.addComponent(label_createDrivers, de.uib.configed.Globals.BUTTON_WIDTH,
-										de.uib.configed.Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
-								.addGap(hGap, hGap, hGap).addComponent(btnCreateDrivers,
-										de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH,
-										de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH,
-										de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH))
-						.addGroup(layoutByAuditInfo.createSequentialGroup()
-								.addComponent(label_driverToIntegrate, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(hGap, hGap, hGap)
-								.addComponent(buttonCallSelectDriverFiles, de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH,
-										de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH,
-										de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH)
-								.addGap(hFirstGap, hFirstGap, hFirstGap).addComponent(fieldDriverPath,
-										de.uib.configed.Globals.BUTTON_WIDTH, de.uib.configed.Globals.BUTTON_WIDTH * 2,
-										Short.MAX_VALUE))
-						.addComponent(panelButtonGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGroup(layoutByAuditInfo.createSequentialGroup().addComponent(panelMountShare,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-						.addGroup(layoutByAuditInfo.createSequentialGroup()
-								.addComponent(labelTargetPath, label_driverToIntegrate.getPreferredSize().width,
-										label_driverToIntegrate.getPreferredSize().width,
-										label_driverToIntegrate.getPreferredSize().width)
-								.addGap(hGap, hGap, hGap)
-								.addComponent(buttonCallChooserServerpath, de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH,
-										de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH,
-										de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH)
-								.addGap(hFirstGap, hFirstGap, hFirstGap).addComponent(fieldServerPath,
-										de.uib.configed.Globals.BUTTON_WIDTH * 2,
-										de.uib.configed.Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE))
-				// .addComponent(buttonUploadDrivers,
-				// de.uib.configed.Globals.graphicButtonWidth,
-				// de.uib.configed.Globals.graphicButtonWidth,
-				// de.uib.configed.Globals.graphicButtonWidth)
-				).addGap(hFirstGap, hFirstGap, hFirstGap))
-				.addGroup(layoutByAuditInfo.createSequentialGroup().addGap(5, 5, Short.MAX_VALUE)
-						// .addComponent(driverPathChecked, de.uib.configed.Globals.checkBoxWidth,
-						// de.uib.configed.Globals.checkBoxWidth, de.uib.configed.Globals.checkBoxWidth)
-						.addComponent(driverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						// .addGap(2,2,2)
-						.addGap(hGap, 2 * hGap, 2 * hGap)
-						// .addComponent(serverPathChecked, de.uib.configed.Globals.checkBoxWidth,
-						// de.uib.configed.Globals.checkBoxWidth, de.uib.configed.Globals.checkBoxWidth)
-						.addComponent(serverPathChecked, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						// .addGap(2,2,2)
-						.addGap(hGap, 2 * hGap, 2 * hGap)
-						.addComponent(buttonUploadDrivers, de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH,
-								de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH,
-								de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH)
-						.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2))
+		layoutByAuditInfo
+				.setHorizontalGroup(
+						layoutByAuditInfo.createParallelGroup()
+								.addGroup(
+										layoutByAuditInfo.createSequentialGroup()
+												.addGap(hFirstGap, hFirstGap, hFirstGap)
+												.addGroup(layoutByAuditInfo.createParallelGroup()
+														.addGroup(layoutByAuditInfo.createSequentialGroup()
+																.addComponent(label_topic, 5, wLeftText, wLeftText)
+																.addGap(hFirstGap, hFirstGap, hFirstGap)
+																// .addGap(Globals.graphicButtonWidth,
+																// Globals.graphicButtonWidth,
+																// Globals.graphicButtonWidth)
+																// .addGap(hFirstGap, hFirstGap, hFirstGap)
+																.addComponent(fieldClientname, Globals.BUTTON_WIDTH,
+																		Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2))
+														.addGroup(
+																layoutByAuditInfo.createSequentialGroup().addComponent(
+																		panelMountShare, GroupLayout.PREFERRED_SIZE,
+																		GroupLayout.PREFERRED_SIZE,
+																		GroupLayout.PREFERRED_SIZE))
+														.addGroup(layoutByAuditInfo.createSequentialGroup()
+																.addComponent(label_DepotServer)
+																.addGap(hGap, hGap, hGap)
+																.addComponent(comboChooseDepot, Globals.BUTTON_WIDTH,
+																		Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2)
+																.addGap(hGap, hGap, hGap)
+																.addComponent(label_winProduct,
+																		GroupLayout.PREFERRED_SIZE,
+																		GroupLayout.PREFERRED_SIZE,
+																		GroupLayout.PREFERRED_SIZE)
+																.addGap(hGap, hGap, hGap)
+																.addComponent(comboChooseWinProduct,
+																		Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2,
+																		Globals.BUTTON_WIDTH * 3))
+														.addGroup(layoutByAuditInfo.createSequentialGroup()
+																.addComponent(label_showDrivers, Globals.BUTTON_WIDTH,
+																		Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
+																.addGap(hGap, hGap, hGap).addComponent(
+																		btnShowDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
+																		Globals.GRAPHIC_BUTTON_WIDTH,
+																		Globals.GRAPHIC_BUTTON_WIDTH))
+														.addGroup(layoutByAuditInfo.createSequentialGroup()
+																.addComponent(label_createDrivers, Globals.BUTTON_WIDTH,
+																		Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
+																.addGap(hGap, hGap, hGap).addComponent(
+																		btnCreateDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
+																		Globals.GRAPHIC_BUTTON_WIDTH,
+																		Globals.GRAPHIC_BUTTON_WIDTH))
+														.addGroup(layoutByAuditInfo.createSequentialGroup()
+																.addComponent(label_driverToIntegrate,
+																		GroupLayout.PREFERRED_SIZE,
+																		GroupLayout.PREFERRED_SIZE,
+																		GroupLayout.PREFERRED_SIZE)
+																.addGap(hGap, hGap, hGap)
+																.addComponent(buttonCallSelectDriverFiles,
+																		Globals.GRAPHIC_BUTTON_WIDTH,
+																		Globals.GRAPHIC_BUTTON_WIDTH,
+																		Globals.GRAPHIC_BUTTON_WIDTH)
+																.addGap(hFirstGap, hFirstGap, hFirstGap)
+																.addComponent(fieldDriverPath, Globals.BUTTON_WIDTH,
+																		Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE))
+														.addComponent(panelButtonGroup, GroupLayout.PREFERRED_SIZE,
+																GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+														.addGroup(
+																layoutByAuditInfo.createSequentialGroup().addComponent(
+																		panelMountShare, GroupLayout.PREFERRED_SIZE,
+																		GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+														.addGroup(layoutByAuditInfo.createSequentialGroup()
+																.addComponent(labelTargetPath,
+																		label_driverToIntegrate
+																				.getPreferredSize().width,
+																		label_driverToIntegrate
+																				.getPreferredSize().width,
+																		label_driverToIntegrate
+																				.getPreferredSize().width)
+																.addGap(hGap, hGap, hGap)
+																.addComponent(buttonCallChooserServerpath,
+																		Globals.GRAPHIC_BUTTON_WIDTH,
+																		Globals.GRAPHIC_BUTTON_WIDTH,
+																		Globals.GRAPHIC_BUTTON_WIDTH)
+																.addGap(hFirstGap, hFirstGap, hFirstGap)
+																.addComponent(fieldServerPath, Globals.BUTTON_WIDTH * 2,
+																		Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE))
+												// .addComponent(buttonUploadDrivers,
+												// Globals.graphicButtonWidth,
+												// Globals.graphicButtonWidth,
+												// Globals.graphicButtonWidth)
+												).addGap(hFirstGap, hFirstGap, hFirstGap))
+								.addGroup(layoutByAuditInfo.createSequentialGroup().addGap(5, 5, Short.MAX_VALUE)
+										// .addComponent(driverPathChecked, Globals.checkBoxWidth,
+										// Globals.checkBoxWidth, Globals.checkBoxWidth)
+										.addComponent(driverPathChecked, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										// .addGap(2,2,2)
+										.addGap(hGap, 2 * hGap, 2 * hGap)
+										// .addComponent(serverPathChecked, Globals.checkBoxWidth,
+										// Globals.checkBoxWidth, Globals.checkBoxWidth)
+										.addComponent(serverPathChecked, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										// .addGap(2,2,2)
+										.addGap(hGap, 2 * hGap, 2 * hGap)
+										.addComponent(buttonUploadDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
+												Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
+										.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2))
 
-				.addGroup(layoutByAuditInfo.createSequentialGroup()
-						/*
-						 * //.addGap(hGap, hGap, Short.MAX_VALUE)
-						 * .addComponent(label_uploading, GroupLayout.PREFERRED_SIZE,
-						 * GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						 * .addGap(hFirstGap, hFirstGap, hFirstGap)
-						 * .addComponent(waitingImage, de.uib.configed.Globals.iconWidth,
-						 * de.uib.configed.Globals.iconWidth, de.uib.configed.Globals.iconWidth)
-						 * .addGap(hFirstGap, hFirstGap, hFirstGap)
-						 * )
-						 */
-						.addGap(hGap, hGap, Short.MAX_VALUE)
-						// .addComponent(label_uploading, GroupLayout.PREFERRED_SIZE,
-						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						// .addComponent(waitingImage, de.uib.configed.Globals.iconWidth,
-						// de.uib.configed.Globals.iconWidth, de.uib.configed.Globals.iconWidth)
-						.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2)));
+								.addGroup(layoutByAuditInfo.createSequentialGroup()
+										/*
+										 * //.addGap(hGap, hGap, Short.MAX_VALUE)
+										 * .addComponent(label_uploading, GroupLayout.PREFERRED_SIZE,
+										 * GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										 * .addGap(hFirstGap, hFirstGap, hFirstGap)
+										 * .addComponent(waitingImage, Globals.iconWidth,
+										 * Globals.iconWidth, Globals.iconWidth)
+										 * .addGap(hFirstGap, hFirstGap, hFirstGap)
+										 * )
+										 */
+										.addGap(hGap, hGap, Short.MAX_VALUE)
+										// .addComponent(label_uploading, GroupLayout.PREFERRED_SIZE,
+										// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										// .addComponent(waitingImage, Globals.iconWidth,
+										// Globals.iconWidth, Globals.iconWidth)
+										.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2)));
 
 		setBackground(Globals.backgroundLightGrey);
 
@@ -686,7 +701,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		// Thread.yield();
 
-		final FLoadingWaiter waiter = new FLoadingWaiter(de.uib.configed.Globals.APPNAME,
+		final FLoadingWaiter waiter = new FLoadingWaiter(Globals.APPNAME,
 				configed.getResourceValue("PanelDriverUpload.execute.running"));
 		waiter.startWaiting();
 

@@ -150,7 +150,7 @@ public class ControllerHWinfoMultiClients {
 			}
 		};
 
-		panel.setMasterFrame(de.uib.configed.Globals.mainFrame);
+		panel.setMasterFrame(Globals.mainFrame);
 		panel.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panel.showFilterIcon(true); // supply implementation of SearchTargetModelFromTable.setFiltered
@@ -231,16 +231,16 @@ public class ControllerHWinfoMultiClients {
 		// panel.setTitle( "" );//configed.getResourceValue("PanelHWInfo.overview") );
 
 		// Icon iconConfigure =
-		// de.uib.configed.Globals.createImageIcon("images/config_pro.png", "");
+		// Globals.createImageIcon("images/config_pro.png", "");
 		// buttonConfigureColumns = new JButton("...");
-		buttonConfigureColumns = new JButton("", de.uib.configed.Globals.createImageIcon("images/configure16.png", ""));
+		buttonConfigureColumns = new JButton("", Globals.createImageIcon("images/configure16.png", ""));
 		buttonConfigureColumns.setToolTipText(configed.getResourceValue("PanelHWInfo.overview.configure"));
-		buttonConfigureColumns.setPreferredSize(de.uib.configed.Globals.smallButtonDimension);
+		buttonConfigureColumns.setPreferredSize(Globals.smallButtonDimension);
 
-		buttonReload = new JButton("", de.uib.configed.Globals.createImageIcon("images/reload16.png", ""));
+		buttonReload = new JButton("", Globals.createImageIcon("images/reload16.png", ""));
 		buttonReload.setToolTipText(configed.getResourceValue("PanelHWInfo.overview.loadNewConfiguration"));
 
-		buttonReload.setPreferredSize(de.uib.configed.Globals.smallButtonDimension);
+		buttonReload.setPreferredSize(Globals.smallButtonDimension);
 
 		buttonReload.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -285,9 +285,8 @@ public class ControllerHWinfoMultiClients {
 			}
 		});
 
-		buttonCopySelection = new JButton("",
-				de.uib.configed.Globals.createImageIcon("images/memorize_selection.png", ""));
-		buttonCopySelection.setPreferredSize(de.uib.configed.Globals.smallButtonDimension);
+		buttonCopySelection = new JButton("", Globals.createImageIcon("images/memorize_selection.png", ""));
+		buttonCopySelection.setPreferredSize(Globals.smallButtonDimension);
 		buttonCopySelection.setEnabled(false);
 
 		buttonCopySelection.setToolTipText(configed.getResourceValue("PanelHWInfo.overview.getSelection"));

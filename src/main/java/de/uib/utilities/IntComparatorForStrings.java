@@ -4,8 +4,7 @@ import java.util.Comparator;
 
 import de.uib.utilities.logging.logging;
 
-public class IntComparatorForStrings
-		implements Comparator<String> {
+public class IntComparatorForStrings implements Comparator<String> {
 
 	public int compare(String o1, String o2) {
 		int result = 0;

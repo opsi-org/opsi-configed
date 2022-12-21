@@ -89,7 +89,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		init();
 		pack();
 		this.setSize(new Dimension(frameWidth, frameHight));
-		this.centerOn(de.uib.configed.Globals.mainFrame);
+		this.centerOn(Globals.mainFrame);
 		this.setBackground(Globals.backLightBlue);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
@@ -167,7 +167,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
-		winAuthPanel.setBorder(new LineBorder(de.uib.configed.Globals.blueGrey, 2, true));
+		winAuthPanel.setBorder(new LineBorder(Globals.blueGrey, 2, true));
 		inputPanel.setPreferredSize(new java.awt.Dimension(376, 220));
 
 		{
@@ -260,12 +260,11 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			// btn_showPassw = new JButton("",
 			// Globals.createImageIcon("images/eye_open.png", ""));//
 			// Globals.createImageIcon("images/eye_open_close.png"));
-			btn_showPassw = new JButton(de.uib.configed.Globals.createImageIcon("images/eye_blue_open.png", ""));
+			btn_showPassw = new JButton(Globals.createImageIcon("images/eye_blue_open.png", ""));
 			// "***"); //configed.getResourceValue("SSHConnection.passwordButtonText"));
 			// btn_showPassw.setPreferredSize(new Dimension(Globals.squareButtonWidth,
 			// Globals.buttonHeight));
-			btn_showPassw.setPreferredSize(new Dimension(de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH + 15,
-					de.uib.configed.Globals.BUTTON_HEIGHT));
+			btn_showPassw.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
 			btn_showPassw.setToolTipText(
 					configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.showPassword.tooltip"));
 			btn_showPassw.addActionListener(new ActionListener() {
@@ -311,7 +310,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 					}), 2, 2);
 
 			panelFinalAction.setOpaque(false);
-			// panelFinalAction.setBorder(new LineBorder( de.uib.configed.Globals.blueGrey,
+			// panelFinalAction.setBorder(new LineBorder( Globals.blueGrey,
 			// 1, true) );
 
 		}

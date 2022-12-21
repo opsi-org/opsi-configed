@@ -6,8 +6,7 @@ import java.util.HashSet;
 
 import javax.swing.tree.TreePath;
 
-public class SimpleTreePath extends ArrayList<String>
-		implements Comparable<SimpleTreePath> {
+public class SimpleTreePath extends ArrayList<String> implements Comparable<SimpleTreePath> {
 
 	public SimpleTreePath() {
 		super();

@@ -92,7 +92,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	public FSoftwarename2LicencePool(JFrame owner, ControlPanelAssignToLPools myController) {
 		super(
-				// de.uib.configed.Globals.mainFrame,
+				// Globals.mainFrame,
 				owner, configed.getResourceValue("FSoftwarename2LicencePool.title"), false, new String[] {
 						// "save",
 						// "cancel",
@@ -188,7 +188,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		// setTableModel(null);
 
 		buttonRemoveAllAssignments = new JButton();
-		buttonRemoveAllAssignments.setIcon(de.uib.configed.Globals.createImageIcon("images/list-remove-14.png", ""));
+		buttonRemoveAllAssignments.setIcon(Globals.createImageIcon("images/list-remove-14.png", ""));
 		buttonRemoveAllAssignments.setPreferredSize(Globals.shortButtonDimension);
 		labelRemoveAllAssignments = new JLabel(
 				configed.getResourceValue("FSoftwarename2LicencePool.labelRemoveAllAssignments"));
@@ -202,8 +202,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		buttonSetAllAssignmentsToGloballySelectedPool = new JButton();
 		buttonSetAllAssignmentsToGloballySelectedPool.setEnabled(false);
 		buttonSetAllAssignmentsToGloballySelectedPool.setPreferredSize(Globals.shortButtonDimension);
-		buttonSetAllAssignmentsToGloballySelectedPool
-				.setIcon(de.uib.configed.Globals.createImageIcon("images/list-add-14.png", ""));
+		buttonSetAllAssignmentsToGloballySelectedPool.setIcon(Globals.createImageIcon("images/list-add-14.png", ""));
 		labelSetAllAssignmentsToGloballySelectedPool = new JLabel(
 				configed.getResourceValue("FSoftwarename2LicencePool.labelSetAllAssignmentsToGloballySelectedPool"));
 		buttonSetAllAssignmentsToGloballySelectedPool.addActionListener(new ActionListener() {
@@ -216,8 +215,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		buttonSetAllAssignmentsToPoolFromSelectedRow = new JButton();
 		buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(false);
 		buttonSetAllAssignmentsToPoolFromSelectedRow.setPreferredSize(Globals.shortButtonDimension);
-		buttonSetAllAssignmentsToPoolFromSelectedRow
-				.setIcon(de.uib.configed.Globals.createImageIcon("images/list-add-14.png", ""));
+		buttonSetAllAssignmentsToPoolFromSelectedRow.setIcon(Globals.createImageIcon("images/list-add-14.png", ""));
 		labelSetAllAssignmentsToPoolFromSelectedRow = new JLabel(
 				configed.getResourceValue("FSoftwarename2LicencePool.labelSetAllAssignmentsToPoolFromSelectedRow")); // assign
 																																												// each
@@ -308,9 +306,9 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		setAdditionalPane(panelSWx);
 		// setTableModelSWxLicencepool( "zypper" );
-		additionalPane.setBackground(de.uib.configed.Globals.backgroundWhite);// Color.YELLOW
-																				// );//de.uib.configed.Globals.backLightBlue
-																				// );
+		additionalPane.setBackground(Globals.backgroundWhite);// Color.YELLOW
+																// );//Globals.backLightBlue
+																// );
 		setCenterPane(panelSWnames);
 		additionalPane.setVisible(true);
 		// additionalPane.setBackground( Color.RED );

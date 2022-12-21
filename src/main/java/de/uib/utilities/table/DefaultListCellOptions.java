@@ -6,8 +6,7 @@ import javax.swing.ListSelectionModel;
 
 import de.uib.utilities.logging.logging;
 
-public class DefaultListCellOptions
-		implements ListCellOptions {
+public class DefaultListCellOptions implements ListCellOptions {
 	java.util.List possibleValues;
 	java.util.List defaultValues;
 	int selectionMode;
@@ -22,17 +21,12 @@ public class DefaultListCellOptions
 		editable = true;
 		nullable = true;
 		description = "";
-		logging.info(this, "constructed " + possibleValues + ", " + defaultValues + ", " + selectionMode
-				+ ", " + editable + ", " + nullable);
+		logging.info(this, "constructed " + possibleValues + ", " + defaultValues + ", " + selectionMode + ", "
+				+ editable + ", " + nullable);
 	}
 
-	public DefaultListCellOptions(
-			java.util.List possibleValues,
-			java.util.List defaultValues,
-			int selectionMode,
-			boolean editable,
-			boolean nullable,
-			String description)
+	public DefaultListCellOptions(java.util.List possibleValues, java.util.List defaultValues, int selectionMode,
+			boolean editable, boolean nullable, String description)
 
 	{
 		this.possibleValues = possibleValues;
@@ -57,13 +51,8 @@ public class DefaultListCellOptions
 		defaultValues.add(false);
 		boolean editable = false;
 		boolean nullable = false;
-		return new DefaultListCellOptions(
-				possibleValues,
-				defaultValues,
-				ListSelectionModel.SINGLE_SELECTION,
-				editable,
-				nullable,
-				"");
+		return new DefaultListCellOptions(possibleValues, defaultValues, ListSelectionModel.SINGLE_SELECTION, editable,
+				nullable, "");
 	}
 
 	public static ListCellOptions getNewEmptyListCellOptions() {
@@ -71,13 +60,8 @@ public class DefaultListCellOptions
 		java.util.List possibleValues = new ArrayList();
 		boolean editable = true;
 		boolean nullable = true;
-		return new DefaultListCellOptions(
-				possibleValues,
-				null, // defaultValues,
-				ListSelectionModel.SINGLE_SELECTION,
-				editable,
-				nullable,
-				"");
+		return new DefaultListCellOptions(possibleValues, null, // defaultValues,
+				ListSelectionModel.SINGLE_SELECTION, editable, nullable, "");
 	}
 
 	public static ListCellOptions getNewEmptyListCellOptionsMultiSelection() {
@@ -85,13 +69,8 @@ public class DefaultListCellOptions
 		java.util.List possibleValues = new ArrayList();
 		boolean editable = true;
 		boolean nullable = true;
-		return new DefaultListCellOptions(
-				possibleValues,
-				null, // defaultValues,
-				ListSelectionModel.MULTIPLE_INTERVAL_SELECTION,
-				editable,
-				nullable,
-				"");
+		return new DefaultListCellOptions(possibleValues, null, // defaultValues,
+				ListSelectionModel.MULTIPLE_INTERVAL_SELECTION, editable, nullable, "");
 	}
 
 	public java.util.List getPossibleValues() {
@@ -124,11 +103,8 @@ public class DefaultListCellOptions
 
 	@Override
 	public String toString() {
-		return "DefaultListCellOptions,  possibleValues: " + possibleValues
-				+ "; defaultValues: " + defaultValues
-				+ "; selectionMode: " + selectionMode
-				+ "; editable: " + editable
-				+ "; nullable: " + nullable;
+		return "DefaultListCellOptions,  possibleValues: " + possibleValues + "; defaultValues: " + defaultValues
+				+ "; selectionMode: " + selectionMode + "; editable: " + editable + "; nullable: " + nullable;
 	}
 
 }

@@ -46,7 +46,7 @@ public abstract class SelectionMemorizerUpdateController implements de.uib.utili
 			javax.swing.JOptionPane.showMessageDialog(Globals.mainContainer,
 					de.uib.configed.configed
 							.getResourceValue("SelectionMemorizerUpdateController.no_row_selection.text"),
-					de.uib.configed.Globals.APPNAME + "  "
+					Globals.APPNAME + "  "
 							+ de.uib.configed.configed
 									.getResourceValue("SelectionMemorizerUpdateController.no_row_selection.title"),
 					javax.swing.JOptionPane.OK_OPTION);

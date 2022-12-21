@@ -55,9 +55,8 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	}
 
 	/**
-	 * check persistenceController opsi version
-	 * and set Command name dependend on this version
-	 * to 'opsi-makeproductfile' or 'opsi-makepackage'
+	 * check persistenceController opsi version and set Command name dependend
+	 * on this version to 'opsi-makeproductfile' or 'opsi-makepackage'
 	 */
 	private void setCommandName() {
 		if (!PersistenceControllerFactory.getPersistenceController().handleVersionOlderThan("4.1")) {
@@ -190,8 +189,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	@Override
 	public SSHConnectionExecDialog startHelpDialog() {
 		SSHCommand command = new CommandHelp(this);
-		SSHConnectExec exec = new SSHConnectExec(
-				command
+		SSHConnectExec exec = new SSHConnectExec(command
 		// SSHConnectionExecDialog.getInstance(
 		// configed.getResourceValue("SSHConnection.Exec.title") + "
 		// \""+command.getCommand() + "\" ",

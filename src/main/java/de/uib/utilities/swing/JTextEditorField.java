@@ -7,8 +7,7 @@ import javax.swing.text.Document;
 
 import de.uib.utilities.logging.logging;
 
-public class JTextEditorField extends javax.swing.JTextField
-		implements KeyListener {
+public class JTextEditorField extends javax.swing.JTextField implements KeyListener {
 	String lastSetS = null;
 
 	public JTextEditorField(String s) {

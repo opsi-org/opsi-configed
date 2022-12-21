@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnect;
@@ -37,7 +38,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 			buildFrame = false;
 			initGUI();
 
-			this.centerOn(de.uib.configed.Globals.mainFrame);
+			this.centerOn(Globals.mainFrame);
 			this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 			this.setSize(900, 500);
@@ -96,23 +97,21 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 			btn_killProcess = new de.uib.configed.gui.IconButton(
 					de.uib.configed.configed.getResourceValue("SSHConnection.buttonKillProcess"),
 					"images/edit-delete.png", "images/edit-delete.png", "images/edit-delete.png", true);
-			btn_killProcess.setPreferredSize(new Dimension(de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH + 15,
-					de.uib.configed.Globals.BUTTON_HEIGHT + 3));
+			btn_killProcess
+					.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3));
 			btn_killProcess.setToolTipText(configed.getResourceValue("SSHConnection.buttonKillProcess"));
 
 			btn_clear = new de.uib.configed.gui.IconButton(
 					de.uib.configed.configed.getResourceValue("SSHConnection.btn_clear"), "images/user-trash.png",
 					"images/user-trash.png", "images/user-trash.png", true);
-			btn_clear.setPreferredSize(new Dimension(de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH + 15,
-					de.uib.configed.Globals.BUTTON_HEIGHT + 3));
+			btn_clear.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3));
 			btn_clear.setToolTipText(configed.getResourceValue("SSHConnection.btn_clear"));
 			btn_clear.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					clear();
 				}
 			});
-			createLayout(konsolePanelLayout, jScrollPane, de.uib.configed.Globals.GAP_SIZE,
-					de.uib.configed.Globals.GAP_SIZE, true);
+			createLayout(konsolePanelLayout, jScrollPane, Globals.GAP_SIZE, Globals.GAP_SIZE, true);
 			createLayout(mainPanelLayout, inputPanel, 0, 0, false);
 		} catch (Exception e) {
 			logging.warning(this, "initGui, exception occurred ", e);
@@ -137,7 +136,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 	}
 
 	private void createLayout(GroupLayout layout, Component comp, int vgap, int hgap, boolean addInputField) {
-		int pref = de.uib.configed.Globals.BUTTON_HEIGHT;
+		int pref = Globals.BUTTON_HEIGHT;
 		int max = Short.MAX_VALUE;
 		GroupLayout.Alignment leading = GroupLayout.Alignment.LEADING;
 		layout.setAutoCreateGaps(true);
@@ -154,13 +153,9 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 		horizontalGroup.addGroup(layout.createSequentialGroup().addGap(hgap).addComponent(comp).addGap(hgap));
 		if (addInputField)
 			horizontalGroup.addGroup(layout.createSequentialGroup().addGap(hgap, hgap, max)
-					.addComponent(btn_clear, de.uib.configed.Globals.ICON_WIDTH, de.uib.configed.Globals.ICON_WIDTH,
-							de.uib.configed.Globals.ICON_WIDTH)
-					.addComponent(btn_killProcess, de.uib.configed.Globals.ICON_WIDTH,
-							de.uib.configed.Globals.ICON_WIDTH, de.uib.configed.Globals.ICON_WIDTH)
-					.addComponent(btn_close, de.uib.configed.Globals.ICON_WIDTH, de.uib.configed.Globals.ICON_WIDTH,
-							de.uib.configed.Globals.ICON_WIDTH)
-					.addGap(hgap));
+					.addComponent(btn_clear, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+					.addComponent(btn_killProcess, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+					.addComponent(btn_close, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH).addGap(hgap));
 
 		layout.setVerticalGroup(verticalGroup);
 		layout.setHorizontalGroup(horizontalGroup);

@@ -103,32 +103,30 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 
 	private void initLayout() {
 		GroupLayout layout = new GroupLayout(this);
-		// this.setBorder(new LineBorder(de.uib.configed.Globals.blueGrey));
+		// this.setBorder(new LineBorder(Globals.blueGrey));
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createSequentialGroup()
 
-				.addGap(de.uib.configed.Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(layout.createParallelGroup()
-						.addGroup(layout.createSequentialGroup().addGap(de.uib.configed.Globals.GAP_SIZE * 2)
-								.addComponent(lbl_user, PREF, PREF, PREF).addGap(de.uib.configed.Globals.GAP_SIZE))
-						.addGroup(layout.createSequentialGroup().addGap(de.uib.configed.Globals.GAP_SIZE * 2)
-								.addComponent(lbl_pswd, PREF, PREF, PREF).addGap(de.uib.configed.Globals.GAP_SIZE)))
+						.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
+								.addComponent(lbl_user, PREF, PREF, PREF).addGap(Globals.GAP_SIZE))
+						.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
+								.addComponent(lbl_pswd, PREF, PREF, PREF).addGap(Globals.GAP_SIZE)))
 				.addGroup(layout.createParallelGroup()
-						.addComponent(tf_user, de.uib.configed.Globals.BUTTON_WIDTH,
-								de.uib.configed.Globals.BUTTON_WIDTH, de.uib.configed.Globals.BUTTON_WIDTH * 2)
-						.addComponent(tf_pswd, de.uib.configed.Globals.BUTTON_WIDTH,
-								de.uib.configed.Globals.BUTTON_WIDTH, de.uib.configed.Globals.BUTTON_WIDTH * 2)));
+						.addComponent(tf_user, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2)
+						.addComponent(tf_pswd, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2)));
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(de.uib.configed.Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup().addGap(de.uib.configed.Globals.GAP_SIZE)
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addGroup(layout.createParallelGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(lbl_user, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addGap(de.uib.configed.Globals.GAP_SIZE)
+						.addGap(Globals.GAP_SIZE)
 						.addComponent(tf_user, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addGap(de.uib.configed.Globals.GAP_SIZE))
-				.addGroup(layout.createParallelGroup().addGap(de.uib.configed.Globals.GAP_SIZE)
+						.addGap(Globals.GAP_SIZE))
+				.addGroup(layout.createParallelGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(lbl_pswd, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addGap(de.uib.configed.Globals.GAP_SIZE)
+						.addGap(Globals.GAP_SIZE)
 						.addComponent(tf_pswd, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addGap(de.uib.configed.Globals.GAP_SIZE)));
+						.addGap(Globals.GAP_SIZE)));
 	}
 }

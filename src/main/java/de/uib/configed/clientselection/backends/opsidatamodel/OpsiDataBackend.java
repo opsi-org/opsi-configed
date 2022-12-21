@@ -249,8 +249,7 @@ public class OpsiDataBackend extends Backend {
 
 		// hardware
 		if (element instanceof GenericTextElement || element instanceof GenericIntegerElement
-				|| element instanceof GenericBigIntegerElement
-				|| element instanceof GenericEnumElement) {
+				|| element instanceof GenericBigIntegerElement || element instanceof GenericEnumElement) {
 			String map = hwUiToOpsi.get(elementPath[0]);
 			String attr = getKey(elementPath);
 			if (operation instanceof StringEqualsOperation)

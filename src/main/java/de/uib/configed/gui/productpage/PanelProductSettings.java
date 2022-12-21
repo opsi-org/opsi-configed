@@ -307,13 +307,13 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		String iconsDir = null;
 
-		if (de.uib.configed.Globals.showIconsInProductTable)
+		if (Globals.showIconsInProductTable)
 			iconsDir = "images/productstate/targetconfiguration";
 		targetConfigurationTableCellRenderer = new ColoredTableCellRendererByIndex(
 				de.uib.opsidatamodel.productstate.TargetConfiguration.getLabel2DisplayLabel(), iconsDir, false,
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_targetConfiguration) + ": ");
 
-		if (de.uib.configed.Globals.showIconsInProductTable)
+		if (Globals.showIconsInProductTable)
 			iconsDir = "images/productstate/installationstatus";
 		installationStatusTableCellRenderer = new ColoredTableCellRendererByIndex(
 				de.uib.opsidatamodel.productstate.InstallationStatus.getLabel2TextColor(),
@@ -364,28 +364,28 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			}
 		}
 
-		if (de.uib.configed.Globals.showIconsInProductTable)
+		if (Globals.showIconsInProductTable)
 			iconsDir = "images/productstate/actionprogress";
 
 		actionProgressTableCellRenderer = new ActionProgressTableCellRenderer(
 				de.uib.opsidatamodel.productstate.ActionProgress.getLabel2DisplayLabel(), iconsDir, false,
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_actionProgress) + ": ");
 
-		if (de.uib.configed.Globals.showIconsInProductTable)
+		if (Globals.showIconsInProductTable)
 			iconsDir = "images/productstate/actionresult";
 
 		actionResultTableCellRenderer = new ColoredTableCellRendererByIndex(
 				de.uib.opsidatamodel.productstate.ActionResult.getLabel2DisplayLabel(), iconsDir, false,
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_actionResult) + ": ");
 
-		if (de.uib.configed.Globals.showIconsInProductTable)
+		if (Globals.showIconsInProductTable)
 			iconsDir = "images/productstate/lastaction";
 
 		lastActionTableCellRenderer = new ColoredTableCellRendererByIndex(
 				de.uib.opsidatamodel.productstate.ActionRequest.getLabel2DisplayLabel(), iconsDir, false,
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_lastAction) + ": ");
 
-		if (de.uib.configed.Globals.showIconsInProductTable)
+		if (Globals.showIconsInProductTable)
 			iconsDir = "images/productstate/actionrequest";
 
 		actionRequestTableCellRenderer = new ColoredTableCellRendererByIndex(
@@ -602,7 +602,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		// itemSaveAndExecute.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_X,
 		// InputEvent.CTRL_DOWN_MASK) );
 		// dies bit get its intended context
-		itemSaveAndExecute.setIcon(de.uib.configed.Globals.createImageIcon("images/executing_command_blue_16.png", ""));
+		itemSaveAndExecute.setIcon(Globals.createImageIcon("images/executing_command_blue_16.png", ""));
 		itemSaveAndExecute.setFont(Globals.defaultFont);
 		itemSaveAndExecute.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -647,7 +647,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		// reload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)); does not
 		// find itscontext
 		reload.setText(configed.getResourceValue("ConfigedMain.reloadTable"));
-		reload.setIcon(de.uib.configed.Globals.createImageIcon("images/reload16.png", ""));
+		reload.setIcon(Globals.createImageIcon("images/reload16.png", ""));
 		reload.setFont(Globals.defaultFont);
 		reload.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -659,7 +659,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		JMenuItem createReport = new JMenuItemFormatted();
 		createReport.setText(configed.getResourceValue("PanelProductSettings.pdf"));
-		createReport.setIcon(de.uib.configed.Globals.createImageIcon("images/acrobat_reader16.png", ""));
+		createReport.setIcon(Globals.createImageIcon("images/acrobat_reader16.png", ""));
 		createReport.setFont(Globals.defaultFont);
 		createReport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -990,7 +990,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			TableColumn targetColumn = tableProducts.getColumnModel().getColumn(colIndex);
 
 			String iconsDir = null;
-			if (de.uib.configed.Globals.showIconsInProductTable)
+			if (Globals.showIconsInProductTable)
 				iconsDir = "images/productstate/targetconfiguration";
 
 			JComboBox targetCombo = new JComboBox();
@@ -1006,7 +1006,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			TableColumn statusColumn = tableProducts.getColumnModel().getColumn(colIndex);
 
 			String iconsDir = null;
-			if (de.uib.configed.Globals.showIconsInProductTable)
+			if (Globals.showIconsInProductTable)
 				iconsDir = "images/productstate/installationstatus";
 
 			JComboBox statesCombo = new JComboBox();
@@ -1042,7 +1042,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			TableColumn actionColumn = tableProducts.getColumnModel().getColumn(colIndex);
 
 			String iconsDir = null;
-			if (de.uib.configed.Globals.showIconsInProductTable)
+			if (Globals.showIconsInProductTable)
 				iconsDir = "images/productstate/actionrequest";
 
 			JComboBox actionsCombo = new JComboBox();

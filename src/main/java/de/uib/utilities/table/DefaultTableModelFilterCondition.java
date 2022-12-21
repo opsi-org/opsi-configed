@@ -3,8 +3,7 @@ package de.uib.utilities.table;
 import java.util.TreeSet;
 import java.util.Vector;
 
-public class DefaultTableModelFilterCondition
-		implements TableModelFilterCondition {
+public class DefaultTableModelFilterCondition implements TableModelFilterCondition {
 
 	protected TreeSet<? extends Object> filterSet;
 	protected int keyCol = -1;

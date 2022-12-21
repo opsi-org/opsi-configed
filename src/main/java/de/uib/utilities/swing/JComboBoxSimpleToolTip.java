@@ -5,6 +5,8 @@ import java.awt.Component;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
+import de.uib.configed.Globals;
+
 public class JComboBoxSimpleToolTip extends javax.swing.JComboBox {
 
 	protected int FILL_LENGTH = 40;
@@ -15,13 +17,13 @@ public class JComboBoxSimpleToolTip extends javax.swing.JComboBox {
 	}
 
 	protected class MyComboBoxRenderer extends BasicComboBoxRenderer {
-		public Component getListCellRendererComponent(JList list, Object value,
-				int index, boolean isSelected, boolean cellHasFocus) {
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+				boolean cellHasFocus) {
 
 			String val = (value == null) ? "" : value.toString();
 			setText(val);
 
-			String tooltipText = de.uib.configed.Globals.fillStringToLength(val + " ", FILL_LENGTH);
+			String tooltipText = Globals.fillStringToLength(val + " ", FILL_LENGTH);
 
 			setToolTipText(tooltipText);
 

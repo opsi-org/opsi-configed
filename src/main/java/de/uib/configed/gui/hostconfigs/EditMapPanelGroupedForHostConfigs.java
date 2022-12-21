@@ -25,6 +25,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.tree.TreePath;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.FDialogTextfieldWithListSelection;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
@@ -56,10 +57,8 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 	// String username;
 	// String rolename;
 
-	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer,
-			boolean keylistExtendible,
-			boolean keylistEditable,
-			boolean reloadable,
+	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer, boolean keylistExtendible,
+			boolean keylistEditable, boolean reloadable,
 			final de.uib.utilities.datapanel.AbstractEditMapPanel.Actor actor) {
 		super(tableCellRenderer, keylistExtendible, keylistEditable, reloadable, actor);
 
@@ -109,31 +108,28 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 		popupForUserpathes = new PopupMenuTrait(new Integer[] {
 				// PopupMenuTrait.POPUP_SAVE,
-				PopupMenuTrait.POPUP_RELOAD,
-				PopupMenuTrait.POPUP_DELETE,
-				PopupMenuTrait.POPUP_ADD
-		}) {
+				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
 			public void action(int p) {
 				// logging.info(this, "action popup " + p);
 
 				switch (p) {
-					case PopupMenuTrait.POPUP_RELOAD:
-						reload();
-						// actor.reloadData();
-						break;
+				case PopupMenuTrait.POPUP_RELOAD:
+					reload();
+					// actor.reloadData();
+					break;
 
-					case PopupMenuTrait.POPUP_SAVE:
-						// actor.saveData();
-						break;
+				case PopupMenuTrait.POPUP_SAVE:
+					// actor.saveData();
+					break;
 
-					case PopupMenuTrait.POPUP_ADD:
-						addUser();
-						break;
+				case PopupMenuTrait.POPUP_ADD:
+					addUser();
+					break;
 
-					case PopupMenuTrait.POPUP_DELETE:
-						// actor.deleteData();
-						deleteUser();
-						break;
+				case PopupMenuTrait.POPUP_DELETE:
+					// actor.deleteData();
+					deleteUser();
+					break;
 
 				}
 
@@ -142,25 +138,23 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 		popupForUserpath = new PopupMenuTrait(new Integer[] {
 				// PopupMenuTrait.POPUP_SAVE,
-				PopupMenuTrait.POPUP_RELOAD,
-				PopupMenuTrait.POPUP_ADD
-		}) {
+				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
 			public void action(int p) {
 				// logging.info(this, "action popup " + p);
 
 				switch (p) {
-					case PopupMenuTrait.POPUP_RELOAD:
-						reload();
-						// actor.reloadData();
-						break;
+				case PopupMenuTrait.POPUP_RELOAD:
+					reload();
+					// actor.reloadData();
+					break;
 
-					case PopupMenuTrait.POPUP_SAVE:
-						// actor.saveData();
-						break;
+				case PopupMenuTrait.POPUP_SAVE:
+					// actor.saveData();
+					break;
 
-					case PopupMenuTrait.POPUP_ADD:
-						addUser();
-						break;
+				case PopupMenuTrait.POPUP_ADD:
+					addUser();
+					break;
 
 				}
 
@@ -169,32 +163,29 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 		popupForRolepathes = new PopupMenuTrait(new Integer[] {
 				// PopupMenuTrait.POPUP_SAVE,
-				PopupMenuTrait.POPUP_RELOAD,
-				PopupMenuTrait.POPUP_DELETE,
-				PopupMenuTrait.POPUP_ADD
-		}) {
+				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
 				// logging.info(this, "action popup " + p);
 
 				switch (p) {
-					case PopupMenuTrait.POPUP_RELOAD:
-						reload();
-						// actor.reloadData();
-						break;
+				case PopupMenuTrait.POPUP_RELOAD:
+					reload();
+					// actor.reloadData();
+					break;
 
-					case PopupMenuTrait.POPUP_SAVE:
-						// actor.saveData();
-						break;
+				case PopupMenuTrait.POPUP_SAVE:
+					// actor.saveData();
+					break;
 
-					case PopupMenuTrait.POPUP_ADD:
-						addRole();
-						break;
+				case PopupMenuTrait.POPUP_ADD:
+					addRole();
+					break;
 
-					case PopupMenuTrait.POPUP_DELETE:
-						// actor.deleteData();
-						deleteUser();
-						break;
+				case PopupMenuTrait.POPUP_DELETE:
+					// actor.deleteData();
+					deleteUser();
+					break;
 
 				}
 
@@ -203,26 +194,24 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 		popupForRolepath = new PopupMenuTrait(new Integer[] {
 				// PopupMenuTrait.POPUP_SAVE,
-				PopupMenuTrait.POPUP_RELOAD,
-				PopupMenuTrait.POPUP_ADD
-		}) {
+				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
 				// logging.info(this, "action popup " + p);
 
 				switch (p) {
-					case PopupMenuTrait.POPUP_RELOAD:
-						reload();
-						// actor.reloadData();
-						break;
+				case PopupMenuTrait.POPUP_RELOAD:
+					reload();
+					// actor.reloadData();
+					break;
 
-					case PopupMenuTrait.POPUP_SAVE:
-						// actor.saveData();
-						break;
+				case PopupMenuTrait.POPUP_SAVE:
+					// actor.saveData();
+					break;
 
-					case PopupMenuTrait.POPUP_ADD:
-						addRole();
-						break;
+				case PopupMenuTrait.POPUP_ADD:
+					addRole();
+					break;
 
 				}
 
@@ -387,59 +376,56 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		logging.info(this, "theUsers found " + theUsers);
 
 		for (String classkey : partialPanels.keySet()) {
-			(partialPanels.get(classkey)).setEditDenier(
-					key -> {
+			(partialPanels.get(classkey)).setEditDenier(key -> {
 
-						logging.info(this, "classkey " + classkey + " key " + key);
+				logging.info(this, "classkey " + classkey + " key " + key);
 
-						Boolean result = false;
+				Boolean result = false;
 
-						if (key.endsWith(UserConfig.MODIFICATION_INFO_KEY)) {
-							result = true;
+				if (key.endsWith(UserConfig.MODIFICATION_INFO_KEY)) {
+					result = true;
 
-							JOptionPane.showMessageDialog(de.uib.configed.Globals.mainFrame,
-									configed.getResourceValue("EditMapPanelGrouped.noManualEditing"),
-									key, JOptionPane.INFORMATION_MESSAGE);
-						} else {
-							String user = UserConfig.getUserFromKey(key);
-							if (user != null)
-							// we really are in a user branch
-							{
+					JOptionPane.showMessageDialog(Globals.mainFrame,
+							configed.getResourceValue("EditMapPanelGrouped.noManualEditing"), key,
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					String user = UserConfig.getUserFromKey(key);
+					if (user != null)
+					// we really are in a user branch
+					{
 
-								String rolekey = classkey + "." + UserConfig.HAS_ROLE_ATTRIBUT;
+						String rolekey = classkey + "." + UserConfig.HAS_ROLE_ATTRIBUT;
 
-								if (!(key.equals(rolekey)))
-								// rolekey may be edited
-								{
+						if (!(key.equals(rolekey)))
+						// rolekey may be edited
+						{
 
-									String theRole = null;
+							String theRole = null;
 
-									java.util.List<Object> values = de.uib.opsidatamodel.PersistenceControllerFactory
-											.getPersistenceController().getConfigDefaultValues().get(rolekey);
+							java.util.List<Object> values = de.uib.opsidatamodel.PersistenceControllerFactory
+									.getPersistenceController().getConfigDefaultValues().get(rolekey);
 
-									if (values != null && values.size() > 0)
-										theRole = "" + values.get(0);
+							if (values != null && values.size() > 0)
+								theRole = "" + values.get(0);
 
-									boolean obeyToRole = (theRole != null
-											&& !(theRole.equals(UserConfig.NONE_PROTOTYPE)));
+							boolean obeyToRole = (theRole != null && !(theRole.equals(UserConfig.NONE_PROTOTYPE)));
 
-									if (obeyToRole) {
-										result = true;
-										JOptionPane.showMessageDialog(de.uib.configed.Globals.mainFrame,
-												configed.getResourceValue(
-														"EditMapPanelGroupedForHostConfigs.noManualEditingWhereRoleDefined")
-										// "editing only possible if the user is not assigned to a role"
-												, key, JOptionPane.INFORMATION_MESSAGE);
-
-									}
-								}
+							if (obeyToRole) {
+								result = true;
+								JOptionPane.showMessageDialog(Globals.mainFrame, configed.getResourceValue(
+										"EditMapPanelGroupedForHostConfigs.noManualEditingWhereRoleDefined")
+								// "editing only possible if the user is not assigned to a role"
+										, key, JOptionPane.INFORMATION_MESSAGE);
 
 							}
 						}
 
-						logging.info(this, "key denied ? " + key + " : " + result);
-						return result;
 					}
+				}
+
+				logging.info(this, "key denied ? " + key + " : " + result);
+				return result;
+			}
 
 			);
 		}
@@ -450,8 +436,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		String result = null;
 		String[] splitted = key.split("\\.");
 
-		if (splitted.length == 3
-				&& splitted[0].equals(UserConfig.CONFIGKEY_STR_USER)
+		if (splitted.length == 3 && splitted[0].equals(UserConfig.CONFIGKEY_STR_USER)
 				&& splitted[1].equals(UserConfig.ROLE)) {
 			result = splitted[2];
 			if (result.charAt(0) == '{' && result.charAt(result.length() - 1) == '}')
@@ -465,8 +450,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		String result = null;
 		String[] splitted = key.split("\\.");
 
-		if (splitted.length == 2
-				&& splitted[0].equals(UserConfig.CONFIGKEY_STR_USER)
+		if (splitted.length == 2 && splitted[0].equals(UserConfig.CONFIGKEY_STR_USER)
 				&& !(splitted[1].equals(UserConfig.ROLE))) {
 			result = splitted[1];
 			if (result.charAt(0) == '{' && result.charAt(result.length() - 1) == '}')
@@ -495,8 +479,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 	}
 
 	private boolean isUserRoot(TreePath path) {
-		if (path != null
-				&& path.getPathCount() == 2
+		if (path != null && path.getPathCount() == 2
 				&& path.getPathComponent(1).toString().equals(UserConfig.CONFIGKEY_STR_USER))
 			return true;
 
@@ -504,8 +487,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 	}
 
 	private boolean isUserPath(TreePath path) {
-		if (path != null
-				&& path.getPathCount() == 3
+		if (path != null && path.getPathCount() == 3
 				&& path.getPathComponent(1).toString().equals(UserConfig.CONFIGKEY_STR_USER)
 				&& !path.getPathComponent(2).toString().equals(UserConfig.ROLE))
 			return true;
@@ -561,24 +543,18 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		if (role == null)
 			role = "";
 
-		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(
-				null, // owner frame
+		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, // owner frame
 				"add user", // title
 				false, // modal
 
-				new String[] {
-						configed.getResourceValue("FGeneralDialog.ok"),
-						configed.getResourceValue("FGeneralDialog.cancel")
-				},
+				new String[] { configed.getResourceValue("FGeneralDialog.ok"),
+						configed.getResourceValue("FGeneralDialog.cancel") },
 
-				new Icon[] {
-						de.uib.configed.Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-						de.uib.configed.Globals.createImageIcon("images/cancel16_small.png", "")
-				},
+				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
+						Globals.createImageIcon("images/cancel16_small.png", "") },
 				2, // lastButtonNo,with "1" we get only the first button
-				600, 600,
-				true, // lazylayout, i.e, we have a chance to define components and use them for the
-						// layout
+				600, 600, true, // lazylayout, i.e, we have a chance to define components and use them for the
+				// layout
 				null // addPanel predefined
 		)
 
@@ -650,8 +626,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 			if (newData.size() > 0) {
 
-				OpsiMethodCall omc = new OpsiMethodCall(
-						"config_updateObjects",
+				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
 						new Object[] { persist.exec.jsonArray(newData) });
 
 				persist.exec.doCall(omc);
@@ -665,24 +640,18 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		de.uib.opsidatamodel.PersistenceController persist = de.uib.opsidatamodel.PersistenceControllerFactory
 				.getPersistenceController();
 
-		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(
-				null, // owner frame
+		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, // owner frame
 				"add role", // title
 				false, // modal
 
-				new String[] {
-						configed.getResourceValue("FGeneralDialog.ok"),
-						configed.getResourceValue("FGeneralDialog.cancel")
-				},
+				new String[] { configed.getResourceValue("FGeneralDialog.ok"),
+						configed.getResourceValue("FGeneralDialog.cancel") },
 
-				new Icon[] {
-						de.uib.configed.Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-						de.uib.configed.Globals.createImageIcon("images/cancel16_small.png", "")
-				},
+				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
+						Globals.createImageIcon("images/cancel16_small.png", "") },
 				2, // lastButtonNo,with "1" we get only the first button
-				600, 600,
-				true, // lazylayout, i.e, we have a chance to define components and use them for the
-						// layout
+				600, 600, true, // lazylayout, i.e, we have a chance to define components and use them for the
+				// layout
 				null // addPanel predefined
 		) {
 

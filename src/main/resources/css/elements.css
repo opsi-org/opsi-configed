@@ -21,7 +21,8 @@
 	-fx-background-color: #FFFFFF;
 }
 
-.tree-view, .tree-cell {
+.tree-view,
+.tree-cell {
 	-fx-background-color: #DCE4F2;
 }
 

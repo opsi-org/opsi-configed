@@ -44,7 +44,7 @@ import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.NavigationPanel;
 
 public class TablesearchPane extends JPanel implements DocumentListener, KeyListener, ActionListener {
-	javax.swing.JFrame masterFrame = de.uib.configed.Globals.mainFrame;
+	javax.swing.JFrame masterFrame = Globals.mainFrame;
 
 	JTextField fieldSearch;
 
@@ -369,15 +369,15 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		navPane.setVisible(false);
 
-		Icon iconReload = de.uib.configed.Globals.createImageIcon("images/reload_blue16.png", "");
+		Icon iconReload = Globals.createImageIcon("images/reload_blue16.png", "");
 		markReload = new CheckedLabel(iconReload, true);
 		markReload.setVisible(false); // in the moment, it's a proof of concept
 
 		labelSearch = new JLabel(configed.getResourceValue("SearchPane.search"));
 		labelSearch.setFont(Globals.defaultFont);
 
-		Icon unselectedIconSearch = de.uib.configed.Globals.createImageIcon("images/loupe_light_16.png", "");
-		Icon selectedIconSearch = de.uib.configed.Globals.createImageIcon("images/loupe_light_16_x.png", "");
+		Icon unselectedIconSearch = Globals.createImageIcon("images/loupe_light_16.png", "");
+		Icon selectedIconSearch = Globals.createImageIcon("images/loupe_light_16_x.png", "");
 
 		try {
 			checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
@@ -396,8 +396,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		 * );
 		 */
 
-		selectedIconSearch = de.uib.configed.Globals.createImageIcon("images/loupe_light_16_progressiveselect.png", "");
-		unselectedIconSearch = de.uib.configed.Globals.createImageIcon("images/loupe_light_16_blockselect.png", "");
+		selectedIconSearch = Globals.createImageIcon("images/loupe_light_16_progressiveselect.png", "");
+		unselectedIconSearch = Globals.createImageIcon("images/loupe_light_16_blockselect.png", "");
 
 		boolean active = true;
 
@@ -585,9 +585,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		// comboSearchFieldsMode.setModel(new DefaultComboBoxModel(searchModes));
 		comboSearchFieldsMode.setPreferredSize(Globals.lowerButtonDimension);
 
-		Icon unselectedIconFilter = de.uib.configed.Globals.createImageIcon("images/filter_14x14_open.png", "");
-		Icon selectedIconFilter = de.uib.configed.Globals.createImageIcon("images/filter_14x14_closed.png", "");
-		Icon nullIconFilter = de.uib.configed.Globals.createImageIcon("images/filter_14x14_inwork.png", "");
+		Icon unselectedIconFilter = Globals.createImageIcon("images/filter_14x14_open.png", "");
+		Icon selectedIconFilter = Globals.createImageIcon("images/filter_14x14_closed.png", "");
+		Icon nullIconFilter = Globals.createImageIcon("images/filter_14x14_inwork.png", "");
 
 		filtermark = new CheckedLabel("", selectedIconFilter, unselectedIconFilter, nullIconFilter, false);
 		filtermark.setToolTipText(configed.getResourceValue("SearchPane.filtermark.tooltip"));
@@ -601,14 +601,14 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		Icon selectedIcon;
 
 		// unselectedIcon =
-		// de.uib.configed.Globals.createImageIcon("images/checked_blue_empty_withoutbox.png",
+		// Globals.createImageIcon("images/checked_blue_empty_withoutbox.png",
 		// "");
 		// selectedIcon =
-		// de.uib.configed.Globals.createImageIcon("images/checked_blue_withoutbox.png",
+		// Globals.createImageIcon("images/checked_blue_withoutbox.png",
 		// "");
 
-		unselectedIcon = de.uib.configed.Globals.createImageIcon("images/loupe_light_16_singlecolumnsearch.png", "");
-		selectedIcon = de.uib.configed.Globals.createImageIcon("images/loupe_light_16_multicolumnsearch.png", "");
+		unselectedIcon = Globals.createImageIcon("images/loupe_light_16_singlecolumnsearch.png", "");
+		selectedIcon = Globals.createImageIcon("images/loupe_light_16_multicolumnsearch.png", "");
 
 		active = true;
 		if (saveSearchpaneAllColumnsSearch != null)
@@ -622,14 +622,14 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		// setSearchFieldsAll() is to called to synchronize with select == true
 
 		// unselectedIcon =
-		// de.uib.configed.Globals.createImageIcon("images/checked_blue_empty_withoutbox.png",
+		// Globals.createImageIcon("images/checked_blue_empty_withoutbox.png",
 		// "");
 		// selectedIcon =
-		// de.uib.configed.Globals.createImageIcon("images/checked_blue_withoutbox.png",
+		// Globals.createImageIcon("images/checked_blue_withoutbox.png",
 		// "");
 
-		unselectedIcon = de.uib.configed.Globals.createImageIcon("images/loupe_light_16_starttextsearch.png", "");
-		selectedIcon = de.uib.configed.Globals.createImageIcon("images/loupe_light_16_fulltextsearch.png", "");
+		unselectedIcon = Globals.createImageIcon("images/loupe_light_16_starttextsearch.png", "");
+		selectedIcon = Globals.createImageIcon("images/loupe_light_16_fulltextsearch.png", "");
 
 		active = true;
 		if (saveSearchpaneFullTextSearch != null)

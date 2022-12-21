@@ -33,14 +33,6 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 
-/**
- * FGeneralDialog
- * Copyright:     Copyright (c) 2001-2017,2020-2022
- * Organisation:  uib
- * @author Rupert Röder, Nils Otto
- * 
- *  // TODO UNITE THE CONSTRUCTORS ?
- */
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;

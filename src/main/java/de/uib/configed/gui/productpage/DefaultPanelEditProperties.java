@@ -20,6 +20,7 @@ import org.jdesktop.swingx.JXPanel;
  *
  */
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 
 public abstract class DefaultPanelEditProperties extends JXPanel {
 	protected de.uib.utilities.datapanel.AbstractEditMapPanel productPropertiesPanel;
@@ -47,7 +48,7 @@ public abstract class DefaultPanelEditProperties extends JXPanel {
 		setBackgroundPainter(new org.jdesktop.swingx.painter.AbstractPainter() {
 			@Override
 			public void doPaint(Graphics2D g, Object obj, int width, int height) {
-				g.setPaint(de.uib.configed.Globals.backLightBlue);
+				g.setPaint(Globals.backLightBlue);
 				g.fillRect(0, 0, width, height);
 			}
 		});

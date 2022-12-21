@@ -325,10 +325,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JCheckBoxMenuItem popupSelectionToggleClientFilter = new JCheckBoxMenuItem();
 
 	JMenuItemFormatted popupRebuildClientList = new JMenuItemFormatted(
-			configed.getResourceValue("PopupMenuTrait.reload"),
-			de.uib.configed.Globals.createImageIcon("images/reload16.png", ""));
+			configed.getResourceValue("PopupMenuTrait.reload"), Globals.createImageIcon("images/reload16.png", ""));
 	JMenuItemFormatted popupCreatePdf = new JMenuItemFormatted(configed.getResourceValue("FGeneralDialog.pdf"),
-			de.uib.configed.Globals.createImageIcon("images/acrobat_reader16.png", ""));
+			Globals.createImageIcon("images/acrobat_reader16.png", ""));
 
 	JPopupMenu popupLocalbootProducts = new JPopupMenu();
 	JPopupMenu popupNetbootProducts = new JPopupMenu();
@@ -1182,7 +1181,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jMenuServer.removeAll();
 		jMenuServer.setText(SSHCommandFactory.parentNull);
-		boolean isReadOnly = de.uib.configed.Globals.isGlobalReadOnly();
+		boolean isReadOnly = Globals.isGlobalReadOnly();
 		boolean methodsExists = factory.checkSSHCommandMethod();
 
 		logging.info(this, "setupMenuServer add configpage");
@@ -2205,9 +2204,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		final Icon selectedIcon;
 		final Icon nullIcon;
 
-		unselectedIcon = de.uib.configed.Globals.createImageIcon("images/checked_not.png", "");
-		selectedIcon = de.uib.configed.Globals.createImageIcon("images/checked.png", "");
-		nullIcon = de.uib.configed.Globals.createImageIcon("images/checked_box_mixed.png", "");
+		unselectedIcon = Globals.createImageIcon("images/checked_not.png", "");
+		selectedIcon = Globals.createImageIcon("images/checked.png", "");
+		nullIcon = Globals.createImageIcon("images/checked_box_mixed.png", "");
 
 		cbUefiBoot = new CheckedLabel(configed.getResourceValue("NewClientDialog.boottype"), selectedIcon,
 				unselectedIcon, nullIcon, false);
@@ -3544,8 +3543,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	private void showAboutAction() {
-		FTextArea info = new FTextArea(this, de.uib.configed.Globals.APPNAME + " Copyright Information", true,
-				new String[] { "ok" }, 700, 300);
+		FTextArea info = new FTextArea(this, Globals.APPNAME + " Copyright Information", true, new String[] { "ok" },
+				700, 300);
 
 		StringBuffer message = new StringBuffer();
 
@@ -3562,13 +3561,12 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private void showLogfileLocationAction() {
 		// logging.info(this, "showLogfileLocationAction on " + this);
 		FTextArea info = new FTextArea((MainFrame) this,
-				de.uib.configed.Globals.APPNAME + " " + configed.getResourceValue("MainFrame.showLogFileInfoTitle"),
-				false,
+				Globals.APPNAME + " " + configed.getResourceValue("MainFrame.showLogFileInfoTitle"), false,
 				new String[] { configed.getResourceValue("MainFrame.showLogFileCopyToClipboard"),
 						configed.getResourceValue("MainFrame.showLogFileOpen"),
 						configed.getResourceValue("MainFrame.showLogFileClose") },
-				new Icon[] { null, de.uib.configed.Globals.createImageIcon("images/document-view16.png", ""),
-						de.uib.configed.Globals.createImageIcon("images/cancel16_small.png", "") },
+				new Icon[] { null, Globals.createImageIcon("images/document-view16.png", ""),
+						Globals.createImageIcon("images/cancel16_small.png", "") },
 				500, 150) {
 			@Override
 			public void doAction1() {
@@ -4665,7 +4663,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	public void setUpdatedLogfilePanel(String logtype) {
 		logging.info(this, "setUpdatedLogfilePanel " + logtype);
 		// WaitCursor waitCursor = new WaitCursor(
-		// de.uib.configed.Globals.mainContainer, "setUpdatedLogFilePanel" );
+		// Globals.mainContainer, "setUpdatedLogFilePanel" );
 		setLogfilePanel(main.getLogfilesUpdating(logtype));
 		// waitCursor.stop();
 	}
@@ -4689,7 +4687,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	public void setLogview(String logtype) {
-		int i = Arrays.asList(de.uib.configed.Globals.logtypes).indexOf(logtype);
+		int i = Arrays.asList(Globals.logtypes).indexOf(logtype);
 		if (i < 0)
 			return;
 

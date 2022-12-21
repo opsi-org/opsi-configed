@@ -456,8 +456,7 @@ public class DataStubNOM extends DataStub {
 
 				String productVersion = (String) retrievedMap.get(OpsiPackage.SERVICEkeyPRODUCT_VERSION);
 				String packageVersion = (String) retrievedMap.get(OpsiPackage.SERVICEkeyPACKAGE_VERSION);
-				String versionInfo = productVersion + de.uib.configed.Globals.ProductPackageVersionSeparator.forKey()
-						+ packageVersion;
+				String versionInfo = productVersion + Globals.ProductPackageVersionSeparator.forKey() + packageVersion;
 
 				if (product2VersionInfo2Depots.get(productId) == null
 						|| product2VersionInfo2Depots.get(productId).get(versionInfo) == null) {
@@ -535,8 +534,7 @@ public class DataStubNOM extends DataStub {
 
 				String productVersion = "" + dependencyItem.get(OpsiPackage.SERVICEkeyPRODUCT_VERSION);
 				String packageVersion = "" + dependencyItem.get(OpsiPackage.SERVICEkeyPACKAGE_VERSION);
-				String versionInfo = productVersion + de.uib.configed.Globals.ProductPackageVersionSeparator.forKey()
-						+ packageVersion;
+				String versionInfo = productVersion + Globals.ProductPackageVersionSeparator.forKey() + packageVersion;
 
 				String action = "" + dependencyItem.get("productAction");
 				String requirementType = "";
@@ -761,7 +759,7 @@ public class DataStubNOM extends DataStub {
 
 			// try reloading?
 			int returnedOption = javax.swing.JOptionPane.NO_OPTION;
-			returnedOption = javax.swing.JOptionPane.showOptionDialog(de.uib.configed.Globals.mainFrame,
+			returnedOption = javax.swing.JOptionPane.showOptionDialog(Globals.mainFrame,
 					configed.getResourceValue("DataStub.reloadSoftwareInformation.text"),
 					configed.getResourceValue("DataStub.reloadSoftwareInformation.title"),
 					javax.swing.JOptionPane.YES_NO_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, null, null);

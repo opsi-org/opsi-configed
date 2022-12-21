@@ -9,8 +9,9 @@ package de.uib.utilities.swing;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
+import de.uib.configed.Globals;
+
 /**
- *
  * @author roeder
  */
 public class DynamicCombo extends javax.swing.JPanel {
@@ -35,18 +36,14 @@ public class DynamicCombo extends javax.swing.JPanel {
 
 		table = new javax.swing.JTable();
 
-		tablemodel = new javax.swing.table.DefaultTableModel(
-				new String[] {
-						"column 0"
-				},
-				0);
+		tablemodel = new javax.swing.table.DefaultTableModel(new String[] { "column 0" }, 0);
 
 		tablemodel.addRow(new String[] { "" });
 		// tablemodel.addRow (new String[] {""});
 
 		table.setModel(tablemodel);
-		table.setSelectionBackground(de.uib.configed.Globals.backgroundWhite);
-		table.setSelectionForeground(de.uib.configed.Globals.lightBlack);
+		table.setSelectionBackground(Globals.backgroundWhite);
+		table.setSelectionForeground(Globals.lightBlack);
 		table.setShowGrid(false);
 
 		col = table.getColumnModel().getColumn(0);
@@ -102,9 +99,7 @@ public class DynamicCombo extends javax.swing.JPanel {
 
 		col.setCellEditor(
 
-				new de.uib.utilities.table.gui.AdaptingCellEditor(
-						combo,
-						modelsource));
+				new de.uib.utilities.table.gui.AdaptingCellEditor(combo, modelsource));
 
 		setLayout(new java.awt.BorderLayout());
 
@@ -122,9 +117,7 @@ public class DynamicCombo extends javax.swing.JPanel {
 
 		col.setCellEditor(
 
-				new de.uib.utilities.table.gui.AdaptingCellEditor(
-						combo,
-						modelsource));
+				new de.uib.utilities.table.gui.AdaptingCellEditor(combo, modelsource));
 
 	}
 

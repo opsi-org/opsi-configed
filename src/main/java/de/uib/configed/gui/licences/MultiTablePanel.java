@@ -5,6 +5,7 @@
 package de.uib.configed.gui.licences;
 
 import de.uib.configed.ControlMultiTablePanel;
+import de.uib.configed.Globals;
 
 /**
  * Copyright (C) 2009 uib.de
@@ -28,7 +29,7 @@ public class MultiTablePanel extends de.uib.utilities.swing.tabbedpane.TabClient
 	public boolean mayLeave() {
 		// logging.debug(this, "we want to leave " + this);
 
-		if (de.uib.configed.Globals.isGlobalReadOnly())
+		if (Globals.isGlobalReadOnly())
 			return true;
 
 		boolean result = super.mayLeave();

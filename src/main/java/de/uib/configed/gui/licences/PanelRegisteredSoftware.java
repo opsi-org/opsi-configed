@@ -18,15 +18,10 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 	int[] saveRowSelection;
 
-	public PanelRegisteredSoftware(
-			ControlPanelAssignToLPools controller) {
+	public PanelRegisteredSoftware(ControlPanelAssignToLPools controller) {
 		super("",
 				// configed.getResourceValue("ConfigedMain.Licences.SectiontitleWindowsSoftware2LPool"),
-				0, true, 2, true,
-				new int[] {
-						PanelGenEditTable.POPUP_RELOAD
-				},
-				true
+				0, true, 2, true, new int[] { PanelGenEditTable.POPUP_RELOAD }, true
 
 		);
 		this.controller = controller;
@@ -56,8 +51,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 		super.reset();
 
 		if (controller.thePanel.fSoftwarename2LicencePool != null) {
-			logging.info(this,
-					"Panel.fSoftwarename2LicencePool.panelSWnames.reset");
+			logging.info(this, "Panel.fSoftwarename2LicencePool.panelSWnames.reset");
 			// controller.thePanel.fSoftwarename2LicencePool.panelSWnames.requestReload();
 			// does not solve the task
 			controller.thePanel.fSoftwarename2LicencePool.panelSWnames.reset();
@@ -77,15 +71,13 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 		if (tableModel.getCursorRow() < 0)
 			return;
 
-		String nameVal = (String) tableModel.getValueAt(
-				modelrow,
+		String nameVal = (String) tableModel.getValueAt(modelrow,
 				getTableModel().getColumnNames().indexOf(SWAuditEntry.NAME));
 
 		logging.info(this, " got name " + nameVal);
 
 		if (controller.thePanel.fSoftwarename2LicencePool != null)
-			controller.thePanel.fSoftwarename2LicencePool.panelSWnames.moveToValue(
-					nameVal, 0);
+			controller.thePanel.fSoftwarename2LicencePool.panelSWnames.moveToValue(nameVal, 0);
 	}
 
 	@Override
@@ -185,9 +177,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 	@Override
 	public void setDataChanged(boolean b) {
-		if (b &&
-				((ControlPanelAssignToLPools) controller)
-						.acknowledgeChangeForSWList()) {
+		if (b && ((ControlPanelAssignToLPools) controller).acknowledgeChangeForSWList()) {
 			int col = theTable.getEditingColumn();
 			logging.info(this, "setDataChanged col " + col);
 			if (tableModel.gotMarkCursorRow() && col != tableModel.getColMarkCursorRow()) {

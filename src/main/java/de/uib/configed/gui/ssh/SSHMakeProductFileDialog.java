@@ -75,14 +75,14 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		main = m;
 		initGUI();
 
-		this.centerOn(de.uib.configed.Globals.mainFrame);
+		this.centerOn(Globals.mainFrame);
 		this.setBackground(Globals.backLightBlue);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		filename = "";
 
-		this.setSize(new java.awt.Dimension(de.uib.configed.Globals.DIALOG_FRAME_DEFAULT_WIDTH + 100,
+		this.setSize(new java.awt.Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH + 100,
 				// workbenchpanel.getHeight() + buttonPanel.getHeight()
-				de.uib.configed.Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100));
+				Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100));
 		autocompletion.doButtonAction();
 		doSetActionGetVersions();
 		showAdvancedSettings();
@@ -297,16 +297,16 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 							.addGap(Globals.GAP_SIZE)
 							.addGroup(workbenchpanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-									.addComponent(cb_mainDir, de.uib.configed.Globals.BUTTON_WIDTH,
-											2 * de.uib.configed.Globals.BUTTON_WIDTH, Short.MAX_VALUE)
+									.addComponent(cb_mainDir, Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH,
+											Short.MAX_VALUE)
 									.addComponent(lbl_versions_controlfile, GroupLayout.PREFERRED_SIZE,
 											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 									.addComponent(btn_setRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 											GroupLayout.PREFERRED_SIZE)
-									.addComponent(lbl_productVersion_controlfile, de.uib.configed.Globals.BUTTON_WIDTH,
-											de.uib.configed.Globals.BUTTON_WIDTH + 25, Short.MAX_VALUE)
-									.addComponent(lbl_packageVersion_controlfile, de.uib.configed.Globals.BUTTON_WIDTH,
-											de.uib.configed.Globals.BUTTON_WIDTH + 25, Short.MAX_VALUE)
+									.addComponent(lbl_productVersion_controlfile, Globals.BUTTON_WIDTH,
+											Globals.BUTTON_WIDTH + 25, Short.MAX_VALUE)
+									.addComponent(lbl_packageVersion_controlfile, Globals.BUTTON_WIDTH,
+											Globals.BUTTON_WIDTH + 25, Short.MAX_VALUE)
 
 									.addGroup(workbenchpanelLayout.createSequentialGroup()
 											.addComponent(cb_overwrite, GroupLayout.PREFERRED_SIZE,

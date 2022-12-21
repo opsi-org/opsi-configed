@@ -18,12 +18,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-/**
- * FGeneralDialogLicensingInfo
- * Copyright:     Copyright (c) 2001-2017,2020-2022
- * Organisation:  uib
- * @author Rupert Röder
- */
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
@@ -101,8 +95,8 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		// we could design an adapted layout and infuse it in guiInit
 		//logging.info(this, "allLayout");
 
-		allpane.setBackground(de.uib.configed.Globals.backLightBlue); // Globals.nimbusBackground);///Globals.backgroundWhite);
-																		// //Globals.backLighter);//Globals.backgroundWhite);//(myHintYellow);
+		allpane.setBackground(Globals.backLightBlue); // Globals.nimbusBackground);///Globals.backgroundWhite);
+														// //Globals.backLighter);//Globals.backgroundWhite);//(myHintYellow);
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
@@ -355,10 +349,10 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		/*
 		JButton buttonReload = new JButton("",
-			de.uib.configed.Globals.createImageIcon("images/reload16.png", "" )
+			Globals.createImageIcon("images/reload16.png", "" )
 			);
 		
-		buttonReload.setPreferredSize( de.uib.configed.Globals.smallButtonDimension );
+		buttonReload.setPreferredSize( Globals.smallButtonDimension );
 		*/
 
 		buttonReload.addActionListener(new ActionListener() {

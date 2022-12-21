@@ -183,12 +183,13 @@
             <version>9.1.2</version>
         </dependency>
         
-        <!-- https://mvnrepository.com/artifact/com.atlassian.commonmark/commonmark -->
+        <!-- https://mvnrepository.com/artifact/org.commonmark/commonmark -->
         <dependency>
-            <groupId>com.atlassian.commonmark</groupId>
+            <groupId>org.commonmark</groupId>
             <artifactId>commonmark</artifactId>
-            <version>0.17.0</version>
+            <version>0.21.0</version>
         </dependency>
+
 
     </dependencies>
 </project>

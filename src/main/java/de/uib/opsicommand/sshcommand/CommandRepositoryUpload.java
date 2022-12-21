@@ -31,8 +31,7 @@ public class CommandRepositoryUpload extends CommandSFTPUpload
 
 	public String getDescription() {
 		if (description.equals(""))
-			description = "copy " + sourcePath + sourceFilename
-					+ " to " + targetPath + targetFilename
+			description = "copy " + sourcePath + sourceFilename + " to " + targetPath + targetFilename
 					+ " on connected server";
 		return description;
 	}

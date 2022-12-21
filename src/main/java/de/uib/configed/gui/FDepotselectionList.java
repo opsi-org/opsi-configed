@@ -6,12 +6,6 @@ import java.util.Vector;
 import javax.swing.JDialog;
 import javax.swing.ListSelectionModel;
 
-/**
- * FDepotSelectionList
- * Copyright:     Copyright (c) 2017
- * Organisation:  uib
- * @author Rupert Röder
- */
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
@@ -24,13 +18,10 @@ public class FDepotselectionList extends FGeneralDialog {
 
 	public FDepotselectionList(JDialog masterWindow) {
 		super(
-				// de.uib.configed.Globals.mainFrame,
-				masterWindow,
-				configed.getResourceValue("FDepotselectionList.title"),
-				new String[] {
-						configed.getResourceValue("FDepotselectionList.buttontake"),
-						configed.getResourceValue("FDepotselectionList.buttonclose")
-				},
+				// Globals.mainFrame,
+				masterWindow, configed.getResourceValue("FDepotselectionList.title"),
+				new String[] { configed.getResourceValue("FDepotselectionList.buttontake"),
+						configed.getResourceValue("FDepotselectionList.buttonclose") },
 				500, 300);
 		depotsList = new DepotsList(PersistenceControllerFactory.getPersistenceController());
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);

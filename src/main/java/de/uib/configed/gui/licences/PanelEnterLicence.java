@@ -278,7 +278,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 				false // searchpane
 		);
 
-		panelKeys.setMasterFrame(de.uib.configed.Globals.frame1);
+		panelKeys.setMasterFrame(Globals.frame1);
 		// panelKeys.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		// panelKeys.showFilterIcon( true ); //supply implementation of
@@ -290,7 +290,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 				false, new int[] { PanelGenEditTable.POPUP_RELOAD }, true // with tablesearchpane
 		);
 
-		panelLicencepools.setMasterFrame(de.uib.configed.Globals.frame1);
+		panelLicencepools.setMasterFrame(Globals.frame1);
 		// panelLicencepools.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		// panelLicencepools.showFilterIcon( true ); //supply implementation of
@@ -303,7 +303,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true // with tablesearchpane
 		);
-		panelLicencecontracts.setMasterFrame(de.uib.configed.Globals.frame1);
+		panelLicencecontracts.setMasterFrame(Globals.frame1);
 		// panelLicencecontracts.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		// panelLicencecontracts.showFilterIcon( true ); //supply implementation of

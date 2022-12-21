@@ -20,8 +20,7 @@ public abstract class MetaConfig {
 
 	protected ConfigOption.TYPE propertyType;
 
-	public class InvalidTypeException extends Exception {
-	}
+	public class InvalidTypeException extends Exception {}
 
 	public static final String CONFIG_KEY = "configed.meta_config";
 	public static final String PROPERTY_KEY_PART = "propertyname";
@@ -41,12 +40,8 @@ public abstract class MetaConfig {
 	String possibleValuesMetaKeyName;
 	String typeMetaKeyName;
 
-	public MetaConfig(
-			String keyName, String propertyName, String description,
-			boolean editable, boolean multiValue,
-			java.util.List<Object> values,
-			java.util.List<Object> possibleValues,
-			ConfigOption.TYPE type)
+	public MetaConfig(String keyName, String propertyName, String description, boolean editable, boolean multiValue,
+			java.util.List<Object> values, java.util.List<Object> possibleValues, ConfigOption.TYPE type)
 
 	{
 		baseMetaKeyName = CONFIG_KEY + ". " + keyName;

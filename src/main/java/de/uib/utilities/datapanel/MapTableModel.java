@@ -18,6 +18,7 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.util.function.Function;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.DataChangedSubject;
@@ -65,7 +66,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		 * logging.info(this, "key denied ?" + key );
 		 * Boolean result = key.endsWith( "modified");
 		 * if (result)
-		 * JOptionPane.showMessageDialog(de.uib.configed.Globals.mainFrame,
+		 * JOptionPane.showMessageDialog(Globals.mainFrame,
 		 * "this entry cannot be edited manually",
 		 * "information", JOptionPane.INFORMATION_MESSAGE
 		 * );
@@ -534,7 +535,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 						// + ", " + rowModiTime + ", " + row);
 
 						if (rowModiTime > -1 && row != rowModiTime) {
-							setValueAt(de.uib.configed.Globals.getNowTimeListValue(), rowModiTime, 1);
+							setValueAt(Globals.getNowTimeListValue(), rowModiTime, 1);
 						}
 
 					}

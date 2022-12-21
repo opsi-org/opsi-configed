@@ -42,7 +42,7 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 				true // switchLineColors
 				, null, true // searchpane
 		);
-		panelStatistics.setMasterFrame(de.uib.configed.Globals.frame1);
+		panelStatistics.setMasterFrame(Globals.frame1);
 		panelStatistics.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panelStatistics.showFilterIcon(true); // supply implementation of SearchTargetModelFromTable.setFiltered

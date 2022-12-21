@@ -39,9 +39,7 @@ public class SSHPMInstallPanel extends JPanel {
 
 	public void open() {
 		if (!isOpen) {
-			this.setSize(
-					this.getWidth(),
-					this.getHeight() + this.getHeight());
+			this.setSize(this.getWidth(), this.getHeight() + this.getHeight());
 			isOpen = true;
 			this.setVisible(isOpen);
 		}
@@ -49,9 +47,7 @@ public class SSHPMInstallPanel extends JPanel {
 
 	public void close() {
 		if (isOpen) {
-			this.setSize(
-					this.getWidth(),
-					this.getHeight() - this.getHeight());
+			this.setSize(this.getWidth(), this.getHeight() - this.getHeight());
 			isOpen = false;
 			this.setVisible(isOpen);
 		}

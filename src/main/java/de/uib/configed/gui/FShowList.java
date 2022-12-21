@@ -7,12 +7,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
-/**
- * FShowList
- * Copyright:     Copyright (c) 2001-2012
- * Organisation:  uib
- * @author Rupert Röder
- */
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 

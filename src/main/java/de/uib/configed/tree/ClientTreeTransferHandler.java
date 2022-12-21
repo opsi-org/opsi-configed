@@ -14,6 +14,7 @@ import javax.swing.TransferHandler;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 public class ClientTreeTransferHandler extends TransferHandler {
@@ -52,7 +53,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		boolean result = true;
 		logging.debug(this, "----------- can import ??");
 
-		if (de.uib.configed.Globals.isGlobalReadOnly())
+		if (Globals.isGlobalReadOnly())
 			return false;
 
 		if (!support.isDataFlavorSupported(DataFlavor.stringFlavor) || !support.isDrop()) {

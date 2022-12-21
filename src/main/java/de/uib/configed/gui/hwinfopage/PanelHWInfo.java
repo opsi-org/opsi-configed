@@ -144,7 +144,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		table.getColumnModel().getColumn(1).setPreferredWidth(300);
 
 		table.setDragEnabled(true);
-		table.setBackground(de.uib.configed.Globals.nimbusBackground);
+		table.setBackground(Globals.nimbusBackground);
 		JPanel embed = new JPanel();
 		GroupLayout layoutEmbed = new GroupLayout(embed);
 		embed.setLayout(layoutEmbed);
@@ -162,7 +162,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		// embed.setBackground(Color.red);
 		jScrollPaneInfo = new JScrollPane(embed);
 		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		// jScrollPaneInfo.getViewport().setBackground(de.uib.configed.Globals.nimbusBackground);
+		// jScrollPaneInfo.getViewport().setBackground(Globals.nimbusBackground);
 		// jScrollPaneInfo.setMinimumSize( new Dimension(200, 200) );
 		// jScrollPaneInfo.setPREFERRED_SIZE( new Dimension(400, 200) );
 
@@ -275,14 +275,14 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());
-		externalView.centerOn(de.uib.configed.Globals.mainFrame);
+		externalView.centerOn(Globals.mainFrame);
 
 		externalView.setVisible(true);
 	}
 
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	private ImageIcon createImageIcon(String path) {
-		return de.uib.configed.Globals.createImageIcon(path, "");
+		return Globals.createImageIcon(path, "");
 		/*
 		 * java.net.URL imgURL = getClass().getResource(path);
 		 * if (imgURL != null)

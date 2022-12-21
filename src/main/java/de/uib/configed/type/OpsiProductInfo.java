@@ -69,11 +69,9 @@ public class OpsiProductInfo extends OpsiPackage {
 		}
 
 		hasUserLoginScript = (m.get(SERVICEkeyUSER_LOGIN_SCRIPT) != null
-				&&
-				!("" + m.get(SERVICEkeyUSER_LOGIN_SCRIPT)).equals(""));
+				&& !("" + m.get(SERVICEkeyUSER_LOGIN_SCRIPT)).equals(""));
 
-		logging.debug(this, "created with description " + description + "\n,"
-				+ " possible actions " + possibleActions
+		logging.debug(this, "created with description " + description + "\n," + " possible actions " + possibleActions
 				+ ", hasUserLoginScript " + hasUserLoginScript);
 		// System.exit(0);
 
@@ -113,13 +111,8 @@ public class OpsiProductInfo extends OpsiPackage {
 
 	@Override
 	public String toString() {
-		return getClass().getName()
-				+ "{productId=" + productId
-				+ ";productName=" + productName + ";description=" + description
-				+ ";possibleActions" + possibleActions + ";hasUserLoginScript=" + hasUserLoginScript
-				+ ";priority=" + priority
-				+ ";description=" + description
-				+ ";advice=" + advice
-				+ "}";
+		return getClass().getName() + "{productId=" + productId + ";productName=" + productName + ";description="
+				+ description + ";possibleActions" + possibleActions + ";hasUserLoginScript=" + hasUserLoginScript
+				+ ";priority=" + priority + ";description=" + description + ";advice=" + advice + "}";
 	}
 }

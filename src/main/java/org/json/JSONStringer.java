@@ -25,26 +25,21 @@ SOFTWARE.
 */
 
 /**
- * JSONStringer provides a quick and convenient way of producing JSON text.
- * The texts produced strictly conform to JSON syntax rules. No whitespace is
- * added, so the results are ready for transmission or storage. Each instance of
+ * JSONStringer provides a quick and convenient way of producing JSON text. The
+ * texts produced strictly conform to JSON syntax rules. No whitespace is added,
+ * so the results are ready for transmission or storage. Each instance of
  * JSONStringer can produce one JSON text.
  * <p>
  * A JSONStringer instance provides a <code>value</code> method for appending
- * values to the
- * text, and a <code>key</code>
- * method for adding keys before values in objects. There are <code>array</code>
- * and <code>endArray</code> methods that make and bound array values, and
- * <code>object</code> and <code>endObject</code> methods which make and bound
- * object values. All of these methods return the JSONStringer instance,
- * permitting cascade style. For example,
+ * values to the text, and a <code>key</code> method for adding keys before
+ * values in objects. There are <code>array</code> and <code>endArray</code>
+ * methods that make and bound array values, and <code>object</code> and
+ * <code>endObject</code> methods which make and bound object values. All of
+ * these methods return the JSONStringer instance, permitting cascade style. For
+ * example,
  * 
  * <pre>
- * myString = new JSONStringer()
- * 		.object()
- * 		.key("JSON").value("Hello, World!")
- * 		.endObject()
- * 		.toString();
+ * myString = new JSONStringer().object().key("JSON").value("Hello, World!").endObject().toString();
  * </pre>
  * 
  * which produces the string
@@ -72,12 +67,8 @@ public class JSONStringer {
 	private boolean comma;
 
 	/**
-	 * The current mode. Values:
-	 * 'a' (array),
-	 * 'd' (done),
-	 * 'i' (initial),
-	 * 'k' (key),
-	 * 'o' (object).
+	 * The current mode. Values: 'a' (array), 'd' (done), 'i' (initial), 'k'
+	 * (key), 'o' (object).
 	 */
 	private char mode;
 
@@ -114,8 +105,7 @@ public class JSONStringer {
 	 * @return this
 	 * @throws JSONException If the value is out of sequence.
 	 */
-	private JSONStringer append(String s)
-			throws JSONException {
+	private JSONStringer append(String s) throws JSONException {
 		if (s == null) {
 			throw new JSONException("Null pointer");
 		}
@@ -141,8 +131,7 @@ public class JSONStringer {
 	 * @return this
 	 * @throws JSONException If the nesting is too deep, or if the object is
 	 *                       started in the wrong place (for example as a key or
-	 *                       after the end of the
-	 *                       outermost array or object).
+	 *                       after the end of the outermost array or object).
 	 */
 	public JSONStringer array() throws JSONException {
 		if (this.mode == 'i' || this.mode == 'o' || this.mode == 'a') {
@@ -200,11 +189,10 @@ public class JSONStringer {
 	 * 
 	 * @param s A key string.
 	 * @return this
-	 * @throws JSONException If the key is out of place. For example, keys
-	 *                       do not belong in arrays or if the key is null.
+	 * @throws JSONException If the key is out of place. For example, keys do
+	 *                       not belong in arrays or if the key is null.
 	 */
-	public JSONStringer key(String s)
-			throws JSONException {
+	public JSONStringer key(String s) throws JSONException {
 		if (s == null) {
 			throw new JSONException("Null key.");
 		}
@@ -229,8 +217,7 @@ public class JSONStringer {
 	 * @return this
 	 * @throws JSONException If the nesting is too deep, or if the object is
 	 *                       started in the wrong place (for example as a key or
-	 *                       after the end of the
-	 *                       outermost array or object).
+	 *                       after the end of the outermost array or object).
 	 */
 	public JSONStringer object() throws JSONException {
 		if (this.mode == 'i') {
@@ -325,8 +312,7 @@ public class JSONStringer {
 			JSONObject.testValidity(o);
 			return this.append(JSONObject.numberToString((Number) o));
 		}
-		if (o instanceof Boolean ||
-				o instanceof JSONArray || o instanceof JSONObject) {
+		if (o instanceof Boolean || o instanceof JSONArray || o instanceof JSONObject) {
 			return this.append(o.toString());
 		}
 		return this.append(JSONObject.quote(o.toString()));

@@ -131,10 +131,8 @@ public class DPassword extends JDialog // implements Runnable
 			// waitingProgressBar.setMaximum(max);
 
 			UIDefaults defaults = new UIDefaults();
-			defaults.put("ProgressBar[Enabled].foregroundPainter",
-					new ProgressBarPainter(de.uib.configed.Globals.opsiLogoBlue));
-			defaults.put("ProgressBar[Enabled].backgroundPainter",
-					new ProgressBarPainter(de.uib.configed.Globals.opsiLogoLightBlue));
+			defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
+			defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.opsiLogoLightBlue));
 			waitingProgressBar.putClientProperty("Nimbus.Overrides", defaults);
 
 			JPanel cPanel = new JPanel();

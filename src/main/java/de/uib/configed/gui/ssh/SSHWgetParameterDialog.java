@@ -74,8 +74,8 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		init();
 		initLayout();
 		pack();
-		setSize(de.uib.configed.Globals.dialogFrameDefaultSize);
-		this.centerOn(de.uib.configed.Globals.mainFrame);
+		setSize(Globals.dialogFrameDefaultSize);
+		this.centerOn(Globals.mainFrame);
 		this.setBackground(Globals.backLightBlue);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
@@ -294,7 +294,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		int MAX = Short.MAX_VALUE;
 		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup()
 
-				.addGap(de.uib.configed.Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 
 				.addGroup(inputPanelLayout.createParallelGroup().addGroup(inputPanelLayout.createSequentialGroup()
 						.addGroup(inputPanelLayout.createParallelGroup().addComponent(lbl_url, PREF, PREF, PREF)
@@ -307,36 +307,35 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 								.addGroup(inputPanelLayout.createSequentialGroup().addComponent(tf_url, PREF, PREF,
 										Short.MAX_VALUE))
 								.addGroup(inputPanelLayout.createSequentialGroup()
-										.addComponent(cb_dir, de.uib.configed.Globals.BUTTON_WIDTH,
-												de.uib.configed.Globals.BUTTON_WIDTH, Short.MAX_VALUE)
+										.addComponent(cb_dir, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+												Short.MAX_VALUE)
 										.addComponent(btn_searchDir, PREF, PREF, PREF))
 								.addComponent(cb_verbosity, GroupLayout.Alignment.LEADING, Globals.ICON_WIDTH,
 										Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 								.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
 										GroupLayout.Alignment.LEADING, PREF, PREF, PREF)
-								.addComponent(tf_freeInput, de.uib.configed.Globals.BUTTON_WIDTH,
-										de.uib.configed.Globals.BUTTON_WIDTH, Short.MAX_VALUE)))
+								.addComponent(tf_freeInput, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+										Short.MAX_VALUE)))
 						.addComponent(wgetAuthPanel, PREF, PREF, MAX))
-				.addGap(de.uib.configed.Globals.GAP_SIZE));
+				.addGap(Globals.GAP_SIZE));
 
-		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup()
-				.addGap(de.uib.configed.Globals.GAP_SIZE)
+		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(tf_url, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 						.addComponent(lbl_url, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-				.addGap(de.uib.configed.Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(btn_searchDir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
 						.addComponent(cb_dir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 						.addComponent(lbl_dir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-				.addGap(de.uib.configed.Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(cb_verbosity, GroupLayout.Alignment.LEADING, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 						.addComponent(lbl_verbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
-				.addGap(de.uib.configed.Globals.GAP_SIZE)
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH), Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
@@ -345,13 +344,11 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 								Globals.BUTTON_HEIGHT))
 				.addComponent(wgetAuthPanel, PREF, PREF, PREF)
 
-				.addGap(de.uib.configed.Globals.GAP_SIZE)
-				.addGroup(
-						inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(tf_freeInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT)
-								.addComponent(lbl_freeInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT))
-				.addGap(de.uib.configed.Globals.GAP_SIZE).addContainerGap(70, 70));
+				.addGap(Globals.GAP_SIZE)
+				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(tf_freeInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(lbl_freeInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
+				.addGap(Globals.GAP_SIZE).addContainerGap(70, 70));
 	}
 }

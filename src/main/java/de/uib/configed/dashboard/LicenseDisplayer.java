@@ -13,27 +13,38 @@
 
 package de.uib.configed.dashboard;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.Vector;
 
-import javax.swing.event.*;
+import javax.swing.event.TableModelListener;
 
-import javafx.application.*;
-import javafx.collections.*;
-import javafx.embed.swing.*;
-import javafx.fxml.*;
-import javafx.scene.*;
-import javafx.scene.control.*;
-import javafx.scene.text.*;
-import javafx.stage.*;
-
-import de.uib.configed.*;
-import de.uib.configed.gui.*;
-import de.uib.opsidatamodel.*;
-import de.uib.utilities.logging.*;
-import de.uib.utilities.table.*;
-import de.uib.utilities.table.provider.*;
-import de.uib.utilities.table.updates.*;
+import de.uib.configed.Globals;
+import de.uib.configed.configed;
+import de.uib.configed.gui.FSoftwarename2LicencePool;
+import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.utilities.logging.logging;
+import de.uib.utilities.table.GenTableModel;
+import de.uib.utilities.table.provider.DefaultTableProvider;
+import de.uib.utilities.table.provider.RetrieverMapSource;
+import de.uib.utilities.table.updates.TableUpdateCollection;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 
 public class LicenseDisplayer {
 	@FXML
@@ -52,22 +63,21 @@ public class LicenseDisplayer {
 	}
 
 	public void loadData() {
-		Platform.runLater(
-				new Thread() {
-					@Override
-					public void run() {
-						message = "";
-						showInfo();
+		Platform.runLater(new Thread() {
+			@Override
+			public void run() {
+				message = "";
+				showInfo();
 
-						StringBuffer mess = new StringBuffer();
+				StringBuffer mess = new StringBuffer();
 
-						mess.append(showLicenceContractWarnings());
-						mess.append(calculateVariantLicencepools());
+				mess.append(showLicenceContractWarnings());
+				mess.append(calculateVariantLicencepools());
 
-						message = mess.toString();
-						showInfo();
-					}
-				});
+				message = mess.toString();
+				showInfo();
+			}
+		});
 	}
 
 	private void showInfo() {
@@ -154,14 +164,10 @@ public class LicenseDisplayer {
 
 		final TreeSet<String> namesWithVariantPools = new TreeSet<String>();
 
-		modelSWnames = new GenTableModel(
-				null, // no updates
-				new DefaultTableProvider(
-						new RetrieverMapSource(columnNames, classNames,
-								() -> (Map) persist.getInstalledSoftwareName2SWinfo())),
-				0,
-				new int[] {},
-				(TableModelListener) null, // panelSWnames ,
+		modelSWnames = new GenTableModel(null, // no updates
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
+						() -> (Map) persist.getInstalledSoftwareName2SWinfo())),
+				0, new int[] {}, (TableModelListener) null, // panelSWnames ,
 				updateCollection) {
 			@Override
 			protected void initColumns() {

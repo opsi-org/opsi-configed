@@ -354,14 +354,14 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 
 				popupItemDeleteEntry1 = new JMenuItemFormatted(
 						removingSpecificValuesPropertyHandler.getRemovalMenuText(),
-						de.uib.configed.Globals.createImageIcon("images/no-value.png", ""));
+						Globals.createImageIcon("images/no-value.png", ""));
 				popupItemDeleteEntry1.addActionListener(listenerForRemoval_REMOVE_SPECIFIC);
 
 				// popupEditOptions.add(popupItemDeleteEntry1);
 				popupNoEditOptions.add(popupItemDeleteEntry1);
 
 				popupItemDeleteEntry2 = new JMenuItemFormatted(settingDefaultValuesPropertyHandler.getRemovalMenuText(),
-						de.uib.configed.Globals.createImageIcon("images/fixed-value.png", ""));
+						Globals.createImageIcon("images/fixed-value.png", ""));
 				popupItemDeleteEntry2.addActionListener(listenerForRemoval_SET_DEFAULT_AS_SPECIFIC);
 
 				// popupEditOptions.add(popupItemDeleteEntry2);
@@ -463,8 +463,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 						// logging.info(this, "propertyName" + propertyName );
 						// logging.info(this, "defaultsMap" + defaultsMap );
 						// logging.info(this, "defaultsMap.get .." + defaultsMap.get(propertyName) );
-						if (de.uib.configed.Globals.isKeyForSecretValue(propertyName))
-							tooltip = tooltip + de.uib.configed.Globals.STARRED_STRING;
+						if (Globals.isKeyForSecretValue(propertyName))
+							tooltip = tooltip + Globals.STARRED_STRING;
 						else
 							tooltip = tooltip + defaultsMap.get(propertyName);
 					}
@@ -501,12 +501,11 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 						}
 					}
 
-					if (vColIndex == 1 && de.uib.configed.Globals
-							.isKeyForSecretValue((String) mapTableModel.getValueAt(rowIndex, 0))) {
+					if (vColIndex == 1 && Globals.isKeyForSecretValue((String) mapTableModel.getValueAt(rowIndex, 0))) {
 						if (jc instanceof JLabel) {
-							((JLabel) jc).setText(de.uib.configed.Globals.STARRED_STRING);
+							((JLabel) jc).setText(Globals.STARRED_STRING);
 						} else if (jc instanceof javax.swing.text.JTextComponent) {
-							((javax.swing.text.JTextComponent) jc).setText(de.uib.configed.Globals.STARRED_STRING);
+							((javax.swing.text.JTextComponent) jc).setText(Globals.STARRED_STRING);
 						} else
 							CellAlternatingColorizer.colorizeSecret(jc);
 
@@ -666,7 +665,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 			if (names.indexOf(s) > -1) {
 				ok =
 
-						(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(de.uib.configed.Globals.mainContainer,
+						(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(Globals.mainContainer,
 								"Ein Eintrag mit diesem Namen existiert bereits. Überschreiben des bisherigen Eintrags?",
 								Globals.APPNAME, JOptionPane.OK_CANCEL_OPTION));
 			}
@@ -722,14 +721,14 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 				Point tablePoint = table.getLocationOnScreen();
 
 				fed.setLocation((int) tablePoint.getX() + (int) rect.getX() + 50,
-						(int) tablePoint.getY() + (int) rect.getY() + de.uib.configed.Globals.LINE_HEIGHT);
+						(int) tablePoint.getY() + (int) rect.getY() + Globals.LINE_HEIGHT);
 				located = true;
 			} catch (Exception ex) {
 				logging.warning(this, "get location error " + ex);
 			}
 		}
 		if (!located)
-			fed.centerOn(de.uib.configed.Globals.mainContainer);
+			fed.centerOn(Globals.mainContainer);
 
 		fed.setVisible(true);
 	}

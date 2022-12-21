@@ -11,8 +11,7 @@ import java.util.Vector;
 import de.uib.configed.configed;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
 
-public class FramingNewRole
-		implements FramingTextfieldWithListselection {
+public class FramingNewRole implements FramingTextfieldWithListselection {
 
 	Vector<String> list;
 	String title;

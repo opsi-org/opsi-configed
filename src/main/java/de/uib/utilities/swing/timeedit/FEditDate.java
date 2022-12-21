@@ -30,7 +30,7 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 
 	protected DateFormat dateFormat;
 
-	// de.uib.configed.Globals.createImageIcon("images/edit-delete.png", ""
+	// Globals.createImageIcon("images/edit-delete.png", ""
 
 	public FEditDate(String initialText, boolean withTime) {
 		super(initialText);

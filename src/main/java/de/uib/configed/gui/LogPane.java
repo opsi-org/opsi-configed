@@ -117,8 +117,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected String title;
 	protected String info;
 
-	private boolean changing = false;
-
 	protected Integer displayFontSize = 11;
 	final int minDisplayFontSize = 10;
 	protected Font monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);

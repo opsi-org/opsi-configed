@@ -46,7 +46,6 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 import de.uib.configed.ConfigedMain;
-//import utils.TableSorter;
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
@@ -202,8 +201,8 @@ public class JTableSelectionPanel extends JPanel
 		labelSearch = new JLabel(configed.getResourceValue("SearchPane.search"));
 		labelSearch.setFont(Globals.defaultFont);
 
-		Icon unselectedIconSearch = de.uib.configed.Globals.createImageIcon("images/loupe_light_16.png", "");
-		Icon selectedIconSearch = de.uib.configed.Globals.createImageIcon("images/loupe_light_16_x.png", "");
+		Icon unselectedIconSearch = Globals.createImageIcon("images/loupe_light_16.png", "");
+		Icon selectedIconSearch = Globals.createImageIcon("images/loupe_light_16_x.png", "");
 
 		checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
 		checkmarkSearch.setToolTipText(configed.getResourceValue("SearchPane.checkmarkSearch.tooltip"));
@@ -276,8 +275,8 @@ public class JTableSelectionPanel extends JPanel
 			}
 		});
 
-		Icon markAllIcon = de.uib.configed.Globals.createImageIcon("images/selection-all.png", "");
-		Icon invertSelectionIcon = de.uib.configed.Globals.createImageIcon("images/selection-invert.png", "");
+		Icon markAllIcon = Globals.createImageIcon("images/selection-all.png", "");
+		Icon invertSelectionIcon = Globals.createImageIcon("images/selection-invert.png", "");
 		buttonMarkAll = new JButton("", markAllIcon);
 		buttonMarkAll.setToolTipText(configed.getResourceValue("SearchPane.popup.markall"));
 		buttonInvertSelection = new JButton("", invertSelectionIcon);

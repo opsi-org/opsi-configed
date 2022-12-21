@@ -92,7 +92,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		initComponents();
 
-		panelMountShare = new PanelMountShare((NameProducer) this, main, root);
+		panelMountShare = new PanelMountShare(this, main, root);
 
 		defineLayout();
 	}
@@ -122,9 +122,8 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 			else {
 
 				if (opsiPackageOnWorkbench.exists()) {
-					int returnedOption = JOptionPane.NO_OPTION;
 
-					returnedOption = JOptionPane.showOptionDialog(rootFrame,
+					int returnedOption = JOptionPane.showOptionDialog(rootFrame,
 							configed.getResourceValue("InstallOpsiPackage.packageReinstall") + " "
 									+ opsiWorkBenchDirectoryS + " "
 									+ configed.getResourceValue("InstallOpsiPackage.packageReinstall2"),
@@ -132,10 +131,8 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 									+ configed.getResourceValue("InstallOpsiPackage.packageReinstallTitle"),
 							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-					if (returnedOption == JOptionPane.YES_OPTION)
-						return true;
-					else
-						return false;
+					return returnedOption == JOptionPane.YES_OPTION;
+
 				} else
 				// it is not there and we have to copy it
 				{
@@ -210,8 +207,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	}
 
 	public void execute() {
-		boolean force = true;
-		Object propertyDefaultValues = null;
 
 		if (installProductFromWorkbench()) {
 			produceServerPath();
@@ -219,14 +214,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 			persist.setRights(opsiPackageServerPathS);
 			boolean result = persist.installPackage(opsiPackageServerPathS);
 			waitCursor.stop();
-
-			String resultMessage = "";
-
-			if (result) {
-				resultMessage = configed.getResourceValue("InstallOpsiPackage.reportSuccessful");
-			} else {
-				resultMessage = configed.getResourceValue("InstallOpsiPackage.reportFailed");
-			}
 
 			logging.info(this, "installPackage wrongly reporesult " + result);
 

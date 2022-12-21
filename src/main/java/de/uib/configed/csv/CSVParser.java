@@ -81,61 +81,60 @@ public class CSVParser {
 			CSVToken token = tokens.get(i);
 
 			switch (token.getName()) {
-				case CSVToken.STRING_SEPARATOR:
-					if (ignoreErrors || i == 0) {
-						break;
-					}
+			case CSVToken.STRING_SEPARATOR:
+				if (ignoreErrors || i == 0) {
+					break;
+				}
 
-					boolean fieldStart = false;
-					boolean fieldEnd = false;
+				boolean fieldStart = false;
+				boolean fieldEnd = false;
 
-					if (tokens.get(i - 1).equals(CSVToken.FIELD_SEPARATOR)
-							&& (tokens.get(i + 1).equals(CSVToken.FIELD) ||
-									tokens.get(i + 1).equals(CSVToken.NEW_LINE) ||
-									tokens.get(i + 1).equals(CSVToken.EMBEDDED_QUOTE))) {
-						fieldStart = true;
-					}
+				if (tokens.get(i - 1).equals(CSVToken.FIELD_SEPARATOR)
+						&& (tokens.get(i + 1).equals(CSVToken.FIELD) || tokens.get(i + 1).equals(CSVToken.NEW_LINE)
+								|| tokens.get(i + 1).equals(CSVToken.EMBEDDED_QUOTE))) {
+					fieldStart = true;
+				}
 
-					if (((tokens.get(i - 1).equals(CSVToken.FIELD) || tokens.get(i - 1).equals(CSVToken.EMBEDDED_QUOTE))
-							&& (tokens.get(i + 1).equals(CSVToken.FIELD_SEPARATOR)
-									|| tokens.get(i + 1).equals(CSVToken.LINE_END)))) {
-						fieldEnd = true;
-					}
+				if (((tokens.get(i - 1).equals(CSVToken.FIELD) || tokens.get(i - 1).equals(CSVToken.EMBEDDED_QUOTE))
+						&& (tokens.get(i + 1).equals(CSVToken.FIELD_SEPARATOR)
+								|| tokens.get(i + 1).equals(CSVToken.LINE_END)))) {
+					fieldEnd = true;
+				}
 
-					if (!fieldStart && !fieldEnd) {
-						throw new CSVParserException("Syntax error occurred");
-					}
-					break;
-				case CSVToken.NEW_LINE:
-					pendingFieldCount = fieldCount;
-					field.append(token.getValue());
-					pendingField = field.toString();
-					isMultiLine = true;
-					break;
-				case CSVToken.FIELD_SEPARATOR:
-					fieldCount++;
-					result.add(field.toString());
-					field.setLength(0);
-					break;
-				case CSVToken.EMPTY_FIELD:
-					break;
-				case CSVToken.FIELD:
-					field.append(token.getValue());
-					isMultiLine = false;
-					break;
-				case CSVToken.EMBEDDED_QUOTE:
-					field.append(token.getValue());
-					break;
-				case CSVToken.LINE_END:
-					fieldCount++;
-					result.add(field.toString());
-					field.setLength(0);
+				if (!fieldStart && !fieldEnd) {
+					throw new CSVParserException("Syntax error occurred");
+				}
+				break;
+			case CSVToken.NEW_LINE:
+				pendingFieldCount = fieldCount;
+				field.append(token.getValue());
+				pendingField = field.toString();
+				isMultiLine = true;
+				break;
+			case CSVToken.FIELD_SEPARATOR:
+				fieldCount++;
+				result.add(field.toString());
+				field.setLength(0);
+				break;
+			case CSVToken.EMPTY_FIELD:
+				break;
+			case CSVToken.FIELD:
+				field.append(token.getValue());
+				isMultiLine = false;
+				break;
+			case CSVToken.EMBEDDED_QUOTE:
+				field.append(token.getValue());
+				break;
+			case CSVToken.LINE_END:
+				fieldCount++;
+				result.add(field.toString());
+				field.setLength(0);
 
-					if (fieldCount != 0) {
-						numberOfFieldsPerLine.add(fieldCount);
-						fieldCount = 0;
-					}
-					break;
+				if (fieldCount != 0) {
+					numberOfFieldsPerLine.add(fieldCount);
+					fieldCount = 0;
+				}
+				break;
 			}
 		}
 
@@ -152,8 +151,8 @@ public class CSVParser {
 		}
 
 		long commonFieldCount = numberOfFieldsPerLine.stream()
-				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-				.entrySet().stream().max(Map.Entry.comparingByValue()).get().getKey();
+				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet().stream()
+				.max(Map.Entry.comparingByValue()).get().getKey();
 
 		if (pendingFieldCount == 0
 				&& !numberOfFieldsPerLine.stream().allMatch(lineFieldCount -> lineFieldCount == commonFieldCount)) {

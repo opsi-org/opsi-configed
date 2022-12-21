@@ -30,13 +30,9 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 		this.selectionEditingBackground = selectionEditingBackground;
 	}
 
-	public Component getTableCellRendererComponent(
-			JTable table,
-			Object value, // value to display
+	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 			boolean isSelected, // is the cell selected
-			boolean hasFocus,
-			int row,
-			int column) {
+			boolean hasFocus, int row, int column) {
 		Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		/*

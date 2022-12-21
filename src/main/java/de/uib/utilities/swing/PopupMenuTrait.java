@@ -7,6 +7,7 @@ import java.util.Arrays;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
@@ -58,127 +59,114 @@ public class PopupMenuTrait extends JPopupMenu {
 	protected void addPopup(final int p) {
 		int i;
 		switch (p) {
-			case POPUP_RELOAD:
-				i = listPopups.indexOf(p);
-				menuItems[i] = new JMenuItemFormatted(
-						configed.getResourceValue("PopupMenuTrait.reload"),
-						de.uib.configed.Globals.createImageIcon("images/reload16.png", ""));
-				// menuItems[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)); does
-				// not work
+		case POPUP_RELOAD:
+			i = listPopups.indexOf(p);
+			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PopupMenuTrait.reload"),
+					Globals.createImageIcon("images/reload16.png", ""));
+			// menuItems[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)); does
+			// not work
 
-				addItem(p);
+			addItem(p);
 
-				break;
+			break;
 
-			case POPUP_FLOATINGCOPY:
-				i = listPopups.indexOf(p);
-				menuItems[i] = new JMenuItemFormatted(
-						configed.getResourceValue("PopupMenuTrait.floatingInstance"),
-						de.uib.configed.Globals.createImageIcon("images/edit-copy.png", ""));
-				// menuItems[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)); does
-				// not work
+		case POPUP_FLOATINGCOPY:
+			i = listPopups.indexOf(p);
+			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PopupMenuTrait.floatingInstance"),
+					Globals.createImageIcon("images/edit-copy.png", ""));
+			// menuItems[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)); does
+			// not work
 
-				addSeparator();
-				addItem(p);
+			addSeparator();
+			addItem(p);
 
-				break;
+			break;
 
-			case POPUP_SAVE:
-				i = listPopups.indexOf(p);
-				menuItems[i] = new JMenuItemFormatted(
-						configed.getResourceValue("PopupMenuTrait.save"),
-						de.uib.configed.Globals.createImageIcon("images/save.png", ""));
-				// menuItems[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)); does
-				// not work
+		case POPUP_SAVE:
+			i = listPopups.indexOf(p);
+			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PopupMenuTrait.save"),
+					Globals.createImageIcon("images/save.png", ""));
+			// menuItems[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)); does
+			// not work
 
-				addItem(p);
+			addItem(p);
 
-				break;
+			break;
 
-			case POPUP_SAVE_AS_ZIP:
-				i = listPopups.indexOf(p);
-				menuItems[i] = new JMenuItemFormatted(
-						configed.getResourceValue("PopupMenuTrait.saveAsZip"),
-						de.uib.configed.Globals.createImageIcon("images/zip-icon.png", ""));
+		case POPUP_SAVE_AS_ZIP:
+			i = listPopups.indexOf(p);
+			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PopupMenuTrait.saveAsZip"),
+					Globals.createImageIcon("images/zip-icon.png", ""));
 
-				addItem(p);
+			addItem(p);
 
-				break;
+			break;
 
-			case POPUP_SAVE_LOADED_AS_ZIP:
-				i = listPopups.indexOf(p);
-				menuItems[i] = new JMenuItemFormatted(
-						configed.getResourceValue("PopupMenuTrait.saveLoadedAsZip"),
-						de.uib.configed.Globals.createImageIcon("images/zip-icon.png", ""));
+		case POPUP_SAVE_LOADED_AS_ZIP:
+			i = listPopups.indexOf(p);
+			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PopupMenuTrait.saveLoadedAsZip"),
+					Globals.createImageIcon("images/zip-icon.png", ""));
 
-				addItem(p);
+			addItem(p);
 
-				break;
+			break;
 
-			case POPUP_SAVE_ALL_AS_ZIP:
-				i = listPopups.indexOf(p);
-				menuItems[i] = new JMenuItemFormatted(
-						configed.getResourceValue("PopupMenuTrait.saveAllAsZip"),
-						de.uib.configed.Globals.createImageIcon("images/zip-icon.png", ""));
+		case POPUP_SAVE_ALL_AS_ZIP:
+			i = listPopups.indexOf(p);
+			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PopupMenuTrait.saveAllAsZip"),
+					Globals.createImageIcon("images/zip-icon.png", ""));
 
-				addItem(p);
+			addItem(p);
 
-				break;
+			break;
 
-			case POPUP_PDF:
-				i = listPopups.indexOf(p);
-				menuItems[i] = new JMenuItemFormatted(
-						configed.getResourceValue("FGeneralDialog.pdf"),
-						de.uib.configed.Globals.createImageIcon("images/acrobat_reader16.png", ""));
+		case POPUP_PDF:
+			i = listPopups.indexOf(p);
+			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("FGeneralDialog.pdf"),
+					Globals.createImageIcon("images/acrobat_reader16.png", ""));
 
-				addItem(p);
+			addItem(p);
 
-				break;
+			break;
 
-			case POPUP_EXPORT_CSV:
-				i = listPopups.indexOf(p);
-				menuItems[i] = new JMenuItemFormatted(
-						configed.getResourceValue("PanelGenEditTable.exportTableAsCSV")
-				// , de.uib.configed.Globals.createImageIcon("images/acrobat_reader16.png", "")
-				);
+		case POPUP_EXPORT_CSV:
+			i = listPopups.indexOf(p);
+			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.exportTableAsCSV")
+			// , Globals.createImageIcon("images/acrobat_reader16.png", "")
+			);
 
-				addItem(p);
+			addItem(p);
 
-				break;
+			break;
 
-			case POPUP_EXPORT_SELECTED_CSV:
-				i = listPopups.indexOf(p);
-				menuItems[i] = new JMenuItemFormatted(
-						configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV")
-				// , de.uib.configed.Globals.createImageIcon("images/acrobat_reader16.png", "")
-				);
+		case POPUP_EXPORT_SELECTED_CSV:
+			i = listPopups.indexOf(p);
+			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV")
+			// , Globals.createImageIcon("images/acrobat_reader16.png", "")
+			);
 
-				addItem(p);
+			addItem(p);
 
-				break;
+			break;
 
-			case POPUP_DELETE:
-				i = listPopups.indexOf(p);
-				menuItems[i] = new JMenuItemFormatted(
-						"delete",
-						de.uib.configed.Globals.createImageIcon("images/edit-delete.png", ""));
+		case POPUP_DELETE:
+			i = listPopups.indexOf(p);
+			menuItems[i] = new JMenuItemFormatted("delete", Globals.createImageIcon("images/edit-delete.png", ""));
 
-				addItem(p);
+			addItem(p);
 
-				break;
+			break;
 
-			case POPUP_ADD:
-				i = listPopups.indexOf(p);
-				menuItems[i] = new JMenuItemFormatted(
-						"add",
-						de.uib.configed.Globals.createImageIcon("images/list-add.png", ""));
+		case POPUP_ADD:
+			i = listPopups.indexOf(p);
+			menuItems[i] = new JMenuItemFormatted("add", Globals.createImageIcon("images/list-add.png", ""));
 
-				addItem(p);
+			addItem(p);
 
-				break;
+			break;
 
-			default:
-				logging.info(this, "popuptype " + p + " not implemented");
+		default:
+			logging.info(this, "popuptype " + p + " not implemented");
 
 		}
 	}

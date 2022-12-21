@@ -45,9 +45,7 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 		this.tooltipPrefix = tooltipPrefix;
 	}
 
-	public Component getListCellRendererComponent(
-			JList list,
-			Object value, // value to display
+	public Component getListCellRendererComponent(JList list, Object value, // value to display
 			int index, // cell index
 			boolean isSelected, // is the cell selected
 			boolean cellHasFocus) // the list and the cell have the focus
@@ -62,9 +60,8 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 		// logging.info(this, "value " + value + " index " + index + " hasfocus " +
 		// cellHasFocus);
 		if (uniformColor == null)
-			CellAlternatingColorizer.colorize(
-					jc, isSelected, (index % 2 == 0), true,
-					selectedEven, selectedUneven, unselectedEven, unselectedUneven);
+			CellAlternatingColorizer.colorize(jc, isSelected, (index % 2 == 0), true, selectedEven, selectedUneven,
+					unselectedEven, unselectedUneven);
 
 		else {
 
@@ -90,8 +87,7 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 		uniformSelectedColor = cSelected;
 	}
 
-	public void setAlternatingColors(
-			java.awt.Color selectedEvenColor, java.awt.Color selectedUnevenColor,
+	public void setAlternatingColors(java.awt.Color selectedEvenColor, java.awt.Color selectedUnevenColor,
 			java.awt.Color unselectedEvenColor, java.awt.Color unselectedUnevenColor) {
 		selectedEven = selectedEvenColor;
 		selectedUneven = selectedUnevenColor;

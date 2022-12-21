@@ -19,8 +19,7 @@ import de.uib.utilities.table.ListCellOptions;
 	for which data exist (to be placed in column 1 of the table)
 */
 
-public class ListModelProducerForVisualDatamap
-		extends DefaultListModelProducer {
+public class ListModelProducerForVisualDatamap extends DefaultListModelProducer {
 	Map<Integer, ListModel> listmodels = new HashMap<Integer, ListModel>();
 
 	Map<String, ListCellOptions> optionsMap;
@@ -28,17 +27,13 @@ public class ListModelProducerForVisualDatamap
 	Map<String, Class> originalTypes;
 	JTable table;
 
-	public ListModelProducerForVisualDatamap(
-			JTable tableVisualizingMap,
-			Map<String, ListCellOptions> optionsMap,
+	public ListModelProducerForVisualDatamap(JTable tableVisualizingMap, Map<String, ListCellOptions> optionsMap,
 			Map currentData) {
 		this.table = tableVisualizingMap;
 		setData(optionsMap, currentData);
 	}
 
-	public void setData(
-			Map<String, ListCellOptions> optionsMap,
-			Map currentData) {
+	public void setData(Map<String, ListCellOptions> optionsMap, Map currentData) {
 		this.optionsMap = optionsMap;
 		// logging.info(this, "setData " + optionsMap + " optionsMap.get(type) " +
 		// optionsMap.get("type"));

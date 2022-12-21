@@ -27,8 +27,8 @@ SOFTWARE.
 import java.util.Iterator;
 
 /**
- * This provides static methods to convert an XML text into a JSONObject,
- * and to covert a JSONObject into an XML text.
+ * This provides static methods to convert an XML text into a JSONObject, and to
+ * covert a JSONObject into an XML text.
  * 
  * @author JSON.org
  * @version 2
@@ -76,11 +76,8 @@ public class XML {
 	 * @return The escaped string.
 	 */
 	public static String escape(String string) {
-		return string
-				.replaceAll("&", "&amp;")
-				.replaceAll("<", "&lt;")
-				.replaceAll(">", "&gt;")
-				.replaceAll("\"", "&quot;");
+		return string.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\"",
+				"&quot;");
 	}
 
 	/**
@@ -92,8 +89,7 @@ public class XML {
 	 * @return true if the close tag is processed.
 	 * @throws JSONException
 	 */
-	private static boolean parse(XMLTokener x, JSONObject context,
-			String name) throws JSONException {
+	private static boolean parse(XMLTokener x, JSONObject context, String name) throws JSONException {
 		char c;
 		int i;
 		String n;
@@ -231,8 +227,7 @@ public class XML {
 							if (parse(x, o, n)) {
 								if (o.length() == 0) {
 									context.accumulate(n, Boolean.TRUE);
-								} else if (o.length() == 1 &&
-										o.opt("content") != null) {
+								} else if (o.length() == 1 && o.opt("content") != null) {
 									context.accumulate(n, o.opt("content"));
 								} else {
 									context.accumulate(n, o);
@@ -250,14 +245,14 @@ public class XML {
 
 	/**
 	 * Convert a well-formed (but not necessarily valid) XML string into a
-	 * JSONObject. Some information may be lost in this transformation
-	 * because JSON is a data format and XML is a document format. XML uses
-	 * elements, attributes, and content text, while JSON uses unordered
-	 * collections of name/value pairs and arrays of values. JSON does not
-	 * does not like to distinguish between elements and attributes.
-	 * Sequences of similar elements are represented as JSONArrays. Content
-	 * text may be placed in a "content" member. Comments, prologs, DTDs, and
-	 * <code>&lt;[ [ ]]></code> are ignored.
+	 * JSONObject. Some information may be lost in this transformation because
+	 * JSON is a data format and XML is a document format. XML uses elements,
+	 * attributes, and content text, while JSON uses unordered collections of
+	 * name/value pairs and arrays of values. JSON does not does not like to
+	 * distinguish between elements and attributes. Sequences of similar
+	 * elements are represented as JSONArrays. Content text may be placed in a
+	 * "content" member. Comments, prologs, DTDs, and <code>&lt;[ [ ]]></code>
+	 * are ignored.
 	 * 
 	 * @param string The source string.
 	 * @return A JSONObject containing the structured data from the XML string.
@@ -292,8 +287,7 @@ public class XML {
 	 * @return A string.
 	 * @throws JSONException
 	 */
-	public static String toString(Object o, String tagName)
-			throws JSONException {
+	public static String toString(Object o, String tagName) throws JSONException {
 		StringBuffer b = new StringBuffer();
 		int i;
 		JSONArray ja;
@@ -378,8 +372,7 @@ public class XML {
 			ja = (JSONArray) o;
 			len = ja.length();
 			for (i = 0; i < len; ++i) {
-				b.append(toString(
-						ja.opt(i), (tagName == null) ? "array" : tagName));
+				b.append(toString(ja.opt(i), (tagName == null) ? "array" : tagName));
 			}
 			return b.toString();
 		} else {

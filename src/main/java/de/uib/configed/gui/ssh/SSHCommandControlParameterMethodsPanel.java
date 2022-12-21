@@ -176,10 +176,8 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 						.addGap(Globals.MIN_GAP_SIZE * 3, Globals.MIN_GAP_SIZE * 3, Short.MAX_VALUE))
 
 				.addGroup(thisLayout.createSequentialGroup().addComponent(lbl_empty, 10, 10, Short.MAX_VALUE)
-						.addComponent(btn_test_param, de.uib.configed.Globals.ICON_WIDTH,
-								de.uib.configed.Globals.ICON_WIDTH, de.uib.configed.Globals.ICON_WIDTH)
-						.addComponent(btn_add_param, de.uib.configed.Globals.ICON_WIDTH,
-								de.uib.configed.Globals.ICON_WIDTH, de.uib.configed.Globals.ICON_WIDTH))
+						.addComponent(btn_test_param, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+						.addComponent(btn_add_param, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH))
 
 		).addGap(rGap));
 		thisLayout.setVerticalGroup(thisLayout.createSequentialGroup().addGap(oGap * 2)
@@ -196,12 +194,11 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(thisLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(btn_add_param, de.uib.configed.Globals.BUTTON_HEIGHT,
-								de.uib.configed.Globals.BUTTON_HEIGHT, de.uib.configed.Globals.BUTTON_HEIGHT)
-						.addComponent(btn_test_param, de.uib.configed.Globals.BUTTON_HEIGHT,
-								de.uib.configed.Globals.BUTTON_HEIGHT, de.uib.configed.Globals.BUTTON_HEIGHT)
-						.addComponent(lbl_empty, de.uib.configed.Globals.BUTTON_HEIGHT,
-								de.uib.configed.Globals.BUTTON_HEIGHT, de.uib.configed.Globals.BUTTON_HEIGHT))
+						.addComponent(btn_add_param, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(btn_test_param, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(lbl_empty, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
 				.addGap(uGap * 2)
 		// .addGap(50) //we add space for the combo box popup which does not always
 		// correctly appear if not placed inside the frame

@@ -166,11 +166,9 @@ public class PanelSWMultiClientReport extends JPanel {
 				configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
 		exportDirectoryS = "";
 
-		JButton buttonCallSelectExportDirectory = new JButton("",
-				de.uib.configed.Globals.createImageIcon("images/folder_16.png", ""));
-		buttonCallSelectExportDirectory
-				.setSelectedIcon(de.uib.configed.Globals.createImageIcon("images/folder_16.png", ""));
-		buttonCallSelectExportDirectory.setPreferredSize(de.uib.configed.Globals.graphicButtonDimension);
+		JButton buttonCallSelectExportDirectory = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
+		buttonCallSelectExportDirectory.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
+		buttonCallSelectExportDirectory.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallSelectExportDirectory
 				.setToolTipText(configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
 
@@ -297,16 +295,15 @@ public class PanelSWMultiClientReport extends JPanel {
 
 				.addGroup(glPreConfig.createSequentialGroup()
 						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
-						.addComponent(labelExportDirectory, de.uib.configed.Globals.BUTTON_WIDTH,
-								de.uib.configed.Globals.BUTTON_WIDTH * 2, de.uib.configed.Globals.BUTTON_WIDTH * 2)
+						.addComponent(labelExportDirectory, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2,
+								Globals.BUTTON_WIDTH * 2)
 
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 
 						.addComponent(buttonCallSelectExportDirectory, Globals.GRAPHIC_BUTTON_WIDTH,
 								Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-						.addComponent(fieldExportDirectory, 40, de.uib.configed.Globals.BUTTON_WIDTH * 2,
-								Short.MAX_VALUE)
+						.addComponent(fieldExportDirectory, 40, Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
 						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE))
 
 				.addGroup(glPreConfig.createSequentialGroup()
@@ -316,17 +313,17 @@ public class PanelSWMultiClientReport extends JPanel {
 
 				.addGroup(glPreConfig.createSequentialGroup()
 						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
-						.addComponent(labelFilenamePrefix, de.uib.configed.Globals.BUTTON_WIDTH,
-								de.uib.configed.Globals.BUTTON_WIDTH * 2, de.uib.configed.Globals.BUTTON_WIDTH * 2)
+						.addComponent(labelFilenamePrefix, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2,
+								Globals.BUTTON_WIDTH * 2)
 
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 
 						.addGap(Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH,
 								Globals.GRAPHIC_BUTTON_WIDTH)
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-						.addComponent(fieldFilenamePrefix, de.uib.configed.Globals.BUTTON_WIDTH / 2,
-								de.uib.configed.Globals.BUTTON_WIDTH, Short.MAX_VALUE / 2)
-						.addGap(20, de.uib.configed.Globals.BUTTON_WIDTH, Short.MAX_VALUE / 2)
+						.addComponent(fieldFilenamePrefix, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
+								Short.MAX_VALUE / 2)
+						.addGap(20, Globals.BUTTON_WIDTH, Short.MAX_VALUE / 2)
 						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE))
 				.addGroup(glPreConfig.createSequentialGroup()
 						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)

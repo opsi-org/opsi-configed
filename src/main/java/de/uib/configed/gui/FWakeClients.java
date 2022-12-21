@@ -6,12 +6,6 @@ import java.util.Map;
 
 import javax.swing.JFrame;
 
-/**
-*  FWakeClients
- * Copyright:     Copyright (c) 2014-2015
- * Organisation:  uib
- * @author Rupert Röder
- */
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.opsicommand.Executioner;
@@ -55,13 +49,13 @@ public class FWakeClients extends FShowList {
 
 			for (String depot : hostSeparationByDepots.keySet()) {
 
-				logging.info(this, "act on depot " + depot + ", executioner != NONE  "
-						+ (executionerForDepots.get(depot) != Executioner.NONE)
-						+ " counterByDepots.get(depot) " + counterByDepots.get(depot));
+				logging.info(this,
+						"act on depot " + depot + ", executioner != NONE  "
+								+ (executionerForDepots.get(depot) != Executioner.NONE) + " counterByDepots.get(depot) "
+								+ counterByDepots.get(depot));
 
 				if (executionerForDepots.get(depot) != Executioner.NONE
-						&&
-						counterByDepots.get(depot) < hostSeparationByDepots.get(depot).size())
+						&& counterByDepots.get(depot) < hostSeparationByDepots.get(depot).size())
 
 				{
 					if (executionerForDepots.get(depot) == null) {
@@ -95,10 +89,7 @@ public class FWakeClients extends FShowList {
 				}
 			}
 
-			persist.wakeOnLan(
-					hostsToWakeOnThisTurn,
-					hostSeparationByDepots,
-					executionerForDepots);
+			persist.wakeOnLan(hostsToWakeOnThisTurn, hostSeparationByDepots, executionerForDepots);
 
 			try {
 				Thread.sleep(1000 * delaySecs);

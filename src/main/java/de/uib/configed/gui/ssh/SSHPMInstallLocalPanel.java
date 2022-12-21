@@ -53,13 +53,13 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 		filechooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		filechooser.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 		filechooser.setDialogType(JFileChooser.OPEN_DIALOG);
-		filechooser.setDialogTitle(de.uib.configed.Globals.APPNAME);
+		filechooser.setDialogTitle(Globals.APPNAME);
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("opsi-paket (*.opsi) ", "opsi");
 		filechooser.setFileFilter(filter);
 
-		btn_filechooser = new JButton("", de.uib.configed.Globals.createImageIcon("images/folder_16.png", ""));
-		btn_filechooser.setSelectedIcon(de.uib.configed.Globals.createImageIcon("images/folder_16.png", ""));
-		btn_filechooser.setPreferredSize(de.uib.configed.Globals.smallButtonDimension);
+		btn_filechooser = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
+		btn_filechooser.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
+		btn_filechooser.setPreferredSize(Globals.smallButtonDimension);
 		btn_filechooser.setToolTipText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.filechooser.tooltip"));
 		btn_filechooser.addActionListener(new ActionListener() {

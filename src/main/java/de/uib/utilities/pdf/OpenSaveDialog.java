@@ -40,7 +40,7 @@ public class OpenSaveDialog implements ActionListener {
 		JPanel qPanel = new JPanel();
 		// qPanel.add(text);
 		qPanel.add(buttonPane);
-		dialogView = new de.uib.configed.gui.GeneralFrame(null, de.uib.configed.Globals.APPNAME + " " + title, true); // modal
+		dialogView = new de.uib.configed.gui.GeneralFrame(null, Globals.APPNAME + " " + title, true); // modal
 		dialogView.addPanel(qPanel);
 		dialogView.setSize(new Dimension(400, 90));
 		dialogView.centerOn(Globals.mainFrame);

@@ -152,7 +152,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	 * info)
 	 * {
 	 * final WaitCursor waitCursor = new WaitCursor(
-	 * de.uib.configed.Globals.mainContainer, "updateDocument");
+	 * Globals.mainContainer, "updateDocument");
 	 * SwingUtilities.invokeLater( new Runnable(){
 	 * public void run(){
 	 * setDocument(ident, s, info);
@@ -202,8 +202,8 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 			// chooser.setFileHidingEnabled(false);
 			chooser.setApproveButtonText("O.K.");
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-			chooser.setDialogTitle(de.uib.configed.Globals.APPNAME + " "
-					+ configed.getResourceValue("PanelTabbedDocument.saveFileChooser"));
+			chooser.setDialogTitle(
+					Globals.APPNAME + " " + configed.getResourceValue("PanelTabbedDocument.saveFileChooser"));
 		}
 	}
 
@@ -218,7 +218,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		File f = new File(chooserDirectory, typename);
 		chooser.setSelectedFile(f);
 
-		int returnVal = chooser.showSaveDialog(de.uib.configed.Globals.frame1);
+		int returnVal = chooser.showSaveDialog(Globals.frame1);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			if (chooser != null) {
 				fileName = chooser.getSelectedFile().getAbsolutePath();
@@ -243,7 +243,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		while (i < lines.length) {
 			try {
 				fWriter.write(lines[i] + "\n");
-				// setTitle(de.uib.configed.Globals.APPNAME + " : " + fn);
+				// setTitle(Globals.APPNAME + " : " + fn);
 			} catch (IOException ex) {
 				logging.error("Error writing file: " + fn + "\n --- " + ex);
 			}

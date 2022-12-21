@@ -27,6 +27,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
+import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.utilities.logging.logging;
@@ -47,7 +48,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 	protected GroupLayout konsolePanelLayout;
 	protected GroupLayout mainPanelLayout;
 
-	private Color linecolor = de.uib.configed.Globals.lightBlack;
+	private Color linecolor = Globals.lightBlack;
 	private final String ansi_escape1 = "";
 	private final String ansi_escape2 = "\u001B";
 
@@ -60,29 +61,29 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 
 	public final Map<String, Color> ansiCodeColors = new HashMap<String, Color>() {
 		{
-			put("[0;info;0m", de.uib.configed.Globals.greyed); // user info not really ansi code !!
-			put("[0;error;0m", de.uib.configed.Globals.actionRed); // user info "error" not really ansi code !!
+			put("[0;info;0m", Globals.greyed); // user info not really ansi code !!
+			put("[0;error;0m", Globals.actionRed); // user info "error" not really ansi code !!
 			put("[0;30;40m", Color.BLACK);
 			// ansis beginning with "[1": lines should be unterlined - are not !
 			put("[1;30;40m", Color.BLACK);
 			put("[0;40;40m", Color.BLACK);
 			put("[1;40;40m", Color.BLACK);
-			put("[0;31;40m", de.uib.configed.Globals.actionRed);
-			put("[1;31;40m", de.uib.configed.Globals.actionRed);
-			put("[0;41;40m", de.uib.configed.Globals.actionRed);
-			put("[1;41;40m", de.uib.configed.Globals.actionRed);
-			put("[0;32;40m", de.uib.configed.Globals.okGreen);
-			put("[1;32;40m", de.uib.configed.Globals.okGreen);
-			put("[0;42;40m", de.uib.configed.Globals.okGreen);
-			put("[1;42;40m", de.uib.configed.Globals.okGreen);
-			put("[0;33;40m", de.uib.configed.Globals.darkOrange);
-			put("[1;33;40m", de.uib.configed.Globals.darkOrange);
-			put("[0;43;40m", de.uib.configed.Globals.darkOrange);
-			put("[1;43;40m", de.uib.configed.Globals.darkOrange);
-			put("[0;34;40m", de.uib.configed.Globals.blue);
-			put("[1;34;40m", de.uib.configed.Globals.blue);
-			put("[0;44;40m", de.uib.configed.Globals.blue);
-			put("[1;44;40m", de.uib.configed.Globals.blue);
+			put("[0;31;40m", Globals.actionRed);
+			put("[1;31;40m", Globals.actionRed);
+			put("[0;41;40m", Globals.actionRed);
+			put("[1;41;40m", Globals.actionRed);
+			put("[0;32;40m", Globals.okGreen);
+			put("[1;32;40m", Globals.okGreen);
+			put("[0;42;40m", Globals.okGreen);
+			put("[1;42;40m", Globals.okGreen);
+			put("[0;33;40m", Globals.darkOrange);
+			put("[1;33;40m", Globals.darkOrange);
+			put("[0;43;40m", Globals.darkOrange);
+			put("[1;43;40m", Globals.darkOrange);
+			put("[0;34;40m", Globals.blue);
+			put("[1;34;40m", Globals.blue);
+			put("[0;44;40m", Globals.blue);
+			put("[1;44;40m", Globals.blue);
 			put("[0;35;40m", Color.MAGENTA);
 			put("[1;35;40m", Color.MAGENTA);
 			put("[0;45;40m", Color.MAGENTA);
@@ -91,10 +92,10 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			put("[1;36;40m", Color.CYAN);
 			put("[0;46;40m", Color.CYAN);
 			put("[1;46;40m", Color.CYAN);
-			put("[0;37;40m", de.uib.configed.Globals.lightBlack);
-			put("[1;37;40m", de.uib.configed.Globals.lightBlack);
-			put("[0;47;40m", de.uib.configed.Globals.lightBlack);
-			put("[1;47;40m", de.uib.configed.Globals.lightBlack);
+			put("[0;37;40m", Globals.lightBlack);
+			put("[1;37;40m", Globals.lightBlack);
+			put("[0;47;40m", Globals.lightBlack);
+			put("[1;47;40m", Globals.lightBlack);
 		}
 	};
 
@@ -102,7 +103,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 		public void actionPerformed(ActionEvent e) {
 			logging.debug(this, "actionPerformed " + e);
 			cancel();
-			// JOptionPane.showMessageDialog(de.uib.configed.Globals.mainFrame, "we got
+			// JOptionPane.showMessageDialog(Globals.mainFrame, "we got
 			// cancel");
 		}
 	};
@@ -118,7 +119,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 		closeListener = new DialogCloseListener();
 		initOutputGui();
 		this.setSize(700, 400);
-		this.centerOn(de.uib.configed.Globals.mainFrame);
+		this.centerOn(Globals.mainFrame);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 
@@ -181,10 +182,9 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 
 	private void initOutputGui() {
 		try {
-			Dimension btn_dim = new Dimension(de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH + 15,
-					de.uib.configed.Globals.BUTTON_HEIGHT + 3);
-			inputPanel.setBackground(de.uib.configed.Globals.backLightBlue);
-			mainPanel.setBackground(de.uib.configed.Globals.backLightBlue);
+			Dimension btn_dim = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3);
+			inputPanel.setBackground(Globals.backLightBlue);
+			mainPanel.setBackground(Globals.backLightBlue);
 			getContentPane().add(mainPanel, BorderLayout.CENTER);
 
 			mainPanelLayout = new GroupLayout((JComponent) mainPanel);
@@ -239,8 +239,8 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			// lbl_userhost = new JLabel();
 			// lbl_userhost.setText("user@host");
 
-			// createLayout(konsolePanelLayout, jScrollPane,de.uib.configed.Globals.gapSize,
-			// de.uib.configed.Globals.gapSize, false);
+			// createLayout(konsolePanelLayout, jScrollPane,Globals.gapSize,
+			// Globals.gapSize, false);
 			// createLayout(mainPanelLayout, inputPanel,0,0, false);
 		} catch (Exception e) {
 			logging.warning(this, "initOutputGui, exception occurred", e);

@@ -72,8 +72,8 @@ public class PanelHWByAuditDriver extends JPanel {
 		JLabel labelVendor = new JLabel(configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsVendor"));
 		JLabel labelProduct = new JLabel(configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsProduct"));
 
-		buttonUploadDrivers = new JButton("", de.uib.configed.Globals.createImageIcon("images/upload2product.png", ""));
-		buttonUploadDrivers.setSelectedIcon(de.uib.configed.Globals.createImageIcon("images/upload2product.png", ""));
+		buttonUploadDrivers = new JButton("", Globals.createImageIcon("images/upload2product.png", ""));
+		buttonUploadDrivers.setSelectedIcon(Globals.createImageIcon("images/upload2product.png", ""));
 		buttonUploadDrivers.setToolTipText(configed.getResourceValue("PanelHWInfo.uploadDrivers"));
 
 		buttonUploadDrivers.addActionListener(new ActionListener() {
@@ -143,11 +143,10 @@ public class PanelHWByAuditDriver extends JPanel {
 						.addComponent(fieldLabel2, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH * 2))
 
-				.addGap(5 * hGap, 10 * hGap, 10 * hGap)
-				.addComponent(buttonUploadDrivers, de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH,
-						de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH, de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH)
+				.addGap(5 * hGap, 10 * hGap, 10 * hGap).addComponent(buttonUploadDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
+						Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
 				.addGap(2 * hGap, 4 * hGap, Short.MAX_VALUE));
-		setBackground(de.uib.configed.Globals.backLightBlue);
+		setBackground(Globals.backLightBlue);
 		setBorder(BorderFactory.createLineBorder(Globals.greyed));
 	}
 
@@ -216,7 +215,7 @@ public class PanelHWByAuditDriver extends JPanel {
 			fDriverUpload = new FDriverUpload(main, main.getPersistenceController(), null);
 		}
 
-		fDriverUpload.setSize(de.uib.configed.Globals.helperFormDimension);
+		fDriverUpload.setSize(Globals.helperFormDimension);
 		fDriverUpload.setVisible(true);
 		fDriverUpload.centerOnParent();
 

@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 public class SimpleTreeModel extends DefaultTreeModel
@@ -38,7 +39,7 @@ public class SimpleTreeModel extends DefaultTreeModel
 		setAsksAllowsChildren(true);
 
 		ROOT = (SimpleIconNode) getRoot();
-		// ROOT.setIcon(de.uib.configed.Globals.createImageIcon("images/system-config.png","open
+		// ROOT.setIcon(Globals.createImageIcon("images/system-config.png","open
 		// table"));
 		// logging.info(this, "tooltips " + tooltips);
 		this.tooltips = tooltips;
@@ -113,9 +114,8 @@ public class SimpleTreeModel extends DefaultTreeModel
 				// node must be created
 				{
 					node = new SimpleIconNode(path.get(i - 1));
-					node.setIcon(de.uib.configed.Globals.createImageIcon("images/opentable_small.png", "open table"));
-					node.setNonSelectedIcon(
-							de.uib.configed.Globals.createImageIcon("images/closedtable_small.png", "closed table"));
+					node.setIcon(Globals.createImageIcon("images/opentable_small.png", "open table"));
+					node.setNonSelectedIcon(Globals.createImageIcon("images/closedtable_small.png", "closed table"));
 
 					if (tooltips != null) {
 						String key = partialPath.dottedString(0, partialPath.size());

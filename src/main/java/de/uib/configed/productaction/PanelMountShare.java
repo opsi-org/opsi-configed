@@ -13,7 +13,6 @@
 package de.uib.configed.productaction;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,9 +31,9 @@ import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.logging;
 
 public class PanelMountShare extends JPanel {
-	static ArrayList<PanelMountShare> instances = new ArrayList<PanelMountShare>();
+	static ArrayList<PanelMountShare> instances = new ArrayList<>();
 
-	final int firstLabelWidth = Globals.FIRST_LABEL_WIDTH;
+	private final static int FIRST_LABEL_WIDTH = Globals.FIRST_LABEL_WIDTH;
 
 	PersistenceController persist;
 	ConfigedMain main;
@@ -81,11 +80,7 @@ public class PanelMountShare extends JPanel {
 
 		buttonMountShare.setEnabled(isWindows);
 
-		buttonMountShare.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				callMountShare();
-			}
-		});
+		buttonMountShare.addActionListener((ActionEvent e) -> callMountShare());
 	}
 
 	private void defineLayout() {
@@ -117,27 +112,28 @@ public class PanelMountShare extends JPanel {
 								Globals.LINE_HEIGHT)));
 
 		if (leftBound >= 0) {
-			layout.setHorizontalGroup(layout.createParallelGroup().addGroup(layout.createSequentialGroup()
-					.addComponent(mountShareLabel, 0, 0, 0).addGap(leftBound, leftBound, leftBound)
-					.addComponent(buttonMountShare, de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH,
-							de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH, de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH)
-					.addGap(hFirstGap, hFirstGap, hFirstGap).addComponent(mountShareDescriptionLabel,
-							Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 3, Short.MAX_VALUE)
-					.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)));
-		} else {
-
 			layout.setHorizontalGroup(
 					layout.createParallelGroup()
-							.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
-									.addComponent(mountShareLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
-									.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-									.addComponent(buttonMountShare, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGroup(layout.createSequentialGroup().addComponent(mountShareLabel, 0, 0, 0)
+									.addGap(leftBound, leftBound, leftBound)
+									.addComponent(buttonMountShare, Globals.GRAPHIC_BUTTON_WIDTH,
+											Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
 									.addGap(hFirstGap, hFirstGap, hFirstGap)
 									.addComponent(mountShareDescriptionLabel, Globals.BUTTON_WIDTH * 2,
-											Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
-									.addGap(5, 5, 5)
-									.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE)));
+											Globals.BUTTON_WIDTH * 3, Short.MAX_VALUE)
+									.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)));
+		} else {
+
+			layout.setHorizontalGroup(layout.createParallelGroup()
+					.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+							.addComponent(mountShareLabel, FIRST_LABEL_WIDTH, FIRST_LABEL_WIDTH, FIRST_LABEL_WIDTH)
+							.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+							.addComponent(buttonMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+									GroupLayout.PREFERRED_SIZE)
+							.addGap(hFirstGap, hFirstGap, hFirstGap)
+							.addComponent(mountShareDescriptionLabel, Globals.BUTTON_WIDTH * 2,
+									Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
+							.addGap(5, 5, 5).addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE)));
 		}
 	}
 
@@ -161,7 +157,7 @@ public class PanelMountShare extends JPanel {
 		logging.info(this, "windows call: " + call);
 
 		try {
-			Runtime.getRuntime().exec(call);
+			Runtime.getRuntime().exec(new String[] { call });
 		} catch (IOException ioex) {
 			logging.error("io-Error: " + ioex, ioex);
 		} catch (Exception ex) {
@@ -219,12 +215,13 @@ public class PanelMountShare extends JPanel {
 		return smbMounted;
 	}
 
-	// for overriding
 	protected void initialMount() {
+		// for overriding
 	}
 
 	protected void checkConnectionToShare(final int seconds) {
 		new Thread() {
+			@Override
 			public void run() {
 				int i = 0;
 
@@ -240,6 +237,7 @@ public class PanelMountShare extends JPanel {
 						rootFrame.toFront();
 					} catch (Exception ex) {
 						logging.debug(this, "Exception " + ex);
+						Thread.currentThread().interrupt();
 					}
 				}
 

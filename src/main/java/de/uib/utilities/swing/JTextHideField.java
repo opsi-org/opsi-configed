@@ -71,7 +71,7 @@ public class JTextHideField extends javax.swing.JPanel {
 		visibleField.setEnabled(true);
 		invisibleField.setEnabled(false);
 
-		button = new JButton(de.uib.configed.Globals.createImageIcon("images/eye_blue_open.png", "show"));
+		button = new JButton(Globals.createImageIcon("images/eye_blue_open.png", "show"));
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

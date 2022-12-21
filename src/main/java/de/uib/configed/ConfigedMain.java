@@ -3225,7 +3225,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private void setClientByTree(String nodeObject, TreePath pathToNode) {
 		// WaitCursor waitCursor = new WaitCursor(
-		// de.uib.configed.Globals.mainContainer, "setClientByTree" );
+		// Globals.mainContainer, "setClientByTree" );
 
 		clearTree();
 
@@ -4249,7 +4249,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			try {
 				// waitCursor = new WaitCursor( mainFrame.retrieveBasePane(),
 				// mainFrame.getCursor() );
-				WaitCursor waitCursor = new WaitCursor(de.uib.configed.Globals.mainContainer, "getLogfilesUpdating");
+				WaitCursor waitCursor = new WaitCursor(Globals.mainContainer, "getLogfilesUpdating");
 				logfiles = persist.getLogfiles(firstSelectedClient, logtypeToUpdate);
 				waitCursor.stop();
 
@@ -6579,7 +6579,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					((SSHCommandNeedParameter) command).startParameterGui(m);
 				else
 					new SSHConnectExec(m, command);
-				// if (!(de.uib.configed.Globals.isGlobalReadOnly()))
+				// if (!(Globals.isGlobalReadOnly()))
 				// {
 				// if (command instanceof SSHCommand_Template)
 				// exec_template((SSHCommand_Template) command);

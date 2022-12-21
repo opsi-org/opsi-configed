@@ -87,9 +87,7 @@ public class ActivatedGroupModel {
 	}
 
 	public String getLabel() {
-		if (groupName != null
-				&& groupDescription != null
-				&& !groupDescription.equals(groupName)
+		if (groupName != null && groupDescription != null && !groupDescription.equals(groupName)
 				&& !groupDescription.equals(""))
 			return
 			// "<html><b>" +

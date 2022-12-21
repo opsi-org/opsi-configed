@@ -205,7 +205,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				 */
 
 				if (!fSoftwarename2LicencePool.isVisible())
-					fSoftwarename2LicencePool.centerOn(de.uib.configed.Globals.frame1);
+					fSoftwarename2LicencePool.centerOn(Globals.frame1);
 
 				logging.info(this, "buttonSupplementSimilar actionPerformed, we have selected "
 						+ panelRadiobuttonsPreselectionForName2Pool.getValue());
@@ -247,7 +247,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		panelRadiobuttonsPreselectionForName2Pool.addChangeListener(this);
 
 		JPanel panelWorkNamebased = new JPanel();
-		panelWorkNamebased.setBorder(new javax.swing.border.LineBorder(de.uib.configed.Globals.blueGrey, 3, true));
+		panelWorkNamebased.setBorder(new javax.swing.border.LineBorder(Globals.blueGrey, 3, true));
 		panelWorkNamebased.setBackground(Globals.backgroundWhite);
 		panelWorkNamebased.setOpaque(true);
 		GroupLayout layoutNamebased = new GroupLayout(panelWorkNamebased);
@@ -298,7 +298,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		JPanel panelRadiobuttonsDirectionOfAssignmentX = new JPanel();
 		// panelRadiobuttonsDirectionOfAssignmentX.setBorder( new
-		// javax.swing.border.LineBorder(de.uib.configed.Globals.backLightBlue, 3, true)
+		// javax.swing.border.LineBorder(Globals.backLightBlue, 3, true)
 		// );
 		GroupLayout layoutBorder = new GroupLayout(panelRadiobuttonsDirectionOfAssignmentX);
 		panelRadiobuttonsDirectionOfAssignmentX.setLayout(layoutBorder);
@@ -513,7 +513,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		 */
 		;
 		panelLicencepools.setResetFilterModeOnNewSearch(false);
-		panelLicencepools.setMasterFrame(de.uib.configed.Globals.frame1);
+		panelLicencepools.setMasterFrame(Globals.frame1);
 
 		panelProductId2LPool = new PanelGenEditTable(
 				configed.getResourceValue("ConfigedMain.Licences.SectiontitleProductId2LPool"), tablesMaxWidth, true, 1,
@@ -522,12 +522,12 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				true // with tablesearchpane
 		);
 
-		panelProductId2LPool.setMasterFrame(de.uib.configed.Globals.frame1);
+		panelProductId2LPool.setMasterFrame(Globals.frame1);
 		boolean switchLineColors = true;
 
 		panelRegisteredSoftware = new PanelRegisteredSoftware((ControlPanelAssignToLPools) controller);
 		panelRegisteredSoftware.setFiltering(true, false);
-		panelRegisteredSoftware.setMasterFrame(de.uib.configed.Globals.frame1);
+		panelRegisteredSoftware.setMasterFrame(Globals.frame1);
 
 		javax.swing.GroupLayout layoutTopPane = new javax.swing.GroupLayout((JPanel) topPane);
 		topPane.setLayout(layoutTopPane);

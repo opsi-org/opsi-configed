@@ -36,8 +36,8 @@ public class FPanel extends SecondaryFrame {
 	public FPanel(String title, JPanel panel, boolean checkLeave, int initialWidth, int initialHeight) {
 		super();
 		this.checkLeave = checkLeave;
-		setIconImage(de.uib.configed.Globals.mainIcon);
-		setTitle(de.uib.configed.Globals.APPNAME + " " + title);
+		setIconImage(Globals.mainIcon);
+		setTitle(Globals.APPNAME + " " + title);
 		// registerWithRunningInstances();
 		setSize(new Dimension(initialWidth, initialHeight));
 		innerPanel = panel;
@@ -83,21 +83,19 @@ public class FPanel extends SecondaryFrame {
 				returnedOption = JOptionPane.showOptionDialog(masterFrame,
 						configed.getResourceValue("ConfigedMain.saveBeforeCloseText"),
 						Globals.APPNAME + " " + configed.getResourceValue("ConfigedMain.saveBeforeCloseTitle"),
-						JOptionPane.YES_NO_CANCEL_OPTION,
-						JOptionPane.QUESTION_MESSAGE,
-						null, null, null);
+						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 				switch (returnedOption) {
-					case JOptionPane.YES_OPTION:
-						editPanel.commit();
-						result = true;
-						break;
-					case JOptionPane.NO_OPTION:
-						editPanel.cancel();
-						result = true;
-						break;
-					case JOptionPane.CANCEL_OPTION:
-						break;
+				case JOptionPane.YES_OPTION:
+					editPanel.commit();
+					result = true;
+					break;
+				case JOptionPane.NO_OPTION:
+					editPanel.cancel();
+					result = true;
+					break;
+				case JOptionPane.CANCEL_OPTION:
+					break;
 				}
 			}
 
@@ -152,10 +150,7 @@ public class FPanel extends SecondaryFrame {
 		JPanel testpanel = new JPanel();
 		testpanel.add(new JLabel("hallo 1 "));
 
-		FPanel testF = new FPanel(
-				"hardware classes / database columns",
-				testpanel,
-				true);
+		FPanel testF = new FPanel("hardware classes / database columns", testpanel, true);
 		testF.setVisible(true);
 	}
 

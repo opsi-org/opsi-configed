@@ -5,13 +5,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 
-/**
- * FEditorPane
- * Copyright:     Copyright (c) 2001-2005, 2016
- * Organisation:  uib
- * @author Rupert Röder
- * @version
- */
 import de.uib.configed.Globals;
 
 public class FEditorPane extends FGeneralDialog {

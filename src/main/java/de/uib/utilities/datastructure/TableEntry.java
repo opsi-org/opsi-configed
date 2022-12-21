@@ -63,8 +63,7 @@ public abstract class TableEntry extends LinkedHashMap<String, String> {
 			}
 		} catch (Exception ex) {
 			logging.debug(this, "remap keyRetrieved, exception " + ex);
-			logging.debug(this, "remap keyRetrieved " + keyRetrieved
-					+ ", value " + pureEntry.get(keyRetrieved)
+			logging.debug(this, "remap keyRetrieved " + keyRetrieved + ", value " + pureEntry.get(keyRetrieved)
 					+ ", class " + pureEntry.get(keyRetrieved).getClass());
 			put(key, "");
 		}

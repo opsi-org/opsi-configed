@@ -17,9 +17,7 @@ import javax.swing.event.DocumentListener;
 
 import de.uib.utilities.logging.logging;
 
-public class DataEditListener
-		implements
-		DocumentListener, // for text components
+public class DataEditListener implements DocumentListener, // for text components
 		ItemListener, // for combo boxes
 
 		KeyListener

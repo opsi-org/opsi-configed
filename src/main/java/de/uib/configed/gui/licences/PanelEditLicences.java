@@ -48,7 +48,7 @@ public class PanelEditLicences extends MultiTablePanel {
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true // with tablesearchpane
 		);
-		panelKeys.setMasterFrame(de.uib.configed.Globals.frame1);
+		panelKeys.setMasterFrame(Globals.frame1);
 		panelKeys.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panelKeys.showFilterIcon(true); // supply implementation of SearchTargetModelFromTable.setFiltered
@@ -60,7 +60,7 @@ public class PanelEditLicences extends MultiTablePanel {
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true // with tablesearchpane
 		);
-		panelSoftwarelicences.setMasterFrame(de.uib.configed.Globals.frame1);
+		panelSoftwarelicences.setMasterFrame(Globals.frame1);
 		panelSoftwarelicences.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		panelSoftwarelicences.setFiltering(true);
 		panelSoftwarelicences.showFilterIcon(true);
@@ -71,7 +71,7 @@ public class PanelEditLicences extends MultiTablePanel {
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true // with tablesearchpane
 		);
-		panelLicencecontracts.setMasterFrame(de.uib.configed.Globals.frame1);
+		panelLicencecontracts.setMasterFrame(Globals.frame1);
 		panelLicencecontracts.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panelLicencecontracts.showFilterIcon(true); // supply implementation of SearchTargetModelFromTable.setFiltered

@@ -394,7 +394,7 @@ public class Globals {
 	public static java.net.URL getImageResourceURL(String relPath) {
 		String resourceS = imageBase + relPath;
 
-		ClassLoader cl = de.uib.configed.Globals.class.getClassLoader();
+		ClassLoader cl = Globals.class.getClassLoader();
 		java.net.URL imgURL = cl.getResource(resourceS);
 		if (imgURL != null) {
 			return imgURL;
@@ -406,12 +406,12 @@ public class Globals {
 
 	public static Image createImage(String path) {
 		String xPath = imageBase + path;
-		ClassLoader cl = de.uib.configed.Globals.class.getClassLoader();
+		ClassLoader cl = Globals.class.getClassLoader();
 		// based on MainFrame
 
 		java.net.URL imgURL = cl.getResource(xPath);
 
-		// imgURL = de.uib.configed.Globals.class.getResource(xPath);
+		// imgURL = Globals.class.getResource(xPath);
 		// should have the same result (but seems not to have)
 
 		try {
@@ -432,12 +432,12 @@ public class Globals {
 
 	public static ImageIcon createImageIcon(String path, String description) {
 		String xPath = imageBase + path;
-		ClassLoader cl = de.uib.configed.Globals.class.getClassLoader();
+		ClassLoader cl = Globals.class.getClassLoader();
 		// based on MainFrame
 
 		java.net.URL imgURL = cl.getResource(xPath);
 
-		// imgURL = de.uib.configed.Globals.class.getResource(xPath);
+		// imgURL = Globals.class.getResource(xPath);
 		// should have the same result (but seems not to have)
 
 		try {

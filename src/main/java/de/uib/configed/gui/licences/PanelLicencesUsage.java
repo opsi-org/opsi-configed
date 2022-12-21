@@ -130,7 +130,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true // searchpane
 		);
-		panelUsage.setMasterFrame(de.uib.configed.Globals.frame1);
+		panelUsage.setMasterFrame(Globals.frame1);
 		panelUsage.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panelUsage.setFiltering(true);

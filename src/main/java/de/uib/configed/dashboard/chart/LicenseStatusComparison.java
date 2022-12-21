@@ -41,9 +41,7 @@ public class LicenseStatusComparison extends StackPane implements DataChangeList
 		List<String> availableLicenses = LicenseData.getLicenses();
 		List<String> activeLicenses = LicenseData.getActiveLicenses();
 
-		if (activeLicenses.isEmpty() &&
-				expiredLicenses.isEmpty() &&
-				availableLicenses.isEmpty()) {
+		if (activeLicenses.isEmpty() && expiredLicenses.isEmpty() && availableLicenses.isEmpty()) {
 			licenseStatusNoDataText.setVisible(true);
 			licenseStatusComparisonPieChart.setLabelsVisible(false);
 		} else {

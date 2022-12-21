@@ -95,7 +95,7 @@ public class SavedSearchesDialog extends FEditList {
 		// reload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)); does not
 		// find itscontext
 		reload.setText(configed.getResourceValue("ConfigedMain.reloadTable"));
-		reload.setIcon(de.uib.configed.Globals.createImageIcon("images/reload16.png", ""));
+		reload.setIcon(Globals.createImageIcon("images/reload16.png", ""));
 		reload.setFont(Globals.defaultFont);
 		reload.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -109,7 +109,7 @@ public class SavedSearchesDialog extends FEditList {
 		// remove.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)); does not
 		// find itscontext
 		remove.setText(de.uib.configed.configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
-		// remove.setIcon(de.uib.configed.Globals.createImageIcon("images/remove16.png",
+		// remove.setIcon(Globals.createImageIcon("images/remove16.png",
 		// ""));
 		remove.setFont(Globals.defaultFont);
 		remove.addActionListener(new ActionListener() {

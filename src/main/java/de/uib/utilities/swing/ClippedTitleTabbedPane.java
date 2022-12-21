@@ -92,16 +92,16 @@ public class ClippedTitleTabbedPane extends JTabbedPane {
 		int tabWidth = 0; // = tabInsets.left + tabInsets.right + 3;
 		int gap = 0;
 		switch (getTabPlacement()) {
-			case LEFT:
-			case RIGHT:
-				tabWidth = areaWidth / 4;
-				gap = 0;
-				break;
-			case BOTTOM:
-			case TOP:
-			default:
-				tabWidth = areaWidth / tabCount;
-				gap = areaWidth - (tabWidth * tabCount);
+		case LEFT:
+		case RIGHT:
+			tabWidth = areaWidth / 4;
+			gap = 0;
+			break;
+		case BOTTOM:
+		case TOP:
+		default:
+			tabWidth = areaWidth / tabCount;
+			gap = areaWidth - (tabWidth * tabCount);
 		}
 		// "3" is magic number @see BasicTabbedPaneUI#calculateTabWidth
 		tabWidth = tabWidth - tabInsets.left - tabInsets.right - 3;

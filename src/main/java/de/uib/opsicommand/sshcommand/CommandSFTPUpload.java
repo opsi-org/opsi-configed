@@ -6,8 +6,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 
-public class CommandSFTPUpload
-		implements SSHCommandNeedParameter, SSHSFTPCommand, SSHCommand {
+public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPCommand, SSHCommand {
 	protected FGeneralDialog dialog;
 	private boolean needParameter = true;
 	private boolean isMultiCommand = false;
@@ -46,8 +45,7 @@ public class CommandSFTPUpload
 
 	public String getDescription() {
 		if (description.equals(""))
-			description = "copy " + sourcePath + sourceFilename
-					+ " to " + targetPath + targetFilename
+			description = "copy " + sourcePath + sourceFilename + " to " + targetPath + targetFilename
 					+ " on connected server";
 		return description;
 	}

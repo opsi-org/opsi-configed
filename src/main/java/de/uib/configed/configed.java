@@ -1132,7 +1132,7 @@ public class configed {
 		// logging.debug (imageHandled);
 		try {
 			String resourceS = Globals.iconresourcename;
-			URL resource = de.uib.configed.Globals.class.getResource(resourceS);
+			URL resource = Globals.class.getResource(resourceS);
 			if (resource == null) {
 				logging.debug("image resource " + resourceS + "  not found");
 			} else {

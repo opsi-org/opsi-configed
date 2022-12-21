@@ -5,12 +5,6 @@ import java.awt.Component;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 
-/*
- * 
- * Author: Rupert Röder, uib 2011
- *
- */
-
 import de.uib.configed.Globals;
 
 public class ColoredListCellRenderer extends DefaultListCellRenderer {
@@ -32,7 +26,7 @@ public class ColoredListCellRenderer extends DefaultListCellRenderer {
 		 * else
 		 * {
 		 * background = Globals.nimbusBackground;
-		 * foreground = de.uib.configed.Globals.nimbusSelectionBackground;
+		 * foreground = Globals.nimbusSelectionBackground;
 		 * //Color.black;
 		 * };
 		 * 

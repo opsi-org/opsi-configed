@@ -115,7 +115,7 @@ public class SSHPackageManagerUninstallParameterDialog
 		pack();
 		this.setSize(frameWidth, frameHeight);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setComponentsEnabled(!de.uib.configed.Globals.isGlobalReadOnly());
+		setComponentsEnabled(!Globals.isGlobalReadOnly());
 		waitCursor.stop();
 		this.setVisible(true);
 	}

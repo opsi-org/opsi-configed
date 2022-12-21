@@ -375,7 +375,7 @@ public class ExporterToPDF extends ExportTable {
 			// TODO: logo, create String from Globals
 			// String url = Globals.BUNDLE_NAME + ... ;
 			// String url = "classes/de/uib/configed/gui/images/opsi_full.png";
-			java.net.URL opsi_image_URL = de.uib.configed.Globals.getImageResourceURL("images/opsi_full.png");
+			java.net.URL opsi_image_URL = Globals.getImageResourceURL("images/opsi_full.png");
 			try {
 				// add header table with page number
 				table.setWidths(new int[] { 24, 24, 2 });

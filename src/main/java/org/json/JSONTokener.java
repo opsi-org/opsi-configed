@@ -26,8 +26,8 @@ SOFTWARE.
 
 /**
  * A JSONTokener takes a source string and extracts characters and tokens from
- * it. It is used by the JSONObject and JSONArray constructors to parse
- * JSON source strings.
+ * it. It is used by the JSONObject and JSONArray constructors to parse JSON
+ * source strings.
  * 
  * @author JSON.org
  * @version 2
@@ -55,9 +55,9 @@ public class JSONTokener {
 	}
 
 	/**
-	 * Back up one character. This provides a sort of lookahead capability,
-	 * so that you can test for a digit or letter before attempting to parse
-	 * the next number or identifier.
+	 * Back up one character. This provides a sort of lookahead capability, so
+	 * that you can test for a digit or letter before attempting to parse the
+	 * next number or identifier.
 	 */
 	public void back() {
 		if (this.myIndex > 0) {
@@ -86,8 +86,8 @@ public class JSONTokener {
 	}
 
 	/**
-	 * Determine if the source string still contains characters that next()
-	 * can consume.
+	 * Determine if the source string still contains characters that next() can
+	 * consume.
 	 * 
 	 * @return true if not yet at the end of the source.
 	 */
@@ -120,8 +120,7 @@ public class JSONTokener {
 	public char next(char c) throws JSONException {
 		char n = next();
 		if (n != c) {
-			throw syntaxError("Expected '" + c + "' and instead saw '" +
-					n + "'.");
+			throw syntaxError("Expected '" + c + "' and instead saw '" + n + "'.");
 		}
 		return n;
 	}
@@ -131,9 +130,8 @@ public class JSONTokener {
 	 *
 	 * @param n The number of characters to take.
 	 * @return A string of n characters.
-	 * @throws JSONException
-	 *                       Substring bounds error if there are not
-	 *                       n characters remaining in the source string.
+	 * @throws JSONException Substring bounds error if there are not n
+	 *                       characters remaining in the source string.
 	 */
 	public String next(int n) throws JSONException {
 		int i = this.myIndex;
@@ -146,8 +144,8 @@ public class JSONTokener {
 	}
 
 	/**
-	 * Get the next char in the string, skipping whitespace
-	 * and comments (slashslash, slashstar, and hash).
+	 * Get the next char in the string, skipping whitespace and comments
+	 * (slashslash, slashstar, and hash).
 	 * 
 	 * @throws JSONException
 	 * @return A character, or 0 if there are no more characters.
@@ -157,28 +155,28 @@ public class JSONTokener {
 			char c = next();
 			if (c == '/') {
 				switch (next()) {
-					case '/':
-						do {
-							c = next();
-						} while (c != '\n' && c != '\r' && c != 0);
-						break;
-					case '*':
-						for (;;) {
-							c = next();
-							if (c == 0) {
-								throw syntaxError("Unclosed comment.");
-							}
-							if (c == '*') {
-								if (next() == '/') {
-									break;
-								}
-								back();
-							}
+				case '/':
+					do {
+						c = next();
+					} while (c != '\n' && c != '\r' && c != 0);
+					break;
+				case '*':
+					for (;;) {
+						c = next();
+						if (c == 0) {
+							throw syntaxError("Unclosed comment.");
 						}
-						break;
-					default:
-						back();
-						return '/';
+						if (c == '*') {
+							if (next() == '/') {
+								break;
+							}
+							back();
+						}
+					}
+					break;
+				default:
+					back();
+					return '/';
 				}
 			} else if (c == '#') {
 				do {
@@ -191,10 +189,9 @@ public class JSONTokener {
 	}
 
 	/**
-	 * Return the characters up to the next close quote character.
-	 * Backslash processing is done. The formal JSON format does not
-	 * allow strings in single quotes, but an implementation is allowed to
-	 * accept them.
+	 * Return the characters up to the next close quote character. Backslash
+	 * processing is done. The formal JSON format does not allow strings in
+	 * single quotes, but an implementation is allowed to accept them.
 	 * 
 	 * @param quote The quoting character, either
 	 *              <code>"</code>&nbsp;<small>(double quote)</small> or
@@ -208,50 +205,50 @@ public class JSONTokener {
 		for (;;) {
 			c = next();
 			switch (c) {
-				case 0:
-				case '\n':
-				case '\r':
-					throw syntaxError("Unterminated string");
-				case '\\':
-					c = next();
-					switch (c) {
-						case 'b':
-							sb.append('\b');
-							break;
-						case 't':
-							sb.append('\t');
-							break;
-						case 'n':
-							sb.append('\n');
-							break;
-						case 'f':
-							sb.append('\f');
-							break;
-						case 'r':
-							sb.append('\r');
-							break;
-						case 'u':
-							sb.append((char) Integer.parseInt(next(4), 16));
-							break;
-						case 'x':
-							sb.append((char) Integer.parseInt(next(2), 16));
-							break;
-						default:
-							sb.append(c);
-					}
+			case 0:
+			case '\n':
+			case '\r':
+				throw syntaxError("Unterminated string");
+			case '\\':
+				c = next();
+				switch (c) {
+				case 'b':
+					sb.append('\b');
+					break;
+				case 't':
+					sb.append('\t');
+					break;
+				case 'n':
+					sb.append('\n');
+					break;
+				case 'f':
+					sb.append('\f');
+					break;
+				case 'r':
+					sb.append('\r');
+					break;
+				case 'u':
+					sb.append((char) Integer.parseInt(next(4), 16));
+					break;
+				case 'x':
+					sb.append((char) Integer.parseInt(next(2), 16));
 					break;
 				default:
-					if (c == quote) {
-						return sb.toString();
-					}
 					sb.append(c);
+				}
+				break;
+			default:
+				if (c == quote) {
+					return sb.toString();
+				}
+				sb.append(c);
 			}
 		}
 	}
 
 	/**
-	 * Get the text up but not including the specified character or the
-	 * end of line, whichever comes first.
+	 * Get the text up but not including the specified character or the end of
+	 * line, whichever comes first.
 	 * 
 	 * @param d A delimiter character.
 	 * @return A string.
@@ -282,8 +279,7 @@ public class JSONTokener {
 		StringBuffer sb = new StringBuffer();
 		for (;;) {
 			c = next();
-			if (delimiters.indexOf(c) >= 0 || c == 0 ||
-					c == '\n' || c == '\r') {
+			if (delimiters.indexOf(c) >= 0 || c == 0 || c == '\n' || c == '\r') {
 				if (c != 0) {
 					back();
 				}
@@ -298,7 +294,6 @@ public class JSONTokener {
 	 * JSONArray, JSONObject, Long, or String, or the JSONObject.NULL object.
 	 * 
 	 * @throws JSONException If syntax error.
-	 *
 	 * @return An object.
 	 */
 	public Object nextValue() throws JSONException {
@@ -306,15 +301,15 @@ public class JSONTokener {
 		String s;
 
 		switch (c) {
-			case '"':
-			case '\'':
-				return nextString(c);
-			case '{':
-				back();
-				return new JSONObject(this);
-			case '[':
-				back();
-				return new JSONArray(this);
+		case '"':
+		case '\'':
+			return nextString(c);
+		case '{':
+			back();
+			return new JSONObject(this);
+		case '[':
+			back();
+			return new JSONArray(this);
 		}
 
 		/*
@@ -362,11 +357,9 @@ public class JSONTokener {
 
 		if ((b >= '0' && b <= '9') || b == '.' || b == '-' || b == '+') {
 			if (b == '0') {
-				if (s.length() > 2 &&
-						(s.charAt(1) == 'x' || s.charAt(1) == 'X')) {
+				if (s.length() > 2 && (s.charAt(1) == 'x' || s.charAt(1) == 'X')) {
 					try {
-						return new Integer(Integer.parseInt(s.substring(2),
-								16));
+						return new Integer(Integer.parseInt(s.substring(2), 16));
 					} catch (Exception e) {
 						/* Ignore the error */
 					}
@@ -396,12 +389,12 @@ public class JSONTokener {
 	}
 
 	/**
-	 * Skip characters until the next character is the requested character.
-	 * If the requested character is not found, no characters are skipped.
+	 * Skip characters until the next character is the requested character. If
+	 * the requested character is not found, no characters are skipped.
 	 * 
 	 * @param to A character to skip to.
-	 * @return The requested character, or zero if the requested character
-	 *         is not found.
+	 * @return The requested character, or zero if the requested character is
+	 *         not found.
 	 */
 	public char skipTo(char to) {
 		char c;
@@ -418,8 +411,8 @@ public class JSONTokener {
 	}
 
 	/**
-	 * Skip characters until past the requested string.
-	 * If it is not found, we are left at the end of the source.
+	 * Skip characters until past the requested string. If it is not found, we
+	 * are left at the end of the source.
 	 * 
 	 * @param to A string to skip past.
 	 */

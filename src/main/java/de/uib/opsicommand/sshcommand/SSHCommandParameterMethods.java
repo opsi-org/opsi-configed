@@ -24,6 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.ValueSelectorList;
@@ -384,7 +385,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 
 	protected String getUserText(String text, Component dialog) {
 		if (dialog == null)
-			dialog = de.uib.configed.Globals.mainFrame;
+			dialog = Globals.mainFrame;
 		logging.debug(this, "getUserText text " + text);
 		final JTextField field = new JTextField();
 		// field.setEchoChar('*');
@@ -396,8 +397,8 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 				((Component) field).requestFocusInWindow();
 			}
 		};
-		final JDialog jdialog = opPane.createDialog(dialog, de.uib.configed.Globals.APPNAME + " "
-				+ configed.getResourceValue("SSHConnection.ParameterDialog.Input"));
+		final JDialog jdialog = opPane.createDialog(dialog,
+				Globals.APPNAME + " " + configed.getResourceValue("SSHConnection.ParameterDialog.Input"));
 		jdialog.setSize(400, 150);
 		jdialog.setVisible(true);
 
@@ -535,7 +536,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 			}
 		});
 
-		final JDialog jdialog = opPane.createDialog(opPane, de.uib.configed.Globals.APPNAME);
+		final JDialog jdialog = opPane.createDialog(opPane, Globals.APPNAME);
 		jdialog.setSize(400, 250);
 		jdialog.setVisible(true);
 

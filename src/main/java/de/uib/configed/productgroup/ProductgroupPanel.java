@@ -943,8 +943,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 			if (addedElements.size() > 0) {
 
-				FShowList fList = new FShowList(de.uib.configed.Globals.mainFrame, de.uib.configed.Globals.APPNAME,
-						true,
+				FShowList fList = new FShowList(Globals.mainFrame, Globals.APPNAME, true,
 						new String[] { configed.getResourceValue("buttonYES"), configed.getResourceValue("buttonNO") },
 						450, 400);
 

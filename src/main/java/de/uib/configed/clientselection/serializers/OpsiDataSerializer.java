@@ -184,24 +184,24 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		try {
 			while (parser.next()) {
 				switch (parser.getPositionType()) {
-					case ObjectBegin:
-						result.put(name, parseObject());
-						break;
-					case ObjectEnd:
-						return result;
-					case ListBegin:
-						result.put(name, parseList(name));
-						break;
-					case JsonName:
-						name = parser.getValue();
-						name = name.substring(1, name.length() - 1);
-						logging.debug(this, name);
-						break;
-					case JsonValue:
-						result.put(name, stringToObject(parser.getValue(), name));
-						break;
-					default:
-						throw new IllegalArgumentException("Type " + parser.getPositionType() + " not expected here");
+				case ObjectBegin:
+					result.put(name, parseObject());
+					break;
+				case ObjectEnd:
+					return result;
+				case ListBegin:
+					result.put(name, parseList(name));
+					break;
+				case JsonName:
+					name = parser.getValue();
+					name = name.substring(1, name.length() - 1);
+					logging.debug(this, name);
+					break;
+				case JsonValue:
+					result.put(name, stringToObject(parser.getValue(), name));
+					break;
+				default:
+					throw new IllegalArgumentException("Type " + parser.getPositionType() + " not expected here");
 				}
 			}
 		} catch (IOException e) {
@@ -216,17 +216,17 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		try {
 			while (!done && parser.next()) {
 				switch (parser.getPositionType()) {
-					case ListEnd:
-						done = true;
-						break;
-					case ObjectBegin:
-						list.add(parseObject());
-						break;
-					case JsonValue:
-						list.add(stringToObject(parser.getValue(), ""));
-						break;
-					default:
-						throw new IllegalArgumentException("Type " + parser.getPositionType() + " not expected here");
+				case ListEnd:
+					done = true;
+					break;
+				case ObjectBegin:
+					list.add(parseObject());
+					break;
+				case JsonValue:
+					list.add(stringToObject(parser.getValue(), ""));
+					break;
+				default:
+					throw new IllegalArgumentException("Type " + parser.getPositionType() + " not expected here");
 				}
 			}
 		} catch (IOException e) {
@@ -247,21 +247,21 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		if (name.equals("data")) {
 			value = value.substring(1, value.length() - 1);
 			switch (lastDataType) {
-				case NoneType:
-					return null;
-				case TextType:
-				case EnumType:
-					return value;
-				case DoubleType:
-					return Double.valueOf(value);
-				case IntegerType:
-					return Integer.valueOf(value);
-				case BigIntegerType:
-					return Long.valueOf(value);
-				case DateType:
-					return value;
-				default:
-					throw new IllegalArgumentException("Type " + lastDataType + " not expected here");
+			case NoneType:
+				return null;
+			case TextType:
+			case EnumType:
+				return value;
+			case DoubleType:
+				return Double.valueOf(value);
+			case IntegerType:
+				return Integer.valueOf(value);
+			case BigIntegerType:
+				return Long.valueOf(value);
+			case DateType:
+				return value;
+			default:
+				throw new IllegalArgumentException("Type " + lastDataType + " not expected here");
 			}
 		}
 		if (value.startsWith("\""))

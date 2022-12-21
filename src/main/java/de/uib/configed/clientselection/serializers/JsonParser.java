@@ -9,9 +9,8 @@ import de.uib.utilities.logging.logging;
 
 /**
  * This is a small parser for the JSON-like syntax of the OpsiDataSerializer.
- * Things different from JSON:
- * - values of the type SelectData.DataType are not in quotes
- * - all other values are in quotes
+ * Things different from JSON: - values of the type SelectData.DataType are not
+ * in quotes - all other values are in quotes
  */
 class JsonParser {
 	private StringReader reader;

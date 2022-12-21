@@ -45,7 +45,7 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 				, null // default popups
 				, true // searchpane
 		);
-		panelReconciliation.setMasterFrame(de.uib.configed.Globals.frame1);
+		panelReconciliation.setMasterFrame(Globals.frame1);
 		panelReconciliation.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panelReconciliation.showFilterIcon(true); // supply implementation of SearchTargetModelFromTable.setFiltered

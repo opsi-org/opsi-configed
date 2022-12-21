@@ -132,7 +132,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 	private void initLayout() {
 		this.setBackground(Globals.backLightBlue);
-		// this.setBorder(new LineBorder(de.uib.configed.Globals.blueGrey));
+		// this.setBorder(new LineBorder(Globals.blueGrey));
 
 		GroupLayout layout = new GroupLayout(this);
 

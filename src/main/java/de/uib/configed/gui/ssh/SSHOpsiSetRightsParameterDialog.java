@@ -16,8 +16,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-// import java.nio.charset.Charset;
-// import java.util.regex.*;
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
@@ -159,7 +157,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 				.addGap(Globals.GAP_SIZE));
 
 		this.setSize(600, 200);
-		this.centerOn(de.uib.configed.Globals.mainFrame);
+		this.centerOn(Globals.mainFrame);
 		this.setBackground(Globals.backLightBlue);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setVisible(true);

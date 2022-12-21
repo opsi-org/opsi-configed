@@ -10,8 +10,7 @@ public class ColorTableCellRenderer extends DefaultTableCellRenderer {
 		super();
 	}
 
-	public java.awt.Component getTableCellRendererComponent(
-			JTable table, Object value, boolean isSelected,
+	public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 			boolean hasFocus, int row, int column) {
 		java.awt.Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 

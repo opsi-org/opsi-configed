@@ -25,8 +25,7 @@ import de.uib.utilities.logging.logging;
 /**
  * This class represent a ssh-command
  **/
-public class SSHCommand_Template implements SSHCommand,
-		Comparable<SSHCommand_Template>, SSHMultiCommand {
+public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Template>, SSHMultiCommand {
 	/** boolean needParameter = false **/
 	private boolean needParameter = false;
 	/** boolean isMultiCommand = true **/
@@ -71,8 +70,7 @@ public class SSHCommand_Template implements SSHCommand,
 	 * @param p   (position): int
 	 * @return SSHCommand_Template instance
 	 */
-	public SSHCommand_Template(String id, LinkedList<String> c, String mt,
-			boolean ns, String pmt, String ttt, int p) {
+	public SSHCommand_Template(String id, LinkedList<String> c, String mt, boolean ns, String pmt, String ttt, int p) {
 		position = SSHCommandFactory.getInstance().position_default;
 		setId(id);
 		setMenuText(mt);

@@ -4,8 +4,7 @@ import java.util.Comparator;
 
 import de.uib.utilities.logging.logging;
 
-public class IntComparatorForObjects
-		implements Comparator<Object> {
+public class IntComparatorForObjects implements Comparator<Object> {
 
 	public int compare(Object o1, Object o2) {
 		// logging.info(this, "compare " + o1 + " to " + o2 );

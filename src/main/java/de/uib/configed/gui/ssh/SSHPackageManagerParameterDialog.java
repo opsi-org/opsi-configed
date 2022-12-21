@@ -65,8 +65,8 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		setIconImage(Globals.mainIcon);
 		// additionalPane = pane;
 		// }
-		this.setSize(new Dimension(de.uib.configed.Globals.DIALOG_FRAME_DEFAULT_WIDTH, frameHeight));
-		this.centerOn(de.uib.configed.Globals.mainFrame);
+		this.setSize(new Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH, frameHeight));
+		this.centerOn(Globals.mainFrame);
 		this.setBackground(Globals.backLightBlue);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -173,7 +173,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 				}
 			});
 
-			setComponentsEnabled(!de.uib.configed.Globals.isGlobalReadOnly());
+			setComponentsEnabled(!Globals.isGlobalReadOnly());
 		}
 	}
 

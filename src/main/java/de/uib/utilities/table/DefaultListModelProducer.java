@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
-public class DefaultListModelProducer
-		implements ListModelProducer {
+public class DefaultListModelProducer implements ListModelProducer {
 	public ListModel getListModel(int row, int column) {
 		return null;
 	}

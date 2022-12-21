@@ -73,7 +73,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 	protected void allLayout() {
 		logging.info(this, "allLayout");
 
-		allpane.setBackground(de.uib.configed.Globals.backLightBlue);
+		allpane.setBackground(Globals.backLightBlue);
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 

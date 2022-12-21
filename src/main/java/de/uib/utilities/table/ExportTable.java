@@ -48,7 +48,7 @@ public abstract class ExportTable {
 
 	DecimalFormat f = new DecimalFormat("#0.00");
 
-	protected final String SHORT_APPNAME = de.uib.configed.Globals.APPNAME;
+	protected final String SHORT_APPNAME = Globals.APPNAME;
 
 	public ExportTable(javax.swing.JTable table, Vector<String> classNames) {
 		this.theTable = table;
@@ -86,7 +86,7 @@ public abstract class ExportTable {
 	public JMenuItemFormatted getMenuItemExport() {
 		JMenuItemFormatted menuItem = new JMenuItemFormatted(
 				configed.getResourceValue("PanelGenEditTable.exportTableAsCSV")
-		// , de.uib.configed.Globals.createImageIcon("images/acrobat_reader16.png", "")
+		// , Globals.createImageIcon("images/acrobat_reader16.png", "")
 		);
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -105,7 +105,7 @@ public abstract class ExportTable {
 	public JMenuItemFormatted getMenuItemExportSelected() {
 		JMenuItemFormatted menuItem = new JMenuItemFormatted(
 				configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV")
-		// , de.uib.configed.Globals.createImageIcon("images/acrobat_reader16.png", "")
+		// , Globals.createImageIcon("images/acrobat_reader16.png", "")
 		);
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -235,7 +235,7 @@ public abstract class ExportTable {
 			 */
 			SwingUtilities.updateComponentTreeUI(chooser);
 
-			int returnVal = chooser.showDialog(de.uib.configed.Globals.frame1, null);
+			int returnVal = chooser.showDialog(Globals.frame1, null);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				try {
 					filename = chooser.getSelectedFile().getAbsolutePath();
@@ -255,10 +255,10 @@ public abstract class ExportTable {
 					file = new File(filename);
 
 					if (file.exists() && askForOverwrite) {
-						int option = JOptionPane.showConfirmDialog(de.uib.configed.Globals.frame1,
+						int option = JOptionPane.showConfirmDialog(Globals.frame1,
 								de.uib.configed.configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n"
 										+ file.getName(),
-								de.uib.configed.Globals.APPNAME + " "
+								Globals.APPNAME + " "
 										+ de.uib.configed.configed.getResourceValue("DocumentExport.question"),
 								JOptionPane.OK_CANCEL_OPTION);
 
@@ -287,7 +287,7 @@ public abstract class ExportTable {
 		 * chooser.setApproveButtonText("ok");
 		 * 
 		 * 
-		 * int returnVal = chooser.showDialog( de.uib.configed.Globals.frame1, null);
+		 * int returnVal = chooser.showDialog( Globals.frame1, null);
 		 * if(returnVal == JFileChooser.APPROVE_OPTION)
 		 * {
 		 * try
@@ -311,11 +311,11 @@ public abstract class ExportTable {
 		 * 
 		 * if ( file.exists() )
 		 * {
-		 * int option = JOptionPane.showConfirmDialog( de.uib.configed.Globals.frame1,
+		 * int option = JOptionPane.showConfirmDialog( Globals.frame1,
 		 * de.uib.configed.configed.getResourceValue("DocumentExport.showConfirmDialog")
 		 * + "\n"
 		 * + file.getName(),
-		 * de.uib.configed.Globals.APPNAME + " " +
+		 * Globals.APPNAME + " " +
 		 * de.uib.configed.configed.getResourceValue("DocumentExport.question"),
 		 * JOptionPane.OK_CANCEL_OPTION );
 		 * 

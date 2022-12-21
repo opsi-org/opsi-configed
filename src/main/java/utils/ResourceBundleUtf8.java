@@ -12,8 +12,7 @@ import java.util.ResourceBundle;
 
 /**
  * Same as {@link ResourceBundle} but is target for UTF-8 property file
- * resources.
- * May not be used with 8-bit ASCII - only with UTF-8.
+ * resources. May not be used with 8-bit ASCII - only with UTF-8.
  *
  * @author Marc Neumann
  */

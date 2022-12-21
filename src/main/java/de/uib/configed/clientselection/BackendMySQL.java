@@ -164,153 +164,151 @@ public class BackendMySQL {
 				JSONArray children;
 
 				switch (jsonObject.getString("operation")) {
-					case "OrOperation":
-						children = jsonObject.getJSONArray("children");
+				case "OrOperation":
+					children = jsonObject.getJSONArray("children");
 
-						return OR(children);
+					return OR(children);
 
-					case "AndOperation":
-						children = jsonObject.getJSONArray("children");
+				case "AndOperation":
+					children = jsonObject.getJSONArray("children");
 
-						return AND(children);
+					return AND(children);
 
-					case "NotOperation":
-						children = jsonObject.getJSONArray("children");
+				case "NotOperation":
+					children = jsonObject.getJSONArray("children");
 
-						return NOT(children);
+					return NOT(children);
 
-					case "SoftwareOperation": // PRODUCT
+				case "SoftwareOperation": // PRODUCT
 
-						String where_clause = doJSONObject(jsonObject, true, MySQL.Type.NEW);
-						String inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
+					String where_clause = doJSONObject(jsonObject, true, MySQL.Type.NEW);
+					String inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
 
-						// Diese Abfrage liefert alle hostIds, die ein 'passendes' Produkt in
-						// PRODUCT_ON_CLIENT haben
-						String abfrage = "SELECT DISTINCT HOST.hostId FROM HOST " + inner_joins + " WHERE "
-								+ where_clause
-								+ ";";
+					// Diese Abfrage liefert alle hostIds, die ein 'passendes' Produkt in
+					// PRODUCT_ON_CLIENT haben
+					String abfrage = "SELECT DISTINCT HOST.hostId FROM HOST " + inner_joins + " WHERE " + where_clause
+							+ ";";
 
-						String where_clause2 = getWhereClauseDefaultProduct(where_clause);
+					String where_clause2 = getWhereClauseDefaultProduct(where_clause);
 
-						// Diese Abfrage soll alle hostIds liefern, die ein 'passendes' Produkt haben,
-						// das nicht in PRODUCT_ON_CLIENT ist. Entsprechend werden die Standardwerte
-						// abgefragt.
-						String abfrage2 = "SELECT DISTINCT HOST.hostId FROM HOST CROSS JOIN PRODUCT d WHERE ( "
-								+ where_clause2
-								+ " ) AND NOT EXISTS (SELECT null FROM PRODUCT_ON_CLIENT WHERE d.productId LIKE PRODUCT_ON_CLIENT.productId AND hostId LIKE PRODUCT_ON_CLIENT.clientId);";
+					// Diese Abfrage soll alle hostIds liefern, die ein 'passendes' Produkt haben,
+					// das nicht in PRODUCT_ON_CLIENT ist. Entsprechend werden die Standardwerte
+					// abgefragt.
+					String abfrage2 = "SELECT DISTINCT HOST.hostId FROM HOST CROSS JOIN PRODUCT d WHERE ( "
+							+ where_clause2
+							+ " ) AND NOT EXISTS (SELECT null FROM PRODUCT_ON_CLIENT WHERE d.productId LIKE PRODUCT_ON_CLIENT.productId AND hostId LIKE PRODUCT_ON_CLIENT.clientId);";
 
-						List<String> list1 = getListFromSQL(abfrage);
-						List<String> list2 = getListFromSQL(abfrage2);
+					List<String> list1 = getListFromSQL(abfrage);
+					List<String> list2 = getListFromSQL(abfrage2);
 
-						return union(list1, list2);
+					return union(list1, list2);
 
-					case "PropertiesOperation":
+				case "PropertiesOperation":
 
-						where_clause = doJSONObject(jsonObject, true, MySQL.Type.NEW);
-						inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
+					where_clause = doJSONObject(jsonObject, true, MySQL.Type.NEW);
+					inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
 
-						// Diese Abfrage liefert alle hostIds, die ein 'passendes' Produkt in
-						// PRODUCT_ON_CLIENT haben
-						where_clause = where_clause.replace("d.productId", "h.productId");
-						abfrage = "SELECT DISTINCT HOST.hostId FROM HOST INNER JOIN PRODUCT_PROPERTY_STATE h ON (h.objectId LIKE HOST.hostId) WHERE "
-								+ where_clause + ";";
+					// Diese Abfrage liefert alle hostIds, die ein 'passendes' Produkt in
+					// PRODUCT_ON_CLIENT haben
+					where_clause = where_clause.replace("d.productId", "h.productId");
+					abfrage = "SELECT DISTINCT HOST.hostId FROM HOST INNER JOIN PRODUCT_PROPERTY_STATE h ON (h.objectId LIKE HOST.hostId) WHERE "
+							+ where_clause + ";";
 
-						// Abfrage 2 mit Standardwerten
-						where_clause2 = getWhereClauseDefaultProductProperty(where_clause);
+					// Abfrage 2 mit Standardwerten
+					where_clause2 = getWhereClauseDefaultProductProperty(where_clause);
 
-						where_clause2 = where_clause2.replace("%\"", "");
-						where_clause2 = where_clause2.replace("\"%", "");
-						where_clause2 = where_clause2.replace("h.productId", "v.productId");
+					where_clause2 = where_clause2.replace("%\"", "");
+					where_clause2 = where_clause2.replace("\"%", "");
+					where_clause2 = where_clause2.replace("h.productId", "v.productId");
 
-						abfrage2 = "SELECT DISTINCT HOST.hostId FROM HOST INNER JOIN PRODUCT_PROPERTY_VALUE v WHERE v.isDefault LIKE '1' AND ("
-								+ where_clause2
-								+ ") AND NOT EXISTS (SELECT null FROM PRODUCT_PROPERTY_STATE WHERE v.productId LIKE productId AND HOST.hostId LIKE objectId AND v.propertyId LIKE propertyId);";
+					abfrage2 = "SELECT DISTINCT HOST.hostId FROM HOST INNER JOIN PRODUCT_PROPERTY_VALUE v WHERE v.isDefault LIKE '1' AND ("
+							+ where_clause2
+							+ ") AND NOT EXISTS (SELECT null FROM PRODUCT_PROPERTY_STATE WHERE v.productId LIKE productId AND HOST.hostId LIKE objectId AND v.propertyId LIKE propertyId);";
 
-						// Abfragen
+					// Abfragen
 
-						list1 = getListFromSQL(abfrage);
-						list2 = getListFromSQL(abfrage2);
+					list1 = getListFromSQL(abfrage);
+					list2 = getListFromSQL(abfrage2);
 
-						return union(list1, list2);
+					return union(list1, list2);
 
-					case "SoftwareWithPropertiesOperation":
+				case "SoftwareWithPropertiesOperation":
 
-						where_clause = doJSONObject(jsonObject, true, MySQL.Type.NEW);
-						inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
+					where_clause = doJSONObject(jsonObject, true, MySQL.Type.NEW);
+					inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
 
-						// Diese Abfrage liefert alle hostIds, die ein 'passendes' Produkt in
-						// PRODUCT_ON_CLIENT haben
-						abfrage = "SELECT DISTINCT HOST.hostId FROM HOST " + inner_joins + " WHERE " + where_clause
-								+ ";";
+					// Diese Abfrage liefert alle hostIds, die ein 'passendes' Produkt in
+					// PRODUCT_ON_CLIENT haben
+					abfrage = "SELECT DISTINCT HOST.hostId FROM HOST " + inner_joins + " WHERE " + where_clause + ";";
 
-						where_clause2 = getWhereClauseDefaultProduct(where_clause);
-						String where_clause3 = getWhereClauseDefaultProductProperty(where_clause); // v an die Abfragen
-																									// schreiben, da
-																									// hier in
-						String where_clause4 = getWhereClauseDefaultProductProperty(where_clause2); // PRODUCT_PROPERTY_STATE
-																									// v abgefragt wird
+					where_clause2 = getWhereClauseDefaultProduct(where_clause);
+					String where_clause3 = getWhereClauseDefaultProductProperty(where_clause); // v an die Abfragen
+																								// schreiben, da
+																								// hier in
+					String where_clause4 = getWhereClauseDefaultProductProperty(where_clause2); // PRODUCT_PROPERTY_STATE
+																								// v abgefragt wird
 
-						// Diese Abfrage soll alle hostIds liefern, die ein 'passendes' Produkt haben,
-						// das nicht in PRODUCT_ON_CLIENT ist, aber
-						// eine 'passende' Property, die in PRODUCT_PROPERTY_STATE eingetragen ist
-						// Entsprechend werden die Standardwerte für PRODUCT abgefragt.
+					// Diese Abfrage soll alle hostIds liefern, die ein 'passendes' Produkt haben,
+					// das nicht in PRODUCT_ON_CLIENT ist, aber
+					// eine 'passende' Property, die in PRODUCT_PROPERTY_STATE eingetragen ist
+					// Entsprechend werden die Standardwerte für PRODUCT abgefragt.
 
-						abfrage2 = "SELECT DISTINCT HOST.hostId FROM HOST INNER JOIN PRODUCT_PROPERTY_STATE h ON (h.objectId LIKE HOST.hostId) INNER JOIN PRODUCT d ON (d.productId LIKE h.productId) WHERE ("
-								+ where_clause2
-								+ ") AND NOT EXISTS (SELECT null FROM PRODUCT_ON_CLIENT WHERE h.productId LIKE PRODUCT_ON_CLIENT.productId AND d.productVersion LIKE PRODUCT_ON_CLIENT.productVersion AND d.packageVersion LIKE PRODUCT_ON_CLIENT.packageVersion AND hostId LIKE PRODUCT_ON_CLIENT.clientId);";
+					abfrage2 = "SELECT DISTINCT HOST.hostId FROM HOST INNER JOIN PRODUCT_PROPERTY_STATE h ON (h.objectId LIKE HOST.hostId) INNER JOIN PRODUCT d ON (d.productId LIKE h.productId) WHERE ("
+							+ where_clause2
+							+ ") AND NOT EXISTS (SELECT null FROM PRODUCT_ON_CLIENT WHERE h.productId LIKE PRODUCT_ON_CLIENT.productId AND d.productVersion LIKE PRODUCT_ON_CLIENT.productVersion AND d.packageVersion LIKE PRODUCT_ON_CLIENT.packageVersion AND hostId LIKE PRODUCT_ON_CLIENT.clientId);";
 
-						// Diese Abfrage soll alle hostIds liefern, die eine 'passende' Product-Property
-						// haben, die nicht in PRODUCT_PROPERTY_STATE ist,
-						// aber ein 'passendes' Produkt, das in PRODUCT_ON_CLIENT ist
-						// Entsprechend werden die Standardwerte abgefragt.
-						where_clause3 = where_clause3.replace("%\"", "");
-						where_clause3 = where_clause3.replace("\"%", "");
-						String abfrage3 = "SELECT DISTINCT HOST.hostId FROM HOST INNER JOIN PRODUCT_ON_CLIENT d ON (HOST.hostId=d.clientId) INNER JOIN PRODUCT_PROPERTY_VALUE v ON (v.productId LIKE d.productId) WHERE v.isDefault LIKE '1' AND ("
-								+ where_clause3
-								+ ") AND NOT EXISTS (SELECT null FROM PRODUCT_PROPERTY_STATE WHERE d.productId LIKE productId AND HOST.hostId LIKE objectId AND v.propertyId LIKE propertyId);";
+					// Diese Abfrage soll alle hostIds liefern, die eine 'passende' Product-Property
+					// haben, die nicht in PRODUCT_PROPERTY_STATE ist,
+					// aber ein 'passendes' Produkt, das in PRODUCT_ON_CLIENT ist
+					// Entsprechend werden die Standardwerte abgefragt.
+					where_clause3 = where_clause3.replace("%\"", "");
+					where_clause3 = where_clause3.replace("\"%", "");
+					String abfrage3 = "SELECT DISTINCT HOST.hostId FROM HOST INNER JOIN PRODUCT_ON_CLIENT d ON (HOST.hostId=d.clientId) INNER JOIN PRODUCT_PROPERTY_VALUE v ON (v.productId LIKE d.productId) WHERE v.isDefault LIKE '1' AND ("
+							+ where_clause3
+							+ ") AND NOT EXISTS (SELECT null FROM PRODUCT_PROPERTY_STATE WHERE d.productId LIKE productId AND HOST.hostId LIKE objectId AND v.propertyId LIKE propertyId);";
 
-						// Diese Abfrage dient der Suche nach hostIds, die ein 'passendes' Produkt
-						// haben, das nicht in PRODUCT_ON_CLIENT ist, und eine
-						// 'passende' PRODUCT_PROPERTY, die nicht in PRODUCT_PROPERTY_STATE ist.
-						where_clause4 = where_clause4.replace("%\"", "");
-						where_clause4 = where_clause4.replace("\"%", "");
+					// Diese Abfrage dient der Suche nach hostIds, die ein 'passendes' Produkt
+					// haben, das nicht in PRODUCT_ON_CLIENT ist, und eine
+					// 'passende' PRODUCT_PROPERTY, die nicht in PRODUCT_PROPERTY_STATE ist.
+					where_clause4 = where_clause4.replace("%\"", "");
+					where_clause4 = where_clause4.replace("\"%", "");
 
-						String abfrage4 = "SELECT DISTINCT HOST.hostId FROM HOST CROSS JOIN PRODUCT_PROPERTY_VALUE v INNER JOIN PRODUCT d ON (d.productId LIKE v.productId AND d.productVersion LIKE v.productVersion AND d.packageVersion LIKE v.packageVersion) WHERE v.isDefault like '1' AND ( "
-								+ where_clause4
-								+ " ) AND NOT EXISTS (SELECT null FROM PRODUCT_ON_CLIENT WHERE v.productId LIKE PRODUCT_ON_CLIENT.productId AND hostId LIKE PRODUCT_ON_CLIENT.clientId) AND NOT EXISTS (SELECT null FROM PRODUCT_PROPERTY_STATE WHERE v.productId LIKE productId AND HOST.hostId LIKE objectId AND v.propertyId LIKE propertyId);";
+					String abfrage4 = "SELECT DISTINCT HOST.hostId FROM HOST CROSS JOIN PRODUCT_PROPERTY_VALUE v INNER JOIN PRODUCT d ON (d.productId LIKE v.productId AND d.productVersion LIKE v.productVersion AND d.packageVersion LIKE v.packageVersion) WHERE v.isDefault like '1' AND ( "
+							+ where_clause4
+							+ " ) AND NOT EXISTS (SELECT null FROM PRODUCT_ON_CLIENT WHERE v.productId LIKE PRODUCT_ON_CLIENT.productId AND hostId LIKE PRODUCT_ON_CLIENT.clientId) AND NOT EXISTS (SELECT null FROM PRODUCT_PROPERTY_STATE WHERE v.productId LIKE productId AND HOST.hostId LIKE objectId AND v.propertyId LIKE propertyId);";
 
-						// Abfragen
+					// Abfragen
 
-						list1 = getListFromSQL(abfrage);
-						list2 = getListFromSQL(abfrage2);
-						List<String> list3 = getListFromSQL(abfrage3);
-						List<String> list4 = getListFromSQL(abfrage4);
+					list1 = getListFromSQL(abfrage);
+					list2 = getListFromSQL(abfrage2);
+					List<String> list3 = getListFromSQL(abfrage3);
+					List<String> list4 = getListFromSQL(abfrage4);
 
-						// Die Vereinigung aller Listen zurückgeben
-						return union(union(list1, list2), union(list3, list4));
+					// Die Vereinigung aller Listen zurückgeben
+					return union(union(list1, list2), union(list3, list4));
 
-					case "HardwareOperation":
-						abfrage = doJSONObject(jsonObject, true, MySQL.Type.NEW);
+				case "HardwareOperation":
+					abfrage = doJSONObject(jsonObject, true, MySQL.Type.NEW);
 
-						inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
+					inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
 
-						abfrage = "SELECT DISTINCT HOST.hostId FROM HOST " + inner_joins + " WHERE i.state LIKE 1 AND ("
-								+ abfrage + ")";
+					abfrage = "SELECT DISTINCT HOST.hostId FROM HOST " + inner_joins + " WHERE i.state LIKE 1 AND ("
+							+ abfrage + ")";
 
-						return getListFromSQL(abfrage);
+					return getListFromSQL(abfrage);
 
-					case "SwAuditOperation":
-						abfrage = doJSONObject(jsonObject, true, MySQL.Type.NEW);
+				case "SwAuditOperation":
+					abfrage = doJSONObject(jsonObject, true, MySQL.Type.NEW);
 
-						inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
+					inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
 
-						abfrage = "SELECT DISTINCT HOST.hostId FROM HOST " + inner_joins + " WHERE " + abfrage;
+					abfrage = "SELECT DISTINCT HOST.hostId FROM HOST " + inner_joins + " WHERE " + abfrage;
 
-						return getListFromSQL(abfrage);
+					return getListFromSQL(abfrage);
 
-					default:
-						JSONArray jsonArray = (JSONArray) jsonObject.getJSONArray("children");
-						return getListFromJSONObject((JSONObject) jsonArray.get(0));
+				default:
+					JSONArray jsonArray = (JSONArray) jsonObject.getJSONArray("children");
+					return getListFromJSONObject((JSONObject) jsonArray.get(0));
 				}
 			} else if (jsonObject.getJSONArray("elementPath").getString(0).equals("GroupWithSubgroups")) { // Group with
 																											// subgroups

@@ -9,12 +9,6 @@ import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-/**
- * FDialogSubTable
- * Copyright:     Copyright (c) 2020-2021
- * Organisation:  uib
- * @author Rupert Röder
- */
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
@@ -31,8 +25,8 @@ public class FDialogSubTable extends FGeneralDialog {
 	protected void allLayout() {
 		// super.allLayout(); we define an adapted layout
 		logging.info(this, "allLayout");
-		allpane.setBackground(de.uib.configed.Globals.backLightBlue); // Globals.nimbusBackground);///Globals.backgroundWhite);
-																		// //Globals.backLighter);//Globals.backgroundWhite);//(myHintYellow);
+		allpane.setBackground(Globals.backLightBlue); // Globals.nimbusBackground);///Globals.backgroundWhite);
+														// //Globals.backLighter);//Globals.backgroundWhite);//(myHintYellow);
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 

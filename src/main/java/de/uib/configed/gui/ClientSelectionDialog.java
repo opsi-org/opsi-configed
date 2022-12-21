@@ -1011,7 +1011,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		}
 		sourceGroup.dataComponent.setMaximumSize(new Dimension(sourceGroup.dataComponent.getMaximumSize().width,
 				sourceGroup.dataComponent.getMinimumSize().height));
-		int minHeight = de.uib.configed.Globals.LINE_HEIGHT;
+		int minHeight = Globals.LINE_HEIGHT;
 		sourceGroup.vRow.addComponent(sourceGroup.dataComponent, GroupLayout.Alignment.CENTER, minHeight, minHeight,
 				minHeight);
 		hGroupData.addComponent(sourceGroup.dataComponent, 100, 100, Short.MAX_VALUE);

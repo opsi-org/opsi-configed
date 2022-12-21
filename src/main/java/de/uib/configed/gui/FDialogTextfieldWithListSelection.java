@@ -15,12 +15,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-/**
- * FDialogTextfieldWithListSelectio
- * Copyright:     Copyright (c) 2022
- * Organisation:  uib
- * @author Rupert Röder
- */
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
@@ -65,8 +59,8 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		// we could design an adapted layout and infuse it in guiInit
 		logging.info(this, "allLayout");
 
-		allpane.setBackground(de.uib.configed.Globals.backLightBlue); // Globals.nimbusBackground);///Globals.backgroundWhite);
-																		// //Globals.backLighter);//Globals.backgroundWhite);//(myHintYellow);
+		allpane.setBackground(Globals.backLightBlue); // Globals.nimbusBackground);///Globals.backgroundWhite);
+														// //Globals.backLighter);//Globals.backgroundWhite);//(myHintYellow);
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
@@ -221,8 +215,8 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 
 				new String[] { "ok", "cancel" },
 
-				new Icon[] { de.uib.configed.Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-						de.uib.configed.Globals.createImageIcon("images/cancel16_small.png", "") },
+				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
+						Globals.createImageIcon("images/cancel16_small.png", "") },
 				1, // lastButtonNo,with "1" we get only the first button
 				600, 600, true, // lazylayout, i.e, we have a chance to define components and use them for the
 				// layout

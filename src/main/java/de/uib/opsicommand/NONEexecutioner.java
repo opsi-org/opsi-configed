@@ -73,20 +73,17 @@ public class NONEexecutioner extends Executioner {
 		return null;
 	}
 
-	public Map<String, Map<String, String>> getStringMappedObjectsByKey(
-			OpsiMethodCall omc, String key,
-			String[] sourceVars, String[] targetVars,
-			Map<String, String> translateValues) {
+	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
+			String[] sourceVars, String[] targetVars, Map<String, String> translateValues) {
 		return null;
 	}
 
-	public Map<String, Map<String, String>> getStringMappedObjectsByKey(
-			OpsiMethodCall omc, String key, String[] sourceVars, String[] targetVars) {
+	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
+			String[] sourceVars, String[] targetVars) {
 		return null;
 	}
 
-	public Map<String, Map<String, String>> getStringMappedObjectsByKey(
-			OpsiMethodCall omc, String key) {
+	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key) {
 		return null;
 	}
 

@@ -27,6 +27,7 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
@@ -146,7 +147,7 @@ public class SSHConnect {
 			return "";
 		}
 		if (dialog == null)
-			dialog = de.uib.configed.Globals.mainFrame;
+			dialog = Globals.mainFrame;
 		logging.debug(this, "getSudoPass dialog " + dialog);
 		final JPasswordField passwordField = new JPasswordField(10);
 		passwordField.setEchoChar('*');

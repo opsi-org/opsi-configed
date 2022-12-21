@@ -25,8 +25,8 @@ SOFTWARE.
 */
 
 /**
- * The HTTPTokener extends the JSONTokener to provide additional methods
- * for the parsing of HTTP headers.
+ * The HTTPTokener extends the JSONTokener to provide additional methods for the
+ * parsing of HTTP headers.
  * 
  * @author JSON.org
  * @version 2
