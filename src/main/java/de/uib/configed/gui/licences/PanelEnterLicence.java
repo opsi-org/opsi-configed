@@ -119,10 +119,10 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	protected void defineListeners() {
 		panelLicencecontracts.getListSelectionModel().addListSelectionListener(listSelectionEvent -> {
 			// Ignore extra messages.
-			if (e.getValueIsAdjusting())
+			if (listSelectionEvent.getValueIsAdjusting())
 				return;
 
-			ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+			ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
 
 			if (lsm.isSelectionEmpty()) {
 				// logging.debug(this, "no rows selected");
