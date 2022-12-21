@@ -8,6 +8,7 @@ import java.util.Vector;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 public class JComboBoxToolTip extends javax.swing.JComboBox {

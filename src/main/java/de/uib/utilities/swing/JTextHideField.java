@@ -13,7 +13,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
-import Globals;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 public class JTextHideField extends javax.swing.JPanel {

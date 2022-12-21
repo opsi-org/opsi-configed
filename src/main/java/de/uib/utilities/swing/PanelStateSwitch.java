@@ -27,7 +27,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import Globals;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 public class PanelStateSwitch extends JPanel {
@@ -155,7 +155,6 @@ public class PanelStateSwitch extends JPanel {
 
 		ImageIcon activatedIcon = de.uib.configed.Globals.createImageIcon("images/checked_withoutbox.png", "");
 		ImageIcon deactivatedIcon = de.uib.configed.Globals.createImageIcon("images/checked_empty_withoutbox.png", "");
-		final PanelStateSwitch THIS = this;
 
 		for (Enum val : values) {
 			JRadioButton button = new JRadioButton(labels.get(val));
@@ -180,16 +179,19 @@ public class PanelStateSwitch extends JPanel {
 
 			// hack to get the icons behaving as expected
 			button.addMouseListener(new MouseAdapter() {
+				@Override
 				public void mouseEntered(MouseEvent e) {
 					// logging.info(this, "mouse entered");
 					if (!button.isSelected())
 						button.setSelectedIcon(deactivatedIcon);
 				}
 
+				@Override
 				public void mouseClicked(MouseEvent e) {
 					button.setSelectedIcon(activatedIcon);
 				}
 
+				@Override
 				public void mouseExited(MouseEvent e) {
 					button.setSelectedIcon(activatedIcon);
 				}

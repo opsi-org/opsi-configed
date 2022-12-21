@@ -126,7 +126,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	public TablesearchPane(SearchTargetModel targetModel, boolean withRegEx, int prefColNo,
 			String savedStatesObjectTag) {
 		comparator = Globals.getCollator();
-		mappedValues = new HashMap<String, Mapping<Integer, String>>();
+		mappedValues = new HashMap<>();
 		this.withRegEx = withRegEx;
 		this.preferredColumnIndex = prefColNo;
 

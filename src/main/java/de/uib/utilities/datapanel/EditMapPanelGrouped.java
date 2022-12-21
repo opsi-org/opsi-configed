@@ -30,6 +30,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.utilities.logging.logging;

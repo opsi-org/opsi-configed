@@ -44,6 +44,7 @@ import javax.swing.text.View;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.parser.ParserDelegator;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 public class FEditPane extends FEdit implements DocumentListener, MouseListener, MouseMotionListener {

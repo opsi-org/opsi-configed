@@ -8,7 +8,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import Globals;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 public class NavigationPanel extends JPanel implements ActionListener {

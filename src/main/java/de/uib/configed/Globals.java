@@ -182,6 +182,10 @@ public class Globals {
 	public static final Color checkGreen = new Color(174, 201, 143);
 	public static final Color checkGreenLight = new Color(198, 225, 171);
 
+	public static final int toolTipInitialDelayMs = 1000;
+	public static final int toolTipDismissDelayMs = 20000;
+	public static final int toolTipReshowDelayMs = 0;
+
 	public static void formatButtonSmallText(javax.swing.JButton button) {
 		button.setFont(defaultFontSmall);
 		button.setPreferredSize(new Dimension(45, 20));
@@ -271,6 +275,7 @@ public class Globals {
 	public static final int SQUARE_BUTTON_WIDTH = 24;
 
 	public static final Dimension buttonDimension = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);
+	public static final Dimension lowerButtonDimension = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT - 4);
 	public static final Dimension smallButtonDimension = new Dimension(BUTTON_WIDTH / 2, BUTTON_HEIGHT);
 	public static final Dimension shortButtonDimension = new Dimension(BUTTON_WIDTH / 4, BUTTON_HEIGHT);
 	public static final Dimension textfieldDimension = new Dimension(BUTTON_WIDTH, LINE_HEIGHT);

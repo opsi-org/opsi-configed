@@ -4,7 +4,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import Globals;
+import de.uib.configed.Globals;
 
 public class TitledPanel extends JPanel {
 	protected JLabel label1;

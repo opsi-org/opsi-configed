@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.swing.JFrame;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 public class SecondaryFrame extends JFrame implements WindowListener {
@@ -18,7 +19,7 @@ public class SecondaryFrame extends JFrame implements WindowListener {
 	protected Container masterFrame;
 
 	public SecondaryFrame() {
-		this.masterFrame = Globals.masterFrame;
+		this.masterFrame = Globals.mainContainer;
 		if (masterFrame == null)
 			logging.warning(this, "masterFrame yet null");
 		addWindowListener(this);
