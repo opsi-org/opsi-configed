@@ -1753,15 +1753,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		logging.info(this, "locateAndDisplay, call buildLocation startX, startY, startWidth, startHeight, got " + savedX
 				+ ", " + savedY + ", " + savedWidth + ", " + savedHeight);
 
-		de.uib.utilities.Globals.startX = null;
-		de.uib.utilities.Globals.startY = null;
+		Globals.startX = null;
+		Globals.startY = null;
 
 		if (savedX != null && savedY != null) {
-			de.uib.utilities.Globals.startX = Integer.valueOf(savedX);
-			de.uib.utilities.Globals.startY = Integer.valueOf(savedY);
+			Globals.startX = Integer.valueOf(savedX);
+			Globals.startY = Integer.valueOf(savedY);
 
-			de.uib.utilities.Globals.startWidth = Integer.valueOf(savedWidth);
-			de.uib.utilities.Globals.startHeight = Integer.valueOf(savedHeight);
+			Globals.startWidth = Integer.valueOf(savedWidth);
+			Globals.startHeight = Integer.valueOf(savedHeight);
 		}
 
 		Rectangle screenRectangle = configed.fProgress.getGraphicsConfiguration().getBounds();
@@ -1972,8 +1972,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		 */
 
 		licencesFrame.setSize(licencesInitDimension);
-		final Rectangle dim = de.uib.utilities.Globals.buildLocation(licencesInitDimension.width,
-				licencesInitDimension.height, 0, 0);
+		final Rectangle dim = Globals.buildLocation(licencesInitDimension.width, licencesInitDimension.height, 0, 0);
 		licencesFrame.setLocation(dim.x, dim.y);
 
 		waitCursor.stop();

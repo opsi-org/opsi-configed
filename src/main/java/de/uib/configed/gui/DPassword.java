@@ -394,9 +394,9 @@ public class DPassword extends JDialog // implements Runnable
 		// Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		// this.setLocation((screenSize.width - 450) / 2, 200);
 
-		/*final Rectangle dim = de.uib.utilities.Globals.buildLocationOnDefaultDisplay(getSize().width, getSize().height,
-				de.uib.utilities.Globals.smallFramesDistanceFromLeft,
-				de.uib.utilities.Globals.smallFramesDistanceFromTop);
+		/*final Rectangle dim = Globals.buildLocationOnDefaultDisplay(getSize().width, getSize().height,
+				Globals.smallFramesDistanceFromLeft,
+				Globals.smallFramesDistanceFromTop);
 		this.setLocation(dim.x, dim.y);*/
 
 		jLabelHost.setText(configed.getResourceValue("DPassword.jLabelHost"));

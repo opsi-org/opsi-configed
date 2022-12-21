@@ -10,7 +10,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import de.uib.utilities.Globals;
+import de.uib.configed.Globals;
 
 public class PanelLinedComponents extends JPanel {
 
@@ -33,7 +33,7 @@ public class PanelLinedComponents extends JPanel {
 	}
 
 	public void setComponents(JComponent[] components) {
-		setComponents(components, Globals.lineHeight);
+		setComponents(components, Globals.LINE_HEIGHT);
 	}
 
 	protected void defineLayout() {
@@ -41,17 +41,17 @@ public class PanelLinedComponents extends JPanel {
 		setLayout(layout);
 
 		GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
-		hGroup.addGap(Globals.hGapSize);
+		hGroup.addGap(Globals.HGAP_SIZE);
 		if (components != null) {
 			for (int j = 0; j < components.length; j++) {
 				hGroup.addComponent(components[j], 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE);
-				hGroup.addGap(Globals.hGapSize);
+				hGroup.addGap(Globals.HGAP_SIZE);
 			}
 		}
 		layout.setHorizontalGroup(hGroup);
 
 		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
-		vGroup.addGap(0, Globals.vGapSize / 2, Globals.vGapSize / 2);
+		vGroup.addGap(0, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2);
 
 		GroupLayout.ParallelGroup vGroup1 = layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER);
 
@@ -63,7 +63,7 @@ public class PanelLinedComponents extends JPanel {
 
 		vGroup.addGroup(vGroup1);
 
-		vGroup.addGap(0, Globals.vGapSize / 2, Globals.vGapSize / 2);
+		vGroup.addGap(0, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2);
 		layout.setVerticalGroup(vGroup);
 	}
 

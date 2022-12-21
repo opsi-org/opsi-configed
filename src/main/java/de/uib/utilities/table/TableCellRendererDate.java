@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 
-import de.uib.utilities.Globals;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
@@ -27,13 +27,9 @@ public class TableCellRendererDate extends ColorTableCellRenderer {
 		label.setText("");
 	}
 
-	public Component getTableCellRendererComponent(
-			JTable table,
-			Object value, // value to display
+	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 			boolean isSelected, // is the cell selected
-			boolean hasFocus,
-			int row,
-			int column) {
+			boolean hasFocus, int row, int column) {
 		Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		String selectedString = "";

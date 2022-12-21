@@ -92,11 +92,11 @@ public class PanelSWMultiClientReport extends JPanel {
 
 		JLabel labelSwauditMultiClientReport1 = new JLabel(
 				configed.getResourceValue("PanelSWMultiClientReport.title1"));
-		labelSwauditMultiClientReport1.setFont(de.uib.utilities.Globals.defaultFontBig);
+		labelSwauditMultiClientReport1.setFont(Globals.defaultFontBig);
 
 		JLabel labelSwauditMultiClientReport2 = new JLabel(
 				configed.getResourceValue("PanelSWMultiClientReport.title2"));
-		labelSwauditMultiClientReport2.setFont(de.uib.utilities.Globals.defaultFontBold);
+		labelSwauditMultiClientReport2.setFont(Globals.defaultFontBold);
 
 		JLabel labelFilenamePrefix = new JLabel(
 				configed.getResourceValue("PanelSWMultiClientReport.labelFilenamePrefix"));
@@ -151,7 +151,7 @@ public class PanelSWMultiClientReport extends JPanel {
 		}
 
 		chooserDirectory = new JFileChooser();
-		chooserDirectory.setPreferredSize(de.uib.utilities.Globals.filechooserSize);
+		chooserDirectory.setPreferredSize(Globals.filechooserSize);
 		chooserDirectory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooserDirectory.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));

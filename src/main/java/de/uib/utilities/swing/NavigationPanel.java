@@ -8,11 +8,10 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import de.uib.utilities.Globals;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
-public class NavigationPanel extends JPanel
-		implements ActionListener {
+public class NavigationPanel extends JPanel implements ActionListener {
 
 	protected JButton nextButton;
 	protected JButton previousButton;
@@ -69,7 +68,7 @@ public class NavigationPanel extends JPanel
 		// setPreferredSize(Globals.buttonDimension);
 		logging.info(this, "initComponents");
 
-		Dimension navButtonDimension = new Dimension(30, Globals.buttonHeight - 6);
+		Dimension navButtonDimension = new Dimension(30, Globals.BUTTON_HEIGHT - 6);
 		nextButton = new JButton();
 		nextButton.setIcon(de.uib.configed.Globals.createImageIcon("images/arrows/arrow_red_16x16-right.png", ""));
 		// nextButton.setIcon(de.uib.configed.Globals.createImageIcon("images/minibarpointerred.png",

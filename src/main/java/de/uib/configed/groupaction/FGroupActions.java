@@ -183,7 +183,7 @@ public class FGroupActions extends SecondaryFrame {
 		IconButton buttonReload = new IconButton(configed.getResourceValue("FGroupAction.buttonReload"),
 				"images/reload16.png", "images/reload16_over.png", "images/reload16_disabled.png", true);
 		// buttonReload.setPreferredSize(new Dimension(60, 40));
-		// buttonReload.setBackground(de.uib.utilities.Globals.backgroundLightGrey);
+		// buttonReload.setBackground(Globals.backgroundLightGrey);
 
 		buttonReload.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -226,8 +226,7 @@ public class FGroupActions extends SecondaryFrame {
 						.addGap(Globals.HGAP_SIZE * 2, Globals.HGAP_SIZE * 4, Globals.HGAP_SIZE * 4)
 						.addComponent(buttonSetup, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
 						.addGap(Globals.HGAP_SIZE * 2, Globals.HGAP_SIZE * 2, Globals.HGAP_SIZE * 2)
-						.addComponent(buttonReload, de.uib.utilities.Globals.iconWidth,
-								de.uib.utilities.Globals.iconWidth, de.uib.utilities.Globals.iconWidth)
+						.addComponent(buttonReload, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 						.addGap(Globals.HGAP_SIZE, Globals.HFIRST_GAP, Short.MAX_VALUE))
 		//////////////////////////////////////////////////////////////////////
 		);

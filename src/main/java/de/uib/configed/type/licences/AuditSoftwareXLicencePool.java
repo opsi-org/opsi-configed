@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.utilities.datastructure.Relation;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
@@ -64,12 +65,12 @@ public class AuditSoftwareXLicencePool extends Relation {
 	/*
 	 * private String produceSWident(Map<String, String> m)
 	 * {
-	 * String result = de.uib.utilities.Globals.pseudokey(new String[]{
-	 * de.uib.utilities.Globals.getStringValue( m.get(SWAuditEntry.NAME) ),
-	 * de.uib.utilities.Globals.getStringValue( m.get(SWAuditEntry.VERSION) ),
-	 * de.uib.utilities.Globals.getStringValue( m.get(SWAuditEntry.SUBVERSION) ) ,
-	 * de.uib.utilities.Globals.getStringValue( m.get(SWAuditEntry.LANGUAGE) ),
-	 * de.uib.utilities.Globals.getStringValue (m.get (SWAuditEntry.ARCHITECTURE) )
+	 * String result = Globals.pseudokey(new String[]{
+	 * Globals.getStringValue( m.get(SWAuditEntry.NAME) ),
+	 * Globals.getStringValue( m.get(SWAuditEntry.VERSION) ),
+	 * Globals.getStringValue( m.get(SWAuditEntry.SUBVERSION) ) ,
+	 * Globals.getStringValue( m.get(SWAuditEntry.LANGUAGE) ),
+	 * Globals.getStringValue (m.get (SWAuditEntry.ARCHITECTURE) )
 	 * }
 	 * );
 	 * 
@@ -120,12 +121,11 @@ public class AuditSoftwareXLicencePool extends Relation {
 	 */
 
 	private String produceSWident(Map<String, Object> m) {
-		return de.uib.utilities.Globals
-				.pseudokey(new String[] { de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.NAME)),
-						de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.VERSION)),
-						de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.SUBVERSION)),
-						de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.LANGUAGE)),
-						de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.ARCHITECTURE)) });
+		return Globals.pseudokey(new String[] { Globals.getStringValue(m.get(SWAuditEntry.NAME)),
+				Globals.getStringValue(m.get(SWAuditEntry.VERSION)),
+				Globals.getStringValue(m.get(SWAuditEntry.SUBVERSION)),
+				Globals.getStringValue(m.get(SWAuditEntry.LANGUAGE)),
+				Globals.getStringValue(m.get(SWAuditEntry.ARCHITECTURE)) });
 	}
 
 	public static Map<String, String> produceMapFromSWident(String ident) {
@@ -159,8 +159,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 		 * logging.info(this, "integrateRaw " + m);
 		 */
 
-		rowmap.put(LicencepoolEntry.idSERVICEKEY,
-				de.uib.utilities.Globals.getStringValue(m.get(LicencepoolEntry.idSERVICEKEY)));
+		rowmap.put(LicencepoolEntry.idSERVICEKEY, Globals.getStringValue(m.get(LicencepoolEntry.idSERVICEKEY)));
 		add(rowmap);
 
 		// logging.info(this, " StringValuedRelationElement " + rowmap);

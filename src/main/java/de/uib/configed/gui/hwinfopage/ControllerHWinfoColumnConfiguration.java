@@ -26,6 +26,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
@@ -310,7 +311,7 @@ public class ControllerHWinfoColumnConfiguration {
 		panel.setTitlePane(
 				new JComponent[] { new JLabel(configed.getResourceValue("HWinfoColumnConfiguration.infoTitle")) }, 20);
 
-		panel.setTitlePaneBackground(de.uib.utilities.Globals.backLightBlue);
+		panel.setTitlePaneBackground(Globals.backLightBlue);
 
 		LinkedHashMap<Integer, SortOrder> sortDescriptor = new LinkedHashMap<Integer, SortOrder>();
 

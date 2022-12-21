@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
@@ -72,9 +71,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 		this(tableCellRenderer, keylistExtendible, keylistEditable, false);
 	}
 
-	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer,
-			boolean keylistExtendible,
-			boolean keylistEditable,
+	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
 			boolean reloadable) {
 		super(keylistExtendible, keylistEditable, reloadable);
 		this.tableCellRenderer = tableCellRenderer;
@@ -97,8 +94,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 	}
 
 	/**
-	 * setting all data for displaying and editing
-	 * <br />
+	 * setting all data for displaying and editing <br />
 	 * 
 	 * @param Map visualdata - the source for the table model
 	 * @param Map optionsMap - the description for producing cell editors
@@ -182,27 +178,6 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 			// state "hangs"
 		}
 
-	}
-
-	private boolean checkKey(String s) {
-		boolean ok = false;
-
-		if (s != null && !s.equals("")) {
-			ok = true;
-
-			if (names.indexOf(s) > -1) {
-				ok =
-
-						(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(
-								de.uib.configed.Globals.mainContainer,
-								"Ein Eintrag mit diesem Namen existiert bereits. Überschreiben des bisherigen Eintrags?",
-								de.uib.utilities.Globals.APPNAME,
-								JOptionPane.OK_CANCEL_OPTION));
-			}
-
-		}
-
-		return ok;
 	}
 
 	public void setValues(Map data) {

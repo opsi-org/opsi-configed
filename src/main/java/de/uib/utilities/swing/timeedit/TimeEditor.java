@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 
-import de.uib.utilities.Globals;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 public class TimeEditor extends JPanel {

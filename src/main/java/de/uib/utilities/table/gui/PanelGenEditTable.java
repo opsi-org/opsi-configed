@@ -49,8 +49,8 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
-import de.uib.utilities.Globals;
 import de.uib.utilities.Mapping;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
@@ -439,7 +439,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		labelRowCount.setFont(Globals.defaultFontStandardBold);
 
 		labelMarkedCount = new JLabel("");
-		labelMarkedCount.setFont(Globals.defaultFontStandard);
+		labelMarkedCount.setFont(Globals.defaultFont);
 
 		titlePane = new PanelLinedComponents();
 		titlePane.setVisible(false);
@@ -447,7 +447,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		// popupMenu = new JPopupMenu();
 		theTable = new de.uib.utilities.table.JTableWithToolTips();
 		// theTable = new JTable();
-		theTable.setRowHeight(de.uib.utilities.Globals.tableRowHeight);
+		theTable.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 		// new de.uib.utilities.table.JTableWithContextMenu(popupMenu);
 
 		exportTable = new ExporterToCSV(theTable);
@@ -505,14 +505,14 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		try {
 			scrollpane = new javax.swing.JScrollPane();
 			scrollpane.setViewportView(theTable);
-			scrollpane.getViewport().setBackground(de.uib.utilities.Globals.backLightBlue);
+			scrollpane.getViewport().setBackground(Globals.backLightBlue);
 		} catch (ClassCastException ex) {
 			// a strange Nimbus exception which occurs sometimes here
 			logging.warning(this, "strange exception on creating scrollpane " + ex);
 
 			scrollpane = new javax.swing.JScrollPane();
 			scrollpane.setViewportView(theTable);
-			scrollpane.getViewport().setBackground(de.uib.utilities.Globals.backLightBlue);
+			scrollpane.getViewport().setBackground(Globals.backLightBlue);
 
 		}
 
@@ -520,10 +520,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		this.setLayout(layout);
 
 		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
-				.createSequentialGroup().addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+				.createSequentialGroup().addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 						.addGroup(layout.createSequentialGroup()
-								.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+								.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 								.addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 								// .addGap(Globals.hGapSize, 2* Globals.hGapSize, 2 * Globals.hGapSize)
@@ -535,28 +535,29 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 						.addGroup(layout.createSequentialGroup()
 								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize).addComponent(buttonCancel,
-										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE,
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE)))
-				.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)));
+				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)));
 
 		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addContainerGap()
 						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-								.addComponent(label, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-								.addComponent(titlePane, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+								.addComponent(label, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+								.addComponent(titlePane, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addComponent(searchPane)
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addComponent(scrollpane, 20, 100, Short.MAX_VALUE)
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize).addComponent(buttonCancel,
-										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
 	}
 
@@ -644,7 +645,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	public void setTitlePaneBackground(java.awt.Color c) {
 		if (c == null)
-			titlePane.setBackground(de.uib.utilities.Globals.backgroundWhite);
+			titlePane.setBackground(Globals.backgroundWhite);
 		else
 			titlePane.setBackground(c);
 	}

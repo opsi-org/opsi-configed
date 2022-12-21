@@ -735,7 +735,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 
 	public void doActionOeffnen() {
 		final JFileChooser chooser = new JFileChooser("Choose directory");
-		chooser.setPreferredSize(de.uib.utilities.Globals.filechooserSize);
+		chooser.setPreferredSize(Globals.filechooserSize);
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		// final File file = new File("/home");

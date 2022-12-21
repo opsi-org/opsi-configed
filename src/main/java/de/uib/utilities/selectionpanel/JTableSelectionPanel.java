@@ -131,7 +131,7 @@ public class JTableSelectionPanel extends JPanel
 		table.setShowGrid(true);
 		table.setGridColor(Color.white);
 		table.setDefaultRenderer(Object.class, new StandardTableCellRenderer());
-		table.setRowHeight(de.uib.utilities.Globals.tableRowHeight);
+		table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 		// sorter.setTableHeader(table.getTableHeader());
 		table.setAutoCreateRowSorter(true);
 
@@ -713,7 +713,7 @@ public class JTableSelectionPanel extends JPanel
 		 * alphaCollator.setStrength(java.text.Collator.PRIMARY);
 		 * 
 		 * ((TableRowSorter) table.getRowSorter()).setComparator(0,
-		 * de.uib.utilities.Globals.alphaCollator);
+		 * Globals.alphaCollator);
 		 */
 
 	}

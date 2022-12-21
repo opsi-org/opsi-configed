@@ -3,11 +3,20 @@ package de.uib.configed;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.Rectangle;
+import java.text.Collator;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import javax.swing.ImageIcon;
 
@@ -93,16 +102,54 @@ public class Globals {
 	public static final int DEFAULT_FTEXTAREA_HEIGHT = 200;
 	public static final int DEFAULT_FTEXTAREA_WIDTH = 350;
 
-	/*
-	 * // Get all font family names
-	 * GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-	 * String fontNames[] = ge.getAvailableFontFamilyNames();
-	 * 
-	 * // Iterate the font family names
-	 * for (int i=0; i<fontNames.length; i++) {
-	 * logging.debug("FONT ==>>> " + fontNames[i]);
-	 * }
-	 */
+	public static Boolean interpretAsBoolean(Object value) {
+		// logging.debug("Globals: interpretAsBoolean " + value);
+
+		if (value == null)
+			return null;
+
+		if (value instanceof Boolean) {
+			// logging.debug("Globals: interpretAsBoolean based on Boolean ");
+			return (Boolean) value;
+		}
+
+		if (value instanceof Integer) {
+			// logging.debug("Globals: interpretAsBoolean based on Integer ");
+			int val = (Integer) value;
+			if (val == 1)
+				return true;
+			else if (val == 0)
+				return false;
+
+			else
+				throw new IllegalArgumentException("" + value + " cannot be interpreted as boolean");
+		}
+
+		if (value instanceof String) {
+			// logging.debug("Globals: interpretAsBoolean based on String ");
+
+			String val = ((String) value).toLowerCase();
+
+			if (val.equals(""))
+				return null;
+
+			if (val.equals("true"))
+				return true;
+
+			if (val.equals("false"))
+				return false;
+
+			if (val.equals("1"))
+				return true;
+
+			if (val.equals("0"))
+				return false;
+
+			throw new IllegalArgumentException(" " + value + " cannot be interpreted as boolean");
+		}
+
+		throw new IllegalArgumentException(" " + value + " cannot be interpreted as boolean");
+	}
 
 	public static final Color backgroundWhite = new Color(245, 245, 245);
 	public static final Color backgroundGrey = new Color(220, 220, 220);
@@ -135,6 +182,10 @@ public class Globals {
 	public static final Color checkGreen = new Color(174, 201, 143);
 	public static final Color checkGreenLight = new Color(198, 225, 171);
 
+	public static final int toolTipInitialDelayMs = 1000;
+	public static final int toolTipDismissDelayMs = 20000;
+	public static final int toolTipReshowDelayMs = 0;
+
 	public static void formatButtonSmallText(javax.swing.JButton button) {
 		button.setFont(defaultFontSmall);
 		button.setPreferredSize(new Dimension(45, 20));
@@ -149,7 +200,6 @@ public class Globals {
 	public static final Color nimbusSelectionBackground = new Color(57, 105, 138);
 	public static final Color nimbusBackground = new Color(214, 217, 223);
 	public static final Color backNimbus = new Color(214, 219, 222);
-	public static final Color backNimbusLight = new Color(224, 229, 235);
 
 	// in table, change colors by row
 	public static final Color defaultTableCellBgColor1 = Color.white; // new Color (255,255,255);
@@ -217,6 +267,7 @@ public class Globals {
 	public static final int LINE_HEIGHT = 28;
 	public static final int SMALL_HEIGHT = 18;
 	public static final int PROGRESS_BAR_HEIGHT = 10;
+	public static final int TABLE_ROW_HEIGHT = 16;
 	public static final int BUTTON_WIDTH = 140;
 	public static final int ICON_WIDTH = 60;
 	public static final int LABEL_WIDTH = 80;
@@ -224,6 +275,7 @@ public class Globals {
 	public static final int SQUARE_BUTTON_WIDTH = 24;
 
 	public static final Dimension buttonDimension = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT);
+	public static final Dimension lowerButtonDimension = new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT - 4);
 	public static final Dimension smallButtonDimension = new Dimension(BUTTON_WIDTH / 2, BUTTON_HEIGHT);
 	public static final Dimension shortButtonDimension = new Dimension(BUTTON_WIDTH / 4, BUTTON_HEIGHT);
 	public static final Dimension textfieldDimension = new Dimension(BUTTON_WIDTH, LINE_HEIGHT);
@@ -231,8 +283,9 @@ public class Globals {
 	public static final Dimension shortlabelDimension = new Dimension(60, LINE_HEIGHT);
 	public static final int COUNTERFIELD_WIDTH = 160;
 	public static final Dimension counterfieldDimension = new Dimension(COUNTERFIELD_WIDTH, LINE_HEIGHT);
-
+	public static final Dimension newSmallButton = new Dimension(30, 30);
 	public static final Dimension modeSwitchDimension = new Dimension(50, 50);
+	public static final Dimension filechooserSize = new Dimension(600, 400);
 
 	public static final int GRAPHIC_BUTTON_HEIGHT = 40;
 	public static final int GRAPHIC_BUTTON_WIDTH = 40;
@@ -242,6 +295,13 @@ public class Globals {
 	public static final int COMBOBOX_ROW_COUNT = 20;
 
 	public static final Dimension graphicButtonDimension = new Dimension(GRAPHIC_BUTTON_WIDTH, GRAPHIC_BUTTON_HEIGHT);
+
+	public static Integer startX;
+	public static Integer startY;
+	public static Integer startWidth;
+	public static Integer startHeight;
+
+	public static final int dateFormatStylePattern = DateFormat.LONG;
 
 	// action form constants
 	public static final int HFIRST_GAP = HGAP_SIZE * 3;
@@ -279,7 +339,19 @@ public class Globals {
 		return objects;
 	}
 
-	public static java.awt.Container mainContainer; // transparent for appletHandling
+	private static Collator alphaCollator = null;
+
+	public static Collator getCollator() {
+		if (alphaCollator == null) {
+			alphaCollator = Collator.getInstance();
+			// alphaCollator.setStrength(java.text.Collator.PRIMARY);
+			alphaCollator.setStrength(java.text.Collator.IDENTICAL);
+
+		}
+		return alphaCollator;
+	}
+
+	public static java.awt.Container mainContainer; // transparent for appletHandling // masterFrame
 	public static javax.swing.JFrame mainFrame; // fixed
 	public static javax.swing.JFrame frame1; // can be changed
 	public static java.awt.Container container1; // can be changed
@@ -296,6 +368,11 @@ public class Globals {
 
 	public static String getResourceValue(String key) {
 		return configed.getResourceValue(key);
+	}
+
+	public static boolean isWindows() {
+		String osName = System.getProperty("os.name");
+		return osName.toLowerCase().startsWith("windows");
 	}
 
 	public static String fillStringToLength(String s, int len) {
@@ -420,12 +497,73 @@ public class Globals {
 		return sqlNow;
 	}
 
-	public static final ArrayList<Object> getNowTimeListValue() {
+	public static Date getToday() {
+		return new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis());
+	}
+
+	private static String formatlNumberUpTo99(long n) {
+		if (n < 10)
+			return "0" + n;
+		else
+			return "" + n;
+	}
+
+	public static String giveTimeSpan(final long millis) {
+		long seconds;
+		long remseconds;
+		String remSecondsS;
+		long minutes;
+		long remminutes;
+		String remMinutesS;
+		long hours;
+		String hoursS;
+
+		seconds = millis / 1000;
+		minutes = seconds / 60;
+		remseconds = seconds % 60;
+
+		hours = minutes / 60;
+		remminutes = minutes % 60;
+
+		remSecondsS = formatlNumberUpTo99(remseconds);
+		remMinutesS = formatlNumberUpTo99(remminutes);
+		hoursS = formatlNumberUpTo99(hours);
+
+		return "" + hoursS + ":" + remMinutesS + ":" + remSecondsS;
+	}
+
+	public static String getStringValue(Object s) {
+		if (s == null)
+			return "";
+		/*
+		 * if (s instanceof String)
+		 * return s;
+		 */
+
+		return s.toString();
+	}
+
+	public static List<String> takeAsStringList(java.util.List<Object> list) {
+		List<String> result = new java.util.ArrayList<>();
+
+		if (list == null)
+			return result;
+
+		for (Object val : list) {
+			result.add((String) val);
+		}
+
+		return result;
+	}
+
+	public static final String pseudokeySeparator = ";";
+
+	public static final List<Object> getNowTimeListValue() {
 		return getNowTimeListValue(null);
 	}
 
-	public static final ArrayList<Object> getNowTimeListValue(final String comment) {
-		ArrayList<Object> result = new ArrayList<Object>();
+	public static final List<Object> getNowTimeListValue(final String comment) {
+		ArrayList<Object> result = new ArrayList<>();
 		// result. add( new Date().toString() );
 		String now = new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis()).toString();
 		now = now.substring(0, now.indexOf("."));
@@ -452,6 +590,49 @@ public class Globals {
 		}
 
 		return resultBuffer.toString();
+	}
+
+	static final int tooltipLineLength = 50;
+	static final int uncertainty = 20;
+
+	public static String wrapToHTML(String s) {
+		StringBuffer result = new StringBuffer("<html>");
+		String remainder = s;
+		while (remainder.length() > 0) {
+			de.uib.utilities.logging.logging.debug("Globals, remainder " + remainder);
+			if (remainder.length() <= tooltipLineLength) {
+				result.append(remainder.replace("\\n", "<br />"));
+				remainder = "";
+				break;
+			}
+			result.append(remainder.substring(0, tooltipLineLength).replace("\\n", "<br />"));
+
+			int testspan = min(remainder.length() - tooltipLineLength, uncertainty);
+
+			String separationString = remainder.substring(tooltipLineLength, tooltipLineLength + testspan);
+
+			boolean found = false;
+			int i = 0;
+			de.uib.utilities.logging.logging.debug("Globals, separationString " + separationString);
+
+			while (!found && i < testspan) {
+				if (separationString.charAt(i) == ' ' || separationString.charAt(i) == '\n'
+						|| separationString.charAt(i) == '\t') {
+					found = true;
+					if (separationString.charAt(i) == '\n')
+						result.append("<br />");
+				} else
+					i++;
+			}
+
+			result.append(separationString.substring(0, i));
+			result.append("<br />");
+			int end = max(remainder.length(), tooltipLineLength);
+			remainder = remainder.substring(tooltipLineLength + i, end);
+		}
+
+		result.append("</html>");
+		return result.toString();
 	}
 
 	public static int max(int a, int b) {
@@ -492,6 +673,273 @@ public class Globals {
 			logging.debug(source.getClass().getName() + " " + cName + " is null");
 
 		return result;
+	}
+
+	private static Integer stringCompareAsInt(String s1, String s2) throws NumberFormatException {
+		// logging.debug ( " compare int " + s1 + " " + s2 );
+		if (s1 == null && s2 == null)
+			return 0;
+		if (s1 == null)
+			return -1;
+		if (s2 == null)
+			return +1;
+
+		String s1A = s1.trim();
+		String s2A = s2.trim();
+
+		if (s1A.equals(s2A))
+			return 0;
+
+		if (s1A.length() == 0)
+			return -1;
+
+		if (s2A.length() == 0)
+			return +1;
+
+		int val1 = Integer.valueOf(s1A);
+		int val2 = Integer.valueOf(s2A);
+		// logging.debug ( " compare int " + val1 + " " + val2 );
+		return val1 - val2;
+	}
+
+	public static Integer compareDottedNumberStrings(final String ver1, final String ver2)
+			throws NumberFormatException {
+		// logging.debug ( " ver1 " + ver1 );
+		// logging.debug ( " ver2 " + ver2 );
+
+		if (ver1 == null && ver2 == null)
+			return 0;
+		if (ver1 == null)
+			return -1;
+		if (ver2 == null)
+			return +1;
+		if (ver1.equals(ver2))
+			return 0;
+
+		String ver1A = ver1.replace('_', '.');
+		String ver2A = ver2.replace('_', '.');
+
+		String[] ver1parts = ver1A.split("\\.");
+		String[] ver2parts = ver2A.split("\\.");
+
+		// logging.debug ( " ver1parts " + Arrays.toString( ver1parts ) );
+		// logging.debug ( " ver2parts " + Arrays.toString( ver2parts ) );
+
+		int i = 0;
+		int result = 0;
+
+		while (result == 0 && i < ver1parts.length && i < ver2parts.length) {
+			result = stringCompareAsInt(ver1parts[i], ver2parts[i]);
+			if (result == 0)
+				i++;
+		}
+
+		return result;
+	}
+
+	public static int compareOpsiVersions(final String number1, final String number2) {
+		if (number1 == null)
+			throw new IllegalArgumentException("Number1 can not be null");
+		if (!number1.matches("[0-9]+(\\.[0-9]+)*"))
+			throw new IllegalArgumentException("Invalid number1 format");
+
+		if (number2 == null)
+			throw new IllegalArgumentException("Number2 can not be null");
+		// if (number2 == null) return 1;
+		if (!number2.matches("[0-9]+(\\.[0-9]+)*"))
+			throw new IllegalArgumentException("Invalid number2 format");
+		String[] n1Parts = number1.split("\\.");
+		String[] n2Parts = number2.split("\\.");
+		int length = Math.max(n1Parts.length, n2Parts.length);
+		for (int i = 0; i < length; i++) {
+			int n1Part = i < n1Parts.length ? Integer.parseInt(n1Parts[i]) : 0;
+			int n2Part = i < n2Parts.length ? Integer.parseInt(n2Parts[i]) : 0;
+			if (n1Part < n2Part)
+				return -1;
+			if (n1Part > n2Part)
+				return 1;
+		}
+		return 0;
+	}
+
+	public static String makeHTMLlines(String s) {
+		if (s == null || s.trim().startsWith("<"))
+			return s;
+
+		final int maxLineLength = 80;
+
+		StringBuffer b = new StringBuffer("<html>");
+		int charsInLine = 0;
+		boolean indentDone = false;
+		int lineIndent = 0;
+		for (int c = 0; c < s.length(); c++) {
+			charsInLine++;
+			switch (s.charAt(c)) {
+			case ' ':
+				b.append("&nbsp;");
+				if (!indentDone)
+					lineIndent = lineIndent + 1;
+				break;
+			case '\t':
+				b.append("&nbsp;&nbsp;&nbsp;");
+				if (!indentDone)
+					lineIndent = lineIndent + 3;
+				break;
+			case '\n':
+				b.append("<br/>");
+				indentDone = false;
+				charsInLine = 0;
+				lineIndent = 0;
+				break;
+			default:
+				indentDone = true;
+				b.append(s.charAt(c));
+			}
+			if (charsInLine >= maxLineLength) {
+				if (c + 1 < s.length()) {
+					if ((s.charAt(c + 1) == ' ') || (s.charAt(c + 1) == '\t') || (s.charAt(c + 1) == '\n')) {
+						c++;
+						b.append("<br/>");
+						if (s.charAt(c) != '\n') {
+							while (lineIndent > 0) {
+								lineIndent--;
+								charsInLine++;
+								b.append("&nbsp;");
+							}
+						}
+						charsInLine = 0;
+						indentDone = false;
+						lineIndent = 0;
+					}
+				}
+			}
+		}
+
+		b.append("</html>");
+
+		return b.toString();
+	}
+
+	private static Rectangle getMinDevice() {
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice[] gs = ge.getScreenDevices();
+		Rectangle result = new Rectangle(1600, 1200);
+		for (int j = 0; j < gs.length; j++) {
+			GraphicsDevice gd = gs[j];
+			GraphicsConfiguration[] gc = gd.getConfigurations();
+			for (int i = 0; i < gc.length; i++) {
+				int w = gc[i].getBounds().width;
+				int h = gc[i].getBounds().height;
+				// logging.info("minimalBounds: compare " + result + " to " +
+				// gc[i].getBounds());
+				if (w < result.width || h < result.height)
+					result = new Rectangle(w, h);
+			}
+		}
+
+		logging.info("minimalBounds: giving " + result);
+
+		return result;
+	}
+
+	public static Rectangle buildLocation(int intendedWidth, int intendedHeight, int placementX, int placementY) {
+		return buildLocation(null, intendedWidth, intendedHeight, placementX, placementY);
+	}
+
+	private static int bigFramesDistanceFromLeft = 60;
+	private static int bigFramesDistanceFromTop = 40;
+
+	public static Rectangle buildLocation(javax.swing.JFrame f, int intendedWidth, int intendedHeight, int placementX,
+			int placementY) {
+
+		int width = intendedWidth;
+		int height = intendedHeight;
+
+		logging.info("buildLocation startX, startY, startWidth, startHeight " + startX + ", " + startY + ", "
+				+ startWidth + ", " + startHeight);
+
+		if (startX != null && startY != null && startX != 0 && startY != 0)
+		// take given values which could e.g. be retrieved from a previous session
+		{
+			placementX = startX;
+			placementY = startY;
+
+			if (startWidth != null && startHeight != null && startWidth != 0 && startHeight != 0) {
+				width = startWidth;
+				height = startHeight;
+			}
+
+		} else {
+
+			Rectangle minBounds = getMinDevice();
+
+			if (intendedWidth + 2 * bigFramesDistanceFromLeft > minBounds.width) {
+				intendedWidth = minBounds.width - 2 * bigFramesDistanceFromLeft;
+			}
+
+			if (intendedHeight + 2 * bigFramesDistanceFromTop > minBounds.height) {
+				intendedHeight = minBounds.height - 2 * bigFramesDistanceFromTop;
+			}
+
+			if (f != null) {
+				f.setSize(intendedWidth, intendedHeight);
+				logging.info("buildLocation " + f);
+			}
+
+			width = intendedWidth;
+			height = intendedHeight;
+
+			if (width + placementX > minBounds.width) {
+				logging.info("buildLocation  width + placementX > minBounds.width " + width + ", " + placementX + ", "
+						+ minBounds.width);
+				placementX = bigFramesDistanceFromLeft;
+				width = minBounds.width - 2 * placementX;
+				logging.info("buildLocation  width , placementX " + width + ", " + placementX);
+			} else if (placementX == 0) {
+				// center in minBounds
+				logging.info("buildLocation  width, minBounds.width " + width + ", " + minBounds.width);
+
+				placementX = (minBounds.width - width) / 2;
+
+			}
+
+			logging.info("buildLocation placementX " + placementX);
+
+			if (height + placementY > minBounds.height) {
+				logging.info("buildLocation  height + placementY > minBounds.height " + height + ", " + placementY
+						+ ", " + minBounds.height);
+				placementY = bigFramesDistanceFromTop;
+				height = minBounds.height - 2 * placementY;
+				logging.info("buildLocation  height + placementY " + height + ", " + placementY);
+			} else if (placementY == 0) {
+				// center in minBounds
+				logging.info(" locate given minBounds.height, height  " + minBounds.width + ", " + height);
+				placementY = (minBounds.height - height) / 2;
+
+			}
+			logging.info("buildLocation placementY " + placementY);
+		}
+
+		return new Rectangle(placementX, placementY, width, height);
+	}
+
+	public static String usedMemory() {
+		long total = Runtime.getRuntime().totalMemory();
+		long free = Runtime.getRuntime().freeMemory();
+
+		return " " + (((total - free) / 1024) / 1024) + " MB ";
+	}
+
+	public static String getCLIparam(String question, boolean password) {
+		java.io.Console con = System.console();
+		if (con == null)
+			return "";
+		System.out.print(question);
+		if (password)
+			return String.valueOf(con.readPassword()).trim();
+		try (Scanner sc = new Scanner(con.reader())) {
+			return sc.nextLine();
+		}
 	}
 
 	public static Color brightenColor(java.awt.Color c)

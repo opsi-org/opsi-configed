@@ -1,5 +1,6 @@
 package de.uib.utilities.table;
 
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -13,9 +14,9 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.FTextArea;
-import de.uib.utilities.Globals;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.table.gui.PanelGenEditTable;
@@ -212,7 +213,7 @@ public abstract class ExportTable {
 			// javax.swing.filechooser.FileNameExtensionFilter(
 			// "CSV", "csv");
 			chooser.addChoosableFileFilter(exFilter);
-			chooser.setPreferredSize(de.uib.utilities.Globals.filechooserSize);
+			chooser.setPreferredSize(Globals.filechooserSize);
 
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 			chooser.setDialogTitle(SHORT_APPNAME + "    " + configed.getResourceValue("DocumentExport.chooser"));
@@ -356,7 +357,7 @@ public abstract class ExportTable {
 		// logging.info(this, "getFileLocation with defaultFile " + defaultFile);
 
 		chooser = new JFileChooser(exportDirectory);
-		chooser.setPreferredSize(de.uib.utilities.Globals.filechooserSize);
+		chooser.setPreferredSize(Globals.filechooserSize);
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("PDF", "pdf"));
 		// chooser.setApproveButtonText("ok");
@@ -364,7 +365,7 @@ public abstract class ExportTable {
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setDialogTitle(Globals.APPNAME + " " + configed.getResourceValue("DocumentExport.chooser"));
 
-		int returnVal = chooser.showDialog(de.uib.utilities.Globals.masterFrame, "OK");
+		int returnVal = chooser.showDialog(Globals.mainContainer, "OK");
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			fileName = chooser.getSelectedFile().getAbsolutePath();
 
@@ -395,7 +396,7 @@ public abstract class ExportTable {
 			if (!fileExists)
 				return filename;
 
-			int option = JOptionPane.showConfirmDialog(de.uib.utilities.Globals.masterFrame,
+			int option = JOptionPane.showConfirmDialog(Globals.mainContainer,
 					configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
 					Globals.APPNAME + " " + configed.getResourceValue("DocumentExport.question"),
 					JOptionPane.OK_CANCEL_OPTION);
@@ -404,7 +405,7 @@ public abstract class ExportTable {
 				result = null;
 			else
 				result = filename;
-		} catch (Exception fc_e) {
+		} catch (HeadlessException ex) {
 			logging.error(configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename);
 
 		}

@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 import utils.ResourceBundleUtf8;
 
@@ -107,8 +108,7 @@ public class Messages {
 			if (javaVersionOnlyNumbers.length() < javaVersionOnlyNumbers0.length())
 				logging.debug("shortened to " + javaVersionOnlyNumbers);
 
-			Integer differenceToJava9 = de.uib.utilities.Globals.compareDottedNumberStrings("9",
-					javaVersionOnlyNumbers);
+			Integer differenceToJava9 = Globals.compareDottedNumberStrings("9", javaVersionOnlyNumbers);
 			logging.debug(" version difference to java 9 is: " + differenceToJava9);
 			UTF8_HACK = (differenceToJava9 > 0);
 			logging.debug(" we will use the UTF8 hack " + UTF8_HACK);

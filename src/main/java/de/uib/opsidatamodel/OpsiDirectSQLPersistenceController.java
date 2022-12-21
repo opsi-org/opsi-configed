@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsicommand.DbConnect;
@@ -198,7 +199,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			while (rs.next()) {
 				counter++;
 
-				String ident = de.uib.utilities.Globals
+				String ident = Globals
 						.pseudokey(new String[] { rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.NAME)),
 								rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.VERSION)),
 								rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.SUBVERSION)),
@@ -257,9 +258,8 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			while (rs.next()) {
 				counter++;
 
-				String ident = de.uib.utilities.Globals
-						.pseudokey(new String[] { rs.getString("name"), rs.getString("version"),
-								rs.getString("subversion"), rs.getString("language"), rs.getString("architecture") });
+				String ident = Globals.pseudokey(new String[] { rs.getString("name"), rs.getString("version"),
+						rs.getString("subversion"), rs.getString("language"), rs.getString("architecture") });
 
 				if (rowsSOFTWARE.get(ident) == null) {
 					Map<String, String> rowmap = new HashMap<String, String>();

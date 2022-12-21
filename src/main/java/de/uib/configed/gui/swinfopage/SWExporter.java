@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Vector;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.messages.Messages;
@@ -73,21 +74,20 @@ public abstract class SWExporter {
 
 	public void addMissingArgs() {
 		if (server == null)
-			server = de.uib.utilities.Globals.getCLIparam("Host (default: localhost): ", false);
+			server = Globals.getCLIparam("Host (default: localhost): ", false);
 		if (server.equals(""))
 			server = "localhost";
 
 		if (user == null)
-			user = de.uib.utilities.Globals.getCLIparam("User (default: " + System.getProperty("user.name") + ") : ",
-					false);
+			user = Globals.getCLIparam("User (default: " + System.getProperty("user.name") + ") : ", false);
 		if (user.equals(""))
 			user = System.getProperty("user.name");
 
 		if (password == null)
-			password = de.uib.utilities.Globals.getCLIparam("Password: ", true);
+			password = Globals.getCLIparam("Password: ", true);
 
 		if (clientsFile == null)
-			clientsFile = de.uib.utilities.Globals.getCLIparam("File with client names: ", false);
+			clientsFile = Globals.getCLIparam("File with client names: ", false);
 		if (clientsFile.equals("")) {
 			finish(de.uib.configed.ErrorCode.CLIENTNAMES_FILENAME_MISSING);
 		}
@@ -96,7 +96,7 @@ public abstract class SWExporter {
 		String userHomeS = userHome.toString();
 
 		if (outDir == null)
-			outDir = de.uib.utilities.Globals.getCLIparam("Export directory (default: " + userHomeS + "): ", false);
+			outDir = Globals.getCLIparam("Export directory (default: " + userHomeS + "): ", false);
 		if (outDir.equals(""))
 			outDir = userHomeS;
 

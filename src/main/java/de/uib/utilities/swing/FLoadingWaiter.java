@@ -25,9 +25,8 @@ import javax.swing.Painter;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
-//import de.uib.utilities.swing.timeedit.*;
-import de.uib.utilities.Globals;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.thread.WaitInfoString;
 import de.uib.utilities.thread.WaitingSleeper;
@@ -159,7 +158,7 @@ public class FLoadingWaiter extends JFrame
 								.addComponent(progressBar, 100, 350, Short.MAX_VALUE).addGap(10, 10, 30)));
 		layout.setVerticalGroup(layout
 				.createSequentialGroup().addComponent(iconLabel, 150, 150, 150).addComponent(progressBar,
-						Globals.progressBarHeight, Globals.progressBarHeight, Globals.progressBarHeight)
+						Globals.PROGRESS_BAR_HEIGHT, Globals.PROGRESS_BAR_HEIGHT, Globals.PROGRESS_BAR_HEIGHT)
 				.addComponent(infoLabel, 30, 30, 30)
 
 		);

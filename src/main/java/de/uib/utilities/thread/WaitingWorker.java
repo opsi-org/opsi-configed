@@ -118,7 +118,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 				// "passed " + giveTimeSpan( millis) +
 				waitingSleeper.setLabellingStrategy(millis));
 		// " " + configed .getResourceValue("FStartWakeOnLan.timeLeft") + " " +
-		// de.uib.utilities.Globals.giveTimeSpan( waitingSleeper.getWaitingMillis() -
+		// Globals.giveTimeSpan( waitingSleeper.getWaitingMillis() -
 		// millis ) );
 
 		int barLength = progressBar.getMaximum() - progressBar.getMinimum();

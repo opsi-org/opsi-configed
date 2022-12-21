@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.opsicommand.DbConnect;
@@ -36,8 +37,7 @@ public class DataStubDirectSQL extends DataStubRawData
 
 	@Override
 	protected void retrieveSoftwareAuditOnClients(final java.util.List<String> clients) {
-		logging.info(this,
-				"retrieveSoftwareAuditOnClients used memory on start " + de.uib.utilities.Globals.usedMemory());
+		logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
 		retrieveInstalledSoftwareInformation();
 		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  clients count ======  " + clients.size());
@@ -155,11 +155,10 @@ public class DataStubDirectSQL extends DataStubRawData
 			// logging.info(this, "retrieveSoftwareAuditOnClients client2software " +
 			// client2software);
 
-			logging.info(this,
-					"retrieveSoftwareAuditOnClients used memory on end " + de.uib.utilities.Globals.usedMemory());
+			logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
 			// System.gc();
 			// logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " +
-			// de.uib.utilities.Globals.usedMemory());
+			// Globals.usedMemory());
 			// step++;
 
 			persist.notifyDataRefreshedObservers("softwareConfig");

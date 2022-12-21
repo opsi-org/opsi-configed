@@ -755,7 +755,7 @@ public class UserConfigProducing {
 		} else {
 			logging.info(this, "supplyPermissionEntriesForAUser added object(s) for saving, for username " + username
 					+ ": " + (readyObjects.size() - 1));
-			ArrayList<Object> timeVal = de.uib.configed.Globals.getNowTimeListValue("set by role prototype");
+			List<Object> timeVal = de.uib.configed.Globals.getNowTimeListValue("set by role prototype");
 
 			/*
 			 * ConfigOption itemModifyTime = PersistenceController.createConfig(

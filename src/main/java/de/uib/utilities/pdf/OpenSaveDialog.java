@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
@@ -38,14 +37,13 @@ public class OpenSaveDialog implements ActionListener {
 		JPanel buttonPane = new JPanel();
 		buttonPane.add(saveBtn);
 		buttonPane.add(openBtn);
-		JLabel text = new JLabel(configed.getResourceValue("OpenSaveDialog.jLabel_text"));
 		JPanel qPanel = new JPanel();
 		// qPanel.add(text);
 		qPanel.add(buttonPane);
 		dialogView = new de.uib.configed.gui.GeneralFrame(null, de.uib.configed.Globals.APPNAME + " " + title, true); // modal
 		dialogView.addPanel(qPanel);
 		dialogView.setSize(new Dimension(400, 90));
-		dialogView.centerOn(de.uib.utilities.Globals.masterFrame);
+		dialogView.centerOn(Globals.mainFrame);
 		dialogView.setVisible(true);
 
 	}

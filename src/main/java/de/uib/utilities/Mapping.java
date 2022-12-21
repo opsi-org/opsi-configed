@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 public class Mapping<K, V> {
@@ -129,8 +130,7 @@ public class Mapping<K, V> {
 				logging.info(this, " " + k + " mapped to null in map " + m);
 			else
 
-				addPair(k, v);
-			;
+				addPair(k, v);;
 		}
 	}
 

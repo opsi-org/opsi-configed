@@ -155,6 +155,7 @@ public class PersistenceControllerFactory {
 							boolean value;
 						}
 
+						@Override
 						public void run() {
 							final Continuing continuing = new Continuing();
 							continuing.value = true;

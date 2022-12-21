@@ -63,8 +63,7 @@ public class TextInputField extends JPanel
 		inputType = InputType.VALUELIST;
 
 		if (proposedValues == null) {
-			this.proposedValues = new Vector<String>();
-			;
+			this.proposedValues = new Vector<String>();;
 
 			if (initialValue == null) {
 				inputType = InputType.DATE;
@@ -211,7 +210,7 @@ public class TextInputField extends JPanel
 
 		/*
 		 * if (inputType == InputType.DATE)
-		 * textfield = new JFormattedTextField(de.uib.utilities.Globals.getToday());
+		 * textfield = new JFormattedTextField(Globals.getToday());
 		 * 
 		 * else
 		 */
@@ -227,8 +226,7 @@ public class TextInputField extends JPanel
 
 	}
 
-	public void addValueChangeListener(
-			de.uib.utilities.observer.swing.ValueChangeListener listener) {
+	public void addValueChangeListener(de.uib.utilities.observer.swing.ValueChangeListener listener) {
 		combo.addActionListener(listener);
 		textfield.getDocument().addDocumentListener(listener);
 	}

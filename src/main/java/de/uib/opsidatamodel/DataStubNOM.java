@@ -22,6 +22,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.HWAuditClientEntry;
@@ -1055,13 +1056,6 @@ public class DataStubNOM extends DataStub {
 	public Map<String, java.util.Set<String>> getSoftwareIdent2clients()
 	// fill the clientlist by fill ...
 	{
-		for (String ident : softwareIdent2clients.keySet()) {
-
-			// logging.info(this, "getSoftwareIdent2clients = ident == size ===== " + ident
-			// + " ===== "
-			// + softwareIdent2clients.get(ident).size() );
-		}
-
 		return softwareIdent2clients;
 	}
 
@@ -1076,8 +1070,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	protected void retrieveSoftwareAuditOnClients(final java.util.List<String> clients) {
-		logging.info(this,
-				"retrieveSoftwareAuditOnClients used memory on start " + de.uib.utilities.Globals.usedMemory());
+		logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
 
 		retrieveInstalledSoftwareInformation();
 		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
@@ -1200,11 +1193,9 @@ public class DataStubNOM extends DataStub {
 
 			}
 
-			logging.info(this,
-					"retrieveSoftwareAuditOnClients used memory on end " + de.uib.utilities.Globals.usedMemory());
+			logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
 			System.gc();
-			logging.info(this,
-					"retrieveSoftwareAuditOnClients used memory on end " + de.uib.utilities.Globals.usedMemory());
+			logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
 
 			persist.notifyDataRefreshedObservers("softwareConfig");
 		}

@@ -30,6 +30,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.utilities.logging.logging;
@@ -59,8 +60,8 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	protected Map<String, AbstractEditMapPanel> partialPanels;
 	protected TreeMap<String, Map<String, Object>> virtualLines;
 
-	protected int hGap = de.uib.utilities.Globals.hGapSize / 2;
-	protected int vGap = de.uib.utilities.Globals.vGapSize / 2;
+	protected int hGap = Globals.HGAP_SIZE / 2;
+	protected int vGap = Globals.VGAP_SIZE / 2;
 
 	public EditMapPanelGrouped() {
 		this(null);
@@ -298,7 +299,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		splitPane = new JSplitPane();
 
 		splitPane.setBackground(Color.red);
-		setBackground(de.uib.utilities.Globals.backNimbus);
+		setBackground(Globals.backNimbus);
 
 		tree = new XTree();
 		// tree.setToolTipText("help");

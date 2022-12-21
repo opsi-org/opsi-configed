@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Vector;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 //data source table productOnDepot
@@ -103,8 +104,7 @@ public class OpsiPackage implements Comparable {
 
 	public OpsiPackage(Map<String, Object> m) {
 		this("" + m.get(DBkeyPRODUCT_ID), "" + m.get(SERVICEkeyPRODUCT_VERSION), "" + m.get(SERVICEkeyPACKAGE_VERSION),
-				"" + m.get(SERVICEkeyPRODUCT_TYPE),
-				de.uib.utilities.Globals.interpretAsBoolean(m.get(SERVICEkeyLOCKED)));
+				"" + m.get(SERVICEkeyPRODUCT_TYPE), Globals.interpretAsBoolean(m.get(SERVICEkeyLOCKED)));
 		logging.debug(this, "built from " + m);
 
 		/*

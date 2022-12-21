@@ -88,7 +88,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		this.persist = persist;
 		this.rootFrame = root;
 
-		isWindows = de.uib.utilities.Globals.isWindows();
+		isWindows = Globals.isWindows();
 
 		initComponents();
 
@@ -282,7 +282,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		comboChooseDepot.setEnabled(false); // as long as we did not implement contacting a different depot
 
 		chooserPackage = new JFileChooser();
-		chooserPackage.setPreferredSize(de.uib.utilities.Globals.filechooserSize);
+		chooserPackage.setPreferredSize(Globals.filechooserSize);
 		// chooserPackage.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		javax.swing.filechooser.FileNameExtensionFilter filter = new javax.swing.filechooser.FileNameExtensionFilter(
 				"opsi package", "opsi");
@@ -297,7 +297,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		chooserPackage.setDialogTitle(Globals.APPNAME + " " + configed.getResourceValue("InstallOpsiPackage.chooser"));
 
 		chooserTmpDir = new JFileChooser();
-		chooserTmpDir.setPreferredSize(de.uib.utilities.Globals.filechooserSize);
+		chooserTmpDir.setPreferredSize(Globals.filechooserSize);
 		chooserTmpDir.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooserTmpDir.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));
@@ -308,7 +308,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		chooserTmpDir.setDialogTitle(Globals.APPNAME + " " + configed.getResourceValue("InstallOpsiPackage.chooser"));
 
 		chooserServerpath = new JFileChooser();
-		chooserServerpath.setPreferredSize(de.uib.utilities.Globals.filechooserSize);
+		chooserServerpath.setPreferredSize(Globals.filechooserSize);
 		chooserServerpath.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooserServerpath.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));

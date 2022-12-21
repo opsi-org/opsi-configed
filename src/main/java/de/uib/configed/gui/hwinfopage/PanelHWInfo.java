@@ -29,6 +29,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.tree.IconNode;
 import de.uib.configed.tree.IconNodeRenderer;
@@ -84,9 +85,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	protected PopupMenuTrait popupMenu;
 
-	protected int hGap = de.uib.utilities.Globals.hGapSize / 2;
-	protected int vGap = de.uib.utilities.Globals.vGapSize / 2;
-	protected int hLabel = de.uib.utilities.Globals.buttonHeight;
+	protected int hGap = Globals.HGAP_SIZE / 2;
+	protected int vGap = Globals.VGAP_SIZE / 2;
+	protected int hLabel = Globals.BUTTON_HEIGHT;
 
 	protected IconNode selectedNode;
 

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.type.ConfigStateEntry;
 import de.uib.configed.type.SWAuditClientEntry;
@@ -398,8 +399,7 @@ public class DataStubRawData extends DataStubNOM {
 
 	@Override
 	protected void retrieveSoftwareAuditOnClients(final java.util.List<String> clients) {
-		logging.info(this,
-				"retrieveSoftwareAuditOnClients used memory on start " + de.uib.utilities.Globals.usedMemory());
+		logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
 
 		retrieveInstalledSoftwareInformation();
 		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)

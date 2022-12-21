@@ -102,34 +102,32 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 		buttonCommit = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("FEditObject.SaveButtonTooltip"), "images/apply.png",
 				"images/apply_over.png", "images/apply_disabled.png", true);
-		buttonCommit.setPreferredSize(new Dimension(buttonWidth, de.uib.utilities.Globals.buttonHeight));
+		buttonCommit.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 
 		buttonCancel = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("FEditObject.CancelButtonTooltip"), "images/cancel.png",
 				"images/cancel_over.png", "images/cancel_disabled.png", true);
-		buttonCancel.setPreferredSize(new Dimension(buttonWidth, de.uib.utilities.Globals.buttonHeight));
+		buttonCancel.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 		buttonCancel.setEnabled(true);
 
 		buttonRemove = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("FEditObject.RemoveButtonTooltip"), "images/list-remove.png",
 				"images/list-remove.png", "images/list-remove_disabled.png", true);
-		buttonRemove.setPreferredSize(new Dimension(buttonWidth, de.uib.utilities.Globals.buttonHeight));
+		buttonRemove.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 		buttonRemove.setVisible(false);
 
 		buttonAdd = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("FEditObject.AddButtonTooltip"), "images/list-add.png",
 				"images/list-add.png", "images/list-add_disabled.png", true);
-		buttonAdd.setPreferredSize(new Dimension(buttonWidth, de.uib.utilities.Globals.buttonHeight));
+		buttonAdd.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 		buttonAdd.setVisible(false);
 
 		extraField = new JTextField("");
-		extraField.setPreferredSize(
-				new Dimension(de.uib.utilities.Globals.buttonWidth, de.uib.utilities.Globals.lineHeight));
+		extraField.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		extraField.setVisible(false);
 
 		extraLabel = new JLabel("");
-		extraLabel.setPreferredSize(
-				new Dimension(de.uib.utilities.Globals.buttonWidth, de.uib.utilities.Globals.lineHeight));
+		extraLabel.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		extraLabel.setVisible(false);
 
 	}
