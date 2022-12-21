@@ -483,8 +483,6 @@ public abstract class JSONExecutioner extends Executioner {
 	public String getStringResult(OpsiMethodCall omc) {
 		String result = null;
 
-		JSONObject jsonResult = null;
-
 		JSONObject jO = retrieveJSONObject(omc);
 
 		if (checkResponse(jO)) {

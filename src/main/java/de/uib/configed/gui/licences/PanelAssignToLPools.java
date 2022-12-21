@@ -523,8 +523,6 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		);
 
 		panelProductId2LPool.setMasterFrame(Globals.frame1);
-		boolean switchLineColors = true;
-
 		panelRegisteredSoftware = new PanelRegisteredSoftware((ControlPanelAssignToLPools) controller);
 		panelRegisteredSoftware.setFiltering(true, false);
 		panelRegisteredSoftware.setMasterFrame(Globals.frame1);

@@ -1257,11 +1257,9 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				logging.warning("followRequirements: required product: '" + requiredProduct + "' not installable");
 				missingProducts.add(requiredProduct);
 			} else {
-				boolean recursionStop = false;
 				if (getChangedState(clientId, requiredProduct, ActionRequest.KEY) != null) {
 					logging.debug(this,
 							"required product: '" + requiredProduct + "'  has already been treated - stop recursion");
-					recursionStop = true;
 
 				}
 

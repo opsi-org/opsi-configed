@@ -62,7 +62,8 @@ public class SSHConnectSCP extends SSHConnectExec {
 				setDialog(SSHConnectionExecDialog.getInstance());
 			outputDialog = getDialog();
 
-			if (SSHCommandFactory.getInstance(main).ssh_always_exec_in_background) {
+			SSHCommandFactory.getInstance(main);
+			if (SSHCommandFactory.ssh_always_exec_in_background) {
 				outputDialog.setVisible(false);
 			}
 		}

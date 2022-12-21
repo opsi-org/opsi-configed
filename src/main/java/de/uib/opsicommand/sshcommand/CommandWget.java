@@ -14,10 +14,8 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	private String command = "wget ";
 	protected FGeneralDialog dialog = null;
 	private boolean needSudo = false;
-	private boolean needRoot = false;
 	private boolean needParameter = true;
 	private boolean isMultiCommand = false;
-	private int helpColumns = 2;
 	private int priority = 110;
 
 	private String url = " ";

@@ -98,8 +98,6 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 	@Override
 	protected Map<String, java.util.List<Map<String, String>>> getLocalBootProductStatesNOM(String[] clientIds) {
 
-		java.util.List clients = java.util.Arrays.asList(clientIds);
-
 		String columns = Arrays.toString((ProductState.DB_COLUMN_NAMES).toArray(new String[] {}));
 		columns = columns.substring(1);
 		columns = columns.substring(0, columns.length() - 1);

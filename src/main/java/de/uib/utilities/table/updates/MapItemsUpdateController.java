@@ -44,8 +44,6 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 
 		String lastKeyValue = new String("");
 
-		boolean goOn = true;
-
 		while (iter.hasNext() && success) {
 
 			MapBasedTableEditItem updateItem = (MapBasedTableEditItem) iter.next();

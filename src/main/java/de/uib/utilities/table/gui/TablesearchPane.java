@@ -794,7 +794,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private class Finding {
 		boolean success = false;
-		int startChar = -1;
 		int endChar = -1;
 	}
 
@@ -886,12 +885,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		result.success = false;
 
 		int i = 0;
-		result.startChar = 0;
-
 		int end = realS.length() - part.length() + 1;
 
 		while (!result.success && i < end) {
-			result.startChar = i;
 			result.success = (comparator.compare(realS.substring(i, i + part.length()), part) == 0);
 			result.endChar = i + part.length() - 1;
 			i++;
@@ -1095,10 +1091,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		return -1;
-	}
-
-	private void getSelectedAndSearch(boolean select) {
-		getSelectedAndSearch(false, select);
 	}
 
 	public boolean isSearchActive() {

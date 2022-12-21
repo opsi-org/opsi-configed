@@ -214,7 +214,8 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 			@Override
 			public void reload() {
 
-				logging.info(this, " LicInfoPanelGenTable reload, reduced " + !ME.extendedView);
+				logging.info(this,
+						" LicInfoPanelGenTable reload, reduced " + !FGeneralDialogLicensingInfo.extendedView);
 				//String oldNumber = "" + clientNumbers.get(LicensingInfoMap.All);
 				persist.configOptionsRequestRefresh();
 				persist.opsiLicensingInfoRequestRefresh();

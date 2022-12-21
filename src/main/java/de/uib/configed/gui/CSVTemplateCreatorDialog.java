@@ -54,7 +54,6 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	protected int wLeftLabel = Globals.BUTTON_WIDTH + 20;
 
-	private PanelGenEditTable thePanel;
 	private CSVFormat format;
 
 	private ButtonGroup fieldSeparatorOptions;

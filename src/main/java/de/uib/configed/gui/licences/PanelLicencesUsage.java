@@ -45,8 +45,6 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 	protected int buttonWidth = 140;
 	protected int lPoolHeight = 100;
 
-	private ComboBoxModel emptyComboBoxModel = new DefaultComboBoxModel(new String[] { "" });
-
 	protected de.uib.configed.ControlPanelLicencesUsage licencesUsageController;
 	private int initialSplit = 0;
 

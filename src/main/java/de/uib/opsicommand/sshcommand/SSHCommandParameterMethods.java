@@ -415,7 +415,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 				return depot;
 			}
 
-		logging.debug(this, "getConfig_serverName " + main.HOST);
+		logging.debug(this, "getConfig_serverName " + ConfigedMain.HOST);
 		//// peristancecontroller methods for depot :
 		// public Map<String, Map<String, Object>> getDepots()
 		// public LinkedList<String> getDepotNamesList()

@@ -203,10 +203,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 				logging.warning(this, "No url given. 2");
 				return;
 			}
-			if (pmInstallCom != null)
-				commands.addCommand(pmInstallCom);
-			else
-				logging.warning(this, "ERROR 0 command = null");
+			commands.addCommand(pmInstallCom);
 		}
 
 		else if (rb_server.isSelected()) {

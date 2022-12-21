@@ -54,10 +54,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	private javax.swing.JScrollPane scrollpane;
 	private javax.swing.JTextPane textpane;
 
-	private DefaultStyledDocument doc;
-	// private javax.swing.text.html.HTMLDocument doc;
-	// protected Html2Text html2text = new Html2Text();
-
 	protected LinkSearcher searcher;
 	protected Highlighter highlighter;
 	protected de.uib.utilities.script.CmdLauncher cmdLauncher;

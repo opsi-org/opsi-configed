@@ -434,10 +434,6 @@ public class logging implements LogEventSubject
 		return errorList;
 	}
 
-	private static void checkErrorList() {
-		checkErrorList(null);
-	}
-
 	public static void checkErrorList(JFrame parentFrame) {
 		// if errors Occurred show a window with the logged errors
 		// logging.debug("checkErrorList");

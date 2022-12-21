@@ -33,7 +33,7 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 
 	public CellEditor4TableText(de.uib.utilities.swing.FEdit fEdit, Dimension initSize) {
 		super(new JTextField());
-		editorContent = (JTextField) getComponent();
+		JTextField editorContent = (JTextField) getComponent();
 
 		if (fEdit == null)
 			this.fEdit = new de.uib.utilities.swing.FEditText("");

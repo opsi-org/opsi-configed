@@ -38,6 +38,7 @@ import de.uib.configed.type.licences.LicenceUsableForEntry;
 import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.configed.type.licences.Table_LicenceContracts;
+import de.uib.opsicommand.Executioner;
 import de.uib.opsicommand.JSONReMapper;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utilities.logging.TimeCheck;
@@ -698,7 +699,7 @@ public class DataStubNOM extends DataStub {
 					configed.getResourceValue("LoadingObserver.loadtable") + " product property state");
 			String[] callAttributes = new String[] {};// "objectId","productId","propertyId", "values"};
 			HashMap callFilter = new HashMap();
-			callFilter.put("objectId", persist.exec.jsonArray(newClients));
+			callFilter.put("objectId", Executioner.jsonArray(newClients));
 
 			result = persist.retrieveListOfMapsNOM(callAttributes, callFilter, "productPropertyState_getObjects");
 			// logging.info(this, "propstates: " + propstates);

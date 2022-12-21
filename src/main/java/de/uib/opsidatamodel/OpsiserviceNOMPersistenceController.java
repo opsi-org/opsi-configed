@@ -1242,7 +1242,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			ArrayList<Object> readyObjects = new ArrayList<Object>();
 			Map<String, Object> item = createJSONBoolConfig(KEY_USER_REGISTER, KEY_USER_REGISTER_VALUE,
 					"without given values the primary value setting is false");
-			readyObjects.add(exec.jsonMap(item));
+			readyObjects.add(Executioner.jsonMap(item));
 
 			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
 					new Object[] { exec.jsonArray(readyObjects) });

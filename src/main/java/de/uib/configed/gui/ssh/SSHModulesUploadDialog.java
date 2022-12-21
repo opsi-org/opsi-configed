@@ -92,7 +92,7 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 			command.setTargetFilename(filechooser_local.getSelectedFile().getName());
 		} else {
 			command.setTargetPath(((CommandModulesUpload) command).actually_modules_directory);
-			command.setTargetFilename(((CommandModulesUpload) command).DEFAULT_FILENAME);
+			command.setTargetFilename(CommandModulesUpload.DEFAULT_FILENAME);
 		}
 		return modules_server_path;
 	}

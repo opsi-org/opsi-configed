@@ -142,7 +142,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		if (selectedDepots.size() == 0) {
 			if (persist.isDepotsFullPermission()) {
-				depotParameter = persist.DEPOT_SELECTION_NODEPOTS;
+				depotParameter = PersistenceController.DEPOT_SELECTION_NODEPOTS;
 			} else if (possibleDepots.size() > 0) {
 				depotParameter = possibleDepots.get(0);
 			} else

@@ -256,8 +256,6 @@ public class CSVImportDataModifier {
 
 	private void disableRowSorting(PanelGenEditTable thePanel) {
 		TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(thePanel.getTheTable().getModel());
-		java.util.List<RowSorter.SortKey> sortKeys = thePanel.getRowSorter().getSortKeys();
-
 		int columnCount = thePanel.getTheTable().getColumnCount();
 
 		for (int i = 0; i < columnCount; i++) {

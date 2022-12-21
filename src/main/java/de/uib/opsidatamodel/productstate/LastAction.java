@@ -35,8 +35,6 @@ public class LastAction {
 
 	private static Vector<Integer> states;
 	private static Vector<String> labels;
-	private static String[] choiceLabels;
-
 	// instance variable
 	private int state = INVALID;
 
@@ -115,8 +113,6 @@ public class LastAction {
 		displayLabel2label.put("always", "always");
 		displayLabel2label.put("once", "once");
 		displayLabel2label.put("custom", "custom");
-
-		choiceLabels = new String[] { label2displayLabel.get("none") };
 
 	}
 

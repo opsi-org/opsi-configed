@@ -486,12 +486,9 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	}
 
 	public void setPreselectionForName2Pool(Softwarename2LicencepoolRestriction val) {
-		boolean filtering = true;
-
 		switch (val) {
 		case SHOW_ALL_NAMES:
 			modelSWnames.clearFilter();
-			filtering = false;
 			break;
 		case SHOW_ONLY_NAMES_WITH_VARIANT_LICENCEPOOLS:
 			modelSWnames.setFilterCondition(showOnlyNamesWithVariantLicences);

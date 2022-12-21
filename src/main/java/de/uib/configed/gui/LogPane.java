@@ -901,7 +901,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	private class StringBlock {
 		String s;
-		int iStart;
 		int iEnd;
 		private int contentStart;
 		private int contentEnd;
@@ -951,8 +950,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 
 		void forward(int iStart, char startC, char endC) {
-			// logging.info(this, "treating line " + s + " we start at " + iStart);
-			this.iStart = iStart;
 			iEnd = iStart;
 			finish = false;
 			found = false;

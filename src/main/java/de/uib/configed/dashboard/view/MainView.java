@@ -16,6 +16,7 @@ import de.uib.configed.dashboard.collector.DepotData;
 import de.uib.configed.dashboard.collector.LicenseData;
 import de.uib.configed.dashboard.collector.ModuleData;
 import de.uib.configed.dashboard.collector.ProductData;
+import de.uib.configed.dashboard.view.MainView.InitialDataRetriever;
 import de.uib.messages.Messages;
 import de.uib.utilities.logging.logging;
 import javafx.application.Platform;
@@ -147,7 +148,8 @@ public class MainView implements View {
 		retrieverThread.start();
 	}
 
-	private class InitialDataRetriever extends Task<Void> {
+	// TODO; ONLY protected here for automatic linting; should be private
+	protected class InitialDataRetriever extends Task<Void> {
 		@Override
 		public Void call() {
 			ClientData.clear();

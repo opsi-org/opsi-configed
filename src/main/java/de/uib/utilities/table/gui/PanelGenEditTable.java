@@ -89,8 +89,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	protected String textMarkedCount = "selected";
 	protected JPanel titlePane;
 
-	private JTextField celleditorfield;
-
 	// protected Color backgroundColor = new Color(250, 250,
 	// 240);//Globals.backLightYellow;
 	protected Color backgroundColorEditFieldsSelected = Globals.defaultTableCellSelectedBgColor;// new Color(206, 224,

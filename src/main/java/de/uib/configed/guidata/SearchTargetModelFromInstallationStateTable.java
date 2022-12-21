@@ -119,7 +119,6 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 	}
 
 	public void setCursorRow(int row) {
-		int viewrow = table.convertRowIndexToView(row);
 		int modelrow = table.convertRowIndexToModel(row);
 
 		logging.debug(this, "setCursorRow row, produced modelrow, produced viewrow, not implemented ");
@@ -185,8 +184,6 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 		// if (b == filtered)
 		// return;
-
-		InstallationStateTableModel model = (InstallationStateTableModel) (table.getModel());
 
 		if (!filtered)
 			viewRowfilter = table.getSelectedRows();

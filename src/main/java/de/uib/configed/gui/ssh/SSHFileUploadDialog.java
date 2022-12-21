@@ -207,9 +207,6 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		});
 		enableComponents(rb_from_server.isSelected());
 		SSHConnectExec testFile = new SSHConnectExec();
-		String result = testFile.exec(new Empty_Command(factory.str_command_fileexists_notremove
-				.replaceAll(factory.str_replacement_filename, command.getTargetPath()) // /etc/opsi/modules.d
-		), false);
 		init_additional();
 		/*
 		 * init_additional in ModulesUploadDialog do something like

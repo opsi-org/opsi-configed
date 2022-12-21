@@ -86,7 +86,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		DefaultMutableTreeNode dropOnThis = (DefaultMutableTreeNode) dropLocation.getPath().getLastPathComponent();
 		String id = dropOnThis.getUserObject().toString();
 		GroupNode targetNode = (GroupNode) tree.getGroupNode(id);
-		TreePath dropPath = tree.getActiveTreePath(id);
 		Object[] dropObjectPath = new Object[0];
 		if (targetNode != null)
 			dropObjectPath = targetNode.getUserObjectPath();
