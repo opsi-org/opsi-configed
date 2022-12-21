@@ -330,8 +330,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		main = configMain;
 		if (!main.treeViewAllowed()) {
 			setEnabled(false);
-			setToolTipText(
-					de.uib.utilities.Globals.wrapToHTML(configed.getResourceValue("ConfigedMain.TreeViewNotActive")));
+			setToolTipText(Globals.wrapToHTML(configed.getResourceValue("ConfigedMain.TreeViewNotActive")));
 		}
 
 		logging.debug(this, "UI " + getUI());

@@ -311,7 +311,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 			buttonUpdateList = new IconAsButton("buttonUpdateList", "images/reload16.png", "images/reload16.png",
 					"images/reload16.png", "images/reload16.png");
-			buttonUpdateList.setBackground(de.uib.utilities.Globals.backgroundLightGrey);
+			buttonUpdateList.setBackground(Globals.backgroundLightGrey);
 			buttonUpdateList.setToolTipText(configed.getResourceValue(
 					"SSHConnection.ParameterDialog.opsipackagemanager_uninstall.JButtonUpdateList.tooltip"));
 

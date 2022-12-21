@@ -10,7 +10,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import de.uib.utilities.Globals;
+import Globals;
 
 public class PanelLinedComponents extends JPanel {
 

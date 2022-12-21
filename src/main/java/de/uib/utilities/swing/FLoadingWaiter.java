@@ -25,9 +25,8 @@ import javax.swing.Painter;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
-//import de.uib.utilities.swing.timeedit.*;
-import de.uib.utilities.Globals;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.thread.WaitInfoString;
 import de.uib.utilities.thread.WaitingSleeper;

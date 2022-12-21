@@ -201,7 +201,7 @@ public class SWAuditClientEntry
 		// " -- " + values);
 		String result = "";
 		try {
-			result = de.uib.utilities.Globals.pseudokey(new String[] {
+			result = Globals.pseudokey(new String[] {
 					// (values.get( keys.indexOf( DB_COLUMNS.get(SWAuditEntry.NAME) )
 					// )).toLowerCase(),
 					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.NAME))),
@@ -332,7 +332,7 @@ public class SWAuditClientEntry
 	}
 
 	public static String produceSWident(Map<String, Object> readMap) {
-		String result = de.uib.utilities.Globals.pseudokey(new String[] {
+		String result = Globals.pseudokey(new String[] {
 				// ((String)
 				// readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME))).toLowerCase(),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME)),

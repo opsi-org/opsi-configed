@@ -27,7 +27,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.uib.utilities.Globals;
+import Globals;
 import de.uib.utilities.logging.logging;
 
 public class PanelStateSwitch extends JPanel {
@@ -222,15 +222,13 @@ public class PanelStateSwitch extends JPanel {
 
 		if (title != null)
 			vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(labelTitle,
-					de.uib.utilities.Globals.SMALL_HEIGHT, de.uib.utilities.Globals.SMALL_HEIGHT,
-					de.uib.utilities.Globals.SMALL_HEIGHT));
+					Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT));
 
 		// vGroup.addContainerGap();
 
 		for (Enum val : values) {
 			vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(
-					groupedButtons.get(val), de.uib.utilities.Globals.SMALL_HEIGHT,
-					de.uib.utilities.Globals.SMALL_HEIGHT, de.uib.utilities.Globals.SMALL_HEIGHT)
+					groupedButtons.get(val), Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT)
 
 			);
 		}

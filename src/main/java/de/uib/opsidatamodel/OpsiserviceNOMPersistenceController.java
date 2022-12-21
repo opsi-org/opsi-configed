@@ -7782,10 +7782,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			logging.info(this, "licencePoolXOpsiProduct size " + dataStub.getLicencePoolXOpsiProduct().size());
 
 			for (StringValuedRelationElement element : dataStub.getLicencePoolXOpsiProduct()) {
-				rowsLicencePoolXOpsiProduct.put(de.uib.utilities.Globals
-						.pseudokey(new String[] { element.get(LicencePoolXOpsiProduct.licencepoolKEY),
-								element.get(LicencePoolXOpsiProduct.productIdKEY) }),
-						element);
+				rowsLicencePoolXOpsiProduct
+						.put(Globals.pseudokey(new String[] { element.get(LicencePoolXOpsiProduct.licencepoolKEY),
+								element.get(LicencePoolXOpsiProduct.productIdKEY) }), element);
 			}
 
 			/*
@@ -8409,7 +8408,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public java.util.List<String> getServerConfigStrings(String key) {
 		getConfigOptions();
 
-		return de.uib.utilities.Globals.takeAsStringList(configDefaultValues.get(key));
+		return Globals.takeAsStringList(configDefaultValues.get(key));
 	}
 
 	@Override
@@ -9538,7 +9537,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					"getProductOnClients_displayFieldsLocalbootProducts()  configOptions.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT "
 							+ configOptions.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT));
 
-			List<String> configuredByService = de.uib.utilities.Globals
+			List<String> configuredByService = Globals
 					.takeAsStringList(serverPropertyMap.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT));
 
 			List<String> possibleValuesAccordingToService = new ArrayList<String>();
@@ -9710,7 +9709,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (productOnClients_displayFieldsNetbootProducts == null) {
 			Map<String, java.util.List<Object>> serverPropertyMap = getConfigDefaultValues();
 
-			List<String> configuredByService = de.uib.utilities.Globals
+			List<String> configuredByService = Globals
 					.takeAsStringList(serverPropertyMap.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT));
 
 			List<String> possibleValuesAccordingToService = new ArrayList<String>();
@@ -9856,8 +9855,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (host_displayFields == null) {
 			Map<String, java.util.List<Object>> serverPropertyMap = getConfigDefaultValues();
 
-			List<String> configuredByService = de.uib.utilities.Globals
-					.takeAsStringList(serverPropertyMap.get(KEY_HOST_DISPLAYFIELDS));
+			List<String> configuredByService = Globals.takeAsStringList(serverPropertyMap.get(KEY_HOST_DISPLAYFIELDS));
 
 			// check if have to initialize the server property
 			configuredByService = produceHost_displayFields(configuredByService);
@@ -9881,7 +9879,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public java.util.List<String> getDisabledClientMenuEntries() {
 		getConfigOptions();
 
-		return de.uib.utilities.Globals.takeAsStringList(configDefaultValues.get(KEY_DISABLED_CLIENT_ACTIONS));
+		return Globals.takeAsStringList(configDefaultValues.get(KEY_DISABLED_CLIENT_ACTIONS));
 	}
 
 	public java.util.List<String> getOpsiclientdExtraEvents() {
@@ -9892,8 +9890,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					"checkStandardConfigs:  since no values found setting values for  " + KEY_OPSICLIENTD_EXTRA_EVENTS);
 		}
 
-		java.util.List<String> result = de.uib.utilities.Globals
-				.takeAsStringList(configDefaultValues.get(KEY_OPSICLIENTD_EXTRA_EVENTS));
+		java.util.List<String> result = Globals.takeAsStringList(configDefaultValues.get(KEY_OPSICLIENTD_EXTRA_EVENTS));
 
 		logging.debug(this, "getOpsiclientdExtraEvents() " + result);
 
@@ -11210,9 +11207,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	@Override
 	public boolean handleVersionOlderThan(String minRequiredVersion) {
 		// Integer compareResult =
-		// de.uib.utilities.Globals.lastpositionDifferenceForDotSeparatedNumbers(opsiVersion,
+		// Globals.lastpositionDifferenceForDotSeparatedNumbers(opsiVersion,
 		// minRequiredVersion);
-		return de.uib.utilities.Globals.compareOpsiVersions(opsiVersion, minRequiredVersion) < 0;
+		return Globals.compareOpsiVersions(opsiVersion, minRequiredVersion) < 0;
 	}
 
 	/**

@@ -262,7 +262,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				"images/reload16.png", "images/reload16_over.png", "images/reload16.png",
 				"images/reload16_disabled.png");
 
-		buttonReload.setBackground(de.uib.utilities.Globals.backgroundLightGrey);
+		buttonReload.setBackground(Globals.backgroundLightGrey);
 
 		final ClientSelectionDialog dialog = this;
 		buttonReload.addActionListener(new ActionListener() {
@@ -289,7 +289,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				"images/reload16_red.png", "images/reload16_over.png", "images/reload16.png",
 				"images/reload16_disabled.png");
 
-		buttonRestart.setBackground(de.uib.utilities.Globals.backgroundLightGrey);
+		buttonRestart.setBackground(Globals.backgroundLightGrey);
 
 		buttonRestart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

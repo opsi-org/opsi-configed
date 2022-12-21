@@ -23,23 +23,22 @@ public class JComboBoxToolTip extends javax.swing.JComboBox {
 	public JComboBoxToolTip() {
 		super(); // as it is
 
-		listBackgroundColorSelected = de.uib.utilities.Globals.backgroundWhite;
-		listBackgroundColorUnselected = de.uib.utilities.Globals.backgroundLightGrey;
-		listForegroundColor = de.uib.utilities.Globals.lightBlack;
+		listBackgroundColorSelected = Globals.backgroundWhite;
+		listBackgroundColorUnselected = Globals.backgroundLightGrey;
+		listForegroundColor = Globals.lightBlack;
 
 	}
 
 	Vector<String> tooltips = new Vector<String>();
 
 	protected class NewComboBoxRenderer extends BasicComboBoxRenderer {
-		public Component getListCellRendererComponent(JList list, Object value,
-				int index, boolean isSelected, boolean cellHasFocus) {
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+				boolean cellHasFocus) {
 			if (isSelected) {
 				setBackground(listBackgroundColorSelected); // list.getSelectionBackground());
 				setForeground(listForegroundColor); // list.getSelectionForeground());
 				logging.debug(this, "index, tooltips " + index + ", " + tooltips);
-				if (-1 < index
-						&& index < tooltips.size() // we had an error only on linux with openjdk 8
+				if (-1 < index && index < tooltips.size() // we had an error only on linux with openjdk 8
 				) {
 					list.setToolTipText(tooltips.get(index));
 				}

@@ -100,7 +100,7 @@ public class FEditList extends FEditObject
 		buttonRemove = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("FEditObject.RemoveButtonTooltip"), "images/list-clear.png",
 				"images/list-clear.png", "images/list-clear_disabled.png", true);
-		buttonRemove.setPreferredSize(new Dimension(buttonWidth, de.uib.utilities.Globals.BUTTON_HEIGHT));
+		buttonRemove.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 		buttonRemove.setVisible(false);
 	}
 

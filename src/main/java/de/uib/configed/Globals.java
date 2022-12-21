@@ -8,11 +8,15 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.text.Collator;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import javax.swing.ImageIcon;
 
@@ -259,6 +263,7 @@ public class Globals {
 	public static final int LINE_HEIGHT = 28;
 	public static final int SMALL_HEIGHT = 18;
 	public static final int PROGRESS_BAR_HEIGHT = 10;
+	public static final int TABLE_ROW_HEIGHT = 16;
 	public static final int BUTTON_WIDTH = 140;
 	public static final int ICON_WIDTH = 60;
 	public static final int LABEL_WIDTH = 80;
@@ -273,8 +278,9 @@ public class Globals {
 	public static final Dimension shortlabelDimension = new Dimension(60, LINE_HEIGHT);
 	public static final int COUNTERFIELD_WIDTH = 160;
 	public static final Dimension counterfieldDimension = new Dimension(COUNTERFIELD_WIDTH, LINE_HEIGHT);
-
+	public static final Dimension newSmallButton = new Dimension(30, 30);
 	public static final Dimension modeSwitchDimension = new Dimension(50, 50);
+	public static final Dimension filechooserSize = new Dimension(600, 400);
 
 	public static final int GRAPHIC_BUTTON_HEIGHT = 40;
 	public static final int GRAPHIC_BUTTON_WIDTH = 40;
@@ -289,6 +295,8 @@ public class Globals {
 	public static Integer startY;
 	public static Integer startWidth;
 	public static Integer startHeight;
+
+	public static final int dateFormatStylePattern = DateFormat.LONG;
 
 	// action form constants
 	public static final int HFIRST_GAP = HGAP_SIZE * 3;
@@ -326,6 +334,18 @@ public class Globals {
 		return objects;
 	}
 
+	private static Collator alphaCollator = null;
+
+	public static Collator getCollator() {
+		if (alphaCollator == null) {
+			alphaCollator = Collator.getInstance();
+			// alphaCollator.setStrength(java.text.Collator.PRIMARY);
+			alphaCollator.setStrength(java.text.Collator.IDENTICAL);
+
+		}
+		return alphaCollator;
+	}
+
 	public static java.awt.Container mainContainer; // transparent for appletHandling // masterFrame
 	public static javax.swing.JFrame mainFrame; // fixed
 	public static javax.swing.JFrame frame1; // can be changed
@@ -343,6 +363,11 @@ public class Globals {
 
 	public static String getResourceValue(String key) {
 		return configed.getResourceValue(key);
+	}
+
+	public static boolean isWindows() {
+		String osName = System.getProperty("os.name");
+		return osName.toLowerCase().startsWith("windows");
 	}
 
 	public static String fillStringToLength(String s, int len) {
@@ -465,6 +490,10 @@ public class Globals {
 			sqlNow = sqlNow.replace("-", "");
 
 		return sqlNow;
+	}
+
+	public static Date getToday() {
+		return new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis());
 	}
 
 	private static String formatlNumberUpTo99(long n) {
@@ -887,6 +916,25 @@ public class Globals {
 		}
 
 		return new Rectangle(placementX, placementY, width, height);
+	}
+
+	public static String usedMemory() {
+		long total = Runtime.getRuntime().totalMemory();
+		long free = Runtime.getRuntime().freeMemory();
+
+		return " " + (((total - free) / 1024) / 1024) + " MB ";
+	}
+
+	public static String getCLIparam(String question, boolean password) {
+		java.io.Console con = System.console();
+		if (con == null)
+			return "";
+		System.out.print(question);
+		if (password)
+			return String.valueOf(con.readPassword()).trim();
+		try (Scanner sc = new Scanner(con.reader())) {
+			return sc.nextLine();
+		}
 	}
 
 	public static Color brightenColor(java.awt.Color c)

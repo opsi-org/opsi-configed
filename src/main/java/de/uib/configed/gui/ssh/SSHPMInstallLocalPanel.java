@@ -49,7 +49,7 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 		btn_autocompletion = autocompletion.getButton();
 
 		filechooser = new JFileChooser();
-		filechooser.setPreferredSize(de.uib.utilities.Globals.filechooserSize);
+		filechooser.setPreferredSize(Globals.filechooserSize);
 		filechooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		filechooser.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 		filechooser.setDialogType(JFileChooser.OPEN_DIALOG);

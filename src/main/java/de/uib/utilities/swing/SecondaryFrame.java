@@ -13,13 +13,12 @@ import javax.swing.JFrame;
 
 import de.uib.utilities.logging.logging;
 
-public class SecondaryFrame extends JFrame
-		implements WindowListener {
+public class SecondaryFrame extends JFrame implements WindowListener {
 
 	protected Container masterFrame;
 
 	public SecondaryFrame() {
-		this.masterFrame = de.uib.utilities.Globals.masterFrame;
+		this.masterFrame = Globals.masterFrame;
 		if (masterFrame == null)
 			logging.warning(this, "masterFrame yet null");
 		addWindowListener(this);

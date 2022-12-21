@@ -130,10 +130,10 @@ public class PanelHostConfig extends JPanel {
 		 * 
 		 * headerLayout.setHorizontalGroup(
 		 * headerLayout.createSequentialGroup()
-		 * .addGap(de.uib.utilities.Globals.hGapSize)
+		 * .addGap(Globals.hGapSize)
 		 * .addComponent(label, 10, GroupLayout.PREFERRED_SIZE,
 		 * GroupLayout.PREFERRED_SIZE)
-		 * .addGap(de.uib.utilities.Globals.hGapSize)
+		 * .addGap(Globals.hGapSize)
 		 * )
 		 * ;
 		 * 
@@ -147,11 +147,11 @@ public class PanelHostConfig extends JPanel {
 		this.setLayout(planeLayout);
 
 		planeLayout.setHorizontalGroup(planeLayout.createSequentialGroup()
-				// .addGap(de.uib.utilities.Globals.vGapSize)
+				// .addGap(Globals.vGapSize)
 				.addGroup(planeLayout.createParallelGroup()
 						// .addComponent( header, GroupLayout.Alignment.CENTER )
 						.addComponent(editMapPanel))
-		// .addGap(de.uib.utilities.Globals.vGapSize)
+		// .addGap(Globals.vGapSize)
 		);
 
 		planeLayout.setVerticalGroup(planeLayout.createSequentialGroup()

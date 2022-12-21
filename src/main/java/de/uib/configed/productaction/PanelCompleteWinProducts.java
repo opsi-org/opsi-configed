@@ -160,8 +160,8 @@ public class PanelCompleteWinProducts extends JPanel
 
 	private void defineChoosers() {
 		chooserFolder = new JFileChooser();
-		chooserFolder.setPreferredSize(de.uib.utilities.Globals.filechooserSize);
-		chooserFolder.setPreferredSize(de.uib.utilities.Globals.filechooserSize);
+		chooserFolder.setPreferredSize(Globals.filechooserSize);
+		chooserFolder.setPreferredSize(Globals.filechooserSize);
 		chooserFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooserFolder.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));

@@ -995,13 +995,13 @@ public class configed {
 
 	private static void addMissingArgs() {
 		if (host == null) {
-			host = de.uib.utilities.Globals.getCLIparam("Host: ", false);
+			host = Globals.getCLIparam("Host: ", false);
 		}
 		if (user == null) {
-			user = de.uib.utilities.Globals.getCLIparam("User: ", false);
+			user = Globals.getCLIparam("User: ", false);
 		}
 		if (password == null) {
-			password = de.uib.utilities.Globals.getCLIparam("Password: ", true);
+			password = Globals.getCLIparam("Password: ", true);
 		}
 	}
 
@@ -1026,8 +1026,6 @@ public class configed {
 	 * main-Methode
 	 */
 	public static void main(String[] args) {
-		de.uib.utilities.Globals.APPNAME = Globals.APPNAME;
-		de.uib.utilities.Globals.iconresourcename = Globals.iconresourcename;
 
 		// logging.init(); too early, variables not set
 		processArgs(args);
@@ -1133,12 +1131,12 @@ public class configed {
 
 		// logging.debug (imageHandled);
 		try {
-			String resourceS = de.uib.utilities.Globals.iconresourcename;
+			String resourceS = Globals.iconresourcename;
 			URL resource = de.uib.configed.Globals.class.getResource(resourceS);
 			if (resource == null) {
 				logging.debug("image resource " + resourceS + "  not found");
 			} else {
-				de.uib.utilities.Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
+				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 			}
 		} catch (Exception ex) {
 			logging.debug("imageHandled failed: " + ex.toString());

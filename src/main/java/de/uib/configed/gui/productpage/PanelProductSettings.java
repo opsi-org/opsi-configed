@@ -212,7 +212,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		tableProducts.setBackground(Globals.backgroundWhite);
 		tableProducts.setShowHorizontalLines(true);
 		tableProducts.setGridColor(Color.WHITE);
-		tableProducts.setRowHeight(de.uib.utilities.Globals.TABLE_ROW_HEIGHT);
+		tableProducts.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 
 		// final PanelProductSettings THIS = this;
 
@@ -955,7 +955,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		}
 
 		;
-		// sorter.setComparator(0, de.uib.utilities.Globals.getCollator());
+		// sorter.setComparator(0, Globals.getCollator());
 
 		tableProducts.setRowSorter(sorter);
 		sorter.addRowSorterListener(this);

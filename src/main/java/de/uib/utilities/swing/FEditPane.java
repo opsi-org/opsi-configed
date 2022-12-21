@@ -123,7 +123,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		setDataChanged(false);
 
 		cmdLauncher = new de.uib.utilities.script.CmdLauncher();
-		if (de.uib.utilities.Globals.isWindows())
+		if (Globals.isWindows())
 			cmdLauncher.setPrefix(WINDOWS_LINK_INTERPRETER);
 		else
 			cmdLauncher.setPrefix(LINUX_LINK_INTERPRETER);

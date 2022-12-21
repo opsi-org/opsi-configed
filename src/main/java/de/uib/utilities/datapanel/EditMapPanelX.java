@@ -167,13 +167,13 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 				+ entryRemovable + ",  " + reloadable);
 		ttm = ToolTipManager.sharedInstance();
 		ttm.setEnabled(true);
-		ttm.setInitialDelay(de.uib.utilities.Globals.toolTipInitialDelayMs);
-		ttm.setDismissDelay(de.uib.utilities.Globals.toolTipDismissDelayMs);
-		ttm.setReshowDelay(de.uib.utilities.Globals.toolTipReshowDelayMs);
+		ttm.setInitialDelay(Globals.toolTipInitialDelayMs);
+		ttm.setDismissDelay(Globals.toolTipDismissDelayMs);
+		ttm.setReshowDelay(Globals.toolTipReshowDelayMs);
 
 		buildPanel();
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setRowHeight(de.uib.utilities.Globals.TABLE_ROW_HEIGHT);
+		table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 
 		editableColumn = table.getColumnModel().getColumn(1);
 
@@ -280,7 +280,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 							// JOptionPane.showInternalMessageDialog( table,
 							// configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"));
 
-							FTextArea fAsk = new FTextArea(null, de.uib.utilities.Globals.APPNAME, "", true);
+							FTextArea fAsk = new FTextArea(null, Globals.APPNAME, "", true);
 							fAsk.setSize(new Dimension(200, 200));
 							fAsk.setModal(true);
 							fAsk.setMessage(configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"));
@@ -304,7 +304,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 							// JOptionPane.showInternalMessageDialog( table,
 							// configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"));
 
-							FTextArea fAsk = new FTextArea(null, de.uib.utilities.Globals.APPNAME, "", true);
+							FTextArea fAsk = new FTextArea(null, Globals.APPNAME, "", true);
 							fAsk.setSize(new Dimension(200, 200));
 							fAsk.setModal(true);
 							fAsk.setMessage(configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"));
@@ -328,7 +328,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 							// JOptionPane.showInternalMessageDialog( table,
 							// configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"));
 
-							FTextArea fAsk = new FTextArea(null, de.uib.utilities.Globals.APPNAME, "", true);
+							FTextArea fAsk = new FTextArea(null, Globals.APPNAME, "", true);
 							fAsk.setSize(new Dimension(200, 200));
 							fAsk.setModal(true);
 							fAsk.setMessage(configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"));
@@ -472,7 +472,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 						tooltip = tooltip + "\n\n" + descriptionsMap.get(propertyName);
 					}
 
-					jc.setToolTipText(de.uib.utilities.Globals.makeHTMLlines(tooltip));
+					jc.setToolTipText(Globals.makeHTMLlines(tooltip));
 
 					// check equals with default
 					// logging.info(this, "prepareRenderer rowIndex " + rowIndex);
@@ -518,10 +518,10 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		};
 
 		table.setDefaultRenderer(Object.class, colorized);
-		table.setRowHeight(de.uib.utilities.Globals.LINE_HEIGHT);
+		table.setRowHeight(Globals.LINE_HEIGHT);
 		table.setShowGrid(true);
 		table.setGridColor(Color.white);
-		// table.setBackground(de.uib.utilities.Globals.backNimbus);
+		// table.setBackground(Globals.backNimbus);
 
 		table.addMouseWheelListener(new MouseWheelListener() {
 			public void mouseWheelMoved(MouseWheelEvent e) {
@@ -557,7 +557,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		});
 
 		jScrollPane = new JScrollPane(table);
-		jScrollPane.getViewport().setBackground(de.uib.utilities.Globals.backLightBlue);
+		jScrollPane.getViewport().setBackground(Globals.backLightBlue);
 		// jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		add(jScrollPane, BorderLayout.CENTER);
 	}
@@ -667,7 +667,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 
 						(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(de.uib.configed.Globals.mainContainer,
 								"Ein Eintrag mit diesem Namen existiert bereits. Überschreiben des bisherigen Eintrags?",
-								de.uib.utilities.Globals.APPNAME, JOptionPane.OK_CANCEL_OPTION));
+								Globals.APPNAME, JOptionPane.OK_CANCEL_OPTION));
 			}
 
 		}
@@ -711,7 +711,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		fed.setModal(true);
 		fed.setSingleLine(true);
 		fed.select(0, initial.length());
-		fed.setTitle(de.uib.utilities.Globals.APPNAME);
+		fed.setTitle(Globals.APPNAME);
 		fed.init(new Dimension(300, 50));
 		boolean located = false;
 

@@ -34,6 +34,7 @@ import javax.swing.text.InternationalFormatter;
  * @author Rupert Röder
  */
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.observer.RunningInstances;
@@ -190,7 +191,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		// scrollpane = new JScrollPane();
 		scrollpane.setViewportView(contentPane);
 
-		labelTimeYetToWait = new JLabel(de.uib.utilities.Globals.giveTimeSpan(0), SwingConstants.RIGHT);
+		labelTimeYetToWait = new JLabel(Globals.giveTimeSpan(0), SwingConstants.RIGHT);
 		labelTimeYetToWait.setToolTipText(configed.getResourceValue("FStartWakeOnLan.timeLeft.toolTip"));
 
 		waitingProgressBar = new JProgressBar();
@@ -535,7 +536,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 	public String setLabellingStrategy(long millisLevel) {
 		return " " + configed.getResourceValue("FStartWakeOnLan.timeLeft") + "  "
-				+ de.uib.utilities.Globals.giveTimeSpan(getWaitingMillis() - millisLevel);
+				+ Globals.giveTimeSpan(getWaitingMillis() - millisLevel);
 	}
 
 	@Override

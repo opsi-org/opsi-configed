@@ -3,6 +3,7 @@ package de.uib.configed.clientselection;
 import java.util.List;
 import java.util.Map;
 
+import de.uib.configed.Globals;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsidatamodel.PersistenceController;
@@ -84,11 +85,11 @@ public class SavedSearchQuery {
 
 	public void addMissingArgs() {
 		if (host == null)
-			host = de.uib.utilities.Globals.getCLIparam("Host: ", false);
+			host = Globals.getCLIparam("Host: ", false);
 		if (user == null)
-			user = de.uib.utilities.Globals.getCLIparam("User: ", false);
+			user = Globals.getCLIparam("User: ", false);
 		if (password == null)
-			password = de.uib.utilities.Globals.getCLIparam("Password: ", true);
+			password = Globals.getCLIparam("Password: ", true);
 	}
 
 	public List<String> runSearch(boolean printing) {

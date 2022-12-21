@@ -28,8 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
 
-//import de.uib.configed.Globals;
-import de.uib.utilities.Globals;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 public class FEdit extends javax.swing.JDialog implements ActionListener, KeyListener {
@@ -97,12 +96,12 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 			}
 		};
 		// buttonCommit.setEnabled( false );
-		buttonCommit.setPreferredSize(new Dimension(40, de.uib.utilities.Globals.BUTTON_HEIGHT));
+		buttonCommit.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 
 		buttonCancel = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"), "images/cancel.png",
 				"images/cancel_over.png", "images/cancel_disabled.png", true);
-		buttonCancel.setPreferredSize(new Dimension(40, de.uib.utilities.Globals.BUTTON_HEIGHT));
+		buttonCancel.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 
 		// buttonCancel.setEnabled( false );
 	}

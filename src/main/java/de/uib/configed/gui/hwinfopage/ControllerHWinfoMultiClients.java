@@ -26,6 +26,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.logging.logging;
@@ -273,8 +274,8 @@ public class ControllerHWinfoMultiClients {
 							// testpanel,
 							true);
 
-					fTable.setSize(new java.awt.Dimension(de.uib.utilities.Globals.masterFrame.getSize().width - 50,
-							de.uib.utilities.Globals.masterFrame.getSize().height / 2));
+					fTable.setSize(new java.awt.Dimension(Globals.mainContainer.getSize().width - 50,
+							Globals.mainContainer.getSize().height / 2));
 				}
 
 				fTable.centerOnParent();
@@ -303,7 +304,7 @@ public class ControllerHWinfoMultiClients {
 		panel.setTitlePane(new JComponent[] {
 				// buttonConfigureColumns, buttonReload }, 20 );
 				buttonReload, buttonCopySelection, new JLabel("       "), buttonConfigureColumns }, 20);
-		panel.setTitlePaneBackground(de.uib.utilities.Globals.backLightBlue);
+		panel.setTitlePaneBackground(Globals.backLightBlue);
 
 		panel.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {

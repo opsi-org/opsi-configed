@@ -585,7 +585,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		baseContainer = this.getContentPane();
 
-		de.uib.utilities.Globals.masterFrame = baseContainer;
+		Globals.mainContainer = baseContainer;
 
 		glass = new GlassPane();
 

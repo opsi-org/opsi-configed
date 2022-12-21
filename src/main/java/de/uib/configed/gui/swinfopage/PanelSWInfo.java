@@ -23,6 +23,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.type.DatedRowList;
 import de.uib.configed.type.SWAuditClientEntry;
@@ -71,9 +72,9 @@ public class PanelSWInfo extends JPanel {
 	protected Boolean askingForKindOfAction;
 	protected boolean askForOverwrite = true;
 
-	protected int hGap = de.uib.utilities.Globals.HGAP_SIZE / 2;
-	protected int vGap = de.uib.utilities.Globals.VGAP_SIZE / 2;
-	protected int hLabel = de.uib.utilities.Globals.BUTTON_HEIGHT;
+	protected int hGap = Globals.HGAP_SIZE / 2;
+	protected int vGap = Globals.VGAP_SIZE / 2;
+	protected int hLabel = Globals.BUTTON_HEIGHT;
 
 	protected ConfigedMain mainController;
 	protected PersistenceController persist;
@@ -164,7 +165,7 @@ public class PanelSWInfo extends JPanel {
 		 * };
 		 */
 
-		labelSuperTitle.setFont(de.uib.utilities.Globals.defaultFontBold);
+		labelSuperTitle.setFont(Globals.defaultFontBold);
 
 		panelTable = new PanelGenEditTable("title", 0, false, 0, true, new int[] {
 				// PanelGenEditTable.POPUP_RELOAD,
@@ -322,7 +323,7 @@ public class PanelSWInfo extends JPanel {
 	protected void buildPanel() {
 
 		labelSuperTitle.setOpaque(true);
-		labelSuperTitle.setBackground(de.uib.utilities.Globals.backgroundLightGrey);
+		labelSuperTitle.setBackground(Globals.backgroundLightGrey);
 
 		// voidTableModel = new SWInfoTableModel();
 
@@ -356,7 +357,7 @@ public class PanelSWInfo extends JPanel {
 		jTable.setRowSelectionAllowed(true);
 		jTable.setDragEnabled(true);
 		scrollPaneSWInfo = new JScrollPane(jTable);
-		scrollPaneSWInfo.getViewport().setBackground(de.uib.utilities.Globals.backLightBlue);
+		scrollPaneSWInfo.getViewport().setBackground(Globals.backLightBlue);
 
 		GroupLayout layoutEmbed = new GroupLayout(this);
 		setLayout(layoutEmbed);
@@ -634,7 +635,7 @@ public class PanelSWInfo extends JPanel {
 		title = this.hostId;
 		this.swRows = new DatedRowList();
 
-		String timeS = "" + de.uib.utilities.Globals.getToday();
+		String timeS = "" + Globals.getToday();
 		String[] parts = timeS.split(":");
 		if (parts.length > 2)
 			timeS = parts[0] + ":" + parts[1];
@@ -660,7 +661,7 @@ public class PanelSWInfo extends JPanel {
 	 * 
 	 * 
 	 * 
-	 * String timeS = "" + de.uib.utilities.Globals.getToday();
+	 * String timeS = "" + Globals.getToday();
 	 * String[] parts = timeS.split(":");
 	 * if (parts.length > 2)
 	 * timeS = parts[0] + ":" + parts[1];

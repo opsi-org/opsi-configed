@@ -4,7 +4,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import de.uib.utilities.Globals;
+import Globals;
 
 public class TitledPanel extends JPanel {
 	protected JLabel label1;
@@ -28,7 +28,7 @@ public class TitledPanel extends JPanel {
 	}
 
 	protected void initGui() {
-		setBackground(de.uib.utilities.Globals.backLightBlue);
+		setBackground(Globals.backLightBlue);
 
 		label1.setFont(Globals.defaultFontBig);
 		label2.setFont(Globals.defaultFontBig);

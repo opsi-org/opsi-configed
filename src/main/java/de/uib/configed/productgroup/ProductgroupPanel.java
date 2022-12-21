@@ -419,19 +419,19 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				"images/apply_disabled.png", // active
 				true); // setEnabled
 		buttonCommit.addActionListener(this);
-		buttonCommit.setPreferredSize(de.uib.utilities.Globals.newSmallButton);
+		buttonCommit.setPreferredSize(Globals.newSmallButton);
 
 		buttonCancel = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("GroupPanel.CancelButtonTooltip"), "images/cancel.png",
 				"images/cancel_over.png", "images/cancel_disabled.png");
 		buttonCancel.addActionListener(this);
-		buttonCancel.setPreferredSize(de.uib.utilities.Globals.newSmallButton);
+		buttonCancel.setPreferredSize(Globals.newSmallButton);
 
 		buttonDelete = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("GroupPanel.DeleteButtonTooltip"), "images/edit-delete.png",
 				"images/edit-delete_over.png", "images/edit-delete_disabled.png");
 		buttonDelete.addActionListener(this);
-		buttonDelete.setPreferredSize(de.uib.utilities.Globals.newSmallButton);
+		buttonDelete.setPreferredSize(Globals.newSmallButton);
 
 		buttonReloadProductStates = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("GroupPanel.ReloadButtonTooltip"), "images/reload_blue16.png",
@@ -441,7 +441,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				.setToolTipText(de.uib.configed.configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"));
 
 		buttonReloadProductStates.addActionListener(this);
-		buttonReloadProductStates.setPreferredSize(de.uib.utilities.Globals.newSmallButton);
+		buttonReloadProductStates.setPreferredSize(Globals.newSmallButton);
 		buttonReloadProductStates.setVisible(true);
 
 		/*
@@ -453,7 +453,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		 * "images/cancel_light.png");
 		 * 
 		 * buttonCancelStateEditing.addActionListener(this);
-		 * buttonCancelStateEditing.setPreferredSize(de.uib.utilities.Globals.
+		 * buttonCancelStateEditing.setPreferredSize(Globals.
 		 * newSmallButton);
 		 * 
 		 * buttonCancelStateEditing.setToolTipText(
@@ -470,7 +470,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				.setToolTipText(de.uib.configed.configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
 
 		buttonSaveAndExecute.addActionListener(this);
-		buttonSaveAndExecute.setPreferredSize(de.uib.utilities.Globals.newSmallButton);
+		buttonSaveAndExecute.setPreferredSize(Globals.newSmallButton);
 		buttonSaveAndExecute.setVisible(true);
 
 		/*
@@ -483,7 +483,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		 */
 
 		labelCollectiveAction = new JLabel(configed.getResourceValue("GroupPanel.labelAggregateProducts"));
-		labelCollectiveAction.setFont(de.uib.utilities.Globals.defaultFont);
+		labelCollectiveAction.setFont(Globals.defaultFont);
 
 		buttonCollectiveAction = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
@@ -493,7 +493,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				de.uib.configed.configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"));
 
 		buttonCollectiveAction.addActionListener(this);
-		buttonCollectiveAction.setPreferredSize(de.uib.utilities.Globals.newSmallButton);
+		buttonCollectiveAction.setPreferredSize(Globals.newSmallButton);
 		buttonCollectiveAction.setVisible(true);
 
 		comboAggregatedEditing = new JComboBoxToolTip();
@@ -625,7 +625,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		surroundScrollChooseAction.setOpaque(true);
 
 		comboAggregatedEditing.setValues(values);
-		comboAggregatedEditing.setFont(de.uib.utilities.Globals.defaultFont);
+		comboAggregatedEditing.setFont(Globals.defaultFont);
 
 		/*
 		 * buttonFilter = new de.uib.configed.gui.IconButton(
@@ -641,7 +641,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		 * "GroupPanel.FilterButtonTooltipInactive")
 		 * );
 		 * buttonFilter.addActionListener(this);
-		 * buttonFilter.setPreferredSize(de.uib.utilities.Globals.newSmallButton);
+		 * buttonFilter.setPreferredSize(Globals.newSmallButton);
 		 * buttonFilter.setVisible(false); //we use the filtericon of the
 		 * TableSearchPane
 		 */
@@ -654,11 +654,11 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		buttonEditDialog.setToolTips(de.uib.configed.configed.getResourceValue("GroupPanel.EditButtonTooltipInactive"),
 				de.uib.configed.configed.getResourceValue("GroupPanel.EditButtonTooltipActive"));
 		buttonEditDialog.addActionListener(this);
-		buttonEditDialog.setPreferredSize(de.uib.utilities.Globals.newSmallButton);
+		buttonEditDialog.setPreferredSize(Globals.newSmallButton);
 
 		JLabel labelSelectedGroup = new JLabel(configed.getResourceValue("GroupPanel.selectgroup.label"));
 
-		labelSelectedGroup.setFont(de.uib.utilities.Globals.defaultFont);
+		labelSelectedGroup.setFont(Globals.defaultFont);
 
 		// groupsEditField = (JTextField)
 		// (saveNameEditor.getEditor().getEditorComponent());

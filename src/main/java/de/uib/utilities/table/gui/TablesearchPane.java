@@ -33,8 +33,8 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
-import de.uib.utilities.Globals;
 import de.uib.utilities.Mapping;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.savedstates.SaveInteger;

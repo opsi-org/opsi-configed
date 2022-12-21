@@ -25,6 +25,7 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 //a class similar to JCheckBox
@@ -281,14 +282,10 @@ public class CheckedLabel extends JPanel implements FocusListener
 		setLayout(layout);
 
 		layout.setVerticalGroup(layout.createParallelGroup()
-				.addComponent(textLabel, de.uib.utilities.Globals.LINE_HEIGHT, de.uib.utilities.Globals.LINE_HEIGHT,
-						de.uib.utilities.Globals.LINE_HEIGHT)
-				.addComponent(selectedLabel, de.uib.utilities.Globals.LINE_HEIGHT, de.uib.utilities.Globals.LINE_HEIGHT,
-						de.uib.utilities.Globals.LINE_HEIGHT)
-				.addComponent(unselectedLabel, de.uib.utilities.Globals.LINE_HEIGHT,
-						de.uib.utilities.Globals.LINE_HEIGHT, de.uib.utilities.Globals.LINE_HEIGHT)
-				.addComponent(nullLabel, de.uib.utilities.Globals.LINE_HEIGHT, de.uib.utilities.Globals.LINE_HEIGHT,
-						de.uib.utilities.Globals.LINE_HEIGHT));
+				.addComponent(textLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(selectedLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(unselectedLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(nullLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT));
 
 		layout.setHorizontalGroup(layout.createSequentialGroup()
 				.addComponent(textLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

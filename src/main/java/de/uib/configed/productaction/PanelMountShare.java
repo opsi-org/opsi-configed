@@ -63,7 +63,7 @@ public class PanelMountShare extends JPanel {
 		this.np = np;
 		this.leftBound = leftBound;
 
-		isWindows = de.uib.utilities.Globals.isWindows();
+		isWindows = Globals.isWindows();
 		smbMounted = false;
 
 		initComponents();

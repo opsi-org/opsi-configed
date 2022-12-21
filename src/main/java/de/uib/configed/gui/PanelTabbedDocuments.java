@@ -11,6 +11,7 @@ import java.util.zip.ZipOutputStream;
 
 import javax.swing.JFileChooser;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.ClippedTitleTabbedPane;
@@ -31,7 +32,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 		setProportionOfTotalWidth(0.5);
 
-		setForeground(de.uib.utilities.Globals.blue);
+		setForeground(Globals.blue);
 		// setFont(Globals.defaultFont);
 
 		textPanes = new LogPane[idents.length];
@@ -194,7 +195,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	private void setFileChooser(String fn) {
 		if (chooser == null) {
 			chooser = new JFileChooser(fn);
-			chooser.setPreferredSize(de.uib.utilities.Globals.filechooserSize);
+			chooser.setPreferredSize(Globals.filechooserSize);
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY); // AND_DIRECTORIES);
 			chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z",
 					"log", "zip", "gz", "7z"));

@@ -47,12 +47,12 @@ public class LicencePoolXOpsiProduct extends Relation {
 	 * private String produceSWident(Map<String, Object> m)
 	 * {
 	 * return
-	 * de.uib.utilities.Globals.pseudokey(new String[]{
-	 * de.uib.utilities.Globals.getStringValue( m.get(SWAuditEntry.NAME ) ),
-	 * de.uib.utilities.Globals.getStringValue( m.get(SWAuditEntry.VERSION ) ),
-	 * de.uib.utilities.Globals.getStringValue( m.get(SWAuditEntry.SUBVERSION ) ),
-	 * de.uib.utilities.Globals.getStringValue( m.get(SWAuditEntry.LANGUAGE ) ),
-	 * de.uib.utilities.Globals.getStringValue( m.get (SWAuditEntry.ARCHITECTURE ) )
+	 * Globals.pseudokey(new String[]{
+	 * Globals.getStringValue( m.get(SWAuditEntry.NAME ) ),
+	 * Globals.getStringValue( m.get(SWAuditEntry.VERSION ) ),
+	 * Globals.getStringValue( m.get(SWAuditEntry.SUBVERSION ) ),
+	 * Globals.getStringValue( m.get(SWAuditEntry.LANGUAGE ) ),
+	 * Globals.getStringValue( m.get (SWAuditEntry.ARCHITECTURE ) )
 	 * }
 	 * );
 	 * }

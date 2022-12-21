@@ -66,14 +66,14 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			jc.setText("");
 
 			if (
-			// de.uib.utilities.Globals.interpretAsBoolean( value) )
+			// Globals.interpretAsBoolean( value) )
 			(Boolean) value.equals(true))
 				jc.setIcon(Globals.createImageIcon("images/checked_withoutbox.png", ""));
 
 			else
 				jc.setIcon(Globals.createImageIcon("images/checked_void.png", ""));
 
-			// String result = " " + de.uib.utilities.Globals.interpretAsBoolean( value) ;
+			// String result = " " + Globals.interpretAsBoolean( value) ;
 			// jc.setText( result );
 
 		}

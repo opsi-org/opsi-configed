@@ -49,8 +49,8 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 	TableModelFilterCondition windowsSoftwareFilterConditon_showOnlySelected; // we replace the filter from
 																				// GenTableModel
-	// static String labelWindowsSoftwareFilterCondition_showOnlySelected =
-	// "showOnlySelected";
+																				// static String labelWindowsSoftwareFilterCondition_showOnlySelected =
+																				// "showOnlySelected";
 	TableModelFilterCondition windowsSoftwareFilterCondition_dontShowAssociatedToOtherPool;
 	static String labelWindowsSoftwareFilterCondition_dontShowAssociatedToOtherPool = "restrictToNonAssociated";
 
@@ -166,7 +166,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 			Map<String, Object> missingSoftwareMap = new HashMap<>();
 
 			for (String ID : persist.getUnknownSoftwareListForLicencePool(poolID)) {
-				String[] rowValues = ID.split(de.uib.utilities.Globals.pseudokeySeparator);
+				String[] rowValues = ID.split(Globals.pseudokeySeparator);
 
 				Map<String, String> rowMap = new HashMap<>();
 				for (String colName : thePanel.fMissingSoftwareInfo.columnNames)
@@ -1041,16 +1041,16 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 		if (oldDirection != direction) {
 			switch (direction) {
-				case POOL2SOFTWARE:
-					thePanel.panelRegisteredSoftware.getTheSearchpane().showFilterIcon(true);
-					// thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(true);
-					break;
+			case POOL2SOFTWARE:
+				thePanel.panelRegisteredSoftware.getTheSearchpane().showFilterIcon(true);
+				// thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(true);
+				break;
 
-				case SOFTWARE2POOL:
-					thePanel.panelRegisteredSoftware.getTheSearchpane().showFilterIcon(false);
-					resetCounters(null);
-					thePanel.fieldCountAssignedInEditing.setText("");
-					break;
+			case SOFTWARE2POOL:
+				thePanel.panelRegisteredSoftware.getTheSearchpane().showFilterIcon(false);
+				resetCounters(null);
+				thePanel.fieldCountAssignedInEditing.setText("");
+				break;
 			}
 
 			logging.info(this, "switched to " + direction);
