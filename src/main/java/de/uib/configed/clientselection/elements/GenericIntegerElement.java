@@ -18,7 +18,7 @@ public class GenericIntegerElement extends SelectElement {
 
 	@Override
 	public List<SelectOperation> supportedOperations() {
-		List<SelectOperation> result = new LinkedList<SelectOperation>();
+		List<SelectOperation> result = new LinkedList<>();
 		result.add(new IntLessThanOperation(this));
 		result.add(new IntLessOrEqualOperation(this));
 		result.add(new IntEqualsOperation(this));

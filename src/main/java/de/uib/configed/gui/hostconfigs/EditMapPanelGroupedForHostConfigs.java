@@ -358,7 +358,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 		theRoles.add(UserConfig.NONE_PROTOTYPE);
 
-		for (String classkey : new TreeSet<String>(partialPanels.keySet())) {
+		for (String classkey : new TreeSet<>(partialPanels.keySet())) {
 			logging.info(this, "classkey " + classkey);
 
 			String role = roleFromRolerootKey(classkey);
@@ -667,7 +667,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		};
 
 		FramingTextfieldWithListselection defs = new FramingNewRole();
-		defs.setListData(new Vector<String>(theRoles));
+		defs.setListData(new Vector<>(theRoles));
 		f.applyFraming(defs);
 
 		JPanel centerPanel = f.initPanel();

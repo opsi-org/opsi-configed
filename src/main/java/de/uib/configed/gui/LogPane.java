@@ -740,8 +740,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		// logging.debug(this, "building document level " + selLevel );
 
-		docLinestartPosition2lineCount = new TreeMap<Integer, Integer>();
-		lineCount2docLinestartPosition = new TreeMap<Integer, Integer>();
+		docLinestartPosition2lineCount = new TreeMap<>();
+		lineCount2docLinestartPosition = new TreeMap<>();
 
 		try {
 			int i = 0;

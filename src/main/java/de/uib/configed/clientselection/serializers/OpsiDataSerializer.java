@@ -33,7 +33,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 
 	@Override
 	public List<String> getSaved() {
-		HashSet<String> set = new HashSet<String>();
+		HashSet<String> set = new HashSet<>();
 		set.addAll(searches.keySet());
 		set.addAll(controller.getSavedSearches().keySet());
 		return new LinkedList<>(set);

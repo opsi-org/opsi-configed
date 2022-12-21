@@ -58,7 +58,7 @@ public abstract class Backend {
 
 		if (operation instanceof SelectGroupOperation) {
 			SelectGroupOperation groupOperation = (SelectGroupOperation) operation;
-			List<SelectOperation> children = new LinkedList<SelectOperation>();
+			List<SelectOperation> children = new LinkedList<>();
 			for (SelectOperation child : groupOperation.getChildOperations())
 				children.add((SelectOperation) createExecutableOperation(child));
 			return (ExecutableOperation) createGroupOperation(groupOperation, children);

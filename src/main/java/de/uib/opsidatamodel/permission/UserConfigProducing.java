@@ -66,8 +66,8 @@ public class UserConfigProducing {
 	public ArrayList<Object> produce() {
 		readyObjects = new ArrayList<>();
 
-		java.util.Set<String> userparts = new TreeSet<String>();
-		java.util.Set<String> roleparts = new TreeSet<String>();
+		java.util.Set<String> userparts = new TreeSet<>();
+		java.util.Set<String> roleparts = new TreeSet<>();
 		produceRoleAndUserParts(userparts, roleparts);
 
 		if (ConfigedMain.USER == null) {
@@ -255,7 +255,7 @@ public class UserConfigProducing {
 
 		roleConfigs.put(UserConfig.DEFAULT_ROLE_NAME, defaultUserConfig);
 
-		Set<String> extraRoleParts = new HashSet<String>(roleParts);
+		Set<String> extraRoleParts = new HashSet<>(roleParts);
 		extraRoleParts.remove(UserConfig.DEFAULT_ROLE_NAME);
 
 		logging.info(this, "supplyAllPermissionEntries extraRoleParts " + extraRoleParts);
@@ -324,7 +324,7 @@ public class UserConfigProducing {
 			else
 				selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
 
-			Set<String> possibleValuesSet = new HashSet<String>(roleParts);
+			Set<String> possibleValuesSet = new HashSet<>(roleParts);
 			if (configuredRole != null)
 				possibleValuesSet.add(configuredRole);
 			possibleValuesSet.add(UserConfig.NONE_PROTOTYPE);
@@ -586,7 +586,7 @@ public class UserConfigProducing {
 				|| configOptionsMap.get(configKeyList).getPossibleValues() == null) {
 			oldPossibleValuesDepot = new TreeSet<Object>();
 		} else {
-			oldPossibleValuesDepot = new HashSet<Object>(configOptionsMap.get(configKeyList).getPossibleValues());
+			oldPossibleValuesDepot = new HashSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
 			// oldPossibleValues = new TreeSet<Object>();
 		}
 
@@ -653,7 +653,7 @@ public class UserConfigProducing {
 				|| configOptionsMap.get(configKeyList).getPossibleValues() == null) {
 			oldPossibleValuesHostgroup = new TreeSet<Object>();
 		} else {
-			oldPossibleValuesHostgroup = new HashSet<Object>(configOptionsMap.get(configKeyList).getPossibleValues());
+			oldPossibleValuesHostgroup = new HashSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
 		}
 
 		if (prototypeObligatory) {
@@ -715,8 +715,7 @@ public class UserConfigProducing {
 				|| configOptionsMap.get(configKeyList).getPossibleValues() == null) {
 			oldPossibleValuesProductgroups = new TreeSet<Object>();
 		} else {
-			oldPossibleValuesProductgroups = new HashSet<Object>(
-					configOptionsMap.get(configKeyList).getPossibleValues());
+			oldPossibleValuesProductgroups = new HashSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
 		}
 
 		currentPossibleValuesProductgroupsListed = new LinkedHashSet<Object>();

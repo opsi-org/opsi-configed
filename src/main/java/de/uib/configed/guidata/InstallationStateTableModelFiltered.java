@@ -36,7 +36,7 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 
 	private void saveFilterSet(Set<String> filterSet) {
 		/*
-		 * Set<String> testSet = new HashSet<String>();
+		 * Set<String> testSet = new HashSet<>();
 		 * testSet.add("jedit");
 		 */
 		filterSaver.serialize(filterSet);
@@ -49,7 +49,7 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 		if (filterSaved == null || filterSaved.isEmpty()) {
 			setFilterFrom((Set) null);
 		} else {
-			Set<String> products_only_in_filterset = new HashSet<String>(filterSaved);
+			Set<String> products_only_in_filterset = new HashSet<>(filterSaved);
 			products_only_in_filterset.removeAll(tsProductNames);
 			filterSaved.removeAll(products_only_in_filterset);
 			// A - (A - B) is the intersection
@@ -67,7 +67,7 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 		Set<String> reducedIds = null;
 		if (ids != null) {
 			logging.info(this, "setFilterFrom, save set " + ids.size());
-			reducedIds = new HashSet<String>(productsV);
+			reducedIds = new HashSet<>(productsV);
 			reducedIds.retainAll(ids);
 		}
 

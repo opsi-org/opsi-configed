@@ -93,12 +93,12 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	 */
 
 	protected void initDataStructure() {
-		columnNames = new Vector<String>();
+		columnNames = new Vector<>();
 		columnNames.add("ID");
 		for (String key : de.uib.configed.type.SWAuditEntry.KEYS_FOR_IDENT)
 			columnNames.add(key);
 
-		classNames = new Vector<String>();
+		classNames = new Vector<>();
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}

@@ -18,7 +18,7 @@ public class GenericDateElement extends SelectElement {
 
 	@Override
 	public List<SelectOperation> supportedOperations() {
-		List<SelectOperation> result = new LinkedList<SelectOperation>();
+		List<SelectOperation> result = new LinkedList<>();
 
 		result.add(new DateGreaterThanOperation(this));
 		result.add(new DateGreaterOrEqualOperation(this));

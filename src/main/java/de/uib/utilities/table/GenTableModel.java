@@ -157,7 +157,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		 * 
 		 * if (columnNames1 != null)
 		 * {
-		 * columnNames = new Vector<String>();
+		 * columnNames = new Vector<>();
 		 * for (int i = 0; i < columnNames1.size(); i++)
 		 * columnNames.add(columnNames1.get(i).toLowerCase());
 		 * }
@@ -581,11 +581,11 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	public Vector<String> getOrderedColumn(int col) {
-		TreeSet<String> set = new TreeSet<String>();
+		TreeSet<String> set = new TreeSet<>();
 		for (int row = 0; row < rowsLength; row++)
 			set.add((String) getValueAt(row, col));
 
-		Vector<String> result = new Vector<String>(set);
+		Vector<String> result = new Vector<>(set);
 
 		return result;
 	}
@@ -1161,7 +1161,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			for (Object key : function.keySet()) {
 				Integer keyVal = (Integer) key;
 				xFunction.put(keyVal,
-						col2ndMapping.restrictedTo(new HashSet<Object>((java.util.List<Object>) function.get(key))));
+						col2ndMapping.restrictedTo(new HashSet<>((java.util.List<Object>) function.get(key))));
 			}
 		}
 

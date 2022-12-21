@@ -313,7 +313,7 @@ public class JSONReMapper {
 	}
 
 	public static List<Map<String, Object>> getListOfMaps(JSONArray retrieved) {
-		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> result = new ArrayList<>();
 		List jsonList = null;
 
 		try {
@@ -357,7 +357,7 @@ public class JSONReMapper {
 	}
 
 	public static List<Map<String, Object>> getListOfMaps(Object retrieved) {
-		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> result = new ArrayList<>();
 		List jsonList = null;
 
 		try {

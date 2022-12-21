@@ -38,7 +38,7 @@ public class Mapping<K, V> {
 		domain = new Vector<K>();
 		range = new Vector<V>();
 		mapOfStrings = new HashMap<String, V>();
-		rangeAsStrings = new Vector<String>();
+		rangeAsStrings = new Vector<>();
 
 		defineBy(definingMap);
 	}
@@ -81,7 +81,7 @@ public class Mapping<K, V> {
 	}
 
 	public TreeSet<String> getDomainAsStringsCollated() {
-		TreeSet<String> ts = new TreeSet<String>(Globals.getCollator());
+		TreeSet<String> ts = new TreeSet<>(Globals.getCollator());
 		ts.addAll(mapOfStrings.keySet());
 		return ts;
 	}
@@ -95,7 +95,7 @@ public class Mapping<K, V> {
 	}
 
 	public TreeSet<String> getRangeAsStringsCollated() {
-		TreeSet<String> ts = new TreeSet<String>(Globals.getCollator());
+		TreeSet<String> ts = new TreeSet<>(Globals.getCollator());
 		ts.addAll(rangeAsStrings);
 		return ts;
 	}

@@ -16,7 +16,7 @@ public class AndOperation extends SelectGroupOperation implements ExecutableOper
 	private List<SelectOperation> operations;
 
 	public AndOperation(List<SelectOperation> operations) {
-		this.operations = new LinkedList<SelectOperation>();
+		this.operations = new LinkedList<>();
 		for (SelectOperation operation : operations) {
 			this.operations.add(operation);
 			registerChildOperation(operation);

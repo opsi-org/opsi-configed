@@ -48,7 +48,7 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 
 		if (tableType == OpsiHwAuditDeviceClass.hostAssignedTableType) {
 			/*
-			 * Vector<String> usedHostColumns = new Vector<String>();
+			 * Vector<String> usedHostColumns = new Vector<>();
 			 * for (Object value : valuesSet )
 			 * {
 			 * usedHostColumns.add( (String) value );
@@ -66,7 +66,7 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 
 		} else {
 			/*
-			 * Vector<String> usedHwItemColumns = new Vector<String>();
+			 * Vector<String> usedHwItemColumns = new Vector<>();
 			 * for (Object value : valuesSet )
 			 * {
 			 * usedHwItemColumns.add( (String) value );

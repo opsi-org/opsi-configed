@@ -17,12 +17,12 @@ public class GenericTextElement extends SelectElement {
 
 	public GenericTextElement(Set<String> proposedData, String[] name, String... localizedName) {
 		super(name, localizedName);
-		this.proposedData = new Vector<String>(proposedData);
+		this.proposedData = new Vector<>(proposedData);
 	}
 
 	public GenericTextElement(String[] proposedData, String[] name, String... localizedName) {
 		super(name, localizedName);
-		this.proposedData = new Vector<String>(Arrays.asList((String[]) proposedData));
+		this.proposedData = new Vector<>(Arrays.asList((String[]) proposedData));
 	}
 
 	public GenericTextElement(String[] name, String... localizedName) {
@@ -31,7 +31,7 @@ public class GenericTextElement extends SelectElement {
 
 	@Override
 	public List<SelectOperation> supportedOperations() {
-		List<SelectOperation> result = new LinkedList<SelectOperation>();
+		List<SelectOperation> result = new LinkedList<>();
 		result.add(new StringEqualsOperation(this));
 		return result;
 	}

@@ -167,7 +167,7 @@ public abstract class DataStub {
 
 	public abstract Map<String, Map<String, Object>> getClient2HwRows(String[] hosts);
 
-	public static Set<String> linuxSWnameMarkers = new HashSet<String>();
+	public static Set<String> linuxSWnameMarkers = new HashSet<>();
 	static {
 		linuxSWnameMarkers.add("linux");
 		linuxSWnameMarkers.add("Linux");
@@ -175,7 +175,7 @@ public abstract class DataStub {
 		linuxSWnameMarkers.add("ubuntu");
 		linuxSWnameMarkers.add("ubuntu");
 	}
-	public static Set<String> linuxSubversionMarkers = new HashSet<String>();
+	public static Set<String> linuxSubversionMarkers = new HashSet<>();
 	static {
 		linuxSubversionMarkers.add("lin:");
 	}

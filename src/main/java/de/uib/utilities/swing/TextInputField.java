@@ -63,7 +63,7 @@ public class TextInputField extends JPanel
 		inputType = InputType.VALUELIST;
 
 		if (proposedValues == null) {
-			this.proposedValues = new Vector<String>();;
+			this.proposedValues = new Vector<>();;
 
 			if (initialValue == null) {
 				inputType = InputType.DATE;

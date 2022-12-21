@@ -47,7 +47,7 @@ public class SimpleTreeModel extends DefaultTreeModel
 	}
 
 	public TreeSet<String> getGeneratedKeys() {
-		TreeSet<String> result = new TreeSet<String>();
+		TreeSet<String> result = new TreeSet<>();
 
 		for (SimpleTreePath path : allPathes)
 			result.add(path.dottedString(0, path.size()));
@@ -177,20 +177,20 @@ public class SimpleTreeModel extends DefaultTreeModel
 
 		de.uib.configed.configed.configureUI();
 
-		Set<String> example = new HashSet<String>(
+		Set<String> example = new HashSet<>(
 				(Arrays.asList(new String[] { "configed", "configed.saved_search", "opsiclientd" })));
 
 		SimpleTreeModel model = new SimpleTreeModel(example);
 		model.produce();
 
-		example = new HashSet<String>((Arrays.asList(new String[] { "", "configed.saved_search", "opsiclientd" })));
+		example = new HashSet<>((Arrays.asList(new String[] { "", "configed.saved_search", "opsiclientd" })));
 		model = new SimpleTreeModel(example);
 		model.produce();
 
 		model = new SimpleTreeModel(example);
 		model.produce();
 
-		example = new HashSet<String>((Arrays.asList(new String[] { "a1.b1.c1", "a1.b2.d1", "a2.b1" })));
+		example = new HashSet<>((Arrays.asList(new String[] { "a1.b1.c1", "a1.b2.d1", "a2.b1" })));
 
 		model = new SimpleTreeModel(example);
 		model.produce();

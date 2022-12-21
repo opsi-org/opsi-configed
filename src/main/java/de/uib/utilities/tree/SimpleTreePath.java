@@ -24,7 +24,7 @@ public class SimpleTreePath extends ArrayList<String> implements Comparable<Simp
 	}
 
 	public java.util.Set<String> collectNodeNames() {
-		HashSet<String> set = new HashSet<String>();
+		HashSet<String> set = new HashSet<>();
 
 		for (String nodename : this) {
 			set.add(nodename);

@@ -310,22 +310,22 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	}
 
 	protected void initDataStructure() {
-		columnNames = new Vector<String>();
+		columnNames = new Vector<>();
 		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS)
 			columnNames.add(key);
 
-		classNames = new Vector<String>();
+		classNames = new Vector<>();
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
 
 		updateCollection = new TableUpdateCollection();
 
-		columnNamesSWxLicencepool = new Vector<String>();
+		columnNamesSWxLicencepool = new Vector<>();
 		columnNamesSWxLicencepool.add(AuditSoftwareXLicencePool.SwID);
 		columnNamesSWxLicencepool.add(LicencepoolEntry.idSERVICEKEY);
 
-		classNamesSWxLicencepool = new Vector<String>();
+		classNamesSWxLicencepool = new Vector<>();
 		for (int i = 0; i < columnNamesSWxLicencepool.size(); i++) {
 			classNamesSWxLicencepool.add("java.lang.String");
 		}
@@ -500,7 +500,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	// nearly done in produceModelSWxLicencepool, but we collect the range of the
 	// model-map
 	{
-		Set<String> range = new HashSet<String>();
+		Set<String> range = new HashSet<>();
 
 		for (String swID : persist.getName2SWIdents().get(swName)) {
 			String licpool = persist.getFSoftware2LicencePool(swID);

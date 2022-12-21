@@ -89,7 +89,7 @@ public class UserOpsipermission extends UserConfigModule {
 	public static final HashMap<String, String> CORRESPONDENCE_TO_LIST_KEYS;
 	static {
 		CORRESPONDENCE_TO_LIST_KEYS = new HashMap<>();
-		LIST_KEYS = new HashSet<String>();
+		LIST_KEYS = new HashSet<>();
 
 		CORRESPONDENCE_TO_LIST_KEYS.put(PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED,
 				PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE);

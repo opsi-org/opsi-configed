@@ -182,7 +182,7 @@ public class DataStubNOM extends DataStub {
 			 * m->
 			 * {
 			 * if ( pInfos.get( m.get(keyP ) ) == null )
-			 * pInfos.put( (String) m.get(keyP), new ArrayList<Map<String, Object>>() );
+			 * pInfos.put( (String) m.get(keyP), new ArrayList<>() );
 			 * }
 			 * );
 			 * 
@@ -677,7 +677,7 @@ public class DataStubNOM extends DataStub {
 			newClients = new ArrayList<>(clients);
 
 		if (hosts == null) {
-			hosts = new HashSet<String>();
+			hosts = new HashSet<>();
 		} else {
 			newClients.removeAll(hosts);
 		}
@@ -688,7 +688,7 @@ public class DataStubNOM extends DataStub {
 
 		if (newClients.size() == 0) {
 			// look if propstates is initialized
-			result = new ArrayList<Map<String, Object>>();
+			result = new ArrayList<>();
 		} else {
 			hosts.addAll(newClients);
 
@@ -873,14 +873,14 @@ public class DataStubNOM extends DataStub {
 					 * Set<String> containingThisName = name2SWIdents.get( swName );
 					 * if ( containingThisName == null )
 					 * {
-					 * containingThisName = new TreeSet<String>();
+					 * containingThisName = new TreeSet<>();
 					 * name2SWIdents.put( swName, containingThisName );
 					 * }
 					 * containingThisName.add( entry.getIdent() );
 					 */
 
 					if (name2SWIdents.get(swName) == null)
-						name2SWIdents.put(swName, new TreeSet<String>());
+						name2SWIdents.put(swName, new TreeSet<>());
 					name2SWIdents.get(swName).add(entry.getIdent());
 
 					Map<String, String> identInfoRow = installedSoftwareName2SWinfo.get(swName);
@@ -1424,7 +1424,7 @@ public class DataStubNOM extends DataStub {
 					TreeSet<String> contractSet = contractsToNotify.get(notiDate);
 
 					if (contractSet == null) {
-						contractSet = new TreeSet<String>();
+						contractSet = new TreeSet<>();
 						contractsToNotify.put(notiDate, contractSet);
 					}
 
@@ -1436,7 +1436,7 @@ public class DataStubNOM extends DataStub {
 					TreeSet<String> contractSet = contractsExpired.get(expireDate);
 
 					if (contractSet == null) {
-						contractSet = new TreeSet<String>();
+						contractSet = new TreeSet<>();
 						contractsExpired.put(expireDate, contractSet);
 					}
 

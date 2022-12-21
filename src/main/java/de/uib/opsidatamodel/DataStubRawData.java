@@ -171,7 +171,7 @@ public class DataStubRawData extends DataStubNOM {
 		// super.produceProductPropertyStates(clients, hosts);
 		// logging.info(this, "produceProductPropertyStates got " + compareList.size());
 
-		java.util.List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		java.util.List<Map<String, Object>> result = new ArrayList<>();
 
 		java.util.List<String> newClients = null;
 		if (clients == null)
@@ -180,7 +180,7 @@ public class DataStubRawData extends DataStubNOM {
 			newClients = new ArrayList<>(clients);
 
 		if (hosts == null) {
-			hosts = new HashSet<String>();
+			hosts = new HashSet<>();
 		} else {
 			newClients.removeAll(hosts);
 		}
@@ -758,7 +758,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		// z.B. hwClass is DISK_PARTITION
 
-		Vector<String> specificColumns = new Vector<String>(); // columns specific for the class
+		Vector<String> specificColumns = new Vector<>(); // columns specific for the class
 		specificColumns.add(Host.idColumn);
 
 		StringBuffer buf = new StringBuffer("select HOST.hostId, ");

@@ -38,13 +38,13 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 		if (values == null || descriptions == null || values.size() != descriptions.size()) {
 			logging.error("missing data for List");
-			theValues = new Vector<String>();
-			theDescriptions = new Vector<String>();
-			unfilteredV = new Vector<String>();
-			unfilteredD = new Vector<String>();
+			theValues = new Vector<>();
+			theDescriptions = new Vector<>();
+			unfilteredV = new Vector<>();
+			unfilteredD = new Vector<>();
 		} else {
-			theValues = new Vector<String>(values);
-			theDescriptions = new Vector<String>(descriptions);
+			theValues = new Vector<>(values);
+			theDescriptions = new Vector<>(descriptions);
 		}
 
 		tableModel = setupTableModel(theValues, theDescriptions);
@@ -191,8 +191,8 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		if (b) // && filtering)
 		{
 			unfilteredSelection = jList.getSelectedIndices();
-			theValues = new Vector<String>();
-			theDescriptions = new Vector<String>();
+			theValues = new Vector<>();
+			theDescriptions = new Vector<>();
 			for (Integer i : jList.getSelectedIndices()) {
 				theValues.add(unfilteredV.get(i));
 				theDescriptions.add(unfilteredD.get(i));

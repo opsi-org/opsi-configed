@@ -593,12 +593,12 @@ public class LicensingInfoMap {
 	private Map<String, Map> produceTableMapFromDatesMap(Map<String, Map<String, Map<String, Object>>> datesM) {
 		Map<String, Map> resultMap = new HashMap<String, Map>();
 
-		columnNames = new Vector<String>();
+		columnNames = new Vector<>();
 		columnNames.add(configed.getResourceValue("LicensingInfo.modules"));
 		columnNames.add(configed.getResourceValue("LicensingInfo.available"));
 		// columnNames.add(configed.getResourceValue("LicensingInfo.info"));
 
-		classNames = new Vector<String>();
+		classNames = new Vector<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		// classNames.add("java.lang.String");

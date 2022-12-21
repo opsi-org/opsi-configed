@@ -126,7 +126,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 
 	public void reduceToSet(Set<String> filter) {
 		activatePacketSelectionHandling(false);
-		// Set<String> testSet = new HashSet<String>();
+		// Set<String> testSet = new HashSet<>();
 		// testSet.add("jedit");
 		InstallationStateTableModelFiltered tModel = (InstallationStateTableModelFiltered) tableProducts.getModel();
 		tModel.setFilterFrom(filter);

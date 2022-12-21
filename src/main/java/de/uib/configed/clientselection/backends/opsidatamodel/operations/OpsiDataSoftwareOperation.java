@@ -23,7 +23,7 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 		if (controller == null)
 			logging.warning(this, "Warning, controller is null!");
 		productDefaultStates = controller.getProductDefaultStates();
-		productsWithDefaultValues = new TreeSet<String>(productDefaultStates.keySet());
+		productsWithDefaultValues = new TreeSet<>(productDefaultStates.keySet());
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 		// logging.debug(this, "doesMatch " + oClient);
 		List softwareSet = oClient.getSoftwareList();
 		List<String> theProductNames = oClient.getProductNames();
-		TreeSet<String> productsWithDefaultValues_client = new TreeSet<String>(productsWithDefaultValues);
+		TreeSet<String> productsWithDefaultValues_client = new TreeSet<>(productsWithDefaultValues);
 		// logging.debug(this, "doesMatch " + softwareSet);
 		// logging.debug(this, "doesMatch productsWithDefaultValues_client " +
 		// productsWithDefaultValues_client);

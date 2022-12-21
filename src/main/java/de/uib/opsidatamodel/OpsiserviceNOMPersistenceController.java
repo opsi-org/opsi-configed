@@ -867,7 +867,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 							"retrieveOpsiHosts clients in " + depot + ": " + depot2_host2hostInfo.get(depot).size());
 				}
 
-				TreeSet<String> depotNamesSorted = new TreeSet<String>(masterDepots.keySet());
+				TreeSet<String> depotNamesSorted = new TreeSet<>(masterDepots.keySet());
 				depotNamesSorted.remove(configServer);
 
 				for (String depot : depotNamesSorted) {
@@ -1579,7 +1579,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		configKeyUseList = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED;
 		configKeyList = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE;
-		depotsPermitted = new HashSet<String>();
+		depotsPermitted = new HashSet<>();
 
 		depotsFullPermission = checkFullPermission(depotsPermitted,
 				// true,
@@ -1590,7 +1590,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		configKeyUseList = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED;
 		configKeyList = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE;
-		hostgroupsPermitted = new HashSet<String>();
+		hostgroupsPermitted = new HashSet<>();
 
 		hostgroupsOnlyIfExplicitlyStated = checkFullPermission(hostgroupsPermitted,
 				// false, //not only as specified but always
@@ -1603,7 +1603,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		configKeyUseList = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED;
 		configKeyList = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE;
-		productgroupsPermitted = new HashSet<String>();
+		productgroupsPermitted = new HashSet<>();
 
 		productgroupsFullPermission = checkFullPermission(productgroupsPermitted,
 				// false,
@@ -1612,7 +1612,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		permittedProducts = null;
 
 		if (!productgroupsFullPermission) {
-			permittedProducts = new TreeSet<String>();
+			permittedProducts = new TreeSet<>();
 
 			for (String group : productgroupsPermitted) {
 				Set<String> products = getFProductGroup2Members().get(group);
@@ -2731,7 +2731,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// logging.info(this, "host " + hostId + " in depot " + depotId);
 
 			if (hostSeparationByDepots.get(depotId) == null)
-				hostSeparationByDepots.put(depotId, new HashSet<String>());
+				hostSeparationByDepots.put(depotId, new HashSet<>());
 
 			hostSeparationByDepots.get(depotId).add(hostId);
 		}
@@ -2797,7 +2797,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			if (hostSeparationByDepot.get(depot) != null && hostSeparationByDepot.get(depot).size() > 0) {
 				// logging.info(this, "wakeOnLan from depot " + depot + " we have hosts " +
 				// hostSeparationByDepot.get(depot));
-				java.util.Set<String> hostsToWake = new HashSet<String>(hostIds);
+				java.util.Set<String> hostsToWake = new HashSet<>(hostIds);
 				hostsToWake.retainAll(hostSeparationByDepot.get(depot));
 				// logging.debug(this, "wakeOnLan execute for " + hostsToWake);
 
@@ -3178,7 +3178,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				Set<String> assignedSet = result.get(originValue);
 				if (assignedSet == null) // no assignment yet
 				{
-					assignedSet = new TreeSet<String>();
+					assignedSet = new TreeSet<>();
 				}
 				// logging.debug(this, "projectToFunction: assignedSet, imageValue " +
 				// assignedSet + ", " + imageValue);
@@ -3446,14 +3446,14 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				new Object[] { new Object[] { exec.jsonMap(map) } });
 		result = exec.doCall(omc);
 
-		HashSet<String> inNewSetnotInOriSet = new HashSet<String>(productSet);
-		HashSet<String> inOriSetnotInNewSet = new HashSet<String>();
+		HashSet<String> inNewSetnotInOriSet = new HashSet<>(productSet);
+		HashSet<String> inOriSetnotInNewSet = new HashSet<>();
 
 		if (groupId != null && getFProductGroup2Members().get(groupId) != null) {
 
 			Set oriSet = getFProductGroup2Members().get(groupId);
 			logging.debug(this, "setProductGroup: oriSet " + oriSet);
-			inOriSetnotInNewSet = new HashSet<String>(oriSet);
+			inOriSetnotInNewSet = new HashSet<>(oriSet);
 			inOriSetnotInNewSet.removeAll(productSet);
 			inNewSetnotInOriSet.removeAll(oriSet);
 		}
@@ -3509,7 +3509,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Set<String> groups = getHostGroups().keySet();
 		groups.remove(de.uib.configed.tree.ClientTree.DIRECTORY_NAME);
 
-		return new ArrayList<>(new TreeSet<String>(groups));
+		return new ArrayList<>(new TreeSet<>(groups));
 
 		/*
 		 * return exec.getListResult ( new OpsiMethodCall(
@@ -4012,7 +4012,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				+ (client2HwRowsColumnNames == null));
 		if (client2HwRowsColumnNames == null || client2HwRowsJavaclassNames == null || hwInfoClassNames == null) {
 
-			hostColumnNames = new Vector<String>();
+			hostColumnNames = new Vector<>();
 
 			hostColumnNames.add(Host.idColumn); // "HOST.hostId");
 			hostColumnNames.add(Host.descriptionColumn);
@@ -4023,7 +4023,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			getConfigOptions();
 			// there is produced client2HwRowsColumnNames
 
-			client2HwRowsColumnNames = new Vector<String>(hostColumnNames);
+			client2HwRowsColumnNames = new Vector<>(hostColumnNames);
 
 			for (String hwClassName : hwAuditDeviceClasses.keySet()) {
 				OpsiHwAuditDeviceClass hwAuditDeviceClass = hwAuditDeviceClasses.get(hwClassName);
@@ -4062,12 +4062,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			 * client2HwRowsColumnNames.add("HARDWARE_CONFIG_COMPUTER_SYSTEM.serialNumber");
 			 */
 
-			client2HwRowsJavaclassNames = new Vector<String>();
+			client2HwRowsJavaclassNames = new Vector<>();
 			for (String col : client2HwRowsColumnNames) {
 				client2HwRowsJavaclassNames.add("java.lang.String");
 			}
 
-			Set<String> hwInfoClasses = new TreeSet<String>();
+			Set<String> hwInfoClasses = new TreeSet<>();
 
 			for (String columnName : client2HwRowsColumnNames) {
 				String className = cutClassName(columnName);
@@ -4075,7 +4075,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					hwInfoClasses.add(className);
 			}
 
-			hwInfoClassNames = new Vector<String>(hwInfoClasses);
+			hwInfoClassNames = new Vector<>(hwInfoClasses);
 
 			/*
 			 * hwInfoClassNames.add("BIOS");
@@ -4543,13 +4543,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public Vector<String> getWinProducts(String depotId, String depotProductDirectory) {
-		Vector<String> winProducts = new Vector<String>();
+		Vector<String> winProducts = new Vector<>();
 		if (depotProductDirectory == null)
 			return winProducts;
 
 		boolean smbMounted = new File(depotProductDirectory).exists();
 
-		for (String product : new TreeSet<String>(getAllNetbootProductNames(depotId))) {
+		for (String product : new TreeSet<>(getAllNetbootProductNames(depotId))) {
 			// if (product.toLowerCase().startsWith("win"))
 			if (!smbMounted // probably not on Windows, take every product to correct path manually
 					|| new File(depotProductDirectory + File.separator + product + File.separator
@@ -5175,7 +5175,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			 * )
 			 * );
 			 * 
-			 * productIds = new TreeSet<String>();
+			 * productIds = new TreeSet<>();
 			 * productDefaultStates = new TreeMap<String, Map<String, String>>();
 			 * 
 			 * for (Map<String, Object> map : maps )
@@ -5194,7 +5194,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			 * 
 			 */
 
-			productIds = new TreeSet<String>();
+			productIds = new TreeSet<>();
 			productDefaultStates = new TreeMap<String, Map<String, String>>();
 
 			for (String productId : dataStub.getProduct2versionInfo2infos().keySet()) {
@@ -5258,12 +5258,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public Set<String> extendToDependentProducts(final java.util.Set<String> startProductSet, final String depot) {
-		HashSet<String> notHandled = new HashSet<String>(startProductSet);
-		HashSet<String> endResultSet = new HashSet<String>(startProductSet);
+		HashSet<String> notHandled = new HashSet<>(startProductSet);
+		HashSet<String> endResultSet = new HashSet<>(startProductSet);
 		HashSet<String> startResultSet = null;
 
 		while (notHandled.size() > 0) {
-			startResultSet = new HashSet<String>(endResultSet);
+			startResultSet = new HashSet<>(endResultSet);
 
 			for (String prod : notHandled) {
 				logging.info(this, " extendToDependentProducts prod " + prod);
@@ -5273,7 +5273,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				}
 			}
 
-			notHandled = new HashSet<String>(endResultSet);
+			notHandled = new HashSet<>(endResultSet);
 			notHandled.removeAll(startResultSet);
 		}
 
@@ -5367,7 +5367,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		List<Map<String, Object>> properties = retrieveListOfMapsNOM(callAttributes, callFilter,
 				"productPropertyState_getObjects");
 
-		Set<String> resultSet = new HashSet<String>();
+		Set<String> resultSet = new HashSet<>();
 
 		boolean starting = true;
 
@@ -5381,7 +5381,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			List<Object> valueList = (java.util.List<Object>) retrievedValues;
 
-			Set<String> values = new HashSet<String>();
+			Set<String> values = new HashSet<>();
 
 			for (int i = 0; i < valueList.size(); i++) {
 				values.add((String) valueList.get(i));
@@ -5431,7 +5431,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 * @param clientNames -
 	 */
 	public void retrieveProductproperties(List<String> clientNames) {
-		retrieveProductproperties(new HashSet<String>(clientNames));
+		retrieveProductproperties(new HashSet<>(clientNames));
 	}
 
 	public Map<String, Map<String, ConfigName2ConfigValue>> getDepot2product2properties() {
@@ -5596,7 +5596,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		dataStub.fillProductPropertyStates(clientNames);
 		List<Map<String, Object>> retrieved = dataStub.getProductPropertyStates();
 
-		Set<String> productsWithProductPropertyStates = new HashSet<String>();
+		Set<String> productsWithProductPropertyStates = new HashSet<>();
 
 		for (Map<String, Object> map : retrieved) {
 			String host = (String) map.get("objectId");
@@ -5658,11 +5658,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		 * else
 		 * {
 		 * defaultProperties_retrieved = new HashMap<String, Map<String, Object>>();
-		 * products = new HashSet<String>();
+		 * products = new HashSet<>();
 		 * }
 		 */
 
-		productsHavingSpecificProperties = new TreeSet<String>(products);
+		productsHavingSpecificProperties = new TreeSet<>(products);
 
 		for (String host : clientNames) {
 			HashMap<String, ConfigName2ConfigValue> productproperties1Client = new HashMap<String, ConfigName2ConfigValue>();
@@ -5751,14 +5751,14 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		 * //should not be, but lets try again:
 		 * logging.debug("getProductproperties with additional client " + pcname +
 		 * " for " + productname);
-		 * Set<String> pcs = new TreeSet<String>();
+		 * Set<String> pcs = new TreeSet<>();
 		 * pcs.add(pcname);
 		 * retrieveProductproperties(pcs);
 		 * checkProductproperties(pcname, productname);
 		 * }
 		 */
 
-		Set<String> pcs = new TreeSet<String>();
+		Set<String> pcs = new TreeSet<>();
 		pcs.add(pcname);
 		retrieveProductproperties(pcs);
 
@@ -6952,7 +6952,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				deleteConfigStateItems = new ArrayList();
 
 			// add configId where necessary
-			Set<String> usedConfigIds = new HashSet<String>();
+			Set<String> usedConfigIds = new HashSet<>();
 			Map<String, String> typesOfUsedConfigIds = new HashMap<>();
 
 			List doneList = new ArrayList();
@@ -6998,7 +6998,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			List existingConfigIds = exec.getListResult(new OpsiMethodCall("config_getIdents", new Object[] {}));
 			logging.debug(this, "setAdditionalConfiguration(), existingConfigIds: " + existingConfigIds.size());
 
-			Set<String> missingConfigIds = new HashSet<String>(usedConfigIds);
+			Set<String> missingConfigIds = new HashSet<>(usedConfigIds);
 			for (Object configId : existingConfigIds) {
 				missingConfigIds.remove(configId);
 			}
@@ -7307,7 +7307,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public Vector<String> getDomains() {
-		Vector<String> result = new Vector<String>();
+		Vector<String> result = new Vector<>();
 
 		if (configDefaultValues.get(configedGIVENDOMAINS_key) == null) {
 			logging.info(this, "no values found for   " + configedGIVENDOMAINS_key);
@@ -7315,8 +7315,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			logging.info(this, "getDomains " + configDefaultValues.get(configedGIVENDOMAINS_key));
 
 			HashMap<String, Integer> numberedValues = new HashMap<String, Integer>();
-			TreeSet<String> orderedValues = new TreeSet<String>();
-			TreeSet<String> unorderedValues = new TreeSet<String>();
+			TreeSet<String> orderedValues = new TreeSet<>();
+			TreeSet<String> unorderedValues = new TreeSet<>();
 
 			for (Object item : configDefaultValues.get(configedGIVENDOMAINS_key)) {
 				String entry = (String) item;
@@ -8128,7 +8128,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			List<String> oldEntriesTruely = new ArrayList(oldEntries); // local copy
 			List<String> softwareToAssignTruely = new ArrayList(softwareToAssign); // local copy
 
-			Set<String> entriesToRemove = new HashSet<String>();
+			Set<String> entriesToRemove = new HashSet<>();
 
 			// we work only with real changes
 			softwareToAssignTruely.removeAll(oldEntries);
@@ -8226,7 +8226,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					String[] parts = ident.split(";", -1); // give zero length parts as ""
 					String swName = parts[1];
 					if (getName2SWIdents().get(swName) == null)
-						getName2SWIdents().put(swName, new TreeSet<String>());
+						getName2SWIdents().put(swName, new TreeSet<>());
 					getName2SWIdents().get(swName).add(ident);
 
 					logging.info(this,
@@ -8608,7 +8608,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					}
 
 					if (setOfUsingClients == null) {
-						setOfUsingClients = new HashSet<String>();
+						setOfUsingClients = new HashSet<>();
 						licencePool2setOfUsingClients_SWInvent.put(licencePoolId, setOfUsingClients);
 					}
 
@@ -8737,7 +8737,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			Set<String> usingClients = pool2opsiUsages.get(pool);
 
 			if (usingClients == null) {
-				usingClients = new TreeSet<String>();
+				usingClients = new TreeSet<>();
 				pool2opsiUsages.put(pool, usingClients);
 			}
 
@@ -8785,7 +8785,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			TreeSet<String> clientsServedByPool = pool2clients.get(pool);
 
 			if (clientsServedByPool == null) {
-				clientsServedByPool = new TreeSet<String>();
+				clientsServedByPool = new TreeSet<>();
 				pool2clients.put(pool, clientsServedByPool);
 			}
 
@@ -8967,7 +8967,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		 * 
 		 * if (setOfUsingClients == null)
 		 * {
-		 * setOfUsingClients = new HashSet<String>();
+		 * setOfUsingClients = new HashSet<>();
 		 * licencePool2setOfUsingClients_SWInvent.put(licencePoolId, setOfUsingClients);
 		 * }
 		 * 
@@ -9599,8 +9599,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			 */
 
 			if (configuredByService.size() == 0
-					|| !((new HashSet<String>(getPossibleValuesProductOnClientDisplayfields_localboot()))
-							.equals(new HashSet<String>(possibleValuesAccordingToService)))) {
+					|| !((new HashSet<>(getPossibleValuesProductOnClientDisplayfields_localboot()))
+							.equals(new HashSet<>(possibleValuesAccordingToService)))) {
 				// we did not initialize server property
 				configuredByService = produceProductOnClientDisplayfields_localboot();
 			}
@@ -9771,8 +9771,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			 */
 
 			if (configuredByService.size() == 0
-					|| !((new HashSet<String>(getPossibleValuesProductOnClientDisplayfields_netboot()))
-							.equals(new HashSet<String>(possibleValuesAccordingToService)))
+					|| !((new HashSet<>(getPossibleValuesProductOnClientDisplayfields_netboot()))
+							.equals(new HashSet<>(possibleValuesAccordingToService)))
 
 			) {
 				// we did not initialize server property

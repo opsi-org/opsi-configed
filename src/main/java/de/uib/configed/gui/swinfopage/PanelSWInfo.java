@@ -204,9 +204,9 @@ public class PanelSWInfo extends JPanel {
 		Vector<String> columnNames;
 		Vector<String> classNames;
 
-		columnNames = new Vector<String>(SWAuditClientEntry.KEYS);
+		columnNames = new Vector<>(SWAuditClientEntry.KEYS);
 		columnNames.remove(0);
-		classNames = new Vector<String>();
+		classNames = new Vector<>();
 		int[] finalColumns = new int[columnNames.size()];
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");

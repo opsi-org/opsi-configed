@@ -64,7 +64,7 @@ public class InstallationStatus {
 
 		// states.add(INSTALLING);
 
-		labels = new Vector<String>();
+		labels = new Vector<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);
 		labels.add(Globals.NO_VALID_STATE_STRING);
 		labels.add("undefined");

@@ -14,13 +14,13 @@ public class GenericEnumElement extends SelectElement {
 
 	public GenericEnumElement(String[] enumData, String[] name, String... localizedName) {
 		super(name, localizedName);
-		this.enumData = new Vector<String>(Arrays.asList((String[]) enumData));
+		this.enumData = new Vector<>(Arrays.asList((String[]) enumData));
 		// this.enumData.add(0, "*");
 	}
 
 	@Override
 	public List<SelectOperation> supportedOperations() {
-		List<SelectOperation> result = new LinkedList<SelectOperation>();
+		List<SelectOperation> result = new LinkedList<>();
 		result.add(new StringEqualsOperation(this));
 		return result;
 	}

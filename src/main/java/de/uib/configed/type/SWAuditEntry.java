@@ -71,7 +71,7 @@ public class SWAuditEntry extends TableEntry
 
 	public static Vector<String> KEYS_FOR_IDENT;
 	static {
-		KEYS_FOR_IDENT = new Vector<String>();
+		KEYS_FOR_IDENT = new Vector<>();
 		KEYS_FOR_IDENT.add(NAME);
 		KEYS_FOR_IDENT.add(VERSION);
 		KEYS_FOR_IDENT.add("subversion");
@@ -81,7 +81,7 @@ public class SWAuditEntry extends TableEntry
 
 	public static Vector<String> ID_VARIANTS_COLS;
 	static {
-		ID_VARIANTS_COLS = new Vector<String>();
+		ID_VARIANTS_COLS = new Vector<>();
 		ID_VARIANTS_COLS.add(NAME);
 		ID_VARIANTS_COLS.add(EXISTING_IDS);
 

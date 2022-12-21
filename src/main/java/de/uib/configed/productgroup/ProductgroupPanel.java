@@ -944,7 +944,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			Set<String> originalSelection = associate.getSelectedIDs();
 			Set<String> extendedSelection = mainController.getPersistenceController()
 					.extendToDependentProducts(associate.getSelectedIDs(), "bonifax.uib.local");
-			Set<String> addedElements = new TreeSet<String>(extendedSelection);
+			Set<String> addedElements = new TreeSet<>(extendedSelection);
 			addedElements.removeAll(originalSelection);
 
 			if (addedElements.size() > 0) {
@@ -1006,7 +1006,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		namesAndDescriptionsSave = new LinkedHashMap();
 		namesAndDescriptionsSave.put(SAVE_GROUP_ID, NO_GROUP_DESCRIPTION);
-		for (String id : new TreeSet<String>(theData.keySet())) {
+		for (String id : new TreeSet<>(theData.keySet())) {
 			// logging.debug(this, "id " + id + ": " + theData.get(id).get("description"));
 			namesAndDescriptionsSave.put(id, theData.get(id).get("description"));
 		}
@@ -1014,7 +1014,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		namesAndDescriptions = new LinkedHashMap();
 		namesAndDescriptions.put(NO_GROUP_ID, "");
-		for (String id : new TreeSet<String>(theData.keySet())) {
+		for (String id : new TreeSet<>(theData.keySet())) {
 			// logging.debug(this, "id " + id + ": " + theData.get(id).get("description"));
 			namesAndDescriptions.put(id, theData.get(id).get("description"));
 		}
@@ -1160,7 +1160,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		// associate.getSelectedRowsInModelTerms().indexOf( rowId ) >= 0 )
 		// );
 
-		associate.setSelection(new HashSet<String>(saveSelectedProducts));
+		associate.setSelection(new HashSet<>(saveSelectedProducts));
 
 	}
 

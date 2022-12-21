@@ -257,7 +257,7 @@ public class Messages {
 			logging.warning("Messages exception on reading: " + ex);
 		}
 
-		TreeSet<String> names = new TreeSet<String>();
+		TreeSet<String> names = new TreeSet<>();
 		for (LocaleRepresentation representer : existingLocales) {
 			names.add(representer.getName());
 			localeInfo.put(representer.getName(), representer.getIconName());

@@ -54,7 +54,7 @@ public abstract class SelectElement {
 	 * list of possible values for the user.
 	 */
 	public Vector<String> getEnumData() {
-		return new Vector<String>();
+		return new Vector<>();
 	}
 
 	public boolean hasEnumData() {

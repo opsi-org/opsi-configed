@@ -41,8 +41,8 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 	TableSource tableSource;
 
-	Vector<String> columnNames = new Vector<String>();
-	Vector<String> classNames = new Vector<String>();
+	Vector<String> columnNames = new Vector<>();
+	Vector<String> classNames = new Vector<>();
 	Map<String, Map> theSourceMap = new HashMap<String, Map>();
 	Map<String, Map<String, Map<String, Object>>> datesMap = new HashMap<>();
 	Map<String, Object> clientNumbers;

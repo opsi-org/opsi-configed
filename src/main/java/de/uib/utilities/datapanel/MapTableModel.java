@@ -103,7 +103,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			myCollator.setStrength(Collator.PRIMARY);
 			this.data = Collections.synchronizedSortedMap(new TreeMap(myCollator));
 			this.data.putAll(data);
-			keys = new Vector<String>(this.data.keySet());
+			keys = new Vector<>(this.data.keySet());
 
 		}
 		oridata = data;
@@ -231,7 +231,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		oridata.put(key, newval);
 
 		// Logging.debug(this, " keys " + keys);
-		keys = new Vector<String>(data.keySet());
+		keys = new Vector<>(data.keySet());
 		// logging.debug(this, " new keys " + keys);
 		putEntryIntoStoredMaps(key, newval);
 		fireTableDataChanged();

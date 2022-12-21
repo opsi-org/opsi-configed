@@ -86,7 +86,7 @@ public class SSHPackageManagerUninstallParameterDialog
 			@Override
 			public void setListData(Vector<? extends String> v) {
 				if (v == null || v.size() == 0) {
-					setListData(new Vector<String>());
+					setListData(new Vector<>());
 					jButton1.setEnabled(false);
 				} else {
 					super.setListData(v);

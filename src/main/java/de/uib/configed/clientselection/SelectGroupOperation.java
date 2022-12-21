@@ -11,7 +11,7 @@ public abstract class SelectGroupOperation extends SelectOperation {
 
 	public SelectGroupOperation() {
 		super(null);
-		childOperations = new LinkedList<SelectOperation>();
+		childOperations = new LinkedList<>();
 	}
 
 	/** Register an operation as child of this operation. */

@@ -58,7 +58,7 @@ public class PanelCompleteWinProducts extends JPanel
 	String winProduct = "";
 	String server = "";
 	String selectedDepot = null;
-	Set<String> depots = new HashSet<String>();
+	Set<String> depots = new HashSet<>();
 	// String standardProductDirectory;
 	String depotProductDirectory;
 	boolean smbMounted;

@@ -238,7 +238,7 @@ public class ControlDash {
 
 		updateCollection = new TableUpdateCollection();
 
-		final TreeSet<String> namesWithVariantPools = new TreeSet<String>();
+		final TreeSet<String> namesWithVariantPools = new TreeSet<>();
 
 		modelSWnames = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,

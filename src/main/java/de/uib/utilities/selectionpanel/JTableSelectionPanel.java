@@ -488,7 +488,7 @@ public class JTableSelectionPanel extends JPanel
 	}
 
 	public Set<String> getSelectedSet() {
-		TreeSet<String> result = new TreeSet<String>();
+		TreeSet<String> result = new TreeSet<>();
 
 		for (int i = 0; i < table.getRowCount(); i++) {
 			if (selectionmodel.isSelectedIndex(i)) {
@@ -501,7 +501,7 @@ public class JTableSelectionPanel extends JPanel
 	}
 
 	public TreeSet<String> getInvertedSet() {
-		TreeSet<String> result = new TreeSet<String>();
+		TreeSet<String> result = new TreeSet<>();
 
 		for (int i = 0; i < table.getRowCount(); i++) {
 			if (!selectionmodel.isSelectedIndex(i)) {
@@ -516,7 +516,7 @@ public class JTableSelectionPanel extends JPanel
 	public void initColumnNames() {
 		// logging.info(this, "initColumnNames");
 		Object oldSelected = comboSearch.getSelectedItem();
-		Vector<String> comboSearchItems = new Vector<String>();
+		Vector<String> comboSearchItems = new Vector<>();
 		comboSearchItems.add(configed.getResourceValue("ConfigedMain.pclistTableModel.allfields"));
 
 		try {
@@ -567,7 +567,7 @@ public class JTableSelectionPanel extends JPanel
 		if (valuesList == null || valuesList.isEmpty())
 			return;
 
-		TreeSet<String> valuesSet = new TreeSet<String>(valuesList);
+		TreeSet<String> valuesSet = new TreeSet<>(valuesList);
 		// because of ordering , we create a TreeSet view of the list
 
 		logging.info(this, "setSelectedValues, (ordered) set of values, size " + valuesSet.size());
@@ -656,7 +656,7 @@ public class JTableSelectionPanel extends JPanel
 	}
 
 	public Set<String> getColumnValues(int col) {
-		HashSet<String> result = new HashSet<String>();
+		HashSet<String> result = new HashSet<>();
 		if (table.getModel() == null || table.getModel().getColumnCount() <= col)
 			return result;
 
@@ -670,7 +670,7 @@ public class JTableSelectionPanel extends JPanel
 	public void setModel(TableModel tm) {
 		logging.info(this, "set model with column count " + tm.getColumnCount());
 		/*
-		 * Vector<String> cols = new Vector<String>();
+		 * Vector<String> cols = new Vector<>();
 		 * for (int i = 0; i < tm.getColumnCount(); i++)
 		 * cols.add( tm.getColumnName(i) );
 		 * logging.info(this, "set model " + cols);

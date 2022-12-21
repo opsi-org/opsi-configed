@@ -156,7 +156,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	protected ActionRequest actionInTreatment;
 	// protected boolean changeActionIsSet = false;
-	protected java.util.Set<String> missingProducts = new HashSet<String>();
+	protected java.util.Set<String> missingProducts = new HashSet<>();
 
 	protected List<String> displayColumns;
 	protected int numberOfColumns;
@@ -261,7 +261,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		myCollator.setStrength(Collator.SECONDARY);
 
 		// logging.info(this, "listOfInstallableProducts " + listOfInstallableProducts);
-		productNamesInDeliveryOrder = new Vector<String>();
+		productNamesInDeliveryOrder = new Vector<>();
 		if (listOfInstallableProducts != null) {
 			for (int i = 0; i < listOfInstallableProducts.size(); i++) {
 				String product = (String) listOfInstallableProducts.get(i);
@@ -269,7 +269,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			}
 		}
 
-		tsProductNames = new TreeSet<String>(myCollator);
+		tsProductNames = new TreeSet<>(myCollator);
 		tsProductNames.addAll(productNamesInDeliveryOrder);
 		productsV = new Vector(tsProductNames);
 
@@ -280,7 +280,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	}
 
 	private void initalizeProductStates(Map<String, java.util.List<Map<String, String>>> client2listProductState) {
-		allClientsProductStates = new HashMap<String, Map<String, Map<String, String>>>();
+		allClientsProductStates = new HashMap<>();
 		remaptoClient2Product2Rowmap(client2listProductState);
 
 		produceVisualStatesFromExistingEntries();
@@ -1186,7 +1186,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		Set<String> aSetOfClients = product2setOfClientsWithNewAction.get(product);
 
 		if (aSetOfClients == null) {
-			aSetOfClients = new HashSet<String>();
+			aSetOfClients = new HashSet<>();
 			product2setOfClientsWithNewAction.put(product, aSetOfClients);
 		}
 

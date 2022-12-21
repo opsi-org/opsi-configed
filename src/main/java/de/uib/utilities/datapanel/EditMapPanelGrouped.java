@@ -360,7 +360,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		// Iterator<String> iterCollect = classIds.descendingSet().iterator();
 		NavigableSet<String> classIdsDescending = classIds.descendingSet();
 
-		for (String key : new TreeSet<String>(data.keySet()).descendingSet()) {
+		for (String key : new TreeSet<>(data.keySet()).descendingSet()) {
 			logging.debug(this, "classify key ------- " + key);
 			boolean foundClass = false;
 			for (String idCollect : classIdsDescending) {

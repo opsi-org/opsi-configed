@@ -23,7 +23,7 @@ public class OpsiMethodCall {
 	public static String extendRpcPath = "extend/configed";
 	private String rpcPath = "";// extendRpcPath;
 
-	public static final Vector<String> collectedCalls = new Vector<String>();
+	public static final Vector<String> collectedCalls = new Vector<>();
 	public static int maxCollectSize = -1;
 
 	/*

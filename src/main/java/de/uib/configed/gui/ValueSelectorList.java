@@ -48,8 +48,8 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		this.multidepot = multidepot;
 		this.persist = persist;
 
-		Vector<String> values = new Vector<String>();
-		Vector<String> descriptions = new Vector<String>();
+		Vector<String> values = new Vector<>();
+		Vector<String> descriptions = new Vector<>();
 		Map<String, Map<String, Object>> depotInfo = valueList.getDepotInfo();
 
 		for (String depot : depotInfo.keySet()) {
@@ -300,7 +300,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 		if (!filtered) {
 			unfilteredV = valueList.getListData();
-			valueList.setListData(new Vector<String>(valueList.getSelectedValuesList()));
+			valueList.setListData(new Vector<>(valueList.getSelectedValuesList()));
 		} else
 			valueList.setListData(unfilteredV);
 

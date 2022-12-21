@@ -101,7 +101,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		translationsFromPersistentNames = new HashMap<>();
 		translationsToPersistentNames.put(DIRECTORY_NAME, DIRECTORY_PERSISTENT_NAME);
 		translationsFromPersistentNames.put(DIRECTORY_PERSISTENT_NAME, DIRECTORY_NAME);
-		topGroupNames = new HashSet<String>();
+		topGroupNames = new HashSet<>();
 		{
 			topGroupNames.add(ALL_NAME);
 			topGroupNames.add(GROUPS_NAME);
@@ -178,7 +178,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	// clientid --> client node
 	// is a function, when the directory has been cleared
 
-	protected HashSet<String> activeParents = new HashSet<String>();
+	protected HashSet<String> activeParents = new HashSet<>();
 	// groups containing clients (especially the selected ones)
 
 	protected Map<String, HostInfo> host2HostInfo;
@@ -2054,7 +2054,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	}
 
 	public java.util.TreeSet<String> collectLeafs(DefaultMutableTreeNode node) {
-		TreeSet<String> clients = new TreeSet<String>(enumerateLeafNodes(node));
+		TreeSet<String> clients = new TreeSet<>(enumerateLeafNodes(node));
 
 		// logging.debug(this, "collectLeafs in " + node + ": " + clients);
 		return clients;
@@ -2076,7 +2076,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	public HashSet<String> collectParentIDs(String nodeID) {
 		// logging.info(this, "collectParentIDs for node " + nodeID);
 
-		HashSet<String> allParents = new HashSet<String>();
+		HashSet<String> allParents = new HashSet<>();
 
 		java.util.List<SimpleTreePath> treePaths = getSimpleTreePaths(nodeID);
 

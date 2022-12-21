@@ -210,7 +210,7 @@ public class ControllerHWinfoColumnConfiguration {
 	protected void initModel() {
 
 		updateCollection = new TableUpdateCollection();
-		columnNames = new Vector<String>();
+		columnNames = new Vector<>();
 		columnNames.add(colLineNo);
 		columnNames.add(colHwClass);
 		columnNames.add(colLinuxQuery);
@@ -224,7 +224,7 @@ public class ControllerHWinfoColumnConfiguration {
 		// columnNames.add( "report function");
 		// columnNames.add( colTellAgainHardwareClass );
 
-		classNames = new Vector<String>();
+		classNames = new Vector<>();
 
 		// classNames.add("java.lang.Integer");
 		for (int i = 0; i < columnNames.size(); i++) {
@@ -399,7 +399,7 @@ public class ControllerHWinfoColumnConfiguration {
 					.getDeviceHwItemProperties();
 
 			// hw class line
-			Map<String, Object> lineMap = new LinkedHashMap<String, Object>();
+			Map<String, Object> lineMap = new LinkedHashMap<>();
 			lineMap.put(colLineNo, formatLineNo(id));
 			lineMap.put(colHwClass, hwClass);
 			lineMap.put(colLinuxQuery, hwAuditDeviceClass.getLinuxQuery());
@@ -409,7 +409,7 @@ public class ControllerHWinfoColumnConfiguration {
 			id++;
 
 			// colHostVsItemAssigned line
-			lineMap = new LinkedHashMap<String, Object>();
+			lineMap = new LinkedHashMap<>();
 			lineMap.put(colLineNo, formatLineNo(id));
 			// lineMap.put(colTellAgainHardwareClass, hwClass);
 
@@ -420,7 +420,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 			for (OpsiHwAuditDevicePropertyType deviceProperty : deviceHostProperties) {
 
-				lineMap = new LinkedHashMap<String, Object>();
+				lineMap = new LinkedHashMap<>();
 				lineMap.put(colLineNo, formatLineNo(id));
 				// lineMap.put(colTellAgainHardwareClass, hwClass);
 
@@ -439,7 +439,7 @@ public class ControllerHWinfoColumnConfiguration {
 				id++;
 			}
 
-			lineMap = new LinkedHashMap<String, Object>();
+			lineMap = new LinkedHashMap<>();
 			lineMap.put(colLineNo, formatLineNo(id));
 			lineMap.put(colHostVsItemAssigned, valAssignedToHwItem);
 
@@ -448,7 +448,7 @@ public class ControllerHWinfoColumnConfiguration {
 			id++;
 
 			for (OpsiHwAuditDevicePropertyType deviceProperty : deviceHwItemProperties) {
-				lineMap = new LinkedHashMap<String, Object>();
+				lineMap = new LinkedHashMap<>();
 				lineMap.put(colLineNo, formatLineNo(id));
 
 				ColumnIdent columnIdent = new ColumnIdent(hwClass, OpsiHwAuditDeviceClass.hwItemAssignedTableType,

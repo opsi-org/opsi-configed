@@ -86,7 +86,7 @@ public class ActionRequest {
 		possibleRequests.add(ONCE);
 		possibleRequests.add(CUSTOM);
 
-		labels = new Vector<String>();
+		labels = new Vector<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);
 		labels.add(Globals.NO_VALID_STATE_STRING);
 		labels.add("not_available");
@@ -118,8 +118,8 @@ public class ActionRequest {
 		serviceValue2state.put("once", ONCE);
 		serviceValue2state.put("custom", CUSTOM);
 
-		serviceValues = new Vector<String>(serviceValue2state.keySet());
-		scriptKeys = new Vector<String>();
+		serviceValues = new Vector<>(serviceValue2state.keySet());
+		scriptKeys = new Vector<>();
 		// scriptKey2state = new HashMap<String, Integer>();
 		scriptKey2label = new HashMap<>();
 

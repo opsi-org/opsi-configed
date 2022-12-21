@@ -53,7 +53,7 @@ public class OpsiPackage implements Comparable {
 
 	public static final Vector<String> COLUMN_NAMES;
 	static {
-		COLUMN_NAMES = new Vector<String>();
+		COLUMN_NAMES = new Vector<>();
 		COLUMN_NAMES.add(DBkeyPRODUCT_ID);
 		COLUMN_NAMES.add(SERVICEkeyPRODUCT_VERSION);
 		COLUMN_NAMES.add(SERVICEkeyPACKAGE_VERSION);

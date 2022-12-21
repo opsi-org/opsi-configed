@@ -694,7 +694,7 @@ public class NewClientDialog extends FGeneralDialog
 	 * client; Don't really know what's happening here (TODO)
 	 */
 	private void treatSelectedDomainForNewClient(final String selectedDomain) {
-		Vector<String> editableDomains = new Vector<String>();
+		Vector<String> editableDomains = new Vector<>();
 		ArrayList<Object> saveDomains = new ArrayList<>();
 		int order = 0;
 		saveDomains.add("" + order + ":" + selectedDomain);

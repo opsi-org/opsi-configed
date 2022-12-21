@@ -76,11 +76,11 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 		Vector<String> classNames;
 
 		// panelKeys
-		columnNames = new Vector<String>();
+		columnNames = new Vector<>();
 		columnNames.add("softwareLicenseId");
 		columnNames.add("licensePoolId");
 		columnNames.add("licenseKey");
-		classNames = new Vector<String>();
+		classNames = new Vector<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");

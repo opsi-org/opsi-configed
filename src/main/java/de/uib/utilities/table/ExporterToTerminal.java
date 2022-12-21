@@ -22,7 +22,7 @@ public class ExporterToTerminal extends ExportTable {
 		for (int rowI = 0; rowI < theTable.getRowCount(); rowI++) {
 			// logging.debug("selected? " + theTable.isRowSelected(rowI));
 			if (!selectedOnly || theTable.isRowSelected(rowI)) {
-				Vector<String> rowV = new Vector<String>();
+				Vector<String> rowV = new Vector<>();
 				for (int colI = 0; colI < theTable.getColumnCount(); colI++) {
 					if (theTable.getValueAt(rowI, colI) != null) {
 						if (classNames == null || classNames.size() == 0) {

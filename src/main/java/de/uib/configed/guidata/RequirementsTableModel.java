@@ -34,7 +34,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 	protected static Vector<String> rowType;
 	protected static int noOfRowTypes;
 	static {
-		rowType = new Vector<String>();
+		rowType = new Vector<>();
 		rowType.add("KEYROW");
 		rowType.add("SETUP REQUIREMENT");
 		rowType.add("UNINSTALL REQUIREMENT");

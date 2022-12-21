@@ -3353,7 +3353,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	private void groupByNotCurrentProductVersion() {
-		java.util.List<String> products = getProduct(new Vector<String>(new TreeSet<String>(main.getProductNames())));
+		java.util.List<String> products = getProduct(new Vector<>(new TreeSet<>(main.getProductNames())));
 
 		if (!products.isEmpty())
 			main.selectClientsNotCurrentProductInstalled(products, false);
@@ -3361,7 +3361,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	private void groupByNotCurrentProductVersionOrBrokenInstallation() {
-		java.util.List<String> products = getProduct(new Vector<String>(new TreeSet<String>(main.getProductNames())));
+		java.util.List<String> products = getProduct(new Vector<>(new TreeSet<>(main.getProductNames())));
 
 		if (!products.isEmpty())
 			main.selectClientsNotCurrentProductInstalled(products, true);
@@ -3369,7 +3369,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	private void groupByFailedProduct() {
-		java.util.List<String> products = getProduct(new Vector<String>(new TreeSet<String>(main.getProductNames())));
+		java.util.List<String> products = getProduct(new Vector<>(new TreeSet<>(main.getProductNames())));
 
 		if (!products.isEmpty())
 			main.selectClientsWithFailedProduct(products);

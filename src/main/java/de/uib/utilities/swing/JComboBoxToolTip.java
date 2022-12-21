@@ -30,7 +30,7 @@ public class JComboBoxToolTip extends javax.swing.JComboBox {
 
 	}
 
-	Vector<String> tooltips = new Vector<String>();
+	Vector<String> tooltips = new Vector<>();
 
 	protected class NewComboBoxRenderer extends BasicComboBoxRenderer {
 		@Override
@@ -77,7 +77,7 @@ public class JComboBoxToolTip extends javax.swing.JComboBox {
 
 		this.removeAllItems();
 
-		tooltips = new Vector<String>();
+		tooltips = new Vector<>();
 
 		if (addE) {
 			addItem("");

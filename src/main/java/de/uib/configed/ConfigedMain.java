@@ -238,9 +238,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 														// products, where for each occurring product there may be an
 														// entry stateTypeKey - value
 
-	protected Map<String /* client */, Map<String /* product */, Map<String /* propertykey */, String/* propertyvalue */>>> collectChangedLocalbootStates = new HashMap<String, Map<String, Map<String, String>>>();
+	protected Map<String /* client */, Map<String /* product */, Map<String /* propertykey */, String/* propertyvalue */>>> collectChangedLocalbootStates = new HashMap<>();
 
-	protected Map<String /* client */, Map<String /* product */, Map<String /* propertykey */, String/* propertyvalue */>>> collectChangedNetbootStates = new HashMap<String, Map<String, Map<String, String>>>();
+	protected Map<String /* client */, Map<String /* product */, Map<String /* propertykey */, String/* propertyvalue */>>> collectChangedNetbootStates = new HashMap<>();
 
 	protected Map<String, java.util.List<String>> possibleActions = new HashMap<String, java.util.List<String>>(); // a
 																													// map
@@ -1210,7 +1210,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// java.util.List<String> allHosts =
 	// persist.getHostInfoCollections().getOpsiHostNames();
 
-	// HashSet<String> selectValues = new HashSet<String>();
+	// HashSet<String> selectValues = new HashSet<>();
 	// int i = 0;
 
 	// for (final String host : allHosts) {
@@ -2128,7 +2128,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 * private TreePath adaptTreeSelection()
 	 * {
 	 * //building tree selection paths
-	 * ArrayList<TreePath> selpathlist = new ArrayList<TreePath>();
+	 * ArrayList<TreePath> selpathlist = new ArrayList<>();
 	 * 
 	 * TreePath firstPath = null;
 	 * 
@@ -2650,7 +2650,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (persist.getHost_displayFields().get(HostInfo.clientUefiBoot_DISPLAY_FIELD_LABEL)) {
 
-			Vector<String> columns = new Vector<String>();
+			Vector<String> columns = new Vector<>();
 			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
 				columns.add(selectionPanel.getTableModel().getColumnName(i));
 			}
@@ -2682,7 +2682,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (persist.getHost_displayFields().get(HostInfo.clientWanConfig_DISPLAY_FIELD_LABEL)) {
 
-			Vector<String> columns = new Vector<String>();
+			Vector<String> columns = new Vector<>();
 			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
 				columns.add(selectionPanel.getTableModel().getColumnName(i));
 			}
@@ -2712,7 +2712,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (persist.getHost_displayFields().get(HostInfo.clientInstallByShutdown_DISPLAY_FIELD_LABEL)) {
 
-			Vector<String> columns = new Vector<String>();
+			Vector<String> columns = new Vector<>();
 
 			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
 				columns.add(selectionPanel.getTableModel().getColumnName(i));
@@ -3199,8 +3199,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected void initTree() {
 		logging.debug(this, "initTree");
-		activeTreeNodes = new HashMap<String, TreePath>();
-		activePaths = new ArrayList<TreePath>();
+		activeTreeNodes = new HashMap<>();
+		activePaths = new ArrayList<>();
 
 		// de.uib.configed.tree.ClientTree.initializeStatics();
 		treeClients = new de.uib.configed.tree.ClientTree(this);
@@ -3313,7 +3313,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public Set<String> getActiveParents() {
 		if (treeClients == null)
-			return new HashSet<String>();
+			return new HashSet<>();
 
 		return treeClients.getActiveParents();
 	}
@@ -3382,7 +3382,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		depotsOfSelectedClients = null;
 
 		selectedDepots = new String[depotsList.getSelectedValues().length];
-		selectedDepotsV = new Vector<String>();
+		selectedDepotsV = new Vector<>();
 
 		for (int i = 0; i < depotsList.getSelectedValues().length; i++) {
 			selectedDepots[i] = (String) depotsList.getSelectedValues()[i];
@@ -3934,7 +3934,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private void removeKeysStartingWith(Map<String, ? extends Object> m, Set<String> keystartersStrNotWanted) {
-		Set<String> keysForDeleting = new HashSet<String>();
+		Set<String> keysForDeleting = new HashSet<>();
 
 		for (String start : keystartersStrNotWanted) {
 			for (String key : m.keySet()) {
@@ -4007,8 +4007,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				// waitCursor = new WaitCursor( mainFrame.retrieveBasePane(),
 				// mainFrame.getCursor() );
 
-				ArrayList<Map<String, Object>> additionalConfigs = new ArrayList<Map<String, Object>>(
-						getSelectedClients().length);
+				ArrayList<Map<String, Object>> additionalConfigs = new ArrayList<>(getSelectedClients().length);
 
 				// persist.hostConfigsCheck(getSelectedClients());
 
@@ -4670,7 +4669,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		 * {
 		 * depots.put(myServer, configServerRecord);
 		 * logging.debug(this, "fetchDepots depots.keySet() " +depots.keySet());
-		 * TreeSet<String> depotIdsSorted = new TreeSet<String>( depots.keySet() );
+		 * TreeSet<String> depotIdsSorted = new TreeSet<>( depots.keySet() );
 		 * depotIdsSorted.remove(myServer);
 		 * for (String depotId : depotIdsSorted)
 		 * {
@@ -4721,7 +4720,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public Vector<String> getLinkedDepots() {
-		return new Vector<String>(depotNamesLinked);
+		return new Vector<>(depotNamesLinked);
 	}
 
 	public String getConfigserver() {
@@ -4973,7 +4972,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// persist.getHostInfoCollections().getMapPcBelongsToDepot());
 
 		// if depot selection changed, we adapt the clients
-		TreeSet<String> clientsLeft = new TreeSet<String>();
+		TreeSet<String> clientsLeft = new TreeSet<>();
 
 		for (String client : savedSelectedValues) {
 			// logging.debug(this, "client: " + client);
@@ -5914,7 +5913,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 * if (TEST_ACCESS_RESTRICTED_HOST_GROUP == null)
 	 * return;
 	 * 
-	 * Set<String> acceptedHosts = new HashSet<String>();
+	 * Set<String> acceptedHosts = new HashSet<>();
 	 * 
 	 * 
 	 * for (String client :
@@ -6921,7 +6920,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (clientList != null) {
 			Object[] clients = clientList.entrySet().toArray();
-			TreeSet<String> selectedList = new TreeSet<String>();
+			TreeSet<String> selectedList = new TreeSet<>();
 			for (int i = 0; i < clients.length; i++) {
 				Map.Entry ob = (Map.Entry) clients[i];
 

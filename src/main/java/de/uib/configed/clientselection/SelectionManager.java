@@ -84,7 +84,7 @@ public class SelectionManager {
 			List<OperationWithStatus> operationsWithStatuses) {
 		logging.debug(this, "Adding group operation " + name + " with " + operationsWithStatuses.toString());
 
-		LinkedList<SelectOperation> tmpList = new LinkedList<SelectOperation>();
+		LinkedList<SelectOperation> tmpList = new LinkedList<>();
 		tmpList.add(build(operationsWithStatuses, new int[] { 0 }));
 		logging.debug(this, "addGroupOperation: " + name + " " + tmpList.size() + " " + tmpList.get(0));
 		if (name.equals("Software"))
@@ -264,8 +264,8 @@ public class SelectionManager {
 		if (input.isEmpty())
 			return null;
 
-		LinkedList<SelectOperation> orConnections = new LinkedList<SelectOperation>();
-		LinkedList<SelectOperation> andConnections = new LinkedList<SelectOperation>();
+		LinkedList<SelectOperation> orConnections = new LinkedList<>();
+		LinkedList<SelectOperation> andConnections = new LinkedList<>();
 		boolean currentAnd = false;
 
 		while (currentPos[0] < input.size()) {
@@ -356,7 +356,7 @@ public class SelectionManager {
 		if (operation.status == ConnectionStatus.And || operation.status == ConnectionStatus.Or)
 			return operation.operation;
 
-		LinkedList<SelectOperation> arg = new LinkedList<SelectOperation>();
+		LinkedList<SelectOperation> arg = new LinkedList<>();
 		arg.add(operation.operation);
 
 		return new NotOperation(arg);

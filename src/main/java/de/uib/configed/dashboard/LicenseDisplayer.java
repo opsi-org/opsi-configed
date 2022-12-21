@@ -151,18 +151,18 @@ public class LicenseDisplayer {
 
 		TableUpdateCollection updateCollection;
 
-		columnNames = new Vector<String>();
+		columnNames = new Vector<>();
 		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS)
 			columnNames.add(key);
 
-		classNames = new Vector<String>();
+		classNames = new Vector<>();
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
 
 		updateCollection = new TableUpdateCollection();
 
-		final TreeSet<String> namesWithVariantPools = new TreeSet<String>();
+		final TreeSet<String> namesWithVariantPools = new TreeSet<>();
 
 		modelSWnames = new GenTableModel(null, // no updates
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
@@ -234,7 +234,7 @@ public class LicenseDisplayer {
 	// nearly done in produceModelSWxLicencepool, but we collect the range of the
 	// model-map
 	{
-		Set<String> range = new HashSet<String>();
+		Set<String> range = new HashSet<>();
 
 		for (String swID : persist.getName2SWIdents().get(swName)) {
 			String licpool = persist.getFSoftware2LicencePool(swID);

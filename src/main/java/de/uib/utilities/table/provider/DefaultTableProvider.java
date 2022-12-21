@@ -154,7 +154,7 @@ public class DefaultTableProvider implements TableProvider {
 		// logging.debug(this, "getOrderedColumn " + col + ", empty_allowed " +
 		// empty_allowed);
 
-		TreeSet<String> set = new TreeSet<String>();
+		TreeSet<String> set = new TreeSet<>();
 		for (int row = 0; row < rowsCopy.size(); row++) {
 			String val = (String) rowsCopy.get(row).get(col);
 			// logging.debug(this, "getOrderedColumn(" + col + ") row " + row + ": " +val );
@@ -164,7 +164,7 @@ public class DefaultTableProvider implements TableProvider {
 			}
 		}
 
-		Vector<String> result = new Vector<String>(set);
+		Vector<String> result = new Vector<>(set);
 
 		// logging.debug(this, "getOrderedColumn, result " +result);
 

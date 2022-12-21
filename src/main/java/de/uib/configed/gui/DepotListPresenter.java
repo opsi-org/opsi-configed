@@ -55,8 +55,8 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		this.multidepot = multidepot;
 		this.persist = persist;
 
-		Vector<String> values = new Vector<String>();
-		Vector<String> descriptions = new Vector<String>();
+		Vector<String> values = new Vector<>();
+		Vector<String> descriptions = new Vector<>();
 		Map<String, Map<String, Object>> depotInfo = depotsList.getDepotInfo();
 
 		for (String depot : depotInfo.keySet()) {
@@ -304,7 +304,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 
 		if (!filtered) {
 			unfilteredV = depotslist.getListData();
-			depotslist.setListData(new Vector<String>(depotslist.getSelectedValuesList()));
+			depotslist.setListData(new Vector<>(depotslist.getSelectedValuesList()));
 		} else
 			depotslist.setListData(unfilteredV);
 

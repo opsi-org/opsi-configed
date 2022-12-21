@@ -61,7 +61,7 @@ public class FramingNewRole implements FramingTextfieldWithListselection {
 	@Override
 	public Vector<String> getListData() {
 		if (list == null) {
-			list = new Vector<String>();
+			list = new Vector<>();
 			list.add("B1");
 			list.add("B2");
 			list.add("B1");

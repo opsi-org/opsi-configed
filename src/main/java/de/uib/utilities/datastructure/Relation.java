@@ -45,7 +45,7 @@ public class Relation extends ArrayList<StringValuedRelationElement> {
 	 * {
 	 * resultIsReduced = true;
 	 * 
-	 * Set<String> keysToRemove = new HashSet<String>(keys);
+	 * Set<String> keysToRemove = new HashSet<>(keys);
 	 * 
 	 * logging.info(this, "adapt keys, attribute set after removal " +
 	 * keysToRemove);

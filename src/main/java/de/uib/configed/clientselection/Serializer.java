@@ -240,7 +240,7 @@ public abstract class Serializer {
 
 		// Children
 		List<Map<String, Object>> childrenData = (List<Map<String, Object>>) data.get("children");
-		LinkedList<SelectOperation> children = new LinkedList<SelectOperation>();
+		LinkedList<SelectOperation> children = new LinkedList<>();
 		if (childrenData != null)
 			for (Map<String, Object> child : childrenData)
 				children.add(getOperation(child, hardware));

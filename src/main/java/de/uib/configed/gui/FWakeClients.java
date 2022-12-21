@@ -45,7 +45,7 @@ public class FWakeClients extends FShowList {
 
 		int turn = 0;
 		while (turn < maxSize && !cancelled) {
-			java.util.Set<String> hostsToWakeOnThisTurn = new HashSet<String>();
+			java.util.Set<String> hostsToWakeOnThisTurn = new HashSet<>();
 
 			for (String depot : hostSeparationByDepots.keySet()) {
 

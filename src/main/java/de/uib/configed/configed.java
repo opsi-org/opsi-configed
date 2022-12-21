@@ -146,7 +146,7 @@ public class configed {
 	public static final Charset serverCharset = Charset.forName("UTF-8");
 	public static final String javaVersion = System.getProperty("java.version");
 	public static final String javaVendor = System.getProperty("java.vendor", "");
-	public static final LinkedHashMap<String, Object> javaSysExtraProperties = new LinkedHashMap<String, Object>();
+	public static final LinkedHashMap<String, Object> javaSysExtraProperties = new LinkedHashMap<>();
 	public static final String systemSSLversion = System.getProperty("https.protocols");
 	public static String EXTRA_LOCALIZATION_FILENAME = null;
 	public static PropertiesStore extraLocalization;
