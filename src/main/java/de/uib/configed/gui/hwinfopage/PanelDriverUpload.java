@@ -306,21 +306,19 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		JLabel label_showDrivers = new JLabel(configed.getResourceValue("PanelDriverUpload.labelShowDrivers"));
 		btnShowDrivers = new JButton("", Globals.createImageIcon("images/show-menu.png", ""));
 		btnShowDrivers.setToolTipText(configed.getResourceValue("PanelDriverUpload.btnShowDrivers.tooltip"));
-		btnShowDrivers.addActionListener(actionEvent -> {
-			new Thread() {
-				@Override
-				public void run() {
-					new SSHConnectExec(main,
-							// Empty_Command(String id, String c, String mt, boolean ns)
-							(new Empty_Command("show_drivers.py", // id not needed
-									"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem()
-											+ "/show_drivers.py " + fieldClientname.getText(),
-									"show_drivers.py", // menuText - not needed
-									false // needSudo?
-					)));
-				}
-			}.start();
-		});
+		btnShowDrivers.addActionListener(actionEvent -> new Thread() {
+			@Override
+			public void run() {
+				new SSHConnectExec(main,
+						// Empty_Command(String id, String c, String mt, boolean ns)
+						(new Empty_Command("show_drivers.py", // id not needed
+								"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem() + "/show_drivers.py "
+										+ fieldClientname.getText(),
+								"show_drivers.py", // menuText - not needed
+								false // needSudo?
+				)));
+			}
+		}.start());
 
 		JLabel label_createDrivers = new JLabel(configed.getResourceValue("PanelDriverUpload.labelCreateDriverLinks"));
 		btnCreateDrivers = new JButton("", Globals.createImageIcon("images/run-build-file.png", ""));
@@ -463,6 +461,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		buttonUploadDrivers.setEnabled(false);
 
 		buttonUploadDrivers.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.info(this, "actionPerformed on buttonUploadDrivers from " + fieldDriverPath.getText() + " to "

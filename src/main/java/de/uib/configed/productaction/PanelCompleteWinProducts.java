@@ -295,20 +295,16 @@ public class PanelCompleteWinProducts extends JPanel
 
 		fieldPathInstallFiles = new JTextField();
 
-		buttonCallSelectFolderInstallFiles.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		buttonCallSelectFolderInstallFiles.addActionListener(actionEvent -> {
 
-				int returnVal = chooserFolder.showOpenDialog(panel);
+			int returnVal = chooserFolder.showOpenDialog(panel);
 
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					String pathInstallFiles = chooserFolder.getSelectedFile().getPath();
-					fieldPathInstallFiles.setText(pathInstallFiles);
-					fieldPathInstallFiles.setCaretPosition(pathInstallFiles.length());
-				} else {
-					fieldPathInstallFiles.setText("");
-				}
-
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				String pathInstallFiles = chooserFolder.getSelectedFile().getPath();
+				fieldPathInstallFiles.setText(pathInstallFiles);
+				fieldPathInstallFiles.setCaretPosition(pathInstallFiles.length());
+			} else {
+				fieldPathInstallFiles.setText("");
 			}
 		});
 

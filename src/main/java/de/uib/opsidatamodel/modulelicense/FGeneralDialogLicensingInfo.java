@@ -2,8 +2,6 @@ package de.uib.opsidatamodel.modulelicense;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -351,14 +349,9 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		buttonReload.setPreferredSize( Globals.smallButtonDimension );
 		*/
 
-		buttonReload.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//logging.info(this, "action performed " + e);
-				LicensingInfoMap.requestRefresh();
-				thePanel.reload();
-			}
-
+		buttonReload.addActionListener(actionEvent -> {
+			LicensingInfoMap.requestRefresh();
+			thePanel.reload();
 		});
 
 		JComponent[] linedComponents = new JComponent[] { buttonReload, new JLabel("   "), checkExtendedView,

@@ -1,8 +1,6 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.TreeSet;
 import java.util.Vector;
 
@@ -312,14 +310,11 @@ public class SSHPackageManagerUninstallParameterDialog
 
 			btn_depotselection = new JButton(
 					configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager.depotselection"));
-			btn_depotselection.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					initDepots();
-					if (btn_depotselection != null)
-						fDepotList.centerOn(btn_depotselection);
-					fDepotList.setVisible(true);
-				}
+			btn_depotselection.addActionListener(actionEvent -> {
+				initDepots();
+				if (btn_depotselection != null)
+					fDepotList.centerOn(btn_depotselection);
+				fDepotList.setVisible(true);
 			});
 
 			tf_selecteddepots = new JTextField();
