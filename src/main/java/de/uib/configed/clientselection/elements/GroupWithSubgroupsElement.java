@@ -7,7 +7,6 @@ public class GroupWithSubgroupsElement
 		extends GenericEnumElement
 
 {
-	private String[] enumData;
 
 	public GroupWithSubgroupsElement(String[] enumData) {
 		super(enumData, new String[] { "GroupWithSubgroups" },

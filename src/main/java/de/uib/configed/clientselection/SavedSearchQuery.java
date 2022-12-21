@@ -15,7 +15,7 @@ import de.uib.utilities.logging.logging;
  * This class is a little command line tool which can execute saved searches.
  */
 public class SavedSearchQuery {
-	private final String usage = "\n" + "configed_savedsearch [OPTIONS] [NAME]\n\n"
+	private static final String USAGE = "\n" + "configed_savedsearch [OPTIONS] [NAME]\n\n"
 			+ "Runs the given search NAME and returns the matching clients. "
 			+ "If NAME is not set, list all available searches.\n\n" + "OPTIONS:\n"
 			+ "  -h\tConfiguration server to connect to\n" + "  -u\tUsername for authentication\n"
@@ -26,7 +26,6 @@ public class SavedSearchQuery {
 	private String user;
 	private String password;
 	private String searchName;
-	private String group;
 
 	private PersistenceController controller;
 
@@ -70,17 +69,15 @@ public class SavedSearchQuery {
 	}
 
 	public void showUsage() {
-		logging.debug(usage);
+		logging.debug(USAGE);
 	}
 
 	public void setArgs(String host, String user, String password, String searchName, String group) {
-		logging.info(this, "setArgs " + host + ", PASSWORD, " + searchName + ", " + group);
+		logging.info(this, "setArgs " + host + ", PASSWORD, " + searchName);
 		this.host = host;
 		this.user = user;
 		this.password = password;
 		this.searchName = searchName;
-		this.group = group;
-		// System.exit(0);
 	}
 
 	public void addMissingArgs() {

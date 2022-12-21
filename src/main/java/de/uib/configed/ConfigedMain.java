@@ -268,9 +268,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public Map<String, Boolean> displayFieldsLocalbootProducts;
 	public Map<String, Boolean> displayFieldsNetbootProducts;
 
-	// java.util.List<? extends RowSorter.SortKey> currentSortKeysLocalbootProducts;
-	// java.util.List<? extends RowSorter.SortKey>currentSortKeysNetbootProducts;
-
 	protected Set depotsOfSelectedClients = null;
 	protected Set<String> allowedClients = null;
 

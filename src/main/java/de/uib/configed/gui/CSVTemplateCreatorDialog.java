@@ -49,12 +49,10 @@ import de.uib.configed.configed;
 import de.uib.configed.csv.CSVFormat;
 import de.uib.configed.csv.CSVWriter;
 import de.uib.utilities.logging.logging;
-import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	protected int wLeftLabel = Globals.BUTTON_WIDTH + 20;
 
-	private PanelGenEditTable thePanel;
 	private CSVFormat format;
 
 	private ButtonGroup fieldSeparatorOptions;
@@ -68,8 +66,6 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 	private JLabel importOptionsLabel;
 	private JLabel splittingOptionsLabel;
-	private JLabel startLineLabel;
-	private JFormattedTextField startLineInput;
 	private JFormattedTextField otherSeparatorInput;
 	private JLabel stringSeparatorLabel;
 
@@ -169,9 +165,6 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		NumberFormatter formatter = new NumberFormatter(numberFormat);
 		formatter.setAllowsInvalid(false);
 		formatter.setCommitsOnValidEdit(true);
-
-		startLineLabel = new JLabel(configed.getResourceValue("CSVImportDataDialog.startLineLabel"));
-		startLineInput = new JFormattedTextField(formatter);
 
 		tabsOption = new JRadioButton(configed.getResourceValue("CSVImportDataDialog.tabsOption"));
 		tabsOption.setActionCommand("\t");

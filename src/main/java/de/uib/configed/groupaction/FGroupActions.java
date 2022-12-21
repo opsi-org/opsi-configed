@@ -176,7 +176,7 @@ public class FGroupActions extends SecondaryFrame {
 		IconButton buttonReload = new IconButton(configed.getResourceValue("FGroupAction.buttonReload"),
 				"images/reload16.png", "images/reload16_over.png", "images/reload16_disabled.png", true);
 		// buttonReload.setPreferredSize(new Dimension(60, 40));
-		// buttonReload.setBackground(Globals.backgroundLightGrey);
+		// buttonReload.setBackground(Globals.backgroundLigtGrey);
 
 		buttonReload.addActionListener(actionEvent -> reload());
 
