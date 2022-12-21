@@ -447,6 +447,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	public void threadedReset(final de.uib.utilities.thread.ReadyFlag flag) {
 		new Thread() {
+			@Override
 			public void run() {
 				reset();
 				flag.ready = true;
@@ -589,6 +590,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		return result;
 	}
 
+	@Override
 	public boolean isCellEditable(int row, int col) {
 		if (addedRows.indexOf(row) == -1 && finalCols.indexOf(col) > -1)
 			// we cannot edit a key column but when it is not saved in the data backend
@@ -654,6 +656,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		return colMarkCursorRow;
 	}
 
+	@Override
 	public void setValueAt(Object value, int row, int col) {
 		// wenn row hinzugefügte zeile ist:
 
@@ -1051,6 +1054,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		xFunctions = null;
 	}
 
+	@Override
 	public Map<Object, java.util.List<Object>> getFunction(int col1, int col2) {
 		return getFunction(col1, col2, null);
 	}
@@ -1071,6 +1075,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		return function;
 	}
 
+	@Override
 	public java.util.Map<Integer, RowStringMap> getPrimarykey2Rowmap() {
 		if (keyCol < 0)
 			return null;
@@ -1088,10 +1093,12 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		return primarykey2Rowmap;
 	}
 
+	@Override
 	public void setKeyRepresenter(de.uib.utilities.table.KeyRepresenter kr) {
 		keyRepresenter = kr;
 	}
 
+	@Override
 	public java.util.Map<Integer, String> getPrimarykeyTranslation() {
 		if (keyCol < 0)
 			return null;
@@ -1122,6 +1129,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		return primarykeyTranslation;
 	}
 
+	@Override
 	public de.uib.utilities.Mapping<Integer, String> getPrimarykeyRepresentation() {
 		if (getPrimarykeyTranslation() == null)
 			return null;
@@ -1134,6 +1142,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		return primarykeyRepresentation;
 	}
 
+	@Override
 	public java.util.Map<Integer, Mapping<Integer, String>> getID2Mapping(int col1st, int col2nd,
 			Mapping col2ndMapping) {
 		TableModelFunctions.PairOfInt pair = new TableModelFunctions.PairOfInt(col1st, col2nd);

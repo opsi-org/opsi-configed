@@ -94,9 +94,11 @@ public class PanelSWInfo extends JPanel {
 	int indexOfColWindowsSoftwareID;
 
 	de.uib.utilities.table.TableModelFilterCondition filterConditionWithMsUpdates = new de.uib.utilities.table.TableModelFilterCondition() {
+		@Override
 		public void setFilter(TreeSet<Object> filter) {
 		}
 
+		@Override
 		public boolean test(Vector<Object> row) {
 			String entry = (String) row.get(indexOfColWindowsSoftwareID);
 			boolean isKb = entry.startsWith("kb");
@@ -121,9 +123,11 @@ public class PanelSWInfo extends JPanel {
 	final java.util.regex.Pattern patternWithKB = java.util.regex.Pattern.compile("\\{.*\\}\\p{Punct}kb.*");
 
 	de.uib.utilities.table.TableModelFilterCondition filterConditionWithMsUpdates2 = new de.uib.utilities.table.TableModelFilterCondition() {
+		@Override
 		public void setFilter(TreeSet<Object> filter) {
 		}
 
+		@Override
 		public boolean test(Vector<Object> row) {
 			String entry = (String) row.get(indexOfColWindowsSoftwareID);
 			boolean isKb = (patternWithKB.matcher(entry)).matches();
@@ -213,6 +217,7 @@ public class PanelSWInfo extends JPanel {
 
 		modelSWInfo = new GenTableModel(null, // no updates
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
 					public Map<String, Map> retrieveMap() {
 						logging.info(this, "retrieving data for " + hostId);
 						Map<String, Map> tableData = persist.retrieveSoftwareAuditData(hostId);
@@ -244,6 +249,7 @@ public class PanelSWInfo extends JPanel {
 		checkWithMsUpdates = new JCheckBox("", withMsUpdates);
 		checkWithMsUpdates.setForeground(Globals.blue);
 		checkWithMsUpdates.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				setWithMsUpdatesValue(checkWithMsUpdates.isSelected());
 			}
@@ -258,6 +264,7 @@ public class PanelSWInfo extends JPanel {
 		checkWithMsUpdates2 = new JCheckBox("", withMsUpdates2);
 		checkWithMsUpdates2.setForeground(Globals.blue);
 		checkWithMsUpdates2.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				setWithMsUpdatesValue2(checkWithMsUpdates2.isSelected());
 			}
@@ -406,6 +413,7 @@ public class PanelSWInfo extends JPanel {
 							PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,
 
 							PopupMenuTrait.POPUP_FLOATINGCOPY }) {
+				@Override
 				public void action(int p) {
 
 					switch (p) {
@@ -730,18 +738,22 @@ public class PanelSWInfo extends JPanel {
 			fireTableDataChanged();
 		}
 
+		@Override
 		public int getRowCount() {
 			return data.size();
 		}
 
+		@Override
 		public int getColumnCount() {
 			return SWAuditClientEntry.getDisplayKeys().size(); // not key "ID";
 		}
 
+		@Override
 		public String getColumnName(int column) {
 			return SWAuditClientEntry.getDisplayKey(column + 1);
 		}
 
+		@Override
 		public Object getValueAt(int row, int col) {
 			return (/* encodeString */ (String[]) data.get(row))[col + 1];
 		}

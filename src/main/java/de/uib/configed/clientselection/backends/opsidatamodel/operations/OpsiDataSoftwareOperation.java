@@ -26,6 +26,7 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 		productsWithDefaultValues = new TreeSet<String>(productDefaultStates.keySet());
 	}
 
+	@Override
 	public boolean doesMatch(Client client) {
 		logging.debug(this, "doesMatch starting");
 		OpsiDataClient oClient = (OpsiDataClient) client;

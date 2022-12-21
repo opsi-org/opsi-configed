@@ -94,6 +94,7 @@ public class FEditorPane extends FGeneralDialog {
 
 	// KeyListener
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;

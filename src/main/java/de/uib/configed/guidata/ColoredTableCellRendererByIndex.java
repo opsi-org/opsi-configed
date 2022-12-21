@@ -30,6 +30,7 @@ public class ColoredTableCellRendererByIndex extends de.uib.utilities.table.gui.
 		this.mapOfTextColors = mapOfTextColors;
 	}
 
+	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 			boolean isSelected, // is the cell selected
 			boolean hasFocus, int row, int column) {

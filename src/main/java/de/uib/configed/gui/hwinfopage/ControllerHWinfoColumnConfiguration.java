@@ -242,6 +242,7 @@ public class ControllerHWinfoColumnConfiguration {
 				// tableProvider
 				// new de.uib.utilities.table.provider.DefaultTableProvider(sqlSource),
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
 					public Map retrieveMap() {
 						Map<String, Map<String, Object>> hwColumnConfig = getHwColumnConfig();
 
@@ -345,6 +346,7 @@ public class ControllerHWinfoColumnConfiguration {
 		// this is not correct for keys, therefore we set the void icon
 
 		panel.setUpdateController(new MapItemsUpdateController(panel, model, new MapBasedUpdater() {
+			@Override
 			public String sendUpdate(Map<String, Object> rowmap) {
 				// panel.sortAgainAsConfigured();
 				// we reset the original sorting because we need information from lines "above"
@@ -358,6 +360,7 @@ public class ControllerHWinfoColumnConfiguration {
 				return "";
 			}
 
+			@Override
 			public boolean sendDelete(Map<String, Object> rowmap) {
 				logging.info(this, "within MapItemsUpdateController sendDelete " + rowmap);
 				// method is not used since we don*t delete rows

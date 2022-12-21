@@ -20,6 +20,7 @@ public class OpsiDataDateGreaterThanOperation extends DateGreaterThanOperation i
 		};
 	}
 
+	@Override
 	public boolean doesMatch(Client client) {
 		return matcher.doesMatch(client);
 	}

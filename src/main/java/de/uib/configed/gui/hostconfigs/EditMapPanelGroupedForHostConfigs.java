@@ -109,6 +109,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		popupForUserpathes = new PopupMenuTrait(new Integer[] {
 				// PopupMenuTrait.POPUP_SAVE,
 				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
+			@Override
 			public void action(int p) {
 				// logging.info(this, "action popup " + p);
 
@@ -139,6 +140,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		popupForUserpath = new PopupMenuTrait(new Integer[] {
 				// PopupMenuTrait.POPUP_SAVE,
 				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
+			@Override
 			public void action(int p) {
 				// logging.info(this, "action popup " + p);
 
@@ -516,6 +518,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 	}
 
+	@Override
 	protected void reload() {
 		// partial reload
 		PersistenceController persist = PersistenceControllerFactory.getPersistenceController();

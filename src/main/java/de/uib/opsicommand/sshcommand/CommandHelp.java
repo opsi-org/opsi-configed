@@ -86,6 +86,7 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	 * 
 	 * @param c (command): String
 	 **/
+	@Override
 	public void setCommand(String c) {
 		command = c;
 	}

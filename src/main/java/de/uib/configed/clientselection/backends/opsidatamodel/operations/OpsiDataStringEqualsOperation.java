@@ -32,6 +32,7 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 
 	}
 
+	@Override
 	public boolean doesMatch(Client client) {
 		OpsiDataClient oClient = (OpsiDataClient) client;
 		logging.debug(this, " (OpsiDataStringEqualsOperation) doesMatch client " + oClient);

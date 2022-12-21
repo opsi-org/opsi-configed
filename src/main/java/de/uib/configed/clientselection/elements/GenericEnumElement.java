@@ -18,6 +18,7 @@ public class GenericEnumElement extends SelectElement {
 		// this.enumData.add(0, "*");
 	}
 
+	@Override
 	public List<SelectOperation> supportedOperations() {
 		List<SelectOperation> result = new LinkedList<SelectOperation>();
 		result.add(new StringEqualsOperation(this));

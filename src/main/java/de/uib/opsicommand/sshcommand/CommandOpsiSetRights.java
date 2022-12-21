@@ -48,6 +48,7 @@ public class CommandOpsiSetRights extends SSHCommand_Template
 		return mainName;
 	}
 
+	@Override
 	public void setMainName(String n) {
 		mainName = n;
 	}
@@ -116,6 +117,7 @@ public class CommandOpsiSetRights extends SSHCommand_Template
 		return commands_string_list;
 	}
 
+	@Override
 	public LinkedList<SSHCommand> getOriginalCommands() {
 		return ssh_command_original;
 	}
@@ -150,6 +152,7 @@ public class CommandOpsiSetRights extends SSHCommand_Template
 	 * 
 	 * @param c (command): String
 	 **/
+	@Override
 	public void setCommand(String c) {
 		command = c;
 	}

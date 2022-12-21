@@ -45,6 +45,7 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 		this.tooltipPrefix = tooltipPrefix;
 	}
 
+	@Override
 	public Component getListCellRendererComponent(JList list, Object value, // value to display
 			int index, // cell index
 			boolean isSelected, // is the cell selected

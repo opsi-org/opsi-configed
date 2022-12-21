@@ -42,14 +42,17 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 		return (AbstractTableModel) table.getModel();
 	}
 
+	@Override
 	public String getColumnName(int col) {
 		return getTableModel().getColumnName(col);
 	}
 
+	@Override
 	public int findColumn(String name) {
 		return getTableModel().findColumn(name);
 	}
 
+	@Override
 	public int getColumnCount() {
 		// logging.info(this, "getColumnCount retrieves model " + getTableModel());
 		// if (getTableModel() == null)
@@ -58,22 +61,27 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 		return getTableModel().getColumnCount();
 	}
 
+	@Override
 	public int getRowCount() {
 		return getTableModel().getRowCount();
 	}
 
+	@Override
 	public Object getValueAt(int row, int col) {
 		return getTableModel().getValueAt(row, col);
 	}
 
+	@Override
 	public int getColForVisualCol(int visualCol) {
 		return table.convertColumnIndexToModel(visualCol);
 	}
 
+	@Override
 	public int getRowForVisualRow(int visualRow) {
 		return table.convertRowIndexToModel(visualRow);
 	}
 
+	@Override
 	public void setRenderAsCurrentRow(int row) {
 		/*
 		 * logging.info(this, "setRenderAsCurrentRow " + row);
@@ -98,18 +106,22 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 		 */
 	}
 
+	@Override
 	public void clearSelection() {
 		table.clearSelection();
 	}
 
+	@Override
 	public int getSelectedRow() {
 		return table.getSelectedRow();
 	}
 
+	@Override
 	public int[] getSelectedRows() {
 		return table.getSelectedRows();
 	}
 
+	@Override
 	public void ensureRowIsVisible(int row) {
 		// int viewrow = table.convertRowIndexToView(row);
 		// int modelrow = table.convertRowIndexToModel(row);
@@ -118,6 +130,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 		// setCursorRow( row );
 	}
 
+	@Override
 	public void setCursorRow(int row) {
 		int viewrow = table.convertRowIndexToView(row);
 		int modelrow = table.convertRowIndexToModel(row);
@@ -136,6 +149,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	}
 
+	@Override
 	public void setSelectedRow(int row) {
 		if (table.getRowCount() == 0)
 			return;
@@ -150,6 +164,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 		ensureRowIsVisible(row);
 	}
 
+	@Override
 	public void addSelectedRow(int row) {
 		logging.debug(this, "addSelectedRow " + row);
 
@@ -161,14 +176,17 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 		ensureRowIsVisible(row);
 	}
 
+	@Override
 	public int[] getUnfilteredSelection() {
 		return viewRowfilter;
 	}
 
+	@Override
 	public void setValueIsAdjusting(boolean b) {
 		table.getSelectionModel().setValueIsAdjusting(b);
 	}
 
+	@Override
 	public void setSelection(int[] selection) {
 		logging.info(this, "setSelection --- " + java.util.Arrays.toString(selection));
 		table.getSelectionModel().clearSelection();

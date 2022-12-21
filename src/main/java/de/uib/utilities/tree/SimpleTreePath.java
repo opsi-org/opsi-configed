@@ -33,6 +33,7 @@ public class SimpleTreePath extends ArrayList<String> implements Comparable<Simp
 		return set;
 	}
 
+	@Override
 	public SimpleTreePath subList(int j, int i) {
 		return new SimpleTreePath(super.subList(j, i));
 	}
@@ -95,6 +96,7 @@ public class SimpleTreePath extends ArrayList<String> implements Comparable<Simp
 	 */
 
 	// interface Comparable
+	@Override
 	public int compareTo(SimpleTreePath o) {
 		int result = 0;
 		int i = 0;

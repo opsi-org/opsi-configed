@@ -29,6 +29,7 @@ public class ResourceBundleUtf8 {
 		/**
 		 * @see java.util.ResourceBundle#getKeys()
 		 */
+		@Override
 		public Enumeration<String> getKeys() {
 			return Collections.enumeration(valueByKey.keySet());
 		}
@@ -56,6 +57,7 @@ public class ResourceBundleUtf8 {
 		/**
 		 * @see java.util.ResourceBundle#handleGetObject(java.lang.String)
 		 */
+		@Override
 		protected Object handleGetObject(String pKey) {
 			return valueByKey.get(pKey);
 		}

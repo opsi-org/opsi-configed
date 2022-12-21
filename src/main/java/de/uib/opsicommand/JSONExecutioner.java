@@ -22,6 +22,7 @@ import de.uib.utilities.logging.logging;
 public abstract class JSONExecutioner extends Executioner {
 	protected ConnectionState conStat;
 
+	@Override
 	public abstract JSONObject retrieveJSONObject(OpsiMethodCall omc);
 
 	public JSONObject retrieveJSONResult(OpsiMethodCall omc) {
@@ -32,10 +33,12 @@ public abstract class JSONExecutioner extends Executioner {
 		return null;
 	}
 
+	@Override
 	public ConnectionState getConnectionState() {
 		return conStat;
 	}
 
+	@Override
 	public void setConnectionState(ConnectionState state) {
 		conStat = state;
 	}
@@ -44,6 +47,7 @@ public abstract class JSONExecutioner extends Executioner {
 		return JSONReMapper.checkResponse(retrieved);
 	}
 
+	@Override
 	public Object getValueFromJSONObject(Object o, String key) {
 		Object value = null;
 		try {
@@ -57,6 +61,7 @@ public abstract class JSONExecutioner extends Executioner {
 		return value;
 	}
 
+	@Override
 	public boolean doCall(OpsiMethodCall omc) {
 		JSONObject jO = retrieveJSONObject(omc);
 		// logging.debug ( " --------------- jO " + jO);
@@ -64,18 +69,22 @@ public abstract class JSONExecutioner extends Executioner {
 		return checkResponse(jO);
 	}
 
+	@Override
 	public List<List<String>> getListOfStringLists(OpsiMethodCall omc) {
 		return JSONReMapper.getListOfStringLists(retrieveJSONObject(omc));
 	}
 
+	@Override
 	public List getListResult(OpsiMethodCall omc) {
 		return JSONReMapper.getListResult(retrieveJSONObject(omc));
 	}
 
+	@Override
 	public List<String> getStringListResult(OpsiMethodCall omc) {
 		return JSONReMapper.getStringListResult(retrieveJSONObject(omc));
 	}
 
+	@Override
 	public Map getMapResult(OpsiMethodCall omc)
 	// yields possibly JSON objects and arrays as values
 	// compare getMap_Object
@@ -129,10 +138,12 @@ public abstract class JSONExecutioner extends Executioner {
 		return result;
 	}
 
+	@Override
 	public Map getMapOfLists(OpsiMethodCall omc) {
 		return getMapOfLists(omc, true);
 	}
 
+	@Override
 	public Map getMapOfMaps(OpsiMethodCall omc) {
 		HashMap result = new HashMap();
 		try {
@@ -164,12 +175,14 @@ public abstract class JSONExecutioner extends Executioner {
 		return result;
 	}
 
+	@Override
 	public Map<String, Object> getMap_Object(OpsiMethodCall omc)
 	// this method tries to return Java lists in comparison with getMapResult
 	{
 		return JSONReMapper.getMap_Object(retrieveJSONObject(omc));
 	}
 
+	@Override
 	public Map<String, Map<String, Object>> getMap2_Object(OpsiMethodCall omc)
 	// including a conversion of json objects to a standard java object
 
@@ -265,19 +278,23 @@ public abstract class JSONExecutioner extends Executioner {
 	 * }
 	 */
 
+	@Override
 	public Map<String, Map<String, Map<String, Object>>> getMap3_Object(OpsiMethodCall omc) {
 		return JSONReMapper.getMap3_Object(retrieveJSONObject(omc));
 	}
 
+	@Override
 	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key) {
 		return getStringMappedObjectsByKey(omc, key, null, null);
 	}
 
+	@Override
 	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
 			String[] sourceVars, String[] targetVars) {
 		return getStringMappedObjectsByKey(omc, key, sourceVars, targetVars, null);
 	}
 
+	@Override
 	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
 			String[] sourceVars, String[] targetVars, Map<String, String> translateValues)
 
@@ -372,6 +389,7 @@ public abstract class JSONExecutioner extends Executioner {
 
 	}
 
+	@Override
 	public Map getMapOfListsOfMaps(OpsiMethodCall omc) {
 		// TODO: Performance
 		HashMap result = new HashMap();
@@ -411,14 +429,17 @@ public abstract class JSONExecutioner extends Executioner {
 		return result;
 	}
 
+	@Override
 	public List<Map<String, Object>> getListOfMaps(OpsiMethodCall omc) {
 		return JSONReMapper.getListOfMaps(retrieveJSONObject(omc));
 	}
 
+	@Override
 	public List<Map<String, String>> getListOfStringMaps(OpsiMethodCall omc) {
 		return JSONReMapper.getListOfStringMaps(retrieveJSONObject(omc));
 	}
 
+	@Override
 	public List getListOfMapsOfListsOfMaps(OpsiMethodCall omc) {
 		// TODO: Performance
 		ArrayList result = null;
@@ -480,6 +501,7 @@ public abstract class JSONExecutioner extends Executioner {
 		return result;
 	}
 
+	@Override
 	public String getStringResult(OpsiMethodCall omc) {
 		String result = null;
 
@@ -499,6 +521,7 @@ public abstract class JSONExecutioner extends Executioner {
 		return result;
 	}
 
+	@Override
 	public boolean getBooleanResult(OpsiMethodCall omc) {
 		// logging.info(this, "getBooleanResult " + omc);
 		Boolean result = null;
@@ -527,6 +550,7 @@ public abstract class JSONExecutioner extends Executioner {
 		return result.booleanValue();
 	}
 
+	@Override
 	public String getStringValueFromItem(Object s) {
 		if (s instanceof String) {
 			return (String) s;
@@ -534,6 +558,7 @@ public abstract class JSONExecutioner extends Executioner {
 		return null;
 	}
 
+	@Override
 	public Map<String, Object> getMapFromItem(Object s) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		if (s == null)
@@ -587,6 +612,7 @@ public abstract class JSONExecutioner extends Executioner {
 		return result;
 	}
 
+	@Override
 	public List getListFromItem(String s) {
 		ArrayList result = new ArrayList();
 

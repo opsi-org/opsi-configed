@@ -44,14 +44,17 @@ public class GenericTableUpdateItemFactory extends TableUpdateItemFactory {
 		this.columnNames = columnNames;
 	}
 
+	@Override
 	public TableEditItem produceUpdateItem(Vector oldValues, Vector rowV) {
 		return new GenericTableUpdateItem(source, keyCol, columnNames, classNames, oldValues, rowV);
 	}
 
+	@Override
 	public TableEditItem produceInsertItem(Vector rowV) {
 		return new GenericTableInsertItem(source, keyCol, columnNames, classNames, rowV);
 	}
 
+	@Override
 	public TableEditItem produceDeleteItem(Vector rowV) {
 		return new GenericTableDeleteItem(source, keyCol, columnNames, classNames, rowV);
 	}

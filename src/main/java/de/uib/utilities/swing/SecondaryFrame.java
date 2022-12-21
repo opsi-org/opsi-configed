@@ -75,6 +75,7 @@ public class SecondaryFrame extends JFrame implements WindowListener {
 		setVisible(false);
 	}
 
+	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		// logging.info(this, "--------processWindowEvent " + e);
 		// super.processWindowEvent(e);
@@ -85,31 +86,38 @@ public class SecondaryFrame extends JFrame implements WindowListener {
 	}
 
 	/* WindowListener implementation */
+	@Override
 	public void windowClosing(WindowEvent e) {
 		// logging.info(this, "-------windowClosing " + e);
 		callExit();
 	}
 
+	@Override
 	public void windowOpened(WindowEvent e) {
 		;
 	}
 
+	@Override
 	public void windowClosed(WindowEvent e) {
 		;
 	}
 
+	@Override
 	public void windowActivated(WindowEvent e) {
 		;
 	}
 
+	@Override
 	public void windowDeactivated(WindowEvent e) {
 		;
 	}
 
+	@Override
 	public void windowIconified(WindowEvent e) {
 		;
 	}
 
+	@Override
 	public void windowDeiconified(WindowEvent e) {
 		;
 	}

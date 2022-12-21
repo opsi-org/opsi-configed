@@ -21,6 +21,7 @@ public class OpsiDataIntEqualsOperation extends IntEqualsOperation implements Ex
 		this.data = data;
 	}
 
+	@Override
 	public boolean doesMatch(Client client) {
 		OpsiDataClient oClient = (OpsiDataClient) client;
 		Map realMap = oClient.getMap(map);

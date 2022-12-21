@@ -622,6 +622,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	}
 
+	@Override
 	public int getColumnIndex(String columnName) {
 		return displayColumns.indexOf(columnName);
 	}
@@ -633,6 +634,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		}
 	}
 
+	@Override
 	public void clearCollectChangedStates() {
 		collectChangedStates.clear();
 		// changeActionIsSet = false;
@@ -729,6 +731,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 							configed.getResourceValue("InstallationStateTableModel.contradictingProductRequirements3"),
 							actualProduct, existingRequest, state);
 					new Thread() {
+						@Override
 						public void run() {
 							javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame, infoOfChange,
 									configed.getResourceValue(
@@ -758,6 +761,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 									existingRequest);
 
 					new Thread() {
+						@Override
 						public void run() {
 							javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame, errorInfo,
 									configed.getResourceValue(
@@ -815,6 +819,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		return changedStatesForProduct.get(stateType);
 	}
 
+	@Override
 	public boolean infoIfNoClientsSelected() {
 
 		if (selectedClients.length == 0) {
@@ -834,6 +839,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		}
 	}
 
+	@Override
 	public void initCollectiveChange() {
 		logging.debug(this, "initCollectiveChange");
 		setOnGoingCollectiveChangeCount();
@@ -887,6 +893,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		// missingProducts.clear();
 	}
 
+	@Override
 	public void finishCollectiveChange() {
 		logging.info(this, "finishCollectiveChange");
 
@@ -974,6 +981,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		return true;
 	}
 
+	@Override
 	public void collectiveChangeActionRequest(String productId, ActionRequest ar) {
 
 		logging.info(this, "collectiveChangeActionRequest for product " + productId + " to " + ar);
@@ -1376,11 +1384,13 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		return productsV.indexOf(id);
 	}
 
+	@Override
 	public Map<String, Map<String, Object>> getGlobalProductInfos() {
 		return globalProductInfos;
 	}
 
 	// interface ComboBoxModeller
+	@Override
 	public ComboBoxModel getComboBoxModel(int row, int column) {
 		actualProduct = (String) productsV.get(row); // products[row];
 		// logging.debug(this, "getComboBoxModel(), actualproduct " + actualProduct + "
@@ -1511,14 +1521,17 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	// table model
 
+	@Override
 	public int getColumnCount() {
 		return numberOfColumns; // 3;
 	}
 
+	@Override
 	public int getRowCount() {
 		return productsV.size();
 	}
 
+	@Override
 	public String getColumnName(int col) {
 		return columnTitles.get(col);
 		/*
@@ -1546,6 +1559,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		 */
 	}
 
+	@Override
 	public String getLastStateChange(int row) {
 		String actualProduct = (String) productsV.get(row);
 		// logging.debug(this,
@@ -1563,6 +1577,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	// this method may be overwritten e.g.for row filtering but retrieveValue
 	// continues to work
+	@Override
 	public Object getValueAt(int row, int displayCol) {
 		return retrieveValueAt(row, displayCol);
 	}
@@ -1692,6 +1707,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	 * editor for each cell. If we didn't implement this method,
 	 * then the last column would contain text
 	 */
+	@Override
 	public Class getColumnClass(int c) {
 		Object val = retrieveValueAt(0, c);
 		if (val == null)
@@ -1703,6 +1719,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	/*
 	 * editable columns
 	 */
+	@Override
 	public boolean isCellEditable(int row, int col) {
 		if (preparedColumnIsEditable(indexPreparedColumns[col])) {
 			return true;
@@ -1714,6 +1731,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	/*
 	 * change method for edited cells
 	 */
+	@Override
 	public void setValueAt(Object value, int row, int col) {
 		logging.debug(this, " actualProduct " + actualProduct + ", set value at " + row + ", " + col);
 		changeValueAt(value, row, col);

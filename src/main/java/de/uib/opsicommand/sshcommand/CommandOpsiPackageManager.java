@@ -91,6 +91,7 @@ public class CommandOpsiPackageManager implements SSHCommand {
 	 * 
 	 * @param c (command): String
 	 **/
+	@Override
 	public void setCommand(String c) {
 	}
 

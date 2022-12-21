@@ -74,6 +74,7 @@ public class Table_LicenceContracts extends Relation {
 	}
 
 	// @Override
+	@Override
 	public StringValuedRelationElement integrateRaw(Map<String, Object> m) {
 		StringValuedRelationElement rowmap = new StringValuedRelationElement();
 		rowmap.setAllowedAttributes(INTERFACED_ATTRIBUTES);

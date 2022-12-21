@@ -150,6 +150,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	 * 
 	 * @param c (command): String
 	 **/
+	@Override
 	public void setCommand(String c) {
 	}
 

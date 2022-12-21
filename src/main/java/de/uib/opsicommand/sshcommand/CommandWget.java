@@ -207,6 +207,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 		return product;
 	}
 
+	@Override
 	public void setCommand(String c) {
 		command = c;
 	}

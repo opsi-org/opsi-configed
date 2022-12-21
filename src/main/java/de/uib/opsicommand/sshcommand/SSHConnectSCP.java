@@ -88,10 +88,12 @@ public class SSHConnectSCP extends SSHConnectExec {
 		return null;
 	}
 
+	@Override
 	public SSHConnectionExecDialog getDialog() {
 		return outputDialog;
 	}
 
+	@Override
 	public void setDialog(SSHConnectionExecDialog dia) {
 		outputDialog = dia;
 	}

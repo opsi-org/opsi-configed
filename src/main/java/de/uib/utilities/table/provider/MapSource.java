@@ -157,14 +157,17 @@ public class MapSource implements TableSource
 		}
 	}
 
+	@Override
 	public Vector<String> retrieveColumnNames() {
 		return columnNames;
 	}
 
+	@Override
 	public Vector<String> retrieveClassNames() {
 		return classNames;
 	}
 
+	@Override
 	public Vector<Vector<Object>> retrieveRows() {
 		logging.info(this, " -- retrieveRows");
 		if (reloadRequested) {
@@ -175,6 +178,7 @@ public class MapSource implements TableSource
 		return rows;
 	}
 
+	@Override
 	public void requestReload() {
 		reloadRequested = true;
 	}

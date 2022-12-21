@@ -58,16 +58,20 @@ public class DepotsList extends JList<String> implements ComponentListener {
 	}
 
 	// interface ComponentListene
+	@Override
 	public void componentHidden(ComponentEvent e) {
 	}
 
+	@Override
 	public void componentMoved(ComponentEvent e) {
 	}
 
+	@Override
 	public void componentResized(ComponentEvent e) {
 		ensureIndexIsVisible(getSelectedIndex());
 	}
 
+	@Override
 	public void componentShown(ComponentEvent e) {
 		ensureIndexIsVisible(getSelectedIndex());
 	}
@@ -141,6 +145,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 			this.extendedInfo = extendedInfo;
 		}
 
+		@Override
 		public Component getListCellRendererComponent(JList list, Object value, // value to display
 				int index, // cell index
 				boolean isSelected, // is the cell selected

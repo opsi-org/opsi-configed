@@ -27,10 +27,12 @@ public class DefaultTableModelFilterCondition implements TableModelFilterConditi
 			this.filterLabel = label;
 	}
 
+	@Override
 	public void setFilter(TreeSet<Object> filterParam) {
 		filterSet = filterParam;
 	}
 
+	@Override
 	public boolean test(Vector<Object> row) {
 		// logging.info(this, "test " + row);
 
@@ -49,6 +51,7 @@ public class DefaultTableModelFilterCondition implements TableModelFilterConditi
 	public void setFilter(int[] rowNoFilter, final Vector<Vector<Object>> row) {
 	}
 
+	@Override
 	public String toString() {
 		return filterLabel;
 	}

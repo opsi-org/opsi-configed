@@ -16,6 +16,7 @@ public class MapDeleteItem extends MapBasedTableEditItem {
 		super(source, keyCol, columnNames, classNames, null, rowV);
 	}
 
+	@Override
 	public boolean keyChanged() {
 		return false;
 	}

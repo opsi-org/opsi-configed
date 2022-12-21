@@ -74,6 +74,7 @@ public class SavedSearchesDialog extends FEditList {
 		super.initComponents();
 
 		buttonRemove.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.debug(this, "actionPerformed");
 				// does not find the selected entry
@@ -85,6 +86,7 @@ public class SavedSearchesDialog extends FEditList {
 
 		buttonAdd.setEnabled(true);
 		buttonAdd.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.debug(this, "actionPerformed on buttonAdd ");
 				addElement();
@@ -98,6 +100,7 @@ public class SavedSearchesDialog extends FEditList {
 		reload.setIcon(Globals.createImageIcon("images/reload16.png", ""));
 		reload.setFont(Globals.defaultFont);
 		reload.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.debug(this, "------------- reload action");
 				reloadAction();
@@ -113,6 +116,7 @@ public class SavedSearchesDialog extends FEditList {
 		// ""));
 		remove.setFont(Globals.defaultFont);
 		remove.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.debug(this, "------------- remove action");
 				removeSelectedEntry();
@@ -124,6 +128,7 @@ public class SavedSearchesDialog extends FEditList {
 		edit.setText(de.uib.configed.configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
 		edit.setFont(Globals.defaultFont);
 		edit.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				editSearch(visibleList.getSelectedValue().toString());
 			}
@@ -275,6 +280,7 @@ public class SavedSearchesDialog extends FEditList {
 	public void mouseExited(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
 	// ======================

@@ -23,6 +23,7 @@ public class JTableWithToolTips extends JTable {
 		super(tm);
 	}
 
+	@Override
 	public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int colIndex) {
 		Component c = super.prepareRenderer(renderer, rowIndex, colIndex);
 

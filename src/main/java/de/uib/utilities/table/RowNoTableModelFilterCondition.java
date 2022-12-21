@@ -20,6 +20,7 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 		this.table = table;
 	}
 
+	@Override
 	public void setFilter(TreeSet<Object> filter) {
 	}
 
@@ -47,6 +48,7 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 		// logging.info(this, "setFilter we have got selectionInfo " + selectionInfo);
 	}
 
+	@Override
 	public boolean test(Vector<Object> row) {
 		// logging.info(this, "row " + row + " selectionInfo " + selectionInfo );
 

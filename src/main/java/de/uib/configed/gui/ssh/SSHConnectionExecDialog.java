@@ -85,6 +85,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 
 		instance = new SSHConnectionExecDialog();
 		SwingUtilities.invokeLater(new Thread() {
+			@Override
 			public void run() {
 				instance.setVisible(true);
 			}
@@ -107,6 +108,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 			btn_clear.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3));
 			btn_clear.setToolTipText(configed.getResourceValue("SSHConnection.btn_clear"));
 			btn_clear.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					clear();
 				}
@@ -120,6 +122,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 
 	public boolean showResult = true;
 
+	@Override
 	public void setStatusFinish() {
 		if (showResult)
 			setVisible(true);

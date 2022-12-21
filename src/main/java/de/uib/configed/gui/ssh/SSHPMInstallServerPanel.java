@@ -37,6 +37,7 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 		}
 	}
 
+	@Override
 	public void enable(boolean e) {
 		cb_autocompletion.setEnabled(e);
 		btn_autocompletion.setEnabled(e);

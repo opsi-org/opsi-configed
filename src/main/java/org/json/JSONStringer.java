@@ -327,6 +327,7 @@ public class JSONStringer {
 	 * 
 	 * @return The JSON text.
 	 */
+	@Override
 	public String toString() {
 		return this.mode == 'd' ? this.sb.toString() : null;
 	}

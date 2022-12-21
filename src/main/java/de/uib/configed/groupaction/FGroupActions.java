@@ -174,6 +174,7 @@ public class FGroupActions extends SecondaryFrame {
 		buttonSetup.setToolTipText(configed.getResourceValue("FGroupAction.buttonSetup.tooltip"));
 
 		buttonSetup.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				// logging.info(this, "actionPerformed");
 				replay();
@@ -186,6 +187,7 @@ public class FGroupActions extends SecondaryFrame {
 		// buttonReload.setBackground(Globals.backgroundLightGrey);
 
 		buttonReload.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				// logging.info(this, "actionPerformed");
 				reload();

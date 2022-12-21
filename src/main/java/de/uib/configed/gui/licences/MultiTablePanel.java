@@ -19,6 +19,7 @@ public class MultiTablePanel extends de.uib.utilities.swing.tabbedpane.TabClient
 		this.controller = controller;
 	}
 
+	@Override
 	public void reset() {
 		super.reset();
 		// logging.debug(this, "MultiTablePanel.reset() ");
@@ -26,6 +27,7 @@ public class MultiTablePanel extends de.uib.utilities.swing.tabbedpane.TabClient
 		controller.initializeVisualSettings();
 	}
 
+	@Override
 	public boolean mayLeave() {
 		// logging.debug(this, "we want to leave " + this);
 

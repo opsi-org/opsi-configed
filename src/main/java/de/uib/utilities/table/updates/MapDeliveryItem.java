@@ -26,6 +26,7 @@ public class MapDeliveryItem extends MapBasedTableEditItem {
 		this(source, keyCol, columnNames, classNames, null, rowV);
 	}
 
+	@Override
 	public boolean keyChanged() {
 		if (keyCol < 0)
 			return false;

@@ -4,6 +4,7 @@ public class VisualClientNodeNameModifierFactory {
 	VisualClientNodeNameModifier mod;
 
 	class SuppressTerminatingUnderscores implements VisualClientNodeNameModifier {
+		@Override
 		public String modify(final String in) {
 			if (in == null)
 				return null;

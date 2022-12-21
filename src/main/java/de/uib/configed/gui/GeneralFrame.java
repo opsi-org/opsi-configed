@@ -179,6 +179,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	}
 
 	// ActionListener
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		// logging.debug ("ActionEvent ...... ");
 		if (e.getSource() == jButton1) {
@@ -228,6 +229,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 			fadeTimer.start();
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			// logging.debug(this, "fade, opacity " + opacity);
 

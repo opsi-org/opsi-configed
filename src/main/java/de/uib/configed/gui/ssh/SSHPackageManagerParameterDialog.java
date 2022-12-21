@@ -130,6 +130,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 			btn_help.setText(configed.getResourceValue("SSHConnection.buttonHelp"));
 			// buttonPanel.add(btn_help);
 			btn_help.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					doActionHelp(caller);
 				}
@@ -141,6 +142,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 			btn_execute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 			if (!(Globals.isGlobalReadOnly()))
 				btn_execute.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						if (caller instanceof SSHPackageManagerUninstallParameterDialog)
 							((SSHPackageManagerUninstallParameterDialog) caller).doAction1();
@@ -155,6 +157,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 			btn_reload.setToolTipText(configed.getResourceValue("SSHConnection.buttonPackagesReload.tooltip"));
 			if (!(Globals.isGlobalReadOnly()))
 				btn_reload.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						logging.debug(this, "ActionEvent on btn_reload");
 						main.reload();
@@ -167,6 +170,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 			btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 			btn_close.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 			btn_close.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					// doAction2();
 					cancel();

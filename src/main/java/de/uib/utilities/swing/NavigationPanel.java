@@ -150,6 +150,7 @@ public class NavigationPanel extends JPanel implements ActionListener {
 
 	// interface
 	// ActionListener
+	@Override
 	public void actionPerformed(java.awt.event.ActionEvent e) {
 		if (e.getSource() == nextButton)
 			next();

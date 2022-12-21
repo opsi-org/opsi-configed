@@ -114,6 +114,7 @@ public class FLoadingWaiter extends JFrame
 	}
 
 	// DataLoadingObserver
+	@Override
 	public void gotNotification(Object mesg) {
 		observingMesg = mesg;
 	}
@@ -205,6 +206,7 @@ public class FLoadingWaiter extends JFrame
 	}
 
 	// WaitingSleeper
+	@Override
 	public void actAfterWaiting() {
 		logging.info(this, "actAfterWaiting");
 		SwingUtilities.invokeLater(
@@ -220,26 +222,32 @@ public class FLoadingWaiter extends JFrame
 		// dispose();
 	}
 
+	@Override
 	public JProgressBar getProgressBar() {
 		return progressBar;
 	}
 
+	@Override
 	public JLabel getLabel() {
 		return infoLabel;
 	}
 
+	@Override
 	public long getStartActionMillis() {
 		return new GregorianCalendar().getTimeInMillis();
 	}
 
+	@Override
 	public long getWaitingMillis() {
 		return WAITING_MILLIS_FOR_LOADING;
 	}
 
+	@Override
 	public long getOneProgressBarLengthWaitingMillis() {
 		return ESTIMATED_TOTAL_WAIT_MILLIS;
 	}
 
+	@Override
 	public String setLabellingStrategy(long millisLevel) {
 		logging.debug(this, "setLabellingStrategy millis " + millisLevel);
 		return "" + observingMesg + " " + waitInfoString.next(); // ??produces strings with ascii null
@@ -248,24 +256,30 @@ public class FLoadingWaiter extends JFrame
 	}
 
 	// windowListener
+	@Override
 	public void windowActivated(WindowEvent e) {
 	}
 
+	@Override
 	public void windowClosing(WindowEvent e) {
 		// sendingToFront = true;
 	}
 
+	@Override
 	public void windowDeactivated(WindowEvent e) {
 	}
 
+	@Override
 	public void windowDeiconified(WindowEvent e) {
 	}
 
+	@Override
 	public void windowIconified(WindowEvent e) {
 		// sendingToFront = false;
 		// logging.debug ("sendingToFront " + sendingToFront);
 	}
 
+	@Override
 	public void windowOpened(WindowEvent e) {
 	}
 

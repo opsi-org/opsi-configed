@@ -102,6 +102,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		btn_doAction.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly()))
 			btn_doAction.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					logging.info(this, "btn_doAction pressed");
 					doAction1();
@@ -113,6 +114,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 		btn_close.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 		btn_close.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				cancel();
 			}
@@ -121,6 +123,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 
 		cb_actions = new JComboBox(command.getActionsText());
 		cb_actions.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if ((String) e.getItem() == configed
 						.getResourceValue("SSHConnection.command.opsipackageupdater.action.list")) {
@@ -153,6 +156,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	}
 
 	/* This method is called when button 1 is pressed */
+	@Override
 	public void doAction1() {
 		try {
 			command.setAction(command.getAction((String) cb_actions.getSelectedItem()));

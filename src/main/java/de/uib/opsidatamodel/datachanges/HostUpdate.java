@@ -10,6 +10,7 @@ public class HostUpdate extends MapUpdate {
 		super(persis, newdata);
 	}
 
+	@Override
 	public void doCall() {
 		logging.debug(this, "doCall, newdata " + newdata);
 		persis.setHostValues(newdata);

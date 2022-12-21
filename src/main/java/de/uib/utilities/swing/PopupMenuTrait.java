@@ -194,6 +194,7 @@ public class PopupMenuTrait extends JPopupMenu {
 	protected void addItem(final int p) {
 		int i = listPopups.indexOf(p);
 		menuItems[i].addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				action(p);
 			}

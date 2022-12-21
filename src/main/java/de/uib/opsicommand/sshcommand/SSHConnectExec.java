@@ -316,6 +316,7 @@ public class SSHConnectExec extends SSHConnect {
 				// does this really occur anywhere?
 				{
 					SwingUtilities.invokeLater(new Thread() {
+						@Override
 						public void run() {
 							dialog.setVisible(true);
 						}
@@ -518,6 +519,7 @@ public class SSHConnectExec extends SSHConnect {
 				final InputStream in = channel.getInputStream();
 				channel.connect();
 				killProcessListener = new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						interruptChannel(channel);
 						disconnect();

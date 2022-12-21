@@ -678,12 +678,15 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		}
 		// ComponentListener implementation
 
+		@Override
 		public void componentHidden(ComponentEvent e) {
 		}
 
+		@Override
 		public void componentMoved(ComponentEvent e) {
 		}
 
+		@Override
 		public void componentResized(ComponentEvent e) {
 			logging.debug(this, "componentResized");
 
@@ -696,6 +699,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		}
 
+		@Override
 		public void componentShown(ComponentEvent e) {
 		}
 
@@ -1284,6 +1288,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 					logging.info(this, "ssh command menuitem text " + com.getMenuText());
 					jMenuItem.setToolTipText(com.getToolTipText());
 					jMenuItem.addActionListener(new ActionListener() {
+						@Override
 						public void actionPerformed(ActionEvent e) {
 							if (factory.getConnectionState().equals(SSHCommandFactory.NOT_CONNECTED))
 								logging.error(this, configed.getResourceValue("SSHConnection.not_connected.message")
@@ -1335,6 +1340,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			jMenuOpsiCommand.setToolTipText(command.getToolTipText());
 			jMenuOpsiCommand.addActionListener(new ActionListener() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (factory.getConnectionState().equals(SSHCommandFactory.NOT_CONNECTED))
 						logging.error(this, configed.getResourceValue("SSHConnection.not_connected.message") + " "
@@ -1480,6 +1486,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuFrameShowDialogs.setText(configed.getResourceValue("MainFrame.jMenuFrameShowDialogs"));
 		jMenuFrameShowDialogs.setEnabled(false);
 		jMenuFrameShowDialogs.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.info(this, "actionPerformed");
 				executeCommandOnInstances("arrange", FEditObject.runningInstances.getAll());
@@ -2857,6 +2864,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		// tab panes
 
 		jTabbedPaneConfigPanes.addChangeListener(new javax.swing.event.ChangeListener() {
+			@Override
 			public void stateChanged(ChangeEvent e) {
 				// report state change request to
 				int visualIndex = jTabbedPaneConfigPanes.getSelectedIndex();
@@ -3022,6 +3030,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				configed.getResourceValue("MainFrame.jPanel_logfiles"), ConfigedMain.VIEW_LOG);
 
 		showLogfiles.addChangeListener(new javax.swing.event.ChangeListener() {
+			@Override
 			public void stateChanged(ChangeEvent e) {
 				// logging.debug(this, " stateChanged " + e);
 				logging.debug(this, " new logfiles tabindex " + showLogfiles.getSelectedIndex());
@@ -3724,17 +3733,21 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	// ComponentListener
+	@Override
 	public void componentHidden(ComponentEvent e) {
 	}
 
+	@Override
 	public void componentMoved(ComponentEvent e) {
 		saveLocation(e);
 	}
 
+	@Override
 	public void componentResized(ComponentEvent e) {
 		saveLocation(e);
 	}
 
+	@Override
 	public void componentShown(ComponentEvent e) {
 	}
 
@@ -3751,30 +3764,37 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	/* WindowListener implementation */
+	@Override
 	public void windowClosing(WindowEvent e) {
 		main.finishApp(true, 0);
 	}
 
+	@Override
 	public void windowOpened(WindowEvent e) {
 		;
 	}
 
+	@Override
 	public void windowClosed(WindowEvent e) {
 		;
 	}
 
+	@Override
 	public void windowActivated(WindowEvent e) {
 		;
 	}
 
+	@Override
 	public void windowDeactivated(WindowEvent e) {
 		;
 	}
 
+	@Override
 	public void windowIconified(WindowEvent e) {
 		;
 	}
 
+	@Override
 	public void windowDeiconified(WindowEvent e) {
 		;
 	}
@@ -3874,6 +3894,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	// RunningInstancesObserver
+	@Override
 	public void instancesChanged(Set<JDialog> instances) {
 		// logging.info(this, "instancesChanged, we have instances " + instances);
 		boolean existJDialogInstances = (instances != null && instances.size() > 0);
@@ -3893,6 +3914,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		 */
 	}
 
+	@Override
 	public void executeCommandOnInstances(String command, Set<JDialog> instances) {
 		logging.info(this, "executeCommandOnInstances " + command + " for count instances " + instances.size());
 		if (command.equals("arrange"))
@@ -3988,25 +4010,31 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	// MouseListener implementation
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		logging.debug(this, "mouse clicked " + Arrays.toString(main.getSelectedClients()));
 
 		reactToHostDataChange(e);
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e) {
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
 
 	// KeyListener implementation
+	@Override
 	public void keyPressed(KeyEvent e) {
 		/*
 		 * if (e.getSource() == macAddressField)
@@ -4029,16 +4057,19 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 		logging.debug(this, "key released " + Arrays.toString(main.getSelectedClients()));
 
 		reactToHostDataChange(e);
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 	}
 
 	// ActionListener implementation
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		logging.debug(this, "actionPerformed on " + e.getSource());

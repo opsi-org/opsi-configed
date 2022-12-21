@@ -325,17 +325,20 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	// offer observing of data refreshed announcements
 	protected java.util.List<DataRefreshedObserver> dataRefreshedObservers;
 
+	@Override
 	public void registerDataRefreshedObserver(DataRefreshedObserver ob) {
 		if (dataRefreshedObservers == null)
 			dataRefreshedObservers = new ArrayList<DataRefreshedObserver>();
 		dataRefreshedObservers.add(ob);
 	}
 
+	@Override
 	public void unregisterDataRefreshedObserver(DataRefreshedObserver ob) {
 		if (dataRefreshedObservers != null)
 			dataRefreshedObservers.remove(ob);
 	}
 
+	@Override
 	public void notifyDataRefreshedObservers(Object mesg) {
 		if (dataRefreshedObservers == null)
 			return;
@@ -348,17 +351,20 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	// offer observing of data loading
 	protected java.util.List<DataLoadingObserver> dataLoadingObservers;
 
+	@Override
 	public void registerDataLoadingObserver(DataLoadingObserver ob) {
 		if (dataLoadingObservers == null)
 			dataLoadingObservers = new ArrayList<DataLoadingObserver>();
 		dataLoadingObservers.add(ob);
 	}
 
+	@Override
 	public void unregisterDataLoadingObserver(DataLoadingObserver ob) {
 		if (dataLoadingObservers != null)
 			dataLoadingObservers.remove(ob);
 	}
 
+	@Override
 	public void notifyDataLoadingObservers(Object mesg) {
 		if (dataLoadingObservers == null)
 			return;

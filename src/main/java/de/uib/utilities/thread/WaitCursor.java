@@ -86,6 +86,7 @@ public class WaitCursor {
 
 		if (java.awt.EventQueue.isDispatchThread()) {
 			new Thread() {
+				@Override
 				public void run() {
 					ActivityPanel.setActing(true);
 
@@ -101,6 +102,7 @@ public class WaitCursor {
 			}.start();
 		} else {
 			javax.swing.SwingUtilities.invokeLater(new Thread() {
+				@Override
 				public void run() {
 					ActivityPanel.setActing(true);
 
@@ -123,6 +125,7 @@ public class WaitCursor {
 		ready = true;
 
 		javax.swing.SwingUtilities.invokeLater(new Thread() {
+			@Override
 			public void run() {
 
 				if (c != null)

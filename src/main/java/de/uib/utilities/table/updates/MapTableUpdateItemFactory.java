@@ -31,14 +31,17 @@ public class MapTableUpdateItemFactory extends TableUpdateItemFactory {
 		this.source = source;
 	}
 
+	@Override
 	public TableEditItem produceUpdateItem(Vector oldValues, Vector rowV) {
 		return new MapDeliveryItem(source, keyCol, columnNames, classNames, oldValues, rowV);
 	}
 
+	@Override
 	public TableEditItem produceInsertItem(Vector rowV) {
 		return new MapDeliveryItem(source, keyCol, columnNames, classNames, rowV);
 	}
 
+	@Override
 	public TableEditItem produceDeleteItem(Vector rowV) {
 		return new MapDeleteItem(source, keyCol, columnNames, classNames, rowV);
 	}

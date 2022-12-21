@@ -407,6 +407,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		return null;
 	}
 
+	@Override
 	public String getConfig_serverName() {
 		List<String> depots = main.getPersistenceController().getHostInfoCollections().getDepotNamesList();
 		for (String depot : depots)
@@ -423,6 +424,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		return main.HOST;
 	}
 
+	@Override
 	public String getConfig_sshserverName() {
 		logging.debug(this, "getConfig_sshserverName " + SSHConnectionInfo.getInstance().getHost());
 		return SSHConnectionInfo.getInstance().getHost();
@@ -451,6 +453,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		return clientIPs;
 	}
 
+	@Override
 	public String[] getSelected_clientnames() {
 		logging.debug(this, "getSelected_clientnames  " + Arrays.toString(main.getSelectedClients()));
 		String[] clientnames = new String[main.getSelectedClients().length];
@@ -458,6 +461,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		return clientnames;
 	}
 
+	@Override
 	public String[] getSelected_depotnames() {
 		logging.debug(this, "getSelected_depotnames  " + main.getSelectedDepots());
 		return main.getSelectedDepots();
@@ -525,6 +529,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		};
 
 		opPane.addHierarchyListener(new HierarchyListener() {
+			@Override
 			public void hierarchyChanged(HierarchyEvent e) {
 				Window window = SwingUtilities.getWindowAncestor(opPane);
 				if (window instanceof Dialog) {

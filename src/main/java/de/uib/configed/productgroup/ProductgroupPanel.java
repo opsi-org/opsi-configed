@@ -74,6 +74,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	JComboBoxToolTip groupsCombo;
 
 	class JComboBoxToolTipX extends JComboBoxToolTip {
+		@Override
 		public void fireActionEvent()
 		// make public
 		{
@@ -149,16 +150,19 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		public abstract void doAction();
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 			if (enabled)
 				doAction();
 		}
 
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			if (enabled)
 				doAction();
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			if (enabled)
 				doAction();
@@ -587,6 +591,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		JScrollPane scrollChooseAction = new JScrollPane(listChooseAction, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		listChooseAction.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseReleased(MouseEvent e) {
 				if (e.getClickCount() > 1) {
 					String s = (String) listChooseAction.getSelectedValue();
@@ -680,6 +685,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		groupsCombo.addItemListener(this);
 
 		groupsEditField.addFocusListener(new FocusAdapter() {
+			@Override
 			public void focusGained(FocusEvent e) {
 				logging.debug(this, "focus gained on groupsEditField, groupediting");
 				setGroupEditing(true);
@@ -1048,6 +1054,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	}
 
 	// ActionListener interface
+	@Override
 	public void actionPerformed(java.awt.event.ActionEvent e) {
 		String s = " ";
 		if (e.getSource() == buttonCommit) {
@@ -1158,6 +1165,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	}
 
 	// ListSelectionListener
+	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		// logging.debug(this, "-----------------ListSelectionListener valueChanged,
 		// source " + e.getSource());
@@ -1170,6 +1178,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	}
 
 	// ItemListener
+	@Override
 	public void itemStateChanged(ItemEvent e) {
 		logging.info(this, "itemStateChanged ");
 		if (e.getStateChange() == ItemEvent.SELECTED) {

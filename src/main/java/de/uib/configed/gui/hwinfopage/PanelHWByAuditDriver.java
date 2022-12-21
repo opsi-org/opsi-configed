@@ -77,6 +77,7 @@ public class PanelHWByAuditDriver extends JPanel {
 		buttonUploadDrivers.setToolTipText(configed.getResourceValue("PanelHWInfo.uploadDrivers"));
 
 		buttonUploadDrivers.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				startDriverUploadFrame();
 			}

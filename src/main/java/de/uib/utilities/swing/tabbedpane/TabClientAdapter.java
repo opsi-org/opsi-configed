@@ -11,10 +11,12 @@ public class TabClientAdapter extends JPanel implements TabClient {
 		// logging.debug("-- TabClientAdapter created and made visible ");
 	}
 
+	@Override
 	public void reset() {
 		logging.info(this, "TabClientAdapter.reset() ");
 	}
 
+	@Override
 	public boolean mayLeave() {
 		boolean result = true;
 		logging.debug(this, "TabClientAdapter.mayLeave() " + result);

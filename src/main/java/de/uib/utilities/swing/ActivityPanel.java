@@ -101,6 +101,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 	/**
 	 * endless loop
 	 */
+	@Override
 	public void run() {
 		int i = 0;
 		boolean finalizing = false;

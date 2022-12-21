@@ -137,6 +137,7 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 		return (countVisibleItems > 0);
 	}
 
+	@Override
 	protected void maybeShowPopup(MouseEvent e) {
 		if (checkAccepted(e))
 			super.maybeShowPopup(e);

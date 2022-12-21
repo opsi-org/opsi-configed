@@ -68,10 +68,12 @@ public class ControllerHWinfoMultiClients {
 	de.uib.utilities.table.TableModelFilterCondition filterConditionHwForSelectedHosts = new de.uib.utilities.table.TableModelFilterCondition() {
 		private TreeSet<Object> filter;
 
+		@Override
 		public void setFilter(TreeSet<Object> filter) {
 			this.filter = filter;
 		}
 
+		@Override
 		public boolean test(Vector<Object> row) {
 			if (filter == null || row == null || keycol >= row.size())
 				return true;
@@ -176,6 +178,7 @@ public class ControllerHWinfoMultiClients {
 				// tableProvider
 				// new de.uib.utilities.table.provider.DefaultTableProvider(sqlSource),
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
 					public Map retrieveMap() {
 						logging.info(this, "retrieveMap: getClient2HwRows");
 
@@ -243,6 +246,7 @@ public class ControllerHWinfoMultiClients {
 		buttonReload.setPreferredSize(Globals.smallButtonDimension);
 
 		buttonReload.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.info(this, "action performed " + e);
 				rebuildModel();
@@ -263,6 +267,7 @@ public class ControllerHWinfoMultiClients {
 		// testpanel.add( new JLabel ("hallo welt") );
 
 		buttonConfigureColumns.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.info(this, "action performed " + e);
 
@@ -292,6 +297,7 @@ public class ControllerHWinfoMultiClients {
 		buttonCopySelection.setToolTipText(configed.getResourceValue("PanelHWInfo.overview.getSelection"));
 
 		buttonCopySelection.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				// logging.info(this, "action performed " + e);
 				// logging.info(this, "selection empty " + panel.isSelectionEmpty());
@@ -306,6 +312,7 @@ public class ControllerHWinfoMultiClients {
 		panel.setTitlePaneBackground(Globals.backLightBlue);
 
 		panel.addListSelectionListener(new ListSelectionListener() {
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// logging.info(this, "val changed " + e);
 				buttonCopySelection.setEnabled(!((ListSelectionModel) e.getSource()).isSelectionEmpty());

@@ -14,6 +14,7 @@ public class DescriptionElement extends SelectElement {
 				/* "Description" */configed.getResourceValue("NewClientDialog.description"));
 	}
 
+	@Override
 	public List<SelectOperation> supportedOperations() {
 		List<SelectOperation> result = new LinkedList<SelectOperation>();
 		result.add(new StringEqualsOperation(this));

@@ -177,6 +177,7 @@ public class DPassword extends JDialog // implements Runnable
 
 		// interface WaitingSleeper
 
+		@Override
 		public void actAfterWaiting() {
 			// setCursor(saveCursor);
 			waitCursor.stop();
@@ -247,26 +248,32 @@ public class DPassword extends JDialog // implements Runnable
 			}
 		}
 
+		@Override
 		public JProgressBar getProgressBar() {
 			return waitingProgressBar;
 		}
 
+		@Override
 		public JLabel getLabel() {
 			return waitLabel;
 		}
 
+		@Override
 		public long getStartActionMillis() {
 			return new GregorianCalendar().getTimeInMillis();
 		}
 
+		@Override
 		public long getWaitingMillis() {
 			return timeOutMillis;
 		}
 
+		@Override
 		public long getOneProgressBarLengthWaitingMillis() {
 			return ESTIMATED_TOTAL_WAIT_MILLIS;
 		}
 
+		@Override
 		public String setLabellingStrategy(long millisLevel) {
 			return waitLabel.getText();
 		}
@@ -437,6 +444,7 @@ public class DPassword extends JDialog // implements Runnable
 		JCheckBox checkCompression = new JCheckBox(configed.getResourceValue("DPassword.checkCompression"),
 				de.uib.opsicommand.JSONthroughHTTP.compressTransmission);
 		checkCompression.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				// logging.debug(this, "itemStateChanged " + e);
 				// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission =
@@ -450,6 +458,7 @@ public class DPassword extends JDialog // implements Runnable
 				de.uib.configed.configed.sshconnect_onstart);
 		logging.info(this, "checkTrySSH  " + de.uib.configed.configed.sshconnect_onstart);
 		checkTrySSH.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				// logging.debug(this, "itemStateChanged " + e);
 				de.uib.configed.configed.sshconnect_onstart = (e.getStateChange() == ItemEvent.SELECTED);
@@ -475,16 +484,19 @@ public class DPassword extends JDialog // implements Runnable
 				}
 			}
 
+			@Override
 			public void changedUpdate(DocumentEvent e) {
 				// logging.debug(this, "++ changedUpdate on " );
 				setRefreshMinutes();
 			}
 
+			@Override
 			public void insertUpdate(DocumentEvent e) {
 				// logging.debug(this, "++ insertUpdate on " );
 				setRefreshMinutes();
 			}
 
+			@Override
 			public void removeUpdate(DocumentEvent e) {
 				// logging.debug(this, "++ removeUpdate on " );
 				setRefreshMinutes();

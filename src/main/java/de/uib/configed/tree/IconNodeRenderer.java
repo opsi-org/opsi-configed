@@ -23,6 +23,7 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 		setPreferredSize(new java.awt.Dimension(labelWidth, labelHeight));
 	}
 
+	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
 			int row, boolean hasFocus) {
 		if (value instanceof IconNode) {

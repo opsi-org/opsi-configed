@@ -73,30 +73,37 @@ public class DefaultListCellOptions implements ListCellOptions {
 				ListSelectionModel.MULTIPLE_INTERVAL_SELECTION, editable, nullable, "");
 	}
 
+	@Override
 	public java.util.List getPossibleValues() {
 		return possibleValues;
 	}
 
+	@Override
 	public java.util.List getDefaultValues() {
 		return defaultValues;
 	}
 
+	@Override
 	public void setDefaultValues(java.util.List values) {
 		defaultValues = values;
 	}
 
+	@Override
 	public int getSelectionMode() {
 		return selectionMode;
 	}
 
+	@Override
 	public boolean isEditable() {
 		return editable;
 	}
 
+	@Override
 	public boolean isNullable() {
 		return nullable;
 	}
 
+	@Override
 	public String getDescription() {
 		return description;
 	}

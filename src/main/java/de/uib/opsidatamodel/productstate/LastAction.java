@@ -181,6 +181,7 @@ public class LastAction {
 		return getLabel(state);
 	}
 
+	@Override
 	public String toString() {
 		return getLabel(state);
 	}

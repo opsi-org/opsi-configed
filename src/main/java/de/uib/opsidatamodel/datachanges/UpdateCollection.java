@@ -16,6 +16,7 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 		this.implementor = implementor;
 	}
 
+	@Override
 	public boolean addAll(Collection c) {
 		boolean success = true;
 		Iterator it = c.iterator();
@@ -28,6 +29,7 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 		return success;
 	}
 
+	@Override
 	public void clear() {
 		logging.debug(this, "clear()");
 		Iterator it = implementor.iterator();
@@ -106,54 +108,67 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 		clearElements();
 	}
 
+	@Override
 	public boolean contains(Object o) {
 		return implementor.contains(o);
 	}
 
+	@Override
 	public boolean containsAll(Collection c) {
 		return implementor.containsAll(c);
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		return implementor.equals(o);
 	}
 
+	@Override
 	public int hashCode() {
 		return implementor.hashCode();
 	}
 
+	@Override
 	public boolean isEmpty() {
 		return implementor.isEmpty();
 	}
 
+	@Override
 	public Iterator iterator() {
 		return implementor.iterator();
 	}
 
+	@Override
 	public boolean remove(Object o) {
 		return implementor.remove(o);
 	}
 
+	@Override
 	public boolean removeAll(Collection c) {
 		return implementor.removeAll(c);
 	}
 
+	@Override
 	public boolean retainAll(Collection c) {
 		return implementor.retainAll(c);
 	}
 
+	@Override
 	public int size() {
 		return implementor.size();
 	}
 
+	@Override
 	public Object[] toArray() {
 		return implementor.toArray();
 	}
 
+	@Override
 	public Object[] toArray(Object[] a) {
 		return implementor.toArray(a);
 	}
 
+	@Override
 	@SuppressWarnings("unused")
 	public boolean add(Object obj) {
 		logging.debug(this, "###### UpdateCollection add Object  " + obj);
@@ -174,6 +189,7 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 		return implementor.toString();
 	}
 
+	@Override
 	public int accumulatedSize() {
 		if (size() == 0)
 			return 0;
@@ -197,10 +213,12 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 		return result;
 	}
 
+	@Override
 	public Object getController() {
 		return null;
 	}
 
+	@Override
 	public void setController(Object cont) {
 	}
 
@@ -208,6 +226,7 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 	 * doCall calls doCall on all members. This will give a recursion for
 	 * members being update collections themselves.
 	 */
+	@Override
 	public void doCall() {
 		logging.debug(this, "doCall, element count: " + size());
 

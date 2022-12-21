@@ -28,10 +28,12 @@ public class ControlPanelLicencesStatistics extends ControlMultiTablePanel {
 		init();
 	}
 
+	@Override
 	public TabClientAdapter getTabClient() {
 		return thePanel;
 	}
 
+	@Override
 	public void init() {
 		updateCollection = new TableUpdateCollection();
 
@@ -57,6 +59,7 @@ public class ControlPanelLicencesStatistics extends ControlMultiTablePanel {
 				columnNames, classNames, 0);
 		modelStatistics = new GenTableModel(updateItemFactoryStatistics,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
 					public Map retrieveMap() {
 						logging.info(this, "retrieveMap() for modelStatistics");
 						if (initialized)

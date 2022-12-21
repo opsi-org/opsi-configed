@@ -35,14 +35,17 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 	public CommandSFTPUpload() {
 	}
 
+	@Override
 	public boolean getShowOutputDialog() {
 		return showOutputDialog;
 	}
 
+	@Override
 	public String getTitle() {
 		return title;
 	}
 
+	@Override
 	public String getDescription() {
 		if (description.equals(""))
 			description = "copy " + sourcePath + sourceFilename + " to " + targetPath + targetFilename
@@ -50,62 +53,77 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 		return description;
 	}
 
+	@Override
 	public String getFullTargetPath() {
 		return getTargetPath() + getTargetFilename();
 	}
 
+	@Override
 	public String getTargetPath() {
 		return targetPath;
 	}
 
+	@Override
 	public String getTargetFilename() {
 		return targetFilename;
 	}
 
+	@Override
 	public String getFullSourcePath() {
 		return fullSourcePath;
 	}
 
+	@Override
 	public String getSourcePath() {
 		return sourcePath;
 	}
 
+	@Override
 	public String getSourceFilename() {
 		return sourceFilename;
 	}
 
+	@Override
 	public boolean getOverwriteMode() {
 		return overwriteMode;
 	}
 
+	@Override
 	public void setTitle(String t) {
 		title = t;
 	}
 
+	@Override
 	public void setDescription(String d) {
 		description = d;
 	}
 
+	@Override
 	public void setTargetPath(String p) {
 		targetPath = p;
 	}
 
+	@Override
 	public void setTargetFilename(String f) {
 		targetFilename = f;
 	}
 
+	@Override
 	public void setSourcePath(String p) {
 		sourcePath = p;
 	}
 
+	@Override
 	public void setSourceFilename(String f) {
 		sourceFilename = f;
 	}
 
+	@Override
 	public void setFullSourcePath(String f) {
 		fullSourcePath = f;
 	}
 
+	@Override
 	public void setOverwriteMode(boolean o) {
 		overwriteMode = o;
 	}
@@ -221,6 +239,7 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 		return null;
 	}
 
+	@Override
 	public String toString() {
 		return "cp " + getSourcePath() + getSourceFilename() + " " + getTargetPath() + getTargetFilename();
 	}

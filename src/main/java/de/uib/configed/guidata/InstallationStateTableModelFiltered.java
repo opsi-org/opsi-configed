@@ -140,6 +140,7 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 	}
 
 	// table model
+	@Override
 	public int getRowCount() {
 		if (filter == null)
 			return super.getRowCount();
@@ -147,20 +148,24 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 			return filter.length;
 	}
 
+	@Override
 	public Object getValueAt(int row, int displayCol) {
 		return super.getValueAt(originRow(row), displayCol);
 	}
 
+	@Override
 	public boolean isCellEditable(int row, int col) {
 		return super.isCellEditable(originRow(row), col);
 	}
 
+	@Override
 	public void setValueAt(Object value, int row, int col) {
 		super.changeValueAt(value, originRow(row), col);
 		fireTableCellUpdated(row, col);
 	}
 
 	// ComboBoxModeller
+	@Override
 	public ComboBoxModel getComboBoxModel(int row, int column) {
 		return super.getComboBoxModel(originRow(row), column);
 	}

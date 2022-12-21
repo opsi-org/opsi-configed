@@ -8,6 +8,7 @@ public class SessionSaveSet<T> extends SaveState {
 	public SessionSaveSet() {
 	}
 
+	@Override
 	public void serialize(Object ob) {
 		if (ob == null)
 			saveObject = null;
@@ -15,6 +16,7 @@ public class SessionSaveSet<T> extends SaveState {
 			saveObject = (Set<T>) ob;
 	}
 
+	@Override
 	public Object deserialize() {
 		return saveObject;
 	}

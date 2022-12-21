@@ -28,6 +28,7 @@ public class AdaptingCellEditor extends DefaultCellEditor {
 
 	}
 
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 
 		int modelRow = table.convertRowIndexToModel(row);

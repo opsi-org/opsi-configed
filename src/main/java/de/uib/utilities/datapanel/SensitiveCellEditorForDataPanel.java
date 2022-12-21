@@ -38,6 +38,7 @@ public class SensitiveCellEditorForDataPanel extends de.uib.utilities.table.gui.
 		return instance;
 	}
 
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		// we use data panel :
 		if (column == 1) {

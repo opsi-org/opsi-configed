@@ -63,6 +63,7 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 		btn_filechooser.setToolTipText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.filechooser.tooltip"));
 		btn_filechooser.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				int returnVal = filechooser.showOpenDialog(instance);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {

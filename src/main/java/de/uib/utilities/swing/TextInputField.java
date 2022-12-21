@@ -243,6 +243,7 @@ public class TextInputField extends JPanel
 		combo.setEditable(b);
 	}
 
+	@Override
 	public void setToolTipText(String s) {
 		textfield.setToolTipText(s);
 		combo.setToolTipText(s);

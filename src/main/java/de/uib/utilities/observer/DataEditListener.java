@@ -77,11 +77,13 @@ public class DataEditListener implements DocumentListener, // for text component
 	}
 
 	// DocumentListener interface
+	@Override
 	public void changedUpdate(DocumentEvent e) {
 		// logging.debug(this, "++ changedUpdate on " + source);
 		act();
 	}
 
+	@Override
 	public void insertUpdate(DocumentEvent e) {
 		// logging.debug(this, "++ insertUpdate on " + source);
 		act();
@@ -89,18 +91,21 @@ public class DataEditListener implements DocumentListener, // for text component
 		// dataChangedSubject.hasChanged());
 	}
 
+	@Override
 	public void removeUpdate(DocumentEvent e) {
 		// logging.debug(this, "++ removeUpdate on " + source);
 		act();
 	}
 
 	// ItemListener interface
+	@Override
 	public void itemStateChanged(ItemEvent e) {
 		// logging.debug(this, "++ ItemEvent on " + source);
 		act();
 	}
 
 	// KeyListener interface
+	@Override
 	public void keyPressed(KeyEvent e) {
 		// logging.debug(this, "keypressed " + e.getKeyCode());
 
@@ -114,9 +119,11 @@ public class DataEditListener implements DocumentListener, // for text component
 			act();
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 	}
 }

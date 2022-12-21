@@ -18,10 +18,12 @@ public class HostUpdateCollection extends UpdateCollection {
 		setController(persis);
 	}
 
+	@Override
 	public void setController(Object obj) {
 		this.persis = (PersistenceController) obj;
 	}
 
+	@Override
 	public boolean addAll(Collection c) {
 		boolean result = true;
 
@@ -44,6 +46,7 @@ public class HostUpdateCollection extends UpdateCollection {
 		return result;
 	}
 
+	@Override
 	public void clearElements() {
 		logging.debug(this, "clearElements()");
 		clear();

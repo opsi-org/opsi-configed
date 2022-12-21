@@ -19,6 +19,7 @@ public class ColoredTableCellRenderer extends de.uib.utilities.table.gui.Standar
 		super(tooltipPrefix);
 	}
 
+	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 			boolean isSelected, // is the cell selected
 			boolean hasFocus, int row, int column) {

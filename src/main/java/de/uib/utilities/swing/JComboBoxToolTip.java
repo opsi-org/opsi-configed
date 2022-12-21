@@ -33,6 +33,7 @@ public class JComboBoxToolTip extends javax.swing.JComboBox {
 	Vector<String> tooltips = new Vector<String>();
 
 	protected class NewComboBoxRenderer extends BasicComboBoxRenderer {
+		@Override
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
 			if (isSelected) {

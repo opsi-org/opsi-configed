@@ -104,6 +104,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		givenClasses = classesMap;
 
 		popupmenuAtRow = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD }) {
+			@Override
 			public void action(int p) {
 				logging.debug(this, "( EditMapPanelGrouped ) popup " + p);
 
@@ -159,6 +160,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 				}
 
 				// @Override
+				@Override
 				protected JPopupMenu definePopup() {
 					logging.debug(this, " (EditMapPanelGrouped) definePopup ");
 					JPopupMenu result
@@ -168,6 +170,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 									PopupMenuTrait.POPUP_PDF })
 
 							{
+								@Override
 								public void action(int p) {
 									switch (p) {
 									case PopupMenuTrait.POPUP_RELOAD:
@@ -488,6 +491,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	 * }
 	 */
 
+	@Override
 	public void setLabel(String s) {
 		if (treemodel == null)
 			return;
@@ -510,6 +514,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	}
 
 	// TreeSelectionListener
+	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 		javax.swing.tree.TreePath p = tree.getSelectionPath();
 		// logging.info(this, "valueChanged TreeSelectionEvent, path " + p);

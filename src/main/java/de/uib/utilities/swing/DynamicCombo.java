@@ -55,11 +55,13 @@ public class DynamicCombo extends javax.swing.JPanel {
 		combo.setBorder(null);
 
 		combo.addPopupMenuListener(new PopupMenuListener() {
+			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {
 				// logging.debug(this, "popupMenuCanceled, value>>" + combo.getSelectedItem() +
 				// "<<");
 			}
 
+			@Override
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 				// logging.debug(this, "popupMenuWillBecomeInvisible , value>>" +
 				// combo.getSelectedItem() + "<<");
@@ -68,6 +70,7 @@ public class DynamicCombo extends javax.swing.JPanel {
 				// somewhere else
 			}
 
+			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				// logging.debug(this, "popupMenuWillBecomeVisible, value>>" +
 				// combo.getSelectedItem() + "<<");
@@ -107,6 +110,7 @@ public class DynamicCombo extends javax.swing.JPanel {
 
 	}
 
+	@Override
 	public void setFont(java.awt.Font font) {
 		if (combo != null)
 			combo.setFont(font);

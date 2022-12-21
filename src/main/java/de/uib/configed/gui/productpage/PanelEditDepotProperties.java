@@ -145,6 +145,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		buttonSetValuesFromPackage.setPreferredSize(new Dimension(15, 30));
 
 		buttonSetValuesFromPackage.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				productPropertiesPanel.resetDefaults();
@@ -250,6 +251,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 	}
 
 	// Interface ListSelectionListener
+	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if (e.getValueIsAdjusting())
 			return;
@@ -476,11 +478,13 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		// Do nothing because MouseListener demands implementation
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		// Do nothing because MouseListener demands implementation
 	}
 
 	// ActionListener
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		logging.debug(this, "actionPerformed " + e);
 

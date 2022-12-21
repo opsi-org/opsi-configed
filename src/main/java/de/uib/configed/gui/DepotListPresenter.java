@@ -313,6 +313,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	}
 
 	// ActionListener implementation
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == buttonSelectDepotsAll) {
 			logging.info(this, "action on buttonSelectDepotsAll");

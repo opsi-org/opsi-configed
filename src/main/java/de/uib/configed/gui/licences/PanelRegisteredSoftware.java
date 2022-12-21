@@ -160,6 +160,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 		// logging.info(this, "row " + theTable.rowAtPoint(e.getPoint()) );
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (mouseInColumnOfMarkCursor(e.getPoint())) {
 			logging.info(this, "mouseReleased reset saveRowSelection ");// + Arrays.toString( saveRowSelection ) );

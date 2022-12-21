@@ -462,6 +462,7 @@ public class logging implements LogEventSubject
 		}
 
 		new Thread() {
+			@Override
 			public void run() {
 				fErrors.setMessage(logging.getErrorListAsLines());
 				fErrors.setAlwaysOnTop(true);
@@ -508,6 +509,7 @@ public class logging implements LogEventSubject
 	}
 
 	// interface LogEventSubject
+	@Override
 	public void registerLogEventObserver(LogEventObserver o) {
 		// not implemented since static method is needed
 	}

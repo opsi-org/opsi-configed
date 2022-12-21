@@ -25,10 +25,12 @@ public class CommandRepositoryUpload extends CommandSFTPUpload
 		this("");
 	}
 
+	@Override
 	public String getTitle() {
 		return title;
 	}
 
+	@Override
 	public String getDescription() {
 		if (description.equals(""))
 			description = "copy " + sourcePath + sourceFilename + " to " + targetPath + targetFilename

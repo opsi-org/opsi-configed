@@ -112,6 +112,7 @@ public class JTextHideField extends javax.swing.JPanel {
 			toggleHidden();
 	}
 
+	@Override
 	public void setEnabled(boolean b) {
 		visibleField.setEnabled(b);
 		button.setEnabled(b);
@@ -136,6 +137,7 @@ public class JTextHideField extends javax.swing.JPanel {
 
 	}
 
+	@Override
 	public void setBackground(java.awt.Color c) {
 		if (visibleField != null)
 			visibleField.setBackground(c);

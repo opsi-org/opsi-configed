@@ -95,6 +95,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 	}
 
+	@Override
 	public TabClientAdapter getTabClient() {
 		return thePanel;
 	}
@@ -426,6 +427,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 	}
 
+	@Override
 	public void init() {
 		updateCollection = new TableUpdateCollection();
 
@@ -478,6 +480,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		// updates
 		thePanel.panelLicencepools.setUpdateController(
 				new MapItemsUpdateController(thePanel.panelLicencepools, modelLicencepools, new MapBasedUpdater() {
+					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
 						// hack for avoiding unvoluntary reuse of a licence pool id
 						boolean existsNewRow = (mainController.licencePoolTableProvider.getRows()
@@ -508,6 +511,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 								(String) rowmap.get(LicencepoolEntry.descriptionKEY));
 					}
 
+					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencepools.requestReload();
 						return persist.deleteLicencePool((String) rowmap.get("licensePoolId"));
@@ -525,6 +529,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 				columnNames, classNames, 0);
 		modelProductId2LPool = new GenTableModel(updateItemFactoryProductId2LPool,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
 					public Map retrieveMap() {
 						return persist.getRelationsProductId2LPool();
 					}
@@ -584,11 +589,13 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		thePanel.panelProductId2LPool.setUpdateController(new MapItemsUpdateController(thePanel.panelProductId2LPool,
 				modelProductId2LPool, new MapBasedUpdater() {
 
+					@Override
 					public String sendUpdate(Map<String, Object> m) {
 						return persist.editRelationProductId2LPool((String) m.get("productId"),
 								(String) m.get("licensePoolId"));
 					}
 
+					@Override
 					public boolean sendDelete(Map<String, Object> m) {
 						modelProductId2LPool.requestReload();
 						return persist.deleteRelationProductId2LPool((String) m.get("productId"),
@@ -618,6 +625,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		boolean withRowCounter = false;
 		modelWindowsSoftwareIds = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
 					public Map retrieveMap() {
 						persist.installedSoftwareInformationRequestRefresh();
 						return persist.getInstalledSoftwareInformationForLicensing();
@@ -754,6 +762,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		thePanel.panelRegisteredSoftware
 				.setUpdateController(new SelectionMemorizerUpdateController(thePanel.panelLicencepools, 0,
 						thePanel.panelRegisteredSoftware, modelWindowsSoftwareIds, new StrList2BooleanFunction() {
+							@Override
 							public boolean sendUpdate(String poolId, List softwareIds) {
 
 								logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
@@ -838,6 +847,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 							}
 						}) {
 
+					@Override
 					public boolean cancelChanges() {
 						setSoftwareIdsFromLicencePool(null);
 						return true;
@@ -858,6 +868,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 		// combine
 		thePanel.panelLicencepools.getListSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// Ignore extra messages.
 				if (e.getValueIsAdjusting())

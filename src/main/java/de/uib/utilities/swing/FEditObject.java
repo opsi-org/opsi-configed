@@ -265,6 +265,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 		editable = b;
 	}
 
+	@Override
 	public void setModal(boolean b) {
 		super.setModal(b);
 		logging.debug(this, "setModal " + b);
@@ -422,6 +423,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 		super.setVisible(b);
 	}
 
+	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			/*
@@ -463,6 +465,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 	// -------------
 	// interface ActionListener
+	@Override
 	public void actionPerformed(java.awt.event.ActionEvent e) {
 		logging.debug(this, "actionPerformed");
 		// commit1();
@@ -477,6 +480,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 	// -------------
 	// interface KeyListener
+	@Override
 	public void keyPressed(KeyEvent e) {
 		// loggig.debug(this, " key event " + e);
 		// if (e.getSource() == buttonCommit)
@@ -487,9 +491,11 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 		}
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 	}
 	// -------------
@@ -500,14 +506,17 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 	// -------------
 	// interface DocumentListener
+	@Override
 	public void changedUpdate(DocumentEvent e) {
 		extraFieldChanged(true);
 	}
 
+	@Override
 	public void insertUpdate(DocumentEvent e) {
 		extraFieldChanged(true);
 	}
 
+	@Override
 	public void removeUpdate(DocumentEvent e) {
 		extraFieldChanged(true);
 	}

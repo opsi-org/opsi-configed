@@ -33,6 +33,7 @@ public class SSHOutputCollector {
 		return values;
 	}
 
+	@Override
 	public String toString() {
 		return values.toString();
 	}

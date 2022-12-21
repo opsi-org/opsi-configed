@@ -279,6 +279,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	}
 
 	// DocumentListener interface
+	@Override
 	public void changedUpdate(DocumentEvent e) {
 		/*
 		 * try{
@@ -291,6 +292,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	}
 
+	@Override
 	public void insertUpdate(DocumentEvent e) {
 		/*
 		 * try{
@@ -302,6 +304,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		setDataChanged(true);
 	}
 
+	@Override
 	public void removeUpdate(DocumentEvent e) {
 		/*
 		 * try{
@@ -357,6 +360,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	}
 
 	// MouseListener
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		// logging.info(this, "caret " + textpane.getCaretPosition());
 		// logging.info(this, " line clicked " + getLineForPos(
@@ -376,23 +380,29 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) {
 		editingStarted = true;
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e) {
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
 
 	// MouseMotionListener
+	@Override
 	public void mouseDragged(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseMoved(MouseEvent e) {
 		Point p = e.getPoint();
 		// logging.info(this, "mouse " + p + " " + textpane.viewToModel( p ) );
@@ -417,6 +427,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			delegator.parse(in, this, Boolean.TRUE);
 		}
 
+		@Override
 		public void handleText(char[] text, int pos) {
 			s.append(text);
 		}
@@ -545,10 +556,12 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			color = c;
 		}
 
+		@Override
 		public void paint(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c) {
 			// Do nothing: this method will never be called
 		}
 
+		@Override
 		public Shape paintLayer(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c, View view) {
 			g.setColor(color == null ? c.getSelectionColor() : color);
 
@@ -595,6 +608,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			return addHighlight(p0, p1, painter);
 		}
 
+		@Override
 		public void setDrawsLayeredHighlights(boolean newValue) {
 			// Illegal if false - we only support layered highlights
 			if (newValue == false) {

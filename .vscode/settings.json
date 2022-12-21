@@ -9,5 +9,9 @@
         "source.organizeImports": true
     },
     "java.format.settings.url": ".vscode/java-formatter.xml",
-    "java.configuration.updateBuildConfiguration": "disabled"
+    "java.configuration.updateBuildConfiguration": "disabled",
+    "java.codeAction.sortMembers.avoidVolatileChanges": false,
+    "java.cleanup.actionsOnSave": [
+        "addOverride"
+    ]
 }

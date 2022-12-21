@@ -94,10 +94,12 @@ public class OpsiDataClient implements Client {
 	}
 
 	/** Get the ID of this client */
+	@Override
 	public String getId() {
 		return hostId;
 	}
 
+	@Override
 	public String toString() {
 		return hostId + " ( " + this.getClass() + " )";
 	}

@@ -214,14 +214,17 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 			}
 
+			@Override
 			public void changedUpdate(DocumentEvent e) {
 				actOnChange();
 			}
 
+			@Override
 			public void insertUpdate(DocumentEvent e) {
 				actOnChange();
 			}
 
+			@Override
 			public void removeUpdate(DocumentEvent e) {
 				actOnChange();
 			}
@@ -260,6 +263,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		buttonSetNew.setToolTipText(configed.getResourceValue("FStartWakeOnLan.buttonSetNew.tooltip"));
 
 		buttonSetNew.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.debug(this, "actionPerformed");
 				setClients();
@@ -273,6 +277,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		buttonRefreshTime.setToolTipText("Zeit neu setzen");
 
 		buttonRefreshTime.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.debug(this, "actionPerformed");
 				setNowTimeAsTarget();
@@ -480,30 +485,37 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	}
 
 	// implementing WaitingSleeper
+	@Override
 	public void actAfterWaiting() {
 		startAction();
 	}
 
+	@Override
 	public JProgressBar getProgressBar() {
 		return waitingProgressBar;
 	}
 
+	@Override
 	public JLabel getLabel() {
 		return labelTimeYetToWait;
 	}
 
+	@Override
 	public long getStartActionMillis() {
 		return startActionMillis;
 	}
 
+	@Override
 	public long getWaitingMillis() {
 		return waitingMillis;
 	}
 
+	@Override
 	public long getOneProgressBarLengthWaitingMillis() {
 		return waitingMillis;
 	}
 
+	@Override
 	public String setLabellingStrategy(long millisLevel) {
 		return " " + configed.getResourceValue("FStartWakeOnLan.timeLeft") + "  "
 				+ Globals.giveTimeSpan(getWaitingMillis() - millisLevel);

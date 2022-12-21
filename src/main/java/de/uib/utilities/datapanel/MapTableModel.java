@@ -265,10 +265,12 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	 */
 
 	// table model
+	@Override
 	public int getColumnCount() {
 		return 2;
 	}
 
+	@Override
 	public int getRowCount() {
 		int result = 0;
 		if (data != null)
@@ -276,6 +278,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		return result;
 	}
 
+	@Override
 	public String getColumnName(int col) {
 		String result = "";
 		switch (col) {
@@ -291,6 +294,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 
 	}
 
+	@Override
 	public Object getValueAt(int row, int col) {
 		if (data == null)
 			return "";
@@ -365,6 +369,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	 * JTable uses this method to determine the default renderer/
 	 * editor for each cell.
 	 */
+	@Override
 	public Class getColumnClass(int c) {
 		switch (c) {
 		case 0:
@@ -380,6 +385,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	 * We implement this method since the table is partially
 	 * editable.
 	 */
+	@Override
 	public boolean isCellEditable(int row, int col) {
 		// The data/cell address is constant,
 		// no matter where the cell appears onscreen.
@@ -481,6 +487,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	 * We need to implement this method since the table's
 	 * data can change.
 	 */
+	@Override
 	public void setValueAt(Object value, int row, int col) {
 		if (value == null) {
 			logging.debug(this, "call set value in table at " + row + "," + col + " to null");
@@ -577,6 +584,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	}
 
 	// implementation of DataChangedSubject
+	@Override
 	public void registerDataChangedObserver(DataChangedObserver o) {
 		observers.addElement(o);
 	}

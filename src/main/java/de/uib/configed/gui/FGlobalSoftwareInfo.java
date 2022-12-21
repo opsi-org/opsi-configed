@@ -111,6 +111,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		panelGlobalSoftware.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panelGlobalSoftware.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (e.getValueIsAdjusting())
 					return;
@@ -127,6 +128,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		{
 			this.model = new GenTableModel(null, // no updates
 					new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+						@Override
 						public Map retrieveMap() {
 							persist.installedSoftwareInformationRequestRefresh();
 							return persist.getInstalledSoftwareInformation();

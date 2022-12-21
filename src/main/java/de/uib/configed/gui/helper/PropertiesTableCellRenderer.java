@@ -20,6 +20,7 @@ import de.uib.configed.guidata.ListMerger;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
 public class PropertiesTableCellRenderer extends ColorTableCellRenderer {
+	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 			boolean isSelected, // is the cell selected
 			boolean hasFocus, int row, int column) {

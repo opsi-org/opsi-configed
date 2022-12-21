@@ -12,6 +12,7 @@ public class ExporterToTerminal extends ExportTable {
 
 	}
 
+	@Override
 	public void execute(String fileName, boolean onlySelectedRows) {
 		// logging.debug("onlySelectedRows: "+ onlySelectedRows);
 		Boolean selectedOnly = checkSelection(onlySelectedRows);

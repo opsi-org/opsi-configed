@@ -82,6 +82,7 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 		return (SSHConnectionExecDialog) exec.getDialog();
 	}
 
+	@Override
 	public int getPriority() {
 		return priority;
 	}

@@ -26,6 +26,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		createGui();
 	}
 
+	@Override
 	public void setGroupName(String s) {
 		logging.info(this, "setGroupName " + s);
 		resetReportedClients();
@@ -37,14 +38,17 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		// fieldGroupActivated.setText("");
 	}
 
+	@Override
 	public String getSelectedClientNames() {
 		return fieldSelectedClientsNames.getText();
 	}
 
+	@Override
 	public String getInvolvedDepots() {
 		return fieldInvolvedDepots.getText();
 	}
 
+	@Override
 	public String getGroupName() {
 		return fieldGroupActivated.getText();
 	}
@@ -64,6 +68,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		fieldInvolvedDepots.setToolTipText("");
 	}
 
+	@Override
 	public void updateValues(Integer clientsCount, Integer selectedClientsCount, String selectedClientNames,
 			String involvedDepots) {
 		logging.info(this,
@@ -114,6 +119,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		}
 	}
 
+	@Override
 	public void setGroupClientsCount(int n) {
 		String newS = null;
 		int bracketIndex = fieldActivatedClientsCount.getText().indexOf("(");

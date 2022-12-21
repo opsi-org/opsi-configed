@@ -141,6 +141,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		tf_url = new JTextField();
 		tf_url.setText(wgetDefText);
 		tf_url.addFocusListener(new FocusAdapter() {
+			@Override
 			public void focusGained(FocusEvent e) {
 				if (tf_url.getText().equals(wgetDefText)) {
 					tf_url.setSelectionStart(0);
@@ -171,6 +172,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		btn_filechooser.setToolTipText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.filechooser.tooltip"));
 		btn_filechooser.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				int returnVal = filechooser_local.showOpenDialog(inputPanel);
 
@@ -191,6 +193,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		btn_execute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly()))
 			btn_execute.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					doAction1();
 				}
@@ -201,6 +204,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 		btn_close.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 		btn_close.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				cancel();
 			}
@@ -340,6 +344,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	}
 
 	/* This method is called when button 1 is pressed */
+	@Override
 	public void doAction1() {
 		logging.info(this, "doAction1 upload ");
 		if (rb_local.isSelected()) {

@@ -143,6 +143,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 	}
 
 	// item listener
+	@Override
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getStateChange() == ItemEvent.SELECTED) {
 			setMap((String) combo.getSelectedItem());

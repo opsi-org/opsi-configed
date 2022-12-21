@@ -217,6 +217,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		// final PanelProductSettings THIS = this;
 
 		tableProducts.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// logging.info(this, "-----------------tableProducts ListSelectionListener
 				// valueChanged");
@@ -581,6 +582,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		save.setFont(Globals.defaultFont);
 		save.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.debug(this, "actionevent on save-menue");
 				mainController.checkSaveAll(false);
@@ -605,6 +607,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		itemSaveAndExecute.setIcon(Globals.createImageIcon("images/executing_command_blue_16.png", ""));
 		itemSaveAndExecute.setFont(Globals.defaultFont);
 		itemSaveAndExecute.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.debug(this, "actionevent on save and execute menu item");
 				saveAndExecuteAction();
@@ -650,6 +653,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		reload.setIcon(Globals.createImageIcon("images/reload16.png", ""));
 		reload.setFont(Globals.defaultFont);
 		reload.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.info(this, "------------- reload action");
 				reloadAction();
@@ -662,6 +666,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		createReport.setIcon(Globals.createImageIcon("images/acrobat_reader16.png", ""));
 		createReport.setFont(Globals.defaultFont);
 		createReport.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.info(this, "------------- create report");
 				HashMap<String, String> metaData = new HashMap<>();
@@ -910,6 +915,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	private class StringComparator implements Comparator<String> {
+		@Override
 		public int compare(String o1, String o2) {
 			// logging.info(this, "compare " + o1 + " to " + o2);
 			return o1.compareTo(o2);
@@ -1246,6 +1252,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	// RowSorterListener for table row sorter
+	@Override
 	public void sorterChanged(RowSorterEvent e) {
 		logging.info(this, "RowSorterEvent " + e);
 		currentSortKeys = tableProducts.getRowSorter().getSortKeys();

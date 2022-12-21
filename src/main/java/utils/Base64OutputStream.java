@@ -35,6 +35,7 @@ public class Base64OutputStream extends FilterOutputStream {
 		return bOut.toString();
 	}
 
+	@Override
 	public void write(int c) throws IOException {
 		inbuf[i] = c;
 		i++;
@@ -55,6 +56,7 @@ public class Base64OutputStream extends FilterOutputStream {
 		}
 	}
 
+	@Override
 	public void flush() throws IOException {
 		if (i == 1) {
 			super.write(toBase64[(inbuf[0] & 0xFC) >> 2]);

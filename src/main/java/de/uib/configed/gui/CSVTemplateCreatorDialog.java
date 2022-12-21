@@ -386,6 +386,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 				setCellRenderer(new CellRenderer());
 
 				addMouseListener(new MouseAdapter() {
+					@Override
 					public void mousePressed(MouseEvent e) {
 						int index = locationToIndex(e.getPoint());
 
@@ -404,6 +405,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			}
 
 			protected class CellRenderer implements ListCellRenderer {
+				@Override
 				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
 						boolean cellHasFocus) {
 					JCheckBox checkbox = (JCheckBox) value;

@@ -316,6 +316,7 @@ public class SSHPackageManagerUninstallParameterDialog
 					"SSHConnection.ParameterDialog.opsipackagemanager_uninstall.JButtonUpdateList.tooltip"));
 
 			buttonUpdateList.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					logging.info(this, "actionPerformed");
 					resetProducts();
@@ -455,6 +456,7 @@ public class SSHPackageManagerUninstallParameterDialog
 			return;
 
 		Thread execThread = new Thread() {
+			@Override
 			public void run() {
 				try {
 					logging.info(this, "start exec thread ");

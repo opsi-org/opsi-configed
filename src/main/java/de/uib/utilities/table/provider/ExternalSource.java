@@ -28,14 +28,17 @@ public class ExternalSource implements TableSource
 
 	}
 
+	@Override
 	public Vector<String> retrieveColumnNames() {
 		return columnNames;
 	}
 
+	@Override
 	public Vector<String> retrieveClassNames() {
 		return classNames;
 	}
 
+	@Override
 	public Vector<Vector<Object>> retrieveRows() {
 		if (reloadRequested) {
 			rowsProvider.requestReload();
@@ -46,6 +49,7 @@ public class ExternalSource implements TableSource
 		return rowsProvider.getRows();
 	}
 
+	@Override
 	public void requestReload() {
 		reloadRequested = true;
 	}

@@ -202,6 +202,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 
 	// ======================
 	// interface ListSelectionListener
+	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		// logging.info(this, "valueChanged " + e);
 		// selectedListElement = theList.getSelectedValue();

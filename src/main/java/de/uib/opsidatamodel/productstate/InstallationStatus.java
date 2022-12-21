@@ -203,6 +203,7 @@ public class InstallationStatus {
 		return getLabel(state);
 	}
 
+	@Override
 	public String toString() {
 		return getLabel(state);
 	}

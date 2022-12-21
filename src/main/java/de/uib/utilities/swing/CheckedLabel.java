@@ -233,6 +233,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 
 		addKeyListener(new KeyAdapter() {
 
+			@Override
 			public void keyPressed(KeyEvent e) {
 				logging.info(this, "event " + e);
 				if (!isEnabled())
@@ -258,6 +259,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 		textLabel.setText(s);
 	}
 
+	@Override
 	public void setToolTipText(String s) {
 		super.setToolTipText(s);
 		nullLabel.setToolTipText(s);
@@ -311,6 +313,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 		return selected;
 	}
 
+	@Override
 	public void setEnabled(boolean b) {
 		super.setEnabled(b);
 		textLabel.setEnabled(b);

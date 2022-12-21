@@ -324,6 +324,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		checkExtendedView.addActionListener(new ActionListener() {
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				extendedView = checkExtendedView.isSelected();
 				logging.info(this, "extendedView " + extendedView + ", i.e. reduced " + !extendedView);
@@ -356,6 +357,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		*/
 
 		buttonReload.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				//logging.info(this, "action performed " + e);
 				LicensingInfoMap.requestRefresh();

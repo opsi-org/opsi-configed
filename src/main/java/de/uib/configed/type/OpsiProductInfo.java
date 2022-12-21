@@ -104,6 +104,7 @@ public class OpsiProductInfo extends OpsiPackage {
 			return priority;
 	}
 
+	@Override
 	public Vector<Object> appendValues(Vector<Object> row) {
 		row.add(getProductName());
 		return row;

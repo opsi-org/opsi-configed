@@ -110,6 +110,7 @@ public class Empty_Command implements SSHCommand {
 	 * 
 	 * @param c (command): String
 	 **/
+	@Override
 	public void setCommand(String c) {
 		command = c;
 	}

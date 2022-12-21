@@ -20,6 +20,7 @@ public class TabbedFrame extends SecondaryFrame {
 		init();
 	}
 
+	@Override
 	public void setGlobals(Map globals) {
 		panel.setGlobals(globals);
 		setIconImage((Image) globals.get("mainIcon"));
@@ -32,6 +33,7 @@ public class TabbedFrame extends SecondaryFrame {
 		pack();
 	}
 
+	@Override
 	public void start() {
 		setVisible(true);
 		setExtendedState(Frame.NORMAL);

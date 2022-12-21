@@ -106,6 +106,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	 * 
 	 * @param c (command): String
 	 **/
+	@Override
 	public void setCommand(String c) {
 		command = c;
 	}

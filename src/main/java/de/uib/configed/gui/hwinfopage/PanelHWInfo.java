@@ -197,6 +197,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					PopupMenuTrait.POPUP_FLOATINGCOPY })
 
 			{
+				@Override
 				public void action(int p) {
 					switch (p) {
 					case PopupMenuTrait.POPUP_RELOAD:
@@ -465,6 +466,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		tableModel.setData(getDataForNode(node));
 	}
 
+	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 		// Returns the last path element of the selection.
 		IconNode node = (IconNode) tree.getLastSelectedPathComponent();
@@ -662,18 +664,22 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			fireTableDataChanged();
 		}
 
+		@Override
 		public int getRowCount() {
 			return data.size();
 		}
 
+		@Override
 		public int getColumnCount() {
 			return 2;
 		}
 
+		@Override
 		public String getColumnName(int column) {
 			return header[column];
 		}
 
+		@Override
 		public Object getValueAt(int row, int col) {
 			return ((String[]) data.get(row))[col];
 		}

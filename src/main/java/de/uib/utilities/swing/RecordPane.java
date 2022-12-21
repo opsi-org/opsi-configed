@@ -182,13 +182,16 @@ public class RecordPane extends JPanel implements KeyListener {
 
 	// interface
 	// KeyListener
+	@Override
 	public void keyPressed(KeyEvent e) {
 		// logging.debug(this, " key event " + e);
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 	}
 

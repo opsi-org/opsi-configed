@@ -295,14 +295,17 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			tf_port = new JTextField(new CheckedDocument(/* allowedChars */
 					new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', }, 5), String.valueOf("22"), 1);
 			tf_port.getDocument().addDocumentListener(new DocumentListener() {
+				@Override
 				public void insertUpdate(DocumentEvent e) {
 					checkComponentStates();
 				}
 
+				@Override
 				public void removeUpdate(DocumentEvent e) {
 					checkComponentStates();
 				}
 
+				@Override
 				public void changedUpdate(DocumentEvent e) {
 					// Plain text components do not fire these events
 				}
@@ -314,14 +317,17 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			tf_user = new JTextField();
 			tf_user.setText(connectionInfo.getUser());
 			tf_user.getDocument().addDocumentListener(new DocumentListener() {
+				@Override
 				public void insertUpdate(DocumentEvent e) {
 					checkComponentStates();
 				}
 
+				@Override
 				public void removeUpdate(DocumentEvent e) {
 					checkComponentStates();
 				}
 
+				@Override
 				public void changedUpdate(DocumentEvent e) {
 					// Plain text components do not fire these events
 				}
@@ -334,14 +340,17 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			tf_passw.setText(connectionInfo.getPassw());
 			// SSHConnectionInfo.getInstance().setPassw(ConfigedMain.PASSWORD);
 			tf_passw.getDocument().addDocumentListener(new DocumentListener() {
+				@Override
 				public void insertUpdate(DocumentEvent e) {
 					checkComponentStates();
 				}
 
+				@Override
 				public void removeUpdate(DocumentEvent e) {
 					checkComponentStates();
 				}
 
+				@Override
 				public void changedUpdate(DocumentEvent e) {
 					// Plain text components do not fire these events
 				}
@@ -363,6 +372,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			btn_kill.setPreferredSize(Globals.smallButtonDimension);
 
 			btn_kill.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					btn_kill.setEnabled(false);
 
@@ -386,6 +396,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			logging.info(this, "actionlistener for button1 " + Globals.isGlobalReadOnly());
 			if (!(Globals.isGlobalReadOnly())) {
 				btn_save.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						logging.debug(this, "actionPerformed on button1");
 						doAction1();
@@ -400,6 +411,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			btn_openChooser.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH / 4, Globals.BUTTON_HEIGHT));
 			if (!(Globals.isGlobalReadOnly()))
 				btn_openChooser.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						doActionOeffnen();
 					}
@@ -408,6 +420,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		{
 			buttonPanel.add(btn_close);
 			btn_close.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					doAction2();
 				}
@@ -419,14 +432,17 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			tf_keyfile = new JTextField();
 			tf_keyfile.setText(connectionInfo.getKeyfilePath());
 			tf_keyfile.getDocument().addDocumentListener(new DocumentListener() {
+				@Override
 				public void insertUpdate(DocumentEvent e) {
 					checkComponentStates();
 				}
 
+				@Override
 				public void removeUpdate(DocumentEvent e) {
 					checkComponentStates();
 				}
 
+				@Override
 				public void changedUpdate(DocumentEvent e) {
 					// Plain text components do not fire these events
 				}
@@ -439,14 +455,17 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			tf_passphrase.setEnabled(false);
 			tf_passphrase.setText(connectionInfo.getKeyfilePassphrase());
 			tf_passphrase.getDocument().addDocumentListener(new DocumentListener() {
+				@Override
 				public void insertUpdate(DocumentEvent e) {
 					checkComponentStates();
 				}
 
+				@Override
 				public void removeUpdate(DocumentEvent e) {
 					checkComponentStates();
 				}
 
+				@Override
 				public void changedUpdate(DocumentEvent e) {
 					// Plain text components do not fire these events
 				}
@@ -671,6 +690,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 	}
 
 	/* This method is called when button 1 is pressed */
+	@Override
 	public void doAction1() {
 		logging.info(this, "doAction1  ");
 		setSSHState();
@@ -727,6 +747,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 	}
 
 	/* This method gets called when button 2 is pressed */
+	@Override
 	public void doAction2() {
 		logging.info(this, "doAction2 cb_host.getSelectedItem() " + cb_host.getSelectedItem());
 
@@ -747,6 +768,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 
 		chooser.setFileHidingEnabled(false);
 		chooser.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent e) {
 				if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
 						|| e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {

@@ -22,6 +22,7 @@ public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRen
 		setVerticalAlignment(SwingConstants.CENTER);
 	}
 
+	@Override
 	public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 			boolean hasFocus, int row, int column) {
 

@@ -12,6 +12,7 @@ public class PropertyValueElement extends SelectElement {
 		super(new String[] { "Property-Value" }, "opsi-Product/Property/Value");
 	}
 
+	@Override
 	public List<SelectOperation> supportedOperations() {
 		List<SelectOperation> result = new LinkedList<SelectOperation>();
 		result.add(new StringEqualsOperation(this));

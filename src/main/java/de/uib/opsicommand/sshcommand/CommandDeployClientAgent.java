@@ -130,6 +130,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	 * 
 	 * @param c (command): String
 	 **/
+	@Override
 	public void setCommand(String c) {
 		command = c;
 	}

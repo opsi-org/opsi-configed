@@ -220,6 +220,7 @@ public class SSHConnectTerminal extends SSHConnect {
 
 	private ChannelShell setStreams(ChannelShell ch, boolean silent) throws IOException {
 		ch.setInputStream(new FilterInputStream(System.in) {
+			@Override
 			public int read(byte[] b, int off, int len) throws IOException {
 				return in.read(b, off, (len > 1024 ? 1024 : len));
 			}
@@ -283,6 +284,7 @@ public class SSHConnectTerminal extends SSHConnect {
 
 	private void initListeners() {
 		connectionKeyListener = new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.info(this, "interrupt with btn ");
 				exec(new String(new byte[] { 3 }) + "\n");

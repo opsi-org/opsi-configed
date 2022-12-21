@@ -256,6 +256,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 	/**
 	 * This method receives the JSONObject via HTTP.
 	 */
+	@Override
 	public JSONObject retrieveJSONObject(OpsiMethodCall omc) {
 		boolean background = false;
 		logging.info(this, "retrieveJSONObjects started");

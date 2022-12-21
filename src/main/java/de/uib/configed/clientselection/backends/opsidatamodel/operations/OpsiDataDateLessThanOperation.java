@@ -19,6 +19,7 @@ public class OpsiDataDateLessThanOperation extends DateLessThanOperation impleme
 		};
 	}
 
+	@Override
 	public boolean doesMatch(Client client) {
 		return matcher.doesMatch(client);
 	}

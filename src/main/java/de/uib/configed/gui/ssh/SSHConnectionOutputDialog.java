@@ -100,6 +100,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 	};
 
 	protected class DialogCloseListener implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			logging.debug(this, "actionPerformed " + e);
 			cancel();

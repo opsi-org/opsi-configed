@@ -119,30 +119,37 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 
 	// ======================
 	// interface de.uib.utilities.table.ListCellOptions
+	@Override
 	public java.util.List getPossibleValues() {
 		return (java.util.List) get("possibleValues");
 	}
 
+	@Override
 	public java.util.List getDefaultValues() {
 		return (java.util.List) get("defaultValues");
 	}
 
+	@Override
 	public void setDefaultValues(java.util.List values) {
 		put("defaultValues", values);
 	}
 
+	@Override
 	public int getSelectionMode() {
 		return (Integer) get("selectionMode");
 	}
 
+	@Override
 	public boolean isNullable() {
 		return (!type.equals(TYPE.BoolConfig)); // until we extend the data structure
 	}
 
+	@Override
 	public boolean isEditable() {
 		return (Boolean) get("editable");
 	}
 
+	@Override
 	public String getDescription() {
 		return (String) get("description");
 	}

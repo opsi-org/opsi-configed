@@ -313,6 +313,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 	}
 
 	// ActionListener implementation
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == buttonSelectValuesAll) {
 			logging.info(this, "action on buttonSelectValuesAll");

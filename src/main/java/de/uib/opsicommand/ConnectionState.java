@@ -86,6 +86,7 @@ public class ConnectionState {
 	 * 
 	 * @return Connection State
 	 */
+	@Override
 	public String toString() {
 		switch (myState) {
 		case UNDEFINED:

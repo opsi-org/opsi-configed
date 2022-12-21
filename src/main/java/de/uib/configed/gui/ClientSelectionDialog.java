@@ -266,6 +266,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		final ClientSelectionDialog dialog = this;
 		buttonReload.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.info(this, "actionPerformed");
 				buttonReload.setEnabled(false);
@@ -273,6 +274,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				Cursor saveCursor = dialog.getCursor();
 				dialog.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 				SwingUtilities.invokeLater(new Runnable() {
+					@Override
 					public void run() {
 						setReloadRequested();
 						// main.callClientSelectionDialog();
@@ -292,6 +294,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		buttonRestart.setBackground(Globals.backgroundLightGrey);
 
 		buttonRestart.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.info(this, "actionPerformed");
 				buttonRestart.setEnabled(false);
@@ -299,6 +302,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				dialog.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
 				SwingUtilities.invokeLater(new Runnable() {
+					@Override
 					public void run() {
 						setReloadRequested();
 						// main.callClientSelectionDialog();
@@ -942,6 +946,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			fieldText.setToolTipText(
 					/* "Use * as wildcard" */configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
 			fieldText.addValueChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
+				@Override
 				protected void actOnChange() {
 					buildParentheses();
 				}
@@ -955,6 +960,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			fieldDouble.setToolTipText(
 					/* "Use * as wildcard" */configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
 			fieldDouble.addValueChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
+				@Override
 				protected void actOnChange() {
 					buildParentheses();
 				}
@@ -969,6 +975,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			box.setToolTipText(configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
 			// box.setSelectedItem("");
 			box.addValueChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
+				@Override
 				protected void actOnChange() {
 					buildParentheses();
 				}
@@ -980,6 +987,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			fieldDate.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 			fieldDate.setToolTipText("yyyy-mm-dd");
 			fieldDate.addValueChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
+				@Override
 				protected void actOnChange() {
 					buildParentheses();
 				}
@@ -990,6 +998,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		case IntegerType:
 			JSpinner spinner = new JSpinner();
 			spinner.addChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
+				@Override
 				protected void actOnChange() {
 					buildParentheses();
 				}
@@ -999,6 +1008,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		case BigIntegerType:
 			SpinnerWithExt swx = new SpinnerWithExt();
 			swx.addChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
+				@Override
 				protected void actOnChange() {
 					buildParentheses();
 				}
@@ -1252,6 +1262,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	private class RemoveButtonListener implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			Iterator<ComplexGroup> complexIterator = complexElements.iterator();
 			while (complexIterator.hasNext()) {
@@ -1281,6 +1292,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	private class AddElementListener implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (!complexElements.isEmpty())
 				complexElements.getLast().connectionType.setVisible(true);
@@ -1309,6 +1321,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	private class SelectOperationListener implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			JComponent source = null;
 			SimpleGroup sourceGroup = null;
@@ -1346,6 +1359,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	private class NotButtonListener implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent event) {
 			if (!(event.getSource() instanceof IconAsButton))
 				return;
@@ -1356,6 +1370,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	private class ParenthesisListener implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent event) {
 			if (!(event.getSource() instanceof IconAsButton))
 				return;
@@ -1365,6 +1380,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	private class AndOrButtonListener implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent event) {
 			buildParentheses();
 		}
@@ -1409,6 +1425,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	private class SaveButtonListener implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			String text = saveNameField.getText();
 			if (text.isEmpty()) {

@@ -553,6 +553,7 @@ public class SSHCommandFactory {
 	 */
 	public void reloadServerMenu() {
 		new Thread() {
+			@Override
 			public void run() {
 				main.reloadServerMenu();
 			}

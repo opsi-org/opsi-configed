@@ -360,6 +360,7 @@ public class ExporterToPDF extends ExportTable {
 		 * @see com.itextpdf.text.pdf.PdfPageEventHelper#onOpenDocument(
 		 *      com.itextpdf.text.pdf.PdfWriter, com.itextpdf.text.Document)
 		 */
+		@Override
 		public void onOpenDocument(PdfWriter writer, Document document) {
 			total = writer.getDirectContent().createTemplate(30, 16);
 		}
@@ -370,6 +371,7 @@ public class ExporterToPDF extends ExportTable {
 		 * @see com.itextpdf.text.pdf.PdfPageEventHelper#onEndPage(
 		 *      com.itextpdf.text.pdf.PdfWriter, com.itextpdf.text.Document)
 		 */
+		@Override
 		public void onEndPage(PdfWriter writer, Document document) {
 			PdfPTable table = new PdfPTable(3);
 			// TODO: logo, create String from Globals
@@ -408,6 +410,7 @@ public class ExporterToPDF extends ExportTable {
 		 * @see com.itextpdf.text.pdf.PdfPageEventHelper#onCloseDocument(
 		 *      com.itextpdf.text.pdf.PdfWriter, com.itextpdf.text.Document)
 		 */
+		@Override
 		public void onCloseDocument(PdfWriter writer, Document document) {
 			ColumnText.showTextAligned(total, Element.ALIGN_LEFT,
 					new Phrase(String.valueOf(writer.getPageNumber() - 1)), 2, 2, 0);

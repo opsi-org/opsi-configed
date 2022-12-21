@@ -45,6 +45,7 @@ public class JTextFieldObserved extends JTextField implements KeyListener {
 	}
 
 	// KeyListener
+	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			// logging.debug(this, "escape");
@@ -56,9 +57,11 @@ public class JTextFieldObserved extends JTextField implements KeyListener {
 
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 	}
 

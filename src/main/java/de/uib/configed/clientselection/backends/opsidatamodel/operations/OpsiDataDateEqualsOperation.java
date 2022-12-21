@@ -19,6 +19,7 @@ public class OpsiDataDateEqualsOperation extends DateEqualsOperation implements 
 		};
 	}
 
+	@Override
 	public boolean doesMatch(Client client) {
 		return matcher.doesMatch(client);
 	}

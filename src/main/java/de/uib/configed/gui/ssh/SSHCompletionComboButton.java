@@ -143,6 +143,7 @@ public class SSHCompletionComboButton {
 
 		if (search_specific_files != null && (!search_specific_files.equals("")))
 			combobox.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (combobox.getSelectedItem() != null
 							&& ((String) combobox.getSelectedItem()).endsWith(search_specific_files))
@@ -159,6 +160,7 @@ public class SSHCompletionComboButton {
 		button.setText(configed.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button"));
 		button.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button.tooltip"));
 		button.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				doButtonAction();
 			}
@@ -219,6 +221,7 @@ public class SSHCompletionComboButton {
 
 	private void getDirectoriesIn(final String curdir) {
 		new Thread() {
+			@Override
 			public void run() {
 				try {
 					Empty_Command getDirectories = new Empty_Command(
@@ -245,6 +248,7 @@ public class SSHCompletionComboButton {
 
 	private void getDirectoriesAndFilesIn(final String curdir) {
 		new Thread() {
+			@Override
 			public void run() {
 				try {
 					Empty_Command getFiles = new Empty_Command(
@@ -328,6 +332,7 @@ public class SSHCompletionComboButton {
 			super();
 		}
 
+		@Override
 		public Component getListCellRendererComponent(JList list, Object value, // value to display
 				int index, // cell index
 				boolean isSelected, // is the cell selected

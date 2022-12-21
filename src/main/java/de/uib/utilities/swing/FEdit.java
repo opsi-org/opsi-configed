@@ -90,6 +90,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 		buttonCommit = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip"), "images/apply.png",
 				"images/apply_over.png", "images/apply_disabled.png", true) {
+			@Override
 			public void setEnabled(boolean b) {
 				super.setEnabled(b);
 				logging.debug(this, "setEnabled " + b);
@@ -359,6 +360,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 		deactivate(); // no effect probably because of reentering the field
 	}
 
+	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			cancel();
@@ -402,6 +404,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 	// interface
 	// ActionListener
+	@Override
 	public void actionPerformed(java.awt.event.ActionEvent e) {
 		if (e.getSource() == buttonCommit) {
 			commit();
@@ -414,6 +417,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 	// interface
 	// KeyListener
+	@Override
 	public void keyPressed(KeyEvent e) {
 		logging.debug(this, " key event " + e);
 		if (e.getSource() == buttonCommit) {
@@ -424,9 +428,11 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 	}
 

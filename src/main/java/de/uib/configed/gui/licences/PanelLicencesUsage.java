@@ -233,6 +233,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 	}
 
 	// ActionListener
+	@Override
 	public void actionPerformed(java.awt.event.ActionEvent evt) {
 		if (evt.getSource() == buttonGet) {
 			licencesUsageController.getSoftwareLicenceReservation((String) comboClient.getSelectedItem());

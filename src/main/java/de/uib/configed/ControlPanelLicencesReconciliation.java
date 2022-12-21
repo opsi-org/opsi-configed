@@ -35,10 +35,12 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 		init();
 	}
 
+	@Override
 	public TabClientAdapter getTabClient() {
 		return thePanel;
 	}
 
+	@Override
 	public void init() {
 		updateCollection = new TableUpdateCollection();
 
@@ -76,6 +78,7 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 				modelLicencesReconciliation, columnNames, classNames, 0);
 		modelLicencesReconciliation = new GenTableModel(updateItemFactoryLicencesReconciliation,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
 					public Map retrieveMap() {
 						logging.debug(this, "retrieveMap");
 						if (initialized)
@@ -91,10 +94,12 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 
 		// filter which guarantees that clients are only shown when they have entries
 		modelLicencesReconciliation.setFilterCondition(new TableModelFilterCondition() {
+			@Override
 			public void setFilter(TreeSet<Object> filterParam) {
 				// Implementing TableModelFilterCondition
 			}
 
+			@Override
 			public boolean test(Vector<Object> row) {
 				return ((Boolean) row.get(index_used_by_opsi)) || ((Boolean) row.get(index_SWinventory_used));
 			}
@@ -141,11 +146,13 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 		// updates
 		thePanel.panelReconciliation.setUpdateController(new MapItemsUpdateController(thePanel.panelReconciliation,
 				modelLicencesReconciliation, new MapBasedUpdater() {
+					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
 						return persist.editLicencesReconciliation((String) rowmap.get("hostId"),
 								(String) rowmap.get("licensePoolId"));
 					}
 
+					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencesReconciliation.requestReload();
 						return persist.deleteLicencesReconciliation((String) rowmap.get("hostId"),

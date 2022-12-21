@@ -63,10 +63,12 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 		mainController.checkErrorList();
 	}
 
+	@Override
 	public TabClientAdapter getTabClient() {
 		return thePanel;
 	}
 
+	@Override
 	public void init() {
 		updateCollection = new TableUpdateCollection();
 
@@ -98,11 +100,13 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 
 		thePanel.panelKeys.setUpdateController(
 				new MapItemsUpdateController(thePanel.panelKeys, modelLicencekeys, new MapBasedUpdater() {
+					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
 						return persist.editRelationSoftwareL2LPool((String) rowmap.get("softwareLicenseId"),
 								(String) rowmap.get("licensePoolId"), (String) rowmap.get("licenseKey"));
 					}
 
+					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencekeys.requestReload();
 						return persist.deleteRelationSoftwareL2LPool((String) rowmap.get("softwareLicenseId"),
@@ -223,6 +227,7 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 		// updates
 		thePanel.panelLicencecontracts.setUpdateController(new MapItemsUpdateController(thePanel.panelLicencecontracts,
 				modelLicencecontracts, new MapBasedUpdater() {
+					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
 						return persist.editLicenceContract((String) rowmap.get("licenseContractId"),
 								(String) rowmap.get("partner"), (String) rowmap.get("conclusionDate"),
@@ -230,6 +235,7 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 								(String) rowmap.get("notes"));
 					}
 
+					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencecontracts.requestReload();
 						return persist.deleteLicenceContract((String) rowmap.get("licenseContractId"));

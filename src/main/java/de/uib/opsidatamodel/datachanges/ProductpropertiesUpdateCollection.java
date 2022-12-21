@@ -37,6 +37,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 		this.mainController = mainController;
 	}
 
+	@Override
 	public void setController(Object obj) {
 		this.persis = (PersistenceController) obj;
 	}

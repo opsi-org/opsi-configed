@@ -279,6 +279,7 @@ public class OpsiDataBackend extends Backend {
 		throw new IllegalArgumentException("The operation " + operation + " was not found on " + element);
 	}
 
+	@Override
 	protected SelectGroupOperation createGroupOperation(SelectGroupOperation operation,
 			List<SelectOperation> operations) {
 		/*
@@ -312,6 +313,7 @@ public class OpsiDataBackend extends Backend {
 
 	}
 
+	@Override
 	public void setReloadRequested() {
 		logging.info(this, "setReloadRequested");
 		super.setReloadRequested();
@@ -389,6 +391,7 @@ public class OpsiDataBackend extends Backend {
 
 	}
 
+	@Override
 	protected List<Client> getClients() {
 		List<Client> clients = new LinkedList<Client>();
 
@@ -426,14 +429,17 @@ public class OpsiDataBackend extends Backend {
 		return clients;
 	}
 
+	@Override
 	public List<String> getGroups() {
 		return controller.getHostGroupIds();
 	}
 
+	@Override
 	public TreeSet<String> getProductIDs() {
 		return controller.getProductIds();
 	}
 
+	@Override
 	public Map<String, List<SelectElement>> getHardwareList() {
 		Map<String, List<SelectElement>> result = new HashMap<String, List<SelectElement>>();
 
@@ -467,6 +473,7 @@ public class OpsiDataBackend extends Backend {
 		return result;
 	}
 
+	@Override
 	public Map<String, List<SelectElement>> getLocalizedHardwareList() {
 		Map<String, List<SelectElement>> result = new HashMap<String, List<SelectElement>>();
 

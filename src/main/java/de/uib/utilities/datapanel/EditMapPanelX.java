@@ -131,12 +131,15 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 	protected final PropertyHandler settingDefaultValuesPropertyHandler;
 
 	protected class DatadependentPopupMenuListener implements PopupMenuListener {
+		@Override
 		public void popupMenuCanceled(PopupMenuEvent e) {
 		}
 
+		@Override
 		public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 		}
 
+		@Override
 		public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 		}
 	}
@@ -229,6 +232,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 						configed.getResourceValue("EditMapPanel.PopupMenu.AddEntrySingleSelection"));
 				popupEditOptions.add(popupItemAddStringListEntry);
 				popupItemAddStringListEntry.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 
 						addEntryFor("java.lang.String", false);
@@ -242,6 +246,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 						configed.getResourceValue("EditMapPanel.PopupMenu.AddEntryMultiSelection"));
 				popupEditOptions.add(popupItemAddStringListEntry);
 				popupItemAddStringListEntry.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 
 						addEntryFor("java.lang.String", true);
@@ -255,6 +260,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 						configed.getResourceValue("EditMapPanel.PopupMenu.AddBooleanEntry"));
 				popupEditOptions.add(popupItemAddBooleanListEntry);
 				popupItemAddBooleanListEntry.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 
 						addEntryFor("java.lang.Boolean");
@@ -275,6 +281,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 				// therefore in a specific manner)
 
 				ActionListener listenerForRemoval = new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						logging.info(this, "popupItemDeleteEntry action");
 						if (table.getSelectedRowCount() == 0) {
@@ -299,6 +306,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 				};
 
 				ActionListener listenerForRemoval_REMOVE_SPECIFIC = new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						logging.info(this, "popupItemDeleteEntry action");
 						if (table.getSelectedRowCount() == 0) {
@@ -323,6 +331,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 				};
 
 				ActionListener listenerForRemoval_SET_DEFAULT_AS_SPECIFIC = new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						logging.info(this, "popupItemDeleteEntry action");
 						if (table.getSelectedRowCount() == 0) {
@@ -448,6 +457,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		TableCellRenderer colorized = new ColorTableCellRenderer();
 
 		table = new JTable(mapTableModel) {
+			@Override
 			public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
 				Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
 				if (c != null && c instanceof JComponent && showToolTip) {
@@ -524,6 +534,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		// table.setBackground(Globals.backNimbus);
 
 		table.addMouseWheelListener(new MouseWheelListener() {
+			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				// logging.debug(this, "MouseWheelEvent " + e);
 
@@ -642,6 +653,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 
 	}
 
+	@Override
 	public void cancelOldCellEditing() {
 
 		if (theCellEditor != null) // && data != null)
@@ -843,11 +855,13 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 	}
 
 	// ================= FocusListener
+	@Override
 	public void focusGained(FocusEvent e) {
 		// logging.debug("++++++++++++++++ Focus gained isEditing " +
 		// table.isEditing());
 	}
 
+	@Override
 	public void focusLost(FocusEvent e) {
 		// logging.debug("---------------------- Focus lost isEditing " +
 		// table.isEditing());

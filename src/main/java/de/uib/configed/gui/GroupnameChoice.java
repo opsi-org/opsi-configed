@@ -126,18 +126,22 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 	}
 
 	// DocumentListener for Document in groupnameField
+	@Override
 	public void insertUpdate(DocumentEvent e) {
 		textvalueChanged();
 	}
 
+	@Override
 	public void removeUpdate(DocumentEvent e) {
 		textvalueChanged();
 	}
 
+	@Override
 	public void changedUpdate(DocumentEvent e) {
 	}
 
 	// ListSelectionListener
+	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		selIndex = groups.getSelectedIndex();
 

@@ -20,6 +20,7 @@ public class OpsiDataSwAuditOperation extends SwAuditOperation implements Execut
 		controller = de.uib.opsidatamodel.PersistenceControllerFactory.getPersistenceController();
 	}
 
+	@Override
 	public boolean doesMatch(Client client) {
 		OpsiDataClient oClient = (OpsiDataClient) client;
 		List<SWAuditClientEntry> auditList = oClient.getSwAuditList();

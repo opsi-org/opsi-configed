@@ -157,6 +157,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 				btn_searchDir = autocompletion.getButton();
 				btn_searchDir.removeActionListener(btn_searchDir.getActionListeners()[0]);
 				btn_searchDir.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						autocompletion.doButtonAction();
 						doSetActionGetVersions();
@@ -222,6 +223,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 				// btn_advancedSettings.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_advancedSettings.tooltip"));
 				if (!(Globals.isGlobalReadOnly()))
 					btn_advancedSettings.addActionListener(new ActionListener() {
+						@Override
 						public void actionPerformed(ActionEvent e) {
 							showAdvancedSettings(); // open and close
 						}
@@ -238,6 +240,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 						.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights.tooltip"));
 				if (!(Globals.isGlobalReadOnly()))
 					btn_setRights.addActionListener(new ActionListener() {
+						@Override
 						public void actionPerformed(ActionEvent e) {
 							doExecSetRights();
 						}
@@ -253,6 +256,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 				if (!(Globals.isGlobalReadOnly()))
 					btn_toPackageManager.addActionListener(new ActionListener() {
+						@Override
 						public void actionPerformed(ActionEvent e) {
 							if (main != null)
 								new SSHPackageManagerInstallParameterDialog(main, filename);
@@ -265,6 +269,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 				btn_exec.setEnabled(false);
 				if (!(Globals.isGlobalReadOnly()))
 					btn_exec.addActionListener(new ActionListener() {
+						@Override
 						public void actionPerformed(ActionEvent e) {
 							doAction1();
 						}
@@ -273,6 +278,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 				btn_cancel.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 				btn_cancel.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 				btn_cancel.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						cancel();
 					}
@@ -561,6 +567,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		// SSHConnectExec ssh = new SSHConnectExec(str2exec);
 		logging.info(this, "SSHConnectExec " + str2exec);
 		new Thread() {
+			@Override
 			public void run() {
 				SSHConnectExec ssh = new SSHConnectExec(str2exec);
 			}

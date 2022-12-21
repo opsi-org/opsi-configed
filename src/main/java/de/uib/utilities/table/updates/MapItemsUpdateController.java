@@ -30,6 +30,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 		this.updateCollection = updateCollection;
 	}
 
+	@Override
 	public boolean saveChanges() {
 		// logging.debug (" ------- update controller called ");
 		logging.debug(this, "saveChanges");
@@ -126,6 +127,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 		return success;
 	}
 
+	@Override
 	public boolean cancelChanges() {
 
 		Iterator iter = updateCollection.iterator();

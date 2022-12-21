@@ -65,11 +65,13 @@ public class ImagePlusTextLabel extends JPanel {
 	 * without questioning if the childcomponent is null it leads to exception
 	 * because it is set deeply into the Swing machine beforehand
 	 */
+	@Override
 	public void setFont(Font font) {
 		if (textlabel != null)
 			textlabel.setFont(font);
 	}
 
+	@Override
 	public Font getFont() {
 		if (textlabel != null)
 			return textlabel.getFont();
@@ -77,6 +79,7 @@ public class ImagePlusTextLabel extends JPanel {
 			return super.getFont();
 	}
 
+	@Override
 	public void setBackground(Color bg) {
 		if (textlabel != null)
 			textlabel.setBackground(bg);
@@ -84,6 +87,7 @@ public class ImagePlusTextLabel extends JPanel {
 			imagefield.setBackground(bg);
 	}
 
+	@Override
 	public void setForeground(Color fg) {
 		if (textlabel != null)
 			textlabel.setForeground(fg);

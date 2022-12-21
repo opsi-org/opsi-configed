@@ -98,12 +98,14 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	}
 
 	// DocumentListener interface
+	@Override
 	public void changedUpdate(DocumentEvent e) {
 		// logging.debug(this, "changedUpdate");
 		setDataChanged(true);
 
 	}
 
+	@Override
 	public void insertUpdate(DocumentEvent e) {
 		// logging.debug(this, "insertUpdate");
 		/*
@@ -127,24 +129,30 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	}
 
 	// MouseListener
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		// logging.error(this, " " + textarea.getCaretPosition()+ "\n" + e);
 		if (standalone)
 			logging.debug(getText());
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e) {
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
 
+	@Override
 	public void removeUpdate(DocumentEvent e) {
 		// logging.debug(this, "removeUpdate");
 		setDataChanged(true);

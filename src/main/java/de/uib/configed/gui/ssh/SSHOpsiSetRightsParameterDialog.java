@@ -73,6 +73,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 		btn_doAction.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly()))
 			btn_doAction.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					logging.info(this, "btn_doAction pressed");
 					doAction1();
@@ -84,6 +85,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 		btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 		btn_close.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 		btn_close.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				cancel();
 			}
@@ -105,12 +107,14 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	}
 
 	/* This method is called when button 1 is pressed */
+	@Override
 	public void doAction1() {
 		try {
 			commandopsisetrights.setDir(completion.combobox_getStringItem());;
 			logging.info(this, "doAction1 opsi-set-rights with path: " + commandopsisetrights.getDir());
 			// we are in the event queure
 			new Thread() {
+				@Override
 				public void run() {
 					new SSHConnectExec((SSHCommand) commandopsisetrights, btn_doAction);
 				}

@@ -285,6 +285,7 @@ public class NewClientDialog extends FGeneralDialog
 		jLabelNotes.setText(configed.getResourceValue("NewClientDialog.notes"));
 		jTextNotes = new JTextArea();
 		jTextNotes.addFocusListener(new FocusListener() {
+			@Override
 			public void focusGained(FocusEvent e) {
 				jTextNotes.setText(jTextNotes.getText().trim());
 				// remove tab at end of text, inserted by navigating while in the panel
@@ -302,9 +303,11 @@ public class NewClientDialog extends FGeneralDialog
 		// handle backtab (below)
 
 		jTextNotes.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
 			public void changedUpdate(DocumentEvent e) {
 			}
 
+			@Override
 			public void insertUpdate(DocumentEvent e) {
 				try {
 					// logging.debug (" --------->" + e.getDocString newPiece =
@@ -322,6 +325,7 @@ public class NewClientDialog extends FGeneralDialog
 
 			}
 
+			@Override
 			public void removeUpdate(DocumentEvent e) {
 			}
 		});

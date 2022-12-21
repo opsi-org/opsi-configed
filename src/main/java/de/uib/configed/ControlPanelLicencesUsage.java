@@ -76,6 +76,7 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 
 	}
 
+	@Override
 	public TabClientAdapter getTabClient() {
 		return thePanel;
 	}
@@ -98,6 +99,7 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 		thePanel.setDivider();
 	}
 
+	@Override
 	public void init() {
 		updateCollection = new TableUpdateCollection();
 
@@ -121,6 +123,7 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 				columnNames, classNames, 0);
 		modelLicencesUsage = new GenTableModel(updateItemFactoryLicencesUsage,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
 					public Map retrieveMap() {
 						persist.licencesUsageRequestRefresh();
 						return persist.getLicencesUsage();
@@ -188,6 +191,7 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 		// updates
 		thePanel.panelUsage.setUpdateController(
 				new MapItemsUpdateController(thePanel.panelUsage, modelLicencesUsage, new MapBasedUpdater() {
+					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
 						return persist.editLicenceUsage((String) rowmap.get(LicenceUsageEntry.clientIdKEY), // "hostId"),
 								(String) rowmap.get(LicenceUsageEntry.licenceIdKEY), // "softwareLicenseId"),
@@ -198,6 +202,7 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 
 					}
 
+					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencesUsage.requestReload();
 						return persist.deleteLicenceUsage((String) rowmap.get(LicenceUsageEntry.clientIdKEY), // ""hostId"),
@@ -228,6 +233,7 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 
 		// combo clients
 		thePanel.setClientsSource(new de.uib.utilities.ComboBoxModeller() {
+			@Override
 			public ComboBoxModel<String> getComboBoxModel(int row, int column) {
 				List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(persist.getHostInfoCollections()
 						.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))

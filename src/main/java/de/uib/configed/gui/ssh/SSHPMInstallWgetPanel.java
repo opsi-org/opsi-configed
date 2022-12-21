@@ -56,6 +56,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 		wgetAuthPanel.close();
 	}
 
+	@Override
 	public void enable(boolean e) {
 		cb_autocompletion.setEnabled(e);
 		btn_autocompletion.setEnabled(e);
@@ -82,6 +83,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 		tf_url.setBackground(Globals.backLightYellow);
 		// tf_url.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_url"));
 		tf_url.addFocusListener(new FocusAdapter() {
+			@Override
 			public void focusGained(FocusEvent e) {
 				if (tf_url.getText().equals(url_def_text)) {
 					tf_url.setSelectionStart(0);

@@ -516,6 +516,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	// KeyListener
+	@Override
 	public void keyPressed(KeyEvent e) {
 		logging.debug(this, "key event " + e);
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
@@ -537,6 +538,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		}
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
@@ -544,29 +546,35 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 	}
 
 	// MouseListener
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		logging.debug(this, "mouseClicked");
 
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) {
 		logging.debug(this, "mouseEntered");
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e) {
 		logging.debug(this, "mouseExited");
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 		logging.debug(this, "mousePressed");
 
 		preAction1();
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		logging.debug(this, "mouseReleased");
 	}
@@ -582,6 +590,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	// ActionListener
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == jButton1) {
 			preAction1();
@@ -637,6 +646,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			fadeTimer.start();
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (vanishing) {
 				opacity -= step;

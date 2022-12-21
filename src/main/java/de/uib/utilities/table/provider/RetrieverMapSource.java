@@ -26,6 +26,7 @@ public class RetrieverMapSource extends MapSource
 		this(columnNames, classNames, retriever, false);
 	}
 
+	@Override
 	protected void fetchData() {
 		table = retriever.retrieveMap();
 		// logging.debug ( " -------- RetrieverMapSource fetchData() : " + table);

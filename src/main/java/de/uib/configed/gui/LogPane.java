@@ -163,6 +163,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 
 		// ChangeListener
+		@Override
 		public void stateChanged(ChangeEvent e) {
 			// for debugging
 			logging.info(this, "min, max, value " + min + ", " + max + ", " + value + " -- ChangeEvent " + e);
@@ -328,6 +329,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		// jTextPane.setContentType ("text/ascii; charset=UTF-8");
 
 		class LogStyleContext extends StyleContext {
+			@Override
 			public Font getFont(AttributeSet attr) {
 				return monospacedFont;
 			}
@@ -428,6 +430,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		sliderLevel0 = new AdaptingSlider(minL, maxL, produceInitialMaxShowLevel());
 		sliderLevel0.setVisible(false); // to develop
 		sliderLevel0.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				logging.info(this, "mouseClicked on sliderLevel0 ");
 			}
@@ -446,6 +449,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 
 		sliderListener = new ChangeListener() {
+			@Override
 			public void stateChanged(ChangeEvent e) {
 				// final Cursor startingCursor = sliderLevel.getCursor();
 				// sliderLevel.setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -456,6 +460,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				// activateShowLevel();
 
 				SwingUtilities.invokeLater(new Runnable() {
+					@Override
 					public void run() {
 						logging.debug(this, "activateShowLevel call");
 						Cursor startingCursor = sliderLevel.getCursor();
@@ -474,6 +479,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		sliderLevel.addChangeListener(sliderListener);
 		sliderLevel.addMouseWheelListener(new MouseWheelListener() {
+			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				logging.debug(this, "MouseWheelEvent " + e);
 
@@ -506,6 +512,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		comboType.addActionListener(new ActionListener() {
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				int oldSelTypeIndex = selTypeIndex;
 				Object selType = comboType.getSelectedItem();
@@ -683,6 +690,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 					PopupMenuTrait.POPUP_SAVE_AS_ZIP,
 					// PopupMenuTrait.POPUP_SAVE_LOADED_AS_ZIP,
 					PopupMenuTrait.POPUP_SAVE_ALL_AS_ZIP, PopupMenuTrait.POPUP_FLOATINGCOPY }) {
+				@Override
 				public void action(int p) {
 					switch (p) {
 					case PopupMenuTrait.POPUP_RELOAD:
@@ -782,6 +790,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 		jTextPane.setDocument(document);
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				// jTextPane.setDocument(document); //if called here, ths cursor location is
 				// lost
@@ -1183,6 +1192,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 	}
 
+	@Override
 	public void keyPressed(KeyEvent e) {
 		logging.debug(this, "KeyEvent " + e);
 		if (e.getSource() == buttonSearch) {
@@ -1212,10 +1222,12 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 		if (e.getSource() == jTextPane) {
 			if (e.getKeyChar() == '/' || e.getKeyChar() == '\u0006') // ctrl-f
@@ -1236,6 +1248,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	// Interface ActionListener
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		// logging.info(this, "ActionEvent " + e);
 		if (e.getSource() == buttonSearch) {
@@ -1353,10 +1366,12 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			color = c;
 		}
 
+		@Override
 		public void paint(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c) {
 			// Do nothing: this method will never be called
 		}
 
+		@Override
 		public Shape paintLayer(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c, View view) {
 			g.setColor(color == null ? c.getSelectionColor() : color);
 
@@ -1403,6 +1418,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			return addHighlight(p0, p1, painter);
 		}
 
+		@Override
 		public void setDrawsLayeredHighlights(boolean newValue) {
 			// Illegal if false - we only support layered highlights
 			if (newValue == false) {

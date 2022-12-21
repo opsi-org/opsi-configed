@@ -71,6 +71,7 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 	 * }
 	 */
 
+	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 			boolean isSelected, // is the cell selected
 			boolean hasFocus, int row, int column) {

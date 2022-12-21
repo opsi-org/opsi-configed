@@ -166,6 +166,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 		// mapTableModel.fireTableDataChanged();
 	}
 
+	@Override
 	public void setLabel(String s) {
 	}
 

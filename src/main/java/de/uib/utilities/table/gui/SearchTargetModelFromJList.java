@@ -55,14 +55,17 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	protected AbstractTableModel setupTableModel(Vector<String> values, Vector<String> descriptions) {
 
 		AbstractTableModel tableModel = new AbstractTableModel() {
+			@Override
 			public int getRowCount() {
 				return values.size();
 			}
 
+			@Override
 			public int getColumnCount() {
 				return 2;
 			}
 
+			@Override
 			public Object getValueAt(int row, int col) {
 				if (col == 0)
 					return values.get(row);
@@ -74,25 +77,30 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		return tableModel;
 	}
 
+	@Override
 	public int getColForVisualCol(int visualCol) {
 		return visualCol;
 	}
 
+	@Override
 	public int getRowForVisualRow(int visualRow) {
 		return visualRow;
 	}
 
+	@Override
 	public void clearSelection() {
 		logging.info(this, "clearSelection");
 		jList.clearSelection();
 	}
 
+	@Override
 	public int getSelectedRow() {
 		if (getSelectedRows().length == 0)
 			return -1;
 		return getSelectedRows()[0];
 	}
 
+	@Override
 	public int[] getSelectedRows() {
 		TreeSet<Integer> selection = new TreeSet<Integer>();
 		for (int j = 0; j < theValues.size(); j++) {
@@ -109,14 +117,17 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		return result;
 	}
 
+	@Override
 	public void ensureRowIsVisible(int row) {
 		// jList.locationToIndex
 		// table.scrollRectToVisible(table.getCellRect(row, 0, false));
 	}
 
+	@Override
 	public void setCursorRow(int row) {
 	}
 
+	@Override
 	public void setSelectedRow(int row) {
 		if (row == -1) {
 			clearSelection();
@@ -127,6 +138,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		ensureRowIsVisible(row);
 	}
 
+	@Override
 	public void addSelectedRow(int row) {
 		logging.info(this, "addSelectedRow " + row);
 
@@ -136,6 +148,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		ensureRowIsVisible(row);
 	}
 
+	@Override
 	public int[] getUnfilteredSelection() {
 		if (unfilteredV == null || unfilteredSelection == null)
 			return null;
@@ -143,6 +156,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		return unfilteredSelection;
 	}
 
+	@Override
 	public void setSelection(int[] selection) {
 		setValueIsAdjusting(true);
 		jList.clearSelection();
@@ -160,6 +174,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 			jList.ensureIndexIsVisible(selection[0]);
 	}
 
+	@Override
 	public void setValueIsAdjusting(boolean b) {
 		jList.getSelectionModel().setValueIsAdjusting(b);
 	}

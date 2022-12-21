@@ -212,6 +212,7 @@ public abstract class SWExporter {
 
 		modelSWInfo = new GenTableModel(null, // no updates
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
 					public Map<String, Map> retrieveMap() {
 						logging.info(this, "retrieving data for " + theHost);
 						Map<String, Map> tableData = persist.retrieveSoftwareAuditData(theHost);

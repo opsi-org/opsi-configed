@@ -253,6 +253,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 	 * implementing MouseListener *
 	 *****************************/
 
+	@Override
 	public void mouseClicked(java.awt.event.MouseEvent e) {
 
 		if (isEnabled()) {
@@ -261,14 +262,17 @@ public class IconAsButton extends JPanel implements MouseListener {
 		}
 	}
 
+	@Override
 	public void mousePressed(java.awt.event.MouseEvent e) {
 
 	}
 
+	@Override
 	public void mouseReleased(java.awt.event.MouseEvent e) {
 
 	}
 
+	@Override
 	public void mouseEntered(java.awt.event.MouseEvent e) {
 		if (enabled && !mouseOver) {
 			mouseOver = true;
@@ -276,6 +280,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 		}
 	}
 
+	@Override
 	public void mouseExited(java.awt.event.MouseEvent e) {
 		if (enabled && mouseOver) {
 			mouseOver = false;

@@ -25,10 +25,12 @@ public class DefaultTableProvider implements TableProvider {
 		this.source = source;
 	}
 
+	@Override
 	public void setTableSource(TableSource source) {
 		this.source = source;
 	}
 
+	@Override
 	public Vector<String> getColumnNames() {
 		if (columnNames == null)
 			columnNames = source.retrieveColumnNames();
@@ -36,6 +38,7 @@ public class DefaultTableProvider implements TableProvider {
 		return columnNames;
 	}
 
+	@Override
 	public Vector<String> getClassNames() {
 		if (classNames == null)
 			classNames = source.retrieveClassNames();
@@ -44,6 +47,7 @@ public class DefaultTableProvider implements TableProvider {
 	}
 
 	// should deliver a copy of the data
+	@Override
 	public Vector<Vector<Object>> getRows() {
 		logging.info(this, " -- getRows()");
 
@@ -97,6 +101,7 @@ public class DefaultTableProvider implements TableProvider {
 	}
 
 	// should set the working copy as new original values
+	@Override
 	public void setWorkingCopyAsNewOriginalRows() {
 		/// logging.debug(" setWorkingCopyAsNewOriginalRows() ");
 		// "deep" rows = rowsCopy:
@@ -121,11 +126,13 @@ public class DefaultTableProvider implements TableProvider {
 	}
 
 	// should initiate returning to the original data
+	@Override
 	public void requestReturnToOriginal() {
 		rowsCopy = null;
 	}
 
 	// should initiate reloading the original data
+	@Override
 	public void requestReloadRows() {
 		rows = null;
 		rowsCopy = null;
@@ -134,6 +141,7 @@ public class DefaultTableProvider implements TableProvider {
 	}
 
 	// should initiate reloading the metadata
+	@Override
 	public void structureChanged() {
 		source.structureChanged();
 		classNames = null;
@@ -141,6 +149,7 @@ public class DefaultTableProvider implements TableProvider {
 	}
 
 	// yields a column as ordered vector
+	@Override
 	public Vector<String> getOrderedColumn(int col, boolean empty_allowed) {
 		// logging.debug(this, "getOrderedColumn " + col + ", empty_allowed " +
 		// empty_allowed);

@@ -133,6 +133,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			myCollator.setStrength(Collator.IDENTICAL);
 		}
 
+		@Override
 		public int compare(DefaultMutableTreeNode o1, DefaultMutableTreeNode o2) {
 			return myCollator.compare("" + o1.getUserObject(), "" + o2.getUserObject());
 		}
@@ -399,6 +400,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		TreePopupMouseListener.createSubnodePosition = 0;
 
 		menuItemCreateNode.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				// logging.debug(" action performed on menuItemCreateNode, " + e);
 				// logging.debug(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
@@ -420,6 +422,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		TreePopupMouseListener.editNodePosition = 1;
 
 		menuItemEditNode.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				editGroupNode(treePopupMouseListener.getPopupSourcePath());
 				/*
@@ -448,6 +451,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		TreePopupMouseListener.deleteNodePosition = 2;
 
 		menuItemDeleteNode.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				// logging.debug(" action performed on menuItemDeleteNode, " + e);
 				// logging.debug(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
@@ -468,6 +472,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		TreePopupMouseListener.deleteGroupNodePosition = 3;
 
 		menuItemDeleteGroupNode.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				// logging.debug(" action performed on menuItemDeleteNode, " + e);
 				// logging.debug(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
@@ -488,6 +493,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		TreePopupMouseListener.activateElementsPosition = 4;
 
 		menuItemActivateElements.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				// logging.debug(" action performed on menuItemActivateElements, " + e);
 				// logging.debug(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
@@ -521,6 +527,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		TreePopupMouseListener.removeElementsPosition = 5;
 
 		menuItemRemoveElements.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				// logging.debug(" action performed on menuItemRemoveElements, " + e);
 				// logging.debug(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
@@ -612,6 +619,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	 */
 
 	// publishing the protected method
+	@Override
 	public TreePath[] getPathBetweenRows(int index0, int index1) {
 		return super.getPathBetweenRows(index0, index1);
 	}
@@ -650,12 +658,15 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	// =====
 	// interface KeyListener
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 	}
 
+	@Override
 	public void keyPressed(KeyEvent e) {
 		// logging.debug(this, "key event " + e);
 
@@ -691,6 +702,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	// ======================
 	// interface TreeSelectionListener
+	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 		// logging.info(this, " -- tree selection event " + e);
 
@@ -733,17 +745,21 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	// ======================
 	// TreeModelListener
+	@Override
 	public void treeNodesChanged(TreeModelEvent e) {
 
 	}
 
+	@Override
 	public void treeNodesInserted(TreeModelEvent e) {
 	}
 
+	@Override
 	public void treeNodesRemoved(TreeModelEvent e) {
 		// logging.debug(this,"treeNodesRemoved");
 	}
 
+	@Override
 	public void treeStructureChanged(TreeModelEvent e) {
 		// logging.debug(this,"treeStructureChanged");
 	}
@@ -751,10 +767,12 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	// ======================
 	// interface MouseMotionListener
+	@Override
 	public void mouseMoved(MouseEvent e) {
 
 	}
 
+	@Override
 	public void mouseDragged(MouseEvent e) {
 	}
 	// ======================
@@ -764,6 +782,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	boolean mouse_ready = true;
 
 	// interface MouseListener
+	@Override
 	public void mousePressed(final MouseEvent e) {
 		logging.debug(this, "mousePressed event " + e);
 
@@ -797,21 +816,25 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	}
 
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		// logging.info(this, "mouseClicked event " + e);
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) {
 		// int selRow = getRowForLocation(e.getX(), e.getY());
 		// logging.debug(this," mouse entered, (x,y) " + e.getX() + ", " + e.getY() + "
 		// row " + selRow);
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e) {
 		// int selRow = getRowForLocation(e.getX(), e.getY());
 		// logging.debug(this," mouse exited, row " + selRow);
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
 	// ======================

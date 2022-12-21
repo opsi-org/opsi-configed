@@ -30,6 +30,7 @@ public abstract class SelectionMemorizerUpdateController implements de.uib.utili
 		this.updater = updater;
 	}
 
+	@Override
 	public boolean saveChanges() {
 		boolean success = true;
 
@@ -67,5 +68,6 @@ public abstract class SelectionMemorizerUpdateController implements de.uib.utili
 		return success;
 	}
 
+	@Override
 	public abstract boolean cancelChanges();
 }

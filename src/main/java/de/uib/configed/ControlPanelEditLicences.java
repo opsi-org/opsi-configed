@@ -50,10 +50,12 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 
 	}
 
+	@Override
 	public TabClientAdapter getTabClient() {
 		return thePanel;
 	}
 
+	@Override
 	public void init() {
 		updateCollection = new TableUpdateCollection();
 
@@ -119,6 +121,7 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 		// updates
 		thePanel.panelKeys.setUpdateController(
 				new MapItemsUpdateController(thePanel.panelKeys, modelLicencekeys, new MapBasedUpdater() {
+					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
 						logging.info(this, "sendUpdate " + rowmap);
 
@@ -126,6 +129,7 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 								(String) rowmap.get("licensePoolId"), (String) rowmap.get("licenseKey"));
 					}
 
+					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						logging.info(this, "sendDelete " + rowmap);
 						modelLicencekeys.requestReload();
@@ -250,6 +254,7 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 
 		thePanel.panelSoftwarelicences.setUpdateController(new MapItemsUpdateController(thePanel.panelSoftwarelicences,
 				modelSoftwarelicences, new MapBasedUpdater() {
+					@Override
 					public String sendUpdate(Map<String, Object> m) {
 
 						return persist.editSoftwareLicence((String) m.get("softwareLicenseId"),
@@ -258,6 +263,7 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 								(String) m.get("boundToHost"), (String) m.get("expirationDate"));
 					}
 
+					@Override
 					public boolean sendDelete(Map<String, Object> m) {
 						modelSoftwarelicences.requestReload();
 						return persist.deleteSoftwareLicence((String) m.get("softwareLicenseId"));
@@ -396,6 +402,7 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 
 		thePanel.panelLicencecontracts.setUpdateController(new MapItemsUpdateController(thePanel.panelLicencecontracts,
 				modelLicencecontracts, new MapBasedUpdater() {
+					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
 						return persist.editLicenceContract((String) rowmap.get("licenseContractId"),
 								(String) rowmap.get("partner"), (String) rowmap.get("conclusionDate"),
@@ -403,6 +410,7 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 								(String) rowmap.get("notes"));
 					}
 
+					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencecontracts.requestReload();
 						return persist.deleteLicenceContract((String) rowmap.get("licenseContractId"));

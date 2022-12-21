@@ -129,6 +129,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		// tf_command).getText().length());
 		logging.info(this, "SSHConnectionTerminalDialog build ");
 		this.addComponentListener(new ComponentAdapter() {
+			@Override
 			public void componentResized(ComponentEvent e) {
 				logging.info(this, "SSHConnectionTerminalDialog  resized");
 				super.componentResized(e);
@@ -182,6 +183,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 		// some thread seems to prevent setting it directly
 		SwingUtilities.invokeLater(new Thread() {
+			@Override
 			public void run() {
 				int timeoutRuns = 2;
 				int counter = 0;
@@ -307,6 +309,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	private void initGUI() {
 		logging.info(this, "initGUI ");
 		tf_command = new JPasswordField() {
+			@Override
 			public void addNotify() {
 				super.addNotify();
 				requestFocusInWindow();
@@ -344,6 +347,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		if (!(Globals.isGlobalReadOnly()))
 			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonTest()
 					.addActionListener(new ActionListener() {
+						@Override
 						public void actionPerformed(ActionEvent e) {
 							((SSHCommandControlParameterMethodsPanel) parameterPanel).doActionTestParam(caller);
 						}
@@ -352,6 +356,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		if (!(Globals.isGlobalReadOnly()))
 			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonAdd()
 					.addActionListener(new ActionListener() {
+						@Override
 						public void actionPerformed(ActionEvent e) {
 							((SSHCommandControlParameterMethodsPanel) parameterPanel)
 									.doActionParamAdd((JTextComponent) tf_command);
@@ -369,6 +374,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		btn_executeCommand.setPreferredSize(btn_dim);
 		if (!(Globals.isGlobalReadOnly()))
 			btn_executeCommand.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					String text = getInputField().getText() + "\n";
 					if (terminal != null) {

@@ -305,14 +305,17 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		{
 
 			tf_tooltipText.getDocument().addDocumentListener(new DocumentListener() {
+				@Override
 				public void insertUpdate(DocumentEvent e) {
 					checkAllTexts();
 				}
 
+				@Override
 				public void removeUpdate(DocumentEvent e) {
 					checkAllTexts();
 				}
 
+				@Override
 				public void changedUpdate(DocumentEvent e) {
 					// Plain text components do not fire these events
 				}
@@ -320,14 +323,17 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		}
 		{
 			tf_priority.getDocument().addDocumentListener(new DocumentListener() {
+				@Override
 				public void insertUpdate(DocumentEvent e) {
 					checkAllTexts();
 				}
 
+				@Override
 				public void removeUpdate(DocumentEvent e) {
 					checkAllTexts();
 				}
 
+				@Override
 				public void changedUpdate(DocumentEvent e) {
 					// Plain text components do not fire these events
 				}
@@ -338,14 +344,17 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		}
 		{
 			tp_commands.getDocument().addDocumentListener(new DocumentListener() {
+				@Override
 				public void insertUpdate(DocumentEvent e) {
 					checkAllTexts();
 				}
 
+				@Override
 				public void removeUpdate(DocumentEvent e) {
 					checkAllTexts();
 				}
 
+				@Override
 				public void changedUpdate(DocumentEvent e) {
 					// Plain text components do not fire these events
 				}
@@ -363,6 +372,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			showPanel();
 			if (!(Globals.isGlobalReadOnly()))
 				btn_test_command.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						doActionTestCommand();
 					}
@@ -372,6 +382,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			if (!(Globals.isGlobalReadOnly()))
 				((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonTest()
 						.addActionListener(new ActionListener() {
+							@Override
 							public void actionPerformed(ActionEvent e) {
 								((SSHCommandControlParameterMethodsPanel) parameterPanel).doActionTestParam(caller);
 							}
@@ -380,6 +391,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			if (!(Globals.isGlobalReadOnly()))
 				((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonAdd()
 						.addActionListener(new ActionListener() {
+							@Override
 							public void actionPerformed(ActionEvent e) {
 								((SSHCommandControlParameterMethodsPanel) parameterPanel)
 										.doActionParamAdd((JTextComponent) tp_commands);
@@ -392,6 +404,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		{
 			if (!(Globals.isGlobalReadOnly()))
 				btn_del.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						String menu = (String) cb_menuText.getSelectedItem();
 						factory.deleteSSHCommandByMenu(menu);
@@ -406,6 +419,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		{
 			if (!(Globals.isGlobalReadOnly()))
 				btn_save.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent e) {
 						doAction1();
 					}
@@ -413,6 +427,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		}
 		{
 			btn_close.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					doAction2();
 				}
@@ -643,6 +658,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	}
 
 	/* This method is called when button 1 (save) is pressed */
+	@Override
 	public void doAction1() {
 		logging.info(this, "doAction1 savecommand ");
 		String menuText = (String) cb_menuText.getSelectedItem();
@@ -681,6 +697,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		logging.debug(this, "doActionTestCommand buildCommand commandlist " + command.commandlistToString());
 
 		new Thread() {
+			@Override
 			public void run() {
 				new SSHConnectExec(cmain, command); // .starting(command);
 			}
@@ -737,6 +754,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	}
 
 	/* This method gets called when button 2 (cancel) is pressed */
+	@Override
 	public void doAction2() {
 		super.doAction2();
 	}

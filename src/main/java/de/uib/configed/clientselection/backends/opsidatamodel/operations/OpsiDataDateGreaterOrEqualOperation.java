@@ -21,6 +21,7 @@ public class OpsiDataDateGreaterOrEqualOperation extends DateGreaterOrEqualOpera
 		};
 	}
 
+	@Override
 	public boolean doesMatch(Client client) {
 		return matcher.doesMatch(client);
 	}

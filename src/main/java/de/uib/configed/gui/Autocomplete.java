@@ -113,6 +113,7 @@ public class Autocomplete implements DocumentListener {
 			this.position = position;
 		}
 
+		@Override
 		public void run() {
 			StringBuffer sb = new StringBuffer(textField.getText());
 			sb.insert(position, completion);

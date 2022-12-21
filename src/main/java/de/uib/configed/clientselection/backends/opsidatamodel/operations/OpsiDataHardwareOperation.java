@@ -13,6 +13,7 @@ public class OpsiDataHardwareOperation extends HardwareOperation implements Exec
 		logging.info(this, "created");
 	}
 
+	@Override
 	public boolean doesMatch(Client client) {
 		// logging.debug(this, "doesMatch " + client);
 		OpsiDataClient oClient = (OpsiDataClient) client;

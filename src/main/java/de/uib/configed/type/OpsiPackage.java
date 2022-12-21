@@ -185,6 +185,7 @@ public class OpsiPackage implements Comparable {
 	}
 
 	// Interface Comparable
+	@Override
 	public int compareTo(Object o) {
 		return representation.compareTo(o.toString());
 	}

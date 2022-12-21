@@ -4,6 +4,7 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 
 	private static String lastException = "";
 
+	@Override
 	public void uncaughtException(Thread t, Throwable e) {
 
 		de.uib.utilities.thread.WaitCursor.stopAll();

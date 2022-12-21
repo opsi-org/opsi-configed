@@ -19,6 +19,7 @@ public class OpsiDataDateLessOrEqualOperation extends DateLessOrEqualOperation i
 		};
 	}
 
+	@Override
 	public boolean doesMatch(Client client) {
 		return matcher.doesMatch(client);
 	}

@@ -31,6 +31,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		searchDataVersion = dataVersion;
 	}
 
+	@Override
 	public List<String> getSaved() {
 		HashSet<String> set = new HashSet<String>();
 		set.addAll(searches.keySet());
@@ -38,6 +39,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		return new LinkedList<String>(set);
 	}
 
+	@Override
 	public SavedSearches getSavedSearches() {
 		return controller.getSavedSearches();
 	}

@@ -32,6 +32,7 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 		currentRow = rowNumber;
 	}
 
+	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 			boolean isSelected, // is the cell selected
 			boolean hasFocus, int row, int column) {

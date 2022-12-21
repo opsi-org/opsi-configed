@@ -115,19 +115,23 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			tf_url = new JTextField();
 			tf_url.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"));
 			tf_url.getDocument().addDocumentListener(new DocumentListener() {
+				@Override
 				public void changedUpdate(DocumentEvent documentEvent) {
 					changeUrl();
 				}
 
+				@Override
 				public void insertUpdate(DocumentEvent documentEvent) {
 					changeUrl();
 				}
 
+				@Override
 				public void removeUpdate(DocumentEvent documentEvent) {
 					changeUrl();
 				}
 			});
 			tf_url.addFocusListener(new FocusAdapter() {
+				@Override
 				public void focusGained(FocusEvent e) {
 					if (tf_url.getText().equals(
 							configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"))) {
@@ -163,14 +167,17 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			tf_freeInput = new JTextField();
 			tf_freeInput.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.freeInput"));
 			tf_freeInput.getDocument().addDocumentListener(new DocumentListener() {
+				@Override
 				public void changedUpdate(DocumentEvent documentEvent) {
 					changeFreeInput();
 				}
 
+				@Override
 				public void insertUpdate(DocumentEvent documentEvent) {
 					changeFreeInput();
 				}
 
+				@Override
 				public void removeUpdate(DocumentEvent documentEvent) {
 					changeFreeInput();
 				}
@@ -189,6 +196,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			btn_help.setToolTipText(configed.getResourceValue("SSHConnection.buttonParameterInfo.tooltip"));
 			buttonPanel.add(btn_help);
 			btn_help.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					doActionHelp();
 				}
@@ -199,6 +207,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			btn_execute.setText(configed.getResourceValue("SSHConnection.buttonExec"));
 			btn_execute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 			btn_execute.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (!(Globals.isGlobalReadOnly())) {
 						doAction1();
@@ -211,6 +220,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 			btn_close.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 			btn_close.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					// doAction2();
 					cancel();
@@ -246,6 +256,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	}
 
 	/* This method is called when button 1 is pressed */
+	@Override
 	public void doAction1() {
 		if ((tf_url.getText()
 				.equals(configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url")))
@@ -264,6 +275,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 
 		if (commandWget.checkCommand()) {
 			new Thread() {
+				@Override
 				public void run() {
 					try {
 						logging.info(this, "doAction1 wget ");

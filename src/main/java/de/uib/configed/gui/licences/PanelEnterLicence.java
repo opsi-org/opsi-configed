@@ -105,6 +105,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		final JPanel THIS = this;
 		addComponentListener(new ComponentAdapter() {
+			@Override
 			public void componentResized(ComponentEvent e) {
 				// logging.info(this, "size " + THIS.getSize());
 			}
@@ -118,6 +119,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 	protected void defineListeners() {
 		panelLicencecontracts.getListSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// Ignore extra messages.
 				if (e.getValueIsAdjusting())
@@ -138,6 +140,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		});
 
 		licencePoolSelectionListener = new ListSelectionListener() {
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (e.getValueIsAdjusting())
 					return;
@@ -348,6 +351,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		jTextField_endOfLicence.setEditable(false); // edit only via fEditDate
 		jTextField_endOfLicence.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				// logging.debug( " mouse clicked on textfield 5 ");
 				if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
@@ -374,9 +378,11 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 			}
 		});
 		jTextField_endOfLicence.addFocusListener(new FocusAdapter() {
+			@Override
 			public void focusGained(FocusEvent e) {
 			}
 
+			@Override
 			public void focusLost(FocusEvent e) {
 				if (fEditDate != null)
 					fEditDate.deactivate();
@@ -794,6 +800,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	}
 
 	// ActionListener
+	@Override
 	public void actionPerformed(java.awt.event.ActionEvent evt) {
 		if (evt.getSource() == jButtonCreateStandard) {
 			startStandard();

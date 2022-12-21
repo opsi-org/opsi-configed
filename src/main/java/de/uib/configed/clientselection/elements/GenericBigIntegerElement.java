@@ -16,6 +16,7 @@ public class GenericBigIntegerElement extends SelectElement {
 		super(name, localizedName);
 	}
 
+	@Override
 	public List<SelectOperation> supportedOperations() {
 		List<SelectOperation> result = new LinkedList<SelectOperation>();
 		result.add(new BigIntLessThanOperation(this));

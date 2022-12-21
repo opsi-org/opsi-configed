@@ -42,6 +42,7 @@ public class FShowList extends FTextArea {
 		init(preferredWidth, preferredHeight);
 	}
 
+	@Override
 	public void setMessage(String message) {
 		jTextArea1.setText(message);
 	}
@@ -60,6 +61,7 @@ public class FShowList extends FTextArea {
 			appendLine(line);
 	}
 
+	@Override
 	public void setFont(Font f) {
 		if (jTextArea1 == null) {
 			// logging.debug (" set Font called too early ");
@@ -95,6 +97,7 @@ public class FShowList extends FTextArea {
 
 	}
 
+	@Override
 	public void doAction1() {
 		// logging.debug ("action2");
 		logging.clearErrorList();
@@ -103,6 +106,7 @@ public class FShowList extends FTextArea {
 		super.doAction1();
 	}
 
+	@Override
 	public void doAction2() {
 		// logging.debug ("action2");
 		// logging. clearErrorList();
@@ -110,6 +114,7 @@ public class FShowList extends FTextArea {
 	}
 
 	// KeyListener
+	@Override
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;

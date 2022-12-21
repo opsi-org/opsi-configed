@@ -46,6 +46,7 @@ public class FramingNewRole implements FramingTextfieldWithListselection {
 		return listLabel;
 	}
 
+	@Override
 	public String getListLabelToolTip() {
 		listLabelToolTip = configed.getResourceValue("FramingNewRole.listLabel.ToolTip");
 

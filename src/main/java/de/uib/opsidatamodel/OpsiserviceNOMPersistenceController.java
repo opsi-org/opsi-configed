@@ -110,6 +110,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	private static final String EMPTYFIELD = "-";
 	private static final ArrayList NONE_LIST = new ArrayList() {
+		@Override
 		public int size() {
 			return -1;
 		}
@@ -378,6 +379,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 * }
 	 */
 
+	@Override
 	public boolean canCallMySQL() {
 		if (acceptMySQL == null)
 			acceptMySQL = dataStub.canCallMySQL();
@@ -476,10 +478,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			return result;
 		}
 
+		@Override
 		public void setTree(de.uib.configed.tree.ClientTree tree) {
 			connectedTree = tree;
 		}
 
+		@Override
 		public String getConfigServer() {
 			return configServer;
 		}
@@ -489,6 +493,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				mapPcBelongsToDepot = new HashMap<String, String>();
 		}
 
+		@Override
 		public Map<String, String> getMapPcBelongsToDepot() {
 			checkMapPcBelongsToDepot();
 			return mapPcBelongsToDepot;
@@ -498,6 +503,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			return mapOfPCs;
 		}
 
+		@Override
 		public java.util.List<String> getOpsiHostNames() {
 			retrieveOpsiHosts();
 			return opsiHostNames;
@@ -513,11 +519,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			 */
 		}
 
+		@Override
 		public int getCountClients() {
 			retrieveOpsiHosts();
 			return countClients;
 		}
 
+		@Override
 		public Map<String, Map<String, Object>> getDepots() {
 			retrieveOpsiHosts();
 			logging.debug(this, "getDepots masterDepots " + masterDepots);
@@ -527,33 +535,39 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			return masterDepots;
 		}
 
+		@Override
 		public LinkedList<String> getDepotNamesList() {
 			retrieveOpsiHosts();
 			return depotNamesList;
 		}
 
+		@Override
 		public Map<String, Map<String, Object>> getAllDepots() {
 			retrieveOpsiHosts();
 			return allDepots;
 		}
 
+		@Override
 		public Map<String, HostInfo> getMapOfPCInfoMaps() {
 			// logging.info(this, "getMapOfPCInfoMaps() size " + mapPC_Infomap.size() );
 			return mapPC_Infomap;
 		}
 
+		@Override
 		public Map<String, HostInfo> getMapOfAllPCInfoMaps() {
 			logging.info(this, "getMapOfAllPCInfoMaps() size " + host2hostInfo.size());
 			return host2hostInfo;
 		}
 
 		// request data refreshes
+		@Override
 		public void opsiHostsRequestRefresh() {
 			opsiHostNames = null;
 			fNode2Treeparents = null;
 		}
 
 		// build data
+		@Override
 		protected void retrieveOpsiHosts() {
 			logging.debug(this, "retrieveOpsiHosts , opsiHostNames == null " + (opsiHostNames == null));
 
@@ -872,6 +886,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 		}
 
+		@Override
 		public Map<String, Set<String>> getFNode2Treeparents() {
 			retrieveFNode2Treeparents();
 
@@ -895,6 +910,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			return null;
 		}
 
+		@Override
 		public Map<String, Boolean> getClientListForDepots(String[] depots, Set<String> allowedClients) {
 			retrieveOpsiHosts();
 
@@ -1029,14 +1045,17 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		}
 
 		// update derived data (caution!), does not create a HostInfo
+		@Override
 		public void addOpsiHostName(String newName) {
 			opsiHostNames.add(newName);
 		}
 
+		@Override
 		public void addOpsiHostNames(String[] newNames) {
 			opsiHostNames.addAll(Arrays.asList(newNames));
 		}
 
+		@Override
 		public void updateLocalHostInfo(String hostId, String property, Object value)
 		// for table
 		{
@@ -1053,6 +1072,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		}
 
+		@Override
 		public void setLocalHostInfo(String hostId, String depotId, HostInfo hostInfo) {
 			logging.debug(this, "setLocalHostInfo " + " " + hostId + ", " + depotId + ", " + hostInfo);
 			mapPC_Infomap.put(hostId, hostInfo);
@@ -1369,6 +1389,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	}
 
+	@Override
 	public String getOpsiCACert() {
 		OpsiMethodCall omc = new OpsiMethodCall("getOpsiCACert", new Object[0]);
 		return exec.getStringResult(omc);
@@ -1389,14 +1410,17 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 */
 
 	// we delegate method calls to the executioner
+	@Override
 	public ConnectionState getConnectionState() {
 		return exec.getConnectionState();
 	}
 
+	@Override
 	public void setConnectionState(ConnectionState state) {
 		exec.setConnectionState(state);
 	}
 
+	@Override
 	public boolean isGlobalReadOnly() {
 		// logging.info(this, "isreadonly " + globalReadOnly);
 
@@ -1756,6 +1780,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 * 
 	 */
 
+	@Override
 	public boolean installPackage(String filename) {
 		return installPackage(filename, true, new Object[] {}, "");
 	}
@@ -1771,6 +1796,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
+	@Override
 	public boolean setRights(String path) {
 		String method = "setRights";
 		logging.info(this, "setRights for path " + path);
@@ -2060,6 +2086,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
+	@Override
 	public boolean configureInstallByShutdown(String clientId, boolean shutdownInstall) {
 		return setHostBooleanConfigValue(KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN, clientId, shutdownInstall);
 	}
@@ -2215,6 +2242,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return jsonObjects;
 	}
 
+	@Override
 	public boolean setWANConfigs(String clientId, boolean wan) {
 		boolean result = false;
 		logging.info(this, "setWANConfigs " + clientId + " . " + wan);
@@ -2250,6 +2278,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return exec.jsonMap(item);
 	}
 
+	@Override
 	public boolean configureUefiBoot(String clientId, boolean uefiBoot) {
 		boolean result = false;
 
@@ -2321,6 +2350,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
+	@Override
 	public boolean createClients(Vector<Vector<Object>> clients) {
 		List<Object> clientsJsonObject = new ArrayList<>();
 		List<Object> productsNetbootJsonObject = new ArrayList<>();
@@ -2445,6 +2475,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	}
 
+	@Override
 	public boolean createClient(String hostname, String domainname, String depotId, String description,
 			String inventorynumber, String notes, String ipaddress, String macaddress, boolean shutdownInstall,
 			boolean uefiBoot, boolean wanConfig, String group, String productNetboot, String productLocalboot) {
@@ -2619,6 +2650,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	}
 
+	@Override
 	public boolean renameClient(String hostname, String newHostname) {
 		if (globalReadOnly)
 			return false;
@@ -2630,6 +2662,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return exec.doCall(omc);
 	}
 
+	@Override
 	public void deleteClient(String hostId) {
 		if (globalReadOnly)
 			return;
@@ -2639,6 +2672,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		hostInfoCollections.opsiHostsRequestRefresh();
 	}
 
+	@Override
 	public void deleteClients(String[] hostIds) {
 		if (globalReadOnly)
 			return;
@@ -2677,6 +2711,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return errors;
 	}
 
+	@Override
 	public java.util.List<String> deletePackageCaches(String[] hostIds) {
 
 		OpsiMethodCall omc = new OpsiMethodCall("hostControlSafe_opsiclientdRpc",

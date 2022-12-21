@@ -18,14 +18,17 @@ public class ProductpropertiesUpdate implements UpdateCommand {
 		setController(persis);
 	}
 
+	@Override
 	public void setController(Object obj) {
 		this.persis = (PersistenceController) obj;
 	}
 
+	@Override
 	public Object getController() {
 		return persis;
 	}
 
+	@Override
 	public void doCall() {
 		// if (newdata != null) logging.debug(this, "doCall, setting " + newdata + ",
 		// class " + newdata.getClass());

@@ -67,6 +67,7 @@ public class CheckedDocument extends PlainDocument {
 		super.insertString(offs, s, a);
 	}
 
+	@Override
 	public void insertString(int offs, String s, AttributeSet a) throws BadLocationException {
 		// logging.info(this, "insertString s offs, size " + s + ", " + offs + ", " +
 		// size);

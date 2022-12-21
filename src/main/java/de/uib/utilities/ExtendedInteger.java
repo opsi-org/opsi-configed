@@ -113,6 +113,7 @@ public class ExtendedInteger implements Comparable {
 	}
 
 	// Interface Comparable
+	@Override
 	public int compareTo(Object o) // throws NotComparableException
 	{
 		ExtendedInteger comparedWithMe = null;

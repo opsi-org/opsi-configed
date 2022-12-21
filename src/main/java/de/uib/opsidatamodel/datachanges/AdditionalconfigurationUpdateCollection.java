@@ -23,10 +23,12 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 		setController(persis);
 	}
 
+	@Override
 	public void setController(Object obj) {
 		this.persis = (PersistenceController) obj;
 	}
 
+	@Override
 	public boolean addAll(Collection c) {
 		boolean result = true;
 
@@ -70,11 +72,13 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 		return result;
 	}
 
+	@Override
 	public void clearElements() {
 		logging.debug(this, "clearElements()");
 		clear();
 	}
 
+	@Override
 	public void doCall() {
 		super.doCall();
 		logging.debug(this, "doCall, after recursion, element count: " + size());
@@ -85,6 +89,7 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 		clear();
 	}
 
+	@Override
 	public boolean add(Object obj) {
 		// logging.debug ("----------- adding " + obj + " of class " +
 		// obj.getClass().getName());

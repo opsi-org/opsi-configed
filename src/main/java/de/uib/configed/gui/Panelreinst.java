@@ -177,6 +177,7 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 	}
 
 	// implementation of ActionListener
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == comboImages) {
 			buildInstallCommand();
@@ -189,30 +190,38 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 	}
 
 	// implementation of KeyListener
+	@Override
 	public void keyPressed(KeyEvent e) {
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 		buildInstallCommand();
 	}
 
 	// implementation of MouseListener
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		buildInstallCommand();
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e) {
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 
 	}
