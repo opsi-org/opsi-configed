@@ -26,7 +26,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -51,8 +50,6 @@ public class ProductView implements View {
 	private TextField clientSearchbarTextField;
 	@FXML
 	private TextField productSearchbarTextField;
-	@FXML
-	private CheckBox productStatusCheckBox;
 	@FXML
 	private ChoiceBox<String> productStatusChoiceBox;
 	@FXML
@@ -94,11 +91,11 @@ public class ProductView implements View {
 		unusedProductsNumberLabel.setText(String.valueOf(ProductData.getUnusedProducts().size()));
 
 		productStatusChoiceBox.getItems().clear();
+		productStatusChoiceBox.getItems().add(configed.getResourceValue("Dashboard.choiceBoxChoice.all"));
 		productStatusChoiceBox.getItems().add(configed.getResourceValue("Dashboard.products.installed"));
 		productStatusChoiceBox.getItems().add(configed.getResourceValue("Dashboard.products.failed"));
 		productStatusChoiceBox.getItems().add(configed.getResourceValue("Dashboard.products.unused"));
-
-		productStatusCheckBox.setOnAction(e -> changeProductStatusState());
+		productStatusChoiceBox.getSelectionModel().selectFirst();
 
 		productIdTableColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
 		productStatusTableColumn.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
@@ -115,23 +112,25 @@ public class ProductView implements View {
 		final ObjectProperty<Predicate<Product>> productStatusFilter = new SimpleObjectProperty<>();
 
 		productIdFilter.bind(Bindings.createObjectBinding(() -> product -> {
-			if (productSearchbarTextField.getText() == null)
+			if (productSearchbarTextField.getText() == null) {
 				return true;
+			}
+
 			return product.getId().contains(productSearchbarTextField.getText());
-		},
-				productSearchbarTextField.textProperty()));
+		}, productSearchbarTextField.textProperty()));
 		productStatusFilter.bind(Bindings.createObjectBinding(() -> product -> {
-			if (productStatusChoiceBox.getValue() == null)
+			if (productStatusChoiceBox.getValue() == null || productStatusChoiceBox.getValue()
+					.equals(configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
 				return true;
+			}
+
 			return productStatusChoiceBox.getValue().equals(configed.getResourceValue("Dashboard.products.installed"))
-					&& product.getStatus().equals(configed.getResourceValue("Dashboard.products.installed")) ||
-					productStatusChoiceBox.getValue().equals(configed.getResourceValue("Dashboard.products.failed"))
+					&& product.getStatus().equals(configed.getResourceValue("Dashboard.products.installed"))
+					|| productStatusChoiceBox.getValue().equals(configed.getResourceValue("Dashboard.products.failed"))
 							&& product.getStatus().equals(configed.getResourceValue("Dashboard.products.failed"))
-					||
-					productStatusChoiceBox.getValue().equals(configed.getResourceValue("Dashboard.products.unused"))
+					|| productStatusChoiceBox.getValue().equals(configed.getResourceValue("Dashboard.products.unused"))
 							&& product.getStatus().equals(configed.getResourceValue("Dashboard.products.unused"));
-		},
-				productStatusChoiceBox.valueProperty()));
+		}, productStatusChoiceBox.valueProperty()));
 
 		filteredData.predicateProperty().bind(Bindings.createObjectBinding(
 				() -> productIdFilter.get().and(productStatusFilter.get()), productIdFilter, productStatusFilter));
@@ -163,10 +162,12 @@ public class ProductView implements View {
 		FilteredList<String> filteredData = new FilteredList<>(FXCollections.observableArrayList(data));
 
 		ObjectProperty<Predicate<String>> productDataFilter = new SimpleObjectProperty<>();
-		productDataFilter.bind(Bindings.createObjectBinding(
-				() -> product -> product.toLowerCase(Locale.ROOT)
-						.contains(searchbar.getText().toLowerCase(Locale.ROOT)),
-				searchbar.textProperty()));
+		productDataFilter
+				.bind(Bindings
+						.createObjectBinding(
+								() -> product -> product.toLowerCase(Locale.ROOT)
+										.contains(searchbar.getText().toLowerCase(Locale.ROOT)),
+								searchbar.textProperty()));
 
 		view.setItems(filteredData);
 
@@ -178,14 +179,5 @@ public class ProductView implements View {
 	public void display() {
 		Platform.runLater(() -> fxPanel.setScene(scene));
 		loadData();
-	}
-
-	private void changeProductStatusState() {
-		if (productStatusCheckBox.isSelected()) {
-			productStatusChoiceBox.setDisable(false);
-		} else {
-			productStatusChoiceBox.getSelectionModel().clearSelection();
-			productStatusChoiceBox.setDisable(true);
-		}
 	}
 }

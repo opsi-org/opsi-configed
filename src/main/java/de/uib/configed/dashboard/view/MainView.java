@@ -1,22 +1,36 @@
 package de.uib.configed.dashboard.view;
 
-import java.io.*;
+import java.io.IOException;
 
+import de.uib.configed.dashboard.Dashboard;
+import de.uib.configed.dashboard.DataObserver;
+import de.uib.configed.dashboard.DepotInfo;
+import de.uib.configed.dashboard.LicenseDisplayer;
+import de.uib.configed.dashboard.chart.ClientLastSeenComparison;
+import de.uib.configed.dashboard.chart.InstalledOSComparison;
+import de.uib.configed.dashboard.chart.LicenseStatusComparison;
+import de.uib.configed.dashboard.chart.ModuleStatusComparison;
+import de.uib.configed.dashboard.chart.ProductStatusComparison;
+import de.uib.configed.dashboard.collector.ClientData;
+import de.uib.configed.dashboard.collector.DepotData;
+import de.uib.configed.dashboard.collector.LicenseData;
+import de.uib.configed.dashboard.collector.ModuleData;
+import de.uib.configed.dashboard.collector.ProductData;
+import de.uib.messages.Messages;
+import de.uib.utilities.logging.logging;
 import javafx.application.Platform;
-import javafx.concurrent.*;
-import javafx.embed.swing.*;
-import javafx.fxml.*;
-import javafx.scene.*;
-import javafx.scene.control.*;
-import javafx.scene.effect.*;
-import javafx.scene.layout.*;
-import javafx.scene.text.*;
-
-import de.uib.configed.dashboard.*;
-import de.uib.configed.dashboard.chart.*;
-import de.uib.configed.dashboard.collector.*;
-import de.uib.messages.*;
-import de.uib.utilities.logging.*;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.embed.swing.JFXPanel;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 public class MainView implements View {
 	@FXML
@@ -99,15 +113,41 @@ public class MainView implements View {
 	}
 
 	public void init() {
-		DataRetriever dataRetriever = new DataRetriever();
-		dataRetriever.setOnSucceeded(e -> ViewManager.displayView(Dashboard.MAIN_VIEW));
+		Service<Void> retrieverThread = new Service<>() {
+			@Override
+			protected Task<Void> createTask() {
+				InitialDataRetriever dataRetriever = new InitialDataRetriever();
+				dataRetriever.setOnSucceeded(e -> {
+					ViewManager.displayView(Dashboard.MAIN_VIEW);
 
-		Thread retrieverThread = new Thread(dataRetriever, "dataRetriever");
-		retrieverThread.setDaemon(true);
+					// When initial data is retrieved, we create and start another thread.
+					// The created thread makes sure to load extra data, without dissallowing
+					// for user to use dashbaord.
+					Service<Void> extraDataRetrieverThread = new Service<>() {
+						@Override
+						protected Task<Void> createTask() {
+							return new Task<Void>() {
+								@Override
+								protected Void call() throws Exception {
+									ProductData.retrieveUnusedProducts();
+									return null;
+								}
+							};
+						}
+					};
+
+					extraDataRetrieverThread.setOnSucceeded(
+							e2 -> observer.notify(DATA_CHANGED_SERVICE, selectedDepotChoiceBox.getValue()));
+					extraDataRetrieverThread.start();
+				});
+				return dataRetriever;
+			}
+		};
+
 		retrieverThread.start();
 	}
 
-	private class DataRetriever extends Task<Void> {
+	private class InitialDataRetriever extends Task<Void> {
 		@Override
 		public Void call() {
 			ClientData.clear();

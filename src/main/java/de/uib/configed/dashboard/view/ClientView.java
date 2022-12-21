@@ -1,28 +1,43 @@
 package de.uib.configed.dashboard.view;
 
-import java.io.*;
-import java.time.*;
-import java.util.*;
-import java.util.function.*;
-import java.time.format.*;
-import java.time.temporal.*;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.function.Predicate;
 
+import de.uib.configed.configed;
+import de.uib.configed.dashboard.Dashboard;
+import de.uib.configed.dashboard.chart.ClientActivityComparison;
+import de.uib.configed.dashboard.chart.ClientLastSeenComparison;
+import de.uib.configed.dashboard.collector.Client;
+import de.uib.configed.dashboard.collector.ClientData;
+import de.uib.messages.Messages;
 import javafx.application.Platform;
-import javafx.beans.binding.*;
-import javafx.beans.property.*;
-import javafx.collections.*;
-import javafx.collections.transformation.*;
-import javafx.embed.swing.*;
-import javafx.fxml.*;
-import javafx.scene.*;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.*;
-
-import de.uib.configed.*;
-import de.uib.configed.dashboard.*;
-import de.uib.configed.dashboard.chart.*;
-import de.uib.configed.dashboard.collector.*;
-import de.uib.messages.*;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import javafx.embed.swing.JFXPanel;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.CheckBoxTableCell;
 
 public class ClientView implements View {
 	@FXML
@@ -40,11 +55,7 @@ public class ClientView implements View {
 	@FXML
 	private ChoiceBox<String> clientActivityStatusChoiceBox;
 	@FXML
-	private CheckBox clientActivityStatusCheckBox;
-	@FXML
 	private ChoiceBox<String> clientLastSeenChoiceBox;
-	@FXML
-	private CheckBox clientLastSeenCheckBox;
 	@FXML
 	private ListView<String> clientListView;
 	@FXML
@@ -99,12 +110,15 @@ public class ClientView implements View {
 		clientActiveTableColumn.setCellFactory(tc -> new CheckBoxTableCell<>());
 
 		List<String> clientStatus = new ArrayList<>();
+		clientStatus.add(configed.getResourceValue("Dashboard.choiceBoxChoice.all"));
 		clientStatus.add(configed.getResourceValue("Dashboard.client.active"));
 		clientStatus.add(configed.getResourceValue("Dashboard.client.inactive"));
 		final ObservableList<String> status = new FilteredList<>(FXCollections.observableArrayList(clientStatus));
 		clientActivityStatusChoiceBox.setItems(status);
+		clientActivityStatusChoiceBox.getSelectionModel().selectFirst();
 
 		List<String> clientLastSeenData = new ArrayList<>();
+		clientLastSeenData.add(configed.getResourceValue("Dashboard.choiceBoxChoice.all"));
 		clientLastSeenData.add(configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays"));
 		clientLastSeenData.add(configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"));
 		clientLastSeenData.add(configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays"));
@@ -113,6 +127,7 @@ public class ClientView implements View {
 		final ObservableList<String> lastSeen = new FilteredList<>(
 				FXCollections.observableArrayList(clientLastSeenData));
 		clientLastSeenChoiceBox.setItems(lastSeen);
+		clientLastSeenChoiceBox.getSelectionModel().selectFirst();
 
 		final FilteredList<Client> filteredData = new FilteredList<>(FXCollections.observableArrayList(clients));
 
@@ -125,11 +140,12 @@ public class ClientView implements View {
 				return true;
 			return client.getHostname().toLowerCase(Locale.ROOT)
 					.contains(clientSearchbarTextField.getText().toLowerCase(Locale.ROOT));
-		},
-				clientSearchbarTextField.textProperty()));
+		}, clientSearchbarTextField.textProperty()));
 		lastSeenFilter.bind(Bindings.createObjectBinding(() -> client -> {
-			if (clientLastSeenChoiceBox.getValue() == null)
+			if (clientLastSeenChoiceBox.getValue() == null || clientLastSeenChoiceBox.getValue()
+					.equals(configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
 				return true;
+			}
 
 			final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			final LocalDate current = LocalDate.now();
@@ -140,29 +156,27 @@ public class ClientView implements View {
 
 			return clientLastSeenChoiceBox.getValue()
 					.equals(configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays")) && days <= 14
-					&& days >= 0 ||
-					clientLastSeenChoiceBox.getValue()
+					&& days >= 0
+					|| clientLastSeenChoiceBox.getValue()
 							.equals(configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"))
 							&& days > 14 && days <= 30
-					||
-					clientLastSeenChoiceBox.getValue()
+					|| clientLastSeenChoiceBox.getValue()
 							.equals(configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays")) && days > 30
-					||
-					clientLastSeenChoiceBox.getValue().equals(configed.getResourceValue("Dashboard.lastSeen.never"))
+					|| clientLastSeenChoiceBox.getValue().equals(configed.getResourceValue("Dashboard.lastSeen.never"))
 							&& client.getLastSeen().equals(configed.getResourceValue("Dashboard.lastSeen.never"));
-		},
-				clientLastSeenChoiceBox.valueProperty()));
+		}, clientLastSeenChoiceBox.valueProperty()));
 		activeFilter.bind(Bindings.createObjectBinding(() -> client -> {
-			if (clientActivityStatusChoiceBox.getValue() == null)
+			if (clientActivityStatusChoiceBox.getValue() == null || clientActivityStatusChoiceBox.getValue()
+					.equals(configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
 				return true;
+			}
+
 			return client.getReachable()
 					&& clientActivityStatusChoiceBox.getValue()
 							.equals(configed.getResourceValue("Dashboard.client.active"))
-					||
-					!client.getReachable() && clientActivityStatusChoiceBox.getValue()
+					|| !client.getReachable() && clientActivityStatusChoiceBox.getValue()
 							.equals(configed.getResourceValue("Dashboard.client.inactive"));
-		},
-				clientActivityStatusChoiceBox.valueProperty()));
+		}, clientActivityStatusChoiceBox.valueProperty()));
 
 		filteredData.predicateProperty()
 				.bind(Bindings.createObjectBinding(
@@ -174,8 +188,6 @@ public class ClientView implements View {
 		clientTableView.setItems(sortedData);
 
 		backButton.setOnAction(e -> Platform.runLater(() -> ViewManager.displayView(Dashboard.MAIN_VIEW)));
-		clientActivityStatusCheckBox.setOnAction(e -> changeClientActivityStatusState());
-		clientLastSeenCheckBox.setOnAction(e -> changeClientLastSeenState());
 
 		clientActivityComparison.display();
 		clientLastSeenComparison.display();
@@ -185,23 +197,5 @@ public class ClientView implements View {
 	public void display() {
 		Platform.runLater(() -> fxPanel.setScene(scene));
 		loadData();
-	}
-
-	private void changeClientActivityStatusState() {
-		if (clientActivityStatusCheckBox.isSelected()) {
-			clientActivityStatusChoiceBox.setDisable(false);
-		} else {
-			clientActivityStatusChoiceBox.getSelectionModel().clearSelection();
-			clientActivityStatusChoiceBox.setDisable(true);
-		}
-	}
-
-	private void changeClientLastSeenState() {
-		if (clientLastSeenCheckBox.isSelected()) {
-			clientLastSeenChoiceBox.setDisable(false);
-		} else {
-			clientLastSeenChoiceBox.getSelectionModel().clearSelection();
-			clientLastSeenChoiceBox.setDisable(true);
-		}
 	}
 }
