@@ -860,7 +860,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	private void initMenuData() {
-		labelledDelays = new LinkedHashMap<String, Integer>();
+		labelledDelays = new LinkedHashMap<>();
 		labelledDelays.put("0 sec", 0);
 		labelledDelays.put("5 sec", 5);
 		labelledDelays.put("20 sec", 20);
@@ -870,7 +870,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		labelledDelays.put("20 min", 1200);
 		labelledDelays.put("1 h", 3600);
 
-		searchedTimeSpans = new LinkedHashMap<String, String>();
+		searchedTimeSpans = new LinkedHashMap<>();
 
 		final String TODAY = "today";
 		final String SINCE_YESTERDAY = "since yesterday";
@@ -886,7 +886,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		searchedTimeSpans.put(LAST_MONTH, "%minus31%");
 		searchedTimeSpans.put(ANY_TIME, "");
 
-		searchedTimeSpansText = new LinkedHashMap<String, String>();
+		searchedTimeSpansText = new LinkedHashMap<>();
 
 		searchedTimeSpansText.put(TODAY, configed.getResourceValue("MainFrame.TODAY"));
 		searchedTimeSpansText.put(SINCE_YESTERDAY, configed.getResourceValue("MainFrame.SINCE_YESTERDAY"));
@@ -1420,7 +1420,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuClientselectionFailedInPeriod
 				.setText(configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedInTimespan"));
 
-		for (final String value : searchedTimeSpans.values()) {
+		for (final String value : searchedTimeSpansText.values()) {
 			JMenuItem item = new JMenuItemFormatted(value);
 			item.setFont(Globals.defaultFont);
 
