@@ -12,7 +12,7 @@ import java.util.HashSet;
 
 public class TableUpdateCollection extends java.util.Vector<TableEditItem> {
 
-	HashSet<de.uib.utilities.table.GenTableModel> modelsToReload = new HashSet<de.uib.utilities.table.GenTableModel>();
+	HashSet<de.uib.utilities.table.GenTableModel> modelsToReload = new HashSet<>();
 
 	/*
 	 * public boolean add(TableEditItem ob)

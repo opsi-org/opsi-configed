@@ -1060,7 +1060,7 @@ public class JTableSelectionPanel extends JPanel
 	 */
 
 	public boolean moveToValue(Object value, int col) {
-		HashSet<Integer> cols = new HashSet<Integer>();
+		HashSet<Integer> cols = new HashSet<>();
 		cols.add(col);
 		int viewrow = findViewRowFromValue(0, value, cols);
 
@@ -1164,10 +1164,10 @@ public class JTableSelectionPanel extends JPanel
 		// logging.info(this, " searchTheRow for >>" + value + "<<");
 
 		HashSet<Integer> selectedCols = null;
-		// selectedCols = new HashSet<Integer>();
+		// selectedCols = new HashSet<>();
 
 		if (comboSearch.getSelectedIndex() > 0) {
-			selectedCols = new HashSet<Integer>();
+			selectedCols = new HashSet<>();
 			selectedCols.add(getTableModel().findColumn((String) comboSearch.getSelectedItem()));
 		}
 		/*

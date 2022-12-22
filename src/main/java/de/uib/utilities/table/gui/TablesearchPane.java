@@ -1212,7 +1212,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		HashSet<Integer> selectedCols0 = null;
 
 		if (comboSearchFields.getSelectedIndex() > 0) {
-			selectedCols0 = new HashSet<Integer>();
+			selectedCols0 = new HashSet<>();
 			selectedCols0.add(targetModel.findColumn((String) comboSearchFields.getSelectedItem()));
 		}
 

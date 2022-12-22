@@ -1810,7 +1810,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 				removeObject2Group(clientID, node.getUserObject().toString());
 			}
 
-			locationsInDIRECTORY.put(clientID, new HashSet<GroupNode>(correctNode));
+			locationsInDIRECTORY.put(clientID, new HashSet<>(correctNode));
 		}
 
 	}

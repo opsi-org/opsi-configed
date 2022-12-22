@@ -662,7 +662,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		boolean found = false;
 
-		Set<Integer> setOfKeys = new HashSet<Integer>();
+		Set<Integer> setOfKeys = new HashSet<>();
 
 		for (int key : listOfKeys) {
 			if (key == insertpoint) {
