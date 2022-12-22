@@ -182,7 +182,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			for (int i = upTo + 1; i <= max; i++)
 				levelMap.put(i, new JLabel(" . "));
 
-			levelDict = new Hashtable<Integer, JLabel>(levelMap);
+			levelDict = new Hashtable<>(levelMap);
 			try {
 				setLabelTable(levelDict);
 			} catch (Exception ex) {
