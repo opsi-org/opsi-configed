@@ -108,7 +108,7 @@ public class SSHCommandFactory {
 	/** setting ssh_always_exec_in_background per default false **/
 	public static boolean ssh_always_exec_in_background = false;
 	/** all static commands which need run-time parameter **/
-	public static List<de.uib.opsicommand.sshcommand.SSHCommand> ssh_commands_param = new LinkedList<de.uib.opsicommand.sshcommand.SSHCommand>();
+	public static List<de.uib.opsicommand.sshcommand.SSHCommand> ssh_commands_param = new LinkedList<>();
 
 	/** static final name of field "id" */
 	public final String command_map_id = "id";

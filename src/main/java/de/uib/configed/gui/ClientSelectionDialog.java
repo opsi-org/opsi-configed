@@ -745,7 +745,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		hGroupParenthesisOpen.addComponent(result.openParenthesis, 20, 20, 20);
 		contentPane.add(result.topLabel);
 
-		result.groupList = new LinkedList<SimpleGroup>();
+		result.groupList = new LinkedList<>();
 		return result;
 	}
 
@@ -1036,7 +1036,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			SelectionManager.OperationWithStatus groupStatus;
 			groupStatus = getInformation(complex);
 
-			List<SelectionManager.OperationWithStatus> childList = new LinkedList<SelectionManager.OperationWithStatus>();
+			List<SelectionManager.OperationWithStatus> childList = new LinkedList<>();
 
 			for (SimpleGroup group : complex.groupList) {
 				SelectOperation op = getOperation(group);

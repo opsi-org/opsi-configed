@@ -1174,7 +1174,7 @@ public class DataStubNOM extends DataStub {
 							 * if (entries == null)
 							 * {retrieveSoftwareAuditOnClients, start a request");
 							 * 
-							 * entries = new LinkedList<SWAuditClientEntry>();
+							 * entries = new LinkedList<>();
 							 * client2software.put(clientId, entries);
 							 * }
 							 */

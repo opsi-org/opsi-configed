@@ -556,7 +556,7 @@ public class OpsiDataBackend extends Backend {
 		 * Map map = (Map) obj;
 		 * String name = (String) map.get("clientId");
 		 * if( !result.containsKey(name) )
-		 * result.put( name, new LinkedList<Map>() );
+		 * result.put( name, new LinkedList<>() );
 		 * result.get(name).add(map);
 		 * }
 		 */

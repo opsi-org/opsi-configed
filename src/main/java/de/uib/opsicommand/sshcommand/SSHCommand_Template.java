@@ -35,8 +35,8 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	/** String unique menu text **/
 	private String menuText;
 	/** LinkedList<SSHCommand> ssh_command **/
-	private LinkedList<SSHCommand> ssh_command = new LinkedList<SSHCommand>();
-	private LinkedList<SSHCommand> ssh_command_original = new LinkedList<SSHCommand>();
+	private LinkedList<SSHCommand> ssh_command = new LinkedList<>();
+	private LinkedList<SSHCommand> ssh_command_original = new LinkedList<>();
 	/** boolean needSudo state **/
 	private boolean needSudo = false;
 	/** String parent menu text **/

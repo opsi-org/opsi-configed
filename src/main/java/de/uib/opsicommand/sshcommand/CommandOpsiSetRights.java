@@ -18,8 +18,8 @@ public class CommandOpsiSetRights extends SSHCommand_Template
 	private boolean needSudo = true;
 	private boolean needParameter = true;
 	private boolean isMultiCommand = true;
-	private LinkedList<SSHCommand> ssh_command = new LinkedList<SSHCommand>();
-	private LinkedList<SSHCommand> ssh_command_original = new LinkedList<SSHCommand>();
+	private LinkedList<SSHCommand> ssh_command = new LinkedList<>();
+	private LinkedList<SSHCommand> ssh_command_original = new LinkedList<>();
 	private int priority = 110;
 	private String mainName = "";
 	private String dir = null;

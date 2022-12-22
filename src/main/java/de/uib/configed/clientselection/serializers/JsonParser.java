@@ -25,7 +25,7 @@ class JsonParser {
 
 	public JsonParser(String input) {
 		reader = new StringReader(input);
-		stack = new LinkedList<PositionType>();
+		stack = new LinkedList<>();
 	}
 
 	public boolean next() throws IOException {

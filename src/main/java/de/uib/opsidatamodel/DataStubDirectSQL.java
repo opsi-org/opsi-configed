@@ -106,7 +106,7 @@ public class DataStubDirectSQL extends DataStubRawData
 
 					List<SWAuditClientEntry> entries = client2software.get(clientId);
 					if (entries == null) {
-						entries = new LinkedList<SWAuditClientEntry>();
+						entries = new LinkedList<>();
 						client2software.put(clientId, entries);
 					}
 
@@ -143,7 +143,7 @@ public class DataStubDirectSQL extends DataStubRawData
 				// the remaining clients are without software entry
 
 				for (String clientId : newClients) {
-					client2software.put(clientId, new LinkedList<SWAuditClientEntry>());
+					client2software.put(clientId, new LinkedList<>());
 				}
 
 			}

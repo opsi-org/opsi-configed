@@ -480,7 +480,7 @@ public class DataStubRawData extends DataStubNOM {
 				/*
 				 * for (String clientId : clientListForCall)
 				 * {
-				 * client2software.put(clientId, new LinkedList<SWAuditClientEntry>());
+				 * client2software.put(clientId, new LinkedList<>());
 				 * }
 				 */
 
