@@ -187,8 +187,8 @@ public abstract class JSONExecutioner extends Executioner {
 	// including a conversion of json objects to a standard java object
 
 	{
-		HashMap<String, Map<String, Object>> result = new HashMap<String, Map<String, Object>>();
-		HashMap<String, Map<String, Object>> resultNull = new HashMap<String, Map<String, Object>>();
+		HashMap<String, Map<String, Object>> result = new HashMap<>();
+		HashMap<String, Map<String, Object>> resultNull = new HashMap<>();
 
 		try {
 			JSONObject jO = retrieveJSONObject(omc);

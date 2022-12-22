@@ -64,7 +64,7 @@ public class ActionProgress {
 		state2label.put(INSTALLING, "installing");
 		state2label.put(CACHED, "cached");
 
-		label2state = new HashMap<String, Integer>();
+		label2state = new HashMap<>();
 		label2state.put(Globals.CONFLICT_STATE_STRING, CONFLICT);
 		label2state.put(Globals.NO_VALID_STATE_STRING, INVALID);
 		label2state.put("not_available", NOT_AVAILABLE);

@@ -170,7 +170,7 @@ public class HostInfo {
 
 	public static void resetInstancesCount() {
 		numberOfInstances = 0;
-		ID2InstanceNumber = new HashMap<String, Integer>();
+		ID2InstanceNumber = new HashMap<>();
 	}
 
 	public static int getInstancesCount() {

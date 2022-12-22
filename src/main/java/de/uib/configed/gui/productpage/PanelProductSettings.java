@@ -1231,7 +1231,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				"", // String productPackageversion,
 				"", // String productCreationTimestamp,
 
-				null, // new HashMap<String, Boolean>,
+				null, // new HashMap<>,
 				null, // Collection storableProductProperties,
 
 				null, // Map editableProductProperties,

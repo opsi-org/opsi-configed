@@ -918,11 +918,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			logging.debug(this, " ------ building pcList");
 			mapPcBelongsToDepot = new HashMap<>();
 			// mapPC_selected = new HashMap();
-			mapOfPCs = new HashMap<String, Boolean>();
+			mapOfPCs = new HashMap<>();
 			mapPC_Infomap = new HashMap<String, HostInfo>();
 
 			// Map mapForDepot = new HashMap();
-			// Map mapPCs_inDepot = new HashMap<String, Boolean>();
+			// Map mapPCs_inDepot = new HashMap<>();
 			// checkMapPcBelongsToDepot();
 
 			// logging.warning(this, "getClients_listOfHashes server, depots " + server + ",
@@ -1118,7 +1118,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		execs.put(server, exec);
 
-		hwAuditConf = new HashMap<String, List<Map<String, Object>>>();
+		hwAuditConf = new HashMap<>();
 
 		initMembers();
 	}
@@ -2732,7 +2732,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			hostSeparationByDepots.get(depotId).add(hostId);
 		}
 
-		Map<String, List<String>> result = new HashMap<String, List<String>>();
+		Map<String, List<String>> result = new HashMap<>();
 		for (String depot : hostSeparationByDepots.keySet()) {
 			result.put(depot, new ArrayList<>(hostSeparationByDepots.get(depot)));
 		}
@@ -2748,7 +2748,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	protected List<String> wakeOnLan(String[] hostIds, Map<String, List<String>> hostSeparationByDepot) {
 		Map responses = new HashMap();
 
-		Map<String, Executioner> executionerForDepots = new HashMap<String, Executioner>();
+		Map<String, Executioner> executionerForDepots = new HashMap<>();
 
 		for (String depot : hostSeparationByDepot.keySet()) {
 			logging.info(this, "from depot " + depot + " we have hosts " + hostSeparationByDepot.get(depot));
@@ -3015,7 +3015,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		 */
 
 		if (hostUpdates == null) {
-			hostUpdates = new HashMap<String, Map<String, Object>>();
+			hostUpdates = new HashMap<>();
 		}
 
 		Map<String, Object> hostUpdateMap = hostUpdates.get(hostId);
@@ -3118,7 +3118,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		 * }
 		 * else
 		 * {
-		 * hostGroups = new HostGroups(new HashMap<String, Map<String, String>>());
+		 * hostGroups = new HostGroups(new HashMap<>());
 		 * for ( String groupID : allHostGroups.keySet() )
 		 * {
 		 * logging.info(this, "getHostGroups check group ID " + groupID);
@@ -5297,7 +5297,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	private boolean generateIfNull2(Map<String, Map<String, Object>> ob) {
 		if (ob == null) {
-			ob = new HashMap<String, Map<String, Object>>();
+			ob = new HashMap<>();
 			return true;
 		}
 		return false;
@@ -5599,7 +5599,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			Map<String, Map<String, Object>> productproperties1Client = productproperties_retrieved.get(host);
 
 			if (productproperties1Client == null) {
-				productproperties1Client = new HashMap<String, Map<String, Object>>();
+				productproperties1Client = new HashMap<>();
 				productproperties_retrieved.put(host, productproperties1Client);
 			}
 
@@ -5626,7 +5626,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		// TreeSet<String>(productproperties_retrieved.keySet());
 
 		Map<String, ConfigName2ConfigValue> defaultProperties = getDefaultProductProperties(theDepot);
-		Map<String, Map<String, Object>> defaultProperties_retrieved = new HashMap<String, Map<String, Object>>();
+		Map<String, Map<String, Object>> defaultProperties_retrieved = new HashMap<>();
 		if (defaultProperties == null) {
 			// should not occur
 		} else {
@@ -5650,7 +5650,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		 * }
 		 * else
 		 * {
-		 * defaultProperties_retrieved = new HashMap<String, Map<String, Object>>();
+		 * defaultProperties_retrieved = new HashMap<>();
 		 * products = new HashSet<>();
 		 * }
 		 */
@@ -5714,7 +5714,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 		}
 
-		productHavingClientSpecificProperties = new HashMap<String, Boolean>();
+		productHavingClientSpecificProperties = new HashMap<>();
 		for (String product : products) {
 			productHavingClientSpecificProperties.put(product,
 					(Boolean) productsHavingSpecificProperties.contains(product));
@@ -6201,7 +6201,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					"getPossibleMethods_listOfHashes", new Object[] {}));
 
 			if (methodsList != null) {
-				mapOfMethodSignatures = new HashMap<String, List<String>>();
+				mapOfMethodSignatures = new HashMap<>();
 
 				Iterator iter = methodsList.iterator();
 				while (iter.hasNext()) {
@@ -6546,7 +6546,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 * {
 	 * configOptions = new HashMap<String, ConfigOption>();
 	 * configListCellOptions = new HashMap<String, ListCellOptions>();
-	 * configDefaultValues = new HashMap<String, List>();
+	 * configDefaultValues = new HashMap<>();
 	 * 
 	 * remoteControls = new RemoteControls();
 	 * savedSearches = new SavedSearches();
@@ -7305,7 +7305,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		} else {
 			logging.info(this, "getDomains " + configDefaultValues.get(configedGIVENDOMAINS_key));
 
-			HashMap<String, Integer> numberedValues = new HashMap<String, Integer>();
+			HashMap<String, Integer> numberedValues = new HashMap<>();
 			TreeSet<String> orderedValues = new TreeSet<>();
 			TreeSet<String> unorderedValues = new TreeSet<>();
 
@@ -7681,7 +7681,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	// without internal caching
 	// legacy license method
 	{
-		HashMap<String, Map> rowsSoftwareL2LPool = new HashMap<String, Map>();
+		HashMap<String, Map> rowsSoftwareL2LPool = new HashMap<>();
 
 		if (withLicenceManagement) {
 			List li0 = exec.getListResult(new OpsiMethodCall("getSoftwareLicenses_listOfHashes", new String[] {}));
@@ -7799,7 +7799,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	// without internal caching
 	{
 
-		HashMap<String, Map<String, String>> rowsLicencePoolXOpsiProduct = new HashMap<String, Map<String, String>>();
+		HashMap<String, Map<String, String>> rowsLicencePoolXOpsiProduct = new HashMap<>();
 
 		if (withLicenceManagement) {
 			dataStub.licencePoolXOpsiProductRequestRefresh();
@@ -7915,9 +7915,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		rowmapAuditSoftware = new TreeMap<String, Map>();
 		fSoftware2LicencePool = new HashMap<>(); // function softwareIdent --> pool
-		fLicencePool2SoftwareList = new HashMap<String, List<String>>(); // function pool --> list of assigned software
-		fLicencePool2UnknownSoftwareList = new HashMap<String, List<String>>(); // function pool --> list of assigned
-																				// software
+		fLicencePool2SoftwareList = new HashMap<>(); // function pool --> list of assigned software
+		fLicencePool2UnknownSoftwareList = new HashMap<>(); // function pool --> list of assigned
+															// software
 
 		softwareWithoutAssociatedLicencePool = new TreeSet<Object>(
 				getInstalledSoftwareInformationForLicensing().keySet());
@@ -8530,13 +8530,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		// side effects of this method: rowsLicencesReconciliation
 		logging.info(this, "produceLicenceStatistics === ");
 
-		Map<String, List<String>> licencePool2listOfUsingClients_SWInvent = new HashMap<String, List<String>>();
+		Map<String, List<String>> licencePool2listOfUsingClients_SWInvent = new HashMap<>();
 
 		// countOnlyOnePoolusagePerClient = true
 		Map<String, Set<String>> licencePool2setOfUsingClients_SWInvent = new HashMap<String, Set<String>>();
 
 		// result
-		Map<String, Integer> licencePoolUsagecount_SWInvent = new HashMap<String, Integer>();
+		Map<String, Integer> licencePoolUsagecount_SWInvent = new HashMap<>();
 
 		fillClient2Software(getHostInfoCollections().getOpsiHostNames()); // now we have audit software on client data
 																			// for all clients
@@ -8550,7 +8550,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			Map<String, LicencepoolEntry> licencePools = dataStub.getLicencepools();
 
 			if (rowsLicencesReconciliation == null) {
-				rowsLicencesReconciliation = new HashMap<String, Map<String, Object>>();
+				rowsLicencesReconciliation = new HashMap<>();
 
 				List<String> extraHostFields = getServerConfigStrings(
 						KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PanelLicencesReconciliation);
@@ -8887,7 +8887,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		 * 
 		 * if (rowsLicencesReconciliation == null)
 		 * {
-		 * rowsLicencesReconciliation = new HashMap<String, Map<String, Object>>();
+		 * rowsLicencesReconciliation = new HashMap<>();
 		 * 
 		 * List<String> extraHostFields = getServerConfigStrings(
 		 * KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PanelLicencesReconciliation);
@@ -9333,7 +9333,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		/*
 		 * test:
 		 * 
-		 * rowsLicencesReconciliation = new HashMap<String, Map>();
+		 * rowsLicencesReconciliation = new HashMap<>();
 		 * 
 		 * HashMap<String, Object> rowMap = new HashMap<>();
 		 * 
@@ -10687,7 +10687,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		produceOpsiInformation();
 
 		// opsiModulesPermissions = new HashMap<String, ModulePermissionValue>();
-		opsiModules = new HashMap<String, Boolean>(); // has the actual signal if a module is activ
+		opsiModules = new HashMap<>(); // has the actual signal if a module is activ
 
 		// opsiModulesInfo = new HashMap<>(); //the part of
 		// opsiinformation which delivers the service information on checked modules
@@ -10820,7 +10820,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		opsiModulesDisplayInfo = new HashMap<>(); // keeps the info for displaying to the user
 		opsiVersion = "4";
 		HashMap<String, ModulePermissionValue> opsiModulesPermissions = new HashMap<String, ModulePermissionValue>();
-		opsiModules = new HashMap<String, Boolean>(); // has the actual signal if a module is active
+		opsiModules = new HashMap<>(); // has the actual signal if a module is active
 
 		Map<String, Object> opsiCountModules = new HashMap<>();
 		String expiresKey = de.uib.opsidatamodel.permission.ModulePermissionValue.keyExpires;

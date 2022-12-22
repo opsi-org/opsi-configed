@@ -393,7 +393,7 @@ public class OpsiDataBackend extends Backend {
 
 	@Override
 	protected List<Client> getClients() {
-		List<Client> clients = new LinkedList<Client>();
+		List<Client> clients = new LinkedList<>();
 
 		checkInitData();
 
@@ -441,14 +441,14 @@ public class OpsiDataBackend extends Backend {
 
 	@Override
 	public Map<String, List<SelectElement>> getHardwareList() {
-		Map<String, List<SelectElement>> result = new HashMap<String, List<SelectElement>>();
+		Map<String, List<SelectElement>> result = new HashMap<>();
 
 		for (int i = 0; i < hwConfig.size(); i++) {
 			Map hardwareMap = (Map) hwConfig.get(i);
 			Map hardwareMapLocalized = (Map) hwConfigLocalized.get(i);
 			String hardwareName = (String) ((Map) hardwareMap.get("Class")).get("UI");
 			String hardwareNameLocalized = (String) ((Map) hardwareMapLocalized.get("Class")).get("UI");
-			List<SelectElement> elementList = new LinkedList<SelectElement>();
+			List<SelectElement> elementList = new LinkedList<>();
 			List values = (List) hardwareMap.get("Values");
 			List valuesLocalized = (List) hardwareMapLocalized.get("Values");
 			for (int j = 0; j < values.size(); j++) {
@@ -475,14 +475,14 @@ public class OpsiDataBackend extends Backend {
 
 	@Override
 	public Map<String, List<SelectElement>> getLocalizedHardwareList() {
-		Map<String, List<SelectElement>> result = new HashMap<String, List<SelectElement>>();
+		Map<String, List<SelectElement>> result = new HashMap<>();
 
 		for (int i = 0; i < hwConfig.size(); i++) {
 			Map hardwareMap = (Map) hwConfig.get(i);
 			Map hardwareMapLocalized = (Map) hwConfigLocalized.get(i);
 			String hardwareName = (String) ((Map) hardwareMap.get("Class")).get("UI");
 			String hardwareNameLocalized = (String) ((Map) hardwareMapLocalized.get("Class")).get("UI");
-			List<SelectElement> elementList = new LinkedList<SelectElement>();
+			List<SelectElement> elementList = new LinkedList<>();
 			List values = (List) hardwareMap.get("Values");
 			List valuesLocalized = (List) hardwareMapLocalized.get("Values");
 			for (int j = 0; j < values.size(); j++) {
@@ -523,9 +523,9 @@ public class OpsiDataBackend extends Backend {
 
 	private void getHardwareOnClient(String[] clientNames) {
 		hardwareOnClient = controller.getHardwareOnClient();
-		clientToHardware = new HashMap<String, List<Map<String, Object>>>();
+		clientToHardware = new HashMap<>();
 		for (int i = 0; i < clientNames.length; i++)
-			clientToHardware.put(clientNames[i], new LinkedList<Map<String, Object>>());
+			clientToHardware.put(clientNames[i], new LinkedList<>());
 		for (Map<String, Object> map : hardwareOnClient) {
 			String name = (String) map.get(HWAuditClientEntry.hostKEY);
 			if (!clientToHardware.containsKey(name)) {
@@ -537,7 +537,7 @@ public class OpsiDataBackend extends Backend {
 	}
 
 	private Map<String, List<SWAuditClientEntry>> getSwAuditOnClients() {
-		Map<String, List<SWAuditClientEntry>> result = new HashMap<String, List<SWAuditClientEntry>>();
+		Map<String, List<SWAuditClientEntry>> result = new HashMap<>();
 		if (!hasSwAudit)
 			return result;
 
@@ -570,7 +570,7 @@ public class OpsiDataBackend extends Backend {
 		hwConfigLocalized = controller.getOpsiHWAuditConf(locale);
 		logging.debug(this, "" + hwConfig);
 		hwUiToOpsi = new HashMap<>();
-		hwClassToValues = new HashMap<String, List>();
+		hwClassToValues = new HashMap<>();
 
 		for (Object obj : hwConfig) {
 			Map hardwareMap = (Map) obj;

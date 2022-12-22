@@ -68,9 +68,9 @@ public class DataStubDirectSQL extends DataStubRawData
 			// logging.info(this, "retrieveSoftwareAuditOnClients for " +
 			// clientListForCall.size() + " clients " + clientListForCall);
 
-			// client2software = new HashMap<String, List<String>>();
+			// client2software = new HashMap<>();
 			if (client2software == null)
-				client2software = new HashMap<String, List<SWAuditClientEntry>>();
+				client2software = new HashMap<>();
 
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " softwareConfig ");

@@ -139,7 +139,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 		initPanel();
 		initModel();
-		updateItems = new HashMap<String, Map<String, Boolean>>();
+		updateItems = new HashMap<>();
 
 	}
 
@@ -375,7 +375,7 @@ public class ControllerHWinfoColumnConfiguration {
 		logging.info(this, "add this item to items for configIdent " + col.configIdent);
 
 		if (tableConfigUpdates == null) {
-			tableConfigUpdates = new HashMap<String, Boolean>();
+			tableConfigUpdates = new HashMap<>();
 			updateItems.put(col.configIdent, tableConfigUpdates);
 		}
 		tableConfigUpdates.put(col.dbColumnName, use);

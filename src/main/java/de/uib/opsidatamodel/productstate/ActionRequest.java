@@ -120,7 +120,7 @@ public class ActionRequest {
 
 		serviceValues = new Vector<>(serviceValue2state.keySet());
 		scriptKeys = new Vector<>();
-		// scriptKey2state = new HashMap<String, Integer>();
+		// scriptKey2state = new HashMap<>();
 		scriptKey2label = new HashMap<>();
 
 		for (String request : serviceValues) {
@@ -129,7 +129,7 @@ public class ActionRequest {
 			scriptKey2label.put(request + "Script", state2label.get(serviceValue2state.get(request)));
 		}
 
-		label2state = new HashMap<String, Integer>();
+		label2state = new HashMap<>();
 		label2state.put(Globals.CONFLICT_STATE_STRING, CONFLICT);
 		label2state.put(Globals.NO_VALID_STATE_STRING, INVALID);
 		label2state.put("not_available", NOT_AVAILABLE);

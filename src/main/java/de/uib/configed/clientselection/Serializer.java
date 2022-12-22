@@ -311,7 +311,7 @@ public abstract class Serializer {
 			map.put("data", operation.getSelectData().getData());
 		}
 		if (operation instanceof SelectGroupOperation) {
-			List<Map<String, Object>> childData = new LinkedList<Map<String, Object>>();
+			List<Map<String, Object>> childData = new LinkedList<>();
 			for (SelectOperation child : ((SelectGroupOperation) operation).getChildOperations())
 				childData.add(produceData(child));
 			map.put("children", childData);

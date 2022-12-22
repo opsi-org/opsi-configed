@@ -43,7 +43,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 	Vector<String> columnNames = new Vector<>();
 	Vector<String> classNames = new Vector<>();
-	Map<String, Map> theSourceMap = new HashMap<String, Map>();
+	Map<String, Map> theSourceMap = new HashMap<>();
 	Map<String, Map<String, Map<String, Object>>> datesMap = new HashMap<>();
 	Map<String, Object> clientNumbers;
 

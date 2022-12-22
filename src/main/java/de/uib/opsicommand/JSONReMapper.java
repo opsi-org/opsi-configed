@@ -153,8 +153,8 @@ public class JSONReMapper {
 	}
 
 	public static Map<String, Map<String, Object>> getMap2_Object(Object retrieved) {
-		HashMap<String, Map<String, Object>> result = new HashMap<String, Map<String, Object>>();
-		HashMap<String, Map<String, Object>> resultNull = new HashMap<String, Map<String, Object>>();
+		HashMap<String, Map<String, Object>> result = new HashMap<>();
+		HashMap<String, Map<String, Object>> resultNull = new HashMap<>();
 
 		try {
 			JSONObject jO = (JSONObject) retrieved;
@@ -209,7 +209,7 @@ public class JSONReMapper {
 																													// client
 																													// values
 																													// logging.debug(this, " key1 " + key1 + " value " + map1);
-				HashMap<String, Map<String, Object>> map1R = new HashMap<String, Map<String, Object>>(); // to produce
+				HashMap<String, Map<String, Object>> map1R = new HashMap<>(); // to produce
 
 				Iterator iter1 = map1.keySet().iterator();
 				while (iter1.hasNext()) {
@@ -252,8 +252,8 @@ public class JSONReMapper {
 																														// client
 																														// values
 																														// logging.debug(this, " key1 " + key1 + " value " + map1);
-					HashMap<String, Map<String, Object>> map1R = new HashMap<String, Map<String, Object>>(); // to
-																												// produce
+					HashMap<String, Map<String, Object>> map1R = new HashMap<>(); // to
+																					// produce
 
 					Iterator iter1 = map1.keySet().iterator();
 					while (iter1.hasNext()) {

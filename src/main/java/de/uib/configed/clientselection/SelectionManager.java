@@ -47,7 +47,7 @@ public class SelectionManager {
 		this.backend = OpsiDataBackend.getInstance();
 
 		serializer = new OpsiDataSerializer(this);
-		groupWithStatusList = new LinkedList<OperationWithStatus>();
+		groupWithStatusList = new LinkedList<>();
 	}
 
 	/**
@@ -318,7 +318,7 @@ public class SelectionManager {
 	 * there are no parentheses around the whole list
 	 */
 	private List<OperationWithStatus> reverseBuild(SelectOperation operation, boolean isTopOperation) {
-		LinkedList<OperationWithStatus> result = new LinkedList<OperationWithStatus>();
+		LinkedList<OperationWithStatus> result = new LinkedList<>();
 		if (operation instanceof AndOperation) {
 			for (SelectOperation op : ((AndOperation) operation).getChildOperations()) {
 				result.addAll(reverseBuild(op, false));

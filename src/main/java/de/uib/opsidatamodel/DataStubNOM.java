@@ -311,7 +311,7 @@ public class DataStubNOM extends DataStub {
 
 				Map<String, List<String>> versionInfo2Depots = product2VersionInfo2Depots.get(p.getProductId());
 				if (versionInfo2Depots == null) {
-					versionInfo2Depots = new HashMap<String, List<String>>();
+					versionInfo2Depots = new HashMap<>();
 					product2VersionInfo2Depots.put(p.getProductId(), versionInfo2Depots);
 				}
 
@@ -1102,7 +1102,7 @@ public class DataStubNOM extends DataStub {
 				// logging.info(this, "retrieveSoftwareAuditOnClients for " +
 				// clientListForCall.size() + " clients " + clientListForCall);
 
-				// client2software = new HashMap<String, List<String>>();
+				// client2software = new HashMap<>();
 				if (client2software == null)
 					client2software = new HashMap<>();
 
@@ -1278,7 +1278,7 @@ public class DataStubNOM extends DataStub {
 
 		List<Map<String, Object>> retrieved = persist.retrieveListOfMapsNOM(callAttributes, callFilter,
 				"configState_getObjects");
-		hostConfigs = new HashMap<String, Map<String, Object>>();
+		hostConfigs = new HashMap<>();
 
 		for (Map<String, Object> listElement : retrieved) {
 			Object id = listElement.get("objectId");
@@ -1623,7 +1623,7 @@ public class DataStubNOM extends DataStub {
 	@Override
 	protected void retrieveClient2HwRows(String[] hosts) {
 		if (client2HwRows == null) {
-			client2HwRows = new HashMap<String, Map<String, Object>>();
+			client2HwRows = new HashMap<>();
 		}
 	}
 

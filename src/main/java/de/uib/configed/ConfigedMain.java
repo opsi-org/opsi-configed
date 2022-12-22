@@ -242,26 +242,26 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected Map<String /* client */, Map<String /* product */, Map<String /* propertykey */, String/* propertyvalue */>>> collectChangedNetbootStates = new HashMap<>();
 
-	protected Map<String, List<String>> possibleActions = new HashMap<String, List<String>>(); // a
-																								// map
-																								// of
-																								// products,
-																								// product
-																								// -->
-																								// list
-																								// of
-																								// actions;
-																								// used
-																								// as
-																								// an
-																								// indicator
-																								// that
-																								// a
-																								// product
-																								// is
-																								// in
-																								// the
-																								// depot
+	protected Map<String, List<String>> possibleActions = new HashMap<>(); // a
+																			// map
+																			// of
+																			// products,
+																			// product
+																			// -->
+																			// list
+																			// of
+																			// actions;
+																			// used
+																			// as
+																			// an
+																			// indicator
+																			// that
+																			// a
+																			// product
+																			// is
+																			// in
+																			// the
+																			// depot
 
 	protected Map mergedProductProperties = null;
 
@@ -1699,7 +1699,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Globals.mainContainer = mainFrame;
 
 		/*
-		 * Map<String, Boolean> itemsToDisable = new HashMap<String, Boolean>();
+		 * Map<String, Boolean> itemsToDisable = new HashMap<>();
 		 * 
 		 * itemsToDisable.put(MainFrame.ITEM_ADD_CLIENT, true);
 		 * itemsToDisable.put(MainFrame.ITEM_DELETE_CLIENT, true);
@@ -4012,7 +4012,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				// persist.hostConfigsCheck(getSelectedClients());
 
 				if (hostConfigs == null) {
-					hostConfigs = new HashMap<String, Map<String, Object>>(); // serves as marker
+					hostConfigs = new HashMap<>(); // serves as marker
 
 					for (String client : getSelectedClients()) {
 						hostConfigs.put(client, persist.getConfigs().get(client));
@@ -4146,7 +4146,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected void checkSwInfo() {
 		/*
 		 * if (swInfoClientmap == null)
-		 * swInfoClientmap = new HashMap<String, List<Map<String, Object>>>();
+		 * swInfoClientmap = new HashMap<>();
 		 */
 	}
 
@@ -4662,7 +4662,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		 * if (depots == null || depots.size() < 1)
 		 * {
 		 * logging.warning(" depots list empty, selecting main configuration server" );
-		 * depots = new HashMap<String, Map<String, Object>>();
+		 * depots = new HashMap<>();
 		 * depots.put(myServer, configServerRecord);
 		 * }
 		 * else
@@ -6486,7 +6486,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Map<String, String> entries = new LinkedHashMap<String, String>();
 			Map<String, String> tooltips = new LinkedHashMap<String, String>();
 			Map<String, String> rcCommands = new HashMap<>();
-			Map<String, Boolean> commandsEditable = new HashMap<String, Boolean>();
+			Map<String, Boolean> commandsEditable = new HashMap<>();
 
 			for (String key : remoteControls.keySet()) {
 				entries.put(key, key);

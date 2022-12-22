@@ -3801,7 +3801,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	private Map<String, String> getChangedClientInfoFor(String client) {
 		if (changedClientInfos == null)
-			changedClientInfos = new HashMap<String, Map<String, String>>();
+			changedClientInfos = new HashMap<>();
 
 		Map<String, String> changedClientInfo = changedClientInfos.get(client);
 

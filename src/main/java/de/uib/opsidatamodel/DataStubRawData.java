@@ -436,9 +436,9 @@ public class DataStubRawData extends DataStubNOM {
 			// logging.info(this, "retrieveSoftwareAuditOnClients for " +
 			// clientListForCall.size() + " clients " + clientListForCall);
 
-			// client2software = new HashMap<String, List<String>>();
+			// client2software = new HashMap<>();
 			if (client2software == null)
-				client2software = new HashMap<String, List<SWAuditClientEntry>>();
+				client2software = new HashMap<>();
 			// if (softwareId2clients == null) softwareId2clients = new HashMap<Integer,
 			// java.util.Set<String>>();
 			if (softwareIdent2clients == null)
@@ -670,7 +670,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		logging.info(this, "retrieveHostConfigs, finished a request");
 
-		hostConfigs = new HashMap<String, Map<String, Object>>();
+		hostConfigs = new HashMap<>();
 
 		if (rows == null || rows.size() == 0) {
 			logging.warning(this, "no host config rows " + rows);
@@ -865,7 +865,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		// shrink to one line per client
 
-		Map<String, Map<String, Object>> clientInfo = new HashMap<String, Map<String, Object>>();
+		Map<String, Map<String, Object>> clientInfo = new HashMap<>();
 
 		for (List<String> row : rows) {
 			Map<String, Object> rowMap = clientInfo.get(row.get(0));
@@ -930,7 +930,7 @@ public class DataStubRawData extends DataStubNOM {
 			return;
 		}
 
-		client2HwRows = new HashMap<String, Map<String, Object>>();
+		client2HwRows = new HashMap<>();
 
 		// set default rows
 		for (String host : persist.getHostInfoCollections().getOpsiHostNames()) {

@@ -1219,7 +1219,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			Set<String> permittedHostGroups) {
 		locationsInDIRECTORY.clear();
 
-		HashMap<String, List<String>> group2Members = new HashMap<String, List<String>>();
+		HashMap<String, List<String>> group2Members = new HashMap<>();
 
 		// we must rebuild this map since the direct call of persist.getFGroup2Members
 		// would eliminate
@@ -1390,7 +1390,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		HashMap<String, String> labels = new HashMap<>();
 		labels.put("groupname", configed.getResourceValue("ClientTree.editNode.label.groupname"));
 		labels.put("description", configed.getResourceValue("ClientTree.editNode.label.description"));
-		HashMap<String, Boolean> editable = new HashMap<String, Boolean>();
+		HashMap<String, Boolean> editable = new HashMap<>();
 		editable.put("groupname", false);
 		editable.put("description", true);
 
@@ -1449,7 +1449,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			HashMap<String, String> labels = new HashMap<>();
 			labels.put("groupname", configed.getResourceValue("ClientTree.editNode.label.groupname"));
 			labels.put("description", configed.getResourceValue("ClientTree.editNode.label.description"));
-			HashMap<String, Boolean> editable = new HashMap<String, Boolean>();
+			HashMap<String, Boolean> editable = new HashMap<>();
 			editable.put("groupname", true);
 			editable.put("description", true);
 

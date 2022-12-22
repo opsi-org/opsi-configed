@@ -591,7 +591,7 @@ public class LicensingInfoMap {
 	 * and modules as rows
 	 */
 	private Map<String, Map> produceTableMapFromDatesMap(Map<String, Map<String, Map<String, Object>>> datesM) {
-		Map<String, Map> resultMap = new HashMap<String, Map>();
+		Map<String, Map> resultMap = new HashMap<>();
 
 		columnNames = new Vector<>();
 		columnNames.add(configed.getResourceValue("LicensingInfo.modules"));

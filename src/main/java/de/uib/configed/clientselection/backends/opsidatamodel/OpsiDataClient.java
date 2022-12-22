@@ -38,7 +38,7 @@ public class OpsiDataClient implements Client {
 		productList = new LinkedList();
 		productNames = new ArrayList<>();
 		swauditList = new LinkedList<SWAuditClientEntry>();
-		hardwareInfo = new LinkedList<Map<String, Object>>();
+		hardwareInfo = new LinkedList<>();
 	}
 
 	/** Set the map with the information about hosts */

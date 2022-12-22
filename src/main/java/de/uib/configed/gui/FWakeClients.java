@@ -30,8 +30,8 @@ public class FWakeClients extends FShowList {
 		setVisible(true);
 		glassTransparency(true, 1000, 200, 0.04f);
 		Map<String, List<String>> hostSeparationByDepots = persist.getHostSeparationByDepots(selectedClients);
-		Map<String, Integer> counterByDepots = new HashMap<String, Integer>();
-		Map<String, Executioner> executionerForDepots = new HashMap<String, Executioner>();
+		Map<String, Integer> counterByDepots = new HashMap<>();
+		Map<String, Executioner> executionerForDepots = new HashMap<>();
 
 		int maxSize = 0;
 

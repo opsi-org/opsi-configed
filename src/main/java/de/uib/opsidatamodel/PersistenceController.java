@@ -244,7 +244,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public Executioner exec;
 
-	protected final Map<String, Executioner> execs = new HashMap<String, Executioner>();
+	protected final Map<String, Executioner> execs = new HashMap<>();
 
 	public abstract void userConfigurationRequestReload();
 

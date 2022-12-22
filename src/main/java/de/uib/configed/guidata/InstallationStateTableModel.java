@@ -295,7 +295,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		// logging.debug(this, "" + clientAllProductRows);
 
 		for (String clientId : clientAllProductRows.keySet()) {
-			Map<String, Map<String, String>> productRows = new HashMap<String, Map<String, String>>();
+			Map<String, Map<String, String>> productRows = new HashMap<>();
 
 			allClientsProductStates.put(clientId, productRows);
 			// for each client we build the productstates map
@@ -340,7 +340,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	private void produceVisualStatesFromExistingEntries() {
 
-		combinedVisualValues = new HashMap<String, Map<String, String>>();
+		combinedVisualValues = new HashMap<>();
 		for (String key : ProductState.KEYS) {
 			HashMap<String, String> combinedVisualValuesForOneColumn = new HashMap<>();
 			combinedVisualValues.put(key, combinedVisualValuesForOneColumn);
@@ -406,7 +406,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			// check if productstates exist
 			Map<String, Map<String, String>> productStates = allClientsProductStates.get(clientId);
 			if (productStates == null) {
-				productStates = new HashMap<String, Map<String, String>>();
+				productStates = new HashMap<>();
 				allClientsProductStates.put(clientId, productStates);
 			}
 
@@ -628,7 +628,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	private void initChangedStates() {
 		for (String clientId : selectedClients) {
-			Map<String, Map<String, String>> changedStates = new HashMap<String, Map<String, String>>();
+			Map<String, Map<String, String>> changedStates = new HashMap<>();
 			collectChangedStates.put(clientId, changedStates);
 		}
 	}
@@ -655,7 +655,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		Map<String, Map<String, String>> changedStatesForClient = (Map<String, Map<String, String>>) (collectChangedStates
 				.get(clientId));
 		if (changedStatesForClient == null) {
-			changedStatesForClient = new HashMap<String, Map<String, String>>();
+			changedStatesForClient = new HashMap<>();
 			collectChangedStates.put(clientId, changedStatesForClient);
 		}
 
@@ -786,7 +786,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		Map<String, Map<String, String>> changedStatesForClient = (Map<String, Map<String, String>>) (collectChangedStates
 				.get(clientId));
 		if (changedStatesForClient == null) {
-			changedStatesForClient = new HashMap<String, Map<String, String>>();
+			changedStatesForClient = new HashMap<>();
 			collectChangedStates.put(clientId, changedStatesForClient);
 		}
 
@@ -956,7 +956,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		Map<String, Map<String, String>> productStates = allClientsProductStates.get(clientId);
 		if (productStates == null) {
-			productStates = new HashMap<String, Map<String, String>>();
+			productStates = new HashMap<>();
 			allClientsProductStates.put(clientId, productStates);
 		}
 

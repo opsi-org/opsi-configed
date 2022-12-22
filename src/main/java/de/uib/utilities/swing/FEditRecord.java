@@ -92,7 +92,7 @@ public class FEditRecord extends FEdit {
 		labels.put("field2", "label2");
 		labels.put("field3", "labelt3");
 
-		HashMap<String, Boolean> editable = new HashMap<String, Boolean>();
+		HashMap<String, Boolean> editable = new HashMap<>();
 		editable.put("field1", true);
 		editable.put("field2", true);
 		editable.put("field3", true);
