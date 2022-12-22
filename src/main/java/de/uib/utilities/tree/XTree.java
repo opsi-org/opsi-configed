@@ -98,7 +98,7 @@ public class XTree extends JTree {
 	public Vector<Integer> getToggledRows(TreePath parent)
 	// make public
 	{
-		Vector<Integer> result = new Vector<Integer>();
+		Vector<Integer> result = new Vector<>();
 		Enumeration<TreePath> enumer = super.getDescendantToggledPaths(parent);
 		while (enumer.hasMoreElements()) {
 			result.add(getRowForPath(enumer.nextElement()));

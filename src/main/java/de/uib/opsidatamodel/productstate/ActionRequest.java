@@ -66,7 +66,7 @@ public class ActionRequest {
 		if (states != null)
 			return;
 
-		states = new Vector<Integer>();
+		states = new Vector<>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(NOT_AVAILABLE);
@@ -78,7 +78,7 @@ public class ActionRequest {
 		states.add(ONCE);
 		states.add(CUSTOM);
 
-		possibleRequests = new Vector<Integer>();
+		possibleRequests = new Vector<>();
 		possibleRequests.add(SETUP);
 		possibleRequests.add(UPDATE);
 		possibleRequests.add(UNINSTALL);

@@ -330,7 +330,7 @@ public class DataStubNOM extends DataStub {
 				}
 				depotpackages.add(p);
 
-				Vector<Object> productRow = new Vector<Object>();
+				Vector<Object> productRow = new Vector<>();
 
 				productRow.add(p.getProductId());
 

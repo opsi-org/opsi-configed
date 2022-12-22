@@ -53,7 +53,7 @@ public class InstallationStatus {
 		if (states != null)
 			return;
 
-		states = new Vector<Integer>();
+		states = new Vector<>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(UNDEFINED);

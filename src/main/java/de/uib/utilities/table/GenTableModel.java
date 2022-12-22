@@ -95,10 +95,10 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		initColumns();
 		setRows((Vector<Vector<Object>>) dataProvider.getRows());
 
-		addedRows = new Vector<Integer>();
-		updatedRows = new Vector<Integer>();
+		addedRows = new Vector<>();
+		updatedRows = new Vector<>();
 
-		this.finalCols = new Vector<Integer>();
+		this.finalCols = new Vector<>();
 		if (finalColumns == null) {
 			if (keyCol > -1)
 				this.finalCols.add(keyCol);
@@ -574,7 +574,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	public Vector<Object> getColumn(int col) {
-		Vector<Object> result = new Vector<Object>();
+		Vector<Object> result = new Vector<>();
 		for (int row = 0; row < rowsLength; row++)
 			result.add(getValueAt(row, col));
 
@@ -819,7 +819,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	public Vector<Object> produceValueRowFromSomeEntries(RowMap entries) {
 		logging.debug(this, "produceValueRowFromSomeEntries " + entries);
 
-		Vector<Object> result = new Vector<Object>();
+		Vector<Object> result = new Vector<>();
 
 		for (String col : columnNames) {
 			// logging.debug(this, "produceValueRowFromSomeEntries " + col + ": " +

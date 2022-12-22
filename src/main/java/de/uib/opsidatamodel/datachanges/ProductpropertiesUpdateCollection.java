@@ -27,7 +27,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 
 	public ProductpropertiesUpdateCollection(ConfigedMain mainController, Object persis, List<String> clients,
 			String productname) {
-		super(new Vector<Object>(0));
+		super(new Vector<>(0));
 		if (clients == null) {
 			this.clients = new ArrayList<>();
 		} else {
