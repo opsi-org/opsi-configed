@@ -387,9 +387,9 @@ public class SSHCommandFactory {
 		Collections.sort(sshcommand_list);
 
 		java.util.LinkedHashMap<String, List<SSHCommand_Template>> sortedComs = new LinkedHashMap<String, List<SSHCommand_Template>>();
-		// sortedComs.put(parentNull , new LinkedList<SSHCommand_Template>());
-		sortedComs.put(parentdefaultForOwnCommands, new LinkedList<SSHCommand_Template>());
-		sortedComs.put(parentOpsi, new LinkedList<SSHCommand_Template>());
+		// sortedComs.put(parentNull , new LinkedList<>());
+		sortedComs.put(parentdefaultForOwnCommands, new LinkedList<>());
+		sortedComs.put(parentOpsi, new LinkedList<>());
 
 		for (SSHCommand_Template com : sshcommand_list) {
 			String parent = com.getParentMenuText();
@@ -397,7 +397,7 @@ public class SSHCommandFactory {
 				parent = parentdefaultForOwnCommands;
 				// parent = parentNull;
 			}
-			List parentList = new LinkedList<SSHCommand_Template>();
+			List parentList = new LinkedList<>();
 			if (sortedComs.containsKey(parent))
 				parentList = sortedComs.get(parent);
 			else

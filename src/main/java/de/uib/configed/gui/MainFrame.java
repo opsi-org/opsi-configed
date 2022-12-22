@@ -762,10 +762,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	private void setupMenuLists() {
 
-		menuItemsHost = new HashMap<String, List<JMenuItem>>();
-		menuItemsHost.put(ITEM_ADD_CLIENT, new ArrayList<JMenuItem>());
-		menuItemsHost.put(ITEM_DELETE_CLIENT, new ArrayList<JMenuItem>());
-		menuItemsHost.put(ITEM_FREE_LICENCES, new ArrayList<JMenuItem>());
+		menuItemsHost = new LinkedHashMap<>();
+		menuItemsHost.put(ITEM_ADD_CLIENT, new ArrayList<>());
+		menuItemsHost.put(ITEM_DELETE_CLIENT, new ArrayList<>());
+		menuItemsHost.put(ITEM_FREE_LICENCES, new ArrayList<>());
 
 		/*
 		 * menuItemsOpsiclientdExtraEvent = new HashMap<String,
@@ -775,7 +775,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		 * for (String event :
 		 * main.getPersistenceController().getOpsiclientdExtraEvents())
 		 * {
-		 * menuItemsOpsiclientdExtraEvent.put(event, new ArrayList<JMenuItem>());
+		 * menuItemsOpsiclientdExtraEvent.put(event, new ArrayList<>());
 		 * }
 		 * }
 		 */
@@ -1269,7 +1269,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			boolean commands_exists = false;
 			for (Map.Entry<String, List<SSHCommand_Template>> entry : sortedComs.entrySet()) {
 				String parentMenuName = entry.getKey();
-				LinkedList<SSHCommand_Template> list_com = new LinkedList<SSHCommand_Template>(entry.getValue());
+				LinkedList<SSHCommand_Template> list_com = new LinkedList<>(entry.getValue());
 				Collections.sort(list_com);
 				JMenu parentMenu = new JMenu();
 				parentMenu.setText(parentMenuName);
