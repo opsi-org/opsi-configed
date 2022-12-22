@@ -69,7 +69,7 @@ public class ExporterToPDF extends ExportTable {
 	private static Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
 	private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 	private static Font small = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
-	private static ArrayList<Integer> leftAlignmentlist = new ArrayList<Integer>();
+	private static ArrayList<Integer> leftAlignmentlist = new ArrayList<>();
 
 	public ExporterToPDF(javax.swing.JTable table, Vector<String> classNames) {
 		super(table, classNames);

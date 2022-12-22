@@ -137,7 +137,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	// request
 	// protected Map<String, ActionRequest> product2AR;
 	// for each product, we remember the visual action that is set
-	protected java.util.TreeSet<String> missingImplementationForAR;
+	protected TreeSet<String> missingImplementationForAR;
 
 	protected Map<String, Map<String, Map<String, String>>> allClientsProductStates; // (clientId -> (productId ->
 																						// (product state key -> product
@@ -251,7 +251,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		initColumnNames(displayColumns);
 		initChangedStates();
 
-		missingImplementationForAR = new java.util.TreeSet<String>();
+		missingImplementationForAR = new TreeSet<>();
 		product2setOfClientsWithNewAction = new HashMap<>();
 
 		persist = main.getPersistenceController();

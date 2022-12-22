@@ -698,8 +698,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				/**
 				 * old PDF exporting tableToPDF = new DocumentToPdf (null,
 				 * metaData); // no filename, metadata // set alignment left
-				 * ArrayList list = new ArrayList<Integer>(); list.add(0); //
-				 * column
+				 * ArrayList list = new ArrayList<>(); list.add(0); // column
 				 * de.uib.utilities.pdf.DocumentElementToPdf.setAlignmentLeft(list);
 				 * // only relevant rows
 				 * tableToPDF.createContentElement("table",
@@ -906,7 +905,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	public List<Integer> getSelectedRowsInModelTerms() {
 		int[] selection = tableProducts.getSelectedRows();
-		ArrayList<Integer> selectionInModelTerms = new ArrayList<Integer>(selection.length);
+		ArrayList<Integer> selectionInModelTerms = new ArrayList<>(selection.length);
 		for (int i = 0; i < selection.length; i++) {
 			selectionInModelTerms.add(convertRowIndexToModel(selection[i]));
 		}

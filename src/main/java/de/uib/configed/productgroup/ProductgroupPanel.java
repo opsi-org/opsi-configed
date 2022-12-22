@@ -568,8 +568,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		// "uninstall (marked)", "set 'uninstall' for all marked products (if uninstall
 		// action exists)");
 
-		DefaultListModel<String> modelChooseAction = new DefaultListModel<String>(); // put values from hashmap into
-																						// list
+		DefaultListModel<String> modelChooseAction = new DefaultListModel<>(); // put values from hashmap into
+																				// list
 		for (String key : values.keySet()) {
 			modelChooseAction.addElement(key);
 		}

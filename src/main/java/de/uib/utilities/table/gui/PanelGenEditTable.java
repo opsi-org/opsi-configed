@@ -283,7 +283,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		this.generalPopupPosition = generalPopupPosition;
 
-		this.internalpopups = new ArrayList<Integer>();
+		this.internalpopups = new ArrayList<>();
 		if (popupsWanted != null) {
 			for (int j = 0; j < popupsWanted.length; j++) {
 				this.internalpopups.add(popupsWanted[j]);
@@ -658,7 +658,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	protected ArrayList<Integer> supplementBefore(int insertpoint, final int[] injectKeys,
 			final List<Integer> listOfKeys) {
-		ArrayList<Integer> augmentedList = new ArrayList<Integer>();
+		ArrayList<Integer> augmentedList = new ArrayList<>();
 
 		boolean found = false;
 
@@ -886,7 +886,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	protected List<RowSorter.SortKey> buildSortkeysFromColumns() {
 		logging.debug(this, "buildSortkeysFromColumns,  sortDescriptor " + sortDescriptor);
-		List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
+		List<RowSorter.SortKey> sortKeys = new ArrayList<>();
 
 		if (tableModel.getColumnCount() == 0)
 			return null;
@@ -1076,7 +1076,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	 * {
 	 * 
 	 * List <RowSorter.SortKey> sortKeys
-	 * = new ArrayList<RowSorter.SortKey>();
+	 * = new ArrayList<>();
 	 * //sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
 	 * //sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 	 * sortKeys.add(new RowSorter.SortKey(tableModel.getKeyCol(),
@@ -1090,7 +1090,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	 * {
 	 * 
 	 * List <RowSorter.SortKey> sortKeys
-	 * = new ArrayList<RowSorter.SortKey>();
+	 * = new ArrayList<>();
 	 * Iterator iter = tableModel.getFinalCols().iterator();
 	 * //sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
 	 * //sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));

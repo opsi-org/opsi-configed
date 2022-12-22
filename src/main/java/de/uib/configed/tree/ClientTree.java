@@ -244,7 +244,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			// simpleTreePath);
 
 			if (invertedSimpleClientPaths.get(leafname) == null)
-				invertedSimpleClientPaths.put(leafname, new ArrayList<SimpleTreePath>());
+				invertedSimpleClientPaths.put(leafname, new ArrayList<>());
 
 			invertedSimpleClientPaths.get(leafname).add(simpleTreePath);
 			// logging.debug(this, "add got for leaf, simple path " + leafname + ", " +
@@ -2052,7 +2052,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return result;
 	}
 
-	public java.util.TreeSet<String> collectLeafs(DefaultMutableTreeNode node) {
+	public TreeSet<String> collectLeafs(DefaultMutableTreeNode node) {
 		TreeSet<String> clients = new TreeSet<>(enumerateLeafNodes(node));
 
 		// logging.debug(this, "collectLeafs in " + node + ": " + clients);

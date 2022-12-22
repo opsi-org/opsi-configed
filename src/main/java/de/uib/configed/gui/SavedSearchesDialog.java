@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JMenuItem;
@@ -230,7 +231,7 @@ public class SavedSearchesDialog extends FEditList {
 		model.removeAllElements();
 
 		de.uib.opsidatamodel.SavedSearches savedSearches = manager.getSavedSearches();
-		java.util.TreeSet<String> nameSet = new java.util.TreeSet<String>(manager.getSavedSearchesNames());
+		TreeSet<String> nameSet = new TreeSet<>(manager.getSavedSearchesNames());
 		Map<String, String> valueMap = new HashMap<>();
 		Map<String, String> descMap = new HashMap<>();
 

@@ -338,7 +338,7 @@ public class PanelSWInfo extends JPanel {
 
 		jTable.setAutoCreateRowSorter(true);
 		TableRowSorter tableSorter = (TableRowSorter) jTable.getRowSorter();
-		ArrayList<RowSorter.SortKey> list = new ArrayList<RowSorter.SortKey>(1);
+		ArrayList<RowSorter.SortKey> list = new ArrayList<>(1);
 		list.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 		tableSorter.setSortKeys(list);
 		tableSorter.sort();
@@ -557,7 +557,7 @@ public class PanelSWInfo extends JPanel {
 		 * metaData); // no filename, metadata
 		 * tableToPDF.setAskForOverwrite( askForOverwrite );
 		 * 
-		 * ArrayList list = new ArrayList<Integer>();
+		 * ArrayList list = new ArrayList<>();
 		 * list.add(0); // column(s)
 		 * de.uib.utilities.pdf.DocumentElementToPdf.setAlignmentLeft(list);
 		 * 

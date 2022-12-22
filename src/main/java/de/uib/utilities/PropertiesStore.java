@@ -101,7 +101,7 @@ public class PropertiesStore
 		internalStore.put(key, value);
 	}
 
-	private java.util.TreeSet<String> formOutputLines() {
+	private TreeSet<String> formOutputLines() {
 		TreeSet<String> orderedLines = new TreeSet();
 
 		for (String key : internalStore.keySet()) {
