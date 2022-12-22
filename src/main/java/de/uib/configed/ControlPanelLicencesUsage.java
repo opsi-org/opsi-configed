@@ -3,7 +3,6 @@ package de.uib.configed;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Vector;
 
 import javax.swing.ComboBoxModel;
@@ -231,9 +230,9 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 		thePanel.setClientsSource(new de.uib.utilities.ComboBoxModeller() {
 			@Override
 			public ComboBoxModel<String> getComboBoxModel(int row, int column) {
-				List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(persist.getHostInfoCollections()
-						.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))
-								.keySet());
+				List<String> choicesAllHosts = new ArrayList<>(persist.getHostInfoCollections()
+						.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients())
+						.keySet());
 
 				choicesAllHosts.set(0, "");
 

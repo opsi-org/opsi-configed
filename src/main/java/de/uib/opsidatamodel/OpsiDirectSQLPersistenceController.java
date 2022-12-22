@@ -131,7 +131,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 				List<Map<String, String>> states1Client = result.get(client);
 				if (states1Client == null) {
-					states1Client = new ArrayList<Map<String, String>>();
+					states1Client = new ArrayList<>();
 					result.put(client, states1Client);
 				}
 

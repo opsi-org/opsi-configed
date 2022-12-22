@@ -80,7 +80,7 @@ public class UserConfig {
 
 	public static LinkedHashSet<String> getUserBoolKeys() {
 		if (USER_BOOL_KEYS == null) {
-			USER_BOOL_KEYS = new LinkedHashSet<String>();
+			USER_BOOL_KEYS = new LinkedHashSet<>();
 
 			logging.info("addAll ssh bool keys");
 			USER_BOOL_KEYS.addAll(UserSshConfig.BOOL_KEYS);
@@ -100,7 +100,7 @@ public class UserConfig {
 
 	public static LinkedHashSet<String> getUserStringValueKeys() {
 		if (USER_STRINGVALUE_KEYS == null) {
-			USER_STRINGVALUE_KEYS = new LinkedHashSet<String>(getUserStringValueKeys_withoutRole());
+			USER_STRINGVALUE_KEYS = new LinkedHashSet<>(getUserStringValueKeys_withoutRole());
 			USER_STRINGVALUE_KEYS.add(HAS_ROLE_ATTRIBUT);
 		}
 
@@ -109,7 +109,7 @@ public class UserConfig {
 
 	public static LinkedHashSet<String> getUserStringValueKeys_withoutRole() {
 		if (USER_STRINGVALUE_KEYS_WITHOUT_ROLE == null) {
-			USER_STRINGVALUE_KEYS_WITHOUT_ROLE = new LinkedHashSet<String>();
+			USER_STRINGVALUE_KEYS_WITHOUT_ROLE = new LinkedHashSet<>();
 			USER_STRINGVALUE_KEYS_WITHOUT_ROLE.add(MODIFICATION_INFO_KEY);
 		}
 
@@ -120,7 +120,7 @@ public class UserConfig {
 	public static LinkedHashSet<String> getUserListKeys() {
 		// logging.info("getUserListKeys " + USER_LIST_KEYS);
 		if (USER_LIST_KEYS == null) {
-			USER_LIST_KEYS = new LinkedHashSet<String>();
+			USER_LIST_KEYS = new LinkedHashSet<>();
 
 			USER_LIST_KEYS.addAll(UserSshConfig.LIST_KEYS);
 			USER_LIST_KEYS.addAll(UserOpsipermission.LIST_KEYS);

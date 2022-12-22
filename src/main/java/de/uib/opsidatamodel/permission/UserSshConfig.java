@@ -45,7 +45,7 @@ public class UserSshConfig extends UserConfigModule {
 	// addToBoolKeys
 	public static LinkedHashSet<String> BOOL_KEYS;
 	{
-		BOOL_KEYS = new LinkedHashSet<String>();
+		BOOL_KEYS = new LinkedHashSet<>();
 		BOOL_KEYS.add(KEY_SSH_MENU_ACTIVE);
 		BOOL_KEYS.add(KEY_SSH_CONFIG_ACTIVE);
 		BOOL_KEYS.add(KEY_SSH_COMMANDCONTROL_ACTIVE);
@@ -56,7 +56,7 @@ public class UserSshConfig extends UserConfigModule {
 
 	public static final LinkedHashSet<String> LIST_KEYS;
 	static {
-		LIST_KEYS = new LinkedHashSet<String>();
+		LIST_KEYS = new LinkedHashSet<>();
 	}
 
 	public static HashMap<String, String> configDescription;

@@ -85,7 +85,7 @@ public class PanelStateSwitch extends JPanel {
 		this.hGap = hGap;
 		this.vGap = vGap;
 
-		changeListeners = new ArrayList<ChangeListener>();
+		changeListeners = new ArrayList<>();
 
 		if (labels != null && labels.length < values.length)
 			logging.warning(this, "missing label");

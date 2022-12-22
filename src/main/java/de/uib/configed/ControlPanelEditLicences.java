@@ -1,10 +1,8 @@
 package de.uib.configed;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Vector;
 
 import javax.swing.DefaultCellEditor;
@@ -180,12 +178,15 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 		JComboBox<String> combo = new JComboBox<>();
 		combo.setFont(Globals.defaultFontBig);
 
-		col.setCellEditor(new AdaptingCellEditor(combo, (row, column) -> {
-			List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(persist.getHostInfoCollections()
-					.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))
-							.keySet());
-			choicesAllHosts.set(0, "");
-			return new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
+		col.setCellEditor(new AdaptingCellEditor(comboLP0, (row, column) -> {
+			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
+					mainController.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
+
+			if (poolIds.size() <= 1)
+				poolIds.add("");
+			// hack, since combo box shows nothing otherwise
+
+			return new DefaultComboBoxModel<>(poolIds.toArray(String[]::new));
 		}));
 
 		col = thePanel.panelSoftwarelicences.getColumnModel().getColumn(5);

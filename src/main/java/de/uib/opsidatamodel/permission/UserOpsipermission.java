@@ -73,7 +73,7 @@ public class UserOpsipermission extends UserConfigModule {
 
 	public static final LinkedHashSet<String> BOOL_KEYS;
 	static {
-		BOOL_KEYS = new LinkedHashSet<String>();
+		BOOL_KEYS = new LinkedHashSet<>();
 		BOOL_KEYS.add(PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY);
 		BOOL_KEYS.add(PARTKEY_USER_PRIVILEGE_SERVER_READWRITE);
 		BOOL_KEYS.add(PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED);

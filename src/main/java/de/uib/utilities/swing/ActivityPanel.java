@@ -25,7 +25,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 
 	private final int noOfParts = 4;
 	/** an arraylist for panels */
-	ArrayList<JPanel> partPanels = new ArrayList<JPanel>();
+	ArrayList<JPanel> partPanels = new ArrayList<>();
 
 	public static int sleepingMS = 750;
 
@@ -171,7 +171,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 		colors[0] = Globals.opsiLogoLightBlue;
 		setPreferredSize(new Dimension(w, h));
 
-		partPanels = new ArrayList<JPanel>();
+		partPanels = new ArrayList<>();
 
 		for (int j = 0; j < noOfParts; j++) {
 			partPanels.add(new JPanel() {

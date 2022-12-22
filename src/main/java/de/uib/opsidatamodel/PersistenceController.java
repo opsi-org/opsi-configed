@@ -156,7 +156,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = configed
 			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL_WHERE_INSTALLED");
 
-	public static final List BOOLEAN_VALUES = new ArrayList<Boolean>();
+	public static final List BOOLEAN_VALUES = new ArrayList<>();
 	static {
 		BOOLEAN_VALUES.add(true);
 		BOOLEAN_VALUES.add(false);
@@ -328,7 +328,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	@Override
 	public void registerDataRefreshedObserver(DataRefreshedObserver ob) {
 		if (dataRefreshedObservers == null)
-			dataRefreshedObservers = new ArrayList<DataRefreshedObserver>();
+			dataRefreshedObservers = new ArrayList<>();
 		dataRefreshedObservers.add(ob);
 	}
 
@@ -354,7 +354,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	@Override
 	public void registerDataLoadingObserver(DataLoadingObserver ob) {
 		if (dataLoadingObservers == null)
-			dataLoadingObservers = new ArrayList<DataLoadingObserver>();
+			dataLoadingObservers = new ArrayList<>();
 		dataLoadingObservers.add(ob);
 	}
 

@@ -100,7 +100,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 
 		addFocusListener(this);
 
-		myListeners = new ArrayList<ActionListener>();
+		myListeners = new ArrayList<>();
 
 		textLabel = null;
 		try {

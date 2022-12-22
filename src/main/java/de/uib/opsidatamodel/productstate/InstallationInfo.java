@@ -19,7 +19,7 @@ public class InstallationInfo {
 
 	public static final String MANUALLY = "manually set";
 
-	public static final LinkedHashSet<String> defaultDisplayValues = new LinkedHashSet<String>();
+	public static final LinkedHashSet<String> defaultDisplayValues = new LinkedHashSet<>();
 	static {
 		defaultDisplayValues.add(NONEdisplayString);
 		defaultDisplayValues.add(SUCCESSdisplayString);

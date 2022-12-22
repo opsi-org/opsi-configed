@@ -3504,7 +3504,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Set<String> groups = getHostGroups().keySet();
 		groups.remove(de.uib.configed.tree.ClientTree.DIRECTORY_NAME);
 
-		return new ArrayList<>(new TreeSet<>(groups));
+		return new ArrayList<>(groups);
 
 		/*
 		 * return exec.getListResult ( new OpsiMethodCall(
@@ -3671,7 +3671,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (entries == null)
 			return null;
 
-		List<String[]> list = new ArrayList<String[]>();
+		List<String[]> list = new ArrayList<>();
 		String dateS = null;
 
 		if (entries.size() > 0)
@@ -4822,7 +4822,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			String client = (String) m.get(ProductOnClient.CLIENTid);
 			List<Map<String, String>> states1Client = result.get(client);
 			if (states1Client == null) {
-				states1Client = new ArrayList<Map<String, String>>();
+				states1Client = new ArrayList<>();
 				result.put(client, states1Client);
 			}
 
@@ -4886,7 +4886,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			String client = (String) m.get("clientId");
 			List<Map<String, String>> states1Client = result.get(client);
 			if (states1Client == null) {
-				states1Client = new ArrayList<Map<String, String>>();
+				states1Client = new ArrayList<>();
 				result.put(client, states1Client);
 			}
 
@@ -5229,7 +5229,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		}
 
 		if (result == null) {
-			result = new ArrayList<Map<String, String>>();
+			result = new ArrayList<>();
 		}
 
 		logging.debug(this,
@@ -7220,8 +7220,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 
 			// remap to JSON types
-			List<org.json.JSONObject> callsConfigUpdateCollection = new ArrayList<org.json.JSONObject>();
-			List<org.json.JSONObject> callsConfigDeleteCollection = new ArrayList<org.json.JSONObject>();
+			List<org.json.JSONObject> callsConfigUpdateCollection = new ArrayList<>();
+			List<org.json.JSONObject> callsConfigDeleteCollection = new ArrayList<>();
 
 			for (Object config : configCollection) {
 				Map callConfig = (Map) config;
@@ -8128,7 +8128,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			logging.info(this, "setWindowsSoftwareIds2LPool oldEntriesTruely " + oldEntriesTruely);
 
 			if (!onlyAdding) {
-				ArrayList<JSONObject> deleteItems = new ArrayList<JSONObject>();
+				ArrayList<JSONObject> deleteItems = new ArrayList<>();
 				// ArrayList<String> keysForDeleting = new ArrayList<>();
 				for (String swIdent : oldEntriesTruely) {
 					// logging.debug(this, "installedSoftwareInformation.get(swIdent), " + swIdent +
@@ -8166,7 +8166,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			}
 
-			ArrayList<JSONObject> createItems = new ArrayList<JSONObject>();
+			ArrayList<JSONObject> createItems = new ArrayList<>();
 
 			/*
 			 * String typeInfo = "\"type\" : \"AuditSoftwareToLicensePool\"";
@@ -9125,7 +9125,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			List<LicenceUsageEntry> licencesUsagesForClient = fClient2LicencesUsageList.get(m.getClientId());
 
 			if (licencesUsagesForClient == null) {
-				licencesUsagesForClient = new ArrayList<LicenceUsageEntry>();
+				licencesUsagesForClient = new ArrayList<>();
 				fClient2LicencesUsageList.put(m.getClientId(), licencesUsagesForClient);
 			}
 			licencesUsagesForClient.add(m);
@@ -9198,7 +9198,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		// logging.info(this, "addDeletionLicenceUsage hostId, softwareLicenseId,
 		// licensePoolId " + hostId + ", " + softwareLicenseId + ", " + licensePoolId);
 		if (itemsDeletionLicenceUsage == null)
-			itemsDeletionLicenceUsage = new ArrayList<LicenceUsageEntry>();
+			itemsDeletionLicenceUsage = new ArrayList<>();
 
 		addDeletionLicenceUsage(hostId, softwareLicenseId, licensePoolId, itemsDeletionLicenceUsage);
 		// logging.info(this, "addDeletionLicenceUsage, size of collectiion now " +
@@ -10466,7 +10466,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		exec.doCall(omc);
 
-		List<org.json.JSONObject> defaultUserConfigsObsolete = new ArrayList<org.json.JSONObject>();
+		List<org.json.JSONObject> defaultUserConfigsObsolete = new ArrayList<>();
 
 		// delete obsolete configs
 

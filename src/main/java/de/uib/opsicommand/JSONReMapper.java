@@ -278,7 +278,7 @@ public class JSONReMapper {
 	}
 
 	public static List<Map<String, String>> getListOfStringMaps(Object retrieved) {
-		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+		List<Map<String, String>> result = new ArrayList<>();
 		List jsonList = null;
 		try {
 			JSONObject jO = (JSONObject) retrieved;
@@ -393,7 +393,7 @@ public class JSONReMapper {
 	}
 
 	public static List<JSONObject> getListOfJSONObjects(JSONObject jO, String key) {
-		ArrayList<JSONObject> result = new ArrayList<JSONObject>();
+		ArrayList<JSONObject> result = new ArrayList<>();
 		JSONArray jA = jO.optJSONArray(key);
 
 		if (jA != null) {
@@ -404,7 +404,7 @@ public class JSONReMapper {
 	}
 
 	public static List<List<String>> getListOfListsOfStrings(JSONObject jO, String key) {
-		List<List<String>> list0 = new ArrayList<List<String>>();
+		List<List<String>> list0 = new ArrayList<>();
 		JSONArray jA = jO.optJSONArray(key);
 
 		int size0 = jA.length();
@@ -430,7 +430,7 @@ public class JSONReMapper {
 	}
 
 	public static List<List<String>> getJsonListOfStringLists(JSONObject jO, String key) {
-		ArrayList<List<String>> result = new ArrayList<List<String>>();
+		ArrayList<List<String>> result = new ArrayList<>();
 
 		List<Object> list1 = getJsonList(jO, key);
 
@@ -578,7 +578,7 @@ public class JSONReMapper {
 	}
 
 	public static List<List<String>> getListOfStringLists(JSONObject jO) {
-		List<List<String>> result = new ArrayList<List<String>>();
+		List<List<String>> result = new ArrayList<>();
 		try {
 			if (checkResponse(jO)) {
 				result = JSONReMapper.getJsonListOfStringLists(jO, "result");

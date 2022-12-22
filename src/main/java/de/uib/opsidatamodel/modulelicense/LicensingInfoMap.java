@@ -497,9 +497,9 @@ public class LicensingInfoMap {
 		if (futureOverLimitModuleList == null)
 			futureOverLimitModuleList = new ArrayList<>();
 		if (allCloseToLimitModules == null)
-			allCloseToLimitModules = new LinkedHashSet<String>();
+			allCloseToLimitModules = new LinkedHashSet<>();
 		if (allOverLimitModules == null)
-			allOverLimitModules = new LinkedHashSet<String>();
+			allOverLimitModules = new LinkedHashSet<>();
 
 		Map<String, Map<String, Map<String, Object>>> resultMap = new HashMap<>();
 

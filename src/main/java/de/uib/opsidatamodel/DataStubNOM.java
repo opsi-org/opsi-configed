@@ -197,7 +197,7 @@ public class DataStubNOM extends DataStub {
 			 * {
 			 * String p = (String) m.get(keyP);
 			 * if (pInfos.get( p ) == null)
-			 * pInfos.put(p, new ArrayList<Map<String, Object>());
+			 * pInfos.put(p, new ArrayList<>());
 			 * 
 			 * List<Map<String, Object> list = pInfos.get( p );
 			 * list.add((Map<String, Object) m);
@@ -565,7 +565,7 @@ public class DataStubNOM extends DataStub {
 					List<Map<String, String>> dependencyInfos = product2dependencyInfos.get(productId);
 
 					if (dependencyInfos == null) {
-						dependencyInfos = new ArrayList<Map<String, String>>();
+						dependencyInfos = new ArrayList<>();
 						product2dependencyInfos.put(productId, dependencyInfos);
 					}
 
@@ -1509,7 +1509,7 @@ public class DataStubNOM extends DataStub {
 		if (licenceUsabilities != null)
 			return;
 
-		licenceUsabilities = new ArrayList<LicenceUsableForEntry>();
+		licenceUsabilities = new ArrayList<>();
 
 		if (persist.withLicenceManagement) {
 			persist.notifyDataLoadingObservers(
@@ -1549,7 +1549,7 @@ public class DataStubNOM extends DataStub {
 		if (licenceUsages != null)
 			return;
 
-		licenceUsages = new ArrayList<LicenceUsageEntry>();
+		licenceUsages = new ArrayList<>();
 
 		if (persist.withLicenceManagement) {
 			persist.notifyDataLoadingObservers(

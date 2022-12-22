@@ -49,7 +49,7 @@ public class RunningInstances<T> {
 		this.askForLeave = askForLeave;
 		logging.info(this, "created for class " + classname);
 		instances = new ConcurrentHashMap<T, String>();
-		observers = new ArrayList<RunningInstancesObserver<T>>();
+		observers = new ArrayList<>();
 
 	}
 

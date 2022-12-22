@@ -52,8 +52,8 @@ public class OpsiHwAuditDeviceClass {
 	public OpsiHwAuditDeviceClass(String hwClassName) {
 		this.hwClassName = hwClassName;
 
-		deviceHostProperties = new ArrayList<OpsiHwAuditDevicePropertyType>();
-		deviceHwItemProperties = new ArrayList<OpsiHwAuditDevicePropertyType>();
+		deviceHostProperties = new ArrayList<>();
+		deviceHwItemProperties = new ArrayList<>();
 		// hostPossibleColumns = new List<Object>();
 		// hwItemPossibleColumns = new List<Object>();
 	}

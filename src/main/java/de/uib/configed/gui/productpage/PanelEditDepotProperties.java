@@ -269,7 +269,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 							.getProductPropertyOptionsMap(listDepots.getSelectedValuesList().get(0), productEdited));
 
 			// list of all property maps
-			List<ConfigName2ConfigValue> storableProperties = new ArrayList<ConfigName2ConfigValue>();
+			List<ConfigName2ConfigValue> storableProperties = new ArrayList<>();
 			for (String depot : listDepots.getSelectedValuesList()) {
 				Map<String, ConfigName2ConfigValue> product2properties = mainController.getPersistenceController()
 						.getDepot2product2properties().get(depot);

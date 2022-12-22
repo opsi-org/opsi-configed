@@ -474,7 +474,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 				Enumeration<TreeNode> enumer = node.breadthFirstEnumeration();
 
-				List<DefaultMutableTreeNode> clientNodesToRemove = new ArrayList<DefaultMutableTreeNode>();
+				List<DefaultMutableTreeNode> clientNodesToRemove = new ArrayList<>();
 
 				while (enumer.hasMoreElements()) {
 					DefaultMutableTreeNode element = (DefaultMutableTreeNode) enumer.nextElement();
@@ -1569,7 +1569,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	}
 
 	private boolean removeClientNodes(List<DefaultMutableTreeNode> clientNodes) {
-		List<Object2GroupEntry> groupEntries = new ArrayList<Object2GroupEntry>();
+		List<Object2GroupEntry> groupEntries = new ArrayList<>();
 
 		for (DefaultMutableTreeNode clientNode : clientNodes) {
 			String clientId = (String) (clientNode.getUserObject());

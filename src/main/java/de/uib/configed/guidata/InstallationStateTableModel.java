@@ -1489,7 +1489,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			if (delivered == null)
 				delivered = "";
 
-			LinkedHashSet<String> values = new LinkedHashSet<String>();
+			LinkedHashSet<String> values = new LinkedHashSet<>();
 
 			if (!InstallationInfo.defaultDisplayValues.contains(delivered))
 				values.add(delivered);
