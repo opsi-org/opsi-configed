@@ -42,8 +42,8 @@ public class OpsiHwAuditDeviceClass {
 	protected String linuxQuery;
 	protected List<OpsiHwAuditDevicePropertyType> deviceHostProperties;
 	protected List<OpsiHwAuditDevicePropertyType> deviceHwItemProperties;
-	// protected java.util.Vector<String> usedHostColumns;
-	// protected java.util.Vector<String> usedHwItemColumns;
+	// protected Vector<String> usedHostColumns;
+	// protected Vector<String> usedHwItemColumns;
 	protected ConfigOption hostConfig;
 	protected ConfigOption hwItemConfig;
 	protected String hostConfigKey;
