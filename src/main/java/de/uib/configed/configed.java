@@ -15,6 +15,7 @@ import java.util.Formatter;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.Set;
@@ -410,7 +411,7 @@ public class configed {
 		logging.logDirectoryName = logdirectory;
 
 		// Set locale
-		java.util.List<String> existingLocales = Messages.getLocaleNames();
+		List<String> existingLocales = Messages.getLocaleNames();
 		Messages.setLocale(paramLocale);
 		logging.info("getLocales: " + existingLocales);
 		logging.info("selected locale characteristic " + Messages.getSelectedLocale());
@@ -1057,7 +1058,7 @@ public class configed {
 			// + ", " + group);
 			query.setArgs(host, user, password, savedSearch, group);
 			query.addMissingArgs();
-			java.util.List<String> newGroupMembers = query.runSearch(false);
+			List<String> newGroupMembers = query.runSearch(false);
 			// logging.debug( " newGroupMembers " + newGroupMembers );
 
 			query.populateHostGroup(newGroupMembers, group);
@@ -1097,7 +1098,7 @@ public class configed {
 					persist.getProductGroups().keySet(), // Collection<String> existingProductgroups,
 
 					// data. on which changes are based
-					persist.getConfigDefaultValues(), // Map<String, java.util.List<Object>> serverconfigValuesMap,
+					persist.getConfigDefaultValues(), // Map<String, List<Object>> serverconfigValuesMap,
 					persist.getConfigOptions()// Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap
 			);
 

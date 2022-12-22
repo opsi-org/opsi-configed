@@ -44,7 +44,7 @@ public class SWAuditClientEntry
 	protected final Map<String, String> data;
 	protected java.util.ArrayList<String> software;
 	protected java.util.TreeMap<String, Integer> software2Number;
-	private static java.util.List<String> notFoundSoftwareIDs;
+	private static List<String> notFoundSoftwareIDs;
 	private static Long lastUpdateTime;
 	private static final long msAfterThisAllowNextUpdate = 60000;
 	protected Integer swId;
@@ -143,7 +143,7 @@ public class SWAuditClientEntry
 
 	public static final int columnIndexLastStateChange = DB_COLUMN_NAMES.indexOf("modificationTime");
 
-	public SWAuditClientEntry(final java.util.List<String> keys, final java.util.List<String> values,
+	public SWAuditClientEntry(final List<String> keys, final List<String> values,
 			de.uib.opsidatamodel.PersistenceController controller) {
 		// logging.debug(this, "create, keys/values constructor");
 
@@ -194,7 +194,7 @@ public class SWAuditClientEntry
 
 	}
 
-	public static String produceSWident(java.util.List<String> keys, java.util.List<String> values)
+	public static String produceSWident(List<String> keys, List<String> values)
 	// from db columns
 	{
 		// logging.info("SWAuditClientEntry:: produceSWident keys -- value : " + keys +
@@ -249,7 +249,7 @@ public class SWAuditClientEntry
 			logging.warning(this, "updateSoftware: doing nothing since we just updated");
 	}
 
-	private Integer getIndex(java.util.List<String> list, String element) {
+	private Integer getIndex(List<String> list, String element) {
 		/*
 		 * int result = -1;
 		 * if (list == null || element == null)

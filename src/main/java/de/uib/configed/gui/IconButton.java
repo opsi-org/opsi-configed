@@ -1,5 +1,7 @@
 package de.uib.configed.gui;
 
+import java.util.List;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -285,7 +287,7 @@ public class IconButton extends JButton {
 
 			waitingCycle = new WaitingCycle(maxWaitSecs) {
 				@Override
-				protected void process(java.util.List<Integer> chunks) {
+				protected void process(List<Integer> chunks) {
 					workWithWaitingSignals(chunks);
 				}
 			};
@@ -299,7 +301,7 @@ public class IconButton extends JButton {
 
 	}
 
-	private void workWithWaitingSignals(java.util.List<Integer> chunks) {
+	private void workWithWaitingSignals(List<Integer> chunks) {
 		if (imagesForAnimation == null)
 			return;
 

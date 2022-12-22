@@ -13,6 +13,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.AbstractButton;
@@ -70,7 +71,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	private JLabel stringSeparatorLabel;
 
 	private Vector<String> columnNames;
-	private java.util.List<JCheckBox> headerButtons;
+	private List<JCheckBox> headerButtons;
 
 	public CSVTemplateCreatorDialog(Vector<String> columnNames) {
 		super(Globals.mainFrame, configed.getResourceValue("CSVTemplateCreatorDialog.title"), false,

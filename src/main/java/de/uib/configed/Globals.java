@@ -543,7 +543,7 @@ public class Globals {
 		return s.toString();
 	}
 
-	public static List<String> takeAsStringList(java.util.List<Object> list) {
+	public static List<String> takeAsStringList(List<Object> list) {
 		List<String> result = new java.util.ArrayList<>();
 
 		if (list == null)

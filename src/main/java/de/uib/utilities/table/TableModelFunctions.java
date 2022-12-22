@@ -8,6 +8,8 @@
 
 package de.uib.utilities.table;
 
+import java.util.List;
+
 import de.uib.utilities.Mapping;
 
 public interface TableModelFunctions<K> {
@@ -21,7 +23,7 @@ public interface TableModelFunctions<K> {
 		}
 	}
 
-	java.util.Map<Object, java.util.List<Object>> getFunction(int col1, int col2);
+	java.util.Map<Object, List<Object>> getFunction(int col1, int col2);
 
 	java.util.Map<Integer, RowStringMap> getPrimarykey2Rowmap();
 

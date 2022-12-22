@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -69,7 +70,7 @@ public class CSVImportDataModifier {
 				reader = new CSVReader(new FileReader(csvFile), parser, startLine, columnNames);
 			}
 
-			java.util.List<Map<String, Object>> csvData = reader.readAll();
+			List<Map<String, Object>> csvData = reader.readAll();
 			reader.close();
 
 			model = createModel(thePanel, csvData, columnNames, parser);
@@ -111,7 +112,7 @@ public class CSVImportDataModifier {
 		return model;
 	}
 
-	private GenTableModel createModel(PanelGenEditTable thePanel, java.util.List<Map<String, Object>> csvData,
+	private GenTableModel createModel(PanelGenEditTable thePanel, List<Map<String, Object>> csvData,
 			Vector<String> columnNames, CSVParser parser) {
 		Vector<String> classNames = new Vector<>();
 		populateClassNames(classNames, columnNames);
@@ -205,7 +206,7 @@ public class CSVImportDataModifier {
 		}
 	}
 
-	private void populateSourceMap(Map<String, Map> theSourceMap, java.util.List<Map<String, Object>> data,
+	private void populateSourceMap(Map<String, Map> theSourceMap, List<Map<String, Object>> data,
 			Vector<String> columnNames) {
 		int id = 0;
 

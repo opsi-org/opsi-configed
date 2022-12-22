@@ -27,7 +27,7 @@ public class UserConfigProducing {
 	Collection<String> existingHostgroups;
 	Collection<String> existingProductgroups;
 
-	Map<String, java.util.List<Object>> serverconfigValuesMap;
+	Map<String, List<Object>> serverconfigValuesMap;
 	Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap;
 
 	ArrayList<Object> readyObjects;
@@ -45,7 +45,7 @@ public class UserConfigProducing {
 			Collection<String> existingProductgroups,
 
 			// data. on which changes are based
-			Map<String, java.util.List<Object>> serverconfigValuesMap,
+			Map<String, List<Object>> serverconfigValuesMap,
 			Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap
 
 	) {
@@ -285,7 +285,7 @@ public class UserConfigProducing {
 			logging.info(this,
 					"supplyAllPermissionEntries usernameStartkey " + usernameStartkey + " roleKey " + roleKey);
 
-			java.util.List<Object> values = serverconfigValuesMap.get(roleKey);
+			List<Object> values = serverconfigValuesMap.get(roleKey);
 
 			logging.info(this,
 					"supplyAllPermissionEntries got values " + values + " for role from serverconfigValuesMap ");
@@ -383,7 +383,7 @@ public class UserConfigProducing {
 			logging.info(this,
 					"supplyPermissionEntriesForAUser boolean configKey " + configKey + " -- partkey " + partkey);
 
-			java.util.List<Object> values = serverconfigValuesMap.get(configKey);
+			List<Object> values = serverconfigValuesMap.get(configKey);
 			Boolean value = null;
 
 			logging.info(this,
@@ -429,7 +429,7 @@ public class UserConfigProducing {
 		if (!prototypeObligatory) {
 			configKey = startkey + UserConfig.HAS_ROLE_ATTRIBUT;
 			logging.info(this, "configkey " + configKey);
-			java.util.List<Object> values = serverconfigValuesMap.get(configKey);
+			List<Object> values = serverconfigValuesMap.get(configKey);
 
 			if (values == null || values.size() == 0 || !((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE)) {
 				ArrayList<Object> selectedValuesRole = new ArrayList<>();
@@ -451,7 +451,7 @@ public class UserConfigProducing {
 			// String configKey = startkey +
 			// UserOpsipermission.PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY ;
 
-			java.util.List<Object> values = serverconfigValuesMap.get(configKey);
+			List<Object> values = serverconfigValuesMap.get(configKey);
 
 			logging.info(this, "supplyPermissionEntriesForAUser configKey " + configKey + " -- partkey " + partkey);
 			logging.info(this, "supplyPermissionEntriesForAUser configKey has size 1 values " + values);
@@ -499,7 +499,7 @@ public class UserConfigProducing {
 		 * UserOpsipermission.PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY ;
 		 * 
 		 * 
-		 * java.util.List<Object> values = serverconfigValuesMap.get( configKey );
+		 * List<Object> values = serverconfigValuesMap.get( configKey );
 		 * 
 		 * logging.info(this, "supplyPermissionEntriesForAUser list configKey " +
 		 * configKey + " -- partkey " + partkey);
@@ -805,7 +805,7 @@ public class UserConfigProducing {
 				persist.getProductGroups().keySet(), // Collection<String> existingProductgroups,
 
 				// data. on which changes are based
-				persist.getConfigDefaultValues(), // Map<String, java.util.List<Object>> serverconfigValuesMap,
+				persist.getConfigDefaultValues(), // Map<String, List<Object>> serverconfigValuesMap,
 				persist.getConfigOptions()// Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap
 
 		);

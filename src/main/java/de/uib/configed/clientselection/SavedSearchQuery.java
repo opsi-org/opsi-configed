@@ -111,7 +111,7 @@ public class SavedSearchQuery {
 		controller.getHostInfoCollections().getClientListForDepots(depots.keySet().toArray(new String[0]), null);
 
 		SelectionManager manager = new SelectionManager(null);
-		java.util.List<String> searches = manager.getSavedSearchesNames();
+		List<String> searches = manager.getSavedSearchesNames();
 		if (searchName == null && printing) {
 			printResult(searches);
 			return null;
@@ -131,7 +131,7 @@ public class SavedSearchQuery {
 		return result;
 	}
 
-	public void populateHostGroup(java.util.List<String> hosts, String groupName) {
+	public void populateHostGroup(List<String> hosts, String groupName) {
 		if (controller == null) {
 			logging.error("controller not initialized");
 			System.exit(3);
@@ -151,7 +151,7 @@ public class SavedSearchQuery {
 			System.exit(5);
 		}
 
-		java.util.List<String> groupAttributes = new de.uib.configed.type.HostGroupRelation().getAttributes();
+		List<String> groupAttributes = new de.uib.configed.type.HostGroupRelation().getAttributes();
 		StringValuedRelationElement saveGroupRelation = new StringValuedRelationElement(groupAttributes,
 				hostGroups.get(groupName));
 

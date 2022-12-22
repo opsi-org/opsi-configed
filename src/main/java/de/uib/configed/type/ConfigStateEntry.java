@@ -35,7 +35,7 @@ public class ConfigStateEntry extends HashMap<String, Object> {
 	// public static final int columnIndexLastStateChange =
 	// DB_COLUMN_NAMES.indexOf("modificationTime");
 
-	public ConfigStateEntry(String configId, String hostId, java.util.List values) {
+	public ConfigStateEntry(String configId, String hostId, List values) {
 		super();
 		put(CONFIG_ID, configId);
 		put(OBJECT_ID, hostId);

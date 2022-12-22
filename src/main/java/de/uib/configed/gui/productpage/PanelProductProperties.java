@@ -3,6 +3,7 @@ package de.uib.configed.gui.productpage;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JPopupMenu;
@@ -45,7 +46,7 @@ public class PanelProductProperties extends JSplitPane
 	// JScrollPane paneProducts;
 	public PanelGenEditTable paneProducts;
 	protected OpsiPackage selectedOpsiPackage;
-	protected java.util.List<String> depotsOfPackage;
+	protected List<String> depotsOfPackage;
 
 	private ProductInfoPane infoPane; // right pane
 	protected PanelEditDepotProperties panelEditProperties;
@@ -187,7 +188,7 @@ public class PanelProductProperties extends JSplitPane
 						 * );
 						 */
 						// depotsOfPackage.clear();
-						java.util.List<String> depotsOfPackageAsRetrieved = new ArrayList<>();
+						List<String> depotsOfPackageAsRetrieved = new ArrayList<>();
 
 						String versionInfo = "";
 						boolean retrieval = true;
@@ -311,7 +312,7 @@ public class PanelProductProperties extends JSplitPane
 			/*
 			 * private Map<String, Object> mergeProperties(
 			 * Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties,
-			 * java.util.List depots,
+			 * List depots,
 			 * String productId) {
 			 * Map<String, Object> result = new HashMap<>();
 			 * 
@@ -348,7 +349,7 @@ public class PanelProductProperties extends JSplitPane
 			 * depot2product2properties.get(depots.get(n)).get(productId);
 			 * 
 			 * for (String key : properties.keySet()) {
-			 * java.util.List value = (java.util.List) properties.get(key);
+			 * List value = (List) properties.get(key);
 			 * result.put(key, new ListMerger(value));
 			 * }
 			 * 
@@ -357,7 +358,7 @@ public class PanelProductProperties extends JSplitPane
 			 * properties = depot2product2properties.get(depots.get(i)).get(productId);
 			 * 
 			 * for (String key : properties.keySet()) {
-			 * java.util.List value = (java.util.List) properties.get(key);
+			 * List value = (List) properties.get(key);
 			 * if (result.get(key) == null)
 			 * // we need a new property. it is not common
 			 * {

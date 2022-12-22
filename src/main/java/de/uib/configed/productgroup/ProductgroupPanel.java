@@ -188,7 +188,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		initComponents();
 	}
 
-	public void setSearchFields(java.util.List<String> fieldList) {
+	public void setSearchFields(List<String> fieldList) {
 		searchPane.setSearchFields(fieldList);
 	}
 

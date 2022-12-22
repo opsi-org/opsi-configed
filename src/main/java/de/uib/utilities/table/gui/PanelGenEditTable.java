@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
@@ -193,7 +194,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	}
 
-	private static final ArrayList<String> giveMenuitemNames(java.util.List<Integer> popups) {
+	private static final ArrayList<String> giveMenuitemNames(List<Integer> popups) {
 		ArrayList<String> result = new ArrayList<>();
 
 		for (int el : popups) {
@@ -247,7 +248,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	private static final int[] POPUPS_EXPORT = new int[] { POPUP_SEPARATOR, POPUP_EXPORT_CSV,
 			POPUP_EXPORT_SELECTED_CSV, };
 
-	protected java.util.List<Integer> internalpopups;
+	protected List<Integer> internalpopups;
 
 	JMenuItemFormatted menuItemDeleteRelation;
 	JMenuItemFormatted menuItemSave;
@@ -656,7 +657,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	protected ArrayList<Integer> supplementBefore(int insertpoint, final int[] injectKeys,
-			final java.util.List<Integer> listOfKeys) {
+			final List<Integer> listOfKeys) {
 		ArrayList<Integer> augmentedList = new ArrayList<Integer>();
 
 		boolean found = false;
@@ -883,9 +884,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		// setSorter();
 	}
 
-	protected java.util.List<RowSorter.SortKey> buildSortkeysFromColumns() {
+	protected List<RowSorter.SortKey> buildSortkeysFromColumns() {
 		logging.debug(this, "buildSortkeysFromColumns,  sortDescriptor " + sortDescriptor);
-		java.util.List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
+		List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
 
 		if (tableModel.getColumnCount() == 0)
 			return null;
@@ -997,7 +998,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		// theTable.setRowSorter(sorter);
 
-		java.util.List<RowSorter.SortKey> sortKeys = buildSortkeysFromColumns();
+		List<RowSorter.SortKey> sortKeys = buildSortkeysFromColumns();
 
 		/*
 		 * if (sortKeys != null)
@@ -1074,7 +1075,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	 * if (tableModel.getKeyCol() > -1)
 	 * {
 	 * 
-	 * java.util.List <RowSorter.SortKey> sortKeys
+	 * List <RowSorter.SortKey> sortKeys
 	 * = new ArrayList<RowSorter.SortKey>();
 	 * //sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
 	 * //sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
@@ -1088,7 +1089,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	 * tableModel.getFinalCols().size() > 0)
 	 * {
 	 * 
-	 * java.util.List <RowSorter.SortKey> sortKeys
+	 * List <RowSorter.SortKey> sortKeys
 	 * = new ArrayList<RowSorter.SortKey>();
 	 * Iterator iter = tableModel.getFinalCols().iterator();
 	 * //sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
@@ -1527,7 +1528,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		return awareOfTableChangedListener;
 	}
 
-	public java.util.List<String> getSelectedKeys() {
+	public List<String> getSelectedKeys() {
 		ArrayList<String> result = new ArrayList<>();
 		// logging.info(this, " getSelectedKeys() we have key col " +
 		// tableModel.getKeyCol());
@@ -1558,7 +1559,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	}
 
-	public void setSelectedValues(java.util.List<String> values, int col) {
+	public void setSelectedValues(List<String> values, int col) {
 		// logging.info(this, "setSelectedValues for col " + col + " : " + values);
 		getListSelectionModel().clearSelection();
 

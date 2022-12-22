@@ -29,6 +29,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -57,14 +58,14 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 	}
 
 	@Override
-	public java.util.List<Map<java.lang.String, java.lang.Object>> HOST_read() {
+	public List<Map<java.lang.String, java.lang.Object>> HOST_read() {
 
 		logging.info(this, "HOST_read ");
 		String query = "select *  from HOST";
 		TimeCheck timer = new TimeCheck(this, "HOST_read").start();
 
 		logging.notice(this, "HOST_read");
-		java.util.List<Map<java.lang.String, java.lang.Object>> opsiHosts = exec
+		List<Map<java.lang.String, java.lang.Object>> opsiHosts = exec
 				.getListOfMaps(new OpsiMethodCall("getData", new Object[] { query }));
 		timer.stop();
 
@@ -96,9 +97,9 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 	}
 
 	@Override
-	protected Map<String, java.util.List<Map<String, String>>> getLocalBootProductStatesNOM(String[] clientIds) {
+	protected Map<String, List<Map<String, String>>> getLocalBootProductStatesNOM(String[] clientIds) {
 
-		java.util.List clients = java.util.Arrays.asList(clientIds);
+		List clients = java.util.Arrays.asList(clientIds);
 
 		String columns = Arrays.toString((ProductState.DB_COLUMN_NAMES).toArray(new String[] {}));
 		columns = columns.substring(1);
@@ -114,7 +115,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 		// TimeCheck timer= new TimeCheck(this, "getLocalBootProductStatesNOM").start();
 
-		Map<String, java.util.List<Map<String, String>>> result = new HashMap<String, java.util.List<Map<String, String>>>();
+		Map<String, List<Map<String, String>>> result = new HashMap<String, List<Map<String, String>>>();
 
 		java.sql.Connection sqlConn = DbConnect.getConnection();
 
@@ -128,7 +129,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			while (rs.next()) {
 				String client = rs.getString("clientId");
 
-				java.util.List<Map<String, String>> states1Client = result.get(client);
+				List<Map<String, String>> states1Client = result.get(client);
 				if (states1Client == null) {
 					states1Client = new ArrayList<Map<String, String>>();
 					result.put(client, states1Client);

@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -19,7 +20,7 @@ import de.uib.utilities.swing.ClippedTitleTabbedPane;
 public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	LogPane[] textPanes;
 	String[] idents;
-	final java.util.List<String> identsList;
+	final List<String> identsList;
 
 	protected JFileChooser chooser;
 	protected File chooserDirectory;

@@ -25,8 +25,8 @@ public class Messages {
 	private static final String LOCALISATIONS_CONF = "valid_localisations.conf";
 	private static Boolean UTF8_HACK = null;
 
-	static java.util.List<LocaleRepresentation> existingLocales;
-	static java.util.List<String> existingLocalesNames;
+	static List<LocaleRepresentation> existingLocales;
+	static List<String> existingLocalesNames;
 	static java.util.Map<String, String> localeInfo;
 	static String selectedLocaleString;
 	static Locale myLocale = null;
@@ -220,7 +220,7 @@ public class Messages {
 		return loc;
 	}
 
-	public static java.util.List<String> getLocaleNames() {
+	public static List<String> getLocaleNames() {
 		if (existingLocalesNames == null)
 			getLocaleRepresentations();
 
@@ -236,7 +236,7 @@ public class Messages {
 		return localeInfo;
 	}
 
-	private static java.util.List<LocaleRepresentation> getLocaleRepresentations() {
+	private static List<LocaleRepresentation> getLocaleRepresentations() {
 		if (existingLocales != null)
 			return existingLocales;
 
@@ -271,7 +271,7 @@ public class Messages {
 
 	/*
 	 * does not work in applet context
-	 * public static java.util.List<String> getLocales()
+	 * public static List<String> getLocales()
 	 * {
 	 * if (existingLocales != null)
 	 * return existingLocales;

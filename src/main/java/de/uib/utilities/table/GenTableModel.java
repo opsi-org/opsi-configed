@@ -11,6 +11,7 @@ package de.uib.utilities.table;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -66,7 +67,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	// maps for TableModelFunctions
 	protected KeyRepresenter<Integer> keyRepresenter;
-	protected Map<TableModelFunctions.PairOfInt, Map<Object, java.util.List<Object>>> functions;
+	protected Map<TableModelFunctions.PairOfInt, Map<Object, List<Object>>> functions;
 	protected Map<Integer, RowStringMap> primarykey2Rowmap;
 	protected Map<Integer, String> primarykeyTranslation;
 	protected Mapping<Integer, String> primarykeyRepresentation;
@@ -962,9 +963,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		return result;
 	}
 
-	private Map<Object, java.util.List<Object>> buildFunction(int col1, int col2,
+	private Map<Object, List<Object>> buildFunction(int col1, int col2,
 			TableModelFilterCondition specialFilterCondition) {
-		Map<Object, java.util.List<Object>> result = new HashMap<Object, java.util.List<Object>>();
+		Map<Object, List<Object>> result = new HashMap<Object, List<Object>>();
 
 		boolean saveUsingFilter = workingFilter != null && workingFilter.isInUse();
 
@@ -987,7 +988,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		for (int row = 0; row < getRowCount(); row++) {
 			Object val1 = getValueAt(row, col1);
 
-			java.util.List<Object> associatedValues = result.get(val1);
+			List<Object> associatedValues = result.get(val1);
 
 			if (associatedValues == null) {
 				associatedValues = new ArrayList<>();
@@ -1055,18 +1056,17 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	@Override
-	public Map<Object, java.util.List<Object>> getFunction(int col1, int col2) {
+	public Map<Object, List<Object>> getFunction(int col1, int col2) {
 		return getFunction(col1, col2, null);
 	}
 
-	public Map<Object, java.util.List<Object>> getFunction(int col1, int col2,
-			TableModelFilterCondition specialFilterCondition) {
+	public Map<Object, List<Object>> getFunction(int col1, int col2, TableModelFilterCondition specialFilterCondition) {
 		TableModelFunctions.PairOfInt pair = new TableModelFunctions.PairOfInt(col1, col2);
 
 		if (functions == null)
-			functions = new HashMap<TableModelFunctions.PairOfInt, Map<Object, java.util.List<Object>>>();
+			functions = new HashMap<TableModelFunctions.PairOfInt, Map<Object, List<Object>>>();
 
-		java.util.Map<Object, java.util.List<Object>> function = functions.get(pair);
+		java.util.Map<Object, List<Object>> function = functions.get(pair);
 
 		if (function == null) {
 			function = buildFunction(pair.col1, pair.col2, specialFilterCondition);
@@ -1150,7 +1150,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		if (xFunctions == null)
 			xFunctions = new HashMap<TableModelFunctions.PairOfInt, Map<Integer, Mapping<Integer, String>>>();
 
-		java.util.Map<Object, java.util.List<Object>> function = getFunction(col1st, col2nd);
+		java.util.Map<Object, List<Object>> function = getFunction(col1st, col2nd);
 
 		if (function == null)
 			return null;
@@ -1160,8 +1160,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			xFunction = new HashMap<Integer, Mapping<Integer, String>>();
 			for (Object key : function.keySet()) {
 				Integer keyVal = (Integer) key;
-				xFunction.put(keyVal,
-						col2ndMapping.restrictedTo(new HashSet<>((java.util.List<Object>) function.get(key))));
+				xFunction.put(keyVal, col2ndMapping.restrictedTo(new HashSet<>((List<Object>) function.get(key))));
 			}
 		}
 

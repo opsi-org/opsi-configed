@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.TreeMap;
 
 import javax.swing.DefaultComboBoxModel;
@@ -96,7 +97,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	// public static Object[] levels = new Object[] {MIN_LEVEL, "up to 2", "up to
 	// 3", "up to 4", "up to 5", "up to 6", "up to 7", "up to 8", "ALL"};
 	public Integer[] levels = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-	public java.util.List<Integer> levelList = Arrays.asList(levels);
+	public List<Integer> levelList = Arrays.asList(levels);
 
 	protected Integer maxLevel = levels[levels.length - 1];
 	protected Integer minLevel = levels[0];
@@ -104,7 +105,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected Integer showLevel = minLevel;
 
 	protected boolean showTypeRestricted = false;
-	protected java.util.List<String> typesList;
+	protected List<String> typesList;
 	protected int typesListMaxShowCount = 25;
 
 	protected int[] lineTypes;
@@ -1124,7 +1125,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	private void setParsedText(final String[] lines, final int[] lineLevels, final Style[] lineStyles,
-			final int[] lineTypes, final java.util.List typesList, boolean showTypeRestricted, int selTypeIndex,
+			final int[] lineTypes, final List typesList, boolean showTypeRestricted, int selTypeIndex,
 			int maxExistingLevel) {
 		logging.debug(this, "setParsedText");
 		this.lines = lines;

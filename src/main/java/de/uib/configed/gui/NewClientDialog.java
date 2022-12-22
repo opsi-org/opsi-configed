@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -91,7 +92,7 @@ public class NewClientDialog extends FGeneralDialog
 	private boolean shutdownInstall;
 	protected boolean multidepot;
 
-	private java.util.List<String> existingHostNames;
+	private List<String> existingHostNames;
 
 	// private static boolean macAddressFieldVisible = false;
 	// private static boolean macAddressFieldVisibleSet = false;
@@ -172,7 +173,7 @@ public class NewClientDialog extends FGeneralDialog
 		jComboDomain.setModel(new DefaultComboBoxModel(this.domains));
 	}
 
-	public void setHostNames(java.util.List<String> existingHostNames) {
+	public void setHostNames(List<String> existingHostNames) {
 		this.existingHostNames = existingHostNames;
 	}
 

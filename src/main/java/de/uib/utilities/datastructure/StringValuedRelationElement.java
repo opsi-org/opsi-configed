@@ -1,5 +1,6 @@
 package de.uib.utilities.datastructure;
 
+import java.util.List;
 import java.util.Map;
 
 //very similar to TableEntry
@@ -15,7 +16,7 @@ public class StringValuedRelationElement extends RelationElement<String, String>
 		super(rowmap);
 	}
 
-	public StringValuedRelationElement(java.util.List<String> allowedAttributes, Map<String, ? extends Object> map) {
+	public StringValuedRelationElement(List<String> allowedAttributes, Map<String, ? extends Object> map) {
 		this();
 		// logging.debug("" +map);
 		this.allowedAttributes = allowedAttributes;

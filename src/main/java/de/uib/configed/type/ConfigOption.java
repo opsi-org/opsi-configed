@@ -1,6 +1,7 @@
 package de.uib.configed.type;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.ListSelectionModel;
@@ -102,7 +103,7 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 		// put("classname", "java.lang.Boolean");
 		// else
 
-		put("classname", "java.util.List");
+		put("classname", "List");
 
 		if (retrieved == null)
 			put("editable", true);
@@ -120,17 +121,17 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 	// ======================
 	// interface de.uib.utilities.table.ListCellOptions
 	@Override
-	public java.util.List getPossibleValues() {
-		return (java.util.List) get("possibleValues");
+	public List getPossibleValues() {
+		return (List) get("possibleValues");
 	}
 
 	@Override
-	public java.util.List getDefaultValues() {
-		return (java.util.List) get("defaultValues");
+	public List getDefaultValues() {
+		return (List) get("defaultValues");
 	}
 
 	@Override
-	public void setDefaultValues(java.util.List values) {
+	public void setDefaultValues(List values) {
 		put("defaultValues", values);
 	}
 

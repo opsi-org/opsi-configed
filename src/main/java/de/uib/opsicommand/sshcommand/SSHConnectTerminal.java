@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JTextField;
 
@@ -330,7 +331,7 @@ public class SSHConnectTerminal extends SSHConnect {
 						// if (textField.getText().contains(" cd ") || textField.getText().contains("cd
 						// "))
 						// {
-						// java.util.List dirs = getList(getCompletionList(false, true));
+						// List dirs = getList(getCompletionList(false, true));
 						// if (commands_compgen != null)
 						// if (dirs != null)
 						// {
@@ -424,7 +425,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		return result;
 	}
 
-	private java.util.List getList(String str) {
+	private List getList(String str) {
 		if (str.equals(""))
 			return null;
 		String[] arr = str.split("\n");

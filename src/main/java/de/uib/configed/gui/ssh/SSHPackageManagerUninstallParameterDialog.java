@@ -1,6 +1,7 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
+import java.util.List;
 import java.util.TreeSet;
 import java.util.Vector;
 
@@ -36,7 +37,6 @@ import de.uib.utilities.thread.WaitCursor;
 public class SSHPackageManagerUninstallParameterDialog
 		extends /* javax.swing.JDialog */ SSHPackageManagerParameterDialog {
 
-	private GroupLayout gpl;
 	private JPanel uninstallPanel = new JPanel();
 
 	private JLabel lbl_uninstall = new JLabel();
@@ -132,7 +132,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 	protected String produceDepotParameter() {
 		String depotParameter = "";
-		java.util.List<String> selectedDepots = fDepotList.getSelectedDepots();
+		List<String> selectedDepots = fDepotList.getSelectedDepots();
 
 		logging.debug(this, "produceDepotParameter, selectedDepots " + selectedDepots);
 

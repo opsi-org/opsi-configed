@@ -99,7 +99,7 @@ public class FLoadingWaiter extends JFrame
 		 * {
 		 * 
 		 * @Override
-		 * protected void process( java.util.List<Long> listOfMillis )
+		 * protected void process( List<Long> listOfMillis )
 		 * {
 		 * super.process(listOfMillis);
 		 * statusLabel.setText("abc");

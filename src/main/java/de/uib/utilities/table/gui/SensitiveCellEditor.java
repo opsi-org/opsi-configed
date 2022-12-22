@@ -6,6 +6,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.AbstractCellEditor;
@@ -31,7 +32,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	protected String myKey;
 
 	protected ListModelProducer modelProducer;
-	protected java.util.List<Object> forbiddenValues;
+	protected List<Object> forbiddenValues;
 
 	private boolean usingListEditor;
 
@@ -105,7 +106,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		listeditor.init();
 	}
 
-	public void setForbiddenValues(java.util.List<Object> forbidden) {
+	public void setForbiddenValues(List<Object> forbidden) {
 		forbiddenValues = forbidden;
 	}
 
@@ -146,9 +147,9 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				+ value.getClass().getName());
 		// this.value = modelProducer.toList(value);
 		// this.value = new ArrayList();
-		java.util.List val = modelProducer.toList(value);
+		List val = modelProducer.toList(value);
 
-		if (val instanceof java.util.List) // is now always
+		if (val instanceof List) // is now always
 		{
 			// logging.info(this, " try list editing, with modelProducer " + modelProducer);
 
@@ -229,16 +230,16 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		// logging.debug(this, "getCellEditorValue " + listeditor.getValue() + "
 		// original class " + modelProducer.getClass(editingRow, editingColumn));
 
-		// if ( java.util.List.class.isAssignableFrom
+		// if ( List.class.isAssignableFrom
 		// (modelProducer.getClass(editingRow, editingColumn)) )
 		// logging.debug(this, "getCellEditorValue, original class instance of
-		// java.util.List");
+		// List");
 
 		if (listeditor.getValue() == null)
 			return null;
 
-		if (listeditor.getValue() instanceof java.util.List) {
-			java.util.List list = (java.util.List) listeditor.getValue();
+		if (listeditor.getValue() instanceof List) {
+			List list = (List) listeditor.getValue();
 
 			if (forbiddenValues != null) {
 				Iterator iter = forbiddenValues.iterator();
@@ -259,11 +260,11 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			// modelProducer.getClass(editingRow, editingColumn) );
 
 			/*
-			 * if ( java.util.List.class.isAssignableFrom
+			 * if ( List.class.isAssignableFrom
 			 * (modelProducer.getClass(editingRow, editingColumn)) )
 			 * {
 			 * logging.info(this,
-			 * "getCellEditorValue,  original class instance of java.util.List");
+			 * "getCellEditorValue,  original class instance of List");
 			 * //ArrayList<String> li = new ArrayList<>();
 			 * //li.add("xxx");
 			 * //return li;
@@ -271,9 +272,9 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			 * }
 			 */
 
-			if (java.util.List.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
+			if (List.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
 				// logging.info(this, "getCellEditorValue, original class instance of
-				// java.util.List");
+				// List");
 				// ArrayList<String> li = new ArrayList<>();
 				// li.add("xxx");
 				// return li;
@@ -353,7 +354,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	 * {
 	 * logging.debug(this, "getCellEditorValue " + listeditor.getValue());
 	 * 
-	 * modelProducer.setSelectedValues((java.util.List) listeditor.getValue(),
+	 * modelProducer.setSelectedValues((List) listeditor.getValue(),
 	 * editingRow, editingColumn);
 	 * return listeditor.getValue();
 	 * }

@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -33,12 +34,12 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	protected Collection<Map<String, Object>> storeData;
 	protected boolean datachanged;
 
-	private java.util.List<Object> showOnlyValues; // values set cannot be set for any key
+	private List<Object> showOnlyValues; // values set cannot be set for any key
 	private java.util.Set<String> keysOfReadOnlyEntries; // keys which identify readonly entries
 
 	private Function<String, Boolean> editDenier;
 
-	public static final java.util.List nullLIST = new java.util.ArrayList();
+	public static final List nullLIST = new java.util.ArrayList();
 	static {
 		nullLIST.add(null);
 	}
@@ -202,11 +203,11 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		editDenier = disallow;
 	}
 
-	public void setShowOnlyValues(java.util.List<Object> showOnly) {
+	public void setShowOnlyValues(List<Object> showOnly) {
 		showOnlyValues = showOnly;
 	}
 
-	public java.util.List<Object> getShowOnlyValues() {
+	public List<Object> getShowOnlyValues() {
 		return showOnlyValues;
 	}
 
@@ -327,13 +328,13 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			 * (result == null)
 			 * + " class " + result.getClass() + " equals null " + result.equals( null )
 			 * + " String value equals \"null\" " + (result.toString()).equals("null"));
-			 * if (result != null && result instanceof java.util.List)
+			 * if (result != null && result instanceof List)
 			 * {
 			 * logging.info(this, " result size for " + key + " " +
-			 * ((java.util.List)(result)).size());
-			 * if ( ((java.util.List)(result)).size() > 0)
+			 * ((List)(result)).size());
+			 * if ( ((List)(result)).size() > 0)
 			 * logging.info(this, " result.get(0) for " + key + " is null " +
-			 * (((java.util.List)(result)).get(0) == null));
+			 * (((List)(result)).get(0) == null));
 			 * }
 			 * 
 			 * logging.info(this, " optionsMap for " + key + ": " + optionsMap.get(key) );
@@ -346,8 +347,8 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			// deliver the default value
 			// logging.info(this, "getValueAt " + row + ", " + col + " result was " + result
 			// );
-			if (result != null && result instanceof java.util.List) {
-				java.util.List li = (java.util.List) result;
+			if (result != null && result instanceof List) {
+				List li = (List) result;
 				if (li.size() > 0 && li.get(0) == null && optionsMap != null) {
 					result = defaultData.get(key);
 					logging.info(this,
@@ -375,7 +376,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		case 0:
 			return "".getClass();
 		case 1:
-			return java.util.List.class;
+			return List.class;
 		}
 		return Object.class;
 		// return getValueAt(0, c).getClass();
@@ -570,8 +571,8 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			return;
 		}
 
-		if (optionsMap.get(key) != null && (optionsMap.get(key)) instanceof java.util.List) {
-			java.util.List valuelist = (java.util.List) optionsMap.get(key);
+		if (optionsMap.get(key) != null && (optionsMap.get(key)) instanceof List) {
+			List valuelist = (List) optionsMap.get(key);
 
 			if (valuelist.size() > 0 && valuelist.indexOf(value) == -1) {
 				// logging.debug("optionsMap.get(key) " + optionsMap.get(key));

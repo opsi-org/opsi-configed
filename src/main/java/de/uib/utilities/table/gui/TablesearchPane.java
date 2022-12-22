@@ -16,6 +16,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -731,7 +732,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	}
 
-	public void setSearchFields(java.util.List<String> fieldList) {
+	public void setSearchFields(List<String> fieldList) {
 		for (String fieldName : fieldList) {
 			if (((DefaultComboBoxModel) comboSearchFields.getModel()).getIndexOf(fieldName) == -1)
 				comboSearchFields.addItem(fieldName);

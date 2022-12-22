@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.SwingUtilities;
@@ -656,7 +657,7 @@ public class SSHConnectExec extends SSHConnect {
 		}
 
 		@Override
-		protected void process(java.util.List<String> chunks) {
+		protected void process(List<String> chunks) {
 			logging.info(this, "chunks " + chunks.size());
 			final SSHOutputCollector sshOutputCollector = SSHOutputCollector.getInstance();
 

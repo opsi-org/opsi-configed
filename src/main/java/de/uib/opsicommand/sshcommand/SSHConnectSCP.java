@@ -3,6 +3,7 @@ package de.uib.opsicommand.sshcommand;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.SwingWorker;
 
@@ -320,7 +321,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 		}
 
 		@Override
-		protected void process(java.util.List<String> chunks) {
+		protected void process(List<String> chunks) {
 			logging.debug(this, "chunks " + chunks.size());
 			if (outputDialog != null) {
 				// outputDialog.setVisible(true);

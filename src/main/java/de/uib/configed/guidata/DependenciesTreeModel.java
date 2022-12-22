@@ -63,7 +63,7 @@ public class DependenciesTreeModel {
 			depotId = pc.getDepot();
 
 		// Erstmal die Dependencies laden
-		Map<String, java.util.List<Map<String, String>>> dependencies = pc.getProductDependencies(depotId);
+		Map<String, List<Map<String, String>>> dependencies = pc.getProductDependencies(depotId);
 		// <productId> requiredProductId, '"Lösung"'
 
 		productList = new LinkedList<>(dependencies.keySet());
@@ -205,9 +205,8 @@ public class DependenciesTreeModel {
 			adj.get(source).add(dest);
 		}
 
-		public void addEdges(Map<String, java.util.List<Map<String, String>>> dependencies,
-				Map<String, Integer> productMap) {
-			for (Map.Entry<String, java.util.List<Map<String, String>>> entry : dependencies.entrySet()) {
+		public void addEdges(Map<String, List<Map<String, String>>> dependencies, Map<String, Integer> productMap) {
+			for (Map.Entry<String, List<Map<String, String>>> entry : dependencies.entrySet()) {
 				Object fst = productMap.get(entry.getKey());
 
 				if (fst == null)

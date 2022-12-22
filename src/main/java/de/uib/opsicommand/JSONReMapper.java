@@ -57,7 +57,7 @@ public class JSONReMapper {
 				// String value = "";
 
 				if (response.get("error") == null) {
-					java.util.List list = (java.util.List) response.get("result");
+					List list = (List) response.get("result");
 
 					// logging.debug("JSONReMapper getResponses " + list);
 					// value = "" + list;

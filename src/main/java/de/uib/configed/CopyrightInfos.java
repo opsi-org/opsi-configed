@@ -1,5 +1,7 @@
 package de.uib.configed;
 
+import java.util.List;
+
 /**
  * configed - configuration editor for client work stations in opsi (open pc
  * server integration) www.opsi.org CopyrightInfos 2017
@@ -53,7 +55,7 @@ public class CopyrightInfos {
 	private CopyrightInfos() {
 	}
 
-	public static java.util.List<String> get() {
+	public static List<String> get() {
 		return infos;
 	}
 }

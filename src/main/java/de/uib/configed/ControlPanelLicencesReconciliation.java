@@ -1,5 +1,6 @@
 package de.uib.configed;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -47,7 +48,7 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 		Vector<String> columnNames;
 		Vector<String> classNames;
 
-		java.util.List<String> extraHostFields = persist.getServerConfigStrings(
+		List<String> extraHostFields = persist.getServerConfigStrings(
 				PersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PanelLicencesReconciliation);
 
 		// --- panelLicencesReconciliation

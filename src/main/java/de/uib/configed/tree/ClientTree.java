@@ -474,7 +474,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 				Enumeration<TreeNode> enumer = node.breadthFirstEnumeration();
 
-				java.util.List<DefaultMutableTreeNode> clientNodesToRemove = new ArrayList<DefaultMutableTreeNode>();
+				List<DefaultMutableTreeNode> clientNodesToRemove = new ArrayList<DefaultMutableTreeNode>();
 
 				while (enumer.hasMoreElements()) {
 					DefaultMutableTreeNode element = (DefaultMutableTreeNode) enumer.nextElement();
@@ -1568,8 +1568,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		 */
 	}
 
-	private boolean removeClientNodes(java.util.List<DefaultMutableTreeNode> clientNodes) {
-		java.util.List<Object2GroupEntry> groupEntries = new ArrayList<Object2GroupEntry>();
+	private boolean removeClientNodes(List<DefaultMutableTreeNode> clientNodes) {
+		List<Object2GroupEntry> groupEntries = new ArrayList<Object2GroupEntry>();
 
 		for (DefaultMutableTreeNode clientNode : clientNodes) {
 			String clientId = (String) (clientNode.getUserObject());
@@ -1797,7 +1797,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		// size should always be at least 1
 		// we handle the case that is > 1
 
-		java.util.List<GroupNode> correctNode = selectOneNode(groupsInDIRECTORY, clientID, selectedNode);
+		List<GroupNode> correctNode = selectOneNode(groupsInDIRECTORY, clientID, selectedNode);
 
 		if (correctNode != null)
 		// we did some selection
@@ -1815,11 +1815,10 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	}
 
-	private java.util.List<GroupNode> selectOneNode(java.util.Set<GroupNode> groupSet, String clientID,
-			GroupNode preSelected)
+	private List<GroupNode> selectOneNode(java.util.Set<GroupNode> groupSet, String clientID, GroupNode preSelected)
 
 	{
-		java.util.List<GroupNode> result = null;
+		List<GroupNode> result = null;
 
 		if (groupSet.size() > 1) {
 			// logging.debug(this, "selectOneNode groupSet, clientID " + groupSet + ", " +
@@ -2078,7 +2077,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		HashSet<String> allParents = new HashSet<>();
 
-		java.util.List<SimpleTreePath> treePaths = getSimpleTreePaths(nodeID);
+		List<SimpleTreePath> treePaths = getSimpleTreePaths(nodeID);
 
 		// logging.info(this, "collectParentIDs for node " + nodeID + " treePaths " +
 		// treePaths);

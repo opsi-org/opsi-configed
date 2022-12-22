@@ -2,6 +2,7 @@ package de.uib.utilities.datapanel;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.DefaultListModel;
@@ -23,7 +24,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 	Map<Integer, ListModel> listmodels = new HashMap<Integer, ListModel>();
 
 	Map<String, ListCellOptions> optionsMap;
-	Map<String, java.util.List> currentData;
+	Map<String, List> currentData;
 	Map<String, Class> originalTypes;
 	JTable table;
 
@@ -54,7 +55,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 	}
 
 	private void mapTypes(final Map currentData) {
-		this.currentData = new HashMap<String, java.util.List>();
+		this.currentData = new HashMap<String, List>();
 		logging.debug(this, "mapTypes  " + currentData);
 		originalTypes = new HashMap<String, Class>();
 		for (Object key : currentData.keySet()) {
@@ -88,18 +89,18 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 
 		ListCellOptions options = getListCellOptions(key);
 
-		java.util.List values = options.getPossibleValues();
+		List values = options.getPossibleValues();
 		logging.info(this, "getListModel key " + key + " the option values " + values);
 		logging.info(this, "getListModel key " + key + " options  " + options);
 
 		// logging.debug(this, "we produce a list model");
 		DefaultListModel model = new DefaultListModel();
-		Iterator iter = ((java.util.List) values).iterator();
+		Iterator iter = ((List) values).iterator();
 		while (iter.hasNext()) {
 			model.addElement(iter.next());
 		}
-		if (currentData.get(key) != null && currentData.get(key) instanceof java.util.List) {
-			iter = ((java.util.List) currentData.get(key)).iterator();
+		if (currentData.get(key) != null && currentData.get(key) instanceof List) {
+			iter = ((List) currentData.get(key)).iterator();
 
 			while (iter.hasNext()) {
 				Object entry = iter.next();
@@ -113,14 +114,14 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 	}
 
 	@Override
-	public java.util.List getSelectedValues(int row, int column) {
+	public List getSelectedValues(int row, int column) {
 		// logging.info(this, "getSelectedValues row " + row);
 		String key = (String) table.getValueAt(row, 0);
-		return (java.util.List) currentData.get(key);
+		return (List) currentData.get(key);
 	}
 
 	@Override
-	public void setSelectedValues(java.util.List newValues, int row, int column) {
+	public void setSelectedValues(List newValues, int row, int column) {
 		// logging.info(this, "setSelectedValues row " + row);
 		String key = (String) table.getValueAt(row, 0);
 		currentData.put(key, newValues);

@@ -8,6 +8,7 @@
 package de.uib.utilities.datapanel;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -138,7 +139,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 		mapTableModel.setReadOnlyEntries(keys);
 	}
 
-	public void setShowOnlyValues(java.util.List<Object> showOnly) {
+	public void setShowOnlyValues(List<Object> showOnly) {
 		mapTableModel.setShowOnlyValues(showOnly);
 	}
 

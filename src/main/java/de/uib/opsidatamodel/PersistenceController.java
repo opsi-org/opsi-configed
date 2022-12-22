@@ -118,8 +118,8 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String WAN_PARTKEY = "wan_";
 	public static final String WAN_CONFIGURED_PARTKEY = "wan_mode_on";
 	public static final String NOT_WAN_CONFIGURED_PARTKEY = "wan_mode_off";
-	protected Map<String, java.util.List<Object>> wanConfiguration;
-	protected Map<String, java.util.List<Object>> notWanConfiguration;
+	protected Map<String, List<Object>> wanConfiguration;
+	protected Map<String, List<Object>> notWanConfiguration;
 	// keys for default wan configuration
 	public static final String CONFIG_CLIENTD_EVENT_GUISTARTUP = "opsiclientd.event_gui_startup.active";
 	public static final String CONFIG_CLIENTD_EVENT_GUISTARTUP_USERLOGGEDIN = "opsiclientd.event_gui_startup{user_logged_in}.active";
@@ -156,7 +156,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = configed
 			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL_WHERE_INSTALLED");
 
-	public static final java.util.List BOOLEAN_VALUES = new ArrayList<Boolean>();
+	public static final List BOOLEAN_VALUES = new ArrayList<Boolean>();
 	static {
 		BOOLEAN_VALUES.add(true);
 		BOOLEAN_VALUES.add(false);
@@ -323,7 +323,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	// ---------------------------------------------------------------
 	// implementation of observer patterns
 	// offer observing of data refreshed announcements
-	protected java.util.List<DataRefreshedObserver> dataRefreshedObservers;
+	protected List<DataRefreshedObserver> dataRefreshedObservers;
 
 	@Override
 	public void registerDataRefreshedObserver(DataRefreshedObserver ob) {
@@ -349,7 +349,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	}
 
 	// offer observing of data loading
-	protected java.util.List<DataLoadingObserver> dataLoadingObservers;
+	protected List<DataLoadingObserver> dataLoadingObservers;
 
 	@Override
 	public void registerDataLoadingObserver(DataLoadingObserver ob) {
@@ -383,11 +383,11 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	/* relating to the PC list */
 
-	public abstract java.util.List<Map<java.lang.String, java.lang.Object>> HOST_read();
+	public abstract List<Map<java.lang.String, java.lang.Object>> HOST_read();
 
 	public abstract HostInfoCollections getHostInfoCollections();
 
-	public abstract java.util.List<String> getClientsWithOtherProductVersion(String productId, String productVersion,
+	public abstract List<String> getClientsWithOtherProductVersion(String productId, String productVersion,
 			String packageVersion, boolean includeFailedInstallations);
 
 	// public abstract String[] getClientsWithFailed();
@@ -421,22 +421,22 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void deleteClients(String[] hostIds);
 
-	public abstract java.util.List<String> deletePackageCaches(String[] hostIds);
+	public abstract List<String> deletePackageCaches(String[] hostIds);
 
 	// public abstract void wakeOnLan (String hostId);
 
-	public abstract java.util.List<String> wakeOnLan(String[] hostIds);
+	public abstract List<String> wakeOnLan(String[] hostIds);
 
-	public abstract java.util.List<String> wakeOnLan(java.util.Set<String> hostIds,
-			Map<String, java.util.List<String>> hostSeparationByDepot, Map<String, Executioner> execsByDepot);
+	public abstract List<String> wakeOnLan(java.util.Set<String> hostIds,
+			Map<String, List<String>> hostSeparationByDepot, Map<String, Executioner> execsByDepot);
 
-	public abstract java.util.List<String> fireOpsiclientdEventOnClients(String event, String[] clientIds);
+	public abstract List<String> fireOpsiclientdEventOnClients(String event, String[] clientIds);
 
-	public abstract java.util.List<String> showPopupOnClients(String message, String[] clientIds, Float seconds);
+	public abstract List<String> showPopupOnClients(String message, String[] clientIds, Float seconds);
 
-	public abstract java.util.List<String> shutdownClients(String[] clientIds);
+	public abstract List<String> shutdownClients(String[] clientIds);
 
-	public abstract java.util.List<String> rebootClients(String[] clientIds);
+	public abstract List<String> rebootClients(String[] clientIds);
 
 	public abstract Map<String, Object> reachableInfo(String[] clientIds);
 
@@ -488,13 +488,13 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract Map<String, Set<String>> getFProductGroup2Members();
 
-	public abstract boolean addHosts2Group(java.util.List<String> objectIds, String groupId);
+	public abstract boolean addHosts2Group(List<String> objectIds, String groupId);
 
 	public abstract boolean addObject2Group(String objectId, String groupId);
 
 	public abstract boolean removeObject2Group(String objectId, String groupId);
 
-	public abstract boolean removeHostGroupElements(java.util.List<Object2GroupEntry> entries);
+	public abstract boolean removeHostGroupElements(List<Object2GroupEntry> entries);
 
 	public abstract boolean addGroup(StringValuedRelationElement newgroup);
 
@@ -509,7 +509,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	// public abstract void populateHostGroupFromSearch(String savedSearch, String
 	// groupName);
 
-	public abstract Map<String, java.util.List<String>> getHostSeparationByDepots(String[] hostIds);
+	public abstract Map<String, List<String>> getHostSeparationByDepots(String[] hostIds);
 
 	// deprecated
 	// public abstract boolean writeGroup (String groupname, String[] groupmembers);
@@ -525,13 +525,13 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract Map getSoftwareInfo(String clientId);
 
-	public abstract void fillClient2Software(java.util.List<String> clients);
+	public abstract void fillClient2Software(List<String> clients);
 
 	public abstract void softwareAuditOnClientsRequestRefresh();
 
 	// public abstract List<Map<String, Object>> getSoftwareAuditOnClients();
 
-	public abstract Map<String, java.util.List<SWAuditClientEntry>> getClient2Software();
+	public abstract Map<String, List<SWAuditClientEntry>> getClient2Software();
 
 	public abstract DatedRowList getSoftwareAudit(String clientId);
 
@@ -619,7 +619,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void retrieveProducts();
 
-	public abstract Map<String, java.util.List<String>> getPossibleActions(String depotId);
+	public abstract Map<String, List<String>> getPossibleActions(String depotId);
 
 	public abstract Map<String, Map<String, OpsiProductInfo>> getProduct2versionInfo2infos();
 
@@ -634,7 +634,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract Vector<Vector<Object>> getProductRows();
 
-	public abstract Map<String, Map<String, java.util.List<String>>> getProduct2VersionInfo2Depots();
+	public abstract Map<String, Map<String, List<String>>> getProduct2VersionInfo2Depots();
 
 	public abstract TreeSet<String> getProductIds();
 
@@ -648,8 +648,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract Set<String> extendToDependentProducts(final Set<String> startProductSet, final String depot);
 
 	// intersection of the values of the clients
-	public abstract List<String> getCommonProductPropertyValues(java.util.List<String> clients, String product,
-			String property);
+	public abstract List<String> getCommonProductPropertyValues(List<String> clients, String product, String property);
 
 	public abstract void productPropertyDefinitionsRequestRefresh();
 
@@ -694,18 +693,15 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	// public abstract Map getMapOfProductActions (String clientId);
 
-	public abstract Map<String, java.util.List<Map<String, String>>> getMapOfProductStatesAndActions(
-			String[] clientIds);
+	public abstract Map<String, List<Map<String, String>>> getMapOfProductStatesAndActions(String[] clientIds);
 
 	// public abstract Map getMapOfLocalbootProductStatesAndActions (String[]
 	// clientIds,
 	// Map currentMap);
 
-	public abstract Map<String, java.util.List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(
-			String[] clientIds);
+	public abstract Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(String[] clientIds);
 
-	public abstract Map<String, java.util.List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(
-			String[] clientIds);
+	public abstract Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(String[] clientIds);
 
 	// collecting update items
 	public abstract boolean updateProductOnClient(String pcname, String productname, int producttype, Map updateValues);
@@ -747,15 +743,15 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	// public abstract void setProductproperties(String pcname, String productname,
 	// Map properties,
-	// java.util.List updateCollection, java.util.List deleteCollection);
+	// List updateCollection, List deleteCollection);
 	public abstract void setProductproperties(String pcname, String productname, Map properties);
 
-	// public abstract void setProductproperties( java.util.List updateCollection,
-	// java.util.List deleteCollection );
+	// public abstract void setProductproperties( List updateCollection,
+	// List deleteCollection );
 	public abstract void setProductproperties();
 
 	public abstract void setCommonProductPropertyValue(Set<String> clientNames, String productName, String propertyName,
-			java.util.List<String> values);
+			List<String> values);
 
 	/* information about the service */
 	// public abstract void mapOfMethodSignaturesRequestRefresh(); we dont need
@@ -767,7 +763,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	/* network and additional settings, for network objects */
 
-	// public abstract java.util.List getServers();
+	// public abstract List getServers();
 
 	// public abstract Map getNetworkConfiguration (String objectId);
 
@@ -780,7 +776,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract Map<String, de.uib.utilities.table.ListCellOptions> getConfigOptions();
 
-	public abstract Map<String, java.util.List<Object>> getConfigDefaultValues();
+	public abstract Map<String, List<Object>> getConfigDefaultValues();
 
 	public abstract Boolean getGlobalBooleanConfigValue(String key, Boolean defaultVal);
 
@@ -805,7 +801,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void setAdditionalConfiguration(boolean determineConfigOptions);
 
-	public abstract void setConfig(Map<String, java.util.List<Object>> settings);
+	public abstract void setConfig(Map<String, List<Object>> settings);
 
 	public abstract void setConfig();
 
@@ -821,7 +817,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void saveSearch(SavedSearch ob);
 
-	public abstract java.util.List<String> getServerConfigStrings(String key);
+	public abstract List<String> getServerConfigStrings(String key);
 
 	public abstract void requestReloadOpsiDefaultDomain();
 
@@ -939,7 +935,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void licencesUsageRequestRefresh();
 
-	public abstract Map<String, java.util.List<LicenceUsageEntry>> getFClient2LicencesUsageList();
+	public abstract Map<String, List<LicenceUsageEntry>> getFClient2LicencesUsageList();
 
 	public abstract Map<String, LicenceUsageEntry> getLicencesUsage();
 
@@ -972,9 +968,9 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract LinkedHashMap<String, Boolean> getHost_displayFields();
 
 	// menu configuration
-	public abstract java.util.List<String> getDisabledClientMenuEntries();
+	public abstract List<String> getDisabledClientMenuEntries();
 
-	public abstract java.util.List<String> getOpsiclientdExtraEvents();
+	public abstract List<String> getOpsiclientdExtraEvents();
 
 	// table sources
 	// public abstract class AllProductsTableSource implements
@@ -1024,7 +1020,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract boolean handleVersionOlderThan(String minRequiredVersion);
 
-	public abstract java.util.List<Map<java.lang.String, java.lang.Object>> retrieveCommandList();
+	public abstract List<Map<java.lang.String, java.lang.Object>> retrieveCommandList();
 
 	public abstract boolean doActionSSHCommand(String method, List<Object> jsonObjects);
 
@@ -1046,7 +1042,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	}
 
 	public static ConfigOption createConfig(ConfigOption.TYPE type, String key, String description, boolean editable,
-			boolean multiValue, java.util.List<Object> defaultValues, java.util.List<Object> possibleValues) {
+			boolean multiValue, List<Object> defaultValues, List<Object> possibleValues) {
 		Map<String, Object> item = createNOMitem(type.toString());
 
 		item.put("ident", key.toLowerCase());
@@ -1062,8 +1058,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	}
 
 	public static Map<String, Object> createJSONConfig(ConfigOption.TYPE type, String key, String description,
-			boolean editable, boolean multiValue, java.util.List<Object> defaultValues,
-			java.util.List<Object> possibleValues) {
+			boolean editable, boolean multiValue, List<Object> defaultValues, List<Object> possibleValues) {
 
 		Map<String, Object> item = createNOMitem(type.toString());
 
@@ -1080,10 +1075,10 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	}
 
 	public static ConfigOption createBoolConfig(String key, Boolean value, String description) {
-		java.util.List<Object> defaultValues = new ArrayList<>();
+		List<Object> defaultValues = new ArrayList<>();
 		defaultValues.add(value);
 
-		java.util.List<Object> possibleValues = new ArrayList<>();
+		List<Object> possibleValues = new ArrayList<>();
 		possibleValues.add(true);
 		possibleValues.add(false);
 
@@ -1092,10 +1087,10 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	}
 
 	public static Map<String, Object> createJSONBoolConfig(String key, Boolean value, String description) {
-		java.util.List<Object> defaultValues = new ArrayList<>();
+		List<Object> defaultValues = new ArrayList<>();
 		defaultValues.add(value);
 
-		java.util.List<Object> possibleValues = new ArrayList<>();
+		List<Object> possibleValues = new ArrayList<>();
 		possibleValues.add(true);
 		possibleValues.add(false);
 

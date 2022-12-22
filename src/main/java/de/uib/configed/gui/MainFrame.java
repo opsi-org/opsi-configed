@@ -36,6 +36,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -175,10 +176,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	public static final String ITEM_DELETE_CLIENT = "remove client";
 	public static final String ITEM_FREE_LICENCES = "free licences for client";
 
-	private Map<String, java.util.List<JMenuItem>> menuItemsHost;
+	private Map<String, List<JMenuItem>> menuItemsHost;
 
-	// Map<String, java.util.List<JMenuItem>> menuItemsOpsiclientdExtraEvent = new
-	// HashMap<String, java.util.List<JMenuItem>>();
+	// Map<String, List<JMenuItem>> menuItemsOpsiclientdExtraEvent = new
+	// HashMap<String, List<JMenuItem>>();
 
 	JMenuBar jMenuBar1 = new JMenuBar();
 
@@ -761,14 +762,14 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	private void setupMenuLists() {
 
-		menuItemsHost = new HashMap<String, java.util.List<JMenuItem>>();
+		menuItemsHost = new HashMap<String, List<JMenuItem>>();
 		menuItemsHost.put(ITEM_ADD_CLIENT, new ArrayList<JMenuItem>());
 		menuItemsHost.put(ITEM_DELETE_CLIENT, new ArrayList<JMenuItem>());
 		menuItemsHost.put(ITEM_FREE_LICENCES, new ArrayList<JMenuItem>());
 
 		/*
 		 * menuItemsOpsiclientdExtraEvent = new HashMap<String,
-		 * java.util.List<JMenuItem>>();
+		 * List<JMenuItem>>();
 		 * if (main.getPersistenceController().getOpsiclientdExtraEvents() != null)
 		 * {
 		 * for (String event :
@@ -1261,12 +1262,12 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		if (methodsExists) {
 			factory.retrieveSSHCommandListRequestRefresh();
 			factory.retrieveSSHCommandList();
-			Map<String, java.util.List<SSHCommand_Template>> sortedComs = factory.getSSHCommandMapSortedByParent();
+			Map<String, List<SSHCommand_Template>> sortedComs = factory.getSSHCommandMapSortedByParent();
 
 			logging.debug(this, "setupMenuServer add commands to menu commands sortedComs " + sortedComs);
 			boolean firstParentGroup = true;
 			boolean commands_exists = false;
-			for (Map.Entry<String, java.util.List<SSHCommand_Template>> entry : sortedComs.entrySet()) {
+			for (Map.Entry<String, List<SSHCommand_Template>> entry : sortedComs.entrySet()) {
 				String parentMenuName = entry.getKey();
 				LinkedList<SSHCommand_Template> list_com = new LinkedList<SSHCommand_Template>(entry.getValue());
 				Collections.sort(list_com);
@@ -1332,7 +1333,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			menuOpsi.addSeparator();
 		} else
 			jMenuServer.add(menuOpsi);
-		java.util.List<SSHCommand> commands = factory.getSSHCommandParameterList();
+		List<SSHCommand> commands = factory.getSSHCommandParameterList();
 		logging.info(this, "setupMenuServer add parameterDialogs to opsi commands" + commands);
 		for (final SSHCommand command : commands) {
 			JMenuItem jMenuOpsiCommand = new JMenuItem();
@@ -3335,7 +3336,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		main.callClientSelectionDialog();
 	}
 
-	private java.util.List<String> getProduct(Vector<String> completeList) {
+	private List<String> getProduct(Vector<String> completeList) {
 		FEditList fList = new FEditList();
 		fList.setListModel(new DefaultComboBoxModel<>(completeList));
 		fList.setTitle(Globals.APPNAME + ": " + configed.getResourceValue("MainFrame.productSelection"));
@@ -3349,11 +3350,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		logging.debug(this, "fList getSelectedValue " + fList.getSelectedList());
 
-		return (java.util.List<String>) fList.getSelectedList();
+		return (List<String>) fList.getSelectedList();
 	}
 
 	private void groupByNotCurrentProductVersion() {
-		java.util.List<String> products = getProduct(new Vector<>(new TreeSet<>(main.getProductNames())));
+		List<String> products = getProduct(new Vector<>(new TreeSet<>(main.getProductNames())));
 
 		if (!products.isEmpty())
 			main.selectClientsNotCurrentProductInstalled(products, false);
@@ -3361,7 +3362,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	private void groupByNotCurrentProductVersionOrBrokenInstallation() {
-		java.util.List<String> products = getProduct(new Vector<>(new TreeSet<>(main.getProductNames())));
+		List<String> products = getProduct(new Vector<>(new TreeSet<>(main.getProductNames())));
 
 		if (!products.isEmpty())
 			main.selectClientsNotCurrentProductInstalled(products, true);
@@ -3369,7 +3370,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	private void groupByFailedProduct() {
-		java.util.List<String> products = getProduct(new Vector<>(new TreeSet<>(main.getProductNames())));
+		List<String> products = getProduct(new Vector<>(new TreeSet<>(main.getProductNames())));
 
 		if (!products.isEmpty())
 			main.selectClientsWithFailedProduct(products);
@@ -3421,8 +3422,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			return;
 		}
 
-		java.util.List<String> disabledClientMenuEntries = main.getPersistenceController()
-				.getDisabledClientMenuEntries();
+		List<String> disabledClientMenuEntries = main.getPersistenceController().getDisabledClientMenuEntries();
 
 		if (disabledClientMenuEntries != null) {
 
@@ -4177,7 +4177,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		 * if (depotslist.getSelectedIndex() > -1)
 		 * {
 		 * String depotSelected = (String) depotslist.getSelectedValue();
-		 * java.util.List<String> depotsWithEqualStock
+		 * List<String> depotsWithEqualStock
 		 * = main.getPersistenceController().getAllDepotsWithIdenticalProductStock(
 		 * depotSelected);
 		 * depotslist.addToSelection(depotsWithEqualStock);
@@ -4289,7 +4289,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		panelReinstmgr.startFor(pcname, images);
 	}
 
-	public void initHardwareInfo(java.util.List config) {
+	public void initHardwareInfo(List config) {
 		if (showHardwareLog_version2 == null) {
 			showHardwareLog_version2 = new de.uib.configed.gui.hwinfopage.PanelHWInfo(main) {
 				@Override
@@ -4598,7 +4598,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 			panelSWInfo.setKindOfExport(showSoftwareLog_MultiClientReport.wantsKindOfExport());
 
-			java.util.List<String> clientsWithoutScan = new ArrayList<>();
+			List<String> clientsWithoutScan = new ArrayList<>();
 
 			for (String client : main.getSelectedClients()) {
 				Map<String, Map> tableData = main.getPersistenceController().retrieveSoftwareAuditData(client);

@@ -25,6 +25,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.CellEditor;
 import javax.swing.DefaultListModel;
@@ -49,7 +50,7 @@ public class FEditList extends FEditObject
 	private JTextComponent tracker;
 
 	private ListModel initialModel;
-	private java.util.List<Object> initiallySelected;
+	private List<Object> initiallySelected;
 
 	protected Object selValue = "";
 
@@ -160,7 +161,7 @@ public class FEditList extends FEditObject
 		extraFieldChanged(false);
 	}
 
-	protected void addSelectedValues(java.util.List<Object> toSelect) {
+	protected void addSelectedValues(List<Object> toSelect) {
 		if (toSelect == null)
 			return;
 
@@ -187,7 +188,7 @@ public class FEditList extends FEditObject
 			visibleList.setSelectedIndex(0);
 	}
 
-	public void setSelectedValues(java.util.List<Object> toSelect) {
+	public void setSelectedValues(List<Object> toSelect) {
 		// logging.debug(this, "setSelectedValues " + toSelect);
 		initiallySelected = toSelect;
 
@@ -221,7 +222,7 @@ public class FEditList extends FEditObject
 		if (limo instanceof DefaultListModel) {
 			if (!((DefaultListModel) limo).contains(element)) {
 				((DefaultListModel) limo).addElement(element);
-				java.util.List list = new ArrayList(); // getSelectedList();
+				List list = new ArrayList(); // getSelectedList();
 				list.add(element);
 				addSelectedValues(list);
 			}
@@ -346,8 +347,8 @@ public class FEditList extends FEditObject
 		return super.init();
 	}
 
-	public java.util.List getSelectedList() {
-		java.util.List result = new ArrayList();
+	public List getSelectedList() {
+		List result = new ArrayList();
 
 		ListModel model = visibleList.getModel();
 
@@ -371,7 +372,7 @@ public class FEditList extends FEditObject
 	// interface ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		java.util.List selectedList = getSelectedList();
+		List selectedList = getSelectedList();
 		// logging.info(this, "FEditList valueChanged , selected " + selectedList + "
 		// nullable? " + nullable);
 		if (!nullable && selectedList.size() == 0) {

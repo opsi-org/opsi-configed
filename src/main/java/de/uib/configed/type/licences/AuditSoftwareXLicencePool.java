@@ -3,6 +3,7 @@ package de.uib.configed.type.licences;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.Globals;
@@ -29,7 +30,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 
 	public static final String SwID = "swId";
 
-	public static final java.util.List<String> ATTRIBUTES;
+	public static final List<String> ATTRIBUTES;
 	// public static final String[] ATTRIBUTES_asArray;
 	static {
 		ATTRIBUTES = new LinkedList<>();
@@ -45,7 +46,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 		// ATTRIBUTES_asArray = ATTRIBUTES.toArray(new String[0]);
 	}
 
-	public static final java.util.List<String> INTERFACED_ATTRIBUTES;
+	public static final List<String> INTERFACED_ATTRIBUTES;
 	static {
 		INTERFACED_ATTRIBUTES = new LinkedList<>(ATTRIBUTES);
 		INTERFACED_ATTRIBUTES.add(SwID);

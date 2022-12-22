@@ -100,7 +100,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	public static final String unequalAddstring = "≠ ";
 
 	protected static Map<String, String> columnDict;
-	protected static java.util.List<String> columnsLocalized;
+	protected static List<String> columnsLocalized;
 
 	protected String actualProduct = "";
 
@@ -142,13 +142,13 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	protected Map<String, Map<String, Map<String, String>>> allClientsProductStates; // (clientId -> (productId ->
 																						// (product state key -> product
 																						// state value)))
-																						// protected final Map<String, java.util.List<Map<String, String>>>
+																						// protected final Map<String, List<Map<String, String>>>
 																						// allClientsProductlistsSaved;//clientId -> (productrows)
 
 	protected PersistenceController persist;
 	protected Map<String, Map<String, Map<String, String>>> collectChangedStates;
 	protected final String[] selectedClients;
-	protected Map<String, java.util.List<String>> possibleActions; // product-->possibleActions
+	protected Map<String, List<String>> possibleActions; // product-->possibleActions
 	protected Map<String, Map<String, Object>> globalProductInfos;
 	protected String theClient;
 	protected TreeSet<String> tsProductNames;
@@ -218,8 +218,8 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		return columnDict.get(column);
 	}
 
-	public static java.util.List<String> localizeColumns(java.util.List<String> cols) {
-		java.util.List<String> result = new ArrayList<>();
+	public static List<String> localizeColumns(List<String> cols) {
+		List<String> result = new ArrayList<>();
 
 		if (columnDict != null) {
 			for (String col : cols) {
@@ -232,8 +232,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	public InstallationStateTableModel(String[] selectedClients, ConfigedMain main,
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
-			Map<String, java.util.List<Map<String, String>>> statesAndActions,
-			Map<String, java.util.List<String>> possibleActions, // product-->possibleActions
+			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions, // product-->possibleActions
 			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
 		logging.info(this, "creating an InstallationStateTableModel ");
 		if (statesAndActions == null)
@@ -279,7 +278,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		initalizeProductStates(statesAndActions);
 	}
 
-	private void initalizeProductStates(Map<String, java.util.List<Map<String, String>>> client2listProductState) {
+	private void initalizeProductStates(Map<String, List<Map<String, String>>> client2listProductState) {
 		allClientsProductStates = new HashMap<>();
 		remaptoClient2Product2Rowmap(client2listProductState);
 
@@ -287,7 +286,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		completeVisualStatesByDefaults();
 	}
 
-	private void remaptoClient2Product2Rowmap(Map<String, java.util.List<Map<String, String>>> clientAllProductRows) {
+	private void remaptoClient2Product2Rowmap(Map<String, List<Map<String, String>>> clientAllProductRows) {
 		if (clientAllProductRows == null)
 			return;
 

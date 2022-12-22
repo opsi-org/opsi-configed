@@ -3,6 +3,7 @@ package de.uib.opsidatamodel.permission;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import de.uib.utilities.logging.logging;
 
@@ -70,8 +71,8 @@ public class UserConfig {
 	protected UserConfig prototypeConfig;
 
 	protected LinkedHashMap<String, Boolean> booleanMap;
-	protected LinkedHashMap<String, java.util.List<Object>> valuesMap;
-	protected LinkedHashMap<String, java.util.List<Object>> possibleValuesMap;
+	protected LinkedHashMap<String, List<Object>> valuesMap;
+	protected LinkedHashMap<String, List<Object>> possibleValuesMap;
 
 	// ============================================================================================
 
@@ -157,8 +158,8 @@ public class UserConfig {
 		logging.info(this, "create for " + userName);
 		this.username = userName;
 		booleanMap = new LinkedHashMap<String, Boolean>();
-		valuesMap = new LinkedHashMap<String, java.util.List<Object>>();
-		possibleValuesMap = new LinkedHashMap<String, java.util.List<Object>>();
+		valuesMap = new LinkedHashMap<String, List<Object>>();
+		possibleValuesMap = new LinkedHashMap<String, List<Object>>();
 	}
 
 	public String getUserName() {
@@ -181,7 +182,7 @@ public class UserConfig {
 		booleanMap.put(key, val);
 	}
 
-	public void setValues(String key, java.util.List<Object> values) {
+	public void setValues(String key, List<Object> values) {
 		/*
 		 * if ( !getUserListKeys().contains( key ) )
 		 * {
@@ -192,7 +193,7 @@ public class UserConfig {
 		valuesMap.put(key, values);
 	}
 
-	public void setPossibleValues(String key, java.util.List<Object> possibleValues) {
+	public void setPossibleValues(String key, List<Object> possibleValues) {
 		/*
 		 * if ( !getUserListKeys().contains( key ) )
 		 * {
@@ -232,14 +233,14 @@ public class UserConfig {
 		return booleanMap.get(key);
 	}
 
-	public java.util.List<Object> getValues(String key) {
+	public List<Object> getValues(String key) {
 		if (valuesMap.get(key) == null)
 			return new ArrayList<>();
 
 		return valuesMap.get(key);
 	}
 
-	public java.util.List<Object> getPossibleValues(String key) {
+	public List<Object> getPossibleValues(String key) {
 		if (hasBooleanConfig(key))
 			return BOOLEAN_POSSIBLE_VALUES;
 

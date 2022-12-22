@@ -3,6 +3,7 @@ package de.uib.configed.gui.swinfopage;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -708,7 +709,7 @@ public class PanelSWInfo extends JPanel {
 	 */
 
 	protected class SWInfoTableModel extends AbstractTableModel {
-		private java.util.List<String[]> data;
+		private List<String[]> data;
 		// private String dateS;
 		private final String[] header = { configed.getResourceValue("PanelSWInfo.tableheader_displayName"),
 				configed.getResourceValue("PanelSWInfo.tableheader_softwareId"),

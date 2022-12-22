@@ -1,6 +1,7 @@
 package de.uib.utilities.swing;
 
 import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
@@ -37,7 +38,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 	protected JMenuItemFormatted menuItemReload;
 	protected Integer[] popups;
-	protected java.util.List<Integer> listPopups;
+	protected List<Integer> listPopups;
 
 	protected JMenuItemFormatted[] menuItems;
 

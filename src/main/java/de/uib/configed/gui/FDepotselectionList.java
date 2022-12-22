@@ -1,6 +1,7 @@
 package de.uib.configed.gui;
 
 import java.awt.Window;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JDialog;
@@ -50,7 +51,7 @@ public class FDepotselectionList extends FGeneralDialog {
 		return depotsList.getListData();
 	}
 
-	public java.util.List<String> getSelectedDepots() {
+	public List<String> getSelectedDepots() {
 		return depotsList.getSelectedValuesList();
 	}
 

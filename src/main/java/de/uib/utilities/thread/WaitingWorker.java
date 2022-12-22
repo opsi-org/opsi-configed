@@ -1,6 +1,7 @@
 package de.uib.utilities.thread;
 
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
@@ -108,7 +109,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 	// Executed in event dispatching thread
 	//
 	@Override
-	protected void process(java.util.List<Long> listOfMillis) {
+	protected void process(List<Long> listOfMillis) {
 		// update the steps which are done
 		logging.debug(this, "process, we have got list " + listOfMillis);
 

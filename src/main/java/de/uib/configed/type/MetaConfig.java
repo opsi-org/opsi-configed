@@ -1,5 +1,7 @@
 package de.uib.configed.type;
 
+import java.util.List;
+
 //currently only the CONFIG_KEY is used
 
 public abstract class MetaConfig {
@@ -41,7 +43,7 @@ public abstract class MetaConfig {
 	String typeMetaKeyName;
 
 	public MetaConfig(String keyName, String propertyName, String description, boolean editable, boolean multiValue,
-			java.util.List<Object> values, java.util.List<Object> possibleValues, ConfigOption.TYPE type)
+			List<Object> values, List<Object> possibleValues, ConfigOption.TYPE type)
 
 	{
 		baseMetaKeyName = CONFIG_KEY + ". " + keyName;
@@ -62,9 +64,9 @@ public abstract class MetaConfig {
 	 * if (readyObjects == null)
 	 * readyObjects = new ArrayList<>();
 	 * 
-	 * java.util.List<Object> defaultValues = new ArrayList<> ();
+	 * List<Object> defaultValues = new ArrayList<> ();
 	 * defaultValues.add(propertyName);
-	 * java.util.List<Object> propertyPossibleValues = new ArrayList<>();
+	 * List<Object> propertyPossibleValues = new ArrayList<>();
 	 * propertyPossibleValues.add(propertyName);
 	 * 
 	 * 

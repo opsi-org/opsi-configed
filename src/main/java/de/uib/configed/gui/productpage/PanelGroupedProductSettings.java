@@ -2,6 +2,7 @@ package de.uib.configed.gui.productpage;
 
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -46,7 +47,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 			tableProducts.getSelectionModel().removeListSelectionListener(groupPanel);
 	}
 
-	public void setSearchFields(java.util.List<String> fieldList) {
+	public void setSearchFields(List<String> fieldList) {
 		groupPanel.setSearchFields(fieldList);
 	}
 

@@ -18,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
@@ -370,7 +371,7 @@ public class PanelCompleteWinProducts extends JPanel
 			JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,
 					configed.getResourceValue("CompleteWinProduct.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
 
-			java.util.List<String> values = new ArrayList<>();
+			List<String> values = new ArrayList<>();
 
 			String productKey = fieldProductKey.getText().trim();
 			values.add(productKey);
@@ -381,11 +382,10 @@ public class PanelCompleteWinProducts extends JPanel
 
 			String oldProductKey = null;
 
-			if (propsMap != null && propsMap.get("productkey") != null
-					&& propsMap.get("productkey") instanceof java.util.List
-					&& (((java.util.List) propsMap.get("productkey")).size() > 0)
-					&& !(((java.util.List) propsMap.get("productkey")).get(0).equals("")))
-				oldProductKey = (String) ((java.util.List) propsMap.get("productkey")).get(0);
+			if (propsMap != null && propsMap.get("productkey") != null && propsMap.get("productkey") instanceof List
+					&& (((List) propsMap.get("productkey")).size() > 0)
+					&& !(((List) propsMap.get("productkey")).get(0).equals("")))
+				oldProductKey = (String) ((List) propsMap.get("productkey")).get(0);
 
 			if (oldProductKey == null)
 				oldProductKey = "";

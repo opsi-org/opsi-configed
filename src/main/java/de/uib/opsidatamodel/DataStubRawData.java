@@ -43,7 +43,7 @@ public class DataStubRawData extends DataStubNOM {
 
 	// can be used if we do not need table specific translations of key names and
 	// value types
-	protected List<Map<String, Object>> retrieveListOfMapsBySQLselect(java.util.List<String> columns, String tables,
+	protected List<Map<String, Object>> retrieveListOfMapsBySQLselect(List<String> columns, String tables,
 			String condition) {
 		StringBuilder sb = new StringBuilder("select");
 
@@ -64,7 +64,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		String query = sb.toString();
 
-		java.util.List<java.util.List<java.lang.String>> rows = persist.exec
+		List<List<java.lang.String>> rows = persist.exec
 				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query }));
 		for (List<String> row : rows) {
 			logging.info(this, "sql produced row " + row);
@@ -117,7 +117,7 @@ public class DataStubRawData extends DataStubNOM {
 	 * }
 	 */
 
-	protected String giveWhereOR(String colName, java.util.List<String> values) {
+	protected String giveWhereOR(String colName, List<String> values) {
 		if (values == null || values.isEmpty())
 			return "true";
 
@@ -150,8 +150,8 @@ public class DataStubRawData extends DataStubNOM {
 
 	/*
 	 * in superclass
-	 * //protected java.util.List <Map<String, Object>> productPropertyStates;
-	 * //protected java.util.List <Map<String, Object>> productPropertyDepotStates;
+	 * //protected List <Map<String, Object>> productPropertyStates;
+	 * //protected List <Map<String, Object>> productPropertyDepotStates;
 	 * //will only be refreshed when all product data are refreshed
 	 * 
 	 * //protected java.util.Set<String> hostsWithProductProperties;
@@ -161,19 +161,19 @@ public class DataStubRawData extends DataStubNOM {
 	// update as a side effect
 
 	@Override
-	protected java.util.List<Map<String, Object>> produceProductPropertyStates(
-			// protected java.util.List <Map<String, Object>>
+	protected List<Map<String, Object>> produceProductPropertyStates(
+			// protected List <Map<String, Object>>
 			// ENTWURFproduceProductPropertyStates(
 			final Collection<String> clients, java.util.Set<String> hosts) {
 		logging.debug(this, "produceProductPropertyStates new hosts " + clients + " old hosts " + hosts);
 
-		// java.util.List <Map<String, Object>> compareList =
+		// List <Map<String, Object>> compareList =
 		// super.produceProductPropertyStates(clients, hosts);
 		// logging.info(this, "produceProductPropertyStates got " + compareList.size());
 
-		java.util.List<Map<String, Object>> result = new ArrayList<>();
+		List<Map<String, Object>> result = new ArrayList<>();
 
-		java.util.List<String> newClients = null;
+		List<String> newClients = null;
 		if (clients == null)
 			newClients = new ArrayList<>();
 		else
@@ -211,7 +211,7 @@ public class DataStubRawData extends DataStubNOM {
 
 			logging.info(this, "produceProductPropertyStates query " + query);
 
-			java.util.List<java.util.List<java.lang.String>> rows = persist.exec
+			List<List<java.lang.String>> rows = persist.exec
 					.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query }));
 
 			logging.info(this, "produceProductPropertyStates got rows " + rows.size());
@@ -328,8 +328,8 @@ public class DataStubRawData extends DataStubNOM {
 	/*
 	 * in superclass
 	 * 
-	 * protected java.util.List <Map<String, Object>> softwareAuditOnClients;
-	 * protected Map<String, java.util.List <SWAuditClientEntry>> client2software;
+	 * protected List <Map<String, Object>> softwareAuditOnClients;
+	 * protected Map<String, List <SWAuditClientEntry>> client2software;
 	 * 
 	 * protected java.sql.Time SOFTWARE_CONFIG_last_entry = null;
 	 * 
@@ -360,13 +360,13 @@ public class DataStubRawData extends DataStubNOM {
 	 * }
 	 * 
 	 * @Override
-	 * public void fillClient2Software(java.util.List<String> clients)
+	 * public void fillClient2Software(List<String> clients)
 	 * {
 	 * retrieveSoftwareAuditOnClients(clients);
 	 * }
 	 * 
 	 * @Override
-	 * public Map<String, java.util.List<SWAuditClientEntry>> getClient2Software()
+	 * public Map<String, List<SWAuditClientEntry>> getClient2Software()
 	 * //fill the clientlist by fill ...
 	 * {
 	 * logging.info(this, "getClient2Software  ============= ");
@@ -391,21 +391,21 @@ public class DataStubRawData extends DataStubNOM {
 	 * 
 	 * protected void retrieveSoftwareAuditOnClients(String client)
 	 * {
-	 * java.util.List<String> clients = new ArrayList<>();
+	 * List<String> clients = new ArrayList<>();
 	 * clients.add(client);
 	 * retrieveSoftwareAuditOnClients(clients);
 	 * }
 	 */
 
 	@Override
-	protected void retrieveSoftwareAuditOnClients(final java.util.List<String> clients) {
+	protected void retrieveSoftwareAuditOnClients(final List<String> clients) {
 		logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
 
 		retrieveInstalledSoftwareInformation();
 		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  clients count ======  " + clients.size());
 
-		java.util.List<String> newClients = new ArrayList<>(clients);
+		List<String> newClients = new ArrayList<>(clients);
 
 		if (client2software != null) {
 			logging.info(this, "retrieveSoftwareAuditOnClients client2Software.keySet size " + "   +++  "
@@ -436,9 +436,9 @@ public class DataStubRawData extends DataStubNOM {
 			// logging.info(this, "retrieveSoftwareAuditOnClients for " +
 			// clientListForCall.size() + " clients " + clientListForCall);
 
-			// client2software = new HashMap<String, java.util.List<String>>();
+			// client2software = new HashMap<String, List<String>>();
 			if (client2software == null)
-				client2software = new HashMap<String, java.util.List<SWAuditClientEntry>>();
+				client2software = new HashMap<String, List<SWAuditClientEntry>>();
 			// if (softwareId2clients == null) softwareId2clients = new HashMap<Integer,
 			// java.util.Set<String>>();
 			if (softwareIdent2clients == null)
@@ -466,7 +466,7 @@ public class DataStubRawData extends DataStubNOM {
 
 			logging.info(this, "retrieveSoftwareAuditOnClients, query " + query);
 
-			java.util.List<java.util.List<java.lang.String>> rows = persist.exec
+			List<List<java.lang.String>> rows = persist.exec
 					.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query }));
 
 			logging.info(this, "retrieveSoftwareAuditOnClients, finished a request");
@@ -490,12 +490,12 @@ public class DataStubRawData extends DataStubNOM {
 				SWAuditClientEntry.summillis1stPartOfConstructor = 0;
 				SWAuditClientEntry.summillis2ndPartOfConstructor = 0;
 
-				for (java.util.List<String> row : rows) {
+				for (List<String> row : rows) {
 					String clientId = row.get(0);
 
 					String swIdent = null;
 
-					java.util.List<SWAuditClientEntry> entries = client2software.get(clientId);
+					List<SWAuditClientEntry> entries = client2software.get(clientId);
 					if (entries == null) {
 						entries = new LinkedList<>();
 						client2software.put(clientId, entries);
@@ -663,7 +663,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		logging.info(this, "retrieveHostConfigs, query " + query);
 
-		java.util.List<java.util.List<java.lang.String>> rows = persist.exec
+		List<List<java.lang.String>> rows = persist.exec
 				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query })
 
 				);
@@ -677,7 +677,7 @@ public class DataStubRawData extends DataStubNOM {
 		} else {
 			logging.info(this, "retrieveHostConfigs rows size " + rows.size());
 
-			for (java.util.List<String> row : rows) {
+			for (List<String> row : rows) {
 				String hostId = row.get(0);
 				// ConfigStateEntry.DB_COLUMN_NAMES.indexOf(ConfigStateEntry.OBJECT_ID));
 
@@ -688,11 +688,11 @@ public class DataStubRawData extends DataStubNOM {
 				}
 
 				/*
-				 * Map<String, java.util.List<Object>> configValues1Host =
+				 * Map<String, List<Object>> configValues1Host =
 				 * hostConfigValues.get(hostId) ;
 				 * if (configValues1Host == null)
 				 * {
-				 * configValues1Host = new HashMap<String, java.util.List<Object>>();
+				 * configValues1Host = new HashMap<String, List<Object>>();
 				 * hostConfigValues.put(hostId, configValues1Host);
 				 * }
 				 */
@@ -719,7 +719,7 @@ public class DataStubRawData extends DataStubNOM {
 				// put into host configs
 				configs1Host.put(configId, values);
 
-				// configValues1Host.put( configId, (java.util.List) configs1Host.get( configId
+				// configValues1Host.put( configId, (List) configs1Host.get( configId
 				// ) );
 
 			}
@@ -855,7 +855,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		logging.info(this, "retrieveClient2HwRows, query " + query);
 
-		java.util.List<java.util.List<java.lang.String>> rows = persist.exec
+		List<List<java.lang.String>> rows = persist.exec
 				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query })
 
 				);
@@ -867,7 +867,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		Map<String, Map<String, Object>> clientInfo = new HashMap<String, Map<String, Object>>();
 
-		for (java.util.List<String> row : rows) {
+		for (List<String> row : rows) {
 			Map<String, Object> rowMap = clientInfo.get(row.get(0));
 			if (rowMap == null) {
 				rowMap = new HashMap<>();

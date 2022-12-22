@@ -3,6 +3,7 @@ package de.uib.opsidatamodel.permission;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import de.uib.utilities.logging.logging;
 
@@ -13,8 +14,8 @@ public class UserConfigModule {
 	public LinkedHashSet<String> list_keys;
 
 	public LinkedHashMap<String, Boolean> booleanMap;
-	public LinkedHashMap<String, java.util.List<Object>> valuesMap;
-	public LinkedHashMap<String, java.util.List<Object>> possibleValuesMap;
+	public LinkedHashMap<String, List<Object>> valuesMap;
+	public LinkedHashMap<String, List<Object>> possibleValuesMap;
 
 	protected UserConfigModule(String userName) {
 		this(userName, null);
@@ -27,8 +28,8 @@ public class UserConfigModule {
 
 		booleanMap = new LinkedHashMap<String, Boolean>();
 		bool_keys = new LinkedHashSet<String>();
-		valuesMap = new LinkedHashMap<String, java.util.List<Object>>();
-		possibleValuesMap = new LinkedHashMap<String, java.util.List<Object>>();
+		valuesMap = new LinkedHashMap<String, List<Object>>();
+		possibleValuesMap = new LinkedHashMap<String, List<Object>>();
 		list_keys = new LinkedHashSet<String>();
 
 		if (prototype != null) {
@@ -66,14 +67,14 @@ public class UserConfigModule {
 		return UserConfig.getArcheoConfig().getBooleanValue(key);
 	}
 
-	public java.util.List<Object> getValues(String key) {
+	public List<Object> getValues(String key) {
 		if (valuesMap.get(key) == null)
 			return new ArrayList<>();
 
 		return valuesMap.get(key);
 	}
 
-	public java.util.List<Object> getPossibleValues(String key) {
+	public List<Object> getPossibleValues(String key) {
 		if (possibleValuesMap.get(key) == null)
 			return new ArrayList<>();
 
@@ -94,7 +95,7 @@ public class UserConfigModule {
 		}
 	}
 
-	public void setValues(String key, java.util.List<Object> values) {
+	public void setValues(String key, List<Object> values) {
 		logging.info(this, "for user " + username + ", key " + key + " setValues " + values);
 		logging.info(this, "we have list_keys " + list_keys);
 		logging.info(this, "we have bool_keys " + bool_keys);
@@ -106,7 +107,7 @@ public class UserConfigModule {
 
 	}
 
-	public void setPossibleValues(String key, java.util.List<Object> possibleValues) {
+	public void setPossibleValues(String key, List<Object> possibleValues) {
 		logging.info(this, "for user " + username + ", key " + key + " setPossibleValues " + possibleValues);
 		logging.info(this, "we have list_keys " + list_keys);
 		logging.info(this, "we have bool_keys " + bool_keys);

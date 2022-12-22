@@ -53,9 +53,9 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 	private javax.swing.JLabel jLabelEditDepotProductProperties;
 	private IconButton buttonSetValuesFromPackage;
 
-	java.util.List<String> depots;
+	List<String> depots;
 	private JList<String> listDepots;
-	java.util.List<String> listSelectedDepots;
+	List<String> listSelectedDepots;
 	private JPanel panelDepots;
 	private JButton buttonSelectWithEqualProperties;
 	private JButton buttonSelectAll;
@@ -203,7 +203,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		setDepotListData(new ArrayList<>(), "");
 	}
 
-	public void setDepotListData(java.util.List<String> depots, String productEdited) {
+	public void setDepotListData(List<String> depots, String productEdited) {
 
 		logging.info(this, "setDepotListData");
 		if (depots == null) {
@@ -269,7 +269,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 							.getProductPropertyOptionsMap(listDepots.getSelectedValuesList().get(0), productEdited));
 
 			// list of all property maps
-			java.util.List<ConfigName2ConfigValue> storableProperties = new ArrayList<ConfigName2ConfigValue>();
+			List<ConfigName2ConfigValue> storableProperties = new ArrayList<ConfigName2ConfigValue>();
 			for (String depot : listDepots.getSelectedValuesList()) {
 				Map<String, ConfigName2ConfigValue> product2properties = mainController.getPersistenceController()
 						.getDepot2product2properties().get(depot);
@@ -306,7 +306,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 	}
 
 	private Map<String, Object> mergeProperties(
-			Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties, java.util.List<String> depots,
+			Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties, List<String> depots,
 			String productId) {
 
 		Map<String, Object> result = new HashMap<>();
@@ -386,7 +386,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		listSelectedDepots = listDepots.getSelectedValuesList();
 	}
 
-	private void resetSelectedDepots(java.util.List<String> baseList) {
+	private void resetSelectedDepots(List<String> baseList) {
 		logging.debug(this, "resetSelectedDepots");
 
 		listDepots.setValueIsAdjusting(true);

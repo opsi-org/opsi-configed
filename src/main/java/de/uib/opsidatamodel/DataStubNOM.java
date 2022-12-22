@@ -219,7 +219,7 @@ public class DataStubNOM extends DataStub {
 	protected Object2Product2VersionList depot2NetbootProducts;
 	protected Vector<Vector<Object>> productRows;
 	protected Map<String, TreeSet<OpsiPackage>> depot2Packages;
-	protected Map<String, Map<String, java.util.List<String>>> product2VersionInfo2Depots;
+	protected Map<String, Map<String, List<String>>> product2VersionInfo2Depots;
 
 	@Override
 	public void productsAllDepotsRequestRefresh() {
@@ -239,7 +239,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	@Override
-	public Map<String, Map<String, java.util.List<String>>> getProduct2VersionInfo2Depots() {
+	public Map<String, Map<String, List<String>>> getProduct2VersionInfo2Depots() {
 		retrieveProductsAllDepots();
 		return product2VersionInfo2Depots;
 	}
@@ -285,7 +285,7 @@ public class DataStubNOM extends DataStub {
 
 			depot2LocalbootProducts = new Object2Product2VersionList();
 			depot2NetbootProducts = new Object2Product2VersionList();
-			product2VersionInfo2Depots = new HashMap<String, Map<String, java.util.List<String>>>();
+			product2VersionInfo2Depots = new HashMap<String, Map<String, List<String>>>();
 
 			productRows = new Vector<Vector<Object>>();
 
@@ -309,14 +309,13 @@ public class DataStubNOM extends DataStub {
 					depot2LocalbootProducts.addPackage(depot, p.getProductId(), p.getVersionInfo());
 				}
 
-				Map<String, java.util.List<String>> versionInfo2Depots = product2VersionInfo2Depots
-						.get(p.getProductId());
+				Map<String, List<String>> versionInfo2Depots = product2VersionInfo2Depots.get(p.getProductId());
 				if (versionInfo2Depots == null) {
-					versionInfo2Depots = new HashMap<String, java.util.List<String>>();
+					versionInfo2Depots = new HashMap<String, List<String>>();
 					product2VersionInfo2Depots.put(p.getProductId(), versionInfo2Depots);
 				}
 
-				java.util.List depotsWithThisVersion = versionInfo2Depots.get(p.getVersionInfo());
+				List depotsWithThisVersion = versionInfo2Depots.get(p.getVersionInfo());
 
 				if (depotsWithThisVersion == null) {
 					depotsWithThisVersion = new ArrayList<>();
@@ -499,8 +498,8 @@ public class DataStubNOM extends DataStub {
 
 	// ===================================================
 
-	protected Map<String, Map<String, java.util.List<Map<String, String>>>> // depotId-->productId --> (dependencyKey-->
-																			// value)
+	protected Map<String, Map<String, List<Map<String, String>>>> // depotId-->productId --> (dependencyKey-->
+																	// value)
 	depot2product2dependencyInfos;
 
 	@Override
@@ -509,7 +508,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	@Override
-	public Map<String, Map<String, java.util.List<Map<String, String>>>> getDepot2product2dependencyInfos() {
+	public Map<String, Map<String, List<Map<String, String>>>> getDepot2product2dependencyInfos() {
 		retrieveAllProductDependencies();
 		return depot2product2dependencyInfos;
 	}
@@ -518,7 +517,7 @@ public class DataStubNOM extends DataStub {
 		retrieveProductsAllDepots();
 
 		if (depot2product2dependencyInfos == null) {
-			depot2product2dependencyInfos = new HashMap<String, Map<String, java.util.List<Map<String, String>>>>();
+			depot2product2dependencyInfos = new HashMap<String, Map<String, List<Map<String, String>>>>();
 
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " product dependency");
@@ -526,8 +525,8 @@ public class DataStubNOM extends DataStub {
 			String[] callAttributes = new String[] {};
 			HashMap callFilter = new HashMap();
 
-			java.util.List<Map<String, Object>> retrievedList = persist.retrieveListOfMapsNOM(callAttributes,
-					callFilter, "productDependency_getObjects");
+			List<Map<String, Object>> retrievedList = persist.retrieveListOfMapsNOM(callAttributes, callFilter,
+					"productDependency_getObjects");
 
 			for (Map<String, Object> dependencyItem : retrievedList) {
 				String productId = "" + dependencyItem.get(OpsiPackage.DBkeyPRODUCT_ID);
@@ -556,14 +555,14 @@ public class DataStubNOM extends DataStub {
 					continue;
 				}
 				for (String depot : product2VersionInfo2Depots.get(productId).get(versionInfo)) {
-					Map<String, java.util.List<Map<String, String>>> product2dependencyInfos = depot2product2dependencyInfos
+					Map<String, List<Map<String, String>>> product2dependencyInfos = depot2product2dependencyInfos
 							.get(depot);
 					if (product2dependencyInfos == null) {
-						product2dependencyInfos = new HashMap<String, java.util.List<Map<String, String>>>();
+						product2dependencyInfos = new HashMap<String, List<Map<String, String>>>();
 						depot2product2dependencyInfos.put(depot, product2dependencyInfos);
 					}
 
-					java.util.List<Map<String, String>> dependencyInfos = product2dependencyInfos.get(productId);
+					List<Map<String, String>> dependencyInfos = product2dependencyInfos.get(productId);
 
 					if (dependencyInfos == null) {
 						dependencyInfos = new ArrayList<Map<String, String>>();
@@ -594,9 +593,9 @@ public class DataStubNOM extends DataStub {
 
 	// ===================================================
 
-	protected java.util.List<Map<String, Object>> productPropertyStates;
-	protected java.util.List<Map<String, Object>> productPropertyDepotStates; // will only be refreshed when all product
-																				// data are refreshed
+	protected List<Map<String, Object>> productPropertyStates;
+	protected List<Map<String, Object>> productPropertyDepotStates; // will only be refreshed when all product
+																	// data are refreshed
 
 	// protected Map<String, Map<String, Map<String, Object>>>
 	// host2product2properties_retrieved = new HashMap<String, Map<String, Map
@@ -610,7 +609,7 @@ public class DataStubNOM extends DataStub {
 		hostsWithProductProperties = null;
 	}
 
-	public java.util.List<Map<String, Object>> getProductPropertyStates() {
+	public List<Map<String, Object>> getProductPropertyStates() {
 		retrieveProductPropertyStates();
 		return productPropertyStates;
 	}
@@ -620,7 +619,7 @@ public class DataStubNOM extends DataStub {
 		productPropertyDepotStates = null;
 	}
 
-	public java.util.List<Map<String, Object>> getProductPropertyDepotStates(java.util.Set<String> depots) {
+	public List<Map<String, Object>> getProductPropertyDepotStates(java.util.Set<String> depots) {
 		retrieveProductPropertyDepotStates(depots);
 		return productPropertyDepotStates;
 	}
@@ -667,10 +666,10 @@ public class DataStubNOM extends DataStub {
 
 	// client is a set of added hosts, host represents the totality and will be
 	// updated as a side effect
-	protected java.util.List<Map<String, Object>> produceProductPropertyStates(final Collection<String> clients,
+	protected List<Map<String, Object>> produceProductPropertyStates(final Collection<String> clients,
 			java.util.Set<String> hosts) {
 		logging.info(this, "produceProductPropertyStates new hosts " + clients + " old hosts " + hosts);
-		java.util.List<String> newClients = null;
+		List<String> newClients = null;
 		if (clients == null)
 			newClients = new ArrayList<>();
 		else
@@ -684,7 +683,7 @@ public class DataStubNOM extends DataStub {
 
 		// logging.info(this, "produceProductPropertyStates, new hosts " + clients);
 
-		java.util.List<Map<String, Object>> result = null;
+		List<Map<String, Object>> result = null;
 
 		if (newClients.size() == 0) {
 			// look if propstates is initialized
@@ -716,8 +715,8 @@ public class DataStubNOM extends DataStub {
 	}
 
 	// ===================================================
-	protected TreeMap<String, java.util.List<HWAuditClientEntry>> client2hwAuditHostEntries;
-	protected TreeMap<String, Map<String, java.util.List<HWAuditClientEntry>>> client2hwType2hwAuditHostEntries;
+	protected TreeMap<String, List<HWAuditClientEntry>> client2hwAuditHostEntries;
+	protected TreeMap<String, Map<String, List<HWAuditClientEntry>>> client2hwType2hwAuditHostEntries;
 
 	// ===================================================
 	protected TreeMap<String, SWAuditEntry> installedSoftwareInformation;
@@ -970,10 +969,10 @@ public class DataStubNOM extends DataStub {
 
 	// ===================================================
 
-	protected java.util.List<Map<String, Object>> softwareAuditOnClients;
-	protected Map<String, java.util.List<SWAuditClientEntry>> client2software;
+	protected List<Map<String, Object>> softwareAuditOnClients;
+	protected Map<String, List<SWAuditClientEntry>> client2software;
 	protected Map<String, java.util.Set<String>> softwareIdent2clients;
-	// protected Map<Integer, java.util.List<String>> softwareId2clients;
+	// protected Map<Integer, List<String>> softwareId2clients;
 
 	protected java.sql.Time SOFTWARE_CONFIG_last_entry = null;
 
@@ -987,7 +986,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	/*
-	 * public java.util.List <Map<String, Object>> getSoftwareAuditOnClients()
+	 * public List <Map<String, Object>> getSoftwareAuditOnClients()
 	 * {
 	 * logging.debug(this, "getSoftwareAuditOnClients");
 	 * retrieveSoftwareAuditOnClients0();
@@ -1011,7 +1010,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	@Override
-	public void fillClient2Software(java.util.List<String> clients) {
+	public void fillClient2Software(List<String> clients) {
 		if (clients == null)
 			logging.info(this, "fillClient2Software for clients null");
 		else
@@ -1020,7 +1019,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	@Override
-	public Map<String, java.util.List<SWAuditClientEntry>> getClient2Software()
+	public Map<String, List<SWAuditClientEntry>> getClient2Software()
 	// fill the clientlist by fill ...
 	{
 		logging.info(this, "getClient2Software  ============= ");
@@ -1030,7 +1029,7 @@ public class DataStubNOM extends DataStub {
 
 	/*
 	 * @Override
-	 * public Map<Integer, java.util.List<String>> getSoftwareId2clients()
+	 * public Map<Integer, List<String>> getSoftwareId2clients()
 	 * {
 	 * 
 	 * //logging.info(this, "getSoftwareId2clients ============= ");
@@ -1062,19 +1061,19 @@ public class DataStubNOM extends DataStub {
 	}
 
 	protected void retrieveSoftwareAuditOnClients(String client) {
-		java.util.List<String> clients = new ArrayList<>();
+		List<String> clients = new ArrayList<>();
 		clients.add(client);
 		retrieveSoftwareAuditOnClients(clients);
 	}
 
-	protected void retrieveSoftwareAuditOnClients(final java.util.List<String> clients) {
+	protected void retrieveSoftwareAuditOnClients(final List<String> clients) {
 		logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
 
 		retrieveInstalledSoftwareInformation();
 		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  clients count ======  " + clients.size());
 
-		java.util.List<String> newClients = new ArrayList<>(clients);
+		List<String> newClients = new ArrayList<>(clients);
 
 		if (client2software != null) {
 			logging.info(this, "retrieveSoftwareAuditOnClients client2Software.keySet size " + "   +++  "
@@ -1093,7 +1092,7 @@ public class DataStubNOM extends DataStub {
 		if (client2software == null || softwareIdent2clients == null || !newClients.isEmpty()) {
 			int step = 1;
 			while (!newClients.isEmpty()) {
-				java.util.List<String> clientListForCall = new ArrayList<>();
+				List<String> clientListForCall = new ArrayList<>();
 
 				for (int i = 0; i < stepSize && i < newClients.size(); i++)
 					clientListForCall.add(newClients.get(i));
@@ -1103,14 +1102,14 @@ public class DataStubNOM extends DataStub {
 				// logging.info(this, "retrieveSoftwareAuditOnClients for " +
 				// clientListForCall.size() + " clients " + clientListForCall);
 
-				// client2software = new HashMap<String, java.util.List<String>>();
+				// client2software = new HashMap<String, List<String>>();
 				if (client2software == null)
 					client2software = new HashMap<>();
 
 				if (softwareIdent2clients == null)
 					softwareIdent2clients = new HashMap<>();
 				// if (softwareId2clients == null) softwareId2clients = new HashMap<Integer,
-				// java.util.List<String>>();
+				// List<String>>();
 
 				persist.notifyDataLoadingObservers(
 						configed.getResourceValue("LoadingObserver.loadtable") + " software config, step " + step);
@@ -1168,7 +1167,7 @@ public class DataStubNOM extends DataStub {
 					{
 						if (clientId != null) // null not allowed in mysql
 						{
-							java.util.List<SWAuditClientEntry> entries = client2software.get(clientId);
+							List<SWAuditClientEntry> entries = client2software.get(clientId);
 
 							// variant1
 							/*
@@ -1489,7 +1488,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	// ===================================================
-	protected java.util.List<LicenceUsableForEntry> licenceUsabilities;
+	protected List<LicenceUsableForEntry> licenceUsabilities;
 	// protected java.sql.Time CONFIG_STATE_last_entry = null;
 
 	@Override
@@ -1499,7 +1498,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	@Override
-	public java.util.List<LicenceUsableForEntry> getLicenceUsabilities() {
+	public List<LicenceUsableForEntry> getLicenceUsabilities() {
 		retrieveLicenceUsabilities();
 		return licenceUsabilities;
 	}
@@ -1528,7 +1527,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	// ===================================================
-	protected java.util.List<LicenceUsageEntry> licenceUsages;
+	protected List<LicenceUsageEntry> licenceUsages;
 	// protected java.sql.Time CONFIG_STATE_last_entry = null;
 
 	@Override
@@ -1538,7 +1537,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	@Override
-	public java.util.List<LicenceUsageEntry> getLicenceUsages() {
+	public List<LicenceUsageEntry> getLicenceUsages() {
 		retrieveLicenceUsages();
 		return licenceUsages;
 	}

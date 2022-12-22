@@ -10,6 +10,7 @@
 package de.uib.utilities.observer;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -41,7 +42,7 @@ public class RunningInstances<T> {
 	private ConcurrentHashMap<T, String> instances;
 
 	// the observers
-	private java.util.List<RunningInstancesObserver<T>> observers;
+	private List<RunningInstancesObserver<T>> observers;
 
 	public RunningInstances(Class type, String askForLeave) {
 		this.classname = type.getName();

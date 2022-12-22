@@ -2,6 +2,7 @@
 package de.uib.configed.gui.licences;
 
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.type.SWAuditEntry;
@@ -87,7 +88,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	}
 
 	@Override
-	public void setSelectedValues(java.util.List<String> values, int col) {
+	public void setSelectedValues(List<String> values, int col) {
 		super.setSelectedValues(values, col);
 		saveRowSelection = theTable.getSelectedRows();
 	}

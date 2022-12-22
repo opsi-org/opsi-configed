@@ -55,7 +55,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	protected Map hwInfo;
 	protected String treeRootTitle;
-	protected java.util.List hwConfig;
+	protected List hwConfig;
 	protected String title = "HW Information";
 
 	// for creating pdf
@@ -378,13 +378,13 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		// logging.debug(this, "Selected node: " + device + " " + deviceInfo);
 
-		java.util.List values = null;
+		List values = null;
 
 		for (int j = 0; j < hwConfig.size(); j++) {
 			try {
 				Map whc = (Map) hwConfig.get(j);
 				if (((String) ((Map) whc.get("Class")).get("Opsi")).equals(hwClass)) {
-					values = (java.util.List) whc.get("Values");
+					values = (List) whc.get("Values");
 					break;
 				}
 			} catch (NullPointerException ex) {
@@ -481,7 +481,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	}
 
-	public void setHardwareConfig(java.util.List hwConfig) {
+	public void setHardwareConfig(List hwConfig) {
 		this.hwConfig = hwConfig;
 	}
 
@@ -527,7 +527,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			return;
 		}
 
-		java.util.List hwInfo_special = (java.util.List) hwInfo.get(SCANPROPERTYNAME);
+		List hwInfo_special = (List) hwInfo.get(SCANPROPERTYNAME);
 		String rootname = "";
 
 		if (hwInfo_special != null && hwInfo_special.size() > 0) {

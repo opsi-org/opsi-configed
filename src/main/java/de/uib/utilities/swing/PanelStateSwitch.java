@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
@@ -44,7 +45,7 @@ public class PanelStateSwitch extends JPanel {
 	protected int vGap;
 	protected int hGap;
 
-	protected java.util.List<ChangeListener> changeListeners;
+	protected List<ChangeListener> changeListeners;
 
 	@FunctionalInterface
 	public interface Enumsetter {

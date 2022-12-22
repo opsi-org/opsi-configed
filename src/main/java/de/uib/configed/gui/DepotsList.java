@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -87,7 +88,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		getSelectionModel().setValueIsAdjusting(false);
 	}
 
-	public void addToSelection(java.util.List<String> depots) {
+	public void addToSelection(List<String> depots) {
 		if (depots == null || depots.size() == 0)
 			return;
 

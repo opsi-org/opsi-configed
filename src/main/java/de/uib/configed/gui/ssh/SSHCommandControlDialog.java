@@ -17,6 +17,7 @@ package de.uib.configed.gui.ssh;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -548,9 +549,9 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			factory.retrieveSSHCommandListRequestRefresh();
 		}
 
-		java.util.List<SSHCommand_Template> commands = factory.retrieveSSHCommandList();
-		java.util.List<String> commandMenus = factory.getSSHCommandMenuNames();
-		java.util.List<String> commandParents = factory.getSSHCommandMenuParents();
+		List<SSHCommand_Template> commands = factory.retrieveSSHCommandList();
+		List<String> commandMenus = factory.getSSHCommandMenuNames();
+		List<String> commandParents = factory.getSSHCommandMenuParents();
 		for (String menu : commandMenus)
 			if (((DefaultComboBoxModel) cb_menuText.getModel()).getIndexOf(menu) == -1)
 				cb_menuText.addItem(menu);

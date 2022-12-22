@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -64,7 +65,7 @@ public class JTableSelectionPanel extends JPanel
 	// TableSorter sorter; //from the Sun Swing tutorial
 	DefaultListSelectionModel selectionmodel;
 	ConfigedMain main;
-	java.util.List<RowSorter.SortKey> primaryOrderingKeys;
+	List<RowSorter.SortKey> primaryOrderingKeys;
 
 	JLabel labelSearch;
 	CheckedLabel checkmarkSearch;
@@ -633,11 +634,11 @@ public class JTableSelectionPanel extends JPanel
 		table.getRowSorter().setSortKeys(primaryOrderingKeys);
 	}
 
-	public java.util.List<? extends RowSorter.SortKey> getSortKeys() {
+	public List<? extends RowSorter.SortKey> getSortKeys() {
 		return table.getRowSorter().getSortKeys();
 	}
 
-	public void setSortKeys(java.util.List<? extends RowSorter.SortKey> orderingKeys) {
+	public void setSortKeys(List<? extends RowSorter.SortKey> orderingKeys) {
 		table.getRowSorter().setSortKeys(orderingKeys);
 	}
 
@@ -803,7 +804,7 @@ public class JTableSelectionPanel extends JPanel
 	 * }
 	 */
 
-	private java.util.List<String> getWords(String line) {
+	private List<String> getWords(String line) {
 		ArrayList<String> result = new ArrayList<>();
 		String[] splitted = line.split("\\s+");
 		for (String s : splitted) {
@@ -852,7 +853,7 @@ public class JTableSelectionPanel extends JPanel
 			}
 		}
 
-		java.util.List<String> alternativeWords = getWords(valLower);
+		List<String> alternativeWords = getWords(valLower);
 		lastCountOfSearchWords = alternativeWords.size();
 
 		while (!found && viewrow < getTableModel().getRowCount()) {

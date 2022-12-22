@@ -50,7 +50,7 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 			// the retrieved object always are lists, we could correct this by observing the
 			// config options
 
-			if (!(retrieved.get(key) instanceof java.util.List)) {
+			if (!(retrieved.get(key) instanceof List)) {
 				logging.warning(this, "list expected , for key " + key + " found " + retrieved.get(key));
 				logging.error(this, "list expected , for key " + key);
 				// logging.debug(this, "key " + key + ", retrieved.get(key) " +
@@ -60,9 +60,9 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 
 				continue;
 			} else
-				list = (java.util.List) retrieved.get(key);
+				list = (List) retrieved.get(key);
 
-			classnames.put(key, "java.util.List");
+			classnames.put(key, "List");
 
 			if (configOptions != null && configOptions.get(key) != null) {
 				ConfigOption configOption = (ConfigOption) configOptions.get(key);

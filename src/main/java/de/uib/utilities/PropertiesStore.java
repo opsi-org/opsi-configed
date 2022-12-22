@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.TreeSet;
 
 import de.uib.utilities.logging.logging;
@@ -112,7 +113,7 @@ public class PropertiesStore
 	}
 
 	public void store(String comments) throws IOException {
-		java.util.List<String> outLines = new java.util.ArrayList();
+		List<String> outLines = new java.util.ArrayList();
 
 		if (comments != null)
 			outLines.add("# " + comments);

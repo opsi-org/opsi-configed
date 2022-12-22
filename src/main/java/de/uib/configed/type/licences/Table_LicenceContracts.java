@@ -1,6 +1,7 @@
 package de.uib.configed.type.licences;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import de.uib.utilities.datastructure.Relation;
@@ -35,7 +36,7 @@ public class Table_LicenceContracts extends Relation {
 	public static final String opsiNOMtype = "LicenseContract";
 	public static final String typeKEY = "type";
 
-	public static final java.util.List<String> DB_ATTRIBUTES;
+	public static final List<String> DB_ATTRIBUTES;
 	// public static final String[] ATTRIBUTES_asArray;
 	static {
 		DB_ATTRIBUTES = new LinkedList<>();
@@ -48,7 +49,7 @@ public class Table_LicenceContracts extends Relation {
 		DB_ATTRIBUTES.add(descriptionKEY);
 	}
 
-	public static final java.util.List<String> INTERFACED_ATTRIBUTES;
+	public static final List<String> INTERFACED_ATTRIBUTES;
 	static {
 		INTERFACED_ATTRIBUTES = new LinkedList<>();
 		INTERFACED_ATTRIBUTES.add(idDBKEY);
@@ -60,7 +61,7 @@ public class Table_LicenceContracts extends Relation {
 		// INTERFACED_ATTRIBUTES.add(descriptionKEY);
 	}
 
-	public static final java.util.List<String> ALLOWED_ATTRIBUTES;
+	public static final List<String> ALLOWED_ATTRIBUTES;
 	// public static final String[] ATTRIBUTES_asArray;
 	static {
 		ALLOWED_ATTRIBUTES = new LinkedList<>(DB_ATTRIBUTES);

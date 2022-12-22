@@ -20,7 +20,7 @@ public interface TableSource {
 	// we get a new version
 	Vector<Vector<Object>> retrieveRows();
 
-	// Map<String, java.util.List<String>> getFunction(Integer defIndex, Integer
+	// Map<String, List<String>> getFunction(Integer defIndex, Integer
 	// valIndex);
 
 	void setRowCounting(boolean b);

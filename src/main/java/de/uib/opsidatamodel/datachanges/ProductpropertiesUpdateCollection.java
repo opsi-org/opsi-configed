@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -14,7 +15,7 @@ import de.uib.utilities.logging.logging;
 /**
 */
 public class ProductpropertiesUpdateCollection extends UpdateCollection {
-	java.util.List<String> clients;
+	List<String> clients;
 	String productname;
 	PersistenceController persis;
 	ConfigedMain mainController;
@@ -24,7 +25,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 		this(mainController, persis, Arrays.asList(clients), productname);
 	}
 
-	public ProductpropertiesUpdateCollection(ConfigedMain mainController, Object persis, java.util.List<String> clients,
+	public ProductpropertiesUpdateCollection(ConfigedMain mainController, Object persis, List<String> clients,
 			String productname) {
 		super(new Vector<Object>(0));
 		if (clients == null) {

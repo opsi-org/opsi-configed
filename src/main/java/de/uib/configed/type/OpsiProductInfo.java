@@ -11,6 +11,7 @@
 package de.uib.configed.type;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -77,7 +78,7 @@ public class OpsiProductInfo extends OpsiPackage {
 
 	}
 
-	public java.util.List getPossibleActions() {
+	public List getPossibleActions() {
 		return possibleActions;
 	}
 

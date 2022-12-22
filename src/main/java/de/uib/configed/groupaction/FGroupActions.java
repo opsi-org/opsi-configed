@@ -14,6 +14,7 @@ package de.uib.configed.groupaction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -47,7 +48,7 @@ public class FGroupActions extends SecondaryFrame {
 
 	JComboBox comboSelectImage;
 
-	java.util.List<String> associatedClients;
+	List<String> associatedClients;
 
 	PersistenceController persist;
 	ConfigedMain main;

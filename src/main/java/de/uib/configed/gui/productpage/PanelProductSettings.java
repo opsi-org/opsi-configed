@@ -94,7 +94,7 @@ import de.uib.utilities.table.gui.StandardTableCellRenderer;
 
 public class PanelProductSettings extends JSplitPane implements RowSorterListener {
 
-	private static final java.util.List<RowSorter.SortKey> sortkeysDefault = new ArrayList<>();
+	private static final List<RowSorter.SortKey> sortkeysDefault = new ArrayList<>();
 	static {
 		sortkeysDefault.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 	}
@@ -153,7 +153,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	protected Map<String, Boolean> productDisplayFields;
 
-	protected java.util.List<? extends RowSorter.SortKey> currentSortKeys;
+	protected List<? extends RowSorter.SortKey> currentSortKeys;
 
 	protected ArrayList<String> selectedProducts;
 
@@ -816,7 +816,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	protected void reloadAction() {
-		// java.util.List<? extends RowSorter.SortKey> currentSortKeys
+		// List<? extends RowSorter.SortKey> currentSortKeys
 		// = tableProducts.getRowSorter().getSortKeys();
 		mainController.requestReloadStatesAndActions();
 		mainController.resetView(mainController.getViewIndex());
@@ -833,7 +833,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	}
 
-	private String infoSortKeys(java.util.List<? extends RowSorter.SortKey> sortKeys) {
+	private String infoSortKeys(List<? extends RowSorter.SortKey> sortKeys) {
 		if (sortKeys == null)
 			return "null";
 
@@ -850,12 +850,12 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	}
 
-	public java.util.List<? extends RowSorter.SortKey> getSortKeys() {
+	public List<? extends RowSorter.SortKey> getSortKeys() {
 		logging.info(this, "getSortKeys : " + infoSortKeys(currentSortKeys));
 		return currentSortKeys;
 	}
 
-	public void setSortKeys(java.util.List<? extends RowSorter.SortKey> currentSortKeys) {
+	public void setSortKeys(List<? extends RowSorter.SortKey> currentSortKeys) {
 		logging.info(this, "setSortKeys: " + infoSortKeys(currentSortKeys));
 		if (currentSortKeys != null)
 			tableProducts.getRowSorter().setSortKeys(currentSortKeys);

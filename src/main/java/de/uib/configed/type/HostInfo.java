@@ -820,7 +820,7 @@ public class HostInfo {
 		// persist.setCommonProductPropertyValue( new HashSet(Arrays.asList(client)),
 		// product, "on_shutdown_install" , Arrays.asList(shutdownInstall) );
 		// // Set<String> clientNames, String productName, String propertyName,
-		// java.util.List<String> values
+		// List<String> values
 		// Map<String, String> productValues = new HashMap<String,String>();
 		// productValues.put("actionRequest", "setup");
 

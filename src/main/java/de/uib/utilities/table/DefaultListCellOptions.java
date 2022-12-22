@@ -1,14 +1,15 @@
 package de.uib.utilities.table;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ListSelectionModel;
 
 import de.uib.utilities.logging.logging;
 
 public class DefaultListCellOptions implements ListCellOptions {
-	java.util.List possibleValues;
-	java.util.List defaultValues;
+	List possibleValues;
+	List defaultValues;
 	int selectionMode;
 	boolean editable;
 	boolean nullable;
@@ -25,8 +26,8 @@ public class DefaultListCellOptions implements ListCellOptions {
 				+ editable + ", " + nullable);
 	}
 
-	public DefaultListCellOptions(java.util.List possibleValues, java.util.List defaultValues, int selectionMode,
-			boolean editable, boolean nullable, String description)
+	public DefaultListCellOptions(List possibleValues, List defaultValues, int selectionMode, boolean editable,
+			boolean nullable, String description)
 
 	{
 		this.possibleValues = possibleValues;
@@ -44,10 +45,10 @@ public class DefaultListCellOptions implements ListCellOptions {
 
 	public static ListCellOptions getNewBooleanListCellOptions() {
 		logging.info("getNewBooleanListCellOptions");
-		java.util.List possibleValues = new ArrayList();
+		List possibleValues = new ArrayList();
 		possibleValues.add(true);
 		possibleValues.add(false);
-		java.util.List defaultValues = new ArrayList();
+		List defaultValues = new ArrayList();
 		defaultValues.add(false);
 		boolean editable = false;
 		boolean nullable = false;
@@ -57,7 +58,7 @@ public class DefaultListCellOptions implements ListCellOptions {
 
 	public static ListCellOptions getNewEmptyListCellOptions() {
 		logging.info("getNewEmptyListCellOptions");
-		java.util.List possibleValues = new ArrayList();
+		List possibleValues = new ArrayList();
 		boolean editable = true;
 		boolean nullable = true;
 		return new DefaultListCellOptions(possibleValues, null, // defaultValues,
@@ -66,7 +67,7 @@ public class DefaultListCellOptions implements ListCellOptions {
 
 	public static ListCellOptions getNewEmptyListCellOptionsMultiSelection() {
 		logging.info("getNewBooleanListCellOptionsMultiSelection");
-		java.util.List possibleValues = new ArrayList();
+		List possibleValues = new ArrayList();
 		boolean editable = true;
 		boolean nullable = true;
 		return new DefaultListCellOptions(possibleValues, null, // defaultValues,
@@ -74,17 +75,17 @@ public class DefaultListCellOptions implements ListCellOptions {
 	}
 
 	@Override
-	public java.util.List getPossibleValues() {
+	public List getPossibleValues() {
 		return possibleValues;
 	}
 
 	@Override
-	public java.util.List getDefaultValues() {
+	public List getDefaultValues() {
 		return defaultValues;
 	}
 
 	@Override
-	public void setDefaultValues(java.util.List values) {
+	public void setDefaultValues(List values) {
 		defaultValues = values;
 	}
 

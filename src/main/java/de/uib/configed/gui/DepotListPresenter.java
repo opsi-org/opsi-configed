@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -326,9 +327,8 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 			logging.info(this, "action on buttonSelectDepotsWithEqualProperties");
 
 			if (depotslist.getSelectedIndex() > -1) {
-				String depotSelected = (String) depotslist.getSelectedValue();
-				java.util.List<String> depotsWithEqualStock = persist
-						.getAllDepotsWithIdenticalProductStock(depotSelected);
+				String depotSelected = depotslist.getSelectedValue();
+				List<String> depotsWithEqualStock = persist.getAllDepotsWithIdenticalProductStock(depotSelected);
 				depotslist.addToSelection(depotsWithEqualStock);
 
 			}

@@ -150,12 +150,11 @@ public class ProductData {
 			List<String> clientsMap = persist.getHostInfoCollections().getMapOfAllPCInfoMaps().values().stream()
 					.filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName).collect(Collectors.toList());
 			String[] clientIds = clientsMap.toArray(new String[clientsMap.size()]);
-			Map<String, java.util.List<Map<String, String>>> productsStatesAndActions = persist
+			Map<String, List<Map<String, String>>> productsStatesAndActions = persist
 					.getMapOfProductStatesAndActions(clientIds);
 
 			if (!productsStatesAndActions.isEmpty()) {
-				for (Map.Entry<String, java.util.List<Map<String, String>>> entry : productsStatesAndActions
-						.entrySet()) {
+				for (Map.Entry<String, List<Map<String, String>>> entry : productsStatesAndActions.entrySet()) {
 					String hostname = entry.getKey();
 
 					for (Map<String, String> productInfo : entry.getValue()) {

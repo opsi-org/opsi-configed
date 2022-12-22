@@ -75,13 +75,13 @@ public class SSHCommandFactory {
 	/**
 	 * List<Map<String,Object>> list elements are commands with key value pairs
 	 **/
-	private java.util.List<Map<java.lang.String, java.lang.Object>> commandlist;
+	private List<Map<java.lang.String, java.lang.Object>> commandlist;
 	/** List<SSHCommand_Template> list elements are sshcommands **/
-	private java.util.List<SSHCommand_Template> sshcommand_list;
+	private List<SSHCommand_Template> sshcommand_list;
 	/** list of known menus **/
-	private java.util.List<String> list_knownMenus;
+	private List<String> list_knownMenus;
 	/** list of known parent menus **/
-	private java.util.List<String> list_knownParents;
+	private List<String> list_knownParents;
 
 	/** static String for parent null ("Server-Konsole") **/
 	public static final String parentNull = configed.getResourceValue("MainFrame.jMenuServer");
@@ -293,9 +293,9 @@ public class SSHCommandFactory {
 	 * retrieve commandlist from persistencecontroller (if commandlist is null)
 	 * and build sshcommandlist
 	 * 
-	 * @return java.util.List<SSHCommand_Template>
+	 * @return List<SSHCommand_Template>
 	 **/
-	public java.util.List<SSHCommand_Template> retrieveSSHCommandList() {
+	public List<SSHCommand_Template> retrieveSSHCommandList() {
 		logging.info(this, "retrieveSSHCommandList ");
 		if (commandlist == null)
 			commandlist = main.getPersistenceController().retrieveCommandList();
@@ -351,9 +351,9 @@ public class SSHCommandFactory {
 	/**
 	 * Sort all menu names alphabeticly
 	 * 
-	 * @return java.util.List<String> sorted list_knownMenus
+	 * @return List<String> sorted list_knownMenus
 	 **/
-	public java.util.List<String> getSSHCommandMenuNames() {
+	public List<String> getSSHCommandMenuNames() {
 		if (commandlist == null)
 			commandlist = main.getPersistenceController().retrieveCommandList();
 		Collections.sort(list_knownMenus, (String s1, String s2) -> s1.compareToIgnoreCase(s2));
@@ -363,9 +363,9 @@ public class SSHCommandFactory {
 	/**
 	 * Sort all parent menus alphabeticly
 	 * 
-	 * @return java.util.List<String> sorted list_knownParents
+	 * @return List<String> sorted list_knownParents
 	 **/
-	public java.util.List<String> getSSHCommandMenuParents() {
+	public List<String> getSSHCommandMenuParents() {
 		if (commandlist == null)
 			commandlist = main.getPersistenceController().retrieveCommandList();
 		Collections.sort(list_knownParents, (String s1, String s2) -> s1.compareToIgnoreCase(s2));
@@ -376,17 +376,17 @@ public class SSHCommandFactory {
 	 * Sorts all SSHCommands by position, after that sorts by there parent menus
 	 * (keep position order in parent menus).
 	 * 
-	 * @return java.util.LinkedHashMap<String,java.util.List<SSHCommand_Template>>
+	 * @return java.util.LinkedHashMap<String,List<SSHCommand_Template>>
 	 *         sortedComs
 	 **/
-	public Map<String, java.util.List<SSHCommand_Template>> getSSHCommandMapSortedByParent() {
+	public Map<String, List<SSHCommand_Template>> getSSHCommandMapSortedByParent() {
 		if (commandlist == null)
 			commandlist = main.getPersistenceController().retrieveCommandList();
 
 		logging.info(this, "getSSHCommandMapSortedByParent sorting commands ");
 		Collections.sort(sshcommand_list);
 
-		java.util.LinkedHashMap<String, java.util.List<SSHCommand_Template>> sortedComs = new LinkedHashMap<String, java.util.List<SSHCommand_Template>>();
+		java.util.LinkedHashMap<String, List<SSHCommand_Template>> sortedComs = new LinkedHashMap<String, List<SSHCommand_Template>>();
 		// sortedComs.put(parentNull , new LinkedList<SSHCommand_Template>());
 		sortedComs.put(parentdefaultForOwnCommands, new LinkedList<SSHCommand_Template>());
 		sortedComs.put(parentOpsi, new LinkedList<SSHCommand_Template>());
@@ -397,7 +397,7 @@ public class SSHCommandFactory {
 				parent = parentdefaultForOwnCommands;
 				// parent = parentNull;
 			}
-			java.util.List parentList = new LinkedList<SSHCommand_Template>();
+			List parentList = new LinkedList<SSHCommand_Template>();
 			if (sortedComs.containsKey(parent))
 				parentList = sortedComs.get(parent);
 			else
@@ -412,9 +412,9 @@ public class SSHCommandFactory {
 	/**
 	 * Get list of SSHCommands which need run-time parameter
 	 * 
-	 * @return java.util.List<SSHCommand> ssh_commands_param
+	 * @return List<SSHCommand> ssh_commands_param
 	 **/
-	public java.util.List<SSHCommand> getSSHCommandParameterList() {
+	public List<SSHCommand> getSSHCommandParameterList() {
 		logging.info(this, "getSSHCommandParameterList ");
 		return ssh_commands_param;
 	}

@@ -3,6 +3,7 @@ package de.uib.configed.gui;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
@@ -56,7 +57,7 @@ public class FShowList extends FTextArea {
 		jTextArea1.setCaretPosition(jTextArea1.getText().length());
 	}
 
-	public void setLines(java.util.List<String> lines) {
+	public void setLines(List<String> lines) {
 		for (String line : lines)
 			appendLine(line);
 	}

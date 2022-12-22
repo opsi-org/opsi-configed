@@ -2,6 +2,7 @@ package de.uib.opsidatamodel.dbtable;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.uib.configed.Globals;
 
@@ -15,7 +16,7 @@ public class ProductPropertyState extends Table {
 	public static final String OBJECT_ID = "objectId";
 	public static final String VALUES = "values";
 
-	public static java.util.List<String> columns;
+	public static List<String> columns;
 	static {
 		columns = new ArrayList<>();
 		// columns.add("product_property_state_id");
@@ -33,7 +34,7 @@ public class ProductPropertyState extends Table {
 	 * }
 	 */
 
-	public static java.util.List<String> primaryKey;
+	public static List<String> primaryKey;
 	public static String primaryKeyString;
 	static {
 		primaryKey = new ArrayList<>();

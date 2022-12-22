@@ -123,7 +123,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 		// logging.info(this, "setSoftwareIdsFromLicencePool old selected keys " +
 		// thePanel.panelRegisteredSoftware.getSelectedKeys());
-		java.util.List<String> selectKeys = thePanel.panelRegisteredSoftware.getSelectedKeys();
+		List<String> selectKeys = thePanel.panelRegisteredSoftware.getSelectedKeys();
 
 		boolean wasUsingSelectedFilter = modelWindowsSoftwareIds
 				.isUsingFilter(GenTableModel.labelFilterConditionShowOnlySelected);
@@ -335,10 +335,10 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		// thePanel.panelLicencepools.getValueAt(thePanel.panelLicencepools.getSelectedRow(),
 		// 0).toString();
 
-		java.util.List softwareIdsForPool = persist.getSoftwareListByLicencePool(selectedLicencePool);
+		List softwareIdsForPool = persist.getSoftwareListByLicencePool(selectedLicencePool);
 		// logging.debug(this, "software ids " + softwareIdsForPool);
 
-		java.util.List<String> selKeys = thePanel.panelRegisteredSoftware.getSelectedKeys();
+		List<String> selKeys = thePanel.panelRegisteredSoftware.getSelectedKeys();
 		String showSelKeys = null;
 		if (selKeys != null)
 			showSelKeys = "" + selKeys.size();

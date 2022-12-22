@@ -29,6 +29,7 @@ package de.uib.opsidatamodel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -64,13 +65,13 @@ public abstract class DataStub {
 
 	public abstract Vector<Vector<Object>> getProductRows();
 
-	public abstract Map<String, Map<String, java.util.List<String>>> getProduct2VersionInfo2Depots();
+	public abstract Map<String, Map<String, List<String>>> getProduct2VersionInfo2Depots();
 
 	public abstract Object2Product2VersionList getDepot2LocalbootProducts();
 
 	public abstract Object2Product2VersionList getDepot2NetbootProducts();
 
-	// public abstract HashMap<String, java.util.List<String>>
+	// public abstract HashMap<String, List<String>>
 	// getProductversion2Depots();
 
 	public abstract void productPropertyDefinitionsRequestRefresh();
@@ -79,18 +80,18 @@ public abstract class DataStub {
 
 	public abstract void productDependenciesRequestRefresh();
 
-	public abstract Map<String, Map<String, java.util.List<Map<String, String>>>> getDepot2product2dependencyInfos();
+	public abstract Map<String, Map<String, List<Map<String, String>>>> getDepot2product2dependencyInfos();
 
 	public abstract void productPropertyStatesRequestRefresh();
 
 	public abstract void fillProductPropertyStates(Collection<String> clients);
 
-	public abstract java.util.List<Map<String, Object>> getProductPropertyStates();
+	public abstract List<Map<String, Object>> getProductPropertyStates();
 
 	// protected abstract void productPropertyDepotStatesRequestRefresh();
 	// public abstract void fillProductPropertyDepotStates(Collection<String>
 	// clients);
-	public abstract java.util.List<Map<String, Object>> getProductPropertyDepotStates(java.util.Set<String> depots);
+	public abstract List<Map<String, Object>> getProductPropertyDepotStates(java.util.Set<String> depots);
 
 	public abstract void installedSoftwareInformationRequestRefresh();
 
@@ -110,13 +111,13 @@ public abstract class DataStub {
 
 	public abstract void softwareAuditOnClientsRequestRefresh();
 
-	public abstract void fillClient2Software(java.util.List<String> clients);
+	public abstract void fillClient2Software(List<String> clients);
 
 	public abstract void fillClient2Software(String client);
 
-	public abstract Map<String, java.util.List<SWAuditClientEntry>> getClient2Software();
+	public abstract Map<String, List<SWAuditClientEntry>> getClient2Software();
 
-	// public abstract Map<Integer, java.util.List<String>> getSoftwareId2clients();
+	// public abstract Map<Integer, List<String>> getSoftwareId2clients();
 	public abstract Map<String, java.util.Set<String>> getSoftwareIdent2clients();
 
 	public abstract void auditSoftwareXLicencePoolRequestRefresh();
@@ -127,7 +128,7 @@ public abstract class DataStub {
 
 	public abstract Map<String, Map<String, Object>> getConfigs();
 	// host -> (key -> value)
-	// public abstract Map<String, Map<String, java.util.List<Object>>>
+	// public abstract Map<String, Map<String, List<Object>>>
 	// getConfigValues();
 	// host;key -> valuelist
 
@@ -151,11 +152,11 @@ public abstract class DataStub {
 
 	public abstract void licenceUsabilitiesRequestRefresh();
 
-	public abstract java.util.List<LicenceUsableForEntry> getLicenceUsabilities();
+	public abstract List<LicenceUsableForEntry> getLicenceUsabilities();
 
 	public abstract void licenceUsagesRequestRefresh();
 
-	public abstract java.util.List<LicenceUsageEntry> getLicenceUsages();
+	public abstract List<LicenceUsageEntry> getLicenceUsages();
 
 	public abstract void licencePoolXOpsiProductRequestRefresh();
 

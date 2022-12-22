@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.uib.opsidatamodel.productstate.ProductState;
@@ -22,7 +23,7 @@ public class ProductOnClient extends Table {
 	// public static final String version = class.getName() + " " +
 	// Globals.VERSION;
 
-	public static java.util.List<String> columns;
+	public static List<String> columns;
 	static {
 		columns = new ArrayList<>(ProductState.DB_COLUMN_NAMES);
 		columns.add("clientId");
@@ -36,7 +37,7 @@ public class ProductOnClient extends Table {
 		columnsString = columnsString.substring(0, columnsString.length() - 1);
 	}
 
-	public static java.util.List<String> primaryKey;
+	public static List<String> primaryKey;
 	public static String primaryKeyString;
 	static {
 		primaryKey = new ArrayList<>();

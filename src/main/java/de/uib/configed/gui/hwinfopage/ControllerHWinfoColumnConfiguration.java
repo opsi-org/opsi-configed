@@ -14,6 +14,7 @@ package de.uib.configed.gui.hwinfopage;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -393,10 +394,8 @@ public class ControllerHWinfoColumnConfiguration {
 		for (String hwClass : hwAuditDeviceClasses.keySet()) {
 
 			OpsiHwAuditDeviceClass hwAuditDeviceClass = hwAuditDeviceClasses.get(hwClass);
-			java.util.List<OpsiHwAuditDevicePropertyType> deviceHostProperties = hwAuditDeviceClass
-					.getDeviceHostProperties();
-			java.util.List<OpsiHwAuditDevicePropertyType> deviceHwItemProperties = hwAuditDeviceClass
-					.getDeviceHwItemProperties();
+			List<OpsiHwAuditDevicePropertyType> deviceHostProperties = hwAuditDeviceClass.getDeviceHostProperties();
+			List<OpsiHwAuditDevicePropertyType> deviceHwItemProperties = hwAuditDeviceClass.getDeviceHwItemProperties();
 
 			// hw class line
 			Map<String, Object> lineMap = new LinkedHashMap<>();

@@ -1,6 +1,7 @@
 package de.uib.configed.type;
 
 import java.util.HashMap;
+import java.util.List;
 
 import de.uib.utilities.logging.logging;
 
@@ -12,7 +13,7 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 		this.hwAuditDeviceClasses = hwAuditDeviceClasses;
 	}
 
-	public void checkIn(String key, java.util.List valuesSet) {
+	public void checkIn(String key, List valuesSet) {
 		if (!key.startsWith(OpsiHwAuditDeviceClass.CONFIG_KEY))
 			return;
 

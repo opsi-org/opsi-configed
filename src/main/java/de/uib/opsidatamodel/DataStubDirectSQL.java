@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
@@ -36,13 +37,13 @@ public class DataStubDirectSQL extends DataStubRawData
 	}
 
 	@Override
-	protected void retrieveSoftwareAuditOnClients(final java.util.List<String> clients) {
+	protected void retrieveSoftwareAuditOnClients(final List<String> clients) {
 		logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
 		retrieveInstalledSoftwareInformation();
 		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  clients count ======  " + clients.size());
 
-		java.util.List<String> newClients = new ArrayList<>(clients);
+		List<String> newClients = new ArrayList<>(clients);
 
 		if (client2software != null) {
 			logging.info(this, "retrieveSoftwareAuditOnClients client2Software.keySet size " + "   +++  "
@@ -67,9 +68,9 @@ public class DataStubDirectSQL extends DataStubRawData
 			// logging.info(this, "retrieveSoftwareAuditOnClients for " +
 			// clientListForCall.size() + " clients " + clientListForCall);
 
-			// client2software = new HashMap<String, java.util.List<String>>();
+			// client2software = new HashMap<String, List<String>>();
 			if (client2software == null)
-				client2software = new HashMap<String, java.util.List<SWAuditClientEntry>>();
+				client2software = new HashMap<String, List<SWAuditClientEntry>>();
 
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " softwareConfig ");
@@ -103,7 +104,7 @@ public class DataStubDirectSQL extends DataStubRawData
 
 					String clientId = rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditClientEntry.CLIENT_ID));
 
-					java.util.List<SWAuditClientEntry> entries = client2software.get(clientId);
+					List<SWAuditClientEntry> entries = client2software.get(clientId);
 					if (entries == null) {
 						entries = new LinkedList<SWAuditClientEntry>();
 						client2software.put(clientId, entries);

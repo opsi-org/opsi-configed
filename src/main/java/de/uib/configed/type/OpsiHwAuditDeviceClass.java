@@ -11,6 +11,7 @@
 package de.uib.configed.type;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class OpsiHwAuditDeviceClass {
 
@@ -39,8 +40,8 @@ public class OpsiHwAuditDeviceClass {
 	protected String ui;
 	protected String wmiQuery;
 	protected String linuxQuery;
-	protected java.util.List<OpsiHwAuditDevicePropertyType> deviceHostProperties;
-	protected java.util.List<OpsiHwAuditDevicePropertyType> deviceHwItemProperties;
+	protected List<OpsiHwAuditDevicePropertyType> deviceHostProperties;
+	protected List<OpsiHwAuditDevicePropertyType> deviceHwItemProperties;
 	// protected java.util.Vector<String> usedHostColumns;
 	// protected java.util.Vector<String> usedHwItemColumns;
 	protected ConfigOption hostConfig;
@@ -53,12 +54,12 @@ public class OpsiHwAuditDeviceClass {
 
 		deviceHostProperties = new ArrayList<OpsiHwAuditDevicePropertyType>();
 		deviceHwItemProperties = new ArrayList<OpsiHwAuditDevicePropertyType>();
-		// hostPossibleColumns = new java.util.List<Object>();
-		// hwItemPossibleColumns = new java.util.List<Object>();
+		// hostPossibleColumns = new List<Object>();
+		// hwItemPossibleColumns = new List<Object>();
 	}
 
 	/*
-	 * public boolean checkIn( String configKey, java.util.List valuesUsed)
+	 * public boolean checkIn( String configKey, List valuesUsed)
 	 * //importing configs
 	 * {
 	 * if (!configKey.startsWith(CONFIG_KEY))
@@ -162,12 +163,12 @@ public class OpsiHwAuditDeviceClass {
 	}
 
 	/*
-	 * public java.util.List<Object> getHostPossibleColumns()
+	 * public List<Object> getHostPossibleColumns()
 	 * {
 	 * return hostPossibleColumns;
 	 * }
 	 * 
-	 * public java.util.List<Object> getHwItemPossibleColumns()
+	 * public List<Object> getHwItemPossibleColumns()
 	 * {
 	 * return hwItemPossibleColumns;
 	 * }
@@ -179,11 +180,11 @@ public class OpsiHwAuditDeviceClass {
 				+ ", HW_ITEM_COLUMNS " + deviceHwItemProperties;
 	}
 
-	public java.util.List<OpsiHwAuditDevicePropertyType> getDeviceHostProperties() {
+	public List<OpsiHwAuditDevicePropertyType> getDeviceHostProperties() {
 		return deviceHostProperties;
 	}
 
-	public java.util.List<OpsiHwAuditDevicePropertyType> getDeviceHwItemProperties() {
+	public List<OpsiHwAuditDevicePropertyType> getDeviceHwItemProperties() {
 		return deviceHwItemProperties;
 	}
 

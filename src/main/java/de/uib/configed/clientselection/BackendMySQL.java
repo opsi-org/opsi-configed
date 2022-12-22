@@ -83,7 +83,7 @@ public class BackendMySQL {
 
 		logging.info(this, abfrage);
 
-		java.util.List<java.util.List<java.lang.String>> clients = controller.exec
+		List<List<java.lang.String>> clients = controller.exec
 				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { abfrage }));
 
 		List<String> list = new ArrayList<>();
@@ -328,7 +328,7 @@ public class BackendMySQL {
 		}
 
 		/*
-		 * java.util.List<java.util.List<java.lang.String>> result
+		 * List<List<java.lang.String>> result
 		 * = controller.exec.getListOfStringLists(
 		 * new OpsiMethodCall(
 		 * "getRawData",

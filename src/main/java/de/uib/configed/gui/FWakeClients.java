@@ -2,6 +2,7 @@ package de.uib.configed.gui;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFrame;
@@ -28,7 +29,7 @@ public class FWakeClients extends FShowList {
 	public void act(String[] selectedClients, int delaySecs) {
 		setVisible(true);
 		glassTransparency(true, 1000, 200, 0.04f);
-		Map<String, java.util.List<String>> hostSeparationByDepots = persist.getHostSeparationByDepots(selectedClients);
+		Map<String, List<String>> hostSeparationByDepots = persist.getHostSeparationByDepots(selectedClients);
 		Map<String, Integer> counterByDepots = new HashMap<String, Integer>();
 		Map<String, Executioner> executionerForDepots = new HashMap<String, Executioner>();
 

@@ -1,14 +1,16 @@
 package de.uib.utilities.table;
 
+import java.util.List;
+
 public interface ListCellOptions
 // may represent an Opsi 4.0 config
 // and is for this purpose implemented in de.uib.configed.type;ConfigOption
 {
-	public java.util.List<Object> getPossibleValues();
+	public List<Object> getPossibleValues();
 
-	public java.util.List<Object> getDefaultValues();
+	public List<Object> getDefaultValues();
 
-	public void setDefaultValues(java.util.List<Object> values);
+	public void setDefaultValues(List<Object> values);
 
 	public int getSelectionMode();
 

@@ -1,6 +1,7 @@
 package de.uib.utilities.table;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
@@ -27,12 +28,12 @@ public class DefaultListModelProducer implements ListModelProducer {
 	}
 
 	@Override
-	public java.util.List getSelectedValues(int row, int column) {
+	public List getSelectedValues(int row, int column) {
 		return new ArrayList();
 	}
 
 	@Override
-	public void setSelectedValues(java.util.List newValues, int row, int column) {
+	public void setSelectedValues(List newValues, int row, int column) {
 	}
 
 	@Override
@@ -46,12 +47,12 @@ public class DefaultListModelProducer implements ListModelProducer {
 	}
 
 	@Override
-	public java.util.List toList(Object value) {
+	public List toList(Object value) {
 		if (value == null)
 			return null;
 
-		if (value instanceof java.util.List)
-			return (java.util.List) value;
+		if (value instanceof List)
+			return (List) value;
 
 		ArrayList list = new ArrayList();
 		list.add(value);

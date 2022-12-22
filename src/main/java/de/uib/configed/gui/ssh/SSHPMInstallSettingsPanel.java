@@ -1,5 +1,6 @@
 package de.uib.configed.gui.ssh;
 
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.GroupLayout;
@@ -181,7 +182,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 	protected String produceDepotParameter() {
 		String depotParameter = "";
-		java.util.List<String> selectedDepots = fDepotList.getSelectedDepots();
+		List<String> selectedDepots = fDepotList.getSelectedDepots();
 
 		if (selectedDepots.size() == 0) {
 			if (persist.isDepotsFullPermission()) {

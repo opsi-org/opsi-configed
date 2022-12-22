@@ -8,6 +8,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -380,7 +381,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		setCenterLayout();
 	}
 
-	public void setAutocompleteList(java.util.List<String> list) {
+	public void setAutocompleteList(List<String> list) {
 		if (list == null)
 			return;
 		final String COMMIT_ACTION = "commit";

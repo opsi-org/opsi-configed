@@ -1,6 +1,7 @@
 package de.uib.configed.type.licences;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import de.uib.utilities.datastructure.Relation;
@@ -20,14 +21,14 @@ public class LicencePoolXOpsiProduct extends Relation {
 	public static final String idKEY = "id";
 	public static final String productsKEY = "productIds";
 
-	public static final java.util.List<String> ATTRIBUTES;
+	public static final List<String> ATTRIBUTES;
 	static {
 		ATTRIBUTES = new LinkedList<>();
 		ATTRIBUTES.add(licencepoolKEY);
 		ATTRIBUTES.add(productIdKEY);
 	}
 
-	public static final java.util.List<String> SERVICE_ATTRIBUTES;
+	public static final List<String> SERVICE_ATTRIBUTES;
 	static {
 		SERVICE_ATTRIBUTES = new LinkedList<>();
 		SERVICE_ATTRIBUTES.add(idKEY);
@@ -63,7 +64,7 @@ public class LicencePoolXOpsiProduct extends Relation {
 		try {
 			// logging.info(this, "integrateRawFromService " + m );
 
-			java.util.List<Object> productList = ((org.json.JSONArray) m.get(productsKEY)).toList();
+			List<Object> productList = ((org.json.JSONArray) m.get(productsKEY)).toList();
 
 			for (Object p : productList) {
 				String productId = (String) p;

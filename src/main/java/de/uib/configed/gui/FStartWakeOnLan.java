@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -76,7 +77,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	LinkedList<String> minutes;
 	String nullDelayValue;
 
-	Map<String, java.util.List<String>> hostSeparationByDepots;
+	Map<String, List<String>> hostSeparationByDepots;
 	Set<String> usedDepots;
 	int clientCount;
 	String[] currentlySelectedClients;
@@ -684,7 +685,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	 * 
 	 * 
 	 * @Override
-	 * protected void process( java.util.List<Long> listOfMillis )
+	 * protected void process( List<Long> listOfMillis )
 	 * {
 	 * //update the steps which are done
 	 * //logging.info(this, "process, we have got list " + listOfMillis);

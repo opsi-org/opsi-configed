@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -404,7 +405,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 							String theRole = null;
 
-							java.util.List<Object> values = de.uib.opsidatamodel.PersistenceControllerFactory
+							List<Object> values = de.uib.opsidatamodel.PersistenceControllerFactory
 									.getPersistenceController().getConfigDefaultValues().get(rolekey);
 
 							if (values != null && values.size() > 0)
@@ -613,7 +614,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				persist.getProductGroups().keySet(), // Collection<String> existingProductgroups,
 
 				// data. on which changes are based
-				persist.getConfigDefaultValues(), // Map<String, java.util.List<Object>> serverconfigValuesMap,
+				persist.getConfigDefaultValues(), // Map<String, List<Object>> serverconfigValuesMap,
 				persist.getConfigOptions()// Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap
 		);
 

@@ -24,6 +24,7 @@
 
 package de.uib.opsidatamodel;
 
+import java.util.List;
 import java.util.Map;
 
 import de.uib.opsicommand.OpsiMethodCall;
@@ -85,7 +86,7 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 	}
 
 	@Override
-	public java.util.List<Map<java.lang.String, java.lang.Object>> HOST_read() {
+	public List<Map<java.lang.String, java.lang.Object>> HOST_read() {
 
 		logging.debug(this, "HOST_read ");
 		String query = "select *  from HOST";
@@ -98,7 +99,7 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 		TimeCheck timer = new TimeCheck(this, "HOST_read").start();
 
 		logging.notice(this, "HOST_read, query " + query);
-		java.util.List<Map<java.lang.String, java.lang.Object>> opsiHosts = exec
+		List<Map<java.lang.String, java.lang.Object>> opsiHosts = exec
 				.getListOfMaps(new OpsiMethodCall("getData", new Object[] { query }));
 		timer.stop();
 

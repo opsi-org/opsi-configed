@@ -10,7 +10,7 @@ import de.uib.utilities.logging.logging;
 public class UserOpsipermission extends UserConfigModule {
 	// public enum HostTypeOfPrivilege{ ALL, CLIENT, DEPOT, SERVER }
 	// permit restrictable action
-	// public java.util.List<Object> reduceList( java.util.List<Object> checkList )
+	// public List<Object> reduceList( List<Object> checkList )
 	// public String getInfo();
 	// public String signalCause();
 

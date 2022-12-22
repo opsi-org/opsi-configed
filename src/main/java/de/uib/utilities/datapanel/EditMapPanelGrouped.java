@@ -10,6 +10,7 @@ package de.uib.utilities.datapanel;
 import java.awt.Color;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
 import java.util.TreeMap;
@@ -266,7 +267,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 			 * 
 			 */
 
-			java.util.List listelem = ListMerger.getMergedList((java.util.List) mapTableModel.getData().get(key));
+			List listelem = ListMerger.getMergedList((List) mapTableModel.getData().get(key));
 			if (!listelem.isEmpty())
 				property = listelem.get(0).toString();
 
