@@ -196,28 +196,28 @@ public class JSONReMapper {
 		HashMap<String, Map<String, Map<String, Object>>> result = new HashMap<>();
 		try {
 			JSONObject jO = (JSONObject) retrieved;
-			HashMap<String, JSONObject> map0 = new HashMapX<String, JSONObject>(jO);
+			HashMap<String, JSONObject> map0 = new HashMapX<>(jO);
 			// logging.debug(this, " map0: " + map0);
 
 			Iterator iter0 = map0.keySet().iterator();
 			while (iter0.hasNext()) {
 				String key1 = (String) iter0.next(); // e.g. client
-				HashMap<String, JSONObject> map1 = new HashMapX<String, JSONObject>((JSONObject) map0.get(key1)); // e.g.
-																													// map
-																													// of
-																													// 1
-																													// client
-																													// values
-																													// logging.debug(this, " key1 " + key1 + " value " + map1);
+				HashMap<String, JSONObject> map1 = new HashMapX<>((JSONObject) map0.get(key1)); // e.g.
+																								// map
+																								// of
+																								// 1
+																								// client
+																								// values
+																								// logging.debug(this, " key1 " + key1 + " value " + map1);
 				HashMap<String, Map<String, Object>> map1R = new HashMap<>(); // to produce
 
 				Iterator iter1 = map1.keySet().iterator();
 				while (iter1.hasNext()) {
 					String key2 = (String) iter1.next(); // e.g. product
-					HashMap<String, Object> map2 = new HashMapX<String, Object>((JSONObject) map1.get(key2), true); // e.g.
-																													// product
-																													// values;
-																													// logging.debug(this, " key2 " + key2 + " value " + map2);
+					HashMap<String, Object> map2 = new HashMapX<>((JSONObject) map1.get(key2), true); // e.g.
+																										// product
+																										// values;
+																										// logging.debug(this, " key2 " + key2 + " value " + map2);
 					map1R.put(key2, map2);
 					// logging.debug(this, " map1R.get(key2) " + map1R.get(key2));
 				}
@@ -239,29 +239,29 @@ public class JSONReMapper {
 			if (checkResponse(jO)) {
 				JSONObject jOResult = jO.optJSONObject("result");
 
-				HashMap<String, JSONObject> map0 = new HashMapX<String, JSONObject>(jOResult);
+				HashMap<String, JSONObject> map0 = new HashMapX<>(jOResult);
 				// logging.debug(this, " map0: " + map0);
 
 				Iterator iter0 = map0.keySet().iterator();
 				while (iter0.hasNext()) {
 					String key1 = (String) iter0.next(); // e.g. client
-					HashMap<String, JSONObject> map1 = new HashMapX<String, JSONObject>((JSONObject) map0.get(key1)); // e.g.
-																														// map
-																														// of
-																														// 1
-																														// client
-																														// values
-																														// logging.debug(this, " key1 " + key1 + " value " + map1);
+					HashMap<String, JSONObject> map1 = new HashMapX<>((JSONObject) map0.get(key1)); // e.g.
+																									// map
+																									// of
+																									// 1
+																									// client
+																									// values
+																									// logging.debug(this, " key1 " + key1 + " value " + map1);
 					HashMap<String, Map<String, Object>> map1R = new HashMap<>(); // to
 																					// produce
 
 					Iterator iter1 = map1.keySet().iterator();
 					while (iter1.hasNext()) {
 						String key2 = (String) iter1.next(); // e.g. product
-						HashMap<String, Object> map2 = new HashMapX<String, Object>((JSONObject) map1.get(key2), true); // e.g.
-																														// product
-																														// values;
-																														// logging.debug(this, " key2 " + key2 + " value " + map2);
+						HashMap<String, Object> map2 = new HashMapX<>((JSONObject) map1.get(key2), true); // e.g.
+																											// product
+																											// values;
+																											// logging.debug(this, " key2 " + key2 + " value " + map2);
 						map1R.put(key2, map2);
 						// logging.debug(this, " map1R.get(key2) " + map1R.get(key2));
 					}
