@@ -81,7 +81,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		// panelDepots.setOpaque(true);
 
 		depots = new ArrayList<>();
-		listDepots = new JList<String>(); // new String[]{"a","b","c"});
+		listDepots = new JList<>(); // new String[]{"a","b","c"});
 		listDepots.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		listDepots.addListSelectionListener(this);
 		listDepots.addMouseListener(this);

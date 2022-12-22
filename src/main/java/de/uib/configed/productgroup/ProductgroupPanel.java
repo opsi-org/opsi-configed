@@ -573,7 +573,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		for (String key : values.keySet()) {
 			modelChooseAction.addElement(key);
 		}
-		JList<String> listChooseAction = new JList<String>(modelChooseAction); // create list with tooltips
+		JList<String> listChooseAction = new JList<>(modelChooseAction); // create list with tooltips
 		de.uib.utilities.swing.list.StandardListCellRenderer renderActionList = new de.uib.utilities.swing.list.ListCellRendererByIndex(
 				null, // index is identical with the value
 				values, "");
