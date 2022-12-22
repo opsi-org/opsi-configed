@@ -544,7 +544,7 @@ public class Globals {
 	}
 
 	public static List<String> takeAsStringList(List<Object> list) {
-		List<String> result = new java.util.ArrayList<>();
+		List<String> result = new ArrayList<>();
 
 		if (list == null)
 			return result;

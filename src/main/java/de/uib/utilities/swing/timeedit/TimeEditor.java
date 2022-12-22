@@ -52,14 +52,14 @@ public class TimeEditor extends JPanel {
 		labelTime = new JLabel(" hh:mm");
 		labelTime.setFont(Globals.defaultFontBig);
 
-		hours = new java.util.ArrayList<String>();
+		hours = new ArrayList<String>();
 		for (int i = 0; i < 24; i++) {
 			hours.add(fillTo2Chars(i));
 		}
 
 		spinnerHour = new JSpinner(new SpinnerListModel(hours));
 
-		mins = new java.util.ArrayList<String>();
+		mins = new ArrayList<String>();
 		for (int i = 0; i < 60; i++) {
 			mins.add(fillTo2Chars(i));
 		}

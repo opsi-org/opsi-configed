@@ -1,5 +1,6 @@
 package de.uib.configed;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,9 +12,9 @@ public class CopyrightInfos {
 	static String discard, major, minor, update, build;
 	static final String COMPLETE_VERSION_INFO = System.getProperty("java.runtime.version");
 
-	private static final java.util.ArrayList<String> infos;
+	private static final ArrayList<String> infos;
 	static {
-		infos = new java.util.ArrayList<>();
+		infos = new ArrayList<>();
 
 		infos.add(
 				Globals.APPNAME + "  Version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);

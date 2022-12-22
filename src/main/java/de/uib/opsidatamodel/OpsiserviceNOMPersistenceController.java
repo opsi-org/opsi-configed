@@ -10088,10 +10088,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			item = createNOMitem("UnicodeConfig");
 
-			defaultValues = new java.util.ArrayList();
+			defaultValues = new ArrayList();
 			defaultValues.add(getOpsiDefaultDomain());
 
-			possibleValues = new java.util.ArrayList();
+			possibleValues = new ArrayList();
 			possibleValues.add(getOpsiDefaultDomain());
 
 			item.put("ident", key);

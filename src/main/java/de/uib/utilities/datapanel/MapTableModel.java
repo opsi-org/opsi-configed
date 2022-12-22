@@ -39,7 +39,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 
 	private Function<String, Boolean> editDenier;
 
-	public static final List nullLIST = new java.util.ArrayList();
+	public static final List nullLIST = new ArrayList();
 	static {
 		nullLIST.add(null);
 	}

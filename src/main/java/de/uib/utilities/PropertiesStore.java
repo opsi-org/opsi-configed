@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -113,7 +114,7 @@ public class PropertiesStore
 	}
 
 	public void store(String comments) throws IOException {
-		List<String> outLines = new java.util.ArrayList();
+		List<String> outLines = new ArrayList();
 
 		if (comments != null)
 			outLines.add("# " + comments);

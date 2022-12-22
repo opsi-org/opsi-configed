@@ -300,9 +300,9 @@ public class SSHCommandFactory {
 		if (commandlist == null)
 			commandlist = main.getPersistenceController().retrieveCommandList();
 
-		sshcommand_list = new java.util.ArrayList<SSHCommand_Template>();
-		list_knownMenus = new java.util.ArrayList<String>();
-		list_knownParents = new java.util.ArrayList<String>();
+		sshcommand_list = new ArrayList<SSHCommand_Template>();
+		list_knownMenus = new ArrayList<String>();
+		list_knownParents = new ArrayList<String>();
 
 		if (!commandlist.isEmpty())
 			list_knownParents.add(parentdefaultForOwnCommands);

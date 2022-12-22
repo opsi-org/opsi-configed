@@ -1,5 +1,6 @@
 package de.uib.opsidatamodel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.uib.utilities.logging.logging;
@@ -14,7 +15,7 @@ public class Object2Product2VersionList extends java.util.HashMap<String, Produc
 
 		List<String> versions = pVersions.get(productName);
 		if (versions == null) {
-			versions = new java.util.ArrayList<String>();
+			versions = new ArrayList<>();
 			pVersions.put(productName, versions);
 		}
 
