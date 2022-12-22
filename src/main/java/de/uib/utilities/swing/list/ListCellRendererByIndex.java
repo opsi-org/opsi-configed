@@ -45,7 +45,7 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 		this.showOnlyIcon = showOnlyIcon;
 		mapOfStrings = mapOfStringValues;
 		mapOfTooltips = mapOfDescriptions;
-		mapOfImages = new HashMap<String, ImageIcon>();
+		mapOfImages = new HashMap<>();
 
 		if (mapOfStrings != null)
 		// Load the item values

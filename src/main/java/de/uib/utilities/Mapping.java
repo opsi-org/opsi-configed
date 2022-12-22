@@ -33,11 +33,11 @@ public class Mapping<K, V> {
 	}
 
 	public Mapping(Map<K, V> definingMap) {
-		map = new HashMap<K, V>();
-		inverseMap = new HashMap<V, K>();
+		map = new HashMap<>();
+		inverseMap = new HashMap<>();
 		domain = new Vector<K>();
 		range = new Vector<V>();
-		mapOfStrings = new HashMap<String, V>();
+		mapOfStrings = new HashMap<>();
 		rangeAsStrings = new Vector<>();
 
 		defineBy(definingMap);
@@ -135,7 +135,7 @@ public class Mapping<K, V> {
 	}
 
 	public Mapping<K, V> restrictedTo(java.util.Set<K> partialDomain) {
-		HashMap<K, V> restrictedMap = new HashMap<K, V>();
+		HashMap<K, V> restrictedMap = new HashMap<>();
 		for (K key : partialDomain) {
 			if (domain.contains(key)) {
 				restrictedMap.put(key, map.get(key));

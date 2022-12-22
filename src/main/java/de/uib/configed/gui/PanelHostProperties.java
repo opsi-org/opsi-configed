@@ -114,7 +114,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 	}
 
 	protected Map<String, ListCellOptions> deriveOptionsMap(Map m) {
-		Map<String, ListCellOptions> result = new HashMap<String, ListCellOptions>();
+		Map<String, ListCellOptions> result = new HashMap<>();
 
 		for (Object key : m.keySet()) {
 

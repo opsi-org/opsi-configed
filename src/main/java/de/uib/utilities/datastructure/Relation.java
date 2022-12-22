@@ -18,7 +18,7 @@ public class Relation extends ArrayList<StringValuedRelationElement> {
 		this.attributes = attributes;
 		attributeSet = new HashSet(attributes);
 
-		functionByAttribute = new HashMap<String, Map<String, Relation>>();
+		functionByAttribute = new HashMap<>();
 
 	}
 
@@ -81,7 +81,7 @@ public class Relation extends ArrayList<StringValuedRelationElement> {
 		if (function != null)
 			return function;
 
-		function = new HashMap<String, Relation>();
+		function = new HashMap<>();
 		functionByAttribute.put(attribute, function);
 
 		for (StringValuedRelationElement element : this) {

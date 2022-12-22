@@ -442,7 +442,7 @@ public class DataStubRawData extends DataStubNOM {
 			// if (softwareId2clients == null) softwareId2clients = new HashMap<Integer,
 			// java.util.Set<String>>();
 			if (softwareIdent2clients == null)
-				softwareIdent2clients = new HashMap<String, java.util.Set<String>>();
+				softwareIdent2clients = new HashMap<>();
 
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " softwareConfig ");
@@ -692,7 +692,7 @@ public class DataStubRawData extends DataStubNOM {
 				 * hostConfigValues.get(hostId) ;
 				 * if (configValues1Host == null)
 				 * {
-				 * configValues1Host = new HashMap<String, List<Object>>();
+				 * configValues1Host = new HashMap<>();
 				 * hostConfigValues.put(hostId, configValues1Host);
 				 * }
 				 */

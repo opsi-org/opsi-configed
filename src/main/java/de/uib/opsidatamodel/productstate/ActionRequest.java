@@ -98,7 +98,7 @@ public class ActionRequest {
 		labels.add("once");
 		labels.add("custom");
 
-		state2label = new HashMap<Integer, String>();
+		state2label = new HashMap<>();
 		state2label.put(CONFLICT, Globals.CONFLICT_STATE_STRING);
 		state2label.put(INVALID, Globals.NO_VALID_STATE_STRING);
 		state2label.put(NOT_AVAILABLE, "not_available");
@@ -169,7 +169,7 @@ public class ActionRequest {
 				label2displayLabel.get("update"), label2displayLabel.get("uninstall"), label2displayLabel.get("always"),
 				label2displayLabel.get("once"), label2displayLabel.get("custom"), };
 
-		label2textColor = new HashMap<String, Color>();
+		label2textColor = new HashMap<>();
 		label2textColor.put("none", NONEcolor);
 		label2textColor.put("setup", SETUPcolor);
 		label2textColor.put("update", UPDATEcolor);

@@ -74,7 +74,7 @@ public class InstallationStatus {
 		labels.add("unknown");
 		// labels.add("installing");
 
-		state2label = new HashMap<Integer, String>();
+		state2label = new HashMap<>();
 		state2label.put(CONFLICT, Globals.CONFLICT_STATE_STRING);
 		state2label.put(INVALID, Globals.NO_VALID_STATE_STRING);
 		state2label.put(UNDEFINED, "undefined");
@@ -121,7 +121,7 @@ public class InstallationStatus {
 				// label2displayLabel.get(Globals.NOVALIDSTATEstring)
 		};
 
-		label2textColor = new HashMap<String, Color>();
+		label2textColor = new HashMap<>();
 		label2textColor.put("not_installed", NOT_INSTALLEDcolor);
 		label2textColor.put("installed", INSTALLEDcolor);
 		label2textColor.put("unknown", UNKNOWNcolor);

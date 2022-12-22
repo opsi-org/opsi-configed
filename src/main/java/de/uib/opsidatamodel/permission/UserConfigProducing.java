@@ -250,8 +250,8 @@ public class UserConfigProducing {
 
 		// ---System.exit(0);
 
-		Map<String, UserConfig> roleConfigs = new HashMap<String, UserConfig>();
-		Map<String, UserConfig> userConfigs = new HashMap<String, UserConfig>();
+		Map<String, UserConfig> roleConfigs = new HashMap<>();
+		Map<String, UserConfig> userConfigs = new HashMap<>();
 
 		roleConfigs.put(UserConfig.DEFAULT_ROLE_NAME, defaultUserConfig);
 

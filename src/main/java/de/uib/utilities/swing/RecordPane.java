@@ -96,8 +96,8 @@ public class RecordPane extends JPanel implements KeyListener {
 
 		setBackground(Globals.backgroundWhite);
 
-		labelfields = new HashMap<String, JLabel>();
-		datafields = new HashMap<String, JTextFieldObserved>();
+		labelfields = new HashMap<>();
+		datafields = new HashMap<>();
 
 		javax.swing.GroupLayout baseLayout = new javax.swing.GroupLayout(this);
 		this.setLayout(baseLayout);
@@ -143,7 +143,7 @@ public class RecordPane extends JPanel implements KeyListener {
 			datafields.put(key, jTextField);
 		}
 
-		Map<String, GroupLayout.SequentialGroup> vGroups = new HashMap<String, GroupLayout.SequentialGroup>();
+		Map<String, GroupLayout.SequentialGroup> vGroups = new HashMap<>();
 
 		GroupLayout.ParallelGroup hGroup = baseLayout.createParallelGroup();
 

@@ -63,7 +63,7 @@ public class ResourceBundleUtf8 {
 		}
 	}
 
-	private static Map<ClassLoader, Map<String, Map<Locale, ResourceBundle>>> bundleByClassLoaderByBaseNameByLocale = new HashMap<ClassLoader, Map<String, Map<Locale, ResourceBundle>>>();
+	private static Map<ClassLoader, Map<String, Map<Locale, ResourceBundle>>> bundleByClassLoaderByBaseNameByLocale = new HashMap<>();
 
 	/**
 	 * @see ResourceBundle#getBundle(String)
@@ -93,7 +93,7 @@ public class ResourceBundleUtf8 {
 		synchronized (bundleByClassLoaderByBaseNameByLocale) {
 			bundleByBaseNameByLocale = bundleByClassLoaderByBaseNameByLocale.get(pLoader);
 			if (bundleByBaseNameByLocale == null) {
-				bundleByBaseNameByLocale = new HashMap<String, Map<Locale, ResourceBundle>>();
+				bundleByBaseNameByLocale = new HashMap<>();
 				bundleByClassLoaderByBaseNameByLocale.put(pLoader, bundleByBaseNameByLocale);
 			}
 		}
@@ -101,7 +101,7 @@ public class ResourceBundleUtf8 {
 		synchronized (bundleByBaseNameByLocale) {
 			bundleByLocale = bundleByBaseNameByLocale.get(pBaseName);
 			if (bundleByLocale == null) {
-				bundleByLocale = new HashMap<Locale, ResourceBundle>();
+				bundleByLocale = new HashMap<>();
 				bundleByBaseNameByLocale.put(pBaseName, bundleByLocale);
 			}
 		}

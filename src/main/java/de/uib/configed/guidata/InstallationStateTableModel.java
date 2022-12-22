@@ -252,7 +252,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		initChangedStates();
 
 		missingImplementationForAR = new java.util.TreeSet<String>();
-		product2setOfClientsWithNewAction = new HashMap<String, Set<String>>();
+		product2setOfClientsWithNewAction = new HashMap<>();
 
 		persist = main.getPersistenceController();
 		Collator myCollator = Collator.getInstance();
@@ -693,7 +693,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	private void checkForContradictingAssignments(String clientId, String product, String stateType, String state) {
 		if (changeEventCount2product2request == null)
-			changeEventCount2product2request = new HashMap<Integer, Map<String, String>>();
+			changeEventCount2product2request = new HashMap<>();
 
 		Map<String, String> product2request = changeEventCount2product2request.get(onGoingCollectiveChangeEventCount);
 
@@ -932,7 +932,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		// request
 		missingProducts.clear();
 
-		// if (product2AR == null) product2AR = new HashMap<String, ActionRequest>();
+		// if (product2AR == null) product2AR = new HashMap<>();
 
 		// return missingProducts;
 	}

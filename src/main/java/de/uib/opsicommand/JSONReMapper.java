@@ -193,7 +193,7 @@ public class JSONReMapper {
 	}
 
 	public static Map<String, Map<String, Map<String, Object>>> getMap3_Objects(Object retrieved) {
-		HashMap<String, Map<String, Map<String, Object>>> result = new HashMap<String, Map<String, Map<String, Object>>>();
+		HashMap<String, Map<String, Map<String, Object>>> result = new HashMap<>();
 		try {
 			JSONObject jO = (JSONObject) retrieved;
 			HashMap<String, JSONObject> map0 = new HashMapX<String, JSONObject>(jO);
@@ -233,7 +233,7 @@ public class JSONReMapper {
 	}
 
 	public static Map<String, Map<String, Map<String, Object>>> getMap3_Object(Object retrieved) {
-		HashMap<String, Map<String, Map<String, Object>>> result = new HashMap<String, Map<String, Map<String, Object>>>();
+		HashMap<String, Map<String, Map<String, Object>>> result = new HashMap<>();
 		try {
 			JSONObject jO = (JSONObject) retrieved;
 			if (checkResponse(jO)) {

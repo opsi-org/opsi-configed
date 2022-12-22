@@ -474,7 +474,7 @@ public class JTableSelectionPanel extends JPanel
 	}
 
 	public Map<Integer, Integer> getSelectionMap() {
-		Map<Integer, Integer> selectionMap = new HashMap<Integer, Integer>();
+		Map<Integer, Integer> selectionMap = new HashMap<>();
 		int selectedKeysCount = 0;
 
 		for (int i = 0; i < table.getRowCount(); i++) {

@@ -501,7 +501,7 @@ public class LicensingInfoMap {
 		if (allOverLimitModules == null)
 			allOverLimitModules = new LinkedHashSet<String>();
 
-		Map<String, Map<String, Map<String, Object>>> resultMap = new HashMap<String, Map<String, Map<String, Object>>>();
+		Map<String, Map<String, Map<String, Object>>> resultMap = new HashMap<>();
 
 		try {
 			JSONObject modulesJSOb;

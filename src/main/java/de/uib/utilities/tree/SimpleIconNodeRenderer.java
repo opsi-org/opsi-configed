@@ -21,12 +21,12 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 	public static Dimension preferred = new Dimension(labelWidth, labelHeight);
 
 	private Font deriveFont0(Font font) {
-		HashMap<TextAttribute, Object> map = new HashMap<TextAttribute, Object>();
+		HashMap<TextAttribute, Object> map = new HashMap<>();
 		return font.deriveFont(map);
 	}
 
 	private Font deriveFont1(Font font) {
-		HashMap<TextAttribute, Object> map = new HashMap<TextAttribute, Object>();
+		HashMap<TextAttribute, Object> map = new HashMap<>();
 		// map.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
 		// map.put(TextAttribute.INPUT_METHOD_UNDERLINE,
 		// TextAttribute.UNDERLINE_LOW_TWO_PIXEL);

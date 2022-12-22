@@ -59,7 +59,7 @@ public class TargetConfiguration {
 		labels.add("always");
 		labels.add("forbidden");
 
-		state2label = new HashMap<Integer, String>();
+		state2label = new HashMap<>();
 		state2label.put(CONFLICT, Globals.CONFLICT_STATE_STRING);
 		state2label.put(INVALID, Globals.NO_VALID_STATE_STRING);
 		state2label.put(UNDEFINED, "undefined");

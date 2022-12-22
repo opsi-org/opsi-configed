@@ -142,7 +142,7 @@ public class DataStubNOM extends DataStub {
 
 			// logging.info(this, "retrieveProductInfos retrievedList " + retrievedList);
 
-			product2versionInfo2infos = new HashMap<String, Map<String, OpsiProductInfo>>();
+			product2versionInfo2infos = new HashMap<>();
 
 			for (Map<String, Object> m : retrievedList) {
 				// logging.info(this, "retrieveProductInfos " + m);
@@ -154,7 +154,7 @@ public class DataStubNOM extends DataStub {
 				Map<String, OpsiProductInfo> version2productInfos = product2versionInfo2infos.get(productId);
 
 				if (version2productInfos == null) {
-					version2productInfos = new HashMap<String, OpsiProductInfo>();
+					version2productInfos = new HashMap<>();
 					product2versionInfo2infos.put(productId, version2productInfos);
 				}
 				version2productInfos.put(versionInfo, productInfo);
@@ -285,11 +285,11 @@ public class DataStubNOM extends DataStub {
 
 			depot2LocalbootProducts = new Object2Product2VersionList();
 			depot2NetbootProducts = new Object2Product2VersionList();
-			product2VersionInfo2Depots = new HashMap<String, Map<String, List<String>>>();
+			product2VersionInfo2Depots = new HashMap<>();
 
 			productRows = new Vector<Vector<Object>>();
 
-			depot2Packages = new HashMap<String, TreeSet<OpsiPackage>>();
+			depot2Packages = new HashMap<>();
 
 			for (Map<String, Object> m : packages) {
 				String depot = "" + m.get("depotId");
@@ -412,12 +412,12 @@ public class DataStubNOM extends DataStub {
 		retrieveProductsAllDepots();
 
 		if (depot2Product2PropertyDefinitions == null) {
-			depot2Product2PropertyDefinitions = new HashMap<String, Map<String, Map<String, ListCellOptions>>>();
+			depot2Product2PropertyDefinitions = new HashMap<>();
 
 			// HashMap<String, java.util.Set<String>> productListForProductID = new
 			// HashMap<String, java.util.Set<String>>();
 			// HashMap<String, java.util.Set<String>> productListForProductID_notUnique =
-			// new HashMap<String, java.util.Set<String>>();
+			// new HashMap<>();
 
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " product property");
@@ -470,14 +470,14 @@ public class DataStubNOM extends DataStub {
 						Map<String, Map<String, ListCellOptions>> product2PropertyDefinitions = depot2Product2PropertyDefinitions
 								.get(depot);
 						if (product2PropertyDefinitions == null) {
-							product2PropertyDefinitions = new HashMap<String, Map<String, ListCellOptions>>();
+							product2PropertyDefinitions = new HashMap<>();
 							depot2Product2PropertyDefinitions.put(depot, product2PropertyDefinitions);
 						}
 
 						Map<String, ListCellOptions> propertyDefinitions = product2PropertyDefinitions.get(productId);
 
 						if (propertyDefinitions == null) {
-							propertyDefinitions = new HashMap<String, ListCellOptions>();
+							propertyDefinitions = new HashMap<>();
 							product2PropertyDefinitions.put(productId, propertyDefinitions);
 						}
 
@@ -517,7 +517,7 @@ public class DataStubNOM extends DataStub {
 		retrieveProductsAllDepots();
 
 		if (depot2product2dependencyInfos == null) {
-			depot2product2dependencyInfos = new HashMap<String, Map<String, List<Map<String, String>>>>();
+			depot2product2dependencyInfos = new HashMap<>();
 
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " product dependency");
@@ -558,7 +558,7 @@ public class DataStubNOM extends DataStub {
 					Map<String, List<Map<String, String>>> product2dependencyInfos = depot2product2dependencyInfos
 							.get(depot);
 					if (product2dependencyInfos == null) {
-						product2dependencyInfos = new HashMap<String, List<Map<String, String>>>();
+						product2dependencyInfos = new HashMap<>();
 						depot2product2dependencyInfos.put(depot, product2dependencyInfos);
 					}
 
@@ -1402,7 +1402,7 @@ public class DataStubNOM extends DataStub {
 			return;
 
 		String today = new java.sql.Date(new java.util.Date().getTime()).toString();
-		licenceContracts = new HashMap<String, LicenceContractEntry>();
+		licenceContracts = new HashMap<>();
 		contractsToNotify = new TreeMap<String, TreeSet<String>>();
 		contractsExpired = new TreeMap<String, TreeSet<String>>();
 
@@ -1472,7 +1472,7 @@ public class DataStubNOM extends DataStub {
 		if (licences != null)
 			return;
 
-		licences = new HashMap<String, LicenceEntry>();
+		licences = new HashMap<>();
 
 		if (persist.withLicenceManagement) {
 			persist.notifyDataLoadingObservers(

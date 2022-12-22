@@ -21,7 +21,7 @@ import de.uib.utilities.table.ListCellOptions;
 */
 
 public class ListModelProducerForVisualDatamap extends DefaultListModelProducer {
-	Map<Integer, ListModel> listmodels = new HashMap<Integer, ListModel>();
+	Map<Integer, ListModel> listmodels = new HashMap<>();
 
 	Map<String, ListCellOptions> optionsMap;
 	Map<String, List> currentData;
@@ -57,7 +57,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 	private void mapTypes(final Map currentData) {
 		this.currentData = new HashMap<>();
 		logging.debug(this, "mapTypes  " + currentData);
-		originalTypes = new HashMap<String, Class>();
+		originalTypes = new HashMap<>();
 		for (Object key : currentData.keySet()) {
 			Object value = currentData.get(key);
 			// logging.debug(this, "mapTypes key, value " + key + ", " + value);

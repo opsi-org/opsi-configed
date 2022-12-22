@@ -965,7 +965,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	private Map<Object, List<Object>> buildFunction(int col1, int col2,
 			TableModelFilterCondition specialFilterCondition) {
-		Map<Object, List<Object>> result = new HashMap<Object, List<Object>>();
+		Map<Object, List<Object>> result = new HashMap<>();
 
 		boolean saveUsingFilter = workingFilter != null && workingFilter.isInUse();
 
@@ -1064,7 +1064,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		TableModelFunctions.PairOfInt pair = new TableModelFunctions.PairOfInt(col1, col2);
 
 		if (functions == null)
-			functions = new HashMap<TableModelFunctions.PairOfInt, Map<Object, List<Object>>>();
+			functions = new HashMap<>();
 
 		java.util.Map<Object, List<Object>> function = functions.get(pair);
 
@@ -1083,7 +1083,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		if (primarykey2Rowmap != null)
 			return primarykey2Rowmap;
 
-		primarykey2Rowmap = new HashMap<Integer, RowStringMap>();
+		primarykey2Rowmap = new HashMap<>();
 
 		for (int i = 0; i < rows.size(); i++) {
 			Integer key = Integer.valueOf((String) getValueAt(i, keyCol));
@@ -1148,7 +1148,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		TableModelFunctions.PairOfInt pair = new TableModelFunctions.PairOfInt(col1st, col2nd);
 
 		if (xFunctions == null)
-			xFunctions = new HashMap<TableModelFunctions.PairOfInt, Map<Integer, Mapping<Integer, String>>>();
+			xFunctions = new HashMap<>();
 
 		java.util.Map<Object, List<Object>> function = getFunction(col1st, col2nd);
 
@@ -1157,7 +1157,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 		java.util.Map<Integer, Mapping<Integer, String>> xFunction = xFunctions.get(pair);
 		if (xFunction == null) {
-			xFunction = new HashMap<Integer, Mapping<Integer, String>>();
+			xFunction = new HashMap<>();
 			for (Object key : function.keySet()) {
 				Integer keyVal = (Integer) key;
 				xFunction.put(keyVal, col2ndMapping.restrictedTo(new HashSet<>((List<Object>) function.get(key))));

@@ -19,7 +19,7 @@ import de.uib.utilities.logging.logging;
 
 public class SensitiveCellEditorForDataPanel extends de.uib.utilities.table.gui.SensitiveCellEditor {
 
-	private static final Map<Object, SensitiveCellEditorForDataPanel> instances = new HashMap<Object, SensitiveCellEditorForDataPanel>();
+	private static final Map<Object, SensitiveCellEditorForDataPanel> instances = new HashMap<>();
 
 	public static synchronized SensitiveCellEditorForDataPanel getInstance(Object key) {
 

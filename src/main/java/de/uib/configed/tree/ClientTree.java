@@ -186,17 +186,17 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	protected Set<String> directlyAllowedGroups;
 
 	class Leafname2AllItsPaths {
-		Map<String, ArrayList<SimpleTreePath>> invertedSimpleClientPaths = new HashMap<String, ArrayList<SimpleTreePath>>();
+		Map<String, ArrayList<SimpleTreePath>> invertedSimpleClientPaths = new HashMap<>();
 
 		/*
 		 * tried parallel data
 		 * Map<String, ArrayList<TreePath>> invertedClientPaths
-		 * = new HashMap<String, ArrayList<TreePath>>();
+		 * = new HashMap<>();
 		 */
 
 		Leafname2AllItsPaths() {
-			invertedSimpleClientPaths = new HashMap<String, ArrayList<SimpleTreePath>>();
-			// invertedClientPaths = new HashMap<String, ArrayList<TreePath>>();
+			invertedSimpleClientPaths = new HashMap<>();
+			// invertedClientPaths = new HashMap<>();
 		}
 
 		public Set<String> keySet() {
@@ -1063,7 +1063,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	public void produceTreeForALL(Object[] x) {
 		// logging.debug(this, "produceTreeForAll create clientNodesInDIRECTORY");
-		// clientNodesInDIRECTORY = new HashMap<String, DefaultMutableTreeNode>();
+		// clientNodesInDIRECTORY = new HashMap<>();
 		clientNodesInDIRECTORY.clear();
 		produceClients(x);
 	}
@@ -1128,7 +1128,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		// listChildren("produceAndLinkGroups");
 		// GROUPS.removeAllChildren(); has no children at this point
 
-		groupNodes = new HashMap<String, GroupNode>();
+		groupNodes = new HashMap<>();
 
 		// produce top groups;
 		initTopGroups();

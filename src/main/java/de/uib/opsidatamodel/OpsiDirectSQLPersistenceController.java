@@ -115,7 +115,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 		// TimeCheck timer= new TimeCheck(this, "getLocalBootProductStatesNOM").start();
 
-		Map<String, List<Map<String, String>>> result = new HashMap<String, List<Map<String, String>>>();
+		Map<String, List<Map<String, String>>> result = new HashMap<>();
 
 		java.sql.Connection sqlConn = DbConnect.getConnection();
 

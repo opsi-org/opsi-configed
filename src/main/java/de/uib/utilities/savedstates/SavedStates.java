@@ -51,7 +51,7 @@ public class SavedStates extends PropertiesStore {
 		saveLocalbootproductFilter = new SessionSaveSet();
 		saveNetbootproductFilter = new SessionSaveSet();
 		// saveLocalbootproductSelection = new SessionSaveSet();
-		saveServerConfigs = new HashMap<String, SaveString>();
+		saveServerConfigs = new HashMap<>();
 
 	}
 

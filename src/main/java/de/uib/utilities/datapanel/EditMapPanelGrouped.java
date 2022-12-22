@@ -137,7 +137,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 	protected void generateParts() {
 		tooltips4Keys = givenClasses;
-		partialPanels = new HashMap<String, AbstractEditMapPanel>();
+		partialPanels = new HashMap<>();
 
 		for (String key : keyclasses) {
 			// if (key.startsWith("user"))

@@ -40,7 +40,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		this(null);
 	}
 
-	private static final Map<Object, SensitiveCellEditor> instances = new HashMap<Object, SensitiveCellEditor>();
+	private static final Map<Object, SensitiveCellEditor> instances = new HashMap<>();
 
 	public static synchronized SensitiveCellEditor getInstance(Object key) {
 

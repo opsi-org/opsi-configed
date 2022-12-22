@@ -26,7 +26,7 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 		super(tooltipPrefix);
 		this.showOnlyIcon = showOnlyIcon;
 		mapOfStrings = mapOfStringValues;
-		mapOfImages = new HashMap<String, ImageIcon>();
+		mapOfImages = new HashMap<>();
 		// Load the item values
 		{
 			Iterator iter = mapOfStrings.entrySet().iterator();

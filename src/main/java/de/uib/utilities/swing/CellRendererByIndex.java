@@ -67,7 +67,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 		setOpaque(true);
 		// setHorizontalAlignment(LEFT);
 		// setVerticalAlignment(CENTER);
-		mapOfImages = new HashMap<String, ImageIcon>();
+		mapOfImages = new HashMap<>();
 		mapOfStrings = new HashMap<>();
 
 		// Load the item images
@@ -116,7 +116,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 		// setVerticalAlignment(CENTER);
 		mapOfStrings = mapOfStringValues;
 		mapOfTooltips = mapOfDescriptions;
-		mapOfImages = new HashMap<String, ImageIcon>();
+		mapOfImages = new HashMap<>();
 
 		// Load the item images
 		if (imagesBase == null)

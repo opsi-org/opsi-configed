@@ -821,7 +821,7 @@ public class HostInfo {
 		// product, "on_shutdown_install" , Arrays.asList(shutdownInstall) );
 		// // Set<String> clientNames, String productName, String propertyName,
 		// List<String> values
-		// Map<String, String> productValues = new HashMap<String,String>();
+		// Map<String, String> productValues = new HashMap<>();
 		// productValues.put("actionRequest", "setup");
 
 		// persist.updateProductOnClient(

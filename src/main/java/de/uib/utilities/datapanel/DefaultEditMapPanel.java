@@ -118,7 +118,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 		// logging.debug(this, " +++++++ descriptionsMap started " + descriptionsMap);
 
 		if (optionsMap == null) {
-			this.optionsMap = new HashMap<String, ListCellOptions>();
+			this.optionsMap = new HashMap<>();
 			// we introduce an empty Map since otherwise we use two cell editors, and they
 			// dont come always when they should
 		} else {
