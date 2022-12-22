@@ -182,7 +182,7 @@ public class SSHPackageManagerUninstallParameterDialog
 	protected Vector<String> getPossibleDepots() {
 		String selectedProduct = (String) cb_opsiproducts.getSelectedItem();
 
-		Vector<String> result = new Vector<String>();
+		Vector<String> result = new Vector<>();
 
 		if (persist.isDepotsFullPermission()) {
 			tf_selecteddepots.setEditable(true);

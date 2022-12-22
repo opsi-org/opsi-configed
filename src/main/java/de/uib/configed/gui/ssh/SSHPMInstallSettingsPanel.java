@@ -161,7 +161,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	}
 
 	protected Vector<String> getAllowedInstallTargets() {
-		Vector<String> result = new Vector<String>();
+		Vector<String> result = new Vector<>();
 
 		if (persist.isDepotsFullPermission()) {
 			tf_selecteddepots.setEditable(true);
