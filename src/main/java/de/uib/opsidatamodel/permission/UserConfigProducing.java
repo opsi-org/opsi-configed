@@ -572,7 +572,7 @@ public class UserConfigProducing {
 
 		logging.info(this, "configKeyUseList " + configKeyUseList + ", configKeyList " + configKeyList);
 		possibleValuesDepot = new ArrayList<>();
-		currentPossibleValuesDepotListed = new LinkedHashSet<Object>();
+		currentPossibleValuesDepotListed = new LinkedHashSet<>();
 
 		if (prototypeObligatory || serverconfigValuesMap.get(configKeyList) == null) {
 			selectedValuesDepot = prototypeConfig.getValues(partkey);
@@ -594,7 +594,7 @@ public class UserConfigProducing {
 
 		if (prototypeObligatory) {
 			possibleValuesDepot = prototypeConfig.getPossibleValues(partkey);
-			currentPossibleValuesDepotListed = new LinkedHashSet<Object>(possibleValuesDepot);
+			currentPossibleValuesDepotListed = new LinkedHashSet<>(possibleValuesDepot);
 
 		} else {
 
@@ -604,7 +604,7 @@ public class UserConfigProducing {
 			posVals.addAll(existingDepots);
 			posVals.addAll(oldPossibleValuesDepot);
 
-			currentPossibleValuesDepotListed = new LinkedHashSet<Object>(posVals);
+			currentPossibleValuesDepotListed = new LinkedHashSet<>(posVals);
 
 		}
 
@@ -636,7 +636,7 @@ public class UserConfigProducing {
 		defaultvalueForRestrictionUsage = prototypeConfig
 				.getBooleanValue(UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED);
 
-		currentPossibleValuesHostgroupListed = new LinkedHashSet<Object>();
+		currentPossibleValuesHostgroupListed = new LinkedHashSet<>();
 		possibleValuesHostgroup = new ArrayList<>();
 
 		if (prototypeObligatory || serverconfigValuesMap.get(configKeyList) == null) {
@@ -658,11 +658,11 @@ public class UserConfigProducing {
 
 		if (prototypeObligatory) {
 			possibleValuesHostgroup = prototypeConfig.getPossibleValues(partkey);
-			currentPossibleValuesHostgroupListed = new LinkedHashSet<Object>(possibleValuesHostgroup);
+			currentPossibleValuesHostgroupListed = new LinkedHashSet<>(possibleValuesHostgroup);
 		} else {
 			Set<Object> posVals = new TreeSet<>(existingHostgroups);
 			posVals.addAll(oldPossibleValuesHostgroup);
-			currentPossibleValuesHostgroupListed = new LinkedHashSet<Object>(posVals);
+			currentPossibleValuesHostgroupListed = new LinkedHashSet<>(posVals);
 
 		}
 
@@ -700,7 +700,7 @@ public class UserConfigProducing {
 		defaultvalueForRestrictionUsage = prototypeConfig
 				.getBooleanValue(UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED);
 
-		currentPossibleValuesProductgroupsListed = new LinkedHashSet<Object>();
+		currentPossibleValuesProductgroupsListed = new LinkedHashSet<>();
 		possibleValuesProductgroups = new ArrayList<>();
 
 		if (prototypeObligatory || serverconfigValuesMap.get(configKeyList) == null) {
@@ -718,7 +718,7 @@ public class UserConfigProducing {
 			oldPossibleValuesProductgroups = new HashSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
 		}
 
-		currentPossibleValuesProductgroupsListed = new LinkedHashSet<Object>();
+		currentPossibleValuesProductgroupsListed = new LinkedHashSet<>();
 
 		if (prototypeObligatory) {
 			possibleValuesProductgroups = prototypeConfig.getPossibleValues(partkey);

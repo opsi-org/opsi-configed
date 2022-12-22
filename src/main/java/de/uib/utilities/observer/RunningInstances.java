@@ -48,7 +48,7 @@ public class RunningInstances<T> {
 		this.classname = type.getName();
 		this.askForLeave = askForLeave;
 		logging.info(this, "created for class " + classname);
-		instances = new ConcurrentHashMap<T, String>();
+		instances = new ConcurrentHashMap<>();
 		observers = new ArrayList<>();
 
 	}

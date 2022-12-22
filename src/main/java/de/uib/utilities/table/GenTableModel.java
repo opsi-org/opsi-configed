@@ -556,7 +556,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	public RowMap<String, Object> getRowMap(int row) {
-		RowMap<String, Object> result = new RowMap<String, Object>();
+		RowMap<String, Object> result = new RowMap<>();
 
 		for (int col = 0; col < getColumnNames().size(); col++) {
 			Object value = getValueAt(row, col);
@@ -1109,7 +1109,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		if (primarykeyTranslation != null)
 			return primarykeyTranslation;
 
-		primarykeyTranslation = new java.util.HashMap<Integer, String>();
+		primarykeyTranslation = new HashMap<>();
 
 		for (int i = 0; i < rows.size(); i++) {
 			try {
@@ -1137,7 +1137,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		if (primarykeyRepresentation != null)
 			return primarykeyRepresentation;
 
-		primarykeyRepresentation = new Mapping<Integer, String>(primarykeyTranslation);
+		primarykeyRepresentation = new Mapping<>(primarykeyTranslation);
 
 		return primarykeyRepresentation;
 	}
