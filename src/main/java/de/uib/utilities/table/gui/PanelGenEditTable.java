@@ -894,7 +894,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		else if (sortDescriptor == null)
 		// default sorting
 		{
-			sortDescriptor = new LinkedHashMap<Integer, SortOrder>();
+			sortDescriptor = new LinkedHashMap<>();
 
 			if (tableModel.getKeyCol() > -1) {
 				try {

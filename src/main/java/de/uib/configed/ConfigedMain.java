@@ -6483,8 +6483,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			logging.debug(this, "remoteControls " + remoteControls);
 
-			Map<String, String> entries = new LinkedHashMap<String, String>();
-			Map<String, String> tooltips = new LinkedHashMap<String, String>();
+			Map<String, String> entries = new LinkedHashMap<>();
+			Map<String, String> tooltips = new LinkedHashMap<>();
 			Map<String, String> rcCommands = new HashMap<>();
 			Map<String, Boolean> commandsEditable = new HashMap<>();
 

@@ -157,9 +157,9 @@ public class UserConfig {
 	public UserConfig(String userName) {
 		logging.info(this, "create for " + userName);
 		this.username = userName;
-		booleanMap = new LinkedHashMap<String, Boolean>();
-		valuesMap = new LinkedHashMap<String, List<Object>>();
-		possibleValuesMap = new LinkedHashMap<String, List<Object>>();
+		booleanMap = new LinkedHashMap<>();
+		valuesMap = new LinkedHashMap<>();
+		possibleValuesMap = new LinkedHashMap<>();
 	}
 
 	public String getUserName() {

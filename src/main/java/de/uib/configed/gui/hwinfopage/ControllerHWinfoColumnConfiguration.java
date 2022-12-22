@@ -308,7 +308,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 		panel.setTitlePaneBackground(Globals.backLightBlue);
 
-		LinkedHashMap<Integer, SortOrder> sortDescriptor = new LinkedHashMap<Integer, SortOrder>();
+		LinkedHashMap<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
 
 		sortDescriptor.put(keycol, SortOrder.ASCENDING);
 		panel.setSortOrder(sortDescriptor);
@@ -386,7 +386,7 @@ public class ControllerHWinfoColumnConfiguration {
 	}
 
 	protected Map<String, Map<String, Object>> getHwColumnConfig() {
-		Map<String, Map<String, Object>> result = new LinkedHashMap<String, Map<String, Object>>();
+		Map<String, Map<String, Object>> result = new LinkedHashMap<>();
 
 		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = persist.getHwAuditDeviceClasses();
 		int id = 0;

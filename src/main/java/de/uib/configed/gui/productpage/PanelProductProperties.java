@@ -387,7 +387,7 @@ public class PanelProductProperties extends JSplitPane
 		paneProducts.setListSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		// paneProducts.setTableColumnInvisible( columnNames.indexOf( "depotId" ));
 
-		LinkedHashMap<Integer, SortOrder> sortDescriptor = new LinkedHashMap<Integer, SortOrder>();
+		LinkedHashMap<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
 		sortDescriptor.put(columnNames.indexOf("productId"), SortOrder.ASCENDING); // productId
 		sortDescriptor.put(columnNames.indexOf("productVersion"), SortOrder.ASCENDING); // productId
 		sortDescriptor.put(columnNames.indexOf("packageVersion"), SortOrder.ASCENDING); // productId

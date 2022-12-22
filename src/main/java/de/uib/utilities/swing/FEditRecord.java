@@ -82,7 +82,7 @@ public class FEditRecord extends FEdit {
 
 	// test version
 	public void setRecord() {
-		LinkedHashMap<String, String> testdata = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> testdata = new LinkedHashMap<>();
 		testdata.put("field1", "test1");
 		testdata.put("field2", "test2");
 		testdata.put("field3", "test3");

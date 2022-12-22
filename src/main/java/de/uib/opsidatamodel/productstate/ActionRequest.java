@@ -110,7 +110,7 @@ public class ActionRequest {
 		state2label.put(ONCE, "once");
 		state2label.put(CUSTOM, "custom");
 
-		serviceValue2state = new LinkedHashMap<String, Integer>();
+		serviceValue2state = new LinkedHashMap<>();
 		serviceValue2state.put("setup", SETUP);
 		serviceValue2state.put("update", UPDATE);
 		serviceValue2state.put("uninstall", UNINSTALL);

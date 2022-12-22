@@ -26,10 +26,10 @@ public class UserConfigModule {
 
 		logging.info(this, "create UserConfigModule for user named " + username + " with prototype  " + prototype);
 
-		booleanMap = new LinkedHashMap<String, Boolean>();
+		booleanMap = new LinkedHashMap<>();
 		bool_keys = new LinkedHashSet<String>();
-		valuesMap = new LinkedHashMap<String, List<Object>>();
-		possibleValuesMap = new LinkedHashMap<String, List<Object>>();
+		valuesMap = new LinkedHashMap<>();
+		possibleValuesMap = new LinkedHashMap<>();
 		list_keys = new LinkedHashSet<String>();
 
 		if (prototype != null) {

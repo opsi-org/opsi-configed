@@ -90,7 +90,7 @@ public class PanelStateSwitch extends JPanel {
 		if (labels != null && labels.length < values.length)
 			logging.warning(this, "missing label");
 
-		this.labels = new LinkedHashMap<Enum, String>();
+		this.labels = new LinkedHashMap<>();
 
 		for (int i = 0; i < values.length; i++) {
 			if (labels == null || i > labels.length - 1)
@@ -152,7 +152,7 @@ public class PanelStateSwitch extends JPanel {
 	protected void initComponents() {
 		primaryFont = Globals.defaultFont;
 		ButtonGroup buttonGroup = new ButtonGroup();
-		groupedButtons = new LinkedHashMap<Enum, JRadioButton>();
+		groupedButtons = new LinkedHashMap<>();
 
 		ImageIcon activatedIcon = Globals.createImageIcon("images/checked_withoutbox.png", "");
 		ImageIcon deactivatedIcon = Globals.createImageIcon("images/checked_empty_withoutbox.png", "");

@@ -196,7 +196,7 @@ public class RecordPane extends JPanel implements KeyListener {
 	}
 
 	public static void main(String[] args) {
-		LinkedHashMap<String, String> testdata = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> testdata = new LinkedHashMap<>();
 		testdata.put("field1", "test1");
 		testdata.put("field2", "test2");
 		testdata.put("field3", "test3");

@@ -1384,7 +1384,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		String groupId = node.toString();
 
-		LinkedHashMap<String, String> groupData = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> groupData = new LinkedHashMap<>();
 		groupData.put("groupname", groupId);
 		groupData.put("description", groups.get(groupId).get("description"));
 		HashMap<String, String> labels = new HashMap<>();
@@ -1443,7 +1443,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 				return result;
 			}
 
-			LinkedHashMap<String, String> groupData = new LinkedHashMap<String, String>();
+			LinkedHashMap<String, String> groupData = new LinkedHashMap<>();
 			groupData.put("groupname", "");
 			groupData.put("description", "");
 			HashMap<String, String> labels = new HashMap<>();

@@ -579,7 +579,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				opsiHostNames = new ArrayList<>();
 				allDepots = new TreeMap<String, Map<String, Object>>();
-				// masterDepots = new LinkedHashMap<String, Map<String, Object>>();
+				// masterDepots = new LinkedHashMap<>();
 				masterDepots = new CheckingEntryMapOfMaps();
 				depotNamesList = new LinkedList<>();
 
@@ -1446,7 +1446,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		// persist.getHostInfoCollections().depotsRequestRefresh();
 		Map<String, Map<String, Object>> depotProperties = getHostInfoCollections().getAllDepots();
-		LinkedHashMap<String, Map<String, Object>> depotPropertiesForPermittedDepots = new LinkedHashMap<String, Map<String, Object>>();
+		LinkedHashMap<String, Map<String, Object>> depotPropertiesForPermittedDepots = new LinkedHashMap<>();
 
 		String configServer = getHostInfoCollections().getConfigServer();
 		if (getDepotPermission(configServer))
@@ -7936,7 +7936,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// swKEY " + licencePoolKEY + ", " + swKEY);
 
 			// build row for software table
-			LinkedHashMap<String, String> row = new LinkedHashMap<String, String>();
+			LinkedHashMap<String, String> row = new LinkedHashMap<>();
 
 			for (String colName : SWAuditEntry.getDisplayKeys()) {
 				row.put(colName, entry.get(colName));
@@ -9596,7 +9596,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				configuredByService = produceProductOnClientDisplayfields_localboot();
 			}
 
-			productOnClients_displayFieldsLocalbootProducts = new LinkedHashMap<String, Boolean>();
+			productOnClients_displayFieldsLocalbootProducts = new LinkedHashMap<>();
 
 			// key names from de.uib.opsidatamodel.productstate.ProductState
 			productOnClients_displayFieldsLocalbootProducts.put("productId", true);
@@ -9770,7 +9770,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				configuredByService = produceProductOnClientDisplayfields_netboot();
 			}
 
-			productOnClients_displayFieldsNetbootProducts = new LinkedHashMap<String, Boolean>();
+			productOnClients_displayFieldsNetbootProducts = new LinkedHashMap<>();
 
 			// key names from de.uib.opsidatamodel.productstate.ProductState
 			productOnClients_displayFieldsNetbootProducts.put("productId", true);
@@ -9885,7 +9885,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// check if have to initialize the server property
 			configuredByService = produceHost_displayFields(configuredByService);
 
-			host_displayFields = new LinkedHashMap<String, Boolean>();
+			host_displayFields = new LinkedHashMap<>();
 			host_displayFields.put(HostInfo.hostname_DISPLAY_FIELD_LABEL, true);
 			// always shown, we put it here because of ordering and repeat the statement
 			// after the loop if it has been set to false

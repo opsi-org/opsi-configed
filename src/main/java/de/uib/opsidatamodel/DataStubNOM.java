@@ -887,7 +887,7 @@ public class DataStubNOM extends DataStub {
 					String infoString = "";
 
 					if (identInfoRow == null) {
-						identInfoRow = new LinkedHashMap<String, String>();
+						identInfoRow = new LinkedHashMap<>();
 						identInfoRow.put(SWAuditEntry.NAME, swName);
 
 					} else {
@@ -924,7 +924,7 @@ public class DataStubNOM extends DataStub {
 					Map<String, String> infoWithPool = ident2infoWithPool.get(entry.getIdent());
 
 					if (infoWithPool == null) {
-						infoWithPool = new LinkedHashMap<String, String>();
+						infoWithPool = new LinkedHashMap<>();
 						ident2infoWithPool.put(entry.getIdent(), infoWithPool);
 					}
 					String licencePoolAssigned = "x " + i;

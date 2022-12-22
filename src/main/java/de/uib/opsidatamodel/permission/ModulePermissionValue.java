@@ -21,7 +21,7 @@ public class ModulePermissionValue {
 	public static final Map<String, Boolean> MODULE_CHECKED;
 	// the modules which are known and should be checked
 	static {
-		MODULE_CHECKED = new LinkedHashMap<String, Boolean>();
+		MODULE_CHECKED = new LinkedHashMap<>();
 		MODULE_CHECKED.put("license_management", true);
 		MODULE_CHECKED.put("local_imaging", true);
 		MODULE_CHECKED.put("monitoring", true);
@@ -41,7 +41,7 @@ public class ModulePermissionValue {
 	/*
 	 * public static final Map<String, Boolean> MODULE_PERMITTED;
 	 * static {
-	 * MODULE_PERMITTED = new LinkedHashMap<String, Boolean>();
+	 * MODULE_PERMITTED = new LinkedHashMap<>();
 	 * for (String key : MODULE_CHECKED.keySet() )
 	 * {
 	 * MODULE_PERMITTED.put(key, true);

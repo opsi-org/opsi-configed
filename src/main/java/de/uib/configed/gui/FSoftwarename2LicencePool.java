@@ -560,7 +560,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		TreeMap<String, Map<String, String>> result = new TreeMap<String, Map<String, String>>();
 
 		for (String swID : persist.getName2SWIdents().get(swName)) {
-			LinkedHashMap<String, String> rowMap = new LinkedHashMap<String, String>();
+			LinkedHashMap<String, String> rowMap = new LinkedHashMap<>();
 			rowMap.put(AuditSoftwareXLicencePool.SwID, swID);
 			String licpool = persist.getFSoftware2LicencePool(swID);
 

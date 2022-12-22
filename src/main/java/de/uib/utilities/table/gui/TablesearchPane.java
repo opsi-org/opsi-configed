@@ -462,7 +462,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			popupEmptySearchfield = new JMenuItemFormatted();
 		}
 
-		searchMenuEntries = new LinkedHashMap<JMenuItemFormatted, Boolean>();
+		searchMenuEntries = new LinkedHashMap<>();
 		searchMenuEntries.put(popupSearch, true);
 		searchMenuEntries.put(popupSearchNext, true);
 		searchMenuEntries.put(popupNewSearch, true);

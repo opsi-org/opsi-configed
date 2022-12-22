@@ -173,7 +173,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		public void produceLabels(int upTo) {
 			// logging.debug(this, "produceLabels upTo " + upTo);
 
-			levelMap = new LinkedHashMap<Integer, JLabel>();
+			levelMap = new LinkedHashMap<>();
 
 			for (int i = min; i <= upTo; i++) {
 				levelMap.put(i, new JLabel("" + i));

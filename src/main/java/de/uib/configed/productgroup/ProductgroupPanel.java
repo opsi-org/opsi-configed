@@ -522,7 +522,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		 * );
 		 */
 
-		Map<String, String> values = new LinkedHashMap<String, String>();
+		Map<String, String> values = new LinkedHashMap<>();
 		/*
 		 * values.put(
 		 * de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts"

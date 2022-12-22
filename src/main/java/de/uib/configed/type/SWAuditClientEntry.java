@@ -102,7 +102,7 @@ public class SWAuditClientEntry
 
 	public static final String DB_TABLE_NAME = "SOFTWARE_CONFIG";
 
-	public static final LinkedHashMap<String, String> DB_COLUMNS = new LinkedHashMap<String, String>();
+	public static final LinkedHashMap<String, String> DB_COLUMNS = new LinkedHashMap<>();
 	static {
 		DB_COLUMNS.put(CLIENT_ID, DB_TABLE_NAME + "." + "clientId");
 		DB_COLUMNS.put(SWAuditEntry.NAME, DB_TABLE_NAME + "." + "name");

@@ -15,7 +15,7 @@ public class ChainedTableModelFilter extends TableModelFilter {
 	LinkedHashMap<String, TableModelFilter> chain;
 
 	public ChainedTableModelFilter() {
-		chain = new LinkedHashMap<String, TableModelFilter>();
+		chain = new LinkedHashMap<>();
 	}
 
 	public ChainedTableModelFilter set(String filterName, TableModelFilter filter) {

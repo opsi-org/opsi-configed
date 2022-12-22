@@ -15,7 +15,7 @@ public class ConfigStateEntry extends HashMap<String, Object> {
 	public static final String CONFIG_ID = "configId";
 	public static final String VALUES = "values";
 
-	public static final LinkedHashMap<String, String> DB_COLUMNS = new LinkedHashMap<String, String>();
+	public static final LinkedHashMap<String, String> DB_COLUMNS = new LinkedHashMap<>();
 	static {
 		DB_COLUMNS.put(ID, DB_TABLE_NAME + "." + ID);
 		DB_COLUMNS.put(CONFIG_ID, DB_TABLE_NAME + "." + CONFIG_ID);
