@@ -313,7 +313,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 		if (workingFilter != null && workingFilter.isInUse()) {
 			logging.info(this, " --- using workingfilter  " + workingFilter.getClass().getName());
-			Vector<Vector<Object>> filteredRows = new Vector<Vector<Object>>();
+			Vector<Vector<Object>> filteredRows = new Vector<>();
 
 			for (Vector<Object> row : rows) {
 				if (workingFilter.test(row))
@@ -367,7 +367,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 				mapRows.put(row.get(col).toString() + ":" + i, row);
 				i++;
 			}
-			rows = new Vector<Vector<Object>>();
+			rows = new Vector<>();
 			for (String key : mapRows.keySet()) {
 				rows.add(mapRows.get(key));
 			}

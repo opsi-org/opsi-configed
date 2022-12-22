@@ -38,7 +38,7 @@ public class TabbedPaneX extends JPanel {
 		setLayout(new BorderLayout());
 		jTabbedPaneMain = new JTabbedPane(JTabbedPane.TOP);
 
-		tabOrder = new Vector<Enum>();
+		tabOrder = new Vector<>();
 
 		jTabbedPaneMain.addChangeListener(changeEvent -> {
 			int newVisualIndex = jTabbedPaneMain.getSelectedIndex();

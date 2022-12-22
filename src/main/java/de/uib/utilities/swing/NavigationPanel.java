@@ -31,7 +31,7 @@ public class NavigationPanel extends JPanel implements ActionListener {
 	public NavigationPanel(String[] visibleButtons) {
 		initComponents();
 
-		buttons = new Vector<JButton>();
+		buttons = new Vector<>();
 		buttons.add(nextButton);
 		buttons.add(previousButton);
 		buttons.add(firstButton);

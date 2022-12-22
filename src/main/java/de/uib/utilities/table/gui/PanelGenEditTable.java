@@ -278,8 +278,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			boolean switchLineColors, int[] popupsWanted, boolean withTablesearchPane) {
 		this.withTablesearchPane = withTablesearchPane;
 
-		menuItemsRequesting1SelectedLine = new Vector<JMenuItem>();
-		menuItemsRequestingMultiSelectedLines = new Vector<JMenuItem>();
+		menuItemsRequesting1SelectedLine = new Vector<>();
+		menuItemsRequestingMultiSelectedLines = new Vector<>();
 
 		this.generalPopupPosition = generalPopupPosition;
 

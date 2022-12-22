@@ -52,7 +52,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		this.withTime = withTime;
 		// setBorder(new javax.swing.border.EtchedBorder());
 
-		// dateEventObservers = new Vector<DateEventObserver>();
+		// dateEventObservers = new Vector<>();
 
 		JPopupMenu popup = new JPopupMenu();
 

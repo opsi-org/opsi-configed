@@ -67,7 +67,7 @@ public class DefaultTableProvider implements TableProvider {
 		if (rowsCopy != null)
 			rowsCopy.clear();
 		else
-			rowsCopy = new Vector<Vector<Object>>();
+			rowsCopy = new Vector<>();
 
 		if (rows == null) {
 			rows = source.retrieveRows();

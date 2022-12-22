@@ -39,7 +39,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 
 		boolean success = true; // true until failure
 
-		Vector successfullInsertsWithNewKeys = new Vector<MapBasedTableEditItem>();
+		Vector successfullInsertsWithNewKeys = new Vector<>();
 
 		Iterator iter = updateCollection.iterator();
 

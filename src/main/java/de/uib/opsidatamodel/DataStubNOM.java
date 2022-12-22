@@ -287,7 +287,7 @@ public class DataStubNOM extends DataStub {
 			depot2NetbootProducts = new Object2Product2VersionList();
 			product2VersionInfo2Depots = new HashMap<>();
 
-			productRows = new Vector<Vector<Object>>();
+			productRows = new Vector<>();
 
 			depot2Packages = new HashMap<>();
 

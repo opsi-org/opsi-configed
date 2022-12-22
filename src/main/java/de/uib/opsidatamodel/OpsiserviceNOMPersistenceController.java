@@ -252,7 +252,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		HostGroups addSpecialGroups() {
 			logging.debug(this, "addSpecialGroups check");
-			Vector<StringValuedRelationElement> groups = new Vector<StringValuedRelationElement>();
+			Vector<StringValuedRelationElement> groups = new Vector<>();
 
 			if (get(de.uib.configed.tree.ClientTree.DIRECTORY_PERSISTENT_NAME) == null)
 			// create

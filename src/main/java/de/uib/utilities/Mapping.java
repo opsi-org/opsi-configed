@@ -35,8 +35,8 @@ public class Mapping<K, V> {
 	public Mapping(Map<K, V> definingMap) {
 		map = new HashMap<>();
 		inverseMap = new HashMap<>();
-		domain = new Vector<K>();
-		range = new Vector<V>();
+		domain = new Vector<>();
+		range = new Vector<>();
 		mapOfStrings = new HashMap<>();
 		rangeAsStrings = new Vector<>();
 
