@@ -1120,7 +1120,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	// we produce all partial pathes that are defined by the persistent groups
 	public void produceAndLinkGroups(final Map<String, Map<String, String>> importedGroups) {
 		logging.debug(this, "produceAndLinkGroups " + importedGroups.keySet());
-		this.groups = new TreeMap<String, Map<String, String>>(importedGroups);
+		this.groups = new TreeMap<>(importedGroups);
 		// we need a local copy since we add virtual groups
 
 		createDIRECTORY_NOT_ASSIGNED();

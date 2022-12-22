@@ -2196,7 +2196,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			logging.info(this, "------------ buildPclistTableModel, rebuildTree " + rebuildTree);
 			// unfilteredList = producePcListForDepots( getSelectedDepots());
 			unfilteredList = produceClientListForDepots(getSelectedDepots(), null);
-			String[] allPCs = new TreeMap<String, Boolean>(unfilteredList).keySet().toArray(new String[] {});
+			String[] allPCs = new TreeMap<>(unfilteredList).keySet().toArray(new String[] {});
 
 			logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + logging.getStrings(allPCs));
 
@@ -2234,7 +2234,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			if (rebuildTree) {
 				logging.info(this, "------------ buildPclistTableModel, rebuildTree " + rebuildTree);
-				String[] allPCs = new TreeMap<String, Boolean>(unfilteredList).keySet().toArray(new String[] {});
+				String[] allPCs = new TreeMap<>(unfilteredList).keySet().toArray(new String[] {});
 
 				logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + logging.getStrings(allPCs));
 

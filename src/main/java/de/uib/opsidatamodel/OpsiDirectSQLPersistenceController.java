@@ -178,7 +178,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 	public void cleanUpAuditSoftware() {
 		java.sql.Connection sqlConn = DbConnect.getConnection();
 
-		TreeMap<String, Map<String, String>> rowsSOFTWARE_ON_CLIENTS = new TreeMap<String, Map<String, String>>();
+		TreeMap<String, Map<String, String>> rowsSOFTWARE_ON_CLIENTS = new TreeMap<>();
 
 		String columns = SWAuditClientEntry.DB_COLUMN_NAMES.toString();
 		columns = columns.substring(1);
@@ -242,7 +242,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 		java.util.Set<String> swIdentsOnClients = rowsSOFTWARE_ON_CLIENTS.keySet();
 
-		TreeMap<String, Map<String, String>> rowsSOFTWARE = new TreeMap<String, Map<String, String>>();
+		TreeMap<String, Map<String, String>> rowsSOFTWARE = new TreeMap<>();
 
 		query = "select  name, version, subVersion, language, architecture from SOFTWARE";
 

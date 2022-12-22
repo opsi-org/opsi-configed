@@ -645,7 +645,7 @@ public class JTableSelectionPanel extends JPanel
 	public void buildRowIndexByCol(int i) {
 		int row = 0;
 
-		rowIndexMap = new TreeMap<String, Integer>();
+		rowIndexMap = new TreeMap<>();
 
 		while (row < getTableModel().getRowCount()) {
 			rowIndexMap.put((String) getTableModel().getValueAt(row, i), row);

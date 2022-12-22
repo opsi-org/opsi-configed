@@ -557,7 +557,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	private Map<String, Map<String, String>> produceModelSWxLicencepool(String swName) {
 		logging.info(this, "produceModelSWxLicencepool for swName: " + swName);
 
-		TreeMap<String, Map<String, String>> result = new TreeMap<String, Map<String, String>>();
+		TreeMap<String, Map<String, String>> result = new TreeMap<>();
 
 		for (String swID : persist.getName2SWIdents().get(swName)) {
 			LinkedHashMap<String, String> rowMap = new LinkedHashMap<>();

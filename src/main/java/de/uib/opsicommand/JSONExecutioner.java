@@ -299,7 +299,7 @@ public abstract class JSONExecutioner extends Executioner {
 			String[] sourceVars, String[] targetVars, Map<String, String> translateValues)
 
 	{
-		Map<String, Map<String, String>> result = new TreeMap<String, Map<String, String>>();
+		Map<String, Map<String, String>> result = new TreeMap<>();
 
 		List<JSONObject> resultlist = null;
 

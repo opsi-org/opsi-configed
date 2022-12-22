@@ -241,7 +241,7 @@ public class Messages {
 			return existingLocales;
 
 		ArrayList<LocaleRepresentation> existingLocales = new ArrayList();
-		localeInfo = new TreeMap<String, String>();
+		localeInfo = new TreeMap<>();
 
 		InputStream stream = de.uib.messages.Messages.class.getResourceAsStream(LOCALISATIONS_CONF);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));

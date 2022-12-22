@@ -359,7 +359,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			// as capitalization
 			myCollator.setStrength(java.text.Collator.SECONDARY);
 
-			TreeMap<String, Vector<Object>> mapRows = new TreeMap<String, Vector<Object>>(myCollator);
+			TreeMap<String, Vector<Object>> mapRows = new TreeMap<>(myCollator);
 
 			int col = sortCol;
 			int i = 0; // we use the index to get unique values in any col

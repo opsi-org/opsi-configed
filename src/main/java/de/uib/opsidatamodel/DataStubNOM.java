@@ -821,11 +821,11 @@ public class DataStubNOM extends DataStub {
 
 			Iterator iter = li.iterator();
 
-			installedSoftwareInformation = new TreeMap<String, SWAuditEntry>();
-			installedSoftwareInformationForLicensing = new TreeMap<String, SWAuditEntry>();
-			name2SWIdents = new TreeMap<String, Set<String>>();
-			installedSoftwareName2SWinfo = new TreeMap<String, Map<String, String>>();
-			name2ident2infoWithPool = new TreeMap<String, Map<String, Map<String, String>>>();
+			installedSoftwareInformation = new TreeMap<>();
+			installedSoftwareInformationForLicensing = new TreeMap<>();
+			name2SWIdents = new TreeMap<>();
+			installedSoftwareName2SWinfo = new TreeMap<>();
+			name2ident2infoWithPool = new TreeMap<>();
 
 			int i = 0;
 			String testKey = "zypper";
@@ -917,7 +917,7 @@ public class DataStubNOM extends DataStub {
 					Map<String, Map<String, String>> ident2infoWithPool = name2ident2infoWithPool.get(swName);
 
 					if (ident2infoWithPool == null) {
-						ident2infoWithPool = new TreeMap<String, Map<String, String>>();
+						ident2infoWithPool = new TreeMap<>();
 						name2ident2infoWithPool.put(swName, ident2infoWithPool);
 					}
 
@@ -950,7 +950,7 @@ public class DataStubNOM extends DataStub {
 			logging.info(this,
 					"retrieveInstalledSoftwareInformation produced softwarelist with entries " + softwareList.size());
 
-			software2Number = new TreeMap<String, Integer>();
+			software2Number = new TreeMap<>();
 			for (String sw : softwareList) {
 				software2Number.put(sw, 0);
 			}
@@ -1336,7 +1336,7 @@ public class DataStubNOM extends DataStub {
 		if (licencepools != null)
 			return;
 
-		licencepools = new TreeMap<String, LicencepoolEntry>();
+		licencepools = new TreeMap<>();
 
 		if (persist.withLicenceManagement) {
 			String[] attributes = new String[] { LicencepoolEntry.idKEY, LicencepoolEntry.descriptionKEY };
@@ -1403,8 +1403,8 @@ public class DataStubNOM extends DataStub {
 
 		String today = new java.sql.Date(new java.util.Date().getTime()).toString();
 		licenceContracts = new HashMap<>();
-		contractsToNotify = new TreeMap<String, TreeSet<String>>();
-		contractsExpired = new TreeMap<String, TreeSet<String>>();
+		contractsToNotify = new TreeMap<>();
+		contractsExpired = new TreeMap<>();
 
 		// tableLicenceContracts = new Table_LicenceContracts();
 

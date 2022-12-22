@@ -578,7 +578,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				HostInfo.resetInstancesCount();
 
 				opsiHostNames = new ArrayList<>();
-				allDepots = new TreeMap<String, Map<String, Object>>();
+				allDepots = new TreeMap<>();
 				// masterDepots = new LinkedHashMap<>();
 				masterDepots = new CheckingEntryMapOfMaps();
 				depotNamesList = new LinkedList<>();
@@ -681,8 +681,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				}
 
 				// find other depotserver and build depot2_host2hostInfo;
-				depot2_host2hostInfo = new TreeMap<String, Map<String, HostInfo>>();
-				depot2_host2hostInfo.put(configServer, new TreeMap<String, HostInfo>());
+				depot2_host2hostInfo = new TreeMap<>();
+				depot2_host2hostInfo.put(configServer, new TreeMap<>());
 
 				// find depots and build entries for them
 				for (Map<String, Object> host : opsiHosts) {
@@ -709,7 +709,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 							Map<String, Object> hostMap = new HashMap<>(host);
 							masterDepots.put(name, hostMap);
 
-							depot2_host2hostInfo.put(name, new TreeMap<String, HostInfo>());
+							depot2_host2hostInfo.put(name, new TreeMap<>());
 						}
 					}
 				}
@@ -3159,7 +3159,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	private Map<String, Set<String>> projectToFunction(Map<String, Map<String, String>> mappedRelation,
 			String originVar, String imageVar) {
-		Map<String, Set<String>> result = new TreeMap<String, Set<String>>();
+		Map<String, Set<String>> result = new TreeMap<>();
 
 		Iterator iter = mappedRelation.keySet().iterator();
 
@@ -3739,7 +3739,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public Map<String, Map/* <String, String> */> retrieveSoftwareAuditData(String clientId) {
-		Map<String, Map/* <String, String> */> result = new TreeMap<String, Map/* <String, String> */>();
+		Map<String, Map/* <String, String> */> result = new TreeMap<>();
 
 		if (clientId == null || clientId.equals(""))
 			return result;
@@ -3860,7 +3860,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		// getConfigOptions();
 
 		// List<String> opsiHwNames = new ArrayList<>();
-		hwAuditDeviceClasses = new TreeMap<String, OpsiHwAuditDeviceClass>();
+		hwAuditDeviceClasses = new TreeMap<>();
 
 		if (getOpsiHWAuditConf() == null) {
 			logging.error(this, "no hwaudit config found ");
@@ -5170,7 +5170,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			 * );
 			 * 
 			 * productIds = new TreeSet<>();
-			 * productDefaultStates = new TreeMap<String, Map<String, String>>();
+			 * productDefaultStates = new TreeMap<>();
 			 * 
 			 * for (Map<String, Object> map : maps )
 			 * {
@@ -5189,7 +5189,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			 */
 
 			productIds = new TreeSet<>();
-			productDefaultStates = new TreeMap<String, Map<String, String>>();
+			productDefaultStates = new TreeMap<>();
 
 			for (String productId : dataStub.getProduct2versionInfo2infos().keySet()) {
 				productIds.add(productId);
@@ -7653,7 +7653,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 * public Map<String, Map> getLicencekeys()
 	 * // without internal caching
 	 * {
-	 * TreeMap<String, Map> licenceKeys = new TreeMap<String, Map>();
+	 * TreeMap<String, Map> licenceKeys = new TreeMap<>();
 	 * 
 	 * if (withLicenceManagement)
 	 * {
@@ -7913,7 +7913,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		relations_auditSoftwareToLicencePools = dataStub.getAuditSoftwareXLicencePool();
 
-		rowmapAuditSoftware = new TreeMap<String, Map>();
+		rowmapAuditSoftware = new TreeMap<>();
 		fSoftware2LicencePool = new HashMap<>(); // function softwareIdent --> pool
 		fLicencePool2SoftwareList = new HashMap<>(); // function pool --> list of assigned software
 		fLicencePool2UnknownSoftwareList = new HashMap<>(); // function pool --> list of assigned
@@ -8661,7 +8661,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		// ----------------- set up data structure
 
-		TreeMap<String, ExtendedInteger> pool2allowedUsagesCount = new TreeMap<String, ExtendedInteger>();
+		TreeMap<String, ExtendedInteger> pool2allowedUsagesCount = new TreeMap<>();
 
 		for (LicenceUsableForEntry licenceUsability : licenceUsabilities) {
 			String pool = licenceUsability.getLicencePoolId();
@@ -8715,9 +8715,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		logging.debug(this, " pool2allowedUsagesCount " + pool2allowedUsagesCount);
 
-		TreeMap<String, Integer> pool2opsiUsagesCount = new TreeMap<String, Integer>();
+		TreeMap<String, Integer> pool2opsiUsagesCount = new TreeMap<>();
 
-		Map<String, Set<String>> pool2opsiUsages = new TreeMap<String, Set<String>>();
+		Map<String, Set<String>> pool2opsiUsages = new TreeMap<>();
 
 		for (LicenceUsageEntry licenceUsage : licenceUsages) {
 			String lic4pool = licenceUsage.getLic4pool();
@@ -8758,10 +8758,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		logging.info(this, "  retrieveStatistics  collect pool2installationsCount");
 
-		TreeMap<String, TreeSet<String>> pool2clients = new TreeMap<String, TreeSet<String>>();
+		TreeMap<String, TreeSet<String>> pool2clients = new TreeMap<>();
 		// we take Set since we count only one usage per client
 
-		TreeMap<String, Integer> pool2installationsCount = new TreeMap<String, Integer>();
+		TreeMap<String, Integer> pool2installationsCount = new TreeMap<>();
 
 		// iterate throught the licence pools; get the software combined ids which
 		// require this licencepool
@@ -8808,7 +8808,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		// logging.info(this, "pool2installationsCount " + pool2installationsCount);
 
-		rowsLicenceStatistics = new TreeMap<String, LicenceStatisticsRow>();
+		rowsLicenceStatistics = new TreeMap<>();
 
 		if (withLicenceManagement) {
 
@@ -8864,7 +8864,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		 * 
 		 * logging.info(this, "getLicenceStatistics()");
 		 * 
-		 * rowsLicenceStatistics = new TreeMap<String, LicenceStatisticsRow>();
+		 * rowsLicenceStatistics = new TreeMap<>();
 		 * 
 		 * boolean countOnlyOnePoolusagePerClient = true;
 		 * 

@@ -164,7 +164,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public static TreeMap<String, String> PROPERTYCLASSES_SERVER;
 	static {
-		PROPERTYCLASSES_SERVER = new TreeMap<String, String>();
+		PROPERTYCLASSES_SERVER = new TreeMap<>();
 		PROPERTYCLASSES_SERVER.put("", "general configuration items");
 		PROPERTYCLASSES_SERVER.put("clientconfig", "network configuration");
 		PROPERTYCLASSES_SERVER.put(de.uib.opsidatamodel.modulelicense.LicensingInfoMap.CONFIG_KEY,
@@ -196,7 +196,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public static TreeMap<String, String> PROPERTYCLASSES_CLIENT;
 	static {
-		PROPERTYCLASSES_CLIENT = new TreeMap<String, String>();
+		PROPERTYCLASSES_CLIENT = new TreeMap<>();
 		PROPERTYCLASSES_CLIENT.put("", "general configuration items");
 		PROPERTYCLASSES_CLIENT.put("clientconfig", "network configuration");
 		// PROPERTYCLASSES_CLIENT.put( SavedSearch.CONFIG_KEY, "<html></p>saved search
@@ -214,13 +214,13 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public static TreeMap<String, String> PROPERTY_EDITOPTIONS_CLIENT;
 	static {
-		PROPERTY_EDITOPTIONS_CLIENT = new TreeMap<String, String>();
+		PROPERTY_EDITOPTIONS_CLIENT = new TreeMap<>();
 
 	}
 
 	public static TreeMap<String, String> PROPERTY_EDITOPTIONS_SERVER;
 	static {
-		PROPERTY_EDITOPTIONS_SERVER = new TreeMap<String, String>();
+		PROPERTY_EDITOPTIONS_SERVER = new TreeMap<>();
 
 	}
 
