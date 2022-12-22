@@ -77,7 +77,7 @@ public class Mapping<K, V> {
 	}
 
 	public TreeSet<K> getDomainNaturallyOrdered() {
-		return new TreeSet<K>(domain);
+		return new TreeSet<>(domain);
 	}
 
 	public TreeSet<String> getDomainAsStringsCollated() {
@@ -91,7 +91,7 @@ public class Mapping<K, V> {
 	}
 
 	public TreeSet<V> getRangeNaturallyOrdered() {
-		return new TreeSet<V>(range);
+		return new TreeSet<>(range);
 	}
 
 	public TreeSet<String> getRangeAsStringsCollated() {

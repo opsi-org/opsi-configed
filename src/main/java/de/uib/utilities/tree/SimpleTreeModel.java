@@ -60,7 +60,7 @@ public class SimpleTreeModel extends DefaultTreeModel
 	}
 
 	protected void generateFrom(java.util.Set<String> dottedKeys) {
-		allPathes = new TreeSet<SimpleTreePath>();
+		allPathes = new TreeSet<>();
 		path2Node = new TreeMap<SimpleTreePath, SimpleIconNode>();
 		// path2DottedString = new TreeMap<SimpleTreePath, String>();
 

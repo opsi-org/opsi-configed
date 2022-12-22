@@ -7919,7 +7919,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		fLicencePool2UnknownSoftwareList = new HashMap<>(); // function pool --> list of assigned
 															// software
 
-		softwareWithoutAssociatedLicencePool = new TreeSet<Object>(
+		softwareWithoutAssociatedLicencePool = new TreeSet<>(
 				getInstalledSoftwareInformationForLicensing().keySet());
 
 		if (!withLicenceManagement)

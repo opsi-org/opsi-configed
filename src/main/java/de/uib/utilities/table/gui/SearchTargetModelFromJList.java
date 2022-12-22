@@ -102,7 +102,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 	@Override
 	public int[] getSelectedRows() {
-		TreeSet<Integer> selection = new TreeSet<Integer>();
+		TreeSet<Integer> selection = new TreeSet<>();
 		for (int j = 0; j < theValues.size(); j++) {
 			if (jList.isSelectedIndex(j))
 				selection.add(j);

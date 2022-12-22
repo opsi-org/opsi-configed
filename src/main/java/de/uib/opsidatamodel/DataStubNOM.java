@@ -325,7 +325,7 @@ public class DataStubNOM extends DataStub {
 
 				TreeSet<OpsiPackage> depotpackages = depot2Packages.get(depot);
 				if (depotpackages == null) {
-					depotpackages = new TreeSet<OpsiPackage>();
+					depotpackages = new TreeSet<>();
 					depot2Packages.put(depot, depotpackages);
 				}
 				depotpackages.add(p);

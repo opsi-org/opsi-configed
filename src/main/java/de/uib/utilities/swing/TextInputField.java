@@ -85,7 +85,7 @@ public class TextInputField extends JPanel
 		// if (inputType == InputType.TEXT)
 		if (proposedValues != null) {
 
-			TreeSet<Character> orderedValues = new TreeSet<Character>();
+			TreeSet<Character> orderedValues = new TreeSet<>();
 
 			for (String val : proposedValues) {
 				if (val.length() > 0)

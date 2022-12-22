@@ -584,10 +584,10 @@ public class UserConfigProducing {
 
 		if (configOptionsMap.get(configKeyList) == null
 				|| configOptionsMap.get(configKeyList).getPossibleValues() == null) {
-			oldPossibleValuesDepot = new TreeSet<Object>();
+			oldPossibleValuesDepot = new TreeSet<>();
 		} else {
 			oldPossibleValuesDepot = new HashSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
-			// oldPossibleValues = new TreeSet<Object>();
+			// oldPossibleValues = new TreeSet<>();
 		}
 
 		logging.info(this, "oldPossibleValuesDepot " + oldPossibleValuesDepot);
@@ -600,7 +600,7 @@ public class UserConfigProducing {
 
 			currentPossibleValuesDepotListed.add(configserver);
 
-			Set<Object> posVals = new TreeSet<Object>();
+			Set<Object> posVals = new TreeSet<>();
 			posVals.addAll(existingDepots);
 			posVals.addAll(oldPossibleValuesDepot);
 
@@ -651,7 +651,7 @@ public class UserConfigProducing {
 
 		if (configOptionsMap.get(configKeyList) == null
 				|| configOptionsMap.get(configKeyList).getPossibleValues() == null) {
-			oldPossibleValuesHostgroup = new TreeSet<Object>();
+			oldPossibleValuesHostgroup = new TreeSet<>();
 		} else {
 			oldPossibleValuesHostgroup = new HashSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
 		}
@@ -660,7 +660,7 @@ public class UserConfigProducing {
 			possibleValuesHostgroup = prototypeConfig.getPossibleValues(partkey);
 			currentPossibleValuesHostgroupListed = new LinkedHashSet<Object>(possibleValuesHostgroup);
 		} else {
-			Set<Object> posVals = new TreeSet<Object>(existingHostgroups);
+			Set<Object> posVals = new TreeSet<>(existingHostgroups);
 			posVals.addAll(oldPossibleValuesHostgroup);
 			currentPossibleValuesHostgroupListed = new LinkedHashSet<Object>(posVals);
 
@@ -713,7 +713,7 @@ public class UserConfigProducing {
 
 		if (configOptionsMap.get(configKeyList) == null
 				|| configOptionsMap.get(configKeyList).getPossibleValues() == null) {
-			oldPossibleValuesProductgroups = new TreeSet<Object>();
+			oldPossibleValuesProductgroups = new TreeSet<>();
 		} else {
 			oldPossibleValuesProductgroups = new HashSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
 		}
@@ -724,7 +724,7 @@ public class UserConfigProducing {
 			possibleValuesProductgroups = prototypeConfig.getPossibleValues(partkey);
 			currentPossibleValuesProductgroupsListed.addAll(possibleValuesProductgroups);
 		} else {
-			Set<Object> posVals = new TreeSet<Object>(existingProductgroups);
+			Set<Object> posVals = new TreeSet<>(existingProductgroups);
 			currentPossibleValuesProductgroupsListed.addAll(posVals);
 		}
 

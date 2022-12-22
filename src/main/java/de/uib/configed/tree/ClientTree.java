@@ -1006,7 +1006,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		if (isInDIRECTORY(clientPath)) {
 			String nodeID = (String) node.getUserObject();
 			if (locationsInDIRECTORY.get(nodeID) == null) {
-				locationsInDIRECTORY.put(nodeID, new TreeSet<GroupNode>(new NodeComparator()));
+				locationsInDIRECTORY.put(nodeID, new TreeSet<>(new NodeComparator()));
 			}
 
 			java.util.Set<GroupNode> hostingGroups = locationsInDIRECTORY.get(nodeID);
@@ -1784,7 +1784,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	private void checkDIRECTORY(String clientID, GroupNode selectedNode) {
 		java.util.Set<GroupNode> groupsInDIRECTORY = locationsInDIRECTORY.get(clientID);
 		if (groupsInDIRECTORY == null) {
-			groupsInDIRECTORY = new TreeSet<GroupNode>(new NodeComparator());
+			groupsInDIRECTORY = new TreeSet<>(new NodeComparator());
 			locationsInDIRECTORY.put(clientID, groupsInDIRECTORY);
 		}
 

@@ -288,7 +288,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		if (keycol < 0)
 			return null;
 
-		TreeSet<Object> result = new TreeSet<Object>();
+		TreeSet<Object> result = new TreeSet<>();
 		for (int row = 0; row < getRowCount(); row++) {
 			if (getValueAt(row, keycol) != null)
 				result.add(getValueAt(row, keycol));
