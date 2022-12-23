@@ -58,7 +58,7 @@ public class SSHConnectExec extends SSHConnect {
 		FOUND_ERROR = false;
 		main = m;
 		
-		// if (main != null) connect(sshcommand);
+		
 		logging.info(this, "SSHConnectExec main " + main);
 		
 		logging.info(this, "SSHConnectExec sshcommand " + sshcommand.getSecuredCommand());
@@ -70,7 +70,7 @@ public class SSHConnectExec extends SSHConnect {
 	}
 
 	public void starting(SSHCommand sshcommand) {
-		// if (!(isConnected())) connect(sshcommand);
+		
 		if (!(isConnected())) {
 			final SSHCommandFactory factory = SSHCommandFactory.getInstance(main);
 			logging.error(this, configed.getResourceValue("SSHConnection.not_connected.message") + " "

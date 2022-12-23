@@ -3275,7 +3275,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			iconButtonToggleClientFilter.setIcon(Globals.createImageIcon("images/view-filter_disabled-32.png", ""));
 		else
 			iconButtonToggleClientFilter.setIcon(Globals.createImageIcon("images/view-filter-32.png", ""));
-		// setActivated( !main.getFilterClientList() );
+		
 
 	}
 

@@ -1021,7 +1021,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			selectionPanel.moveToValue(getSelectedClients()[0], 0);
 		}
 
-		// mainFrame.showCreatedColumn( !visible );
+		
 		mainFrame.combinedMenuItemCreatedColumn.show(!visible);
 	}
 
@@ -1139,7 +1139,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			allFrames.add(groupActionFrame);
 		}
 
-		groupActionFrame.start();// !groupActionFrame.isVisible());
+		groupActionFrame.start();
 	}
 
 	public void handleProductActionRequest() {
@@ -1174,7 +1174,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			allFrames.add(productActionFrame);
 		}
 
-		productActionFrame.start();// !productActionFrame.isVisible());
+		productActionFrame.start();
 	}
 
 	// private void test4AllClients() {
@@ -1232,7 +1232,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		logging.info(this, "toggleLicencesFrame is visible" + licencesFrame.isVisible());
-		licencesFrame.setVisible(true);// !licencesFrame.isVisible());
+		licencesFrame.setVisible(true);
 		mainFrame.visualizeLicencesFramesActive(licencesFrame.isVisible());
 	}
 
@@ -3565,7 +3565,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			return true;
 		} catch (Exception ex) {
-			// if (waitCursor != null) waitCursor.stop();
+			
 			logging.error("Error in setLocalbootProductsPage: " + ex, ex);
 			return false;
 		}
@@ -3651,7 +3651,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			return true;
 		} catch (Exception ex) {
-			// if (waitCursor != null) waitCursor.stop();
+			
 			logging.error("Error in setNetbootProductsPage: " + ex, ex);
 			return false;
 		}
@@ -3782,7 +3782,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			return true;
 		} catch (Exception ex) {
-			// if (waitCursor != null) waitCursor.stop();
+			
 			logging.error("Error in setHostPropertiesPage: " + ex, ex);
 			return false;
 		}
@@ -3920,7 +3920,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			return true;
 		} catch (Exception ex) {
-			// if (waitCursor != null) waitCursor.stop();
+			
 			logging.error("Error in setNetworkConfigurationPage: " + ex, ex);
 			return false;
 		}
@@ -3966,7 +3966,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			return true;
 		} catch (Exception ex) {
-			// if (waitCursor != null) waitCursor.stop();
+			
 			logging.error("Error in setHardwareInfoPage: " + ex, ex);
 			return false;
 		}
@@ -4007,7 +4007,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			return true;
 		} catch (Exception ex) {
-			// if (waitCursor != null) waitCursor.stop();
+			
 			logging.error("Error in setSoftwareInfoPage: " + ex, ex);
 			return false;
 		}
@@ -4031,7 +4031,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			persist.getLogfiles(firstSelectedClient, logtype);
 
 		} catch (Exception ex) {
-			// if (waitCursor != null) waitCursor.stop();
+			
 			logging.error("Error in updateLogPage: " + ex, ex);
 
 			return false;
@@ -4067,7 +4067,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				logging.debug(this, "log pages set");
 			} catch (Exception ex) {
-				// if (waitCursor != null) waitCursor.stop();
+				
 				logging.error("Error in setLogPage: " + ex, ex);
 			}
 		}
@@ -4097,7 +4097,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return true;
 
 		} catch (Exception ex) {
-			// if (waitCursor != null) waitCursor.stop();
+			
 			logging.error("Error in setLogPage: " + ex, ex);
 			return false;
 		}

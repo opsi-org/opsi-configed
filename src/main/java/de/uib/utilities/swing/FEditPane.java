@@ -128,8 +128,8 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	protected void setSingleLine(boolean b) {
 		singleLine = b;
-		// textpane.setLineWrap(!singleLine);
-		// textpane.setWrapStyleWord(!singleLine);
+		
+		
 	}
 
 	@Override

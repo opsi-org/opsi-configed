@@ -1026,7 +1026,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		
 		
 		
-		// !theTable.getColumnModel().getColumns().hasMoreElements());
+		
 		setDataChanged(false);
 		setCellRenderers();
 
@@ -1272,7 +1272,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			return;
 
 		
-		// !theTable.getColumnModel().getColumns().hasMoreElements());
+		
 
 		if (theTable.getColumnModel().getColumns().hasMoreElements()) {
 			

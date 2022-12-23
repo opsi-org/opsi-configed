@@ -735,7 +735,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		// centerPanel.getHeight()-parameterPanel.getHeight());
 		// this.setSize(this.getWidth(), this.getHeight()-parameterPanel.getHeight());
 		// }
-		// helpPanelStatus = !helpPanelStatus;
+		
 		repaint();
 		revalidate();
 	}

@@ -63,7 +63,7 @@ public class JTextHideField extends javax.swing.JPanel {
 
 		hiddenMode = true;
 		multiValue = true;
-		visibleField.setVisible(true);// !hiddenMode );
+		visibleField.setVisible(true);
 		invisibleField.setVisible(true);
 		visibleField.setEnabled(true);
 		invisibleField.setEnabled(false);

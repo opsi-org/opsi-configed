@@ -99,7 +99,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		// try
 		// {
 		// String o_prod = ((String)firstDepot.get(configDepot)).replace("file://", "");
-		// if (o_prod != null) opsiProd = o_prod;
+		
 		
 		
 		// } catch (Exception e)
@@ -111,7 +111,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		// // String od = firstDepot.get(configDepot).replace("file://", "");
 		
 		// " + opsiDepot);
-		// // if (od != null) opsiDepot = od;
+		
 	}
 
 	protected void initLabels() {

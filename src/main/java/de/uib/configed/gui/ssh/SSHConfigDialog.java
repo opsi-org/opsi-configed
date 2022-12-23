@@ -99,7 +99,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 	private void checkComponentStates() {
 		boolean state = compareStates();
 		logging.debug(this, "checkComponentStates  identical " + state); // setBtn_save setEnabled " + !state);
-		// btn_save.setEnabled( !state );
+		
 		setSSHState();
 	}
 

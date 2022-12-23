@@ -199,11 +199,11 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	public void setGuiIsFiltered(boolean b) {
 		logging.debug(this, "setGuiIsFiltered " + b);
 		searchPane.setFilteredMode(b);
-		// buttonFilter.setActivated(!b);
+		
 	}
 
 	public boolean getGuiIsFiltered() {
-		// return !buttonFilter.isActivated();
+		
 		return searchPane.isFilteredMode();
 
 		

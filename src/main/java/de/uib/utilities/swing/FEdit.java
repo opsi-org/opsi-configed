@@ -391,7 +391,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 		logging.info(this, "cancel, go back to " + initialText);
 		setStartText(initialText); // sets cancelled = false
 		cancelled = true;
-		// if (servedCellEditor != null) servedCellEditor.cancelCellEditing();
+		
 		if (servedCellEditor != null)
 			servedCellEditor.stopCellEditing();
 

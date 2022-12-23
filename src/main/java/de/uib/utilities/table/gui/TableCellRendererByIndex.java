@@ -131,7 +131,7 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 			
 		}
 
-		// if (backgroundColor != null) result.setBackground (backgroundColor);
+		
 		
 
 		// CellAlternatingColorizer.colorize(result, isSelected, (row % 2 == 0), true);
