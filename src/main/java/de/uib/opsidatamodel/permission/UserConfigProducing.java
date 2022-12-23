@@ -340,7 +340,7 @@ public class UserConfigProducing {
 			logging.info(this, "supplyAllPermissionEntries possibleValuesRole, roleParts " + " " + possibleValuesRole
 					+ ", " + roleParts);
 
-			// if( !( possibleValuesSet.equals( roleParts ) ) )
+			
 			readyObjects.add(Executioner.jsonMap(itemRole));
 
 			UserConfig roleConfig = roleConfigs.get(roleToPlay);

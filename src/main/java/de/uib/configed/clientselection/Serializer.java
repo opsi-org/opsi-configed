@@ -219,7 +219,7 @@ public abstract class Serializer {
 									+ " compare with elementName " + elementName + " or perhaps with elementPathS "
 									+ elementPathS);
 
-					// if( possibleElement.getClassName().equals( elementName ) )
+					
 					// originally, but is nonsense -------------------------------------------
 					if (possibleElement.getClassName().equals(elementName)
 							&& Arrays.toString(possibleElement.getPathArray()).equals(elementPathS)) {

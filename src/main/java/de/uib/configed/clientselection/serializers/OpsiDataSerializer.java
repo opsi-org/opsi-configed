@@ -77,7 +77,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		
 		
 
-		// if( !searches.containsKey(name) )
+		
 		// we take version from server and not the (possibly edited own version! )
 		searches.put(name, controller.getSavedSearches().get(name).getSerialization());
 

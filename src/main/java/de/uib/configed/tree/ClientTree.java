@@ -1711,7 +1711,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			DefaultMutableTreeNode newParentNode, TreePath newParentPath) {
 		logging.debug(this, " copying " + objectID + ", sourcePath " + sourcePath + " into group " + newParentID);
 
-		// if (switchToMove(sourcePath, newParentPath)
+		
 
 		DefaultMutableTreeNode clientNode = null;
 
@@ -1905,7 +1905,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		Enumeration<TreeNode> en = parent.children();
 
-		// ----- if ( node.getAllowsChildren() )
+		
 		// for groups, we should look only for groups
 
 		DefaultMutableTreeNode insertNode = null;

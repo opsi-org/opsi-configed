@@ -58,7 +58,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	@Override
 	public int getColumnCount() {
 		
-		// if (getTableModel() == null)
+		
 		
 
 		return getTableModel().getColumnCount();
@@ -211,7 +211,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	public void setFiltered(boolean b) {
 		
 
-		// if (b == filtered)
+		
 		
 
 		boolean wasChanged = false;

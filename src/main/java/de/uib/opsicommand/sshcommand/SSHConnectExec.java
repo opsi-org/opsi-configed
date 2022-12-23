@@ -182,7 +182,7 @@ public class SSHConnectExec extends SSHConnect {
 			for (int i = 0; i < anzahlCommands; i++) {
 				String com = ((SSHCommand_Template) commands).getOriginalCommands().get(i).getCommandRaw();
 				com = "(" + (i + 1) + ")  " + com;
-				// if (i == anzahlCommands-1)
+				
 				// {
 				// // final_dia.append(" ", com);
 				
@@ -348,7 +348,7 @@ public class SSHConnectExec extends SSHConnect {
 			if (sequential)
 				return task.get();
 			if (SSHCommandFactory.ssh_always_exec_in_background)
-				// if (!multiCommand)
+				
 				if (withGui) {
 					outputDialog.setVisible(false);
 				}
@@ -505,7 +505,7 @@ public class SSHConnectExec extends SSHConnect {
 				if (!(isConnected()))
 					connect();
 				final Channel channel = getSession().openChannel("exec");
-				// if (! (((String)command.getCommand().trim()).endsWith("&")))
+				
 				
 				((ChannelExec) channel).setErrStream(System.err);
 				((ChannelExec) channel).setCommand(command.getCommand());
@@ -554,9 +554,9 @@ public class SSHConnectExec extends SSHConnect {
 						if (i < 0)
 							break;
 						String str = new String(tmp, 0, i, "UTF-8");
-						// if ( (command.needSudo() ) &&
+						
 						// (str.equals(configed.getResourceValue("SSHConnection.sudoFailedText"))) )
-						// if ( (command.needSudo() ) &&
+						
 						// (str.equals(SSHCommandFactory.getInstance().sudo_failed_text)) )
 						if ((command.needSudo()) && (str.contains(SSHCommandFactory.sudo_failed_text))) {
 							String pw = "";

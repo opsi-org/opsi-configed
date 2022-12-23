@@ -210,7 +210,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 				logging.warning(this, "ERROR 1 command = null");
 		}
 
-		else { // if (rb_wget.isSelected()) {
+		else { 
 			sequential = true;
 
 			commands = installWgetPanel.getCommand(commands);

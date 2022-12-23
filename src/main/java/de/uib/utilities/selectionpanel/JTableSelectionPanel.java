@@ -1316,7 +1316,7 @@ public class JTableSelectionPanel extends JPanel
 			
 			// targetModel.isFiltered " + targetModel.isFiltered());
 
-			// if (checkmarkSearch.isSelected())
+			
 			fieldSearch.setText("");
 		}
 	}

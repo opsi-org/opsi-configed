@@ -117,7 +117,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		this.centerOn(Globals.mainFrame);
 		this.setSize(this.thissize);
 		this.setMaximumSize(new Dimension(900, 700));
-		// if (terminal != null) terminal.exec("bash\n");
+		
 		
 		
 		setComponentsEnabled_RO(!Globals.isGlobalReadOnly());
@@ -469,7 +469,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	}
 
 	public void changeEchoChar(char c) {
-		// if (passwordMode)
+		
 		logging.debug(this, "changeEchoChar char " + c);
 		((JPasswordField) tf_command).setEchoChar(c);
 		logging.debug(this, "changeEchoChar checkbox set Selected " + passwordMode);

@@ -162,14 +162,14 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			return false;
 		} else if (cb_useKeyfile.isSelected()) {
 			try {
-				// if (connectionInfo.getKeyfilePath() != null)
+				
 				if (!connectionInfo.getKeyfilePath().equals(tf_keyfile.getText())) {
 					logging.debug(this, "compareStates 10");
 					return false;
 				}
 
 				String pp = tf_passphrase.getPassword().toString();
-				// if (connectionInfo.getKeyfilePassphrase() != null)
+				
 				if (!connectionInfo.getKeyfilePassphrase().equals(pp)) {
 					logging.debug(this, "compareStates 11");
 					return false;
@@ -357,7 +357,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 							"actionPerformed on btn_kill " + SSHCommandFactory.getInstance().getConnectionState());
 
 					SSHCommandFactory.getInstance().unsetConnection();
-					// if (SSHCommandFactory.getInstance().getConnectionState().equals(
+					
 					// SSHCommandFactory.CONNECTED ) )
 					
 					// there seems to be nothing got disconnect
@@ -475,12 +475,12 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 				checkComponentStates();
 			});
 
-			// if (configedMain.SSHKEY != null)
+			
 			if (connectionInfo.getKeyfilePath() != "")
 				cb_useKeyfile.setSelected(true);
 			// {
-			// if (connectionInfo.getKeyfilePassphrase() != "")
-			// if (configedMain.SSHKEYPASS != null)
+			
+			
 			// {
 			
 			
@@ -663,7 +663,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			logging.info(this, "doAction1  cb_useDefault.isSelected false");
 			String host = (String) cb_host.getSelectedItem();
 			logging.info(this, "doAction1 host " + host);
-			// if(((DefaultComboBoxModel)cb_host.getModel()).getIndexOf(host) == -1 )
+			
 			
 
 			connectionInfo.setUserData(host, tf_user.getText(), new String(tf_passw.getPassword()), tf_port.getText());

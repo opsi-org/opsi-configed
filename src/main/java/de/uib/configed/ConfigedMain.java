@@ -664,7 +664,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			dashboard.show();
 		}
 
-		// if (controlDash == null )
+		
 		
 		// else
 
@@ -672,7 +672,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// public void showDashInfo()
 	// {
-	// if (controlDash != null)
+	
 
 	// }
 
@@ -1363,7 +1363,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			clientInDepot = "";
 
-			// if (viewIndex == viewClients)
+			
 			hostInfo.initialize();
 
 			Map<String, HostInfo> pcinfos = persist.getHostInfoCollections().getMapOfPCInfoMaps();
@@ -1413,7 +1413,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			 * {
 			 * String selClient = getSelectedClients()[0];
 			 * 
-			 * // if (viewIndex == viewClients)
+			 * 
 			 * // {
 			 * logging.debug(this, "selClient " + selClient + " infos from map " + ((Object)
 			 * pcinfos));
@@ -1467,7 +1467,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			clientInDepot = depotsAdded.toString();
 
-			// if (viewIndex == viewClients)
+			
 			// {
 
 			if (getSelectedClients().length == 1) {
@@ -1491,7 +1491,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			mainFrame.getHostsStatusInfo().updateValues(clientCount, getSelectedClients().length,
 					getSelectedClientsStringWithMaxLength(HostsStatusPanel.maxClientnamesInField), clientInDepot);
 
-			// if (getSelectedClients().length > 0)
+			
 
 			// else
 
@@ -1523,7 +1523,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	// private String showIntArray(int[] a) {
-	// if (a == null || a.length == 0)
+	
 	// return " ";
 
 	
@@ -2018,9 +2018,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	// private String formatDate(String original) {
-	// if (original != null) {
+	
 	// String[] ls = original.split("");
-	// if (ls.length >= 15)
+	
 	// return ls[1] + ls[2] + ls[3] + ls[4] + '-' + ls[5] + ls[6] + '-' + ls[7] +
 	// ls[8] + ' ' + ls[9] + ls[10]
 	
@@ -2691,7 +2691,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (selectValues != null)
 			valuesToSelect = new ArrayList<>(selectValues);
 
-		// if (valuesToSelect == null)
+		
 		
 		List<? extends RowSorter.SortKey> saveSortKeys = selectionPanel.getSortKeys();
 
@@ -3328,7 +3328,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private boolean checkSynchronous(java.util.Set depots) {
-		// if (depots == null)
+		
 
 		if (depots.size() > 1 && !persist.areDepotsSynchronous(depots)) {
 			JOptionPane.showMessageDialog(mainFrame, configed.getResourceValue("ConfigedMain.notSynchronous.text"), // "not
@@ -4659,7 +4659,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			persist.productDataRequestRefresh();
 
 			
-			// if (saveViewIndex == viewProductProperties)
+			
 
 			logging.info(this, "reloadData _1");
 			
@@ -5215,7 +5215,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 										model.fireTableRowsUpdated(row, row);
 										// if ordered by col the order does not change although the value changes
-										// if the other way is wanted a global fireTableDataChanged (see below)
+										
 										// is necessary
 									}
 								}
@@ -5777,13 +5777,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// persist.getCommonProductPropertyValues( new
 		// ArrayList(Arrays.asList(clientname)) , product, "on_shutdown_install" ) );
 
-		// if ( (shutdown_value.get(0) != null) &&
+		
 		// !(shutdown_value.get(0).equals(aktivate)) )
 		{
 			persist.setCommonProductPropertyValue(new HashSet<>(Arrays.asList(getSelectedClients())), product,
 					"on_shutdown_install", Arrays.asList(activate));
 
-			// if (status== setup)
+			
 			// set.status= none
 
 			Map<String, String> productValues = new HashMap<>();
@@ -5807,13 +5807,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// persist.getCommonProductPropertyValues( new
 		// ArrayList(Arrays.asList(clientname)) , product, "on_shutdown_install" ) );
 
-		// if ( (shutdown_value.get(0) != null) &&
+		
 		// !(shutdown_value.get(0).equals(aktivate)) )
 		{
 			persist.setCommonProductPropertyValue(new HashSet<>(Arrays.asList(clientNames)), product,
 					"on_shutdown_install", Arrays.asList(activate));
 
-			// if (status== setup)
+			
 			// set.status= none
 
 			Map<String, String> productValues = new HashMap<>();
@@ -5876,7 +5876,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		ErrorListProducer(String specificPartOfTitle) {
 			String part = specificPartOfTitle;
 			
-			// if (part.length() > maxlen)
+			
 			// part = part.substring(0, maxlen) + " ...";
 
 			title = Globals.APPNAME + ":  " +
@@ -6291,7 +6291,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 * @param command
 	 */
 	public void startSSHOpsiServerExec(final SSHCommand command) {
-		// if (!(Globals.isGlobalReadOnly()))
+		
 		// {
 		logging.info(this, "startSSHOpsiServerExec isReadOnly false");
 		final ConfigedMain m = this;
@@ -6302,9 +6302,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					((SSHCommandNeedParameter) command).startParameterGui(m);
 				else
 					new SSHConnectExec(m, command);
-				// if (!(Globals.isGlobalReadOnly()))
+				
 				// {
-				// if (command instanceof SSHCommand_Template)
+				
 				
 				
 

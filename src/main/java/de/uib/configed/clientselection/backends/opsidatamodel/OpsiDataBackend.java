@@ -211,15 +211,15 @@ public class OpsiDataBackend extends Backend {
 		}
 
 		// this would need the package version to be an integer
-		// if( element instanceof SoftwarePackageVersionElement )
+		
 		// {
-		// if( operation instanceof IntEqualsOperation )
+		
 		// return new OpsiDataIntEqualsOperation( OpsiDataClient.SOFTWARE_MAP,
 		
-		// if( operation instanceof IntLessThanOperation )
+		
 		// return new OpsiDataIntLessThanOperation( OpsiDataClient.SOFTWARE_MAP,
 		
-		// if( operation instanceof IntGreaterThanOperation )
+		
 		// return new OpsiDataIntGreaterThanOperation( OpsiDataClient.SOFTWARE_MAP,
 		
 		// throw new IllegalArgumentException("Wrong operation for this element.");
@@ -295,7 +295,7 @@ public class OpsiDataBackend extends Backend {
 			return new OrOperation(operations);
 		if (operation instanceof NotOperation && operations.size() == 1)
 			return new NotOperation(operations.get(0));
-		// if( operation.equals(de.uib.opsidatamodel.OpsiProduct.NAME) &&
+		
 		// operations.size() == 1 )
 		if (operation instanceof SoftwareOperation && operations.size() == 1)
 			return new OpsiDataSoftwareOperation(operations.get(0));
@@ -339,7 +339,7 @@ public class OpsiDataBackend extends Backend {
 		// gets current data which should be in cache already
 		// reloadRequested " + reloadRequested);
 
-		// if (clientMaps == null || reloadRequested)
+		
 		// take always the current host infos
 		{
 			clientMaps = controller.getHostInfoCollections().getMapOfPCInfoMaps();
@@ -359,7 +359,7 @@ public class OpsiDataBackend extends Backend {
 		String[] clientNames = clientMaps.keySet().toArray(new String[0]);
 
 		if (hasSoftware) {
-			// if (reloadRequested || softwareMap == null)
+			
 			{
 				softwareMap = controller.getMapOfProductStatesAndActions(clientNames);
 				logging.debug(this, "getClients softwareMap ");
@@ -369,7 +369,7 @@ public class OpsiDataBackend extends Backend {
 		// else
 		
 
-		// if ( reloadRequested || swauditMap == null )
+		
 		{
 			swauditMap = getSwAuditOnClients();
 		}
@@ -382,7 +382,7 @@ public class OpsiDataBackend extends Backend {
 
 		logging.debug(this, "getClients hasHardware " + hasHardware);
 		if (hasHardware) {
-			// if (reloadRequested || hardwareOnClient == null || clientToHardware == null )
+			
 			getHardwareOnClient(clientNames);
 		} else
 			hardwareOnClient = null; // dont use older data after a reload request

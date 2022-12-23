@@ -470,7 +470,7 @@ public class LicensingInfoMap {
 					if ((sdf.parse(key)).compareTo(latest) >= 0)
 						reducedDatesKeys.add(key);
 				}
-				// if(reducedDatesKeys != null)
+				
 				dates = reducedDatesKeys;
 			}
 

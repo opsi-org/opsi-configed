@@ -231,7 +231,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	@Override
 	public String getText() {
 		// textpane.setText(textpane.getText().replaceAll("\t",""));
-		// if (singleLine) textpane.setText(textpane.getText().replaceAll("\n",""));
+		
 		initialText = textpane.getText(); // set new initial text for use in processWindowEvent
 		return initialText;
 	}

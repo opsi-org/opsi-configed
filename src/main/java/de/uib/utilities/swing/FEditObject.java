@@ -479,7 +479,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// loggig.debug(this, " key event " + e);
-		// if (e.getSource() == buttonCommit)
+		
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			commit();
 		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {

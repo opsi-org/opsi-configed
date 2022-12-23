@@ -55,7 +55,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 	@Override
 	public int getColumnCount() {
 		
-		// if (getTableModel() == null)
+		
 		
 
 		return getTableModel().getColumnCount();
@@ -188,7 +188,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 	public void setFiltered(boolean b) {
 		
 
-		// if (b == filtered)
+		
 		
 
 		if (!filtered)
