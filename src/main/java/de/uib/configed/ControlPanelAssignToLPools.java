@@ -181,7 +181,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 					for (String key : identKeys) {
 						rowMap.put(key, rowValues[i]);
 						
-						// rowValues[i] );
+						
 						i++;
 					}
 				}

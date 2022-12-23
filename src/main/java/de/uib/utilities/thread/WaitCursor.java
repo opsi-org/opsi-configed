@@ -40,7 +40,7 @@ public class WaitCursor {
 
 	public WaitCursor(Component c_calling, Cursor saveCursor, String callLocation) {
 		
-		// objectCounting++;
+		
 		objectNo = objectCounting.addAndGet(1);
 		allStopped = false;
 

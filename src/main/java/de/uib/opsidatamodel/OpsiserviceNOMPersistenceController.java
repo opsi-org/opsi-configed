@@ -99,7 +99,7 @@ import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.ExtendedDate;
-//import de.uib.utilities.*;
+
 import de.uib.utilities.ExtendedInteger;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.TimeCheck;
@@ -299,7 +299,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	protected HostGroups hostGroups;
 
-	// protected String[] clientsWithFailed;
+	
 
 	protected Map<String, Set<String>> fObject2Groups;
 
@@ -2874,7 +2874,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public Map<String, Integer> getInstalledOsOverview() {
 		logging.info(this, "getInstalledOsOverview");
 
-		// Object[] callParameters = { false, false, false };
+		
 		// String methodName = "backend_getLicensingInfo";
 
 		// OpsiMethodCall omc = new OpsiMethodCall(methodName, callParameters,
@@ -3188,7 +3188,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				assignedSet.add(imageValue);
 				result.put(originValue, assignedSet);
 				
-				// +assignedSet);
+				
 			}
 		}
 
@@ -4651,7 +4651,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 					productGlobalInfos.put(productId, aProductInfo);
 
-					// counting++;
+					
 
 				}
 			}
@@ -4855,7 +4855,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		
 		
-		// + states);
+		
 
 		if (states != null) {
 			return states;
@@ -5169,7 +5169,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 
 			logging.info(this, "getProductIds size / names " + productIds.size() + " / ... ");
-			// + productIds);
+			
 
 		}
 		/*
@@ -5692,7 +5692,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		
 		// ", " + pcname);
-		// + productproperties);
+		
 
 		return productproperties.get(pcname).get(productname);
 	}
@@ -6434,7 +6434,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					if (configOption.getDefaultValues() != null && !configOption.getDefaultValues().isEmpty()) {
 						
 						// : "
-						// + configOption.getDefaultValues() );
+						
 						remoteControls.checkIn(key, "" + configOption.getDefaultValues().get(0));
 						savedSearches.checkIn(key, "" + configOption.getDefaultValues().get(0));
 						hwAuditDevicePropertyTypes.checkIn(key, configOption.getDefaultValues());
@@ -6462,7 +6462,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		}
 
 		
-		// + configListCellOptions);
+		
 
 		
 
@@ -6518,7 +6518,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 * }
 	 * 
 	 * logging.info(this, "getConfigOptions() ready ");
-	 * //+ configListCellOptions);
+	 * 
 	 * 
 	 * return (Map<String, ListCellOptions>) configListCellOptions;
 	 * 
@@ -7824,7 +7824,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		for (StringValuedRelationElement retrieved : relations_auditSoftwareToLicencePools) {
 			
-			// + retrieved);
+			
 			SWAuditEntry entry = new SWAuditEntry(retrieved, relations_auditSoftwareToLicencePools);
 			String licencePoolKEY = retrieved.get(LicencepoolEntry.idSERVICEKEY);
 			String swKEY = entry.getIdent();
@@ -7845,7 +7845,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			
 			
 
-			// i++;
+			
 
 			
 
@@ -8604,7 +8604,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			 * +
 			 * swId2clients.get(swIdent));
 			 * 
-			 * //firefox-locale-de;27.0+build1-0ubuntu0.12.04.
+			 * 
 			 * }
 			 */
 
@@ -9882,7 +9882,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (!result) 
 			return false;
 
-		// callcount++;
+		
 		// if (callcount > 1)
 		
 

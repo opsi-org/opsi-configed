@@ -17,9 +17,9 @@ package de.uib.opsicommand.sshcommand;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-// import de.uib.configed.*;
+
 import de.uib.configed.gui.FGeneralDialog;
-// import de.uib.configed.gui.ssh.*;
+
 import de.uib.utilities.logging.logging;
 
 /**

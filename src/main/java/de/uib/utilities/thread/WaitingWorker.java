@@ -75,7 +75,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 			}
 
 			long nowMillis = new GregorianCalendar().getTimeInMillis();
-			// elapsedMillis = timeStepMillis * progress;;
+			
 
 			elapsedMillis = nowMillis - startActionMillis;
 			elapsedMins = (elapsedMillis / 1000) / 60;
@@ -89,7 +89,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 			// firePropertyChange("elapsedMins", 0, elapsedMins);
 
-			// progress++;
+			
 			
 
 			
@@ -127,12 +127,12 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 		
 		// ":: progressBar.getMinimum() " + progressBar.getMinimum()
 		// + ":: millis " + millis + " :: waitingMillis " + waitingMillis + " :: min + "
-		// + ((int) ((barLength * millis) / waitingMillis)));
+		
 
 		logging.debug(this, "process, millis " + millis);
 		double proportion = ((double) millis) / (double) waitingSleeper.getOneProgressBarLengthWaitingMillis();
 		logging.info(this, "process, millis/estimatedTotalWaitMillis  " + proportion);
-		// double portion = (barLength * millis) / waitingSleeper.getWaitingMillis();
+		
 		int portion = (int) (barLength * proportion);
 		portion = portion % barLength;
 
@@ -141,7 +141,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 		progressBar.setValue(progressBar.getMinimum() + portion);
 
 		// progressBar.setValue( ( int ) (progressBar.getMinimum() + (int) ( (barLength
-		// * millis) / waitingSleeper.getWaitingMillis() )) ) ;
+		
 
 	}
 

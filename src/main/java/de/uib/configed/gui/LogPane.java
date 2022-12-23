@@ -340,23 +340,23 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		logLevelStyles[1] = styleContext.addStyle("loglevel essential", null);
 		StyleConstants.setForeground(logLevelStyles[1], Globals.logColorEssential);
-		// StyleConstants.setBold(logLevelStyles[1], true);
+		
 
 		logLevelStyles[2] = styleContext.addStyle("loglevel critical", null);
 		StyleConstants.setForeground(logLevelStyles[2], Globals.logColorCritical);
-		// StyleConstants.setBold(logLevelStyles[2], true);
+		
 
 		logLevelStyles[3] = styleContext.addStyle("loglevel error", null);
 		StyleConstants.setForeground(logLevelStyles[3], Globals.logColorError);
-		// StyleConstants.setBold(logLevelStyles[3], true);
+		
 
 		logLevelStyles[4] = styleContext.addStyle("loglevel warning", null);
 		StyleConstants.setForeground(logLevelStyles[4], Globals.logColorWarning);
-		// StyleConstants.setBold(logLevelStyles[4], true);
+		
 
 		logLevelStyles[5] = styleContext.addStyle("loglevel notice", null);
 		StyleConstants.setForeground(logLevelStyles[5], Globals.logColorNotice);
-		// StyleConstants.setBold(logLevelStyles[5], true);
+		
 
 		logLevelStyles[6] = styleContext.addStyle("loglevel info", null);
 		StyleConstants.setForeground(logLevelStyles[6], Globals.logColorInfo);
@@ -725,8 +725,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		document = new ImmutableDefaultStyledDocument(styleContext);
 
-		// int level = levelList.indexOf(comboLevel.getSelectedItem()) + 1;
-		// int level = levelList.indexOf(spinnerLevel.getValue()) + 1;
+		
+		
 		int selLevel = levelList.indexOf(sliderLevel.getValue()) + 1;
 
 		

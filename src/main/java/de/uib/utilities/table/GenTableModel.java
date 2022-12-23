@@ -783,7 +783,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		addedRows.add(rowsLength);
 
 		
-		// getValueAt(rowsLength, colsLength - 1));
+		
 
 		updates.add(itemFactory.produceInsertItem(rowV));
 		requestReload(); // we shall have to reload the data if keys are newly generated

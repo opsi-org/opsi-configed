@@ -92,7 +92,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 		// debugging the if clause
 		
-		// + targetNode);
+		
 		if (targetNode != null) {
 			logging.debug(this, "canImport targetNode.isImmutable() " + targetNode.isImmutable());
 		}

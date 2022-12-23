@@ -30,7 +30,7 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 			List<String> displayColumns, de.uib.utilities.savedstates.SessionSaveSet filterSaver) {
 		super(selectedClients, main, collectChangedStates, listOfInstallableProducts, statesAndActions, possibleActions,
 				productGlobalInfos, displayColumns);
-		// test setFilter(new int[]{4,8,9});
+		
 		this.filterSaver = filterSaver;
 	}
 

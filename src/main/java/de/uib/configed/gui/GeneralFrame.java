@@ -109,8 +109,8 @@ public class GeneralFrame extends JDialog implements ActionListener {
 		if (!centerOnMaster) {
 			// center on Screen
 			
-			// startX = (screenSize.width - getSize().width)/ 2;
-			// startY = (screenSize.height - getSize().height)/2;
+			
+			
 
 			GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 			GraphicsConfiguration gc = gd.getDefaultConfiguration();

@@ -347,13 +347,13 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			@Override
 			public void next() {
 				associatedPanel.advanceCursor(+1);
-				// associatedPanel.moveRowBy(+1);
+				
 			}
 
 			@Override
 			public void previous() {
 				associatedPanel.advanceCursor(-1);
-				// associatedPanel.moveRowBy(-1);
+				
 			}
 
 			@Override

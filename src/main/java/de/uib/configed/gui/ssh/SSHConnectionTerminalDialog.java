@@ -131,7 +131,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 				logging.info(this, "SSHConnectionTerminalDialog  resized");
 				super.componentResized(e);
 				
-				// loc.setLocation(loc.getX(), loc.getY() - 1);
+				
 				
 				// the ugly effect of wandering
 				
@@ -214,8 +214,8 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 				+ btn_dim.getHeight() + terminatingPanel.getHeight();
 
 		this.thissize = this.getSize();
-		// double w = 900 - (Globals.gapSize*4);
-		// double h = 700 - no_output_Height;
+		
+		
 		double w = this.getSize().getWidth() - (Globals.GAP_SIZE * 4);
 		double h = this.getSize().getHeight() - no_output_Height;
 		if (w > 1500)

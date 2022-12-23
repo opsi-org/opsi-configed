@@ -31,7 +31,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 	public static final String SwID = "swId";
 
 	public static final List<String> ATTRIBUTES;
-	// public static final String[] ATTRIBUTES_asArray;
+	
 	static {
 		ATTRIBUTES = new LinkedList<>();
 		ATTRIBUTES.add(LicencepoolEntry.idSERVICEKEY);
@@ -43,7 +43,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 		ATTRIBUTES.add(SWAuditEntry.LANGUAGE);
 		ATTRIBUTES.add(SWAuditEntry.ARCHITECTURE);
 
-		// ATTRIBUTES_asArray = ATTRIBUTES.toArray(new String[0]);
+		
 	}
 
 	public static final List<String> INTERFACED_ATTRIBUTES;

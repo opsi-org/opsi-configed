@@ -46,7 +46,7 @@ public abstract class OpsiDataDateMatcher extends OpsiDataMatcher {
 		}
 
 		
-		// +data);
+		
 
 		// check if we have to interpret variables
 

@@ -94,7 +94,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		
 		
 		
-		// String[] monthStrings = getMonthStrings();
+		
 
 		monthSpinnerModel = new SpinnerListModel();
 		monthSpinner = new JSpinner(monthSpinnerModel);

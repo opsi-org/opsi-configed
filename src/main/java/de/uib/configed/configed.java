@@ -471,8 +471,8 @@ public class configed {
 					usage();
 					endApp(NO_ERROR);
 				} else {
-					// savedSearch = args[i];
-					// methodCall = args[i];
+					
+					
 					// only one of them can be used
 				}
 				i++;

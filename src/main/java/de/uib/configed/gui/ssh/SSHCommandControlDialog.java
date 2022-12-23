@@ -272,7 +272,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			cb_needSudo.setPreferredSize(btn_dim);
 			tp_commands.setPreferredSize(tf_dim_long);
 			// btn_changeHelpPanelStatus.setPreferredSize(new
-			// Dimension(Globals.graphicButtonWidth + 15 ,Globals.buttonHeight));
+			
 			btn_test_command.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
 			btn_del.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
 
@@ -732,8 +732,8 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		// {
 		
 		// centerPanel.setSize(centerPanel.getWidth(),
-		// centerPanel.getHeight()-parameterPanel.getHeight());
-		// this.setSize(this.getWidth(), this.getHeight()-parameterPanel.getHeight());
+		
+		
 		// }
 		
 		repaint();

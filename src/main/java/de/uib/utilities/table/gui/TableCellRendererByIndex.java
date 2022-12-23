@@ -134,7 +134,7 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 		
 		
 
-		// CellAlternatingColorizer.colorize(result, isSelected, (row % 2 == 0), true);
+		
 
 		return result;
 	}

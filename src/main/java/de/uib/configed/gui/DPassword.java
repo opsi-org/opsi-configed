@@ -397,7 +397,7 @@ public class DPassword extends JDialog // implements Runnable
 
 		// center
 		
-		// this.setLocation((screenSize.width - 450) / 2, 200);
+		
 
 		/*final Rectangle dim = Globals.buildLocationOnDefaultDisplay(getSize().width, getSize().height,
 				Globals.smallFramesDistanceFromLeft,
@@ -703,7 +703,7 @@ public class DPassword extends JDialog // implements Runnable
 			waitCursor.stop(); // we want only one running instance
 
 		// waitCursor = new WaitCursor(this, "ok_action");
-		// ??we dont need this wait cursor instance; and it seems not to finish
+		
 		// correctly
 
 		tryConnecting();

@@ -164,7 +164,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (mouseInColumnOfMarkCursor(e.getPoint())) {
-			logging.info(this, "mouseReleased reset saveRowSelection ");// + Arrays.toString( saveRowSelection ) );
+			logging.info(this, "mouseReleased reset saveRowSelection ");
 
 			if (saveRowSelection != null)
 				super.setSelection(saveRowSelection);
@@ -173,7 +173,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 		else {
 			saveRowSelection = theTable.getSelectedRows();
-			logging.info(this, "mouseReleased set new saveRowSelection ");// + Arrays.toString( saveRowSelection ) );
+			logging.info(this, "mouseReleased set new saveRowSelection ");
 		}
 	}
 

@@ -195,7 +195,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 			viewRowfilter = table.getSelectedRows();
 
 		
-		// + java.util.Arrays.toString( viewRowfilter ));
+		
 
 		if (b && viewRowfilter.length > 0) {
 			int[] modelRowFilter = new int[viewRowfilter.length];

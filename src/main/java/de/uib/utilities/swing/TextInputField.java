@@ -107,7 +107,7 @@ public class TextInputField extends JPanel
 		
 		combo = new JComboBox<>(this.proposedValues);
 		
-		// + combo.getEditor().getEditorComponent().getClass());
+		
 
 		JTextField comboField = (JTextField) combo.getEditor().getEditorComponent();
 		comboField.getCaret().setBlinkRate(0);
@@ -124,7 +124,7 @@ public class TextInputField extends JPanel
 					
 
 					// if ( s.length() > 0 && s.charAt( s.length() - 1) == e.getKeyChar() )
-					// comboField.setText( s.substring(0, s.length() - 2 ) );
+					
 
 					
 
@@ -139,7 +139,7 @@ public class TextInputField extends JPanel
 						boolean stop = false;
 						while (i < orderedBeginChars.length && !stop) {
 							
-							// orderedBeginChars[i]);
+							
 							if (orderedBeginChars[i] > ch) {
 								stop = true;
 								if (i > 0) {
@@ -184,7 +184,7 @@ public class TextInputField extends JPanel
 							combo.setSelectedItem(proposedValues.get(j));
 
 							// if (!located)
-							// combo.setSelectedItem( proposedValues.get( proposedValues.size() - 1 ) );
+							
 						}
 
 					}

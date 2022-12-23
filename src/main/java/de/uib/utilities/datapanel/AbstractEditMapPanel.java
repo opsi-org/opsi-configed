@@ -202,7 +202,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 	 * {
 	 * logging.info(this, "setPopupConfiguration, set menu " + ((JMenuItem)
 	 * menuElements[i]).getText());
-	 * //popupmenuAtRow.add( (JMenuItem) menuElements[i] );
+	 * 
 	 * }
 	 * 
 	 * }

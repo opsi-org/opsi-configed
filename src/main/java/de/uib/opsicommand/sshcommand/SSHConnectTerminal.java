@@ -120,7 +120,7 @@ public class SSHConnectTerminal extends SSHConnect {
 							"connect useKeyfile " + SSHConnectionInfo.getInstance().usesKeyfile() + " use password …");
 				}
 				// Do not use StrictHostKeyChecking=no. See JSch SFTP security with
-				// session.setConfig(“StrictHostKeyChecking”, “no”);.
+				
 				// http://stackoverflow.com/questions/30178936/jsch-sftp-security-with-session-setconfigstricthostkeychecking-no
 				session.setConfig("StrictHostKeyChecking", "no"); // otherwise exception if not in knwon_hosts or
 																	// unknown fingerprint
@@ -138,7 +138,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				// a hack for MS-DOS prompt on Windows.
 				// channel.setInputStream(new FilterInputStream(System.in){
 				// public int read(byte[] b, int off, int len)throws IOException{
-				// return in.read(b, off, (len>124?124:len));
+				
 				// }
 				
 
@@ -146,7 +146,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				
 				// channel = setChannels(new FilterInputStream(System.in){
 				// public int read(byte[] b, int off, int len)throws IOException{
-				// return in.read(b, off, (len>124?124:len));
+				
 				// }
 				// }),
 				// new MyOutputPrinter(dialog, System.out)

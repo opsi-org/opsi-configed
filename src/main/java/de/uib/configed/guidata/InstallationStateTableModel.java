@@ -1092,7 +1092,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		}
 
 		fireTableDataChanged(); // removes the selection
-		// fireTableRowsUpdated(0, productsV.size()-1); //does not trigger a new
+		
 		// ordering command
 		tellAndClearMissingProducts(productId);
 
@@ -1388,7 +1388,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	// interface ComboBoxModeller
 	@Override
 	public ComboBoxModel getComboBoxModel(int row, int column) {
-		actualProduct = (String) productsV.get(row); // products[row];
+		actualProduct = (String) productsV.get(row); 
 		
 		// row " + row + " col " + column);
 
@@ -1586,7 +1586,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		// if (productsV == null || productsV.isEmpty()) return "";
 
 		Object result = null;
-		actualProduct = (String) productsV.get(row); // products[row];
+		actualProduct = (String) productsV.get(row); 
 
 		/*
 		 * boolean productExistsForClient = (states.get(actualProduct) != null);
@@ -1759,7 +1759,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		infoIfNoClientsSelected();
 
-		// data[row][col] = value; //this is the trivial version
+		
 		actualProduct = (String) productsV.get(row);
 
 		if (combinedVisualValues.get(ProductState.KEY_installationStatus).get(actualProduct) == null)

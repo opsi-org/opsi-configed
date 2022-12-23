@@ -232,7 +232,7 @@ public class UserConfigProducing {
 		// separateServerConfigsTreeSection( UserConfig.KEY_USER_ROOT + "." +
 		
 		// separateServerConfigsTreeSection( userPart().substring( 0,
-		// userPart().length()-1 ) );
+		
 
 		logging.info(this, "supplyAllPermissionEntries all roles " + roleParts);
 		logging.info(this, "supplyAllPermissionEntries first for default role,  " + UserConfig.DEFAULT_ROLE_NAME);
@@ -248,7 +248,7 @@ public class UserConfigProducing {
 
 		logging.info(this, "supplyAllPermissionEntries defaultUserConfig " + defaultUserConfig);
 
-		// ---System.exit(0);
+		
 
 		Map<String, UserConfig> roleConfigs = new HashMap<>();
 		Map<String, UserConfig> userConfigs = new HashMap<>();
@@ -781,7 +781,7 @@ public class UserConfigProducing {
 
 			logging.info(this, "modi time " + itemModifyTime);
 
-			// --System.exit(0);
+			
 
 			readyObjects.add(Executioner.jsonMap(itemModifyTime));
 		}

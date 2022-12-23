@@ -659,7 +659,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	 * }
 	 * 
 	 * long nowMillis = new GregorianCalendar().getTimeInMillis();
-	 * //elapsedMillis = timeStepMillis * progress;;
+	 * 
 	 * 
 	 * elapsedMillis = nowMillis - startActionMillis;
 	 * elapsedMins = (elapsedMillis / 1000) / 60;
@@ -675,7 +675,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	 * 
 	 * 
 	 * 
-	 * //progress++;
+	 * 
 	 * 
 	 * 
 	 * 

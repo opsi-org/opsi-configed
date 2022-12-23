@@ -555,7 +555,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		infoPane.getPanelProductDependencies().setDependenciesModel(mainController.getDependenciesModel());
 
 		setRightComponent(infoPane);
-		// setDividerLocation(fwidth_lefthanded - splitterLeftRight);
+		
 
 		producePopupMenu(productDisplayFields);
 

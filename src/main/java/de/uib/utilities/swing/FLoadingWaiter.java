@@ -251,8 +251,8 @@ public class FLoadingWaiter extends JFrame
 	public String setLabellingStrategy(long millisLevel) {
 		logging.debug(this, "setLabellingStrategy millis " + millisLevel);
 		return "" + observingMesg + " " + waitInfoString.next(); // ??produces strings with ascii null
-		// + waitStrings[ longVal.intValue() % waitStrings.length];
-		// waitStrings[0];
+		
+		
 	}
 
 	// windowListener

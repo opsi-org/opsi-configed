@@ -312,7 +312,7 @@ public class Globals {
 	public static final int[] maxLogSizes = new int[] { 4 * 1024 * 1024, 8 * 1024 * 1024, 8 * 1024 * 1024, 0,
 			1 * 1024 * 1024 };
 	// public static final int[] maxLogSizes = new int[]{3*1024*1024, 3*1024*1024,
-	// 3*1024*1024, 0, 1* 1024*1024};
+	
 	
 	// be given
 
@@ -460,7 +460,7 @@ public class Globals {
 		String sqlNow = new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis()).toString();
 		sqlNow = sqlNow.substring(0, sqlNow.lastIndexOf(':'));
 		sqlNow = sqlNow.replace(' ', '-');
-		// sqlNow = sqlNow.replace(':', '-');
+		
 
 		return sqlNow;
 	}
@@ -830,7 +830,7 @@ public class Globals {
 				int w = gc[i].getBounds().width;
 				int h = gc[i].getBounds().height;
 				
-				// gc[i].getBounds());
+				
 				if (w < result.width || h < result.height)
 					result = new Rectangle(w, h);
 			}

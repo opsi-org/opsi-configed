@@ -224,7 +224,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 		resetSelectedDepots(depots);
 
-		// listDepots.setSelectionInterval(0, listDepots.getModel().getSize()-1);
+		
 	}
 
 	// Interface ListSelectionListener
@@ -315,7 +315,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 		
 		
-		// + propertiesDepot0.get(productId));
+		
 
 		if (depots.size() == 1) {
 			if (propertiesDepot0 == null || propertiesDepot0.get(productId) == null) {
@@ -348,7 +348,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 					
 					
-					// + properties);
+					
 
 					if (properties == null) {
 						logging.info(this, "mergeProperties, product on depot has not properties " + productId + " on "

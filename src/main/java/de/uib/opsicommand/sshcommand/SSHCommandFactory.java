@@ -62,7 +62,7 @@ public class SSHCommandFactory {
 	public final String opsipathVarDepot = "/var/lib/opsi/depot/";
 	// public final String str_command_comparemd5 = " if [ -z $((cat
 	// *.product.*.md5" + ") | grep $(md5sum *.product.* | head -n1 | cut -d \" \"
-	// -f1)) ] ; then echo \"*.md5notequal.*\"; else echo \"*.md5equal.*\"; fi";
+	
 	// public final String str_replacement_product="*.product.*";
 	// public final String str_replacement_equal= "*.md5equal.*";
 	// public final String str_replacement_notequal= "*.md5notequal.*";

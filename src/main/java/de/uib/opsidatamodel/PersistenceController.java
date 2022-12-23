@@ -46,7 +46,7 @@ import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.Executioner;
-//import de.uib.opsidatamodel.permission.*;
+
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.observer.DataLoadingObservable;
@@ -390,7 +390,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract List<String> getClientsWithOtherProductVersion(String productId, String productVersion,
 			String packageVersion, boolean includeFailedInstallations);
 
-	// public abstract String[] getClientsWithFailed();
+	
 
 	// public abstract Map<String, String> getProductVersion(String productId,
 	
@@ -512,7 +512,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract Map<String, List<String>> getHostSeparationByDepots(String[] hostIds);
 
 	// deprecated
-	// public abstract boolean writeGroup (String groupname, String[] groupmembers);
+	
 
 	
 
@@ -681,9 +681,9 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	/* PC specific listings of products and their states and updatings */
 
-	// public abstract List[] getClientsLocalbootProductNames(String[] clientIds);
+	
 
-	// public abstract List[] getClientsNetbootProductNames(String[] clientIds);
+	
 
 	// methods requires java 8:
 	
@@ -769,9 +769,9 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void hostConfigsRequestRefresh();
 
-	// public abstract void hostConfigsRequestRefresh(String[] clients);
+	
 
-	// public abstract void hostConfigsCheck(String[] clients);
+	
 	// retrieve host configs if not existing
 
 	public abstract Map<String, de.uib.utilities.table.ListCellOptions> getConfigOptions();

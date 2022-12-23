@@ -488,7 +488,7 @@ public class DataStubNOM extends DataStub {
 			}
 
 			logging.debug(this, "retrieveAllProductPropertyDefinitions ");
-			// + depot2Product2PropertyDefinitions);
+			
 			persist.notifyDataRefreshedObservers("productProperty");
 
 		}
@@ -1182,7 +1182,7 @@ public class DataStubNOM extends DataStub {
 					}
 				}
 
-				logging.info(this, "retrieveSoftwareAuditOnClients client2software "); // + client2software);
+				logging.info(this, "retrieveSoftwareAuditOnClients client2software "); 
 
 				step++;
 
@@ -1237,7 +1237,7 @@ public class DataStubNOM extends DataStub {
 		}
 
 		logging.info(this, "retrieveAuditSoftwareXLicencePool retrieved ");
-		// + auditSoftwareXLicencePool);
+		
 
 		
 		

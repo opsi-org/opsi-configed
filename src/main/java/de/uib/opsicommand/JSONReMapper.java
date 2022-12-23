@@ -166,7 +166,7 @@ public class JSONReMapper {
 					logging.error(CLASSNAME + "map expected " + jOX);
 				} else {
 					logging.debug(CLASSNAME + "map retrieved ");
-					// + jOX.getMap());
+					
 					Map map0 = jOX.getMap();
 
 					Iterator iter0 = map0.keySet().iterator();

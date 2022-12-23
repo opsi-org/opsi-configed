@@ -185,7 +185,7 @@ public class SSHConnectExec extends SSHConnect {
 				// if (i == anzahlCommands-1)
 				// {
 				// // final_dia.append(" ", com);
-				// defaultCommandsString = defaultCommandsString + com;
+				
 				// }
 				// else
 				// {

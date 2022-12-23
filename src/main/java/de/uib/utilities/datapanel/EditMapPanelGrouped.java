@@ -381,7 +381,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 			 * int k = remainder.indexOf('.');
 			 * while (k > j && !foundClass)
 			 * {
-			 * //componentKey = key.substring(j+1, k);
+			 * 
 			 * partialKey = key.substring(0, k);
 			 * remainder = key.substring(k+1);
 			 * 

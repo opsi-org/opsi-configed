@@ -549,7 +549,7 @@ public class JTableSelectionPanel extends JPanel
 
 		return valuesList;
 
-		// return (String[]) values.toArray(new String[values.size()]);
+		
 	}
 
 	public void clearSelection() {
@@ -1181,7 +1181,7 @@ public class JTableSelectionPanel extends JPanel
 
 		searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES;
 		switch (comboSearchMode.getSelectedIndex()) {
-		// case 0 :;
+		
 		case 0:
 			searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES;
 			break;

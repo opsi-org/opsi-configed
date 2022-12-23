@@ -59,7 +59,7 @@ public class TableCellRendererByBoolean extends ColorTableCellRenderer {
 			
 		}
 
-		// CellAlternatingColorizer.colorize(result, isSelected, (row % 2 == 0) , true);
+		
 
 		return result;
 	}

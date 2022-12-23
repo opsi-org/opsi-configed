@@ -1,6 +1,6 @@
 package de.uib.configed.type;
 
-//import lombok.*;
+
 import java.util.ArrayList;
 
 import de.uib.utilities.datastructure.Relation;

@@ -247,7 +247,7 @@ public class ProductState extends HashMap<String, String> {
 
 		String versionInfo = "";
 		
-		// +get(KEY_productVersion));
+		
 		if (!get(KEY_productVersion).equals(""))
 			versionInfo = get(KEY_productVersion) + Globals.ProductPackageVersionSeparator.forDisplay()
 					+ get(KEY_packageVersion);

@@ -319,7 +319,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		if (e.getSource() == buttonSelectValuesAll) {
 			logging.info(this, "action on buttonSelectValuesAll");
 			
-			// depotslist.setSelectionInterval(0, depotslist.getModel().getSize() - 1);
+			
 			valueList.selectAll();
 		}
 

@@ -636,7 +636,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		logging.info(this, "setTitle " + title);
 		this.title = title;
 		label.setText(title);
-		// labelRowCount.setText(title + tableModel.getRowCount());
+		
 	}
 
 	public void setTitlePaneBackground(java.awt.Color c) {
@@ -1541,7 +1541,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		} else {
 			for (int i = 0; i < theTable.getSelectedRows().length; i++) {
 				
-				// theTable.getSelectedRows()[i] );
+				
 				result.add(tableModel.getValueAt(theTable.convertRowIndexToModel(theTable.getSelectedRows()[i]),
 						tableModel.getKeyCol()).toString());
 			}
@@ -1747,7 +1747,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		theTable.setRowSelectionInterval(n, n);
 		tableModel.setCursorRow(theTable.convertRowIndexToModel(n));
 		
-		// + getSelectedRowInModelTerms());
+		
 	}
 
 	public void moveToModelRow(int n) {

@@ -43,7 +43,7 @@ import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
  */
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-// import org.json.*;
+
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.ssh.SSHOutputCollector;
 
@@ -60,7 +60,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 
 	private ConfigedMain main;
 	private static SSHCommandParameterMethods instance;
-	// private String[] methods;
+	
 	public static final String method_interactiveElement = configed
 			.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv");
 	public static final String method_getSelectedClientNames = configed
@@ -218,7 +218,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		if (m.contains(param_splitter_default)) {
 			splitted[0] = m.split(param_splitter_default)[0];
 			logging.info(this, "splitParameter method " + splitted[0]);
-			// splitted[0] = getTranslatedMethod(splitted[0]);
+			
 			logging.info(this, "splitParameter method " + splitted[0]);
 			splitted[1] = m.split(param_splitter_default)[1];
 			logging.info(this, "splitParameter format " + splitted[1]);
@@ -386,7 +386,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 			dialog = Globals.mainFrame;
 		logging.debug(this, "getUserText text " + text);
 		final JTextField field = new JTextField();
-		// field.setEchoChar('*');
+		
 		final JOptionPane opPane = new JOptionPane(new Object[] { new JLabel(text), field },
 				JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION) {
 			@Override

@@ -418,13 +418,13 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			TreePath sourcePath = treePopupMouseListener.getPopupSourcePath();
 			if (sourcePath != null && sourcePath.getPathComponent(sourcePath.getPathCount() - 1) instanceof GroupNode) {
 				// String nodeS = sourcePath.getPathComponent(sourcePath.getPathCount()
-				// -1).toString();
+				
 				GroupNode node = (GroupNode) sourcePath.getPathComponent(sourcePath.getPathCount() - 1);
 				main.setGroup(node.toString());
 				
 				
 				// treePopupMouseListener.getPopupSourcePath() + " node "
-				// + sourcePath.getPathComponent(sourcePath.getPathCount() -1));
+				
 			}
 		});
 		popupMenu.add(menuItemActivateElements);
@@ -443,13 +443,13 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			TreePath sourcePath = treePopupMouseListener.getPopupSourcePath();
 			if (sourcePath != null && sourcePath.getPathComponent(sourcePath.getPathCount() - 1) instanceof GroupNode) {
 				// String nodeS = sourcePath.getPathComponent(sourcePath.getPathCount()
-				// -1).toString();
+				
 				GroupNode node = (GroupNode) sourcePath.getPathComponent(sourcePath.getPathCount() - 1);
 				
 				
 				
 				// treePopupMouseListener.getPopupSourcePath() + " node "
-				// + sourcePath.getPathComponent(sourcePath.getPathCount() -1));
+				
 				
 				
 
@@ -570,7 +570,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	public void keyPressed(KeyEvent e) {
 		
 
-		// int[] selection = getSelectionRows();
+		
 		
 		// Arrays.toString(selection) + "\n" + e);
 

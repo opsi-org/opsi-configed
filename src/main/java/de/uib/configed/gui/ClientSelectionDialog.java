@@ -366,7 +366,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		GroupLayout.ParallelGroup vHeadlines = layout.createParallelGroup();
 		vGroup.addGroup(vHeadlines);
 		vMainGroup.addGroup(vGroup);
-		// vMainGroup.addGap(2 * Globals.vGapSize);
+		
 
 		layout.setVerticalGroup(vMainGroup);
 		hGroupParenthesisClose = layout.createParallelGroup();
@@ -442,7 +442,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		
 
 		newElementBox.addActionListener(new AddElementListener());
-		// vMainGroup.addGap(2 * Globals.vGapSize);
+		
 		vMainGroup.addComponent(newElementBox, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
 		hMainGroup.addComponent(newElementBox, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH);
 		contentPane.add(newElementBox);

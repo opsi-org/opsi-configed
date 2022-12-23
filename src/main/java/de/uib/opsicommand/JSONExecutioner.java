@@ -200,7 +200,7 @@ public abstract class JSONExecutioner extends Executioner {
 					logging.error(this, "map expected " + jOX);
 				} else {
 					logging.debug(this, "map retrieved ");
-					// + jOX.getMap());
+					
 					Map map0 = jOX.getMap();
 
 					Iterator iter0 = map0.keySet().iterator();

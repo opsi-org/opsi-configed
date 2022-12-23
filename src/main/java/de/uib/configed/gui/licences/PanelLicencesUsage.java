@@ -138,7 +138,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 
 		// panelWindowsSoftwareIds = new
 		// PanelGenEditTable(configed.getResourceValue("ConfigedMain.Licences.SectiontitleWindowsSoftwareIDs"),
-		// 0, false, -1);
+		
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 

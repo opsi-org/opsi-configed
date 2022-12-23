@@ -177,7 +177,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	List<String> saveSelectedClients = null;
 	List<String> preSaveSelectedClients = null;
 
-	// protected TreePath[] selectedTreePaths = new TreePath[]{}; // not used since
+	
 	// we do not work with selection
 
 	protected Map<String, TreePath> activeTreeNodes;
@@ -1184,7 +1184,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	
 
 	// for (final String host : allHosts) {
-	// i++;
+	
 
 	// try {
 	
@@ -1312,7 +1312,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// FTextArea fMessage = new FTextArea(mainFrame, "stopp", true, new String[] {
 	// "ok" }, 350, 150);
 	// fMessage.setMessage("stop and look at\n" + this.getClass().getName() + " :\n"
-	// + location);
+	
 
 	// }
 
@@ -1740,10 +1740,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				try {
 					logging.info(this, "locateAndDisplay, setting mainframe visible in EventQueue");
 
-					// mainFrame.panel_Clientselection.setDividerLocation(dim.width - 100);
+					
 
-					//mainFrame.setSize(dim.width + 2, dim.height); // corrects splitpane
-					//mainFrame.panel_Clientselection.setDividerLocation(mainFrame.getWidth() - 100);
+					
+					
 
 					mainFrame.setSavingFramePosition(true);
 
@@ -2023,7 +2023,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// if (ls.length >= 15)
 	// return ls[1] + ls[2] + ls[3] + ls[4] + '-' + ls[5] + ls[6] + '-' + ls[7] +
 	// ls[8] + ' ' + ls[9] + ls[10]
-	// + ':' + ls[11] + ls[12] + ':' + ls[13] + ls[14];
+	
 	// else
 
 	// } else
@@ -2094,7 +2094,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 * selpathlist.add(listforclient.get(k));
 	 * }
 	 * }
-	 * //selectedTreePaths = selpathlist.toArray(new TreePath[selpathlist.size()]);
+	 * 
 	 * 
 	 * 
 	 * return firstPath;
@@ -2130,7 +2130,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Map<String, Boolean> unfilteredList = produceClientListForDepots(getSelectedDepots(), null);
 
 		logging.debug(this, " unfilteredList ");
-		// + unfilteredList);
+		
 
 		buildPclistTableModelCounter++;
 		logging.info(this,
@@ -2169,7 +2169,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			unfilteredList = produceClientListForDepots(getSelectedDepots(), allowedClients);
 
 			logging.info(this, " unfilteredList " + unfilteredList.size());
-			// + unfilteredList);
+			
 
 			buildPclistTableModelCounter++;
 			logging.info(this, "buildPclistTableModel, counter " + buildPclistTableModelCounter + "   rebuildTree  "
@@ -2330,7 +2330,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		else {
 			setSelectedClientsOnPanel(new String[] { clientName });
 			// implies:
-			// setSelectedClientsArray(new String[]{clientname});
+			
 			actOnListSelection();
 		}
 	}
@@ -2343,7 +2343,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		else {
 			setSelectedClientsOnPanel(clientNames);
 			// implies:
-			// setSelectedClientsArray(new String[]{clientname});
+			
 			actOnListSelection();
 		}
 	}
@@ -2697,12 +2697,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		logging.info(this, " setRebuiltClientListTableModel--- set model new, selected "
 				+ selectionPanel.getSelectedValues().size());
-		// setSelectedClientsOnPanel(new String[]{});
+		
 		TableModel tm = buildClientListTableModel(rebuildTree);
 		logging.info(this,
 				"setRebuiltClientListTableModel --- got model selected " + selectionPanel.getSelectedValues().size());
 		selectionPanel.removeListSelectionListener(this);
-		// setSelectedClientsOnPanel(new String[]{});
+		
 
 		selectionPanel.setModel(tm);
 
@@ -2842,7 +2842,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 							ListMerger mergedValue = ((ListMerger) merger).merge(value);
 
-							// + (mergedValue == ListMerger.NO_COMMON_VALUE));
+							
 
 							// on merging we check if the value is the same as before
 							mergedProductProperties.put(key, mergedValue);
@@ -3057,7 +3057,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 					// restore keys, do not rebuild tree, select clientsFilteredByTree
 
-					// treeClients.setSelectionPaths(activePaths.toArray(new TreePath[]{}));
+					
 
 				}
 
@@ -3275,7 +3275,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		depotsList_selectionChanged = true;
 		depotsOfSelectedClients = null;
 
-		selectedDepots = depotsList.getSelectedValuesList().toArray(new String[0]);// new String[depotsList.getSelectedValues().length];
+		selectedDepots = depotsList.getSelectedValuesList().toArray(new String[0]);
 		selectedDepotsV = new Vector<>(depotsList.getSelectedValuesList());
 
 		logging.debug(this, "--------------------  selectedDepotsV         " + selectedDepotsV);
@@ -3356,7 +3356,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			String oldRepresentative = depotRepresentative;
 
 			logging.debug(this, "setDepotRepresentative(), old representative: " + depotRepresentative + " should be ");
-			// + persist.getDepot() );
+			
 
 			if (!checkSynchronous(depots))
 				result = false;
@@ -3805,7 +3805,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public boolean setNetworkconfigurationPage() {
-		logging.info(this, "setNetworkconfigurationPage ");// + Arrays.asList(saveSelectedClients));
+		logging.info(this, "setNetworkconfigurationPage ");
 		logging.info(this,
 				"setNetworkconfigurationPage  getSelectedClients() " + Arrays.toString(getSelectedClients()));
 		
@@ -3871,7 +3871,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				for (int i = 0; i < getSelectedClients().length; i++) {
 					additionalConfigs.add(persist.getConfig(getSelectedClients()[i]));
 
-					// persist.getConfig(getSelectedClients()[i]));
+					
 					// with server defaults
 				}
 
@@ -4395,7 +4395,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		logging.debug(this, "initServer() preSaveSelectedClients " + preSaveSelectedClients);
 		setSelectedClients((List) null);
 		logging.debug(this, "set selected values in initServer()");
-		// setSelectedClientsOnPanel(new String[0]);
+		
 
 	}
 
@@ -5675,7 +5675,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 * persist.getHostInfoCollections().getFNode2Treeparents().keySet())
 	 * {
 	 * 
-	 * //+ persist.getHostInfoCollections().getFNode2Treeparents().get( client ));
+	 * 
 	 * if (persist.getHostInfoCollections().getFNode2Treeparents().get( client
 	 * ).contains ( TEST_ACCESS_RESTRICTED_HOST_GROUP ) )
 	 * {
@@ -6253,7 +6253,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			}
 
-			// + tooltips );
+			
 
 			dialogRemoteControl.setMeanings(rcCommands);
 			dialogRemoteControl.setEditable(commandsEditable);
@@ -6636,7 +6636,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public void setClientGroup() {
 		boolean wasFiltered = false;
-		// String[] saveSelectedClients = getSelectedClients();
+		
 
 		if (filterClientList) // no group selection on the filtered list
 		{
@@ -6657,7 +6657,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			for (int i = 0; i < clients.length; i++) {
 				Map.Entry ob = (Map.Entry) clients[i];
 
-				// +ob.getValue() );
+				
 
 				if (Boolean.TRUE.equals((Boolean) ob.getValue())) {
 
@@ -6667,7 +6667,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					// lsm.addSelectionInterval(selectionPanel.convertRowIndexToView(i),
 
 					// lsm.addSelectionInterval (selectionPanel.getModelToSortedView()[i],
-					// selectionPanel.getModelToSortedView()[i]);
+					
 				}
 			}
 

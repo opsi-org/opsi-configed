@@ -398,7 +398,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				true, null);
 		searchPane.setFiltering(true);
 		searchPane.showFilterIcon(true); // filter icon inside searchpane
-		// searchPane.setSearchFields(new Integer[]{0, 1, 2, 3, 4});
+		
 
 		groupsCombo = new JComboBoxToolTip();
 		groupsCombo.setEditable(false);

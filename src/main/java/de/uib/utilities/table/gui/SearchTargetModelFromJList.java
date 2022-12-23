@@ -143,7 +143,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		logging.info(this, "addSelectedRow " + row);
 
 		jList.addSelectionInterval(row, row);
-		// jList.addSelectionInterval(row +2 , row + 2); //test
+		
 		
 		ensureRowIsVisible(row);
 	}

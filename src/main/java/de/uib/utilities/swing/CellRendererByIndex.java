@@ -186,7 +186,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 		String selectedTooltip = "";
 
 		if (uhOhFont == null) { // lazily create this font
-			uhOhFont = list.getFont().deriveFont((float) 10); // list.getFont().getSize() - 3); 
+			uhOhFont = list.getFont().deriveFont((float) 10); 
 		}
 		setFont(uhOhFont);
 
@@ -210,7 +210,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 		setFont(Globals.defaultFont);
 		// de.uib.utilities.swing.CellAlternatingColorizer.colorize(this, isSelected,
-		// (index % 2 == 0), true);
+		
 
 		/*
 		 * if (icon != null) {

@@ -203,7 +203,7 @@ public class ControllerHWinfoMultiClients {
 		
 
 		panel.setTableModel(model);
-		// panel.setEmphasizedColumns(new int[]{2});
+		
 
 		model.chainFilter(FILTER_SELECTED_CLIENTS, tableModelFilter);
 

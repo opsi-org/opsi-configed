@@ -147,7 +147,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	public static final int F_WIDTH = 800;
 	public static final int F_HEIGHT = 600;
 
-	private static final int F_WIDTH_RIGHTHANDED = 200;// was fwidth - fwidth_lefthanded;
+	private static final int F_WIDTH_RIGHTHANDED = 200;
 
 	private static final int DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT = 200;
 	private static final int DIVIDER_LOCATION_CLIENT_TREE_SIGLE_DEPOT = 50;
@@ -645,10 +645,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		
 
 		// moveDivider(panel_LocalbootProductsettings, localbootProductInfo,
-		// (int)fwidth_righthanded/2 + 40, 130, fwidth_righthanded_compi + 80);
+		
 
 		// moveDivider(panel_NetbootProductsettings, netbootProductInfo,
-		// (int)fwidth_righthanded/2 + 40, 130, fwidth_righthanded_compi + 80);
+		
 	}
 
 	private void moveDivider1(JSplitPane splitpane, JComponent rightpane, int min_right_width, int min_left_width,
@@ -657,7 +657,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			return;
 
 		int dividerLocation = splitpane.getDividerLocation();
-		// dividerLocation initially was (fwidth_lefthanded + splitterLeftRight);
+		
 		int sizeOfRightPanel = (int) rightpane.getSize().getWidth();
 		int missingSpace = min_right_width - sizeOfRightPanel;
 		if (missingSpace > 0 && dividerLocation > min_left_width) {
@@ -710,7 +710,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				return;
 
 			int dividerLocation = splitpane.getDividerLocation();
-			// dividerLocation initially was (fwidth_lefthanded + splitterLeftRight);
+			
 			int sizeOfRightPanel = (int) rightpane.getSize().getWidth();
 			int missingSpace = min_right_width - sizeOfRightPanel;
 			if (missingSpace > 0 && dividerLocation > min_left_width) {
@@ -747,10 +747,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			
 
 			// moveDivider(panel_LocalbootProductsettings, localbootProductInfo,
-			// (int)fwidth_righthanded/2 + 40, 130, fwidth_righthanded_compi + 80);
+			
 
 			// moveDivider(panel_NetbootProductsettings, netbootProductInfo,
-			// (int)fwidth_righthanded/2 + 40, 130, fwidth_righthanded_compi + 80);
+			
 		}
 
 	}
@@ -1565,7 +1565,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			rbLoglevelItems[i] = new JRadioButtonMenuItem("[" + i + "] " + logging.levelText(i).toLowerCase());
 			//String commented = configed.getResourceValue("MainFrame.jMenuLoglevel." + i);
 			//if (!configed.getResourceValue("MainFrame.jMenuLoglevel." + i).equals("MainFrame.jMenuLoglevel." + i))
-			//	rbLoglevelItems[i].setText(commented);
+			
 
 			jMenuHelpLoglevel.add(rbLoglevelItems[i]);
 			if (i == logging.LOG_LEVEL_CONSOLE)
@@ -3449,7 +3449,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		for (int i = 0; i < clientPopupsDependOnSelectionCount.length; i++) {
 			clientPopupsDependOnSelectionCount[i].setEnabled(false);
 			
-			// clientPopupsDependOnSelectionCount[i].getText());
+			
 		}
 
 		
@@ -4139,7 +4139,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		 * else if (e.getSource() == buttonSelectDepotsAll)
 		 * {
 		 * logging.info(this, "action on buttonSelectDepotsAll");
-		 * //depotslist.setSelectionInterval(0, depotslist.getModel().getSize() - 1);
+		 * 
 		 * depotslist.selectAll();
 		 * }
 		 * 

@@ -319,7 +319,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		if (e.getSource() == buttonSelectDepotsAll) {
 			logging.info(this, "action on buttonSelectDepotsAll");
 			
-			// depotslist.setSelectionInterval(0, depotslist.getModel().getSize() - 1);
+			
 			depotslist.selectAll();
 		}
 

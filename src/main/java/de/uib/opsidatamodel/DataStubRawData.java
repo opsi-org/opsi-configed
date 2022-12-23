@@ -564,7 +564,7 @@ public class DataStubRawData extends DataStubNOM {
 					 * " size " + softwareIdent2clients.get(swIdent).size() + " :: " +
 					 * softwareIdent2clients.get(swIdent) );
 					 * 
-					 * //firefox-locale-de;27.0+build1-0ubuntu0.12.04.
+					 * 
 					 * }
 					 */
 
@@ -590,7 +590,7 @@ public class DataStubRawData extends DataStubNOM {
 			logging.info(this, "retrieveSoftwareAuditOnClients used memory on end "
 					+ Runtime.getRuntime().totalMemory() / 1000000 + " MB");
 			
-			// step++;
+			
 
 			persist.notifyDataRefreshedObservers("softwareConfig");
 		}
@@ -653,7 +653,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		
 		
-		// columns = columns.substring(0, columns.length()-1);
+		
 		// json parsing for integer value false thereforw we omit the ID column
 
 		String columns = ConfigStateEntry.DB_TABLE_NAME + "." + ConfigStateEntry.OBJECT_ID + ", "
@@ -701,7 +701,7 @@ public class DataStubRawData extends DataStubNOM {
 
 				String configId = row.get(1);
 
-				// ConfigStateEntry.DB_COLUMN_NAMES.indexOf(ConfigStateEntry.CONFIG_ID) + 1);
+				
 
 				// get values as String
 				String valueString = row.get(2);
@@ -799,7 +799,7 @@ public class DataStubRawData extends DataStubNOM {
 
 				if (!hwInfoCol.substring(part0.length()).startsWith(hwClass)) {
 					
-					// + hwInfoCol);
+					
 					
 				} else {
 					colFound = true;

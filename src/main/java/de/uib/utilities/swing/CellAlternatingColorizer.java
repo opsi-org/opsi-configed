@@ -26,7 +26,7 @@ public class CellAlternatingColorizer {
 		 * }
 		 */
 		
-		// + isEven);
+		
 
 		if (isSelected) {
 			if (isEven)

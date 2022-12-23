@@ -1,9 +1,9 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
-// import javax.swing.border.*;
-// import javax.swing.event.*;
-// import java.io.*;
+
+
+
 import java.util.Vector;
 
 import javax.swing.BorderFactory;

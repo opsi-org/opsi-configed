@@ -46,7 +46,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 
 	protected java.awt.Font textFont;
 
-	// protected Map<TextAttribute, ? > defaultTextAttributes;
+	
 	// I didn't get work this, couldn't fix the Generics issues
 
 	protected Map defaultTextAttributes;

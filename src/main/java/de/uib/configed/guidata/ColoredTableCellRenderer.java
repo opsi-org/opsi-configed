@@ -31,7 +31,7 @@ public class ColoredTableCellRenderer extends de.uib.utilities.table.gui.Standar
 		}
 
 		// de.uib.utilities.swing.CellAlternatingColorizer.colorize(c, isSelected, (row
-		// % 2 == 0), true);
+		
 
 		return c;
 	}

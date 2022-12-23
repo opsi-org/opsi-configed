@@ -137,7 +137,7 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	// }
 	// public String[] getRegexes()
 	// {
-	// final String[] regexes = new String[2];
+	
 	// regexes[0] = "(-[\\w*],[
 	// ])|(--[\\w*]*-[\\w*]*-[\\w*]*)|(--[\\w*]*-[\\w*]*)|(--[\\w*]*)";
 	// regexes[1] = "((<[\\w*]*>)|(<[\\w*]*-[\\w*]*>)|(<[\\w*]*-[\\w*]*-[\\w*]*>)) |

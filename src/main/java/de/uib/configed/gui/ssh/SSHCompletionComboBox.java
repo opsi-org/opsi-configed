@@ -1,9 +1,9 @@
 package de.uib.configed.gui.ssh;
 
-// import de.uib.opsicommand.*;
-// import de.uib.opsicommand.sshcommand.*;
-// import java.awt.event.*;
-// import java.awt.*;
+
+
+
+
 import java.util.Vector;
 
 import javax.swing.ComboBoxEditor;

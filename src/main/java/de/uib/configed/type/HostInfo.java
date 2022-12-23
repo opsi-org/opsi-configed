@@ -420,7 +420,7 @@ public class HostInfo {
 		// shows pckey
 
 		
-		// Map pcInfo = (Map) pcInfos.get(selectedClients[0]);
+		
 
 		if (pcInfo == null) {
 			initialize();
@@ -513,7 +513,7 @@ public class HostInfo {
 	 * logging.info(this, "getInfo " + pcInfo);
 	 * 
 	 * 
-	 * //Map pcInfo = (Map) pcInfos.get(selectedClients[0]);
+	 * 
 	 * 
 	 * if (pcInfo == null)
 	 * {

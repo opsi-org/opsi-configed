@@ -4,7 +4,7 @@ import java.util.Map;
 
 import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.SelectElement;
-//import de.uib.configed.clientselection.operations.*;
+
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.utilities.logging.logging;
 

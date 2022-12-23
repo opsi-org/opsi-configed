@@ -363,7 +363,7 @@ public class OpsiDataBackend extends Backend {
 			{
 				softwareMap = controller.getMapOfProductStatesAndActions(clientNames);
 				logging.debug(this, "getClients softwareMap ");
-				// + softwareMap );
+				
 			}
 		}
 		// else
