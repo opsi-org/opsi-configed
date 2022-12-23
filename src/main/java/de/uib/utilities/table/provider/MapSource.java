@@ -23,7 +23,7 @@ public class MapSource implements TableSource
 // classname
 // has to be String)
 {
-	protected final String rowCounterName = "rowcounter";
+	protected static final String ROW_COUNTER_NAME = "rowcounter";
 
 	protected boolean rowCounting = false;
 
@@ -125,7 +125,7 @@ public class MapSource implements TableSource
 						String className = classNames.get(i);
 
 						// if (className.equals("java.lang.Integer"))
-						if (columnNames.get(i).equals(rowCounterName)) {
+						if (columnNames.get(i).equals(ROW_COUNTER_NAME)) {
 							vRow.add("" + rowCount);
 							// vRow.add( rowCount );
 						} else {
@@ -185,7 +185,7 @@ public class MapSource implements TableSource
 
 	@Override
 	public String getRowCounterName() {
-		return rowCounterName;
+		return ROW_COUNTER_NAME;
 	}
 
 	@Override
@@ -200,7 +200,7 @@ public class MapSource implements TableSource
 			// classNames.add( "java.lang.String" );
 			classNames.add("java.lang.Integer");
 			// has the effect that IntComparatorForStrings is applied
-			columnNames.add(rowCounterName);
+			columnNames.add(ROW_COUNTER_NAME);
 			structureChanged();
 		}
 	}

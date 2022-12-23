@@ -327,7 +327,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		if (e.getClickCount() > 1) {
 			Point p = e.getPoint();
 			// logging.info(this, "mouse " + p + " " + textpane.viewToModel( p ) );
-			String line = getMarkedLine(textpane.viewToModel(p));
+			String line = getMarkedLine(textpane.viewToModel2D(p));
 			// logging.info(this, " got line " + line );
 			if (line != null) {
 				logging.info(this, " got link " + line);
@@ -364,7 +364,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		// logging.info(this, "mouse " + p + " " + textpane.viewToModel( p ) );
 		// logging.info(this, "got line " + getMarkedLine (textpane.viewToModel( p )) );
 
-		if (getMarkedLine(textpane.viewToModel(p)) != null)
+		if (getMarkedLine(textpane.viewToModel2D(p)) != null)
 			textpane.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		else
 			textpane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
