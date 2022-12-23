@@ -131,7 +131,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 	@Override
 	public void startParameterGui() {
-		
+		// if (main.getOpsiVersion().length() == 0 || main.getOpsiVersion().charAt(0) ==
 		// '<' || main.getOpsiVersion().compareTo("4.1") < 0){}
 		
 	}

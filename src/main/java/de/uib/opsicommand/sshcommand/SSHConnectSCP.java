@@ -115,13 +115,13 @@ public class SSHConnectSCP extends SSHConnectExec {
 				return task.get();
 
 			if (SSHCommandFactory.ssh_always_exec_in_background)
-				
+				// if (!multiCommand)
 				if (withGui)
 					dialog.setVisible(true);
 				else
 					dialog.setVisible(false);
 			System.gc();
-			
+			// if (command.getShowOutputDialog())
 			// return "finish";
 			// else
 			return task.get();

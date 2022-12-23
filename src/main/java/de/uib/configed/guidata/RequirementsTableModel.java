@@ -278,7 +278,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 			
 
-			
+			// if (isSelected)
 			{
 				switch (kindOfRow) {
 				case 0:

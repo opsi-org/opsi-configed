@@ -35,7 +35,7 @@ public class LicenceStatisticsRow extends HashMap<String, String> {
 
 	public void setAllowedUsagesCount(ExtendedInteger count) {
 		if (count != null) {
-			
+			// if (count == ExtendedInteger.INFINITE)
 			
 			String value = count.getDisplay();
 			allowedUsages = count;

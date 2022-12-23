@@ -129,7 +129,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 			String product = mainDir + "/" + getFilenameFromUrl(mainProduct);
 			// ToDo: Folgender Parameter String (befehl) muss noch in die klasse
 			// sshcommandfactory ausgelagert werden
-			
+			// if (commands != null)
 			commands.addCommand(new Empty_Command("md5_vergleich", " if [ -z $((cat " + product + ".md5" + ") | "
 					+ "grep $(md5sum " + product + "  | head -n1 | cut -d \" \" -f1)) ] ; " + " then echo \""
 					+ configed.getResourceValue(

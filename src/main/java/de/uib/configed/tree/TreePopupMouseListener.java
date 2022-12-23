@@ -118,7 +118,7 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 				countVisibleItems++;
 			}
 
-			
+			// if ( ((GroupNode)clickNode).allowsSubGroups() )
 			if (!(((GroupNode) clickNode).isFixed())) {
 				((JMenuItem) myMenu.getSubElements()[removeElementsPosition]).setVisible(true); // delete non-groupnode
 																								// elements

@@ -339,7 +339,7 @@ public class OpsiDataBackend extends Backend {
 		// gets current data which should be in cache already
 		// reloadRequested " + reloadRequested);
 
-		
+		// if (clientMaps == null || reloadRequested)
 		// take always the current host infos
 		{
 			clientMaps = controller.getHostInfoCollections().getMapOfPCInfoMaps();
@@ -359,7 +359,7 @@ public class OpsiDataBackend extends Backend {
 		String[] clientNames = clientMaps.keySet().toArray(new String[0]);
 
 		if (hasSoftware) {
-			
+			// if (reloadRequested || softwareMap == null)
 			{
 				softwareMap = controller.getMapOfProductStatesAndActions(clientNames);
 				logging.debug(this, "getClients softwareMap ");
@@ -369,7 +369,7 @@ public class OpsiDataBackend extends Backend {
 		// else
 		
 
-		
+		// if ( reloadRequested || swauditMap == null )
 		{
 			swauditMap = getSwAuditOnClients();
 		}
@@ -382,7 +382,7 @@ public class OpsiDataBackend extends Backend {
 
 		logging.debug(this, "getClients hasHardware " + hasHardware);
 		if (hasHardware) {
-			
+			// if (reloadRequested || hardwareOnClient == null || clientToHardware == null )
 			getHardwareOnClient(clientNames);
 		} else
 			hardwareOnClient = null; // dont use older data after a reload request

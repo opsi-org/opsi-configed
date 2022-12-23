@@ -854,7 +854,7 @@ public class DataStubNOM extends DataStub {
 					String subversion = entry.get(SWAuditEntry.SUBVERSION);
 
 					for (String marker : linuxSubversionMarkers) {
-						
+						// if (subversion.indexOf ( marker ) > -1 )
 						if (subversion.startsWith(marker)) {
 							showForLicensing = false;
 							break;
@@ -1106,7 +1106,7 @@ public class DataStubNOM extends DataStub {
 
 				if (softwareIdent2clients == null)
 					softwareIdent2clients = new HashMap<>();
-				
+				// if (softwareId2clients == null) softwareId2clients = new HashMap<Integer,
 				
 
 				persist.notifyDataLoadingObservers(

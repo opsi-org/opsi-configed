@@ -72,7 +72,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 		}
 		try {
 			
-			
+			// if (SwingUtilities.isEventDispatchThread())
 			{
 				
 				paintImmediately(0, 0, w, h); // class cast exceptions mit sleepingMS = 50 if not event dispatch thread

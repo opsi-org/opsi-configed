@@ -176,11 +176,11 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 	// protected void doActionHelp(final SSHPackageManagerParameterDialog caller))
 	// {
 	
-	
+	// if (caller instanceof SSHPackageManagerUninstallParameterDialog)
 	// {
 	
 	// }
-	
+	// else if (caller instanceof SSHPackageManagerInstallParameterDialog)
 	// {
 	
 	// }

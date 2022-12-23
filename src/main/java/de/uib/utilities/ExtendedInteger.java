@@ -124,7 +124,7 @@ public class ExtendedInteger implements Comparable {
 		else if (o instanceof Integer)
 			comparedWithMe = new ExtendedInteger((Integer) o);
 
-		
+		// if (o == null)
 		
 
 		if (this.equals(INFINITE)) {

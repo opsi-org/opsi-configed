@@ -316,7 +316,7 @@ public class NewClientDialog extends FGeneralDialog
 					String newPiece = e.getDocument().getText(e.getOffset(), e.getLength());
 					logging.debug(this, " --------->" + newPiece + "<");
 
-					"\t") )
+					// if ( (e.getDocument().getText(e.getOffset(), e.getLength()) ).equals ("\t") )
 					if (newPiece.equals("\t")) {
 						
 						macAddressField.requestFocus();
@@ -998,7 +998,7 @@ public class NewClientDialog extends FGeneralDialog
 
 		else {
 			logging.info(this, "keyPressed source " + e.getSource());
-			
+			// if (e.getSource() == jButton1)
 			
 			if (e.getSource() == jButton1) {
 				// jButton1.setIcon( Globals.createImageIcon(

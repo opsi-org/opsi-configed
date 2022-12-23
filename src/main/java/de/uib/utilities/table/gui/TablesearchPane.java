@@ -131,7 +131,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		this.withRegEx = withRegEx;
 		this.preferredColumnIndex = prefColNo;
 
-		
+		// if (targetModel instanceof SearchTargetModelFromJList)
 		filtering = true;
 
 		initSavedStates(savedStatesObjectTag);
@@ -988,7 +988,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 					if (colIndices != null // we dont compare all values (comparing all values is default)
 							&& !colIndices.contains(j))
 
-						
+						// if (j != 0) //test
 						continue;
 
 					int colJ = targetModel.getColForVisualCol(j);
@@ -1464,7 +1464,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			logging.debug(this,
 					"actionPerformed on checkmarkSearch, targetModel.isFiltered " + targetModel.isFiltered());
 
-			
+			// if (checkmarkSearch.isSelected())
 			fieldSearch.setText("");
 		}
 

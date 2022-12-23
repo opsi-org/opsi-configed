@@ -183,7 +183,7 @@ public class DPassword extends JDialog // implements Runnable
 			waitCursor.stop();
 
 			if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED)
-			
+			// if ( persis.getConnectionState().getState() == ConnectionState.CONNECTED )
 			{
 				updateCertificate();
 

@@ -72,7 +72,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 				"updateValues clientsCount, selectedClientsCount " + clientsCount + ", " + selectedClientsCount);
 		
 
-		
+		// if (clientsCount != null)
 		labelAllClientsCount.setText(configed.getResourceValue("MainFrame.labelClientsTotal") + "  " + clientsCount);
 
 		setFieldClientsCount(selectedClientsCount);
@@ -81,7 +81,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 			fieldSelectedClientsNames.setText("");
 			fieldSelectedClientsNames.setToolTipText(null);
 		} else
-		
+		// if (selectedClientNames != null)
 		{
 
 			/*

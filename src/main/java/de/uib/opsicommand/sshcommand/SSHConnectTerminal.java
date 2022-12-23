@@ -308,7 +308,7 @@ public class SSHConnectTerminal extends SSHConnect {
 			public void keyReleased(KeyEvent e) {
 				int key = e.getKeyCode();
 				JTextField textField = (JTextField) e.getSource();
-				"exit")) { //
+				// if (textField.getText().trim().toLowerCase().equals("exit")) { //
 				
 				
 				if (key == KeyEvent.VK_ENTER) {
@@ -319,7 +319,7 @@ public class SSHConnectTerminal extends SSHConnect {
 						clear();
 						((Component) textField).requestFocusInWindow();
 					}
-					"kill")) {
+					// else if (textField.getText().trim().toLowerCase().equals("kill")) {
 					// exec(new String(new byte[] {3}) +"\n");
 					
 					// dialog.getInputField().setText("");
@@ -327,14 +327,14 @@ public class SSHConnectTerminal extends SSHConnect {
 					else {
 						// String text = textField.getText() + "\n";
 						exec(textField.getText() + "\n");
-						" cd ") || textField.getText().contains("cd
+						// if (textField.getText().contains(" cd ") || textField.getText().contains("cd
 						// "))
 						// {
 						
-						
-						
+						// if (commands_compgen != null)
+						// if (dirs != null)
 						// {
-						
+						// if (dirs.addAll(commands_compgen))
 						
 						// }
 						// else
@@ -347,7 +347,7 @@ public class SSHConnectTerminal extends SSHConnect {
 						dialog.getInputField().setText("");
 					}
 				}
-				
+				// else if (key == KeyEvent.VK_TAB)
 				// {
 
 				// }
@@ -380,14 +380,14 @@ public class SSHConnectTerminal extends SSHConnect {
 			logging.debug(this, "getCompletionList commands compgen -c " + result);
 		}
 
-		
+		// if (dirchanged)
 		// {
 		// // String pwd = ssh.exec(new Empty_Command("pwd" ), false, null, true,
 		// false).replace("\n", "");
 		// try {
 		
 		// // exec("pwd\n");
-		
+		// if (out != null)
 		// {
 		// out.write("pwd\n".getBytes());
 		

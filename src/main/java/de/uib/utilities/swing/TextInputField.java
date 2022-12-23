@@ -82,7 +82,7 @@ public class TextInputField extends JPanel
 
 		
 
-		
+		// if (inputType == InputType.TEXT)
 		if (proposedValues != null) {
 
 			TreeSet<Character> orderedValues = new TreeSet<>();
@@ -123,14 +123,14 @@ public class TextInputField extends JPanel
 					combo.showPopup();
 					
 
-					
-					
-
+					// if ( s.length() > 0 && s.charAt( s.length() - 1) == e.getKeyChar() )
 					
 
 					
+
 					
 					
+					// if (inputType == InputType.TEXT)
 					if (orderedBeginChars != null) {
 
 						Character ch = e.getKeyChar();
@@ -183,7 +183,7 @@ public class TextInputField extends JPanel
 
 							combo.setSelectedItem(proposedValues.get(j));
 
-							
+							// if (!located)
 							
 						}
 

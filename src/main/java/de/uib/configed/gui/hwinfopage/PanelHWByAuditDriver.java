@@ -197,7 +197,7 @@ public class PanelHWByAuditDriver extends JPanel {
 		if (selectionBASE_BOARD.isSelected()) {
 			byAuditPath = eliminateIllegalPathChars(fieldVendor2.getText()) + "/"
 					+ eliminateIllegalPathChars(fieldLabel2.getText());
-		} else 
+		} else // if (selectionCOMPUTER_SYSTEN.isSelected())
 		{
 			byAuditPath = eliminateIllegalPathChars(fieldVendor.getText()) + "/"
 					+ eliminateIllegalPathChars(fieldLabel.getText());

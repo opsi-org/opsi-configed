@@ -664,7 +664,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				found = true;
 
 				for (int type : injectKeys) {
-					
+					// if ( augmentedList.indexOf( type ) == -1 )
 					if (!setOfKeys.contains(type)) {
 						augmentedList.add(type);
 						setOfKeys.add(type);
@@ -740,7 +740,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				menuItemSortAgain = new JMenuItemFormatted(
 						configed.getResourceValue("PanelGenEditTable.sortAsConfigured"));
 				menuItemSortAgain.addActionListener(actionEvent -> sortAgainAsConfigured());
-				
+				// if (sortDescriptor != null)
 				addPopupItem(menuItemSortAgain);
 
 				break;

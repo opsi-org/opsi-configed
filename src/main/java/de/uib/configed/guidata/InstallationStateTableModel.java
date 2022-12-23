@@ -378,7 +378,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					
 					// combinedVisualValues.get(colKey) " + combinedVisualValues.get(colKey));
 
-					"setup"))
+					// if (stateAndAction.get(ProductState.KEY_actionRequest).equals("setup"))
 					
 					// clientId + ", stateAndAction " + stateAndAction);
 
@@ -801,7 +801,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		changedStatesForProduct.put(stateType, state);
 		// test testes setValueAt("None", 2, 6);
-		
+		// if (!product.equals( actualProduct)) setValueAt( state, productsV.indexOf (
 		
 		main.getGeneralDataChangedKeeper().dataHaveChanged(this);
 	}
@@ -1015,7 +1015,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			// all clients " + ar + " for " + prod + " instead of " +
 			
 
-			
+			// if ( ( product2setOfClientsWithNewAction.get(prod) ).size() <
 			// selectedClients.length )
 			// -- not each client got a new action for this product
 			{
@@ -1583,7 +1583,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		// +
 		
 
-		"";
+		// if (productsV == null || productsV.isEmpty()) return "";
 
 		Object result = null;
 		actualProduct = (String) productsV.get(row); 

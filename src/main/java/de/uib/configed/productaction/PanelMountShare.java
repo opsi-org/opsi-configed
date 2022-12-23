@@ -92,7 +92,7 @@ public class PanelMountShare extends JPanel {
 
 		mountShareDescriptionLabel = new JLabel(
 				configed.getResourceValue("PanelMountShare.mountShareResult0") + " " + np.getDefaultName());
-		
+		// if (!isWindows)
 		
 
 		checkConnectionToShare();

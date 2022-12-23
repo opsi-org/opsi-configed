@@ -484,7 +484,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		ConfigName2ConfigValue properties0 = mainController.getPersistenceController()
 				.getDefaultProductProperties(selectedDepot0).get(productEdited);
 
-		
+		// if (properties0 == null)
 		
 
 		int startDepotIndex = listDepots.getSelectedIndex();

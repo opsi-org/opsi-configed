@@ -54,7 +54,7 @@ public class PropertiesStore
 					// continue
 				} else {
 					int posSeparator = line.indexOf(keySeparator);
-					
+					// if (posSeparator == -1)
 					// posSeparator = line.indexOf(":");
 					String key = line.substring(0, posSeparator);
 					String value = null;

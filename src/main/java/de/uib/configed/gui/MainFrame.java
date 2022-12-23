@@ -2869,10 +2869,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				int visualIndex = jTabbedPaneConfigPanes.getSelectedIndex();
 
 				// report state change request to controller
-				
+				// if ( localboot_productPropertiesPanel != null)
 				
 
-				
+				// if (netboot_productPropertiesPanel != null)
 				
 				logging.info(this, "stateChanged of tabbedPane, visualIndex " + visualIndex);
 				main.setViewIndex(visualIndex);
@@ -3828,7 +3828,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	 * }
 	 * 
 	 * 
-	 * 
+	 * // else if (e.getSource() == cbInstallByShutdown)
 	 * // {
 	 * // JOptionPane.showMessageDialog(this,
 	 * "MainFrame.stateChanged(cbInstallByShutdown)");
@@ -4742,7 +4742,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	public void setUefiBoot(Boolean b) {
 		logging.info(this, "setUefiBoot " + b);
 		cbUefiBoot.setSelected(b);
-		
+		// test if (b == null)
 		
 	}
 

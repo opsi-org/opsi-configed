@@ -39,6 +39,3 @@ find . -name *.java -exec sed -i "s/\/\/[a-zA-Z0-9 \-_\!'()<>{}\.\\}\{,=]*;.*//g
 
 #14. command
 find . -name *.java -exec sed -i "s/\/\/[^\"]*;.*//g" {} \;
-
-#15. command
-find . -name *.java -exec sed -i "s/\/\/[^\"]* if [^\"]*([^\"]*)[^\"]*//g" {} \;

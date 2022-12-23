@@ -437,7 +437,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 			
 
-			
+			// if (oldPath == null)
 			
 
 			logging.debug(this, "importData  ----------------   " + i + " values[i] " + importID);

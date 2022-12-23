@@ -306,7 +306,7 @@ public class SSHCommandFactory {
 		if (!commandlist.isEmpty())
 			list_knownParents.add(parentdefaultForOwnCommands);
 
-		
+		// if (commandlist.size() > 0)
 		
 
 		list_knownMenus.add(parentdefaultForOwnCommands);

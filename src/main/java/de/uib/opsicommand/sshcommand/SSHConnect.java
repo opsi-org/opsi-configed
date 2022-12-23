@@ -64,7 +64,7 @@ public class SSHConnect {
 	public SSHConnect(ConfigedMain main) {
 		this.main = main;
 		connectionInfo = SSHConnectionInfo.getInstance();
-		
+		// if (main.SSHKEY != null)
 		
 	}
 

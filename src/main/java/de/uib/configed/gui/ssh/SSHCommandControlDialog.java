@@ -154,7 +154,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	private void setCenterLayout() {
 		logging.debug(this, "setCenterLayout ");
 		centerPanelLayout.setAutoCreateGaps(true);
-		
+		// if (helpPanelStatus)
 		{
 			centerPanelLayout.setHorizontalGroup(centerPanelLayout.createParallelGroup().addComponent(commandlistPanel)
 					.addComponent(parameterPanel));
@@ -350,7 +350,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			});
 		}
 		{
-			
+			// if (!(Globals.isGlobalReadOnly()))
 			// btn_changeHelpPanelStatus.addActionListener(new ActionListener()
 			// {
 			// public void actionPerformed(ActionEvent e)
@@ -399,7 +399,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			buttonPanel.add(btn_close);
 		}
 		initLayout();
-		
+		// if (Globals.isGlobalReadOnly())
 		setComponentsEnabled_RO(!Globals.isGlobalReadOnly());
 	}
 
@@ -722,7 +722,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 
 	private void showPanel() {
 		logging.info(this, "showPanel helpPanelStatus always true");
-		
+		// if (helpPanelStatus)
 		{
 			setCenterLayout();
 			centerPanel.setSize(centerPanel.getWidth(), centerPanel.getHeight() + parameterPanel.getHeight());
