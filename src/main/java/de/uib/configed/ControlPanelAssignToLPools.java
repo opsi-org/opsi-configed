@@ -157,11 +157,11 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		thePanel.fieldCountAllWindowsSoftware.setText("0");
 
 		thePanel.buttonShowAssignedNotExisting
-				.setEnabled(persist.getUnknownSoftwareListForLicencePool(poolID).size() > 0);
+				.setEnabled(!persist.getUnknownSoftwareListForLicencePool(poolID).isEmpty());
 		if (thePanel.fMissingSoftwareInfo == null)
 			thePanel.fMissingSoftwareInfo = new FGlobalSoftwareInfo(Globals.frame1, this);
 
-		if (persist.getUnknownSoftwareListForLicencePool(poolID).size() > 0) {
+		if (!persist.getUnknownSoftwareListForLicencePool(poolID).isEmpty()) {
 			Map<String, Object> missingSoftwareMap = new HashMap<>();
 
 			for (String ID : persist.getUnknownSoftwareListForLicencePool(poolID)) {

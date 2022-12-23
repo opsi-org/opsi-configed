@@ -846,7 +846,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	}
 
 	private void tellAndClearMissingProducts(String productId) {
-		if (missingProducts.size() > 0) {
+		if (!missingProducts.isEmpty()) {
 
 			logging.info(this, "required by product " + productId + " but missing " + missingProducts);
 
@@ -906,7 +906,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		logging.debug(this, "finishCollectiveChange, changes " + collectChangedStates);
 
-		if (missingImplementationForAR.size() > 0) {
+		if (!missingImplementationForAR.isEmpty()) {
 
 			StringBuffer products = new StringBuffer("\n\n\n");
 			for (String prod : missingImplementationForAR) {

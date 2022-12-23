@@ -237,7 +237,7 @@ public class PanelProductProperties extends JSplitPane
 						logging.debug(this, "selectedRowChanged depotsOfPackage " + depotsOfPackage);
 
 						infoPane.clearEditing();
-						if (depotsOfPackage != null && depotsOfPackage.size() > 0) {
+						if (depotsOfPackage != null && !depotsOfPackage.isEmpty()) {
 
 							infoPane.setEditValues(productEdited,
 									"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),

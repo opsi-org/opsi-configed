@@ -292,7 +292,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		{
 			String firstDIRECTORYgroupname = null;
 			java.util.Set<GroupNode> locations = tree.getLocationsInDIRECTORY(importID);
-			if (locations != null && locations.size() > 0) {
+			if (locations != null && !locations.isEmpty()) {
 				logging.debug(this, "handleClientID tree.getLocationsInDIRECTORY 1");
 				Iterator<GroupNode> iter = tree.getLocationsInDIRECTORY(importID).iterator();
 				firstDIRECTORYgroupname = iter.next().toString();

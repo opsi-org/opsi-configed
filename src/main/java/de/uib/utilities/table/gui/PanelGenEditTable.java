@@ -579,10 +579,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	public void sortAgainAsConfigured() {
 		logging.debug(this, "sortAgainAsConfigured " + specialSortDescriptor);
 
-		if (specialSortDescriptor != null && specialSortDescriptor.size() > 0)
+		if (specialSortDescriptor != null && !specialSortDescriptor.isEmpty())
 			sortDescriptor = specialSortDescriptor;
 
-		if (sortDescriptor != null && sortDescriptor.size() > 0) {
+		if (sortDescriptor != null && !sortDescriptor.isEmpty()) {
 			int selRow = getSelectedRow();
 
 			Object selVal = null;
@@ -909,7 +909,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			}
 
-			else if (tableModel.getFinalCols() != null && tableModel.getFinalCols().size() > 0) {
+			else if (tableModel.getFinalCols() != null && !tableModel.getFinalCols().isEmpty()) {
 				Iterator<Integer> iter = tableModel.getFinalCols().iterator();
 				// sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
 				// sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
@@ -1007,7 +1007,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		 * logging.info(this, "setSorter sortKey " + sortKey );
 		 * }
 		 */
-		if (sortKeys != null && sortKeys.size() > 0)
+		if (sortKeys != null && !sortKeys.isEmpty())
 			sorter.setSortKeys(sortKeys);
 
 		theTable.setRowSorter(sorter);

@@ -383,8 +383,8 @@ public class PanelCompleteWinProducts extends JPanel
 			String oldProductKey = null;
 
 			if (propsMap != null && propsMap.get("productkey") != null && propsMap.get("productkey") instanceof List
-					&& (((List) propsMap.get("productkey")).size() > 0)
-					&& !(((List) propsMap.get("productkey")).get(0).equals("")))
+					&& !((List) propsMap.get("productkey")).isEmpty()
+					&& !((List) propsMap.get("productkey")).get(0).equals(""))
 				oldProductKey = (String) ((List) propsMap.get("productkey")).get(0);
 
 			if (oldProductKey == null)

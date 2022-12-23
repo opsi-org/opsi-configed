@@ -3896,7 +3896,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	@Override
 	public void instancesChanged(Set<JDialog> instances) {
 		// logging.info(this, "instancesChanged, we have instances " + instances);
-		boolean existJDialogInstances = (instances != null && instances.size() > 0);
+		boolean existJDialogInstances = (instances != null && !instances.isEmpty());
 
 		if (jMenuShowScheduledWOL != null) {
 			jMenuShowScheduledWOL.setEnabled(existJDialogInstances);

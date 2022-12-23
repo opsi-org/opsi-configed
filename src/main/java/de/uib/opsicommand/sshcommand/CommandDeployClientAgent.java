@@ -121,7 +121,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 		command = baseName + " " + verbosity + user + passw + finishAction + keepClientOnFailure + getPingOption()
 				+ client;
 		if (needSudo())
-			return SSHCommandFactory.getInstance().sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 

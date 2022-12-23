@@ -142,7 +142,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 		command = "cd " + dir + " && " + baseName + " " + keepVersions + " " + packageVersion + " " + productVersion
 				+ " " + md5sum + " " + zsync + " ";
 		if (needSudo())
-			return SSHCommandFactory.getInstance().sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 

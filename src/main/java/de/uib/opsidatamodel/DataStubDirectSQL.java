@@ -57,7 +57,7 @@ public class DataStubDirectSQL extends DataStubRawData
 		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  new clients count  ====== " + newClients.size());
 
-		if (client2software == null || newClients.size() > 0) {
+		if (client2software == null || !newClients.isEmpty()) {
 
 			String clientSelection = null;
 

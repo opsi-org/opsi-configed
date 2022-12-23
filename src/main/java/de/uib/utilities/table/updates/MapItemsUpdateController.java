@@ -103,7 +103,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 
 			waitCursor.stop();
 		} else {
-			if (successfullInsertsWithNewKeys.size() > 0) {
+			if (!successfullInsertsWithNewKeys.isEmpty()) {
 				// we have to remove all update items ...
 				while (iter.hasNext()) {
 					MapBasedTableEditItem updateItem = (MapBasedTableEditItem) iter.next();

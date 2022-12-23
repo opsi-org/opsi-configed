@@ -349,7 +349,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			// );
 			if (result != null && result instanceof List) {
 				List li = (List) result;
-				if (li.size() > 0 && li.get(0) == null && optionsMap != null) {
+				if (!li.isEmpty() && li.get(0) == null && optionsMap != null) {
 					result = defaultData.get(key);
 					logging.info(this,
 							"getValueAt " + row + ", " + col + " result corrected for key  " + key + ": " + result);
@@ -574,7 +574,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		if (optionsMap.get(key) != null && (optionsMap.get(key)) instanceof List) {
 			List valuelist = (List) optionsMap.get(key);
 
-			if (valuelist.size() > 0 && valuelist.indexOf(value) == -1) {
+			if (!valuelist.isEmpty() && valuelist.indexOf(value) == -1) {
 				// logging.debug("optionsMap.get(key) " + optionsMap.get(key));
 				logging.error("EditMapPanel: value not allowed: " + value);
 				return;

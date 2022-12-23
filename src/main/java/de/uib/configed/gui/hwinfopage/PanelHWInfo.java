@@ -530,7 +530,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		List hwInfo_special = (List) hwInfo.get(SCANPROPERTYNAME);
 		String rootname = "";
 
-		if (hwInfo_special != null && hwInfo_special.size() > 0) {
+		if (hwInfo_special != null && !hwInfo_special.isEmpty()) {
 			if (hwInfo_special.get(0) != null && ((Map) hwInfo_special.get(0)).get(SCANTIME) != null) {
 				rootname = "Scan " + (String) ((Map) hwInfo_special.get(0)).get(SCANTIME);
 			}

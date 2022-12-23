@@ -63,7 +63,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 				setDialog(SSHConnectionExecDialog.getInstance());
 			outputDialog = getDialog();
 
-			if (SSHCommandFactory.getInstance(main).ssh_always_exec_in_background) {
+			if (SSHCommandFactory.ssh_always_exec_in_background) {
 				outputDialog.setVisible(false);
 			}
 		}
@@ -74,7 +74,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 			task.execute();
 			logging.info(this, "execute was called");
 
-			if (SSHCommandFactory.getInstance(main).ssh_always_exec_in_background)
+			if (SSHCommandFactory.ssh_always_exec_in_background)
 				if (command.getShowOutputDialog())
 					outputDialog.setVisible(true);
 				else
@@ -114,7 +114,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 			if (sequential)
 				return task.get();
 
-			if (SSHCommandFactory.getInstance(main).ssh_always_exec_in_background)
+			if (SSHCommandFactory.ssh_always_exec_in_background)
 				// if (!multiCommand)
 				if (withGui)
 					dialog.setVisible(true);

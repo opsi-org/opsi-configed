@@ -851,7 +851,7 @@ public class DataStubNOM extends DataStub {
 					}
 				}
 
-				if (showForLicensing && linuxSubversionMarkers.size() > 0) {
+				if (showForLicensing && !linuxSubversionMarkers.isEmpty()) {
 
 					String subversion = entry.get(SWAuditEntry.SUBVERSION);
 

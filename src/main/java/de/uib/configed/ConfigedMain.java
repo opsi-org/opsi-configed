@@ -4506,7 +4506,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// logging.info(this, "updateProductStates: collectChangedLocalbootStates " +
 		// collectChangedLocalbootStates );
 		if (collectChangedLocalbootStates != null && collectChangedLocalbootStates.keySet() != null
-				&& collectChangedLocalbootStates.keySet().size() > 0) {
+				&& !collectChangedLocalbootStates.keySet().isEmpty()) {
 			// logging.info(this, "collectChangedLocalbootStates keySet " +
 			// collectChangedLocalbootStates.keySet() );
 			Iterator it0 = collectChangedLocalbootStates.keySet().iterator();
@@ -4542,7 +4542,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// netboot products
 		logging.debug(this, "collectChangedNetbootStates  " + collectChangedNetbootStates);
 		if (collectChangedNetbootStates != null && collectChangedNetbootStates.keySet() != null
-				&& collectChangedNetbootStates.keySet().size() > 0) {
+				&& !collectChangedNetbootStates.keySet().isEmpty()) {
 			Iterator it0 = collectChangedNetbootStates.keySet().iterator();
 
 			while (it0.hasNext()) {

@@ -282,7 +282,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			if (productGroupMembers.get(currentKey) == null || ((Set) productGroupMembers.get(currentKey)).isEmpty())
 			// there were no products assigned
 			{
-				if (selectedIDs.size() > 0)
+				if (!selectedIDs.isEmpty())
 					// but now there are some
 					result = true;
 			} else
@@ -294,7 +294,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		} else
 		// we have no old key
 		{
-			if (selectedIDs.size() > 0)
+			if (!selectedIDs.isEmpty())
 				result = true;
 		}
 
@@ -947,7 +947,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			Set<String> addedElements = new TreeSet<>(extendedSelection);
 			addedElements.removeAll(originalSelection);
 
-			if (addedElements.size() > 0) {
+			if (!addedElements.isEmpty()) {
 
 				FShowList fList = new FShowList(Globals.mainFrame, Globals.APPNAME, true,
 						new String[] { configed.getResourceValue("buttonYES"), configed.getResourceValue("buttonNO") },

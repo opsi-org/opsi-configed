@@ -391,7 +391,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			modelSWxLicencepool.setValueAt(newVal, i, 1);
 		}
 
-		return updateCollection.size() > 0;
+		return !updateCollection.isEmpty();
 
 	}
 

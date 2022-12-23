@@ -475,7 +475,7 @@ public class logging implements LogEventSubject
 
 	public static String getErrorListAsLines() {
 		StringBuffer result = new StringBuffer("");
-		if (errorList.size() > 0) {
+		if (!errorList.isEmpty()) {
 			for (int i = 0; i < errorList.size(); i++) {
 				result.append("\n");
 				result.append(errorList.get(i));

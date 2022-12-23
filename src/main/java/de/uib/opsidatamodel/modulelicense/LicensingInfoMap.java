@@ -885,8 +885,8 @@ public class LicensingInfoMap {
 		logging.info(this, "warnings futureOverLimitModuleList? " + futureOverLimitModuleList.size());
 		logging.info(this, "warnings futureOverLimitModuleList? " + futureOverLimitModuleList.size());
 
-		result = currentOverLimitModuleList.size() > 0 || currentCloseToLimitModuleList.size() > 0
-				|| currentTimeWarningModuleList.size() > 0
+		result = !currentOverLimitModuleList.isEmpty() || !currentCloseToLimitModuleList.isEmpty()
+				|| !currentTimeWarningModuleList.isEmpty()
 		// ||
 		// futureOverLimitModuleList.size() > 0
 		// ||

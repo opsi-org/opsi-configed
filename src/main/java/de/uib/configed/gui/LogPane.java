@@ -1083,7 +1083,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		comboModelTypes.removeAllElements();
 
 		// if (typesList.size() > 1)
-		if (typesList.size() > 0) {
+		if (!typesList.isEmpty()) {
 			comboModelTypes.addElement(defaultType);
 			for (String type : typesList) {
 				comboModelTypes.addElement(type);

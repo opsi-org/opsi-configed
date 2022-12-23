@@ -383,7 +383,7 @@ public class FEditList extends FEditObject
 
 		setTracker(selectedList);
 
-		buttonRemove.setEnabled(selectedList.size() > 0);
+		buttonRemove.setEnabled(!selectedList.isEmpty());
 	}
 	// ======================
 

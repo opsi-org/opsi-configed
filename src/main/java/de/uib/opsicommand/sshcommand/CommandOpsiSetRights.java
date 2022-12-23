@@ -97,7 +97,7 @@ public class CommandOpsiSetRights extends SSHCommand_Template
 			command = "opsi-set-rights " + dir;
 		// command = "opsisetrights <<<Enter path (if needed)>>> ";
 		if (needSudo())
-			return SSHCommandFactory.getInstance().sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 
@@ -165,8 +165,8 @@ public class CommandOpsiSetRights extends SSHCommand_Template
 	@Override
 	public ArrayList<String> getParameterList() {
 		ArrayList<String> paramlist = new ArrayList<>();
-		String tmp_1 = SSHCommandFactory.getInstance().getParameterHandler().replacement_default_1;
-		String tmp_2 = SSHCommandFactory.getInstance().getParameterHandler().replacement_default_2;
+		String tmp_1 = SSHCommandParameterMethods.replacement_default_1;
+		String tmp_2 = SSHCommandParameterMethods.replacement_default_2;
 		if (command != null)
 			if ((command.contains(tmp_1)) && (command.contains(tmp_2))) {
 				myTmpCommand = getCommandRaw();
@@ -187,8 +187,8 @@ public class CommandOpsiSetRights extends SSHCommand_Template
 	 * @return String with and between "<<<" and ">>>"
 	 */
 	private String searchPlaceholder() {
-		String tmp_1 = SSHCommandFactory.getInstance().getParameterHandler().replacement_default_1;
-		String tmp_2 = SSHCommandFactory.getInstance().getParameterHandler().replacement_default_2;
+		String tmp_1 = SSHCommandParameterMethods.replacement_default_1;
+		String tmp_2 = SSHCommandParameterMethods.replacement_default_2;
 
 		String splitted_text = myTmpCommand.split(tmp_1, 2)[1].split(tmp_2, 2)[0];
 		logging.debug(this, "searchPlaceholder found " + tmp_1 + splitted_text + tmp_2);

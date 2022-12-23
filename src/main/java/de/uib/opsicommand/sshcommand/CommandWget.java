@@ -14,10 +14,8 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	private String command = "wget ";
 	protected FGeneralDialog dialog = null;
 	private boolean needSudo = false;
-	private boolean needRoot = false;
 	private boolean needParameter = true;
 	private boolean isMultiCommand = false;
-	private int helpColumns = 2;
 	private int priority = 110;
 
 	private String url = " ";
@@ -113,7 +111,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 		else
 			command = "wget " + authentication + filename + verbosity + dir + url + " " + additional_url;
 		if (needSudo())
-			return SSHCommandFactory.getInstance().sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 

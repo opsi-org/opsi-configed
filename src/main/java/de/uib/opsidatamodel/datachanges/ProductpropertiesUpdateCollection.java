@@ -47,7 +47,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 	public boolean addAll(Collection c) {
 		boolean result = true;
 
-		if (c.size() > 0) {
+		if (!c.isEmpty()) {
 			Iterator it = c.iterator();
 			Object ob = it.next();
 			logging.info(this, "addAll on collection of size " + c.size() + " of type " + ob.getClass()

@@ -255,7 +255,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	}
 
 	public void setLastHistoryIndex() {
-		if (commandHistory.size() > 0)
+		if (!commandHistory.isEmpty())
 			historyGetIndex = commandHistory.size();
 	}
 

@@ -1282,10 +1282,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			logging.warning(this, "readyObjects for userparts " + null);
 		} else {
 
-			if (readyConfigObjects.size() > 0) {
+			if (!readyConfigObjects.isEmpty()) {
 
 				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-						new Object[] { exec.jsonArray(readyConfigObjects) });
+						new Object[] { Executioner.jsonArray(readyConfigObjects) });
 
 				exec.doCall(omc);
 			}
@@ -2014,7 +2014,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Boolean result = false;
 
 		if (getConfigs().get(hostname) != null && getConfigs().get(hostname).get(CONFIG_DHCPD_FILENAME) != null
-				&& ((List) (getConfigs().get(hostname).get(CONFIG_DHCPD_FILENAME))).size() > 0) {
+				&& !((List) (getConfigs().get(hostname).get(CONFIG_DHCPD_FILENAME))).isEmpty()) {
 			String configValue = (String) ((List) (getConfigs().get(hostname).get(CONFIG_DHCPD_FILENAME))).get(0);
 
 			// logging.info(this, "dhcpd filename for " + name + ": " + configValue );
@@ -2026,7 +2026,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				result = true;
 			}
 		} else if (getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME) != null
-				&& ((List) (getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME))).size() > 0) {
+				&& !((List) (getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME))).isEmpty()) {
 			String configValue = (String) ((List) (getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME))).get(0);
 
 			if (configValue.indexOf(EFI_STRING) >= 0) {
@@ -2055,7 +2055,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		boolean result = false;
 
-		if (configs != null && configs.get(configKey) != null && ((List) (configs.get(configKey))).size() > 0) {
+		if (configs != null && configs.get(configKey) != null && !((List) (configs.get(configKey))).isEmpty()) {
 
 			logging.debug(this, "valueFromConfigStateAsExpected configKey, values " + configKey + ", valueList "
 					+ ((List) (configs.get(configKey))) + " expected " + expectValue);
@@ -2789,7 +2789,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Map responses = new HashMap<>();
 
 		for (String depot : hostSeparationByDepot.keySet()) {
-			if (hostSeparationByDepot.get(depot) != null && hostSeparationByDepot.get(depot).size() > 0) {
+			if (hostSeparationByDepot.get(depot) != null && !hostSeparationByDepot.get(depot).isEmpty()) {
 				// logging.info(this, "wakeOnLan from depot " + depot + " we have hosts " +
 				// hostSeparationByDepot.get(depot));
 				java.util.Set<String> hostsToWake = new HashSet<>(hostIds);
@@ -2797,7 +2797,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				// logging.debug(this, "wakeOnLan execute for " + hostsToWake);
 
 				if (execsByDepot.get(depot) != null && execsByDepot.get(depot) != Executioner.NONE
-						&& hostsToWake.size() > 0) {
+						&& !hostsToWake.isEmpty()) {
 					logging.debug(this, "wakeOnLan execute for " + hostsToWake);
 					OpsiMethodCall omc = new OpsiMethodCall("hostControl_start",
 							new Object[] { hostsToWake.toArray(new String[0]) });
@@ -3310,7 +3310,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		}
 
 		boolean result = true;
-		if (deleteItems.size() > 0) {
+		if (!deleteItems.isEmpty()) {
 			OpsiMethodCall omc = new OpsiMethodCall("objectToGroup_deleteObjects",
 					new Object[] { deleteItems.toArray() });
 
@@ -3470,7 +3470,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		logging.debug(this, "delete objects " + object2Groups);
 
-		if (object2Groups.size() > 0) {
+		if (!object2Groups.isEmpty()) {
 			Object jsonArray = exec.jsonArray(object2Groups);
 			result = result
 					&& exec.doCall(new OpsiMethodCall("objectToGroup_deleteObjects", new Object[] { jsonArray }));
@@ -3486,7 +3486,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		logging.debug(this, "create new objects " + object2Groups);
 
-		if (object2Groups.size() > 0) {
+		if (!object2Groups.isEmpty()) {
 			Object jsonArray = exec.jsonArray(object2Groups);
 			result = result
 					&& exec.doCall(new OpsiMethodCall("objectToGroup_createObjects", new Object[] { jsonArray }));
@@ -3674,7 +3674,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		List<String[]> list = new ArrayList<>();
 		String dateS = null;
 
-		if (entries.size() > 0)
+		if (!entries.isEmpty())
 			dateS = entries.get(0).getLastModification();
 
 		for (SWAuditClientEntry entry : entries) {
@@ -3730,7 +3730,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		if (clientId != null && !clientId.equals("") && dataStub.getClient2Software() != null
 				&& dataStub.getClient2Software().get(clientId) != null
-				&& dataStub.getClient2Software().get(clientId).size() > 0) {
+				&& !dataStub.getClient2Software().get(clientId).isEmpty()) {
 			result = dataStub.getClient2Software().get(clientId).get(0).getLastModification();
 		}
 
@@ -4598,7 +4598,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				// look for associated product on depot info
 				Product2VersionList product2VersionList = dataStub.getDepot2LocalbootProducts().get(depotId);
 				if (product2VersionList != null && product2VersionList.get(productId) != null
-						&& product2VersionList.get(productId).size() > 0) {
+						&& !product2VersionList.get(productId).isEmpty()) {
 					versionInfo = product2VersionList.get(productId).get(0);
 				}
 
@@ -4606,7 +4606,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					product2VersionList = dataStub.getDepot2NetbootProducts().get(depotId);
 
 					if (product2VersionList != null && product2VersionList.get(productId) != null
-							&& product2VersionList.get(productId).size() > 0) {
+							&& !product2VersionList.get(productId).isEmpty()) {
 						versionInfo = product2VersionList.get(productId).get(0);
 					}
 				}
@@ -4950,7 +4950,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		boolean result = false;
 
-		if (updateItems != null && updateItems.size() > 0) {
+		if (updateItems != null && !updateItems.isEmpty()) {
 			logging.info(this, "updateProductOnClients  updateItems.size " + updateItems.size());
 
 			OpsiMethodCall omc = new OpsiMethodCall("productOnClient_updateObjects",
@@ -5077,7 +5077,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		// deleteProductItems);
 		logging.info(this, "resetLocalbootProducts deleteProductItems.size " + deleteProductItems.size());
 
-		if (deleteProductItems.size() > 0) {
+		if (!deleteProductItems.isEmpty()) {
 			if (deleteProductItems.size() > 10) {
 				logging.info(this, "productOnClient_deleteObjects ");
 				for (Object item : deleteProductItems) {
@@ -5095,7 +5095,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		logging.debug(this, "resetLocalbootProducts result " + result);
 
 		logging.info(this, "resetLocalbootProducts deletePropertyItems.size " + deletePropertyItems.size());
-		if (result && deletePropertyItems.size() > 0 && withDependencies) {
+		if (result && !deletePropertyItems.isEmpty() && withDependencies) {
 			OpsiMethodCall omc = new OpsiMethodCall("productPropertyState_deleteObjects",
 					new Object[] { deletePropertyItems.toArray() });
 
@@ -5256,7 +5256,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		HashSet<String> endResultSet = new HashSet<>(startProductSet);
 		HashSet<String> startResultSet = null;
 
-		while (notHandled.size() > 0) {
+		while (!notHandled.isEmpty()) {
 			startResultSet = new HashSet<>(endResultSet);
 
 			for (String prod : notHandled) {
@@ -5446,7 +5446,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				// initializing state
 				return new HashMap<>();
 
-			if (depot2product2properties.get(depotId).size() > 0) {
+			if (!depot2product2properties.get(depotId).isEmpty()) {
 				logging.info(this, "getDefaultProductProperties for depotId " + depotId + " starts with "
 						+ new ArrayList<>(depot2product2properties.get(depotId).keySet()).get(0));
 			}
@@ -5869,14 +5869,14 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		// , updateCollection: " + updateCollection );
 
-		if (updateCollection != null && updateCollection.size() > 0) {
+		if (updateCollection != null && !updateCollection.isEmpty()) {
 			if (exec.doCall(new OpsiMethodCall("productPropertyState_updateObjects",
 					new Object[] { exec.jsonArray(updateCollection) }))) {
 				updateCollection.clear();
 			}
 		}
 
-		if (deleteCollection != null && deleteCollection.size() > 0) {
+		if (deleteCollection != null && !deleteCollection.isEmpty()) {
 			if (exec.doCall(new OpsiMethodCall("productPropertyState_deleteObjects",
 					new Object[] { exec.jsonArray(deleteCollection) }))) {
 				deleteCollection.clear();
@@ -6499,7 +6499,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					// logging.info(this, "we got values " + configOption.getDefaultValues() );
 					// }
 
-					if (configOption.getDefaultValues() != null && configOption.getDefaultValues().size() > 0) {
+					if (configOption.getDefaultValues() != null && !configOption.getDefaultValues().isEmpty()) {
 						// logging.info(this, "getConfigOptions check for savedSearches key " + key + "
 						// : "
 						// + configOption.getDefaultValues() );
@@ -6516,7 +6516,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			logging.info(this, "{ole deleteItems " + deleteItems.size());
 
-			if (deleteItems.size() > 0) {
+			if (!deleteItems.isEmpty()) {
 				OpsiMethodCall omc = new OpsiMethodCall("config_deleteObjects", new Object[] { deleteItems.toArray() });
 
 				if (exec.doCall(omc)) {
@@ -6643,7 +6643,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Boolean globalDefault = getGlobalBooleanConfigValue(key, null);
 
 		if (getConfigs().get(hostName) != null && getConfigs().get(hostName).get(key) != null
-				&& ((List) (getConfigs().get(hostName).get(key))).size() > 0) {
+				&& !((List) (getConfigs().get(hostName).get(key))).isEmpty()) {
 
 			result = interpretAsBoolean(((List) (getConfigs().get(hostName).get(key))).get(0), (Boolean) null);
 
@@ -6686,7 +6686,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			} else {
 
 				List li = option.getDefaultValues();
-				if (li != null && li.size() > 0) {
+				if (li != null && !li.isEmpty()) {
 					val = (Boolean) li.get(0);
 				}
 				logging.debug(this, "getGlobalBooleanConfigValue key, defaultValues " + key + ", " + li);
@@ -6871,7 +6871,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			removedKeys.removeAll(currentKeys);
 			logging.info(this, "setAdditionalConfigurations removed " + removedKeys);
 
-			if (removedKeys.size() > 0) {
+			if (!removedKeys.isEmpty()) {
 				if (deleteConfigStateItems == null)
 					deleteConfigStateItems = new ArrayList<>();
 
@@ -6936,7 +6936,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			return;
 
 		if (Globals.checkCollection(this, "setAdditionalConfiguration", "configStateCollection", configStateCollection)
-				&& configStateCollection.size() > 0) {
+				&& !configStateCollection.isEmpty()) {
 			boolean configsChanged = false;
 
 			if (deleteConfigStateItems == null)
@@ -6954,7 +6954,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				List valueList = (List) (((Map) configState).get("values"));
 
-				if (valueList.size() > 0 && valueList.get(0) instanceof Boolean)
+				if (!valueList.isEmpty() && valueList.get(0) instanceof Boolean)
 					typesOfUsedConfigIds.put(ident, "BoolConfig");
 				else
 					typesOfUsedConfigIds.put(ident, "UnicodeConfig");
@@ -6974,7 +6974,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			logging.debug(this, "setAdditionalConfiguration(), deleteConfigStateItems  " + deleteConfigStateItems);
 			// not used
-			if (deleteConfigStateItems.size() > 0) {
+			if (!deleteConfigStateItems.isEmpty()) {
 
 				OpsiMethodCall omc = new OpsiMethodCall("configState_deleteObjects",
 						new Object[] { deleteConfigStateItems.toArray() });
@@ -7001,7 +7001,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				createItems.add(exec.jsonMap(item));
 			}
 
-			if (createItems.size() > 0) {
+			if (!createItems.isEmpty()) {
 				// logging.debug(this, "should call config_createObjects");
 
 				OpsiMethodCall omc = new OpsiMethodCall("config_createObjects", new Object[] { createItems.toArray() });
@@ -7065,7 +7065,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 
 			logging.debug(this, "callsConfigCollection " + callsConfigCollection);
-			if (callsConfigCollection.size() > 0) {
+			if (!callsConfigCollection.isEmpty()) {
 				exec.doCall(new OpsiMethodCall("config_updateObjects",
 						new Object[] { exec.jsonArray(callsConfigCollection) }));
 			}
@@ -7125,7 +7125,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 							type = (String) configOptions.get(key).get("type");
 
 						else {
-							if (valueList.size() > 0) {
+							if (!valueList.isEmpty()) {
 								if (valueList.get(0) instanceof java.lang.Boolean)
 									type = "BoolConfig";
 							}
@@ -7183,7 +7183,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (globalReadOnly)
 			return;
 
-		if (configCollection != null && configCollection.size() > 0) {
+		if (configCollection != null && !configCollection.isEmpty()) {
 			boolean configsChanged = false;
 			// add configId where necessary
 			List<String> usedConfigIds = new ArrayList<>();
@@ -7214,7 +7214,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				createItems.add(exec.jsonMap(item));
 			}
 
-			if (createItems.size() > 0) {
+			if (!createItems.isEmpty()) {
 				OpsiMethodCall omc = new OpsiMethodCall("config_createObjects", new Object[] { createItems.toArray() });
 				exec.doCall(omc);
 			}
@@ -7245,7 +7245,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			logging.debug(this, "setConfig() callsConfigUpdateCollection " + callsConfigUpdateCollection);
 
-			if (callsConfigDeleteCollection.size() > 0) {
+			if (!callsConfigDeleteCollection.isEmpty()) {
 				exec.doCall(new OpsiMethodCall("config_deleteObjects",
 						new Object[] { exec.jsonArray(callsConfigDeleteCollection) }));
 				configOptionsRequestRefresh();
@@ -7254,7 +7254,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			logging.debug(this, "setConfig() callsConfigUpdateCollection " + callsConfigUpdateCollection);
 
-			if (callsConfigUpdateCollection.size() > 0) {
+			if (!callsConfigUpdateCollection.isEmpty()) {
 				exec.doCall(new OpsiMethodCall("config_updateObjects",
 						new Object[] { exec.jsonArray(callsConfigUpdateCollection) }));
 				configOptionsRequestRefresh();
@@ -8148,7 +8148,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				logging.info(this, "entriesToRemove " + entriesToRemove);
 				logging.info(this, "deleteItems " + deleteItems);
 
-				if (deleteItems.size() > 0) {
+				if (!deleteItems.isEmpty()) {
 					OpsiMethodCall omc = new OpsiMethodCall("auditSoftwareToLicensePool_deleteObjects",
 							new Object[] { deleteItems.toArray() });
 					result = exec.doCall(omc);
@@ -9472,7 +9472,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		boolean result = false;
 
 		Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
-		if (serverPropertyMap.get(KEY_USER_REGISTER) != null && serverPropertyMap.get(KEY_USER_REGISTER).size() > 0)
+		if (serverPropertyMap.get(KEY_USER_REGISTER) != null && !serverPropertyMap.get(KEY_USER_REGISTER).isEmpty())
 		// dont do anything if we have not got the config
 		{
 			result = (Boolean) ((List) (serverPropertyMap.get(KEY_USER_REGISTER))).get(0);
@@ -10515,7 +10515,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		// System.exit(0);
 
-		if (defaultUserConfigsObsolete.size() > 0) {
+		if (!defaultUserConfigsObsolete.isEmpty()) {
 			exec.doCall(new OpsiMethodCall("config_deleteObjects",
 					new Object[] { exec.jsonArray(defaultUserConfigsObsolete) }));
 		} ;
@@ -11064,7 +11064,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// if (missingModulesPermissionInfo.size() > 0)
 			// configed.endApp(2);
 
-			if (missingModulesPermissionInfo.size() > 0) {
+			if (!missingModulesPermissionInfo.isEmpty()) {
 				javax.swing.SwingUtilities.invokeLater(new Thread() {
 					public void run() {
 

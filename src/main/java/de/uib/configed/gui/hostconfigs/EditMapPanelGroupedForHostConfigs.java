@@ -408,7 +408,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 							List<Object> values = de.uib.opsidatamodel.PersistenceControllerFactory
 									.getPersistenceController().getConfigDefaultValues().get(rolekey);
 
-							if (values != null && values.size() > 0)
+							if (values != null && !values.isEmpty())
 								theRole = "" + values.get(0);
 
 							boolean obeyToRole = (theRole != null && !(theRole.equals(UserConfig.NONE_PROTOTYPE)));
@@ -624,7 +624,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 			logging.warning(this, "readyObjects for userparts " + null);
 		} else {
 
-			if (newData.size() > 0) {
+			if (!newData.isEmpty()) {
 
 				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
 						new Object[] { persist.exec.jsonArray(newData) });

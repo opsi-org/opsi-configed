@@ -352,7 +352,7 @@ public class SSHConnectExec extends SSHConnect {
 
 			if (sequential)
 				return task.get();
-			if (SSHCommandFactory.getInstance(main).ssh_always_exec_in_background)
+			if (SSHCommandFactory.ssh_always_exec_in_background)
 				// if (!multiCommand)
 				if (withGui) {
 					outputDialog.setVisible(false);
@@ -563,7 +563,7 @@ public class SSHConnectExec extends SSHConnect {
 						// (str.equals(configed.getResourceValue("SSHConnection.sudoFailedText"))) )
 						// if ( (command.needSudo() ) &&
 						// (str.equals(SSHCommandFactory.getInstance().sudo_failed_text)) )
-						if ((command.needSudo()) && (str.contains(SSHCommandFactory.getInstance().sudo_failed_text))) {
+						if ((command.needSudo()) && (str.contains(SSHCommandFactory.sudo_failed_text))) {
 							String pw = "";
 							if (supw_retriedTimes >= 1)
 								pw = getSudoPass(outputDialog);

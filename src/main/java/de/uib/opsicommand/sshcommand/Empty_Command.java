@@ -225,8 +225,8 @@ public class Empty_Command implements SSHCommand {
 	@Override
 	public ArrayList<String> getParameterList() {
 		ArrayList<String> paramlist = new ArrayList<>();
-		String tmp_1 = SSHCommandFactory.getInstance().getParameterHandler().replacement_default_1;
-		String tmp_2 = SSHCommandFactory.getInstance().getParameterHandler().replacement_default_2;
+		String tmp_1 = SSHCommandParameterMethods.replacement_default_1;
+		String tmp_2 = SSHCommandParameterMethods.replacement_default_2;
 		if (command != null)
 			if ((command.contains(tmp_1)) && (command.contains(tmp_2))) {
 				myTmpCommand = getCommandRaw();
@@ -247,8 +247,8 @@ public class Empty_Command implements SSHCommand {
 	 * @return String with and between "<<<" and ">>>"
 	 */
 	private String searchPlaceholder() {
-		String tmp_1 = SSHCommandFactory.getInstance().getParameterHandler().replacement_default_1;
-		String tmp_2 = SSHCommandFactory.getInstance().getParameterHandler().replacement_default_2;
+		String tmp_1 = SSHCommandParameterMethods.replacement_default_1;
+		String tmp_2 = SSHCommandParameterMethods.replacement_default_2;
 
 		String splitted_text = myTmpCommand.split(tmp_1, 2)[1].split(tmp_2, 2)[0];
 		logging.debug(this, "searchPlaceholder found " + tmp_1 + splitted_text + tmp_2);
@@ -307,9 +307,9 @@ public class Empty_Command implements SSHCommand {
 
 		if (needSudo()) {
 			if (command.contains("2>&1"))
-				result = SSHCommandFactory.getInstance().sudo_text + " " + command;
+				result = SSHCommandFactory.sudo_text + " " + command;
 			else
-				result = SSHCommandFactory.getInstance().sudo_text + " " + command + " 2>&1";
+				result = SSHCommandFactory.sudo_text + " " + command + " 2>&1";
 		} else {
 			if (command.contains("2>&1"))
 				result = command;

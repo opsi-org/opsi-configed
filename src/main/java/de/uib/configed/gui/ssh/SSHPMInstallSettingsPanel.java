@@ -15,6 +15,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.FDepotselectionList;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
+import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.logging.logging;
 
 public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
@@ -186,18 +187,18 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 		if (selectedDepots.isEmpty()) {
 			if (persist.isDepotsFullPermission()) {
-				depotParameter = persist.DEPOT_SELECTION_NODEPOTS;
-			} else if (depots.size() > 0) {
+				depotParameter = PersistenceController.DEPOT_SELECTION_NODEPOTS;
+			} else if (!depots.isEmpty()) {
 				depotParameter = depots.get(0);
 			}
 		} else {
 			if (selectedDepots.contains(
 					// configed.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS")
-					persist.DEPOT_SELECTION_NODEPOTS)
+					PersistenceController.DEPOT_SELECTION_NODEPOTS)
 
 			) {
 				depotParameter = "";// persist.DEPOT_SELECTION_NODEPOTS;
-			} else if (selectedDepots.contains(persist.DEPOT_SELECTION_ALL)) {
+			} else if (selectedDepots.contains(PersistenceController.DEPOT_SELECTION_ALL)) {
 				depotParameter = "all";
 			} else {
 				StringBuffer sb = new StringBuffer();
