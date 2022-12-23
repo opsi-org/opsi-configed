@@ -26,7 +26,7 @@ public class ExtendedInteger implements Comparable {
 	}
 
 	public ExtendedInteger(int intVal) {
-		number = new Integer(intVal);
+		number = Integer.valueOf(intVal);
 		value = "" + intVal;
 	}
 
@@ -94,7 +94,7 @@ public class ExtendedInteger implements Comparable {
 		} else {
 			// logging.info(this, " adding " + getNumber() + " + " + ei.getNumber());
 			int sum = this.getNumber() + ei.getNumber();
-			result = new ExtendedInteger(new Integer(sum), "" + sum);
+			result = new ExtendedInteger(Integer.valueOf(sum), "" + sum);
 		}
 		// logging.info(this, " add giving " + result);
 		return result;

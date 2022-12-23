@@ -1011,7 +1011,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				levC = lines[i].charAt(1);
 			}
 			if (Character.isDigit(levC)) {
-				lev = new Integer("" + levC).intValue();
+				lev = Character.getNumericValue(levC);
 				if (lev > maxExistingLevel)
 					maxExistingLevel = lev;
 
