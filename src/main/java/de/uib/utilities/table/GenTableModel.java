@@ -803,7 +803,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 		// if (addedRows.size() == 0) // we add only one row up to further notice
 		{
-			Vector rowV = new Vector();
+			Vector rowV = new Vector<>();
 			for (int i = 0; i < colsLength; i++) {
 				rowV.add(null);
 			}

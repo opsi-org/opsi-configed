@@ -58,7 +58,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	private boolean writeData = true;
 
 	public MapTableModel() {
-		observers = new Vector();
+		observers = new Vector<>();
 
 		/*
 		 * editDenier
@@ -215,7 +215,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		data.put(key, newval);
 		oridata.put(key, newval);
 		logging.debug(this, " keys " + keys);
-		keys = new Vector(data.keySet());
+		keys = new Vector<>(data.keySet());
 		logging.debug(this, " new keys  " + keys);
 		if (toStore)
 			putEntryIntoStoredMaps(key, newval, toStore);
@@ -242,7 +242,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		data.remove(key);
 		oridata.remove(key);
 		// logging.debug(this, "removeEntry, keys " + keys);
-		keys = new Vector(data.keySet());
+		keys = new Vector<>(data.keySet());
 		// logging.debug(this, "removeEntry, new keys " + keys);
 		removeEntryFromStoredMaps(key);
 		fireTableDataChanged();

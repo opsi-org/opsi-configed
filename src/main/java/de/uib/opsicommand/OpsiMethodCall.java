@@ -214,7 +214,7 @@ public class OpsiMethodCall {
 			JSONArray joParams = new JSONArray();
 
 			/*
-			 * Vector v = new Vector();
+			 * Vector v = new Vector<>();
 			 * for (int i = 0; i<parameters.length; i++)
 			 * { v.add (parameters[i]);
 			 * }

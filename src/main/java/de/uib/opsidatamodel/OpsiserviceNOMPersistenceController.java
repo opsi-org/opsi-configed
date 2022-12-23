@@ -4365,7 +4365,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	/*
 	 * public Vector getInstallImages()
 	 * {
-	 * return new Vector(
+	 * return new Vector<>(
 	 * exec.getListResult(
 	 * new OpsiMethodCall(
 	 * "getBootimages_list",

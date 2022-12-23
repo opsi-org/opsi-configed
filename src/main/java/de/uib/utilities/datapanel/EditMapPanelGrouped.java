@@ -271,7 +271,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 			if (!listelem.isEmpty())
 				property = listelem.get(0).toString();
 
-			values = new Vector();
+			values = new Vector<>();
 			// logging.debug(key + " :: " + property);
 			// TODO search another possibility to exclude?
 			if (!key.contains("saved_search")) {

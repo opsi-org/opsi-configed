@@ -14,7 +14,7 @@ public class HostUpdateCollection extends UpdateCollection {
 	PersistenceController persis;
 
 	public HostUpdateCollection(Object persis) {
-		super(new Vector(0));
+		super(new Vector<>(0));
 		setController(persis);
 	}
 

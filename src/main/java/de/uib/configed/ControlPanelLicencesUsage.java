@@ -88,7 +88,7 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 	 * persist.getHostInfoCollections().getPcListForDepots(
 	 * mainController.getSelectedDepots() )
 	 * ).keySet());
-	 * return new Vector(set);
+	 * return new Vector<>(set);
 	 * }
 	 */
 

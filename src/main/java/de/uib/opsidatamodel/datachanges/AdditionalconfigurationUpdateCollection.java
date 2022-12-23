@@ -18,7 +18,7 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 	boolean masterConfig = false;
 
 	public AdditionalconfigurationUpdateCollection(Object persis, String[] objectIds) {
-		super(new Vector(0));
+		super(new Vector<>(0));
 		this.objectIds = objectIds;
 		setController(persis);
 	}

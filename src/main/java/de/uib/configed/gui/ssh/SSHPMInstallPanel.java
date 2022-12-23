@@ -21,7 +21,7 @@ public class SSHPMInstallPanel extends JPanel {
 
 	protected SSHCommandFactory factory = SSHCommandFactory.getInstance();
 
-	protected Vector<String> additional_default_paths = new Vector();
+	protected Vector<String> additional_default_paths = new Vector<>();
 
 	PersistenceController persist;
 	protected String workbench;

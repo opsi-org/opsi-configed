@@ -94,13 +94,13 @@ public class SSHCompletionComboButton {
 		if (opsiRepo.charAt(opsiRepo.length() - 1) != '/')
 			opsiRepo = opsiRepo + "/";
 		if (combobox_default_path != null) {
-			defaultvalues = new Vector();
+			defaultvalues = new Vector<>();
 			defaultvalues.addElement(combobox_default_path);
 			defaultvalues.addElement(root);
 			defaultvalues.addElement(opsiRepo);
 			// defaultvalues.addElement(opsiVarRepository);
 		} else {
-			defaultvalues = new Vector();
+			defaultvalues = new Vector<>();
 			defaultvalues.addElement(opsiRepo);
 			defaultvalues.addElement(root);
 			// defaultvalues.addElement(opsiVarRepository);

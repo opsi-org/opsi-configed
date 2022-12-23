@@ -270,7 +270,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		tsProductNames = new TreeSet<>(myCollator);
 		tsProductNames.addAll(productNamesInDeliveryOrder);
-		productsV = new Vector(tsProductNames);
+		productsV = new Vector<>(tsProductNames);
 
 		logging.debug(this, "tsProductNames " + tsProductNames);
 
@@ -1507,7 +1507,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			 * values.add(InstallationInfo.FAILEDdisplayString);
 			 */
 
-			return new DefaultComboBoxModel(new Vector(values));
+			return new DefaultComboBoxModel(new Vector<>(values));
 
 		}
 

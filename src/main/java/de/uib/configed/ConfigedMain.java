@@ -271,7 +271,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected Set depotsOfSelectedClients = null;
 	protected Set<String> allowedClients = null;
 
-	// protected Vector pclist = new Vector();
+	// protected Vector pclist = new Vector<>();
 
 	protected List<String> localbootProductnames;
 	protected List<String> netbootProductnames;
@@ -3916,7 +3916,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				mainFrame.panel_HostProperties.initMultipleHostsEditing(
 						configed.getResourceValue("PanelHostProperties.SelectHost"),
-						new DefaultComboBoxModel(new Vector(depotPropertiesForPermittedDepots.keySet())),
+						new DefaultComboBoxModel(new Vector<>(depotPropertiesForPermittedDepots.keySet())),
 						depotPropertiesForPermittedDepots, hostUpdateCollection,
 						PersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT
 
@@ -5748,7 +5748,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		 */
 		// List<String> groupList = persist.getHostGroupIds();
 		// Collections.sort( groupList );
-		// Vector<String> groupSelectionIds = new Vector(groupList);
+		// Vector<String> groupSelectionIds = new Vector<>(groupList);
 
 		Collections.sort(localbootProductnames);
 		Vector<String> vLocalbootProducts = new Vector<>(localbootProductnames);
@@ -6509,9 +6509,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			dialogRemoteControl.setMeanings(rcCommands);
 			dialogRemoteControl.setEditable(commandsEditable);
 
-			dialogRemoteControl.setListModel(new DefaultComboBoxModel(new Vector(new TreeSet<>(remoteControls.keySet()))
-			// new String[]{"xx"}
-			));
+			dialogRemoteControl
+					.setListModel(new DefaultComboBoxModel(new Vector<>(new TreeSet<>(remoteControls.keySet()))
+					// new String[]{"xx"}
+					));
 
 			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, null, -1, false, ""));
 
@@ -6661,7 +6662,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public void callSaveGroupDialog() {
 		List groupList = persist.getHostGroupIds();
 		Collections.sort(groupList);
-		Vector groupSelectionIds = new Vector(groupList);
+		Vector groupSelectionIds = new Vector<>(groupList);
 
 		int i = groupSelectionIds.indexOf(groupname);
 

@@ -56,7 +56,7 @@ public class MapSource implements TableSource
 			logging.info(this, "completed to classes " + classNames);
 		}
 		this.table = table;
-		rows = new Vector();
+		rows = new Vector<>();
 
 	}
 
@@ -76,7 +76,7 @@ public class MapSource implements TableSource
 		int rowCount = 0;
 
 		for (String key : table.keySet()) {
-			Vector vRow = new Vector();
+			Vector vRow = new Vector<>();
 
 			Map mRow = table.get(key);
 

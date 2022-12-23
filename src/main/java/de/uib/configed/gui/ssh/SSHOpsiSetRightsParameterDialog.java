@@ -34,7 +34,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	private JButton btn_doAction;
 	private JButton btn_close;
 	private CommandOpsiSetRights commandopsisetrights;
-	private Vector<String> additional_default_paths = new Vector();
+	private Vector<String> additional_default_paths = new Vector<>();
 	private SSHCompletionComboButton completion;
 
 	public SSHOpsiSetRightsParameterDialog() {

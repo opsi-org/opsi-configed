@@ -19,7 +19,7 @@ public class RetrieverMapSource extends MapSource
 			boolean rowCounting) {
 		super(columnNames, classNames, null, rowCounting);
 		this.retriever = retriever;
-		rows = new Vector();
+		rows = new Vector<>();
 	}
 
 	public RetrieverMapSource(Vector<String> columnNames, Vector<String> classNames, MapRetriever retriever) {
