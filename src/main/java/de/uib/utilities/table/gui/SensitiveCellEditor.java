@@ -257,7 +257,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			
 			// editingRow + " , " + editingColumn + " " +
 			// "modelProducer.getClass(editingRow, editingColumn) " +
-			// modelProducer.getClass(editingRow, editingColumn) );
+			
 
 			/*
 			 * if ( List.class.isAssignableFrom

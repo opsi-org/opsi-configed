@@ -414,7 +414,7 @@ public class DataStubNOM extends DataStub {
 			depot2Product2PropertyDefinitions = new HashMap<>();
 
 			// HashMap<String, java.util.Set<String>> productListForProductID = new
-			// HashMap<String, java.util.Set<String>>();
+			
 			// HashMap<String, java.util.Set<String>> productListForProductID_notUnique =
 			
 
@@ -598,7 +598,7 @@ public class DataStubNOM extends DataStub {
 
 	// protected Map<String, Map<String, Map<String, Object>>>
 	// host2product2properties_retrieved = new HashMap<String, Map<String, Map
-	// <String, Object>>>();
+	
 	protected java.util.Set<String> hostsWithProductProperties;
 	// protected java.util.Set<String> depotsWithProductProperties;
 
@@ -625,7 +625,7 @@ public class DataStubNOM extends DataStub {
 
 	// public Map<String, Map<String, Map<String, Object>>>
 	// getHost2product2properties_retrieved = new HashMap<String, Map<String, Map
-	// <String, Object>>>();
+	
 
 	public void fillProductPropertyStates(Collection<String> clients) {
 		logging.info(this, "fillProductPropertyStates for " + clients);

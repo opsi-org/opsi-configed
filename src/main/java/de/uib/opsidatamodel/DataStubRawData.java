@@ -170,7 +170,7 @@ public class DataStubRawData extends DataStubNOM {
 		logging.debug(this, "produceProductPropertyStates new hosts " + clients + " old hosts " + hosts);
 
 		// List <Map<String, Object>> compareList =
-		// super.produceProductPropertyStates(clients, hosts);
+		
 		
 
 		List<Map<String, Object>> result = new ArrayList<>();
@@ -955,7 +955,7 @@ public class DataStubRawData extends DataStubNOM {
 		timeCheck.start();
 
 		// Map<String, Map<String, Object>> client2AllInfos = new HashMap<String,
-		// Map<String, Object>>();
+		
 
 		for (String hwClass : persist.getHwInfoClassNames()) {
 			logging.info(this, "retrieveClient2HwRows hwClass " + hwClass);

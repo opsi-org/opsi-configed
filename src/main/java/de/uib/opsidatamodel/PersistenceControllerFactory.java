@@ -55,7 +55,7 @@ public class PersistenceControllerFactory {
 		if (sqlAndGetRows) {
 			// have a try
 			// persistControl = new OpsiserviceSQLgetrowsPersistenceController (server,
-			// user, password);
+			
 			persistControl = new OpsiserviceRawDataPersistenceController(server, user, password);
 			logging.info("a PersistenceController initiated by option sqlAndGetRows got " + (persistControl == null));
 		} else if (avoidSqlRawData) {

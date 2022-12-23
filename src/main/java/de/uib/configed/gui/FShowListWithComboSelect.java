@@ -28,10 +28,10 @@ public class FShowListWithComboSelect extends FShowList {
 		
 		
 		// HorizontalPositioner northPanel = new HorizontalPositioner (new
-		// SurroundPanel(labelChoice), combo);
+		
 		// northPanel = panelChoice;
 		pack();
-		// allpane.add(panelChoice, BorderLayout.NORTH);
+		
 		
 
 	}

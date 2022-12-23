@@ -86,7 +86,7 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 					boolean leaf, int row, boolean hasFocus) {
 
 				JLabel label = new JLabel(value.toString()); // (JLabel)
-																// super.getTreeCellRendererComponent(tree,value,sel,expanded,leaf,row,hasFocus);
+																
 
 				if (sel)
 					label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));

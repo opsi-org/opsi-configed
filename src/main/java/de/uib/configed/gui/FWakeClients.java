@@ -79,7 +79,7 @@ public class FWakeClients extends FShowList {
 						String host = hostSeparationByDepots.get(depot).get(turn);
 						// appendLine("trying to start up " + host + " in depot " + depot);
 						// appendLine(String.format("trying to start up %4s %s from depot %s ", turn,
-						// host, depot));
+						
 						String line = String.format("trying to start up   %s    from depot    %s  ", host, depot);
 						appendLine(line);
 						logging.info(this, "act: " + line);

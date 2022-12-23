@@ -35,7 +35,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 		
 		logging.debug(this, "saveChanges");
 
-		WaitCursor waitCursor = new WaitCursor(); // licencesFrame, licencesFrame.getCursor() );
+		WaitCursor waitCursor = new WaitCursor(); 
 
 		boolean success = true; // true until failure
 

@@ -408,7 +408,7 @@ public class ControllerHWinfoColumnConfiguration {
 			// colHostVsItemAssigned line
 			lineMap = new LinkedHashMap<>();
 			lineMap.put(colLineNo, formatLineNo(id));
-			// lineMap.put(colTellAgainHardwareClass, hwClass);
+			
 
 			lineMap.put(colHostVsItemAssigned, valAssignedToHost);
 
@@ -419,7 +419,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 				lineMap = new LinkedHashMap<>();
 				lineMap.put(colLineNo, formatLineNo(id));
-				// lineMap.put(colTellAgainHardwareClass, hwClass);
+				
 
 				ColumnIdent columnIdent = new ColumnIdent(hwClass, OpsiHwAuditDeviceClass.hostAssignedTableType,
 						deviceProperty.getOpsiDbColumnName());
@@ -441,7 +441,7 @@ public class ControllerHWinfoColumnConfiguration {
 			lineMap.put(colHostVsItemAssigned, valAssignedToHwItem);
 
 			result.put(formatLineNo(id), lineMap);
-			// lineMap.put(colTellAgainHardwareClass, hwClass);
+			
 			id++;
 
 			for (OpsiHwAuditDevicePropertyType deviceProperty : deviceHwItemProperties) {

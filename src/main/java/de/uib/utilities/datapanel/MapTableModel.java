@@ -501,7 +501,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		// actualPropName = (String) value;
 
 		
-		// getValueAt (row, col).getClass() );
+		
 		if (getValueAt(row, col).equals(value) || getValueAt(row, col).toString().equals(value.toString())) {
 			
 		} else {

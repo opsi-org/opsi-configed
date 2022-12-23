@@ -421,7 +421,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 				// -1).toString();
 				GroupNode node = (GroupNode) sourcePath.getPathComponent(sourcePath.getPathCount() - 1);
 				main.setGroup(node.toString());
-				// main.activateGroupByTree(node, sourcePath);
+				
 				
 				// treePopupMouseListener.getPopupSourcePath() + " node "
 				// + sourcePath.getPathComponent(sourcePath.getPathCount() -1));
@@ -446,7 +446,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 				// -1).toString();
 				GroupNode node = (GroupNode) sourcePath.getPathComponent(sourcePath.getPathCount() - 1);
 				
-				// main.activateGroupByTree(node, sourcePath);
+				
 				
 				// treePopupMouseListener.getPopupSourcePath() + " node "
 				// + sourcePath.getPathComponent(sourcePath.getPathCount() -1));
@@ -1167,13 +1167,13 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			
 			
 
-			// hasChildWithName(parent, groupId);
+			
 
 			try {
 				parent.add(node);
 				model.nodesWereInserted(parent, new int[] { model.getIndexOfChild(parent, node) });
 
-				// insertNodeInOrder(node, parent); doubles entries
+				
 			} catch (IllegalArgumentException ex) {
 				logging.error(this, "Cannot add node to parent " + node + ", " + parent + ": " + ex, ex);
 				JOptionPane.showMessageDialog(Globals.mainContainer,

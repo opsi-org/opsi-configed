@@ -220,7 +220,7 @@ public class HostInfo {
 		unordered.put(depotOfClient_DISPLAY_FIELD_LABEL, depotOfClient);
 		unordered.put(clientConnectedKEY, clientConnected);
 
-		// unordered.put( clientShutdownInstallKEY, clientShutdownInstall );
+		
 
 		logging.debug(this, "getMap clientName " + clientName + " : " + unordered);
 
@@ -257,7 +257,7 @@ public class HostInfo {
 		unordered.put(clientConnectedKEY, clientConnected);
 		unordered.put(clientShutdownInstallKEY, clientShutdownInstall);
 
-		// unordered.put( clientShutdownInstallKEY, clientShutdownInstall );
+		
 
 		logging.debug(this, "getMap clientName " + clientName);
 
@@ -829,7 +829,7 @@ public class HostInfo {
 
 		
 		// persist.getHostInfoCollections().updateLocalHostInfo(client,
-		// clientShutdownInstallKEY, boolShutdownInstall);
+		
 		// }
 	}
 

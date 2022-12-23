@@ -467,7 +467,7 @@ public class OpsiDataBackend extends Backend {
 							new String[] { hardwareNameLocalized, localizedName }));
 			}
 			result.put(hardwareName, elementList);
-			// result.put( hardwareName, elementList );
+			
 			logging.debug(this, "" + elementList);
 		}
 		return result;
@@ -501,7 +501,7 @@ public class OpsiDataBackend extends Backend {
 							new String[] { hardwareNameLocalized, localizedName }));
 			}
 			result.put(hardwareNameLocalized, elementList);
-			// result.put( hardwareName, elementList );
+			
 			logging.debug(this, "" + elementList);
 		}
 		return result;

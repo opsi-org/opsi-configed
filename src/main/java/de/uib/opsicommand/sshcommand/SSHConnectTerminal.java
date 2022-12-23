@@ -142,7 +142,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				// }
 				// });
 
-				// channel.setOutputStream(new MyOutputPrinter(dialog, System.out));
+				
 				// out = channel.getOutputStream();
 				// channel = setChannels(new FilterInputStream(System.in){
 				// public int read(byte[] b, int off, int len)throws IOException{
@@ -340,8 +340,8 @@ public class SSHConnectTerminal extends SSHConnect {
 						// else
 						// dialog.setAutocompleteList(commands_compgen);
 
-						// else dialog.setAutocompleteList(getList(getCompletionList(true, true)));
-						// dialog.setAutocompleteList(getList(getCompletionList(true, false)));
+						
+						
 						// }
 						((Component) textField).requestFocusInWindow();
 						dialog.getInputField().setText("");
@@ -403,7 +403,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		// String com = "ls -aldU " + currentDirectory + "./*";
 		
 		// String result_ls = ssh.exec( new Empty_Command(com ),
-		// false, null, true, false);
+		
 		
 		
 		// String[] arr_result_dir = result_ls.split("\n");

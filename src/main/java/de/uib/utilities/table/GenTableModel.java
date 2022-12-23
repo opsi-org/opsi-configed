@@ -639,7 +639,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 				rows.get(cursorrow).set(colMarkCursorRow, true);
 
 				change = true;
-				// fireTableCellUpdated(cursorrow, colMarkCursorRow);
+				
 			}
 
 			if (change) {

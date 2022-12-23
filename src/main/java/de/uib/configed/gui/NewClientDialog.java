@@ -312,7 +312,7 @@ public class NewClientDialog extends FGeneralDialog
 			public void insertUpdate(DocumentEvent e) {
 				try {
 					
-					// e.getDocument().getText(e.getOffset(), e.getLength());
+					
 					String newPiece = e.getDocument().getText(e.getOffset(), e.getLength());
 					logging.debug(this, " --------->" + newPiece + "<");
 

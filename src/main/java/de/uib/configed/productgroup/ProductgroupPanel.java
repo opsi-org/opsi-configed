@@ -409,7 +409,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		saveNameEditor.setEditable(true);
 		saveNameEditor.setToolTipText(de.uib.configed.configed.getResourceValue("GroupPanel.GroupnameTooltip"));
-		// setGroupsData(null, null);
+		
 		// Set<String> oldSet = groupPanel.getLastSelectedIDs();
 		setMembers();
 		setGroupEditing(false);

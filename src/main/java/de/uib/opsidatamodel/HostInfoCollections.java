@@ -38,7 +38,7 @@ public abstract class HostInfoCollections {
 
 	public abstract List<String> getDepotNamesList(); // master depots in display order
 
-	// protected abstract Map<String, Boolean> getMapOfPCs();
+	
 
 	public abstract Map<String, String> getMapPcBelongsToDepot();
 

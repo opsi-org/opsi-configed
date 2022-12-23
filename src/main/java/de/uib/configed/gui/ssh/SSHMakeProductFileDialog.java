@@ -560,6 +560,6 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		if (result != null)
 			return result.replace("id:", "").trim();
 		return "";
-		// setDirectoryItems(result, curdir);
+		
 	}
 }

@@ -64,7 +64,7 @@ public class PanelProductProperties extends JSplitPane
 	protected TableCellRenderer propertiesTableCellRenderer;
 
 	// protected final Map<String,Object> emptyVisualData = new
-	// HashMap<String,Object>();
+	
 
 	protected LinkedHashMap<String, Boolean> productDisplayFields;
 

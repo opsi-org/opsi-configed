@@ -209,7 +209,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 
 			StyleConstants.setBackground(readonlyStyle, Color.GREEN);// Kein grün :(
 
-			// StyleConstants.setBackground(style, Color.blue);
+			
 			StyleConstants.setForeground(readonlyStyle, Color.RED); // Was ist rot?
 
 			SimpleAttributeSet readOnlyAttributeSet = new SimpleAttributeSet(doc.getStyle("readonlyStyle"));
@@ -229,9 +229,9 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 					de.uib.configed.configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
 					"images/cancel.png", "images/cancel.png", true);
 			// btn_test_command.setSize(new Dimension( Globals.graphicButtonWidth + 15
-			// ,Globals.lineHeight));
+			
 			// btn_test_command.setSize(new Dimension( Globals.graphicButtonWidth + 15
-			// ,Globals.lineHeight));
+			
 			btn_close.setPreferredSize(btn_dim);
 
 			btn_close.addActionListener(closeListener);
@@ -240,7 +240,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			// lbl_userhost.setText("user@host");
 
 			// createLayout(konsolePanelLayout, jScrollPane,Globals.gapSize,
-			// Globals.gapSize, false);
+			
 			// createLayout(mainPanelLayout, inputPanel,0,0, false);
 		} catch (Exception e) {
 			logging.warning(this, "initOutputGui, exception occurred", e);

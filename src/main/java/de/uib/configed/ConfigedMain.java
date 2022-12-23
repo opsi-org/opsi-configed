@@ -814,7 +814,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// } catch (InterruptedException ex) {
 	// } ;
 
-	// mainFrame.allPane.setSize(newW, newH);
+	
 
 	// }
 
@@ -1200,7 +1200,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// SwingUtilities.invokeLater(new Thread() {
 	// public void run() {
 
-	// //setRebuiltClientListTableModel(true, true, selectValues);
+	
 	// }
 	// });
 	// }
@@ -2382,7 +2382,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		GroupNode node = treeClients.getGroupNode(groupname);
 		TreePath path = treeClients.getPathToNode(node);
 
-		// setGroupByTree(node, path);
+		
 		activateGroupByTree(false, node, path);
 
 		logging.info(this, "expand activated  path " + path);
@@ -3073,7 +3073,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			} else {
 				if (clicked) {
 					activateGroupByTree(false, mouseNode, mousePath);
-					// activateGroupByTreeWithModelRebuild(mouseNode, mousePath); tree construction
+					
 					// fails!!
 				}
 			}
@@ -3086,7 +3086,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					+ (mouseNode instanceof GroupNode));
 
 			if (mouseNode instanceof GroupNode) {
-				// activateGroupByTree(false, mouseNode, mousePath);
+				
 				setGroup(mouseNode.toString());
 
 			}
@@ -3194,7 +3194,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		setRebuiltClientListTableModel(true, false, null);
 		// with this, a selected client remains selected (but in bottom line, the group
 		// seems activated, not the client)
-		// setRebuiltClientListTableModel(true, false);
+		
 		groupPathActivatedByTree = pathToNode;
 
 		// mainFrame.setGroupName("" + node ); //+ " (" + pathToNode + ")");
@@ -3274,7 +3274,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		 * // if nothing is selected set config server as depot
 		 * {
 		 * 
-		 * //depotsList.setSelectedValue (myServer, true);
+		 * 
 		 * }
 		 */
 
@@ -6450,7 +6450,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			treeClients.makeVisible(newGroupPath);
 			treeClients.repaint();
 
-			// persist.writeGroup(choiceDialog.getResultString(), getSelectedClients());
+			
 		}
 	}
 
@@ -6677,7 +6677,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 					// modelIndex " + selectionPanel.convertRowIndexToModel(i) + " viewIndex " +
 
-					// lsm.addSelectionInterval(i, i);
+					
 					selectedList.add((String) ob.getKey());
 					// lsm.addSelectionInterval(selectionPanel.convertRowIndexToView(i),
 

@@ -386,7 +386,7 @@ public class SSHCommandFactory {
 		Collections.sort(sshcommand_list);
 
 		java.util.LinkedHashMap<String, List<SSHCommand_Template>> sortedComs = new LinkedHashMap<>();
-		// sortedComs.put(parentNull , new LinkedList<>());
+		
 		sortedComs.put(parentdefaultForOwnCommands, new LinkedList<>());
 		sortedComs.put(parentOpsi, new LinkedList<>());
 

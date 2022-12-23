@@ -41,7 +41,7 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 			if (i >= rows.size())
 				logging.warning(this, "setFilter: impossible selection index " + i);
 			else
-				// selectionInfo.put( Globals.pseudokey( rows.get(i) ), true );
+				
 				selectionInfo.put(rows.get(i), true);
 		}
 

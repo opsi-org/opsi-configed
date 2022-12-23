@@ -331,7 +331,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		
 		// saveHGroup.addComponent( loadSearchBox, Globals.buttonWidth,
-		// Globals.buttonWidth, Globals.buttonWidth);
+		
 		saveHGroup.addGap(Globals.HGAP_SIZE);
 		additionalLayout.setHorizontalGroup(saveHGroup);
 
@@ -344,7 +344,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		saveVGroup.addComponent(buttonReload, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
 		saveVGroup.addComponent(buttonRestart, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
 		// saveVGroup.addComponent( loadSearchBox, Globals.lineHeight,
-		// Globals.lineHeight, Globals.lineHeight );
+		
 		additionalLayout.setVerticalGroup(saveVGroup);
 
 		additionalPane.setVisible(true);
@@ -413,7 +413,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		
 		hGroupData.addComponent(dataLabel, GroupLayout.Alignment.CENTER);
 		hGroupConnections.addComponent(connectionLabel, GroupLayout.Alignment.CENTER);
-		// hGroupRemoveBtn.addComponent( removeLabel, GroupLayout.Alignment.CENTER );
+		
 
 		newElementBox = new JComboBox<>(
 				new String[] { configed.getResourceValue("ClientSelectionDialog.newElementsBox") });

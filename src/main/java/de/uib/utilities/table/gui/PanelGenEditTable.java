@@ -2010,7 +2010,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		de.uib.configed.gui.GeneralFrame externalView;
 
 		copyOfMe = new PanelGenEditTable(title, maxTableWidth, false);
-		// copyOfMe.setSoftwareInfo(hostId, swRows);
+		
 		copyOfMe.setTableModel(tableModel);
 
 		externalView = new de.uib.configed.gui.GeneralFrame(null, "hallo", false);

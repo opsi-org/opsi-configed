@@ -107,7 +107,7 @@ public class SSHConnectExec extends SSHConnect {
 
 	// public SSHConnectExec(SSHCommand sshcommand)
 	// {
-	// this(null, sshcommand);
+	
 	// }
 	public SSHConnectExec() {
 		super(null);
@@ -221,7 +221,7 @@ public class SSHConnectExec extends SSHConnect {
 					LinkedList<SSHCommand> commands_list = commandToExec.getCommands();
 					for (SSHCommand co : commandToExec.getCommands()) {
 						if (!found_error) {
-							// pmethodHandler.parseParameter(co, caller);
+							
 							co = pmethodHandler.parseParameter(co, caller); // ???????? sollte hier eigentlich stehen?!
 																			// # nein! co wird vom phander verändert
 							if (!pmethodHandler.canceled) {

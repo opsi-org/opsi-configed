@@ -529,7 +529,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void softwareAuditOnClientsRequestRefresh();
 
-	// public abstract List<Map<String, Object>> getSoftwareAuditOnClients();
+	
 
 	public abstract Map<String, List<SWAuditClientEntry>> getClient2Software();
 
@@ -743,7 +743,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	// public abstract void setProductproperties(String pcname, String productname,
 	// Map properties,
-	// List updateCollection, List deleteCollection);
+	
 	public abstract void setProductproperties(String pcname, String productname, Map properties);
 
 	// public abstract void setProductproperties( List updateCollection,
@@ -785,7 +785,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	protected abstract boolean setHostBooleanConfigValue(String key, String hostName, boolean val);
 
 	// protected abstract boolean getHostBooleanConfigValue( String key, String
-	// hostName, Boolean defaultVal );
+	
 
 	public abstract Map<String, Map<String, Object>> getConfigs();
 
@@ -793,7 +793,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	
 
-	// public abstract void setNetworkConfiguration (String objectId, Map settings);
+	
 
 	public abstract void setHostValues(Map settings);
 

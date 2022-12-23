@@ -179,7 +179,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private Map<String, List<JMenuItem>> menuItemsHost;
 
 	// Map<String, List<JMenuItem>> menuItemsOpsiclientdExtraEvent = new
-	// HashMap<String, List<JMenuItem>>();
+	
 
 	JMenuBar jMenuBar1 = new JMenuBar();
 

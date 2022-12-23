@@ -49,10 +49,10 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 
 	public SSHPackageManagerParameterDialog(String title) {
 		super(null, title);
-		// super(null,title, false);
+		
 		// public FGeneralDialog(JFrame owner, String title, JPanel pane)
 		// {
-		// super(owner, false);
+		
 		
 		
 		// this.owner = owner;

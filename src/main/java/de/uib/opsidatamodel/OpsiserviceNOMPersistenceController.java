@@ -598,7 +598,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 					for (String key : host.keySet()) {
 						if (de.uib.opsicommand.JSONReMapper.isNull(host.get(key)))
-							// host.put(key, org.json.JSONObject.NULL);
+							
 							host.put(key, de.uib.opsicommand.JSONReMapper.NullRepresenter);
 
 						// hostMap.put(key, "" + host.get(key));
@@ -2013,7 +2013,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			if (configValue.indexOf(EFI_STRING) >= 0) {
 				// something similar should work, but not this:
 				
-				// host.put(HostInfo.clientUefiBootKEY, true);
+				
 				result = true;
 			}
 		} else if (getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME) != null
@@ -2023,7 +2023,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			if (configValue.indexOf(EFI_STRING) >= 0) {
 				// something similar should work, but not this:
 				
-				// host.put(HostInfo.clientUefiBootKEY, true);
+				
 				result = true;
 			}
 		}
@@ -2033,7 +2033,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		{
 			
 
-			// host.put(HostInfo.clientUefiBootKEY, false);
+			
 		}
 
 		return result;
@@ -2562,7 +2562,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// 
 
 			// // persist.getHostInfoCollections().updateLocalHostInfo(newClientID,
-			// HostInfo.clientShutdownInstallKEY, shutdownInstall);
+			
 			// // persist.getHostInfoCollections().setLocalHostInfo(newClientID, depotID,
 			
 			// }
@@ -2573,7 +2573,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			// if (wan) && isWithWAN()
 			// {
-			// setWANConfig(newClientId ,wan);
+			
 			// }
 		}
 
@@ -4708,7 +4708,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 * // try bugfix
 	 * {
 	 * logging.debug (this, " --------------- null for " + OpsiProduct.KEY);
-	 * //result.put (productEntry.get(OpsiProduct.KEY), productEntry.g );
+	 * 
 	 * }
 	 * }
 	 * }
@@ -4851,7 +4851,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 		Map<String, List<Map<String, String>>> states = null;
 
-		states = getLocalBootProductStates(clientIds);// , currentMap);
+		states = getLocalBootProductStates(clientIds);
 
 		
 		
@@ -7038,7 +7038,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 					if (valueList != null && (!valueList.equals(oldValue))) {
 						Map<String, Object> config = new HashMap<>();
-						// config.put(key, (List) settings.get(key));
+						
 						config.put("ident", key);
 
 						String type = "UnicodeConfig";
@@ -7847,7 +7847,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			// i++;
 
-			// addLocalAuditSoftwareXLicencePool( swKEY, licencePoolKEY );
+			
 
 			// build fSoftware2LicencePool
 			if (fSoftware2LicencePool.get(swKEY) != null && !fSoftware2LicencePool.get(swKEY).equals(licencePoolKEY)) {
@@ -8493,7 +8493,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			if (count == null) // not yet initialized
 			{
 				
-				// pool, licenceId));
+				
 				
 				// (dataStub.getLicences() == null));
 				
@@ -8508,7 +8508,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				 */
 			} else {
 				
-				// pool, licenceId));
+				
 				
 				// (dataStub.getLicences() == null));
 				
@@ -10293,7 +10293,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					// still existing
 					logging.info(this, "handling ssh config key at old location " + configkey);
 					Map<String, Object> config = new HashMap<>();
-					// config.put(key, (List) settings.get(key));
+					
 					config.put("id", configkey);
 
 					String type = "BoolConfig";
@@ -10312,7 +10312,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					// still existing
 					logging.info(this, "removing unwillingly generated entry  " + configkey);
 					Map<String, Object> config = new HashMap<>();
-					// config.put(key, (List) settings.get(key));
+					
 					config.put("id", configkey);
 
 					String type = "BoolConfig";

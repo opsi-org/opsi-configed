@@ -1197,7 +1197,7 @@ public class JTableSelectionPanel extends JPanel
 		}
 
 		// foundrow = findViewRowFromValue(startrow, value, selectedCols,
-		// fulltextSearchWithOneString, regexSearch);
+		
 		foundrow = findViewRowFromValue(startrow, value, selectedCols, searchMode);
 
 		if (foundrow > -1) {

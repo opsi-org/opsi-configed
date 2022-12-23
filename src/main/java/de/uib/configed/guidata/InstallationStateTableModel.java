@@ -967,7 +967,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		}
 		rowMapForaClient.put(ProductState.KEY_actionRequest, ar.toString());
 
-		// setChangedState( clientId, productId, ActionRequest.KEY, ar.toString() );
+		
 
 	}
 
@@ -1124,7 +1124,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	 * selectedClients.length )
 	 * // not each client got a new action for this product
 	 * {
-	 * //mixToVisualActions(actions, productId, actionInTreatment.toString());
+	 * 
 	 * String mixedValue = mixToVisualState(ProductState.KEY_actionRequest,
 	 * combinedVisualValues.get(ProductState.KEY_actionRequest), productId,
 	 * (product2AR.get(productId)).toString());
@@ -1193,7 +1193,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		// product2AR.put (product, ar);
 
-		// actions.put (product, actionInTreatment.toString()); // if necessary change
+		
 		// of visible action in combined actions
 
 		
@@ -1203,7 +1203,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		logging.debug(this, "recursivelyChangeActionRequest product " + product + " modelRow " + modelRow);
 		if (modelRow > -1) {
 			logging.debug(this, "recursivelyChangeActionRequest fire update for row  " + modelRow);
-			// fireTableCellUpdated(modelRow, displayColumns.indexOf(ActionRequest.KEY)); //
+			
 			// tell the table model listeners where a change occurred
 			fireTableRowsUpdated(modelRow, modelRow);
 			
@@ -1215,12 +1215,12 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			// don't follow
 		} else if (ar.getVal() == ActionRequest.UNINSTALL) {
 			logging.debug(this, " follow requirements for ActionRequest.UNINSTALL, product " + product);
-			// setChangedState(clientId, product, ActionRequest.KEY, ar.toString());
+			
 			Map<String, String> requirements = persist.getProductDeinstallRequirements(null, product);
 			logging.debug(this, "ProductRequirements for uninstall for " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 		} else {
-			// setChangedState(clientId, product, ActionRequest.KEY, ar.toString());
+			
 			Map<String, String> requirements = persist.getProductPreRequirements(null, product);
 			logging.debug(this, "ProductPreRequirements for  " + product + ": " + requirements);
 			followRequirements(clientId, requirements);

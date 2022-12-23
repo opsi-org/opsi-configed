@@ -37,7 +37,7 @@ public class GenericEnumElement extends SelectElement {
 
 	// public SelectOperation createOperation( String operation, SelectData data )
 	// {
-	// return Backend.getBackend().createOperation( operation, data, this );
+	
 	// }
 
 	protected static String[] removeFirst(int n, String[] data) {

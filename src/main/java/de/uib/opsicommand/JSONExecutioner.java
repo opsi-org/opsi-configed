@@ -100,7 +100,7 @@ public abstract class JSONExecutioner extends Executioner {
 				while (iter.hasNext()) {
 					String key = (String) iter.next();
 					
-					// JSONReMapper.getJsonList(jOResult, key));
+					
 					result.put(key, JSONReMapper.getJsonList(jO, key));
 				}
 			}
@@ -126,7 +126,7 @@ public abstract class JSONExecutioner extends Executioner {
 						while (iter.hasNext()) {
 							String key = (String) iter.next();
 							
-							// JSONReMapper.getJsonList(jOResult, key));
+							
 							result.put(key, JSONReMapper.getJsonList(jOResult, key));
 						}
 					}

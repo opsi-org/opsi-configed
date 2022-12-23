@@ -198,7 +198,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 		if (withMovingSelectionDate) {
 			setSelectionDate(newDate);
-			// communicateDateEvent(new DateEvent(this, newDate));
+			
 		}
 	}
 
@@ -211,7 +211,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 		if (withMovingSelectionDate) {
 			setSelectionDate(newDate);
-			// communicateDateEvent(new DateEvent(this, newDate));
+			
 		}
 	}
 
@@ -250,7 +250,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 				+ calendar.get(Calendar.MINUTE));
 		timeSetter.setHour(calendar.get(Calendar.HOUR_OF_DAY));
 		timeSetter.setMin(calendar.get(Calendar.MINUTE));
-		// communicateDateEvent(new DateEvent(this, now));
+		
 	}
 
 	public void setHour(int h) {

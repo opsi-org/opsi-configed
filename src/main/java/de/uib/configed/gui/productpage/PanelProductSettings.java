@@ -521,7 +521,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		setLeftComponent(leftPane);
 
 		// propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false,
-		// false, false);
+		
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, true, false);
 		logging.info(this, " created properties Panel, is  EditMapPanelX instance No. " + EditMapPanelX.objectCounter);
 		((EditMapPanelX) propertiesPanel)
@@ -1000,7 +1000,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 			JComboBox targetCombo = new JComboBox<>();
 			targetCombo.setRenderer(standardListCellRenderer);
-			// targetColumn.setCellEditor(new AdaptingCellEditor(targetCombo, istm));
+			
 			targetColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(targetCombo, istm,
 					de.uib.opsidatamodel.productstate.TargetConfiguration.getLabel2DisplayLabel(), iconsDir));
 			targetColumn.setPreferredWidth(fwidth_column_productstate);
@@ -1016,7 +1016,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 			JComboBox statesCombo = new JComboBox<>();
 			statesCombo.setRenderer(standardListCellRenderer);
-			// statusColumn.setCellEditor(new AdaptingCellEditor(statesCombo, istm));
+			
 			statusColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(statesCombo, istm,
 					de.uib.opsidatamodel.productstate.InstallationStatus.getLabel2DisplayLabel(), iconsDir));
 			statusColumn.setPreferredWidth(fwidth_column_productstate);

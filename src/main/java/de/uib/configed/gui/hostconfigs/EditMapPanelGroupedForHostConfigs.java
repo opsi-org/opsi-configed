@@ -718,7 +718,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 			tree.setExpandsSelectedPaths(true);
 			tree.setSelectionInterval(row, row);
-			// tree.removeSelectionInterval(row, row);
+			
 			tree.scrollRowToVisible(row);
 		}
 	}

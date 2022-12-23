@@ -68,7 +68,7 @@ public class JSONReMapper {
 					String str = "" + response.get("error");
 					result.put(key, str);
 				}
-				// result.put(key, value);
+				
 			}
 		}
 

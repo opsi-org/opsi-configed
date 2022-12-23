@@ -734,7 +734,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 	private static void checkComponents() {
 		if (cb_useDefault.isSelected()) {
 			connectionInfo.setUserData(
-					// null, null, null, null);
+					
 					ConfigedMain.HOST, // persist.getHostInfoCollections().getConfigServer(),
 					ConfigedMain.USER, ConfigedMain.PASSWORD, SSHConnect.portSSH);
 
