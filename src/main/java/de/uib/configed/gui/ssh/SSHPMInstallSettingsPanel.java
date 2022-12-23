@@ -184,7 +184,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		String depotParameter = "";
 		List<String> selectedDepots = fDepotList.getSelectedDepots();
 
-		if (selectedDepots.size() == 0) {
+		if (selectedDepots.isEmpty()) {
 			if (persist.isDepotsFullPermission()) {
 				depotParameter = persist.DEPOT_SELECTION_NODEPOTS;
 			} else if (depots.size() > 0) {
@@ -218,7 +218,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		depots = getAllowedInstallTargets();
 		logging.info(this, "depots: " + depots.toString());
 		fDepotList.setListData(depots);
-		if (depots.size() == 0)
+		if (depots.isEmpty())
 		// probably no permission
 		{
 			// To DO:

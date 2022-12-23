@@ -685,7 +685,7 @@ public class DataStubNOM extends DataStub {
 
 		List<Map<String, Object>> result = null;
 
-		if (newClients.size() == 0) {
+		if (newClients.isEmpty()) {
 			// look if propstates is initialized
 			result = new ArrayList<>();
 		} else {

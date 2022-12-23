@@ -3800,7 +3800,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private Map<String, Object> mergeMaps(ArrayList<Map<String, Object>> collection) {
 		HashMap<String, Object> mergedMap = new HashMap<>();
-		if (collection == null || collection.size() == 0)
+		if (collection == null || collection.isEmpty())
 			return mergedMap;
 
 		Map<String, Object> mergeIn = collection.get(0);
@@ -4519,7 +4519,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				logging.debug(this, "updateProductStates, collectChangedLocalbootStates , client " + client + " values "
 						+ clientValues);
 
-				if (clientValues.keySet() == null || clientValues.keySet().size() == 0)
+				if (clientValues.keySet() == null || clientValues.keySet().isEmpty())
 					continue;
 
 				Iterator it1 = clientValues.keySet().iterator();
@@ -4550,7 +4550,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				Map<String, Map<String, String>> clientValues = (Map<String, Map<String, String>>) collectChangedNetbootStates
 						.get(client);
 
-				if (clientValues.keySet() == null || clientValues.keySet().size() == 0)
+				if (clientValues.keySet() == null || clientValues.keySet().isEmpty())
 					continue;
 
 				Iterator it1 = clientValues.keySet().iterator();
@@ -5170,7 +5170,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			 * if (
 			 * (this.source) == null
 			 * ||
-			 * (this.source).size() == 0
+			 * (this.source).isEmpty()
 			 * )
 			 * {
 			 * logging.debug(this, "source empty, we set datachanged false, source " +

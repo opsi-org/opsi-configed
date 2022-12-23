@@ -139,7 +139,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 		logging.debug(this, "getSourceActions,  activePaths " + tree.getActivePaths());
 
-		if (tree.getActivePaths() == null || tree.getActivePaths().size() == 0) {
+		if (tree.getActivePaths() == null || tree.getActivePaths().isEmpty()) {
 			logging.debug(this, "getSourceActions no active pathes, TransferHandler.NONE");
 			return TransferHandler.NONE;
 		}

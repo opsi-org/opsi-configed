@@ -4492,7 +4492,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 					 * if (switchOn)
 					 * {
 					 * if (
-					 * shutdown_value.size() == 0 ||
+					 * shutdown_value.isEmpty() ||
 					 * ((shutdown_value.get(0) != null) && !(shutdown_value.get(0).equals("on")))
 					 * )
 					 * {
@@ -4519,7 +4519,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 					 * else
 					 * {
 					 * if (
-					 * shutdown_value.size() == 0 ||
+					 * shutdown_value.isEmpty() ||
 					 * ((shutdown_value.get(0) != null) && !(shutdown_value.get(0).equals("off")))
 					 * )
 					 * {

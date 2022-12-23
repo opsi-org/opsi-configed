@@ -316,7 +316,7 @@ public class PanelProductProperties extends JSplitPane
 			 * String productId) {
 			 * Map<String, Object> result = new HashMap<>();
 			 * 
-			 * if (depots == null || depots.size() == 0)
+			 * if (depots == null || depots.isEmpty())
 			 * return result;
 			 * 
 			 * // Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties

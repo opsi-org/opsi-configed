@@ -407,7 +407,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	}
 
 	void weHaveChangedStoredMaps() {
-		if (!datachanged || updateCollection.size() == 0 // updateCollection has been emptied since last change
+		if (!datachanged || updateCollection.isEmpty() // updateCollection has been emptied since last change
 		) {
 			datachanged = true;
 			// tell it to all registered DataChangedObservers

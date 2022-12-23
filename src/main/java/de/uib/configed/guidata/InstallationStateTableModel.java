@@ -1583,7 +1583,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		// +
 		// combinedVisualValues.get(ProductState.KEY_lastStateChange).get(actualProduct));
 
-		// if (productsV == null || productsV.size() == 0) return "";
+		// if (productsV == null || productsV.isEmpty()) return "";
 
 		Object result = null;
 		actualProduct = (String) productsV.get(row); // products[row];

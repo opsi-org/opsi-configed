@@ -99,7 +99,7 @@ public class JSONObjectX extends JSONObject {
 	}
 
 	public void produceString() {
-		if (list.size() == 0) {
+		if (list.isEmpty()) {
 			value = "";
 			beingString = true;
 		}

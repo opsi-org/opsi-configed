@@ -298,7 +298,7 @@ public class UserConfigProducing {
 			// logging.info(this, "supplyAllPermissionEntries is NONE " + ( ((String)
 			// values.get(0) ).equals( UserConfig.NONE_PROTOTYPE) ));
 
-			if (values == null || values.size() == 0 // || !(values.get(0) instanceof String )
+			if (values == null || values.isEmpty() // || !(values.get(0) instanceof String )
 					|| (((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE))) {
 				logging.info(this, "no role specified for user " + username);
 			} else {
@@ -390,7 +390,7 @@ public class UserConfigProducing {
 					"supplyPermissionEntriesForAUser bool configKey " + configKey + " -- partkey " + partkey);
 			logging.info(this, "supplyPermissionEntriesForAUser bool configKey has values " + values);
 
-			if (values == null || values.size() == 0 || !(values.get(0) instanceof Boolean)
+			if (values == null || values.isEmpty() || !(values.get(0) instanceof Boolean)
 			// there is no formally correct value)
 					|| (prototypeObligatory
 							&& !((Boolean) values.get(0).equals(prototypeConfig.getBooleanValue(partkey)))
@@ -431,7 +431,7 @@ public class UserConfigProducing {
 			logging.info(this, "configkey " + configKey);
 			List<Object> values = serverconfigValuesMap.get(configKey);
 
-			if (values == null || values.size() == 0 || !((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE)) {
+			if (values == null || values.isEmpty() || !((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE)) {
 				ArrayList<Object> selectedValuesRole = new ArrayList<>();
 				selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
 

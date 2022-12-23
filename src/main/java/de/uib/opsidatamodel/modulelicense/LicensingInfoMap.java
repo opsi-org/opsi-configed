@@ -859,9 +859,9 @@ public class LicensingInfoMap {
 	public Map<String, ArrayList<String>> getWarnings() {
 		Map<String, ArrayList<String>> result = new HashMap<>();
 
-		if (currentCloseToLimitModuleList.size() == 0 && currentOverLimitModuleList.size() == 0
-				&& currentTimeWarningModuleList.size() == 0 && futureCloseToLimitModuleList.size() == 0
-				&& futureOverLimitModuleList.size() == 0)
+		if (currentCloseToLimitModuleList.isEmpty() && currentOverLimitModuleList.isEmpty()
+				&& currentTimeWarningModuleList.isEmpty() && futureCloseToLimitModuleList.isEmpty()
+				&& futureOverLimitModuleList.isEmpty())
 			return null;
 
 		result.put(CURRENT_OVER_LIMIT, currentOverLimitModuleList);

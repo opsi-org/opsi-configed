@@ -724,7 +724,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						String depotId = null;
 
 						if (getConfigs().get(name) == null || getConfigs().get(name).get(CONFIG_DEPOT_ID) == null
-								|| ((List) (getConfigs().get(name).get(CONFIG_DEPOT_ID))).size() == 0) {
+								|| ((List) (getConfigs().get(name).get(CONFIG_DEPOT_ID))).isEmpty()) {
 							logging.debug(this,
 									"retrieveOpsiHosts client  " + name + " has no config for " + CONFIG_DEPOT_ID);
 						} else {
@@ -5534,7 +5534,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		 * boolean existing
 		 * = (
 		 * productproperties != null
-		 * && clientNames.removeAll(productproperties.keySet()).size() == 0
+		 * && clientNames.removeAll(productproperties.keySet()).isEmpty()
 		 * )
 		 * its clearer with a manual search:
 		 */
@@ -8395,7 +8395,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 * protected Map<String, Map<String, String>>
 	 * retrieveClients(List<String> requestedFields)
 	 * {
-	 * if (requestedFields == null || requestedFields.size() == 0)
+	 * if (requestedFields == null || requestedFields.isEmpty())
 	 * {
 	 * 
 	 * }
@@ -9588,7 +9588,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			 * configuredByService);
 			 */
 
-			if (configuredByService.size() == 0
+			if (configuredByService.isEmpty()
 					|| !((new HashSet<>(getPossibleValuesProductOnClientDisplayfields_localboot()))
 							.equals(new HashSet<>(possibleValuesAccordingToService)))) {
 				// we did not initialize server property
@@ -9760,7 +9760,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			 * configuredByService);
 			 */
 
-			if (configuredByService.size() == 0
+			if (configuredByService.isEmpty()
 					|| !((new HashSet<>(getPossibleValuesProductOnClientDisplayfields_netboot()))
 							.equals(new HashSet<>(possibleValuesAccordingToService)))
 
@@ -9836,7 +9836,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		defaultValues.add(HostInfo.clientIpAddress_DISPLAY_FIELD_LABEL);
 
 		if (givenList == null // no service property
-				|| givenList.size() == 0 // bad configuration
+				|| givenList.isEmpty() // bad configuration
 		) {
 			result = defaultValues;
 			createOnServer = true;
@@ -10309,7 +10309,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		// does it exist?
 
 		Map<String, ConfigOption> wanConfigOptions = getWANConfigOptions();
-		if (wanConfigOptions == null || wanConfigOptions.size() == 0) {
+		if (wanConfigOptions == null || wanConfigOptions.isEmpty()) {
 			logging.info(this, "build default wanConfigOptions");
 			readyObjects = buildWANConfigOptions(readyObjects);
 		}
@@ -10656,7 +10656,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	private String modulesWithWarning(String typeOfMessage, String header) {
-		if (licInfoMap.getWarnings().get(typeOfMessage).size() == 0) {
+		if (licInfoMap.getWarnings().get(typeOfMessage).isEmpty()) {
 			return "";
 		} else {
 			StringBuffer buf = new StringBuffer("\n");
@@ -11101,7 +11101,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			logging.warning("opsi module information problem", ex);
 		}
 
-		// if (missingModulesPermissionInfo.size() == 0)
+		// if (missingModulesPermissionInfo.isEmpty())
 		{
 			withLinuxAgent = (opsiModules.get("linux_agent") != null) && ((Boolean) opsiModules.get("linux_agent"));
 			withLicenceManagement = (opsiModules.get("license_management") != null)

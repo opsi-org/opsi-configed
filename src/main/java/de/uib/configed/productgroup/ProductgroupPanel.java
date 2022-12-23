@@ -279,7 +279,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		if (namesAndDescriptions.get(currentKey) != null)
 		// case we have an old key
 		{
-			if (productGroupMembers.get(currentKey) == null || ((Set) productGroupMembers.get(currentKey)).size() == 0)
+			if (productGroupMembers.get(currentKey) == null || ((Set) productGroupMembers.get(currentKey)).isEmpty())
 			// there were no products assigned
 			{
 				if (selectedIDs.size() > 0)

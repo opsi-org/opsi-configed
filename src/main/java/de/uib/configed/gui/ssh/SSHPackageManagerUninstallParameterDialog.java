@@ -85,7 +85,7 @@ public class SSHPackageManagerUninstallParameterDialog
 		fDepotList = new FDepotselectionList(this) {
 			@Override
 			public void setListData(Vector<? extends String> v) {
-				if (v == null || v.size() == 0) {
+				if (v == null || v.isEmpty()) {
 					setListData(new Vector<>());
 					jButton1.setEnabled(false);
 				} else {
@@ -136,7 +136,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		logging.debug(this, "produceDepotParameter, selectedDepots " + selectedDepots);
 
-		if (selectedDepots.size() == 0) {
+		if (selectedDepots.isEmpty()) {
 			if (persist.isDepotsFullPermission()) {
 				depotParameter = persist.DEPOT_SELECTION_NODEPOTS;
 			} else if (possibleDepots.size() > 0) {
@@ -214,7 +214,7 @@ public class SSHPackageManagerUninstallParameterDialog
 	protected void initDepots() {
 		possibleDepots = getPossibleDepots();
 		fDepotList.setListData(possibleDepots);
-		if (possibleDepots.size() == 0)
+		if (possibleDepots.isEmpty())
 		// probably no permission
 		{
 			btn_execute.setVisible(false);

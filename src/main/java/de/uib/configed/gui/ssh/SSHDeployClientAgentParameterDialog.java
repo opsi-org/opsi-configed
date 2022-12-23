@@ -99,7 +99,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 				.getConfig(main.getPersistenceController().getHostInfoCollections().getConfigServer());
 		ArrayList<Object> result_config_list = (ArrayList<Object>) configs
 				.get(main.getPersistenceController().KEY_SSH_DEFAULTWINUSER);
-		if (result_config_list == null || result_config_list.size() == 0) {
+		if (result_config_list == null || result_config_list.isEmpty()) {
 			// defaultWinUser =
 			// configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.defaultWinUser");
 			logging.info(this, "KEY_SSH_DEFAULTWINUSER not existing");
@@ -112,7 +112,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		}
 
 		result_config_list = (ArrayList<Object>) configs.get(main.getPersistenceController().KEY_SSH_DEFAULTWINPW);
-		if (result_config_list == null || result_config_list.size() == 0) {
+		if (result_config_list == null || result_config_list.isEmpty()) {
 			// defaultWinUser =
 			// configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.defaultWinUser");
 			logging.info(this, "KEY_SSH_DEFAULTWINPW not existing");

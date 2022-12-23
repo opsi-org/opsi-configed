@@ -252,7 +252,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		}
 
 		/*
-		 * if (listDepots.getSelectedValuesList().size() == 0)
+		 * if (listDepots.getSelectedValuesList().isEmpty())
 		 * {
 		 * visualDats = emptyVisualDt
 		 */

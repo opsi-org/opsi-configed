@@ -89,7 +89,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 	}
 
 	public void addToSelection(List<String> depots) {
-		if (depots == null || depots.size() == 0)
+		if (depots == null || depots.isEmpty())
 			return;
 
 		getSelectionModel().setValueIsAdjusting(true);

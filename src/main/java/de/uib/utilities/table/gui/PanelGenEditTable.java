@@ -1563,7 +1563,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		// logging.info(this, "setSelectedValues for col " + col + " : " + values);
 		getListSelectionModel().clearSelection();
 
-		if (values == null || values.size() == 0)
+		if (values == null || values.isEmpty())
 			return;
 
 		setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);

@@ -124,7 +124,7 @@ public class ModulePermissionValue {
 	private Map<String, Object> interpretAsJson(Object ob) {
 		Map<String, Object> result = exec.getMapFromItem(ob);
 
-		if (result.entrySet().size() == 0)
+		if (result.entrySet().isEmpty())
 			return null;
 
 		return result;

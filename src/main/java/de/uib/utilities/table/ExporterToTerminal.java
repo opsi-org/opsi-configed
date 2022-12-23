@@ -25,7 +25,7 @@ public class ExporterToTerminal extends ExportTable {
 				Vector<String> rowV = new Vector<>();
 				for (int colI = 0; colI < theTable.getColumnCount(); colI++) {
 					if (theTable.getValueAt(rowI, colI) != null) {
-						if (classNames == null || classNames.size() == 0) {
+						if (classNames == null || classNames.isEmpty()) {
 							if (theTable.getValueAt(rowI, colI) instanceof String) {
 								// logging.debug(theTable.getValueAt(rowI, colI));
 								rowV.add((String) theTable.getValueAt(rowI, colI));

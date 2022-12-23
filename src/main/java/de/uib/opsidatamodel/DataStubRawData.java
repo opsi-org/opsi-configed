@@ -672,7 +672,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		hostConfigs = new HashMap<>();
 
-		if (rows == null || rows.size() == 0) {
+		if (rows == null || rows.isEmpty()) {
 			logging.warning(this, "no host config rows " + rows);
 		} else {
 			logging.info(this, "retrieveHostConfigs rows size " + rows.size());

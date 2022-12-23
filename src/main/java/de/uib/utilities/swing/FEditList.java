@@ -375,7 +375,7 @@ public class FEditList extends FEditObject
 		List selectedList = getSelectedList();
 		// logging.info(this, "FEditList valueChanged , selected " + selectedList + "
 		// nullable? " + nullable);
-		if (!nullable && selectedList.size() == 0) {
+		if (!nullable && selectedList.isEmpty()) {
 			// reset to some value
 			initSelection();
 		}

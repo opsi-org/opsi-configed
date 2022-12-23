@@ -221,7 +221,7 @@ public class PanelSWInfo extends JPanel {
 						logging.info(this, "retrieving data for " + hostId);
 						Map<String, Map> tableData = persist.retrieveSoftwareAuditData(hostId);
 
-						if (tableData == null || tableData.keySet().size() == 0) {
+						if (tableData == null || tableData.keySet().isEmpty()) {
 							scanInfo = de.uib.configed.configed.getResourceValue("PanelSWInfo.noScanResult");
 							title = scanInfo;
 						} else {

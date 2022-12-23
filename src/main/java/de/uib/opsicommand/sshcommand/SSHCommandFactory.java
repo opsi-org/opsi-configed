@@ -493,7 +493,7 @@ public class SSHCommandFactory {
 				logging.info(this, "isSSHCommandEqualSavedCommand  command_list == null ");
 				return false;
 			}
-			if (sshcommand_list.size() == 0) {
+			if (sshcommand_list.isEmpty()) {
 				logging.info(this, "isSSHCommandEqualSavedCommand  command_list has no elements ");
 				return false;
 			}

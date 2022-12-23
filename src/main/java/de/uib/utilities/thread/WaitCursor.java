@@ -135,7 +135,7 @@ public class WaitCursor {
 					objectCounting.decrementAndGet();
 					logging.debug(this, "removing instance " + objectNo);
 					if (objectCounting.get() <= 0)
-					// if (instances.size() == 0)
+					// if (instances.isEmpty())
 					{
 						logging.info(this, "seemed to be last living instance");
 						ActivityPanel.setActing(false);
@@ -163,7 +163,7 @@ public class WaitCursor {
 	 * objectCounting.decrementAndGet();
 	 * logging.debug(this, "removing instance " + objectNo);
 	 * if (objectCounting.get() == 0)
-	 * //if (instances.size() == 0)
+	 * //if (instances.isEmpty())
 	 * {
 	 * logging.debug(this, "seemed to be last living instance");
 	 * ActivityPanel.setActing(false);
