@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import org.json.JSONArray;
+
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.type.ConfigStateEntry;
@@ -709,7 +711,7 @@ public class DataStubRawData extends DataStubNOM {
 				// ArrayList values = null;
 				ArrayList values = new ArrayList<>();
 				try {
-					values = (new org.json.JSONArray(valueString)).toList();
+					values = (new JSONArray(valueString)).toList();
 
 				} catch (Exception ex) {
 					logging.warning(this, "retrieveHostConfigs, error when json parsing database string \n"
