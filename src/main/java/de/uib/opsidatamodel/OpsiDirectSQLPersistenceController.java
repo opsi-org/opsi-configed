@@ -24,8 +24,10 @@
 
 package de.uib.opsidatamodel;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -117,12 +119,9 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 
-		java.sql.Connection sqlConn = DbConnect.getConnection();
+		Connection sqlConn = DbConnect.getConnection();
 
-		try {
-
-			java.sql.Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY);
+		try (Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
 
 			ResultSet rs = stat.executeQuery(query);
 
@@ -158,16 +157,6 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 		return result;
 	}
 
-	private String produceNotNull(Map<String, String> m, String k) {
-		if (m.get(k) == null) {
-			logging.warning(this, " null value for key " + k);
-
-			return "";
-		}
-
-		return m.get(k);
-	}
-
 	private String sqlQuote(String r) {
 		String s = r.replace("'", "''");
 		String t = s.replace("\\", "\\\\");
@@ -187,10 +176,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 		String query = "select " + columns + " from " + SWAuditClientEntry.DB_TABLE_NAME + " \n" + " where  state = 1 ";
 		logging.info(this, "cleanUpAuditSoftware query " + query);
 
-		try {
-
-			java.sql.Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY);
+		try (Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
 
 			ResultSet rs = stat.executeQuery(query);
 
@@ -232,8 +218,6 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			logging.info(this, "retrieveSoftwareAuditOnClients, entries read " + counter);
 			logging.info(this, "retrieveSoftwareAuditOnClients, idents  " + rowsSOFTWARE_ON_CLIENTS.size());
 
-			stat.close();
-
 		}
 
 		catch (SQLException e) {
@@ -248,9 +232,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 		logging.info(this, "cleanUpAuditSoftware, select from SOFTWARE " + " using query: " + query);
 
-		try {
-			java.sql.Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY);
+		try (Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
 
 			ResultSet rs = stat.executeQuery(query);
 
@@ -277,9 +259,6 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			}
 			logging.info(this, "retrieveSoftware, entries read " + counter);
 			logging.info(this, "retrieveSoftware, idents size " + rowsSOFTWARE.size());
-
-			stat.close();
-
 		}
 
 		catch (SQLException e) {
@@ -346,11 +325,8 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			query = "delete  from SOFTWARE where " + condition.toString();
 			logging.debug(this, "cleanUpAuditSoftware, delete SOFTWARE records  by query: \n" + query);
 
-			try {
-
-				java.sql.Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-						ResultSet.CONCUR_READ_ONLY);
-
+			try (Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY)) {
 				int affectedRows = stat.executeUpdate(query);
 
 				logging.info(this, "cleanUpAuditSoftware, deleted " + affectedRows + " in Table SOFTWARE");

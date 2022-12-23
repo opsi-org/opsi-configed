@@ -36,19 +36,14 @@ public class ExporterToCSV extends ExportTable {
 		if (value == null)
 			return "";
 
-		String result = ((String) value).replace(stringDelimiter, '\'');
-
-		// result = result.replace(CSVseparator, " ");
-		return result;
+		return ((String) value).replace(stringDelimiter, '\'');
 	}
 
 	private String removeSeparatorChar(Object value) {
 		if (value == null)
 			return "";
 
-		String result = ((String) value).replace(csvSep, "\\" + csvSep);
-
-		return result;
+		return ((String) value).replace(csvSep, "\\" + csvSep);
 	}
 
 	@Override
@@ -69,10 +64,10 @@ public class ExporterToCSV extends ExportTable {
 		fileName = checkFile(fileName, extensionFilter);
 
 		if (fileName != null) {
-			try {
-				OutputStream os = (OutputStream) new FileOutputStream(fileName);
-				OutputStreamWriter osw = new OutputStreamWriter(os); // , CSVencoding);
-				BufferedWriter bw = new BufferedWriter(osw);
+
+			try (OutputStream os = new FileOutputStream(fileName);
+					OutputStreamWriter osw = new OutputStreamWriter(os);
+					BufferedWriter bw = new BufferedWriter(osw)) {
 				// logging.debugOut(logging.LEVEL_WARNING,"BufferedWriter created");
 
 				// write header
@@ -89,7 +84,6 @@ public class ExporterToCSV extends ExportTable {
 				bw.write(line.toString());
 				bw.flush();
 				// write rows
-
 				for (int rowI = 0; rowI < theTable.getRowCount(); rowI++) {
 					logging.debug(this, "toCsv, handle row " + rowI + " selected " + theTable.isRowSelected(rowI)
 							+ " selectedOnly " + selectedOnly);
@@ -111,7 +105,7 @@ public class ExporterToCSV extends ExportTable {
 							 */
 
 							if (theTable.getValueAt(rowI, colI) != null) {
-								if (classNames == null || classNames.size() == 0) {
+								if (classNames == null || classNames.isEmpty()) {
 									if (theTable.getValueAt(rowI, colI) instanceof String) {
 										String val = "" + theTable.getValueAt(rowI, colI);
 										val = removeStringDelimiter(val);
@@ -131,8 +125,7 @@ public class ExporterToCSV extends ExportTable {
 
 									if (classNames.get(colI).equals("java.lang.String")) {
 
-										String inString = new String();
-										inString = removeStringDelimiter(theTable.getValueAt(rowI, colI));
+										String inString = removeStringDelimiter(theTable.getValueAt(rowI, colI));
 
 										/*
 										 * if (inString.matches("\\d{2}.\\d{2}.\\d{4}") ||
@@ -204,10 +197,6 @@ public class ExporterToCSV extends ExportTable {
 						bw.flush();
 					}
 				}
-
-				bw.close();
-				osw.close();
-				os.close();
 
 			} catch (Exception ex) {
 				logging.error(configed.getResourceValue("ExportTable.error") + " " + ex.toString());

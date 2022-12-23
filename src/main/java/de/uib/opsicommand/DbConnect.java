@@ -99,8 +99,7 @@ public class DbConnect {
 
 	public static boolean checkForExistence(String sql) {
 		logging.debug("DbConnect: " + sql);
-		try {
-			ResultSet reply = getConnection().createStatement().executeQuery(sql);
+		try (ResultSet reply = getConnection().createStatement().executeQuery(sql)) {
 			if (reply.next())
 				return true;
 		} catch (Exception e) {

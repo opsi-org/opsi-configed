@@ -42,33 +42,32 @@ public class PropertiesStore
 	}
 
 	public void load() throws IOException {
-		BufferedReader reader = new BufferedReader(new FileReader(myStore));
+		try (BufferedReader reader = new BufferedReader(new FileReader(myStore))) {
 
-		String line = reader.readLine();
+			String line = reader.readLine();
 
-		while (line != null) {
-			logging.debug(this, "line: " + line);
-			String trimmed = line.trim();
+			while (line != null) {
+				logging.debug(this, "line: " + line);
+				String trimmed = line.trim();
 
-			if (trimmed.length() == 0 || trimmed.charAt(0) == '#' || trimmed.charAt(0) == ';') {
-				// continue
-			} else {
-				int posSeparator = line.indexOf(keySeparator);
-				// if (posSeparator == -1)
-				// posSeparator = line.indexOf(":");
-				String key = line.substring(0, posSeparator);
-				String value = null;
-				if (line.length() > posSeparator)
-					value = line.substring(posSeparator + 1);
-				if (value != null)
-					setProperty(key, value);
-				logging.debug(this, "key, value " + key + ", " + value);
+				if (trimmed.length() == 0 || trimmed.charAt(0) == '#' || trimmed.charAt(0) == ';') {
+					// continue
+				} else {
+					int posSeparator = line.indexOf(keySeparator);
+					// if (posSeparator == -1)
+					// posSeparator = line.indexOf(":");
+					String key = line.substring(0, posSeparator);
+					String value = null;
+					if (line.length() > posSeparator)
+						value = line.substring(posSeparator + 1);
+					if (value != null)
+						setProperty(key, value);
+					logging.debug(this, "key, value " + key + ", " + value);
+				}
+
+				line = reader.readLine();
 			}
-
-			line = reader.readLine();
 		}
-
-		reader.close();
 	}
 
 	public String getProperty(String key) {
@@ -103,7 +102,7 @@ public class PropertiesStore
 	}
 
 	private TreeSet<String> formOutputLines() {
-		TreeSet<String> orderedLines = new TreeSet();
+		TreeSet<String> orderedLines = new TreeSet<>();
 
 		for (String key : internalStore.keySet()) {
 			if (getProperty(key) != null)
@@ -114,7 +113,7 @@ public class PropertiesStore
 	}
 
 	public void store(String comments) throws IOException {
-		List<String> outLines = new ArrayList();
+		List<String> outLines = new ArrayList<>();
 
 		if (comments != null)
 			outLines.add("# " + comments);
@@ -122,12 +121,11 @@ public class PropertiesStore
 				.getDateTimeInstance(java.text.DateFormat.LONG, java.text.DateFormat.LONG).format(new Date()));
 		outLines.addAll(formOutputLines());
 
-		BufferedWriter writer = new BufferedWriter(new FileWriter(myStore));
-
-		for (String line : outLines) {
-			writer.write(line);
-			writer.newLine();
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(myStore))) {
+			for (String line : outLines) {
+				writer.write(line);
+				writer.newLine();
+			}
 		}
-		writer.close();
 	}
 }

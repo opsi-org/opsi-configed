@@ -236,9 +236,8 @@ public class SSHConnectSCP extends SSHConnectExec {
 		@Override
 		public String doInBackground() throws java.net.SocketException {
 			StringBuffer buf = new StringBuffer();
-			FileInputStream fis = null;
 			File sourcefile = new File(command.getFullSourcePath());
-			try {
+			try (FileInputStream fis = new FileInputStream(sourcefile)) {
 				logging.info(this, "doInBackground getSession " + getSession());
 
 				if (!(isConnected()))
@@ -254,7 +253,6 @@ public class SSHConnectSCP extends SSHConnectExec {
 
 				channelsftp.cd(command.getTargetPath());
 				publish("Set target directory … " + command.getTargetPath());
-				fis = new FileInputStream(sourcefile);
 
 				if (command.getOverwriteMode())
 					channelsftp.put(fis, command.getTargetFilename(), ChannelSftp.OVERWRITE);
@@ -267,6 +265,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 					Thread.sleep(2000);
 				} catch (Exception ee) {
 					logging.error("Error", ee);
+					Thread.currentThread().interrupt();
 				}
 
 				publish("Copying finish ");
@@ -309,14 +308,13 @@ public class SSHConnectSCP extends SSHConnectExec {
 				logging.warning(this, "SSH Exception", e);
 				FOUND_ERROR = true;
 				publishError(e.getMessage());
+				Thread.currentThread().interrupt();
 			}
 
-			if (outputDialog != null)
-				if (!multiCommand) {
-					outputDialog.setStatusFinish();
-					disconnect();
-				}
-			System.gc();
+			if (outputDialog != null && !multiCommand) {
+				outputDialog.setStatusFinish();
+				disconnect();
+			}
 			return buf.toString();
 		}
 

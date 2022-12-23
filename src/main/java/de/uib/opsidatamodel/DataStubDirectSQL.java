@@ -13,8 +13,10 @@
 
 package de.uib.opsidatamodel;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -87,14 +89,12 @@ public class DataStubDirectSQL extends DataStubRawData
 
 			logging.info(this, "retrieveSoftwareAuditOnClients, query " + query);
 
-			java.sql.Connection sqlConn = DbConnect.getConnection();
+			Connection sqlConn = DbConnect.getConnection();
 
-			try {
+			try (Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY)) {
 				TimeCheck timeCheck = new TimeCheck(this, "execute Query   " + query);
 				timeCheck.start();
-
-				java.sql.Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-						ResultSet.CONCUR_READ_ONLY);
 
 				ResultSet rs = stat.executeQuery(query);
 
