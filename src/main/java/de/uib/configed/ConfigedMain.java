@@ -433,7 +433,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 	// with this enum type we build a state model, which target shall be edited
 
-	// protected EditingTarget target = EditingTarget.CLIENTS;
+	
 	public static EditingTarget editingTarget = EditingTarget.CLIENTS;
 
 	public ConfigedMain(String host, String user, String password) {
@@ -3254,7 +3254,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		changeDepotSelection();
 
-		// Vector<String> saveSelectedDepotsV = selectedDepotsV;
+		
 
 		/*
 		 * if (getSelectedDepots().length == 0)
@@ -3483,7 +3483,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (!setDepotRepresentative())
 			return false;
 
-		// WaitCursor waitCursor = null;
+		
 
 		try {
 			// waitCursor = new WaitCursor( mainFrame.retrieveBasePane(),
@@ -3581,7 +3581,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		freeMemoryFromSearchData();
 
-		// WaitCursor waitCursor = null;
+		
 
 		try {
 			// waitCursor = new WaitCursor( mainFrame.retrieveBasePane(),
@@ -3750,7 +3750,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected boolean setHostPropertiesPage() {
 		logging.debug(this, "setHostPropertiesPage");
-		// WaitCursor waitCursor = null;
+		
 
 		try {
 			if (editingTarget == EditingTarget.DEPOTS) {
@@ -3808,7 +3808,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		logging.info(this, "setNetworkconfigurationPage ");// + Arrays.asList(saveSelectedClients));
 		logging.info(this,
 				"setNetworkconfigurationPage  getSelectedClients() " + Arrays.toString(getSelectedClients()));
-		// WaitCursor waitCursor = null;
+		
 
 		try {
 			if (editingTarget == EditingTarget.SERVER)
@@ -3940,7 +3940,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected boolean setHardwareInfoPage() {
 		logging.info(this, "setHardwareInfoPage for, clients count " + getSelectedClients().length);
 
-		// WaitCursor waitCursor = null;
+		
 
 		try {
 			// waitCursor = new WaitCursor(mainFrame.retrieveBasePane(),
@@ -3993,7 +3993,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected boolean setSoftwareInfoPage() {
 		logging.info(this, "setSoftwareInfoPage() firstSelectedClient, checkOneClientSelected " + firstSelectedClient
 				+ ", " + checkOneClientSelected());
-		// WaitCursor waitCursor = null;
+		
 
 		try {
 			// waitCursor = new WaitCursor( mainFrame.retrieveBasePane(),
@@ -4018,7 +4018,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public boolean updateLogPage(String logtype) {
-		// WaitCursor waitCursor = null;
+		
 
 		try {
 			logging.debug(this, "updatelogpage");
@@ -4076,7 +4076,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected boolean setLogPage() {
-		// WaitCursor waitCursor = null;
+		
 
 		logging.debug(this, "setLogPage(), selected clients: " + logging.getStrings(getSelectedClients()));
 
@@ -4625,7 +4625,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			selectionPanel.removeListSelectionListener(this); // deactivate temporarily listening to list selection
 																// events
 
-		// filterClientList = false;
+		
 
 		if (dataReady)
 		// dont do anything if we did not finish another thread for this
@@ -4921,7 +4921,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			// public void dataHaveChanged(Map<String, Map<String, String>> source)
 			// {
-			// this.source = source;
+			
 
 			logging.debug(this, "dataHaveChanged source " + source);
 
@@ -5165,7 +5165,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				);
 
-				// boolean changed = false;
+				
 				if (!suspended && editingTarget == EditingTarget.CLIENTS && viewIndex == VIEW_CLIENTS) {
 
 					try {
@@ -5193,7 +5193,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 								 * could be sufficient:
 								 * if (!model.getValueAt(row, col).equals(newInfo))
 								 * {
-								 * //changed = true;
+								 * 
 								 * model.setValueAt(newInfo, row, col);
 								 * 
 								 * model.fireTableRowsUpdated(row, row);
@@ -5204,13 +5204,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 								if (newInfo != null) {
 
 									if (saveReachableInfo.get(clientId) == null) {
-										// changed = true;
+										
 										model.setValueAt(newInfo, row, col);
 									}
 
 									else if (model.getValueAt(row, col) != null
 											&& !model.getValueAt(row, col).equals(newInfo)) {
-										// changed = true;
+										
 										model.setValueAt(newInfo, row, col);
 
 										model.fireTableRowsUpdated(row, row);
@@ -5720,7 +5720,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected void refreshClientList() {
 		logging.info(this, "refreshClientList");
 
-		// allowedClients = null; not sufficient for getting new allowedClients
+		
 
 		produceClientListForDepots(getSelectedDepots(), allowedClients);
 
@@ -5994,7 +5994,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 * 
 	 * 
 	 * 
-	 * //fListFeedback = null;
+	 * 
 	 * }
 	 * }.start();
 	 * 

@@ -394,7 +394,7 @@ public class SSHCommandFactory {
 			String parent = com.getParentMenuText();
 			if ((parent == null) || (parent.trim().equals(""))) {
 				parent = parentdefaultForOwnCommands;
-				// parent = parentNull;
+				
 			}
 			List parentList = new LinkedList<>();
 			if (sortedComs.containsKey(parent))

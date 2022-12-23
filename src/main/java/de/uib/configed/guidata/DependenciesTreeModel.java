@@ -54,7 +54,7 @@ public class DependenciesTreeModel {
 		this.pc = pc;
 
 		graphIsInitialized = false;
-		// isCyclic = false;
+		
 	}
 
 	private void initGraph(String depotId) {

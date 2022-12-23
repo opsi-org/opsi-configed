@@ -11,7 +11,7 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 	protected FGeneralDialog dialog = null;
 	private String command;
 	private int priority = 10;
-	// private boolean isMultiCommand = false;
+	
 	String opsiproduct;
 	String depots;
 	String verbosity = " -vvv ";

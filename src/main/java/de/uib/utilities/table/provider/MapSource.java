@@ -104,7 +104,7 @@ public class MapSource implements TableSource
 						Class cl = Class.forName(classNames.get(i));
 						if (!dynInstanceOf(ob, cl)) {
 							// Class.forName( classNames.get(i) ) ).isAssignableFrom ( ob.getClass() ) )
-							// e.g. java.lang.String valueInColumnI = ob; works!
+							
 							logging.warning(this, "MapSource fetchData(): data type does not fit");
 							logging.info(this, " ob " + ob + " class " + ob.getClass().getName());
 							logging.info(this, "class should be " + cl);

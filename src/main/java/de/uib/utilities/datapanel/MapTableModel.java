@@ -498,7 +498,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		logging.info(this, "Setting value in table at " + row + "," + col + " to " + value + " (an instance of "
 				+ value.getClass() + ")");
 		// data[row][col] = value; //this is the trivial version
-		// actualPropName = (String) value;
+		
 
 		
 		

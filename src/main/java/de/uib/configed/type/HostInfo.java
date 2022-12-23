@@ -800,12 +800,12 @@ public class HostInfo {
 		// if ( sourceOfChanges.get(clientShutdownInstallKEY) != null )
 		// {
 		// String shutdownInstall = "off";
-		// boolean boolShutdownInstall = false;
+		
 
 		// if ( sourceOfChanges.get(clientShutdownInstallKEY).equals("true") )
 		// {
 		// shutdownInstall = "on";
-		// boolShutdownInstall = true;
+		
 		// }
 		
 		

@@ -262,7 +262,7 @@ public class FLoadingWaiter extends JFrame
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		// sendingToFront = true;
+		
 	}
 
 	@Override
@@ -275,7 +275,7 @@ public class FLoadingWaiter extends JFrame
 
 	@Override
 	public void windowIconified(WindowEvent e) {
-		// sendingToFront = false;
+		
 		
 	}
 

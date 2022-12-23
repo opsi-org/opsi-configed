@@ -20,8 +20,8 @@ import de.uib.utilities.logging.logging;
 
 public class PersistenceControllerFactory {
 	private static PersistenceController staticPersistControl;
-	// public static boolean sqlLocally = false;
-	// public static boolean sqlLocallyResync = false;
+	
+	
 	public static boolean localDB = false;
 	public static boolean localDBResync = false;
 
@@ -114,7 +114,7 @@ public class PersistenceControllerFactory {
 					persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
 				}
 
-				// String savePath = de.uib.opsicommand.OpsiMethodCall.standardRpcPath;
+				
 				// de.uib.opsicommand.OpsiMethodCall.standardRpcPath = ""; //for compatibility
 				
 
@@ -205,7 +205,7 @@ public class PersistenceControllerFactory {
 				persistControl.retrieveOpsiModules();
 				// retrieves host infos because of client counting
 
-				// de.uib.opsicommand.OpsiMethodCall.standardRpcPath = savePath;
+				
 
 				
 				// retrieves host infos because of client counting

@@ -214,7 +214,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		tableProducts.setGridColor(Color.WHITE);
 		tableProducts.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 
-		// final PanelProductSettings THIS = this;
+		
 
 		tableProducts.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override

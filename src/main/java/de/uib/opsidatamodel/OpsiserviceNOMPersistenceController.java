@@ -334,7 +334,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	protected boolean withMySQL = false;
 	protected boolean withUEFI = false;
 	protected boolean withWAN = false;
-	// protected boolean withInstallByShutdown = true; is free
+	
 	protected boolean withLinuxAgent = false;
 	protected boolean withUserRoles = false;
 
@@ -465,7 +465,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		
 
 		DefaultHostInfoCollections() {
-			// this.persis = persis;
+			
 		}
 
 		// deliver data
@@ -1558,7 +1558,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		// serverActionPermission = UserOpsipermission.ActionPrivilege.READ_ONLY;
 		serverFullPermission = (serverActionPermission == UserOpsipermission.ActionPrivilege.READ_WRITE);
 
-		// createClientPermission = true; set before call this method
+		
 
 		configKey = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_CREATECLIENT;
 		logging.info(this, " checkPermissions key " + configKey);
@@ -2057,7 +2057,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			Object value = ((List) (configs.get(configKey))).get(0);
 
 			if (value instanceof Boolean) {
-				// boolean valueBool = (boolean) value ;
+				
 				if ((Boolean) value == (Boolean) expectValue)
 					result = true;
 			} else if (value instanceof String) {
@@ -9131,7 +9131,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		// rowsWindowsSoftwareId2LPool = null;
 		relations_auditSoftwareToLicencePools = null;
 		// statistics4licensePools = null;
-		// auditClientsUsingSoftware = null;
+		
 		dataStub.softwareAuditOnClientsRequestRefresh();
 		dataStub.licencepoolsRequestRefresh();
 		dataStub.licencesRequestRefresh();
@@ -10613,7 +10613,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		logging.info(this, "produceOpsiModulesInfo withWAN " + withWAN);
 		logging.info(this, "produceOpsiModulesInfo withLicenceManagement " + withLicenceManagement);
 		logging.info(this, "produceOpsiModulesInfo withMySQL " + withMySQL);
-		// withMySQL = false; //test
+		
 
 		
 		// sets value to true if we use the mysql backend and informs that we are

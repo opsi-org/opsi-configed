@@ -82,7 +82,7 @@ public class Empty_Command implements SSHCommand {
 	}
 
 	public Empty_Command(String c) {
-		// position = factory.position_default;
+		
 		
 		setCommand(c);
 		getParameterList();

@@ -444,7 +444,7 @@ public class configed {
 		
 		logging.debug("args " + Arrays.toString(args));
 
-		// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = true;
+		
 		de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
 
 		if (args.length == 2 && args[0].equals("--args")) {
@@ -564,7 +564,7 @@ public class configed {
 					sshkeypassphrase = getArg(args, i);
 					i = i + 2;
 				} else if (args[i].equals("--gzip")) {
-					// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = true;
+					
 					de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
 					i = i + 1;
 					
@@ -572,11 +572,11 @@ public class configed {
 					if (isValue(args, i)) {
 						
 						if (args[i].equalsIgnoreCase("Y")) {
-							// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = true;
+							
 							de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
 						} else if (args[i].equalsIgnoreCase("N")) {
 							de.uib.opsicommand.JSONthroughHTTP.compressTransmission = false;
-							// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = false;
+							
 						} else {
 							usage();
 							endApp(ERROR_INVALID_OPTION);

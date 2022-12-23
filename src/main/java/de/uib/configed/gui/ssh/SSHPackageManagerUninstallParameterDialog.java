@@ -481,7 +481,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 	@Override
 	public void doAction2() {
-		// productMissing=false;
+		
 		execFinished = true;
 		this.setVisible(false);
 		this.dispose();

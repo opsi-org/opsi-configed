@@ -55,11 +55,11 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		
 		
 		
-		// this.owner = owner;
+		
 		setTitle(title);
 		setFont(Globals.defaultFont);
 		setIconImage(Globals.mainIcon);
-		// additionalPane = pane;
+		
 		// }
 		this.setSize(new Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH, frameHeight));
 		this.centerOn(Globals.mainFrame);
@@ -175,7 +175,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 	}
 	// protected void doActionHelp(final SSHPackageManagerParameterDialog caller))
 	// {
-	// SSHCommand command = null;
+	
 	// if (caller instanceof SSHPackageManagerUninstallParameterDialog)
 	// {
 	

@@ -403,7 +403,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			String sourceParentID = null;
 			try {
 				// if values not got from transferable, the following reduces
-				// to setting importId = value;
+				
 
 				
 				
@@ -459,7 +459,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			// coming from table, replace!
 			{
 				// sourceParentID = tree.ALL_NAME;
-				// sourceParentNode = tree.ALL;
+				
 			}
 
 			logging.debug(this, "importData, sourceParentID " + sourceParentID);

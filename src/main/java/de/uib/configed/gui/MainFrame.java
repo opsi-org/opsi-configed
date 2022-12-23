@@ -578,7 +578,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		this.treeClients = treeClients;
 
 		depotListPresenter = new DepotListPresenter(depotsList, multidepot, main.getPersistenceController());
-		// this.depotslist = depotsList;
+		
 
 		this.main = main;
 		addComponentListener(this);
@@ -4408,7 +4408,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		final ArrayList<String> shutdown_value = shutdown_valueX;
 
 		// for testing defined with fixed values
-		// final Boolean activate = false;
+		
 		final Boolean activate = wantActive;
 
 		/*
@@ -4702,21 +4702,21 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	public void setClientDescriptionText(String s) {
 		jTextFieldDescription.setText(s);
 		jTextFieldDescription.setCaretPosition(0);
-		// oldDescription = s;
+		
 		// changedClientInfo.put("description", s);
 	}
 
 	public void setClientInventoryNumberText(String s) {
 		jTextFieldInventoryNumber.setText(s);
 		jTextFieldInventoryNumber.setCaretPosition(0);
-		// oldInventoryNumber = s;
+		
 		// changedClientInfo.put("inventoryNumber", s);
 	}
 
 	public void setClientOneTimePasswordText(String s) {
 		jTextFieldOneTimePassword.setText(s);
 		jTextFieldOneTimePassword.setCaretPosition(0);
-		// oldOneTimePassword = s;
+		
 		// changedClientInfo.put("oneTimePassword", s);
 	}
 
@@ -4729,13 +4729,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	public void setClientMacAddress(String s) {
 		macAddressField.setText(s);
-		// oldMacAddress = s;
+		
 		// changedClientInfo.put("hardwareAddress", s);
 	}
 
 	public void setClientIpAddress(String s) {
 		ipAddressField.setText(s);
-		// oldMacAddress = s;
+		
 		// changedClientInfo.put("hardwareAddress", s);
 	}
 

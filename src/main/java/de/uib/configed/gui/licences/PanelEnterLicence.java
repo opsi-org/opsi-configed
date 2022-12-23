@@ -50,7 +50,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	protected int minVSize = 50;
 	protected int minPanelTableHeight = 60;
 	protected int maxHSize = 1000;
-	// protected int tablesMaxWidth = PanelAssignToLPools.tablesMaxWidth;
+	
 	// protected int hSizePanelLicencepools = 600;
 
 	protected int minFieldWidth = 40;

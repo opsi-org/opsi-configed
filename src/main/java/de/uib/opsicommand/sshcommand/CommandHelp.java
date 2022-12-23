@@ -10,7 +10,7 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	// private String baseName = "";
 	// private LinkedList<CommandHelp_Row> helpLinesSplitted = null;
 	private boolean needSudo = false;
-	// private boolean needRoot = false;
+	
 	private boolean needParameter = false;
 	private SSHCommand basicCommand;
 	protected FGeneralDialog dialog = null;
@@ -125,7 +125,7 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	// }
 	// public void setHelpLines(LinkedList<CommandHelp_Row> lines)
 	// {
-	// helpLinesSplitted = lines;
+	
 	// }
 	// @Override
 	// public int getHelpColumns()

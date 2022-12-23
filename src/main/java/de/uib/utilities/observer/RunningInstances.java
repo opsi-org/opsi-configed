@@ -32,7 +32,7 @@ import de.uib.utilities.logging.logging;
 
 public class RunningInstances<T> {
 	
-	// private static boolean allStopped = false;
+	
 
 	private Boolean reallyLeave = null;
 	private String classname;

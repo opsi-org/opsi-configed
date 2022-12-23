@@ -119,7 +119,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	private int thisWidth = 850;
 	private int thisHeight = 600;
 
-	// private boolean helpPanelStatus = true;
+	
 	private SSHCommandControlDialog(ConfigedMain cm, JFrame owner) {
 		super(null, configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
 		logging.info(this, "SSHCommandControlDialog instance " + instance + " main " + main);
@@ -608,7 +608,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	 **/
 	private void updateComponents(String parent, String tooltip, int prio, boolean ns, String coms) {
 		if ((parent == null) || (parent.trim() == "")) {
-			// parent = factory.parentNull;
+			
 			parent = factory.parentdefaultForOwnCommands;
 		}
 		cb_parentMenuText.setSelectedItem(parent);

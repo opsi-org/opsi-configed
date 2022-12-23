@@ -259,7 +259,7 @@ public class SSHConnectExec extends SSHConnect {
 		}
 	}
 
-	// protected String commandInfoName = null;
+	
 	protected boolean FOUND_ERROR = false;
 
 	public String exec(SSHCommand command) {

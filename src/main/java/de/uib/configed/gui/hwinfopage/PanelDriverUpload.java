@@ -786,7 +786,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			}
 		}.start();
 
-		// waitCursor = null;
+		
 	}
 
 	public void setByAuditPath(String s) {

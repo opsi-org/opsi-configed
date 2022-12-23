@@ -385,7 +385,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		// // String pwd = ssh.exec(new Empty_Command("pwd" ), false, null, true,
 		// false).replace("\n", "");
 		// try {
-		// getCurrentDirectorySilent = true;
+		
 		// // exec("pwd\n");
 		// if (out != null)
 		// {
@@ -397,7 +397,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		// // }
 		// // catch (IOException ioe)
 
-		// if (currentDirectory == null) return result;
+		
 
 		// currentDirectory = currentDirectory.replace("\n", "") + "/";
 		// String com = "ls -aldU " + currentDirectory + "./*";
@@ -411,7 +411,7 @@ public class SSHConnectTerminal extends SSHConnect {
 
 		// for (String l : arr_result_dir)
 		// {
-		// String line = l; //.replace("\\","\\\\");
+		
 		
 		// String dir = "" + line.split(currentDirectory + "/",2)[1];
 		

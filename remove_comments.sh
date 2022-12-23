@@ -16,5 +16,8 @@ find . -name *.java -exec sed -i "s/\/\/[a-zA-Z '()<>{}\.,]*);.*//g" {} \;
 #6. command
 find . -name *.java -exec sed -i "s/\/\/[a-zA-Z '()<>{}\.,]*;.*//g" {} \;
 
-#5. command
+#7. command
 find . -name *.java -exec sed -i "s/\/\/[a-zA-Z '()<>{}\.,=]*);.*//g" {} \;
+
+#8. command
+find . -name *.java -exec sed -i "s/\/\/[a-zA-Z '()<>{}\.,=]*;.*//g" {} \;

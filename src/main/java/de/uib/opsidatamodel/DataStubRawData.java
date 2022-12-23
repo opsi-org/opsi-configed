@@ -227,7 +227,7 @@ public class DataStubRawData extends DataStubNOM {
 				m.put(ProductPropertyState.OBJECT_ID, row.get(2));
 
 				// parse String and produce json list
-				// ArrayList values = null;
+				
 				org.json.JSONArray values = null;
 				try {
 					values = new org.json.JSONArray(row.get(3));
@@ -708,7 +708,7 @@ public class DataStubRawData extends DataStubNOM {
 				// ConfigStateEntry.DB_COLUMN_NAMES.indexOf( ConfigStateEntry.VALUES) );
 
 				// parse String and produce list
-				// ArrayList values = null;
+				
 				List values = new ArrayList<>();
 				try {
 					values = (new JSONArray(valueString)).toList();

@@ -131,7 +131,7 @@ public class JSONReMapper {
 				String errorMessage = getErrorFromResponse(retrieved);
 
 				if (errorMessage != null) {
-					// responseFound = false;
+					
 					String logMessage = "Opsi service error: " + errorMessage;
 					logging.error(logMessage);
 				} else {

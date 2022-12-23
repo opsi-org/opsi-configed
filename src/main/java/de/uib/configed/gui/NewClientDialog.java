@@ -94,8 +94,8 @@ public class NewClientDialog extends FGeneralDialog
 
 	private List<String> existingHostNames;
 
-	// private static boolean macAddressFieldVisible = false;
-	// private static boolean macAddressFieldVisibleSet = false;
+	
+	
 
 	protected int wLeftLabel = Globals.BUTTON_WIDTH + 20;
 

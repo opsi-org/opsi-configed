@@ -93,7 +93,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	public static final Color conflictTextColor = backgroundGrey;
 	public static final Color defaultBackColor = Color.white;
 	public static final Color defaultTextColor = Color.black;
-	// public static final Color notUpdatedTextColor = defaultTextColor; // new
+	
 	// Color(250, 30, 0); // needed for update_version_display
 
 	final String initString = "";
@@ -155,7 +155,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	protected Vector<String> productNamesInDeliveryOrder;
 
 	protected ActionRequest actionInTreatment;
-	// protected boolean changeActionIsSet = false;
+	
 	protected java.util.Set<String> missingProducts = new HashSet<>();
 
 	protected List<String> displayColumns;
@@ -274,7 +274,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		logging.debug(this, "tsProductNames " + tsProductNames);
 
-		// allClientsProductlistsSaved = statesAndActions; trying to start a deep copy
+		
 		initalizeProductStates(statesAndActions);
 	}
 
@@ -636,7 +636,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	@Override
 	public void clearCollectChangedStates() {
 		collectChangedStates.clear();
-		// changeActionIsSet = false;
+		
 		
 	}
 
@@ -925,7 +925,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	}
 
 	protected void initChangeActionRequests() {
-		// changeActionIsSet = true;
+		
 		product2setOfClientsWithNewAction.clear();
 
 		// for each product, we shall collect the clients that have a changed action
@@ -1641,7 +1641,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			break;
 
 		case 8:
-			// result = (String) actions.get(actualProduct) ;
+			
 			// if (actualProduct.equals("firefox"))
 			
 			// combinedVisualValues.get(ProductState.KEY_actionRequest).get(actualProduct));

@@ -367,14 +367,14 @@ public class OpsiDataBackend extends Backend {
 			}
 		}
 		// else
-		// softwareMap = null; //dont use older data after a reload request
+		
 
 		// if ( reloadRequested || swauditMap == null )
 		{
 			swauditMap = getSwAuditOnClients();
 		}
 		// else
-		// swauditMap = null; //dont use older data after a reload request
+		
 
 		// if ( reloadRequested || hwConfig == null || hwConfigLocalized == null ||
 		// hwUiToOpsi == null || hwClassToValues == null )

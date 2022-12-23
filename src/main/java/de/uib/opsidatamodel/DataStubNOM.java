@@ -1365,7 +1365,7 @@ public class DataStubNOM extends DataStub {
 	@Override
 	public void licenceContractsRequestRefresh() {
 		logging.info(this, "licenceContractsRequestRefresh");
-		// tableLicenceContracts = null;
+		
 		licenceContracts = null;
 		contractsExpired = null;
 		contractsToNotify = null;

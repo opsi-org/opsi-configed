@@ -672,7 +672,7 @@ public class PanelSWInfo extends JPanel {
 	 * 
 	 * 
 	 * title = hostId;
-	 * //this.hostId = hostId;
+	 * 
 	 * this.swRows = swRows;
 	 * if (swRows == null)
 	 * this.swRows = new DatedRowList();

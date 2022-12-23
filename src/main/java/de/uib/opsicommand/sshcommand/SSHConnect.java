@@ -65,7 +65,7 @@ public class SSHConnect {
 		this.main = main;
 		connectionInfo = SSHConnectionInfo.getInstance();
 		// if (main.SSHKEY != null)
-		// useKeyfile = true;
+		
 	}
 
 	public static boolean isConnectionAllowed() {

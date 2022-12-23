@@ -29,7 +29,7 @@ public class FShowListWithComboSelect extends FShowList {
 		
 		// HorizontalPositioner northPanel = new HorizontalPositioner (new
 		
-		// northPanel = panelChoice;
+		
 		pack();
 		
 		
