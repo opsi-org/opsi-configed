@@ -104,7 +104,7 @@ public class TextInputField extends JPanel
 			}
 		}
 
-		// combo = new JComboBoxSearching(this.proposedValues);
+		
 		combo = new JComboBox<>(this.proposedValues);
 		
 		// + combo.getEditor().getEditorComponent().getClass());

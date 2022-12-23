@@ -382,7 +382,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		// table provider
 		{
 
-			produceRows(); // rows = tableProvider.getRows();
+			produceRows(); 
 			
 
 			if (!modelStructureValid) {

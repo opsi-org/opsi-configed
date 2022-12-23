@@ -76,7 +76,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 		panelGetAndAssignSL = new javax.swing.JPanel();
 		labelGetAndAssignSL = new javax.swing.JLabel(
 				configed.getResourceValue("ConfigedMain.Licences.Usage.LabelAssignLicense"));
-		// comboClient = new javax.swing.JComboBox();
+		
 		comboClient = new de.uib.utilities.swing.DynamicCombo();
 		comboClient.setFont(Globals.defaultFontBig);
 		comboClient.setPreferredSize(new java.awt.Dimension(200, 20));

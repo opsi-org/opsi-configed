@@ -143,7 +143,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				// });
 
 				
-				// out = channel.getOutputStream();
+				
 				// channel = setChannels(new FilterInputStream(System.in){
 				// public int read(byte[] b, int off, int len)throws IOException{
 				// return in.read(b, off, (len>124?124:len));
@@ -330,7 +330,7 @@ public class SSHConnectTerminal extends SSHConnect {
 						// if (textField.getText().contains(" cd ") || textField.getText().contains("cd
 						// "))
 						// {
-						// List dirs = getList(getCompletionList(false, true));
+						
 						// if (commands_compgen != null)
 						// if (dirs != null)
 						// {

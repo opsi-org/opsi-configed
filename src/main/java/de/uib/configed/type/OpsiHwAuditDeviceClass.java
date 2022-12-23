@@ -54,8 +54,8 @@ public class OpsiHwAuditDeviceClass {
 
 		deviceHostProperties = new ArrayList<>();
 		deviceHwItemProperties = new ArrayList<>();
-		// hostPossibleColumns = new List<Object>();
-		// hwItemPossibleColumns = new List<Object>();
+		
+		
 	}
 
 	/*

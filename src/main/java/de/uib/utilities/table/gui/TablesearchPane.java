@@ -437,7 +437,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		
 		fieldSearch.setFont(Globals.defaultFontBig);
 		fieldSearch.setBackground(Globals.backVeryLightBlue); 
-		// blinkrate = fieldSearch.getCaret().getBlinkRate(); //save default blinkrate
+		
 		fieldSearch.getCaret().setBlinkRate(blinkrate);
 		fieldSearch.setToolTipText(configed.getResourceValue("SearchPane.searchField.toolTip"));
 
@@ -921,7 +921,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		String[] valParts = val.split(" ");
 
-		// String valLower = val.toLowerCase();
+		
 
 		boolean found = false;
 

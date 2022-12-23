@@ -42,7 +42,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 	private JPanel settingsPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
 
-	// private final JFileChooser fchooser = new JFileChooser();
+	
 	private static JCheckBox cb_useDefault;
 	private static JCheckBox cb_useKeyfile;
 	private JCheckBox cb_useOutputColor;

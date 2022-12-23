@@ -440,9 +440,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		titlePane = new PanelLinedComponents();
 		titlePane.setVisible(false);
 		titlePane.setBackground(Globals.backgroundWhite);
-		// popupMenu = new JPopupMenu();
+		
 		theTable = new de.uib.utilities.table.JTableWithToolTips();
-		// theTable = new JTable();
+		
 		theTable.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 		
 
@@ -1017,7 +1017,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		tableModel = m;
 		tableModel.addCursorrowObserver(this);
 		
-		// exportTable = new ExportTable(theTable, m.getClassNames() );
+		
 
 		comparators = new Comparator[m.getColumnCount()];
 

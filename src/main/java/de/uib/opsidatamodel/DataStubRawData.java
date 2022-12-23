@@ -508,7 +508,7 @@ public class DataStubRawData extends DataStubNOM {
 					SWAuditClientEntry clientEntry = new SWAuditClientEntry(SWAuditClientEntry.DB_COLUMN_NAMES, row,
 							persist);
 
-					// String clientId = clientEntry.getClientId();
+					
 					swIdent = clientEntry.getSWident();
 
 					/*
@@ -636,7 +636,7 @@ public class DataStubRawData extends DataStubNOM {
 	@Override
 	protected void retrieveHostConfigs() {
 		
-		// (hostConfigs == null) );
+		
 		
 		// + classCounter + ": " + (hostConfigs == null) );
 

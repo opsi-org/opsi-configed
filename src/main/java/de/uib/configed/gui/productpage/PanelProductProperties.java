@@ -84,7 +84,7 @@ public class PanelProductProperties extends JSplitPane
 	}
 
 	protected void init() {
-		// tableProducts = new JTable();
+		
 		
 
 		selectedProducts = new ArrayList<>();

@@ -828,7 +828,7 @@ public class DataStubNOM extends DataStub {
 
 			int i = 0;
 			logging.info(this, "getInstalledSoftwareInformation build map");
-			// ArrayList<String> foundEntries = new ArrayList<>();
+			
 
 			while (iter.hasNext()) {
 				i++;

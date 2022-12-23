@@ -249,7 +249,7 @@ public class NewClientDialog extends FGeneralDialog
 		jLabelDomainname.setText(configed.getResourceValue("NewClientDialog.domain"));
 		jComboDomain = new JComboBox<>();
 		jComboDomain.setEditable(true);
-		// jTextDomainname = new JTextField(defaultDomain);
+		
 
 		JLabel jLabelDescription = new JLabel();
 		jLabelDescription.setText(configed.getResourceValue("NewClientDialog.description"));

@@ -422,7 +422,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				final Color saveColor = buttonCallExecute.getBackground();
-				// final Icon saveIcon = buttonCallExecute.getIcon();
+				
 				buttonCallExecute.setBackground(Globals.failedBackColor);
 				
 				logging.info(this, "actionPerformed on buttonCallExecute opsiPackageGotPathS,  depot:  "

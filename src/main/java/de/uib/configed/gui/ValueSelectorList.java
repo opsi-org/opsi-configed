@@ -215,7 +215,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		// labelDepotServer.setPreferredSize(new Dimension(widthColumnServer,
 		// line_height));
 
-		// popupDepots = new JPopupMenu();
+		
 		
 
 		/*

@@ -419,7 +419,7 @@ public class HostInfo {
 		
 		// shows pckey
 
-		// Map pcInfos = persist.getMapOfPCInfoMaps();
+		
 		// Map pcInfo = (Map) pcInfos.get(selectedClients[0]);
 
 		if (pcInfo == null) {
@@ -512,7 +512,7 @@ public class HostInfo {
 	 * 
 	 * logging.info(this, "getInfo " + pcInfo);
 	 * 
-	 * //Map pcInfos = persist.getMapOfPCInfoMaps();
+	 * 
 	 * //Map pcInfo = (Map) pcInfos.get(selectedClients[0]);
 	 * 
 	 * if (pcInfo == null)
@@ -817,7 +817,7 @@ public class HostInfo {
 		// product, "on_shutdown_install" , Arrays.asList(shutdownInstall) );
 		// // Set<String> clientNames, String productName, String propertyName,
 		// List<String> values
-		// Map<String, String> productValues = new HashMap<>();
+		
 		// productValues.put("actionRequest", "setup");
 
 		// persist.updateProductOnClient(

@@ -64,7 +64,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 					success = (result != null);
 					if (success && updateItem.keyChanged()) {
 						successfullInsertsWithNewKeys.add(updateItem);
-						// lastKeyValue = updateItem.getKeyColumnStringValue();
+						
 						lastKeyValue = result;
 					}
 				}

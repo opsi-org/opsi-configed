@@ -242,7 +242,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		
 		descriptionFieldListener.setEnabled(false);
 
-		// String currentKey = (String) saveNameEditor.getSelectedItem();
+		
 		String currentKey = groupsEditField.getText(); 
 
 		
@@ -266,7 +266,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		selectedIDs = associate.getSelectedIDs();
 
-		// String currentKey = (String) saveNameEditor.getSelectedItem();
+		
 		String currentKey = saveNameEditor.getText();
 
 		if (currentKey == null || currentKey.equals(""))
@@ -347,7 +347,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	}
 
 	private void updateAssociations() {
-		// editedKey = namesAndDescriptions.getKeyAt(groupsCombo.getSelectedIndex());
+		
 		if (membersChanged()) {
 			setDataChanged(true);
 		}
@@ -366,7 +366,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 	private boolean isDescriptionChanged() {
 		boolean result = false;
-		// String currentKey = (String) saveNameEditor.getSelectedItem();
+		
 		String currentKey = saveNameEditor.getText();
 
 		if (namesAndDescriptions.get(currentKey) == null) // current key did not exist
@@ -404,13 +404,13 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		groupsCombo.setEditable(false);
 		groupsCombo.setMaximumRowCount(30);
 
-		// saveNameEditor = new JComboBoxToolTipX();
+		
 		saveNameEditor = new JTextField("");
 
 		saveNameEditor.setEditable(true);
 		saveNameEditor.setToolTipText(de.uib.configed.configed.getResourceValue("GroupPanel.GroupnameTooltip"));
 		
-		// Set<String> oldSet = groupPanel.getLastSelectedIDs();
+		
 		setMembers();
 		setGroupEditing(false);
 	}

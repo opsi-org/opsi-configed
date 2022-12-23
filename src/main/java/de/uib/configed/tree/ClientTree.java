@@ -196,7 +196,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		Leafname2AllItsPaths() {
 			invertedSimpleClientPaths = new HashMap<>();
-			// invertedClientPaths = new HashMap<>();
+			
 		}
 
 		public Set<String> keySet() {
@@ -723,14 +723,14 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// int selRow = getRowForLocation(e.getX(), e.getY());
+		
 		
 		// row " + selRow);
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// int selRow = getRowForLocation(e.getX(), e.getY());
+		
 		
 	}
 
@@ -846,7 +846,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		
 		ROOT.add(GROUPS);
 
-		// pathToGROUPS = pathToALL.pathByAddingChild(GROUPS);
+		
 		pathToGROUPS = new TreePath(new Object[] { ROOT, GROUPS });
 
 		// DIRECTORY
@@ -1044,7 +1044,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	public void produceTreeForALL(Object[] x) {
 		
-		// clientNodesInDIRECTORY = new HashMap<>();
+		
 		clientNodesInDIRECTORY.clear();
 		produceClients(x);
 	}
@@ -1569,14 +1569,14 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	}
 
 	public void removeClientInternally(String clientID, GroupNode parentNode) {
-		// DefaultMutableTreeNode clientNode = getClientNode(clientID);
+		
 
 		logging.debug("removeClientInternally clientId, parentNode " + clientID + ", " + parentNode);
 
 		
 
 		DefaultMutableTreeNode clientNode = getChildWithUserObjectString(clientID, parentNode);
-		// DefaultMutableTreeNode clientNode = getClientNode(clientID);
+		
 
 		int stopCounter = 0;
 

@@ -411,7 +411,7 @@ public class Globals {
 
 		java.net.URL imgURL = cl.getResource(xPath);
 
-		// imgURL = Globals.class.getResource(xPath);
+		
 		// should have the same result (but seems not to have)
 
 		try {
@@ -437,7 +437,7 @@ public class Globals {
 
 		java.net.URL imgURL = cl.getResource(xPath);
 
-		// imgURL = Globals.class.getResource(xPath);
+		
 		// should have the same result (but seems not to have)
 
 		try {

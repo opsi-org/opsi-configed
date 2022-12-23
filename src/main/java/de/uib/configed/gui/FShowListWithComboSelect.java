@@ -17,7 +17,7 @@ public class FShowListWithComboSelect extends FShowList {
 	public FShowListWithComboSelect(JFrame owner, String title, boolean modal, String choiceTitle, String[] choices,
 			String[] buttonList) {
 		super(owner, title, modal, buttonList);
-		// JPanel panelChoice = new JPanel(new BorderLayout());
+		
 		labelChoice = new JLabel(choiceTitle + ": ");
 		labelChoice.setOpaque(true);
 		labelChoice.setBackground(Globals.backgroundLightGrey);

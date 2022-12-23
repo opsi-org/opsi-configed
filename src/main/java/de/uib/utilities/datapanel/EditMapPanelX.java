@@ -177,7 +177,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 
 		editableColumn = table.getColumnModel().getColumn(1);
 
-		// defaultCellEditor = new DefaultCellEditor(new JTextField());
+		
 		editorfield = new JComboBox<>();
 		editorfield.setEditable(true);
 		defaultCellEditor = new XCellEditor(editorfield);
@@ -219,9 +219,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 			table.getTableHeader().setToolTipText(configed.getResourceValue("EditMapPanel.PopupMenu.EditableToolTip"));
 
 			if (keylistExtendible) {
-				// popupmenuAtRow = new JPopupMenu();
+				
 
-				// MouseListener popupListener = new utils.PopupMouseListener(popupmenuAtRow);
+				
 				
 
 				popupItemAddStringListEntry = new JMenuItemFormatted(
@@ -556,7 +556,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 
 		
 
-		// theCellEditor = SensitiveCellEditor.getInstance();
+		
 
 		if (optionsMap != null) {
 

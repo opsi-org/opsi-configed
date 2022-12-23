@@ -129,7 +129,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
-		// southPanel = new JPanel();
+		
 		southPanel.setOpaque(false);
 		southPanel.setBackground(Color.white); 
 		southPanel.setOpaque(true);
@@ -190,7 +190,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 	}
 
 	protected PanelGenEditTable initMainPanel() {
-		// licenseMap = getLicensingInfoMap();
+		
 		retrieveData();
 
 		FGeneralDialogLicensingInfo ME = this;
@@ -273,7 +273,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		redWarningLabel.setIcon(Globals.createImageIcon("images/warning_red.png", ""));
 		//JLabel redWarningLevel = new JLabel("<html>" + configed.getResourceValue("LicensingInfo.warning.over_limit") + "</html>");
 
-		//Map<String, List<Object>> configs = persist.getConfigDefaultValues();
+		
 		JLabel warningLevelAbsolute = new JLabel(
 				"<html>" + configed.getResourceValue("LicensingInfo.warning.levels.client_absolute") + ": "
 						+ licenseMap.getClientLimitWarningAbsolute() + "</html>");
@@ -549,7 +549,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		 * JPanel bottomPanel = new JPanel();
 		 *
 		 * centerPanel = f.initMainPanel();
-		 * //bottomPanel = f.initSmallPanel();
+		 * 
 		 *
 		 * bottomPanel = f.initClientInfo();
 		 *

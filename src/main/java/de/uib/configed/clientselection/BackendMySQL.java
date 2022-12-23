@@ -403,7 +403,7 @@ public class BackendMySQL {
 		return abfrage;
 	}
 
-	// private MySQL mySQL = new MySQL();
+	
 
 	/*
 	 * Der Teil hier wird eigentlich nur für das Testen mit der lokalen
@@ -456,7 +456,7 @@ public class BackendMySQL {
 	 * ResultSet result = stat.executeQuery(abfrage);
 	 * 
 	 * 
-	 * //int columnNumber = result.getMetaData().getColumnCount();
+	 * 
 	 * 
 	 * while(result.next())
 	 * arrayList.add(result.getString(1));

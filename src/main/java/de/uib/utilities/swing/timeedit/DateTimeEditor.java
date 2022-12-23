@@ -52,7 +52,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		this.withTime = withTime;
 		
 
-		// dateEventObservers = new Vector<>();
+		
 
 		JPopupMenu popup = new JPopupMenu();
 
@@ -91,7 +91,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 		monthView.addMouseListener(new utils.PopupMouseListener(popup));
 
-		// monthSpinnerModel = new SpinnerDateModel(); //new Date(), null, null,
+		
 		
 		
 		// String[] monthStrings = getMonthStrings();

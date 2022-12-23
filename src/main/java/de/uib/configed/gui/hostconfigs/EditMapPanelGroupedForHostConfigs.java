@@ -276,7 +276,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		 * @Override
 		 * protected void maybeShowPopup(MouseEvent e) {
 		 * if (e.isPopupTrigger()) {
-		 * //int selRow = tree.getRowForLocation(e.getX(), e.getY());
+		 * 
 		 * TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
 		 * 
 		 * //if(selRow % 2 == 0) //test

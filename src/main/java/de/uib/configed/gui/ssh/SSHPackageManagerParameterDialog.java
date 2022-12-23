@@ -178,11 +178,11 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 	// SSHCommand command = null;
 	// if (caller instanceof SSHPackageManagerUninstallParameterDialog)
 	// {
-	// command = new CommandHelp(new CommandOpsiPackageManagerUninstall());
+	
 	// }
 	// else if (caller instanceof SSHPackageManagerInstallParameterDialog)
 	// {
-	// command = new CommandHelp(new CommandOpsiPackageManagerInstall());
+	
 	// }
 	// SSHConnectionExecHelpDialog outputDialog = new SSHConnectionExecHelpDialog(
 	// command,

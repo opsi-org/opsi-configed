@@ -189,7 +189,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 		JPanel contentPane = new JPanel();
 		contentPane.setBackground(Globals.backLightBlue);
-		// scrollpane = new JScrollPane();
+		
 		scrollpane.setViewportView(contentPane);
 
 		labelTimeYetToWait = new JLabel(Globals.giveTimeSpan(0), SwingConstants.RIGHT);
@@ -632,11 +632,11 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	 * setProgress( progress );
 	 * 
 	 * //int noOfSteps = 100;
-	 * //long timeStepMillis = (long) (waitingMillis / noOfSteps );
+	 * 
 	 * 
 	 * long timeStepMillis = (long) 1000;
 	 * 
-	 * //long noOfSteps = (long) (waitingMillis/ timeStepMillis);
+	 * 
 	 * 
 	 * 
 	 * 

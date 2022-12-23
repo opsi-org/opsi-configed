@@ -41,7 +41,7 @@ public class FWakeClients extends FShowList {
 				maxSize = hostSeparationByDepots.get(depot).size();
 		}
 
-		// Cursor oldCursor = getCursor();
+		
 		// setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
 		int turn = 0;

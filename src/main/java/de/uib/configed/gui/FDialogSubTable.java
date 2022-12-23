@@ -59,7 +59,7 @@ public class FDialogSubTable extends FGeneralDialog {
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
-		// southPanel = new JPanel();
+		
 		southPanel.setOpaque(false);
 		southPanel.setBackground(Color.white); 
 		southPanel.setOpaque(true);

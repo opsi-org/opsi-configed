@@ -419,7 +419,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 					importID = value.split("\t")[0];
 				} else {
 					String[] parts = value.split(",");
-					// oldPath = new TreePath(parts);
+					
 					importID = parts[parts.length - 1];
 
 					/*
@@ -503,7 +503,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	 * @Override
 	 * protected void exportDone(JComponent c, Transferable data, int action)
 	 * {
-	 * //cleanup(c, action == TransferHandler.MOVE);
+	 * 
 	 * }
 	 * 
 	 * //If the remove argument is true, the drop has been

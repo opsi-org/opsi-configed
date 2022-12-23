@@ -210,7 +210,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JMenuItem jMenuChangeClientID = new JMenuItem();
 
 	JMenu jMenuServer = new JMenu();
-	// JMenuItem jMenuRemoteTerminal = new JMenuItem();
+	
 	JMenuItem jMenuSSHConfig = new JMenuItem();
 	JMenuItem jMenuSSHConnection = new JMenuItem();
 	JMenuItem jMenuSSHCommandControl = new JMenuItem();
@@ -252,8 +252,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JMenuItem jMenuClientselectionProductNotUptodateOrBroken = new JMenuItem();
 	JMenuItem jMenuClientselectionFailedProduct = new JMenuItem();
 	JMenu jMenuClientselectionFailedInPeriod = new JMenu();
-	// JMenuItem jMenuClientselectionSaveGroup = new JMenuItem();
-	// JMenuItem jMenuClientselectionDeleteGroup = new JMenuItem();
+	
+	
 	JMenuItem jMenuClientselectionDeselect = new JMenuItem();
 	JCheckBoxMenuItem jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem();
 
@@ -289,7 +289,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JMenuItemFormatted popupWakeOnLanDirect = new JMenuItemFormatted();
 	JMenuItemFormatted popupWakeOnLanScheduler = new JMenuItemFormatted();
 
-	// JMenu subOpsiClientdEvent = new JMenu();
+	
 	JMenu menuPopupOpsiClientdEvent = new JMenu(configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 	JMenuItemFormatted popupShowPopupMessage = new JMenuItemFormatted();
 	JMenuItemFormatted popupRequestSessionInfo = new JMenuItemFormatted();
@@ -307,7 +307,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			// menuPopupOpsiClientdEvent,
 			popupChangeDepot, popupChangeClientID, popupRemoteControl };
 
-	// JCheckBoxMenuItem popupDisplayClientList = new JCheckBoxMenuItem();
+	
 	JCheckBoxMenuItem popupShowCreatedColumn = new JCheckBoxMenuItem();
 	JCheckBoxMenuItem popupShowWANactiveColumn = new JCheckBoxMenuItem();
 	JCheckBoxMenuItem popupShowIPAddressColumn = new JCheckBoxMenuItem();
@@ -320,8 +320,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	JMenuItemFormatted popupSelectionGetGroup = new JMenuItemFormatted();
 	JMenuItemFormatted popupSelectionGetSavedSearch = new JMenuItemFormatted();
-	// JMenuItemFormatted popupSelectionSaveGroup = new JMenuItemFormatted();
-	// JMenuItemFormatted popupSelectionDeleteGroup = new JMenuItemFormatted();
+	
+	
 	JMenuItemFormatted popupSelectionDeselect = new JMenuItemFormatted();
 	JCheckBoxMenuItem popupSelectionToggleClientFilter = new JCheckBoxMenuItem();
 
@@ -410,7 +410,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	BorderLayout borderLayout1 = new BorderLayout();
 	GroupLayout contentLayout;
 	JTabbedPane jTabbedPaneConfigPanes = new JTabbedPane(); 
-	public JSplitPane panel_Clientselection; // = new JSplitPane();
+	public JSplitPane panel_Clientselection; 
 
 	private HostsStatusPanel statusPane;
 
@@ -465,9 +465,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	private static boolean settingSchalter = false;
 	JButton jBtnAllOff = new JButton();
-	// JButton jBtnCopyTemplate = new JButton();
+	
 
-	// JButton jBtnRefresh = new JButton();
+	
 
 	JTableSelectionPanel panelClientlist;
 	boolean shiftpressed = false;
@@ -571,7 +571,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		panelClientlist = selectionPanel;
 		// selectionPanel.setPreferredSize(new Dimension(fwidth_lefthanded, fheight));
-		// clientlistColumnModel = selectionPanel.getColumnModel();
+		
 
 		exportTable = new ExporterToCSV(selectionPanel.getTable());
 
@@ -2071,9 +2071,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		// symbol]")));
 
 		allPane = new SizeListeningPanel();
-		// allPane = (JPanel) this.getallPane();
+		
 
-		// contentLayout = new GroupLayout(allPane);
+		
 		
 		allPane.setLayout(borderLayout1);
 
@@ -4269,7 +4269,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				protected void reload() {
 					super.reload();
 					main.clearHwInfo();
-					// WaitCursor waitCursor = new WaitCursor(tree);
+					
 					// otherwise we get a wait cursor only in table component
 					main.resetView(ConfigedMain.VIEW_HARDWARE_INFO);
 				}

@@ -157,7 +157,7 @@ public class ControllerHWinfoMultiClients {
 
 	protected void initModel() {
 
-		// updateCollection = new TableUpdateCollection();
+		
 		columnNames = persist.getClient2HwRowsColumnNames();
 		classNames = persist.getClient2HwRowsJavaclassNames();
 		logging.info(this, "initmodel: columns " + columnNames);
@@ -196,8 +196,8 @@ public class ControllerHWinfoMultiClients {
 		
 		// we got metadata:
 
-		// columnNames = model.getColumnNames();
-		// classNames = model.getClassNames();
+		
+		
 
 		
 		
@@ -240,7 +240,7 @@ public class ControllerHWinfoMultiClients {
 			rebuildModel();
 		});
 
-		// JPanel testpanel = new JPanel();
+		
 		// testpanel.add( new JLabel ("hallo welt") );
 
 		buttonConfigureColumns.addActionListener(actionEvent -> {

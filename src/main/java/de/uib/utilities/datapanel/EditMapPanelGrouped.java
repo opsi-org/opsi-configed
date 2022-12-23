@@ -124,7 +124,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		};
 	}
 	// else
-	// popup = new JPopupMenu();
+	
 
 	public void setSubpanelClasses(TreeMap<String, String> classesMap) {
 		givenClasses = classesMap;
@@ -354,7 +354,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		if (data == null)
 			return;
 
-		// Iterator<String> iterCollect = classIds.descendingSet().iterator();
+		
 		NavigableSet<String> classIdsDescending = classIds.descendingSet();
 
 		for (String key : new TreeSet<>(data.keySet()).descendingSet()) {

@@ -113,8 +113,8 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 		setHint(hint);
 
-		// okbutton = new javax.swing.JButton();
-		// cancelbutton = new javax.swing.JButton();
+		
+		
 		// okbutton.setText("ok");
 		// cancelbutton.setText("cancel");
 
@@ -124,9 +124,9 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 		buttonCommit.addKeyListener(this);
 		buttonCancel.addKeyListener(this);
 
-		// scrollpane = new javax.swing.JScrollPane();
+		
 
-		// textarea = new javax.swing.JTextArea();
+		
 
 		// textarea.setColumns(20);
 		// textarea.setRows(5);

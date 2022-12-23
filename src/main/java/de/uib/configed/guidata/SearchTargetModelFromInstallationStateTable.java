@@ -123,8 +123,8 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	@Override
 	public void ensureRowIsVisible(int row) {
-		// int viewrow = table.convertRowIndexToView(row);
-		// int modelrow = table.convertRowIndexToModel(row);
+		
+		
 		table.scrollRectToVisible(table.getCellRect(row, 0, false));
 
 		

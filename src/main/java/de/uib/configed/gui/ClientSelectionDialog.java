@@ -950,7 +950,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			sourceGroup.dataComponent = fieldText;
 			break;
 		case DoubleType:
-			// JTextField fieldDouble = new JTextField();
+			
 			TextInputField fieldDouble = new TextInputField("");
 			fieldDouble.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 			fieldDouble.setToolTipText(

@@ -225,7 +225,7 @@ public class PanelMountShare extends JPanel {
 			public void run() {
 				int i = 0;
 
-				// Icon saveIcon = buttonMountShare.getIcon();
+				
 				while (!smbMounted && i < seconds) {
 					
 

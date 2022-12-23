@@ -1025,7 +1025,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				boolean started = false;
 
 				for (String clientId : selectedClients) {
-					// String mixInVal = ar.toString();
+					
 
 					if (!started) {
 						started = true;
@@ -1198,7 +1198,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		
 		// in subclass " + productsV.indexOf(actualProduct));
-		// int modelRow = getRowFromProductID(actualProduct);
+		
 		int modelRow = getRowFromProductID(product);
 		logging.debug(this, "recursivelyChangeActionRequest product " + product + " modelRow " + modelRow);
 		if (modelRow > -1) {
@@ -1317,7 +1317,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 									.getInstance().requiredActionForStatus.get(requiredStatusS);
 							logging.debug(this, " needed action therefore " + neededAction);
 
-							requiredAR // = ActionRequest.leadingTo(requiredIS);
+							requiredAR 
 									= ActionRequest.getVal(neededAction);
 						}
 

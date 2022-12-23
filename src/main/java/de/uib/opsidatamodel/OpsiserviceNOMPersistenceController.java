@@ -577,7 +577,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				opsiHostNames = new ArrayList<>();
 				allDepots = new TreeMap<>();
-				// masterDepots = new LinkedHashMap<>();
+				
 				masterDepots = new CheckingEntryMapOfMaps();
 				depotNamesList = new LinkedList<>();
 
@@ -594,7 +594,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					String name = (String) host.get(HostInfo.hostnameKEY);
 					opsiHostNames.add(name);
 
-					// Map<String, Object> hostMap = new HashMap<>();
+					
 
 					for (String key : host.keySet()) {
 						if (de.uib.opsicommand.JSONReMapper.isNull(host.get(key)))
@@ -919,7 +919,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			mapOfPCs = new HashMap<>();
 			mapPC_Infomap = new HashMap<>();
 
-			// Map mapForDepot = new HashMap<>();
+			
 			// Map mapPCs_inDepot = new HashMap<>();
 			
 
@@ -1013,7 +1013,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		@Override
 		public void setDepotForClients(String[] clients, String depotId) {
-			// Map<String, Object> values = new HashMap<>();
+			
 			if (!getDepotPermission(depotId))
 				return;
 
@@ -1370,7 +1370,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			logging.info(this, "JSONthroughHTTPS failed to make connection");
 			
 			// JSONthroughHTTPSOldImpl"); //deprecated
-			// exec = new JSONthroughHTTPSOldImpl(connectionServer, user, password);
+			
 			// exec.doCall(new OpsiMethodCall ("authenticated", new String[]{}));
 
 		}
@@ -2549,7 +2549,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// String product = "opsi-client-agent";
 			// setCommonProductPropertyValue( new HashSet<>(Arrays.asList(newClientID)),
 			// product, "on_shutdown_install" , Arrays.asList("on") );
-			// Map<String, String> productValues = new HashMap<String,String>();
+			
 			// productValues.put("actionRequest", "setup");
 
 			// updateProductOnClient(
@@ -2904,7 +2904,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		String methodName = "backend_getLicensingInfo";
 
 		OpsiMethodCall omc = new OpsiMethodCall(methodName, callParameters, OpsiMethodCall.BACKGROUND);
-		// Map<String, Object> result = exec.getMapResult(omc);
+		
 
 		// return JSONReMapper.getListOfMaps((JSONArray) result.get("licenses"));
 		return exec.getMapResult(omc);
@@ -3879,7 +3879,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	protected void produceHwAuditDeviceClasses() {
 		
 
-		// List<String> opsiHwNames = new ArrayList<>();
+		
 		hwAuditDeviceClasses = new TreeMap<>();
 
 		if (getOpsiHWAuditConf() == null) {
@@ -6040,7 +6040,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		for (Map<String, String> aDependency : dependenciesFor1product) {
 			// Object aDependencyObject = dependenciesFor1product.get(i);
-			// Map aDependency = exec.getMapFromItem(aDependencyObject );
+			
 
 			logging.debug(this, " dependency map : " + aDependency);
 
@@ -7426,7 +7426,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (withLicenceManagement) {
 			OpsiMethodCall omc = new OpsiMethodCall("createLicenseContract", new String[] { licenseContractId, partner,
 					conclusionDate, notificationDate, expirationDate, notes });
-			// result = exec.getStringResult ( omc );
+			
 			// the method gives the first letter instead of the complete string as return
 			// value, therefore we set it in a shortcut:
 
@@ -7767,7 +7767,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					new String[] { productId, licensePoolId });
 
 			exec.doCall(omc);
-			// result = exec.getStringResult ( omc );
+			
 
 			
 
@@ -8027,7 +8027,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			if (!onlyAdding) {
 				ArrayList<JSONObject> deleteItems = new ArrayList<>();
-				// ArrayList<String> keysForDeleting = new ArrayList<>();
+				
 				for (String swIdent : oldEntriesTruely) {
 					
 					// ", " + installedSoftwareInformation.get(swIdent) );
@@ -8092,7 +8092,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					new Object[] { createItems.toArray() });
 
 			result = exec.doCall(omc);
-			// result = exec.getStringResult ( omc );
+			
 
 			if (result)
 			// we build the correct data locally
@@ -8276,7 +8276,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 * new String[]{ windowsSoftwareId, licensePoolId });
 	 * 
 	 * exec.doCall ( omc );
-	 * //result = exec.getStringResult ( omc );
+	 * 
 	 * 
 	 * 
 	 * + result);
@@ -8495,9 +8495,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				
 				
 				
-				// (dataStub.getLicences() == null));
 				
-				// (dataStub.getLicences().get(licenceId) == null));
+				
+				
 				count = dataStub.getLicences().get(licenceId).getMaxInstallations();
 
 				pool2allowedUsagesCount.put(pool, count);
@@ -8510,9 +8510,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				
 				
 				
-				// (dataStub.getLicences() == null));
 				
-				// (dataStub.getLicences().get(licenceId) == null));
+				
+				
 
 				ExtendedInteger result = count.add(dataStub.getLicences().get(licenceId).getMaxInstallations());
 
@@ -9879,7 +9879,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		logging.info(this, "checkStandardConfigs, already there " + result);
 
-		if (!result) // (getConfigOptions() == null);
+		if (!result) 
 			return false;
 
 		// callcount++;
@@ -10497,15 +10497,15 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	private void produceOpsiModulesInfo() {
 		produceOpsiInformation();
 
-		// opsiModulesPermissions = new HashMap<>();
+		
 		opsiModules = new HashMap<>(); // has the actual signal if a module is activ
 
-		// opsiModulesInfo = new HashMap<>(); //the part of
+		
 		// opsiinformation which delivers the service information on checked modules
-		// opsiModulesDisplayInfo = new HashMap<>(); //keeps the info for
+		
 		// displaying to the user
 		// opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("realmodules"));
-		// opsiModulesDisplayInfo = new HashMap<>( opsiModulesInfo );
+		
 
 		getHostInfoCollections().retrieveOpsiHosts(); // for checking number of clients and config states
 		logging.info(this, "getOverLimitModuleList() " + LicensingInfoMap
@@ -10615,7 +10615,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		logging.info(this, "produceOpsiModulesInfo withMySQL " + withMySQL);
 		// withMySQL = false; //test
 
-		// withMySQL = isWithMySQL();
+		
 		// sets value to true if we use the mysql backend and informs that we are
 		// underlicensed
 
@@ -11054,7 +11054,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		{
 			logging.info(this, "checkSSHCommandMethod " + method + " exists");
 			return true;
-			// opsiInformation = exec.getMapResult ( omc );
+			
 		}
 		logging.info(this, "checkSSHCommandMethod " + method + " does not exists");
 		return false;

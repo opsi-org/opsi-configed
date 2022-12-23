@@ -30,7 +30,7 @@ public class Autocomplete implements DocumentListener {
 	}
 
 	public void setKeywordsList(List<String> l) {
-		// keywords = new List<String>();
+		
 		this.keywords = l;
 	}
 

@@ -126,8 +126,8 @@ public class JTableSelectionPanel extends JPanel
 			 * }
 			 */
 		};
-		// sorter = new TableSorter( );
-		// table = new JTable(sorter);
+		
+		
 		table.setDragEnabled(true);
 		table.setShowGrid(true);
 		table.setGridColor(Color.white);
@@ -1164,7 +1164,7 @@ public class JTableSelectionPanel extends JPanel
 		
 
 		HashSet<Integer> selectedCols = null;
-		// selectedCols = new HashSet<>();
+		
 
 		if (comboSearch.getSelectedIndex() > 0) {
 			selectedCols = new HashSet<>();

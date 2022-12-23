@@ -325,7 +325,7 @@ public class PanelCompleteWinProducts extends JPanel
 								+ fieldProductKey.getText() + ", " + comboChooseWinProduct.getSelectedItem());
 
 				final Color saveColor = buttonCallExecute.getBackground();
-				// final Icon saveIcon = buttonCallExecute.getIcon();
+				
 				buttonCallExecute.setBackground(Globals.failedBackColor);
 
 				execute();

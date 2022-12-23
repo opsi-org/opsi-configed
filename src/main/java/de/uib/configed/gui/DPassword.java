@@ -321,7 +321,7 @@ public class DPassword extends JDialog // implements Runnable
 	// JRadioButton jRadioButton_ftp = new JRadioButton();
 	JRadioButton jRadioButton_localfs = new JRadioButton();
 
-	// myAuthenticator myAuth = new myAuthenticator();
+	
 	MyKeyListener myKeyListener = new MyKeyListener(this);
 	ButtonGroup buttonGroup1 = new ButtonGroup();
 
@@ -396,7 +396,7 @@ public class DPassword extends JDialog // implements Runnable
 		panel.setBorder(padding);
 
 		// center
-		// Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
 		// this.setLocation((screenSize.width - 450) / 2, 200);
 
 		/*final Rectangle dim = Globals.buildLocationOnDefaultDisplay(getSize().width, getSize().height,
@@ -649,8 +649,8 @@ public class DPassword extends JDialog // implements Runnable
 		 */
 
 		// process = Runtime.getRuntime().exec("cmd.exe /c echo %UNAME%");
-		// br = new BufferedReader( new InputStreamReader(process.getInputStream()));
-		// String uname = br.readLine();
+		
+		
 
 		pack();
 
@@ -730,7 +730,7 @@ public class DPassword extends JDialog // implements Runnable
 		setActivated(false);
 		
 
-		// saveCursor = getCursor();
+		
 		// setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
 		waitCursor = new WaitCursor(this, "ok_action");

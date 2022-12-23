@@ -112,7 +112,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		/*
 		 * logging.info(this, "encode: to encode " + s);
 		 * String result;
-		 * //result = configed.encodeStringFromService(s);
+		 * 
 		 * result = s;
 		 * logging.info(this, "encode: encoded " + result);
 		 * return result;
@@ -122,9 +122,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	protected void buildPanel() {
 		
 
-		// JPanel panelByAuditInfo = new PanelLinedComponents(compis);
+		
 		panelByAuditInfo = new PanelHWByAuditDriver(title, main);
-		// = new JPanel();
+		
 
 		tree = new XTree(null);
 
@@ -435,7 +435,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 							}
 						}
 
-						// cv = encodeString (cv); no encoding needed
+						
 
 						if (unit != null) {
 							cv = addUnit(cv, unit);

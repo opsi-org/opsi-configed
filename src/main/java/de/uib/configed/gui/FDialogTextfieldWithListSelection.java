@@ -205,7 +205,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		
-		// selectedListElement = theList.getSelectedValue();
+		
 	}
 	// ======================
 
@@ -225,7 +225,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		);
 
 		JPanel centerPanel = f.initPanel();
-		// JPanel addPanel = new JPanel();
+		
 		
 
 		

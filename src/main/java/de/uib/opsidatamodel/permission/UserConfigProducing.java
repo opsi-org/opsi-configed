@@ -103,7 +103,7 @@ public class UserConfigProducing {
 
 	private void produceRoleAndUserParts(java.util.Set<String> userNames, java.util.Set<String> roleNames) {
 		logging.info(this, "produceRoleAndUserParts for " + userNames + " resp. " + roleNames);
-		// String generalRoleKey = defaultRolePart();
+		
 		final String roleBranchPart = UserConfig.KEY_USER_ROLE_ROOT;
 		final String startRoleKey = roleBranchPart + ".{";
 
@@ -587,7 +587,7 @@ public class UserConfigProducing {
 			oldPossibleValuesDepot = new TreeSet<>();
 		} else {
 			oldPossibleValuesDepot = new HashSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
-			// oldPossibleValues = new TreeSet<>();
+			
 		}
 
 		logging.info(this, "oldPossibleValuesDepot " + oldPossibleValuesDepot);

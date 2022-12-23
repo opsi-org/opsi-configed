@@ -126,8 +126,8 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public void ensureRowIsVisible(int row) {
-		// int viewrow = table.convertRowIndexToView(row);
-		// int modelrow = table.convertRowIndexToModel(row);
+		
+		
 		table.scrollRectToVisible(table.getCellRect(row, 0, false));
 
 		
@@ -135,7 +135,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public void setCursorRow(int row) {
-		// int viewrow = table.convertRowIndexToView(row);
+		
 		if (table.getRowCount() <= 0) {
 			return;
 		}
@@ -145,7 +145,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		logging.info(this, "setCursorRow row, produced modelrow " + modelrow);
 
 		if (table.getModel() instanceof de.uib.utilities.table.GenTableModel) {
-			// int row = table.convertRowIndexToModel( viewrow );
+			
 			((de.uib.utilities.table.GenTableModel) table.getModel()).setCursorRow(modelrow);
 		}
 

@@ -286,7 +286,7 @@ public class SSHConnectExec extends SSHConnect {
 			logging.error(this, "connection forbidden.");
 			return null;
 		}
-		// command = checkForParameter(command, dialog);
+		
 
 		if (FOUND_ERROR) {
 			logging.warning(this, "exec found error.");

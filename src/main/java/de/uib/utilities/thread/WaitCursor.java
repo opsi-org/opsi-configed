@@ -10,7 +10,7 @@ import de.uib.utilities.swing.ActivityPanel;
 
 public class WaitCursor {
 
-	// static Vector<WaitCursor> instances = new Vector<> ();
+	
 	private static AtomicInteger objectCounting = new AtomicInteger();
 	private static boolean allStopped = false;
 

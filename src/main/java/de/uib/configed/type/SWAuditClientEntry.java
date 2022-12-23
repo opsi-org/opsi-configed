@@ -88,7 +88,7 @@ public class SWAuditClientEntry
 	protected static Map<String, String> locale = new StringIdentityMap(KEYS);
 
 	public static void setLocale() {
-		// locale = new HashMap<>();
+		
 		locale.put(SWAuditEntry.id, "ID");
 		locale.put(SWAuditEntry.NAME, configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
 		locale.put(SWAuditEntry.VERSION, configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
@@ -275,7 +275,7 @@ public class SWAuditClientEntry
 		if (!swIdent.equals(element))
 			logging.warning(this,
 					"getIndex gobal swIdent was assumed to be equal to element " + swIdent + ". " + element);
-		// int result = software.indexOf( swIdent );
+		
 		Integer j = software2Number.get(element);
 		
 		// "getIndex, for swIdent " + swIdent + " differs indexOf " + result + " from

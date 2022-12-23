@@ -59,7 +59,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	private JPanel centerPanel = new JPanel();
 	private JPanel commandlistPanel = new JPanel();
 	private JPanel parameterPanel;
-	// private JPanel parameterHelpPanel = new JPanel();
+	
 	/** command control panel Layout instance **/
 	private GroupLayout controlPanelLayout;
 	/** command - commands control panel Layout instance **/

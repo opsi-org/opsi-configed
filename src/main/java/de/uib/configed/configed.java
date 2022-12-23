@@ -538,7 +538,7 @@ public class configed {
 					i = i + 2;
 				} else if (args[i].equals("--ssh-immediate-connect")) {
 					// de.uib.opsicommand.sshcommand.SSHConnectionInfo
-					// coninfo = de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance();
+					
 
 					
 
@@ -786,7 +786,7 @@ public class configed {
 				out.println("</HTML>");
 
 				// {
-				// Runtime rt = Runtime.getRuntime();
+				
 				// String osName = System.getProperty("os.name");
 				// if (osName.toLowerCase().startsWith("win")) {
 				// Process proc = rt.exec("cmd.exe /c start \"" + messagefile.getPath() + "\"");
@@ -794,7 +794,7 @@ public class configed {
 				// //Linux, we assume that there is a firefox and it will handle the url
 				// {
 				// String[] cmdarray = new String[] { "firefox", messagefile.getPath() };
-				// Process proc = rt.exec(cmdarray);
+				
 
 				// }
 				// }

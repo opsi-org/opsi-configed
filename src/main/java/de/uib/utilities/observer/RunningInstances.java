@@ -31,7 +31,7 @@ import de.uib.utilities.logging.logging;
  */
 
 public class RunningInstances<T> {
-	// private static AtomicInteger objectCounting = new AtomicInteger();
+	
 	// private static boolean allStopped = false;
 
 	private Boolean reallyLeave = null;

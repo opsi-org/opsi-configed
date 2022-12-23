@@ -80,8 +80,8 @@ public class PanelHWByAuditDriver extends JPanel {
 		selectionGroup.add(selectionCOMPUTER_SYSTEN);
 		selectionGroup.add(selectionBASE_BOARD);
 
-		// JPanel panelByAuditInfo = new PanelLinedComponents(compis);
-		// JPanel panelByAuditInfo= new JPanel();
+		
+		
 		GroupLayout layoutByAuditInfo = new GroupLayout(this);
 		this.setLayout(layoutByAuditInfo);
 		int lh = Globals.LINE_HEIGHT - 4;

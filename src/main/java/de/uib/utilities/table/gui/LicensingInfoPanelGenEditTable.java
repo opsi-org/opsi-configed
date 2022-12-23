@@ -12,7 +12,7 @@ public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
 			// if > 0 the popup is added later after installing another popup
 			boolean switchLineColors, int[] popupsWanted, boolean withTablesearchPane) {
 		super(title, maxTableWidth, editing, generalPopupPosition, switchLineColors, popupsWanted, withTablesearchPane);
-		// lInfoMap = LicensingInfoMap.getInstance();
+		
 		// theTable.getTableHeader().setDefaultRenderer(new
 		
 

@@ -53,11 +53,11 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 		
 
 		// int noOfSteps = 100;
-		// long timeStepMillis = (long) (waitingMillis / noOfSteps );
+		
 
 		long timeStepMillis = (long) 500;
 
-		// long noOfSteps = (long) (waitingMillis/ timeStepMillis);
+		
 
 		logging.debug(this, " doInBackground waitingMillis " + waitingSleeper.getWaitingMillis());
 

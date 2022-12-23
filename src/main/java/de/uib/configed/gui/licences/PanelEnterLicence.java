@@ -377,7 +377,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		});
 
 		jTextField_licenceContract = new javax.swing.JTextField();
-		// jLabelContract = new javax.swing.JLabel();
+		
 		jButtonSend = new javax.swing.JButton();
 		jButtonSend.setPreferredSize(Globals.buttonDimension);
 		jLabelLKey = new javax.swing.JLabel();

@@ -126,8 +126,8 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		listeditor.init();
 
 		SwingUtilities.invokeLater(() -> {
-			// Rectangle rect = table.getCellRect(row, column, true);
-			// Point tablePoint = table.getLocationOnScreen();
+			
+			
 
 			listeditor.setVisible(true);
 			listeditor.locateLeftTo(table);
@@ -145,8 +145,8 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 		logging.debug(this, "  celleditor working in " + row + ", " + column + " with value " + value + ", class "
 				+ value.getClass().getName());
-		// this.value = modelProducer.toList(value);
-		// this.value = new ArrayList<>();
+		
+		
 		List val = modelProducer.toList(value);
 
 		if (val instanceof List) // is now always
@@ -265,7 +265,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			 * {
 			 * logging.info(this,
 			 * "getCellEditorValue,  original class instance of List");
-			 * //ArrayList<String> li = new ArrayList<>();
+			 * 
 			 * //li.add("xxx");
 			 * 
 			 * return list;
@@ -275,7 +275,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			if (List.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
 				
 				// List");
-				// ArrayList<String> li = new ArrayList<>();
+				
 				// li.add("xxx");
 				
 				return list;

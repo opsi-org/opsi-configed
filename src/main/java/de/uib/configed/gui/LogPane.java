@@ -319,7 +319,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		title = "";
 		info = "";
 
-		// initialMaxShowLevel = produceInitialMaxShowLevel();
+		
 
 		jTextPanel = new JPanel(new BorderLayout());
 		scrollpane = new JScrollPane();
@@ -452,7 +452,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		sliderListener = new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				// final Cursor startingCursor = sliderLevel.getCursor();
+				
 				// sliderLevel.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 				logging.debug(this, "change event from sliderLevel, " + sliderLevel.getValue());
 				if (sliderLevel.getValueIsAdjusting())
@@ -536,7 +536,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		 * spinnerListener = new ChangeListener(){
 		 * public void stateChanged(ChangeEvent e)
 		 * {
-		 * //final Cursor startingCursor = spinnerLevel.getCursor();
+		 * 
 		 * //spinnerLevel.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		 * logging.debug(this, "change event from spinnerLevel, " +
 		 * spinnerLevel.getValue());
@@ -812,7 +812,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	private void activateShowLevel() {
-		// Object level = comboLevel.getSelectedItem();
+		
 		Integer level = sliderLevel.getValue();
 		if (level > maxExistingLevel) {
 			level = maxExistingLevel;
@@ -961,7 +961,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 			contentStart++;
 
-			// contentEnd = s.indexOf(endC, contentStart);
+			
 
 			contentEnd = findContentEnd();
 

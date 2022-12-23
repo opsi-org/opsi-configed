@@ -130,7 +130,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 			public void componentResized(ComponentEvent e) {
 				logging.info(this, "SSHConnectionTerminalDialog  resized");
 				super.componentResized(e);
-				// Point loc = getLocationOnScreen();
+				
 				// loc.setLocation(loc.getX(), loc.getY() - 1);
 				
 				// the ugly effect of wandering

@@ -506,15 +506,15 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 				logging.info(this, "actionPerformed on buttonUploadDrivers from " + fieldDriverPath.getText() + " to "
 						+ fieldServerPath.getText());
 				final Color saveColor = buttonUploadDrivers.getBackground();
-				// final Icon saveIcon = buttonUploadDrivers.getIcon();
+				
 				buttonUploadDrivers.setBackground(Globals.failedBackColor);
 				execute();
 				buttonUploadDrivers.setBackground(saveColor);
 			}
 		});
 
-		// JPanel panelByAuditInfo = new PanelLinedComponents(compis);
-		// JPanel panelByAuditInfo= new JPanel();
+		
+		
 
 		GroupLayout layoutByAuditInfo = new GroupLayout(this);
 		this.setLayout(layoutByAuditInfo);

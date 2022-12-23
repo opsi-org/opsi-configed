@@ -517,7 +517,7 @@ public class LicensingInfoMap {
 				// new: iterate over all known modules and fill empty ones with 0
 				// also warning state should be none
 				for (String currentModule : shownModules) {
-					// JSONObject moduleInfo = (JSONObject) moduleToDate.get(currentModule);
+					
 
 					JSONObject moduleInfo;
 					boolean available = availableModules.contains(currentModule);
@@ -609,7 +609,7 @@ public class LicensingInfoMap {
 
 			for (String currentModule : shownModules) {
 				Map<String, Object> line = new HashMap<>();
-				// String currentModule = availableModules.get(i).toString();
+				
 
 				// 1st column
 				line.put(configed.getResourceValue("LicensingInfo.modules"), currentModule);
@@ -707,7 +707,7 @@ public class LicensingInfoMap {
 			LocalDate now = LocalDate.now();
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 			// dateNow = sdf.parse("2023-05-01");
-			// Date nextChange = sdf.parse(findNextChangeDate());
+			
 			Date date = sdf.parse(d);
 
 			long diffInMillies = Math.abs(date.getTime() - dateNow.getTime());

@@ -102,7 +102,7 @@ public class SWAuditEntry extends TableEntry
 	protected static Map<String, String> locale = new StringIdentityMap(KEYS);
 
 	public static void setLocale() {
-		// locale = new HashMap<>();
+		
 		locale.put(id, "ID");
 		locale.put(NAME, configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
 		locale.put(VERSION, configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));

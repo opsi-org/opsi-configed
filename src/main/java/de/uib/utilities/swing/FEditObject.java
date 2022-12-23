@@ -143,8 +143,8 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		editingArea.addKeyListener(this);
 
-		// okbutton = new javax.swing.JButton();
-		// cancelbutton = new javax.swing.JButton();
+		
+		
 		// okbutton.setText("ok");
 		// cancelbutton.setText("cancel");
 
@@ -162,9 +162,9 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		extraField.getDocument().addDocumentListener(this);
 
-		// scrollpane = new javax.swing.JScrollPane();
+		
 
-		// textarea = new javax.swing.JTextArea();
+		
 
 		// textarea.setColumns(20);
 		// textarea.setRows(5);

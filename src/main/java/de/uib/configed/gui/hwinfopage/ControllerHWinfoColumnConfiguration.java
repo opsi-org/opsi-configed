@@ -281,8 +281,8 @@ public class ControllerHWinfoColumnConfiguration {
 		
 		// we got metadata:
 
-		// columnNames = model.getColumnNames();
-		// classNames = model.getClassNames();
+		
+		
 
 		
 		

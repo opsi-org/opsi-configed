@@ -34,7 +34,7 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 			return;
 		}
 
-		// selectionInfo = new HashMap<>();
+		
 		selectionInfo = new HashMap<>();
 
 		for (int i : modelRowNoFilter) {

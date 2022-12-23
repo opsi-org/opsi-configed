@@ -320,7 +320,7 @@ public class PanelSWInfo extends JPanel {
 		labelSuperTitle.setOpaque(true);
 		labelSuperTitle.setBackground(Globals.backgroundLightGrey);
 
-		// voidTableModel = new SWInfoTableModel();
+		
 
 		/*
 		 * logging.info(this, "voidTableModel cols hopefully   " +
@@ -491,7 +491,7 @@ public class PanelSWInfo extends JPanel {
 
 		de.uib.configed.gui.swinfopage.SWterminalExporter exporter = new de.uib.configed.gui.swinfopage.SWterminalExporter(
 				PersistenceControllerFactory.getPersistenceController());
-		// exporter.persist = PersistenceControllerFactory.getPersistenceController();
+		
 		
 		exporter.setHost(hostId);
 
@@ -548,7 +548,7 @@ public class PanelSWInfo extends JPanel {
 		/*
 		 * old pdf exporting
 		 * 
-		 * // DocumentToPdf tableToPDF = new DocumentToPdf(clientName, metaData); // no
+		 * 
 		 * filename, metadata
 		 * //the real filename is summoned in the toPDF method call
 		 * DocumentToPdf tableToPDF = new DocumentToPdf ("report_swaudit_" + clientName,
@@ -560,7 +560,7 @@ public class PanelSWInfo extends JPanel {
 		 * de.uib.utilities.pdf.DocumentElementToPdf.setAlignmentLeft(list);
 		 * 
 		 * 
-		 * //GenTableModel sourceModel = panelTable.getTableModel();
+		 * 
 		 * //sourceModel.setSorting(0, true);
 		 * 
 		 * //tableToPDF.createContentElement("tablemodel", sourceModel); //we use the
@@ -716,7 +716,7 @@ public class PanelSWInfo extends JPanel {
 
 		public void setData(DatedRowList datedList) {
 			this.data = datedList.getRows();
-			// dateS = datedList.getDate();
+			
 
 			fireTableDataChanged();
 		}

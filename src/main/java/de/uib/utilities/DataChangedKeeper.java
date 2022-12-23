@@ -25,7 +25,7 @@ public class DataChangedKeeper implements DataChangedObserver {
 	};
 
 	public DataChangedKeeper() {
-		// actUpon = new TellWhat();
+		
 
 	}
 

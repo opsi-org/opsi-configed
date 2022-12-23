@@ -270,7 +270,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		tableProducts.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		standardListCellRenderer = new StandardListCellRenderer();
-		// productTableCellRenderer = new ProductTableCellRendererDefault();
+		
 
 		productNameTableCellRenderer = new StandardTableCellRenderer("") {
 			@Override
@@ -816,7 +816,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	protected void reloadAction() {
 		// List<? extends RowSorter.SortKey> currentSortKeys
-		// = tableProducts.getRowSorter().getSortKeys();
+		
 		mainController.requestReloadStatesAndActions();
 		mainController.resetView(mainController.getViewIndex());
 		mainController.setDataChanged(false);
