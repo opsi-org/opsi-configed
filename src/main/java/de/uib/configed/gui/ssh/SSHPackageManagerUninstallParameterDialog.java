@@ -11,7 +11,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,7 +25,6 @@ import de.uib.configed.gui.FDepotselectionList;
 import de.uib.configed.gui.FShowList;
 import de.uib.configed.gui.IconAsButton;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall;
-import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
@@ -434,7 +432,7 @@ public class SSHPackageManagerUninstallParameterDialog
 				try {
 					logging.info(this, "start exec thread ");
 
-					SSHConnectExec ssh = new SSHConnectExec((SSHCommand) commandPMUninstall);
+					new SSHConnectExec(commandPMUninstall);
 					// ssh.exec((SSHCommand) commandPMUninstall);
 					// cb_opsiproducts.removeItem( prod );
 					execFinished = true;
@@ -499,8 +497,7 @@ public class SSHPackageManagerUninstallParameterDialog
 		int pref = GroupLayout.PREFERRED_SIZE;
 		int max = Short.MAX_VALUE;
 		GroupLayout.Alignment leading = GroupLayout.Alignment.LEADING;
-		JLabel empty_lbl = new JLabel();
-		GroupLayout uninstallPanelLayout = new GroupLayout((JComponent) uninstallPanel);
+		GroupLayout uninstallPanelLayout = new GroupLayout(uninstallPanel);
 		uninstallPanel.setLayout(uninstallPanelLayout);
 		uninstallPanelLayout.setHorizontalGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addComponent(lbl_uninstall, pref, pref, max).addGap(Globals.GAP_SIZE * 2)

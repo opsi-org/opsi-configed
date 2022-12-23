@@ -1,7 +1,6 @@
 package de.uib.opsidatamodel.productstate;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
@@ -200,20 +199,4 @@ public class TargetConfiguration {
 		else
 			state = INVALID;
 	}
-
-	public static void main(String[] args) {
-		// logging.debug(" test TargetConfiguration.java");
-		checkCollections();
-		Iterator iter = states.iterator();
-
-		int i = 0;
-
-		while (iter.hasNext()) {
-			i++;
-			int state = (Integer) iter.next();
-			// logging.debug("state " + i + " : " + state + " label " +
-			// getLabel(state));
-		}
-	}
-
 }

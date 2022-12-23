@@ -255,11 +255,10 @@ public class SSHConnectTerminal extends SSHConnect {
 	}
 
 	private void initKillProcessButtonFromDialog() {
-		final SSHConnectionTerminalDialog fdia = dialog;
 		logging.info(this, "initKillProcessButtonFromDialog ");
 		initListeners();
-		((SSHConnectionTerminalDialog) this.dialog).btn_killProcess.removeActionListener(connectionKeyListener);
-		((SSHConnectionTerminalDialog) this.dialog).btn_killProcess.addActionListener(connectionKeyListener);
+		this.dialog.btn_killProcess.removeActionListener(connectionKeyListener);
+		this.dialog.btn_killProcess.addActionListener(connectionKeyListener);
 	}
 
 	public void initInputFieldFromDialog() {

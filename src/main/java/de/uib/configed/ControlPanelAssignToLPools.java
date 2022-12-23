@@ -335,7 +335,6 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		// thePanel.panelLicencepools.getValueAt(thePanel.panelLicencepools.getSelectedRow(),
 		// 0).toString();
 
-		List softwareIdsForPool = persist.getSoftwareListByLicencePool(selectedLicencePool);
 		// logging.debug(this, "software ids " + softwareIdsForPool);
 
 		List<String> selKeys = thePanel.panelRegisteredSoftware.getSelectedKeys();

@@ -25,7 +25,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandDeployClientAgent;
-import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.utilities.logging.logging;
@@ -426,7 +425,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		commandDeployClientAgent.finish(finalAction);
 		try {
-			SSHConnectExec ssh = new SSHConnectExec((SSHCommand) commandDeployClientAgent);
+			new SSHConnectExec(commandDeployClientAgent);
 		} catch (Exception e) {
 			logging.warning(this, "doAction1, exception occurred", e);
 		}

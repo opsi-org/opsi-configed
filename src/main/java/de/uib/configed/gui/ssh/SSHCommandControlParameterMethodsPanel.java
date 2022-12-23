@@ -75,8 +75,6 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	/** Init components **/
 	private void init() {
 		logging.debug(this, "init setting up components ");
-		Dimension tf_dim = new Dimension(Globals.FIRST_LABEL_WIDTH - Globals.GRAPHIC_BUTTON_WIDTH,
-				Globals.BUTTON_HEIGHT);
 		Dimension tf_dim_long = new Dimension(Globals.FIRST_LABEL_WIDTH + Globals.GAP_SIZE, Globals.BUTTON_HEIGHT);
 		Dimension btn_dim = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT);
 
@@ -235,7 +233,6 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	}
 
 	public void doActionParamAdd(JTextComponent component) {
-		String text = (String) component.getText();
 		String paramText = "";
 		if (((String) cb_parameter_methods.getSelectedItem())
 				.equals(factory.getParameterHandler().method_interactiveElement)

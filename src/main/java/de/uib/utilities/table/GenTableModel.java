@@ -1118,9 +1118,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 				// logging.debug(this, "getPrimarykeyTranslation() getPrimarykey2Rowmap() " +
 				// getPrimarykey2Rowmap());
 
-				String repr =
-
-						primarykeyTranslation.put(key, keyRepresenter.represents(key, getPrimarykey2Rowmap().get(key)));
+				primarykeyTranslation.put(key, keyRepresenter.represents(key, getPrimarykey2Rowmap().get(key)));
 			} catch (Exception ex) {
 				logging.info(this, "getPrimarykeyTranslation()  " + getValueAt(i, keyCol) + " " + ex);
 			}

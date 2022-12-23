@@ -777,7 +777,6 @@ public class LicensingInfoMap {
 					Integer clientNum = Integer.parseInt(cNum);
 
 					Integer diff = futureNum - clientNum;
-					Long daysLeft = getDaysLeftUntil(findNextChangeDate());
 
 					if (diff < 0)
 						return STATE_OVER_LIMIT;

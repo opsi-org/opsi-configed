@@ -2461,7 +2461,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		buttonGroupRequired.add(jRadioRequiredOff);
 
 		jComboBoxProductValues.setBackground(Globals.backBlue);
-		jComboBoxProductValues.addActionListener(this::jComboBoxProductValues_actionPerformed);
 
 		treeClients.setFont(Globals.defaultFont);
 		// treeClients.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
@@ -3697,31 +3696,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	// ----------------------------------------------------------------------------------------
-
-	void jComboBoxProductValues_actionPerformed(ActionEvent e) {
-		if (!settingSchalter) {
-			String currentkey, newvalue;
-			/*
-			 * if (jListProducts.getSelectedValue() != null)
-			 * {
-			 * currentkey = jListProducts.getSelectedValue().toString();
-			 * currentkey =
-			 * currentkey.copyValueOf(currentkey.toCharArray(),0,currentkey.indexOf("="));
-			 * newvalue = jComboBoxProductValues.getSelectedItem().toString();
-			 * logging.debugOut(this, logging.LEVEL_NONE,
-			 * "jComboBoxProductValues_actionPerformed: set "+currentkey+"="+newvalue);
-			 * //dm.setPcProfileValueWithRequired
-			 * (currentkey,newvalue,jRadioRequiredAll.isSelected());
-			 * //PersistenceController.getPersistenceController().
-			 * setPcProductSwitchWithRequired (currentkey, newvalue,
-			 * jRadioRequiredAll.isSelected());
-			 * checkErrorList();
-			 * dm.setDirty(true);
-			 * refreshProductlist();
-			 * }
-			 */
-		}
-	}
 
 	void jButtonSaveList_actionPerformed(ActionEvent e) {
 		main.checkSaveAll(false);

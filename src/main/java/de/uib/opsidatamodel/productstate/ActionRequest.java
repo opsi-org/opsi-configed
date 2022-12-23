@@ -3,13 +3,11 @@ package de.uib.opsidatamodel.productstate;
 //import de.uib.utilities.logging.*;
 import java.awt.Color;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Vector;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
 
 public class ActionRequest {
 	public static final String KEY = "actionRequest";
@@ -328,21 +326,6 @@ public class ActionRequest {
 			state = t;
 		else
 			state = NOT_AVAILABLE;
-	}
-
-	public static void main(String[] args) {
-		logging.debug(" test ActionRequest.java");
-		checkCollections();
-		Iterator iter = states.iterator();
-
-		int i = 0;
-
-		while (iter.hasNext()) {
-			i++;
-			int state = (Integer) iter.next();
-			// logging.debug("state " + i + " : " + state + " label " +
-			// getLabel(state));
-		}
 	}
 
 }

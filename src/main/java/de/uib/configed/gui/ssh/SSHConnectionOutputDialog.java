@@ -208,7 +208,6 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			Style readonlyStyle = doc.addStyle("readonlyStyle", defaultStyle);
 
 			StyleConstants.setBackground(readonlyStyle, Color.GREEN);// Kein grün :(
-			Style style = doc.addStyle("StyleName", null);
 
 			// StyleConstants.setBackground(style, Color.blue);
 			StyleConstants.setForeground(readonlyStyle, Color.RED); // Was ist rot?

@@ -1,7 +1,6 @@
 package de.uib.opsidatamodel.productstate;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
@@ -183,20 +182,4 @@ public class ActionProgress {
 		else
 			state = NOT_AVAILABLE;
 	}
-
-	public static void main(String[] args) {
-		System.out.println(" test ActionProgress.java");
-		checkCollections();
-		Iterator iter = states.iterator();
-
-		int i = 0;
-
-		while (iter.hasNext()) {
-			i++;
-			int state = (Integer) iter.next();
-			// System.out.println("state " + i + " : " + state + " label " +
-			// getLabel(state));
-		}
-	}
-
 }

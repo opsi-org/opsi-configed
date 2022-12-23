@@ -549,7 +549,6 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			factory.retrieveSSHCommandListRequestRefresh();
 		}
 
-		List<SSHCommand_Template> commands = factory.retrieveSSHCommandList();
 		List<String> commandMenus = factory.getSSHCommandMenuNames();
 		List<String> commandParents = factory.getSSHCommandMenuParents();
 		for (String menu : commandMenus)

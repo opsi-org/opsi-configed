@@ -294,26 +294,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			// logging.debug(this, "remove leafname, invertedSimpleClientPaths.get(leafname)
 			// " + invertedSimpleClientPaths.get(leafname));
 			if (invertedSimpleClientPaths.get(leafname) != null) {
-				SimpleTreePath clientSimpleTreePath = new SimpleTreePath(clientPath.getPath());
 				invertedSimpleClientPaths.get(leafname).remove(new SimpleTreePath(clientPath.getPath()));
-				// logging.debug(this, "remove leafname, invertedSimpleClientPaths.get(leafname)
-				// " + invertedSimpleClientPaths.get(leafname));
-
-				/*
-				 * ArrayList<SimpleTreePath> pathes = invertedSimpleClientPaths.get(leafname);
-				 * logging.debug(this,
-				 * "remove leafname, invertedSimpleClientPaths.get(leafname) " +
-				 * invertedSimpleClientPaths.get(leafname));
-				 * for (SimpleTreePath path : pathes)
-				 * {
-				 * if ( path.equals( clientSimpleTreePath) )
-				 * logging.debug(this, "remove leafname equals " + path + " " +
-				 * clientSimpleTreePath);
-				 * else
-				 * logging.debug(this, "remove leafname not equals " + path + " " +
-				 * clientSimpleTreePath);
-				 * }
-				 */
 			}
 		}
 	}

@@ -21,7 +21,6 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandOpsiSetRights;
 import de.uib.opsicommand.sshcommand.CommandOpsimakeproductfile;
 import de.uib.opsicommand.sshcommand.Empty_Command;
-import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommand_Template;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
@@ -470,7 +469,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		Empty_Command setRights = new Empty_Command("set-rights", "opsi-set-rights " + dir, "set-rights", true);
 		SSHConnectExec ssh = new SSHConnectExec();
 		SSHConnectionExecDialog.getInstance().setVisible(true);
-		String result = ssh.exec(setRights);
+		ssh.exec(setRights);
 	}
 
 	public void cancel() {
@@ -485,7 +484,6 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			return;
 		}
 		SSHCommand_Template str2exec = new SSHCommand_Template();
-		boolean sequential = true;
 		String dir = cb_mainDir.getEditor().getItem().toString();
 
 		String prodVersion = tf_productVersion.getText();
@@ -535,13 +533,13 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		if (cb_setRights.isSelected()) {
 			str2exec.addCommand(new CommandOpsiSetRights(dir));
 		}
-		str2exec.addCommand((SSHCommand) makeProductFile);
+		str2exec.addCommand(makeProductFile);
 		// SSHConnectExec ssh = new SSHConnectExec(str2exec);
 		logging.info(this, "SSHConnectExec " + str2exec);
 		new Thread() {
 			@Override
 			public void run() {
-				SSHConnectExec ssh = new SSHConnectExec(str2exec);
+				new SSHConnectExec(str2exec);
 			}
 		}.start();
 	}

@@ -85,8 +85,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 		DefaultMutableTreeNode dropOnThis = (DefaultMutableTreeNode) dropLocation.getPath().getLastPathComponent();
 		String id = dropOnThis.getUserObject().toString();
-		GroupNode targetNode = (GroupNode) tree.getGroupNode(id);
-		TreePath dropPath = tree.getActiveTreePath(id);
+		GroupNode targetNode = tree.getGroupNode(id);
 		Object[] dropObjectPath = new Object[0];
 		if (targetNode != null)
 			dropObjectPath = targetNode.getUserObjectPath();
@@ -334,8 +333,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		logging.debug(this, "dropPath " + dropPath);
 
 		// what is to be moved/copied
-		Transferable transferable = support.getTransferable();
-		String transferData = null;
 
 		/*
 		 * instead of the following code which retrieves the data from the clipboard
@@ -404,8 +401,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 			String importID = null;
 			String sourceParentID = null;
-			String sourceParentID_in_tree = null;
-			TreePath oldPath = null;
 			try {
 				// if values not got from transferable, the following reduces
 				// to setting importId = value;

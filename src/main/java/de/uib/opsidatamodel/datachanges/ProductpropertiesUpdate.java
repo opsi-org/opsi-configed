@@ -33,7 +33,6 @@ public class ProductpropertiesUpdate implements UpdateCommand {
 		// if (newdata != null) logging.debug(this, "doCall, setting " + newdata + ",
 		// class " + newdata.getClass());
 		if (newdata instanceof de.uib.configed.type.ConfigName2ConfigValue) {
-			de.uib.configed.type.ConfigName2ConfigValue configState = (de.uib.configed.type.ConfigName2ConfigValue) newdata;
 			// logging.info(this, "doCall, set " + newdata + " , we retrieved: " +
 			// configState.getRetrieved());
 

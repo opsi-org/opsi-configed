@@ -1306,7 +1306,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	protected void setCellRenderers() {
 		for (int i = 0; i < tableModel.getColumnCount(); i++) {
-			Class cl = tableModel.getColumnClass(i);
 			String name = tableModel.getColumnName(i);
 			TableColumn col = theTable.getColumn(name);
 			String classname = tableModel.getClassNames().get(i);

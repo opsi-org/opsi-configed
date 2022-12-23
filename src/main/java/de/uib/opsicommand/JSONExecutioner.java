@@ -505,8 +505,6 @@ public abstract class JSONExecutioner extends Executioner {
 	public String getStringResult(OpsiMethodCall omc) {
 		String result = null;
 
-		JSONObject jsonResult = null;
-
 		JSONObject jO = retrieveJSONObject(omc);
 
 		if (checkResponse(jO)) {
@@ -525,8 +523,6 @@ public abstract class JSONExecutioner extends Executioner {
 	public boolean getBooleanResult(OpsiMethodCall omc) {
 		// logging.info(this, "getBooleanResult " + omc);
 		Boolean result = null;
-
-		JSONObject jsonResult = null;
 
 		JSONObject jO = retrieveJSONObject(omc);
 

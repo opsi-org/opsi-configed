@@ -335,7 +335,6 @@ public class DataStubNOM extends DataStub {
 				productRow.add(p.getProductId());
 
 				String productName = null;
-				String productLockedInfo = "";
 
 				try {
 					productName = product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo())
@@ -828,7 +827,6 @@ public class DataStubNOM extends DataStub {
 			name2ident2infoWithPool = new TreeMap<>();
 
 			int i = 0;
-			String testKey = "zypper";
 			logging.info(this, "getInstalledSoftwareInformation build map");
 			// ArrayList<String> foundEntries = new ArrayList<>();
 

@@ -23,20 +23,11 @@ public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
 		// logging.info(this, "setCellRenderers");
 		LicensingInfoMap lInfoMap = LicensingInfoMap.getInstance();
 		for (int i = 0; i < tableModel.getColumnCount(); i++) {
-			Class cl = tableModel.getColumnClass(i);
 			String name = tableModel.getColumnName(i);
 			TableColumn col = theTable.getColumn(name);
-			String classname = tableModel.getClassNames().get(i);
 
 			col.setCellRenderer(new LicensingInfoTableCellRenderer(lInfoMap));
-
 		}
-	}
-
-	@Override
-	public void reload() {
-		// logging.info(this, "LicensingInfoPanel reload here ");
-		super.reload();
 	}
 
 	public void setMarkBoldHeaderCellRenderer() {

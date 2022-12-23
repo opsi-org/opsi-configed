@@ -296,8 +296,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		JLabel windowsNum = new JLabel(clientNumbers.get(LicensingInfoMap.WINDOWS).toString());
 		JLabel checksumTitle = new JLabel(configed.getResourceValue("LicensingInfo.client.checksum"));
 		JLabel checksum = new JLabel(licenseMap.getCheckSum());
-		JLabel checksumInfo = new JLabel(
-				"<html>" + configed.getResourceValue("LicensingInfo.client.checksum.info") + "</html>");
 
 		JLabel customerTitle = new JLabel(configed.getResourceValue("LicensingInfo.customer.data"));
 		Set customerSet = licenseMap.getCustomerNamesSet();

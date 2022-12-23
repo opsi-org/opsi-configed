@@ -141,7 +141,6 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 	public Object getValueAt(int row, int col) {
 		// logging.info(this, "getValueAt " + row + ", " + col);
 		String myKey = (String) keyArray[row / noOfRowTypes];
-		String col0Value = null;
 
 		// logging.info(this, "getValueAt myKey " + myKey );
 
@@ -152,8 +151,6 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 		Object result = null;
 		String indent = "     ";
 		String impossible = null;
-
-		MyWarningColorizer warningColorizer = new MyWarningColorizer();
 
 		if (col == 0) {
 			switch (rowTypeIndex) {

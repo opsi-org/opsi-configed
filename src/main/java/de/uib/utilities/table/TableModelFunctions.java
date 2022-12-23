@@ -12,7 +12,7 @@ import java.util.List;
 
 import de.uib.utilities.Mapping;
 
-public interface TableModelFunctions<K> {
+public interface TableModelFunctions {
 	public class PairOfInt {
 		public final int col1;
 		public final int col2;

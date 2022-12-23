@@ -25,8 +25,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.IOException;
-import java.io.Reader;
 
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
@@ -40,8 +38,6 @@ import javax.swing.text.JTextComponent;
 import javax.swing.text.LayeredHighlighter;
 import javax.swing.text.Position;
 import javax.swing.text.View;
-import javax.swing.text.html.HTMLEditorKit;
-import javax.swing.text.html.parser.ParserDelegator;
 
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
@@ -314,19 +310,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	@Override
 	public void setDataChanged(boolean b) {
-		String currentText = null;
-		try {
-			currentText = textpane.getDocument().getText(0, textpane.getDocument().getLength());
-			// logging.info(this, "editingStarted " + editingStarted + " current text " +
-			// currentText);
-		} catch (Exception ex) {
-			logging.info(this, " setDataChanged " + b + " " + ex);
-		}
-
-		// logging.info(this, "FEditPane setDataChanged " + b);
-
-		// logging.debug(this, "initialText " + initialText);
-		// logging.debug(this, "currentText " + currentText );
 
 		super.setDataChanged(b);
 		searchAndHighlight();
@@ -387,32 +370,8 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			textpane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
-	protected static class Html2Text extends HTMLEditorKit.ParserCallback {
-		StringBuffer s;
-
-		public Html2Text() {
-		}
-
-		public void parse(Reader in) throws IOException {
-			s = new StringBuffer();
-			ParserDelegator delegator = new ParserDelegator();
-			// the third parameter is TRUE to ignore charset directive
-			delegator.parse(in, this, Boolean.TRUE);
-		}
-
-		@Override
-		public void handleText(char[] text, int pos) {
-			s.append(text);
-		}
-
-		public String getText() {
-			return s.toString();
-		}
-	}
-
 	public static void main(String[] args) {
 		logging.debug(" invoking " + FEditPane.class);
-		final Html2Text html2t = new Html2Text();
 
 		SwingUtilities.invokeLater(() -> {
 			logging.setSuppressConsole(false);
@@ -457,9 +416,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		// next occurrence. Highlights are added for all
 		// occurrences found.
 		public int searchLinks() {
-			// logging.info(this, "searchLinks");
-			int firstOffset = -1;
-			int returnOffset = 0;
 			Highlighter highlighter = comp.getHighlighter();
 
 			// Remove any existing highlights for last word

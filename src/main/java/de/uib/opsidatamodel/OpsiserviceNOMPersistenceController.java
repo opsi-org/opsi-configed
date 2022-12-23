@@ -1819,10 +1819,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		List<Map<java.lang.String, java.lang.Object>> opsiHosts = exec
 				.getListOfMaps(new OpsiMethodCall("host_getObjects", new Object[] { callAttributes, callFilter }));
 		timer.stop();
-		for (Map<java.lang.String, java.lang.Object> entry : opsiHosts) {
 
-			// Host.serviceKeyMapping
-		}
 		// System.exit(0);
 
 		return opsiHosts;
@@ -2747,8 +2744,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		for (String depot : hostSeparationByDepot.keySet()) {
 			logging.info(this, "from depot " + depot + " we have hosts " + hostSeparationByDepot.get(depot));
 
-			String hostkey = (String) getHostInfoCollections().getDepots().get(depot).get(HostInfo.hostKeyKEY);
-
 			// logging.info(this, "from depot " + depot + " key " + hostkey + " \n "
 			// + getHostInfoCollections().getMapOfAllPCInfoMaps().get(depot)
 			// );
@@ -3019,10 +3014,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		}
 
 		// logging.info(this, "updateHost map pre " + hostUpdateMap);
-
-		String sValue = "";
-		if (value != null)
-			sValue = value;
 
 		hostUpdateMap.put("ident", hostId);
 		hostUpdateMap.put(HostInfo.hostTypeKEY, "OpsiClient");
@@ -4031,34 +4022,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					}
 				}
 			}
-
-			for (String col : client2HwRowsColumnNames) {
-				logging.info(this, "retrieveClient2HwRowsColumnNames col " + col);
-			}
-
-			/*
-			 * test
-			 * client2HwRowsColumnNames.add("HARDWARE_DEVICE_BIOS.vendor");
-			 * client2HwRowsColumnNames.add("HARDWARE_CONFIG_BIOS.version");
-			 * client2HwRowsColumnNames.add("HARDWARE_CONFIG_DISK_PARTITION.size");
-			 * client2HwRowsColumnNames.add("HARDWARE_DEVICE_DISK_PARTITION.name");
-			 * client2HwRowsColumnNames.add("HARDWARE_DEVICE_DISK_PARTITION.description");
-			 * client2HwRowsColumnNames.add("HARDWARE_DEVICE_PROCESSOR.vendor");
-			 * client2HwRowsColumnNames.add("HARDWARE_DEVICE_PROCESSOR.model");
-			 * client2HwRowsColumnNames.add("HARDWARE_DEVICE_PROCESSOR.description");
-			 * client2HwRowsColumnNames.add("HARDWARE_CONFIG_PROCESSOR.serialNumber");
-			 * client2HwRowsColumnNames.add("HARDWARE_DEVICE_COMPUTER_SYSTEM.vendor");
-			 * client2HwRowsColumnNames.add("HARDWARE_CONFIG_COMPUTER_SYSTEM.serialNumber");
-			 */
-
 			client2HwRowsJavaclassNames = new Vector<>();
-			for (String col : client2HwRowsColumnNames) {
-				client2HwRowsJavaclassNames.add("java.lang.String");
-			}
-
 			Set<String> hwInfoClasses = new TreeSet<>();
 
 			for (String columnName : client2HwRowsColumnNames) {
+				logging.info(this, "retrieveClient2HwRowsColumnNames col " + columnName);
+				client2HwRowsJavaclassNames.add("java.lang.String");
 				String className = cutClassName(columnName);
 				if (className != null)
 					hwInfoClasses.add(className);
@@ -4976,31 +4945,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result && updateProductOnClients(updateCollection);
 	}
 
-	public boolean freeAllPossibleLicences(String[] selectedClients)
-	// hopefully we get only updateItems for allowed clients
-	{
-		if (!serverFullPermission)
-			return false;
-
-		boolean result = true;
-
-		// get bound licenses;
-		// get all licenses
-
-		for (int i = 0; i < selectedClients.length; i++) {
-			Map<String, Object> licenceOnClientItem = createNOMitem("LicenseOnClient");
-			// productOnClientItem.put("productType",
-			// OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
-			// productOnClientItem.put("clientId", selectedClients[i]);
-			// productOnClientItem.put("productId", product);
-
-			// deleteProductItems.add(exec.jsonMap(productOnClientItem));
-
-		}
-
-		return result;
-	}
-
 	public boolean resetLocalbootProducts(String[] selectedClients, boolean withDependencies)
 	// hopefully we get only updateItems for allowed clients
 	{
@@ -5319,7 +5263,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		boolean starting = true;
 
 		for (Map<String, Object> map : properties) {
-			Object client = map.get("objectId");
 			Object retrievedValues = ((org.json.JSONArray) map.get("values")).toList();
 
 			// logging.debug(this, "getCommonProductPropertyValues client :: value "
@@ -6561,7 +6504,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	protected boolean setHostBooleanConfigValue(String configId, String hostName, boolean val) {
-		boolean result = false;
 
 		logging.info(this, "setHostBooleanConfigValue " + hostName + " configId " + configId + " val " + val);
 
@@ -6579,9 +6521,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		OpsiMethodCall omc = new OpsiMethodCall("configState_updateObjects",
 				new Object[] { exec.jsonArray(jsonObjects) });
 
-		result = exec.doCall(omc);
-
-		return result;
+		return exec.doCall(omc);
 	}
 
 	// @Override
@@ -7364,24 +7304,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	public Map<String, SWAuditEntry> getInstalledSoftwareInformationForLicensing() {
-		// logging.info(this, "getInstalledSoftwareInformation");
-
-		// logging.info(this, "software name groups ========== ");
-
-		// TreeMap<String, Set<String>> name2SWIdents = dataStub.getName2SWIdents();
-
-		// for (String name : name2SWIdents.keySet() )
-		// {
-		/*
-		 * if (name2SWIdents.get( name ).size() > 1)
-		 * {
-		 * logging.info(this, "having name " + name);
-		 * logging.info(this, " ----   " + name2SWIdents.get(name) );
-		 * }
-		 */
-		// }
-
-		Map<String, SWAuditEntry> result = dataStub.getInstalledSoftwareInformationForLicensing();
 
 		return dataStub.getInstalledSoftwareInformationForLicensing();
 	}
@@ -8586,8 +8508,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Map<String, Set<String>> pool2opsiUsages = new TreeMap<>();
 
 		for (LicenceUsageEntry licenceUsage : licenceUsages) {
-			String lic4pool = licenceUsage.getLic4pool();
-			// logging.info(this, " pool with usage " + lic4pool);
 
 			String pool = licenceUsage.getLicencepool();
 			Integer usageCount = pool2opsiUsagesCount.get(pool);
@@ -9669,11 +9589,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				"produceHost_displayFields configOptions.get(key) " + configOptions.get(KEY_HOST_DISPLAYFIELDS));
 
 		List givenPossibleValues = null;
-		List givenDefaultValues = null;
 
 		if (configOptions.get(KEY_HOST_DISPLAYFIELDS) != null) {
 			givenPossibleValues = configOptions.get(KEY_HOST_DISPLAYFIELDS).getPossibleValues();
-			givenDefaultValues = configOptions.get(KEY_HOST_DISPLAYFIELDS).getDefaultValues();
 		}
 
 		List<String> possibleValues = new ArrayList<>();
@@ -10563,7 +10481,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		// opsiModulesDisplayInfo = new HashMap<>( opsiModulesInfo );
 
 		getHostInfoCollections().retrieveOpsiHosts(); // for checking number of clients and config states
-		int countClients = hostInfoCollections.getCountClients();
 		logging.info(this, "getOverLimitModuleList() " + LicensingInfoMap
 				.getInstance(getOpsiLicensingInfo(), getConfigDefaultValues(), true).getCurrentOverLimitModuleList());
 
@@ -10756,7 +10673,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				modulePermission = new ModulePermissionValue(exec, opsiCountModules.get(key), validUntil);
 				// the default validUntil is historically assumed if nothing is specified);
 				logging.info(this, "handle modules key " + key + " permission set " + modulePermission);
-				Boolean permissionCheck = modulePermission.getBoolean();
 				opsiModulesPermissions.put(key, modulePermission); // replace value got from modulesInfo
 
 				if (opsiCountModules.get(key) != null)

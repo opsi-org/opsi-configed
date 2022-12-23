@@ -23,7 +23,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandWget;
-import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.utilities.logging.logging;
 
@@ -250,7 +249,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 				public void run() {
 					try {
 						logging.info(this, "doAction1 wget ");
-						SSHConnectExec ssh = new SSHConnectExec(((SSHCommand) commandWget), btn_execute);
+						new SSHConnectExec(commandWget, btn_execute);
 						// btn_execute.setEnabled( true ) transferred to SwingWorker.done()
 
 					} catch (Exception e) {

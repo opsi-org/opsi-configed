@@ -130,23 +130,10 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 		// setCursorRow( row );
 	}
 
+	// TODO; implement this ?
 	@Override
 	public void setCursorRow(int row) {
-		int viewrow = table.convertRowIndexToView(row);
-		int modelrow = table.convertRowIndexToModel(row);
-
 		logging.debug(this, "setCursorRow row, produced modelrow, produced viewrow, not implemented ");
-		// + row + ", " + modelrow + ", " + viewrow);
-
-		/*
-		 * if (table.getModel() instanceof de.uib.utilities.table.GenTableModel)
-		 * {
-		 * //int row = table.convertRowIndexToModel( viewrow );
-		 * ( (de.uib.utilities.table.GenTableModel) table.getModel() ).setCursorRow(
-		 * modelrow );
-		 * }
-		 */
-
 	}
 
 	@Override
@@ -203,8 +190,6 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 		// if (b == filtered)
 		// return;
-
-		InstallationStateTableModel model = (InstallationStateTableModel) (table.getModel());
 
 		if (!filtered)
 			viewRowfilter = table.getSelectedRows();

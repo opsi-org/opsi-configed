@@ -1,7 +1,5 @@
 package de.uib.utilities.script;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.List;
 
 import de.uib.utilities.logging.logging;
@@ -31,17 +29,8 @@ public class CmdLauncher {
 			ProcessBuilder pb = new ProcessBuilder(parts);
 			pb.redirectErrorStream(true);
 
-			Process proc = pb.start();
+			pb.start();
 
-			BufferedReader br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-
-			String line = null;
-			while ((line = br.readLine()) != null) {
-				// logging.debug(getSelectedClients()[J] + " >" + line);
-				// appendLog( ">" + line + "\n");
-			}
-			// logging.debug(getSelectedClients()[J] + " process exitValue " +
-			// proc.exitValue());
 		} catch (Exception ex) {
 			logging.error("Runtime error for command >>" + cmd + "<<, : " + ex, ex);
 		}

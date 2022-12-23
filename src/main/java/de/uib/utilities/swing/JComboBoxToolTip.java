@@ -2,7 +2,6 @@ package de.uib.utilities.swing;
 
 import java.awt.Component;
 import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.JList;
@@ -71,8 +70,6 @@ public class JComboBoxToolTip extends javax.swing.JComboBox {
 	}
 
 	protected void setComboValues() {
-		Set iterableKeys;
-		String iterValue;
 		boolean addE = addEmpty && !selectValues.containsKey("");
 
 		this.removeAllItems();

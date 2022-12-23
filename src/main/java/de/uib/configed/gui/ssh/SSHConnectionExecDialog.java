@@ -129,7 +129,6 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 	private void createLayout(GroupLayout layout, Component comp, int vgap, int hgap, boolean addInputField) {
 		int pref = Globals.BUTTON_HEIGHT;
 		int max = Short.MAX_VALUE;
-		GroupLayout.Alignment leading = GroupLayout.Alignment.LEADING;
 		layout.setAutoCreateGaps(true);
 		SequentialGroup verticalGroup = layout.createSequentialGroup();
 

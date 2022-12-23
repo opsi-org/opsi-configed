@@ -540,8 +540,6 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 	protected void addUser(String rolename) {
 		// de.uib.opsidatamodel.PersistenceControllerFactory.getPersistenceController().addRegisterUserEntry()
-		de.uib.opsidatamodel.PersistenceController persist = de.uib.opsidatamodel.PersistenceControllerFactory
-				.getPersistenceController();
 
 		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, // owner frame
 				"add user", // title
@@ -637,8 +635,6 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 	}
 
 	protected void addRole() {
-		de.uib.opsidatamodel.PersistenceController persist = de.uib.opsidatamodel.PersistenceControllerFactory
-				.getPersistenceController();
 
 		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, // owner frame
 				"add role", // title

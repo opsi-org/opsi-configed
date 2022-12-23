@@ -24,7 +24,6 @@ import de.uib.configed.configed;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.ssh.SSHOutputCollector;
-import de.uib.utilities.thread.WaitCursor;
 
 /**
  * @inheritDoc Class for executing commands.
@@ -103,9 +102,6 @@ public class SSHConnectExec extends SSHConnect {
 			}
 		} catch (Exception e) {
 			logging.error(this, "SSHConnectExec Exception", e);
-		} finally {
-			// disconnect();
-			System.gc();
 		}
 	}
 
@@ -290,7 +286,6 @@ public class SSHConnectExec extends SSHConnect {
 			logging.error(this, "connection forbidden.");
 			return null;
 		}
-		WaitCursor waitCursor = null;
 		// command = checkForParameter(command, dialog);
 
 		if (FOUND_ERROR) {

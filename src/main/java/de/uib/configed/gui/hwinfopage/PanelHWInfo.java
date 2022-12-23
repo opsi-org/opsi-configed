@@ -683,7 +683,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	private void getLocalizedHashMap() {
-		String loc = "";
 
 		hwOpsiToUI = new HashMap<>();
 

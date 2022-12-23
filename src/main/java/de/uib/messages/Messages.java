@@ -124,9 +124,6 @@ public class Messages {
 				messages = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
 
 			logging.debug("Messages messages " + messages);
-			for (String key : messages.keySet()) {
-				// logging.info("key " + key + ", value " + messages.getString(key));
-			}
 
 		} catch (MissingResourceException ex) {
 			messages = getResourceEN();

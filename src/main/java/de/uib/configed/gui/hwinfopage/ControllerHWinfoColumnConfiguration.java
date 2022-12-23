@@ -274,8 +274,6 @@ public class ControllerHWinfoColumnConfiguration {
 
 		updateItemFactory.setSource(model);
 
-		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = persist.getHwAuditDeviceClasses();
-
 		// for (String hwClass : hwAuditDeviceClasses.keySet() )
 
 		// updateItemFactory.setSource(model);

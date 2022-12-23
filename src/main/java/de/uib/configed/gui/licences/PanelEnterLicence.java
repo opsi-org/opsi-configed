@@ -99,7 +99,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		defineListeners();
 		addSettings();
 
-		final JPanel THIS = this;
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {

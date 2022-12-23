@@ -3381,13 +3381,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		depotsList_selectionChanged = true;
 		depotsOfSelectedClients = null;
 
-		selectedDepots = new String[depotsList.getSelectedValues().length];
-		selectedDepotsV = new Vector<>();
-
-		for (int i = 0; i < depotsList.getSelectedValues().length; i++) {
-			selectedDepots[i] = (String) depotsList.getSelectedValues()[i];
-			selectedDepotsV.add(selectedDepots[i]);
-		}
+		selectedDepots = depotsList.getSelectedValuesList().toArray(new String[0]);// new String[depotsList.getSelectedValues().length];
+		selectedDepotsV = new Vector<>(depotsList.getSelectedValuesList());
 
 		logging.debug(this, "--------------------  selectedDepotsV         " + selectedDepotsV);
 
