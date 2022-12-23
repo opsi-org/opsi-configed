@@ -797,12 +797,12 @@ public class HostInfo {
 			persist.getHostInfoCollections().updateLocalHostInfo(client, clientWanConfigKEY, wanStandard);
 		}
 
-		// if ( sourceOfChanges.get(clientShutdownInstallKEY) != null )
+		
 		// {
 		// String shutdownInstall = "off";
 		
 
-		// if ( sourceOfChanges.get(clientShutdownInstallKEY).equals("true") )
+		"true") )
 		// {
 		// shutdownInstall = "on";
 		

@@ -130,7 +130,7 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	// @Override
 	// public int getHelpColumns()
 	// {
-	// // if (packageManager)
+	
 	
 	
 	

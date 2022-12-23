@@ -152,7 +152,7 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 	@Override
 	public void valueChanged(org.jdesktop.swingx.event.DateSelectionEvent ev) {
 		logging.info(this, "valueChanged dateSelectionEvent");
-		// if ( !super.getText().equals( getText() ) )
+		
 		setDataChanged(true);
 		
 		updateCaller(getSelectedDateString());

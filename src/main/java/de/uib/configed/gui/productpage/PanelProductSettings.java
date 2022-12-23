@@ -448,10 +448,10 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 						if (!val.equals(serverProductVersion)) {
 							c.setForeground(Color.red);
-							// if (c instanceof JLabel) ((JLabel) c).setText("≠ " + val) ;//setText(val + "
+							"≠ " + val) ;//setText(val + "
 							// (≠)") ;
 						} else {
-							// if (c instanceof JLabel) ((JLabel) c).setText("" + val );
+							"" + val );
 						}
 					}
 				}
@@ -1097,7 +1097,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			priorityclassTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
 
-			// if (sorter instanceof DefaultRowSorter)
+			
 			{
 				((DefaultRowSorter) sorter).setComparator(colIndex, new de.uib.utilities.IntComparatorForStrings());
 			}
@@ -1110,7 +1110,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			productsequenceTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 			productsequenceColumn.setCellRenderer(productsequenceTableCellRenderer);
 
-			// if (sorter instanceof DefaultRowSorter)
+			
 			// ((DefaultRowSorter) sorter).setComparator(colIndex, new
 			
 			// we already have Integer

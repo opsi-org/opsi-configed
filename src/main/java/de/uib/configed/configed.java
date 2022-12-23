@@ -788,7 +788,7 @@ public class configed {
 				// {
 				
 				// String osName = System.getProperty("os.name");
-				// if (osName.toLowerCase().startsWith("win")) {
+				"win")) {
 				// Process proc = rt.exec("cmd.exe /c start \"" + messagefile.getPath() + "\"");
 				// } else
 				// //Linux, we assume that there is a firefox and it will handle the url
@@ -918,7 +918,7 @@ public class configed {
 		boolean trynimbus = true;
 		boolean found = false;
 
-		// if (trynimbus) {
+		
 		try {
 
 			/*

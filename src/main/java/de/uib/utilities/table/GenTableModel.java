@@ -477,7 +477,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			return;
 
 		for (int j = 0; j < editable.length; j++) {
-			// if (editable[j] != keyCol) // key col cannot be made editable
+			
 			colEditable[editable[j]] = true;
 		}
 	}
@@ -801,7 +801,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	public void addRow(Object[] a) {
 		
 
-		// if (addedRows.isEmpty()) // we add only one row up to further notice
+		
 		{
 			Vector rowV = new Vector<>();
 			for (int i = 0; i < colsLength; i++) {

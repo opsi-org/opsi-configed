@@ -139,7 +139,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			logging.debug(this,
 					"append parseAnsiCodes found color key " + key + " value " + ((Color) entry.getValue()).toString());
 
-			// if ( (line.trim().replaceAll("\\t","").replaceAll(" ","").charAt(0) ==
+			"\\t","").replaceAll(" ","").charAt(0) ==
 			// ansi_escape1.toCharArray()[0])
 			// || (line.trim().replaceAll("\\t","").replaceAll(" ","").charAt(0) ==
 			// ansi_escape2.toCharArray()[0]) )

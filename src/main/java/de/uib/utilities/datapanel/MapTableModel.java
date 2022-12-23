@@ -95,7 +95,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	}
 
 	public void setMap(Map<String, Object> data) {
-		// if (data != null) Logging.debug(this, "### has class " + data.getClass());
+		"### has class " + data.getClass());
 		this.data = null;
 		resetModifiedKey();
 
@@ -343,7 +343,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			 * }
 			 */
 
-			// if there is no true result left (probably because of eliminating the key) we
+			
 			// deliver the default value
 			
 			

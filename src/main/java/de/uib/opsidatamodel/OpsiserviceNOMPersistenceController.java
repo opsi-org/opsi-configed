@@ -912,7 +912,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		public Map<String, Boolean> getClientListForDepots(String[] depots, Set<String> allowedClients) {
 			retrieveOpsiHosts();
 
-			// if (mapOfPCs == null)
+			
 			logging.debug(this, " ------ building pcList");
 			mapPcBelongsToDepot = new HashMap<>();
 			
@@ -2052,7 +2052,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					+ ((List) (configs.get(configKey))) + " expected " + expectValue);
 
 			// {
-			// if (expectValue instanceof Boolean)
+			
 
 			Object value = ((List) (configs.get(configKey))).get(0);
 
@@ -2543,7 +2543,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			}
 
-			// if (shutdownInstall)
+			
 			// {
 
 			// String product = "opsi-client-agent";
@@ -2571,7 +2571,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			result = exec.doCall(omc);
 
-			// if (wan) && isWithWAN()
+			
 			// {
 			
 			// }
@@ -2754,7 +2754,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			if (exec1 == null) {
 				exec1 = retrieveWorkingExec(depot);
-				// if (exec1 == Executioner.None)
+				
 
 			}
 
@@ -3294,7 +3294,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (globalReadOnly)
 			return false;
 
-		// if (!checkHostPermission( objectId, getHostInfoCollections() ) )
+		
 		
 
 		String persistentGroupId = de.uib.configed.tree.ClientTree.translateToPersistentName(groupId);
@@ -3313,7 +3313,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		ArrayList<Object> deleteItems = new ArrayList<>();
 		for (Object2GroupEntry entry : entries) {
 
-			// if ( checkHostPermission( entry.getMember(), getHostInfoCollections() ) )
+			
 			{
 				Map<String, Object> deleteItem = createNOMitem(Object2GroupEntry.TYPE_NAME);
 				deleteItem.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
@@ -4540,7 +4540,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		boolean smbMounted = new File(depotProductDirectory).exists();
 
 		for (String product : new TreeSet<>(getAllNetbootProductNames(depotId))) {
-			// if (product.toLowerCase().startsWith("win"))
+			"win"))
 			if (!smbMounted // probably not on Windows, take every product to correct path manually
 					|| new File(depotProductDirectory + File.separator + product + File.separator
 							+ de.uib.connectx.SmbConnect.directoryPE).exists() // win 6.x
@@ -4953,7 +4953,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			result = exec.doCall(omc);
 
-			// if (result)
+			
 			// at any rate
 			updateItems.clear();
 		}
@@ -6978,7 +6978,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				// value " +
 				// getConfigs().get(state.get("objectId")).get(state.get("configId")));
 
-				// if (getConfigs().get(state.get("objectId")).get(state.get("configId").equals(
+				"objectId")).get(state.get("configId").equals(
 
 				state.put("values", exec.jsonArray((List) state.get("values")));
 
@@ -7465,7 +7465,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		String result = "";
 
 		if (withLicenceManagement) {
-			// if ( getLicencepools().containsKey(licensePoolId) )
+			
 
 			OpsiMethodCall omc = new OpsiMethodCall("createLicensePool", new String[] { licensePoolId, description });
 			result = exec.getStringResult(omc);
@@ -7492,7 +7492,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			result = exec.doCall(omc);
 
-			// if (result)
+			
 			
 			// comes too late
 
@@ -7665,7 +7665,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			
 		}
 
-		// if (result == null)
+		
 		
 
 		return Globals.pseudokey(new String[] { softwareLicenseId, licensePoolId });
@@ -7687,7 +7687,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			
 
-			// if (result)
+			
 		}
 
 		return result;
@@ -8236,7 +8236,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				if (fLicencePool2SoftwareList.get(licencePoolID_new) == null)
 					fLicencePool2SoftwareList.put(licencePoolID_new, new ArrayList<>());
 
-				// if ( fLicencePool2SoftwareList.get( licencePoolID_new ) != null )
+				
 				// {
 				logging.info(this, "fLicencePool2SoftwareList.get( licencePoolID_new ) "
 						+ fLicencePool2SoftwareList.get(licencePoolID_new));
@@ -9883,7 +9883,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			return false;
 
 		
-		// if (callcount > 1)
+		
 		
 
 		List defaultValues;
@@ -10756,7 +10756,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						logging.info(this, " retrieveOpsiModules " + key + " old  warningLimit " + warningLimit
 								+ " stopLimit " + stopLimit);
 
-						// if ( hostInfoCollections.getCountClients() > warningLimit)
+						
 
 						if (stopLimit != null && hostInfoCollections.getCountClients() > stopLimit) {
 							opsiModules.put(key, false);
@@ -10871,7 +10871,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos " + missingModulesPermissionInfo);
 
-			// if (missingModulesPermissionInfo.size() > 0)
+			
 			
 
 			if (!missingModulesPermissionInfo.isEmpty()) {
@@ -10911,7 +10911,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			logging.warning("opsi module information problem", ex);
 		}
 
-		// if (missingModulesPermissionInfo.isEmpty())
+		
 		{
 			withLinuxAgent = (opsiModules.get("linux_agent") != null) && ((Boolean) opsiModules.get("linux_agent"));
 			withLicenceManagement = (opsiModules.get("license_management") != null)
