@@ -308,7 +308,7 @@ public class JTableSelectionPanel extends JPanel
 		 * checkRegEx .setSelected(false);
 		 */
 
-		comboSearch = new JComboBox(
+		comboSearch = new JComboBox<>(
 				new String[] { configed.getResourceValue("ConfigedMain.pclistTableModel.allfields") });
 		comboSearch.setPreferredSize(Globals.buttonDimension);
 

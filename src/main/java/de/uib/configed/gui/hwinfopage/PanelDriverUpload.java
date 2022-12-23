@@ -240,7 +240,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	}
 
 	private void defineChoosers() {
-		comboChooseDepot = new JComboBox();
+		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.textfieldDimension);
 
 		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots()));
@@ -252,7 +252,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			logging.info(this, "actionPerformed  depot selected " + selectedDepot);
 		});
 
-		comboChooseWinProduct = new JComboBox();
+		comboChooseWinProduct = new JComboBox<>();
 		comboChooseWinProduct.setSize(Globals.textfieldDimension);
 		comboChooseWinProduct.addActionListener(actionEvent -> {
 			winProduct = "" + comboChooseWinProduct.getSelectedItem();

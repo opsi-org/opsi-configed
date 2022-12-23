@@ -41,7 +41,7 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 	JPanel panelSurroundSelectImage = new SurroundPanel();
 
 	JLabel labelSelectImage = new JLabel();
-	JComboBox comboImages = new JComboBox();
+	JComboBox comboImages = new JComboBox<>();
 	JLabel labelEthernetAdress = new JLabel();
 	JTextField fieldEthernetAddress = new JTextField();
 	JPanel panelSurroundEthernetAddress = new SurroundPanel();

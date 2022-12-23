@@ -110,7 +110,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		btn_close.addActionListener(actionEvent -> cancel());
 		setComponentsEnabled(!Globals.isGlobalReadOnly());
 
-		cb_actions = new JComboBox(command.getActionsText());
+		cb_actions = new JComboBox<>(command.getActionsText());
 		cb_actions.addItemListener(itemEvent -> {
 			if (((String) itemEvent.getItem())
 					.equals(configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.list")))
@@ -118,9 +118,9 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		});
 
 		if (command.getRepos() != null) {
-			cb_repos = new JComboBox(command.getRepos().keySet().toArray());
+			cb_repos = new JComboBox<>(command.getRepos().keySet().toArray());
 		} else {
-			cb_repos = new JComboBox();
+			cb_repos = new JComboBox<>();
 		}
 
 		cb_repos.addItem(configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"));

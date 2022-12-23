@@ -396,7 +396,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		// labelSearch.setPreferredSize(new Dimension (buttonWidth,
 		// Globals.buttonHeight));
 
-		jComboBoxSearch = new JComboBox();
+		jComboBoxSearch = new JComboBox<>();
 		jComboBoxSearch.setEditable(true);
 		jComboBoxSearch.addActionListener(this);
 
@@ -506,7 +506,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		labelDisplayRestriction.setFont(Globals.defaultFont);
 
 		comboModelTypes = new DefaultComboBoxModel<>();
-		comboType = new JComboBox(comboModelTypes);
+		comboType = new JComboBox<>(comboModelTypes);
 		comboType.setFont(Globals.defaultFont);
 		comboType.setEnabled(false);
 		comboType.setEditable(false);
@@ -597,7 +597,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		 */
 
 		/*
-		 * comboLevel = new JComboBox(levels);
+		 * comboLevel = new JComboBox<>(levels);
 		 * comboLevel.setMaximumRowCount(levels.length);
 		 * comboLevel.setSelectedItem(showLevel);
 		 * comboLevel.setFont (Globals.defaultFont);

@@ -781,7 +781,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		/*
 		 * 
-		 * JComboBox comboCombinedChanges = new JComboBox();
+		 * JComboBox comboCombinedChanges = new JComboBox<>();
 		 * 
 		 * //setActionRequestWhereOutdated
 		 * //setProductActionRequestForHostGroup ../ProductGroup
@@ -799,7 +799,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		 * JLabel labelSetActionRequest = new JLabel("action");
 		 * JLabel labelSetTargetState = new JLabel("request target status");
 		 * JLabel labelSetInstallationStatus = new JLabel("installation status");
-		 * JComboBox comboActionRequest = new JComboBox(
+		 * JComboBox comboActionRequest = new JComboBox<>(
 		 * JComboBox comboTargetState =
 		 * JComboBox comboInstallationStatus =
 		 * 

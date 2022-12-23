@@ -998,7 +998,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			if (Globals.showIconsInProductTable)
 				iconsDir = "images/productstate/targetconfiguration";
 
-			JComboBox targetCombo = new JComboBox();
+			JComboBox targetCombo = new JComboBox<>();
 			targetCombo.setRenderer(standardListCellRenderer);
 			// targetColumn.setCellEditor(new AdaptingCellEditor(targetCombo, istm));
 			targetColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(targetCombo, istm,
@@ -1014,7 +1014,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			if (Globals.showIconsInProductTable)
 				iconsDir = "images/productstate/installationstatus";
 
-			JComboBox statesCombo = new JComboBox();
+			JComboBox statesCombo = new JComboBox<>();
 			statesCombo.setRenderer(standardListCellRenderer);
 			// statusColumn.setCellEditor(new AdaptingCellEditor(statesCombo, istm));
 			statusColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(statesCombo, istm,
@@ -1050,7 +1050,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			if (Globals.showIconsInProductTable)
 				iconsDir = "images/productstate/actionrequest";
 
-			JComboBox actionsCombo = new JComboBox();
+			JComboBox actionsCombo = new JComboBox<>();
 			actionsCombo.setRenderer(standardListCellRenderer);
 			actionColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(actionsCombo, istm,
 					de.uib.opsidatamodel.productstate.ActionRequest.getLabel2DisplayLabel(), iconsDir));
@@ -1146,7 +1146,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			installationInfoColumn.setPreferredWidth(fwidth_column_installationInfo);
 			installationInfoColumn.setCellRenderer(installationInfoTableCellRenderer);
 
-			JComboBox installationInfoCombo = new JComboBox();
+			JComboBox installationInfoCombo = new JComboBox<>();
 			// installationInfoCombo.setEditable(true);
 			/*
 			 * try

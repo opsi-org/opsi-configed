@@ -179,7 +179,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		editableColumn = table.getColumnModel().getColumn(1);
 
 		// defaultCellEditor = new DefaultCellEditor(new JTextField());
-		editorfield = new JComboBox();
+		editorfield = new JComboBox<>();
 		editorfield.setEditable(true);
 		defaultCellEditor = new XCellEditor(editorfield);
 		theCellEditor = defaultCellEditor;

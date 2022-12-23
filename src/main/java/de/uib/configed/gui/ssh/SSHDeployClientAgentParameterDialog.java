@@ -188,7 +188,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		{
 			lbl_verbosity.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
-			cb_verbosity = new JComboBox();
+			cb_verbosity = new JComboBox<>();
 			cb_verbosity.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
 			for (int i = 0; i < 5; i++)
 				cb_verbosity.addItem(i);

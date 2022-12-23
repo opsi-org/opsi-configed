@@ -254,7 +254,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		saveButton.setFont(Globals.defaultFont);
 		saveButton.addActionListener(new SaveButtonListener());
 
-		// loadSearchBox = new JComboBox( new String[]
+		// loadSearchBox = new JComboBox<>( new String[]
 		// {configed.getResourceValue("ClientSelectionDialog.loadSearchBox")} );
 		// loadSearchBox.setFont(Globals.defaultFont);
 
@@ -964,7 +964,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			sourceGroup.dataComponent = fieldDouble;
 			break;
 		case EnumType:
-			// JComboBox box = new JComboBox( sourceGroup.element.getEnumData( operation )
+			// JComboBox box = new JComboBox<>( sourceGroup.element.getEnumData( operation )
 			// );
 			TextInputField box = new TextInputField("", sourceGroup.element.getEnumData());
 			box.setEditable(true);

@@ -260,7 +260,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 	private void defineChoosers() {
 
-		comboChooseDepot = new JComboBox();
+		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.textfieldDimension);
 
 		logging.debug(this, "defineChoosers, depots: " + persist.getHostInfoCollections().getDepots());

@@ -22,7 +22,7 @@ public class FShowListWithComboSelect extends FShowList {
 		labelChoice.setOpaque(true);
 		labelChoice.setBackground(Globals.backgroundLightGrey);
 		northPanel.add(labelChoice);
-		combo = new JComboBox(choices);
+		combo = new JComboBox<>(choices);
 		combo.setFont(Globals.defaultFontBold);
 		northPanel.add(combo);
 		// northPanel.setBackground(Color.RED);

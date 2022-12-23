@@ -38,7 +38,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 
 	protected void buildPanel() {
 		label = new JLabel(configed.getResourceValue("MainFrame.jLabel_Config"));
-		combo = new JComboBox();
+		combo = new JComboBox<>();
 		combo.setVisible(false);
 		combo.addItemListener(this);
 		de.uib.configed.gui.helper.PropertiesTableCellRenderer cellRenderer = new de.uib.configed.gui.helper.PropertiesTableCellRenderer();

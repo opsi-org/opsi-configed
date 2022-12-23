@@ -173,7 +173,7 @@ public class PanelCompleteWinProducts extends JPanel
 		chooserFolder.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooserFolder.setDialogTitle(Globals.APPNAME + " " + configed.getResourceValue("CompleteWinProducts.chooser"));
 
-		comboChooseDepot = new JComboBox();
+		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.textfieldDimension);
 
 		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots()));
@@ -189,7 +189,7 @@ public class PanelCompleteWinProducts extends JPanel
 			evaluateWinProducts();
 		});
 
-		comboChooseWinProduct = new JComboBox();
+		comboChooseWinProduct = new JComboBox<>();
 		comboChooseWinProduct.setSize(Globals.textfieldDimension);
 		comboChooseWinProduct.addActionListener(actionEvent -> {
 			winProduct = "" + comboChooseWinProduct.getSelectedItem();

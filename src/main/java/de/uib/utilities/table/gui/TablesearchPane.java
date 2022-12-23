@@ -520,9 +520,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				searchNextRow(selectMode);
 		});
 
-		// comboSearchFields = new JComboBox(new String[]{"alle Felder"});
+		// comboSearchFields = new JComboBox<>(new String[]{"alle Felder"});
 
-		comboSearchFields = new JComboBox(new String[] { configed.getResourceValue("SearchPane.search.allfields") });
+		comboSearchFields = new JComboBox<>(new String[] { configed.getResourceValue("SearchPane.search.allfields") });
 		comboSearchFields.setPreferredSize(Globals.lowerButtonDimension);
 		comboSearchFields.setFont(Globals.defaultFont);
 

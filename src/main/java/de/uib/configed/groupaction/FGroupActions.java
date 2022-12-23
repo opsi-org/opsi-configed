@@ -164,7 +164,7 @@ public class FGroupActions extends SecondaryFrame {
 	private void defineImageActionPanel(JPanel panel) {
 		JLabel labelCombo = new JLabel(configed.getResourceValue("FGroupAction.existingImages"));
 		// labelCombo.setPreferredSize(new Dimension(200, Globals.lineHeight));
-		comboSelectImage = new JComboBox();
+		comboSelectImage = new JComboBox<>();
 		// comboSelectImage.setPreferredSize(new Dimension(200, Globals.lineHeight));
 
 		JLabel topicLabel = new JLabel(configed.getResourceValue("FGroupAction.replayImage"));

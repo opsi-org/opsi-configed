@@ -207,9 +207,9 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 
 		{
 			lbl_parentMenuText = new JLabel();
-			cb_parentMenuText = new JComboBox();
+			cb_parentMenuText = new JComboBox<>();
 			lbl_menuText = new JLabel();
-			cb_menuText = new JComboBox();
+			cb_menuText = new JComboBox<>();
 			lbl_tooltipText = new JLabel();
 			lbl_priority = new JLabel();
 			// btn_save = new JButton();
