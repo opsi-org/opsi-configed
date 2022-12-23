@@ -42,7 +42,6 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 		 * jc.setToolTipText("");
 		 * }
 		 */
-		
 
 		if (f != null)
 			result.setFont(f);

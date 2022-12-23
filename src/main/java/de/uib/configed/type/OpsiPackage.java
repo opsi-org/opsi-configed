@@ -62,15 +62,12 @@ public class OpsiPackage implements Comparable {
 
 	}
 
-	
-
 	public static final int TYPE_LOCALBOOT = 0;
 	public static final int TYPE_NETBOOT = 1;
 
 	public static int lastIndex = -1;
 
 	// public static Map<Integer, String> productName2Id = new HashMap<String,
-	
 
 	public OpsiPackage(String productId, String productVersion, String packageVersion, String productType) {
 		this(productId, productVersion, packageVersion, productType, null); // compatibility to usages without locked
@@ -144,7 +141,7 @@ public class OpsiPackage implements Comparable {
 	}
 
 	public Vector<Object> appendValues(Vector<Object> row) {
-		
+
 		row.add(giveProductType(getProductType()));
 		row.add(getProductVersion());
 		row.add(getPackageVersion());

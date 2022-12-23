@@ -1,9 +1,6 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
-
-
-
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -83,7 +80,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 
 		btn_searchDir = completion.getButton();
 		cb_autocompletion = completion.getCombobox();
-		
+
 		cb_autocompletion.setEnabled(true);
 		cb_autocompletion.addItem("");
 		cb_autocompletion.setSelectedItem("");
@@ -109,8 +106,6 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 				}
 			}.start();
 
-			
-			
 		} catch (Exception e) {
 			logging.warning(this, "doAction1, exception occurred", e);
 		}

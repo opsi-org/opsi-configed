@@ -52,7 +52,7 @@ public class SWAuditEntry extends TableEntry
 		KEYS.add("subversion");
 		KEYS.add(ARCHITECTURE);
 		KEYS.add(LANGUAGE);
-		
+
 		KEYS.add(WINDOWSsOFTWAREid);
 	}
 
@@ -65,7 +65,7 @@ public class SWAuditEntry extends TableEntry
 		KEYS_FOR_GUI_TABLES.add(SUBVERSION);
 		KEYS_FOR_GUI_TABLES.add(ARCHITECTURE);
 		KEYS_FOR_GUI_TABLES.add(LANGUAGE);
-		
+
 		KEYS_FOR_GUI_TABLES.add(WINDOWSsOFTWAREid);
 	}
 
@@ -102,7 +102,7 @@ public class SWAuditEntry extends TableEntry
 	protected static Map<String, String> locale = new StringIdentityMap(KEYS);
 
 	public static void setLocale() {
-		
+
 		locale.put(id, "ID");
 		locale.put(NAME, configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
 		locale.put(VERSION, configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
@@ -121,7 +121,7 @@ public class SWAuditEntry extends TableEntry
 
 	@Override
 	public String put(String key, String value) {
-		
+
 		return super.put(key, value);
 
 		/*
@@ -157,13 +157,12 @@ public class SWAuditEntry extends TableEntry
 	public SWAuditEntry(Map<String, Object> entry) {
 		super(entry);
 
-		
 		remap(NAME, key2serverKey.get(NAME));
 		remap(VERSION, key2serverKey.get(VERSION));
 		// remap("subversion", "subVersion");
 		remap(ARCHITECTURE, key2serverKey.get(ARCHITECTURE));
 		remap(LANGUAGE, key2serverKey.get(LANGUAGE));
-		
+
 		remap(WINDOWSsOFTWAREid, "windowsSoftwareId");
 		// remap("ID", "ident", false);
 		// null value for key "ID" will be handled below; or, we dont assume that there
@@ -171,8 +170,6 @@ public class SWAuditEntry extends TableEntry
 
 		String subversion // not included in key-values
 				= entryRetrieved.get(key2serverKey.get(SUBVERSION));
-
-		
 
 		if (subversion == null)
 			subversion = "";
@@ -191,13 +188,8 @@ public class SWAuditEntry extends TableEntry
 		if (entry.get("lastseen") != null)
 			lastseen = entry.get("lastseen").toString();
 
-		
-		
 		// if (get("ID") == null)
 		put(id, ident);
-
-		
-		
 
 		/*
 		 * if (get("name").equals("Microsoft Office Office 64-bit Components 2010"))

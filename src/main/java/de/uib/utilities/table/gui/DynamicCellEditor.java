@@ -45,14 +45,11 @@ public class DynamicCellEditor extends DefaultCellEditor {
 			cc.setModel(cbm.getComboBoxModel(modelRow, modelColumn));
 
 		// cc.setToolTipText("hello");
-		
 
 		Component c = super.getTableCellEditorComponent(table, value, isSelected, row, column);
 		if (c instanceof JComponent)
 			((JComponent) c).setToolTipText("" + value);
 
-		
-		
 		return c;
 	}
 

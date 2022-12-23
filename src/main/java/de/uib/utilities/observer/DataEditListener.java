@@ -34,9 +34,9 @@ public class DataEditListener implements DocumentListener, // for text component
 			logging.info(this, "dataChangedSubject null");
 			return;
 		}
-		
+
 		if (!withFocusCheck || (source instanceof JComponent && ((JComponent) source).hasFocus())) {
-			
+
 			dataChangedSubject.setChanged();
 			dataChangedSubject.notifyObservers();
 		}
@@ -49,7 +49,7 @@ public class DataEditListener implements DocumentListener, // for text component
 		}
 
 		if (!withFocusCheck || (source instanceof JComponent && ((JComponent) source).hasFocus())) {
-			
+
 			if (!(action.equals(cancelRequest) || action.equals(commitRequest))) {
 				dataChangedSubject.setChanged();
 				dataChangedSubject.notifyObservers(action);
@@ -79,35 +79,33 @@ public class DataEditListener implements DocumentListener, // for text component
 	// DocumentListener interface
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-		
+
 		act();
 	}
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		
+
 		act();
-		
-		
+
 	}
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		
+
 		act();
 	}
 
 	// ItemListener interface
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		
+
 		act();
 	}
 
 	// KeyListener interface
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
 
 		if (e.getKeyCode() == 10)// KeyEvent.VK_ENTER)
 			requestAction(commitRequest);

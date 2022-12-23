@@ -45,7 +45,6 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 		if (columnName != null && columnName.equals(configed.getResourceValue("LicensingInfo.modules"))) {
 			// jc.setText("<html>" + value + " &#8505; </html>");
 			// jc = new JLabel("" + value, Globals.createImageIcon("images/info_i.png", ""),
-			
 
 			// jc.setIcon(Globals.createImageIcon("images/Apps-Help-Info-icon-sw.png", ""));
 
@@ -75,7 +74,6 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 				jc.setIcon(Globals.createImageIcon("images/checked_void.png", ""));
 
 			// String result = " " + Globals.interpretAsBoolean( value) ;
-			
 
 		}
 		/*

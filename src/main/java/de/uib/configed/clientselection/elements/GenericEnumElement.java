@@ -35,11 +35,6 @@ public class GenericEnumElement extends SelectElement {
 		return true;
 	}
 
-	
-	
-	
-	
-
 	protected static String[] removeFirst(int n, String[] data) {
 		return Arrays.copyOfRange(data, n, data.length);
 	}

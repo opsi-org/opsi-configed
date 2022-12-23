@@ -31,7 +31,6 @@ import de.uib.configed.configed;
 import de.uib.configed.gui.FDialogTextfieldWithListSelection;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
 import de.uib.opsicommand.OpsiMethodCall;
-
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.permission.UserConfig;
@@ -44,7 +43,6 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 // works on a map of pairs of type String - List
 {
 
-	
 	protected JPopupMenu popupForUserpath;
 	protected JPopupMenu popupForUserpathes;
 	protected JPopupMenu popupForRolepath;
@@ -54,9 +52,6 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 	protected LinkedList<String> theUsers;
 	protected LinkedList<String> theRoles;
-
-	
-	
 
 	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer, boolean keylistExtendible,
 			boolean keylistEditable, boolean reloadable,
@@ -112,16 +107,15 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
-				
 
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-					
+
 					break;
 
 				case PopupMenuTrait.POPUP_SAVE:
-					
+
 					break;
 
 				case PopupMenuTrait.POPUP_ADD:
@@ -129,7 +123,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 					break;
 
 				case PopupMenuTrait.POPUP_DELETE:
-					
+
 					deleteUser();
 					break;
 
@@ -143,16 +137,15 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
-				
 
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-					
+
 					break;
 
 				case PopupMenuTrait.POPUP_SAVE:
-					
+
 					break;
 
 				case PopupMenuTrait.POPUP_ADD:
@@ -169,16 +162,15 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
-				
 
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-					
+
 					break;
 
 				case PopupMenuTrait.POPUP_SAVE:
-					
+
 					break;
 
 				case PopupMenuTrait.POPUP_ADD:
@@ -186,7 +178,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 					break;
 
 				case PopupMenuTrait.POPUP_DELETE:
-					
+
 					deleteUser();
 					break;
 
@@ -200,16 +192,15 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
-				
 
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-					
+
 					break;
 
 				case PopupMenuTrait.POPUP_SAVE:
-					
+
 					break;
 
 				case PopupMenuTrait.POPUP_ADD:
@@ -289,14 +280,12 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		 * tree.addMouseListener(popupListener0);
 		 */
 
-		
-
 		MouseListener popupListenerForUserpathes = new utils.PopupMouseListener(popupForUserpathes) {
 			@Override
 			protected void maybeShowPopup(MouseEvent e) {
 				if (e.isPopupTrigger()) {
 					TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-					
+
 					if (selPath != null && isUserPath(selPath))
 						super.maybeShowPopup(e);
 				}
@@ -524,13 +513,10 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		// partial reload
 		PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 		buildUserConfig();
-		
+
 		persist.hostConfigsRequestRefresh();
 		persist.configOptionsRequestRefresh();
 		super.reload();
-
-		
-		
 
 	}
 
@@ -580,19 +566,14 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 		JPanel addPanel = new JPanel();
 		addPanel.setBackground(Color.YELLOW);
-		
 
-		
 		f.setCenterPane(centerPanel);
-
-		
 
 		f.setupLayout();
 		f.setSize(new Dimension(500, 400));
 		f.setVisible(true);
 
 		logging.info(this, "addUser finished, result " + f.getResult());
-		
 
 		if (f.getResult() == 1) {
 			logging.info(this, "addUser ok");
@@ -673,12 +654,8 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 		JPanel addPanel = new JPanel();
 		addPanel.setBackground(Color.YELLOW);
-		
 
-		
 		f.setCenterPane(centerPanel);
-
-		
 
 		f.setupLayout();
 		f.setSize(new Dimension(500, 400));
@@ -687,11 +664,9 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 	}
 
 	protected void deleteUser() {
-		
-		
+
 		javax.swing.tree.TreePath p = tree.getSelectionPath();
 
-		
 		if (p != null) {
 			logging.info(this, "deleteUser path " + p);
 
@@ -704,8 +679,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 			}
 			String key = keyB.toString();
 			logging.info(this, "deleteUser, selected user key " + key);
-			
-			
+
 			Vector<String> propertyNames = partialPanels.get(key).getNames();
 			logging.info(this, "deleteUser, property names " + propertyNames);
 			for (String name : propertyNames) {
@@ -718,7 +692,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 			tree.setExpandsSelectedPaths(true);
 			tree.setSelectionInterval(row, row);
-			
+
 			tree.scrollRowToVisible(row);
 		}
 	}

@@ -32,6 +32,7 @@ public class JSONObjectX extends JSONObject {
 		return map;
 	}
 
+	@Override
 	public boolean isEmpty() {
 		return !hasElements;
 	}
@@ -56,14 +57,13 @@ public class JSONObjectX extends JSONObject {
 		map = new HashMap<>();
 		try {
 			Iterator iter = master.keys();
-			
+
 			if (!iter.hasNext()) {
 				hasElements = false;
 			}
 
 			while (iter.hasNext()) {
 				String key = (String) iter.next();
-				
 
 				if (master.get(key) != null)
 					beingList = false;

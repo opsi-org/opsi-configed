@@ -156,7 +156,6 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 	}
 
 	public void appendLater(String line) {
-		
 
 		append(line);
 

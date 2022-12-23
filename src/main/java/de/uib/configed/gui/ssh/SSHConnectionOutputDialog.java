@@ -37,8 +37,6 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 	protected JTextPane output;
 	protected JScrollPane jScrollPane;
 
-	
-	
 	protected JButton btn_close;
 	protected boolean buildFrame = false;
 
@@ -111,8 +109,6 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 
 	DialogCloseListener closeListener;
 
-	
-	
 	public SSHConnectionOutputDialog(String title) {
 		super(null, "", false);
 		logging.info(this, "\ncreated a SSHConnectionOutputDialog with title " + title + "\n");
@@ -139,7 +135,6 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			logging.debug(this,
 					"append parseAnsiCodes found color key " + key + " value " + ((Color) entry.getValue()).toString());
 
-			
 			// ansi_escape1.toCharArray()[0])
 			// || (line.trim().replaceAll("\\t","").replaceAll(" ","").charAt(0) ==
 			// ansi_escape2.toCharArray()[0]) )
@@ -154,8 +149,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 	}
 
 	public void append(String caller, String line) {
-		
-		
+
 		if (SSHCommandFactory.ssh_colored_output) {
 			if ((line != null) && (!line.trim().replaceAll("\\t", "").replaceAll(" ", "").equals("")))
 				for (Map.Entry entry : ansiCodeColors.entrySet())
@@ -209,7 +203,6 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 
 			StyleConstants.setBackground(readonlyStyle, Color.GREEN);// Kein grün :(
 
-			
 			StyleConstants.setForeground(readonlyStyle, Color.RED); // Was ist rot?
 
 			SimpleAttributeSet readOnlyAttributeSet = new SimpleAttributeSet(doc.getStyle("readonlyStyle"));
@@ -222,26 +215,22 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			jScrollPane.setViewportView(output);
 			output.setText("");
 
-			
-			
 			// btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 			btn_close = new de.uib.configed.gui.IconButton(
 					de.uib.configed.configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
 					"images/cancel.png", "images/cancel.png", true);
 			// btn_test_command.setSize(new Dimension( Globals.graphicButtonWidth + 15
-			
+
 			// btn_test_command.setSize(new Dimension( Globals.graphicButtonWidth + 15
-			
+
 			btn_close.setPreferredSize(btn_dim);
 
 			btn_close.addActionListener(closeListener);
 
-			
 			// lbl_userhost.setText("user@host");
 
 			// createLayout(konsolePanelLayout, jScrollPane,Globals.gapSize,
-			
-			
+
 		} catch (Exception e) {
 			logging.warning(this, "initOutputGui, exception occurred", e);
 		}

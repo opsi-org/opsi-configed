@@ -43,7 +43,7 @@ import de.uib.utilities.table.updates.TableUpdateCollection;
 public class PanelProductProperties extends JSplitPane
 // implements RowSorterListener
 {
-	
+
 	public PanelGenEditTable paneProducts;
 	protected OpsiPackage selectedOpsiPackage;
 	protected List<String> depotsOfPackage;
@@ -64,7 +64,6 @@ public class PanelProductProperties extends JSplitPane
 	protected TableCellRenderer propertiesTableCellRenderer;
 
 	// protected final Map<String,Object> emptyVisualData = new
-	
 
 	protected LinkedHashMap<String, Boolean> productDisplayFields;
 
@@ -84,8 +83,6 @@ public class PanelProductProperties extends JSplitPane
 	}
 
 	protected void init() {
-		
-		
 
 		selectedProducts = new ArrayList<>();
 
@@ -121,7 +118,7 @@ public class PanelProductProperties extends JSplitPane
 				lsm.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 				if (lsm.isSelectionEmpty()) {
-					
+
 					logging.info(this, "selected  no row ");
 
 					// infoPane.clearEditValue
@@ -187,7 +184,7 @@ public class PanelProductProperties extends JSplitPane
 						 * theTable.getValueAt(row, columnNames.indexOf("packageVersion"))
 						 * );
 						 */
-						
+
 						List<String> depotsOfPackageAsRetrieved = new ArrayList<>();
 
 						String versionInfo = "";
@@ -383,7 +380,7 @@ public class PanelProductProperties extends JSplitPane
 		};
 
 		paneProducts.setTableModel(model);
-		
+
 		paneProducts.setListSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		// paneProducts.setTableColumnInvisible( columnNames.indexOf( "depotId" ));
 
@@ -400,7 +397,7 @@ public class PanelProductProperties extends JSplitPane
 
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, false, false);
 		// propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false,
-		
+
 		logging.info(this, " created properties Panel, is  EditMapPanelX instance No. " + EditMapPanelX.objectCounter);
 		((EditMapPanelX) propertiesPanel)
 				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName().toString()));
@@ -409,7 +406,6 @@ public class PanelProductProperties extends JSplitPane
 		propertiesPanel.setUpdateCollection(null);
 
 		// ((EditMapPanelX) propertiesPanel).setPropertyHandlerType(
-		
 
 		panelEditProperties = new PanelEditDepotProperties(mainController, propertiesPanel);
 		infoPane = new ProductInfoPane(mainController, panelEditProperties);
@@ -417,10 +413,7 @@ public class PanelProductProperties extends JSplitPane
 		infoPane.getPanelProductDependencies().setDependenciesModel(mainController.getDependenciesModel());
 
 		setRightComponent(infoPane);
-		
 
-		
-		
 	}
 
 	/*

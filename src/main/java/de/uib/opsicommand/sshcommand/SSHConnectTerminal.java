@@ -88,7 +88,7 @@ public class SSHConnectTerminal extends SSHConnect {
 	public void connect() {
 		if (!isConnectionAllowed()) {
 			logging.error(this, "connection forbidden.");
-			
+
 		} else {
 
 			logging.info(this, "connect ...");
@@ -120,7 +120,7 @@ public class SSHConnectTerminal extends SSHConnect {
 							"connect useKeyfile " + SSHConnectionInfo.getInstance().usesKeyfile() + " use password …");
 				}
 				// Do not use StrictHostKeyChecking=no. See JSch SFTP security with
-				
+
 				// http://stackoverflow.com/questions/30178936/jsch-sftp-security-with-session-setconfigstricthostkeychecking-no
 				session.setConfig("StrictHostKeyChecking", "no"); // otherwise exception if not in knwon_hosts or
 																	// unknown fingerprint
@@ -134,28 +134,16 @@ public class SSHConnectTerminal extends SSHConnect {
 				// "\n\n", dialog.getInputField());
 				logging.info(this, "Connect");
 
-				
 				// a hack for MS-DOS prompt on Windows.
 				// channel.setInputStream(new FilterInputStream(System.in){
-				
-				
-				
-				
 
-				
-				
 				// channel = setChannels(new FilterInputStream(System.in){
-				
-				
-				
-				
+
 				// new MyOutputPrinter(dialog, System.out)
-				
+
 				channel = setStreams(channel);
 
 				channel.setPtyType("dumb");
-				
-				
 
 				channel.connect();
 				logging.info(this, "connect " + SSHConnectionInfo.getInstance().getUser() + "@"
@@ -182,7 +170,7 @@ public class SSHConnectTerminal extends SSHConnect {
 	public final void exec(String text) {
 		if (!isConnectionAllowed()) {
 			logging.warning(this, "connection forbidden.");
-			
+
 		} else {
 
 			try {
@@ -205,7 +193,7 @@ public class SSHConnectTerminal extends SSHConnect {
 					dialog.setLastHistoryIndex();
 					out.flush();
 				}
-				
+
 			} catch (IOException ioe) {
 				logging.error(this, "SSHConnectTerminal exec ioexception", ioe);
 			} catch (Exception e) {
@@ -308,9 +296,7 @@ public class SSHConnectTerminal extends SSHConnect {
 			public void keyReleased(KeyEvent e) {
 				int key = e.getKeyCode();
 				JTextField textField = (JTextField) e.getSource();
-				
-				
-				
+
 				if (key == KeyEvent.VK_ENTER) {
 					logging.info(this, "initInputFieldFromDialog keyReleased ENTER ");
 					logging.info(this, "initInputFieldFromDialog inputfield " + textField);
@@ -319,38 +305,24 @@ public class SSHConnectTerminal extends SSHConnect {
 						clear();
 						((Component) textField).requestFocusInWindow();
 					}
-					
+
 					// exec(new String(new byte[] {3}) +"\n");
-					
+
 					// dialog.getInputField().setText("");
-					
+
 					else {
 						// String text = textField.getText() + "\n";
 						exec(textField.getText() + "\n");
-						
-						// "))
-						
-						
-						
-						
-						
-						
-						
-						
-						// else
-						
 
-						
-						
-						
+						// "))
+
+						// else
+
 						((Component) textField).requestFocusInWindow();
 						dialog.getInputField().setText("");
 					}
 				}
-				
-				
 
-				
 				else if ((key == KeyEvent.VK_UP) || (key == KeyEvent.VK_KP_UP)) {
 					dialog.getInputField().setText(dialog.getPrevCommand_up());
 					((Component) textField).requestFocusInWindow();
@@ -369,7 +341,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		String result = "";
 		if (newCommands) {
 			// result = ssh.exec(new Empty_Command("compgen -c" ), false, null, true,
-			
+
 			result = ssh.exec(new Empty_Command(
 					// http://stackoverflow.com/questions/948008/linux-command-to-list-all-available-commands-and-aliases
 					SSHCommandFactory.getInstance().str_command_getLinuxCommands), false, null, true, false);
@@ -380,47 +352,35 @@ public class SSHConnectTerminal extends SSHConnect {
 			logging.debug(this, "getCompletionList commands compgen -c " + result);
 		}
 
-		
-		
 		// // String pwd = ssh.exec(new Empty_Command("pwd" ), false, null, true,
 		// false).replace("\n", "");
 		// try {
-		
+
 		// // exec("pwd\n");
-		
-		
+
 		// out.write("pwd\n".getBytes());
-		
-		
-		
-		
+
 		// 
 		// // catch (IOException ioe)
 
-		
-
 		// currentDirectory = currentDirectory.replace("\n", "") + "/";
 		// String com = "ls -aldU " + currentDirectory + "./*";
-		
+
 		// String result_ls = ssh.exec( new Empty_Command(com ),
-		
-		
-		
+
 		// String[] arr_result_dir = result_ls.split("\n");
 		// String result_dir = "";
 
 		// for (String l : arr_result_dir)
-		
-		
-		
+
 		// String dir = "" + line.split(currentDirectory + "/",2)[1];
-		
+
 		// result_dir = result_dir + dir + "\n";
-		
+
 		// result = result + "\n" + result_dir;
-		
+
 		// catch (Exception ioe)
-		
+
 		return result;
 	}
 

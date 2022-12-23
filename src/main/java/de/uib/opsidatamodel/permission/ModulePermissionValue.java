@@ -10,7 +10,6 @@ import de.uib.utilities.logging.logging;
 public class ModulePermissionValue {
 	de.uib.opsicommand.Executioner exec;
 
-	
 	private ExtendedInteger maxClients;
 	private ExtendedDate expiresDate;
 	private Boolean booleanValue;
@@ -50,7 +49,7 @@ public class ModulePermissionValue {
 	 */
 
 	private Boolean checkBoolean(Object ob) {
-		
+
 		Boolean result = null;
 
 		if (ob instanceof Boolean) {
@@ -63,8 +62,6 @@ public class ModulePermissionValue {
 			if (checked)
 				result = sValue.equalsIgnoreCase("yes");
 		}
-
-		
 
 		return result;
 	}

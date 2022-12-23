@@ -30,23 +30,22 @@ public class Autocomplete implements DocumentListener {
 	}
 
 	public void setKeywordsList(List<String> l) {
-		
+
 		this.keywords = l;
 	}
 
 	@Override
 	public void changedUpdate(DocumentEvent ev) {
-		
+
 	}
 
 	@Override
 	public void removeUpdate(DocumentEvent ev) {
-		
+
 	}
 
 	@Override
 	public void insertUpdate(DocumentEvent ev) {
-		
 
 		if (ev.getLength() != 1)
 			return;
@@ -62,7 +61,7 @@ public class Autocomplete implements DocumentListener {
 		// Find where the word starts
 		int w;
 		for (w = pos; w >= 0; w--) {
-			
+
 			if (content.charAt(w) == ' ')
 				break;
 		}

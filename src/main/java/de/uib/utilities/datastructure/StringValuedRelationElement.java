@@ -18,10 +18,10 @@ public class StringValuedRelationElement extends RelationElement<String, String>
 
 	public StringValuedRelationElement(List<String> allowedAttributes, Map<String, ? extends Object> map) {
 		this();
-		
+
 		this.allowedAttributes = allowedAttributes;
 		produceFrom(map);
-		
+
 	}
 
 	/*

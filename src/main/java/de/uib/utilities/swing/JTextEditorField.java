@@ -31,17 +31,12 @@ public class JTextEditorField extends javax.swing.JTextField implements KeyListe
 	}
 
 	public boolean isChangedText() {
-		
-		
 
 		if (lastSetS == null && getText() == null)
 			return false;
 
 		if (lastSetS == null && getText() != null)
 			return true;
-
-		
-		
 
 		return !lastSetS.equals(getText());
 	}
@@ -54,9 +49,7 @@ public class JTextEditorField extends javax.swing.JTextField implements KeyListe
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
-		
-		
+
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			setText(lastSetS);
 		}

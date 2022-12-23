@@ -21,8 +21,4 @@ public class DescriptionElement extends SelectElement {
 		return result;
 	}
 
-	
-	
-	
-	
 }

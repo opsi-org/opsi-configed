@@ -105,17 +105,8 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 		mapTableModel.setMap(visualdata);
 		mapTableModel.fireTableDataChanged();
 
-		
-		
-
 		// from mapTableModel, we get back the sorted vector of property names:
 		names = mapTableModel.getKeys();
-
-		
-		
-		
-		
-		
 
 		if (optionsMap == null) {
 			this.optionsMap = new HashMap<>();
@@ -132,7 +123,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 
 			if (optionsMap != null) {
 				for (String key : optionsMap.keySet()) {
-					
+
 					String description = optionsMap.get(key).getDescription();
 					Object defaultvalue = optionsMap.get(key).getDefaultValues();
 
@@ -162,8 +153,6 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 
 		cancelOldCellEditing();
 
-		
-		
 	}
 
 	@Override
@@ -175,14 +164,14 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 		if (theCellEditor != null) // && data != null)
 		{
 			theCellEditor.cancelCellEditing(); // don't shift the old editing state to a new product
-			
+
 			// state "hangs"
 		}
 
 	}
 
 	public void setValues(Map data) {
-		
+
 		if (data == null)
 			return;
 
@@ -202,7 +191,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 	public void setVoid() {
 		for (Object key : names) {
 			mapTableModel.removeEntryFromStoredMaps((String) key);
-			
+
 		}
 
 		mapTableModel.unsetWrite();

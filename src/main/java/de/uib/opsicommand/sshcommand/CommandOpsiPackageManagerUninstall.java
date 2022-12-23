@@ -11,7 +11,7 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 	protected FGeneralDialog dialog = null;
 	private String command;
 	private int priority = 10;
-	
+
 	String opsiproduct;
 	String depots;
 	String verbosity = " -vvv ";
@@ -74,7 +74,6 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 		// )
 		);
 
-		
 		// exec.exec(command, true, new SSHConnectionExecDialog(command,
 		// configed.getResourceValue("SSHConnection.Exec.title") + "
 		// \""+command.getCommand() + "\" "));

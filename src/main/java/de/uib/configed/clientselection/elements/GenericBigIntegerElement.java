@@ -27,8 +27,4 @@ public class GenericBigIntegerElement extends SelectElement {
 		return result;
 	}
 
-	
-	
-	
-	
 }

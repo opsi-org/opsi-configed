@@ -62,7 +62,7 @@ public class SSHCommandFactory {
 	public final String opsipathVarDepot = "/var/lib/opsi/depot/";
 	// public final String str_command_comparemd5 = " if [ -z $((cat
 	// *.product.*.md5" + ") | grep $(md5sum *.product.* | head -n1 | cut -d \" \"
-	
+
 	// public final String str_replacement_product="*.product.*";
 	// public final String str_replacement_equal= "*.md5equal.*";
 	// public final String str_replacement_notequal= "*.md5notequal.*";
@@ -211,20 +211,18 @@ public class SSHCommandFactory {
 		// Funktioniert nicht wie gewünscht. Optionaler Parameter "<<<....>>>" wird
 		// nicht abgefragt.
 		// ssh_commands_param.add(new
-		
+
 		// SSHCommand csetrights = new
-		
+
 		// LinkedList<String> coms = new LinkedList<>()
-		
-		
-		
+
 		// ssh_commands_param.add(new SSHCommand_Template(csetrights, new
-		
+
 		ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandOpsiSetRights());
 		// ssh_commands_param.add(new SSHCommand_Template(opsisetrights, coms,
 		// configed.getResourceValue("SSHConnection.command.opsisetrights"), true, null,
 		// configed.getResourceValue("SSHConnection.command.opsisetrights.tooltip"),
-		
+
 		ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandDeployClientAgent());
 
 	}
@@ -306,11 +304,7 @@ public class SSHCommandFactory {
 		if (!commandlist.isEmpty())
 			list_knownParents.add(parentdefaultForOwnCommands);
 
-		
-		
-
 		list_knownMenus.add(parentdefaultForOwnCommands);
-		
 
 		for (Map<java.lang.String, java.lang.Object> map : commandlist) {
 			SSHCommand_Template com = buildSSHCommand(((String) map.get(command_map_id)),
@@ -330,7 +324,7 @@ public class SSHCommandFactory {
 			String parent = com.getParentMenuText();
 
 			logging.info(this, "parent menu text " + parent);
-			
+
 			if (parent == null || parent.equalsIgnoreCase("null") || parent == parentdefaultForOwnCommands)
 				parent = parentdefaultForOwnCommands;
 			if (!list_knownParents.contains(parent))
@@ -339,8 +333,6 @@ public class SSHCommandFactory {
 			logging.info(this, "parent menu text changed  " + parent);
 
 			logging.info(this, "list_knownParents " + list_knownParents);
-
-			
 
 			sshcommand_list.add(com);
 		}
@@ -386,7 +378,7 @@ public class SSHCommandFactory {
 		Collections.sort(sshcommand_list);
 
 		java.util.LinkedHashMap<String, List<SSHCommand_Template>> sortedComs = new LinkedHashMap<>();
-		
+
 		sortedComs.put(parentdefaultForOwnCommands, new LinkedList<>());
 		sortedComs.put(parentOpsi, new LinkedList<>());
 
@@ -394,7 +386,7 @@ public class SSHCommandFactory {
 			String parent = com.getParentMenuText();
 			if ((parent == null) || (parent.trim().equals(""))) {
 				parent = parentdefaultForOwnCommands;
-				
+
 			}
 			List parentList = new LinkedList<>();
 			if (sortedComs.containsKey(parent))
@@ -469,8 +461,7 @@ public class SSHCommandFactory {
 
 		if (list_knownMenus.contains(command.getMenuText())) {
 			logging.info(this, "saveSSHCommand sshcommand_list.contains(command) true");
-			if (main.getPersistenceController().updateSSHCommand(jsonObjects)) 
-			{
+			if (main.getPersistenceController().updateSSHCommand(jsonObjects)) {
 				((SSHCommand_Template) sshcommand_list
 						.get(sshcommand_list.indexOf(getSSHCommandByMenu(command.getMenuText())))).update(command);
 				return true;

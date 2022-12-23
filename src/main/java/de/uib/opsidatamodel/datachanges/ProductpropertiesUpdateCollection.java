@@ -100,8 +100,6 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 		logging.debug(this, "doCall, after recursion");
 		persis.setProductproperties();
 
-		
-		
 	}
 
 	@Override
@@ -117,7 +115,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 
 	@Override
 	public boolean add(Object obj) {
-		
+
 		// obj + " of class " + obj.getClass().getName());
 		return super.add(obj);
 	}

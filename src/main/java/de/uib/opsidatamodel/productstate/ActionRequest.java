@@ -1,6 +1,5 @@
 package de.uib.opsidatamodel.productstate;
 
-
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -118,7 +117,7 @@ public class ActionRequest {
 
 		serviceValues = new Vector<>(serviceValue2state.keySet());
 		scriptKeys = new Vector<>();
-		
+
 		scriptKey2label = new HashMap<>();
 
 		for (String request : serviceValues) {
@@ -309,7 +308,7 @@ public class ActionRequest {
 		checkCollections();
 
 		if (label == null)
-			return new ActionRequest(NONE); 
+			return new ActionRequest(NONE);
 
 		if (!labels.contains(label))
 			return new ActionRequest(INVALID);

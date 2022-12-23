@@ -36,7 +36,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 
 	public void setData(Map<String, ListCellOptions> optionsMap, Map currentData) {
 		this.optionsMap = optionsMap;
-		
+
 		// optionsMap.get("type"));
 		mapTypes(currentData);
 	}
@@ -60,9 +60,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 		originalTypes = new HashMap<>();
 		for (Object key : currentData.keySet()) {
 			Object value = currentData.get(key);
-			
-			
-			
+
 			originalTypes.put((String) key, value.getClass());
 			this.currentData.put((String) key, toList(value));
 		}
@@ -81,11 +79,8 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 		logging.info(this, "getListModel, row " + row + ", column " + column);
 
 		// build listmodel
-		
-		
-		String key = (String) table.getValueAt(row, 0);
 
-		
+		String key = (String) table.getValueAt(row, 0);
 
 		ListCellOptions options = getListCellOptions(key);
 
@@ -93,7 +88,6 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 		logging.info(this, "getListModel key " + key + " the option values " + values);
 		logging.info(this, "getListModel key " + key + " options  " + options);
 
-		
 		DefaultListModel model = new DefaultListModel();
 		Iterator iter = ((List) values).iterator();
 		while (iter.hasNext()) {
@@ -115,14 +109,14 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 
 	@Override
 	public List getSelectedValues(int row, int column) {
-		
+
 		String key = (String) table.getValueAt(row, 0);
 		return (List) currentData.get(key);
 	}
 
 	@Override
 	public void setSelectedValues(List newValues, int row, int column) {
-		
+
 		String key = (String) table.getValueAt(row, 0);
 		currentData.put(key, newValues);
 		table.setValueAt(newValues, row, 1);
@@ -153,9 +147,8 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 
 	@Override
 	public Class getClass(int row, int column) {
-		
+
 		String key = (String) table.getValueAt(row, 0);
-		
 
 		return originalTypes.get(key);
 	}

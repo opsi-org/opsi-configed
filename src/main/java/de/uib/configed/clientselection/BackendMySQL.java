@@ -33,8 +33,6 @@ public class BackendMySQL {
 
 		alle_hosts = getListFromSQL("SELECT hostId FROM HOST;");
 
-		
-		
 		////
 		/*
 		 * for(int j=0; j<((List)((HashMap)hwConfig.get(i)).get("Values")).size(); j++)
@@ -75,8 +73,7 @@ public class BackendMySQL {
 		 * 
 		 * //
 		 */
-		
-		
+
 	}
 
 	public List<String> getListFromSQL(String abfrage) {
@@ -115,7 +112,6 @@ public class BackendMySQL {
 
 		for (int i = 0; i < children.length(); i++) {
 			List<String> list_i = getListFromJSONObject((JSONObject) children.get(i));
-			
 
 			result = union(result, list_i);
 
@@ -337,10 +333,6 @@ public class BackendMySQL {
 		 * );
 		 */
 
-		
-		
-		
-
 		return list;
 	}
 
@@ -367,7 +359,6 @@ public class BackendMySQL {
 		}
 	}
 
-	
 	// Es müssen entsprechend noch die Standardwerte anstelle der Platzhalter
 	// ergänzt werden.
 	public String getWhereClauseDefaultProduct(String abfrage) {
@@ -402,8 +393,6 @@ public class BackendMySQL {
 
 		return abfrage;
 	}
-
-	
 
 	/*
 	 * Der Teil hier wird eigentlich nur für das Testen mit der lokalen

@@ -27,7 +27,7 @@ public class ConnectionState {
 		myState = state;
 		this.message = message;
 		instancesCount++;
-		
+
 	}
 
 	/**

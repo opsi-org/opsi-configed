@@ -72,7 +72,6 @@ public abstract class DataStub {
 	public abstract Object2Product2VersionList getDepot2NetbootProducts();
 
 	// public abstract HashMap<String, List<String>>
-	
 
 	public abstract void productPropertyDefinitionsRequestRefresh();
 
@@ -88,9 +87,8 @@ public abstract class DataStub {
 
 	public abstract List<Map<String, Object>> getProductPropertyStates();
 
-	
 	// public abstract void fillProductPropertyDepotStates(Collection<String>
-	
+
 	public abstract List<Map<String, Object>> getProductPropertyDepotStates(java.util.Set<String> depots);
 
 	public abstract void installedSoftwareInformationRequestRefresh();
@@ -117,7 +115,6 @@ public abstract class DataStub {
 
 	public abstract Map<String, List<SWAuditClientEntry>> getClient2Software();
 
-	
 	public abstract Map<String, java.util.Set<String>> getSoftwareIdent2clients();
 
 	public abstract void auditSoftwareXLicencePoolRequestRefresh();
@@ -129,8 +126,6 @@ public abstract class DataStub {
 	public abstract Map<String, Map<String, Object>> getConfigs();
 	// host -> (key -> value)
 	// public abstract Map<String, Map<String, List<Object>>>
-	
-	
 
 	public abstract void licencepoolsRequestRefresh();
 

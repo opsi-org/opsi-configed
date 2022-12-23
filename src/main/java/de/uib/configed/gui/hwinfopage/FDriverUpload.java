@@ -8,7 +8,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.MainFrame;
 import de.uib.opsidatamodel.PersistenceController;
-
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.SecondaryFrame;
@@ -52,8 +51,6 @@ public class FDriverUpload extends SecondaryFrame {
 
 	protected void define() {
 		panelDriverUpload = new PanelDriverUpload(main, persist, this);
-
-		
 
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);

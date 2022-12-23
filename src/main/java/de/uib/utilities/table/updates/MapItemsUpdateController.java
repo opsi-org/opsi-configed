@@ -32,10 +32,10 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 
 	@Override
 	public boolean saveChanges() {
-		
+
 		logging.debug(this, "saveChanges");
 
-		WaitCursor waitCursor = new WaitCursor(); 
+		WaitCursor waitCursor = new WaitCursor();
 
 		boolean success = true; // true until failure
 
@@ -50,13 +50,8 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 			MapBasedTableEditItem updateItem = (MapBasedTableEditItem) iter.next();
 
 			logging.debug(this, " handling updateItem " + updateItem);
-			
-			
-			
-			
 
 			if (updateItem.getSource() == this.tablemodel) {
-				
 
 				if (updateItem instanceof MapDeliveryItem) {
 					String result = updater.sendUpdate(updateItem.getRowAsMap());
@@ -64,7 +59,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 					success = (result != null);
 					if (success && updateItem.keyChanged()) {
 						successfullInsertsWithNewKeys.add(updateItem);
-						
+
 						lastKeyValue = result;
 					}
 				}

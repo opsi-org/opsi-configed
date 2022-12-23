@@ -23,11 +23,10 @@ public class DbConnect {
 	private DbConnect() {
 		try {
 			Class.forName(driver).getDeclaredConstructor().newInstance();
-			
+
 		}
 		// catch ( ClassNotFoundException e ) {
-		
-		
+
 		catch (Exception e) {
 			logging.error("Error", e);
 			return;

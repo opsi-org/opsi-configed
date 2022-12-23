@@ -78,7 +78,6 @@ public class XTree extends JTree {
 					return;
 				}
 
-				
 				// + " " + currentPath.getLastPathComponent());
 
 				if (getModel().isLeaf(currentPath.getLastPathComponent())) {
@@ -86,7 +85,7 @@ public class XTree extends JTree {
 					setSelectionPath(currentPath);
 				} else {
 					setCursor(defaultCursor);
-					
+
 				}
 			}
 
@@ -109,14 +108,14 @@ public class XTree extends JTree {
 	public void expandRows(Vector<Integer> rows) {
 		logging.debug(this, "expandRows " + rows.size());
 		for (Integer row : rows) {
-			
+
 			expandRow(row);
 		}
 	}
 
 	public void expandAll() {
 		for (int row = 0; row < getRowCount(); row++) {
-			
+
 			expandRow(row);
 		}
 	}

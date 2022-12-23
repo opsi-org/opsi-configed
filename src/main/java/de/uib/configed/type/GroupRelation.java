@@ -1,6 +1,5 @@
 package de.uib.configed.type;
 
-
 import java.util.ArrayList;
 
 import de.uib.utilities.datastructure.Relation;

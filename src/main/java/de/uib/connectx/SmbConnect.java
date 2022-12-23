@@ -83,8 +83,6 @@ public class SmbConnect {
 		Map<String, Map<String, Object>> depot2depotMap = persist.getHostInfoCollections().getDepots();
 
 		logging.info(this, "buildSambaTarget for depotserver " + depotserver);
-		
-		
 
 		if (depot2depotMap.get(depotserver) == null)
 			return result;

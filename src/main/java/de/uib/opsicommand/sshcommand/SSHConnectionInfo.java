@@ -118,7 +118,7 @@ public class SSHConnectionInfo {
 		if (getHost() == null)
 			// setHost(allowedHostsContainsSubstring(
 			// SSHCommandFactory.getInstance().getAllowedHosts(),
-			
+
 			setHost(ConfigedMain.HOST);
 		// for SSH ConfigedMain.HOST always allowed
 

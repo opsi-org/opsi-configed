@@ -206,10 +206,6 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 		return dialog;
 	}
 	// @Override
-	
-	
-	
-	
 
 	public void setClient(String c) {
 		if (c != "")

@@ -71,16 +71,13 @@ public class ActivityPanel extends JPanel implements Runnable {
 
 		}
 		try {
-			
-			
+
 			{
-				
+
 				paintImmediately(0, 0, w, h); // class cast exceptions mit sleepingMS = 50 if not event dispatch thread
 			}
 			// else
-			
 
-			
 		} catch (Exception strange) {
 			logging.warning(this, "strange exception " + strange);
 			setState(inactive);
@@ -109,7 +106,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 		try {
 			while (true) {
 				try {
-					
+
 					Thread.sleep(sleepingMS);
 
 				} catch (InterruptedException ignore) {
@@ -167,7 +164,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 		setOpaque(true);
 		setBorder(lineBorderInactive);
 		colors = new Color[2];
-		colors[1] = Globals.opsiLogoBlue; 
+		colors[1] = Globals.opsiLogoBlue;
 		colors[0] = Globals.opsiLogoLightBlue;
 		setPreferredSize(new Dimension(w, h));
 
@@ -188,7 +185,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 							WaitCursor.stopAll();
 						} catch (Exception x) {
 						} ;
-						
+
 					}
 				}
 

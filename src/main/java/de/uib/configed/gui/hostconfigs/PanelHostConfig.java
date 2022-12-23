@@ -28,7 +28,6 @@ public class PanelHostConfig extends JPanel {
 	protected boolean entryRemovable = true;
 	protected boolean reloadable = true;
 
-	
 	public final String propertyClassUser = UserConfig.KEY_USER_ROOT;
 	public final String propertyClassRole = UserConfig.KEY_USER_ROLE_ROOT;
 
@@ -44,7 +43,7 @@ public class PanelHostConfig extends JPanel {
 	// overwrite in subclasses
 	protected void reloadHostConfig() {
 		logging.info(this, " in PanelHostConfig: reloadHostConfig");
-		
+
 	}
 
 	// overwrite in subclasses
@@ -100,9 +99,9 @@ public class PanelHostConfig extends JPanel {
 
 	protected void buildPanel() {
 		// boolean serverEditing = (ConfigedMain.getEditingTarget() ==
-		
+
 		label = new JLabel(configed.getResourceValue("MainFrame.jLabel_Config"));
-		
+
 		PersistenceControllerFactory.getPersistenceController().checkConfiguration();
 		putUsersToPropertyclassesTreeMap();
 
@@ -186,7 +185,6 @@ public class PanelHostConfig extends JPanel {
 
 		editMapPanel.setOptionsEditable(optionsEditable);
 		// ((EditMapPanelGrouped)editMapPanel).setPropertyHandlerType(
-		
 
 	}
 

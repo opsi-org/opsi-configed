@@ -41,39 +41,33 @@ public abstract interface SSHSFTPCommand {
 	public void setTargetFilename(String f);
 
 	public void setOverwriteMode(boolean o);
-	
+
 	// /** @return command String to execute **/
-	
-	
+
 	// 
-	
 
 	// /** @return raw command String **/
-	
+
 	// /** @returnlist of parameter-Ersatz **/
-	
+
 	// /** @return True if command need sudo **/
-	
+
 	// /** @return command id String **/
-	
+
 	// 
 	// /** @return command menu text String **/
-	
+
 	// /** @return command parent menu text String **/
-	
+
 	// /** @return command tooltip text String **/
-	
+
 	// /** @return command priority int **/
-	
-	
 
 	// /** @return True if command needs an parameter gui **/
-	
+
 	// /** @return True if command is a multicommand **/
-	
+
 	// 
 	// /** @return the command dialog(parameter)**/
-	
 
-	
 }

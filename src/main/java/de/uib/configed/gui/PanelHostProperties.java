@@ -43,7 +43,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 		combo.addItemListener(this);
 		de.uib.configed.gui.helper.PropertiesTableCellRenderer cellRenderer = new de.uib.configed.gui.helper.PropertiesTableCellRenderer();
 		logging.info(this, "buildPanel, produce editMapPanel");
-		editMapPanel = new EditMapPanelX(cellRenderer, false, false); 
+		editMapPanel = new EditMapPanelX(cellRenderer, false, false);
 		((EditMapPanelX) editMapPanel)
 				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName().toString()));
 		editMapPanel.setShowToolTip(false);
@@ -83,8 +83,6 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 			Set<String> keysOfReadOnlyEntries) {
 		label.setText(labeltext);
 		activateCombo(comboModel);
-
-		
 
 		logging.debug(this, "initMultipleHosts " + " configs  " + (multipleMaps)
 		// + " configOptions " + (configOptions)

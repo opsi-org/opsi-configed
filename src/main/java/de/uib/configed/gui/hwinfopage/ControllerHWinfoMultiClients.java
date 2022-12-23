@@ -39,7 +39,7 @@ public class ControllerHWinfoMultiClients {
 	private GenTableModel model;
 
 	JButton buttonConfigureColumns;
-	
+
 	JButton buttonReload;
 	JButton buttonCopySelection;
 
@@ -108,9 +108,9 @@ public class ControllerHWinfoMultiClients {
 	public void setFilter() {
 		theFilterSet = new TreeSet<>(main.getSelectedClientsInTable());
 		filterConditionHwForSelectedHosts.setFilter(theFilterSet);
-		model.invalidate(); 
+		model.invalidate();
 		model.reset();
-		
+
 	}
 
 	public void requestResetFilter() {
@@ -127,12 +127,10 @@ public class ControllerHWinfoMultiClients {
 				PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF, true) {
 			@Override
 			public void reload() {
-				
+
 				persist.client2HwRowsRequestRefresh();
-				
-				
+
 				super.reload();
-				
 
 			}
 
@@ -157,14 +155,12 @@ public class ControllerHWinfoMultiClients {
 
 	protected void initModel() {
 
-		
 		columnNames = persist.getClient2HwRowsColumnNames();
 		classNames = persist.getClient2HwRowsJavaclassNames();
 		logging.info(this, "initmodel: columns " + columnNames);
 		hosts = new String[0];
 
 		// GenericTableUpdateItemFactory updateItemFactory = new
-		
 
 		model = new GenTableModel(
 				// updateItemFactory,
@@ -191,19 +187,9 @@ public class ControllerHWinfoMultiClients {
 				// updateCollection
 				null);
 
-		
-
-		
 		// we got metadata:
 
-		
-		
-
-		
-		
-
 		panel.setTableModel(model);
-		
 
 		model.chainFilter(FILTER_SELECTED_CLIENTS, tableModelFilter);
 
@@ -240,7 +226,6 @@ public class ControllerHWinfoMultiClients {
 			rebuildModel();
 		});
 
-		
 		// testpanel.add( new JLabel ("hallo welt") );
 
 		buttonConfigureColumns.addActionListener(actionEvent -> {
@@ -272,7 +257,7 @@ public class ControllerHWinfoMultiClients {
 				actionEvent -> main.setSelectedClientsCollectionOnPanel(panel.getSelectedKeys(), true));
 
 		panel.setTitlePane(new JComponent[] {
-				
+
 				buttonReload, buttonCopySelection, new JLabel("       "), buttonConfigureColumns }, 20);
 		panel.setTitlePaneBackground(Globals.backLightBlue);
 

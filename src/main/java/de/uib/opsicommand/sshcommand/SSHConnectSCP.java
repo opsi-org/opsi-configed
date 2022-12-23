@@ -115,13 +115,13 @@ public class SSHConnectSCP extends SSHConnectExec {
 				return task.get();
 
 			if (SSHCommandFactory.ssh_always_exec_in_background)
-				
+
 				if (withGui)
 					dialog.setVisible(true);
 				else
 					dialog.setVisible(false);
 			System.gc();
-			
+
 			// return "finish";
 			// else
 			return task.get();
@@ -322,7 +322,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 		protected void process(List<String> chunks) {
 			logging.debug(this, "chunks " + chunks.size());
 			if (outputDialog != null) {
-				
+
 				for (String line : chunks) {
 					logging.debug(this, "process " + line);
 					outputDialog.append(getCommandName(), line + "\n");

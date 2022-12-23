@@ -183,7 +183,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		 */
 
 		initDataStructure();
-		
 
 		buttonRemoveAllAssignments = new JButton();
 		buttonRemoveAllAssignments.setIcon(Globals.createImageIcon("images/list-remove-14.png", ""));
@@ -215,7 +214,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 																																												// selected
 																																												// row:
 																																												// ")
-																																												
+
 		buttonSetAllAssignmentsToPoolFromSelectedRow
 				.addActionListener(actionEvent -> panelSWxLicencepool.setDataChanged(
 						setSWxColTo((String) panelSWxLicencepool.getValueAt(panelSWxLicencepool.getSelectedRow(), 1))));
@@ -293,14 +292,11 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		setAdditionalPane(panelSWx);
 		// setTableModelSWxLicencepool( "zypper" );
 		additionalPane.setBackground(Globals.backgroundWhite);// Color.YELLOW
-																
-																
+
 		setCenterPane(panelSWnames);
 		additionalPane.setVisible(true);
-		
-		
+
 		setupLayout();
-		
 
 	}
 
@@ -338,7 +334,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 			@Override
 			public boolean test(Vector<Object> row) {
-				
+
 				return getRangeSWxLicencepool((String) row.get(0)).size() > 1;
 			}
 		};
@@ -351,7 +347,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 			@Override
 			public boolean test(Vector<Object> row) {
-				
+
 				return checkExistNamesWithVariantLicencepools((String) row.get(0));
 			}
 		};
@@ -377,7 +373,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 				// setTableModelSWxLicencepool
 
-				
 			}
 		});
 
@@ -409,12 +404,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			this.modelSWnames = new GenTableModel(null, // no updates
 					new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
 							// new MapRetriever(){
-							
-							
-							
-							
-							
-							
+
 							() -> (Map) persist.getInstalledSoftwareName2SWinfo())
 					// ,
 
@@ -468,12 +458,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		panelSWnames.setTableModel(this.modelSWnames);
 
-		
-		
-		
-		
-		
-
 	}
 
 	public void setPreselectionForName2Pool(Softwarename2LicencepoolRestriction val) {
@@ -491,7 +475,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		}
 
 		modelSWnames.reset();
-		
 
 		logging.info(this, "setPreselectionForName2Pool, we did a reset for modelSWnames with " + val);
 	}
@@ -614,8 +597,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						logging.info(this, "sendUpdate " + rowmap);
 						// update with new value "---" == valNoLicencepool is interpreted as deleting
 
-						
-						
 						// reloads local data (which are not yet updated)
 						String swID = (String) rowmap.get(AuditSoftwareXLicencePool.SwID);
 						String licensePoolID_old = persist.getFSoftware2LicencePool(swID);
@@ -637,7 +618,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 					}
 				}, updateCollection));
-		
 
 	}
 
@@ -688,7 +668,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	public void leave() {
 		setVisible(false);
 		// we dont dispose the window, dispose it in the enclosing class
-		
+
 	}
 
 	public void exit() {

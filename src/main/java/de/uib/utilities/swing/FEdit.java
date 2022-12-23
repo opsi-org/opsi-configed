@@ -41,8 +41,6 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 	protected JComponent editingArea;
 	protected JLabel labelHint;
 
-	
-	
 	protected de.uib.configed.gui.IconButton buttonCommit;
 	protected de.uib.configed.gui.IconButton buttonCancel;
 
@@ -64,7 +62,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 		logging.debug(this, " FEdit constructed for >>" + initialText + "<< title " + hint);
 		setIconImage(Globals.mainIcon);
-		
+
 		if (initialText != null)
 			this.initialText = initialText;
 
@@ -83,7 +81,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 	protected void createComponents() {
 		framingPanel = new JPanel();
 		editingArea = new JPanel(new BorderLayout());
-		
+
 		labelHint = new JLabel();
 		labelHint.setFont(Globals.defaultFontStandardBold);
 
@@ -96,7 +94,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 				logging.debug(this, "setEnabled " + b);
 			}
 		};
-		
+
 		buttonCommit.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 
 		buttonCancel = new de.uib.configed.gui.IconButton(
@@ -104,7 +102,6 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 				"images/cancel_over.png", "images/cancel_disabled.png", true);
 		buttonCancel.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 
-		
 	}
 
 	protected void initComponents() {
@@ -113,8 +110,6 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 		setHint(hint);
 
-		
-		
 		// okbutton.setText("ok");
 		// cancelbutton.setText("cancel");
 
@@ -123,14 +118,6 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 		buttonCommit.addKeyListener(this);
 		buttonCancel.addKeyListener(this);
-
-		
-
-		
-
-		
-		
-		
 
 		javax.swing.GroupLayout layout1 = new javax.swing.GroupLayout(framingPanel);
 		framingPanel.setLayout(layout1);
@@ -184,12 +171,12 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 	}
 
 	public void setDataChanged(boolean b) {
-		
+
 		// " button enabled " + buttonCommit.isEnabled() + " set to " + b);
 		dataChanged = b;
 		buttonCommit.setEnabled(b);
 		buttonCancel.setEnabled(true);
-		
+
 	}
 
 	protected boolean isDataChenged() {
@@ -242,20 +229,19 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 	}
 
 	public boolean init(Dimension usableAreaSize) {
-		
+
 		if (editingArea.getComponentCount() != 1) {
 			logging.info(this, " editing area not filled with component");
-			
+
 		}
-		
-		
+
 		editingArea.getComponent(0).setPreferredSize(usableAreaSize);
 		initComponents();
 		return true;
 	}
 
 	public boolean init() {
-		
+
 		return init(areaDimension);
 	}
 
@@ -269,7 +255,6 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 		// problem: in applet in windows, we may leave the screen
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		
 
 		if (startX + getSize().width > screenSize.width)
 			startX = screenSize.width - getSize().width;
@@ -307,23 +292,12 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 			startY = (screenSize.height - getSize().height) / 2;
 
 		} else {
-			
-			
-			
-			
-			
-			
-			
-			
-
-			
 
 			startX = (int) masterOnScreen.getX() + intHalf(master.getWidth()) - intHalf(getSize().getWidth());
 			startY = (int) masterOnScreen.getY() + intHalf(master.getHeight()) - intHalf(getSize().getHeight());
 
 			// problem: in applet in windows, we may leave the screen
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			
 
 			if (startX + getSize().width > screenSize.width)
 				startX = screenSize.width - getSize().width;
@@ -340,13 +314,13 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 		if (caller != null) {
 			callerFont = caller.getFont();
 			caller.setFont(callerFont.deriveFont(Font.ITALIC));
-			
+
 		}
 	}
 
 	public void deactivate() {
 		if (caller != null) {
-			
+
 			caller.setFont(callerFont);
 			caller.validate();
 		}
@@ -364,13 +338,11 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			cancel();
-			
+
 		} else if (e.getID() == WindowEvent.WINDOW_ACTIVATED) {
-			
+
 			enter();
 		} else if (e.getID() == WindowEvent.WINDOW_DEACTIVATED) {
-			
-			
 
 		}
 
@@ -391,7 +363,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 		logging.info(this, "cancel, go back to " + initialText);
 		setStartText(initialText); // sets cancelled = false
 		cancelled = true;
-		
+
 		if (servedCellEditor != null)
 			servedCellEditor.stopCellEditing();
 
@@ -409,7 +381,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 		if (e.getSource() == buttonCommit) {
 			commit();
 		} else if (e.getSource() == buttonCancel) {
-			
+
 			cancel();
 		}
 

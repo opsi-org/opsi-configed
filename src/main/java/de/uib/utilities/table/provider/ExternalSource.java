@@ -44,8 +44,7 @@ public class ExternalSource implements TableSource
 			rowsProvider.requestReload();
 			reloadRequested = false;
 		}
-		
-		
+
 		return rowsProvider.getRows();
 	}
 

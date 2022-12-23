@@ -20,8 +20,6 @@ public class ProductOnClient extends Table {
 	public static final String PRODUCTtype = "productType";
 
 	private static final String localFilename = "productstates.configed";
-	
-	
 
 	public static List<String> columns;
 	static {

@@ -12,8 +12,7 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 	public ConfigName2ConfigValue(Map<String, Object> retrieved, Map<String, ConfigOption> configOptions) {
 		super(retrieved);
 		this.configOptions = configOptions;
-		
-		
+
 		buildX();
 	}
 
@@ -26,13 +25,13 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 		// overwrite values by virtue of imported type informations
 
 		if (retrieved == null) {
-			
+
 			// we should take default values even if we have not got any values
 			retrieved = new HashMap<>();
 		}
 
 		if (configOptions == null) {
-			
+
 		} else {
 
 			for (String key : configOptions.keySet()) {
@@ -53,10 +52,6 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 			if (!(retrieved.get(key) instanceof List)) {
 				logging.warning(this, "list expected , for key " + key + " found " + retrieved.get(key));
 				logging.error(this, "list expected , for key " + key);
-				
-				
-				
-				
 
 				continue;
 			} else
@@ -66,14 +61,14 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 
 			if (configOptions != null && configOptions.get(key) != null) {
 				ConfigOption configOption = (ConfigOption) configOptions.get(key);
-				
+
 				// configOption.get("classname"));
 				if (configOption.get("classname").equals("java.lang.Boolean")) {
 					put(key, list.get(0));
 				} else
 					put(key, list);
 			} else {
-				
+
 				logging.debug(this, "no config (option) found for key " + key);
 
 				put(key, list);
@@ -81,7 +76,6 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 
 		}
 
-		
 	}
 
 }

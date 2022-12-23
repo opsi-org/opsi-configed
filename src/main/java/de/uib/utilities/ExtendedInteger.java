@@ -36,15 +36,12 @@ public class ExtendedInteger implements Comparable {
 	}
 
 	public ExtendedInteger(String s) {
-		
 
 		number = null;
 		value = null;
 
 		if (s.equals(sINFINITE) || s.equals(infiniteImport) || s.equals(displayInfinite)) {
 			value = sINFINITE;
-
-			
 
 		} else {
 			try {
@@ -92,11 +89,11 @@ public class ExtendedInteger implements Comparable {
 		if (ei.equals(INFINITE) || this.equals(INFINITE)) {
 			result = new ExtendedInteger(INFINITE);
 		} else {
-			
+
 			int sum = this.getNumber() + ei.getNumber();
 			result = new ExtendedInteger(Integer.valueOf(sum), "" + sum);
 		}
-		
+
 		return result;
 	}
 
@@ -124,12 +121,9 @@ public class ExtendedInteger implements Comparable {
 		else if (o instanceof Integer)
 			comparedWithMe = new ExtendedInteger((Integer) o);
 
-		
-		
-
 		if (this.equals(INFINITE)) {
 			if (comparedWithMe.equals(INFINITE))
-				return 0; 
+				return 0;
 			else
 				return -1;
 		} else {

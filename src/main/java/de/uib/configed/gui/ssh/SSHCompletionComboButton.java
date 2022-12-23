@@ -98,12 +98,12 @@ public class SSHCompletionComboButton {
 			defaultvalues.addElement(combobox_default_path);
 			defaultvalues.addElement(root);
 			defaultvalues.addElement(opsiRepo);
-			
+
 		} else {
 			defaultvalues = new Vector<>();
 			defaultvalues.addElement(opsiRepo);
 			defaultvalues.addElement(root);
-			
+
 		}
 		// Is element in defaultValues?
 		if (defvalues != null)

@@ -95,10 +95,8 @@ public class Relation extends ArrayList<StringValuedRelationElement> {
 
 			valueList.add(element);
 
-			
 			// valueTakenAsKey + " composed valueList " +valueList);
 
-			
 		}
 
 		return function;

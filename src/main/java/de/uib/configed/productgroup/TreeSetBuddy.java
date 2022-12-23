@@ -32,7 +32,6 @@ public class TreeSetBuddy extends TreeSet<String> {
 		while (equal && iter.hasNext()) {
 			String str0 = iter.next();
 			String str1 = otherIter.next();
-			
 
 			if (!str0.equals(str1))
 				equal = false;

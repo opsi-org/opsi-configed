@@ -169,10 +169,9 @@ public class ExporterToPDF extends ExportTable {
 
 			if ((saveAction == false) && (temp.getAbsolutePath() != null)) {
 				try {
-					
-					
-					Desktop.getDesktop().open(temp); 
-					
+
+					Desktop.getDesktop().open(temp);
+
 				} catch (Exception e) {
 					logging.error("cannot show: " + temp.getAbsolutePath() + " : " + e);
 				}
@@ -229,7 +228,7 @@ public class ExporterToPDF extends ExportTable {
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd. MMMMM yyyy");
 		// Second parameter is the number of the chapter
 		Paragraph content = new Paragraph();
-		
+
 		if (metaData.containsKey("title"))
 			content.add(new Paragraph(metaData.get("title"), catFont));
 		if (metaData.containsKey("subtitle"))
@@ -370,7 +369,7 @@ public class ExporterToPDF extends ExportTable {
 		public void onEndPage(PdfWriter writer, Document document) {
 			PdfPTable table = new PdfPTable(3);
 			// TODO: logo, create String from Globals
-			
+
 			// String url = "classes/de/uib/configed/gui/images/opsi_full.png";
 			java.net.URL opsi_image_URL = Globals.getImageResourceURL("images/opsi_full.png");
 			try {

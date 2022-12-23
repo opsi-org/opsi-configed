@@ -51,7 +51,7 @@ public abstract class TableEntry extends LinkedHashMap<String, String> {
 	}
 
 	protected void remap(String key, String keyRetrieved, boolean replaceNull) {
-		
+
 		// + ", value "+ entryRetrieved.get(keyRetrieved));
 		try {
 			if (entryRetrieved.get(keyRetrieved) != null)

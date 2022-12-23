@@ -2,8 +2,6 @@ package de.uib.utilities;
 
 import java.util.Date;
 
-
-
 public class ExtendedDate {
 	static final String infiniteImport = "never";
 	static final String sINFINITE = "INFINITE";
@@ -45,7 +43,7 @@ public class ExtendedDate {
 			if (value.equalsIgnoreCase(infiniteImport) || value.equalsIgnoreCase(sINFINITE)) {
 				sDate = sINFINITE;
 			} else {
-				
+
 				// extend
 
 				if (value.indexOf(' ') == -1) {

@@ -53,7 +53,6 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	private JPanel workbenchpanel;
 	private JPanel mainpanel;
 	private JPanel buttonPanel;
-	
 
 	private JButton btn_advancedSettings;
 	private JButton btn_setRights;
@@ -88,7 +87,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	}
 
 	private void setComponentsEnabled(boolean value) {
-		
+
 		btn_exec.setEnabled(value);
 		if (value == false) {
 			tf_packageVersion.setEnabled(value);
@@ -149,7 +148,6 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 				});
 				autocompletion.initCombobox();
 				cb_mainDir = autocompletion.getCombobox();
-				
 
 				btn_searchDir = autocompletion.getButton();
 				btn_searchDir.removeActionListener(btn_searchDir.getActionListeners()[0]);
@@ -508,7 +506,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 					+ " removed\" || echo \"File did not exist\"";
 			// Empty_Command removeExistingPackage = new
 			// Empty_Command(str_command_fileexists.replaceAll(str_replacement_filename,
-			
+
 			Empty_Command removeExistingPackage = new Empty_Command(command);
 			str2exec.addCommand(removeExistingPackage);
 
@@ -518,7 +516,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 					+ ".zsync removed\" || echo \"File  " + filename + ".zsync did not exist\"";
 			// removeExistingPackage = new
 			// Empty_Command(str_command_filezsyncExists.replaceAll(str_replacement_filename,
-			
+
 			removeExistingPackage = new Empty_Command(command);
 			str2exec.addCommand(removeExistingPackage);
 
@@ -527,14 +525,14 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			removeExistingPackage = new Empty_Command(command);
 			// removeExistingPackage = new
 			// Empty_Command(str_command_filemd5Exists.replaceAll(str_replacement_filename,
-			
+
 			str2exec.addCommand(removeExistingPackage);
 		}
 		if (cb_setRights.isSelected()) {
 			str2exec.addCommand(new CommandOpsiSetRights(dir));
 		}
 		str2exec.addCommand(makeProductFile);
-		
+
 		logging.info(this, "SSHConnectExec " + str2exec);
 		new Thread() {
 			@Override
@@ -560,6 +558,6 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		if (result != null)
 			return result.replace("id:", "").trim();
 		return "";
-		
+
 	}
 }

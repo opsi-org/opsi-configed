@@ -47,7 +47,7 @@ public class SavedSearchesDialog extends FEditList {
 
 	public void start() {
 		buttonAdd.setEnabled(true);
-		
+
 		resetModel();
 	}
 
@@ -93,7 +93,7 @@ public class SavedSearchesDialog extends FEditList {
 		});
 
 		JMenuItem reload = new JMenuItemFormatted();
-		
+
 		// find itscontext
 		reload.setText(configed.getResourceValue("ConfigedMain.reloadTable"));
 		reload.setIcon(Globals.createImageIcon("images/reload16.png", ""));
@@ -108,7 +108,7 @@ public class SavedSearchesDialog extends FEditList {
 		popup.add(reload);
 
 		JMenuItem remove = new JMenuItemFormatted();
-		
+
 		// find itscontext
 		remove.setText(de.uib.configed.configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
 		// remove.setIcon(Globals.createImageIcon("images/remove16.png",
@@ -164,7 +164,6 @@ public class SavedSearchesDialog extends FEditList {
 	@Override
 	protected void commit() {
 		result = null;
-		
 
 		buttonCommit.setEnabled(false);
 		buttonCancel.setEnabled(false);
@@ -178,7 +177,7 @@ public class SavedSearchesDialog extends FEditList {
 				manager.loadSearch(selected.get(0));
 
 				// test:
-				
+
 				result = manager.selectClients();
 			}
 			super.commit();
@@ -192,7 +191,7 @@ public class SavedSearchesDialog extends FEditList {
 	@Override
 	protected void cancel() {
 		result = null;
-		
+
 		super.cancel();
 	}
 
@@ -202,7 +201,7 @@ public class SavedSearchesDialog extends FEditList {
 
 		if (index == -1)
 			return;
-		
+
 		logging.debug(this, "remove entry at " + index);
 
 		removeSavedSearch((String) model.get(index));
@@ -256,7 +255,7 @@ public class SavedSearchesDialog extends FEditList {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		
+
 		if (e.getClickCount() > 1) {
 			commit();
 		}

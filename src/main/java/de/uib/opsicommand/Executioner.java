@@ -16,8 +16,7 @@ public abstract class Executioner {
 	public abstract JSONObject retrieveJSONObject(OpsiMethodCall omc);
 
 	// public abstract List<JSONObject> retrieveJSONObjects(List<OpsiMethodCall>
-	
-	
+
 	public static JSONObject jsonMap(Map m) {
 		return new JSONObject(m);
 	}
@@ -31,7 +30,7 @@ public abstract class Executioner {
 			result = new JSONArray();
 		else
 			result = new JSONArray(l);
-		
+
 		return result;
 	}
 
@@ -79,6 +78,5 @@ public abstract class Executioner {
 
 	public abstract String getStringValueFromItem(Object s);
 
-	
 	public static final Executioner NONE = new NONEexecutioner();
 }

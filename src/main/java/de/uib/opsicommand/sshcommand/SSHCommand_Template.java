@@ -17,9 +17,7 @@ package de.uib.opsicommand.sshcommand;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-
 import de.uib.configed.gui.FGeneralDialog;
-
 import de.uib.utilities.logging.logging;
 
 /**
@@ -166,7 +164,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 
 	@Override
 	public String getSecureInfoInCommand() {
-		return confidential_information; 
+		return confidential_information;
 	}
 
 	@Override

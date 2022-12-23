@@ -87,16 +87,13 @@ public class PanelMountShare extends JPanel {
 
 		// mountShareLabel = new JLabel(
 		// configed.getResourceValue("PanelMountShare.mountShare" ) + " " +
-		
+
 		mountShareLabel = new JLabel("");
 
 		mountShareDescriptionLabel = new JLabel(
 				configed.getResourceValue("PanelMountShare.mountShareResult0") + " " + np.getDefaultName());
-		
-		
 
 		checkConnectionToShare();
-		
 
 		JPanel panel = this;
 		GroupLayout layout = new GroupLayout(panel);
@@ -169,7 +166,6 @@ public class PanelMountShare extends JPanel {
 
 		checkConnectionToShare(240);
 
-		
 		// runtime
 	}
 
@@ -225,9 +221,7 @@ public class PanelMountShare extends JPanel {
 			public void run() {
 				int i = 0;
 
-				
 				while (!smbMounted && i < seconds) {
-					
 
 					try {
 						logging.debug(this, "trying to find dir, count " + i);

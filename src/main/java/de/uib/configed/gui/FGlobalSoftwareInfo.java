@@ -50,7 +50,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 				10, 10); // initial size of super frame
 
 		this.myController = myController;
-		
+
 		persist = PersistenceControllerFactory.getPersistenceController();
 
 		panelGlobalSoftware = new PanelGenEditTable("", // "software assigned, but not existing",
@@ -65,7 +65,6 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		additionalPane.add(infoLabel);
 		additionalPane.setBackground(Globals.backLightBlue);
 		additionalPane.setVisible(true);
-		
 
 		setSize(new Dimension(infoLabel.getPreferredSize().width + 100, 300));
 		owner.setVisible(true);
@@ -75,7 +74,6 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		jButton2.setIcon(Globals.createImageIcon("images/cancel.png", ""));
 
 		initDataStructure();
-		
 
 	}
 
@@ -155,8 +153,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 			}
 			result = 1;
 		}
-		
-		
+
 	}
 
 	@Override
@@ -171,7 +168,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	public void leave() {
 		setVisible(false);
 		// we dont dispose the window, dispose it in the enclosing class
-		
+
 	}
 
 	public void exit() {

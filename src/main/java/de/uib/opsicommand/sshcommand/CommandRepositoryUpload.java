@@ -55,12 +55,11 @@ public class CommandRepositoryUpload extends CommandSFTPUpload
 
 	@Override
 	public void startParameterGui() {
-		
+
 	}
 
 	@Override
 	public void startParameterGui(ConfigedMain main) {
-		
 
 		if (main.getOpsiVersion().length() == 0 || main.getOpsiVersion().charAt(0) == '<'
 				|| main.getOpsiVersion().compareTo("4.1") < 0) {

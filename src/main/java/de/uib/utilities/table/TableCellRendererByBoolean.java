@@ -8,11 +8,9 @@ package de.uib.utilities.table;
 
 import java.awt.Component;
 
-
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
-
 
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
@@ -56,10 +54,8 @@ public class TableCellRendererByBoolean extends ColorTableCellRenderer {
 			((JLabel) result).setText(selectedString);
 			((JLabel) result).setIcon(selectedIcon);
 			((JLabel) result).setToolTipText(selectedString);
-			
-		}
 
-		
+		}
 
 		return result;
 	}

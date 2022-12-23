@@ -39,7 +39,6 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	private JButton buttonSelectDepotsWithEqualProperties;
 	private JButton buttonSelectDepotsAll;
 
-	
 	private TablesearchPane searchPane;
 
 	private Vector<? extends String> unfilteredV;
@@ -128,10 +127,9 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		else
 			labelDepotServer.setText(configed.getResourceValue("DepotListPresenter.depot"));
 		labelDepotServer.setOpaque(false);
-		
+
 		labelDepotServer.setBackground(Globals.backLightBlue);
 		labelDepotServer.setFont(Globals.defaultFontStandardBold);
-		
 
 		buttonSelectDepotsWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
 		buttonSelectDepotsWithEqualProperties
@@ -215,15 +213,9 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		 * popupCancelChangedDepotSelection.setEnabled(false);
 		 */
 
-		
 		// must not be set (otherwise the embedding scrollpane does not scroll)
-		
-		
-		// labelDepotServer.setPreferredSize(new Dimension(widthColumnServer,
-		
 
-		
-		
+		// labelDepotServer.setPreferredSize(new Dimension(widthColumnServer,
 
 		/*
 		 * buttonCommitChangedDepotSelection = new IconButton(
@@ -318,8 +310,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == buttonSelectDepotsAll) {
 			logging.info(this, "action on buttonSelectDepotsAll");
-			
-			
+
 			depotslist.selectAll();
 		}
 

@@ -31,11 +31,10 @@ public class AuditSoftwareXLicencePool extends Relation {
 	public static final String SwID = "swId";
 
 	public static final List<String> ATTRIBUTES;
-	
+
 	static {
 		ATTRIBUTES = new LinkedList<>();
 		ATTRIBUTES.add(LicencepoolEntry.idSERVICEKEY);
-		
 
 		ATTRIBUTES.add(SWAuditEntry.NAME);
 		ATTRIBUTES.add(SWAuditEntry.VERSION);
@@ -43,7 +42,6 @@ public class AuditSoftwareXLicencePool extends Relation {
 		ATTRIBUTES.add(SWAuditEntry.LANGUAGE);
 		ATTRIBUTES.add(SWAuditEntry.ARCHITECTURE);
 
-		
 	}
 
 	public static final List<String> INTERFACED_ATTRIBUTES;
@@ -58,8 +56,6 @@ public class AuditSoftwareXLicencePool extends Relation {
 	public AuditSoftwareXLicencePool(ArrayList<String> allRegisteredSoftware) {
 		super(ATTRIBUTES);
 		registeredSoftware = allRegisteredSoftware;
-		
-		
 
 	}
 
@@ -162,8 +158,6 @@ public class AuditSoftwareXLicencePool extends Relation {
 
 		rowmap.put(LicencepoolEntry.idSERVICEKEY, Globals.getStringValue(m.get(LicencepoolEntry.idSERVICEKEY)));
 		add(rowmap);
-
-		
 
 		return rowmap;
 	}

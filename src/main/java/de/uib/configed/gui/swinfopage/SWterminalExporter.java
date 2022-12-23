@@ -21,16 +21,8 @@ public class SWterminalExporter extends SWExporter {
 	@Override
 	public void export() {
 		String clientName = theHost;
-		
-		
-
-		
-		
 
 		modelSWInfo.setSorting(0, true);
-		
-		
-		
 
 		theTable.setModel(modelSWInfo);
 

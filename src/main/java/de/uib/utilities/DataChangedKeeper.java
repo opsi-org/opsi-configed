@@ -25,7 +25,6 @@ public class DataChangedKeeper implements DataChangedObserver {
 	};
 
 	public DataChangedKeeper() {
-		
 
 	}
 
@@ -47,7 +46,6 @@ public class DataChangedKeeper implements DataChangedObserver {
 		if (actUpon != null)
 			actUpon.act(source);
 
-		
 	}
 
 	public void actionOnChangeXXX(boolean condition, Object source) {

@@ -50,7 +50,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 		TerminatingPanel(ActionListener closeListener) {
 			super();
-			
+
 			setBackground(Globals.backLightBlue);
 			btn_close = new de.uib.configed.gui.IconButton(
 					de.uib.configed.configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
@@ -117,26 +117,20 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		this.centerOn(Globals.mainFrame);
 		this.setSize(this.thissize);
 		this.setMaximumSize(new Dimension(900, 700));
-		
-		
-		
+
 		setComponentsEnabled_RO(!Globals.isGlobalReadOnly());
 		setCLfocus();
 		// ((JTextField) tf_command).setCaretPosition(((JTextField)
-		
+
 		logging.info(this, "SSHConnectionTerminalDialog build ");
 		this.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				logging.info(this, "SSHConnectionTerminalDialog  resized");
 				super.componentResized(e);
-				
-				
-				
+
 				// the ugly effect of wandering
-				
-				
-				
+
 				setCLfocus();
 				// append("", tf_command); // try to set scrollpane to end of textpane and focus
 				// on tf_command
@@ -209,13 +203,12 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	 */
 
 	private void setOutSize() {
-		
+
 		double no_output_Height = (Globals.GAP_SIZE * 4) + tf_command.getHeight() + parameterPanel.getHeight()
 				+ btn_dim.getHeight() + terminatingPanel.getHeight();
 
 		this.thissize = this.getSize();
-		
-		
+
 		double w = this.getSize().getWidth() - (Globals.GAP_SIZE * 4);
 		double h = this.getSize().getHeight() - no_output_Height;
 		if (w > 1500)
@@ -230,10 +223,9 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		this.output.setMaximumSize(output_size);
 		this.jScrollPane.setSize(output_size);
 		this.jScrollPane.setPreferredSize(output_size);
-		
+
 		this.revalidate();
-		
-		
+
 	}
 
 	public JTextField getInputField() {
@@ -315,7 +307,6 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 		setCLfocus();
 		// ((JTextField) tf_command).setCaretPosition(((JTextField)
-		
 
 		cb_privat = new JCheckBox(configed.getResourceValue("SSHConnection.passwordButtonText"));
 		cb_privat.setPreferredSize(btn_dim);
@@ -377,7 +368,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 			logging.error("" + e);
 		}
 		// this.setSize(this.getWidth(), this.getHeight() + parameterPanel.getHeight()
-		
+
 		setCenterLayout();
 	}
 
@@ -469,7 +460,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	}
 
 	public void changeEchoChar(char c) {
-		
+
 		logging.debug(this, "changeEchoChar char " + c);
 		((JPasswordField) tf_command).setEchoChar(c);
 		logging.debug(this, "changeEchoChar checkbox set Selected " + passwordMode);

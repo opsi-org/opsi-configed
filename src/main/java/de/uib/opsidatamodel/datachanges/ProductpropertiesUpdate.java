@@ -30,11 +30,9 @@ public class ProductpropertiesUpdate implements UpdateCommand {
 
 	@Override
 	public void doCall() {
-		
+
 		// class " + newdata.getClass());
 		if (newdata instanceof de.uib.configed.type.ConfigName2ConfigValue) {
-			
-			
 
 			persis.setProductproperties(pcname, productname, newdata);
 		}
@@ -42,10 +40,9 @@ public class ProductpropertiesUpdate implements UpdateCommand {
 
 	public void revert() {
 		if (newdata instanceof de.uib.configed.type.ConfigName2ConfigValue) {
-			
+
 			((de.uib.configed.type.ConfigName2ConfigValue) newdata).rebuild();
 
-			
 		}
 	}
 

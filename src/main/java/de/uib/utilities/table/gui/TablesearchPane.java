@@ -97,7 +97,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	protected boolean resetFilterModeOnNewSearch = true;
 
 	private int foundrow = -1;
-	
+
 	protected SearchTargetModel targetModel;
 	protected PanelGenEditTable associatedTable;
 
@@ -131,7 +131,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		this.withRegEx = withRegEx;
 		this.preferredColumnIndex = prefColNo;
 
-		
 		filtering = true;
 
 		initSavedStates(savedStatesObjectTag);
@@ -141,8 +140,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		setNarrow(false);
 
 		this.targetModel = targetModel;
-
-		
 
 	}
 
@@ -253,7 +250,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	public void setMapping(String columnName, Mapping<Integer, String> mapping) {
 		mappedValues.put(columnName, mapping);
-		
+
 	}
 
 	public void setSelectMode(boolean select) {
@@ -307,7 +304,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		filteredMode = b;
 		popupSearch.setEnabled(!b);
 		popupSearchNext.setEnabled(!b);
-		
+
 		popupMarkHits.setEnabled(!b);
 		popupMarkAndFilter.setEnabled(!b);
 		popupEmptySearchfield.setEnabled(!b);
@@ -319,7 +316,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	public void setNarrow(boolean b) {
-		
+
 		showFilterIcon(b);
 		checkmarkSearchProgressive.setVisible(b);
 		checkmarkAllColumns.setVisible(b);
@@ -347,25 +344,25 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			@Override
 			public void next() {
 				associatedPanel.advanceCursor(+1);
-				
+
 			}
 
 			@Override
 			public void previous() {
 				associatedPanel.advanceCursor(-1);
-				
+
 			}
 
 			@Override
 			public void first() {
 				associatedPanel.setCursorToFirstRow();
-				
+
 			}
 
 			@Override
 			public void last() {
 				associatedPanel.setCursorToLastRow();
-				
+
 			}
 		};
 
@@ -429,15 +426,13 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		 */
 
 		// JLabel labelSearch = new JLabel("Suche");
-		
-		
 
 		fieldSearch = new JTextField("");
 		fieldSearch.setPreferredSize(Globals.textfieldDimension);
-		
+
 		fieldSearch.setFont(Globals.defaultFontBig);
-		fieldSearch.setBackground(Globals.backVeryLightBlue); 
-		
+		fieldSearch.setBackground(Globals.backVeryLightBlue);
+
 		fieldSearch.getCaret().setBlinkRate(blinkrate);
 		fieldSearch.setToolTipText(configed.getResourceValue("SearchPane.searchField.toolTip"));
 
@@ -484,7 +479,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		popupNewSearch.setText(configed.getResourceValue("SearchPane.popup.searchnew"));
 
 		popupNewSearch.addActionListener(actionEvent -> {
-			
+
 			targetModel.setFiltered(false);
 			if (resetFilterModeOnNewSearch)
 				setFilteredMode(false);
@@ -513,8 +508,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		popupEmptySearchfield.addActionListener(actionEvent -> fieldSearch.setText(""));
 
-		
-
 		fieldSearch.addActionListener(actionEvent -> {
 			if (searchInputType == SearchInputType.PROGRESSIVE)
 				searchNextRow(selectMode);
@@ -529,7 +522,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		setSearchFieldsAll();
 
 		// JLabel labelSearchMode = new JLabel("Modus");
-		
+
 		labelSearchMode = new JLabel(configed.getResourceValue("SearchPane.searchmode.searchmode"));
 		labelSearchMode.setFont(Globals.defaultFont);
 
@@ -564,7 +557,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		((JComboBoxToolTip) comboSearchFieldsMode).setValues(tooltipsMap, false);
 		comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
 
-		
 		comboSearchFieldsMode.setPreferredSize(Globals.lowerButtonDimension);
 
 		Icon unselectedIconFilter = Globals.createImageIcon("images/filter_14x14_open.png", "");
@@ -720,7 +712,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			for (int i = 0; i < targetModel.getColumnCount(); i++) {
 				String colname = targetModel.getColumnName(i);
 				comboSearchFields.addItem(colname);
-				
+
 			}
 
 			if ((saveSearchpaneAllColumnsSearch == null) || saveSearchpaneAllColumnsSearch.deserializeAsInt() == 0
@@ -811,7 +803,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		Finding partSearch = new Finding();
 
 		while (searching) {
-			
+
 			partSearch = stringContains(remainder, parts[i]);
 			if (partSearch.success) {
 				i++;
@@ -853,8 +845,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		if (colname != null && mappedValues.get(colname) != null)
 			realS = mappedValues.get(colname).getMapOfStrings().get(s);
-
-		
 
 		if (realS == null || part.length() > realS.length())
 			return result;
@@ -921,8 +911,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		String[] valParts = val.split(" ");
 
-		
-
 		boolean found = false;
 
 		int viewrow = 0;
@@ -988,7 +976,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 					if (colIndices != null // we dont compare all values (comparing all values is default)
 							&& !colIndices.contains(j))
 
-						
 						continue;
 
 					int colJ = targetModel.getColForVisualCol(j);
@@ -999,7 +986,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 					);
 
-					
 					// value + " to " + compareValue);
 
 					if (compareValue == null) {
@@ -1011,10 +997,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 						String compareVal = ("" + compareValue).toLowerCase();
 
 						if (regex) {
-							
+
 							if (pattern.matcher(compareVal).matches())
 								found = true;
-							
+
 							// " + found);
 						}
 
@@ -1031,9 +1017,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 							 */
 
 							else {
-								
+
 								found = stringStartsWith(targetModel.getColumnName(colJ), compareVal, val);
-								
+
 							}
 
 							/*
@@ -1058,7 +1044,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 					}
 
 					if (found) {
-						
+
 						break;
 					}
 				}
@@ -1069,8 +1055,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				viewrow++;
 
 		}
-
-		
 
 		if (found) {
 			return viewrow;
@@ -1097,21 +1081,18 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		searchTheRow(0, true);
 
 		// new Thread(){
-		
+
 		{
 			int startFoundrow = foundrow;
-			
+
 			foundrow = foundrow + 1;
 
 			while (foundrow > startFoundrow) {
 				getSelectedAndSearch(true, true); // adding the next row to selection
-				
-				
-				
+
 			}
 			targetModel.setValueIsAdjusting(false);
 		}
-		
 
 	}
 
@@ -1128,10 +1109,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			if (!fieldSearch.getText().equals(""))
 				markAll();
 
-			
-
-			
-			
 		}
 	}
 
@@ -1184,7 +1161,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void setRow(int row, boolean addSelection, boolean select) {
-		
+
 		// addSelection + ", " +select);
 		if (select) {
 			if (addSelection)
@@ -1198,7 +1175,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		targetModel.setCursorRow(row);
 
-		
 	}
 
 	private void searchTheRow(final int startrow, final boolean addSelection, final boolean select) {
@@ -1214,21 +1190,17 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		final HashSet<Integer> selectedCols = selectedCols0;
 
-		
-
 		final boolean fulltextSearch = (comboSearchFieldsMode.getSelectedIndex() == FULL_TEXT_SEARCH);
 		final boolean regexSearch = (comboSearchFieldsMode.getSelectedIndex() == REGEX_SEARCH);
 		final boolean combineCols = fulltextSearch;
 
-		
-		
 		fieldSearch.getCaret().setVisible(false);
 
 		// final de.uib.utilities.thread.WaitCursor waitCursor = new
 		// de.uib.utilities.thread.WaitCursor(fieldSearch, "TablesearchPane");
 
 		// new Thread(){ //destroys search of all
-		
+
 		{
 
 			if (value.toString().length() < 2) {
@@ -1239,28 +1211,21 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				foundrow = findViewRowFromValue(startrow, value, selectedCols, fulltextSearch, regexSearch,
 						combineCols);
 
-				
-
 				if (foundrow > -1) {
 					setRow(foundrow, addSelection, select);
 				} else {
 
 					if (startrow > 0) {
-						
+
 						searchTheRow(0, addSelection, select);
 					} else
 						setRow(0, false, select);
 				}
 			}
 
-			
-
-			
-
 			fieldSearch.getCaret().setVisible(true);
-			
+
 		}
-		
 
 	}
 
@@ -1280,7 +1245,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void switchFilterOff() {
 		if (targetModel.isFiltered()) {
-			
+
 			targetModel.setFiltered(false);
 			setFilteredMode(false);
 
@@ -1289,7 +1254,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void switchFilterOn() {
 		if (!targetModel.isFiltered()) {
-			
+
 			targetModel.setFiltered(true);
 			setFilteredMode(true);
 
@@ -1299,7 +1264,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	// DocumentListener interface
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-		
+
 		if (e.getDocument() == fieldSearch.getDocument()) {
 
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
@@ -1314,7 +1279,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		
+
 		if (e.getDocument() == fieldSearch.getDocument()) {
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
 
@@ -1328,7 +1293,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		
+
 		if (e.getDocument() == fieldSearch.getDocument()) {
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
 
@@ -1355,7 +1320,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	// KeyListener interface
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
 
 		if (e.getKeyCode() == KeyEvent.VK_F5) {
 			if (!disabledSinceWeAreInFilteredMode()) {
@@ -1380,7 +1344,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			logging.debug(this, "key pressed ENTER on fieldSearch, with content " + fieldSearch.getText()
 					+ " searchInputType " + searchInputType);
-			
+
 			if (searchInputType == SearchInputType.LINE) {
 				if (!fieldSearch.getText().equals("")) {
 					switchFilterOff();
@@ -1404,7 +1368,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	// ActionListener implementation
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
 
 		if (e.getSource() == checkmarkAllColumns) {
 			logging.debug(this, "actionPerformed on checkmarkAllColumns");
@@ -1440,11 +1403,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			logging.info(this, "actionPerformed on filtermark, targetModel.isFiltered " + targetModel.isFiltered());
 
 			if (targetModel.isFiltered()) {
-				
 
 				int[] unfilteredSelection = targetModel.getUnfilteredSelection();
-				
-				
 
 				targetModel.setFiltered(false);
 				setFilteredMode(false);
@@ -1454,7 +1414,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				}
 
 			} else {
-				
+
 				switchFilterOn();
 			}
 
@@ -1464,7 +1424,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			logging.debug(this,
 					"actionPerformed on checkmarkSearch, targetModel.isFiltered " + targetModel.isFiltered());
 
-			
 			fieldSearch.setText("");
 		}
 

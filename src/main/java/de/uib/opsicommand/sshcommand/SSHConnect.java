@@ -64,8 +64,7 @@ public class SSHConnect {
 	public SSHConnect(ConfigedMain main) {
 		this.main = main;
 		connectionInfo = SSHConnectionInfo.getInstance();
-		
-		
+
 	}
 
 	public static boolean isConnectionAllowed() {
@@ -241,7 +240,7 @@ public class SSHConnect {
 				session.setPassword(connectionInfo.getPassw());
 				logging.info(this, "connect useKeyfile " + connectionInfo.usesKeyfile() + " use password …");
 			}
-			
+
 			// session.setConfig("StrictHostKeyChecking", "no");
 
 			Properties config = new Properties();
@@ -253,7 +252,7 @@ public class SSHConnect {
 			// will prevent session ending
 			// cf
 			// https://stackoverflow.com/questions/37280442/jsch-0-1-53-session-connect-throws-end-of-io-stream-read
-			
+
 			int timeo = 10000;
 
 			logging.info(this, "we try to connect with timeout " + timeo);
@@ -293,7 +292,7 @@ public class SSHConnect {
 	private int retry(int retriedTimes, Exception e) {
 		if (retriedTimes >= 3) {
 			retriedTimes = 1;
-			
+
 			logging.warning(this, "Error", e);
 		} else {
 			logging.warning(this, "[" + retriedTimes + "] seems to be a session exception " + e);

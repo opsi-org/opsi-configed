@@ -11,7 +11,7 @@ import javax.swing.JTable;
 import de.uib.utilities.logging.logging;
 
 public class RowNoTableModelFilterCondition implements TableModelFilterCondition {
-	
+
 	protected Map<Object, Boolean> selectionInfo;
 
 	protected JTable table;
@@ -34,31 +34,28 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 			return;
 		}
 
-		
 		selectionInfo = new HashMap<>();
 
 		for (int i : modelRowNoFilter) {
 			if (i >= rows.size())
 				logging.warning(this, "setFilter: impossible selection index " + i);
 			else
-				
+
 				selectionInfo.put(rows.get(i), true);
 		}
 
-		
 	}
 
 	@Override
 	public boolean test(Vector<Object> row) {
-		
 
 		if (selectionInfo == null)
 			return true;
 
 		// Boolean found = selectionInfo.get( Globals.pseudokey(row) )
-		
+
 		Boolean found = selectionInfo.get(row);
-		
+
 		if (found == null)
 			return false;
 

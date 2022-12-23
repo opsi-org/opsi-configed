@@ -156,7 +156,6 @@ public class PanelSWMultiClientReport extends JPanel {
 		chooserDirectory.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserDirectory);
-		
 
 		fieldExportDirectory = new JTextShowField(exportDirectoryS);
 
@@ -188,7 +187,7 @@ public class PanelSWMultiClientReport extends JPanel {
 					}
 
 					fieldExportDirectory.setText(exportDirectoryS);
-					
+
 					configed.savedStates.saveSWauditExportDir.serialize(exportDirectoryS);
 
 				}
@@ -237,8 +236,6 @@ public class PanelSWMultiClientReport extends JPanel {
 
 		logging.info(this, "kindOfExport set from savedStates  " + koe);
 		logging.info(this, "kindOfExport   " + kindOfExport);
-
-		
 
 		JPanel subpanelPreConfig = new JPanel();
 		subpanelPreConfig.setBackground(Globals.backgroundWhite);

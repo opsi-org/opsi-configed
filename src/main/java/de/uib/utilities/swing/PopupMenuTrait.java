@@ -31,9 +31,6 @@ public class PopupMenuTrait extends JPopupMenu {
 	public static final int POPUP_EXPORT_CSV = 23;
 	public static final int POPUP_EXPORT_SELECTED_CSV = 24;
 
-	
-	
-
 	public static final int POPUP_PRINT = 30;
 
 	protected JMenuItemFormatted menuItemReload;
@@ -62,7 +59,7 @@ public class PopupMenuTrait extends JPopupMenu {
 			i = listPopups.indexOf(p);
 			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PopupMenuTrait.reload"),
 					Globals.createImageIcon("images/reload16.png", ""));
-			
+
 			// not work
 
 			addItem(p);
@@ -73,7 +70,7 @@ public class PopupMenuTrait extends JPopupMenu {
 			i = listPopups.indexOf(p);
 			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PopupMenuTrait.floatingInstance"),
 					Globals.createImageIcon("images/edit-copy.png", ""));
-			
+
 			// not work
 
 			addSeparator();
@@ -85,7 +82,7 @@ public class PopupMenuTrait extends JPopupMenu {
 			i = listPopups.indexOf(p);
 			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PopupMenuTrait.save"),
 					Globals.createImageIcon("images/save.png", ""));
-			
+
 			// not work
 
 			addItem(p);

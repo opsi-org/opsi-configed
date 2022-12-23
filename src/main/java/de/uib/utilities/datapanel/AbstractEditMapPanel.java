@@ -78,7 +78,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 	public AbstractEditMapPanel() {
 		actor = new Actor();
 		mapTableModel = new MapTableModel();
-		
+
 	}
 
 	public AbstractEditMapPanel(boolean keylistExtendible, boolean keylistEditable, boolean reloadable) {
@@ -86,7 +86,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 		this.keylistExtendible = keylistExtendible;
 		this.keylistEditable = keylistEditable;
 		this.reloadable = reloadable;
-		
+
 	}
 
 	public void setActor(Actor actor) {

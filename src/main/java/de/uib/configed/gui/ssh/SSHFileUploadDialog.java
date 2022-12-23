@@ -175,7 +175,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				String path_modules = filechooser_local.getSelectedFile().getPath();
 				tf_local_path.setText(path_modules);
-				
+
 				command.setFullSourcePath(path_modules);
 				tf_local_path.setCaretPosition(path_modules.length());
 			} else {

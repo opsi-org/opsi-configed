@@ -10,37 +10,31 @@ public class UserSshConfig extends UserConfigModule {
 	// public static final String KEY_USER_SSH_REGISTER = "register.ssh";
 	// public static final String KEY_USER_SSH_REGISTER_description = "if false: do
 	// not create new user specific ssh configs (use defaults)";
-	
 
 	public static final String KEY_SSH_MENU_ACTIVE = "ssh.menu_serverconsole.active";
 	private static final String KEY_SSH_MENU_ACTIVE_description = configed
 			.getResourceValue("PersistenceController.SSH_MENU_ACTIVE");
 	// "activates the whole menu server-console" ;
-	
 
 	public static final String KEY_SSH_CONFIG_ACTIVE = "ssh.serverconfiguration.active";
 	private static final String KEY_SSH_CONFIG_ACTIVE_description = configed
 			.getResourceValue("PersistenceController.SSH_CONFIG_ACTIVE");
 	// "activates menu to configure ssh connection" ;
-	
 
 	public static final String KEY_SSH_COMMANDCONTROL_ACTIVE = "ssh.commandmanagement.active";
 	private static final String KEY_SSH_COMMANDCONTROL_ACTIVE_description = configed
 			.getResourceValue("PersistenceController.SSH_CONTROL_ACTIVE");
 	// "activate the menu of command management";
-	
 
 	// public static final String KEY_SSH_SHELL_ACTIVE = "ssh.terminal.active";
 	// public static final String KEY_SSH_SHELL_ACTIVE_description =
 	// configed.getResourceValue("PersistenceController.SSH_SHELL_ACTIVE");
 	// = "activates terminal to ssh server";
-	
 
 	public static final String KEY_SSH_COMMANDS_ACTIVE = "ssh.commands.active";
 	private static final String KEY_SSH_COMMANDS_ACTIVE_description = configed
 			.getResourceValue("PersistenceController.SSH_COMMANDS_ACTIVE");
 	// activate menus of all executable commands in menu server-console";
-	
 
 	// addToBoolKeys
 	public static LinkedHashSet<String> BOOL_KEYS;

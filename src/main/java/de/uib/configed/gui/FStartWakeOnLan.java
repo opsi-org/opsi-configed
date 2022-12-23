@@ -43,9 +43,6 @@ import de.uib.utilities.swing.ProgressBarPainter;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 
-
-
-
 public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.thread.WaitingSleeper
 // implements PropertyChangeListener
 {
@@ -68,8 +65,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	Calendar cal;
 	long startActionMillis;
 	long waitingMillis;
-	
-	
+
 	int stepsTotal;
 	boolean waitingMode = false;
 
@@ -90,7 +86,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 	public FStartWakeOnLan(Frame owner, String title, ConfigedMain main) {
 		super(null, title, false, new String[]
-		
+
 		{ configed.getResourceValue("FStartWakeOnLan.start"), configed.getResourceValue("FStartWakeOnLan.cancel") },
 				750, 310);
 		this.main = main;
@@ -103,7 +99,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		this.labelledDelays = labelledDelays;
 		LinkedList<String> delays = new LinkedList<>(labelledDelays.keySet());
 		// comboDelay.setModel(new DefaultComboBoxModel<>(new
-		
+
 		spinnerDelay.setModel(new SpinnerListModel(delays));
 		nullDelayValue = delays.get(0);
 		((JSpinner.ListEditor) spinnerDelay.getEditor()).getTextField().setEditable(false);
@@ -189,7 +185,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 		JPanel contentPane = new JPanel();
 		contentPane.setBackground(Globals.backLightBlue);
-		
+
 		scrollpane.setViewportView(contentPane);
 
 		labelTimeYetToWait = new JLabel(Globals.giveTimeSpan(0), SwingConstants.RIGHT);
@@ -199,7 +195,6 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		waitingProgressBar.setToolTipText(configed.getResourceValue("FStartWakeOnLan.timeElapsed.toolTip"));
 		waitingProgressBar.setValue(0);
 		waitingProgressBar.setEnabled(true);
-		
 
 		UIDefaults defaults = new UIDefaults();
 		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
@@ -260,7 +255,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 		buttonSetNew = new IconButton(configed.getResourceValue("FStartWakeOnLan.buttonSetNew"), "images/reload16.png",
 				"images/reload16_over.png", "images/reload16_disabled.png");
-		
+
 		buttonSetNew.setToolTipText(configed.getResourceValue("FStartWakeOnLan.buttonSetNew.tooltip"));
 
 		buttonSetNew.addActionListener(new ActionListener() {
@@ -268,13 +263,13 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 			public void actionPerformed(ActionEvent e) {
 				logging.debug(this, "actionPerformed");
 				setClients();
-				
+
 			}
 		});
 
 		buttonRefreshTime = new IconButton(configed.getResourceValue("FStartWakeOnLan.buttonRefreshTime"),
 				"images/clock16.png", "images/clock16.png", "images/clock16.png");
-		
+
 		buttonRefreshTime.setToolTipText("Zeit neu setzen");
 
 		buttonRefreshTime.addActionListener(new ActionListener() {
@@ -296,9 +291,6 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		JLabel labelDepotCount = new JLabel(configed.getResourceValue("FStartWakeOnLan.countOfDepots"));
 
 		labelStarttime = new JLabel(readTime(cal));
-		
-		
-		
 
 		// = new JLabel("delay between triggering WOL events (per depot)");
 		spinnerDelay = new JSpinner();
@@ -338,8 +330,6 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 				Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT));
 		lPanelSpinnerDelay.setHorizontalGroup(lPanelSpinnerDelay.createSequentialGroup().addComponent(spinnerDelay,
 				2 * Globals.TIME_SPINNER_WIDTH, 2 * Globals.TIME_SPINNER_WIDTH, 2 * Globals.TIME_SPINNER_WIDTH));
-
-		
 
 		GroupLayout lPanel = new GroupLayout(contentPane);
 		contentPane.setLayout(lPanel);
@@ -462,9 +452,9 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		waitingMode = true;
 		logging.info(this, "startWaiting " + runningInstances);
 		runningInstances.add(this, scheduleTitle);
-		
+
 		waitingTask = new WaitingWorker((WaitingSleeper) this);
-		
+
 		waitingTask.execute();
 
 	}
@@ -510,7 +500,6 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	public void doAction1() {
 
 		logging.info(this, "doAction1");
-		
 
 		if (currentlySelectedClients == null || currentlySelectedClients.length == 0) {
 			JOptionPane.showMessageDialog(this, configed.getResourceValue("FStartWakeOnLan.noClientsSelected.text"),
@@ -527,14 +516,11 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 		scheduleTitle = "  scheduler" + scheduleTitle;
 		startActionMillis = new GregorianCalendar().getTimeInMillis();
-		
-		
+
 		waitingMillis = cal.getTimeInMillis() - startActionMillis;
-		
+
 		if (waitingMillis < 0)
 			waitingMillis = 0;
-		
-		
 
 		if (waitingMillis < 100) {
 			startAction();

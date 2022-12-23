@@ -32,15 +32,14 @@ public class FEditRecord extends FEdit {
 	final ObservableSubject myObservable = new ObservableSubject() {
 		@Override
 		public void notifyObservers() {
-			
+
 			super.notifyObservers();
-			
+
 		}
 
 		@Override
 		public void setChanged() {
-			
-			
+
 			super.setChanged();
 			setDataChanged(true);
 		}
@@ -55,7 +54,7 @@ public class FEditRecord extends FEdit {
 		recordPane = new RecordPane() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				
+
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					commit();
 				} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {

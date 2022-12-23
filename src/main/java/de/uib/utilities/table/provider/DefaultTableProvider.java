@@ -51,7 +51,6 @@ public class DefaultTableProvider implements TableProvider {
 	public Vector<Vector<Object>> getRows() {
 		logging.info(this, " -- getRows()");
 
-		
 		if (rowsCopy == null)
 			resetRows();
 
@@ -85,8 +84,6 @@ public class DefaultTableProvider implements TableProvider {
 			isDecorated = true;
 		}
 
-		
-
 		if (rows == null) {
 			logging.info(" no data rows retrieved ");
 			return;
@@ -97,17 +94,16 @@ public class DefaultTableProvider implements TableProvider {
 			rowsCopy.add(row);
 		}
 
-		
 	}
 
 	// should set the working copy as new original values
 	@Override
 	public void setWorkingCopyAsNewOriginalRows() {
-		
+
 		// "deep" rows = rowsCopy:
 
 		if (rows == null) {
-			
+
 			// in the following reset, we request a reload
 		}
 
@@ -151,22 +147,18 @@ public class DefaultTableProvider implements TableProvider {
 	// yields a column as ordered vector
 	@Override
 	public Vector<String> getOrderedColumn(int col, boolean empty_allowed) {
-		
-		
 
 		TreeSet<String> set = new TreeSet<>();
 		for (int row = 0; row < rowsCopy.size(); row++) {
 			String val = (String) rowsCopy.get(row).get(col);
-			
+
 			if (empty_allowed || val != null && !val.equals("")) {
-				
+
 				set.add((String) rowsCopy.get(row).get(col));
 			}
 		}
 
 		Vector<String> result = new Vector<>(set);
-
-		
 
 		return result;
 	}

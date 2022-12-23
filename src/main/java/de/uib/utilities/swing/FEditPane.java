@@ -49,9 +49,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	private javax.swing.JScrollPane scrollpane;
 	private javax.swing.JTextPane textpane;
 
-	
-	
-
 	protected LinkSearcher searcher;
 	protected Highlighter highlighter;
 	protected de.uib.utilities.script.CmdLauncher cmdLauncher;
@@ -83,9 +80,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		editingArea.add(scrollpane, BorderLayout.CENTER);
 
-		
-		
-
 		/*
 		 * editingLayout.setHorizontalGroup(
 		 * editingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -106,7 +100,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		textpane.addMouseListener(this);
 		textpane.addMouseMotionListener(this);
 
-		
 		// we only register changes after loading the initial document
 
 		searcher = new LinkSearcher(textpane);
@@ -122,22 +115,18 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			cmdLauncher.setPrefix(LINUX_LINK_INTERPRETER);
 
 		// HyperlinkListener hyperlinkListener = new
-		
-		
+
 	}
 
 	protected void setSingleLine(boolean b) {
 		singleLine = b;
-		
-		
+
 	}
 
 	@Override
 	public void setStartText(String s) {
 		logging.debug(this, " FEeditPane setStartText: " + s);
 		super.setStartText(s);
-
-		
 
 		textpane.setText(s);
 
@@ -151,13 +140,11 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	}
 
 	private void searchAndHighlight() {
-		
-		
+
 		searcher.searchLinks();
 	}
 
 	public boolean isLink(String s0) {
-		
 
 		if (s0 == null)
 			return false;
@@ -231,7 +218,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	@Override
 	public String getText() {
 		// textpane.setText(textpane.getText().replaceAll("\t",""));
-		
+
 		initialText = textpane.getText(); // set new initial text for use in processWindowEvent
 		return initialText;
 	}
@@ -246,7 +233,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	@Override
 	public void keyReleased(KeyEvent e) {
 		super.keyReleased(e);
-		
+
 	}
 
 	@Override
@@ -257,7 +244,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getSource() == textpane) {
-			
 
 			if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
 					&& e.getKeyCode() == KeyEvent.VK_TAB)
@@ -319,16 +305,12 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		
-		
-		
-		
 
 		if (e.getClickCount() > 1) {
 			Point p = e.getPoint();
-			
+
 			String line = getMarkedLine(textpane.viewToModel2D(p));
-			
+
 			if (line != null) {
 				logging.info(this, " got link " + line);
 				cmdLauncher.launch("\"" + line + "\"");
@@ -361,8 +343,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		Point p = e.getPoint();
-		
-		
 
 		if (getMarkedLine(textpane.viewToModel2D(p)) != null)
 			textpane.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -388,7 +368,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			f.setStartText(buf.toString());
 
 			count++;
-			
+
 		});
 
 	}
@@ -454,9 +434,8 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 			for (int i = 0; i < linesplits.length; i++) {
 				String line = linesplits[i];
-				
+
 				endIndex = startIndex + line.length();
-				
 
 				int posInLine = startOfMarkedString(line);
 				int len = line.trim().length();
@@ -471,8 +450,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 				startIndex = endIndex + 1;
 			}
 
-			
-			
 			return lastFoundIndex;
 		}
 	}

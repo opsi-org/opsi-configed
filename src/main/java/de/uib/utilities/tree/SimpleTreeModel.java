@@ -24,7 +24,6 @@ public class SimpleTreeModel extends DefaultTreeModel
 
 	Set<SimpleTreePath> allPathes;
 	Map<SimpleTreePath, SimpleIconNode> path2Node;
-	
 
 	Map<String, String> tooltips;
 
@@ -41,7 +40,7 @@ public class SimpleTreeModel extends DefaultTreeModel
 		ROOT = (SimpleIconNode) getRoot();
 		// ROOT.setIcon(Globals.createImageIcon("images/system-config.png","open
 		// table"));
-		
+
 		this.tooltips = tooltips;
 		generateFrom(dottedKeys);
 	}
@@ -62,11 +61,10 @@ public class SimpleTreeModel extends DefaultTreeModel
 	protected void generateFrom(java.util.Set<String> dottedKeys) {
 		allPathes = new TreeSet<>();
 		path2Node = new TreeMap<>();
-		
 
 		if (dottedKeys != null) {
 			for (String key : dottedKeys) {
-				
+
 				String remainder = key;
 
 				int j = -1;
@@ -77,21 +75,14 @@ public class SimpleTreeModel extends DefaultTreeModel
 					String componentKey = key.substring(j + 1, k);
 					path.add(componentKey);
 					allPathes.add(new SimpleTreePath(path));
-					
 
 					remainder = key.substring(k + 1);
-
-					
-					
-
-					
 
 					j = k;
 					k = j + 1 + remainder.indexOf('.');
 				}
 				path.add(remainder);
 				allPathes.add(path);
-				
 
 			}
 		}
@@ -157,7 +148,6 @@ public class SimpleTreeModel extends DefaultTreeModel
 		tree.setCellRenderer(new SimpleIconNodeRenderer());
 
 		tree.expandAll();
-		
 
 		JFrame frame = new JFrame();
 		frame.getContentPane().add(tree);

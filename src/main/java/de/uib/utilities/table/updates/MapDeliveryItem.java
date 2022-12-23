@@ -31,15 +31,8 @@ public class MapDeliveryItem extends MapBasedTableEditItem {
 		if (keyCol < 0)
 			return false;
 
-		
-
 		if (oldValues == null)
 			return true;
-
-		
-		
-		
-		
 
 		if (oldValues.get(keyCol).toString().equals(rowV.get(keyCol).toString())) {
 			return true;

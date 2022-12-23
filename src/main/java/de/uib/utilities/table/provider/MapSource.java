@@ -70,9 +70,7 @@ public class MapSource implements TableSource
 
 	protected void fetchData() {
 		rows.clear();
-		
 
-		
 		int rowCount = 0;
 
 		for (String key : table.keySet()) {
@@ -80,9 +78,6 @@ public class MapSource implements TableSource
 
 			Map mRow = table.get(key);
 
-			
-
-			
 			// previously we assumed that column 0 hold the key
 
 			for (int i = 0; i < columnNames.size(); i++) {
@@ -92,19 +87,17 @@ public class MapSource implements TableSource
 					logging.debug(this, "fetchData for A-key " + key + " col  " + columnNames.get(i) + " index " + i
 							+ " val " + ob);
 
-				
 				// + " ob:" + ob);
 
 				if (ob != null) {
 					vRow.add(ob);
 
 					try {
-						
-						
+
 						Class cl = Class.forName(classNames.get(i));
 						if (!dynInstanceOf(ob, cl)) {
 							// Class.forName( classNames.get(i) ) ).isAssignableFrom ( ob.getClass() ) )
-							
+
 							logging.warning(this, "MapSource fetchData(): data type does not fit");
 							logging.info(this, " ob " + ob + " class " + ob.getClass().getName());
 							logging.info(this, "class should be " + cl);
@@ -127,11 +120,11 @@ public class MapSource implements TableSource
 						// if (className.equals("java.lang.Integer"))
 						if (columnNames.get(i).equals(ROW_COUNTER_NAME)) {
 							vRow.add("" + rowCount);
-							
+
 						} else {
 							if (class2defaultValue.get(className) != null) {
 								vRow.add(class2defaultValue.get(className));
-								
+
 								// for " + className );
 							}
 

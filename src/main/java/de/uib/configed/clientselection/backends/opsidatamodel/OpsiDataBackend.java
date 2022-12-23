@@ -132,7 +132,7 @@ public class OpsiDataBackend extends Backend {
 		if (controller == null)
 			logging.warning(this, "Warning, controller is null!");
 		getHardwareConfig();
-		
+
 	}
 
 	@Override
@@ -211,19 +211,14 @@ public class OpsiDataBackend extends Backend {
 		}
 
 		// this would need the package version to be an integer
-		
-		
-		
+
 		// return new OpsiDataIntEqualsOperation( OpsiDataClient.SOFTWARE_MAP,
-		
-		
+
 		// return new OpsiDataIntLessThanOperation( OpsiDataClient.SOFTWARE_MAP,
-		
-		
+
 		// return new OpsiDataIntGreaterThanOperation( OpsiDataClient.SOFTWARE_MAP,
-		
+
 		// throw new IllegalArgumentException("Wrong operation for this element.");
-		
 
 		// SwAudit
 		String swauditAttributeText = null;
@@ -295,7 +290,7 @@ public class OpsiDataBackend extends Backend {
 			return new OrOperation(operations);
 		if (operation instanceof NotOperation && operations.size() == 1)
 			return new NotOperation(operations.get(0));
-		
+
 		// operations.size() == 1 )
 		if (operation instanceof SoftwareOperation && operations.size() == 1)
 			return new OpsiDataSoftwareOperation(operations.get(0));
@@ -329,7 +324,6 @@ public class OpsiDataBackend extends Backend {
 		hardwareOnClient = null;
 		clientToHardware = null;
 		System.gc();
-		
 
 	}
 
@@ -339,13 +333,11 @@ public class OpsiDataBackend extends Backend {
 		// gets current data which should be in cache already
 		// reloadRequested " + reloadRequested);
 
-		
 		// take always the current host infos
 		{
 			clientMaps = controller.getHostInfoCollections().getMapOfPCInfoMaps();
 			logging.info(this, "client maps size " + clientMaps.size());
 		}
-		
 
 		if (groups == null || reloadRequested) {
 			groups = controller.getFObject2Groups();
@@ -359,22 +351,19 @@ public class OpsiDataBackend extends Backend {
 		String[] clientNames = clientMaps.keySet().toArray(new String[0]);
 
 		if (hasSoftware) {
-			
+
 			{
 				softwareMap = controller.getMapOfProductStatesAndActions(clientNames);
 				logging.debug(this, "getClients softwareMap ");
-				
+
 			}
 		}
 		// else
-		
 
-		
 		{
 			swauditMap = getSwAuditOnClients();
 		}
 		// else
-		
 
 		// if ( reloadRequested || hwConfig == null || hwConfigLocalized == null ||
 		// hwUiToOpsi == null || hwClassToValues == null )
@@ -382,7 +371,7 @@ public class OpsiDataBackend extends Backend {
 
 		logging.debug(this, "getClients hasHardware " + hasHardware);
 		if (hasHardware) {
-			
+
 			getHardwareOnClient(clientNames);
 		} else
 			hardwareOnClient = null; // dont use older data after a reload request
@@ -406,8 +395,6 @@ public class OpsiDataBackend extends Backend {
 		 * logging.info(this, "getClients swauditMap.keySet()   " +
 		 * (swauditMap.keySet()) );
 		 */
-
-		
 
 		for (String clientName : clientMaps.keySet()) {
 			OpsiDataClient client = new OpsiDataClient(clientName);
@@ -467,7 +454,7 @@ public class OpsiDataBackend extends Backend {
 							new String[] { hardwareNameLocalized, localizedName }));
 			}
 			result.put(hardwareName, elementList);
-			
+
 			logging.debug(this, "" + elementList);
 		}
 		return result;
@@ -501,7 +488,7 @@ public class OpsiDataBackend extends Backend {
 							new String[] { hardwareNameLocalized, localizedName }));
 			}
 			result.put(hardwareNameLocalized, elementList);
-			
+
 			logging.debug(this, "" + elementList);
 		}
 		return result;

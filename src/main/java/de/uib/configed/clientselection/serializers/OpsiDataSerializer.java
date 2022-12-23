@@ -74,17 +74,12 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 
 	@Override
 	protected Map<String, Object> getData(String name) throws WrongVersionException {
-		
-		
 
-		
 		// we take version from server and not the (possibly edited own version! )
 		searches.put(name, controller.getSavedSearches().get(name).getSerialization());
 
-		
 		// controller.getSavedSearches().get(name)
 		// + " this gives the value for serialization " +
-		
 
 		String serialization = searches.get(name);
 		return decipher(serialization);

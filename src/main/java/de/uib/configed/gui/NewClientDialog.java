@@ -55,7 +55,7 @@ public class NewClientDialog extends FGeneralDialog
 	protected JPanel panel;
 	protected GroupLayout gpl;
 	protected JTextField jTextHostname;
-	
+
 	protected JComboBox<String> jComboDomain;
 	protected JComboBox<String> jComboDepots;
 	protected JTextField jTextDescription;
@@ -94,9 +94,6 @@ public class NewClientDialog extends FGeneralDialog
 
 	private List<String> existingHostNames;
 
-	
-	
-
 	protected int wLeftLabel = Globals.BUTTON_WIDTH + 20;
 
 	private NewClientDialog(ConfigedMain main, Vector<String> depots) {
@@ -130,13 +127,13 @@ public class NewClientDialog extends FGeneralDialog
 			instance = new NewClientDialog(main, depots);
 			instance.init();
 		} else {
-			
+
 		}
 		return instance;
 	}
 
 	public static NewClientDialog getInstance() {
-		
+
 		return instance;
 	}
 
@@ -223,7 +220,6 @@ public class NewClientDialog extends FGeneralDialog
 	}
 
 	protected void init() {
-		
 
 		panel = new JPanel();
 		gpl = new GroupLayout(panel);
@@ -249,7 +245,6 @@ public class NewClientDialog extends FGeneralDialog
 		jLabelDomainname.setText(configed.getResourceValue("NewClientDialog.domain"));
 		jComboDomain = new JComboBox<>();
 		jComboDomain.setEditable(true);
-		
 
 		JLabel jLabelDescription = new JLabel();
 		jLabelDescription.setText(configed.getResourceValue("NewClientDialog.description"));
@@ -311,14 +306,12 @@ public class NewClientDialog extends FGeneralDialog
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				try {
-					
-					
+
 					String newPiece = e.getDocument().getText(e.getOffset(), e.getLength());
 					logging.debug(this, " --------->" + newPiece + "<");
 
-					
 					if (newPiece.equals("\t")) {
-						
+
 						macAddressField.requestFocus();
 					}
 				} catch (javax.swing.text.BadLocationException ex) {
@@ -360,7 +353,7 @@ public class NewClientDialog extends FGeneralDialog
 		labelUefiDefault = new LabelChecked();
 		labelUefiDefault.setText(configed.getResourceValue("NewClientDialog.boottype") + " "
 				+ configed.getResourceValue("NewClientDialog.serverDefault"));
-		
+
 		if (!main.getPersistenceController().isWithUEFI()) {
 			labelUefiDefault.setText(configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			labelUefiDefault.setEnabled(false);
@@ -382,7 +375,7 @@ public class NewClientDialog extends FGeneralDialog
 		labelWanDefault = new LabelChecked();
 		labelWanDefault.setText(configed.getResourceValue("NewClientDialog.wanConfig") + " "
 				+ configed.getResourceValue("NewClientDialog.serverDefault"));
-		
+
 		if (!main.getPersistenceController().isWithWAN()) {
 			labelWanDefault.setText(configed.getResourceValue("NewClientDialog.wan_not_activated"));
 		}
@@ -943,7 +936,6 @@ public class NewClientDialog extends FGeneralDialog
 		result = 1;
 
 		// FTextArea fText = new FTextArea(Globals.mainFrame, "waiting", false, 0);
-		
 
 		String hostname = jTextHostname.getText();
 		String selectedDomain = (String) jComboDomain.getSelectedItem();
@@ -993,13 +985,12 @@ public class NewClientDialog extends FGeneralDialog
 				&& (e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
 				&& e.getKeyCode() == KeyEvent.VK_TAB) {
 			jTextDescription.requestFocusInWindow();
-			
+
 		}
 
 		else {
 			logging.info(this, "keyPressed source " + e.getSource());
-			
-			
+
 			if (e.getSource() == jButton1) {
 				// jButton1.setIcon( Globals.createImageIcon(
 				// "images/client_small_executing.png", "Client" ) );

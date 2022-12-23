@@ -45,7 +45,6 @@ public class DependenciesTreeModel {
 	private String productId = "";
 
 	private boolean graphIsInitialized;
-	
 
 	private PersistenceController pc;
 
@@ -54,7 +53,7 @@ public class DependenciesTreeModel {
 		this.pc = pc;
 
 		graphIsInitialized = false;
-		
+
 	}
 
 	private void initGraph(String depotId) {

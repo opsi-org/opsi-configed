@@ -20,8 +20,7 @@ import de.uib.utilities.logging.logging;
 
 public class PersistenceControllerFactory {
 	private static PersistenceController staticPersistControl;
-	
-	
+
 	public static boolean localDB = false;
 	public static boolean localDBResync = false;
 
@@ -50,12 +49,11 @@ public class PersistenceControllerFactory {
 		}
 
 		PersistenceController persistControl;
-		
 
 		if (sqlAndGetRows) {
 			// have a try
 			// persistControl = new OpsiserviceSQLgetrowsPersistenceController (server,
-			
+
 			persistControl = new OpsiserviceRawDataPersistenceController(server, user, password);
 			logging.info("a PersistenceController initiated by option sqlAndGetRows got " + (persistControl == null));
 		} else if (avoidSqlRawData) {
@@ -114,9 +112,7 @@ public class PersistenceControllerFactory {
 					persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
 				}
 
-				
 				// de.uib.opsicommand.OpsiMethodCall.standardRpcPath = ""; //for compatibility
-				
 
 				if (persistControl.getOpsiVersion().compareTo(Globals.REQUIRED_SERVICE_VERSION) < 0) {
 					String errorInfo = configed.getResourceValue("PersistenceControllerFactory.requiredServiceVersion")
@@ -132,7 +128,7 @@ public class PersistenceControllerFactory {
 					return null;
 
 					// persistControl = new OpsiservicePersistenceController (server, user,
-					
+
 				}
 
 				if (persistControl.getOpsiVersion().compareTo(Globals.MIN_SUPPORTED_OPSI_VERSION) < 0) {
@@ -191,7 +187,7 @@ public class PersistenceControllerFactory {
 
 									infodialog.centerOn(Globals.mainFrame);
 								}
-								
+
 							}
 
 						}
@@ -205,9 +201,6 @@ public class PersistenceControllerFactory {
 				persistControl.retrieveOpsiModules();
 				// retrieves host infos because of client counting
 
-				
-
-				
 				// retrieves host infos because of client counting
 
 				if (sqlAndGetRows && !persistControl.isWithMySQL()) {

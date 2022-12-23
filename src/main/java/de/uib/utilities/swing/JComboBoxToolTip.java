@@ -36,16 +36,16 @@ public class JComboBoxToolTip extends javax.swing.JComboBox {
 		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
 			if (isSelected) {
-				setBackground(listBackgroundColorSelected); 
-				setForeground(listForegroundColor); 
+				setBackground(listBackgroundColorSelected);
+				setForeground(listForegroundColor);
 				logging.debug(this, "index, tooltips " + index + ", " + tooltips);
 				if (-1 < index && index < tooltips.size() // we had an error only on linux with openjdk 8
 				) {
 					list.setToolTipText(tooltips.get(index));
 				}
 			} else {
-				setBackground(listBackgroundColorSelected); 
-				setForeground(listForegroundColor); 
+				setBackground(listBackgroundColorSelected);
+				setForeground(listForegroundColor);
 			}
 			setFont(list.getFont());
 			setText((value == null) ? "" : value.toString());

@@ -55,13 +55,9 @@ public class OpsiProductInfo extends OpsiPackage {
 		if (m.get(SERVICEkeyPRODUCT_DESCRIPTION) != null)
 			description = "" + m.get(SERVICEkeyPRODUCT_DESCRIPTION);
 
-		
-
 		advice = "";
 		if (m.get(SERVICEkeyPRODUCT_ADVICE) != null)
 			advice = "" + m.get(SERVICEkeyPRODUCT_ADVICE);
-
-		
 
 		try {
 			priority = Integer.valueOf("" + m.get(SERVICEkeyPRIORITY));
@@ -74,7 +70,6 @@ public class OpsiProductInfo extends OpsiPackage {
 
 		logging.debug(this, "created with description " + description + "\n," + " possible actions " + possibleActions
 				+ ", hasUserLoginScript " + hasUserLoginScript);
-		
 
 	}
 

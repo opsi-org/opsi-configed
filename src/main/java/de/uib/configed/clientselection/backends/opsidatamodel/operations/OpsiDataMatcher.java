@@ -4,7 +4,6 @@ import java.util.Map;
 
 import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.SelectElement;
-
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.utilities.logging.logging;
 
@@ -24,16 +23,16 @@ public abstract class OpsiDataMatcher {
 	public boolean doesMatch(Client client) {
 		OpsiDataClient oClient = (OpsiDataClient) client;
 		logging.debug(this, "doesMatch client " + oClient);
-		
+
 		Map realMap = oClient.getMap(map);
-		
+
 		if (!realMap.containsKey(key) || realMap.get(key) == null) {
-			
+
 			return false;
 		}
 
 		String realData = realMap.get(key).toString();
-		
+
 		return checkData(realData);
 	}
 

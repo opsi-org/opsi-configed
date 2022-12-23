@@ -25,7 +25,7 @@ import de.uib.utilities.table.ListModelProducer;
 
 public class SensitiveCellEditor extends AbstractCellEditor implements TableCellEditor, MouseListener {
 	protected JTextField field;
-	
+
 	protected FEditList listeditor;
 	private int editingRow = -1;
 	private int editingColumn = -1;
@@ -99,7 +99,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		 * //other popup windows are now not visible
 		 */
 		setModelProducer(modelProducer);
-		
+
 	}
 
 	public void re_init() {
@@ -111,14 +111,14 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	}
 
 	public void setModelProducer(ListModelProducer producer) {
-		
+
 		this.modelProducer = producer;
 		if (producer == null)
 		// build default producer
 		{
 			modelProducer = new DefaultListModelProducer();
 		}
-		
+
 	}
 
 	private void startListEditor(final JTable table, final int row, final int column) {
@@ -126,13 +126,11 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		listeditor.init();
 
 		SwingUtilities.invokeLater(() -> {
-			
-			
 
 			listeditor.setVisible(true);
 			listeditor.locateLeftTo(table);
 		});
-		
+
 		usingListEditor = true;
 	}
 
@@ -145,13 +143,11 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 		logging.debug(this, "  celleditor working in " + row + ", " + column + " with value " + value + ", class "
 				+ value.getClass().getName());
-		
-		
+
 		List val = modelProducer.toList(value);
 
 		if (val instanceof List) // is now always
 		{
-			
 
 			ListModel model = modelProducer.getListModel(row, column);
 			logging.debug(this,
@@ -159,13 +155,10 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			listeditor.setVisible(false);
 			listeditor.setTitle(modelProducer.getCaption(row, column));
 
-			
-
 			if (model != null) {
-				
 
 				listeditor.setListModel(modelProducer.getListModel(row, column));
-				
+
 				logging.info(this, "startValue set: " + value);
 
 				listeditor.setSelectionMode(modelProducer.getSelectionMode(row, column));
@@ -223,16 +216,16 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 	@Override
 	public Object getCellEditorValue() {
-		
+
 		// editingRow + ", " + editingColumn +", value :");
-		
+
 		// class " + listeditor.getValue().getClass());
-		
+
 		// original class " + modelProducer.getClass(editingRow, editingColumn));
 
 		// if ( List.class.isAssignableFrom
 		// (modelProducer.getClass(editingRow, editingColumn)) )
-		
+
 		// List");
 
 		if (listeditor.getValue() == null)
@@ -245,19 +238,16 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				Iterator iter = forbiddenValues.iterator();
 				while (iter.hasNext()) {
 					Object element = iter.next();
-					
+
 					list.remove(element);
 				}
 
-				
 			}
 
 			int n = list.size();
 
-			
 			// editingRow + " , " + editingColumn + " " +
 			// "modelProducer.getClass(editingRow, editingColumn) " +
-			
 
 			/*
 			 * if ( List.class.isAssignableFrom
@@ -273,18 +263,17 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			 */
 
 			if (List.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
-				
+
 				// List");
-				
+
 				// li.add("xxx");
-				
+
 				return list;
 			}
 
 			if (java.lang.Integer.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
-				
+
 				// java.lang.Integer");
-				
 
 				if (n == 0)
 					return null;
@@ -293,7 +282,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			}
 
 			if (java.lang.Boolean.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
-				
+
 				// java.lang.Boolean");
 
 				if (n == 0)
@@ -320,8 +309,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				buf.append("" + list.get(n - 1));
 
 				String result = buf.toString();
-
-				
 
 				if (result.equalsIgnoreCase("null"))
 					return org.json.JSONObject.NULL;
@@ -374,7 +361,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	public void mouseClicked(MouseEvent e) {
 		if (e.getSource() == field && usingListEditor) {
 			if (e.getClickCount() > 1) {
-				
+
 				listeditor.setVisible(true);
 			}
 		}

@@ -147,8 +147,6 @@ public class TargetConfiguration {
 
 	public static final String[] getDisplayLabelsForChoice() {
 		checkCollections();
-		
-		
 
 		return choiceLabels;
 	}
@@ -181,10 +179,6 @@ public class TargetConfiguration {
 
 		if (!labels.contains(label))
 			return new TargetConfiguration(INVALID);
-
-		
-		
-		
 
 		return new TargetConfiguration(getVal(label));
 	}

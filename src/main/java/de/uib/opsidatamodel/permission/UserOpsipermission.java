@@ -10,12 +10,6 @@ import de.uib.utilities.logging.logging;
 public class UserOpsipermission extends UserConfigModule {
 	// public enum HostTypeOfPrivilege{ ALL, CLIENT, DEPOT, SERVER }
 	// permit restrictable action
-	
-	
-	
-
-	
-	
 
 	public enum ActionPrivilege {
 		READ_ONLY, READ_WRITE
@@ -47,7 +41,7 @@ public class UserOpsipermission extends UserConfigModule {
 
 	public static final String PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED = CONFIGKEY_STR_PRIVILEGE + "."
 			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_DEPOT + "." + CONFIGKEY_STR_ACCESSCONTROLLED;
-	
+
 	public static final String PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE = CONFIGKEY_STR_PRIVILEGE + "."
 			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_DEPOT + "." + CONFIGKEY_STR_DEPOTLIST;
 	// privilege.host.depotaccess.depots : multivalue
@@ -57,7 +51,6 @@ public class UserOpsipermission extends UserConfigModule {
 
 	public static final String PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED = CONFIGKEY_STR_PRIVILEGE + "."
 			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_HOSTGROUP + "." + CONFIGKEY_STR_ACCESSCONTROLLED;
-	
 
 	public static final String PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE = CONFIGKEY_STR_PRIVILEGE + "."
 			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_HOSTGROUP + "." + CONFIGKEY_STR_HOSTGROUPLIST;
@@ -65,7 +58,6 @@ public class UserOpsipermission extends UserConfigModule {
 
 	public static final String PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED = CONFIGKEY_STR_PRIVILEGE
 			+ "." + CONFIGKEY_STR_PRODUCT + "." + CONFIGKEY_STR_PRODUCTGROUP + "." + CONFIGKEY_STR_ACCESSCONTROLLED;
-	
 
 	public static final String PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE = CONFIGKEY_STR_PRIVILEGE + "."
 			+ CONFIGKEY_STR_PRODUCT + "." + CONFIGKEY_STR_PRODUCTGROUP + "." + CONFIGKEY_STR_PRODUCTGROUPLIST;
@@ -113,8 +105,6 @@ public class UserOpsipermission extends UserConfigModule {
 		logging.info("init ARCHEO for UserOpsipermission");
 		DEFAULT = new UserOpsipermission(UserConfig.ARCHEO_ROLE_NAME);
 
-		
-		
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY, false);
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_SERVER_READWRITE, true);
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED, false);

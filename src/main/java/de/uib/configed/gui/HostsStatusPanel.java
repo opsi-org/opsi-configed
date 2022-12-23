@@ -16,7 +16,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 
 	JLabel labelAllClientsCount;
 	JTextField fieldGroupActivated;
-	
+
 	JTextField fieldSelectedClientsNames;
 	JTextField fieldActivatedClientsCount;
 	JTextField fieldInvolvedDepots;
@@ -70,9 +70,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 				"updateValues clientsCount, selectedClientsCount " + clientsCount + ", " + selectedClientsCount);
 		logging.info(this,
 				"updateValues clientsCount, selectedClientsCount " + clientsCount + ", " + selectedClientsCount);
-		
 
-		
 		labelAllClientsCount.setText(configed.getResourceValue("MainFrame.labelClientsTotal") + "  " + clientsCount);
 
 		setFieldClientsCount(selectedClientsCount);
@@ -81,7 +79,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 			fieldSelectedClientsNames.setText("");
 			fieldSelectedClientsNames.setToolTipText(null);
 		} else
-		
+
 		{
 
 			/*
@@ -100,10 +98,9 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 			 */
 
 			fieldSelectedClientsNames.setText(selectedClientNames);
-			
+
 			fieldSelectedClientsNames.setToolTipText(
 					"<html><body><p>" + selectedClientNames.replace(";\n", "<br\\ >") + "</p></body></html>");
-			
 
 		}
 
@@ -148,10 +145,9 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		JLabel labelActivated = new JLabel(configed.getResourceValue("MainFrame.activated"));
 
 		JLabel labelGroupActivated = new JLabel(configed.getResourceValue("MainFrame.groupActivated"));
-		
 
 		fieldGroupActivated = new JTextField("");
-		
+
 		fieldGroupActivated.setPreferredSize(Globals.counterfieldDimension);
 		fieldGroupActivated.setEditable(false);
 
@@ -159,17 +155,14 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		labelAllClientsCount.setPreferredSize(Globals.labelDimension);
 
 		JLabel labelSelectedClientsCount = new JLabel(configed.getResourceValue("MainFrame.labelSelected"));
-		
 
 		JLabel labelSelectedClientsNames = new JLabel(configed.getResourceValue("MainFrame.labelNames"));
-		
 
 		JLabel labelInvolvedDepots = new JLabel(configed.getResourceValue("MainFrame.labelInDepot"));
-		
+
 		JLabel labelInvolvedDepots2 = new JLabel(configed.getResourceValue("MainFrame.labelInDepot2"));
 
 		// fieldAllClientsCount = new JTextField("");
-		
 
 		fieldActivatedClientsCount = new JTextField("");
 		fieldActivatedClientsCount.setPreferredSize(Globals.counterfieldDimension);
@@ -182,15 +175,10 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		fieldSelectedClientsNames.setDragEnabled(true);
 
 		// JScrollPane viewSelectedClientsNames = new
-		
-		
 
 		fieldInvolvedDepots = new JTextField("");
 		fieldInvolvedDepots.setPreferredSize(Globals.counterfieldDimension);
 		fieldInvolvedDepots.setEditable(false);
-		
-		
-		
 
 		initializeValues();
 

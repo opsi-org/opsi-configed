@@ -39,7 +39,6 @@ public class XCellEditor extends DefaultCellEditor {
 		c.setBackground(background);
 		c.setForeground(foreground);
 
-		
 		return c;
 	}
 

@@ -139,14 +139,10 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 	@Override
 	public Object getValueAt(int row, int col) {
-		
+
 		String myKey = (String) keyArray[row / noOfRowTypes];
 
-		
-
 		int rowTypeIndex = row % noOfRowTypes;
-
-		
 
 		Object result = null;
 		String indent = "     ";
@@ -231,7 +227,6 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 				boolean hasFocus, int row, int column) {
 			MyColorizer colorizer = new MyColorizer(String.valueOf(value));
 
-			
 			java.awt.Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
 					column);
 
@@ -276,9 +271,6 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 			int kindOfRow = row % 3;
 
-			
-
-			
 			{
 				switch (kindOfRow) {
 				case 0:
@@ -289,7 +281,6 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 					break;
 				case 2:
 
-					
 					cell.setBackground(Globals.backVeryLightBlue);
 					break;
 				}

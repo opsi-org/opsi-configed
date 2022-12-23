@@ -53,13 +53,8 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 
 			((JLabel) jc).setToolTipText(tooltipText);
 
-			
-			
-			
-
 			if (row == currentRow) {
-				
-				
+
 			}
 		}
 

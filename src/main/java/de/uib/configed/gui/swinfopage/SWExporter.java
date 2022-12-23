@@ -166,8 +166,7 @@ public abstract class SWExporter {
 		else {
 			theHost = hostId;
 			updateModel();
-			
-			
+
 		}
 
 		setWriteToFile(filepathStart + hostId + ".pdf");
@@ -189,7 +188,6 @@ public abstract class SWExporter {
 		if (exportDirectory != null)
 			exportDirectoryS = exportDirectory.toString();
 
-		
 		// setWriteToFile( filepathStart + hostId + ".pdf");
 
 		Vector<String> columnNames;
@@ -234,14 +232,11 @@ public abstract class SWExporter {
 	public void updateModel() {
 		logging.info(this, "update++");
 
-		
-		
 		logging.info(this, "update++++ modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
 
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
 		logging.info(this, "update++++++ modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
-		
 
 	}
 

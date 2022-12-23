@@ -36,11 +36,11 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 	public boolean doesMatch(Client client) {
 		OpsiDataClient oClient = (OpsiDataClient) client;
 		logging.debug(this, " (OpsiDataStringEqualsOperation) doesMatch client " + oClient);
-		
+
 		Map realMap = oClient.getMap(map);
 		logging.debug(this, "doesMatch,  we look into map for key " + key);
 		if (!realMap.containsKey(key) || realMap.get(key) == null) {
-			
+
 			return false;
 		}
 
@@ -50,27 +50,24 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 	}
 
 	protected boolean checkData(final String realData) {
-		
 
 		String rData = realData.toLowerCase();
 
 		if (dataSplitted == null) // simple case: no '*'
 		{
 			// if (data.equals("cached"))
-			
+
 			return rData.equals(data);
 		}
 
 		else if (dataSplitted.length == 0) // the only chars are '*'
 		{
-			
+
 			if (realData.length() > 0)
 				return true;
 			else
 				return false;
 		} else {
-			
-			
 
 			if (!startsWith)
 				if (!rData.startsWith(dataSplitted[0]))
@@ -78,13 +75,13 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 			int index = 0;
 			int i = 0;
 			while (i < dataSplitted.length && index >= 0) {
-				
+
 				if (!dataSplitted[i].isEmpty()) {
 					index = rData.indexOf(dataSplitted[i], index);
 					if (index >= 0)
 						index += dataSplitted[i].length();
 				}
-				
+
 				i++;
 			}
 			if (index < 0)

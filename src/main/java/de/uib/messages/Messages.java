@@ -177,7 +177,7 @@ public class Messages {
 		logging.debug("Messages, setLocale");
 		Locale loc = null;
 		if (characteristics != null && !characteristics.equals("")) {
-			
+
 			if (characteristics.length() == 5 && characteristics.indexOf('_') == 2) {
 				try {
 					loc = produceLocale(characteristics.substring(0, 2), characteristics.substring(3, 5));

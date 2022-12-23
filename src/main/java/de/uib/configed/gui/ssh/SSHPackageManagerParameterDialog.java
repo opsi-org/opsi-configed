@@ -20,7 +20,6 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.logging;
 
 public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ FGeneralDialog {
-	
 
 	protected PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
@@ -49,24 +48,16 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 
 	public SSHPackageManagerParameterDialog(String title) {
 		super(null, title);
-		
-		
-		
-		
-		
-		
-		
+
 		setTitle(title);
 		setFont(Globals.defaultFont);
 		setIconImage(Globals.mainIcon);
-		
-		
+
 		this.setSize(new Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH, frameHeight));
 		this.centerOn(Globals.mainFrame);
 		this.setBackground(Globals.backLightBlue);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		
 	}
 
 	protected void setComponentsEnabled(boolean value) {
@@ -97,21 +88,15 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		logging.info(this, "getRepositoriesFromConfigs opsiRepo " + opsiRepo);
 
 		// try
-		
+
 		// String o_prod = ((String)firstDepot.get(configDepot)).replace("file://", "");
-		
-		
-		
-		
-		
-		
 
 		logging.info(this, "getRepositoriesFromConfigs opsiRepo " + opsiRepo);
 		logging.info(this, "getRepositoriesFromConfigs opsiProd " + opsiProd);
 		// // String od = firstDepot.get(configDepot).replace("file://", "");
-		
+
 		// " + opsiDepot);
-		
+
 	}
 
 	protected void initLabels() {
@@ -121,10 +106,10 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 
 	protected void initButtons(final SSHPackageManagerParameterDialog caller) {
 		{
-			
+
 			btn_help = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
 			btn_help.setText(configed.getResourceValue("SSHConnection.buttonHelp"));
-			
+
 			btn_help.addActionListener(actionEvent -> doActionHelp(caller));
 
 			btn_execute = new JButton();
@@ -173,31 +158,16 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		}
 		dia.setVisible(true);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	// SSHConnectionExecHelpDialog outputDialog = new SSHConnectionExecHelpDialog(
 	// command,
 	// configed.getResourceValue("SSHConnection.Exec.title")+ "
 	// \""+command.getCommand() + "\" "
-	
-	
 
 	/* This method gets called when button 2 is pressed */
-	
-	
+
 	// 
-	
-	
-	
+
 	public void cancel() {
 		super.doAction2();
 	}

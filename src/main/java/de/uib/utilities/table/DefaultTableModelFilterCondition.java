@@ -34,7 +34,6 @@ public class DefaultTableModelFilterCondition implements TableModelFilterConditi
 
 	@Override
 	public boolean test(Vector<Object> row) {
-		
 
 		if (filterSet == null)
 			return true;
@@ -43,7 +42,6 @@ public class DefaultTableModelFilterCondition implements TableModelFilterConditi
 			return true;
 
 		boolean result = filterSet.contains(row.get(keyCol));
-		
 
 		return result;
 	}

@@ -57,9 +57,6 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public int getColumnCount() {
-		
-		
-		
 
 		return getTableModel().getColumnCount();
 	}
@@ -126,16 +123,14 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public void ensureRowIsVisible(int row) {
-		
-		
+
 		table.scrollRectToVisible(table.getCellRect(row, 0, false));
 
-		
 	}
 
 	@Override
 	public void setCursorRow(int row) {
-		
+
 		if (table.getRowCount() <= 0) {
 			return;
 		}
@@ -145,7 +140,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		logging.info(this, "setCursorRow row, produced modelrow " + modelrow);
 
 		if (table.getModel() instanceof de.uib.utilities.table.GenTableModel) {
-			
+
 			((de.uib.utilities.table.GenTableModel) table.getModel()).setCursorRow(modelrow);
 		}
 
@@ -162,7 +157,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		}
 
 		table.setRowSelectionInterval(row, row);
-		
+
 		ensureRowIsVisible(row);
 	}
 
@@ -174,7 +169,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 			return;
 
 		table.addRowSelectionInterval(row, row);
-		
+
 		ensureRowIsVisible(row);
 	}
 
@@ -209,10 +204,6 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public void setFiltered(boolean b) {
-		
-
-		
-		
 
 		boolean wasChanged = false;
 
@@ -223,9 +214,6 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 		if (!filtered)
 			viewRowfilter = table.getSelectedRows();
-
-		
-		
 
 		if (b && viewRowfilter.length > 0) {
 			int[] modelRowFilter = new int[viewRowfilter.length];
@@ -241,12 +229,11 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 			model.setUsingFilter(FILTER_BY_SELECTION, true);
 			model.reset();
 
-			
 			table.getSelectionModel().setSelectionInterval(0, model.getRowCount());
 
 		} else {
 			model.setUsingFilter(FILTER_BY_SELECTION, false);
-			
+
 			setSelection(viewRowfilter); // restore the original selection
 		}
 		filtered = b;
@@ -258,7 +245,6 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	public boolean isFiltered() {
 		return filtered;
 
-		
 		// not work since we don't always have got a GenTableModel
 	}
 

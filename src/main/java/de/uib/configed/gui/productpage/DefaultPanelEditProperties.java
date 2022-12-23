@@ -44,7 +44,7 @@ public abstract class DefaultPanelEditProperties extends JXPanel {
 		super();
 		this.mainController = mainController;
 		this.productPropertiesPanel = productPropertiesPanel;
-		
+
 		setBackgroundPainter(new org.jdesktop.swingx.painter.AbstractPainter() {
 			@Override
 			public void doPaint(Graphics2D g, Object obj, int width, int height) {

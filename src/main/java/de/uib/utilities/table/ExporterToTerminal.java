@@ -14,20 +14,20 @@ public class ExporterToTerminal extends ExportTable {
 
 	@Override
 	public void execute(String fileName, boolean onlySelectedRows) {
-		
+
 		Boolean selectedOnly = checkSelection(onlySelectedRows);
 		if (selectedOnly == null)
 			return;
 
 		for (int rowI = 0; rowI < theTable.getRowCount(); rowI++) {
-			
+
 			if (!selectedOnly || theTable.isRowSelected(rowI)) {
 				Vector<String> rowV = new Vector<>();
 				for (int colI = 0; colI < theTable.getColumnCount(); colI++) {
 					if (theTable.getValueAt(rowI, colI) != null) {
 						if (classNames == null || classNames.isEmpty()) {
 							if (theTable.getValueAt(rowI, colI) instanceof String) {
-								
+
 								rowV.add((String) theTable.getValueAt(rowI, colI));
 
 							}

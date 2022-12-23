@@ -1,6 +1,5 @@
 package de.uib.opsidatamodel.productstate;
 
-
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,9 +25,6 @@ public class InstallationStatus {
 	public static final int UNKNOWN = 2;
 
 	// compatibility mode for older opsi data, not more necessary
-	
-
-	
 
 	// textcolors
 	public static final Color NOT_INSTALLEDcolor = Globals.INVISIBLE;
@@ -58,10 +54,8 @@ public class InstallationStatus {
 		states.add(UNDEFINED);
 		states.add(INSTALLED);
 		states.add(NOT_INSTALLED);
-		
-		states.add(UNKNOWN);
 
-		
+		states.add(UNKNOWN);
 
 		labels = new Vector<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);
@@ -170,7 +164,7 @@ public class InstallationStatus {
 		checkCollections();
 
 		if (label == null || label.equals(""))
-			
+
 			// action requests
 			return UNKNOWN;
 
@@ -220,10 +214,6 @@ public class InstallationStatus {
 
 		if (!labels.contains(label))
 			return new InstallationStatus(INVALID);
-
-		
-		
-		
 
 		return new InstallationStatus(getVal(label));
 	}

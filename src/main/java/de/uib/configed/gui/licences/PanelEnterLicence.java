@@ -50,8 +50,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	protected int minVSize = 50;
 	protected int minPanelTableHeight = 60;
 	protected int maxHSize = 1000;
-	
-	
 
 	protected int minFieldWidth = 40;
 	protected int minFieldHeight = 6;
@@ -61,7 +59,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	private javax.swing.JButton jButtonCreateOEM;
 	private javax.swing.JButton jButtonCreateConcurrent;
 	private javax.swing.JButton jButtonSend;
-	
+
 	private javax.swing.JLabel jLabelLKey;
 	private javax.swing.JLabel jLabelLicencePool;
 	private javax.swing.JLabel jLabelTask;
@@ -78,7 +76,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	private javax.swing.JPanel panelLicenceModel;
 	private javax.swing.JTextField jTextField_licenceID;
 	private javax.swing.JTextField jTextField_licenceType;
-	
+
 	private javax.swing.JTextField jTextField_maxInstallations;
 	private javax.swing.JComboBox comboClient;
 	private javax.swing.JTextField jTextField_endOfLicence;
@@ -102,7 +100,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				
+
 			}
 		});
 
@@ -121,7 +119,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 			ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
 
 			if (lsm.isSelectionEmpty()) {
-				
+
 			} else {
 				int selectedRow = lsm.getMinSelectionIndex();
 				String keyValue = panelLicencecontracts.getValueAt(selectedRow, 0).toString();
@@ -199,7 +197,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_licenceType.setText("RETAIL");
 		jTextField_licenceType.setEditable(false);
 		jTextField_maxInstallations.setEnabled(true);
-		
+
 		jTextField_maxInstallations.setText("1");
 		jTextField_maxInstallations.setEditable(false);
 		comboClient.setEnabled(false);
@@ -215,7 +213,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_licenceType.setText("VOLUME");
 		jTextField_licenceType.setEditable(false);
 		jTextField_maxInstallations.setEnabled(true);
-		
+
 		jTextField_maxInstallations.setText("0");
 		jTextField_maxInstallations.setEditable(true);
 		comboClient.setEnabled(false);
@@ -231,7 +229,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_licenceType.setText("OEM");
 		jTextField_licenceType.setEditable(false);
 		jTextField_maxInstallations.setEnabled(true);
-		
+
 		jTextField_maxInstallations.setText("1");
 		jTextField_maxInstallations.setEditable(false);
 		comboClient.setModel(new DefaultComboBoxModel<>(enterLicenceController.getChoicesAllHosts()));
@@ -249,7 +247,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_licenceType.setText("CONCURRENT");
 		jTextField_licenceType.setEditable(false);
 		jTextField_maxInstallations.setEnabled(true);
-		
+
 		jTextField_maxInstallations.setText("0");
 		jTextField_maxInstallations.setEditable(false);
 		comboClient.setEnabled(false);
@@ -269,11 +267,8 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		);
 
 		panelKeys.setMasterFrame(Globals.frame1);
-		
 
-		
 		// SearchTargetModelFromTable.setFiltered
-		
 
 		panelLicencepools = new PanelGenEditTable(
 				configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool"), maxHSize, false, 0,
@@ -281,11 +276,8 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		);
 
 		panelLicencepools.setMasterFrame(Globals.frame1);
-		
 
-		
 		// SearchTargetModelFromTable.setFiltered
-		
 
 		panelLicencecontracts = new PanelGenEditTable(
 				configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), 0, true, 1, false,
@@ -294,11 +286,8 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 				true // with tablesearchpane
 		);
 		panelLicencecontracts.setMasterFrame(Globals.frame1);
-		
 
-		
 		// SearchTargetModelFromTable.setFiltered
-		
 
 		jLabelLicencePool = new javax.swing.JLabel();
 		jButtonCreateStandard = new javax.swing.JButton();
@@ -322,14 +311,12 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_licenceID = new javax.swing.JTextField();
 		jTextField_licenceType = new javax.swing.JTextField();
 		jTextField_maxInstallations = new javax.swing.JTextField();
-		
+
 		// jTextField_maxInstallations.setInputVerifier(new
-		
 
 		comboClient = new javax.swing.JComboBox();
 		comboClient.setFont(Globals.defaultFontBig);
-		
-		
+
 		comboClient.setPreferredSize(new java.awt.Dimension(200, 20));
 
 		jLabelSLid3info = new javax.swing.JLabel();
@@ -340,7 +327,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_endOfLicence.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+
 				if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
 					if (fEditDate == null)
 						fEditDate = new FEditDate(jTextField_endOfLicence.getText(), false);
@@ -377,7 +364,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		});
 
 		jTextField_licenceContract = new javax.swing.JTextField();
-		
+
 		jButtonSend = new javax.swing.JButton();
 		jButtonSend.setPreferredSize(Globals.buttonDimension);
 		jLabelLKey = new javax.swing.JLabel();
@@ -652,7 +639,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setResizeWeight(0.3f);
-		
 
 		topPane = new JPanel();
 		bottomPane = new JPanel();

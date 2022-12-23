@@ -60,13 +60,12 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 	// *** perhaps we should instead implement a recursive empty which clears only
 	// the implementors but does not remove the elements
 	{
-		
 
 		Iterator it = implementor.iterator();
 		while (it.hasNext()) {
 			Object obj = it.next();
 			if (obj != null) {
-				
+
 				if (obj instanceof UpdateCollection)
 				// a element of the collection is a collection, we do our best to clear
 				// recursively
@@ -88,7 +87,7 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 		while (it.hasNext()) {
 			Object obj = it.next();
 			if (obj != null) {
-				
+
 				if (obj instanceof UpdateCollection)
 				// a element of the collection is a collection, we do our best to clear
 				// recursively
@@ -236,12 +235,11 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 		Iterator it = implementor.iterator();
 		while (it.hasNext()) {
 			UpdateCommand theCommand = ((UpdateCommand) it.next());
-			
+
 			if (theCommand != null)
 				theCommand.doCall();
 		}
 
-		
 	}
 
 }

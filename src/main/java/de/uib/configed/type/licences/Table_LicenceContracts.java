@@ -37,7 +37,7 @@ public class Table_LicenceContracts extends Relation {
 	public static final String typeKEY = "type";
 
 	public static final List<String> DB_ATTRIBUTES;
-	
+
 	static {
 		DB_ATTRIBUTES = new LinkedList<>();
 		DB_ATTRIBUTES.add(idDBKEY);
@@ -58,11 +58,11 @@ public class Table_LicenceContracts extends Relation {
 		INTERFACED_ATTRIBUTES.add(notificationDateKEY);
 		INTERFACED_ATTRIBUTES.add(expirationDateKEY);
 		INTERFACED_ATTRIBUTES.add(notesKEY);
-		
+
 	}
 
 	public static final List<String> ALLOWED_ATTRIBUTES;
-	
+
 	static {
 		ALLOWED_ATTRIBUTES = new LinkedList<>(DB_ATTRIBUTES);
 		ALLOWED_ATTRIBUTES.add(idKEY);

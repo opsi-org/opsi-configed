@@ -49,15 +49,8 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 	public Void doInBackground() {
 
 		// startAnotherProcess()
-		
-		
-
-		
-		
 
 		long timeStepMillis = (long) 500;
-
-		
 
 		logging.debug(this, " doInBackground waitingMillis " + waitingSleeper.getWaitingMillis());
 
@@ -75,7 +68,6 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 			}
 
 			long nowMillis = new GregorianCalendar().getTimeInMillis();
-			
 
 			elapsedMillis = nowMillis - startActionMillis;
 			elapsedMins = (elapsedMillis / 1000) / 60;
@@ -89,10 +81,6 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 			// firePropertyChange("elapsedMins", 0, elapsedMins);
 
-			
-			
-
-			
 		}
 
 		logging.info(this,
@@ -114,25 +102,22 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 		logging.debug(this, "process, we have got list " + listOfMillis);
 
 		long millis = listOfMillis.get(listOfMillis.size() - 1);
-		
+
 		statusLabel.setText(
 				// "passed " + giveTimeSpan( millis) +
 				waitingSleeper.setLabellingStrategy(millis));
 		// " " + configed .getResourceValue("FStartWakeOnLan.timeLeft") + " " +
 		// Globals.giveTimeSpan( waitingSleeper.getWaitingMillis() -
-		
 
 		int barLength = progressBar.getMaximum() - progressBar.getMinimum();
 
-		
 		// ":: progressBar.getMinimum() " + progressBar.getMinimum()
 		// + ":: millis " + millis + " :: waitingMillis " + waitingMillis + " :: min + "
-		
 
 		logging.debug(this, "process, millis " + millis);
 		double proportion = ((double) millis) / (double) waitingSleeper.getOneProgressBarLengthWaitingMillis();
 		logging.info(this, "process, millis/estimatedTotalWaitMillis  " + proportion);
-		
+
 		int portion = (int) (barLength * proportion);
 		portion = portion % barLength;
 
@@ -141,7 +126,6 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 		progressBar.setValue(progressBar.getMinimum() + portion);
 
 		// progressBar.setValue( ( int ) (progressBar.getMinimum() + (int) ( (barLength
-		
 
 	}
 

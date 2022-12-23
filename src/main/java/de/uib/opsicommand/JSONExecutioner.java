@@ -64,8 +64,7 @@ public abstract class JSONExecutioner extends Executioner {
 	@Override
 	public boolean doCall(OpsiMethodCall omc) {
 		JSONObject jO = retrieveJSONObject(omc);
-		
-		
+
 		return checkResponse(jO);
 	}
 
@@ -99,8 +98,7 @@ public abstract class JSONExecutioner extends Executioner {
 				Iterator iter = jO.keys();
 				while (iter.hasNext()) {
 					String key = (String) iter.next();
-					
-					
+
 					result.put(key, JSONReMapper.getJsonList(jO, key));
 				}
 			}
@@ -125,8 +123,7 @@ public abstract class JSONExecutioner extends Executioner {
 						Iterator iter = jOResult.keys();
 						while (iter.hasNext()) {
 							String key = (String) iter.next();
-							
-							
+
 							result.put(key, JSONReMapper.getJsonList(jOResult, key));
 						}
 					}
@@ -200,7 +197,7 @@ public abstract class JSONExecutioner extends Executioner {
 					logging.error(this, "map expected " + jOX);
 				} else {
 					logging.debug(this, "map retrieved ");
-					
+
 					Map map0 = jOX.getMap();
 
 					Iterator iter0 = map0.keySet().iterator();
@@ -320,7 +317,6 @@ public abstract class JSONExecutioner extends Executioner {
 				Iterator iter = resultlist.iterator();
 				while (iter.hasNext()) {
 					JSONObject jO = (JSONObject) iter.next();
-					
 
 					String keyOfItem = null;
 
@@ -384,7 +380,6 @@ public abstract class JSONExecutioner extends Executioner {
 			}
 		}
 
-		
 		return result;
 
 	}
@@ -513,7 +508,6 @@ public abstract class JSONExecutioner extends Executioner {
 			} catch (Exception jsonEx) {
 			}
 
-			
 		}
 
 		return result;
@@ -521,12 +515,10 @@ public abstract class JSONExecutioner extends Executioner {
 
 	@Override
 	public boolean getBooleanResult(OpsiMethodCall omc) {
-		
+
 		Boolean result = null;
 
 		JSONObject jO = retrieveJSONObject(omc);
-
-		
 
 		if (!JSONReMapper.checkForNotValidOpsiMethod(jO)) {
 			result = getBooleanResult(omc.activateExtendedRpcPath());
@@ -536,7 +528,7 @@ public abstract class JSONExecutioner extends Executioner {
 					result = (Boolean) jO.get("result");
 				} catch (Exception jsonEx) {
 				}
-				
+
 			}
 		}
 
@@ -577,13 +569,13 @@ public abstract class JSONExecutioner extends Executioner {
 			}
 
 			if (wehavejO) {
-				
+
 				if (jO != null && jO != JSONObject.NULL) {
-					
+
 					Iterator iter = jO.keys();
 					while (iter.hasNext()) {
 						String key = (String) iter.next();
-						
+
 						result.put(key, jO.get(key));
 					}
 				}

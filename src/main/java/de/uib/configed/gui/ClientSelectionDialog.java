@@ -93,8 +93,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	private JTextField saveNameField;
 	private JTextField saveDescriptionField;
 	private JButton saveButton;
-	
-	
 
 	private LinkedList<ComplexGroup> complexElements;
 
@@ -190,34 +188,25 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		List<String> clients = new ArrayList<>();
 
 		// de.uib.utilities.WaitCursor waitCursor = new
-		
 
 		try {
-			
-			
+
 			collectData();
 			//
 			// try
-			
+
 			// SwingUtilities.invokeAndWait(
 			// new Runnable(){
-			
-			
+
 			main.setVisualViewIndex(ConfigedMain.VIEW_CLIENTS); // because of potential memory problems we switch to
 																// client view
-																
-																
-																
-																
-																// catch(InterruptedException iex)
-																
-																
-																
+
+			// catch(InterruptedException iex)
 
 			if (manager != null)
 				clients = manager.selectClients();
 		} finally {
-			
+
 		}
 
 		if (clients == null)
@@ -234,7 +223,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	@Override
 	protected void initComponents() {
 		additionalPane = new JPanel();
-		
 
 		GroupLayout additionalLayout = new GroupLayout(additionalPane);
 		additionalPane.setLayout(additionalLayout);
@@ -255,8 +243,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		saveButton.addActionListener(new SaveButtonListener());
 
 		// loadSearchBox = new JComboBox<>( new String[]
-		
-		
 
 		buttonReload = new IconAsButton(configed.getResourceValue("ClientSelectionDialog.buttonReload"),
 				"images/reload16.png", "images/reload16_over.png", "images/reload16.png",
@@ -275,8 +261,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				dialog.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 				SwingUtilities.invokeLater(() -> {
 					setReloadRequested();
-					
-					
+
 					buttonReload.setEnabled(true);
 					buttonRestart.setEnabled(true);
 					dialog.setCursor(saveCursor);
@@ -301,8 +286,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 				SwingUtilities.invokeLater(() -> {
 					setReloadRequested();
-					
-					
+
 					main.callNewClientSelectionDialog();
 					// we lose all components of this dialog, there is nothing to reset
 
@@ -329,9 +313,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		saveHGroup.addGap(Globals.HGAP_SIZE / 2);
 		saveHGroup.addComponent(buttonRestart, 20, 20, 20);
 
-		
 		// saveHGroup.addComponent( loadSearchBox, Globals.buttonWidth,
-		
+
 		saveHGroup.addGap(Globals.HGAP_SIZE);
 		additionalLayout.setHorizontalGroup(saveHGroup);
 
@@ -344,7 +327,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		saveVGroup.addComponent(buttonReload, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
 		saveVGroup.addComponent(buttonRestart, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
 		// saveVGroup.addComponent( loadSearchBox, Globals.lineHeight,
-		
+
 		additionalLayout.setVerticalGroup(saveVGroup);
 
 		additionalPane.setVisible(true);
@@ -355,7 +338,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		contentPane.setBackground(Globals.backLightBlue);
 		layout = new GroupLayout(contentPane);
 		contentPane.setLayout(layout);
-		
+
 		layout.setAutoCreateContainerGaps(true);
 		layout.setHonorsVisibility(false);
 
@@ -366,7 +349,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		GroupLayout.ParallelGroup vHeadlines = layout.createParallelGroup();
 		vGroup.addGroup(vHeadlines);
 		vMainGroup.addGroup(vGroup);
-		
 
 		layout.setVerticalGroup(vMainGroup);
 		hGroupParenthesisClose = layout.createParallelGroup();
@@ -391,34 +373,31 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		nameLabel.setFont(font);
 		// JLabel operationLabel = new JLabel(
 		// configed.getResourceValue("ClientSelectionDialog.operationColumn") );
-		
+
 		JLabel dataLabel = new JLabel(configed.getResourceValue("ClientSelectionDialog.dataColumn"));
 		dataLabel.setFont(font);
 		JLabel connectionLabel = new JLabel(configed.getResourceValue("ClientSelectionDialog.connectionColumn"));
 		connectionLabel.setFont(font);
 		// JLabel removeLabel = new JLabel(
 		// configed.getResourceValue("ClientSelectionDialog.removeColumn") );
-		
 
 		vHeadlines.addComponent(negationLabel);
 		vHeadlines.addComponent(nameLabel);
-		
+
 		vHeadlines.addComponent(dataLabel);
 		vHeadlines.addComponent(connectionLabel);
-		
 
 		hGroupNegate.addComponent(negationLabel, GroupLayout.Alignment.CENTER);
 		hGroupElements.addComponent(nameLabel, GroupLayout.Alignment.CENTER);
 		// hGroupOperations.addComponent( operationLabel, GroupLayout.Alignment.CENTER
-		
+
 		hGroupData.addComponent(dataLabel, GroupLayout.Alignment.CENTER);
 		hGroupConnections.addComponent(connectionLabel, GroupLayout.Alignment.CENTER);
-		
 
 		newElementBox = new JComboBox<>(
 				new String[] { configed.getResourceValue("ClientSelectionDialog.newElementsBox") });
 		newElementBox.setFont(Globals.defaultFont);
-		
+
 		newElementBox.setMaximumRowCount(Globals.COMBOBOX_ROW_COUNT);
 		newElementBox.addItem(configed.getResourceValue("ClientSelectionDialog.hostName"));
 		newElementBox.addItem(configed.getResourceValue("ClientSelectionDialog.softwareName"));
@@ -439,20 +418,17 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		// newElementBox.setMaximumSize( new Dimension(
 		// newElementBox.getPreferredSize().width,
-		
 
 		newElementBox.addActionListener(new AddElementListener());
-		
+
 		vMainGroup.addComponent(newElementBox, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
 		hMainGroup.addComponent(newElementBox, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH);
 		contentPane.add(newElementBox);
 
 		// for( String name: manager.getSavedSearchesNames() )
-		
+
 		// loadSearchBox.setMaximumSize( new Dimension(
 		// loadSearchBox.getPreferredSize().width,
-		
-		
 
 		complexElements.add(createHostGroup());
 		complexElements.add(createSoftwareGroup());
@@ -579,7 +555,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		result.groupList.add(createSimpleGroup(new SoftwareInstallationStatusElement()));
 		// result.groupList.add( createSimpleGroup( new
-		
+
 		result.groupList.add(createSimpleGroup(new SoftwareActionResultElement()));
 		result.groupList.add(createSimpleGroup(new SoftwareRequestElement()));
 		result.groupList.add(createSimpleGroup(new SoftwareActionProgressElement()));
@@ -635,7 +611,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		result.groupList.add(createSimpleGroup(new SoftwareInstallationStatusElement()));
 		// result.groupList.add( createSimpleGroup( new
-		
+
 		result.groupList.add(createSimpleGroup(new SoftwareActionResultElement()));
 		result.groupList.add(createSimpleGroup(new SoftwareRequestElement()));
 		result.groupList.add(createSimpleGroup(new SoftwareActionProgressElement()));
@@ -807,7 +783,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			break;
 		case EnumType:
 			// String textEnum = ((JComboBox)
-			
+
 			String textEnum = ((TextInputField) group.dataComponent).getText();
 			if (textEnum.isEmpty())
 				return null;
@@ -950,7 +926,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			sourceGroup.dataComponent = fieldText;
 			break;
 		case DoubleType:
-			
+
 			TextInputField fieldDouble = new TextInputField("");
 			fieldDouble.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 			fieldDouble.setToolTipText(
@@ -965,7 +941,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			break;
 		case EnumType:
 			// JComboBox box = new JComboBox<>( sourceGroup.element.getEnumData( operation )
-			
+
 			TextInputField box = new TextInputField("", sourceGroup.element.getEnumData());
 			box.setEditable(true);
 			box.setToolTipText(configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
@@ -1046,9 +1022,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 					childList.add(ows);
 				}
 			}
-
-			
-			
 
 			if (!childList.isEmpty()) {
 				switch (complex.type) {
@@ -1187,8 +1160,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 					setConnectionTypes(simple.connectionType, simple.negateButton, ows.status);
 					logging.debug(this, "simple, open, closed: " + simple.element.getClassName() + ows.parenthesisOpen
 							+ ows.parenthesisClose);
-					
-					
+
 					break;
 				}
 			}

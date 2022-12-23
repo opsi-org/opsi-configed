@@ -170,8 +170,6 @@ public class DataStubRawData extends DataStubNOM {
 		logging.debug(this, "produceProductPropertyStates new hosts " + clients + " old hosts " + hosts);
 
 		// List <Map<String, Object>> compareList =
-		
-		
 
 		List<Map<String, Object>> result = new ArrayList<>();
 
@@ -192,9 +190,6 @@ public class DataStubRawData extends DataStubNOM {
 		if (newClients.isEmpty()) {
 		} else {
 			hosts.addAll(newClients);
-
-			
-			
 
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " product property state");
@@ -227,7 +222,7 @@ public class DataStubRawData extends DataStubNOM {
 				m.put(ProductPropertyState.OBJECT_ID, row.get(2));
 
 				// parse String and produce json list
-				
+
 				org.json.JSONArray values = null;
 				try {
 					values = new org.json.JSONArray(row.get(3));
@@ -242,8 +237,6 @@ public class DataStubRawData extends DataStubNOM {
 			}
 
 			logging.info(this, "produceProductPropertyStates produced  items " + counter);
-			
-			
 
 			/*
 			 * 
@@ -319,7 +312,6 @@ public class DataStubRawData extends DataStubNOM {
 			 * System.exit(0);
 			 */
 
-			
 		}
 
 		return result;
@@ -435,14 +427,11 @@ public class DataStubRawData extends DataStubNOM {
 
 			}
 
-			
 			// clientListForCall.size() + " clients " + clientListForCall);
 
-			
 			if (client2software == null)
 				client2software = new HashMap<>();
-			
-			
+
 			if (softwareIdent2clients == null)
 				softwareIdent2clients = new HashMap<>();
 
@@ -502,13 +491,12 @@ public class DataStubRawData extends DataStubNOM {
 						entries = new LinkedList<>();
 						client2software.put(clientId, entries);
 					}
-					
+
 					// client " + clientId);
 
 					SWAuditClientEntry clientEntry = new SWAuditClientEntry(SWAuditClientEntry.DB_COLUMN_NAMES, row,
 							persist);
 
-					
 					swIdent = clientEntry.getSWident();
 
 					/*
@@ -584,13 +572,8 @@ public class DataStubRawData extends DataStubNOM {
 
 			}
 
-			
-			
-
 			logging.info(this, "retrieveSoftwareAuditOnClients used memory on end "
 					+ Runtime.getRuntime().totalMemory() / 1000000 + " MB");
-			
-			
 
 			persist.notifyDataRefreshedObservers("softwareConfig");
 		}
@@ -635,9 +618,7 @@ public class DataStubRawData extends DataStubNOM {
 
 	@Override
 	protected void retrieveHostConfigs() {
-		
-		
-		
+
 		// + classCounter + ": " + (hostConfigs == null) );
 
 		if (hostConfigs != null)
@@ -651,9 +632,6 @@ public class DataStubRawData extends DataStubNOM {
 		timeCheck.start();
 		logging.info(this, "  retrieveHostConfigs ( CONFIG_STATE )  start a request");
 
-		
-		
-		
 		// json parsing for integer value false thereforw we omit the ID column
 
 		String columns = ConfigStateEntry.DB_TABLE_NAME + "." + ConfigStateEntry.OBJECT_ID + ", "
@@ -681,7 +659,6 @@ public class DataStubRawData extends DataStubNOM {
 
 			for (List<String> row : rows) {
 				String hostId = row.get(0);
-				
 
 				Map<String, Object> configs1Host = hostConfigs.get(hostId);
 				if (configs1Host == null) {
@@ -701,14 +678,11 @@ public class DataStubRawData extends DataStubNOM {
 
 				String configId = row.get(1);
 
-				
-
 				// get values as String
 				String valueString = row.get(2);
-				
 
 				// parse String and produce list
-				
+
 				List values = new ArrayList<>();
 				try {
 					values = (new JSONArray(valueString)).toList();
@@ -722,7 +696,6 @@ public class DataStubRawData extends DataStubNOM {
 				configs1Host.put(configId, values);
 
 				// configValues1Host.put( configId, (List) configs1Host.get( configId
-				
 
 			}
 		}
@@ -731,7 +704,7 @@ public class DataStubRawData extends DataStubNOM {
 		logging.info(this, "retrieveHostConfigs retrieved ");
 		// hostConfigs.keySet()
 		persist.notifyDataRefreshedObservers("configState");
-		
+
 	}
 
 	// =================================================== client2HwRows
@@ -784,9 +757,8 @@ public class DataStubRawData extends DataStubNOM {
 			logging.info(this, "hwInfoCol " + hwInfoCol + " look for " + persist.hwInfo_DEVICE + " as well as "
 					+ persist.hwInfo_CONFIG);
 			String part0 = hwInfoCol.substring(0, persist.hwInfo_DEVICE.length());
-			
+
 			// + ", hwInfoCol.substring( part0.length()) " + hwInfoCol.substring(
-			
 
 			boolean colFound = false;
 			// check if colname is from a CONFIG or a DEVICE table
@@ -798,9 +770,7 @@ public class DataStubRawData extends DataStubNOM {
 				part0 = hwInfoCol.substring(0, persist.hwInfo_CONFIG.length());
 
 				if (!hwInfoCol.substring(part0.length()).startsWith(hwClass)) {
-					
-					
-					
+
 				} else {
 					colFound = true;
 					// we found a CONFIG column name
@@ -833,7 +803,7 @@ public class DataStubRawData extends DataStubNOM {
 		buf.append(configTable);
 
 		buf.append("\n where ");
-		
+
 		// buf.append(" 'vbrupertwin7-64.uib.local' ");
 
 		// buf.append("\n AND ");
@@ -955,15 +925,11 @@ public class DataStubRawData extends DataStubNOM {
 		timeCheck.start();
 
 		// Map<String, Map<String, Object>> client2AllInfos = new HashMap<String,
-		
 
 		for (String hwClass : persist.getHwInfoClassNames()) {
 			logging.info(this, "retrieveClient2HwRows hwClass " + hwClass);
 
 			Map<String, Map<String, Object>> client2ClassInfos = client2HwRowsForHwClass(hwClass);
-
-			
-			
 
 			if (client2ClassInfos != null) {
 

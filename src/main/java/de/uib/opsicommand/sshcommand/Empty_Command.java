@@ -82,12 +82,10 @@ public class Empty_Command implements SSHCommand {
 	}
 
 	public Empty_Command(String c) {
-		
-		
+
 		setCommand(c);
 		getParameterList();
-		
-		
+
 	}
 
 	/**
@@ -254,7 +252,7 @@ public class Empty_Command implements SSHCommand {
 		logging.debug(this, "searchPlaceholder found " + tmp_1 + splitted_text + tmp_2);
 		myTmpCommand = myTmpCommand.replace(tmp_1 + splitted_text + tmp_2, "");
 		logging.debug(this, "searchPlaceholder myCommand_tmp " + myTmpCommand);
-		
+
 		return tmp_1 + splitted_text + tmp_2;
 	}
 

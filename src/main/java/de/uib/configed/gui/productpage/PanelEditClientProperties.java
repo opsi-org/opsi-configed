@@ -133,7 +133,7 @@ public class PanelEditClientProperties extends DefaultPanelEditProperties {
 	}
 
 	protected void setPropertyResetActivated(boolean b) {
-		
+
 		buttonRemoveSpecificValues.setEnabled(b);
 	}
 }

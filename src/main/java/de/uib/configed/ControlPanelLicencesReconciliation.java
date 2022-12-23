@@ -69,7 +69,7 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 		final int index_SWinventory_used = columnNames.size() - 1;
 		logging.debug(this, "columnNames: " + columnNames);
 		logging.debug(this, "cols index_used_by_opsi  " + index_used_by_opsi + " , " + index_SWinventory_used);
-		
+
 		classNames.add("java.lang.String");
 
 		classNames.add("java.lang.String");
@@ -167,8 +167,6 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 
 		thePanel.panelReconciliation.setSearchColumns(searchCols);
 		thePanel.panelReconciliation.setSearchSelectMode(true);
-
-		
 
 	}
 }

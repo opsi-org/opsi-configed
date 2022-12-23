@@ -40,8 +40,6 @@ public class JTextHideField extends javax.swing.JPanel {
 
 			super.insertString(0, fixed, a);
 
-			
-
 		}
 
 		@Override
@@ -74,10 +72,6 @@ public class JTextHideField extends javax.swing.JPanel {
 				toggleHidden();
 		});
 		button.setToolTipText(de.uib.configed.configed.getResourceValue("JTextHideField.toggleHide"));
-
-		
-		
-		
 
 		setupPanel();
 		setEnabled(false);

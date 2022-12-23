@@ -2,9 +2,6 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
-
-
-
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
@@ -148,7 +145,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 				command.setRepo(repo);
 			logging.info(this, "doAction1 opsi-package-updater: " + command.toString());
 			new SSHConnectExec((SSHCommand) command);
-			
+
 		} catch (Exception e) {
 			logging.warning(this, "doAction1, exception occurred", e);
 		}

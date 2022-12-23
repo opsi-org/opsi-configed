@@ -40,19 +40,16 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 				if (imagesBase != null) {
 					if (key != null && stringval != null) {
 						String imageFileString = imagesBase + "/" + key + ".png";
-						
 
 						image = Globals.createImageIcon(imageFileString, stringval);
-						
 
 						if (image == null)
 						// try with gif
 						{
 							imageFileString = imagesBase + "/" + stringval + ".gif";
-							
 
 							image = Globals.createImageIcon(imageFileString, stringval);
-							
+
 						}
 
 						if (image != null)
@@ -82,13 +79,9 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 
 		if (value != null) {
 
-			
-			
 			if (mapOfStrings != null)
 				selectedString = mapOfStrings.get("" + value);
-			
-			
-			
+
 			if (mapOfImages != null)
 				selectedIcon = mapOfImages.get("" + value);
 
@@ -128,13 +121,8 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 			((JLabel) result).setIcon(selectedIcon);
 			((JLabel) result).setToolTipText(
 					Globals.fillStringToLength(tooltipPrefix + " " + selectedString + " ", FILL_LENGTH));
-			
+
 		}
-
-		
-		
-
-		
 
 		return result;
 	}

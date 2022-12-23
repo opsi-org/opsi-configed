@@ -19,7 +19,7 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
  * @author roeder
  */
 public class PanelLicencesStatistics extends MultiTablePanel {
-	
+
 	public PanelGenEditTable panelStatistics;
 
 	protected int minVSize = 50;
@@ -33,8 +33,6 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 	private void initComponents() {
 
 		// testfield = new JTextField(" Übersicht ");
-
-		
 
 		panelStatistics = new PanelGenEditTable(
 				configed.getResourceValue("ConfigedMain.Licences.SectiontitleStatistics"), 1000, false, // editing

@@ -35,7 +35,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 
 	protected JPanel topPane = new JPanel();
 	protected JPanel southPanel = new JPanel();
-	
+
 	protected JButton jButton1 = new JButton();
 	// protected String button1Text = "close";
 
@@ -55,7 +55,6 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	protected GridLayout gridLayout1 = new GridLayout();
 	protected BorderLayout borderLayout1 = new BorderLayout();
 	protected FlowLayout flowLayout1 = new FlowLayout();
-	
 
 	protected JPanel additionalPane;
 
@@ -68,7 +67,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	}
 
 	public void setup() {
-		
+
 		pack();
 	}
 
@@ -79,7 +78,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	}
 
 	public void addPanel(JPanel pane) {
-		
+
 		getContentPane().add(pane);
 	}
 
@@ -108,9 +107,6 @@ public class GeneralFrame extends JDialog implements ActionListener {
 
 		if (!centerOnMaster) {
 			// center on Screen
-			
-			
-			
 
 			GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 			GraphicsConfiguration gc = gd.getDefaultConfiguration();
@@ -119,23 +115,12 @@ public class GeneralFrame extends JDialog implements ActionListener {
 					(gc.getBounds().height - getHeight()) / 2 + gc.getBounds().y);
 
 		} else {
-			
-			
-			
-			
-			
-			
-			
-			
-
-			
 
 			startX = (int) masterOnScreen.getX() + intHalf(master.getWidth()) - intHalf(getSize().getWidth());
 			startY = (int) masterOnScreen.getY() + intHalf(master.getHeight()) - intHalf(getSize().getHeight());
 
 			// problem: in applet in windows, we may leave the screen
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			
 
 			if (startX + getSize().width > screenSize.width)
 				startX = screenSize.width - getSize().width;
@@ -181,9 +166,9 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	// ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+
 		if (e.getSource() == jButton1) {
-			
+
 			doAction1();
 		}
 	}
@@ -231,7 +216,6 @@ public class GeneralFrame extends JDialog implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
 
 			if (vanishing) {
 				opacity -= step;

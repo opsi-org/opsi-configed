@@ -95,7 +95,7 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 		int countVisibleItems = 0;
 
 		if (clickNode.getAllowsChildren()) {
-			
+
 			// (clickNode instanceof GroupNode) )
 
 			if (((GroupNode) clickNode).allowsSubGroups()) {
@@ -118,7 +118,6 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 				countVisibleItems++;
 			}
 
-			
 			if (!(((GroupNode) clickNode).isFixed())) {
 				((JMenuItem) myMenu.getSubElements()[removeElementsPosition]).setVisible(true); // delete non-groupnode
 																								// elements
@@ -132,7 +131,6 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 			}
 		}
 
-		
 		return (countVisibleItems > 0);
 	}
 

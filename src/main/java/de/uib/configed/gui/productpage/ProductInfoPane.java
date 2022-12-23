@@ -241,7 +241,6 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 
 		this.setTopComponent(productDescriptionsPanel);
 		this.setBottomComponent(bottomComponent);
-		
 
 	}
 
@@ -351,7 +350,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 	// DataChangedObserver
 	@Override
 	public void dataHaveChanged(Object source) {
-		
+
 		if (source instanceof de.uib.utilities.datapanel.EditMapPanelX) {
 			specificPropertiesExisting.put(productName, true);
 		}

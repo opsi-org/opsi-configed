@@ -41,7 +41,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	public void reset() {
 		logging.info(this, "reset");
 		super.reset();
-		
+
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 		if (controller.thePanel.fSoftwarename2LicencePool != null) {
 			logging.info(this, "Panel.fSoftwarename2LicencePool.panelSWnames.reset");
-			
+
 			// does not solve the task
 			controller.thePanel.fSoftwarename2LicencePool.panelSWnames.reset();
 		}
@@ -96,22 +96,11 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	// ListSelectionListener
 	@Override
 	public void valueChanged(javax.swing.event.ListSelectionEvent e) {
-		
-
-		
-
-		
 
 		if (isAwareOfSelectionListener()) {
 			logging.debug(this, "selectionListener valueChanged, aware of selectionlistener");
 
-			
-
-			
-
 		}
-
-		
 
 	}
 
@@ -146,7 +135,6 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 				if (controller.thePanel.fSoftwarename2LicencePool.isVisible()) {
 					logging.info(this, "selectionListener valueChanged,fSoftwarename2LicencePool.isVisible ");
 
-					
 					// the data is not refreshed
 				}
 
@@ -157,8 +145,6 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 		super.mouseClicked(e);
 
-		
-		
 	}
 
 	@Override

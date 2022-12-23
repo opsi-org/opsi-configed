@@ -42,7 +42,6 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 	private JPanel settingsPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
 
-	
 	private static JCheckBox cb_useDefault;
 	private static JCheckBox cb_useKeyfile;
 	private JCheckBox cb_useOutputColor;
@@ -76,10 +75,9 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		configedMain = cmain;
 		connectionInfo = SSHConnectionInfo.getInstance();
 
-		
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		init();
-		
+
 		this.setSize(500, 535);
 		this.setVisible(true);
 		cb_useDefault_state = cb_useDefault.isSelected();
@@ -99,7 +97,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 	private void checkComponentStates() {
 		boolean state = compareStates();
 		logging.debug(this, "checkComponentStates  identical " + state); // setBtn_save setEnabled " + !state);
-		
+
 		setSSHState();
 	}
 
@@ -131,8 +129,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 				return false;
 			}
 		} else {
-			
-			
+
 			if (!connectionInfo.getHost().equals(ConfigedMain.HOST)) {
 				logging.info(this,
 						"compareStates 5 >" + connectionInfo.getHost() + "<     <>    >" + ConfigedMain.HOST + "<");
@@ -162,14 +159,14 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			return false;
 		} else if (cb_useKeyfile.isSelected()) {
 			try {
-				
+
 				if (!connectionInfo.getKeyfilePath().equals(tf_keyfile.getText())) {
 					logging.debug(this, "compareStates 10");
 					return false;
 				}
 
 				String pp = tf_passphrase.getPassword().toString();
-				
+
 				if (!connectionInfo.getKeyfilePassphrase().equals(pp)) {
 					logging.debug(this, "compareStates 11");
 					return false;
@@ -315,7 +312,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			lbl_passw.setText(configed.getResourceValue("SSHConnection.Config.jLabelPassword"));
 			tf_passw = new JPasswordField();
 			tf_passw.setText(connectionInfo.getPassw());
-			
+
 			tf_passw.getDocument().addDocumentListener(new DocumentListener() {
 				@Override
 				public void insertUpdate(DocumentEvent e) {
@@ -357,9 +354,9 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 							"actionPerformed on btn_kill " + SSHCommandFactory.getInstance().getConnectionState());
 
 					SSHCommandFactory.getInstance().unsetConnection();
-					
+
 					// SSHCommandFactory.CONNECTED ) )
-					
+
 					// there seems to be nothing got disconnect
 					setSSHState();
 				}
@@ -475,23 +472,13 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 				checkComponentStates();
 			});
 
-			
 			if (connectionInfo.getKeyfilePath() != "")
 				cb_useKeyfile.setSelected(true);
-			
-			
-			
-			
-			
-			
-			
+
 			// connectionInfo.useKeyfile(true, tf_keyfile.getText(), new
-			
-			
-			
+
 			// connectionInfo.setUserData((String) cb_host.getSelectedItem(),
-			
-			
+
 			cb_useOutputColor = new JCheckBox();
 			cb_useOutputColor.setText(configed.getResourceValue("SSHConnection.Config.coloredOutput"));
 			cb_useOutputColor.setToolTipText(configed.getResourceValue("SSHConnection.Config.coloredOutput.tooltip"));
@@ -663,8 +650,6 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			logging.info(this, "doAction1  cb_useDefault.isSelected false");
 			String host = (String) cb_host.getSelectedItem();
 			logging.info(this, "doAction1 host " + host);
-			
-			
 
 			connectionInfo.setUserData(host, tf_user.getText(), new String(tf_passw.getPassword()), tf_port.getText());
 		}
@@ -687,9 +672,8 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 
 		factory.testConnection(connectionInfo.getUser(), connectionInfo.getHost());
 
-		
 		// factory.testConnection(tf_user.getText(), (String) cb_host.getSelectedItem())
-		
+
 		SSHCommandFactory.ssh_colored_output = cb_useOutputColor.isSelected();
 		SSHCommandFactory.ssh_always_exec_in_background = cb_execInBackground.isSelected();
 		cb_useDefault_state = cb_useDefault.isSelected();
@@ -711,7 +695,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		// final File file = new File("/home");
-		
+
 		String userDirLocation = System.getProperty(logging.envVariableForUserDirectory);
 		File userDir = new File(userDirLocation);
 		// default to user directory
@@ -734,7 +718,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 	private static void checkComponents() {
 		if (cb_useDefault.isSelected()) {
 			connectionInfo.setUserData(
-					
+
 					ConfigedMain.HOST, // persist.getHostInfoCollections().getConfigServer(),
 					ConfigedMain.USER, ConfigedMain.PASSWORD, SSHConnect.portSSH);
 

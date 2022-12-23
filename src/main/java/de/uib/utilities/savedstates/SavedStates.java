@@ -24,10 +24,9 @@ public class SavedStates extends PropertiesStore {
 	public SaveString saveSWauditExportDir;
 	public SaveString saveSWauditExportFilePrefix;
 
-	
 	public SessionSaveSet<String> saveLocalbootproductFilter;
 	public SessionSaveSet<String> saveNetbootproductFilter;
-	
+
 	// up to now not used
 
 	public Map<String, SaveString> saveServerConfigs;
@@ -50,7 +49,7 @@ public class SavedStates extends PropertiesStore {
 		// we memorize it locally in order to signal if the config has changed
 		saveLocalbootproductFilter = new SessionSaveSet();
 		saveNetbootproductFilter = new SessionSaveSet();
-		
+
 		saveServerConfigs = new HashMap<>();
 
 	}

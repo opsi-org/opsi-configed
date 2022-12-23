@@ -34,12 +34,8 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		setProportionOfTotalWidth(0.5);
 
 		setForeground(Globals.blue);
-		
 
 		textPanes = new LogPane[idents.length];
-
-		
-		
 
 		for (int i = 0; i < idents.length; i++) {
 			final String ident = idents[i];
@@ -60,7 +56,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 					String pathname = openFile(filename + ".log");
 					if (pathname != null && !pathname.equals(""))
 						saveToFile(pathname, lines);
-					
+
 				}
 
 				@Override
@@ -197,10 +193,10 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		if (chooser == null) {
 			chooser = new JFileChooser(fn);
 			chooser.setPreferredSize(Globals.filechooserSize);
-			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY); 
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z",
 					"log", "zip", "gz", "7z"));
-			
+
 			chooser.setApproveButtonText("O.K.");
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 			chooser.setDialogTitle(

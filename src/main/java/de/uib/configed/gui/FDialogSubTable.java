@@ -23,10 +23,10 @@ public class FDialogSubTable extends FGeneralDialog {
 
 	@Override
 	protected void allLayout() {
-		
+
 		logging.info(this, "allLayout");
-		allpane.setBackground(Globals.backLightBlue); 
-														// 
+		allpane.setBackground(Globals.backLightBlue);
+		// 
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
@@ -59,9 +59,8 @@ public class FDialogSubTable extends FGeneralDialog {
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
-		
 		southPanel.setOpaque(false);
-		southPanel.setBackground(Color.white); 
+		southPanel.setBackground(Color.white);
 		southPanel.setOpaque(true);
 
 		GroupLayout allLayout = new GroupLayout(allpane);

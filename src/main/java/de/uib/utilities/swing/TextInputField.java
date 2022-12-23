@@ -80,9 +80,6 @@ public class TextInputField extends JPanel
 			proposedValues.add(0, "");
 		}
 
-		
-
-		
 		if (proposedValues != null) {
 
 			TreeSet<Character> orderedValues = new TreeSet<>();
@@ -91,9 +88,6 @@ public class TextInputField extends JPanel
 				if (val.length() > 0)
 					orderedValues.add(val.charAt(0));
 			}
-
-			
-			
 
 			orderedBeginChars = new Character[orderedValues.size()];
 
@@ -104,10 +98,7 @@ public class TextInputField extends JPanel
 			}
 		}
 
-		
 		combo = new JComboBox<>(this.proposedValues);
-		
-		
 
 		JTextField comboField = (JTextField) combo.getEditor().getEditorComponent();
 		comboField.getCaret().setBlinkRate(0);
@@ -116,21 +107,10 @@ public class TextInputField extends JPanel
 			@Override
 			public void keyPressed(KeyEvent e) {
 				String s = comboField.getText();
-				
-				
 
 				if (s.length() == 0) {
 					combo.showPopup();
-					
 
-					
-					
-
-					
-
-					
-					
-					
 					if (orderedBeginChars != null) {
 
 						Character ch = e.getKeyChar();
@@ -138,8 +118,7 @@ public class TextInputField extends JPanel
 						int i = 0;
 						boolean stop = false;
 						while (i < orderedBeginChars.length && !stop) {
-							
-							
+
 							if (orderedBeginChars[i] > ch) {
 								stop = true;
 								if (i > 0) {
@@ -153,7 +132,6 @@ public class TextInputField extends JPanel
 						if (!stop && i > 0)
 							ch = orderedBeginChars[i - 1];
 
-						
 						// " + e.getKeyChar());
 
 						combo.selectWithKeyChar(ch);
@@ -183,12 +161,10 @@ public class TextInputField extends JPanel
 
 							combo.setSelectedItem(proposedValues.get(j));
 
-							
-							
 						}
 
 					}
-					
+
 					comboField.setText("");
 				}
 

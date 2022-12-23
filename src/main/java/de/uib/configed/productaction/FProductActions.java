@@ -62,7 +62,6 @@ public class FProductActions extends SecondaryFrame {
 		PanelInstallOpsiPackage panelInstallOpsiPackage = new PanelInstallOpsiPackage(main, persist, this);
 
 		imageActionPanel = new JPanel();
-		
 
 		PanelCompleteWinProducts panelCompleteWinProducts = new PanelCompleteWinProducts(main, persist, this);
 

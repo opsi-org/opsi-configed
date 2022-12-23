@@ -14,12 +14,9 @@ package de.uib.configed.gui;
  */
 
 import java.awt.BorderLayout;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
-
-
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -83,7 +80,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 		setLayout(new BorderLayout());
 		label.addMouseListener((MouseListener) this);
 		add(label);
-		
+
 	}
 
 	public IconAsButton(String desc, String imageRelPath) {
@@ -197,12 +194,12 @@ public class IconAsButton extends JPanel implements MouseListener {
 					label.setIcon(iconInactive);
 				}
 			} else {
-				
+
 				if (activated && iconActive != null) {
-					
+
 					label.setIcon(iconActive);
 				} else {
-					
+
 					label.setIcon(iconInactive);
 				}
 			}

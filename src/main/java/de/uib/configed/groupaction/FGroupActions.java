@@ -55,7 +55,7 @@ public class FGroupActions extends SecondaryFrame {
 
 	int hFirstGap = Globals.HFIRST_GAP;
 
-	int firstLabelWidth = Globals.BUTTON_WIDTH; 
+	int firstLabelWidth = Globals.BUTTON_WIDTH;
 
 	public FGroupActions(ConfigedMain main, PersistenceController persist, JFrame mainframe) {
 		super();
@@ -117,7 +117,6 @@ public class FGroupActions extends SecondaryFrame {
 
 		Map<String, String> changedValues = new HashMap<>();
 		changedValues.put(de.uib.opsidatamodel.productstate.ProductState.KEY_actionRequest, "setup");
-		
 
 		persist.updateProductOnClients(
 				// associatedClients,
@@ -131,7 +130,6 @@ public class FGroupActions extends SecondaryFrame {
 
 	protected void define() {
 		topPanel = new JPanel();
-		
 
 		defineTopPanel(topPanel);
 
@@ -163,9 +161,8 @@ public class FGroupActions extends SecondaryFrame {
 
 	private void defineImageActionPanel(JPanel panel) {
 		JLabel labelCombo = new JLabel(configed.getResourceValue("FGroupAction.existingImages"));
-		
+
 		comboSelectImage = new JComboBox<>();
-		
 
 		JLabel topicLabel = new JLabel(configed.getResourceValue("FGroupAction.replayImage"));
 
@@ -176,8 +173,6 @@ public class FGroupActions extends SecondaryFrame {
 
 		IconButton buttonReload = new IconButton(configed.getResourceValue("FGroupAction.buttonReload"),
 				"images/reload16.png", "images/reload16_over.png", "images/reload16_disabled.png", true);
-		
-		
 
 		buttonReload.addActionListener(actionEvent -> reload());
 

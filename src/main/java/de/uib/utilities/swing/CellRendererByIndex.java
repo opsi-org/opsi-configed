@@ -63,10 +63,9 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 	public CellRendererByIndex(Set<String> keySet, String imagesBase, int imageWidth) {
 		super(imageWidth);
-		
+
 		setOpaque(true);
-		
-		
+
 		mapOfImages = new HashMap<>();
 		mapOfStrings = new HashMap<>();
 
@@ -85,7 +84,6 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 				if (imagesBase != null) {
 					String imageFileString = imagesBase + "/" + stringval + ".png";
-					
 
 					image = Globals.createImageIcon(imageFileString, stringval);
 					if (image != null)
@@ -110,10 +108,9 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 	{
 		super(imageWidth);
-		
+
 		setOpaque(true);
-		
-		
+
 		mapOfStrings = mapOfStringValues;
 		mapOfTooltips = mapOfDescriptions;
 		mapOfImages = new HashMap<>();
@@ -133,7 +130,6 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 				if (key != null && stringval != null) {
 					String imageFileString = imagesBase + "/" + stringval + ".png";
-					
 
 					image = Globals.createImageIcon(imageFileString, stringval);
 					if (image != null)
@@ -175,7 +171,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 			foreground = Color.WHITE;
 		} else {
 			background = Globals.nimbusBackground;
-			foreground = Globals.nimbusSelectionBackground; 
+			foreground = Globals.nimbusSelectionBackground;
 		} ;
 
 		setBackground(background);
@@ -186,7 +182,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 		String selectedTooltip = "";
 
 		if (uhOhFont == null) { // lazily create this font
-			uhOhFont = list.getFont().deriveFont((float) 10); 
+			uhOhFont = list.getFont().deriveFont((float) 10);
 		}
 		setFont(uhOhFont);
 
@@ -210,7 +206,6 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 		setFont(Globals.defaultFont);
 		// de.uib.utilities.swing.CellAlternatingColorizer.colorize(this, isSelected,
-		
 
 		/*
 		 * if (icon != null) {

@@ -33,7 +33,7 @@ import de.uib.utilities.logging.logging;
 	*/
 
 public class UserConfig {
-	public static String CONFIGKEY_STR_USER = "user"; 
+	public static String CONFIGKEY_STR_USER = "user";
 
 	public static final String ROLE = "role";
 
@@ -118,14 +118,13 @@ public class UserConfig {
 	}
 
 	public static LinkedHashSet<String> getUserListKeys() {
-		
+
 		if (USER_LIST_KEYS == null) {
 			USER_LIST_KEYS = new LinkedHashSet<>();
 
 			USER_LIST_KEYS.addAll(UserSshConfig.LIST_KEYS);
 			USER_LIST_KEYS.addAll(UserOpsipermission.LIST_KEYS);
 		}
-		
 
 		return USER_LIST_KEYS;
 	}

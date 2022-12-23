@@ -245,7 +245,7 @@ public class OpsiMethodCall {
 			jO.put("method", methodname);
 			jO.put("params", joParams);
 			result = jO.toString();
-			
+
 		} catch (org.json.JSONException jex) {
 			logging.error(this, "Exception while producing a JSONObject, " + jex.toString());
 		}

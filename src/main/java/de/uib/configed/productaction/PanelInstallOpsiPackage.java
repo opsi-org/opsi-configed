@@ -77,8 +77,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	JButton buttonCallChooserServerpath;
 	JFileChooser chooserServerpath;
 
-	
-
 	PersistenceController persist;
 	ConfigedMain main;
 	JFrame rootFrame;
@@ -140,7 +138,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 					try {
 						opsiWorkBenchDirectory = new File(fieldServerPath.getText());
-						
+
 						// we start at a local directory
 					} catch (Exception ex) {
 						logging.info(this, "trying to build file " + opsiWorkBenchDirectoryS + " : " + ex);
@@ -175,8 +173,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		Map<String, Map<String, Object>> depot2depotMap = persist.getHostInfoCollections().getDepots();
 
 		logging.info(this, "buildSambaTarget for depotserver " + depotserver);
-		
-		
 
 		if (depot2depotMap.get(depotserver) == null)
 			return;
@@ -270,7 +266,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		chooserPackage = new JFileChooser();
 		chooserPackage.setPreferredSize(Globals.filechooserSize);
-		
+
 		javax.swing.filechooser.FileNameExtensionFilter filter = new javax.swing.filechooser.FileNameExtensionFilter(
 				"opsi package", "opsi");
 		chooserPackage.addChoosableFileFilter(filter);
@@ -278,7 +274,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		chooserPackage.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserPackage);
-		
 
 		chooserPackage.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooserPackage.setDialogTitle(Globals.APPNAME + " " + configed.getResourceValue("InstallOpsiPackage.chooser"));
@@ -289,7 +284,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		chooserTmpDir.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserTmpDir);
-		
 
 		chooserTmpDir.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooserTmpDir.setDialogTitle(Globals.APPNAME + " " + configed.getResourceValue("InstallOpsiPackage.chooser"));
@@ -300,7 +294,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		chooserServerpath.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserServerpath);
-		
 
 		chooserServerpath.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooserServerpath.setDialogTitle(
@@ -327,7 +320,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		buildSambaTarget("" + comboChooseDepot.getSelectedItem());
 
 		// workbench = "\\\\" + comboChooseDepot.getSelectedItem() + "\\" +
-		
 
 		// fieldServerPath = new JTextField("");
 
@@ -422,21 +414,16 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				final Color saveColor = buttonCallExecute.getBackground();
-				
+
 				buttonCallExecute.setBackground(Globals.failedBackColor);
-				
+
 				logging.info(this, "actionPerformed on buttonCallExecute opsiPackageGotPathS,  depot:  "
 						+ fieldOpsiPackageName.getText() + ", " + comboChooseDepot.getSelectedItem());
 				// SwingUtilities.invokeLater(new Runnable(){
-				
-				
+
 				execute();
 
 				buttonCallExecute.setBackground(saveColor);
-				
-				
-				
-				
 
 			}
 		});
@@ -456,9 +443,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		// mountShareLabel = new JLabel("");
 		// mountShareDescriptionLabel = new JLabel(
 		// configed.getResourceValue("InstallOpsiPackage.mountShareResult0" ) );
-
-		
-		
 
 		JLabel serverPathLabel = new JLabel(configed.getResourceValue("InstallOpsiPackage.serverpath"));
 

@@ -131,9 +131,9 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 	@Override
 	public void startParameterGui() {
-		
+
 		// '<' || main.getOpsiVersion().compareTo("4.1") < 0){}
-		
+
 	}
 
 	@Override
@@ -144,7 +144,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 			logging.error(this, configed.getResourceValue("OpsiConfdVersionError").replace("{0}", "4.1.0"));
 		} else
 			dialog = new SSHPackageUpdaterDialog();
-		
+
 	}
 
 	@Override

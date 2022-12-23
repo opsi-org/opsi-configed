@@ -127,7 +127,6 @@ public class HostInfo {
 	// https://support.microsoft.com/en-us/kb/909264
 	{
 
-		
 		boolean result = true;
 		String hintMessage = null;
 
@@ -161,8 +160,6 @@ public class HostInfo {
 				result = false;
 			}
 		}
-
-		
 
 		return hintMessage;
 
@@ -220,8 +217,6 @@ public class HostInfo {
 		unordered.put(depotOfClient_DISPLAY_FIELD_LABEL, depotOfClient);
 		unordered.put(clientConnectedKEY, clientConnected);
 
-		
-
 		logging.debug(this, "getMap clientName " + clientName + " : " + unordered);
 
 		return unordered;
@@ -256,8 +251,6 @@ public class HostInfo {
 
 		unordered.put(clientConnectedKEY, clientConnected);
 		unordered.put(clientShutdownInstallKEY, clientShutdownInstall);
-
-		
 
 		logging.debug(this, "getMap clientName " + clientName);
 
@@ -416,11 +409,8 @@ public class HostInfo {
 	}
 
 	public void setBy(Map<String, Object> pcInfo) {
-		
-		// shows pckey
 
-		
-		
+		// shows pckey
 
 		if (pcInfo == null) {
 			initialize();
@@ -797,27 +787,16 @@ public class HostInfo {
 			persist.getHostInfoCollections().updateLocalHostInfo(client, clientWanConfigKEY, wanStandard);
 		}
 
-		
-		
 		// String shutdownInstall = "off";
-		
 
-		
-		
 		// shutdownInstall = "on";
-		
-		
-		
-		
-		
-		
 
 		// String product = "opsi-client-agent";
 		// persist.setCommonProductPropertyValue( new HashSet<>(Arrays.asList(client)),
 		// product, "on_shutdown_install" , Arrays.asList(shutdownInstall) );
 		// // Set<String> clientNames, String productName, String propertyName,
 		// List<String> values
-		
+
 		// productValues.put("actionRequest", "setup");
 
 		// persist.updateProductOnClient(
@@ -825,12 +804,9 @@ public class HostInfo {
 		// product,
 		// OpsiPackage.TYPE_LOCALBOOT,
 		// productValues
-		
 
-		
 		// persist.getHostInfoCollections().updateLocalHostInfo(client,
-		
-		
+
 	}
 
 	@Override

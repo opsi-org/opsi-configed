@@ -54,9 +54,6 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	@Override
 	public int getColumnCount() {
-		
-		
-		
 
 		return getTableModel().getColumnCount();
 	}
@@ -123,14 +120,11 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	@Override
 	public void ensureRowIsVisible(int row) {
-		
-		
+
 		table.scrollRectToVisible(table.getCellRect(row, 0, false));
 
-		
 	}
 
-	
 	@Override
 	public void setCursorRow(int row) {
 		logging.debug(this, "setCursorRow row, produced modelrow, produced viewrow, not implemented ");
@@ -147,7 +141,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 		}
 
 		table.setRowSelectionInterval(row, row);
-		
+
 		ensureRowIsVisible(row);
 	}
 
@@ -159,7 +153,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 			return;
 
 		table.addRowSelectionInterval(row, row);
-		
+
 		ensureRowIsVisible(row);
 	}
 
@@ -186,16 +180,9 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	@Override
 	public void setFiltered(boolean b) {
-		
-
-		
-		
 
 		if (!filtered)
 			viewRowfilter = table.getSelectedRows();
-
-		
-		
 
 		if (b && viewRowfilter.length > 0) {
 			int[] modelRowFilter = new int[viewRowfilter.length];

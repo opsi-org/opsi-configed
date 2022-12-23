@@ -215,13 +215,12 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 
 	@Override
 	public void startParameterGui() {
-		
+
 	}
 
 	@Override
 	public void startParameterGui(ConfigedMain main) {
-		
-		
+
 	}
 
 	@Override

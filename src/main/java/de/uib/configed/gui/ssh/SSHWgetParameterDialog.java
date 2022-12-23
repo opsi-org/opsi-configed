@@ -80,13 +80,13 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		cb_dir.setEnabled(value);
 		cb_dir.setEditable(value);
 		cb_verbosity.setEnabled(value);
-		
+
 		tf_freeInput.setEnabled(value);
 		tf_freeInput.setEditable(value);
 
 		btn_execute.setEnabled(value);
 		btn_help.setEnabled(value);
-		
+
 	}
 
 	private void init() {
@@ -175,7 +175,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			wgetAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH + 67, Globals.BUTTON_HEIGHT);
 		}
 		{
-			
+
 			btn_help = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
 			btn_help.setText(configed.getResourceValue("SSHConnection.buttonParameterInfo"));
 			btn_help.setToolTipText(configed.getResourceValue("SSHConnection.buttonParameterInfo.tooltip"));
@@ -199,7 +199,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		}
 		{
 			lbl_fullCommand.setText("wget ");
-			
+
 			changeUrl();
 			changeFreeInput();
 		}

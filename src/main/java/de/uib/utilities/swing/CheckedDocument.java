@@ -43,7 +43,7 @@ public class CheckedDocument extends PlainDocument {
 	}
 
 	protected String giveAllowedCharacters(String s, int offset) {
-		
+
 		if (s == null)
 			return "";
 
@@ -54,7 +54,6 @@ public class CheckedDocument extends PlainDocument {
 			appendCharIfAllowed(textBuf, startchars[i]);
 		}
 
-		
 		return textBuf.toString();
 	}
 
@@ -62,15 +61,12 @@ public class CheckedDocument extends PlainDocument {
 	}
 
 	protected void insertStringPlain(int offs, String s, AttributeSet a) throws BadLocationException {
-		
-		
+
 		super.insertString(offs, s, a);
 	}
 
 	@Override
 	public void insertString(int offs, String s, AttributeSet a) throws BadLocationException {
-		
-		
 
 		if (s == null)
 			return;
@@ -78,15 +74,12 @@ public class CheckedDocument extends PlainDocument {
 		if (size > -1 && offs >= size)
 			return;
 
-		
-
 		String corrected = giveAllowedCharacters(s, offs);
-		
+
 		// offs + ", " + size);
 		if (size > -1 && offs + corrected.length() > size)
 			corrected = corrected.substring(0, size - offs);
 
-		
 		// + offs + ", " + size);
 
 		insertStringPlain(offs, corrected, a);

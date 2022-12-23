@@ -38,7 +38,7 @@ public class FPanel extends SecondaryFrame {
 		this.checkLeave = checkLeave;
 		setIconImage(Globals.mainIcon);
 		setTitle(Globals.APPNAME + " " + title);
-		
+
 		setSize(new Dimension(initialWidth, initialHeight));
 		innerPanel = panel;
 		getContentPane().add(innerPanel);
@@ -123,9 +123,6 @@ public class FPanel extends SecondaryFrame {
 	@Override
 	protected void processWindowEvent(WindowEvent e) {
 
-		
-		
-
 		boolean leaving = true;
 
 		if ((e.getID() == WindowEvent.WINDOW_CLOSING)
@@ -139,7 +136,6 @@ public class FPanel extends SecondaryFrame {
 
 				leave();
 
-				
 			} else
 				setVisible(true);
 		}

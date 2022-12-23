@@ -44,7 +44,7 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 		lbl_opsi_product.setText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelOtherPath"));
 		tf_product = autocompletion.getTextField();
-		
+
 		cb_autocompletion = autocompletion.getCombobox();
 		cb_autocompletion.setToolTipText(configed
 				.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button_andopsipackage.combo.tooltip"));
@@ -94,7 +94,7 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 	}
 
 	public static CommandOpsiPackageManagerInstall getCommand(String product) {
-		
+
 		if ((product == null) || (product.equals("")))
 			return null;
 		CommandOpsiPackageManagerInstall com = new CommandOpsiPackageManagerInstall();

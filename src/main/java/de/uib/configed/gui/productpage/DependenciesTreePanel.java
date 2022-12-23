@@ -86,7 +86,6 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 					boolean leaf, int row, boolean hasFocus) {
 
 				JLabel label = new JLabel(value.toString()); // (JLabel)
-																
 
 				if (sel)
 					label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -98,9 +97,7 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		};
 
 		// Icon productIcon = Globals.createImageIcon("images/package.png", "" );
-		
-		
-		
+
 		dependenciesTree.setCellRenderer(renderer);
 
 		DefaultTreeSelectionModel selectionModel = new DefaultTreeSelectionModel() {

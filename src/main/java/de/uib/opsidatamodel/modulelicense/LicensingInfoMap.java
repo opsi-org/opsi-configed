@@ -254,7 +254,7 @@ public class LicensingInfoMap {
 		} catch (Exception ex) {
 			logging.error(CLASSNAME + " produceLicenses " + ex.toString());
 		}
-		
+
 		return result;
 	}
 
@@ -458,8 +458,6 @@ public class LicensingInfoMap {
 			}
 			Collections.sort(dates);
 
-			
-
 			Date latest = findLatestChangeDate(dates);
 
 			ArrayList<String> reducedDatesKeys = new ArrayList<>();
@@ -470,14 +468,14 @@ public class LicensingInfoMap {
 					if ((sdf.parse(key)).compareTo(latest) >= 0)
 						reducedDatesKeys.add(key);
 				}
-				
+
 				dates = reducedDatesKeys;
 			}
 
 		} catch (Exception ex) {
 			logging.error(CLASSNAME + " produceDatesKeys : " + ex.toString() + ", ");
 		}
-		
+
 		return dates;
 	}
 
@@ -517,7 +515,6 @@ public class LicensingInfoMap {
 				// new: iterate over all known modules and fill empty ones with 0
 				// also warning state should be none
 				for (String currentModule : shownModules) {
-					
 
 					JSONObject moduleInfo;
 					boolean available = availableModules.contains(currentModule);
@@ -609,7 +606,6 @@ public class LicensingInfoMap {
 
 			for (String currentModule : shownModules) {
 				Map<String, Object> line = new HashMap<>();
-				
 
 				// 1st column
 				line.put(configed.getResourceValue("LicensingInfo.modules"), currentModule);
@@ -647,7 +643,7 @@ public class LicensingInfoMap {
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 			for (String key : datesKeys) {
-				
+
 				Date thisDate = sdf.parse(key);
 				if (dateNow.compareTo(thisDate) >= 0)
 					newest = key;
@@ -671,7 +667,7 @@ public class LicensingInfoMap {
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 			for (String key : dates) {
-				
+
 				Date thisDate = sdf.parse(key);
 				if (dateNow.compareTo(thisDate) >= 0)
 					newest = thisDate;
@@ -707,7 +703,7 @@ public class LicensingInfoMap {
 			LocalDate now = LocalDate.now();
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 			// dateNow = sdf.parse("2023-05-01");
-			
+
 			Date date = sdf.parse(d);
 
 			long diffInMillies = Math.abs(date.getTime() - dateNow.getTime());
@@ -833,8 +829,6 @@ public class LicensingInfoMap {
 		if (configs.get(key) != null)
 			percentClientLimitWarning = Integer.parseInt((String) configs.get(key).get(0));
 
-		
-		
 	}
 
 	public ArrayList<String> getCloseToLimitModuleList() {
@@ -866,7 +860,6 @@ public class LicensingInfoMap {
 		result.put(FUTURE_OVER_LIMIT, futureOverLimitModuleList);
 		result.put(FUTURE_CLOSE_TO_LIMIT, futureCloseToLimitModuleList);
 
-		
 		return result;
 	}
 

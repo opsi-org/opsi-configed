@@ -94,7 +94,6 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 		// test for depot_restriction:
 		// SELECT CONFIG_VALUE.configId, CONFIG_STATE.objectId, CONFIG_STATE.values from
 		// CONFIG_VALUE, CONFIG_STATE where CONFIG_STATE.configId =
-		
 
 		TimeCheck timer = new TimeCheck(this, "HOST_read").start();
 
@@ -104,18 +103,10 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 		timer.stop();
 
 		for (Map<java.lang.String, java.lang.Object> entry : opsiHosts) {
-			
+
 			Host.db2ServiceRowMap(entry);
-			
+
 		}
-
-		
-		
-
-		
-
-		
-		
 
 		return opsiHosts;
 	}

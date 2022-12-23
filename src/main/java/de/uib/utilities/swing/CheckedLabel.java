@@ -46,7 +46,6 @@ public class CheckedLabel extends JPanel implements FocusListener
 
 	protected java.awt.Font textFont;
 
-	
 	// I didn't get work this, couldn't fix the Generics issues
 
 	protected Map defaultTextAttributes;
@@ -96,7 +95,6 @@ public class CheckedLabel extends JPanel implements FocusListener
 
 		setFocusable(true);
 		setRequestFocusEnabled(true);
-		
 
 		addFocusListener(this);
 
@@ -339,7 +337,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 		for (ActionListener al : myListeners) {
 			al.actionPerformed(ae);
 		}
-		
+
 	}
 
 }

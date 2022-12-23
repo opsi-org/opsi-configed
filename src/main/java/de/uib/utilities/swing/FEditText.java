@@ -84,7 +84,6 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getSource() == textarea) {
-			
 
 			if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
 					&& e.getKeyCode() == KeyEvent.VK_TAB)
@@ -100,14 +99,14 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	// DocumentListener interface
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-		
+
 		setDataChanged(true);
 
 	}
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		
+
 		/*
 		 * //catch tabs and in case returns
 		 * try
@@ -131,7 +130,7 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		
+
 		if (standalone)
 			logging.debug(getText());
 	}
@@ -154,7 +153,7 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		
+
 		setDataChanged(true);
 	}
 

@@ -8,13 +8,12 @@ import de.uib.configed.gui.FGeneralDialog;
  * Represent a sshcommand object
  **/
 public abstract interface SSHCommand {
-	
+
 	/** @return command String to execute **/
 	public abstract String getCommand();
 
 	public abstract String getSecuredCommand();
 
-	
 	public abstract String getSecureInfoInCommand();
 
 	/** @return raw command String **/
@@ -29,7 +28,6 @@ public abstract interface SSHCommand {
 	/** @return command id String **/
 	public abstract String getId();
 
-	
 	/** @return command menu text String **/
 	public abstract String getMenuText();
 
@@ -50,7 +48,6 @@ public abstract interface SSHCommand {
 	/** @return True if command is a multicommand **/
 	public abstract boolean isMultiCommand();
 
-	
 	/** @return the command dialog(parameter) **/
 	public abstract FGeneralDialog getDialog();
 

@@ -121,10 +121,8 @@ public class PanelStateSwitch extends JPanel {
 		}
 
 		this.startValue = startValue;
-		
-		
+
 		logging.info(this, " string val of start value " + startValue.toString());
-		
 
 		initComponents();
 
@@ -182,7 +180,7 @@ public class PanelStateSwitch extends JPanel {
 			button.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseEntered(MouseEvent e) {
-					
+
 					if (!button.isSelected())
 						button.setSelectedIcon(deactivatedIcon);
 				}
@@ -216,7 +214,6 @@ public class PanelStateSwitch extends JPanel {
 		GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
 		// this.setBorder(new
-		
 
 		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
 		layout.setVerticalGroup(vGroup);
@@ -226,8 +223,6 @@ public class PanelStateSwitch extends JPanel {
 		if (title != null)
 			vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(labelTitle,
 					Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT));
-
-		
 
 		for (Enum val : values) {
 			vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(

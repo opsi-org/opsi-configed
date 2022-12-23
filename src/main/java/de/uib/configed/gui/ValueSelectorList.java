@@ -32,7 +32,6 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 	private JButton buttonSelectValuesWithEqualProperties;
 	private JButton buttonSelectValuesAll;
 
-	
 	private TablesearchPane searchPane;
 
 	private Vector<? extends String> unfilteredV;
@@ -121,10 +120,9 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		else
 			labelValue.setText(configed.getResourceValue("ValueSelectorList.value"));
 		labelValue.setOpaque(false);
-		
+
 		labelValue.setBackground(Globals.backLightBlue);
 		labelValue.setFont(Globals.defaultFontStandardBold);
-		
 
 		buttonSelectValuesWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
 		buttonSelectValuesWithEqualProperties
@@ -208,15 +206,9 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		 * popupCancelChangedDepotSelection.setEnabled(false);
 		 */
 
-		
 		// must not be set (otherwise the embedding scrollpane does not scroll)
-		
-		
-		// labelDepotServer.setPreferredSize(new Dimension(widthColumnServer,
-		
 
-		
-		
+		// labelDepotServer.setPreferredSize(new Dimension(widthColumnServer,
 
 		/*
 		 * buttonCommitChangedDepotSelection = new IconButton(
@@ -318,8 +310,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == buttonSelectValuesAll) {
 			logging.info(this, "action on buttonSelectValuesAll");
-			
-			
+
 			valueList.selectAll();
 		}
 

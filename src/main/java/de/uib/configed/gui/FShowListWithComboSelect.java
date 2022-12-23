@@ -17,7 +17,7 @@ public class FShowListWithComboSelect extends FShowList {
 	public FShowListWithComboSelect(JFrame owner, String title, boolean modal, String choiceTitle, String[] choices,
 			String[] buttonList) {
 		super(owner, title, modal, buttonList);
-		
+
 		labelChoice = new JLabel(choiceTitle + ": ");
 		labelChoice.setOpaque(true);
 		labelChoice.setBackground(Globals.backgroundLightGrey);
@@ -25,14 +25,10 @@ public class FShowListWithComboSelect extends FShowList {
 		combo = new JComboBox<>(choices);
 		combo.setFont(Globals.defaultFontBold);
 		northPanel.add(combo);
-		
-		
+
 		// HorizontalPositioner northPanel = new HorizontalPositioner (new
-		
-		
+
 		pack();
-		
-		
 
 	}
 

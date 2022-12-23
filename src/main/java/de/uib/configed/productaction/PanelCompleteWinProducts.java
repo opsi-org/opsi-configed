@@ -60,7 +60,7 @@ public class PanelCompleteWinProducts extends JPanel
 	String server = "";
 	String selectedDepot = null;
 	Set<String> depots = new HashSet<>();
-	
+
 	String depotProductDirectory;
 	boolean smbMounted;
 
@@ -128,8 +128,6 @@ public class PanelCompleteWinProducts extends JPanel
 
 		defineLayout();
 
-		
-
 		persist.registerDataRefreshedObserver(this);
 
 	}
@@ -168,7 +166,6 @@ public class PanelCompleteWinProducts extends JPanel
 		chooserFolder.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserFolder);
-		
 
 		chooserFolder.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooserFolder.setDialogTitle(Globals.APPNAME + " " + configed.getResourceValue("CompleteWinProducts.chooser"));
@@ -195,8 +192,6 @@ public class PanelCompleteWinProducts extends JPanel
 			winProduct = "" + comboChooseWinProduct.getSelectedItem();
 			produceTarget();
 		});
-
-		
 
 	}
 
@@ -268,8 +263,6 @@ public class PanelCompleteWinProducts extends JPanel
 		fieldProductKey = new JTextField("");
 		fieldProductKey.setPreferredSize(Globals.textfieldDimension);
 
-		
-
 		buttonCallSelectFolderWinPE = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectFolderWinPE.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectFolderWinPE.setPreferredSize(Globals.graphicButtonDimension);
@@ -325,7 +318,7 @@ public class PanelCompleteWinProducts extends JPanel
 								+ fieldProductKey.getText() + ", " + comboChooseWinProduct.getSelectedItem());
 
 				final Color saveColor = buttonCallExecute.getBackground();
-				
+
 				buttonCallExecute.setBackground(Globals.failedBackColor);
 
 				execute();
@@ -393,7 +386,6 @@ public class PanelCompleteWinProducts extends JPanel
 			depots.clear();
 			depots.add((String) comboChooseDepot.getSelectedItem());
 
-			
 			// winProduct + ", " + values);
 
 			if (!oldProductKey.equals(productKey)) {

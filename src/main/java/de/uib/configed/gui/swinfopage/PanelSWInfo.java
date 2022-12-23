@@ -46,14 +46,14 @@ public class PanelSWInfo extends JPanel {
 	protected PanelGenEditTable panelTable;
 	protected ExporterToCSV csvExportTable;
 	protected ExporterToPDF pdfExportTable;
-	
+
 	protected JPanel subPanelTitle;
 
 	protected JScrollPane scrollPaneSWInfo;
 	protected JTable jTable;
 	protected final SWInfoTableModel voidTableModel = new SWInfoTableModel();
 	protected GenTableModel modelSWInfo;
-	
+
 	protected JLabel labelSuperTitle;
 
 	protected String supertitle = "";
@@ -66,7 +66,6 @@ public class PanelSWInfo extends JPanel {
 
 	private PopupMenuTrait popupTrait;
 
-	
 	protected Boolean askingForKindOfAction;
 	protected boolean askForOverwrite = true;
 
@@ -192,7 +191,7 @@ public class PanelSWInfo extends JPanel {
 		};
 
 		panelTable.setTitle("");
-		
+
 		// therefore postponed
 		panelTable.setColumnSelectionAllowed(false); // up to now, true is destroying search function
 
@@ -241,8 +240,7 @@ public class PanelSWInfo extends JPanel {
 		indexOfColWindowsSoftwareID = columnNames.indexOf(SWAuditEntry.WINDOWSsOFTWAREid);
 		modelSWInfo.chainFilter(FILTER_MS_UPDATES, new TableModelFilter(filterConditionWithMsUpdates));
 		modelSWInfo.reset();
-		
-		
+
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates = new JCheckBox("", withMsUpdates);
 		checkWithMsUpdates.setForeground(Globals.blue);
@@ -251,8 +249,7 @@ public class PanelSWInfo extends JPanel {
 
 		modelSWInfo.chainFilter(FILTER_MS_UPDATES2, new TableModelFilter(filterConditionWithMsUpdates2));
 		modelSWInfo.reset();
-		
-		
+
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates2 = new JCheckBox("", withMsUpdates2);
 		checkWithMsUpdates2.setForeground(Globals.blue);
@@ -302,8 +299,6 @@ public class PanelSWInfo extends JPanel {
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(vGap, vGap, vGap).addGap(vGap, vGap, vGap));
 
-		
-
 		panelTable.setTableModel(modelSWInfo);
 		panelTable.setSearchColumnsAll();
 
@@ -319,8 +314,6 @@ public class PanelSWInfo extends JPanel {
 
 		labelSuperTitle.setOpaque(true);
 		labelSuperTitle.setBackground(Globals.backgroundLightGrey);
-
-		
 
 		/*
 		 * logging.info(this, "voidTableModel cols hopefully   " +
@@ -491,8 +484,7 @@ public class PanelSWInfo extends JPanel {
 
 		de.uib.configed.gui.swinfopage.SWterminalExporter exporter = new de.uib.configed.gui.swinfopage.SWterminalExporter(
 				PersistenceControllerFactory.getPersistenceController());
-		
-		
+
 		exporter.setHost(hostId);
 
 		if (panelTable.getSelectedRowCount() > 0)
@@ -532,7 +524,6 @@ public class PanelSWInfo extends JPanel {
 
 		HashMap<String, String> metaData = new HashMap<>();
 		// metaData.put("header", " " + mf.format( new String[] { hostId,
-		
 
 		metaData.put("title", "Client " + hostId);
 		metaData.put("subtitle", scanInfo);
@@ -584,7 +575,7 @@ public class PanelSWInfo extends JPanel {
 		supertitle = "" + s;
 		logging.info(this, "setSuperTitle " + s);
 		labelSuperTitle.setText(supertitle);
-		
+
 	}
 
 	/** overwrite in subclasses */
@@ -613,13 +604,10 @@ public class PanelSWInfo extends JPanel {
 	public void updateModel() {
 		logging.info(this, "update+++++");
 
-		
-		
 		logging.info(this, "update+++++ modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
 
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
-		
 
 	}
 
@@ -637,7 +625,6 @@ public class PanelSWInfo extends JPanel {
 
 		scanInfo = " (no software audit data, checked at time:  " + timeS + ")";
 
-		
 		return;
 	}
 
@@ -716,7 +703,6 @@ public class PanelSWInfo extends JPanel {
 
 		public void setData(DatedRowList datedList) {
 			this.data = datedList.getRows();
-			
 
 			fireTableDataChanged();
 		}

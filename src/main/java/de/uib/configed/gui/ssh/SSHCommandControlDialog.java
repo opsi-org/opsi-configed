@@ -59,14 +59,14 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	private JPanel centerPanel = new JPanel();
 	private JPanel commandlistPanel = new JPanel();
 	private JPanel parameterPanel;
-	
+
 	/** command control panel Layout instance **/
 	private GroupLayout controlPanelLayout;
 	/** command - commands control panel Layout instance **/
 	private GroupLayout centerPanelLayout;
-	
+
 	private GroupLayout commandlistPanelLayout;
-	
+
 	/** Save Button instance **/
 	private JButton btn_save;
 	/** Close Button instance **/
@@ -109,7 +109,6 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	/** This instance / Design Patter: singelton **/
 	private static SSHCommandControlDialog instance;
 
-	
 	private JButton btn_test_command;
 	/**
 	 * Graphical user interface for editing sshcommands.
@@ -119,7 +118,6 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	private int thisWidth = 850;
 	private int thisHeight = 600;
 
-	
 	private SSHCommandControlDialog(ConfigedMain cm, JFrame owner) {
 		super(null, configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
 		logging.info(this, "SSHCommandControlDialog instance " + instance + " main " + main);
@@ -154,7 +152,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	private void setCenterLayout() {
 		logging.debug(this, "setCenterLayout ");
 		centerPanelLayout.setAutoCreateGaps(true);
-		
+
 		{
 			centerPanelLayout.setHorizontalGroup(centerPanelLayout.createParallelGroup().addComponent(commandlistPanel)
 					.addComponent(parameterPanel));
@@ -162,14 +160,13 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 					.addComponent(parameterPanel));
 		}
 		// else
-		
+
 		// centerPanelLayout.setHorizontalGroup( centerPanelLayout.createParallelGroup()
 		// .addComponent(commandlistPanel)
-		
+
 		// centerPanelLayout.setVerticalGroup( centerPanelLayout.createSequentialGroup()
 		// .addComponent(commandlistPanel)
-		
-		
+
 		parameterPanel.setVisible(true);
 	}
 
@@ -212,7 +209,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			cb_menuText = new JComboBox<>();
 			lbl_tooltipText = new JLabel();
 			lbl_priority = new JLabel();
-			
+
 			tf_priority = new JTextField(new CheckedDocument(/* allowedChars */
 					new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-' }, 5),
 					String.valueOf(factory.position_default), 1);
@@ -223,7 +220,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			// de.uib.configed.configed.getResourceValue("SSHConnection.CommandControl.btnShowActionHelp")
 			// ,
 			// "images/help.gif", "images/help.gif", "images/help.gif",true
-			
+
 			btn_test_command = new de.uib.configed.gui.IconButton(
 					de.uib.configed.configed.getResourceValue("SSHConnection.CommandControl.btnTestCommand"),
 					"images/executing_command_red_22.png", "images/executing_command_red_22.png",
@@ -272,7 +269,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			cb_needSudo.setPreferredSize(btn_dim);
 			tp_commands.setPreferredSize(tf_dim_long);
 			// btn_changeHelpPanelStatus.setPreferredSize(new
-			
+
 			btn_test_command.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
 			btn_del.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
 
@@ -350,14 +347,9 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			});
 		}
 		{
-			
+
 			// btn_changeHelpPanelStatus.addActionListener(new ActionListener()
-			
-			
-			
-			
-			
-			
+
 			showPanel();
 			if (!(Globals.isGlobalReadOnly()))
 				btn_test_command.addActionListener(actionEvent -> doActionTestCommand());
@@ -399,7 +391,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			buttonPanel.add(btn_close);
 		}
 		initLayout();
-		
+
 		setComponentsEnabled_RO(!Globals.isGlobalReadOnly());
 	}
 
@@ -414,8 +406,6 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 
 		cb_parentMenuText.setEnabled(value);
 		cb_parentMenuText.setEditable(value);
-
-		
 
 		tf_tooltipText.setEnabled(value);
 		tf_tooltipText.setEditable(value);
@@ -608,7 +598,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	 **/
 	private void updateComponents(String parent, String tooltip, int prio, boolean ns, String coms) {
 		if ((parent == null) || (parent.trim() == "")) {
-			
+
 			parent = factory.parentdefaultForOwnCommands;
 		}
 		cb_parentMenuText.setSelectedItem(parent);
@@ -660,7 +650,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		new Thread() {
 			@Override
 			public void run() {
-				new SSHConnectExec(cmain, command); 
+				new SSHConnectExec(cmain, command);
 			}
 		}.start();
 
@@ -722,20 +712,16 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 
 	private void showPanel() {
 		logging.info(this, "showPanel helpPanelStatus always true");
-		
+
 		{
 			setCenterLayout();
 			centerPanel.setSize(centerPanel.getWidth(), centerPanel.getHeight() + parameterPanel.getHeight());
 			this.setSize(this.getWidth(), this.getHeight() + parameterPanel.getHeight());
 		}
 		// else
-		
-		
+
 		// centerPanel.setSize(centerPanel.getWidth(),
-		
-		
-		
-		
+
 		repaint();
 		revalidate();
 	}

@@ -10,7 +10,6 @@ import de.uib.utilities.swing.ActivityPanel;
 
 public class WaitCursor {
 
-	
 	private static AtomicInteger objectCounting = new AtomicInteger();
 	private static boolean allStopped = false;
 
@@ -39,8 +38,7 @@ public class WaitCursor {
 	}
 
 	public WaitCursor(Component c_calling, Cursor saveCursor, String callLocation) {
-		
-		
+
 		objectNo = objectCounting.addAndGet(1);
 		allStopped = false;
 
@@ -90,11 +88,10 @@ public class WaitCursor {
 				public void run() {
 					ActivityPanel.setActing(true);
 
-					
 					while (!ready && !allStopped) {
 						try {
 							Thread.sleep(200);
-							
+
 						} catch (InterruptedException ex) {
 						}
 					}
@@ -106,11 +103,10 @@ public class WaitCursor {
 				public void run() {
 					ActivityPanel.setActing(true);
 
-					
 					while (!ready && !allStopped) {
 						try {
 							Thread.sleep(200);
-							
+
 						} catch (InterruptedException ex) {
 						}
 					}
@@ -135,7 +131,7 @@ public class WaitCursor {
 					objectCounting.decrementAndGet();
 					logging.debug(this, "removing instance " + objectNo);
 					if (objectCounting.get() <= 0)
-					
+
 					{
 						logging.info(this, "seemed to be last living instance");
 						ActivityPanel.setActing(false);

@@ -8,9 +8,9 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 
 {
 	// private String baseName = "";
-	
+
 	private boolean needSudo = false;
-	
+
 	private boolean needParameter = false;
 	private SSHCommand basicCommand;
 	protected FGeneralDialog dialog = null;
@@ -55,10 +55,6 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	}
 
 	// @Override
-	
-	
-	
-	
 
 	@Override
 	public String getMenuText() {
@@ -114,35 +110,12 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	public ArrayList<String> getParameterList() {
 		return null;
 	}
-	
-	
-	
-	
 
-	
-	
-	
-	
-	
-	
-	
-	
 	// @Override
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	// regexes[0] = "(-[\\w*],[
 	// ])|(--[\\w*]*-[\\w*]*-[\\w*]*)|(--[\\w*]*-[\\w*]*)|(--[\\w*]*)";
 	// regexes[1] = "((<[\\w*]*>)|(<[\\w*]*-[\\w*]*>)|(<[\\w*]*-[\\w*]*-[\\w*]*>)) |
 	// ((<[\\w*]*>\\s\\.{3})|(<[\\w*]*-[\\w*]*>\\s\\.{3})|(<[\\w*]*-[\\w*]*-[\\w*]*>\\s\\.{3}))";
-	
-	
 
 }

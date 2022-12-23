@@ -29,7 +29,7 @@ public class RetrieverMapSource extends MapSource
 	@Override
 	protected void fetchData() {
 		table = retriever.retrieveMap();
-		
+
 		super.fetchData();
 	}
 }

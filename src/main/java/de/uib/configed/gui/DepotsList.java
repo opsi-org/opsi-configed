@@ -33,7 +33,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		setBackground(Globals.backgroundWhite);
 		setSelectionBackground(Globals.defaultTableCellSelectedBgColor);
 		setSelectionForeground(Color.black);
-		
+
 		setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		myListCellRenderer = new MyListCellRenderer(persist);
 		setCellRenderer(myListCellRenderer);
@@ -160,7 +160,6 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 			JComponent jc = (JComponent) c;
 			// CellAlternatingColorizer.colorize(jc, isSelected, (row % 2 == 0), (column % 2
-			
 
 			if (jc instanceof JLabel) {
 				String tooltipText = null;

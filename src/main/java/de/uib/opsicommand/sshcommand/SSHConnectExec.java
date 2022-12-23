@@ -46,7 +46,7 @@ public class SSHConnectExec extends SSHConnect {
 		super(m);
 		FOUND_ERROR = false;
 		main = m;
-		
+
 	}
 
 	public SSHConnectExec(ConfigedMain m, SSHCommand sshcommand) {
@@ -57,10 +57,9 @@ public class SSHConnectExec extends SSHConnect {
 		super(m);
 		FOUND_ERROR = false;
 		main = m;
-		
-		
+
 		logging.info(this, "SSHConnectExec main " + main);
-		
+
 		logging.info(this, "SSHConnectExec sshcommand " + sshcommand.getSecuredCommand());
 		this.responseButton = responseButton;
 		if (responseButton != null)
@@ -70,7 +69,7 @@ public class SSHConnectExec extends SSHConnect {
 	}
 
 	public void starting(SSHCommand sshcommand) {
-		
+
 		if (!(isConnected())) {
 			final SSHCommandFactory factory = SSHCommandFactory.getInstance(main);
 			logging.error(this, configed.getResourceValue("SSHConnection.not_connected.message") + " "
@@ -105,10 +104,6 @@ public class SSHConnectExec extends SSHConnect {
 		}
 	}
 
-	
-	
-	
-	
 	public SSHConnectExec() {
 		super(null);
 		connect();
@@ -156,7 +151,7 @@ public class SSHConnectExec extends SSHConnect {
 				+ "] sequential[" + sequential + "] dialog[" + dialog + "]");
 		if (!isConnectionAllowed()) {
 			logging.warning(this, "connection forbidden.");
-			
+
 		} else {
 
 			multiCommand = true;
@@ -182,16 +177,14 @@ public class SSHConnectExec extends SSHConnect {
 			for (int i = 0; i < anzahlCommands; i++) {
 				String com = ((SSHCommand_Template) commands).getOriginalCommands().get(i).getCommandRaw();
 				com = "(" + (i + 1) + ")  " + com;
-				
-				
+
 				// // final_dia.append(" ", com);
-				
-				
+
 				// else
-				
+
 				// // final_dia.append(" ", com + " \n");
 				defaultCommandsString = defaultCommandsString + com + "   \n";
-				
+
 			}
 			try {
 
@@ -211,8 +204,7 @@ public class SSHConnectExec extends SSHConnect {
 				final SSHConnectExec caller = this;
 				FOUND_ERROR = false;
 				// new Thread()
-				
-				
+
 				{
 					if (!SSHCommandFactory.ssh_always_exec_in_background)
 						final_dia.setVisible(true);
@@ -221,7 +213,7 @@ public class SSHConnectExec extends SSHConnect {
 					LinkedList<SSHCommand> commands_list = commandToExec.getCommands();
 					for (SSHCommand co : commandToExec.getCommands()) {
 						if (!found_error) {
-							
+
 							co = pmethodHandler.parseParameter(co, caller); // ???????? sollte hier eigentlich stehen?!
 																			// # nein! co wird vom phander verändert
 							if (!pmethodHandler.canceled) {
@@ -244,22 +236,21 @@ public class SSHConnectExec extends SSHConnect {
 					// wrong place final_dia.appendLater("\nREADY\n");
 
 				}
-				
+
 				logging.info(this, "exec_list command after starting " + commands);
 				logging.info(this, "exec_list commandToExec " + commandToExec);
-				
+
 			} catch (Exception e) {
 				logging.warning("exception: " + e);
 			}
 
 			finally {
-				
+
 				System.gc();
 			}
 		}
 	}
 
-	
 	protected boolean FOUND_ERROR = false;
 
 	public String exec(SSHCommand command) {
@@ -286,7 +277,6 @@ public class SSHConnectExec extends SSHConnect {
 			logging.error(this, "connection forbidden.");
 			return null;
 		}
-		
 
 		if (FOUND_ERROR) {
 			logging.warning(this, "exec found error.");
@@ -318,8 +308,6 @@ public class SSHConnectExec extends SSHConnect {
 				} else
 					dialog.setVisible(true);
 
-				
-				
 			} else {
 				outputDialog = SSHConnectionExecDialog.getInstance();
 			}
@@ -348,11 +336,11 @@ public class SSHConnectExec extends SSHConnect {
 			if (sequential)
 				return task.get();
 			if (SSHCommandFactory.ssh_always_exec_in_background)
-				
+
 				if (withGui) {
 					outputDialog.setVisible(false);
 				}
-			
+
 			if (withGui)
 				return "finish";
 			else
@@ -370,7 +358,7 @@ public class SSHConnectExec extends SSHConnect {
 			if (s.length() > 0)
 				if (s != "\n") {
 					String t = outputDialog.ansiCodeInfo + s;;
-					
+
 					return t;
 				}
 		return s;
@@ -505,8 +493,7 @@ public class SSHConnectExec extends SSHConnect {
 				if (!(isConnected()))
 					connect();
 				final Channel channel = getSession().openChannel("exec");
-				
-				
+
 				((ChannelExec) channel).setErrStream(System.err);
 				((ChannelExec) channel).setCommand(command.getCommand());
 				final OutputStream out = channel.getOutputStream();
@@ -526,7 +513,7 @@ public class SSHConnectExec extends SSHConnect {
 
 				logging.info(this, "doInBackground start waiting for answer");
 				int size = 1024 * 1024;
-				
+
 				byte[] tmp = new byte[size];
 				int progress = 0;
 				if (outputDialog != null) {
@@ -534,12 +521,12 @@ public class SSHConnectExec extends SSHConnect {
 					(outputDialog).addKillProcessListener(killProcessListener);
 					// publishInfo("result:" + outputDialog.ansiCodeEnd);
 					// publish("");
-					
+
 				}
 				supw_retriedTimes = 0;
 				while (true) {
 					while (in.available() > 0) {
-						
+
 						int i = in.read(tmp, 0, size);
 						logging.info(this, "doInBackground i " + i);
 
@@ -554,9 +541,9 @@ public class SSHConnectExec extends SSHConnect {
 						if (i < 0)
 							break;
 						String str = new String(tmp, 0, i, "UTF-8");
-						
+
 						// (str.equals(configed.getResourceValue("SSHConnection.sudoFailedText"))) )
-						
+
 						// (str.equals(SSHCommandFactory.getInstance().sudo_failed_text)) )
 						if ((command.needSudo()) && (str.contains(SSHCommandFactory.sudo_failed_text))) {
 							String pw = "";
@@ -581,7 +568,7 @@ public class SSHConnectExec extends SSHConnect {
 						if (withGui) {
 							// publish( "" + i);
 							for (String line : str.split("\n")) {
-								
+
 								logging.debug(this, " doInBackground publish " + progress + ": " + line);
 								publish(new String(line));
 								progress++;
@@ -591,7 +578,7 @@ public class SSHConnectExec extends SSHConnect {
 								}
 							}
 						} else {
-							
+
 							for (String line : str.split("\n"))
 								logging.debug(this, "line: " + line);
 						}
@@ -644,7 +631,7 @@ public class SSHConnectExec extends SSHConnect {
 			if (outputDialog != null)
 				if (!multiCommand) {
 					outputDialog.setStatusFinish(getCommandName());
-					
+
 				}
 			System.gc();
 			return buf.toString();
@@ -657,7 +644,7 @@ public class SSHConnectExec extends SSHConnect {
 
 			if (outputDialog != null) {
 				outputDialog.setStartAnsi(Color.BLACK);
-				
+
 				for (String line : chunks) {
 					logging.debug(this, "process " + line);
 					sshOutputCollector.appendValue(line);
@@ -671,7 +658,7 @@ public class SSHConnectExec extends SSHConnect {
 
 		protected void publishInfo(String s) {
 			if (outputDialog != null) {
-				
+
 				outputDialog.setStartAnsi(Color.BLACK);
 			}
 		}
@@ -681,7 +668,7 @@ public class SSHConnectExec extends SSHConnect {
 				if (s.length() > 0)
 					if (s != "\n")
 						s = outputDialog.ansiCodeError + s;
-			
+
 		}
 
 		@Override

@@ -46,13 +46,10 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 
 			if (sel) {
 				setBackground(Globals.backLightBlue);
-				
-				
+
 			} else {
 				setBackground(Color.white);
-				
-				
-				
+
 			}
 
 			if (leaf) {

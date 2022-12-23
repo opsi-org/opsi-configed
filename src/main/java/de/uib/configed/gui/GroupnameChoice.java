@@ -118,8 +118,6 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 			selIndex = -1;
 		}
 
-		
-		
 	}
 
 	// DocumentListener for Document in groupnameField

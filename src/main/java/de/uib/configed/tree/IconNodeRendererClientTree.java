@@ -61,19 +61,9 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 			node.setEnabled(enabled);
 
-			
-			
-			
-			
-			
-			
-
-			
-
 			if (!node.getAllowsChildren()) // client
 			{
-				
-				
+
 				if (
 				// sel
 				// ||
@@ -87,18 +77,12 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 					// setText( stringValue + "--xxx" );
 					setFont(Globals.defaultFont);
 					setIcon(node.getNonSelectedLeafIcon());
-					
 
-					
-					
 				}
 			} else // group
 			{
 				String visualText = modifier.modify(stringValue);
 
-				
-
-				
 				setText(visualText);
 
 				setIcon(node.getClosedIcon()); // default,will be changed, if clients are childs
@@ -117,10 +101,6 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 					// setBackground((Color) UIManager.get("controlHighlight"));
 				} else {
 					setFont(Globals.defaultFont);
-					
-
-					
-					
 
 				}
 			}
@@ -146,10 +126,9 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 					&& tree.hasFocus())
 
 			{
-				
+
 				// setText(stringValue + "<");
-				
-				
+
 				Map attributes = getFont().getAttributes();
 				attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
 				setFont(getFont().deriveFont(attributes));

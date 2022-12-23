@@ -1,9 +1,5 @@
 package de.uib.configed.gui.ssh;
 
-
-
-
-
 import java.util.Vector;
 
 import javax.swing.ComboBoxEditor;

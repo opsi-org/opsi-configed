@@ -21,7 +21,7 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public abstract class ExportTable {
 	protected javax.swing.JTable theTable;
-	
+
 	// protected String sheetLabel = "Page 1";//must not be empty!
 	protected Vector<String> classNames;
 	protected HashMap<String, String> metaData;
@@ -78,8 +78,6 @@ public abstract class ExportTable {
 	}
 
 	protected abstract void execute(String fileName, boolean onlySelectedRows);
-
-	
 
 	public JMenuItemFormatted getMenuItemExport() {
 		JMenuItemFormatted menuItem = new JMenuItemFormatted(
@@ -346,7 +344,6 @@ public abstract class ExportTable {
 		logging.info(this, "getFileLocation with writeToFile " + writeToFile);
 
 		File defaultFile = new File(writeToFile);
-		
 
 		chooser = new JFileChooser(exportDirectory);
 		chooser.setPreferredSize(Globals.filechooserSize);

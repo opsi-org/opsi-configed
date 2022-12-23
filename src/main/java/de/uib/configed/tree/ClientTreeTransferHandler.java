@@ -23,7 +23,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	public ClientTreeTransferHandler(ClientTree tree) {
 		super();
 		this.tree = tree;
-		
 
 	}
 
@@ -34,8 +33,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			return null;
 
 		String[] parts = treeRepresentation.split(",");
-
-		
 
 		if (parts.length == 1)
 			return null;
@@ -91,8 +88,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			dropObjectPath = targetNode.getUserObjectPath();
 
 		// debugging the if clause
-		
-		
+
 		if (targetNode != null) {
 			logging.debug(this, "canImport targetNode.isImmutable() " + targetNode.isImmutable());
 		}
@@ -131,10 +127,8 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 	@Override
 	public int getSourceActions(JComponent c) {
-		
+
 		// + "JComponent " + c + " getSourceActions " + TransferHandler.COPY_OR_MOVE);
-		
-		
 
 		logging.debug(this, "getSourceActions,  activePaths " + tree.getActivePaths());
 
@@ -188,7 +182,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			if (tree.isInDIRECTORY(path)) {
 				logging.debug(this, "getSourceActions , isInDIRECTORY true");
 				// action depends additionally from target
-				
+
 			}
 		}
 
@@ -207,7 +201,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			TreePath path = (TreePath) iterPaths.next();
 
 			// String id = ((DefaultMutableTreeNode)
-			
 
 			int len = path.getPath().length;
 			for (int j = 0; j < len; j++) {
@@ -215,8 +208,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 				if (j < len - 1)
 					buff.append(",");
 			}
-
-			
 
 			if (iterPaths.hasNext())
 				buff.append("\n");
@@ -227,7 +218,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	}
 
 	// @Override
-	
 
 	private boolean chooseMOVE(TransferHandler.TransferSupport support, String sourceGroupName, TreePath dropPath,
 			boolean isLeaf) {
@@ -368,8 +358,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		 * String[] values = transferData.split("\n");
 		 */
 
-		
-		
 		logging.debug(this, "importData. ++++++++++ getActivePaths(): " + tree.getActivePaths());
 
 		String[] values = tree.getSelectedClientsInTable().toArray(new String[] {});
@@ -403,14 +391,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			String sourceParentID = null;
 			try {
 				// if values not got from transferable, the following reduces
-				
-
-				
-				
-				
-				
-				
-				
 
 				if ((value.split("\t").length > 1))
 				// probably an import from the JTable
@@ -419,7 +399,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 					importID = value.split("\t")[0];
 				} else {
 					String[] parts = value.split(",");
-					
+
 					importID = parts[parts.length - 1];
 
 					/*
@@ -434,11 +414,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			} catch (Exception ex) {
 				logging.info(this, " no tree parts got " + ex);
 			}
-
-			
-
-			
-			
 
 			logging.debug(this, "importData  ----------------   " + i + " values[i] " + importID);
 
@@ -458,8 +433,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			else
 			// coming from table, replace!
 			{
-				
-				
+
 			}
 
 			logging.debug(this, "importData, sourceParentID " + sourceParentID);

@@ -60,7 +60,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	// for creating pdf
 	private Map<String, String> hwOpsiToUI;
-	
 
 	protected JSplitPane contentPane;
 	protected JScrollPane jScrollPaneTree;
@@ -120,11 +119,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	protected void buildPanel() {
-		
 
-		
 		panelByAuditInfo = new PanelHWByAuditDriver(title, main);
-		
 
 		tree = new XTree(null);
 
@@ -132,7 +128,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		jScrollPaneTree = new JScrollPane(tree);
 		jScrollPaneTree.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		
+
 		jScrollPaneTree.setMinimumSize(new Dimension(200, 200));
 		jScrollPaneTree.setPreferredSize(new Dimension(400, 200));
 
@@ -159,17 +155,10 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(vGap, vGap, vGap));
 
-		
 		jScrollPaneInfo = new JScrollPane(embed);
 		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		
-		
-		
 
 		contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
-		
-
-		
 
 		GroupLayout layoutBase = new GroupLayout(this);
 		setLayout(layoutBase);
@@ -244,8 +233,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			popupMenu.addPopupListenersTo(new JComponent[] { tree, table });
 		}
 
-		
-
 	}
 
 	public void setTitle(String s) {
@@ -266,8 +253,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		copyOfMe = new PanelHWInfo(false, main);
 		copyOfMe.setHardwareConfig(hwConfig);
 		copyOfMe.setHardwareInfo(hwInfo, treeRootTitle);
-
-		
 
 		copyOfMe.expandRows(tree.getToggledRows(rootPath));
 		copyOfMe.setSelectedRow(tree.getMinSelectionRow());
@@ -376,8 +361,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			return EMPTY;
 		}
 
-		
-
 		List values = null;
 
 		for (int j = 0; j < hwConfig.size(); j++) {
@@ -419,23 +402,21 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 							if (hwClass.equals(class_COMPUTER_SYSTEM)) {
 								if (opsi.equalsIgnoreCase(key_VENDOR)) {
 									vendorStringCOMPUTER_SYSTEM = cv;
-									
+
 								} else if (opsi.equalsIgnoreCase(key_MODEL)) {
 									modelString = cv;
-									
+
 								}
 							} else if (hwClass.equals(class_BASE_BOARD)) {
 								if (opsi.equalsIgnoreCase(key_VENDOR)) {
 									vendorStringBASE_BOARD = cv;
-									
+
 								} else if (opsi.equalsIgnoreCase(key_PRODUCT)) {
 									productString = cv;
-									
+
 								}
 							}
 						}
-
-						
 
 						if (unit != null) {
 							cv = addUnit(cv, unit);
@@ -495,7 +476,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			String hwClassUI = path[1].toString();
 			String hwClass = (String) hwClassMapping.get(hwClassUI);
 
-			
 			if (hwClass != null && (hwClass.equals(class_COMPUTER_SYSTEM) || hwClass.equals(class_BASE_BOARD))) {
 				logging.debug(this, "scanNode found  class_COMPUTER_SYSTEM or class_BASE_BOARD");
 				getDataForNode(node, true);
@@ -556,7 +536,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			Map whc = (Map) hwConfig.get(i);
 			hwClassesUI[i] = (String) ((Map) whc.get("Class")).get("UI");
 			hwClassMapping.put(hwClassesUI[i], (String) ((Map) whc.get("Class")).get("Opsi"));
-			
+
 		}
 
 		java.util.Arrays.sort(hwClassesUI);
@@ -565,8 +545,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			// get next key - value - pair
 			String hwClassUI = hwClassesUI[i];
 			String hwClass = (String) hwClassMapping.get(hwClassUI);
-
-			
 
 			ArrayList devices = (ArrayList) hwInfo.get(hwClass);
 			if (devices == null) {
@@ -607,14 +585,13 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			while (iter.hasNext()) {
 				String displayName = (String) iter.next();
 				ArrayList devs = (ArrayList) displayNames.get(displayName);
-				
+
 				for (int j = 0; j < devs.size(); j++) {
 					HashMap dev = (HashMap) devs.get(j);
 					String dn = displayName;
 					if (devs.size() > 1)
 						dn += " (" + j + ")";
 
-					
 					dev.put("displayName", dn);
 					names[num] = dn;
 					num++;
@@ -643,7 +620,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		treeModel.nodeChanged(root);
 		tree.expandRow(0);
 		tree.expandRow(1);
-		
 
 	}
 

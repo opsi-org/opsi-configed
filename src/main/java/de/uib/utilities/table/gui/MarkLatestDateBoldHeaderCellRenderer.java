@@ -31,7 +31,7 @@ public class MarkLatestDateBoldHeaderCellRenderer extends DefaultTableCellRender
 				column);
 
 		// java.awt.Component cell = super.getTableCellRendererComponent
-		
+
 		cell.setBackground(Globals.defaultTableHeaderBgColor);
 
 		JComponent jc = (JComponent) cell;

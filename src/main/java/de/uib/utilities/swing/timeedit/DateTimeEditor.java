@@ -41,8 +41,6 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	protected boolean withMovingSelectionDate = true;
 	protected boolean withTime = true;
 
-	
-
 	public DateTimeEditor() {
 		this(true);
 	}
@@ -50,9 +48,6 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	public DateTimeEditor(boolean withTime) {
 		super();
 		this.withTime = withTime;
-		
-
-		
 
 		JPopupMenu popup = new JPopupMenu();
 
@@ -63,7 +58,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 		JMenuItem menuItemNull = new JMenuItem("Kein Datum");;
 		menuItemNull.addActionListener(actionEvent -> {
-			
+
 			monthView.getSelectionModel().clearSelection();
 			monthView.commitSelection();
 		});
@@ -78,7 +73,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		hourDateFormat = new java.text.SimpleDateFormat("dd.MM.yyyy HH:mm");
 
 		monthView = new JXMonthView();
-		
+
 		monthView.setSelectionMode(DateSelectionModel.SelectionMode.SINGLE_SELECTION);
 
 		addDateSelectionListener(this); // observe monthview
@@ -90,11 +85,6 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		setDate(false);
 
 		monthView.addMouseListener(new utils.PopupMouseListener(popup));
-
-		
-		
-		
-		
 
 		monthSpinnerModel = new SpinnerListModel();
 		monthSpinner = new JSpinner(monthSpinnerModel);
@@ -190,7 +180,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	}
 
 	protected void switchMonth(int d) {
-		
+
 		calendar.add(Calendar.MONTH, d);
 
 		Date newDate = calendar.getTime();
@@ -198,12 +188,12 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 		if (withMovingSelectionDate) {
 			setSelectionDate(newDate);
-			
+
 		}
 	}
 
 	protected void switchYear(int d) {
-		
+
 		calendar.add(Calendar.YEAR, d);
 
 		Date newDate = calendar.getTime();
@@ -211,14 +201,13 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 		if (withMovingSelectionDate) {
 			setSelectionDate(newDate);
-			
+
 		}
 	}
 
 	public void setEditable(boolean b) {
 		editable = b;
-		
-		
+
 	}
 
 	@Override
@@ -250,7 +239,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 				+ calendar.get(Calendar.MINUTE));
 		timeSetter.setHour(calendar.get(Calendar.HOUR_OF_DAY));
 		timeSetter.setMin(calendar.get(Calendar.MINUTE));
-		
+
 	}
 
 	public void setHour(int h) {
@@ -269,7 +258,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		monthView.setSelectionDate(d);
 		timeSetter.setHour(calendar.get(Calendar.HOUR_OF_DAY));
 		timeSetter.setMin(calendar.get(Calendar.MINUTE));
-		
+
 	}
 
 	public int getHour() {
@@ -318,7 +307,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		if (withMovingSelectionDate) {
 			if (calendar.getTime().equals(monthView.getFirstSelectionDate())) {
 				// avoid recursion
-				
+
 			} else {
 				if (monthView.getFirstSelectionDate() != null)
 					calendar.setTime(monthView.getFirstSelectionDate());

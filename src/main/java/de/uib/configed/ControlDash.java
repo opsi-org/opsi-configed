@@ -87,7 +87,7 @@ public class ControlDash {
 				showInfo();
 			}
 		});
-		
+
 	}
 
 	public void showInfo() {
@@ -153,7 +153,7 @@ public class ControlDash {
 				public void setVisible(boolean b) {
 					super.setVisible(b);
 					jButton1.requestFocus();
-					
+
 				}
 
 				@Override
@@ -163,9 +163,8 @@ public class ControlDash {
 				}
 
 			};
-			
+
 			fDash.checkAdditionalPane();
-			
 
 			if (Globals.mainFrame != null) {
 				fDash.setLocation(Globals.mainFrame.getX() + Globals.LOCATION_DISTANCE_X,
@@ -264,7 +263,7 @@ public class ControlDash {
 
 					i++;
 				}
-				
+
 				logging.info(this, "produced rows, foundVariantLicencepools " + foundVariantLicencepools);
 			}
 
@@ -275,8 +274,6 @@ public class ControlDash {
 			}
 		};
 		modelSWnames.produceRows();
-
-		
 
 		Vector<Vector<Object>> specialrows = modelSWnames.getRows();
 		if (specialrows != null) {

@@ -20,13 +20,11 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 
 	public SimpleIconNodeRenderer() {
 		super();
-		
+
 		setOpaque(true);
 
-		
-		
 		standard = Globals.defaultFontBig;
-		
+
 		emphasized = Globals.defaultFontStandardBold;
 
 		setFont(standard);
@@ -76,13 +74,10 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 			if (sel && row != 0) // assuming that row 0 contains sort of header
 			{
 				setBackground(Globals.backLightBlue);
-				
-				
+
 			} else {
 				setBackground(Color.white);
-				
-				
-				
+
 			}
 
 			if (leaf) {

@@ -20,9 +20,6 @@ public class CmdLauncher {
 		String cmd = cmdPrefix + " " + s;
 		List<String> parts = de.uib.utilities.script.Interpreter.splitToList(cmd);
 
-		
-		
-
 		try {
 			logging.debug(this, "start OS call cmd: " + cmd + " splitted to " + parts);
 

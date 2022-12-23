@@ -34,11 +34,11 @@ public class UserConfigModule {
 
 		if (prototype != null) {
 			booleanMap.putAll(prototype.booleanMap);
-			
+
 			extractKeys(prototype.booleanMap, bool_keys);
 
 			valuesMap.putAll(prototype.valuesMap);
-			
+
 			extractKeys(prototype.valuesMap, list_keys);
 		}
 
@@ -82,8 +82,7 @@ public class UserConfigModule {
 	}
 
 	public void setBooleanValue(String key, Boolean val) {
-		
-		
+
 		logging.info(this, "for user " + username + " setBooleanValue " + key + " : " + val);
 		booleanMap.put(key, val);
 

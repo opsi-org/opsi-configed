@@ -88,7 +88,7 @@ public class SWAuditClientEntry
 	protected static Map<String, String> locale = new StringIdentityMap(KEYS);
 
 	public static void setLocale() {
-		
+
 		locale.put(SWAuditEntry.id, "ID");
 		locale.put(SWAuditEntry.NAME, configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
 		locale.put(SWAuditEntry.VERSION, configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
@@ -112,7 +112,6 @@ public class SWAuditClientEntry
 		DB_COLUMNS.put(SWAuditEntry.LANGUAGE, DB_TABLE_NAME + "." + "language");
 		DB_COLUMNS.put(LICENCEkEY, DB_TABLE_NAME + "." + "licenseKey");
 		DB_COLUMNS.put(LAST_MODIFICATION, DB_TABLE_NAME + "." + "lastseen");
-		
 
 	}
 
@@ -145,7 +144,6 @@ public class SWAuditClientEntry
 
 	public SWAuditClientEntry(final List<String> keys, final List<String> values,
 			de.uib.opsidatamodel.PersistenceController controller) {
-		
 
 		startmillis1stPartOfConstructor = System.currentTimeMillis();
 
@@ -159,7 +157,7 @@ public class SWAuditClientEntry
 		data.put(SWAuditEntry.id, values.get(keys.indexOf(DB_COLUMNS.get(CLIENT_ID))));
 		data.put(LICENCEkEY, values.get(keys.indexOf(DB_COLUMNS.get(LICENCEkEY))));
 		// data.put(SWAuditEntry.SUBVERSION,
-		
+
 		lastModificationS = values.get(keys.indexOf(DB_COLUMNS.get(LAST_MODIFICATION)));
 		swIdent = produceSWident(keys, values);
 		this.controller = controller;
@@ -176,11 +174,10 @@ public class SWAuditClientEntry
 		summillis2ndPartOfConstructor = summillis2ndPartOfConstructor
 				+ (endmillis2ndPartOfConstructor - startmillis2ndPartOfConstructor);
 
-		
 	}
 
 	public SWAuditClientEntry(final Map<String, Object> m, de.uib.opsidatamodel.PersistenceController controller) {
-		
+
 		data = new HashMap<>();
 		data.put(SWAuditEntry.id, Globals.produceNonNull(m.get(CLIENT_ID)));
 		swIdent = produceSWident(m);
@@ -190,14 +187,13 @@ public class SWAuditClientEntry
 		produceSWid();
 		data.put(LICENCEkEY, Globals.produceNonNull(m.get(LICENCEkEY)));
 		lastModificationS = Globals.produceNonNull(m.get(LAST_MODIFICATION));
-		
 
 	}
 
 	public static String produceSWident(List<String> keys, List<String> values)
 	// from db columns
 	{
-		
+
 		// " -- " + values);
 		String result = "";
 		try {
@@ -234,7 +230,6 @@ public class SWAuditClientEntry
 
 		}
 
-		
 		return result;
 	}
 
@@ -275,9 +270,9 @@ public class SWAuditClientEntry
 		if (!swIdent.equals(element))
 			logging.warning(this,
 					"getIndex gobal swIdent was assumed to be equal to element " + swIdent + ". " + element);
-		
+
 		Integer j = software2Number.get(element);
-		
+
 		// "getIndex, for swIdent " + swIdent + " differs indexOf " + result + " from
 		// mapped value " + j);
 
@@ -288,7 +283,7 @@ public class SWAuditClientEntry
 			result = j;
 
 		if (result == -1 && list != null) {
-			
+
 			// for " + swIdent );
 			int i = 0;
 			while (result == -1 && i < list.size()) {
@@ -319,7 +314,6 @@ public class SWAuditClientEntry
 				swId = getIndex(software, swIdent);
 			}
 
-			
 			if (swId == -1) {
 				logging.warning(this, "swIdent not found in softwarelist: " + swIdent);
 				if (notFoundSoftwareIDs == null)
@@ -341,7 +335,6 @@ public class SWAuditClientEntry
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.ARCHITECTURE)) });
 
-		
 		return result;
 	}
 
@@ -355,7 +348,7 @@ public class SWAuditClientEntry
 
 	public String getLastModification() {
 		return lastModificationS;
-		
+
 	}
 
 	public Integer getSWid() {
@@ -399,7 +392,7 @@ public class SWAuditClientEntry
 	public Map<String, String> getExpandedMap(Map<String, SWAuditEntry> installedSoftwareInformation, String swIdent) {
 		Map<String, String> dataMap = new HashMap<>(data);
 		dataMap.putAll(installedSoftwareInformation.get(swIdent));
-		
+
 		return dataMap;
 	}
 

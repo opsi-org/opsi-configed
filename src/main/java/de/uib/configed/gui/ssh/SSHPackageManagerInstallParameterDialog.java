@@ -210,7 +210,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 				logging.warning(this, "ERROR 1 command = null");
 		}
 
-		else { 
+		else {
 			sequential = true;
 
 			commands = installWgetPanel.getCommand(commands);

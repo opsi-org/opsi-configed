@@ -7,5 +7,5 @@ public interface TableModelFilterCondition {
 	public void setFilter(TreeSet<Object> filter);
 
 	public boolean test(Vector<Object> row);
-	
+
 }

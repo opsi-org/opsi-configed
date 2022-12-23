@@ -50,20 +50,19 @@ public class DynamicCombo extends javax.swing.JPanel {
 		col.setHeaderRenderer(null);
 
 		combo = new javax.swing.JComboBox();
-		
-		
+
 		combo.setBorder(null);
 
 		combo.addPopupMenuListener(new PopupMenuListener() {
 			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {
-				
+
 				// "<<");
 			}
 
 			@Override
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-				
+
 				// combo.getSelectedItem() + "<<");
 				combo.setSelectedItem(combo.getSelectedItem());
 				// ensures that we leave the combo box completely when we set the focus
@@ -72,7 +71,7 @@ public class DynamicCombo extends javax.swing.JPanel {
 
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				
+
 				// combo.getSelectedItem() + "<<");
 			}
 		});

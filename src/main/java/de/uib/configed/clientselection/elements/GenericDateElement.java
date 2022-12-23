@@ -29,8 +29,4 @@ public class GenericDateElement extends SelectElement {
 		return result;
 	}
 
-	
-	
-	
-	
 }

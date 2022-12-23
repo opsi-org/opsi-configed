@@ -47,8 +47,6 @@ public class FLoadingWaiter extends JFrame
 	String[] waitStrings;
 	int waitStringsIndex = -1;
 
-	
-
 	int max = 200;
 
 	private WaitingWorker worker;
@@ -168,8 +166,6 @@ public class FLoadingWaiter extends JFrame
 
 		setSize(new Dimension(400, 250));
 
-		
-
 		// center
 		/*
 		 * Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -212,14 +208,11 @@ public class FLoadingWaiter extends JFrame
 		SwingUtilities.invokeLater(
 
 				// new Runnable(){
-				
-				
+
 				() -> setVisible(false)
-		
-		
-		
+
 		);
-		
+
 	}
 
 	@Override
@@ -251,8 +244,7 @@ public class FLoadingWaiter extends JFrame
 	public String setLabellingStrategy(long millisLevel) {
 		logging.debug(this, "setLabellingStrategy millis " + millisLevel);
 		return "" + observingMesg + " " + waitInfoString.next(); // ??produces strings with ascii null
-		
-		
+
 	}
 
 	// windowListener
@@ -262,7 +254,7 @@ public class FLoadingWaiter extends JFrame
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		
+
 	}
 
 	@Override
@@ -275,8 +267,7 @@ public class FLoadingWaiter extends JFrame
 
 	@Override
 	public void windowIconified(WindowEvent e) {
-		
-		
+
 	}
 
 	@Override

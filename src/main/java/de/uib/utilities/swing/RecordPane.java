@@ -38,7 +38,7 @@ public class RecordPane extends JPanel implements KeyListener {
 	protected class TheObservableSubject extends ObservableSubject {
 		@Override
 		public void notifyObservers() {
-			
+
 			logging.debug("RecordPane: notifyObservers ");
 		}
 	}
@@ -54,7 +54,6 @@ public class RecordPane extends JPanel implements KeyListener {
 	protected Map<String, String> labels;
 	protected Map<String, String> hints;
 	protected Map<String, Boolean> editable;
-	
 
 	public RecordPane() {
 		// call of setData necessary
@@ -138,8 +137,6 @@ public class RecordPane extends JPanel implements KeyListener {
 
 			jTextField.addKeyListener(this);
 
-			
-
 			datafields.put(key, jTextField);
 		}
 
@@ -182,7 +179,7 @@ public class RecordPane extends JPanel implements KeyListener {
 	// KeyListener
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
+
 	}
 
 	@Override

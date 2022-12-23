@@ -117,13 +117,13 @@ public class FEditList extends FEditObject
 	}
 
 	public void setListModel(ListModel model) {
-		
+
 		visibleList.setModel(model);
 		initialModel = model;
 	}
 
 	public void setSelectionMode(int selectionMode) {
-		
+
 		visibleList.setSelectionMode(selectionMode);
 		singleSelectionMode = (selectionMode == ListSelectionModel.SINGLE_SELECTION);
 	}
@@ -140,11 +140,11 @@ public class FEditList extends FEditObject
 
 	@Override
 	public void setEditable(boolean b) {
-		
+
 		super.setEditable(b);
 		extraField.setVisible(b);
 		buttonRemove.setVisible(b && !singleSelectionMode);
-		
+
 		buttonAdd.setVisible(b);
 	}
 
@@ -155,8 +155,7 @@ public class FEditList extends FEditObject
 	protected void setExtraFieldToListValueAt(Point location) {
 		String txt = "" + getValueAt(location);
 		// visibleList.getModel().getElementAt( visibleList.locationToIndex( location )
-		
-		
+
 		extraField.setText(txt);
 		extraFieldChanged(false);
 	}
@@ -169,18 +168,15 @@ public class FEditList extends FEditObject
 
 		for (int i = 0; i < model.getSize(); i++) {
 			Object element = model.getElementAt(i);
-			
-			
 
 			if (toSelect.contains(element)) {
-				
+
 				visibleList.addSelectionInterval(i, i);
 			}
 		}
 
 		visibleList.ensureIndexIsVisible(visibleList.getMaxSelectionIndex());
 
-		
 	}
 
 	public void initSelection() {
@@ -189,40 +185,37 @@ public class FEditList extends FEditObject
 	}
 
 	public void setSelectedValues(List<Object> toSelect) {
-		
+
 		initiallySelected = toSelect;
 
 		visibleList.clearSelection();
-		
+
 		addSelectedValues(toSelect);
 
-		
-		
 	}
 
 	public void setSelectedValue(Object ob) {
-		
+
 		visibleList.setSelectedValue(ob, true);
 	}
 
 	private void addElementFromExtraField(Object element) {
-		
+
 		addElement(element);
 
-		
 		// extraField.setText(""); //an empty list value will always be created by what
 		// ever event
-		
+
 		extraFieldChanged(false);
 	}
 
 	protected void addElement(Object element) {
-		
+
 		ListModel limo = visibleList.getModel();
 		if (limo instanceof DefaultListModel) {
 			if (!((DefaultListModel) limo).contains(element)) {
 				((DefaultListModel) limo).addElement(element);
-				List list = new ArrayList<>(); 
+				List list = new ArrayList<>();
 				list.add(element);
 				addSelectedValues(list);
 			}
@@ -244,7 +237,7 @@ public class FEditList extends FEditObject
 
 	@Override
 	public void setStartValue(Object s) {
-		
+
 		super.setStartValue(s);
 		setTracker(s);
 	}
@@ -373,7 +366,7 @@ public class FEditList extends FEditObject
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		List selectedList = getSelectedList();
-		
+
 		// nullable? " + nullable);
 		if (!nullable && selectedList.isEmpty()) {
 			// reset to some value

@@ -42,8 +42,7 @@ public class OpsiHwAuditDeviceClass {
 	protected String linuxQuery;
 	protected List<OpsiHwAuditDevicePropertyType> deviceHostProperties;
 	protected List<OpsiHwAuditDevicePropertyType> deviceHwItemProperties;
-	
-	
+
 	protected ConfigOption hostConfig;
 	protected ConfigOption hwItemConfig;
 	protected String hostConfigKey;
@@ -54,8 +53,7 @@ public class OpsiHwAuditDeviceClass {
 
 		deviceHostProperties = new ArrayList<>();
 		deviceHwItemProperties = new ArrayList<>();
-		
-		
+
 	}
 
 	/*
@@ -154,12 +152,12 @@ public class OpsiHwAuditDeviceClass {
 
 	public void addHostRelatedProperty(OpsiHwAuditDevicePropertyType devProperty) {
 		deviceHostProperties.add(devProperty);
-		
+
 	}
 
 	public void addHwItemRelatedProperty(OpsiHwAuditDevicePropertyType deviceProperty) {
 		deviceHwItemProperties.add(deviceProperty);
-		
+
 	}
 
 	/*

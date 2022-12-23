@@ -56,8 +56,6 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 			 * }
 			 */
 
-			
-
 			for (OpsiHwAuditDevicePropertyType deviceProperty : auditDeviceClass.getDeviceHostProperties()) {
 				if (valuesSet.contains(deviceProperty.getOpsiDbColumnName()))
 					deviceProperty.setDisplayed(true);
@@ -77,8 +75,6 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 			 */
 
 			for (OpsiHwAuditDevicePropertyType deviceProperty : auditDeviceClass.getDeviceHwItemProperties()) {
-				
-				
 
 				if (valuesSet.contains(deviceProperty.getOpsiDbColumnName()))
 					deviceProperty.setDisplayed(true);
@@ -86,7 +82,7 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 					deviceProperty.setDisplayed(false);
 			}
 		}
-		
+
 	}
 
 }

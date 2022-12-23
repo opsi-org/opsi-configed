@@ -210,8 +210,6 @@ public abstract class Serializer {
 				}
 				logging.info(this, "getOperation elementPath[0] " + elementPath[0]);
 				List<SelectElement> elements = hardware.get(elementPath[0]);
-				
-				
 
 				for (SelectElement possibleElement : elements) {
 					logging.info(this,
@@ -219,7 +217,6 @@ public abstract class Serializer {
 									+ " compare with elementName " + elementName + " or perhaps with elementPathS "
 									+ elementPathS);
 
-					
 					// originally, but is nonsense -------------------------------------------
 					if (possibleElement.getClassName().equals(elementName)
 							&& Arrays.toString(possibleElement.getPathArray()).equals(elementPathS)) {

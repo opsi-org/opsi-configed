@@ -22,14 +22,13 @@ public class MultiTablePanel extends de.uib.utilities.swing.tabbedpane.TabClient
 	@Override
 	public void reset() {
 		super.reset();
-		
+
 		controller.refreshTables();
 		controller.initializeVisualSettings();
 	}
 
 	@Override
 	public boolean mayLeave() {
-		
 
 		if (Globals.isGlobalReadOnly())
 			return true;

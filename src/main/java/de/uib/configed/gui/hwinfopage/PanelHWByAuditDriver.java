@@ -80,8 +80,6 @@ public class PanelHWByAuditDriver extends JPanel {
 		selectionGroup.add(selectionCOMPUTER_SYSTEN);
 		selectionGroup.add(selectionBASE_BOARD);
 
-		
-		
 		GroupLayout layoutByAuditInfo = new GroupLayout(this);
 		this.setLayout(layoutByAuditInfo);
 		int lh = Globals.LINE_HEIGHT - 4;
@@ -152,7 +150,6 @@ public class PanelHWByAuditDriver extends JPanel {
 		fieldLabel.setText("");
 		fieldVendor2.setText("");
 		fieldLabel2.setText("");
-		
 
 		// fieldByAuditPath.setText("");
 		if (fDriverUpload != null)
@@ -190,15 +187,14 @@ public class PanelHWByAuditDriver extends JPanel {
 
 		if (fDriverUpload != null)
 			fDriverUpload.setUploadParameters(byAuditPath);
-		
+
 	}
 
 	private void startDriverUploadFrame() {
 		if (selectionBASE_BOARD.isSelected()) {
 			byAuditPath = eliminateIllegalPathChars(fieldVendor2.getText()) + "/"
 					+ eliminateIllegalPathChars(fieldLabel2.getText());
-		} else 
-		{
+		} else {
 			byAuditPath = eliminateIllegalPathChars(fieldVendor.getText()) + "/"
 					+ eliminateIllegalPathChars(fieldLabel.getText());
 		}

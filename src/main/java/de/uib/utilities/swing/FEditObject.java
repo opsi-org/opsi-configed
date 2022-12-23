@@ -49,8 +49,6 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	protected JSplitPane splitPane;
 	private int splitPaneHMargin = 1;
 
-	
-	
 	protected de.uib.configed.gui.IconButton buttonCommit;
 	protected de.uib.configed.gui.IconButton buttonCancel;
 	protected de.uib.configed.gui.IconButton buttonAdd;
@@ -70,7 +68,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	public FEditObject(Object initialValue) {
 		// runningInstances.add(this, "");
 		setIconImage(Globals.mainIcon);
-		
+
 		if (initialValue != null)
 			this.initialValue = initialValue;
 
@@ -86,7 +84,6 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		loggingArea = new JTextArea("");
 		loggingArea.setEditable(false);
-		
 
 		loggingArea.setBackground(Globals.backgroundWhite);
 
@@ -96,8 +93,6 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 		loggingPanel.add(scrollpaneL, BorderLayout.CENTER);
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-
-		
 
 		buttonCommit = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("FEditObject.SaveButtonTooltip"), "images/apply.png",
@@ -143,8 +138,6 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		editingArea.addKeyListener(this);
 
-		
-		
 		// okbutton.setText("ok");
 		// cancelbutton.setText("cancel");
 
@@ -161,14 +154,6 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 		buttonAdd.addKeyListener(this);
 
 		extraField.getDocument().addDocumentListener(this);
-
-		
-
-		
-
-		
-		
-		
 
 		javax.swing.GroupLayout layout1 = new javax.swing.GroupLayout(framingPanel);
 		framingPanel.setLayout(layout1);
@@ -281,16 +266,16 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		dataChanged = b;
 		buttonCommit.setEnabled(b);
-		
+
 	}
 
 	public void setStartValue(Object s) {
-		
+
 		initialValue = s;
 	}
 
 	public Object getValue() {
-		
+
 		return initialValue;
 	}
 
@@ -329,17 +314,14 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 			logging.debug(this, "centerOn " + master.getClass() + ", " + master);
 
 			// startX = (int) masterOnScreen.getX() + intHalf ( master.getWidth() ) -
-			
+
 			// startY = (int) masterOnScreen.getY() + intHalf ( master.getHeight() ) -
-			
+
 			startX = (int) masterOnScreen.getX() - (int) (getSize().getWidth()) - Globals.MIN_HGAP_SIZE;
 			startY = (int) masterOnScreen.getY();
 
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			logging.debug(this, "centerOn screenSize " + screenSize);
-			
-			
-			
 
 			/*
 			 * if (startX + getSize().width > screenSize.width)
@@ -359,8 +341,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 			logging.error(" editing area not filled with component");
 			return false;
 		}
-		
-		
+
 		editingArea.getComponent(0).setPreferredSize(usableAreaSize);
 		initComponents();
 		initEditing();
@@ -394,7 +375,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 	public void enter() {
 		logging.debug(this, "enter");
-		
+
 	}
 
 	public void deactivate() {
@@ -402,12 +383,10 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	}
 
 	protected void leave() {
-		
 
 		setVisible(false);
 		finished = true;
-		
-		
+
 	}
 
 	@Override
@@ -427,13 +406,11 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 			 * leave();
 			 */
 			cancel();
-			
+
 		} else if (e.getID() == WindowEvent.WINDOW_ACTIVATED) {
-			
+
 			enter();
 		} else if (e.getID() == WindowEvent.WINDOW_DEACTIVATED) {
-			
-			
 
 		}
 
@@ -453,8 +430,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	}
 
 	protected void cancel() {
-		
-		
+
 		setStartValue(initialValue);
 		leave();
 	}
@@ -464,11 +440,11 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	@Override
 	public void actionPerformed(java.awt.event.ActionEvent e) {
 		logging.debug(this, "actionPerformed");
-		
+
 		if (e.getSource() == buttonCommit) {
 			commit();
 		} else if (e.getSource() == buttonCancel) {
-			
+
 			cancel();
 		}
 	}
@@ -479,7 +455,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// loggig.debug(this, " key event " + e);
-		
+
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			commit();
 		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {

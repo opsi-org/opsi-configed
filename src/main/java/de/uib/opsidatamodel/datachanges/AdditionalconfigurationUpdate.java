@@ -28,11 +28,10 @@ public class AdditionalconfigurationUpdate implements UpdateCommand {
 
 	@Override
 	public void doCall() {
-		
-		
+
 		if (newdata instanceof de.uib.configed.type.ConfigName2ConfigValue) {
 			de.uib.configed.type.ConfigName2ConfigValue configState = (de.uib.configed.type.ConfigName2ConfigValue) newdata;
-			
+
 			persis.setAdditionalConfiguration(objectId, configState);
 			// for opsi 4.0, this only collects the data
 		}

@@ -172,8 +172,6 @@ public class ControllerHWinfoColumnConfiguration {
 
 				persist.getConfigOptions();
 
-				
-
 				model.reset();
 				setDataChanged(false);
 
@@ -204,7 +202,6 @@ public class ControllerHWinfoColumnConfiguration {
 		panel.showFilterIcon(true); // supply implementation of SearchTargetModelFromTable.setFiltered
 		panel.setFiltering(true);
 		panel.setDeleteAllowed(false);
-		
 
 	}
 
@@ -223,7 +220,6 @@ public class ControllerHWinfoColumnConfiguration {
 		// columnNames.add( "UI Name");
 		// columnNames.add( "display type");
 		// columnNames.add( "report function");
-		
 
 		classNames = new Vector<>();
 
@@ -233,7 +229,6 @@ public class ControllerHWinfoColumnConfiguration {
 		}
 
 		// GenericTableUpdateItemFactory updateItemFactory = new
-		
 
 		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, classNames, keycol);
 
@@ -276,16 +271,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 		// for (String hwClass : hwAuditDeviceClasses.keySet() )
 
-		
-
-		
 		// we got metadata:
-
-		
-		
-
-		
-		
 
 		model.setEditableColumns(new int[] {
 				// columnNames.indexOf ( colOpsiColumnName ),
@@ -340,7 +326,7 @@ public class ControllerHWinfoColumnConfiguration {
 		panel.setUpdateController(new MapItemsUpdateController(panel, model, new MapBasedUpdater() {
 			@Override
 			public String sendUpdate(Map<String, Object> rowmap) {
-				
+
 				// we reset the original sorting because we need information from lines "above"
 
 				logging.info(this, "within MapItemsUpdateController sendUpdate " + rowmap);
@@ -408,7 +394,6 @@ public class ControllerHWinfoColumnConfiguration {
 			// colHostVsItemAssigned line
 			lineMap = new LinkedHashMap<>();
 			lineMap.put(colLineNo, formatLineNo(id));
-			
 
 			lineMap.put(colHostVsItemAssigned, valAssignedToHost);
 
@@ -419,7 +404,6 @@ public class ControllerHWinfoColumnConfiguration {
 
 				lineMap = new LinkedHashMap<>();
 				lineMap.put(colLineNo, formatLineNo(id));
-				
 
 				ColumnIdent columnIdent = new ColumnIdent(hwClass, OpsiHwAuditDeviceClass.hostAssignedTableType,
 						deviceProperty.getOpsiDbColumnName());
@@ -441,7 +425,7 @@ public class ControllerHWinfoColumnConfiguration {
 			lineMap.put(colHostVsItemAssigned, valAssignedToHwItem);
 
 			result.put(formatLineNo(id), lineMap);
-			
+
 			id++;
 
 			for (OpsiHwAuditDevicePropertyType deviceProperty : deviceHwItemProperties) {

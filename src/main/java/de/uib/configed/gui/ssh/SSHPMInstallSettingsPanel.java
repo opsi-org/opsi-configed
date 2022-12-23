@@ -41,7 +41,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	}
 
 	public SSHPMInstallSettingsPanel(JDialog dia) {
-		
+
 		if (dia != null)
 			setFDepotList(dia);
 		initComponents();
@@ -109,7 +109,6 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 	private void initLayout() {
 		this.setBackground(Globals.backLightBlue);
-		
 
 		GroupLayout layout = new GroupLayout(this);
 

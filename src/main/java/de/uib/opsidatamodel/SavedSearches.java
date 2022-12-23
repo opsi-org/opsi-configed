@@ -9,7 +9,7 @@ public class SavedSearches extends HashMap<String, SavedSearch> {
 	// public static final String SEARCHfailedAnyProduct = "{ \"version\" : \"2\",
 	// \"data\" : { \"element\" : null, \"elementPath\" : null, \"operation\" :
 	// \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [
-	
+
 	// \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\",
 	// \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null } ] } }";
 	public static final String SEARCHfailedProduct = "{ \"version\" : \"2\", \"data\" : { \"element\" : null, \"elementPath\" : null, \"operation\" : \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [ { \"element\" : null, \"elementPath\" : null, \"operation\" : \"AndOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [ { \"element\" : \"SoftwareNameElement\", \"elementPath\" : [ \"Product\", \"Name\" ], \"operation\" : \"StringEqualsOperation\", \"dataType\" : TextType, \"data\" : \"%s\", \"children\" : null }, { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : [ \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\", \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null } ] } ] } }";
@@ -17,7 +17,7 @@ public class SavedSearches extends HashMap<String, SavedSearch> {
 	// public static final String SEARCHfailedByTimeTestS = "{ \"version\" : \"2\",
 	// \"data\" : { \"element\" : null, \"elementPath\" : null, \"operation\" :
 	// \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [
-	
+
 	// \"AndOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [ {
 	// \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : [
 	// \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\",
@@ -62,8 +62,6 @@ public class SavedSearches extends HashMap<String, SavedSearch> {
 				SavedSearch rc = retrieveRC(name);
 
 				String remainder = rcPartOfKey.substring(i + 1);
-
-				
 
 				i = nextPartAt(remainder);
 
