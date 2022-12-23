@@ -872,7 +872,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 			try {
 				jTextPane.setCaretPosition(startPosition);
-				jTextPane.scrollRectToVisible(jTextPane.modelToView(startPosition));
+
+				jTextPane.scrollRectToVisible(jTextPane
+						.modelToView2D(offset + jComboBoxSearch.getSelectedItem().toString().length()).getBounds());
 				jTextPane.getCaret().setVisible(true);
 				highlighter.removeAllHighlights();
 			} catch (BadLocationException e) {
@@ -1149,14 +1151,15 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		// change 08/2015: set lastReturnedOffset to start search at last caretPosition
 		searcher.lastReturnedOffset = jTextPane.getCaretPosition();
 		int offset = searcher.search(jComboBoxSearch.getSelectedItem().toString());
-		if (!(jComboBoxSearch.getSelectedIndex() > -1)) { // does not exist
+		if (jComboBoxSearch.getSelectedIndex() <= -1) { // does not exist
 			jComboBoxSearch.addItem(jComboBoxSearch.getSelectedItem().toString());
 			jComboBoxSearch.repaint();
 		}
 		if (offset != -1) {
 			try {
-				jTextPane.scrollRectToVisible(
-						jTextPane.modelToView(offset + jComboBoxSearch.getSelectedItem().toString().length()));
+				jTextPane.scrollRectToVisible(jTextPane
+						.modelToView2D(offset + jComboBoxSearch.getSelectedItem().toString().length()).getBounds());
+
 				jTextPane.setCaretPosition(offset);
 				jTextPane.getCaret().setVisible(true);
 				searcher.comp.setCaretPosition(offset);

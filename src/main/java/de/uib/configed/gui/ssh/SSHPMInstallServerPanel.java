@@ -26,7 +26,9 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 		initComponents();
 		setPackagePath(fullPathToPackage);
 		initLayout();
-		enable(true);
+
+		cb_autocompletion.setEnabled(true);
+		btn_autocompletion.setEnabled(true);
 		cb_autocompletion.setSelectedItem(workbench);
 	}
 
@@ -35,12 +37,6 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 			cb_autocompletion.addItem(pPath);
 			cb_autocompletion.setSelectedItem(pPath);
 		}
-	}
-
-	@Override
-	public void enable(boolean e) {
-		cb_autocompletion.setEnabled(e);
-		btn_autocompletion.setEnabled(e);
 	}
 
 	private void initComponents() {
@@ -94,7 +90,7 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 	}
 
 	public CommandOpsiPackageManagerInstall getCommand() {
-		return SSHPMInstallServerPanel.getCommand((String) tf_product.getText());
+		return SSHPMInstallServerPanel.getCommand(tf_product.getText());
 	}
 
 	public static CommandOpsiPackageManagerInstall getCommand(String product) {

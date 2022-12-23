@@ -48,17 +48,13 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 		url_def_text = configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url");
 		initComponents();
 		initLayout();
-		enable(true);
+
+		cb_autocompletion.setEnabled(true);
+		btn_autocompletion.setEnabled(true);
 
 		cb_autocompletion.setSelectedItem(workbench);
 		wgetAuthPanel.isOpen = true;
 		wgetAuthPanel.close();
-	}
-
-	@Override
-	public void enable(boolean e) {
-		cb_autocompletion.setEnabled(e);
-		btn_autocompletion.setEnabled(e);
 	}
 
 	private void initComponents() {

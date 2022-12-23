@@ -3160,6 +3160,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		fGroup2Members = null;
 	}
 
+	@Override
 	public void fProductGroup2MembersRequestRefresh() {
 		fProductGroup2Members = null;
 	}
@@ -3194,6 +3195,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
+	@Override
 	public Map<String, Set<String>> getFGroup2Members() {
 		if (fGroup2Members == null) {
 			fGroup2Members = retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_HOSTGROUP, "clientId");
@@ -3202,6 +3204,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return fGroup2Members;
 	}
 
+	@Override
 	public Map<String, Set<String>> getFProductGroup2Members() {
 		if (fProductGroup2Members == null) {
 			fProductGroup2Members = retrieveFGroup2Members(Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP, "productId");
@@ -3232,10 +3235,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		fObject2Groups = null;
 	}
 
+	@Override
 	public void fObject2GroupsRequestRefresh() {
 		fObject2Groups = null;
 	}
 
+	@Override
 	public Map<String, Set<String>> getFObject2Groups()
 	// returns the function that yields for a given clientId all groups to which the
 	// client belongs
@@ -3257,6 +3262,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return fObject2Groups;
 	}
 
+	@Override
 	public boolean addHosts2Group(List<String> objectIds, String groupId) {
 		if (globalReadOnly)
 			return false;
@@ -3283,6 +3289,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return exec.doCall(omc);
 	}
 
+	@Override
 	public boolean addObject2Group(String objectId, String groupId) {
 		if (globalReadOnly)
 			return false;
@@ -3298,6 +3305,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return exec.doCall(omc);
 	}
 
+	@Override
 	public boolean removeHostGroupElements(List<Object2GroupEntry> entries) {
 		if (globalReadOnly)
 			return false;
@@ -3331,6 +3339,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
+	@Override
 	public boolean removeObject2Group(String objectId, String groupId) {
 		if (globalReadOnly)
 			return false;
@@ -3347,6 +3356,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return exec.doCall(omc);
 	}
 
+	@Override
 	public boolean addGroup(StringValuedRelationElement newgroup) {
 		return addGroup(newgroup, true);
 	}
@@ -3382,6 +3392,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	}
 
+	@Override
 	public boolean deleteGroup(String groupId) {
 		if (!serverFullPermission)
 			return false;
@@ -3398,6 +3409,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
+	@Override
 	public boolean updateGroup(String groupId, Map<String, String> updateInfo) {
 		if (!serverFullPermission)
 			return false;
@@ -3424,6 +3436,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return exec.doCall(omc);
 	}
 
+	@Override
 	public boolean setProductGroup(String groupId, String description, Set<String> productSet) {
 		if (!serverFullPermission)
 			return false;
@@ -8533,7 +8546,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 
 			if (usageCount == null) {
-				usageCount = new Integer(0);
+				usageCount = Integer.valueOf(0);
 				pool2opsiUsagesCount.put(pool, usageCount);
 			}
 

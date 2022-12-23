@@ -35,12 +35,6 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 		instance = this;
 	}
 
-	@Override
-	public void enable(boolean e) {
-		tf_user.setEnabled(e);
-		tf_pswd.setEnabled(e);
-	}
-
 	private void initComponents() {
 		lbl_needAuthentication
 				.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.needAuthentication"));

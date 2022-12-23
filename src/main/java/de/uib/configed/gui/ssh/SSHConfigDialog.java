@@ -168,7 +168,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 					return false;
 				}
 
-				String pp = new String(tf_passphrase.getText());
+				String pp = tf_passphrase.getPassword().toString();
 				// if (connectionInfo.getKeyfilePassphrase() != null)
 				if (!connectionInfo.getKeyfilePassphrase().equals(pp)) {
 					logging.debug(this, "compareStates 11");

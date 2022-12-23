@@ -3,6 +3,7 @@ package de.uib.opsicommand.sshcommand;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FilterInputStream;
@@ -297,7 +298,7 @@ public class SSHConnectTerminal extends SSHConnect {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if ((e.getKeyCode() == KeyEvent.VK_C) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+				if ((e.getKeyCode() == KeyEvent.VK_C) && ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
 					logging.info(this, "interrupt with keys ");
 					exec(new String(new byte[] { 3 }) + "\n");
 				}
@@ -314,9 +315,8 @@ public class SSHConnectTerminal extends SSHConnect {
 					logging.info(this, "initInputFieldFromDialog keyReleased ENTER ");
 					logging.info(this, "initInputFieldFromDialog inputfield " + textField);
 					logging.info(this, "initInputFieldFromDialog dialog " + dialog);
-					if (textField.getText().trim().toLowerCase().equals("clear")) {
-						if (key == KeyEvent.VK_ENTER)
-							clear();
+					if (textField.getText().trim().equalsIgnoreCase("clear")) {
+						clear();
 						((Component) textField).requestFocusInWindow();
 					}
 					// else if (textField.getText().trim().toLowerCase().equals("kill")) {

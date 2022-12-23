@@ -84,7 +84,7 @@ public class ExtendedDate {
 		if (equals(INFINITE))
 			return 1;
 
-		else if (equals(compareDate.getDate()))
+		else if (getDate().equals(compareDate))
 			return 0;
 
 		else if (getDate().after(compareDate))
