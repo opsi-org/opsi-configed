@@ -21,7 +21,7 @@ public interface TableSource {
 	Vector<Vector<Object>> retrieveRows();
 
 	// Map<String, List<String>> getFunction(Integer defIndex, Integer
-	// valIndex);
+	
 
 	void setRowCounting(boolean b);
 

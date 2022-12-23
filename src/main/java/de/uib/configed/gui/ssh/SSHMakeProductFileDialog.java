@@ -508,7 +508,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 					+ " removed\" || echo \"File did not exist\"";
 			// Empty_Command removeExistingPackage = new
 			// Empty_Command(str_command_fileexists.replaceAll(str_replacement_filename,
-			// filename));
+			
 			Empty_Command removeExistingPackage = new Empty_Command(command);
 			str2exec.addCommand(removeExistingPackage);
 
@@ -518,7 +518,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 					+ ".zsync removed\" || echo \"File  " + filename + ".zsync did not exist\"";
 			// removeExistingPackage = new
 			// Empty_Command(str_command_filezsyncExists.replaceAll(str_replacement_filename,
-			// filename));
+			
 			removeExistingPackage = new Empty_Command(command);
 			str2exec.addCommand(removeExistingPackage);
 
@@ -527,7 +527,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			removeExistingPackage = new Empty_Command(command);
 			// removeExistingPackage = new
 			// Empty_Command(str_command_filemd5Exists.replaceAll(str_replacement_filename,
-			// filename));
+			
 			str2exec.addCommand(removeExistingPackage);
 		}
 		if (cb_setRights.isSelected()) {

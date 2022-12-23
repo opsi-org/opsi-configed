@@ -151,7 +151,7 @@ public class SSHPackageManagerUninstallParameterDialog
 				StringBuffer sb = new StringBuffer();
 				int startIndex = possibleDepots.indexOf(persist.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
 				// logging.debug(this, " we have special selection in possibleDepots " +
-				// possibleDepots);
+				
 				// logging.info(this, " we have special selection starting at " + startIndex);
 				for (int i = startIndex + 1; i < possibleDepots.size() - 1; i++) {
 					// logging.info(this, "append i " + i + " " + possibleDepots.get(i) );
@@ -324,7 +324,7 @@ public class SSHPackageManagerUninstallParameterDialog
 		resetProducts();
 		changeProduct("");
 		changeVerbosity();
-		// changeFreeInput();
+		
 	}
 
 	@Override
@@ -357,7 +357,7 @@ public class SSHPackageManagerUninstallParameterDialog
 	// private void changeFreeInput( )
 	// {
 	// commandPMUninstall.setFreeInput(tf_freeInput.getText().trim());
-	// updateCommand();
+	
 	// }
 	private void changeDepot() {
 		if (tf_selecteddepots.getText()

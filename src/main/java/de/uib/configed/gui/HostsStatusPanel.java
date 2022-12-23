@@ -70,7 +70,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 				"updateValues clientsCount, selectedClientsCount " + clientsCount + ", " + selectedClientsCount);
 		logging.info(this,
 				"updateValues clientsCount, selectedClientsCount " + clientsCount + ", " + selectedClientsCount);
-		// resetReportedGroup();
+		
 
 		// if (clientsCount != null)
 		labelAllClientsCount.setText(configed.getResourceValue("MainFrame.labelClientsTotal") + "  " + clientsCount);
@@ -182,7 +182,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		fieldSelectedClientsNames.setDragEnabled(true);
 
 		// JScrollPane viewSelectedClientsNames = new
-		// JScrollPane(fieldSelectedClientsNames);
+		
 		// viewSelectedClientsNames.setPreferredSize(fieldSelectedClientsNames.getMaximumSize());
 
 		fieldInvolvedDepots = new JTextField("");

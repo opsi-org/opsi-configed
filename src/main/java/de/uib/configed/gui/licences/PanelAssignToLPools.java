@@ -180,7 +180,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		labelSupplementSimilar.setFont(Globals.defaultFont);
 		// labelSupplementSimilar.setIcon(
 		// Globals.createImageIcon("images/edit-table-insert-row-under-16x16.png", "")
-		// );
+		
 
 		// buttonSupplementSimilar = new JButton( configed.getResourceValue(
 		// "PanelAssignToLPools.Licences.supplementSimilarSWEntries.button") );
@@ -298,7 +298,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		JPanel panelRadiobuttonsDirectionOfAssignmentX = new JPanel();
 		// panelRadiobuttonsDirectionOfAssignmentX.setBorder( new
 		// javax.swing.border.LineBorder(Globals.backLightBlue, 3, true)
-		// );
+		
 		GroupLayout layoutBorder = new GroupLayout(panelRadiobuttonsDirectionOfAssignmentX);
 		panelRadiobuttonsDirectionOfAssignmentX.setLayout(layoutBorder);
 		layoutBorder.setVerticalGroup(layoutBorder

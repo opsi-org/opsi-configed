@@ -128,7 +128,7 @@ public class PanelCompleteWinProducts extends JPanel
 
 		defineLayout();
 
-		// evaluateWinProducts();
+		
 
 		persist.registerDataRefreshedObserver(this);
 

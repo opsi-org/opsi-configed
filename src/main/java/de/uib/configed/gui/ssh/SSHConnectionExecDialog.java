@@ -63,7 +63,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 		 * // instance.setVisible(true);
 		 * // }
 		 * //}
-		 * //);
+		 * 
 		 * }
 		 * else
 		 */

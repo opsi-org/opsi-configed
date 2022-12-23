@@ -79,7 +79,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		// this.centerOn(main);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		init();
-		// pack();
+		
 		this.setSize(500, 535);
 		this.setVisible(true);
 		cb_useDefault_state = cb_useDefault.isSelected();

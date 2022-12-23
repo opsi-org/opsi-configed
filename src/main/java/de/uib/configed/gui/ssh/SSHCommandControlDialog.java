@@ -165,10 +165,10 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		// {
 		// centerPanelLayout.setHorizontalGroup( centerPanelLayout.createParallelGroup()
 		// .addComponent(commandlistPanel)
-		// );
+		
 		// centerPanelLayout.setVerticalGroup( centerPanelLayout.createSequentialGroup()
 		// .addComponent(commandlistPanel)
-		// );
+		
 		// }
 		parameterPanel.setVisible(true);
 	}
@@ -223,7 +223,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			// de.uib.configed.configed.getResourceValue("SSHConnection.CommandControl.btnShowActionHelp")
 			// ,
 			// "images/help.gif", "images/help.gif", "images/help.gif",true
-			// );
+			
 			btn_test_command = new de.uib.configed.gui.IconButton(
 					de.uib.configed.configed.getResourceValue("SSHConnection.CommandControl.btnTestCommand"),
 					"images/executing_command_red_22.png", "images/executing_command_red_22.png",
@@ -355,7 +355,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			// {
 			// public void actionPerformed(ActionEvent e)
 			// {
-			// showPanel();
+			
 			// }
 			// });
 			showPanel();
@@ -730,7 +730,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		}
 		// else
 		// {
-		// setCenterLayout();
+		
 		// centerPanel.setSize(centerPanel.getWidth(),
 		// centerPanel.getHeight()-parameterPanel.getHeight());
 		// this.setSize(this.getWidth(), this.getHeight()-parameterPanel.getHeight());

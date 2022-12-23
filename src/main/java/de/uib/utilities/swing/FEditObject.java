@@ -70,7 +70,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	public FEditObject(Object initialValue) {
 		// runningInstances.add(this, "");
 		setIconImage(Globals.mainIcon);
-		// initComponents();
+		
 		if (initialValue != null)
 			this.initialValue = initialValue;
 
@@ -394,7 +394,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 	public void enter() {
 		logging.debug(this, "enter");
-		// initEditing();
+		
 	}
 
 	public void deactivate() {
@@ -407,7 +407,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 		setVisible(false);
 		finished = true;
 		// runningInstances.forget(this);
-		// deactivate(); //no effect probably because of reentering the field
+		
 	}
 
 	@Override
@@ -433,7 +433,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 			enter();
 		} else if (e.getID() == WindowEvent.WINDOW_DEACTIVATED) {
 			// logging.debug(" window deactivated");
-			// deactivate();
+			
 
 		}
 
@@ -454,7 +454,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 	protected void cancel() {
 		// logging.debug(this, "cancel, resetting ---------- initialValue " +
-		// initialValue);
+		
 		setStartValue(initialValue);
 		leave();
 	}

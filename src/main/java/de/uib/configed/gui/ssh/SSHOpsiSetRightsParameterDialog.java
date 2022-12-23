@@ -110,7 +110,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 			}.start();
 
 			// SSHConnectExec ssh = new SSHConnectExec((SSHCommand) commandopsisetrights );
-			// cancel();
+			
 		} catch (Exception e) {
 			logging.warning(this, "doAction1, exception occurred", e);
 		}

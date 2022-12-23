@@ -262,7 +262,7 @@ public class UserConfigProducing {
 
 		for (String rolename : extraRoleParts) {
 			rolenameStartkey = UserConfig.KEY_USER_ROOT + "." + UserConfig.ROLE + ".{" + rolename + "}.";
-			// separateServerConfigsTreeSection( rolenameStartkey );
+			
 			UserConfig roleConfig = new UserConfig(rolename);
 			supplyPermissionEntriesForAUser(rolename, rolenameStartkey, false, defaultUserConfig, roleConfig);
 
@@ -294,7 +294,7 @@ public class UserConfigProducing {
 			boolean followConfiguredRole = false;
 			logging.info(this, "supplyAllPermissionEntries has role " + values);
 			// logging.info(this, "supplyAllPermissionEntries is string " + (values.get(0)
-			// instanceof String) );
+			
 			// logging.info(this, "supplyAllPermissionEntries is NONE " + ( ((String)
 			// values.get(0) ).equals( UserConfig.NONE_PROTOTYPE) ));
 
@@ -747,7 +747,7 @@ public class UserConfigProducing {
 		logging.info(this, "supplyPermissionEntriesForAUser countReadyObjectsOnStart " + countReadyObjectsOnStart);
 		logging.info(this, "supplyPermissionEntriesForAUser readyObjects.size() " + readyObjects.size());
 		// logging.info(this, "supplyPermissionEntriesForAUser readyObjects " +
-		// readyObjects);
+		
 
 		if (countReadyObjectsOnStart == readyObjects.size()) {
 			logging.info(this,

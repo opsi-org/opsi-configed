@@ -183,7 +183,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		 */
 
 		initDataStructure();
-		// setTableModel(null);
+		
 
 		buttonRemoveAllAssignments = new JButton();
 		buttonRemoveAllAssignments.setIcon(Globals.createImageIcon("images/list-remove-14.png", ""));
@@ -293,8 +293,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		setAdditionalPane(panelSWx);
 		// setTableModelSWxLicencepool( "zypper" );
 		additionalPane.setBackground(Globals.backgroundWhite);// Color.YELLOW
-																// );//Globals.backLightBlue
-																// );
+																
+																
 		setCenterPane(panelSWnames);
 		additionalPane.setVisible(true);
 		// additionalPane.setBackground( Color.RED );
@@ -672,7 +672,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		 * result = 1;
 		 * }
 		 * //owner.setVisible(true);
-		 * //leave();
+		 * 
 		 */
 	}
 
@@ -688,7 +688,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	public void leave() {
 		setVisible(false);
 		// we dont dispose the window, dispose it in the enclosing class
-		// setEnabled(false);
+		
 	}
 
 	public void exit() {

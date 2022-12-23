@@ -148,7 +148,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 				command.setRepo(repo);
 			logging.info(this, "doAction1 opsi-package-updater: " + command.toString());
 			new SSHConnectExec((SSHCommand) command);
-			// cancel();
+			
 		} catch (Exception e) {
 			logging.warning(this, "doAction1, exception occurred", e);
 		}

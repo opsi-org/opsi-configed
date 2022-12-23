@@ -53,7 +53,7 @@ public abstract class HostInfoCollections {
 	public abstract void opsiHostsRequestRefresh();
 	// includes all refreshes
 
-	// public abstract void pclistRequestRefresh();
+	
 
 	public abstract void setDepotForClients(String[] clients, String depotId);
 

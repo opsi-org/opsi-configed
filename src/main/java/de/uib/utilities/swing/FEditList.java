@@ -155,7 +155,7 @@ public class FEditList extends FEditObject
 	protected void setExtraFieldToListValueAt(Point location) {
 		String txt = "" + getValueAt(location);
 		// visibleList.getModel().getElementAt( visibleList.locationToIndex( location )
-		// );
+		
 		// logging.debug(this, " location has text " + txt);
 		extraField.setText(txt);
 		extraFieldChanged(false);
@@ -170,7 +170,7 @@ public class FEditList extends FEditObject
 		for (int i = 0; i < model.getSize(); i++) {
 			Object element = model.getElementAt(i);
 			// logging.debug(this, "addSelectedValues, check element " + element + " no " +
-			// i);
+			
 
 			if (toSelect.contains(element)) {
 				// logging.debug(this, "setSelectedValues, adding " + element);
@@ -222,7 +222,7 @@ public class FEditList extends FEditObject
 		if (limo instanceof DefaultListModel) {
 			if (!((DefaultListModel) limo).contains(element)) {
 				((DefaultListModel) limo).addElement(element);
-				List list = new ArrayList<>(); // getSelectedList();
+				List list = new ArrayList<>(); 
 				list.add(element);
 				addSelectedValues(list);
 			}

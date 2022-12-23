@@ -199,7 +199,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		}
 		{
 			lbl_fullCommand.setText("wget ");
-			// changeDir();
+			
 			changeUrl();
 			changeFreeInput();
 		}

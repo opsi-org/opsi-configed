@@ -132,7 +132,7 @@ public class PersistenceControllerFactory {
 					return null;
 
 					// persistControl = new OpsiservicePersistenceController (server, user,
-					// password);
+					
 				}
 
 				if (persistControl.getOpsiVersion().compareTo(Globals.MIN_SUPPORTED_OPSI_VERSION) < 0) {

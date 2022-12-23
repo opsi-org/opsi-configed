@@ -683,7 +683,7 @@ public class PanelSWInfo extends JPanel {
 	 * 
 	 * if (swRows == null)
 	 * {
-	 * voidTableModel.setData(this.swRows); // we have a new DatedRowList());
+	 * voidTableModel.setData(this.swRows); 
 	 * return;
 	 * }
 	 * 

@@ -50,7 +50,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 		// startAnotherProcess()
 		// int progress = 0;
-		// setProgress( progress );
+		
 
 		// int noOfSteps = 100;
 		// long timeStepMillis = (long) (waitingMillis / noOfSteps );
@@ -90,9 +90,9 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 			// firePropertyChange("elapsedMins", 0, elapsedMins);
 
 			// progress++;
-			// setProgress( progress );
+			
 
-			// setElapsedMins(elapsedMins);
+			
 		}
 
 		logging.info(this,
@@ -120,7 +120,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 				waitingSleeper.setLabellingStrategy(millis));
 		// " " + configed .getResourceValue("FStartWakeOnLan.timeLeft") + " " +
 		// Globals.giveTimeSpan( waitingSleeper.getWaitingMillis() -
-		// millis ) );
+		
 
 		int barLength = progressBar.getMaximum() - progressBar.getMinimum();
 

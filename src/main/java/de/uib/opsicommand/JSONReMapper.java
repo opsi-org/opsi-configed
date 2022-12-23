@@ -83,7 +83,7 @@ public class JSONReMapper {
 
 	public static boolean checkForNotValidOpsiMethod(JSONObject retrieved) {
 		// logging.debug("JSONReMapper: checkForNotValidOpsiMethod " +
-		// getErrorFromResponse(retrieved));
+		
 		if (retrieved != null && getErrorFromResponse(retrieved) != null
 				&& getErrorFromResponse(retrieved).indexOf("Opsi rpc error: Method") > -1
 				&& getErrorFromResponse(retrieved).endsWith("is not valid")) {
@@ -137,7 +137,7 @@ public class JSONReMapper {
 				} else {
 					resultValue = retrieved.get("result");
 					// logging.debug (" checkResponse resultValue ------------- " +
-					// resultValue);
+					
 				}
 			} catch (JSONException jex) {
 				logging.error("JSON Error on retrieving result value,  " + jex.toString());

@@ -156,7 +156,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 			produceLabels(max);
 
-			// setPaintTicks(true);
+			
 
 			setPaintLabels(true);
 			setSnapToTicks(true);
@@ -458,7 +458,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				if (sliderLevel.getValueIsAdjusting())
 					return;
 
-				// activateShowLevel();
+				
 
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
@@ -541,7 +541,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		 * logging.debug(this, "change event from spinnerLevel, " +
 		 * spinnerLevel.getValue());
 		 * 
-		 * //activateShowLevel();
+		 * 
 		 * 
 		 * SwingUtilities.invokeLater(new Runnable()
 		 * {
@@ -828,7 +828,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				+ maxExistingLevel);
 
 		if (oldLevel != level && (level < maxExistingLevel || oldLevel < maxExistingLevel)) {
-			// emptyDocument();
+			
 
 			int caretPosition = jTextPane.getCaretPosition();
 			// logging.info(this, "caretPosition " + caretPosition);

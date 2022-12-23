@@ -524,7 +524,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		// partial reload
 		PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 		buildUserConfig();
-		// rebuildTree();
+		
 		persist.hostConfigsRequestRefresh();
 		persist.configOptionsRequestRefresh();
 		super.reload();

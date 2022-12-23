@@ -96,7 +96,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 
 		setFocusable(true);
 		setRequestFocusEnabled(true);
-		// requestFocus();
+		
 
 		addFocusListener(this);
 

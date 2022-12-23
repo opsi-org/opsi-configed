@@ -108,7 +108,7 @@ public class ControllerHWinfoMultiClients {
 	public void setFilter() {
 		theFilterSet = new TreeSet<>(main.getSelectedClientsInTable());
 		filterConditionHwForSelectedHosts.setFilter(theFilterSet);
-		model.invalidate(); // requestRefilter();
+		model.invalidate(); 
 		model.reset();
 		// model.setFilterCondition( filterConditionHwForSelectedHosts );
 	}

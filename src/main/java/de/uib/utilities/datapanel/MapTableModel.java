@@ -346,7 +346,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			// if there is no true result left (probably because of eliminating the key) we
 			// deliver the default value
 			// logging.info(this, "getValueAt " + row + ", " + col + " result was " + result
-			// );
+			
 			if (result != null && result instanceof List) {
 				List li = (List) result;
 				if (!li.isEmpty() && li.get(0) == null && optionsMap != null) {

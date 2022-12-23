@@ -358,7 +358,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		// namesAndDescriptions.keySet() );
 
 		isSaveLegal();
-		// isDeleteLegal(); not needed since a change in associations does not concern
+		
 		// save name
 
 		findGroup(associate.getSelectedIDs());
@@ -579,7 +579,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				values, "");
 		// renderActionList.setUniformColor(
 		// Globals.backLightBlue, Globals.backVeryLightBlue
-		// );
+		
 		renderActionList.setAlternatingColors(Globals.backLightBlue, Globals.backLightBlue, Globals.backgroundLightGrey,
 				Globals.backgroundWhite);
 
@@ -625,7 +625,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		;
 
-		// SurroundPanel( scrollChooseAction );
+		
 		surroundScrollChooseAction.setBackground(Globals.backgroundLightGrey);
 		surroundScrollChooseAction.setOpaque(true);
 
@@ -675,7 +675,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			@Override
 			public void doAction() {
 				// logging.debug(this, "comboBox item edited, enabled listener " + enabled);
-				// updateKey();
+				
 				enterEditGroup();
 			}
 		};
@@ -987,7 +987,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 	protected void setMembers() {
 		// logging.debug(this, "setMembers, productGroupMembers " +
-		// productGroupMembers);
+		
 
 		if (productGroupMembers == null || groupsCombo == null)
 		// || productGroupMembers.get((String) groupsCombo.getSelectedItem()) == null)
@@ -1158,7 +1158,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		// ActionRequest.SETUP ),
 		// (java.util.function.IntPredicate) ( rowId ->
 		// associate.getSelectedRowsInModelTerms().indexOf( rowId ) >= 0 )
-		// );
+		
 
 		associate.setSelection(new HashSet<>(saveSelectedProducts));
 

@@ -162,7 +162,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 
 		cancelOldCellEditing();
 
-		// setNew();
+		
 		// mapTableModel.fireTableDataChanged();
 	}
 

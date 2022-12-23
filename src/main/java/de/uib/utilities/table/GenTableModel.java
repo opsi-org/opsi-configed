@@ -123,9 +123,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		setFilter(chainedFilter);
 
 		// filterConditionShowOnlySelected = new DefaultTableModelFilterCondition(
-		// keyCol );
+		
 		// chainFilter( labelFilterConditionShowOnlySelected, new TableModelFilter(
-		// filterConditionShowOnlySelected ) );
+		
 
 	}
 
@@ -514,7 +514,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			// logging.info(this, "getValueAt row, col " + row + ", " + col);
 			// logging.info(this, "getValueAt col " + col + " " + columnNames.get(col));
 			// logging.info(this, "getValueAt row " + row + " null? " + (rows.get(row) ==
-			// null));
+			
 			// logging.info(this, "getValueAt row " + row + " size: " +
 			// rows.get(row).size());
 			// logging.info(this, "getValueAt row " + row + " size: " +

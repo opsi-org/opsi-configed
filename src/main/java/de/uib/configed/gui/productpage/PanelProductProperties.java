@@ -121,7 +121,7 @@ public class PanelProductProperties extends JSplitPane
 				lsm.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 				if (lsm.isSelectionEmpty()) {
-					// initAllProperties();
+					
 					logging.info(this, "selected  no row ");
 
 					// infoPane.clearEditValue

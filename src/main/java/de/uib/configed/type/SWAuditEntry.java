@@ -163,7 +163,7 @@ public class SWAuditEntry extends TableEntry
 		// remap("subversion", "subVersion");
 		remap(ARCHITECTURE, key2serverKey.get(ARCHITECTURE));
 		remap(LANGUAGE, key2serverKey.get(LANGUAGE));
-		// remap(LICENCEkEY);
+		
 		remap(WINDOWSsOFTWAREid, "windowsSoftwareId");
 		// remap("ID", "ident", false);
 		// null value for key "ID" will be handled below; or, we dont assume that there

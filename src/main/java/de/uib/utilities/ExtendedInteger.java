@@ -125,11 +125,11 @@ public class ExtendedInteger implements Comparable {
 			comparedWithMe = new ExtendedInteger((Integer) o);
 
 		// if (o == null)
-		// throw new NotComparableException();
+		
 
 		if (this.equals(INFINITE)) {
 			if (comparedWithMe.equals(INFINITE))
-				return 0; // throw new NotComparableException();
+				return 0; 
 			else
 				return -1;
 		} else {

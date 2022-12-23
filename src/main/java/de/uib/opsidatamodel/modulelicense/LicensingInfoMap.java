@@ -834,7 +834,7 @@ public class LicensingInfoMap {
 			percentClientLimitWarning = Integer.parseInt((String) configs.get(key).get(0));
 
 		// logging.debug("warning levels: " + absolutClientLimitWarning + ", " +
-		// percentClientLimitWarning);
+		
 	}
 
 	public ArrayList<String> getCloseToLimitModuleList() {

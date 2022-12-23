@@ -490,7 +490,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		theTable.addKeyListener(this);
 
-		// setAwareOfSelectionListener(true);
+		
 		getListSelectionModel().addListSelectionListener(this);
 
 		theTable.setDragEnabled(true);
@@ -876,7 +876,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	public void setSortOrder(LinkedHashMap<Integer, SortOrder> sortDescriptor) {
 		this.sortDescriptor = sortDescriptor;
-		// setSorter();
+		
 	}
 
 	protected List<RowSorter.SortKey> buildSortkeysFromColumns() {
@@ -1598,7 +1598,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			);
 
 			// logging.debug(this, "findViewRowFromValue compare " + value + " to " +
-			// compareValue);
+			
 
 			if (compareValue == null) {
 				if (val == null || val.equals(""))
@@ -1939,7 +1939,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			singleSelection = (selectedRow == lsm.getMaxSelectionIndex());
 		}
 
-		// getSelectedKeys(); //test output
+		
 	}
 
 	public boolean isSelectionEmpty() {

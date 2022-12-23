@@ -177,7 +177,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 	 * public void setPopupConfiguration(LinkedList<JMenuItem>menuItems)
 	 * {
 	 * logPopupElements();
-	 * //removePopupElements();
+	 * 
 	 * 
 	 * 
 	 * logging.info(this, "setPopupConfiguration, set menuitems " +menuItems.size()
@@ -193,7 +193,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 	 * public void setPopupConfiguration(JPopupMenu menu)
 	 * {
 	 * logPopupElements();
-	 * //removePopupElements();
+	 * 
 	 * 
 	 * 
 	 * MenuElement[] menuElements = menu.getSubElements();

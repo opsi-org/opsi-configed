@@ -269,7 +269,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 						if (names != null) {
 							propertyHandler = defaultPropertyHandler;
 							// logging.debug(this, "remove entry " + names.elementAt( table.getSelectedRow()
-							// ) );
+							
 							removeProperty(names.elementAt(table.getSelectedRow()));
 						}
 					}
@@ -291,7 +291,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 						if (names != null) {
 							propertyHandler = removingSpecificValuesPropertyHandler;
 							// logging.debug(this, "remove entry " + names.elementAt( table.getSelectedRow()
-							// ) );
+							
 							removeProperty(names.elementAt(table.getSelectedRow()));
 						}
 					}
@@ -313,7 +313,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 						if (names != null) {
 							propertyHandler = settingDefaultValuesPropertyHandler;
 							// logging.debug(this, "remove entry " + names.elementAt( table.getSelectedRow()
-							// ) );
+							
 							removeProperty(names.elementAt(table.getSelectedRow()));
 						}
 					}
@@ -378,7 +378,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 				 * );
 				 */
 
-				// logPopupElements( popupNoEditOptions );
+				
 
 			}
 		}
@@ -586,7 +586,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 
 		editableColumn.setCellEditor(theCellEditor);
 
-		// setNew();
+		
 		// mapTableModel.fireTableDataChanged();
 
 		/*
@@ -850,9 +850,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		 * ^^ test
 		 */
 		if (b) {
-			// setPopupConfiguration( listEditableModeMenuItems );
+			
 			popupmenuAtRow = popupEditOptions;
-			// logPopupElements(popupmenuAtRow);
+			
 			/*
 			 * table.removeMouseListener(popupNoEditOptionsListener);
 			 * table.addMouseListener(popupEditOptionsListener);
@@ -860,9 +860,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 			 */
 
 		} else {
-			// setPopupConfiguration( listNotEditableModeMenuItems );
+			
 			popupmenuAtRow = popupNoEditOptions;
-			// logPopupElements(popupmenuAtRow);
+			
 			/*
 			 * table.removeMouseListener(popupEditOptionsListener);
 			 * table.addMouseListener(popupNoEditOptionsListener);

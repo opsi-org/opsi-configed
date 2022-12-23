@@ -68,7 +68,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	}
 
 	public void setup() {
-		// guiInit();
+		
 		pack();
 	}
 

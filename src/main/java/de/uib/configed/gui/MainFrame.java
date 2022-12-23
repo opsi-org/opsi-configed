@@ -221,7 +221,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private Map<String, String> searchedTimeSpansText;
 
 	// JCheckBoxMenuItem jCheckBoxMenuItem_displayClientList = new
-	// JCheckBoxMenuItem();
+	
 	private JCheckBoxMenuItem jCheckBoxMenuItem_showCreatedColumn = new JCheckBoxMenuItem();
 	JCheckBoxMenuItem jCheckBoxMenuItem_showWANactiveColumn = new JCheckBoxMenuItem();
 	JCheckBoxMenuItem jCheckBoxMenuItem_showIPAddressColumn = new JCheckBoxMenuItem();
@@ -409,7 +409,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	BorderLayout borderLayout1 = new BorderLayout();
 	GroupLayout contentLayout;
-	JTabbedPane jTabbedPaneConfigPanes = new JTabbedPane(); // new ClippedTitleTabbedPane();
+	JTabbedPane jTabbedPaneConfigPanes = new JTabbedPane(); 
 	public JSplitPane panel_Clientselection; // = new JSplitPane();
 
 	private HostsStatusPanel statusPane;
@@ -1847,7 +1847,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		// subOpsiClientdEvent = new JMenu("abcd");
 		// configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent")
-		// );
+		
 		/*
 		 * for (final String event :
 		 * main.getPersistenceController().getOpsiclientdExtraEvents())
@@ -2152,7 +2152,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		// jLabelClientMacAddress.setFont(Globals.defaultFontStandardBold);
 
 		JLabel labelClientIPAddress = new JLabel(configed.getResourceValue("MainFrame.jLabelIPAddress")); // configed.getResourceValue("MainFrame.jLabelIPAddress")
-																											// );
+																											
 
 		JLabel labelOneTimePassword = new JLabel(configed.getResourceValue("MainFrame.jLabelOneTimePassword"));
 
@@ -2219,7 +2219,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				unselectedIcon, nullIcon, false);
 		cbUefiBoot.addActionListener(this);
 		// JLabel labelWANConfig = new JLabel( configed.getResourceValue("vpnConfig" )
-		// );
+		
 		cbWANConfig = new CheckedLabel(configed.getResourceValue("WAN Konfiguration"), selectedIcon, unselectedIcon,
 				nullIcon, false);
 		cbWANConfig.setSelected(false);
@@ -3452,7 +3452,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			// clientPopupsDependOnSelectionCount[i].getText());
 		}
 
-		// checkMenuItemsDisabling(); produces NPEs since method seems to be called
+		
 		// sometimes
 		// before the menu is built completely
 
@@ -3834,7 +3834,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	 * "MainFrame.stateChanged(cbInstallByShutdown)");
 	 * // changedClientInfo.put(HostInfo.clientShutdownInstallKEY,
 	 * // ((Boolean)cbInstallByShutdown.isSelected()).toString()
-	 * // );
+	 * 
 	 * 
 	 * // main.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfo);
 	 * 
@@ -4217,7 +4217,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			jButtonDepotsConfiguration.setSelected(false);
 			jButtonServerConfiguration.setSelected(false);
 			// logging.debug ( " 2 jButtonLicences == null " + (jButtonLicences ==
-			// null));
+			
 			// jLabelLicences.setForeground (Globals.greyed);
 			break;
 
@@ -4624,7 +4624,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			showSoftwareAudit();
 
 			// logging.info(this, "setSoftwareAudit clientsWithoutScan: " +
-			// clientsWithoutScan);
+			
 
 		} else // case main.getSelectedClients() is null or length == 0; the case == 1 is
 				// handled by the following methos
@@ -4682,7 +4682,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		// SwingUtilities.invokeLater( new Runnable(){
 		// public void run(){
 		// WaitCursor waitCursor = new WaitCursor( retrieveBasePane(), "setLogFilePanel"
-		// );
+		
 		showLogfiles.setDocuments(logs, statusPane.getSelectedClientNames());
 		// waitCursor.stop();
 		// }
@@ -4760,7 +4760,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		logging.info(this, "setShutdownInstall " + b);
 		cbInstallByShutdown.setSelected(b);
 
-		// handleInstallByShutdownChange();
+		
 	}
 
 	public void setClientID(String s) {

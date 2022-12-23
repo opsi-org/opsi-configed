@@ -168,7 +168,7 @@ public class FLoadingWaiter extends JFrame
 
 		setSize(new Dimension(400, 250));
 
-		// pack();
+		
 
 		// center
 		/*
@@ -219,7 +219,7 @@ public class FLoadingWaiter extends JFrame
 		// }
 		// }
 		);
-		// dispose();
+		
 	}
 
 	@Override

@@ -114,9 +114,9 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	public ArrayList<String> getParameterList() {
 		return null;
 	}
-	// public void startParameterGui();
-	// public void startParameterGui(ConfigedMain main);
-	// public SSHConnectionExecDialog startHelpDialog();
+	
+	
+	
 	// public String getBasicName()
 
 	// public LinkedList<CommandHelp_Row> getHelpLines()

@@ -120,7 +120,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	protected void buildPanel() {
-		// setLayout(new BorderLayout());
+		
 
 		// JPanel panelByAuditInfo = new PanelLinedComponents(compis);
 		panelByAuditInfo = new PanelHWByAuditDriver(title, main);
@@ -169,7 +169,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
 		// contentPane.setBackground(Color.yellow);
 
-		// add (contentPane);
+		
 
 		GroupLayout layoutBase = new GroupLayout(this);
 		setLayout(layoutBase);

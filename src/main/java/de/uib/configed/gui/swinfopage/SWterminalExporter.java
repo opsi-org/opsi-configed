@@ -22,10 +22,10 @@ public class SWterminalExporter extends SWExporter {
 	public void export() {
 		String clientName = theHost;
 		// logging.info(this, "------------- create console report swaudit for " +
-		// clientName );
+		
 
 		// logging.debug( "------------- create console report swaudit for " +
-		// clientName );
+		
 
 		modelSWInfo.setSorting(0, true);
 		// logging.debug(" theHost " + clientName);

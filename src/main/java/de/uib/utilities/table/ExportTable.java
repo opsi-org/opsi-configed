@@ -79,7 +79,7 @@ public abstract class ExportTable {
 
 	protected abstract void execute(String fileName, boolean onlySelectedRows);
 
-	// protected abstract void determineClasses();
+	
 
 	public JMenuItemFormatted getMenuItemExport() {
 		JMenuItemFormatted menuItem = new JMenuItemFormatted(

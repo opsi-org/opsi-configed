@@ -64,7 +64,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 		logging.debug(this, " FEdit constructed for >>" + initialText + "<< title " + hint);
 		setIconImage(Globals.mainIcon);
-		// initComponents();
+		
 		if (initialText != null)
 			this.initialText = initialText;
 
@@ -370,7 +370,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 			enter();
 		} else if (e.getID() == WindowEvent.WINDOW_DEACTIVATED) {
 			// logging.debug(" window deactivated");
-			// deactivate();
+			
 
 		}
 

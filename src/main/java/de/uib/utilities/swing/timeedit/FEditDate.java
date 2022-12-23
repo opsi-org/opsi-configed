@@ -128,7 +128,7 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 	// at the moment, the implementation decides about the date formatting
 	{
 		return getSelectedDateTime();
-		// return getSelectedDate();
+		
 		/*
 		 * java.util.Date date = dateEditor.getSelectedSqlTime();
 		 * 
@@ -154,7 +154,7 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 		logging.info(this, "valueChanged dateSelectionEvent");
 		// if ( !super.getText().equals( getText() ) )
 		setDataChanged(true);
-		// updateCaller(getSelectedDate());
+		
 		updateCaller(getSelectedDateString());
 	}
 

@@ -164,7 +164,7 @@ public class ProductState extends HashMap<String, String> {
 		if (retrieved == null) {
 			setDefaultValues();
 		} else {
-			readRetrieved();// retrievedState);
+			readRetrieved();
 		}
 
 		if (transform)

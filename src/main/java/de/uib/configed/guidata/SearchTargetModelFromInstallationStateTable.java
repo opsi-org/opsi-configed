@@ -127,7 +127,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 		// int modelrow = table.convertRowIndexToModel(row);
 		table.scrollRectToVisible(table.getCellRect(row, 0, false));
 
-		// setCursorRow( row );
+		
 	}
 
 	// TODO; implement this ?
@@ -215,7 +215,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 			 * 
 			 * model.setUsingFilter( FILTER_BY_SELECTION, true);
 			 * model.reset();
-			 * //setSelection( viewRowfilter );
+			 * 
 			 * table.getSelectionModel().setSelectionInterval(0, model.getRowCount());
 			 */
 

@@ -207,7 +207,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 																// client view
 																// }
 																// }
-																// );
+																
 																// }
 																// catch(InterruptedException iex)
 																// {
@@ -410,7 +410,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		hGroupNegate.addComponent(negationLabel, GroupLayout.Alignment.CENTER);
 		hGroupElements.addComponent(nameLabel, GroupLayout.Alignment.CENTER);
 		// hGroupOperations.addComponent( operationLabel, GroupLayout.Alignment.CENTER
-		// );
+		
 		hGroupData.addComponent(dataLabel, GroupLayout.Alignment.CENTER);
 		hGroupConnections.addComponent(connectionLabel, GroupLayout.Alignment.CENTER);
 		// hGroupRemoveBtn.addComponent( removeLabel, GroupLayout.Alignment.CENTER );
@@ -579,7 +579,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		result.groupList.add(createSimpleGroup(new SoftwareInstallationStatusElement()));
 		// result.groupList.add( createSimpleGroup( new
-		// SoftwareTargetConfigurationElement() ) );
+		
 		result.groupList.add(createSimpleGroup(new SoftwareActionResultElement()));
 		result.groupList.add(createSimpleGroup(new SoftwareRequestElement()));
 		result.groupList.add(createSimpleGroup(new SoftwareActionProgressElement()));
@@ -635,7 +635,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		result.groupList.add(createSimpleGroup(new SoftwareInstallationStatusElement()));
 		// result.groupList.add( createSimpleGroup( new
-		// SoftwareTargetConfigurationElement() ) );
+		
 		result.groupList.add(createSimpleGroup(new SoftwareActionResultElement()));
 		result.groupList.add(createSimpleGroup(new SoftwareRequestElement()));
 		result.groupList.add(createSimpleGroup(new SoftwareActionProgressElement()));
@@ -965,7 +965,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			break;
 		case EnumType:
 			// JComboBox box = new JComboBox<>( sourceGroup.element.getEnumData( operation )
-			// );
+			
 			TextInputField box = new TextInputField("", sourceGroup.element.getEnumData());
 			box.setEditable(true);
 			box.setToolTipText(configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
@@ -1048,7 +1048,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			}
 
 			// logging.info(this, "collectData complex: childList " + complex + " : " +
-			// childList);
+			
 
 			if (!childList.isEmpty()) {
 				switch (complex.type) {

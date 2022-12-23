@@ -110,12 +110,12 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 		}
 
 		// logging.info(this, "OpsiserviceRawDataPersistenceController opsiHosts " +
-		// opsiHosts);
+		
 
 		// opsiHosts = super.HOST_read(); //test
 
 		// logging.info(this, "OpsiserviceNOMPersistenceController opsiHosts " +
-		// opsiHosts);
+		
 
 		return opsiHosts;
 	}

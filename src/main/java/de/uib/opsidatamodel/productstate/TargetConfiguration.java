@@ -184,7 +184,7 @@ public class TargetConfiguration {
 
 		// logging.debug(" -------- label " + label + " --- val " + getVal(label));
 		// logging.debug(" -------- display " + new
-		// TargetConfiguration(getVal(label)));
+		
 
 		return new TargetConfiguration(getVal(label));
 	}

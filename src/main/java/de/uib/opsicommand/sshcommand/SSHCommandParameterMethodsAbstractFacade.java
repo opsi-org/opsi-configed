@@ -24,7 +24,7 @@ public abstract class SSHCommandParameterMethodsAbstractFacade {
 
 	public abstract String[] getSelected_depotnames();
 
-	// public abstract String getSelectedClientName();
+	
 	public abstract String getConfig_serverName();
 
 	public abstract String getConfig_sshserverName();

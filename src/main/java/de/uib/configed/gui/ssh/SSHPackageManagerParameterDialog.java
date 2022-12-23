@@ -54,7 +54,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		// {
 		// super(owner, false);
 		// logging.info(this, "created by constructor 1");
-		// registerWithRunningInstances();
+		
 		// this.owner = owner;
 		setTitle(title);
 		setFont(Globals.defaultFont);
@@ -66,7 +66,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		this.setBackground(Globals.backLightBlue);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		// getRepositoriesFromConfigs(null);
+		
 	}
 
 	protected void setComponentsEnabled(boolean value) {
@@ -188,13 +188,13 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 	// command,
 	// configed.getResourceValue("SSHConnection.Exec.title")+ "
 	// \""+command.getCommand() + "\" "
-	// );
+	
 	// }
 
 	/* This method gets called when button 2 is pressed */
 	// public void doAction2()
 	// {
-	// // setVisible(false);
+	// 
 	// this.setVisible (false);
 	// this.dispose();
 	// }

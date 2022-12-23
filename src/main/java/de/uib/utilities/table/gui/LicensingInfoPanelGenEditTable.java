@@ -14,7 +14,7 @@ public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
 		super(title, maxTableWidth, editing, generalPopupPosition, switchLineColors, popupsWanted, withTablesearchPane);
 		// lInfoMap = LicensingInfoMap.getInstance();
 		// theTable.getTableHeader().setDefaultRenderer(new
-		// MarkBoldHeaderCellRenderer(lInfoMap));
+		
 
 	}
 

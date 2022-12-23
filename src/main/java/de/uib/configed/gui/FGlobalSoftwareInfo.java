@@ -75,7 +75,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		jButton2.setIcon(Globals.createImageIcon("images/cancel.png", ""));
 
 		initDataStructure();
-		// setTableModel(null);
+		
 
 	}
 
@@ -156,7 +156,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 			result = 1;
 		}
 		// owner.setVisible(true);
-		// leave();
+		
 	}
 
 	@Override
@@ -171,7 +171,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	public void leave() {
 		setVisible(false);
 		// we dont dispose the window, dispose it in the enclosing class
-		// setEnabled(false);
+		
 	}
 
 	public void exit() {

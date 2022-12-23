@@ -11,11 +11,11 @@ public class UserOpsipermission extends UserConfigModule {
 	// public enum HostTypeOfPrivilege{ ALL, CLIENT, DEPOT, SERVER }
 	// permit restrictable action
 	// public List<Object> reduceList( List<Object> checkList )
-	// public String getInfo();
-	// public String signalCause();
+	
+	
 
-	// public ActionPrivilege allowsAction();
-	// public HostTypeOfPrivilege isFor();
+	
+	
 
 	public enum ActionPrivilege {
 		READ_ONLY, READ_WRITE

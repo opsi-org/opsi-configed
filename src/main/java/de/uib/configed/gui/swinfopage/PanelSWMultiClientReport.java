@@ -188,7 +188,7 @@ public class PanelSWMultiClientReport extends JPanel {
 					}
 
 					fieldExportDirectory.setText(exportDirectoryS);
-					// getFilepathStart();
+					
 					configed.savedStates.saveSWauditExportDir.serialize(exportDirectoryS);
 
 				}

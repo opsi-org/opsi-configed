@@ -93,7 +93,7 @@ public class TextInputField extends JPanel
 			}
 
 			// logging.info(this, " orderedBeginChars " + Arrays.toString( orderedBeginChars
-			// ) );
+			
 
 			orderedBeginChars = new Character[orderedValues.size()];
 
@@ -117,7 +117,7 @@ public class TextInputField extends JPanel
 			public void keyPressed(KeyEvent e) {
 				String s = comboField.getText();
 				// logging.info(this, " " + e.getKeyChar() + " content until now >" + s + "< " +
-				// e);
+				
 
 				if (s.length() == 0) {
 					combo.showPopup();
@@ -129,7 +129,7 @@ public class TextInputField extends JPanel
 					// combo.selectWithKeyChar( e.getKeyChar() );
 
 					// logging.info(this, " orderedBeginChars " + Arrays.toString( orderedBeginChars
-					// ) );
+					
 					// if (inputType == InputType.TEXT)
 					if (orderedBeginChars != null) {
 

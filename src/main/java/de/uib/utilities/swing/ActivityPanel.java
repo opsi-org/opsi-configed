@@ -80,7 +80,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 			// else
 			// logging.info(this, "not event dispatch thread");
 
-			// repaint();
+			
 		} catch (Exception strange) {
 			logging.warning(this, "strange exception " + strange);
 			setState(inactive);

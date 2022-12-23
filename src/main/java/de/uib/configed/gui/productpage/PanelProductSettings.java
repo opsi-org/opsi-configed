@@ -1055,7 +1055,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			actionColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(actionsCombo, istm,
 					de.uib.opsidatamodel.productstate.ActionRequest.getLabel2DisplayLabel(), iconsDir));
 			actionColumn.setPreferredWidth(fwidth_column_productstate);
-			actionColumn.setCellRenderer(actionRequestTableCellRenderer); // productTableCellRenderer);
+			actionColumn.setCellRenderer(actionRequestTableCellRenderer); 
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_lastStateChange)) > -1) {

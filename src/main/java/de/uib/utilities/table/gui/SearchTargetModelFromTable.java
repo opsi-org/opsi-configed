@@ -130,7 +130,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		// int modelrow = table.convertRowIndexToModel(row);
 		table.scrollRectToVisible(table.getCellRect(row, 0, false));
 
-		// setCursorRow( row );
+		
 	}
 
 	@Override
@@ -241,7 +241,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 			model.setUsingFilter(FILTER_BY_SELECTION, true);
 			model.reset();
 
-			// setSelection( viewRowfilter );
+			
 			table.getSelectionModel().setSelectionInterval(0, model.getRowCount());
 
 		} else {

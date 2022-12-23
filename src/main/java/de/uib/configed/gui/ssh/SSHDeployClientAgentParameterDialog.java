@@ -352,7 +352,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		changeClient();
 		changeUser();
 		changePassw();
-		// changeKeepClient();
+		
 		changeVerbosity();
 
 		initLayout();
@@ -408,7 +408,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	}
 	// public void doAction2()
 	// {
-	// // setVisible(false);
+	// 
 
 	// this.setVisible (false);
 	// this.dispose ();

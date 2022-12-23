@@ -88,9 +88,9 @@ public abstract class DataStub {
 
 	public abstract List<Map<String, Object>> getProductPropertyStates();
 
-	// protected abstract void productPropertyDepotStatesRequestRefresh();
+	
 	// public abstract void fillProductPropertyDepotStates(Collection<String>
-	// clients);
+	
 	public abstract List<Map<String, Object>> getProductPropertyDepotStates(java.util.Set<String> depots);
 
 	public abstract void installedSoftwareInformationRequestRefresh();
@@ -129,7 +129,7 @@ public abstract class DataStub {
 	public abstract Map<String, Map<String, Object>> getConfigs();
 	// host -> (key -> value)
 	// public abstract Map<String, Map<String, List<Object>>>
-	// getConfigValues();
+	
 	// host;key -> valuelist
 
 	public abstract void licencepoolsRequestRefresh();

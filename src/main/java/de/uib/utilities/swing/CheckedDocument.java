@@ -70,7 +70,7 @@ public class CheckedDocument extends PlainDocument {
 	@Override
 	public void insertString(int offs, String s, AttributeSet a) throws BadLocationException {
 		// logging.info(this, "insertString s offs, size " + s + ", " + offs + ", " +
-		// size);
+		
 
 		if (s == null)
 			return;

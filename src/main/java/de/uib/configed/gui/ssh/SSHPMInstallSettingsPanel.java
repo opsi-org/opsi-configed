@@ -41,7 +41,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	}
 
 	public SSHPMInstallSettingsPanel(JDialog dia) {
-		// super();
+		
 		if (dia != null)
 			setFDepotList(dia);
 		initComponents();

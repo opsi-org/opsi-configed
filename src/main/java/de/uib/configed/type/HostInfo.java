@@ -809,7 +809,7 @@ public class HostInfo {
 		// }
 		// // System.out.print("");logging.debug("");logging.debug("");
 		// // logging.debug("HostInfo showAndSave shutdownInstall " +
-		// shutdownInstall);
+		
 		// // logging.debug("");logging.debug("");logging.debug("");
 
 		// String product = "opsi-client-agent";
@@ -825,7 +825,7 @@ public class HostInfo {
 		// product,
 		// OpsiPackage.TYPE_LOCALBOOT,
 		// productValues
-		// );
+		
 
 		// persist.updateProductOnClients();
 		// persist.getHostInfoCollections().updateLocalHostInfo(client,

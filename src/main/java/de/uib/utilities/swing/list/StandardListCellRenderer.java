@@ -59,7 +59,7 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 		JComponent jc = (JComponent) c;
 
 		// logging.info(this, "value " + value + " index " + index + " hasfocus " +
-		// cellHasFocus);
+		
 		if (uniformColor == null)
 			CellAlternatingColorizer.colorize(jc, isSelected, (index % 2 == 0), true, selectedEven, selectedUneven,
 					unselectedEven, unselectedUneven);

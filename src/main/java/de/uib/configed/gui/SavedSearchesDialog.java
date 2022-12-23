@@ -47,7 +47,7 @@ public class SavedSearchesDialog extends FEditList {
 
 	public void start() {
 		buttonAdd.setEnabled(true);
-		// reloadAction();
+		
 		resetModel();
 	}
 
@@ -192,7 +192,7 @@ public class SavedSearchesDialog extends FEditList {
 	@Override
 	protected void cancel() {
 		result = null;
-		// resetModel();
+		
 		super.cancel();
 	}
 

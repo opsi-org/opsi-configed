@@ -860,7 +860,7 @@ public class JTableSelectionPanel extends JPanel
 			// logging.info(this, "findViewRowFromValue loop with viewrow, alternativeWords
 			// "
 			// + viewrow + ", " + alternativeWords
-			// );
+			
 
 			for (int j = 0; j < getTableModel().getColumnCount(); j++) {
 				if (colIndices != null // we dont compare all values (comparing all values is default)
@@ -874,7 +874,7 @@ public class JTableSelectionPanel extends JPanel
 				);
 
 				// logging.info(this, "findViewRowFromValue compare " + value + " to " +
-				// compareValue);
+				
 
 				if (compareValue == null) {
 					found = (val == null || val.equals(""));

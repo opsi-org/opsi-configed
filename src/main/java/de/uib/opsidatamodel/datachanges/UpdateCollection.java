@@ -241,7 +241,7 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 				theCommand.doCall();
 		}
 
-		// removeAll(); do it in the client
+		
 	}
 
 }

@@ -194,7 +194,7 @@ public class DataStubRawData extends DataStubNOM {
 			hosts.addAll(newClients);
 
 			// logging.info(this, "produceHostsWithProductPropertyStates, all hosts " +
-			// hosts);
+			
 
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " product property state");
@@ -380,7 +380,7 @@ public class DataStubRawData extends DataStubNOM {
 	 * //fill the clientlist by fill ...
 	 * {
 	 * logging.info(this, "getSoftwareIdent2clients ============= "
-	 * //);
+	 * 
 	 * + softwareIdent2clients );
 	 * return softwareIdent2clients;
 	 * }
@@ -722,7 +722,7 @@ public class DataStubRawData extends DataStubNOM {
 				configs1Host.put(configId, values);
 
 				// configValues1Host.put( configId, (List) configs1Host.get( configId
-				// ) );
+				
 
 			}
 		}

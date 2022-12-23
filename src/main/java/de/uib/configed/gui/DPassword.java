@@ -179,7 +179,7 @@ public class DPassword extends JDialog // implements Runnable
 
 		@Override
 		public void actAfterWaiting() {
-			// setCursor(saveCursor);
+			
 			waitCursor.stop();
 
 			if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED)
@@ -803,7 +803,7 @@ public class DPassword extends JDialog // implements Runnable
 					 * 
 					 */
 
-					// stopWaitInfo();
+					
 
 					logging.info(this, "waitingTask can be set to ready");
 					waitingTask.setReady();

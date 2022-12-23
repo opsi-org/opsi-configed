@@ -125,7 +125,7 @@ public class FWakeClients extends FShowList {
 		 * }
 		 */
 
-		// setCursor(oldCursor);
+		
 		jButton1.setText(configed.getResourceValue("FWakeClients.close"));
 	}
 

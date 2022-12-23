@@ -83,11 +83,11 @@ public class Empty_Command implements SSHCommand {
 
 	public Empty_Command(String c) {
 		// position = factory.position_default;
-		// setId(id);
+		
 		setCommand(c);
 		getParameterList();
-		// setMenuText(mt);
-		// setNeedSudo(ns);
+		
+		
 	}
 
 	/**

@@ -150,7 +150,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				// }
 				// }),
 				// new MyOutputPrinter(dialog, System.out)
-				// );
+				
 				channel = setStreams(channel);
 
 				channel.setPtyType("dumb");
@@ -369,7 +369,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		String result = "";
 		if (newCommands) {
 			// result = ssh.exec(new Empty_Command("compgen -c" ), false, null, true,
-			// false);
+			
 			result = ssh.exec(new Empty_Command(
 					// http://stackoverflow.com/questions/948008/linux-command-to-list-all-available-commands-and-aliases
 					SSHCommandFactory.getInstance().str_command_getLinuxCommands), false, null, true, false);

@@ -142,7 +142,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		this.targetModel = targetModel;
 
-		// setSearchFieldsAll();
+		
 
 	}
 
@@ -1128,10 +1128,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			if (!fieldSearch.getText().equals(""))
 				markAll();
 
-			// switchFilterOn();
+			
 
 			// targetModel.setFilter(true);
-			// setFilteredMode(true);
+			
 		}
 	}
 
@@ -1444,7 +1444,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 				int[] unfilteredSelection = targetModel.getUnfilteredSelection();
 				// logging.info(this, "actionPerformed on filtermark, unfilteredSelection" +
-				// unfilteredSelection);
+				
 
 				targetModel.setFiltered(false);
 				setFilteredMode(false);

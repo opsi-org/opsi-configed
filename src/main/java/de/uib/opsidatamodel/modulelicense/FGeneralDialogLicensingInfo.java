@@ -94,7 +94,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		//logging.info(this, "allLayout");
 
 		allpane.setBackground(Globals.backLightBlue); // Globals.nimbusBackground);///Globals.backgroundWhite);
-														// //Globals.backLighter);//Globals.backgroundWhite);//(myHintYellow);
+														// //Globals.backLighter);//Globals.backgroundWhite);
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
@@ -231,8 +231,8 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 				//logging.info(this, "reload info " + oldNumber + " :: " + newNumber + ":: " + noAfterReload);
 				//ME.setVisible(false);
-				//initMainPanel();
-				//setVisible(true);
+				
+				
 			}
 		};
 

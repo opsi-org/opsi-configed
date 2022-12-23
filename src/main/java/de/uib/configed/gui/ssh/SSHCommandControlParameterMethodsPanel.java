@@ -61,7 +61,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		main = owner;
 		init();
 
-		// initLayout();
+		
 	}
 
 	public JPanel getPanel() {

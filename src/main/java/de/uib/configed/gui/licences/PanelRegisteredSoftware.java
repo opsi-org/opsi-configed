@@ -107,7 +107,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 			// ((ControlPanelAssignToLPools)controller).validateWindowsSoftwareKeys( );
 
-			// setDataChanged(true); we transfer to mouse listener
+			
 
 		}
 

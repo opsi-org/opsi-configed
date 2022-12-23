@@ -132,7 +132,7 @@ public class OpsiDataBackend extends Backend {
 		if (controller == null)
 			logging.warning(this, "Warning, controller is null!");
 		getHardwareConfig();
-		// setReloadRequested(); //trigger initial loading
+		
 	}
 
 	@Override
@@ -329,7 +329,7 @@ public class OpsiDataBackend extends Backend {
 		hardwareOnClient = null;
 		clientToHardware = null;
 		System.gc();
-		// checkInitData();
+		
 
 	}
 

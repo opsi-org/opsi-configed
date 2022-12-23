@@ -153,7 +153,7 @@ public class ControlDash {
 				public void setVisible(boolean b) {
 					super.setVisible(b);
 					jButton1.requestFocus();
-					// registerWithRunningInstances();
+					
 				}
 
 				@Override

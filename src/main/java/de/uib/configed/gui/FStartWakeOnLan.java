@@ -268,7 +268,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 			public void actionPerformed(ActionEvent e) {
 				logging.debug(this, "actionPerformed");
 				setClients();
-				// setNowTimeAsTarget();
+				
 			}
 		});
 
@@ -462,7 +462,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		waitingMode = true;
 		logging.info(this, "startWaiting " + runningInstances);
 		runningInstances.add(this, scheduleTitle);
-		// setCalToNowAsStart(); //update start time values
+		
 		waitingTask = new WaitingWorker((WaitingSleeper) this);
 		// waitingTask.addPropertyChangeListener(this);
 		waitingTask.execute();
@@ -676,9 +676,9 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	 * 
 	 * 
 	 * //progress++;
-	 * //setProgress( progress );
 	 * 
-	 * //setElapsedMins(elapsedMins);
+	 * 
+	 * 
 	 * }
 	 * return null;
 	 * }

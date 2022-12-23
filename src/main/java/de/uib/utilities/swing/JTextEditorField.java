@@ -41,7 +41,7 @@ public class JTextEditorField extends javax.swing.JTextField implements KeyListe
 			return true;
 
 		// logging.info(this, "isChangedText: not equal, equal? " + lastSetS.equals(
-		// getText() ) );
+		
 
 		return !lastSetS.equals(getText());
 	}

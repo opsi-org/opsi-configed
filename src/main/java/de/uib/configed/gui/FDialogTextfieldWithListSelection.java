@@ -60,7 +60,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		logging.info(this, "allLayout");
 
 		allpane.setBackground(Globals.backLightBlue); // Globals.nimbusBackground);///Globals.backgroundWhite);
-														// //Globals.backLighter);//Globals.backgroundWhite);//(myHintYellow);
+														// //Globals.backLighter);//Globals.backgroundWhite);
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 

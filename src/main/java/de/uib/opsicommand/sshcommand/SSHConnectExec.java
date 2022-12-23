@@ -253,7 +253,7 @@ public class SSHConnectExec extends SSHConnect {
 			}
 
 			finally {
-				// disconnect();
+				
 				System.gc();
 			}
 		}
@@ -644,7 +644,7 @@ public class SSHConnectExec extends SSHConnect {
 			if (outputDialog != null)
 				if (!multiCommand) {
 					outputDialog.setStatusFinish(getCommandName());
-					// disconnect();
+					
 				}
 			System.gc();
 			return buf.toString();
@@ -671,7 +671,7 @@ public class SSHConnectExec extends SSHConnect {
 
 		protected void publishInfo(String s) {
 			if (outputDialog != null) {
-				// publish(setAsInfoString(s));
+				
 				outputDialog.setStartAnsi(Color.BLACK);
 			}
 		}
@@ -681,7 +681,7 @@ public class SSHConnectExec extends SSHConnect {
 				if (s.length() > 0)
 					if (s != "\n")
 						s = outputDialog.ansiCodeError + s;
-			// publish(s);
+			
 		}
 
 		@Override

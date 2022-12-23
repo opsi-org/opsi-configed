@@ -315,7 +315,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	}
 
 	protected void buildPanel() {
-		// setLayout(new BorderLayout());
+		
 
 		fieldByAuditPath = new JTextShowField();
 
@@ -330,7 +330,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		buttonCallSelectDriverFiles
 				.setToolTipText(configed.getResourceValue("PanelDriverUpload.hintDriverToIntegrate"));
 
-		fieldServerPath = new JTextShowField(true); // opsiWorkBenchDirectoryS );
+		fieldServerPath = new JTextShowField(true); 
 		fieldServerPath.getDocument().addDocumentListener(new FileNameDocumentListener());
 
 		fieldServerPath.setForeground(Globals.greyed);

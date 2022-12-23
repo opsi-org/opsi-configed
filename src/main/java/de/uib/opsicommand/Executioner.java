@@ -16,8 +16,8 @@ public abstract class Executioner {
 	public abstract JSONObject retrieveJSONObject(OpsiMethodCall omc);
 
 	// public abstract List<JSONObject> retrieveJSONObjects(List<OpsiMethodCall>
-	// omcList);
-	// public abstract JSONObject jsonMap (Map m);
+	
+	
 	public static JSONObject jsonMap(Map m) {
 		return new JSONObject(m);
 	}
@@ -79,6 +79,6 @@ public abstract class Executioner {
 
 	public abstract String getStringValueFromItem(Object s);
 
-	// public abstract Object deriveStandard(Object ob);
+	
 	public static final Executioner NONE = new NONEexecutioner();
 }

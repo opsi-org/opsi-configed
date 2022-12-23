@@ -241,19 +241,19 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		public void add(String leafname, SimpleTreePath simpleTreePath) {
 			// logging.debug(this, "add leafname, simpleTreePath " + leafname + ", " +
-			// simpleTreePath);
+			
 
 			if (invertedSimpleClientPaths.get(leafname) == null)
 				invertedSimpleClientPaths.put(leafname, new ArrayList<>());
 
 			invertedSimpleClientPaths.get(leafname).add(simpleTreePath);
 			// logging.debug(this, "add got for leaf, simple path " + leafname + ", " +
-			// simpleTreePath);
+			
 		}
 
 		public void add(String leafname, TreePath clientPath) {
 			// logging.debug(this, "add leafname, clientPath " + leafname + ", " +
-			// clientPath);
+			
 			add(leafname, new SimpleTreePath(clientPath.getPath()));
 		}
 
@@ -339,7 +339,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		createTopNodes();
 
 		setRootVisible(false);
-		// setExpandsSelectedPaths(false);
+		
 		setShowsRootHandles(true);
 
 		// putClientProperty("JTree.lineStyle", "Horizontal"); does not work
@@ -436,7 +436,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		menuItemRemoveElements.addActionListener(actionEvent -> {
 			// logging.debug(" action performed on menuItemRemoveElements, " + e);
 			// logging.debug(" mouseRow " + treePopupMouseListener.getPopupSourceRow()
-			// );
+			
 			// logging.debug(" mousePath " +
 			// treePopupMouseListener.getPopupSourcePath() );
 
@@ -451,7 +451,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 				// treePopupMouseListener.getPopupSourcePath() + " node "
 				// + sourcePath.getPathComponent(sourcePath.getPathCount() -1));
 				// logging.info(this, "menuItemRemoveElements from node " + node);
-				// enumerateLeafNodes(node) );
+				
 
 				Enumeration<TreeNode> enumer = node.breadthFirstEnumeration();
 
@@ -470,10 +470,10 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		});
 		popupMenu.add(menuItemRemoveElements);
 
-		// addComponentListener(this);
+		
 		addTreeSelectionListener(this);
 		addMouseListener(this);
-		// addMouseMotionListener(this);
+		
 
 		locationsInDIRECTORY = new HashMap<>();
 		clientNodesInDIRECTORY = new HashMap<>();
@@ -527,7 +527,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	public TreePath pathByAddingChild(TreePath treePath, Object child) {
 		TreePath result;
 		// logging.debug(this, " pathByAddingChild treePath, child " + treePath + ", " +
-		// child);
+		
 		if (child == null) {
 			logging.debug(this, "pathByAddingChild: child null cannot be added");
 			return null;
@@ -1165,7 +1165,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			// groupNodes.get(parentId));
 
 			// logging.debug(this, "produceAndLinkGroups, getPathToNode parent " +
-			// getPathToNode(parent));
+			
 
 			// hasChildWithName(parent, groupId);
 
@@ -1265,7 +1265,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			Set<GroupNode> hostingGroups = locationsInDIRECTORY.get(clientId);
 
 			// logging.debug(this, "associate, clientId hostingGroups " + clientId + " " +
-			// hostingGroups);
+			
 			if (hostingGroups.isEmpty()) // client is not in any DIRECTORY group
 			{
 				membersOfDIRECTORY_NOT_ASSIGNED.add(clientId);
@@ -1312,7 +1312,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 						allowedClients.add(clientId);
 						directlyAllowedGroups.addAll(path);
 						// logging.info(this, "associateClientsToGroups allowed Groups " +
-						// directlyAllowedGroups);
+						
 					}
 				}
 			}
@@ -1573,7 +1573,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		logging.debug("removeClientInternally clientId, parentNode " + clientID + ", " + parentNode);
 
-		// enumerateLeafs( parentNode );
+		
 
 		DefaultMutableTreeNode clientNode = getChildWithUserObjectString(clientID, parentNode);
 		// DefaultMutableTreeNode clientNode = getClientNode(clientID);
@@ -1599,7 +1599,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		simplePathToClient.add(clientID);
 
 		// logging.debug("removeClientInternally 1 " + " remove pathToClient " +
-		// simplePathToClient);
+		
 
 		leafname2AllItsPaths.remove(clientID, simplePathToClient); // 13
 		activeParents.removeAll(simplePathToClient.collectNodeNames());
@@ -1620,7 +1620,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		if (existingNode == null) // we have not a node with this name in the target group
 		{
 			// logging.debug(this, "moveClientTo checked importID " + importID + " to " +
-			// dropParentNode);
+			
 
 			if (sourcePath != null) {
 				logging.debug(this,
@@ -1634,7 +1634,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			DefaultMutableTreeNode clientNode = getChildWithUserObjectString(importID, sourceParentNode);
 
 			// logging.debug(this, "moveClientTo checked node " + clientNode + " to " +
-			// dropParentNode);
+			
 			insertNodeInOrder(clientNode, dropParentNode);
 			getModel().nodeStructureChanged(sourceParentNode);
 
@@ -1644,7 +1644,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 				addObject2PersistentGroup(importID, dropParentID);
 
 			// logging.debug(this, "moveClientsTo dropPath, clientNode " + dropPath + ", " +
-			// clientNode);
+			
 
 			// operations in DIRECTORY
 
@@ -1724,7 +1724,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		if (sourcePath == null) {
 			// logging.debug(this, "copyClientTo, client node map " +
-			// clientNodesInDIRECTORY);
+			
 			clientNode = getClientNode(objectID);
 		} else
 			clientNode = (DefaultMutableTreeNode) sourcePath.getLastPathComponent();
@@ -1803,7 +1803,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		if (groupSet.size() > 1) {
 			// logging.debug(this, "selectOneNode groupSet, clientID " + groupSet + ", " +
-			// clientID);
+			
 			FEditList fList = new FEditList(null);
 			fList.setListModel(new DefaultComboBoxModel<GroupNode>(new Vector<>(groupSet)));
 			fList.setTitle(Globals.APPNAME + ":  " + configed.getResourceValue("ClientTree.DIRECTORYname") + " "
@@ -1991,7 +1991,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	public void collectParentIDsFrom(DefaultMutableTreeNode node) {
 		activeParents.addAll(collectParentIDs(node));
 		// logging.debug(this, "collectParentIDsFrom activeParents produced " +
-		// activeParents);
+		
 	}
 
 	public void initActiveParents() {
@@ -2002,7 +2002,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		// logging.debug(this, "produceActiveParents clients " +
 		// Arrays.toString(clients));
 		// logging.debug(this, "produceActiveParents old activeParents " +
-		// activeParents);
+		
 		initActiveParents();
 
 		for (int i = 0; i < clients.length; i++) {
@@ -2061,11 +2061,11 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		List<SimpleTreePath> treePaths = getSimpleTreePaths(nodeID);
 
 		// logging.info(this, "collectParentIDs for node " + nodeID + " treePaths " +
-		// treePaths);
+		
 
 		if (treePaths == null) {
 			// logging.debug(this, "collectParentIDs nodeID, treePaths " + nodeID + ", " +
-			// treePaths);
+			
 		} else {
 			for (SimpleTreePath path : treePaths) {
 				allParents.addAll(path.collectNodeNames());
@@ -2073,7 +2073,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		}
 
 		// logging.info(this, "collectParentIDs for node " + nodeID + " allParents " +
-		// allParents);
+		
 
 		return allParents;
 	}

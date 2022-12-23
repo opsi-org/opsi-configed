@@ -110,7 +110,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		// we only register changes after loading the initial document
 
 		searcher = new LinkSearcher(textpane);
-		searcher.setCaseSensitivity(true);// false);
+		searcher.setCaseSensitivity(true);
 		highlighter = new UnderlineHighlighter(null);
 		textpane.setHighlighter(highlighter);
 		setDataChanged(false);
@@ -122,7 +122,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			cmdLauncher.setPrefix(LINUX_LINK_INTERPRETER);
 
 		// HyperlinkListener hyperlinkListener = new
-		// ActivatedHyperlinkListener(textpane);
+		
 		// textpane.addHyperlinkListener(hyperlinkListener);
 	}
 
@@ -246,7 +246,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	@Override
 	public void keyReleased(KeyEvent e) {
 		super.keyReleased(e);
-		// markLinks();
+		
 	}
 
 	@Override
@@ -472,7 +472,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			}
 
 			// logging.info(this, "content length " + content.length() + " last index " +
-			// startIndex);
+			
 			return lastFoundIndex;
 		}
 	}

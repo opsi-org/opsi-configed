@@ -132,11 +132,11 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 				super.componentResized(e);
 				// Point loc = getLocationOnScreen();
 				// loc.setLocation(loc.getX(), loc.getY() - 1);
-				// setLocation(loc);//repairs vanishing of combobox popup on enlarging but has
+				
 				// the ugly effect of wandering
-				// revalidate();
+				
 				// this.repaint();
-				// setOutSize();
+				
 				setCLfocus();
 				// append("", tf_command); // try to set scrollpane to end of textpane and focus
 				// on tf_command
@@ -209,7 +209,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	 */
 
 	private void setOutSize() {
-		// printWindowSize();
+		
 		double no_output_Height = (Globals.GAP_SIZE * 4) + tf_command.getHeight() + parameterPanel.getHeight()
 				+ btn_dim.getHeight() + terminatingPanel.getHeight();
 
@@ -233,7 +233,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		// this.jScrollPane.setMaximumSize(output_size);
 		this.revalidate();
 		// this.repaint();
-		// printWindowSize();
+		
 	}
 
 	public JTextField getInputField() {
@@ -377,7 +377,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 			logging.error("" + e);
 		}
 		// this.setSize(this.getWidth(), this.getHeight() + parameterPanel.getHeight()
-		// );
+		
 		setCenterLayout();
 	}
 

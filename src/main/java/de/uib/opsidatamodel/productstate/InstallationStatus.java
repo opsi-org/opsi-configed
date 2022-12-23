@@ -223,7 +223,7 @@ public class InstallationStatus {
 
 		// logging.debug(" -------- label " + label + " --- val " + getVal(label));
 		// logging.debug(" -------- display " + new
-		// InstallationStatus(getVal(label)));
+		
 
 		return new InstallationStatus(getVal(label));
 	}

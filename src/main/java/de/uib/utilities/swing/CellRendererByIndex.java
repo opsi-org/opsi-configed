@@ -65,8 +65,8 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 		super(imageWidth);
 		// logging.debug(" ------------- font " + getFont() );
 		setOpaque(true);
-		// setHorizontalAlignment(LEFT);
-		// setVerticalAlignment(CENTER);
+		
+		
 		mapOfImages = new HashMap<>();
 		mapOfStrings = new HashMap<>();
 
@@ -112,8 +112,8 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 		super(imageWidth);
 		// logging.debug(" ------------- font " + getFont() );
 		setOpaque(true);
-		// setHorizontalAlignment(LEFT);
-		// setVerticalAlignment(CENTER);
+		
+		
 		mapOfStrings = mapOfStringValues;
 		mapOfTooltips = mapOfDescriptions;
 		mapOfImages = new HashMap<>();

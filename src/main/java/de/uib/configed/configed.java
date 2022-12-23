@@ -1118,7 +1118,7 @@ public class configed {
 			System.exit(0);
 
 			// logging.debug(" called me with " + host + ", " + user + ", " +
-			// methodCall);
+			
 		}
 
 		if (de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect) {

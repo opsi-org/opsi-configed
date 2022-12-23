@@ -90,7 +90,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 					// setBackground(Color.white);
 
 					// setFont(Globals.defaultFontBig);
-					// setForeground(getTextNonSelectionColor());
+					
 				}
 			} else // group
 			{
@@ -120,7 +120,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 					// setBackground(Color.white);
 
 					// setFont(Globals.defaultFontBig);
-					// setForeground(getTextNonSelectionColor());
+					
 
 				}
 			}

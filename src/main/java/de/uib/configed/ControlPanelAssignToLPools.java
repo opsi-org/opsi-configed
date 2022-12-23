@@ -129,8 +129,8 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 				.isUsingFilter(GenTableModel.labelFilterConditionShowOnlySelected);
 		logging.info(this, "setSoftwareIdsFromLicencePool wasUsingSelectedFilter " + wasUsingSelectedFilter);
 		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.labelFilterConditionShowOnlySelected, false); // wasUsingSelectedFilter
-																											// );
-																											// //false);
+																											
+																											// 
 
 		modelWindowsSoftwareIds.setUsingFilter(labelWindowsSoftwareFilterCondition_dontShowAssociatedToOtherPool,
 				false);
@@ -235,14 +235,14 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 		modelWindowsSoftwareIds.setUsingFilter(labelWindowsSoftwareFilterCondition_dontShowAssociatedToOtherPool,
 				getSoftwareShowAllMeans() != SoftwareShowAllMeans.ALL);
-		// isShowOnlyAssociationsToSelectedPoolOrNoPool());
-		// wasUsingBaseSelectionFilter);
+		
+		
 
 		totalShownEntries = modelWindowsSoftwareIds.getRowCount();
 		logging.info(this, "modelWindowsSoftwareIds row count " + totalShownEntries);
 		thePanel.fieldCountAllWindowsSoftware.setText(produceCount(totalSWEntries));// + " - shown " + totalShownEntries
 																					// + " - unassigned " +
-																					// totalUnassignedSWEntries);
+																					
 		thePanel.fieldCountDisplayedWindowsSoftware.setText(produceCount(totalShownEntries));
 		thePanel.fieldCountNotAssignedSoftware.setText(produceCount(totalUnassignedSWEntries));
 
@@ -465,7 +465,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 			// setting back the other tables is provided by ListSelectionListener
 			// setting back the other tables is provided by ListSelectionListener
 			// thePanel.panelProductId2LPool.setSelectedValues(null, 0);
-			// setSoftwareIdsFromLicencePool();
+			
 		});
 
 		thePanel.panelLicencepools.addPopupItem(menuItemAddPool);
@@ -1106,7 +1106,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		super.initializeVisualSettings();
 		setSoftwareIdsFromLicencePool(null);
 		resetCounters(null);
-		// produceFilterSets( null );
+		
 		// windowsSoftwareFilterConditon_showOnlySelected.setFilter(null);
 		thePanel.panelProductId2LPool.getTheTable().clearSelection();
 		thePanel.panelLicencepools.getTheTable().clearSelection();
