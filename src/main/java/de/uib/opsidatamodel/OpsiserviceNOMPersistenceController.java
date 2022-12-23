@@ -168,7 +168,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	protected Map<String, Map<String, ListCellOptions>> productPropertyDefinitions; // for depot
 
-	// protected enum SelectionState{SELECTED, NOT_SELECTED};
+	
 
 	protected HostInfoCollections hostInfoCollections;
 

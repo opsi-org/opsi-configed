@@ -246,10 +246,10 @@ public class SSHPackageManagerUninstallParameterDialog
 			// tf_freeInput.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.freeInput"));
 			// tf_freeInput.getDocument().addDocumentListener(new DocumentListener()
 			// {
-			// public void changedUpdate(DocumentEvent documentEvent) { changeFreeInput(); }
-			// public void insertUpdate(DocumentEvent documentEvent) { changeFreeInput(); }
-			// public void removeUpdate(DocumentEvent documentEvent) { changeFreeInput(); }
-			// });
+			
+			
+			
+			
 			lbl_keepFiles.setText(configed
 					.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelKeepFiles"));
 			checkb_keepFiles = new JCheckBox();

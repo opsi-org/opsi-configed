@@ -1111,7 +1111,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			}
 			targetModel.setValueIsAdjusting(false);
 		}
-		// }.start();
+		
 
 	}
 
@@ -1260,7 +1260,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			fieldSearch.getCaret().setVisible(true);
 			
 		}
-		// }.start();
+		
 
 	}
 

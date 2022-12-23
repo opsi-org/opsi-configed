@@ -217,9 +217,9 @@ public class SSHCommandFactory {
 		// LinkedList<String> coms = new LinkedList<>()
 		// {{
 		
-		// }};
+		
 		// ssh_commands_param.add(new SSHCommand_Template(csetrights, new
-		// LinkedList<String>(){{add(csetrights.getCommandRaw());}} ));
+		
 		ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandOpsiSetRights());
 		// ssh_commands_param.add(new SSHCommand_Template(opsisetrights, coms,
 		// configed.getResourceValue("SSHConnection.command.opsisetrights"), true, null,

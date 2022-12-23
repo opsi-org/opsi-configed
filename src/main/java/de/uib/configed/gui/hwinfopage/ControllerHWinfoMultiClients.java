@@ -272,7 +272,7 @@ public class ControllerHWinfoMultiClients {
 				actionEvent -> main.setSelectedClientsCollectionOnPanel(panel.getSelectedKeys(), true));
 
 		panel.setTitlePane(new JComponent[] {
-				// buttonConfigureColumns, buttonReload }, 20 );
+				
 				buttonReload, buttonCopySelection, new JLabel("       "), buttonConfigureColumns }, 20);
 		panel.setTitlePaneBackground(Globals.backLightBlue);
 

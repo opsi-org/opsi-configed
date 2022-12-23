@@ -55,7 +55,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	private JPasswordField tf_passw;
 	
 
-	// public enum FinalActionType { START_OCD, REBOOT, SHUTDOWN };
+	
 	protected CommandDeployClientAgent.FinalActionType finalAction;
 	protected PanelStateSwitch panelFinalAction;
 

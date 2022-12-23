@@ -244,7 +244,7 @@ public class SSHConnectExec extends SSHConnect {
 					// wrong place final_dia.appendLater("\nREADY\n");
 
 				}
-				// } .start();
+				
 				logging.info(this, "exec_list command after starting " + commands);
 				logging.info(this, "exec_list commandToExec " + commandToExec);
 				

@@ -2195,7 +2195,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		macAddressField = new JTextEditorField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3',
 				'4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':', 2, true), "", 17);
 		// new SeparatedField(6, 2, 2, ':', new char[] { '0', '1', '2', '3', '4', '5',
-		// '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' } );
+		
 		macAddressField.addKeyListener(this);
 		macAddressField.addMouseListener(this);
 
@@ -4686,7 +4686,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		showLogfiles.setDocuments(logs, statusPane.getSelectedClientNames());
 		
 		// }
-		// });
+		
 
 	}
 

@@ -357,7 +357,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			// {
 			
 			// }
-			// });
+			
 			showPanel();
 			if (!(Globals.isGlobalReadOnly()))
 				btn_test_command.addActionListener(actionEvent -> doActionTestCommand());

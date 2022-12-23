@@ -532,7 +532,7 @@ public class PanelSWInfo extends JPanel {
 
 		HashMap<String, String> metaData = new HashMap<>();
 		// metaData.put("header", " " + mf.format( new String[] { hostId,
-		// swRows.getDate()} ));
+		
 
 		metaData.put("title", "Client " + hostId);
 		metaData.put("subtitle", scanInfo);

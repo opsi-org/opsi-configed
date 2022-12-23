@@ -614,7 +614,7 @@ public class DPassword extends JDialog // implements Runnable
 		/*
 		 * csPanel.doForAllContainedCompis
 		 * ("setBackground", new Object[]{ java.awt.Color.yellow
-		 * });//Globals.backLightBlue});
+		 * });
 		 */
 		
 		

@@ -346,7 +346,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected int saveServerViewIndex = VIEW_NETWORK_CONFIGURATION;
 
 	// public enum MainTabState {CLIENT_SELECTION, LOCALBOOT_PRODUCTS,
-	// NETBOOT_PRODUCTS, NETWORK_CONFIG, HARDWARE_INVENT, SOFTWARE_INVENT};
+	
 
 	protected Map<String, Object> reachableInfo = new HashMap<>();
 	protected Map<String, String> sessionInfo = new HashMap<>();
@@ -807,7 +807,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// try {
 
 	// } catch (InterruptedException ex) {
-	// } ;
+	
 
 	// }
 
@@ -1194,7 +1194,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// public void run() {
 
 	// }
-	// });
+	
 	// }
 	// }
 
