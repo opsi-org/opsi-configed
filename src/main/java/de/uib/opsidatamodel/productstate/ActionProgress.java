@@ -31,7 +31,6 @@ public class ActionProgress {
 
 	private static Vector<Integer> states;
 	private static Vector<String> labels;
-	private static String[] choiceLabels;
 
 	// instance variable
 	private int state = INVALID;
@@ -89,9 +88,6 @@ public class ActionProgress {
 		// displayLabel2label.put("none", "none");
 		displayLabel2label.put("installing", "installing");
 		displayLabel2label.put("cached", "cached");
-
-		choiceLabels = new String[] { label2displayLabel.get("none") };
-
 	}
 
 	public static Map<String, String> getLabel2DisplayLabel() {

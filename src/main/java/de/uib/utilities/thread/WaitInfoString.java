@@ -7,8 +7,6 @@ public class WaitInfoString {
 	private int current = 0;
 	private String baseString;
 
-	private boolean running;
-
 	public WaitInfoString() {
 		this("");
 		init(baseString);

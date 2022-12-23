@@ -143,7 +143,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	// Executioner exec; in superclass
 	// Executioner execBackground;
-	private static PersistenceController staticPersistControl;
 
 	protected FTextArea licInfoWarnings;
 
@@ -152,7 +151,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	private String user;
 	private String userConfigPart;
 	private Boolean applyUserSpecializedConfig;
-	private String password;
 
 	protected Map<String, List<String>> mapOfMethodSignatures;
 
@@ -1103,10 +1101,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		);
 		this.connectionServer = server;
 		this.user = user;
-
-		this.password = password;
-
-		new de.uib.configed.type.user.OpsiUser(user);
 
 		logging.debug(this, "create");
 
@@ -4086,12 +4080,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public void client2HwRowsRequestRefresh() {
 		hostColumnNames = null;
 		client2HwRowsColumnNames = null;
-		client2HwRowsColumnNames = null;
 		hwInfoClassNames = null;
 		dataStub.client2HwRowsRequestRefresh();
 	}
-
-	private Map<String, Object> nearlyEmptyHwRow = new HashMap<>();
 
 	@Override
 	public Map<String, Map<String, Object>> getClient2HwRows(String[] hosts) {

@@ -7,8 +7,6 @@ package de.uib.configed.gui.licences;
 
 import java.awt.event.ActionListener;
 
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
@@ -44,8 +42,6 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 	protected int buttonHeight = 15;
 	protected int buttonWidth = 140;
 	protected int lPoolHeight = 100;
-
-	private ComboBoxModel emptyComboBoxModel = new DefaultComboBoxModel<>(new String[] { "" });
 
 	protected de.uib.configed.ControlPanelLicencesUsage licencesUsageController;
 	private int initialSplit = 0;

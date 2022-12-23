@@ -51,8 +51,6 @@ public class LicensingInfoMap {
 	private Map<String, Map> tableMap;
 	private String latestDateString;
 	private String checksum;
-	private Boolean closeToLimitWarning = false;
-	private Boolean overLimitWarning = false;
 	private ArrayList<String> currentCloseToLimitModuleList;
 	private ArrayList<String> currentOverLimitModuleList;
 	private ArrayList<String> currentTimeWarningModuleList;
@@ -113,7 +111,6 @@ public class LicensingInfoMap {
 
 	public static final String CONFIG_KEY = "licensing";
 
-	private boolean checked = false;
 	private static LicensingInfoMap instance;
 	private static LicensingInfoMap instanceComplete;
 	private static LicensingInfoMap instanceReduced;

@@ -10,7 +10,6 @@ import java.io.File;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -21,7 +20,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -31,10 +29,8 @@ import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.IconButton;
-import de.uib.configed.gui.MainFrame;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnect;
-import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
@@ -42,7 +38,6 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.CheckedDocument;
 
 public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
-	private GroupLayout gpl;
 	private JPanel connectionPanel = new JPanel();
 	private JPanel settingsPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
@@ -57,7 +52,6 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 	private JButton btn_close;
 	private JButton btn_kill;
 
-	private JLabel lbl_serverConfig = new JLabel();
 	private JLabel lbl_keyfile = new JLabel();
 	private JLabel lbl_passphrase = new JLabel();
 	private JLabel lbl_host = new JLabel();
@@ -66,10 +60,6 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 	private JLabel lbl_port = new JLabel();
 	private JLabel lbl_connectionState = new JLabel();
 
-	private ButtonGroup buttonGroup1;
-	private JRadioButton rb_passw;
-	private JRadioButton rb_keyfile;
-
 	private static JComboBox<String> cb_host;
 	private static JTextField tf_keyfile;
 	private static JPasswordField tf_passphrase;
@@ -77,17 +67,12 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 	private static JTextField tf_port;
 	private static JPasswordField tf_passw;
 	private static boolean cb_useDefault_state;
-	private static boolean cb_useOutputColor_state;
-	private static boolean cb_execInBackground_state;
-	private MainFrame main;
 	private ConfigedMain configedMain;
 	private static SSHConfigDialog instance;
-	private static SSHConnectExec connection = null;
 	private static SSHConnectionInfo connectionInfo = null;
 
 	private SSHConfigDialog(Frame owner, ConfigedMain cmain) {
 		super(null, configed.getResourceValue("MainFrame.jMenuSSHConfig"), false);
-		main = (MainFrame) owner;
 		configedMain = cmain;
 		connectionInfo = SSHConnectionInfo.getInstance();
 
@@ -98,8 +83,6 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		this.setSize(500, 535);
 		this.setVisible(true);
 		cb_useDefault_state = cb_useDefault.isSelected();
-		cb_useOutputColor_state = cb_useOutputColor.isSelected();
-		cb_execInBackground_state = cb_execInBackground.isSelected();
 		if (Globals.isGlobalReadOnly()) {
 			setComponentsEnabled_RO(false);
 		}

@@ -36,7 +36,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
@@ -88,8 +87,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	protected javax.swing.JLabel labelMarkedCount;
 	protected String textMarkedCount = "selected";
 	protected JPanel titlePane;
-
-	private JTextField celleditorfield;
 
 	// protected Color backgroundColor = new Color(250, 250,
 	// 240);//Globals.backLightYellow;
@@ -267,8 +264,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	protected Vector<JMenuItem> menuItemsRequesting1SelectedLine;
 	protected Vector<JMenuItem> menuItemsRequestingMultiSelectedLines;
-
-	private boolean separatorAdded = false;
 
 	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition, // if -1 dont
 			// use a

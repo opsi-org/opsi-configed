@@ -44,7 +44,6 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	private JComboBox cb_parameter_formats;
 	private JButton btn_add_param;
 	private JButton btn_test_param;
-	private JButton btn_test_command;
 
 	public SSHCommandControlParameterMethodsPanel(JDialog owner, int lg, int rg, int ug, int og) {
 		super();

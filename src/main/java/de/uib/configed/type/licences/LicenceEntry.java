@@ -1,7 +1,6 @@
 package de.uib.configed.type.licences;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -60,7 +59,6 @@ public class LicenceEntry extends TreeMap<String, Object>
 	public static final String CONCURRENTservice = "ConcurrentSoftwareLicense";
 
 	public static final String[] LICENCE_TYPES = new String[] { VOLUME, OEM, RETAIL, CONCURRENT };
-	private static final List<String> TYPE_LIST = Arrays.asList(LICENCE_TYPES);
 
 	public static List<String> getKeys() {
 		return KEYS;

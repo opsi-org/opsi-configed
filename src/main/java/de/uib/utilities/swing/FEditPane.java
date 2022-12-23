@@ -34,7 +34,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Document;
 import javax.swing.text.Highlighter;
 import javax.swing.text.JTextComponent;
@@ -54,7 +53,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	private javax.swing.JScrollPane scrollpane;
 	private javax.swing.JTextPane textpane;
 
-	private DefaultStyledDocument doc;
 	// private javax.swing.text.html.HTMLDocument doc;
 	// protected Html2Text html2text = new Html2Text();
 
@@ -65,8 +63,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	protected String[] linesplits;
 
 	private boolean singleLine;
-	private final boolean standalone = true;
-	private boolean editingStarted = false;
 	static int count = 0;
 
 	// static final Pattern linkpattern = Pattern.compile(".*.*");
@@ -382,7 +378,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		editingStarted = true;
 	}
 
 	@Override

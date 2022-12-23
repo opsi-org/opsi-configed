@@ -76,9 +76,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	private javax.swing.JPanel panelTask;
 	private javax.swing.JPanel panelEnterKey;
 	private javax.swing.JPanel panelLicenceModel;
-	private javax.swing.JPanel jPanelLicencepool;
-	private javax.swing.JTable jTable2;
-	private javax.swing.JTable jTable3;
 	private javax.swing.JTextField jTextField_licenceID;
 	private javax.swing.JTextField jTextField_licenceType;
 	// private javax.swing.JFormattedTextField jTextField_maxInstallations;

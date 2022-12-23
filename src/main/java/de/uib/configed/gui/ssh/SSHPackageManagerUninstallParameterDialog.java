@@ -50,7 +50,6 @@ public class SSHPackageManagerUninstallParameterDialog
 	// private JComboBox cb_depots;
 	private JCheckBox checkb_keepFiles;
 
-	private JTextField tf_freeInput;
 	private JTextField tf_product;
 	private JTextField tf_selecteddepots;
 

@@ -30,8 +30,6 @@ import de.uib.utilities.swing.XList;
 
 public class GroupnameChoice extends FGeneralDialog implements DocumentListener, ListSelectionListener {
 
-	private ConfigedMain main;
-
 	protected int selIndex = -1;
 
 	protected XList groups;
@@ -50,7 +48,6 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 		} catch (Exception ex) {
 			toFront();
 		}
-		this.main = main;
 
 		dataVector = v;
 

@@ -44,9 +44,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 	// protected String opsiRepo = "";// /var/lib/opsi/depot/";
 
 	private String configRepo = "repositoryLocalUrl";
-	private String configDepot = "depotLocalUrl";
 
-	private static SSHPackageManagerParameterDialog instance;
 	protected ConfigedMain main;
 
 	public SSHPackageManagerParameterDialog(String title) {

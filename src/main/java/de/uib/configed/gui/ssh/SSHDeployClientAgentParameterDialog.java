@@ -32,7 +32,6 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.PanelStateSwitch;
 
 public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
-	private GroupLayout layout;
 	private JPanel inputPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
 	private JPanel winAuthPanel = new JPanel();

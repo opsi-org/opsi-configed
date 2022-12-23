@@ -31,7 +31,6 @@ public class ActionResult {
 
 	private static Vector<Integer> states;
 	private static Vector<String> labels;
-	private static String[] choiceLabels;
 
 	// instance variable
 	private int state = INVALID;
@@ -88,9 +87,6 @@ public class ActionResult {
 		displayLabel2label.put("always", "always");
 		displayLabel2label.put("failed", "failed");
 		displayLabel2label.put("success", "successful");
-
-		choiceLabels = new String[] { label2displayLabel.get("none") };
-
 	}
 
 	public static Map<String, String> getLabel2DisplayLabel() {
