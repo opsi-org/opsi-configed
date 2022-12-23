@@ -89,12 +89,12 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 	@Override
 	protected void allLayout() {
-		// super.allLayout();
+		
 		// we could design an adapted layout and infuse it in guiInit
 		
 
-		allpane.setBackground(Globals.backLightBlue); // Globals.nimbusBackground);///Globals.backgroundWhite);
-														// //Globals.backLighter);//Globals.backgroundWhite);
+		allpane.setBackground(Globals.backLightBlue); 
+														// 
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
@@ -131,7 +131,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		// southPanel = new JPanel();
 		southPanel.setOpaque(false);
-		southPanel.setBackground(Color.white); // Color.YELLOW );
+		southPanel.setBackground(Color.white); 
 		southPanel.setOpaque(true);
 
 		GroupLayout allLayout = new GroupLayout(allpane);
@@ -230,13 +230,13 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				super.reload();
 
 				
-				//ME.setVisible(false);
+				
 				
 				
 			}
 		};
 
-		//thePanel.setLicensingInfoMap(LicensingInfoMap.getInstance());
+		
 
 		thePanel.setMarkBoldHeaderCellRenderer();
 

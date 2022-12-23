@@ -1240,7 +1240,7 @@ public class DataStubNOM extends DataStub {
 		// + auditSoftwareXLicencePool);
 
 		
-		// auditSoftwareXLicencePool.getFunctionBy(LicencepoolEntry.idKEY));
+		
 	}
 
 	// ===================================================

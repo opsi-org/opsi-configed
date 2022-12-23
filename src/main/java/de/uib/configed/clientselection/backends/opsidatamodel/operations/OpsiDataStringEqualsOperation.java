@@ -70,7 +70,7 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 				return false;
 		} else {
 			
-			// Arrays.toString(dataSplitted));
+			
 
 			if (!startsWith)
 				if (!rData.startsWith(dataSplitted[0]))

@@ -76,7 +76,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		configedMain = cmain;
 		connectionInfo = SSHConnectionInfo.getInstance();
 
-		// this.centerOn(main);
+		
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		init();
 		
@@ -132,7 +132,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			}
 		} else {
 			
-			// configedMain.HOST );
+			
 			if (!connectionInfo.getHost().equals(ConfigedMain.HOST)) {
 				logging.info(this,
 						"compareStates 5 >" + connectionInfo.getHost() + "<     <>    >" + ConfigedMain.HOST + "<");
@@ -315,7 +315,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			lbl_passw.setText(configed.getResourceValue("SSHConnection.Config.jLabelPassword"));
 			tf_passw = new JPasswordField();
 			tf_passw.setText(connectionInfo.getPassw());
-			// SSHConnectionInfo.getInstance().setPassw(ConfigedMain.PASSWORD);
+			
 			tf_passw.getDocument().addDocumentListener(new DocumentListener() {
 				@Override
 				public void insertUpdate(DocumentEvent e) {
@@ -359,7 +359,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 					SSHCommandFactory.getInstance().unsetConnection();
 					// if (SSHCommandFactory.getInstance().getConnectionState().equals(
 					// SSHCommandFactory.CONNECTED ) )
-					// SSHCommandFactory.getInstance().getConnection().disconnect();
+					
 					// there seems to be nothing got disconnect
 					setSSHState();
 				}
@@ -687,7 +687,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 
 		factory.testConnection(connectionInfo.getUser(), connectionInfo.getHost());
 
-		// waitCursor.stop();
+		
 		// factory.testConnection(tf_user.getText(), (String) cb_host.getSelectedItem())
 		// ;
 		SSHCommandFactory.ssh_colored_output = cb_useOutputColor.isSelected();
@@ -711,7 +711,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		// final File file = new File("/home");
-		// chooser.setCurrentDirectory(file);
+		
 		String userDirLocation = System.getProperty(logging.envVariableForUserDirectory);
 		File userDir = new File(userDirLocation);
 		// default to user directory

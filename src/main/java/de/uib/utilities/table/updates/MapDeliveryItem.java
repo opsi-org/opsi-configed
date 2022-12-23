@@ -37,9 +37,9 @@ public class MapDeliveryItem extends MapBasedTableEditItem {
 			return true;
 
 		
-		// oldValues.get(keyCol).toString());
 		
-		// rowV.get(keyCol).toString());
+		
+		
 
 		if (oldValues.get(keyCol).toString().equals(rowV.get(keyCol).toString())) {
 			return true;

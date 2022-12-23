@@ -29,7 +29,7 @@ public class AdditionalconfigurationUpdate implements UpdateCommand {
 	@Override
 	public void doCall() {
 		
-		// newdata.getClass());
+		
 		if (newdata instanceof de.uib.configed.type.ConfigName2ConfigValue) {
 			de.uib.configed.type.ConfigName2ConfigValue configState = (de.uib.configed.type.ConfigName2ConfigValue) newdata;
 			

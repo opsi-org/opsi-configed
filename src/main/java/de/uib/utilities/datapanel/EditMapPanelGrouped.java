@@ -112,7 +112,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-					// actor.reloadData();
+					
 					break;
 
 				case PopupMenuTrait.POPUP_SAVE:
@@ -193,7 +193,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 								}
 							};
 
-					// result.addSeparator();
+					
 					/*
 					 * result.addSeparator();
 					 * JMenuItem popupRemoveClientEntry = new JMenuItem("remove client entry");
@@ -253,13 +253,13 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 			String property = "";
 			
 			
-			// mapTableModel.getData().get(key));
 			
-			// mapTableModel.getData());
 			
-			// mapTableModel.getData().getClass());
 			
-			// mapTableModel.getData().get(key).getClass());
+			
+			
+			
+			
 			/*
 			 * ListMerger listelem = (ListMerger) mapTableModel.getData().get(key);
 			 * if (!listelem.isEmpty())
@@ -312,7 +312,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		// tree.putClientProperty("JTree.lineStyle", "Horizontal");
 		tree.setCellRenderer(new SimpleIconNodeRenderer());
 		tree.expandAll();
-		// tree.setRootVisible(false);
+		
 
 		tree.addTreeSelectionListener(this);
 
@@ -328,7 +328,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		splitPane.setRightComponent(rightPane);
 		splitPane.setDividerLocation(initialSplitLoc);
 
-		// splitPane.add(jScrollPaneTree);
+		
 
 		GroupLayout layout = new GroupLayout(this);
 		setLayout(layout);
@@ -412,10 +412,10 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		logging.debug(this, " setEditableMap, visualdata keys " + visualdata);
 		if (visualdata != null) {
 			
-			// visualdata.keySet());
+			
 
 			treemodel = new SimpleTreeModel(givenClasses.keySet(), tooltips4Keys);
-			// treemodel.produce();
+			
 			tree.setModel(treemodel);
 			tree.expandAll();
 
@@ -456,7 +456,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	@Override
 	public void setStoreData(Collection data) {
 		super.setStoreData(data);
-		// meaning mapTableModel.setStoreData(data);
+		
 
 		for (String key : keyclasses) {
 			// if (key.startsWith("user"))
@@ -469,7 +469,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	@Override
 	public void setUpdateCollection(Collection updateCollection) {
 		super.setUpdateCollection(updateCollection);
-		// meaning mapTableModel.setUpdateCollection( updateCollection );
+		
 
 		for (String key : keyclasses) {
 			// if (key.startsWith("user"))
@@ -544,7 +544,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 		splitPane.setDividerLocation(divLoc);
 
-		// labelForRightPane.setText(key);
+		
 	}
 
 }

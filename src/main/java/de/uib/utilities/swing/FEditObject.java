@@ -97,7 +97,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
-		// editingArea.addFocusListener(this);
+		
 
 		buttonCommit = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("FEditObject.SaveButtonTooltip"), "images/apply.png",
@@ -168,7 +168,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		// textarea.setColumns(20);
 		// textarea.setRows(5);
-		// scrollpane.setViewportView(textarea);
+		
 
 		javax.swing.GroupLayout layout1 = new javax.swing.GroupLayout(framingPanel);
 		framingPanel.setLayout(layout1);
@@ -281,7 +281,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		dataChanged = b;
 		buttonCommit.setEnabled(b);
-		// buttonCancel.setEnabled(b);
+		
 	}
 
 	public void setStartValue(Object s) {
@@ -329,9 +329,9 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 			logging.debug(this, "centerOn " + master.getClass() + ", " + master);
 
 			// startX = (int) masterOnScreen.getX() + intHalf ( master.getWidth() ) -
-			// intHalf( getSize().getWidth() );
+			
 			// startY = (int) masterOnScreen.getY() + intHalf ( master.getHeight() ) -
-			// intHalf( getSize().getHeight() );
+			
 			startX = (int) masterOnScreen.getX() - (int) (getSize().getWidth()) - Globals.MIN_HGAP_SIZE;
 			startY = (int) masterOnScreen.getY();
 
@@ -339,7 +339,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 			logging.debug(this, "centerOn screenSize " + screenSize);
 			
 			
-			// getSize().height));
+			
 
 			/*
 			 * if (startX + getSize().width > screenSize.width)
@@ -406,7 +406,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		setVisible(false);
 		finished = true;
-		// runningInstances.forget(this);
+		
 		
 	}
 

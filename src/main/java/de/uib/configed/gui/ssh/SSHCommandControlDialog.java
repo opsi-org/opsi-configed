@@ -660,7 +660,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		new Thread() {
 			@Override
 			public void run() {
-				new SSHConnectExec(cmain, command); // .starting(command);
+				new SSHConnectExec(cmain, command); 
 			}
 		}.start();
 

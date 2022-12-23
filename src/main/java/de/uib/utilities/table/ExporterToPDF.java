@@ -170,9 +170,9 @@ public class ExporterToPDF extends ExportTable {
 			if ((saveAction == false) && (temp.getAbsolutePath() != null)) {
 				try {
 					
-					// Desktop.getDesktop().isSupported(Desktop.Action.OPEN));
-					Desktop.getDesktop().open(temp); // new File(temp.getAbsolutePath()));
-					// Desktop.getDesktop().browse(new java.net.URI( temp.getAbsolutePath() ) );
+					
+					Desktop.getDesktop().open(temp); 
+					
 				} catch (Exception e) {
 					logging.error("cannot show: " + temp.getAbsolutePath() + " : " + e);
 				}

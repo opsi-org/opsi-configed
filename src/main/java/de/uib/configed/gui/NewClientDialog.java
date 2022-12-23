@@ -130,13 +130,13 @@ public class NewClientDialog extends FGeneralDialog
 			instance = new NewClientDialog(main, depots);
 			instance.init();
 		} else {
-			// instance.init();
+			
 		}
 		return instance;
 	}
 
 	public static NewClientDialog getInstance() {
-		// instance.init();
+		
 		return instance;
 	}
 
@@ -360,7 +360,7 @@ public class NewClientDialog extends FGeneralDialog
 		labelUefiDefault = new LabelChecked();
 		labelUefiDefault.setText(configed.getResourceValue("NewClientDialog.boottype") + " "
 				+ configed.getResourceValue("NewClientDialog.serverDefault"));
-		// labelUefiDefault.setBackground( Color.WHITE );
+		
 		if (!main.getPersistenceController().isWithUEFI()) {
 			labelUefiDefault.setText(configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			labelUefiDefault.setEnabled(false);
@@ -382,7 +382,7 @@ public class NewClientDialog extends FGeneralDialog
 		labelWanDefault = new LabelChecked();
 		labelWanDefault.setText(configed.getResourceValue("NewClientDialog.wanConfig") + " "
 				+ configed.getResourceValue("NewClientDialog.serverDefault"));
-		// labelWanDefault.setBackground( Color.WHITE );
+		
 		if (!main.getPersistenceController().isWithWAN()) {
 			labelWanDefault.setText(configed.getResourceValue("NewClientDialog.wan_not_activated"));
 		}
@@ -943,7 +943,7 @@ public class NewClientDialog extends FGeneralDialog
 		result = 1;
 
 		// FTextArea fText = new FTextArea(Globals.mainFrame, "waiting", false, 0);
-		// fText.setVisible(true);
+		
 
 		String hostname = jTextHostname.getText();
 		String selectedDomain = (String) jComboDomain.getSelectedItem();
@@ -993,7 +993,7 @@ public class NewClientDialog extends FGeneralDialog
 				&& (e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
 				&& e.getKeyCode() == KeyEvent.VK_TAB) {
 			jTextDescription.requestFocusInWindow();
-			// e.consume();
+			
 		}
 
 		else {

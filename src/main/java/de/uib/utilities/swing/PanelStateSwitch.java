@@ -227,7 +227,7 @@ public class PanelStateSwitch extends JPanel {
 			vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(labelTitle,
 					Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT));
 
-		// vGroup.addContainerGap();
+		
 
 		for (Enum val : values) {
 			vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(

@@ -302,7 +302,7 @@ public class configed {
 
 		String s = "java.version";
 		if (propNames.contains(s)) {
-			// javaNames.add( s );
+			
 			priorizedNames.add(s);
 		}
 
@@ -540,17 +540,17 @@ public class configed {
 					// de.uib.opsicommand.sshcommand.SSHConnectionInfo
 					// coninfo = de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance();
 
-					// coninfo.setSSHActivateStatus(true);
+					
 
 					i = i + 1;
 
 					if (isValue(args, i)) {
 						if (args[i].equalsIgnoreCase("Y")) {
 							sshconnect_onstart = true;
-							// coninfo.setSSHActivateStatus(true);
+							
 						} else if (args[i].equalsIgnoreCase("N")) {
 							sshconnect_onstart = false;
-							// coninfo.setSSHActivateStatus(false);
+							
 						} else {
 							usage();
 							endApp(ERROR_INVALID_OPTION);
@@ -941,7 +941,7 @@ public class configed {
 					// was chosen: UIManager.put("nimbusSelectionBackground",
 					// UIManager.get("controlHighlight"));
 					// UIManager.put("Tree[Enabled+Selected].collapsedIconPainter", new
-					// javax.swing.text.DefaultHighlighter.DefaultHighlightPainter(java.awt.Color.yellow));
+					
 					// UIManager.put("Tree.rendererMargins", new Insets(0,0,0,0));
 
 					// UIManager.put("Tree.drawHorizontalLines", true);
@@ -990,7 +990,7 @@ public class configed {
 		 * UIManager.put("ProgressBar.selectionForeground", Globals.backLightBlue);
 		 */
 
-		// JPopupMenu.setDefaultLightWeightPopupEnabled(false);
+		
 		// destroys some popups, saves others
 	}
 
@@ -1159,7 +1159,7 @@ public class configed {
 		fErrorOutOfMemory
 				.setMessage("The program will be terminated,\nsince more memory is required than was assigned.");
 
-		//fErrorOutOfMemory.setVisible(true);
+		
 
 		new configed(locale, host, user, password, client, clientgroup, tab, logdirectory);
 	}

@@ -46,7 +46,7 @@ public class SSHConnectExec extends SSHConnect {
 		super(m);
 		FOUND_ERROR = false;
 		main = m;
-		// setDialog(SSHConnectionExecDialog.getInstance());
+		
 	}
 
 	public SSHConnectExec(ConfigedMain m, SSHCommand sshcommand) {
@@ -57,7 +57,7 @@ public class SSHConnectExec extends SSHConnect {
 		super(m);
 		FOUND_ERROR = false;
 		main = m;
-		// setDialog(SSHConnectionExecDialog.getInstance());
+		
 		// if (main != null) connect(sshcommand);
 		logging.info(this, "SSHConnectExec main " + main);
 		
@@ -247,7 +247,7 @@ public class SSHConnectExec extends SSHConnect {
 				// } .start();
 				logging.info(this, "exec_list command after starting " + commands);
 				logging.info(this, "exec_list commandToExec " + commandToExec);
-				// System.gc();
+				
 			} catch (Exception e) {
 				logging.warning("exception: " + e);
 			}
@@ -318,8 +318,8 @@ public class SSHConnectExec extends SSHConnect {
 				} else
 					dialog.setVisible(true);
 
-				// outputDialog.setVisible(false);
-				// outputDialog.setVisible(true);
+				
+				
 			} else {
 				outputDialog = SSHConnectionExecDialog.getInstance();
 			}
@@ -352,7 +352,7 @@ public class SSHConnectExec extends SSHConnect {
 				if (withGui) {
 					outputDialog.setVisible(false);
 				}
-			// System.gc();
+			
 			if (withGui)
 				return "finish";
 			else
@@ -506,7 +506,7 @@ public class SSHConnectExec extends SSHConnect {
 					connect();
 				final Channel channel = getSession().openChannel("exec");
 				// if (! (((String)command.getCommand().trim()).endsWith("&")))
-				// ((ChannelExec)channel).setPty(true);
+				
 				((ChannelExec) channel).setErrStream(System.err);
 				((ChannelExec) channel).setCommand(command.getCommand());
 				final OutputStream out = channel.getOutputStream();
@@ -534,12 +534,12 @@ public class SSHConnectExec extends SSHConnect {
 					(outputDialog).addKillProcessListener(killProcessListener);
 					// publishInfo("result:" + outputDialog.ansiCodeEnd);
 					// publish("");
-					// outputDialog.setStartAnsi(Color.BLACK);
+					
 				}
 				supw_retriedTimes = 0;
 				while (true) {
 					while (in.available() > 0) {
-						// outputDialog.setStartAnsi(Color.BLACK);
+						
 						int i = in.read(tmp, 0, size);
 						logging.info(this, "doInBackground i " + i);
 
@@ -581,7 +581,7 @@ public class SSHConnectExec extends SSHConnect {
 						if (withGui) {
 							// publish( "" + i);
 							for (String line : str.split("\n")) {
-								// outputDialog.setStartAnsi(Color.BLACK);
+								
 								logging.debug(this, " doInBackground publish " + progress + ": " + line);
 								publish(new String(line));
 								progress++;
@@ -657,7 +657,7 @@ public class SSHConnectExec extends SSHConnect {
 
 			if (outputDialog != null) {
 				outputDialog.setStartAnsi(Color.BLACK);
-				// outputDialog.setVisible(true);
+				
 				for (String line : chunks) {
 					logging.debug(this, "process " + line);
 					sshOutputCollector.appendValue(line);
@@ -695,7 +695,7 @@ public class SSHConnectExec extends SSHConnect {
 			/*
 			 * if (outputDialog != null)
 			 * {
-			 * //outputDialog.leave();
+			 * 
 			 * }
 			 */
 		}

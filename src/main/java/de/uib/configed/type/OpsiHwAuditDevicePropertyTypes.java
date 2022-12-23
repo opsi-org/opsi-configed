@@ -56,7 +56,7 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 			 * }
 			 */
 
-			// auditDeviceClass.setUsedHostColumns( usedHostColumns );
+			
 
 			for (OpsiHwAuditDevicePropertyType deviceProperty : auditDeviceClass.getDeviceHostProperties()) {
 				if (valuesSet.contains(deviceProperty.getOpsiDbColumnName()))
@@ -78,7 +78,7 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 
 			for (OpsiHwAuditDevicePropertyType deviceProperty : auditDeviceClass.getDeviceHwItemProperties()) {
 				
-				// deviceProperty.getOpsiDbColumnName());
+				
 
 				if (valuesSet.contains(deviceProperty.getOpsiDbColumnName()))
 					deviceProperty.setDisplayed(true);

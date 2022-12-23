@@ -359,13 +359,13 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			@Override
 			public void first() {
 				associatedPanel.setCursorToFirstRow();
-				// associatedPanel.moveToFirstRow();
+				
 			}
 
 			@Override
 			public void last() {
 				associatedPanel.setCursorToLastRow();
-				// associatedPanel.moveToLastRow();
+				
 			}
 		};
 
@@ -429,14 +429,14 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		 */
 
 		// JLabel labelSearch = new JLabel("Suche");
-		// labelSearch.setFont(Globals.defaultFontStandardBold);
-		// labelSearch.setPreferredSize(Globals.labelDimension);
+		
+		
 
 		fieldSearch = new JTextField("");
 		fieldSearch.setPreferredSize(Globals.textfieldDimension);
-		// fieldSearch.setPreferredSize(Globals.buttonDimension);
+		
 		fieldSearch.setFont(Globals.defaultFontBig);
-		fieldSearch.setBackground(Globals.backVeryLightBlue); // Globals.backLightYellow);
+		fieldSearch.setBackground(Globals.backVeryLightBlue); 
 		// blinkrate = fieldSearch.getCaret().getBlinkRate(); //save default blinkrate
 		fieldSearch.getCaret().setBlinkRate(blinkrate);
 		fieldSearch.setToolTipText(configed.getResourceValue("SearchPane.searchField.toolTip"));
@@ -484,7 +484,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		popupNewSearch.setText(configed.getResourceValue("SearchPane.popup.searchnew"));
 
 		popupNewSearch.addActionListener(actionEvent -> {
-			// filtermark.setSelected(null);
+			
 			targetModel.setFiltered(false);
 			if (resetFilterModeOnNewSearch)
 				setFilteredMode(false);
@@ -513,7 +513,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		popupEmptySearchfield.addActionListener(actionEvent -> fieldSearch.setText(""));
 
-		// fieldSearch.setComponentPopupMenu(searchMenu);
+		
 
 		fieldSearch.addActionListener(actionEvent -> {
 			if (searchInputType == SearchInputType.PROGRESSIVE)
@@ -529,7 +529,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		setSearchFieldsAll();
 
 		// JLabel labelSearchMode = new JLabel("Modus");
-		// labelSearchMode.setFont(Globals.defaultFontStandardBold);
+		
 		labelSearchMode = new JLabel(configed.getResourceValue("SearchPane.searchmode.searchmode"));
 		labelSearchMode.setFont(Globals.defaultFont);
 
@@ -1107,7 +1107,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				getSelectedAndSearch(true, true); // adding the next row to selection
 				
 				
-				// targetModel.getSelectedRows() ));
+				
 			}
 			targetModel.setValueIsAdjusting(false);
 		}
@@ -1130,7 +1130,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 			
 
-			// targetModel.setFilter(true);
+			
 			
 		}
 	}
@@ -1198,7 +1198,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		targetModel.setCursorRow(row);
 
-		// targetModel.setRenderAsCurrentRow( row );
+		
 	}
 
 	private void searchTheRow(final int startrow, final boolean addSelection, final boolean select) {
@@ -1253,7 +1253,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				}
 			}
 
-			// waitCursor.stop();
+			
 
 			// fieldSearch.setCursor(new java.awt.Cursor( java.awt.Cursor.TEXT_CURSOR));
 
@@ -1280,7 +1280,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void switchFilterOff() {
 		if (targetModel.isFiltered()) {
-			// filtermark.setSelected(null);
+			
 			targetModel.setFiltered(false);
 			setFilteredMode(false);
 
@@ -1289,7 +1289,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void switchFilterOn() {
 		if (!targetModel.isFiltered()) {
-			// filtermark.setSelected(null);
+			
 			targetModel.setFiltered(true);
 			setFilteredMode(true);
 
@@ -1380,7 +1380,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			logging.debug(this, "key pressed ENTER on fieldSearch, with content " + fieldSearch.getText()
 					+ " searchInputType " + searchInputType);
-			// e.consume(); would prevent the actionlistener on fieldSearch to act
+			
 			if (searchInputType == SearchInputType.LINE) {
 				if (!fieldSearch.getText().equals("")) {
 					switchFilterOff();
@@ -1440,7 +1440,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			logging.info(this, "actionPerformed on filtermark, targetModel.isFiltered " + targetModel.isFiltered());
 
 			if (targetModel.isFiltered()) {
-				// filtermark.setSelected(null);
+				
 
 				int[] unfilteredSelection = targetModel.getUnfilteredSelection();
 				
@@ -1454,7 +1454,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				}
 
 			} else {
-				// filtermark.setSelected(null);
+				
 				switchFilterOn();
 			}
 

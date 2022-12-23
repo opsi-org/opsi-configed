@@ -85,7 +85,7 @@ public class PanelProductProperties extends JSplitPane
 
 	protected void init() {
 		// tableProducts = new JTable();
-		// tableProducts.setDragEnabled(true);
+		
 
 		selectedProducts = new ArrayList<>();
 
@@ -187,7 +187,7 @@ public class PanelProductProperties extends JSplitPane
 						 * theTable.getValueAt(row, columnNames.indexOf("packageVersion"))
 						 * );
 						 */
-						// depotsOfPackage.clear();
+						
 						List<String> depotsOfPackageAsRetrieved = new ArrayList<>();
 
 						String versionInfo = "";
@@ -419,8 +419,8 @@ public class PanelProductProperties extends JSplitPane
 		setRightComponent(infoPane);
 		// setDividerLocation(800);
 
-		// paneProducts.addMouseListener(new utils.PopupMouseListener(popup));
-		// tableProducts.addMouseListener(new utils.PopupMouseListener(popup));
+		
+		
 	}
 
 	/*
@@ -435,7 +435,7 @@ public class PanelProductProperties extends JSplitPane
 	/*
 	 * protected void reloadAction()
 	 * {
-	 * //mainController.requestReloadStatesAndActions();
+	 * 
 	 * //mainController.getPersistenceController().
 	 * productPropertyDefinitionsRequestRefresh();
 	 * //mainController.getPersistenceController().productpropertiesRequestRefresh()

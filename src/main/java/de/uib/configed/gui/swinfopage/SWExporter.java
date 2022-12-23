@@ -166,8 +166,8 @@ public abstract class SWExporter {
 		else {
 			theHost = hostId;
 			updateModel();
-			// modelSWInfo.requestReload();
-			// smodelSWInfo.reset();
+			
+			
 		}
 
 		setWriteToFile(filepathStart + hostId + ".pdf");
@@ -241,7 +241,7 @@ public abstract class SWExporter {
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
 		logging.info(this, "update++++++ modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
-		// panelTable.reload();
+		
 
 	}
 

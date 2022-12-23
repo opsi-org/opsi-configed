@@ -75,9 +75,9 @@ public class JTextHideField extends javax.swing.JPanel {
 		});
 		button.setToolTipText(de.uib.configed.configed.getResourceValue("JTextHideField.toggleHide"));
 
-		// button.setEnabled( true );
-		// button.setBackground( Color.BLUE );
-		// visibleField.setEditable(false);
+		
+		
+		
 
 		setupPanel();
 		setEnabled(false);

@@ -134,7 +134,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				// "\n\n", dialog.getInputField());
 				logging.info(this, "Connect");
 
-				// channel.setInputStream(new FilterInputStream(System.in));
+				
 				// a hack for MS-DOS prompt on Windows.
 				// channel.setInputStream(new FilterInputStream(System.in){
 				// public int read(byte[] b, int off, int len)throws IOException{
@@ -154,8 +154,8 @@ public class SSHConnectTerminal extends SSHConnect {
 				channel = setStreams(channel);
 
 				channel.setPtyType("dumb");
-				// channel.setPty(false);
-				// ((ChannelShell)channel).setPty(false);
+				
+				
 
 				channel.connect();
 				logging.info(this, "connect " + SSHConnectionInfo.getInstance().getUser() + "@"
@@ -310,7 +310,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				JTextField textField = (JTextField) e.getSource();
 				// if (textField.getText().trim().toLowerCase().equals("exit")) { //
 				// if(key==KeyEvent.VK_ENTER) dialog.cancel(); // ((Component)
-				// textField).requestFocusInWindow(); // } // else
+				
 				if (key == KeyEvent.VK_ENTER) {
 					logging.info(this, "initInputFieldFromDialog keyReleased ENTER ");
 					logging.info(this, "initInputFieldFromDialog inputfield " + textField);
@@ -321,7 +321,7 @@ public class SSHConnectTerminal extends SSHConnect {
 					}
 					// else if (textField.getText().trim().toLowerCase().equals("kill")) {
 					// exec(new String(new byte[] {3}) +"\n");
-					// ((Component) textField).requestFocusInWindow();
+					
 					// dialog.getInputField().setText("");
 					// }
 					else {
@@ -335,7 +335,7 @@ public class SSHConnectTerminal extends SSHConnect {
 						// if (dirs != null)
 						// {
 						// if (dirs.addAll(commands_compgen))
-						// dialog.setAutocompleteList(dirs);
+						
 						// }
 						// else
 						// dialog.setAutocompleteList(commands_compgen);
@@ -391,7 +391,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		// {
 		// out.write("pwd\n".getBytes());
 		
-		// out.flush();
+		
 		// }
 		// try{Thread.sleep(50);} catch(Exception ee){}
 		// // }

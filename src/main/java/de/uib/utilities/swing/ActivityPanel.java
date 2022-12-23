@@ -188,7 +188,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 							WaitCursor.stopAll();
 						} catch (Exception x) {
 						} ;
-						// WaitCursor.stopAll();
+						
 					}
 				}
 

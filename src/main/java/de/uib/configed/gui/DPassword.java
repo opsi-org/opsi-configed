@@ -128,7 +128,7 @@ public class DPassword extends JDialog // implements Runnable
 			// configed.getResourceValue("FStartWakeOnLan.timeElapsed.toolTip") );
 			waitingProgressBar.setValue(0);
 			waitingProgressBar.setEnabled(true);
-			// waitingProgressBar.setMaximum(max);
+			
 
 			UIDefaults defaults = new UIDefaults();
 			defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
@@ -390,7 +390,7 @@ public class DPassword extends JDialog // implements Runnable
 		titledBorder1 = new TitledBorder("");
 
 		panel = new JPanel();
-		//panel.setEnabled(false);
+		
 
 		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 		panel.setBorder(padding);
@@ -440,7 +440,7 @@ public class DPassword extends JDialog // implements Runnable
 
 		// JCheckBox checkGzip = new
 		// JCheckBox(configed.getResourceValue("DPassword.checkGzip") ,
-		// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission);
+		
 		JCheckBox checkCompression = new JCheckBox(configed.getResourceValue("DPassword.checkCompression"),
 				de.uib.opsicommand.JSONthroughHTTP.compressTransmission);
 		checkCompression.addItemListener(new ItemListener() {
@@ -526,7 +526,7 @@ public class DPassword extends JDialog // implements Runnable
 		jPanelButtons.add(jButtonCommit);
 		jPanelButtons.add(jButtonCancel);
 
-		// jPanelRadioButtons.setLayout(flowLayoutRadioButtons);
+		
 		// jPanelRadioButtons.add(jRadioButton_ssh2);
 		// jPanelRadioButtons.add(jRadioButton_localfs);
 
@@ -616,15 +616,15 @@ public class DPassword extends JDialog // implements Runnable
 		 * ("setBackground", new Object[]{ java.awt.Color.yellow
 		 * });//Globals.backLightBlue});
 		 */
-		// myAuth.setDefault(myAuth);
-		// Authenticator.setDefault(myAuth);
+		
+		
 
 		// fieldUser.setText(System.getProperty("user.name"));
 		// jLabelVersion.setText("opsi configuration editor, version " + Globals.VERSION
 		// + " date " + Globals.VERDATE);
 		// jLabelVersion.setText( sprintf(
 		// configed.getResourceValue("DPassword.jLabelVersion"), Globals.VERSION,
-		// Globals.VERDATE) );
+		
 
 		MessageFormat messageFormatVersion = new MessageFormat(configed.getResourceValue("DPassword.jLabelVersion"));
 		jLabelVersion.setText(messageFormatVersion
@@ -707,7 +707,7 @@ public class DPassword extends JDialog // implements Runnable
 		// correctly
 
 		tryConnecting();
-		// waitInfo.toFront();
+		
 	}
 	/*
 	 * public static PersistenceController producePersistenceController(String
@@ -728,7 +728,7 @@ public class DPassword extends JDialog // implements Runnable
 	public void tryConnecting() {
 		logging.info(this, "started  tryConnecting");
 		setActivated(false);
-		//jButtonCommit.setEnabled(false);
+		
 
 		// saveCursor = getCursor();
 		// setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -761,10 +761,10 @@ public class DPassword extends JDialog // implements Runnable
 		logging.info(this, "is local app  " + localApp);
 		if (localApp) {
 
-			//waitInfo.setAlwaysOnTop(true);
+			
 			logging.info(this, "start WaitingWorker");
 			waitingTask = new de.uib.utilities.thread.WaitingWorker(waitInfo);
-			// waitingTask.addPropertyChangeListener(this);
+			
 			waitingTask.execute();
 
 			new Thread() {
@@ -834,12 +834,12 @@ public class DPassword extends JDialog // implements Runnable
 			waitInfo.actAfterWaiting();
 		}
 
-		// de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setHost(HOST);
+		
 		// de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setHost((String)
-		// fieldHost.getSelectedItem());
-		// de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setUser(USER);
+		
+		
 		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setUser(fieldUser.getText());
-		// de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setPassw(PASSWORD);
+		
 		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance()
 				.setPassw(String.valueOf(passwordField.getPassword()));
 		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setHost((String) fieldHost.getSelectedItem());

@@ -144,7 +144,7 @@ public class FEditList extends FEditObject
 		super.setEditable(b);
 		extraField.setVisible(b);
 		buttonRemove.setVisible(b && !singleSelectionMode);
-		// buttonRemove.setEnabled(b);
+		
 		buttonAdd.setVisible(b);
 	}
 
@@ -209,10 +209,10 @@ public class FEditList extends FEditObject
 		
 		addElement(element);
 
-		// extraField.removeActionListener(this);
+		
 		// extraField.setText(""); //an empty list value will always be created by what
 		// ever event
-		// extraField.addActionListener(this);
+		
 		extraFieldChanged(false);
 	}
 

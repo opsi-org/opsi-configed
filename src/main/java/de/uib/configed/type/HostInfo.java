@@ -827,7 +827,7 @@ public class HostInfo {
 		// productValues
 		
 
-		// persist.updateProductOnClients();
+		
 		// persist.getHostInfoCollections().updateLocalHostInfo(client,
 		// clientShutdownInstallKEY, boolShutdownInstall);
 		// }

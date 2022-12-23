@@ -188,7 +188,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		else
 			editableColumn.setCellRenderer(tableCellRenderer);
 
-		// editorfield.addFocusListener(this);
+		
 
 		popupEditOptions = definePopup();
 		popupNoEditOptions = definePopup();
@@ -222,28 +222,28 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 				// popupmenuAtRow = new JPopupMenu();
 
 				// MouseListener popupListener = new utils.PopupMouseListener(popupmenuAtRow);
-				// table.addMouseListener(popupListener);
+				
 
 				popupItemAddStringListEntry = new JMenuItemFormatted(
 						configed.getResourceValue("EditMapPanel.PopupMenu.AddEntrySingleSelection"));
 				popupEditOptions.add(popupItemAddStringListEntry);
 				popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.String", false));
 
-				// listEditableModeMenuItems.add( popupItemAddStringListEntry );
+				
 
 				popupItemAddStringListEntry = new JMenuItemFormatted(
 						configed.getResourceValue("EditMapPanel.PopupMenu.AddEntryMultiSelection"));
 				popupEditOptions.add(popupItemAddStringListEntry);
 				popupItemAddStringListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.String", true));
 
-				// listEditableModeMenuItems.add( popupItemAddStringListEntry );
+				
 
 				popupItemAddBooleanListEntry = new JMenuItemFormatted(
 						configed.getResourceValue("EditMapPanel.PopupMenu.AddBooleanEntry"));
 				popupEditOptions.add(popupItemAddBooleanListEntry);
 				popupItemAddBooleanListEntry.addActionListener(actionEvent -> addEntryFor("java.lang.Boolean"));
 
-				// listEditableModeMenuItems.add( popupItemAddBooleanListEntry );
+				
 			}
 
 			if (entryRemovable) {
@@ -495,7 +495,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		table.setRowHeight(Globals.LINE_HEIGHT);
 		table.setShowGrid(true);
 		table.setGridColor(Color.white);
-		// table.setBackground(Globals.backNimbus);
+		
 
 		table.addMouseWheelListener(mouseWheelEvent -> {
 			
@@ -587,7 +587,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		editableColumn.setCellEditor(theCellEditor);
 
 		
-		// mapTableModel.fireTableDataChanged();
+		
 
 		/*
 		 * if (optionsMap != null)
@@ -619,11 +619,11 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		if (theCellEditor != null) // && data != null)
 		{
 			theCellEditor.cancelCellEditing(); // don't shift the old editing state to a new product
-			// theCellEditor.stopCellEditing(); //here we get null value errors since the
+			
 			// state "hangs"
 			if (theCellEditor instanceof SensitiveCellEditor)
 				((SensitiveCellEditor) theCellEditor).hideListEditor();
-			// ((DefaultCellEditor) theCellEditor).getComponent().setVisible(false);
+			
 		}
 
 	}
@@ -741,7 +741,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 	protected final void addProperty(String key, Object newval) {
 		mapTableModel.addEntry(key, newval);
 		names = mapTableModel.getKeys();
-		// mapTableModel.fireTableDataChanged(); //called in MapTableModel
+		
 	}
 
 	/**
@@ -797,7 +797,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 
 		names = mapTableModel.getKeys();
 		logging.info(this, "removeProperty names left: " + names);
-		// mapTableModel.fireTableDataChanged(); //called in MapTableModel
+		
 	}
 
 	public void stopEditing() {
@@ -811,13 +811,13 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 	@Override
 	public void focusGained(FocusEvent e) {
 		
-		// table.isEditing());
+		
 	}
 
 	@Override
 	public void focusLost(FocusEvent e) {
 		
-		// table.isEditing());
+		
 		stopEditing();
 	}
 

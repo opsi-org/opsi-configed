@@ -35,7 +35,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 	static {
 		ATTRIBUTES = new LinkedList<>();
 		ATTRIBUTES.add(LicencepoolEntry.idSERVICEKEY);
-		// ATTRIBUTES.add(SwID);
+		
 
 		ATTRIBUTES.add(SWAuditEntry.NAME);
 		ATTRIBUTES.add(SWAuditEntry.VERSION);

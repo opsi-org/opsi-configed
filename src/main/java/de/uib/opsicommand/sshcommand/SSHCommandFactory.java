@@ -211,12 +211,12 @@ public class SSHCommandFactory {
 		// Funktioniert nicht wie gewünscht. Optionaler Parameter "<<<....>>>" wird
 		// nicht abgefragt.
 		// ssh_commands_param.add(new
-		// de.uib.opsicommand.sshcommand.CommandOpsiSetRights() );
+		
 		// SSHCommand csetrights = new
-		// de.uib.opsicommand.sshcommand.CommandOpsiSetRights();
+		
 		// LinkedList<String> coms = new LinkedList<>()
 		// {{
-		// add(csetrights.getCommandRaw());
+		
 		// }};
 		// ssh_commands_param.add(new SSHCommand_Template(csetrights, new
 		// LinkedList<String>(){{add(csetrights.getCommandRaw());}} ));
@@ -340,7 +340,7 @@ public class SSHCommandFactory {
 
 			logging.info(this, "list_knownParents " + list_knownParents);
 
-			// com.setParentMenuText( parent );
+			
 
 			sshcommand_list.add(com);
 		}

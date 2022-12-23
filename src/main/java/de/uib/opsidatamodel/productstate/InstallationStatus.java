@@ -58,10 +58,10 @@ public class InstallationStatus {
 		states.add(UNDEFINED);
 		states.add(INSTALLED);
 		states.add(NOT_INSTALLED);
-		// states.add(FAILED);
+		
 		states.add(UNKNOWN);
 
-		// states.add(INSTALLING);
+		
 
 		labels = new Vector<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);

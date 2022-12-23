@@ -78,7 +78,7 @@ public class DependenciesTreeModel {
 
 		/*
 		 * productList = new LinkedList<>();
-		 * //productList.addAll(dependencies.keySet());
+		 * 
 		 * if(pc.getDepot2LocalbootProducts().get(depotId) != null)
 		 * productList.addAll(pc.getDepot2LocalbootProducts().get(depotId).keySet());
 		 */

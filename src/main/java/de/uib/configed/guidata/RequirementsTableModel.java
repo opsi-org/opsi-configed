@@ -289,7 +289,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 					break;
 				case 2:
 
-					// cell.setBackground( Globals.backLighterBlue );
+					
 					cell.setBackground(Globals.backVeryLightBlue);
 					break;
 				}

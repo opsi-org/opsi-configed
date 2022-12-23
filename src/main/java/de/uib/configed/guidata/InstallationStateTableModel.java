@@ -256,7 +256,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		persist = main.getPersistenceController();
 		Collator myCollator = Collator.getInstance();
-		// myCollator.setStrength(Collator.PRIMARY); //ignores hyphens
+		
 		myCollator.setStrength(Collator.SECONDARY);
 
 		
@@ -364,7 +364,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 				String priority = "";
 				if (globalProductInfos != null && globalProductInfos.get(productId) != null)
-					priority = "" + globalProductInfos.get(productId).get("priority");// aProduct.get(ActionSequence.KEY);
+					priority = "" + globalProductInfos.get(productId).get("priority");
 				stateAndAction.put(ProductState.KEY_productPriority, priority);
 
 				stateAndAction.put(ProductState.KEY_actionSequence, priority);
@@ -420,7 +420,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 					/*
 					 * stateAndAction = new ProductState(null);
-					 * //ProductState.getDEFAULT(); //for testing
+					 * 
 					 * //defaults for the product
 					 * productStates.put( productId, stateAndAction);
 					 * 
@@ -445,7 +445,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					String priority = "";
 
 					if (globalProductInfos != null && globalProductInfos.get(productId) != null)
-						priority = "" + globalProductInfos.get(productId).get("priority");// aProduct.get(ActionSequence.KEY);
+						priority = "" + globalProductInfos.get(productId).get("priority");
 
 					while (iter.hasNext()) {
 						String key = (String) iter.next();
@@ -889,7 +889,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			 */
 		}
 
-		// missingProducts.clear();
+		
 	}
 
 	@Override
@@ -1108,7 +1108,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	 * 
 	 * initChangeActionRequests();
 	 * 
-	 * //changedStatesForClient.get(product);
+	 * 
 	 * // by recursion, we find all new settings
 	 * for (String clientId : selectedClients)
 	 * {
@@ -1206,7 +1206,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			// fireTableCellUpdated(modelRow, displayColumns.indexOf(ActionRequest.KEY)); //
 			// tell the table model listeners where a change occurred
 			fireTableRowsUpdated(modelRow, modelRow);
-			// displayColumns.indexOf(ActionRequest.KEY)); // tell the table model listeners
+			
 			// where a change occurred
 		}
 
@@ -1322,7 +1322,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 						}
 
 						
-						// ActionRequest.getLabel(requiredAR));
+						
 
 						// handle resulting action requests
 						if (requiredAR > ActionRequest.NONE)
@@ -1431,7 +1431,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 							actionList.add(ActionRequest.getDisplayLabel(ar.getVal()));
 						}
 
-						// actionList.add(ActionRequest.UNDEFINEDstring);
+						
 						// add UNDEFINED string only to local copy but we dont want to set anything to
 						// UNDEFINED
 					}
@@ -1451,7 +1451,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		else if (column == displayColumns.indexOf(InstallationStatus.KEY)) // selection of status
 		{
 			
-			// InstallationStatus.allStates);
+			
 			if (possibleActions.get(actualProduct) == null)
 			// we dont have the product in our depot selection
 			{
@@ -1469,7 +1469,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		else if (column == displayColumns.indexOf(TargetConfiguration.KEY)) // selection of status
 		{
 			
-			// InstallationStatus.allStates);
+			
 			if (possibleActions.get(actualProduct) == null)
 			// we dont have the product in our depot selection
 			{

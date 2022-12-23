@@ -322,7 +322,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 		protected void process(List<String> chunks) {
 			logging.debug(this, "chunks " + chunks.size());
 			if (outputDialog != null) {
-				// outputDialog.setVisible(true);
+				
 				for (String line : chunks) {
 					logging.debug(this, "process " + line);
 					outputDialog.append(getCommandName(), line + "\n");

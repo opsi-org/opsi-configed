@@ -86,7 +86,7 @@ public class XTree extends JTree {
 					setSelectionPath(currentPath);
 				} else {
 					setCursor(defaultCursor);
-					// tableModel.setData(EMPTY); //stays too long
+					
 				}
 			}
 

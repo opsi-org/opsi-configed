@@ -47,8 +47,8 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 		this.initSize = initSize;
 
 		editorContent.setEditable(false);
-		// editorContent.setFont(editorContent.getFont().deriveFont(Font.ITALIC));
-		// editorContent.addActionListener(this);
+		
+		
 		editorContent.addMouseListener(this);
 		editorContent.addKeyListener(this);
 		editorContent.addFocusListener(this);
@@ -172,7 +172,7 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 		fEdit.setLocation((int) (loc.getX() + rec.getX() + 30), (int) (loc.getY() + rec.getY() + 20));
 
 		fEdit.setTitle(" (" + Globals.APPNAME + ")  '" + table.getColumnName(column) + "'");
-		// fEdit.setDataChanged( false );
+		
 
 		currentValue = oldValue;
 		return editorContent;

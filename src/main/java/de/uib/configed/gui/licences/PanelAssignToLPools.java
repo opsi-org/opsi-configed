@@ -111,7 +111,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		labelSelectedLicencePoolId = new JLabel(
 				configed.getResourceValue("PanelAssignToLPools.labelSelectedLicencePoolId"));
-		// labelSelectedLicencePoolId.setPreferredSize(Globals.counterfieldDimension);
+		
 		labelSelectedLicencePoolId.setFont(Globals.defaultFont);
 
 		fieldSelectedLicencePoolId = new JLabel("");
@@ -120,7 +120,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		labelCountAllWindowsSoftware = new JLabel(
 				configed.getResourceValue("PanelAssignToLPools.labelCountAllWindowsSoftware"));
-		// labelCountAllWindowsSoftware.setPreferredSize(Globals.counterfieldDimension);
+		
 		labelCountAllWindowsSoftware.setFont(Globals.defaultFont);
 
 		fieldCountAllWindowsSoftware = new JLabel("");
@@ -145,7 +145,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		labelCountAssignedStatus = new JLabel(
 				configed.getResourceValue("PanelAssignToLPools.labelCountAssignedStatus"));
-		// labelCountAssignedStatus.setPreferredSize(Globals.counterfieldDimension);
+		
 		labelCountAssignedStatus.setFont(Globals.defaultFont);
 
 		fieldCountAssignedStatus = new JLabel("");
@@ -154,7 +154,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		labelCountAssignedInEditing = new JLabel(
 				configed.getResourceValue("PanelAssignToLPools.labelCountAssignedInEditing"));
-		// labelCountAssignedInEditing.setPreferredSize(Globals.counterfieldDimension);
+		
 		labelCountAssignedInEditing.setFont(Globals.defaultFont);
 
 		fieldCountAssignedInEditing = new JLabel("");

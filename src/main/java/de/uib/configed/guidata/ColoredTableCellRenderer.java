@@ -26,7 +26,7 @@ public class ColoredTableCellRenderer extends de.uib.utilities.table.gui.Standar
 		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		if (value != null && (value.equals(InstallationStateTableModel.CONFLICTstring))) {
-			c.setBackground(Globals.backgroundGrey); // result.setForeground (lightBlack);
+			c.setBackground(Globals.backgroundGrey); 
 			c.setForeground(Globals.backgroundGrey);
 		}
 

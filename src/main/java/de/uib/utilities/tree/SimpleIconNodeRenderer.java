@@ -20,7 +20,7 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 
 	public SimpleIconNodeRenderer() {
 		super();
-		// setHorizontalTextPosition(SwingConstants.LEFT);
+		
 		setOpaque(true);
 
 		// standard = deriveFont0(Globals.defaultFontBig);
@@ -77,12 +77,12 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 			{
 				setBackground(Globals.backLightBlue);
 				
-				// setForeground(Color.blue);//Globals.unknownBlue);
+				
 			} else {
 				setBackground(Color.white);
-				// setBackground(Globals.backgroundWhite);
 				
-				// setForeground(Globals.lightBlack);
+				
+				
 			}
 
 			if (leaf) {
@@ -117,7 +117,7 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 		 * row,
 		 * hasFocus);
 		 * 
-		 * //c.setBackground(Globals.backLightBlue);
+		 * 
 		 * 
 		 * return c;
 		 */

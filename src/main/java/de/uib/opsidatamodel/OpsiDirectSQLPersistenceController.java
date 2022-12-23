@@ -150,7 +150,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			logging.error("getLocalBootProductStatesNOM sql Error " + e.toString());
 		}
 
-		// timer.stop();
+		
 
 		return result;
 	}

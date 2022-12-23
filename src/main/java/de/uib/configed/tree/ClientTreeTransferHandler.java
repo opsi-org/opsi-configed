@@ -207,7 +207,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			TreePath path = (TreePath) iterPaths.next();
 
 			// String id = ((DefaultMutableTreeNode)
-			// path.getLastPathComponent()).getUserObject().toString();
+			
 
 			int len = path.getPath().length;
 			for (int j = 0; j < len; j++) {
@@ -216,7 +216,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 					buff.append(",");
 			}
 
-			// buff.append(path.toString());
+			
 
 			if (iterPaths.hasNext())
 				buff.append("\n");
@@ -369,7 +369,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		 */
 
 		
-		// tree.getSelectedClientsInTable());
+		
 		logging.debug(this, "importData. ++++++++++ getActivePaths(): " + tree.getActivePaths());
 
 		String[] values = tree.getSelectedClientsInTable().toArray(new String[] {});

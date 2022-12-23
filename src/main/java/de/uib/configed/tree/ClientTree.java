@@ -318,7 +318,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		// setMaximumSize(new java.awt.Dimension(IconNodeRendererClientTree.labelWidth +
 		// 30, 100));
 		// interacts with line (in MainFrame.java)
-		// scrollpaneTreeClients.setPreferredSize(treeClients.getMaximumSize());
+		
 
 		/*
 		 * addHighlighter(new org.jdesktop.swingx.decorator.ColorHighlighter(
@@ -438,14 +438,14 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			
 			
 			
-			// treePopupMouseListener.getPopupSourcePath() );
+			
 
 			TreePath sourcePath = treePopupMouseListener.getPopupSourcePath();
 			if (sourcePath != null && sourcePath.getPathComponent(sourcePath.getPathCount() - 1) instanceof GroupNode) {
 				// String nodeS = sourcePath.getPathComponent(sourcePath.getPathCount()
 				// -1).toString();
 				GroupNode node = (GroupNode) sourcePath.getPathComponent(sourcePath.getPathCount() - 1);
-				// main.setGroup(node.toString());
+				
 				// main.activateGroupByTree(node, sourcePath);
 				
 				// treePopupMouseListener.getPopupSourcePath() + " node "
@@ -596,7 +596,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			e.consume();
 		}
 
-		// waitCursor.stop();
+		
 
 	}
 
@@ -712,7 +712,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		theTree.setCursor(initialCursor);
 		// }
 		// }
-		// .start();
+		
 
 	}
 
@@ -841,9 +841,9 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		// GROUPS = new IconNode(GROUPS_NAME);
 		// GROUPS.setIcon(Globals.createImageIcon("images/group_small.png", "group"));
 
-		// immutableNodes.add(GROUPS);
+		
 
-		// ALL.add(GROUPS);
+		
 		ROOT.add(GROUPS);
 
 		// pathToGROUPS = pathToALL.pathByAddingChild(GROUPS);
@@ -857,7 +857,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		DIRECTORY.setAllowsOnlyGroupChilds(true);
 		DIRECTORY.setFixed(true);
 
-		// immutableNodes.add(DIRECTORY); we can move from and to
+		
 		ROOT.add(DIRECTORY);
 
 		pathToDIRECTORY = new TreePath(new Object[] { ROOT, DIRECTORY });
@@ -905,7 +905,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		DIRECTORY.removeAllChildren();// (02)
 		GROUPS.removeAllChildren(); // 03
 		
-		// FAILED.removeAllChildren(); //04
+		
 
 		model.nodeStructureChanged(GROUPS);
 
@@ -976,7 +976,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			/*
 			 * parent.remove(node);
 			 * getModel().nodeStructureChanged(parent);
-			 * //invertedPaths.get(nodeID).remove(path);
+			 * 
 			 */
 		}
 
@@ -1107,7 +1107,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		createDIRECTORY_NOT_ASSIGNED();
 
 		// listChildren("produceAndLinkGroups");
-		// GROUPS.removeAllChildren(); has no children at this point
+		
 
 		groupNodes = new HashMap<>();
 
@@ -1153,7 +1153,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			DefaultMutableTreeNode parent = null;
 
 			
-			// groupNodes.get(parentId));
+			
 
 			if (groupNodes.get(parentId) == null)
 				// group not existing
@@ -1162,7 +1162,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 				parent = groupNodes.get(parentId);
 
 			
-			// groupNodes.get(parentId));
+			
 
 			
 			
@@ -1480,7 +1480,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 					 * fEdit.centerOn(Globals.mainContainer);
 					 * fEdit.setSingleLine(true);
 					 * fEdit.setModal(true);
-					 * //fEdit.setAlwaysOnTop(true); in superclass
+					 * 
 					 * fEdit.setVisible(true);
 					 * 
 					 * 
@@ -1639,7 +1639,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			getModel().nodeStructureChanged(sourceParentNode);
 
 			
-			// getGroupNode(dropParentID).getChildsArePersistent());
+			
 			if (getGroupNode(dropParentID).getChildsArePersistent())
 				addObject2PersistentGroup(importID, dropParentID);
 
@@ -1744,7 +1744,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		activeParents.addAll(simplePath.collectNodeNames());
 
 		
-		// locationsInDIRECTORY.get(objectID));
+		
 
 		// operations in DIRECTORY
 
@@ -1814,7 +1814,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 			fList.locateLeftTo(Globals.mainContainer);
 			fList.setModal(true);
-			// fList.setAlwaysOnTop(true); in superclass
+			
 			if (preSelected != null) {
 				fList.setSelectedValue(preSelected);
 				fList.setDataChanged(true);
@@ -2000,7 +2000,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	public void produceActiveParents(String[] clients) {
 		
-		// Arrays.toString(clients));
+		
 		
 		
 		initActiveParents();

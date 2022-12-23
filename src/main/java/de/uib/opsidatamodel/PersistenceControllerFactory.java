@@ -207,7 +207,7 @@ public class PersistenceControllerFactory {
 
 				// de.uib.opsicommand.OpsiMethodCall.standardRpcPath = savePath;
 
-				// persistControl.retrieveOpsiModules();
+				
 				// retrieves host infos because of client counting
 
 				if (sqlAndGetRows && !persistControl.isWithMySQL()) {

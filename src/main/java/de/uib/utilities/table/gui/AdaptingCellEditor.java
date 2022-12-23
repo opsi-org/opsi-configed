@@ -22,7 +22,7 @@ public class AdaptingCellEditor extends DefaultCellEditor {
 		this.cc = cc;
 		this.cbm = cbm;
 		nullModel = new DefaultComboBoxModel<>(new String[] { "" });
-		// cc.getEditor().getEditorComponent().setBackground(java.awt.Color.blue);
+		
 
 		cc.setRenderer(new ColoredListCellRenderer());
 

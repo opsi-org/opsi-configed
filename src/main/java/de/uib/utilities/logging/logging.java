@@ -191,7 +191,7 @@ public class logging implements LogEventSubject
 	}
 
 	private static String now() {
-		// return new GregorianCalendar().getTime().toString();
+		
 		return loggingDateFormat.format(new java.util.Date());// + " ";
 	}
 
@@ -466,7 +466,7 @@ public class logging implements LogEventSubject
 			}
 		}.start();
 
-		// parentFrame.setVisible(true);
+		
 	}
 
 	public static String getErrorListAsLines() {

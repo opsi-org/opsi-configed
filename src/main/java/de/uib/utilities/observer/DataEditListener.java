@@ -88,7 +88,7 @@ public class DataEditListener implements DocumentListener, // for text component
 		
 		act();
 		
-		// dataChangedSubject.hasChanged());
+		
 	}
 
 	@Override

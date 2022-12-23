@@ -122,7 +122,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(false);
 
 		
-		// thePanel.panelRegisteredSoftware.getSelectedKeys());
+		
 		List<String> selectKeys = thePanel.panelRegisteredSoftware.getSelectedKeys();
 
 		boolean wasUsingSelectedFilter = modelWindowsSoftwareIds
@@ -706,7 +706,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		 * 
 		 * 
 		 * 
-		 * //modelWindowsSoftwareIds.toggleFilter();
+		 * 
 		 * 
 		 * thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(true);
 		 * thePanel.panelRegisteredSoftware.setDataChanged(b);
@@ -723,7 +723,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 		thePanel.panelRegisteredSoftware.addPopupItem(menuItemSoftwareShowAll);
 		thePanel.panelRegisteredSoftware.addPopupItem(menuItemSoftwareShowAssigned);
-		// thePanel.panelRegisteredSoftware.addPopupItem(menuItemSoftwareShowNotAssigned);
+		
 
 		// special treatment of columns
 
@@ -1041,7 +1041,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 			switch (direction) {
 			case POOL2SOFTWARE:
 				thePanel.panelRegisteredSoftware.getTheSearchpane().showFilterIcon(true);
-				// thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(true);
+				
 				break;
 
 			case SOFTWARE2POOL:

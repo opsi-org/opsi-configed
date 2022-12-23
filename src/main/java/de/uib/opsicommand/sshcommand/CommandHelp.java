@@ -57,7 +57,7 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	// @Override
 	// public String getBasicName()
 	// {
-	// return basicCommand.getBasicName();
+	
 	// }
 
 	@Override
@@ -133,7 +133,7 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	// // if (packageManager)
 	// // return ((CommandOpsiPackageManager)basicCommand).getHelpColumns;
 	// // return 0;
-	// return basicCommand.getHelpColumns();
+	
 	// }
 	// public String[] getRegexes()
 	// {

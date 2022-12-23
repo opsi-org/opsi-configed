@@ -157,7 +157,7 @@ public class SimpleTreeModel extends DefaultTreeModel
 		tree.setCellRenderer(new SimpleIconNodeRenderer());
 
 		tree.expandAll();
-		// tree.setRootVisible(false);
+		
 
 		JFrame frame = new JFrame();
 		frame.getContentPane().add(tree);

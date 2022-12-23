@@ -195,8 +195,8 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 	// public void doAction2()
 	// {
 	// 
-	// this.setVisible (false);
-	// this.dispose();
+	
+	
 	// }
 	public void cancel() {
 		super.doAction2();

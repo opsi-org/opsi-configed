@@ -39,7 +39,7 @@ public class WaitCursor {
 	}
 
 	public WaitCursor(Component c_calling, Cursor saveCursor, String callLocation) {
-		// instances.add(this);
+		
 		// objectCounting++;
 		objectNo = objectCounting.addAndGet(1);
 		allStopped = false;
@@ -159,7 +159,7 @@ public class WaitCursor {
 	 * ready = true;
 	 * 
 	 * if (c != null) c.setCursor(saveCursor);
-	 * //instances.remove(this);
+	 * 
 	 * objectCounting.decrementAndGet();
 	 * logging.debug(this, "removing instance " + objectNo);
 	 * if (objectCounting.get() == 0)

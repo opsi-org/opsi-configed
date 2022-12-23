@@ -83,7 +83,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 
 		btn_searchDir = completion.getButton();
 		cb_autocompletion = completion.getCombobox();
-		// completion.doButtonAction();
+		
 		cb_autocompletion.setEnabled(true);
 		cb_autocompletion.addItem("");
 		cb_autocompletion.setSelectedItem("");

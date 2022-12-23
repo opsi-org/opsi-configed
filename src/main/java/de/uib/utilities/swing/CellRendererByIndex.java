@@ -159,11 +159,11 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 		 * if (isSelected) {
 		 * setBackground(list.getSelectionBackground());
 		 * setForeground(list.getSelectionForeground());
-		 * //setForeground(java.awt.Color.black);
+		 * 
 		 * } else {
 		 * setBackground(list.getBackground());
 		 * setForeground(list.getForeground());
-		 * //setForeground(java.awt.Color.black);
+		 * 
 		 * }
 		 */
 
@@ -186,7 +186,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 		String selectedTooltip = "";
 
 		if (uhOhFont == null) { // lazily create this font
-			uhOhFont = list.getFont().deriveFont((float) 10); // list.getFont().getSize() - 3); // Font.ITALIC);
+			uhOhFont = list.getFont().deriveFont((float) 10); // list.getFont().getSize() - 3); 
 		}
 		setFont(uhOhFont);
 

@@ -100,7 +100,7 @@ public class PanelHostConfig extends JPanel {
 
 	protected void buildPanel() {
 		// boolean serverEditing = (ConfigedMain.getEditingTarget() ==
-		// ConfigedMain.EditingTarget.SERVER);
+		
 		label = new JLabel(configed.getResourceValue("MainFrame.jLabel_Config"));
 		
 		PersistenceControllerFactory.getPersistenceController().checkConfiguration();

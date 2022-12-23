@@ -93,11 +93,11 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		 * {
 		 * case PopupMenuTrait.POPUP_RELOAD:
 		 * reload();
-		 * //actor.reloadData();
+		 * 
 		 * break;
 		 * 
 		 * case PopupMenuTrait.POPUP_SAVE:
-		 * //actor.saveData();
+		 * 
 		 * break;
 		 * }
 		 * 
@@ -117,11 +117,11 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-					// actor.reloadData();
+					
 					break;
 
 				case PopupMenuTrait.POPUP_SAVE:
-					// actor.saveData();
+					
 					break;
 
 				case PopupMenuTrait.POPUP_ADD:
@@ -129,7 +129,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 					break;
 
 				case PopupMenuTrait.POPUP_DELETE:
-					// actor.deleteData();
+					
 					deleteUser();
 					break;
 
@@ -148,11 +148,11 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-					// actor.reloadData();
+					
 					break;
 
 				case PopupMenuTrait.POPUP_SAVE:
-					// actor.saveData();
+					
 					break;
 
 				case PopupMenuTrait.POPUP_ADD:
@@ -174,11 +174,11 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-					// actor.reloadData();
+					
 					break;
 
 				case PopupMenuTrait.POPUP_SAVE:
-					// actor.saveData();
+					
 					break;
 
 				case PopupMenuTrait.POPUP_ADD:
@@ -186,7 +186,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 					break;
 
 				case PopupMenuTrait.POPUP_DELETE:
-					// actor.deleteData();
+					
 					deleteUser();
 					break;
 
@@ -205,11 +205,11 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-					// actor.reloadData();
+					
 					break;
 
 				case PopupMenuTrait.POPUP_SAVE:
-					// actor.saveData();
+					
 					break;
 
 				case PopupMenuTrait.POPUP_ADD:
@@ -289,7 +289,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		 * tree.addMouseListener(popupListener0);
 		 */
 
-		// popupForUserpathes.add( popupItemDeleteEntry );
+		
 
 		MouseListener popupListenerForUserpathes = new utils.PopupMouseListener(popupForUserpathes) {
 			@Override
@@ -529,8 +529,8 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		persist.configOptionsRequestRefresh();
 		super.reload();
 
-		// configed.cm.setNetworkconfigurationPage();
-		// configed.cm.reload();
+		
+		
 
 	}
 
@@ -580,12 +580,12 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 		JPanel addPanel = new JPanel();
 		addPanel.setBackground(Color.YELLOW);
-		// f.setAdditionalPane( addPanel );
+		
 
-		// f.setCenterPaneInScrollpane( centerPanel );
+		
 		f.setCenterPane(centerPanel);
 
-		// f.setAdditionalPane( addPanel );
+		
 
 		f.setupLayout();
 		f.setSize(new Dimension(500, 400));
@@ -673,12 +673,12 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 		JPanel addPanel = new JPanel();
 		addPanel.setBackground(Color.YELLOW);
-		// f.setAdditionalPane( addPanel );
+		
 
-		// f.setCenterPaneInScrollpane( centerPanel );
+		
 		f.setCenterPane(centerPanel);
 
-		// f.setAdditionalPane( addPanel );
+		
 
 		f.setupLayout();
 		f.setSize(new Dimension(500, 400));
@@ -691,7 +691,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		
 		javax.swing.tree.TreePath p = tree.getSelectionPath();
 
-		// actor.deleteData();
+		
 		if (p != null) {
 			logging.info(this, "deleteUser path " + p);
 
@@ -705,7 +705,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 			String key = keyB.toString();
 			logging.info(this, "deleteUser, selected user key " + key);
 			
-			// ).getTableModel());
+			
 			Vector<String> propertyNames = partialPanels.get(key).getNames();
 			logging.info(this, "deleteUser, property names " + propertyNames);
 			for (String name : propertyNames) {

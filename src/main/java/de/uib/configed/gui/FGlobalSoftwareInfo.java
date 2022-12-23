@@ -65,7 +65,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		additionalPane.add(infoLabel);
 		additionalPane.setBackground(Globals.backLightBlue);
 		additionalPane.setVisible(true);
-		// additionalPane.setPreferredSize(infoLabel.getPreferredSize());
+		
 
 		setSize(new Dimension(infoLabel.getPreferredSize().width + 100, 300));
 		owner.setVisible(true);
@@ -155,7 +155,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 			}
 			result = 1;
 		}
-		// owner.setVisible(true);
+		
 		
 	}
 

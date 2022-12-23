@@ -192,9 +192,9 @@ public class Globals {
 		button.setForeground(lightBlack);
 		button.setBackground(backBlue);
 		button.setOpaque(false);
-		// button.setContentAreaFilled(false);
+		
 		button.setBorderPainted(false);
-		// button.setBorder(BorderFactory.createEmptyBorder());
+		
 	}
 
 	public static final Color nimbusSelectionBackground = new Color(57, 105, 138);
@@ -344,7 +344,7 @@ public class Globals {
 	public static Collator getCollator() {
 		if (alphaCollator == null) {
 			alphaCollator = Collator.getInstance();
-			// alphaCollator.setStrength(java.text.Collator.PRIMARY);
+			
 			alphaCollator.setStrength(java.text.Collator.IDENTICAL);
 
 		}
@@ -564,7 +564,7 @@ public class Globals {
 
 	public static final List<Object> getNowTimeListValue(final String comment) {
 		ArrayList<Object> result = new ArrayList<>();
-		// result. add( new Date().toString() );
+		
 		String now = new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis()).toString();
 		now = now.substring(0, now.indexOf("."));
 		if (comment != null)
@@ -660,10 +660,10 @@ public class Globals {
 		if (result) {
 			if (c instanceof Collection) {
 				
-				// ((Collection)c).size() );
+				
 			} else if (c instanceof Map) {
 				
-				// ((Map)c).size() );
+				
 			} else {
 				logging.info(source.getClass().getName() + " " + cName + " is neither a Collection nor a Map  ");
 				result = false;
@@ -968,7 +968,7 @@ public class Globals {
 
 	public static boolean forbidEditingTargetSpecific() {
 		// boolean forbidEditing =
-		// PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly();
+		
 
 		boolean forbidEditing = false;
 

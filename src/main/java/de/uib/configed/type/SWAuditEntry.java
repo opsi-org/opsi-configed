@@ -52,7 +52,7 @@ public class SWAuditEntry extends TableEntry
 		KEYS.add("subversion");
 		KEYS.add(ARCHITECTURE);
 		KEYS.add(LANGUAGE);
-		// KEYS.add(LICENCEkEY);
+		
 		KEYS.add(WINDOWSsOFTWAREid);
 	}
 

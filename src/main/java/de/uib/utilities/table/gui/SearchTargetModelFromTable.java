@@ -246,7 +246,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 		} else {
 			model.setUsingFilter(FILTER_BY_SELECTION, false);
-			// ((AbstractTableModel) table.getModel()).fireTableDataChanged();
+			
 			setSelection(viewRowfilter); // restore the original selection
 		}
 		filtered = b;
@@ -258,7 +258,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	public boolean isFiltered() {
 		return filtered;
 
-		// ((de.uib.utilities.table.GenTableModel) table.getModel()).isFiltered(); does
+		
 		// not work since we don't always have got a GenTableModel
 	}
 

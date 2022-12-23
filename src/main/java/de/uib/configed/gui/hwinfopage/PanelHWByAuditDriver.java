@@ -152,7 +152,7 @@ public class PanelHWByAuditDriver extends JPanel {
 		fieldLabel.setText("");
 		fieldVendor2.setText("");
 		fieldLabel2.setText("");
-		// selectionGroup.clearSelection();
+		
 
 		// fieldByAuditPath.setText("");
 		if (fDriverUpload != null)
@@ -190,7 +190,7 @@ public class PanelHWByAuditDriver extends JPanel {
 
 		if (fDriverUpload != null)
 			fDriverUpload.setUploadParameters(byAuditPath);
-		// fieldByAuditPath.setText(byAuditPath);
+		
 	}
 
 	private void startDriverUploadFrame() {

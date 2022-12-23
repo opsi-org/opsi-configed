@@ -83,7 +83,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 	protected void createComponents() {
 		framingPanel = new JPanel();
 		editingArea = new JPanel(new BorderLayout());
-		// editingArea.addFocusListener(this);
+		
 		labelHint = new JLabel();
 		labelHint.setFont(Globals.defaultFontStandardBold);
 
@@ -96,7 +96,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 				logging.debug(this, "setEnabled " + b);
 			}
 		};
-		// buttonCommit.setEnabled( false );
+		
 		buttonCommit.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 
 		buttonCancel = new de.uib.configed.gui.IconButton(
@@ -104,7 +104,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 				"images/cancel_over.png", "images/cancel_disabled.png", true);
 		buttonCancel.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 
-		// buttonCancel.setEnabled( false );
+		
 	}
 
 	protected void initComponents() {
@@ -130,7 +130,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 		// textarea.setColumns(20);
 		// textarea.setRows(5);
-		// scrollpane.setViewportView(textarea);
+		
 
 		javax.swing.GroupLayout layout1 = new javax.swing.GroupLayout(framingPanel);
 		framingPanel.setLayout(layout1);
@@ -189,7 +189,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 		dataChanged = b;
 		buttonCommit.setEnabled(b);
 		buttonCancel.setEnabled(true);
-		// buttonCancel.setEnabled(b);
+		
 	}
 
 	protected boolean isDataChenged() {
@@ -308,9 +308,9 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 		} else {
 			
-			// masterOnScreen.getX());
 			
-			// masterOnScreen.getY());
+			
+			
 			
 			
 			// ;

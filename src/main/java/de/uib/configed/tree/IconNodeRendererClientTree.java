@@ -64,16 +64,16 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			
 			
 			
-			// main.getSelectedClients());
 			
-			// main.getSelectedClients().contains(stringValue));
+			
+			
 
 			
 
 			if (!node.getAllowsChildren()) // client
 			{
 				
-				// main.getActiveTreeNodes().containsKey(value) );
+				
 				if (
 				// sel
 				// ||
@@ -87,9 +87,9 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 					// setText( stringValue + "--xxx" );
 					setFont(Globals.defaultFont);
 					setIcon(node.getNonSelectedLeafIcon());
-					// setBackground(Color.white);
+					
 
-					// setFont(Globals.defaultFontBig);
+					
 					
 				}
 			} else // group
@@ -117,9 +117,9 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 					// setBackground((Color) UIManager.get("controlHighlight"));
 				} else {
 					setFont(Globals.defaultFont);
-					// setBackground(Color.white);
+					
 
-					// setFont(Globals.defaultFontBig);
+					
 					
 
 				}
@@ -148,8 +148,8 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			{
 				
 				// setText(stringValue + "<");
-				// setBackground(Globals.backNimbusLight);
-				// setFont( getFont().deriveFont( java.awt.Font.ITALIC ));
+				
+				
 				Map attributes = getFont().getAttributes();
 				attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
 				setFont(getFont().deriveFont(attributes));

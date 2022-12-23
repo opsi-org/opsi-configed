@@ -98,9 +98,9 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		};
 
 		// Icon productIcon = Globals.createImageIcon("images/package.png", "" );
-		// renderer.setLeafIcon(null);
-		// renderer.setOpenIcon(null);
-		// renderer.setClosedIcon(null);
+		
+		
+		
 		dependenciesTree.setCellRenderer(renderer);
 
 		DefaultTreeSelectionModel selectionModel = new DefaultTreeSelectionModel() {

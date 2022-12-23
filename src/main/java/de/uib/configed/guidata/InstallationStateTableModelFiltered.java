@@ -40,7 +40,7 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 		 * testSet.add("jedit");
 		 */
 		filterSaver.serialize(filterSet);
-		// filterSaver.serialize(testSet);
+		
 		logging.info(this, "saveFilterSet " + filterSet);
 	}
 

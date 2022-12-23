@@ -121,12 +121,12 @@ public class TextInputField extends JPanel
 
 				if (s.length() == 0) {
 					combo.showPopup();
-					// combo.selectWithKeyChar( e.getKeyChar() );
+					
 
 					// if ( s.length() > 0 && s.charAt( s.length() - 1) == e.getKeyChar() )
 					// comboField.setText( s.substring(0, s.length() - 2 ) );
 
-					// combo.selectWithKeyChar( e.getKeyChar() );
+					
 
 					
 					
@@ -188,7 +188,7 @@ public class TextInputField extends JPanel
 						}
 
 					}
-					// e.consume();
+					
 					comboField.setText("");
 				}
 

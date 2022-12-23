@@ -55,10 +55,10 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 
 			
 			
-			// jc.getToolTipText());
+			
 
 			if (row == currentRow) {
-				// jc.setFont( jc.getFont().deriveFont(Font.ITALIC) );
+				
 				
 			}
 		}

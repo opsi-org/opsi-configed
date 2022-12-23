@@ -50,8 +50,8 @@ public class DynamicCombo extends javax.swing.JPanel {
 		col.setHeaderRenderer(null);
 
 		combo = new javax.swing.JComboBox();
-		// org.jdesktop.swingx.autocomplete.AutoCompleteDecorator.decorate(combo);
-		// combo.setRenderer ();
+		
+		
 		combo.setBorder(null);
 
 		combo.addPopupMenuListener(new PopupMenuListener() {

@@ -433,7 +433,7 @@ public class SSHPackageManagerUninstallParameterDialog
 					logging.info(this, "start exec thread ");
 
 					new SSHConnectExec(commandPMUninstall);
-					// ssh.exec((SSHCommand) commandPMUninstall);
+					
 					// cb_opsiproducts.removeItem( prod );
 					execFinished = true;
 					logging.debug(this, "end exec thread");
@@ -473,7 +473,7 @@ public class SSHPackageManagerUninstallParameterDialog
 		 */
 		try {
 			execThread.start();
-			// reloadThread.start();
+			
 		} catch (Exception e) {
 			logging.warning(this, "doAction1, exception occurred", e);
 		}

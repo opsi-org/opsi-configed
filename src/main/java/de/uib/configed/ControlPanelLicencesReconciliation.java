@@ -168,7 +168,7 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 		thePanel.panelReconciliation.setSearchColumns(searchCols);
 		thePanel.panelReconciliation.setSearchSelectMode(true);
 
-		// thePanel.panelReconciliation.showFiltered( true );
+		
 
 	}
 }

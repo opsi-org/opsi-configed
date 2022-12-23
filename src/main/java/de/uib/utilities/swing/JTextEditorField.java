@@ -55,7 +55,7 @@ public class JTextEditorField extends javax.swing.JTextField implements KeyListe
 	@Override
 	public void keyPressed(KeyEvent e) {
 		
-		// e.getKeyChar());
+		
 		
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			setText(lastSetS);

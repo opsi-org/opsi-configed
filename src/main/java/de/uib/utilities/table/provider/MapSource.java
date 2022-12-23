@@ -82,7 +82,7 @@ public class MapSource implements TableSource
 
 			
 
-			// vRow.add(key);
+			
 			// previously we assumed that column 0 hold the key
 
 			for (int i = 0; i < columnNames.size(); i++) {
@@ -100,7 +100,7 @@ public class MapSource implements TableSource
 
 					try {
 						
-						// classNames.get(i));
+						
 						Class cl = Class.forName(classNames.get(i));
 						if (!dynInstanceOf(ob, cl)) {
 							// Class.forName( classNames.get(i) ) ).isAssignableFrom ( ob.getClass() ) )
@@ -127,7 +127,7 @@ public class MapSource implements TableSource
 						// if (className.equals("java.lang.Integer"))
 						if (columnNames.get(i).equals(ROW_COUNTER_NAME)) {
 							vRow.add("" + rowCount);
-							// vRow.add( rowCount );
+							
 						} else {
 							if (class2defaultValue.get(className) != null) {
 								vRow.add(class2defaultValue.get(className));

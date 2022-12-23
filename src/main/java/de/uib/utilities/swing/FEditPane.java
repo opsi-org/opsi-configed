@@ -83,8 +83,8 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		editingArea.add(scrollpane, BorderLayout.CENTER);
 
-		// editingArea.setLayout(new FlowLayout());
-		// editingArea.add(scrollpane);
+		
+		
 
 		/*
 		 * editingLayout.setHorizontalGroup(
@@ -106,7 +106,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		textpane.addMouseListener(this);
 		textpane.addMouseMotionListener(this);
 
-		// textpane.getDocument().addDocumentListener(this);
+		
 		// we only register changes after loading the initial document
 
 		searcher = new LinkSearcher(textpane);
@@ -123,7 +123,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 		// HyperlinkListener hyperlinkListener = new
 		
-		// textpane.addHyperlinkListener(hyperlinkListener);
+		
 	}
 
 	protected void setSingleLine(boolean b) {
@@ -151,7 +151,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	}
 
 	private void searchAndHighlight() {
-		// textpane.requestFocus();
+		
 		// searcher.comp.setCaretPosition(0);
 		searcher.searchLinks();
 	}
@@ -321,7 +321,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	public void mouseClicked(MouseEvent e) {
 		
 		
-		// textpane.getCaretPosition() ) );//+ "\n" + e);
+		
 		// if (e.getClickCount() > 1) searchAndHighlight();
 
 		if (e.getClickCount() > 1) {

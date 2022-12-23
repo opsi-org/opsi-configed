@@ -119,7 +119,7 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 		}
 
 		
-		// groups.getSelectedIndex());
+		
 	}
 
 	// DocumentListener for Document in groupnameField

@@ -50,7 +50,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	public DateTimeEditor(boolean withTime) {
 		super();
 		this.withTime = withTime;
-		// setBorder(new javax.swing.border.EtchedBorder());
+		
 
 		// dateEventObservers = new Vector<>();
 
@@ -78,7 +78,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		hourDateFormat = new java.text.SimpleDateFormat("dd.MM.yyyy HH:mm");
 
 		monthView = new JXMonthView();
-		// monthView.setAntialiased(true); old jxswing version
+		
 		monthView.setSelectionMode(DateSelectionModel.SelectionMode.SINGLE_SELECTION);
 
 		addDateSelectionListener(this); // observe monthview
@@ -92,8 +92,8 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		monthView.addMouseListener(new utils.PopupMouseListener(popup));
 
 		// monthSpinnerModel = new SpinnerDateModel(); //new Date(), null, null,
-		// Calendar.MONTH);
-		// monthSpinnerModel.setCalendarField(Calendar.MONTH);
+		
+		
 		// String[] monthStrings = getMonthStrings();
 
 		monthSpinnerModel = new SpinnerListModel();
@@ -190,7 +190,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	}
 
 	protected void switchMonth(int d) {
-		// calendar.setTime(monthView.getFirstDisplayedDay());
+		
 		calendar.add(Calendar.MONTH, d);
 
 		Date newDate = calendar.getTime();
@@ -203,7 +203,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	}
 
 	protected void switchYear(int d) {
-		// calendar.setTime(monthView.getFirstDisplayedDay());
+		
 		calendar.add(Calendar.YEAR, d);
 
 		Date newDate = calendar.getTime();
@@ -217,8 +217,8 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 	public void setEditable(boolean b) {
 		editable = b;
-		// timeSetter.setEditable(b);
-		// monthView.setEditable(b);
+		
+		
 	}
 
 	@Override
@@ -269,7 +269,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		monthView.setSelectionDate(d);
 		timeSetter.setHour(calendar.get(Calendar.HOUR_OF_DAY));
 		timeSetter.setMin(calendar.get(Calendar.MINUTE));
-		// monthView.repaint();
+		
 	}
 
 	public int getHour() {

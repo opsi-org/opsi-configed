@@ -211,12 +211,12 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 	public void setReloadActionHandler(ActionListener al) {
 		buttonReloadProductStates.addActionListener(al);
-		// searchPane.setReloadActionHandler( al );
+		
 	}
 
 	public void setSaveAndExecuteActionHandler(ActionListener al) {
 		buttonSaveAndExecute.addActionListener(al);
-		// searchPane.setReloadActionHandler( al );
+		
 	}
 
 	protected void enterExistingGroup() {
@@ -243,7 +243,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		descriptionFieldListener.setEnabled(false);
 
 		// String currentKey = (String) saveNameEditor.getSelectedItem();
-		String currentKey = groupsEditField.getText(); // saveNameEditor.getText();
+		String currentKey = groupsEditField.getText(); 
 
 		
 
@@ -332,7 +332,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				String name = (String) iterNames.next();
 				
 				
-				// productGroupMembers.get(name));
+				
 				
 
 				if (productGroupMembers.get(name) != null && productGroupMembers.get(name).equals(checkSet)) {
@@ -355,7 +355,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		if (namesAndDescriptions == null)
 			return;
 		
-		// namesAndDescriptions.keySet() );
+		
 
 		isSaveLegal();
 		
@@ -603,7 +603,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		JLabel labelStrip = new JLabel(
 				"  " + de.uib.configed.configed.getResourceValue("GroupPanel.labelAggregateProducts"));
-		// labelStrip.setBackground( Globals.backVeryLightBlue);
+		
 		labelStrip.setBackground(Globals.backLightBlue);
 		labelStrip.setOpaque(true);
 		labelStrip.setFont(Globals.defaultFont);
@@ -655,7 +655,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				de.uib.configed.configed.getResourceValue("GroupPanel.EditButtonTooltip"),
 				"images/packagegroup_save.png", "images/packagegroup_save_over.png",
 				"images/packagegroup_save_disabled.png");
-		// buttonEditDialog.setPreferredSize(Globals.buttonDimension);
+		
 		buttonEditDialog.setToolTips(de.uib.configed.configed.getResourceValue("GroupPanel.EditButtonTooltipInactive"),
 				de.uib.configed.configed.getResourceValue("GroupPanel.EditButtonTooltipActive"));
 		buttonEditDialog.addActionListener(this);
@@ -666,7 +666,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		labelSelectedGroup.setFont(Globals.defaultFont);
 
 		// groupsEditField = (JTextField)
-		// (saveNameEditor.getEditor().getEditorComponent());
+		
 		groupsEditField = saveNameEditor;
 		groupsEditField.getCaret().setBlinkRate(0);
 		groupsEditField.setBackground(Globals.backgroundLightGrey);
@@ -695,7 +695,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		groupsCombo.setPreferredSize(Globals.buttonDimension);
 		saveNameEditor.setPreferredSize(Globals.buttonDimension);
 		groupsEditField.setBackground(Globals.backgroundLightGrey);
-		// saveNameEditor.addItemListener(this);
+		
 
 		labelSave = new JLabel();
 		labelSave.setText(TEXT_SAVE);
@@ -824,7 +824,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		GroupLayout layoutMain = new GroupLayout(this);
 		this.setLayout(layoutMain);
-		// setBorder( new javax.swing.border.LineBorder( Globals.backLightYellow) );
+		
 
 		JPanel separatingPlace = new JPanel();
 		separatingPlace.setForeground(Globals.backLightYellow);
@@ -923,7 +923,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		
 
 		if (deleted) {
-			String removeGroupID = groupsEditField.getText(); // (String) groupsCombo.getSelectedItem();
+			String removeGroupID = groupsEditField.getText(); 
 			
 			theData.remove(removeGroupID);
 
@@ -933,7 +933,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			}
 
 		} else {
-			String newGroupID = groupsEditField.getText();// (String) saveNameEditor.getSelectedItem();
+			String newGroupID = groupsEditField.getText();
 			String newDescription = descriptionField.getText();
 			Set selectedProducts = associate.getSelectedIDs();
 
@@ -1010,7 +1010,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			
 			namesAndDescriptionsSave.put(id, theData.get(id).get("description"));
 		}
-		// saveNameEditor.setValues(namesAndDescriptionsSave);
+		
 
 		namesAndDescriptions = new LinkedHashMap();
 		namesAndDescriptions.put(NO_GROUP_ID, "");
@@ -1039,7 +1039,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		setInternalGroupsData();
 
-		// buttonFilter.setActivated(true);
+		
 		setGuiIsFiltered(false);
 	}
 
@@ -1106,7 +1106,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		 * else
 		 * {
 		 * setGuiIsFiltered(false);
-		 * //buttonFilter.setActivated(true);
+		 * 
 		 * logging.debug(this, "associate.showAll()");
 		 * associate.showAll();
 		 * buttonFilter.setNewImage(
@@ -1211,7 +1211,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	private void clearChanges() {
 		// reset internal components
 		if (saveNameEditor != null) {
-			// saveNameEditor.setValues(namesAndDescriptionsSave);
+			
 
 			saveNameEditorShallFollow();
 		}
@@ -1264,7 +1264,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			result = (groupsCombo.getSelectedIndex() > 0);
 
 		// result = result &&
-		// groupsEditField.getText().equals((String)groupsCombo.getSelectedItem());
+		
 
 		buttonDelete.setEnabled(result);
 
@@ -1290,7 +1290,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 	public void commit() {
 		logging.debug(this, "commit");
-		String newGroupID = groupsEditField.getText();// (String) saveNameEditor.getSelectedItem();
+		String newGroupID = groupsEditField.getText();
 		if (save()) {
 			clearChanges();
 			groupsCombo.setSelectedItem(newGroupID);

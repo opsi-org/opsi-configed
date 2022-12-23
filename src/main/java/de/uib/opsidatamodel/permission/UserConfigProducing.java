@@ -230,7 +230,7 @@ public class UserConfigProducing {
 		logging.info(this, "supplyAllPermissionEntries start");
 
 		// separateServerConfigsTreeSection( UserConfig.KEY_USER_ROOT + "." +
-		// UserConfig.ROLE );
+		
 		// separateServerConfigsTreeSection( userPart().substring( 0,
 		// userPart().length()-1 ) );
 
@@ -417,7 +417,7 @@ public class UserConfigProducing {
 				+ readyObjects);
 
 		
-		// UserConfig.getUserListKeys());
+		
 
 		// single String valued
 		logging.info(this, "supplyPermissionEntriesForAUser UserConfig.getUserStringValueKeys "

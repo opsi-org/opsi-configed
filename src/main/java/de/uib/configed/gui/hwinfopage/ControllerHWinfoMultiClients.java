@@ -110,7 +110,7 @@ public class ControllerHWinfoMultiClients {
 		filterConditionHwForSelectedHosts.setFilter(theFilterSet);
 		model.invalidate(); 
 		model.reset();
-		// model.setFilterCondition( filterConditionHwForSelectedHosts );
+		
 	}
 
 	public void requestResetFilter() {
@@ -127,12 +127,12 @@ public class ControllerHWinfoMultiClients {
 				PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF, true) {
 			@Override
 			public void reload() {
-				// persist.configOptionsRequestRefresh();
+				
 				persist.client2HwRowsRequestRefresh();
 				// columnNames = persist.getClient2HwRowsColumnNames();
 				// classNames = persist.getClient2HwRowsJavaclassNames();
 				super.reload();
-				// getTableModel().fireTableStructureChanged();
+				
 
 			}
 
@@ -191,16 +191,16 @@ public class ControllerHWinfoMultiClients {
 				// updateCollection
 				null);
 
-		// updateItemFactory.setSource(model);
+		
 
-		// model.reset();
+		
 		// we got metadata:
 
 		// columnNames = model.getColumnNames();
 		// classNames = model.getClassNames();
 
-		// updateItemFactory.setColumnNames(columnNames);
-		// updateItemFactory.setClassNames(classNames);
+		
+		
 
 		panel.setTableModel(model);
 		// panel.setEmphasizedColumns(new int[]{2});

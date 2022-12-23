@@ -23,10 +23,10 @@ public class FDialogSubTable extends FGeneralDialog {
 
 	@Override
 	protected void allLayout() {
-		// super.allLayout(); we define an adapted layout
+		
 		logging.info(this, "allLayout");
-		allpane.setBackground(Globals.backLightBlue); // Globals.nimbusBackground);///Globals.backgroundWhite);
-														// //Globals.backLighter);//Globals.backgroundWhite);
+		allpane.setBackground(Globals.backLightBlue); 
+														// 
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
@@ -61,7 +61,7 @@ public class FDialogSubTable extends FGeneralDialog {
 
 		// southPanel = new JPanel();
 		southPanel.setOpaque(false);
-		southPanel.setBackground(Color.white); // Color.YELLOW );
+		southPanel.setBackground(Color.white); 
 		southPanel.setOpaque(true);
 
 		GroupLayout allLayout = new GroupLayout(allpane);

@@ -62,7 +62,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 			Object value = currentData.get(key);
 			
 			
-			// value.getClass());
+			
 			originalTypes.put((String) key, value.getClass());
 			this.currentData.put((String) key, toList(value));
 		}

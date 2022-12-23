@@ -54,9 +54,9 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 				logging.warning(this, "list expected , for key " + key + " found " + retrieved.get(key));
 				logging.error(this, "list expected , for key " + key);
 				
-				// retrieved.get(key));
 				
-				// retrieved.get(key).getClass().getName());
+				
+				
 
 				continue;
 			} else

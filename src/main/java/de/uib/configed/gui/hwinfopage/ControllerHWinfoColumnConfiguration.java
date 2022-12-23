@@ -172,7 +172,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 				persist.getConfigOptions();
 
-				// super.reload();
+				
 
 				model.reset();
 				setDataChanged(false);
@@ -204,7 +204,7 @@ public class ControllerHWinfoColumnConfiguration {
 		panel.showFilterIcon(true); // supply implementation of SearchTargetModelFromTable.setFiltered
 		panel.setFiltering(true);
 		panel.setDeleteAllowed(false);
-		// panel.getTheTable().setRowSorter(null);
+		
 
 	}
 
@@ -223,7 +223,7 @@ public class ControllerHWinfoColumnConfiguration {
 		// columnNames.add( "UI Name");
 		// columnNames.add( "display type");
 		// columnNames.add( "report function");
-		// columnNames.add( colTellAgainHardwareClass );
+		
 
 		classNames = new Vector<>();
 
@@ -276,16 +276,16 @@ public class ControllerHWinfoColumnConfiguration {
 
 		// for (String hwClass : hwAuditDeviceClasses.keySet() )
 
-		// updateItemFactory.setSource(model);
+		
 
-		// model.reset();
+		
 		// we got metadata:
 
 		// columnNames = model.getColumnNames();
 		// classNames = model.getClassNames();
 
-		// updateItemFactory.setColumnNames(columnNames);
-		// updateItemFactory.setClassNames(classNames);
+		
+		
 
 		model.setEditableColumns(new int[] {
 				// columnNames.indexOf ( colOpsiColumnName ),
@@ -340,7 +340,7 @@ public class ControllerHWinfoColumnConfiguration {
 		panel.setUpdateController(new MapItemsUpdateController(panel, model, new MapBasedUpdater() {
 			@Override
 			public String sendUpdate(Map<String, Object> rowmap) {
-				// panel.sortAgainAsConfigured();
+				
 				// we reset the original sorting because we need information from lines "above"
 
 				logging.info(this, "within MapItemsUpdateController sendUpdate " + rowmap);

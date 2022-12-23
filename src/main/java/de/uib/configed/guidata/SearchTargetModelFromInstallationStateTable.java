@@ -224,7 +224,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 			/*
 			 * model.setUsingFilter( FILTER_BY_SELECTION, false);
-			 * //((AbstractTableModel) table.getModel()).fireTableDataChanged();
+			 * 
 			 * setSelection( viewRowfilter ); //restore the original selection
 			 */
 		}

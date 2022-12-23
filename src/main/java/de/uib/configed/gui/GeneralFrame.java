@@ -79,7 +79,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	}
 
 	public void addPanel(JPanel pane) {
-		// additionalPane.add(pane);
+		
 		getContentPane().add(pane);
 	}
 
@@ -120,9 +120,9 @@ public class GeneralFrame extends JDialog implements ActionListener {
 
 		} else {
 			
-			// masterOnScreen.getX());
 			
-			// masterOnScreen.getY());
+			
+			
 			
 			
 			// ;

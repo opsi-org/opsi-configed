@@ -63,7 +63,7 @@ public class CheckedDocument extends PlainDocument {
 
 	protected void insertStringPlain(int offs, String s, AttributeSet a) throws BadLocationException {
 		
-		// super.getClass().getName());
+		
 		super.insertString(offs, s, a);
 	}
 

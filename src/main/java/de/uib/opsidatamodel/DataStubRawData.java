@@ -589,7 +589,7 @@ public class DataStubRawData extends DataStubNOM {
 
 			logging.info(this, "retrieveSoftwareAuditOnClients used memory on end "
 					+ Runtime.getRuntime().totalMemory() / 1000000 + " MB");
-			// System.gc();
+			
 			// step++;
 
 			persist.notifyDataRefreshedObservers("softwareConfig");
@@ -833,7 +833,7 @@ public class DataStubRawData extends DataStubNOM {
 		buf.append(configTable);
 
 		buf.append("\n where ");
-		// buf.append(Host.idColumn);buf.append(" = ");
+		
 		// buf.append(" 'vbrupertwin7-64.uib.local' ");
 
 		// buf.append("\n AND ");

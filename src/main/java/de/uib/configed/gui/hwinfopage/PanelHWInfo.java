@@ -159,15 +159,15 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(vGap, vGap, vGap));
 
-		// embed.setBackground(Color.red);
+		
 		jScrollPaneInfo = new JScrollPane(embed);
 		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		// jScrollPaneInfo.getViewport().setBackground(Globals.nimbusBackground);
+		
 		// jScrollPaneInfo.setMinimumSize( new Dimension(200, 200) );
 		// jScrollPaneInfo.setPREFERRED_SIZE( new Dimension(400, 200) );
 
 		contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
-		// contentPane.setBackground(Color.yellow);
+		
 
 		
 
@@ -244,7 +244,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			popupMenu.addPopupListenersTo(new JComponent[] { tree, table });
 		}
 
-		// setBackground(Color.green);
+		
 
 	}
 
@@ -267,7 +267,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		copyOfMe.setHardwareConfig(hwConfig);
 		copyOfMe.setHardwareInfo(hwInfo, treeRootTitle);
 
-		// copyOfMe.setNode(selectedNode);
+		
 
 		copyOfMe.expandRows(tree.getToggledRows(rootPath));
 		copyOfMe.setSelectedRow(tree.getMinSelectionRow());

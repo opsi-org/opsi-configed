@@ -194,7 +194,7 @@ public class LicenseDisplayer {
 
 					i++;
 				}
-				// myController.thePanel.setDisplaySimilarExist( foundVariantLicencepools );
+				
 				logging.info(this, "produced rows, foundVariantLicencepools " + foundVariantLicencepools);
 			}
 
@@ -207,7 +207,7 @@ public class LicenseDisplayer {
 
 		modelSWnames.produceRows();
 
-		// modelSWnames.requestReload();
+		
 
 		Vector<Vector<Object>> specialrows = modelSWnames.getRows();
 		if (specialrows != null) {

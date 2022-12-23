@@ -163,7 +163,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 		cancelOldCellEditing();
 
 		
-		// mapTableModel.fireTableDataChanged();
+		
 	}
 
 	@Override
@@ -175,7 +175,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 		if (theCellEditor != null) // && data != null)
 		{
 			theCellEditor.cancelCellEditing(); // don't shift the old editing state to a new product
-			// theCellEditor.stopCellEditing(); //here we get null value errors since the
+			
 			// state "hangs"
 		}
 
@@ -202,7 +202,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 	public void setVoid() {
 		for (Object key : names) {
 			mapTableModel.removeEntryFromStoredMaps((String) key);
-			// mapTableModel.removeEntry((String) key);
+			
 		}
 
 		mapTableModel.unsetWrite();

@@ -117,7 +117,7 @@ public class FGroupActions extends SecondaryFrame {
 
 		Map<String, String> changedValues = new HashMap<>();
 		changedValues.put(de.uib.opsidatamodel.productstate.ProductState.KEY_actionRequest, "setup");
-		// ActionRequest.getLabel(ActionRequest.SETUP);
+		
 
 		persist.updateProductOnClients(
 				// associatedClients,
@@ -131,7 +131,7 @@ public class FGroupActions extends SecondaryFrame {
 
 	protected void define() {
 		topPanel = new JPanel();
-		// topPanel.setBorder( Globals.createPanelBorder() );
+		
 
 		defineTopPanel(topPanel);
 
@@ -177,7 +177,7 @@ public class FGroupActions extends SecondaryFrame {
 		IconButton buttonReload = new IconButton(configed.getResourceValue("FGroupAction.buttonReload"),
 				"images/reload16.png", "images/reload16_over.png", "images/reload16_disabled.png", true);
 		// buttonReload.setPreferredSize(new Dimension(60, 40));
-		// buttonReload.setBackground(Globals.backgroundLigtGrey);
+		
 
 		buttonReload.addActionListener(actionEvent -> reload());
 
@@ -261,7 +261,7 @@ public class FGroupActions extends SecondaryFrame {
 		 * Map<String, String> changedValues = new HashMap<>();
 		 * changedValues.put(de.uib.opsidatamodel.productstate.ProductState.
 		 * KEY_actionRequest, "setup");
-		 * //ActionRequest.getLabel(ActionRequest.SETUP);
+		 * 
 		 * 
 		 * persist.updateProductOnClients(
 		 * main.getActivatedGroupModel().getAssociatedClients(),

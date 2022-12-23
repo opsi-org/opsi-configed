@@ -148,10 +148,10 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		JLabel labelActivated = new JLabel(configed.getResourceValue("MainFrame.activated"));
 
 		JLabel labelGroupActivated = new JLabel(configed.getResourceValue("MainFrame.groupActivated"));
-		// labelGroupActivated.setPreferredSize(Globals.counterfieldDimension);
+		
 
 		fieldGroupActivated = new JTextField("");
-		// fieldGroupActivated.setFont(Globals.defaultFontStandardBold);
+		
 		fieldGroupActivated.setPreferredSize(Globals.counterfieldDimension);
 		fieldGroupActivated.setEditable(false);
 
@@ -159,17 +159,17 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		labelAllClientsCount.setPreferredSize(Globals.labelDimension);
 
 		JLabel labelSelectedClientsCount = new JLabel(configed.getResourceValue("MainFrame.labelSelected"));
-		// labelSelectedClientsCount.setPreferredSize(Globals.shortlabelDimension);
+		
 
 		JLabel labelSelectedClientsNames = new JLabel(configed.getResourceValue("MainFrame.labelNames"));
-		// labelSelectedClientsNames.setPreferredSize(Globals.shortlabelDimension);
+		
 
 		JLabel labelInvolvedDepots = new JLabel(configed.getResourceValue("MainFrame.labelInDepot"));
-		// labelInvolvedDepots.setPreferredSize(Globals.shortlabelDimension);
+		
 		JLabel labelInvolvedDepots2 = new JLabel(configed.getResourceValue("MainFrame.labelInDepot2"));
 
 		// fieldAllClientsCount = new JTextField("");
-		// fieldAllClientsCount.setPreferredSize(Globals.counterfieldDimension);
+		
 
 		fieldActivatedClientsCount = new JTextField("");
 		fieldActivatedClientsCount.setPreferredSize(Globals.counterfieldDimension);
@@ -183,14 +183,14 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 
 		// JScrollPane viewSelectedClientsNames = new
 		
-		// viewSelectedClientsNames.setPreferredSize(fieldSelectedClientsNames.getMaximumSize());
+		
 
 		fieldInvolvedDepots = new JTextField("");
 		fieldInvolvedDepots.setPreferredSize(Globals.counterfieldDimension);
 		fieldInvolvedDepots.setEditable(false);
 		// JScrollPane viewInvolvedDepots = new JScrollPane(fieldInvolvedDepots);
 		// viewInvolvedDepots.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		// viewInvolvedDepots.setPreferredSize(fieldInvolvedDepots.getMaximumSize());
+		
 
 		initializeValues();
 

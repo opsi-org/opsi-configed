@@ -51,9 +51,9 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 
 			logging.debug(this, " handling updateItem " + updateItem);
 			
-			// this.tablemodel);
 			
-			// updateItem.getSource());
+			
+			
 
 			if (updateItem.getSource() == this.tablemodel) {
 				

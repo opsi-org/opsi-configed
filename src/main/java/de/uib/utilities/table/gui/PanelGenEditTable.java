@@ -444,7 +444,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		theTable = new de.uib.utilities.table.JTableWithToolTips();
 		// theTable = new JTable();
 		theTable.setRowHeight(Globals.TABLE_ROW_HEIGHT);
-		// new de.uib.utilities.table.JTableWithContextMenu(popupMenu);
+		
 
 		exportTable = new ExporterToCSV(theTable);
 
@@ -456,7 +456,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		// add the popup to the scrollpane for the case that the table is empty
 		scrollpane = new javax.swing.JScrollPane();
-		// scrollpane.addMouseListener(new utils.PopupMouseListener(popupMenu)); DOES
+		
 		// NOT WORK
 
 		if (switchLineColors)
@@ -483,7 +483,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		;
 
-		// new javax.swing.JTable();
+		
 		// we prefer the simple behaviour:
 		theTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		theTable.getTableHeader().setReorderingAllowed(false);
@@ -725,7 +725,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				
 				menuItemReload = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.reload"),
 						Globals.createImageIcon("images/reload16.png", ""));
-				// menuItemReload.setPreferredSize(Globals.buttonDimension);
+				
 				// menuItemReload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 				// does not work
 				menuItemReload.addActionListener(actionEvent -> reload());
@@ -976,7 +976,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		{
 			for (int j = 0; j < tableModel.getColumnCount(); j++) {
 				
-				// tableModel.getClassNames().get(j));
+				
 				if (comparators[j] != null) {
 					logging.info(this, " set sorter for column " + j + " " + comparators[j]);
 					// restore previously explicitly assigned comparator
@@ -991,7 +991,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			}
 		}
 
-		// theTable.setRowSorter(sorter);
+		
 
 		List<RowSorter.SortKey> sortKeys = buildSortkeysFromColumns();
 
@@ -1016,7 +1016,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		theTable.setModel(m);
 		tableModel = m;
 		tableModel.addCursorrowObserver(this);
-		// exportTable.setClassNames( m.getClassNames() );
+		
 		// exportTable = new ExportTable(theTable, m.getClassNames() );
 
 		comparators = new Comparator[m.getColumnCount()];
@@ -1024,7 +1024,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		setSorter();
 
 		
-		// m.getRowCount());
+		
 		
 		// !theTable.getColumnModel().getColumns().hasMoreElements());
 		setDataChanged(false);
@@ -1525,13 +1525,13 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	public List<String> getSelectedKeys() {
 		ArrayList<String> result = new ArrayList<>();
 		
-		// tableModel.getKeyCol());
+		
 
 		if (tableModel.getKeyCol() < 0)
 			return result;
 
 		
-		// Arrays.toString(theTable.getSelectedRows()));
+		
 
 		if (tableModel.isUsingFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION)) {
 			for (int i = 0; i < tableModel.getRowCount(); i++) {

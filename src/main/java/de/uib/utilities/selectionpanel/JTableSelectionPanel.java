@@ -133,7 +133,7 @@ public class JTableSelectionPanel extends JPanel
 		table.setGridColor(Color.white);
 		table.setDefaultRenderer(Object.class, new StandardTableCellRenderer());
 		table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
-		// sorter.setTableHeader(table.getTableHeader());
+		
 		table.setAutoCreateRowSorter(true);
 
 		primaryOrderingKeys = new ArrayList<>();
@@ -192,13 +192,13 @@ public class JTableSelectionPanel extends JPanel
 		 */
 
 		scrollpane.getViewport().add(table);
-		// test table.setVisible(false);
+		
 
 		JPanel topPane = new JPanel();
 
 		// JLabel labelSearch = new
 		// JLabel(configed.getResourceValue("JTableSelectionPanel.searchin"));
-		// labelSearch.setPreferredSize(Globals.labelDimension);
+		
 
 		labelSearch = new JLabel(configed.getResourceValue("SearchPane.search"));
 		labelSearch.setFont(Globals.defaultFont);
@@ -214,7 +214,7 @@ public class JTableSelectionPanel extends JPanel
 		fieldSearch = new JTextField("");
 		fieldSearch.setPreferredSize(Globals.textfieldDimension);
 		fieldSearch.setFont(Globals.defaultFont);
-		// fieldSearch.setBackground(Globals.backgroundLightGrey);
+		
 		fieldSearch.setBackground(Globals.backVeryLightBlue); // Globals.backLightYellow
 		fieldSearch.getCaret().setBlinkRate(0);
 		fieldSearch.getDocument().addDocumentListener(this);
@@ -679,7 +679,7 @@ public class JTableSelectionPanel extends JPanel
 		logging.info(this, " [JTableSelectionPanel] setModel with row count " + tm.getRowCount());
 
 		tm.addTableModelListener(table);
-		// ((AbstractTableModel) tm).fireTableStructureChanged();
+		
 
 		logging.info(this, "setModel all hosts size "
 				+ main.getPersistenceController().getHostInfoCollections().getMapOfAllPCInfoMaps().size());
@@ -1093,7 +1093,7 @@ public class JTableSelectionPanel extends JPanel
 	public void addSelectedRow(int row) {
 		if (table.getRowCount() == 0)
 			return;
-		// table.requestFocus();
+		
 		table.addRowSelectionInterval(row, row);
 		
 		
@@ -1109,7 +1109,7 @@ public class JTableSelectionPanel extends JPanel
 			table.clearSelection();
 			return;
 		}
-		// table.requestFocus();
+		
 		table.setRowSelectionInterval(row, row);
 		
 		

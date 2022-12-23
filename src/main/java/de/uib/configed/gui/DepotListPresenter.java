@@ -128,10 +128,10 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		else
 			labelDepotServer.setText(configed.getResourceValue("DepotListPresenter.depot"));
 		labelDepotServer.setOpaque(false);
-		// labelDepotServer.setBackground(Globals.backgroundWhite); 
+		
 		labelDepotServer.setBackground(Globals.backLightBlue);
 		labelDepotServer.setFont(Globals.defaultFontStandardBold);
-		// labelDepotServer.setFont(Globals.defaultFont);
+		
 
 		buttonSelectDepotsWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
 		buttonSelectDepotsWithEqualProperties
@@ -218,12 +218,12 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		
 		// must not be set (otherwise the embedding scrollpane does not scroll)
 		// depotslist.setPreferredSize(new Dimension(widthColumnServer, line_height));
-		// depotslist.setFont(Globals.defaultFont);
+		
 		// labelDepotServer.setPreferredSize(new Dimension(widthColumnServer,
 		// line_height));
 
 		// popupDepots = new JPopupMenu();
-		// depotslist.setComponentPopupMenu(popupDepots);
+		
 
 		/*
 		 * buttonCommitChangedDepotSelection = new IconButton(

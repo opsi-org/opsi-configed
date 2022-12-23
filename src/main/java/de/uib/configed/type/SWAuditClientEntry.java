@@ -234,7 +234,7 @@ public class SWAuditClientEntry
 
 		}
 
-		// return result.toLowerCase();
+		
 		return result;
 	}
 
@@ -341,7 +341,7 @@ public class SWAuditClientEntry
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.ARCHITECTURE)) });
 
-		// return result.toLowerCase();
+		
 		return result;
 	}
 

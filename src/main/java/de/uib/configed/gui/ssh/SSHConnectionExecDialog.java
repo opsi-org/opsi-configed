@@ -60,7 +60,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 		 * // {
 		 * instance.append( "SSHConnectionExecDialog " + new java.util.Date() + "\n" );
 		 * 
-		 * // instance.setVisible(true);
+		 * 
 		 * // }
 		 * //}
 		 * 

@@ -46,13 +46,13 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 
 			if (sel) {
 				setBackground(Globals.backLightBlue);
-				// setFont(Globals.defaultFontBold);
-				// setForeground(Color.blue);//Globals.unknownBlue);
+				
+				
 			} else {
 				setBackground(Color.white);
-				// setBackground(Globals.backgroundWhite);
-				// setFont(Globals.defaultFontBig);
-				// setForeground(Globals.lightBlack);
+				
+				
+				
 			}
 
 			if (leaf) {
@@ -79,7 +79,7 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 		 * row,
 		 * hasFocus);
 		 * 
-		 * //c.setBackground(Globals.backLightBlue);
+		 * 
 		 * 
 		 * return c;
 		 * 

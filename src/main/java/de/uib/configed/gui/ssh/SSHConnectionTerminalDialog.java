@@ -50,7 +50,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 		TerminatingPanel(ActionListener closeListener) {
 			super();
-			// setBackground(java.awt.Color.GREEN);
+			
 			setBackground(Globals.backLightBlue);
 			btn_close = new de.uib.configed.gui.IconButton(
 					de.uib.configed.configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
@@ -135,7 +135,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 				
 				// the ugly effect of wandering
 				
-				// this.repaint();
+				
 				
 				setCLfocus();
 				// append("", tf_command); // try to set scrollpane to end of textpane and focus
@@ -232,7 +232,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		this.jScrollPane.setPreferredSize(output_size);
 		// this.jScrollPane.setMaximumSize(output_size);
 		this.revalidate();
-		// this.repaint();
+		
 		
 	}
 

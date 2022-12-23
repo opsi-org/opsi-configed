@@ -42,9 +42,9 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 
 		// theField = new JTextField("user1");
 		labelField = new JLabel(defs.getTextfieldLabel());
-		// labelField.setText( defs.getTextfieldLabel() );
+		
 		labelList = new JLabel(defs.getListLabel());
-		// labelList.setText( defs.getListLabel() );
+		
 		labelList.setToolTipText(defs.getListLabelToolTip());
 		theList = new JList<>();
 		theList.setListData(defs.getListData());
@@ -55,20 +55,20 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 
 	@Override
 	protected void allLayout() {
-		// super.allLayout();
+		
 		// we could design an adapted layout and infuse it in guiInit
 		logging.info(this, "allLayout");
 
-		allpane.setBackground(Globals.backLightBlue); // Globals.nimbusBackground);///Globals.backgroundWhite);
-														// //Globals.backLighter);//Globals.backgroundWhite);
+		allpane.setBackground(Globals.backLightBlue); 
+														// 
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
 		if (centerPanel == null)
 			centerPanel = new JPanel();
 
-		centerPanel.setBackground(Globals.backLightBlue);// Color.white);
-		// centerPanel.setOpaque(true);
+		centerPanel.setBackground(Globals.backLightBlue);
+		
 
 		southPanel = new JPanel();
 
@@ -94,8 +94,8 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
-		// southPanel.setOpaque(true);
-		southPanel.setBackground(Globals.backLightBlue);// Color.white );
+		
+		southPanel.setBackground(Globals.backLightBlue);
 
 		GroupLayout allLayout = new GroupLayout(allpane);
 		allpane.setLayout(allLayout);
@@ -128,7 +128,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 	public JPanel initPanel() {
 		JPanel thePanel = new JPanel();
 		thePanel.setBackground(Globals.backLightBlue);
-		// thePanel.setOpaque( true );
+		
 
 		theList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		theList.addListSelectionListener(this);
@@ -138,7 +138,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 
 		scrollpaneForList = new javax.swing.JScrollPane();
 		scrollpaneForList.setViewportView(theList);
-		// scrollpaneForList.getViewport().setBackground(Globals.backLightBlue );
+		
 
 		GroupLayout theLayout = new GroupLayout(thePanel);
 		thePanel.setLayout(theLayout);
@@ -226,12 +226,12 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 
 		JPanel centerPanel = f.initPanel();
 		// JPanel addPanel = new JPanel();
-		// addPanel.setBackground( Color.BLUE );
+		
 
-		// f.setCenterPaneInScrollpane( centerPanel );
+		
 		f.setCenterPane(centerPanel);
 
-		// f.setAdditionalPane( addPanel );
+		
 
 		f.setSize(new Dimension(500, 600));
 

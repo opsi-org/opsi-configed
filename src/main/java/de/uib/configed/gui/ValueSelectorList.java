@@ -121,10 +121,10 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		else
 			labelValue.setText(configed.getResourceValue("ValueSelectorList.value"));
 		labelValue.setOpaque(false);
-		// labelDepotServer.setBackground(Globals.backgroundWhite); 
+		
 		labelValue.setBackground(Globals.backLightBlue);
 		labelValue.setFont(Globals.defaultFontStandardBold);
-		// labelDepotServer.setFont(Globals.defaultFont);
+		
 
 		buttonSelectValuesWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
 		buttonSelectValuesWithEqualProperties
@@ -211,12 +211,12 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		
 		// must not be set (otherwise the embedding scrollpane does not scroll)
 		// depotslist.setPreferredSize(new Dimension(widthColumnServer, line_height));
-		// depotslist.setFont(Globals.defaultFont);
+		
 		// labelDepotServer.setPreferredSize(new Dimension(widthColumnServer,
 		// line_height));
 
 		// popupDepots = new JPopupMenu();
-		// depotslist.setComponentPopupMenu(popupDepots);
+		
 
 		/*
 		 * buttonCommitChangedDepotSelection = new IconButton(

@@ -41,7 +41,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	public void reset() {
 		logging.info(this, "reset");
 		super.reset();
-		// ((ControlPanelAssignToLPools)controller).setSoftwareIdsFromLicencePool();
+		
 	}
 
 	@Override
@@ -96,7 +96,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	// ListSelectionListener
 	@Override
 	public void valueChanged(javax.swing.event.ListSelectionEvent e) {
-		// super.valueChanged(e); we base it on a mouse event
+		
 
 		// if (e.getValueIsAdjusting()) return;
 
@@ -105,7 +105,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 		if (isAwareOfSelectionListener()) {
 			logging.debug(this, "selectionListener valueChanged, aware of selectionlistener");
 
-			// ((ControlPanelAssignToLPools)controller).validateWindowsSoftwareKeys( );
+			
 
 			
 

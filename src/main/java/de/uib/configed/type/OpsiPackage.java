@@ -144,7 +144,7 @@ public class OpsiPackage implements Comparable {
 	}
 
 	public Vector<Object> appendValues(Vector<Object> row) {
-		// row.add(getProductId());
+		
 		row.add(giveProductType(getProductType()));
 		row.add(getProductVersion());
 		row.add(getPackageVersion());

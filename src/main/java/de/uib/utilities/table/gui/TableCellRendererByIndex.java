@@ -83,12 +83,12 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 		if (value != null) {
 
 			
-			// value.getClass());
+			
 			if (mapOfStrings != null)
 				selectedString = mapOfStrings.get("" + value);
 			
 			
-			// value.getClass());
+			
 			if (mapOfImages != null)
 				selectedIcon = mapOfImages.get("" + value);
 
@@ -132,7 +132,7 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 		}
 
 		// if (backgroundColor != null) result.setBackground (backgroundColor);
-		// result.setForeground (lightBlack);
+		
 
 		// CellAlternatingColorizer.colorize(result, isSelected, (row % 2 == 0), true);
 

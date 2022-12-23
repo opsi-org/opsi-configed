@@ -132,7 +132,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			listeditor.setVisible(true);
 			listeditor.locateLeftTo(table);
 		});
-		// listeditor.setVisible(true);
+		
 		usingListEditor = true;
 	}
 
@@ -165,7 +165,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				
 
 				listeditor.setListModel(modelProducer.getListModel(row, column));
-				// listeditor.setStartValue(value);
+				
 				logging.info(this, "startValue set: " + value);
 
 				listeditor.setSelectionMode(modelProducer.getSelectionMode(row, column));

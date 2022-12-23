@@ -124,7 +124,7 @@ public class FPanel extends SecondaryFrame {
 	protected void processWindowEvent(WindowEvent e) {
 
 		
-		// super.processWindowEvent(e);
+		
 
 		boolean leaving = true;
 
@@ -139,7 +139,7 @@ public class FPanel extends SecondaryFrame {
 
 				leave();
 
-				// super.processWindowEvent(e);
+				
 			} else
 				setVisible(true);
 		}

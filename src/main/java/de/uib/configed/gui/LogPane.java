@@ -394,7 +394,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		labelSearch = new JLabel(configed.getResourceValue("TextPane.jLabel_search"));
 		labelSearch.setFont(Globals.defaultFont);
 		// labelSearch.setPreferredSize(new Dimension (buttonWidth,
-		// Globals.buttonHeight));
+		
 
 		jComboBoxSearch = new JComboBox<>();
 		jComboBoxSearch.setEditable(true);

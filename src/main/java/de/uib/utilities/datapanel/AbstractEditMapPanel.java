@@ -78,7 +78,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 	public AbstractEditMapPanel() {
 		actor = new Actor();
 		mapTableModel = new MapTableModel();
-		// mapTableModel.setData(null);
+		
 	}
 
 	public AbstractEditMapPanel(boolean keylistExtendible, boolean keylistEditable, boolean reloadable) {
@@ -86,7 +86,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 		this.keylistExtendible = keylistExtendible;
 		this.keylistEditable = keylistEditable;
 		this.reloadable = reloadable;
-		// mapTableModel.setData(null);
+		
 	}
 
 	public void setActor(Actor actor) {
@@ -185,7 +185,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 	 * for (JMenuItem item : menuItems)
 	 * {
 	 * logging.info(this, "setPopupConfiguration, set " + item.getText());
-	 * //popupmenuAtRow.add( item );
+	 * 
 	 * }
 	 * 
 	 * }

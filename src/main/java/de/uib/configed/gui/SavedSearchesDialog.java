@@ -178,7 +178,7 @@ public class SavedSearchesDialog extends FEditList {
 				manager.loadSearch(selected.get(0));
 
 				// test:
-				// manager.setSearch(de.uib.opsidatamodel.SavedSearches.SEARCHfailedByTimeTestS);
+				
 				result = manager.selectClients();
 			}
 			super.commit();

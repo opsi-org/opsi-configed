@@ -72,12 +72,12 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 	}
 
 	protected void initComponents() {
-		// super.initComponents();
+		
 
 		panelDepots = new JPanel();
-		// panelDepots.setBorder( Globals.createPanelBorder() );
-		// panelDepots.setBackground(Globals.backgroundLightGrey);
-		// panelDepots.setOpaque(true);
+		
+		
+		
 
 		listDepots = new JList<>(); // new String[]{"a","b","c"});
 		listDepots.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -125,12 +125,12 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 				.addComponent(buttonSelectAll, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 		buttonSelectAll.setForeground(Globals.blue);
 		buttonSelectWithEqualProperties.setForeground(Globals.blue);
-		// buttonSelectAll.setBackground(Globals.backLightBlue);
-		// buttonSelectWithEqualProperties.setBackground(Globals.backLightBlue);
+		
+		
 
 		// jLabelProductProperties = new JLabel (
 		// configed.getResourceValue("ProductInfoPane.jLabelProductProperties") );
-		// jLabelProductProperties.setFont ( Globals.defaultFontBig );
+		
 
 		jLabelEditDepotProductProperties = new JLabel(
 				configed.getResourceValue("ProductInfoPane.jLabelEditDepotProductProperties"));
@@ -238,7 +238,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		 * listSelectedDepots = listDepots.getSelectedValuesList();
 		 */
 		
-		// listDepots.getSelectedValuesList() );
+		
 		
 
 		Map<String, Object> visualData = mergeProperties(

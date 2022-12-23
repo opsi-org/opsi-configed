@@ -254,7 +254,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		logging.info(this, "setFilterCondition " + cond);
 		clearFilter();
 		chainedFilter.set(DEFAULT_FILTER_NAME, new TableModelFilter(cond));
-		// chainedFilter.setInUse( true ); implemented in constructor of
+		
 		// TableModelFilter
 	}
 
@@ -355,7 +355,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 		else {
 			java.text.Collator myCollator = java.text.Collator.getInstance();
-			// myCollator.setStrength(java.text.Collator.PRIMARY); //ignores hyphens as well
+			
 			// as capitalization
 			myCollator.setStrength(java.text.Collator.SECONDARY);
 
@@ -516,9 +516,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			
 			
 			
-			// rows.get(row).size());
 			
-			// rows.get(row).size());
+			
+			
 			result = (rows.get(row)).get(col);
 		}
 
@@ -671,7 +671,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		logging.debug(this, " old value at " + row + ", " + col + " : " + oldValueString);
 		logging.debug(this, " new value at " + row + ", " + col + " : " + value);
 		
-		// value.getClass().getName() );
+		
 
 		
 		
@@ -823,7 +823,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 		for (String col : columnNames) {
 			
-			// entries.get(col));
+			
 
 			/*
 			 * if (col.equals("APO_PLZ"))
@@ -845,8 +845,8 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	private boolean checkDeletionOfAddedRow(int rowNum) {
 		if (addedRows.indexOf(rowNum) > -1) {
 			
-			// addedRows.indexOf(rowNum));
-			// addedRows.remove(addedRows.indexOf(rowNum));
+			
+			
 
 			// deletion of added rows is not adequately managed
 			// therefore we reject it

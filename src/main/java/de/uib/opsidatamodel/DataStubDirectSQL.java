@@ -157,9 +157,9 @@ public class DataStubDirectSQL extends DataStubRawData
 			// client2software);
 
 			logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
-			// System.gc();
 			
-			// Globals.usedMemory());
+			
+			
 			// step++;
 
 			persist.notifyDataRefreshedObservers("softwareConfig");

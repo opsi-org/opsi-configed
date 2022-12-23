@@ -92,7 +92,7 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 	@Override
 	public boolean add(Object obj) {
 		
-		// obj.getClass().getName());
+		
 		return super.add(obj);
 	}
 

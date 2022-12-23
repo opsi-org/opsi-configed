@@ -71,9 +71,9 @@ public class FWakeClients extends FShowList {
 					}
 
 					
-					// hostSeparationByDepots.get(depot));
 					
-					// counterByDepots.get(depot));
+					
+					
 
 					if (executionerForDepots.get(depot) != Executioner.NONE) {
 						String host = hostSeparationByDepots.get(depot).get(turn);

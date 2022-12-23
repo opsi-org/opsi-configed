@@ -88,12 +88,12 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		// cb_parameter_formats.setLightWeightPopupEnabled(false);
 		cb_parameter_formats.setPreferredSize(tf_dim_long);
 		cb_parameter_formats.setMaximumRowCount(5); // we have to delimit it so that is constrained to the component (in
-													// Windows) //Globals.comboBoxRowCount);
+													// Windows) 
 		cb_parameter_methods = new JComboBox<>(factory.getParameterHandler().getParameterMethodLocalNames());
 		cb_parameter_methods
 				.setSelectedItem(configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"));
 		cb_parameter_methods.setPreferredSize(tf_dim_long);
-		cb_parameter_methods.setMaximumRowCount(5); // Globals.comboBoxRowCount);
+		cb_parameter_methods.setMaximumRowCount(5); 
 		// cb_parameter_methods.setLightWeightPopupEnabled(false);
 		cb_parameter_formats.setEnabled(false);
 

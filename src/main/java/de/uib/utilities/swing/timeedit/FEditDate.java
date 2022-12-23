@@ -36,14 +36,14 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 		super(initialText);
 		areaDimension = AREA_DIMENSION;
 
-		dateFormat = DateFormat.getDateInstance(Globals.dateFormatStylePattern);// DateFormat.LONG);
+		dateFormat = DateFormat.getDateInstance(Globals.dateFormatStylePattern);
 
 		dateEditor = new DateTimeEditor(withTime);
 
-		editingArea.add(dateEditor); // BorderLayout.CENTER);
+		editingArea.add(dateEditor); 
 
 		dateEditor.setEditable(true);
-		// dateEditor.registerDateEventObserver(this);
+		
 		dateEditor.addDateSelectionListener(this);
 		dateEditor.addKeyListener(this);
 		dateEditor.addMonthViewMouseListener(this);
@@ -56,18 +56,18 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 	protected void createComponents() {
 		super.createComponents();
 		// buttonCommit.setText("");
-		// buttonCommit.setPreferredSize(Globals.smallButtonDimension );
+		
 		// buttonCancel.setText("");
 
-		// buttonCancel.setPreferredSize(Globals.smallButtonDimension );
-		// cancelbutton.setVisible(false);
+		
+		
 
 	}
 
 	@Override
 	public void setStartText(String s) {
 		super.setStartText(s);
-		// textarea.setText(s);
+		
 
 		logging.info(this, "setStartText(): " + s);
 		setDataChanged(false);

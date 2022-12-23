@@ -87,7 +87,7 @@ public class ControlDash {
 				showInfo();
 			}
 		});
-		// .start();
+		
 	}
 
 	public void showInfo() {
@@ -163,7 +163,7 @@ public class ControlDash {
 				}
 
 			};
-			// fDash.setAdditionalPane( new PanelDashInfo() );
+			
 			fDash.checkAdditionalPane();
 			// fDash.setSize( new Dimension( 400, 500 ) );
 
@@ -264,7 +264,7 @@ public class ControlDash {
 
 					i++;
 				}
-				// myController.thePanel.setDisplaySimilarExist( foundVariantLicencepools );
+				
 				logging.info(this, "produced rows, foundVariantLicencepools " + foundVariantLicencepools);
 			}
 
@@ -276,7 +276,7 @@ public class ControlDash {
 		};
 		modelSWnames.produceRows();
 
-		// modelSWnames.requestReload();
+		
 
 		Vector<Vector<Object>> specialrows = modelSWnames.getRows();
 		if (specialrows != null) {

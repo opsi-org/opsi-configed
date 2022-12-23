@@ -271,9 +271,9 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		panelKeys.setMasterFrame(Globals.frame1);
 		// panelKeys.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		// panelKeys.showFilterIcon( true ); //supply implementation of
+		
 		// SearchTargetModelFromTable.setFiltered
-		// panelKeys.setFiltering( true );
+		
 
 		panelLicencepools = new PanelGenEditTable(
 				configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool"), maxHSize, false, 0,
@@ -283,9 +283,9 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		panelLicencepools.setMasterFrame(Globals.frame1);
 		// panelLicencepools.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		// panelLicencepools.showFilterIcon( true ); //supply implementation of
+		
 		// SearchTargetModelFromTable.setFiltered
-		// panelLicencepools.setFiltering( true );
+		
 
 		panelLicencecontracts = new PanelGenEditTable(
 				configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), 0, true, 1, false,
@@ -296,9 +296,9 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		panelLicencecontracts.setMasterFrame(Globals.frame1);
 		// panelLicencecontracts.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		// panelLicencecontracts.showFilterIcon( true ); //supply implementation of
+		
 		// SearchTargetModelFromTable.setFiltered
-		// panelLicencecontracts.setFiltering( true );
+		
 
 		jLabelLicencePool = new javax.swing.JLabel();
 		jButtonCreateStandard = new javax.swing.JButton();
@@ -324,12 +324,12 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_maxInstallations = new javax.swing.JTextField();
 		// jTextField_maxInstallations = new javax.swing.JFormattedTextField();
 		// jTextField_maxInstallations.setInputVerifier(new
-		// utils.FormattedTextFieldVerifier());
+		
 
 		comboClient = new javax.swing.JComboBox();
 		comboClient.setFont(Globals.defaultFontBig);
-		// org.jdesktop.swingx.autocomplete.AutoCompleteDecorator.decorate(combo);
-		// combo.setRenderer ();
+		
+		
 		comboClient.setPreferredSize(new java.awt.Dimension(200, 20));
 
 		jLabelSLid3info = new javax.swing.JLabel();

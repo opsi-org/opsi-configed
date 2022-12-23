@@ -156,7 +156,7 @@ public class PanelSWMultiClientReport extends JPanel {
 		chooserDirectory.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserDirectory);
-		// chooserDirectory.setControlButtonsAreShown(false);
+		
 
 		fieldExportDirectory = new JTextShowField(exportDirectoryS);
 
@@ -241,7 +241,7 @@ public class PanelSWMultiClientReport extends JPanel {
 		// System.exit(0);
 
 		JPanel subpanelPreConfig = new JPanel();
-		subpanelPreConfig.setBackground(Globals.backgroundWhite);// Globals.backNimbusLight);
+		subpanelPreConfig.setBackground(Globals.backgroundWhite);
 
 		GroupLayout glPreConfig = new GroupLayout(subpanelPreConfig);
 		subpanelPreConfig.setLayout(glPreConfig);

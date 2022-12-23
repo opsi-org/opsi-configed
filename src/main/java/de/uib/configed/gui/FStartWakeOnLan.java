@@ -199,7 +199,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		waitingProgressBar.setToolTipText(configed.getResourceValue("FStartWakeOnLan.timeElapsed.toolTip"));
 		waitingProgressBar.setValue(0);
 		waitingProgressBar.setEnabled(true);
-		// waitingProgressBar.setMaximum(max);
+		
 
 		UIDefaults defaults = new UIDefaults();
 		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
@@ -260,7 +260,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 		buttonSetNew = new IconButton(configed.getResourceValue("FStartWakeOnLan.buttonSetNew"), "images/reload16.png",
 				"images/reload16_over.png", "images/reload16_disabled.png");
-		// buttonSetNew.setBackground(de.uib.utilities.Globals.backgroundLightGrey);
+		
 		buttonSetNew.setToolTipText(configed.getResourceValue("FStartWakeOnLan.buttonSetNew.tooltip"));
 
 		buttonSetNew.addActionListener(new ActionListener() {
@@ -274,7 +274,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 		buttonRefreshTime = new IconButton(configed.getResourceValue("FStartWakeOnLan.buttonRefreshTime"),
 				"images/clock16.png", "images/clock16.png", "images/clock16.png");
-		// buttonRefreshTime.setBackground(de.uib.utilities.Globals.backgroundLightGrey);
+		
 		buttonRefreshTime.setToolTipText("Zeit neu setzen");
 
 		buttonRefreshTime.addActionListener(new ActionListener() {
@@ -296,9 +296,9 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		JLabel labelDepotCount = new JLabel(configed.getResourceValue("FStartWakeOnLan.countOfDepots"));
 
 		labelStarttime = new JLabel(readTime(cal));
-		// labelStarttime.setFont(Globals.defaultFont);
-		// labelStarttime.setEditable(false);
-		// labelStarttime.setEnabled(false);
+		
+		
+		
 
 		// = new JLabel("delay between triggering WOL events (per depot)");
 		spinnerDelay = new JSpinner();
@@ -339,7 +339,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		lPanelSpinnerDelay.setHorizontalGroup(lPanelSpinnerDelay.createSequentialGroup().addComponent(spinnerDelay,
 				2 * Globals.TIME_SPINNER_WIDTH, 2 * Globals.TIME_SPINNER_WIDTH, 2 * Globals.TIME_SPINNER_WIDTH));
 
-		// contentPane.setBackground( java.awt.Color.BLUE );
+		
 
 		GroupLayout lPanel = new GroupLayout(contentPane);
 		contentPane.setLayout(lPanel);
@@ -464,7 +464,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		runningInstances.add(this, scheduleTitle);
 		
 		waitingTask = new WaitingWorker((WaitingSleeper) this);
-		// waitingTask.addPropertyChangeListener(this);
+		
 		waitingTask.execute();
 
 	}

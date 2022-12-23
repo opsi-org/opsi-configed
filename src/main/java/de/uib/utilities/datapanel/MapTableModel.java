@@ -357,7 +357,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			}
 
 			break;
-		// data.get (keys.get(row)).toString(); break;
+		
 		}
 
 		if (result == null)
@@ -429,7 +429,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	public void removeEntryFromStoredMaps(String myKey) {
 		if (storeData != null) {
 			for (Map<String, Object> aStoreMap : storeData) {
-				// ( (Map) aStoreMap ).remove(myKey);
+				
 				aStoreMap.put(myKey, nullLIST);
 			}
 

@@ -87,7 +87,7 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// super.mouseClicked(e);
+		
 		checkSelected();
 
 		if (e.getClickCount() > 1)

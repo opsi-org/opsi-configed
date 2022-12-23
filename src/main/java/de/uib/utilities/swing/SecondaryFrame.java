@@ -78,7 +78,7 @@ public class SecondaryFrame extends JFrame implements WindowListener {
 	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		
-		// super.processWindowEvent(e);
+		
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			callExit();
 		}

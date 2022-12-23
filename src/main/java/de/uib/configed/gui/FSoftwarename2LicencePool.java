@@ -297,7 +297,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 																
 		setCenterPane(panelSWnames);
 		additionalPane.setVisible(true);
-		// additionalPane.setBackground( Color.RED );
+		
 		// additionalPane.setPreferredSize( new Dimension( 400, 400) );
 		setupLayout();
 		// setSize( new Dimension( 800, 400 ) );
@@ -411,7 +411,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 							// new MapRetriever(){
 							// public Map retrieveMap()
 							// {
-							// persist.installedSoftwareInformationRequestRefresh();
+							
 							// return persist.getInstalledSoftwareName2SWinfo();
 							// }
 							// }
@@ -468,10 +468,10 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		panelSWnames.setTableModel(this.modelSWnames);
 
-		// modelSWnames.setFilterCondition( showOnlyNamesWithVariantLicences );
-		// modelSWnames.setFilterCondition( showOnlyNamesWithoutLicences );
-		// panelSWnames.setFiltering( true );
-		// modelSWnames.reset();
+		
+		
+		
+		
 		
 
 	}
@@ -491,7 +491,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		}
 
 		modelSWnames.reset();
-		// modelSWnames.requestReload();
+		
 
 		logging.info(this, "setPreselectionForName2Pool, we did a reset for modelSWnames with " + val);
 	}
@@ -614,8 +614,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						logging.info(this, "sendUpdate " + rowmap);
 						// update with new value "---" == valNoLicencepool is interpreted as deleting
 
-						// modelSWxLicencepool.requestReload();
-						// myController.thePanel.panelRegisteredSoftware.requestReload();
+						
+						
 						// reloads local data (which are not yet updated)
 						String swID = (String) rowmap.get(AuditSoftwareXLicencePool.SwID);
 						String licensePoolID_old = persist.getFSoftware2LicencePool(swID);
@@ -637,7 +637,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 					}
 				}, updateCollection));
-		// panelSWxLicencepool.setDataChanged ( true );
+		
 
 	}
 
@@ -671,7 +671,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		 * }
 		 * result = 1;
 		 * }
-		 * //owner.setVisible(true);
+		 * 
 		 * 
 		 */
 	}

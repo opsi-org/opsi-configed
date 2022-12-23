@@ -65,7 +65,7 @@ public class NavigationPanel extends JPanel implements ActionListener {
 	}
 
 	protected void initComponents() {
-		// setPreferredSize(Globals.buttonDimension);
+		
 		logging.info(this, "initComponents");
 
 		Dimension navButtonDimension = new Dimension(30, Globals.BUTTON_HEIGHT - 6);
