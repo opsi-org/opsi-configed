@@ -412,7 +412,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 							// public Map retrieveMap()
 							// {
 							
-							// return persist.getInstalledSoftwareName2SWinfo();
+							
 							// }
 							// }
 							() -> (Map) persist.getInstalledSoftwareName2SWinfo())

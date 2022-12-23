@@ -63,7 +63,7 @@ public abstract class HostInfoCollections {
 
 	// valueFromConfigStateAsExpected
 
-	// public abstract void intersectWithMapOfPCs(List<String> clientSelection);
+	
 
 	protected abstract void retrieveOpsiHosts();
 

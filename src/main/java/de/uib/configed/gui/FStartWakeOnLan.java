@@ -103,7 +103,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		this.labelledDelays = labelledDelays;
 		LinkedList<String> delays = new LinkedList<>(labelledDelays.keySet());
 		// comboDelay.setModel(new DefaultComboBoxModel<>(new
-		// Vector<String>(labelledDelays.keySet() ) ) );
+		
 		spinnerDelay.setModel(new SpinnerListModel(delays));
 		nullDelayValue = delays.get(0);
 		((JSpinner.ListEditor) spinnerDelay.getEditor()).getTextField().setEditable(false);

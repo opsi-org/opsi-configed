@@ -70,7 +70,7 @@ public class OpsiPackage implements Comparable {
 	public static int lastIndex = -1;
 
 	// public static Map<Integer, String> productName2Id = new HashMap<String,
-	// Integer>();
+	
 
 	public OpsiPackage(String productId, String productVersion, String packageVersion, String productType) {
 		this(productId, productVersion, packageVersion, productType, null); // compatibility to usages without locked

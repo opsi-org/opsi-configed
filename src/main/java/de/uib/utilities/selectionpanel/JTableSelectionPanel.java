@@ -296,7 +296,7 @@ public class JTableSelectionPanel extends JPanel
 
 		logging.info(this, "comboSearchMode set index to " + searchMode.ordinal());
 
-		// comboSearchMode.setModel(new DefaultComboBoxModel<>(searchModes));
+		
 		comboSearchMode.setPreferredSize(Globals.buttonDimension);
 
 		/*

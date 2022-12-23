@@ -442,7 +442,7 @@ public class DataStubRawData extends DataStubNOM {
 			if (client2software == null)
 				client2software = new HashMap<>();
 			// if (softwareId2clients == null) softwareId2clients = new HashMap<Integer,
-			// java.util.Set<String>>();
+			
 			if (softwareIdent2clients == null)
 				softwareIdent2clients = new HashMap<>();
 

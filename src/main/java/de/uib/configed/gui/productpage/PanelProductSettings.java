@@ -575,7 +575,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		popup = new JPopupMenu("");
 
 		// LinkedHashMap<String, JMenuItem> menuItems = new LinkedHashMap<String,
-		// JMenuItem>();
+		
 
 		JMenuItem save = new JMenuItemFormatted();
 		save.setText(configed.getResourceValue("ConfigedMain.saveConfiguration"));

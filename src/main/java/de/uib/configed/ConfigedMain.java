@@ -3157,9 +3157,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (filterClientList)
 			mainFrame.toggleClientFilterAction();
 
-		// (new ArrayList<>(clientsFilteredByTree)); does not select
+		
 
-		// setSelectedClients(new ArrayList<>(clientsFilteredByTree));
+		
 
 	}
 

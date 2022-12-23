@@ -416,7 +416,7 @@ public class DataStubNOM extends DataStub {
 			// HashMap<String, java.util.Set<String>> productListForProductID = new
 			// HashMap<String, java.util.Set<String>>();
 			// HashMap<String, java.util.Set<String>> productListForProductID_notUnique =
-			// new HashMap<>();
+			
 
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " product property");
@@ -1107,7 +1107,7 @@ public class DataStubNOM extends DataStub {
 				if (softwareIdent2clients == null)
 					softwareIdent2clients = new HashMap<>();
 				// if (softwareId2clients == null) softwareId2clients = new HashMap<Integer,
-				// List<String>>();
+				
 
 				persist.notifyDataLoadingObservers(
 						configed.getResourceValue("LoadingObserver.loadtable") + " software config, step " + step);

@@ -51,7 +51,7 @@ public abstract interface SSHSFTPCommand {
 	// /** @return raw command String **/
 	
 	// /** @returnlist of parameter-Ersatz **/
-	// public abstract ArrayList<String> getParameterList();
+	
 	// /** @return True if command need sudo **/
 	
 	// /** @return command id String **/
