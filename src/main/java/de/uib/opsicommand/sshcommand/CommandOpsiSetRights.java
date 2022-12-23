@@ -28,7 +28,7 @@ public class CommandOpsiSetRights extends SSHCommand_Template
 	public CommandOpsiSetRights() {
 		command = "opsi-set-rights " + configed.getResourceValue("SSHConnection.command.opsisetrights.additionalPath")
 				+ " ";
-		ssh_command.add((SSHCommand) this);
+		ssh_command.add(this);
 	}
 
 	public CommandOpsiSetRights(String d) {

@@ -155,8 +155,8 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 			outputDia = ((SSHConnectExec) caller).getDialog();
 		else if (caller instanceof SSHConnectTerminal)
 			outputDia = ((SSHConnectTerminal) caller).getDialog();
-		ArrayList<String> params = command.getParameterList();
-		if ((params != null) && (params.size() > 0))
+		List<String> params = command.getParameterList();
+		if ((params != null) && (!params.isEmpty()))
 			for (String param : params) {
 				if (command.getCommandRaw().contains(param)) {
 					String[] splitted_parameter = splitParameter(param);
@@ -167,7 +167,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 						logging.debug(this, "parseParameter command " + command.getCommandRaw());
 						logging.debug(this, "parseParameter param " + param);
 						logging.debug(this, "parseParameter result " + result);
-						((SSHCommand) command).setCommand(command.getCommandRaw().replace(param, result));
+						(command).setCommand(command.getCommandRaw().replace(param, result));
 						logging.debug(this, "parseParameter command " + command.getCommandRaw());
 					}
 				}

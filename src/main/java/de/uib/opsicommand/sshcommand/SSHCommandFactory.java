@@ -135,7 +135,6 @@ public class SSHCommandFactory {
 	// SSHCommandFactory.getInstance().sudo_text
 	public static String sudo_failed_text = configed.getResourceValue("SSHConnection.sudoFailedText");
 	public static String sudo_text = "sudo -S -p \"" + sudo_failed_text + "\" ";
-	private final String opsisetrights = "opsi-set-rights";
 
 	public final String sshusr = "<<!sshuser!>>";
 	public final String sshhst = "<<!sshhost!>>";

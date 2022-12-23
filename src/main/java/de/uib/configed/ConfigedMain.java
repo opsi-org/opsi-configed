@@ -4278,14 +4278,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected boolean setView(int viewIndex)
 	// extra tasks not done by resetView
 	{
-		switch (viewIndex) {
-		case VIEW_CLIENTS: {
+		if (viewIndex == VIEW_CLIENTS) {
 			checkErrorList();
 			// mainFrame.menuClientSelectionSetEnabled(true);
 			// mainFrame.deselectSetEnabled(true);
 			depotsList.setEnabled(true);
-			break;
-		}
 		}
 
 		return true;

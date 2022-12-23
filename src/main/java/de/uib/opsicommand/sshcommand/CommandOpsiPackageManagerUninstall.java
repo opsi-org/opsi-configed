@@ -10,7 +10,6 @@ import de.uib.utilities.logging.logging;
 public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManager implements SSHCommandNeedParameter {
 	protected FGeneralDialog dialog = null;
 	private String command;
-	private boolean install;
 	private int priority = 10;
 	// private boolean isMultiCommand = false;
 	String opsiproduct;

@@ -202,7 +202,7 @@ public class SSHConnectExec extends SSHConnect {
 				final_dia.appendLater("\n\n\n" + new Date());
 				final_dia.appendLater("\n[" + configed.getResourceValue("SSHConnection.Exec.dialog.commandlist").trim()
 						+ "]\n" + defaultCommandsString + "\n\n");
-				if (SSHCommandFactory.getInstance(main).ssh_always_exec_in_background) {
+				if (SSHCommandFactory.ssh_always_exec_in_background) {
 					multiDialog.setVisible(false);
 					final_dia.setVisible(false);
 				}
@@ -218,14 +218,13 @@ public class SSHConnectExec extends SSHConnect {
 				// {
 				// public void run()
 				{
-					if (!SSHCommandFactory.getInstance(main).ssh_always_exec_in_background)
+					if (!SSHCommandFactory.ssh_always_exec_in_background)
 						final_dia.setVisible(true);
 					pmethodHandler.canceled = false;
 					boolean found_error = false;
-					LinkedList<SSHCommand> commands_list = (LinkedList) commandToExec.getCommands();
+					LinkedList<SSHCommand> commands_list = commandToExec.getCommands();
 					for (SSHCommand co : commandToExec.getCommands()) {
 						if (!found_error) {
-							SSHCommand defaultCommand = co;
 							// pmethodHandler.parseParameter(co, caller);
 							co = pmethodHandler.parseParameter(co, caller); // ???????? sollte hier eigentlich stehen?!
 																			// # nein! co wird vom phander verändert

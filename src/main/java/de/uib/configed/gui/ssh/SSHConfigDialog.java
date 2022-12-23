@@ -197,9 +197,11 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		}
 
 		if (cb_useOutputColor != null) {
+			SSHCommandFactory.getInstance();
 			logging.debug(this, "compareStates  (factory.ssh_colored_output != cb_useOutputColor.isSelected()) "
-					+ SSHCommandFactory.getInstance().ssh_colored_output + " != " + cb_useOutputColor.isSelected());
-			if (SSHCommandFactory.getInstance().ssh_colored_output != cb_useOutputColor.isSelected()) {
+					+ SSHCommandFactory.ssh_colored_output + " != " + cb_useOutputColor.isSelected());
+			SSHCommandFactory.getInstance();
+			if (SSHCommandFactory.ssh_colored_output != cb_useOutputColor.isSelected()) {
 				logging.debug(this, "compareStates 12");
 				return false;
 			}
@@ -207,9 +209,10 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		if (cb_execInBackground != null) {
 			logging.debug(this,
 					"compareStates  (factory.ssh_always_exec_in_background != cb_execInBackground.isSelected()) "
-							+ SSHCommandFactory.getInstance().ssh_always_exec_in_background + " != "
+							+ SSHCommandFactory.ssh_always_exec_in_background + " != "
 							+ cb_execInBackground.isSelected());
-			if (SSHCommandFactory.getInstance().ssh_always_exec_in_background != cb_execInBackground.isSelected()) {
+			SSHCommandFactory.getInstance();
+			if (SSHCommandFactory.ssh_always_exec_in_background != cb_execInBackground.isSelected()) {
 				logging.debug(this, "compareStates 13");
 				return false;
 			}
@@ -704,8 +707,8 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		// waitCursor.stop();
 		// factory.testConnection(tf_user.getText(), (String) cb_host.getSelectedItem())
 		// ;
-		factory.ssh_colored_output = cb_useOutputColor.isSelected();
-		factory.ssh_always_exec_in_background = cb_execInBackground.isSelected();
+		SSHCommandFactory.ssh_colored_output = cb_useOutputColor.isSelected();
+		SSHCommandFactory.ssh_always_exec_in_background = cb_execInBackground.isSelected();
 		cb_useDefault_state = cb_useDefault.isSelected();
 		checkComponentStates();
 		logging.info(this, "request focus");

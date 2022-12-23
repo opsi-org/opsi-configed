@@ -363,7 +363,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		};
 	}
 
-	public ArrayList<String> commands_compgen;
+	public List<String> commands_compgen;
 
 	private String getCompletionList(boolean newCommands, boolean dirchanged) {
 		SSHConnectExec ssh = new SSHConnectExec();
@@ -377,7 +377,7 @@ public class SSHConnectTerminal extends SSHConnect {
 			if (result == null)
 				logging.warning(this, "no commands could be found for autocompletion");
 
-			commands_compgen = (ArrayList) getList(result);
+			commands_compgen = getList(result);
 			logging.debug(this, "getCompletionList commands compgen -c " + result);
 		}
 
@@ -425,7 +425,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		return result;
 	}
 
-	private List getList(String str) {
+	private List<String> getList(String str) {
 		if (str.equals(""))
 			return null;
 		String[] arr = str.split("\n");
