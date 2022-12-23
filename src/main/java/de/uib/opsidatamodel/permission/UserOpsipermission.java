@@ -10,7 +10,7 @@ import de.uib.utilities.logging.logging;
 public class UserOpsipermission extends UserConfigModule {
 	// public enum HostTypeOfPrivilege{ ALL, CLIENT, DEPOT, SERVER }
 	// permit restrictable action
-	// public List<Object> reduceList( List<Object> checkList )
+	
 	
 	
 

@@ -409,7 +409,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			this.modelSWnames = new GenTableModel(null, // no updates
 					new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
 							// new MapRetriever(){
-							// public Map retrieveMap()
+							
 							// {
 							
 							

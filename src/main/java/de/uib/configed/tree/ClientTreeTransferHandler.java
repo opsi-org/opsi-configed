@@ -227,7 +227,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	}
 
 	// @Override
-	// public Icon getVisualRepresentation(Transferable t)
+	
 
 	private boolean chooseMOVE(TransferHandler.TransferSupport support, String sourceGroupName, TreePath dropPath,
 			boolean isLeaf) {

@@ -55,7 +55,7 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	}
 
 	// @Override
-	// public String getBasicName()
+	
 	// {
 	
 	// }
@@ -117,9 +117,9 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	
 	
 	
-	// public String getBasicName()
+	
 
-	// public LinkedList<CommandHelp_Row> getHelpLines()
+	
 	// {
 	
 	// }
@@ -128,14 +128,14 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	
 	// }
 	// @Override
-	// public int getHelpColumns()
+	
 	// {
 	
 	
 	
 	
 	// }
-	// public String[] getRegexes()
+	
 	// {
 	
 	// regexes[0] = "(-[\\w*],[

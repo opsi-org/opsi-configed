@@ -35,7 +35,7 @@ public class GenericEnumElement extends SelectElement {
 		return true;
 	}
 
-	// public SelectOperation createOperation( String operation, SelectData data )
+	
 	// {
 	
 	// }

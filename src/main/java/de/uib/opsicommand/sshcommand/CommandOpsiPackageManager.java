@@ -47,7 +47,7 @@ public class CommandOpsiPackageManager implements SSHCommand {
 	}
 
 	// @Override
-	// public String getBasicName()
+	
 	// {
 	// return "opsi-package-manager";
 	// }

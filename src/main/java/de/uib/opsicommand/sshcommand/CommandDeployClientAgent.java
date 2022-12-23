@@ -206,7 +206,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 		return dialog;
 	}
 	// @Override
-	// public int getHelpColumns()
+	
 	// {
 	
 	// }

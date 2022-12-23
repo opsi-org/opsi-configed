@@ -21,7 +21,7 @@ public class DescriptionElement extends SelectElement {
 		return result;
 	}
 
-	// public SelectOperation createOperation( String operation, SelectData data )
+	
 	// {
 	
 	// }

@@ -105,7 +105,7 @@ public class SSHConnectExec extends SSHConnect {
 		}
 	}
 
-	// public SSHConnectExec(SSHCommand sshcommand)
+	
 	// {
 	
 	// }

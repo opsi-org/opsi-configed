@@ -137,7 +137,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				
 				// a hack for MS-DOS prompt on Windows.
 				// channel.setInputStream(new FilterInputStream(System.in){
-				// public int read(byte[] b, int off, int len)throws IOException{
+				
 				
 				// }
 				
@@ -145,7 +145,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				
 				
 				// channel = setChannels(new FilterInputStream(System.in){
-				// public int read(byte[] b, int off, int len)throws IOException{
+				
 				
 				// }
 				// }),

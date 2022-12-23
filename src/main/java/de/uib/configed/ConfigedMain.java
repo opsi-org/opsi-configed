@@ -1522,7 +1522,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		actOnListSelection();
 	}
 
-	// private String showIntArray(int[] a) {
+	
 	
 	// return " ";
 
@@ -2017,7 +2017,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return dependenciesModel;
 	}
 
-	// private String formatDate(String original) {
+	
 	
 	// String[] ls = original.split("");
 	
