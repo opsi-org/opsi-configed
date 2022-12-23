@@ -126,7 +126,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	final int fwidth_column_packageversion = fwidth_column_productstate;
 	final int fwidth_column_installationInfo = fwidth_column_productstate;
 
-	// TableCellRenderer productTableCellRenderer; // was default
+	
 	ListCellRenderer standardListCellRenderer;
 
 	TableCellRenderer productNameTableCellRenderer;

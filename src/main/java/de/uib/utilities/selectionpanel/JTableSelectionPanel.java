@@ -62,7 +62,7 @@ public class JTableSelectionPanel extends JPanel
 		implements DocumentListener, KeyListener, MissingDataPanel, ActionListener {
 	JScrollPane scrollpane;
 	JTable table; // we put a JTable on a standard JScrollPane
-	// TableSorter sorter; //from the Sun Swing tutorial
+	
 	DefaultListSelectionModel selectionmodel;
 	ConfigedMain main;
 	List<RowSorter.SortKey> primaryOrderingKeys;
@@ -74,7 +74,7 @@ public class JTableSelectionPanel extends JPanel
 	JButton buttonMarkAll;
 	JButton buttonInvertSelection;
 
-	// CheckedLabel markReload;
+	
 
 	JTextField fieldSearch;
 	JComboBox comboSearch;
@@ -1221,7 +1221,7 @@ public class JTableSelectionPanel extends JPanel
 			if (searchMode == TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES
 					&& getWords(fieldSearch.getText()).size() > lastCountOfSearchWords)
 				// when a new search word is added instead of extending one
-				// the condition is not refined but widened; and we have to start the search new
+				
 				setSelectedRow(0);
 
 			searchTheRow();

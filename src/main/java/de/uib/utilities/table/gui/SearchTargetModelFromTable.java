@@ -212,7 +212,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		
 
 		// if (b == filtered)
-		// return;
+		
 
 		boolean wasChanged = false;
 

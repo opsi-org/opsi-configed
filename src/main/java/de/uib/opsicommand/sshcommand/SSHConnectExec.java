@@ -156,7 +156,7 @@ public class SSHConnectExec extends SSHConnect {
 				+ "] sequential[" + sequential + "] dialog[" + dialog + "]");
 		if (!isConnectionAllowed()) {
 			logging.warning(this, "connection forbidden.");
-			// return null;
+			
 		} else {
 
 			multiCommand = true;

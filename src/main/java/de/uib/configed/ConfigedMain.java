@@ -169,8 +169,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected HostConfigsDataChangedKeeper hostConfigsDataChangedKeeper;
 
 	protected DependenciesModel dependenciesModel;
-	// protected RequirementsTableModel requirementsModel;
-	// protected DependenciesTreeModel dependenciesTreeModel;
+	
+	
 	protected IFInstallationStateTableModel istmForSelectedClientsLocalboot;
 	protected IFInstallationStateTableModel istmForSelectedClientsNetboot;
 	protected String firstSelectedClient = null;
@@ -185,7 +185,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected ArrayList<TreePath> activePaths;
 	// is nearly activeTreeNodes.values() , but there may be multiple paths where
 	// only one entry to activeTreeNode remains ----
-	// protected HashSet<String> activeParents; moved to ClientTree
+	
 
 	protected Set<String> clientsFilteredByTree;
 	protected TreePath groupPathActivatedByTree;
@@ -229,7 +229,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected ProductpropertiesUpdateCollection depotProductpropertiesUpdateCollection;
 
 	// protected NetworkconfigurationUpdateCollection
-	// networkconfigurationUpdateCollection;
+	
 	protected AdditionalconfigurationUpdateCollection additionalconfigurationUpdateCollection;
 
 	protected HostUpdateCollection hostUpdateCollection;
@@ -250,7 +250,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 																			// -->
 																			// list
 																			// of
-																			// actions;
+																			
 																			// used
 																			// as
 																			// an
@@ -284,7 +284,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private Map<String, Map<String, Object>> hostConfigs = null;
 
 	// collection of retrieved software audit and hardware maps
-	// private Map<String, List<Map<String, Object>>> swInfoClientmap;
+	
 	private Map<String, Object> hwInfoClientmap;
 
 	// public static final ActionRequestDisplay ardDefault = new
@@ -351,7 +351,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// public enum MainTabState {CLIENT_SELECTION, LOCALBOOT_PRODUCTS,
 	// NETBOOT_PRODUCTS, NETWORK_CONFIG, HARDWARE_INVENT, SOFTWARE_INVENT};
-	// protected MainTabState viewIndex;
+	
 
 	protected Map<String, Object> reachableInfo = new HashMap<>();
 	protected Map<String, String> sessionInfo = new HashMap<>();
@@ -1339,7 +1339,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		checkErrorList();
 
 		/*
-		 * if (!groupLoading // we change a group not by group manager; any group
+		 * if (!groupLoading 
 		 * manager choices are not more valid
 		 * && !changeListByToggleShowSelection) // and not by the show selection toggle
 		 * {
@@ -1992,7 +1992,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		 * }
 		 * 
 		 * 
-		 * //dpass sets a new PersistenceController; we check it:
+		 * 
 		 * if ( persist != null && persist.getConnectionState().getState() ==
 		 * ConnectionState.CONNECTED )
 		 * {
@@ -2033,7 +2033,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// ls[8] + ' ' + ls[9] + ls[10]
 	// + ':' + ls[11] + ls[12] + ':' + ls[13] + ls[14];
 	// else
-	// return original;
+	
 	// } else
 	// return "";
 	// }
@@ -2488,7 +2488,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (clientNames.equals(saveSelectedClients)) {
 			logging.info(this, "setSelectedClients clientNames.equals(saveSelectedClients)");
-			// return;
+			
 		}
 
 		saveSelectedClients = clientNames;

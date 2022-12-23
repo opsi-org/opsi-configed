@@ -111,8 +111,8 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 
 	DialogCloseListener closeListener;
 
-	// protected JDialog parentDialog;
-	// private static SSHConnectionOutputDialog instance;
+	
+	
 	public SSHConnectionOutputDialog(String title) {
 		super(null, "", false);
 		logging.info(this, "\ncreated a SSHConnectionOutputDialog with title " + title + "\n");

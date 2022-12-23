@@ -215,7 +215,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 																																												// selected
 																																												// row:
 																																												// ")
-																																												// ;
+																																												
 		buttonSetAllAssignmentsToPoolFromSelectedRow
 				.addActionListener(actionEvent -> panelSWxLicencepool.setDataChanged(
 						setSWxColTo((String) panelSWxLicencepool.getValueAt(panelSWxLicencepool.getSelectedRow(), 1))));

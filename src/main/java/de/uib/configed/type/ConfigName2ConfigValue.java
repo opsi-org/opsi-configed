@@ -26,7 +26,7 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 		// overwrite values by virtue of imported type informations
 
 		if (retrieved == null) {
-			// return;
+			
 			// we should take default values even if we have not got any values
 			retrieved = new HashMap<>();
 		}

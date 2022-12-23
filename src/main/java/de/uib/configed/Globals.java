@@ -54,7 +54,7 @@ public class Globals {
 
 	public static final boolean showIconsInProductTable = false;
 	public static final Color INVISIBLE = new Color(11, 13, 17); // some value which shall be interpreted as identical
-																	// with background;
+																	
 
 	public static final String CERTIFICATE_FILE_NAME = "opsi-ca-cert";
 	public static final String CERTIFICATE_FILE_EXTENSION = "pem";

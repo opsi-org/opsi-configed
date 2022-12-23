@@ -49,8 +49,8 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	protected JSplitPane splitPane;
 	private int splitPaneHMargin = 1;
 
-	// private javax.swing.JButton cancelbutton;
-	// private javax.swing.JButton buttonCommit;
+	
+	
 	protected de.uib.configed.gui.IconButton buttonCommit;
 	protected de.uib.configed.gui.IconButton buttonCancel;
 	protected de.uib.configed.gui.IconButton buttonAdd;

@@ -43,8 +43,8 @@ import de.uib.utilities.swing.ProgressBarPainter;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 
-//import java.beans.PropertyChangeEvent;
-//import java.beans.PropertyChangeListener;
+
+
 
 public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.thread.WaitingSleeper
 // implements PropertyChangeListener
@@ -68,8 +68,8 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	Calendar cal;
 	long startActionMillis;
 	long waitingMillis;
-	// int waitingSeconds;
-	// int sleepingIntervalCount;
+	
+	
 	int stepsTotal;
 	boolean waitingMode = false;
 

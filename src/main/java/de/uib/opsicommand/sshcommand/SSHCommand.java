@@ -8,7 +8,7 @@ import de.uib.configed.gui.FGeneralDialog;
  * Represent a sshcommand object
  **/
 public abstract interface SSHCommand {
-	// private SSHCommand instance;
+	
 	/** @return command String to execute **/
 	public abstract String getCommand();
 

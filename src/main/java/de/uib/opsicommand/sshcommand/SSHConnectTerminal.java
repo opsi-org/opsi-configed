@@ -88,7 +88,7 @@ public class SSHConnectTerminal extends SSHConnect {
 	public void connect() {
 		if (!isConnectionAllowed()) {
 			logging.error(this, "connection forbidden.");
-			// return null;
+			
 		} else {
 
 			logging.info(this, "connect ...");
@@ -182,7 +182,7 @@ public class SSHConnectTerminal extends SSHConnect {
 	public final void exec(String text) {
 		if (!isConnectionAllowed()) {
 			logging.warning(this, "connection forbidden.");
-			// return null;
+			
 		} else {
 
 			try {

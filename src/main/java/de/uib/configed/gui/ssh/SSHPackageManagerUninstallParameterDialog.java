@@ -16,7 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-// import java.nio.charset.Charset;
+
 // import java.util.regex.*;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;

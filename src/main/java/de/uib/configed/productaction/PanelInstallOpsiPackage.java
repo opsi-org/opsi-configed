@@ -77,7 +77,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	JButton buttonCallChooserServerpath;
 	JFileChooser chooserServerpath;
 
-	// String workbench;
+	
 
 	PersistenceController persist;
 	ConfigedMain main;
@@ -327,7 +327,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		buildSambaTarget("" + comboChooseDepot.getSelectedItem());
 
 		// workbench = "\\\\" + comboChooseDepot.getSelectedItem() + "\\" +
-		// packageShareS;
+		
 
 		// fieldServerPath = new JTextField("");
 

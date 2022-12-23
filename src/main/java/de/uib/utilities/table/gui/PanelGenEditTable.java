@@ -77,8 +77,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	protected javax.swing.JScrollPane scrollpane;
 	protected javax.swing.JTable theTable;
 	protected de.uib.utilities.table.GenTableModel tableModel;
-	// protected javax.swing.JButton jButtonCommit; standard version
-	// protected javax.swing.JButton jButtonCancel;
+	
+	
 	protected de.uib.configed.gui.IconButton buttonCommit;
 	protected de.uib.configed.gui.IconButton buttonCancel;
 	protected javax.swing.JLabel label;
@@ -89,10 +89,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	protected JPanel titlePane;
 
 	// protected Color backgroundColor = new Color(250, 250,
-	// 240);//Globals.backLightYellow;
+	// 240);
 	protected Color backgroundColorEditFieldsSelected = Globals.defaultTableCellSelectedBgColor;// new Color(206, 224,
-																								// 235);// Color.white;
-																								// //Globals.backLightYellow;//backLightGreen;
+																								// 235);
+																								
 	protected Color backgroundColorSelected = Globals.defaultTableCellSelectedBgColorNotEditable;
 
 	protected JPopupMenu popupMenu;
@@ -355,7 +355,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		this(0);
 	}
 
-	// Override in subclasses; delegates to table header renderer
+	
 	protected Object modifyHeaderValue(Object value) {
 		return value;
 	}

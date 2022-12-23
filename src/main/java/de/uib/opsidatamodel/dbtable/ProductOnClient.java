@@ -21,7 +21,7 @@ public class ProductOnClient extends Table {
 
 	private static final String localFilename = "productstates.configed";
 	// public static final String version = class.getName() + " " +
-	// Globals.VERSION;
+	
 
 	public static List<String> columns;
 	static {

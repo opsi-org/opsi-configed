@@ -167,7 +167,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 		setOpaque(true);
 		setBorder(lineBorderInactive);
 		colors = new Color[2];
-		colors[1] = Globals.opsiLogoBlue; // Globals.backgroundLightGrey;
+		colors[1] = Globals.opsiLogoBlue; 
 		colors[0] = Globals.opsiLogoLightBlue;
 		setPreferredSize(new Dimension(w, h));
 

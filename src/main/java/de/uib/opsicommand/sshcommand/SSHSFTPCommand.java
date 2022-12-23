@@ -41,7 +41,7 @@ public abstract interface SSHSFTPCommand {
 	public void setTargetFilename(String f);
 
 	public void setOverwriteMode(boolean o);
-	// // private SSHCommand instance;
+	
 	// /** @return command String to execute **/
 	
 	

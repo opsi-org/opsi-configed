@@ -11,7 +11,7 @@ import javax.swing.JTable;
 import de.uib.utilities.logging.logging;
 
 public class RowNoTableModelFilterCondition implements TableModelFilterCondition {
-	// protected Map<String, Boolean> selectionInfo;
+	
 	protected Map<Object, Boolean> selectionInfo;
 
 	protected JTable table;
@@ -56,7 +56,7 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 			return true;
 
 		// Boolean found = selectionInfo.get( Globals.pseudokey(row) )
-		// ;
+		
 		Boolean found = selectionInfo.get(row);
 		
 		if (found == null)

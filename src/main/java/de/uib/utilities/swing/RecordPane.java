@@ -54,7 +54,7 @@ public class RecordPane extends JPanel implements KeyListener {
 	protected Map<String, String> labels;
 	protected Map<String, String> hints;
 	protected Map<String, Boolean> editable;
-	// protected Component parent;
+	
 
 	public RecordPane() {
 		// call of setData necessary

@@ -98,7 +98,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	public void valueChanged(javax.swing.event.ListSelectionEvent e) {
 		
 
-		// if (e.getValueIsAdjusting()) return;
+		
 
 		
 

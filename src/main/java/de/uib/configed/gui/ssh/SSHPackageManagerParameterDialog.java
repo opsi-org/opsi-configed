@@ -20,7 +20,7 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.logging;
 
 public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ FGeneralDialog {
-	// protected ArrayList<HelpRow> helpLinesSplitted;
+	
 
 	protected PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 

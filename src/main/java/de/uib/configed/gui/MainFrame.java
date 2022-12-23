@@ -136,7 +136,7 @@ import de.uib.utilities.thread.WaitCursor;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
-//import de.uib.utilities.StringvaluedObject;
+
 
 public class MainFrame extends JFrame implements WindowListener, KeyListener, MouseListener, ActionListener,
 		RunningInstancesObserver<JDialog>, ComponentListener {
@@ -154,11 +154,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	// final int widthColumnServer = 110; //130;
 
-	// protected String oldDescription;
-	// protected String oldInventoryNumber;
-	// protected String oldOneTimePassword;
+	
+	
+	
 	protected String oldNotes;
-	// protected String oldMacAddress;
+	
 
 	protected Map<String, Map<String, String>> changedClientInfos;
 
@@ -197,7 +197,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JMenuItem jMenuFreeLicences = new JMenuItem();
 	JMenuItem jMenuDeletePackageCaches = new JMenuItem();
 	JMenu jMenuWakeOnLan;
-	// JMenu jMenuScheduledWOL;
+	
 	JMenuItem jMenuDirectWOL = new JMenuItem();
 	JMenuItem jMenuNewScheduledWOL = new JMenuItem();
 	JMenuItem jMenuShowScheduledWOL = new JMenuItem();
@@ -358,7 +358,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JButton jButtonLicences;
 
 	JPanel iconPane1;
-	// JButton buttonWindowStack; may be it will get a revival at a different place
+	
 	IconButton iconButtonReload;
 	IconButton iconButtonReloadLicenses;
 	IconButton iconButtonNewClient;
@@ -442,8 +442,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	public de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo fDialogOpsiLicensingInfo;
 
-	// protected ProductInfoPane localbootProductInfo;
-	// protected ProductInfoPane netbootProductInfo;
+	
+	
 
 	// EditMapPanel localboot_productPropertiesPanel;
 	// EditMapPanel netboot_productPropertiesPanel;
@@ -471,7 +471,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	JTableSelectionPanel panelClientlist;
 	boolean shiftpressed = false;
-	// TableColumnModel clientlistColumnModel;
+	
 	JLabel jLabel_Hostinfos = new JLabel();
 	// FlowLayout flowLayout1 = new FlowLayout();
 	JLabel jLabelPath = new JLabel();
@@ -484,10 +484,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	CheckedLabel cbUefiBoot;
 	CheckedLabel cbWANConfig;
 
-	// JPanel paneldeprecatedInstallByShutdown;
+	
 	// JLabel jLabel_InstallByShutdown;
-	// JButton btnAktivateInstallByShutdown;
-	// JButton btnDeaktivateInstallByShutdown;
+	
+	
 
 	JTextEditorField jTextFieldDescription;
 	JTextEditorField jTextFieldInventoryNumber;
@@ -501,16 +501,16 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JPopupMenu jPopupMenu = new JPopupMenu();
 
 	protected FShowList fListSelectedClients;
-	// protected FTextArea fAskSaveChangedText;
+	
 
 	JPanel jPanelChooseDomain;
-	// JTabbedPane jTabbedPaneConfigPanes; // cf. above
+	
 	JPanel panelTreeClientSelection;
 	JPanel jPanelProductsConfig;
 
-	// DepotsList depotslist;
+	
 	boolean multidepot = false;
-	// JScrollPane scrollpaneDepotslist;
+	
 
 	DepotListPresenter depotListPresenter;
 
@@ -524,7 +524,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	int prefClientPaneW = 100;
 	int clientPaneW;
 
-	// ComponentListener clientPaneComponentListener;
+	
 
 	public Container baseContainer;
 
@@ -2002,7 +2002,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			HashMap<String, String> metaData = new HashMap<>();
 			String title = configed.getResourceValue("MainFrame.ClientList");
 			// group: " + statusPane.getGroupName()
-			// jTable;
+			
 			if (statusPane.getGroupName().length() != 0) {
 				title = title + ": " + statusPane.getGroupName();
 			}

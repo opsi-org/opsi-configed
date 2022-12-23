@@ -64,13 +64,13 @@ import de.uib.utilities.swing.PopupMenuTrait;
 public class LogPane extends JPanel implements KeyListener, ActionListener {
 	public static final int defaultMaxShowLevel = 3;
 
-	// private int initialMaxShowLevel;
+	
 
 	protected JTextPane jTextPane;
 	protected JScrollPane scrollpane;
 	protected JPanel commandpane;
 	protected JLabel labelSearch;
-	// protected JTextField fieldSearch;
+	
 	protected JComboBox jComboBoxSearch;
 	protected final int fieldH = Globals.LINE_HEIGHT;
 	protected JButton buttonSearch;
@@ -380,7 +380,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		jTextPane.setOpaque(true);
 		jTextPane.setBackground(Globals.backgroundWhite);
-		jTextPane.setEditable(true); // we want a caret; therefore we make the document immutable
+		jTextPane.setEditable(true); 
 		jTextPane.setFont(Globals.defaultFont);
 		jTextPane.addKeyListener(this);
 
@@ -896,7 +896,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		private int contentEnd;
 		boolean finish;
 		boolean found;
-		// String content;
+		
 		char startC;
 		char endC;
 

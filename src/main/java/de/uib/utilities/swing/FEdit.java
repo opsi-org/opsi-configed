@@ -41,8 +41,8 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 	protected JComponent editingArea;
 	protected JLabel labelHint;
 
-	// private javax.swing.JButton cancelbutton;
-	// private javax.swing.JButton buttonCommit;
+	
+	
 	protected de.uib.configed.gui.IconButton buttonCommit;
 	protected de.uib.configed.gui.IconButton buttonCancel;
 
@@ -245,7 +245,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 		
 		if (editingArea.getComponentCount() != 1) {
 			logging.info(this, " editing area not filled with component");
-			// return false;
+			
 		}
 		
 		// editingArea.getComponent(0).getClass());
@@ -313,7 +313,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 			
 			
 			
-			// ;
+			
 			
 
 			

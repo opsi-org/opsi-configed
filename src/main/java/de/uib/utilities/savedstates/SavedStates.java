@@ -24,10 +24,10 @@ public class SavedStates extends PropertiesStore {
 	public SaveString saveSWauditExportDir;
 	public SaveString saveSWauditExportFilePrefix;
 
-	// public final SaveSet saveLocalbootproductFilterset;
+	
 	public SessionSaveSet<String> saveLocalbootproductFilter;
 	public SessionSaveSet<String> saveNetbootproductFilter;
-	// public final SessionSaveSet<String> saveLocalbootproductSelection;
+	
 	// up to now not used
 
 	public Map<String, SaveString> saveServerConfigs;

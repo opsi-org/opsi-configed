@@ -116,7 +116,7 @@ public class PersistenceControllerFactory {
 
 				// String savePath = de.uib.opsicommand.OpsiMethodCall.standardRpcPath;
 				// de.uib.opsicommand.OpsiMethodCall.standardRpcPath = ""; //for compatibility
-				// with older versions;
+				
 
 				if (persistControl.getOpsiVersion().compareTo(Globals.REQUIRED_SERVICE_VERSION) < 0) {
 					String errorInfo = configed.getResourceValue("PersistenceControllerFactory.requiredServiceVersion")

@@ -130,7 +130,7 @@ public abstract class DataStub {
 	// host -> (key -> value)
 	// public abstract Map<String, Map<String, List<Object>>>
 	
-	// host;key -> valuelist
+	
 
 	public abstract void licencepoolsRequestRefresh();
 

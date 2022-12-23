@@ -485,7 +485,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 						if (existsNewRow
 								&& persist.getLicencepools().containsKey((String) rowmap.get("licensePoolId"))) {
-							// signalled even if only one of several rows fulfill the condition;
+							
 							// but we leave it until the service methods reflect the situation more
 							// accurately
 							

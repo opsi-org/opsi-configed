@@ -152,11 +152,11 @@ public class DataStubRawData extends DataStubNOM {
 
 	/*
 	 * in superclass
-	 * //protected List <Map<String, Object>> productPropertyStates;
-	 * //protected List <Map<String, Object>> productPropertyDepotStates;
+	 * 
+	 * 
 	 * //will only be refreshed when all product data are refreshed
 	 * 
-	 * //protected java.util.Set<String> hostsWithProductProperties;
+	 * 
 	 */
 
 	// client is a set of added hosts, host represents the totality and will be

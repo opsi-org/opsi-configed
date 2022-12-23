@@ -55,7 +55,7 @@ public class NewClientDialog extends FGeneralDialog
 	protected JPanel panel;
 	protected GroupLayout gpl;
 	protected JTextField jTextHostname;
-	// protected JTextField jTextDomainname;
+	
 	protected JComboBox<String> jComboDomain;
 	protected JComboBox<String> jComboDepots;
 	protected JTextField jTextDescription;

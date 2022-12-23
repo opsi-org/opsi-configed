@@ -31,7 +31,7 @@ public class UserConfigProducing {
 	Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap;
 
 	ArrayList<Object> readyObjects;
-	// UserConfig userConfigToApply;
+	
 
 	public UserConfigProducing(
 			// command tools

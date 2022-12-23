@@ -143,7 +143,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 																						// (product state key -> product
 																						// state value)))
 																						// protected final Map<String, List<Map<String, String>>>
-																						// allClientsProductlistsSaved;//clientId -> (productrows)
+																						
 
 	protected PersistenceController persist;
 	protected Map<String, Map<String, Map<String, String>>> collectChangedStates;
@@ -550,7 +550,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		editablePreparedColumns[3] = true;
 
 		preparedColumns.add(4, ProductState.KEY_installationInfo);
-		editablePreparedColumns[4] = true; // false;
+		editablePreparedColumns[4] = true; 
 
 		preparedColumns.add(5, ProductState.KEY_actionProgress);
 		editablePreparedColumns[5] = false;
@@ -934,7 +934,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		// if (product2AR == null) product2AR = new HashMap<>();
 
-		// return missingProducts;
+		
 	}
 
 	/*
@@ -1780,7 +1780,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				// an action has changed
 				// change recursively visible action changes and collect the changes for saving
 
-				// changeActionRequest (actualProduct, (String) value) ;
+				
 				initCollectiveChange();
 				collectiveChangeActionRequest(actualProduct, ActionRequest.produceFromLabel((String) value));
 				finishCollectiveChange();

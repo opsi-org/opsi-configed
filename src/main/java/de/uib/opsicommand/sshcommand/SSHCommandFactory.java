@@ -469,7 +469,7 @@ public class SSHCommandFactory {
 
 		if (list_knownMenus.contains(command.getMenuText())) {
 			logging.info(this, "saveSSHCommand sshcommand_list.contains(command) true");
-			if (main.getPersistenceController().updateSSHCommand(jsonObjects)) // ;
+			if (main.getPersistenceController().updateSSHCommand(jsonObjects)) 
 			{
 				((SSHCommand_Template) sshcommand_list
 						.get(sshcommand_list.indexOf(getSSHCommandByMenu(command.getMenuText())))).update(command);

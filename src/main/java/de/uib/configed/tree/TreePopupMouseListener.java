@@ -132,7 +132,7 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 			}
 		}
 
-		// return true;
+		
 		return (countVisibleItems > 0);
 	}
 

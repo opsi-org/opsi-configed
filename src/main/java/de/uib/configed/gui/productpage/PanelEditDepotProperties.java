@@ -485,7 +485,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 				.getDefaultProductProperties(selectedDepot0).get(productEdited);
 
 		// if (properties0 == null)
-		// return;
+		
 
 		int startDepotIndex = listDepots.getSelectedIndex();
 		listDepots.setSelectionInterval(startDepotIndex, startDepotIndex);

@@ -60,7 +60,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 	private JPanel panelInfoWindowsSoftware;
 	private JPanel panelInfoConfigWindowsSoftware;
-	// public PanelGenEditTable panelRegisteredSoftware;
+	
 	public PanelRegisteredSoftware panelRegisteredSoftware;
 	public PanelGenEditTable panelLicencepools;
 	public PanelGenEditTable panelProductId2LPool;

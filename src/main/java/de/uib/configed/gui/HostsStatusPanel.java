@@ -16,7 +16,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 
 	JLabel labelAllClientsCount;
 	JTextField fieldGroupActivated;
-	// JTextField fieldAllClientsCount;
+	
 	JTextField fieldSelectedClientsNames;
 	JTextField fieldActivatedClientsCount;
 	JTextField fieldInvolvedDepots;

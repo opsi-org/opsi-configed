@@ -19,7 +19,7 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
  * @author rupert roeder
  */
 public class PanelLicencesReconciliation extends MultiTablePanel {
-	// public JTextField testfield;
+	
 	public PanelGenEditTable panelReconciliation;
 
 	protected int minVSize = 50;

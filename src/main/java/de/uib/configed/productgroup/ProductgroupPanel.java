@@ -87,19 +87,19 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	protected JTable tableProducts;
 	protected IFInstallationStateTableModel insTableModel;
 
-	// JComboBoxToolTipX saveNameEditor;
+	
 
 	JTextField saveNameEditor;
 
 	protected de.uib.configed.gui.IconButton buttonCommit;
 	protected de.uib.configed.gui.IconButton buttonCancel;
-	// protected de.uib.configed.gui.IconButton buttonFilter; //instead of it, we
+	
 	// use the filter icon of the tablesearchpane
 	protected de.uib.configed.gui.IconButton buttonEditDialog;
 	protected de.uib.configed.gui.IconButton buttonDelete;
 
 	protected de.uib.configed.gui.IconButton buttonReloadProductStates;
-	// protected de.uib.configed.gui.IconButton buttonCancelStateEditing;
+	
 	protected de.uib.configed.gui.IconButton buttonSaveAndExecute;
 
 	protected de.uib.configed.gui.IconButton buttonCollectiveAction;
@@ -107,7 +107,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	protected JLabel labelCollectiveAction;
 	protected JComboBoxToolTip comboAggregatedEditing;
 	protected JList listChooseAction;
-	// protected JMenuBar menuBarAggregateActions;
+	
 	private int actionType = ActionRequest.INVALID;
 	protected JLabel labelSave;
 
@@ -206,7 +206,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		// return !buttonFilter.isActivated();
 		return searchPane.isFilteredMode();
 
-		// return false;
+		
 	}
 
 	public void setReloadActionHandler(ActionListener al) {

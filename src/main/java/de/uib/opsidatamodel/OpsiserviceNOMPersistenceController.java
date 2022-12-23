@@ -141,12 +141,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	public static final String[] LICENSE_TYPES = new String[] { "VOLUME", "OEM", "RETAIL", "CONCURRENT" };
 
-	// Executioner exec; in superclass
-	// Executioner execBackground;
+	
+	
 
 	protected FTextArea licInfoWarnings;
 
-	// private String server;
+	
 	protected String connectionServer;
 	private String user;
 	private String userConfigPart;
@@ -156,15 +156,15 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	protected List<OpsiProductInfo> productInfos;
 	protected Map<String, Map<String, Object>> productGlobalInfos;
-	// protected List productDependenciesCompleteList;
-	// protected Map productDependenciesMapForProducts;
+	
+	
 	protected Map<String, Map<String, ConfigName2ConfigValue>> productproperties;
 	// (pcname -> (productname -> (propertyname -> propertyvalue))) NOM
 	private Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties;
 	protected Set<String> productsHavingSpecificProperties;
 	protected Map<String, Boolean> productHavingClientSpecificProperties;
 
-	// protected List pcList;
+	
 
 	protected Map<String, Map<String, ListCellOptions>> productPropertyDefinitions; // for depot
 
@@ -187,16 +187,16 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	protected List<Map<String, Object>> softwareAuditOnClients;
 
-	// protected Map<String, SWAuditEntry> installedSoftwareInformation;
+	
 	// key --> rowmap for auditSoftware
 
-	// protected TreeMap<String, LicencePoolEntry> licencePools;
+	
 
 	// protected TreeMap<String, Map> rowsWindowsSoftwareId2LPool;
 
-	// protected HashMap<String, String> lPoolFROMWindowsSoftwareId;
+	
 
-	// protected HashMap<String, List> windowsSoftwareIdsFROMLPool;
+	
 
 	protected List<Map<String, Object>> relations_auditHardwareOnHost;
 
@@ -321,7 +321,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	protected Date expiresDate;
 
-	// protected Map<String, ModulePermissionValue> opsiModulesPermissions;
+	
 	protected Map<String, Object> opsiModulesInfo; // the may as read in
 	protected Map<String, Object> opsiModulesDisplayInfo; // the infos that are displayed in the gui
 	protected Map<String, Boolean> opsiModules; // the resulting info about permission
@@ -447,7 +447,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		protected List<String> opsiHostNames;
 
 		protected int countClients = 0;
-		// protected List<Map<String, Object>> opsiHosts;
+		
 		protected Map<String, Map<String, Object>> masterDepots;
 		protected Map<String, Map<String, Object>> allDepots;
 		protected Map<String, Map<String, HostInfo>> depot2_host2hostInfo;
@@ -462,7 +462,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		private de.uib.configed.tree.ClientTree connectedTree;
 
-		// PersistenceController persis;
+		
 
 		DefaultHostInfoCollections() {
 			// this.persis = persis;
@@ -756,7 +756,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						if (getConfig(name) != null) {
 
 							Boolean result = false;
-							// null; //can be true or false or keeping null
+							
 
 							Boolean tested = null;
 							tested = findBooleanConfigurationComparingToDefaults(name, wanConfiguration);
@@ -1855,7 +1855,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		for (Map<String, Object> m : retrievedList) {
 			String client = (String) m.get(ProductOnClient.CLIENTid);
 			// if (!client.equals("pcbirgit.uib.local"))
-			// continue;
+			
 
 			String clientProductVersion = (String) m.get(OpsiPackage.SERVICEkeyPRODUCT_VERSION);
 			String clientPackageVersion = (String) m.get(OpsiPackage.SERVICEkeyPACKAGE_VERSION);
@@ -3295,7 +3295,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			return false;
 
 		// if (!checkHostPermission( objectId, getHostInfoCollections() ) )
-		// return false;
+		
 
 		String persistentGroupId = de.uib.configed.tree.ClientTree.translateToPersistentName(groupId);
 		logging.debug(this, "addObject2Group persistentGroupId " + persistentGroupId);
@@ -4296,7 +4296,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		try {
 
 			logging.debug(this, "OpsiMethodCall readLog " + logtypes[i] + " max size " + Globals.maxLogSizes[i]);
-			// since loglines becoming too long;
+			
 			
 			try {
 
@@ -7246,7 +7246,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						orderNumber = Integer.valueOf(entry.substring(0, p));
 						String value = entry.substring(p + 1);
 						if (numberedValues.get(value) == null || orderNumber < numberedValues.get(value))
-						// we have a new value; or we take the minimum place if the same value occurs
+						
 						// twice
 						{
 							orderedValues.add(entry); // add
@@ -7666,7 +7666,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		}
 
 		// if (result == null)
-		// return null;
+		
 
 		return Globals.pseudokey(new String[] { softwareLicenseId, licensePoolId });
 	}
@@ -8576,7 +8576,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		TreeMap<String, Integer> pool2installationsCount = new TreeMap<>();
 
-		// iterate throught the licence pools; get the software combined ids which
+		
 		// require this licencepool
 		// add the clients which have this software installed
 
@@ -9817,7 +9817,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 * final ArrayList<Object> objectsToSend,
 	 * UserConfig newUserConfig
 	 * )
-	 * //we get a user config value; and set it
+	 * 
 	 * {
 	 * String key = userpart + userconfKey;
 	 * logging.info(this, "getUserObjectsToSend handle key " + key);

@@ -25,7 +25,7 @@ import de.uib.utilities.table.ListModelProducer;
 
 public class SensitiveCellEditor extends AbstractCellEditor implements TableCellEditor, MouseListener {
 	protected JTextField field;
-	// protected Object value;
+	
 	protected FEditList listeditor;
 	private int editingRow = -1;
 	private int editingColumn = -1;
@@ -267,7 +267,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			 * "getCellEditorValue,  original class instance of List");
 			 * //ArrayList<String> li = new ArrayList<>();
 			 * //li.add("xxx");
-			 * //return li;
+			 * 
 			 * return list;
 			 * }
 			 */
@@ -277,7 +277,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				// List");
 				// ArrayList<String> li = new ArrayList<>();
 				// li.add("xxx");
-				// return li;
+				
 				return list;
 			}
 

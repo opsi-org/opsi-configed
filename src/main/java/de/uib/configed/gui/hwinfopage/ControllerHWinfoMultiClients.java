@@ -39,7 +39,7 @@ public class ControllerHWinfoMultiClients {
 	private GenTableModel model;
 
 	JButton buttonConfigureColumns;
-	// CheckedLabel buttonConfigureColumns;
+	
 	JButton buttonReload;
 	JButton buttonCopySelection;
 

@@ -10,7 +10,7 @@ import de.uib.utilities.logging.logging;
 public class ModulePermissionValue {
 	de.uib.opsicommand.Executioner exec;
 
-	// private String moduleKey;
+	
 	private ExtendedInteger maxClients;
 	private ExtendedDate expiresDate;
 	private Boolean booleanValue;

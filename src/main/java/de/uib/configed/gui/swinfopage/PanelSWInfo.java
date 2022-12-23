@@ -46,14 +46,14 @@ public class PanelSWInfo extends JPanel {
 	protected PanelGenEditTable panelTable;
 	protected ExporterToCSV csvExportTable;
 	protected ExporterToPDF pdfExportTable;
-	// protected JPanel subPanelButtons;
+	
 	protected JPanel subPanelTitle;
 
 	protected JScrollPane scrollPaneSWInfo;
 	protected JTable jTable;
 	protected final SWInfoTableModel voidTableModel = new SWInfoTableModel();
 	protected GenTableModel modelSWInfo;
-	// protected JLabel jLabelTitle;
+	
 	protected JLabel labelSuperTitle;
 
 	protected String supertitle = "";
@@ -66,7 +66,7 @@ public class PanelSWInfo extends JPanel {
 
 	private PopupMenuTrait popupTrait;
 
-	// protected DocumentToPdf tableToPDF;
+	
 	protected Boolean askingForKindOfAction;
 	protected boolean askForOverwrite = true;
 

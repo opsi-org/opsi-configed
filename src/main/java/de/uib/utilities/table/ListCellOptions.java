@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface ListCellOptions
 // may represent an Opsi 4.0 config
-// and is for this purpose implemented in de.uib.configed.type;ConfigOption
+
 {
 	public List<Object> getPossibleValues();
 

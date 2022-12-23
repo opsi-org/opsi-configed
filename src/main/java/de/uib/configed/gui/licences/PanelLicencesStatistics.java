@@ -19,7 +19,7 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
  * @author roeder
  */
 public class PanelLicencesStatistics extends MultiTablePanel {
-	// public JTextField testfield;
+	
 	public PanelGenEditTable panelStatistics;
 
 	protected int minVSize = 50;

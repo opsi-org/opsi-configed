@@ -60,7 +60,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	// for creating pdf
 	private Map<String, String> hwOpsiToUI;
-	// protected ConfigedMain mainController;
+	
 
 	protected JSplitPane contentPane;
 	protected JScrollPane jScrollPaneTree;

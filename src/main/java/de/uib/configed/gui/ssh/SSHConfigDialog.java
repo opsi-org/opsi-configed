@@ -689,7 +689,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 
 		
 		// factory.testConnection(tf_user.getText(), (String) cb_host.getSelectedItem())
-		// ;
+		
 		SSHCommandFactory.ssh_colored_output = cb_useOutputColor.isSelected();
 		SSHCommandFactory.ssh_always_exec_in_background = cb_execInBackground.isSelected();
 		cb_useDefault_state = cb_useDefault.isSelected();

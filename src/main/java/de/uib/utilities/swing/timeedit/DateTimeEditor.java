@@ -41,7 +41,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	protected boolean withMovingSelectionDate = true;
 	protected boolean withTime = true;
 
-	// protected Vector<DateEventObserver> dateEventObservers;
+	
 
 	public DateTimeEditor() {
 		this(true);

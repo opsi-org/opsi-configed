@@ -974,7 +974,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	// table sources
 	// public abstract class AllProductsTableSource implements
-	// de.uib.utilities.table.provider.TableSource;
+	
 
 	// opsi module information
 	public static int CLIENT_COUNT_WARNING_LIMIT = 10;

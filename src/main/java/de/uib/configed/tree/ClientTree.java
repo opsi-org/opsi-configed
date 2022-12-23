@@ -76,7 +76,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	public GroupNode ALL;
 	protected GroupNode GROUPS;
-	// protected GroupNode FAILED;
+	
 	protected GroupNode DIRECTORY;
 	protected GroupNode DIRECTORY_NOT_ASSIGNED;
 
@@ -146,7 +146,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	protected TreePath pathToROOT;
 	protected TreePath pathToALL;
 	protected TreePath pathToGROUPS;
-	// protected TreePath pathToFAILED;
+	
 	protected TreePath pathToDIRECTORY;
 	protected TreePath pathToDIRECTORY_NOT_ASSIGNED;
 
@@ -1111,7 +1111,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		groupNodes = new HashMap<>();
 
-		// produce top groups;
+		
 		initTopGroups();
 
 		
@@ -1133,7 +1133,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		
 
-		// every group node is created;
+		
 		// now we link them
 
 		for (String groupId : groups.keySet()) {

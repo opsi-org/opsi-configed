@@ -39,7 +39,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	private JButton buttonSelectDepotsWithEqualProperties;
 	private JButton buttonSelectDepotsAll;
 
-	// private JTextField searchField;
+	
 	private TablesearchPane searchPane;
 
 	private Vector<? extends String> unfilteredV;

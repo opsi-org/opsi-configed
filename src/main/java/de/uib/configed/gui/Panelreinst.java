@@ -23,7 +23,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import de.uib.configed.Globals;
-//import de.uib.opsidatamodel.PersistenceController;
+
 import de.uib.utilities.swing.SurroundPanel;
 
 public class Panelreinst extends JPanel implements KeyListener, MouseListener, ActionListener {
@@ -56,7 +56,7 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 
 	JTextArea textOut = new JTextArea();
 
-	// ByteArrayOutputStream execOut;
+	
 
 	public Panelreinst() {
 

@@ -188,7 +188,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			if (tree.isInDIRECTORY(path)) {
 				logging.debug(this, "getSourceActions , isInDIRECTORY true");
 				// action depends additionally from target
-				// return TransferHandler.COPY;
+				
 			}
 		}
 
@@ -435,10 +435,10 @@ public class ClientTreeTransferHandler extends TransferHandler {
 				logging.info(this, " no tree parts got " + ex);
 			}
 
-			// importID; //= values[i].split("\t")[0]; for table lines
+			
 
 			// if (oldPath == null)
-			// continue;
+			
 
 			logging.debug(this, "importData  ----------------   " + i + " values[i] " + importID);
 

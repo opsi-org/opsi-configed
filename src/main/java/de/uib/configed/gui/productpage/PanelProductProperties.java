@@ -43,7 +43,7 @@ import de.uib.utilities.table.updates.TableUpdateCollection;
 public class PanelProductProperties extends JSplitPane
 // implements RowSorterListener
 {
-	// JScrollPane paneProducts;
+	
 	public PanelGenEditTable paneProducts;
 	protected OpsiPackage selectedOpsiPackage;
 	protected List<String> depotsOfPackage;

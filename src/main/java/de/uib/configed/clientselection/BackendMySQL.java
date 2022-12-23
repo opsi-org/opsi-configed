@@ -367,7 +367,7 @@ public class BackendMySQL {
 		}
 	}
 
-	// Diese Funktion trägt die Standardwerte für die Produkte ein;
+	
 	// Es müssen entsprechend noch die Standardwerte anstelle der Platzhalter
 	// ergänzt werden.
 	public String getWhereClauseDefaultProduct(String abfrage) {

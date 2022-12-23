@@ -31,7 +31,7 @@ import de.uib.configed.configed;
 import de.uib.configed.gui.FDialogTextfieldWithListSelection;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
 import de.uib.opsicommand.OpsiMethodCall;
-//import de.uib.configed.guidata.ListMerger;
+
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.permission.UserConfig;
@@ -55,8 +55,8 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 	protected LinkedList<String> theUsers;
 	protected LinkedList<String> theRoles;
 
-	// String username;
-	// String rolename;
+	
+	
 
 	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer, boolean keylistExtendible,
 			boolean keylistEditable, boolean reloadable,

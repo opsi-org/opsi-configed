@@ -141,7 +141,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 		for (String key : keyclasses) {
 			// if (key.startsWith("user"))
-			// continue;
+			
 
 			EditMapPanelX editMapPanel = new EditMapPanelX(tableCellRenderer, keylistExtendible, keylistEditable,
 					reloadable) {
@@ -428,7 +428,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 			for (String key : keyclasses) {
 				// if (key.startsWith("user"))
-				// continue;
+				
 
 				partialPanels.get(key).setEditableMap(virtualLines.get(key), optionsMap);
 
@@ -447,7 +447,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 		for (String key : keyclasses) {
 			// if (key.startsWith("user"))
-			// continue;
+			
 			partialPanels.get(key).setOptionsEditable(b);
 		}
 	}
@@ -460,7 +460,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 		for (String key : keyclasses) {
 			// if (key.startsWith("user"))
-			// continue;
+			
 			partialPanels.get(key).setStoreData(data);
 		}
 	}
@@ -473,7 +473,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 		for (String key : keyclasses) {
 			// if (key.startsWith("user"))
-			// continue;
+			
 			partialPanels.get(key).setUpdateCollection(updateCollection);
 		}
 	}

@@ -62,7 +62,7 @@ public class OpsiPackage implements Comparable {
 
 	}
 
-	// public class PackageRow extends Vector<Object>;
+	
 
 	public static final int TYPE_LOCALBOOT = 0;
 	public static final int TYPE_NETBOOT = 1;

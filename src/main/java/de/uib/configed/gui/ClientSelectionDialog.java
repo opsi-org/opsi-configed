@@ -93,8 +93,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	private JTextField saveNameField;
 	private JTextField saveDescriptionField;
 	private JButton saveButton;
-	// private JLabel savedSearchLabel;
-	// private JComboBox savedSearchBox;
+	
+	
 
 	private LinkedList<ComplexGroup> complexElements;
 

@@ -130,7 +130,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 		
 	}
 
-	// TODO; implement this ?
+	
 	@Override
 	public void setCursorRow(int row) {
 		logging.debug(this, "setCursorRow row, produced modelrow, produced viewrow, not implemented ");
@@ -189,7 +189,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 		
 
 		// if (b == filtered)
-		// return;
+		
 
 		if (!filtered)
 			viewRowfilter = table.getSelectedRows();

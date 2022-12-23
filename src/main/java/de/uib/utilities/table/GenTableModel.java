@@ -62,7 +62,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	private TableModelFilter workingFilter;
 	public static final String DEFAULT_FILTER_NAME = "default";
 
-	// protected TableModelFilterCondition filterConditionShowOnlySelected;
+	
 	public static String labelFilterConditionShowOnlySelected = "showOnlySelected";
 
 	// maps for TableModelFunctions

@@ -61,7 +61,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	private javax.swing.JButton jButtonCreateOEM;
 	private javax.swing.JButton jButtonCreateConcurrent;
 	private javax.swing.JButton jButtonSend;
-	// private javax.swing.JLabel jLabelContract;
+	
 	private javax.swing.JLabel jLabelLKey;
 	private javax.swing.JLabel jLabelLicencePool;
 	private javax.swing.JLabel jLabelTask;

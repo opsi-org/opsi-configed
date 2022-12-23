@@ -28,7 +28,7 @@ public class ColoredListCellRenderer extends DefaultListCellRenderer {
 		 * {
 		 * background = Globals.nimbusBackground;
 		 * foreground = Globals.nimbusSelectionBackground;
-		 * //Color.black;
+		 * 
 		 * };
 		 * 
 		 * c.setBackground(background);

@@ -6,7 +6,7 @@ import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 
 public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
 
-	// LicensingInfoMap lInfoMap;
+	
 
 	public LicensingInfoPanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition, // if -1 dont use a standard popup
 			// if > 0 the popup is added later after installing another popup

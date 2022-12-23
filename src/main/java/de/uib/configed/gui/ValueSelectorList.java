@@ -32,7 +32,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 	private JButton buttonSelectValuesWithEqualProperties;
 	private JButton buttonSelectValuesAll;
 
-	// private JTextField searchField;
+	
 	private TablesearchPane searchPane;
 
 	private Vector<? extends String> unfilteredV;

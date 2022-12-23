@@ -55,7 +55,7 @@ public class FGroupActions extends SecondaryFrame {
 
 	int hFirstGap = Globals.HFIRST_GAP;
 
-	int firstLabelWidth = Globals.BUTTON_WIDTH; // Globals.firstLabelWidth;
+	int firstLabelWidth = Globals.BUTTON_WIDTH; 
 
 	public FGroupActions(ConfigedMain main, PersistenceController persist, JFrame mainframe) {
 		super();

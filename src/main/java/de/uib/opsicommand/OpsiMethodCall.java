@@ -21,7 +21,7 @@ public class OpsiMethodCall {
 	protected static final int defaultJsonId = 1;
 
 	public static String extendRpcPath = "extend/configed";
-	private String rpcPath = "";// extendRpcPath;
+	private String rpcPath = "";
 
 	public static final Vector<String> collectedCalls = new Vector<>();
 	public static int maxCollectSize = -1;

@@ -121,7 +121,7 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 
 	// public LinkedList<CommandHelp_Row> getHelpLines()
 	// {
-	// return helpLinesSplitted;
+	
 	// }
 	// public void setHelpLines(LinkedList<CommandHelp_Row> lines)
 	// {
@@ -131,7 +131,7 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	// public int getHelpColumns()
 	// {
 	// // if (packageManager)
-	// // return ((CommandOpsiPackageManager)basicCommand).getHelpColumns;
+	
 	// // return 0;
 	
 	// }
@@ -142,7 +142,7 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	// ])|(--[\\w*]*-[\\w*]*-[\\w*]*)|(--[\\w*]*-[\\w*]*)|(--[\\w*]*)";
 	// regexes[1] = "((<[\\w*]*>)|(<[\\w*]*-[\\w*]*>)|(<[\\w*]*-[\\w*]*-[\\w*]*>)) |
 	// ((<[\\w*]*>\\s\\.{3})|(<[\\w*]*-[\\w*]*>\\s\\.{3})|(<[\\w*]*-[\\w*]*-[\\w*]*>\\s\\.{3}))";
-	// return regexes;
+	
 	// }
 
 }

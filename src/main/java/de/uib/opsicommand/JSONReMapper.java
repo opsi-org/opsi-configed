@@ -216,7 +216,7 @@ public class JSONReMapper {
 					String key2 = (String) iter1.next(); // e.g. product
 					HashMap<String, Object> map2 = new HashMapX<>((JSONObject) map1.get(key2), true); // e.g.
 																										// product
-																										// values;
+																										
 																										
 					map1R.put(key2, map2);
 					
@@ -260,7 +260,7 @@ public class JSONReMapper {
 						String key2 = (String) iter1.next(); // e.g. product
 						HashMap<String, Object> map2 = new HashMapX<>((JSONObject) map1.get(key2), true); // e.g.
 																											// product
-																											// values;
+																											
 																											
 						map1R.put(key2, map2);
 						

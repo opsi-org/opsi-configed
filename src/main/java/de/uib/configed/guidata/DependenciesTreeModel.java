@@ -45,7 +45,7 @@ public class DependenciesTreeModel {
 	private String productId = "";
 
 	private boolean graphIsInitialized;
-	// private boolean isCyclic;
+	
 
 	private PersistenceController pc;
 

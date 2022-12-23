@@ -47,7 +47,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 	Map<String, Map<String, Map<String, Object>>> datesMap = new HashMap<>();
 	Map<String, Object> clientNumbers;
 
-	public static boolean extendedView = false; //false; //used as initial value.
+	public static boolean extendedView = false; 
 
 	JLabel clientTitle = new JLabel();
 	JLabel allClient = new JLabel();

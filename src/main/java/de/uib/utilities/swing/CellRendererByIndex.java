@@ -175,7 +175,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 			foreground = Color.WHITE;
 		} else {
 			background = Globals.nimbusBackground;
-			foreground = Globals.nimbusSelectionBackground; // Color.WHITE; // Color.black;
+			foreground = Globals.nimbusSelectionBackground; 
 		} ;
 
 		setBackground(background);

@@ -21,7 +21,7 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public abstract class ExportTable {
 	protected javax.swing.JTable theTable;
-	// protected JFrame ancestorOfTable;
+	
 	// protected String sheetLabel = "Page 1";//must not be empty!
 	protected Vector<String> classNames;
 	protected HashMap<String, String> metaData;

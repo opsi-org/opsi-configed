@@ -346,7 +346,7 @@ public class DataStubNOM extends DataStub {
 					p.appendValues(productRow);
 
 					
-					// productName;
+					
 					
 
 					if (depotsWithThisVersion.size() == 1)
@@ -600,7 +600,7 @@ public class DataStubNOM extends DataStub {
 	// host2product2properties_retrieved = new HashMap<String, Map<String, Map
 	
 	protected java.util.Set<String> hostsWithProductProperties;
-	// protected java.util.Set<String> depotsWithProductProperties;
+	
 
 	public void productPropertyStatesRequestRefresh() {
 		logging.info(this, "productPropertyStatesRequestRefresh");

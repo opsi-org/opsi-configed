@@ -125,7 +125,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 			
 			
 			
-			// ;
+			
 			
 
 			

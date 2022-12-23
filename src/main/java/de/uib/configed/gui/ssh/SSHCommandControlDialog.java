@@ -64,9 +64,9 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	private GroupLayout controlPanelLayout;
 	/** command - commands control panel Layout instance **/
 	private GroupLayout centerPanelLayout;
-	// private BorderLayout centerPanelLayout;
+	
 	private GroupLayout commandlistPanelLayout;
-	// private GroupLayout parameterPanelLayout;
+	
 	/** Save Button instance **/
 	private JButton btn_save;
 	/** Close Button instance **/

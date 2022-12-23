@@ -166,7 +166,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 
 	@Override
 	public String getSecureInfoInCommand() {
-		return confidential_information; // usually null;
+		return confidential_information; 
 	}
 
 	@Override
