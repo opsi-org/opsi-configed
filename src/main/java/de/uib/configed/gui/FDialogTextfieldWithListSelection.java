@@ -46,7 +46,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		labelList = new JLabel(defs.getListLabel());
 		// labelList.setText( defs.getListLabel() );
 		labelList.setToolTipText(defs.getListLabelToolTip());
-		theList = new JList();
+		theList = new JList<>();
 		theList.setListData(defs.getListData());
 		if (defs.getListData() != null && defs.getListData().size() > 0)
 			theList.setSelectedIndex(0);
