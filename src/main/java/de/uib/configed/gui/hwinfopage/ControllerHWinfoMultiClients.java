@@ -108,9 +108,9 @@ public class ControllerHWinfoMultiClients {
 	public void setFilter() {
 		theFilterSet = new TreeSet<>(main.getSelectedClientsInTable());
 		filterConditionHwForSelectedHosts.setFilter(theFilterSet);
-		model.invalidate(); // requestRefilter();
+		model.invalidate(); 
 		model.reset();
-		// model.setFilterCondition( filterConditionHwForSelectedHosts );
+		
 	}
 
 	public void requestResetFilter() {
@@ -127,12 +127,12 @@ public class ControllerHWinfoMultiClients {
 				PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF, true) {
 			@Override
 			public void reload() {
-				// persist.configOptionsRequestRefresh();
+				
 				persist.client2HwRowsRequestRefresh();
-				// columnNames = persist.getClient2HwRowsColumnNames();
-				// classNames = persist.getClient2HwRowsJavaclassNames();
+				
+				
 				super.reload();
-				// getTableModel().fireTableStructureChanged();
+				
 
 			}
 
@@ -157,14 +157,14 @@ public class ControllerHWinfoMultiClients {
 
 	protected void initModel() {
 
-		// updateCollection = new TableUpdateCollection();
+		
 		columnNames = persist.getClient2HwRowsColumnNames();
 		classNames = persist.getClient2HwRowsJavaclassNames();
 		logging.info(this, "initmodel: columns " + columnNames);
 		hosts = new String[0];
 
 		// GenericTableUpdateItemFactory updateItemFactory = new
-		// GenericTableUpdateItemFactory(0);
+		
 
 		model = new GenTableModel(
 				// updateItemFactory,
@@ -191,19 +191,19 @@ public class ControllerHWinfoMultiClients {
 				// updateCollection
 				null);
 
-		// updateItemFactory.setSource(model);
+		
 
-		// model.reset();
+		
 		// we got metadata:
 
-		// columnNames = model.getColumnNames();
-		// classNames = model.getClassNames();
+		
+		
 
-		// updateItemFactory.setColumnNames(columnNames);
-		// updateItemFactory.setClassNames(classNames);
+		
+		
 
 		panel.setTableModel(model);
-		// panel.setEmphasizedColumns(new int[]{2});
+		
 
 		model.chainFilter(FILTER_SELECTED_CLIENTS, tableModelFilter);
 
@@ -221,11 +221,11 @@ public class ControllerHWinfoMultiClients {
 
 	protected void buildSurrounding() {
 
-		// panel.setTitle( "" );//configed.getResourceValue("PanelHWInfo.overview") );
+		
 
 		// Icon iconConfigure =
-		// Globals.createImageIcon("images/config_pro.png", "");
-		// buttonConfigureColumns = new JButton("...");
+		
+		
 		buttonConfigureColumns = new JButton("", Globals.createImageIcon("images/configure16.png", ""));
 		buttonConfigureColumns.setToolTipText(configed.getResourceValue("PanelHWInfo.overview.configure"));
 		buttonConfigureColumns.setPreferredSize(Globals.smallButtonDimension);
@@ -240,8 +240,8 @@ public class ControllerHWinfoMultiClients {
 			rebuildModel();
 		});
 
-		// JPanel testpanel = new JPanel();
-		// testpanel.add( new JLabel ("hallo welt") );
+		
+		
 
 		buttonConfigureColumns.addActionListener(actionEvent -> {
 			logging.info(this, "action performed " + actionEvent);
@@ -272,7 +272,7 @@ public class ControllerHWinfoMultiClients {
 				actionEvent -> main.setSelectedClientsCollectionOnPanel(panel.getSelectedKeys(), true));
 
 		panel.setTitlePane(new JComponent[] {
-				// buttonConfigureColumns, buttonReload }, 20 );
+				
 				buttonReload, buttonCopySelection, new JLabel("       "), buttonConfigureColumns }, 20);
 		panel.setTitlePaneBackground(Globals.backLightBlue);
 

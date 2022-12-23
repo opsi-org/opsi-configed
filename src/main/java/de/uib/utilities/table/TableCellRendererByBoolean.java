@@ -56,10 +56,10 @@ public class TableCellRendererByBoolean extends ColorTableCellRenderer {
 			((JLabel) result).setText(selectedString);
 			((JLabel) result).setIcon(selectedIcon);
 			((JLabel) result).setToolTipText(selectedString);
-			// ((JLabel)result).setHorizontalAlignment(CENTER);
+			
 		}
 
-		// CellAlternatingColorizer.colorize(result, isSelected, (row % 2 == 0) , true);
+		
 
 		return result;
 	}

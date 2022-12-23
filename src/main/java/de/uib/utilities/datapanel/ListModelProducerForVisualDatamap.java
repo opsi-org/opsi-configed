@@ -37,7 +37,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 	public void setData(Map<String, ListCellOptions> optionsMap, Map currentData) {
 		this.optionsMap = optionsMap;
 		// logging.info(this, "setData " + optionsMap + " optionsMap.get(type) " +
-		// optionsMap.get("type"));
+		
 		mapTypes(currentData);
 	}
 
@@ -60,9 +60,9 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 		originalTypes = new HashMap<>();
 		for (Object key : currentData.keySet()) {
 			Object value = currentData.get(key);
-			// logging.debug(this, "mapTypes key, value " + key + ", " + value);
+			
 			// logging.debug(this, "mapTypes key, value class " + key + ", " +
-			// value.getClass());
+			
 			originalTypes.put((String) key, value.getClass());
 			this.currentData.put((String) key, toList(value));
 		}
@@ -82,10 +82,10 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 
 		// build listmodel
 		// logging.info(this, "getListModel table.getValueAt(row, 0) " +
-		// table.getValueAt(row, 0));
+		
 		String key = (String) table.getValueAt(row, 0);
 
-		// logging.debug(this, "key = table.getValueAt( " + row + ", 0 ), " + key);
+		
 
 		ListCellOptions options = getListCellOptions(key);
 
@@ -93,7 +93,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 		logging.info(this, "getListModel key " + key + " the option values " + values);
 		logging.info(this, "getListModel key " + key + " options  " + options);
 
-		// logging.debug(this, "we produce a list model");
+		
 		DefaultListModel model = new DefaultListModel();
 		Iterator iter = ((List) values).iterator();
 		while (iter.hasNext()) {
@@ -115,14 +115,14 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 
 	@Override
 	public List getSelectedValues(int row, int column) {
-		// logging.info(this, "getSelectedValues row " + row);
+		
 		String key = (String) table.getValueAt(row, 0);
 		return (List) currentData.get(key);
 	}
 
 	@Override
 	public void setSelectedValues(List newValues, int row, int column) {
-		// logging.info(this, "setSelectedValues row " + row);
+		
 		String key = (String) table.getValueAt(row, 0);
 		currentData.put(key, newValues);
 		table.setValueAt(newValues, row, 1);
@@ -153,9 +153,9 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 
 	@Override
 	public Class getClass(int row, int column) {
-		// logging.info(this, "getClass for row, col " + row + ", " + column);
+		
 		String key = (String) table.getValueAt(row, 0);
-		// logging.info(this, "getClass key " + key);
+		
 
 		return originalTypes.get(key);
 	}

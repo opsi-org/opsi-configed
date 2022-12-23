@@ -15,7 +15,7 @@ public class PopupMouseListener extends MouseAdapter {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// logging.debug ( " mouse pressed ");
+		
 		maybeShowPopup(e);
 
 	}
@@ -23,7 +23,7 @@ public class PopupMouseListener extends MouseAdapter {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 
-		// logging.debug ( " mouse released ");
+		
 		maybeShowPopup(e);
 	}
 

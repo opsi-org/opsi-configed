@@ -180,14 +180,14 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 		PROPERTYCLASSES_SERVER.put(OpsiHwAuditDeviceClass.CONFIG_KEY,
 				"<html><p>configuration for hw overview table,<br />- best editing via the helper function<br />at the hw overview table!)</p></html>");
 		PROPERTYCLASSES_SERVER.put("opsiclientd", "<html>entries for the opsiclientd.conf</html>");
-		// PROPERTYCLASSES_SERVER.put( "opsi-local-image", "" );
+		
 		PROPERTYCLASSES_SERVER.put("opsi-script", "<html>parameters for opsi-script on a client</html>");
 		PROPERTYCLASSES_SERVER.put("software-on-demand",
 				"<html>software on demand configuration,<br />not client specific</html>");
 		// PROPERTYCLASSES_SERVER.put( KEY_USER_ROOT, "<html>user privileges
-		// configuration,<br />not client specific</html>");
+		
 		// PROPERTYCLASSES_SERVER.put( KEY_USER_ROLE_ROOT, "<html>user role
-		// configuration,<br />not client specific</html>");
+		
 		PROPERTYCLASSES_SERVER.put(KEY_USER_ROOT,
 				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.userPrivilegesConfiguration.ToolTip"));
 		PROPERTYCLASSES_SERVER.put(KEY_USER_ROLE_ROOT,
@@ -200,16 +200,16 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 		PROPERTYCLASSES_CLIENT.put("", "general configuration items");
 		PROPERTYCLASSES_CLIENT.put("clientconfig", "network configuration");
 		// PROPERTYCLASSES_CLIENT.put( SavedSearch.CONFIG_KEY, "<html></p>saved search
-		// configurations ,<br />do not edit!</p></html>" );
+		
 		// PROPERTYCLASSES_CLIENT.put( RemoteControl.CONFIG_KEY, "<html><p>remote
-		// control call,<br />not client specific</p></html>" );
+		
 		PROPERTYCLASSES_CLIENT.put("opsiclientd", "<html>entries for the opsiclientd.conf</html>");
 		PROPERTYCLASSES_CLIENT.put("opsi-script", "<html>parameters for opsi-script on a client</html>");
-		// PROPERTYCLASSES_CLIENT.put( "opsi-local-image", "" );
+		
 		PROPERTYCLASSES_CLIENT.put("software-on-demand",
 				"<html>software on demand configuration,<br />not client specific</html>");
 		// PROPERTYCLASSES_CLIENT.put( OpsiPermission.CONFIGKEY_STR_USER, "<html>user
-		// privileges configuration,<br />not client specific</html>");
+		
 	}
 
 	public static TreeMap<String, String> PROPERTY_EDITOPTIONS_CLIENT;
@@ -248,7 +248,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void userConfigurationRequestReload();
 
-	// public abstract void checkFragileUserRegistration();
+	
 
 	public abstract void addRoleConfig(String name, String rolename);
 
@@ -256,14 +256,14 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void checkConfiguration();
 
-	// protected abstract boolean sourceAccept();
+	
 
 	public abstract boolean canCallMySQL();
 
 	/* error handling convenience methods */
-	// public abstract List getErrorList ();
+	
 
-	// public abstract void clearErrorList ();
+	
 
 	/* ============================ */
 	public abstract Executioner retrieveWorkingExec(String depot);
@@ -277,7 +277,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void setConnectionState(ConnectionState state);
 
-	// public abstract void checkReadOnly();
+	
 
 	public abstract LinkedHashMap<String, Map<String, Object>> getDepotPropertiesForPermittedDepots();
 
@@ -390,10 +390,10 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract List<String> getClientsWithOtherProductVersion(String productId, String productVersion,
 			String packageVersion, boolean includeFailedInstallations);
 
-	// public abstract String[] getClientsWithFailed();
+	
 
 	// public abstract Map<String, String> getProductVersion(String productId,
-	// String depotID);
+	
 
 	public abstract boolean areDepotsSynchronous(Set depots);
 
@@ -423,7 +423,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract List<String> deletePackageCaches(String[] hostIds);
 
-	// public abstract void wakeOnLan (String hostId);
+	
 
 	public abstract List<String> wakeOnLan(String[] hostIds);
 
@@ -474,7 +474,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void hostGroupsRequestRefresh();
 
-	// public abstract void clientsWithFailedRequestRefresh();
+	
 
 	public abstract void fObject2GroupsRequestRefresh();
 
@@ -507,16 +507,16 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract List<String> getHostGroupIds();
 
 	// public abstract void populateHostGroupFromSearch(String savedSearch, String
-	// groupName);
+	
 
 	public abstract Map<String, List<String>> getHostSeparationByDepots(String[] hostIds);
 
 	// deprecated
-	// public abstract boolean writeGroup (String groupname, String[] groupmembers);
+	
 
-	// public abstract String getPcInfo( String hostId );
+	
 
-	// public abstract boolean existsEntry (String pcname);
+	
 
 	/* software info */
 	public abstract ArrayList<String> getSoftwareList();
@@ -529,7 +529,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void softwareAuditOnClientsRequestRefresh();
 
-	// public abstract List<Map<String, Object>> getSoftwareAuditOnClients();
+	
 
 	public abstract Map<String, List<SWAuditClientEntry>> getClient2Software();
 
@@ -582,11 +582,11 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract Map<String, String> getLogfiles(String clientId);
 
 	/* list of boot images */
-	// public abstract Vector getInstallImages();
+	
 
 	// product related
 
-	// public abstract void depotProductPropertiesRequestRefresh();
+	
 
 	public abstract void depotChange();
 
@@ -604,7 +604,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract List<String> getAllLocalbootProductNames();
 
-	// public abstract void localbootProductNamesRequestRefresh();
+	
 
 	public abstract List<String> getAllDepotsWithIdenticalProductStock(String depot);
 
@@ -615,7 +615,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract Vector<String> getWinProducts(String depotId, String depotProductDirectory);
 
-	// public abstract void retrieveProductsAllDepots();
+	
 
 	public abstract void retrieveProducts();
 
@@ -627,7 +627,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract Object2Product2VersionList getDepot2NetbootProducts();
 
-	// public abstract void retrieveProductGlobalInfos();
+	
 
 	public abstract Map<String, Map<String, Object>> getProductGlobalInfos(String depotId); // (productId -> (infoKey ->
 																							// info))
@@ -640,7 +640,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract Map<String, Map<String, String>> getProductDefaultStates();
 
-	// public abstract List getProductDependencies ( String productname);
+	
 	public abstract Map<String, List<Map<String, String>>> getProductDependencies(String depotId);
 
 	public abstract void retrieveProductDependencies();
@@ -659,11 +659,11 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract Map<String, de.uib.utilities.table.ListCellOptions> getProductPropertyOptionsMap(String depotId,
 			String productId);
 
-	// public abstract Map getProductPropertyValuesMap (String productname);
+	
 
-	// public abstract Map getProductPropertyDescriptionsMap (String productname);
+	
 
-	// public abstract Map getProductPropertyDefaultsMap (String productname);
+	
 
 	public abstract String getProductTitle(String product);
 
@@ -681,23 +681,23 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	/* PC specific listings of products and their states and updatings */
 
-	// public abstract List[] getClientsLocalbootProductNames(String[] clientIds);
+	
 
-	// public abstract List[] getClientsNetbootProductNames(String[] clientIds);
+	
 
 	// methods requires java 8:
-	// public abstract Map getProductStatesNOMSortedByClientId();
-	// public abstract Map getProductStatesNOMSorted(String sortKey);
+	
+	
 
-	// public abstract Map getMapOfProductStates (String clientId);
+	
 
-	// public abstract Map getMapOfProductActions (String clientId);
+	
 
 	public abstract Map<String, List<Map<String, String>>> getMapOfProductStatesAndActions(String[] clientIds);
 
 	// public abstract Map getMapOfLocalbootProductStatesAndActions (String[]
 	// clientIds,
-	// Map currentMap);
+	
 
 	public abstract Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(String[] clientIds);
 
@@ -724,7 +724,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract Map<String, String> getProductDeinstallRequirements(String depotId, String productname);
 
 	/* pc and product specific */
-	// public abstract void retrieveProductproperties (List clientNames);
+	
 	public abstract void productpropertiesRequestRefresh();
 
 	public abstract void retrieveProductproperties(List<String> clientNames);
@@ -743,18 +743,18 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	// public abstract void setProductproperties(String pcname, String productname,
 	// Map properties,
-	// List updateCollection, List deleteCollection);
+	
 	public abstract void setProductproperties(String pcname, String productname, Map properties);
 
 	// public abstract void setProductproperties( List updateCollection,
-	// List deleteCollection );
+	
 	public abstract void setProductproperties();
 
 	public abstract void setCommonProductPropertyValue(Set<String> clientNames, String productName, String propertyName,
 			List<String> values);
 
 	/* information about the service */
-	// public abstract void mapOfMethodSignaturesRequestRefresh(); we dont need
+	 we dont need
 	// update this
 
 	public abstract List<String> getMethodSignature(String methodname);
@@ -763,15 +763,15 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	/* network and additional settings, for network objects */
 
-	// public abstract List getServers();
+	
 
-	// public abstract Map getNetworkConfiguration (String objectId);
+	
 
 	public abstract void hostConfigsRequestRefresh();
 
-	// public abstract void hostConfigsRequestRefresh(String[] clients);
+	
 
-	// public abstract void hostConfigsCheck(String[] clients);
+	
 	// retrieve host configs if not existing
 
 	public abstract Map<String, de.uib.utilities.table.ListCellOptions> getConfigOptions();
@@ -785,15 +785,15 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	protected abstract boolean setHostBooleanConfigValue(String key, String hostName, boolean val);
 
 	// protected abstract boolean getHostBooleanConfigValue( String key, String
-	// hostName, Boolean defaultVal );
+	
 
 	public abstract Map<String, Map<String, Object>> getConfigs();
 
 	public abstract Map<String, Object> getConfig(String objectId);
 
-	// public abstract Map getAdditionalConfiguration (String objectId);
+	
 
-	// public abstract void setNetworkConfiguration (String objectId, Map settings);
+	
 
 	public abstract void setHostValues(Map settings);
 
@@ -805,7 +805,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void setConfig();
 
-	// public abstract void setConfig(boolean restrictToMissing);
+	
 
 	public abstract void configOptionsRequestRefresh();
 
@@ -831,7 +831,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract String getDepot();
 
-	// public abstract String getDepot();
+	
 
 	public abstract Map<String, SWAuditEntry> getInstalledSoftwareInformation();
 
@@ -908,9 +908,9 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void setFSoftware2LicencePool(String softwareIdent, String licencePoolId);
 
-	// public abstract List getLicencePool2WindowsSoftwareIDs(String licensePoolId);
+	
 
-	// public abstract Map<String, Map> getRelationsWindowsSoftwareId2LPool();
+	
 
 	public abstract boolean removeAssociations(String licensePoolId, List<String> softwareIds);
 
@@ -1000,7 +1000,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract boolean isWithLocalImaging();
 
-	// public abstract boolean isWithScalability1();
+	
 
 	public abstract boolean isWithLicenceManagement();
 

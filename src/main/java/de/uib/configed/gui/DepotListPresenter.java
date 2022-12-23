@@ -128,10 +128,10 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		else
 			labelDepotServer.setText(configed.getResourceValue("DepotListPresenter.depot"));
 		labelDepotServer.setOpaque(false);
-		// labelDepotServer.setBackground(Globals.backgroundWhite); //backTabsColor);
+		
 		labelDepotServer.setBackground(Globals.backLightBlue);
 		labelDepotServer.setFont(Globals.defaultFontStandardBold);
-		// labelDepotServer.setFont(Globals.defaultFont);
+		
 
 		buttonSelectDepotsWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
 		buttonSelectDepotsWithEqualProperties
@@ -215,15 +215,15 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		 * popupCancelChangedDepotSelection.setEnabled(false);
 		 */
 
-		// setChangedDepotSelectionActive(false); is not initialized
+		 is not initialized
 		// must not be set (otherwise the embedding scrollpane does not scroll)
-		// depotslist.setPreferredSize(new Dimension(widthColumnServer, line_height));
-		// depotslist.setFont(Globals.defaultFont);
+		
+		
 		// labelDepotServer.setPreferredSize(new Dimension(widthColumnServer,
-		// line_height));
+		
 
-		// popupDepots = new JPopupMenu();
-		// depotslist.setComponentPopupMenu(popupDepots);
+		
+		
 
 		/*
 		 * buttonCommitChangedDepotSelection = new IconButton(
@@ -318,8 +318,8 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == buttonSelectDepotsAll) {
 			logging.info(this, "action on buttonSelectDepotsAll");
-			// filterOnSelect();
-			// depotslist.setSelectionInterval(0, depotslist.getModel().getSize() - 1);
+			
+			
 			depotslist.selectAll();
 		}
 

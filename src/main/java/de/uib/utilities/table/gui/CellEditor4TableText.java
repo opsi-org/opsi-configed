@@ -47,8 +47,8 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 		this.initSize = initSize;
 
 		editorContent.setEditable(false);
-		// editorContent.setFont(editorContent.getFont().deriveFont(Font.ITALIC));
-		// editorContent.addActionListener(this);
+		
+		
 		editorContent.addMouseListener(this);
 		editorContent.addKeyListener(this);
 		editorContent.addFocusListener(this);
@@ -63,7 +63,7 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 	// ActionListener
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == editorContent) {
-			// logging.debug("action event occurred on editorContent");
+			
 			fireEditingStopped();
 		}
 
@@ -75,7 +75,7 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 	public void mouseClicked(MouseEvent e) {
 		if (e.getSource() == editorContent) {
 			if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
-				// logging.debug("double clicked");
+				
 				fEdit.setVisible(true);
 			}
 
@@ -102,7 +102,7 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 	// KeyListener
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// logging.debug("key event " + e);
+		
 		if (e.getSource() == editorContent) {
 			if (e.getKeyCode() == 32)
 				fEdit.setVisible(true);
@@ -123,7 +123,7 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 	@Override
 	public void focusGained(FocusEvent e) {
 		if (e.getSource() == editorContent) {
-			// logging.info(this, "focusGained, getText ");
+			
 			editorContent.setText(fEdit.getText());
 		}
 	}
@@ -172,7 +172,7 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 		fEdit.setLocation((int) (loc.getX() + rec.getX() + 30), (int) (loc.getY() + rec.getY() + 20));
 
 		fEdit.setTitle(" (" + Globals.APPNAME + ")  '" + table.getColumnName(column) + "'");
-		// fEdit.setDataChanged( false );
+		
 
 		currentValue = oldValue;
 		return editorContent;

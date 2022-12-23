@@ -187,14 +187,14 @@ public class LicenseDisplayer {
 					String swName = (String) getValueAt(i, 0);
 
 					if (checkExistNamesWithVariantLicencepools(swName)) {
-						// logging.info(this, "foundVariantLicencepoold for " + swName);
+						
 						namesWithVariantPools.add(swName);
 						foundVariantLicencepools++;
 					}
 
 					i++;
 				}
-				// myController.thePanel.setDisplaySimilarExist( foundVariantLicencepools );
+				
 				logging.info(this, "produced rows, foundVariantLicencepools " + foundVariantLicencepools);
 			}
 
@@ -207,7 +207,7 @@ public class LicenseDisplayer {
 
 		modelSWnames.produceRows();
 
-		// modelSWnames.requestReload();
+		
 
 		Vector<Vector<Object>> specialrows = modelSWnames.getRows();
 		if (specialrows != null) {

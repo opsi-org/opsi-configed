@@ -79,7 +79,7 @@ public class FDepotselectionList extends FGeneralDialog {
 	public void leave() {
 		setVisible(false);
 		// we dont dispose the window, dispose it in the enclosing class
-		// setEnabled(false);
+		
 	}
 
 	public void exit() {

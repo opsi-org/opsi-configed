@@ -53,7 +53,7 @@ public class FDriverUpload extends SecondaryFrame {
 	protected void define() {
 		panelDriverUpload = new PanelDriverUpload(main, persist, this);
 
-		// main, persist, this);
+		
 
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);

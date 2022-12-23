@@ -29,7 +29,7 @@ public class ConfigUpdate implements UpdateCommand {
 	@Override
 	public void doCall() {
 		logging.info(this, "doCall, setting class " + newdata.getClass() + ", the new data is " + newdata);
-		// logging.debug(this, "retrieved property:" + config.getRetrieved());
+		
 		persis.setConfig(newdata);
 	}
 }

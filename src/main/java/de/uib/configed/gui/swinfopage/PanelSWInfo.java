@@ -184,15 +184,15 @@ public class PanelSWInfo extends JPanel {
 			 * @Override
 			 * public void reload()
 			 * {
-			 * //persist.installedSoftwareInformationRequestRefresh();
-			 * //persist.softwareAuditOnClientsRequestRefresh();
+			 * 
+			 * 
 			 * super.reload();
 			 * }
 			 */
 		};
 
 		panelTable.setTitle("");
-		// panelTable.setSearchColumnsAll(); we need the model for setting all columns,
+		 we need the model for setting all columns,
 		// therefore postponed
 		panelTable.setColumnSelectionAllowed(false); // up to now, true is destroying search function
 
@@ -241,8 +241,8 @@ public class PanelSWInfo extends JPanel {
 		indexOfColWindowsSoftwareID = columnNames.indexOf(SWAuditEntry.WINDOWSsOFTWAREid);
 		modelSWInfo.chainFilter(FILTER_MS_UPDATES, new TableModelFilter(filterConditionWithMsUpdates));
 		modelSWInfo.reset();
-		// modelSWInfo.setUsingFilter(FILTER_MS_UPDATES, withMsUpdates);
-		// modelSWInfo.toggleFilter( FILTER_MS_UPDATES );
+		
+		
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates = new JCheckBox("", withMsUpdates);
 		checkWithMsUpdates.setForeground(Globals.blue);
@@ -251,8 +251,8 @@ public class PanelSWInfo extends JPanel {
 
 		modelSWInfo.chainFilter(FILTER_MS_UPDATES2, new TableModelFilter(filterConditionWithMsUpdates2));
 		modelSWInfo.reset();
-		// modelSWInfo.setUsingFilter(FILTER_MS_UPDATES2, withMsUpdates2);
-		// modelSWInfo.toggleFilter( FILTER_MS_UPDATES2 );
+		
+		
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates2 = new JCheckBox("", withMsUpdates2);
 		checkWithMsUpdates2.setForeground(Globals.blue);
@@ -302,7 +302,7 @@ public class PanelSWInfo extends JPanel {
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(vGap, vGap, vGap).addGap(vGap, vGap, vGap));
 
-		// subPanelTitle.setBorder(BorderFactory.createLineBorder(Globals.blueGrey));
+		
 
 		panelTable.setTableModel(modelSWInfo);
 		panelTable.setSearchColumnsAll();
@@ -320,11 +320,11 @@ public class PanelSWInfo extends JPanel {
 		labelSuperTitle.setOpaque(true);
 		labelSuperTitle.setBackground(Globals.backgroundLightGrey);
 
-		// voidTableModel = new SWInfoTableModel();
+		
 
 		/*
 		 * logging.info(this, "voidTableModel cols hopefully   " +
-		 * SWAuditEntry.KEYS);//.getKeys());
+		 * SWAuditEntry.KEYS);
 		 * for (int i = 0; i<voidTableModel.getColumnCount(); i++)
 		 * {
 		 * logging.info(this, "voidTableModel col " + i + " " +
@@ -491,8 +491,8 @@ public class PanelSWInfo extends JPanel {
 
 		de.uib.configed.gui.swinfopage.SWterminalExporter exporter = new de.uib.configed.gui.swinfopage.SWterminalExporter(
 				PersistenceControllerFactory.getPersistenceController());
-		// exporter.persist = PersistenceControllerFactory.getPersistenceController();
-		// exporter.setNewPersistenceController();
+		
+		
 		exporter.setHost(hostId);
 
 		if (panelTable.getSelectedRowCount() > 0)
@@ -532,7 +532,7 @@ public class PanelSWInfo extends JPanel {
 
 		HashMap<String, String> metaData = new HashMap<>();
 		// metaData.put("header", " " + mf.format( new String[] { hostId,
-		// swRows.getDate()} ));
+		
 
 		metaData.put("title", "Client " + hostId);
 		metaData.put("subtitle", scanInfo);
@@ -548,7 +548,7 @@ public class PanelSWInfo extends JPanel {
 		/*
 		 * old pdf exporting
 		 * 
-		 * // DocumentToPdf tableToPDF = new DocumentToPdf(clientName, metaData); // no
+		 *  // no
 		 * filename, metadata
 		 * //the real filename is summoned in the toPDF method call
 		 * DocumentToPdf tableToPDF = new DocumentToPdf ("report_swaudit_" + clientName,
@@ -560,10 +560,10 @@ public class PanelSWInfo extends JPanel {
 		 * de.uib.utilities.pdf.DocumentElementToPdf.setAlignmentLeft(list);
 		 * 
 		 * 
-		 * //GenTableModel sourceModel = panelTable.getTableModel();
-		 * //sourceModel.setSorting(0, true);
 		 * 
-		 * //tableToPDF.createContentElement("tablemodel", sourceModel); //we use the
+		 * 
+		 * 
+		 *  //we use the
 		 * model in order to avoid any graphical component
 		 * 
 		 * 
@@ -584,7 +584,7 @@ public class PanelSWInfo extends JPanel {
 		supertitle = "" + s;
 		logging.info(this, "setSuperTitle " + s);
 		labelSuperTitle.setText(supertitle);
-		// panelTable.setTitle(s);
+		
 	}
 
 	/** overwrite in subclasses */
@@ -614,12 +614,12 @@ public class PanelSWInfo extends JPanel {
 		logging.info(this, "update+++++");
 
 		// logging.info(this, "update+++++ voidTableModel.getRowCount() "
-		// +voidTableModel.getRowCount() );
+		
 		logging.info(this, "update+++++ modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
 
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
-		// panelTable.reload();
+		
 
 	}
 
@@ -637,7 +637,7 @@ public class PanelSWInfo extends JPanel {
 
 		scanInfo = " (no software audit data, checked at time:  " + timeS + ")";
 
-		// voidTableModel.setData(this.swRows);
+		
 		return;
 	}
 
@@ -666,7 +666,7 @@ public class PanelSWInfo extends JPanel {
 	 * ")" );
 	 * 
 	 * 
-	 * //panelTable.reload();
+	 * 
 	 * 
 	 * 
 	 * 
@@ -683,7 +683,7 @@ public class PanelSWInfo extends JPanel {
 	 * 
 	 * if (swRows == null)
 	 * {
-	 * voidTableModel.setData(this.swRows); // we have a new DatedRowList());
+	 * voidTableModel.setData(this.swRows); 
 	 * return;
 	 * }
 	 * 
@@ -697,9 +697,9 @@ public class PanelSWInfo extends JPanel {
 	 * title = title + "   " + configed.getResourceValue("PanelSWInfo.title");
 	 * }
 	 * 
-	 * //jLabelTitle.setText(" " + swRows.getDate());
 	 * 
-	 * //voidTableModel.setData(swRows);
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 
@@ -716,7 +716,7 @@ public class PanelSWInfo extends JPanel {
 
 		public void setData(DatedRowList datedList) {
 			this.data = datedList.getRows();
-			// dateS = datedList.getDate();
+			
 
 			fireTableDataChanged();
 		}

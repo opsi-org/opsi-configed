@@ -38,7 +38,7 @@ public class FPanel extends SecondaryFrame {
 		this.checkLeave = checkLeave;
 		setIconImage(Globals.mainIcon);
 		setTitle(Globals.APPNAME + " " + title);
-		// registerWithRunningInstances();
+		
 		setSize(new Dimension(initialWidth, initialHeight));
 		innerPanel = panel;
 		getContentPane().add(innerPanel);
@@ -123,8 +123,8 @@ public class FPanel extends SecondaryFrame {
 	@Override
 	protected void processWindowEvent(WindowEvent e) {
 
-		// logging.info(this, " FPanel --------processWindowEvent " + e);
-		// super.processWindowEvent(e);
+		
+		
 
 		boolean leaving = true;
 
@@ -139,7 +139,7 @@ public class FPanel extends SecondaryFrame {
 
 				leave();
 
-				// super.processWindowEvent(e);
+				
 			} else
 				setVisible(true);
 		}

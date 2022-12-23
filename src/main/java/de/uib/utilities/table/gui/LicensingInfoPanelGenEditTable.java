@@ -12,15 +12,15 @@ public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
 			// if > 0 the popup is added later after installing another popup
 			boolean switchLineColors, int[] popupsWanted, boolean withTablesearchPane) {
 		super(title, maxTableWidth, editing, generalPopupPosition, switchLineColors, popupsWanted, withTablesearchPane);
-		// lInfoMap = LicensingInfoMap.getInstance();
+		
 		// theTable.getTableHeader().setDefaultRenderer(new
-		// MarkBoldHeaderCellRenderer(lInfoMap));
+		
 
 	}
 
 	@Override
 	protected void setCellRenderers() {
-		// logging.info(this, "setCellRenderers");
+		
 		LicensingInfoMap lInfoMap = LicensingInfoMap.getInstance();
 		for (int i = 0; i < tableModel.getColumnCount(); i++) {
 			String name = tableModel.getColumnName(i);

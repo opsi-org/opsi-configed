@@ -56,14 +56,14 @@ public class JSONObjectX extends JSONObject {
 		map = new HashMap<>();
 		try {
 			Iterator iter = master.keys();
-			// logging.debug(this, "keys " + master.keys());
+			
 			if (!iter.hasNext()) {
 				hasElements = false;
 			}
 
 			while (iter.hasNext()) {
 				String key = (String) iter.next();
-				// logging.debug(this, "got key " +key);
+				
 
 				if (master.get(key) != null)
 					beingList = false;

@@ -118,12 +118,12 @@ public class ActionRequest {
 
 		serviceValues = new Vector<>(serviceValue2state.keySet());
 		scriptKeys = new Vector<>();
-		// scriptKey2state = new HashMap<>();
+		
 		scriptKey2label = new HashMap<>();
 
 		for (String request : serviceValues) {
 			scriptKeys.add(request + "Script");
-			// scriptKey2state.put(request + "Script", serviceValue2state.get(request));
+			
 			scriptKey2label.put(request + "Script", state2label.get(serviceValue2state.get(request)));
 		}
 
@@ -309,7 +309,7 @@ public class ActionRequest {
 		checkCollections();
 
 		if (label == null)
-			return new ActionRequest(NONE); // NOT_AVAILABLE);
+			return new ActionRequest(NONE); 
 
 		if (!labels.contains(label))
 			return new ActionRequest(INVALID);

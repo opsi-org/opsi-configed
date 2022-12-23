@@ -211,20 +211,20 @@ public class SSHCommandFactory {
 		// Funktioniert nicht wie gewünscht. Optionaler Parameter "<<<....>>>" wird
 		// nicht abgefragt.
 		// ssh_commands_param.add(new
-		// de.uib.opsicommand.sshcommand.CommandOpsiSetRights() );
+		
 		// SSHCommand csetrights = new
-		// de.uib.opsicommand.sshcommand.CommandOpsiSetRights();
+		
 		// LinkedList<String> coms = new LinkedList<>()
 		// {{
-		// add(csetrights.getCommandRaw());
+		
 		// }};
 		// ssh_commands_param.add(new SSHCommand_Template(csetrights, new
-		// LinkedList<String>(){{add(csetrights.getCommandRaw());}} ));
+		
 		ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandOpsiSetRights());
 		// ssh_commands_param.add(new SSHCommand_Template(opsisetrights, coms,
 		// configed.getResourceValue("SSHConnection.command.opsisetrights"), true, null,
 		// configed.getResourceValue("SSHConnection.command.opsisetrights.tooltip"),
-		// 110));
+		
 		ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandDeployClientAgent());
 
 	}
@@ -307,10 +307,10 @@ public class SSHCommandFactory {
 			list_knownParents.add(parentdefaultForOwnCommands);
 
 		// if (commandlist.size() > 0)
-		// list_knownParents.add( parentNull );
+		
 
 		list_knownMenus.add(parentdefaultForOwnCommands);
-		// list_knownMenus.add( parentNull );
+		
 
 		for (Map<java.lang.String, java.lang.Object> map : commandlist) {
 			SSHCommand_Template com = buildSSHCommand(((String) map.get(command_map_id)),
@@ -330,7 +330,7 @@ public class SSHCommandFactory {
 			String parent = com.getParentMenuText();
 
 			logging.info(this, "parent menu text " + parent);
-			// System.exit(0);
+			
 			if (parent == null || parent.equalsIgnoreCase("null") || parent == parentdefaultForOwnCommands)
 				parent = parentdefaultForOwnCommands;
 			if (!list_knownParents.contains(parent))
@@ -340,7 +340,7 @@ public class SSHCommandFactory {
 
 			logging.info(this, "list_knownParents " + list_knownParents);
 
-			// com.setParentMenuText( parent );
+			
 
 			sshcommand_list.add(com);
 		}
@@ -386,7 +386,7 @@ public class SSHCommandFactory {
 		Collections.sort(sshcommand_list);
 
 		java.util.LinkedHashMap<String, List<SSHCommand_Template>> sortedComs = new LinkedHashMap<>();
-		// sortedComs.put(parentNull , new LinkedList<>());
+		
 		sortedComs.put(parentdefaultForOwnCommands, new LinkedList<>());
 		sortedComs.put(parentOpsi, new LinkedList<>());
 
@@ -441,7 +441,7 @@ public class SSHCommandFactory {
 	 **/
 	private Map<String, Object> buildCommandMap(SSHCommand_Template c) {
 		Map<String, Object> com = new HashMap<>();
-		// com.put("id", c.getId());
+		
 		com.put(command_map_menuText, c.getMenuText());
 		com.put(command_map_parentMenuText, c.getParentMenuText());
 		com.put(command_map_tooltipText, c.getToolTipText());

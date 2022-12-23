@@ -109,7 +109,7 @@ public class JTableSelectionPanel extends JPanel
 				try {
 					return super.getValueAt(row, col);
 				} catch (Exception ex) {
-					// logging.debug ("******** Exception in getValueAt: " + ex.toString());
+					
 					// after change of model (deleting of rows) the row sorter tries to rebuild
 					// itself but fails if no values are supplied
 					// we get a null pointer exception
@@ -126,21 +126,21 @@ public class JTableSelectionPanel extends JPanel
 			 * }
 			 */
 		};
-		// sorter = new TableSorter( );
-		// table = new JTable(sorter);
+		
+		
 		table.setDragEnabled(true);
 		table.setShowGrid(true);
 		table.setGridColor(Color.white);
 		table.setDefaultRenderer(Object.class, new StandardTableCellRenderer());
 		table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
-		// sorter.setTableHeader(table.getTableHeader());
+		
 		table.setAutoCreateRowSorter(true);
 
 		primaryOrderingKeys = new ArrayList<>();
 		primaryOrderingKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		// table.getTableHeader().setToolTipText(configed.getResourceValue("MainFrame.tableheader_tooltip"));
+		
 		table.getTableHeader().setReorderingAllowed(false);
 		table.getTableHeader()
 				.setDefaultRenderer(new ColorHeaderCellRenderer(table.getTableHeader().getDefaultRenderer()));
@@ -192,13 +192,13 @@ public class JTableSelectionPanel extends JPanel
 		 */
 
 		scrollpane.getViewport().add(table);
-		// test table.setVisible(false);
+		
 
 		JPanel topPane = new JPanel();
 
 		// JLabel labelSearch = new
-		// JLabel(configed.getResourceValue("JTableSelectionPanel.searchin"));
-		// labelSearch.setPreferredSize(Globals.labelDimension);
+		
+		
 
 		labelSearch = new JLabel(configed.getResourceValue("SearchPane.search"));
 		labelSearch.setFont(Globals.defaultFont);
@@ -214,7 +214,7 @@ public class JTableSelectionPanel extends JPanel
 		fieldSearch = new JTextField("");
 		fieldSearch.setPreferredSize(Globals.textfieldDimension);
 		fieldSearch.setFont(Globals.defaultFont);
-		// fieldSearch.setBackground(Globals.backgroundLightGrey);
+		
 		fieldSearch.setBackground(Globals.backVeryLightBlue); // Globals.backLightYellow
 		fieldSearch.getCaret().setBlinkRate(0);
 		fieldSearch.getDocument().addDocumentListener(this);
@@ -243,7 +243,7 @@ public class JTableSelectionPanel extends JPanel
 		popupNewSearch.addActionListener(actionEvent -> searchTheRow(0));
 
 		popupMarkHits.setText(configed.getResourceValue("SearchPane.popup.markall"));// "JTableSelectionPanel.markall")
-																						// + " ( F5 ) ");
+																						
 		popupMarkHits.addActionListener(actionEvent -> markAll());
 
 		popupEmptySearchfield.setText(configed.getResourceValue("JTableSelectionPanel.searchempty"));
@@ -296,7 +296,7 @@ public class JTableSelectionPanel extends JPanel
 
 		logging.info(this, "comboSearchMode set index to " + searchMode.ordinal());
 
-		// comboSearchMode.setModel(new DefaultComboBoxModel<>(searchModes));
+		
 		comboSearchMode.setPreferredSize(Globals.buttonDimension);
 
 		/*
@@ -453,7 +453,7 @@ public class JTableSelectionPanel extends JPanel
 	}
 
 	public int convertRowIndexToModel(int i) {
-		// logging.debug ( " ----- converting row index to model ");
+		
 		return table.convertRowIndexToModel(i);
 	}
 
@@ -515,7 +515,7 @@ public class JTableSelectionPanel extends JPanel
 	}
 
 	public void initColumnNames() {
-		// logging.info(this, "initColumnNames");
+		
 		Object oldSelected = comboSearch.getSelectedItem();
 		Vector<String> comboSearchItems = new Vector<>();
 		comboSearchItems.add(configed.getResourceValue("ConfigedMain.pclistTableModel.allfields"));
@@ -549,7 +549,7 @@ public class JTableSelectionPanel extends JPanel
 
 		return valuesList;
 
-		// return (String[]) values.toArray(new String[values.size()]);
+		
 	}
 
 	public void clearSelection() {
@@ -595,7 +595,7 @@ public class JTableSelectionPanel extends JPanel
 			}
 		}
 
-		// logging.info(this, "setSelectedValues remove point " + lastAddedI);
+		
 		lsm.removeSelectionInterval(lastAddedI, lastAddedI);
 
 		// get again the listeners
@@ -605,7 +605,7 @@ public class JTableSelectionPanel extends JPanel
 
 		// and repeat the last addition
 		if (lastAddedI > -1) {
-			// logging.info(this, "setSelectedValues add point " + lastAddedI);
+			
 			lsm.addSelectionInterval(lastAddedI, lastAddedI);
 		}
 
@@ -679,12 +679,12 @@ public class JTableSelectionPanel extends JPanel
 		logging.info(this, " [JTableSelectionPanel] setModel with row count " + tm.getRowCount());
 
 		tm.addTableModelListener(table);
-		// ((AbstractTableModel) tm).fireTableStructureChanged();
+		
 
 		logging.info(this, "setModel all hosts size "
 				+ main.getPersistenceController().getHostInfoCollections().getMapOfAllPCInfoMaps().size());
 
-		// logging.debug(" --- setting model, row count " + table.getRowCount());;
+		;
 
 		table.setModel(tm);
 
@@ -860,7 +860,7 @@ public class JTableSelectionPanel extends JPanel
 			// logging.info(this, "findViewRowFromValue loop with viewrow, alternativeWords
 			// "
 			// + viewrow + ", " + alternativeWords
-			// );
+			
 
 			for (int j = 0; j < getTableModel().getColumnCount(); j++) {
 				if (colIndices != null // we dont compare all values (comparing all values is default)
@@ -874,7 +874,7 @@ public class JTableSelectionPanel extends JPanel
 				);
 
 				// logging.info(this, "findViewRowFromValue compare " + value + " to " +
-				// compareValue);
+				
 
 				if (compareValue == null) {
 					found = (val == null || val.equals(""));
@@ -885,7 +885,7 @@ public class JTableSelectionPanel extends JPanel
 
 					switch (searchMode) {
 					case REGEX_SEARCHING: {
-						// logging.info(this, " try to match " + value + " with " + compareVal);
+						
 						found = pattern.matcher(compareVal).matches();
 						break;
 					}
@@ -893,7 +893,7 @@ public class JTableSelectionPanel extends JPanel
 					case FULL_TEXT_SEARCHING_WITH_ALTERNATIVES: {
 						for (String word : alternativeWords) {
 							// logging.info(this, "findViewRowFromValue compare in column " + j + ", " +
-							// word+ " to " + compareVal);
+							
 							found = (compareVal.indexOf(word) >= 0);
 							if (found)
 								break;
@@ -913,7 +913,7 @@ public class JTableSelectionPanel extends JPanel
 				}
 
 				if (found) {
-					// logging.info(this, "findViewRowFromValue identified " + value );
+					
 					break;
 				}
 			}
@@ -1014,7 +1014,7 @@ public class JTableSelectionPanel extends JPanel
 	 * 
 	 * if (regex)
 	 * {
-	 * //logging.info(this, " try to match " + value + " with " + compareVal);
+	 * 
 	 * if ( pattern.matcher(compareVal).matches() )
 	 * found = true;
 	 * }
@@ -1039,7 +1039,7 @@ public class JTableSelectionPanel extends JPanel
 	 * 
 	 * if (found)
 	 * {
-	 * //logging.info(this, "findViewRowFromValue identified " + value );
+	 * 
 	 * break;
 	 * }
 	 * }
@@ -1065,7 +1065,7 @@ public class JTableSelectionPanel extends JPanel
 		int viewrow = findViewRowFromValue(0, value, cols);
 
 		scrollRowToVisible(viewrow);
-		// Rectangle scrollTo = table.getCellRect(viewrow, 0, false);
+		
 		if (viewrow == -1)
 			return false;
 
@@ -1073,11 +1073,11 @@ public class JTableSelectionPanel extends JPanel
 	}
 
 	public void scrollRowToVisible(int row) {
-		// table.scrollRectToVisible(table.getCellRect(row, 0, false));
+		
 
 		Rectangle scrollTo = table.getCellRect(row, 0, false);
 		table.scrollRectToVisible(scrollTo);
-		// logging.info(this, " srollto " + scrollTo);
+		
 
 		/*
 		 * does not work properly since we pass correct locations
@@ -1093,12 +1093,12 @@ public class JTableSelectionPanel extends JPanel
 	public void addSelectedRow(int row) {
 		if (table.getRowCount() == 0)
 			return;
-		// table.requestFocus();
+		
 		table.addRowSelectionInterval(row, row);
-		// debug logging.error("addSelectedRow " + row);
-		// logging.debug(" --- view row selected " + row);
+		
+		
 		scrollRowToVisible(row);
-		// table.scrollRectToVisible(table.getCellRect(row, 0, false));
+		
 	}
 
 	public void setSelectedRow(int row) {
@@ -1109,12 +1109,12 @@ public class JTableSelectionPanel extends JPanel
 			table.clearSelection();
 			return;
 		}
-		// table.requestFocus();
+		
 		table.setRowSelectionInterval(row, row);
-		// debug logging.error("setSelectedRow " + row);
-		// logging.debug(" --- view row selected " + row);
+		
+		
 		scrollRowToVisible(row);
-		// table.scrollRectToVisible(table.getCellRect(row, 0, false));
+		
 	}
 
 	private void searchTheNextRow() {
@@ -1125,11 +1125,11 @@ public class JTableSelectionPanel extends JPanel
 		table.clearSelection();
 		searchTheRow(0);
 		int startFoundrow = foundrow;
-		// logging.info(this, "markAll foundrow " + foundrow);
+		
 		foundrow = foundrow + 1;
 		while (foundrow > startFoundrow) {
 			searchTheNextRow(true); // adding the next row to selection
-			// logging.info(this, "markAll foundrow " + foundrow);
+			
 		}
 	}
 
@@ -1161,10 +1161,10 @@ public class JTableSelectionPanel extends JPanel
 		if (value.length() > 10 && value.substring(0, 4).equalsIgnoreCase("http") && value.indexOf("host=") > 0)
 			value = value.substring(value.indexOf("host=") + ("host=").length());
 
-		// logging.info(this, " searchTheRow for >>" + value + "<<");
+		
 
 		HashSet<Integer> selectedCols = null;
-		// selectedCols = new HashSet<>();
+		
 
 		if (comboSearch.getSelectedIndex() > 0) {
 			selectedCols = new HashSet<>();
@@ -1177,7 +1177,7 @@ public class JTableSelectionPanel extends JPanel
 		 * }
 		 */
 
-		// logging.info(this, "markAll foundrow " + foundrow);
+		
 
 		searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES;
 		switch (comboSearchMode.getSelectedIndex()) {
@@ -1197,7 +1197,7 @@ public class JTableSelectionPanel extends JPanel
 		}
 
 		// foundrow = findViewRowFromValue(startrow, value, selectedCols,
-		// fulltextSearchWithOneString, regexSearch);
+		
 		foundrow = findViewRowFromValue(startrow, value, selectedCols, searchMode);
 
 		if (foundrow > -1) {
@@ -1232,7 +1232,7 @@ public class JTableSelectionPanel extends JPanel
 	@Override
 	public void changedUpdate(DocumentEvent e) {
 		// logging.info(this, "changedUpdate fieldSearch.getText().length() > 0 " +
-		// (fieldSearch.getText().length() > 0 ) );
+		
 		if (e.getDocument() == fieldSearch.getDocument()) {
 
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
@@ -1245,7 +1245,7 @@ public class JTableSelectionPanel extends JPanel
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		// logging.info(this, "insertUpdate");
+		
 		if (e.getDocument() == fieldSearch.getDocument()) {
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
 
@@ -1257,7 +1257,7 @@ public class JTableSelectionPanel extends JPanel
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		// logging.info(this, "removeUpdate");
+		
 		if (e.getDocument() == fieldSearch.getDocument()) {
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
 			searchOnDocumentChange();
@@ -1271,25 +1271,25 @@ public class JTableSelectionPanel extends JPanel
 	// KeyListener interface
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// logging.info(this, "keypressed source " + e.getSource());
+		
 
 		if (!(e.getSource() instanceof JTextField))
 			keyPressedOnTable(e);
 
-		// logging.info(this, "keypressed " + e);
+		
 		if (e.getKeyCode() == KeyEvent.VK_F5) {
 			if (!fieldSearch.getText().equals(""))
 				markAll();
 		}
 
 		else if (e.getKeyCode() == KeyEvent.VK_F3) {
-			// logging.info(this, "keypressed search next row");
+			
 			if (!fieldSearch.getText().equals(""))
 				searchTheNextRow();
 		}
 
 		else if (e.getKeyCode() == KeyEvent.VK_F3) {
-			// logging.info(this, "keypressed search next row");
+			
 			if (!fieldSearch.getText().equals(""))
 				searchTheNextRow();
 		}
@@ -1311,10 +1311,10 @@ public class JTableSelectionPanel extends JPanel
 	// ActionListener implementation
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// logging.info(this, "ActionEvent " + e);
+		
 		if (e.getSource() == checkmarkSearch) {
 			// logging.debug(this, "actionPerformed on checkmarkSearch,
-			// targetModel.isFiltered " + targetModel.isFiltered());
+			
 
 			// if (checkmarkSearch.isSelected())
 			fieldSearch.setText("");

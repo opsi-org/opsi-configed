@@ -33,8 +33,8 @@ public class BackendMySQL {
 
 		alle_hosts = getListFromSQL("SELECT hostId FROM HOST;");
 
-		// logging.info(this, "\n\n\n\n\n\n\n\n\n");
-		// for(int i=0; i<hwConfig.size(); i++) {
+		
+		 i++) {
 		////
 		/*
 		 * for(int j=0; j<((List)((HashMap)hwConfig.get(i)).get("Values")).size(); j++)
@@ -75,7 +75,7 @@ public class BackendMySQL {
 		 * 
 		 * //
 		 */
-		// logging.info(this, hwConfig.get(i));
+		
 		// }
 	}
 
@@ -115,7 +115,7 @@ public class BackendMySQL {
 
 		for (int i = 0; i < children.length(); i++) {
 			List<String> list_i = getListFromJSONObject((JSONObject) children.get(i));
-			// logging.info(this, "OR " + i + children.toString());
+			
 
 			result = union(result, list_i);
 
@@ -337,8 +337,8 @@ public class BackendMySQL {
 		 * );
 		 */
 
-		// for(int i=0; i<result.size(); i++) {
-		// arrayList.add(result.get(i).get(0));
+		 i++) {
+		
 		// }
 
 		return list;
@@ -403,7 +403,7 @@ public class BackendMySQL {
 		return abfrage;
 	}
 
-	// private MySQL mySQL = new MySQL();
+	
 
 	/*
 	 * Der Teil hier wird eigentlich nur für das Testen mit der lokalen
@@ -420,7 +420,7 @@ public class BackendMySQL {
 	 * String drivers = props.getProperty("jdbc.drivers");
 	 * 
 	 * //if(drivers != null)
-	 * //System.setProperty("jdbc.drivers", idbc.drivers);
+	 * 
 	 * 
 	 * 
 	 * System.setProperty("jdbc.drivers", "com.mysql.idbc.Driver");
@@ -456,7 +456,7 @@ public class BackendMySQL {
 	 * ResultSet result = stat.executeQuery(abfrage);
 	 * 
 	 * 
-	 * //int columnNumber = result.getMetaData().getColumnCount();
+	 * 
 	 * 
 	 * while(result.next())
 	 * arrayList.add(result.getString(1));

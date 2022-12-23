@@ -53,13 +53,13 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 
 			((JLabel) jc).setToolTipText(tooltipText);
 
-			// logging.info(this, "row " + row + " currentRow " + currentRow);
+			
 			// logging.debug("row " + row + " col " + column + " tooltip " +
-			// jc.getToolTipText());
+			
 
 			if (row == currentRow) {
-				// jc.setFont( jc.getFont().deriveFont(Font.ITALIC) );
-				// logging.info(this, "row " + row + " emphasized ");
+				
+				
 			}
 		}
 

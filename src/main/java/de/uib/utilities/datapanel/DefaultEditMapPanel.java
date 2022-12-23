@@ -105,17 +105,17 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 		mapTableModel.setMap(visualdata);
 		mapTableModel.fireTableDataChanged();
 
-		// logging.info(this, " setEditableMap: visualdata " + visualdata);
-		// logging.info(this, " setEditableMap: optionsMap " + optionsMap);
+		
+		
 
 		// from mapTableModel, we get back the sorted vector of property names:
 		names = mapTableModel.getKeys();
 
-		// logging.debug(this, " +++++++ visualdata " + visualdata);
-		// logging.debugMap(this, visualdata);
-		// logging.debug(this, " +++++++ optionsMap " + optionsMap);
-		// logging.debugMap(this, optionsMap);
-		// logging.debug(this, " +++++++ descriptionsMap started " + descriptionsMap);
+		
+		
+		
+		
+		
 
 		if (optionsMap == null) {
 			this.optionsMap = new HashMap<>();
@@ -132,7 +132,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 
 			if (optionsMap != null) {
 				for (String key : optionsMap.keySet()) {
-					// logging.debug(this, "optionsMap.get(key) is " + optionsMap.get(key));
+					
 					String description = optionsMap.get(key).getDescription();
 					Object defaultvalue = optionsMap.get(key).getDefaultValues();
 
@@ -162,8 +162,8 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 
 		cancelOldCellEditing();
 
-		// setNew();
-		// mapTableModel.fireTableDataChanged();
+		
+		
 	}
 
 	@Override
@@ -175,14 +175,14 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 		if (theCellEditor != null) // && data != null)
 		{
 			theCellEditor.cancelCellEditing(); // don't shift the old editing state to a new product
-			// theCellEditor.stopCellEditing(); //here we get null value errors since the
+			 //here we get null value errors since the
 			// state "hangs"
 		}
 
 	}
 
 	public void setValues(Map data) {
-		// logging.debug(this, "setData: " + data);
+		
 		if (data == null)
 			return;
 
@@ -202,7 +202,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 	public void setVoid() {
 		for (Object key : names) {
 			mapTableModel.removeEntryFromStoredMaps((String) key);
-			// mapTableModel.removeEntry((String) key);
+			
 		}
 
 		mapTableModel.unsetWrite();

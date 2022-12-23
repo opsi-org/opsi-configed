@@ -34,12 +34,12 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		setProportionOfTotalWidth(0.5);
 
 		setForeground(Globals.blue);
-		// setFont(Globals.defaultFont);
+		
 
 		textPanes = new LogPane[idents.length];
 
 		// logging.debug ( " ------------------------------ idents.length " +
-		// idents.length);
+		
 
 		for (int i = 0; i < idents.length; i++) {
 			final String ident = idents[i];
@@ -60,7 +60,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 					String pathname = openFile(filename + ".log");
 					if (pathname != null && !pathname.equals(""))
 						saveToFile(pathname, lines);
-					// showLogfile.setTitle(fn);
+					
 				}
 
 				@Override
@@ -197,10 +197,10 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		if (chooser == null) {
 			chooser = new JFileChooser(fn);
 			chooser.setPreferredSize(Globals.filechooserSize);
-			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY); // AND_DIRECTORIES);
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY); 
 			chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z",
 					"log", "zip", "gz", "7z"));
-			// chooser.setFileHidingEnabled(false);
+			
 			chooser.setApproveButtonText("O.K.");
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 			chooser.setDialogTitle(
@@ -226,7 +226,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 				chooserDirectory = chooser.getCurrentDirectory();
 			} else {
 				logging.error("Not a valid filename: " + fileName);
-				// showDialog("Not a valid filename: \n" + fileName);
+				
 			}
 		}
 
@@ -244,7 +244,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		while (i < lines.length) {
 			try {
 				fWriter.write(lines[i] + "\n");
-				// setTitle(Globals.APPNAME + " : " + fn);
+				
 			} catch (IOException ex) {
 				logging.error("Error writing file: " + fn + "\n --- " + ex);
 			}

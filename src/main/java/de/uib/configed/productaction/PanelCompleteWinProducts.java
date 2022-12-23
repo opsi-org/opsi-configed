@@ -128,7 +128,7 @@ public class PanelCompleteWinProducts extends JPanel
 
 		defineLayout();
 
-		// evaluateWinProducts();
+		
 
 		persist.registerDataRefreshedObserver(this);
 
@@ -168,7 +168,7 @@ public class PanelCompleteWinProducts extends JPanel
 		chooserFolder.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserFolder);
-		// chooserFolder.setControlButtonsAreShown(false);
+		
 
 		chooserFolder.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooserFolder.setDialogTitle(Globals.APPNAME + " " + configed.getResourceValue("CompleteWinProducts.chooser"));
@@ -196,7 +196,7 @@ public class PanelCompleteWinProducts extends JPanel
 			produceTarget();
 		});
 
-		// logging.debug(this, "defineChoosers, depots: " + persist.getWinProducts());
+		
 
 	}
 
@@ -261,14 +261,14 @@ public class PanelCompleteWinProducts extends JPanel
 
 	private void initComponents() {
 
-		// fieldServerPath = new JTextField("");
+		
 
 		final JPanel panel = this;
 
 		fieldProductKey = new JTextField("");
 		fieldProductKey.setPreferredSize(Globals.textfieldDimension);
 
-		// fieldTargetPath.setForeground(Globals.greyed);
+		
 
 		buttonCallSelectFolderWinPE = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectFolderWinPE.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
@@ -325,7 +325,7 @@ public class PanelCompleteWinProducts extends JPanel
 								+ fieldProductKey.getText() + ", " + comboChooseWinProduct.getSelectedItem());
 
 				final Color saveColor = buttonCallExecute.getBackground();
-				// final Icon saveIcon = buttonCallExecute.getIcon();
+				
 				buttonCallExecute.setBackground(Globals.failedBackColor);
 
 				execute();
@@ -394,7 +394,7 @@ public class PanelCompleteWinProducts extends JPanel
 			depots.add((String) comboChooseDepot.getSelectedItem());
 
 			// logging.info(this, "setCommonProductPropertyValue " + depots + ", " +
-			// winProduct + ", " + values);
+			
 
 			if (!oldProductKey.equals(productKey)) {
 

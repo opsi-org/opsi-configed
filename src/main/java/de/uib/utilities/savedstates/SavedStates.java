@@ -50,7 +50,7 @@ public class SavedStates extends PropertiesStore {
 		// we memorize it locally in order to signal if the config has changed
 		saveLocalbootproductFilter = new SessionSaveSet();
 		saveNetbootproductFilter = new SessionSaveSet();
-		// saveLocalbootproductSelection = new SessionSaveSet();
+		
 		saveServerConfigs = new HashMap<>();
 
 	}

@@ -63,7 +63,7 @@ public class SavedSearches extends HashMap<String, SavedSearch> {
 
 				String remainder = rcPartOfKey.substring(i + 1);
 
-				// logging.debug(this, "checkIn, remainder " + remainder);
+				
 
 				i = nextPartAt(remainder);
 

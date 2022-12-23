@@ -47,7 +47,7 @@ public class SavedSearchesDialog extends FEditList {
 
 	public void start() {
 		buttonAdd.setEnabled(true);
-		// reloadAction();
+		
 		resetModel();
 	}
 
@@ -60,7 +60,7 @@ public class SavedSearchesDialog extends FEditList {
 				.setToolTipText(de.uib.configed.configed.getResourceValue("SavedSearchesDialog.ExecuteButtonTooltip"));
 		buttonCommit.setIcon(Globals.createImageIcon("images/executing_command_red_22.png", ""));
 		buttonCommit.setSelectedIcon(Globals.createImageIcon("images/executing_command_red_22.png", ""));// ("images/execute_over.png",
-																											// ""));
+																											
 		buttonCommit.setDisabledIcon(Globals.createImageIcon("images/execute_disabled.png", ""));
 		buttonCommit.setPreferredSize(new java.awt.Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 
@@ -93,7 +93,7 @@ public class SavedSearchesDialog extends FEditList {
 		});
 
 		JMenuItem reload = new JMenuItemFormatted();
-		// reload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)); does not
+		 does not
 		// find itscontext
 		reload.setText(configed.getResourceValue("ConfigedMain.reloadTable"));
 		reload.setIcon(Globals.createImageIcon("images/reload16.png", ""));
@@ -108,11 +108,11 @@ public class SavedSearchesDialog extends FEditList {
 		popup.add(reload);
 
 		JMenuItem remove = new JMenuItemFormatted();
-		// remove.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)); does not
+		 does not
 		// find itscontext
 		remove.setText(de.uib.configed.configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
 		// remove.setIcon(Globals.createImageIcon("images/remove16.png",
-		// ""));
+		
 		remove.setFont(Globals.defaultFont);
 		remove.addActionListener(actionEvent -> {
 			logging.debug(this, "------------- remove action");
@@ -164,7 +164,7 @@ public class SavedSearchesDialog extends FEditList {
 	@Override
 	protected void commit() {
 		result = null;
-		// logging.info(this, " SavedSearchesDialog.commit");
+		
 
 		buttonCommit.setEnabled(false);
 		buttonCancel.setEnabled(false);
@@ -178,7 +178,7 @@ public class SavedSearchesDialog extends FEditList {
 				manager.loadSearch(selected.get(0));
 
 				// test:
-				// manager.setSearch(de.uib.opsidatamodel.SavedSearches.SEARCHfailedByTimeTestS);
+				
 				result = manager.selectClients();
 			}
 			super.commit();
@@ -192,7 +192,7 @@ public class SavedSearchesDialog extends FEditList {
 	@Override
 	protected void cancel() {
 		result = null;
-		// resetModel();
+		
 		super.cancel();
 	}
 
@@ -202,7 +202,7 @@ public class SavedSearchesDialog extends FEditList {
 
 		if (index == -1)
 			return;
-		// logging.debug( this, "we have list size " + model.getSize());
+		
 		logging.debug(this, "remove entry at " + index);
 
 		removeSavedSearch((String) model.get(index));
@@ -256,7 +256,7 @@ public class SavedSearchesDialog extends FEditList {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// logging.info(this, "mouseClicked " + e);
+		
 		if (e.getClickCount() > 1) {
 			commit();
 		}

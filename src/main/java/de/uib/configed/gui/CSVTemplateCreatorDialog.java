@@ -411,7 +411,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 					checkbox.setBorderPainted(true);
 					checkbox.setBorder(noFocusBorder);
 					// checkbox.setBorder(isSelected ?
-					// UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder);
+					
 					return checkbox;
 				}
 			}

@@ -34,14 +34,14 @@ public class SimpleTreeModel extends DefaultTreeModel
 
 	public SimpleTreeModel(java.util.Set<String> dottedKeys, Map<String, String> tooltips) {
 		super(new SimpleIconNode(""));
-		// setRootLabel(" (selected client/s)");
+		
 		logging.debug(this, "SimpleTreeModel created for " + dottedKeys);
 		setAsksAllowsChildren(true);
 
 		ROOT = (SimpleIconNode) getRoot();
 		// ROOT.setIcon(Globals.createImageIcon("images/system-config.png","open
-		// table"));
-		// logging.info(this, "tooltips " + tooltips);
+		
+		
 		this.tooltips = tooltips;
 		generateFrom(dottedKeys);
 	}
@@ -62,11 +62,11 @@ public class SimpleTreeModel extends DefaultTreeModel
 	protected void generateFrom(java.util.Set<String> dottedKeys) {
 		allPathes = new TreeSet<>();
 		path2Node = new TreeMap<>();
-		// path2DottedString = new TreeMap<>();
+		
 
 		if (dottedKeys != null) {
 			for (String key : dottedKeys) {
-				// logging.debug(this, "generateFrom key ------- " + key);
+				
 				String remainder = key;
 
 				int j = -1;
@@ -77,21 +77,21 @@ public class SimpleTreeModel extends DefaultTreeModel
 					String componentKey = key.substring(j + 1, k);
 					path.add(componentKey);
 					allPathes.add(new SimpleTreePath(path));
-					// logging.debug(this, "add " + path);
+					
 
 					remainder = key.substring(k + 1);
 
-					// logging.debug(this, "generateFrom partial " + partialKey);
-					// logging.debug(this, "generateFrom remainder " + remainder);
+					
+					
 
-					// path2DottedString.put(path, partialKey);
+					
 
 					j = k;
 					k = j + 1 + remainder.indexOf('.');
 				}
 				path.add(remainder);
 				allPathes.add(path);
-				// logging.debug(this, "add " + path);
+				
 
 			}
 		}
@@ -152,12 +152,12 @@ public class SimpleTreeModel extends DefaultTreeModel
 		 */
 
 		XTree tree = new XTree(this);
-		// tree.putClientProperty("JTree.lineStyle", "Horizontal");
+		
 
 		tree.setCellRenderer(new SimpleIconNodeRenderer());
 
 		tree.expandAll();
-		// tree.setRootVisible(false);
+		
 
 		JFrame frame = new JFrame();
 		frame.getContentPane().add(tree);

@@ -175,7 +175,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				String path_modules = filechooser_local.getSelectedFile().getPath();
 				tf_local_path.setText(path_modules);
-				// command.setTargetFilename(filechooser_local.getSelectedFile().getName());
+				
 				command.setFullSourcePath(path_modules);
 				tf_local_path.setCaretPosition(path_modules.length());
 			} else {
@@ -203,23 +203,23 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		init_additional();
 		/*
 		 * init_additional in ModulesUploadDialog do something like
-		 * //lbl_copy_to_modules_d = new JLabel();
+		 * 
 		 * //lbl_copy_to_modules_d.setText(configed.getResourceValue(
 		 * "SSHConnection.ParameterDialog.fileupload.lbl_copy_to_modules_d"));
 		 * 
-		 * //cb_copy_to_modules_d = new JCheckBox();
-		 * //cb_copy_to_modules_d.setSelected(true);
+		 * 
+		 * 
 		 * if (result.trim().equals(factory.str_file_exists))
 		 * {
 		 * lbl_copy_to_modules_d.setVisible(true);
-		 * //cb_copy_to_modules_d.setVisible(true);
-		 * //cb_copy_to_modules_d.setSelected(true);
+		 * 
+		 * 
 		 * }
 		 * else
 		 * {
 		 * lbl_copy_to_modules_d.setVisible(false);
-		 * //cb_copy_to_modules_d.setVisible(false);
-		 * //cb_copy_to_modules_d.setSelected(false);
+		 * 
+		 * 
 		 * }
 		 */
 	}

@@ -15,8 +15,8 @@ public class ImagePanel extends JPanel {
 
 	public ImagePanel(Image image) {
 		this.image = image;
-		// image = Globals.createImage("images/waitingcircle.gif");
-		// Toolkit.getDefaultToolkit().createImage("e:/java/spin.gif");
+		
+		
 	}
 
 	@Override

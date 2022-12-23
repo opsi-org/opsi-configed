@@ -52,7 +52,7 @@ public class SWAuditEntry extends TableEntry
 		KEYS.add("subversion");
 		KEYS.add(ARCHITECTURE);
 		KEYS.add(LANGUAGE);
-		// KEYS.add(LICENCEkEY);
+		
 		KEYS.add(WINDOWSsOFTWAREid);
 	}
 
@@ -65,7 +65,7 @@ public class SWAuditEntry extends TableEntry
 		KEYS_FOR_GUI_TABLES.add(SUBVERSION);
 		KEYS_FOR_GUI_TABLES.add(ARCHITECTURE);
 		KEYS_FOR_GUI_TABLES.add(LANGUAGE);
-		// KEYS_FOR_GUI_TABLES.add(LICENCEkEY);
+		
 		KEYS_FOR_GUI_TABLES.add(WINDOWSsOFTWAREid);
 	}
 
@@ -95,23 +95,23 @@ public class SWAuditEntry extends TableEntry
 		key2serverKey.put(SUBVERSION, "subVersion");
 		key2serverKey.put(ARCHITECTURE, "architecture");
 		key2serverKey.put(LANGUAGE, "language");
-		// key2serverKey.put(LICENCEkEY, "licensekey");
+		
 		key2serverKey.put(WINDOWSsOFTWAREid, "windowsSoftwareId");
 	}
 
 	protected static Map<String, String> locale = new StringIdentityMap(KEYS);
 
 	public static void setLocale() {
-		// locale = new HashMap<>();
+		
 		locale.put(id, "ID");
 		locale.put(NAME, configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
 		locale.put(VERSION, configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
 		// locale.put(subversion,
-		// configed.getResourceValue("PanelSWInfo.tableheader_displaySubVersion"));
+		
 		locale.put(ARCHITECTURE, configed.getResourceValue("PanelSWInfo.tableheader_architecture"));
 		locale.put(LANGUAGE, configed.getResourceValue("PanelSWInfo.tableheader_displayLanguage"));
 		// locale.put(LICENCEkEY,
-		// configed.getResourceValue("PanelSWInfo.tableheader_displayLicenseKey"));
+		
 		locale.put(WINDOWSsOFTWAREid, configed.getResourceValue("PanelSWInfo.tableheader_softwareId"));
 	}
 
@@ -121,7 +121,7 @@ public class SWAuditEntry extends TableEntry
 
 	@Override
 	public String put(String key, String value) {
-		// logging.info(this, "put key, value " + key + ", " + value);
+		
 		return super.put(key, value);
 
 		/*
@@ -157,22 +157,22 @@ public class SWAuditEntry extends TableEntry
 	public SWAuditEntry(Map<String, Object> entry) {
 		super(entry);
 
-		// logging.info(this, "got " + entry);
+		
 		remap(NAME, key2serverKey.get(NAME));
 		remap(VERSION, key2serverKey.get(VERSION));
-		// remap("subversion", "subVersion");
+		
 		remap(ARCHITECTURE, key2serverKey.get(ARCHITECTURE));
 		remap(LANGUAGE, key2serverKey.get(LANGUAGE));
-		// remap(LICENCEkEY);
+		
 		remap(WINDOWSsOFTWAREid, "windowsSoftwareId");
-		// remap("ID", "ident", false);
+		
 		// null value for key "ID" will be handled below; or, we dont assume that there
 		// is a key "ident"
 
 		String subversion // not included in key-values
 				= entryRetrieved.get(key2serverKey.get(SUBVERSION));
 
-		// logging.info(this, "subversion " + subversion);
+		
 
 		if (subversion == null)
 			subversion = "";
@@ -191,13 +191,13 @@ public class SWAuditEntry extends TableEntry
 		if (entry.get("lastseen") != null)
 			lastseen = entry.get("lastseen").toString();
 
-		// logging.info(this, "produced " + this + " ID >> " + get("ID"));
-		// logging.info(this, "produced " + this + " ident " + ident);
+		
+		
 		// if (get("ID") == null)
 		put(id, ident);
 
-		// logging.info(this, "produced " + this + " getIdent " + getIdent() );
-		// logging.info(this, "produced " + this + " ID >> " + get("ID"));
+		
+		
 
 		/*
 		 * if (get("name").equals("Microsoft Office Office 64-bit Components 2010"))

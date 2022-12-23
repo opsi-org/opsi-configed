@@ -59,7 +59,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	private JPanel centerPanel = new JPanel();
 	private JPanel commandlistPanel = new JPanel();
 	private JPanel parameterPanel;
-	// private JPanel parameterHelpPanel = new JPanel();
+	
 	/** command control panel Layout instance **/
 	private GroupLayout controlPanelLayout;
 	/** command - commands control panel Layout instance **/
@@ -165,10 +165,10 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		// {
 		// centerPanelLayout.setHorizontalGroup( centerPanelLayout.createParallelGroup()
 		// .addComponent(commandlistPanel)
-		// );
+		
 		// centerPanelLayout.setVerticalGroup( centerPanelLayout.createSequentialGroup()
 		// .addComponent(commandlistPanel)
-		// );
+		
 		// }
 		parameterPanel.setVisible(true);
 	}
@@ -212,7 +212,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			cb_menuText = new JComboBox<>();
 			lbl_tooltipText = new JLabel();
 			lbl_priority = new JLabel();
-			// btn_save = new JButton();
+			
 			tf_priority = new JTextField(new CheckedDocument(/* allowedChars */
 					new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-' }, 5),
 					String.valueOf(factory.position_default), 1);
@@ -223,7 +223,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			// de.uib.configed.configed.getResourceValue("SSHConnection.CommandControl.btnShowActionHelp")
 			// ,
 			// "images/help.gif", "images/help.gif", "images/help.gif",true
-			// );
+			
 			btn_test_command = new de.uib.configed.gui.IconButton(
 					de.uib.configed.configed.getResourceValue("SSHConnection.CommandControl.btnTestCommand"),
 					"images/executing_command_red_22.png", "images/executing_command_red_22.png",
@@ -238,7 +238,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 					"images/cancel-32.png", "images/cancel_over-32.png", " ", true);
 		}
 		{
-			// btn_save.setText(configed.getResourceValue("SSHConnection.buttonSave"));
+			
 			lbl_menuText.setText(configed.getResourceValue("SSHConnection.CommandControl.menuText"));
 			lbl_parentMenuText.setText(configed.getResourceValue("SSHConnection.CommandControl.parentMenuText"));
 			lbl_tooltipText.setText(configed.getResourceValue("SSHConnection.CommandControl.tooltipText"));
@@ -272,7 +272,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			cb_needSudo.setPreferredSize(btn_dim);
 			tp_commands.setPreferredSize(tf_dim_long);
 			// btn_changeHelpPanelStatus.setPreferredSize(new
-			// Dimension(Globals.graphicButtonWidth + 15 ,Globals.buttonHeight));
+			
 			btn_test_command.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
 			btn_del.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
 
@@ -355,9 +355,9 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			// {
 			// public void actionPerformed(ActionEvent e)
 			// {
-			// showPanel();
+			
 			// }
-			// });
+			
 			showPanel();
 			if (!(Globals.isGlobalReadOnly()))
 				btn_test_command.addActionListener(actionEvent -> doActionTestCommand());
@@ -415,7 +415,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		cb_parentMenuText.setEnabled(value);
 		cb_parentMenuText.setEditable(value);
 
-		// cb_menuText.setEnabled(value);
+		
 
 		tf_tooltipText.setEnabled(value);
 		tf_tooltipText.setEditable(value);
@@ -660,7 +660,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		new Thread() {
 			@Override
 			public void run() {
-				new SSHConnectExec(cmain, command); // .starting(command);
+				new SSHConnectExec(cmain, command); 
 			}
 		}.start();
 
@@ -730,10 +730,10 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		}
 		// else
 		// {
-		// setCenterLayout();
+		
 		// centerPanel.setSize(centerPanel.getWidth(),
-		// centerPanel.getHeight()-parameterPanel.getHeight());
-		// this.setSize(this.getWidth(), this.getHeight()-parameterPanel.getHeight());
+		
+		
 		// }
 		// helpPanelStatus = !helpPanelStatus;
 		repaint();

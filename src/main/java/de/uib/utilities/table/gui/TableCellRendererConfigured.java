@@ -42,7 +42,7 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 		 * jc.setToolTipText("");
 		 * }
 		 */
-		// CellColorizer.colorize(result, value.toString());
+		
 
 		if (f != null)
 			result.setFont(f);

@@ -118,14 +118,14 @@ public class UserConfig {
 	}
 
 	public static LinkedHashSet<String> getUserListKeys() {
-		// logging.info("getUserListKeys " + USER_LIST_KEYS);
+		
 		if (USER_LIST_KEYS == null) {
 			USER_LIST_KEYS = new LinkedHashSet<>();
 
 			USER_LIST_KEYS.addAll(UserSshConfig.LIST_KEYS);
 			USER_LIST_KEYS.addAll(UserOpsipermission.LIST_KEYS);
 		}
-		// logging.info("getUserListKeys " + USER_LIST_KEYS);
+		
 
 		return USER_LIST_KEYS;
 	}

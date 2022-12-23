@@ -34,11 +34,11 @@ public class UserConfigModule {
 
 		if (prototype != null) {
 			booleanMap.putAll(prototype.booleanMap);
-			// bool_keys = (LinkedHashSet<String>) booleanMap.keySet();
+			
 			extractKeys(prototype.booleanMap, bool_keys);
 
 			valuesMap.putAll(prototype.valuesMap);
-			// list_keys = (LinkedHashSet<String>) valuesMap.keySet();
+			
 			extractKeys(prototype.valuesMap, list_keys);
 		}
 
@@ -83,7 +83,7 @@ public class UserConfigModule {
 
 	public void setBooleanValue(String key, Boolean val) {
 		// if ( !bool_keys.contains( key ) )
-		// logging.error("UserConfigModule : illegal key " + key);
+		
 		logging.info(this, "for user " + username + " setBooleanValue " + key + " : " + val);
 		booleanMap.put(key, val);
 

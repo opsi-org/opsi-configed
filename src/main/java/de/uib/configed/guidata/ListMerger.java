@@ -19,7 +19,7 @@ public class ListMerger extends ArrayList {
 	static {
 		NO_COMMON_VALUE.setHavingNoCommonValue();
 	}
-	// static{ NO_COMMON_VALUE.add("NO COMMON VALUE"); } // setting a String
+	 } // setting a String
 	// prevents correct recognition
 
 	// building the merger:
@@ -37,7 +37,7 @@ public class ListMerger extends ArrayList {
 	}
 
 	private boolean equals(List list1, List list2) {
-		// logging.debug(this, "equals list1, list2: " + list1 + ", " + list2);
+		
 		if (list1 == null && list2 == null)
 			return true;
 
@@ -60,7 +60,7 @@ public class ListMerger extends ArrayList {
 				havingCommonValue = false;
 
 				// logging.debug(this, "merge first list " + listToMergeIn + " to " + listValue
-				// + " havingCommonValue " + havingCommonValue);
+				
 
 				listValue = NO_COMMON_VALUE;
 			}

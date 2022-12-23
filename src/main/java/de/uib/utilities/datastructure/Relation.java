@@ -96,9 +96,9 @@ public class Relation extends ArrayList<StringValuedRelationElement> {
 			valueList.add(element);
 
 			// logging.info(this, " getFunctionBy " + attribute + ": for key " +
-			// valueTakenAsKey + " composed valueList " +valueList);
+			
 
-			// logging.info(this, " getFunctionBy " + attribute + ": " + function);
+			
 		}
 
 		return function;

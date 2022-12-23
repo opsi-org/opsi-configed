@@ -39,7 +39,7 @@ public class DynamicCombo extends javax.swing.JPanel {
 		tablemodel = new javax.swing.table.DefaultTableModel(new String[] { "column 0" }, 0);
 
 		tablemodel.addRow(new String[] { "" });
-		// tablemodel.addRow (new String[] {""});
+		
 
 		table.setModel(tablemodel);
 		table.setSelectionBackground(Globals.backgroundWhite);
@@ -50,21 +50,21 @@ public class DynamicCombo extends javax.swing.JPanel {
 		col.setHeaderRenderer(null);
 
 		combo = new javax.swing.JComboBox();
-		// org.jdesktop.swingx.autocomplete.AutoCompleteDecorator.decorate(combo);
-		// combo.setRenderer ();
+		
+		
 		combo.setBorder(null);
 
 		combo.addPopupMenuListener(new PopupMenuListener() {
 			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {
 				// logging.debug(this, "popupMenuCanceled, value>>" + combo.getSelectedItem() +
-				// "<<");
+				
 			}
 
 			@Override
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 				// logging.debug(this, "popupMenuWillBecomeInvisible , value>>" +
-				// combo.getSelectedItem() + "<<");
+				
 				combo.setSelectedItem(combo.getSelectedItem());
 				// ensures that we leave the combo box completely when we set the focus
 				// somewhere else
@@ -73,7 +73,7 @@ public class DynamicCombo extends javax.swing.JPanel {
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				// logging.debug(this, "popupMenuWillBecomeVisible, value>>" +
-				// combo.getSelectedItem() + "<<");
+				
 			}
 		});
 

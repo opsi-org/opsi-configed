@@ -54,8 +54,8 @@ public class OpsiHwAuditDeviceClass {
 
 		deviceHostProperties = new ArrayList<>();
 		deviceHwItemProperties = new ArrayList<>();
-		// hostPossibleColumns = new List<Object>();
-		// hwItemPossibleColumns = new List<Object>();
+		
+		
 	}
 
 	/*
@@ -154,12 +154,12 @@ public class OpsiHwAuditDeviceClass {
 
 	public void addHostRelatedProperty(OpsiHwAuditDevicePropertyType devProperty) {
 		deviceHostProperties.add(devProperty);
-		// hostPossibleColumns.add( devProperty.getOpsiDbColumnName() );
+		
 	}
 
 	public void addHwItemRelatedProperty(OpsiHwAuditDevicePropertyType deviceProperty) {
 		deviceHwItemProperties.add(deviceProperty);
-		// hwItemPossibleColumns.add( devProperty.getOpsiDbColumnName() );
+		
 	}
 
 	/*

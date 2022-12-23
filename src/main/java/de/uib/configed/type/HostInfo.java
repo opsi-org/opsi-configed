@@ -127,7 +127,7 @@ public class HostInfo {
 	// https://support.microsoft.com/en-us/kb/909264
 	{
 
-		// logging.debug("checkADNamingConvention");
+		
 		boolean result = true;
 		String hintMessage = null;
 
@@ -162,7 +162,7 @@ public class HostInfo {
 			}
 		}
 
-		// logging.debug( hintMessage );
+		
 
 		return hintMessage;
 
@@ -220,7 +220,7 @@ public class HostInfo {
 		unordered.put(depotOfClient_DISPLAY_FIELD_LABEL, depotOfClient);
 		unordered.put(clientConnectedKEY, clientConnected);
 
-		// unordered.put( clientShutdownInstallKEY, clientShutdownInstall );
+		
 
 		logging.debug(this, "getMap clientName " + clientName + " : " + unordered);
 
@@ -257,7 +257,7 @@ public class HostInfo {
 		unordered.put(clientConnectedKEY, clientConnected);
 		unordered.put(clientShutdownInstallKEY, clientShutdownInstall);
 
-		// unordered.put( clientShutdownInstallKEY, clientShutdownInstall );
+		
 
 		logging.debug(this, "getMap clientName " + clientName);
 
@@ -416,11 +416,11 @@ public class HostInfo {
 	}
 
 	public void setBy(Map<String, Object> pcInfo) {
-		// logging.info(this, "produceFrom " + pcInfo);
+		
 		// shows pckey
 
-		// Map pcInfos = persist.getMapOfPCInfoMaps();
-		// Map pcInfo = (Map) pcInfos.get(selectedClients[0]);
+		
+		
 
 		if (pcInfo == null) {
 			initialize();
@@ -512,8 +512,8 @@ public class HostInfo {
 	 * 
 	 * logging.info(this, "getInfo " + pcInfo);
 	 * 
-	 * //Map pcInfos = persist.getMapOfPCInfoMaps();
-	 * //Map pcInfo = (Map) pcInfos.get(selectedClients[0]);
+	 * 
+	 * 
 	 * 
 	 * if (pcInfo == null)
 	 * {
@@ -807,29 +807,29 @@ public class HostInfo {
 		// shutdownInstall = "on";
 		// boolShutdownInstall = true;
 		// }
-		// // System.out.print("");logging.debug("");logging.debug("");
+		
 		// // logging.debug("HostInfo showAndSave shutdownInstall " +
-		// shutdownInstall);
-		// // logging.debug("");logging.debug("");logging.debug("");
+		
+		
 
 		// String product = "opsi-client-agent";
 		// persist.setCommonProductPropertyValue( new HashSet<>(Arrays.asList(client)),
-		// product, "on_shutdown_install" , Arrays.asList(shutdownInstall) );
+		
 		// // Set<String> clientNames, String productName, String propertyName,
 		// List<String> values
-		// Map<String, String> productValues = new HashMap<>();
-		// productValues.put("actionRequest", "setup");
+		
+		
 
 		// persist.updateProductOnClient(
 		// client,
 		// product,
 		// OpsiPackage.TYPE_LOCALBOOT,
 		// productValues
-		// );
+		
 
-		// persist.updateProductOnClients();
+		
 		// persist.getHostInfoCollections().updateLocalHostInfo(client,
-		// clientShutdownInstallKEY, boolShutdownInstall);
+		
 		// }
 	}
 

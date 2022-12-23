@@ -39,9 +39,9 @@ public abstract class Backend {
 
 		List<String> matchingClients = new LinkedList<>();
 		for (Client client : clients) {
-			// logging.debug( this, "Checking client " +client.getId()+"..." );
+			
 			if (operation.doesMatch(client)) {
-				// logging.debug( this, "Client did match!" );
+				
 				matchingClients.add(client.getId());
 			}
 		}

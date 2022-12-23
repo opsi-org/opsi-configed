@@ -65,7 +65,7 @@ public class FShowList extends FTextArea {
 	@Override
 	public void setFont(Font f) {
 		if (jTextArea1 == null) {
-			// logging.debug (" set Font called too early ");
+			
 		} else {
 			jTextArea1.setFont(f);
 		}
@@ -84,7 +84,7 @@ public class FShowList extends FTextArea {
 		jTextArea1.setLineWrap(true);
 		jTextArea1.setWrapStyleWord(true);
 		jTextArea1.setOpaque(true);
-		// jTextArea1.setBackground(myHintYellow);
+		
 		jTextArea1.setBackground(Globals.backgroundWhite);
 		jTextArea1.setText("          ");
 		jTextArea1.setEditable(false);
@@ -100,7 +100,7 @@ public class FShowList extends FTextArea {
 
 	@Override
 	public void doAction1() {
-		// logging.debug ("action2");
+		
 		logging.clearErrorList();
 		if (owner != null)
 			owner.toFront();
@@ -109,8 +109,8 @@ public class FShowList extends FTextArea {
 
 	@Override
 	public void doAction2() {
-		// logging.debug ("action2");
-		// logging. clearErrorList();
+		
+		
 		super.doAction2();
 	}
 
@@ -119,7 +119,7 @@ public class FShowList extends FTextArea {
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
-			// logging.debug ("shift released");
+			
 		}
 
 		if (e.getKeyCode() == KeyEvent.VK_TAB && !shiftPressed) {

@@ -70,9 +70,9 @@ public class MapSource implements TableSource
 
 	protected void fetchData() {
 		rows.clear();
-		// logging.debug(this, "MapSource fetchData() : " + table);
+		
 
-		// logging.info(this, "fetchData , columns " + columnNames);
+		
 		int rowCount = 0;
 
 		for (String key : table.keySet()) {
@@ -80,9 +80,9 @@ public class MapSource implements TableSource
 
 			Map mRow = table.get(key);
 
-			// logging.debug ( " -------- key '" + key + "', mRow = " + mRow );
+			
 
-			// vRow.add(key);
+			
 			// previously we assumed that column 0 hold the key
 
 			for (int i = 0; i < columnNames.size(); i++) {
@@ -93,14 +93,14 @@ public class MapSource implements TableSource
 							+ " val " + ob);
 
 				// logging.debug(this, " getting ob to column " + i + ", " + columnNames.get(i)
-				// + " ob:" + ob);
+				
 
 				if (ob != null) {
 					vRow.add(ob);
 
 					try {
 						// logging.debug( "??? is " + ob + " dyninstance class of " +
-						// classNames.get(i));
+						
 						Class cl = Class.forName(classNames.get(i));
 						if (!dynInstanceOf(ob, cl)) {
 							// Class.forName( classNames.get(i) ) ).isAssignableFrom ( ob.getClass() ) )
@@ -127,12 +127,12 @@ public class MapSource implements TableSource
 						// if (className.equals("java.lang.Integer"))
 						if (columnNames.get(i).equals(ROW_COUNTER_NAME)) {
 							vRow.add("" + rowCount);
-							// vRow.add( rowCount );
+							
 						} else {
 							if (class2defaultValue.get(className) != null) {
 								vRow.add(class2defaultValue.get(className));
 								// logging.info(this, "fetchData row " + mRow + " ob == null, setting default
-								// for " + className );
+								
 							}
 
 							else {
@@ -197,7 +197,7 @@ public class MapSource implements TableSource
 	public void setRowCounting(boolean b) {
 		if (!rowCounting && b) {
 			rowCounting = true;
-			// classNames.add( "java.lang.String" );
+			
 			classNames.add("java.lang.Integer");
 			// has the effect that IntComparatorForStrings is applied
 			columnNames.add(ROW_COUNTER_NAME);

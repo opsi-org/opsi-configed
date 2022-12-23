@@ -104,18 +104,18 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 		timer.stop();
 
 		for (Map<java.lang.String, java.lang.Object> entry : opsiHosts) {
-			// logging.info(this, "HOST_read " + entry);
+			
 			Host.db2ServiceRowMap(entry);
-			// logging.info(this, "HOST_read " + entry);
+			
 		}
 
 		// logging.info(this, "OpsiserviceRawDataPersistenceController opsiHosts " +
-		// opsiHosts);
+		
 
-		// opsiHosts = super.HOST_read(); //test
+		 //test
 
 		// logging.info(this, "OpsiserviceNOMPersistenceController opsiHosts " +
-		// opsiHosts);
+		
 
 		return opsiHosts;
 	}

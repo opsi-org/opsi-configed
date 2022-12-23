@@ -32,7 +32,7 @@ public class UserSshConfig extends UserConfigModule {
 
 	// public static final String KEY_SSH_SHELL_ACTIVE = "ssh.terminal.active";
 	// public static final String KEY_SSH_SHELL_ACTIVE_description =
-	// configed.getResourceValue("PersistenceController.SSH_SHELL_ACTIVE");
+	
 	// = "activates terminal to ssh server";
 	// public static boolean KEY_SSH_SHELL_ACTIVE_defaultvalue = false;
 

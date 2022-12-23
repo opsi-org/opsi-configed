@@ -36,7 +36,7 @@ public class Interpreter {
 
 		while (tok.hasMoreTokens()) {
 			String s = tok.nextToken();
-			// logging.debug(s);
+			
 			if (citMarks.indexOf(s) > -1) {
 				if (partBuff == null) {
 					// start of citation
@@ -46,7 +46,7 @@ public class Interpreter {
 					if (s.equals(lastCitMark))
 					// end of citation
 					{
-						// logging.debug( partBuff.toString() );
+						
 						result.add(partBuff.toString());
 						partBuff = null;
 					} else
@@ -65,14 +65,14 @@ public class Interpreter {
 			if (partBuff == null)
 			// no buff started
 			{
-				// logging.debug(s);
+				
 				result.add(s);
 			} else
 				partBuff.append(s);
 		}
 
 		if (partBuff != null) {
-			// logging.debug("String not closed: " + partBuff);
+			
 			result.add(partBuff.toString());
 		}
 

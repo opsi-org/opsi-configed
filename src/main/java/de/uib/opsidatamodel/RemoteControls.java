@@ -41,7 +41,7 @@ public class RemoteControls extends HashMap<String, RemoteControl> {
 
 				String remainder = rcPartOfKey.substring(i + 1);
 
-				// logging.debug(this, "checkIn, remainder " + remainder);
+				
 
 				i = nextPartAt(remainder);
 

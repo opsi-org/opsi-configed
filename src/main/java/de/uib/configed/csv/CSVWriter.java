@@ -22,7 +22,7 @@ public class CSVWriter {
 	}
 
 	public void insertFormatHint() throws IOException {
-		writer.append(String.format("//- sep=%c -- quote=%c", format.getFieldSeparator(), format.getStringSeparator()));
+		writer.append(String.format("
 		writer.newLine();
 	}
 

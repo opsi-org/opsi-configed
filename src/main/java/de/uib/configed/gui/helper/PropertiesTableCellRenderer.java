@@ -24,7 +24,7 @@ public class PropertiesTableCellRenderer extends ColorTableCellRenderer {
 	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 			boolean isSelected, // is the cell selected
 			boolean hasFocus, int row, int column) {
-		// logging.debug(this, "getTableCellRendererComponent");
+		
 
 		Object sValue = formatList(value);
 		Component result = super.getTableCellRendererComponent(table, sValue, isSelected, hasFocus, row, column);
@@ -36,7 +36,7 @@ public class PropertiesTableCellRenderer extends ColorTableCellRenderer {
 	}
 
 	private Object formatList(Object value) {
-		// logging.debug(this, "formatList " + value);
+		
 		Object result = value;
 		if (value != null) {
 			String s = value.toString();
@@ -44,18 +44,18 @@ public class PropertiesTableCellRenderer extends ColorTableCellRenderer {
 				result = s.substring(1, s.length() - 1);
 			}
 		}
-		// logging.debug(this, "formatList produced " + result);
+		
 
 		return result;
 	}
 
 	protected void merge_colorize(Component comp, Object value) {
-		// logging.debug(this, "merge_colorize value " +value);
-		// logging.debug(this, "class of value " + value.getClass().getName());
+		
+		
 
 		if // ( value instanceof ListMerger && !((ListMerger)value).hasCommonValue() )
 		(value == ListMerger.NO_COMMON_VALUE) {
-			// logging.debug(this," ++++++ take colors for NO_COMMON_VALUE");
+			
 			comp.setBackground(ListMerger.noCommonValueBackcolor);
 			comp.setForeground(ListMerger.noCommonValueTextcolor);
 		}

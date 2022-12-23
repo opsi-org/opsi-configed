@@ -29,7 +29,7 @@ public class CopyrightInfos {
 		infos.add(configed.getResourceValue("CopyrightInfos.thanksTo"));
 		infos.add("");
 		infos.add("commons-io Apache library");
-		infos.add("http://www.apache.org/licenses/");
+		infos.add("http:
 		infos.add("");
 		infos.add("KDE oxygen icon library");
 		infos.add("licensed by a Creative Commons Public License");

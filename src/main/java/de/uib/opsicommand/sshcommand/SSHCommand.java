@@ -14,7 +14,7 @@ public abstract interface SSHCommand {
 
 	public abstract String getSecuredCommand();
 
-	// public abstract boolean hasSecureInfoInCommand();
+	
 	public abstract String getSecureInfoInCommand();
 
 	/** @return raw command String **/
@@ -29,7 +29,7 @@ public abstract interface SSHCommand {
 	/** @return command id String **/
 	public abstract String getId();
 
-	// public abstract String getBasicName();
+	
 	/** @return command menu text String **/
 	public abstract String getMenuText();
 
@@ -50,7 +50,7 @@ public abstract interface SSHCommand {
 	/** @return True if command is a multicommand **/
 	public abstract boolean isMultiCommand();
 
-	// public abstract int getHelpColumns();
+	
 	/** @return the command dialog(parameter) **/
 	public abstract FGeneralDialog getDialog();
 

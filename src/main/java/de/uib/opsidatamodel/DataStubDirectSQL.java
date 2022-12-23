@@ -68,15 +68,15 @@ public class DataStubDirectSQL extends DataStubRawData
 			}
 
 			// logging.info(this, "retrieveSoftwareAuditOnClients for " +
-			// clientListForCall.size() + " clients " + clientListForCall);
+			
 
-			// client2software = new HashMap<>();
+			
 			if (client2software == null)
 				client2software = new HashMap<>();
 
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " softwareConfig ");
-			// , step " + step);
+			
 
 			logging.info(this, "retrieveSoftwareAuditOnClients/ SOFTWARE_CONFIG, start a request");
 
@@ -129,7 +129,7 @@ public class DataStubDirectSQL extends DataStubRawData
 						logging.info("Missing auditSoftware entry for swIdent " + SWAuditClientEntry.DB_COLUMN_NAMES
 								+ "for values"
 								+ SWAuditClientEntry.produceSWident(SWAuditClientEntry.DB_COLUMN_NAMES, row));
-						// item.put(SWAuditEntry.WINDOWSsOFTWAREid, "MISSING");
+						
 					} else {
 						entries.add(clientEntry);
 					}
@@ -154,12 +154,12 @@ public class DataStubDirectSQL extends DataStubRawData
 			}
 
 			// logging.info(this, "retrieveSoftwareAuditOnClients client2software " +
-			// client2software);
+			
 
 			logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
-			// System.gc();
+			
 			// logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " +
-			// Globals.usedMemory());
+			
 			// step++;
 
 			persist.notifyDataRefreshedObservers("softwareConfig");

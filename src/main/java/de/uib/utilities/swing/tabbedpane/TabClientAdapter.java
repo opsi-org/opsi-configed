@@ -8,7 +8,7 @@ public class TabClientAdapter extends JPanel implements TabClient {
 
 	public TabClientAdapter() {
 		super();
-		// logging.debug("-- TabClientAdapter created and made visible ");
+		
 	}
 
 	@Override

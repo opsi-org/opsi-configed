@@ -26,7 +26,7 @@ public class CellAlternatingColorizer {
 		 * }
 		 */
 		// logging.debug("CellAlternating colorize selection, even " + isSelected + ", "
-		// + isEven);
+		
 
 		if (isSelected) {
 			if (isEven)

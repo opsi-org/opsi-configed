@@ -65,7 +65,7 @@ public class ControllerHWinfoColumnConfiguration {
 	public static final String colLinuxQuery = configed.getResourceValue("HWinfoColumnConfiguration.colLinuxQuery");
 	public static final String colWMIQuery = configed.getResourceValue("HWinfoColumnConfiguration.colWMIQuery");
 	// public static final String colTellAgainHardwareClass =
-	// configed.getResourceValue("HWinfoColumnConfiguration.colTellAgainHardwareClass");
+	
 
 	private Map<String, Map<String, Boolean>> updateItems;
 
@@ -172,7 +172,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 				persist.getConfigOptions();
 
-				// super.reload();
+				
 
 				model.reset();
 				setDataChanged(false);
@@ -204,7 +204,7 @@ public class ControllerHWinfoColumnConfiguration {
 		panel.showFilterIcon(true); // supply implementation of SearchTargetModelFromTable.setFiltered
 		panel.setFiltering(true);
 		panel.setDeleteAllowed(false);
-		// panel.getTheTable().setRowSorter(null);
+		
 
 	}
 
@@ -220,20 +220,20 @@ public class ControllerHWinfoColumnConfiguration {
 		columnNames.add(colOpsiColumnName);
 		columnNames.add(colUseInQuery);
 		columnNames.add(colOpsiDbColumnType);
-		// columnNames.add( "UI Name");
-		// columnNames.add( "display type");
-		// columnNames.add( "report function");
-		// columnNames.add( colTellAgainHardwareClass );
+		
+		
+		
+		
 
 		classNames = new Vector<>();
 
-		// classNames.add("java.lang.Integer");
+		
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
 
 		// GenericTableUpdateItemFactory updateItemFactory = new
-		// GenericTableUpdateItemFactory(0);
+		
 
 		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, classNames, keycol);
 
@@ -276,16 +276,16 @@ public class ControllerHWinfoColumnConfiguration {
 
 		// for (String hwClass : hwAuditDeviceClasses.keySet() )
 
-		// updateItemFactory.setSource(model);
+		
 
-		// model.reset();
+		
 		// we got metadata:
 
-		// columnNames = model.getColumnNames();
-		// classNames = model.getClassNames();
+		
+		
 
-		// updateItemFactory.setColumnNames(columnNames);
-		// updateItemFactory.setClassNames(classNames);
+		
+		
 
 		model.setEditableColumns(new int[] {
 				// columnNames.indexOf ( colOpsiColumnName ),
@@ -296,10 +296,10 @@ public class ControllerHWinfoColumnConfiguration {
 				// columnNames.indexOf ( colOpsiColumnName ),
 				columnNames.indexOf(colUseInQuery) });
 
-		// panel.setTitle( "" );//configed.getResourceValue("PanelHWInfo.overview") );
+		
 
 		// Icon iconConfigure =
-		// Globals.createImageIcon("images/config_pro.png", "");
+		
 
 		panel.setTitlePane(
 				new JComponent[] { new JLabel(configed.getResourceValue("HWinfoColumnConfiguration.infoTitle")) }, 20);
@@ -340,7 +340,7 @@ public class ControllerHWinfoColumnConfiguration {
 		panel.setUpdateController(new MapItemsUpdateController(panel, model, new MapBasedUpdater() {
 			@Override
 			public String sendUpdate(Map<String, Object> rowmap) {
-				// panel.sortAgainAsConfigured();
+				
 				// we reset the original sorting because we need information from lines "above"
 
 				logging.info(this, "within MapItemsUpdateController sendUpdate " + rowmap);
@@ -408,7 +408,7 @@ public class ControllerHWinfoColumnConfiguration {
 			// colHostVsItemAssigned line
 			lineMap = new LinkedHashMap<>();
 			lineMap.put(colLineNo, formatLineNo(id));
-			// lineMap.put(colTellAgainHardwareClass, hwClass);
+			
 
 			lineMap.put(colHostVsItemAssigned, valAssignedToHost);
 
@@ -419,7 +419,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 				lineMap = new LinkedHashMap<>();
 				lineMap.put(colLineNo, formatLineNo(id));
-				// lineMap.put(colTellAgainHardwareClass, hwClass);
+				
 
 				ColumnIdent columnIdent = new ColumnIdent(hwClass, OpsiHwAuditDeviceClass.hostAssignedTableType,
 						deviceProperty.getOpsiDbColumnName());
@@ -441,7 +441,7 @@ public class ControllerHWinfoColumnConfiguration {
 			lineMap.put(colHostVsItemAssigned, valAssignedToHwItem);
 
 			result.put(formatLineNo(id), lineMap);
-			// lineMap.put(colTellAgainHardwareClass, hwClass);
+			
 			id++;
 
 			for (OpsiHwAuditDevicePropertyType deviceProperty : deviceHwItemProperties) {

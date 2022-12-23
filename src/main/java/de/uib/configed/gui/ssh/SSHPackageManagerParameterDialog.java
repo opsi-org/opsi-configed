@@ -49,12 +49,12 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 
 	public SSHPackageManagerParameterDialog(String title) {
 		super(null, title);
-		// super(null,title, false);
+		
 		// public FGeneralDialog(JFrame owner, String title, JPanel pane)
 		// {
-		// super(owner, false);
-		// logging.info(this, "created by constructor 1");
-		// registerWithRunningInstances();
+		
+		
+		
 		// this.owner = owner;
 		setTitle(title);
 		setFont(Globals.defaultFont);
@@ -66,7 +66,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		this.setBackground(Globals.backLightBlue);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		// getRepositoriesFromConfigs(null);
+		
 	}
 
 	protected void setComponentsEnabled(boolean value) {
@@ -89,7 +89,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 			firstDepot = depotProperties.get(depot);
 		logging.info(this, "getRepositoriesFromConfigs firstDepot " + firstDepot);
 
-		String o_repo = ((String) firstDepot.get(configRepo)).replace("file://", "");
+		String o_repo = ((String) firstDepot.get(configRepo)).replace("file:
 		if ((o_repo != null) && (o_repo != "null") && (o_repo.trim() != ""))
 			opsiRepo = o_repo + "/";
 
@@ -98,19 +98,19 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 
 		// try
 		// {
-		// String o_prod = ((String)firstDepot.get(configDepot)).replace("file://", "");
+		
 		// if (o_prod != null) opsiProd = o_prod;
 		// logging.info(this, "getRepositoriesFromConfigs depot "+ depot +" opsiProd " +
-		// o_prod);
+		
 		// } catch (Exception e)
 		// {
 		// }
 
 		logging.info(this, "getRepositoriesFromConfigs opsiRepo " + opsiRepo);
 		logging.info(this, "getRepositoriesFromConfigs opsiProd " + opsiProd);
-		// // String od = firstDepot.get(configDepot).replace("file://", "");
+		
 		// // logging.info(this, "getRepositoriesFromConfigs depot "+ depot +" opsiDepot
-		// " + opsiDepot);
+		
 		// // if (od != null) opsiDepot = od;
 	}
 
@@ -121,10 +121,10 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 
 	protected void initButtons(final SSHPackageManagerParameterDialog caller) {
 		{
-			// btn_help = new JButton();
+			
 			btn_help = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
 			btn_help.setText(configed.getResourceValue("SSHConnection.buttonHelp"));
-			// buttonPanel.add(btn_help);
+			
 			btn_help.addActionListener(actionEvent -> doActionHelp(caller));
 
 			btn_execute = new JButton();
@@ -178,25 +178,25 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 	// SSHCommand command = null;
 	// if (caller instanceof SSHPackageManagerUninstallParameterDialog)
 	// {
-	// command = new CommandHelp(new CommandOpsiPackageManagerUninstall());
+	
 	// }
 	// else if (caller instanceof SSHPackageManagerInstallParameterDialog)
 	// {
-	// command = new CommandHelp(new CommandOpsiPackageManagerInstall());
+	
 	// }
 	// SSHConnectionExecHelpDialog outputDialog = new SSHConnectionExecHelpDialog(
 	// command,
 	// configed.getResourceValue("SSHConnection.Exec.title")+ "
 	// \""+command.getCommand() + "\" "
-	// );
+	
 	// }
 
 	/* This method gets called when button 2 is pressed */
 	// public void doAction2()
 	// {
-	// // setVisible(false);
-	// this.setVisible (false);
-	// this.dispose();
+	
+	
+	
 	// }
 	public void cancel() {
 		super.doAction2();

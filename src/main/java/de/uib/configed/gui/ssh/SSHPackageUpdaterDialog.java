@@ -127,7 +127,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		cb_repos.setSelectedItem(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"));
 		cb_actions.setEnabled(true);
-		// cb_actions.addItem("");
+		
 		inputPanel.add(cb_actions);
 		inputPanel.add(cb_repos);
 	}
@@ -148,7 +148,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 				command.setRepo(repo);
 			logging.info(this, "doAction1 opsi-package-updater: " + command.toString());
 			new SSHConnectExec((SSHCommand) command);
-			// cancel();
+			
 		} catch (Exception e) {
 			logging.warning(this, "doAction1, exception occurred", e);
 		}

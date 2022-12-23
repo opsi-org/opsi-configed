@@ -20,13 +20,13 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 
 	public SimpleIconNodeRenderer() {
 		super();
-		// setHorizontalTextPosition(SwingConstants.LEFT);
+		
 		setOpaque(true);
 
-		// standard = deriveFont0(Globals.defaultFontBig);
-		// emphasized = deriveFont1(Globals.defaultFontBig);
+		
+		
 		standard = Globals.defaultFontBig;
-		// emphasized = deriveFont1(standard); //
+		 //
 		emphasized = Globals.defaultFontStandardBold;
 
 		setFont(standard);
@@ -76,13 +76,13 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 			if (sel && row != 0) // assuming that row 0 contains sort of header
 			{
 				setBackground(Globals.backLightBlue);
-				// setFont(emphasized);
-				// setForeground(Color.blue);//Globals.unknownBlue);
+				
+				
 			} else {
 				setBackground(Color.white);
-				// setBackground(Globals.backgroundWhite);
-				// setFont(standard);
-				// setForeground(Globals.lightBlack);
+				
+				
+				
 			}
 
 			if (leaf) {
@@ -117,7 +117,7 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 		 * row,
 		 * hasFocus);
 		 * 
-		 * //c.setBackground(Globals.backLightBlue);
+		 * 
 		 * 
 		 * return c;
 		 */

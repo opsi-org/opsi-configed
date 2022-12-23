@@ -79,7 +79,7 @@ public abstract class ExportTable {
 
 	protected abstract void execute(String fileName, boolean onlySelectedRows);
 
-	// protected abstract void determineClasses();
+	
 
 	public JMenuItemFormatted getMenuItemExport() {
 		JMenuItemFormatted menuItem = new JMenuItemFormatted(
@@ -203,7 +203,7 @@ public abstract class ExportTable {
 			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 			// javax.swing.filechooser.FileNameExtensionFilter filter = new
 			// javax.swing.filechooser.FileNameExtensionFilter(
-			// "CSV", "csv");
+			
 			chooser.addChoosableFileFilter(exFilter);
 			chooser.setPreferredSize(Globals.filechooserSize);
 
@@ -346,13 +346,13 @@ public abstract class ExportTable {
 		logging.info(this, "getFileLocation with writeToFile " + writeToFile);
 
 		File defaultFile = new File(writeToFile);
-		// logging.info(this, "getFileLocation with defaultFile " + defaultFile);
+		
 
 		chooser = new JFileChooser(exportDirectory);
 		chooser.setPreferredSize(Globals.filechooserSize);
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("PDF", "pdf"));
-		// chooser.setApproveButtonText("ok");
+		
 		chooser.setSelectedFile(defaultFile);
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setDialogTitle(Globals.APPNAME + " " + configed.getResourceValue("DocumentExport.chooser"));

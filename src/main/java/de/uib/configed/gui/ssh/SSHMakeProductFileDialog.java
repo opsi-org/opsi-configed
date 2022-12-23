@@ -88,7 +88,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	}
 
 	private void setComponentsEnabled(boolean value) {
-		// btn_advancedSettings.setEnabled(value);
+		
 		btn_exec.setEnabled(value);
 		if (value == false) {
 			tf_packageVersion.setEnabled(value);
@@ -110,7 +110,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 	private void initGUI() {
 		try {
-			// this.setTitle(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.title"));
+			
 
 			workbenchpanel = new JPanel();
 			mainpanel = new JPanel();
@@ -149,7 +149,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 				});
 				autocompletion.initCombobox();
 				cb_mainDir = autocompletion.getCombobox();
-				// cb_mainDir.setEnabled(false);
+				
 
 				btn_searchDir = autocompletion.getButton();
 				btn_searchDir.removeActionListener(btn_searchDir.getActionListeners()[0]);
@@ -188,9 +188,9 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 				lbl_productVersion_controlfile = new JLabel();
 				lbl_packageVersion_controlfile = new JLabel();
 				tf_packageVersion = new JTextField();
-				// tf_packageVersion.setText(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.keepVersions"));
+				
 				tf_productVersion = new JTextField();
-				// tf_productVersion.setText(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.keepVersions"));
+				
 				enableTfVersions(false);
 			}
 			{
@@ -213,7 +213,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 				btn_advancedSettings = new JButton();
 				btn_advancedSettings.setText(configed
 						.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_advancedSettings"));
-				// btn_advancedSettings.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_advancedSettings.tooltip"));
+				
 				if (!(Globals.isGlobalReadOnly()))
 					btn_advancedSettings.addActionListener(actionEvent -> showAdvancedSettings());
 
@@ -508,17 +508,17 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 					+ " removed\" || echo \"File did not exist\"";
 			// Empty_Command removeExistingPackage = new
 			// Empty_Command(str_command_fileexists.replaceAll(str_replacement_filename,
-			// filename));
+			
 			Empty_Command removeExistingPackage = new Empty_Command(command);
 			str2exec.addCommand(removeExistingPackage);
 
 			// Empty_Command removeExistingPackage = new Empty_Command("rm " + dir + "" +
-			// getPackageID(dir) + "_" + prodVersion + "-" + packVersion + ".opsi" );
+			
 			command = "[ -f " + filename + ".zsync ] &&  rm " + filename + ".zsync && echo \"File " + filename
 					+ ".zsync removed\" || echo \"File  " + filename + ".zsync did not exist\"";
 			// removeExistingPackage = new
 			// Empty_Command(str_command_filezsyncExists.replaceAll(str_replacement_filename,
-			// filename));
+			
 			removeExistingPackage = new Empty_Command(command);
 			str2exec.addCommand(removeExistingPackage);
 
@@ -527,14 +527,14 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			removeExistingPackage = new Empty_Command(command);
 			// removeExistingPackage = new
 			// Empty_Command(str_command_filemd5Exists.replaceAll(str_replacement_filename,
-			// filename));
+			
 			str2exec.addCommand(removeExistingPackage);
 		}
 		if (cb_setRights.isSelected()) {
 			str2exec.addCommand(new CommandOpsiSetRights(dir));
 		}
 		str2exec.addCommand(makeProductFile);
-		// SSHConnectExec ssh = new SSHConnectExec(str2exec);
+		
 		logging.info(this, "SSHConnectExec " + str2exec);
 		new Thread() {
 			@Override
@@ -560,6 +560,6 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		if (result != null)
 			return result.replace("id:", "").trim();
 		return "";
-		// setDirectoryItems(result, curdir);
+		
 	}
 }

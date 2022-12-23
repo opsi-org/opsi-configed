@@ -10,7 +10,7 @@ import de.uib.utilities.swing.ActivityPanel;
 
 public class WaitCursor {
 
-	// static Vector<WaitCursor> instances = new Vector<> ();
+	
 	private static AtomicInteger objectCounting = new AtomicInteger();
 	private static boolean allStopped = false;
 
@@ -39,7 +39,7 @@ public class WaitCursor {
 	}
 
 	public WaitCursor(Component c_calling, Cursor saveCursor, String callLocation) {
-		// instances.add(this);
+		
 		// objectCounting++;
 		objectNo = objectCounting.addAndGet(1);
 		allStopped = false;
@@ -68,13 +68,13 @@ public class WaitCursor {
 		 * ActivityPanel.setActing(true);
 		 * 
 		 * 
-		 * //logging.debug(this, " cursor carrying component " + c);
+		 * 
 		 * while (!ready && !allStopped)
 		 * {
 		 * try
 		 * {
 		 * Thread.sleep (200);
-		 * //logging.debug(this, "running wait cursor thread ");
+		 * 
 		 * }
 		 * catch (InterruptedException ex)
 		 * {}
@@ -90,11 +90,11 @@ public class WaitCursor {
 				public void run() {
 					ActivityPanel.setActing(true);
 
-					// logging.debug(this, " cursor carrying component " + c);
+					
 					while (!ready && !allStopped) {
 						try {
 							Thread.sleep(200);
-							// logging.debug(this, "running wait cursor thread ");
+							
 						} catch (InterruptedException ex) {
 						}
 					}
@@ -106,11 +106,11 @@ public class WaitCursor {
 				public void run() {
 					ActivityPanel.setActing(true);
 
-					// logging.debug(this, " cursor carrying component " + c);
+					
 					while (!ready && !allStopped) {
 						try {
 							Thread.sleep(200);
-							// logging.debug(this, "running wait cursor thread ");
+							
 						} catch (InterruptedException ex) {
 						}
 					}
@@ -159,7 +159,7 @@ public class WaitCursor {
 	 * ready = true;
 	 * 
 	 * if (c != null) c.setCursor(saveCursor);
-	 * //instances.remove(this);
+	 * 
 	 * objectCounting.decrementAndGet();
 	 * logging.debug(this, "removing instance " + objectNo);
 	 * if (objectCounting.get() == 0)

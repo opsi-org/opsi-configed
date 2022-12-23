@@ -102,7 +102,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				// logging.info(this, "size " + THIS.getSize());
+				
 			}
 		});
 
@@ -121,7 +121,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 			ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
 
 			if (lsm.isSelectionEmpty()) {
-				// logging.debug(this, "no rows selected");
+				
 			} else {
 				int selectedRow = lsm.getMinSelectionIndex();
 				String keyValue = panelLicencecontracts.getValueAt(selectedRow, 0).toString();
@@ -199,7 +199,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_licenceType.setText("RETAIL");
 		jTextField_licenceType.setEditable(false);
 		jTextField_maxInstallations.setEnabled(true);
-		// jTextField_maxInstallations.setValue(1);//setText("1");
+		
 		jTextField_maxInstallations.setText("1");
 		jTextField_maxInstallations.setEditable(false);
 		comboClient.setEnabled(false);
@@ -215,7 +215,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_licenceType.setText("VOLUME");
 		jTextField_licenceType.setEditable(false);
 		jTextField_maxInstallations.setEnabled(true);
-		// jTextField_maxInstallations.setValue(0);//setText("0");
+		
 		jTextField_maxInstallations.setText("0");
 		jTextField_maxInstallations.setEditable(true);
 		comboClient.setEnabled(false);
@@ -231,7 +231,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_licenceType.setText("OEM");
 		jTextField_licenceType.setEditable(false);
 		jTextField_maxInstallations.setEnabled(true);
-		// jTextField_maxInstallations.setValue(1);//setText("1");
+		
 		jTextField_maxInstallations.setText("1");
 		jTextField_maxInstallations.setEditable(false);
 		comboClient.setModel(new DefaultComboBoxModel<>(enterLicenceController.getChoicesAllHosts()));
@@ -249,7 +249,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_licenceType.setText("CONCURRENT");
 		jTextField_licenceType.setEditable(false);
 		jTextField_maxInstallations.setEnabled(true);
-		// jTextField_maxInstallations.setValue(0);//setText("0");
+		
 		jTextField_maxInstallations.setText("0");
 		jTextField_maxInstallations.setEditable(false);
 		comboClient.setEnabled(false);
@@ -269,11 +269,11 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		);
 
 		panelKeys.setMasterFrame(Globals.frame1);
-		// panelKeys.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		
 
-		// panelKeys.showFilterIcon( true ); //supply implementation of
+		 //supply implementation of
 		// SearchTargetModelFromTable.setFiltered
-		// panelKeys.setFiltering( true );
+		
 
 		panelLicencepools = new PanelGenEditTable(
 				configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool"), maxHSize, false, 0,
@@ -281,11 +281,11 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		);
 
 		panelLicencepools.setMasterFrame(Globals.frame1);
-		// panelLicencepools.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		
 
-		// panelLicencepools.showFilterIcon( true ); //supply implementation of
+		 //supply implementation of
 		// SearchTargetModelFromTable.setFiltered
-		// panelLicencepools.setFiltering( true );
+		
 
 		panelLicencecontracts = new PanelGenEditTable(
 				configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), 0, true, 1, false,
@@ -294,11 +294,11 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 				true // with tablesearchpane
 		);
 		panelLicencecontracts.setMasterFrame(Globals.frame1);
-		// panelLicencecontracts.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		
 
-		// panelLicencecontracts.showFilterIcon( true ); //supply implementation of
+		 //supply implementation of
 		// SearchTargetModelFromTable.setFiltered
-		// panelLicencecontracts.setFiltering( true );
+		
 
 		jLabelLicencePool = new javax.swing.JLabel();
 		jButtonCreateStandard = new javax.swing.JButton();
@@ -322,14 +322,14 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_licenceID = new javax.swing.JTextField();
 		jTextField_licenceType = new javax.swing.JTextField();
 		jTextField_maxInstallations = new javax.swing.JTextField();
-		// jTextField_maxInstallations = new javax.swing.JFormattedTextField();
+		
 		// jTextField_maxInstallations.setInputVerifier(new
-		// utils.FormattedTextFieldVerifier());
+		
 
 		comboClient = new javax.swing.JComboBox();
 		comboClient.setFont(Globals.defaultFontBig);
-		// org.jdesktop.swingx.autocomplete.AutoCompleteDecorator.decorate(combo);
-		// combo.setRenderer ();
+		
+		
 		comboClient.setPreferredSize(new java.awt.Dimension(200, 20));
 
 		jLabelSLid3info = new javax.swing.JLabel();
@@ -340,7 +340,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_endOfLicence.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// logging.debug( " mouse clicked on textfield 5 ");
+				
 				if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
 					if (fEditDate == null)
 						fEditDate = new FEditDate(jTextField_endOfLicence.getText(), false);
@@ -377,7 +377,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		});
 
 		jTextField_licenceContract = new javax.swing.JTextField();
-		// jLabelContract = new javax.swing.JLabel();
+		
 		jButtonSend = new javax.swing.JButton();
 		jButtonSend.setPreferredSize(Globals.buttonDimension);
 		jLabelLKey = new javax.swing.JLabel();
@@ -652,7 +652,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setResizeWeight(0.3f);
-		// splitPane.setDividerLocation(1f); //maximum for top when starting
+		 //maximum for top when starting
 
 		topPane = new JPanel();
 		bottomPane = new JPanel();

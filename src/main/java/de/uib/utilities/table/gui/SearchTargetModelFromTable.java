@@ -57,7 +57,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public int getColumnCount() {
-		// logging.info(this, "getColumnCount retrieves model " + getTableModel());
+		
 		// if (getTableModel() == null)
 		// return 0;
 
@@ -126,16 +126,16 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public void ensureRowIsVisible(int row) {
-		// int viewrow = table.convertRowIndexToView(row);
-		// int modelrow = table.convertRowIndexToModel(row);
+		
+		
 		table.scrollRectToVisible(table.getCellRect(row, 0, false));
 
-		// setCursorRow( row );
+		
 	}
 
 	@Override
 	public void setCursorRow(int row) {
-		// int viewrow = table.convertRowIndexToView(row);
+		
 		if (table.getRowCount() <= 0) {
 			return;
 		}
@@ -145,7 +145,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		logging.info(this, "setCursorRow row, produced modelrow " + modelrow);
 
 		if (table.getModel() instanceof de.uib.utilities.table.GenTableModel) {
-			// int row = table.convertRowIndexToModel( viewrow );
+			
 			((de.uib.utilities.table.GenTableModel) table.getModel()).setCursorRow(modelrow);
 		}
 
@@ -162,7 +162,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		}
 
 		table.setRowSelectionInterval(row, row);
-		// logging.debug(" --- view row selected " + row);
+		
 		ensureRowIsVisible(row);
 	}
 
@@ -174,7 +174,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 			return;
 
 		table.addRowSelectionInterval(row, row);
-		// logging.debug(" --- view row selected " + row);
+		
 		ensureRowIsVisible(row);
 	}
 
@@ -209,7 +209,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public void setFiltered(boolean b) {
-		// logging.info(this, "setFiltered " + b + " it was filtered " + filtered);
+		
 
 		// if (b == filtered)
 		// return;
@@ -225,7 +225,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 			viewRowfilter = table.getSelectedRows();
 
 		// logging.info(this, "setFiltered " + b + " viewRowfilter "
-		// + java.util.Arrays.toString( viewRowfilter ));
+		
 
 		if (b && viewRowfilter.length > 0) {
 			int[] modelRowFilter = new int[viewRowfilter.length];
@@ -241,12 +241,12 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 			model.setUsingFilter(FILTER_BY_SELECTION, true);
 			model.reset();
 
-			// setSelection( viewRowfilter );
+			
 			table.getSelectionModel().setSelectionInterval(0, model.getRowCount());
 
 		} else {
 			model.setUsingFilter(FILTER_BY_SELECTION, false);
-			// ((AbstractTableModel) table.getModel()).fireTableDataChanged();
+			
 			setSelection(viewRowfilter); // restore the original selection
 		}
 		filtered = b;
@@ -258,7 +258,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	public boolean isFiltered() {
 		return filtered;
 
-		// ((de.uib.utilities.table.GenTableModel) table.getModel()).isFiltered(); does
+		 does
 		// not work since we don't always have got a GenTableModel
 	}
 

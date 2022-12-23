@@ -49,7 +49,7 @@ public class ExporterToCSV extends ExportTable {
 	@Override
 	public void execute(String fileName, boolean onlySelectedRows) {
 
-		// logging.info(this, "toCSV classNames " + classNames );
+		
 		logging.info(this, "toCSV fileName, onlySelectedRows, csvSep " + "\"" + fileName + "\", " + onlySelectedRows
 				+ "\", " + "\"" + csvSep + "\"");
 
@@ -68,7 +68,7 @@ public class ExporterToCSV extends ExportTable {
 			try (OutputStream os = new FileOutputStream(fileName);
 					OutputStreamWriter osw = new OutputStreamWriter(os);
 					BufferedWriter bw = new BufferedWriter(osw)) {
-				// logging.debugOut(logging.LEVEL_WARNING,"BufferedWriter created");
+				
 
 				// write header
 				StringBuffer line = new StringBuffer();

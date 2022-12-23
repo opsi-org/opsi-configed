@@ -39,7 +39,7 @@ public class AndOrSelectButtonByIcon extends IconAsButton {
 		public void actionPerformed(ActionEvent e) {
 			logging.debug(this, "actionPerformed  " + e + " activated " + activated);
 			setActivated(!activated);
-			// createActionEvents();
+			
 		}
 	}
 }

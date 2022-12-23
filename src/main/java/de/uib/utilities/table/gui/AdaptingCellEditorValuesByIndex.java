@@ -46,15 +46,15 @@ public class AdaptingCellEditorValuesByIndex extends DefaultCellEditor {
 		} else
 			cc.setModel(cbm.getComboBoxModel(modelRow, modelColumn));
 
-		// cc.setToolTipText("hello");
-		// cc.setSize(100,20); has no effect
+		
+		 has no effect
 
 		Component c = super.getTableCellEditorComponent(table, value, isSelected, row, column);
 		if (c instanceof JComponent)
 			((JComponent) c).setToolTipText("" + value);
 
-		// c.setSize(100,20); has no effect
-		// logging.debug("this component active");
+		 has no effect
+		
 		return c;
 	}
 

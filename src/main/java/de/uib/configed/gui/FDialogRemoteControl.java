@@ -34,7 +34,7 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 	protected void initExtraField()
 	// hack to modify settings from superclass
 	{
-		// extraField.setText("");
+		
 		checkSelected();
 	}
 
@@ -87,7 +87,7 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// super.mouseClicked(e);
+		
 		checkSelected();
 
 		if (e.getClickCount() > 1)
@@ -133,19 +133,19 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 	// ======================
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-		// logging.debug(this, "++ changedUpdate on " );
+		
 		saveEditedText();
 	}
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		// logging.debug(this, "++ insertUpdate on " );
+		
 		saveEditedText();
 	}
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		// logging.debug(this, "++ removeUpdate on " );
+		
 		saveEditedText();
 	}
 	// ======================

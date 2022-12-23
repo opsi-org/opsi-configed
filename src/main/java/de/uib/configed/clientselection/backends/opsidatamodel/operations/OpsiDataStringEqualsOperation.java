@@ -36,11 +36,11 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 	public boolean doesMatch(Client client) {
 		OpsiDataClient oClient = (OpsiDataClient) client;
 		logging.debug(this, " (OpsiDataStringEqualsOperation) doesMatch client " + oClient);
-		// logging.debug(this, "doesMatch interesting map, key " + map + ", " + key);
+		
 		Map realMap = oClient.getMap(map);
 		logging.debug(this, "doesMatch,  we look into map for key " + key);
 		if (!realMap.containsKey(key) || realMap.get(key) == null) {
-			// logging.debug(this, "key '" + key + "' not found!");
+			
 			return false;
 		}
 
@@ -50,27 +50,27 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 	}
 
 	protected boolean checkData(final String realData) {
-		// logging.debug(this, "checkData " + realData + " " +data);
+		
 
 		String rData = realData.toLowerCase();
 
 		if (dataSplitted == null) // simple case: no '*'
 		{
 			// if (data.equals("cached"))
-			// logging.info(this, "checkData, comparing to rData " + rData);
+			
 			return rData.equals(data);
 		}
 
 		else if (dataSplitted.length == 0) // the only chars are '*'
 		{
-			// logging.debug(this, "checkData, dataSplitted.length == 0" );
+			
 			if (realData.length() > 0)
 				return true;
 			else
 				return false;
 		} else {
 			// logging.debug(this, "checkData comparing to dataSplitted " +
-			// Arrays.toString(dataSplitted));
+			
 
 			if (!startsWith)
 				if (!rData.startsWith(dataSplitted[0]))
@@ -78,13 +78,13 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 			int index = 0;
 			int i = 0;
 			while (i < dataSplitted.length && index >= 0) {
-				// logging.debug( this, dataSplitted[i] );
+				
 				if (!dataSplitted[i].isEmpty()) {
 					index = rData.indexOf(dataSplitted[i], index);
 					if (index >= 0)
 						index += dataSplitted[i].length();
 				}
-				// logging.debug( this, String.valueOf(index) );
+				
 				i++;
 			}
 			if (index < 0)
