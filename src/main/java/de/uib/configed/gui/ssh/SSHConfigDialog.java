@@ -482,15 +482,15 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			// if (connectionInfo.getKeyfilePassphrase() != "")
 			// if (configedMain.SSHKEYPASS != null)
 			// {
-			// btn_openChooser.setEnabled(true);
-			// tf_passphrase.setEnabled(true);
-			// tf_passphrase.setText(ConfigedMain.SSHKEYPASS);
+			
+			
+			
 			// connectionInfo.useKeyfile(true, tf_keyfile.getText(), new
-			// String(tf_passphrase.getPassword()));
+			
 			// }
-			// connectionInfo.useKeyfile(true, tf_keyfile.getText());
+			
 			// connectionInfo.setUserData((String) cb_host.getSelectedItem(),
-			// tf_user.getText(), new String(tf_passw.getPassword()), tf_port.getText() );
+			
 			// }
 			cb_useOutputColor = new JCheckBox();
 			cb_useOutputColor.setText(configed.getResourceValue("SSHConnection.Config.coloredOutput"));
@@ -664,7 +664,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			String host = (String) cb_host.getSelectedItem();
 			logging.info(this, "doAction1 host " + host);
 			// if(((DefaultComboBoxModel)cb_host.getModel()).getIndexOf(host) == -1 )
-			// cb_host.addItem(host);
+			
 
 			connectionInfo.setUserData(host, tf_user.getText(), new String(tf_passw.getPassword()), tf_port.getText());
 		}

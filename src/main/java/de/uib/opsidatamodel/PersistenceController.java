@@ -141,7 +141,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	// public static final String SHIM_STRING = "shim";
 	public static final String EFI_STRING = "efi";
 
-	public static final String KEY_USER_ROOT = "user"; // UserConfig.CONFIGKEY_STR_USER;
+	public static final String KEY_USER_ROOT = "user"; 
 
 	public static final String KEY_USER_ROLE_ROOT = KEY_USER_ROOT + "." + "role";// UserConfig.
 	public static final String ALL_USER_KEY_START = KEY_USER_ROOT + ".{}.";// UserConfig.

@@ -529,7 +529,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 
 		jScrollPane = new JScrollPane(table);
 		jScrollPane.getViewport().setBackground(Globals.backLightBlue);
-		// jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		
 		add(jScrollPane, BorderLayout.CENTER);
 	}
 

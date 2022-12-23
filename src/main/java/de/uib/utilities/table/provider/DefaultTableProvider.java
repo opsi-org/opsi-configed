@@ -152,7 +152,7 @@ public class DefaultTableProvider implements TableProvider {
 	@Override
 	public Vector<String> getOrderedColumn(int col, boolean empty_allowed) {
 		
-		// empty_allowed);
+		
 
 		TreeSet<String> set = new TreeSet<>();
 		for (int row = 0; row < rowsCopy.size(); row++) {

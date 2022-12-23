@@ -118,12 +118,12 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		this.setSize(this.thissize);
 		this.setMaximumSize(new Dimension(900, 700));
 		// if (terminal != null) terminal.exec("bash\n");
-		// btn_close.removeActionListener(closeListener);
-		// btn_close.addActionListener(this.closeListener);
+		
+		
 		setComponentsEnabled_RO(!Globals.isGlobalReadOnly());
 		setCLfocus();
 		// ((JTextField) tf_command).setCaretPosition(((JTextField)
-		// tf_command).getText().length());
+		
 		logging.info(this, "SSHConnectionTerminalDialog build ");
 		this.addComponentListener(new ComponentAdapter() {
 			@Override
@@ -230,7 +230,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		this.output.setMaximumSize(output_size);
 		this.jScrollPane.setSize(output_size);
 		this.jScrollPane.setPreferredSize(output_size);
-		// this.jScrollPane.setMaximumSize(output_size);
+		
 		this.revalidate();
 		
 		
@@ -315,7 +315,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 		setCLfocus();
 		// ((JTextField) tf_command).setCaretPosition(((JTextField)
-		// tf_command).getText().length());
+		
 
 		cb_privat = new JCheckBox(configed.getResourceValue("SSHConnection.passwordButtonText"));
 		cb_privat.setPreferredSize(btn_dim);

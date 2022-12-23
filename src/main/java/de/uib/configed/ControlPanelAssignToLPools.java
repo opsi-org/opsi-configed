@@ -69,7 +69,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 	}
 
 	private SoftwareShowMode softwareShow = SoftwareShowMode.ALL;
-	private SoftwareShowAllMeans softwareShowAllMeans = SoftwareShowAllMeans.ALL;// SoftwareShowAllMeans.ASSIGNED_OR_ASSIGNED_TO_NOTHING;
+	private SoftwareShowAllMeans softwareShowAllMeans = SoftwareShowAllMeans.ALL;
 																					// //
 	private SoftwareDirectionOfAssignment softwareDirectionOfAssignment = SoftwareDirectionOfAssignment.POOL2SOFTWARE;
 	// private SoftwareDirectionOfAssignment softwareDirectionOfAssignment =
@@ -1107,7 +1107,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		setSoftwareIdsFromLicencePool(null);
 		resetCounters(null);
 		
-		// windowsSoftwareFilterConditon_showOnlySelected.setFilter(null);
+		
 		thePanel.panelProductId2LPool.getTheTable().clearSelection();
 		thePanel.panelLicencepools.getTheTable().clearSelection();
 		thePanel.panelRegisteredSoftware.getTheTable().clearSelection();

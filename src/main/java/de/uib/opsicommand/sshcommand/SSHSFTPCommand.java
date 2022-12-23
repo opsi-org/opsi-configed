@@ -75,5 +75,5 @@ public abstract interface SSHSFTPCommand {
 	// /** @return the command dialog(parameter)**/
 	
 
-	// public abstract String get_ERROR_TEXT();
+	
 }

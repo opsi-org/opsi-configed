@@ -31,8 +31,8 @@ public class PopupMenuTrait extends JPopupMenu {
 	public static final int POPUP_EXPORT_CSV = 23;
 	public static final int POPUP_EXPORT_SELECTED_CSV = 24;
 
-	// public static final int POPUP_EXPORT_EXCEL = 25;
-	// public static final int POPUP_EXPORT_SELECTED_EXCEL = 26;
+	
+	
 
 	public static final int POPUP_PRINT = 30;
 

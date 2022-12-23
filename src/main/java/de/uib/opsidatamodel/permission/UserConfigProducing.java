@@ -296,7 +296,7 @@ public class UserConfigProducing {
 			
 			
 			
-			// values.get(0) ).equals( UserConfig.NONE_PROTOTYPE) ));
+			
 
 			if (values == null || values.isEmpty() // || !(values.get(0) instanceof String )
 					|| (((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE))) {
@@ -379,7 +379,7 @@ public class UserConfigProducing {
 		{
 			configKey = startkey + partkey;
 			// String configKey = startkey +
-			// UserOpsipermission.PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY ;
+			
 			logging.info(this,
 					"supplyPermissionEntriesForAUser boolean configKey " + configKey + " -- partkey " + partkey);
 
@@ -449,7 +449,7 @@ public class UserConfigProducing {
 
 			configKey = startkey + partkey;
 			// String configKey = startkey +
-			// UserOpsipermission.PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY ;
+			
 
 			List<Object> values = serverconfigValuesMap.get(configKey);
 

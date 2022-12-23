@@ -42,7 +42,7 @@ public class FWakeClients extends FShowList {
 		}
 
 		
-		// setCursor(new Cursor(Cursor.WAIT_CURSOR));
+		
 
 		int turn = 0;
 		while (turn < maxSize && !cancelled) {

@@ -202,7 +202,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	protected AuditSoftwareXLicencePool relations_auditSoftwareToLicencePools;
 
-	// protected List< Map<String, Object>> relations_auditSoftwareToLicencePools;
+	
 
 	protected Map<String, Map> rowmapAuditSoftware;
 
@@ -454,7 +454,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		protected java.util.LinkedList<String> depotNamesList;
 
 		protected HashMap<String, Boolean> mapOfPCs;
-		// protected HashMap<String,SelectionState> mapPC_selected;
+		
 		protected HashMap<String, HostInfo> mapPC_Infomap; // for some depots
 		protected HashMap<String, HostInfo> host2hostInfo; // all hosts
 		protected Map<String, Set<String>> fNode2Treeparents; // essentially client --> all groups with it
@@ -678,7 +678,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					System.exit(1);
 				}
 
-				// find other depotserver and build depot2_host2hostInfo;
+				
 				depot2_host2hostInfo = new TreeMap<>();
 				depot2_host2hostInfo.put(configServer, new TreeMap<>());
 
@@ -750,7 +750,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						
 						
 						
-						// getConfigs().get(name).get(CONFIG_DHCPD_FILENAME));
+						
 
 						// CHECK WAN STANDARD CONFIG
 						if (getConfig(name) != null) {
@@ -842,7 +842,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 							myDepot = depotId;
 							// if (hostInfo.isClientInDepot("dummydepot12.uib.local")) //test for
 							// depot_restriction:
-							// depot2_host2hostInfo.get(depotId).put(name, hostInfo);
+							
 						} else {
 							host.put(HostInfo.depotOfClientKEY, configServer);
 							hostInfo = new HostInfo(host);
@@ -850,7 +850,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 							myDepot = configServer;
 							// if (hostInfo.isClientInDepot("dummydepot12.uib.local")) //test for
 							// depot_restriction:
-							// depot2_host2hostInfo.get(configServer).put(name, hostInfo);
+							
 						}
 
 						host2hostInfo.put(name, hostInfo);
@@ -915,12 +915,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// if (mapOfPCs == null)
 			logging.debug(this, " ------ building pcList");
 			mapPcBelongsToDepot = new HashMap<>();
-			// mapPC_selected = new HashMap<>();
+			
 			mapOfPCs = new HashMap<>();
 			mapPC_Infomap = new HashMap<>();
 
 			
-			// Map mapPCs_inDepot = new HashMap<>();
+			
 			
 
 			
@@ -955,7 +955,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 								continue;
 						}
 
-						// mapPCs_inDepot.put(clientName, false);
+						
 						mapOfPCs.put(clientName, false);
 
 						/*
@@ -1018,7 +1018,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				return;
 
 			ArrayList<String> depots = new ArrayList<>();
-			// values.put(CONFIG_DEPOT_ID, depots);
+			
 			ConfigName2ConfigValue config = new ConfigName2ConfigValue(null);
 			depots.add(depotId);
 
@@ -1086,7 +1086,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		 * {
 		 * if (mapOfPCs.containsKey(client))//observe depots
 		 * mapOfPCs.put(client,true);
-		 * //mapPC_selected.put(item, SelectionState.SELECTED);
+		 * 
 		 * }
 		 * }
 		 * }
@@ -1347,7 +1347,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	protected boolean makeConnection(Executioner exec1) {
-		// setConnectionState(new ConnectionState (ConnectionState.STARTED_CONNECTING));
+		
 		// set by executioner
 
 		logging.info(this, "trying to make connection");
@@ -1555,7 +1555,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 		}
 
-		// serverActionPermission = UserOpsipermission.ActionPrivilege.READ_ONLY;
+		
 		serverFullPermission = (serverActionPermission == UserOpsipermission.ActionPrivilege.READ_WRITE);
 
 		
@@ -1861,7 +1861,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			String clientPackageVersion = (String) m.get(OpsiPackage.SERVICEkeyPACKAGE_VERSION);
 
 			Object clientProductState = m.get(ProductState.KEY_installationStatus);
-			// Object clientActionRequest = m.get (ProductState.KEY_actionRequest );
+			
 
 			
 
@@ -3556,11 +3556,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	/*
 	 * public boolean existsEntry (String pcname)
 	 * {
-	 * //if (mapPC_selected == null) return false;
+	 * 
 	 * if (hostInfoCollections.getMapOfPCs() == null) return false;
 	 * 
 	 * return hostInfoCollections.getMapOfPCs().containsKey(pcname);
-	 * //return mapPC_selected.containsKey(pcname);
+	 * 
 	 * // without casting to string we test equality by Object.equals() whereas
 	 * String.equals() gives what we want
 	 * }
@@ -3851,7 +3851,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		}
 
 		
-		// relations_auditHardwareOnHost);
+		
 
 		return relations_auditHardwareOnHost;
 	}
@@ -5555,7 +5555,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		// " + productproperties_retrieved);
 
 		// havingProductProperties = new
-		// TreeSet<String>(productproperties_retrieved.keySet());
+		
 
 		Map<String, ConfigName2ConfigValue> defaultProperties = getDefaultProductProperties(theDepot);
 		Map<String, Map<String, Object>> defaultProperties_retrieved = new HashMap<>();
@@ -8223,7 +8223,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			logging.info(this, "editPool2AuditSoftware ok " + ok);
 
 			if (ok) {
-				// addLocalAuditSoftwareXLicencePool( softwareID, licencePoolID_new);
+				
 
 				logging.info(this, "fSoftware2LicencePool == null " + (fSoftware2LicencePool == null));
 
@@ -9199,7 +9199,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		List<String> result = new ArrayList<>();
 
 		result.add("productId");
-		// result.add(ProductState.KEY_productName);
+		
 		result.add(ProductState.KEY_installationStatus);
 		result.add(ProductState.KEY_installationInfo);
 		result.add(ProductState.KEY_actionRequest);
@@ -9348,7 +9348,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				KEY_USER_REGISTER_VALUE = checkUserRolesModule();
 
 			
-			// ((Object)(serverPropertyMap.get(KEY_USER_REGISTER).get(0))).getClass().getName());
+			
 
 		}
 
@@ -9388,7 +9388,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					+ possibleValuesAccordingToService);
 			
 			// possibleValuesCurrentDefault " +
-			// getPossibleValuesProductOnClientDisplayfields_localboot());
+			
 
 			/*
 			 * logging.debug(this,
@@ -9510,7 +9510,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		List<String> result = new ArrayList<>();
 
 		result.add("productId");
-		// result.add(ProductState.KEY_productName);
+		
 		result.add(ProductState.KEY_installationStatus);
 		result.add(ProductState.KEY_installationInfo);
 		result.add(ProductState.KEY_actionRequest);
@@ -9560,7 +9560,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// possibleValuesAccordingToService " + possibleValuesAccordingToService);
 			
 			// possibleValuesCurrentDefault " +
-			// getPossibleValuesProductOnClientDisplayfields_netboot());
+			
 
 			/*
 			 * logging.debug(this,
@@ -10248,7 +10248,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			defaultValues = new ArrayList<>();
 
 			defaultValues.add(OPSI_CLIENTD_EVENT_on_demand);
-			// defaultValues.add( OPSI_CLIENTD_EVENT_silent_install );
+			
 
 			configDefaultValues.put(key, defaultValues);
 
@@ -10400,7 +10400,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				logging.info(this, "method " + backendLicensingInfoMethodname + " not existing in this opsi service");
 				opsiLicensingInfoVersion = LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD;
 			} else
-				// opsiLicensingInfoVersion = LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD;
+				
 				// // test!!!
 				opsiLicensingInfoVersion = LicensingInfoMap.OPSI_LICENSING_INFO_VERSION;
 		}

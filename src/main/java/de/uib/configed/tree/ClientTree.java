@@ -81,7 +81,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	protected GroupNode DIRECTORY_NOT_ASSIGNED;
 
 	public static String ALL_NAME;
-	// public static String FAILED_NAME;
+	
 	public static String GROUPS_NAME;
 	public static String DIRECTORY_NAME;
 	public static String DIRECTORY_PERSISTENT_NAME;
@@ -362,7 +362,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		// not allowing discontigous multiselection, we build a similar behavior based
 		// on activeTreeNodes
 		// since otherwise we could not discriminate between open and select click
-		// selectionmodel.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		
 
 		selectionmodel.setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 		setSelectionModel(selectionmodel);
@@ -580,7 +580,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			logging.info(this, " selected path " + selectedPath);
 			if (selectedPath != null) {
 				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
-				// main.treeClients_keyAction( e, selectedPath);
+				
 				if (selectedNode instanceof GroupNode) {
 					main.activateGroupByTree(false, selectedNode, selectedPath);
 					main.setGroup(selectedNode.toString());
@@ -620,7 +620,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		 * selectedPath);
 		 */
 
-		// main.treeClients_selectedValueChanged(e);
+		
 		/*
 		 * TreePath[] selClientPaths = getSelectionPaths();
 		 * logging.debug(this,"in " + this +
@@ -838,7 +838,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		GROUPS.setAllowsOnlyGroupChilds(true);
 		GROUPS.setFixed(true);
 
-		// GROUPS = new IconNode(GROUPS_NAME);
+		
 		// GROUPS.setIcon(Globals.createImageIcon("images/group_small.png", "group"));
 
 		
@@ -862,7 +862,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		pathToDIRECTORY = new TreePath(new Object[] { ROOT, DIRECTORY });
 
-		// createDIRECTORY_NOT_ASSIGNED();
+		
 
 		/*
 		 * //DIRECTORY_NOT_ASSIGNED
@@ -888,7 +888,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 				// "all clients in selected depots");
 				configed.getResourceValue("ClientTree.ALLdescription"));
 
-		// ALL = new IconNode(ALL_NAME);
+		
 		// ALL.setIcon(Globals.createImageIcon("images/group_small.png", "group"));
 		ROOT.add(ALL);
 		ALL.setImmutable(true);
@@ -1065,7 +1065,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		groups.put(ALL_NAME, groupALL);
 
-		// groupNodes.put(FAILED_NAME, FAILED);
+		
 
 		groupGROUPS.put("groupId", GROUPS_NAME);
 		// groupGROUPS.put("parentGroupId", ALL_NAME);

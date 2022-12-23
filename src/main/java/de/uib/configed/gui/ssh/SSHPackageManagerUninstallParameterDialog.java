@@ -45,7 +45,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 	private JComboBox cb_opsiproducts;
 	private JComboBox cb_verbosity;
-	// private JComboBox cb_depots;
+	
 	private JCheckBox checkb_keepFiles;
 
 	private JTextField tf_product;
@@ -103,7 +103,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		btn_execute.setEnabled(false); // requires valid depot selection
 		tf_selecteddepots.setText("");
-		// tf_selecteddepots.setEnabled(false);
+		
 
 		pack();
 		this.setSize(frameWidth, frameHeight);
@@ -242,7 +242,7 @@ public class SSHPackageManagerUninstallParameterDialog
 			cb_verbosity.addItemListener(itemEvent -> changeVerbosity());
 		}
 		{
-			// tf_freeInput = new JTextField();
+			
 			// tf_freeInput.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.freeInput"));
 			// tf_freeInput.getDocument().addDocumentListener(new DocumentListener()
 			// {
@@ -283,7 +283,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 			cb_opsiproducts.addItemListener(itemEvent -> {
 				tf_selecteddepots.setText("");
-				// tf_selecteddepots.setEnabled(false);
+				
 				btn_execute.setEnabled(false);
 				tf_product.setText((String) cb_opsiproducts.getSelectedItem());
 			});
@@ -356,7 +356,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 	// private void changeFreeInput( )
 	// {
-	// commandPMUninstall.setFreeInput(tf_freeInput.getText().trim());
+	
 	
 	// }
 	private void changeDepot() {
@@ -434,7 +434,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 					new SSHConnectExec(commandPMUninstall);
 					
-					// cb_opsiproducts.removeItem( prod );
+					
 					execFinished = true;
 					logging.debug(this, "end exec thread");
 				} catch (Exception e) {

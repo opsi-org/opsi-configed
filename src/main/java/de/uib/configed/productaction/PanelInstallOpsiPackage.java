@@ -270,7 +270,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		chooserPackage = new JFileChooser();
 		chooserPackage.setPreferredSize(Globals.filechooserSize);
-		// chooserPackage.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		
 		javax.swing.filechooser.FileNameExtensionFilter filter = new javax.swing.filechooser.FileNameExtensionFilter(
 				"opsi package", "opsi");
 		chooserPackage.addChoosableFileFilter(filter);

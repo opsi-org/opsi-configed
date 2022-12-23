@@ -1199,7 +1199,7 @@ public class DataStubNOM extends DataStub {
 	// ===================================================
 
 	protected AuditSoftwareXLicencePool auditSoftwareXLicencePool;
-	// protected java.sql.Time CONFIG_STATE_last_entry = null;
+	
 
 	@Override
 	public void auditSoftwareXLicencePoolRequestRefresh() {
@@ -1316,7 +1316,7 @@ public class DataStubNOM extends DataStub {
 
 	// ===================================================
 	protected TreeMap<String, LicencepoolEntry> licencepools;
-	// protected java.sql.Time CONFIG_STATE_last_entry = null;
+	
 
 	@Override
 	public void licencepoolsRequestRefresh() {
@@ -1355,7 +1355,7 @@ public class DataStubNOM extends DataStub {
 
 	// ===================================================
 	protected java.util.Map<String, LicenceContractEntry> licenceContracts;
-	// protected Table_LicenceContracts tableLicenceContracts;
+	
 
 	protected TreeMap<String, TreeSet<String>> contractsExpired;
 	// date in sql time format, contrad ID
@@ -1404,7 +1404,7 @@ public class DataStubNOM extends DataStub {
 		contractsToNotify = new TreeMap<>();
 		contractsExpired = new TreeMap<>();
 
-		// tableLicenceContracts = new Table_LicenceContracts();
+		
 
 		if (persist.withLicenceManagement) {
 			persist.notifyDataLoadingObservers(
@@ -1450,7 +1450,7 @@ public class DataStubNOM extends DataStub {
 
 	// ===================================================
 	protected java.util.Map<String, LicenceEntry> licences;
-	// protected java.sql.Time CONFIG_STATE_last_entry = null;
+	
 
 	@Override
 	public void licencesRequestRefresh() {
@@ -1487,7 +1487,7 @@ public class DataStubNOM extends DataStub {
 
 	// ===================================================
 	protected List<LicenceUsableForEntry> licenceUsabilities;
-	// protected java.sql.Time CONFIG_STATE_last_entry = null;
+	
 
 	@Override
 	public void licenceUsabilitiesRequestRefresh() {
@@ -1526,7 +1526,7 @@ public class DataStubNOM extends DataStub {
 
 	// ===================================================
 	protected List<LicenceUsageEntry> licenceUsages;
-	// protected java.sql.Time CONFIG_STATE_last_entry = null;
+	
 
 	@Override
 	public void licenceUsagesRequestRefresh() {

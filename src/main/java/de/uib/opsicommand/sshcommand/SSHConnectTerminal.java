@@ -309,7 +309,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				int key = e.getKeyCode();
 				JTextField textField = (JTextField) e.getSource();
 				// if (textField.getText().trim().toLowerCase().equals("exit")) { //
-				// if(key==KeyEvent.VK_ENTER) dialog.cancel(); // ((Component)
+				
 				
 				if (key == KeyEvent.VK_ENTER) {
 					logging.info(this, "initInputFieldFromDialog keyReleased ENTER ");
@@ -338,7 +338,7 @@ public class SSHConnectTerminal extends SSHConnect {
 						
 						// }
 						// else
-						// dialog.setAutocompleteList(commands_compgen);
+						
 
 						
 						

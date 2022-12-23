@@ -33,7 +33,7 @@ import de.uib.utilities.logging.logging;
 	*/
 
 public class UserConfig {
-	public static String CONFIGKEY_STR_USER = "user"; // de.uib.opsidatamodel.PersistenceController.KEY_USER_ROOT;
+	public static String CONFIGKEY_STR_USER = "user"; 
 
 	public static final String ROLE = "role";
 

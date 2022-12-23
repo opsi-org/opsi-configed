@@ -392,7 +392,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					// lastStateChange " + stateAndAction.get(ProductState.KEY_lastStateChange));
 					
 					// lastStateChange " +
-					// combinedVisualValues.get(ProductState.KEY_lastStateChange));
+					
 
 				}
 
@@ -1013,7 +1013,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 			
 			// all clients " + ar + " for " + prod + " instead of " +
-			// combinedVisualValues.get(ProductState.KEY_actionRequest).get(prod));
+			
 
 			// if ( ( product2setOfClientsWithNewAction.get(prod) ).size() <
 			// selectedClients.length )
@@ -1560,10 +1560,10 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		String actualProduct = (String) productsV.get(row);
 		
 		// "combinedVisualValues.get(ProductState.KEY_lastStateChange) " +
-		// combinedVisualValues.get(ProductState.KEY_lastStateChange));
+		
 		
 		// ", " +
-		// combinedVisualValues.get(ProductState.KEY_lastStateChange).get(actualProduct));
+		
 		return combinedVisualValues.get(ProductState.KEY_lastStateChange).get(actualProduct);
 	}
 
@@ -1581,7 +1581,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	private Object retrieveValueAt(int row, int displayCol) {
 		
 		// +
-		// combinedVisualValues.get(ProductState.KEY_lastStateChange).get(actualProduct));
+		
 
 		// if (productsV == null || productsV.isEmpty()) return "";
 
@@ -1609,7 +1609,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		case 1:
 			result = globalProductInfos.get(actualProduct).get(ProductState.KEY_productName);
-			// combinedVisualValues.get(ProductState.KEY_productName).get(actualProduct);
+			
 			// there we have not got the value
 			break;
 
@@ -1644,7 +1644,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			
 			// if (actualProduct.equals("firefox"))
 			
-			// combinedVisualValues.get(ProductState.KEY_actionRequest).get(actualProduct));
+			
 			ActionRequest ar = ActionRequest
 					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_actionRequest).get(actualProduct));
 			result = ActionRequest.getDisplayLabel(ar.getVal());

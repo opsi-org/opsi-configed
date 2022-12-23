@@ -88,7 +88,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	}
 
 	private void setComponentsEnabled(boolean value) {
-		// btn_advancedSettings.setEnabled(value);
+		
 		btn_exec.setEnabled(value);
 		if (value == false) {
 			tf_packageVersion.setEnabled(value);
@@ -149,7 +149,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 				});
 				autocompletion.initCombobox();
 				cb_mainDir = autocompletion.getCombobox();
-				// cb_mainDir.setEnabled(false);
+				
 
 				btn_searchDir = autocompletion.getButton();
 				btn_searchDir.removeActionListener(btn_searchDir.getActionListeners()[0]);

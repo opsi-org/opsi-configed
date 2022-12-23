@@ -210,10 +210,10 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 		
 		// must not be set (otherwise the embedding scrollpane does not scroll)
-		// depotslist.setPreferredSize(new Dimension(widthColumnServer, line_height));
+		
 		
 		// labelDepotServer.setPreferredSize(new Dimension(widthColumnServer,
-		// line_height));
+		
 
 		
 		

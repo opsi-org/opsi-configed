@@ -93,7 +93,7 @@ public class SavedSearchesDialog extends FEditList {
 		});
 
 		JMenuItem reload = new JMenuItemFormatted();
-		// reload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)); does not
+		
 		// find itscontext
 		reload.setText(configed.getResourceValue("ConfigedMain.reloadTable"));
 		reload.setIcon(Globals.createImageIcon("images/reload16.png", ""));
@@ -108,7 +108,7 @@ public class SavedSearchesDialog extends FEditList {
 		popup.add(reload);
 
 		JMenuItem remove = new JMenuItemFormatted();
-		// remove.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)); does not
+		
 		// find itscontext
 		remove.setText(de.uib.configed.configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
 		// remove.setIcon(Globals.createImageIcon("images/remove16.png",

@@ -96,7 +96,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			{
 				String visualText = modifier.modify(stringValue);
 
-				// eliminate_appending_visual_underscores( stringValue );
+				
 
 				
 				setText(visualText);

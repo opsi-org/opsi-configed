@@ -78,7 +78,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	private javax.swing.JPanel panelLicenceModel;
 	private javax.swing.JTextField jTextField_licenceID;
 	private javax.swing.JTextField jTextField_licenceType;
-	// private javax.swing.JFormattedTextField jTextField_maxInstallations;
+	
 	private javax.swing.JTextField jTextField_maxInstallations;
 	private javax.swing.JComboBox comboClient;
 	private javax.swing.JTextField jTextField_endOfLicence;
@@ -199,7 +199,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_licenceType.setText("RETAIL");
 		jTextField_licenceType.setEditable(false);
 		jTextField_maxInstallations.setEnabled(true);
-		// jTextField_maxInstallations.setValue(1);//setText("1");
+		
 		jTextField_maxInstallations.setText("1");
 		jTextField_maxInstallations.setEditable(false);
 		comboClient.setEnabled(false);
@@ -215,7 +215,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_licenceType.setText("VOLUME");
 		jTextField_licenceType.setEditable(false);
 		jTextField_maxInstallations.setEnabled(true);
-		// jTextField_maxInstallations.setValue(0);//setText("0");
+		
 		jTextField_maxInstallations.setText("0");
 		jTextField_maxInstallations.setEditable(true);
 		comboClient.setEnabled(false);
@@ -231,7 +231,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_licenceType.setText("OEM");
 		jTextField_licenceType.setEditable(false);
 		jTextField_maxInstallations.setEnabled(true);
-		// jTextField_maxInstallations.setValue(1);//setText("1");
+		
 		jTextField_maxInstallations.setText("1");
 		jTextField_maxInstallations.setEditable(false);
 		comboClient.setModel(new DefaultComboBoxModel<>(enterLicenceController.getChoicesAllHosts()));
@@ -249,7 +249,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_licenceType.setText("CONCURRENT");
 		jTextField_licenceType.setEditable(false);
 		jTextField_maxInstallations.setEnabled(true);
-		// jTextField_maxInstallations.setValue(0);//setText("0");
+		
 		jTextField_maxInstallations.setText("0");
 		jTextField_maxInstallations.setEditable(false);
 		comboClient.setEnabled(false);
@@ -269,7 +269,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		);
 
 		panelKeys.setMasterFrame(Globals.frame1);
-		// panelKeys.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		
 
 		
 		// SearchTargetModelFromTable.setFiltered
@@ -281,7 +281,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		);
 
 		panelLicencepools.setMasterFrame(Globals.frame1);
-		// panelLicencepools.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		
 
 		
 		// SearchTargetModelFromTable.setFiltered
@@ -294,7 +294,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 				true // with tablesearchpane
 		);
 		panelLicencecontracts.setMasterFrame(Globals.frame1);
-		// panelLicencecontracts.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		
 
 		
 		// SearchTargetModelFromTable.setFiltered
@@ -322,7 +322,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_licenceID = new javax.swing.JTextField();
 		jTextField_licenceType = new javax.swing.JTextField();
 		jTextField_maxInstallations = new javax.swing.JTextField();
-		// jTextField_maxInstallations = new javax.swing.JFormattedTextField();
+		
 		// jTextField_maxInstallations.setInputVerifier(new
 		
 

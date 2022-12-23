@@ -215,13 +215,13 @@ public class OpsiDataBackend extends Backend {
 		// {
 		// if( operation instanceof IntEqualsOperation )
 		// return new OpsiDataIntEqualsOperation( OpsiDataClient.SOFTWARE_MAP,
-		// ProductState.KEY_packageVersion, (Integer) operation.getData(), element );
+		
 		// if( operation instanceof IntLessThanOperation )
 		// return new OpsiDataIntLessThanOperation( OpsiDataClient.SOFTWARE_MAP,
-		// ProductState.KEY_packageVersion, (Integer) operation.getData(), element );
+		
 		// if( operation instanceof IntGreaterThanOperation )
 		// return new OpsiDataIntGreaterThanOperation( OpsiDataClient.SOFTWARE_MAP,
-		// ProductState.KEY_packageVersion, (Integer) operation.getData(), element );
+		
 		// throw new IllegalArgumentException("Wrong operation for this element.");
 		// }
 

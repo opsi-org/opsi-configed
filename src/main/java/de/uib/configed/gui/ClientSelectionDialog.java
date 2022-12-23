@@ -193,7 +193,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		
 
 		try {
-			// setCursor(new Cursor(Cursor.WAIT_CURSOR));
+			
 			
 			collectData();
 			//

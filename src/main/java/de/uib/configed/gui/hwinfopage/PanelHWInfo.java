@@ -132,7 +132,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		jScrollPaneTree = new JScrollPane(tree);
 		jScrollPaneTree.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		// jScrollPaneTree.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		
 		jScrollPaneTree.setMinimumSize(new Dimension(200, 200));
 		jScrollPaneTree.setPreferredSize(new Dimension(400, 200));
 
@@ -164,7 +164,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		
-		// jScrollPaneInfo.setPREFERRED_SIZE( new Dimension(400, 200) );
+		
 
 		contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
 		

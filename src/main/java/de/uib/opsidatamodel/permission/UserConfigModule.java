@@ -34,11 +34,11 @@ public class UserConfigModule {
 
 		if (prototype != null) {
 			booleanMap.putAll(prototype.booleanMap);
-			// bool_keys = (LinkedHashSet<String>) booleanMap.keySet();
+			
 			extractKeys(prototype.booleanMap, bool_keys);
 
 			valuesMap.putAll(prototype.valuesMap);
-			// list_keys = (LinkedHashSet<String>) valuesMap.keySet();
+			
 			extractKeys(prototype.valuesMap, list_keys);
 		}
 

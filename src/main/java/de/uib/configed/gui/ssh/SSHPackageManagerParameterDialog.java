@@ -101,7 +101,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		// String o_prod = ((String)firstDepot.get(configDepot)).replace("file://", "");
 		// if (o_prod != null) opsiProd = o_prod;
 		
-		// o_prod);
+		
 		// } catch (Exception e)
 		// {
 		// }
@@ -121,10 +121,10 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 
 	protected void initButtons(final SSHPackageManagerParameterDialog caller) {
 		{
-			// btn_help = new JButton();
+			
 			btn_help = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
 			btn_help.setText(configed.getResourceValue("SSHConnection.buttonHelp"));
-			// buttonPanel.add(btn_help);
+			
 			btn_help.addActionListener(actionEvent -> doActionHelp(caller));
 
 			btn_execute = new JButton();

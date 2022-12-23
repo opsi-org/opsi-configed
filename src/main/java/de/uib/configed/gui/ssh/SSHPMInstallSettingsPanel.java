@@ -197,7 +197,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 					PersistenceController.DEPOT_SELECTION_NODEPOTS)
 
 			) {
-				depotParameter = "";// persist.DEPOT_SELECTION_NODEPOTS;
+				depotParameter = "";
 			} else if (selectedDepots.contains(PersistenceController.DEPOT_SELECTION_ALL)) {
 				depotParameter = "all";
 			} else {

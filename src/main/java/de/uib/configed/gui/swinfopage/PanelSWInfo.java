@@ -241,8 +241,8 @@ public class PanelSWInfo extends JPanel {
 		indexOfColWindowsSoftwareID = columnNames.indexOf(SWAuditEntry.WINDOWSsOFTWAREid);
 		modelSWInfo.chainFilter(FILTER_MS_UPDATES, new TableModelFilter(filterConditionWithMsUpdates));
 		modelSWInfo.reset();
-		// modelSWInfo.setUsingFilter(FILTER_MS_UPDATES, withMsUpdates);
-		// modelSWInfo.toggleFilter( FILTER_MS_UPDATES );
+		
+		
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates = new JCheckBox("", withMsUpdates);
 		checkWithMsUpdates.setForeground(Globals.blue);
@@ -251,8 +251,8 @@ public class PanelSWInfo extends JPanel {
 
 		modelSWInfo.chainFilter(FILTER_MS_UPDATES2, new TableModelFilter(filterConditionWithMsUpdates2));
 		modelSWInfo.reset();
-		// modelSWInfo.setUsingFilter(FILTER_MS_UPDATES2, withMsUpdates2);
-		// modelSWInfo.toggleFilter( FILTER_MS_UPDATES2 );
+		
+		
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates2 = new JCheckBox("", withMsUpdates2);
 		checkWithMsUpdates2.setForeground(Globals.blue);

@@ -109,7 +109,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	/** This instance / Design Patter: singelton **/
 	private static SSHCommandControlDialog instance;
 
-	// private JButton btn_changeHelpPanelStatus;
+	
 	private JButton btn_test_command;
 	/**
 	 * Graphical user interface for editing sshcommands.
@@ -212,7 +212,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			cb_menuText = new JComboBox<>();
 			lbl_tooltipText = new JLabel();
 			lbl_priority = new JLabel();
-			// btn_save = new JButton();
+			
 			tf_priority = new JTextField(new CheckedDocument(/* allowedChars */
 					new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-' }, 5),
 					String.valueOf(factory.position_default), 1);
@@ -415,7 +415,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		cb_parentMenuText.setEnabled(value);
 		cb_parentMenuText.setEditable(value);
 
-		// cb_menuText.setEnabled(value);
+		
 
 		tf_tooltipText.setEnabled(value);
 		tf_tooltipText.setEditable(value);

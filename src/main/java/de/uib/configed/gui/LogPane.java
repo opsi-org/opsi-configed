@@ -453,7 +453,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				
-				// sliderLevel.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+				
 				logging.debug(this, "change event from sliderLevel, " + sliderLevel.getValue());
 				if (sliderLevel.getValueIsAdjusting())
 					return;
@@ -537,7 +537,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		 * public void stateChanged(ChangeEvent e)
 		 * {
 		 * 
-		 * //spinnerLevel.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+		 * 
 		 * logging.debug(this, "change event from spinnerLevel, " +
 		 * spinnerLevel.getValue());
 		 * 

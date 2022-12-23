@@ -44,7 +44,7 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 		lbl_opsi_product.setText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelOtherPath"));
 		tf_product = autocompletion.getTextField();
-		// tf_product.setEditable(false);
+		
 		cb_autocompletion = autocompletion.getCombobox();
 		cb_autocompletion.setToolTipText(configed
 				.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button_andopsipackage.combo.tooltip"));

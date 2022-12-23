@@ -36,11 +36,11 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 		TreeSet<String> productsWithDefaultValues_client = new TreeSet<>(productsWithDefaultValues);
 		
 		
-		// productsWithDefaultValues_client);
+		
 		
 		productsWithDefaultValues_client.removeAll(theProductNames);
 		
-		// productsWithDefaultValues_client);
+		
 
 		
 

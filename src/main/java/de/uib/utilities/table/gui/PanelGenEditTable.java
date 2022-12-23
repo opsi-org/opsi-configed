@@ -158,7 +158,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	public static final int POPUP_PRINT = PopupMenuTrait.POPUP_PRINT; // 30
 
-	// public static final int POPUP_TEST = POPUP_PRINT;
+	
 
 	private static final HashMap<Integer, String> keyNames = new HashMap<Integer, String>() {
 		@Override
@@ -286,7 +286,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			}
 		} else {
 			this.internalpopups.add(POPUP_RELOAD);
-			// this.internalpopups.add(POPUP_PRINT);
+			
 			this.internalpopups.add(POPUP_PDF);
 		}
 
@@ -726,7 +726,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				menuItemReload = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.reload"),
 						Globals.createImageIcon("images/reload16.png", ""));
 				
-				// menuItemReload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+				
 				// does not work
 				menuItemReload.addActionListener(actionEvent -> reload());
 				if (popupIndex > 1)

@@ -189,7 +189,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		fieldInvolvedDepots.setPreferredSize(Globals.counterfieldDimension);
 		fieldInvolvedDepots.setEditable(false);
 		
-		// viewInvolvedDepots.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		
 		
 
 		initializeValues();

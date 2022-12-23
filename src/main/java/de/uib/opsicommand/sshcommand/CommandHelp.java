@@ -8,7 +8,7 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 
 {
 	// private String baseName = "";
-	// private LinkedList<CommandHelp_Row> helpLinesSplitted = null;
+	
 	private boolean needSudo = false;
 	
 	private boolean needParameter = false;

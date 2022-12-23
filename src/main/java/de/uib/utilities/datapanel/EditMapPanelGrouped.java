@@ -318,7 +318,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 		JScrollPane jScrollPaneTree = new JScrollPane(tree);
 		jScrollPaneTree.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		// jScrollPaneTree.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		
 
 		rightPane = new JPanel();
 		labelForRightPane = new JLabel("");

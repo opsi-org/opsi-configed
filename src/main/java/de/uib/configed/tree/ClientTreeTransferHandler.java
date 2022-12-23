@@ -458,7 +458,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			else
 			// coming from table, replace!
 			{
-				// sourceParentID = tree.ALL_NAME;
+				
 				
 			}
 

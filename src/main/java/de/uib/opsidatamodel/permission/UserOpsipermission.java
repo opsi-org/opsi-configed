@@ -114,7 +114,7 @@ public class UserOpsipermission extends UserConfigModule {
 		DEFAULT = new UserOpsipermission(UserConfig.ARCHEO_ROLE_NAME);
 
 		
-		// PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY);
+		
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY, false);
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_SERVER_READWRITE, true);
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED, false);

@@ -118,8 +118,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	final int fwidth_column_productcompletename = 170;
 	final int fwidth_column_productstate = 60;
 	final int fwidth_column_productposition = 40;
-	// final int fwidth_column_productinstallationstatus = 100;
-	// final int fwidth_column_productaction = 100;
+	
+	
 	final int fwidth_column_productsequence = fwidth_column_productposition;
 	final int fwidth_column_versionInfo = fwidth_column_productstate;
 	final int fwidth_column_productversion = fwidth_column_productstate;
@@ -602,7 +602,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		itemSaveAndExecute = new JMenuItemFormatted();
 		itemSaveAndExecute.setText(configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
 		// itemSaveAndExecute.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_X,
-		// InputEvent.CTRL_DOWN_MASK) );
+		
 		// dies bit get its intended context
 		itemSaveAndExecute.setIcon(Globals.createImageIcon("images/executing_command_blue_16.png", ""));
 		itemSaveAndExecute.setFont(Globals.defaultFont);
@@ -647,7 +647,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		showPopupOpsiclientdEvent(true);
 
 		JMenuItem reload = new JMenuItemFormatted();
-		// reload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)); does not
+		
 		// find itscontext
 		reload.setText(configed.getResourceValue("ConfigedMain.reloadTable"));
 		reload.setIcon(Globals.createImageIcon("images/reload16.png", ""));

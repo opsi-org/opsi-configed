@@ -52,7 +52,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		init();
 		setGapSize(lg, rg, ug, og);
 		initLayout();
-		// setComponentsEnabled_RO();
+		
 	}
 
 	public SSHCommandControlParameterMethodsPanel(JDialog owner) {
@@ -80,12 +80,12 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 		lbl_empty.setPreferredSize(tf_dim_long);
 		lbl_paramMethods.setText(configed.getResourceValue("SSHConnection.CommandControl.parameterMethods"));
-		// lbl_paramMethods.setPreferredSize(tf_dim);
+		
 		lbl_paramFormats.setText(configed.getResourceValue("SSHConnection.CommandControl.parameterFormats"));
-		// lbl_paramFormats.setPreferredSize(tf_dim);
+		
 		cb_parameter_formats = new JComboBox<>(factory.getParameterHandler().getParameterFormats());
 		logging.info(this, "cb_parameter_formats lightweight " + cb_parameter_formats.isLightWeightPopupEnabled());
-		// cb_parameter_formats.setLightWeightPopupEnabled(false);
+		
 		cb_parameter_formats.setPreferredSize(tf_dim_long);
 		cb_parameter_formats.setMaximumRowCount(5); // we have to delimit it so that is constrained to the component (in
 													// Windows) 
@@ -94,7 +94,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 				.setSelectedItem(configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"));
 		cb_parameter_methods.setPreferredSize(tf_dim_long);
 		cb_parameter_methods.setMaximumRowCount(5); 
-		// cb_parameter_methods.setLightWeightPopupEnabled(false);
+		
 		cb_parameter_formats.setEnabled(false);
 
 		cb_parameter_methods.addItemListener(itemEvent -> {

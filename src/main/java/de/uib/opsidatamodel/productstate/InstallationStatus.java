@@ -170,7 +170,7 @@ public class InstallationStatus {
 		checkCollections();
 
 		if (label == null || label.equals(""))
-			// return NOT_INSTALLED; produces false results when recursively following
+			
 			// action requests
 			return UNKNOWN;
 

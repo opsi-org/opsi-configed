@@ -112,7 +112,7 @@ public class SWAuditClientEntry
 		DB_COLUMNS.put(SWAuditEntry.LANGUAGE, DB_TABLE_NAME + "." + "language");
 		DB_COLUMNS.put(LICENCEkEY, DB_TABLE_NAME + "." + "licenseKey");
 		DB_COLUMNS.put(LAST_MODIFICATION, DB_TABLE_NAME + "." + "lastseen");
-		// DB_COLUMNS.put(SWAuditEntry.WINDOWSsOFTWAREid);
+		
 
 	}
 
@@ -159,7 +159,7 @@ public class SWAuditClientEntry
 		data.put(SWAuditEntry.id, values.get(keys.indexOf(DB_COLUMNS.get(CLIENT_ID))));
 		data.put(LICENCEkEY, values.get(keys.indexOf(DB_COLUMNS.get(LICENCEkEY))));
 		// data.put(SWAuditEntry.SUBVERSION,
-		// values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.SUBVERSION))));
+		
 		lastModificationS = values.get(keys.indexOf(DB_COLUMNS.get(LAST_MODIFICATION)));
 		swIdent = produceSWident(keys, values);
 		this.controller = controller;
@@ -190,7 +190,7 @@ public class SWAuditClientEntry
 		produceSWid();
 		data.put(LICENCEkEY, Globals.produceNonNull(m.get(LICENCEkEY)));
 		lastModificationS = Globals.produceNonNull(m.get(LAST_MODIFICATION));
-		// uninstallString = Globals.produceNonNull(m.get(UNINSTALL_STRING));
+		
 
 	}
 
@@ -355,7 +355,7 @@ public class SWAuditClientEntry
 
 	public String getLastModification() {
 		return lastModificationS;
-		// Globals.produceNonNull(readMap.get(LAST_MODIFICATION));
+		
 	}
 
 	public Integer getSWid() {

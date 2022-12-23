@@ -464,7 +464,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected void initGui() {
 		logging.info(this, "initGui");
 
-		// persist.getProductOnClients_displayFieldsLocalbootProducts());
+		
 		displayFieldsLocalbootProducts = new LinkedHashMap<>(
 				persist.getProductOnClients_displayFieldsLocalbootProducts());
 		displayFieldsNetbootProducts = new LinkedHashMap<>(persist.getProductOnClients_displayFieldsNetbootProducts());
@@ -2250,9 +2250,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			// test
 			// host_displayFields.put("install by shutdown", true);
-			// host_displayFields.put(HostInfo.clientUefiBoot_DISPLAY_FIELD_LABEL, true);
-			// host_displayFields.put(HostInfo.clientWanConfig_DISPLAY_FIELD_LABEL, true);
-			// host_displayFields.put(HostInfo.depotOfClient_DISPLAY_FIELD_LABEL, true);
+			
+			
+			
 
 			for (Map.Entry<String, Boolean> entry : host_displayFields.entrySet()) {
 				if (Boolean.TRUE.equals(entry.getValue())) {
@@ -2416,9 +2416,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public void requestReloadStatesAndActions(boolean onlyUpdate) {
 		logging.info(this, "requestReloadStatesAndActions , only updating " + onlyUpdate);
 		// currentSortKeysLocalbootProducts =
-		// mainFrame.panel_LocalbootProductsettings.getSortKeys();
+		
 		// currentSortKeysNetbootProducts =
-		// mainFrame.panel_NetbootProductsettings.getSortKeys();
+		
 
 		persist.productpropertiesRequestRefresh();
 
@@ -3742,7 +3742,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 			}
 
-			// mainFrame.panel_ProductProperties.refresh();
+			
 			return true;
 		} else
 			return false;
@@ -4646,7 +4646,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			persist.userConfigurationRequestReload();
 			persist.checkConfiguration();
 
-			// mainFrame.panel_ProductProperties.paneProducts.requestReload();
+			
 
 			persist.opsiInformationRequestRefresh();
 			persist.hwAuditConfRequestRefresh();
@@ -4662,7 +4662,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			// if (saveViewIndex == viewProductProperties)
 
 			logging.info(this, "reloadData _1");
-			// mainFrame.panel_ProductProperties.paneProducts.requestReload();
+			
 			// calls again persist.productDataRequestRefresh()
 			mainFrame.panel_ProductProperties.paneProducts.reload();
 			logging.info(this, "reloadData _2");
@@ -4670,10 +4670,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			// if variable modelDataValid in GenTableModel has no function , the following
 			// statement is sufficient:
 
-			// mainFrame.panel_ProductProperties.paneProducts.reset();
+			
 
 			// only for licenses, will be handled in another method
-			// persist.relations_auditSoftwareToLicencePools_requestRefresh();
+			
 
 			persist.configOptionsRequestRefresh();
 
@@ -4892,7 +4892,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			 */
 
 			// JOptionPane.showMessageDialog(null, "" + source, "alert",
-			// JOptionPane.INFORMATION_MESSAGE) );
+			
 		}
 
 	}
@@ -5975,7 +5975,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 * fListFeedback.setMessage("");
 	 * fListFeedback.setButtonsEnabled(false);
 	 * Cursor oldCursor = fListFeedback.getCursor();
-	 * //fListFeedback.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+	 * 
 	 * fListFeedback.setVisible(true);
 	 * fListFeedback.glassTransparency(true, 1000, 200, 0.04f);
 	 * 
@@ -6305,8 +6305,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				// if (!(Globals.isGlobalReadOnly()))
 				// {
 				// if (command instanceof SSHCommand_Template)
-				// exec_template((SSHCommand_Template) command);
-				// else if (command.isMultiCommand()) exec_list((SSHMultiCommand)command);
+				
+				
 
 				// }
 			}

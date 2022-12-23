@@ -651,7 +651,7 @@ public class DataStubRawData extends DataStubNOM {
 		timeCheck.start();
 		logging.info(this, "  retrieveHostConfigs ( CONFIG_STATE )  start a request");
 
-		// String columns = ConfigStateEntry.DB_COLUMN_NAMES.toString();
+		
 		
 		// columns = columns.substring(0, columns.length()-1);
 		// json parsing for integer value false thereforw we omit the ID column
@@ -681,7 +681,7 @@ public class DataStubRawData extends DataStubNOM {
 
 			for (List<String> row : rows) {
 				String hostId = row.get(0);
-				// ConfigStateEntry.DB_COLUMN_NAMES.indexOf(ConfigStateEntry.OBJECT_ID));
+				
 
 				Map<String, Object> configs1Host = hostConfigs.get(hostId);
 				if (configs1Host == null) {
@@ -705,7 +705,7 @@ public class DataStubRawData extends DataStubNOM {
 
 				// get values as String
 				String valueString = row.get(2);
-				// ConfigStateEntry.DB_COLUMN_NAMES.indexOf( ConfigStateEntry.VALUES) );
+				
 
 				// parse String and produce list
 				

@@ -1220,8 +1220,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		final boolean regexSearch = (comboSearchFieldsMode.getSelectedIndex() == REGEX_SEARCH);
 		final boolean combineCols = fulltextSearch;
 
-		// setCursor(new java.awt.Cursor( java.awt.Cursor.WAIT_CURSOR));
-		// fieldSearch.setCursor(new java.awt.Cursor( java.awt.Cursor.WAIT_CURSOR));
+		
+		
 		fieldSearch.getCaret().setVisible(false);
 
 		// final de.uib.utilities.thread.WaitCursor waitCursor = new
@@ -1255,7 +1255,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 			
 
-			// fieldSearch.setCursor(new java.awt.Cursor( java.awt.Cursor.TEXT_CURSOR));
+			
 
 			fieldSearch.getCaret().setVisible(true);
 			

@@ -858,7 +858,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	@Override
 	public String getDefaultName() {
 		return byAuditPath;
-		// return de.uib.connectx.SmbConnect.PRODUCT_SHARE_RW;
+		
 	}
 
 }

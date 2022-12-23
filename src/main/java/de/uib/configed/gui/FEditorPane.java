@@ -19,7 +19,7 @@ public class FEditorPane extends FGeneralDialog {
 
 	private void init() {
 		editPane.setOpaque(true);
-		// editPane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
+		
 		editPane.setBackground(Globals.backgroundGrey);
 		editPane.setText("          ");
 		editPane.setEditable(false);

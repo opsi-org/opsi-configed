@@ -316,9 +316,9 @@ public class DPassword extends JDialog // implements Runnable
 
 	JPanel jPanelRadioButtons = new JPanel();
 	FlowLayout flowLayoutRadioButtons = new FlowLayout();
-	// JRadioButton jRadioButton_ssh = new JRadioButton();
+	
 	JRadioButton jRadioButton_ssh2 = new JRadioButton();
-	// JRadioButton jRadioButton_ftp = new JRadioButton();
+	
 	JRadioButton jRadioButton_localfs = new JRadioButton();
 
 	
@@ -527,8 +527,8 @@ public class DPassword extends JDialog // implements Runnable
 		jPanelButtons.add(jButtonCancel);
 
 		
-		// jPanelRadioButtons.add(jRadioButton_ssh2);
-		// jPanelRadioButtons.add(jRadioButton_localfs);
+		
+		
 
 		// x y w h wx wy
 
@@ -731,7 +731,7 @@ public class DPassword extends JDialog // implements Runnable
 		
 
 		
-		// setCursor(new Cursor(Cursor.WAIT_CURSOR));
+		
 
 		waitCursor = new WaitCursor(this, "ok_action");
 

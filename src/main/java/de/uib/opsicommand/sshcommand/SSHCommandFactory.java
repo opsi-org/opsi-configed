@@ -307,10 +307,10 @@ public class SSHCommandFactory {
 			list_knownParents.add(parentdefaultForOwnCommands);
 
 		// if (commandlist.size() > 0)
-		// list_knownParents.add( parentNull );
+		
 
 		list_knownMenus.add(parentdefaultForOwnCommands);
-		// list_knownMenus.add( parentNull );
+		
 
 		for (Map<java.lang.String, java.lang.Object> map : commandlist) {
 			SSHCommand_Template com = buildSSHCommand(((String) map.get(command_map_id)),

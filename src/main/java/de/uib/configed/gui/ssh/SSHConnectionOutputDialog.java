@@ -37,8 +37,8 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 	protected JTextPane output;
 	protected JScrollPane jScrollPane;
 
-	// private JCheckBox cb_showResult;
-	// private JButton btn_inBackground;
+	
+	
 	protected JButton btn_close;
 	protected boolean buildFrame = false;
 
@@ -222,8 +222,8 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			jScrollPane.setViewportView(output);
 			output.setText("");
 
-			// btn_close = new JButton();
-			// // buttonPanel.add(btn_close);
+			
+			
 			// btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 			btn_close = new de.uib.configed.gui.IconButton(
 					de.uib.configed.configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
@@ -236,7 +236,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 
 			btn_close.addActionListener(closeListener);
 
-			// lbl_userhost = new JLabel();
+			
 			// lbl_userhost.setText("user@host");
 
 			// createLayout(konsolePanelLayout, jScrollPane,Globals.gapSize,

@@ -309,7 +309,7 @@ public class ActionRequest {
 		checkCollections();
 
 		if (label == null)
-			return new ActionRequest(NONE); // NOT_AVAILABLE);
+			return new ActionRequest(NONE); 
 
 		if (!labels.contains(label))
 			return new ActionRequest(INVALID);
