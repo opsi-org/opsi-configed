@@ -207,8 +207,6 @@ public class FLoadingWaiter extends JFrame
 		logging.info(this, "actAfterWaiting");
 		SwingUtilities.invokeLater(
 
-				
-
 				() -> setVisible(false)
 
 		);

@@ -19,7 +19,7 @@ public class ListMerger extends ArrayList {
 	static {
 		NO_COMMON_VALUE.setHavingNoCommonValue();
 	}
-	
+
 	// prevents correct recognition
 
 	// building the merger:

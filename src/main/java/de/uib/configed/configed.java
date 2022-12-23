@@ -115,19 +115,19 @@ public class configed {
 					"Set logging level L, L is a number >= " + logging.LEVEL_NONE + ", <= " + logging.LEVEL_SECRET
 							+ " . DEFAULT: " + de.uib.utilities.logging.logging.LOG_LEVEL_CONSOLE },
 			new String[] { "--halt", "", "Use  first occurring debug halt point that may be in the code" },
-			
+
 			// implemented in PersistenceController "},
 			new String[] { "--sqlgetrows", "", "Force use sql statements by getRawData" },
 			new String[] { "--nosqlrawdata", "", "Avoid getRawData" },
-			
+
 			// "},
-			
+
 			// database "},
-			
+
 			// database after renewing it"},
-			
+
 			// PersistenceController "}
-			
+
 			// if possible in PersistenceController "},
 			new String[] { "--localizationfile EXTRA_LOCALIZATION_FILENAME", "",
 					"For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: "
@@ -140,7 +140,6 @@ public class configed {
 					"export csv swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)" }
 
 			// undocumented
-			
 
 	};
 
@@ -781,8 +780,6 @@ public class configed {
 				// Process proc = rt.exec("cmd.exe /c start \"" + messagefile.getPath() + "\"");
 
 				// //Linux, we assume that there is a firefox and it will handle the url
-
-				
 
 			}
 		} catch (IOException ex) {

@@ -4257,7 +4257,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// OpsiMethodCall("getLocalBootProductIds_list", new String[]{theDepot}) );
 
 			Map productOrderingResult = (Map) exec.getMapOfLists(new OpsiMethodCall("getProductOrdering",
-					
+
 					new String[] { depotId }));
 
 			List<String> sortedProducts = (List<String>) productOrderingResult.get("sorted");

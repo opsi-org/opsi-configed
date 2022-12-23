@@ -342,8 +342,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected int saveDepotsViewIndex = VIEW_PRODUCT_PROPERTIES;
 	protected int saveServerViewIndex = VIEW_NETWORK_CONFIGURATION;
 
-	
-
 	protected Map<String, Object> reachableInfo = new HashMap<>();
 	protected Map<String, String> sessionInfo = new HashMap<>();
 
@@ -789,8 +787,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		login(savedServers);
 	}
 
-	
-
 	protected void initData() {
 
 		dependenciesModel = new DependenciesModel(persist);
@@ -1149,12 +1145,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	// List<String> allHosts =
-
-	
-
-	
-
-	
 
 	public void handleLicencesManagementRequest() {
 		logging.info(this, "handleLicencesManagementRequest called");
@@ -2076,7 +2066,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			treeClients.produceTreeForALL(allPCs);
 
-			
 			treeClients.produceAndLinkGroups(persist.getHostGroups());
 
 			logging.info(this, "------------ buildPclistTableModel, permittedHostGroups " + permittedHostGroups);
@@ -2110,8 +2099,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				treeClients.setClientInfo(persist.getHostInfoCollections().getMapOfAllPCInfoMaps());
 
 				treeClients.produceTreeForALL(allPCs);
-
-				
 
 				logging.info(this, "----------- buildPclistTableModel, directly allowed groups "
 						+ treeClients.getDirectlyAllowedGroups());
@@ -5286,7 +5273,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 							else
 
-								sessionInfo = persist.sessionInfo(null); 
+								sessionInfo = persist.sessionInfo(null);
 
 							sessioninfoFinished = true;
 
@@ -5750,8 +5737,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			fListFeedback.setVisible(true);
 			fListFeedback.glassTransparency(true, 800, 200, 0.04f);
 
-			
-
 			List errors = getErrors();
 
 			if (!errors.isEmpty()) {
@@ -6107,7 +6092,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			dialogRemoteControl
 					.setListModel(new DefaultComboBoxModel<>(new Vector<>(new TreeSet<>(remoteControls.keySet()))
-					
+
 					));
 
 			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, null, -1, false, ""));

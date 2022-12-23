@@ -196,7 +196,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			// try
 
 			// SwingUtilities.invokeAndWait(
-			
 
 			main.setVisualViewIndex(ConfigedMain.VIEW_CLIENTS); // because of potential memory problems we switch to
 																// client view

@@ -123,7 +123,7 @@ public class ControllerHWinfoMultiClients {
 	protected void initPanel() {
 		panel = new PanelGenEditTable("", // configed.getResourceValue("HardwareList"),
 				0, false, 0, false,
-				
+
 				PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF, true) {
 			@Override
 			public void reload() {

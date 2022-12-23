@@ -75,7 +75,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 		panelDepots = new JPanel();
 
-		listDepots = new JList<>(); 
+		listDepots = new JList<>();
 		listDepots.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		listDepots.addListSelectionListener(this);
 		listDepots.addMouseListener(this);

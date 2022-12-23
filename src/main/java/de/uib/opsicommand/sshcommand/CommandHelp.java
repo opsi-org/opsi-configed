@@ -116,6 +116,5 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	// regexes[0] = "(-[\\w*],[
 	// ])|(--[\\w*]*-[\\w*]*-[\\w*]*)|(--[\\w*]*-[\\w*]*)|(--[\\w*]*)";
 	// regexes[1] = "((<[\\w*]*>)|(<[\\w*]*-[\\w*]*>)|(<[\\w*]*-[\\w*]*-[\\w*]*>)) |
-	
 
 }

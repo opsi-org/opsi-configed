@@ -719,10 +719,6 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		final WaitCursor waitCursor = new WaitCursor(rootFrame);
 
-		
-
-		
-
 		new Thread() {
 			@Override
 			public void run() {

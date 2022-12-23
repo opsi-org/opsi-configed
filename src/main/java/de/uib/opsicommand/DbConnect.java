@@ -25,7 +25,6 @@ public class DbConnect {
 			Class.forName(driver).getDeclaredConstructor().newInstance();
 
 		}
-		
 
 		catch (Exception e) {
 			logging.error("Error", e);

@@ -8,7 +8,7 @@ import java.util.LinkedHashSet;
 import de.uib.utilities.logging.logging;
 
 public class UserOpsipermission extends UserConfigModule {
-	
+
 	// permit restrictable action
 
 	public enum ActionPrivilege {

@@ -419,7 +419,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 				logging.info(this, "actionPerformed on buttonCallExecute opsiPackageGotPathS,  depot:  "
 						+ fieldOpsiPackageName.getText() + ", " + comboChooseDepot.getSelectedItem());
-				
 
 				execute();
 

@@ -1596,7 +1596,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				de.uib.configed.configed.getResourceValue("MainFrame.iconButtonSessionInfo"),
 				"images/system-users-query.png", "images/system-users-query_over.png",
 				"images/system-users-query_over.png", waitingCircle,
-				
+
 				// "images/system-users-query_waiting_half.png"},
 				500, main.host_displayFields.get("clientSessionInfo"));
 		iconButtonSessionInfo.setEnabled(true);
@@ -2114,7 +2114,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		macAddressField = new JTextEditorField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3',
 				'4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':', 2, true), "", 17);
-		
 
 		macAddressField.addKeyListener(this);
 		macAddressField.addMouseListener(this);
@@ -4556,8 +4555,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jTabbedPaneConfigPanes.setComponentAt(
 				jTabbedPaneConfigPanes.indexOfTab(configed.getResourceValue("MainFrame.jPanel_logfiles")),
 				showLogfiles);
-
-		
 
 		// WaitCursor waitCursor = new WaitCursor( retrieveBasePane(), "setLogFilePanel"
 

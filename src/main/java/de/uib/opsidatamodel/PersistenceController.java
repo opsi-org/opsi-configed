@@ -46,7 +46,6 @@ import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.Executioner;
-
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.observer.DataLoadingObservable;
