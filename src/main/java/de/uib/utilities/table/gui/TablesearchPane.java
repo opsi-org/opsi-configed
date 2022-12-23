@@ -564,7 +564,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		((JComboBoxToolTip) comboSearchFieldsMode).setValues(tooltipsMap, false);
 		comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
 
-		// comboSearchFieldsMode.setModel(new DefaultComboBoxModel(searchModes));
+		// comboSearchFieldsMode.setModel(new DefaultComboBoxModel<>(searchModes));
 		comboSearchFieldsMode.setPreferredSize(Globals.lowerButtonDimension);
 
 		Icon unselectedIconFilter = Globals.createImageIcon("images/filter_14x14_open.png", "");

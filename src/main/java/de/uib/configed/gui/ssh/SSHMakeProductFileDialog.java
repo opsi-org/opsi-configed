@@ -141,7 +141,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			lbl_dir = new JLabel(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.serverDir"));
 			{
 				autocompletion.setCombobox(new SSHCompletionComboBox(
-						new DefaultComboBoxModel(autocompletion.getDefaultValues().toArray())) {
+						new DefaultComboBoxModel<>(autocompletion.getDefaultValues().toArray())) {
 					@Override
 					public void setSelectedItem(Object item) {
 						super.setSelectedItem(item);

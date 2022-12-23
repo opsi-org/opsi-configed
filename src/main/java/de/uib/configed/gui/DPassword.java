@@ -334,7 +334,7 @@ public class DPassword extends JDialog // implements Runnable
 	}
 
 	public void setServers(Vector<String> hosts) {
-		fieldHost.setModel(new DefaultComboBoxModel(hosts));
+		fieldHost.setModel(new DefaultComboBoxModel<>(hosts));
 		((JTextField) fieldHost.getEditor().getEditorComponent())
 				.setCaretPosition(((String) (fieldHost.getSelectedItem())).length());
 	}

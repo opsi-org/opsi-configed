@@ -3916,7 +3916,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				mainFrame.panel_HostProperties.initMultipleHostsEditing(
 						configed.getResourceValue("PanelHostProperties.SelectHost"),
-						new DefaultComboBoxModel(new Vector<>(depotPropertiesForPermittedDepots.keySet())),
+						new DefaultComboBoxModel<>(new Vector<>(depotPropertiesForPermittedDepots.keySet())),
 						depotPropertiesForPermittedDepots, hostUpdateCollection,
 						PersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT
 
@@ -6510,7 +6510,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			dialogRemoteControl.setEditable(commandsEditable);
 
 			dialogRemoteControl
-					.setListModel(new DefaultComboBoxModel(new Vector<>(new TreeSet<>(remoteControls.keySet()))
+					.setListModel(new DefaultComboBoxModel<>(new Vector<>(new TreeSet<>(remoteControls.keySet()))
 					// new String[]{"xx"}
 					));
 

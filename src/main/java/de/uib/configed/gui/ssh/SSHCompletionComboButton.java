@@ -126,7 +126,7 @@ public class SSHCompletionComboButton {
 
 	private void createInstances() {
 		button = new JButton();
-		combobox = new SSHCompletionComboBox(new DefaultComboBoxModel(defaultvalues.toArray()));
+		combobox = new SSHCompletionComboBox(new DefaultComboBoxModel<>(defaultvalues.toArray()));
 	}
 
 	public void initCombobox() {

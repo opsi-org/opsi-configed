@@ -25,7 +25,7 @@ public class AdaptingCellEditorValuesByIndex extends DefaultCellEditor {
 		super(cc);
 		this.cc = cc;
 		this.cbm = cbm;
-		nullModel = new DefaultComboBoxModel(new String[] { "" });
+		nullModel = new DefaultComboBoxModel<>(new String[] { "" });
 
 		cc.setRenderer(new CellRendererByIndex(universalMapOfStrings, imagesBase));
 

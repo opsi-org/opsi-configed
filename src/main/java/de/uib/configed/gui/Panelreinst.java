@@ -169,7 +169,7 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 
 	public void startFor(String pcName, Vector installImages) {
 		this.pcName = pcName;
-		comboImages.setModel(new DefaultComboBoxModel(installImages));
+		comboImages.setModel(new DefaultComboBoxModel<>(installImages));
 		String installCommand = callReinstmgr;
 		fieldInstallCommand.setText(installCommand);
 		String unsetCommand = callReinstmgr + " unset " + pcName;

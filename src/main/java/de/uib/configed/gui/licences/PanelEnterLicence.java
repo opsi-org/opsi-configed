@@ -92,7 +92,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 	protected de.uib.configed.ControlPanelEnterLicence enterLicenceController;
 
-	private ComboBoxModel emptyComboBoxModel = new DefaultComboBoxModel(new String[] { "" });
+	private ComboBoxModel emptyComboBoxModel = new DefaultComboBoxModel<>(new String[] { "" });
 
 	/** Creates new form PanelEnterLicence */
 	public PanelEnterLicence(de.uib.configed.ControlPanelEnterLicence enterLicenceController) {
@@ -238,7 +238,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		// jTextField_maxInstallations.setValue(1);//setText("1");
 		jTextField_maxInstallations.setText("1");
 		jTextField_maxInstallations.setEditable(false);
-		comboClient.setModel(new DefaultComboBoxModel(enterLicenceController.getChoicesAllHosts()));
+		comboClient.setModel(new DefaultComboBoxModel<>(enterLicenceController.getChoicesAllHosts()));
 		comboClient.setEnabled(true);
 
 	}

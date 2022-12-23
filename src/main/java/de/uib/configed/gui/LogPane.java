@@ -505,7 +505,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		labelDisplayRestriction = new JLabel(configed.getResourceValue("TextPane.EventType"));
 		labelDisplayRestriction.setFont(Globals.defaultFont);
 
-		comboModelTypes = new DefaultComboBoxModel();
+		comboModelTypes = new DefaultComboBoxModel<>();
 		comboType = new JComboBox(comboModelTypes);
 		comboType.setFont(Globals.defaultFont);
 		comboType.setEnabled(false);

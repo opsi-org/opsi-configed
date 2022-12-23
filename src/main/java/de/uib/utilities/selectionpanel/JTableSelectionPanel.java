@@ -296,7 +296,7 @@ public class JTableSelectionPanel extends JPanel
 
 		logging.info(this, "comboSearchMode set index to " + searchMode.ordinal());
 
-		// comboSearchMode.setModel(new DefaultComboBoxModel(searchModes));
+		// comboSearchMode.setModel(new DefaultComboBoxModel<>(searchModes));
 		comboSearchMode.setPreferredSize(Globals.buttonDimension);
 
 		/*
@@ -529,7 +529,7 @@ public class JTableSelectionPanel extends JPanel
 				comboSearchItems.add(table.getColumnName(j));
 			}
 
-			comboSearch.setModel(new DefaultComboBoxModel(comboSearchItems));
+			comboSearch.setModel(new DefaultComboBoxModel<>(comboSearchItems));
 
 			if (oldSelected != null)
 				comboSearch.setSelectedItem(oldSelected);

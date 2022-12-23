@@ -219,7 +219,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 		this.productEdited = productEdited;
 		listDepots.setListData(new Vector<>(depots));
-		// listDepots.setModel(new DefaultComboBoxModel(new Vector<>(depots)));
+		// listDepots.setModel(new DefaultComboBoxModel<>(new Vector<>(depots)));
 		// listDepots.setSelectedValue(selectedDepot, true);
 
 		resetSelectedDepots(depots);

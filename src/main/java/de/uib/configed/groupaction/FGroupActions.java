@@ -88,7 +88,7 @@ public class FGroupActions extends SecondaryFrame {
 		imagesCollection.addAll(new TreeSet<>(persist.getCommonProductPropertyValues(associatedClients,
 				persist.localImageRestoreProductKey, persist.localImagesListPropertyKey)));
 
-		comboSelectImage.setModel(new DefaultComboBoxModel(imagesCollection));
+		comboSelectImage.setModel(new DefaultComboBoxModel<>(imagesCollection));
 	}
 
 	private void reload() {

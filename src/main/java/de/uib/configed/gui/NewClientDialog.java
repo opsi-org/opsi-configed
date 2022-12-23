@@ -170,7 +170,7 @@ public class NewClientDialog extends FGeneralDialog
 	 */
 	public void setDomains(final Vector<String> domains) {
 		this.domains = domains;
-		jComboDomain.setModel(new DefaultComboBoxModel(this.domains));
+		jComboDomain.setModel(new DefaultComboBoxModel<>(this.domains));
 	}
 
 	public void setHostNames(List<String> existingHostNames) {

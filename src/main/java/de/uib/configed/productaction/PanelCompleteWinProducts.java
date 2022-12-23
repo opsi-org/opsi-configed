@@ -157,7 +157,7 @@ public class PanelCompleteWinProducts extends JPanel
 
 		Vector<String> winProducts = persist.getWinProducts(server, depotProductDirectory);
 
-		comboChooseWinProduct.setModel(new DefaultComboBoxModel(winProducts));
+		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts));
 	}
 
 	private void defineChoosers() {
@@ -176,7 +176,7 @@ public class PanelCompleteWinProducts extends JPanel
 		comboChooseDepot = new JComboBox();
 		comboChooseDepot.setSize(Globals.textfieldDimension);
 
-		comboChooseDepot.setModel(new DefaultComboBoxModel(main.getLinkedDepots()));
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots()));
 
 		comboChooseDepot.setEnabled(false);
 

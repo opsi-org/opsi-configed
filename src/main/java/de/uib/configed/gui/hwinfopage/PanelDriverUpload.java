@@ -243,7 +243,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		comboChooseDepot = new JComboBox();
 		comboChooseDepot.setSize(Globals.textfieldDimension);
 
-		comboChooseDepot.setModel(new DefaultComboBoxModel(main.getLinkedDepots()));
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots()));
 
 		comboChooseDepot.setEnabled(false);
 
@@ -311,7 +311,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		Vector<String> winProducts = persist.getWinProducts(server, depotProductDirectory);
 
-		comboChooseWinProduct.setModel(new DefaultComboBoxModel(winProducts));
+		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts));
 	}
 
 	protected void buildPanel() {
@@ -800,7 +800,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	}
 
 	public void setDepot(String s) {
-		comboChooseDepot.setModel(new DefaultComboBoxModel(new String[] { s }));
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(new String[] { s }));
 	}
 
 	private void produceTarget() {

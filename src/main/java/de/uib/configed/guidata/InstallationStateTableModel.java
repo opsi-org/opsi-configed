@@ -1445,7 +1445,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			if (actionsForProduct == null)
 				actionsForProduct = new String[] { "null" };
 
-			return new DefaultComboBoxModel(actionsForProduct);
+			return new DefaultComboBoxModel<>(actionsForProduct);
 		}
 
 		else if (column == displayColumns.indexOf(InstallationStatus.KEY)) // selection of status
@@ -1458,12 +1458,12 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				String state = (String) combinedVisualValues.get(ProductState.KEY_installationStatus)
 						.get(actualProduct);
 				if (state == null)
-					return new DefaultComboBoxModel(new String[] { "null" });
+					return new DefaultComboBoxModel<>(new String[] { "null" });
 
-				return new DefaultComboBoxModel(new String[] {});
+				return new DefaultComboBoxModel<>(new String[] {});
 			}
 
-			return new DefaultComboBoxModel(InstallationStatus.getDisplayLabelsForChoice());
+			return new DefaultComboBoxModel<>(InstallationStatus.getDisplayLabelsForChoice());
 		}
 
 		else if (column == displayColumns.indexOf(TargetConfiguration.KEY)) // selection of status
@@ -1476,12 +1476,12 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				String state = (String) combinedVisualValues.get(ProductState.KEY_installationStatus)
 						.get(actualProduct);
 				if (state == null)
-					return new DefaultComboBoxModel(new String[] { "null" });
+					return new DefaultComboBoxModel<>(new String[] { "null" });
 
-				return new DefaultComboBoxModel(new String[] {});
+				return new DefaultComboBoxModel<>(new String[] {});
 			}
 
-			return new DefaultComboBoxModel(TargetConfiguration.getDisplayLabelsForChoice());
+			return new DefaultComboBoxModel<>(TargetConfiguration.getDisplayLabelsForChoice());
 		}
 
 		else if (column == displayColumns.indexOf(ProductState.KEY_installationInfo)) {
@@ -1507,7 +1507,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			 * values.add(InstallationInfo.FAILEDdisplayString);
 			 */
 
-			return new DefaultComboBoxModel(new Vector<>(values));
+			return new DefaultComboBoxModel<>(new Vector<>(values));
 
 		}
 
