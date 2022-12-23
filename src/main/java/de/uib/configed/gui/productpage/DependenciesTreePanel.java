@@ -93,11 +93,6 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 				else
 					label.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-				if (((DefaultMutableTreeNode) value).isRoot())
-					label.setIcon(null);
-				else
-					label.setIcon(null);
-
 				return label;
 			}
 		};

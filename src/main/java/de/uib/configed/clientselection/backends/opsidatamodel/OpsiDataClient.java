@@ -34,8 +34,8 @@ public class OpsiDataClient implements Client {
 
 	public OpsiDataClient(String id) {
 		hostId = id;
-		groupsSet = new HashSet();
-		productList = new LinkedList();
+		groupsSet = new HashSet<>();
+		productList = new LinkedList<>();
 		productNames = new ArrayList<>();
 		swauditList = new LinkedList<>();
 		hardwareInfo = new LinkedList<>();

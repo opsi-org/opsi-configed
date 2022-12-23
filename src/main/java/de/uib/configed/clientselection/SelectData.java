@@ -68,6 +68,8 @@ public class SelectData {
 				throw new IllegalArgumentException("Data is no String");
 			}
 			break;
+		case NoneType:
+			break;
 		}
 	}
 

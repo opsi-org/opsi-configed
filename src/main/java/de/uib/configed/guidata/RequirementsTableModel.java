@@ -215,6 +215,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 		return result;
 	}
 
+	// TODO when is a cell editable? This returns always true...
 	@Override
 	public boolean isCellEditable(int row, int col) {
 		int rowTypeIndex = row % noOfRowTypes;

@@ -53,7 +53,6 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 	private javax.swing.JLabel jLabelEditDepotProductProperties;
 	private IconButton buttonSetValuesFromPackage;
 
-	List<String> depots;
 	private JList<String> listDepots;
 	List<String> listSelectedDepots;
 	private JPanel panelDepots;
@@ -80,7 +79,6 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		// panelDepots.setBackground(Globals.backgroundLightGrey);
 		// panelDepots.setOpaque(true);
 
-		depots = new ArrayList<>();
 		listDepots = new JList<>(); // new String[]{"a","b","c"});
 		listDepots.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		listDepots.addListSelectionListener(this);
@@ -219,7 +217,6 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		 * + ", " + listSelectedDepots);
 		 */
 
-		this.depots = depots;
 		this.productEdited = productEdited;
 		listDepots.setListData(new Vector<>(depots));
 		// listDepots.setModel(new DefaultComboBoxModel(new Vector(depots)));

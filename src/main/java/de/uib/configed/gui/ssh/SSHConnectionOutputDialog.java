@@ -59,7 +59,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 	public final String ansiCodeInfo = "[0;info;0m"; // user info not really ansi code !!
 	public final String ansiCodeError = "[0;error;0m"; // user info "error" not really ansi code !!
 
-	public final Map<String, Color> ansiCodeColors = new HashMap<>() {
+	private final Map<String, Color> ansiCodeColors = new HashMap<>() {
 		{
 			put("[0;info;0m", Globals.greyed); // user info not really ansi code !!
 			put("[0;error;0m", Globals.actionRed); // user info "error" not really ansi code !!
