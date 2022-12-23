@@ -16,7 +16,7 @@ public class Relation extends ArrayList<StringValuedRelationElement> {
 	public Relation(List<String> attributes) {
 		super();
 		this.attributes = attributes;
-		attributeSet = new HashSet(attributes);
+		attributeSet = new HashSet<>(attributes);
 
 		functionByAttribute = new HashMap<>();
 

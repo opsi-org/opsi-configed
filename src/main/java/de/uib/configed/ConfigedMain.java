@@ -234,9 +234,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected HostUpdateCollection hostUpdateCollection;
 
-	protected Map collectChangedStates = new HashMap(); // a map of clients, for each occurring client there is a map of
-														// products, where for each occurring product there may be an
-														// entry stateTypeKey - value
+	protected Map collectChangedStates = new HashMap<>(); // a map of clients, for each occurring client there is a map of
+															// products, where for each occurring product there may be an
+															// entry stateTypeKey - value
 
 	protected Map<String /* client */, Map<String /* product */, Map<String /* propertykey */, String/* propertyvalue */>>> collectChangedLocalbootStates = new HashMap<>();
 
@@ -1588,7 +1588,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		 * if (serverList == null || serverList.size() < 1)
 		 * {
 		 * logging.error(" server list empty" );
-		 * serverList = new ArrayList();
+		 * serverList = new ArrayList<>();
 		 * serverList.add("");
 		 * }
 		 */
@@ -2608,7 +2608,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			toggleFilterClientList();
 
 		logging.info(this, "invertClientselection selected " + selectionPanel.getSelectedValues());
-		List<String> selectedValues = new ArrayList(selectionPanel.getInvertedSet());
+		List<String> selectedValues = new ArrayList<>(selectionPanel.getInvertedSet());
 
 		String[] selected = selectedValues.toArray(new String[selectedValues.size()]);
 
@@ -2843,7 +2843,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected Set getDepotsOfSelectedClients() {
 		if (depotsOfSelectedClients == null) {
-			depotsOfSelectedClients = new TreeSet();
+			depotsOfSelectedClients = new TreeSet<>();
 
 			for (int i = 0; i < getSelectedClients().length; i++) {
 				// logging.debug(this, " selectedClient " + i + ": " + getSelectedClients()[i]);
@@ -2868,8 +2868,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	{
 		logging.info(this, "collectTheProductProperties for " + productEdited);
-		mergedProductProperties = new HashMap();
-		productProperties = new ArrayList(getSelectedClients().length);
+		mergedProductProperties = new HashMap<>();
+		productProperties = new ArrayList<>(getSelectedClients().length);
 
 		if ((getSelectedClients().length > 0) && (possibleActions.get(productEdited) != null)) {
 			// getSelectedClients()[0]
@@ -3249,9 +3249,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (filterClientList)
 			mainFrame.toggleClientFilterAction();
 
-		// (new ArrayList(clientsFilteredByTree)); does not select
+		// (new ArrayList<>(clientsFilteredByTree)); does not select
 
-		// setSelectedClients(new ArrayList(clientsFilteredByTree));
+		// setSelectedClients(new ArrayList<>(clientsFilteredByTree));
 		// setSelectedClientsOnPanel(clientsFilteredByTree); leads to problems
 
 	}
@@ -3409,7 +3409,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		/*
 		 * test of check of synchronicity
-		 * TreeSet depotSet = new TreeSet();
+		 * TreeSet depotSet = new TreeSet<>();
 		 * for (int i = 0; i < getSelectedDepots().length; i++)
 		 * { depotSet.add(getSelectedDepots()[i] ); }
 		 * persist.areDepotsSynchronous(depotSet);
@@ -3632,7 +3632,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				istmForSelectedClientsLocalboot = null;
 			}
 
-			clientProductpropertiesUpdateCollections = new HashMap();
+			clientProductpropertiesUpdateCollections = new HashMap<>();
 			mainFrame.panel_LocalbootProductsettings.initAllProperties();
 
 			logging.debug(this, "setLocalbootProductsPage,  depotRepresentative:" + depotRepresentative);
@@ -3663,7 +3663,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						collectChangedLocalbootStates, persist.getAllLocalbootProductNames(depotRepresentative),
 						localbootStatesAndActions, possibleActions, // persist.getPossibleActions(depotRepresentative),
 						persist.getProductGlobalInfos(depotRepresentative),
-						// new ArrayList(productDisplayFields.keySet())
+						// new ArrayList<>(productDisplayFields.keySet())
 						getLocalbootProductDisplayFieldsList(), configed.savedStates.saveLocalbootproductFilter
 
 				);
@@ -3745,7 +3745,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			List<? extends RowSorter.SortKey> currentSortKeysNetbootProducts = mainFrame.panel_NetbootProductsettings
 					.getSortKeys();
 
-			clientProductpropertiesUpdateCollections = new HashMap();
+			clientProductpropertiesUpdateCollections = new HashMap<>();
 			mainFrame.panel_LocalbootProductsettings.initAllProperties();
 
 			possibleActions = persist.getPossibleActions(depotRepresentative);
@@ -3980,7 +3980,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				// waitCursor = new WaitCursor( mainFrame.retrieveBasePane(),
 				// mainFrame.getCursor() );
 
-				ArrayList additionalConfigs = new ArrayList(1);
+				ArrayList additionalConfigs = new ArrayList<>(1);
 
 				Map<String, List<Object>> defaultValuesMap = persist.getConfigDefaultValues();
 				// logging.debug(this, "setNetworkconfigurationPage: defaultValuesMap " +
@@ -5871,7 +5871,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 * protected void setDepotForClients(String[] clients, String depotId)
 	 * {
 	 * Map<String, Object> values = new HashMap<>();
-	 * ArrayList depots = new ArrayList();
+	 * ArrayList depots = new ArrayList<>();
 	 * values.put("clientconfig.depot.id", depots);
 	 * ConfigName2ConfigValue config = new ConfigName2ConfigValue(null);
 	 * //logging.debug(this, "setDepotForClients, values " + values);
@@ -6025,7 +6025,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// if ( (shutdown_value.get(0) != null) &&
 		// !(shutdown_value.get(0).equals(aktivate)) )
 		{
-			persist.setCommonProductPropertyValue(new HashSet(Arrays.asList(getSelectedClients())), product,
+			persist.setCommonProductPropertyValue(new HashSet<>(Arrays.asList(getSelectedClients())), product,
 					"on_shutdown_install", Arrays.asList(activate));
 
 			// if (status== setup)
@@ -6055,7 +6055,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// if ( (shutdown_value.get(0) != null) &&
 		// !(shutdown_value.get(0).equals(aktivate)) )
 		{
-			persist.setCommonProductPropertyValue(new HashSet(Arrays.asList(clientNames)), product,
+			persist.setCommonProductPropertyValue(new HashSet<>(Arrays.asList(clientNames)), product,
 					"on_shutdown_install", Arrays.asList(activate));
 
 			// if (status== setup)
@@ -6509,7 +6509,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			dialogRemoteControl.setMeanings(rcCommands);
 			dialogRemoteControl.setEditable(commandsEditable);
 
-			dialogRemoteControl.setListModel(new DefaultComboBoxModel(new Vector(new TreeSet(remoteControls.keySet()))
+			dialogRemoteControl.setListModel(new DefaultComboBoxModel(new Vector(new TreeSet<>(remoteControls.keySet()))
 			// new String[]{"xx"}
 			));
 

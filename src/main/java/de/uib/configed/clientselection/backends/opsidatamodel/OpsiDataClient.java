@@ -169,6 +169,6 @@ public class OpsiDataClient implements Client {
 		if (hardwareValue != null) {
 			return hardwareValue;
 		}
-		return new HashMap();
+		return new HashMap<>();
 	}
 }

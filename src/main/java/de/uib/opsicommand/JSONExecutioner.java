@@ -93,7 +93,7 @@ public abstract class JSONExecutioner extends Executioner {
 	}
 
 	public Map getMapOfLists(JSONObject jO) {
-		HashMap result = new HashMap();
+		HashMap result = new HashMap<>();
 		try {
 			if (jO != null) {
 				Iterator iter = jO.keys();
@@ -111,7 +111,7 @@ public abstract class JSONExecutioner extends Executioner {
 	}
 
 	private Map getMapOfLists(OpsiMethodCall omc, boolean recursive) {
-		Map result = new HashMap();
+		Map result = new HashMap<>();
 		try {
 			JSONObject jO = retrieveJSONObject(omc);
 
@@ -145,7 +145,7 @@ public abstract class JSONExecutioner extends Executioner {
 
 	@Override
 	public Map getMapOfMaps(OpsiMethodCall omc) {
-		HashMap result = new HashMap();
+		HashMap result = new HashMap<>();
 		try {
 			JSONObject jO = retrieveJSONObject(omc);
 			if (checkResponse(jO)) {
@@ -155,7 +155,7 @@ public abstract class JSONExecutioner extends Executioner {
 					Iterator iter = jOResult.keys();
 					while (iter.hasNext()) {
 						String key = (String) iter.next();
-						HashMap inner = new HashMap();
+						HashMap inner = new HashMap<>();
 						JSONObject jsonInner = (JSONObject) jOResult.get(key);
 						if (jsonInner != null) {
 							Iterator iter2 = jsonInner.keys();
@@ -392,7 +392,7 @@ public abstract class JSONExecutioner extends Executioner {
 	@Override
 	public Map getMapOfListsOfMaps(OpsiMethodCall omc) {
 		// TODO: Performance
-		HashMap result = new HashMap();
+		HashMap result = new HashMap<>();
 		try {
 			JSONObject jO = retrieveJSONObject(omc);
 			if (checkResponse(jO)) {
@@ -404,10 +404,10 @@ public abstract class JSONExecutioner extends Executioner {
 						String key = (String) iter.next();
 
 						JSONArray jA = jOResult.optJSONArray(key);
-						ArrayList al = new ArrayList(jA.length());
+						ArrayList al = new ArrayList<>(jA.length());
 
 						for (int i = 0; i < jA.length(); i++) {
-							HashMap inner = new HashMap();
+							HashMap inner = new HashMap<>();
 							JSONObject jsonInner = (JSONObject) jA.get(i);
 							if (jsonInner != null) {
 								Iterator iter2 = jsonInner.keys();
@@ -450,10 +450,10 @@ public abstract class JSONExecutioner extends Executioner {
 				JSONArray jA1 = jO.optJSONArray("result");
 
 				if (jA1 != null) {
-					result = new ArrayList(jA1.length());
+					result = new ArrayList<>(jA1.length());
 
 					for (int i = 0; i < jA1.length(); i++) {
-						HashMap inner1 = new HashMap();
+						HashMap inner1 = new HashMap<>();
 						JSONObject jsonInner1 = (JSONObject) jA1.get(i);
 						if (jsonInner1 != null) {
 							Iterator iter = jsonInner1.keys();
@@ -461,9 +461,9 @@ public abstract class JSONExecutioner extends Executioner {
 								String key = (String) iter.next();
 								try {
 									JSONArray jA2 = jsonInner1.optJSONArray(key);
-									ArrayList al2 = new ArrayList(jA2.length());
+									ArrayList al2 = new ArrayList<>(jA2.length());
 									for (int j = 0; j < jA2.length(); j++) {
-										HashMap inner2 = new HashMap();
+										HashMap inner2 = new HashMap<>();
 										JSONObject jsonInner2 = (JSONObject) jA2.get(j);
 										if (jsonInner2 != null) {
 											Iterator iter2 = jsonInner2.keys();
@@ -477,7 +477,7 @@ public abstract class JSONExecutioner extends Executioner {
 									}
 									inner1.put(key, al2);
 								} catch (Exception e) {
-									HashMap inner2 = new HashMap();
+									HashMap inner2 = new HashMap<>();
 									JSONObject jsonInner2 = (JSONObject) jsonInner1.get(key);
 									if (jsonInner2 != null) {
 										Iterator iter2 = jsonInner2.keys();
@@ -614,7 +614,7 @@ public abstract class JSONExecutioner extends Executioner {
 
 	@Override
 	public List getListFromItem(String s) {
-		ArrayList result = new ArrayList();
+		ArrayList result = new ArrayList<>();
 
 		if (s == null || s.equals("null"))
 			return result;

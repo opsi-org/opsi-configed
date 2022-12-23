@@ -93,7 +93,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	protected boolean withPopup;
 
-	private final ArrayList EMPTY = new ArrayList();
+	private final ArrayList EMPTY = new ArrayList<>();
 
 	ConfigedMain main;
 
@@ -390,7 +390,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			} catch (NullPointerException ex) {
 			}
 		}
-		ArrayList data = new ArrayList();
+		ArrayList data = new ArrayList<>();
 		if (values != null) {
 			for (int j = 0; j < values.size(); j++) {
 				Map v = (Map) values.get(j);
@@ -489,7 +489,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		if (node != null && node.isLeaf()) {
 			TreeNode[] path = node.getPath();
 			if (path.length < 3) {
-				tableModel.setData(new ArrayList());
+				tableModel.setData(new ArrayList<>());
 				return;
 			}
 			String hwClassUI = path[1].toString();
@@ -538,7 +538,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		title = rootname;
 
 		createRoot(rootname);
-		tableModel.setData(new ArrayList());
+		tableModel.setData(new ArrayList<>());
 
 		if (hwConfig == null) {
 			logging.info("hwConfig null");
@@ -550,7 +550,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			return;
 		}
 
-		hwClassMapping = new HashMap();
+		hwClassMapping = new HashMap<>();
 		String[] hwClassesUI = new String[hwConfig.size()];
 		for (int i = 0; i < hwConfig.size(); i++) {
 			Map whc = (Map) hwConfig.get(i);
@@ -586,7 +586,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			classNode.setOpenIcon(classIcon);
 			root.add(classNode);
 
-			HashMap displayNames = new HashMap();
+			HashMap displayNames = new HashMap<>();
 
 			for (int j = 0; j < devices.size(); j++) {
 				HashMap deviceInfo = (HashMap) devices.get(j);
@@ -596,7 +596,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				}
 
 				if (!displayNames.containsKey(displayName)) {
-					displayNames.put(displayName, new ArrayList());
+					displayNames.put(displayName, new ArrayList<>());
 				}
 				((ArrayList) displayNames.get(displayName)).add(devices.get(j));
 			}
@@ -653,7 +653,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		public HWInfoTableModel() {
 			super();
-			data = new ArrayList();
+			data = new ArrayList<>();
 		}
 
 		public void setData(ArrayList data) {

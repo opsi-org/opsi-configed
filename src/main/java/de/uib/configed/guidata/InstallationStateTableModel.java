@@ -1397,7 +1397,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			logging.debug(this, " possible actions  " + possibleActions);
 			Object[] actionsForProduct = null;
 			if (possibleActions != null) {
-				ArrayList actionList = new ArrayList();
+				ArrayList actionList = new ArrayList<>();
 
 				// actionList.addALL (List) possibleActions.get(actualProduct)
 				// instead of this we take the display strings:

@@ -135,7 +135,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 	}
 
 	protected void setMap(String selectedItem) {
-		ArrayList editedMaps = new ArrayList(1);
+		ArrayList editedMaps = new ArrayList<>(1);
 		editedMaps.add(multipleMaps.get(selectedItem));
 		logging.debug(this, "setMap " + multipleMaps.get(selectedItem));
 		editMapPanel.setEditableMap(multipleMaps.get(selectedItem), deriveOptionsMap(multipleMaps.get(selectedItem)));

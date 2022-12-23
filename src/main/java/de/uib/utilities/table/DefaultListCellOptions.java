@@ -16,8 +16,8 @@ public class DefaultListCellOptions implements ListCellOptions {
 	String description;
 
 	public DefaultListCellOptions() {
-		possibleValues = new ArrayList();
-		defaultValues = new ArrayList();
+		possibleValues = new ArrayList<>();
+		defaultValues = new ArrayList<>();
 		selectionMode = ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 		editable = true;
 		nullable = true;
@@ -45,10 +45,10 @@ public class DefaultListCellOptions implements ListCellOptions {
 
 	public static ListCellOptions getNewBooleanListCellOptions() {
 		logging.info("getNewBooleanListCellOptions");
-		List possibleValues = new ArrayList();
+		List possibleValues = new ArrayList<>();
 		possibleValues.add(true);
 		possibleValues.add(false);
-		List defaultValues = new ArrayList();
+		List defaultValues = new ArrayList<>();
 		defaultValues.add(false);
 		boolean editable = false;
 		boolean nullable = false;
@@ -58,7 +58,7 @@ public class DefaultListCellOptions implements ListCellOptions {
 
 	public static ListCellOptions getNewEmptyListCellOptions() {
 		logging.info("getNewEmptyListCellOptions");
-		List possibleValues = new ArrayList();
+		List possibleValues = new ArrayList<>();
 		boolean editable = true;
 		boolean nullable = true;
 		return new DefaultListCellOptions(possibleValues, null, // defaultValues,
@@ -67,7 +67,7 @@ public class DefaultListCellOptions implements ListCellOptions {
 
 	public static ListCellOptions getNewEmptyListCellOptionsMultiSelection() {
 		logging.info("getNewBooleanListCellOptionsMultiSelection");
-		List possibleValues = new ArrayList();
+		List possibleValues = new ArrayList<>();
 		boolean editable = true;
 		boolean nullable = true;
 		return new DefaultListCellOptions(possibleValues, null, // defaultValues,

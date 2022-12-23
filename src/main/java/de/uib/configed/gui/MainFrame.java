@@ -3388,7 +3388,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	/*
 	 * public void noGroupingAction()
 	 * {
-	 * main.loadClientGroup("", "", "", "", "", "", new HashMap());
+	 * main.loadClientGroup("", "", "", "", "", "", new HashMap<>());
 	 * }
 	 */
 
@@ -4414,7 +4414,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		 * ArrayList<String> shutdown_value = ( (ArrayList)
 		 * main.getPersistenceController()
 		 * .getCommonProductPropertyValues(
-		 * new ArrayList(Arrays.asList(clientID)) ,
+		 * new ArrayList<>(Arrays.asList(clientID)) ,
 		 * "opsi-client-agent",
 		 * "on_shutdown_install"
 		 * )

@@ -48,7 +48,7 @@ public class OpsiMethodCall {
 	public OpsiMethodCall(String methodname, Object[] parameters, boolean background) {
 		this.methodname = methodname;
 		this.parameters = parameters;
-		theCall = new HashMap();
+		theCall = new HashMap<>();
 		theCall.put("method", methodname);
 		theCall.put("params", parameters);
 		theCall.put("rpcpath", rpcPath);
@@ -64,7 +64,7 @@ public class OpsiMethodCall {
 	public OpsiMethodCall(String methodname, Object[] parameters) {
 		this.methodname = methodname;
 		this.parameters = parameters;
-		theCall = new HashMap();
+		theCall = new HashMap<>();
 		theCall.put("method", methodname);
 		theCall.put("params", parameters);
 		theCall.put("rpcpath", rpcPath);

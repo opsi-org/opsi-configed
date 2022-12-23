@@ -29,7 +29,7 @@ public class DefaultListModelProducer implements ListModelProducer {
 
 	@Override
 	public List getSelectedValues(int row, int column) {
-		return new ArrayList();
+		return new ArrayList<>();
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class DefaultListModelProducer implements ListModelProducer {
 		if (value instanceof List)
 			return (List) value;
 
-		ArrayList list = new ArrayList();
+		ArrayList list = new ArrayList<>();
 		list.add(value);
 
 		return list;

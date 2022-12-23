@@ -88,7 +88,7 @@ public class JSONArray {
 	 * Construct an empty JSONArray.
 	 */
 	public JSONArray() {
-		this.myArrayList = new ArrayList();
+		this.myArrayList = new ArrayList<>();
 	}
 
 	/**
@@ -148,7 +148,7 @@ public class JSONArray {
 	 * @param collection A Collection.
 	 */
 	public JSONArray(Collection collection) {
-		this.myArrayList = new ArrayList(collection);
+		this.myArrayList = new ArrayList<>(collection);
 	}
 
 	/**
@@ -739,8 +739,8 @@ public class JSONArray {
 	 * return a Java List *
 	 */
 	public ArrayList toList() {
-		ArrayList exportList = new ArrayList(myArrayList); // export a copy to avoid external manipulations of the
-															// JSONArray
+		ArrayList exportList = new ArrayList<>(myArrayList); // export a copy to avoid external manipulations of the
+																// JSONArray
 		return exportList;
 	}
 

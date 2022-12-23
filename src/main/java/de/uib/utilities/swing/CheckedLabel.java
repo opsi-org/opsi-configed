@@ -111,7 +111,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 
 		textFont = textLabel.getFont();
 		defaultTextAttributes = textFont.getAttributes();
-		focusedTextAttributes = new HashMap(defaultTextAttributes);
+		focusedTextAttributes = new HashMap<>(defaultTextAttributes);
 		focusedTextAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
 		selectedLabel = new JLabel(selectedIcon);
 		unselectedLabel = new JLabel(unselectedIcon);

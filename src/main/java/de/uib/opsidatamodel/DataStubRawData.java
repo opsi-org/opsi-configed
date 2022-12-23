@@ -707,7 +707,7 @@ public class DataStubRawData extends DataStubNOM {
 
 				// parse String and produce list
 				// ArrayList values = null;
-				ArrayList values = new ArrayList();
+				ArrayList values = new ArrayList<>();
 				try {
 					values = (new org.json.JSONArray(valueString)).toList();
 

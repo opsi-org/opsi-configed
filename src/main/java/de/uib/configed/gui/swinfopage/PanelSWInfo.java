@@ -713,7 +713,7 @@ public class PanelSWInfo extends JPanel {
 
 		public SWInfoTableModel() {
 			super();
-			data = new ArrayList();
+			data = new ArrayList<>();
 		}
 
 		public void setData(DatedRowList datedList) {

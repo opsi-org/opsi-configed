@@ -240,7 +240,7 @@ public class Messages {
 		if (existingLocales != null)
 			return existingLocales;
 
-		ArrayList<LocaleRepresentation> existingLocales = new ArrayList();
+		ArrayList<LocaleRepresentation> existingLocales = new ArrayList<>();
 		localeInfo = new TreeMap<>();
 
 		InputStream stream = de.uib.messages.Messages.class.getResourceAsStream(LOCALISATIONS_CONF);
@@ -263,7 +263,7 @@ public class Messages {
 			localeInfo.put(representer.getName(), representer.getIconName());
 		}
 		logging.debug("Messages, existing names " + names);
-		existingLocalesNames = new ArrayList(names);
+		existingLocalesNames = new ArrayList<>(names);
 		logging.debug("Messages, existing locales " + existingLocales);
 		logging.debug("Messages, localeInfo  " + localeInfo);
 		return existingLocales;
@@ -316,7 +316,7 @@ public class Messages {
 	 * }
 	 * 
 	 * 
-	 * existingLocales = new ArrayList(new TreeSet(existingLocales));
+	 * existingLocales = new ArrayList<>(new TreeSet<>(existingLocales));
 	 * //logging.info("Messages:, getLocales: " + existingLocales);
 	 * 
 	 * return existingLocales;

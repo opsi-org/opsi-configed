@@ -707,7 +707,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 	}
 
 	public void addEmptyProperty(String key) {
-		ArrayList val = new ArrayList();
+		ArrayList val = new ArrayList<>();
 		val.add("");
 		addProperty(key, val);
 		optionsMap.put(key, DefaultListCellOptions.getNewEmptyListCellOptions());
@@ -716,7 +716,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 	}
 
 	public void addEmptyPropertyMultiSelection(String key) {
-		ArrayList val = new ArrayList();
+		ArrayList val = new ArrayList<>();
 		val.add("");
 		addProperty(key, val);
 		optionsMap.put(key, DefaultListCellOptions.getNewEmptyListCellOptionsMultiSelection());
@@ -802,7 +802,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 	}
 
 	private Map testData() {
-		HashMap hm = new HashMap();
+		HashMap hm = new HashMap<>();
 		hm.put("key 1", "value 1");
 		hm.put("key 2", "value 2");
 		return hm;

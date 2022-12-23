@@ -132,7 +132,7 @@ public class DataStubNOM extends DataStub {
 
 			logging.debug(this, "retrieveProductInfos callAttributes " + Arrays.asList(callAttributes));
 
-			HashMap callFilter = new HashMap();
+			HashMap callFilter = new HashMap<>();
 			// callFilter.put("id", "acroread*");
 
 			persist.notifyDataLoadingObservers(configed.getResourceValue("LoadingObserver.loadtable") + " product");
@@ -278,7 +278,7 @@ public class DataStubNOM extends DataStub {
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " productOnDepot");
 			String[] callAttributes = new String[] {};
-			HashMap callFilter = new HashMap();
+			HashMap callFilter = new HashMap<>();
 
 			List<Map<String, Object>> packages = persist.retrieveListOfMapsNOM(callAttributes, callFilter,
 					"productOnDepot_getObjects");
@@ -423,7 +423,7 @@ public class DataStubNOM extends DataStub {
 					configed.getResourceValue("LoadingObserver.loadtable") + " product property");
 
 			String[] callAttributes = new String[] {};
-			HashMap callFilter = new HashMap();
+			HashMap callFilter = new HashMap<>();
 
 			List<Map<String, Object>> retrieved = persist.retrieveListOfMapsNOM(callAttributes, callFilter,
 					"productProperty_getObjects");
@@ -523,7 +523,7 @@ public class DataStubNOM extends DataStub {
 					configed.getResourceValue("LoadingObserver.loadtable") + " product dependency");
 
 			String[] callAttributes = new String[] {};
-			HashMap callFilter = new HashMap();
+			HashMap callFilter = new HashMap<>();
 
 			List<Map<String, Object>> retrievedList = persist.retrieveListOfMapsNOM(callAttributes, callFilter,
 					"productDependency_getObjects");
@@ -696,7 +696,7 @@ public class DataStubNOM extends DataStub {
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " product property state");
 			String[] callAttributes = new String[] {};// "objectId","productId","propertyId", "values"};
-			HashMap callFilter = new HashMap();
+			HashMap callFilter = new HashMap<>();
 			callFilter.put("objectId", persist.exec.jsonArray(newClients));
 
 			result = persist.retrieveListOfMapsNOM(callAttributes, callFilter, "productPropertyState_getObjects");
@@ -814,7 +814,7 @@ public class DataStubNOM extends DataStub {
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE), // key element
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.ARCHITECTURE), // key element
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.WINDOWSsOFTWAREid) };
-			HashMap callFilter = new HashMap();
+			HashMap callFilter = new HashMap<>();
 
 			List<Map<String, Object>> li = persist.retrieveListOfMapsNOM(callAttributes, callFilter,
 					"auditSoftware_getHashes");;
@@ -1117,7 +1117,7 @@ public class DataStubNOM extends DataStub {
 				logging.info(this, "retrieveSoftwareAuditOnClients, start a request");
 
 				String[] callAttributes = new String[] {};
-				HashMap callFilter = new HashMap();
+				HashMap callFilter = new HashMap<>();
 				callFilter.put("state", 1);
 				if (newClients != null)
 					callFilter.put("clientId", persist.exec.jsonArray(clientListForCall));
@@ -1227,7 +1227,7 @@ public class DataStubNOM extends DataStub {
 				configed.getResourceValue("LoadingObserver.loadtable") + " AUDIT_SOFTWARE_TO_LICENSE_POOL");
 
 		List<Map<String, Object>> retrieved = persist.retrieveListOfMapsNOM(
-				AuditSoftwareXLicencePool.SERVICE_ATTRIBUTES, new HashMap(), // callFilter
+				AuditSoftwareXLicencePool.SERVICE_ATTRIBUTES, new HashMap<>(), // callFilter
 				"auditSoftwareToLicensePool_getObjects");
 
 		auditSoftwareXLicencePool = new AuditSoftwareXLicencePool(getSoftwareList());
@@ -1274,7 +1274,7 @@ public class DataStubNOM extends DataStub {
 		timeCheck.start();
 
 		String[] callAttributes = new String[] {};
-		HashMap callFilter = new HashMap();
+		HashMap callFilter = new HashMap<>();
 
 		List<Map<String, Object>> retrieved = persist.retrieveListOfMapsNOM(callAttributes, callFilter,
 				"configState_getObjects");
@@ -1344,7 +1344,7 @@ public class DataStubNOM extends DataStub {
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " licence pool");
 
-			List<Map<String, Object>> retrieved = persist.retrieveListOfMapsNOM(attributes, new HashMap(),
+			List<Map<String, Object>> retrieved = persist.retrieveListOfMapsNOM(attributes, new HashMap<>(),
 					"licensePool_getObjects");
 
 			for (Map<String, Object> importedEntry : retrieved) {
@@ -1593,7 +1593,7 @@ public class DataStubNOM extends DataStub {
 				configed.getResourceValue("LoadingObserver.loadtable") + " PRODUCT_ID_TO_LICENSE_POOL");
 
 		List<Map<String, Object>> retrieved = persist.retrieveListOfMapsNOM(
-				LicencePoolXOpsiProduct.SERVICE_ATTRIBUTES_asArray, new HashMap(), // callFilter
+				LicencePoolXOpsiProduct.SERVICE_ATTRIBUTES_asArray, new HashMap<>(), // callFilter
 				"licensePool_getObjects");
 		// integrates two database calls
 

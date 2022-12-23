@@ -146,7 +146,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		logging.debug(this, "  celleditor working in " + row + ", " + column + " with value " + value + ", class "
 				+ value.getClass().getName());
 		// this.value = modelProducer.toList(value);
-		// this.value = new ArrayList();
+		// this.value = new ArrayList<>();
 		List val = modelProducer.toList(value);
 
 		if (val instanceof List) // is now always
@@ -188,7 +188,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 				listeditor.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 				listeditor.setEditable(true);
-				listeditor.setSelectedValues(new ArrayList());
+				listeditor.setSelectedValues(new ArrayList<>());
 
 				listeditor.enter();
 				listeditor.setStartValue("");

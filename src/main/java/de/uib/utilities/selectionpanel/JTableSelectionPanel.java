@@ -136,7 +136,7 @@ public class JTableSelectionPanel extends JPanel
 		// sorter.setTableHeader(table.getTableHeader());
 		table.setAutoCreateRowSorter(true);
 
-		primaryOrderingKeys = new ArrayList();
+		primaryOrderingKeys = new ArrayList<>();
 		primaryOrderingKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);

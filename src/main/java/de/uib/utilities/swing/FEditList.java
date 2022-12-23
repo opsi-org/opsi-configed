@@ -222,7 +222,7 @@ public class FEditList extends FEditObject
 		if (limo instanceof DefaultListModel) {
 			if (!((DefaultListModel) limo).contains(element)) {
 				((DefaultListModel) limo).addElement(element);
-				List list = new ArrayList(); // getSelectedList();
+				List list = new ArrayList<>(); // getSelectedList();
 				list.add(element);
 				addSelectedValues(list);
 			}
@@ -348,7 +348,7 @@ public class FEditList extends FEditObject
 	}
 
 	public List getSelectedList() {
-		List result = new ArrayList();
+		List result = new ArrayList<>();
 
 		ListModel model = visibleList.getModel();
 

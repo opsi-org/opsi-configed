@@ -82,7 +82,7 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 	/*
 	 * protected Vector getChoicesAllHosts()
 	 * {
-	 * TreeSet set = new TreeSet();
+	 * TreeSet set = new TreeSet<>();
 	 * set.add("");
 	 * set.addAll(new TreeMap(
 	 * persist.getHostInfoCollections().getPcListForDepots(

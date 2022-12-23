@@ -145,7 +145,7 @@ public class JSONObject {
 	 * Construct an empty JSONObject.
 	 */
 	public JSONObject() {
-		this.myHashMap = new HashMap();
+		this.myHashMap = new HashMap<>();
 	}
 
 	/**
@@ -231,7 +231,7 @@ public class JSONObject {
 	 *            the JSONObject.
 	 */
 	public JSONObject(Map map) {
-		this.myHashMap = new HashMap(map);
+		this.myHashMap = new HashMap<>(map);
 	}
 
 	/**

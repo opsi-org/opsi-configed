@@ -76,18 +76,18 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 		if (product != null && !product.trim().equals("")) {
 			retrieveRequirements(depotId, product);
 
-			keySet = new TreeSet();
+			keySet = new TreeSet<>();
 			if (requMap != null && requMap.keySet() != null) {
-				keySet.addAll(new TreeSet(requMap.keySet()));
+				keySet.addAll(new TreeSet<>(requMap.keySet()));
 			}
 			if (requBeforeMap != null && requBeforeMap.keySet() != null) {
-				keySet.addAll(new TreeSet(requBeforeMap.keySet()));
+				keySet.addAll(new TreeSet<>(requBeforeMap.keySet()));
 			}
 			if (requAfterMap != null && requAfterMap.keySet() != null) {
-				keySet.addAll(new TreeSet(requAfterMap.keySet()));
+				keySet.addAll(new TreeSet<>(requAfterMap.keySet()));
 			}
 			if (requDeinstallMap != null && requDeinstallMap.keySet() != null) {
-				keySet.addAll(new TreeSet(requDeinstallMap.keySet()));
+				keySet.addAll(new TreeSet<>(requDeinstallMap.keySet()));
 			}
 			if (keySet != null) {
 				keyArray = keySet.toArray();

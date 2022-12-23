@@ -1035,7 +1035,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		if (data != null)
 			theData = data;
 		else
-			theData = new HashMap();
+			theData = new HashMap<>();
 
 		setInternalGroupsData();
 

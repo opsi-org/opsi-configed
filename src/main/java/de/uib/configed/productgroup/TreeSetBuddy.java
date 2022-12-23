@@ -68,18 +68,18 @@ public class TreeSetBuddy extends TreeSet<String> {
 		TreeSet stest1 = null;
 		TreeSet stest2 = null;
 
-		stest1 = new TreeSet(Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"));
-		stest2 = new TreeSet(Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"));
+		stest1 = new TreeSet<>(Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"));
+		stest2 = new TreeSet<>(Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"));
 
 		assert (stest1.equals(stest2));
 
-		stest2 = new TreeSet(Arrays.asList("a", "b"));
+		stest2 = new TreeSet<>(Arrays.asList("a", "b"));
 		assert (!stest1.equals(stest2));
 
-		stest2 = new TreeSet(Arrays.asList("a", "b", "c", "d"));
+		stest2 = new TreeSet<>(Arrays.asList("a", "b", "c", "d"));
 		assert (!stest1.equals(stest2));
 
-		stest2 = new TreeSet(Arrays.asList("a", "b", "e"));
+		stest2 = new TreeSet<>(Arrays.asList("a", "b", "e"));
 		assert (!stest1.equals(stest2));
 	}
 

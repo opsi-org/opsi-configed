@@ -318,7 +318,7 @@ public class JSONReMapper {
 
 		try {
 			JSONArray jA = retrieved;
-			jsonList = new ArrayList();
+			jsonList = new ArrayList<>();
 
 			if (jA != null) {
 				for (int i = 0; i < jA.length(); i++) {
@@ -441,7 +441,7 @@ public class JSONReMapper {
 				ArrayList<String> row = null;
 
 				if (jA != null) {
-					row = new ArrayList(jA.length());
+					row = new ArrayList<>(jA.length());
 					for (int i = 0; i < jA.length(); i++) {
 						// logging.debug(this, "getJSONList, add item ---- " + jA.get(i));
 
@@ -466,12 +466,12 @@ public class JSONReMapper {
 	}
 
 	public static List getJsonList(JSONObject jO, String key) {
-		ArrayList result = new ArrayList();
+		ArrayList result = new ArrayList<>();
 		try {
 			JSONArray jA = jO.optJSONArray(key);
 
 			if (jA != null) {
-				result = new ArrayList(jA.length());
+				result = new ArrayList<>(jA.length());
 				for (int i = 0; i < jA.length(); i++) {
 					// logging.debug(this, "getJSONList, add item ---- " + jA.get(i));
 					result.add(jA.get(i));
@@ -494,7 +494,7 @@ public class JSONReMapper {
 
 			// logging.debug ("jA is " + jA.toString());
 			if (jA != null) {
-				result = new ArrayList(jA.length());
+				result = new ArrayList<>(jA.length());
 				for (int i = 0; i < jA.length(); i++) {
 					result.add("" + jA.get(i));
 				}
@@ -509,7 +509,7 @@ public class JSONReMapper {
 	}
 
 	public static List getListResult(JSONObject jO) {
-		List result = new ArrayList();
+		List result = new ArrayList<>();
 		try {
 			if (checkResponse(jO)) {
 				result = JSONReMapper.getJsonList(jO, "result");
@@ -545,7 +545,7 @@ public class JSONReMapper {
 	// yields possibly JSON objects and arrays as values
 	// compare getMap_Object
 	{
-		HashMap result = new HashMap();
+		HashMap result = new HashMap<>();
 		try {
 			if (checkResponse(jO)) {
 				JSONObject jOResult = jO.optJSONObject("result");
@@ -636,7 +636,7 @@ public class JSONReMapper {
 		}
 
 		else if (ob instanceof JSONObject) {
-			Map<String, Object> map = new HashMap();
+			Map<String, Object> map = new HashMap<>();
 
 			Iterator iter = ((JSONObject) ob).keys();
 

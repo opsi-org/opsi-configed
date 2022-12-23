@@ -817,7 +817,7 @@ public class HostInfo {
 		// // logging.debug("");logging.debug("");logging.debug("");
 
 		// String product = "opsi-client-agent";
-		// persist.setCommonProductPropertyValue( new HashSet(Arrays.asList(client)),
+		// persist.setCommonProductPropertyValue( new HashSet<>(Arrays.asList(client)),
 		// product, "on_shutdown_install" , Arrays.asList(shutdownInstall) );
 		// // Set<String> clientNames, String productName, String propertyName,
 		// List<String> values

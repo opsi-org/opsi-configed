@@ -702,7 +702,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		 * List selectedKeys = thePanel.panelRegisteredSoftware.getSelectedKeys();
 		 * thePanel.panelRegisteredSoftware.setSelectedValues(selectedKeys, 0);
 		 * 
-		 * modelWindowsSoftwareIds.setInvertedFilter(new TreeSet(selectedKeys));
+		 * modelWindowsSoftwareIds.setInvertedFilter(new TreeSet<>(selectedKeys));
 		 * modelWindowsSoftwareIds.setUsingFilter(true);
 		 * 
 		 * 
