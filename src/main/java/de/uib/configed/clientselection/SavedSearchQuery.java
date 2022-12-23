@@ -117,7 +117,7 @@ public class SavedSearchQuery {
 			return null;
 		}
 
-		
+		// logging.debug("searches, searchName " + searches + ", " + searchName);
 
 		if (!searches.contains(searchName)) {
 			logging.error("Search not found.");
@@ -144,7 +144,7 @@ public class SavedSearchQuery {
 
 		Map<String, Map<String, String>> hostGroups = controller.getHostGroups();
 
-		
+		// logging.debug(" hostGroups " + hostGroups);
 
 		if (!hostGroups.keySet().contains(groupName)) {
 			logging.error("group not found");

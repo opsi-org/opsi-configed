@@ -41,7 +41,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	public void reset() {
 		logging.info(this, "reset");
 		super.reset();
-		
+		// ((ControlPanelAssignToLPools)controller).setSoftwareIdsFromLicencePool();
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 		if (controller.thePanel.fSoftwarename2LicencePool != null) {
 			logging.info(this, "Panel.fSoftwarename2LicencePool.panelSWnames.reset");
-			
+			// controller.thePanel.fSoftwarename2LicencePool.panelSWnames.requestReload();
 			// does not solve the task
 			controller.thePanel.fSoftwarename2LicencePool.panelSWnames.reset();
 		}
@@ -96,22 +96,22 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	// ListSelectionListener
 	@Override
 	public void valueChanged(javax.swing.event.ListSelectionEvent e) {
-		 we base it on a mouse event
+		// super.valueChanged(e); we base it on a mouse event
 
 		// if (e.getValueIsAdjusting()) return;
 
-		
+		// logging.info(this, "selectionListener valueChanged, not more adjusting");
 
 		if (isAwareOfSelectionListener()) {
 			logging.debug(this, "selectionListener valueChanged, aware of selectionlistener");
 
-			
+			// ((ControlPanelAssignToLPools)controller).validateWindowsSoftwareKeys( );
 
-			 we transfer to mouse listener
+			// setDataChanged(true); we transfer to mouse listener
 
 		}
 
-		
+		// callName2Pool();
 
 	}
 
@@ -146,7 +146,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 				if (controller.thePanel.fSoftwarename2LicencePool.isVisible()) {
 					logging.info(this, "selectionListener valueChanged,fSoftwarename2LicencePool.isVisible ");
 
-					
+					// controller.thePanel.fSoftwarename2LicencePool.panelSWxLicencepool.reload();
 					// the data is not refreshed
 				}
 
@@ -157,14 +157,14 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 		super.mouseClicked(e);
 
-		
-		
+		// logging.info(this, "mouse event " + e);
+		// logging.info(this, "row " + theTable.rowAtPoint(e.getPoint()) );
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (mouseInColumnOfMarkCursor(e.getPoint())) {
-			logging.info(this, "mouseReleased reset saveRowSelection ");
+			logging.info(this, "mouseReleased reset saveRowSelection ");// + Arrays.toString( saveRowSelection ) );
 
 			if (saveRowSelection != null)
 				super.setSelection(saveRowSelection);
@@ -173,7 +173,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 		else {
 			saveRowSelection = theTable.getSelectedRows();
-			logging.info(this, "mouseReleased set new saveRowSelection ");
+			logging.info(this, "mouseReleased set new saveRowSelection ");// + Arrays.toString( saveRowSelection ) );
 		}
 	}
 

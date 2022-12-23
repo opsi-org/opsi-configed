@@ -120,7 +120,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	@Override
 	public void ensureRowIsVisible(int row) {
 		// jList.locationToIndex
-		
+		// table.scrollRectToVisible(table.getCellRect(row, 0, false));
 	}
 
 	@Override
@@ -143,8 +143,8 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		logging.info(this, "addSelectedRow " + row);
 
 		jList.addSelectionInterval(row, row);
-		 //test
-		
+		// jList.addSelectionInterval(row +2 , row + 2); //test
+		// logging.debug(" --- view row selected " + row);
 		ensureRowIsVisible(row);
 	}
 

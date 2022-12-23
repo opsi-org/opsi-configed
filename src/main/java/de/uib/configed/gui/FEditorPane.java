@@ -19,7 +19,7 @@ public class FEditorPane extends FGeneralDialog {
 
 	private void init() {
 		editPane.setOpaque(true);
-		
+		// editPane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
 		editPane.setBackground(Globals.backgroundGrey);
 		editPane.setText("          ");
 		editPane.setEditable(false);
@@ -98,7 +98,7 @@ public class FEditorPane extends FGeneralDialog {
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
-			
+			// logging.debug ("shift released");
 		}
 
 		if (e.getKeyCode() == KeyEvent.VK_TAB && !shiftPressed) {

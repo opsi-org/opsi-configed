@@ -83,7 +83,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 		setLayout(new BorderLayout());
 		label.addMouseListener((MouseListener) this);
 		add(label);
-		
+		// logging.debug(this, "IconAsButton " + description + " created: " + this);
 	}
 
 	public IconAsButton(String desc, String imageRelPath) {
@@ -197,12 +197,12 @@ public class IconAsButton extends JPanel implements MouseListener {
 					label.setIcon(iconInactive);
 				}
 			} else {
-				
+				// logging.debug(this, "iconActive == null " + (iconActive == null));
 				if (activated && iconActive != null) {
-					
+					// logging.debug(this, "setIcon iconActive");
 					label.setIcon(iconActive);
 				} else {
-					
+					// logging.debug(this, "setIcon iconInactive");
 					label.setIcon(iconInactive);
 				}
 			}

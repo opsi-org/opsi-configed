@@ -7,6 +7,6 @@ public interface SSHMultiCommand {
 
 	public LinkedList<String> getCommandsRaw();
 
-	
+	// public int getCommandsCount();
 	public String getMainName();
 }

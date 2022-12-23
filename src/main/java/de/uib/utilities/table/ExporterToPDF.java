@@ -170,9 +170,9 @@ public class ExporterToPDF extends ExportTable {
 			if ((saveAction == false) && (temp.getAbsolutePath() != null)) {
 				try {
 					// logging.info(this, "is supported OPEN: " +
-					
-					Desktop.getDesktop().open(temp); 
-					
+					// Desktop.getDesktop().isSupported(Desktop.Action.OPEN));
+					Desktop.getDesktop().open(temp); // new File(temp.getAbsolutePath()));
+					// Desktop.getDesktop().browse(new java.net.URI( temp.getAbsolutePath() ) );
 				} catch (Exception e) {
 					logging.error("cannot show: " + temp.getAbsolutePath() + " : " + e);
 				}
@@ -229,7 +229,7 @@ public class ExporterToPDF extends ExportTable {
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd. MMMMM yyyy");
 		// Second parameter is the number of the chapter
 		Paragraph content = new Paragraph();
-		
+		// addEmptyLine(content, 1);
 		if (metaData.containsKey("title"))
 			content.add(new Paragraph(metaData.get("title"), catFont));
 		if (metaData.containsKey("subtitle"))

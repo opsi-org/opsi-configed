@@ -27,7 +27,7 @@ public class ConnectionState {
 		myState = state;
 		this.message = message;
 		instancesCount++;
-		
+		// logging.debug("Setting connection state to: "+toString());
 	}
 
 	/**

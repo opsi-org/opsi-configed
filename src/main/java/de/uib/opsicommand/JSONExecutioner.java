@@ -64,8 +64,8 @@ public abstract class JSONExecutioner extends Executioner {
 	@Override
 	public boolean doCall(OpsiMethodCall omc) {
 		JSONObject jO = retrieveJSONObject(omc);
-		
-		
+		// logging.debug ( " --------------- jO " + jO);
+		// logging.debug (" " + checkResponse(jO));
 		return checkResponse(jO);
 	}
 
@@ -100,7 +100,7 @@ public abstract class JSONExecutioner extends Executioner {
 				while (iter.hasNext()) {
 					String key = (String) iter.next();
 					// logging.debug(this, "getMapOfLists, key " + key + " list value " +
-					
+					// JSONReMapper.getJsonList(jOResult, key));
 					result.put(key, JSONReMapper.getJsonList(jO, key));
 				}
 			}
@@ -126,7 +126,7 @@ public abstract class JSONExecutioner extends Executioner {
 						while (iter.hasNext()) {
 							String key = (String) iter.next();
 							// logging.debug(this, "getMapOfLists, key " + key + " list value " +
-							
+							// JSONReMapper.getJsonList(jOResult, key));
 							result.put(key, JSONReMapper.getJsonList(jOResult, key));
 						}
 					}
@@ -200,7 +200,7 @@ public abstract class JSONExecutioner extends Executioner {
 					logging.error(this, "map expected " + jOX);
 				} else {
 					logging.debug(this, "map retrieved ");
-					
+					// + jOX.getMap());
 					Map map0 = jOX.getMap();
 
 					Iterator iter0 = map0.keySet().iterator();
@@ -241,7 +241,7 @@ public abstract class JSONExecutioner extends Executioner {
 	 * 
 	 * HashMap<String, JSONObject> map0 = new HashMapX<String,
 	 * JSONObject>(jOResult);
-	 * 
+	 * //logging.debug(this, " map0: " + map0);
 	 * 
 	 * Iterator iter0 = map0.keySet().iterator();
 	 * while (iter0.hasNext())
@@ -249,7 +249,7 @@ public abstract class JSONExecutioner extends Executioner {
 	 * String key1 = (String) iter0.next(); //e.g. client
 	 * HashMap<String, JSONObject> map1 =new HashMapX<>(
 	 * (JSONObject) map0.get(key1) ); //e.g. map of 1 client values
-	 * 
+	 * //logging.debug(this, " key1 " + key1 + " value " + map1);
 	 * HashMap<String, Map<String, Object>> map1R = new HashMap<String, Map<String,
 	 * Object>>(); // to produce
 	 * 
@@ -259,9 +259,9 @@ public abstract class JSONExecutioner extends Executioner {
 	 * String key2 = (String) iter1.next(); //e.g. product
 	 * HashMap<String, Object> map2 = new HashMapX<>((JSONObject)
 	 * map1.get(key2), true); //e.g. product values;
-	 * 
+	 * //logging.debug(this, " key2 " + key2 + " value " + map2);
 	 * map1R.put(key2, map2);
-	 * 
+	 * //logging.debug(this, " map1R.get(key2) " + map1R.get(key2));
 	 * }
 	 * 
 	 * result.put(key1, map1R);
@@ -320,7 +320,7 @@ public abstract class JSONExecutioner extends Executioner {
 				Iterator iter = resultlist.iterator();
 				while (iter.hasNext()) {
 					JSONObject jO = (JSONObject) iter.next();
-					
+					// logging.debug("jO " + jO);
 
 					String keyOfItem = null;
 
@@ -384,7 +384,7 @@ public abstract class JSONExecutioner extends Executioner {
 			}
 		}
 
-		
+		// logging.info (this, " getStringMappedObjectsByKey result:" + result);
 		return result;
 
 	}
@@ -446,7 +446,7 @@ public abstract class JSONExecutioner extends Executioner {
 		try {
 			JSONObject jO = retrieveJSONObject(omc);
 			if (checkResponse(jO)) {
-				
+				// JSONObject jOResult = jO.optJSONObject ("result");
 				JSONArray jA1 = jO.optJSONArray("result");
 
 				if (jA1 != null) {
@@ -513,7 +513,7 @@ public abstract class JSONExecutioner extends Executioner {
 			} catch (Exception jsonEx) {
 			}
 
-			
+			// logging.debug (" ------------- getStringResult() " + result);
 		}
 
 		return result;
@@ -521,12 +521,12 @@ public abstract class JSONExecutioner extends Executioner {
 
 	@Override
 	public boolean getBooleanResult(OpsiMethodCall omc) {
-		
+		// logging.info(this, "getBooleanResult " + omc);
 		Boolean result = null;
 
 		JSONObject jO = retrieveJSONObject(omc);
 
-		
+		// logging.info(this, "getBooleanResult " + jO);
 
 		if (!JSONReMapper.checkForNotValidOpsiMethod(jO)) {
 			result = getBooleanResult(omc.activateExtendedRpcPath());
@@ -536,7 +536,7 @@ public abstract class JSONExecutioner extends Executioner {
 					result = (Boolean) jO.get("result");
 				} catch (Exception jsonEx) {
 				}
-				
+				// logging.debug (" ------------- getBooleanResult() " + result);
 			}
 		}
 
@@ -577,13 +577,13 @@ public abstract class JSONExecutioner extends Executioner {
 			}
 
 			if (wehavejO) {
-				
+				// logging.debug (" +++++++++++++++ JSONObject jO " + jO.toString());
 				if (jO != null && jO != JSONObject.NULL) {
-					
+					// logging.debug ("JO keys");
 					Iterator iter = jO.keys();
 					while (iter.hasNext()) {
 						String key = (String) iter.next();
-						
+						// logging.debug (key);
 						result.put(key, jO.get(key));
 					}
 				}

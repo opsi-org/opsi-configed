@@ -87,16 +87,16 @@ public class PanelMountShare extends JPanel {
 
 		// mountShareLabel = new JLabel(
 		// configed.getResourceValue("PanelMountShare.mountShare" ) + " " +
-		
+		// np.produceName() );
 		mountShareLabel = new JLabel("");
 
 		mountShareDescriptionLabel = new JLabel(
 				configed.getResourceValue("PanelMountShare.mountShareResult0") + " " + np.getDefaultName());
 		// if (!isWindows)
-		
+		// mountShareDescriptionLabel.setForeground(Globals.greyed);
 
 		checkConnectionToShare();
-		
+		// mountShareDescriptionLabel.setVisible(isWindows);
 
 		JPanel panel = this;
 		GroupLayout layout = new GroupLayout(panel);
@@ -169,7 +169,7 @@ public class PanelMountShare extends JPanel {
 
 		checkConnectionToShare(240);
 
-		 //of no use, since we probably do not wait for the
+		// rootFrame.toFront(); //of no use, since we probably do not wait for the
 		// runtime
 	}
 
@@ -225,9 +225,9 @@ public class PanelMountShare extends JPanel {
 			public void run() {
 				int i = 0;
 
-				
+				// Icon saveIcon = buttonMountShare.getIcon();
 				while (!smbMounted && i < seconds) {
-					
+					// buttonMountShare.setPressedIcon(Globals.waitingButtonIcon);
 
 					try {
 						logging.debug(this, "trying to find dir, count " + i);

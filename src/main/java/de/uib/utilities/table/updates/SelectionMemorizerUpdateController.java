@@ -34,10 +34,10 @@ public abstract class SelectionMemorizerUpdateController implements de.uib.utili
 	public boolean saveChanges() {
 		boolean success = true;
 
-		
+		// logging.debug (" -- update controller called ");
 
-		WaitCursor waitCursor = new WaitCursor();
-													
+		WaitCursor waitCursor = new WaitCursor();// Globals.masterFrame, this.getClass().getName() + ".saveChanges" );
+													// //licencesFrame, licencesFrame.getCursor() );
 
 		logging.debug(this, "keysPanel is null " + (keysPanel == null));
 		if (keysPanel.getSelectedRow() < 0) {
@@ -57,7 +57,7 @@ public abstract class SelectionMemorizerUpdateController implements de.uib.utili
 
 		String keyValue = keysPanel.getValueAt(keysPanel.getSelectedRow(), keyCol).toString();
 
-		
+		// logging.debug(" --- set " + keyValue + ", " + panel.getSelectedKeys());
 
 		success = updater.sendUpdate(keyValue, panel.getSelectedKeys());
 

@@ -86,7 +86,7 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 					boolean leaf, int row, boolean hasFocus) {
 
 				JLabel label = new JLabel(value.toString()); // (JLabel)
-																
+																// super.getTreeCellRendererComponent(tree,value,sel,expanded,leaf,row,hasFocus);
 
 				if (sel)
 					label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -97,10 +97,10 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 			}
 		};
 
-		
-		
-		
-		
+		// Icon productIcon = Globals.createImageIcon("images/package.png", "" );
+		// renderer.setLeafIcon(null);//productIcon);
+		// renderer.setOpenIcon(null);
+		// renderer.setClosedIcon(null);
 		dependenciesTree.setCellRenderer(renderer);
 
 		DefaultTreeSelectionModel selectionModel = new DefaultTreeSelectionModel() {

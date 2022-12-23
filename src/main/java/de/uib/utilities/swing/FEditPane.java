@@ -50,7 +50,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	private javax.swing.JTextPane textpane;
 
 	// private javax.swing.text.html.HTMLDocument doc;
-	
+	// protected Html2Text html2text = new Html2Text();
 
 	protected LinkSearcher searcher;
 	protected Highlighter highlighter;
@@ -61,7 +61,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	private boolean singleLine;
 	static int count = 0;
 
-	
+	// static final Pattern linkpattern = Pattern.compile(".*.*");
 
 	public FEditPane(String initialText, String hint) {
 		super(initialText, hint);;
@@ -83,8 +83,8 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		editingArea.add(scrollpane, BorderLayout.CENTER);
 
-		
-		
+		// editingArea.setLayout(new FlowLayout());
+		// editingArea.add(scrollpane);
 
 		/*
 		 * editingLayout.setHorizontalGroup(
@@ -97,7 +97,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		 * );
 		 */
 
-		
+		// textpane.setContentType( "text/html" );
 		textpane.setContentType("text/plain");
 
 		textpane.setEditable(true);
@@ -106,11 +106,11 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		textpane.addMouseListener(this);
 		textpane.addMouseMotionListener(this);
 
-		
+		// textpane.getDocument().addDocumentListener(this);
 		// we only register changes after loading the initial document
 
 		searcher = new LinkSearcher(textpane);
-		searcher.setCaseSensitivity(true);
+		searcher.setCaseSensitivity(true);// false);
 		highlighter = new UnderlineHighlighter(null);
 		textpane.setHighlighter(highlighter);
 		setDataChanged(false);
@@ -122,14 +122,14 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			cmdLauncher.setPrefix(LINUX_LINK_INTERPRETER);
 
 		// HyperlinkListener hyperlinkListener = new
-		
-		
+		// ActivatedHyperlinkListener(textpane);
+		// textpane.addHyperlinkListener(hyperlinkListener);
 	}
 
 	protected void setSingleLine(boolean b) {
 		singleLine = b;
-		
-		
+		// textpane.setLineWrap(!singleLine);
+		// textpane.setWrapStyleWord(!singleLine);
 	}
 
 	@Override
@@ -137,7 +137,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		logging.debug(this, " FEeditPane setStartText: " + s);
 		super.setStartText(s);
 
-		
+		// logging.info(this, " setStartText after super class call "+s);
 
 		textpane.setText(s);
 
@@ -151,13 +151,13 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	}
 
 	private void searchAndHighlight() {
-		
-		
+		// textpane.requestFocus();
+		// searcher.comp.setCaretPosition(0);
 		searcher.searchLinks();
 	}
 
 	public boolean isLink(String s0) {
-		
+		// logging.info(this, "isLink " + s0);
 
 		if (s0 == null)
 			return false;
@@ -230,8 +230,8 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	@Override
 	public String getText() {
-		
-		
+		// textpane.setText(textpane.getText().replaceAll("\t",""));
+		// if (singleLine) textpane.setText(textpane.getText().replaceAll("\n",""));
 		initialText = textpane.getText(); // set new initial text for use in processWindowEvent
 		return initialText;
 	}
@@ -246,7 +246,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	@Override
 	public void keyReleased(KeyEvent e) {
 		super.keyReleased(e);
-		
+		// markLinks();
 	}
 
 	@Override
@@ -257,7 +257,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getSource() == textpane) {
-			
+			// logging.debug(this, " key event on textpane " + e);
 
 			if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
 					&& e.getKeyCode() == KeyEvent.VK_TAB)
@@ -319,16 +319,16 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		
+		// logging.info(this, "caret " + textpane.getCaretPosition());
 		// logging.info(this, " line clicked " + getLineForPos(
-		
-		
+		// textpane.getCaretPosition() ) );//+ "\n" + e);
+		// if (e.getClickCount() > 1) searchAndHighlight();
 
 		if (e.getClickCount() > 1) {
 			Point p = e.getPoint();
-			
+			// logging.info(this, "mouse " + p + " " + textpane.viewToModel( p ) );
 			String line = getMarkedLine(textpane.viewToModel2D(p));
-			
+			// logging.info(this, " got line " + line );
 			if (line != null) {
 				logging.info(this, " got link " + line);
 				cmdLauncher.launch("\"" + line + "\"");
@@ -361,8 +361,8 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		Point p = e.getPoint();
-		
-		
+		// logging.info(this, "mouse " + p + " " + textpane.viewToModel( p ) );
+		// logging.info(this, "got line " + getMarkedLine (textpane.viewToModel( p )) );
 
 		if (getMarkedLine(textpane.viewToModel2D(p)) != null)
 			textpane.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -388,7 +388,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			f.setStartText(buf.toString());
 
 			count++;
-			
+			// logging.debug( "having " + count + " " + f.getText( ) );
 		});
 
 	}
@@ -454,9 +454,9 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 			for (int i = 0; i < linesplits.length; i++) {
 				String line = linesplits[i];
-				
+				// logging.info(this, "line " + line);
 				endIndex = startIndex + line.length();
-				
+				// logging.info(this, "line " + startIndex + " - " + endIndex);
 
 				int posInLine = startOfMarkedString(line);
 				int len = line.trim().length();
@@ -472,7 +472,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			}
 
 			// logging.info(this, "content length " + content.length() + " last index " +
-			
+			// startIndex);
 			return lastFoundIndex;
 		}
 	}

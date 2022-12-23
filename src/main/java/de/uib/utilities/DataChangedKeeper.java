@@ -25,7 +25,7 @@ public class DataChangedKeeper implements DataChangedObserver {
 	};
 
 	public DataChangedKeeper() {
-		
+		// actUpon = new TellWhat();
 
 	}
 
@@ -47,7 +47,7 @@ public class DataChangedKeeper implements DataChangedObserver {
 		if (actUpon != null)
 			actUpon.act(source);
 
-		
+		// actionOnChange( true, source);
 	}
 
 	public void actionOnChangeXXX(boolean condition, Object source) {

@@ -74,10 +74,10 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 		// )
 		);
 
-		
+		// SSHConnectExec exec = new SSHConnectExec();
 		// exec.exec(command, true, new SSHConnectionExecDialog(command,
 		// configed.getResourceValue("SSHConnection.Exec.title") + "
-		
+		// \""+command.getCommand() + "\" "));
 		return (SSHConnectionExecDialog) exec.getDialog();
 	}
 

@@ -254,7 +254,7 @@ public class LicensingInfoMap {
 		} catch (Exception ex) {
 			logging.error(CLASSNAME + " produceLicenses " + ex.toString());
 		}
-		
+		// logging.info( " licenses result: " + result);
 		return result;
 	}
 
@@ -458,7 +458,7 @@ public class LicensingInfoMap {
 			}
 			Collections.sort(dates);
 
-			
+			// logging.info(this, " dates keys: " + dates);
 
 			Date latest = findLatestChangeDate(dates);
 
@@ -477,7 +477,7 @@ public class LicensingInfoMap {
 		} catch (Exception ex) {
 			logging.error(CLASSNAME + " produceDatesKeys : " + ex.toString() + ", ");
 		}
-		
+		// logging.info(this, " dates keys: " + dates);
 		return dates;
 	}
 
@@ -517,7 +517,7 @@ public class LicensingInfoMap {
 				// new: iterate over all known modules and fill empty ones with 0
 				// also warning state should be none
 				for (String currentModule : shownModules) {
-					
+					// JSONObject moduleInfo = (JSONObject) moduleToDate.get(currentModule);
 
 					JSONObject moduleInfo;
 					boolean available = availableModules.contains(currentModule);
@@ -593,12 +593,12 @@ public class LicensingInfoMap {
 		columnNames = new Vector<>();
 		columnNames.add(configed.getResourceValue("LicensingInfo.modules"));
 		columnNames.add(configed.getResourceValue("LicensingInfo.available"));
-		
+		// columnNames.add(configed.getResourceValue("LicensingInfo.info"));
 
 		classNames = new Vector<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
-		
+		// classNames.add("java.lang.String");
 
 		try {
 
@@ -609,14 +609,14 @@ public class LicensingInfoMap {
 
 			for (String currentModule : shownModules) {
 				Map<String, Object> line = new HashMap<>();
-				
+				// String currentModule = availableModules.get(i).toString();
 
 				// 1st column
 				line.put(configed.getResourceValue("LicensingInfo.modules"), currentModule);
 
 				// 2nd column
 				// line.put(configed.getResourceValue("LicensingInfo.info"),
-				
+				// configed.getResourceValue("LicensingInfo.info"));
 
 				// 3rd column
 				line.put(configed.getResourceValue("LicensingInfo.available"),
@@ -643,11 +643,11 @@ public class LicensingInfoMap {
 		String newest = null;
 		try {
 			LocalDate now = LocalDate.now();
-			
+			// Date dateNow = sdf.parse("2022-04-06");
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 			for (String key : datesKeys) {
-				
+				// logging.debug("key " + key);
 				Date thisDate = sdf.parse(key);
 				if (dateNow.compareTo(thisDate) >= 0)
 					newest = key;
@@ -667,11 +667,11 @@ public class LicensingInfoMap {
 		Date newest = new Date();
 		try {
 			LocalDate now = LocalDate.now();
-			
+			// Date dateNow = sdf.parse("2022-04-06");
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 			for (String key : dates) {
-				
+				// logging.debug("key " + key);
 				Date thisDate = sdf.parse(key);
 				if (dateNow.compareTo(thisDate) >= 0)
 					newest = thisDate;
@@ -706,8 +706,8 @@ public class LicensingInfoMap {
 		try {
 			LocalDate now = LocalDate.now();
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
-			
-			
+			// dateNow = sdf.parse("2023-05-01");
+			// Date nextChange = sdf.parse(findNextChangeDate());
 			Date date = sdf.parse(d);
 
 			long diffInMillies = Math.abs(date.getTime() - dateNow.getTime());
@@ -834,7 +834,7 @@ public class LicensingInfoMap {
 			percentClientLimitWarning = Integer.parseInt((String) configs.get(key).get(0));
 
 		// logging.debug("warning levels: " + absolutClientLimitWarning + ", " +
-		
+		// percentClientLimitWarning);
 	}
 
 	public ArrayList<String> getCloseToLimitModuleList() {
@@ -866,7 +866,7 @@ public class LicensingInfoMap {
 		result.put(FUTURE_OVER_LIMIT, futureOverLimitModuleList);
 		result.put(FUTURE_CLOSE_TO_LIMIT, futureCloseToLimitModuleList);
 
-		
+		// System.exit(0);
 		return result;
 	}
 

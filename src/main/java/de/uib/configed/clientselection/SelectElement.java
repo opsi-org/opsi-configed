@@ -62,7 +62,7 @@ public abstract class SelectElement {
 	}
 
 	// public abstract SelectOperation createOperation( String operation, SelectData
-	
+	// data );
 
 	@Override
 	public String toString() {

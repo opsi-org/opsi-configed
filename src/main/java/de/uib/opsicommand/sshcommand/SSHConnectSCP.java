@@ -242,12 +242,12 @@ public class SSHConnectSCP extends SSHConnectExec {
 
 				if (!(isConnected()))
 					connect();
-				
-				
+				// publish("Session connected…");
+				// final Channel channel = getSession().openChannel("exec");
 				final Channel channel = getSession().openChannel("sftp");
 				logging.info(this, "doInBackground channel openchannel " + channel);
 				channel.connect();
-				
+				// publish("Channel connected…");
 				logging.info(this, "doInBackground channel connect " + channel);
 				final ChannelSftp channelsftp = (ChannelSftp) channel;
 
@@ -322,7 +322,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 		protected void process(List<String> chunks) {
 			logging.debug(this, "chunks " + chunks.size());
 			if (outputDialog != null) {
-				
+				// outputDialog.setVisible(true);
 				for (String line : chunks) {
 					logging.debug(this, "process " + line);
 					outputDialog.append(getCommandName(), line + "\n");

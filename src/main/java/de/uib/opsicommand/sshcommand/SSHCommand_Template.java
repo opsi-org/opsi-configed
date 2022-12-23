@@ -135,7 +135,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	public void setCommands(LinkedList<String> c_list) {
 		if (c_list != null) {
 			for (String c : c_list) {
-				
+				// c_list.add("echo READY");
 				SSHCommand sshc = new Empty_Command(getId(), c, getMenuText(), needSudo());
 				ssh_command.add(sshc);
 				if (firstInitCommands)
@@ -329,8 +329,8 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 				commands_string_list.add(c.getCommandRaw());
 		}
 
-		
-		
+		// commands_string_list.add("echo ... ");
+		// commands_string_list.add("echo READY");
 
 		return commands_string_list;
 	}

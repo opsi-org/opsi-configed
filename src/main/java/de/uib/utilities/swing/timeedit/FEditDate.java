@@ -25,7 +25,7 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 		org.jdesktop.swingx.event.DateSelectionListener, MouseListener, KeyListener
 
 {
-	public static final Dimension AREA_DIMENSION = new Dimension(380, 300);
+	public static final Dimension AREA_DIMENSION = new Dimension(380, 300);// new Dimension(200,200);
 	private DateTimeEditor dateEditor;
 
 	protected DateFormat dateFormat;
@@ -36,14 +36,14 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 		super(initialText);
 		areaDimension = AREA_DIMENSION;
 
-		dateFormat = DateFormat.getDateInstance(Globals.dateFormatStylePattern);
+		dateFormat = DateFormat.getDateInstance(Globals.dateFormatStylePattern);// DateFormat.LONG);
 
 		dateEditor = new DateTimeEditor(withTime);
 
-		editingArea.add(dateEditor); 
+		editingArea.add(dateEditor); // BorderLayout.CENTER);
 
 		dateEditor.setEditable(true);
-		
+		// dateEditor.registerDateEventObserver(this);
 		dateEditor.addDateSelectionListener(this);
 		dateEditor.addKeyListener(this);
 		dateEditor.addMonthViewMouseListener(this);
@@ -55,19 +55,19 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 	@Override
 	protected void createComponents() {
 		super.createComponents();
-		
-		
-		
+		// buttonCommit.setText("");
+		// buttonCommit.setPreferredSize(Globals.smallButtonDimension );
+		// buttonCancel.setText("");
 
-		
-		
+		// buttonCancel.setPreferredSize(Globals.smallButtonDimension );
+		// cancelbutton.setVisible(false);
 
 	}
 
 	@Override
 	public void setStartText(String s) {
 		super.setStartText(s);
-		
+		// textarea.setText(s);
 
 		logging.info(this, "setStartText(): " + s);
 		setDataChanged(false);
@@ -85,14 +85,14 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 			} catch (ParseException pex) {
 				try // fallback for standard sql time format
 				{
-					
+					// logging.debug(" fallback for standard sql time");
 					s1 = s;
 					if (s1.indexOf(' ') == -1)
 						s1 = s1 + " 00:00:00";
 					newDate = java.sql.Timestamp.valueOf(s1);
 					logging.info(this, "after supplement setStartText(): " + s1);
 					dateEditor.setSelectionDate(newDate);
-					
+					// logging.debug(" date parsed");
 					setDataChanged(false);
 				} catch (IllegalArgumentException ex) {
 					logging.warning("not valid date: " + s1);
@@ -128,7 +128,7 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 	// at the moment, the implementation decides about the date formatting
 	{
 		return getSelectedDateTime();
-		
+		// return getSelectedDate();
 		/*
 		 * java.util.Date date = dateEditor.getSelectedSqlTime();
 		 * 
@@ -154,7 +154,7 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 		logging.info(this, "valueChanged dateSelectionEvent");
 		// if ( !super.getText().equals( getText() ) )
 		setDataChanged(true);
-		
+		// updateCaller(getSelectedDate());
 		updateCaller(getSelectedDateString());
 	}
 
@@ -183,7 +183,7 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		
+		// logging.debug(" MouseEvent " + e);
 		if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2)
 			commit();
 

@@ -15,12 +15,12 @@ public class OpsiDataHardwareOperation extends HardwareOperation implements Exec
 
 	@Override
 	public boolean doesMatch(Client client) {
-		
+		// logging.debug(this, "doesMatch " + client);
 		OpsiDataClient oClient = (OpsiDataClient) client;
 		oClient.startHardwareIterator();
 		while (true) {
 			if (((ExecutableOperation) getChildOperations().get(0)).doesMatch(client)) {
-				
+				// logging.debug(this, "doesMatch operation " + getChildOperations().get(0));
 				return true;
 			}
 			if (!oClient.hardwareIteratorNext())

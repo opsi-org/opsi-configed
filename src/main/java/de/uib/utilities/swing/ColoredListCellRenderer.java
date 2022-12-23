@@ -35,7 +35,7 @@ public class ColoredListCellRenderer extends DefaultListCellRenderer {
 		 * c.setForeground(foreground);
 		 */
 		c.setFont(Globals.defaultFont);
-		
+		// logging.debug("component active");
 
 		return c;
 	}

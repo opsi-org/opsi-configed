@@ -100,8 +100,8 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 		logging.debug(this, "doCall, after recursion");
 		persis.setProductproperties();
 
-		
-		
+		// mainController.requestReloadStatesAndActions();
+		// mainController.resetView(mainController.getViewIndex());
 	}
 
 	@Override
@@ -118,7 +118,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 	@Override
 	public boolean add(Object obj) {
 		// logging.debug ("----------- adding to ProductPropertiesCollection " +
-		
+		// obj + " of class " + obj.getClass().getName());
 		return super.add(obj);
 	}
 

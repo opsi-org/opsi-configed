@@ -226,8 +226,8 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		label_uploading = new JLabel("uploading");
 		// waitingImage = new
-		
-		
+		// ImagePanel(Globals.createImage("images/waitingcircle.gif"));
+		// waitingImage.setVisible(true);
 		initComponents();
 
 		logging.info(this, "depotProductDirectory " + depotProductDirectory);
@@ -266,7 +266,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		chooserDriverPath.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserDriverPath);
-		
+		// chooserDriverPath.setControlButtonsAreShown(false);
 
 		chooserDriverPath.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooserDriverPath.setDialogTitle(
@@ -278,7 +278,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		chooserServerpath.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserServerpath);
-		
+		// chooserServerpath.setControlButtonsAreShown(false);
 
 		chooserServerpath.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooserServerpath.setDialogTitle(
@@ -315,7 +315,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	}
 
 	protected void buildPanel() {
-		
+		// setLayout(new BorderLayout());
 
 		fieldByAuditPath = new JTextShowField();
 
@@ -330,7 +330,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		buttonCallSelectDriverFiles
 				.setToolTipText(configed.getResourceValue("PanelDriverUpload.hintDriverToIntegrate"));
 
-		fieldServerPath = new JTextShowField(true); 
+		fieldServerPath = new JTextShowField(true); // opsiWorkBenchDirectoryS );
 		fieldServerPath.getDocument().addDocumentListener(new FileNameDocumentListener());
 
 		fieldServerPath.setForeground(Globals.greyed);
@@ -376,7 +376,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		fieldDriverPath = new JTextShowField(true);
 		fieldDriverPath.getDocument().addDocumentListener(new FileNameDocumentListener());
-		
+		// fieldDriverPath.setToolTipText(configed.getResourceValue("PanelDriverUpload.hintDriverToIntegrate"));
 
 		final JPanel thisPanel = this;
 
@@ -489,13 +489,13 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		serverPathChecked = new CheckedLabel(configed.getResourceValue("PanelDriverUpload.targetdirConnected"),
 				Globals.createImageIcon("images/checked_withoutbox.png", "Z"),
 				Globals.createImageIcon("images/checked_empty_withoutbox.png", ""), true);
-		
+		// serverPathChecked.setEnabled(false);
 
 		buttonUploadDrivers = new JButton("", Globals.createImageIcon("images/upload2product.png", ""));
 		buttonUploadDrivers.setEnabled(false);
 		buttonUploadDrivers.setSelectedIcon(Globals.createImageIcon("images/upload2product.png", ""));
 		// buttonUploadDrivers.setDisabledIcon(
-		
+		// Globals.createImageIcon("images/waitingcircle.gif", "") );
 
 		buttonUploadDrivers.setEnabled(false);
 
@@ -506,15 +506,15 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 				logging.info(this, "actionPerformed on buttonUploadDrivers from " + fieldDriverPath.getText() + " to "
 						+ fieldServerPath.getText());
 				final Color saveColor = buttonUploadDrivers.getBackground();
-				
+				// final Icon saveIcon = buttonUploadDrivers.getIcon();
 				buttonUploadDrivers.setBackground(Globals.failedBackColor);
 				execute();
 				buttonUploadDrivers.setBackground(saveColor);
 			}
 		});
 
-		
-		
+		// JPanel panelByAuditInfo = new PanelLinedComponents(compis);
+		// JPanel panelByAuditInfo= new JPanel();
 
 		GroupLayout layoutByAuditInfo = new GroupLayout(this);
 		this.setLayout(layoutByAuditInfo);
@@ -719,9 +719,9 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	}
 
 	protected void execute() {
-		
+		// waitingImage.setVisible(true);
 
-		
+		// Thread.yield();
 
 		final FLoadingWaiter waiter = new FLoadingWaiter(Globals.APPNAME,
 				configed.getResourceValue("PanelDriverUpload.execute.running"));
@@ -740,7 +740,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 					logging.info(this, "copy  " + driverPath + " to " + targetPath);
 
-					
+					// Thread.currentThread().sleep(100);
 
 					makePath(targetPath, true);
 
@@ -782,7 +782,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 					waitCursor.stop();
 					logging.error("error in uploading :\n" + ex, ex);
 				}
-				
+				// waitingImage.setVisible(false);
 			}
 		}.start();
 

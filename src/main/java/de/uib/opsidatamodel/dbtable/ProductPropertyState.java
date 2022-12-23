@@ -19,7 +19,7 @@ public class ProductPropertyState extends Table {
 	public static List<String> columns;
 	static {
 		columns = new ArrayList<>();
-		
+		// columns.add("product_property_state_id");
 		columns.add(PRODUCT_ID);
 		columns.add(PROPERTY_ID);
 		columns.add(OBJECT_ID);

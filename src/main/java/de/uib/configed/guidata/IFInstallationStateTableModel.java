@@ -17,7 +17,7 @@ public interface IFInstallationStateTableModel extends TableModel, ComboBoxModel
 	public Map<String, Map<String, Object>> getGlobalProductInfos();
 
 	// not used public void setActionRequestWithCondition(ActionRequest ar,
-	
+	// IntPredicate rowCondition);
 
 	public boolean infoIfNoClientsSelected();
 
@@ -27,5 +27,5 @@ public interface IFInstallationStateTableModel extends TableModel, ComboBoxModel
 
 	public void finishCollectiveChange();
 
-	
+	// public void reset();
 }

@@ -112,7 +112,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		/*
 		 * logging.info(this, "encode: to encode " + s);
 		 * String result;
-		 * 
+		 * //result = configed.encodeStringFromService(s);
 		 * result = s;
 		 * logging.info(this, "encode: encoded " + result);
 		 * return result;
@@ -120,19 +120,19 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	protected void buildPanel() {
-		
+		// setLayout(new BorderLayout());
 
-		
+		// JPanel panelByAuditInfo = new PanelLinedComponents(compis);
 		panelByAuditInfo = new PanelHWByAuditDriver(title, main);
-		
+		// = new JPanel();
 
 		tree = new XTree(null);
 
-		
+		// createRoot("");
 
 		jScrollPaneTree = new JScrollPane(tree);
 		jScrollPaneTree.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		
+		// jScrollPaneTree.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPaneTree.setMinimumSize(new Dimension(200, 200));
 		jScrollPaneTree.setPreferredSize(new Dimension(400, 200));
 
@@ -159,17 +159,17 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(vGap, vGap, vGap));
 
-		
+		// embed.setBackground(Color.red);
 		jScrollPaneInfo = new JScrollPane(embed);
 		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		
-		
-		
+		// jScrollPaneInfo.getViewport().setBackground(Globals.nimbusBackground);
+		// jScrollPaneInfo.setMinimumSize( new Dimension(200, 200) );
+		// jScrollPaneInfo.setPREFERRED_SIZE( new Dimension(400, 200) );
 
 		contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
-		
+		// contentPane.setBackground(Color.yellow);
 
-		
+		// add (contentPane);
 
 		GroupLayout layoutBase = new GroupLayout(this);
 		setLayout(layoutBase);
@@ -244,7 +244,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			popupMenu.addPopupListenersTo(new JComponent[] { tree, table });
 		}
 
-		
+		// setBackground(Color.green);
 
 	}
 
@@ -267,7 +267,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		copyOfMe.setHardwareConfig(hwConfig);
 		copyOfMe.setHardwareInfo(hwInfo, treeRootTitle);
 
-		
+		// copyOfMe.setNode(selectedNode);
 
 		copyOfMe.expandRows(tree.getToggledRows(rootPath));
 		copyOfMe.setSelectedRow(tree.getMinSelectionRow());
@@ -376,7 +376,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			return EMPTY;
 		}
 
-		
+		// logging.debug(this, "Selected node: " + device + " " + deviceInfo);
 
 		List values = null;
 
@@ -419,23 +419,23 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 							if (hwClass.equals(class_COMPUTER_SYSTEM)) {
 								if (opsi.equalsIgnoreCase(key_VENDOR)) {
 									vendorStringCOMPUTER_SYSTEM = cv;
-									
+									// logging.info(this, "vendorString " + cv);
 								} else if (opsi.equalsIgnoreCase(key_MODEL)) {
 									modelString = cv;
-									
+									// logging.info(this, "modelString " + cv);
 								}
 							} else if (hwClass.equals(class_BASE_BOARD)) {
 								if (opsi.equalsIgnoreCase(key_VENDOR)) {
 									vendorStringBASE_BOARD = cv;
-									
+									// logging.info(this, "vendorString " + cv);
 								} else if (opsi.equalsIgnoreCase(key_PRODUCT)) {
 									productString = cv;
-									
+									// logging.info(this, "productString " + cv);
 								}
 							}
 						}
 
-						 no encoding needed
+						// cv = encodeString (cv); no encoding needed
 
 						if (unit != null) {
 							cv = addUnit(cv, unit);
@@ -495,7 +495,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			String hwClassUI = path[1].toString();
 			String hwClass = (String) hwClassMapping.get(hwClassUI);
 
-			
+			// logging.debug(this, "scanNode hwClass " + hwClass);
 			if (hwClass != null && (hwClass.equals(class_COMPUTER_SYSTEM) || hwClass.equals(class_BASE_BOARD))) {
 				logging.debug(this, "scanNode found  class_COMPUTER_SYSTEM or class_BASE_BOARD");
 				getDataForNode(node, true);
@@ -556,7 +556,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			Map whc = (Map) hwConfig.get(i);
 			hwClassesUI[i] = (String) ((Map) whc.get("Class")).get("UI");
 			hwClassMapping.put(hwClassesUI[i], (String) ((Map) whc.get("Class")).get("Opsi"));
-			
+			// logging.debug(this, "found hwclass " + hwClassesUI[i]);
 		}
 
 		java.util.Arrays.sort(hwClassesUI);
@@ -566,7 +566,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			String hwClassUI = hwClassesUI[i];
 			String hwClass = (String) hwClassMapping.get(hwClassUI);
 
-			
+			// logging.debug(this, "Processing hwclass " + hwClassUI + "/" + hwClass);
 
 			ArrayList devices = (ArrayList) hwInfo.get(hwClass);
 			if (devices == null) {
@@ -607,14 +607,14 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			while (iter.hasNext()) {
 				String displayName = (String) iter.next();
 				ArrayList devs = (ArrayList) displayNames.get(displayName);
-				
+				// logging.info(this, "displayName: " + displayName);
 				for (int j = 0; j < devs.size(); j++) {
 					HashMap dev = (HashMap) devs.get(j);
 					String dn = displayName;
 					if (devs.size() > 1)
 						dn += " (" + j + ")";
 
-					
+					// logging.info(this, " - displayName: " + dn);
 					dev.put("displayName", dn);
 					names[num] = dn;
 					num++;
@@ -643,7 +643,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		treeModel.nodeChanged(root);
 		tree.expandRow(0);
 		tree.expandRow(1);
-		
+		// setSelectedRow(2);
 
 	}
 

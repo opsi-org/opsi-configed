@@ -94,7 +94,7 @@ public class Globals {
 	public static final Font defaultFontSmall = new java.awt.Font("SansSerif", 0, 9);
 	public static final Font defaultFontSmallBold = new java.awt.Font("SansSerif", Font.BOLD, 9);
 	// public static final Font defaultFont12 = new java.awt.Font("SansSerif", 0,
-	
+	// 12);
 	public static final Font defaultFontBig = new java.awt.Font("SansSerif", 0, 12);
 	public static final Font defaultFontBold = new java.awt.Font("SansSerif", Font.BOLD, 12);
 	public static final Font defaultFontTitle = new java.awt.Font("SansSerif", 0, 16);
@@ -103,18 +103,18 @@ public class Globals {
 	public static final int DEFAULT_FTEXTAREA_WIDTH = 350;
 
 	public static Boolean interpretAsBoolean(Object value) {
-		
+		// logging.debug("Globals: interpretAsBoolean " + value);
 
 		if (value == null)
 			return null;
 
 		if (value instanceof Boolean) {
-			
+			// logging.debug("Globals: interpretAsBoolean based on Boolean ");
 			return (Boolean) value;
 		}
 
 		if (value instanceof Integer) {
-			
+			// logging.debug("Globals: interpretAsBoolean based on Integer ");
 			int val = (Integer) value;
 			if (val == 1)
 				return true;
@@ -126,7 +126,7 @@ public class Globals {
 		}
 
 		if (value instanceof String) {
-			
+			// logging.debug("Globals: interpretAsBoolean based on String ");
 
 			String val = ((String) value).toLowerCase();
 
@@ -192,9 +192,9 @@ public class Globals {
 		button.setForeground(lightBlack);
 		button.setBackground(backBlue);
 		button.setOpaque(false);
-		
+		// button.setContentAreaFilled(false);
 		button.setBorderPainted(false);
-		
+		// button.setBorder(BorderFactory.createEmptyBorder());
 	}
 
 	public static final Color nimbusSelectionBackground = new Color(57, 105, 138);
@@ -202,31 +202,31 @@ public class Globals {
 	public static final Color backNimbus = new Color(214, 219, 222);
 
 	// in table, change colors by row
-	public static final Color defaultTableCellBgColor1 = Color.white; 
-	public static final Color defaultTableCellBgColor2 = backLightYellow; 
+	public static final Color defaultTableCellBgColor1 = Color.white; // new Color (255,255,255);
+	public static final Color defaultTableCellBgColor2 = backLightYellow; // new java.awt.Color (250, 48, 221);
 
 	// tableSelection
 	// public static final Color defaultTableSelectedRowDark = new Color
-	
+	// (189,207,231);
 	public static final Color defaultTableSelectedRowDark = new Color(204, 220, 238);
 	public static final Color defaultTableSelectedRowBright = new Color(221, 233, 249);
 
 	// in table, change colors by row and column
-	public static final Color defaultTableCellBgColor00 = backLightYellow;
+	public static final Color defaultTableCellBgColor00 = backLightYellow;// new java.awt.Color (250, 48, 221);
 	public static final Color defaultTableCellBgColor01 = new Color(236, 235, 214);
-	public static final Color defaultTableCellBgColor10 = Color.white; 
+	public static final Color defaultTableCellBgColor10 = Color.white; // new Color (255,255,255);
 	public static final Color defaultTableCellBgColor11 = backgroundWhite;
 
-	public static final Color defaultTableHeaderBgColor = new Color(222, 231, 247); 
-	public static final Color defaultTableCellSelectedBgColor = new Color(206, 224, 235); 
+	public static final Color defaultTableHeaderBgColor = new Color(222, 231, 247); // new Color (206,223,247);
+	public static final Color defaultTableCellSelectedBgColor = new Color(206, 224, 235); // new Color (184,207,229);
 	public static final Color defaultTableCellSelectedBgColorNotEditable = new Color(189, 207, 231);
 
 	public static final Color logColorEssential = new Color(0, 0, 0); // 1 - black
-	public static final Color logColorCritical = new Color(255, 0, 0);  // 2 - red
-	public static final Color logColorError = new Color(200, 100, 0);  // 3 - orange
-	public static final Color logColorWarning = new Color(20, 20, 200); 
+	public static final Color logColorCritical = new Color(255, 0, 0); // new Color(200,0,200); // 2 - red
+	public static final Color logColorError = new Color(200, 100, 0); // new Color(200,0,0); // 3 - orange
+	public static final Color logColorWarning = new Color(20, 20, 200); // new Color(0,200,0); //new Color(255,128,0);
 																		// //4 - blue
-	public static final Color logColorNotice = new Color(10, 150, 10);  //5 - green
+	public static final Color logColorNotice = new Color(10, 150, 10); // new Color(0,200,0); //5 - green
 	public static final Color logColorInfo = new Color(50, 50, 50); // 6 - grey
 	public static final Color logColorDebug = new Color(150, 150, 150);// 7 - brighter grey
 	public static final Color logColorDebug2 = new Color(150, 150, 150);
@@ -318,7 +318,7 @@ public class Globals {
 
 	public static Image mainIcon = null;
 	// mainIcon =
-	
+	// Toolkit.getDefaultToolkit().createImage(Globals.class.getResource("opsi.gif"));
 	// called in configed
 
 	public static final String CONFLICT_STATE_STRING = "mixed";
@@ -344,7 +344,7 @@ public class Globals {
 	public static Collator getCollator() {
 		if (alphaCollator == null) {
 			alphaCollator = Collator.getInstance();
-			
+			// alphaCollator.setStrength(java.text.Collator.PRIMARY);
 			alphaCollator.setStrength(java.text.Collator.IDENTICAL);
 
 		}
@@ -411,7 +411,7 @@ public class Globals {
 
 		java.net.URL imgURL = cl.getResource(xPath);
 
-		
+		// imgURL = Globals.class.getResource(xPath);
 		// should have the same result (but seems not to have)
 
 		try {
@@ -437,7 +437,7 @@ public class Globals {
 
 		java.net.URL imgURL = cl.getResource(xPath);
 
-		
+		// imgURL = Globals.class.getResource(xPath);
 		// should have the same result (but seems not to have)
 
 		try {
@@ -460,7 +460,7 @@ public class Globals {
 		String sqlNow = new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis()).toString();
 		sqlNow = sqlNow.substring(0, sqlNow.lastIndexOf(':'));
 		sqlNow = sqlNow.replace(' ', '-');
-		
+		// sqlNow = sqlNow.replace(':', '-');
 
 		return sqlNow;
 	}
@@ -468,7 +468,7 @@ public class Globals {
 	public static String getSeconds() {
 		String sqlNow = new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis()).toString();
 
-		
+		// logging.debug(" sqlNow " + sqlNow);
 		int i = sqlNow.lastIndexOf(' ');
 		String date = sqlNow.substring(0, i);
 		date = date.replace(' ', '-');
@@ -564,7 +564,7 @@ public class Globals {
 
 	public static final List<Object> getNowTimeListValue(final String comment) {
 		ArrayList<Object> result = new ArrayList<>();
-		
+		// result. add( new Date().toString() );
 		String now = new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis()).toString();
 		now = now.substring(0, now.indexOf("."));
 		if (comment != null)
@@ -660,10 +660,10 @@ public class Globals {
 		if (result) {
 			if (c instanceof Collection) {
 				// logging.info(source.getClass().getName() + " " + cName + " has size " +
-				
+				// ((Collection)c).size() );
 			} else if (c instanceof Map) {
 				// logging.info(source.getClass().getName() + " " + cName + " has size " +
-				
+				// ((Map)c).size() );
 			} else {
 				logging.info(source.getClass().getName() + " " + cName + " is neither a Collection nor a Map  ");
 				result = false;
@@ -675,7 +675,7 @@ public class Globals {
 	}
 
 	private static Integer stringCompareAsInt(String s1, String s2) throws NumberFormatException {
-		
+		// logging.debug ( " compare int " + s1 + " " + s2 );
 		if (s1 == null && s2 == null)
 			return 0;
 		if (s1 == null)
@@ -697,14 +697,14 @@ public class Globals {
 
 		int val1 = Integer.valueOf(s1A);
 		int val2 = Integer.valueOf(s2A);
-		
+		// logging.debug ( " compare int " + val1 + " " + val2 );
 		return val1 - val2;
 	}
 
 	public static Integer compareDottedNumberStrings(final String ver1, final String ver2)
 			throws NumberFormatException {
-		
-		
+		// logging.debug ( " ver1 " + ver1 );
+		// logging.debug ( " ver2 " + ver2 );
 
 		if (ver1 == null && ver2 == null)
 			return 0;
@@ -721,8 +721,8 @@ public class Globals {
 		String[] ver1parts = ver1A.split("\\.");
 		String[] ver2parts = ver2A.split("\\.");
 
-		
-		
+		// logging.debug ( " ver1parts " + Arrays.toString( ver1parts ) );
+		// logging.debug ( " ver2parts " + Arrays.toString( ver2parts ) );
 
 		int i = 0;
 		int result = 0;
@@ -830,7 +830,7 @@ public class Globals {
 				int w = gc[i].getBounds().width;
 				int h = gc[i].getBounds().height;
 				// logging.info("minimalBounds: compare " + result + " to " +
-				
+				// gc[i].getBounds());
 				if (w < result.width || h < result.height)
 					result = new Rectangle(w, h);
 			}
@@ -968,7 +968,7 @@ public class Globals {
 
 	public static boolean forbidEditingTargetSpecific() {
 		// boolean forbidEditing =
-		
+		// PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly();
 
 		boolean forbidEditing = false;
 

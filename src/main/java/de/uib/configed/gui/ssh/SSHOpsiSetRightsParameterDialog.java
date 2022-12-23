@@ -83,7 +83,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 
 		btn_searchDir = completion.getButton();
 		cb_autocompletion = completion.getCombobox();
-		
+		// completion.doButtonAction();
 		cb_autocompletion.setEnabled(true);
 		cb_autocompletion.addItem("");
 		cb_autocompletion.setSelectedItem("");
@@ -109,8 +109,8 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 				}
 			}.start();
 
-			
-			
+			// SSHConnectExec ssh = new SSHConnectExec((SSHCommand) commandopsisetrights );
+			// cancel();
 		} catch (Exception e) {
 			logging.warning(this, "doAction1, exception occurred", e);
 		}

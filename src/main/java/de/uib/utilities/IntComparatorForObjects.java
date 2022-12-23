@@ -8,7 +8,7 @@ public class IntComparatorForObjects implements Comparator<Object> {
 
 	@Override
 	public int compare(Object o1, Object o2) {
-		
+		// logging.info(this, "compare " + o1 + " to " + o2 );
 		int result = 0;
 		int i1 = Integer.MAX_VALUE;
 		int i2 = Integer.MIN_VALUE;
@@ -44,7 +44,7 @@ public class IntComparatorForObjects implements Comparator<Object> {
 		else if (i1 > i2)
 			result = +1;
 
-		
+		// logging.info("compare result " + result);
 
 		return result;
 	}

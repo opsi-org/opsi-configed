@@ -64,7 +64,7 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 
 		if (result != null) {
 			thePanel.panelUsage.reload();
-			
+			// thePanel.panelUsage.moveToValue(clientId, 0, true);
 			thePanel.panelUsage.moveToKeyValue(result);
 		} else {
 			thePanel.panelUsage.moveToValue(clientId, 0, true);

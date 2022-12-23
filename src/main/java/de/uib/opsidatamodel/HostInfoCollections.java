@@ -38,7 +38,7 @@ public abstract class HostInfoCollections {
 
 	public abstract List<String> getDepotNamesList(); // master depots in display order
 
-	
+	// protected abstract Map<String, Boolean> getMapOfPCs();
 
 	public abstract Map<String, String> getMapPcBelongsToDepot();
 
@@ -53,7 +53,7 @@ public abstract class HostInfoCollections {
 	public abstract void opsiHostsRequestRefresh();
 	// includes all refreshes
 
-	
+	// public abstract void pclistRequestRefresh();
 
 	public abstract void setDepotForClients(String[] clients, String depotId);
 
@@ -63,7 +63,7 @@ public abstract class HostInfoCollections {
 
 	// valueFromConfigStateAsExpected
 
-	
+	// public abstract void intersectWithMapOfPCs(List<String> clientSelection);
 
 	protected abstract void retrieveOpsiHosts();
 

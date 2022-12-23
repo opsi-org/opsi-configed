@@ -105,7 +105,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			logging.debug(this, "actionPerformed " + e);
 			cancel();
 			// JOptionPane.showMessageDialog(Globals.mainFrame, "we got
-			
+			// cancel");
 		}
 	};
 
@@ -143,7 +143,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			// ansi_escape1.toCharArray()[0])
 			// || (line.trim().replaceAll("\\t","").replaceAll(" ","").charAt(0) ==
 			// ansi_escape2.toCharArray()[0]) )
-			
+			// line = line.replace(ansi_escape2, "");
 			line = line.replace(ansi_escape1, "").replace(ansi_escape2, "");
 		}
 		return line;
@@ -209,7 +209,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 
 			StyleConstants.setBackground(readonlyStyle, Color.GREEN);// Kein grün :(
 
-			
+			// StyleConstants.setBackground(style, Color.blue);
 			StyleConstants.setForeground(readonlyStyle, Color.RED); // Was ist rot?
 
 			SimpleAttributeSet readOnlyAttributeSet = new SimpleAttributeSet(doc.getStyle("readonlyStyle"));
@@ -222,26 +222,26 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			jScrollPane.setViewportView(output);
 			output.setText("");
 
-			
-			
-			
+			// btn_close = new JButton();
+			// // buttonPanel.add(btn_close);
+			// btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 			btn_close = new de.uib.configed.gui.IconButton(
 					de.uib.configed.configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
 					"images/cancel.png", "images/cancel.png", true);
 			// btn_test_command.setSize(new Dimension( Globals.graphicButtonWidth + 15
-			
+			// ,Globals.lineHeight));
 			// btn_test_command.setSize(new Dimension( Globals.graphicButtonWidth + 15
-			
+			// ,Globals.lineHeight));
 			btn_close.setPreferredSize(btn_dim);
 
 			btn_close.addActionListener(closeListener);
 
-			
-			
+			// lbl_userhost = new JLabel();
+			// lbl_userhost.setText("user@host");
 
 			// createLayout(konsolePanelLayout, jScrollPane,Globals.gapSize,
-			
-			
+			// Globals.gapSize, false);
+			// createLayout(mainPanelLayout, inputPanel,0,0, false);
 		} catch (Exception e) {
 			logging.warning(this, "initOutputGui, exception occurred", e);
 		}

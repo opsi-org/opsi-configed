@@ -50,14 +50,14 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 		// startAnotherProcess()
 		// int progress = 0;
-		
+		// setProgress( progress );
 
 		// int noOfSteps = 100;
-		
+		// long timeStepMillis = (long) (waitingMillis / noOfSteps );
 
 		long timeStepMillis = (long) 500;
 
-		
+		// long noOfSteps = (long) (waitingMillis/ timeStepMillis);
 
 		logging.debug(this, " doInBackground waitingMillis " + waitingSleeper.getWaitingMillis());
 
@@ -87,12 +87,12 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 			timeoutReached = (elapsedMillis >= waitingSleeper.getWaitingMillis());
 
-			
+			// firePropertyChange("elapsedMins", 0, elapsedMins);
 
 			// progress++;
-			
+			// setProgress( progress );
 
-			
+			// setElapsedMins(elapsedMins);
 		}
 
 		logging.info(this,
@@ -114,25 +114,25 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 		logging.debug(this, "process, we have got list " + listOfMillis);
 
 		long millis = listOfMillis.get(listOfMillis.size() - 1);
-		
+		// logging.info(this, "process :: millis " + millis);
 		statusLabel.setText(
 				// "passed " + giveTimeSpan( millis) +
 				waitingSleeper.setLabellingStrategy(millis));
 		// " " + configed .getResourceValue("FStartWakeOnLan.timeLeft") + " " +
 		// Globals.giveTimeSpan( waitingSleeper.getWaitingMillis() -
-		
+		// millis ) );
 
 		int barLength = progressBar.getMaximum() - progressBar.getMinimum();
 
 		// logging.info(this, "progressBar.getMaximum() " + progressBar.getMaximum() +
 		// ":: progressBar.getMinimum() " + progressBar.getMinimum()
 		// + ":: millis " + millis + " :: waitingMillis " + waitingMillis + " :: min + "
-		
+		// + ((int) ((barLength * millis) / waitingMillis)));
 
 		logging.debug(this, "process, millis " + millis);
 		double proportion = ((double) millis) / (double) waitingSleeper.getOneProgressBarLengthWaitingMillis();
 		logging.info(this, "process, millis/estimatedTotalWaitMillis  " + proportion);
-		
+		// double portion = (barLength * millis) / waitingSleeper.getWaitingMillis();
 		int portion = (int) (barLength * proportion);
 		portion = portion % barLength;
 

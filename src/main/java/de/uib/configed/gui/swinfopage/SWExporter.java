@@ -166,8 +166,8 @@ public abstract class SWExporter {
 		else {
 			theHost = hostId;
 			updateModel();
-			
-			
+			// modelSWInfo.requestReload();
+			// smodelSWInfo.reset();
 		}
 
 		setWriteToFile(filepathStart + hostId + ".pdf");
@@ -190,7 +190,7 @@ public abstract class SWExporter {
 			exportDirectoryS = exportDirectory.toString();
 
 		// filepathStart = exportDirectoryS + File.separator + prefix;
-		
+		// setWriteToFile( filepathStart + hostId + ".pdf");
 
 		Vector<String> columnNames;
 		Vector<String> classNames;
@@ -235,13 +235,13 @@ public abstract class SWExporter {
 		logging.info(this, "update++");
 
 		// logging.info(this, "update+++++ voidTableModel.getRowCount() "
-		
+		// +voidTableModel.getRowCount() );
 		logging.info(this, "update++++ modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
 
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
 		logging.info(this, "update++++++ modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
-		
+		// panelTable.reload();
 
 	}
 

@@ -78,7 +78,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		public void fireActionEvent()
 		// make public
 		{
-			
+			// logging.debug(this, "fireActionEvent()");
 			super.fireActionEvent();
 		}
 	}
@@ -199,11 +199,11 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	public void setGuiIsFiltered(boolean b) {
 		logging.debug(this, "setGuiIsFiltered " + b);
 		searchPane.setFilteredMode(b);
-		
+		// buttonFilter.setActivated(!b);
 	}
 
 	public boolean getGuiIsFiltered() {
-		
+		// return !buttonFilter.isActivated();
 		return searchPane.isFilteredMode();
 
 		// return false;
@@ -211,12 +211,12 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 	public void setReloadActionHandler(ActionListener al) {
 		buttonReloadProductStates.addActionListener(al);
-		
+		// searchPane.setReloadActionHandler( al );
 	}
 
 	public void setSaveAndExecuteActionHandler(ActionListener al) {
 		buttonSaveAndExecute.addActionListener(al);
-		
+		// searchPane.setReloadActionHandler( al );
 	}
 
 	protected void enterExistingGroup() {
@@ -239,13 +239,13 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	}
 
 	protected void enterEditGroup() {
-		
+		// logging.debug(this, "enterEditGroup , ");
 		descriptionFieldListener.setEnabled(false);
 
-		
-		String currentKey = groupsEditField.getText(); 
+		// String currentKey = (String) saveNameEditor.getSelectedItem();
+		String currentKey = groupsEditField.getText(); // saveNameEditor.getText();
 
-		
+		// logging.debug(this, "enterEditGroup , currentKey " + currentKey);
 
 		if (namesAndDescriptionsSave != null && namesAndDescriptionsSave.get(currentKey) != null) {
 			descriptionField.setText(namesAndDescriptionsSave.get(currentKey));
@@ -266,7 +266,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		selectedIDs = associate.getSelectedIDs();
 
-		
+		// String currentKey = (String) saveNameEditor.getSelectedItem();
 		String currentKey = saveNameEditor.getText();
 
 		if (currentKey == null || currentKey.equals(""))
@@ -274,7 +274,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		boolean result = false;
 
-		
+		// logging.debug(this, "membersChanged, currentKey " + currentKey);
 
 		if (namesAndDescriptions.get(currentKey) != null)
 		// case we have an old key
@@ -298,7 +298,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				result = true;
 		}
 
-		
+		// logging.debug(this, "membersChanged " + result);
 
 		return result;
 	}
@@ -330,10 +330,10 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			while (!theSetFound && iterNames.hasNext()) {
 
 				String name = (String) iterNames.next();
-				
+				// logging.debug(this, "findGroup(): name " + name);
 				// logging.debug(this, "findGroup(): productGroupMembers.get(name) " +
-				
-				
+				// productGroupMembers.get(name));
+				// logging.debug(this, "findGroup(): compare to " + set);
 
 				if (productGroupMembers.get(name) != null && productGroupMembers.get(name).equals(checkSet)) {
 					// avoid selection events in groupsCombo
@@ -347,7 +347,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	}
 
 	private void updateAssociations() {
-		
+		// editedKey = namesAndDescriptions.getKeyAt(groupsCombo.getSelectedIndex());
 		if (membersChanged()) {
 			setDataChanged(true);
 		}
@@ -355,10 +355,10 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		if (namesAndDescriptions == null)
 			return;
 		// logging.debug(this, "updateAssociations: namesAndDescriptions.keySet() " +
-		
+		// namesAndDescriptions.keySet() );
 
 		isSaveLegal();
-		 not needed since a change in associations does not concern
+		// isDeleteLegal(); not needed since a change in associations does not concern
 		// save name
 
 		findGroup(associate.getSelectedIDs());
@@ -366,7 +366,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 	private boolean isDescriptionChanged() {
 		boolean result = false;
-		
+		// String currentKey = (String) saveNameEditor.getSelectedItem();
 		String currentKey = saveNameEditor.getText();
 
 		if (namesAndDescriptions.get(currentKey) == null) // current key did not exist
@@ -378,7 +378,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				result = true;
 		}
 
-		
+		// logging.debug(this, "isDescriptionChanged " + result);
 
 		return result;
 	}
@@ -398,19 +398,19 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				true, null);
 		searchPane.setFiltering(true);
 		searchPane.showFilterIcon(true); // filter icon inside searchpane
-		
+		// searchPane.setSearchFields(new Integer[]{0, 1, 2, 3, 4});
 
 		groupsCombo = new JComboBoxToolTip();
 		groupsCombo.setEditable(false);
 		groupsCombo.setMaximumRowCount(30);
 
-		
+		// saveNameEditor = new JComboBoxToolTipX();
 		saveNameEditor = new JTextField("");
 
 		saveNameEditor.setEditable(true);
 		saveNameEditor.setToolTipText(de.uib.configed.configed.getResourceValue("GroupPanel.GroupnameTooltip"));
-		
-		
+		// setGroupsData(null, null);
+		// Set<String> oldSet = groupPanel.getLastSelectedIDs();
 		setMembers();
 		setGroupEditing(false);
 	}
@@ -502,7 +502,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		comboAggregatedEditing = new JComboBoxToolTip();
 		// comboAggregatedEditing.setToolTipText(
-		
+		// de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.tooltip"));
 
 		/*
 		 * comboAggregatedEditing.addActionListener( new ActionListener(){
@@ -539,7 +539,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		values.put(de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"),
 				de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked.tooltip"));
 		// "setup (marked)", "set 'setup' for all marked products (if setup action
-		
+		// exists)");
 
 		/*
 		 * values.put(
@@ -566,7 +566,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked.tooltip"));
 
 		// "uninstall (marked)", "set 'uninstall' for all marked products (if uninstall
-		
+		// action exists)");
 
 		DefaultListModel<String> modelChooseAction = new DefaultListModel<>(); // put values from hashmap into
 																				// list
@@ -579,7 +579,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				values, "");
 		// renderActionList.setUniformColor(
 		// Globals.backLightBlue, Globals.backVeryLightBlue
-		
+		// );
 		renderActionList.setAlternatingColors(Globals.backLightBlue, Globals.backLightBlue, Globals.backgroundLightGrey,
 				Globals.backgroundWhite);
 
@@ -603,7 +603,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		JLabel labelStrip = new JLabel(
 				"  " + de.uib.configed.configed.getResourceValue("GroupPanel.labelAggregateProducts"));
-		
+		// labelStrip.setBackground( Globals.backVeryLightBlue);
 		labelStrip.setBackground(Globals.backLightBlue);
 		labelStrip.setOpaque(true);
 		labelStrip.setFont(Globals.defaultFont);
@@ -625,7 +625,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		;
 
-		
+		// SurroundPanel( scrollChooseAction );
 		surroundScrollChooseAction.setBackground(Globals.backgroundLightGrey);
 		surroundScrollChooseAction.setOpaque(true);
 
@@ -655,7 +655,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				de.uib.configed.configed.getResourceValue("GroupPanel.EditButtonTooltip"),
 				"images/packagegroup_save.png", "images/packagegroup_save_over.png",
 				"images/packagegroup_save_disabled.png");
-		
+		// buttonEditDialog.setPreferredSize(Globals.buttonDimension);
 		buttonEditDialog.setToolTips(de.uib.configed.configed.getResourceValue("GroupPanel.EditButtonTooltipInactive"),
 				de.uib.configed.configed.getResourceValue("GroupPanel.EditButtonTooltipActive"));
 		buttonEditDialog.addActionListener(this);
@@ -666,7 +666,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		labelSelectedGroup.setFont(Globals.defaultFont);
 
 		// groupsEditField = (JTextField)
-		
+		// (saveNameEditor.getEditor().getEditorComponent());
 		groupsEditField = saveNameEditor;
 		groupsEditField.getCaret().setBlinkRate(0);
 		groupsEditField.setBackground(Globals.backgroundLightGrey);
@@ -674,8 +674,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		groupsEditFieldListener = new MyDocumentListener() {
 			@Override
 			public void doAction() {
-				
-				
+				// logging.debug(this, "comboBox item edited, enabled listener " + enabled);
+				// updateKey();
 				enterEditGroup();
 			}
 		};
@@ -695,7 +695,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		groupsCombo.setPreferredSize(Globals.buttonDimension);
 		saveNameEditor.setPreferredSize(Globals.buttonDimension);
 		groupsEditField.setBackground(Globals.backgroundLightGrey);
-		
+		// saveNameEditor.addItemListener(this);
 
 		labelSave = new JLabel();
 		labelSave.setText(TEXT_SAVE);
@@ -824,15 +824,15 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		GroupLayout layoutMain = new GroupLayout(this);
 		this.setLayout(layoutMain);
-		
+		// setBorder( new javax.swing.border.LineBorder( Globals.backLightYellow) );
 
 		JPanel separatingPlace = new JPanel();
 		separatingPlace.setForeground(Globals.backLightYellow);
 		separatingPlace.setBackground(Color.RED);
 		separatingPlace.setOpaque(true);
 		separatingPlace.setBorder(new javax.swing.border.LineBorder(Globals.backBlue));
-		
-		
+		// separatingPlace.add( new JLabel("abc") );
+		// JLabel separatingPlace = new JLabel( " ---- ");
 
 		layoutMain.setVerticalGroup(layoutMain.createSequentialGroup()
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
@@ -920,11 +920,11 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 	protected boolean save() {
 		boolean result = false;
-		
+		// logging.debug(this, "save: !");
 
 		if (deleted) {
-			String removeGroupID = groupsEditField.getText(); 
-			
+			String removeGroupID = groupsEditField.getText(); // (String) groupsCombo.getSelectedItem();
+			// logging.debug(this, "save: delete group " + removeGroupID);
 			theData.remove(removeGroupID);
 
 			if (mainController.deleteGroup(removeGroupID)) {
@@ -933,14 +933,14 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			}
 
 		} else {
-			String newGroupID = groupsEditField.getText();
+			String newGroupID = groupsEditField.getText();// (String) saveNameEditor.getSelectedItem();
 			String newDescription = descriptionField.getText();
 			Set selectedProducts = associate.getSelectedIDs();
 
 			logging.debug(this, "save: set groupname, description, assigned_products " + newGroupID + ", "
 					+ newDescription + ", " + selectedProducts);
 
-			
+			// logging.debug(this, "save: newGroupID " + newGroupID);
 			Set<String> originalSelection = associate.getSelectedIDs();
 			Set<String> extendedSelection = mainController.getPersistenceController()
 					.extendToDependentProducts(associate.getSelectedIDs(), "bonifax.uib.local");
@@ -987,7 +987,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 	protected void setMembers() {
 		// logging.debug(this, "setMembers, productGroupMembers " +
-		
+		// productGroupMembers);
 
 		if (productGroupMembers == null || groupsCombo == null)
 		// || productGroupMembers.get((String) groupsCombo.getSelectedItem()) == null)
@@ -1002,20 +1002,20 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	}
 
 	protected void setInternalGroupsData() {
-		
+		// logging.debug(this, "setInternalGroupsData: data " + theData);
 
 		namesAndDescriptionsSave = new LinkedHashMap();
 		namesAndDescriptionsSave.put(SAVE_GROUP_ID, NO_GROUP_DESCRIPTION);
 		for (String id : new TreeSet<>(theData.keySet())) {
-			
+			// logging.debug(this, "id " + id + ": " + theData.get(id).get("description"));
 			namesAndDescriptionsSave.put(id, theData.get(id).get("description"));
 		}
-		
+		// saveNameEditor.setValues(namesAndDescriptionsSave);
 
 		namesAndDescriptions = new LinkedHashMap();
 		namesAndDescriptions.put(NO_GROUP_ID, "");
 		for (String id : new TreeSet<>(theData.keySet())) {
-			
+			// logging.debug(this, "id " + id + ": " + theData.get(id).get("description"));
 			namesAndDescriptions.put(id, theData.get(id).get("description"));
 		}
 		groupsCombo.setValues(namesAndDescriptions);
@@ -1039,12 +1039,12 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		setInternalGroupsData();
 
-		
+		// buttonFilter.setActivated(true);
 		setGuiIsFiltered(false);
 	}
 
 	private void setGroupEditing(boolean b) {
-		
+		// logging.debug(this, "setGroupEditing " + b);
 		groupEditing = b;
 		if (panelEdit != null) {
 			panelEdit.setVisible(b);
@@ -1062,7 +1062,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		}
 
 		else if (e.getSource() == buttonCancel) {
-			
+			// logging.debug (" -------- buttonCancel " + e);
 			cancel();
 		}
 
@@ -1106,7 +1106,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		 * else
 		 * {
 		 * setGuiIsFiltered(false);
-		 * 
+		 * //buttonFilter.setActivated(true);
 		 * logging.debug(this, "associate.showAll()");
 		 * associate.showAll();
 		 * buttonFilter.setNewImage(
@@ -1158,7 +1158,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		// ActionRequest.SETUP ),
 		// (java.util.function.IntPredicate) ( rowId ->
 		// associate.getSelectedRowsInModelTerms().indexOf( rowId ) >= 0 )
-		
+		// );
 
 		associate.setSelection(new HashSet<>(saveSelectedProducts));
 
@@ -1168,7 +1168,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		// logging.debug(this, "-----------------ListSelectionListener valueChanged,
-		
+		// source " + e.getSource());
 		// Ignore extra messages.
 		if (e.getValueIsAdjusting())
 			return;
@@ -1193,7 +1193,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 	private void saveNameEditorShallFollow() {
 		int comboIndex = groupsCombo.getSelectedIndex();
-		
+		// logging.debug(this, "saveNameEditorShallFollow(): comboIndex " + comboIndex);
 		/*
 		 * if (comboIndex != saveNameEditor.getSelectedIndex())
 		 * //to avoid loops
@@ -1211,7 +1211,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	private void clearChanges() {
 		// reset internal components
 		if (saveNameEditor != null) {
-			
+			// saveNameEditor.setValues(namesAndDescriptionsSave);
 
 			saveNameEditorShallFollow();
 		}
@@ -1225,7 +1225,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	}
 
 	public void setDataChanged(boolean b) {
-		
+		// logging.debug(this, "setDataChanged " + b);
 		dataChanged = b;
 		if (buttonCommit != null)
 			buttonCommit.setEnabled(b);
@@ -1236,7 +1236,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	protected boolean isSaveLegal() {
 		String proposedName = groupsEditField.getText();
 
-		
+		// logging.debug(this, "isSaveLegal: proposedName >" + proposedName + "<");
 
 		boolean result = true;
 
@@ -1264,7 +1264,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			result = (groupsCombo.getSelectedIndex() > 0);
 
 		// result = result &&
-		
+		// groupsEditField.getText().equals((String)groupsCombo.getSelectedItem());
 
 		buttonDelete.setEnabled(result);
 
@@ -1290,7 +1290,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 	public void commit() {
 		logging.debug(this, "commit");
-		String newGroupID = groupsEditField.getText();
+		String newGroupID = groupsEditField.getText();// (String) saveNameEditor.getSelectedItem();
 		if (save()) {
 			clearChanges();
 			groupsCombo.setSelectedItem(newGroupID);

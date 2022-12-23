@@ -103,7 +103,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		btn_execute.setEnabled(false); // requires valid depot selection
 		tf_selecteddepots.setText("");
-		
+		// tf_selecteddepots.setEnabled(false);
 
 		pack();
 		this.setSize(frameWidth, frameHeight);
@@ -143,7 +143,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		} else {
 			btn_execute.setEnabled(true);
-			
+			// logging.info(this, " we have something selected ");
 
 			if (selectedDepots.contains(persist.DEPOT_SELECTION_NODEPOTS)) {
 				depotParameter = persist.DEPOT_SELECTION_NODEPOTS;
@@ -151,10 +151,10 @@ public class SSHPackageManagerUninstallParameterDialog
 				StringBuffer sb = new StringBuffer();
 				int startIndex = possibleDepots.indexOf(persist.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
 				// logging.debug(this, " we have special selection in possibleDepots " +
-				
-				
+				// possibleDepots);
+				// logging.info(this, " we have special selection starting at " + startIndex);
 				for (int i = startIndex + 1; i < possibleDepots.size() - 1; i++) {
-					
+					// logging.info(this, "append i " + i + " " + possibleDepots.get(i) );
 					sb.append(possibleDepots.get(i));
 					sb.append(",");
 				}
@@ -191,7 +191,7 @@ public class SSHPackageManagerUninstallParameterDialog
 		for (String depot : persist.getHostInfoCollections().getDepotNamesList()) {
 			if (persist.getDepotPermission(depot)) {
 				// logging.info(this, " depot " + depot + " has products " +
-				
+				// persist.getDepot2LocalbootProducts().get(depot).keySet());
 
 				if ((persist.getDepot2LocalbootProducts().get(depot) != null
 						&& persist.getDepot2LocalbootProducts().get(depot).keySet().contains(selectedProduct))
@@ -242,14 +242,14 @@ public class SSHPackageManagerUninstallParameterDialog
 			cb_verbosity.addItemListener(itemEvent -> changeVerbosity());
 		}
 		{
-			
-			
+			// tf_freeInput = new JTextField();
+			// tf_freeInput.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.freeInput"));
 			// tf_freeInput.getDocument().addDocumentListener(new DocumentListener()
 			// {
-			 }
-			 }
-			 }
-			
+			// public void changedUpdate(DocumentEvent documentEvent) { changeFreeInput(); }
+			// public void insertUpdate(DocumentEvent documentEvent) { changeFreeInput(); }
+			// public void removeUpdate(DocumentEvent documentEvent) { changeFreeInput(); }
+			// });
 			lbl_keepFiles.setText(configed
 					.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelKeepFiles"));
 			checkb_keepFiles = new JCheckBox();
@@ -283,7 +283,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 			cb_opsiproducts.addItemListener(itemEvent -> {
 				tf_selecteddepots.setText("");
-				
+				// tf_selecteddepots.setEnabled(false);
 				btn_execute.setEnabled(false);
 				tf_product.setText((String) cb_opsiproducts.getSelectedItem());
 			});
@@ -324,7 +324,7 @@ public class SSHPackageManagerUninstallParameterDialog
 		resetProducts();
 		changeProduct("");
 		changeVerbosity();
-		
+		// changeFreeInput();
 	}
 
 	@Override
@@ -356,8 +356,8 @@ public class SSHPackageManagerUninstallParameterDialog
 
 	// private void changeFreeInput( )
 	// {
-	
-	
+	// commandPMUninstall.setFreeInput(tf_freeInput.getText().trim());
+	// updateCommand();
 	// }
 	private void changeDepot() {
 		if (tf_selecteddepots.getText()
@@ -433,8 +433,8 @@ public class SSHPackageManagerUninstallParameterDialog
 					logging.info(this, "start exec thread ");
 
 					new SSHConnectExec(commandPMUninstall);
-					
-					
+					// ssh.exec((SSHCommand) commandPMUninstall);
+					// cb_opsiproducts.removeItem( prod );
 					execFinished = true;
 					logging.debug(this, "end exec thread");
 				} catch (Exception e) {
@@ -473,7 +473,7 @@ public class SSHPackageManagerUninstallParameterDialog
 		 */
 		try {
 			execThread.start();
-			
+			// reloadThread.start();
 		} catch (Exception e) {
 			logging.warning(this, "doAction1, exception occurred", e);
 		}

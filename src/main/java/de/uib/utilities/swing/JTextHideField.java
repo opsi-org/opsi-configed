@@ -40,7 +40,7 @@ public class JTextHideField extends javax.swing.JPanel {
 
 			super.insertString(0, fixed, a);
 
-			
+			// logging.info(this, "inserted " + str);
 
 		}
 
@@ -63,7 +63,7 @@ public class JTextHideField extends javax.swing.JPanel {
 
 		hiddenMode = true;
 		multiValue = true;
-		visibleField.setVisible(true);
+		visibleField.setVisible(true);// !hiddenMode );
 		invisibleField.setVisible(true);
 		visibleField.setEnabled(true);
 		invisibleField.setEnabled(false);
@@ -75,9 +75,9 @@ public class JTextHideField extends javax.swing.JPanel {
 		});
 		button.setToolTipText(de.uib.configed.configed.getResourceValue("JTextHideField.toggleHide"));
 
-		
-		
-		
+		// button.setEnabled( true );
+		// button.setBackground( Color.BLUE );
+		// visibleField.setEditable(false);
 
 		setupPanel();
 		setEnabled(false);

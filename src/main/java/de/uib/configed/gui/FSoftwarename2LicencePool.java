@@ -183,7 +183,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		 */
 
 		initDataStructure();
-		
+		// setTableModel(null);
 
 		buttonRemoveAllAssignments = new JButton();
 		buttonRemoveAllAssignments.setIcon(Globals.createImageIcon("images/list-remove-14.png", ""));
@@ -291,16 +291,16 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						.addGap(Globals.HGAP_SIZE)));
 
 		setAdditionalPane(panelSWx);
-		
+		// setTableModelSWxLicencepool( "zypper" );
 		additionalPane.setBackground(Globals.backgroundWhite);// Color.YELLOW
-																//Globals.backLightBlue
-																
+																// );//Globals.backLightBlue
+																// );
 		setCenterPane(panelSWnames);
 		additionalPane.setVisible(true);
-		
-		
+		// additionalPane.setBackground( Color.RED );
+		// additionalPane.setPreferredSize( new Dimension( 400, 400) );
 		setupLayout();
-		
+		// setSize( new Dimension( 800, 400 ) );
 
 	}
 
@@ -338,7 +338,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 			@Override
 			public boolean test(Vector<Object> row) {
-				
+				// logging.info(this, "showOnlyNamesWithVariantLicences testing row " + row);
 				return getRangeSWxLicencepool((String) row.get(0)).size() > 1;
 			}
 		};
@@ -351,7 +351,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 			@Override
 			public boolean test(Vector<Object> row) {
-				
+				// logging.info(this, "showOnlyNamesWithoutLicences testing row " + row);
 				return checkExistNamesWithVariantLicencepools((String) row.get(0));
 			}
 		};
@@ -377,7 +377,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 				// setTableModelSWxLicencepool
 
-				
+				// jButton1.setEnabled( panelSWnames.getTheTable().getSelectedRowCount() > 0 );
 			}
 		});
 
@@ -411,8 +411,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 							// new MapRetriever(){
 							// public Map retrieveMap()
 							// {
-							
-							
+							// persist.installedSoftwareInformationRequestRefresh();
+							// return persist.getInstalledSoftwareName2SWinfo();
 							// }
 							// }
 							() -> (Map) persist.getInstalledSoftwareName2SWinfo())
@@ -468,11 +468,11 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		panelSWnames.setTableModel(this.modelSWnames);
 
-		
-		
-		
-		
-		
+		// modelSWnames.setFilterCondition( showOnlyNamesWithVariantLicences );
+		// modelSWnames.setFilterCondition( showOnlyNamesWithoutLicences );
+		// panelSWnames.setFiltering( true );
+		// modelSWnames.reset();
+		// logging.info(this, "we did a reset for modelSWnames");
 
 	}
 
@@ -491,7 +491,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		}
 
 		modelSWnames.reset();
-		
+		// modelSWnames.requestReload();
 
 		logging.info(this, "setPreselectionForName2Pool, we did a reset for modelSWnames with " + val);
 	}
@@ -614,8 +614,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						logging.info(this, "sendUpdate " + rowmap);
 						// update with new value "---" == valNoLicencepool is interpreted as deleting
 
-						
-						
+						// modelSWxLicencepool.requestReload();
+						// myController.thePanel.panelRegisteredSoftware.requestReload();
 						// reloads local data (which are not yet updated)
 						String swID = (String) rowmap.get(AuditSoftwareXLicencePool.SwID);
 						String licensePoolID_old = persist.getFSoftware2LicencePool(swID);
@@ -637,7 +637,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 					}
 				}, updateCollection));
-		
+		// panelSWxLicencepool.setDataChanged ( true );
 
 	}
 
@@ -671,8 +671,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		 * }
 		 * result = 1;
 		 * }
-		 * 
-		 * 
+		 * //owner.setVisible(true);
+		 * //leave();
 		 */
 	}
 
@@ -688,7 +688,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	public void leave() {
 		setVisible(false);
 		// we dont dispose the window, dispose it in the enclosing class
-		
+		// setEnabled(false);
 	}
 
 	public void exit() {

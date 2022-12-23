@@ -103,7 +103,7 @@ public class UserConfigProducing {
 
 	private void produceRoleAndUserParts(java.util.Set<String> userNames, java.util.Set<String> roleNames) {
 		logging.info(this, "produceRoleAndUserParts for " + userNames + " resp. " + roleNames);
-		
+		// String generalRoleKey = defaultRolePart();
 		final String roleBranchPart = UserConfig.KEY_USER_ROLE_ROOT;
 		final String startRoleKey = roleBranchPart + ".{";
 
@@ -112,7 +112,7 @@ public class UserConfigProducing {
 				continue;
 
 			// logging.info(this, "produceRoleAndUserParts. starting with
-			
+			// UserConfig.KEY_USER_ROOT " + key);
 			if (key.startsWith(roleBranchPart)) {
 				String rolenameBefore = key.substring(0, startRoleKey.length());
 				String rolename = key.substring(rolenameBefore.length());
@@ -127,7 +127,7 @@ public class UserConfigProducing {
 
 					String propertyclass = startRoleKey + rolename + '}';
 
-					
+					// logging.info(this, "role branch propertyclass " + propertyclass);
 
 					if (!PersistenceController.PROPERTYCLASSES_SERVER.containsKey(propertyclass)) {
 						logging.info(this, "createRolePropertySubclass for role  " + rolename);
@@ -230,9 +230,9 @@ public class UserConfigProducing {
 		logging.info(this, "supplyAllPermissionEntries start");
 
 		// separateServerConfigsTreeSection( UserConfig.KEY_USER_ROOT + "." +
-		
+		// UserConfig.ROLE );
 		// separateServerConfigsTreeSection( userPart().substring( 0,
-		
+		// userPart().length()-1 ) );
 
 		logging.info(this, "supplyAllPermissionEntries all roles " + roleParts);
 		logging.info(this, "supplyAllPermissionEntries first for default role,  " + UserConfig.DEFAULT_ROLE_NAME);
@@ -248,7 +248,7 @@ public class UserConfigProducing {
 
 		logging.info(this, "supplyAllPermissionEntries defaultUserConfig " + defaultUserConfig);
 
-		
+		// ---System.exit(0);
 
 		Map<String, UserConfig> roleConfigs = new HashMap<>();
 		Map<String, UserConfig> userConfigs = new HashMap<>();
@@ -262,7 +262,7 @@ public class UserConfigProducing {
 
 		for (String rolename : extraRoleParts) {
 			rolenameStartkey = UserConfig.KEY_USER_ROOT + "." + UserConfig.ROLE + ".{" + rolename + "}.";
-			
+			// separateServerConfigsTreeSection( rolenameStartkey );
 			UserConfig roleConfig = new UserConfig(rolename);
 			supplyPermissionEntriesForAUser(rolename, rolenameStartkey, false, defaultUserConfig, roleConfig);
 
@@ -294,9 +294,9 @@ public class UserConfigProducing {
 			boolean followConfiguredRole = false;
 			logging.info(this, "supplyAllPermissionEntries has role " + values);
 			// logging.info(this, "supplyAllPermissionEntries is string " + (values.get(0)
-			
+			// instanceof String) );
 			// logging.info(this, "supplyAllPermissionEntries is NONE " + ( ((String)
-			
+			// values.get(0) ).equals( UserConfig.NONE_PROTOTYPE) ));
 
 			if (values == null || values.isEmpty() // || !(values.get(0) instanceof String )
 					|| (((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE))) {
@@ -417,7 +417,7 @@ public class UserConfigProducing {
 				+ readyObjects);
 
 		// logging.info(this, "supplyPermissionEntriesForAUser list keys " +
-		
+		// UserConfig.getUserListKeys());
 
 		// single String valued
 		logging.info(this, "supplyPermissionEntriesForAUser UserConfig.getUserStringValueKeys "
@@ -479,8 +479,8 @@ public class UserConfigProducing {
 
 			}
 			// logging.info(this, "supplyPermissionEntriesForAUser list configKey " +
-			
-			
+			// configKey + " -- partkey " + partkey);
+			// logging.info(this, "supplyPermissionEntriesForAUser list " + values);
 		}
 
 		// Stringlist valued
@@ -543,7 +543,7 @@ public class UserConfigProducing {
 		 * userConfig.setValues ( partkey, values );
 		 * //logging.info(this, "supplyPermissionEntriesForAUser list configKey " +
 		 * configKey + " -- partkey " + partkey);
-		 * 
+		 * //logging.info(this, "supplyPermissionEntriesForAUser list " + values);
 		 * }
 		 */
 
@@ -587,7 +587,7 @@ public class UserConfigProducing {
 			oldPossibleValuesDepot = new TreeSet<>();
 		} else {
 			oldPossibleValuesDepot = new HashSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
-			
+			// oldPossibleValues = new TreeSet<>();
 		}
 
 		logging.info(this, "oldPossibleValuesDepot " + oldPossibleValuesDepot);
@@ -747,7 +747,7 @@ public class UserConfigProducing {
 		logging.info(this, "supplyPermissionEntriesForAUser countReadyObjectsOnStart " + countReadyObjectsOnStart);
 		logging.info(this, "supplyPermissionEntriesForAUser readyObjects.size() " + readyObjects.size());
 		// logging.info(this, "supplyPermissionEntriesForAUser readyObjects " +
-		
+		// readyObjects);
 
 		if (countReadyObjectsOnStart == readyObjects.size()) {
 			logging.info(this,
@@ -781,7 +781,7 @@ public class UserConfigProducing {
 
 			logging.info(this, "modi time " + itemModifyTime);
 
-			
+			// --System.exit(0);
 
 			readyObjects.add(Executioner.jsonMap(itemModifyTime));
 		}

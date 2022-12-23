@@ -55,7 +55,7 @@ public class PersistenceControllerFactory {
 		if (sqlAndGetRows) {
 			// have a try
 			// persistControl = new OpsiserviceSQLgetrowsPersistenceController (server,
-			
+			// user, password);
 			persistControl = new OpsiserviceRawDataPersistenceController(server, user, password);
 			logging.info("a PersistenceController initiated by option sqlAndGetRows got " + (persistControl == null));
 		} else if (avoidSqlRawData) {
@@ -132,7 +132,7 @@ public class PersistenceControllerFactory {
 					return null;
 
 					// persistControl = new OpsiservicePersistenceController (server, user,
-					
+					// password);
 				}
 
 				if (persistControl.getOpsiVersion().compareTo(Globals.MIN_SUPPORTED_OPSI_VERSION) < 0) {
@@ -191,7 +191,7 @@ public class PersistenceControllerFactory {
 
 									infodialog.centerOn(Globals.mainFrame);
 								}
-								
+								// result = (infodialog.getResult() == 1);
 							}
 
 						}
@@ -207,7 +207,7 @@ public class PersistenceControllerFactory {
 
 				// de.uib.opsicommand.OpsiMethodCall.standardRpcPath = savePath;
 
-				
+				// persistControl.retrieveOpsiModules();
 				// retrieves host infos because of client counting
 
 				if (sqlAndGetRows && !persistControl.isWithMySQL()) {

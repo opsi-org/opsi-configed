@@ -11,5 +11,5 @@ public interface SSHCommandNeedParameter {
 	public SSHConnectionExecDialog startHelpDialog();
 
 	public String getBasicName();
-	
+	// public void setVisible();
 }

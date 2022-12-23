@@ -50,8 +50,8 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 		lbl_user.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.username"));
 		lbl_pswd.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.password"));
 		((JPasswordField) tf_pswd).setEchoChar('*');
-		tf_user.setText(""); 
-		tf_pswd.setText(""); 
+		tf_user.setText(""); // main.USER);
+		tf_pswd.setText(""); // main.PASSWORD);
 
 	}
 
@@ -94,7 +94,7 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 
 	private void initLayout() {
 		GroupLayout layout = new GroupLayout(this);
-		
+		// this.setBorder(new LineBorder(Globals.blueGrey));
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createSequentialGroup()
 

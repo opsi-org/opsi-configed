@@ -120,42 +120,42 @@ public class SSHConnectTerminal extends SSHConnect {
 							"connect useKeyfile " + SSHConnectionInfo.getInstance().usesKeyfile() + " use password …");
 				}
 				// Do not use StrictHostKeyChecking=no. See JSch SFTP security with
-				.
+				// session.setConfig(“StrictHostKeyChecking”, “no”);.
 				// http://stackoverflow.com/questions/30178936/jsch-sftp-security-with-session-setconfigstricthostkeychecking-no
 				session.setConfig("StrictHostKeyChecking", "no"); // otherwise exception if not in knwon_hosts or
 																	// unknown fingerprint
 				session.connect();
 				channel = (ChannelShell) session.openChannel("shell");
 
-				
+				// dialog.append("\n");
 				// naechste zeile activiert den Hinweis, falls die nicht die standard bash
 				// verwendet wird, soll der befehl bash ausgefuehrt werden..
 				// dialog.append(configed.getResourceValue("SSHConnection.Terminal.note") +
-				
+				// "\n\n", dialog.getInputField());
 				logging.info(this, "Connect");
 
-				
+				// channel.setInputStream(new FilterInputStream(System.in));
 				// a hack for MS-DOS prompt on Windows.
 				// channel.setInputStream(new FilterInputStream(System.in){
 				// public int read(byte[] b, int off, int len)throws IOException{
-				
+				// return in.read(b, off, (len>124?124:len));
 				// }
-				
+				// });
 
-				
-				
+				// channel.setOutputStream(new MyOutputPrinter(dialog, System.out));
+				// out = channel.getOutputStream();
 				// channel = setChannels(new FilterInputStream(System.in){
 				// public int read(byte[] b, int off, int len)throws IOException{
-				
+				// return in.read(b, off, (len>124?124:len));
 				// }
 				// }),
 				// new MyOutputPrinter(dialog, System.out)
-				
+				// );
 				channel = setStreams(channel);
 
 				channel.setPtyType("dumb");
-				
-				
+				// channel.setPty(false);
+				// ((ChannelShell)channel).setPty(false);
 
 				channel.connect();
 				logging.info(this, "connect " + SSHConnectionInfo.getInstance().getUser() + "@"
@@ -205,7 +205,7 @@ public class SSHConnectTerminal extends SSHConnect {
 					dialog.setLastHistoryIndex();
 					out.flush();
 				}
-				
+				// else logging.info(this, "empty input text");
 			} catch (IOException ioe) {
 				logging.error(this, "SSHConnectTerminal exec ioexception", ioe);
 			} catch (Exception e) {
@@ -309,8 +309,8 @@ public class SSHConnectTerminal extends SSHConnect {
 				int key = e.getKeyCode();
 				JTextField textField = (JTextField) e.getSource();
 				// if (textField.getText().trim().toLowerCase().equals("exit")) { //
-				 // ((Component)
-				 // } // else
+				// if(key==KeyEvent.VK_ENTER) dialog.cancel(); // ((Component)
+				// textField).requestFocusInWindow(); // } // else
 				if (key == KeyEvent.VK_ENTER) {
 					logging.info(this, "initInputFieldFromDialog keyReleased ENTER ");
 					logging.info(this, "initInputFieldFromDialog inputfield " + textField);
@@ -320,9 +320,9 @@ public class SSHConnectTerminal extends SSHConnect {
 						((Component) textField).requestFocusInWindow();
 					}
 					// else if (textField.getText().trim().toLowerCase().equals("kill")) {
-					
-					
-					
+					// exec(new String(new byte[] {3}) +"\n");
+					// ((Component) textField).requestFocusInWindow();
+					// dialog.getInputField().setText("");
 					// }
 					else {
 						// String text = textField.getText() + "\n";
@@ -330,18 +330,18 @@ public class SSHConnectTerminal extends SSHConnect {
 						// if (textField.getText().contains(" cd ") || textField.getText().contains("cd
 						// "))
 						// {
-						
+						// List dirs = getList(getCompletionList(false, true));
 						// if (commands_compgen != null)
 						// if (dirs != null)
 						// {
 						// if (dirs.addAll(commands_compgen))
-						
+						// dialog.setAutocompleteList(dirs);
 						// }
 						// else
-						
+						// dialog.setAutocompleteList(commands_compgen);
 
-						
-						
+						// else dialog.setAutocompleteList(getList(getCompletionList(true, true)));
+						// dialog.setAutocompleteList(getList(getCompletionList(true, false)));
 						// }
 						((Component) textField).requestFocusInWindow();
 						dialog.getInputField().setText("");
@@ -369,7 +369,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		String result = "";
 		if (newCommands) {
 			// result = ssh.exec(new Empty_Command("compgen -c" ), false, null, true,
-			
+			// false);
 			result = ssh.exec(new Empty_Command(
 					// http://stackoverflow.com/questions/948008/linux-command-to-list-all-available-commands-and-aliases
 					SSHCommandFactory.getInstance().str_command_getLinuxCommands), false, null, true, false);
@@ -383,17 +383,17 @@ public class SSHConnectTerminal extends SSHConnect {
 		// if (dirchanged)
 		// {
 		// // String pwd = ssh.exec(new Empty_Command("pwd" ), false, null, true,
-		
+		// false).replace("\n", "");
 		// try {
 		// getCurrentDirectorySilent = true;
-		
+		// // exec("pwd\n");
 		// if (out != null)
 		// {
-		
-		
-		
+		// out.write("pwd\n".getBytes());
+		// logging.debug(this, " exec getPrivateStatus " + dialog.getPrivateStatus());
+		// out.flush();
 		// }
-		} catch(Exception ee){}
+		// try{Thread.sleep(50);} catch(Exception ee){}
 		// // }
 		// // catch (IOException ioe)
 
@@ -401,20 +401,20 @@ public class SSHConnectTerminal extends SSHConnect {
 
 		// currentDirectory = currentDirectory.replace("\n", "") + "/";
 		// String com = "ls -aldU " + currentDirectory + "./*";
-		
+		// logging.debug("\n\nCommand: " + com);
 		// String result_ls = ssh.exec( new Empty_Command(com ),
-		
-		
-		
-		
+		// false, null, true, false);
+		// logging.debug("\ncurrentDirectory: " + currentDirectory + "./");
+		// logging.debug("result_ls: " + result_ls);
+		// String[] arr_result_dir = result_ls.split("\n");
 		// String result_dir = "";
 
 		// for (String l : arr_result_dir)
 		// {
-		
-		
+		// String line = l; //.replace("\\","\\\\");
+		// logging.debug("line: " + line);
 		// String dir = "" + line.split(currentDirectory + "/",2)[1];
-		
+		// logging.debug("DIR: " + dir);
 		// result_dir = result_dir + dir + "\n";
 		// }
 		// result = result + "\n" + result_dir;

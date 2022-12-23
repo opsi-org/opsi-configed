@@ -81,7 +81,7 @@ public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
 		}
 
 		if (val == null) {
-			
+			// logging.info(this, "val is null " + nullIcon);
 			if (nullIcon != null)
 				label.setIcon(nullIcon);
 		} else {

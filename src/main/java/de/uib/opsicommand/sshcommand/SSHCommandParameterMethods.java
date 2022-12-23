@@ -90,7 +90,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		methods.put(method_getSelectedDepotIPs, "getSelectedDepotIPs");
 		methods.put(method_getConfigServerName, "getConfigServerName");
 		methods.put(method_getConnectedSSHServerName, "getConnectedSSHServerName");
-		methods.put(method_optionSelection, "ssh:
+		methods.put(method_optionSelection, "ssh://path/to/file");
 
 		this.main = main;
 		instance = this;
@@ -218,7 +218,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		if (m.contains(param_splitter_default)) {
 			splitted[0] = m.split(param_splitter_default)[0];
 			logging.info(this, "splitParameter method " + splitted[0]);
-			
+			// splitted[0] = getTranslatedMethod(splitted[0]);
 			logging.info(this, "splitParameter method " + splitted[0]);
 			splitted[1] = m.split(param_splitter_default)[1];
 			logging.info(this, "splitParameter format " + splitted[1]);
@@ -386,7 +386,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 			dialog = Globals.mainFrame;
 		logging.debug(this, "getUserText text " + text);
 		final JTextField field = new JTextField();
-		
+		// field.setEchoChar('*');
 		final JOptionPane opPane = new JOptionPane(new Object[] { new JLabel(text), field },
 				JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION) {
 			@Override
@@ -561,7 +561,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		SSHOutputCollector.getInstance().removeAllValues();
 		final SSHConnect caller = new SSHConnect(main);
 
-		final String scriptFile = method.replace("ssh:
+		final String scriptFile = method.replace("ssh://", "");
 		final LinkedList<String> commands = new LinkedList<>();
 		commands.add(scriptFile);
 		SSHCommand_Template cmd = new SSHCommand_Template("", commands, "", false, "", "", 0);

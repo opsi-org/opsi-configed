@@ -77,7 +77,7 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 			else
 				put("type", retrieved.get("type"));
 
-			
+			// logging.info(this, "type found " + get("type"));
 			if (get("type").equals(BOOL_TYPE) || get("type").equals("BoolProductProperty"))
 				type = TYPE.BoolConfig;
 			else
@@ -98,9 +98,9 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 		}
 
 		// if (retrieved.get("type") == null )
-		
+		// put("classname", "java.lang.String");
 		// else if (retrieved.get("type").equals("BoolConfig"))
-		
+		// put("classname", "java.lang.Boolean");
 		// else
 
 		put("classname", "List");

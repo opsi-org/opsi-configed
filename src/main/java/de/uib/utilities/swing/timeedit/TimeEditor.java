@@ -69,7 +69,7 @@ public class TimeEditor extends JPanel {
 		add(labelTime);
 		add(spinnerHour);
 		add(spinnerMin);
-		
+		// add(new JLabel());
 	}
 
 	public void setHour(int h) {

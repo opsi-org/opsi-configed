@@ -99,22 +99,22 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 				.get(main.getPersistenceController().KEY_SSH_DEFAULTWINUSER);
 		if (result_config_list == null || result_config_list.isEmpty()) {
 			// defaultWinUser =
-			
+			// configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.defaultWinUser");
 			logging.info(this, "KEY_SSH_DEFAULTWINUSER not existing");
-			
+			// jMenuRemoteTerminal.setEnabled(main.getPersistenceController().KEY_SSH_SHELL_ACTIVE_defaultvalue);
 			// the config will be created in this run of configed
 		} else {
 			defaultWinUser = (String) result_config_list.get(0);
 			logging.info(this, "KEY_SSH_DEFAULTWINUSER " + ((String) result_config_list.get(0)));
-			
+			// jMenuRemoteTerminal.setEnabled((Boolean) shell_list.get(0));
 		}
 
 		result_config_list = (ArrayList<Object>) configs.get(main.getPersistenceController().KEY_SSH_DEFAULTWINPW);
 		if (result_config_list == null || result_config_list.isEmpty()) {
 			// defaultWinUser =
-			
+			// configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.defaultWinUser");
 			logging.info(this, "KEY_SSH_DEFAULTWINPW not existing");
-			
+			// jMenuRemoteTerminal.setEnabled(main.getPersistenceController().KEY_SSH_SHELL_ACTIVE_defaultvalue);
 			// the config will be created in this run of configed
 		} else {
 			if (tf_passw == null) {
@@ -123,7 +123,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			}
 			tf_passw.setText((String) result_config_list.get(0));
 			logging.info(this, "key_ssh_shell_active " + SSHCommandFactory.getInstance().confidential);
-			
+			// jMenuRemoteTerminal.setEnabled((Boolean) shell_list.get(0));
 		}
 	}
 
@@ -137,7 +137,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		tf_passw.setEnabled(value);
 		tf_passw.setEditable(value);
 
-		
+		// cb_passw_echo.setEnabled(value);
 
 		btn_showPassw.setEnabled(value);
 
@@ -243,15 +243,15 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			tf_passw.setEchoChar('*');
 
 			// cb_passw_echo = new
-			
+			// JCheckBox(configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.showPassword"));
 
 			// btn_showPassw = new JButton("",
-			//
-			
+			// Globals.createImageIcon("images/eye_open.png", ""));//
+			// Globals.createImageIcon("images/eye_open_close.png"));
 			btn_showPassw = new JButton(Globals.createImageIcon("images/eye_blue_open.png", ""));
-			
+			// "***"); //configed.getResourceValue("SSHConnection.passwordButtonText"));
 			// btn_showPassw.setPreferredSize(new Dimension(Globals.squareButtonWidth,
-			
+			// Globals.buttonHeight));
 			btn_showPassw.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
 			btn_showPassw.setToolTipText(
 					configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.showPassword.tooltip"));
@@ -298,7 +298,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 			panelFinalAction.setOpaque(false);
 			// panelFinalAction.setBorder(new LineBorder( Globals.blueGrey,
-			
+			// 1, true) );
 
 		}
 
@@ -309,7 +309,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		 * tf_freeInput = new JTextField();
 		 * tf_freeInput.setToolTipText(configed.getResourceValue(
 		 * "SSHConnection.ParameterDialog.tooltip.freeInput"));
-		 * 
+		 * // tf_freeInput.setText("");
 		 * addListener(tf_freeInput);
 		 * }
 		 */
@@ -318,15 +318,15 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			btn_copy_selected_clients = new JButton(configed
 					.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.btn_copy_selected_clients"));
 			// btn_copy_selected_clients.setToolTipText(
-			
-			
-			
+			// configed.getResourceValue("SSHConnection.buttonHelp") );
+			// btn_copy_selected_clients.setText(configed.getResourceValue("SSHConnection.buttonHelp"));
+			// buttonPanel.add(btn_copy_selected_clients);
 			btn_copy_selected_clients.addActionListener(actionEvent -> doCopySelectedClients());
 
 			btn_help = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
 			btn_help.setToolTipText(configed.getResourceValue("SSHConnection.buttonHelp"));
 			btn_help.setText(configed.getResourceValue("SSHConnection.buttonHelp"));
-			
+			// buttonPanel.add(btn_help);
 			btn_help.addActionListener(actionEvent -> doActionHelp());
 
 			btn_execute = new JButton();
@@ -352,7 +352,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		changeClient();
 		changeUser();
 		changePassw();
-		
+		// changeKeepClient();
 		changeVerbosity();
 
 		initLayout();
@@ -408,10 +408,10 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	}
 	// public void doAction2()
 	// {
-	
+	// // setVisible(false);
 
-	
-	
+	// this.setVisible (false);
+	// this.dispose ();
 	// }
 
 	/* This method is called when button 1 is pressed */

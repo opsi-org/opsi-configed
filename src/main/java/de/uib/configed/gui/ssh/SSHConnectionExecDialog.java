@@ -59,11 +59,11 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 		 * // public void run()
 		 * // {
 		 * instance.append( "SSHConnectionExecDialog " + new java.util.Date() + "\n" );
-		 * 
-		 * 
+		 * // logging.info("SSHConnectionExecDialog.getInstance set it visible ");
+		 * // instance.setVisible(true);
 		 * // }
 		 * //}
-		 * 
+		 * //);
 		 * }
 		 * else
 		 */
@@ -156,7 +156,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 	}
 
 	public void appendLater(String line) {
-		
+		// logging.info(this, "appendLater " + line);
 
 		append(line);
 

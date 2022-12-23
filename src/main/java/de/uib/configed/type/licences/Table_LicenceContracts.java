@@ -58,7 +58,7 @@ public class Table_LicenceContracts extends Relation {
 		INTERFACED_ATTRIBUTES.add(notificationDateKEY);
 		INTERFACED_ATTRIBUTES.add(expirationDateKEY);
 		INTERFACED_ATTRIBUTES.add(notesKEY);
-		
+		// INTERFACED_ATTRIBUTES.add(descriptionKEY);
 	}
 
 	public static final List<String> ALLOWED_ATTRIBUTES;

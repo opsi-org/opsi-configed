@@ -156,7 +156,7 @@ public class PanelSWMultiClientReport extends JPanel {
 		chooserDirectory.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserDirectory);
-		
+		// chooserDirectory.setControlButtonsAreShown(false);
 
 		fieldExportDirectory = new JTextShowField(exportDirectoryS);
 
@@ -188,7 +188,7 @@ public class PanelSWMultiClientReport extends JPanel {
 					}
 
 					fieldExportDirectory.setText(exportDirectoryS);
-					
+					// getFilepathStart();
 					configed.savedStates.saveSWauditExportDir.serialize(exportDirectoryS);
 
 				}
@@ -228,7 +228,7 @@ public class PanelSWMultiClientReport extends JPanel {
 					configed.savedStates.saveSWauditKindOfExport.serialize("" + val);
 				}));
 
-		
+		// configed.savedStates.saveSWauditKindOfExport.serialize("CSV");
 
 		String koe = configed.savedStates.saveSWauditKindOfExport.deserialize();
 		panelSelectExportType.setValueByString(koe);
@@ -238,10 +238,10 @@ public class PanelSWMultiClientReport extends JPanel {
 		logging.info(this, "kindOfExport set from savedStates  " + koe);
 		logging.info(this, "kindOfExport   " + kindOfExport);
 
-		
+		// System.exit(0);
 
 		JPanel subpanelPreConfig = new JPanel();
-		subpanelPreConfig.setBackground(Globals.backgroundWhite);
+		subpanelPreConfig.setBackground(Globals.backgroundWhite);// Globals.backNimbusLight);
 
 		GroupLayout glPreConfig = new GroupLayout(subpanelPreConfig);
 		subpanelPreConfig.setLayout(glPreConfig);

@@ -132,7 +132,7 @@ public class OpsiDataBackend extends Backend {
 		if (controller == null)
 			logging.warning(this, "Warning, controller is null!");
 		getHardwareConfig();
-		 //trigger initial loading
+		// setReloadRequested(); //trigger initial loading
 	}
 
 	@Override
@@ -215,14 +215,14 @@ public class OpsiDataBackend extends Backend {
 		// {
 		// if( operation instanceof IntEqualsOperation )
 		// return new OpsiDataIntEqualsOperation( OpsiDataClient.SOFTWARE_MAP,
-		
+		// ProductState.KEY_packageVersion, (Integer) operation.getData(), element );
 		// if( operation instanceof IntLessThanOperation )
 		// return new OpsiDataIntLessThanOperation( OpsiDataClient.SOFTWARE_MAP,
-		
+		// ProductState.KEY_packageVersion, (Integer) operation.getData(), element );
 		// if( operation instanceof IntGreaterThanOperation )
 		// return new OpsiDataIntGreaterThanOperation( OpsiDataClient.SOFTWARE_MAP,
-		
-		
+		// ProductState.KEY_packageVersion, (Integer) operation.getData(), element );
+		// throw new IllegalArgumentException("Wrong operation for this element.");
 		// }
 
 		// SwAudit
@@ -329,7 +329,7 @@ public class OpsiDataBackend extends Backend {
 		hardwareOnClient = null;
 		clientToHardware = null;
 		System.gc();
-		
+		// checkInitData();
 
 	}
 
@@ -337,7 +337,7 @@ public class OpsiDataBackend extends Backend {
 		logging.info(this, "checkInitData ");
 
 		// gets current data which should be in cache already
-		
+		// reloadRequested " + reloadRequested);
 
 		// if (clientMaps == null || reloadRequested)
 		// take always the current host infos
@@ -345,7 +345,7 @@ public class OpsiDataBackend extends Backend {
 			clientMaps = controller.getHostInfoCollections().getMapOfPCInfoMaps();
 			logging.info(this, "client maps size " + clientMaps.size());
 		}
-		
+		// System.exit(0);
 
 		if (groups == null || reloadRequested) {
 			groups = controller.getFObject2Groups();
@@ -363,7 +363,7 @@ public class OpsiDataBackend extends Backend {
 			{
 				softwareMap = controller.getMapOfProductStatesAndActions(clientNames);
 				logging.debug(this, "getClients softwareMap ");
-				
+				// + softwareMap );
 			}
 		}
 		// else
@@ -407,7 +407,7 @@ public class OpsiDataBackend extends Backend {
 		 * (swauditMap.keySet()) );
 		 */
 
-		
+		// logging.info(this, "getClients softwareMap " + softwareMap);
 
 		for (String clientName : clientMaps.keySet()) {
 			OpsiDataClient client = new OpsiDataClient(clientName);
@@ -467,7 +467,7 @@ public class OpsiDataBackend extends Backend {
 							new String[] { hardwareNameLocalized, localizedName }));
 			}
 			result.put(hardwareName, elementList);
-			
+			// result.put( hardwareName, elementList );
 			logging.debug(this, "" + elementList);
 		}
 		return result;
@@ -501,7 +501,7 @@ public class OpsiDataBackend extends Backend {
 							new String[] { hardwareNameLocalized, localizedName }));
 			}
 			result.put(hardwareNameLocalized, elementList);
-			
+			// result.put( hardwareName, elementList );
 			logging.debug(this, "" + elementList);
 		}
 		return result;

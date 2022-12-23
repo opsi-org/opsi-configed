@@ -220,15 +220,15 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// logging.info(this, "-----------------tableProducts ListSelectionListener
-				
+				// valueChanged");
 
 				// Ignore extra messages.
 				if (e.getValueIsAdjusting())
 					return;
 
-				
+				// mainController.clearProductEditing();
 				clearEditing();
-				
+				// selectedProducts.clear();
 
 				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 				if (lsm.isSelectionEmpty()) {
@@ -252,7 +252,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 					/*
 					 * int[] selection = tableProducts.getSelectedRows();
-					 * 
+					 * //logging.debug(this, "selection " + java.util.Arrays.toString(selection));
 					 * for (int i = 0; i < selection.length; i++)
 					 * {
 					 * selectedProducts.add(
@@ -262,7 +262,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					 */
 				}
 
-				
+				// logging.info(this, "selected: " + THIS.getSelectedIDs());
 
 			}
 		});
@@ -270,7 +270,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		tableProducts.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		standardListCellRenderer = new StandardListCellRenderer();
-		
+		// productTableCellRenderer = new ProductTableCellRendererDefault();
 
 		productNameTableCellRenderer = new StandardTableCellRenderer("") {
 			@Override
@@ -290,7 +290,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 						.getLastStateChange(convertRowIndexToModel(row));
 
 				// logging.debug(this, " ------ " + table.getModel().getValueAt(row, 0) + " -
-				
+				// stateChange " + stateChange);
 
 				if (stateChange == null)
 					stateChange = "";
@@ -334,7 +334,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 					boolean isSelected, // is the cell selected
 					boolean hasFocus, int row, int column) {
-				
+				// logging.debug(this, "value >" + value + "<");
 				Component result = null;
 				if (value != null && !value.equals("") && !value.toString().equals("null")
 						&& !value.toString().equalsIgnoreCase("none")
@@ -429,7 +429,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					if (val.equals(InstallationStateTableModel.CONFLICTstring)
 							|| val.equals(InstallationStateTableModel.unequalAddstring
 									+ InstallationStateTableModel.CONFLICTstring)) {
-						c.setBackground(Globals.CONFLICT_STATE_CELL_COLOR); 
+						c.setBackground(Globals.CONFLICT_STATE_CELL_COLOR); // result.setForeground (lightBlack);
 						c.setForeground(Globals.CONFLICT_STATE_CELL_COLOR);
 					} else {
 
@@ -451,7 +451,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 							// if (c instanceof JLabel) ((JLabel) c).setText("≠ " + val) ;//setText(val + "
 							// (≠)") ;
 						} else {
-							
+							// if (c instanceof JLabel) ((JLabel) c).setText("" + val );
 						}
 					}
 				}
@@ -521,7 +521,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		setLeftComponent(leftPane);
 
 		// propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false,
-		
+		// false, false);
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, true, false);
 		logging.info(this, " created properties Panel, is  EditMapPanelX instance No. " + EditMapPanelX.objectCounter);
 		((EditMapPanelX) propertiesPanel)
@@ -555,14 +555,14 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		infoPane.getPanelProductDependencies().setDependenciesModel(mainController.getDependenciesModel());
 
 		setRightComponent(infoPane);
-		
+		// setDividerLocation(fwidth_lefthanded - splitterLeftRight);
 
 		producePopupMenu(productDisplayFields);
 
 		paneProducts.addMouseListener(new utils.PopupMouseListener(popup));
 		tableProducts.addMouseListener(new utils.PopupMouseListener(popup));
 
-		
+		// tableProducts.getRowSorter().setSortKeys(PanelProductSettings.sortkeysDefault);
 	}
 
 	public void initAllProperties() {
@@ -575,7 +575,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		popup = new JPopupMenu("");
 
 		// LinkedHashMap<String, JMenuItem> menuItems = new LinkedHashMap<String,
-		
+		// JMenuItem>();
 
 		JMenuItem save = new JMenuItemFormatted();
 		save.setText(configed.getResourceValue("ConfigedMain.saveConfiguration"));
@@ -602,7 +602,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		itemSaveAndExecute = new JMenuItemFormatted();
 		itemSaveAndExecute.setText(configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
 		// itemSaveAndExecute.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_X,
-		
+		// InputEvent.CTRL_DOWN_MASK) );
 		// dies bit get its intended context
 		itemSaveAndExecute.setIcon(Globals.createImageIcon("images/executing_command_blue_16.png", ""));
 		itemSaveAndExecute.setFont(Globals.defaultFont);
@@ -647,7 +647,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		showPopupOpsiclientdEvent(true);
 
 		JMenuItem reload = new JMenuItemFormatted();
-		 does not
+		// reload.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)); does not
 		// find itscontext
 		reload.setText(configed.getResourceValue("ConfigedMain.reloadTable"));
 		reload.setIcon(Globals.createImageIcon("images/reload16.png", ""));
@@ -703,7 +703,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				 * // only relevant rows
 				 * tableToPDF.createContentElement("table",
 				 * strippTable(tableProducts));
-				 * tableToPDF.setPageSizeA4_Landscape(); 
+				 * tableToPDF.setPageSizeA4_Landscape(); // tableToPDF.toPDF();
 				 */
 			}
 		});
@@ -816,11 +816,11 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	protected void reloadAction() {
 		// List<? extends RowSorter.SortKey> currentSortKeys
-		
+		// = tableProducts.getRowSorter().getSortKeys();
 		mainController.requestReloadStatesAndActions();
 		mainController.resetView(mainController.getViewIndex());
 		mainController.setDataChanged(false);
-		
+		// tableProducts.getRowSorter().setSortKeys( currentSortKeys );
 	}
 
 	protected void saveAndExecuteAction() {
@@ -845,7 +845,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		result.append("]");
 		logging.info(this, "infoSortkeys " + result);
 		return " (number " + i + ") ";
-		
+		// return result.toString();
 
 	}
 
@@ -861,7 +861,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	public void showPopupOpsiclientdEvent(boolean visible) {
-		
+		// subOpsiclientdEvent.setVisible(visible);
 		itemOnDemand.setVisible(visible);
 		itemSaveAndExecute.setVisible(visible);
 	}
@@ -916,7 +916,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	private class StringComparator implements Comparator<String> {
 		@Override
 		public int compare(String o1, String o2) {
-			
+			// logging.info(this, "compare " + o1 + " to " + o2);
 			return o1.compareTo(o2);
 		}
 	}
@@ -925,7 +925,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		tableProducts.setRowSorter(null); // delete old row sorter before setting new model
 		tableProducts.setModel(istm);
 
-		
+		// tableProducts.setAutoCreateRowSorter(true);
 		// try bugfix:
 
 		final StringComparator myComparator = new StringComparator();
@@ -960,12 +960,12 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		}
 
 		;
-		
+		// sorter.setComparator(0, Globals.getCollator());
 
 		tableProducts.setRowSorter(sorter);
 		sorter.addRowSorterListener(this);
 
-		
+		// tableProducts.getTableHeader().setToolTipText(configed.getResourceValue("MainFrame.tableheader_tooltip"));
 		tableProducts.getTableHeader()
 				.setDefaultRenderer(new ColorHeaderCellRenderer(tableProducts.getTableHeader().getDefaultRenderer()));
 
@@ -1000,7 +1000,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 			JComboBox targetCombo = new JComboBox<>();
 			targetCombo.setRenderer(standardListCellRenderer);
-			
+			// targetColumn.setCellEditor(new AdaptingCellEditor(targetCombo, istm));
 			targetColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(targetCombo, istm,
 					de.uib.opsidatamodel.productstate.TargetConfiguration.getLabel2DisplayLabel(), iconsDir));
 			targetColumn.setPreferredWidth(fwidth_column_productstate);
@@ -1016,7 +1016,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 			JComboBox statesCombo = new JComboBox<>();
 			statesCombo.setRenderer(standardListCellRenderer);
-			
+			// statusColumn.setCellEditor(new AdaptingCellEditor(statesCombo, istm));
 			statusColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(statesCombo, istm,
 					de.uib.opsidatamodel.productstate.InstallationStatus.getLabel2DisplayLabel(), iconsDir));
 			statusColumn.setPreferredWidth(fwidth_column_productstate);
@@ -1055,14 +1055,14 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			actionColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(actionsCombo, istm,
 					de.uib.opsidatamodel.productstate.ActionRequest.getLabel2DisplayLabel(), iconsDir));
 			actionColumn.setPreferredWidth(fwidth_column_productstate);
-			actionColumn.setCellRenderer(actionRequestTableCellRenderer); 
+			actionColumn.setCellRenderer(actionRequestTableCellRenderer); // productTableCellRenderer);
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_lastStateChange)) > -1) {
 			TableColumn laststatechangeColumn = tableProducts.getColumnModel().getColumn(colIndex);
 			laststatechangeColumn.setPreferredWidth(fwidth_column_productsequence);
 
-			
+			// laststatechangeColumn.setHorizontalAlignment(SwingConstants.LEFT);
 			laststatechangeColumn.setCellRenderer(lastStateChangeTableCellRenderer);
 
 			/*
@@ -1112,7 +1112,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 			// if (sorter instanceof DefaultRowSorter)
 			// ((DefaultRowSorter) sorter).setComparator(colIndex, new
-			
+			// de.uib.utilities.IntComparatorForStrings());
 			// we already have Integer
 
 		}
@@ -1124,7 +1124,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_packageVersion)) > -1) {
-			
+			// logging.debug("******* colIndex for packageVersion " + colIndex);
 			TableColumn packageversionColumn = tableProducts.getColumnModel().getColumn(colIndex);
 			packageversionColumn.setPreferredWidth(fwidth_column_packageversion);
 			packageversionColumn.setCellRenderer(packageversionTableCellRenderer);
@@ -1138,7 +1138,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			((DefaultRowSorter) sorter).setComparator(colIndex, new StringComparator());
 
 			// ((DefaultRowSorter) sorter).setComparator(colIndex, new
-			
+			// de.uib.utilities.IntComparatorForStrings());
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_installationInfo)) > -1) {
@@ -1147,7 +1147,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			installationInfoColumn.setCellRenderer(installationInfoTableCellRenderer);
 
 			JComboBox installationInfoCombo = new JComboBox<>();
-			
+			// installationInfoCombo.setEditable(true);
 			/*
 			 * try
 			 * {
@@ -1198,7 +1198,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		infoPane.setProductName(productTitle);
 		infoPane.setProductInfo(productInfo);
 		infoPane.setProductVersion(productVersion);
-		
+		// infoPane.setPackageVersion(productPackageversion);
 		infoPane.setProductAdvice(productHint);
 
 		Globals.checkCollection(this, "initEditing", "editableProductProperties ", editableProductProperties);

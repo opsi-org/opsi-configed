@@ -62,7 +62,7 @@ public class PopupMenuTrait extends JPopupMenu {
 			i = listPopups.indexOf(p);
 			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PopupMenuTrait.reload"),
 					Globals.createImageIcon("images/reload16.png", ""));
-			 does
+			// menuItems[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)); does
 			// not work
 
 			addItem(p);
@@ -73,7 +73,7 @@ public class PopupMenuTrait extends JPopupMenu {
 			i = listPopups.indexOf(p);
 			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PopupMenuTrait.floatingInstance"),
 					Globals.createImageIcon("images/edit-copy.png", ""));
-			 does
+			// menuItems[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)); does
 			// not work
 
 			addSeparator();
@@ -85,7 +85,7 @@ public class PopupMenuTrait extends JPopupMenu {
 			i = listPopups.indexOf(p);
 			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PopupMenuTrait.save"),
 					Globals.createImageIcon("images/save.png", ""));
-			 does
+			// menuItems[i].setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)); does
 			// not work
 
 			addItem(p);

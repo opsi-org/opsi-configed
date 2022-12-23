@@ -63,10 +63,10 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 	public CellRendererByIndex(Set<String> keySet, String imagesBase, int imageWidth) {
 		super(imageWidth);
-		
+		// logging.debug(" ------------- font " + getFont() );
 		setOpaque(true);
-		
-		
+		// setHorizontalAlignment(LEFT);
+		// setVerticalAlignment(CENTER);
 		mapOfImages = new HashMap<>();
 		mapOfStrings = new HashMap<>();
 
@@ -85,7 +85,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 				if (imagesBase != null) {
 					String imageFileString = imagesBase + "/" + stringval + ".png";
-					
+					// logging.debug (" image file " + imageFileString);
 
 					image = Globals.createImageIcon(imageFileString, stringval);
 					if (image != null)
@@ -110,10 +110,10 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 	{
 		super(imageWidth);
-		
+		// logging.debug(" ------------- font " + getFont() );
 		setOpaque(true);
-		
-		
+		// setHorizontalAlignment(LEFT);
+		// setVerticalAlignment(CENTER);
 		mapOfStrings = mapOfStringValues;
 		mapOfTooltips = mapOfDescriptions;
 		mapOfImages = new HashMap<>();
@@ -133,7 +133,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 				if (key != null && stringval != null) {
 					String imageFileString = imagesBase + "/" + stringval + ".png";
-					
+					// logging.debug (" image file " + imageFileString);
 
 					image = Globals.createImageIcon(imageFileString, stringval);
 					if (image != null)
@@ -159,11 +159,11 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 		 * if (isSelected) {
 		 * setBackground(list.getSelectionBackground());
 		 * setForeground(list.getSelectionForeground());
-		 * 
+		 * //setForeground(java.awt.Color.black);
 		 * } else {
 		 * setBackground(list.getBackground());
 		 * setForeground(list.getForeground());
-		 * 
+		 * //setForeground(java.awt.Color.black);
 		 * }
 		 */
 
@@ -186,7 +186,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 		String selectedTooltip = "";
 
 		if (uhOhFont == null) { // lazily create this font
-			uhOhFont = list.getFont().deriveFont((float) 10); 
+			uhOhFont = list.getFont().deriveFont((float) 10); // list.getFont().getSize() - 3); // Font.ITALIC);
 		}
 		setFont(uhOhFont);
 
@@ -210,7 +210,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 		setFont(Globals.defaultFont);
 		// de.uib.utilities.swing.CellAlternatingColorizer.colorize(this, isSelected,
-		
+		// (index % 2 == 0), true);
 
 		/*
 		 * if (icon != null) {

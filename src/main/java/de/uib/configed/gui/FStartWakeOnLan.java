@@ -94,7 +94,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		{ configed.getResourceValue("FStartWakeOnLan.start"), configed.getResourceValue("FStartWakeOnLan.cancel") },
 				750, 310);
 		this.main = main;
-		
+		// scheduleTitleStarter = configed.getResourceValue("FStartWakeOnLan.creation");
 		setCalToNow();
 		centerOn(Globals.frame1);
 	}
@@ -103,7 +103,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		this.labelledDelays = labelledDelays;
 		LinkedList<String> delays = new LinkedList<>(labelledDelays.keySet());
 		// comboDelay.setModel(new DefaultComboBoxModel<>(new
-		
+		// Vector<String>(labelledDelays.keySet() ) ) );
 		spinnerDelay.setModel(new SpinnerListModel(delays));
 		nullDelayValue = delays.get(0);
 		((JSpinner.ListEditor) spinnerDelay.getEditor()).getTextField().setEditable(false);
@@ -189,7 +189,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 		JPanel contentPane = new JPanel();
 		contentPane.setBackground(Globals.backLightBlue);
-		
+		// scrollpane = new JScrollPane();
 		scrollpane.setViewportView(contentPane);
 
 		labelTimeYetToWait = new JLabel(Globals.giveTimeSpan(0), SwingConstants.RIGHT);
@@ -199,7 +199,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		waitingProgressBar.setToolTipText(configed.getResourceValue("FStartWakeOnLan.timeElapsed.toolTip"));
 		waitingProgressBar.setValue(0);
 		waitingProgressBar.setEnabled(true);
-		
+		// waitingProgressBar.setMaximum(max);
 
 		UIDefaults defaults = new UIDefaults();
 		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
@@ -207,7 +207,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		waitingProgressBar.putClientProperty("Nimbus.Overrides", defaults);
 
 		fieldTaskname = new JTextField();
-		
+		// JTextField fieldStartTime = new CheckedTimeField("");
 		fieldTaskname.getDocument().addDocumentListener(new DocumentListener() {
 
 			private void actOnChange() {
@@ -260,7 +260,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 		buttonSetNew = new IconButton(configed.getResourceValue("FStartWakeOnLan.buttonSetNew"), "images/reload16.png",
 				"images/reload16_over.png", "images/reload16_disabled.png");
-		
+		// buttonSetNew.setBackground(de.uib.utilities.Globals.backgroundLightGrey);
 		buttonSetNew.setToolTipText(configed.getResourceValue("FStartWakeOnLan.buttonSetNew.tooltip"));
 
 		buttonSetNew.addActionListener(new ActionListener() {
@@ -268,13 +268,13 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 			public void actionPerformed(ActionEvent e) {
 				logging.debug(this, "actionPerformed");
 				setClients();
-				
+				// setNowTimeAsTarget();
 			}
 		});
 
 		buttonRefreshTime = new IconButton(configed.getResourceValue("FStartWakeOnLan.buttonRefreshTime"),
 				"images/clock16.png", "images/clock16.png", "images/clock16.png");
-		
+		// buttonRefreshTime.setBackground(de.uib.utilities.Globals.backgroundLightGrey);
 		buttonRefreshTime.setToolTipText("Zeit neu setzen");
 
 		buttonRefreshTime.addActionListener(new ActionListener() {
@@ -296,11 +296,11 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		JLabel labelDepotCount = new JLabel(configed.getResourceValue("FStartWakeOnLan.countOfDepots"));
 
 		labelStarttime = new JLabel(readTime(cal));
-		
-		
-		
+		// labelStarttime.setFont(Globals.defaultFont);
+		// labelStarttime.setEditable(false);
+		// labelStarttime.setEnabled(false);
 
-		
+		// = new JLabel("delay between triggering WOL events (per depot)");
 		spinnerDelay = new JSpinner();
 
 		JPanel panelTimeSelection = new JPanel();
@@ -339,7 +339,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		lPanelSpinnerDelay.setHorizontalGroup(lPanelSpinnerDelay.createSequentialGroup().addComponent(spinnerDelay,
 				2 * Globals.TIME_SPINNER_WIDTH, 2 * Globals.TIME_SPINNER_WIDTH, 2 * Globals.TIME_SPINNER_WIDTH));
 
-		
+		// contentPane.setBackground( java.awt.Color.BLUE );
 
 		GroupLayout lPanel = new GroupLayout(contentPane);
 		contentPane.setLayout(lPanel);
@@ -462,9 +462,9 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		waitingMode = true;
 		logging.info(this, "startWaiting " + runningInstances);
 		runningInstances.add(this, scheduleTitle);
-		 //update start time values
+		// setCalToNowAsStart(); //update start time values
 		waitingTask = new WaitingWorker((WaitingSleeper) this);
-		
+		// waitingTask.addPropertyChangeListener(this);
 		waitingTask.execute();
 
 	}
@@ -510,7 +510,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	public void doAction1() {
 
 		logging.info(this, "doAction1");
-		 //includes leave()
+		// super.doAction1(); //includes leave()
 
 		if (currentlySelectedClients == null || currentlySelectedClients.length == 0) {
 			JOptionPane.showMessageDialog(this, configed.getResourceValue("FStartWakeOnLan.noClientsSelected.text"),
@@ -527,14 +527,14 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 		scheduleTitle = "  scheduler" + scheduleTitle;
 		startActionMillis = new GregorianCalendar().getTimeInMillis();
-		
-		
+		// logging.info(this, "doAction1 calTimeMillis " + calTimeMillis);
+		// logging.info(this, "doAction1 startActionMillis " + startActionMillis);
 		waitingMillis = cal.getTimeInMillis() - startActionMillis;
-		
+		// logging.info(this, "doAction1 waitingMillis " + waitingMillis);
 		if (waitingMillis < 0)
 			waitingMillis = 0;
-		
-		
+		// waitingSeconds = (int) (waitingMillis / 1000);
+		// logging.info(this, "doAction1 " + waitingSeconds);
 
 		if (waitingMillis < 100) {
 			startAction();
@@ -632,13 +632,13 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	 * setProgress( progress );
 	 * 
 	 * //int noOfSteps = 100;
-	 * 
+	 * //long timeStepMillis = (long) (waitingMillis / noOfSteps );
 	 * 
 	 * long timeStepMillis = (long) 1000;
 	 * 
+	 * //long noOfSteps = (long) (waitingMillis/ timeStepMillis);
 	 * 
-	 * 
-	 * 
+	 * //logging.info(this, " doInBackground waitingMillis " + waitingMillis );
 	 * 
 	 * 
 	 * long elapsedMillis = 0;
@@ -671,14 +671,14 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	 * 
 	 * publish(elapsedMillis);
 	 * 
-	 * 
+	 * //firePropertyChange("elapsedMins", 0, elapsedMins);
 	 * 
 	 * 
 	 * 
 	 * //progress++;
+	 * //setProgress( progress );
 	 * 
-	 * 
-	 * 
+	 * //setElapsedMins(elapsedMins);
 	 * }
 	 * return null;
 	 * }
@@ -688,10 +688,10 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	 * protected void process( List<Long> listOfMillis )
 	 * {
 	 * //update the steps which are done
-	 * 
+	 * //logging.info(this, "process, we have got list " + listOfMillis);
 	 * 
 	 * long millis = listOfMillis.get( listOfMillis.size() - 1);
-	 * 
+	 * //logging.info(this, "process :: millis " + millis);
 	 * statusLabel.setText(
 	 * //"passed " + giveTimeSpan( millis) +
 	 * " " + configed .getResourceValue("FStartWakeOnLan.timeLeft") + "  " +

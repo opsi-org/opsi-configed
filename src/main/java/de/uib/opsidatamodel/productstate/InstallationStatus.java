@@ -58,10 +58,10 @@ public class InstallationStatus {
 		states.add(UNDEFINED);
 		states.add(INSTALLED);
 		states.add(NOT_INSTALLED);
-		
+		// states.add(FAILED);
 		states.add(UNKNOWN);
 
-		
+		// states.add(INSTALLING);
 
 		labels = new Vector<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);
@@ -69,9 +69,9 @@ public class InstallationStatus {
 		labels.add("undefined");
 		labels.add("installed");
 		labels.add("not_installed");
-		
+		// labels.add("failed");
 		labels.add("unknown");
-		
+		// labels.add("installing");
 
 		state2label = new HashMap<>();
 		state2label.put(CONFLICT, Globals.CONFLICT_STATE_STRING);
@@ -79,10 +79,10 @@ public class InstallationStatus {
 		state2label.put(UNDEFINED, "undefined");
 		state2label.put(INSTALLED, "installed");
 		state2label.put(NOT_INSTALLED, "not_installed");
-		
+		// state2label.put(FAILED, "failed");
 		state2label.put(UNKNOWN, "unknown");
 
-		
+		// state2label.put(INSTALLING, "installing");
 
 		label2state = new HashMap<>();
 		label2state.put(Globals.CONFLICT_STATE_STRING, CONFLICT);
@@ -90,9 +90,9 @@ public class InstallationStatus {
 		label2state.put("undefined", UNDEFINED);
 		label2state.put("installed", INSTALLED);
 		label2state.put("not_installed", NOT_INSTALLED);
-		
+		// label2state.put("failed", FAILED);
 		label2state.put("unknown", UNKNOWN);
-		
+		// label2state.put("installing", INSTALLING);
 
 		label2displayLabel = new HashMap<>();
 		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
@@ -100,9 +100,9 @@ public class InstallationStatus {
 		label2displayLabel.put("undefined", "undefined");
 		label2displayLabel.put("installed", "installed");
 		label2displayLabel.put("not_installed", "not_installed");
-		
+		// label2displayLabel.put("failed", "failed");
 		label2displayLabel.put("unknown", "unknown");
-		
+		// label2displayLabel.put("installing", "installing");
 
 		displayLabel2label = new HashMap<>();
 		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
@@ -110,9 +110,9 @@ public class InstallationStatus {
 		displayLabel2label.put("undefined", "undefined");
 		displayLabel2label.put("installed", "installed");
 		displayLabel2label.put("not_installed", "not_installed");
-		
+		// displayLabel2label.put("failed", "failed");
 		displayLabel2label.put("unknown", "unknown");
-		
+		// displayLabel2label.put("installing", "installing");
 
 		choiceLabels = new String[] { label2displayLabel.get("not_installed"), label2displayLabel.get("installed"),
 				label2displayLabel.get("unknown")
@@ -221,9 +221,9 @@ public class InstallationStatus {
 		if (!labels.contains(label))
 			return new InstallationStatus(INVALID);
 
-		
+		// logging.debug(" -------- label " + label + " --- val " + getVal(label));
 		// logging.debug(" -------- display " + new
-		
+		// InstallationStatus(getVal(label)));
 
 		return new InstallationStatus(getVal(label));
 	}

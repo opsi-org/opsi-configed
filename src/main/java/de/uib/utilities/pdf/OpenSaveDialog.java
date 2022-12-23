@@ -25,11 +25,11 @@ public class OpenSaveDialog implements ActionListener {
 
 		saveBtn = new JButton(configed.getResourceValue("OpenSaveDialog.save"));
 		saveBtn.setFont(Globals.defaultFont);
-		
+		// saveBtn.setToolTipText(configed.getResourceValue("OpenSaveDialog.save.Tooltipp"));
 		saveBtn.addActionListener(this);
 
 		openBtn = new JButton(configed.getResourceValue("OpenSaveDialog.open"));
-		
+		// openBtn.setToolTipText(configed.getResourceValue("OpenSaveDialog.open.ToolTip"));
 		openBtn.setFont(Globals.defaultFont);
 		openBtn.addActionListener(this);
 
@@ -37,7 +37,7 @@ public class OpenSaveDialog implements ActionListener {
 		buttonPane.add(saveBtn);
 		buttonPane.add(openBtn);
 		JPanel qPanel = new JPanel();
-		
+		// qPanel.add(text);
 		qPanel.add(buttonPane);
 		dialogView = new de.uib.configed.gui.GeneralFrame(null, Globals.APPNAME + " " + title, true); // modal
 		dialogView.addPanel(qPanel);

@@ -61,7 +61,7 @@ public class ChainedTableModelFilter extends TableModelFilter {
 				testresult = testresult && chain.get(filterName).test(row);
 			}
 			// logging.info(this, "test result, filtered by " + filterName + ", " +
-			
+			// testresult);
 		}
 
 		if (inverted) {

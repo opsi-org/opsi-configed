@@ -210,8 +210,8 @@ public abstract class Serializer {
 				}
 				logging.info(this, "getOperation elementPath[0] " + elementPath[0]);
 				List<SelectElement> elements = hardware.get(elementPath[0]);
-				
-				
+				// logging.info(this, "getOperation hardware " + hardware);
+				// logging.info(this, "getOperation hardware elements " + elements );
 
 				for (SelectElement possibleElement : elements) {
 					logging.info(this,

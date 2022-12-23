@@ -15,7 +15,7 @@ public class GenericEnumElement extends SelectElement {
 	public GenericEnumElement(String[] enumData, String[] name, String... localizedName) {
 		super(name, localizedName);
 		this.enumData = new Vector<>(Arrays.asList((String[]) enumData));
-		
+		// this.enumData.add(0, "*");
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class GenericEnumElement extends SelectElement {
 
 	// public SelectOperation createOperation( String operation, SelectData data )
 	// {
-	
+	// return Backend.getBackend().createOperation( operation, data, this );
 	// }
 
 	protected static String[] removeFirst(int n, String[] data) {

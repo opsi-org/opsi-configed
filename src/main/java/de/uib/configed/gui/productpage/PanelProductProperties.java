@@ -64,7 +64,7 @@ public class PanelProductProperties extends JSplitPane
 	protected TableCellRenderer propertiesTableCellRenderer;
 
 	// protected final Map<String,Object> emptyVisualData = new
-	
+	// HashMap<String,Object>();
 
 	protected LinkedHashMap<String, Boolean> productDisplayFields;
 
@@ -84,8 +84,8 @@ public class PanelProductProperties extends JSplitPane
 	}
 
 	protected void init() {
-		
-		
+		// tableProducts = new JTable();
+		// tableProducts.setDragEnabled(true);
 
 		selectedProducts = new ArrayList<>();
 
@@ -121,7 +121,7 @@ public class PanelProductProperties extends JSplitPane
 				lsm.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 				if (lsm.isSelectionEmpty()) {
-					
+					// initAllProperties();
 					logging.info(this, "selected  no row ");
 
 					// infoPane.clearEditValue
@@ -187,7 +187,7 @@ public class PanelProductProperties extends JSplitPane
 						 * theTable.getValueAt(row, columnNames.indexOf("packageVersion"))
 						 * );
 						 */
-						
+						// depotsOfPackage.clear();
 						List<String> depotsOfPackageAsRetrieved = new ArrayList<>();
 
 						String versionInfo = "";
@@ -321,7 +321,7 @@ public class PanelProductProperties extends JSplitPane
 			 * 
 			 * // Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties
 			 * =
-			 * 
+			 * // mainController.getPersistenceController().getDepot2product2properties();
 			 * 
 			 * Map<String, ConfigName2ConfigValue> propertiesDepot0 =
 			 * depot2product2properties.get(depots.get(0));
@@ -363,7 +363,7 @@ public class PanelProductProperties extends JSplitPane
 			 * // we need a new property. it is not common
 			 * {
 			 * ListMerger merger = new ListMerger(value);
-			 * 
+			 * // logging.debug(this, " new property, merger " + merger);
 			 * merger.setHavingNoCommonValue();
 			 * result.put(key, merger);
 			 * } else {
@@ -383,15 +383,15 @@ public class PanelProductProperties extends JSplitPane
 		};
 
 		paneProducts.setTableModel(model);
-		
+		// paneProducts.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		paneProducts.setListSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
+		// paneProducts.setTableColumnInvisible( columnNames.indexOf( "depotId" ));
 
 		LinkedHashMap<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
 		sortDescriptor.put(columnNames.indexOf("productId"), SortOrder.ASCENDING); // productId
 		sortDescriptor.put(columnNames.indexOf("productVersion"), SortOrder.ASCENDING); // productId
 		sortDescriptor.put(columnNames.indexOf("packageVersion"), SortOrder.ASCENDING); // productId
-		
+		// sortDescriptor.put(columnNames.indexOf("depotId"), SortOrder.ASCENDING);
 		// //productId
 
 		paneProducts.setSortOrder(sortDescriptor);
@@ -400,7 +400,7 @@ public class PanelProductProperties extends JSplitPane
 
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, false, false);
 		// propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false,
-		
+		// true, true, EditMapPanelX.PropertyHandlerType.REMOVE_CLIENT_SPECIFIC_VALUE );
 		logging.info(this, " created properties Panel, is  EditMapPanelX instance No. " + EditMapPanelX.objectCounter);
 		((EditMapPanelX) propertiesPanel)
 				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName().toString()));
@@ -409,7 +409,7 @@ public class PanelProductProperties extends JSplitPane
 		propertiesPanel.setUpdateCollection(null);
 
 		// ((EditMapPanelX) propertiesPanel).setPropertyHandlerType(
-		
+		// EditMapPanelX.PropertyHandlerType.REMOVE_CLIENT_SPECIFIC_VALUE );
 
 		panelEditProperties = new PanelEditDepotProperties(mainController, propertiesPanel);
 		infoPane = new ProductInfoPane(mainController, panelEditProperties);
@@ -417,10 +417,10 @@ public class PanelProductProperties extends JSplitPane
 		infoPane.getPanelProductDependencies().setDependenciesModel(mainController.getDependenciesModel());
 
 		setRightComponent(infoPane);
-		
+		// setDividerLocation(800);
 
-		
-		
+		// paneProducts.addMouseListener(new utils.PopupMouseListener(popup));
+		// tableProducts.addMouseListener(new utils.PopupMouseListener(popup));
 	}
 
 	/*
@@ -435,7 +435,7 @@ public class PanelProductProperties extends JSplitPane
 	/*
 	 * protected void reloadAction()
 	 * {
-	 * 
+	 * //mainController.requestReloadStatesAndActions();
 	 * //mainController.getPersistenceController().
 	 * productPropertyDefinitionsRequestRefresh();
 	 * //mainController.getPersistenceController().productpropertiesRequestRefresh()

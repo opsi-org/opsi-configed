@@ -84,7 +84,7 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getSource() == textarea) {
-			
+			// logging.debug(this, " key event on textarea " + e);
 
 			if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
 					&& e.getKeyCode() == KeyEvent.VK_TAB)
@@ -100,14 +100,14 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	// DocumentListener interface
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-		
+		// logging.debug(this, "changedUpdate");
 		setDataChanged(true);
 
 	}
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		
+		// logging.debug(this, "insertUpdate");
 		/*
 		 * //catch tabs and in case returns
 		 * try
@@ -116,7 +116,7 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 		 * logging.debug(this, " --------->" + newPiece + "<");
 		 * if ( newPiece.equals ("\t") )
 		 * {
-		 * 
+		 * //logging.debug(this, "tab");
 		 * buttonCommit.requestFocus();
 		 * }e
 		 * 
@@ -131,7 +131,7 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		
+		// logging.error(this, " " + textarea.getCaretPosition()+ "\n" + e);
 		if (standalone)
 			logging.debug(getText());
 	}
@@ -154,7 +154,7 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		
+		// logging.debug(this, "removeUpdate");
 		setDataChanged(true);
 	}
 

@@ -191,7 +191,7 @@ public class logging implements LogEventSubject
 	}
 
 	private static String now() {
-		
+		// return new GregorianCalendar().getTime().toString();
 		return loggingDateFormat.format(new java.util.Date());// + " ";
 	}
 
@@ -426,7 +426,7 @@ public class logging implements LogEventSubject
 	}
 
 	public static void clearErrorList() {
-		
+		// warning("clear error list");
 		errorList.clear();
 	}
 
@@ -436,7 +436,7 @@ public class logging implements LogEventSubject
 
 	public static void checkErrorList(JFrame parentFrame) {
 		// if errors Occurred show a window with the logged errors
-		
+		// logging.debug("checkErrorList");
 		final JFrame f;
 		if (parentFrame == null)
 			f = Globals.mainFrame;
@@ -453,7 +453,7 @@ public class logging implements LogEventSubject
 		if (fErrors == null) {
 			WaitCursor.stopAll();
 
-			
+			// logging.debug(" start fErrors");
 			fErrors = new FShowList(f, Globals.APPNAME + ": problems Occurred", false, new String[] { "ok" }, 400, 300);
 		}
 
@@ -466,7 +466,7 @@ public class logging implements LogEventSubject
 			}
 		}.start();
 
-		
+		// parentFrame.setVisible(true);
 	}
 
 	public static String getErrorListAsLines() {

@@ -76,7 +76,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 
 		tf_url = new JTextField(url_def_text);
 		tf_url.setBackground(Globals.backLightYellow);
-		
+		// tf_url.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_url"));
 		tf_url.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {

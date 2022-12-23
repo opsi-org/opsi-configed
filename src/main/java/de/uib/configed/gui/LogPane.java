@@ -156,7 +156,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 			produceLabels(max);
 
-			
+			// setPaintTicks(true);
 
 			setPaintLabels(true);
 			setSnapToTicks(true);
@@ -171,7 +171,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 
 		public void produceLabels(int upTo) {
-			
+			// logging.debug(this, "produceLabels upTo " + upTo);
 
 			levelMap = new LinkedHashMap<>();
 
@@ -298,7 +298,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		int savedMaxShownLogLevel = 0;
 		try {
 			savedMaxShownLogLevel = Integer.valueOf(configed.savedStates.savedMaxShownLogLevel.deserialize());
-			
+			// logging.info(this, "savedMaxShownLogLevel " + savedMaxShownLogLevel);
 		} catch (NumberFormatException ex) {
 			logging.warning(this, "savedMaxShownLogLevel could not be read, value "
 					+ configed.savedStates.savedMaxShownLogLevel.deserialize());
@@ -319,7 +319,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		title = "";
 		info = "";
 
-		
+		// initialMaxShowLevel = produceInitialMaxShowLevel();
 
 		jTextPanel = new JPanel(new BorderLayout());
 		scrollpane = new JScrollPane();
@@ -327,7 +327,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		jTextPane.setCaretColor(Color.RED);
 		jTextPane.getCaret().setBlinkRate(0);
 
-		
+		// jTextPane.setContentType ("text/ascii; charset=UTF-8");
 
 		class LogStyleContext extends StyleContext {
 			@Override
@@ -340,23 +340,23 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		logLevelStyles[1] = styleContext.addStyle("loglevel essential", null);
 		StyleConstants.setForeground(logLevelStyles[1], Globals.logColorEssential);
-		
+		// StyleConstants.setBold(logLevelStyles[1], true);
 
 		logLevelStyles[2] = styleContext.addStyle("loglevel critical", null);
 		StyleConstants.setForeground(logLevelStyles[2], Globals.logColorCritical);
-		
+		// StyleConstants.setBold(logLevelStyles[2], true);
 
 		logLevelStyles[3] = styleContext.addStyle("loglevel error", null);
 		StyleConstants.setForeground(logLevelStyles[3], Globals.logColorError);
-		
+		// StyleConstants.setBold(logLevelStyles[3], true);
 
 		logLevelStyles[4] = styleContext.addStyle("loglevel warning", null);
 		StyleConstants.setForeground(logLevelStyles[4], Globals.logColorWarning);
-		
+		// StyleConstants.setBold(logLevelStyles[4], true);
 
 		logLevelStyles[5] = styleContext.addStyle("loglevel notice", null);
 		StyleConstants.setForeground(logLevelStyles[5], Globals.logColorNotice);
-		
+		// StyleConstants.setBold(logLevelStyles[5], true);
 
 		logLevelStyles[6] = styleContext.addStyle("loglevel info", null);
 		StyleConstants.setForeground(logLevelStyles[6], Globals.logColorInfo);
@@ -394,7 +394,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		labelSearch = new JLabel(configed.getResourceValue("TextPane.jLabel_search"));
 		labelSearch.setFont(Globals.defaultFont);
 		// labelSearch.setPreferredSize(new Dimension (buttonWidth,
-		
+		// Globals.buttonHeight));
 
 		jComboBoxSearch = new JComboBox<>();
 		jComboBoxSearch.setEditable(true);
@@ -452,13 +452,13 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		sliderListener = new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				
-				
+				// final Cursor startingCursor = sliderLevel.getCursor();
+				// sliderLevel.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 				logging.debug(this, "change event from sliderLevel, " + sliderLevel.getValue());
 				if (sliderLevel.getValueIsAdjusting())
 					return;
 
-				
+				// activateShowLevel();
 
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
@@ -536,12 +536,12 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		 * spinnerListener = new ChangeListener(){
 		 * public void stateChanged(ChangeEvent e)
 		 * {
-		 * 
-		 * 
+		 * //final Cursor startingCursor = spinnerLevel.getCursor();
+		 * //spinnerLevel.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		 * logging.debug(this, "change event from spinnerLevel, " +
 		 * spinnerLevel.getValue());
 		 * 
-		 * 
+		 * //activateShowLevel();
 		 * 
 		 * SwingUtilities.invokeLater(new Runnable()
 		 * {
@@ -729,7 +729,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		// int level = levelList.indexOf(spinnerLevel.getValue()) + 1;
 		int selLevel = levelList.indexOf(sliderLevel.getValue()) + 1;
 
-		
+		// logging.debug(this, "building document level " + selLevel );
 
 		docLinestartPosition2lineCount = new TreeMap<>();
 		lineCount2docLinestartPosition = new TreeMap<>();
@@ -758,9 +758,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 					docLinestartPosition2lineCount.put(document.getLength(), i);
 					lineCount2docLinestartPosition.put(i, document.getLength());
 
-					
-					
-					
+					// logging.debug(this, " lines i " + i);
+					// logging.debug(this, " lines i line ");
+					// logging.debug(this, " lines i " + lines[i]);
 					String no = "(" + i + ")";
 					document.insertStringTruely(document.getLength(), /*
 																		 * type + " j1 " + j1 + " j2 " + j2 + " ::: " +
@@ -776,7 +776,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 		jTextPane.setDocument(document);
 		SwingUtilities.invokeLater(() -> jTextPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)));
-		
+		// logging.debug(this, "Text set" );
 	}
 
 	private void setLevelWithoutAction(Object l) {
@@ -812,7 +812,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	private void activateShowLevel() {
-		
+		// Object level = comboLevel.getSelectedItem();
 		Integer level = sliderLevel.getValue();
 		if (level > maxExistingLevel) {
 			level = maxExistingLevel;
@@ -828,10 +828,10 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				+ maxExistingLevel);
 
 		if (oldLevel != level && (level < maxExistingLevel || oldLevel < maxExistingLevel)) {
-			
+			// emptyDocument();
 
 			int caretPosition = jTextPane.getCaretPosition();
-			
+			// logging.info(this, "caretPosition " + caretPosition);
 			int startPosition = 0;
 			int oldStartPosition = 0;
 			int offset = 0;
@@ -847,15 +847,15 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			if (docLinestartPosition2lineCount.get(oldStartPosition) != null)
 				lineNo = docLinestartPosition2lineCount.get(oldStartPosition);
 
-			
+			// logging.info(this, "line no " + lineNo);
 
 			buildDocument();
 
-			
+			// logging.info(this, "finding new startPosition ");
 
 			if (lineCount2docLinestartPosition.containsKey(lineNo)) {
 				startPosition = lineCount2docLinestartPosition.get(lineNo) + offset;
-				
+				// logging.info(this, "new startPosition " + startPosition);
 			} else {
 				Iterator<Integer> linesIterator = lineCount2docLinestartPosition.keySet().iterator();
 				int nextLineNo = 0;
@@ -867,7 +867,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 					nextLineNo = linesIterator.next();
 
 				startPosition = lineCount2docLinestartPosition.get(nextLineNo) + offset;
-				
+				// logging.info(this, "found startPosition " + startPosition);
 			}
 
 			try {
@@ -909,7 +909,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 
 		boolean hasFound() {
-			
+			// logging.info(this, "hasFound " + found);
 			return found;
 		}
 
@@ -940,7 +940,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 
 		void forward(int iStart, char startC, char endC) {
-			
+			// logging.info(this, "treating line " + s + " we start at " + iStart);
 			this.iStart = iStart;
 			iEnd = iStart;
 			finish = false;
@@ -961,7 +961,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 			contentStart++;
 
-			
+			// contentEnd = s.indexOf(endC, contentStart);
 
 			contentEnd = findContentEnd();
 
@@ -973,7 +973,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			iEnd = contentEnd;
 			iEnd++;
 
-			
+			// logging.info(this, "forward, found content " + content + " iEnd " + iEnd);
 
 		}
 
@@ -991,7 +991,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	protected void parse() {
-		
+		// logging.info(this, "parse lines.length " + lines.length);
 		char levC = '0';
 		int lev = 0;
 		maxExistingLevel = 0;
@@ -1032,7 +1032,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			nextBlock.forward(nextStartI, '[', ']');
 
 			if (nextBlock.hasFound()) {
-				
+				// logging.info(this, "parse found part " + infoPart);
 
 				nextStartI = nextBlock.getIEnd() + 1;
 
@@ -1044,14 +1044,14 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			}
 
 			if (nextBlock.hasFound()) {
-				
+				// logging.info(this, "parse found part " + infoPart);
 
 				nextStartI = nextBlock.getIEnd() + 1;
 				nextBlock.forward(nextStartI, '[', ']');
 			}
 
 			if (nextBlock.hasFound()) {
-				
+				// logging.info(this, "parse found part " + infoPart);
 				type = nextBlock.getContent();
 
 				typeIndex = typesList.indexOf(type);
@@ -1065,7 +1065,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		}
 
-		
+		// logging.info(this, "parse result types " + typesList);
 		adaptComboType();
 
 	}
@@ -1098,7 +1098,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		if (s == null)
 			logging.info(this, "Setting text");
 		lines = s.split("\n");
-		
+		// logging.debug(this, " lines length " + lines.length);
 		parse();
 		if (lines.length > 1) {
 			showLevel = produceInitialMaxShowLevel();
@@ -1226,7 +1226,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+		// logging.info(this, "ActionEvent " + e);
 		if (e.getSource() == buttonSearch) {
 			search();
 		} else if (e.getSource() == jComboBoxSearch) {
@@ -1273,7 +1273,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		// next occurrence. Highlights are added for all
 		// occurrences found.
 		public int search(String word) {
-			
+			// logging.info(this, "search");
 			int firstOffset = -1;
 			int returnOffset = lastReturnedOffset;
 			Highlighter highlighter = comp.getHighlighter();

@@ -93,11 +93,11 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		 * {
 		 * case PopupMenuTrait.POPUP_RELOAD:
 		 * reload();
-		 * 
+		 * //actor.reloadData();
 		 * break;
 		 * 
 		 * case PopupMenuTrait.POPUP_SAVE:
-		 * 
+		 * //actor.saveData();
 		 * break;
 		 * }
 		 * 
@@ -112,16 +112,16 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
-				
+				// logging.info(this, "action popup " + p);
 
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-					
+					// actor.reloadData();
 					break;
 
 				case PopupMenuTrait.POPUP_SAVE:
-					
+					// actor.saveData();
 					break;
 
 				case PopupMenuTrait.POPUP_ADD:
@@ -129,7 +129,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 					break;
 
 				case PopupMenuTrait.POPUP_DELETE:
-					
+					// actor.deleteData();
 					deleteUser();
 					break;
 
@@ -143,16 +143,16 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
-				
+				// logging.info(this, "action popup " + p);
 
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-					
+					// actor.reloadData();
 					break;
 
 				case PopupMenuTrait.POPUP_SAVE:
-					
+					// actor.saveData();
 					break;
 
 				case PopupMenuTrait.POPUP_ADD:
@@ -169,16 +169,16 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
-				
+				// logging.info(this, "action popup " + p);
 
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-					
+					// actor.reloadData();
 					break;
 
 				case PopupMenuTrait.POPUP_SAVE:
-					
+					// actor.saveData();
 					break;
 
 				case PopupMenuTrait.POPUP_ADD:
@@ -186,7 +186,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 					break;
 
 				case PopupMenuTrait.POPUP_DELETE:
-					
+					// actor.deleteData();
 					deleteUser();
 					break;
 
@@ -200,16 +200,16 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
-				
+				// logging.info(this, "action popup " + p);
 
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-					
+					// actor.reloadData();
 					break;
 
 				case PopupMenuTrait.POPUP_SAVE:
-					
+					// actor.saveData();
 					break;
 
 				case PopupMenuTrait.POPUP_ADD:
@@ -276,9 +276,9 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		 * @Override
 		 * protected void maybeShowPopup(MouseEvent e) {
 		 * if (e.isPopupTrigger()) {
-		 * 
+		 * //int selRow = tree.getRowForLocation(e.getX(), e.getY());
 		 * TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-		 * 
+		 * //logging.info(this, " sel path " + selPath);
 		 * //if(selRow % 2 == 0) //test
 		 * if ( selPath != null && !isUserPath( selPath ) && !isRolePath( selPath,
 		 * false) && !isRolePath( selPath, true) )
@@ -289,14 +289,14 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		 * tree.addMouseListener(popupListener0);
 		 */
 
-		
+		// popupForUserpathes.add( popupItemDeleteEntry );
 
 		MouseListener popupListenerForUserpathes = new utils.PopupMouseListener(popupForUserpathes) {
 			@Override
 			protected void maybeShowPopup(MouseEvent e) {
 				if (e.isPopupTrigger()) {
 					TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-					
+					// logging.info(this, " sel path " + selPath);
 					if (selPath != null && isUserPath(selPath))
 						super.maybeShowPopup(e);
 				}
@@ -524,13 +524,13 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		// partial reload
 		PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 		buildUserConfig();
-		
+		// rebuildTree();
 		persist.hostConfigsRequestRefresh();
 		persist.configOptionsRequestRefresh();
 		super.reload();
 
-		
-		
+		// configed.cm.setNetworkconfigurationPage();
+		// configed.cm.reload();
 
 	}
 
@@ -580,19 +580,19 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 		JPanel addPanel = new JPanel();
 		addPanel.setBackground(Color.YELLOW);
-		
+		// f.setAdditionalPane( addPanel );
 
-		
+		// f.setCenterPaneInScrollpane( centerPanel );
 		f.setCenterPane(centerPanel);
 
-		
+		// f.setAdditionalPane( addPanel );
 
 		f.setupLayout();
 		f.setSize(new Dimension(500, 400));
 		f.setVisible(true);
 
 		logging.info(this, "addUser finished, result " + f.getResult());
-		
+		// System.exit(0);
 
 		if (f.getResult() == 1) {
 			logging.info(this, "addUser ok");
@@ -673,12 +673,12 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 		JPanel addPanel = new JPanel();
 		addPanel.setBackground(Color.YELLOW);
-		
+		// f.setAdditionalPane( addPanel );
 
-		
+		// f.setCenterPaneInScrollpane( centerPanel );
 		f.setCenterPane(centerPanel);
 
-		
+		// f.setAdditionalPane( addPanel );
 
 		f.setupLayout();
 		f.setSize(new Dimension(500, 400));
@@ -687,11 +687,11 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 	}
 
 	protected void deleteUser() {
-		
-		
+		// logging.info(this, "delete " + mapTableModel.getKeys());
+		// logging.info(this, "delete " + mapTableModel.getData());
 		javax.swing.tree.TreePath p = tree.getSelectionPath();
 
-		
+		// actor.deleteData();
 		if (p != null) {
 			logging.info(this, "deleteUser path " + p);
 
@@ -705,7 +705,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 			String key = keyB.toString();
 			logging.info(this, "deleteUser, selected user key " + key);
 			// logging.info(this, "deleteUser, selected entry " + partialPanels.get( key
-			
+			// ).getTableModel());
 			Vector<String> propertyNames = partialPanels.get(key).getNames();
 			logging.info(this, "deleteUser, property names " + propertyNames);
 			for (String name : propertyNames) {
@@ -718,7 +718,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 			tree.setExpandsSelectedPaths(true);
 			tree.setSelectionInterval(row, row);
-			
+			// tree.removeSelectionInterval(row, row);
 			tree.scrollRowToVisible(row);
 		}
 	}

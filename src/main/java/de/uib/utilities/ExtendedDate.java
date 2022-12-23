@@ -45,7 +45,7 @@ public class ExtendedDate {
 			if (value.equalsIgnoreCase(infiniteImport) || value.equalsIgnoreCase(sINFINITE)) {
 				sDate = sINFINITE;
 			} else {
-				
+				// date = new java.sql.Timestamp(new Date().getTime());
 				// extend
 
 				if (value.indexOf(' ') == -1) {

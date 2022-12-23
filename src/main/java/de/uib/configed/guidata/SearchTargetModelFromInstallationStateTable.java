@@ -54,7 +54,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	@Override
 	public int getColumnCount() {
-		
+		// logging.info(this, "getColumnCount retrieves model " + getTableModel());
 		// if (getTableModel() == null)
 		// return 0;
 
@@ -123,11 +123,11 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	@Override
 	public void ensureRowIsVisible(int row) {
-		
-		
+		// int viewrow = table.convertRowIndexToView(row);
+		// int modelrow = table.convertRowIndexToModel(row);
 		table.scrollRectToVisible(table.getCellRect(row, 0, false));
 
-		
+		// setCursorRow( row );
 	}
 
 	// TODO; implement this ?
@@ -147,7 +147,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 		}
 
 		table.setRowSelectionInterval(row, row);
-		
+		// logging.debug(" --- view row selected " + row);
 		ensureRowIsVisible(row);
 	}
 
@@ -159,7 +159,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 			return;
 
 		table.addRowSelectionInterval(row, row);
-		
+		// logging.debug(" --- view row selected " + row);
 		ensureRowIsVisible(row);
 	}
 
@@ -186,7 +186,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	@Override
 	public void setFiltered(boolean b) {
-		
+		// logging.info(this, "setFiltered " + b + " it was filtered " + filtered);
 
 		// if (b == filtered)
 		// return;
@@ -195,7 +195,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 			viewRowfilter = table.getSelectedRows();
 
 		// logging.info(this, "setFiltered " + b + " viewRowfilter "
-		
+		// + java.util.Arrays.toString( viewRowfilter ));
 
 		if (b && viewRowfilter.length > 0) {
 			int[] modelRowFilter = new int[viewRowfilter.length];
@@ -215,7 +215,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 			 * 
 			 * model.setUsingFilter( FILTER_BY_SELECTION, true);
 			 * model.reset();
-			 * 
+			 * //setSelection( viewRowfilter );
 			 * table.getSelectionModel().setSelectionInterval(0, model.getRowCount());
 			 */
 
@@ -224,7 +224,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 			/*
 			 * model.setUsingFilter( FILTER_BY_SELECTION, false);
-			 * 
+			 * //((AbstractTableModel) table.getModel()).fireTableDataChanged();
 			 * setSelection( viewRowfilter ); //restore the original selection
 			 */
 		}

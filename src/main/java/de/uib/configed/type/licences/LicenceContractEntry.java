@@ -29,7 +29,7 @@ public class LicenceContractEntry extends StringValuedRelationElement {
 	@Override
 	protected void produceFrom(Map<String, ? extends Object> map) {
 		super.produceFrom(map);
-		
+		// logging.info(this, "produceFrom " + map);
 		put(Table_LicenceContracts.idDBKEY, get(Table_LicenceContracts.idKEY));
 		remove(Table_LicenceContracts.typeKEY);
 		remove(Table_LicenceContracts.identKEY);
@@ -39,7 +39,7 @@ public class LicenceContractEntry extends StringValuedRelationElement {
 		put(Table_LicenceContracts.notificationDateKEY, removeTime(get(Table_LicenceContracts.notificationDateKEY)));
 		put(Table_LicenceContracts.expirationDateKEY, removeTime(get(Table_LicenceContracts.expirationDateKEY)));
 
-		
+		// logging.info(this, "produceFrom result " +this);
 	}
 
 	public String getId() {

@@ -23,7 +23,7 @@ public class FWakeClients extends FShowList {
 		setMessage("");
 		setButtonsEnabled(true);
 		this.persist = persist;
-		
+		// glassTransparency(true, 1000, 200, 0.04f);
 	}
 
 	public void act(String[] selectedClients, int delaySecs) {
@@ -41,8 +41,8 @@ public class FWakeClients extends FShowList {
 				maxSize = hostSeparationByDepots.get(depot).size();
 		}
 
-		
-		
+		// Cursor oldCursor = getCursor();
+		// setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
 		int turn = 0;
 		while (turn < maxSize && !cancelled) {
@@ -71,15 +71,15 @@ public class FWakeClients extends FShowList {
 					}
 
 					// logging.info(this, "act , hostSeparationByDepots.get(depot) " +
-					
+					// hostSeparationByDepots.get(depot));
 					// logging.info(this, "act , counterByDepots.get(depot) " +
-					
+					// counterByDepots.get(depot));
 
 					if (executionerForDepots.get(depot) != Executioner.NONE) {
 						String host = hostSeparationByDepots.get(depot).get(turn);
-						
+						// appendLine("trying to start up " + host + " in depot " + depot);
 						// appendLine(String.format("trying to start up %4s %s from depot %s ", turn,
-						
+						// host, depot));
 						String line = String.format("trying to start up   %s    from depot    %s  ", host, depot);
 						appendLine(line);
 						logging.info(this, "act: " + line);
@@ -125,7 +125,7 @@ public class FWakeClients extends FShowList {
 		 * }
 		 */
 
-		
+		// setCursor(oldCursor);
 		jButton1.setText(configed.getResourceValue("FWakeClients.close"));
 	}
 

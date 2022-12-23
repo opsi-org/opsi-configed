@@ -11,11 +11,11 @@ public class UserOpsipermission extends UserConfigModule {
 	// public enum HostTypeOfPrivilege{ ALL, CLIENT, DEPOT, SERVER }
 	// permit restrictable action
 	// public List<Object> reduceList( List<Object> checkList )
-	
-	
+	// public String getInfo();
+	// public String signalCause();
 
-	
-	
+	// public ActionPrivilege allowsAction();
+	// public HostTypeOfPrivilege isFor();
 
 	public enum ActionPrivilege {
 		READ_ONLY, READ_WRITE
@@ -114,7 +114,7 @@ public class UserOpsipermission extends UserConfigModule {
 		DEFAULT = new UserOpsipermission(UserConfig.ARCHEO_ROLE_NAME);
 
 		// logging.info(" PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY " +
-		
+		// PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY);
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY, false);
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_SERVER_READWRITE, true);
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED, false);

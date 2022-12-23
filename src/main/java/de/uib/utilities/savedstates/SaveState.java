@@ -12,7 +12,7 @@ public abstract class SaveState {
 		this.key = key;
 		this.defaultValue = defaultValue;
 		this.states = states;
-		 //for classifiedpropertiesstore
+		// states.addKey(key, ""); //for classifiedpropertiesstore
 	}
 
 	public void setDefaultValue(Object val) {

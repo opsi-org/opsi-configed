@@ -98,12 +98,12 @@ public class SSHCompletionComboButton {
 			defaultvalues.addElement(combobox_default_path);
 			defaultvalues.addElement(root);
 			defaultvalues.addElement(opsiRepo);
-			
+			// defaultvalues.addElement(opsiVarRepository);
 		} else {
 			defaultvalues = new Vector<>();
 			defaultvalues.addElement(opsiRepo);
 			defaultvalues.addElement(root);
-			
+			// defaultvalues.addElement(opsiVarRepository);
 		}
 		// Is element in defaultValues?
 		if (defvalues != null)
@@ -297,7 +297,7 @@ public class SSHCompletionComboButton {
 			for (String item : result.split("\n")) {
 				logging.debug(this, "setItems add " + item);
 				if (item.contains("//"))
-					combobox.addItem(item.replace("
+					combobox.addItem(item.replace("//", "/"));
 				else
 					combobox.addItem(item); // .replace("//", "/")
 			}
@@ -349,9 +349,9 @@ public class SSHCompletionComboButton {
 				if ((!basicPath.equals("")) && (!getText.equals(""))) // könnte eigtl raus. funktiniert sonst aber nicht...
 				{
 					if (basicPath.contains("//"))
-						basicPath = basicPath.replaceAll("
+						basicPath = basicPath.replaceAll("//", "/");
 					if (getText.contains("//"))
-						getText = getText.replaceAll("
+						getText = getText.replaceAll("//", "/");
 
 					if (getText.equals(basicPath) || autocompletion.contains_in_defaults(getText)) {
 						logging.debug(this, "getListCellRendererComponent colorize(" + getText + ") = true");

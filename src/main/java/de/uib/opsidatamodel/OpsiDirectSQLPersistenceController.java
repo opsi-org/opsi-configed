@@ -110,10 +110,10 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 		String query = "select " + columns + " from PRODUCT_ON_CLIENT " + " where  productType = 'LocalbootProduct'"
 				+ " AND \n" + " ( " + giveWhereOR("clientId", clientIds) + ") ";
 
-		
-		
+		// logging.debug(query);
+		// System.exit(0);
 
-		
+		// TimeCheck timer= new TimeCheck(this, "getLocalBootProductStatesNOM").start();
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 
@@ -150,7 +150,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			logging.error("getLocalBootProductStatesNOM sql Error " + e.toString());
 		}
 
-		
+		// timer.stop();
 
 		return result;
 	}
@@ -269,7 +269,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 		logging.info(this, "cleanUpAuditSoftware  idents in SOFTWARE not on CLIENTS " + swIdentsOnlyInSoftware.size());
 		// logging.info(this, "cleanUpAuditSoftware idents in SOFTWARE not on CLIENTS "
-		
+		// + rowsSOFTWARE_ON_CLIENTS.get("LHCommon.NET 9.60;9.60.344;;;x86"));
 
 		int sizeOfAllRemoves = swIdentsOnlyInSoftware.size();
 
@@ -317,7 +317,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			condition.append(" false ");
 
 			// logging.debug(this, "cleanUpAuditSoftware idents in SOFTWARE not on CLIENTS
-			
+			// cleaning condition " + condition);
 
 			logging.info(this, "cleanUpAuditSoftware, delete SOFTWARE records");
 			query = "delete  from SOFTWARE where " + condition.toString();

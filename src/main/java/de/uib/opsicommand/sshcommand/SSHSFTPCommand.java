@@ -43,37 +43,37 @@ public abstract interface SSHSFTPCommand {
 	public void setOverwriteMode(boolean o);
 	// // private SSHCommand instance;
 	// /** @return command String to execute **/
-	
-	
-	
-	
+	// public abstract String getCommand();
+	// public abstract String getSecuredCommand();
+	// // public abstract boolean hasSecureInfoInCommand();
+	// public abstract String getSecureInfoInCommand();
 
 	// /** @return raw command String **/
-	
+	// public abstract String getCommandRaw();
 	// /** @returnlist of parameter-Ersatz **/
-	
+	// public abstract ArrayList<String> getParameterList();
 	// /** @return True if command need sudo **/
-	
+	// public abstract boolean needSudo();
 	// /** @return command id String **/
-	
-	
+	// public abstract String getId();
+	// // public abstract String getBasicName();
 	// /** @return command menu text String **/
-	
+	// public abstract String getMenuText();
 	// /** @return command parent menu text String **/
-	
+	// public abstract String getParentMenuText();
 	// /** @return command tooltip text String **/
-	
+	// public abstract String getToolTipText();
 	// /** @return command priority int **/
-	
-	
+	// public abstract int getPriority();
+	// public void setCommand(String c);
 
 	// /** @return True if command needs an parameter gui **/
-	
+	// public abstract boolean needParameter();
 	// /** @return True if command is a multicommand **/
-	
-	
+	// public abstract boolean isMultiCommand();
+	// // public abstract int getHelpColumns();
 	// /** @return the command dialog(parameter)**/
-	
+	// public abstract FGeneralDialog getDialog();
 
-	
+	// public abstract String get_ERROR_TEXT();
 }

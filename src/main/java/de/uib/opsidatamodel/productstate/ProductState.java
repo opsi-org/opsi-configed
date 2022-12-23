@@ -20,7 +20,7 @@ public class ProductState extends HashMap<String, String> {
 
 	public static final List<String> SERVICE_KEYS = new ArrayList<>();
 	static {// from 30_configed.conf
-		SERVICE_KEYS.add("modificationTime"); 
+		SERVICE_KEYS.add("modificationTime"); // lastStateChange");
 		SERVICE_KEYS.add("productId");
 		SERVICE_KEYS.add("productVersion");
 		SERVICE_KEYS.add("packageVersion");
@@ -47,7 +47,7 @@ public class ProductState extends HashMap<String, String> {
 		DB_COLUMNS.put("actionProgress", "VARCHAR(255)");
 		DB_COLUMNS.put("actionResult", "VARCHAR(16)");
 
-		DB_COLUMNS.put("modificationTime", "TIMESTAMP"); 
+		DB_COLUMNS.put("modificationTime", "TIMESTAMP"); // lastStateChange");
 	}
 
 	public static final List<String> DB_COLUMN_NAMES = new ArrayList<>(DB_COLUMNS.keySet());
@@ -136,7 +136,7 @@ public class ProductState extends HashMap<String, String> {
 	}
 
 	private void readRetrieved() {
-		
+		// logging.debug(this, "retrieved " + retrievedState);
 
 		put(KEY_productId, getRetrievedValue(key2servicekey.get(KEY_productId)));
 
@@ -164,7 +164,7 @@ public class ProductState extends HashMap<String, String> {
 		if (retrieved == null) {
 			setDefaultValues();
 		} else {
-			readRetrieved();
+			readRetrieved();// retrievedState);
 		}
 
 		if (transform)
@@ -182,7 +182,7 @@ public class ProductState extends HashMap<String, String> {
 	}
 
 	private void setTransforms() {
-		
+		// logging.debug(this, "setTransforms on " + this);
 
 		// format
 		/*
@@ -234,7 +234,7 @@ public class ProductState extends HashMap<String, String> {
 				installationInfo.append(ActionResult.getDisplayLabel(result.getVal()));
 			}
 			// else
-			
+			// installationInfo.append(" ");
 
 			if (lastAction.getVal() > 0) {
 				installationInfo.append(" (");
@@ -247,11 +247,11 @@ public class ProductState extends HashMap<String, String> {
 
 		String versionInfo = "";
 		// logging.debug(this, "setTransforms get(KEY_productVersion) "
-		
+		// +get(KEY_productVersion));
 		if (!get(KEY_productVersion).equals(""))
 			versionInfo = get(KEY_productVersion) + Globals.ProductPackageVersionSeparator.forDisplay()
 					+ get(KEY_packageVersion);
-		
+		// logging.debug(this, "setTransforms version info " + versionInfo);
 		put(KEY_versionInfo, versionInfo);
 
 	}

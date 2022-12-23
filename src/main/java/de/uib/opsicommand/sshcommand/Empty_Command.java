@@ -83,11 +83,11 @@ public class Empty_Command implements SSHCommand {
 
 	public Empty_Command(String c) {
 		// position = factory.position_default;
-		
+		// setId(id);
 		setCommand(c);
 		getParameterList();
-		
-		
+		// setMenuText(mt);
+		// setNeedSudo(ns);
 	}
 
 	/**
@@ -254,7 +254,7 @@ public class Empty_Command implements SSHCommand {
 		logging.debug(this, "searchPlaceholder found " + tmp_1 + splitted_text + tmp_2);
 		myTmpCommand = myTmpCommand.replace(tmp_1 + splitted_text + tmp_2, "");
 		logging.debug(this, "searchPlaceholder myCommand_tmp " + myTmpCommand);
-		
+		// logging.debug("my com now: : " + myTmpCommand);
 		return tmp_1 + splitted_text + tmp_2;
 	}
 

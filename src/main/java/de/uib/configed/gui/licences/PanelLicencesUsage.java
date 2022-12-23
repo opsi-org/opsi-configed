@@ -76,7 +76,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 		panelGetAndAssignSL = new javax.swing.JPanel();
 		labelGetAndAssignSL = new javax.swing.JLabel(
 				configed.getResourceValue("ConfigedMain.Licences.Usage.LabelAssignLicense"));
-		
+		// comboClient = new javax.swing.JComboBox();
 		comboClient = new de.uib.utilities.swing.DynamicCombo();
 		comboClient.setFont(Globals.defaultFontBig);
 		comboClient.setPreferredSize(new java.awt.Dimension(200, 20));
@@ -117,9 +117,9 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 
 	private void initComponents() {
 
-		
+		// testfield = new JTextField(" ");
 
-		
+		// logging.debug( "--------- init PanelLicencesUsage");
 
 		panelUsage = new PanelGenEditTable(configed.getResourceValue("ConfigedMain.Licences.SectiontitleUsage"), 0,
 				true, 0, false, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
@@ -134,11 +134,11 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 
 		// panelKeys = new
 		// PanelGenEditTable(configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceUsable"),
-		
+		// 0, false, 0);
 
 		// panelWindowsSoftwareIds = new
 		// PanelGenEditTable(configed.getResourceValue("ConfigedMain.Licences.SectiontitleWindowsSoftwareIDs"),
-		
+		// 0, false, -1);
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 

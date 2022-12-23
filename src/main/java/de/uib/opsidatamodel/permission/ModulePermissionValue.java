@@ -50,7 +50,7 @@ public class ModulePermissionValue {
 	 */
 
 	private Boolean checkBoolean(Object ob) {
-		
+		// logging.info(this, "checkBoolean " + ob);
 		Boolean result = null;
 
 		if (ob instanceof Boolean) {
@@ -64,7 +64,7 @@ public class ModulePermissionValue {
 				result = sValue.equalsIgnoreCase("yes");
 		}
 
-		
+		// logging.info(this, "checkBoolean " +result);
 
 		return result;
 	}

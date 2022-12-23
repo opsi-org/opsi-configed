@@ -34,23 +34,23 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 			return;
 		}
 
-		
+		// selectionInfo = new HashMap<>();
 		selectionInfo = new HashMap<>();
 
 		for (int i : modelRowNoFilter) {
 			if (i >= rows.size())
 				logging.warning(this, "setFilter: impossible selection index " + i);
 			else
-				
+				// selectionInfo.put( Globals.pseudokey( rows.get(i) ), true );
 				selectionInfo.put(rows.get(i), true);
 		}
 
-		
+		// logging.info(this, "setFilter we have got selectionInfo " + selectionInfo);
 	}
 
 	@Override
 	public boolean test(Vector<Object> row) {
-		
+		// logging.info(this, "row " + row + " selectionInfo " + selectionInfo );
 
 		if (selectionInfo == null)
 			return true;
@@ -58,7 +58,7 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 		// Boolean found = selectionInfo.get( Globals.pseudokey(row) )
 		// ;
 		Boolean found = selectionInfo.get(row);
-		
+		// logging.info(this, "row " + row + " selectionInfo found row " + found);
 		if (found == null)
 			return false;
 

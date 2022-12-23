@@ -30,19 +30,19 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 	public boolean doesMatch(Client client) {
 		logging.debug(this, "doesMatch starting");
 		OpsiDataClient oClient = (OpsiDataClient) client;
-		
+		// logging.debug(this, "doesMatch " + oClient);
 		List softwareSet = oClient.getSoftwareList();
 		List<String> theProductNames = oClient.getProductNames();
 		TreeSet<String> productsWithDefaultValues_client = new TreeSet<>(productsWithDefaultValues);
-		
+		// logging.debug(this, "doesMatch " + softwareSet);
 		// logging.debug(this, "doesMatch productsWithDefaultValues_client " +
-		
-		
+		// productsWithDefaultValues_client);
+		// logging.debug(this, "doesMatch theProductNames " + theProductNames);
 		productsWithDefaultValues_client.removeAll(theProductNames);
 		// logging.debug(this, "doesMatch productsWithDefaultValues " +
-		
+		// productsWithDefaultValues_client);
 
-		
+		// logging.debug(this, "Child: " + getChildOperations().get(0) );
 
 		for (Object value : softwareSet) {
 			if (value instanceof Map) {

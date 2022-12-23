@@ -61,19 +61,19 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 				if (imagesBase != null) {
 					if (key != null && stringval != null) {
 						String imageFileString = imagesBase + "/" + key + ".png";
-						
+						// logging.info(this, "key " + key + ", image file " + imageFileString);
 
 						image = Globals.createImageIcon(imageFileString, stringval);
-						
+						// logging.info(this, "image found " + (image != null));
 
 						if (image == null)
 						// try with gif
 						{
 							imageFileString = imagesBase + "/" + stringval + ".gif";
-							
+							// logging.info(this, " image file " + imageFileString);
 
 							image = Globals.createImageIcon(imageFileString, stringval);
-							
+							// logging.info(this, "image found " + (image != null));
 						}
 
 						if (image != null)
