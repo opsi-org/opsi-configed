@@ -74,7 +74,7 @@ public class FEditList extends FEditObject
 		this.tracker = tracker;
 		this.celleditor = celleditor;
 
-		visibleList = new JList<>(); // new String[]{"a","b","c"});
+		visibleList = new JList<>(); 
 		visibleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		visibleList.addListSelectionListener(this);
 		visibleList.setCellRenderer(new StandardListCellRenderer());

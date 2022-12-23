@@ -135,9 +135,9 @@ public class SSHConnectTerminal extends SSHConnect {
 				logging.info(this, "Connect");
 
 				// a hack for MS-DOS prompt on Windows.
-				// channel.setInputStream(new FilterInputStream(System.in){
+				
 
-				// channel = setChannels(new FilterInputStream(System.in){
+				
 
 				// new MyOutputPrinter(dialog, System.out)
 
@@ -306,7 +306,7 @@ public class SSHConnectTerminal extends SSHConnect {
 						((Component) textField).requestFocusInWindow();
 					}
 
-					// exec(new String(new byte[] {3}) +"\n");
+					
 
 					// dialog.getInputField().setText("");
 
@@ -354,7 +354,7 @@ public class SSHConnectTerminal extends SSHConnect {
 
 		// // String pwd = ssh.exec(new Empty_Command("pwd" ), false, null, true,
 		// false).replace("\n", "");
-		// try {
+		
 
 		// // exec("pwd\n");
 

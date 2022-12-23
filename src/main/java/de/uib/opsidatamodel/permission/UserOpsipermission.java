@@ -8,7 +8,7 @@ import java.util.LinkedHashSet;
 import de.uib.utilities.logging.logging;
 
 public class UserOpsipermission extends UserConfigModule {
-	// public enum HostTypeOfPrivilege{ ALL, CLIENT, DEPOT, SERVER }
+	
 	// permit restrictable action
 
 	public enum ActionPrivilege {

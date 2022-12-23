@@ -55,14 +55,14 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 		 * {
 		 * //giving back existing instance does not work, probably because of threading
 		 * problems
-		 * //SwingUtilities.invokeLater( new Runnable(){
+		 * 
 		 * 
 		 * 
 		 * instance.append( "SSHConnectionExecDialog " + new java.util.Date() + "\n" );
 		 * 
 		 * 
 		 * 
-		 * //}
+		 * 
 		 * 
 		 * }
 		 * else

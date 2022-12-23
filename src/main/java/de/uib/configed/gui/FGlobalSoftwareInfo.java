@@ -84,7 +84,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	/*
 	 * @Override
 	 * protected void initScrollPane()
-	 * //we do NOT activate the scroll pane}
+	 * 
 	 * //therefore override with nothing
 	 * {
 	 * }

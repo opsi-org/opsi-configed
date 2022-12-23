@@ -92,7 +92,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected Highlighter highlighter;
 	protected final StyleContext styleContext;
 	protected final Style[] logLevelStyles;
-	// public static Object[] levels = new Object[] {MIN_LEVEL, "up to 2", "up to
+	
 	// 3", "up to 4", "up to 5", "up to 6", "up to 7", "up to 8", "ALL"};
 	public Integer[] levels = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 	public List<Integer> levelList = Arrays.asList(levels);

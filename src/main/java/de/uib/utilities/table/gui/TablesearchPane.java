@@ -513,7 +513,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				searchNextRow(selectMode);
 		});
 
-		// comboSearchFields = new JComboBox<>(new String[]{"alle Felder"});
+		
 
 		comboSearchFields = new JComboBox<>(new String[] { configed.getResourceValue("SearchPane.search.allfields") });
 		comboSearchFields.setPreferredSize(Globals.lowerButtonDimension);
@@ -1080,7 +1080,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		targetModel.clearSelection();
 		searchTheRow(0, true);
 
-		// new Thread(){
+		
 
 		{
 			int startFoundrow = foundrow;
@@ -1199,7 +1199,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		// final de.uib.utilities.thread.WaitCursor waitCursor = new
 		// de.uib.utilities.thread.WaitCursor(fieldSearch, "TablesearchPane");
 
-		// new Thread(){ //destroys search of all
+		
 
 		{
 

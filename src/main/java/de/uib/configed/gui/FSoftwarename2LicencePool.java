@@ -125,7 +125,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 				true, // editing,
 				0, true // switchLineColors
 				, new int[] { PanelGenEditTable.POPUP_RELOAD },
-				// PanelGenEditTable.POPUP_SAVE, PanelGenEditTable.POPUP_CANCEL },
+				
 				// PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF,
 				false // searchpane
 		) {
@@ -403,7 +403,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			logging.info(this, "init modelSWnames");
 			this.modelSWnames = new GenTableModel(null, // no updates
 					new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-							// new MapRetriever(){
+							
 
 							() -> (Map) persist.getInstalledSoftwareName2SWinfo())
 					// ,

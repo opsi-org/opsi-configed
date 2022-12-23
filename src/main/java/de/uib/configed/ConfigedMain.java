@@ -342,7 +342,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected int saveDepotsViewIndex = VIEW_PRODUCT_PROPERTIES;
 	protected int saveServerViewIndex = VIEW_NETWORK_CONFIGURATION;
 
-	// public enum MainTabState {CLIENT_SELECTION, LOCALBOOT_PRODUCTS,
+	
 
 	protected Map<String, Object> reachableInfo = new HashMap<>();
 	protected Map<String, String> sessionInfo = new HashMap<>();
@@ -789,7 +789,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		login(savedServers);
 	}
 
-	// try {
+	
 
 	protected void initData() {
 
@@ -1150,11 +1150,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// List<String> allHosts =
 
-	// for (final String host : allHosts) {
+	
 
-	// try {
+	
 
-	// SwingUtilities.invokeLater(new Thread() {
+	
 
 	public void handleLicencesManagementRequest() {
 		logging.info(this, "handleLicencesManagementRequest called");
@@ -2076,7 +2076,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			treeClients.produceTreeForALL(allPCs);
 
-			// String[]{"fscnoteb1.uib.local"});
+			
 			treeClients.produceAndLinkGroups(persist.getHostGroups());
 
 			logging.info(this, "------------ buildPclistTableModel, permittedHostGroups " + permittedHostGroups);
@@ -2111,7 +2111,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				treeClients.produceTreeForALL(allPCs);
 
-				// String[]{"fscnoteb1.uib.local"});
+				
 
 				logging.info(this, "----------- buildPclistTableModel, directly allowed groups "
 						+ treeClients.getDirectlyAllowedGroups());
@@ -5286,7 +5286,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 							else
 
-								sessionInfo = persist.sessionInfo(null); // new String[]{"vbrupertwin7-64.uib.local"});
+								sessionInfo = persist.sessionInfo(null); 
 
 							sessioninfoFinished = true;
 
@@ -5750,7 +5750,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			fListFeedback.setVisible(true);
 			fListFeedback.glassTransparency(true, 800, 200, 0.04f);
 
-			// SwingUtilities.invokeLater( new Thread(){
+			
 
 			List errors = getErrors();
 
@@ -6107,7 +6107,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			dialogRemoteControl
 					.setListModel(new DefaultComboBoxModel<>(new Vector<>(new TreeSet<>(remoteControls.keySet()))
-					// new String[]{"xx"}
+					
 					));
 
 			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, null, -1, false, ""));

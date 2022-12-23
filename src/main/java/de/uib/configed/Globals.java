@@ -296,7 +296,7 @@ public class Globals {
 			"opsiconfd" };
 	public static final int[] maxLogSizes = new int[] { 4 * 1024 * 1024, 8 * 1024 * 1024, 8 * 1024 * 1024, 0,
 			1 * 1024 * 1024 };
-	// public static final int[] maxLogSizes = new int[]{3*1024*1024, 3*1024*1024,
+	
 
 	// be given
 

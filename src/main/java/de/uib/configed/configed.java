@@ -115,19 +115,19 @@ public class configed {
 					"Set logging level L, L is a number >= " + logging.LEVEL_NONE + ", <= " + logging.LEVEL_SECRET
 							+ " . DEFAULT: " + de.uib.utilities.logging.logging.LOG_LEVEL_CONSOLE },
 			new String[] { "--halt", "", "Use  first occurring debug halt point that may be in the code" },
-			// new String[]{"--sqlgethashes", "", "Use sql statements with getHashes where
+			
 			// implemented in PersistenceController "},
 			new String[] { "--sqlgetrows", "", "Force use sql statements by getRawData" },
 			new String[] { "--nosqlrawdata", "", "Avoid getRawData" },
-			// new String[]{"--synced", "", "Load table first and do only sync afterwards
+			
 			// "},
-			// new String[]{"--dblocal", "", "Tries to make use of an embedded local
+			
 			// database "},
-			// new String[]{"--dblocalnew", "", "Tries to make use of an embedded local
+			
 			// database after renewing it"},
-			// new String[]{"--sqldirect", "", "Use direct sql access if possible in
+			
 			// PersistenceController "}
-			// new String[]{"--sqldirect-cleanup-auditsoftware", "", "Use direct sql access
+			
 			// if possible in PersistenceController "},
 			new String[] { "--localizationfile EXTRA_LOCALIZATION_FILENAME", "",
 					"For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: "
@@ -140,7 +140,7 @@ public class configed {
 					"export csv swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)" }
 
 			// undocumented
-			// new String[]{"--me", "--testPersistenceControllerMethod", ""}
+			
 
 	};
 
@@ -782,7 +782,7 @@ public class configed {
 
 				// //Linux, we assume that there is a firefox and it will handle the url
 
-				// String[] cmdarray = new String[] { "firefox", messagefile.getPath() };
+				
 
 			}
 		} catch (IOException ex) {
