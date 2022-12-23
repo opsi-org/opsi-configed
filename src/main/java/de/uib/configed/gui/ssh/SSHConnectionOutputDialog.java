@@ -241,7 +241,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 
 			// createLayout(konsolePanelLayout, jScrollPane,Globals.gapSize,
 			
-			// createLayout(mainPanelLayout, inputPanel,0,0, false);
+			
 		} catch (Exception e) {
 			logging.warning(this, "initOutputGui, exception occurred", e);
 		}

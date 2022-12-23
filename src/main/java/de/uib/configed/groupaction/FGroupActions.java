@@ -163,9 +163,9 @@ public class FGroupActions extends SecondaryFrame {
 
 	private void defineImageActionPanel(JPanel panel) {
 		JLabel labelCombo = new JLabel(configed.getResourceValue("FGroupAction.existingImages"));
-		// labelCombo.setPreferredSize(new Dimension(200, Globals.lineHeight));
+		
 		comboSelectImage = new JComboBox<>();
-		// comboSelectImage.setPreferredSize(new Dimension(200, Globals.lineHeight));
+		
 
 		JLabel topicLabel = new JLabel(configed.getResourceValue("FGroupAction.replayImage"));
 
@@ -176,7 +176,7 @@ public class FGroupActions extends SecondaryFrame {
 
 		IconButton buttonReload = new IconButton(configed.getResourceValue("FGroupAction.buttonReload"),
 				"images/reload16.png", "images/reload16_over.png", "images/reload16_disabled.png", true);
-		// buttonReload.setPreferredSize(new Dimension(60, 40));
+		
 		
 
 		buttonReload.addActionListener(actionEvent -> reload());

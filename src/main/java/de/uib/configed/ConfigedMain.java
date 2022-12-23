@@ -873,7 +873,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (!editableDomains.contains(opsiDefaultDomain))
 			editableDomains.add(opsiDefaultDomain);
 
-		// System.exit(0);
+		
 
 		localbootProductnames = persist.getAllLocalbootProductNames();
 		netbootProductnames = persist.getAllNetbootProductNames();
@@ -890,7 +890,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			savedSearchesDialog.resetModel();
 		}
 
-		// System.exit(0);
+		
 
 		productGroups = persist.getProductGroups();
 		productGroupMembers = persist.getFProductGroup2Members();
@@ -922,7 +922,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		persist.getInstalledSoftwareInformation();
 
-		// persist.getClient2Software();
+		
 
 		dataReady = true;
 		waitCursor.stop();
@@ -1181,13 +1181,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// List<String> allHosts =
 
 	
-	// int i = 0;
+	
 
 	// for (final String host : allHosts) {
 	// i++;
 
 	// try {
-	// Thread.sleep(500);
+	
 	// } catch (Exception ex) {
 	// }
 	// SwingUtilities.invokeLater(new Thread() {
@@ -1527,7 +1527,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// return " ";
 
 	
-	// for (int n = 0; n < a.length; n++) {
+	
 	// b.append(" " + a[n]);
 	// }
 
@@ -2043,7 +2043,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			mainFrame.getHostsStatusInfo().updateValues(clientCount, null, null, null);
 			// persist.getHostInfoCollections().getCountClients() > 0
 			// but we are testing:
-			// selectionPanel.setMissingDataPanel( pcCount < 100);
+			
 			selectionPanel.setMissingDataPanel(persist.getHostInfoCollections().getCountClients() == 0);
 		}
 
@@ -2157,7 +2157,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			allowedClients = treeClients.associateClientsToGroups(allPCs, persist.getFObject2Groups(),
 					permittedHostGroups);
 
-			// treeClients.associateClientsToGroups( allPCs, persist.getFObject2Groups() );
+			
 			if (allowedClients != null)
 				logging.info(this, "------------ buildPclistTableModel, allowedClients " + allowedClients.size());
 
@@ -2200,10 +2200,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 																								// the parameter
 																								// hostgroupsPermitted
 				);
-				// treeClients.associateClientsToGroups( allPCs, persist.getFObject2Groups() );
+				
 
 				logging.info(this, "tree produced");
-				// System.exit(0);
+				
 			}
 		}
 
@@ -2379,7 +2379,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		logging.info(this, "expand activated  path " + path);
 		treeClients.expandPath(path);
 
-		// System.exit(0);
+		
 
 		return true;
 	}
@@ -2594,7 +2594,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 				column.setMaxWidth(iconColumnMaxWidth);
 				column.setPreferredWidth(iconColumnPrefWidth);
-				// System.exit(2);
+				
 				// column.setCellRenderer(new
 
 				column.setCellRenderer(new BooleanIconTableCellRenderer(
@@ -4542,7 +4542,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			// WaitCursor waitCursor = new WaitCursor( mainFrame.retrieveBasePane(),
 
-			// persist.getRelationsWindowsSoftwareId2LPool();
+			
 
 			Iterator iter = allControlMultiTablePanels.iterator();
 			while (iter.hasNext()) {
@@ -4696,9 +4696,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			// _/
 
 			// _/
-			// persist.fObject2GroupsRequestRefresh();
+			
 			// _/
-			// persist.fGroup2MembersRequestRefresh();
+			
 
 			persist.fProductGroup2MembersRequestRefresh();
 			persist.auditHardwareOnHostRequestRefresh();
@@ -5875,7 +5875,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		ErrorListProducer(String specificPartOfTitle) {
 			String part = specificPartOfTitle;
-			// int maxlen = 30;
+			
 			// if (part.length() > maxlen)
 			// part = part.substring(0, maxlen) + " ...";
 
@@ -6194,7 +6194,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 							List<String> parts = de.uib.utilities.script.Interpreter.splitToList(cmd);
 
-							// System.exit(0);
+							
 
 							try {
 								logging.debug(this,
@@ -6646,7 +6646,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		selectionPanel.clearSelection();
 
-		// for (int j=0; j < depotsList.getSelectedValues().length ; j++)
+		
 
 		Map<String, Boolean> clientList = produceClientListForDepots(getSelectedDepots(), null);
 		logging.debug(this, "setClientGroup pclist " + clientList);
@@ -6760,7 +6760,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		updateCollection.doCall();
 		checkErrorList();
 
-		// System.exit(0);
+		
 
 		clearUpdateCollectionAndTell();
 	}

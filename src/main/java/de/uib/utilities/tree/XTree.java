@@ -54,7 +54,7 @@ public class XTree extends JTree {
 		 * selRow = getRowCount() -1;
 		 * 
 		 * int startRow = 0;
-		 * //if (rootVisible) startRow = 1;
+		 * 
 		 * 
 		 * if (selRow < startRow)
 		 * selRow = startRow;

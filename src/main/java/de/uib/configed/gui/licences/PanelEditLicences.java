@@ -80,7 +80,7 @@ public class PanelEditLicences extends MultiTablePanel {
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setResizeWeight(0.5f);
-		// splitPane.setDividerLocation(1f); //maximum for top when starting
+		
 
 		topPane = new JPanel();
 		bottomPane = new JPanel();

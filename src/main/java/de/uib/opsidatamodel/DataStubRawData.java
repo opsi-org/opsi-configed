@@ -438,7 +438,7 @@ public class DataStubRawData extends DataStubNOM {
 			
 			// clientListForCall.size() + " clients " + clientListForCall);
 
-			// client2software = new HashMap<>();
+			
 			if (client2software == null)
 				client2software = new HashMap<>();
 			// if (softwareId2clients == null) softwareId2clients = new HashMap<Integer,
@@ -585,7 +585,7 @@ public class DataStubRawData extends DataStubNOM {
 			}
 
 			
-			// client2software);
+			
 
 			logging.info(this, "retrieveSoftwareAuditOnClients used memory on end "
 					+ Runtime.getRuntime().totalMemory() / 1000000 + " MB");
@@ -652,7 +652,7 @@ public class DataStubRawData extends DataStubNOM {
 		logging.info(this, "  retrieveHostConfigs ( CONFIG_STATE )  start a request");
 
 		// String columns = ConfigStateEntry.DB_COLUMN_NAMES.toString();
-		// columns = columns.substring(1);
+		
 		// columns = columns.substring(0, columns.length()-1);
 		// json parsing for integer value false thereforw we omit the ID column
 
@@ -731,7 +731,7 @@ public class DataStubRawData extends DataStubNOM {
 		logging.info(this, "retrieveHostConfigs retrieved ");
 		// hostConfigs.keySet()
 		persist.notifyDataRefreshedObservers("configState");
-		// System.exit(0);
+		
 	}
 
 	// =================================================== client2HwRows
@@ -786,7 +786,7 @@ public class DataStubRawData extends DataStubNOM {
 			String part0 = hwInfoCol.substring(0, persist.hwInfo_DEVICE.length());
 			
 			// + ", hwInfoCol.substring( part0.length()) " + hwInfoCol.substring(
-			// part0.length()));
+			
 
 			boolean colFound = false;
 			// check if colname is from a CONFIG or a DEVICE table
@@ -963,7 +963,7 @@ public class DataStubRawData extends DataStubNOM {
 			Map<String, Map<String, Object>> client2ClassInfos = client2HwRowsForHwClass(hwClass);
 
 			
-			// client2ClassInfos);
+			
 
 			if (client2ClassInfos != null) {
 

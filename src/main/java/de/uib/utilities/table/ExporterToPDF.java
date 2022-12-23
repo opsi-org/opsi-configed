@@ -229,7 +229,7 @@ public class ExporterToPDF extends ExportTable {
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd. MMMMM yyyy");
 		// Second parameter is the number of the chapter
 		Paragraph content = new Paragraph();
-		// addEmptyLine(content, 1);
+		
 		if (metaData.containsKey("title"))
 			content.add(new Paragraph(metaData.get("title"), catFont));
 		if (metaData.containsKey("subtitle"))

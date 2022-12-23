@@ -72,7 +72,7 @@ public abstract class DataStub {
 	public abstract Object2Product2VersionList getDepot2NetbootProducts();
 
 	// public abstract HashMap<String, List<String>>
-	// getProductversion2Depots();
+	
 
 	public abstract void productPropertyDefinitionsRequestRefresh();
 
@@ -117,7 +117,7 @@ public abstract class DataStub {
 
 	public abstract Map<String, List<SWAuditClientEntry>> getClient2Software();
 
-	// public abstract Map<Integer, List<String>> getSoftwareId2clients();
+	
 	public abstract Map<String, java.util.Set<String>> getSoftwareIdent2clients();
 
 	public abstract void auditSoftwareXLicencePoolRequestRefresh();

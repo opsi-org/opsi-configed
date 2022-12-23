@@ -53,7 +53,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	private JPanel workbenchpanel;
 	private JPanel mainpanel;
 	private JPanel buttonPanel;
-	// private final int mainPanelHeight = 121;
+	
 
 	private JButton btn_advancedSettings;
 	private JButton btn_setRights;
@@ -534,7 +534,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			str2exec.addCommand(new CommandOpsiSetRights(dir));
 		}
 		str2exec.addCommand(makeProductFile);
-		// SSHConnectExec ssh = new SSHConnectExec(str2exec);
+		
 		logging.info(this, "SSHConnectExec " + str2exec);
 		new Thread() {
 			@Override

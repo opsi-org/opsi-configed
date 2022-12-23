@@ -84,7 +84,7 @@ public class FShowList extends FTextArea {
 		jTextArea1.setLineWrap(true);
 		jTextArea1.setWrapStyleWord(true);
 		jTextArea1.setOpaque(true);
-		// jTextArea1.setBackground(myHintYellow);
+		
 		jTextArea1.setBackground(Globals.backgroundWhite);
 		jTextArea1.setText("          ");
 		jTextArea1.setEditable(false);

@@ -116,14 +116,14 @@ public class DPassword extends JDialog // implements Runnable
 				}
 			});
 
-			// setSize (350,100);
+			
 			setTitle(Globals.APPNAME + " login");
 			waitLabel = new JLabel();
-			// waitLabel.setPreferredSize (new Dimension (200, 25));
+			
 			waitLabel.setText(configed.getResourceValue("DPassword.WaitInfo.label"));
 
 			waitingProgressBar = new JProgressBar();
-			// waitingProgressBar.setPreferredSize (new Dimension (100, 10));
+			
 			// waitingProgressBar.setToolTipText(
 			// configed.getResourceValue("FStartWakeOnLan.timeElapsed.toolTip") );
 			waitingProgressBar.setValue(0);
@@ -410,7 +410,7 @@ public class DPassword extends JDialog // implements Runnable
 
 		defaultBlinkRate = fieldUser.getCaret().getBlinkRate();
 
-		// fieldHost.setMargin(new Insets(0, 3, 0, 3));
+		
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
 		fieldHost.addKeyListener(myKeyListener);

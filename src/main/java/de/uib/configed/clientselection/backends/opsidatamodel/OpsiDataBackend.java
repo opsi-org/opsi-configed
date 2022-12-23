@@ -345,7 +345,7 @@ public class OpsiDataBackend extends Backend {
 			clientMaps = controller.getHostInfoCollections().getMapOfPCInfoMaps();
 			logging.info(this, "client maps size " + clientMaps.size());
 		}
-		// System.exit(0);
+		
 
 		if (groups == null || reloadRequested) {
 			groups = controller.getFObject2Groups();

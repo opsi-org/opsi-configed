@@ -128,8 +128,8 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 		
 
-		// textarea.setColumns(20);
-		// textarea.setRows(5);
+		
+		
 		
 
 		javax.swing.GroupLayout layout1 = new javax.swing.GroupLayout(framingPanel);
@@ -248,7 +248,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 			
 		}
 		
-		// editingArea.getComponent(0).getClass());
+		
 		editingArea.getComponent(0).setPreferredSize(usableAreaSize);
 		initComponents();
 		return true;

@@ -238,7 +238,7 @@ public class PanelSWMultiClientReport extends JPanel {
 		logging.info(this, "kindOfExport set from savedStates  " + koe);
 		logging.info(this, "kindOfExport   " + kindOfExport);
 
-		// System.exit(0);
+		
 
 		JPanel subpanelPreConfig = new JPanel();
 		subpanelPreConfig.setBackground(Globals.backgroundWhite);

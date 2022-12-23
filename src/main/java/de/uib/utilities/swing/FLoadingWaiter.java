@@ -47,7 +47,7 @@ public class FLoadingWaiter extends JFrame
 	String[] waitStrings;
 	int waitStringsIndex = -1;
 
-	// int max = 60;
+	
 
 	int max = 200;
 

@@ -23,7 +23,7 @@ public class FWakeClients extends FShowList {
 		setMessage("");
 		setButtonsEnabled(true);
 		this.persist = persist;
-		// glassTransparency(true, 1000, 200, 0.04f);
+		
 	}
 
 	public void act(String[] selectedClients, int delaySecs) {

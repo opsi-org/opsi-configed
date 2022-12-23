@@ -49,10 +49,10 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 	public Void doInBackground() {
 
 		// startAnotherProcess()
-		// int progress = 0;
+		
 		
 
-		// int noOfSteps = 100;
+		
 		
 
 		long timeStepMillis = (long) 500;

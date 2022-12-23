@@ -298,9 +298,9 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		setCenterPane(panelSWnames);
 		additionalPane.setVisible(true);
 		
-		// additionalPane.setPreferredSize( new Dimension( 400, 400) );
+		
 		setupLayout();
-		// setSize( new Dimension( 800, 400 ) );
+		
 
 	}
 
@@ -377,7 +377,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 				// setTableModelSWxLicencepool
 
-				// jButton1.setEnabled( panelSWnames.getTheTable().getSelectedRowCount() > 0 );
+				
 			}
 		});
 

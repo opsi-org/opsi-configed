@@ -561,7 +561,7 @@ public class PanelSWInfo extends JPanel {
 		 * 
 		 * 
 		 * 
-		 * //sourceModel.setSorting(0, true);
+		 * 
 		 * 
 		 * //tableToPDF.createContentElement("tablemodel", sourceModel); //we use the
 		 * model in order to avoid any graphical component

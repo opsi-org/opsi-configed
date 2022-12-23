@@ -94,7 +94,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	public static final Color defaultBackColor = Color.white;
 	public static final Color defaultTextColor = Color.black;
 	
-	// Color(250, 30, 0); // needed for update_version_display
+	
 
 	final String initString = "";
 	public static final String unequalAddstring = "≠ ";
@@ -135,7 +135,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	protected Map<String, Set<String>> product2setOfClientsWithNewAction;
 	// for each product, we shall collect the clients that have a changed action
 	// request
-	// protected Map<String, ActionRequest> product2AR;
+	
 	// for each product, we remember the visual action that is set
 	protected TreeSet<String> missingImplementationForAR;
 
@@ -304,7 +304,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 			for (int i = 0; i < productRowsList1client.size(); i++) {
 				Map<String, String> stateAndAction = productRowsList1client.get(i);
-				// new HashMap<>(productRowsList1client.get(i));
+				
 				// deep copy, but seems to be not complete, therefore not used
 				// if (clientId.equals("vbrupertwin7-64.uib.local"))
 				
@@ -802,7 +802,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		changedStatesForProduct.put(stateType, state);
 		// test testes setValueAt("None", 2, 6);
 		// if (!product.equals( actualProduct)) setValueAt( state, productsV.indexOf (
-		// product ), 3 );
+		
 		main.getGeneralDataChangedKeeper().dataHaveChanged(this);
 	}
 
@@ -932,7 +932,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		// request
 		missingProducts.clear();
 
-		// if (product2AR == null) product2AR = new HashMap<>();
+		
 
 		
 	}
@@ -1191,7 +1191,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		aSetOfClients.add(clientId);
 
-		// product2AR.put (product, ar);
+		
 
 		
 		// of visible action in combined actions
@@ -1519,7 +1519,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	@Override
 	public int getColumnCount() {
-		return numberOfColumns; // 3;
+		return numberOfColumns; 
 	}
 
 	@Override

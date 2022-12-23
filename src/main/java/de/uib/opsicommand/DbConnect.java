@@ -26,7 +26,7 @@ public class DbConnect {
 			
 		}
 		// catch ( ClassNotFoundException e ) {
-		// System.exit(1);
+		
 		// }
 		catch (Exception e) {
 			logging.error("Error", e);

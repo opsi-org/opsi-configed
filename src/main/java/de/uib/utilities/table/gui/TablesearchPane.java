@@ -97,7 +97,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	protected boolean resetFilterModeOnNewSearch = true;
 
 	private int foundrow = -1;
-	// private int lastSearchTextLength = 0;
+	
 	protected SearchTargetModel targetModel;
 	protected PanelGenEditTable associatedTable;
 
@@ -319,7 +319,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	public void setNarrow(boolean b) {
-		// labelSearch0.setVisible(b);
+		
 		showFilterIcon(b);
 		checkmarkSearchProgressive.setVisible(b);
 		checkmarkAllColumns.setVisible(b);
@@ -1246,7 +1246,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				} else {
 
 					if (startrow > 0) {
-						// setRow(0, false, select);
+						
 						searchTheRow(0, addSelection, select);
 					} else
 						setRow(0, false, select);
@@ -1258,7 +1258,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			// fieldSearch.setCursor(new java.awt.Cursor( java.awt.Cursor.TEXT_CURSOR));
 
 			fieldSearch.getCaret().setVisible(true);
-			// fieldSearch.getCaret().setBlinkRate(0);
+			
 		}
 		// }.start();
 
@@ -1339,7 +1339,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 			/*
 			 * if (fieldSearch.getText().equals(""))
-			 * //setSelectedRow(0);
+			 * 
 			 * setRow(0, false, selectMode);
 			 * 
 			 * else

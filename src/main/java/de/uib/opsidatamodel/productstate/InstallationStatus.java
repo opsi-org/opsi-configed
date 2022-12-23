@@ -26,9 +26,9 @@ public class InstallationStatus {
 	public static final int UNKNOWN = 2;
 
 	// compatibility mode for older opsi data, not more necessary
-	// public static final int FAILED = 4;
+	
 
-	// public static final int INSTALLING = 3;
+	
 
 	// textcolors
 	public static final Color NOT_INSTALLEDcolor = Globals.INVISIBLE;

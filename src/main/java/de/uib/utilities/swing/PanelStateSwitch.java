@@ -216,7 +216,7 @@ public class PanelStateSwitch extends JPanel {
 		GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
 		// this.setBorder(new
-		// javax.swing.border.LineBorder(Globals.blueGrey, 1, true));
+		
 
 		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
 		layout.setVerticalGroup(vGroup);

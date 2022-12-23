@@ -111,7 +111,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 				+ " AND \n" + " ( " + giveWhereOR("clientId", clientIds) + ") ";
 
 		
-		// System.exit(0);
+		
 
 		// TimeCheck timer= new TimeCheck(this, "getLocalBootProductStatesNOM").start();
 

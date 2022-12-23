@@ -24,7 +24,7 @@ public class SimpleTreeModel extends DefaultTreeModel
 
 	Set<SimpleTreePath> allPathes;
 	Map<SimpleTreePath, SimpleIconNode> path2Node;
-	// Map<SimpleTreePath, String> path2DottedString;
+	
 
 	Map<String, String> tooltips;
 
@@ -62,7 +62,7 @@ public class SimpleTreeModel extends DefaultTreeModel
 	protected void generateFrom(java.util.Set<String> dottedKeys) {
 		allPathes = new TreeSet<>();
 		path2Node = new TreeMap<>();
-		// path2DottedString = new TreeMap<>();
+		
 
 		if (dottedKeys != null) {
 			for (String key : dottedKeys) {
@@ -84,7 +84,7 @@ public class SimpleTreeModel extends DefaultTreeModel
 					
 					
 
-					// path2DottedString.put(path, partialKey);
+					
 
 					j = k;
 					k = j + 1 + remainder.indexOf('.');

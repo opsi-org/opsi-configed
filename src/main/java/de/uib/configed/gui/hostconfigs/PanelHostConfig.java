@@ -28,7 +28,7 @@ public class PanelHostConfig extends JPanel {
 	protected boolean entryRemovable = true;
 	protected boolean reloadable = true;
 
-	// static Integer classcounter = 0;
+	
 	public final String propertyClassUser = UserConfig.KEY_USER_ROOT;
 	public final String propertyClassRole = UserConfig.KEY_USER_ROLE_ROOT;
 

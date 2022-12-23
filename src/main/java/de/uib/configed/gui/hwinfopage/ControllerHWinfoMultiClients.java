@@ -129,8 +129,8 @@ public class ControllerHWinfoMultiClients {
 			public void reload() {
 				
 				persist.client2HwRowsRequestRefresh();
-				// columnNames = persist.getClient2HwRowsColumnNames();
-				// classNames = persist.getClient2HwRowsJavaclassNames();
+				
+				
 				super.reload();
 				
 
@@ -164,7 +164,7 @@ public class ControllerHWinfoMultiClients {
 		hosts = new String[0];
 
 		// GenericTableUpdateItemFactory updateItemFactory = new
-		// GenericTableUpdateItemFactory(0);
+		
 
 		model = new GenTableModel(
 				// updateItemFactory,

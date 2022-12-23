@@ -180,7 +180,7 @@ public class FEditList extends FEditObject
 
 		visibleList.ensureIndexIsVisible(visibleList.getMaxSelectionIndex());
 
-		// buttonRemove.setEnabled(toSelect.size() > 0);
+		
 	}
 
 	public void initSelection() {
@@ -196,7 +196,7 @@ public class FEditList extends FEditObject
 		
 		addSelectedValues(toSelect);
 
-		// buttonRemove.setEnabled(toSelect.size() > 0);
+		
 		
 	}
 

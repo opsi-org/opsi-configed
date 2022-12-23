@@ -74,7 +74,7 @@ public class OpsiProductInfo extends OpsiPackage {
 
 		logging.debug(this, "created with description " + description + "\n," + " possible actions " + possibleActions
 				+ ", hasUserLoginScript " + hasUserLoginScript);
-		// System.exit(0);
+		
 
 	}
 

@@ -34,7 +34,7 @@ public class BackendMySQL {
 		alle_hosts = getListFromSQL("SELECT hostId FROM HOST;");
 
 		
-		// for(int i=0; i<hwConfig.size(); i++) {
+		
 		////
 		/*
 		 * for(int j=0; j<((List)((HashMap)hwConfig.get(i)).get("Values")).size(); j++)
@@ -337,8 +337,8 @@ public class BackendMySQL {
 		 * );
 		 */
 
-		// for(int i=0; i<result.size(); i++) {
-		// arrayList.add(result.get(i).get(0));
+		
+		
 		// }
 
 		return list;

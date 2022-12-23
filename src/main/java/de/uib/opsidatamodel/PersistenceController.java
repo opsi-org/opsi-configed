@@ -908,9 +908,9 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void setFSoftware2LicencePool(String softwareIdent, String licencePoolId);
 
-	// public abstract List getLicencePool2WindowsSoftwareIDs(String licensePoolId);
+	
 
-	// public abstract Map<String, Map> getRelationsWindowsSoftwareId2LPool();
+	
 
 	public abstract boolean removeAssociations(String licensePoolId, List<String> softwareIds);
 
@@ -1000,7 +1000,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract boolean isWithLocalImaging();
 
-	// public abstract boolean isWithScalability1();
+	
 
 	public abstract boolean isWithLicenceManagement();
 

@@ -165,7 +165,7 @@ public class DataStubNOM extends DataStub {
 				 * version2productInfos);
 				 */
 
-				// System.exit(0);
+				
 
 			}
 
@@ -206,7 +206,7 @@ public class DataStubNOM extends DataStub {
 			 * 
 			 */
 			
-			// System.exit(0);
+			
 
 			persist.notifyDataRefreshedObservers("product");
 		}
@@ -340,7 +340,7 @@ public class DataStubNOM extends DataStub {
 					productName = product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo())
 							.getProductName();
 					// productLockedInfo =
-					// product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo()).getLockedInfo();
+					
 
 					productRow.add(productName);
 					p.appendValues(productRow);
@@ -368,7 +368,7 @@ public class DataStubNOM extends DataStub {
 
 				}
 
-				// System.exit(0);
+				
 
 			}
 
@@ -380,14 +380,14 @@ public class DataStubNOM extends DataStub {
 			 */
 
 			
-			// product2VersionInfo2Depots);
-			// System.exit(0);
+			
+			
 
 			persist.notifyDataRefreshedObservers("productOnDepot");
 		}
 
 		
-		// System.exit(0);
+		
 
 	}
 
@@ -583,7 +583,7 @@ public class DataStubNOM extends DataStub {
 			}
 
 			
-			// depot2product2dependencyInfos );
+			
 			persist.notifyDataRefreshedObservers("productDependency");
 
 		}
@@ -932,7 +932,7 @@ public class DataStubNOM extends DataStub {
 
 				}
 
-				// if (i == 4) break;
+				
 			}
 
 			/*
@@ -970,7 +970,7 @@ public class DataStubNOM extends DataStub {
 	protected List<Map<String, Object>> softwareAuditOnClients;
 	protected Map<String, List<SWAuditClientEntry>> client2software;
 	protected Map<String, java.util.Set<String>> softwareIdent2clients;
-	// protected Map<Integer, List<String>> softwareId2clients;
+	
 
 	protected java.sql.Time SOFTWARE_CONFIG_last_entry = null;
 
@@ -980,7 +980,7 @@ public class DataStubNOM extends DataStub {
 		softwareAuditOnClients = null;
 		client2software = null;
 		softwareIdent2clients = null;
-		// softwareId2clients = null;
+		
 	}
 
 	/*
@@ -1100,7 +1100,7 @@ public class DataStubNOM extends DataStub {
 				
 				// clientListForCall.size() + " clients " + clientListForCall);
 
-				// client2software = new HashMap<>();
+				
 				if (client2software == null)
 					client2software = new HashMap<>();
 
@@ -1614,8 +1614,8 @@ public class DataStubNOM extends DataStub {
 	public void client2HwRowsRequestRefresh() {
 		logging.info(this, "client2HwRowsRequestRefresh");
 		client2HwRows = null;
-		// client2HwRowsColumnNames = null;
-		// client2HwRowsClassNames = null;
+		
+		
 	}
 
 	@Override

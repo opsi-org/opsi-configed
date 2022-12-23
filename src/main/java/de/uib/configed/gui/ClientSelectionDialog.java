@@ -194,7 +194,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		try {
 			// setCursor(new Cursor(Cursor.WAIT_CURSOR));
-			// glassTransparency(true, 1000, 200, 0.04f);
+			
 			collectData();
 			//
 			// try

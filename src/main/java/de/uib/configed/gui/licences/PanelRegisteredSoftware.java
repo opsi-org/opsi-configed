@@ -53,7 +53,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 		if (controller.thePanel.fSoftwarename2LicencePool != null) {
 			logging.info(this, "Panel.fSoftwarename2LicencePool.panelSWnames.reset");
-			// controller.thePanel.fSoftwarename2LicencePool.panelSWnames.requestReload();
+			
 			// does not solve the task
 			controller.thePanel.fSoftwarename2LicencePool.panelSWnames.reset();
 		}
@@ -111,7 +111,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 		}
 
-		// callName2Pool();
+		
 
 	}
 
@@ -146,7 +146,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 				if (controller.thePanel.fSoftwarename2LicencePool.isVisible()) {
 					logging.info(this, "selectionListener valueChanged,fSoftwarename2LicencePool.isVisible ");
 
-					// controller.thePanel.fSoftwarename2LicencePool.panelSWxLicencepool.reload();
+					
 					// the data is not refreshed
 				}
 

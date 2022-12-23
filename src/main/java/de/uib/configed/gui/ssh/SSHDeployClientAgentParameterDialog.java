@@ -298,7 +298,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 			panelFinalAction.setOpaque(false);
 			// panelFinalAction.setBorder(new LineBorder( Globals.blueGrey,
-			// 1, true) );
+			
 
 		}
 

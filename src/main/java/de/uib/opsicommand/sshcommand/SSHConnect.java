@@ -241,7 +241,7 @@ public class SSHConnect {
 				session.setPassword(connectionInfo.getPassw());
 				logging.info(this, "connect useKeyfile " + connectionInfo.usesKeyfile() + " use password …");
 			}
-			// session.setTimeout(10000);
+			
 			// session.setConfig("StrictHostKeyChecking", "no");
 
 			Properties config = new Properties();
@@ -253,7 +253,7 @@ public class SSHConnect {
 			// will prevent session ending
 			// cf
 			// https://stackoverflow.com/questions/37280442/jsch-0-1-53-session-connect-throws-end-of-io-stream-read
-			// int timeo = 4000;
+			
 			int timeo = 10000;
 
 			logging.info(this, "we try to connect with timeout " + timeo);

@@ -330,14 +330,14 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 						Globals.createImageIcon("images/no-value.png", ""));
 				popupItemDeleteEntry1.addActionListener(listenerForRemoval_REMOVE_SPECIFIC);
 
-				// popupEditOptions.add(popupItemDeleteEntry1);
+				
 				popupNoEditOptions.add(popupItemDeleteEntry1);
 
 				popupItemDeleteEntry2 = new JMenuItemFormatted(settingDefaultValuesPropertyHandler.getRemovalMenuText(),
 						Globals.createImageIcon("images/fixed-value.png", ""));
 				popupItemDeleteEntry2.addActionListener(listenerForRemoval_SET_DEFAULT_AS_SPECIFIC);
 
-				// popupEditOptions.add(popupItemDeleteEntry2);
+				
 				popupNoEditOptions.add(popupItemDeleteEntry2);
 
 				/*

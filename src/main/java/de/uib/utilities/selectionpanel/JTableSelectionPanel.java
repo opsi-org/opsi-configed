@@ -1065,7 +1065,7 @@ public class JTableSelectionPanel extends JPanel
 		int viewrow = findViewRowFromValue(0, value, cols);
 
 		scrollRowToVisible(viewrow);
-		// Rectangle scrollTo = table.getCellRect(viewrow, 0, false);
+		
 		if (viewrow == -1)
 			return false;
 
@@ -1073,7 +1073,7 @@ public class JTableSelectionPanel extends JPanel
 	}
 
 	public void scrollRowToVisible(int row) {
-		// table.scrollRectToVisible(table.getCellRect(row, 0, false));
+		
 
 		Rectangle scrollTo = table.getCellRect(row, 0, false);
 		table.scrollRectToVisible(scrollTo);
@@ -1098,7 +1098,7 @@ public class JTableSelectionPanel extends JPanel
 		
 		
 		scrollRowToVisible(row);
-		// table.scrollRectToVisible(table.getCellRect(row, 0, false));
+		
 	}
 
 	public void setSelectedRow(int row) {
@@ -1114,7 +1114,7 @@ public class JTableSelectionPanel extends JPanel
 		
 		
 		scrollRowToVisible(row);
-		// table.scrollRectToVisible(table.getCellRect(row, 0, false));
+		
 	}
 
 	private void searchTheNextRow() {
@@ -1232,7 +1232,7 @@ public class JTableSelectionPanel extends JPanel
 	@Override
 	public void changedUpdate(DocumentEvent e) {
 		
-		// (fieldSearch.getText().length() > 0 ) );
+		
 		if (e.getDocument() == fieldSearch.getDocument()) {
 
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);

@@ -132,7 +132,7 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	// {
 	// // if (packageManager)
 	
-	// // return 0;
+	
 	
 	// }
 	// public String[] getRegexes()

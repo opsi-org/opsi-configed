@@ -526,7 +526,7 @@ public class SSHConnectExec extends SSHConnect {
 
 				logging.info(this, "doInBackground start waiting for answer");
 				int size = 1024 * 1024;
-				// int size = 500;
+				
 				byte[] tmp = new byte[size];
 				int progress = 0;
 				if (outputDialog != null) {

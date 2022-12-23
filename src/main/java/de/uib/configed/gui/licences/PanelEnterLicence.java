@@ -51,7 +51,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	protected int minPanelTableHeight = 60;
 	protected int maxHSize = 1000;
 	
-	// protected int hSizePanelLicencepools = 600;
+	
 
 	protected int minFieldWidth = 40;
 	protected int minFieldHeight = 6;
@@ -652,7 +652,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setResizeWeight(0.3f);
-		// splitPane.setDividerLocation(1f); //maximum for top when starting
+		
 
 		topPane = new JPanel();
 		bottomPane = new JPanel();

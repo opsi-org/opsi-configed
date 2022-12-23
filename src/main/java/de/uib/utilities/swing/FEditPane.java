@@ -50,7 +50,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	private javax.swing.JTextPane textpane;
 
 	
-	// protected Html2Text html2text = new Html2Text();
+	
 
 	protected LinkSearcher searcher;
 	protected Highlighter highlighter;
@@ -152,7 +152,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	private void searchAndHighlight() {
 		
-		// searcher.comp.setCaretPosition(0);
+		
 		searcher.searchLinks();
 	}
 
@@ -322,7 +322,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		
 		
 		
-		// if (e.getClickCount() > 1) searchAndHighlight();
+		
 
 		if (e.getClickCount() > 1) {
 			Point p = e.getPoint();

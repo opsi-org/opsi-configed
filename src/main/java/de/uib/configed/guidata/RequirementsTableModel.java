@@ -100,7 +100,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 	@Override
 	public int getColumnCount() {
-		return 4;// remove uninstall 5;
+		return 4;
 	}
 
 	@Override

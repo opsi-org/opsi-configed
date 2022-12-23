@@ -84,7 +84,7 @@ public class SmbConnect {
 
 		logging.info(this, "buildSambaTarget for depotserver " + depotserver);
 		
-		// depot2depotMap.get(depotserver));
+		
 
 		if (depot2depotMap.get(depotserver) == null)
 			return result;

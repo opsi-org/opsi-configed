@@ -960,7 +960,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		}
 
 		;
-		// sorter.setComparator(0, Globals.getCollator());
+		
 
 		tableProducts.setRowSorter(sorter);
 		sorter.addRowSorterListener(this);

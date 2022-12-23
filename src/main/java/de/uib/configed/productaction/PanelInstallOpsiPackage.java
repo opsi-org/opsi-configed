@@ -176,7 +176,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		logging.info(this, "buildSambaTarget for depotserver " + depotserver);
 		
-		// depot2depotMap.get(depotserver));
+		
 
 		if (depot2depotMap.get(depotserver) == null)
 			return;
@@ -457,7 +457,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		// mountShareDescriptionLabel = new JLabel(
 		// configed.getResourceValue("InstallOpsiPackage.mountShareResult0" ) );
 
-		// checkConnectionToWorkbench(10);
+		
 		
 
 		JLabel serverPathLabel = new JLabel(configed.getResourceValue("InstallOpsiPackage.serverpath"));

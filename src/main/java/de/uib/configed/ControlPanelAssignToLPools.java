@@ -73,7 +73,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 																					// //
 	private SoftwareDirectionOfAssignment softwareDirectionOfAssignment = SoftwareDirectionOfAssignment.POOL2SOFTWARE;
 	// private SoftwareDirectionOfAssignment softwareDirectionOfAssignment =
-	// SoftwareDirectionOfAssignment.SOFTWARE2POOL;
+	
 
 	Integer totalSWEntries;
 	Integer totalUnassignedSWEntries;
@@ -333,7 +333,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 		// selectedLicencePool =
 		// thePanel.panelLicencepools.getValueAt(thePanel.panelLicencepools.getSelectedRow(),
-		// 0).toString();
+		
 
 		
 
@@ -464,7 +464,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 			// setting back the other tables is provided by ListSelectionListener
 			// setting back the other tables is provided by ListSelectionListener
 			// setting back the other tables is provided by ListSelectionListener
-			// thePanel.panelProductId2LPool.setSelectedValues(null, 0);
+			
 			
 		});
 
@@ -549,7 +549,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 			a[1] = "";
 
 			modelProductId2LPool.addRow(a);
-			// thePanel.panelProductId2LPool.moveToLastRow();
+			
 			
 			// a[0] " + a[0]);
 			thePanel.panelProductId2LPool.moveToValue("" + a[0], 0);

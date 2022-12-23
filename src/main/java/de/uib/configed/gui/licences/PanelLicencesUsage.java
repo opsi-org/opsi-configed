@@ -134,7 +134,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 
 		// panelKeys = new
 		// PanelGenEditTable(configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceUsable"),
-		// 0, false, 0);
+		
 
 		// panelWindowsSoftwareIds = new
 		// PanelGenEditTable(configed.getResourceValue("ConfigedMain.Licences.SectiontitleWindowsSoftwareIDs"),

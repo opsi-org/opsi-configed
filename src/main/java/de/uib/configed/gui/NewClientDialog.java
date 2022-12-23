@@ -223,7 +223,7 @@ public class NewClientDialog extends FGeneralDialog
 	}
 
 	protected void init() {
-		// int width = 300;
+		
 
 		panel = new JPanel();
 		gpl = new GroupLayout(panel);
@@ -999,7 +999,7 @@ public class NewClientDialog extends FGeneralDialog
 		else {
 			logging.info(this, "keyPressed source " + e.getSource());
 			// if (e.getSource() == jButton1)
-			// preAction1();
+			
 			if (e.getSource() == jButton1) {
 				// jButton1.setIcon( Globals.createImageIcon(
 				// "images/client_small_executing.png", "Client" ) );

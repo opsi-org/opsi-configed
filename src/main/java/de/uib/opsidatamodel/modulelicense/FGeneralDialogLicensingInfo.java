@@ -81,7 +81,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		this.setCenterPaneInScrollpane(centerPanel);
 		this.setAdditionalPane(bottomPanel);
 
-		// this.setSize(new Dimension( 900, 700));
+		
 
 		this.setupLayout();
 		this.setVisible(true);
@@ -251,10 +251,10 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		thePanel.getTheTable().setRowSorter(null);
 
-		// thePanel.getColumnModel().getColumn(0).setPreferredWidth(100);
+		
 		thePanel.getColumnModel().getColumn(0).setPreferredWidth(150);
 		thePanel.getColumnModel().getColumn(1).setPreferredWidth(60);
-		// thePanel.getColumnModel().getColumn(2).setPreferredWidth(25);
+		
 
 		return thePanel;
 	}
@@ -309,8 +309,8 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		checksum.setToolTipText(configed.getResourceValue("LicensingInfo.client.checksum.info"));
 		customerTitle.setFont(Globals.defaultFontBold);
 
-		//customerNames.setMinimumSize(new Dimension(250, 20));
-		//checksum.setMinimumSize(new Dimension(50, 20));
+		
+		
 
 		JLabel labelExtendedView = new JLabel(configed.getResourceValue("LicensingInfo.buttonExtendedView"));
 		JCheckBox checkExtendedView = new JCheckBox(""
@@ -362,7 +362,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		extraInfoPanel.setBackground(Globals.backgroundWhite);
 		extraInfoPanel.setOpaque(true);
 
-		//redWarningLevel.setPreferredSize(new Dimension(450, 50));
+		
 
 		JPanel panel = new JPanel();
 		GroupLayout gLayout = new GroupLayout(panel);

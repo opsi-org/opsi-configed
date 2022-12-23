@@ -321,7 +321,7 @@ public class PanelProductProperties extends JSplitPane
 			 * 
 			 * // Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties
 			 * =
-			 * // mainController.getPersistenceController().getDepot2product2properties();
+			 * 
 			 * 
 			 * Map<String, ConfigName2ConfigValue> propertiesDepot0 =
 			 * depot2product2properties.get(depots.get(0));
@@ -417,7 +417,7 @@ public class PanelProductProperties extends JSplitPane
 		infoPane.getPanelProductDependencies().setDependenciesModel(mainController.getDependenciesModel());
 
 		setRightComponent(infoPane);
-		// setDividerLocation(800);
+		
 
 		
 		

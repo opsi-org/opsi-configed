@@ -59,7 +59,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	public int getColumnCount() {
 		
 		// if (getTableModel() == null)
-		// return 0;
+		
 
 		return getTableModel().getColumnCount();
 	}

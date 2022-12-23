@@ -379,7 +379,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			return List.class;
 		}
 		return Object.class;
-		// return getValueAt(0, c).getClass();
+		
 	}
 
 	/*

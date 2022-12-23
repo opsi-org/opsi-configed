@@ -740,7 +740,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 					logging.info(this, "copy  " + driverPath + " to " + targetPath);
 
-					// Thread.currentThread().sleep(100);
+					
 
 					makePath(targetPath, true);
 

@@ -50,7 +50,7 @@ public class PersistenceControllerFactory {
 		}
 
 		PersistenceController persistControl;
-		// PersistenceController persistControl1;
+		
 
 		if (sqlAndGetRows) {
 			// have a try
@@ -191,7 +191,7 @@ public class PersistenceControllerFactory {
 
 									infodialog.centerOn(Globals.mainFrame);
 								}
-								// result = (infodialog.getResult() == 1);
+								
 							}
 
 						}

@@ -120,7 +120,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	@Override
 	public void ensureRowIsVisible(int row) {
 		// jList.locationToIndex
-		// table.scrollRectToVisible(table.getCellRect(row, 0, false));
+		
 	}
 
 	@Override

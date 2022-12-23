@@ -56,7 +56,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 	public int getColumnCount() {
 		
 		// if (getTableModel() == null)
-		// return 0;
+		
 
 		return getTableModel().getColumnCount();
 	}

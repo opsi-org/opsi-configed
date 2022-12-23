@@ -86,7 +86,7 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 					deviceProperty.setDisplayed(false);
 			}
 		}
-		// System.exit(0);
+		
 	}
 
 }

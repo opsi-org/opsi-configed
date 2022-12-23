@@ -241,7 +241,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 
 		this.setTopComponent(productDescriptionsPanel);
 		this.setBottomComponent(bottomComponent);
-		// setDividerLocation(250);
+		
 
 	}
 

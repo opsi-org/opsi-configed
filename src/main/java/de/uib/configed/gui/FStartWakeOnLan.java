@@ -510,7 +510,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	public void doAction1() {
 
 		logging.info(this, "doAction1");
-		// super.doAction1(); //includes leave()
+		
 
 		if (currentlySelectedClients == null || currentlySelectedClients.length == 0) {
 			JOptionPane.showMessageDialog(this, configed.getResourceValue("FStartWakeOnLan.noClientsSelected.text"),
@@ -533,7 +533,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		
 		if (waitingMillis < 0)
 			waitingMillis = 0;
-		// waitingSeconds = (int) (waitingMillis / 1000);
+		
 		
 
 		if (waitingMillis < 100) {
@@ -631,7 +631,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	 * int progress = 0;
 	 * setProgress( progress );
 	 * 
-	 * //int noOfSteps = 100;
+	 * 
 	 * 
 	 * 
 	 * long timeStepMillis = (long) 1000;

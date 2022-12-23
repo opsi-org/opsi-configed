@@ -94,7 +94,7 @@ public class Globals {
 	public static final Font defaultFontSmall = new java.awt.Font("SansSerif", 0, 9);
 	public static final Font defaultFontSmallBold = new java.awt.Font("SansSerif", Font.BOLD, 9);
 	// public static final Font defaultFont12 = new java.awt.Font("SansSerif", 0,
-	// 12);
+	
 	public static final Font defaultFontBig = new java.awt.Font("SansSerif", 0, 12);
 	public static final Font defaultFontBold = new java.awt.Font("SansSerif", Font.BOLD, 12);
 	public static final Font defaultFontTitle = new java.awt.Font("SansSerif", 0, 16);
@@ -202,31 +202,31 @@ public class Globals {
 	public static final Color backNimbus = new Color(214, 219, 222);
 
 	// in table, change colors by row
-	public static final Color defaultTableCellBgColor1 = Color.white; // new Color (255,255,255);
-	public static final Color defaultTableCellBgColor2 = backLightYellow; // new java.awt.Color (250, 48, 221);
+	public static final Color defaultTableCellBgColor1 = Color.white; 
+	public static final Color defaultTableCellBgColor2 = backLightYellow; 
 
 	// tableSelection
 	// public static final Color defaultTableSelectedRowDark = new Color
-	// (189,207,231);
+	
 	public static final Color defaultTableSelectedRowDark = new Color(204, 220, 238);
 	public static final Color defaultTableSelectedRowBright = new Color(221, 233, 249);
 
 	// in table, change colors by row and column
-	public static final Color defaultTableCellBgColor00 = backLightYellow;// new java.awt.Color (250, 48, 221);
+	public static final Color defaultTableCellBgColor00 = backLightYellow;
 	public static final Color defaultTableCellBgColor01 = new Color(236, 235, 214);
-	public static final Color defaultTableCellBgColor10 = Color.white; // new Color (255,255,255);
+	public static final Color defaultTableCellBgColor10 = Color.white; 
 	public static final Color defaultTableCellBgColor11 = backgroundWhite;
 
-	public static final Color defaultTableHeaderBgColor = new Color(222, 231, 247); // new Color (206,223,247);
-	public static final Color defaultTableCellSelectedBgColor = new Color(206, 224, 235); // new Color (184,207,229);
+	public static final Color defaultTableHeaderBgColor = new Color(222, 231, 247); 
+	public static final Color defaultTableCellSelectedBgColor = new Color(206, 224, 235); 
 	public static final Color defaultTableCellSelectedBgColorNotEditable = new Color(189, 207, 231);
 
 	public static final Color logColorEssential = new Color(0, 0, 0); // 1 - black
-	public static final Color logColorCritical = new Color(255, 0, 0); // new Color(200,0,200); // 2 - red
-	public static final Color logColorError = new Color(200, 100, 0); // new Color(200,0,0); // 3 - orange
-	public static final Color logColorWarning = new Color(20, 20, 200); // new Color(0,200,0); //new Color(255,128,0);
+	public static final Color logColorCritical = new Color(255, 0, 0); 
+	public static final Color logColorError = new Color(200, 100, 0); 
+	public static final Color logColorWarning = new Color(20, 20, 200); 
 																		// //4 - blue
-	public static final Color logColorNotice = new Color(10, 150, 10); // new Color(0,200,0); //5 - green
+	public static final Color logColorNotice = new Color(10, 150, 10); 
 	public static final Color logColorInfo = new Color(50, 50, 50); // 6 - grey
 	public static final Color logColorDebug = new Color(150, 150, 150);// 7 - brighter grey
 	public static final Color logColorDebug2 = new Color(150, 150, 150);
@@ -313,7 +313,7 @@ public class Globals {
 			1 * 1024 * 1024 };
 	// public static final int[] maxLogSizes = new int[]{3*1024*1024, 3*1024*1024,
 	// 3*1024*1024, 0, 1* 1024*1024};
-	// if each factor is 1 a heap size of 256 m is sufficient; for more, 512 should
+	
 	// be given
 
 	public static Image mainIcon = null;
@@ -744,7 +744,7 @@ public class Globals {
 
 		if (number2 == null)
 			throw new IllegalArgumentException("Number2 can not be null");
-		// if (number2 == null) return 1;
+		
 		if (!number2.matches("[0-9]+(\\.[0-9]+)*"))
 			throw new IllegalArgumentException("Invalid number2 format");
 		String[] n1Parts = number1.split("\\.");

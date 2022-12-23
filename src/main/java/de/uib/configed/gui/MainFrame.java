@@ -152,7 +152,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private static final int DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT = 200;
 	private static final int DIVIDER_LOCATION_CLIENT_TREE_SIGLE_DEPOT = 50;
 
-	// final int widthColumnServer = 110; //130;
+	
 
 	
 	
@@ -473,7 +473,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	boolean shiftpressed = false;
 	
 	JLabel jLabel_Hostinfos = new JLabel();
-	// FlowLayout flowLayout1 = new FlowLayout();
+	
 	JLabel jLabelPath = new JLabel();
 	// JLabel jLabelDepot = new
 	// JLabel(configed.getResourceValue("MainFrame.jLabelDepot"));//"Depot(s): ");
@@ -2091,7 +2091,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		setupMenuHelp();
 
 		jMenuBar1.add(jMenuFile);
-		// jMenuBar1.add(jMenuFileLanguage);
+		
 		jMenuBar1.add(jMenuClientselection);
 		jMenuBar1.add(jMenuClients);
 		jMenuBar1.add(jMenuServer);
@@ -2124,7 +2124,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		clientPane.setPreferredSize(new Dimension(F_WIDTH_RIGHTHANDED, F_HEIGHT + 40));
 		clientPane.setBorder(Globals.createPanelBorder());
-		// new LineBorder(Globals.backBlue, 2, true));
+		
 		csClientPane = new Containership(clientPane);
 
 		GroupLayout layoutClientPane = new GroupLayout(clientPane);
@@ -2470,7 +2470,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		 * {
 		 * public JScrollBar createVerticalScrollBar()
 		 * {
-		 * //Dimension minDim = new Dimension(10,2);
+		 * 
 		 * final JScrollBar result = new JScrollBar();
 		 * 
 		 * BoundedRangeModel rangeModel = new DefaultBoundedRangeModel(2,5,1,40);
@@ -2515,7 +2515,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		);
 
 		
-		// Dimension(2,2) );
+		
 		logging.info(this, "scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize() " +
 
 				scrollpaneTreeClients.getVerticalScrollBar().getMinimumSize()
@@ -2535,7 +2535,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		
 		
 
-		// System.exit(0);
+		
 		panelTreeClientSelection = new JPanel();
 		GroupLayout layoutPanelTreeClientSelection = new GroupLayout(panelTreeClientSelection);
 		panelTreeClientSelection.setLayout(layoutPanelTreeClientSelection);
@@ -3110,7 +3110,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				new Object[] { Globals.backgroundLightGrey }, VerticalPositioner.class); 
 		panel_NetbootProductsettings.setBackground(Globals.backgroundLightGrey);
 
-		// iconPane0.setBackground(Globals.backgroundLightGrey);
+		
 		iconPane0.setBackground(Globals.backLightBlue);
 		iconBarPane.setBackground(Globals.backLightBlue);
 		iconPane1.setBackground(Globals.backLightBlue);
@@ -3544,7 +3544,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				Globals.APPNAME + ":  " + configed.getResourceValue("MainFrame.InfoInternalConfiguration"), false,
 				new String[] { configed.getResourceValue("MainFrame.InfoInternalConfiguration.close") }, 800, 600);
 		backendInfoDialog.insertHTMLTable(main.getBackendInfos(), "");
-		// backendInfoDialog.setSize (new Dimension (400, 400));
+		
 
 		backendInfoDialog.setVisible(true);
 	}
@@ -3578,7 +3578,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			@Override
 			public void doAction1() {
 				getTextComponent().copy();
-				// super.doAction1();
+				
 			}
 
 			@Override
@@ -4119,7 +4119,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			}
 
 			
-			// System.exit ( 0 );
+			
 		}
 
 		else if (e.getSource() == jButtonWorkOnGroups || e.getSource() == jMenuFrameWorkOnGroups) {
@@ -4626,7 +4626,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			
 			
 
-		} else // case main.getSelectedClients() is null or length == 0; the case == 1 is
+		} else 
 				// handled by the following methos
 		{
 			labelNoSoftware.setText(configed.getResourceValue("MainFrame.TabRequiresClientSelected"));
@@ -4743,7 +4743,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		logging.info(this, "setUefiBoot " + b);
 		cbUefiBoot.setSelected(b);
 		// test if (b == null)
-		// System.exit(0);
+		
 	}
 
 	public void setWANConfig(Boolean b) {
@@ -4801,8 +4801,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		cbUefiBoot.setEnabled(gb && main.getPersistenceController().isWithUEFI());
 		cbWANConfig.setEnabled(gb && main.getPersistenceController().isWithWAN());
 		cbInstallByShutdown.setEnabled(gb);
-		// btnAktivateInstallByShutdown.setEnabled(b1);
-		// btnDeaktivateInstallByShutdown.setEnabled(b1);
+		
+		
 		jTextFieldHostKey.setMultiValue(!singleClient);
 		jTextFieldHostKey.setEnabled(singleClient);
 

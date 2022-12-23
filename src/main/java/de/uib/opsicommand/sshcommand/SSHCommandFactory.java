@@ -224,7 +224,7 @@ public class SSHCommandFactory {
 		// ssh_commands_param.add(new SSHCommand_Template(opsisetrights, coms,
 		// configed.getResourceValue("SSHConnection.command.opsisetrights"), true, null,
 		// configed.getResourceValue("SSHConnection.command.opsisetrights.tooltip"),
-		// 110));
+		
 		ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandDeployClientAgent());
 
 	}
@@ -330,7 +330,7 @@ public class SSHCommandFactory {
 			String parent = com.getParentMenuText();
 
 			logging.info(this, "parent menu text " + parent);
-			// System.exit(0);
+			
 			if (parent == null || parent.equalsIgnoreCase("null") || parent == parentdefaultForOwnCommands)
 				parent = parentdefaultForOwnCommands;
 			if (!list_knownParents.contains(parent))

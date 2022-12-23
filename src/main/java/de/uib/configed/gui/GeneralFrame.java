@@ -35,7 +35,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 
 	protected JPanel topPane = new JPanel();
 	protected JPanel southPanel = new JPanel();
-	// JTextArea jTextArea1 = new JTextArea();
+	
 	protected JButton jButton1 = new JButton();
 	// protected String button1Text = "close";
 
@@ -55,7 +55,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	protected GridLayout gridLayout1 = new GridLayout();
 	protected BorderLayout borderLayout1 = new BorderLayout();
 	protected FlowLayout flowLayout1 = new FlowLayout();
-	// JLabel jLabel1 = new JLabel();
+	
 
 	protected JPanel additionalPane;
 

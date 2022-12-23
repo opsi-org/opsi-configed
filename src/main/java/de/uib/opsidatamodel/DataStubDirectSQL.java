@@ -70,7 +70,7 @@ public class DataStubDirectSQL extends DataStubRawData
 			
 			// clientListForCall.size() + " clients " + clientListForCall);
 
-			// client2software = new HashMap<>();
+			
 			if (client2software == null)
 				client2software = new HashMap<>();
 
@@ -154,7 +154,7 @@ public class DataStubDirectSQL extends DataStubRawData
 			}
 
 			
-			// client2software);
+			
 
 			logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
 			

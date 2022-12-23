@@ -82,7 +82,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 
 		// build listmodel
 		
-		// table.getValueAt(row, 0));
+		
 		String key = (String) table.getValueAt(row, 0);
 
 		

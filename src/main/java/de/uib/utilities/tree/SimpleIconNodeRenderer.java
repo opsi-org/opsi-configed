@@ -23,10 +23,10 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 		
 		setOpaque(true);
 
-		// standard = deriveFont0(Globals.defaultFontBig);
-		// emphasized = deriveFont1(Globals.defaultFontBig);
+		
+		
 		standard = Globals.defaultFontBig;
-		// emphasized = deriveFont1(standard); //
+		
 		emphasized = Globals.defaultFontStandardBold;
 
 		setFont(standard);

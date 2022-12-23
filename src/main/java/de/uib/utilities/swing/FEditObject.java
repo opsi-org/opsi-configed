@@ -86,7 +86,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		loggingArea = new JTextArea("");
 		loggingArea.setEditable(false);
-		// loggingArea.setPreferredSize(new Dimension(100, 50));
+		
 
 		loggingArea.setBackground(Globals.backgroundWhite);
 
@@ -166,8 +166,8 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		
 
-		// textarea.setColumns(20);
-		// textarea.setRows(5);
+		
+		
 		
 
 		javax.swing.GroupLayout layout1 = new javax.swing.GroupLayout(framingPanel);
@@ -360,7 +360,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 			return false;
 		}
 		
-		// editingArea.getComponent(0).getClass());
+		
 		editingArea.getComponent(0).setPreferredSize(usableAreaSize);
 		initComponents();
 		initEditing();
@@ -464,7 +464,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	@Override
 	public void actionPerformed(java.awt.event.ActionEvent e) {
 		logging.debug(this, "actionPerformed");
-		// commit1();
+		
 		if (e.getSource() == buttonCommit) {
 			commit();
 		} else if (e.getSource() == buttonCancel) {

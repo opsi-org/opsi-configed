@@ -316,7 +316,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		logging.debug(this, "UI " + getUI());
 
 		// setMaximumSize(new java.awt.Dimension(IconNodeRendererClientTree.labelWidth +
-		// 30, 100));
+		
 		// interacts with line (in MainFrame.java)
 		
 
@@ -1243,7 +1243,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			GroupNode groupNode = groupNodes.get(entry.getKey());
 			if (groupNode == null) {
 				logging.warning("group for groupId " + entry.getKey() + " not found");
-				// System.exit(0);
+				
 			}
 
 			else {
@@ -1329,13 +1329,13 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		 * logging.info(this, "associateClientsToGroups allowed clients " +
 		 * allowedClients);
 		 * 
-		 * //System.exit(0);
+		 * 
 		 * String[] clients = allowedClients.toArray( new String[ allowedClients.size()
 		 * ] );
 		 * //for (String c : clients)
 		 * 
 		 * 
-		 * //System.exit(0);
+		 * 
 		 * return clients;
 		 */
 
@@ -1381,7 +1381,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		fEdit.init();
 		fEdit.setSize(450, 250);
 		fEdit.centerOn(Globals.mainContainer);
-		// fEdit.associateTo(getLocation(new java.awt.Point()), 100, 100);
+		
 		fEdit.setModal(true);
 
 		fEdit.setVisible(true);
@@ -1446,7 +1446,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			fEdit.init();
 			fEdit.setSize(450, 250);
 			fEdit.centerOn(Globals.mainContainer);
-			// fEdit.associateTo(getLocation(new java.awt.Point()), 100, 100);
+			
 			fEdit.setModal(true);
 
 			while (!gotName) {

@@ -44,7 +44,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 // works on a map of pairs of type String - List
 {
 
-	// protected JPopupMenu popup0;
+	
 	protected JPopupMenu popupForUserpath;
 	protected JPopupMenu popupForUserpathes;
 	protected JPopupMenu popupForRolepath;
@@ -592,7 +592,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		f.setVisible(true);
 
 		logging.info(this, "addUser finished, result " + f.getResult());
-		// System.exit(0);
+		
 
 		if (f.getResult() == 1) {
 			logging.info(this, "addUser ok");

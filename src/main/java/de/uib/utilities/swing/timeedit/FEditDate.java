@@ -25,7 +25,7 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 		org.jdesktop.swingx.event.DateSelectionListener, MouseListener, KeyListener
 
 {
-	public static final Dimension AREA_DIMENSION = new Dimension(380, 300);// new Dimension(200,200);
+	public static final Dimension AREA_DIMENSION = new Dimension(380, 300);
 	private DateTimeEditor dateEditor;
 
 	protected DateFormat dateFormat;

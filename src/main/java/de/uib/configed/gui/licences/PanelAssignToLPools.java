@@ -211,7 +211,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				fSoftwarename2LicencePool.setPreselectionForName2Pool(
 						(FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction) panelRadiobuttonsPreselectionForName2Pool
 								.getValue());
-				// System.exit(0);
+				
 				fSoftwarename2LicencePool.setVisible(true);
 
 				panelRegisteredSoftware.callName2Pool(panelRegisteredSoftware.getTableModel().getCursorRow());

@@ -118,7 +118,7 @@ public class ActionRequest {
 
 		serviceValues = new Vector<>(serviceValue2state.keySet());
 		scriptKeys = new Vector<>();
-		// scriptKey2state = new HashMap<>();
+		
 		scriptKey2label = new HashMap<>();
 
 		for (String request : serviceValues) {

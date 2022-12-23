@@ -233,7 +233,7 @@ public class ControllerHWinfoColumnConfiguration {
 		}
 
 		// GenericTableUpdateItemFactory updateItemFactory = new
-		// GenericTableUpdateItemFactory(0);
+		
 
 		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, classNames, keycol);
 

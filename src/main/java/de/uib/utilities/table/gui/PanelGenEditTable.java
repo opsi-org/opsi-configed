@@ -89,9 +89,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	protected JPanel titlePane;
 
 	// protected Color backgroundColor = new Color(250, 250,
-	// 240);
+	
 	protected Color backgroundColorEditFieldsSelected = Globals.defaultTableCellSelectedBgColor;// new Color(206, 224,
-																								// 235);
+																								
 																								
 	protected Color backgroundColorSelected = Globals.defaultTableCellSelectedBgColorNotEditable;
 
@@ -893,8 +893,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			if (tableModel.getKeyCol() > -1) {
 				try {
-					// sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
-					// sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+					
+					
 					sortKeys.add(new RowSorter.SortKey(tableModel.getKeyCol(), SortOrder.ASCENDING));
 
 					sortDescriptor.put(tableModel.getKeyCol(), SortOrder.ASCENDING);
@@ -906,8 +906,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			else if (tableModel.getFinalCols() != null && !tableModel.getFinalCols().isEmpty()) {
 				Iterator<Integer> iter = tableModel.getFinalCols().iterator();
-				// sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
-				// sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+				
+				
 				while (iter.hasNext()) {
 					Integer col = iter.next();
 					sortKeys.add(new RowSorter.SortKey(col, SortOrder.ASCENDING));
@@ -1072,8 +1072,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	 * 
 	 * List <RowSorter.SortKey> sortKeys
 	 * = new ArrayList<>();
-	 * //sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
-	 * //sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+	 * 
+	 * 
 	 * sortKeys.add(new RowSorter.SortKey(tableModel.getKeyCol(),
 	 * SortOrder.ASCENDING));
 	 * sorter.setSortKeys(sortKeys);
@@ -1087,8 +1087,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	 * List <RowSorter.SortKey> sortKeys
 	 * = new ArrayList<>();
 	 * Iterator iter = tableModel.getFinalCols().iterator();
-	 * //sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
-	 * //sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+	 * 
+	 * 
 	 * while (iter.hasNext())
 	 * sortKeys.add(new RowSorter.SortKey((Integer) iter.next(),
 	 * SortOrder.ASCENDING));

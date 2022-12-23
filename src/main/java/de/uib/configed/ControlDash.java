@@ -165,7 +165,7 @@ public class ControlDash {
 			};
 			
 			fDash.checkAdditionalPane();
-			// fDash.setSize( new Dimension( 400, 500 ) );
+			
 
 			if (Globals.mainFrame != null) {
 				fDash.setLocation(Globals.mainFrame.getX() + Globals.LOCATION_DISTANCE_X,
