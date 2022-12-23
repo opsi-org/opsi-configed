@@ -229,7 +229,7 @@ public abstract class Serializer {
 				}
 			} else {
 				element = (SelectElement) Class.forName("de.uib.configed.clientselection.elements." + elementName)
-						.newInstance();
+						.getDeclaredConstructor().newInstance();
 			}
 		}
 

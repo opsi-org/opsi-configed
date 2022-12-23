@@ -6963,7 +6963,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// configOptionsRequestRefresh();
 
 			// now we can set the values and clear the collected update items
-			boolean result = exec.doCall(new OpsiMethodCall("configState_updateObjects",
+			exec.doCall(new OpsiMethodCall("configState_updateObjects",
 					new Object[] { exec.jsonArray(callsConfigName2ConfigValueCollection) }));
 
 			/*
@@ -7073,7 +7073,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			return;
 
 		if (configCollection != null && !configCollection.isEmpty()) {
-			boolean configsChanged = false;
 			// add configId where necessary
 			List<String> usedConfigIds = new ArrayList<>();
 			Map<String, String> typesOfUsedConfigIds = new HashMap<>();
@@ -7620,16 +7619,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (!serverFullPermission)
 			return "";
 
-		String result = "";
-
 		if (withLicenceManagement) {
 			// logging.debug(this, "--- licenseKey " + licenseKey + ", licensePoolId " +
 			// licensePoolId);
 			OpsiMethodCall omc = new OpsiMethodCall("addSoftwareLicenseToLicensePool",
 					new String[] { softwareLicenseId, licensePoolId, licenseKey });
 
-			// result = exec.doCall ( omc );
-			result = exec.getStringResult(omc);
+			exec.getStringResult(omc);
 
 			// logging.debug(this, "--- result for editRelationSoftwareL2LPool" + result);
 		}
@@ -7637,11 +7633,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		// if (result == null)
 		// return null;
 
-		String pseudokey = Globals.pseudokey(new String[] { softwareLicenseId, licensePoolId });
-
-		// logging.debug( " pseudokey " + pseudokey);
-
-		return pseudokey;
+		return Globals.pseudokey(new String[] { softwareLicenseId, licensePoolId });
 	}
 
 	public boolean deleteRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId) {
