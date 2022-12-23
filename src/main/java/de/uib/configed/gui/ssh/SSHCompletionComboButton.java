@@ -331,7 +331,8 @@ public class SSHCompletionComboButton {
 			Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 			logging.debug(this, "getListCellRendererComponent called");
 
-			if (c == null || !(c instanceof JComponent))
+			// is null or not JComponent
+			if (!(c instanceof JComponent))
 				return c;
 
 			JComponent jc = (JComponent) c;

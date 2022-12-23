@@ -5265,43 +5265,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return new TreeSet<>(endResultSet);
 	}
 
-	/*
-	 * private List getProductDependencies ( String productname)
-	 * {
-	 * List<Map<String, String>> result =
-	 * dataStub.getDepot2product2dependencyInfos().get(theDepot).get(productname);
-	 * logging.debug(this, "getProductDependencies for product " + productname +
-	 * " , result " + result);
-	 * return result;
-	 * 
-	 * 
-	 * }
-	 */
-
-	private boolean generateIfNull3(Map<String, Map<String, Map<String, Object>>> ob) {
-		if (ob == null) {
-			ob = new HashMap<>();
-			return true;
-		}
-		return false;
-	}
-
-	private boolean generateIfNull2(Map<String, Map<String, Object>> ob) {
-		if (ob == null) {
-			ob = new HashMap<>();
-			return true;
-		}
-		return false;
-	}
-
-	private boolean generateIfNull1(Map<String, Object> ob) {
-		if (ob == null) {
-			ob = new HashMap<>();
-			return true;
-		}
-		return false;
-	}
-
 	/**
 	 * returns a set which depends on the momentarily selected hosts as
 	 * specified by a call to retrieveProductProperties
@@ -6583,11 +6546,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 * 
 	 * }
 	 */
-
-	private Object getLocalbootDisplayFieldsConfig() {
-		// getConfigs();
-		return null;
-	}
 
 	@Override
 	public Map<String, RemoteControl> getRemoteControls() {
@@ -8430,88 +8388,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public Map<String, LicencepoolEntry> getLicencepools() {
 		dataStub.licencepoolsRequestRefresh();
 		return dataStub.getLicencepools();
-	}
-
-	private Integer getIntValue(String s) {
-		if (s == null)
-			return -1;
-
-		Integer result = -1;
-		try {
-			result = Integer.valueOf(s);
-		} catch (Exception ex) {
-			logging.info(this, "getIntValue exception " + ex);
-		}
-
-		return result;
-
-	}
-
-	private String testOutRow(String licencePoolId, Map<String, String> rowmap) {
-		// Send all output to the Appendable object sb
-
-		String result = String.format("%50s", rowmap.get("licensePoolId")) + ": " + " licence_options "
-				+ String.format("%5s", rowmap.get("licence_options")) + " used_by_opsi "
-				+ String.format("%5s", rowmap.get("used_by_opsi")) + " remaining_opsi "
-				+ String.format("%5s", rowmap.get("remaining_opsi")) + " SWinventory_used "
-				+ String.format("%5s", rowmap.get("SWinventory_used")) + " SWinventory_remaining "
-				+ String.format("%5s", rowmap.get("SWinventory_remaining"));
-
-		assert rowmap.get("licence_options") != null : " rowmap.get(licence_options) is null";
-		assert rowsLicenceStatistics.get(licencePoolId) != null : " rowsLicenceStatistics.get(licencePoolId)  is null";
-		assert rowsLicenceStatistics.get(licencePoolId).get("licence_options") != null
-				: "rowsLicenceStatistics.get(licencePoolId).get.get(licence_options) is null";
-		assert rowmap.get("used_by_opsi") != null : " rowmap.get(used_by_opsi) is null";
-		assert rowsLicenceStatistics.get(licencePoolId).get("used_by_opsi") != null
-				: "rowsLicenceStatistics.get(licencePoolId).get(used_by_opsi)  is null";
-		assert rowmap.get("SWinventory_used") != null
-				: "rowsLicenceStatistics.get(licencePoolId).get(SWinventory_used ) is null";
-
-		// comparing to service method
-		boolean ok =
-
-				(rowmap.get("licence_options")).equals(rowsLicenceStatistics.get(licencePoolId).get("licence_options"))
-
-						&&
-
-						(rowmap.get("used_by_opsi"))
-								.equals(rowsLicenceStatistics.get(licencePoolId).get("used_by_opsi"))
-
-						&&
-
-						(rowmap.get("remaining_opsi"))
-								.equals(rowsLicenceStatistics.get(licencePoolId).get("remaining_opsi"))
-
-						&&
-
-						/*
-						 * (rowmap.get("SWinventory_remaining")).equals(
-						 * (rowmap.get("licence_options"))
-						 * )
-						 */
-
-						(rowmap.get("SWinventory_used"))
-								.equals(rowsLicenceStatistics.get(licencePoolId).get("SWinventory_used"));
-
-		if (!ok) {
-			String result1 = String.format("%50s", rowmap.get("licensePoolId")) + ": " + " licence_options "
-					+ String.format("%5s", rowsLicenceStatistics.get(licencePoolId).get("licence_options"))
-					+ " used_by_opsi "
-					+ String.format("%5s", rowsLicenceStatistics.get(licencePoolId).get("used_by_opsi"))
-					+ " remaining_opsi "
-					+ String.format("%5s", rowsLicenceStatistics.get(licencePoolId).get("remaining_opsi"))
-					+ " SWinventory_used "
-					+ String.format("%5s", rowsLicenceStatistics.get(licencePoolId).get("SWinventory_used"))
-					+ " SWinventory_remaining "
-					+ String.format("%5s", rowsLicenceStatistics.get(licencePoolId).get("SWinventory_remaining"));
-
-			logging.warning(this, "statistic results differ new result " + result);
-
-			logging.warning(this, "statistic results differ old  result " + result1);
-		}
-
-		return result;
-
 	}
 
 	protected Map<String, LicenceStatisticsRow> produceLicenceStatistics()

@@ -200,10 +200,6 @@ public class WaitCursor {
 		 */
 	}
 
-	private int getObjectNo() {
-		return objectNo;
-	}
-
 	/*
 	 * private static String getInstancesNumbers()
 	 * {

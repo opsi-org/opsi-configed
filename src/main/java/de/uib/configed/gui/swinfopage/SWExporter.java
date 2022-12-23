@@ -153,10 +153,6 @@ public abstract class SWExporter {
 		configed.endApp(exitcode);
 	}
 
-	private void showUsage() {
-		logging.debug(usage);
-	}
-
 	public void setWriteToFile(String path) {
 		exportFilename = path;
 

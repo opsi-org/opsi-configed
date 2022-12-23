@@ -5,8 +5,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
-import java.awt.font.TextAttribute;
-import java.util.HashMap;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -19,20 +17,6 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 	protected Font emphasized;
 	protected Font standard;
 	public static Dimension preferred = new Dimension(labelWidth, labelHeight);
-
-	private Font deriveFont0(Font font) {
-		HashMap<TextAttribute, Object> map = new HashMap<>();
-		return font.deriveFont(map);
-	}
-
-	private Font deriveFont1(Font font) {
-		HashMap<TextAttribute, Object> map = new HashMap<>();
-		// map.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-		// map.put(TextAttribute.INPUT_METHOD_UNDERLINE,
-		// TextAttribute.UNDERLINE_LOW_TWO_PIXEL);
-		// map.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
-		return font.deriveFont(map);
-	}
 
 	public SimpleIconNodeRenderer() {
 		super();

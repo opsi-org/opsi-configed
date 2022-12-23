@@ -581,8 +581,4 @@ public class OpsiDataBackend extends Backend {
 			hwClassToValues.put(hardwareOpsi, values);
 		}
 	}
-
-	private String getHardwareTableName(String name) {
-		return hwUiToOpsi.get(name);
-	}
 }

@@ -1079,10 +1079,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		return -1;
 	}
 
-	private void getSelectedAndSearch(boolean select) {
-		getSelectedAndSearch(false, select);
-	}
-
 	public boolean isSearchActive() {
 		return searchActive;
 	}

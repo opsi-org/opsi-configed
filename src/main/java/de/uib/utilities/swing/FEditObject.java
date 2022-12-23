@@ -298,10 +298,6 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 		leaveOnCommit = b;
 	}
 
-	private int intHalf(double x) {
-		return (int) (x / 2);
-	}
-
 	public void locateLeftTo(Component master) {
 		int startX = 0;
 		int startY = 0;

@@ -333,28 +333,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	}
 
-	private String getLineForPos(int charpos) {
-		String result = "";
-		String[] linesplits = textpane.getText().split("\n");
-
-		// logging.info(this, "linesplits " + java.util.Arrays.toString( linesplits ));
-
-		int pos = 0;
-		int i = 0;
-		boolean hit = false;
-		while (!hit && i < linesplits.length) {
-			result = linesplits[i];
-			// logging.info(this, "line " + i + " starting with charpos " + pos + " is " +
-			// result);
-			pos = pos + result.length();
-			if (pos >= charpos)
-				hit = true;
-			i++;
-		}
-		// logging.info(this, "line for charpos " + charpos + " is " + result);
-		return result;
-	}
-
 	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {

@@ -182,10 +182,6 @@ public class HostInfo {
 		return numberOfInstances;
 	}
 
-	private void extendMapID2InstanceNumber(String key) {
-		ID2InstanceNumber.put(key, instanceNumber);
-	}
-
 	public Integer getInstanceNumber(String key) {
 		return ID2InstanceNumber.get(key);
 	}

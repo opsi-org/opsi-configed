@@ -19,7 +19,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JComboBox;
@@ -799,13 +798,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		names = mapTableModel.getKeys();
 		logging.info(this, "removeProperty names left: " + names);
 		// mapTableModel.fireTableDataChanged(); //called in MapTableModel
-	}
-
-	private Map testData() {
-		HashMap hm = new HashMap<>();
-		hm.put("key 1", "value 1");
-		hm.put("key 2", "value 2");
-		return hm;
 	}
 
 	public void stopEditing() {

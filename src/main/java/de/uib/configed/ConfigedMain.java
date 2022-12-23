@@ -4792,12 +4792,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		depotsList_selectionChanged = false;
 	}
 
-	private void cancelChangeDepotSelection() {
-		logging.debug(this, "cancelChangeDepotSelection");
-		mainFrame.setChangedDepotSelectionActive(false);
-		depotsList_selectionChanged = false;
-	}
-
 	public void reload() {
 		if (mainFrame != null) {
 			mainFrame.setChangedDepotSelectionActive(false);

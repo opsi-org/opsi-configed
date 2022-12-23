@@ -718,16 +718,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 	}
 
-	private void emptyDocument() {
-		ImmutableDefaultStyledDocument blank = new ImmutableDefaultStyledDocument();
-		try {
-			blank.insertStringTruely(0, "building document", lineStyles[0]);
-		} catch (BadLocationException e) {
-		}
-
-		jTextPane.setDocument(blank);
-	}
-
 	public void buildDocument() {
 		logging.debug(this, "building document");
 		jTextPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));

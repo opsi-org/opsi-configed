@@ -776,17 +776,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 	}
 
-	private boolean checkSelectionLicencepools() {
-		if (panelLicencepools.getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(enterLicenceController.mainController.licencesFrame,
-					configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectLicencepool"),
-					configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
-			return false;
-		}
-
-		return true;
-	}
-
 	// ActionListener
 	@Override
 	public void actionPerformed(java.awt.event.ActionEvent evt) {
