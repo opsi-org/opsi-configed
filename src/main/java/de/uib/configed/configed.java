@@ -273,7 +273,7 @@ public class configed {
 	}
 
 	protected static boolean isValue(String[] args, int i) {
-		
+
 		// i + " has - " + (args[i].indexOf('-') == 0) );
 		return i >= args.length || args[i].indexOf('-') == 0;
 	}
@@ -302,7 +302,7 @@ public class configed {
 
 		String s = "java.version";
 		if (propNames.contains(s)) {
-			
+
 			priorizedNames.add(s);
 		}
 
@@ -394,7 +394,6 @@ public class configed {
 
 		configureUI();
 
-		
 		try {
 			String resourceS = "opsi.gif";
 			URL resource = Globals.class.getResource(resourceS);
@@ -431,7 +430,7 @@ public class configed {
 	}
 
 	protected static void processArgs(String[] args) {
-		
+
 		/*for (int i = 0; i < args.length; i++)
 			logging.debug();*/
 		/*
@@ -441,10 +440,9 @@ public class configed {
 		 * logging.debug(args[i]);
 		 * }
 		 */
-		
+
 		logging.debug("args " + Arrays.toString(args));
 
-		
 		de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
 
 		if (args.length == 2 && args[0].equals("--args")) {
@@ -463,7 +461,6 @@ public class configed {
 
 		int i = 0;
 		while (i < args.length) {
-			
 
 			if (args[i].charAt(0) != '-') // no option
 			{
@@ -471,15 +468,14 @@ public class configed {
 					usage();
 					endApp(NO_ERROR);
 				} else {
-					
-					
+
 					// only one of them can be used
 				}
 				i++;
 			} else // options
 
 			{
-				
+
 				if (args[i].equals("-l") || args[i].equals("--locale")) {
 					locale = getArg(args, i);
 					i = i + 2;
@@ -538,19 +534,16 @@ public class configed {
 					i = i + 2;
 				} else if (args[i].equals("--ssh-immediate-connect")) {
 					// de.uib.opsicommand.sshcommand.SSHConnectionInfo
-					
-
-					
 
 					i = i + 1;
 
 					if (isValue(args, i)) {
 						if (args[i].equalsIgnoreCase("Y")) {
 							sshconnect_onstart = true;
-							
+
 						} else if (args[i].equalsIgnoreCase("N")) {
 							sshconnect_onstart = false;
-							
+
 						} else {
 							usage();
 							endApp(ERROR_INVALID_OPTION);
@@ -564,19 +557,18 @@ public class configed {
 					sshkeypassphrase = getArg(args, i);
 					i = i + 2;
 				} else if (args[i].equals("--gzip")) {
-					
+
 					de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
 					i = i + 1;
-					
 
 					if (isValue(args, i)) {
-						
+
 						if (args[i].equalsIgnoreCase("Y")) {
-							
+
 							de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
 						} else if (args[i].equalsIgnoreCase("N")) {
 							de.uib.opsicommand.JSONthroughHTTP.compressTransmission = false;
-							
+
 						} else {
 							usage();
 							endApp(ERROR_INVALID_OPTION);
@@ -594,10 +586,10 @@ public class configed {
 					i++;
 					group = getArg(args, i);
 					i = i + 2;
-					
+
 				} else if (args[i].equals("--initUserRoles")) {
 					optionCLIuserConfigProducing = true;
-					
+
 					i++;
 				} else if (args[i].equals("-me") || args[i].equals("--testPersistenceControllerMethod")) {
 					optionPersistenceControllerMethodCall = true;
@@ -752,7 +744,6 @@ public class configed {
 	}
 
 	public static String encodeStringFromService(String s) {
-		
 
 		return s;
 
@@ -786,15 +777,14 @@ public class configed {
 				out.println("</HTML>");
 
 				// {
-				
+
 				// String osName = System.getProperty("os.name");
-				
+
 				// Process proc = rt.exec("cmd.exe /c start \"" + messagefile.getPath() + "\"");
 				// } else
 				// //Linux, we assume that there is a firefox and it will handle the url
 				// {
 				// String[] cmdarray = new String[] { "firefox", messagefile.getPath() };
-				
 
 				// }
 				// }
@@ -847,7 +837,6 @@ public class configed {
 		} catch (MissingResourceException mre) {
 			// we return the key and log the problem:
 			logging.debug("Problem: " + mre.toString());
-			
 
 			try {
 				result = Messages.messagesEN.getString(key);
@@ -859,7 +848,7 @@ public class configed {
 				}
 			} catch (MissingResourceException mre2) {
 				logging.debug("Problem: " + mre2.toString());
-				
+
 			}
 		} catch (Exception ex) {
 			logging.warning("Failed to message " + key + ": " + ex);
@@ -918,7 +907,6 @@ public class configed {
 		boolean trynimbus = true;
 		boolean found = false;
 
-		
 		try {
 
 			/*
@@ -932,8 +920,6 @@ public class configed {
 					UIManager.setLookAndFeel(info.getClassName());
 					logging.info("Nimbus look&feel set, by " + info.getClassName());
 
-					
-
 					// UIManager.put("nimbusSelectionBackground",
 					// UIManager.get("nimbusLightBackground"));
 
@@ -941,7 +927,7 @@ public class configed {
 					// was chosen: UIManager.put("nimbusSelectionBackground",
 					// UIManager.get("controlHighlight"));
 					// UIManager.put("Tree[Enabled+Selected].collapsedIconPainter", new
-					
+
 					// UIManager.put("Tree.rendererMargins", new Insets(0,0,0,0));
 
 					// UIManager.put("Tree.drawHorizontalLines", true);
@@ -990,7 +976,6 @@ public class configed {
 		 * UIManager.put("ProgressBar.selectionForeground", Globals.backLightBlue);
 		 */
 
-		
 		// destroys some popups, saves others
 	}
 
@@ -1028,21 +1013,18 @@ public class configed {
 	 */
 	public static void main(String[] args) {
 
-		
 		processArgs(args);
 
 		logging.debug("initiating configed");
 
 		if (optionCLIQuerySearch) {
-			
+
 			logging.debug("optionCLIQuerySearch");
 			de.uib.configed.clientselection.SavedSearchQuery query = new de.uib.configed.clientselection.SavedSearchQuery();
-			
 
 			query.setArgs(host, user, password, savedSearch, null);
 			query.addMissingArgs();
 
-			
 			query.runSearch(true);
 			System.exit(0);
 		} else if (optionCLIDefineGroupBySearch) {
@@ -1054,12 +1036,11 @@ public class configed {
 			// addObject2Group
 
 			de.uib.configed.clientselection.SavedSearchQuery query = new de.uib.configed.clientselection.SavedSearchQuery();
-			
+
 			// + ", " + group);
 			query.setArgs(host, user, password, savedSearch, group);
 			query.addMissingArgs();
 			List<String> newGroupMembers = query.runSearch(false);
-			
 
 			query.populateHostGroup(newGroupMembers, group);
 			System.exit(0);
@@ -1114,11 +1095,8 @@ public class configed {
 
 			connect();
 
-			
 			System.exit(0);
 
-			
-			
 		}
 
 		if (de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect) {
@@ -1130,9 +1108,8 @@ public class configed {
 			System.exit(0);
 		}
 
-		
 		try {
-			String resourceS = Globals.iconresourcename;
+			String resourceS = Globals.ICON_RESOURCE_NAME;
 			URL resource = Globals.class.getResource(resourceS);
 			if (resource == null) {
 				logging.debug("image resource " + resourceS + "  not found");
@@ -1158,8 +1135,6 @@ public class configed {
 		fErrorOutOfMemory.setFont(Globals.defaultFontBig);
 		fErrorOutOfMemory
 				.setMessage("The program will be terminated,\nsince more memory is required than was assigned.");
-
-		
 
 		new configed(locale, host, user, password, client, clientgroup, tab, logdirectory);
 	}

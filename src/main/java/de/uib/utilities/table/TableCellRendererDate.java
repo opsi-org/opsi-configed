@@ -22,7 +22,7 @@ public class TableCellRendererDate extends ColorTableCellRenderer {
 	private java.text.DateFormat dateFormat;
 
 	public TableCellRendererDate() {
-		dateFormat = java.text.DateFormat.getDateInstance(Globals.dateFormatStylePattern);
+		dateFormat = java.text.DateFormat.getDateInstance(Globals.DATE_FORMAT_STYLE_PATTERN);
 
 		label.setText("");
 	}
@@ -53,10 +53,8 @@ public class TableCellRendererDate extends ColorTableCellRenderer {
 			((JLabel) result).setText(selectedString);
 			((JLabel) result).setIcon(selectedIcon);
 			((JLabel) result).setToolTipText(selectedString);
-			
-		}
 
-		
+		}
 
 		return result;
 	}
