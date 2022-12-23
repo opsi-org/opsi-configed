@@ -2802,6 +2802,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	}
 
+	@Override
 	public List<String> fireOpsiclientdEventOnClients(String event, String[] clientIds) {
 		OpsiMethodCall omc = new OpsiMethodCall("hostControl_fireEvent", new Object[] { event, clientIds });
 
@@ -2810,6 +2811,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return collectErrorsFromResponsesByHost(responses, "fireOpsiclientdEventOnClients");
 	}
 
+	@Override
 	public List<String> showPopupOnClients(String message, String[] clientIds, Float seconds) {
 		OpsiMethodCall omc;
 		if (seconds == 0.0) {
@@ -2824,6 +2826,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	}
 
+	@Override
 	public List<String> shutdownClients(String[] clientIds) {
 		OpsiMethodCall omc = new OpsiMethodCall("hostControl_shutdown", new Object[] { clientIds });
 
@@ -2833,6 +2836,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	}
 
+	@Override
 	public List<String> rebootClients(String[] clientIds) {
 		OpsiMethodCall omc = new OpsiMethodCall("hostControl_reboot", new Object[] { clientIds });
 
@@ -2841,6 +2845,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return collectErrorsFromResponsesByHost(responses, "rebootClients");
 	}
 
+	@Override
 	public Map<String, Object> reachableInfo(String[] clientIds) {
 		logging.info(this, "reachableInfo ");
 		Object[] callParameters = new Object[] {};
@@ -2865,6 +2870,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
+	@Override
 	public Map<String, Integer> getInstalledOsOverview() {
 		logging.info(this, "getInstalledOsOverview");
 
@@ -2890,6 +2896,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return map;
 	}
 
+	@Override
 	public Map<String, Object> getLicensingInfo() {
 		logging.info(this, "getLicensingInfo");
 
@@ -2903,6 +2910,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return exec.getMapResult(omc);
 	}
 
+	@Override
 	public List<Map<String, Object>> getModules() {
 		logging.info(this, "getModules");
 
@@ -2910,6 +2918,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return JSONReMapper.getListOfMaps((JSONArray) licensingInfo.get("licenses"));
 	}
 
+	@Override
 	public Map<String, String> sessionInfo(String[] clientIds) {
 		Map result = new HashMap<>();
 
@@ -2976,6 +2985,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	// executes all updates collected by setHostDescription ...
+	@Override
 	public void updateHosts() {
 		if (globalReadOnly)
 			return;
@@ -3024,36 +3034,44 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		hostUpdates.put(hostId, hostUpdateMap);
 	}
 
+	@Override
 	public void setHostDescription(String hostId, String description) {
 		updateHost(hostId, HostInfo.clientDescriptionKEY, description);
 	}
 
+	@Override
 	public void setClientInventoryNumber(String hostId, String inventoryNumber) {
 		updateHost(hostId, HostInfo.clientInventoryNumberKEY, inventoryNumber);
 	}
 
+	@Override
 	public void setClientOneTimePassword(String hostId, String oneTimePassword) {
 		updateHost(hostId, HostInfo.clientOneTimePasswordKEY, oneTimePassword);
 	}
 
+	@Override
 	public void setHostNotes(String hostId, String notes) {
 		updateHost(hostId, HostInfo.clientNotesKEY, notes);
 	}
 
+	@Override
 	public void setMacAddress(String hostId, String address) {
 		updateHost(hostId, HostInfo.clientMacAddressKEY, address);
 	}
 
+	@Override
 	public void setIpAddress(String hostId, String address) {
 		updateHost(hostId, HostInfo.clientIpAddressKEY, address);
 	}
 
+	@Override
 	public String getMacAddress(String hostId)
 	// opsi 3 compatibility
 	{
 		return "";
 	}
 
+	@Override
 	public Map<String, Map<String, String>> getProductGroups() {
 		if (productGroups != null)
 			return productGroups;
@@ -3079,10 +3097,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return productGroups;
 	}
 
+	@Override
 	public void productGroupsRequestRefresh() {
 		productGroups = null;
 	}
 
+	@Override
 	public Map<String, Map<String, String>> getHostGroups() {
 		if (hostGroups != null)
 			return hostGroups;
@@ -3130,10 +3150,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return hostGroups;
 	}
 
+	@Override
 	public void hostGroupsRequestRefresh() {
 		hostGroups = null;
 	}
 
+	@Override
 	public void fGroup2MembersRequestRefresh() {
 		fGroup2Members = null;
 	}

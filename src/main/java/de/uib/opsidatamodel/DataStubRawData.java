@@ -709,7 +709,7 @@ public class DataStubRawData extends DataStubNOM {
 
 				// parse String and produce list
 				// ArrayList values = null;
-				ArrayList values = new ArrayList<>();
+				List values = new ArrayList<>();
 				try {
 					values = (new JSONArray(valueString)).toList();
 

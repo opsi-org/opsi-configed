@@ -337,9 +337,7 @@ public class JSONReMapper {
 
 			Iterator iter = jsonList.iterator();
 
-			int count = 0;
 			while (iter.hasNext()) {
-				count++;
 				item = (JSONObject) iter.next();
 				Map<String, Object> mapItem = (Map<String, Object>) JSONReMapper.deriveStandard(item);
 				result.add(mapItem);
@@ -373,9 +371,7 @@ public class JSONReMapper {
 
 			Iterator iter = jsonList.iterator();
 
-			int count = 0;
 			while (iter.hasNext()) {
-				count++;
 				item = (JSONObject) iter.next();
 				Map<String, Object> mapItem = (Map<String, Object>) JSONReMapper.deriveStandard(item);
 				result.add(mapItem);
@@ -385,17 +381,6 @@ public class JSONReMapper {
 					: " getListOfMaps did not work, jsonList.size " + jsonList.size() + ", remapped " + result.size();
 		} catch (Exception ex) {
 			logging.error("JSONReMapper: Exception on reproducing  " + item + ", " + ex);
-		}
-
-		return result;
-	}
-
-	public static List<JSONObject> getListOfJSONObjects(JSONObject jO, String key) {
-		ArrayList<JSONObject> result = new ArrayList<>();
-		JSONArray jA = jO.optJSONArray(key);
-
-		if (jA != null) {
-			result = jA.toList();
 		}
 
 		return result;
