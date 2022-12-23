@@ -57,11 +57,11 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 		 * problems
 		 * //SwingUtilities.invokeLater( new Runnable(){
 		 * 
-		 * // {
+		 * 
 		 * instance.append( "SSHConnectionExecDialog " + new java.util.Date() + "\n" );
 		 * 
 		 * 
-		 * // }
+		 * 
 		 * //}
 		 * 
 		 * }

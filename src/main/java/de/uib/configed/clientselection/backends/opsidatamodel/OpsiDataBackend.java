@@ -212,7 +212,7 @@ public class OpsiDataBackend extends Backend {
 
 		// this would need the package version to be an integer
 		
-		// {
+		
 		
 		// return new OpsiDataIntEqualsOperation( OpsiDataClient.SOFTWARE_MAP,
 		
@@ -223,7 +223,7 @@ public class OpsiDataBackend extends Backend {
 		// return new OpsiDataIntGreaterThanOperation( OpsiDataClient.SOFTWARE_MAP,
 		
 		// throw new IllegalArgumentException("Wrong operation for this element.");
-		// }
+		
 
 		// SwAudit
 		String swauditAttributeText = null;

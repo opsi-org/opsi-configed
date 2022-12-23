@@ -798,15 +798,15 @@ public class HostInfo {
 		}
 
 		
-		// {
+		
 		// String shutdownInstall = "off";
 		
 
 		
-		// {
+		
 		// shutdownInstall = "on";
 		
-		// }
+		
 		
 		
 		
@@ -830,7 +830,7 @@ public class HostInfo {
 		
 		// persist.getHostInfoCollections().updateLocalHostInfo(client,
 		
-		// }
+		
 	}
 
 	@Override

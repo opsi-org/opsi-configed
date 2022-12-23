@@ -2051,7 +2051,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			logging.debug(this, "valueFromConfigStateAsExpected configKey, values " + configKey + ", valueList "
 					+ ((List) (configs.get(configKey))) + " expected " + expectValue);
 
-			// {
+			
 			
 
 			Object value = ((List) (configs.get(configKey))).get(0);
@@ -2544,7 +2544,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 
 			
-			// {
+			
 
 			// String product = "opsi-client-agent";
 			// setCommonProductPropertyValue( new HashSet<>(Arrays.asList(newClientID)),
@@ -2565,16 +2565,16 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			
 			// // persist.getHostInfoCollections().setLocalHostInfo(newClientID, depotID,
 			
-			// }
+			
 
 			omc = new OpsiMethodCall("configState_updateObjects", new Object[] { exec.jsonArray(jsonObjects) });
 
 			result = exec.doCall(omc);
 
 			
-			// {
 			
-			// }
+			
+			
 		}
 
 		if ((result) && ((group != null) && (!group.isEmpty()))) {
@@ -6393,10 +6393,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					configOptions.put(key, configOption);
 
 					// if (key.indexOf("has_role") > -1) //testing
-					// {
 					
 					
-					// }
+					
+					
 
 					configListCellOptions.put(key, (ListCellOptions) configOption);
 
@@ -6426,10 +6426,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 					configDefaultValues.put(key, configOption.getDefaultValues());
 					// if (key.indexOf("has_role") > -1)
-					// {
 					
 					
-					// }
+					
+					
 
 					if (configOption.getDefaultValues() != null && !configOption.getDefaultValues().isEmpty()) {
 						
@@ -8237,12 +8237,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					fLicencePool2SoftwareList.put(licencePoolID_new, new ArrayList<>());
 
 				
-				// {
+				
 				logging.info(this, "fLicencePool2SoftwareList.get( licencePoolID_new ) "
 						+ fLicencePool2SoftwareList.get(licencePoolID_new));
 
 				fLicencePool2SoftwareList.get(licencePoolID_new).add(softwareID);
-				// }
+				
 
 			}
 

@@ -671,10 +671,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	
-	// {
+	
 	
 
-	// }
+	
 
 	public void loadDataAndGo() {
 		dpass.setVisible(false);
@@ -806,10 +806,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	
 	// try {
 
-	// } catch (InterruptedException ex) {
+	
 	
 
-	// }
+	
 
 	protected void initData() {
 		
@@ -1188,15 +1188,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// try {
 	
-	// } catch (Exception ex) {
-	// }
+	
+	
 	// SwingUtilities.invokeLater(new Thread() {
 	
 
-	// }
 	
-	// }
-	// }
+	
+	
+	
 
 	public void handleLicencesManagementRequest() {
 		logging.info(this, "handleLicencesManagementRequest called");
@@ -1314,7 +1314,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// fMessage.setMessage("stop and look at\n" + this.getClass().getName() + " :\n"
 	
 
-	// }
+	
 
 	protected void actOnListSelection() {
 		logging.info(this, "actOnListSelection");
@@ -1414,7 +1414,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			 * String selClient = getSelectedClients()[0];
 			 * 
 			 * 
-			 * // {
+			 * 
 			 * logging.debug(this, "selClient " + selClient + " infos from map " + ((Object)
 			 * pcinfos));
 			 * logging.info(this, "addOnListSelection selClient " + selClient);
@@ -1430,7 +1430,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			 * 
 			 * hostInfo.produceFrom( pcinfos.get(selClient).getMap() ) ;
 			 * }
-			 * // }
+			 * 
 			 * 
 			 * }
 			 * catch (Exception ex)
@@ -1468,7 +1468,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			clientInDepot = depotsAdded.toString();
 
 			
-			// {
+			
 
 			if (getSelectedClients().length == 1) {
 				mainFrame.setClientID(getSelectedClients()[0]);
@@ -1479,7 +1479,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			hostInfo.resetGui(mainFrame);
 
 			mainFrame.enableMenuItemsForClients(getSelectedClients().length);
-			// }
+			
 
 			logging.info(this, "actOnListSelection update hosts status selectedClients " + getSelectedClients().length
 					+ " as well as " + selectionPanel.getSelectedValues().size());
@@ -1529,9 +1529,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	
 	
 	// b.append(" " + a[n]);
-	// }
+	
 
-	// }
+	
 
 	// we call this after we have a PersistenceController
 	protected void initMainFrame() {
@@ -2026,9 +2026,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	
 	// else
 
-	// } else
+	
 	// return "";
-	// }
+	
 
 	protected Map<String, Boolean> produceClientListForDepots(String[] depots, Set<String> allowedClients) {
 		logging.info(this, " producePcListForDepots " + logging.getStrings(depots) + " running with allowedClients "
@@ -4920,7 +4920,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			this.source = (Map<String, Map<String, String>>) source1;
 
 			
-			// {
+			
 			
 
 			logging.debug(this, "dataHaveChanged source " + source);
@@ -5527,12 +5527,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		NewClientDialog.getInstance().setHostNames(persist.getHostInfoCollections().getOpsiHostNames());
 
 		// try // in an applet context this may cause a security problem
-		// {
+		
 
-		// }
+		
 		// catch (Exception ex)
-		// {
-		// }
+		
+		
 
 	}
 
@@ -6292,7 +6292,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 */
 	public void startSSHOpsiServerExec(final SSHCommand command) {
 		
-		// {
+		
 		logging.info(this, "startSSHOpsiServerExec isReadOnly false");
 		final ConfigedMain m = this;
 		new Thread() {
@@ -6303,15 +6303,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				else
 					new SSHConnectExec(m, command);
 				
-				// {
+				
 				
 				
 				
 
-				// }
+				
 			}
 		}.start();
-		// }
+		
 	}
 
 	/**

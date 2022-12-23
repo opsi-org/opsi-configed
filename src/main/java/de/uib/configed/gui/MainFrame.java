@@ -3829,7 +3829,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	 * 
 	 * 
 	 * 
-	 * // {
+	 * 
 	 * // JOptionPane.showMessageDialog(this,
 	 * "MainFrame.stateChanged(cbInstallByShutdown)");
 	 * // changedClientInfo.put(HostInfo.clientShutdownInstallKEY,
@@ -3839,7 +3839,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	 * 
 	 * 
 	 * 
-	 * // }
+	 * 
 	 * }
 	 */
 
@@ -4685,7 +4685,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		
 		showLogfiles.setDocuments(logs, statusPane.getSelectedClientNames());
 		
-		// }
+		
 		
 
 	}

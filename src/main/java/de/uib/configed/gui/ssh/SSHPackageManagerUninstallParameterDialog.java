@@ -245,7 +245,7 @@ public class SSHPackageManagerUninstallParameterDialog
 			
 			// tf_freeInput.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.freeInput"));
 			// tf_freeInput.getDocument().addDocumentListener(new DocumentListener()
-			// {
+			
 			
 			
 			
@@ -355,10 +355,10 @@ public class SSHPackageManagerUninstallParameterDialog
 	}
 
 	
-	// {
 	
 	
-	// }
+	
+	
 	private void changeDepot() {
 		if (tf_selecteddepots.getText()
 				.equals(configed.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS")))

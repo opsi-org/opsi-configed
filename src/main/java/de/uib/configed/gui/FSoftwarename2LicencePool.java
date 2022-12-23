@@ -410,11 +410,11 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 					new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
 							// new MapRetriever(){
 							
-							// {
 							
 							
-							// }
-							// }
+							
+							
+							
 							() -> (Map) persist.getInstalledSoftwareName2SWinfo())
 					// ,
 

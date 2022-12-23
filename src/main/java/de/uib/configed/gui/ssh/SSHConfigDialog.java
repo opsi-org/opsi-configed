@@ -478,20 +478,20 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			
 			if (connectionInfo.getKeyfilePath() != "")
 				cb_useKeyfile.setSelected(true);
-			// {
 			
 			
-			// {
+			
+			
 			
 			
 			
 			// connectionInfo.useKeyfile(true, tf_keyfile.getText(), new
 			
-			// }
+			
 			
 			// connectionInfo.setUserData((String) cb_host.getSelectedItem(),
 			
-			// }
+			
 			cb_useOutputColor = new JCheckBox();
 			cb_useOutputColor.setText(configed.getResourceValue("SSHConnection.Config.coloredOutput"));
 			cb_useOutputColor.setToolTipText(configed.getResourceValue("SSHConnection.Config.coloredOutput.tooltip"));

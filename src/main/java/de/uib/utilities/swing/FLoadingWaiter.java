@@ -213,11 +213,11 @@ public class FLoadingWaiter extends JFrame
 
 				// new Runnable(){
 				
-				// {
+				
 				() -> setVisible(false)
 		
-		// }
-		// }
+		
+		
 		);
 		
 	}

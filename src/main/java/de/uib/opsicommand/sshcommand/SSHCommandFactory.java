@@ -215,7 +215,7 @@ public class SSHCommandFactory {
 		// SSHCommand csetrights = new
 		
 		// LinkedList<String> coms = new LinkedList<>()
-		// {{
+		
 		
 		
 		// ssh_commands_param.add(new SSHCommand_Template(csetrights, new

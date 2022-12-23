@@ -51,7 +51,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		super(null, title);
 		
 		
-		// {
+		
 		
 		
 		
@@ -60,7 +60,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		setFont(Globals.defaultFont);
 		setIconImage(Globals.mainIcon);
 		
-		// }
+		
 		this.setSize(new Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH, frameHeight));
 		this.centerOn(Globals.mainFrame);
 		this.setBackground(Globals.backLightBlue);
@@ -97,14 +97,14 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		logging.info(this, "getRepositoriesFromConfigs opsiRepo " + opsiRepo);
 
 		// try
-		// {
+		
 		// String o_prod = ((String)firstDepot.get(configDepot)).replace("file://", "");
 		
 		
 		
-		// } catch (Exception e)
-		// {
-		// }
+		
+		
+		
 
 		logging.info(this, "getRepositoriesFromConfigs opsiRepo " + opsiRepo);
 		logging.info(this, "getRepositoriesFromConfigs opsiProd " + opsiProd);
@@ -174,30 +174,30 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		dia.setVisible(true);
 	}
 	
-	// {
 	
 	
-	// {
 	
-	// }
 	
-	// {
 	
-	// }
+	
+	
+	
+	
+	
 	// SSHConnectionExecHelpDialog outputDialog = new SSHConnectionExecHelpDialog(
 	// command,
 	// configed.getResourceValue("SSHConnection.Exec.title")+ "
 	// \""+command.getCommand() + "\" "
 	
-	// }
+	
 
 	/* This method gets called when button 2 is pressed */
 	
-	// {
+	
 	// 
 	
 	
-	// }
+	
 	public void cancel() {
 		super.doAction2();
 	}

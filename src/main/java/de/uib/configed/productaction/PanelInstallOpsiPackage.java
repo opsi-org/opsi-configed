@@ -429,13 +429,13 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 						+ fieldOpsiPackageName.getText() + ", " + comboChooseDepot.getSelectedItem());
 				// SwingUtilities.invokeLater(new Runnable(){
 				
-				// {
+				
 				execute();
 
 				buttonCallExecute.setBackground(saveColor);
 				
-				// }
-				// }
+				
+				
 				
 
 			}

@@ -76,7 +76,7 @@ public class BackendMySQL {
 		 * //
 		 */
 		
-		// }
+		
 	}
 
 	public List<String> getListFromSQL(String abfrage) {
@@ -339,7 +339,7 @@ public class BackendMySQL {
 
 		
 		
-		// }
+		
 
 		return list;
 	}

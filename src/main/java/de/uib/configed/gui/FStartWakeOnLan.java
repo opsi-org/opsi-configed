@@ -90,7 +90,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 	public FStartWakeOnLan(Frame owner, String title, ConfigedMain main) {
 		super(null, title, false, new String[]
-		// {"start", "cancel"},
+		
 		{ configed.getResourceValue("FStartWakeOnLan.start"), configed.getResourceValue("FStartWakeOnLan.cancel") },
 				750, 310);
 		this.main = main;

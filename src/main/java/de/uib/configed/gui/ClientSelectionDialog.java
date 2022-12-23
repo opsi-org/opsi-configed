@@ -198,21 +198,21 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			collectData();
 			//
 			// try
-			// {
+			
 			// SwingUtilities.invokeAndWait(
 			// new Runnable(){
 			
-			// {
+			
 			main.setVisualViewIndex(ConfigedMain.VIEW_CLIENTS); // because of potential memory problems we switch to
 																// client view
-																// }
-																// }
 																
-																// }
+																
+																
+																
 																// catch(InterruptedException iex)
-																// {
 																
-																// }
+																
+																
 
 			if (manager != null)
 				clients = manager.selectClients();
@@ -255,7 +255,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		saveButton.addActionListener(new SaveButtonListener());
 
 		// loadSearchBox = new JComboBox<>( new String[]
-		// {configed.getResourceValue("ClientSelectionDialog.loadSearchBox")} );
+		
 		
 
 		buttonReload = new IconAsButton(configed.getResourceValue("ClientSelectionDialog.buttonReload"),

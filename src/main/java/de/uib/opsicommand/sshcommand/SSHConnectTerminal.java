@@ -139,7 +139,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				// channel.setInputStream(new FilterInputStream(System.in){
 				
 				
-				// }
+				
 				
 
 				
@@ -147,8 +147,8 @@ public class SSHConnectTerminal extends SSHConnect {
 				// channel = setChannels(new FilterInputStream(System.in){
 				
 				
-				// }
-				// }),
+				
+				
 				// new MyOutputPrinter(dialog, System.out)
 				
 				channel = setStreams(channel);
@@ -323,34 +323,34 @@ public class SSHConnectTerminal extends SSHConnect {
 					// exec(new String(new byte[] {3}) +"\n");
 					
 					// dialog.getInputField().setText("");
-					// }
+					
 					else {
 						// String text = textField.getText() + "\n";
 						exec(textField.getText() + "\n");
 						
 						// "))
-						// {
 						
 						
 						
-						// {
 						
 						
-						// }
+						
+						
+						
 						// else
 						
 
 						
 						
-						// }
+						
 						((Component) textField).requestFocusInWindow();
 						dialog.getInputField().setText("");
 					}
 				}
 				
-				// {
+				
 
-				// }
+				
 				else if ((key == KeyEvent.VK_UP) || (key == KeyEvent.VK_KP_UP)) {
 					dialog.getInputField().setText(dialog.getPrevCommand_up());
 					((Component) textField).requestFocusInWindow();
@@ -381,20 +381,20 @@ public class SSHConnectTerminal extends SSHConnect {
 		}
 
 		
-		// {
+		
 		// // String pwd = ssh.exec(new Empty_Command("pwd" ), false, null, true,
 		// false).replace("\n", "");
 		// try {
 		
 		// // exec("pwd\n");
 		
-		// {
+		
 		// out.write("pwd\n".getBytes());
 		
 		
-		// }
 		
-		// // }
+		
+		// 
 		// // catch (IOException ioe)
 
 		
@@ -410,17 +410,17 @@ public class SSHConnectTerminal extends SSHConnect {
 		// String result_dir = "";
 
 		// for (String l : arr_result_dir)
-		// {
+		
 		
 		
 		// String dir = "" + line.split(currentDirectory + "/",2)[1];
 		
 		// result_dir = result_dir + dir + "\n";
-		// }
+		
 		// result = result + "\n" + result_dir;
-		// }
+		
 		// catch (Exception ioe)
-		// }
+		
 		return result;
 	}
 

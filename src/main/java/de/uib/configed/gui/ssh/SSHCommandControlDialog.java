@@ -162,14 +162,14 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 					.addComponent(parameterPanel));
 		}
 		// else
-		// {
+		
 		// centerPanelLayout.setHorizontalGroup( centerPanelLayout.createParallelGroup()
 		// .addComponent(commandlistPanel)
 		
 		// centerPanelLayout.setVerticalGroup( centerPanelLayout.createSequentialGroup()
 		// .addComponent(commandlistPanel)
 		
-		// }
+		
 		parameterPanel.setVisible(true);
 	}
 
@@ -352,11 +352,11 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		{
 			
 			// btn_changeHelpPanelStatus.addActionListener(new ActionListener()
-			// {
 			
-			// {
 			
-			// }
+			
+			
+			
 			
 			showPanel();
 			if (!(Globals.isGlobalReadOnly()))
@@ -729,12 +729,12 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			this.setSize(this.getWidth(), this.getHeight() + parameterPanel.getHeight());
 		}
 		// else
-		// {
+		
 		
 		// centerPanel.setSize(centerPanel.getWidth(),
 		
 		
-		// }
+		
 		
 		repaint();
 		revalidate();

@@ -53,3 +53,7 @@ find . -name *.java -exec sed -i "s/\/\/[^\"]* void[^\"]*([^\"]*).*//g" {} \;
 find . -name *.java -exec sed -i "s/\/\/[^\"]* private[^\"]*([^\"]*).*//g" {} \;
 find . -name *.java -exec sed -i "s/\/\/[^\"]* public[^\"]*([^\"]*).*//g" {} \;
 find . -name *.java -exec sed -i "s/\/\/[^\"]* protected[^\"]*([^\"]*).*//g" {} \;
+
+#19. command 
+find . -name *.java -exec sed -i "s/\/\/[^\"][{]\{1,10\}.*//g" {} \;
+find . -name *.java -exec sed -i "s/\/\/[^\"][}]\{1,10\}.*//g" {} \;

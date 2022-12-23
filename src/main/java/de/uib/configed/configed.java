@@ -776,18 +776,18 @@ public class configed {
 				out.println("</body>");
 				out.println("</HTML>");
 
-				// {
+				
 
 				// String osName = System.getProperty("os.name");
 
 				// Process proc = rt.exec("cmd.exe /c start \"" + messagefile.getPath() + "\"");
-				// } else
+				
 				// //Linux, we assume that there is a firefox and it will handle the url
-				// {
+				
 				// String[] cmdarray = new String[] { "firefox", messagefile.getPath() };
 
-				// }
-				// }
+				
+				
 			}
 		} catch (IOException ex) {
 			logging.debug("configed showExternalInfo " + s);
@@ -952,7 +952,7 @@ public class configed {
 			// handle exception
 			logging.error("Failed to configure ui " + e);
 		}
-		// }
+		
 
 		if (!found) {
 			trynimbus = false;

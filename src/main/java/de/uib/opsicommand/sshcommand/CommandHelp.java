@@ -56,9 +56,9 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 
 	// @Override
 	
-	// {
 	
-	// }
+	
+	
 
 	@Override
 	public String getMenuText() {
@@ -120,29 +120,29 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	
 
 	
-	// {
 	
-	// }
 	
-	// {
 	
-	// }
+	
+	
+	
+	
 	// @Override
 	
-	// {
 	
 	
 	
 	
-	// }
 	
-	// {
+	
+	
+	
 	
 	// regexes[0] = "(-[\\w*],[
 	// ])|(--[\\w*]*-[\\w*]*-[\\w*]*)|(--[\\w*]*-[\\w*]*)|(--[\\w*]*)";
 	// regexes[1] = "((<[\\w*]*>)|(<[\\w*]*-[\\w*]*>)|(<[\\w*]*-[\\w*]*-[\\w*]*>)) |
 	// ((<[\\w*]*>\\s\\.{3})|(<[\\w*]*-[\\w*]*>\\s\\.{3})|(<[\\w*]*-[\\w*]*-[\\w*]*>\\s\\.{3}))";
 	
-	// }
+	
 
 }

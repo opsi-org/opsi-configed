@@ -106,9 +106,9 @@ public class SSHConnectExec extends SSHConnect {
 	}
 
 	
-	// {
 	
-	// }
+	
+	
 	public SSHConnectExec() {
 		super(null);
 		connect();
@@ -183,15 +183,15 @@ public class SSHConnectExec extends SSHConnect {
 				String com = ((SSHCommand_Template) commands).getOriginalCommands().get(i).getCommandRaw();
 				com = "(" + (i + 1) + ")  " + com;
 				
-				// {
+				
 				// // final_dia.append(" ", com);
 				
-				// }
+				
 				// else
-				// {
+				
 				// // final_dia.append(" ", com + " \n");
 				defaultCommandsString = defaultCommandsString + com + "   \n";
-				// }
+				
 			}
 			try {
 
@@ -211,7 +211,7 @@ public class SSHConnectExec extends SSHConnect {
 				final SSHConnectExec caller = this;
 				FOUND_ERROR = false;
 				// new Thread()
-				// {
+				
 				
 				{
 					if (!SSHCommandFactory.ssh_always_exec_in_background)

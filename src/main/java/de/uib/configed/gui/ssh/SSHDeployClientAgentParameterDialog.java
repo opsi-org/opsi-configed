@@ -407,12 +407,12 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		super.doAction2();
 	}
 	
-	// {
+	
 	// 
 
 	
 	
-	// }
+	
 
 	/* This method is called when button 1 is pressed */
 	@Override
