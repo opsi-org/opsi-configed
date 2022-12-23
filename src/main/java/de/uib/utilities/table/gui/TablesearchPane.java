@@ -1097,7 +1097,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		searchTheRow(0, true);
 
 		// new Thread(){
-		// public void run()
+		
 		{
 			int startFoundrow = foundrow;
 			
@@ -1228,7 +1228,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		// de.uib.utilities.thread.WaitCursor(fieldSearch, "TablesearchPane");
 
 		// new Thread(){ //destroys search of all
-		// public void run()
+		
 		{
 
 			if (value.toString().length() < 2) {

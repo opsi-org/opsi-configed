@@ -732,7 +732,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		// try{
 
 		// SwingUtilities.invokeLater(new Thread(){
-		// public void run()
+		
 		new Thread() {
 			@Override
 			public void run() {

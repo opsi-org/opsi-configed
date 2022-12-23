@@ -406,7 +406,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	public void cancel() {
 		super.doAction2();
 	}
-	// public void doAction2()
+	
 	// {
 	// 
 

@@ -670,7 +670,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	}
 
-	// public void showDashInfo()
+	
 	// {
 	
 
@@ -803,7 +803,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		login(savedServers);
 	}
 
-	// private void adjustSize(int waitMs, int newW, int newH) {
+	
 	// try {
 
 	// } catch (InterruptedException ex) {
@@ -1177,7 +1177,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		productActionFrame.start();
 	}
 
-	// private void test4AllClients() {
+	
 	// List<String> allHosts =
 
 	
@@ -1191,7 +1191,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// } catch (Exception ex) {
 	// }
 	// SwingUtilities.invokeLater(new Thread() {
-	// public void run() {
+	
 
 	// }
 	
@@ -1307,7 +1307,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	int shutdowncount = 0;
 
-	// private void stoppAt(String location) {
+	
 
 	// FTextArea fMessage = new FTextArea(mainFrame, "stopp", true, new String[] {
 	// "ok" }, 350, 150);
@@ -4910,7 +4910,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public class ClientInfoDataChangedKeeper extends DataChangedKeeper {
 		Map<String, Map<String, String>> source;
 
-		// public void dataHaveChanged(Map<String, Map<String, String>> source)
+		
 		// we use this, but it would not override, therefore we perform a cast
 		// it does not guarantee that the values of the map are maps!
 
@@ -4919,7 +4919,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			this.source = (Map<String, Map<String, String>>) source1;
 
-			// public void dataHaveChanged(Map<String, Map<String, String>> source)
+			
 			// {
 			
 
@@ -5899,7 +5899,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			fListFeedback.glassTransparency(true, 800, 200, 0.04f);
 
 			// SwingUtilities.invokeLater( new Thread(){
-			// public void run(){
+			
 
 			List errors = getErrors();
 

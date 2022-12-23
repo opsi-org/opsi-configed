@@ -353,7 +353,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			
 			// btn_changeHelpPanelStatus.addActionListener(new ActionListener()
 			// {
-			// public void actionPerformed(ActionEvent e)
+			
 			// {
 			
 			// }

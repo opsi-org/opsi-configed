@@ -45,3 +45,6 @@ find . -name *.java -exec sed -i "s/\/\/[^\"]* if[^\"]*([^\"]*).*//g" {} \;
 
 #16.command
 find . -name *.java -exec sed -i "s/\/\/[^\"]* if[^\"]*([^\"]*).*//g" {} \;
+
+#16.command
+find . -name *.java -exec sed -i "s/\/\/[^\"]* void[^\"]*([^\"]*).*//g" {} \;

@@ -354,7 +354,7 @@ public class SSHPackageManagerUninstallParameterDialog
 		updateCommand();
 	}
 
-	// private void changeFreeInput( )
+	
 	// {
 	
 	

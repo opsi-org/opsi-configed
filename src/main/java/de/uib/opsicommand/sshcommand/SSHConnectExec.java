@@ -212,7 +212,7 @@ public class SSHConnectExec extends SSHConnect {
 				FOUND_ERROR = false;
 				// new Thread()
 				// {
-				// public void run()
+				
 				{
 					if (!SSHCommandFactory.ssh_always_exec_in_background)
 						final_dia.setVisible(true);

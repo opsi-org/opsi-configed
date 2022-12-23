@@ -173,7 +173,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		}
 		dia.setVisible(true);
 	}
-	// protected void doActionHelp(final SSHPackageManagerParameterDialog caller))
+	
 	// {
 	
 	
@@ -192,7 +192,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 	// }
 
 	/* This method gets called when button 2 is pressed */
-	// public void doAction2()
+	
 	// {
 	// 
 	

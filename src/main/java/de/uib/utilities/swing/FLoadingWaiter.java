@@ -212,7 +212,7 @@ public class FLoadingWaiter extends JFrame
 		SwingUtilities.invokeLater(
 
 				// new Runnable(){
-				// public void run()
+				
 				// {
 				() -> setVisible(false)
 		

@@ -123,7 +123,7 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	// {
 	
 	// }
-	// public void setHelpLines(LinkedList<CommandHelp_Row> lines)
+	
 	// {
 	
 	// }

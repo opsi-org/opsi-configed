@@ -4680,7 +4680,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		
 
 		// SwingUtilities.invokeLater( new Runnable(){
-		// public void run(){
+		
 		// WaitCursor waitCursor = new WaitCursor( retrieveBasePane(), "setLogFilePanel"
 		
 		showLogfiles.setDocuments(logs, statusPane.getSelectedClientNames());
