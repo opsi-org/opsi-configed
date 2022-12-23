@@ -420,7 +420,7 @@ public class DPassword extends JDialog // implements Runnable
 		fieldUser.setText(TESTUSER);
 		fieldUser.addKeyListener(myKeyListener);
 		// fieldUser.setText(System.getProperty("user.name"));
-		// logging.debug(passwordField.getPassword());
+		
 		fieldUser.setMargin(new Insets(0, 3, 0, 3));
 
 		jLabelPassword.setText(configed.getResourceValue("DPassword.jLabelPassword"));
@@ -446,7 +446,7 @@ public class DPassword extends JDialog // implements Runnable
 		checkCompression.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				// logging.debug(this, "itemStateChanged " + e);
+				
 				// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission =
 				de.uib.opsicommand.JSONthroughHTTP.compressTransmission = (e.getStateChange() == ItemEvent.SELECTED);
 
@@ -460,7 +460,7 @@ public class DPassword extends JDialog // implements Runnable
 		checkTrySSH.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				// logging.debug(this, "itemStateChanged " + e);
+				
 				de.uib.configed.configed.sshconnect_onstart = (e.getStateChange() == ItemEvent.SELECTED);
 
 				logging.info(this, "checkTrySSH itemStateChanged " + checkTrySSH);
@@ -486,19 +486,19 @@ public class DPassword extends JDialog // implements Runnable
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				// logging.debug(this, "++ changedUpdate on " );
+				
 				setRefreshMinutes();
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
-				// logging.debug(this, "++ insertUpdate on " );
+				
 				setRefreshMinutes();
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				// logging.debug(this, "++ removeUpdate on " );
+				
 				setRefreshMinutes();
 			}
 		});
@@ -654,7 +654,7 @@ public class DPassword extends JDialog // implements Runnable
 
 		pack();
 
-		// logging.debug(" ---- host:" + host + "--");
+		
 		if (host.equals("")) {
 			setHost("localhost");
 			fieldHost.requestFocus();
@@ -774,7 +774,7 @@ public class DPassword extends JDialog // implements Runnable
 					persis = PersistenceControllerFactory.getNewPersistenceController(
 							(String) fieldHost.getSelectedItem(), fieldUser.getText(),
 							String.valueOf(passwordField.getPassword()));
-					// logging.checkErrorList(null);
+					
 					logging.info(this, "got persis, == null " + (persis == null));
 					/*
 					 * long TIMEOUT = 100000; //ms

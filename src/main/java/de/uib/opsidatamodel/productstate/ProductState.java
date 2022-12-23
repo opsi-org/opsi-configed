@@ -136,7 +136,7 @@ public class ProductState extends HashMap<String, String> {
 	}
 
 	private void readRetrieved() {
-		// logging.debug(this, "retrieved " + retrievedState);
+		
 
 		put(KEY_productId, getRetrievedValue(key2servicekey.get(KEY_productId)));
 
@@ -182,7 +182,7 @@ public class ProductState extends HashMap<String, String> {
 	}
 
 	private void setTransforms() {
-		// logging.debug(this, "setTransforms on " + this);
+		
 
 		// format
 		/*
@@ -246,12 +246,12 @@ public class ProductState extends HashMap<String, String> {
 		put(KEY_installationInfo, installationInfo.toString());
 
 		String versionInfo = "";
-		// logging.debug(this, "setTransforms get(KEY_productVersion) "
+		
 		// +get(KEY_productVersion));
 		if (!get(KEY_productVersion).equals(""))
 			versionInfo = get(KEY_productVersion) + Globals.ProductPackageVersionSeparator.forDisplay()
 					+ get(KEY_packageVersion);
-		// logging.debug(this, "setTransforms version info " + versionInfo);
+		
 		put(KEY_versionInfo, versionInfo);
 
 	}

@@ -102,7 +102,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				// logging.info(this, "size " + THIS.getSize());
+				
 			}
 		});
 
@@ -121,7 +121,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 			ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
 
 			if (lsm.isSelectionEmpty()) {
-				// logging.debug(this, "no rows selected");
+				
 			} else {
 				int selectedRow = lsm.getMinSelectionIndex();
 				String keyValue = panelLicencecontracts.getValueAt(selectedRow, 0).toString();
@@ -340,7 +340,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_endOfLicence.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// logging.debug( " mouse clicked on textfield 5 ");
+				
 				if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
 					if (fEditDate == null)
 						fEditDate = new FEditDate(jTextField_endOfLicence.getText(), false);

@@ -187,7 +187,7 @@ public class LicenseDisplayer {
 					String swName = (String) getValueAt(i, 0);
 
 					if (checkExistNamesWithVariantLicencepools(swName)) {
-						// logging.info(this, "foundVariantLicencepoold for " + swName);
+						
 						namesWithVariantPools.add(swName);
 						foundVariantLicencepools++;
 					}

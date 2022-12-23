@@ -43,7 +43,7 @@ public class CheckedDocument extends PlainDocument {
 	}
 
 	protected String giveAllowedCharacters(String s, int offset) {
-		// logging.info(this, "giveAllowedCharacters " + s + " " + offset);
+		
 		if (s == null)
 			return "";
 
@@ -54,7 +54,7 @@ public class CheckedDocument extends PlainDocument {
 			appendCharIfAllowed(textBuf, startchars[i]);
 		}
 
-		// logging.info(this, "giveAllowedCharacters textBuf " + textBuf);
+		
 		return textBuf.toString();
 	}
 
@@ -62,14 +62,14 @@ public class CheckedDocument extends PlainDocument {
 	}
 
 	protected void insertStringPlain(int offs, String s, AttributeSet a) throws BadLocationException {
-		// logging.info(this, "insertStringPlain super is " +
+		
 		// super.getClass().getName());
 		super.insertString(offs, s, a);
 	}
 
 	@Override
 	public void insertString(int offs, String s, AttributeSet a) throws BadLocationException {
-		// logging.info(this, "insertString s offs, size " + s + ", " + offs + ", " +
+		
 		
 
 		if (s == null)
@@ -78,15 +78,15 @@ public class CheckedDocument extends PlainDocument {
 		if (size > -1 && offs >= size)
 			return;
 
-		// logging.debug(this, "insertString getText " + getText(0, getLength()));
+		
 
 		String corrected = giveAllowedCharacters(s, offs);
-		// logging.info(this, "insertString corrected, offs, size " + corrected + ", " +
+		
 		// offs + ", " + size);
 		if (size > -1 && offs + corrected.length() > size)
 			corrected = corrected.substring(0, size - offs);
 
-		// logging.debug(this, "insertString corrected, offs, size " + corrected + ", "
+		
 		// + offs + ", " + size);
 
 		insertStringPlain(offs, corrected, a);

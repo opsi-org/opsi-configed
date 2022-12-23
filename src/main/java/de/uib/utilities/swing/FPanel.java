@@ -123,7 +123,7 @@ public class FPanel extends SecondaryFrame {
 	@Override
 	protected void processWindowEvent(WindowEvent e) {
 
-		// logging.info(this, " FPanel --------processWindowEvent " + e);
+		
 		// super.processWindowEvent(e);
 
 		boolean leaving = true;

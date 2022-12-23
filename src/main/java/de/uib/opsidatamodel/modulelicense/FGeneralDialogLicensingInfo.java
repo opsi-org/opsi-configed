@@ -69,7 +69,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 			int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
 		super(owner, title, modal, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout,
 				addPane);
-		//logging.info(this, "construct");
+		
 
 		persist = PersistenceControllerFactory.getPersistenceController();
 		PanelGenEditTable centerPanel = new PanelGenEditTable();
@@ -91,7 +91,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 	protected void allLayout() {
 		// super.allLayout();
 		// we could design an adapted layout and infuse it in guiInit
-		//logging.info(this, "allLayout");
+		
 
 		allpane.setBackground(Globals.backLightBlue); // Globals.nimbusBackground);///Globals.backgroundWhite);
 														// //Globals.backLighter);//Globals.backgroundWhite);
@@ -166,7 +166,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		classNames = licenseMap.getClassNames();
 		theSourceMap = licenseMap.getTableMap();
 
-		//logging.info(this, "retrieveData columnNames " + columnNames  );
+		
 
 		clientNumbers = licenseMap.getClientNumbersMap();
 		clientTitle.setText("<html>" + configed.getResourceValue("LicensingInfo.client.title") + "  ("
@@ -224,12 +224,12 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 				tableSource = new MapSource(columnNames, classNames, theSourceMap, false);
 
-				//logging.info(this, "" + theSourceMap.get("mysql_backend"));
+				
 				buildModel();
 
 				super.reload();
 
-				//logging.info(this, "reload info " + oldNumber + " :: " + newNumber + ":: " + noAfterReload);
+				
 				//ME.setVisible(false);
 				
 				

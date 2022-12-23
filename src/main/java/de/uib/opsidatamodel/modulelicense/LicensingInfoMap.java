@@ -254,7 +254,7 @@ public class LicensingInfoMap {
 		} catch (Exception ex) {
 			logging.error(CLASSNAME + " produceLicenses " + ex.toString());
 		}
-		// logging.info( " licenses result: " + result);
+		
 		return result;
 	}
 
@@ -458,7 +458,7 @@ public class LicensingInfoMap {
 			}
 			Collections.sort(dates);
 
-			// logging.info(this, " dates keys: " + dates);
+			
 
 			Date latest = findLatestChangeDate(dates);
 
@@ -477,7 +477,7 @@ public class LicensingInfoMap {
 		} catch (Exception ex) {
 			logging.error(CLASSNAME + " produceDatesKeys : " + ex.toString() + ", ");
 		}
-		// logging.info(this, " dates keys: " + dates);
+		
 		return dates;
 	}
 
@@ -647,7 +647,7 @@ public class LicensingInfoMap {
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 			for (String key : datesKeys) {
-				// logging.debug("key " + key);
+				
 				Date thisDate = sdf.parse(key);
 				if (dateNow.compareTo(thisDate) >= 0)
 					newest = key;
@@ -671,7 +671,7 @@ public class LicensingInfoMap {
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 			for (String key : dates) {
-				// logging.debug("key " + key);
+				
 				Date thisDate = sdf.parse(key);
 				if (dateNow.compareTo(thisDate) >= 0)
 					newest = thisDate;
@@ -833,7 +833,7 @@ public class LicensingInfoMap {
 		if (configs.get(key) != null)
 			percentClientLimitWarning = Integer.parseInt((String) configs.get(key).get(0));
 
-		// logging.debug("warning levels: " + absolutClientLimitWarning + ", " +
+		
 		
 	}
 

@@ -171,7 +171,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		// List <Map<String, Object>> compareList =
 		// super.produceProductPropertyStates(clients, hosts);
-		// logging.info(this, "produceProductPropertyStates got " + compareList.size());
+		
 
 		List<Map<String, Object>> result = new ArrayList<>();
 
@@ -193,7 +193,7 @@ public class DataStubRawData extends DataStubNOM {
 		} else {
 			hosts.addAll(newClients);
 
-			// logging.info(this, "produceHostsWithProductPropertyStates, all hosts " +
+			
 			
 
 			persist.notifyDataLoadingObservers(
@@ -242,8 +242,8 @@ public class DataStubRawData extends DataStubNOM {
 			}
 
 			logging.info(this, "produceProductPropertyStates produced  items " + counter);
-			// logging.debug(this, "produceProductPropertyStates produced " + result);
-			// logging.info(this, "produceProductPropertyStates compare " + compareList);
+			
+			
 
 			/*
 			 * 
@@ -319,7 +319,7 @@ public class DataStubRawData extends DataStubNOM {
 			 * System.exit(0);
 			 */
 
-			// logging.info(this, "propstates: " + propstates);
+			
 		}
 
 		return result;
@@ -352,7 +352,7 @@ public class DataStubRawData extends DataStubNOM {
 	 * if (client2software == null)
 	 * {
 	 * retrieveSoftwareAuditOnClients(client);
-	 * //logging.info(this, "fillClient2Software " + client2software);
+	 * 
 	 * return;
 	 * }
 	 * 
@@ -435,7 +435,7 @@ public class DataStubRawData extends DataStubNOM {
 
 			}
 
-			// logging.info(this, "retrieveSoftwareAuditOnClients for " +
+			
 			// clientListForCall.size() + " clients " + clientListForCall);
 
 			// client2software = new HashMap<>();
@@ -502,7 +502,7 @@ public class DataStubRawData extends DataStubNOM {
 						entries = new LinkedList<>();
 						client2software.put(clientId, entries);
 					}
-					// logging.info(this, "adding client entry among " + newClients.size() + " for
+					
 					// client " + clientId);
 
 					SWAuditClientEntry clientEntry = new SWAuditClientEntry(SWAuditClientEntry.DB_COLUMN_NAMES, row,
@@ -584,7 +584,7 @@ public class DataStubRawData extends DataStubNOM {
 
 			}
 
-			// logging.info(this, "retrieveSoftwareAuditOnClients client2software " +
+			
 			// client2software);
 
 			logging.info(this, "retrieveSoftwareAuditOnClients used memory on end "
@@ -635,9 +635,9 @@ public class DataStubRawData extends DataStubNOM {
 
 	@Override
 	protected void retrieveHostConfigs() {
-		// logging.info(this, "retrieveHostConfigs (hostConfigs == null) " +
+		
 		// (hostConfigs == null) );
-		// logging.info(this, "retrieveHostConfigs classCounter: (hostConfigs == null) "
+		
 		// + classCounter + ": " + (hostConfigs == null) );
 
 		if (hostConfigs != null)
@@ -784,7 +784,7 @@ public class DataStubRawData extends DataStubNOM {
 			logging.info(this, "hwInfoCol " + hwInfoCol + " look for " + persist.hwInfo_DEVICE + " as well as "
 					+ persist.hwInfo_CONFIG);
 			String part0 = hwInfoCol.substring(0, persist.hwInfo_DEVICE.length());
-			// logging.info(this, "hwInfoCol part0 " + part0
+			
 			// + ", hwInfoCol.substring( part0.length()) " + hwInfoCol.substring(
 			// part0.length()));
 
@@ -798,9 +798,9 @@ public class DataStubRawData extends DataStubNOM {
 				part0 = hwInfoCol.substring(0, persist.hwInfo_CONFIG.length());
 
 				if (!hwInfoCol.substring(part0.length()).startsWith(hwClass)) {
-					// logging.info(this, "client2HwRowsForHwClass: not an expected column format: "
+					
 					// + hwInfoCol);
-					// logging.info(this, "client2HwRowsForHwClass: starting with " + part0);
+					
 				} else {
 					colFound = true;
 					// we found a CONFIG column name
@@ -962,7 +962,7 @@ public class DataStubRawData extends DataStubNOM {
 
 			Map<String, Map<String, Object>> client2ClassInfos = client2HwRowsForHwClass(hwClass);
 
-			// logging.info(this, "retrieveClient2HwRows client2ClassInfos " +
+			
 			// client2ClassInfos);
 
 			if (client2ClassInfos != null) {

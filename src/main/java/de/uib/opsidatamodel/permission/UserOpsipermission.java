@@ -113,7 +113,7 @@ public class UserOpsipermission extends UserConfigModule {
 		logging.info("init ARCHEO for UserOpsipermission");
 		DEFAULT = new UserOpsipermission(UserConfig.ARCHEO_ROLE_NAME);
 
-		// logging.info(" PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY " +
+		
 		// PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY);
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY, false);
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_SERVER_READWRITE, true);

@@ -407,7 +407,7 @@ public class OpsiDataBackend extends Backend {
 		 * (swauditMap.keySet()) );
 		 */
 
-		// logging.info(this, "getClients softwareMap " + softwareMap);
+		
 
 		for (String clientName : clientMaps.keySet()) {
 			OpsiDataClient client = new OpsiDataClient(clientName);

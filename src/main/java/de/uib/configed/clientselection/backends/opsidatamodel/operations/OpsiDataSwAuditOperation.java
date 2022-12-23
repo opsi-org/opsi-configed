@@ -25,8 +25,8 @@ public class OpsiDataSwAuditOperation extends SwAuditOperation implements Execut
 		OpsiDataClient oClient = (OpsiDataClient) client;
 		List<SWAuditClientEntry> auditList = oClient.getSwAuditList();
 		for (SWAuditClientEntry swEntry : auditList) {
-			// logging.info(this, "swIndex " +swIndex);
-			// logging.info(this, "swIdent " +controller.getSWident(swIndex));
+			
+			
 			String swIdent = null;
 			Integer swIndex = swEntry.getSWid();
 			try {

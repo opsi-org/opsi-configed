@@ -1,6 +1,6 @@
 package de.uib.opsidatamodel.productstate;
 
-//import de.uib.utilities.logging.*;
+
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
@@ -221,8 +221,8 @@ public class InstallationStatus {
 		if (!labels.contains(label))
 			return new InstallationStatus(INVALID);
 
-		// logging.debug(" -------- label " + label + " --- val " + getVal(label));
-		// logging.debug(" -------- display " + new
+		
+		
 		
 
 		return new InstallationStatus(getVal(label));

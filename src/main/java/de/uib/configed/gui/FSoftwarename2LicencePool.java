@@ -338,7 +338,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 			@Override
 			public boolean test(Vector<Object> row) {
-				// logging.info(this, "showOnlyNamesWithVariantLicences testing row " + row);
+				
 				return getRangeSWxLicencepool((String) row.get(0)).size() > 1;
 			}
 		};
@@ -351,7 +351,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 			@Override
 			public boolean test(Vector<Object> row) {
-				// logging.info(this, "showOnlyNamesWithoutLicences testing row " + row);
+				
 				return checkExistNamesWithVariantLicencepools((String) row.get(0));
 			}
 		};
@@ -472,7 +472,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		// modelSWnames.setFilterCondition( showOnlyNamesWithoutLicences );
 		// panelSWnames.setFiltering( true );
 		// modelSWnames.reset();
-		// logging.info(this, "we did a reset for modelSWnames");
+		
 
 	}
 

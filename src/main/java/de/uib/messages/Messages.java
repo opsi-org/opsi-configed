@@ -177,7 +177,7 @@ public class Messages {
 		logging.debug("Messages, setLocale");
 		Locale loc = null;
 		if (characteristics != null && !characteristics.equals("")) {
-			// logging.info("Locale is: " + characteristics + ">");
+			
 			if (characteristics.length() == 5 && characteristics.indexOf('_') == 2) {
 				try {
 					loc = produceLocale(characteristics.substring(0, 2), characteristics.substring(3, 5));
@@ -278,7 +278,7 @@ public class Messages {
 	 * URI uri = de.uib.messages.Messages.class.getResource(".").toURI();
 	 * File messagesDir = new File( uri );
 	 * logging.debug("Messages:, dir " + messagesDir);
-	 * //logging.debug("Messages:, messagesDir isDirectory " +
+	 * 
 	 * messagesDir.isDirectory());
 	 * 
 	 * final class PropertiesFilenameFilter implements FilenameFilter{
@@ -291,7 +291,7 @@ public class Messages {
 	 * 
 	 * 
 	 * 
-	 * //logging.debug("Messages: filter " + filter);
+	 * 
 	 * 
 	 * if (messagesDir.isDirectory())
 	 * {
@@ -312,7 +312,7 @@ public class Messages {
 	 * 
 	 * 
 	 * existingLocales = new ArrayList<>(new TreeSet<>(existingLocales));
-	 * //logging.info("Messages:, getLocales: " + existingLocales);
+	 * 
 	 * 
 	 * return existingLocales;
 	 * }

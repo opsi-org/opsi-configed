@@ -63,7 +63,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 		JMenuItem menuItemNull = new JMenuItem("Kein Datum");;
 		menuItemNull.addActionListener(actionEvent -> {
-			// logging.debug( " action menu null ");
+			
 			monthView.getSelectionModel().clearSelection();
 			monthView.commitSelection();
 		});
@@ -318,7 +318,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		if (withMovingSelectionDate) {
 			if (calendar.getTime().equals(monthView.getFirstSelectionDate())) {
 				// avoid recursion
-				// logging.debug(" new time equal old time ");
+				
 			} else {
 				if (monthView.getFirstSelectionDate() != null)
 					calendar.setTime(monthView.getFirstSelectionDate());

@@ -196,7 +196,7 @@ public class PanelCompleteWinProducts extends JPanel
 			produceTarget();
 		});
 
-		// logging.debug(this, "defineChoosers, depots: " + persist.getWinProducts());
+		
 
 	}
 
@@ -393,7 +393,7 @@ public class PanelCompleteWinProducts extends JPanel
 			depots.clear();
 			depots.add((String) comboChooseDepot.getSelectedItem());
 
-			// logging.info(this, "setCommonProductPropertyValue " + depots + ", " +
+			
 			// winProduct + ", " + values);
 
 			if (!oldProductKey.equals(productKey)) {

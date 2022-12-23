@@ -37,7 +37,7 @@ public class ListMerger extends ArrayList {
 	}
 
 	private boolean equals(List list1, List list2) {
-		// logging.debug(this, "equals list1, list2: " + list1 + ", " + list2);
+		
 		if (list1 == null && list2 == null)
 			return true;
 
@@ -59,7 +59,7 @@ public class ListMerger extends ArrayList {
 			if (!equals(listValue, listToMergeIn)) {
 				havingCommonValue = false;
 
-				// logging.debug(this, "merge first list " + listToMergeIn + " to " + listValue
+				
 				// + " havingCommonValue " + havingCommonValue);
 
 				listValue = NO_COMMON_VALUE;

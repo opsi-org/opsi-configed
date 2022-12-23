@@ -293,7 +293,7 @@ public class SSHConnect {
 	private int retry(int retriedTimes, Exception e) {
 		if (retriedTimes >= 3) {
 			retriedTimes = 1;
-			// logging.error(this, "connect Exception " + e);
+			
 			logging.warning(this, "Error", e);
 		} else {
 			logging.warning(this, "[" + retriedTimes + "] seems to be a session exception " + e);

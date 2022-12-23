@@ -60,7 +60,7 @@ public class ChainedTableModelFilter extends TableModelFilter {
 			if (chain.get(filterName).isInUse()) {
 				testresult = testresult && chain.get(filterName).test(row);
 			}
-			// logging.info(this, "test result, filtered by " + filterName + ", " +
+			
 			
 		}
 

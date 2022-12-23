@@ -40,7 +40,7 @@ public class JTextHideField extends javax.swing.JPanel {
 
 			super.insertString(0, fixed, a);
 
-			// logging.info(this, "inserted " + str);
+			
 
 		}
 

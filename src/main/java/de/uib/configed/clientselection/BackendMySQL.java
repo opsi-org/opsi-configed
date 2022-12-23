@@ -33,7 +33,7 @@ public class BackendMySQL {
 
 		alle_hosts = getListFromSQL("SELECT hostId FROM HOST;");
 
-		// logging.info(this, "\n\n\n\n\n\n\n\n\n");
+		
 		// for(int i=0; i<hwConfig.size(); i++) {
 		////
 		/*
@@ -75,7 +75,7 @@ public class BackendMySQL {
 		 * 
 		 * //
 		 */
-		// logging.info(this, hwConfig.get(i));
+		
 		// }
 	}
 
@@ -115,7 +115,7 @@ public class BackendMySQL {
 
 		for (int i = 0; i < children.length(); i++) {
 			List<String> list_i = getListFromJSONObject((JSONObject) children.get(i));
-			// logging.info(this, "OR " + i + children.toString());
+			
 
 			result = union(result, list_i);
 

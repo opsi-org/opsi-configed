@@ -524,7 +524,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		} else {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_SPACE) {
 				if (e.getSource() == jButton1) {
-					// logging.debug (".... on Button1. ");
+					
 					// preAction1(); integrated in doAction1
 					// doAction1();
 					// comment out, Mon Sep 16 16:35:39 CEST 2019 @649 /Internet Time/

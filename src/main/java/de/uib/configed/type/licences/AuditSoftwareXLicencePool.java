@@ -58,8 +58,8 @@ public class AuditSoftwareXLicencePool extends Relation {
 	public AuditSoftwareXLicencePool(ArrayList<String> allRegisteredSoftware) {
 		super(ATTRIBUTES);
 		registeredSoftware = allRegisteredSoftware;
-		// logging.info(this, "registeredSoftware");
-		// for (String sw : registeredSoftware) logging.info(this, sw);
+		
+		
 
 	}
 
@@ -103,7 +103,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 	 * result = swId;
 	 * else
 	 * {
-	 * //logging.error("no software entry for " + swIdent);
+	 * 
 	 * registeredSoftware.add(swIdent);
 	 * result = registeredSoftware.size();
 	 * newEntry = true;
@@ -113,7 +113,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 	 * if (m.get(LicencepoolEntry.idSERVICEKEY) != null)
 	 * info = " " + m.get(LicencepoolEntry.idSERVICEKEY) + " ";
 	 * 
-	 * //logging.info(this, "registeredSoftware " + registeredSoftware);
+	 * 
 	 * logging.info(this, "swident  " + swIdent + " for " + info + "  ==== id (new "
 	 * + newEntry +") " + result);
 	 * 
@@ -163,7 +163,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 		rowmap.put(LicencepoolEntry.idSERVICEKEY, Globals.getStringValue(m.get(LicencepoolEntry.idSERVICEKEY)));
 		add(rowmap);
 
-		// logging.info(this, " StringValuedRelationElement " + rowmap);
+		
 
 		return rowmap;
 	}

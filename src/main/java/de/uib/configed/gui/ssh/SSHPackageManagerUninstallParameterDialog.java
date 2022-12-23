@@ -143,18 +143,18 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		} else {
 			btn_execute.setEnabled(true);
-			// logging.info(this, " we have something selected ");
+			
 
 			if (selectedDepots.contains(persist.DEPOT_SELECTION_NODEPOTS)) {
 				depotParameter = persist.DEPOT_SELECTION_NODEPOTS;
 			} else if (selectedDepots.contains(persist.DEPOT_SELECTION_ALL_WHERE_INSTALLED)) {
 				StringBuffer sb = new StringBuffer();
 				int startIndex = possibleDepots.indexOf(persist.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
-				// logging.debug(this, " we have special selection in possibleDepots " +
 				
-				// logging.info(this, " we have special selection starting at " + startIndex);
+				
+				
 				for (int i = startIndex + 1; i < possibleDepots.size() - 1; i++) {
-					// logging.info(this, "append i " + i + " " + possibleDepots.get(i) );
+					
 					sb.append(possibleDepots.get(i));
 					sb.append(",");
 				}
@@ -190,7 +190,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		for (String depot : persist.getHostInfoCollections().getDepotNamesList()) {
 			if (persist.getDepotPermission(depot)) {
-				// logging.info(this, " depot " + depot + " has products " +
+				
 				// persist.getDepot2LocalbootProducts().get(depot).keySet());
 
 				if ((persist.getDepot2LocalbootProducts().get(depot) != null

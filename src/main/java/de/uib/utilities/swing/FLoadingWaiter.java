@@ -276,7 +276,7 @@ public class FLoadingWaiter extends JFrame
 	@Override
 	public void windowIconified(WindowEvent e) {
 		// sendingToFront = false;
-		// logging.debug ("sendingToFront " + sendingToFront);
+		
 	}
 
 	@Override

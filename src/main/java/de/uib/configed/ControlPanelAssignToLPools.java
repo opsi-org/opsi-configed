@@ -121,7 +121,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 		thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(false);
 
-		// logging.info(this, "setSoftwareIdsFromLicencePool old selected keys " +
+		
 		// thePanel.panelRegisteredSoftware.getSelectedKeys());
 		List<String> selectKeys = thePanel.panelRegisteredSoftware.getSelectedKeys();
 
@@ -180,7 +180,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 					int i = 0;
 					for (String key : identKeys) {
 						rowMap.put(key, rowValues[i]);
-						// logging.info(this, "unknownSoftwareIdsForPool key, val " + key + ", " +
+						
 						// rowValues[i] );
 						i++;
 					}
@@ -335,7 +335,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		// thePanel.panelLicencepools.getValueAt(thePanel.panelLicencepools.getSelectedRow(),
 		// 0).toString();
 
-		// logging.debug(this, "software ids " + softwareIdsForPool);
+		
 
 		List<String> selKeys = thePanel.panelRegisteredSoftware.getSelectedKeys();
 		String showSelKeys = null;
@@ -488,7 +488,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 							// signalled even if only one of several rows fulfill the condition;
 							// but we leave it until the service methods reflect the situation more
 							// accurately
-							// logging.error("licence pool already existing");
+							
 
 							String info = configed.getResourceValue("PanelAssignToLPools.licencePoolIdAlreadyExists")
 									+ " \n(\"" + rowmap.get("licensePoolId") + "\" ?)";
@@ -550,7 +550,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 			modelProductId2LPool.addRow(a);
 			// thePanel.panelProductId2LPool.moveToLastRow();
-			// logging.info(this, "addRelationProductId2LPool.addActionListener line with
+			
 			// a[0] " + a[0]);
 			thePanel.panelProductId2LPool.moveToValue("" + a[0], 0);
 		});

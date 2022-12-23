@@ -285,12 +285,12 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	}
 
 	public void setStartValue(Object s) {
-		// logging.debug("FEditObject.setStartText(): " + s);
+		
 		initialValue = s;
 	}
 
 	public Object getValue() {
-		// logging.debug("FEditObject.getText()");
+		
 		return initialValue;
 	}
 
@@ -337,8 +337,8 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			logging.debug(this, "centerOn screenSize " + screenSize);
-			// logging.info(this, "startX + getSize().width " + (startX + getSize().width));
-			// logging.info(this, "(startY + getSize().height " + (startY +
+			
+			
 			// getSize().height));
 
 			/*
@@ -359,7 +359,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 			logging.error(" editing area not filled with component");
 			return false;
 		}
-		// logging.debug(" editingArea used by " +
+		
 		// editingArea.getComponent(0).getClass());
 		editingArea.getComponent(0).setPreferredSize(usableAreaSize);
 		initComponents();
@@ -402,7 +402,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	}
 
 	protected void leave() {
-		// logging.debug(this, "FEditObject.leave()");
+		
 
 		setVisible(false);
 		finished = true;
@@ -427,12 +427,12 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 			 * leave();
 			 */
 			cancel();
-			// logging.debug(" window closing, text " + getText());
+			
 		} else if (e.getID() == WindowEvent.WINDOW_ACTIVATED) {
-			// logging.debug(" window activated");
+			
 			enter();
 		} else if (e.getID() == WindowEvent.WINDOW_DEACTIVATED) {
-			// logging.debug(" window deactivated");
+			
 			
 
 		}
@@ -453,7 +453,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	}
 
 	protected void cancel() {
-		// logging.debug(this, "cancel, resetting ---------- initialValue " +
+		
 		
 		setStartValue(initialValue);
 		leave();
@@ -468,7 +468,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 		if (e.getSource() == buttonCommit) {
 			commit();
 		} else if (e.getSource() == buttonCancel) {
-			// logging.debug (" -------- buttonCancel " + e);
+			
 			cancel();
 		}
 	}

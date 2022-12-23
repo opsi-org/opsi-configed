@@ -40,19 +40,19 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 				if (imagesBase != null) {
 					if (key != null && stringval != null) {
 						String imageFileString = imagesBase + "/" + key + ".png";
-						// logging.info(this, "key " + key + ", image file " + imageFileString);
+						
 
 						image = Globals.createImageIcon(imageFileString, stringval);
-						// logging.info(this, "image found " + (image != null));
+						
 
 						if (image == null)
 						// try with gif
 						{
 							imageFileString = imagesBase + "/" + stringval + ".gif";
-							// logging.info(this, " image file " + imageFileString);
+							
 
 							image = Globals.createImageIcon(imageFileString, stringval);
-							// logging.info(this, "image found " + (image != null));
+							
 						}
 
 						if (image != null)
@@ -82,12 +82,12 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 
 		if (value != null) {
 
-			// logging.debug(this, " :1 value is " + value + " value class is " +
+			
 			// value.getClass());
 			if (mapOfStrings != null)
 				selectedString = mapOfStrings.get("" + value);
-			// logging.debug(this, " :1 selectedString is " + selectedString);
-			// logging.debug(this, " :2 value is " + value + " value class is " +
+			
+			
 			// value.getClass());
 			if (mapOfImages != null)
 				selectedIcon = mapOfImages.get("" + value);
@@ -128,7 +128,7 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 			((JLabel) result).setIcon(selectedIcon);
 			((JLabel) result).setToolTipText(
 					Globals.fillStringToLength(tooltipPrefix + " " + selectedString + " ", FILL_LENGTH));
-			// logging.debug("------ tooltip " + ((JLabel)result).getToolTipText());
+			
 		}
 
 		// if (backgroundColor != null) result.setBackground (backgroundColor);

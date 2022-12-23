@@ -121,7 +121,7 @@ public class SWAuditEntry extends TableEntry
 
 	@Override
 	public String put(String key, String value) {
-		// logging.info(this, "put key, value " + key + ", " + value);
+		
 		return super.put(key, value);
 
 		/*
@@ -157,7 +157,7 @@ public class SWAuditEntry extends TableEntry
 	public SWAuditEntry(Map<String, Object> entry) {
 		super(entry);
 
-		// logging.info(this, "got " + entry);
+		
 		remap(NAME, key2serverKey.get(NAME));
 		remap(VERSION, key2serverKey.get(VERSION));
 		// remap("subversion", "subVersion");
@@ -172,7 +172,7 @@ public class SWAuditEntry extends TableEntry
 		String subversion // not included in key-values
 				= entryRetrieved.get(key2serverKey.get(SUBVERSION));
 
-		// logging.info(this, "subversion " + subversion);
+		
 
 		if (subversion == null)
 			subversion = "";
@@ -191,13 +191,13 @@ public class SWAuditEntry extends TableEntry
 		if (entry.get("lastseen") != null)
 			lastseen = entry.get("lastseen").toString();
 
-		// logging.info(this, "produced " + this + " ID >> " + get("ID"));
-		// logging.info(this, "produced " + this + " ident " + ident);
+		
+		
 		// if (get("ID") == null)
 		put(id, ident);
 
-		// logging.info(this, "produced " + this + " getIdent " + getIdent() );
-		// logging.info(this, "produced " + this + " ID >> " + get("ID"));
+		
+		
 
 		/*
 		 * if (get("name").equals("Microsoft Office Office 64-bit Components 2010"))

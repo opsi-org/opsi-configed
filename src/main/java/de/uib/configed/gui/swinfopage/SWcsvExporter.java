@@ -24,9 +24,9 @@ public class SWcsvExporter extends SWExporter {
 		logging.debug("------------- create csv report swaudit for " + clientName);
 
 		modelSWInfo.setSorting(0, true);
-		// logging.debug(" theHost " + clientName);
-		// logging.debug(" export file " + exportFilename);
-		// logging.debug(" model columns " + modelSWInfo.getColumnNames() );
+		
+		
+		
 
 		theTable.setModel(modelSWInfo);
 		exportTable.execute(exportFilename, false);

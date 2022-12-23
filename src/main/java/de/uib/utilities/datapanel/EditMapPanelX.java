@@ -268,7 +268,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 					} else {
 						if (names != null) {
 							propertyHandler = defaultPropertyHandler;
-							// logging.debug(this, "remove entry " + names.elementAt( table.getSelectedRow()
+							
 							
 							removeProperty(names.elementAt(table.getSelectedRow()));
 						}
@@ -290,7 +290,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 					} else {
 						if (names != null) {
 							propertyHandler = removingSpecificValuesPropertyHandler;
-							// logging.debug(this, "remove entry " + names.elementAt( table.getSelectedRow()
+							
 							
 							removeProperty(names.elementAt(table.getSelectedRow()));
 						}
@@ -312,7 +312,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 					} else {
 						if (names != null) {
 							propertyHandler = settingDefaultValuesPropertyHandler;
-							// logging.debug(this, "remove entry " + names.elementAt( table.getSelectedRow()
+							
 							
 							removeProperty(names.elementAt(table.getSelectedRow()));
 						}
@@ -434,9 +434,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 
 					if (propertyName != null && defaultsMap != null && defaultsMap.get(propertyName) != null) {
 						tooltip = "default: ";
-						// logging.info(this, "propertyName" + propertyName );
-						// logging.info(this, "defaultsMap" + defaultsMap );
-						// logging.info(this, "defaultsMap.get .." + defaultsMap.get(propertyName) );
+						
+						
+						
 						if (Globals.isKeyForSecretValue(propertyName))
 							tooltip = tooltip + Globals.STARRED_STRING;
 						else
@@ -450,7 +450,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 					jc.setToolTipText(Globals.makeHTMLlines(tooltip));
 
 					// check equals with default
-					// logging.info(this, "prepareRenderer rowIndex " + rowIndex);
+					
 					Object defaultValue = defaultsMap.get(table.getValueAt(rowIndex, 0));
 					Object gotValue = table.getValueAt(rowIndex, 1);
 
@@ -498,7 +498,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		// table.setBackground(Globals.backNimbus);
 
 		table.addMouseWheelListener(mouseWheelEvent -> {
-			// logging.debug(this, "MouseWheelEvent " + e);
+			
 
 			int selRow = -1;
 
@@ -509,12 +509,12 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 			else
 				selRow = table.getSelectedRows()[0];
 
-			// logging.debug(this, "MouseWheelEvent sel Row " + selRow);
+			
 
 			int diff = mouseWheelEvent.getWheelRotation();
 
 			selRow = selRow + diff;
-			// logging.debug(this, "MouseWheelEvent sel Row " + selRow);
+			
 
 			if (selRow >= table.getRowCount())
 				selRow = table.getRowCount() - 1;
@@ -554,7 +554,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		super.setEditableMap(visualdata, optionsMap);
 		cancelOldCellEditing();
 
-		// logging.debug(this, "construct cell editor");
+		
 
 		// theCellEditor = SensitiveCellEditor.getInstance();
 
@@ -656,7 +656,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		int row = table.getSelectedRow();
 		if (row > -1)
 			initial = (String) table.getValueAt(row, 0);
-		// logging.debug(this, "adding an entry , starting with " + x);
+		
 
 		FEditText fed = new FEditText(initial, configed.getResourceValue("EditMapPanel.KeyToAdd")) {
 
@@ -810,20 +810,20 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 	// ================= FocusListener
 	@Override
 	public void focusGained(FocusEvent e) {
-		// logging.debug("++++++++++++++++ Focus gained isEditing " +
+		
 		// table.isEditing());
 	}
 
 	@Override
 	public void focusLost(FocusEvent e) {
-		// logging.debug("---------------------- Focus lost isEditing " +
+		
 		// table.isEditing());
 		stopEditing();
 	}
 
 	protected void setSelectedRow(int row) {
 		table.setRowSelectionInterval(row, row);
-		// logging.debug(" --- view row selected " + row);
+		
 		showSelectedRow();
 	}
 

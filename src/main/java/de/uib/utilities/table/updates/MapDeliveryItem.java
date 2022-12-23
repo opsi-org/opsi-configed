@@ -31,14 +31,14 @@ public class MapDeliveryItem extends MapBasedTableEditItem {
 		if (keyCol < 0)
 			return false;
 
-		// logging.debug (" keyChanged? oldValues " + oldValues);
+		
 
 		if (oldValues == null)
 			return true;
 
-		// logging.debug(" keyChanged? oldValues.get(keyCol).toString() " +
+		
 		// oldValues.get(keyCol).toString());
-		// logging.debug(" =? rowV.get(keyCol).toString() " +
+		
 		// rowV.get(keyCol).toString());
 
 		if (oldValues.get(keyCol).toString().equals(rowV.get(keyCol).toString())) {

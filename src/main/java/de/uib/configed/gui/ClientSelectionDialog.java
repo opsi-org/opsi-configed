@@ -211,7 +211,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 																// }
 																// catch(InterruptedException iex)
 																// {
-																// logging.info(this. "setvisualindex " +iex);
+																
 																// }
 
 			if (manager != null)
@@ -276,7 +276,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				SwingUtilities.invokeLater(() -> {
 					setReloadRequested();
 					// main.callClientSelectionDialog();
-					// logging.info(this, "actionPerformed ready");
+					
 					buttonReload.setEnabled(true);
 					buttonRestart.setEnabled(true);
 					dialog.setCursor(saveCursor);
@@ -302,7 +302,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				SwingUtilities.invokeLater(() -> {
 					setReloadRequested();
 					// main.callClientSelectionDialog();
-					// logging.info(this, "actionPerformed ready");
+					
 					main.callNewClientSelectionDialog();
 					// we lose all components of this dialog, there is nothing to reset
 
@@ -1047,7 +1047,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				}
 			}
 
-			// logging.info(this, "collectData complex: childList " + complex + " : " +
+			
 			
 
 			if (!childList.isEmpty()) {

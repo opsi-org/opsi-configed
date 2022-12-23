@@ -63,7 +63,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 	public CellRendererByIndex(Set<String> keySet, String imagesBase, int imageWidth) {
 		super(imageWidth);
-		// logging.debug(" ------------- font " + getFont() );
+		
 		setOpaque(true);
 		
 		
@@ -85,7 +85,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 				if (imagesBase != null) {
 					String imageFileString = imagesBase + "/" + stringval + ".png";
-					// logging.debug (" image file " + imageFileString);
+					
 
 					image = Globals.createImageIcon(imageFileString, stringval);
 					if (image != null)
@@ -110,7 +110,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 	{
 		super(imageWidth);
-		// logging.debug(" ------------- font " + getFont() );
+		
 		setOpaque(true);
 		
 		
@@ -133,7 +133,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 				if (key != null && stringval != null) {
 					String imageFileString = imagesBase + "/" + stringval + ".png";
-					// logging.debug (" image file " + imageFileString);
+					
 
 					image = Globals.createImageIcon(imageFileString, stringval);
 					if (image != null)

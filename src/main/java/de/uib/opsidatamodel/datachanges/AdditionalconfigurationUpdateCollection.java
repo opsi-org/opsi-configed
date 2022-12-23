@@ -91,7 +91,7 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 
 	@Override
 	public boolean add(Object obj) {
-		// logging.debug ("----------- adding " + obj + " of class " +
+		
 		// obj.getClass().getName());
 		return super.add(obj);
 	}

@@ -70,9 +70,9 @@ public class FWakeClients extends FShowList {
 
 					}
 
-					// logging.info(this, "act , hostSeparationByDepots.get(depot) " +
+					
 					// hostSeparationByDepots.get(depot));
-					// logging.info(this, "act , counterByDepots.get(depot) " +
+					
 					// counterByDepots.get(depot));
 
 					if (executionerForDepots.get(depot) != Executioner.NONE) {

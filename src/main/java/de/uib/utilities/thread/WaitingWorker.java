@@ -114,7 +114,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 		logging.debug(this, "process, we have got list " + listOfMillis);
 
 		long millis = listOfMillis.get(listOfMillis.size() - 1);
-		// logging.info(this, "process :: millis " + millis);
+		
 		statusLabel.setText(
 				// "passed " + giveTimeSpan( millis) +
 				waitingSleeper.setLabellingStrategy(millis));
@@ -124,7 +124,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 		int barLength = progressBar.getMaximum() - progressBar.getMinimum();
 
-		// logging.info(this, "progressBar.getMaximum() " + progressBar.getMaximum() +
+		
 		// ":: progressBar.getMinimum() " + progressBar.getMinimum()
 		// + ":: millis " + millis + " :: waitingMillis " + waitingMillis + " :: min + "
 		// + ((int) ((barLength * millis) / waitingMillis)));

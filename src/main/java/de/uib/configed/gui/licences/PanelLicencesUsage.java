@@ -119,7 +119,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 
 		// testfield = new JTextField(" ");
 
-		// logging.debug( "--------- init PanelLicencesUsage");
+		
 
 		panelUsage = new PanelGenEditTable(configed.getResourceValue("ConfigedMain.Licences.SectiontitleUsage"), 0,
 				true, 0, false, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,

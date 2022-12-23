@@ -25,7 +25,7 @@ public class CellAlternatingColorizer {
 		 * cell.setBackground( Globals.defaultTableSelectedRowDark );
 		 * }
 		 */
-		// logging.debug("CellAlternating colorize selection, even " + isSelected + ", "
+		
 		// + isEven);
 
 		if (isSelected) {

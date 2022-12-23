@@ -77,7 +77,7 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 			 */
 
 			for (OpsiHwAuditDevicePropertyType deviceProperty : auditDeviceClass.getDeviceHwItemProperties()) {
-				// logging.info(this, "checkIn valuesSet contains? " +
+				
 				// deviceProperty.getOpsiDbColumnName());
 
 				if (valuesSet.contains(deviceProperty.getOpsiDbColumnName()))

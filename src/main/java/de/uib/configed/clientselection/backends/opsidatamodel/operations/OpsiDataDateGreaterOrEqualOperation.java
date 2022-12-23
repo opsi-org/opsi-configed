@@ -14,7 +14,7 @@ public class OpsiDataDateGreaterOrEqualOperation extends DateGreaterOrEqualOpera
 		matcher = new OpsiDataDateMatcher(map, key, data, element) {
 			@Override
 			protected boolean compare(java.sql.Date date, java.sql.Date realdate) {
-				// logging.debug(this, "compare real date " + realdate + " to requested " +
+				
 				
 				return realdate.equals(date) || realdate.after(date);
 			}

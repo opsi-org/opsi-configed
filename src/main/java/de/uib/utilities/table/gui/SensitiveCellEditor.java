@@ -99,7 +99,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		 * //other popup windows are now not visible
 		 */
 		setModelProducer(modelProducer);
-		// logging.debug(this, " constructed");
+		
 	}
 
 	public void re_init() {
@@ -111,14 +111,14 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	}
 
 	public void setModelProducer(ListModelProducer producer) {
-		// logging.info(this, "ListModelProducer set: " + modelProducer);
+		
 		this.modelProducer = producer;
 		if (producer == null)
 		// build default producer
 		{
 			modelProducer = new DefaultListModelProducer();
 		}
-		// logging.debug(this, "ListModelProducer set: " + modelProducer);
+		
 	}
 
 	private void startListEditor(final JTable table, final int row, final int column) {
@@ -151,7 +151,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 		if (val instanceof List) // is now always
 		{
-			// logging.info(this, " try list editing, with modelProducer " + modelProducer);
+			
 
 			ListModel model = modelProducer.getListModel(row, column);
 			logging.debug(this,
@@ -159,10 +159,10 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			listeditor.setVisible(false);
 			listeditor.setTitle(modelProducer.getCaption(row, column));
 
-			// logging.info(this, " model got " + model);
+			
 
 			if (model != null) {
-				// logging.info(this, "start with model");
+				
 
 				listeditor.setListModel(modelProducer.getListModel(row, column));
 				// listeditor.setStartValue(value);
@@ -223,16 +223,16 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 	@Override
 	public Object getCellEditorValue() {
-		// logging.debug(this, "getCellEditorValue, editingRow, editingColumn " +
+		
 		// editingRow + ", " + editingColumn +", value :");
-		// logging.debug(this, "getCellEditorValue " + listeditor.getValue() + " has
+		
 		// class " + listeditor.getValue().getClass());
-		// logging.debug(this, "getCellEditorValue " + listeditor.getValue() + "
+		
 		// original class " + modelProducer.getClass(editingRow, editingColumn));
 
 		// if ( List.class.isAssignableFrom
 		// (modelProducer.getClass(editingRow, editingColumn)) )
-		// logging.debug(this, "getCellEditorValue, original class instance of
+		
 		// List");
 
 		if (listeditor.getValue() == null)
@@ -245,16 +245,16 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				Iterator iter = forbiddenValues.iterator();
 				while (iter.hasNext()) {
 					Object element = iter.next();
-					// logging.debug(this, "removing ?? " + element);
+					
 					list.remove(element);
 				}
 
-				// logging.debug(this, "getCellEditorValue, corrected result " + list);
+				
 			}
 
 			int n = list.size();
 
-			// logging.info(this, "getCellEditorValue editingRow, editingColumn " +
+			
 			// editingRow + " , " + editingColumn + " " +
 			// "modelProducer.getClass(editingRow, editingColumn) " +
 			// modelProducer.getClass(editingRow, editingColumn) );
@@ -273,7 +273,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			 */
 
 			if (List.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
-				// logging.info(this, "getCellEditorValue, original class instance of
+				
 				// List");
 				// ArrayList<String> li = new ArrayList<>();
 				// li.add("xxx");
@@ -282,9 +282,9 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			}
 
 			if (java.lang.Integer.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
-				// logging.info(this, "getCellEditorValue, original class instance of
+				
 				// java.lang.Integer");
-				// logging.debug(this, "getCellEditorValue() " + list.get(0));
+				
 
 				if (n == 0)
 					return null;
@@ -293,7 +293,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			}
 
 			if (java.lang.Boolean.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
-				// logging.info(this, "getCellEditorValue, original class instance of
+				
 				// java.lang.Boolean");
 
 				if (n == 0)
@@ -321,7 +321,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 				String result = buf.toString();
 
-				// logging.info(this, "getCellEditorValue, String-Result " + result);
+				
 
 				if (result.equalsIgnoreCase("null"))
 					return org.json.JSONObject.NULL;
@@ -374,7 +374,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	public void mouseClicked(MouseEvent e) {
 		if (e.getSource() == field && usingListEditor) {
 			if (e.getClickCount() > 1) {
-				// logging.debug(this, "listeditor activated by doubleclick");
+				
 				listeditor.setVisible(true);
 			}
 		}

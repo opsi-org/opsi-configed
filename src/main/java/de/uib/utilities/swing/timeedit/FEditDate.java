@@ -85,14 +85,14 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 			} catch (ParseException pex) {
 				try // fallback for standard sql time format
 				{
-					// logging.debug(" fallback for standard sql time");
+					
 					s1 = s;
 					if (s1.indexOf(' ') == -1)
 						s1 = s1 + " 00:00:00";
 					newDate = java.sql.Timestamp.valueOf(s1);
 					logging.info(this, "after supplement setStartText(): " + s1);
 					dateEditor.setSelectionDate(newDate);
-					// logging.debug(" date parsed");
+					
 					setDataChanged(false);
 				} catch (IllegalArgumentException ex) {
 					logging.warning("not valid date: " + s1);
@@ -183,7 +183,7 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// logging.debug(" MouseEvent " + e);
+		
 		if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2)
 			commit();
 

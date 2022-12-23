@@ -100,7 +100,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 		// if (e.getValueIsAdjusting()) return;
 
-		// logging.info(this, "selectionListener valueChanged, not more adjusting");
+		
 
 		if (isAwareOfSelectionListener()) {
 			logging.debug(this, "selectionListener valueChanged, aware of selectionlistener");
@@ -157,8 +157,8 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 		super.mouseClicked(e);
 
-		// logging.info(this, "mouse event " + e);
-		// logging.info(this, "row " + theTable.rowAtPoint(e.getPoint()) );
+		
+		
 	}
 
 	@Override

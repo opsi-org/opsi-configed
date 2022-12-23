@@ -11,7 +11,7 @@ public abstract class OpsiDataDateMatcher extends OpsiDataMatcher {
 
 	@Override
 	protected boolean checkData(final String realdata) {
-		// logging.debug(this, "OpsiDataDateMatcher checkData " + realdata + " compare
+		
 		// to " +data);
 
 		java.sql.Date date = null;
@@ -45,7 +45,7 @@ public abstract class OpsiDataDateMatcher extends OpsiDataMatcher {
 			realD = realD.substring(0, posBlank);
 		}
 
-		// logging.debug(this, "OpsiDataDateMatcher checkData " + realD + " compare to "
+		
 		// +data);
 
 		// check if we have to interpret variables

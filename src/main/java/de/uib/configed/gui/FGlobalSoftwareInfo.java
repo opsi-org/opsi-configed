@@ -50,7 +50,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 				10, 10); // initial size of super frame
 
 		this.myController = myController;
-		// logging.error(this, " my owner " + owner);
+		
 		persist = PersistenceControllerFactory.getPersistenceController();
 
 		panelGlobalSoftware = new PanelGenEditTable("", // "software assigned, but not existing",

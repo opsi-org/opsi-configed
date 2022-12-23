@@ -80,7 +80,7 @@ public class TextInputField extends JPanel
 			proposedValues.add(0, "");
 		}
 
-		// logging.info(this, " proposedValues " + proposedValues);
+		
 
 		// if (inputType == InputType.TEXT)
 		if (proposedValues != null) {
@@ -92,7 +92,7 @@ public class TextInputField extends JPanel
 					orderedValues.add(val.charAt(0));
 			}
 
-			// logging.info(this, " orderedBeginChars " + Arrays.toString( orderedBeginChars
+			
 			
 
 			orderedBeginChars = new Character[orderedValues.size()];
@@ -106,7 +106,7 @@ public class TextInputField extends JPanel
 
 		// combo = new JComboBoxSearching(this.proposedValues);
 		combo = new JComboBox<>(this.proposedValues);
-		// logging.debug(this, "class of editor component "
+		
 		// + combo.getEditor().getEditorComponent().getClass());
 
 		JTextField comboField = (JTextField) combo.getEditor().getEditorComponent();
@@ -116,7 +116,7 @@ public class TextInputField extends JPanel
 			@Override
 			public void keyPressed(KeyEvent e) {
 				String s = comboField.getText();
-				// logging.info(this, " " + e.getKeyChar() + " content until now >" + s + "< " +
+				
 				
 
 				if (s.length() == 0) {
@@ -128,7 +128,7 @@ public class TextInputField extends JPanel
 
 					// combo.selectWithKeyChar( e.getKeyChar() );
 
-					// logging.info(this, " orderedBeginChars " + Arrays.toString( orderedBeginChars
+					
 					
 					// if (inputType == InputType.TEXT)
 					if (orderedBeginChars != null) {
@@ -138,7 +138,7 @@ public class TextInputField extends JPanel
 						int i = 0;
 						boolean stop = false;
 						while (i < orderedBeginChars.length && !stop) {
-							// logging.info(this, " orderedBeginChar compare ch " + ch + " to " +
+							
 							// orderedBeginChars[i]);
 							if (orderedBeginChars[i] > ch) {
 								stop = true;
@@ -153,7 +153,7 @@ public class TextInputField extends JPanel
 						if (!stop && i > 0)
 							ch = orderedBeginChars[i - 1];
 
-						// logging.info(this, " orderedBeginChar comparisons result " + ch + " input was
+						
 						// " + e.getKeyChar());
 
 						combo.selectWithKeyChar(ch);

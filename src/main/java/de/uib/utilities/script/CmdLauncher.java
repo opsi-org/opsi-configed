@@ -20,7 +20,7 @@ public class CmdLauncher {
 		String cmd = cmdPrefix + " " + s;
 		List<String> parts = de.uib.utilities.script.Interpreter.splitToList(cmd);
 
-		// logging.info(this, "" + values);
+		
 		// System.exit(0);
 
 		try {

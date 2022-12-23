@@ -699,7 +699,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				"addPopupmenuStandardpart, supplemented internalpopups " + giveMenuitemNames(internalpopups));
 
 		for (int popuptype : internalpopups) {
-			// logging.debug ("....... popuptype " + popuptype);
+			
 			switch (popuptype) {
 			case POPUP_SEPARATOR:
 				addPopupItem(null);
@@ -722,7 +722,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				break;
 
 			case POPUP_RELOAD:
-				// logging.info(this, "reload popup worked");
+				
 				menuItemReload = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.reload"),
 						Globals.createImageIcon("images/reload16.png", ""));
 				// menuItemReload.setPreferredSize(Globals.buttonDimension);
@@ -975,7 +975,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		// is always the case since TableRowSorter extends DefaultRowSorter
 		{
 			for (int j = 0; j < tableModel.getColumnCount(); j++) {
-				// logging.info(this, " setSorter for column " + j + " classname " +
+				
 				// tableModel.getClassNames().get(j));
 				if (comparators[j] != null) {
 					logging.info(this, " set sorter for column " + j + " " + comparators[j]);
@@ -984,7 +984,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				}
 
 				else if (tableModel.getClassNames().get(j).equals("java.lang.Integer")) {
-					// logging.info(this, " setSorter for column " + j + "
+					
 					// IntComparatorForStrings");
 					((DefaultRowSorter) sorter).setComparator(j, new de.uib.utilities.IntComparatorForStrings());
 				}
@@ -1023,9 +1023,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		setSorter();
 
-		// logging.debug ( "----------------------------- model row count " +
+		
 		// m.getRowCount());
-		// logging.debug("--------- getColumnModel() size == 0 " +
+		
 		// !theTable.getColumnModel().getColumns().hasMoreElements());
 		setDataChanged(false);
 		setCellRenderers();
@@ -1098,9 +1098,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	 * 
 	 * 
 	 * 
-	 * //logging.debug ( "----------------------------- model row count " +
+	 * 
 	 * m.getRowCount());
-	 * //logging.debug("---------  getColumnModel() size == 0 " +
+	 * 
 	 * !theTable.getColumnModel().getColumns().hasMoreElements());
 	 * setDataChanged(false);
 	 * 
@@ -1271,11 +1271,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		if (cols == null)
 			return;
 
-		// logging.debug("--------- getColumnModel() size == 0 " +
+		
 		// !theTable.getColumnModel().getColumns().hasMoreElements());
 
 		if (theTable.getColumnModel().getColumns().hasMoreElements()) {
-			// logging.debug("--------- we have elements ");
+			
 			for (int j = 0; j < cols.length; j++) {
 				theTable.getColumnModel().getColumn(cols[j])
 						.setCellRenderer(new TableCellRendererConfigured(null, Globals.lightBlack,
@@ -1310,7 +1310,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			TableColumn col = theTable.getColumn(name);
 			String classname = tableModel.getClassNames().get(i);
 
-			// logging.debug(this, "setCellrenderer i, name, class, classname "
+			
 			// + i + ", " + name + ", " + cl + ", " + classname );
 
 			setTimestampRenderer(classname, col);
@@ -1436,7 +1436,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	public void setSelectedRow(int row) {
 		theTable.setRowSelectionInterval(row, row);
-		// logging.debug(" --- view row selected " + row);
+		
 		showSelectedRow();
 	}
 
@@ -1469,7 +1469,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public Object getValueAt(int row, int col) {
-		// logging.info(this, "getValueAt row, col " + row + ", " + col);
+		
 		try {
 			return tableModel.getValueAt(theTable.convertRowIndexToModel(row), theTable.convertColumnIndexToModel(col));
 		} catch (Exception ex) {
@@ -1478,8 +1478,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public void selectedRowChanged() {
-		// logging.info(this, "selectedRowChanged");
-		// logging.debug(" new selected row ");
+		
+		
 	}
 
 	public void setAwareOfSelectionListener(boolean b) {
@@ -1524,13 +1524,13 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	public List<String> getSelectedKeys() {
 		ArrayList<String> result = new ArrayList<>();
-		// logging.info(this, " getSelectedKeys() we have key col " +
+		
 		// tableModel.getKeyCol());
 
 		if (tableModel.getKeyCol() < 0)
 			return result;
 
-		// logging.info(this, " getSelectedKeys() selected rows " +
+		
 		// Arrays.toString(theTable.getSelectedRows()));
 
 		if (tableModel.isUsingFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION)) {
@@ -1540,21 +1540,21 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			}
 		} else {
 			for (int i = 0; i < theTable.getSelectedRows().length; i++) {
-				// logging.info(this, " getSelectedKeys() selected row " +
+				
 				// theTable.getSelectedRows()[i] );
 				result.add(tableModel.getValueAt(theTable.convertRowIndexToModel(theTable.getSelectedRows()[i]),
 						tableModel.getKeyCol()).toString());
 			}
 		}
 
-		// logging.info(this, " getSelectedKeys() +++ result " + result);
+		
 
 		return result;
 
 	}
 
 	public void setSelectedValues(List<String> values, int col) {
-		// logging.info(this, "setSelectedValues for col " + col + " : " + values);
+		
 		getListSelectionModel().clearSelection();
 
 		if (values == null || values.isEmpty())
@@ -1564,11 +1564,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		Iterator iter = values.iterator();
 
-		// logging.debug(" setSelectedValues for " + values);
+		
 
 		while (iter.hasNext()) {
 			int viewRow = findViewRowFromValue((String) iter.next(), col);
-			// logging.debug(" viewRow " + viewRow);
+			
 			getListSelectionModel().addSelectionInterval(viewRow, viewRow);
 		}
 
@@ -1597,7 +1597,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			);
 
-			// logging.debug(this, "findViewRowFromValue compare " + value + " to " +
+			
 			
 
 			if (compareValue == null) {
@@ -1692,7 +1692,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		if (keyValue == null)
 			return false;
 
-		// logging.debug(" -------------++----- keyValue " + keyValue);
+		
 		if (tableModel.getKeyCol() > -1) {
 			found = moveToValue(keyValue, tableModel.getKeyCol());
 		}
@@ -1733,7 +1733,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public void moveToRow(int n) {
-		// logging.debug(this, "moveToRow " + n);
+		
 		if (tableModel.getRowCount() == 0)
 			return;
 
@@ -1746,7 +1746,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		theTable.scrollRectToVisible(theTable.getCellRect(n, 0, true));
 		theTable.setRowSelectionInterval(n, n);
 		tableModel.setCursorRow(theTable.convertRowIndexToModel(n));
-		// logging.debug(this, "moveToRow success " + n + "getSelectedRowInModelTerms "
+		
 		// + getSelectedRowInModelTerms());
 	}
 
@@ -1817,7 +1817,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public void moveRowBy(int i) {
-		// logging.debug(this, "moveRowBy " + i + " getSelectedRowCount " +
+		
 		// getSelectedRowCount() + " selectedRow " + theTable.getSelectedRow());
 		if (getSelectedRowCount() != 1)
 			return;
@@ -1865,11 +1865,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	// ActionListener interface
 	@Override
 	public void actionPerformed(java.awt.event.ActionEvent e) {
-		// logging.debug(this, "actionPerformed source " + e.getSource() );
+		
 		if (e.getSource() == buttonCommit) {
 			commit();
 		} else if (e.getSource() == buttonCancel) {
-			// logging.debug (" -------- buttonCancel " + e);
+			
 			cancel();
 		}
 	}
@@ -1879,7 +1879,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getSource() == theTable) {
-			// logging.debug(" event on table " + e);
+			
 			if (e.getKeyCode() == KeyEvent.VK_DELETE)
 				deleteCurrentRow();
 
@@ -1953,8 +1953,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	// MouseListener, hook for subclasses
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// logging.info(this, "mouse event " + e);
-		// logging.info(this, "row " + theTable.rowAtPoint(e.getPoint()) );
+		
+		
 	}
 
 	@Override

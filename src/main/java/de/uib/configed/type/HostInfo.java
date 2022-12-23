@@ -127,7 +127,7 @@ public class HostInfo {
 	// https://support.microsoft.com/en-us/kb/909264
 	{
 
-		// logging.debug("checkADNamingConvention");
+		
 		boolean result = true;
 		String hintMessage = null;
 
@@ -162,7 +162,7 @@ public class HostInfo {
 			}
 		}
 
-		// logging.debug( hintMessage );
+		
 
 		return hintMessage;
 
@@ -416,7 +416,7 @@ public class HostInfo {
 	}
 
 	public void setBy(Map<String, Object> pcInfo) {
-		// logging.info(this, "produceFrom " + pcInfo);
+		
 		// shows pckey
 
 		// Map pcInfos = persist.getMapOfPCInfoMaps();
@@ -807,10 +807,10 @@ public class HostInfo {
 		// shutdownInstall = "on";
 		// boolShutdownInstall = true;
 		// }
-		// // System.out.print("");logging.debug("");logging.debug("");
-		// // logging.debug("HostInfo showAndSave shutdownInstall " +
 		
-		// // logging.debug("");logging.debug("");logging.debug("");
+		
+		
+		
 
 		// String product = "opsi-client-agent";
 		// persist.setCommonProductPropertyValue( new HashSet<>(Arrays.asList(client)),

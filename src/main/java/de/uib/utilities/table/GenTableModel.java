@@ -235,7 +235,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	public void removeUpdates() {
 		int newSize = updates.size();
 		for (int i = newSize - 1; i >= saveUpdatesSize; i--) {
-			// logging.debug(this, " remove i = " + i);
+			
 			updates.remove(i);
 		}
 		updatedRows.clear();
@@ -300,7 +300,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	public void produceRows() {
 		logging.info(this, " ---  produce rows");
 		setRows(tableProvider.getRows());
-		// logging.debug(this, ":: " + rows);
+		
 		logging.info(this, "produceRows(): count  " + rows.size());
 
 		rowsLength = rows.size();
@@ -321,7 +321,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			}
 			setRows(filteredRows);
 			rowsLength = rows.size();
-			// logging.debug(this, " --- filtered rows produced : " + rows);
+			
 		}
 
 		logging.info(this, "produceRows  filtered size " + rows.size());
@@ -383,7 +383,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		{
 
 			produceRows(); // rows = tableProvider.getRows();
-			// logging.debug(this, " rows.size() " + rows.size());
+			
 
 			if (!modelStructureValid) {
 				initColumns();
@@ -511,13 +511,13 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		if (markCursorRow && col == colMarkCursorRow && row == cursorrow)
 			result = true;
 		else {
-			// logging.info(this, "getValueAt row, col " + row + ", " + col);
-			// logging.info(this, "getValueAt col " + col + " " + columnNames.get(col));
-			// logging.info(this, "getValueAt row " + row + " null? " + (rows.get(row) ==
 			
-			// logging.info(this, "getValueAt row " + row + " size: " +
+			
+			
+			
+			
 			// rows.get(row).size());
-			// logging.info(this, "getValueAt row " + row + " size: " +
+			
 			// rows.get(row).size());
 			result = (rows.get(row)).get(col);
 		}
@@ -550,7 +550,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			result.put(getColumnName(col), "" + getValueAt(row, col));
 		}
 
-		// logging.info(this, " getRowMap for modelrow " + row + ": " + result);
+		
 
 		return result;
 	}
@@ -568,7 +568,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			result.put(getColumnName(col), value);
 		}
 
-		// logging.info(this, " getRowMap for modelrow " + row + ": " + result);
+		
 
 		return result;
 	}
@@ -670,11 +670,11 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 		logging.debug(this, " old value at " + row + ", " + col + " : " + oldValueString);
 		logging.debug(this, " new value at " + row + ", " + col + " : " + value);
-		// logging.debug(this, " -------------------- value has class " +
+		
 		// value.getClass().getName() );
 
-		// logging.debug(this, " key column class name " + classNames.get(keyCol) );
-		// logging.debug(this, " edit column class name " + classNames.get(col) );
+		
+		
 
 		String newValueString = "" + value;
 
@@ -706,16 +706,16 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			{
 				if (updatedRows.indexOf(row) == -1) {
 					Vector oldValues = (Vector) (rows.get(row)).clone();
-					// logging.debug(this, "old values in GenTableModel " + oldValues);
+					
 					rows.get(row).setElementAt(value, col);
-					// logging.debug(this, " new values in GenTableModel " + rows.get(row));
+					
 
 					if (itemFactory == null)
 						logging.info("update item factory missing");
 					else if (updates == null)
 						logging.info("updates not initialized");
 					else {
-						// logging.info(this, "value changed, produce update item ");
+						
 
 						updates.add(itemFactory.produceUpdateItem(oldValues, rows.get(row)));
 					}
@@ -739,11 +739,11 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 				return;
 			}
 
-			// logging.debug(this, " new values in GenTableModel " + rows.get(row));
+			
 
-			// logging.debug(this, " new value " + rows.get(row).get(col));
+			
 			rows.get(row).setElementAt(value, col); // in case of an updated row we did this already
-			// logging.debug(this, " set new value " + rows.get(row).get(col));
+			
 			fireTableCellUpdated(row, col);
 
 			requestRefreshDerivedMaps();
@@ -753,8 +753,8 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	// does not set values to null, leaves instead the original value
 	// if the values map produces a null
 	public void updateRowValues(int row, Map<String, Object> values) {
-		// logging.debug(this, "updateRowValues: row, values " + row + ", '" + values);
-		// logging.debug(this, "updateRowValues: columnNames " + columnNames);
+		
+		
 
 		for (int col = 0; col < columnNames.size(); col++) {
 
@@ -782,7 +782,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		rows.add(rowV);
 		addedRows.add(rowsLength);
 
-		// logging.debug(this, "addRow added, last col element " +
+		
 		// getValueAt(rowsLength, colsLength - 1));
 
 		updates.add(itemFactory.produceInsertItem(rowV));
@@ -799,7 +799,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	public void addRow(Object[] a) {
-		// logging.debug(this, "----------- GenTableModel addRow()");
+		
 
 		// if (addedRows.isEmpty()) // we add only one row up to further notice
 		{
@@ -808,7 +808,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 				rowV.add(null);
 			}
 			for (int j = 0; j < a.length; j++) {
-				// logging.debug(this, " setting column " + j + " to " + a[j]);
+				
 				rowV.set(j, a[j]);
 			}
 
@@ -822,7 +822,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		Vector<Object> result = new Vector<>();
 
 		for (String col : columnNames) {
-			// logging.debug(this, "produceValueRowFromSomeEntries " + col + ": " +
+			
 			// entries.get(col));
 
 			/*
@@ -844,7 +844,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	private boolean checkDeletionOfAddedRow(int rowNum) {
 		if (addedRows.indexOf(rowNum) > -1) {
-			// logging.debug(this, "deleteRow, remove from addedRows " +
+			
 			// addedRows.indexOf(rowNum));
 			// addedRows.remove(addedRows.indexOf(rowNum));
 
@@ -1022,7 +1022,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 				found = true;
 			else
 				i++;
-			// logging.debug(this, "value " + value + " (class) " + value.getClass()
+			
 			// + " =?" + found + " " + compValue + " (class) " + compValue.getClass() );
 		}
 		return found;
@@ -1039,7 +1039,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			else
 				i++;
 
-			// logging.debug(this, "value " + value + " (class) " + value.getClass()
+			
 			// + " =?" + found + " " + compValue + " (class) " + compValue.getClass() );
 		}
 		return found;
@@ -1114,8 +1114,8 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		for (int i = 0; i < rows.size(); i++) {
 			try {
 				Integer key = Integer.valueOf((String) getValueAt(i, keyCol));
-				// logging.debug(this, "getPrimarykeyTranslation() key " + key);
-				// logging.debug(this, "getPrimarykeyTranslation() getPrimarykey2Rowmap() " +
+				
+				
 				// getPrimarykey2Rowmap());
 
 				primarykeyTranslation.put(key, keyRepresenter.represents(key, getPrimarykey2Rowmap().get(key)));

@@ -117,7 +117,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 
 	@Override
 	public boolean add(Object obj) {
-		// logging.debug ("----------- adding to ProductPropertiesCollection " +
+		
 		// obj + " of class " + obj.getClass().getName());
 		return super.add(obj);
 	}

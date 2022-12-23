@@ -61,18 +61,18 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 			node.setEnabled(enabled);
 
-			// logging.info(this, "--- value " + stringValue);
-			// logging.info(this, "--- main " + main);
-			// logging.info(this, "--- main.getSelectedClients() " +
+			
+			
+			
 			// main.getSelectedClients());
-			// logging.info(this, "--- main.getSelectedClients().contains((stringValue) " +
+			
 			// main.getSelectedClients().contains(stringValue));
 
-			// logging.debug (stringValue + " selected! ");
+			
 
 			if (!node.getAllowsChildren()) // client
 			{
-				// logging.debug( " main.getActiveTreeNodes().containsKey(value) " +
+				
 				// main.getActiveTreeNodes().containsKey(value) );
 				if (
 				// sel
@@ -98,7 +98,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 				// eliminate_appending_visual_underscores( stringValue );
 
-				// logging.info(this, "group name, possibly shortened " + visualText);
+				
 				setText(visualText);
 
 				setIcon(node.getClosedIcon()); // default,will be changed, if clients are childs
@@ -146,7 +146,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 					&& tree.hasFocus())
 
 			{
-				// logging.info(this, " we are at this place ");
+				
 				// setText(stringValue + "<");
 				// setBackground(Globals.backNimbusLight);
 				// setFont( getFont().deriveFont( java.awt.Font.ITALIC ));

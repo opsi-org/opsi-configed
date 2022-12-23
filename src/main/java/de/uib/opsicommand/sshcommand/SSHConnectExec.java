@@ -60,7 +60,7 @@ public class SSHConnectExec extends SSHConnect {
 		// setDialog(SSHConnectionExecDialog.getInstance());
 		// if (main != null) connect(sshcommand);
 		logging.info(this, "SSHConnectExec main " + main);
-		// logging.info(this, "created, with sshcommand " + sshcommand);
+		
 		logging.info(this, "SSHConnectExec sshcommand " + sshcommand.getSecuredCommand());
 		this.responseButton = responseButton;
 		if (responseButton != null)
@@ -370,7 +370,7 @@ public class SSHConnectExec extends SSHConnect {
 			if (s.length() > 0)
 				if (s != "\n") {
 					String t = outputDialog.ansiCodeInfo + s;;
-					// logging.info(this, t);
+					
 					return t;
 				}
 		return s;
@@ -591,7 +591,7 @@ public class SSHConnectExec extends SSHConnect {
 								}
 							}
 						} else {
-							// logging.debug("withgui else in forloop");
+							
 							for (String line : str.split("\n"))
 								logging.debug(this, "line: " + line);
 						}

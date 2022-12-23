@@ -119,23 +119,23 @@ public class GeneralFrame extends JDialog implements ActionListener {
 					(gc.getBounds().height - getHeight()) / 2 + gc.getBounds().y);
 
 		} else {
-			// logging.debug(this, "centerOn (int) masterOnScreen.getX() " + (int)
+			
 			// masterOnScreen.getX());
-			// logging.debug(this, "centerOn (int) masterOnScreen.getY() " + (int)
+			
 			// masterOnScreen.getY());
-			// logging.debug(this, "centerOn master.getWidth() " + master.getWidth() / 2);
-			// logging.debug(this, "centerOn master.getHeight() " + master.getHeight() / 2)
+			
+			
 			// ;
-			// logging.debug(this, "centerOn this.getSize() " + getSize());
+			
 
-			// logging.debug(this, "centerOn " + master.getClass() + ", " + master);
+			
 
 			startX = (int) masterOnScreen.getX() + intHalf(master.getWidth()) - intHalf(getSize().getWidth());
 			startY = (int) masterOnScreen.getY() + intHalf(master.getHeight()) - intHalf(getSize().getHeight());
 
 			// problem: in applet in windows, we may leave the screen
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			// logging.debug(this, "centerOn screenSize " + screenSize);
+			
 
 			if (startX + getSize().width > screenSize.width)
 				startX = screenSize.width - getSize().width;
@@ -181,9 +181,9 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	// ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// logging.debug ("ActionEvent ...... ");
+		
 		if (e.getSource() == jButton1) {
-			// logging.debug (".... on Button1. ");
+			
 			doAction1();
 		}
 	}
@@ -231,7 +231,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// logging.debug(this, "fade, opacity " + opacity);
+			
 
 			if (vanishing) {
 				opacity -= step;

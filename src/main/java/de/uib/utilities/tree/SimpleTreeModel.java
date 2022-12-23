@@ -41,7 +41,7 @@ public class SimpleTreeModel extends DefaultTreeModel
 		ROOT = (SimpleIconNode) getRoot();
 		// ROOT.setIcon(Globals.createImageIcon("images/system-config.png","open
 		// table"));
-		// logging.info(this, "tooltips " + tooltips);
+		
 		this.tooltips = tooltips;
 		generateFrom(dottedKeys);
 	}
@@ -66,7 +66,7 @@ public class SimpleTreeModel extends DefaultTreeModel
 
 		if (dottedKeys != null) {
 			for (String key : dottedKeys) {
-				// logging.debug(this, "generateFrom key ------- " + key);
+				
 				String remainder = key;
 
 				int j = -1;
@@ -77,12 +77,12 @@ public class SimpleTreeModel extends DefaultTreeModel
 					String componentKey = key.substring(j + 1, k);
 					path.add(componentKey);
 					allPathes.add(new SimpleTreePath(path));
-					// logging.debug(this, "add " + path);
+					
 
 					remainder = key.substring(k + 1);
 
-					// logging.debug(this, "generateFrom partial " + partialKey);
-					// logging.debug(this, "generateFrom remainder " + remainder);
+					
+					
 
 					// path2DottedString.put(path, partialKey);
 
@@ -91,7 +91,7 @@ public class SimpleTreeModel extends DefaultTreeModel
 				}
 				path.add(remainder);
 				allPathes.add(path);
-				// logging.debug(this, "add " + path);
+				
 
 			}
 		}

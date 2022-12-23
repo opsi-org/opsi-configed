@@ -52,7 +52,7 @@ public class DynamicCellEditor extends DefaultCellEditor {
 			((JComponent) c).setToolTipText("" + value);
 
 		// c.setSize(100,20); has no effect
-		// logging.debug("this component active");
+		
 		return c;
 	}
 

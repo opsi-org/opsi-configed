@@ -363,7 +363,7 @@ public class PanelProductProperties extends JSplitPane
 			 * // we need a new property. it is not common
 			 * {
 			 * ListMerger merger = new ListMerger(value);
-			 * // logging.debug(this, " new property, merger " + merger);
+			 * 
 			 * merger.setHavingNoCommonValue();
 			 * result.put(key, merger);
 			 * } else {

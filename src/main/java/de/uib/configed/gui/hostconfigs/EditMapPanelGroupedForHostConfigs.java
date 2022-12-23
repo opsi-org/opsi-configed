@@ -112,7 +112,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
-				// logging.info(this, "action popup " + p);
+				
 
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
@@ -143,7 +143,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
-				// logging.info(this, "action popup " + p);
+				
 
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
@@ -169,7 +169,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
-				// logging.info(this, "action popup " + p);
+				
 
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
@@ -200,7 +200,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
-				// logging.info(this, "action popup " + p);
+				
 
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
@@ -278,7 +278,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		 * if (e.isPopupTrigger()) {
 		 * //int selRow = tree.getRowForLocation(e.getX(), e.getY());
 		 * TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-		 * //logging.info(this, " sel path " + selPath);
+		 * 
 		 * //if(selRow % 2 == 0) //test
 		 * if ( selPath != null && !isUserPath( selPath ) && !isRolePath( selPath,
 		 * false) && !isRolePath( selPath, true) )
@@ -296,7 +296,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 			protected void maybeShowPopup(MouseEvent e) {
 				if (e.isPopupTrigger()) {
 					TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-					// logging.info(this, " sel path " + selPath);
+					
 					if (selPath != null && isUserPath(selPath))
 						super.maybeShowPopup(e);
 				}
@@ -687,8 +687,8 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 	}
 
 	protected void deleteUser() {
-		// logging.info(this, "delete " + mapTableModel.getKeys());
-		// logging.info(this, "delete " + mapTableModel.getData());
+		
+		
 		javax.swing.tree.TreePath p = tree.getSelectionPath();
 
 		// actor.deleteData();
@@ -704,7 +704,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 			}
 			String key = keyB.toString();
 			logging.info(this, "deleteUser, selected user key " + key);
-			// logging.info(this, "deleteUser, selected entry " + partialPanels.get( key
+			
 			// ).getTableModel());
 			Vector<String> propertyNames = partialPanels.get(key).getNames();
 			logging.info(this, "deleteUser, property names " + propertyNames);

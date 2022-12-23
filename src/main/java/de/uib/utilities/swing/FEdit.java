@@ -184,7 +184,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 	}
 
 	public void setDataChanged(boolean b) {
-		// logging.info(this, " FEdit dataChanged ẃas " + dataChanged +
+		
 		// " button enabled " + buttonCommit.isEnabled() + " set to " + b);
 		dataChanged = b;
 		buttonCommit.setEnabled(b);
@@ -242,12 +242,12 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 	}
 
 	public boolean init(Dimension usableAreaSize) {
-		// logging.info(this, "init usableAreaSize " + usableAreaSize);
+		
 		if (editingArea.getComponentCount() != 1) {
 			logging.info(this, " editing area not filled with component");
 			// return false;
 		}
-		// logging.debug(" editingArea used by " +
+		
 		// editingArea.getComponent(0).getClass());
 		editingArea.getComponent(0).setPreferredSize(usableAreaSize);
 		initComponents();
@@ -255,7 +255,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 	}
 
 	public boolean init() {
-		// logging.info(this, "init areaDimension " + areaDimension);
+		
 		return init(areaDimension);
 	}
 
@@ -269,7 +269,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 		// problem: in applet in windows, we may leave the screen
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		// logging.debug(this, "centerOn screenSize " + screenSize);
+		
 
 		if (startX + getSize().width > screenSize.width)
 			startX = screenSize.width - getSize().width;
@@ -307,23 +307,23 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 			startY = (screenSize.height - getSize().height) / 2;
 
 		} else {
-			// logging.debug(this, "centerOn (int) masterOnScreen.getX() " + (int)
+			
 			// masterOnScreen.getX());
-			// logging.debug(this, "centerOn (int) masterOnScreen.getY() " + (int)
+			
 			// masterOnScreen.getY());
-			// logging.debug(this, "centerOn master.getWidth() " + master.getWidth() / 2);
-			// logging.debug(this, "centerOn master.getHeight() " + master.getHeight() / 2)
+			
+			
 			// ;
-			// logging.debug(this, "centerOn this.getSize() " + getSize());
+			
 
-			// logging.debug(this, "centerOn " + master.getClass() + ", " + master);
+			
 
 			startX = (int) masterOnScreen.getX() + intHalf(master.getWidth()) - intHalf(getSize().getWidth());
 			startY = (int) masterOnScreen.getY() + intHalf(master.getHeight()) - intHalf(getSize().getHeight());
 
 			// problem: in applet in windows, we may leave the screen
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			// logging.debug(this, "centerOn screenSize " + screenSize);
+			
 
 			if (startX + getSize().width > screenSize.width)
 				startX = screenSize.width - getSize().width;
@@ -340,13 +340,13 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 		if (caller != null) {
 			callerFont = caller.getFont();
 			caller.setFont(callerFont.deriveFont(Font.ITALIC));
-			// logging.debug("set derived font");
+			
 		}
 	}
 
 	public void deactivate() {
 		if (caller != null) {
-			// logging.debug(" reset font ");
+			
 			caller.setFont(callerFont);
 			caller.validate();
 		}
@@ -364,12 +364,12 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			cancel();
-			// logging.debug(" window closing, text " + getText());
+			
 		} else if (e.getID() == WindowEvent.WINDOW_ACTIVATED) {
-			// logging.debug(" window activated");
+			
 			enter();
 		} else if (e.getID() == WindowEvent.WINDOW_DEACTIVATED) {
-			// logging.debug(" window deactivated");
+			
 			
 
 		}
@@ -409,7 +409,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 		if (e.getSource() == buttonCommit) {
 			commit();
 		} else if (e.getSource() == buttonCancel) {
-			// logging.debug (" -------- buttonCancel " + e);
+			
 			cancel();
 		}
 

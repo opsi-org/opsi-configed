@@ -57,7 +57,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public int getColumnCount() {
-		// logging.info(this, "getColumnCount retrieves model " + getTableModel());
+		
 		// if (getTableModel() == null)
 		// return 0;
 
@@ -162,7 +162,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		}
 
 		table.setRowSelectionInterval(row, row);
-		// logging.debug(" --- view row selected " + row);
+		
 		ensureRowIsVisible(row);
 	}
 
@@ -174,7 +174,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 			return;
 
 		table.addRowSelectionInterval(row, row);
-		// logging.debug(" --- view row selected " + row);
+		
 		ensureRowIsVisible(row);
 	}
 
@@ -209,7 +209,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public void setFiltered(boolean b) {
-		// logging.info(this, "setFiltered " + b + " it was filtered " + filtered);
+		
 
 		// if (b == filtered)
 		// return;
@@ -224,7 +224,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		if (!filtered)
 			viewRowfilter = table.getSelectedRows();
 
-		// logging.info(this, "setFiltered " + b + " viewRowfilter "
+		
 		// + java.util.Arrays.toString( viewRowfilter ));
 
 		if (b && viewRowfilter.length > 0) {

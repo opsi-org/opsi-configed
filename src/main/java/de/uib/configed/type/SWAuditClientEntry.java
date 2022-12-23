@@ -145,7 +145,7 @@ public class SWAuditClientEntry
 
 	public SWAuditClientEntry(final List<String> keys, final List<String> values,
 			de.uib.opsidatamodel.PersistenceController controller) {
-		// logging.debug(this, "create, keys/values constructor");
+		
 
 		startmillis1stPartOfConstructor = System.currentTimeMillis();
 
@@ -176,11 +176,11 @@ public class SWAuditClientEntry
 		summillis2ndPartOfConstructor = summillis2ndPartOfConstructor
 				+ (endmillis2ndPartOfConstructor - startmillis2ndPartOfConstructor);
 
-		// logging.info(this, " swId " + swId + " from values " + values);
+		
 	}
 
 	public SWAuditClientEntry(final Map<String, Object> m, de.uib.opsidatamodel.PersistenceController controller) {
-		// logging.info(this, "create, map constructor");
+		
 		data = new HashMap<>();
 		data.put(SWAuditEntry.id, Globals.produceNonNull(m.get(CLIENT_ID)));
 		swIdent = produceSWident(m);
@@ -197,7 +197,7 @@ public class SWAuditClientEntry
 	public static String produceSWident(List<String> keys, List<String> values)
 	// from db columns
 	{
-		// logging.info("SWAuditClientEntry:: produceSWident keys -- value : " + keys +
+		
 		// " -- " + values);
 		String result = "";
 		try {
@@ -277,7 +277,7 @@ public class SWAuditClientEntry
 					"getIndex gobal swIdent was assumed to be equal to element " + swIdent + ". " + element);
 		// int result = software.indexOf( swIdent );
 		Integer j = software2Number.get(element);
-		// if (j != null && result != -1 && result != j) logging.warning(this,
+		
 		// "getIndex, for swIdent " + swIdent + " differs indexOf " + result + " from
 		// mapped value " + j);
 
@@ -288,7 +288,7 @@ public class SWAuditClientEntry
 			result = j;
 
 		if (result == -1 && list != null) {
-			// logging.info(this, "current listsize " + list.size() + " indexOfIgnoreCase
+			
 			// for " + swIdent );
 			int i = 0;
 			while (result == -1 && i < list.size()) {
@@ -319,7 +319,7 @@ public class SWAuditClientEntry
 				swId = getIndex(software, swIdent);
 			}
 
-			// logging.info(this, "software with ident " + swIdent + " has index " + swId);
+			
 			if (swId == -1) {
 				logging.warning(this, "swIdent not found in softwarelist: " + swIdent);
 				if (notFoundSoftwareIDs == null)
@@ -399,7 +399,7 @@ public class SWAuditClientEntry
 	public Map<String, String> getExpandedMap(Map<String, SWAuditEntry> installedSoftwareInformation, String swIdent) {
 		Map<String, String> dataMap = new HashMap<>(data);
 		dataMap.putAll(installedSoftwareInformation.get(swIdent));
-		// logging.info( this, " getExpandedMap " + dataMap);
+		
 		return dataMap;
 	}
 

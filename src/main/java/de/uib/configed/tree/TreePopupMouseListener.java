@@ -95,7 +95,7 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 		int countVisibleItems = 0;
 
 		if (clickNode.getAllowsChildren()) {
-			// logging.info(this, "checkAccepted " + clickNode + " is GroupNode " +
+			
 			// (clickNode instanceof GroupNode) )
 
 			if (((GroupNode) clickNode).allowsSubGroups()) {

@@ -259,7 +259,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		// myCollator.setStrength(Collator.PRIMARY); //ignores hyphens
 		myCollator.setStrength(Collator.SECONDARY);
 
-		// logging.info(this, "listOfInstallableProducts " + listOfInstallableProducts);
+		
 		productNamesInDeliveryOrder = new Vector<>();
 		if (listOfInstallableProducts != null) {
 			for (int i = 0; i < listOfInstallableProducts.size(); i++) {
@@ -292,7 +292,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		// iterate through all clients for which a list of
 		// products/states/actionrequests exist
-		// logging.debug(this, "" + clientAllProductRows);
+		
 
 		for (String clientId : clientAllProductRows.keySet()) {
 			Map<String, Map<String, String>> productRows = new HashMap<>();
@@ -307,7 +307,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				// new HashMap<>(productRowsList1client.get(i));
 				// deep copy, but seems to be not complete, therefore not used
 				// if (clientId.equals("vbrupertwin7-64.uib.local"))
-				// logging.info(this, "stateAndAction " + stateAndAction);
+				
 
 				String productId = stateAndAction.get(ProductState.KEY_productId);
 				productRows.put(productId, stateAndAction);
@@ -373,13 +373,13 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 				// build visual states
 				for (String colKey : ProductState.KEYS) {
-					// logging.debug(this, "produceVisualStates, clientId " + clientId + ",
+					
 					// productMap " + productMapAsRetrieved);
-					// logging.debug(this, "produceVisualStates, clientId " + clientId + ",
+					
 					// combinedVisualValues.get(colKey) " + combinedVisualValues.get(colKey));
 
 					// if (stateAndAction.get(ProductState.KEY_actionRequest).equals("setup"))
-					// logging.info(this, "produceVisualStatesFromExistingEntries clientId " +
+					
 					// clientId + ", stateAndAction " + stateAndAction);
 
 					if (colKey == ProductState.KEY_actionRequest) {
@@ -388,9 +388,9 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					}
 
 					mixToVisualState(colKey, combinedVisualValues.get(colKey), productId, stateAndAction.get(colKey));
-					// logging.info(this, "produceVisualStates, clientId " + clientId + ",
+					
 					// lastStateChange " + stateAndAction.get(ProductState.KEY_lastStateChange));
-					// logging.info(this, "produceVisualStates, clientId " + clientId + ",
+					
 					// lastStateChange " +
 					// combinedVisualValues.get(ProductState.KEY_lastStateChange));
 
@@ -468,7 +468,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					 * 
 					 * mixToVisualState(targets, productId, targetConfiguration);
 					 * mixToVisualState(results, productId, actionResult);
-					 * //logging.debug(this, "results " + results + ", actionResult mixed in: " +
+					 * 
 					 * actionResult);
 					 * mixToVisualState(lastActions, productId, lastAction);
 					 * mixToVisualState(priorities, productId, priority);
@@ -485,7 +485,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	protected String mixToVisualState(final String columnName, Map<String, String> visualStates, final String productId,
 			final String mixinValue) {
 		String oldValue = (String) visualStates.get(productId);
-		// logging.info(this, " ------------------- mixtovisualstates, columnName " +
+		
 		// columnName + " productId " + productId + " oldValue " + oldValue + "
 		// mixinValue " + mixinValue);
 
@@ -495,7 +495,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		{
 
 			// if (columnName.equals("actionRequest"))
-			// logging.info(this, " ------------------- mixtovisualstates, columnName " +
+			
 			// columnName + " productId " + productId + " oldValue null " + " mixinValue " +
 			
 			resultValue = mixinValue;
@@ -774,7 +774,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		}
 
-		// logging.info(this, "checkForContradictingAssignments === " + info + " client
+		
 		// " + clientId + ", actualproduct " + actualProduct + ", product " + product +
 		// ", stateType " + stateType + ", state " + state);
 
@@ -1011,7 +1011,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					+ " changed product for client number : " + product2setOfClientsWithNewAction.get(prod).size());
 			logging.debug(this, "collectiveChangeActionRequest we have selected clients  " + selectedClients.length);
 
-			// logging.info(this, "collectiveChangeActionRequest, set value valid if set for
+			
 			// all clients " + ar + " for " + prod + " instead of " +
 			// combinedVisualValues.get(ProductState.KEY_actionRequest).get(prod));
 
@@ -1102,7 +1102,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	 * protected void changeActionRequest (String product, String
 	 * theActionRequestString)
 	 * {
-	 * //logging.info(this, "changeActionRequest called");
+	 * 
 	 * ActionRequest actionInTreatment =
 	 * ActionRequest.produceFromDisplayLabel(theActionRequestString);
 	 * 
@@ -1196,7 +1196,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		// actions.put (product, actionInTreatment.toString()); // if necessary change
 		// of visible action in combined actions
 
-		// logging.debug(this, "productsV.indexOf must be calculated in a different way
+		
 		// in subclass " + productsV.indexOf(actualProduct));
 		// int modelRow = getRowFromProductID(actualProduct);
 		int modelRow = getRowFromProductID(product);
@@ -1271,7 +1271,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 				// check required product
 
-				// logging.debug(this, "---- requiredProduct " + requiredProduct + ", client " +
+				
 				
 				// retrieving the actual state and actionRequest of the required product
 				Map<String, Map<String, String>> productStates = allClientsProductStates.get(clientId);
@@ -1321,7 +1321,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 									= ActionRequest.getVal(neededAction);
 						}
 
-						// logging.debug(this,"resulting requiredAction " +
+						
 						// ActionRequest.getLabel(requiredAR));
 
 						// handle resulting action requests
@@ -1355,7 +1355,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 											"required product: '" + requiredProduct + "'  has already been treated");
 									logging.info(this, "new action was " + alreadyExistingNewActionRequest);
 
-									// logging.error(this, "recursion stop, setting " + requiredAction + " but
+									
 									// already set for clientId, product "
 									// + clientId + "," + requiredProduct + " : " +
 									
@@ -1389,7 +1389,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	@Override
 	public ComboBoxModel getComboBoxModel(int row, int column) {
 		actualProduct = (String) productsV.get(row); // products[row];
-		// logging.debug(this, "getComboBoxModel(), actualproduct " + actualProduct + "
+		
 		// row " + row + " col " + column);
 
 		if (column == displayColumns.indexOf(ActionRequest.KEY)) // selection of actions
@@ -1450,7 +1450,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		else if (column == displayColumns.indexOf(InstallationStatus.KEY)) // selection of status
 		{
-			// logging.debug(this,"return InstallationStatus.allStates " +
+			
 			// InstallationStatus.allStates);
 			if (possibleActions.get(actualProduct) == null)
 			// we dont have the product in our depot selection
@@ -1468,7 +1468,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		else if (column == displayColumns.indexOf(TargetConfiguration.KEY)) // selection of status
 		{
-			// logging.debug(this,"return InstallationStatus.allStates " +
+			
 			// InstallationStatus.allStates);
 			if (possibleActions.get(actualProduct) == null)
 			// we dont have the product in our depot selection
@@ -1558,10 +1558,10 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	@Override
 	public String getLastStateChange(int row) {
 		String actualProduct = (String) productsV.get(row);
-		// logging.debug(this,
+		
 		// "combinedVisualValues.get(ProductState.KEY_lastStateChange) " +
 		// combinedVisualValues.get(ProductState.KEY_lastStateChange));
-		// logging.debug(this, " actualProduct, ..get(actualProduct) " + actualProduct +
+		
 		// ", " +
 		// combinedVisualValues.get(ProductState.KEY_lastStateChange).get(actualProduct));
 		return combinedVisualValues.get(ProductState.KEY_lastStateChange).get(actualProduct);
@@ -1579,7 +1579,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	}
 
 	private Object retrieveValueAt(int row, int displayCol) {
-		// logging.debug (this, "retrieveValueAt, displayCol " + displayCol + " value "
+		
 		// +
 		// combinedVisualValues.get(ProductState.KEY_lastStateChange).get(actualProduct));
 
@@ -1599,7 +1599,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		int col = indexPreparedColumns[displayCol];
 
-		// logging.debug (this, "retrieveValueAt, displayCol " + displayCol + "
+		
 		// --------- corresponding preparedCol " + col );
 
 		switch (col) {
@@ -1643,13 +1643,13 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		case 8:
 			// result = (String) actions.get(actualProduct) ;
 			// if (actualProduct.equals("firefox"))
-			// logging.info(this, "value for firefox is " +
+			
 			// combinedVisualValues.get(ProductState.KEY_actionRequest).get(actualProduct));
 			ActionRequest ar = ActionRequest
 					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_actionRequest).get(actualProduct));
 			result = ActionRequest.getDisplayLabel(ar.getVal());
 
-			// logging.debug(this," --------- row, col " + row + ", " + col + " result " +
+			
 			
 			break;
 
@@ -1659,13 +1659,13 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		case 10:
 			result = combinedVisualValues.get(ProductState.KEY_actionSequence).get(actualProduct);
-			// logging.info(this, " actualProduct " + actualProduct + " , actionSequence " +
+			
 			
 			break;
 
 		case 11:
 			result = productNamesInDeliveryOrder.indexOf(actualProduct); // ProductState.KEY_position
-			// logging.info(this, " actualProduct " + actualProduct + " , position " +
+			
 			
 			break;
 
@@ -1689,7 +1689,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		case 15:
 			result = combinedVisualValues.get(ProductState.KEY_lastStateChange).get(actualProduct);
-			// logging.debug(this, " -------(lastStateChange)-- row, col " + row + ", " +
+			
 			// col + " result " + result);
 			break;
 
@@ -1732,7 +1732,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		logging.debug(this, " actualProduct " + actualProduct + ", set value at " + row + ", " + col);
 		changeValueAt(value, row, col);
 		fireTableCellUpdated(row, col);
-		// logging.debug(this, "set value at " + row + ", " + col);
+		
 	}
 
 	/*

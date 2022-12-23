@@ -71,14 +71,14 @@ public class ActivityPanel extends JPanel implements Runnable {
 
 		}
 		try {
-			// logging.info(this, "paintImmediately i " + i);
+			
 			// if (SwingUtilities.isEventDispatchThread())
 			{
-				// logging.info(this, "event dispatch thread");
+				
 				paintImmediately(0, 0, w, h); // class cast exceptions mit sleepingMS = 50 if not event dispatch thread
 			}
 			// else
-			// logging.info(this, "not event dispatch thread");
+			
 
 			
 		} catch (Exception strange) {
@@ -109,7 +109,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 		try {
 			while (true) {
 				try {
-					// logging.info(this, "sleep " + sleepingMS);
+					
 					Thread.sleep(sleepingMS);
 
 				} catch (InterruptedException ignore) {

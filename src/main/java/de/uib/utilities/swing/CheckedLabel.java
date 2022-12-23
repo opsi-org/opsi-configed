@@ -150,7 +150,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 		 * 
 		 * public void keyPressed(KeyEvent e)
 		 * {
-		 * //logging.info(this, "event " + e);
+		 * 
 		 * super.keyPressed(e);
 		 * if (e.getKeyCode() == KeyEvent.VK_SPACE)
 		 * {
@@ -183,7 +183,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 		 * 
 		 * public void keyPressed(KeyEvent e)
 		 * {
-		 * //logging.info(this, "event " + e);
+		 * 
 		 * super.keyPressed(e);
 		 * if (e.getKeyCode() == KeyEvent.VK_SPACE)
 		 * {
@@ -216,7 +216,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 		 * 
 		 * public void keyPressed(KeyEvent e)
 		 * {
-		 * //logging.info(this, "event " + e);
+		 * 
 		 * super.keyPressed(e);
 		 * if (e.getKeyCode() == KeyEvent.VK_SPACE)
 		 * {
@@ -339,7 +339,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 		for (ActionListener al : myListeners) {
 			al.actionPerformed(ae);
 		}
-		// logging.info(this, "notifed action listeners about " + ae);
+		
 	}
 
 }

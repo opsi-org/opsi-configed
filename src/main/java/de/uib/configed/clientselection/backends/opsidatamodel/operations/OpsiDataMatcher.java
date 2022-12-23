@@ -24,16 +24,16 @@ public abstract class OpsiDataMatcher {
 	public boolean doesMatch(Client client) {
 		OpsiDataClient oClient = (OpsiDataClient) client;
 		logging.debug(this, "doesMatch client " + oClient);
-		// logging.debug(this, "doesMatch interesting map, key " + map + ", " + key);
+		
 		Map realMap = oClient.getMap(map);
-		// logging.debug( this, "doesMatch " + realMap.toString() );
+		
 		if (!realMap.containsKey(key) || realMap.get(key) == null) {
-			// logging.debug(this, "key '" + key + "' not found!");
+			
 			return false;
 		}
 
 		String realData = realMap.get(key).toString();
-		// logging.debug( this, "doesMatch realData " + realData);
+		
 		return checkData(realData);
 	}
 

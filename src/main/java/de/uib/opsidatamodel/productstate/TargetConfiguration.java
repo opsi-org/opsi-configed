@@ -147,8 +147,8 @@ public class TargetConfiguration {
 
 	public static final String[] getDisplayLabelsForChoice() {
 		checkCollections();
-		// logging.debug("TargetConfiguration.getDisplayLabelsForChoice() " +
-		// logging.getStrings(choiceLabels));
+		
+		
 
 		return choiceLabels;
 	}
@@ -182,8 +182,8 @@ public class TargetConfiguration {
 		if (!labels.contains(label))
 			return new TargetConfiguration(INVALID);
 
-		// logging.debug(" -------- label " + label + " --- val " + getVal(label));
-		// logging.debug(" -------- display " + new
+		
+		
 		
 
 		return new TargetConfiguration(getVal(label));

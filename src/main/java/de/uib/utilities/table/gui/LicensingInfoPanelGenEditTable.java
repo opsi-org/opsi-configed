@@ -20,7 +20,7 @@ public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
 
 	@Override
 	protected void setCellRenderers() {
-		// logging.info(this, "setCellRenderers");
+		
 		LicensingInfoMap lInfoMap = LicensingInfoMap.getInstance();
 		for (int i = 0; i < tableModel.getColumnCount(); i++) {
 			String name = tableModel.getColumnName(i);

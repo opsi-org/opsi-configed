@@ -68,13 +68,13 @@ public class WaitCursor {
 		 * ActivityPanel.setActing(true);
 		 * 
 		 * 
-		 * //logging.debug(this, " cursor carrying component " + c);
+		 * 
 		 * while (!ready && !allStopped)
 		 * {
 		 * try
 		 * {
 		 * Thread.sleep (200);
-		 * //logging.debug(this, "running wait cursor thread ");
+		 * 
 		 * }
 		 * catch (InterruptedException ex)
 		 * {}
@@ -90,11 +90,11 @@ public class WaitCursor {
 				public void run() {
 					ActivityPanel.setActing(true);
 
-					// logging.debug(this, " cursor carrying component " + c);
+					
 					while (!ready && !allStopped) {
 						try {
 							Thread.sleep(200);
-							// logging.debug(this, "running wait cursor thread ");
+							
 						} catch (InterruptedException ex) {
 						}
 					}
@@ -106,11 +106,11 @@ public class WaitCursor {
 				public void run() {
 					ActivityPanel.setActing(true);
 
-					// logging.debug(this, " cursor carrying component " + c);
+					
 					while (!ready && !allStopped) {
 						try {
 							Thread.sleep(200);
-							// logging.debug(this, "running wait cursor thread ");
+							
 						} catch (InterruptedException ex) {
 						}
 					}

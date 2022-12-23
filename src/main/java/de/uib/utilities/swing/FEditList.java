@@ -117,13 +117,13 @@ public class FEditList extends FEditObject
 	}
 
 	public void setListModel(ListModel model) {
-		// logging.debug(this, "setListModel " + model);
+		
 		visibleList.setModel(model);
 		initialModel = model;
 	}
 
 	public void setSelectionMode(int selectionMode) {
-		// logging.debug(this, "setSelectionMode " + selectionMode);
+		
 		visibleList.setSelectionMode(selectionMode);
 		singleSelectionMode = (selectionMode == ListSelectionModel.SINGLE_SELECTION);
 	}
@@ -140,7 +140,7 @@ public class FEditList extends FEditObject
 
 	@Override
 	public void setEditable(boolean b) {
-		// logging.debug(this, "setEditable " + b);
+		
 		super.setEditable(b);
 		extraField.setVisible(b);
 		buttonRemove.setVisible(b && !singleSelectionMode);
@@ -156,7 +156,7 @@ public class FEditList extends FEditObject
 		String txt = "" + getValueAt(location);
 		// visibleList.getModel().getElementAt( visibleList.locationToIndex( location )
 		
-		// logging.debug(this, " location has text " + txt);
+		
 		extraField.setText(txt);
 		extraFieldChanged(false);
 	}
@@ -169,11 +169,11 @@ public class FEditList extends FEditObject
 
 		for (int i = 0; i < model.getSize(); i++) {
 			Object element = model.getElementAt(i);
-			// logging.debug(this, "addSelectedValues, check element " + element + " no " +
+			
 			
 
 			if (toSelect.contains(element)) {
-				// logging.debug(this, "setSelectedValues, adding " + element);
+				
 				visibleList.addSelectionInterval(i, i);
 			}
 		}
@@ -189,24 +189,24 @@ public class FEditList extends FEditObject
 	}
 
 	public void setSelectedValues(List<Object> toSelect) {
-		// logging.debug(this, "setSelectedValues " + toSelect);
+		
 		initiallySelected = toSelect;
 
 		visibleList.clearSelection();
-		// logging.debug(this, "setSelectedValues , selection cleared");
+		
 		addSelectedValues(toSelect);
 
 		// buttonRemove.setEnabled(toSelect.size() > 0);
-		// logging.debug(this, "setSelectedValues , selected values added");
+		
 	}
 
 	public void setSelectedValue(Object ob) {
-		// logging.debug(this, "setSelectedValue " + ob);
+		
 		visibleList.setSelectedValue(ob, true);
 	}
 
 	private void addElementFromExtraField(Object element) {
-		// logging.debug(this, "requested addElementFromExtraField >" + element + "<");
+		
 		addElement(element);
 
 		// extraField.removeActionListener(this);
@@ -217,7 +217,7 @@ public class FEditList extends FEditObject
 	}
 
 	protected void addElement(Object element) {
-		// logging.debug(this, "requested addElement >" + element + "<");
+		
 		ListModel limo = visibleList.getModel();
 		if (limo instanceof DefaultListModel) {
 			if (!((DefaultListModel) limo).contains(element)) {
@@ -244,7 +244,7 @@ public class FEditList extends FEditObject
 
 	@Override
 	public void setStartValue(Object s) {
-		// logging.debug(this, "setStartValue " + s);
+		
 		super.setStartValue(s);
 		setTracker(s);
 	}
@@ -373,7 +373,7 @@ public class FEditList extends FEditObject
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		List selectedList = getSelectedList();
-		// logging.info(this, "FEditList valueChanged , selected " + selectedList + "
+		
 		// nullable? " + nullable);
 		if (!nullable && selectedList.isEmpty()) {
 			// reset to some value

@@ -273,7 +273,7 @@ public class configed {
 	}
 
 	protected static boolean isValue(String[] args, int i) {
-		// logging.debug( "isValue " + args[i] + " length " + args.length + " i " +
+		
 		// i + " has - " + (args[i].indexOf('-') == 0) );
 		return i >= args.length || args[i].indexOf('-') == 0;
 	}
@@ -394,7 +394,7 @@ public class configed {
 
 		configureUI();
 
-		// logging.debug (imageHandled);
+		
 		try {
 			String resourceS = "opsi.gif";
 			URL resource = Globals.class.getResource(resourceS);
@@ -431,7 +431,7 @@ public class configed {
 	}
 
 	protected static void processArgs(String[] args) {
-		//logging.debug(args.length);
+		
 		/*for (int i = 0; i < args.length; i++)
 			logging.debug();*/
 		/*
@@ -441,7 +441,7 @@ public class configed {
 		 * logging.debug(args[i]);
 		 * }
 		 */
-		// logging.debug("args " + Arrays.toString(args));
+		
 		logging.debug("args " + Arrays.toString(args));
 
 		// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = true;
@@ -463,7 +463,7 @@ public class configed {
 
 		int i = 0;
 		while (i < args.length) {
-			// logging.debug("treat i, arg " + i + ", " + arg);
+			
 
 			if (args[i].charAt(0) != '-') // no option
 			{
@@ -479,7 +479,7 @@ public class configed {
 			} else // options
 
 			{
-				// logging.debug(" option " + arg);
+				
 				if (args[i].equals("-l") || args[i].equals("--locale")) {
 					locale = getArg(args, i);
 					i = i + 2;
@@ -567,10 +567,10 @@ public class configed {
 					// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = true;
 					de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
 					i = i + 1;
-					// logging.debug ("gzip");
+					
 
 					if (isValue(args, i)) {
-						// logging.debug (args[i]);
+						
 						if (args[i].equalsIgnoreCase("Y")) {
 							// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission = true;
 							de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
@@ -594,10 +594,10 @@ public class configed {
 					i++;
 					group = getArg(args, i);
 					i = i + 2;
-					// logging.debug(" savedsearch, group " + savedSearch + ", " + group);
+					
 				} else if (args[i].equals("--initUserRoles")) {
 					optionCLIuserConfigProducing = true;
-					// logging.debug("treat i, arg " + args[i]);
+					
 					i++;
 				} else if (args[i].equals("-me") || args[i].equals("--testPersistenceControllerMethod")) {
 					optionPersistenceControllerMethodCall = true;
@@ -752,7 +752,7 @@ public class configed {
 	}
 
 	public static String encodeStringFromService(String s) {
-		// logging.debug("configed: to encode " + s);
+		
 
 		return s;
 
@@ -847,7 +847,7 @@ public class configed {
 		} catch (MissingResourceException mre) {
 			// we return the key and log the problem:
 			logging.debug("Problem: " + mre.toString());
-			// logging.debug (" ----------- " + mre.toString());
+			
 
 			try {
 				result = Messages.messagesEN.getString(key);
@@ -859,7 +859,7 @@ public class configed {
 				}
 			} catch (MissingResourceException mre2) {
 				logging.debug("Problem: " + mre2.toString());
-				// logging.debug (" ----------- " + mre2.toString());
+				
 			}
 		} catch (Exception ex) {
 			logging.warning("Failed to message " + key + ": " + ex);
@@ -932,7 +932,7 @@ public class configed {
 					UIManager.setLookAndFeel(info.getClassName());
 					logging.info("Nimbus look&feel set, by " + info.getClassName());
 
-					// logging.debug(UIManager.getDefaults());
+					
 
 					// UIManager.put("nimbusSelectionBackground",
 					// UIManager.get("nimbusLightBackground"));
@@ -1028,21 +1028,21 @@ public class configed {
 	 */
 	public static void main(String[] args) {
 
-		// logging.init(); too early, variables not set
+		
 		processArgs(args);
 
 		logging.debug("initiating configed");
 
 		if (optionCLIQuerySearch) {
-			// logging.debug( "optionCLIQuerySearch" );
+			
 			logging.debug("optionCLIQuerySearch");
 			de.uib.configed.clientselection.SavedSearchQuery query = new de.uib.configed.clientselection.SavedSearchQuery();
-			// logging.debug( "query constructed " + query );
+			
 
 			query.setArgs(host, user, password, savedSearch, null);
 			query.addMissingArgs();
 
-			// logging.debug( "run query ");
+			
 			query.runSearch(true);
 			System.exit(0);
 		} else if (optionCLIDefineGroupBySearch) {
@@ -1054,12 +1054,12 @@ public class configed {
 			// addObject2Group
 
 			de.uib.configed.clientselection.SavedSearchQuery query = new de.uib.configed.clientselection.SavedSearchQuery();
-			// logging.debug("configed: setArgs " + host + ", PASSWORD, " + savedSearch
+			
 			// + ", " + group);
 			query.setArgs(host, user, password, savedSearch, group);
 			query.addMissingArgs();
 			List<String> newGroupMembers = query.runSearch(false);
-			// logging.debug( " newGroupMembers " + newGroupMembers );
+			
 
 			query.populateHostGroup(newGroupMembers, group);
 			System.exit(0);
@@ -1114,10 +1114,10 @@ public class configed {
 
 			connect();
 
-			// logging.debug( "" + controller.getOpsiHostNames());
+			
 			System.exit(0);
 
-			// logging.debug(" called me with " + host + ", " + user + ", " +
+			
 			
 		}
 
@@ -1130,7 +1130,7 @@ public class configed {
 			System.exit(0);
 		}
 
-		// logging.debug (imageHandled);
+		
 		try {
 			String resourceS = Globals.iconresourcename;
 			URL resource = Globals.class.getResource(resourceS);

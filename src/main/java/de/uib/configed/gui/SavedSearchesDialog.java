@@ -164,7 +164,7 @@ public class SavedSearchesDialog extends FEditList {
 	@Override
 	protected void commit() {
 		result = null;
-		// logging.info(this, " SavedSearchesDialog.commit");
+		
 
 		buttonCommit.setEnabled(false);
 		buttonCancel.setEnabled(false);
@@ -202,7 +202,7 @@ public class SavedSearchesDialog extends FEditList {
 
 		if (index == -1)
 			return;
-		// logging.debug( this, "we have list size " + model.getSize());
+		
 		logging.debug(this, "remove entry at " + index);
 
 		removeSavedSearch((String) model.get(index));
@@ -256,7 +256,7 @@ public class SavedSearchesDialog extends FEditList {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// logging.info(this, "mouseClicked " + e);
+		
 		if (e.getClickCount() > 1) {
 			commit();
 		}

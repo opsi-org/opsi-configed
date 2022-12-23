@@ -62,7 +62,7 @@ public class LicencePoolXOpsiProduct extends Relation {
 	public void integrateRawFromService(Map<String, Object> m) {
 		String licensePoolId = (String) m.get(idKEY);
 		try {
-			// logging.info(this, "integrateRawFromService " + m );
+			
 
 			List<Object> productList = ((org.json.JSONArray) m.get(productsKEY)).toList();
 
@@ -73,7 +73,7 @@ public class LicencePoolXOpsiProduct extends Relation {
 				rowmap.put(LicencepoolEntry.idSERVICEKEY, licensePoolId);
 				rowmap.put(productIdKEY, productId);
 				add(rowmap);
-				// logging.info(this, "integrateRawFromService given rowmap" + rowmap);
+				
 			}
 		} catch (Exception ex) {
 			logging.error("integrateRawFromService " + m + " exception " + ex);

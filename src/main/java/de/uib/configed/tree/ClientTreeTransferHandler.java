@@ -23,7 +23,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	public ClientTreeTransferHandler(ClientTree tree) {
 		super();
 		this.tree = tree;
-		// logging.debug(this, "transfer handler constructed");
+		
 
 	}
 
@@ -35,7 +35,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 		String[] parts = treeRepresentation.split(",");
 
-		// logging.debug(this, "transferRepresentsGroup : " + Arrays.toString(parts));
+		
 
 		if (parts.length == 1)
 			return null;
@@ -91,7 +91,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			dropObjectPath = targetNode.getUserObjectPath();
 
 		// debugging the if clause
-		// logging.info(this, "canImport, dropOnThis as node " + targetNode + " class "
+		
 		// + targetNode);
 		if (targetNode != null) {
 			logging.debug(this, "canImport targetNode.isImmutable() " + targetNode.isImmutable());
@@ -131,10 +131,10 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 	@Override
 	public int getSourceActions(JComponent c) {
-		// logging.debug(this," --- ClientTreeTransferHandler , getSourceActions, "
+		
 		// + "JComponent " + c + " getSourceActions " + TransferHandler.COPY_OR_MOVE);
-		// logging.debug(this, "getSourceActions, selectedRows " +
-		// logging.getIntegers(tree.getSelectionRows() ));
+		
+		
 
 		logging.debug(this, "getSourceActions,  activePaths " + tree.getActivePaths());
 
@@ -368,7 +368,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		 * String[] values = transferData.split("\n");
 		 */
 
-		// logging.debug(this, "importData, getSelectedClientsInTable(): " +
+		
 		// tree.getSelectedClientsInTable());
 		logging.debug(this, "importData. ++++++++++ getActivePaths(): " + tree.getActivePaths());
 
@@ -405,12 +405,12 @@ public class ClientTreeTransferHandler extends TransferHandler {
 				// if values not got from transferable, the following reduces
 				// to setting importId = value;
 
-				// logging.debug(this, "transferData split by tab:" +
-				// logging.getStrings(value.split("\t")));
-				// logging.debug(this, "transferData split by ,:" +
-				// logging.getStrings(value.split(",")));
-				// logging.debug(this, "transferData split by ' ' " +
-				// logging.getStrings(value.split(" ")));
+				
+				
+				
+				
+				
+				
 
 				if ((value.split("\t").length > 1))
 				// probably an import from the JTable
@@ -426,7 +426,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 					 * if (parts.length > 1)
 					 * //probably our own transfer
 					 * sourceParentID = parts[parts.length-2];
-					 * //logging.debug(this, "got importID " + importID + ", sourceParentID " +
+					 * 
 					 * sourceParentID);
 					 */
 				}

@@ -67,7 +67,7 @@ public class DataStubDirectSQL extends DataStubRawData
 				clientSelection = " AND ( " + giveWhereOR("clientId", newClients) + ") ";
 			}
 
-			// logging.info(this, "retrieveSoftwareAuditOnClients for " +
+			
 			// clientListForCall.size() + " clients " + clientListForCall);
 
 			// client2software = new HashMap<>();
@@ -153,12 +153,12 @@ public class DataStubDirectSQL extends DataStubRawData
 				logging.error("retrieveSoftwareAuditOnClients sql Error " + e.toString());
 			}
 
-			// logging.info(this, "retrieveSoftwareAuditOnClients client2software " +
+			
 			// client2software);
 
 			logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
 			// System.gc();
-			// logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " +
+			
 			// Globals.usedMemory());
 			// step++;
 

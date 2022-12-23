@@ -121,10 +121,10 @@ public class PanelStateSwitch extends JPanel {
 		}
 
 		this.startValue = startValue;
-		// logging.info(this, " class of start Value " + startValue.getClass());
-		// logging.info(this, " declaring class " + startValue.getDeclaringClass());
+		
+		
 		logging.info(this, " string val of start value " + startValue.toString());
-		// logging.info(this, " class " + (values instanceof Object[]) );
+		
 
 		initComponents();
 
@@ -182,7 +182,7 @@ public class PanelStateSwitch extends JPanel {
 			button.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseEntered(MouseEvent e) {
-					// logging.info(this, "mouse entered");
+					
 					if (!button.isSelected())
 						button.setSelectedIcon(deactivatedIcon);
 				}

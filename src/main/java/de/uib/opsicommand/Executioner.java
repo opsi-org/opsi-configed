@@ -31,7 +31,7 @@ public abstract class Executioner {
 			result = new JSONArray();
 		else
 			result = new JSONArray(l);
-		// logging.debug(this, "jsonArray " + result);
+		
 		return result;
 	}
 

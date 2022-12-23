@@ -311,14 +311,14 @@ public class NewClientDialog extends FGeneralDialog
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				try {
-					// logging.debug (" --------->" + e.getDocString newPiece =
+					
 					// e.getDocument().getText(e.getOffset(), e.getLength());
 					String newPiece = e.getDocument().getText(e.getOffset(), e.getLength());
 					logging.debug(this, " --------->" + newPiece + "<");
 
 					// if ( (e.getDocument().getText(e.getOffset(), e.getLength()) ).equals ("\t") )
 					if (newPiece.equals("\t")) {
-						// logging.debug ("tab");
+						
 						macAddressField.requestFocus();
 					}
 				} catch (javax.swing.text.BadLocationException ex) {

@@ -613,7 +613,7 @@ public class PanelSWInfo extends JPanel {
 	public void updateModel() {
 		logging.info(this, "update+++++");
 
-		// logging.info(this, "update+++++ voidTableModel.getRowCount() "
+		
 		// +voidTableModel.getRowCount() );
 		logging.info(this, "update+++++ modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
 

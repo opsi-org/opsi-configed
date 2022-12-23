@@ -44,7 +44,7 @@ public class ExternalSource implements TableSource
 			rowsProvider.requestReload();
 			reloadRequested = false;
 		}
-		// logging.debug (" --- MapSource retrieveRows() rows.size(): " +
+		
 		// rows.size());
 		return rowsProvider.getRows();
 	}

@@ -77,7 +77,7 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 			else
 				put("type", retrieved.get("type"));
 
-			// logging.info(this, "type found " + get("type"));
+			
 			if (get("type").equals(BOOL_TYPE) || get("type").equals("BoolProductProperty"))
 				type = TYPE.BoolConfig;
 			else

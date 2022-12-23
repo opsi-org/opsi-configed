@@ -30,7 +30,7 @@ public class XTree extends JTree {
 		 * addMouseWheelListener(new MouseWheelListener(){
 		 * public void mouseWheelMoved( MouseWheelEvent e )
 		 * {
-		 * //logging.debug(this, "MouseWheelEvent " + e);
+		 * 
 		 * 
 		 * int selRow = -1;
 		 * 
@@ -43,12 +43,12 @@ public class XTree extends JTree {
 		 * selRow = getSelectionRows()[0];
 		 * 
 		 * 
-		 * //logging.debug(this, "MouseWheelEvent  sel Row " + selRow);
+		 * 
 		 * 
 		 * int diff = e.getWheelRotation();
 		 * 
 		 * selRow = selRow + diff;
-		 * //logging.debug(this, "MouseWheelEvent  sel Row " + selRow);
+		 * 
 		 * 
 		 * if (selRow >= getRowCount())
 		 * selRow = getRowCount() -1;
@@ -78,7 +78,7 @@ public class XTree extends JTree {
 					return;
 				}
 
-				// logging.debug(this, "last path component x, y " + e.getX() + ", " + e.getY()
+				
 				// + " " + currentPath.getLastPathComponent());
 
 				if (getModel().isLeaf(currentPath.getLastPathComponent())) {
@@ -109,14 +109,14 @@ public class XTree extends JTree {
 	public void expandRows(Vector<Integer> rows) {
 		logging.debug(this, "expandRows " + rows.size());
 		for (Integer row : rows) {
-			// logging.debug(this, "expand row " + row);
+			
 			expandRow(row);
 		}
 	}
 
 	public void expandAll() {
 		for (int row = 0; row < getRowCount(); row++) {
-			// logging.debug(this, "expand row " + row);
+			
 			expandRow(row);
 		}
 	}

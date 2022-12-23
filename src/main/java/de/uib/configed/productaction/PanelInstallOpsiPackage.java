@@ -175,7 +175,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		Map<String, Map<String, Object>> depot2depotMap = persist.getHostInfoCollections().getDepots();
 
 		logging.info(this, "buildSambaTarget for depotserver " + depotserver);
-		// logging.info(this, "buildSambaTarget depotMap " +
+		
 		// depot2depotMap.get(depotserver));
 
 		if (depot2depotMap.get(depotserver) == null)

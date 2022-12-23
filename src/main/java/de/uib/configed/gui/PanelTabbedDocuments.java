@@ -38,7 +38,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 		textPanes = new LogPane[idents.length];
 
-		// logging.debug ( " ------------------------------ idents.length " +
+		
 		// idents.length);
 
 		for (int i = 0; i < idents.length; i++) {

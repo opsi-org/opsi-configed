@@ -103,7 +103,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 			// fieldSelectedClientsNames.setCaretPosition(0);
 			fieldSelectedClientsNames.setToolTipText(
 					"<html><body><p>" + selectedClientNames.replace(";\n", "<br\\ >") + "</p></body></html>");
-			// logging.debug("caret " + fieldSelectedClientsNames.getCaret());
+			
 
 		}
 

@@ -178,13 +178,13 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		resultingText = theField.getText();
 		selectedListElement = theList.getSelectedValue();
 
-		// logging.info(this, "preAction1 resultingText, selectedListElement " +
+		
 		// resultingText + ", " + selectedListElement);
 	}
 
 	@Override
 	public int getResult() {
-		// logging.info(this, "got result resultingText, selectedListElement "
+		
 		// + theField.getText() + ", " + theList.getSelectedValue());
 		// values are not got at this point
 		// override doAction for getting the values
@@ -204,7 +204,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 	// interface ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		// logging.info(this, "valueChanged " + e);
+		
 		// selectedListElement = theList.getSelectedValue();
 	}
 	// ======================

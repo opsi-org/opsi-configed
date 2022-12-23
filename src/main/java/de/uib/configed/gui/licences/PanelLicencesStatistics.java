@@ -34,7 +34,7 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 
 		// testfield = new JTextField(" Übersicht ");
 
-		// logging.debug( "--------- init PanelLicencesStatistics");
+		
 
 		panelStatistics = new PanelGenEditTable(
 				configed.getResourceValue("ConfigedMain.Licences.SectiontitleStatistics"), 1000, false, // editing

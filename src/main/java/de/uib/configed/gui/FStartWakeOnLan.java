@@ -527,14 +527,14 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 		scheduleTitle = "  scheduler" + scheduleTitle;
 		startActionMillis = new GregorianCalendar().getTimeInMillis();
-		// logging.info(this, "doAction1 calTimeMillis " + calTimeMillis);
-		// logging.info(this, "doAction1 startActionMillis " + startActionMillis);
+		
+		
 		waitingMillis = cal.getTimeInMillis() - startActionMillis;
-		// logging.info(this, "doAction1 waitingMillis " + waitingMillis);
+		
 		if (waitingMillis < 0)
 			waitingMillis = 0;
 		// waitingSeconds = (int) (waitingMillis / 1000);
-		// logging.info(this, "doAction1 " + waitingSeconds);
+		
 
 		if (waitingMillis < 100) {
 			startAction();
@@ -638,7 +638,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	 * 
 	 * //long noOfSteps = (long) (waitingMillis/ timeStepMillis);
 	 * 
-	 * //logging.info(this, " doInBackground waitingMillis " + waitingMillis );
+	 * 
 	 * 
 	 * 
 	 * long elapsedMillis = 0;
@@ -664,9 +664,9 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	 * elapsedMillis = nowMillis - startActionMillis;
 	 * elapsedMins = (elapsedMillis / 1000) / 60;
 	 * 
-	 * //logging.info(this, " doInBackground progress elapsedMillis " +
+	 * 
 	 * elapsedMillis);
-	 * //logging.info(this, " doInBackground progress " + progress +
+	 * 
 	 * " totalTimeElapsed  [min] " + elapsedMins );
 	 * 
 	 * publish(elapsedMillis);
@@ -688,10 +688,10 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	 * protected void process( List<Long> listOfMillis )
 	 * {
 	 * //update the steps which are done
-	 * //logging.info(this, "process, we have got list " + listOfMillis);
+	 * 
 	 * 
 	 * long millis = listOfMillis.get( listOfMillis.size() - 1);
-	 * //logging.info(this, "process :: millis " + millis);
+	 * 
 	 * statusLabel.setText(
 	 * //"passed " + giveTimeSpan( millis) +
 	 * " " + configed .getResourceValue("FStartWakeOnLan.timeLeft") + "  " +
@@ -699,7 +699,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	 * 
 	 * int barLength = progressBar.getMaximum() - progressBar.getMinimum();
 	 * 
-	 * //logging.info(this, "progressBar.getMaximum() " + progressBar.getMaximum() +
+	 * 
 	 * ":: progressBar.getMinimum() " + progressBar.getMinimum()
 	 * // + ":: millis " + millis + " :: waitingMillis " + waitingMillis +
 	 * " :: min + " + ((int) ((barLength * millis) / waitingMillis)));

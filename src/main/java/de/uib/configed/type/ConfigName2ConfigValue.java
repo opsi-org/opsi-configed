@@ -12,8 +12,8 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 	public ConfigName2ConfigValue(Map<String, Object> retrieved, Map<String, ConfigOption> configOptions) {
 		super(retrieved);
 		this.configOptions = configOptions;
-		// logging.info(this, "retrieved " + retrieved);
-		// logging.info(this, "configOptions " + configOptions);
+		
+		
 		buildX();
 	}
 
@@ -32,7 +32,7 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 		}
 
 		if (configOptions == null) {
-			// logging.info(this, "configOptions == null, retrieved: " + retrieved);
+			
 		} else {
 
 			for (String key : configOptions.keySet()) {
@@ -53,9 +53,9 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 			if (!(retrieved.get(key) instanceof List)) {
 				logging.warning(this, "list expected , for key " + key + " found " + retrieved.get(key));
 				logging.error(this, "list expected , for key " + key);
-				// logging.debug(this, "key " + key + ", retrieved.get(key) " +
+				
 				// retrieved.get(key));
-				// logging.debug(this, "retrieved.get(key) has class " +
+				
 				// retrieved.get(key).getClass().getName());
 
 				continue;
@@ -66,14 +66,14 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 
 			if (configOptions != null && configOptions.get(key) != null) {
 				ConfigOption configOption = (ConfigOption) configOptions.get(key);
-				// logging.debug(this, "key " + key + " configOption class : " +
+				
 				// configOption.get("classname"));
 				if (configOption.get("classname").equals("java.lang.Boolean")) {
 					put(key, list.get(0));
 				} else
 					put(key, list);
 			} else {
-				// logging.warning(this, "no config (option) found for key " + key);
+				
 				logging.debug(this, "no config (option) found for key " + key);
 
 				put(key, list);
@@ -81,7 +81,7 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 
 		}
 
-		// logging.debug(this, toString());
+		
 	}
 
 }

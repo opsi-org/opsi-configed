@@ -131,7 +131,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 				return false;
 			}
 		} else {
-			// logging.info(this, "compareStates 5 " + connectionInfo.getHost() + " <> " +
+			
 			// configedMain.HOST );
 			if (!connectionInfo.getHost().equals(ConfigedMain.HOST)) {
 				logging.info(this,

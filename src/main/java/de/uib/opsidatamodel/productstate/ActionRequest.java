@@ -1,6 +1,6 @@
 package de.uib.opsidatamodel.productstate;
 
-//import de.uib.utilities.logging.*;
+
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.LinkedHashMap;

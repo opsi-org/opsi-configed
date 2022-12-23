@@ -237,9 +237,9 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		 * if (listDepots.hasFocus())
 		 * listSelectedDepots = listDepots.getSelectedValuesList();
 		 */
-		// logging.info(this," ListSelectionListener selected " +
+		
 		// listDepots.getSelectedValuesList() );
-		// logging.info(this," ListSelectionListener productEdited " + productEdited);
+		
 
 		Map<String, Object> visualData = mergeProperties(
 				mainController.getPersistenceController().getDepot2product2properties(),
@@ -299,7 +299,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 		}
 
-		// logging.info(this,"visualdata set " + visualData );
+		
 	}
 
 	private Map<String, Object> mergeProperties(
@@ -313,8 +313,8 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 		Map<String, ConfigName2ConfigValue> propertiesDepot0 = depot2product2properties.get(depots.get(0));
 
-		// logging.info(this, "mergeProperties depot0 " + depots.get(0) );
-		// logging.info(this, "mergeProperties, properties for key " + productId + " : "
+		
+		
 		// + propertiesDepot0.get(productId));
 
 		if (depots.size() == 1) {
@@ -346,8 +346,8 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 				for (int i = 1; i < depots.size(); i++) {
 					properties = depot2product2properties.get(depots.get(i)).get(productId);
 
-					// logging.info(this, "mergeProperties depot " + depots.get(i) );
-					// logging.info(this, "mergeProperties, properties for key " + productId + " : "
+					
+					
 					// + properties);
 
 					if (properties == null) {
@@ -362,7 +362,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 						// we need a new property. it is not common
 						{
 							ListMerger merger = new ListMerger(value);
-							// logging.debug(this, " new property, merger " + merger);
+							
 							merger.setHavingNoCommonValue();
 							result.put(entry.getKey(), merger);
 						} else {
@@ -414,7 +414,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 	// KeyListener
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// logging.info(this, "keyPressed " + e);
+		
 		if (e.getSource() == listDepots) {
 			saveSelectedDepots();
 		}
@@ -499,10 +499,10 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 			ConfigName2ConfigValue compareProperties = mainController.getPersistenceController()
 					.getDefaultProductProperties(compareDepot).get(productEdited);
 
-			// logging.info(this, "compare " + properties0 + " to \n " + compareProperties);
+			
 
 			if ((properties0 == null && compareProperties == null) || properties0.equals(compareProperties)) {
-				// logging.info(this, "equal");
+				
 				listDepots.addSelectionInterval(i, i);
 			}
 		}

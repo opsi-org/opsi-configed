@@ -376,7 +376,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			return EMPTY;
 		}
 
-		// logging.debug(this, "Selected node: " + device + " " + deviceInfo);
+		
 
 		List values = null;
 
@@ -419,18 +419,18 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 							if (hwClass.equals(class_COMPUTER_SYSTEM)) {
 								if (opsi.equalsIgnoreCase(key_VENDOR)) {
 									vendorStringCOMPUTER_SYSTEM = cv;
-									// logging.info(this, "vendorString " + cv);
+									
 								} else if (opsi.equalsIgnoreCase(key_MODEL)) {
 									modelString = cv;
-									// logging.info(this, "modelString " + cv);
+									
 								}
 							} else if (hwClass.equals(class_BASE_BOARD)) {
 								if (opsi.equalsIgnoreCase(key_VENDOR)) {
 									vendorStringBASE_BOARD = cv;
-									// logging.info(this, "vendorString " + cv);
+									
 								} else if (opsi.equalsIgnoreCase(key_PRODUCT)) {
 									productString = cv;
-									// logging.info(this, "productString " + cv);
+									
 								}
 							}
 						}
@@ -495,7 +495,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			String hwClassUI = path[1].toString();
 			String hwClass = (String) hwClassMapping.get(hwClassUI);
 
-			// logging.debug(this, "scanNode hwClass " + hwClass);
+			
 			if (hwClass != null && (hwClass.equals(class_COMPUTER_SYSTEM) || hwClass.equals(class_BASE_BOARD))) {
 				logging.debug(this, "scanNode found  class_COMPUTER_SYSTEM or class_BASE_BOARD");
 				getDataForNode(node, true);
@@ -556,7 +556,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			Map whc = (Map) hwConfig.get(i);
 			hwClassesUI[i] = (String) ((Map) whc.get("Class")).get("UI");
 			hwClassMapping.put(hwClassesUI[i], (String) ((Map) whc.get("Class")).get("Opsi"));
-			// logging.debug(this, "found hwclass " + hwClassesUI[i]);
+			
 		}
 
 		java.util.Arrays.sort(hwClassesUI);
@@ -566,7 +566,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			String hwClassUI = hwClassesUI[i];
 			String hwClass = (String) hwClassMapping.get(hwClassUI);
 
-			// logging.debug(this, "Processing hwclass " + hwClassUI + "/" + hwClass);
+			
 
 			ArrayList devices = (ArrayList) hwInfo.get(hwClass);
 			if (devices == null) {
@@ -607,14 +607,14 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			while (iter.hasNext()) {
 				String displayName = (String) iter.next();
 				ArrayList devs = (ArrayList) displayNames.get(displayName);
-				// logging.info(this, "displayName: " + displayName);
+				
 				for (int j = 0; j < devs.size(); j++) {
 					HashMap dev = (HashMap) devs.get(j);
 					String dn = displayName;
 					if (devs.size() > 1)
 						dn += " (" + j + ")";
 
-					// logging.info(this, " - displayName: " + dn);
+					
 					dev.put("displayName", dn);
 					names[num] = dn;
 					num++;

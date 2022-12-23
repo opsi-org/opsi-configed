@@ -219,7 +219,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		tableProducts.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				// logging.info(this, "-----------------tableProducts ListSelectionListener
+				
 				// valueChanged");
 
 				// Ignore extra messages.
@@ -252,7 +252,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 					/*
 					 * int[] selection = tableProducts.getSelectedRows();
-					 * //logging.debug(this, "selection " + java.util.Arrays.toString(selection));
+					 * 
 					 * for (int i = 0; i < selection.length; i++)
 					 * {
 					 * selectedProducts.add(
@@ -262,7 +262,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					 */
 				}
 
-				// logging.info(this, "selected: " + THIS.getSelectedIDs());
+				
 
 			}
 		});
@@ -289,7 +289,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				String stateChange = ((IFInstallationStateTableModel) (table.getModel()))
 						.getLastStateChange(convertRowIndexToModel(row));
 
-				// logging.debug(this, " ------ " + table.getModel().getValueAt(row, 0) + " -
+				
 				// stateChange " + stateChange);
 
 				if (stateChange == null)
@@ -334,7 +334,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 					boolean isSelected, // is the cell selected
 					boolean hasFocus, int row, int column) {
-				// logging.debug(this, "value >" + value + "<");
+				
 				Component result = null;
 				if (value != null && !value.equals("") && !value.toString().equals("null")
 						&& !value.toString().equalsIgnoreCase("none")
@@ -916,7 +916,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	private class StringComparator implements Comparator<String> {
 		@Override
 		public int compare(String o1, String o2) {
-			// logging.info(this, "compare " + o1 + " to " + o2);
+			
 			return o1.compareTo(o2);
 		}
 	}
@@ -1124,7 +1124,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_packageVersion)) > -1) {
-			// logging.debug("******* colIndex for packageVersion " + colIndex);
+			
 			TableColumn packageversionColumn = tableProducts.getColumnModel().getColumn(colIndex);
 			packageversionColumn.setPreferredWidth(fwidth_column_packageversion);
 			packageversionColumn.setCellRenderer(packageversionTableCellRenderer);

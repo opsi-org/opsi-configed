@@ -137,7 +137,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		logging.debug(this, " FEeditPane setStartText: " + s);
 		super.setStartText(s);
 
-		// logging.info(this, " setStartText after super class call "+s);
+		
 
 		textpane.setText(s);
 
@@ -157,7 +157,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	}
 
 	public boolean isLink(String s0) {
-		// logging.info(this, "isLink " + s0);
+		
 
 		if (s0 == null)
 			return false;
@@ -257,7 +257,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getSource() == textpane) {
-			// logging.debug(this, " key event on textpane " + e);
+			
 
 			if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
 					&& e.getKeyCode() == KeyEvent.VK_TAB)
@@ -319,16 +319,16 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// logging.info(this, "caret " + textpane.getCaretPosition());
-		// logging.info(this, " line clicked " + getLineForPos(
+		
+		
 		// textpane.getCaretPosition() ) );//+ "\n" + e);
 		// if (e.getClickCount() > 1) searchAndHighlight();
 
 		if (e.getClickCount() > 1) {
 			Point p = e.getPoint();
-			// logging.info(this, "mouse " + p + " " + textpane.viewToModel( p ) );
+			
 			String line = getMarkedLine(textpane.viewToModel2D(p));
-			// logging.info(this, " got line " + line );
+			
 			if (line != null) {
 				logging.info(this, " got link " + line);
 				cmdLauncher.launch("\"" + line + "\"");
@@ -361,8 +361,8 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		Point p = e.getPoint();
-		// logging.info(this, "mouse " + p + " " + textpane.viewToModel( p ) );
-		// logging.info(this, "got line " + getMarkedLine (textpane.viewToModel( p )) );
+		
+		
 
 		if (getMarkedLine(textpane.viewToModel2D(p)) != null)
 			textpane.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -388,7 +388,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			f.setStartText(buf.toString());
 
 			count++;
-			// logging.debug( "having " + count + " " + f.getText( ) );
+			
 		});
 
 	}
@@ -454,9 +454,9 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 			for (int i = 0; i < linesplits.length; i++) {
 				String line = linesplits[i];
-				// logging.info(this, "line " + line);
+				
 				endIndex = startIndex + line.length();
-				// logging.info(this, "line " + startIndex + " - " + endIndex);
+				
 
 				int posInLine = startOfMarkedString(line);
 				int len = line.trim().length();
@@ -471,7 +471,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 				startIndex = endIndex + 1;
 			}
 
-			// logging.info(this, "content length " + content.length() + " last index " +
+			
 			
 			return lastFoundIndex;
 		}

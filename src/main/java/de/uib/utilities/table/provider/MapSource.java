@@ -70,9 +70,9 @@ public class MapSource implements TableSource
 
 	protected void fetchData() {
 		rows.clear();
-		// logging.debug(this, "MapSource fetchData() : " + table);
+		
 
-		// logging.info(this, "fetchData , columns " + columnNames);
+		
 		int rowCount = 0;
 
 		for (String key : table.keySet()) {
@@ -80,7 +80,7 @@ public class MapSource implements TableSource
 
 			Map mRow = table.get(key);
 
-			// logging.debug ( " -------- key '" + key + "', mRow = " + mRow );
+			
 
 			// vRow.add(key);
 			// previously we assumed that column 0 hold the key
@@ -92,14 +92,14 @@ public class MapSource implements TableSource
 					logging.debug(this, "fetchData for A-key " + key + " col  " + columnNames.get(i) + " index " + i
 							+ " val " + ob);
 
-				// logging.debug(this, " getting ob to column " + i + ", " + columnNames.get(i)
+				
 				// + " ob:" + ob);
 
 				if (ob != null) {
 					vRow.add(ob);
 
 					try {
-						// logging.debug( "??? is " + ob + " dyninstance class of " +
+						
 						// classNames.get(i));
 						Class cl = Class.forName(classNames.get(i));
 						if (!dynInstanceOf(ob, cl)) {
@@ -131,7 +131,7 @@ public class MapSource implements TableSource
 						} else {
 							if (class2defaultValue.get(className) != null) {
 								vRow.add(class2defaultValue.get(className));
-								// logging.info(this, "fetchData row " + mRow + " ob == null, setting default
+								
 								// for " + className );
 							}
 

@@ -31,8 +31,8 @@ public class JTextEditorField extends javax.swing.JTextField implements KeyListe
 	}
 
 	public boolean isChangedText() {
-		// logging.info(this, "isChangedText: lastSetS " + lastSetS);
-		// logging.info(this, "isChangedText: getText " + getText());
+		
+		
 
 		if (lastSetS == null && getText() == null)
 			return false;
@@ -40,7 +40,7 @@ public class JTextEditorField extends javax.swing.JTextField implements KeyListe
 		if (lastSetS == null && getText() != null)
 			return true;
 
-		// logging.info(this, "isChangedText: not equal, equal? " + lastSetS.equals(
+		
 		
 
 		return !lastSetS.equals(getText());
@@ -54,9 +54,9 @@ public class JTextEditorField extends javax.swing.JTextField implements KeyListe
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// logging.debug(this, "keyPressed code " + e.getKeyCode() + " char " +
+		
 		// e.getKeyChar());
-		// logging.debug(this, "keyPressed KeyEvent.VK_ESCAPE " + KeyEvent.VK_ESCAPE);
+		
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			setText(lastSetS);
 		}

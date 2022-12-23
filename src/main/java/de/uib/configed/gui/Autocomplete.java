@@ -36,17 +36,17 @@ public class Autocomplete implements DocumentListener {
 
 	@Override
 	public void changedUpdate(DocumentEvent ev) {
-		// logging.info(this,"changedUpdate " + ev);
+		
 	}
 
 	@Override
 	public void removeUpdate(DocumentEvent ev) {
-		// logging.info(this,"removeUpdate " + ev);
+		
 	}
 
 	@Override
 	public void insertUpdate(DocumentEvent ev) {
-		// logging.info(this,"insertUpdate " + ev);
+		
 
 		if (ev.getLength() != 1)
 			return;

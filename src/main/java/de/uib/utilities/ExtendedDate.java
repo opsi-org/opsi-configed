@@ -2,7 +2,7 @@ package de.uib.utilities;
 
 import java.util.Date;
 
-//import de.uib.utilities.logging.*;
+
 
 public class ExtendedDate {
 	static final String infiniteImport = "never";

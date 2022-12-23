@@ -346,7 +346,7 @@ public abstract class ExportTable {
 		logging.info(this, "getFileLocation with writeToFile " + writeToFile);
 
 		File defaultFile = new File(writeToFile);
-		// logging.info(this, "getFileLocation with defaultFile " + defaultFile);
+		
 
 		chooser = new JFileChooser(exportDirectory);
 		chooser.setPreferredSize(Globals.filechooserSize);

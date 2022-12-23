@@ -111,7 +111,7 @@ public class UserConfigProducing {
 			if (!(key.startsWith(UserConfig.KEY_USER_ROOT)))
 				continue;
 
-			// logging.info(this, "produceRoleAndUserParts. starting with
+			
 			// UserConfig.KEY_USER_ROOT " + key);
 			if (key.startsWith(roleBranchPart)) {
 				String rolenameBefore = key.substring(0, startRoleKey.length());
@@ -127,7 +127,7 @@ public class UserConfigProducing {
 
 					String propertyclass = startRoleKey + rolename + '}';
 
-					// logging.info(this, "role branch propertyclass " + propertyclass);
+					
 
 					if (!PersistenceController.PROPERTYCLASSES_SERVER.containsKey(propertyclass)) {
 						logging.info(this, "createRolePropertySubclass for role  " + rolename);
@@ -293,9 +293,9 @@ public class UserConfigProducing {
 			String configuredRole = null;
 			boolean followConfiguredRole = false;
 			logging.info(this, "supplyAllPermissionEntries has role " + values);
-			// logging.info(this, "supplyAllPermissionEntries is string " + (values.get(0)
 			
-			// logging.info(this, "supplyAllPermissionEntries is NONE " + ( ((String)
+			
+			
 			// values.get(0) ).equals( UserConfig.NONE_PROTOTYPE) ));
 
 			if (values == null || values.isEmpty() // || !(values.get(0) instanceof String )
@@ -416,7 +416,7 @@ public class UserConfigProducing {
 		logging.info(this, "supplyPermissionEntriesForAUser, readyObjects bool keys for user named " + username + " "
 				+ readyObjects);
 
-		// logging.info(this, "supplyPermissionEntriesForAUser list keys " +
+		
 		// UserConfig.getUserListKeys());
 
 		// single String valued
@@ -478,9 +478,9 @@ public class UserConfigProducing {
 				readyObjects.add(Executioner.jsonMap(item));
 
 			}
-			// logging.info(this, "supplyPermissionEntriesForAUser list configKey " +
+			
 			// configKey + " -- partkey " + partkey);
-			// logging.info(this, "supplyPermissionEntriesForAUser list " + values);
+			
 		}
 
 		// Stringlist valued
@@ -541,9 +541,9 @@ public class UserConfigProducing {
 		 * }
 		 * 
 		 * userConfig.setValues ( partkey, values );
-		 * //logging.info(this, "supplyPermissionEntriesForAUser list configKey " +
+		 * 
 		 * configKey + " -- partkey " + partkey);
-		 * //logging.info(this, "supplyPermissionEntriesForAUser list " + values);
+		 * 
 		 * }
 		 */
 
@@ -746,7 +746,7 @@ public class UserConfigProducing {
 		logging.info(this, "supplyPermissionEntriesForAUser username " + username);
 		logging.info(this, "supplyPermissionEntriesForAUser countReadyObjectsOnStart " + countReadyObjectsOnStart);
 		logging.info(this, "supplyPermissionEntriesForAUser readyObjects.size() " + readyObjects.size());
-		// logging.info(this, "supplyPermissionEntriesForAUser readyObjects " +
+		
 		
 
 		if (countReadyObjectsOnStart == readyObjects.size()) {

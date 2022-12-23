@@ -205,7 +205,7 @@ public class SSHConnectTerminal extends SSHConnect {
 					dialog.setLastHistoryIndex();
 					out.flush();
 				}
-				// else logging.info(this, "empty input text");
+				
 			} catch (IOException ioe) {
 				logging.error(this, "SSHConnectTerminal exec ioexception", ioe);
 			} catch (Exception e) {
@@ -390,7 +390,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		// if (out != null)
 		// {
 		// out.write("pwd\n".getBytes());
-		// logging.debug(this, " exec getPrivateStatus " + dialog.getPrivateStatus());
+		
 		// out.flush();
 		// }
 		// try{Thread.sleep(50);} catch(Exception ee){}
@@ -401,20 +401,20 @@ public class SSHConnectTerminal extends SSHConnect {
 
 		// currentDirectory = currentDirectory.replace("\n", "") + "/";
 		// String com = "ls -aldU " + currentDirectory + "./*";
-		// logging.debug("\n\nCommand: " + com);
+		
 		// String result_ls = ssh.exec( new Empty_Command(com ),
 		// false, null, true, false);
-		// logging.debug("\ncurrentDirectory: " + currentDirectory + "./");
-		// logging.debug("result_ls: " + result_ls);
+		
+		
 		// String[] arr_result_dir = result_ls.split("\n");
 		// String result_dir = "";
 
 		// for (String l : arr_result_dir)
 		// {
 		// String line = l; //.replace("\\","\\\\");
-		// logging.debug("line: " + line);
+		
 		// String dir = "" + line.split(currentDirectory + "/",2)[1];
-		// logging.debug("DIR: " + dir);
+		
 		// result_dir = result_dir + dir + "\n";
 		// }
 		// result = result + "\n" + result_dir;

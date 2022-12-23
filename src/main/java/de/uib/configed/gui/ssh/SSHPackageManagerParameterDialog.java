@@ -53,7 +53,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		// public FGeneralDialog(JFrame owner, String title, JPanel pane)
 		// {
 		// super(owner, false);
-		// logging.info(this, "created by constructor 1");
+		
 		
 		// this.owner = owner;
 		setTitle(title);
@@ -100,7 +100,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		// {
 		// String o_prod = ((String)firstDepot.get(configDepot)).replace("file://", "");
 		// if (o_prod != null) opsiProd = o_prod;
-		// logging.info(this, "getRepositoriesFromConfigs depot "+ depot +" opsiProd " +
+		
 		// o_prod);
 		// } catch (Exception e)
 		// {
@@ -109,7 +109,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		logging.info(this, "getRepositoriesFromConfigs opsiRepo " + opsiRepo);
 		logging.info(this, "getRepositoriesFromConfigs opsiProd " + opsiProd);
 		// // String od = firstDepot.get(configDepot).replace("file://", "");
-		// // logging.info(this, "getRepositoriesFromConfigs depot "+ depot +" opsiDepot
+		
 		// " + opsiDepot);
 		// // if (od != null) opsiDepot = od;
 	}

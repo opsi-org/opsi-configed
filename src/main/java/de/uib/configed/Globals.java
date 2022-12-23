@@ -103,18 +103,18 @@ public class Globals {
 	public static final int DEFAULT_FTEXTAREA_WIDTH = 350;
 
 	public static Boolean interpretAsBoolean(Object value) {
-		// logging.debug("Globals: interpretAsBoolean " + value);
+		
 
 		if (value == null)
 			return null;
 
 		if (value instanceof Boolean) {
-			// logging.debug("Globals: interpretAsBoolean based on Boolean ");
+			
 			return (Boolean) value;
 		}
 
 		if (value instanceof Integer) {
-			// logging.debug("Globals: interpretAsBoolean based on Integer ");
+			
 			int val = (Integer) value;
 			if (val == 1)
 				return true;
@@ -126,7 +126,7 @@ public class Globals {
 		}
 
 		if (value instanceof String) {
-			// logging.debug("Globals: interpretAsBoolean based on String ");
+			
 
 			String val = ((String) value).toLowerCase();
 
@@ -468,7 +468,7 @@ public class Globals {
 	public static String getSeconds() {
 		String sqlNow = new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis()).toString();
 
-		// logging.debug(" sqlNow " + sqlNow);
+		
 		int i = sqlNow.lastIndexOf(' ');
 		String date = sqlNow.substring(0, i);
 		date = date.replace(' ', '-');
@@ -659,10 +659,10 @@ public class Globals {
 		boolean result = (c != null);
 		if (result) {
 			if (c instanceof Collection) {
-				// logging.info(source.getClass().getName() + " " + cName + " has size " +
+				
 				// ((Collection)c).size() );
 			} else if (c instanceof Map) {
-				// logging.info(source.getClass().getName() + " " + cName + " has size " +
+				
 				// ((Map)c).size() );
 			} else {
 				logging.info(source.getClass().getName() + " " + cName + " is neither a Collection nor a Map  ");
@@ -675,7 +675,7 @@ public class Globals {
 	}
 
 	private static Integer stringCompareAsInt(String s1, String s2) throws NumberFormatException {
-		// logging.debug ( " compare int " + s1 + " " + s2 );
+		
 		if (s1 == null && s2 == null)
 			return 0;
 		if (s1 == null)
@@ -697,14 +697,14 @@ public class Globals {
 
 		int val1 = Integer.valueOf(s1A);
 		int val2 = Integer.valueOf(s2A);
-		// logging.debug ( " compare int " + val1 + " " + val2 );
+		
 		return val1 - val2;
 	}
 
 	public static Integer compareDottedNumberStrings(final String ver1, final String ver2)
 			throws NumberFormatException {
-		// logging.debug ( " ver1 " + ver1 );
-		// logging.debug ( " ver2 " + ver2 );
+		
+		
 
 		if (ver1 == null && ver2 == null)
 			return 0;
@@ -721,8 +721,8 @@ public class Globals {
 		String[] ver1parts = ver1A.split("\\.");
 		String[] ver2parts = ver2A.split("\\.");
 
-		// logging.debug ( " ver1parts " + Arrays.toString( ver1parts ) );
-		// logging.debug ( " ver2parts " + Arrays.toString( ver2parts ) );
+		
+		
 
 		int i = 0;
 		int result = 0;
@@ -829,7 +829,7 @@ public class Globals {
 			for (int i = 0; i < gc.length; i++) {
 				int w = gc[i].getBounds().width;
 				int h = gc[i].getBounds().height;
-				// logging.info("minimalBounds: compare " + result + " to " +
+				
 				// gc[i].getBounds());
 				if (w < result.width || h < result.height)
 					result = new Rectangle(w, h);
