@@ -63,9 +63,9 @@ public class SSHCommandFactory {
 	// public final String str_command_comparemd5 = " if [ -z $((cat
 	// *.product.*.md5" + ") | grep $(md5sum *.product.* | head -n1 | cut -d \" \"
 
-	// public final String str_replacement_product="*.product.*";
-	// public final String str_replacement_equal= "*.md5equal.*";
-	// public final String str_replacement_notequal= "*.md5notequal.*";
+	
+	
+	
 
 	/** ConfigedMain instance **/
 	private ConfigedMain main;
@@ -99,9 +99,9 @@ public class SSHCommandFactory {
 	public static int successfulConnectObservedCount = 0;
 
 	/** default parameter replace id beginns with <<< **/
-	// public static String replacement_default_1 = "<<<";
+	
 	/** default parameter replace id ends with >>> **/
-	// public static String replacement_default_2 = ">>>";
+	
 
 	/** setting ssh_colored_output per default true **/
 	public static boolean ssh_colored_output = true;
@@ -208,7 +208,7 @@ public class SSHCommandFactory {
 				|| main.getOpsiVersion().compareTo("4.1") < 0))
 			ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandRepositoryUpload());
 
-		// Funktioniert nicht wie gewünscht. Optionaler Parameter "<<<....>>>" wird
+		
 		// nicht abgefragt.
 		// ssh_commands_param.add(new
 
@@ -220,8 +220,8 @@ public class SSHCommandFactory {
 
 		ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandOpsiSetRights());
 		// ssh_commands_param.add(new SSHCommand_Template(opsisetrights, coms,
-		// configed.getResourceValue("SSHConnection.command.opsisetrights"), true, null,
-		// configed.getResourceValue("SSHConnection.command.opsisetrights.tooltip"),
+		
+		
 
 		ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandDeployClientAgent());
 
@@ -433,7 +433,7 @@ public class SSHCommandFactory {
 	 **/
 	private Map<String, Object> buildCommandMap(SSHCommand_Template c) {
 		Map<String, Object> com = new HashMap<>();
-		// com.put("id", c.getId());
+		
 		com.put(command_map_menuText, c.getMenuText());
 		com.put(command_map_parentMenuText, c.getParentMenuText());
 		com.put(command_map_tooltipText, c.getToolTipText());

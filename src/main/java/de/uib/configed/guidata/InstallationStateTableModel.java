@@ -85,7 +85,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		implements ComboBoxModeller, IFInstallationStateTableModel {
 
 	public static final String EMPTYFIELD = "_";
-	// public static final String NOT_AVAILABLEstring = "--";
+	
 	public static final String CONFLICTstring = Globals.CONFLICT_STATE_STRING;
 
 	public static final Color backgroundGrey = new Color(220, 220, 220);
@@ -300,7 +300,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				Map<String, String> stateAndAction = productRowsList1client.get(i);
 
 				// deep copy, but seems to be not complete, therefore not used
-				// if (clientId.equals("vbrupertwin7-64.uib.local"))
+				
 
 				String productId = stateAndAction.get(ProductState.KEY_productId);
 				productRows.put(productId, stateAndAction);
@@ -362,7 +362,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 				stateAndAction.put(ProductState.KEY_actionSequence, priority);
 
-				// stateAndAction.put(ProductState.KEY_lastStateChange, "test");
+				
 
 				// build visual states
 				for (String colKey : ProductState.KEYS) {
@@ -371,7 +371,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 					// combinedVisualValues.get(colKey) " + combinedVisualValues.get(colKey));
 
-					// clientId + ", stateAndAction " + stateAndAction);
+					
 
 					if (colKey == ProductState.KEY_actionRequest) {
 						logging.debug(this, " ------------before   mixtovisualstate " + "product " + productId
@@ -476,7 +476,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			final String mixinValue) {
 		String oldValue = (String) visualStates.get(productId);
 
-		// columnName + " productId " + productId + " oldValue " + oldValue + "
+		
 		// mixinValue " + mixinValue);
 
 		String resultValue = oldValue;
@@ -484,9 +484,9 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		// ! states.containsKey(productId)
 		{
 
-			// if (columnName.equals("actionRequest"))
+			
 
-			// columnName + " productId " + productId + " oldValue null " + " mixinValue " +
+			
 
 			resultValue = mixinValue;
 			visualStates.put(productId, resultValue);
@@ -764,7 +764,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		}
 
 		// " + clientId + ", actualproduct " + actualProduct + ", product " + product +
-		// ", stateType " + stateType + ", state " + state);
+		
 
 		logging.info(this, "checkForContradictingAssignments === onGoingCollectiveChangeEventCount: product2request "
 				+ onGoingCollectiveChangeEventCount + ": " + product2request);
@@ -788,7 +788,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		checkForContradictingAssignments(clientId, product, stateType, state);
 
 		changedStatesForProduct.put(stateType, state);
-		// test testes setValueAt("None", 2, 6);
+		
 
 		main.getGeneralDataChangedKeeper().dataHaveChanged(this);
 	}
@@ -1319,7 +1319,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 									logging.info(this, "new action was " + alreadyExistingNewActionRequest);
 
 									// already set for clientId, product "
-									// + clientId + "," + requiredProduct + " : " +
+									
 
 								} else {
 
@@ -1518,9 +1518,9 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	public String getLastStateChange(int row) {
 		String actualProduct = (String) productsV.get(row);
 
-		// "combinedVisualValues.get(ProductState.KEY_lastStateChange) " +
+		
 
-		// ", " +
+		
 
 		return combinedVisualValues.get(ProductState.KEY_lastStateChange).get(actualProduct);
 	}
@@ -1596,7 +1596,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		case 8:
 
-			// if (actualProduct.equals("firefox"))
+			
 
 			ActionRequest ar = ActionRequest
 					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_actionRequest).get(actualProduct));
@@ -1639,7 +1639,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		case 15:
 			result = combinedVisualValues.get(ProductState.KEY_lastStateChange).get(actualProduct);
 
-			// col + " result " + result);
+			
 			break;
 
 		}

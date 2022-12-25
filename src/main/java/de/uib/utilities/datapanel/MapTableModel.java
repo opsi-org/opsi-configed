@@ -231,7 +231,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		data.put(key, newval);
 		oridata.put(key, newval);
 
-		// Logging.debug(this, " keys " + keys);
+		
 		keys = new Vector<>(data.keySet());
 
 		putEntryIntoStoredMaps(key, newval);
@@ -392,7 +392,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			return false;
 		} else {
 			if (keysOfReadOnlyEntries != null && keysOfReadOnlyEntries.contains(keys.get(row)) ||
-			// (keys.get(row)).endsWith("modified")
+			
 					editDenier != null && editDenier.apply(keys.get(row)))
 				return false;
 			else
@@ -504,9 +504,9 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 					String myKey = (String) keys.get(row);
 					// StringvaluedObject o = new StringvaluedObject ( "" + value );
 					Object o = value;
-					// Logging.debug(this, " data.get(myKey) has type " +
+					
 					// data.get(myKey).getClass().getName()
-					// + " and value " + data.get(myKey));
+					
 
 					// the internal view data:
 					data.put(myKey, o);
@@ -524,8 +524,8 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 						modifiedKey = getModifiedKey();
 						// produces as well rowModiTime
 
-						// + value + ", " + modifiedKey
-						// + ", " + rowModiTime + ", " + row);
+						
+						
 
 						if (rowModiTime > -1 && row != rowModiTime) {
 							setValueAt(Globals.getNowTimeListValue(), rowModiTime, 1);

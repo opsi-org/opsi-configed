@@ -122,7 +122,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 					dialog.setVisible(false);
 			System.gc();
 
-			// return "finish";
+			
 			// else
 			return task.get();
 		} catch (java.lang.NullPointerException npe) {
@@ -242,12 +242,12 @@ public class SSHConnectSCP extends SSHConnectExec {
 
 				if (!(isConnected()))
 					connect();
-				// publish("Session connected…");
-				// final Channel channel = getSession().openChannel("exec");
+				
+				
 				final Channel channel = getSession().openChannel("sftp");
 				logging.info(this, "doInBackground channel openchannel " + channel);
 				channel.connect();
-				// publish("Channel connected…");
+				
 				logging.info(this, "doInBackground channel connect " + channel);
 				final ChannelSftp channelsftp = (ChannelSftp) channel;
 

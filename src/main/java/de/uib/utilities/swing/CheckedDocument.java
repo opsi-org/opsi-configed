@@ -76,11 +76,11 @@ public class CheckedDocument extends PlainDocument {
 
 		String corrected = giveAllowedCharacters(s, offs);
 
-		// offs + ", " + size);
+		
 		if (size > -1 && offs + corrected.length() > size)
 			corrected = corrected.substring(0, size - offs);
 
-		// + offs + ", " + size);
+		
 
 		insertStringPlain(offs, corrected, a);
 		if (checkMask)

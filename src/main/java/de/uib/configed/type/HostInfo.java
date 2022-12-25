@@ -60,7 +60,7 @@ public class HostInfo {
 	public static final String clientConnectedKEY = "clientConnected";
 	public static final String clientShutdownInstallKEY = "clientShutdownInstall";
 	public static final String depotWorkbenchKEY = "workbenchLocalUrl";
-	// public static final String hostIdKEY = "hostId";
+	
 
 	// ---
 	public static final String depotOfClient_DISPLAY_FIELD_LABEL = "depotId";
@@ -568,7 +568,7 @@ public class HostInfo {
 
 	private int findCol(JTableSelectionPanel selectionPanel, String colName) {
 		return selectionPanel.getTableModel().findColumn(colName
-		// configed.getResourceValue("ConfigedMain.pclistTableModel.clientDescription")
+		
 		);
 	}
 
@@ -787,17 +787,17 @@ public class HostInfo {
 			persist.getHostInfoCollections().updateLocalHostInfo(client, clientWanConfigKEY, wanStandard);
 		}
 
-		// String shutdownInstall = "off";
+		
 
-		// shutdownInstall = "on";
+		
 
-		// String product = "opsi-client-agent";
+		
 		// persist.setCommonProductPropertyValue( new HashSet<>(Arrays.asList(client)),
-		// product, "on_shutdown_install" , Arrays.asList(shutdownInstall) );
+		
 		// // Set<String> clientNames, String productName, String propertyName,
 		// List<String> values
 
-		// productValues.put("actionRequest", "setup");
+		
 
 		// persist.updateProductOnClient(
 		// client,

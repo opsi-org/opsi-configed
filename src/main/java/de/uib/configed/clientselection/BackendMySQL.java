@@ -409,7 +409,7 @@ public class BackendMySQL {
 	 * String drivers = props.getProperty("jdbc.drivers");
 	 * 
 	 * //if(drivers != null)
-	 * //System.setProperty("jdbc.drivers", idbc.drivers);
+	 * 
 	 * 
 	 * 
 	 * System.setProperty("jdbc.drivers", "com.mysql.idbc.Driver");

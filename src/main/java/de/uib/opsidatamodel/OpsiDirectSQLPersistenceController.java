@@ -110,7 +110,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 		String query = "select " + columns + " from PRODUCT_ON_CLIENT " + " where  productType = 'LocalbootProduct'"
 				+ " AND \n" + " ( " + giveWhereOR("clientId", clientIds) + ") ";
 
-		// TimeCheck timer= new TimeCheck(this, "getLocalBootProductStatesNOM").start();
+		
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 
@@ -264,7 +264,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 		logging.info(this, "cleanUpAuditSoftware  idents in SOFTWARE not on CLIENTS " + swIdentsOnlyInSoftware.size());
 
-		// + rowsSOFTWARE_ON_CLIENTS.get("LHCommon.NET 9.60;9.60.344;;;x86"));
+		
 
 		int sizeOfAllRemoves = swIdentsOnlyInSoftware.size();
 

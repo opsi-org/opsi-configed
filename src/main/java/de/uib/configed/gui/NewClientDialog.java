@@ -108,9 +108,9 @@ public class NewClientDialog extends FGeneralDialog
 		jButton1.addKeyListener(this);
 		jButton1.setDefaultIcon("images/client_small.png");
 		jButton1.setIcon(jButton1.getDefaultIcon());
-		// jButton1.setRolloverIcon( Globals.createImageIcon( "images/checked_box.png",
-		// "Client" ) );
-		// jButton1.setRunningActionIcon( "images/client_small_executing.png" );
+		
+		
+		
 		jButton1.setRunningActionIcon("images/waitingcircle_16.png");
 
 		if (depots != null && depots.size() > 1) {
@@ -919,7 +919,7 @@ public class NewClientDialog extends FGeneralDialog
 	protected void preAction1() {
 		super.preAction1();
 		jButton1.setIcon(jButton1.getRunningActionIcon());
-		// Globals.createImageIcon( "images/checked_box.png", "Client" ) );
+		
 	}
 
 	@Override
@@ -935,7 +935,7 @@ public class NewClientDialog extends FGeneralDialog
 
 		result = 1;
 
-		// FTextArea fText = new FTextArea(Globals.mainFrame, "waiting", false, 0);
+		
 
 		String hostname = jTextHostname.getText();
 		String selectedDomain = (String) jComboDomain.getSelectedItem();
@@ -993,7 +993,7 @@ public class NewClientDialog extends FGeneralDialog
 
 			if (e.getSource() == jButton1) {
 				// jButton1.setIcon( Globals.createImageIcon(
-				// "images/client_small_executing.png", "Client" ) );
+				
 			}
 
 			super.keyPressed(e);

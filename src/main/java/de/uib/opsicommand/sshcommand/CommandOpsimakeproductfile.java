@@ -13,8 +13,8 @@ import de.uib.utilities.logging.logging;
 public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedParameter {
 	private String baseName = "opsi-makeproductfile ";
 	private String command = "opsi-makeproductfile ";
-	// private String baseName41 = "opsi-makepackage ";
-	// private String command = "opsi-makepackage ";
+	
+	
 	protected FGeneralDialog dialog = null;
 	private boolean needSudo = false;
 	private boolean needParameter = true;
@@ -191,7 +191,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 		SSHCommand command = new CommandHelp(this);
 		SSHConnectExec exec = new SSHConnectExec(command
 		// SSHConnectionExecDialog.getInstance(
-		// configed.getResourceValue("SSHConnection.Exec.title") + "
+		
 		// \""+command.getCommand() + "\" ",
 		// command
 		// )

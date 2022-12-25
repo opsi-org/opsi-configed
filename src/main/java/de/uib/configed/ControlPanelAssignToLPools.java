@@ -48,7 +48,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 	TableModelFilterCondition windowsSoftwareFilterConditon_showOnlySelected; // we replace the filter from
 																				// GenTableModel
 																				// static String labelWindowsSoftwareFilterCondition_showOnlySelected =
-																				// "showOnlySelected";
+																				
 	TableModelFilterCondition windowsSoftwareFilterCondition_dontShowAssociatedToOtherPool;
 	static String labelWindowsSoftwareFilterCondition_dontShowAssociatedToOtherPool = "restrictToNonAssociated";
 
@@ -195,7 +195,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 							thePanel.fMissingSoftwareInfo.classNames,
 							// () -> (Map) persist.getInstalledSoftwareInformation()
 							() -> (Map) missingSoftwareMap)),
-					0, // columnNames.indexOf("ID"), //key column
+					0, 
 					new int[] {}, (thePanel.fMissingSoftwareInfo.panelGlobalSoftware), updateCollection));
 
 		}
@@ -234,8 +234,8 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 		totalShownEntries = modelWindowsSoftwareIds.getRowCount();
 		logging.info(this, "modelWindowsSoftwareIds row count " + totalShownEntries);
-		thePanel.fieldCountAllWindowsSoftware.setText(produceCount(totalSWEntries));// + " - shown " + totalShownEntries
-																					// + " - unassigned " +
+		thePanel.fieldCountAllWindowsSoftware.setText(produceCount(totalSWEntries));
+																					
 
 		thePanel.fieldCountDisplayedWindowsSoftware.setText(produceCount(totalShownEntries));
 		thePanel.fieldCountNotAssignedSoftware.setText(produceCount(totalUnassignedSWEntries));

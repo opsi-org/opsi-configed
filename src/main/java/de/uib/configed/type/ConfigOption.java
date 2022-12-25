@@ -96,10 +96,10 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 				put("selectionMode", ListSelectionModel.SINGLE_SELECTION);
 		}
 
-		// if (retrieved.get("type") == null )
-		// put("classname", "java.lang.String");
-		// else if (retrieved.get("type").equals("BoolConfig"))
-		// put("classname", "java.lang.Boolean");
+		
+		
+		
+		
 		// else
 
 		put("classname", "List");

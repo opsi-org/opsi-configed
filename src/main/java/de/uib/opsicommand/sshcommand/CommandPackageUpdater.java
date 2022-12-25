@@ -132,7 +132,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	@Override
 	public void startParameterGui() {
 
-		// '<' || main.getOpsiVersion().compareTo("4.1") < 0){}
+		
 
 	}
 
@@ -159,7 +159,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 		 */
 		);
 		// exec.exec(command, true, new SSHConnectionExecDialog(command,
-		// configed.getResourceValue("SSHConnection.Exec.title") + "
+		
 		// \""+command.getCommand() + "\" "));
 		return (SSHConnectionExecDialog) exec.getDialog();
 	}

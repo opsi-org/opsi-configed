@@ -6,7 +6,7 @@ public class ExtendedInteger implements Comparable {
 
 	static final String infiniteImport = "infinite";
 	static final String sINFINITE = "INFINITE";
-	static final String displayInfinite = "\u221E";// "INF";
+	static final String displayInfinite = "\u221E";
 
 	public static final ExtendedInteger INFINITE = new ExtendedInteger(sINFINITE);
 	public static final ExtendedInteger ZERO = new ExtendedInteger(0);

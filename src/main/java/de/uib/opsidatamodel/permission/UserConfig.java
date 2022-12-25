@@ -46,7 +46,7 @@ public class UserConfig {
 	public static final String DEFAULT_ROLE_NAME = "default";
 	public static final String ARCHEO_ROLE_NAME = "archeo";
 	public static final String NONE_PROTOTYPE = "";
-	// public static final String RESTRICTED_ROLE_NAME = "restricted";
+	
 
 	public static final String roleBranchPart = KEY_USER_ROLE_ROOT;
 

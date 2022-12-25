@@ -37,13 +37,13 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	protected JPanel southPanel = new JPanel();
 
 	protected JButton jButton1 = new JButton();
-	// protected String button1Text = "close";
+	
 
 	protected int preferredWidth;
 	protected int preferredHeight;
 
 	// protected String button0Text =
-	// configed.getResourceValue("FGeneralDialog.close");
+	
 
 	protected int noOfButtons = 1;
 	protected int result = -1;

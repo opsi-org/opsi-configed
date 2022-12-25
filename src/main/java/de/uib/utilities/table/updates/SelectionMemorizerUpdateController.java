@@ -34,7 +34,7 @@ public abstract class SelectionMemorizerUpdateController implements de.uib.utili
 	public boolean saveChanges() {
 		boolean success = true;
 
-		WaitCursor waitCursor = new WaitCursor();// Globals.masterFrame, this.getClass().getName() + ".saveChanges" );
+		WaitCursor waitCursor = new WaitCursor();
 
 		logging.debug(this, "keysPanel is null " + (keysPanel == null));
 		if (keysPanel.getSelectedRow() < 0) {

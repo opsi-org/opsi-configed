@@ -153,7 +153,7 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 
 	@Override
 	public String getMenuText() {
-		// return configed.getResourceValue("SSHConnection.command.modulesupload");
+		
 		return "File Upload";
 	}
 
@@ -179,7 +179,7 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 	@Override
 	public String getToolTipText() {
 		// return
-		// configed.getResourceValue("SSHConnection.command.modulesupload.tooltip");
+		
 		return "";
 	}
 

@@ -16,8 +16,8 @@ import java.util.List;
 public class OpsiHwAuditDeviceClass {
 
 	public static final String CONFIG_KEY = "configed.usecolumns_hwaudit";
-	// public static final String HOST_ASSIGNED = "host_assigned";
-	// public static final String HWITEM_ASSIGNED = "hwitem_assigned";
+	
+	
 	public static final String hostAssignedTableType = "CONFIG";
 	public static final String hostAssignedTableTypeLower = hostAssignedTableType.toLowerCase();
 	public static final String hwItemAssignedTableType = "DEVICE";

@@ -139,7 +139,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		partialPanels = new HashMap<>();
 
 		for (String key : keyclasses) {
-			// if (key.startsWith("user"))
+			
 
 			EditMapPanelX editMapPanel = new EditMapPanelX(tableCellRenderer, keylistExtendible, keylistEditable,
 					reloadable) {
@@ -241,8 +241,8 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		JTable jTable = new JTable(tableModel);
 		Vector values;
 
-		tableModel.addColumn(configed.getResourceValue("EditMapPanelGrouped.createJTableForPDF.property_name")); // "Property-Name");
-		tableModel.addColumn(configed.getResourceValue("EditMapPanelGrouped.createJTableForPDF.property_value")); // "Property-Wert");
+		tableModel.addColumn(configed.getResourceValue("EditMapPanelGrouped.createJTableForPDF.property_name")); 
+		tableModel.addColumn(configed.getResourceValue("EditMapPanelGrouped.createJTableForPDF.property_value")); 
 
 		Vector<String> keys = mapTableModel.getKeys();
 		logging.info(this, "createJTableForPDF keys " + keys);
@@ -295,10 +295,10 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		setBackground(Globals.backNimbus);
 
 		tree = new XTree();
-		// tree.setToolTipText("help");
+		
 		ToolTipManager.sharedInstance().registerComponent(tree);
 
-		// tree.putClientProperty("JTree.lineStyle", "Horizontal");
+		
 		tree.setCellRenderer(new SimpleIconNodeRenderer());
 		tree.expandAll();
 
@@ -406,7 +406,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 			classify(visualdata, keyclasses);
 
 			for (String key : keyclasses) {
-				// if (key.startsWith("user"))
+				
 
 				partialPanels.get(key).setEditableMap(virtualLines.get(key), optionsMap);
 
@@ -424,7 +424,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		super.setOptionsEditable(b);
 
 		for (String key : keyclasses) {
-			// if (key.startsWith("user"))
+			
 
 			partialPanels.get(key).setOptionsEditable(b);
 		}
@@ -436,7 +436,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		super.setStoreData(data);
 
 		for (String key : keyclasses) {
-			// if (key.startsWith("user"))
+			
 
 			partialPanels.get(key).setStoreData(data);
 		}
@@ -448,7 +448,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		super.setUpdateCollection(updateCollection);
 
 		for (String key : keyclasses) {
-			// if (key.startsWith("user"))
+			
 
 			partialPanels.get(key).setUpdateCollection(updateCollection);
 		}

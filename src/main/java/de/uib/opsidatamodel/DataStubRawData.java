@@ -427,7 +427,7 @@ public class DataStubRawData extends DataStubNOM {
 
 			}
 
-			// clientListForCall.size() + " clients " + clientListForCall);
+			
 
 			if (client2software == null)
 				client2software = new HashMap<>();
@@ -517,7 +517,7 @@ public class DataStubRawData extends DataStubNOM {
 					 * );
 					 * 
 					 * 
-					 * //item.put(SWAuditEntry.WINDOWSsOFTWAREid, "MISSING");
+					 * 
 					 * }
 					 * else
 					 */
@@ -619,7 +619,7 @@ public class DataStubRawData extends DataStubNOM {
 	@Override
 	protected void retrieveHostConfigs() {
 
-		// + classCounter + ": " + (hostConfigs == null) );
+		
 
 		if (hostConfigs != null)
 			return;
@@ -639,7 +639,7 @@ public class DataStubRawData extends DataStubNOM {
 				+ ConfigStateEntry.DB_TABLE_NAME + "." + ConfigStateEntry.VALUES;
 
 		String query = "select " + columns + " from " + ConfigStateEntry.DB_TABLE_NAME + " ";
-		// + " where state = 1 ";
+		
 
 		logging.info(this, "retrieveHostConfigs, query " + query);
 
@@ -758,7 +758,7 @@ public class DataStubRawData extends DataStubNOM {
 					+ persist.hwInfo_CONFIG);
 			String part0 = hwInfoCol.substring(0, persist.hwInfo_DEVICE.length());
 
-			// + ", hwInfoCol.substring( part0.length()) " + hwInfoCol.substring(
+			
 
 			boolean colFound = false;
 			// check if colname is from a CONFIG or a DEVICE table
@@ -804,9 +804,9 @@ public class DataStubRawData extends DataStubNOM {
 
 		buf.append("\n where ");
 
-		// buf.append(" 'vbrupertwin7-64.uib.local' ");
+		
 
-		// buf.append("\n AND ");
+		
 		buf.append(Host.idColumn);
 		buf.append(" = ");
 		buf.append(configTable);

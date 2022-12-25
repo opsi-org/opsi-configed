@@ -121,7 +121,7 @@ public class ControllerHWinfoMultiClients {
 	}
 
 	protected void initPanel() {
-		panel = new PanelGenEditTable("", // configed.getResourceValue("HardwareList"),
+		panel = new PanelGenEditTable("", 
 				0, false, 0, false,
 
 				PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF, true) {
@@ -207,11 +207,11 @@ public class ControllerHWinfoMultiClients {
 
 	protected void buildSurrounding() {
 
-		// panel.setTitle( "" );//configed.getResourceValue("PanelHWInfo.overview") );
+		
 
 		// Icon iconConfigure =
-		// Globals.createImageIcon("images/config_pro.png", "");
-		// buttonConfigureColumns = new JButton("...");
+		
+		
 		buttonConfigureColumns = new JButton("", Globals.createImageIcon("images/configure16.png", ""));
 		buttonConfigureColumns.setToolTipText(configed.getResourceValue("PanelHWInfo.overview.configure"));
 		buttonConfigureColumns.setPreferredSize(Globals.smallButtonDimension);
@@ -226,7 +226,7 @@ public class ControllerHWinfoMultiClients {
 			rebuildModel();
 		});
 
-		// testpanel.add( new JLabel ("hallo welt") );
+		
 
 		buttonConfigureColumns.addActionListener(actionEvent -> {
 			logging.info(this, "action performed " + actionEvent);

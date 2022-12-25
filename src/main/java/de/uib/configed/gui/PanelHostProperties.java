@@ -85,7 +85,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 		activateCombo(comboModel);
 
 		logging.debug(this, "initMultipleHosts " + " configs  " + (multipleMaps)
-		// + " configOptions " + (configOptions)
+		
 		);
 
 		this.updateCollection = updateCollection;

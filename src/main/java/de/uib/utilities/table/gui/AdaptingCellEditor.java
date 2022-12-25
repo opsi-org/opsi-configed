@@ -40,7 +40,7 @@ public class AdaptingCellEditor extends DefaultCellEditor {
 		} else
 			cc.setModel(cbm.getComboBoxModel(modelRow, modelColumn));
 
-		// cc.setToolTipText("hallo");
+		
 
 		Component c = super.getTableCellEditorComponent(table, value, isSelected, row, column);
 

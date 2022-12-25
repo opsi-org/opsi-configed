@@ -196,7 +196,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 		 */
 		);
 		// exec.exec(command, true, new SSHConnectionExecDialog(command,
-		// configed.getResourceValue("SSHConnection.Exec.title") + "
+		
 		// \""+command.getCommand() + "\" "));
 		return (SSHConnectionExecDialog) exec.getDialog();
 	}

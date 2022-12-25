@@ -93,7 +93,7 @@ public class SWAuditClientEntry
 		locale.put(SWAuditEntry.NAME, configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
 		locale.put(SWAuditEntry.VERSION, configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
 		// locale.put(subversion,
-		// configed.getResourceValue("PanelSWInfo.tableheader_displaySubVersion"));
+		
 		locale.put(SWAuditEntry.ARCHITECTURE, configed.getResourceValue("PanelSWInfo.tableheader_architecture"));
 		locale.put(SWAuditEntry.LANGUAGE, configed.getResourceValue("PanelSWInfo.tableheader_displayLanguage"));
 		locale.put(LICENCEkEY, configed.getResourceValue("PanelSWInfo.tableheader_displayLicenseKey"));
@@ -120,7 +120,7 @@ public class SWAuditClientEntry
 	 * LinkedHashMap<String, String>();
 	 * static {
 	 * DB_COLUMNS.put("config_id", "INTEGER");
-	 * //DB_COLUMNS.put("clientId", "VARCHAR(255)");
+	 * 
 	 * DB_COLUMNS.put("name", "VARCHAR(100)");
 	 * 
 	 * DB_COLUMNS.put("version", "VARCHAR(100)");
@@ -194,7 +194,7 @@ public class SWAuditClientEntry
 	// from db columns
 	{
 
-		// " -- " + values);
+		
 		String result = "";
 		try {
 			result = Globals.pseudokey(new String[] {
@@ -273,7 +273,7 @@ public class SWAuditClientEntry
 
 		Integer j = software2Number.get(element);
 
-		// "getIndex, for swIdent " + swIdent + " differs indexOf " + result + " from
+		
 		// mapped value " + j);
 
 		if (j == null) {

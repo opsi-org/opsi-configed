@@ -175,15 +175,15 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		keyNames.put(POPUP_RELOAD, "POPUP_RELOAD");
 		keyNames.put(POPUP_SORT_AGAIN, "POPUP_SORT_AGAIN");
 		keyNames.put(POPUP_PRINT, "POPUP_PRINT");
-		// keyNames.put(POPUP_EXPORT_EXCEL, "POPUP_EXPORT_EXCEL");
-		// keyNames.put(POPUP_EXPORT_SELECTED_EXCEL, "POPUP_EXPORT_SELECTED_EXCEL");
+		
+		
 		keyNames.put(POPUP_EXPORT_CSV, "POPUP_EXPORT_CSV");
 		keyNames.put(POPUP_EXPORT_SELECTED_CSV, "POPUP_EXPORT_SELECTED_CSV");
 		keyNames.put(POPUP_NEW_ROW, "POPUP_NEW_ROW");
 		keyNames.put(POPUP_COPY_ROW, "POPUP_COPY_ROW");
 		keyNames.put(POPUP_FLOATINGCOPY, "POPUP_FLOATINGCOPY");
 		keyNames.put(POPUP_PDF, "POPUP_PDF");
-		// keyNames.put(POPUP_TEST, "POPUP_TEST");
+		
 
 	}
 
@@ -404,7 +404,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		buttonCommit = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip"), "images/apply.png",
 				"images/apply_over.png", "images/apply_disabled.png");
-		// new javax.swing.JButton("save");
+		
 		buttonCommit.setPreferredSize(Globals.smallButtonDimension);
 		if (!editing)
 			buttonCommit.setVisible(false);
@@ -412,7 +412,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		buttonCancel = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"), "images/cancel.png",
 				"images/cancel_over.png", "images/cancel_disabled.png");
-		// new javax.swing.JButtonCancel("cancel");
+		
 		buttonCancel.setPreferredSize(Globals.smallButtonDimension);
 		if (!editing)
 			buttonCancel.setVisible(false);
@@ -1287,7 +1287,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			TableColumn col = theTable.getColumn(name);
 			String classname = tableModel.getClassNames().get(i);
 
-			// + i + ", " + name + ", " + cl + ", " + classname );
+			
 
 			setTimestampRenderer(classname, col);
 			setBigDecimalRenderer(classname, col);
@@ -1778,7 +1778,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	public void moveRowBy(int i) {
 
-		// getSelectedRowCount() + " selectedRow " + theTable.getSelectedRow());
+		
 		if (getSelectedRowCount() != 1)
 			return;
 

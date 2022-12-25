@@ -59,7 +59,7 @@ public class SavedSearchesDialog extends FEditList {
 		buttonCommit
 				.setToolTipText(de.uib.configed.configed.getResourceValue("SavedSearchesDialog.ExecuteButtonTooltip"));
 		buttonCommit.setIcon(Globals.createImageIcon("images/executing_command_red_22.png", ""));
-		buttonCommit.setSelectedIcon(Globals.createImageIcon("images/executing_command_red_22.png", ""));// ("images/execute_over.png",
+		buttonCommit.setSelectedIcon(Globals.createImageIcon("images/executing_command_red_22.png", ""));
 																											// ""));
 		buttonCommit.setDisabledIcon(Globals.createImageIcon("images/execute_disabled.png", ""));
 		buttonCommit.setPreferredSize(new java.awt.Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
@@ -111,7 +111,7 @@ public class SavedSearchesDialog extends FEditList {
 
 		// find itscontext
 		remove.setText(de.uib.configed.configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
-		// remove.setIcon(Globals.createImageIcon("images/remove16.png",
+		
 		// ""));
 		remove.setFont(Globals.defaultFont);
 		remove.addActionListener(actionEvent -> {

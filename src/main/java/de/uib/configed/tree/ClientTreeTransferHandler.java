@@ -128,7 +128,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	@Override
 	public int getSourceActions(JComponent c) {
 
-		// + "JComponent " + c + " getSourceActions " + TransferHandler.COPY_OR_MOVE);
+		
 
 		logging.debug(this, "getSourceActions,  activePaths " + tree.getActivePaths());
 

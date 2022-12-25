@@ -480,7 +480,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		comboAggregatedEditing = new JComboBoxToolTip();
 		// comboAggregatedEditing.setToolTipText(
-		// de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.tooltip"));
+		
 
 		/*
 		 * comboAggregatedEditing.addActionListener( new ActionListener(){
@@ -516,7 +516,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		 */
 		values.put(de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"),
 				de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked.tooltip"));
-		// "setup (marked)", "set 'setup' for all marked products (if setup action
+		
 		// exists)");
 
 		/*
@@ -543,7 +543,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		values.put(de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked"),
 				de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked.tooltip"));
 
-		// "uninstall (marked)", "set 'uninstall' for all marked products (if uninstall
+		
 		// action exists)");
 
 		DefaultListModel<String> modelChooseAction = new DefaultListModel<>(); // put values from hashmap into
@@ -805,8 +805,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		separatingPlace.setBackground(Color.RED);
 		separatingPlace.setOpaque(true);
 		separatingPlace.setBorder(new javax.swing.border.LineBorder(Globals.backBlue));
-		// separatingPlace.add( new JLabel("abc") );
-		// JLabel separatingPlace = new JLabel( " ---- ");
+		
+		
 
 		layoutMain.setVerticalGroup(layoutMain.createSequentialGroup()
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
@@ -1046,7 +1046,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		 * {
 		 * logging.info(this, "action on buttonCancelStateEditing");
 		 * insTableModel = (IFInstallationStateTableModel) tableProducts.getModel();
-		 * //insTableModel.setActionIf( ActionRequest.produceFromLabel("setup"), i -> i
+		 * 
 		 * > 0);
 		 * insTableModel.reset();
 		 * mainController.setDataChanged(false);

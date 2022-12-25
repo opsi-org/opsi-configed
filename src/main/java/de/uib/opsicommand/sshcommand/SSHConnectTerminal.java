@@ -34,7 +34,7 @@ public class SSHConnectTerminal extends SSHConnect {
 	private KeyListener inputKeyListener = null;
 	private ActionListener connectionKeyListener = null;
 	private OutputStream out = null;
-	public static final String SOME_COMMAND = "/bin/bash"; // "opsi-admin --version";
+	public static final String SOME_COMMAND = "/bin/bash"; 
 	String currentDirectory = "";
 	boolean getCurrentDirectorySilent = false;
 
@@ -127,11 +127,11 @@ public class SSHConnectTerminal extends SSHConnect {
 				session.connect();
 				channel = (ChannelShell) session.openChannel("shell");
 
-				// dialog.append("\n");
+				
 				// naechste zeile activiert den Hinweis, falls die nicht die standard bash
 				// verwendet wird, soll der befehl bash ausgefuehrt werden..
-				// dialog.append(configed.getResourceValue("SSHConnection.Terminal.note") +
-				// "\n\n", dialog.getInputField());
+				
+				
 				logging.info(this, "Connect");
 
 				// a hack for MS-DOS prompt on Windows.
@@ -306,7 +306,7 @@ public class SSHConnectTerminal extends SSHConnect {
 					// dialog.getInputField().setText("");
 
 					else {
-						// String text = textField.getText() + "\n";
+						
 						exec(textField.getText() + "\n");
 
 						// "))
@@ -335,7 +335,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		SSHConnectExec ssh = new SSHConnectExec();
 		String result = "";
 		if (newCommands) {
-			// result = ssh.exec(new Empty_Command("compgen -c" ), false, null, true,
+			
 
 			result = ssh.exec(new Empty_Command(
 					// http://stackoverflow.com/questions/948008/linux-command-to-list-all-available-commands-and-aliases
@@ -347,31 +347,31 @@ public class SSHConnectTerminal extends SSHConnect {
 			logging.debug(this, "getCompletionList commands compgen -c " + result);
 		}
 
-		// // String pwd = ssh.exec(new Empty_Command("pwd" ), false, null, true,
-		// false).replace("\n", "");
+		
+		
 
-		// // exec("pwd\n");
+		
 
-		// out.write("pwd\n".getBytes());
+		
 
 		// 
 		// // catch (IOException ioe)
 
-		// currentDirectory = currentDirectory.replace("\n", "") + "/";
-		// String com = "ls -aldU " + currentDirectory + "./*";
+		
+		
 
 		// String result_ls = ssh.exec( new Empty_Command(com ),
 
-		// String[] arr_result_dir = result_ls.split("\n");
+		
 		// String result_dir = "";
 
 		// for (String l : arr_result_dir)
 
 		// String dir = "" + line.split(currentDirectory + "/",2)[1];
 
-		// result_dir = result_dir + dir + "\n";
+		
 
-		// result = result + "\n" + result_dir;
+		
 
 		// catch (Exception ioe)
 

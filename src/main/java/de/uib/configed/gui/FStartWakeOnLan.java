@@ -90,7 +90,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		{ configed.getResourceValue("FStartWakeOnLan.start"), configed.getResourceValue("FStartWakeOnLan.cancel") },
 				750, 310);
 		this.main = main;
-		// scheduleTitleStarter = configed.getResourceValue("FStartWakeOnLan.creation");
+		
 		setCalToNow();
 		centerOn(Globals.frame1);
 	}
@@ -292,7 +292,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 		labelStarttime = new JLabel(readTime(cal));
 
-		// = new JLabel("delay between triggering WOL events (per depot)");
+		
 		spinnerDelay = new JSpinner();
 
 		JPanel panelTimeSelection = new JPanel();
@@ -657,7 +657,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	 * 
 	 * publish(elapsedMillis);
 	 * 
-	 * //firePropertyChange("elapsedMins", 0, elapsedMins);
+	 * 
 	 * 
 	 * 
 	 * 
@@ -687,7 +687,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	 * 
 	 * 
 	 * ":: progressBar.getMinimum() " + progressBar.getMinimum()
-	 * // + ":: millis " + millis + " :: waitingMillis " + waitingMillis +
+	 * 
 	 * " :: min + " + ((int) ((barLength * millis) / waitingMillis)));
 	 * 
 	 * progressBar.setValue( ( int ) (progressBar.getMinimum() + (int) ( (barLength

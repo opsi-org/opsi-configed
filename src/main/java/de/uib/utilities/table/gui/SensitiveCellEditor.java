@@ -50,7 +50,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		if (instance == null) {
 			// Lazy Creation, falls keine Instanz gefunden
 			instance = new SensitiveCellEditor();
-			// key.startsWith("secret")true);
+			
 			instances.put(key, instance);
 			instance.myKey = "" + key;
 			logging.debug(instance.getClass().getName() + " produced instance for key " + key + " ; size of instances "
@@ -217,7 +217,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	@Override
 	public Object getCellEditorValue() {
 
-		// editingRow + ", " + editingColumn +", value :");
+		
 
 		// class " + listeditor.getValue().getClass());
 
@@ -246,8 +246,8 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 			int n = list.size();
 
-			// editingRow + " , " + editingColumn + " " +
-			// "modelProducer.getClass(editingRow, editingColumn) " +
+			
+			
 
 			/*
 			 * if ( List.class.isAssignableFrom
@@ -256,7 +256,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			 * logging.info(this,
 			 * "getCellEditorValue,  original class instance of List");
 			 * 
-			 * //li.add("xxx");
+			 * 
 			 * 
 			 * return list;
 			 * }
@@ -266,7 +266,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 				// List");
 
-				// li.add("xxx");
+				
 
 				return list;
 			}

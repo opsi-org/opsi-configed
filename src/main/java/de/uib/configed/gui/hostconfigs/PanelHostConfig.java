@@ -170,11 +170,11 @@ public class PanelHostConfig extends JPanel {
 			TreeMap<String, String> classesMap) {
 		label.setText(labeltext);
 
-		// configed.getResourceValue("MainFrame.jLabel_Config") + ": " + hostId);
+		
 
 		logging.info(this, "initEditing "
-				// + " configVisualMap " + (configVisualMap)
-				// + " configOptions " + (configOptions)
+				
+				
 				+ " optionsEditable " + optionsEditable);
 		editMapPanel.setSubpanelClasses(classesMap);
 		editMapPanel.setEditableMap(configVisualMap, configOptions);

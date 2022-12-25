@@ -67,7 +67,7 @@ public class DataStubDirectSQL extends DataStubRawData
 				clientSelection = " AND ( " + giveWhereOR("clientId", newClients) + ") ";
 			}
 
-			// clientListForCall.size() + " clients " + clientListForCall);
+			
 
 			if (client2software == null)
 				client2software = new HashMap<>();
@@ -127,7 +127,7 @@ public class DataStubDirectSQL extends DataStubRawData
 						logging.info("Missing auditSoftware entry for swIdent " + SWAuditClientEntry.DB_COLUMN_NAMES
 								+ "for values"
 								+ SWAuditClientEntry.produceSWident(SWAuditClientEntry.DB_COLUMN_NAMES, row));
-						// item.put(SWAuditEntry.WINDOWSsOFTWAREid, "MISSING");
+						
 					} else {
 						entries.add(clientEntry);
 					}

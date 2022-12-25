@@ -90,7 +90,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	public static final int START_TEXT_SEARCH = 1;
 	public static final int REGEX_SEARCH = 2;
 
-	protected int preferredColumnIndex = 0; // real column index + 1, since for index 0 "all columns" entry is placed
+	protected int preferredColumnIndex = 0; 
 
 	protected boolean withRegEx = true;
 	protected boolean selectMode = true;
@@ -425,7 +425,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		 * labelSearch0.setFont(Globals.defaultFont);
 		 */
 
-		// JLabel labelSearch = new JLabel("Suche");
+		
 
 		fieldSearch = new JTextField("");
 		fieldSearch.setPreferredSize(Globals.textfieldDimension);
@@ -470,12 +470,12 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		popupSearch.setText("Suchen");
 		popupSearch.addActionListener(actionEvent -> searchTheRow(selectMode));
 
-		// popupSearchNext.setText("Zum nächsten Treffer ( F3 ) ");
+		
 		popupSearchNext.setText(configed.getResourceValue("SearchPane.popup.searchnext"));
 
 		popupSearchNext.addActionListener(actionEvent -> searchNextRow(selectMode));
 
-		// popupNewSearch.setText("Suche neu starten");
+		
 		popupNewSearch.setText(configed.getResourceValue("SearchPane.popup.searchnew"));
 
 		popupNewSearch.addActionListener(actionEvent -> {
@@ -486,7 +486,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			searchTheRow(0, selectMode);
 		});
 
-		// popupMarkHits.setText("Mark all hits ( F5 ) ");
+		
 		popupMarkHits.setText(configed.getResourceValue("SearchPane.popup.markall"));
 
 		popupMarkHits.addActionListener(actionEvent -> {
@@ -494,7 +494,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				markAll();
 		});
 
-		// popupMarkAndFilter.setText("Mark and filter ( F8 ) ");
+		
 		popupMarkAndFilter.setText(configed.getResourceValue("SearchPane.popup.markAndFilter"));
 
 		popupMarkAndFilter.addActionListener(actionEvent -> {
@@ -503,7 +503,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			switchFilterOn();
 		});
 
-		// popupEmptySearchfield.setText("Suchfeld leeren");
+		
 		popupEmptySearchfield.setText(configed.getResourceValue("SearchPane.popup.empty"));
 
 		popupEmptySearchfield.addActionListener(actionEvent -> fieldSearch.setText(""));
@@ -519,7 +519,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		setSearchFieldsAll();
 
-		// JLabel labelSearchMode = new JLabel("Modus");
+		
 
 		labelSearchMode = new JLabel(configed.getResourceValue("SearchPane.searchmode.searchmode"));
 		labelSearchMode.setFont(Globals.defaultFont);
@@ -573,10 +573,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		Icon selectedIcon;
 
 		// unselectedIcon =
-		// Globals.createImageIcon("images/checked_blue_empty_withoutbox.png",
+		
 		// "");
 		// selectedIcon =
-		// Globals.createImageIcon("images/checked_blue_withoutbox.png",
+		
 		// "");
 
 		unselectedIcon = Globals.createImageIcon("images/loupe_light_16_singlecolumnsearch.png", "");
@@ -594,10 +594,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		// setSearchFieldsAll() is to called to synchronize with select == true
 
 		// unselectedIcon =
-		// Globals.createImageIcon("images/checked_blue_empty_withoutbox.png",
+		
 		// "");
 		// selectedIcon =
-		// Globals.createImageIcon("images/checked_blue_withoutbox.png",
+		
 		// "");
 
 		unselectedIcon = Globals.createImageIcon("images/loupe_light_16_starttextsearch.png", "");
@@ -984,7 +984,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 					);
 
-					// value + " to " + compareValue);
+					
 
 					if (compareValue == null) {
 						if (val.equals(""))
@@ -1158,7 +1158,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void setRow(int row, boolean addSelection, boolean select) {
 
-		// addSelection + ", " +select);
+		
 		if (select) {
 			if (addSelection)
 				addSelectedRow(row);
@@ -1193,7 +1193,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		fieldSearch.getCaret().setVisible(false);
 
 		// final de.uib.utilities.thread.WaitCursor waitCursor = new
-		// de.uib.utilities.thread.WaitCursor(fieldSearch, "TablesearchPane");
+		
 
 		{
 

@@ -7,7 +7,7 @@ import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 
 public class CommandOpsiPackageManager implements SSHCommand {
-	// private String baseName = "opsi-package-manager";
+	
 	protected LinkedList<Object> helpLinesSplitted;
 	protected FGeneralDialog dialog = null;
 	protected boolean needSudo = false;
@@ -48,7 +48,7 @@ public class CommandOpsiPackageManager implements SSHCommand {
 
 	// @Override
 
-	// return "opsi-package-manager";
+	
 
 	@Override
 	public String getMenuText() {

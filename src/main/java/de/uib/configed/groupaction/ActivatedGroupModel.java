@@ -90,9 +90,9 @@ public class ActivatedGroupModel {
 		if (groupName != null && groupDescription != null && !groupDescription.equals(groupName)
 				&& !groupDescription.equals(""))
 			return
-			// "<html><b>" +
+			
 			groupName
-					// + "</b> "
+					
 					+ "  (" + groupDescription + ") "
 			// + </html>"
 			;
@@ -100,7 +100,7 @@ public class ActivatedGroupModel {
 		return ""
 				// + <html><b>"
 				+ groupName
-		// + "</b></html>"
+		
 		;
 	}
 

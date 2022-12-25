@@ -192,7 +192,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 			}
 		} else {
 			if (selectedDepots.contains(
-					// configed.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS")
+					
 					PersistenceController.DEPOT_SELECTION_NODEPOTS)
 
 			) {

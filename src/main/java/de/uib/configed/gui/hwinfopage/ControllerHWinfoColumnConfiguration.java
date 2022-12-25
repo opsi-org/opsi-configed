@@ -65,7 +65,7 @@ public class ControllerHWinfoColumnConfiguration {
 	public static final String colLinuxQuery = configed.getResourceValue("HWinfoColumnConfiguration.colLinuxQuery");
 	public static final String colWMIQuery = configed.getResourceValue("HWinfoColumnConfiguration.colWMIQuery");
 	// public static final String colTellAgainHardwareClass =
-	// configed.getResourceValue("HWinfoColumnConfiguration.colTellAgainHardwareClass");
+	
 
 	private Map<String, Map<String, Boolean>> updateItems;
 
@@ -144,7 +144,7 @@ public class ControllerHWinfoColumnConfiguration {
 	}
 
 	protected void initPanel() {
-		panel = new PanelGenEditTable("", // configed.getResourceValue("HardwareList"),
+		panel = new PanelGenEditTable("", 
 				0, // maxTableWidth
 				true, // editing
 				0, // generalPopupPosition
@@ -217,13 +217,13 @@ public class ControllerHWinfoColumnConfiguration {
 		columnNames.add(colOpsiColumnName);
 		columnNames.add(colUseInQuery);
 		columnNames.add(colOpsiDbColumnType);
-		// columnNames.add( "UI Name");
-		// columnNames.add( "display type");
-		// columnNames.add( "report function");
+		
+		
+		
 
 		classNames = new Vector<>();
 
-		// classNames.add("java.lang.Integer");
+		
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
@@ -282,10 +282,10 @@ public class ControllerHWinfoColumnConfiguration {
 				// columnNames.indexOf ( colOpsiColumnName ),
 				columnNames.indexOf(colUseInQuery) });
 
-		// panel.setTitle( "" );//configed.getResourceValue("PanelHWInfo.overview") );
+		
 
 		// Icon iconConfigure =
-		// Globals.createImageIcon("images/config_pro.png", "");
+		
 
 		panel.setTitlePane(
 				new JComponent[] { new JLabel(configed.getResourceValue("HWinfoColumnConfiguration.infoTitle")) }, 20);
@@ -327,7 +327,7 @@ public class ControllerHWinfoColumnConfiguration {
 			@Override
 			public String sendUpdate(Map<String, Object> rowmap) {
 
-				// we reset the original sorting because we need information from lines "above"
+				
 
 				logging.info(this, "within MapItemsUpdateController sendUpdate " + rowmap);
 

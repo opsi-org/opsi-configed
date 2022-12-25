@@ -55,7 +55,7 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 
 		if (dataSplitted == null) // simple case: no '*'
 		{
-			// if (data.equals("cached"))
+			
 
 			return rData.equals(data);
 		}

@@ -25,11 +25,11 @@ public class OpenSaveDialog implements ActionListener {
 
 		saveBtn = new JButton(configed.getResourceValue("OpenSaveDialog.save"));
 		saveBtn.setFont(Globals.defaultFont);
-		// saveBtn.setToolTipText(configed.getResourceValue("OpenSaveDialog.save.Tooltipp"));
+		
 		saveBtn.addActionListener(this);
 
 		openBtn = new JButton(configed.getResourceValue("OpenSaveDialog.open"));
-		// openBtn.setToolTipText(configed.getResourceValue("OpenSaveDialog.open.ToolTip"));
+		
 		openBtn.setFont(Globals.defaultFont);
 		openBtn.addActionListener(this);
 

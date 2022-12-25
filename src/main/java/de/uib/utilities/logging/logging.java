@@ -192,7 +192,7 @@ public class logging implements LogEventSubject
 
 	private static String now() {
 
-		return loggingDateFormat.format(new java.util.Date());// + " ";
+		return loggingDateFormat.format(new java.util.Date());
 	}
 
 	private static void addErrorToList(String mesg, String time) {
@@ -426,7 +426,7 @@ public class logging implements LogEventSubject
 	}
 
 	public static void clearErrorList() {
-		// warning("clear error list");
+		
 		errorList.clear();
 	}
 

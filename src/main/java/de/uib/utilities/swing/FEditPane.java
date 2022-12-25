@@ -58,7 +58,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	private boolean singleLine;
 	static int count = 0;
 
-	// static final Pattern linkpattern = Pattern.compile(".*.*");
+	
 
 	public FEditPane(String initialText, String hint) {
 		super(initialText, hint);;
@@ -91,7 +91,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		 * );
 		 */
 
-		// textpane.setContentType( "text/html" );
+		
 		textpane.setContentType("text/plain");
 
 		textpane.setEditable(true);
@@ -217,7 +217,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	@Override
 	public String getText() {
-		// textpane.setText(textpane.getText().replaceAll("\t",""));
+		
 
 		initialText = textpane.getText(); // set new initial text for use in processWindowEvent
 		return initialText;

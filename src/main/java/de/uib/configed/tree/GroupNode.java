@@ -7,7 +7,7 @@ public class GroupNode extends IconNode {
 	protected boolean allowingSubGroups = true;
 	protected boolean immutable = false;
 	protected boolean fixed = false;
-	// fixed means "is generated structure"
+	
 
 	public GroupNode(Object userObject, String description) {
 		super(userObject, true);

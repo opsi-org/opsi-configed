@@ -264,8 +264,8 @@ public class FEditList extends FEditObject
 			if (celleditor != null)
 				celleditor.stopCellEditing();
 
-			// JOptionPane.showMessageDialog(null, " new val " + getValue() + " .. old " +
-			// initialValue , "alert", JOptionPane.INFORMATION_MESSAGE);
+			
+			
 
 			if (leaveOnCommit)
 				leave();

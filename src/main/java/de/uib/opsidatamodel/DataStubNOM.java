@@ -133,7 +133,7 @@ public class DataStubNOM extends DataStub {
 			logging.debug(this, "retrieveProductInfos callAttributes " + Arrays.asList(callAttributes));
 
 			HashMap callFilter = new HashMap<>();
-			// callFilter.put("id", "acroread*");
+			
 
 			persist.notifyDataLoadingObservers(configed.getResourceValue("LoadingObserver.loadtable") + " product");
 
@@ -424,9 +424,9 @@ public class DataStubNOM extends DataStub {
 				String propertyId = (String) retrievedMap.get("propertyId");
 				String productId = (String) retrievedMap.get("productId");
 
-				// propertyId + " , retrieved map " + retrievedMap);
+				
 
-				// propertyId + " , property map " + productPropertyMap);
+				
 
 				String productVersion = (String) retrievedMap.get(OpsiPackage.SERVICEkeyPRODUCT_VERSION);
 				String packageVersion = (String) retrievedMap.get(OpsiPackage.SERVICEkeyPACKAGE_VERSION);
@@ -551,7 +551,7 @@ public class DataStubNOM extends DataStub {
 					dependencyInfo.put("requiredInstallationStatus", requiredInstallationStatus);
 					dependencyInfo.put("requirementType", requirementType);
 
-					// productId + ", " + dependencyInfo);
+					
 					dependencyInfos.add(dependencyInfo);
 
 				}
@@ -665,7 +665,7 @@ public class DataStubNOM extends DataStub {
 
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " product property state");
-			String[] callAttributes = new String[] {};// "objectId","productId","propertyId", "values"};
+			String[] callAttributes = new String[] {};
 			HashMap callFilter = new HashMap<>();
 			callFilter.put("objectId", persist.exec.jsonArray(newClients));
 
@@ -778,9 +778,9 @@ public class DataStubNOM extends DataStub {
 
 			persist.notifyDataLoadingObservers(configed.getResourceValue("LoadingObserver.loadtable") + " software");
 
-			String[] callAttributes = new String[] { SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME), // "name", //key
+			String[] callAttributes = new String[] { SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME), 
 					// element
-					SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION), // "version",//key element
+					SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION), 
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.SUBVERSION), // key element
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE), // key element
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.ARCHITECTURE), // key element
@@ -1065,7 +1065,7 @@ public class DataStubNOM extends DataStub {
 
 				newClients.removeAll(clientListForCall);
 
-				// clientListForCall.size() + " clients " + clientListForCall);
+				
 
 				if (client2software == null)
 					client2software = new HashMap<>();
@@ -1122,7 +1122,7 @@ public class DataStubNOM extends DataStub {
 					 * {
 					 * logging.info("Missing auditSoftware entry for swIdent " +
 					 * SWAuditClientEntry.produceSWident(item));
-					 * //item.put(SWAuditEntry.WINDOWSsOFTWAREid, "MISSING");
+					 * 
 					 * }
 					 * else
 					 */

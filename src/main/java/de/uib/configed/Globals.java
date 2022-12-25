@@ -91,7 +91,6 @@ public class Globals {
 	public static final Font defaultFontStandardBold = new java.awt.Font("SansSerif", Font.BOLD, 11);
 	public static final Font defaultFontSmall = new java.awt.Font("SansSerif", 0, 9);
 	public static final Font defaultFontSmallBold = new java.awt.Font("SansSerif", Font.BOLD, 9);
-	// public static final Font defaultFont12 = new java.awt.Font("SansSerif", 0,
 
 	public static final Font defaultFontBig = new java.awt.Font("SansSerif", 0, 12);
 	public static final Font defaultFontBold = new java.awt.Font("SansSerif", Font.BOLD, 12);
@@ -303,7 +302,7 @@ public class Globals {
 
 	public static final String CONFLICT_STATE_STRING = "mixed";
 	public static final Color CONFLICT_STATE_CELL_COLOR = new Color(255, 180, 180);
-	public static final String NO_VALID_STATE_STRING = "";// "invalid"
+	public static final String NO_VALID_STATE_STRING = "";
 
 	private static Map<String, Object> objects;
 
@@ -379,7 +378,7 @@ public class Globals {
 		if (imgURL != null) {
 			return imgURL;
 		} else {
-			de.uib.utilities.logging.logging.warning("Couldn't find file  " + relPath);
+			logging.warning("Couldn't find file  " + relPath);
 			return null;
 		}
 	}
@@ -398,11 +397,11 @@ public class Globals {
 			if (imgURL != null) {
 				return java.awt.Toolkit.getDefaultToolkit().createImage(imgURL);
 			} else {
-				de.uib.utilities.logging.logging.info("Couldn't find file: " + path);
+				logging.info("Couldn't find file: " + path);
 				return null;
 			}
 		} catch (Exception ex) {
-			de.uib.utilities.logging.logging.info("createImageIcon " + path + " : " + ex);
+			logging.info("createImageIcon " + path + " : " + ex);
 
 		}
 
@@ -423,11 +422,11 @@ public class Globals {
 			if (imgURL != null) {
 				return new ImageIcon(imgURL, description);
 			} else {
-				de.uib.utilities.logging.logging.info("Couldn't find file: " + path);
+				logging.info("Couldn't find file: " + path);
 				return null;
 			}
 		} catch (Exception ex) {
-			de.uib.utilities.logging.logging.info("createImageIcon " + path + " : " + ex);
+			logging.info("createImageIcon " + path + " : " + ex);
 
 		}
 
@@ -563,7 +562,7 @@ public class Globals {
 		StringBuffer result = new StringBuffer("<html>");
 		String remainder = s;
 		while (remainder.length() > 0) {
-			de.uib.utilities.logging.logging.debug("Globals, remainder " + remainder);
+			logging.debug("Globals, remainder " + remainder);
 			if (remainder.length() <= TOOLTIP_LINE_LENGTH) {
 				result.append(remainder.replace("\\n", "<br />"));
 				break;
@@ -576,7 +575,7 @@ public class Globals {
 
 			boolean found = false;
 			int i = 0;
-			de.uib.utilities.logging.logging.debug("Globals, separationString " + separationString);
+			logging.debug("Globals, separationString " + separationString);
 
 			while (!found && i < testspan) {
 				if (separationString.charAt(i) == ' ' || separationString.charAt(i) == '\n'
@@ -909,7 +908,7 @@ public class Globals {
 	public static boolean isGlobalReadOnly() {
 		boolean result = PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly();
 
-		de.uib.utilities.logging.logging.info("Globals got readonly " + result);
+		logging.info("Globals got readonly " + result);
 
 		return result;
 	}
@@ -927,7 +926,7 @@ public class Globals {
 
 		boolean forbidEditing = false;
 
-		de.uib.utilities.logging.logging.debug("forbidEditing for target " + ConfigedMain.getEditingTarget() + "?");
+		logging.debug("forbidEditing for target " + ConfigedMain.getEditingTarget() + "?");
 
 		if (ConfigedMain.getEditingTarget() == ConfigedMain.EditingTarget.SERVER) {
 			forbidEditing
@@ -942,7 +941,7 @@ public class Globals {
 			forbidEditing = PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly();
 		}
 
-		de.uib.utilities.logging.logging.debug("forbidEditing " + forbidEditing);
+		logging.debug("forbidEditing " + forbidEditing);
 
 		return forbidEditing;
 	}

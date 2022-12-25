@@ -171,18 +171,18 @@ public class SSHConnectExec extends SSHConnect {
 			String defaultCommandsString = "";
 			int anzahlCommands = ((SSHCommand_Template) commands).getOriginalCommands().size();
 			logging.info(this, "exec_list, anzahlCommands " + anzahlCommands);
-			// final_dia.append("["+
-			// configed.getResourceValue("SSHConnection.Exec.dialog.commandlist").trim() +"]
-			// ", "");
+			
+			
+			
 			for (int i = 0; i < anzahlCommands; i++) {
 				String com = ((SSHCommand_Template) commands).getOriginalCommands().get(i).getCommandRaw();
 				com = "(" + (i + 1) + ")  " + com;
 
-				// // final_dia.append(" ", com);
+				
 
 				// else
 
-				// // final_dia.append(" ", com + " \n");
+				
 				defaultCommandsString = defaultCommandsString + com + "   \n";
 
 			}
@@ -233,7 +233,7 @@ public class SSHConnectExec extends SSHConnect {
 								+ "]     " + "" + configed.getResourceValue("SSHConnection.Exec.exitClosed"));
 					}
 
-					// wrong place final_dia.appendLater("\nREADY\n");
+					
 
 				}
 
@@ -314,12 +314,12 @@ public class SSHConnectExec extends SSHConnect {
 
 			if (SSHCommandFactory.getInstance(main).ssh_always_exec_in_background)
 				outputDialog.setVisible(false);
-			// outputDialog.append(getConnectedUser() + "@" + getConnectedHost() + "\n");
+			
 			outputDialog.setTitle(configed.getResourceValue("SSHConnection.Exec.title") + " "
 					+ configed.getResourceValue("SSHConnection.Exec.dialog.commandoutput") + "  ("
 					+ SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost()
 					+ ")");
-			// + " ("+ this.user +"@"+this.host+")" );
+			
 
 		} else
 			outputDialog = null;
@@ -403,12 +403,12 @@ public class SSHConnectExec extends SSHConnect {
 			this.rememberPw = rememberPw;
 			this.interruptChannelWorker = interruptChannel;
 			retriedTimes = 1;
-			// publishInfo(configed.getResourceValue("SSHConnection.Exec.dialog.commandlist")
-			// + "\n");
+			
+			
 
-			// publishInfo("\n-------------------------------------------------------------------");
-			// publishInfo("---------------------------------------------------------------------------------------------------------------------------------------------------");
-			// publishInfo("exec: " +this.command.getSecuredCommand());
+			
+			
+			
 		}
 
 		public void setMaxCommandNumber(int mc) {
@@ -477,8 +477,8 @@ public class SSHConnectExec extends SSHConnect {
 					} catch (Exception ee) {
 					}
 				}
-			// publishInfo("---------------------------------------------------------------------------------------------------------------------------------------------------");
-			// publishInfo("---------------------------------------------------------------------------------------------------------------------------------------------------");
+			
+			
 		}
 
 		boolean pwsuccess = false;
@@ -519,7 +519,7 @@ public class SSHConnectExec extends SSHConnect {
 				if (outputDialog != null) {
 					(outputDialog).removeKillProcessListener(killProcessListener);
 					(outputDialog).addKillProcessListener(killProcessListener);
-					// publishInfo("result:" + outputDialog.ansiCodeEnd);
+					
 					// publish("");
 
 				}
@@ -542,7 +542,7 @@ public class SSHConnectExec extends SSHConnect {
 							break;
 						String str = new String(tmp, 0, i, "UTF-8");
 
-						// (str.equals(configed.getResourceValue("SSHConnection.sudoFailedText"))) )
+						
 
 						// (str.equals(SSHCommandFactory.getInstance().sudo_failed_text)) )
 						if ((command.needSudo()) && (str.contains(SSHCommandFactory.sudo_failed_text))) {
@@ -584,8 +584,8 @@ public class SSHConnectExec extends SSHConnect {
 						}
 						buf.append(str);
 					}
-					// buf.append("echo READY");
-					// buf.append("\n");
+					
+					
 					if (channel.isClosed() || interruptChannel || interruptChannelWorker) {
 						if ((in.available() > 0) && (!interruptChannel))
 							continue;
@@ -649,10 +649,10 @@ public class SSHConnectExec extends SSHConnect {
 					logging.debug(this, "process " + line);
 					sshOutputCollector.appendValue(line);
 					outputDialog.append(getCommandName(), line + "\n");
-					// outputDialog.append("\n");
+					
 				}
 
-				// outputDialog.append(getCommandName(), "\n a chunk completed \n");
+				
 			}
 		}
 

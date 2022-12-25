@@ -17,7 +17,7 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 
 	public CommandHelp(SSHCommand basicCommand) {
 		this.basicCommand = basicCommand;
-		// command = this.basicCommand.getBasicName() + " --help";
+		
 		this.dialog = this.basicCommand.getDialog();
 	}
 

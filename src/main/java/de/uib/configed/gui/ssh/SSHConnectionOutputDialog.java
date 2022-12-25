@@ -55,14 +55,14 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 	public final String ansiCodeEnd2 = "[0;0;0m";
 
 	public final String ansiCodeInfo = "[0;info;0m"; // user info not really ansi code !!
-	public final String ansiCodeError = "[0;error;0m"; // user info "error" not really ansi code !!
+	public final String ansiCodeError = "[0;error;0m"; 
 
 	private final Map<String, Color> ansiCodeColors = new HashMap<>() {
 		{
 			put("[0;info;0m", Globals.greyed); // user info not really ansi code !!
-			put("[0;error;0m", Globals.actionRed); // user info "error" not really ansi code !!
+			put("[0;error;0m", Globals.actionRed); 
 			put("[0;30;40m", Color.BLACK);
-			// ansis beginning with "[1": lines should be unterlined - are not !
+			
 			put("[1;30;40m", Color.BLACK);
 			put("[0;40;40m", Color.BLACK);
 			put("[1;40;40m", Color.BLACK);
@@ -136,7 +136,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 					"append parseAnsiCodes found color key " + key + " value " + ((Color) entry.getValue()).toString());
 
 			// ansi_escape1.toCharArray()[0])
-			// || (line.trim().replaceAll("\\t","").replaceAll(" ","").charAt(0) ==
+			
 			// ansi_escape2.toCharArray()[0]) )
 			// line = line.replace(ansi_escape2, "");
 			line = line.replace(ansi_escape1, "").replace(ansi_escape2, "");
@@ -215,7 +215,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			jScrollPane.setViewportView(output);
 			output.setText("");
 
-			// btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
+			
 			btn_close = new de.uib.configed.gui.IconButton(
 					de.uib.configed.configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
 					"images/cancel.png", "images/cancel.png", true);
@@ -227,7 +227,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 
 			btn_close.addActionListener(closeListener);
 
-			// lbl_userhost.setText("user@host");
+			
 
 			// createLayout(konsolePanelLayout, jScrollPane,Globals.gapSize,
 

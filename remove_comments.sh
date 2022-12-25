@@ -60,4 +60,7 @@ find . -name *.java -exec sed -i "s/\/\/[^\"][}]\{1,10\}.*//g" {} \;
 
 #20. command 
 find . -name *.java -exec sed -i "s/\/\/[^\"]*[{]\{1,10\}.*//g" {} \;
-find . -name *.java -exec sed -i "s/\/\/[^\"]*[}]\{1,10\}.*//g" {} \;
+
+#21. command
+find . -name *.java -exec sed -i "s/\/\/[^\"]*[^\\]\"[^\"^+]*[^\\]\"[^\"^+]*.*//g" {} \;
+

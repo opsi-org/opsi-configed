@@ -235,7 +235,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 	 * if (extendedInfo.get(value) != null)
 	 * info = "" + extendedInfo.get(value).get("description");
 	 * 
-	 * //setToolTipText(Globals.fillStringToLength(info + " ", FILL_LENGTH));
+	 * 
 	 * 
 	 * return this;
 	 * }

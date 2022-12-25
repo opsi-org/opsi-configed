@@ -188,7 +188,7 @@ public abstract class SWExporter {
 		if (exportDirectory != null)
 			exportDirectoryS = exportDirectory.toString();
 
-		// setWriteToFile( filepathStart + hostId + ".pdf");
+		
 
 		Vector<String> columnNames;
 		Vector<String> classNames;

@@ -949,7 +949,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		tableProducts.setRowSorter(sorter);
 		sorter.addRowSorterListener(this);
 
-		// tableProducts.getTableHeader().setToolTipText(configed.getResourceValue("MainFrame.tableheader_tooltip"));
+		
 		tableProducts.getTableHeader()
 				.setDefaultRenderer(new ColorHeaderCellRenderer(tableProducts.getTableHeader().getDefaultRenderer()));
 

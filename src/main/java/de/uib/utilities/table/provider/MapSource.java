@@ -17,7 +17,7 @@ import de.uib.utilities.logging.logging;
 public class MapSource implements TableSource
 // based on a regular map (rows indexed by a String key)
 // of maps (representing the rows as pairs columnname - value)
-// "regular" means that all rows have identical structure (missing
+
 // columns may represent null values)
 // column 0 of the table is the key of the outer map (therefore the first
 // classname
@@ -87,7 +87,7 @@ public class MapSource implements TableSource
 					logging.debug(this, "fetchData for A-key " + key + " col  " + columnNames.get(i) + " index " + i
 							+ " val " + ob);
 
-				// + " ob:" + ob);
+				
 
 				if (ob != null) {
 					vRow.add(ob);
@@ -117,7 +117,7 @@ public class MapSource implements TableSource
 					} else {
 						String className = classNames.get(i);
 
-						// if (className.equals("java.lang.Integer"))
+						
 						if (columnNames.get(i).equals(ROW_COUNTER_NAME)) {
 							vRow.add("" + rowCount);
 
@@ -190,7 +190,7 @@ public class MapSource implements TableSource
 	public void setRowCounting(boolean b) {
 		if (!rowCounting && b) {
 			rowCounting = true;
-			// classNames.add( "java.lang.String" );
+			
 			classNames.add("java.lang.Integer");
 			// has the effect that IntComparatorForStrings is applied
 			columnNames.add(ROW_COUNTER_NAME);

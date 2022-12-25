@@ -12,7 +12,7 @@ public class Table {
 
 	public static final String versionKey = "table version";
 
-	// static String tableName = "HOST";
+	
 	protected String localTablePath;
 	protected String localFileName;
 

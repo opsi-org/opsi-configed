@@ -5,7 +5,7 @@ import java.util.Date;
 public class ExtendedDate {
 	static final String infiniteImport = "never";
 	static final String sINFINITE = "INFINITE";
-	// static final String displayInfinite = "\u221E";//"INF";
+	
 
 	public static final ExtendedDate INFINITE = new ExtendedDate(sINFINITE);
 	public static final ExtendedDate ZERO = new ExtendedDate("1900-01-01 00:00:0");

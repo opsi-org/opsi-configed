@@ -86,7 +86,7 @@ public class PanelMountShare extends JPanel {
 	private void defineLayout() {
 
 		// mountShareLabel = new JLabel(
-		// configed.getResourceValue("PanelMountShare.mountShare" ) + " " +
+		
 
 		mountShareLabel = new JLabel("");
 
@@ -149,7 +149,7 @@ public class PanelMountShare extends JPanel {
 
 		String call;
 		call = "explorer.exe " + " \"" + np.produceName() + "\"";
-		// call = "explorer.exe " + " \"" + fieldServerPath.getText() + "\"";
+		
 		// call = "cmd.exe /c start \"\" \"" + fileName +FileUtils "\"";
 		logging.info(this, "windows call: " + call);
 

@@ -40,7 +40,7 @@ public class PanelEditLicences extends MultiTablePanel {
 
 	private void initComponents() {
 
-		// testfield = new JTextField(" ");
+		
 
 		panelKeys = new PanelGenEditTable(
 				configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"), 0, true, 1, false,

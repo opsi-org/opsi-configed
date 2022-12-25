@@ -130,7 +130,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 		case 3:
 			result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeAfter");
 			break;
-		// case 4 : result = "uninstall"; break;
+		
 		};
 
 		return result;

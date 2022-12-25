@@ -122,7 +122,7 @@ public class ActionRequest {
 
 		for (String request : serviceValues) {
 			scriptKeys.add(request + "Script");
-			// scriptKey2state.put(request + "Script", serviceValue2state.get(request));
+			
 			scriptKey2label.put(request + "Script", state2label.get(serviceValue2state.get(request)));
 		}
 

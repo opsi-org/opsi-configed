@@ -404,7 +404,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		});
 
 		buttonCallExecute = new JButton("", Globals.createImageIcon("images/installpackage.png", ""));
-		// Flashing( Globals.createImageIcon("images/installpackage.png", "" ) );
+		
 
 		buttonCallExecute.setSelectedIcon(Globals.createImageIcon("images/installpackage.png", ""));
 		buttonCallExecute.setPreferredSize(Globals.graphicButtonDimension);
@@ -436,12 +436,12 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		JLabel serverLabel = new JLabel(configed.getResourceValue("InstallOpsiPackage.chooseDepot"));
 		// JLabel tmpdirLabel = new JLabel(
-		// configed.getResourceValue("InstallOpsiPackage.tmpDir") );
+		
 		// mountShareLabel = new JLabel(
-		// configed.getResourceValue("InstallOpsiPackage.mountShare" ) );
+		
 		// mountShareLabel = new JLabel("");
 		// mountShareDescriptionLabel = new JLabel(
-		// configed.getResourceValue("InstallOpsiPackage.mountShareResult0" ) );
+		
 
 		JLabel serverPathLabel = new JLabel(configed.getResourceValue("InstallOpsiPackage.serverpath"));
 

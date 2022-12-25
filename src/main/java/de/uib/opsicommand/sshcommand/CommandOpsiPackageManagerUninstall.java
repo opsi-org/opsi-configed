@@ -34,7 +34,7 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 
 	@Override
 	public String getParentMenuText() {
-		// return "Package-Manager";
+		
 		return super.getMenuText();
 	}
 
@@ -68,14 +68,14 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 		SSHCommand command = new CommandHelp(this);
 		SSHConnectExec exec = new SSHConnectExec(command
 		// SSHConnectionExecDialog.getInstance(
-		// configed.getResourceValue("SSHConnection.Exec.title") + "
+		
 		// \""+command.getCommand() + "\" ",
 		// command
 		// )
 		);
 
 		// exec.exec(command, true, new SSHConnectionExecDialog(command,
-		// configed.getResourceValue("SSHConnection.Exec.title") + "
+		
 		// \""+command.getCommand() + "\" "));
 		return (SSHConnectionExecDialog) exec.getDialog();
 	}

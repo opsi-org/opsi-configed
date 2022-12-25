@@ -124,7 +124,7 @@ public class DPassword extends JDialog // implements Runnable
 			waitingProgressBar = new JProgressBar();
 
 			// waitingProgressBar.setToolTipText(
-			// configed.getResourceValue("FStartWakeOnLan.timeElapsed.toolTip") );
+			
 			waitingProgressBar.setValue(0);
 			waitingProgressBar.setEnabled(true);
 
@@ -412,7 +412,7 @@ public class DPassword extends JDialog // implements Runnable
 
 		fieldUser.setText(TESTUSER);
 		fieldUser.addKeyListener(myKeyListener);
-		// fieldUser.setText(System.getProperty("user.name"));
+		
 
 		fieldUser.setMargin(new Insets(0, 3, 0, 3));
 
@@ -432,7 +432,7 @@ public class DPassword extends JDialog // implements Runnable
 		 */
 
 		// JCheckBox checkGzip = new
-		// JCheckBox(configed.getResourceValue("DPassword.checkGzip") ,
+		
 
 		JCheckBox checkCompression = new JCheckBox(configed.getResourceValue("DPassword.checkCompression"),
 				de.uib.opsicommand.JSONthroughHTTP.compressTransmission);
@@ -606,11 +606,11 @@ public class DPassword extends JDialog // implements Runnable
 		 * });
 		 */
 
-		// fieldUser.setText(System.getProperty("user.name"));
-		// jLabelVersion.setText("opsi configuration editor, version " + Globals.VERSION
-		// + " date " + Globals.VERDATE);
+		
+		
+		
 		// jLabelVersion.setText( sprintf(
-		// configed.getResourceValue("DPassword.jLabelVersion"), Globals.VERSION,
+		
 
 		MessageFormat messageFormatVersion = new MessageFormat(configed.getResourceValue("DPassword.jLabelVersion"));
 		jLabelVersion.setText(messageFormatVersion
@@ -634,7 +634,7 @@ public class DPassword extends JDialog // implements Runnable
 		 * }
 		 */
 
-		// process = Runtime.getRuntime().exec("cmd.exe /c echo %UNAME%");
+		
 
 		pack();
 
@@ -685,7 +685,7 @@ public class DPassword extends JDialog // implements Runnable
 		if (waitCursor != null)
 			waitCursor.stop(); // we want only one running instance
 
-		// waitCursor = new WaitCursor(this, "ok_action");
+		
 
 		// correctly
 
@@ -720,7 +720,7 @@ public class DPassword extends JDialog // implements Runnable
 		logging.info(this, "invoking PersistenceControllerFactory host, user, " +
 		// .password " +
 				fieldHost.getSelectedItem() + ", " + fieldUser.getText()
-		// + ", " + String.valueOf( passwordField.getPassword())
+		
 		);
 
 		if (waitingTask != null && !waitingTask.isReady()) {

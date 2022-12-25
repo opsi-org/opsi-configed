@@ -523,7 +523,7 @@ public class PanelSWInfo extends JPanel {
 		logging.info(this, "------------- create report swaudit for " + hostId + " check");
 
 		HashMap<String, String> metaData = new HashMap<>();
-		// metaData.put("header", " " + mf.format( new String[] { hostId,
+		
 
 		metaData.put("title", "Client " + hostId);
 		metaData.put("subtitle", scanInfo);
@@ -554,7 +554,7 @@ public class PanelSWInfo extends JPanel {
 		 * 
 		 * 
 		 * 
-		 * //tableToPDF.createContentElement("tablemodel", sourceModel); //we use the
+		 * 
 		 * model in order to avoid any graphical component
 		 * 
 		 * 
@@ -649,7 +649,7 @@ public class PanelSWInfo extends JPanel {
 	 * timeS = parts[0] + ":" + parts[1];
 	 * 
 	 * 
-	 * //panelTable.setTitle("(no software audit data, checked at time:  " + timeS +
+	 * 
 	 * ")" );
 	 * 
 	 * 
@@ -684,7 +684,7 @@ public class PanelSWInfo extends JPanel {
 	 * title = title + "   " + configed.getResourceValue("PanelSWInfo.title");
 	 * }
 	 * 
-	 * //jLabelTitle.setText(" " + swRows.getDate());
+	 * 
 	 * 
 	 * 
 	 * 
@@ -714,7 +714,7 @@ public class PanelSWInfo extends JPanel {
 
 		@Override
 		public int getColumnCount() {
-			return SWAuditClientEntry.getDisplayKeys().size(); // not key "ID";
+			return SWAuditClientEntry.getDisplayKeys().size(); 
 		}
 
 		@Override

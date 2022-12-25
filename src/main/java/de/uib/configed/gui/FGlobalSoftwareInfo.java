@@ -53,8 +53,8 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 
 		persist = PersistenceControllerFactory.getPersistenceController();
 
-		panelGlobalSoftware = new PanelGenEditTable("", // "software assigned, but not existing",
-				// configed.getResourceValue("ConfigedMain.LicenctiontitleWindowsSoftware2LPool"),
+		panelGlobalSoftware = new PanelGenEditTable("", 
+				
 				0, // width
 				false, // editing,
 				2, true // switchLineColors
@@ -124,7 +124,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 
 					),
 
-					keyCol, // columnNames.indexOf("ID")
+					keyCol, 
 					new int[] {}, panelGlobalSoftware, updateCollection);
 		} else
 			this.model = model;

@@ -95,7 +95,7 @@ public class CommandOpsiSetRights extends SSHCommand_Template
 	public String getCommand() {
 		if (dir != null)
 			command = "opsi-set-rights " + dir;
-		// command = "opsisetrights <<<Enter path (if needed)>>> ";
+		
 		if (needSudo())
 			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
 		return command + " 2>&1";

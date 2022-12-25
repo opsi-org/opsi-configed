@@ -987,7 +987,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			else
 				i++;
 
-			// + " =?" + found + " " + compValue + " (class) " + compValue.getClass() );
+			
 		}
 		return found;
 	}
@@ -1003,7 +1003,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			else
 				i++;
 
-			// + " =?" + found + " " + compValue + " (class) " + compValue.getClass() );
+			
 		}
 		return found;
 	}

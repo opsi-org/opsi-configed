@@ -161,7 +161,7 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 		 * {
 		 * JOptionPane.showMessageDialog( mainController.licencesFrame,
 		 * "keine Zeile ausgewählt",
-		 * //configed.getResourceValue("ConfigedMain.Licences.noRowSelected"),
+		 * 
 		 * configed.getResourceValue("ConfigedMain.Licences.hint.title"),
 		 * JOptionPane.OK_OPTION);
 		 * 
@@ -188,11 +188,11 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 				new MapItemsUpdateController(thePanel.panelUsage, modelLicencesUsage, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
-						return persist.editLicenceUsage((String) rowmap.get(LicenceUsageEntry.clientIdKEY), // "hostId"),
-								(String) rowmap.get(LicenceUsageEntry.licenceIdKEY), // "softwareLicenseId"),
-								(String) rowmap.get(LicenceUsageEntry.licencepoolIdKEY), // "licensePoolId"),
-								(String) rowmap.get(LicenceUsageEntry.licencekeyKEY), // "licenseKey"),
-								(String) rowmap.get(LicenceUsageEntry.notesKEY) // "notes")
+						return persist.editLicenceUsage((String) rowmap.get(LicenceUsageEntry.clientIdKEY), 
+								(String) rowmap.get(LicenceUsageEntry.licenceIdKEY), 
+								(String) rowmap.get(LicenceUsageEntry.licencepoolIdKEY), 
+								(String) rowmap.get(LicenceUsageEntry.licencekeyKEY), 
+								(String) rowmap.get(LicenceUsageEntry.notesKEY) 
 						);
 
 					}
@@ -200,9 +200,9 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencesUsage.requestReload();
-						return persist.deleteLicenceUsage((String) rowmap.get(LicenceUsageEntry.clientIdKEY), // ""hostId"),
-								(String) rowmap.get(LicenceUsageEntry.licenceIdKEY), // "softwareLicenseId"),
-								(String) rowmap.get(LicenceUsageEntry.licencepoolIdKEY) // "licensePoolId")
+						return persist.deleteLicenceUsage((String) rowmap.get(LicenceUsageEntry.clientIdKEY), 
+								(String) rowmap.get(LicenceUsageEntry.licenceIdKEY), 
+								(String) rowmap.get(LicenceUsageEntry.licencepoolIdKEY) 
 						);
 					}
 				}, updateCollection));

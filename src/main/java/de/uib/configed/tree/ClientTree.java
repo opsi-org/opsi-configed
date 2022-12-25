@@ -92,7 +92,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	static {
 		ALL_NAME = configed.getResourceValue("ClientTree.ALLname");
-		// FAILED_NAME = configed.getResourceValue("ClientTree.FAILEDname");
+		
 		GROUPS_NAME = configed.getResourceValue("ClientTree.GROUPSname");
 		DIRECTORY_NAME = configed.getResourceValue("ClientTree.DIRECTORYname");
 		DIRECTORY_PERSISTENT_NAME = "clientdirectory";
@@ -334,7 +334,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		setShowsRootHandles(true);
 
-		// putClientProperty("JTree.lineStyle", "Horizontal"); does not work
+		
 
 		nodeRenderer = new IconNodeRendererClientTree(main);
 		setCellRenderer(nodeRenderer);
@@ -413,7 +413,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 				GroupNode node = (GroupNode) sourcePath.getPathComponent(sourcePath.getPathCount() - 1);
 				main.setGroup(node.toString());
 
-				// treePopupMouseListener.getPopupSourcePath() + " node "
+				
 
 			}
 		});
@@ -431,7 +431,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 				GroupNode node = (GroupNode) sourcePath.getPathComponent(sourcePath.getPathCount() - 1);
 
-				// treePopupMouseListener.getPopupSourcePath() + " node "
+				
 
 				Enumeration<TreeNode> enumer = node.breadthFirstEnumeration();
 
@@ -478,14 +478,14 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	 * 
 	 * Color defaultNimbusSelectionBackground = (Color)
 	 * UIManager.get("nimbusSelectionBackground");
-	 * //UIManager.put("nimbusSelectionBackground",
+	 * 
 	 * UIManager.get("nimbusLightBackground"));
 	 * UIManager.put("nimbusSelectionBackground",
 	 * UIManager.get("controlHighlight"));
 	 * //UIManager.put("Tree[Enabled+Selected].collapsedIconPainter", new
 	 * javax.swing.text.DefaultHighlighter.DefaultHighlightPainter(java.awt.Color.
 	 * yellow));
-	 * //UIManager.put("Tree.rendererMargins", new Insets(0,0,0,0));
+	 * 
 	 * 
 	 * }
 	 * }
@@ -510,7 +510,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			return null;
 		}
 
-		// throw new Error("cannot add null to treePath");
+		
 		result = treePath.pathByAddingChild(child);
 
 		return result;
@@ -546,7 +546,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	@Override
 	public void keyPressed(KeyEvent e) {
 
-		// Arrays.toString(selection) + "\n" + e);
+		
 
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			TreePath selectedPath = getSelectionPath();
@@ -756,7 +756,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	private void createDIRECTORY_NOT_ASSIGNED() {
 		DIRECTORY_NOT_ASSIGNED = produceGroupNode(DIRECTORY_NOT_ASSIGNED_NAME,
-				// "not yet assigned ");
+				
 				configed.getResourceValue("ClientTree.NOTASSIGNEDdescription"));
 
 		DIRECTORY_NOT_ASSIGNED.setAllowsSubGroups(false);
@@ -792,12 +792,12 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		// GROUPS
 		GROUPS = produceGroupNode(GROUPS_NAME,
-				// "groups");
+				
 				configed.getResourceValue("ClientTree.GROUPSdescription"));
 		GROUPS.setAllowsOnlyGroupChilds(true);
 		GROUPS.setFixed(true);
 
-		// GROUPS.setIcon(Globals.createImageIcon("images/group_small.png", "group"));
+		
 
 		ROOT.add(GROUPS);
 
@@ -805,7 +805,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		// DIRECTORY
 		DIRECTORY = produceGroupNode(DIRECTORY_NAME,
-				// "all clients hierarchically");
+				
 				configed.getResourceValue("ClientTree.DIRECTORYdescription"));
 
 		DIRECTORY.setAllowsOnlyGroupChilds(true);
@@ -836,10 +836,10 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		// ALL
 		ALL = produceGroupNode(ALL_NAME,
-				// "all clients in selected depots");
+				
 				configed.getResourceValue("ClientTree.ALLdescription"));
 
-		// ALL.setIcon(Globals.createImageIcon("images/group_small.png", "group"));
+		
 		ROOT.add(ALL);
 		ALL.setImmutable(true);
 		ALL.setFixed(true);
@@ -1008,7 +1008,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		groups.put(ALL_NAME, groupALL);
 
 		groupGROUPS.put("groupId", GROUPS_NAME);
-		// groupGROUPS.put("parentGroupId", ALL_NAME);
+		
 		groupGROUPS.put("description", "root of groups");
 
 		groupNodes.put(GROUPS_NAME, GROUPS);
@@ -1016,7 +1016,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		groups.put(GROUPS_NAME, groupGROUPS);
 
 		groupDIRECTORY.put("groupId", DIRECTORY_NAME);
-		// groupDIRECTORY.put("parentGroupId", ALL_NAME);
+		
 		groupDIRECTORY.put("description", "root of directory");
 
 		groupNodes.put(DIRECTORY_NAME, DIRECTORY);
@@ -1044,7 +1044,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		createDIRECTORY_NOT_ASSIGNED();
 
-		// listChildren("produceAndLinkGroups");
+		
 
 		groupNodes = new HashMap<>();
 
@@ -1071,7 +1071,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 			String parentId = groups.get(groupId).get("parentGroupId");
 
-			// groupId + ", " + parentId);
+			
 
 			if (parentId == null || parentId.equalsIgnoreCase("null"))
 				parentId = GROUPS_NAME;
@@ -1098,7 +1098,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		}
 
-		// listChildren("produceAndLinkGroups --- ");
+		
 
 	}
 
@@ -1125,8 +1125,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 				{
 					for (String groupId : belongingTo) {
-						// if (belongingTo.contains ("rupert")
-						// or, the group has "rupert" as an ancestor
+						
+						
 						// )
 						{
 							List<String> memberList = group2Members.get(groupId);
@@ -1193,7 +1193,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		model.nodeStructureChanged(DIRECTORY);
 
-		// listChildren("associate --- ");
+		
 		TreeSet<String> allowedClients = null;
 
 		logging.info(this, "associateClientsToGroups, evaluate permittedHostGroups " + permittedHostGroups);
@@ -1206,7 +1206,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 			for (String clientId : leafname2AllItsPaths.keySet()) {
 				for (SimpleTreePath path : leafname2AllItsPaths.get(clientId)) {
-					// if (path.contains("rupert"))
+					
 					Set<String> pathElements = new TreeSet<>(path);
 					int allElementsNumber = pathElements.size();
 					pathElements.removeAll(permittedHostGroups);// retained are the elements not permitted
@@ -1214,7 +1214,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 					if (notPermittedNumber < allElementsNumber) {
 
-						// + clientId + " not " + notPermittedNumber + " all " + allElementsNumber + " :
+						
 						// " + (notPermittedNumber< allElementsNumber ) );
 						allowedClients.add(clientId);
 						directlyAllowedGroups.addAll(path);
@@ -1322,9 +1322,9 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 						"group in group not supported for opsiVersion < 3.4.9, \nopsiVersion is "
 								+ main.getOpsiVersion(),
 						"opsi info ",
-						// configed.getResourceValue("ConfigedMain.notSynchronous.text"), //"not
+						
 						// synchronous",
-						// configed.getResourceValue("ConfigedMain.notSynchronous.title"),
+						
 						JOptionPane.WARNING_MESSAGE);
 				return result;
 			}
@@ -1481,7 +1481,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		while (clientNode != null && stopCounter <= clientNodesInDIRECTORY.size()) {
 
-			// clientNode + " from " + parentNode);
+			
 			parentNode.remove(clientNode);
 			// with more than one clientNode we seem to get as many instances of one client
 			// node supplied as there are clients altogether, why ever
@@ -1645,7 +1645,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			locationsInDIRECTORY.put(clientID, groupsInDIRECTORY);
 		}
 
-		// + ", " + clientID);
+		
 
 		if (groupsInDIRECTORY.size() <= 1)
 			return;
@@ -1785,15 +1785,15 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			if (insertNode.getAllowsChildren() // node with subnodes = group
 					&& !node.getAllowsChildren() // leaf
 			) {
-				// we dont insert a leaf before a "true" node
+				
 				continue;
 			}
 
 			if (!insertNode.getAllowsChildren() // leaf
 					&& node.getAllowsChildren() // group
 			) {
-				// if all "true" nodes are passed in our comparison order we dont search any
-				// more for a location of the new "true" node
+				
+				
 				foundLoc = true;
 				continue;
 			}
@@ -1981,7 +1981,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	public DefaultMutableTreeNode getChildWithUserObjectString(String objectID, DefaultMutableTreeNode groupNode) {
 
-		// objectID + ", " + groupNode);
+		
 		Enumeration<TreeNode> enumer = groupNode.children();
 		DefaultMutableTreeNode result = null;
 
@@ -1995,8 +1995,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			}
 		}
 
-		// objectID + " in " + groupNode
-		// + ": " + result);
+		
+		
 		return result;
 	}
 

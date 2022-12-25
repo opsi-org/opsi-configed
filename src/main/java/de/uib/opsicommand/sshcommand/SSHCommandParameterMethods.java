@@ -356,8 +356,8 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 
 	private String createStringOfArray(String[] strArrToReplace, String begin_end_ofStr, String separator) {
 		String result = "error";
-		// String beginStr = begin_end_ofStr.split("x")[0];
-		// String endStr = begin_end_ofStr.split("x")[1];
+		
+		
 		logging.info(this, "createStringOfArray strArrToReplace " + strArrToReplace);
 		logging.info(this, "createStringOfArray strArrToReplace.length " + strArrToReplace.length + "if statement: "
 				+ (strArrToReplace.length > 1));

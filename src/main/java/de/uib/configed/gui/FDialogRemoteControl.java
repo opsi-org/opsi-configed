@@ -14,7 +14,7 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 	String selText;
 
 	public FDialogRemoteControl() {
-		// de.uib.configed.configed.getResourceValue("FEditObject.SaveButtonTooltip")
+		
 		loggingPanel.setVisible(true);
 	}
 

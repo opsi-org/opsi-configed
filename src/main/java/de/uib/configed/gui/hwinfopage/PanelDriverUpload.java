@@ -226,7 +226,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		label_uploading = new JLabel("uploading");
 		// waitingImage = new
-		// ImagePanel(Globals.createImage("images/waitingcircle.gif"));
+		
 
 		initComponents();
 
@@ -373,7 +373,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		fieldDriverPath = new JTextShowField(true);
 		fieldDriverPath.getDocument().addDocumentListener(new FileNameDocumentListener());
-		// fieldDriverPath.setToolTipText(configed.getResourceValue("PanelDriverUpload.hintDriverToIntegrate"));
+		
 
 		final JPanel thisPanel = this;
 
@@ -491,7 +491,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		buttonUploadDrivers.setEnabled(false);
 		buttonUploadDrivers.setSelectedIcon(Globals.createImageIcon("images/upload2product.png", ""));
 		// buttonUploadDrivers.setDisabledIcon(
-		// Globals.createImageIcon("images/waitingcircle.gif", "") );
+		
 
 		buttonUploadDrivers.setEnabled(false);
 

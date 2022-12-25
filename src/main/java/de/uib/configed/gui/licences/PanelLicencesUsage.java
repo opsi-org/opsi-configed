@@ -117,7 +117,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 
 	private void initComponents() {
 
-		// testfield = new JTextField(" ");
+		
 
 		panelUsage = new PanelGenEditTable(configed.getResourceValue("ConfigedMain.Licences.SectiontitleUsage"), 0,
 				true, 0, false, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
@@ -131,10 +131,10 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 		panelUsage.showFilterIcon(true);
 
 		// panelKeys = new
-		// PanelGenEditTable(configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceUsable"),
+		
 
 		// panelWindowsSoftwareIds = new
-		// PanelGenEditTable(configed.getResourceValue("ConfigedMain.Licences.SectiontitleWindowsSoftwareIDs"),
+		
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 

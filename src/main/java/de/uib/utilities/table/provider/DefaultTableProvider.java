@@ -100,7 +100,7 @@ public class DefaultTableProvider implements TableProvider {
 	@Override
 	public void setWorkingCopyAsNewOriginalRows() {
 
-		// "deep" rows = rowsCopy:
+		
 
 		if (rows == null) {
 

@@ -21,7 +21,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 	public PanelRegisteredSoftware(ControlPanelAssignToLPools controller) {
 		super("",
-				// configed.getResourceValue("ConfigedMain.Licences.SectiontitleWindowsSoftware2LPool"),
+				
 				0, true, 2, true, new int[] { PanelGenEditTable.POPUP_RELOAD }, true
 
 		);

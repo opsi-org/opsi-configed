@@ -234,21 +234,21 @@ public class SSHConnect {
 				session = jsch.getSession(connectionInfo.getUser(), connectionInfo.getHost(),
 						Integer.valueOf(connectionInfo.getPort()));
 				logging.info(this, "connect this.password "
-						// + connectionInfo.getPassw() + " "
+						
 						+ SSHCommandFactory.getInstance().confidential);
 
 				session.setPassword(connectionInfo.getPassw());
 				logging.info(this, "connect useKeyfile " + connectionInfo.usesKeyfile() + " use password …");
 			}
 
-			// session.setConfig("StrictHostKeyChecking", "no");
+			
 
 			Properties config = new Properties();
 			config.put("StrictHostKeyChecking", "no");
-			// config.put("PreferredAuthentications", "password");
+			
 			jsch.setConfig(config);
 
-			// session.setConfig("kex", "diffie-hellman-group1-sha1"); //hope, that this
+			
 			// will prevent session ending
 			// cf
 			// https://stackoverflow.com/questions/37280442/jsch-0-1-53-session-connect-throws-end-of-io-stream-read

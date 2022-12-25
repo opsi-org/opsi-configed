@@ -73,7 +73,7 @@ public class Relation extends ArrayList<StringValuedRelationElement> {
 	}
 
 	// for each attribute:
-	// produce the function which maps any "key" value of this attribute to the list
+	
 	// of all entries which have this value
 	public Map<String, Relation> getFunctionBy(String attribute) {
 		Map<String, Relation> function = functionByAttribute.get(attribute);
@@ -95,7 +95,7 @@ public class Relation extends ArrayList<StringValuedRelationElement> {
 
 			valueList.add(element);
 
-			// valueTakenAsKey + " composed valueList " +valueList);
+			
 
 		}
 

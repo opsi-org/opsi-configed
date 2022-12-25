@@ -113,7 +113,7 @@ public class configed {
 			new String[] { "--help", "", "Give this help" },
 			new String[] { "--loglevel L", "",
 					"Set logging level L, L is a number >= " + logging.LEVEL_NONE + ", <= " + logging.LEVEL_SECRET
-							+ " . DEFAULT: " + de.uib.utilities.logging.logging.LOG_LEVEL_CONSOLE },
+							+ " . DEFAULT: " + logging.LOG_LEVEL_CONSOLE },
 			new String[] { "--halt", "", "Use  first occurring debug halt point that may be in the code" },
 
 			// implemented in PersistenceController "},
@@ -261,7 +261,6 @@ public class configed {
 		}
 
 		for (int i = 0; i < usageLines.length; i++) {
-			// System.out.println("usageLines " + i + ", " + 0 + usageLines[i][0]);
 
 			int startedTabs0 = (usageLines[i][0].length() / tabWidth);
 			int startedTabs1 = (usageLines[i][1].length() / tabWidth);
@@ -273,7 +272,6 @@ public class configed {
 
 	protected static boolean isValue(String[] args, int i) {
 
-		// i + " has - " + (args[i].indexOf('-') == 0) );
 		return i >= args.length || args[i].indexOf('-') == 0;
 	}
 
@@ -327,7 +325,7 @@ public class configed {
 			Object value = sysProperties.get(name);
 			String key = name;
 			if (key.length() > 5 && key.substring(0, 5).equals("java."))
-				key = key.substring(5); // omitting "java."
+				key = key.substring(5);
 
 			logging.info(key + ":: " + value);
 
@@ -775,10 +773,6 @@ public class configed {
 				out.println("</body>");
 				out.println("</HTML>");
 
-				// String osName = System.getProperty("os.name");
-
-				// Process proc = rt.exec("cmd.exe /c start \"" + messagefile.getPath() + "\"");
-
 				// //Linux, we assume that there is a firefox and it will handle the url
 
 			}
@@ -824,8 +818,7 @@ public class configed {
 			if (SHOW_LOCALIZATION_STRINGS) {
 				logging.info("LOCALIZE " + key + " by " + result);
 				result = "" + result + "[[" + key + "]]";
-				// result = " for " + Messages.getSelectedLocale() + " " + result + "[[" + key +
-				// "]]";
+
 			}
 		} catch (MissingResourceException mre) {
 			// we return the key and log the problem:
@@ -837,7 +830,7 @@ public class configed {
 				if (SHOW_LOCALIZATION_STRINGS) {
 					logging.info("LOCALIZE " + key + " by " + result);
 					result = "" + result + "?? [[" + key + "]]";
-					// result = " for " + Messages.getSelectedLocale() + "
+
 				}
 			} catch (MissingResourceException mre2) {
 				logging.debug("Problem: " + mre2.toString());
@@ -913,18 +906,9 @@ public class configed {
 					UIManager.setLookAndFeel(info.getClassName());
 					logging.info("Nimbus look&feel set, by " + info.getClassName());
 
-					// UIManager.put("nimbusSelectionBackground",
-					// UIManager.get("nimbusLightBackground"));
-
 					UIManager.put("Tree.selectionBackground", UIManager.get("controlHighlight"));
-					// was chosen: UIManager.put("nimbusSelectionBackground",
-					// UIManager.get("controlHighlight"));
+
 					// UIManager.put("Tree[Enabled+Selected].collapsedIconPainter", new
-
-					// UIManager.put("Tree.rendererMargins", new Insets(0,0,0,0));
-
-					// UIManager.put("Tree.drawHorizontalLines", true);
-					// UIManager.put("Tree.drawVerticalLines", true);
 
 					UIManager.put("TreeUI", de.uib.configed.tree.ClientTreeUI.class.getName());
 
@@ -957,9 +941,6 @@ public class configed {
 				logging.debug("UIManager.setLookAndFeel('javax.swing.plaf.metal.MetalLookAndFeel')," + ex);
 			}
 		}
-
-		// UIManager.put("SplitPane.dividerFocusColor", Globals.backBlue);
-		// UIManager.put("SplitPane.darkShadow", Globals.backBlue);
 
 		/*
 		 * UIManager.put("ProgressBar.background", Globals.backLightBlue);
@@ -1029,7 +1010,6 @@ public class configed {
 
 			de.uib.configed.clientselection.SavedSearchQuery query = new de.uib.configed.clientselection.SavedSearchQuery();
 
-			// + ", " + group);
 			query.setArgs(host, user, password, savedSearch, group);
 			query.addMissingArgs();
 			List<String> newGroupMembers = query.runSearch(false);

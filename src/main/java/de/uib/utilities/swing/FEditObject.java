@@ -138,8 +138,8 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		editingArea.addKeyListener(this);
 
-		// okbutton.setText("ok");
-		// cancelbutton.setText("cancel");
+		
+		
 
 		buttonCommit.addActionListener(this);
 		buttonCancel.addActionListener(this);
@@ -454,7 +454,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	// interface KeyListener
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// loggig.debug(this, " key event " + e);
+		
 
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			commit();

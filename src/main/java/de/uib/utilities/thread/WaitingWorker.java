@@ -79,7 +79,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 			timeoutReached = (elapsedMillis >= waitingSleeper.getWaitingMillis());
 
-			// firePropertyChange("elapsedMins", 0, elapsedMins);
+			
 
 		}
 
@@ -104,15 +104,15 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 		long millis = listOfMillis.get(listOfMillis.size() - 1);
 
 		statusLabel.setText(
-				// "passed " + giveTimeSpan( millis) +
+				
 				waitingSleeper.setLabellingStrategy(millis));
-		// " " + configed .getResourceValue("FStartWakeOnLan.timeLeft") + " " +
+		
 		// Globals.giveTimeSpan( waitingSleeper.getWaitingMillis() -
 
 		int barLength = progressBar.getMaximum() - progressBar.getMinimum();
 
-		// ":: progressBar.getMinimum() " + progressBar.getMinimum()
-		// + ":: millis " + millis + " :: waitingMillis " + waitingMillis + " :: min + "
+		
+		
 
 		logging.debug(this, "process, millis " + millis);
 		double proportion = ((double) millis) / (double) waitingSleeper.getOneProgressBarLengthWaitingMillis();

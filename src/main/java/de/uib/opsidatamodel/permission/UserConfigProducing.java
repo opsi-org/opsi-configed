@@ -225,7 +225,7 @@ public class UserConfigProducing {
 	protected void supplyAllPermissionEntries(java.util.Set<String> userParts, java.util.Set<String> roleParts) {
 		logging.info(this, "supplyAllPermissionEntries start");
 
-		// separateServerConfigsTreeSection( UserConfig.KEY_USER_ROOT + "." +
+		
 
 		// separateServerConfigsTreeSection( userPart().substring( 0,
 
@@ -267,7 +267,7 @@ public class UserConfigProducing {
 		logging.info(this, "supplyAllPermissionEntries for userparts " + userParts);
 
 		for (String username : userParts)
-		// String username = "admindepot1"; //testing
+		
 		{
 			String roleToPlay = UserConfig.DEFAULT_ROLE_NAME;
 			String usernameStartkey = UserConfig.KEY_USER_ROOT + ".{" + username + "}.";
@@ -463,7 +463,7 @@ public class UserConfigProducing {
 
 			}
 
-			// configKey + " -- partkey " + partkey);
+			
 
 		}
 
