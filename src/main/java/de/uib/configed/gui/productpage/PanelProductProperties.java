@@ -164,7 +164,7 @@ public class PanelProductProperties extends JSplitPane
 						String productEdited = "" + theTable.getValueAt(row, columnNames.indexOf("productId"));
 
 						String depotId = ""
-						
+
 						;
 
 						logging.info(this, "selected  depotId, product: " + depotId + ", " + productEdited);
@@ -382,13 +382,12 @@ public class PanelProductProperties extends JSplitPane
 		paneProducts.setTableModel(model);
 
 		paneProducts.setListSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
 
 		LinkedHashMap<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
 		sortDescriptor.put(columnNames.indexOf("productId"), SortOrder.ASCENDING); // productId
 		sortDescriptor.put(columnNames.indexOf("productVersion"), SortOrder.ASCENDING); // productId
 		sortDescriptor.put(columnNames.indexOf("packageVersion"), SortOrder.ASCENDING); // productId
-		
+
 		// //productId
 
 		paneProducts.setSortOrder(sortDescriptor);

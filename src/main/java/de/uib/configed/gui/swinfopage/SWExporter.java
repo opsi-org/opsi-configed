@@ -188,8 +188,6 @@ public abstract class SWExporter {
 		if (exportDirectory != null)
 			exportDirectoryS = exportDirectory.toString();
 
-		
-
 		Vector<String> columnNames;
 		Vector<String> classNames;
 

@@ -270,7 +270,7 @@ public class FGroupActions extends SecondaryFrame {
 
 	private void defineTopPanel(JPanel panel) {
 		JLabel groupNameLabel = new JLabel(configed.getResourceValue("FGroupAction.groupname"));
-		
+
 		JLabel clientsCountLabel = new JLabel(configed.getResourceValue("FGroupAction.clientcounter"));
 
 		fieldGroupname = new JTextField();

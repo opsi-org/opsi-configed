@@ -86,7 +86,6 @@ public class PanelMountShare extends JPanel {
 	private void defineLayout() {
 
 		// mountShareLabel = new JLabel(
-		
 
 		mountShareLabel = new JLabel("");
 
@@ -149,7 +148,7 @@ public class PanelMountShare extends JPanel {
 
 		String call;
 		call = "explorer.exe " + " \"" + np.produceName() + "\"";
-		
+
 		// call = "cmd.exe /c start \"\" \"" + fileName +FileUtils "\"";
 		logging.info(this, "windows call: " + call);
 

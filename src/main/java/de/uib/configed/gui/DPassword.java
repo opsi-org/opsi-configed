@@ -124,7 +124,7 @@ public class DPassword extends JDialog // implements Runnable
 			waitingProgressBar = new JProgressBar();
 
 			// waitingProgressBar.setToolTipText(
-			
+
 			waitingProgressBar.setValue(0);
 			waitingProgressBar.setEnabled(true);
 
@@ -412,7 +412,6 @@ public class DPassword extends JDialog // implements Runnable
 
 		fieldUser.setText(TESTUSER);
 		fieldUser.addKeyListener(myKeyListener);
-		
 
 		fieldUser.setMargin(new Insets(0, 3, 0, 3));
 
@@ -432,7 +431,6 @@ public class DPassword extends JDialog // implements Runnable
 		 */
 
 		// JCheckBox checkGzip = new
-		
 
 		JCheckBox checkCompression = new JCheckBox(configed.getResourceValue("DPassword.checkCompression"),
 				de.uib.opsicommand.JSONthroughHTTP.compressTransmission);
@@ -606,11 +604,7 @@ public class DPassword extends JDialog // implements Runnable
 		 * });
 		 */
 
-		
-		
-		
 		// jLabelVersion.setText( sprintf(
-		
 
 		MessageFormat messageFormatVersion = new MessageFormat(configed.getResourceValue("DPassword.jLabelVersion"));
 		jLabelVersion.setText(messageFormatVersion
@@ -633,8 +627,6 @@ public class DPassword extends JDialog // implements Runnable
 		 * br.close();
 		 * }
 		 */
-
-		
 
 		pack();
 
@@ -685,8 +677,6 @@ public class DPassword extends JDialog // implements Runnable
 		if (waitCursor != null)
 			waitCursor.stop(); // we want only one running instance
 
-		
-
 		// correctly
 
 		tryConnecting();
@@ -720,7 +710,7 @@ public class DPassword extends JDialog // implements Runnable
 		logging.info(this, "invoking PersistenceControllerFactory host, user, " +
 		// .password " +
 				fieldHost.getSelectedItem() + ", " + fieldUser.getText()
-		
+
 		);
 
 		if (waitingTask != null && !waitingTask.isReady()) {

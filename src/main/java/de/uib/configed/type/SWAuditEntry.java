@@ -40,7 +40,7 @@ public class SWAuditEntry extends TableEntry
 	public static final String WINDOWSsOFTWAREid = "windowsSoftwareID";
 
 	public static final String EXISTING_IDS = "(variants)";
-	
+
 	// should be LicencepoolEntry.idSERVICEKEY
 
 	private static List<String> KEYS;
@@ -95,7 +95,7 @@ public class SWAuditEntry extends TableEntry
 		key2serverKey.put(SUBVERSION, "subVersion");
 		key2serverKey.put(ARCHITECTURE, "architecture");
 		key2serverKey.put(LANGUAGE, "language");
-		
+
 		key2serverKey.put(WINDOWSsOFTWAREid, "windowsSoftwareId");
 	}
 
@@ -107,11 +107,11 @@ public class SWAuditEntry extends TableEntry
 		locale.put(NAME, configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
 		locale.put(VERSION, configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
 		// locale.put(subversion,
-		
+
 		locale.put(ARCHITECTURE, configed.getResourceValue("PanelSWInfo.tableheader_architecture"));
 		locale.put(LANGUAGE, configed.getResourceValue("PanelSWInfo.tableheader_displayLanguage"));
 		// locale.put(LICENCEkEY,
-		
+
 		locale.put(WINDOWSsOFTWAREid, configed.getResourceValue("PanelSWInfo.tableheader_softwareId"));
 	}
 
@@ -159,14 +159,11 @@ public class SWAuditEntry extends TableEntry
 
 		remap(NAME, key2serverKey.get(NAME));
 		remap(VERSION, key2serverKey.get(VERSION));
-		
+
 		remap(ARCHITECTURE, key2serverKey.get(ARCHITECTURE));
 		remap(LANGUAGE, key2serverKey.get(LANGUAGE));
 
 		remap(WINDOWSsOFTWAREid, "windowsSoftwareId");
-		
-		
-		
 
 		String subversion // not included in key-values
 				= entryRetrieved.get(key2serverKey.get(SUBVERSION));
@@ -188,7 +185,6 @@ public class SWAuditEntry extends TableEntry
 		if (entry.get("lastseen") != null)
 			lastseen = entry.get("lastseen").toString();
 
-		
 		put(id, ident);
 
 		/*

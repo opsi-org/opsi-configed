@@ -37,13 +37,11 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	protected JPanel southPanel = new JPanel();
 
 	protected JButton jButton1 = new JButton();
-	
 
 	protected int preferredWidth;
 	protected int preferredHeight;
 
 	// protected String button0Text =
-	
 
 	protected int noOfButtons = 1;
 	protected int result = -1;

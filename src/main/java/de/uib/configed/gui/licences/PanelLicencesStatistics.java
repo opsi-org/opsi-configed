@@ -32,8 +32,6 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 
 	private void initComponents() {
 
-		
-
 		panelStatistics = new PanelGenEditTable(
 				configed.getResourceValue("ConfigedMain.Licences.SectiontitleStatistics"), 1000, false, // editing
 				0, // popupPosition

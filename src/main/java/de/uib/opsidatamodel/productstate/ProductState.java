@@ -232,7 +232,6 @@ public class ProductState extends HashMap<String, String> {
 				installationInfo.append(ActionResult.getDisplayLabel(result.getVal()));
 			}
 			// else
-			
 
 			if (lastAction.getVal() > 0) {
 				installationInfo.append(" (");

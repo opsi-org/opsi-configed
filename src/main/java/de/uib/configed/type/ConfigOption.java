@@ -96,10 +96,6 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 				put("selectionMode", ListSelectionModel.SINGLE_SELECTION);
 		}
 
-		
-		
-		
-		
 		// else
 
 		put("classname", "List");

@@ -590,12 +590,10 @@ public class LicensingInfoMap {
 		columnNames = new Vector<>();
 		columnNames.add(configed.getResourceValue("LicensingInfo.modules"));
 		columnNames.add(configed.getResourceValue("LicensingInfo.available"));
-		
 
 		classNames = new Vector<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
-		
 
 		try {
 
@@ -611,8 +609,6 @@ public class LicensingInfoMap {
 				line.put(configed.getResourceValue("LicensingInfo.modules"), currentModule);
 
 				// 2nd column
-				
-				
 
 				// 3rd column
 				line.put(configed.getResourceValue("LicensingInfo.available"),
@@ -639,7 +635,7 @@ public class LicensingInfoMap {
 		String newest = null;
 		try {
 			LocalDate now = LocalDate.now();
-			
+
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 			for (String key : datesKeys) {
@@ -663,7 +659,7 @@ public class LicensingInfoMap {
 		Date newest = new Date();
 		try {
 			LocalDate now = LocalDate.now();
-			
+
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 			for (String key : dates) {
@@ -702,7 +698,6 @@ public class LicensingInfoMap {
 		try {
 			LocalDate now = LocalDate.now();
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
-			
 
 			Date date = sdf.parse(d);
 

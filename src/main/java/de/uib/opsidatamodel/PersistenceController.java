@@ -10,7 +10,6 @@
 
 package de.uib.opsidatamodel;
 
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -129,15 +128,12 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String EFI_DHCPD_FILENAME = "linux/pxelinux.cfg/elilo.efi";
 	// the current real value, but it is not necessary to configure it:
 	// public static final String EFI_DHCPD_FILENAME_SHIM =
-	
+
 	// not more used:
 	// public static final String EFI_DHCPD_FILENAME_X86 =
-	
+
 	public static final String EFI_DHCPD_NOT = "";
 
-	
-	
-	
 	public static final String EFI_STRING = "efi";
 
 	public static final String KEY_USER_ROOT = "user";
@@ -179,7 +175,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 		PROPERTYCLASSES_SERVER.put(OpsiHwAuditDeviceClass.CONFIG_KEY,
 				"<html><p>configuration for hw overview table,<br />- best editing via the helper function<br />at the hw overview table!)</p></html>");
 		PROPERTYCLASSES_SERVER.put("opsiclientd", "<html>entries for the opsiclientd.conf</html>");
-		
+
 		PROPERTYCLASSES_SERVER.put("opsi-script", "<html>parameters for opsi-script on a client</html>");
 		PROPERTYCLASSES_SERVER.put("software-on-demand",
 				"<html>software on demand configuration,<br />not client specific</html>");
@@ -204,7 +200,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 		// control call,<br />not client specific</p></html>" );
 		PROPERTYCLASSES_CLIENT.put("opsiclientd", "<html>entries for the opsiclientd.conf</html>");
 		PROPERTYCLASSES_CLIENT.put("opsi-script", "<html>parameters for opsi-script on a client</html>");
-		
+
 		PROPERTYCLASSES_CLIENT.put("software-on-demand",
 				"<html>software on demand configuration,<br />not client specific</html>");
 		// PROPERTYCLASSES_CLIENT.put( OpsiPermission.CONFIGKEY_STR_USER, "<html>user

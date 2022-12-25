@@ -188,22 +188,20 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 				new MapItemsUpdateController(thePanel.panelUsage, modelLicencesUsage, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
-						return persist.editLicenceUsage((String) rowmap.get(LicenceUsageEntry.clientIdKEY), 
-								(String) rowmap.get(LicenceUsageEntry.licenceIdKEY), 
-								(String) rowmap.get(LicenceUsageEntry.licencepoolIdKEY), 
-								(String) rowmap.get(LicenceUsageEntry.licencekeyKEY), 
-								(String) rowmap.get(LicenceUsageEntry.notesKEY) 
-						);
+						return persist.editLicenceUsage((String) rowmap.get(LicenceUsageEntry.clientIdKEY),
+								(String) rowmap.get(LicenceUsageEntry.licenceIdKEY),
+								(String) rowmap.get(LicenceUsageEntry.licencepoolIdKEY),
+								(String) rowmap.get(LicenceUsageEntry.licencekeyKEY),
+								(String) rowmap.get(LicenceUsageEntry.notesKEY));
 
 					}
 
 					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencesUsage.requestReload();
-						return persist.deleteLicenceUsage((String) rowmap.get(LicenceUsageEntry.clientIdKEY), 
-								(String) rowmap.get(LicenceUsageEntry.licenceIdKEY), 
-								(String) rowmap.get(LicenceUsageEntry.licencepoolIdKEY) 
-						);
+						return persist.deleteLicenceUsage((String) rowmap.get(LicenceUsageEntry.clientIdKEY),
+								(String) rowmap.get(LicenceUsageEntry.licenceIdKEY),
+								(String) rowmap.get(LicenceUsageEntry.licencepoolIdKEY));
 					}
 				}, updateCollection));
 

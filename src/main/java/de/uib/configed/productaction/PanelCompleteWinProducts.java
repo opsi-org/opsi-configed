@@ -386,8 +386,6 @@ public class PanelCompleteWinProducts extends JPanel
 			depots.clear();
 			depots.add((String) comboChooseDepot.getSelectedItem());
 
-			
-
 			if (!oldProductKey.equals(productKey)) {
 
 				int returnedOption = JOptionPane.NO_OPTION;

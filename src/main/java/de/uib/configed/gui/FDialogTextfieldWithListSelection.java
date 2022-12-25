@@ -40,7 +40,6 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 	public void applyFraming(FramingTextfieldWithListselection defs) {
 		setTitle(defs.getTitle());
 
-		
 		labelField = new JLabel(defs.getTextfieldLabel());
 
 		labelList = new JLabel(defs.getListLabel());
@@ -174,13 +173,11 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		resultingText = theField.getText();
 		selectedListElement = theList.getSelectedValue();
 
-		
 	}
 
 	@Override
 	public int getResult() {
 
-		
 		// values are not got at this point
 		// override doAction for getting the values
 
@@ -212,8 +209,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 
 				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
 						Globals.createImageIcon("images/cancel16_small.png", "") },
-				1, 
-				600, 600, true, // lazylayout, i.e, we have a chance to define components and use them for the
+				1, 600, 600, true, // lazylayout, i.e, we have a chance to define components and use them for the
 				// layout
 				null // addPanel predefined
 		);

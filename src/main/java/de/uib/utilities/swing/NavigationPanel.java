@@ -71,7 +71,7 @@ public class NavigationPanel extends JPanel implements ActionListener {
 		Dimension navButtonDimension = new Dimension(30, Globals.BUTTON_HEIGHT - 6);
 		nextButton = new JButton();
 		nextButton.setIcon(Globals.createImageIcon("images/arrows/arrow_red_16x16-right.png", ""));
-		
+
 		// ""));
 		nextButton.setToolTipText("nächste Datenzeile");
 		nextButton.setPreferredSize(navButtonDimension);

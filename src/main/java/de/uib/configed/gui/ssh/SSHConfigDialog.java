@@ -666,7 +666,6 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		}
 
 		// de.uib.utilities.thread.WaitCursor waitCursor = new
-		
 
 		SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
 
@@ -694,7 +693,6 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		chooser.setPreferredSize(Globals.filechooserSize);
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		
 
 		String userDirLocation = System.getProperty(logging.envVariableForUserDirectory);
 		File userDir = new File(userDirLocation);

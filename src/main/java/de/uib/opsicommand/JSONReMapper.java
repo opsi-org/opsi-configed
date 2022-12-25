@@ -63,7 +63,7 @@ public class JSONReMapper {
 
 					result.put(key, list);
 				} else {
-					
+
 					String str = "" + response.get("error");
 					result.put(key, str);
 				}
@@ -96,7 +96,6 @@ public class JSONReMapper {
 		boolean responseFound = true;
 
 		logging.debug(CLASSNAME + ".checkResponse " + logging.LEVEL_DEBUG);
-		
 
 		if (retrieved == null) {
 			responseFound = false;

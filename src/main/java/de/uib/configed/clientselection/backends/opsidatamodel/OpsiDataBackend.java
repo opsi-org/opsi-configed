@@ -146,11 +146,11 @@ public class OpsiDataBackend extends Backend {
 		Object data = operation.getData();
 		String attributeTextHost = null;
 		if (element instanceof NameElement)
-			attributeTextHost = HostInfo.hostnameKEY; 
+			attributeTextHost = HostInfo.hostnameKEY;
 		else if (element instanceof IPElement)
-			attributeTextHost = HostInfo.clientIpAddressKEY; 
+			attributeTextHost = HostInfo.clientIpAddressKEY;
 		else if (element instanceof DescriptionElement)
-			attributeTextHost = HostInfo.clientDescriptionKEY; 
+			attributeTextHost = HostInfo.clientDescriptionKEY;
 		if (attributeTextHost != null) {
 			if (operation instanceof StringEqualsOperation)
 				return new OpsiDataStringEqualsOperation(OpsiDataClient.HOSTINFO_MAP, attributeTextHost,
@@ -185,7 +185,7 @@ public class OpsiDataBackend extends Backend {
 		else if (element instanceof SoftwareLastActionElement)
 			attributeTextSoftware = ProductState.KEY_lastAction;
 		else if (element instanceof SoftwareModificationTimeElement)
-			attributeTextSoftware = ProductState.KEY_lastStateChange; 
+			attributeTextSoftware = ProductState.KEY_lastStateChange;
 
 		if (attributeTextSoftware != null) {
 			if (operation instanceof StringEqualsOperation)
@@ -217,8 +217,6 @@ public class OpsiDataBackend extends Backend {
 		// return new OpsiDataIntLessThanOperation( OpsiDataClient.SOFTWARE_MAP,
 
 		// return new OpsiDataIntGreaterThanOperation( OpsiDataClient.SOFTWARE_MAP,
-
-		
 
 		// SwAudit
 		String swauditAttributeText = null;

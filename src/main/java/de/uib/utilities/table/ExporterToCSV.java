@@ -12,7 +12,7 @@ import de.uib.utilities.logging.logging;
 
 public class ExporterToCSV extends ExportTable {
 	protected String CSVencoding = "UTF8";
-	
+
 	public static final Character CSVseparator = ';';
 	protected static final String csvSep = "" + CSVseparator;
 	public static final Character stringDelimiter = '"';

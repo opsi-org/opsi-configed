@@ -109,7 +109,6 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 	private void initGUI() {
 		try {
-			
 
 			workbenchpanel = new JPanel();
 			mainpanel = new JPanel();
@@ -186,9 +185,9 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 				lbl_productVersion_controlfile = new JLabel();
 				lbl_packageVersion_controlfile = new JLabel();
 				tf_packageVersion = new JTextField();
-				
+
 				tf_productVersion = new JTextField();
-				
+
 				enableTfVersions(false);
 			}
 			{
@@ -211,7 +210,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 				btn_advancedSettings = new JButton();
 				btn_advancedSettings.setText(configed
 						.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_advancedSettings"));
-				
+
 				if (!(Globals.isGlobalReadOnly()))
 					btn_advancedSettings.addActionListener(actionEvent -> showAdvancedSettings());
 
@@ -510,8 +509,6 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			Empty_Command removeExistingPackage = new Empty_Command(command);
 			str2exec.addCommand(removeExistingPackage);
 
-			
-			
 			command = "[ -f " + filename + ".zsync ] &&  rm " + filename + ".zsync && echo \"File " + filename
 					+ ".zsync removed\" || echo \"File  " + filename + ".zsync did not exist\"";
 			// removeExistingPackage = new

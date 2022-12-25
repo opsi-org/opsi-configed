@@ -110,9 +110,6 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 		setHint(hint);
 
-		
-		
-
 		buttonCommit.addActionListener(this);
 		buttonCancel.addActionListener(this);
 
@@ -172,7 +169,6 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 	public void setDataChanged(boolean b) {
 
-		
 		dataChanged = b;
 		buttonCommit.setEnabled(b);
 		buttonCancel.setEnabled(true);

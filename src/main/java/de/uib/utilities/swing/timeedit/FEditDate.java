@@ -30,8 +30,6 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 
 	protected DateFormat dateFormat;
 
-	
-
 	public FEditDate(String initialText, boolean withTime) {
 		super(initialText);
 		areaDimension = AREA_DIMENSION;

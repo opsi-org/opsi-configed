@@ -480,7 +480,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		comboAggregatedEditing = new JComboBoxToolTip();
 		// comboAggregatedEditing.setToolTipText(
-		
 
 		/*
 		 * comboAggregatedEditing.addActionListener( new ActionListener(){
@@ -516,7 +515,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		 */
 		values.put(de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"),
 				de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked.tooltip"));
-		
+
 		// exists)");
 
 		/*
@@ -543,7 +542,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		values.put(de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked"),
 				de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked.tooltip"));
 
-		
 		// action exists)");
 
 		DefaultListModel<String> modelChooseAction = new DefaultListModel<>(); // put values from hashmap into
@@ -805,8 +803,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		separatingPlace.setBackground(Color.RED);
 		separatingPlace.setOpaque(true);
 		separatingPlace.setBorder(new javax.swing.border.LineBorder(Globals.backBlue));
-		
-		
 
 		layoutMain.setVerticalGroup(layoutMain.createSequentialGroup()
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)

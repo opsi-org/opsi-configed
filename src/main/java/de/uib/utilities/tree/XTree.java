@@ -78,8 +78,6 @@ public class XTree extends JTree {
 					return;
 				}
 
-				
-
 				if (getModel().isLeaf(currentPath.getLastPathComponent())) {
 					setCursor(infoCursor);
 					setSelectionPath(currentPath);

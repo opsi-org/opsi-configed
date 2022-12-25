@@ -63,9 +63,8 @@ public class InstallationStatus {
 		labels.add("undefined");
 		labels.add("installed");
 		labels.add("not_installed");
-		
+
 		labels.add("unknown");
-		
 
 		state2label = new HashMap<>();
 		state2label.put(CONFLICT, Globals.CONFLICT_STATE_STRING);
@@ -73,10 +72,8 @@ public class InstallationStatus {
 		state2label.put(UNDEFINED, "undefined");
 		state2label.put(INSTALLED, "installed");
 		state2label.put(NOT_INSTALLED, "not_installed");
-		
-		state2label.put(UNKNOWN, "unknown");
 
-		
+		state2label.put(UNKNOWN, "unknown");
 
 		label2state = new HashMap<>();
 		label2state.put(Globals.CONFLICT_STATE_STRING, CONFLICT);
@@ -84,9 +81,8 @@ public class InstallationStatus {
 		label2state.put("undefined", UNDEFINED);
 		label2state.put("installed", INSTALLED);
 		label2state.put("not_installed", NOT_INSTALLED);
-		
+
 		label2state.put("unknown", UNKNOWN);
-		
 
 		label2displayLabel = new HashMap<>();
 		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
@@ -94,9 +90,8 @@ public class InstallationStatus {
 		label2displayLabel.put("undefined", "undefined");
 		label2displayLabel.put("installed", "installed");
 		label2displayLabel.put("not_installed", "not_installed");
-		
+
 		label2displayLabel.put("unknown", "unknown");
-		
 
 		displayLabel2label = new HashMap<>();
 		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
@@ -104,13 +99,12 @@ public class InstallationStatus {
 		displayLabel2label.put("undefined", "undefined");
 		displayLabel2label.put("installed", "installed");
 		displayLabel2label.put("not_installed", "not_installed");
-		
+
 		displayLabel2label.put("unknown", "unknown");
-		
 
 		choiceLabels = new String[] { label2displayLabel.get("not_installed"), label2displayLabel.get("installed"),
 				label2displayLabel.get("unknown")
-				
+
 				// label2displayLabel.get(Globals.NOVALIDSTATEstring)
 		};
 

@@ -235,7 +235,6 @@ public class SSHPackageManagerUninstallParameterDialog
 		}
 		{
 
-			
 			// tf_freeInput.getDocument().addDocumentListener(new DocumentListener()
 
 			lbl_keepFiles.setText(configed
@@ -380,9 +379,10 @@ public class SSHPackageManagerUninstallParameterDialog
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.confirm") + "\n"
 						+ tf_product.getText()
 						// + cb_opsiproducts.getSelectedItem()
-						+ "\n\n" + configed
+						+ "\n\n"
+						+ configed
 								.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelOn")
-						
+
 						+ "\n\n" + tf_selecteddepots.getText());
 
 		fConfirmAction.centerOn(this);

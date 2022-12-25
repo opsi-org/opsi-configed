@@ -987,7 +987,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			else
 				i++;
 
-			
 		}
 		return found;
 	}
@@ -1003,7 +1002,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			else
 				i++;
 
-			
 		}
 		return found;
 	}

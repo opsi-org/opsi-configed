@@ -110,8 +110,6 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 		String query = "select " + columns + " from PRODUCT_ON_CLIENT " + " where  productType = 'LocalbootProduct'"
 				+ " AND \n" + " ( " + giveWhereOR("clientId", clientIds) + ") ";
 
-		
-
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 
 		Connection sqlConn = DbConnect.getConnection();
@@ -263,8 +261,6 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 		swIdentsOnlyInSoftware.removeAll(swIdentsOnClients);
 
 		logging.info(this, "cleanUpAuditSoftware  idents in SOFTWARE not on CLIENTS " + swIdentsOnlyInSoftware.size());
-
-		
 
 		int sizeOfAllRemoves = swIdentsOnlyInSoftware.size();
 

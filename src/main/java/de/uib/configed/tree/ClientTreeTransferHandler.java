@@ -128,8 +128,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	@Override
 	public int getSourceActions(JComponent c) {
 
-		
-
 		logging.debug(this, "getSourceActions,  activePaths " + tree.getActivePaths());
 
 		if (tree.getActivePaths() == null || tree.getActivePaths().isEmpty()) {

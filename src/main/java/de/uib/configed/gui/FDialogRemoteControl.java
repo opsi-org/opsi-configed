@@ -14,7 +14,7 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 	String selText;
 
 	public FDialogRemoteControl() {
-		
+
 		loggingPanel.setVisible(true);
 	}
 

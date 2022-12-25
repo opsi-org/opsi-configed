@@ -59,8 +59,6 @@ public class ListMerger extends ArrayList {
 			if (!equals(listValue, listToMergeIn)) {
 				havingCommonValue = false;
 
-				
-
 				listValue = NO_COMMON_VALUE;
 			}
 		}

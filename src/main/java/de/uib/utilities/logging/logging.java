@@ -426,7 +426,7 @@ public class logging implements LogEventSubject
 	}
 
 	public static void clearErrorList() {
-		
+
 		errorList.clear();
 	}
 

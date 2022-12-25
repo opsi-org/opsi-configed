@@ -33,7 +33,7 @@ public class SSHCompletionComboButton {
 	private final String root = "/";
 	private final String home = "~";
 	private String opsiRepo = "/"; // will be overwritten with config
-	
+
 	private String basic_search_path;
 
 	private SSHCommandFactory factory = SSHCommandFactory.getInstance();
@@ -60,13 +60,11 @@ public class SSHCompletionComboButton {
 		initButton();
 	}
 
-	public SSHCompletionComboButton(String search_specific_files, String combobox_default_path) 
-	{
+	public SSHCompletionComboButton(String search_specific_files, String combobox_default_path) {
 		this(null, search_specific_files, combobox_default_path);
 	}
 
-	public SSHCompletionComboButton(String search_specific_files) 
-	{
+	public SSHCompletionComboButton(String search_specific_files) {
 		this(null, search_specific_files, null);
 	}
 
@@ -299,7 +297,7 @@ public class SSHCompletionComboButton {
 				if (item.contains("//"))
 					combobox.addItem(item.replace("//", "/"));
 				else
-					combobox.addItem(item); 
+					combobox.addItem(item);
 			}
 			combobox.setSelectedItem(curdir);
 		}

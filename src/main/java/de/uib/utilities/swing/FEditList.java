@@ -264,9 +264,6 @@ public class FEditList extends FEditObject
 			if (celleditor != null)
 				celleditor.stopCellEditing();
 
-			
-			
-
 			if (leaveOnCommit)
 				leave();
 		}

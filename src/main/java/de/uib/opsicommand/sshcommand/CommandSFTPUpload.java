@@ -153,7 +153,7 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 
 	@Override
 	public String getMenuText() {
-		
+
 		return "File Upload";
 	}
 
@@ -179,7 +179,7 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 	@Override
 	public String getToolTipText() {
 		// return
-		
+
 		return "";
 	}
 

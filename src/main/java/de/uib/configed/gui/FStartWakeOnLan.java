@@ -90,7 +90,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		{ configed.getResourceValue("FStartWakeOnLan.start"), configed.getResourceValue("FStartWakeOnLan.cancel") },
 				750, 310);
 		this.main = main;
-		
+
 		setCalToNow();
 		centerOn(Globals.frame1);
 	}
@@ -292,7 +292,6 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 		labelStarttime = new JLabel(readTime(cal));
 
-		
 		spinnerDelay = new JSpinner();
 
 		JPanel panelTimeSelection = new JPanel();

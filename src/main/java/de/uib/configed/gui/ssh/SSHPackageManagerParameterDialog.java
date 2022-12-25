@@ -40,7 +40,6 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 
 	protected String opsiProd = persist.configedWORKBENCH_defaultvalue;
 	protected String opsiRepo = "/var/lib/opsi/repository/";
-	
 
 	private String configRepo = "repositoryLocalUrl";
 
@@ -89,11 +88,8 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 
 		// try
 
-		
-
 		logging.info(this, "getRepositoriesFromConfigs opsiRepo " + opsiRepo);
 		logging.info(this, "getRepositoriesFromConfigs opsiProd " + opsiProd);
-		
 
 		// " + opsiDepot);
 
@@ -161,7 +157,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 
 	// SSHConnectionExecHelpDialog outputDialog = new SSHConnectionExecHelpDialog(
 	// command,
-	
+
 	// \""+command.getCommand() + "\" "
 
 	/* This method gets called when button 2 is pressed */

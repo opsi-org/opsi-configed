@@ -75,7 +75,7 @@ public class ActionProgress {
 		label2displayLabel.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		label2displayLabel.put("not_available", "not_available");
 		label2displayLabel.put("none", "no process reported");
-		
+
 		label2displayLabel.put("installing", "installing");
 		label2displayLabel.put("cached", "cached");
 
@@ -84,7 +84,7 @@ public class ActionProgress {
 		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		displayLabel2label.put("not_available", "not_available");
 		displayLabel2label.put("no process reported", "none");
-		
+
 		displayLabel2label.put("installing", "installing");
 		displayLabel2label.put("cached", "cached");
 	}

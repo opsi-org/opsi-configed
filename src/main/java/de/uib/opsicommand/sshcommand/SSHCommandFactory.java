@@ -63,10 +63,6 @@ public class SSHCommandFactory {
 	// public final String str_command_comparemd5 = " if [ -z $((cat
 	// *.product.*.md5" + ") | grep $(md5sum *.product.* | head -n1 | cut -d \" \"
 
-	
-	
-	
-
 	/** ConfigedMain instance **/
 	private ConfigedMain main;
 	private MainFrame mainFrame;
@@ -99,9 +95,8 @@ public class SSHCommandFactory {
 	public static int successfulConnectObservedCount = 0;
 
 	/** default parameter replace id beginns with <<< **/
-	
+
 	/** default parameter replace id ends with >>> **/
-	
 
 	/** setting ssh_colored_output per default true **/
 	public static boolean ssh_colored_output = true;
@@ -208,7 +203,6 @@ public class SSHCommandFactory {
 				|| main.getOpsiVersion().compareTo("4.1") < 0))
 			ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandRepositoryUpload());
 
-		
 		// nicht abgefragt.
 		// ssh_commands_param.add(new
 
@@ -220,8 +214,6 @@ public class SSHCommandFactory {
 
 		ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandOpsiSetRights());
 		// ssh_commands_param.add(new SSHCommand_Template(opsisetrights, coms,
-		
-		
 
 		ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandDeployClientAgent());
 
@@ -433,7 +425,7 @@ public class SSHCommandFactory {
 	 **/
 	private Map<String, Object> buildCommandMap(SSHCommand_Template c) {
 		Map<String, Object> com = new HashMap<>();
-		
+
 		com.put(command_map_menuText, c.getMenuText());
 		com.put(command_map_parentMenuText, c.getParentMenuText());
 		com.put(command_map_tooltipText, c.getToolTipText());

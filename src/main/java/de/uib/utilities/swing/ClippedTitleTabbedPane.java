@@ -96,7 +96,7 @@ public class ClippedTitleTabbedPane extends JTabbedPane {
 			tabWidth = areaWidth / tabCount;
 			gap = areaWidth - (tabWidth * tabCount);
 		}
-		
+
 		tabWidth = tabWidth - tabInsets.left - tabInsets.right - 3;
 		for (int i = 0; i < tabCount; i++) {
 			JLabel l = (JLabel) getTabComponentAt(i);

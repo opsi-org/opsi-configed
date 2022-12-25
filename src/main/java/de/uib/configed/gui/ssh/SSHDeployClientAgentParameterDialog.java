@@ -97,7 +97,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 				.get(main.getPersistenceController().KEY_SSH_DEFAULTWINUSER);
 		if (result_config_list == null || result_config_list.isEmpty()) {
 			// defaultWinUser =
-			
+
 			logging.info(this, "KEY_SSH_DEFAULTWINUSER not existing");
 
 			// the config will be created in this run of configed
@@ -110,7 +110,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		result_config_list = (ArrayList<Object>) configs.get(main.getPersistenceController().KEY_SSH_DEFAULTWINPW);
 		if (result_config_list == null || result_config_list.isEmpty()) {
 			// defaultWinUser =
-			
+
 			logging.info(this, "KEY_SSH_DEFAULTWINPW not existing");
 
 			// the config will be created in this run of configed
@@ -239,13 +239,11 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			tf_passw.setEchoChar('*');
 
 			// cb_passw_echo = new
-			
 
 			// btn_showPassw = new JButton("",
-			
-			
+
 			btn_showPassw = new JButton(Globals.createImageIcon("images/eye_blue_open.png", ""));
-			
+
 			// btn_showPassw.setPreferredSize(new Dimension(Globals.squareButtonWidth,
 
 			btn_showPassw.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
@@ -276,8 +274,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			lbl_finalize.setText(
 					configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.lbl_finalize"));
 
-			panelFinalAction = new PanelStateSwitch(null, 
-					(Enum) CommandDeployClientAgent.FinalActionType.START_OCD,
+			panelFinalAction = new PanelStateSwitch(null, (Enum) CommandDeployClientAgent.FinalActionType.START_OCD,
 					CommandDeployClientAgent.FinalActionType.values(),
 					new String[] {
 							configed.getResourceValue(
@@ -313,8 +310,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			btn_copy_selected_clients = new JButton(configed
 					.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.btn_copy_selected_clients"));
 			// btn_copy_selected_clients.setToolTipText(
-			
-			
 
 			btn_copy_selected_clients.addActionListener(actionEvent -> doCopySelectedClients());
 

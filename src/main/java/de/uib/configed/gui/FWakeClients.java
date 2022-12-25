@@ -69,8 +69,6 @@ public class FWakeClients extends FShowList {
 
 					if (executionerForDepots.get(depot) != Executioner.NONE) {
 						String host = hostSeparationByDepots.get(depot).get(turn);
-						
-						
 
 						String line = String.format("trying to start up   %s    from depot    %s  ", host, depot);
 						appendLine(line);

@@ -123,7 +123,6 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		buttonSelectWithEqualProperties.setForeground(Globals.blue);
 
 		// jLabelProductProperties = new JLabel (
-		
 
 		jLabelEditDepotProductProperties = new JLabel(
 				configed.getResourceValue("ProductInfoPane.jLabelEditDepotProductProperties"));

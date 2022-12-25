@@ -79,7 +79,6 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		searches.put(name, controller.getSavedSearches().get(name).getSerialization());
 
 		// controller.getSavedSearches().get(name)
-		
 
 		String serialization = searches.get(name);
 		return decipher(serialization);

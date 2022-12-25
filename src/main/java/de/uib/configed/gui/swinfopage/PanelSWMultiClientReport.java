@@ -227,8 +227,6 @@ public class PanelSWMultiClientReport extends JPanel {
 					configed.savedStates.saveSWauditKindOfExport.serialize("" + val);
 				}));
 
-		
-
 		String koe = configed.savedStates.saveSWauditKindOfExport.deserialize();
 		panelSelectExportType.setValueByString(koe);
 

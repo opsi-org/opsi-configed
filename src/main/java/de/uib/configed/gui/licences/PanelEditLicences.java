@@ -40,8 +40,6 @@ public class PanelEditLicences extends MultiTablePanel {
 
 	private void initComponents() {
 
-		
-
 		panelKeys = new PanelGenEditTable(
 				configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"), 0, true, 1, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,

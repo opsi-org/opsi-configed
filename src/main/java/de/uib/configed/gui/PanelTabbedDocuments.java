@@ -222,7 +222,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 				chooserDirectory = chooser.getCurrentDirectory();
 			} else {
 				logging.error("Not a valid filename: " + fileName);
-				
+
 			}
 		}
 
@@ -240,7 +240,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		while (i < lines.length) {
 			try {
 				fWriter.write(lines[i] + "\n");
-				
+
 			} catch (IOException ex) {
 				logging.error("Error writing file: " + fn + "\n --- " + ex);
 			}

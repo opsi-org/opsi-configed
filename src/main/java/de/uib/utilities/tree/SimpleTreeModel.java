@@ -33,12 +33,12 @@ public class SimpleTreeModel extends DefaultTreeModel
 
 	public SimpleTreeModel(java.util.Set<String> dottedKeys, Map<String, String> tooltips) {
 		super(new SimpleIconNode(""));
-		
+
 		logging.debug(this, "SimpleTreeModel created for " + dottedKeys);
 		setAsksAllowsChildren(true);
 
 		ROOT = (SimpleIconNode) getRoot();
-		
+
 		// table"));
 
 		this.tooltips = tooltips;
@@ -143,7 +143,6 @@ public class SimpleTreeModel extends DefaultTreeModel
 		 */
 
 		XTree tree = new XTree(this);
-		
 
 		tree.setCellRenderer(new SimpleIconNodeRenderer());
 

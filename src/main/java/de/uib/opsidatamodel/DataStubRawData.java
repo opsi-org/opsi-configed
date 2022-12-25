@@ -427,8 +427,6 @@ public class DataStubRawData extends DataStubNOM {
 
 			}
 
-			
-
 			if (client2software == null)
 				client2software = new HashMap<>();
 
@@ -619,8 +617,6 @@ public class DataStubRawData extends DataStubNOM {
 	@Override
 	protected void retrieveHostConfigs() {
 
-		
-
 		if (hostConfigs != null)
 			return;
 
@@ -639,7 +635,6 @@ public class DataStubRawData extends DataStubNOM {
 				+ ConfigStateEntry.DB_TABLE_NAME + "." + ConfigStateEntry.VALUES;
 
 		String query = "select " + columns + " from " + ConfigStateEntry.DB_TABLE_NAME + " ";
-		
 
 		logging.info(this, "retrieveHostConfigs, query " + query);
 
@@ -758,8 +753,6 @@ public class DataStubRawData extends DataStubNOM {
 					+ persist.hwInfo_CONFIG);
 			String part0 = hwInfoCol.substring(0, persist.hwInfo_DEVICE.length());
 
-			
-
 			boolean colFound = false;
 			// check if colname is from a CONFIG or a DEVICE table
 			if (hwInfoCol.substring(part0.length()).startsWith(hwClass)) {
@@ -804,9 +797,6 @@ public class DataStubRawData extends DataStubNOM {
 
 		buf.append("\n where ");
 
-		
-
-		
 		buf.append(Host.idColumn);
 		buf.append(" = ");
 		buf.append(configTable);

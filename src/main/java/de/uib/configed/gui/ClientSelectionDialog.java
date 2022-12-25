@@ -371,14 +371,12 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		JLabel nameLabel = new JLabel(configed.getResourceValue("ClientSelectionDialog.nameColumn"));
 		nameLabel.setFont(font);
 		// JLabel operationLabel = new JLabel(
-		
 
 		JLabel dataLabel = new JLabel(configed.getResourceValue("ClientSelectionDialog.dataColumn"));
 		dataLabel.setFont(font);
 		JLabel connectionLabel = new JLabel(configed.getResourceValue("ClientSelectionDialog.connectionColumn"));
 		connectionLabel.setFont(font);
 		// JLabel removeLabel = new JLabel(
-		
 
 		vHeadlines.addComponent(negationLabel);
 		vHeadlines.addComponent(nameLabel);
@@ -1405,11 +1403,10 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 				return;
 			}
-			
+
 			else if (!text.matches("[\\p{javaLowerCase}\\d_-]*")) {
-				JOptionPane.showMessageDialog(saveButton, "wrong name", 
-						"error", 
-						
+				JOptionPane.showMessageDialog(saveButton, "wrong name", "error",
+
 						JOptionPane.OK_OPTION);
 
 				toFront();

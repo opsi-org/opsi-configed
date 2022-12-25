@@ -22,7 +22,6 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 public abstract class ExportTable {
 	protected javax.swing.JTable theTable;
 
-	
 	protected Vector<String> classNames;
 	protected HashMap<String, String> metaData;
 
@@ -82,7 +81,7 @@ public abstract class ExportTable {
 	public JMenuItemFormatted getMenuItemExport() {
 		JMenuItemFormatted menuItem = new JMenuItemFormatted(
 				configed.getResourceValue("PanelGenEditTable.exportTableAsCSV")
-		
+
 		);
 		menuItem.addActionListener(actionEvent -> execute(null, false));
 		return menuItem;
@@ -97,7 +96,7 @@ public abstract class ExportTable {
 	public JMenuItemFormatted getMenuItemExportSelected() {
 		JMenuItemFormatted menuItem = new JMenuItemFormatted(
 				configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV")
-		
+
 		);
 		menuItem.addActionListener(actionEvent -> {
 			boolean onlySelected = true;
@@ -201,7 +200,7 @@ public abstract class ExportTable {
 			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 			// javax.swing.filechooser.FileNameExtensionFilter filter = new
 			// javax.swing.filechooser.FileNameExtensionFilter(
-			
+
 			chooser.addChoosableFileFilter(exFilter);
 			chooser.setPreferredSize(Globals.filechooserSize);
 
@@ -349,7 +348,7 @@ public abstract class ExportTable {
 		chooser.setPreferredSize(Globals.filechooserSize);
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("PDF", "pdf"));
-		
+
 		chooser.setSelectedFile(defaultFile);
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setDialogTitle(Globals.APPNAME + " " + configed.getResourceValue("DocumentExport.chooser"));

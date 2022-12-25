@@ -133,7 +133,6 @@ public class DataStubNOM extends DataStub {
 			logging.debug(this, "retrieveProductInfos callAttributes " + Arrays.asList(callAttributes));
 
 			HashMap callFilter = new HashMap<>();
-			
 
 			persist.notifyDataLoadingObservers(configed.getResourceValue("LoadingObserver.loadtable") + " product");
 
@@ -424,10 +423,6 @@ public class DataStubNOM extends DataStub {
 				String propertyId = (String) retrievedMap.get("propertyId");
 				String productId = (String) retrievedMap.get("productId");
 
-				
-
-				
-
 				String productVersion = (String) retrievedMap.get(OpsiPackage.SERVICEkeyPRODUCT_VERSION);
 				String packageVersion = (String) retrievedMap.get(OpsiPackage.SERVICEkeyPACKAGE_VERSION);
 				String versionInfo = productVersion + Globals.ProductPackageVersionSeparator.forKey() + packageVersion;
@@ -551,7 +546,6 @@ public class DataStubNOM extends DataStub {
 					dependencyInfo.put("requiredInstallationStatus", requiredInstallationStatus);
 					dependencyInfo.put("requirementType", requirementType);
 
-					
 					dependencyInfos.add(dependencyInfo);
 
 				}
@@ -778,9 +772,9 @@ public class DataStubNOM extends DataStub {
 
 			persist.notifyDataLoadingObservers(configed.getResourceValue("LoadingObserver.loadtable") + " software");
 
-			String[] callAttributes = new String[] { SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME), 
+			String[] callAttributes = new String[] { SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME),
 					// element
-					SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION), 
+					SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION),
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.SUBVERSION), // key element
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE), // key element
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.ARCHITECTURE), // key element
@@ -1064,8 +1058,6 @@ public class DataStubNOM extends DataStub {
 					clientListForCall.add(newClients.get(i));
 
 				newClients.removeAll(clientListForCall);
-
-				
 
 				if (client2software == null)
 					client2software = new HashMap<>();

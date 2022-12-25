@@ -63,7 +63,6 @@ public class DependenciesTreeModel {
 
 		// Erstmal die Dependencies laden
 		Map<String, List<Map<String, String>>> dependencies = pc.getProductDependencies(depotId);
-		
 
 		productList = new LinkedList<>(dependencies.keySet());
 

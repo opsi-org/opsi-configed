@@ -121,8 +121,7 @@ public class ControllerHWinfoMultiClients {
 	}
 
 	protected void initPanel() {
-		panel = new PanelGenEditTable("", 
-				0, false, 0, false,
+		panel = new PanelGenEditTable("", 0, false, 0, false,
 
 				PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF, true) {
 			@Override
@@ -207,11 +206,8 @@ public class ControllerHWinfoMultiClients {
 
 	protected void buildSurrounding() {
 
-		
-
 		// Icon iconConfigure =
-		
-		
+
 		buttonConfigureColumns = new JButton("", Globals.createImageIcon("images/configure16.png", ""));
 		buttonConfigureColumns.setToolTipText(configed.getResourceValue("PanelHWInfo.overview.configure"));
 		buttonConfigureColumns.setPreferredSize(Globals.smallButtonDimension);
@@ -225,8 +221,6 @@ public class ControllerHWinfoMultiClients {
 			logging.info(this, "action performed " + actionEvent);
 			rebuildModel();
 		});
-
-		
 
 		buttonConfigureColumns.addActionListener(actionEvent -> {
 			logging.info(this, "action performed " + actionEvent);

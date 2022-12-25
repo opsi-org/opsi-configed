@@ -134,7 +134,7 @@ public class PersistenceControllerFactory {
 				if (persistControl.getOpsiVersion().compareTo(Globals.MIN_SUPPORTED_OPSI_VERSION) < 0) {
 					String errorInfo = configed
 							.getResourceValue("PersistenceControllerFactory.supportEndedForThisVersion")
-							
+
 							+ "\n( " + configed.getResourceValue("PersistenceControllerFactory.foundServiceVersion")
 							+ " " + persistControl.getOpsiVersion() + " ) ";
 

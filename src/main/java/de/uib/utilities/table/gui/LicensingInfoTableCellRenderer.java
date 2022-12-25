@@ -38,15 +38,13 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 
 		if (columnName != null && (columnName.equals(configed.getResourceValue("LicensingInfo.modules")))
 				| columnName.equals(configed.getResourceValue("LicensingInfo.available"))
-		
+
 		)
 			jc.setToolTipText(value.toString());
 
 		if (columnName != null && columnName.equals(configed.getResourceValue("LicensingInfo.modules"))) {
-			
-			// jc = new JLabel("" + value, Globals.createImageIcon("images/info_i.png", ""),
 
-			
+			// jc = new JLabel("" + value, Globals.createImageIcon("images/info_i.png", ""),
 
 			/**
 			 * JButton infoButton = new JButton ("" + value,
@@ -73,8 +71,6 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			else
 				jc.setIcon(Globals.createImageIcon("images/checked_void.png", ""));
 
-			
-
 		}
 		/*
 		 * if(columnName != null &&
@@ -87,7 +83,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 		 */
 		else if (columnName != null && !columnName.equals(configed.getResourceValue("LicensingInfo.modules"))
 				&& !columnName.equals(configed.getResourceValue("LicensingInfo.available"))
-		
+
 		) {
 			Map<String, Map<String, Map<String, Object>>> datesMap = licensingInfoMap.getDatesMap();
 			Map<String, Object> moduleToDateData = datesMap.get(columnName).get(rowName);
@@ -109,16 +105,12 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 					jc.setToolTipText(
 							"<html>" + configed.getResourceValue("LicensingInfo.warning.close_to_limit") + "<br>"
 									+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
-					
-					
-					
+
 				} else if (state.equals(LicensingInfoMap.STATE_OVER_LIMIT)) {
 					jc.setBackground(Globals.warningRed);
 					jc.setToolTipText("<html>" + configed.getResourceValue("LicensingInfo.warning.over_limit") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
-					
-					
-					
+
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_WARNING)) {
 					jc.setBackground(Globals.darkOrange);
 					jc.setToolTipText("<html>" + configed.getResourceValue("LicensingInfo.warning.days") + "<br>"
@@ -156,7 +148,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			try {
 				if (!prevCol.equals(configed.getResourceValue("LicensingInfo.modules"))
 						&& !prevCol.equals(configed.getResourceValue("LicensingInfo.available"))
-				
+
 				) {
 					String clientNum = moduleToDateData.get(LicensingInfoMap.CLIENT_NUMBER).toString();
 					String prevClientNum = datesMap.get(prevCol).get(rowName).get(LicensingInfoMap.CLIENT_NUMBER)

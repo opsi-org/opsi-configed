@@ -99,7 +99,7 @@ public class Messages {
 	private static void checkUTF8() {
 		if (UTF8_HACK == null) {
 			String javaVersionOnlyNumbers0 = System.getProperty("java.version");
-			
+
 			logging.debug("java version " + javaVersionOnlyNumbers0);
 			String javaVersionOnlyNumbers = javaVersionOnlyNumbers0.substring(0, lastIntIndex(javaVersionOnlyNumbers0));
 

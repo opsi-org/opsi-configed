@@ -441,7 +441,7 @@ public abstract class JSONExecutioner extends Executioner {
 		try {
 			JSONObject jO = retrieveJSONObject(omc);
 			if (checkResponse(jO)) {
-				
+
 				JSONArray jA1 = jO.optJSONArray("result");
 
 				if (jA1 != null) {

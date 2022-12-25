@@ -87,8 +87,6 @@ public class MapSource implements TableSource
 					logging.debug(this, "fetchData for A-key " + key + " col  " + columnNames.get(i) + " index " + i
 							+ " val " + ob);
 
-				
-
 				if (ob != null) {
 					vRow.add(ob);
 
@@ -117,7 +115,6 @@ public class MapSource implements TableSource
 					} else {
 						String className = classNames.get(i);
 
-						
 						if (columnNames.get(i).equals(ROW_COUNTER_NAME)) {
 							vRow.add("" + rowCount);
 
@@ -190,7 +187,7 @@ public class MapSource implements TableSource
 	public void setRowCounting(boolean b) {
 		if (!rowCounting && b) {
 			rowCounting = true;
-			
+
 			classNames.add("java.lang.Integer");
 			// has the effect that IntComparatorForStrings is applied
 			columnNames.add(ROW_COUNTER_NAME);

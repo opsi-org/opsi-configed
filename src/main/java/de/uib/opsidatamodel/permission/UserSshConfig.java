@@ -7,29 +7,23 @@ import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
 public class UserSshConfig extends UserConfigModule {
-	
+
 	// public static final String KEY_USER_SSH_REGISTER_description = "if false: do
 	// not create new user specific ssh configs (use defaults)";
 
 	public static final String KEY_SSH_MENU_ACTIVE = "ssh.menu_serverconsole.active";
 	private static final String KEY_SSH_MENU_ACTIVE_description = configed
 			.getResourceValue("PersistenceController.SSH_MENU_ACTIVE");
-	
 
 	public static final String KEY_SSH_CONFIG_ACTIVE = "ssh.serverconfiguration.active";
 	private static final String KEY_SSH_CONFIG_ACTIVE_description = configed
 			.getResourceValue("PersistenceController.SSH_CONFIG_ACTIVE");
-	
 
 	public static final String KEY_SSH_COMMANDCONTROL_ACTIVE = "ssh.commandmanagement.active";
 	private static final String KEY_SSH_COMMANDCONTROL_ACTIVE_description = configed
 			.getResourceValue("PersistenceController.SSH_CONTROL_ACTIVE");
-	
 
-	
 	// public static final String KEY_SSH_SHELL_ACTIVE_description =
-	
-	
 
 	public static final String KEY_SSH_COMMANDS_ACTIVE = "ssh.commands.active";
 	private static final String KEY_SSH_COMMANDS_ACTIVE_description = configed

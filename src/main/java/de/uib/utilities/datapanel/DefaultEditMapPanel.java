@@ -165,7 +165,6 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 		{
 			theCellEditor.cancelCellEditing(); // don't shift the old editing state to a new product
 
-			
 		}
 
 	}

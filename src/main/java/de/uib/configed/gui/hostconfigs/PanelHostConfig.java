@@ -170,11 +170,8 @@ public class PanelHostConfig extends JPanel {
 			TreeMap<String, String> classesMap) {
 		label.setText(labeltext);
 
-		
-
 		logging.info(this, "initEditing "
-				
-				
+
 				+ " optionsEditable " + optionsEditable);
 		editMapPanel.setSubpanelClasses(classesMap);
 		editMapPanel.setEditableMap(configVisualMap, configOptions);

@@ -60,7 +60,6 @@ public class HostInfo {
 	public static final String clientConnectedKEY = "clientConnected";
 	public static final String clientShutdownInstallKEY = "clientShutdownInstall";
 	public static final String depotWorkbenchKEY = "workbenchLocalUrl";
-	
 
 	// ---
 	public static final String depotOfClient_DISPLAY_FIELD_LABEL = "depotId";
@@ -568,7 +567,7 @@ public class HostInfo {
 
 	private int findCol(JTableSelectionPanel selectionPanel, String colName) {
 		return selectionPanel.getTableModel().findColumn(colName
-		
+
 		);
 	}
 
@@ -787,17 +786,10 @@ public class HostInfo {
 			persist.getHostInfoCollections().updateLocalHostInfo(client, clientWanConfigKEY, wanStandard);
 		}
 
-		
-
-		
-
-		
 		// persist.setCommonProductPropertyValue( new HashSet<>(Arrays.asList(client)),
-		
+
 		// // Set<String> clientNames, String productName, String propertyName,
 		// List<String> values
-
-		
 
 		// persist.updateProductOnClient(
 		// client,

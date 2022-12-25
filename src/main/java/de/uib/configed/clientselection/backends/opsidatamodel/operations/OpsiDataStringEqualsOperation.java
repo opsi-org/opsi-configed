@@ -55,7 +55,6 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 
 		if (dataSplitted == null) // simple case: no '*'
 		{
-			
 
 			return rData.equals(data);
 		}

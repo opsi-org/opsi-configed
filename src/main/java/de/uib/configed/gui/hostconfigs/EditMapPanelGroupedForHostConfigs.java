@@ -406,7 +406,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 								result = true;
 								JOptionPane.showMessageDialog(Globals.mainFrame, configed.getResourceValue(
 										"EditMapPanelGroupedForHostConfigs.noManualEditingWhereRoleDefined")
-								
+
 										, key, JOptionPane.INFORMATION_MESSAGE);
 
 							}
@@ -536,8 +536,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
 						Globals.createImageIcon("images/cancel16_small.png", "") },
-				2, 
-				600, 600, true, // lazylayout, i.e, we have a chance to define components and use them for the
+				2, 600, 600, true, // lazylayout, i.e, we have a chance to define components and use them for the
 				// layout
 				null // addPanel predefined
 		)
@@ -626,8 +625,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
 						Globals.createImageIcon("images/cancel16_small.png", "") },
-				2, 
-				600, 600, true, // lazylayout, i.e, we have a chance to define components and use them for the
+				2, 600, 600, true, // lazylayout, i.e, we have a chance to define components and use them for the
 				// layout
 				null // addPanel predefined
 		) {

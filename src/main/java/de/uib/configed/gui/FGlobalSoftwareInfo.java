@@ -53,8 +53,8 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 
 		persist = PersistenceControllerFactory.getPersistenceController();
 
-		panelGlobalSoftware = new PanelGenEditTable("", 
-				
+		panelGlobalSoftware = new PanelGenEditTable("",
+
 				0, // width
 				false, // editing,
 				2, true // switchLineColors
@@ -124,8 +124,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 
 					),
 
-					keyCol, 
-					new int[] {}, panelGlobalSoftware, updateCollection);
+					keyCol, new int[] {}, panelGlobalSoftware, updateCollection);
 		} else
 			this.model = model;
 

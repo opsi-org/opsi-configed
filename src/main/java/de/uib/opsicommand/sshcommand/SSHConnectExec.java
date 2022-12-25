@@ -171,18 +171,13 @@ public class SSHConnectExec extends SSHConnect {
 			String defaultCommandsString = "";
 			int anzahlCommands = ((SSHCommand_Template) commands).getOriginalCommands().size();
 			logging.info(this, "exec_list, anzahlCommands " + anzahlCommands);
-			
-			
-			
+
 			for (int i = 0; i < anzahlCommands; i++) {
 				String com = ((SSHCommand_Template) commands).getOriginalCommands().get(i).getCommandRaw();
 				com = "(" + (i + 1) + ")  " + com;
 
-				
-
 				// else
 
-				
 				defaultCommandsString = defaultCommandsString + com + "   \n";
 
 			}
@@ -232,8 +227,6 @@ public class SSHConnectExec extends SSHConnect {
 						final_dia.appendLater("[" + configed.getResourceValue("SSHConnection.Exec.dialog.commandlist")
 								+ "]     " + "" + configed.getResourceValue("SSHConnection.Exec.exitClosed"));
 					}
-
-					
 
 				}
 
@@ -314,12 +307,11 @@ public class SSHConnectExec extends SSHConnect {
 
 			if (SSHCommandFactory.getInstance(main).ssh_always_exec_in_background)
 				outputDialog.setVisible(false);
-			
+
 			outputDialog.setTitle(configed.getResourceValue("SSHConnection.Exec.title") + " "
 					+ configed.getResourceValue("SSHConnection.Exec.dialog.commandoutput") + "  ("
 					+ SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost()
 					+ ")");
-			
 
 		} else
 			outputDialog = null;
@@ -403,12 +395,7 @@ public class SSHConnectExec extends SSHConnect {
 			this.rememberPw = rememberPw;
 			this.interruptChannelWorker = interruptChannel;
 			retriedTimes = 1;
-			
-			
 
-			
-			
-			
 		}
 
 		public void setMaxCommandNumber(int mc) {
@@ -477,8 +464,7 @@ public class SSHConnectExec extends SSHConnect {
 					} catch (Exception ee) {
 					}
 				}
-			
-			
+
 		}
 
 		boolean pwsuccess = false;
@@ -519,7 +505,7 @@ public class SSHConnectExec extends SSHConnect {
 				if (outputDialog != null) {
 					(outputDialog).removeKillProcessListener(killProcessListener);
 					(outputDialog).addKillProcessListener(killProcessListener);
-					
+
 					// publish("");
 
 				}
@@ -541,8 +527,6 @@ public class SSHConnectExec extends SSHConnect {
 						if (i < 0)
 							break;
 						String str = new String(tmp, 0, i, "UTF-8");
-
-						
 
 						// (str.equals(SSHCommandFactory.getInstance().sudo_failed_text)) )
 						if ((command.needSudo()) && (str.contains(SSHCommandFactory.sudo_failed_text))) {
@@ -584,8 +568,7 @@ public class SSHConnectExec extends SSHConnect {
 						}
 						buf.append(str);
 					}
-					
-					
+
 					if (channel.isClosed() || interruptChannel || interruptChannelWorker) {
 						if ((in.available() > 0) && (!interruptChannel))
 							continue;
@@ -649,10 +632,9 @@ public class SSHConnectExec extends SSHConnect {
 					logging.debug(this, "process " + line);
 					sshOutputCollector.appendValue(line);
 					outputDialog.append(getCommandName(), line + "\n");
-					
+
 				}
 
-				
 			}
 		}
 

@@ -37,7 +37,7 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 			for (String key : configOptions.keySet()) {
 				// fill up by default values
 				if (retrieved.get(key) == null) {
-					
+
 					retrieved.put(key, configOptions.get(key).get("defaultValues"));
 
 				}
@@ -62,7 +62,6 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 			if (configOptions != null && configOptions.get(key) != null) {
 				ConfigOption configOption = (ConfigOption) configOptions.get(key);
 
-				
 				if (configOption.get("classname").equals("java.lang.Boolean")) {
 					put(key, list.get(0));
 				} else

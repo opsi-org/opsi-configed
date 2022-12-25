@@ -37,7 +37,6 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 	public void setData(Map<String, ListCellOptions> optionsMap, Map currentData) {
 		this.optionsMap = optionsMap;
 
-		
 		mapTypes(currentData);
 	}
 

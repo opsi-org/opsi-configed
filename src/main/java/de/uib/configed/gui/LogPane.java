@@ -85,7 +85,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected JComboBox comboType;
 	protected DefaultComboBoxModel comboModelTypes;
 	protected final String defaultType = "(all)";
-	
 
 	protected JPanel jTextPanel;
 	protected WordSearcher searcher;
@@ -93,7 +92,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected final StyleContext styleContext;
 	protected final Style[] logLevelStyles;
 
-	
 	public Integer[] levels = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 	public List<Integer> levelList = Arrays.asList(levels);
 
@@ -319,8 +317,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		jTextPane = new JTextPane();
 		jTextPane.setCaretColor(Color.RED);
 		jTextPane.getCaret().setBlinkRate(0);
-
-		
 
 		class LogStyleContext extends StyleContext {
 			@Override
@@ -1177,8 +1173,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 			// f g h i j k l
 			// 6 7 8 9 10 11 12
-			if (e.getKeyChar() == 'n' || e.getKeyChar() == '\u000c' || e.getKeyCode() == KeyEvent.VK_F3) 
-			{
+			if (e.getKeyChar() == 'n' || e.getKeyChar() == '\u000c' || e.getKeyCode() == KeyEvent.VK_F3) {
 				search();
 			}
 			e.consume();

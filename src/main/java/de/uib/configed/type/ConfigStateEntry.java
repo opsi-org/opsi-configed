@@ -21,7 +21,6 @@ public class ConfigStateEntry extends HashMap<String, Object> {
 		DB_COLUMNS.put(CONFIG_ID, DB_TABLE_NAME + "." + CONFIG_ID);
 		DB_COLUMNS.put(OBJECT_ID, DB_TABLE_NAME + "." + OBJECT_ID);
 		DB_COLUMNS.put(VALUES, DB_TABLE_NAME + "." + "VALUES");
-		
 
 	}
 
@@ -33,7 +32,6 @@ public class ConfigStateEntry extends HashMap<String, Object> {
 	}
 
 	// public static final int columnIndexLastStateChange =
-	
 
 	public ConfigStateEntry(String configId, String hostId, List values) {
 		super();

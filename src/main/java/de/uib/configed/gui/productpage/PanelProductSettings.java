@@ -949,7 +949,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		tableProducts.setRowSorter(sorter);
 		sorter.addRowSorterListener(this);
 
-		
 		tableProducts.getTableHeader()
 				.setDefaultRenderer(new ColorHeaderCellRenderer(tableProducts.getTableHeader().getDefaultRenderer()));
 

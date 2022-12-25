@@ -7,7 +7,6 @@ public class GroupNode extends IconNode {
 	protected boolean allowingSubGroups = true;
 	protected boolean immutable = false;
 	protected boolean fixed = false;
-	
 
 	public GroupNode(Object userObject, String description) {
 		super(userObject, true);

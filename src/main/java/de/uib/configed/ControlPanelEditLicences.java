@@ -167,13 +167,11 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 
 		// --- special treatment of columns
 
-		
 		col = thePanel.panelSoftwarelicences.getColumnModel().getColumn(2);
 		JComboBox<String> comboLicenceTypes = new JComboBox<>(LicenceEntry.LICENCE_TYPES);
 		comboLicenceTypes.setFont(Globals.defaultFontBig);
 		col.setCellEditor(new DefaultCellEditor(comboLicenceTypes));
 
-		
 		col = thePanel.panelSoftwarelicences.getColumnModel().getColumn(4);
 		JComboBox<String> combo = new JComboBox<>();
 		combo.setFont(Globals.defaultFontBig);

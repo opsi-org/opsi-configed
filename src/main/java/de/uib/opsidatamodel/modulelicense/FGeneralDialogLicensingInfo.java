@@ -247,7 +247,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		retrieveData();
 
-		
 		JLabel orangeWarningLabel = new JLabel(
 				"<html>" + configed.getResourceValue("LicensingInfo.warning") + "</html>");
 		orangeWarningLabel.setIcon(Globals.createImageIcon("images/warning_orange.png", ""));
@@ -255,7 +254,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		JLabel redWarningLabel = new JLabel(
 				"<html>" + configed.getResourceValue("LicensingInfo.warning.over_limit") + "</html>");
 		redWarningLabel.setIcon(Globals.createImageIcon("images/warning_red.png", ""));
-		
 
 		JLabel warningLevelAbsolute = new JLabel(
 				"<html>" + configed.getResourceValue("LicensingInfo.warning.levels.client_absolute") + ": "
@@ -294,8 +292,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		JLabel labelExtendedView = new JLabel(configed.getResourceValue("LicensingInfo.buttonExtendedView"));
 		JCheckBox checkExtendedView = new JCheckBox(""
-		
-		
+
 				, extendedView);
 
 		checkExtendedView.addActionListener(actionEvent -> {
@@ -334,7 +331,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		JComponent[] linedComponents = new JComponent[] { buttonReload, new JLabel("   "), checkExtendedView,
 				labelExtendedView
-				
+
 				//,buttonReload
 		};
 

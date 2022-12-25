@@ -20,7 +20,6 @@ public class JTextHideField extends javax.swing.JPanel {
 	JButton button;
 	boolean hiddenMode;
 	boolean multiValue;
-	
 
 	class FixedDocument extends PlainDocument {
 

@@ -92,7 +92,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	static {
 		ALL_NAME = configed.getResourceValue("ClientTree.ALLname");
-		
+
 		GROUPS_NAME = configed.getResourceValue("ClientTree.GROUPSname");
 		DIRECTORY_NAME = configed.getResourceValue("ClientTree.DIRECTORYname");
 		DIRECTORY_PERSISTENT_NAME = "clientdirectory";
@@ -334,8 +334,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		setShowsRootHandles(true);
 
-		
-
 		nodeRenderer = new IconNodeRendererClientTree(main);
 		setCellRenderer(nodeRenderer);
 
@@ -413,8 +411,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 				GroupNode node = (GroupNode) sourcePath.getPathComponent(sourcePath.getPathCount() - 1);
 				main.setGroup(node.toString());
 
-				
-
 			}
 		});
 		popupMenu.add(menuItemActivateElements);
@@ -430,8 +426,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 				// String nodeS = sourcePath.getPathComponent(sourcePath.getPathCount()
 
 				GroupNode node = (GroupNode) sourcePath.getPathComponent(sourcePath.getPathCount() - 1);
-
-				
 
 				Enumeration<TreeNode> enumer = node.breadthFirstEnumeration();
 
@@ -510,7 +504,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			return null;
 		}
 
-		
 		result = treePath.pathByAddingChild(child);
 
 		return result;
@@ -545,8 +538,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-
-		
 
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			TreePath selectedPath = getSelectionPath();
@@ -756,7 +747,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	private void createDIRECTORY_NOT_ASSIGNED() {
 		DIRECTORY_NOT_ASSIGNED = produceGroupNode(DIRECTORY_NOT_ASSIGNED_NAME,
-				
+
 				configed.getResourceValue("ClientTree.NOTASSIGNEDdescription"));
 
 		DIRECTORY_NOT_ASSIGNED.setAllowsSubGroups(false);
@@ -792,12 +783,10 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		// GROUPS
 		GROUPS = produceGroupNode(GROUPS_NAME,
-				
+
 				configed.getResourceValue("ClientTree.GROUPSdescription"));
 		GROUPS.setAllowsOnlyGroupChilds(true);
 		GROUPS.setFixed(true);
-
-		
 
 		ROOT.add(GROUPS);
 
@@ -805,7 +794,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		// DIRECTORY
 		DIRECTORY = produceGroupNode(DIRECTORY_NAME,
-				
+
 				configed.getResourceValue("ClientTree.DIRECTORYdescription"));
 
 		DIRECTORY.setAllowsOnlyGroupChilds(true);
@@ -836,10 +825,9 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		// ALL
 		ALL = produceGroupNode(ALL_NAME,
-				
+
 				configed.getResourceValue("ClientTree.ALLdescription"));
 
-		
 		ROOT.add(ALL);
 		ALL.setImmutable(true);
 		ALL.setFixed(true);
@@ -1008,7 +996,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		groups.put(ALL_NAME, groupALL);
 
 		groupGROUPS.put("groupId", GROUPS_NAME);
-		
+
 		groupGROUPS.put("description", "root of groups");
 
 		groupNodes.put(GROUPS_NAME, GROUPS);
@@ -1016,7 +1004,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		groups.put(GROUPS_NAME, groupGROUPS);
 
 		groupDIRECTORY.put("groupId", DIRECTORY_NAME);
-		
+
 		groupDIRECTORY.put("description", "root of directory");
 
 		groupNodes.put(DIRECTORY_NAME, DIRECTORY);
@@ -1044,8 +1032,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		createDIRECTORY_NOT_ASSIGNED();
 
-		
-
 		groupNodes = new HashMap<>();
 
 		initTopGroups();
@@ -1070,8 +1056,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			DefaultMutableTreeNode node = groupNodes.get(groupId);
 
 			String parentId = groups.get(groupId).get("parentGroupId");
-
-			
 
 			if (parentId == null || parentId.equalsIgnoreCase("null"))
 				parentId = GROUPS_NAME;
@@ -1098,8 +1082,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		}
 
-		
-
 	}
 
 	@Override
@@ -1125,8 +1107,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 				{
 					for (String groupId : belongingTo) {
-						
-						
+
 						// )
 						{
 							List<String> memberList = group2Members.get(groupId);
@@ -1193,7 +1174,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		model.nodeStructureChanged(DIRECTORY);
 
-		
 		TreeSet<String> allowedClients = null;
 
 		logging.info(this, "associateClientsToGroups, evaluate permittedHostGroups " + permittedHostGroups);
@@ -1206,7 +1186,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 			for (String clientId : leafname2AllItsPaths.keySet()) {
 				for (SimpleTreePath path : leafname2AllItsPaths.get(clientId)) {
-					
+
 					Set<String> pathElements = new TreeSet<>(path);
 					int allElementsNumber = pathElements.size();
 					pathElements.removeAll(permittedHostGroups);// retained are the elements not permitted
@@ -1214,7 +1194,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 					if (notPermittedNumber < allElementsNumber) {
 
-						
 						// " + (notPermittedNumber< allElementsNumber ) );
 						allowedClients.add(clientId);
 						directlyAllowedGroups.addAll(path);
@@ -1322,9 +1301,9 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 						"group in group not supported for opsiVersion < 3.4.9, \nopsiVersion is "
 								+ main.getOpsiVersion(),
 						"opsi info ",
-						
+
 						// synchronous",
-						
+
 						JOptionPane.WARNING_MESSAGE);
 				return result;
 			}
@@ -1481,7 +1460,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		while (clientNode != null && stopCounter <= clientNodesInDIRECTORY.size()) {
 
-			
 			parentNode.remove(clientNode);
 			// with more than one clientNode we seem to get as many instances of one client
 			// node supplied as there are clients altogether, why ever
@@ -1645,8 +1623,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			locationsInDIRECTORY.put(clientID, groupsInDIRECTORY);
 		}
 
-		
-
 		if (groupsInDIRECTORY.size() <= 1)
 			return;
 
@@ -1785,15 +1761,14 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			if (insertNode.getAllowsChildren() // node with subnodes = group
 					&& !node.getAllowsChildren() // leaf
 			) {
-				
+
 				continue;
 			}
 
 			if (!insertNode.getAllowsChildren() // leaf
 					&& node.getAllowsChildren() // group
 			) {
-				
-				
+
 				foundLoc = true;
 				continue;
 			}
@@ -1981,7 +1956,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	public DefaultMutableTreeNode getChildWithUserObjectString(String objectID, DefaultMutableTreeNode groupNode) {
 
-		
 		Enumeration<TreeNode> enumer = groupNode.children();
 		DefaultMutableTreeNode result = null;
 
@@ -1995,8 +1969,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			}
 		}
 
-		
-		
 		return result;
 	}
 

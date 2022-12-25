@@ -65,7 +65,6 @@ public class ControllerHWinfoColumnConfiguration {
 	public static final String colLinuxQuery = configed.getResourceValue("HWinfoColumnConfiguration.colLinuxQuery");
 	public static final String colWMIQuery = configed.getResourceValue("HWinfoColumnConfiguration.colWMIQuery");
 	// public static final String colTellAgainHardwareClass =
-	
 
 	private Map<String, Map<String, Boolean>> updateItems;
 
@@ -144,8 +143,7 @@ public class ControllerHWinfoColumnConfiguration {
 	}
 
 	protected void initPanel() {
-		panel = new PanelGenEditTable("", 
-				0, // maxTableWidth
+		panel = new PanelGenEditTable("", 0, // maxTableWidth
 				true, // editing
 				0, // generalPopupPosition
 				false,
@@ -217,13 +215,9 @@ public class ControllerHWinfoColumnConfiguration {
 		columnNames.add(colOpsiColumnName);
 		columnNames.add(colUseInQuery);
 		columnNames.add(colOpsiDbColumnType);
-		
-		
-		
 
 		classNames = new Vector<>();
 
-		
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
@@ -282,10 +276,7 @@ public class ControllerHWinfoColumnConfiguration {
 				// columnNames.indexOf ( colOpsiColumnName ),
 				columnNames.indexOf(colUseInQuery) });
 
-		
-
 		// Icon iconConfigure =
-		
 
 		panel.setTitlePane(
 				new JComponent[] { new JLabel(configed.getResourceValue("HWinfoColumnConfiguration.infoTitle")) }, 20);
@@ -326,8 +317,6 @@ public class ControllerHWinfoColumnConfiguration {
 		panel.setUpdateController(new MapItemsUpdateController(panel, model, new MapBasedUpdater() {
 			@Override
 			public String sendUpdate(Map<String, Object> rowmap) {
-
-				
 
 				logging.info(this, "within MapItemsUpdateController sendUpdate " + rowmap);
 

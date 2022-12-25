@@ -92,20 +92,18 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		super(
 				// Globals.mainFrame,
 				owner, configed.getResourceValue("FSoftwarename2LicencePool.title"), false, new String[] {
-						
-						
+
 						configed.getResourceValue("FSoftwarename2LicencePool.buttonClose") },
 				new Icon[] {
-						
-						
+
 						Globals.createImageIcon("images/cancel16_small.png", "") },
 				1, 700, 800);
 
 		this.myController = myController;
 		persist = PersistenceControllerFactory.getPersistenceController();
 
-		panelSWnames = new PanelGenEditTable("", 
-				
+		panelSWnames = new PanelGenEditTable("",
+
 				0, false, // editing,
 				0, true // switchLineColors
 				, new int[] { PanelGenEditTable.POPUP_RELOAD },
@@ -119,8 +117,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			}
 		};
 
-		panelSWxLicencepool = new PanelGenEditTable("", 
-				
+		panelSWxLicencepool = new PanelGenEditTable("",
+
 				0, // width
 				true, // editing,
 				0, true // switchLineColors
@@ -290,7 +288,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						.addGap(Globals.HGAP_SIZE)));
 
 		setAdditionalPane(panelSWx);
-		
+
 		additionalPane.setBackground(Globals.backgroundWhite);// Color.YELLOW
 
 		setCenterPane(panelSWnames);
@@ -594,7 +592,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
 						logging.info(this, "sendUpdate " + rowmap);
-						
 
 						// reloads local data (which are not yet updated)
 						String swID = (String) rowmap.get(AuditSoftwareXLicencePool.SwID);

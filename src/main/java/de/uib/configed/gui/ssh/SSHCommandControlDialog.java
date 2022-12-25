@@ -217,9 +217,8 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			lbl_commands = new JLabel();
 			tp_commands = new JTextPane();
 			// btn_changeHelpPanelStatus= new de.uib.configed.gui.IconButton(
-			
+
 			// ,
-			
 
 			btn_test_command = new de.uib.configed.gui.IconButton(
 					de.uib.configed.configed.getResourceValue("SSHConnection.CommandControl.btnTestCommand"),
@@ -235,7 +234,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 					"images/cancel-32.png", "images/cancel_over-32.png", " ", true);
 		}
 		{
-			
+
 			lbl_menuText.setText(configed.getResourceValue("SSHConnection.CommandControl.menuText"));
 			lbl_parentMenuText.setText(configed.getResourceValue("SSHConnection.CommandControl.parentMenuText"));
 			lbl_tooltipText.setText(configed.getResourceValue("SSHConnection.CommandControl.tooltipText"));

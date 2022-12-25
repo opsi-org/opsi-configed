@@ -96,8 +96,6 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 			}
 		};
 
-		
-
 		dependenciesTree.setCellRenderer(renderer);
 
 		DefaultTreeSelectionModel selectionModel = new DefaultTreeSelectionModel() {

@@ -137,7 +137,7 @@ public class JTableSelectionPanel extends JPanel
 		primaryOrderingKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		
+
 		table.getTableHeader().setReorderingAllowed(false);
 		table.getTableHeader()
 				.setDefaultRenderer(new ColorHeaderCellRenderer(table.getTableHeader().getDefaultRenderer()));
@@ -193,7 +193,6 @@ public class JTableSelectionPanel extends JPanel
 		JPanel topPane = new JPanel();
 
 		// JLabel labelSearch = new
-		
 
 		labelSearch = new JLabel(configed.getResourceValue("SearchPane.search"));
 		labelSearch.setFont(Globals.defaultFont);
@@ -238,7 +237,7 @@ public class JTableSelectionPanel extends JPanel
 		popupNewSearch.addActionListener(actionEvent -> searchTheRow(0));
 
 		popupMarkHits.setText(configed.getResourceValue("SearchPane.popup.markall"));
-																						
+
 		popupMarkHits.addActionListener(actionEvent -> markAll());
 
 		popupEmptySearchfield.setText(configed.getResourceValue("JTableSelectionPanel.searchempty"));
@@ -848,7 +847,6 @@ public class JTableSelectionPanel extends JPanel
 		while (!found && viewrow < getTableModel().getRowCount()) {
 
 			// "
-			
 
 			for (int j = 0; j < getTableModel().getColumnCount(); j++) {
 				if (colIndices != null // we dont compare all values (comparing all values is default)
@@ -878,7 +876,6 @@ public class JTableSelectionPanel extends JPanel
 					case FULL_TEXT_SEARCHING_WITH_ALTERNATIVES: {
 						for (String word : alternativeWords) {
 
-							
 							found = (compareVal.indexOf(word) >= 0);
 							if (found)
 								break;

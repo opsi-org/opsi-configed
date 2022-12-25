@@ -100,8 +100,6 @@ public class DefaultTableProvider implements TableProvider {
 	@Override
 	public void setWorkingCopyAsNewOriginalRows() {
 
-		
-
 		if (rows == null) {
 
 			// in the following reset, we request a reload

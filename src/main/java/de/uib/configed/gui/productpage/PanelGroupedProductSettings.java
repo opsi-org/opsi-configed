@@ -128,7 +128,6 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 	public void reduceToSet(Set<String> filter) {
 		activatePacketSelectionHandling(false);
 
-		
 		InstallationStateTableModelFiltered tModel = (InstallationStateTableModelFiltered) tableProducts.getModel();
 		tModel.setFilterFrom(filter);
 

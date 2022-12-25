@@ -58,8 +58,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	private boolean singleLine;
 	static int count = 0;
 
-	
-
 	public FEditPane(String initialText, String hint) {
 		super(initialText, hint);;
 		logging.info(this, " FEdit constructed for >>" + initialText + "<< title " + hint);
@@ -91,7 +89,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		 * );
 		 */
 
-		
 		textpane.setContentType("text/plain");
 
 		textpane.setEditable(true);
@@ -217,7 +214,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	@Override
 	public String getText() {
-		
 
 		initialText = textpane.getText(); // set new initial text for use in processWindowEvent
 		return initialText;

@@ -34,7 +34,7 @@ public class SSHConnectTerminal extends SSHConnect {
 	private KeyListener inputKeyListener = null;
 	private ActionListener connectionKeyListener = null;
 	private OutputStream out = null;
-	public static final String SOME_COMMAND = "/bin/bash"; 
+	public static final String SOME_COMMAND = "/bin/bash";
 	String currentDirectory = "";
 	boolean getCurrentDirectorySilent = false;
 
@@ -127,11 +127,9 @@ public class SSHConnectTerminal extends SSHConnect {
 				session.connect();
 				channel = (ChannelShell) session.openChannel("shell");
 
-				
 				// naechste zeile activiert den Hinweis, falls die nicht die standard bash
 				// verwendet wird, soll der befehl bash ausgefuehrt werden..
-				
-				
+
 				logging.info(this, "Connect");
 
 				// a hack for MS-DOS prompt on Windows.
@@ -306,7 +304,7 @@ public class SSHConnectTerminal extends SSHConnect {
 					// dialog.getInputField().setText("");
 
 					else {
-						
+
 						exec(textField.getText() + "\n");
 
 						// "))
@@ -335,7 +333,6 @@ public class SSHConnectTerminal extends SSHConnect {
 		SSHConnectExec ssh = new SSHConnectExec();
 		String result = "";
 		if (newCommands) {
-			
 
 			result = ssh.exec(new Empty_Command(
 					// http://stackoverflow.com/questions/948008/linux-command-to-list-all-available-commands-and-aliases
@@ -347,31 +344,16 @@ public class SSHConnectTerminal extends SSHConnect {
 			logging.debug(this, "getCompletionList commands compgen -c " + result);
 		}
 
-		
-		
-
-		
-
-		
-
 		// 
 		// // catch (IOException ioe)
 
-		
-		
-
 		// String result_ls = ssh.exec( new Empty_Command(com ),
 
-		
 		// String result_dir = "";
 
 		// for (String l : arr_result_dir)
 
 		// String dir = "" + line.split(currentDirectory + "/",2)[1];
-
-		
-
-		
 
 		// catch (Exception ioe)
 

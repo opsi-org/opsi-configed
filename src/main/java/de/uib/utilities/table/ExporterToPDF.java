@@ -370,7 +370,6 @@ public class ExporterToPDF extends ExportTable {
 			PdfPTable table = new PdfPTable(3);
 			// TODO: logo, create String from Globals
 
-			
 			java.net.URL opsi_image_URL = Globals.getImageResourceURL("images/opsi_full.png");
 			try {
 				// add header table with page number

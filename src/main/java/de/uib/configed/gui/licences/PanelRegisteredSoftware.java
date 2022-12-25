@@ -21,7 +21,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 	public PanelRegisteredSoftware(ControlPanelAssignToLPools controller) {
 		super("",
-				
+
 				0, true, 2, true, new int[] { PanelGenEditTable.POPUP_RELOAD }, true
 
 		);

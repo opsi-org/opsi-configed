@@ -72,9 +72,9 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 					setFont(Globals.defaultFontStandardBold);
 
 					setIcon(node.getLeafIcon());
-					
+
 				} else {
-					
+
 					setFont(Globals.defaultFont);
 					setIcon(node.getNonSelectedLeafIcon());
 
@@ -98,7 +98,6 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 				main.getActiveTreeNodes().containsKey(stringValue)) {
 					setFont(Globals.defaultFontStandardBold);
 
-					
 				} else {
 					setFont(Globals.defaultFont);
 
@@ -126,8 +125,6 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 					&& tree.hasFocus())
 
 			{
-
-				
 
 				Map attributes = getFont().getAttributes();
 				attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);

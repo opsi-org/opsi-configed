@@ -40,8 +40,6 @@ public class AdaptingCellEditor extends DefaultCellEditor {
 		} else
 			cc.setModel(cbm.getComboBoxModel(modelRow, modelColumn));
 
-		
-
 		Component c = super.getTableCellEditorComponent(table, value, isSelected, row, column);
 
 		return c;

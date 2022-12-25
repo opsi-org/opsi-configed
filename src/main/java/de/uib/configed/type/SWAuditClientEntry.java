@@ -93,7 +93,7 @@ public class SWAuditClientEntry
 		locale.put(SWAuditEntry.NAME, configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
 		locale.put(SWAuditEntry.VERSION, configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
 		// locale.put(subversion,
-		
+
 		locale.put(SWAuditEntry.ARCHITECTURE, configed.getResourceValue("PanelSWInfo.tableheader_architecture"));
 		locale.put(SWAuditEntry.LANGUAGE, configed.getResourceValue("PanelSWInfo.tableheader_displayLanguage"));
 		locale.put(LICENCEkEY, configed.getResourceValue("PanelSWInfo.tableheader_displayLicenseKey"));
@@ -194,7 +194,6 @@ public class SWAuditClientEntry
 	// from db columns
 	{
 
-		
 		String result = "";
 		try {
 			result = Globals.pseudokey(new String[] {
@@ -273,7 +272,6 @@ public class SWAuditClientEntry
 
 		Integer j = software2Number.get(element);
 
-		
 		// mapped value " + j);
 
 		if (j == null) {

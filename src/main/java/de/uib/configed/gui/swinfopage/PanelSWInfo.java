@@ -523,7 +523,6 @@ public class PanelSWInfo extends JPanel {
 		logging.info(this, "------------- create report swaudit for " + hostId + " check");
 
 		HashMap<String, String> metaData = new HashMap<>();
-		
 
 		metaData.put("title", "Client " + hostId);
 		metaData.put("subtitle", scanInfo);
@@ -714,7 +713,7 @@ public class PanelSWInfo extends JPanel {
 
 		@Override
 		public int getColumnCount() {
-			return SWAuditClientEntry.getDisplayKeys().size(); 
+			return SWAuditClientEntry.getDisplayKeys().size();
 		}
 
 		@Override

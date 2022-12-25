@@ -132,8 +132,6 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	@Override
 	public void startParameterGui() {
 
-		
-
 	}
 
 	@Override
@@ -159,7 +157,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 		 */
 		);
 		// exec.exec(command, true, new SSHConnectionExecDialog(command,
-		
+
 		// \""+command.getCommand() + "\" "));
 		return (SSHConnectionExecDialog) exec.getDialog();
 	}

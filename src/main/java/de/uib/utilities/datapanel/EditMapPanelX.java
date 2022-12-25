@@ -118,8 +118,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		public String getRemovalMenuText() {
 			super.getRemovalMenuText();
 			return configed.getResourceValue("EditMapPanelX.PopupMenu.SetSpecificValueToDefault");
-			
-			
+
 		}
 	}
 
@@ -245,7 +244,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 					logging.info(this, "popupItemDeleteEntry action");
 					if (table.getSelectedRowCount() == 0) {
 						// JOptionPane.showInternalMessageDialog( table,
-						
 
 						FTextArea fAsk = new FTextArea(null, Globals.APPNAME, "", true);
 						fAsk.setSize(new Dimension(200, 200));
@@ -266,7 +264,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 					logging.info(this, "popupItemDeleteEntry action");
 					if (table.getSelectedRowCount() == 0) {
 						// JOptionPane.showInternalMessageDialog( table,
-						
 
 						FTextArea fAsk = new FTextArea(null, Globals.APPNAME, "", true);
 						fAsk.setSize(new Dimension(200, 200));
@@ -287,7 +284,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 					logging.info(this, "popupItemDeleteEntry action");
 					if (table.getSelectedRowCount() == 0) {
 						// JOptionPane.showInternalMessageDialog( table,
-						
 
 						FTextArea fAsk = new FTextArea(null, Globals.APPNAME, "", true);
 						fAsk.setSize(new Dimension(200, 200));
@@ -409,7 +405,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 					JComponent jc = (JComponent) c;
 
 					String propertyName = (String) names.get(rowIndex);
-					
 
 					String tooltip = null;
 
@@ -587,7 +582,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		{
 			theCellEditor.cancelCellEditing(); // don't shift the old editing state to a new product
 
-			
 			if (theCellEditor instanceof SensitiveCellEditor)
 				((SensitiveCellEditor) theCellEditor).hideListEditor();
 

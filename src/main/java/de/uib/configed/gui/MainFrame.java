@@ -453,7 +453,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	JLabel jLabelPath = new JLabel();
 	// JLabel jLabelDepot = new
-	
+
 	JTextArea jFieldInDepot;
 	JLabel labelHost;
 	JLabel labelHostID;
@@ -1080,7 +1080,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	public void updateSSHConnectedInfoMenu(String status) {
-		
 
 		String connectiondata = SSHConnectionInfo.getInstance().getUser() + "@"
 				+ SSHConnectionInfo.getInstance().getHost();
@@ -1496,8 +1495,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		for (int i = logging.LEVEL_NONE; i <= logging.LEVEL_SECRET; i++) {
 			rbLoglevelItems[i] = new JRadioButtonMenuItem("[" + i + "] " + logging.levelText(i).toLowerCase());
-			
-			
 
 			jMenuHelpLoglevel.add(rbLoglevelItems[i]);
 			if (i == logging.LOG_LEVEL_CONSOLE)
@@ -1528,8 +1525,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	// icon pane
 	private void setupIcons1() {
 		// buttonWindowStack = new
-		
-		
 
 		/*
 		 * buttonWindowStack = new IconButton(
@@ -1597,7 +1592,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				"images/system-users-query.png", "images/system-users-query_over.png",
 				"images/system-users-query_over.png", waitingCircle,
 
-				
 				500, main.host_displayFields.get("clientSessionInfo"));
 		iconButtonSessionInfo.setEnabled(true);
 
@@ -1656,7 +1650,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	 * propertyChange(PropertyChangeEvent evt) { if ("progress" ==
 	 * evt.getPropertyName()) { int progress = (Integer) evt.getNewValue();
 	 * proceeding.setIndeterminate(false); proceeding.setValue(progress);
-	 * 
 	 * progress)); } }
 	 */
 	// ------------------------------------------------------------------------------------------
@@ -1775,9 +1768,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		popupDeletePackageCaches.setText(configed.getResourceValue("MainFrame.jMenuDeletePackageCaches"));
 		popupDeletePackageCaches.addActionListener((ActionEvent e) -> deletePackageCachesAction());
-
-		
-		
 
 		/*
 		 * for (final String event :
@@ -2060,8 +2050,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		labelHostID = new JLabel("");
 		labelHostID.setFont(Globals.defaultFontStandardBold);
 
-		
-
 		JLabel labelClientDescription = new JLabel(configed.getResourceValue("MainFrame.jLabelDescription"));
 		labelClientDescription.setPreferredSize(Globals.buttonDimension);
 
@@ -2072,7 +2060,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		JLabel labelClientMacAddress = new JLabel(configed.getResourceValue("MainFrame.jLabelMacAddress"));
 
-		JLabel labelClientIPAddress = new JLabel(configed.getResourceValue("MainFrame.jLabelIPAddress")); 
+		JLabel labelClientIPAddress = new JLabel(configed.getResourceValue("MainFrame.jLabelIPAddress"));
 
 		JLabel labelOneTimePassword = new JLabel(configed.getResourceValue("MainFrame.jLabelOneTimePassword"));
 
@@ -2124,8 +2112,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		ipAddressField.addKeyListener(this);
 		ipAddressField.addMouseListener(this);
 
-		
-
 		final Icon unselectedIcon;
 		final Icon selectedIcon;
 		final Icon nullIcon;
@@ -2137,7 +2123,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		cbUefiBoot = new CheckedLabel(configed.getResourceValue("NewClientDialog.boottype"), selectedIcon,
 				unselectedIcon, nullIcon, false);
 		cbUefiBoot.addActionListener(this);
-		
 
 		cbWANConfig = new CheckedLabel(configed.getResourceValue("WAN Konfiguration"), selectedIcon, unselectedIcon,
 				nullIcon, false);
@@ -2170,8 +2155,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		 * cbUefiBoot.removeMouseListener(cbUefiBoot.getMouseListeners()[i]);
 		 * }
 		 */
-
-		
 
 		jTextFieldOneTimePassword = new JTextEditorField("");
 		jTextFieldOneTimePassword.addKeyListener(this);
@@ -2355,7 +2338,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jPanel3.setLayout(new BorderLayout());
 
 		// jLabel_Clientname.setText(
-		
 
 		jCheckBoxSorted.setSelected(true);
 		jCheckBoxSorted.setText(configed.getResourceValue("MainFrame.jCheckBoxSorted"));
@@ -3257,7 +3239,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		if (!products.isEmpty())
 			main.selectClientsNotCurrentProductInstalled(products, false);
-		
+
 	}
 
 	private void groupByNotCurrentProductVersionOrBrokenInstallation() {
@@ -3265,7 +3247,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		if (!products.isEmpty())
 			main.selectClientsNotCurrentProductInstalled(products, true);
-		
+
 	}
 
 	private void groupByFailedProduct() {
@@ -3273,7 +3255,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		if (!products.isEmpty())
 			main.selectClientsWithFailedProduct(products);
-		
+
 	}
 
 	public void saveGroupAction() {
@@ -3565,7 +3547,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		FEditorPane fEditPane = new FEditorPane(this, "opsi server infoPage", false, new String[] { "ok" }, 500, 400);
 		fEditPane.setPage("https://" + main.getConfigserver() + ":4447/info");
 
-		
 		fEditPane.setVisible(true);
 	}
 
@@ -3578,14 +3559,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 					configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), false, // modal
 
 					new String[] { configed.getResourceValue("Dash.close"),
-					
+
 					},
 
 					new Icon[] {
-							
+
 							Globals.createImageIcon("images/cancel16_small.png", "") },
-					1, 
-					900, 680, true, // lazylayout, i.e, we have a chance to define components and use them for the
+					1, 900, 680, true, // lazylayout, i.e, we have a chance to define components and use them for the
 					// layout
 					null // addPanel predefined
 			);
@@ -3810,7 +3790,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 			else if (e.getSource() == jTextFieldInventoryNumber) {
 
-				
 				if (jTextFieldInventoryNumber.isChangedText()) {
 					changedClientInfo.put(HostInfo.clientInventoryNumberKEY, jTextFieldInventoryNumber.getText());
 					main.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
@@ -3827,8 +3806,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 					changedClientInfo.remove(HostInfo.clientOneTimePasswordKEY);
 				}
 
-				
-
 			}
 
 			else if (e.getSource() == jTextAreaNotes) {
@@ -3844,7 +3821,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			else if (e.getSource() == macAddressField) {
 
 				// oldMacAddress
-				
+
 				logging.debug(this, " keyPressed on macAddressField, text " + macAddressField.getText());
 
 				if (macAddressField.isChangedText()) {
@@ -3860,7 +3837,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			else if (e.getSource() == ipAddressField) {
 
 				// oldMacAddress
-				
+
 				logging.debug(this, " keyPressed on ipAddressField, text " + ipAddressField.getText());
 
 				if (ipAddressField.isChangedText()) {
@@ -4217,16 +4194,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	public void setHardwareInfo(Object hardwareInfo) {
 
-		
-
 		if (hardwareInfo == null)
 			showHardwareLog_version2.setHardwareInfo(null,
 					configed.getResourceValue("MainFrame.NoHardwareConfiguration"));
 		else
 			showHardwareLog_version2.setHardwareInfo((Map) hardwareInfo, null);
-
-		
-		
 
 		/*
 		 * if (hardwareInfo instanceof Map)
@@ -4243,7 +4215,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		 * showHardwareLog = showHardwareLog_NotFound;
 		 */
 
-		
 		showHardwareLog = showHardwareLog_version2;
 		showHardwareInfo();
 
@@ -4546,7 +4517,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	public void setUpdatedLogfilePanel(String logtype) {
 		logging.info(this, "setUpdatedLogfilePanel " + logtype);
 		// WaitCursor waitCursor = new WaitCursor(
-		
+
 		setLogfilePanel(main.getLogfilesUpdating(logtype));
 
 	}
@@ -4555,8 +4526,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jTabbedPaneConfigPanes.setComponentAt(
 				jTabbedPaneConfigPanes.indexOfTab(configed.getResourceValue("MainFrame.jPanel_logfiles")),
 				showLogfiles);
-
-		
 
 		showLogfiles.setDocuments(logs, statusPane.getSelectedClientNames());
 
@@ -4575,40 +4544,35 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jTextFieldDescription.setText(s);
 		jTextFieldDescription.setCaretPosition(0);
 
-		
 	}
 
 	public void setClientInventoryNumberText(String s) {
 		jTextFieldInventoryNumber.setText(s);
 		jTextFieldInventoryNumber.setCaretPosition(0);
 
-		
 	}
 
 	public void setClientOneTimePasswordText(String s) {
 		jTextFieldOneTimePassword.setText(s);
 		jTextFieldOneTimePassword.setCaretPosition(0);
 
-		
 	}
 
 	public void setClientNotesText(String s) {
 		jTextAreaNotes.setText(s);
 		jTextAreaNotes.setCaretPosition(0);
 		oldNotes = s;
-		
+
 	}
 
 	public void setClientMacAddress(String s) {
 		macAddressField.setText(s);
 
-		
 	}
 
 	public void setClientIpAddress(String s) {
 		ipAddressField.setText(s);
 
-		
 	}
 
 	public void setUefiBoot(Boolean b) {

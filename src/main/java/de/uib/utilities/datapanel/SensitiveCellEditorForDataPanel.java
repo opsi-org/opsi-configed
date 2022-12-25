@@ -29,7 +29,7 @@ public class SensitiveCellEditorForDataPanel extends de.uib.utilities.table.gui.
 		if (instance == null) {
 			// Lazy Creation, falls keine Instanz gefunden
 			instance = new SensitiveCellEditorForDataPanel();
-			
+
 			instances.put(key, instance);
 			instance.myKey = "" + key;
 			logging.debug(instance.getClass().getName() + " produced instance for key " + key + " ; size of instances "

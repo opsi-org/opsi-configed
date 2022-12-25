@@ -73,8 +73,6 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 	protected int minVSize = 80;
 
-	
-
 	public static final int tablesMaxWidth = 1000;
 	protected int tablesMaxHeight = Short.MAX_VALUE;
 
@@ -175,14 +173,12 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		labelSupplementSimilar = new JLabel(
 				configed.getResourceValue("PanelAssignToLPools.Licences.supplementSimilarSWEntries"));
-		
+
 		labelSupplementSimilar.setVisible(true);
 		labelSupplementSimilar.setFont(Globals.defaultFont);
 		// labelSupplementSimilar.setIcon(
-		
 
 		// buttonSupplementSimilar = new JButton( configed.getResourceValue(
-		
 
 		buttonSupplementSimilar = new JButton(
 				configed.getResourceValue("PanelAssignToLPools.Licences.supplementSimilarSWEntries.button"),
@@ -222,7 +218,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		labelSimilarEntriesExist.setFont(Globals.defaultFont);
 
 		panelRadiobuttonsPreselectionForName2Pool = new PanelStateSwitch(
-				
+
 				null, FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction.SHOW_ALL_NAMES, // start value
 				FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction.values(),
 				new String[] {

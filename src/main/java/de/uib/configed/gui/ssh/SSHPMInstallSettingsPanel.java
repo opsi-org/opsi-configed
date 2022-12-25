@@ -192,7 +192,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 			}
 		} else {
 			if (selectedDepots.contains(
-					
+
 					PersistenceController.DEPOT_SELECTION_NODEPOTS)
 
 			) {
