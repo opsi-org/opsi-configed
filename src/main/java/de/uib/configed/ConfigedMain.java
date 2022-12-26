@@ -357,7 +357,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected Map<LicencesTabStatus, String> licencesPanelsTabNames = new EnumMap<>(LicencesTabStatus.class);
 
-	// ==================================================================
+	
 	// TabController Interface
 	@Override
 	public Enum getStartTabState() {
@@ -409,7 +409,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return true;
 	}
 
-	// ==================================================================
+	
 
 	private boolean dataReady = false;
 

@@ -586,7 +586,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		};
 		descriptionField.getDocument().addDocumentListener(descriptionFieldListener);
 
-		// ==============
+		
 
 		panelEdit = new JPanel();
 
@@ -639,9 +639,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		panelEdit.setBorder(Globals.createPanelBorder());
 
-		// ==============
+		
 
-		// ==============
+		
 
 		GroupLayout layoutMain = new GroupLayout(this);
 		this.setLayout(layoutMain);

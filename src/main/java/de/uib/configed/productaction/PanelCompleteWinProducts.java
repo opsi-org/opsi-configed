@@ -54,7 +54,7 @@ public class PanelCompleteWinProducts extends JPanel
 
 {
 
-	// ============== file name conventions
+	// file name conventions
 
 	String winProduct = "";
 	String server = "";
@@ -63,8 +63,6 @@ public class PanelCompleteWinProducts extends JPanel
 
 	String depotProductDirectory;
 	boolean smbMounted;
-
-	// ==============
 
 	int firstLabelWidth = Globals.FIRST_LABEL_WIDTH;
 
@@ -212,7 +210,6 @@ public class PanelCompleteWinProducts extends JPanel
 
 	}
 
-	// =======
 	// implements NameProducer
 	@Override
 	public String produceName() {
@@ -229,8 +226,6 @@ public class PanelCompleteWinProducts extends JPanel
 	public String getDefaultName() {
 		return de.uib.connectx.SmbConnect.PRODUCT_SHARE_RW;
 	}
-
-	// =======
 
 	private void initComponentsForNameProducer() {
 		fieldTargetPath = new JTextField("");

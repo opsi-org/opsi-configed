@@ -73,7 +73,7 @@ public class UserConfig {
 	protected LinkedHashMap<String, List<Object>> valuesMap;
 	protected LinkedHashMap<String, List<Object>> possibleValuesMap;
 
-	// ============================================================================================
+	
 
 	private static LinkedHashSet<String> USER_BOOL_KEYS;
 

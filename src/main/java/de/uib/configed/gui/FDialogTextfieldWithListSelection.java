@@ -192,13 +192,13 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		return selectedListElement;
 	}
 
-	// ======================
+	
 	// interface ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 
 	}
-	// ======================
+	
 
 	public static void main(String[] args) {
 		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, // owner frame

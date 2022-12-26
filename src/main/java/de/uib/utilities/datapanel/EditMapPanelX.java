@@ -767,7 +767,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		}
 	}
 
-	// ================= FocusListener
+	// FocusListener
 	@Override
 	public void focusGained(FocusEvent e) {
 

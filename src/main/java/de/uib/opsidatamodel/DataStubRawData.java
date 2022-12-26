@@ -116,12 +116,8 @@ public class DataStubRawData extends DataStubNOM {
 		return result.toString();
 	}
 
-	// ===================================================
-
 	// netbootStatesAndActions
 	// localbootStatesAndActions
-
-	// ===================================================
 
 	/*
 	 * in superclass
@@ -211,8 +207,6 @@ public class DataStubRawData extends DataStubNOM {
 
 		return result;
 	}
-
-	// ===================================================
 
 	@Override
 	protected void retrieveSoftwareAuditOnClients(final List<String> clients) {
@@ -341,10 +335,6 @@ public class DataStubRawData extends DataStubNOM {
 				+ " whereas softwareList has entries " + softwareList.size());
 	}
 
-	// ===================================================
-
-	// ===================================================
-
 	/*
 	 * getAuditSoftwareUsage
 	 * 
@@ -352,8 +342,6 @@ public class DataStubRawData extends DataStubNOM {
 	 * from SOFTWARE_CONFIG group by name, version, subversion, language,
 	 * architecture order by name, version, subversion, language, architecture 
 	 */
-
-	// ===================================================
 
 	@Override
 	protected void retrieveHostConfigs() {
@@ -431,8 +419,6 @@ public class DataStubRawData extends DataStubNOM {
 		persist.notifyDataRefreshedObservers("configState");
 
 	}
-
-	// =================================================== client2HwRows
 
 	private String maxTime(String time0, String time1) {
 		if (time0 == null && time1 == null)
@@ -674,7 +660,5 @@ public class DataStubRawData extends DataStubNOM {
 		persist.notifyDataRefreshedObservers("client2HwRows");
 
 	}
-
-	// ===================================================
 
 }

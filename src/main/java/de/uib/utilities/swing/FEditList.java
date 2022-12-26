@@ -267,7 +267,7 @@ public class FEditList extends FEditObject
 		}
 	}
 
-	// ======================
+	
 	// interface ActionListener
 	@Override
 	public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -279,9 +279,9 @@ public class FEditList extends FEditObject
 			visibleList.clearSelection();
 		}
 	}
-	// ======================
+	
 
-	// ======================
+	
 	// interface KeyListener
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -301,9 +301,9 @@ public class FEditList extends FEditObject
 	@Override
 	public void keyReleased(KeyEvent e) {
 	}
-	// ======================
+	
 
-	// ======================
+	
 	// interface MouseListener
 	@Override
 	public void mousePressed(MouseEvent e) {
@@ -327,7 +327,7 @@ public class FEditList extends FEditObject
 	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
-	// ======================
+	
 
 	@Override
 	public boolean init() {
@@ -356,7 +356,7 @@ public class FEditList extends FEditObject
 		buttonRemove.setEnabled(true);
 	}
 
-	// ======================
+	
 	// interface ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {

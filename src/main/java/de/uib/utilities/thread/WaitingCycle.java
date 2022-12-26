@@ -38,7 +38,7 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 			}
 
 			setProgress(100 * waitSecs / maxWaitSecs);
-			// ==========
+			
 			publish(waitSecs);
 
 			timeoutReached = (waitSecs > maxWaitSecs);

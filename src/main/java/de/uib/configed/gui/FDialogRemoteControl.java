@@ -93,7 +93,7 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 
 	}
 
-	// ======================
+	
 	// interface ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
@@ -119,7 +119,7 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 			extraField.setEnabled(editable.get(selText));
 		}
 	}
-	// ======================
+	
 
 	private void saveEditedText() {
 		if (extraField.isEditable() && selText != null && !selText.equals("") && meanings.get(selText) != null) {
@@ -128,7 +128,7 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 	}
 
 	// DocumentListener
-	// ======================
+	
 	@Override
 	public void changedUpdate(DocumentEvent e) {
 
@@ -146,9 +146,9 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 
 		saveEditedText();
 	}
-	// ======================
+	
 
-	// ======================
+	
 	// interface ActionListener
 	@Override
 	public void actionPerformed(java.awt.event.ActionEvent e) {

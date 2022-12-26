@@ -301,7 +301,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 	}
 
-	// =======
+	
 	// implements NameProducer
 	@Override
 	public String produceName() {
@@ -312,7 +312,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	public String getDefaultName() {
 		return packageShareS;
 	}
-	// =======
+	
 
 	private void initComponents() {
 		defineChoosers();

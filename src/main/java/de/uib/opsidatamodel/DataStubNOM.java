@@ -65,12 +65,8 @@ public class DataStubNOM extends DataStub {
 		productDependenciesRequestRefresh();
 	}
 
-	// ===================================================
-
 	// netbootStatesAndActions
 	// localbootStatesAndActions
-
-	// ===================================================
 
 	@Override
 	public boolean canCallMySQL()
@@ -79,7 +75,6 @@ public class DataStubNOM extends DataStub {
 		return false;
 	}
 
-	// ===================================================
 	protected Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos;
 
 	@Override
@@ -151,8 +146,6 @@ public class DataStubNOM extends DataStub {
 		}
 
 	}
-
-	// ===================================================
 
 	protected Object2Product2VersionList depot2LocalbootProducts;
 	protected Object2Product2VersionList depot2NetbootProducts;
@@ -308,8 +301,6 @@ public class DataStubNOM extends DataStub {
 
 	}
 
-	// ===================================================
-
 	protected Map<String, Map<String, Map<String, ListCellOptions>>> // depotId-->productId --> (propertyId --> value)
 	depot2Product2PropertyDefinitions;
 
@@ -400,8 +391,6 @@ public class DataStubNOM extends DataStub {
 
 	}
 
-	// ===================================================
-
 	protected Map<String, Map<String, List<Map<String, String>>>> // depotId-->productId --> (dependencyKey-->
 																	// value)
 	depot2product2dependencyInfos;
@@ -490,8 +479,6 @@ public class DataStubNOM extends DataStub {
 		}
 
 	}
-
-	// ===================================================
 
 	protected List<Map<String, Object>> productPropertyStates;
 	protected List<Map<String, Object>> productPropertyDepotStates; // will only be refreshed when all product
@@ -587,11 +574,9 @@ public class DataStubNOM extends DataStub {
 		return result;
 	}
 
-	// ===================================================
 	protected TreeMap<String, List<HWAuditClientEntry>> client2hwAuditHostEntries;
 	protected TreeMap<String, Map<String, List<HWAuditClientEntry>>> client2hwType2hwAuditHostEntries;
 
-	// ===================================================
 	protected TreeMap<String, SWAuditEntry> installedSoftwareInformation;
 	protected TreeMap<String, SWAuditEntry> installedSoftwareInformationForLicensing;
 	protected TreeMap<String, Set<String>> name2SWIdents; // giving the idents which have the name in their ident
@@ -807,8 +792,6 @@ public class DataStubNOM extends DataStub {
 		}
 	}
 
-	// ===================================================
-
 	protected List<Map<String, Object>> softwareAuditOnClients;
 	protected Map<String, List<SWAuditClientEntry>> client2software;
 	protected Map<String, java.util.Set<String>> softwareIdent2clients;
@@ -971,8 +954,6 @@ public class DataStubNOM extends DataStub {
 		}
 	}
 
-	// ===================================================
-
 	protected AuditSoftwareXLicencePool auditSoftwareXLicencePool;
 
 	@Override
@@ -1012,8 +993,6 @@ public class DataStubNOM extends DataStub {
 		logging.info(this, "retrieveAuditSoftwareXLicencePool retrieved ");
 
 	}
-
-	// ===================================================
 
 	protected Map<String, Map<String, Object>> hostConfigs;
 	protected java.sql.Time CONFIG_STATE_last_entry = null;
@@ -1082,7 +1061,6 @@ public class DataStubNOM extends DataStub {
 
 	}
 
-	// ===================================================
 	protected TreeMap<String, LicencepoolEntry> licencepools;
 
 	@Override
@@ -1120,7 +1098,6 @@ public class DataStubNOM extends DataStub {
 		}
 	}
 
-	// ===================================================
 	protected java.util.Map<String, LicenceContractEntry> licenceContracts;
 
 	protected TreeMap<String, TreeSet<String>> contractsExpired;
@@ -1212,7 +1189,6 @@ public class DataStubNOM extends DataStub {
 		}
 	}
 
-	// ===================================================
 	protected java.util.Map<String, LicenceEntry> licences;
 
 	@Override
@@ -1248,7 +1224,6 @@ public class DataStubNOM extends DataStub {
 		}
 	}
 
-	// ===================================================
 	protected List<LicenceUsableForEntry> licenceUsabilities;
 
 	@Override
@@ -1286,7 +1261,6 @@ public class DataStubNOM extends DataStub {
 
 	}
 
-	// ===================================================
 	protected List<LicenceUsageEntry> licenceUsages;
 
 	@Override
@@ -1325,7 +1299,6 @@ public class DataStubNOM extends DataStub {
 
 	}
 
-	// ===================================================
 	protected LicencePoolXOpsiProduct licencePoolXOpsiProduct;
 
 	@Override
@@ -1364,8 +1337,6 @@ public class DataStubNOM extends DataStub {
 		}
 
 	}
-
-	// =================================================== client2HwRows
 
 	protected Map<String, Map<String, Object>> client2HwRows;
 	protected java.sql.Time HW_INFO_last_entry = null;

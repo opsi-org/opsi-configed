@@ -141,7 +141,7 @@ public class SavedSearchesDialog extends FEditList {
 		buttonCommit.setEnabled(active);
 	}
 
-	// ======================
+	
 	// interface ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
@@ -154,7 +154,7 @@ public class SavedSearchesDialog extends FEditList {
 
 		buttonCommit.setEnabled(!getSelectedList().isEmpty());
 	}
-	// =====
+	
 
 	@Override
 	public Object getValue() {
@@ -247,7 +247,7 @@ public class SavedSearchesDialog extends FEditList {
 
 	}
 
-	// ======================
+	
 	// interface MouseListener
 	@Override
 	public void mousePressed(MouseEvent e) {
@@ -273,6 +273,6 @@ public class SavedSearchesDialog extends FEditList {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
-	// ======================
+	
 
 }

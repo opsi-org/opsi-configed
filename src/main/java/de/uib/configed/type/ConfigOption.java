@@ -113,7 +113,7 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 			put("nullable", false);
 	}
 
-	// ======================
+	
 	// interface de.uib.utilities.table.ListCellOptions
 	@Override
 	public List getPossibleValues() {
@@ -154,5 +154,5 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 		return type;
 	}
 
-	// ======================
+	
 }

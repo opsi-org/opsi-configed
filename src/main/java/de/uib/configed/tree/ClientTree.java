@@ -437,7 +437,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	}
 
-	// =====
+	
 	// interface KeyListener
 
 	@Override
@@ -475,7 +475,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	}
 
-	// ======================
+	
 	// interface TreeSelectionListener
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
@@ -489,7 +489,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	}
 
-	// ======================
+	
 	// TreeModelListener
 	@Override
 	public void treeNodesChanged(TreeModelEvent e) {
@@ -509,9 +509,9 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	public void treeStructureChanged(TreeModelEvent e) {
 
 	}
-	// ======================
+	
 
-	// ======================
+	
 	// interface MouseMotionListener
 	@Override
 	public void mouseMoved(MouseEvent e) {
@@ -521,9 +521,9 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	@Override
 	public void mouseDragged(MouseEvent e) {
 	}
-	// ======================
+	
 
-	// ======================
+	
 
 	boolean mouse_ready = true;
 
@@ -568,7 +568,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
-	// ======================
+	
 
 	private IconNode produceClientNode(Object x) {
 		IconNode n = new IconNode(x, false);
