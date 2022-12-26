@@ -124,7 +124,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 				0, true // switchLineColors
 				, new int[] { PanelGenEditTable.POPUP_RELOAD },
 
-				// PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF,
 				false // searchpane
 		) {
 			@Override
@@ -163,22 +162,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		panelSWxLicencepool.setDeleteAllowed(false);
 
 		owner.setVisible(true);
-
-		/*
-		 * jButton1 = new de.uib.configed.gui.IconButton (
-		 * de.uib.configed.configed.getResourceValue(
-		 * "PanelGenEditTable.SaveButtonTooltip") ,
-		 * "images/apply.png",
-		 * "images/apply_over.png",
-		 * "images/apply_disabled.png");
-		 * 
-		 * jButton2 = new de.uib.configed.gui.IconButton(
-		 * de.uib.configed.configed.getResourceValue(
-		 * "PanelGenEditTable.CancelButtonTooltip") ,
-		 * "images/cancel.png",
-		 * "images/cancel_over.png",
-		 * "images/cancel_disabled.png");
-		 */
 
 		initDataStructure();
 
@@ -368,9 +351,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 					setTableModelSWxLicencepool(swName);
 
 				}
-
-				// setTableModelSWxLicencepool
-
 			}
 		});
 
@@ -403,23 +383,10 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 					new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
 
 							() -> (Map) persist.getInstalledSoftwareName2SWinfo())
-					// ,
 
 					),
 
 					0, new int[] {}, (TableModelListener) panelSWnames, updateCollection)
-
-			/*
-			 * {
-			 * 
-			 * @Override
-			 * public Object getValueAt( int row , int col)
-			 * {
-			 * logging.info("modelSWnames getValueAt row, col " + row + ", " + col);
-			 * return super.getValueAt( row, col);
-			 * }
-			 * }
-			 */
 
 			{
 				@Override
@@ -572,12 +539,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						logging.info(this, "retrieveMap for swName " + swName);
 						return (Map) produceModelSWxLicencepool(swName);
 					}
-				}
-				// () -> (Map) produceModelSWxLicencepool( swName )
-				)
-		// ,
-
-		),
+				})),
 
 				keyCol, new int[] {}, (TableModelListener) panelSWnames, updateCollection);
 		updateItemFactoySWxLicencepool.setSource(modelSWxLicencepool);
@@ -620,36 +582,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	@Override
 	public void doAction1() {
 		super.doAction1();
-		/*
-		 * logging.debug(this, "doAction1");
-		 * 
-		 * logging.info(this, "removeAssociations for "
-		 * + " licencePool " + myController.getSelectedLicencePool()
-		 * + " selected SW keys " + panelSWnames.getSelectedKeys());
-		 * 
-		 * 
-		 * 
-		 * boolean success = persist.removeAssociations(
-		 * myController.getSelectedLicencePool(),
-		 * panelSWnames.getSelectedKeys()
-		 * );
-		 * 
-		 * if (success)
-		 * {
-		 * for (String key : panelSWnames.getSelectedKeys())
-		 * {
-		 * int row = panelSWnames.findViewRowFromValue(key, keyCol);
-		 * logging.info(this, "doAction1 key, " + key + ", row " + row);
-		 * logging.info(this, "doAction1 model row " +
-		 * panelSWnames.getTheTable().convertRowIndexToModel( row ) );
-		 * panelSWnames.getTableModel().deleteRow(
-		 * panelSWnames.getTheTable().convertRowIndexToModel( row ) );
-		 * }
-		 * result = 1;
-		 * }
-		 * 
-		 * 
-		 */
 	}
 
 	@Override
@@ -664,7 +596,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	public void leave() {
 		setVisible(false);
 		// we dont dispose the window, dispose it in the enclosing class
-
 	}
 
 	public void exit() {

@@ -85,64 +85,14 @@ public class FWakeClients extends FShowList {
 			try {
 				Thread.sleep(1000 * delaySecs);
 			} catch (InterruptedException ies) {
+				Thread.currentThread().interrupt();
 			}
 
 			turn++;
 		}
 
-		/*
-		 * hostSeparationByDepot.get(depot).size());
-		 * 
-		 * 
-		 * 
-		 * 
-		 * int i = 0;
-		 * while (!cancelled && i < selectedClients.length)
-		 * {
-		 * for (String depot : hostSeparationByDepot.keySet()
-		 * {
-		 * 
-		 * appendLine("trying to start up " + selectedClients[i]);
-		 * persist.wakeOnLan(new String[] {selectedClients[i]}, hostSeparationByDepot);
-		 * try
-		 * {
-		 * Thread.sleep(1000 * delaySecs);
-		 * }
-		 * catch(InterruptedException ies)
-		 * {
-		 * }
-		 * i++;
-		 * }
-		 */
-
 		jButton1.setText(configed.getResourceValue("FWakeClients.close"));
 	}
-
-	/*
-	 * 
-	 * void act(String[] selectedClients, int delaySecs)
-	 * {
-	 * Cursor oldCursor = getCursor();
-	 * setCursor(new Cursor(Cursor.WAIT_CURSOR));
-	 * 
-	 * int i = 0;
-	 * while (!cancelled && i < selectedClients.length)
-	 * {
-	 * appendLine("trying to start up " + selectedClients[i]);
-	 * persist.wakeOnLan(new String[] {selectedClients[i]} );
-	 * try
-	 * {
-	 * Thread.sleep(1000 * delaySecs);
-	 * }
-	 * catch(InterruptedException ies)
-	 * {
-	 * }
-	 * i++;
-	 * }
-	 * setCursor(oldCursor);
-	 * jButton1.setText("close");
-	 * }
-	 */
 
 	@Override
 	public void doAction1() {

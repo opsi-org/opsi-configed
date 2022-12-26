@@ -98,7 +98,6 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	public void setPredefinedDelays(LinkedHashMap<String, Integer> labelledDelays) {
 		this.labelledDelays = labelledDelays;
 		LinkedList<String> delays = new LinkedList<>(labelledDelays.keySet());
-		// comboDelay.setModel(new DefaultComboBoxModel<>(new
 
 		spinnerDelay.setModel(new SpinnerListModel(delays));
 		nullDelayValue = delays.get(0);
@@ -202,7 +201,6 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		waitingProgressBar.putClientProperty("Nimbus.Overrides", defaults);
 
 		fieldTaskname = new JTextField();
-		// JTextField fieldStartTime = new CheckedTimeField("");
 		fieldTaskname.getDocument().addDocumentListener(new DocumentListener() {
 
 			private void actOnChange() {
@@ -234,13 +232,11 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		int clientCountWidth = 100;
 
 		spinnerHour = new JSpinner();
-		JFormattedTextField textFieldHour = ((JFormattedTextField) ((JSpinner.DefaultEditor) spinnerHour.getEditor())
-				.getTextField());
+		JFormattedTextField textFieldHour = (((JSpinner.DefaultEditor) spinnerHour.getEditor()).getTextField());
 		textFieldHour.setEditable(false);
 
 		spinnerMinute = new JSpinner();
-		JFormattedTextField textFieldMinute = ((JFormattedTextField) ((JSpinner.DefaultEditor) spinnerMinute
-				.getEditor()).getTextField());
+		JFormattedTextField textFieldMinute = (((JSpinner.DefaultEditor) spinnerMinute.getEditor()).getTextField());
 		textFieldMinute.setEditable(false);
 
 		try {
@@ -566,144 +562,4 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		logging.info(this, "doAction2");
 		leave();
 	}
-
-	/*
-	 * PropertyChangeListener
-	 * public void propertyChange(PropertyChangeEvent evt)
-	 * {
-	 * logging.info(this, "propertyChange event " + evt);
-	 * if ("progress" == evt.getPropertyName())
-	 * {
-	 * int progress = (Integer) evt.getNewValue();
-	 * 
-	 * logging.info(this, "propertyChange  waitingProgressBar max " +
-	 * waitingProgressBar.getMaximum() + " value " + waitingProgressBar.getValue());
-	 * 
-	 * waitingProgressBar.setValue(progress);
-	 * }
-	 * }
-	 * 
-	 */
-
-	/*
-	 * class WaitingTask extends SwingWorker<Void, Long> {
-	 * //
-	 * // Main task. Executed in background thread.
-	 * //
-	 * 
-	 * private boolean stopped = false;
-	 * private final JLabel statusLabel;
-	 * private final JProgressBar progressBar;
-	 * 
-	 * WaitingTask(JProgressBar progressBar, JLabel statusLabel)
-	 * {
-	 * this.progressBar = progressBar;
-	 * this.statusLabel = statusLabel;
-	 * }
-	 * 
-	 * 
-	 * public void stop()
-	 * {
-	 * logging.info(this, "stop");
-	 * stopped = true;
-	 * cancel(true);
-	 * }
-	 * 
-	 * 
-	 * @Override
-	 * public Void doInBackground() {
-	 * 
-	 * int progress = 0;
-	 * setProgress( progress );
-	 * 
-	 * 
-	 * 
-	 * 
-	 * long timeStepMillis = (long) 1000;
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * long elapsedMillis = 0;
-	 * long elapsedMins = 0;
-	 * 
-	 * 
-	 * 
-	 * 
-	 * //while (progress < 100 && !stopped)
-	 * while (elapsedMillis < waitingMillis && !stopped)
-	 * {
-	 * try {
-	 * Thread.sleep( timeStepMillis );
-	 * }
-	 * catch (InterruptedException ignore)
-	 * {
-	 * logging.info(this, "InterruptedException");
-	 * }
-	 * 
-	 * long nowMillis = new GregorianCalendar().getTimeInMillis();
-	 * 
-	 * 
-	 * elapsedMillis = nowMillis - startActionMillis;
-	 * elapsedMins = (elapsedMillis / 1000) / 60;
-	 * 
-	 * 
-	 * elapsedMillis);
-	 * 
-	 * " totalTimeElapsed  [min] " + elapsedMins );
-	 * 
-	 * publish(elapsedMillis);
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * }
-	 * return null;
-	 * }
-	 * 
-	 * 
-	 * @Override
-	 * protected void process( List<Long> listOfMillis )
-	 * {
-	 * //update the steps which are done
-	 * 
-	 * 
-	 * long millis = listOfMillis.get( listOfMillis.size() - 1);
-	 * 
-	 * statusLabel.setText(
-	 * //"passed " + giveTimeSpan( millis) +
-	 * " " + configed .getResourceValue("FStartWakeOnLan.timeLeft") + "  " +
-	 * giveTimeSpan( waitingMillis - millis ) );
-	 * 
-	 * int barLength = progressBar.getMaximum() - progressBar.getMinimum();
-	 * 
-	 * 
-	 * ":: progressBar.getMinimum() " + progressBar.getMinimum()
-	 * 
-	 * " :: min + " + ((int) ((barLength * millis) / waitingMillis)));
-	 * 
-	 * progressBar.setValue( ( int ) (progressBar.getMinimum() + (int) ( (barLength
-	 * * millis) / waitingMillis)) ) ;
-	 * 
-	 * }
-	 * 
-	 * //
-	 * // Executed in event dispatching thread
-	 * //
-	 * 
-	 * @Override
-	 * public void done() {
-	 * logging.info(this, "done,  stopped is " + stopped );
-	 * if (!stopped) startAction();
-	 * }
-	 * }
-	 * 
-	 */
 }
