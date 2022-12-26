@@ -92,33 +92,6 @@ public class DataStubRawData extends DataStubNOM {
 		return result;
 	}
 
-	/*
-	 * @Override
-	 * protected boolean test()
-	 * {
-	 * if (!super.test())
-	 * return false;
-	 * 
-	 * //test if we can access any table
-	 * 
-	 * String query = "select  *  from " + SWAuditClientEntry.DB_TABLE_NAME
-	 * + " LIMIT 1 ";
-	 * 
-	 * logging.info(this, "test, query " + query);
-	 * 
-	 * boolean result
-	 * = persist.exec.doCall(
-	 * new OpsiMethodCall(
-	 * "getRawData",
-	 * new Object[]{query}
-	 * )
-	 * );
-	 * 
-	 * logging.info(this, "test result " + result);
-	 * return result;
-	 * }
-	 */
-
 	protected String giveWhereOR(String colName, List<String> values) {
 		if (values == null || values.isEmpty())
 			return "true";
@@ -163,13 +136,9 @@ public class DataStubRawData extends DataStubNOM {
 	// update as a side effect
 
 	@Override
-	protected List<Map<String, Object>> produceProductPropertyStates(
-			// protected List <Map<String, Object>>
-			// ENTWURFproduceProductPropertyStates(
-			final Collection<String> clients, java.util.Set<String> hosts) {
+	protected List<Map<String, Object>> produceProductPropertyStates(final Collection<String> clients,
+			java.util.Set<String> hosts) {
 		logging.debug(this, "produceProductPropertyStates new hosts " + clients + " old hosts " + hosts);
-
-		// List <Map<String, Object>> compareList =
 
 		List<Map<String, Object>> result = new ArrayList<>();
 
@@ -238,158 +207,12 @@ public class DataStubRawData extends DataStubNOM {
 
 			logging.info(this, "produceProductPropertyStates produced  items " + counter);
 
-			/*
-			 * 
-			 * counter = 0;
-			 * for (List<String> row : rows)
-			 * {
-			 * if (row.get(0).equals("firefox") && row.get(1).equals("profilemigrator"))
-			 * {
-			 * logging.info(this, "sql row  " + counter + ": " + row);
-			 * for (int i = 0; i < row.size(); i++)
-			 * {
-			 * logging.info(this, "sql " + row.get(i));
-			 * }
-			 * 
-			 * Map<String, Object> m = new HashMap<>();
-			 * 
-			 * m.put( ProductPropertyState.PRODUCT_ID, row.get(0) );
-			 * m.put( ProductPropertyState.PROPERTY_ID, row.get(1) );
-			 * m.put( ProductPropertyState.OBJECT_ID, row.get(2) );
-			 * 
-			 * //parse String and produce json list
-			 * org.json.JSONArray values = null;
-			 * try
-			 * {
-			 * values = new org.json.JSONArray(row.get(3));
-			 * }
-			 * catch(Exception ex)
-			 * {
-			 * logging.warning(this,
-			 * "produceProductPropertyStates, error when json parsing database string \n"
-			 * + row.get(3) + " for propertyId " + row.get(1) );
-			 * }
-			 * 
-			 * 
-			 * m.put( ProductPropertyState.VALUES, values);
-			 * 
-			 * logging.info(this, " values " + values);
-			 * 
-			 * result.add(m);
-			 * 
-			 * counter++;
-			 * }
-			 * 
-			 * }
-			 */
-
-			/*
-			 * counter = 0;
-			 * logging.info(this, "compare to ");
-			 * for (Map<String, Object> m : compareList)
-			 * {
-			 * if (
-			 * m.get("productId").equals("firefox")
-			 * &&
-			 * m.get("propertyId").equals("profilemigrator")
-			 * )
-			 * 
-			 * {
-			 * logging.info(this, " .. " + counter);
-			 * for (String key : m.keySet())
-			 * {
-			 * logging.info(this, " key " + key + " value of class "
-			 * + m.get(key).getClass().getName() + " : "
-			 * + m.get(key) );
-			 * 
-			 * }
-			 * 
-			 * 
-			 * 
-			 * counter++;
-			 * }
-			 * }
-			 * System.exit(0);
-			 */
-
 		}
 
 		return result;
 	}
 
 	// ===================================================
-
-	/*
-	 * in superclass
-	 * 
-	 * protected List <Map<String, Object>> softwareAuditOnClients;
-	 * protected Map<String, List <SWAuditClientEntry>> client2software;
-	 * 
-	 * protected java.sql.Time SOFTWARE_CONFIG_last_entry = null;
-	 * 
-	 * 
-	 * @Override
-	 * public void softwareAuditOnClientsRequestRefresh()
-	 * {
-	 * softwareAuditOnClients = null;
-	 * client2software = null;
-	 * }
-	 * 
-	 * 
-	 * 
-	 * @Override
-	 * public void fillClient2Software(String client)
-	 * {
-	 * logging.info(this, "fillClient2Software " + client);
-	 * if (client2software == null)
-	 * {
-	 * retrieveSoftwareAuditOnClients(client);
-	 * 
-	 * return;
-	 * }
-	 * 
-	 * if (client2software.get(client) == null)
-	 * retrieveSoftwareAuditOnClients(client);
-	 * 
-	 * }
-	 * 
-	 * @Override
-	 * public void fillClient2Software(List<String> clients)
-	 * {
-	 * retrieveSoftwareAuditOnClients(clients);
-	 * }
-	 * 
-	 * @Override
-	 * public Map<String, List<SWAuditClientEntry>> getClient2Software()
-	 * //fill the clientlist by fill ...
-	 * {
-	 * logging.info(this, "getClient2Software  ============= ");
-	 * return client2software;
-	 * }
-	 * 
-	 * @Override
-	 * public Map<String, java.util.Set<String>> getSoftwareIdent2clients()
-	 * //fill the clientlist by fill ...
-	 * {
-	 * logging.info(this, "getSoftwareIdent2clients ============= "
-	 * 
-	 * + softwareIdent2clients );
-	 * return softwareIdent2clients;
-	 * }
-	 * 
-	 * 
-	 * protected void retrieveSoftwareAuditOnClients()
-	 * {
-	 * retrieveSoftwareAuditOnClients(new ArrayList<>());
-	 * }
-	 * 
-	 * protected void retrieveSoftwareAuditOnClients(String client)
-	 * {
-	 * List<String> clients = new ArrayList<>();
-	 * clients.add(client);
-	 * retrieveSoftwareAuditOnClients(clients);
-	 * }
-	 */
 
 	@Override
 	protected void retrieveSoftwareAuditOnClients(final List<String> clients) {
@@ -414,8 +237,7 @@ public class DataStubRawData extends DataStubNOM {
 		int missingEntries = 0;
 
 		boolean fetchAll = true;
-		// if (client2software == null || softwareId2clients == null ||
-		// newClients.size() > 0)
+
 		if (client2software == null || softwareIdent2clients == null || !newClients.isEmpty()) {
 			String clientSelection = null;
 
@@ -435,7 +257,6 @@ public class DataStubRawData extends DataStubNOM {
 
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " softwareConfig ");
-			// , step " + step);
 
 			logging.info(this, "retrieveSoftwareAuditOnClients/ SOFTWARE_CONFIG, start a request");
 
@@ -443,13 +264,6 @@ public class DataStubRawData extends DataStubNOM {
 			columns = columns.substring(1);
 			columns = columns.substring(0, columns.length() - 1);
 
-			/*
-			 * String query = "select " + columns + " from " + "HOST, " +
-			 * SWAuditClientEntry.DB_TABLE_NAME + " \n"
-			 * + " where  state = 1 "
-			 * + " and HOST.hostID = " + SWAuditClientEntry.DB_TABLE_NAME + ".clientId "
-			 * + " and HOST.type='OpsiClient' "
-			 */
 			String query = "select " + columns + " from " + SWAuditClientEntry.DB_TABLE_NAME + " \n"
 					+ " where  state = 1 " + clientSelection + " order by clientId ";;
 
@@ -465,13 +279,6 @@ public class DataStubRawData extends DataStubNOM {
 			} else {
 
 				logging.info(this, "retrieveSoftwareAuditOnClients rows size " + rows.size());
-
-				/*
-				 * for (String clientId : clientListForCall)
-				 * {
-				 * client2software.put(clientId, new LinkedList<>());
-				 * }
-				 */
 
 				if (fetchAll)
 					client2software.clear();
@@ -490,35 +297,11 @@ public class DataStubRawData extends DataStubNOM {
 						client2software.put(clientId, entries);
 					}
 
-					// client " + clientId);
-
 					SWAuditClientEntry clientEntry = new SWAuditClientEntry(SWAuditClientEntry.DB_COLUMN_NAMES, row,
 							persist);
 
 					swIdent = clientEntry.getSWident();
 
-					/*
-					 * if (swIdent.indexOf("55375-337") > -1 || swIdent.indexOf("55375-440") > -1)
-					 * {
-					 * logging.info(this, " retrieveSoftwareAuditOnClient clientId : swIdent " +
-					 * clientId + " : " + swIdent);
-					 * }
-					 */
-
-					/*
-					 * if (clientEntry.getSWid() == -1)
-					 * {
-					 * missingEntries++;
-					 * logging.info("Missing auditSoftware entry for swIdent " +
-					 * SWAuditClientEntry.DB_COLUMN_NAMES + " for values: " +
-					 * SWAuditClientEntry.produceSWident(SWAuditClientEntry.DB_COLUMN_NAMES, row)
-					 * );
-					 * 
-					 * 
-					 * 
-					 * }
-					 * else
-					 */
 					{
 						java.util.Set<String> clientsWithThisSW = softwareIdent2clients.get(swIdent);
 						if (clientsWithThisSW == null) {
@@ -527,32 +310,10 @@ public class DataStubRawData extends DataStubNOM {
 							softwareIdent2clients.put(swIdent, clientsWithThisSW);
 						}
 
-						/*
-						 * 
-						 * if (swIdent.indexOf("55375-337") > -1 || swIdent.indexOf("55375-640") > -1)
-						 * {
-						 * logging.info(this, "having this subversion " + clientId);
-						 * }
-						 * 
-						 */
-
 						clientsWithThisSW.add(clientId);
 
 						entries.add(clientEntry);
 					}
-
-					/*
-					 * 
-					 * if (swIdent.indexOf("55375-337") > -1 || swIdent.indexOf("55375-640") > -1)
-					 * {
-					 * logging.info(this,
-					 * " retrieveSoftwareAuditOnClient softwareIdent2clients.get(swIdent) " +
-					 * " size " + softwareIdent2clients.get(swIdent).size() + " :: " +
-					 * softwareIdent2clients.get(swIdent) );
-					 * 
-					 * 
-					 * }
-					 */
 
 				}
 
@@ -589,30 +350,10 @@ public class DataStubRawData extends DataStubNOM {
 	 * 
 	 * select count(*) as Anzahl, name, version, subversion, language, architecture
 	 * from SOFTWARE_CONFIG group by name, version, subversion, language,
-	 * architecture order by name, version, subversion, language, architecture ;
+	 * architecture order by name, version, subversion, language, architecture 
 	 */
 
 	// ===================================================
-
-	/*
-	 * in superclass
-	 * protected Map<String, Map<String, Object>> hostConfigs;
-	 * protected java.sql.Time CONFIG_STATE_last_entry = null;
-	 * 
-	 * @Override
-	 * public void hostConfigsRequestRefresh()
-	 * {
-	 * logging.info(this, "hostConfigsRequestRefresh");
-	 * hostConfigs= null;
-	 * }
-	 * 
-	 * @Override
-	 * public Map<String, Map<String, Object>> getConfigs()
-	 * {
-	 * retrieveHostConfigs();
-	 * return hostConfigs;
-	 * }
-	 */
 
 	@Override
 	protected void retrieveHostConfigs() {
@@ -661,16 +402,6 @@ public class DataStubRawData extends DataStubNOM {
 					hostConfigs.put(hostId, configs1Host);
 				}
 
-				/*
-				 * Map<String, List<Object>> configValues1Host =
-				 * hostConfigValues.get(hostId) ;
-				 * if (configValues1Host == null)
-				 * {
-				 * configValues1Host = new HashMap<>();
-				 * hostConfigValues.put(hostId, configValues1Host);
-				 * }
-				 */
-
 				String configId = row.get(1);
 
 				// get values as String
@@ -697,7 +428,6 @@ public class DataStubRawData extends DataStubNOM {
 
 		timeCheck.stop();
 		logging.info(this, "retrieveHostConfigs retrieved ");
-		// hostConfigs.keySet()
 		persist.notifyDataRefreshedObservers("configState");
 
 	}
@@ -875,7 +605,7 @@ public class DataStubRawData extends DataStubNOM {
 		 * 
 		 * and HOST.hostId = HARDWARE_CONFIG_DISK_PARTITION.hostId
 		 * 
-		 * and HARDWARE_CONFIG_DISK_PARTITION.state=1 ;
+		 * and HARDWARE_CONFIG_DISK_PARTITION.state=1 
 		 * 
 		 */
 
@@ -914,8 +644,6 @@ public class DataStubRawData extends DataStubNOM {
 		TimeCheck timeCheck = new TimeCheck(this, " retrieveClient2HwRows all ");
 		timeCheck.start();
 
-		// Map<String, Map<String, Object>> client2AllInfos = new HashMap<String,
-
 		for (String hwClass : persist.getHwInfoClassNames()) {
 			logging.info(this, "retrieveClient2HwRows hwClass " + hwClass);
 
@@ -943,27 +671,10 @@ public class DataStubRawData extends DataStubNOM {
 
 		timeCheck.stop();
 		logging.info(this, "retrieveClient2HwRows finished  ");
-		// client2HwRows.keySet()
 		persist.notifyDataRefreshedObservers("client2HwRows");
 
 	}
 
 	// ===================================================
-	/*
-	 * String query = "select * from user";
-	 * 
-	 * logging.info(this, "test, query " + query);
-	 * 
-	 * boolean result
-	 * = persist.exec.doCall(
-	 * new OpsiMethodCall(
-	 * "getRawData",
-	 * new Object[]{query}
-	 * )
-	 * );
-	 * 
-	 * test user table
-	 * Opsi service error: [ProgrammingError] (1146,
-	 * "Table 'opsi.user' doesn't exist")
-	 */
+
 }

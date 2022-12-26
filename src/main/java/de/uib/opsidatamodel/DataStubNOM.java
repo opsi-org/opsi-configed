@@ -79,14 +79,6 @@ public class DataStubNOM extends DataStub {
 		return false;
 	}
 
-	/*
-	 * @Override
-	 * protected boolean test()
-	 * {
-	 * return true;
-	 * }
-	 */
-
 	// ===================================================
 	protected Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos;
 
@@ -110,11 +102,6 @@ public class DataStubNOM extends DataStub {
 			for (String key : OpsiPackage.SERVICE_KEYS) {
 				attribs.add(key);
 			}
-
-			/*
-			 * attribs.remove(OpsiPackage.SERVICEkeyPRODUCT_ID);
-			 * attribs.add("id");
-			 */
 
 			for (String scriptKey : ActionRequest.getScriptKeys()) {
 				attribs.add(scriptKey);
@@ -156,50 +143,9 @@ public class DataStubNOM extends DataStub {
 				}
 				version2productInfos.put(versionInfo, productInfo);
 
-				/*
-				 * logging.info(this, "retrieveProductInfos product  -  version2productInfos " +
-				 * productId + "  -  " +
-				 * version2productInfos);
-				 */
-
 			}
 
 			logging.debug(this, "retrieveProductInfos " + product2versionInfo2infos);
-
-			// lambda
-			/*
-			 * 
-			 * Map<String, List<Map<String, Object>>> pInfos = new HashMap<String,
-			 * List<Map<String, Object>>>();
-			 * String keyP = "id";
-			 * 
-			 * retrievedList.forEach(
-			 * m->
-			 * {
-			 * if ( pInfos.get( m.get(keyP ) ) == null )
-			 * pInfos.put( (String) m.get(keyP), new ArrayList<>() );
-			 * }
-			 * );
-			 * 
-			 * retrievedList.forEach(
-			 * m-> pInfos.get( (String) m.get(keyP)).add( m )
-			 * );
-			 */
-
-			/*
-			 * retrievedList.forEach(
-			 * m->
-			 * {
-			 * String p = (String) m.get(keyP);
-			 * if (pInfos.get( p ) == null)
-			 * pInfos.put(p, new ArrayList<>());
-			 * 
-			 * List<Map<String, Object> list = pInfos.get( p );
-			 * list.add((Map<String, Object) m);
-			 * }
-			 * );
-			 * 
-			 */
 
 			persist.notifyDataRefreshedObservers("product");
 		}
@@ -332,7 +278,6 @@ public class DataStubNOM extends DataStub {
 				try {
 					productName = product2versionInfo2infos.get(p.getProductId()).get(p.getVersionInfo())
 							.getProductName();
-					// productLockedInfo =
 
 					productRow.add(productName);
 					p.appendValues(productRow);
@@ -357,13 +302,6 @@ public class DataStubNOM extends DataStub {
 				}
 
 			}
-
-			/*
-			 * logging.debug(this, "retrieveDepotProducts localBoot | netBoot "
-			 * + "\n"+ depot2LocalbootProducts
-			 * + "\n"+ depot2NetbootProducts
-			 * );
-			 */
 
 			persist.notifyDataRefreshedObservers("productOnDepot");
 		}
@@ -391,10 +329,6 @@ public class DataStubNOM extends DataStub {
 
 		if (depot2Product2PropertyDefinitions == null) {
 			depot2Product2PropertyDefinitions = new HashMap<>();
-
-			// HashMap<String, java.util.Set<String>> productListForProductID = new
-
-			// HashMap<String, java.util.Set<String>> productListForProductID_notUnique =
 
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " product property");
@@ -563,9 +497,6 @@ public class DataStubNOM extends DataStub {
 	protected List<Map<String, Object>> productPropertyDepotStates; // will only be refreshed when all product
 																	// data are refreshed
 
-	// protected Map<String, Map<String, Map<String, Object>>>
-	// host2product2properties_retrieved = new HashMap<String, Map<String, Map
-
 	protected java.util.Set<String> hostsWithProductProperties;
 
 	@Override
@@ -592,9 +523,6 @@ public class DataStubNOM extends DataStub {
 		return productPropertyDepotStates;
 	}
 
-	// public Map<String, Map<String, Map<String, Object>>>
-	// getHost2product2properties_retrieved = new HashMap<String, Map<String, Map
-
 	@Override
 	public void fillProductPropertyStates(Collection<String> clients) {
 		logging.info(this, "fillProductPropertyStates for " + clients);
@@ -615,19 +543,6 @@ public class DataStubNOM extends DataStub {
 		if (productPropertyDepotStates == null) {
 			productPropertyDepotStates = produceProductPropertyStates(depots, null);
 		}
-
-		/*
-		 * if (productPropertyDepotStates == null)
-		 * {
-		 * productPropertyDepotStates = produceProductPropertyStates(depots , null);
-		 * depotsWithProductProperties = depots;
-		 * }
-		 * else
-		 * {
-		 * productPropertyDepotStates = produceProductPropertyStates(depots ,
-		 * depotsWithProductProperties);
-		 * }
-		 */
 
 		logging.info(this, "retrieveProductPropertyDepotStates ready  size " + productPropertyDepotStates.size());
 	}
@@ -668,12 +583,6 @@ public class DataStubNOM extends DataStub {
 		}
 
 		logging.info(this, "produceProductPropertyStates for hosts " + hosts);
-		/*
-		 * for (Map<String, Object> m : result)
-		 * {
-		 * logging.info(this, "produceProductPropertyStates record " + m);
-		 * }
-		 */
 
 		return result;
 	}
@@ -831,16 +740,6 @@ public class DataStubNOM extends DataStub {
 
 					installedSoftwareInformationForLicensing.put(entry.getIdent(), entry);
 
-					/*
-					 * Set<String> containingThisName = name2SWIdents.get( swName );
-					 * if ( containingThisName == null )
-					 * {
-					 * containingThisName = new TreeSet<>();
-					 * name2SWIdents.put( swName, containingThisName );
-					 * }
-					 * containingThisName.add( entry.getIdent() );
-					 */
-
 					if (name2SWIdents.get(swName) == null)
 						name2SWIdents.put(swName, new TreeSet<>());
 					name2SWIdents.get(swName).add(entry.getIdent());
@@ -862,20 +761,7 @@ public class DataStubNOM extends DataStub {
 
 					identInfoRow.put(SWAuditEntry.EXISTING_IDS, infoString);
 
-					/*
-					 * if (entry.getIdent().indexOf( "zypper" ) > -1)
-					 * {
-					 * i++;
-					 * logging.info(this, " check zypper i " + i + " info : " + infoString);
-					 * 
-					 * 
-					 * logging.info(this, " check zypper i " + i + " infoRow : " + identInfoRow );
-					 * }
-					 */
-
 					installedSoftwareName2SWinfo.put(swName, identInfoRow);
-
-					// --
 
 					Map<String, Map<String, String>> ident2infoWithPool = name2ident2infoWithPool.get(swName);
 
@@ -898,14 +784,6 @@ public class DataStubNOM extends DataStub {
 				}
 
 			}
-
-			/*
-			 * logging.info(this, "getInstalledSoftwareInformation, found for testKey "
-			 * + foundEntries.size());
-			 * logging.info(this, "getInstalledSoftwareInformation, found for testKey " +
-			 * testKey + ":: " +
-			 * foundEntries);
-			 */
 
 			softwareList = new ArrayList<>(installedSoftwareInformation.keySet());
 
@@ -946,15 +824,6 @@ public class DataStubNOM extends DataStub {
 
 	}
 
-	/*
-	 * public List <Map<String, Object>> getSoftwareAuditOnClients()
-	 * {
-	 * logging.debug(this, "getSoftwareAuditOnClients");
-	 * retrieveSoftwareAuditOnClients0();
-	 * return softwareAuditOnClients;
-	 * }
-	 */
-
 	@Override
 	public void fillClient2Software(String client) {
 		logging.info(this, "fillClient2Software " + client);
@@ -986,28 +855,6 @@ public class DataStubNOM extends DataStub {
 		retrieveInstalledSoftwareInformation();
 		return client2software;
 	}
-
-	/*
-	 * @Override
-	 * public Map<Integer, List<String>> getSoftwareId2clients()
-	 * {
-	 * 
-	 * 
-	 * 
-	 * if (softwareId2clients == null)
-	 * logging.info(this, "getSoftwareId2clients ============= null");
-	 * else
-	 * {
-	 * for (Integer key : softwareId2clients.keySet())
-	 * {
-	 * logging.info(this, "getSoftwareId2clients ===== key " + key + " "
-	 * + softwareId2clients.get(key));
-	 * }
-	 * }
-	 * 
-	 * return softwareId2clients;
-	 * }
-	 */
 
 	@Override
 	public Map<String, java.util.Set<String>> getSoftwareIdent2clients()
@@ -1047,8 +894,6 @@ public class DataStubNOM extends DataStub {
 
 		int stepSize = 100;
 
-		// if (client2software == null || softwareId2clients == null ||
-		// newClients.size() > 0)
 		if (client2software == null || softwareIdent2clients == null || !newClients.isEmpty()) {
 			int step = 1;
 			while (!newClients.isEmpty()) {
@@ -1093,14 +938,6 @@ public class DataStubNOM extends DataStub {
 					String clientId = clientEntry.getClientId();
 					String swIdent = clientEntry.getSWident();
 
-					/*
-					 * if (swIdent.startsWith("firefox"))
-					 * {
-					 * logging.info(this, " retrieveSoftwareAuditOnClient clientId : swIdent " +
-					 * clientId + " : " + swIdent);
-					 * }
-					 */
-
 					Set<String> clientsWithThisSW = softwareIdent2clients.get(swIdent);
 					if (clientsWithThisSW == null) {
 						clientsWithThisSW = new HashSet<>();
@@ -1109,29 +946,11 @@ public class DataStubNOM extends DataStub {
 
 					clientsWithThisSW.add(clientId);
 
-					/*
-					 * if (clientEntry.getSWid() == -1)
-					 * {
-					 * logging.info("Missing auditSoftware entry for swIdent " +
-					 * SWAuditClientEntry.produceSWident(item));
-					 * 
-					 * }
-					 * else
-					 */
 					{
 						if (clientId != null) // null not allowed in mysql
 						{
 							List<SWAuditClientEntry> entries = client2software.get(clientId);
 
-							// variant1
-							/*
-							 * if (entries == null)
-							 * {retrieveSoftwareAuditOnClients, start a request");
-							 * 
-							 * entries = new LinkedList<>();
-							 * client2software.put(clientId, entries);
-							 * }
-							 */
 							entries.add(clientEntry);
 						}
 
@@ -1232,7 +1051,7 @@ public class DataStubNOM extends DataStub {
 		for (Map<String, Object> listElement : retrieved) {
 			Object id = listElement.get("objectId");
 
-			if (id != null && id instanceof String && !id.equals("")) {
+			if (id instanceof String && !id.equals("")) {
 				String hostId = (String) id;
 				Map<String, Object> configs1Host = hostConfigs.get(id);
 				if (configs1Host == null) {
