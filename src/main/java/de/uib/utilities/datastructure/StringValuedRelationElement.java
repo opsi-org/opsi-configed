@@ -24,13 +24,6 @@ public class StringValuedRelationElement extends RelationElement<String, String>
 
 	}
 
-	/*
-	 * public String getString(String key)
-	 * {
-	 * return super.get(key);
-	 * }
-	 */
-
 	protected void produceFrom(Map<String, ? extends Object> map) {
 		for (String attribute : allowedAttributes) {
 			if (map.get(attribute) != null && !map.get(attribute).equals("null")) {

@@ -76,7 +76,6 @@ public class ActivityPanel extends JPanel implements Runnable {
 
 				paintImmediately(0, 0, w, h); // class cast exceptions mit sleepingMS = 50 if not event dispatch thread
 			}
-			// else
 
 		} catch (Exception strange) {
 			logging.warning(this, "strange exception " + strange);
@@ -110,6 +109,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 					Thread.sleep(sleepingMS);
 
 				} catch (InterruptedException ignore) {
+					Thread.currentThread().interrupt();
 				}
 
 				if (acting) {
@@ -135,27 +135,18 @@ public class ActivityPanel extends JPanel implements Runnable {
 					try {
 						Thread.sleep((long) 2 * sleepingMS);
 					} catch (InterruptedException ignore) {
+						Thread.currentThread().interrupt();
 					}
 				}
 			}
 		} catch (Exception anyException) {
 			logging.warning(this, "on running, caught some exception", anyException);
+
+			if (anyException instanceof InterruptedException)
+				Thread.currentThread().interrupt();
 		}
 
 	}
-
-	/*
-	 * @Override public void paint(Graphics g
-	 * {
-	 * try{
-	 * super.paintBorder(g);
-	 * }
-	 * catch(java.lang.ClassCastException ex)
-	 * {
-	 * logging.info(this, "the well known exception " + ex);
-	 * }
-	 * }
-	 */
 
 	protected void initGui() {
 		lineBorderInactive = new javax.swing.border.LineBorder(Globals.backLightBlue, 1, true);

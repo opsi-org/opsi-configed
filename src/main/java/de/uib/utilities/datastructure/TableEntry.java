@@ -11,26 +11,6 @@ public abstract class TableEntry extends LinkedHashMap<String, String> {
 	// static values and methods (resp. methods based on static values)
 	// must be defined in subclasses
 
-	/*
-	 * protected static List<String> KEYS;
-	 * 
-	 * protected static Map<String, String> locale;
-	 * 
-	 * @Override
-	 * public String put(String key, String value)
-	 * {
-	 * assert KEYS.indexOf(key) > -1 : "not valid key " + key;
-	 * 
-	 * if (KEYS.indexOf(key) > -1)
-	 * {
-	 * return super.put(key, value);
-	 * }
-	 * 
-	 * return null;
-	 * 
-	 * }
-	 */
-
 	public TableEntry(Map entry) {
 		pureEntry = entry;
 		entryRetrieved = entry;

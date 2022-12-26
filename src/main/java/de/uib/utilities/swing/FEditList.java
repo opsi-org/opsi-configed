@@ -154,7 +154,6 @@ public class FEditList extends FEditObject
 
 	protected void setExtraFieldToListValueAt(Point location) {
 		String txt = "" + getValueAt(location);
-		// visibleList.getModel().getElementAt( visibleList.locationToIndex( location )
 
 		extraField.setText(txt);
 		extraFieldChanged(false);
@@ -203,7 +202,6 @@ public class FEditList extends FEditObject
 
 		addElement(element);
 
-		// extraField.setText(""); //an empty list value will always be created by what
 		// ever event
 
 		extraFieldChanged(false);
@@ -364,7 +362,6 @@ public class FEditList extends FEditObject
 	public void valueChanged(ListSelectionEvent e) {
 		List selectedList = getSelectedList();
 
-		// nullable? " + nullable);
 		if (!nullable && selectedList.isEmpty()) {
 			// reset to some value
 			initSelection();
@@ -375,6 +372,5 @@ public class FEditList extends FEditObject
 
 		buttonRemove.setEnabled(!selectedList.isEmpty());
 	}
-	// ======================
 
 }

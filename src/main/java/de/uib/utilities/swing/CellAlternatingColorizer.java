@@ -19,13 +19,6 @@ public class CellAlternatingColorizer {
 		if (textColoring)
 			cell.setForeground(Globals.lightBlack);
 
-		/*
-		 * if (isSelected)
-		 * {
-		 * cell.setBackground( Globals.defaultTableSelectedRowDark );
-		 * }
-		 */
-
 		if (isSelected) {
 			if (isEven)
 				cell.setBackground(selectedEvenColor);

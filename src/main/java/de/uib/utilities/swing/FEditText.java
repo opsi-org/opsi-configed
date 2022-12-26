@@ -107,23 +107,6 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
 
-		/*
-		 * //catch tabs and in case returns
-		 * try
-		 * {
-		 * String newPiece = e.getDocument().getText(e.getOffset(), e.getLength());
-		 * logging.debug(this, " --------->" + newPiece + "<");
-		 * if ( newPiece.equals ("\t") )
-		 * {
-		 * 
-		 * buttonCommit.requestFocus();
-		 * }e
-		 * 
-		 * }
-		 * catch(javax.swing.text.BadLocationException ex)
-		 * {
-		 * }
-		 */
 		setDataChanged(true);
 	}
 

@@ -15,25 +15,6 @@ public class ColoredListCellRenderer extends DefaultListCellRenderer {
 
 		CellAlternatingColorizer.colorize(c, isSelected, (index % 2 == 0), true);
 
-		/*
-		 * Color background;
-		 * Color foreground;
-		 * 
-		 * if (isSelected)
-		 * {
-		 * background = Globals.nimbusSelectionBackground;
-		 * foreground = Color.WHITE;
-		 * }
-		 * else
-		 * {
-		 * background = Globals.nimbusBackground;
-		 * foreground = Globals.nimbusSelectionBackground;
-		 * 
-		 * };
-		 * 
-		 * c.setBackground(background);
-		 * c.setForeground(foreground);
-		 */
 		c.setFont(Globals.defaultFont);
 
 		return c;

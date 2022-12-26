@@ -72,29 +72,6 @@ public class DynamicCombo extends javax.swing.JPanel {
 			}
 		});
 
-		/*
-		 * combo.addItemListener(new ItemListener()
-		 * {
-		 * public void itemStateChanged(ItemEvent e)
-		 * {
-		 * logging.debug(this, "itemStateChanged ");
-		 * }
-		 * 
-		 * }
-		 * );
-		 * 
-		 * combo.addActionListener(new ActionListener()
-		 * {
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * logging.debug(this, "action event ");
-		 * combo.setSelectedItem("");
-		 * }
-		 * 
-		 * }
-		 * );
-		 */
-
 		col.setCellEditor(
 
 				new de.uib.utilities.table.gui.AdaptingCellEditor(combo, modelsource));

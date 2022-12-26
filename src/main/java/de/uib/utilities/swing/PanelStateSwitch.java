@@ -52,16 +52,6 @@ public class PanelStateSwitch extends JPanel {
 		public void setValue(Enum val);
 	}
 
-	/*
-	 * 
-	 * public PanelStateSwitch(Enum startValue, Enum[]values)
-	 * {
-	 * 
-	 * this( startValue, values, null);
-	 * 
-	 * }
-	 */
-
 	public PanelStateSwitch(Enum startValue, Enum[] values, Class myenum, Enumsetter enumSetter) {
 		this(null, startValue, values, null, myenum, enumSetter);
 	}
