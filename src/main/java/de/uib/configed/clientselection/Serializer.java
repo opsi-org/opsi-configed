@@ -155,18 +155,6 @@ public abstract class Serializer {
 	protected abstract int getSearchDataVersion();
 
 	/*
-	 * Care for finding a SelectElement
-	 * private SelectElement produceSelectElementFromPath
-	 * {
-	 * 
-	 * 
-	 * (SelectElement)
-	 * Class.forName("de.uib.configed.clientselection.elements."+elementName).
-	 * newInstance();
-	 * 
-	 */
-
-	/*
 	 * Create a SelectOperation from the given data. This function works
 	 * recursively.
 	 */

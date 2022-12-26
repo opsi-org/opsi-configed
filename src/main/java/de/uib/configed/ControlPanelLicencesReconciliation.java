@@ -117,19 +117,6 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 		thePanel.panelReconciliation.setEmphasizedColumns(new int[] {});
 
 		// --- PopupMenu
-		/*
-		 * JMenuItemFormatted menuItemAddReconciliation = new
-		 * JMenuItemFormatted("add Reconciliation");//configed.getResourceValue(
-		 * "ConfigedMain.Licences.NewLicencecontract"));
-		 * menuItemAddReconciliation.addActionListener(new ActionListener(){
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * }
-		 * });
-		 * 
-		 * thePanel.panelReconciliation.addPopupItem(menuItemAddReconciliation);
-		 * 
-		 */
 
 		// special treatment of columns
 		javax.swing.table.TableColumn col;

@@ -253,8 +253,6 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 			thePanel.fieldCountAssignedInEditing.setText(produceCount(count));
 		}
 
-		// if ( softwareDirectionOfAssignment ==
-		// SoftwareDirectionOfAssignment.POOL2SOFTWARE )
 		{
 			thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(false);
 			logging.debug(this, "setSoftwareIdsFromLicencePool  setSelectedValues " + selectKeys);
@@ -272,14 +270,6 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 			thePanel.panelRegisteredSoftware.setDataChanged(false);
 			thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(true);
 		}
-		/*
-		 * else
-		 * {
-		 * thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(true);
-		 * thePanel.panelRegisteredSoftware.getTheTable().clearSelection();
-		 * thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(false);
-		 * }
-		 */
 
 	}
 
@@ -322,9 +312,6 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 		if (!thePanel.panelRegisteredSoftware.isAwareOfSelectionListener())
 			return;
-
-		// selectedLicencePool =
-		// thePanel.panelLicencepools.getValueAt(thePanel.panelLicencepools.getSelectedRow(),
 
 		List<String> selKeys = thePanel.panelRegisteredSoftware.getSelectedKeys();
 		String showSelKeys = null;
@@ -537,7 +524,6 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 			modelProductId2LPool.addRow(a);
 
-			// a[0] " + a[0]);
 			thePanel.panelProductId2LPool.moveToValue("" + a[0], 0);
 		});
 
@@ -609,7 +595,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 				}, withRowCounter)
 				// ,
-				), windowsSoftwareId_KeyCol /* columnNames.indexOf("ID") */, // key column
+				), windowsSoftwareId_KeyCol, // key column
 				new int[] {}, thePanel.panelRegisteredSoftware, updateCollection);
 
 		logging.info(this, "modelWindowsSoftwareIds row count " + modelWindowsSoftwareIds.getRowCount());
@@ -672,33 +658,6 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 			}
 
 		});
-
-		/*
-		 * JMenuItemFormatted menuItemSoftwareShowNotAssigned = new
-		 * JMenuItemFormatted(configed.getResourceValue(
-		 * "ConfigedMain.Licences.PopupWindowsSoftwareShowNotAssigned"));
-		 * menuItemSoftwareShowNotAssigned.addActionListener(new ActionListener(){
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * softwareShow = SoftwareShowMode.NOT_ASSIGNED;
-		 * //save values
-		 * boolean b = thePanel.panelRegisteredSoftware.isDataChanged();
-		 * thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(false);
-		 * List selectedKeys = thePanel.panelRegisteredSoftware.getSelectedKeys();
-		 * thePanel.panelRegisteredSoftware.setSelectedValues(selectedKeys, 0);
-		 * 
-		 * modelWindowsSoftwareIds.setInvertedFilter(new TreeSet<>(selectedKeys));
-		 * modelWindowsSoftwareIds.setUsingFilter(true);
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(true);
-		 * thePanel.panelRegisteredSoftware.setDataChanged(b);
-		 * }
-		 * });
-		 */
 
 		JMenuItemFormatted menuItemSoftwareShowAll = new JMenuItemFormatted(
 				configed.getResourceValue("ConfigedMain.Licences.PopupWindowsSoftwareShowAll"));

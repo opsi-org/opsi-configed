@@ -32,48 +32,6 @@ public class BackendMySQL {
 		mySQL_rekursion = new MySQL(hwConfig);
 
 		alle_hosts = getListFromSQL("SELECT hostId FROM HOST;");
-
-		////
-		/*
-		 * for(int j=0; j<((List)((HashMap)hwConfig.get(i)).get("Values")).size(); j++)
-		 * {
-		 * logging.info(this,
-		 * ((HashMap)((List)((HashMap)hwConfig.get(i)).get("Values")).get(j)).get("Type"
-		 * ));
-		 * logging.info(this,
-		 * ((HashMap)((List)((HashMap)hwConfig.get(i)).get("Values")).get(j)).get("Opsi"
-		 * ));
-		 * logging.info(this,
-		 * ((HashMap)((List)((HashMap)hwConfig.get(i)).get("Values")).get(j)).get("WMI")
-		 * );
-		 * logging.info(this,
-		 * ((HashMap)((List)((HashMap)hwConfig.get(i)).get("Values")).get(j)).get(
-		 * "Scope"));
-		 * logging.info(this,
-		 * ((HashMap)((List)((HashMap)hwConfig.get(i)).get("Values")).get(j)).get(
-		 * "Linux"));
-		 * logging.info(this,
-		 * ((HashMap)((List)((HashMap)hwConfig.get(i)).get("Values")).get(j)).get("OSX")
-		 * );
-		 * //
-		 * }
-		 * 
-		 * //
-		 * //
-		 * logging.info(this,
-		 * ((HashMap)((HashMap)hwConfig.get(i)).get("Class")).get("Opsi").getClass());
-		 * logging.info(this,
-		 * ((HashMap)((HashMap)hwConfig.get(i)).get("Class")).get("WMI").getClass());
-		 * logging.info(this,
-		 * ((HashMap)((HashMap)hwConfig.get(i)).get("Class")).get("Linux").getClass());
-		 * logging.info(this,
-		 * ((HashMap)((HashMap)hwConfig.get(i)).get("Class")).get("UI").getClass());
-		 * logging.info(this,
-		 * ((HashMap)((HashMap)hwConfig.get(i)).get("Class")).get("OSX").getClass());
-		 * 
-		 * //
-		 */
-
 	}
 
 	public List<String> getListFromSQL(String abfrage) {
@@ -94,7 +52,7 @@ public class BackendMySQL {
 
 	// ENDE lokales mysql
 
-	public List<String> AND(JSONArray children) throws Exception {
+	public List<String> AND(JSONArray children) throws JSONException {
 
 		List<String> result = new ArrayList<>(alle_hosts);
 
@@ -107,7 +65,7 @@ public class BackendMySQL {
 		return result;
 	}
 
-	public List<String> OR(JSONArray children) throws Exception {
+	public List<String> OR(JSONArray children) throws JSONException {
 		List<String> result = new ArrayList<>();
 
 		for (int i = 0; i < children.length(); i++) {
@@ -120,7 +78,7 @@ public class BackendMySQL {
 	}
 
 	// Nimmt alle Clients und entfernt die gesuchten
-	public List<String> NOT(JSONArray children) throws Exception {
+	public List<String> NOT(JSONArray children) throws JSONException {
 		List<String> result = new ArrayList<>(alle_hosts);
 
 		List<String> c = getListFromJSONObject((JSONObject) children.get(0));
@@ -323,16 +281,6 @@ public class BackendMySQL {
 		} catch (Exception e) {
 		}
 
-		/*
-		 * List<List<java.lang.String>> result
-		 * = controller.exec.getListOfStringLists(
-		 * new OpsiMethodCall(
-		 * "getRawData",
-		 * new Object[]{abfrage}
-		 * )
-		 * );
-		 */
-
 		return list;
 	}
 
@@ -394,69 +342,6 @@ public class BackendMySQL {
 		return abfrage;
 	}
 
-	/*
-	 * Der Teil hier wird eigentlich nur für das Testen mit der lokalen
-	 * mySQL-Datenbank benötigt
-	 * 
-	 * 
-	 * // Connect to SQL Database
-	 * public static Connection getConnection() throws SQLException, IOException {
-	 * Properties props = new Properties();
-	 * FileInputStream in = new FileInputStream("database.properties");
-	 * props.load(in);
-	 * in.close();
-	 * 
-	 * String drivers = props.getProperty("jdbc.drivers");
-	 * 
-	 * //if(drivers != null)
-	 * 
-	 * 
-	 * 
-	 * System.setProperty("jdbc.drivers", "com.mysql.idbc.Driver");
-	 * 
-	 * String url = props.getProperty("jdbc.url");
-	 * String username = props.getProperty("jdbc.username");
-	 * String password = props.getProperty("jdbc.password");
-	 * 
-	 * return DriverManager.getConnection(url, username, password);
-	 * }
-	 * 
-	 * public static String getAbfrage(int lineNumber) {
-	 * try {
-	 * String line;
-	 * BufferedReader bufferedReader = new BufferedReader(new
-	 * FileReader("gespeicherte_abfragen.txt"));
-	 * for(int i=1; i<lineNumber; i++)
-	 * bufferedReader.readLine();
-	 * 
-	 * return bufferedReader.readLine();
-	 * } catch (Exception e) { logging.info(this, e);}
-	 * 
-	 * return null;
-	 * }
-	 * 
-	 * 
-	 * public List<String> getListFromSQL(String abfrage) {
-	 * 
-	 * 
-	 * ArrayList arrayList = new ArrayList<>();
-	 * 
-	 * try {
-	 * ResultSet result = stat.executeQuery(abfrage);
-	 * 
-	 * 
-	 * 
-	 * 
-	 * while(result.next())
-	 * arrayList.add(result.getString(1));
-	 * 
-	 * } catch(Exception e) {}
-	 * 
-	 * 
-	 * return (List<String>) arrayList;
-	 * }
-	 */
-
 	public List<String> getClientListFromJSONString(String abfrage) {
 
 		logging.info(this, abfrage);
@@ -479,7 +364,7 @@ public class BackendMySQL {
 		if (jsonObject.isNull("element")) {
 			MySQL.Type newType = MySQL.getType(jsonObject);
 			try {
-				return doJSONArray((JSONArray) jsonObject.getJSONArray("children"), newType);
+				return doJSONArray(jsonObject.getJSONArray("children"), newType);
 
 			} catch (Exception e) {
 				logging.warning(this, "" + e);

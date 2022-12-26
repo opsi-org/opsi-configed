@@ -653,9 +653,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		} else {
 			dashboard.show();
 		}
-
-		// else
-
 	}
 
 	public void loadDataAndGo() {
@@ -2472,9 +2469,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		DefaultMutableTreeNode mouseNode = null;
 
 		if (mouseRow != -1) {
-
-			// getting path " + mousePath);
-
 			mouseNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
 
 			if (!mouseNode.getAllowsChildren()) {

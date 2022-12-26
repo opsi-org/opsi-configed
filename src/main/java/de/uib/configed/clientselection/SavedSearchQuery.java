@@ -156,20 +156,6 @@ public class SavedSearchQuery {
 			System.exit(6);
 		}
 
-		/*
-		 * removes group and therefore the memberships of hosts in this group
-		 * subgroups become root subgroups
-		 * 
-		 * 
-		 * try{
-		 * logging.debug(" ......... waiting ");
-		 * Thread.sleep(10000);
-		 * }
-		 * catch(Exception ex)
-		 * {
-		 * }
-		 */
-
 		if (!controller.addGroup(saveGroupRelation)) {
 			logging.error("add group error, group " + saveGroupRelation);
 			System.exit(7);

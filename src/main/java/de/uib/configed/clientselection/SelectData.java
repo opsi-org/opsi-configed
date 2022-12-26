@@ -40,14 +40,6 @@ public class SelectData {
 			break;
 
 		case DateType: {
-			/*
-			 * if( data instanceof String )
-			 * {
-			 * java.sql.Date d = java.sql.Date.valueOf( (String) data );
-			 * //throws IllegalArgumentException
-			 * }
-			 * else
-			 */
 
 			if (!(data instanceof String))
 

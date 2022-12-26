@@ -81,14 +81,6 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	protected boolean wantToBeRegisteredWithRunningInstances() {
 		return true;
 	}
-	/*
-	 * @Override
-	 * protected void initScrollPane()
-	 * 
-	 * //therefore override with nothing
-	 * {
-	 * }
-	 */
 
 	protected void initDataStructure() {
 		columnNames = new Vector<>();
@@ -120,7 +112,6 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 						persist.installedSoftwareInformationRequestRefresh();
 						return (Map) persist.getInstalledSoftwareInformation();
 					})
-					// ,
 
 					),
 

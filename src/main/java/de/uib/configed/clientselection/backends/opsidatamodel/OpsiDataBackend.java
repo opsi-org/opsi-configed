@@ -275,13 +275,6 @@ public class OpsiDataBackend extends Backend {
 	@Override
 	protected SelectGroupOperation createGroupOperation(SelectGroupOperation operation,
 			List<SelectOperation> operations) {
-		/*
-		 * if (operation.equals("Software"))
-		 * {
-		 * logging.info(this, "IllegalArgument: The group operation " +operation);
-		 * System.exit(0);
-		 * }
-		 */
 		if (operation instanceof AndOperation && operations.size() >= 2)
 			return new AndOperation(operations);
 		if (operation instanceof OrOperation && operations.size() >= 2)
@@ -289,7 +282,6 @@ public class OpsiDataBackend extends Backend {
 		if (operation instanceof NotOperation && operations.size() == 1)
 			return new NotOperation(operations.get(0));
 
-		// operations.size() == 1 )
 		if (operation instanceof SoftwareOperation && operations.size() == 1)
 			return new OpsiDataSoftwareOperation(operations.get(0));
 		if (operation instanceof SwAuditOperation && operations.size() == 1)
@@ -329,7 +321,6 @@ public class OpsiDataBackend extends Backend {
 		logging.info(this, "checkInitData ");
 
 		// gets current data which should be in cache already
-		// reloadRequested " + reloadRequested);
 
 		// take always the current host infos
 		{
@@ -356,15 +347,10 @@ public class OpsiDataBackend extends Backend {
 
 			}
 		}
-		// else
 
 		{
 			swauditMap = getSwAuditOnClients();
 		}
-		// else
-
-		// if ( reloadRequested || hwConfig == null || hwConfigLocalized == null ||
-		// hwUiToOpsi == null || hwClassToValues == null )
 		getHardwareConfig();
 
 		logging.debug(this, "getClients hasHardware " + hasHardware);
@@ -388,11 +374,6 @@ public class OpsiDataBackend extends Backend {
 		logging.info(this, "getClients hasHardware " + hasHardware);
 		logging.info(this, "getClients hasSoftware " + hasSoftware);
 		logging.info(this, "getClients swauditMap != null  " + (swauditMap != null));
-		/*
-		 * if (swauditMap != null)
-		 * logging.info(this, "getClients swauditMap.keySet()   " +
-		 * (swauditMap.keySet()) );
-		 */
 
 		for (String clientName : clientMaps.keySet()) {
 			OpsiDataClient client = new OpsiDataClient(clientName);
@@ -528,23 +509,7 @@ public class OpsiDataBackend extends Backend {
 
 		controller.fillClient2Software(new ArrayList<>(clientMaps.keySet()));
 		result = controller.getClient2Software();
-		/*
-		 * for( Object obj: controller.getSoftwareAuditOnClients() )
-		 * {
-		 * if( !(obj instanceof Map) )
-		 * {
-		 * logging.warning(this, "SwAudit element is no map: " + obj + " " +
-		 * obj.getClass() );
-		 * continue;
-		 * }
-		 * 
-		 * Map map = (Map) obj;
-		 * String name = (String) map.get("clientId");
-		 * if( !result.containsKey(name) )
-		 * result.put( name, new LinkedList<>() );
-		 * result.get(name).add(map);
-		 * }
-		 */
+
 		return result;
 	}
 

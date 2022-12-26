@@ -79,19 +79,6 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 		return thePanel;
 	}
 
-	/*
-	 * protected Vector getChoicesAllHosts()
-	 * {
-	 * TreeSet set = new TreeSet<>();
-	 * set.add("");
-	 * set.addAll(new TreeMap(
-	 * persist.getHostInfoCollections().getPcListForDepots(
-	 * mainController.getSelectedDepots() )
-	 * ).keySet());
-	 * return new Vector<>(set);
-	 * }
-	 */
-
 	@Override
 	public void initializeVisualSettings() {
 		thePanel.setDivider();
@@ -133,50 +120,6 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 		thePanel.panelUsage.setTableModel(modelLicencesUsage);
 		modelLicencesUsage.setEditableColumns(new int[] { 3, 4 });
 		thePanel.panelUsage.setEmphasizedColumns(new int[] { 3, 4 });
-
-		// --- PopupMenu
-		/*
-		 * JMenuItemFormatted menuItemAddUsage = new
-		 * JMenuItemFormatted("add Usage");//configed.getResourceValue(
-		 * "ConfigedMain.Licences.NewLicencecontract"));
-		 * menuItemAddUsage.addActionListener(new ActionListener(){
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * }
-		 * });
-		 * 
-		 * thePanel.panelUsage.addPopupItem(menuItemAddUsage);
-		 * 
-		 * 
-		 * JMenuItemFormatted menuItemDeleteRelationLicenceUsage = new
-		 * JMenuItemFormatted("delete usage");//configed.getResourceValue(
-		 * "ConfigedMain.Licences.NewLicencecontract"));
-		 * menuItemDeleteRelationLicenceUsage.addActionListener(new ActionListener(){
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * 
-		 * int selRowsCount = thePanel.panelUsage.getSelectedRowCount();
-		 * 
-		 * if (selRowsCount == 0)
-		 * {
-		 * JOptionPane.showMessageDialog( mainController.licencesFrame,
-		 * "keine Zeile ausgewählt",
-		 * 
-		 * configed.getResourceValue("ConfigedMain.Licences.hint.title"),
-		 * JOptionPane.OK_OPTION);
-		 * 
-		 * return;
-		 * }
-		 * else
-		 * {
-		 * modelLicencesUsage.deleteRow(thePanel.panelUsage.getSelectedRowInModelTerms()
-		 * );
-		 * }
-		 * }
-		 * });
-		 * 
-		 * thePanel.panelUsage.addPopupItem(menuItemDeleteRelationLicenceUsage);
-		 */
 
 		// special treatment of columns
 		javax.swing.table.TableColumn col;

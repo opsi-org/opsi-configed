@@ -83,7 +83,6 @@ public class FGroupActions extends SecondaryFrame {
 
 	protected void setImages() {
 		Vector<String> imagesCollection = new Vector<>();
-		// imagesCollection.add("");
 
 		imagesCollection.addAll(new TreeSet<>(persist.getCommonProductPropertyValues(associatedClients,
 				persist.localImageRestoreProductKey, persist.localImagesListPropertyKey)));
@@ -118,14 +117,10 @@ public class FGroupActions extends SecondaryFrame {
 		Map<String, String> changedValues = new HashMap<>();
 		changedValues.put(de.uib.opsidatamodel.productstate.ProductState.KEY_actionRequest, "setup");
 
-		persist.updateProductOnClients(
-				// associatedClients,
-				main.getActivatedGroupModel().getAssociatedClients(), persist.localImageRestoreProductKey,
-				OpsiPackage.TYPE_NETBOOT, changedValues);
+		persist.updateProductOnClients(main.getActivatedGroupModel().getAssociatedClients(),
+				persist.localImageRestoreProductKey, OpsiPackage.TYPE_NETBOOT, changedValues);
 
 		waitCursor.stop();
-		// if (comboSelectImage
-		// String selectedImage = comboSelectImage
 	}
 
 	protected void define() {
@@ -212,59 +207,6 @@ public class FGroupActions extends SecondaryFrame {
 						.addGap(Globals.HGAP_SIZE, Globals.HFIRST_GAP, Short.MAX_VALUE))
 		//////////////////////////////////////////////////////////////////////
 		);
-
-		/*
-		 * imageActionPanel = new PanelLinedComponents(new JComponent[]{
-		 * new JLabel(" "),
-		 * labelCombo,
-		 * new JLabel(" "),
-		 * comboSelectImage,
-		 * new JLabel(" "),
-		 * buttonSetup,
-		 * new JLabel(" "),
-		 * new JLabel(" "),
-		 * buttonReload
-		 * });
-		 */
-
-		/*
-		 * persist.getCommonProductPropertyValues(
-		 * new ArrayList<> (
-		 * main.getActivatedGroupModel().getAssociatedClients()
-		 * ),
-		 * persist.localImageRestoreProductKey,
-		 * persist.localImagesListPropertyKey
-		 * );
-		 * 
-		 * 
-		 * 
-		 * //set common property
-		 * ArrayList<String> values = new ArrayList<>();
-		 * values.add("win2000"); //selected from common product property values
-		 * 
-		 * persist.setCommonProductPropertyValue(
-		 * main.getActivatedGroupModel().getAssociatedClients(),
-		 * persist.localImageRestoreProductKey,
-		 * persist.localImageToRestorePropertyKey,
-		 * values
-		 * );
-		 * 
-		 * 
-		 * //set to update
-		 * 
-		 * 
-		 * Map<String, String> changedValues = new HashMap<>();
-		 * changedValues.put(de.uib.opsidatamodel.productstate.ProductState.
-		 * KEY_actionRequest, "setup");
-		 * 
-		 * 
-		 * persist.updateProductOnClients(
-		 * main.getActivatedGroupModel().getAssociatedClients(),
-		 * persist.localImageRestoreProductKey,
-		 * OpsiPackage.TYPE_NETBOOT,
-		 * changedValues);
-		 * 
-		 */
 
 	}
 

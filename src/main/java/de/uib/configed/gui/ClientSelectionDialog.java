@@ -187,20 +187,12 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		logging.info(this, "doAction1");
 		List<String> clients = new ArrayList<>();
 
-		// de.uib.utilities.WaitCursor waitCursor = new
-
 		try {
 
 			collectData();
-			//
-			// try
-
-			// SwingUtilities.invokeAndWait(
 
 			main.setVisualViewIndex(ConfigedMain.VIEW_CLIENTS); // because of potential memory problems we switch to
 																// client view
-
-			// catch(InterruptedException iex)
 
 			if (manager != null)
 				clients = manager.selectClients();
@@ -240,8 +232,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		saveButton = new JButton(configed.getResourceValue("ClientSelectionDialog.inquirySave"));
 		saveButton.setFont(Globals.defaultFont);
 		saveButton.addActionListener(new SaveButtonListener());
-
-		// loadSearchBox = new JComboBox<>( new String[]
 
 		buttonReload = new IconAsButton(configed.getResourceValue("ClientSelectionDialog.buttonReload"),
 				"images/reload16.png", "images/reload16_over.png", "images/reload16.png",
@@ -413,19 +403,11 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		for (String hardware : hardwareList)
 			newElementBox.addItem(hardware);
 
-		// newElementBox.setMaximumSize( new Dimension(
-		// newElementBox.getPreferredSize().width,
-
 		newElementBox.addActionListener(new AddElementListener());
 
 		vMainGroup.addComponent(newElementBox, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
 		hMainGroup.addComponent(newElementBox, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH);
 		contentPane.add(newElementBox);
-
-		// for( String name: manager.getSavedSearchesNames() )
-
-		// loadSearchBox.setMaximumSize( new Dimension(
-		// loadSearchBox.getPreferredSize().width,
 
 		complexElements.add(createHostGroup());
 		complexElements.add(createSoftwareGroup());
@@ -551,7 +533,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.groupList.getLast().negateButton.setVisible(false);
 
 		result.groupList.add(createSimpleGroup(new SoftwareInstallationStatusElement()));
-		// result.groupList.add( createSimpleGroup( new
 
 		result.groupList.add(createSimpleGroup(new SoftwareActionResultElement()));
 		result.groupList.add(createSimpleGroup(new SoftwareRequestElement()));
@@ -607,7 +588,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.groupList.getLast().connectionType.setVisible(false);
 
 		result.groupList.add(createSimpleGroup(new SoftwareInstallationStatusElement()));
-		// result.groupList.add( createSimpleGroup( new
 
 		result.groupList.add(createSimpleGroup(new SoftwareActionResultElement()));
 		result.groupList.add(createSimpleGroup(new SoftwareRequestElement()));
@@ -682,15 +662,14 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	 */
 	private ComplexGroup createComplexGroup() {
 		ComplexGroup result = new ComplexGroup();
-		/////////////////////////////////////////
-		result.removeButton = new IconAsButton("" /* configed.getResourceValue("ClientSelectionDialog.removeAction") */,
-				"images/user-trash.png", "images/user-trash_over.png", "images/user-trash.png",
-				"images/user-trash_disabled.png");
+
+		result.removeButton = new IconAsButton("", "images/user-trash.png", "images/user-trash_over.png",
+				"images/user-trash.png", "images/user-trash_disabled.png");
 		result.removeButton.setMaximumSize(new Dimension(result.removeButton.getPreferredSize().width,
 				result.removeButton.getPreferredSize().height));
 		result.removeButton.addActionListener(new RemoveButtonListener());
-		result.negateButton = new IconAsButton("" /* configed.getResourceValue("ClientSelectionDialog.not") */,
-				"images/boolean_not_disabled.png", "images/boolean_not_over.png", "images/boolean_not.png", null);
+		result.negateButton = new IconAsButton("", "images/boolean_not_disabled.png", "images/boolean_not_over.png",
+				"images/boolean_not.png", null);
 		result.negateButton.setActivated(false);
 		result.negateButton.setMaximumSize(new Dimension(result.negateButton.getMaximumSize().width,
 				result.negateButton.getPreferredSize().height));
@@ -699,10 +678,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.topLabel.setMaximumSize(
 				new Dimension(result.topLabel.getMaximumSize().width, result.removeButton.getPreferredSize().height));
 		result.topLabel.setFont(Globals.defaultFontStandardBold);
-		result.openParenthesis = new IconAsButton(
-				"" /* configed.getResourceValue("ClientSelectionDialog.parenthesisOpen") */,
-				"images/parenthesis_open_disabled.png", "images/parenthesis_open_over.png",
-				"images/parenthesis_open.png", null);
+		result.openParenthesis = new IconAsButton("", "images/parenthesis_open_disabled.png",
+				"images/parenthesis_open_over.png", "images/parenthesis_open.png", null);
 		result.openParenthesis.setActivated(false);
 		result.openParenthesis.addActionListener(new ParenthesisListener());
 
@@ -724,10 +701,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	/* This creates the bottom line of a complex group */
 	private void createComplexBottom(ComplexGroup group) {
-		group.closeParenthesis = new IconAsButton(
-				"" /* configed.getResourceValue("ClientSelectionDialog.parenthesisClose") */,
-				"images/parenthesis_close_disabled.png", "images/parenthesis_close_over.png",
-				"images/parenthesis_close.png", null);
+		group.closeParenthesis = new IconAsButton("", "images/parenthesis_close_disabled.png",
+				"images/parenthesis_close_over.png", "images/parenthesis_close.png", null);
 		group.closeParenthesis.setActivated(false);
 		group.closeParenthesis.addActionListener(new ParenthesisListener());
 		group.connectionType = new AndOrSelectButtonByIcon();
@@ -779,7 +754,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			data = value2;
 			break;
 		case EnumType:
-			// String textEnum = ((JComboBox)
 
 			String textEnum = ((TextInputField) group.dataComponent).getText();
 			if (textEnum.isEmpty())
@@ -937,12 +911,10 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			sourceGroup.dataComponent = fieldDouble;
 			break;
 		case EnumType:
-			// JComboBox box = new JComboBox<>( sourceGroup.element.getEnumData( operation )
 
 			TextInputField box = new TextInputField("", sourceGroup.element.getEnumData());
 			box.setEditable(true);
 			box.setToolTipText(configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-			// box.setSelectedItem("");
 			box.addValueChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
 				@Override
 				protected void actOnChange() {
@@ -1418,15 +1390,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			collectData();
 			manager.saveSearch(text, saveDescriptionField.getText());
 			savedSearchesDialog.reloadAction();
-
-			/*
-			 * while( loadSearchBox.getItemCount() > 1 )
-			 * loadSearchBox.removeItemAt(1);
-			 * for( String name: manager.getSavedSearchesNames() )
-			 * loadSearchBox.addItem( name );
-			 * 
-			 */
-
 		}
 	}
 }

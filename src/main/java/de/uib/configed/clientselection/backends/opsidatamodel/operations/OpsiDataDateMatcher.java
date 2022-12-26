@@ -12,8 +12,6 @@ public abstract class OpsiDataDateMatcher extends OpsiDataMatcher {
 	@Override
 	protected boolean checkData(final String realdata) {
 
-		// to " +data);
-
 		java.sql.Date date = null;
 		java.sql.Date realdate = null;
 

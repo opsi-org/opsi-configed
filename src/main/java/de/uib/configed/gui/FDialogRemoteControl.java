@@ -30,11 +30,9 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 		return meanings.get(key);
 	}
 
-	@Override
-	protected void initExtraField()
 	// hack to modify settings from superclass
-	{
-		// extraField.setText("");
+	@Override
+	protected void initExtraField() {
 		checkSelected();
 	}
 
