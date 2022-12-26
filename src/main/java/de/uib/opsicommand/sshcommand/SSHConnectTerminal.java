@@ -134,7 +134,7 @@ public class SSHConnectTerminal extends SSHConnect {
 
 				// a hack for MS-DOS prompt on Windows.
 
-				// new MyOutputPrinter(dialog, System.out)
+				
 
 				channel = setStreams(channel);
 

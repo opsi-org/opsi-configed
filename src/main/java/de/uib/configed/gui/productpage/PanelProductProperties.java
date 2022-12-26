@@ -63,7 +63,7 @@ public class PanelProductProperties extends JSplitPane
 
 	protected TableCellRenderer propertiesTableCellRenderer;
 
-	// protected final Map<String,Object> emptyVisualData = new
+	
 
 	protected LinkedHashMap<String, Boolean> productDisplayFields;
 

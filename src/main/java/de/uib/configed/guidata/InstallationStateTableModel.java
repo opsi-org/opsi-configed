@@ -140,7 +140,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	protected Map<String, Map<String, Map<String, String>>> allClientsProductStates; // (clientId -> (productId ->
 																						// (product state key -> product
 																						// state value)))
-																						// protected final Map<String, List<Map<String, String>>>
+																						
 
 	protected PersistenceController persist;
 	protected Map<String, Map<String, Map<String, String>>> collectChangedStates;

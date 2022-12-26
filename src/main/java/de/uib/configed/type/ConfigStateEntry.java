@@ -31,7 +31,7 @@ public class ConfigStateEntry extends HashMap<String, Object> {
 		}
 	}
 
-	// public static final int columnIndexLastStateChange =
+	
 
 	public ConfigStateEntry(String configId, String hostId, List values) {
 		super();

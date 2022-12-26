@@ -74,3 +74,10 @@ find . -name *.java -exec sed -i "s/\/\/[^\"]*Globals\..*//g" {} \;
 
 #24. command
 find . -name *.java -exec sed -i "s/\/\/[^\"]*GroupLayout\..*//g" {} \;
+
+#25. command
+find . -name *.java -exec sed -i "s/\/\/ protected.*//g" {} \;
+find . -name *.java -exec sed -i "s/\/\/ private.*//g" {} \;
+find . -name *.java -exec sed -i "s/\/\/ public.*//g" {} \;
+find . -name *.java -exec sed -i "s/\/\/ new.*//g" {} \;
+

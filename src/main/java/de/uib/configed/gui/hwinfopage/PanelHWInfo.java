@@ -730,7 +730,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					}
 
 					first = false;
-				} else { // new row, first cell empty
+				} else { 
 					childValues = new Vector<>();
 					childValues.add(""); // first column empty
 					childValues.add(hm.get("displayName").toString());

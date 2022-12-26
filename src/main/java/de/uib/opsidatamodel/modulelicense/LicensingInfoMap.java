@@ -512,7 +512,7 @@ public class LicensingInfoMap {
 				modulesJSObX = new JSONObjectX(modulesJSOb);
 				moduleToDate = modulesJSObX.getMap();
 				// iterate over module entries to every date entry
-				// new: iterate over all known modules and fill empty ones with 0
+				
 				// also warning state should be none
 				for (String currentModule : shownModules) {
 

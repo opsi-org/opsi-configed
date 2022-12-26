@@ -127,10 +127,10 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String CONFIG_DHCPD_FILENAME = "clientconfig.dhcpd.filename";
 	public static final String EFI_DHCPD_FILENAME = "linux/pxelinux.cfg/elilo.efi";
 	// the current real value, but it is not necessary to configure it:
-	// public static final String EFI_DHCPD_FILENAME_SHIM =
+	
 
 	// not more used:
-	// public static final String EFI_DHCPD_FILENAME_X86 =
+	
 
 	public static final String EFI_DHCPD_NOT = "";
 
@@ -376,7 +376,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract List<String> getClientsWithOtherProductVersion(String productId, String productVersion,
 			String packageVersion, boolean includeFailedInstallations);
 
-	// public abstract Map<String, String> getProductVersion(String productId,
+	
 
 	public abstract boolean areDepotsSynchronous(Set depots);
 
@@ -485,7 +485,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract List<String> getHostGroupIds();
 
-	// public abstract void populateHostGroupFromSearch(String savedSearch, String
+	
 
 	public abstract Map<String, List<String>> getHostSeparationByDepots(String[] hostIds);
 
@@ -640,7 +640,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract Map<String, List<Map<String, String>>> getMapOfProductStatesAndActions(String[] clientIds);
 
-	// public abstract Map getMapOfLocalbootProductStatesAndActions (String[]
+	
 	// clientIds,
 
 	public abstract Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(String[] clientIds);
@@ -685,12 +685,12 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract Map<String, Object> getProductproperties(String pcname, String productname);
 
-	// public abstract void setProductproperties(String pcname, String productname,
+	
 	// Map properties,
 
 	public abstract void setProductproperties(String pcname, String productname, Map properties);
 
-	// public abstract void setProductproperties( List updateCollection,
+	
 
 	public abstract void setProductproperties();
 
@@ -721,7 +721,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	protected abstract boolean setHostBooleanConfigValue(String key, String hostName, boolean val);
 
-	// protected abstract boolean getHostBooleanConfigValue( String key, String
+	
 
 	public abstract Map<String, Map<String, Object>> getConfigs();
 
@@ -897,7 +897,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract List<String> getOpsiclientdExtraEvents();
 
 	// table sources
-	// public abstract class AllProductsTableSource implements
+	
 
 	// opsi module information
 	public static int CLIENT_COUNT_WARNING_LIMIT = 10;

@@ -201,7 +201,7 @@ public class Globals {
 	public static final Color defaultTableCellBgColor2 = backLightYellow;
 
 	// tableSelection
-	// public static final Color defaultTableSelectedRowDark = new Color
+	
 
 	public static final Color defaultTableSelectedRowDark = new Color(204, 220, 238);
 	public static final Color defaultTableSelectedRowBright = new Color(221, 233, 249);

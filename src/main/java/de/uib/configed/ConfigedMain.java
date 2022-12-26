@@ -279,9 +279,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private Map<String, Object> hwInfoClientmap;
 
-	// public static final ActionRequestDisplay ardDefault = new
+	
 
-	// public static final ActionRequestDisplay ardNetboot = new
+	
 
 	protected String myServer;
 	protected String opsiDefaultDomain;
@@ -2093,7 +2093,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					Globals.createImageIcon("images/new_network-disconnect.png", ""),
 					Globals.createImageIcon("images/new_network-empty22.png", ""), false));
 
-			// new
+			
 
 		}
 
@@ -3074,7 +3074,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				List value = (List) mergeIn.get(key);
 
 				if (mergedMap.get(key) == null)
-				// new property
+				
 				{
 					ListMerger merger = new ListMerger(value);
 					merger.setHavingNoCommonValue();

@@ -198,7 +198,7 @@ public class SSHConnectExec extends SSHConnect {
 						.getParameterHandler();
 				final SSHConnectExec caller = this;
 				FOUND_ERROR = false;
-				// new Thread()
+				
 
 				{
 					if (!SSHCommandFactory.ssh_always_exec_in_background)

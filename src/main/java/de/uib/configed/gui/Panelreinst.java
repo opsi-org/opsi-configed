@@ -27,8 +27,8 @@ import de.uib.utilities.swing.SurroundPanel;
 
 public class Panelreinst extends JPanel implements KeyListener, MouseListener, ActionListener {
 	final String callReinstmgr = "reinstmgr";
-	// private String unsetCommand = "";
-	// private String installCommand = "";
+	
+	
 
 	String pcName = "";
 

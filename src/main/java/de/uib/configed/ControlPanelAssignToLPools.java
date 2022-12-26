@@ -72,7 +72,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 	private SoftwareShowAllMeans softwareShowAllMeans = SoftwareShowAllMeans.ALL;
 	// //
 	private SoftwareDirectionOfAssignment softwareDirectionOfAssignment = SoftwareDirectionOfAssignment.POOL2SOFTWARE;
-	// private SoftwareDirectionOfAssignment softwareDirectionOfAssignment =
+	
 
 	Integer totalSWEntries;
 	Integer totalUnassignedSWEntries;

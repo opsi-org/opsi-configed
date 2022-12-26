@@ -3129,7 +3129,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Map info = exec
 				.getMapOfListsOfMaps(new OpsiMethodCall("getHardwareInformation_hash", new String[] { clientId }));
 		if (info.size() > 1) // the first element is a default scantime
-		// new version of hardware info
+		
 		{
 			return info;
 		}
@@ -4294,7 +4294,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return retrieveListOfMapsNOM(callAttributes, callFilter, methodName);
 	}
 
-	// public in package
+	
 	List<Map<String, Object>> retrieveListOfMapsNOM(String[] callAttributes, HashMap callFilter, String methodName) {
 		List<Map<String, Object>> retrieved = exec
 				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { callAttributes, callFilter }));

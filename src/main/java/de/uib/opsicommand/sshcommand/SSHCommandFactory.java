@@ -48,10 +48,10 @@ public class SSHCommandFactory {
 	public final String str_command_catDir = "cat *.dir.*OPSI/control | grep \"id: \"";
 	public final String str_command_fileexists = "[ -f .filename. ] &&  rm .filename. && echo \"File .filename. removed\" || echo \"File did not exist\"";
 	public final String str_command_fileexists_notremove = "[ -d .filename. ] && echo \"File exists\" || echo \"File not exist\"";
-	// public final String str_command_filezsyncExists = "[ -f *.filename.*.zsync ]
+	
 	// && rm *.filename.*.zsync && echo \"File *.filename.*.zsync removed\" || echo
 	// \"File *.filename.*.zsync did not exist\"";
-	// public final String str_command_filemd5Exists = "[ -f *.filename.*.md5 ] &&
+	
 	// rm *.filename.*.md5 && echo \"File *.filename.*.md5 removed\" || echo \"File
 	// *.filename.*.md5 did not exist\"";
 	public final String str_replacement_filename = ".filename.";
@@ -60,7 +60,7 @@ public class SSHCommandFactory {
 
 	public final String opsipathVarRepository = "/var/lib/opsi/repository/";
 	public final String opsipathVarDepot = "/var/lib/opsi/depot/";
-	// public final String str_command_comparemd5 = " if [ -z $((cat
+	
 	// *.product.*.md5" + ") | grep $(md5sum *.product.* | head -n1 | cut -d \" \"
 
 	/** ConfigedMain instance **/

@@ -166,7 +166,7 @@ public class ControllerHWinfoMultiClients {
 				null,
 
 				// tableProvider
-				// new de.uib.utilities.table.provider.DefaultTableProvider(sqlSource),
+				
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
 					logging.info(this, "retrieveMap: getClient2HwRows");
 

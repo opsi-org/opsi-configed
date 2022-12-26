@@ -64,7 +64,7 @@ public class ControllerHWinfoColumnConfiguration {
 	public static final String colHwClass = configed.getResourceValue("HWinfoColumnConfiguration.colHwClass");
 	public static final String colLinuxQuery = configed.getResourceValue("HWinfoColumnConfiguration.colLinuxQuery");
 	public static final String colWMIQuery = configed.getResourceValue("HWinfoColumnConfiguration.colWMIQuery");
-	// public static final String colTellAgainHardwareClass =
+	
 
 	private Map<String, Map<String, Boolean>> updateItems;
 
@@ -229,7 +229,7 @@ public class ControllerHWinfoColumnConfiguration {
 		model = new GenTableModel(updateItemFactory,
 
 				// tableProvider
-				// new de.uib.utilities.table.provider.DefaultTableProvider(sqlSource),
+				
 				new DefaultTableProvider(
 						new RetrieverMapSource(columnNames, classNames, () -> (Map) getHwColumnConfig())),
 

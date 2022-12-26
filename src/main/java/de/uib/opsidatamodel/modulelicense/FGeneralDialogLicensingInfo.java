@@ -349,7 +349,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		gLayout.setHorizontalGroup(
 				// 1
 				gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-						// new
+						
 						.addGroup(gLayout.createSequentialGroup().addComponent(redWarningLabel).addGap(20)
 								.addComponent(orangeWarningLabel))
 						.addGroup(gLayout.createSequentialGroup().addComponent(warningLevelAbsolute).addGap(15)
@@ -357,7 +357,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 						.addGroup(gLayout.createSequentialGroup()
 								.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 										/*
-										// new
+										
 										.addGroup(gLayout.createSequentialGroup()
 												.addComponent(overLimitWarningLabel)
 												.addGap(40)
@@ -401,7 +401,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		gLayout.setVerticalGroup(gLayout.createSequentialGroup()
 
-				// new
+				
 				.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(redWarningLabel)
 						.addComponent(orangeWarningLabel))
 				.addGap(15)
