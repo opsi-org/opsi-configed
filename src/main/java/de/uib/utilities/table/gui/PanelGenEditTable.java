@@ -512,7 +512,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 								.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 								.addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-								// .addGap(Globals.hGapSize, 2* Globals.hGapSize, 2 * Globals.hGapSize)
+								
 								.addComponent(titlePane, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 						.addComponent(searchPane, javax.swing.GroupLayout.PREFERRED_SIZE,

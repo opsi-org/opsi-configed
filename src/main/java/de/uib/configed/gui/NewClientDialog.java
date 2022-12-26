@@ -497,13 +497,13 @@ public class NewClientDialog extends FGeneralDialog
 								2 * Globals.BUTTON_WIDTH)
 						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 		// localboot
-		// .addGroup( gpl.createSequentialGroup()
-		// .addGap(Globals.hGapSize,Globals.hGapSize,Globals.hGapSize)
-		// .addComponent(jLabelLocalboot, wLeftLabel , wLeftLabel, wLeftLabel)
-		// .addGap(Globals.hGapSize,Globals.hGapSize,Globals.hGapSize)
-		// .addComponent(jComboLocalboot, Globals.buttonWidth, Globals.buttonWidth,
+		
+		
+		
+		
+		
 		// 2*Globals.buttonWidth)
-		// .addGap(Globals.minVGapSize,Globals.minVGapSize,Globals.minVGapSize)
+		
 		// )
 
 		);
@@ -582,14 +582,14 @@ public class NewClientDialog extends FGeneralDialog
 								.addComponent(jComboNetboot, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT))
 		/////// localboot
-		// .addGap(Globals.vGapSize/2,Globals.vGapSize/2,Globals.vGapSize/2)
-		// .addGroup( gpl.createParallelGroup(GroupLayout.Alignment.CENTER )
-		// .addComponent(jLabelLocalboot,
+		
+		
+		
 		/////// Globals.lineHeight,Globals.lineHeight,Globals.lineHeight)
-		// .addComponent(jComboLocalboot,
+		
 		/////// Globals.lineHeight,Globals.lineHeight,Globals.lineHeight)
 		// )
-		// .addGap(Globals.vGapSize,Globals.vGapSize,Globals.vGapSize)
+		
 
 		);
 

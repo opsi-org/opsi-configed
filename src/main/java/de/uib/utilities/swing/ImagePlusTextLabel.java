@@ -40,7 +40,7 @@ public class ImagePlusTextLabel extends JPanel {
 		;
 
 		layout.setVerticalGroup(layout.createSequentialGroup()
-				// .addGap(1)
+				
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 						.addComponent(imagefield, Globals.LINE_HEIGHT - 5, Globals.LINE_HEIGHT - 5,
 								Globals.LINE_HEIGHT - 5)

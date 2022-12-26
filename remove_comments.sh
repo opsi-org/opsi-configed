@@ -64,3 +64,7 @@ find . -name *.java -exec sed -i "s/\/\/[^\"]*[{]\{1,10\}.*//g" {} \;
 #21. command
 find . -name *.java -exec sed -i "s/\/\/[^\"]*[^\\]\"[^\"^+]*[^\\]\"[^\"^+]*.*//g" {} \;
 
+#22. command
+find . -name *.java -exec sed -i "s/\/\/[^\"]*addGap(.*//g" {} \;
+find . -name *.java -exec sed -i "s/\/\/[^\"]*addGroup(.*//g" {} \;
+find . -name *.java -exec sed -i "s/\/\/[^\"]*addComponent(.*//g" {} \;

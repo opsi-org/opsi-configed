@@ -130,7 +130,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 										.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
-										// .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+										
 										.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE)))

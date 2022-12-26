@@ -1971,7 +1971,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				/////// UEFI BOOT & WAN Config
 
 				.addComponent(cbUefiBoot, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				// .addGap(Globals.minVGapSize,Globals.minVGapSize,Globals.minVGapSize)
+				
 				.addComponent(cbWANConfig, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 
 				/////// ONE TIME PASSWORD

@@ -139,7 +139,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		 * layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 		 * .addGroup(layout.createSequentialGroup()
 		 * .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-		 * //.addComponent(monthSpinner, GroupLayout.PREFERRED_SIZE,
+		 * 
 		 * GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 		 * .addGroup(layout.createSequentialGroup()(
 		 * .addComponent(buttonBack, GroupLayout.PREFERRED_SIZE,
@@ -156,7 +156,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		 * layout.setVerticalGroup(
 		 * layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 		 * .addGroup(layout.createSequentialGroup()
-		 * //.addComponent(monthSpinner, GroupLayout.PREFERRED_SIZE,
+		 * 
 		 * GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 		 * .addGroup(layout.createParallelGroup(
 		 * 

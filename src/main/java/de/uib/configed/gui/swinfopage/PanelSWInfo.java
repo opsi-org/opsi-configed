@@ -287,7 +287,7 @@ public class PanelSWInfo extends JPanel {
 				.addComponent(labelSuperTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(vGap, vGap, vGap)
-				// .addGap(vGap, vGap, vGap)
+				
 				.addGroup(layoutSubPanelTitle.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelWithMSUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -361,26 +361,26 @@ public class PanelSWInfo extends JPanel {
 								 * .addGap(hGap, hGap, hGap)
 								 * )
 								 */
-								// .addComponent(scrollPaneSWInfo, javax.swing.GroupLayout.PREFERRED_SIZE,
+								
 								// javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 								.addComponent(subPanelTitle, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								// .addComponent(subPanelButtons, javax.swing.GroupLayout.PREFERRED_SIZE,
+								
 								// javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 								.addComponent(panelTable, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 						.addGap(hGap, hGap, hGap));
 
 		layoutEmbed.setVerticalGroup(layoutEmbed.createSequentialGroup()
-				// .addGap(vGap, vGap, vGap)
-				// .addComponent(jlabelSuperTitle, hLabel, hLabel, hLabel)
-				// .addGap(vGap, vGap, vGap)
-				// .addComponent(scrollPaneSWInfo, javax.swing.GroupLayout.PREFERRED_SIZE,
+				
+				
+				
+				
 				// javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(vGap, vGap, vGap)
 				.addComponent(subPanelTitle, javax.swing.GroupLayout.PREFERRED_SIZE,
 						javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-				// .addComponent(subPanelButtons, javax.swing.GroupLayout.PREFERRED_SIZE,
+				
 				// javax.swing.GroupLayout.PREFERRED_SIZE,
 				// javax.swing.GroupLayout.PREFERRED_SIZE)
 				.addComponent(panelTable, javax.swing.GroupLayout.PREFERRED_SIZE,

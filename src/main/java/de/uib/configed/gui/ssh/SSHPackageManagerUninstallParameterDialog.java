@@ -485,12 +485,12 @@ public class SSHPackageManagerUninstallParameterDialog
 				.addComponent(lbl_uninstall, pref, pref, max).addGap(Globals.GAP_SIZE * 2)
 				.addGroup(uninstallPanelLayout
 						.createSequentialGroup().addGroup(uninstallPanelLayout.createParallelGroup()
-								// .addComponent(lbl_product,250, 250, 250)
+								
 								.addGroup(uninstallPanelLayout.createSequentialGroup().addGap(5, 10, 20)
 										.addComponent(cb_opsiproducts, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 												2 * Globals.BUTTON_WIDTH)
 										.addGap(5, 5, 5)
-										// .addComponent(buttonUpdateList, 30, 30, 30)
+										
 										.addGap(5, 10, 20))
 								.addGroup(uninstallPanelLayout.createSequentialGroup()
 										.addComponent(lbl_on, pref, pref, pref).addGap(5, 10, 10)
@@ -502,21 +502,21 @@ public class SSHPackageManagerUninstallParameterDialog
 								.addComponent(tf_product, pref, pref, max)
 								.addComponent(tf_selecteddepots, pref, pref, max)
 								.addComponent(cb_verbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-								// .addGroup(uninstallPanelLayout.createParallelGroup()
-								// .addGroup(uninstallPanelLayout.createSequentialGroup()
-								// .addGap(Globals.gapSize*2 + Globals.minGapSize-2)
-								// .addComponent(empty_lbl,pref, pref, max)
+								
+								
+								
+								
 								.addComponent(checkb_keepFiles, pref, pref, pref)
 						// )
 						// )
 						)
 				// )
-				// .addGroup(uninstallPanelLayout.createSequentialGroup()
-				// .addGroup(uninstallPanelLayout.createParallelGroup()
+				
+				
 				// )
-				// .addGap(Globals.gapSize)
+				
 				)
-		// .addComponent(lbl_fullCommand, pref, pref,max)
+		
 		);
 
 		uninstallPanelLayout.setVerticalGroup(uninstallPanelLayout.createSequentialGroup().addComponent(lbl_uninstall)
@@ -524,7 +524,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(cb_opsiproducts, pref, pref, pref)
-						// .addComponent(buttonUpdateList, Globals.lineHeight, Globals.lineHeight,
+						
 						// Globals.lineHeight)
 						.addComponent(tf_product, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 
@@ -547,13 +547,13 @@ public class SSHPackageManagerUninstallParameterDialog
 				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(lbl_keepFiles, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						// .addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						// .addComponent(empty_lbl,pref,pref,pref)
+						
+						
 						.addComponent(checkb_keepFiles, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
 				// )
 				).addGap(Globals.GAP_SIZE)
-		// .addComponent(lbl_fullCommand)
+		
 		);
 	}
 }

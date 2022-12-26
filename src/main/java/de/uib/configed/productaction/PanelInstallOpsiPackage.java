@@ -472,7 +472,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 										Globals.LINE_HEIGHT)
 								.addComponent(comboChooseDepot, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 										Globals.LINE_HEIGHT)
-						// .addComponent(fieldDepotName, Globals.lineHeight, Globals.lineHeight,
+						
 						// Globals.lineHeight)
 						).addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(panelMountShare,
@@ -495,7 +495,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 						 * Globals.lineHeight)
 						 * .addComponent(fieldTmpDir, Globals.lineHeight, Globals.lineHeight,
 						 * Globals.lineHeight)
-						 * //.addComponent(fieldDepotName, Globals.lineHeight, Globals.lineHeight,
+						 * 
 						 * Globals.lineHeight)
 						 * )
 						 */
@@ -528,7 +528,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 								.addGap(hFirstGap, hFirstGap, hFirstGap)
 								.addComponent(comboChooseDepot, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 										Globals.BUTTON_WIDTH * 2)
-								// .addComponent(fieldDepotName, GroupLayout.PREFERRED_SIZE,
+								
 								// GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE))
 
@@ -554,7 +554,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 						 * .addGap(hFirstGap, hFirstGap, hFirstGap)
 						 * .addComponent(fieldTmpDir, Globals.buttonWidth *2 , Globals.buttonWidth*2,
 						 * Short.MAX_VALUE)
-						 * //.addComponent(fieldDepotName, GroupLayout.PREFERRED_SIZE,
+						 * 
 						 * GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						 * .addGap(Globals.hGapSize, Globals.hGapSize*3, Short.MAX_VALUE)
 						 * )

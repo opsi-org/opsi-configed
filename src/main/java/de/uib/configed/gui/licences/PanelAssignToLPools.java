@@ -352,7 +352,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 								Globals.SMALL_HEIGHT))
 				.addGroup(layoutPanelInfo.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
 						titleWindowsSoftware2, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT))
-				// .addGap(Globals.buttonHeight,Globals.buttonHeight, Short.MAX_VALUE)
+				
 				// //corresponding to bottom config height
 				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 				.addComponent(panelWorkNamebased, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -529,7 +529,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 						layoutTopPane.createSequentialGroup().addContainerGap()
 								.addGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 										// for testing purposes:
-										// .addComponent(testfield, javax.swing.GroupLayout.Alignment.LEADING,
+										
 										// javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
 										// Short.MAX_VALUE)
 										.addComponent(panelLicencepools, javax.swing.GroupLayout.Alignment.LEADING,
@@ -541,11 +541,11 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 								.addContainerGap()));
 		layoutTopPane.setVerticalGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(layoutTopPane.createSequentialGroup().addContainerGap()
-						// .addComponent(testfield, javax.swing.GroupLayout.DEFAULT_SIZE,
+						
 						// javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE)
 						.addComponent(panelLicencepools, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE,
 								tablesMaxHeight)
-						// .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+						
 						.addComponent(panelProductId2LPool, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE,
 								tablesMaxHeight)
 

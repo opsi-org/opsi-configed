@@ -190,7 +190,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 								Globals.BUTTON_HEIGHT)
 						.addComponent(lbl_empty, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
 				.addGap(uGap * 2)
-		// .addGap(50) //we add space for the combo box popup which does not always
+		
 		// correctly appear if not placed inside the frame
 		);
 		repaint();

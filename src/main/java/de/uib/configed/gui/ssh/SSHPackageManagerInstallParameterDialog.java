@@ -141,7 +141,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
 		mainPanel.setLayout(mainPanelLayout);
 		mainPanelLayout.setHorizontalGroup(mainPanelLayout.createParallelGroup()
-				// .addGap(3*Globals.gapSize)
+				
 				.addGroup(mainPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
 						.addComponent(lbl_install, PREF, PREF, PREF).addGap(Globals.GAP_SIZE))
 				.addGap(Globals.GAP_SIZE)
@@ -149,7 +149,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 						.addComponent(radioPanel, PREF, PREF, MAX).addGap(Globals.GAP_SIZE))
 				.addGap(Globals.GAP_SIZE).addGroup(mainPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(installSettingsPanel, PREF, PREF, PREF).addGap(Globals.GAP_SIZE))
-		// .addGap(3*Globals.gapSize)
+		
 		);
 
 		mainPanelLayout.setVerticalGroup(mainPanelLayout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)

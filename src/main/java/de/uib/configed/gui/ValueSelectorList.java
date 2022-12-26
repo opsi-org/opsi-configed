@@ -254,15 +254,15 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(5, 5, 10)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(labelValue,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				// .addComponent(buttonSelectValuesWithEqualProperties,
+				
 				// GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE,
 				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				// .addComponent(buttonSelectValuesAll, GroupLayout.Alignment.TRAILING,
+				
 				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 				// GroupLayout.PREFERRED_SIZE)
-				// .addComponent(buttonCommitChangedDepotSelection, GroupLayout.PREFERRED_SIZE,
+				
 				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				// .addComponent(buttonCancelChangedDepotSelection, GroupLayout.PREFERRED_SIZE,
+				
 				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				).addGap(5, 5, 10).addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(searchPane, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
@@ -271,15 +271,15 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 				.addGroup(layout.createSequentialGroup().addGap(10)
 						.addComponent(labelValue, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						// .addGap(10)
-						// .addComponent(buttonSelectValuesWithEqualProperties,
+						
+						
 						// Globals.squareButtonWidth, GroupLayout.PREFERRED_SIZE,
 						// GroupLayout.PREFERRED_SIZE)
-						// .addComponent(buttonSelectValuesAll, Globals.squareButtonWidth,
+						
 						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						// .addComponent(buttonCommitChangedDepotSelection, GroupLayout.PREFERRED_SIZE,
+						
 						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						// .addComponent(buttonCancelChangedDepotSelection, GroupLayout.PREFERRED_SIZE,
+						
 						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(10, 10, 10))
 				.addGroup(layout.createSequentialGroup().addGap(5, 5, 5)

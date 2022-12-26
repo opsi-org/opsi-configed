@@ -537,7 +537,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 										.addComponent(tf_passphrase, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-								// .addGroup(connectionPanelLayout.createParallelGroup()
+								
 								// )
 								.addGap(Globals.VGAP_SIZE))
 						.addGroup(connectionPanelLayout.createSequentialGroup().addComponent(lbl_connectionState,

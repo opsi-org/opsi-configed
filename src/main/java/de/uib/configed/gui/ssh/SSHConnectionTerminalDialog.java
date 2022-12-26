@@ -451,7 +451,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		);
 		mainPanelLayout.setVerticalGroup(
 				mainPanelLayout.createSequentialGroup().addComponent(this.inputPanel).addComponent(this.parameterPanel)
-						// .addGap(50)
+						
 						.addComponent(this.terminatingPanel));
 
 		this.setSize(this.getWidth(),

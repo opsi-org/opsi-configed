@@ -85,7 +85,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 
 		southLayout.setVerticalGroup(southLayout.createSequentialGroup()
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-				// .addComponent(additionalPane, 300, 300, Short.MAX_VALUE )
+				
 				.addComponent(additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
@@ -99,7 +99,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 
 		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
 				.addComponent(centerPanel, 100, 200, Short.MAX_VALUE).addGap(Globals.HGAP_SIZE)
-				// .addComponent(southPanel,300, 300, Short.MAX_VALUE)
+				
 				.addComponent(southPanel, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.HGAP_SIZE));
 

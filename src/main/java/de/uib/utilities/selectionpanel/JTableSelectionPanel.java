@@ -311,9 +311,9 @@ public class JTableSelectionPanel extends JPanel
 		layoutTopPane.setHorizontalGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(layoutTopPane.createSequentialGroup()
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						// .addComponent(markReload, GroupLayout.PREFERRED_SIZE,
+						
 						// GroupLayout.PREFERRED_SIZE,GroupLayout.PREFERRED_SIZE)
-						// .addGap(Globals.minGapSize,Globals.minGapSize,Globals.minGapSize)
+						
 						.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE)
@@ -341,7 +341,7 @@ public class JTableSelectionPanel extends JPanel
 		layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup()
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 				.addGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-						// .addComponent(markReload, 10, GroupLayout.PREFERRED_SIZE,
+						
 						// GroupLayout.PREFERRED_SIZE)
 						.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)

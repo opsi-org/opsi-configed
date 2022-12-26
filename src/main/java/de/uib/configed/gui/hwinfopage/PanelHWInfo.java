@@ -177,7 +177,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(vGap / 2, vGap / 2, vGap / 2).addComponent(contentPane, javax.swing.GroupLayout.PREFERRED_SIZE,
 						javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-		// .addGap(vGap, vGap, vGap)
+		
 		);
 
 		if (withPopup) {

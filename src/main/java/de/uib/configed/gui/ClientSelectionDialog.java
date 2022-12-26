@@ -302,7 +302,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		saveHGroup.addGap(Globals.HGAP_SIZE / 2);
 		saveHGroup.addComponent(buttonRestart, 20, 20, 20);
 
-		// saveHGroup.addComponent( loadSearchBox, Globals.buttonWidth,
+		
 
 		saveHGroup.addGap(Globals.HGAP_SIZE);
 		additionalLayout.setHorizontalGroup(saveHGroup);
@@ -315,7 +315,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		saveVGroup.addComponent(saveButton, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
 		saveVGroup.addComponent(buttonReload, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
 		saveVGroup.addComponent(buttonRestart, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
-		// saveVGroup.addComponent( loadSearchBox, Globals.lineHeight,
+		
 
 		additionalLayout.setVerticalGroup(saveVGroup);
 
@@ -376,7 +376,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		hGroupNegate.addComponent(negationLabel, GroupLayout.Alignment.CENTER);
 		hGroupElements.addComponent(nameLabel, GroupLayout.Alignment.CENTER);
-		// hGroupOperations.addComponent( operationLabel, GroupLayout.Alignment.CENTER
+		
 
 		hGroupData.addComponent(dataLabel, GroupLayout.Alignment.CENTER);
 		hGroupConnections.addComponent(connectionLabel, GroupLayout.Alignment.CENTER);

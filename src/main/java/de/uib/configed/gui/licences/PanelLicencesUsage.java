@@ -163,16 +163,16 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 		 * .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.
 		 * TRAILING)
 		 * // for testing purposes:
-		 * //.addComponent(testfield, javax.swing.GroupLayout.Alignment.LEADING,
+		 * 
 		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
 		 * Short.MAX_VALUE)
 		 * .addComponent(panelUsage, javax.swing.GroupLayout.Alignment.LEADING,
 		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
 		 * Short.MAX_VALUE)
-		 * //.addComponent(panelKeys, javax.swing.GroupLayout.Alignment.LEADING,
+		 * 
 		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
 		 * Short.MAX_VALUE)
-		 * //.addComponent(panelWindowsSoftwareIds,
+		 * 
 		 * javax.swing.GroupLayout.Alignment.LEADING,
 		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
 		 * Short.MAX_VALUE)
@@ -187,14 +187,14 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 		 * layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 		 * .addGroup(layout.createSequentialGroup()
 		 * .addContainerGap()
-		 * //.addComponent(testfield, javax.swing.GroupLayout.DEFAULT_SIZE,
+		 * 
 		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE)
 		 * .addComponent(panelUsage, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE,
 		 * Short.MAX_VALUE)
 		 * .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-		 * //.addComponent(panelKeys, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE,
+		 * 
 		 * 150)
-		 * //.addComponent(panelWindowsSoftwareIds, minVSize,
+		 * 
 		 * javax.swing.GroupLayout.DEFAULT_SIZE, 120)
 		 * .addComponent(panelGetAndAssignSL, javax.swing.GroupLayout.PREFERRED_SIZE,
 		 * javax.swing.GroupLayout.PREFERRED_SIZE, 150)

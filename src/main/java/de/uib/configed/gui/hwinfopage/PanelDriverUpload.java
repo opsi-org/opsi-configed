@@ -555,10 +555,10 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 				.addGap(vGap, vGap * 2, vGap * 2)
 				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.CENTER)
-						// .addComponent(label_uploading, Globals.lineHeight,
+						
 						// Globals.lineHeight, Globals.lineHeight)
 						.addGap(Globals.LINE_HEIGHT)
-				// .addComponent(waitingImage, Globals.lineHeight,
+				
 				// Globals.lineHeight, Globals.lineHeight)
 				).addGap(vGap, vGap * 2, vGap * 2));
 
@@ -572,10 +572,10 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 														.addGroup(layoutByAuditInfo.createSequentialGroup()
 																.addComponent(label_topic, 5, wLeftText, wLeftText)
 																.addGap(hFirstGap, hFirstGap, hFirstGap)
-																// .addGap(Globals.graphicButtonWidth,
+																
 																// Globals.graphicButtonWidth,
 																// Globals.graphicButtonWidth)
-																// .addGap(hFirstGap, hFirstGap, hFirstGap)
+																
 																.addComponent(fieldClientname, Globals.BUTTON_WIDTH,
 																		Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2))
 														.addGroup(
@@ -646,23 +646,23 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 																.addGap(hFirstGap, hFirstGap, hFirstGap)
 																.addComponent(fieldServerPath, Globals.BUTTON_WIDTH * 2,
 																		Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE))
-												// .addComponent(buttonUploadDrivers,
+												
 												// Globals.graphicButtonWidth,
 												// Globals.graphicButtonWidth,
 												// Globals.graphicButtonWidth)
 												).addGap(hFirstGap, hFirstGap, hFirstGap))
 								.addGroup(layoutByAuditInfo.createSequentialGroup().addGap(5, 5, Short.MAX_VALUE)
-										// .addComponent(driverPathChecked, Globals.checkBoxWidth,
+										
 										// Globals.checkBoxWidth, Globals.checkBoxWidth)
 										.addComponent(driverPathChecked, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										// .addGap(2,2,2)
+										
 										.addGap(hGap, 2 * hGap, 2 * hGap)
-										// .addComponent(serverPathChecked, Globals.checkBoxWidth,
+										
 										// Globals.checkBoxWidth, Globals.checkBoxWidth)
 										.addComponent(serverPathChecked, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										// .addGap(2,2,2)
+										
 										.addGap(hGap, 2 * hGap, 2 * hGap)
 										.addComponent(buttonUploadDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
 												Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
@@ -670,7 +670,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 								.addGroup(layoutByAuditInfo.createSequentialGroup()
 										/*
-										 * //.addGap(hGap, hGap, Short.MAX_VALUE)
+										 * 
 										 * .addComponent(label_uploading, GroupLayout.PREFERRED_SIZE,
 										 * GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										 * .addGap(hFirstGap, hFirstGap, hFirstGap)
@@ -680,9 +680,9 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 										 * )
 										 */
 										.addGap(hGap, hGap, Short.MAX_VALUE)
-										// .addComponent(label_uploading, GroupLayout.PREFERRED_SIZE,
+										
 										// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										// .addComponent(waitingImage, Globals.iconWidth,
+										
 										// Globals.iconWidth, Globals.iconWidth)
 										.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2)));
 

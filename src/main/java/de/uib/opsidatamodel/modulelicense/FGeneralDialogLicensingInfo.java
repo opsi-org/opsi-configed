@@ -118,7 +118,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		southLayout.setVerticalGroup(southLayout.createSequentialGroup()
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-				// .addComponent(additionalPane, 300, 300, Short.MAX_VALUE )
+				
 				.addComponent(additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
@@ -134,7 +134,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
 				.addComponent(centerPanel, 200, 300, Short.MAX_VALUE).addGap(Globals.HGAP_SIZE)
-				// .addComponent(southPanel,300, 300, Short.MAX_VALUE)
+				
 				.addComponent(southPanel, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.HGAP_SIZE));
 
@@ -384,10 +384,10 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 										// z
 										.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 
-												//.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+												
 												.addComponent(customerNames)
 										// )
-										// .addComponent(moreInfo)
+										
 										)
 								/*
 								// c
@@ -395,7 +395,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 								// d
 								.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 										.addComponent(checksum)
-								//.addComponent(checksumInfo))
+								
 								*/
 								)));
 
@@ -429,17 +429,17 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 								.addGroup(gLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 										// d
 										.addGroup(gLayout.createSequentialGroup().addComponent(checksum))
-										// .addComponent(checksumInfo)
+										
 										.addGap(20)))
 						.addGap(30)
 						// y
 						.addGroup(gLayout.createSequentialGroup()
 								// y
 								.addGroup(gLayout.createSequentialGroup().addComponent(customerNames)
-								// .addComponent(moreInfo)
+								
 								))
 
-				//.addGap(20)
+				
 
 				));
 

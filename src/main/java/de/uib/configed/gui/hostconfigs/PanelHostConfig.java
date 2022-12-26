@@ -147,20 +147,20 @@ public class PanelHostConfig extends JPanel {
 		this.setLayout(planeLayout);
 
 		planeLayout.setHorizontalGroup(planeLayout.createSequentialGroup()
-				// .addGap(Globals.vGapSize)
+				
 				.addGroup(planeLayout.createParallelGroup()
-						// .addComponent( header, GroupLayout.Alignment.CENTER )
+						
 						.addComponent(editMapPanel))
-		// .addGap(Globals.vGapSize)
+		
 		);
 
 		planeLayout.setVerticalGroup(planeLayout.createSequentialGroup()
-				// .addGap(20)
-				// .addComponent( header, GroupLayout.PREFERRED_SIZE,
+				
+				
 				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				// .addGap(5)
+				
 				.addComponent(editMapPanel, Globals.LINE_HEIGHT * 2, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-		// .addGap(20)
+		
 		);
 	}
 

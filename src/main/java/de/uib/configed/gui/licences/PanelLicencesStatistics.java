@@ -50,7 +50,7 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup().addContainerGap()
 						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
 								// for testing purposes:
-								// .addComponent(testfield, javax.swing.GroupLayout.Alignment.LEADING,
+								
 								// javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
 								// Short.MAX_VALUE)
 								.addComponent(panelStatistics, javax.swing.GroupLayout.Alignment.LEADING,
@@ -59,10 +59,10 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 						.addContainerGap()));
 		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addContainerGap()
-						// .addComponent(testfield, javax.swing.GroupLayout.DEFAULT_SIZE,
+						
 						// javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE)
 						.addComponent(panelStatistics, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						// .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+						
 						.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE))
 
 		);

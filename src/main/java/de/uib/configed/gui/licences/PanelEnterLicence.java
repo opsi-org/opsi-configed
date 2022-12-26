@@ -456,7 +456,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 								.addComponent(jLabelSLid1, javax.swing.GroupLayout.DEFAULT_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-						// .addGap(5,5,5)
+						
 						.addGroup(panelLicenceModelLayout
 								.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, true)
 
@@ -484,7 +484,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 																		javax.swing.GroupLayout.PREFERRED_SIZE)
 																.addPreferredGap(
 																		javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-																// .addGap(5,5,5)
+																
 																.addComponent(jTextField_licenceContract, minFieldWidth,
 																		200, javax.swing.GroupLayout.PREFERRED_SIZE))
 														.addGroup(panelLicenceModelLayout.createSequentialGroup()
@@ -493,7 +493,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 																		javax.swing.GroupLayout.PREFERRED_SIZE)
 																.addPreferredGap(
 																		javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-																// .addGap(5,5,5)
+																
 																.addComponent(jTextField_endOfLicence, minFieldWidth,
 																		200, javax.swing.GroupLayout.PREFERRED_SIZE)))))
 						// .addContainerGap()
@@ -540,7 +540,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 														javax.swing.GroupLayout.PREFERRED_SIZE)
 												.addComponent(comboClient, minFieldHeight, Globals.LINE_HEIGHT,
 														javax.swing.GroupLayout.PREFERRED_SIZE))
-						// .addGap(0, 1, 3)
+						
 						));
 
 		panelEnterKey.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -579,11 +579,11 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 						.addGroup(layoutTask.createSequentialGroup()
 								.addGroup(layoutTask.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 										.addGroup(layoutTask.createSequentialGroup()
-												// .addGap(10, 10, 10)
+												
 												.addGroup(layoutTask
 														.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 														.addComponent(panelLicencecontracts, 50, 300, maxHSize))))
-						// .addGap(10, 10, 10)
+						
 						)
 						.addGroup(layoutTask.createSequentialGroup()
 								.addComponent(jButtonSend, javax.swing.GroupLayout.PREFERRED_SIZE,

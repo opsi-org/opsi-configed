@@ -611,7 +611,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(jCheckBoxCaseSensitive, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH)
-						// .addGap(Globals.gapSize/2,Globals.gapSize/2,Globals.gapSize)
+						
 						.addComponent(buttonFontPlus, Globals.GRAPHIC_BUTTON_WIDTH / 2,
 								Globals.GRAPHIC_BUTTON_WIDTH / 2, Globals.GRAPHIC_BUTTON_WIDTH / 2)
 						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
