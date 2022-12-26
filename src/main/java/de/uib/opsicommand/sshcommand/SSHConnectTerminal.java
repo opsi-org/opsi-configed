@@ -101,7 +101,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				logging.info(this, "connect user@host " + SSHConnectionInfo.getInstance().getUser() + "@"
 						+ SSHConnectionInfo.getInstance().getHost());
 				if (SSHConnectionInfo.getInstance().usesKeyfile()) {
-					if (SSHConnectionInfo.getInstance().getKeyfilePassphrase() != "")
+					if (!SSHConnectionInfo.getInstance().getKeyfilePassphrase().equals(""))
 						jsch.addIdentity(SSHConnectionInfo.getInstance().getKeyfilePath(),
 								SSHConnectionInfo.getInstance().getKeyfilePassphrase());
 					jsch.addIdentity(SSHConnectionInfo.getInstance().getKeyfilePath());
@@ -134,8 +134,6 @@ public class SSHConnectTerminal extends SSHConnect {
 
 				// a hack for MS-DOS prompt on Windows.
 
-				
-
 				channel = setStreams(channel);
 
 				channel.setPtyType("dumb");
@@ -158,6 +156,8 @@ public class SSHConnectTerminal extends SSHConnect {
 				exec(SOME_COMMAND + "\n");
 			} catch (Exception e) {
 				logging.error(this, "SSHConnectTerminal connect exception", e);
+				if (e instanceof InterruptedException)
+					Thread.currentThread().interrupt();
 			}
 		}
 	}
@@ -212,26 +212,6 @@ public class SSHConnectTerminal extends SSHConnect {
 		});
 
 		PrintStream myOut = System.out;
-
-		/*
-		 * does not help; nevertheless we need a terminal from which the configed is
-		 * started
-		 * PrintStream myOut = null;
-		 * 
-		 * try
-		 * {
-		 * logging.debug("starting");
-		 * logging.info(this, "have we got System.out ? " + System.out.checkError());
-		 * File f = File.createTempFile("configedout_", ".tmp");
-		 * myOut = new PrintStream(f);
-		 * logging.info(this, "temp file created for SSH terminal:" + f);
-		 * }
-		 * catch(Exception ex)
-		 * {
-		 * logging.info(this, "no temp file created, taking System.out");
-		 * myOut = System.out;
-		 * }
-		 */
 
 		ch.setOutputStream(new MyOutputPrinter(dialog, myOut));
 		out = ch.getOutputStream();
@@ -301,15 +281,9 @@ public class SSHConnectTerminal extends SSHConnect {
 						((Component) textField).requestFocusInWindow();
 					}
 
-					// dialog.getInputField().setText("");
-
 					else {
 
 						exec(textField.getText() + "\n");
-
-						// "))
-
-						// else
 
 						((Component) textField).requestFocusInWindow();
 						dialog.getInputField().setText("");
@@ -343,19 +317,6 @@ public class SSHConnectTerminal extends SSHConnect {
 			commands_compgen = getList(result);
 			logging.debug(this, "getCompletionList commands compgen -c " + result);
 		}
-
-		// 
-		// // catch (IOException ioe)
-
-		// String result_ls = ssh.exec( new Empty_Command(com ),
-
-		// String result_dir = "";
-
-		// for (String l : arr_result_dir)
-
-		// String dir = "" + line.split(currentDirectory + "/",2)[1];
-
-		// catch (Exception ioe)
 
 		return result;
 	}

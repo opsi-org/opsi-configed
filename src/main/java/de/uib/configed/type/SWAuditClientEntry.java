@@ -115,24 +115,6 @@ public class SWAuditClientEntry
 
 	}
 
-	/*
-	 * public static final LinkedHashMap<String, String> DB_COLUMNS = new
-	 * LinkedHashMap<String, String>();
-	 * static {
-	 * DB_COLUMNS.put("config_id", "INTEGER");
-	 * 
-	 * DB_COLUMNS.put("name", "VARCHAR(100)");
-	 * 
-	 * DB_COLUMNS.put("version", "VARCHAR(100)");
-	 * DB_COLUMNS.put("subVersion", "VARCHAR(100)");
-	 * DB_COLUMNS.put("architecture", "VARCHAR(3)");
-	 * DB_COLUMNS.put("language", "VARCHAR(10)");
-	 * DB_COLUMNS.put("licenseKey", "VARCHAR(255)");
-	 * 
-	 * DB_COLUMNS.put("lastseen", "TIMESTAMP"); //lastStateChange");
-	 * }
-	 */
-
 	public static final List<String> DB_COLUMN_NAMES = new ArrayList<>();
 	static {
 		for (String key : DB_COLUMNS.keySet()) {
@@ -148,15 +130,9 @@ public class SWAuditClientEntry
 		startmillis1stPartOfConstructor = System.currentTimeMillis();
 
 		data = new HashMap<>();
-		/*
-		 * for (int i = 0; i < keys.size(); i++)
-		 * {
-		 * data.put(keys.get(i), values.get(i));
-		 * }
-		 */
+
 		data.put(SWAuditEntry.id, values.get(keys.indexOf(DB_COLUMNS.get(CLIENT_ID))));
 		data.put(LICENCEkEY, values.get(keys.indexOf(DB_COLUMNS.get(LICENCEkEY))));
-		// data.put(SWAuditEntry.SUBVERSION,
 
 		lastModificationS = values.get(keys.indexOf(DB_COLUMNS.get(LAST_MODIFICATION)));
 		swIdent = produceSWident(keys, values);
@@ -196,10 +172,7 @@ public class SWAuditClientEntry
 
 		String result = "";
 		try {
-			result = Globals.pseudokey(new String[] {
-					// (values.get( keys.indexOf( DB_COLUMNS.get(SWAuditEntry.NAME) )
-					// )).toLowerCase(),
-					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.NAME))),
+			result = Globals.pseudokey(new String[] { values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.NAME))),
 					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.VERSION))),
 					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.SUBVERSION))),
 					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.LANGUAGE))),
@@ -244,25 +217,6 @@ public class SWAuditClientEntry
 	}
 
 	private Integer getIndex(List<String> list, String element) {
-		/*
-		 * int result = -1;
-		 * if (list == null || element == null)
-		 * return result;
-		 * 
-		 * int i = 0;
-		 * while (result == -1 && i < list.size())
-		 * {
-		 * if (list.get(i).equalsIgnoreCase( element ) )
-		 * {
-		 * result = i;
-		 * logging.info(this, "indexOfIgnoreCase found equality of " + element +
-		 * " to entry \n" + i + " : " + list.get(i));
-		 * }
-		 * i++;
-		 * }
-		 * 
-		 * return result;
-		 */
 
 		int result = -1;
 
@@ -272,8 +226,6 @@ public class SWAuditClientEntry
 
 		Integer j = software2Number.get(element);
 
-		// mapped value " + j);
-
 		if (j == null) {
 			logging.info(this,
 					"getIndex, probably because of an upper-lower case or a null issue, not found for  " + element);
@@ -282,7 +234,6 @@ public class SWAuditClientEntry
 
 		if (result == -1 && list != null) {
 
-			// for " + swIdent );
 			int i = 0;
 			while (result == -1 && i < list.size()) {
 				if (list.get(i).equalsIgnoreCase(element)) {
@@ -324,14 +275,12 @@ public class SWAuditClientEntry
 	}
 
 	public static String produceSWident(Map<String, Object> readMap) {
-		String result = Globals.pseudokey(new String[] {
-				// ((String)
-				// readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME))).toLowerCase(),
-				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME)),
-				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION)),
-				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.SUBVERSION)),
-				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE)),
-				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.ARCHITECTURE)) });
+		String result = Globals
+				.pseudokey(new String[] { (String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME)),
+						(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION)),
+						(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.SUBVERSION)),
+						(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE)),
+						(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.ARCHITECTURE)) });
 
 		return result;
 	}
@@ -356,28 +305,6 @@ public class SWAuditClientEntry
 	public String getSWident() {
 		return swIdent;
 	}
-
-	/*
-	 * public String[] getData()
-	 * {
-	 * logging.info(this, "getData " + data);
-	 * String[] values = new String[KEYS.size()];
-	 * 
-	 * for (int i = 0; i < KEYS.size(); i++)
-	 * {
-	 * values[i] = data.get(KEYS.get(i));
-	 * }
-	 * 
-	 * return values;
-	 * }
-	 */
-
-	/*
-	 * public String getUninstallString()
-	 * {
-	 * return uninstallString;
-	 * }
-	 */
 
 	public static List<String> getDisplayKeys() {
 		return KEYS_FOR_GUI_TABLES;

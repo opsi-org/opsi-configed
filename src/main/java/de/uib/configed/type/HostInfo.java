@@ -495,76 +495,6 @@ public class HostInfo {
 		lastSeen = showValue("" + infoMap.get(lastSeenKEY));
 	}
 
-	/*
-	 * public void getInfo(Map<String, Object> pcInfo)
-	 * {
-	 * 
-	 * logging.info(this, "getInfo " + pcInfo);
-	 * 
-	 * 
-	 * 
-	 * 
-	 * if (pcInfo == null)
-	 * {
-	 * initialize();
-	 * return;
-	 * }
-	 * 
-	 * clientDescription = configed.encodeStringFromService ((String)
-	 * pcInfo.get(clientDescriptionKEY));
-	 * if (clientDescription == null)
-	 * clientDescription = "";
-	 * 
-	 * clientInventoryNumber = configed.encodeStringFromService ((String)
-	 * pcInfo.get(clientInventoryNumberKEY));
-	 * if (clientInventoryNumber == null)
-	 * clientInventoryNumber = "";
-	 * 
-	 * clientNotes = configed.encodeStringFromService ( (String)
-	 * pcInfo.get(clientNotesKEY) );
-	 * if (clientNotes == null)
-	 * clientNotes = "";
-	 * 
-	 * clientOneTimePassword = configed.encodeStringFromService ( (String)
-	 * pcInfo.get(clientOneTimePasswordKEY) );
-	 * if (clientOneTimePassword == null)
-	 * clientOneTimePassword = "";
-	 * 
-	 * clientMacAddress = (String) pcInfo.get(clientMacAddressKEY) ;
-	 * if (clientMacAddress == null)
-	 * clientMacAddress = "";
-	 * 
-	 * clientIpAddress = (String) pcInfo.get(clientIpAddressKEY) ;
-	 * if (clientIpAddress == null)
-	 * clientIpAddress = "";
-	 * 
-	 * 
-	 * hostKey = (String) pcInfo.get(hostKeyKEY);
-	 * 
-	 * clientName = (String) pcInfo.get(hostnameKEY);
-	 * 
-	 * created = (String) pcInfo.get(createdKEY);
-	 * 
-	 * lastSeen = (String) pcInfo.get(lastSeenKEY);
-	 * if (lastSeen != null)
-	 * {
-	 * String[] ls = lastSeen.split("");
-	 * if (ls.length >= 15)
-	 * lastSeen = ls[1]+ls[2]+ls[3]+ls[4]+'-'+ls[5]+ls[6]+'-'+ls[7]+ls[8]+'
-	 * '+ls[9]+ls[10]+':'+ls[11]+ls[12]+':'+ls[13]+ls[14];
-	 * }
-	 * else
-	 * {
-	 * lastSeen = "";
-	 * }
-	 * 
-	 * clientUefiBoot = (Boolean)
-	 * pcInfo.get(PersistenceController.HOST_KEY_UEFI_BOOT);
-	 * if (clientUefiBoot == null)
-	 * clientUefiBoot = false;
-	 * }
-	 */
-
 	private int findCol(JTableSelectionPanel selectionPanel, String colName) {
 		return selectionPanel.getTableModel().findColumn(colName
 
@@ -586,20 +516,6 @@ public class HostInfo {
 		mainFrame.setUefiBoot(clientUefiBoot);
 		mainFrame.setWANConfig(clientWanConfig);
 		mainFrame.setShutdownInstall(clientShutdownInstall);
-
-		/*
-		 * //testcode
-		 * callCounter++;
-		 * String partOfHostKey = "";
-		 * if (hostKey != null && hostKey.length()>0)
-		 * {
-		 * partOfHostKey = hostKey.substring(0,1);
-		 * logging.info(this, "++++++ " + clientName + " host key " + hostKey);
-		 * }
-		 * else
-		 * logging.info(this, "++++++ " + clientName + " no host key " + hostKey);
-		 * mainFrame.setOpsiHostKey(callCounter + ":" + partOfHostKey);
-		 */
 
 		mainFrame.setOpsiHostKey(hostKey);
 	}
@@ -709,17 +625,6 @@ public class HostInfo {
 			int col = findCol(selectionPanel, configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.clientInstallByShutdown_DISPLAY_FIELD_LABEL));
 
-			/*
-			 * Vector<String> columns = new Vector<>();
-			 * for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++)
-			 * {
-			 * columns.add( selectionPanel.getTableModel().getColumnName( i ) );
-			 * }
-			 * logging.info(this, "showAndSave columns are " + columns);
-			 * 
-			 * logging.info(this, "showAndSave found col " + col);
-			 */
-
 			if (col > -1)
 				// write it into the visible table
 				selectionPanel.getTableModel().setValueAt(shutdownInstall, row, col);
@@ -737,17 +642,6 @@ public class HostInfo {
 
 			int col = findCol(selectionPanel, configed
 					.getResourceValue("ConfigedMain.pclistTableModel." + HostInfo.clientUefiBoot_DISPLAY_FIELD_LABEL));
-
-			/*
-			 * Vector<String> columns = new Vector<>();
-			 * for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++)
-			 * {
-			 * columns.add( selectionPanel.getTableModel().getColumnName( i ) );
-			 * }
-			 * logging.info(this, "showAndSave columns are " + columns);
-			 * 
-			 * logging.info(this, "showAndSave found col " + col);
-			 */
 
 			if (col > -1)
 				// write it into the visible table
@@ -767,14 +661,6 @@ public class HostInfo {
 			int col = findCol(selectionPanel, configed
 					.getResourceValue("ConfigedMain.pclistTableModel." + HostInfo.clientWanConfig_DISPLAY_FIELD_LABEL));
 
-			/*
-			 * Vector<String> columns = new Vector<>();
-			 * for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++)
-			 * {
-			 * columns.add( selectionPanel.getTableModel().getColumnName( i ) );
-			 * }
-			 * logging.info(this, "showAndSave columns are " + columns);
-			 */
 			logging.info(this, "showAndSave found col " + col);
 
 			if (col > -1)
@@ -785,19 +671,6 @@ public class HostInfo {
 				logging.error(this, "wan settings could not be set");
 			persist.getHostInfoCollections().updateLocalHostInfo(client, clientWanConfigKEY, wanStandard);
 		}
-
-		// persist.setCommonProductPropertyValue( new HashSet<>(Arrays.asList(client)),
-
-		// // Set<String> clientNames, String productName, String propertyName,
-		// List<String> values
-
-		// persist.updateProductOnClient(
-		// client,
-		// product,
-		// OpsiPackage.TYPE_LOCALBOOT,
-		// productValues
-
-		// persist.getHostInfoCollections().updateLocalHostInfo(client,
 
 	}
 

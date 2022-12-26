@@ -26,19 +26,6 @@ public class OpsiMethodCall {
 	public static final Vector<String> collectedCalls = new Vector<>();
 	public static int maxCollectSize = -1;
 
-	/*
-	 * public OpsiMethodCall(String methodname, Object[] parameters)
-	 * {
-	 * this(standardRpcPath, methodname, parameters);
-	 * }
-	 * 
-	 * public OpsiMethodCall (String methodname, Object[] parameters, boolean
-	 * background)
-	 * {
-	 * this(standardRpcPath, methodname, parameters, background);
-	 * }
-	 */
-
 	/**
 	 * @param rpcPath    subpath for the rpc call (not including "/rpc/")
 	 * @param methodName name of rpc method
@@ -115,17 +102,6 @@ public class OpsiMethodCall {
 	public boolean isBackground() {
 		return background;
 	}
-	/*
-	 * private String resolveToString(Object element)
-	 * {
-	 * if (element == null)
-	 * return null;
-	 * else if (element instanceof Object[])
-	 * return Arrays.toString( (Object[]) element);
-	 * else
-	 * return element.toString();
-	 * }
-	 */
 
 	@Override
 	public String toString() {
@@ -166,15 +142,6 @@ public class OpsiMethodCall {
 
 			}
 
-			/*
-			 * sb.append( resolveToString(parameters[0] ) ) ;
-			 * for (int i = 1; i < parameters.length; i++)
-			 * {
-			 * sb.append(",");
-			 * sb.append( resolveToString( parameters[i] ) );
-			 * }
-			 */
-
 		}
 		sb.append("]");
 		sb.append("}");
@@ -189,14 +156,6 @@ public class OpsiMethodCall {
 			sb.append(parameters[0].toString());
 			for (int i = 1; i < parameters.length; i++) {
 				sb.append("&");
-				/*
-				 * String p = parameters[i].toString();
-				 * if (p.length() > 0 && p.charAt(0) = '[')
-				 * {
-				 * sb.append('[');
-				 * sb.append('parameters[i].toString());
-				 * }
-				 */
 
 				sb.append(parameters[i].toString());
 			}
@@ -213,12 +172,6 @@ public class OpsiMethodCall {
 
 			JSONArray joParams = new JSONArray();
 
-			/*
-			 * Vector v = new Vector<>();
-			 * for (int i = 0; i<parameters.length; i++)
-			 * { v.add (parameters[i]);
-			 * }
-			 */
 			for (int i = 0; i < parameters.length; i++) {
 				if (parameters[i] instanceof Object[]) {
 					Object[] obs = (Object[]) parameters[i];

@@ -100,14 +100,6 @@ public class PanelSWInfo extends JPanel {
 			String entry = (String) row.get(indexOfColWindowsSoftwareID);
 			boolean isKb = entry.startsWith("kb");
 
-			/*
-			 * if (!isBK)
-			 * {
-			 * String[] parts = entry.split
-			 * isKb = entry.endsWiths(
-			 * }
-			 */
-
 			return !isKb;
 			// on filtering active everything is taken if not isKb
 
@@ -154,40 +146,13 @@ public class PanelSWInfo extends JPanel {
 	protected void initTable() {
 
 		labelSuperTitle = new JLabel();
-		/*
-		 * {
-		 * 
-		 * @Override
-		 * public void setText(String s)
-		 * {
-		 * logging.info(this, "setText " + s);
-		 * super.setText(s);
-		 * }
-		 * };
-		 */
 
 		labelSuperTitle.setFont(Globals.defaultFontBold);
 
 		panelTable = new PanelGenEditTable("title", 0, false, 0, true, new int[] {
-				// PanelGenEditTable.POPUP_RELOAD,
-				// PanelGenEditTable.POPUP_FLOATINGCOPY,
-				// PanelGenEditTable.POPUP_PDF
+
 		}, true) {
-			/*
-			 * @Override
-			 * protected void floatExternal()
-			 * {
-			 * floatExternalX();
-			 * }
-			 * 
-			 * @Override
-			 * public void reload()
-			 * {
-			 * 
-			 * 
-			 * super.reload();
-			 * }
-			 */
+
 		};
 
 		panelTable.setTitle("");
@@ -287,7 +252,7 @@ public class PanelSWInfo extends JPanel {
 				.addComponent(labelSuperTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(vGap, vGap, vGap)
-				
+
 				.addGroup(layoutSubPanelTitle.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelWithMSUpdates, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -314,17 +279,6 @@ public class PanelSWInfo extends JPanel {
 
 		labelSuperTitle.setOpaque(true);
 		labelSuperTitle.setBackground(Globals.backgroundLightGrey);
-
-		/*
-		 * logging.info(this, "voidTableModel cols hopefully   " +
-		 * SWAuditEntry.KEYS);
-		 * for (int i = 0; i<voidTableModel.getColumnCount(); i++)
-		 * {
-		 * logging.info(this, "voidTableModel col " + i + " " +
-		 * voidTableModel.getColumnName(i));
-		 * }
-		 * System.exit(0);
-		 */
 
 		jTable = new JTable(voidTableModel, null);
 
@@ -353,36 +307,20 @@ public class PanelSWInfo extends JPanel {
 		layoutEmbed
 				.setHorizontalGroup(layoutEmbed
 						.createSequentialGroup().addGap(hGap, hGap, hGap).addGroup(layoutEmbed.createParallelGroup()
-								/*
-								 * .addGroup(layoutEmbed.createSequentialGroup()
-								 * .addGap(hGap, hGap, hGap)
-								 * .addComponent(jlabelSuperTitle, javax.swing.GroupLayout.PREFERRED_SIZE,
-								 * javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								 * .addGap(hGap, hGap, hGap)
-								 * )
-								 */
-								
-								
+
 								.addComponent(subPanelTitle, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								
-								
+
 								.addComponent(panelTable, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 						.addGap(hGap, hGap, hGap));
 
 		layoutEmbed.setVerticalGroup(layoutEmbed.createSequentialGroup()
-				
-				
-				
-				
-				
+
 				.addGap(vGap, vGap, vGap)
 				.addComponent(subPanelTitle, javax.swing.GroupLayout.PREFERRED_SIZE,
 						javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-				
-				
-				
+
 				.addComponent(panelTable, javax.swing.GroupLayout.PREFERRED_SIZE,
 						javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(vGap, vGap, vGap));
@@ -535,39 +473,6 @@ public class PanelSWInfo extends JPanel {
 		pdfExportTable.setPageSizeA4_Landscape();
 		pdfExportTable.execute(exportFilename, false);
 
-		/*
-		 * old pdf exporting
-		 * 
-		 * 
-		 * filename, metadata
-		 * //the real filename is summoned in the toPDF method call
-		 * DocumentToPdf tableToPDF = new DocumentToPdf ("report_swaudit_" + clientName,
-		 * metaData); // no filename, metadata
-		 * tableToPDF.setAskForOverwrite( askForOverwrite );
-		 * 
-		 * ArrayList list = new ArrayList<>();
-		 * list.add(0); // column(s)
-		 * de.uib.utilities.pdf.DocumentElementToPdf.setAlignmentLeft(list);
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * model in order to avoid any graphical component
-		 * 
-		 * 
-		 * modelSWInfo.setSorting(0, true);
-		 * tableToPDF.createContentElement("tablemodel", modelSWInfo); //we use the
-		 * model in order to avoid any graphical component
-		 * tableToPDF.setPageSizeA4_Landscape(); //
-		 * if (askingForKindOfAction)
-		 * tableToPDF.toPDF(null, pdfFilename);// create Pdf, ask if it shall be shown
-		 * or saved
-		 * else
-		 * tableToPDF.toPDF(true, pdfFilename );// create Pdf, and save it, if
-		 * exportFilename null, ask for it
-		 **/
 	}
 
 	private void setSuperTitle(String s) {
@@ -632,65 +537,6 @@ public class PanelSWInfo extends JPanel {
 
 		this.hostId = "" + hostId;
 	}
-
-	/*
-	 * public void setSoftwareInfo (String hostId)
-	 * {
-	 * logging.info(this, "setSoftwareInfo for " + hostId + " -- " );
-	 * 
-	 * this.hostId = "" + hostId;
-	 * 
-	 * 
-	 * 
-	 * String timeS = "" + Globals.getToday();
-	 * String[] parts = timeS.split(":");
-	 * if (parts.length > 2)
-	 * timeS = parts[0] + ":" + parts[1];
-	 * 
-	 * 
-	 * 
-	 * ")" );
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * title = hostId;
-	 * 
-	 * this.swRows = swRows;
-	 * if (swRows == null)
-	 * this.swRows = new DatedRowList();
-	 * 
-	 * jLabelTitle.setText(" (no software audit data, checked at time:  " + timeS +
-	 * ")");
-	 * 
-	 * 
-	 * if (swRows == null)
-	 * {
-	 * voidTableModel.setData(this.swRows); 
-	 * return;
-	 * }
-	 * 
-	 * 
-	 * if (swRows.getDate() != null)
-	 * {
-	 * MessageFormat mf = new MessageFormat(
-	 * configed.getResourceValue("PanelSWInfo.jLabel_title") );
-	 * jLabelTitle.setText(" " + mf.format( new String[] { hostId, swRows.getDate()}
-	 * ));
-	 * title = title + "   " + configed.getResourceValue("PanelSWInfo.title");
-	 * }
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * }
-	 */
 
 	protected class SWInfoTableModel extends AbstractTableModel {
 		private List<String[]> data;

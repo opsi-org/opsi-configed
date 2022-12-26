@@ -389,12 +389,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		checkmarkSearch.addActionListener(this);
 		checkmarkSearch.setChangeStateAutonomously(false);
 
-		/*
-		 * checkmarkSearch.addActionListener(
-		 * (ActionEvent ae )-> logging.info(this, " test test we got event " + ae)
-		 * );
-		 */
-
 		selectedIconSearch = Globals.createImageIcon("images/loupe_light_16_progressiveselect.png", "");
 		unselectedIconSearch = Globals.createImageIcon("images/loupe_light_16_blockselect.png", "");
 
@@ -412,18 +406,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		checkmarkSearchProgressive.setChangeStateAutonomously(true);
 		checkmarkSearchProgressive
 				.setToolTipText(configed.getResourceValue("SearchPane.checkmarkSearchProgressive.tooltip"));
-
-		/*
-		 * configed.getResourceValue("SearchPane.announceSearch") ){
-		 * 
-		 * @Override
-		 * public void setText(String s)
-		 * {
-		 * super.setText("" + s + "  "); //adding some space for left handed label
-		 * }
-		 * };
-		 * labelSearch0.setFont(Globals.defaultFont);
-		 */
 
 		fieldSearch = new JTextField("");
 		fieldSearch.setPreferredSize(Globals.textfieldDimension);
@@ -516,12 +498,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		labelSearchMode.setFont(Globals.defaultFont);
 
 		LinkedHashMap tooltipsMap = new LinkedHashMap();
-		/*
-		 * tooltipsMap.put("Volltext", "Suchzeichenfolge irgendwo im Text finden");
-		 * tooltipsMap.put("Anfangstext", "Suchzeichenfolge am Textbeginn finden");
-		 * if (withRegEx) tooltipsMap.put("Schema",
-		 * "Suchausdruck mit symbolischen Zeichen" );
-		 */
 
 		tooltipsMap.put(configed.getResourceValue("SearchPane.searchmode.fulltext"), // Index FULL_TEXT_SEARCH
 				configed.getResourceValue("SearchPane.mode.fulltext.tooltip"));
@@ -563,13 +539,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		Icon unselectedIcon;
 		Icon selectedIcon;
 
-		// unselectedIcon =
-
-		// "");
-		// selectedIcon =
-
-		// "");
-
 		unselectedIcon = Globals.createImageIcon("images/loupe_light_16_singlecolumnsearch.png", "");
 		selectedIcon = Globals.createImageIcon("images/loupe_light_16_multicolumnsearch.png", "");
 
@@ -582,15 +551,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		checkmarkAllColumns.setToolTipText(configed.getResourceValue("SearchPane.checkmarkAllColumns.tooltip"));
 		checkmarkAllColumns.addActionListener(this);
 
-		// setSearchFieldsAll() is to called to synchronize with select == true
-
-		// unselectedIcon =
-
-		// "");
-		// selectedIcon =
-
-		// "");
-
 		unselectedIcon = Globals.createImageIcon("images/loupe_light_16_starttextsearch.png", "");
 		selectedIcon = Globals.createImageIcon("images/loupe_light_16_fulltextsearch.png", "");
 
@@ -598,9 +558,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		if (saveSearchpaneFullTextSearch != null)
 			active = (saveSearchpaneFullTextSearch.deserializeAsInt() == 0);
 
-		checkmarkFullText = new CheckedLabel(selectedIcon, unselectedIcon, active
-		// true
-		);
+		checkmarkFullText = new CheckedLabel(selectedIcon, unselectedIcon, active);
 
 		if (active)
 			comboSearchFieldsMode.setSelectedIndex(FULL_TEXT_SEARCH);
@@ -651,7 +609,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)));
 
 		layoutTablesearchPane.setVerticalGroup(layoutTablesearchPane.createSequentialGroup()
-				
+
 				.addGroup(layoutTablesearchPane.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
 						.addComponent(markReload, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -671,7 +629,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 						.addComponent(comboSearchFieldsMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(comboSearchFields, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-		
+
 		);
 
 	}
@@ -738,26 +696,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		fieldSearch.requestFocus();
 	}
 
-	// search functions
-	// ----------------------------------
-	/*
-	 * protected int findViewRowFromValue(int startviewrow, Object value, Set
-	 * colIndices)
-	 * {
-	 * return findViewRowFromValue(startviewrow, value, colIndices, false, true);
-	 * }
-	 * 
-	 * protected int findViewRowFromValue(int startviewrow, Object value, Set
-	 * colIndices, boolean fulltext)
-	 * {
-	 * return findViewRowFromValue(startviewrow, value, colIndices, fulltext, false,
-	 * true);
-	 * }
-	 */
-
 	private class Finding {
 		boolean success = false;
-		int startChar = -1;
 		int endChar = -1;
 	}
 
@@ -847,12 +787,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		result.success = false;
 
 		int i = 0;
-		result.startChar = 0;
 
 		int end = realS.length() - part.length() + 1;
 
 		while (!result.success && i < end) {
-			result.startChar = i;
 			result.success = (comparator.compare(realS.substring(i, i + part.length()), part) == 0);
 			result.endChar = i + part.length() - 1;
 			i++;
@@ -988,7 +926,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 							if (pattern.matcher(compareVal).matches())
 								found = true;
 
-							// " + found);
 						}
 
 						else {
@@ -996,37 +933,12 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 								found = stringContainsParts(targetModel.getColumnName(colJ), compareVal,
 										valParts).success;
 
-							/*
-							 * if (fulltext)
-							 * found = stringContains(
-							 * targetModel.getColumnName(colJ),
-							 * compareVal, val);
-							 */
-
 							else {
 
 								found = stringStartsWith(targetModel.getColumnName(colJ), compareVal, val);
 
 							}
 
-							/*
-							 * without collator based comparison
-							 * compareVal = compareVal.toLowerCase();
-							 * 
-							 * if (fulltext)
-							 * {
-							 * 
-							 * if (compareVal.indexOf(val.toLowerCase()) >= 0)
-							 * found = true;
-							 * }
-							 * 
-							 * else
-							 * {
-							 * 
-							 * if (compareVal.startsWith(valLower))
-							 * found = true;
-							 * }
-							 */
 						}
 					}
 
@@ -1283,17 +1195,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			setRow(0, false, selectMode);
 			// go back to start when editing is restarted
 
-			/*
-			 * if (fieldSearch.getText().equals(""))
-			 * 
-			 * setRow(0, false, selectMode);
-			 * 
-			 * else
-			 * {
-			 * setRow(0, false, selectMode);
-			 * searchTheRow(0, selectMode);
-			 * }
-			 */
 		}
 
 	}
@@ -1432,17 +1333,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	public static void main(String[] args) {
-		/*
-		 * logging.debug(" abc   contains äb " + stringContains("abc", "äb"));
-		 * logging.debug(" abcde  contains  è " + stringContains("abcde", "é"));
-		 * logging.debug(" abc  contains  c " + stringContains("abc", "'"));
-		 * 
-		 * 
-		 * logging.debug(" abc  starts with  ab " + stringStartsWith("abc", "ab"));
-		 * logging.debug(" abc  starts with  a " + stringStartsWith("abc", "a"));
-		 * logging.debug(" abc  starts with abc " + stringStartsWith("abc",
-		 * "abc"));
-		 */
+
 	}
 
 }

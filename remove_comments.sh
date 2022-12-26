@@ -82,6 +82,5 @@ find . -name *.java -exec sed -i "s/\/\/ public.*//g" {} \;
 find . -name *.java -exec sed -i "s/\/\/ new.*//g" {} \;
 
 #26. command
-# here you should do manually something
-find . -name *.java -exec sed -i "s/\/\/[^\"]*[=]\{5,30\}//g" {} \;
+find . -name *.java -exec sed -i "s/\/\/[^\"]*[=]\{5,30\}.*//g" {} \;
 

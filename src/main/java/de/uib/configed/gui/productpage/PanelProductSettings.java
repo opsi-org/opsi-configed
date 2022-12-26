@@ -216,8 +216,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 
-				// valueChanged");
-
 				// Ignore extra messages.
 				if (e.getValueIsAdjusting())
 					return;
@@ -244,16 +242,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 								(String) tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
 					}
 
-					/*
-					 * int[] selection = tableProducts.getSelectedRows();
-					 * 
-					 * for (int i = 0; i < selection.length; i++)
-					 * {
-					 * selectedProducts.add(
-					 * (String) tableProducts.getValueAt( selection[i] , 0 )
-					 * );
-					 * }
-					 */
 				}
 
 			}
@@ -279,8 +267,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 				String stateChange = ((IFInstallationStateTableModel) (table.getModel()))
 						.getLastStateChange(convertRowIndexToModel(row));
-
-				// stateChange " + stateChange);
 
 				if (stateChange == null)
 					stateChange = "";
@@ -439,9 +425,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 						if (!val.equals(serverProductVersion)) {
 							c.setForeground(Color.red);
 
-							// (≠)") ;
-						} else {
-
 						}
 					}
 				}
@@ -478,23 +461,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			}
 		};
 
-		/*
-		 * JSplitPane leftPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT)
-		 * {
-		 * 
-		 * @Override
-		 * public int getMinimumDividerLocation()
-		 * {
-		 * return 10;
-		 * }
-		 * };
-		 * 
-		 * leftPane.setTopComponent(topPane);
-		 * leftPane.setBottomComponent(paneProducts);
-		 * leftPane.setDividerLocation(topPane.getPreferredSize().height);
-		 * leftPane.setResizeWeight((double) 0);
-		 */
-
 		JPanel leftPane = new JPanel();
 		GroupLayout layoutLeftPane = new GroupLayout(leftPane);
 		leftPane.setLayout(layoutLeftPane);
@@ -509,8 +475,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				.addComponent(paneProducts, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		setLeftComponent(leftPane);
-
-		// propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false,
 
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, true, false);
 		logging.info(this, " created properties Panel, is  EditMapPanelX instance No. " + EditMapPanelX.objectCounter);
@@ -562,8 +526,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	protected void producePopupMenu(final Map<String, Boolean> checkColumns) {
 		popup = new JPopupMenu("");
 
-		// LinkedHashMap<String, JMenuItem> menuItems = new LinkedHashMap<String,
-
 		JMenuItem save = new JMenuItemFormatted();
 		save.setText(configed.getResourceValue("ConfigedMain.saveConfiguration"));
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
@@ -588,7 +550,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		itemSaveAndExecute = new JMenuItemFormatted();
 		itemSaveAndExecute.setText(configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
-		// itemSaveAndExecute.setAccelerator( KeyStroke.getKeyStroke( KeyEvent.VK_X,
 
 		// dies bit get its intended context
 		itemSaveAndExecute.setIcon(Globals.createImageIcon("images/executing_command_blue_16.png", ""));
@@ -603,34 +564,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		popup.add(itemSaveAndExecute);
 		popup.addSeparator();
 
-		/*
-		 * subOpsiclientdEvent = new JMenu(
-		 * configed.getResourceValue("ConfigedMain.OpsiclientdEvent")
-		 * );
-		 * 
-		 * 
-		 * subOpsiclientdEvent.setFont(Globals.defaultFont);
-		 * 
-		 * for (final String event :
-		 * mainController.getPersistenceController().getOpsiclientdExtraEvents())
-		 * {
-		 * JMenuItemFormatted item = new JMenuItemFormatted(event);
-		 * item.setFont(Globals.defaultFont);
-		 * 
-		 * item.addActionListener(new ActionListener()
-		 * {
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * mainController.fireOpsiclientdEventOnSelectedClients(event);
-		 * }
-		 * });
-		 * 
-		 * subOpsiclientdEvent.add(item);
-		 * }
-		 * 
-		 * popup.add(subOpsiclientdEvent);
-		 * 
-		 */
 		showPopupOpsiclientdEvent(true);
 
 		JMenuItem reload = new JMenuItemFormatted();
@@ -682,41 +615,11 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				pdfExportTable.setPageSizeA4_Landscape();
 				pdfExportTable.execute(null, false); // create pdf // no filename, onlySelectedRows = false
 
-				/**
-				 * old PDF exporting tableToPDF = new DocumentToPdf (null,
-				 * metaData); // no filename, metadata // set alignment left
-				 * ArrayList list = new ArrayList<>(); list.add(0); // column
-				 * de.uib.utilities.pdf.DocumentElementToPdf.setAlignmentLeft(list);
-				 * // only relevant rows
-				 * tableToPDF.createContentElement("table",
-				 * strippTable(tableProducts));
-				 * tableToPDF.setPageSizeA4_Landscape();
-				 */
 			}
 		});
 		popup.add(createReport);
 
 		exportTable.addMenuItemsTo(popup);
-
-		/*
-		 * popup.addSeparator();
-		 * 
-		 * JMenuItem findClientsWithOtherProductVersion = new JMenuItemFormatted();
-		 * findClientsWithOtherProductVersion.setText(configed.getResourceValue(
-		 * "ConfigedMain.findClientsWithOtherProductVersion"));
-		 * findClientsWithOtherProductVersion.setFont(Globals.defaultFont);
-		 * findClientsWithOtherProductVersion.addActionListener(new ActionListener()
-		 * {
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * mainController.selectClientsNotCurrentProductInstalled(selectedProducts);
-		 * }
-		 * }
-		 * );
-		 * popup.add(findClientsWithOtherProductVersion);
-		 * 
-		 * // is extremely slow
-		 */
 
 		JMenu sub = new JMenu(configed.getResourceValue("ConfigedMain.columnVisibility"));
 		sub.setFont(Globals.defaultFont);
@@ -802,7 +705,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	protected void reloadAction() {
-		// List<? extends RowSorter.SortKey> currentSortKeys
 
 		mainController.requestReloadStatesAndActions();
 		mainController.resetView(mainController.getViewIndex());
@@ -1047,14 +949,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 			laststatechangeColumn.setCellRenderer(lastStateChangeTableCellRenderer);
 
-			/*
-			 * if (sorter instanceof DefaultRowSorter)
-			 * {
-			 * ((DefaultRowSorter) sorter).setComparator(colIndex, new
-			 * de.uib.utilities.IntComparatorForStrings());
-			 * }
-			 */
-
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_actionSequence)) > -1) {
@@ -1091,8 +985,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			productsequenceTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 			productsequenceColumn.setCellRenderer(productsequenceTableCellRenderer);
 
-			// ((DefaultRowSorter) sorter).setComparator(colIndex, new
-
 			// we already have Integer
 
 		}
@@ -1117,8 +1009,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 			((DefaultRowSorter) sorter).setComparator(colIndex, new StringComparator());
 
-			// ((DefaultRowSorter) sorter).setComparator(colIndex, new
-
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_installationInfo)) > -1) {
@@ -1127,18 +1017,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			installationInfoColumn.setCellRenderer(installationInfoTableCellRenderer);
 
 			JComboBox installationInfoCombo = new JComboBox<>();
-
-			/*
-			 * try
-			 * {
-			 * JTextField field = (JTextField) installationInfoCombo.getEditor();
-			 * field.getCaret().setBlinkRate(0);
-			 * }
-			 * catch(Exception ex)
-			 * {
-			 * logging.debug(this, "installationInfoCombo.getEditor() " + ex);
-			 * }
-			 */
 
 			installationInfoCombo.setRenderer(standardListCellRenderer);
 
@@ -1153,22 +1031,13 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	public void initEditing(String productID, String productTitle, String productInfo, String productHint,
-			String productVersion,
-			// String productPackageversion,
-			String productCreationTimestamp,
+			String productVersion, String productCreationTimestamp,
 
 			Map<String, Boolean> specificPropertiesExisting, Collection storableProductProperties,
 			Map editableProductProperties,
 
 			// editmappanelx
 			Map<String, de.uib.utilities.table.ListCellOptions> productpropertyOptionsMap,
-
-			/*
-			 * //editmappanel
-			 * Map productpropertiesValuesMap,
-			 * Map productpropertiesDescriptionsMap,
-			 * Map productpropertiesDefaultsMap,
-			 */
 
 			ProductpropertiesUpdateCollection updateCollection)
 
@@ -1203,30 +1072,13 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	public void clearEditing() {
 
-		initEditing("", // String productTitle,
-				"", // String productInfo,
-				"", // String productHint,
-				"", // String productVersion,
-				"", // String productPackageversion,
-				"", // String productCreationTimestamp,
+		initEditing("", "", "", "", "", "",
 
-				null, 
-				null, // Collection storableProductProperties,
+				null, null,
 
-				null, // Map editableProductProperties,
+				null, null,
 
-				// editmappanelx
-				null, // Map<String, de.uib.utilities.table.ListCellOptions> productpropertyOptionsMap
-
-				/*
-				 * //editmappanel
-				 * null, //Map productpropertiesValuesMap,
-				 * null, //Map productpropertiesDescriptionsMap,
-				 * null, //Map productpropertiesDefaultsMap,
-				 */
-
-				null // ProductpropertiesUpdateCollection updateCollection)
-		);
+				null);
 		infoPane.setGrey(true);
 	}
 

@@ -60,26 +60,10 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	public MapTableModel() {
 		observers = new Vector<>();
 
-		/*
-		 * editDenier
-		 * =
-		 * key -> {
-		 * logging.info(this, "key denied ?" + key );
-		 * Boolean result = key.endsWith( "modified");
-		 * if (result)
-		 * JOptionPane.showMessageDialog(Globals.mainFrame,
-		 * "this entry cannot be edited manually",
-		 * "information", JOptionPane.INFORMATION_MESSAGE
-		 * );
-		 * return result;
-		 * }
-		 * ;
-		 */
 	}
 
 	public void setModelProducer(ListModelProducerForVisualDatamap modelProducer) {
 
-		// at 0,0 " + modelProducer.getClass(0,0));
 		this.modelProducer = modelProducer;
 	}
 
@@ -134,13 +118,6 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 
 		return modifiedKey;
 	}
-
-	/*
-	 * private Map<String, Object> getDefaultData()
-	 * {
-	 * return defaultData;
-	 * }
-	 */
 
 	@Override
 	public String toString() {
@@ -252,18 +229,6 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		return data.containsKey(key);
 	}
 
-	/*
-	 * public void setDataChanged (boolean b)
-	 * {
-	 * dataChanged = b;
-	 * }
-	 * 
-	 * public boolean isDataChanged ()
-	 * {
-	 * return dataChanged;
-	 * }
-	 */
-
 	// table model
 	@Override
 	public int getColumnCount() {
@@ -316,27 +281,6 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			break;
 		case 1:
 			result = data.get(key);
-			/*
-			 * if (key.equals ("test456"))
-			 * {
-			 * logging.info(this, " result for " + key + ": " + result + " is null  " +
-			 * (result == null)
-			 * + " class " + result.getClass() + " equals null " + result.equals( null )
-			 * + " String value equals \"null\" " + (result.toString()).equals("null"));
-			 * if (result != null && result instanceof List)
-			 * {
-			 * logging.info(this, " result size for " + key + " " +
-			 * ((List)(result)).size());
-			 * if ( ((List)(result)).size() > 0)
-			 * logging.info(this, " result.get(0) for " + key + " is null " +
-			 * (((List)(result)).get(0) == null));
-			 * }
-			 * 
-			 * logging.info(this, " optionsMap for " + key + ": " + optionsMap.get(key) );
-			 * logging.info(this, " optionsMap for " + key + ": " +
-			 * optionsMap.get(key).getDefaultValues() );
-			 * }
-			 */
 
 			// deliver the default value
 
@@ -459,8 +403,6 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 				}
 			}
 
-			// " + updateCollection.size());
-
 			if (toStore)
 				weHaveChangedStoredMaps();
 		}
@@ -500,8 +442,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 				{
 
 				} else {
-					String myKey = (String) keys.get(row);
-					// StringvaluedObject o = new StringvaluedObject ( "" + value );
+					String myKey = keys.get(row);
 					Object o = value;
 
 					// data.get(myKey).getClass().getName()

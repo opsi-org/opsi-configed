@@ -123,7 +123,6 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 			}
 		};
 	}
-	// else
 
 	public void setSubpanelClasses(TreeMap<String, String> classesMap) {
 		givenClasses = classesMap;
@@ -142,7 +141,6 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 			EditMapPanelX editMapPanel = new EditMapPanelX(tableCellRenderer, keylistExtendible, keylistEditable,
 					reloadable) {
-				// @Override
 				protected void reload() {
 					javax.swing.tree.TreePath p = tree.getSelectionPath();
 					int row = tree.getRowForPath(p);
@@ -157,14 +155,12 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 					}
 				}
 
-				// @Override
 				@Override
 				protected JPopupMenu definePopup() {
 					logging.debug(this, " (EditMapPanelGrouped) definePopup ");
 					JPopupMenu result
 
 							= new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD,
-									// PopupMenuTrait.POPUP_DELETE,
 									PopupMenuTrait.POPUP_PDF })
 
 							{
@@ -190,11 +186,6 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 								}
 							};
 
-					/*
-					 * result.addSeparator();
-					 * JMenuItem popupRemoveClientEntry = new JMenuItem("remove client entry");
-					 * result.add( popupRemoveClientEntry );
-					 */
 					return result;
 				}
 			};
@@ -224,15 +215,6 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		pdfExportTable.setPageSizeA4();
 		pdfExportTable.execute(null, false);
 
-		/*
-		 * old pdf exporting
-		 * tableToPDF = new DocumentToPdf (null, metaData); // no filename, metadata
-		 * 
-		 * tableToPDF.createContentElement("table", createJTableForPDF());
-		 * 
-		 * tableToPDF.setPageSizeA4(); //
-		 * tableToPDF.toPDF(); // create Pdf
-		 **/
 	}
 
 	private JTable createJTableForPDF() {
@@ -247,13 +229,6 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		logging.info(this, "createJTableForPDF keys " + keys);
 		for (String key : keys) {
 			String property = "";
-
-			/*
-			 * ListMerger listelem = (ListMerger) mapTableModel.getData().get(key);
-			 * if (!listelem.isEmpty())
-			 * property = listelem.getValue().get(0).toString();
-			 * 
-			 */
 
 			List listelem = ListMerger.getMergedList((List) mapTableModel.getData().get(key));
 			if (!listelem.isEmpty())
@@ -355,27 +330,6 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 				virtualLines.get("").put(key, data.get(key));
 			}
 
-			/*
-			 * String partialKey = "";
-			 * String remainder = key;
-			 * 
-			 * int j = -1;
-			 * int k = remainder.indexOf('.');
-			 * while (k > j && !foundClass)
-			 * {
-			 * 
-			 * partialKey = key.substring(0, k);
-			 * remainder = key.substring(k+1);
-			 * 
-			 * logging.debug(this, "classify partial " + partialKey);
-			 * 
-			 * 
-			 * 
-			 * j = k;
-			 * k = j + 1 + remainder.indexOf('.');
-			 * }
-			 */
-
 		}
 
 	}
@@ -447,16 +401,6 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 			partialPanels.get(key).setUpdateCollection(updateCollection);
 		}
 	}
-
-	/*
-	 * public void setPropertyHandlerType(EditMapPanelX.PropertyHandlerType t)
-	 * {
-	 * for (String key : keyclasses)
-	 * {
-	 * ((EditMapPanelX)partialPanels.get(key)).setPropertyHandlerType(t);
-	 * }
-	 * }
-	 */
 
 	@Override
 	public void setLabel(String s) {

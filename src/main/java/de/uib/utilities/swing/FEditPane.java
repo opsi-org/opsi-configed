@@ -78,17 +78,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		editingArea.add(scrollpane, BorderLayout.CENTER);
 
-		/*
-		 * editingLayout.setHorizontalGroup(
-		 * editingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-		 * .addComponent( scrollpane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-		 * );
-		 * editingLayout.setVerticalGroup(
-		 * editingLayout.createSequentialGroup()
-		 * .addComponent( scrollpane, 0, GroupLayout.PREFERRED_SIZE,Short.MAX_VALUE)
-		 * );
-		 */
-
 		textpane.setContentType("text/plain");
 
 		textpane.setEditable(true);
@@ -161,15 +150,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 		return true;
 
-		/*
-		 * if ( linkpattern.matcher( s0 ).matches( ) )
-		 * {
-		 * logging.info(this, "link found in " + s0);
-		 * return true;
-		 * }
-		 * 
-		 * return false;
-		 */
 	}
 
 	private int startOfMarkedString(String s)
@@ -219,13 +199,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		return initialText;
 	}
 
-	/*
-	 * public void select(int selectionStart, int selectionEnd)
-	 * {
-	 * textpane.select(selectionStart, selectionEnd);
-	 * }
-	 */
-
 	@Override
 	public void keyReleased(KeyEvent e) {
 		super.keyReleased(e);
@@ -255,12 +228,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	// DocumentListener interface
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-		/*
-		 * try{
-		 * logging.info(this, "changedUpdate " + e.getDocument().getText(0,
-		 * e.getDocument().getLength()));
-		 * } catch( BadLocationException ex) {}
-		 */
 
 		setDataChanged(true);
 
@@ -268,24 +235,12 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		/*
-		 * try{
-		 * logging.info(this, "insertUpdate " + e.getDocument().getText(0,
-		 * e.getDocument().getLength()));
-		 * } catch( BadLocationException ex) {}
-		 */
 
 		setDataChanged(true);
 	}
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		/*
-		 * try{
-		 * logging.info(this, "removeUpdate, current text >>" +
-		 * e.getDocument().getText(0, e.getDocument().getLength()) + "<<");
-		 * } catch( BadLocationException ex) {}
-		 */
 
 		setDataChanged(true);
 	}
@@ -403,13 +358,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 				}
 			}
 
-			/*
-			 * if (word == null || word.equals("")) {
-			 * return -1;
-			 * }
-			 * 
-			 */
-
 			String content = null;
 			try {
 				Document d = comp.getDocument();
@@ -513,7 +461,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		@Override
 		public void setDrawsLayeredHighlights(boolean newValue) {
 			// Illegal if false - we only support layered highlights
-			if (newValue == false) {
+			if (!newValue) {
 				throw new IllegalArgumentException("UnderlineHighlighter only draws layered highlights");
 			}
 			super.setDrawsLayeredHighlights(true);

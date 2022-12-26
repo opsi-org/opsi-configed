@@ -63,8 +63,6 @@ public class PanelProductProperties extends JSplitPane
 
 	protected TableCellRenderer propertiesTableCellRenderer;
 
-	
-
 	protected LinkedHashMap<String, Boolean> productDisplayFields;
 
 	protected ArrayList<String> selectedProducts;
@@ -121,7 +119,6 @@ public class PanelProductProperties extends JSplitPane
 
 					logging.info(this, "selected  no row ");
 
-					// infoPane.clearEditValue
 				}
 
 				if (lsm.isSelectionEmpty() || lsm.getMinSelectionIndex() != lsm.getMaxSelectionIndex()) {
@@ -169,22 +166,6 @@ public class PanelProductProperties extends JSplitPane
 
 						logging.info(this, "selected  depotId, product: " + depotId + ", " + productEdited);
 
-						/*
-						 * logging.info(this, "package " + theTable.getValueAt(row,
-						 * columnNames.indexOf("productId")) + "; "
-						 * + theTable.getValueAt(row, columnNames.indexOf("productVersion")) + "; "
-						 * + theTable.getValueAt(row, columnNames.indexOf("packageVersion"))
-						 * );
-						 */
-						/*
-						 * markAllWith(
-						 * row,
-						 * theTable.getValueAt(row, columnNames.indexOf("productId")),
-						 * theTable.getValueAt(row, columnNames.indexOf("productVersion")),
-						 * theTable.getValueAt(row, columnNames.indexOf("packageVersion"))
-						 * );
-						 */
-
 						List<String> depotsOfPackageAsRetrieved = new ArrayList<>();
 
 						String versionInfo = "";
@@ -220,17 +201,6 @@ public class PanelProductProperties extends JSplitPane
 							}
 						}
 
-						/*
-						 * selectedOpsiPackage = new OpsiPackage(
-						 * "" + theTable.getValueAt(row, columnNames.indexOf("productId")),
-						 * "" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
-						 * "" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")),
-						 * "" + theTable.getValueAt(row, columnNames.indexOf("productType"))
-						 * );
-						 * logging.info(this, "selected " + selectedOpsiPackage + "\ndepots "+
-						 * depotsOfPackage);
-						 */
-
 						logging.debug(this, "selectedRowChanged depotsOfPackage " + depotsOfPackage);
 
 						infoPane.clearEditing();
@@ -242,140 +212,12 @@ public class PanelProductProperties extends JSplitPane
 									depotsOfPackage.get(0));
 						} ;
 
-						/*
-						 * we leave setting the properties to panelEditProperties
-						 * 
-						 * Map<String, Object> visualData = mainController.getPersistenceController()
-						 * .getDefaultProductProperties(depotId).get(productEdited);
-						 * 
-						 * //we could merge the properties for all marked depots
-						 * //but prefer to display the properties for the selected depot
-						 * 
-						 * 
-						 * if (visualData == null) //no properties
-						 * {
-						 * //produce empty map
-						 * visualData = emptyVisualData;
-						 * }
-						 * 
-						 * propertiesPanel.setEditableMap(
-						 * 
-						 * visualData,
-						 * 
-						 * mainController.getPersistenceController()
-						 * .getProductPropertyOptionsMap(depotId, productEdited)
-						 * );
-						 * 
-						 */
-
 						panelEditProperties.setDepotListData(depotsOfPackage, productEdited);
 
 					}
 				}
 
 			}
-
-			/*
-			 * private void markAllWith(int row, Object productId, Object productVersion,
-			 * Object packageVersion)
-			 * {
-			 * depotsOfPackage.clear();
-			 * 
-			 * followSelectionListener = false;
-			 * theTable.setRowSelectionInterval(row, row);
-			 * for (int i = 0; i < theTable.getRowCount(); i++)
-			 * {
-			 * if (
-			 * 
-			 * theTable.getValueAt(i, columnNames.indexOf("productId")).equals(productId)
-			 * &&
-			 * theTable.getValueAt(i,
-			 * columnNames.indexOf("productVersion")).equals(productVersion)
-			 * &&
-			 * theTable.getValueAt(i,
-			 * columnNames.indexOf("packageVersion")).equals(packageVersion)
-			 * )
-			 * {
-			 * theTable.addRowSelectionInterval(i, i);
-			 * depotsOfPackage.add("" + theTable.getValueAt(i,
-			 * columnNames.indexOf("depotId")));
-			 * }
-			 * }
-			 * theTable.addRowSelectionInterval(row,row);
-			 * followSelectionListener = true;
-			 * }
-			 */
-
-			/*
-			 * private Map<String, Object> mergeProperties(
-			 * Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties,
-			 * List depots,
-			 * String productId) {
-			 * Map<String, Object> result = new HashMap<>();
-			 * 
-			 * if (depots == null || depots.isEmpty())
-			 * return result;
-			 * 
-			 * // Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties
-			 * =
-			 * 
-			 * 
-			 * Map<String, ConfigName2ConfigValue> propertiesDepot0 =
-			 * depot2product2properties.get(depots.get(0));
-			 * 
-			 * if (depots.size() == 1) {
-			 * if (propertiesDepot0 == null || propertiesDepot0.get(productId) == null) {
-			 * // ready
-			 * } else {
-			 * result = propertiesDepot0.get(productId);
-			 * }
-			 * } else {
-			 * int n = 0;
-			 * 
-			 * while (n < depots.size() && (depot2product2properties.get(depots.get(n)) ==
-			 * null
-			 * || depot2product2properties.get(depots.get(n)).get(productId) == null)) {
-			 * n++;
-			 * }
-			 * 
-			 * if (n == depots.size()) {
-			 * // ready
-			 * } else {
-			 * // create start mergers
-			 * ConfigName2ConfigValue properties =
-			 * depot2product2properties.get(depots.get(n)).get(productId);
-			 * 
-			 * for (String key : properties.keySet()) {
-			 * List value = (List) properties.get(key);
-			 * result.put(key, new ListMerger(value));
-			 * }
-			 * 
-			 * // merge the other depots
-			 * for (int i = 1; i < depots.size(); i++) {
-			 * properties = depot2product2properties.get(depots.get(i)).get(productId);
-			 * 
-			 * for (String key : properties.keySet()) {
-			 * List value = (List) properties.get(key);
-			 * if (result.get(key) == null)
-			 * // we need a new property. it is not common
-			 * {
-			 * ListMerger merger = new ListMerger(value);
-			 * 
-			 * merger.setHavingNoCommonValue();
-			 * result.put(key, merger);
-			 * } else {
-			 * ListMerger merger = (ListMerger) result.get(key);
-			 * result.put(key, merger.merge(value));
-			 * }
-			 * }
-			 * }
-			 * }
-			 * }
-			 * 
-			 * return result;
-			 * 
-			 * }
-			 */
 
 		};
 
@@ -388,14 +230,11 @@ public class PanelProductProperties extends JSplitPane
 		sortDescriptor.put(columnNames.indexOf("productVersion"), SortOrder.ASCENDING); // productId
 		sortDescriptor.put(columnNames.indexOf("packageVersion"), SortOrder.ASCENDING); // productId
 
-		// //productId
-
 		paneProducts.setSortOrder(sortDescriptor);
 
 		setLeftComponent(paneProducts);
 
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, false, false);
-		// propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false,
 
 		logging.info(this, " created properties Panel, is  EditMapPanelX instance No. " + EditMapPanelX.objectCounter);
 		((EditMapPanelX) propertiesPanel)
@@ -403,8 +242,6 @@ public class PanelProductProperties extends JSplitPane
 		propertiesPanel.registerDataChangedObserver(mainController.getGeneralDataChangedKeeper());
 		propertiesPanel.setStoreData(null);
 		propertiesPanel.setUpdateCollection(null);
-
-		// ((EditMapPanelX) propertiesPanel).setPropertyHandlerType(
 
 		panelEditProperties = new PanelEditDepotProperties(mainController, propertiesPanel);
 		infoPane = new ProductInfoPane(mainController, panelEditProperties);
@@ -414,35 +251,5 @@ public class PanelProductProperties extends JSplitPane
 		setRightComponent(infoPane);
 
 	}
-
-	/*
-	 * public void initAllProperties()
-	 * {
-	 * propertiesPanel.init();
-	 * infoPane.setInfo("");
-	 * infoPane.setAdvice("");
-	 * }
-	 */
-
-	/*
-	 * protected void reloadAction()
-	 * {
-	 * 
-	 * //mainController.getPersistenceController().
-	 * productPropertyDefinitionsRequestRefresh();
-	 * //mainController.getPersistenceController().productpropertiesRequestRefresh()
-	 * ;
-	 * 
-	 * mainController.resetView(mainController.getViewIndex());
-	 * mainController.setDataChanged(false);
-	 * }
-	 * 
-	 * 
-	 * public void requestReload()
-	 * {
-	 * paneProducts.requestReload();
-	 * }
-	 * 
-	 */
 
 }

@@ -20,7 +20,7 @@ public class ProductState extends HashMap<String, String> {
 
 	public static final List<String> SERVICE_KEYS = new ArrayList<>();
 	static {// from 30_configed.conf
-		SERVICE_KEYS.add("modificationTime"); // lastStateChange");
+		SERVICE_KEYS.add("modificationTime");
 		SERVICE_KEYS.add("productId");
 		SERVICE_KEYS.add("productVersion");
 		SERVICE_KEYS.add("packageVersion");
@@ -47,7 +47,7 @@ public class ProductState extends HashMap<String, String> {
 		DB_COLUMNS.put("actionProgress", "VARCHAR(255)");
 		DB_COLUMNS.put("actionResult", "VARCHAR(16)");
 
-		DB_COLUMNS.put("modificationTime", "TIMESTAMP"); // lastStateChange");
+		DB_COLUMNS.put("modificationTime", "TIMESTAMP");
 	}
 
 	public static final List<String> DB_COLUMN_NAMES = new ArrayList<>(DB_COLUMNS.keySet());
@@ -110,12 +110,9 @@ public class ProductState extends HashMap<String, String> {
 	public static final Map<String, String> key2servicekey = new HashMap<>();
 	static {
 		key2servicekey.put(KEY_productId, "productId");
-		// key2servicekey.put(KEY_productName
 
 		key2servicekey.put(KEY_targetConfiguration, "targetConfiguration");
 		key2servicekey.put(KEY_installationStatus, "installationStatus");
-
-		// key2servicekey.put(KEY_installationInfo
 
 		key2servicekey.put(KEY_actionResult, "actionResult");
 		key2servicekey.put(KEY_actionProgress, "actionProgress");
@@ -125,12 +122,8 @@ public class ProductState extends HashMap<String, String> {
 		key2servicekey.put(KEY_actionSequence, "actionSequence");
 		key2servicekey.put(KEY_actionRequest, "actionRequest");
 
-		// key2servicekey.put(KEY_versionInfo
-
 		key2servicekey.put(KEY_productVersion, "productVersion");
 		key2servicekey.put(KEY_packageVersion, "packageVersion");
-
-		// key2servicekey.put(KEY_position
 
 		key2servicekey.put(KEY_lastStateChange, "modificationTime");
 	}
@@ -181,25 +174,6 @@ public class ProductState extends HashMap<String, String> {
 	}
 
 	private void setTransforms() {
-
-		// format
-		/*
-		 * String stateChange = get(KEY_lastStateChange);
-		 * logging.debug(this, "setTransforms stateChange " + stateChange);
-		 * if (!stateChange.equals("null") &!stateChange.equals(""))
-		 * {
-		 * String[] sc = stateChange.split("");
-		 * 
-		 * logging.debug(this, "setTransforms stateChange " + Arrays.toString(sc));
-		 * 
-		 * if (sc.length >= 15)
-		 * stateChange = sc[1]+sc[2]+sc[3]+sc[4]+'-'+sc[5]+sc[6]+'-'+sc[7]+sc[8]+'
-		 * '+sc[9]+sc[10]+':'+sc[11]+sc[12]+':'+sc[13]+sc[14];
-		 * 
-		 * logging.debug(this, "setTransforms stateChange " + Arrays.toString(sc));
-		 * }
-		 * put(KEY_lastStateChange, stateChange);
-		 */
 
 		// transformed values
 		StringBuffer installationInfo = new StringBuffer();
@@ -278,36 +252,12 @@ public class ProductState extends HashMap<String, String> {
 	private String getRetrievedValue(String key) {
 
 		assert !(SERVICE_KEYS.indexOf(key) < 0) : "service key " + key + " not known";
-		/*
-		 * if (retrieved.get(key) != null)
-		 * logging.info(this, "getRetrievedValue key" + key
-		 * + " value  " + retrieved.get(key) + " class " +
-		 * retrieved.get(key).getClass());;
-		 */
+
 		if (retrieved.get(key) == null || (retrieved.get(key) instanceof String && retrieved.get(key).equals("null")))
 			return "";
 
 		String value = retrieved.get(key).toString();
 		String predefValue = null;
-
-		/*
-		 * //we reduce the result to the predefined static strings if possible
-		 * 
-		 * switch (key)
-		 * {
-		 * case KEY_installationStatus:
-		 * {
-		 * 
-		 * 
-		 * break;
-		 * }
-		 * case KEY_actionRequest:
-		 * {
-		 * predefValue = ActionRequest.getStaticString(value);
-		 * break;
-		 * }
-		 * case KEY_lastAction
-		 */
 
 		if (predefValue != null)
 			return predefValue;
