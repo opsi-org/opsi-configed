@@ -272,17 +272,7 @@ public class ActionRequest {
 		checkCollections();
 
 		return choiceLabels;
-		/*
-		 * ArrayList<String> list = new ArrayList<>();
-		 * 
-		 * for (int i = NONE; i <= LAST; i++)
-		 * {
-		 * if (states.indexOf(i) >= 0 )
-		 * list.add(getDisplayLabel(i));
-		 * }
-		 * 
-		 * return list;
-		 */
+
 	}
 
 	// instance methods

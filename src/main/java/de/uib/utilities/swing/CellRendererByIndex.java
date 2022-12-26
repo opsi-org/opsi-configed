@@ -82,13 +82,12 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 				ImageIcon image = null;
 
-				if (imagesBase != null) {
-					String imageFileString = imagesBase + "/" + stringval + ".png";
+				String imageFileString = imagesBase + "/" + stringval + ".png";
 
-					image = Globals.createImageIcon(imageFileString, stringval);
-					if (image != null)
-						mapOfImages.put(key, image);
-				}
+				image = Globals.createImageIcon(imageFileString, stringval);
+				if (image != null)
+					mapOfImages.put(key, image);
+
 			}
 		}
 		mapOfTooltips = mapOfStrings;
@@ -151,18 +150,6 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 		// Get the selected index. (The index param isn't
 		// always valid, so just use the value.)
 
-		/*
-		 * if (isSelected) {
-		 * setBackground(list.getSelectionBackground());
-		 * setForeground(list.getSelectionForeground());
-		 * 
-		 * } else {
-		 * setBackground(list.getBackground());
-		 * setForeground(list.getForeground());
-		 * 
-		 * }
-		 */
-
 		Color background;
 		Color foreground;
 
@@ -205,29 +192,8 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 		setToolTipText(selectedTooltip);
 
 		setFont(Globals.defaultFont);
-		// de.uib.utilities.swing.CellAlternatingColorizer.colorize(this, isSelected,
-
-		/*
-		 * if (icon != null) {
-		 * setText(item);
-		 * setFont(list.getFont());
-		 * } else {
-		 * setUhOhText(item + " (no image available)", list.getFont());
-		 * 
-		 * }
-		 */
 
 		return this;
 	}
 
-	/*
-	 * //Set the font and text when no image was found.
-	 * protected void setUhOhText(String uhOhText, Font normalFont) {
-	 * if (uhOhFont == null) { //lazily create this font
-	 * uhOhFont = normalFont.deriveFont(Font.ITALIC);
-	 * }
-	 * setFont(uhOhFont);
-	 * setText(uhOhText);
-	 * }
-	 */
 }

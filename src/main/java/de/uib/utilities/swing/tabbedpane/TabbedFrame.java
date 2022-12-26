@@ -39,24 +39,6 @@ public class TabbedFrame extends SecondaryFrame {
 		setExtendedState(Frame.NORMAL);
 	}
 
-	/*
-	 * public void centerOnParent(int startX, int startY, int parentWidth, int
-	 * parentHeight)
-	 * {
-	 * Dimension frameSize = getSize();
-	 * if (frameSize.height > parentHeight)
-	 * {
-	 * frameSize.height = parentHeight;
-	 * }
-	 * if (frameSize.width > parentWidth)
-	 * {
-	 * frameSize.width = parentWidth;
-	 * }
-	 * setLocation( startX + (parentWidth - frameSize.width) / 2, startY +
-	 * (parentHeight - frameSize.height) / 2);
-	 * }
-	 */
-
 	public TabbedPaneX getMainPanel() {
 		return panel;
 	}

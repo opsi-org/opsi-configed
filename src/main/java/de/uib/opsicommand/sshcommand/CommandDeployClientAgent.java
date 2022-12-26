@@ -188,24 +188,16 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	public SSHConnectionExecDialog startHelpDialog() {
 		SSHCommand command = new CommandHelp(this);
 		SSHConnectExec exec = new SSHConnectExec(command
-		/*
-		 * new SSHConnectionExecDialog(
-		 * configed.getResourceValue("SSHConnection.Exec.title") +
-		 * " \""+command.getCommand() + "\" ",
-		 * command)
-		 */
-		);
-		// exec.exec(command, true, new SSHConnectionExecDialog(command,
 
-		// \""+command.getCommand() + "\" "));
-		return (SSHConnectionExecDialog) exec.getDialog();
+		);
+
+		return exec.getDialog();
 	}
 
 	@Override
 	public FGeneralDialog getDialog() {
 		return dialog;
 	}
-	// @Override
 
 	public void setClient(String c) {
 		if (c != "")

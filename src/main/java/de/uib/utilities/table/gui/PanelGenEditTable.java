@@ -209,28 +209,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			// ,
 			// POPUP_PDF
 	};
-	public static final int[] POPUPS_NOT_EDITABLE_TABLE = new int[] {
-			// POPUP_EXPORT_SELECTED_EXCEL,
-			// POPUP_EXPORT_EXCEL,
-			POPUP_RELOAD, POPUP_SORT_AGAIN
-			// ,
-			// POPUP_PDF
-	};
-	public static final int[] POPUPS_NOT_EDITABLE_TABLE_PDF = new int[] {
-			// POPUP_EXPORT_SELECTED_EXCEL,
-			// POPUP_EXPORT_EXCEL,
-			POPUP_RELOAD, POPUP_PDF, POPUP_SORT_AGAIN };
-	public static final int[] POPUPS_NOT_EDITABLE_TABLE_PRINTABLE = new int[] { POPUP_PRINT, POPUP_PDF,
-			// POPUP_EXPORT_SELECTED_EXCEL,
-			// POPUP_EXPORT_EXCEL,
-			POPUP_RELOAD, POPUP_SORT_AGAIN
-			// ,
-			// POPUP_PDF
-	};
+	public static final int[] POPUPS_NOT_EDITABLE_TABLE = new int[] { POPUP_RELOAD, POPUP_SORT_AGAIN };
+	public static final int[] POPUPS_NOT_EDITABLE_TABLE_PDF = new int[] { POPUP_RELOAD, POPUP_PDF, POPUP_SORT_AGAIN };
+	public static final int[] POPUPS_NOT_EDITABLE_TABLE_PRINTABLE = new int[] { POPUP_PRINT, POPUP_PDF, POPUP_RELOAD,
+			POPUP_SORT_AGAIN };
 	public static final int[] POPUPS_MINIMAL = new int[] { POPUP_RELOAD, POPUP_SORT_AGAIN
-			// ,
-			// POPUP_PDF
-			// POPUP_FLOATINGCOPY
 
 	};
 
@@ -362,11 +345,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			searchPane.requestFocus();
 	}
 
-	public void setAutoResizeMode(int mode)
-	// mode are JTable constants: - One of 5 legal values: AUTO_RESIZE_OFF,
-	// AUTO_RESIZE_NEXT_COLUMN, AUTO_RESIZE_SUBSEQUENT_COLUMNS,
-	// AUTO_RESIZE_LAST_COLUMN, AUTO_RESIZE_ALL_COLUMNS
-	{
+	public void setAutoResizeMode(int mode) {
 		theTable.setAutoResizeMode(mode);
 	}
 
@@ -923,7 +902,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 				else if (tableModel.getClassNames().get(j).equals("java.lang.Integer")) {
 
-					// IntComparatorForStrings");
 					((DefaultRowSorter) sorter).setComparator(j, new de.uib.utilities.IntComparatorForStrings());
 				}
 			}

@@ -30,41 +30,6 @@ public class Relation extends ArrayList<StringValuedRelationElement> {
 		return attributes;
 	}
 
-	/*
-	 * public RelationElement adapt(RelationElement rowmap)
-	 * {
-	 * logging.info(this, "adapt " + rowmap);
-	 * boolean resultIsReduced = false;
-	 * Set<String> keys = rowmap.keySet();
-	 * logging.info(this, "adapt keys " + keys);
-	 * 
-	 * keys.removeAll(getAttributeSet());
-	 * 
-	 * logging.info(this, "adapt keys, attribute set after removal " + keys);
-	 * if (!keys.isEmpty())
-	 * {
-	 * resultIsReduced = true;
-	 * 
-	 * Set<String> keysToRemove = new HashSet<>(keys);
-	 * 
-	 * logging.info(this, "adapt keys, attribute set after removal " +
-	 * keysToRemove);
-	 * 
-	 * for (String key : keysToRemove)
-	 * {
-	 * logging.info(this, "adapt remove " + key);
-	 * rowmap.remove(key); //does not work
-	 * logging.info(this, "adapt removed ?  " + rowmap);
-	 * }
-	 * }
-	 * 
-	 * if (resultIsReduced)
-	 * logging.info(this, "restrictAttributes " + rowmap);
-	 * 
-	 * return rowmap;
-	 * }
-	 */
-
 	public StringValuedRelationElement integrateRaw(Map<String, Object> map) {
 		StringValuedRelationElement rowmap = new StringValuedRelationElement(attributes, map);
 		add(rowmap);

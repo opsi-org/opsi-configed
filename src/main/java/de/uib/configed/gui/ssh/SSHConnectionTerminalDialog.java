@@ -132,8 +132,6 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 				// the ugly effect of wandering
 
 				setCLfocus();
-				// append("", tf_command); // try to set scrollpane to end of textpane and focus
-				// on tf_command
 			}
 		});
 		setOutSize();
@@ -160,15 +158,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 	private void setCLfocus() {
 		logging.info(this, "setCLfocus");
-		/*
-		 * try
-		 * {
-		 * Thread.sleep(1000);
-		 * }
-		 * catch(Exception ex)
-		 * {
-		 * }
-		 */
+
 		tf_command.setCaretPosition(tf_command.getText().length());
 		tf_command.requestFocus();
 
@@ -189,18 +179,6 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		});
 
 	}
-	/*
-	 * private void printWindowSize()
-	 * {
-	 * logging.debug("this.getsize " + this.getSize());
-	 * logging.debug("this.getwidth / getHeight " + this.getWidth() + " " +
-	 * this.getHeight());
-	 * logging.debug("output.getwidth / getHeight " + this.output.getWidth() + " " +
-	 * this.output.getHeight());
-	 * logging.debug("jScrollPane.getwidth / getHeight " +
-	 * this.jScrollPane.getWidth() + " " + this.jScrollPane.getHeight());
-	 * }
-	 */
 
 	private void setOutSize() {
 
@@ -306,7 +284,6 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		tf_command.setPreferredSize(new Dimension(Globals.FIRST_LABEL_WIDTH + Globals.GAP_SIZE, Globals.LINE_HEIGHT));
 
 		setCLfocus();
-		// ((JTextField) tf_command).setCaretPosition(((JTextField)
 
 		cb_privat = new JCheckBox(configed.getResourceValue("SSHConnection.passwordButtonText"));
 		cb_privat.setPreferredSize(btn_dim);
@@ -367,7 +344,6 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 			logging.error("looks like a thread problem");
 			logging.error("" + e);
 		}
-		// this.setSize(this.getWidth(), this.getHeight() + parameterPanel.getHeight()
 
 		setCenterLayout();
 	}
@@ -451,7 +427,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		);
 		mainPanelLayout.setVerticalGroup(
 				mainPanelLayout.createSequentialGroup().addComponent(this.inputPanel).addComponent(this.parameterPanel)
-						
+
 						.addComponent(this.terminatingPanel));
 
 		this.setSize(this.getWidth(),

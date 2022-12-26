@@ -30,43 +30,6 @@ public class WaitInfoString {
 
 	}
 
-	/*
-	 * 
-	 * public void feedLabel(JLabel labelInfo)
-	 * {
-	 * if (labelInfo == null)
-	 * return;
-	 * 
-	 * 
-	 * 
-	 * new Thread(){
-	 * public void run()
-	 * {
-	 * running = true;
-	 * while (running)
-	 * {
-	 * try{
-	 * Thread.sleep(2000);
-	 * }
-	 * catch(InterruptedException ex)
-	 * {
-	 * }
-	 * 
-	 * SwingUtilities.invokeLater(new Runnable(){
-	 * public void run()
-	 * {
-	 * String s = next();
-	 * logging.info(this, "set " + s);
-	 * labelInfo.setText(s);
-	 * }
-	 * }
-	 * );
-	 * }
-	 * }
-	 * }.start();
-	 * }
-	 */
-
 	public String start() {
 		current = 0;
 		return next();

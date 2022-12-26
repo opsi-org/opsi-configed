@@ -31,7 +31,6 @@ public class ProductpropertiesUpdate implements UpdateCommand {
 	@Override
 	public void doCall() {
 
-		// class " + newdata.getClass());
 		if (newdata instanceof de.uib.configed.type.ConfigName2ConfigValue) {
 
 			persis.setProductproperties(pcname, productname, newdata);

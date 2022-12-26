@@ -80,27 +80,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	@Override
 	public void setRenderAsCurrentRow(int row) {
-		/*
-		 * logging.info(this, "setRenderAsCurrentRow " + row);
-		 * 
-		 * for (int i = 0; i < table.getColumnModel().getColumnCount(); i++)
-		 * {
-		 * logging.info(this, "setRenderAsCurrentRow looking for col " + i);
-		 * TableColumn col = table.getColumnModel().getColumn(i);
-		 * logging.info(this, "setRenderAsCurrentRow col cell renderer is " +
-		 * col.getCellRenderer() );
-		 * 
-		 * if (
-		 * col.getCellRenderer() instanceof StandardTableCellRenderer
-		 * //||
-		 * //col.getCellRenderer() instanceof TableCellRendererConfigured
-		 * )
-		 * {
-		 * ((StandardTableCellRenderer)(col.getCellRenderer())).setCurrentRow ( row );
-		 * logging.info(this, "setRenderAsCurrentRow setting for col " + i);
-		 * }
-		 * }
-		 */
+
 	}
 
 	@Override
@@ -194,26 +174,9 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 			panelProductSettings.reduceToSelected();
 
-			/*
-			 * 
-			 * (( de.uib.utilities.table.RowNoTableModelFilterCondition)
-			 * (model.getFilter( FILTER_BY_SELECTION ).getCondition()))
-			 * .setFilter( modelRowFilter, model.getRows() );
-			 * 
-			 * model.setUsingFilter( FILTER_BY_SELECTION, true);
-			 * model.reset();
-			 * 
-			 * table.getSelectionModel().setSelectionInterval(0, model.getRowCount());
-			 */
-
 		} else {
 			panelProductSettings.showAll();;
 
-			/*
-			 * model.setUsingFilter( FILTER_BY_SELECTION, false);
-			 * 
-			 * setSelection( viewRowfilter ); //restore the original selection
-			 */
 		}
 		filtered = b;
 

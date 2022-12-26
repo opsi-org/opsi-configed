@@ -59,64 +59,6 @@ public class AuditSoftwareXLicencePool extends Relation {
 
 	}
 
-	/*
-	 * private String produceSWident(Map<String, String> m)
-	 * {
-	 * String result = Globals.pseudokey(new String[]{
-	 * Globals.getStringValue( m.get(SWAuditEntry.NAME) ),
-	 * Globals.getStringValue( m.get(SWAuditEntry.VERSION) ),
-	 * Globals.getStringValue( m.get(SWAuditEntry.SUBVERSION) ) ,
-	 * Globals.getStringValue( m.get(SWAuditEntry.LANGUAGE) ),
-	 * Globals.getStringValue (m.get (SWAuditEntry.ARCHITECTURE) )
-	 * }
-	 * );
-	 * 
-	 * return result;
-	 * }
-	 */
-
-	/*
-	 * private Integer produceSWidRaw(Map<String, Object> m)
-	 * {
-	 * return produceSWid(new RelationElement(m));
-	 * }
-	 * 
-	 * private Integer produceSWid(Map<String, String> m)
-	 * {
-	 * String swIdent = produceSWident(m);
-	 * 
-	 * int result = -1;
-	 * 
-	 * boolean newEntry = false;
-	 * 
-	 * 
-	 * logging.info(this, "produceSWid for " + swIdent);
-	 * 
-	 * int swId = registeredSoftware.indexOf(swIdent);
-	 * 
-	 * 
-	 * if (swId > -1)
-	 * result = swId;
-	 * else
-	 * {
-	 * 
-	 * registeredSoftware.add(swIdent);
-	 * result = registeredSoftware.size();
-	 * newEntry = true;
-	 * }
-	 * 
-	 * String info = "";
-	 * if (m.get(LicencepoolEntry.idSERVICEKEY) != null)
-	 * info = " " + m.get(LicencepoolEntry.idSERVICEKEY) + " ";
-	 * 
-	 * 
-	 * logging.info(this, "swident  " + swIdent + " for " + info + "  ==== id (new "
-	 * + newEntry +") " + result);
-	 * 
-	 * return result;
-	 * }
-	 */
-
 	private String produceSWident(Map<String, Object> m) {
 		return Globals.pseudokey(new String[] { Globals.getStringValue(m.get(SWAuditEntry.NAME)),
 				Globals.getStringValue(m.get(SWAuditEntry.VERSION)),
@@ -150,11 +92,6 @@ public class AuditSoftwareXLicencePool extends Relation {
 		rowmap.setAllowedAttributes(INTERFACED_ATTRIBUTES);
 		String swIdent = "" + produceSWident(m);
 		rowmap.put(SwID, swIdent);
-
-		/*
-		 * if (swIdent.indexOf("55375-337") > -1 || swIdent.indexOf("55375-640") > -1)
-		 * logging.info(this, "integrateRaw " + m);
-		 */
 
 		rowmap.put(LicencepoolEntry.idSERVICEKEY, Globals.getStringValue(m.get(LicencepoolEntry.idSERVICEKEY)));
 		add(rowmap);

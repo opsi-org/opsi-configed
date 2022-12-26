@@ -41,8 +41,6 @@ public class SWAuditEntry extends TableEntry
 
 	public static final String EXISTING_IDS = "(variants)";
 
-	// should be LicencepoolEntry.idSERVICEKEY
-
 	private static List<String> KEYS;
 	static {
 		KEYS = new LinkedList<>();
@@ -106,11 +104,9 @@ public class SWAuditEntry extends TableEntry
 		locale.put(id, "ID");
 		locale.put(NAME, configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
 		locale.put(VERSION, configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
-		// locale.put(subversion,
 
 		locale.put(ARCHITECTURE, configed.getResourceValue("PanelSWInfo.tableheader_architecture"));
 		locale.put(LANGUAGE, configed.getResourceValue("PanelSWInfo.tableheader_displayLanguage"));
-		// locale.put(LICENCEkEY,
 
 		locale.put(WINDOWSsOFTWAREid, configed.getResourceValue("PanelSWInfo.tableheader_softwareId"));
 	}
@@ -123,20 +119,6 @@ public class SWAuditEntry extends TableEntry
 	public String put(String key, String value) {
 
 		return super.put(key, value);
-
-		/*
-		 * assert KEYS.indexOf(key) > -1 : " " + this + " not valid key " + key;
-		 * 
-		 * if (KEYS.indexOf(key) > -1)
-		 * {
-		 * if (value == null)
-		 * return super.put(key, "");
-		 * else
-		 * return super.put(key, value);
-		 * }
-		 * 
-		 * return null;
-		 */
 
 	}
 
@@ -177,30 +159,11 @@ public class SWAuditEntry extends TableEntry
 
 		identReduced = Globals.pseudokey(new String[] { get(VERSION), get(ARCHITECTURE) });
 
-		/*
-		 * if (get(NAME).equals("Microsoft Windows XP (Service Pack 3)"))
-		 * logging.info(this, "ident " + ident);
-		 */
-
 		if (entry.get("lastseen") != null)
 			lastseen = entry.get("lastseen").toString();
 
 		put(id, ident);
 
-		/*
-		 * if (get("name").equals("Microsoft Office Office 64-bit Components 2010"))
-		 * {
-		 * logging.info(this, "produced " + this + " ident " + getIdent() );
-		 * }
-		 * 
-		 * Microsoft Office Office 64-bit Components 2010;14.0.6029.1000;;;x64
-		 * String test =
-		 * "Microsoft Office Office 64-bit Components 2010;14.0.6029.1000;;;x64;office2010"
-		 * ;
-		 * put("ID", test);
-		 * put("version", "14.0.6029.1000");
-		 * put("name", "Microsoft Office Office 64-bit Components 2010");
-		 */
 	}
 
 	public static String getDisplayKey(int i) {

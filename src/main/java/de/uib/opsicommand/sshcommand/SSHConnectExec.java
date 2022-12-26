@@ -198,7 +198,6 @@ public class SSHConnectExec extends SSHConnect {
 						.getParameterHandler();
 				final SSHConnectExec caller = this;
 				FOUND_ERROR = false;
-				
 
 				{
 					if (!SSHCommandFactory.ssh_always_exec_in_background)
@@ -406,10 +405,6 @@ public class SSHConnectExec extends SSHConnect {
 			this.command_number = cn;
 		}
 
-		public boolean getInterruptedStatus() {
-			return interruptChannelWorker;
-		}
-
 		private void checkExitCode(int exitCode, boolean withGui, Channel channel) {
 			String s = "checkExitCode " + exitCode;
 			logging.debug(this, "publish " + s);
@@ -467,7 +462,6 @@ public class SSHConnectExec extends SSHConnect {
 
 		}
 
-		boolean pwsuccess = false;
 		int supw_retriedTimes = 0;
 
 		@Override
@@ -506,8 +500,6 @@ public class SSHConnectExec extends SSHConnect {
 					(outputDialog).removeKillProcessListener(killProcessListener);
 					(outputDialog).addKillProcessListener(killProcessListener);
 
-					// publish("");
-
 				}
 				supw_retriedTimes = 0;
 				while (true) {
@@ -528,7 +520,6 @@ public class SSHConnectExec extends SSHConnect {
 							break;
 						String str = new String(tmp, 0, i, "UTF-8");
 
-						// (str.equals(SSHCommandFactory.getInstance().sudo_failed_text)) )
 						if ((command.needSudo()) && (str.contains(SSHCommandFactory.sudo_failed_text))) {
 							String pw = "";
 							if (supw_retriedTimes >= 1)
@@ -550,7 +541,6 @@ public class SSHConnectExec extends SSHConnect {
 							}
 						}
 						if (withGui) {
-							// publish( "" + i);
 							for (String line : str.split("\n")) {
 
 								logging.debug(this, " doInBackground publish " + progress + ": " + line);
@@ -661,12 +651,6 @@ public class SSHConnectExec extends SSHConnect {
 			if (responseButton != null)
 				responseButton.setEnabled(true);
 
-			/*
-			 * if (outputDialog != null)
-			 * {
-			 * 
-			 * }
-			 */
 		}
 
 		private String getCommandName() {

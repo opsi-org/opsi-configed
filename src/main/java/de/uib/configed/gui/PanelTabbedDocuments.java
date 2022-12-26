@@ -102,14 +102,6 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 							}
 						}
 
-						/*
-						 * for (int logNo = 0; logNo < idents.length; logNo++)
-						 * {
-						 * logging.info(this, "saveAllAsZip textPanes[" + logNo +
-						 * "].lines.length " + textPanes[logNo].lines.length);
-						 * }
-						 */
-
 						saveAllToZipFile(pathname);
 					}
 
@@ -120,19 +112,6 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 			textPanes[i] = showPane;
 
 			addTab(ident, textPanes[i]);
-
-			/*
-			 * LogPane LogPane = new LogPane(defaultText)
-			 * {
-			 * 
-			 * @Override
-			 * protected void reload()
-			 * {
-			 * super.reload();
-			 * loadDocument(ident);
-			 * }
-			 * };
-			 */
 
 		}
 

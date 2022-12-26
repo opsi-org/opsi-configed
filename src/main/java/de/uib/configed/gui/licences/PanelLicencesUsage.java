@@ -128,10 +128,6 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 		panelUsage.setFiltering(true);
 		panelUsage.showFilterIcon(true);
 
-		// panelKeys = new
-
-		// panelWindowsSoftwareIds = new
-
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout((JPanel) this);
@@ -151,70 +147,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 		splitPane.setBottomComponent(panelGetAndAssignSL);
 		setupSplit();
 
-		/*
-		 * 
-		 * javax.swing.GroupLayout layout = new javax.swing.GroupLayout((JPanel) this);
-		 * this.setLayout(layout);
-		 * layout.setHorizontalGroup(
-		 * layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-		 * .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-		 * layout.createSequentialGroup()
-		 * .addContainerGap()
-		 * .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.
-		 * TRAILING)
-		 * // for testing purposes:
-		 * 
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * Short.MAX_VALUE)
-		 * .addComponent(panelUsage, javax.swing.GroupLayout.Alignment.LEADING,
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * Short.MAX_VALUE)
-		 * 
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * Short.MAX_VALUE)
-		 * 
-		 * javax.swing.GroupLayout.Alignment.LEADING,
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * Short.MAX_VALUE)
-		 * .addComponent(panelGetAndAssignSL, javax.swing.GroupLayout.Alignment.LEADING,
-		 * javax.swing.GroupLayout.PREFERRED_SIZE,
-		 * javax.swing.GroupLayout.PREFERRED_SIZE,
-		 * javax.swing.GroupLayout.PREFERRED_SIZE)
-		 * )
-		 * .addContainerGap())
-		 * );
-		 * layout.setVerticalGroup(
-		 * layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-		 * .addGroup(layout.createSequentialGroup()
-		 * .addContainerGap()
-		 * 
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE)
-		 * .addComponent(panelUsage, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * Short.MAX_VALUE)
-		 * .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-		 * 
-		 * 150)
-		 * 
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, 120)
-		 * .addComponent(panelGetAndAssignSL, javax.swing.GroupLayout.PREFERRED_SIZE,
-		 * javax.swing.GroupLayout.PREFERRED_SIZE, 150)
-		 * .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-		 * )
-		 * 
-		 * );
-		 */
 	}
-
-	/*
-	 * public void setClientsList(ComboBoxModel m)
-	 * {
-	 * if (m == null)
-	 * comboClient.setModel(emptyComboBoxModel);
-	 * else
-	 * comboClient.setModel(m);
-	 * 
-	 * }
-	 */
 
 	public void setClientsSource(de.uib.utilities.ComboBoxModeller modelsource) {
 		comboClient.setModelSource(modelsource);

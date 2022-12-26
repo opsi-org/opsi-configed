@@ -25,14 +25,6 @@ public class ProductPropertyState extends Table {
 		columns.add(OBJECT_ID);
 		columns.add(VALUES);
 	}
-	/*
-	 * public static String columnsString;
-	 * static{
-	 * columnsString = Arrays.toString( columns.toArray( new String[]{} ) ) ;
-	 * columnsString = columnsString.substring(1);
-	 * columnsString = columnsString.substring(0, columnsString.length()-1);
-	 * }
-	 */
 
 	public static List<String> primaryKey;
 	public static String primaryKeyString;

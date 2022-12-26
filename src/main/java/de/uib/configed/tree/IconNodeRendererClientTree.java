@@ -35,24 +35,10 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			int row, boolean hasFocus) {
 		setBackground(Color.white);
 		if (value instanceof IconNode) {
-			String stringValue =
-					// configed.encodeStringFromService (
-					tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus)
-			// )
-			;
+			String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
 
 			setText(stringValue);
 			setToolTipText(((IconNode) value).getToolTipText());
-
-			/*
-			 * //adaption to size of bold font
-			 * java.awt.Dimension newSize = new java.awt.Dimension();
-			 * newSize.setSize(getPreferredSize().getWidth() * 1.3,
-			 * getPreferredSize().getHeight());
-			 * setPreferredSize(newSize);
-			 * logging.debug("--- newSize  " + stringValue + " *** " +
-			 * newSize.getWidth());
-			 */
 
 			// Attention: must be a IconNode
 			IconNode node = (IconNode) value;
@@ -65,9 +51,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			{
 
 				if (
-				// sel
-				// ||
-				// (main.getSelectedClientsInTable().contains(stringValue)
+
 				main.getActiveTreeNodes().containsKey(stringValue)) {
 					setFont(Globals.defaultFontStandardBold);
 
@@ -92,9 +76,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 				}
 
 				if (
-				// sel
-				// ||
-				// (main.getSelectedClientsInTable().contains(stringValue)
+
 				main.getActiveTreeNodes().containsKey(stringValue)) {
 					setFont(Globals.defaultFontStandardBold);
 
@@ -103,23 +85,6 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 				}
 			}
-
-			/*
-			 * if (stringValue.equals( "FAILED"))
-			 * setForeground(Color.RED);
-			 * else
-			 * setForeground(Color.BLACK);
-			 */
-			/*
-			 * if (expanded)
-			 * {
-			 * setIcon(node.getOpenIcon());
-			 * }
-			 * else
-			 * {
-			 * setIcon(node.getClosedIcon());
-			 * }
-			 */
 
 			if (tree.getSelectionPath() != null && node.equals(tree.getSelectionPath().getLastPathComponent())
 					&& tree.hasFocus())

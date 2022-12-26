@@ -512,7 +512,7 @@ public class LicensingInfoMap {
 				modulesJSObX = new JSONObjectX(modulesJSOb);
 				moduleToDate = modulesJSObX.getMap();
 				// iterate over module entries to every date entry
-				
+
 				// also warning state should be none
 				for (String currentModule : shownModules) {
 
@@ -776,11 +776,6 @@ public class LicensingInfoMap {
 							| (futureNum != 0 && (clientNum * 100) / futureNum >= percentClientLimitWarning))
 						return STATE_CLOSE_TO_LIMIT;
 
-					/*
-					 * if(daysLeft <= daysClientLimitWarning)
-					 * return STATE_DAYS_WARNING;
-					 */
-
 					return STATE_FUTURE_OKAY;
 				}
 
@@ -870,12 +865,7 @@ public class LicensingInfoMap {
 		logging.info(this, "warnings futureOverLimitModuleList? " + futureOverLimitModuleList.size());
 
 		result = !currentOverLimitModuleList.isEmpty() || !currentCloseToLimitModuleList.isEmpty()
-				|| !currentTimeWarningModuleList.isEmpty()
-		// ||
-		// futureOverLimitModuleList.size() > 0
-		// ||
-		// futureOverLimitModuleList.size() > 0
-		;
+				|| !currentTimeWarningModuleList.isEmpty();
 
 		logging.info(this, "warning exists " + result);
 

@@ -208,8 +208,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		label_driverToIntegrate = new JLabel(configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
 
-		panelMountShare = new PanelMountShare((de.uib.utilities.NameProducer) this, main, root,
-				label_driverToIntegrate.getPreferredSize().width + hGap)
+		panelMountShare = new PanelMountShare(this, main, root, label_driverToIntegrate.getPreferredSize().width + hGap)
 
 		{
 			@Override
@@ -225,7 +224,6 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		};
 
 		label_uploading = new JLabel("uploading");
-		// waitingImage = new
 
 		initComponents();
 
@@ -555,11 +553,9 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 				.addGap(vGap, vGap * 2, vGap * 2)
 				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.CENTER)
-						
-						
+
 						.addGap(Globals.LINE_HEIGHT)
-				
-				
+
 				).addGap(vGap, vGap * 2, vGap * 2));
 
 		layoutByAuditInfo
@@ -572,10 +568,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 														.addGroup(layoutByAuditInfo.createSequentialGroup()
 																.addComponent(label_topic, 5, wLeftText, wLeftText)
 																.addGap(hFirstGap, hFirstGap, hFirstGap)
-																
-																
-																
-																
+
 																.addComponent(fieldClientname, Globals.BUTTON_WIDTH,
 																		Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2))
 														.addGroup(
@@ -646,44 +639,27 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 																.addGap(hFirstGap, hFirstGap, hFirstGap)
 																.addComponent(fieldServerPath, Globals.BUTTON_WIDTH * 2,
 																		Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE))
-												
-												
-												
-												
+
 												).addGap(hFirstGap, hFirstGap, hFirstGap))
 								.addGroup(layoutByAuditInfo.createSequentialGroup().addGap(5, 5, Short.MAX_VALUE)
-										
-										
+
 										.addComponent(driverPathChecked, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										
+
 										.addGap(hGap, 2 * hGap, 2 * hGap)
-										
-										
+
 										.addComponent(serverPathChecked, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										
+
 										.addGap(hGap, 2 * hGap, 2 * hGap)
 										.addComponent(buttonUploadDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
 												Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
 										.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2))
 
 								.addGroup(layoutByAuditInfo.createSequentialGroup()
-										/*
-										 * 
-										 * .addComponent(label_uploading, GroupLayout.PREFERRED_SIZE,
-										 * GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										 * .addGap(hFirstGap, hFirstGap, hFirstGap)
-										 * .addComponent(waitingImage, Globals.iconWidth,
-										 * Globals.iconWidth, Globals.iconWidth)
-										 * .addGap(hFirstGap, hFirstGap, hFirstGap)
-										 * )
-										 */
+
 										.addGap(hGap, hGap, Short.MAX_VALUE)
-										
-										
-										
-										
+
 										.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2)));
 
 		setBackground(Globals.backgroundLightGrey);
@@ -752,13 +728,6 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 					if (waiter != null)
 						waiter.setReady();
 
-					/*
-					 * JOptionPane.showMessageDialog( rootFrame,
-					 * "Ready", //resultMessage,
-					 * configed.getResourceValue("CompleteWinProduct.reportTitle"),
-					 * JOptionPane.INFORMATION_MESSAGE);
-					 */
-
 				} catch (Exception ex) {
 					waitCursor.stop();
 					logging.error("error in uploading :\n" + ex, ex);
@@ -794,12 +763,6 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		fieldServerPath.setText(result);
 
-		/*
-		 * if (buttonCallExecute != null)
-		 * buttonCallExecute.setEnabled(
-		 * new File( fieldTargetPath.getText()).isDirectory()
-		 * );
-		 */
 	}
 
 	private void chooseServerpath() {
@@ -820,7 +783,6 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 	}
 
-	
 	// implements NameProducer
 	@Override
 	public String produceName() {

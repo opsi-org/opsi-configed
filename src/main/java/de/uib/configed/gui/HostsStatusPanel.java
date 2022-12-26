@@ -82,21 +82,6 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 
 		{
 
-			/*
-			 * String oldSelectedClientNames = fieldSelectedClientsNames.getText();
-			 * if (oldSelectedClientNames != null
-			 * &&
-			 * selectedClientNames.indexOf(oldSelectedClientNames) > -1
-			 * )
-			 * {
-			 * fieldSelectedClientsNames.setSelectionColor(Color.yellow);
-			 * fieldSelectedClientsNames.setSelectionStart(oldSelectedClientNames.length());
-			 * logging.debug(" sel start " + oldSelectedClientNames.length());
-			 * fieldSelectedClientsNames.setSelectionEnd(selectedClientNames.length());
-			 * logging.debug(" sel end " + selectedClientNames.length());
-			 * }
-			 */
-
 			fieldSelectedClientsNames.setText(selectedClientNames);
 
 			fieldSelectedClientsNames.setToolTipText(
@@ -162,8 +147,6 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 
 		JLabel labelInvolvedDepots2 = new JLabel(configed.getResourceValue("MainFrame.labelInDepot2"));
 
-		// fieldAllClientsCount = new JTextField("");
-
 		fieldActivatedClientsCount = new JTextField("");
 		fieldActivatedClientsCount.setPreferredSize(Globals.counterfieldDimension);
 		fieldActivatedClientsCount.setEditable(false);
@@ -173,8 +156,6 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		fieldSelectedClientsNames.setPreferredSize(Globals.counterfieldDimension);
 		fieldSelectedClientsNames.setEditable(false);
 		fieldSelectedClientsNames.setDragEnabled(true);
-
-		// JScrollPane viewSelectedClientsNames = new
 
 		fieldInvolvedDepots = new JTextField("");
 		fieldInvolvedDepots.setPreferredSize(Globals.counterfieldDimension);
@@ -238,13 +219,6 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 										Globals.LINE_HEIGHT))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
-		/*
-		 * csStatusPane.doForAllContainedCompisOfClass
-		 * ("setOpaque", new Object[]{true}, javax.swing.JLabel.class);
-		 * csStatusPane.doForAllContainedCompisOfClass
-		 * ("setBackground", new Object[]{Globals.backLightBlue},
-		 * javax.swing.JLabel.class);
-		 */
 		csStatusPane.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.backgroundLightGrey },
 				javax.swing.text.JTextComponent.class);
 	}

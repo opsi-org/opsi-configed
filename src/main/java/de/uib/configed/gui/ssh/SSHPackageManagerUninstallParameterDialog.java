@@ -141,11 +141,11 @@ public class SSHPackageManagerUninstallParameterDialog
 		} else {
 			btn_execute.setEnabled(true);
 
-			if (selectedDepots.contains(persist.DEPOT_SELECTION_NODEPOTS)) {
-				depotParameter = persist.DEPOT_SELECTION_NODEPOTS;
-			} else if (selectedDepots.contains(persist.DEPOT_SELECTION_ALL_WHERE_INSTALLED)) {
+			if (selectedDepots.contains(PersistenceController.DEPOT_SELECTION_NODEPOTS)) {
+				depotParameter = PersistenceController.DEPOT_SELECTION_NODEPOTS;
+			} else if (selectedDepots.contains(PersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED)) {
 				StringBuffer sb = new StringBuffer();
-				int startIndex = possibleDepots.indexOf(persist.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
+				int startIndex = possibleDepots.indexOf(PersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
 
 				for (int i = startIndex + 1; i < possibleDepots.size() - 1; i++) {
 
@@ -177,8 +177,8 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		if (persist.isDepotsFullPermission()) {
 			tf_selecteddepots.setEditable(true);
-			result.add(persist.DEPOT_SELECTION_NODEPOTS);
-			result.add(persist.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
+			result.add(PersistenceController.DEPOT_SELECTION_NODEPOTS);
+			result.add(PersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
 		} else
 			tf_selecteddepots.setEditable(false);
 
@@ -235,8 +235,6 @@ public class SSHPackageManagerUninstallParameterDialog
 		}
 		{
 
-			// tf_freeInput.getDocument().addDocumentListener(new DocumentListener()
-
 			lbl_keepFiles.setText(configed
 					.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelKeepFiles"));
 			checkb_keepFiles = new JCheckBox();
@@ -255,18 +253,6 @@ public class SSHPackageManagerUninstallParameterDialog
 			cb_opsiproducts = new JComboBoxSimpleToolTip();
 			cb_opsiproducts.setRenderer(new DefaultListCellRenderer());
 			cb_opsiproducts.setMaximumRowCount(Globals.COMBOBOX_ROW_COUNT);
-
-			/*
-			 * cb_opsiproducts.addActionListener(new ActionListener(){
-			 * public void actionPerformed(ActionEvent e)
-			 * {
-			 * tf_product.setText(
-			 * (String) cb_opsiproducts.getSelectedItem()
-			 * );
-			 * }
-			 * }
-			 * );
-			 */
 
 			cb_opsiproducts.addItemListener(itemEvent -> {
 				tf_selecteddepots.setText("");
@@ -337,7 +323,7 @@ public class SSHPackageManagerUninstallParameterDialog
 	}
 
 	private void changeKeepFiles() {
-		commandPMUninstall.setKeepFiles((boolean) checkb_keepFiles.isSelected());
+		commandPMUninstall.setKeepFiles(checkb_keepFiles.isSelected());
 		updateCommand();
 	}
 
@@ -377,9 +363,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		fConfirmAction.setMessage(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.confirm") + "\n"
-						+ tf_product.getText()
-						// + cb_opsiproducts.getSelectedItem()
-						+ "\n\n"
+						+ tf_product.getText() + "\n\n"
 						+ configed
 								.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelOn")
 
@@ -424,35 +408,7 @@ public class SSHPackageManagerUninstallParameterDialog
 				}
 			}
 		};
-		/*
-		 * Thread reloadThread = new Thread()
-		 * {
-		 * public void run()
-		 * {
-		 * try
-		 * {
-		 * boolean ready = false;
-		 * logging.info (this, "start reload thread ");
-		 * 
-		 * while (!ready)
-		 * {
-		 * if (execFinished )
-		 * {
-		 * logging.info(this, "start reload from doAction1");
-		 * main.reload();
-		 * ready = true;
-		 * }
-		 * else Thread.sleep(1000);
-		 * }
-		 * logging.info (this, "end reload thread ");
-		 * }
-		 * catch (Exception e)
-		 * {
-		 * }
-		 * }
-		 * };
-		 * reload should be called manually
-		 */
+
 		try {
 			execThread.start();
 
@@ -485,12 +441,12 @@ public class SSHPackageManagerUninstallParameterDialog
 				.addComponent(lbl_uninstall, pref, pref, max).addGap(Globals.GAP_SIZE * 2)
 				.addGroup(uninstallPanelLayout
 						.createSequentialGroup().addGroup(uninstallPanelLayout.createParallelGroup()
-								
+
 								.addGroup(uninstallPanelLayout.createSequentialGroup().addGap(5, 10, 20)
 										.addComponent(cb_opsiproducts, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 												2 * Globals.BUTTON_WIDTH)
 										.addGap(5, 5, 5)
-										
+
 										.addGap(5, 10, 20))
 								.addGroup(uninstallPanelLayout.createSequentialGroup()
 										.addComponent(lbl_on, pref, pref, pref).addGap(5, 10, 10)
@@ -502,21 +458,13 @@ public class SSHPackageManagerUninstallParameterDialog
 								.addComponent(tf_product, pref, pref, max)
 								.addComponent(tf_selecteddepots, pref, pref, max)
 								.addComponent(cb_verbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-								
-								
-								
-								
+
 								.addComponent(checkb_keepFiles, pref, pref, pref)
-						// )
-						// )
+
 						)
-				// )
-				
-				
-				// )
-				
+
 				)
-		
+
 		);
 
 		uninstallPanelLayout.setVerticalGroup(uninstallPanelLayout.createSequentialGroup().addComponent(lbl_uninstall)
@@ -524,8 +472,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(cb_opsiproducts, pref, pref, pref)
-						
-						
+
 						.addComponent(tf_product, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 
 				.addGap(3 * Globals.GAP_SIZE)
@@ -547,13 +494,11 @@ public class SSHPackageManagerUninstallParameterDialog
 				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(lbl_keepFiles, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						
-						
+
 						.addComponent(checkb_keepFiles, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-				// )
-				).addGap(Globals.GAP_SIZE)
-		
+								Globals.BUTTON_HEIGHT))
+				.addGap(Globals.GAP_SIZE)
+
 		);
 	}
 }

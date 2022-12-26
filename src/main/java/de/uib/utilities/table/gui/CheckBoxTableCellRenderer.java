@@ -36,17 +36,6 @@ public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRen
 			setBackground(Globals.defaultTableCellBgColor1);
 		}
 
-		/*
-		 * if (isSelected) {
-		 * setForeground(table.getSelectionForeground());
-		 * setBackground(table.getSelectionBackground());
-		 * }
-		 * else {
-		 * setForeground(table.getForeground());
-		 * setBackground(table.getBackground());
-		 * }
-		 */
-
 		if (hasFocus) {
 			if (focusBorder == null) {
 				focusBorder = UIManager.getBorder("Table.focusCellHighlightBorder");

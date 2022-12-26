@@ -27,8 +27,6 @@ import de.uib.utilities.swing.SurroundPanel;
 
 public class Panelreinst extends JPanel implements KeyListener, MouseListener, ActionListener {
 	final String callReinstmgr = "reinstmgr";
-	
-	
 
 	String pcName = "";
 
@@ -148,19 +146,6 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 	}
 
 	protected void executeReinstmgr(String command) {
-
-		/*
-		 * textOut.append ( PersistenceController.getPersistenceController().execRemote
-		 * (command) );
-		 * 
-		 * if
-		 * (!PersistenceController.getPersistenceController().getLastError().equals(""))
-		 * {
-		 * JOptionPane.showMessageDialog(this,
-		 * PersistenceController.getPersistenceController().getLastError(), "Warnung",
-		 * JOptionPane.WARNING_MESSAGE);
-		 * }
-		 */
 
 	}
 

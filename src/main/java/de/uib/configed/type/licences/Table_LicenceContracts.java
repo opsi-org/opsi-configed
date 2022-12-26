@@ -10,7 +10,7 @@ import de.uib.utilities.datastructure.StringValuedRelationElement;
 public class Table_LicenceContracts extends Relation {
 
 	/*
-	 * describe LICENSE_CONTRACT ;
+	 * describe LICENSE_CONTRACT 
 	 * | Field | Type | Null | Key | Default | Extra
 	 * | licenseContractId | varchar(100) | NO | PRI | NULL |
 	 * | partner | varchar(100) | YES | | NULL |
@@ -74,7 +74,6 @@ public class Table_LicenceContracts extends Relation {
 		super(INTERFACED_ATTRIBUTES);
 	}
 
-	// @Override
 	@Override
 	public StringValuedRelationElement integrateRaw(Map<String, Object> m) {
 		StringValuedRelationElement rowmap = new StringValuedRelationElement();

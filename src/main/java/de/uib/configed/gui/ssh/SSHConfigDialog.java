@@ -96,7 +96,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 
 	private void checkComponentStates() {
 		boolean state = compareStates();
-		logging.debug(this, "checkComponentStates  identical " + state); // setBtn_save setEnabled " + !state);
+		logging.debug(this, "checkComponentStates  identical " + state);
 
 		setSSHState();
 	}
@@ -150,9 +150,6 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		}
 
 		logging.debug(this, "compareStates until now == ");
-		/*
-		 * return true;
-		 */
 
 		if (connectionInfo.usesKeyfile() != (cb_useKeyfile.isSelected())) {
 			logging.info(this, "compareStates 9");
@@ -355,8 +352,6 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 
 					SSHCommandFactory.getInstance().unsetConnection();
 
-					// SSHCommandFactory.CONNECTED ) )
-
 					// there seems to be nothing got disconnect
 					setSSHState();
 				}
@@ -474,10 +469,6 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 
 			if (connectionInfo.getKeyfilePath() != "")
 				cb_useKeyfile.setSelected(true);
-
-			// connectionInfo.useKeyfile(true, tf_keyfile.getText(), new
-
-			// connectionInfo.setUserData((String) cb_host.getSelectedItem(),
 
 			cb_useOutputColor = new JCheckBox();
 			cb_useOutputColor.setText(configed.getResourceValue("SSHConnection.Config.coloredOutput"));

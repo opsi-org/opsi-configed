@@ -15,12 +15,6 @@ public class ExtendedDate {
 	public ExtendedDate(Object value) {
 		interpretAsTimestamp(value);
 
-		/*
-		 * catch( DateParseException ex )
-		 * {
-		 * logging.warning(this, " " + ex);
-		 * }
-		 */
 	}
 
 	private void setFromDate(Date d) {

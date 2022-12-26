@@ -66,7 +66,6 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	protected JTextArea loggingArea;
 
 	public FEditObject(Object initialValue) {
-		// runningInstances.add(this, "");
 		setIconImage(Globals.mainIcon);
 
 		if (initialValue != null)
@@ -310,23 +309,11 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 			logging.debug(this, "centerOn " + master.getClass() + ", " + master);
 
-			// startX = (int) masterOnScreen.getX() + intHalf ( master.getWidth() ) -
-
-			// startY = (int) masterOnScreen.getY() + intHalf ( master.getHeight() ) -
-
 			startX = (int) masterOnScreen.getX() - (int) (getSize().getWidth()) - Globals.MIN_HGAP_SIZE;
 			startY = (int) masterOnScreen.getY();
 
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			logging.debug(this, "centerOn screenSize " + screenSize);
-
-			/*
-			 * if (startX + getSize().width > screenSize.width)
-			 * startX = screenSize.width - getSize().width;
-			 * 
-			 * if (startY + getSize().height > screenSize.height)
-			 * startY = screenSize.height - getSize().height;
-			 */
 
 		}
 
@@ -398,10 +385,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-			/*
-			 * setStartValue(initialValue);
-			 * leave();
-			 */
+
 			cancel();
 
 		} else if (e.getID() == WindowEvent.WINDOW_ACTIVATED) {

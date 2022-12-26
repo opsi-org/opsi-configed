@@ -25,15 +25,7 @@ public class Table {
 	}
 
 	public String getHighTimestamp() {
-		/*
-		 * try{
-		 * highTimestamp = Timestamp.valueOf(highTimestampS);
-		 * }
-		 * catch(Exception ex)
-		 * {
-		 * logging.info(this, "getHighTimestamp  exception: " + ex);
-		 * }
-		 */
+
 		return highTimestampS;
 	}
 

@@ -34,13 +34,6 @@ public class TableModelFilter {
 		this(null, false, true);
 	}
 
-	/*
-	 * public void setCondition(TableModelFilterCondition condition)
-	 * {
-	 * this.condition = condition;
-	 * }
-	 */
-
 	public TableModelFilterCondition getCondition() {
 		return condition;
 	}

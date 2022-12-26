@@ -58,53 +58,8 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 			final de.uib.utilities.datapanel.AbstractEditMapPanel.Actor actor) {
 		super(tableCellRenderer, keylistExtendible, keylistEditable, reloadable, actor);
 
-		/*
-		 * popupItemDeleteEntry = new JMenuItem(
-		 * configed.getResourceValue("EditMapPanel.PopupMenu.RemoveEntry"));
-		 * 
-		 * popupItemDeleteEntry.addActionListener(
-		 * new ActionListener()
-		 * {
-		 * public void actionPerformed(ActionEvent e){
-		 * logging.info(this, "deleteUser");
-		 * deleteUser();
-		 * }
-		 * }
-		 * );
-		 */
-
-		/*
-		 * popup0 = new PopupMenuTrait(new Integer[]{
-		 * //PopupMenuTrait.POPUP_SAVE,
-		 * PopupMenuTrait.POPUP_RELOAD,
-		 * PopupMenuTrait.POPUP_ADD
-		 * })
-		 * {
-		 * public void action(int p)
-		 * {
-		 * logging.info(this, "action popup  " + p);
-		 * 
-		 * switch(p)
-		 * {
-		 * case PopupMenuTrait.POPUP_RELOAD:
-		 * reload();
-		 * 
-		 * break;
-		 * 
-		 * case PopupMenuTrait.POPUP_SAVE:
-		 * 
-		 * break;
-		 * }
-		 * 
-		 * }
-		 * }
-		 * ;
-		 * 
-		 */
-
-		popupForUserpathes = new PopupMenuTrait(new Integer[] {
-				// PopupMenuTrait.POPUP_SAVE,
-				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
+		popupForUserpathes = new PopupMenuTrait(
+				new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
 
@@ -132,9 +87,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 			}
 		};
 
-		popupForUserpath = new PopupMenuTrait(new Integer[] {
-				// PopupMenuTrait.POPUP_SAVE,
-				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
+		popupForUserpath = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
 
@@ -157,9 +110,8 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 			}
 		};
 
-		popupForRolepathes = new PopupMenuTrait(new Integer[] {
-				// PopupMenuTrait.POPUP_SAVE,
-				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
+		popupForRolepathes = new PopupMenuTrait(
+				new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_DELETE, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
 
@@ -187,9 +139,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 			}
 		};
 
-		popupForRolepath = new PopupMenuTrait(new Integer[] {
-				// PopupMenuTrait.POPUP_SAVE,
-				PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
+		popupForRolepath = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_ADD }) {
 			@Override
 			public void action(int p) {
 
@@ -260,25 +210,6 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 		((PopupMenuTrait) popupForRolepathes).setToolTipText(PopupMenuTrait.POPUP_ADD,
 				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole.ToolTip"));
-
-		/*
-		 * MouseListener popupListener0 = new utils.PopupMouseListener(popup0){
-		 * 
-		 * @Override
-		 * protected void maybeShowPopup(MouseEvent e) {
-		 * if (e.isPopupTrigger()) {
-		 * 
-		 * TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-		 * 
-		 * //if(selRow % 2 == 0) //test
-		 * if ( selPath != null && !isUserPath( selPath ) && !isRolePath( selPath,
-		 * false) && !isRolePath( selPath, true) )
-		 * super.maybeShowPopup(e);
-		 * }
-		 * }
-		 * };
-		 * tree.addMouseListener(popupListener0);
-		 */
 
 		MouseListener popupListenerForUserpathes = new utils.PopupMouseListener(popupForUserpathes) {
 			@Override
@@ -501,10 +432,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 				(Map) persist.getConfigDefaultValues(),
 
-				// additionalConfigs.get(0), //old values mapTableModel.getData(),
-				persist.getConfigOptions()// old values mapTableModel.getOptionsMap()
-
-		);
+				persist.getConfigOptions());
 
 	}
 
@@ -525,7 +453,6 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 	}
 
 	protected void addUser(String rolename) {
-		// de.uib.opsidatamodel.PersistenceControllerFactory.getPersistenceController().addRegisterUserEntry()
 
 		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, // owner frame
 				"add user", // title

@@ -10,7 +10,7 @@ import de.uib.utilities.logging.logging;
 
 public class LicenceUsableForEntry extends HashMap<String, String> {
 	/*
-	 * desc SOFTWARE_LICENSE_TO_LICENSE_POOL;
+	 * desc SOFTWARE_LICENSE_TO_LICENSE_POOL
 	 * | Field | Type | Null | Key | Default | Extra
 	 * | softwareLicenseId | varchar(100) | NO | PRI | NULL |
 	 * | licensePoolId | varchar(100) | NO | PRI | NULL |

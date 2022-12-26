@@ -102,7 +102,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 		public void actionPerformed(ActionEvent e) {
 			logging.debug(this, "actionPerformed " + e);
 			cancel();
-			
+
 			// cancel");
 		}
 	};
@@ -135,10 +135,6 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			logging.debug(this,
 					"append parseAnsiCodes found color key " + key + " value " + ((Color) entry.getValue()).toString());
 
-			// ansi_escape1.toCharArray()[0])
-
-			// ansi_escape2.toCharArray()[0]) )
-			// line = line.replace(ansi_escape2, "");
 			line = line.replace(ansi_escape1, "").replace(ansi_escape2, "");
 		}
 		return line;
@@ -218,15 +214,10 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			btn_close = new de.uib.configed.gui.IconButton(
 					de.uib.configed.configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
 					"images/cancel.png", "images/cancel.png", true);
-			
-
-			
 
 			btn_close.setPreferredSize(btn_dim);
 
 			btn_close.addActionListener(closeListener);
-
-			
 
 		} catch (Exception e) {
 			logging.warning(this, "initOutputGui, exception occurred", e);

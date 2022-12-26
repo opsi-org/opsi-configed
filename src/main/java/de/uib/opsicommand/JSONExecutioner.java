@@ -223,58 +223,6 @@ public abstract class JSONExecutioner extends Executioner {
 
 	}
 
-	/*
-	 * public Map<String, Map<String, Map<String, Object>>> getMap3_Object(Object
-	 * retrieved)
-	 * {
-	 * HashMap<String, Map<String, Map<String, Object>>> result = new
-	 * HashMap<String, Map<String, Map<String, Object>>>();
-	 * try
-	 * {
-	 * JSONObject jO = (JSONObject) retrieved;
-	 * if (checkResponse(jO))
-	 * {
-	 * JSONObject jOResult = jO.optJSONObject ("result");
-	 * 
-	 * HashMap<String, JSONObject> map0 = new HashMapX<String,
-	 * JSONObject>(jOResult);
-	 * 
-	 * 
-	 * Iterator iter0 = map0.keySet().iterator();
-	 * while (iter0.hasNext())
-	 * {
-	 * String key1 = (String) iter0.next(); //e.g. client
-	 * HashMap<String, JSONObject> map1 =new HashMapX<>(
-	 * (JSONObject) map0.get(key1) ); //e.g. map of 1 client values
-	 * 
-	 * HashMap<String, Map<String, Object>> map1R = new HashMap<String, Map<String,
-	 * Object>>(); // to produce
-	 * 
-	 * Iterator iter1 = map1.keySet().iterator();
-	 * while (iter1.hasNext())
-	 * {
-	 * String key2 = (String) iter1.next(); //e.g. product
-	 * HashMap<String, Object> map2 = new HashMapX<>((JSONObject)
-	 * map1.get(key2), true); 
-	 * 
-	 * map1R.put(key2, map2);
-	 * 
-	 * }
-	 * 
-	 * result.put(key1, map1R);
-	 * }
-	 * }
-	 * }
-	 * catch (Exception ex)
-	 * {
-	 * logging.debug("getMap3_String: " + ex.toString());
-	 * }
-	 * 
-	 * return result;
-	 * 
-	 * }
-	 */
-
 	@Override
 	public Map<String, Map<String, Map<String, Object>>> getMap3_Object(OpsiMethodCall omc) {
 		return JSONReMapper.getMap3_Object(retrieveJSONObject(omc));

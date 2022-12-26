@@ -5,8 +5,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 /**
  * FLoadingWaiter
  * Copyright:     Copyright (c) 2016
@@ -32,8 +30,7 @@ import de.uib.utilities.thread.WaitInfoString;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 
-public class FLoadingWaiter extends JFrame
-		implements WindowListener, de.uib.utilities.observer.DataLoadingObserver, WaitingSleeper {
+public class FLoadingWaiter extends JFrame implements de.uib.utilities.observer.DataLoadingObserver, WaitingSleeper {
 
 	private static final long WAITING_MILLIS_FOR_LOADING = 50000;
 	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
@@ -85,7 +82,6 @@ public class FLoadingWaiter extends JFrame
 	public FLoadingWaiter(String title) {
 		super(title);
 
-		addWindowListener(this);
 		createGUI();
 		setVisible(true);
 		logging.info(this, "should be visible ");
@@ -93,17 +89,6 @@ public class FLoadingWaiter extends JFrame
 			waitInfoString = new WaitInfoString();
 
 		worker = new WaitingWorker(this);
-		/*
-		 * {
-		 * 
-		 * @Override
-		 * protected void process( List<Long> listOfMillis )
-		 * {
-		 * super.process(listOfMillis);
-		 * statusLabel.setText("abc");
-		 * }
-		 * }
-		 */
 
 	}
 
@@ -119,14 +104,6 @@ public class FLoadingWaiter extends JFrame
 
 	private void createGUI() {
 		setIconImage(Globals.mainIcon);
-
-		/*
-		 * seems not to work
-		 * UIManager.put("ProgressBar.background", Color.BLUE);
-		 * UIManager.put("ProgressBar.foreground", Color.CYAN);
-		 * UIManager.put("ProgressBar.selectionBackground", Color.BLACK);
-		 * UIManager.put("ProgressBar.selectionForeground", Color.GREEN);
-		 */
 
 		progressBar = new JProgressBar();
 
@@ -165,30 +142,6 @@ public class FLoadingWaiter extends JFrame
 		this.getContentPane().add(panel);
 
 		setSize(new Dimension(400, 250));
-
-		// center
-		/*
-		 * Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		 * Dimension frameSize = this.getSize();
-		 * if (frameSize.height > screenSize.height)
-		 * frameSize.height = screenSize.height;
-		 * if (frameSize.width > screenSize.width)
-		 * frameSize.width = screenSize.width;
-		 * this.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height
-		 * - frameSize.height) / 2);
-		 * 
-		 * 
-		 * GraphicsDevice gd =
-		 * GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		 * GraphicsConfiguration gc = gd.getDefaultConfiguration();
-		 * 
-		 * 
-		 * setLocation(
-		 * gc.getBounds().x + 10,
-		 * gc.getBounds().y +
-		 * (gc.getBounds().height-getHeight()) / 2
-		 * );
-		 */
 
 		setLocationRelativeTo(null);
 	}
@@ -242,39 +195,6 @@ public class FLoadingWaiter extends JFrame
 	public String setLabellingStrategy(long millisLevel) {
 		logging.debug(this, "setLabellingStrategy millis " + millisLevel);
 		return "" + observingMesg + " " + waitInfoString.next(); // ??produces strings with ascii null
-
-	}
-
-	// windowListener
-	@Override
-	public void windowActivated(WindowEvent e) {
-	}
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-
-	}
-
-	@Override
-	public void windowOpened(WindowEvent e) {
-	}
-
-	@Override
-	public void windowClosed(WindowEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 

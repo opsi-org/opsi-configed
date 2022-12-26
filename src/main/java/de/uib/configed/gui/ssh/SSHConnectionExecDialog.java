@@ -50,23 +50,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 
 	public static SSHConnectionExecDialog getInstance() {
 		logging.info("SSHConnectionExecDialog.getInstance, existing " + instance);
-		/*
-		 * if (instance != null)
-		 * {
-		 * //giving back existing instance does not work, probably because of threading
-		 * problems
-		 * 
-		 * 
-		 * 
-		 * instance.append( "SSHConnectionExecDialog " + new java.util.Date() + "\n" );
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * }
-		 * else
-		 */
+
 		if (instance == null) {
 			instance = getNewInstance();
 		}
@@ -158,16 +142,6 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 	public void appendLater(String line) {
 
 		append(line);
-
-		/*
-		 * SwingUtilities.invokeLater( new Thread(){
-		 * public void run()
-		 * {
-		 * append( line );
-		 * }
-		 * }
-		 * );
-		 */
 
 	}
 

@@ -6,26 +6,10 @@ import de.uib.configed.type.SavedSearch;
 import de.uib.utilities.logging.logging;
 
 public class SavedSearches extends HashMap<String, SavedSearch> {
-	
-	// \"data\" : { \"element\" : null, \"elementPath\" : null, \"operation\" :
-	// \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [
 
-	// \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\",
-	// \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null } ] } }";
 	public static final String SEARCHfailedProduct = "{ \"version\" : \"2\", \"data\" : { \"element\" : null, \"elementPath\" : null, \"operation\" : \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [ { \"element\" : null, \"elementPath\" : null, \"operation\" : \"AndOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [ { \"element\" : \"SoftwareNameElement\", \"elementPath\" : [ \"Product\", \"Name\" ], \"operation\" : \"StringEqualsOperation\", \"dataType\" : TextType, \"data\" : \"%s\", \"children\" : null }, { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : [ \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\", \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null } ] } ] } }";
 	public static final String SEARCHfailedByTimeS = "{ \"version\" : \"2\", \"data\" : { \"element\" : null, \"elementPath\" : null, \"operation\" : \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [ { \"element\" : null, \"elementPath\" : null, \"operation\" : \"AndOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [ { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : [ \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\", \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null }, { \"element\" : \"SoftwareModificationTimeElement\", \"elementPath\" : [ \"Product\", \"Modification Time\" ], \"operation\" : \"DateGreaterOrEqualOperation\", \"dataType\" : DateType, \"data\" : \"%s\", \"children\" : null } ] } ] } }";
-	
-	// \"data\" : { \"element\" : null, \"elementPath\" : null, \"operation\" :
-	// \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [
 
-	// \"AndOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [ {
-	// \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : [
-	// \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\",
-	// \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null }, {
-	// \"element\" : \"SoftwareModificationTimeElement\", \"elementPath\" : [
-	// \"Product\", \"Modification Time\" ], \"operation\" :
-	// \"DateGreaterOrEqualOperation\", \"dataType\" : DateType, \"data\" :
-	// \"2014-01-27\", \"children\" : null } ] } ] } }";
 	public static final String SEARCHfailedAtAnyTimeS = "{ \"version\" : \"2\", \"data\" : { \"element\" : null, \"elementPath\" : null, \"operation\" : \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [ { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : [ \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\", \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null } ] } }";
 
 	public SavedSearches() {
@@ -69,10 +53,6 @@ public class SavedSearches extends HashMap<String, SavedSearch> {
 					if (remainder.equals(SavedSearch.DESCRIPTION_KEY))
 						rc.setDescription(value);
 
-					/*
-					 * else if (remainder.equals(SavedSearch.COMMAND_KEY))
-					 * rc.setSerialization(value);
-					 */
 				}
 
 				else

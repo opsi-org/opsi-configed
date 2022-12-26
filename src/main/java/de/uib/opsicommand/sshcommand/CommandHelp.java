@@ -53,8 +53,6 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 		return "ERROR";
 	}
 
-	// @Override
-
 	@Override
 	public String getMenuText() {
 		return null;

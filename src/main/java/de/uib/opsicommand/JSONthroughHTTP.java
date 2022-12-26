@@ -204,55 +204,6 @@ public class JSONthroughHTTP extends JSONExecutioner {
 		connection.setRequestProperty("User-Agent", Globals.APPNAME + " " + Globals.VERSION);
 	}
 
-	/*
-	 * Lazarus solution for compatibility with old and new server version:
-	 * 
-	 * definiere mir die Parameter für compress und nocompress
-	 * und belege sie mit den Werten vor welche rfc conform sind:
-	 * -------------------------------
-	 * var
-	 * ContentTypeCompress : string = 'application/json';
-	 * ContentTypeNoCompress : string = 'application/json';
-	 * ContentEncodingCommpress : string = 'deflate';
-	 * ContentEncodingNoCommpress : string = '';
-	 * AcceptCompress : string = '';
-	 * AcceptNoCompress : string = '';
-	 * AcceptEncodingCompress : string = 'deflate';
-	 * AcceptEncodingNoCompress : string = '';
-	 * 
-	 * -------------------------------
-	 * sollte es bei retrieveJSONObject (und verwandten) zu einer expetion kommen,
-	 * so switche ich um:
-	 * -------------------------------
-	 * // retry with other parameters
-	 * if ContentTypeCompress = 'application/json' then
-	 * begin
-	 * ContentTypeCompress := 'gzip-application/json-rpc';
-	 * AcceptCompress := 'gzip-application/json-rpc';
-	 * ContentTypeNoCompress := 'application/json-rpc';
-	 * AcceptNoCompress := 'application/json-rpc';
-	 * ContentEncodingNoCommpress := '';
-	 * ContentEncodingCommpress := '';
-	 * AcceptEncodingCompress := '';
-	 * AcceptEncodingNoCompress := '';
-	 * end
-	 * else
-	 * begin
-	 * ContentTypeCompress := 'application/json';
-	 * AcceptCompress := '';
-	 * ContentTypeNoCompress := 'application/json';
-	 * AcceptNoCompress := '';
-	 * ContentEncodingNoCommpress := '';
-	 * ContentEncodingCommpress := 'deflate';
-	 * AcceptEncodingCompress := 'deflate';
-	 * AcceptEncodingNoCompress := '';
-	 * end;
-	 * 
-	 * LogDatei.log('Changing to MimeType: ' + ContentTypeCompress, LLDebug);
-	 * 
-	 * 
-	 */
-
 	/**
 	 * This method receives the JSONObject via HTTP.
 	 */

@@ -85,8 +85,8 @@ public abstract class Serializer {
 			logging.warning(this, "data in Serializer.deserialize is null");
 
 		logging.info(this, "deserialize data " + data);
-		if (data.get("elementPath") != null) {
-			logging.info("deserialize, elementPath " + Arrays.toString((String[]) data.get("elementPath")));
+		if (data.get(keyElementPath) != null) {
+			logging.info("deserialize, elementPath " + Arrays.toString((String[]) data.get(keyElementPath)));
 		}
 
 		try {

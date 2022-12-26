@@ -46,8 +46,6 @@ public class CommandOpsiPackageManager implements SSHCommand {
 		return "CommandOpsiPackageManager";
 	}
 
-	// @Override
-
 	@Override
 	public String getMenuText() {
 		return configed.getResourceValue("SSHConnection.command.opsipackagemanager");

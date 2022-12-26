@@ -1971,7 +1971,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				/////// UEFI BOOT & WAN Config
 
 				.addComponent(cbUefiBoot, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-				
+
 				.addComponent(cbWANConfig, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 
 				/////// ONE TIME PASSWORD
@@ -2415,14 +2415,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		SwExporter swExporter = new SwExporter(showSoftwareLog_MultiClientReport, panelSWInfo);
 		showSoftwareLog_MultiClientReport.setActionListenerForStart(swExporter);
 
-		/*
-		 * jTabbedPaneConfigPanes.addTab(
-		 * configed.getResourceValue("MainFrame.jPanel_softwareLog"),
-		 * Globals.createImageIcon("images/swaudit.png", "" ),
-		 * showSoftwareLog
-		 * );
-		 */
-
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_softwareLog"),
 				Globals.createImageIcon("images/swaudit.png", ""), showSoftwareLog,
 				configed.getResourceValue("MainFrame.jPanel_softwareLog"), ConfigedMain.VIEW_SOFTWARE_INFO);
@@ -2544,8 +2536,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	// -- helper methods for interaction
 	public void saveConfigurationsSetEnabled(boolean b) {
-
-		// changed");
 
 		if (Globals.isGlobalReadOnly() && b)
 			return;

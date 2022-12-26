@@ -32,11 +32,7 @@ public class PanelHostConfig extends JPanel {
 	public final String propertyClassRole = UserConfig.KEY_USER_ROLE_ROOT;
 
 	public PanelHostConfig() {
-		/*
-		 * classcounter++;
-		 * if (classcounter > 1)
-		 * System.exit(0);
-		 */
+
 		buildPanel();
 	}
 
@@ -56,18 +52,6 @@ public class PanelHostConfig extends JPanel {
 
 		String newpropertyclass = superclass + "." + user;
 
-		/*
-		 * if (! PersistenceControllerFactory.getPersistenceController().
-		 * PROPERTYCLASSES_SERVER.containsKey(newpropertyclass))
-		 * {
-		 * logging.debug(this,
-		 * "putUsersToPropertyclassesTreeMap found another user named " + user + " [" +
-		 * newpropertyclass +"]");
-		 * PersistenceControllerFactory.getPersistenceController().
-		 * PROPERTYCLASSES_SERVER.put(newpropertyclass, "");
-		 * }
-		 */
-
 		if (!de.uib.opsidatamodel.PersistenceController.PROPERTYCLASSES_SERVER.containsKey(newpropertyclass)) {
 			logging.debug(this, "putUsersToPropertyclassesTreeMap found another user named " + user + " ["
 					+ newpropertyclass + "]");
@@ -80,7 +64,7 @@ public class PanelHostConfig extends JPanel {
 				PersistenceControllerFactory.getPersistenceController().getHostInfoCollections().getConfigServer());
 
 		for (Map.Entry<String, Object> entry : configs.entrySet()) {
-			String key = (String) entry.getKey();
+			String key = entry.getKey();
 
 			if (key.startsWith(propertyClassRole + ".")) {
 				String user = key.split("\\.")[2];
@@ -107,10 +91,7 @@ public class PanelHostConfig extends JPanel {
 
 		editMapPanel = new EditMapPanelGroupedForHostConfigs(
 				new de.uib.configed.gui.helper.PropertiesTableCellRenderer(), keylistExtendible, entryRemovable,
-				reloadable,
-				// serverEditing, serverEditing, true,
-				// PersistenceControllerFactory.getPersistenceController().PROPERTYCLASSES,
-				new AbstractEditMapPanel.Actor() {
+				reloadable, new AbstractEditMapPanel.Actor() {
 					@Override
 					protected void reloadData() {
 						reloadHostConfig();
@@ -122,45 +103,21 @@ public class PanelHostConfig extends JPanel {
 					}
 				});
 
-		/*
-		 * JPanel header =new JPanel();
-		 * 
-		 * GroupLayout headerLayout = new GroupLayout(header);
-		 * header.setLayout(headerLayout);
-		 * 
-		 * headerLayout.setHorizontalGroup(
-		 * headerLayout.createSequentialGroup()
-		 * .addGap(Globals.hGapSize)
-		 * .addComponent(label, 10, GroupLayout.PREFERRED_SIZE,
-		 * GroupLayout.PREFERRED_SIZE)
-		 * .addGap(Globals.hGapSize)
-		 * )
-		 * ;
-		 * 
-		 * headerLayout.setVerticalGroup(
-		 * headerLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-		 * .addComponent(label)
-		 * )
-		 * ;
-		 */
 		GroupLayout planeLayout = new GroupLayout(this);
 		this.setLayout(planeLayout);
 
 		planeLayout.setHorizontalGroup(planeLayout.createSequentialGroup()
-				
+
 				.addGroup(planeLayout.createParallelGroup()
-						
+
 						.addComponent(editMapPanel))
-		
+
 		);
 
 		planeLayout.setVerticalGroup(planeLayout.createSequentialGroup()
-				
-				
-				
-				
+
 				.addComponent(editMapPanel, Globals.LINE_HEIGHT * 2, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-		
+
 		);
 	}
 
@@ -181,7 +138,6 @@ public class PanelHostConfig extends JPanel {
 		editMapPanel.setLabel(labeltext);
 
 		editMapPanel.setOptionsEditable(optionsEditable);
-		// ((EditMapPanelGrouped)editMapPanel).setPropertyHandlerType(
 
 	}
 

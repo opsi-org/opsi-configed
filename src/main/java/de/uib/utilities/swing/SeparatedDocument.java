@@ -55,12 +55,4 @@ public class SeparatedDocument extends CheckedDocument {
 		}
 	}
 
-	/*
-	 * protected void removeUpdate(AbstractDocument.DefaultDocumentEvent chng,
-	 * AttributeSet attr)
-	 * {
-	 * logging.debug(this, "removeUpdate");
-	 * return;
-	 * }
-	 */
 }

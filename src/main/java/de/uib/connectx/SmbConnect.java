@@ -38,18 +38,6 @@ public class SmbConnect {
 	public static final String[] DIRECTORY_DRIVERS_BY_AUDIT = new String[] { "drivers", "drivers", "additional",
 			"byAudit" };
 
-	/*
-	 * public static final String DIRECTORY_DRIVERS = "drivers/drivers";
-	 * public static final String DIRECTORY_DRIVERS_PREFERRED =
-	 * "drivers/drivers/preferred";
-	 * public static final String DIRECTORY_DRIVERS_NEXCLUDED =
-	 * "drivers/drivers/excluded";
-	 * public static final String DIRECTORY_DRIVERS_ADDITIONAL =
-	 * "drivers/drivers/additional";
-	 * public static final String DIRECTORY_DRIVERS_BY_AUDIT =
-	 * "drivers/drivers/additional/byAudit";
-	 */
-
 	private static SmbConnect instance;
 
 	protected PersistenceController persist;

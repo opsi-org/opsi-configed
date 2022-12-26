@@ -53,9 +53,6 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 	@Override
 	protected void createComponents() {
 		super.createComponents();
-		// buttonCommit.setText("");
-
-		// buttonCancel.setText("");
 
 	}
 
@@ -123,14 +120,6 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 	{
 		return getSelectedDateTime();
 
-		/*
-		 * java.util.Date date = dateEditor.getSelectedSqlTime();
-		 * 
-		 * if (date == null)
-		 * return "";
-		 * 
-		 * return DateFormat.getDateInstance(DateFormat.LONG).format(date);
-		 */
 	}
 
 	@Override

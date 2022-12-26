@@ -67,8 +67,6 @@ public class OpsiPackage implements Comparable {
 
 	public static int lastIndex = -1;
 
-	
-
 	public OpsiPackage(String productId, String productVersion, String packageVersion, String productType) {
 		this(productId, productVersion, packageVersion, productType, null); // compatibility to usages without locked
 																			// parameter
@@ -103,13 +101,6 @@ public class OpsiPackage implements Comparable {
 				"" + m.get(SERVICEkeyPRODUCT_TYPE), Globals.interpretAsBoolean(m.get(SERVICEkeyLOCKED)));
 		logging.debug(this, "built from " + m);
 
-		/*
-		 * if (m.get("id") == null)
-		 * {
-		 * logging.warning(this, " has unexpected key 'productId' with value " +
-		 * m.get("productId") + " from Map " + m );
-		 * }
-		 */
 	}
 
 	public String getProductId() {
@@ -168,12 +159,8 @@ public class OpsiPackage implements Comparable {
 	}
 
 	protected String buildRepresentation() {
-		return
-		// getClass().getName() +
-		"{" + DBkeyPRODUCT_ID + ":\"" + productId + "\";" + SERVICEkeyPRODUCT_TYPE + ":\""
-				+ giveProductType(productType) + "\";" + VERSION_INFO + ":\"" + versionInfo
-				// + LOCKED + ":\" + locked
-				+ "\"}";
+		return "{" + DBkeyPRODUCT_ID + ":\"" + productId + "\";" + SERVICEkeyPRODUCT_TYPE + ":\""
+				+ giveProductType(productType) + "\";" + VERSION_INFO + ":\"" + versionInfo + "\"}";
 	}
 
 	@Override

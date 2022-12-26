@@ -66,13 +66,6 @@ public abstract class AbstractEditMapPanel extends JPanel {
 			return s;
 		}
 
-		/*
-		 * @Override
-		 * public String toString()
-		 * {
-		 * return this.getClass().getName();
-		 * }
-		 */
 	}
 
 	public AbstractEditMapPanel() {
@@ -151,62 +144,8 @@ public abstract class AbstractEditMapPanel extends JPanel {
 		MenuElement[] popupElements = popupmenuAtRow.getSubElements();
 		int size = popupElements.length;
 		logging.debug(this, "logPopupElements " + size);
-		/*
-		 * for (int i = 0; i < size; i++)
-		 * {
-		 * logging.info(this, "logPopupElements " + ((JMenuItem)
-		 * popupElements[i]).getText());
-		 * }
-		 */
-	}
 
-	/*
-	 * private void removeOldPopupElements()
-	 * {
-	 * MenuElement[] popupElements = popupmenuAtRow.getSubElements();
-	 * int size = popupElements.length;
-	 * logging.info(this, "removeOldPopupElements " +size);
-	 * for (int i = size-1; i >=0; i--)
-	 * {
-	 * logging.info(this, "removeOldPopupElements " + ((JMenuItem)
-	 * popupElements[i]).getText());
-	 * popupmenuAtRow.remove(i);
-	 * }
-	 * }
-	 * 
-	 * public void setPopupConfiguration(LinkedList<JMenuItem>menuItems)
-	 * {
-	 * logPopupElements();
-	 * 
-	 * 
-	 * 
-	 * logging.info(this, "setPopupConfiguration, set menuitems " +menuItems.size()
-	 * );
-	 * for (JMenuItem item : menuItems)
-	 * {
-	 * logging.info(this, "setPopupConfiguration, set " + item.getText());
-	 * 
-	 * }
-	 * 
-	 * }
-	 * 
-	 * public void setPopupConfiguration(JPopupMenu menu)
-	 * {
-	 * logPopupElements();
-	 * 
-	 * 
-	 * 
-	 * MenuElement[] menuElements = menu.getSubElements();
-	 * logging.info(this, "setPopupConfiguration, set menu " +menuElements.length);
-	 * for (int i = 0; i < menuElements.length; i++)
-	 * {
-	 * logging.info(this, "setPopupConfiguration, set menu " + ((JMenuItem)
-	 * menuElements[i]).getText());
-	 * 
-	 * }
-	 * 
-	 * }
-	 */
+	}
 
 	public void setOptionsEditable(boolean b) {
 		logging.debug(this, "AbstractEditMapPanel.setOptionsEditable " + b);

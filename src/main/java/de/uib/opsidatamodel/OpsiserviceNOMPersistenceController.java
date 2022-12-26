@@ -5230,7 +5230,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return exec.doCall(omc);
 	}
 
-	// @Override
 	protected Boolean getHostBooleanConfigValue(String key, String hostName, boolean useGlobalFallback,
 			Boolean defaultVal) {
 		Boolean result = null;

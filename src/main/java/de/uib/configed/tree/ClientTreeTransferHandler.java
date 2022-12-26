@@ -215,8 +215,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 	}
 
-	// @Override
-
 	private boolean chooseMOVE(TransferHandler.TransferSupport support, String sourceGroupName, TreePath dropPath,
 			boolean isLeaf) {
 		logging.info(this, "chooseMOVE  support " + support);

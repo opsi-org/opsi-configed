@@ -38,7 +38,7 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 			}
 
 			setProgress(100 * waitSecs / maxWaitSecs);
-			
+
 			publish(waitSecs);
 
 			timeoutReached = (waitSecs > maxWaitSecs);
@@ -62,16 +62,7 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 	//
 	@Override
 	protected void process(List<Integer> chunks) {
-		/*
-		 * for (int number : chunks)
-		 * {
-		 * logging.info(this, "WaitingCycle waitSecs " + chunks);
-		 * }
-		 * 
-		 * mainFrame.iconButtonSessionInfo.setEnabled(
-		 * (chunks.get( chunks.size() - 1) % 2 == 0)
-		 * );
-		 */
+
 	}
 
 	//

@@ -17,7 +17,7 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 
 	public enum TYPE {
 		BoolConfig, UnicodeConfig, UndefinedConfig
-	};
+	}
 	// UndefinedConfig should not occur
 
 	public static final String BOOL_TYPE = TYPE.BoolConfig.toString();
@@ -49,13 +49,6 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 				put("defaultValues", ((org.json.JSONArray) retrieved.get("defaultValues")).toList());
 			} else
 				put("defaultValues", retrieved.get("defaultValues"));
-
-			/*
-			 * if (retrieved.get("defaultValues") instanceof org.json.JSONArray)
-			 * {
-			 * logging.error("defaultValues instanceof org.jsonArrayList");
-			 * }
-			 */
 
 		}
 
@@ -96,8 +89,6 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 				put("selectionMode", ListSelectionModel.SINGLE_SELECTION);
 		}
 
-		// else
-
 		put("classname", "List");
 
 		if (retrieved == null)
@@ -113,7 +104,6 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 			put("nullable", false);
 	}
 
-	
 	// interface de.uib.utilities.table.ListCellOptions
 	@Override
 	public List getPossibleValues() {
@@ -154,5 +144,4 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 		return type;
 	}
 
-	
 }

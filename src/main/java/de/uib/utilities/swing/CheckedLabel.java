@@ -143,26 +143,6 @@ public class CheckedLabel extends JPanel implements FocusListener
 			}
 		});
 
-		/*
-		 * selectedLabel.addKeyListener(new KeyAdapter(){
-		 * 
-		 * public void keyPressed(KeyEvent e)
-		 * {
-		 * 
-		 * super.keyPressed(e);
-		 * if (e.getKeyCode() == KeyEvent.VK_SPACE)
-		 * {
-		 * ME.setSelected(false);
-		 * notifyActionListeners(
-		 * new ActionEvent(ME, setCheckedOff, cmdSetCheckedOff, new
-		 * java.util.Date().getTime(), 0)
-		 * );
-		 * }
-		 * }
-		 * }
-		 * );
-		 */
-
 		unselectedLabel.addMouseListener(new GeneralMouseListener("unselectedLabel") {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -176,26 +156,6 @@ public class CheckedLabel extends JPanel implements FocusListener
 			}
 		});
 
-		/*
-		 * unselectedLabel.addKeyListener(new KeyAdapter(){
-		 * 
-		 * public void keyPressed(KeyEvent e)
-		 * {
-		 * 
-		 * super.keyPressed(e);
-		 * if (e.getKeyCode() == KeyEvent.VK_SPACE)
-		 * {
-		 * ME.setSelected(true);
-		 * notifyActionListeners(
-		 * new ActionEvent(ME, setCheckedOn, cmdSetCheckedOn, new
-		 * java.util.Date().getTime(), 0)
-		 * );
-		 * }
-		 * }
-		 * }
-		 * );
-		 */
-
 		nullLabel.addMouseListener(new GeneralMouseListener("nullLabel") {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -208,26 +168,6 @@ public class CheckedLabel extends JPanel implements FocusListener
 						new ActionEvent(ME, setCheckedOff, cmdSetCheckedOff, new java.util.Date().getTime(), 0));
 			}
 		});
-
-		/*
-		 * nullLabel.addKeyListener(new KeyAdapter(){
-		 * 
-		 * public void keyPressed(KeyEvent e)
-		 * {
-		 * 
-		 * super.keyPressed(e);
-		 * if (e.getKeyCode() == KeyEvent.VK_SPACE)
-		 * {
-		 * ME.setSelected(true);
-		 * notifyActionListeners(
-		 * new ActionEvent(ME, setCheckedOn, cmdSetCheckedOn, new
-		 * java.util.Date().getTime(), 0)
-		 * );
-		 * }
-		 * }
-		 * }
-		 * );
-		 */
 
 		addKeyListener(new KeyAdapter() {
 

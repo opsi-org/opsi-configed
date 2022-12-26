@@ -64,7 +64,6 @@ public class ControllerHWinfoColumnConfiguration {
 	public static final String colHwClass = configed.getResourceValue("HWinfoColumnConfiguration.colHwClass");
 	public static final String colLinuxQuery = configed.getResourceValue("HWinfoColumnConfiguration.colLinuxQuery");
 	public static final String colWMIQuery = configed.getResourceValue("HWinfoColumnConfiguration.colWMIQuery");
-	
 
 	private Map<String, Map<String, Boolean>> updateItems;
 
@@ -143,11 +142,7 @@ public class ControllerHWinfoColumnConfiguration {
 	}
 
 	protected void initPanel() {
-		panel = new PanelGenEditTable("", 0, // maxTableWidth
-				true, // editing
-				0, // generalPopupPosition
-				false,
-				// PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF,
+		panel = new PanelGenEditTable("", 0, true, 0, false,
 				new int[] { PanelGenEditTable.POPUP_RELOAD, PanelGenEditTable.POPUP_PDF }, true) {
 
 			@Override
@@ -176,21 +171,6 @@ public class ControllerHWinfoColumnConfiguration {
 				panel.moveToValue("true", columnNames.indexOf(colUseInQuery), true);
 
 			}
-
-			/*
-			 * @Override
-			 * protected Object modifyHeaderValue(Object s)
-			 * {
-			 * if (s != null && s instanceof String && ((String)
-			 * s).startsWith(DELETE_PREFIX))
-			 * {
-			 * String modified = ((String) s).substring(DELETE_PREFIX.length());
-			 * return modified;
-			 * }
-			 * 
-			 * return s;
-			 * }
-			 */
 
 		};
 
@@ -222,20 +202,17 @@ public class ControllerHWinfoColumnConfiguration {
 			classNames.add("java.lang.String");
 		}
 
-		// GenericTableUpdateItemFactory updateItemFactory = new
-
 		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, classNames, keycol);
 
 		model = new GenTableModel(updateItemFactory,
 
 				// tableProvider
-				
+
 				new DefaultTableProvider(
 						new RetrieverMapSource(columnNames, classNames, () -> (Map) getHwColumnConfig())),
 
 				keycol,
 
-				// final columns int array
 				new int[] { keycol },
 
 				// table model listener
@@ -263,20 +240,12 @@ public class ControllerHWinfoColumnConfiguration {
 
 		updateItemFactory.setSource(model);
 
-		// for (String hwClass : hwAuditDeviceClasses.keySet() )
-
 		// we got metadata:
 
-		model.setEditableColumns(new int[] {
-				// columnNames.indexOf ( colOpsiColumnName ),
-				columnNames.indexOf(colUseInQuery) });
+		model.setEditableColumns(new int[] { columnNames.indexOf(colUseInQuery) });
 
 		panel.setTableModel(model);
-		panel.setEmphasizedColumns(new int[] {
-				// columnNames.indexOf ( colOpsiColumnName ),
-				columnNames.indexOf(colUseInQuery) });
-
-		// Icon iconConfigure =
+		panel.setEmphasizedColumns(new int[] { columnNames.indexOf(colUseInQuery) });
 
 		panel.setTitlePane(
 				new JComponent[] { new JLabel(configed.getResourceValue("HWinfoColumnConfiguration.infoTitle")) }, 20);
@@ -438,14 +407,6 @@ public class ControllerHWinfoColumnConfiguration {
 			}
 
 		}
-
-		/*
-		 * for (String lineNo : result.keySet())
-		 * {
-		 * logging.info(this, "getHwColumnConfig " + lineNo + ": " + result.get(lineNo)
-		 * );
-		 * }
-		 */
 
 		return result;
 

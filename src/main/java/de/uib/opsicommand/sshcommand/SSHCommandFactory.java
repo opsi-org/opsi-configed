@@ -48,20 +48,13 @@ public class SSHCommandFactory {
 	public final String str_command_catDir = "cat *.dir.*OPSI/control | grep \"id: \"";
 	public final String str_command_fileexists = "[ -f .filename. ] &&  rm .filename. && echo \"File .filename. removed\" || echo \"File did not exist\"";
 	public final String str_command_fileexists_notremove = "[ -d .filename. ] && echo \"File exists\" || echo \"File not exist\"";
-	
-	// && rm *.filename.*.zsync && echo \"File *.filename.*.zsync removed\" || echo
-	// \"File *.filename.*.zsync did not exist\"";
-	
-	// rm *.filename.*.md5 && echo \"File *.filename.*.md5 removed\" || echo \"File
-	// *.filename.*.md5 did not exist\"";
+
 	public final String str_replacement_filename = ".filename.";
 	public final String str_file_exists = "File exists";
 	public final String str_file_not_exists = "File not exists";
 
 	public final String opsipathVarRepository = "/var/lib/opsi/repository/";
 	public final String opsipathVarDepot = "/var/lib/opsi/depot/";
-	
-	// *.product.*.md5" + ") | grep $(md5sum *.product.* | head -n1 | cut -d \" \"
 
 	/** ConfigedMain instance **/
 	private ConfigedMain main;
@@ -203,17 +196,7 @@ public class SSHCommandFactory {
 				|| main.getOpsiVersion().compareTo("4.1") < 0))
 			ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandRepositoryUpload());
 
-		// nicht abgefragt.
-		// ssh_commands_param.add(new
-
-		// SSHCommand csetrights = new
-
-		// LinkedList<String> coms = new LinkedList<>()
-
-		// ssh_commands_param.add(new SSHCommand_Template(csetrights, new
-
 		ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandOpsiSetRights());
-		// ssh_commands_param.add(new SSHCommand_Template(opsisetrights, coms,
 
 		ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandDeployClientAgent());
 

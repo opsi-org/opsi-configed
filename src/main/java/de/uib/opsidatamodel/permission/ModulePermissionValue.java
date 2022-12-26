@@ -37,16 +37,6 @@ public class ModulePermissionValue {
 		MODULE_CHECKED.put("win-vhd", true);
 		MODULE_CHECKED.put("os_install_by_wlan", true);
 	}
-	/*
-	 * public static final Map<String, Boolean> MODULE_PERMITTED;
-	 * static {
-	 * MODULE_PERMITTED = new LinkedHashMap<>();
-	 * for (String key : MODULE_CHECKED.keySet() )
-	 * {
-	 * MODULE_PERMITTED.put(key, true);
-	 * }
-	 * }
-	 */
 
 	private Boolean checkBoolean(Object ob) {
 

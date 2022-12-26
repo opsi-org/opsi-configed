@@ -149,16 +149,8 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	public SSHConnectionExecDialog startHelpDialog() {
 		SSHCommand command = new CommandHelp(this);
 		SSHConnectExec exec = new SSHConnectExec(command
-		/*
-		 * new SSHConnectionExecDialog(
-		 * configed.getResourceValue("SSHConnection.Exec.title") +
-		 * " \""+command.getCommand() + "\" ",
-		 * command)
-		 */
-		);
-		// exec.exec(command, true, new SSHConnectionExecDialog(command,
 
-		// \""+command.getCommand() + "\" "));
+		);
 		return (SSHConnectionExecDialog) exec.getDialog();
 	}
 

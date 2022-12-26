@@ -130,19 +130,6 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 					descriptionsMap.put(key, description);
 					defaultsMap.put(key, defaultvalue);
 
-					/*
-					 * logging.info(this, "key  " + key + " optionsMap.get(key)  "
-					 * + " class " + optionsMap.get(key).getClass()
-					 * + " optionsMap.get(key) instanceof Map " + ((optionsMap.get(key)) instanceof
-					 * Map)
-					 * + " optionsMap.get(key) instanceof ListCellOptions " + ((optionsMap.get(key))
-					 * instanceof ListCellOptions)
-					 * + " optionsMap.get(key) instanceof DefaultListCellOptions " +
-					 * ((optionsMap.get(key)) instanceof DefaultListCellOptions)
-					 * + " value " + optionsMap.get(key));
-					 * System.exit(0);
-					 */
-
 				}
 			}
 		}
@@ -161,8 +148,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 
 	public void cancelOldCellEditing() {
 
-		if (theCellEditor != null) // && data != null)
-		{
+		if (theCellEditor != null) {
 			theCellEditor.cancelCellEditing(); // don't shift the old editing state to a new product
 
 		}
