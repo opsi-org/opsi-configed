@@ -96,7 +96,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		ArrayList<Object> result_config_list = (ArrayList<Object>) configs
 				.get(main.getPersistenceController().KEY_SSH_DEFAULTWINUSER);
 		if (result_config_list == null || result_config_list.isEmpty()) {
-			// defaultWinUser =
 
 			logging.info(this, "KEY_SSH_DEFAULTWINUSER not existing");
 
@@ -109,7 +108,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		result_config_list = (ArrayList<Object>) configs.get(main.getPersistenceController().KEY_SSH_DEFAULTWINPW);
 		if (result_config_list == null || result_config_list.isEmpty()) {
-			// defaultWinUser =
 
 			logging.info(this, "KEY_SSH_DEFAULTWINPW not existing");
 
@@ -238,13 +236,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			tf_passw = new JPasswordField("nt123", 15);
 			tf_passw.setEchoChar('*');
 
-			// cb_passw_echo = new
-
-			// btn_showPassw = new JButton("",
-
 			btn_showPassw = new JButton(Globals.createImageIcon("images/eye_blue_open.png", ""));
-
-			// btn_showPassw.setPreferredSize(new Dimension(Globals.squareButtonWidth,
 
 			btn_showPassw.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
 			btn_showPassw.setToolTipText(
@@ -290,26 +282,13 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 					}), 2, 2);
 
 			panelFinalAction.setOpaque(false);
-			// panelFinalAction.setBorder(new LineBorder( Globals.blueGrey,
 
 		}
 
-		/*
-		 * {
-		 * lbl_freeInput.setText(configed.getResourceValue(
-		 * "SSHConnection.ParameterDialog.jLabelFreeInput"));
-		 * tf_freeInput = new JTextField();
-		 * tf_freeInput.setToolTipText(configed.getResourceValue(
-		 * "SSHConnection.ParameterDialog.tooltip.freeInput"));
-		 * // tf_freeInput.setText("");
-		 * addListener(tf_freeInput);
-		 * }
-		 */
 		{
 
 			btn_copy_selected_clients = new JButton(configed
 					.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.btn_copy_selected_clients"));
-			// btn_copy_selected_clients.setToolTipText(
 
 			btn_copy_selected_clients.addActionListener(actionEvent -> doCopySelectedClients());
 
@@ -503,21 +482,13 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 												.addComponent(cb_verbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
 														Globals.ICON_WIDTH))
 
-						// .addGap(Globals.gapSize)
-						)
-				// .addGap(Globals.gapSize)
-				// .addGroup(inputPanelLayout.createSequentialGroup()
-				// .addGap(Globals.gapSize)
-				// )
-				));
+						)));
 
 		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						// .addGap(Globals.minGapSize)
 						.addComponent(lbl_client, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(tf_client, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-				// .addGap(GroupLayout.PREFERRED_SIZE)
-				).addGap(Globals.GAP_SIZE)
+						.addComponent(tf_client, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
 						btn_copy_selected_clients, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
 				.addGap(Globals.GAP_SIZE * 2)

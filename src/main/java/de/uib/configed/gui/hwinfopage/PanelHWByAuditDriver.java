@@ -87,7 +87,6 @@ public class PanelHWByAuditDriver extends JPanel {
 				.addGroup(layoutByAuditInfo.createParallelGroup().addComponent(labelInfo, lh, lh, lh)
 						.addComponent(labelVendor, lh, lh, lh).addComponent(labelProduct, lh, lh, lh)
 						.addGap(hGap, hGap, hGap).addComponent(buttonUploadDrivers, lh, lh, lh))
-				// .addGap(vGap, vGap, vGap)
 				.addGroup(layoutByAuditInfo.createParallelGroup()
 						.addGroup(layoutByAuditInfo.createSequentialGroup()
 								.addGap(hGap / 2 + 1, hGap / 2 + 1, hGap / 2 + 1)
@@ -151,7 +150,6 @@ public class PanelHWByAuditDriver extends JPanel {
 		fieldVendor2.setText("");
 		fieldLabel2.setText("");
 
-		// fieldByAuditPath.setText("");
 		if (fDriverUpload != null)
 			fDriverUpload.setUploadParameters("");
 	}

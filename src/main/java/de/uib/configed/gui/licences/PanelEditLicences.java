@@ -128,51 +128,6 @@ public class PanelEditLicences extends MultiTablePanel {
 		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		/*
-		 * javax.swing.GroupLayout layout = new javax.swing.GroupLayout((JPanel) this);
-		 * this.setLayout(layout);
-		 * layout.setHorizontalGroup(
-		 * layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-		 * .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-		 * layout.createSequentialGroup()
-		 * .addContainerGap()
-		 * .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.
-		 * TRAILING)
-		 * // for testing purposes:
-		 * //.addComponent(testfield, javax.swing.GroupLayout.Alignment.LEADING,
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * Short.MAX_VALUE)
-		 * .addComponent(panelKeys, javax.swing.GroupLayout.Alignment.LEADING,
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * Short.MAX_VALUE)
-		 * .addComponent(panelSoftwarelicences,
-		 * javax.swing.GroupLayout.Alignment.LEADING,
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * Short.MAX_VALUE)
-		 * .addComponent(panelLicencecontracts,
-		 * javax.swing.GroupLayout.Alignment.LEADING,
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * Short.MAX_VALUE)
-		 * )
-		 * .addContainerGap())
-		 * );
-		 * layout.setVerticalGroup(
-		 * layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-		 * .addGroup(layout.createSequentialGroup()
-		 * .addContainerGap()
-		 * //.addComponent(testfield, javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE)
-		 * .addComponent(panelKeys, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * Short.MAX_VALUE)
-		 * .addComponent(panelSoftwarelicences, minVSize,
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-		 * .addComponent(panelLicencecontracts, minVSize,
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-		 * .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-		 * )
-		 * 
-		 * );
-		 */
 	}
 
 }

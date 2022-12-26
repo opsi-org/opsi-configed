@@ -201,27 +201,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		), false);
 
 		init_additional();
-		/*
-		 * init_additional in ModulesUploadDialog do something like
-		 * 
-		 * //lbl_copy_to_modules_d.setText(configed.getResourceValue(
-		 * "SSHConnection.ParameterDialog.fileupload.lbl_copy_to_modules_d"));
-		 * 
-		 * 
-		 * 
-		 * if (result.trim().equals(factory.str_file_exists))
-		 * {
-		 * lbl_copy_to_modules_d.setVisible(true);
-		 * 
-		 * 
-		 * }
-		 * else
-		 * {
-		 * lbl_copy_to_modules_d.setVisible(false);
-		 * 
-		 * 
-		 * }
-		 */
+
 	}
 
 	protected void init_additional() {
