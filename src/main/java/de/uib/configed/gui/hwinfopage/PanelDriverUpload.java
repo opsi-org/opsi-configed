@@ -556,10 +556,10 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 				.addGap(vGap, vGap * 2, vGap * 2)
 				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.CENTER)
 						
-						// Globals.lineHeight, Globals.lineHeight)
+						
 						.addGap(Globals.LINE_HEIGHT)
 				
-				// Globals.lineHeight, Globals.lineHeight)
+				
 				).addGap(vGap, vGap * 2, vGap * 2));
 
 		layoutByAuditInfo
@@ -573,8 +573,8 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 																.addComponent(label_topic, 5, wLeftText, wLeftText)
 																.addGap(hFirstGap, hFirstGap, hFirstGap)
 																
-																// Globals.graphicButtonWidth,
-																// Globals.graphicButtonWidth)
+																
+																
 																
 																.addComponent(fieldClientname, Globals.BUTTON_WIDTH,
 																		Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2))
@@ -647,19 +647,19 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 																.addComponent(fieldServerPath, Globals.BUTTON_WIDTH * 2,
 																		Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE))
 												
-												// Globals.graphicButtonWidth,
-												// Globals.graphicButtonWidth,
-												// Globals.graphicButtonWidth)
+												
+												
+												
 												).addGap(hFirstGap, hFirstGap, hFirstGap))
 								.addGroup(layoutByAuditInfo.createSequentialGroup().addGap(5, 5, Short.MAX_VALUE)
 										
-										// Globals.checkBoxWidth, Globals.checkBoxWidth)
+										
 										.addComponent(driverPathChecked, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										
 										.addGap(hGap, 2 * hGap, 2 * hGap)
 										
-										// Globals.checkBoxWidth, Globals.checkBoxWidth)
+										
 										.addComponent(serverPathChecked, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										
@@ -683,7 +683,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 										
 										// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										
-										// Globals.iconWidth, Globals.iconWidth)
+										
 										.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2)));
 
 		setBackground(Globals.backgroundLightGrey);

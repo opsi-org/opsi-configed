@@ -554,7 +554,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				null, // index is identical with the value
 				values, "");
 		// renderActionList.setUniformColor(
-		// Globals.backLightBlue, Globals.backVeryLightBlue
+		
 
 		renderActionList.setAlternatingColors(Globals.backLightBlue, Globals.backLightBlue, Globals.backgroundLightGrey,
 				Globals.backgroundWhite);
@@ -589,7 +589,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		GroupLayout surroundActionLayout = new GroupLayout(surroundScrollChooseAction);
 		surroundScrollChooseAction.setLayout(surroundActionLayout);
 
-		surroundActionLayout.setVerticalGroup(surroundActionLayout.createSequentialGroup().addGap(30) // (int) (1.5 * Globals.lineHeight) ) for levelling the list when centering the
+		surroundActionLayout.setVerticalGroup(surroundActionLayout.createSequentialGroup().addGap(30) 
 				// components
 				.addComponent(labelStrip, 15, 15, 15).addComponent(scrollChooseAction, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, 3 * Globals.LINE_HEIGHT));
@@ -807,7 +807,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		layoutMain.setVerticalGroup(layoutMain.createSequentialGroup()
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 				.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(searchPane,
-						// Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
+						
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

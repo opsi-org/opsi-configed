@@ -43,7 +43,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 
 	public FGlobalSoftwareInfo(JFrame owner, ControlPanelAssignToLPools myController) {
 		super(
-				// Globals.mainFrame,
+				
 				owner, configed.getResourceValue("FGlobalSoftwareInfo.title"), false,
 				new String[] { configed.getResourceValue("FGlobalSoftwareInfo.buttonRemove"),
 						configed.getResourceValue("FGlobalSoftwareInfo.buttonClose") },

@@ -52,7 +52,7 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 		if (selectionInfo == null)
 			return true;
 
-		// Boolean found = selectionInfo.get( Globals.pseudokey(row) )
+		
 
 		Boolean found = selectionInfo.get(row);
 

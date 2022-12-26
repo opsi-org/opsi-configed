@@ -525,7 +525,7 @@ public class SSHPackageManagerUninstallParameterDialog
 				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(cb_opsiproducts, pref, pref, pref)
 						
-						// Globals.lineHeight)
+						
 						.addComponent(tf_product, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 
 				.addGap(3 * Globals.GAP_SIZE)

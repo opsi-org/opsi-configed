@@ -102,7 +102,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 		public void actionPerformed(ActionEvent e) {
 			logging.debug(this, "actionPerformed " + e);
 			cancel();
-			// JOptionPane.showMessageDialog(Globals.mainFrame, "we got
+			
 			// cancel");
 		}
 	};
@@ -218,15 +218,15 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			btn_close = new de.uib.configed.gui.IconButton(
 					de.uib.configed.configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
 					"images/cancel.png", "images/cancel.png", true);
-			// btn_test_command.setSize(new Dimension( Globals.graphicButtonWidth + 15
+			
 
-			// btn_test_command.setSize(new Dimension( Globals.graphicButtonWidth + 15
+			
 
 			btn_close.setPreferredSize(btn_dim);
 
 			btn_close.addActionListener(closeListener);
 
-			// createLayout(konsolePanelLayout, jScrollPane,Globals.gapSize,
+			
 
 		} catch (Exception e) {
 			logging.warning(this, "initOutputGui, exception occurred", e);

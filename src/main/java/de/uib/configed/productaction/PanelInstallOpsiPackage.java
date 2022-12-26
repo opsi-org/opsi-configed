@@ -473,7 +473,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 								.addComponent(comboChooseDepot, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 										Globals.LINE_HEIGHT)
 						
-						// Globals.lineHeight)
+						
 						).addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(panelMountShare,
 								Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))

@@ -121,9 +121,9 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 						.addComponent(lbl_verbosity, PREF, PREF, PREF).addComponent(lbl_properties, PREF, PREF, PREF)
 						.addComponent(lbl_setupInstalled, PREF, PREF, PREF)
 						.addComponent(lbl_updateInstalled, PREF, PREF, PREF)).addGap(Globals.GAP_SIZE)
-						.addGroup(layout.createParallelGroup().addComponent(btn_depotselection, PREF, PREF, PREF) // Globals.iconWidth,
-								// Globals.iconWidth,
-								// Globals.iconWidth)
+						.addGroup(layout.createParallelGroup().addComponent(btn_depotselection, PREF, PREF, PREF) 
+								
+								
 								.addComponent(cb_verbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 								.addComponent(cb_properties, PREF, PREF, PREF)
 								.addComponent(checkb_setupInstalled, PREF, PREF, PREF)

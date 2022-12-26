@@ -105,7 +105,7 @@ public class InstallationStatus {
 		choiceLabels = new String[] { label2displayLabel.get("not_installed"), label2displayLabel.get("installed"),
 				label2displayLabel.get("unknown")
 
-				// label2displayLabel.get(Globals.NOVALIDSTATEstring)
+				
 		};
 
 		label2textColor = new HashMap<>();

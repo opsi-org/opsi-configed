@@ -152,8 +152,8 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		theLayout.setHorizontalGroup(theLayout.createParallelGroup()
 				.addGroup(theLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
 						.addComponent(labelField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)// Globals.labelWidth, Globals.labelWidth *2,
-						// Globals.labelWidth *2 )
+								GroupLayout.PREFERRED_SIZE)
+						
 						.addGap(Globals.HGAP_SIZE).addGap(Globals.HGAP_SIZE)
 						.addComponent(theField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
 						.addGap(Globals.HGAP_SIZE).addGap(Globals.HGAP_SIZE))

@@ -19,7 +19,7 @@ public class FDepotselectionList extends FGeneralDialog {
 
 	public FDepotselectionList(JDialog masterWindow) {
 		super(
-				// Globals.mainFrame,
+				
 				masterWindow, configed.getResourceValue("FDepotselectionList.title"),
 				new String[] { configed.getResourceValue("FDepotselectionList.buttontake"),
 						configed.getResourceValue("FDepotselectionList.buttonclose") },

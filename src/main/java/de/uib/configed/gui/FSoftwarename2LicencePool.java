@@ -90,7 +90,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	public FSoftwarename2LicencePool(JFrame owner, ControlPanelAssignToLPools myController) {
 		super(
-				// Globals.mainFrame,
+				
 				owner, configed.getResourceValue("FSoftwarename2LicencePool.title"), false, new String[] {
 
 						configed.getResourceValue("FSoftwarename2LicencePool.buttonClose") },

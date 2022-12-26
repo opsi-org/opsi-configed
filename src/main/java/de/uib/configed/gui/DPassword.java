@@ -523,7 +523,7 @@ public class DPassword extends JDialog // implements Runnable
 				.addComponent(jPanelParameters1, (int) (1.2 * Globals.LINE_HEIGHT), (int) (1.2 * Globals.LINE_HEIGHT),
 						(int) (1.2 * Globals.LINE_HEIGHT))
 				
-				// * Globals.lineHeight), (int) (1.2 * Globals.lineHeight))
+				
 				.addGap(Globals.LINE_HEIGHT).addComponent(jPanelButtons, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 

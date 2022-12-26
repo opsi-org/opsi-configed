@@ -292,7 +292,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		JPanel panelRadiobuttonsDirectionOfAssignmentX = new JPanel();
 		// panelRadiobuttonsDirectionOfAssignmentX.setBorder( new
-		// javax.swing.border.LineBorder(Globals.backLightBlue, 3, true)
+		
 
 		GroupLayout layoutBorder = new GroupLayout(panelRadiobuttonsDirectionOfAssignmentX);
 		panelRadiobuttonsDirectionOfAssignmentX.setLayout(layoutBorder);

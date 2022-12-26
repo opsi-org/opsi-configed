@@ -105,7 +105,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 				waitingSleeper.setLabellingStrategy(millis));
 
-		// Globals.giveTimeSpan( waitingSleeper.getWaitingMillis() -
+		
 
 		int barLength = progressBar.getMaximum() - progressBar.getMinimum();
 

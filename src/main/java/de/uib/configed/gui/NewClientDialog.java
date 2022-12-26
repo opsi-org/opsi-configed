@@ -482,7 +482,7 @@ public class NewClientDialog extends FGeneralDialog
 						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 		// localboot
 
-		// 2*Globals.buttonWidth)
+		
 
 		// )
 

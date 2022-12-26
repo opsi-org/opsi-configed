@@ -273,7 +273,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 						.addComponent(labelValue, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						
 						
-						// Globals.squareButtonWidth, GroupLayout.PREFERRED_SIZE,
+						
 						// GroupLayout.PREFERRED_SIZE)
 						
 						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
