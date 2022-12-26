@@ -45,13 +45,7 @@ public class Base64OutputStream extends FilterOutputStream {
 			super.write(toBase64[((inbuf[1] & 0x0F) << 2) | ((inbuf[2] & 0xC0) >> 6)]);
 			super.write(toBase64[inbuf[2] & 0x3F]);
 			i = 0;
-			/*
-			 * if (col >= 76)
-			 * {
-			 * super.write('\n');
-			 * col = 0;
-			 * }
-			 */
+
 		}
 	}
 

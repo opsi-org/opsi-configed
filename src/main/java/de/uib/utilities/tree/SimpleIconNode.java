@@ -169,37 +169,4 @@ public class SimpleIconNode extends DefaultMutableTreeNode {
 		return emphasized;
 	}
 
-	/*
-	 * 
-	 * this tip from http://tech.chitgoks.com/2009/11/15/sort-jtree/
-	 * has the effect that "true" nodes dont any more appear before leaves;
-	 * we would have to modify the comparator
-	 * 
-	 * @Override
-	 * public void insert(MutableTreeNode newChild, int childIndex) {
-	 * super.insert(newChild, childIndex);
-	 * Collections.sort(this.children, nodeComparator);
-	 * }
-	 * 
-	 * protected Comparator nodeComparator = new Comparator () {
-	 * 
-	 * @Override
-	 * public int compare(Object o1, Object o2) {
-	 * return o1.toString().compareToIgnoreCase(o2.toString());
-	 * }
-	 * 
-	 * @Override
-	 * 
-	 * @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
-	 * public boolean equals(Object obj) {
-	 * return false;
-	 * }
-	 * 
-	 * @Override
-	 * public int hashCode() {
-	 * int hash = 7;
-	 * return hash;
-	 * }
-	 * };
-	 */
 }

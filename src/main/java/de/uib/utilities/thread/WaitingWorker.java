@@ -57,7 +57,6 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 		long elapsedMillis = 0;
 		long elapsedMins = 0;
 
-		// while (progress < 100 && !stopped)
 		timeoutReached = (elapsedMillis >= waitingSleeper.getWaitingMillis());
 		while (!ready && !timeoutReached && !stopped) {
 			try {
@@ -105,8 +104,6 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 				waitingSleeper.setLabellingStrategy(millis));
 
-		
-
 		int barLength = progressBar.getMaximum() - progressBar.getMinimum();
 
 		logging.debug(this, "process, millis " + millis);
@@ -119,8 +116,6 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 		logging.debug(this, "portion " + portion + " barLength  " + barLength);
 
 		progressBar.setValue(progressBar.getMinimum() + portion);
-
-		// progressBar.setValue( ( int ) (progressBar.getMinimum() + (int) ( (barLength
 
 	}
 

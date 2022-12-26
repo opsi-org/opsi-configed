@@ -26,45 +26,6 @@ public class XTree extends JTree {
 	}
 
 	protected void init() {
-		/*
-		 * addMouseWheelListener(new MouseWheelListener(){
-		 * public void mouseWheelMoved( MouseWheelEvent e )
-		 * {
-		 * 
-		 * 
-		 * int selRow = -1;
-		 * 
-		 * if (getSelectionRows() == null || getSelectionRows().length == 0)
-		 * {
-		 * selRow = -1;
-		 * }
-		 * 
-		 * else
-		 * selRow = getSelectionRows()[0];
-		 * 
-		 * 
-		 * 
-		 * 
-		 * int diff = e.getWheelRotation();
-		 * 
-		 * selRow = selRow + diff;
-		 * 
-		 * 
-		 * if (selRow >= getRowCount())
-		 * selRow = getRowCount() -1;
-		 * 
-		 * int startRow = 0;
-		 * 
-		 * 
-		 * if (selRow < startRow)
-		 * selRow = startRow;
-		 * 
-		 * setSelectionInterval(selRow,selRow);
-		 * 
-		 * }
-		 * }
-		 * );
-		 */
 
 		MouseMotionListener ml = new MouseAdapter() {
 			Cursor infoCursor = new Cursor(Cursor.HAND_CURSOR);

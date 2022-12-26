@@ -66,35 +66,6 @@ public class SimpleTreePath extends ArrayList<String> implements Comparable<Simp
 		return res.toString();
 	}
 
-	/*
-	 * public boolean equals(Object o)
-	 * {
-	 * boolean result = true;
-	 * 
-	 * if (o == null)
-	 * result = false;
-	 * 
-	 * if (o instanceof SimpleTreePath)
-	 * result = false;
-	 * 
-	 * if (result)
-	 * {
-	 * SimpleTreePath ob = (SimpleTreePath) o;
-	 * 
-	 * if (size()!= ob.size())
-	 * result = false;
-	 * 
-	 * int i = 0;
-	 * while (result && i < size())
-	 * {
-	 * result = (get(i) == ob.get(i));
-	 * }
-	 * }
-	 * 
-	 * return result;
-	 * }
-	 */
-
 	// interface Comparable
 	@Override
 	public int compareTo(SimpleTreePath o) {
