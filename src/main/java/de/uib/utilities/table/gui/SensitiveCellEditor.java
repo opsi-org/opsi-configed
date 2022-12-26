@@ -63,41 +63,14 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		super();
 
 		field = new JTextField();
-		/*
-		 * {
-		 * public void setText(String s)
-		 * {
-		 * String txt = s;
-		 * 
-		 * if (s != null && s.length() > 1
-		 * && (s.charAt(0) == '[')
-		 * && (s.charAt(s.length()-1) == ']')
-		 * )
-		 * {
-		 * txt = s.substring(1, s.length()-1);
-		 * }
-		 * 
-		 * super.setText(txt);
-		 * logging.debug(this, "setText " + s + " shortened to " + txt);
-		 * }
-		 * };
-		 */
+
 		field.setEditable(false);
 		field.addMouseListener(this);
 		listeditor = new FEditList(field, this);
 		listeditor.setModal(false);// true has undesired effects in the interaction of the CellEditor and the
 									// FEditList
 		listeditor.init();
-		/*
-		 * try
-		 * {
-		 * listeditor.setAlwaysOnTop(true);
-		 * }
-		 * catch(SecurityException secex)
-		 * {
-		 * }
-		 * //other popup windows are now not visible
-		 */
+
 		setModelProducer(modelProducer);
 
 	}
@@ -190,24 +163,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				editingColumn = -1;
 			}
 
-			/*
-			 * {
-			 * logging.warning(this, "no listmodel got, String editing");
-			 * field.setEditable(true);
-			 * editingRow = -1;
-			 * editingColumn = -1;
-			 * }
-			 */
-
 		}
-		/*
-		 * else if (value instanceof java.lang.Boolean)
-		 * {
-		 * field.setEditable(true);
-		 * }
-		 * else
-		 * field.setEditable(true);
-		 */
 
 		field.setText("" + value);
 
@@ -216,15 +172,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 	@Override
 	public Object getCellEditorValue() {
-
-		// class " + listeditor.getValue().getClass());
-
-		// original class " + modelProducer.getClass(editingRow, editingColumn));
-
-		// if ( List.class.isAssignableFrom
-		// (modelProducer.getClass(editingRow, editingColumn)) )
-
-		// List");
 
 		if (listeditor.getValue() == null)
 			return null;
@@ -244,29 +191,12 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 			int n = list.size();
 
-			/*
-			 * if ( List.class.isAssignableFrom
-			 * (modelProducer.getClass(editingRow, editingColumn)) )
-			 * {
-			 * logging.info(this,
-			 * "getCellEditorValue,  original class instance of List");
-			 * 
-			 * 
-			 * 
-			 * return list;
-			 * }
-			 */
-
 			if (List.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
-
-				// List");
 
 				return list;
 			}
 
 			if (java.lang.Integer.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
-
-				// java.lang.Integer");
 
 				if (n == 0)
 					return null;
@@ -275,8 +205,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			}
 
 			if (java.lang.Boolean.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
-
-				// java.lang.Boolean");
 
 				if (n == 0)
 					return null;
@@ -287,9 +215,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			if (n == 0)
 				return "";
 
-			// if ( java.lang.String.class.isAssignableFrom
-			// (modelProducer.getClass(editingRow, editingColumn)) )
-			// assume String
 			{
 				StringBuffer buf = new StringBuffer("");
 
@@ -309,40 +234,10 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				return result;
 			}
 
-			/*
-			 * 
-			 * try{
-			 * return modelProducer.getClass(editingRow, editingColumn).cast(list.get(0));
-			 * }
-			 * catch(Exception ex)
-			 * {
-			 * logging.debug(this, "getCellEditorValue, cast to original class: " + ex);
-			 * }
-			 * 
-			 * if ( ("" + list.get(0)).equalsIgnoreCase("null") )
-			 * return org.json.JSONObject.NULL;
-			 * 
-			 * return list;
-			 */
 		}
 
 		return listeditor.getValue();
 	}
-
-	/*
-	 * if (editingRow > -1 && editingColumn > -1)
-	 * {
-	 * logging.debug(this, "getCellEditorValue " + listeditor.getValue());
-	 * 
-	 * modelProducer.setSelectedValues((List) listeditor.getValue(),
-	 * editingRow, editingColumn);
-	 * return listeditor.getValue();
-	 * }
-	 * else
-	 * return field.getText();
-	 * 
-	 * }
-	 */
 
 	public void finish() {
 		if (listeditor != null)

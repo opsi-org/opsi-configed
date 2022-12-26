@@ -87,8 +87,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	protected String textMarkedCount = "selected";
 	protected JPanel titlePane;
 
-	
-
 	protected Color backgroundColorEditFieldsSelected = Globals.defaultTableCellSelectedBgColor;
 
 	protected Color backgroundColorSelected = Globals.defaultTableCellSelectedBgColorNotEditable;
@@ -307,16 +305,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		// if -1 dont use a standard popup
 		// if > 0 the popup is added later after installing another popup
 
-		/*
-		 * test
-		 * scrollpane.addMouseListener(new MouseAdapter(){
-		 * public void mouseClicked(MouseEvent e)
-		 * {
-		 * logging.info(this, "mouse clicked");
-		 * }
-		 * }
-		 * );
-		 */
 	}
 
 	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition,
@@ -512,7 +500,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 								.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 								.addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-								
+
 								.addComponent(titlePane, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 						.addComponent(searchPane, javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -596,21 +584,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	 * if reload is requested data are loaded completely new
 	 */
 	public void reset() {
-		/*
-		 * int markCursorRowSave = -1;
-		 * if (tableModel.gotMarkCursorRow())
-		 * {
-		 * markCursorRowSave = tableModel.getCursorRow();
-		 * logging.info(this, "reset, markCursorRowSave " + markCursorRowSave");
-		 * }
-		 */
 
 		tableModel.reset();
 
-		/*
-		 * if (tableModel.gotMarkCursorRow())
-		 * tableModel.setCursorRow( markCursorRowSave );
-		 */
 	}
 
 	public void reload() {
@@ -762,11 +738,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 					}
 				});
 
-				/*
-				 * if (popupIndex > 1)
-				 * popupMenu.addSeparator();
-				 */
-
 				addPopupItem(menuItemPrint);
 
 				break;
@@ -810,21 +781,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 						pdfExportTable.setPageSizeA4_Landscape();
 						pdfExportTable.execute(null, true);
 
-						/*
-						 * old pdf exporting
-						 * tableToPDF = new DocumentToPdf (null, metaData); // no filename, metadata
-						 * tableToPDF.createContentElement("table", theTable);
-						 * tableToPDF.setPageSizeA4_Landscape(); //
-						 * tableToPDF.toPDF(); // create Pdf
-						 **/
 					} catch (Exception ex) {
 						logging.error("PDF printing error " + ex);
 					}
 				});
-				/*
-				 * if (popupIndex > 1)
-				 * popupMenu.addSeparator();
-				 */
 
 				addPopupItem(menuItemPDF);
 
@@ -909,14 +869,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 
 		else {
-			/*
-			 * Iterator iter = sortkeysBaseColumns.iterator();
-			 * while (iter.hasNext())
-			 * {
-			 * sortKeys.add(new RowSorter.SortKey((Integer) iter.next(),
-			 * SortOrder.ASCENDING));
-			 * }
-			 */
+
 			for (Integer col : sortDescriptor.keySet()) {
 				sortKeys.add(new RowSorter.SortKey(col, sortDescriptor.get(col)));
 			}
@@ -954,7 +907,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 					return null;
 				}
 
-				// NullPointerException at java.lang.Class.isAssignableFrom
 			}
 		};
 
@@ -979,13 +931,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		List<RowSorter.SortKey> sortKeys = buildSortkeysFromColumns();
 
-		/*
-		 * if (sortKeys != null)
-		 * {
-		 * for ( RowSorter.SortKey sortKey : sortKeys )
-		 * logging.info(this, "setSorter sortKey " + sortKey );
-		 * }
-		 */
 		if (sortKeys != null && !sortKeys.isEmpty())
 			sorter.setSortKeys(sortKeys);
 
@@ -1010,80 +955,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		setModelFilteringBySelection();
 	}
-
-	/*
-	 * 
-	 * TableRowSorter<TableModel> sorter
-	 * = new TableRowSorter<TableModel>(m)
-	 * {
-	 * protected boolean useToString(int column)
-	 * {
-	 * try{
-	 * return super.useToString(column);
-	 * }
-	 * catch (Exception ex)
-	 * {
-	 * logging.debug ("------------------- no way to string");
-	 * return false;
-	 * }
-	 * }
-	 * 
-	 * public Comparator<?> getComparator(int column)
-	 * {
-	 * try{
-	 * return super.getComparator(column);
-	 * }
-	 * catch (Exception ex)
-	 * {
-	 * logging.debug ("------------------- not getting comparator ");
-	 * return null;
-	 * }
-	 * 
-	 * //NullPointerException at java.lang.Class.isAssignableFrom
-	 * }
-	 * }
-	 * ;
-	 * theTable.setRowSorter(sorter);
-	 * 
-	 * if (tableModel.getKeyCol() > -1)
-	 * {
-	 * 
-	 * List <RowSorter.SortKey> sortKeys
-	 * = new ArrayList<>();
-	 * 
-	 * 
-	 * sortKeys.add(new RowSorter.SortKey(tableModel.getKeyCol(),
-	 * SortOrder.ASCENDING));
-	 * sorter.setSortKeys(sortKeys);
-	 * 
-	 * }
-	 * 
-	 * else if (tableModel.getFinalCols() != null &&
-	 * tableModel.getFinalCols().size() > 0)
-	 * {
-	 * 
-	 * List <RowSorter.SortKey> sortKeys
-	 * = new ArrayList<>();
-	 * Iterator iter = tableModel.getFinalCols().iterator();
-	 * 
-	 * 
-	 * while (iter.hasNext())
-	 * sortKeys.add(new RowSorter.SortKey((Integer) iter.next(),
-	 * SortOrder.ASCENDING));
-	 * 
-	 * sorter.setSortKeys(sortKeys);
-	 * }
-	 * 
-	 * 
-	 * 
-	 * 
-	 * m.getRowCount());
-	 * 
-	 * !theTable.getColumnModel().getColumns().hasMoreElements());
-	 * setDataChanged(false);
-	 * 
-	 * }
-	 */
 
 	/**
 	 * set special comparator for a column
@@ -1455,15 +1326,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	public void setAwareOfSelectionListener(boolean b) {
 		logging.debug(this, "setAwareOfSelectionListener  " + b);
-		/*
-		 * if (b != awareOfSelectionListener)
-		 * {
-		 * if (b)
-		 * getListSelectionModel().addListSelectionListener(this);
-		 * else
-		 * getListSelectionModel().removeListSelectionListener(this);
-		 * }
-		 */
 
 		awareOfSelectionListener = b;
 
@@ -1475,15 +1337,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	public void setAwareOfTableChangedListener(boolean b) {
 		logging.debug(this, "setAwareOfTableChangedListener  " + b);
-		/*
-		 * if (b != awareOfTableChangedListener)
-		 * {
-		 * if (b)
-		 * getListSelectionModel().addListTableChangedListener(this);
-		 * else
-		 * getListSelectionModel().removeListTableChangedListener(this);
-		 * }
-		 */
 
 		awareOfTableChangedListener = b;
 
@@ -1585,43 +1438,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	public int findViewRowFromValue(Object value, int col) {
 		return findViewRowFromValue(0, value, col);
 	}
-
-	/*
-	 * protected int findViewRowFromValue(String value, int col)
-	 * {
-	 * 
-	 * if (value == null)
-	 * return -1;
-	 * 
-	 * boolean found = false;
-	 * 
-	 * int viewrow = 0;
-	 * 
-	 * while (!found && viewrow < tableModel.getRowCount())
-	 * {
-	 * 
-	 * if (value.equals(
-	 * tableModel.getValueAt(
-	 * 
-	 * theTable.convertRowIndexToModel(viewrow),
-	 * col
-	 * 
-	 * ).toString())
-	 * )
-	 * found = true;
-	 * else
-	 * viewrow++;
-	 * }
-	 * 
-	 * 
-	 * if (found)
-	 * {
-	 * return viewrow;
-	 * }
-	 * 
-	 * return -1;
-	 * }
-	 */
 
 	public boolean moveToValue(String value, int col) {
 		return moveToValue(value, col, true);
@@ -1843,22 +1659,12 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		/*
-		 * if (e.getSource() == theTable)
-		 * {
-		 * logging.debug(" event on table " + e);
-		 * }
-		 */
+
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		/*
-		 * if (e.getSource() == theTable)
-		 * {
-		 * logging.debug(" event on table " + e);
-		 * }
-		 */
+
 	}
 
 	//

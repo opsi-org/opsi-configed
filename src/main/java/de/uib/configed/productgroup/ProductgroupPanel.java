@@ -426,24 +426,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		buttonReloadProductStates.setPreferredSize(Globals.newSmallButton);
 		buttonReloadProductStates.setVisible(true);
 
-		/*
-		 * buttonCancelStateEditing = new de.uib.configed.gui.IconButton(
-		 * de.uib.configed.configed.getResourceValue(
-		 * "GroupPanel.CancelStateEditingTooltip") ,
-		 * "images/cancel_light.png",
-		 * "images/cancel_light.png",
-		 * "images/cancel_light.png");
-		 * 
-		 * buttonCancelStateEditing.addActionListener(this);
-		 * buttonCancelStateEditing.setPreferredSize(Globals.
-		 * newSmallButton);
-		 * 
-		 * buttonCancelStateEditing.setToolTipText(
-		 * de.uib.configed.configed.getResourceValue(
-		 * "GroupPanel.CancelStateEditingTooltip")
-		 * );
-		 */
-
 		buttonSaveAndExecute = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("ConfigedMain.savePOCAndExecute"),
 				"images/executing_command_blue-grey_16.png", "images/executing_command_blue-grey_16.png", " ", true);
@@ -454,15 +436,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		buttonSaveAndExecute.addActionListener(this);
 		buttonSaveAndExecute.setPreferredSize(Globals.newSmallButton);
 		buttonSaveAndExecute.setVisible(true);
-
-		/*
-		 * an experiment
-		 * menuBarAggregateActions = new JMenuBar();
-		 * JMenu menuStart = new JMenu( "test" );
-		 * JMenuItemFormatted item0 = new JMenuItemFormatted("item0");
-		 * menuBarAggregateActions.add (menuStart );
-		 * menuStart.add( item0 );
-		 */
 
 		labelCollectiveAction = new JLabel(configed.getResourceValue("GroupPanel.labelAggregateProducts"));
 		labelCollectiveAction.setFont(Globals.defaultFont);
@@ -479,70 +452,17 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		buttonCollectiveAction.setVisible(true);
 
 		comboAggregatedEditing = new JComboBoxToolTip();
-		// comboAggregatedEditing.setToolTipText(
-
-		/*
-		 * comboAggregatedEditing.addActionListener( new ActionListener(){
-		 * 
-		 * public void actionPerformed( ActionEvent e)
-		 * {
-		 * if (tableProducts != null && (tableProducts.getModel() instanceof
-		 * IFInstallationStateTableModel))
-		 * {
-		 * logging.info(this, " action on comboAggregatedEditingresulting in  " +
-		 * comboAggregatedEditing.getSelectedItem() );
-		 * handleCollectiveAction( (IFInstallationStateTableModel)
-		 * tableProducts.getModel() );
-		 * }
-		 * }
-		 * }
-		 * );
-		 */
 
 		Map<String, String> values = new LinkedHashMap<>();
-		/*
-		 * values.put(
-		 * de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts"
-		 * ),
-		 * de.uib.configed.configed.getResourceValue(
-		 * "GroupPanel.comboAggregateProducts.tooltip"));
-		 * 
-		 * values.put(
-		 * de.uib.configed.configed.getResourceValue(
-		 * "GroupPanel.comboAggregateProducts.defaultOption"),
-		 * de.uib.configed.configed.getResourceValue(
-		 * "GroupPanel.comboAggregateProducts.defaultOption.tooltip"));
-		 */
+
 		values.put(de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"),
 				de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked.tooltip"));
 
-		// exists)");
-
-		/*
-		 * values.put(
-		 * de.uib.configed.configed.getResourceValue(
-		 * "GroupPanel.comboAggregateProducts.setupDiffering"),
-		 * de.uib.configed.configed.getResourceValue(
-		 * "GroupPanel.comboAggregateProducts.setupDiffering.tooltip"));
-		 * 
-		 * //"setup (differing)",
-		 * "set 'setup' for all products with other than current product version (if setup action exists)"
-		 * );
-		 * values.put(
-		 * de.uib.configed.configed.getResourceValue(
-		 * "GroupPanel.comboAggregateProducts.setupFailed"),
-		 * de.uib.configed.configed.getResourceValue(
-		 * "GroupPanel.comboAggregateProducts.setupFailed.tooltip"));
-		 * 
-		 * //"setup (failed)"
-		 */
 		values.put(de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked"),
 				de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked.tooltip"));
 
 		values.put(de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked"),
 				de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked.tooltip"));
-
-		// action exists)");
 
 		DefaultListModel<String> modelChooseAction = new DefaultListModel<>(); // put values from hashmap into
 																				// list
@@ -553,8 +473,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		de.uib.utilities.swing.list.StandardListCellRenderer renderActionList = new de.uib.utilities.swing.list.ListCellRendererByIndex(
 				null, // index is identical with the value
 				values, "");
-		// renderActionList.setUniformColor(
-		
 
 		renderActionList.setAlternatingColors(Globals.backLightBlue, Globals.backLightBlue, Globals.backgroundLightGrey,
 				Globals.backgroundWhite);
@@ -589,7 +507,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		GroupLayout surroundActionLayout = new GroupLayout(surroundScrollChooseAction);
 		surroundScrollChooseAction.setLayout(surroundActionLayout);
 
-		surroundActionLayout.setVerticalGroup(surroundActionLayout.createSequentialGroup().addGap(30) 
+		surroundActionLayout.setVerticalGroup(surroundActionLayout.createSequentialGroup().addGap(30)
 				// components
 				.addComponent(labelStrip, 15, 15, 15).addComponent(scrollChooseAction, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, 3 * Globals.LINE_HEIGHT));
@@ -607,25 +525,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		comboAggregatedEditing.setValues(values);
 		comboAggregatedEditing.setFont(Globals.defaultFont);
 
-		/*
-		 * buttonFilter = new de.uib.configed.gui.IconButton(
-		 * de.uib.configed.configed.getResourceValue("GroupPanel.FilterButtonTooltip") ,
-		 * "images/view-filter_disabled-32.png",
-		 * "images/view-filter_over-32.png",
-		 * " ",
-		 * true);
-		 * buttonFilter.setToolTips(
-		 * de.uib.configed.configed.getResourceValue(
-		 * "GroupPanel.FilterButtonTooltipActive"),
-		 * de.uib.configed.configed.getResourceValue(
-		 * "GroupPanel.FilterButtonTooltipInactive")
-		 * );
-		 * buttonFilter.addActionListener(this);
-		 * buttonFilter.setPreferredSize(Globals.newSmallButton);
-		 * buttonFilter.setVisible(false); //we use the filtericon of the
-		 * TableSearchPane
-		 */
-
 		buttonEditDialog = new de.uib.configed.gui.IconButton(
 				de.uib.configed.configed.getResourceValue("GroupPanel.EditButtonTooltip"),
 				"images/packagegroup_save.png", "images/packagegroup_save_over.png",
@@ -639,8 +538,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		JLabel labelSelectedGroup = new JLabel(configed.getResourceValue("GroupPanel.selectgroup.label"));
 
 		labelSelectedGroup.setFont(Globals.defaultFont);
-
-		// groupsEditField = (JTextField)
 
 		groupsEditField = saveNameEditor;
 		groupsEditField.getCaret().setBlinkRate(0);
@@ -740,58 +637,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		setGroupEditing(false);
 
-		/*
-		 * Containership csPanelEdit = new Containership(panelEdit);
-		 * csPanelEdit.doForAllContainedCompis("setOpaque", new Object[]{Boolean.TRUE});
-		 * csPanelEdit.doForAllContainedCompis("setBackground", new
-		 * Object[]{Globals.backgroundWhite});
-		 * 
-		 */
-
 		panelEdit.setBorder(Globals.createPanelBorder());
 
 		// ==============
-
-		/*
-		 * 
-		 * JComboBox comboCombinedChanges = new JComboBox<>();
-		 * 
-		 * //setActionRequestWhereOutdated
-		 * //setProductActionRequestForHostGroup ../ProductGroup
-		 * 
-		 * //request setup for all marked products and all selected clients
-		 * //request setup for all marked products and all selected clients if installed
-		 * //request setup for all marked products and all selected clients if installed
-		 * and outdated
-		 * //change installed status to not_installed
-		 * //remove the complete status information
-		 * 
-		 * 
-		 * JLabel labelDeclareCombinedSetting = new
-		 * JLabel("set for all marked products");
-		 * JLabel labelSetActionRequest = new JLabel("action");
-		 * JLabel labelSetTargetState = new JLabel("request target status");
-		 * JLabel labelSetInstallationStatus = new JLabel("installation status");
-		 * JComboBox comboActionRequest = new JComboBox<>(
-		 * JComboBox comboTargetState =
-		 * JComboBox comboInstallationStatus =
-		 * 
-		 * panelCombinedSettings = new JPanel();
-		 * GroupLayout layoutPanelCombinedSettings = new
-		 * GroupLayout(panelCombinedSettings);
-		 * panelCombinedSettings.setLayout(layoutPanelCombinedSettings);
-		 * 
-		 * 
-		 * 
-		 * layoutPanelCombinedSettings.setVerticalGroup(
-		 * layoutPanelCombinedSettings.createSequentialGroup()
-		 * .addGap(Globals.vGapSize/2, Globals.vGapSize/2, Globals.vGapSize/2)
-		 * .addGroup(layoutPanelCombinedSettings.createParallelGroup(GroupLayout.
-		 * Alignment.BASELINE)
-		 * .addComponent(labelSave, GroupLayout.PREFERRED_SIZE,
-		 * GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-		 * )
-		 */
 
 		// ==============
 
@@ -807,11 +655,10 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		layoutMain.setVerticalGroup(layoutMain.createSequentialGroup()
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 				.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(searchPane,
-						
+
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-				
-				
+
 				.addComponent(separatingPlace, 1, 1, 1)
 				.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelSelectedGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -823,28 +670,17 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 						.addComponent(buttonSaveAndExecute, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 
-						
-						
-						
-						
-						
-						
-						
-
-						
-						
 						.addComponent(surroundScrollChooseAction, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, 3 * Globals.LINE_HEIGHT)
 						.addComponent(buttonEditDialog, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-				
-				
+
 				).addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2).addComponent(panelEdit,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
 		layoutMain.setHorizontalGroup(layoutMain.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(layoutMain.createSequentialGroup()
-						
+
 						.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE))
 				.addGroup(
@@ -854,24 +690,14 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 								.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.GAP_SIZE / 2)
 								.addComponent(buttonReloadProductStates, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								
-								
-								
-								
+
 								.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-								
-								
-								
-								
+
 								.addComponent(surroundScrollChooseAction, minComboWidth, GroupLayout.PREFERRED_SIZE,
 										Short.MAX_VALUE)
-								
-								
-								
+
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-								
-								
-								
+
 								.addComponent(labelSelectedGroup, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.GAP_SIZE / 2)
@@ -1037,47 +863,11 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		else if (e.getSource() == buttonEditDialog) {
 			setGroupEditing(!panelEdit.isVisible());
 		}
-		/*
-		 * else if (e.getSource() == buttonCancelStateEditing)
-		 * {
-		 * logging.info(this, "action on buttonCancelStateEditing");
-		 * insTableModel = (IFInstallationStateTableModel) tableProducts.getModel();
-		 * 
-		 * > 0);
-		 * insTableModel.reset();
-		 * mainController.setDataChanged(false);
-		 * }
-		 */
 
 		else if (e.getSource() == buttonCollectiveAction) {
 			handleCollectiveAction(s, (IFInstallationStateTableModel) tableProducts.getModel());
 		}
 
-		/*
-		 * else if (e.getSource() == buttonFilter)
-		 * {
-		 * if ( !getGuiIsFiltered())
-		 * //buttonFilter.isActivated())
-		 * {
-		 * logging.debug(this, "associate.reduceToSelected()");
-		 * associate.reduceToSelected();
-		 * setGuiIsFiltered(true);
-		 * buttonFilter.setNewImage(
-		 * "images/view-filter_over-32.png",
-		 * "images/view-filter_disabled-32.png");
-		 * }
-		 * else
-		 * {
-		 * setGuiIsFiltered(false);
-		 * 
-		 * logging.debug(this, "associate.showAll()");
-		 * associate.showAll();
-		 * buttonFilter.setNewImage(
-		 * "images/view-filter_disabled-32.png",
-		 * "images/view-filter_over-32.png");
-		 * }
-		 * }
-		 */
 	}
 
 	protected void handleCollectiveAction(String selected, IFInstallationStateTableModel insTableModel) {
@@ -1117,11 +907,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			insTableModel.finishCollectiveChange();
 		}
 
-		// insTableModel.setActionRequestWithCondition( new ActionRequest(
-		// ActionRequest.SETUP ),
-		// (java.util.function.IntPredicate) ( rowId ->
-		// associate.getSelectedRowsInModelTerms().indexOf( rowId ) >= 0 )
-
 		associate.setSelection(new HashSet<>(saveSelectedProducts));
 
 	}
@@ -1130,7 +915,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 
-		// source " + e.getSource());
 		// Ignore extra messages.
 		if (e.getValueIsAdjusting())
 			return;
@@ -1156,13 +940,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	private void saveNameEditorShallFollow() {
 		int comboIndex = groupsCombo.getSelectedIndex();
 
-		/*
-		 * if (comboIndex != saveNameEditor.getSelectedIndex())
-		 * //to avoid loops
-		 * {
-		 * saveNameEditor.setSelectedIndex(comboIndex);
-		 * }
-		 */
 		if (comboIndex == 0 || comboIndex == -1)
 			saveNameEditor.setText(SAVE_GROUP_ID);
 		else
@@ -1203,10 +980,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			result = false;
 
 		if (result) {
-			boolean forbidden = proposedName.equals(SAVE_GROUP_ID) || proposedName.equals("")
-			// ||
-			// proposedName.indexOf(' ') >= 0
-			;
+			boolean forbidden = proposedName.equals(SAVE_GROUP_ID) || proposedName.equals("");
 
 			result = !forbidden;
 		}
@@ -1221,8 +995,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		if (groupsCombo != null)
 			result = (groupsCombo.getSelectedIndex() > 0);
-
-		// result = result &&
 
 		buttonDelete.setEnabled(result);
 
