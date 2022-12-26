@@ -158,35 +158,27 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 				@Override
 				protected JPopupMenu definePopup() {
 					logging.debug(this, " (EditMapPanelGrouped) definePopup ");
-					JPopupMenu result
+					return new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD,
+							PopupMenuTrait.POPUP_PDF })
 
-							= new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD,
-									PopupMenuTrait.POPUP_PDF })
+					{
+						@Override
+						public void action(int p) {
+							switch (p) {
+							case PopupMenuTrait.POPUP_RELOAD:
+								reload();
+								break;
 
-							{
-								@Override
-								public void action(int p) {
-									switch (p) {
-									case PopupMenuTrait.POPUP_RELOAD:
-										reload();
-										break;
-									/*
-									 * case PopupMenuTrait.POPUP_DELETE:
-									 * actor.deleteData();
-									 * break;
-									 */
-									case PopupMenuTrait.POPUP_SAVE:
-										actor.saveData();
-										break;
-									case PopupMenuTrait.POPUP_PDF:
-										createPDF();
-										break;
-									}
+							case PopupMenuTrait.POPUP_SAVE:
+								actor.saveData();
+								break;
+							case PopupMenuTrait.POPUP_PDF:
+								createPDF();
+								break;
+							}
 
-								}
-							};
-
-					return result;
+						}
+					};
 				}
 			};
 

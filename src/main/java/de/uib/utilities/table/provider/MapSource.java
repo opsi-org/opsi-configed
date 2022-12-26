@@ -122,7 +122,6 @@ public class MapSource implements TableSource
 							if (class2defaultValue.get(className) != null) {
 								vRow.add(class2defaultValue.get(className));
 
-								// for " + className );
 							}
 
 							else {

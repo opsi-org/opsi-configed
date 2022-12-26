@@ -103,7 +103,6 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			logging.debug(this, "actionPerformed " + e);
 			cancel();
 
-			// cancel");
 		}
 	};
 
