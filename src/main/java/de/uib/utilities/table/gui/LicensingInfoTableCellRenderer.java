@@ -44,44 +44,18 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 
 		if (columnName != null && columnName.equals(configed.getResourceValue("LicensingInfo.modules"))) {
 
-			// jc = new JLabel("" + value, Globals.createImageIcon("images/info_i.png", ""),
-
-			/**
-			 * JButton infoButton = new JButton ("" + value,
-			 * Globals.createImageIcon("images/info_i.png", ""));
-			 * infoButton.setHorizontalTextPosition(SwingConstants.LEFT);
-			 * infoButton.repaint(); logging.debug("horz alignm: " +
-			 * infoButton.getHorizontalAlignment()); logging.debug("horz text: "
-			 * + infoButton.getHorizontalTextPosition());
-			 * infoButton.addActionListener(new ActionListener(){ public void
-			 * actionPerformed(ActionEvent e) { logging.debug("BUTTON pressed");
-			 * } });
-			 */
-
 		}
 
 		if (columnName != null && columnName.equals(configed.getResourceValue("LicensingInfo.available"))) {
 			jc.setText("");
 
-			if (
-			// Globals.interpretAsBoolean( value) )
-			(Boolean) value.equals(true))
+			if (value.equals(true))
 				jc.setIcon(Globals.createImageIcon("images/checked_withoutbox.png", ""));
 
 			else
 				jc.setIcon(Globals.createImageIcon("images/checked_void.png", ""));
 
-		}
-		/*
-		 * if(columnName != null &&
-		 * columnName.equals(configed.getResourceValue("LicensingInfo.info")))
-		 * {
-		 * jc.setText("");
-		 * jc.setIcon(Globals.createImageIcon("images/info_grey_small.png", ""));
-		 * 
-		 * }
-		 */
-		else if (columnName != null && !columnName.equals(configed.getResourceValue("LicensingInfo.modules"))
+		} else if (columnName != null && !columnName.equals(configed.getResourceValue("LicensingInfo.modules"))
 				&& !columnName.equals(configed.getResourceValue("LicensingInfo.available"))
 
 		) {
@@ -118,31 +92,6 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 				}
 
 			}
-			/*
-			 * if( moduleToDateData.get(LicensingInfoMap.FUTURE_STATE) != null )
-			 * {
-			 * String futureState =
-			 * moduleToDateData.get(LicensingInfoMap.FUTURE_STATE).toString();
-			 * if(futureState != null &&
-			 * futureState.equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT))
-			 * {
-			 * jc.setBackground(Globals.darkOrange);
-			 * jc.setToolTipText("<html>"
-			 * +configed.getResourceValue("LicensingInfo.warning.future.close_to_limit") +
-			 * "<br>" + "clients: " + value.toString() + "<br>" + "license ids: "+ licenses
-			 * + "</html>");
-			 * }
-			 * else if(futureState != null &&
-			 * futureState.equals(LicensingInfoMap.STATE_OVER_LIMIT))
-			 * {
-			 * jc.setBackground(Globals.darkOrange);
-			 * jc.setToolTipText("<html>"
-			 * +configed.getResourceValue("LicensingInfo.warning.future.over_limit") +
-			 * "<br>" + "clients: " + value.toString() + "<br>" + "license ids: "+ licenses
-			 * + "</html>");
-			 * }
-			 * }
-			 */
 
 			String prevCol = licensingInfoMap.getColumnNames().get(column - 1);
 			try {

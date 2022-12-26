@@ -61,13 +61,6 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 
 	}
 
-	/*
-	 * public void setBackgroundColor(Color c)
-	 * {
-	 * backgroundColor = c;
-	 * }
-	 */
-
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 			boolean isSelected, // is the cell selected
@@ -84,29 +77,6 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 
 			if (mapOfImages != null)
 				selectedIcon = mapOfImages.get("" + value);
-
-			/*
-			 * if (value instanceof String)
-			 * {
-			 * try
-			 * {
-			 * selectedIndex = Integer.decode(((String)value).trim());
-			 * }
-			 * catch (Exception ex)
-			 * { logging.debug(this, "TableCellRendererByIndex " + ex); }
-			 * }
-			 * else
-			 * {
-			 * try
-			 * {
-			 * selectedIndex = ((Integer)value).intValue();
-			 * }
-			 * catch (Exception ex)
-			 * {
-			 * logging.debug(this, "TableCellRendererByIndex " + ex);
-			 * }
-			 * }
-			 */
 
 		}
 

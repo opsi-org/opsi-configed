@@ -307,8 +307,6 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 			condition.append(" false ");
 
-			// cleaning condition " + condition);
-
 			logging.info(this, "cleanUpAuditSoftware, delete SOFTWARE records");
 			query = "delete  from SOFTWARE where " + condition.toString();
 			logging.debug(this, "cleanUpAuditSoftware, delete SOFTWARE records  by query: \n" + query);
@@ -336,77 +334,6 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			logging.info(this, "cleanUpAuditSoftware removed entries up to (not including) " + portionStart);
 
 		}
-
-		/*
-		 * 
-		 * logging.info(this, "retrieveSoftwareAuditOnClients, idents  " +
-		 * rowsSOFTWARE.keySet());
-		 * 
-		 * 
-		 * try
-		 * {
-		 * 
-		 * java.sql.Statement stat = sqlConn.createStatement(
-		 * ResultSet.TYPE_SCROLL_INSENSITIVE,
-		 * ResultSet.CONCUR_READ_ONLY
-		 * );
-		 * 
-		 * int affectedRows = 0;
-		 * 
-		 * int count = 0;
-		 * 
-		 * for (String ident : rowsSOFTWARE.keySet())
-		 * {
-		 * count++;
-		 * Map<String, String> rowmap = rowsSOFTWARE.get(ident);
-		 * 
-		 * query = "insert into SOFTWARE "
-		 * + "("
-		 * + "name" + ", "
-		 * + "version" + ", "
-		 * + "subVersion" + ", "
-		 * + "language" + ", "
-		 * + "architecture"
-		 * + ")"
-		 * + "VALUES ("
-		 * + "'" + rowmap.get( SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.NAME) ) +
-		 * "'" + ", "
-		 * + "'" + rowmap.get( SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.VERSION) )
-		 * + "'" + ", "
-		 * + "'" + rowmap.get(
-		 * SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.SUBVERSION) ) + "'" + ", "
-		 * + "'" + rowmap.get( SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.LANGUAGE)
-		 * ) + "'" + ", "
-		 * + "'" + rowmap.get(
-		 * SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE) )+ "'"
-		 * + ")"
-		 * ;
-		 * 
-		 * logging.info(this, "cleanUpAuditSoftware,  insert by query: \n" + query);
-		 * 
-		 * 
-		 * int newly = stat.executeUpdate(query);
-		 * 
-		 * logging.info(this, "cleanUpAuditSoftware,  inserted  " + newly);
-		 * 
-		 * affectedRows = affectedRows + newly;
-		 * 
-		 * if (count > 2) break;
-		 * 
-		 * }
-		 * 
-		 * stat.close();
-		 * 
-		 * logging.info(this, "cleanUpAuditSoftware,  inserted " + rowsSOFTWARE.keySet()
-		 * + " in Table SOFTWARE");
-		 * 
-		 * 
-		 * }
-		 * catch( SQLException e )
-		 * {
-		 * logging.error("cleanUpAuditSoftware sql Error " +e.toString());
-		 * }
-		 */
 
 	}
 

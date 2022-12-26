@@ -8,15 +8,14 @@ import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandPackageUpdater;
-import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.utilities.logging.logging;
 
@@ -124,7 +123,6 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		cb_repos.setSelectedItem(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"));
 		cb_actions.setEnabled(true);
-		// cb_actions.addItem("");
 		inputPanel.add(cb_actions);
 		inputPanel.add(cb_repos);
 	}
@@ -144,7 +142,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 			else
 				command.setRepo(repo);
 			logging.info(this, "doAction1 opsi-package-updater: " + command.toString());
-			new SSHConnectExec((SSHCommand) command);
+			new SSHConnectExec(command);
 
 		} catch (Exception e) {
 			logging.warning(this, "doAction1, exception occurred", e);
@@ -185,7 +183,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		this.setSize(600, 210);
 		this.centerOn(Globals.mainFrame);
 		this.setBackground(Globals.backLightBlue);
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 	}
 }

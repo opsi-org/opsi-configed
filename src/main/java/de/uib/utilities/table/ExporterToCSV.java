@@ -91,17 +91,6 @@ public class ExporterToCSV extends ExportTable {
 						for (int colI = 0; colI < theTable.getColumnCount(); colI++) { // i column
 							date1 = null; // reset
 
-							/*
-							 * logging.debug(this, "toCsv, handle row, col, value: " + rowI + ", " + colI +
-							 * ", " + theTable.getValueAt(rowI, colI));
-							 * if (theTable.getValueAt(rowI, colI) == null)
-							 * logging.debug(this, "toCsv, handle row, col, value: " + rowI + ", " + colI +
-							 * ",  null (will be ignored)");
-							 * else
-							 * logging.debug(this, "toCsv, handle row, col, class: " + rowI + ", " + colI +
-							 * ", " + theTable.getValueAt(rowI, colI).getClass());
-							 */
-
 							if (theTable.getValueAt(rowI, colI) != null) {
 								if (classNames == null || classNames.isEmpty()) {
 									if (theTable.getValueAt(rowI, colI) instanceof String) {
@@ -124,16 +113,6 @@ public class ExporterToCSV extends ExportTable {
 									if (classNames.get(colI).equals("java.lang.String")) {
 
 										String inString = removeStringDelimiter(theTable.getValueAt(rowI, colI));
-
-										/*
-										 * if (inString.matches("\\d{2}.\\d{2}.\\d{4}") ||
-										 * inString.matches("\\d{1}.\\d{2}.\\d{4}")
-										 * || inString.matches("\\d{1}.\\d{1}.\\d{4}")
-										 * || inString.matches("\\d{2}.\\d{1}.\\d{4}")) {
-										 * date1 = dateParser.parse(inString);
-										 * line.append(dateFormatter.format(date1));
-										 * } else
-										 */
 
 										{
 											line.append(stringDelimiter);

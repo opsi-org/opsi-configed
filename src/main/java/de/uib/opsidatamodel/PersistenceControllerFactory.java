@@ -52,7 +52,6 @@ public class PersistenceControllerFactory {
 
 		if (sqlAndGetRows) {
 			// have a try
-			// persistControl = new OpsiserviceSQLgetrowsPersistenceController (server,
 
 			persistControl = new OpsiserviceRawDataPersistenceController(server, user, password);
 			logging.info("a PersistenceController initiated by option sqlAndGetRows got " + (persistControl == null));
@@ -62,24 +61,6 @@ public class PersistenceControllerFactory {
 			logging.info("a PersistenceController initiated by option avoidSqlRawData got " + (persistControl == null));
 		}
 
-		/*
-		 * else if (localDB)
-		 * persistControl = new OpsiserviceLocalDBPersistenceController (server, user,
-		 * password);
-		 * 
-		 * else if (localDBResync)
-		 * {
-		 * persistControl = new OpsiserviceLocalDBPersistenceController (server, user,
-		 * password, true);
-		 * }
-		 * else if (synced)
-		 * persistControl = new OpsiserviceSyncedPersistenceController (server, user,
-		 * password);
-		 * 
-		 * else if (sqlAndGetHashes)
-		 * persistControl = new OpsiserviceSQLgetdataPersistenceController (server,
-		 * user, password);
-		 */
 		else if (sqlDirect) {
 			persistControl = new OpsiDirectSQLPersistenceController(server, user, password);
 			if (directmethodcall.equals(directmethodcall_cleanupAuditsoftware)) {
@@ -127,8 +108,6 @@ public class PersistenceControllerFactory {
 
 					return null;
 
-					// persistControl = new OpsiservicePersistenceController (server, user,
-
 				}
 
 				if (persistControl.getOpsiVersion().compareTo(Globals.MIN_SUPPORTED_OPSI_VERSION) < 0) {
@@ -137,13 +116,6 @@ public class PersistenceControllerFactory {
 
 							+ "\n( " + configed.getResourceValue("PersistenceControllerFactory.foundServiceVersion")
 							+ " " + persistControl.getOpsiVersion() + " ) ";
-
-					/*
-					 * javax.swing.JOptionPane.showMessageDialog( Globals.mainContainer,
-					 * errorInfo,
-					 * Globals.APPNAME,
-					 * javax.swing.JOptionPane.INFORMATION_MESSAGE);
-					 */
 
 					new Thread() {
 

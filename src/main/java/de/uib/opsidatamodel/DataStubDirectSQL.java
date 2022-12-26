@@ -72,7 +72,6 @@ public class DataStubDirectSQL extends DataStubRawData
 
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " softwareConfig ");
-			// , step " + step);
 
 			logging.info(this, "retrieveSoftwareAuditOnClients/ SOFTWARE_CONFIG, start a request");
 
@@ -111,12 +110,6 @@ public class DataStubDirectSQL extends DataStubRawData
 					for (int i = 0; i < SWAuditClientEntry.DB_COLUMN_NAMES.size(); i++) {
 						row.add(rs.getString(i + 1));
 					}
-					/*
-					 * for (String col : SWAuditClientEntry.DB_COLUMN_NAMES)
-					 * {
-					 * row.add(rs.getString(col));
-					 * }
-					 */
 
 					SWAuditClientEntry clientEntry = new SWAuditClientEntry(SWAuditClientEntry.DB_COLUMN_NAMES, row,
 							persist);

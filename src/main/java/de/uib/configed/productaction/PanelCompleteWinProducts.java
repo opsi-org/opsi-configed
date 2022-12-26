@@ -256,8 +256,6 @@ public class PanelCompleteWinProducts extends JPanel
 
 	private void initComponents() {
 
-		// fieldServerPath = new JTextField("");
-
 		final JPanel panel = this;
 
 		fieldProductKey = new JTextField("");

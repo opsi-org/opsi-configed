@@ -134,41 +134,6 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 						.addComponent(timeSetter, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))));
 
-		/*
-		 * layout.setHorizontalGroup(
-		 * layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-		 * .addGroup(layout.createSequentialGroup()
-		 * .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-		 * 
-		 * GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-		 * .addGroup(layout.createSequentialGroup()(
-		 * .addComponent(buttonBack, GroupLayout.PREFERRED_SIZE,
-		 * GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-		 * .addComponent(timeSetter, GroupLayout.PREFERRED_SIZE,
-		 * GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-		 * .addComponent(buttonForwared, GroupLayout.PREFERRED_SIZE,
-		 * GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-		 * )
-		 * .addComponent(monthView, GroupLayout.PREFERRED_SIZE,
-		 * GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-		 * )
-		 * );
-		 * layout.setVerticalGroup(
-		 * layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-		 * .addGroup(layout.createSequentialGroup()
-		 * 
-		 * GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-		 * .addGroup(layout.createParallelGroup(
-		 * 
-		 * .addComponent(monthView, GroupLayout.PREFERRED_SIZE,
-		 * GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-		 * .addComponent(timeSetter, GroupLayout.PREFERRED_SIZE,
-		 * GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-		 * )
-		 * );
-		 * 
-		 */
-
 	}
 
 	protected void setToMidnight() {
@@ -314,27 +279,6 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 			}
 		}
 	}
-
-	/*
-	 * public void registerDateEventObserver(DateEventObserver o)
-	 * {
-	 * dateEventObservers.add(o);
-	 * }
-	 * 
-	 * public void communicateDateEvent(DateEvent e)
-	 * {
-	 * 
-	 * if (dateEventObservers == null)
-	 * return;
-	 * 
-	 * for (int i = 0; i < dateEventObservers.size(); i++)
-	 * {
-	 * dateEventObservers.get(i).dateChanged(e);
-	 * }
-	 * 
-	 * 
-	 * }
-	 */
 
 	/**
 	 * DateFormatSymbols returns an extra, empty value at the end of the array

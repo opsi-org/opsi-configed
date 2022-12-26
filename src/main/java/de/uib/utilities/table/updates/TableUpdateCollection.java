@@ -15,30 +15,4 @@ public class TableUpdateCollection extends Vector<TableEditItem> {
 
 	HashSet<de.uib.utilities.table.GenTableModel> modelsToReload = new HashSet<>();
 
-	/*
-	 * public boolean add(TableEditItem ob)
-	 * {
-	 * if (ob instanceof TableGenModelInsertItem)
-	 * {
-	 * modelsToReload.add( (GenTableModel)((TableGenModelInsertItem)ob).getModel() )
-	 * ;
-	 * }
-	 * return super.add(ob);
-	 * }
-	 */
-
-	/*
-	 * public void sendReset()
-	 * {
-	 * Iterator iter = modelsToReload.iterator();
-	 * 
-	 * while (iter.hasNext())
-	 * {
-	 * ((GenTableModel)iter.next()).reset();
-	 * }
-	 * 
-	 * modelsToReload.clear();
-	 * }
-	 */
-
 }

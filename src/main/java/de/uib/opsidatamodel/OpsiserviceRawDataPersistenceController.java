@@ -56,26 +56,8 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 			javax.swing.SwingUtilities.invokeLater(new Thread() {
 				@Override
 				public void run() {
-					/*
-					 * StringBuffer info = new StringBuffer("");
-					 * info.append(configed.getResourceValue("Permission.modules.clientcount.2"));
-					 * info.append(":\n");
-					 * for (String moduleInfo : missingModulesPermissionInfo)
-					 * {
-					 * info.append(moduleInfo);
-					 * info.append("\n");
-					 * }
-					 */
-					String warning = "limit for mysql backend reached";
 
-					/*
-					 * String.format(
-					 * //locale.
-					 * configed.getResourceValue("Permission.modules.clientcount.error"),
-					 * "" + countClientsInThisBlock , "" + key, "" +
-					 * maxAllowedClientsForThisModule.getNumber()
-					 * );
-					 */
+					String warning = "limit for mysql backend reached";
 
 					logging.info(this, "missingModules " + warning);
 					de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.callInstanceWith(warning);

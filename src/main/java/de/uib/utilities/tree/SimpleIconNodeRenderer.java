@@ -39,20 +39,9 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
 			int row, boolean hasFocus) {
 
-		/*
-		 * if (row == 0)
-		 * setPreferredSize(new java.awt.Dimension(labelWidth, 50));
-		 * else
-		 * setPreferredSize(preferred);
-		 */
-
 		if (value instanceof SimpleIconNode) {
 
-			String stringValue =
-					// configed.encodeStringFromService (
-					tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus)
-			// )
-			;
+			String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
 
 			setText(stringValue);
 			setToolTipText(((SimpleIconNode) value).getToolTipText());
@@ -101,21 +90,6 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 		}
 
 		return this;
-
-		/*
-		 * Component c = super.getTreeCellRendererComponent(
-		 * tree,
-		 * value,
-		 * sel,
-		 * expanded,
-		 * leaf,
-		 * row,
-		 * hasFocus);
-		 * 
-		 * 
-		 * 
-		 * return c;
-		 */
 
 	}
 }

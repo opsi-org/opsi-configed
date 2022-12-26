@@ -36,13 +36,6 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 			boolean hasFocus, int row, int column) {
 		Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		/*
-		 * if (result instanceof JComponent) {
-		 * JComponent jc = (JComponent)result;
-		 * jc.setToolTipText("");
-		 * }
-		 */
-
 		if (f != null)
 			result.setFont(f);
 
@@ -60,19 +53,6 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 
 		if (color != null)
 			result.setForeground(color);
-
-		/*
-		 * 
-		 * if (result instanceof JLabel)
-		 * {
-		 * if (row == currentRow)
-		 * {
-		 * result.setFont(result.getFont().deriveFont(Font.ITALIC) );
-		 * logging.info(this, "row " + row + " emphasized ");
-		 * }
-		 * }
-		 * 
-		 */
 
 		return result;
 	}

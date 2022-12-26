@@ -46,15 +46,6 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 		testFile.exec(new Empty_Command(factory.str_command_fileexists_notremove.replaceAll(
 				factory.str_replacement_filename, ((CommandModulesUpload) command).unofficial_modules_directory) // /etc/opsi/modules.d
 		), false);
-		/*
-		 * if (result.trim().equals(factory.str_file_exists))
-		 * {
-		 * lbl_copy_to_modules_d.setVisible(true);
-		 * cb_copy_to_modules_d.setVisible(true);
-		 * cb_copy_to_modules_d.setSelected(true);
-		 * }
-		 * else
-		 */
 		{
 			lbl_copy_to_modules_d.setVisible(false);
 			cb_copy_to_modules_d.setVisible(false);
@@ -92,7 +83,7 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 			command.setTargetFilename(filechooser_local.getSelectedFile().getName());
 		} else {
 			command.setTargetPath(((CommandModulesUpload) command).actually_modules_directory);
-			command.setTargetFilename(((CommandModulesUpload) command).DEFAULT_FILENAME);
+			command.setTargetFilename(CommandModulesUpload.DEFAULT_FILENAME);
 		}
 		return modules_server_path;
 	}

@@ -28,11 +28,6 @@ public abstract class SWExporter {
 	File exportDirectory;
 	String exportDirectoryS;
 	String filepathStart;
-	/*
-	 * private String server;
-	 * private String user;
-	 * private String password;
-	 */
 
 	protected Boolean askingForKindOfAction = false;
 	protected boolean askForOverwrite = false;

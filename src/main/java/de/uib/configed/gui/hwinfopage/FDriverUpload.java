@@ -20,17 +20,6 @@ public class FDriverUpload extends SecondaryFrame {
 	ConfigedMain main;
 	MainFrame mainframe;
 
-	/*
-	 * public FDriverUpload()
-	 * {
-	 * define();
-	 * setGlobals(Globals.getMap());
-	 * setTitle(Globals.APPNAME + " " +
-	 * configed.getResourceValue("FDriverUpload.title"));
-	 * 
-	 * }
-	 */
-
 	public FDriverUpload(ConfigedMain main, PersistenceController persist, MainFrame mainframe) {
 		super();
 

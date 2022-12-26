@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.TreeMap;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -38,7 +38,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 	protected String defaultProduct = configed.getResourceValue("SSHConnection.ParameterDialog.defaultProduct");
 	protected String defaultDepot = configed.getResourceValue("SSHConnection.ParameterDialog.defaultDepot");
 
-	protected String opsiProd = persist.configedWORKBENCH_defaultvalue;
+	protected String opsiProd = PersistenceController.configedWORKBENCH_defaultvalue;
 	protected String opsiRepo = "/var/lib/opsi/repository/";
 
 	private String configRepo = "repositoryLocalUrl";
@@ -55,7 +55,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		this.setSize(new Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH, frameHeight));
 		this.centerOn(Globals.mainFrame);
 		this.setBackground(Globals.backLightBlue);
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
 	}
 
@@ -90,8 +90,6 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 
 		logging.info(this, "getRepositoriesFromConfigs opsiRepo " + opsiRepo);
 		logging.info(this, "getRepositoriesFromConfigs opsiProd " + opsiProd);
-
-		// " + opsiDepot);
 
 	}
 
@@ -152,17 +150,10 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		} else if (caller instanceof SSHPackageManagerInstallParameterDialog) {
 			dia = new CommandOpsiPackageManagerInstall().startHelpDialog();
 		}
-		dia.setVisible(true);
+
+		if (dia != null)
+			dia.setVisible(true);
 	}
-
-	// SSHConnectionExecHelpDialog outputDialog = new SSHConnectionExecHelpDialog(
-	// command,
-
-	// \""+command.getCommand() + "\" "
-
-	/* This method gets called when button 2 is pressed */
-
-	// 
 
 	public void cancel() {
 		super.doAction2();

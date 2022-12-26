@@ -7,7 +7,6 @@ import de.uib.configed.gui.FGeneralDialog;
 public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeedParameter
 
 {
-	// private String baseName = "";
 
 	private boolean needSudo = false;
 
@@ -110,11 +109,5 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	public ArrayList<String> getParameterList() {
 		return null;
 	}
-
-	// @Override
-
-	// regexes[0] = "(-[\\w*],[
-	// ])|(--[\\w*]*-[\\w*]*-[\\w*]*)|(--[\\w*]*-[\\w*]*)|(--[\\w*]*)";
-	// regexes[1] = "((<[\\w*]*>)|(<[\\w*]*-[\\w*]*>)|(<[\\w*]*-[\\w*]*-[\\w*]*>)) |
 
 }

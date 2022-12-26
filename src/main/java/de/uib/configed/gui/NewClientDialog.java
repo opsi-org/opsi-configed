@@ -124,9 +124,8 @@ public class NewClientDialog extends FGeneralDialog
 		if (instance == null) {
 			instance = new NewClientDialog(main, depots);
 			instance.init();
-		} else {
-
 		}
+
 		return instance;
 	}
 
@@ -140,21 +139,6 @@ public class NewClientDialog extends FGeneralDialog
 			instance.setVisible(false);
 		}
 	}
-
-	/*
-	 * public boolean macAddressFieldIsSet()
-	 * {
-	 * return macAddressFieldVisibleSet;
-	 * }
-	 * 
-	 * 
-	 * public void setMacAddressFieldVisible(boolean b)
-	 * {
-	 * macAddressFieldVisibleSet = true; //we do this once
-	 * macAddressFieldVisible = b;
-	 * repaint();
-	 * }
-	 */
 
 	/**
 	 * Sets the given domain configuration for new clients It expects that
@@ -497,13 +481,9 @@ public class NewClientDialog extends FGeneralDialog
 								2 * Globals.BUTTON_WIDTH)
 						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 		// localboot
-		
-		
-		
-		
-		
+
 		// 2*Globals.buttonWidth)
-		
+
 		// )
 
 		);
@@ -582,14 +562,6 @@ public class NewClientDialog extends FGeneralDialog
 								.addComponent(jComboNetboot, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT))
 		/////// localboot
-		
-		
-		
-		/////// Globals.lineHeight,Globals.lineHeight,Globals.lineHeight)
-		
-		/////// Globals.lineHeight,Globals.lineHeight,Globals.lineHeight)
-		// )
-		
 
 		);
 
@@ -988,7 +960,6 @@ public class NewClientDialog extends FGeneralDialog
 			logging.info(this, "keyPressed source " + e.getSource());
 
 			if (e.getSource() == jButton1) {
-				// jButton1.setIcon( Globals.createImageIcon(
 
 			}
 

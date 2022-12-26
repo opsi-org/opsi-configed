@@ -39,8 +39,6 @@ public class SimpleTreeModel extends DefaultTreeModel
 
 		ROOT = (SimpleIconNode) getRoot();
 
-		// table"));
-
 		this.tooltips = tooltips;
 		generateFrom(dottedKeys);
 	}
@@ -130,17 +128,6 @@ public class SimpleTreeModel extends DefaultTreeModel
 	public void produce()
 	// test method
 	{
-
-		/*
-		 * java 1.7
-		 * javax.swing.plaf.nimbus.NimbusLookAndFeel laf = new
-		 * javax.swing.plaf.nimbus.NimbusLookAndFeel();
-		 * UIManager.setLookAndFeel(laf);
-		 * UIDefaults nimbUID = laf.getDefaults();
-		 * nimbUID.put("Tree.drawHorizontalLines", true);
-		 * nimbUID.put("Tree.drawVerticalLines", true);
-		 * 
-		 */
 
 		XTree tree = new XTree(this);
 

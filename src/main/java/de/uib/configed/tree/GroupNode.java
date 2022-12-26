@@ -57,16 +57,4 @@ public class GroupNode extends IconNode {
 		return fixed;
 	}
 
-	/*
-	 * public void setGeneratedStructure(boolean b)
-	 * {
-	 * generatedStructure = b;
-	 * }
-	 * 
-	 * public boolean isGeneratedStructure()
-	 * {
-	 * return generatedStructure;
-	 * }
-	 */
-
 }

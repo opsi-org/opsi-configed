@@ -181,24 +181,12 @@ public class UserConfig {
 	}
 
 	public void setValues(String key, List<Object> values) {
-		/*
-		 * if ( !getUserListKeys().contains( key ) )
-		 * {
-		 * logging.error("UserConfig.USER_LIST_KEYS " + UserConfig.USER_LIST_KEYS);
-		 * logging.error("UserSshConfig : illegal key " + key);
-		 * }
-		 */
+
 		valuesMap.put(key, values);
 	}
 
 	public void setPossibleValues(String key, List<Object> possibleValues) {
-		/*
-		 * if ( !getUserListKeys().contains( key ) )
-		 * {
-		 * logging.error("UserConfig.USER_LIST_KEYS " + UserConfig.USER_LIST_KEYS);
-		 * logging.error("UserSshConfig : illegal key " + key);
-		 * }
-		 */
+
 		possibleValuesMap.put(key, possibleValues);
 	}
 

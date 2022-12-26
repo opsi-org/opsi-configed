@@ -126,24 +126,6 @@ public class IconAsButton extends JPanel implements MouseListener {
 
 	}
 
-	/*
-	 * public IconAsButton(String desc, String inactive, String active) {
-	 * this(desc, inactive, active, null, null);
-	 * }
-	 * 
-	 * public IconAsButton(String desc, String inactive, String active, Color bg) {
-	 * this(desc, inactive, active, null, bg);
-	 * }
-	 * 
-	 * public IconAsButton(String desc, String inactive, Color bg) {
-	 * this(desc, inactive, null, null, bg);
-	 * }
-	 * 
-	 * public IconAsButton(String desc, String inactive) {
-	 * this(desc, inactive, null, null, null);
-	 * }
-	 */
-
 	@Override
 	public void setToolTipText(String s) {
 		description = s;
