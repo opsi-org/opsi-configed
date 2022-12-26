@@ -79,7 +79,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 					outputDialog.setVisible(true);
 				else
 					outputDialog.setVisible(false);
-			System.gc();
+
 			return task.get();
 		} catch (java.lang.NullPointerException npe) {
 			logging.error(this, "exec NullPointerException", npe);
@@ -120,7 +120,6 @@ public class SSHConnectSCP extends SSHConnectExec {
 					dialog.setVisible(true);
 				else
 					dialog.setVisible(false);
-			System.gc();
 
 			// else
 			return task.get();

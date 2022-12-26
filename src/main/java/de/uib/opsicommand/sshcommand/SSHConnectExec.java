@@ -238,7 +238,6 @@ public class SSHConnectExec extends SSHConnect {
 
 			finally {
 
-				System.gc();
 			}
 		}
 	}
@@ -606,7 +605,7 @@ public class SSHConnectExec extends SSHConnect {
 					outputDialog.setStatusFinish(getCommandName());
 
 				}
-			System.gc();
+
 			return buf.toString();
 		}
 

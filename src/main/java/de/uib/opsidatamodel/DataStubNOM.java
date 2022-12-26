@@ -947,7 +947,7 @@ public class DataStubNOM extends DataStub {
 			}
 
 			logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
-			System.gc();
+
 			logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
 
 			persist.notifyDataRefreshedObservers("softwareConfig");

@@ -313,7 +313,6 @@ public class OpsiDataBackend extends Backend {
 
 		hardwareOnClient = null;
 		clientToHardware = null;
-		System.gc();
 
 	}
 

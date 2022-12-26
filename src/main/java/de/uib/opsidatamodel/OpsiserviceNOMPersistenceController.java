@@ -3576,7 +3576,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			} catch (java.lang.OutOfMemoryError e) {
 				s = "--- file too big for showing, enlarge java memory  ---";
-				System.gc();
+
 			}
 
 		} catch (Exception ex) {
