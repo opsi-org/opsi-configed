@@ -162,12 +162,6 @@ public class DPassword extends JDialog // implements Runnable
 
 			getContentPane().add(cPanel);
 
-			/*
-			 * getContentPane().setLayout(new FlowLayout());
-			 * getContentPane().add(waitingProgressBar);
-			 * getContentPane().add(waitLabel);
-			 */
-
 			pack();
 
 			setLocationRelativeTo(DPassword.this);
@@ -391,13 +385,6 @@ public class DPassword extends JDialog // implements Runnable
 		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 		panel.setBorder(padding);
 
-		// center
-
-		/*final Rectangle dim = Globals.buildLocationOnDefaultDisplay(getSize().width, getSize().height,
-				Globals.smallFramesDistanceFromLeft,
-				Globals.smallFramesDistanceFromTop);
-		this.setLocation(dim.x, dim.y);*/
-
 		jLabelHost.setText(configed.getResourceValue("DPassword.jLabelHost"));
 
 		containership = new Containership(panel);
@@ -420,17 +407,6 @@ public class DPassword extends JDialog // implements Runnable
 		passwordField.setText(TESTPASSWORD);
 		passwordField.addKeyListener(myKeyListener);
 		passwordField.setMargin(new Insets(0, 3, 0, 3));
-		/*
-		 * passwordField.addComponentListener(new java.awt.event.ComponentAdapter()
-		 * {
-		 * public void componentShown(ComponentEvent e)
-		 * {
-		 * passwordField_componentShown(e);
-		 * }
-		 * });
-		 */
-
-		// JCheckBox checkGzip = new
 
 		JCheckBox checkCompression = new JCheckBox(configed.getResourceValue("DPassword.checkCompression"),
 				de.uib.opsicommand.JSONthroughHTTP.compressTransmission);
@@ -438,7 +414,6 @@ public class DPassword extends JDialog // implements Runnable
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 
-				// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission =
 				de.uib.opsicommand.JSONthroughHTTP.compressTransmission = (e.getStateChange() == ItemEvent.SELECTED);
 
 				logging.debug(this, "itemStateChanged " + de.uib.opsicommand.JSONthroughHTTP.gzipTransmission);;
@@ -598,14 +573,6 @@ public class DPassword extends JDialog // implements Runnable
 
 		csPanel.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.backLightBlue }, JPanel.class);
 
-		/*
-		 * csPanel.doForAllContainedCompis
-		 * ("setBackground", new Object[]{ java.awt.Color.yellow
-		 * });
-		 */
-
-		// jLabelVersion.setText( sprintf(
-
 		MessageFormat messageFormatVersion = new MessageFormat(configed.getResourceValue("DPassword.jLabelVersion"));
 		jLabelVersion.setText(messageFormatVersion
 				.format(new Object[] { Globals.VERSION, "(" + Globals.VERDATE + ")", Globals.VERHASHTAG }));
@@ -616,17 +583,6 @@ public class DPassword extends JDialog // implements Runnable
 		String osVersion = System.getProperty("os.version");
 		logging.notice(" OS " + strOS + "  Version " + osVersion);
 		String host = TESTSERVER; // ""
-		/*
-		 * if (strOS.startsWith("Windows") && (osVersion.compareToIgnoreCase("4.0") >=
-		 * 0))
-		 * {
-		 * Process process = Runtime.getRuntime().exec("cmd.exe /q /c echo %HOST%");
-		 * BufferedReader br = new BufferedReader( new
-		 * InputStreamReader(process.getInputStream()));
-		 * host = br.readLine();
-		 * br.close();
-		 * }
-		 */
 
 		pack();
 
@@ -652,21 +608,6 @@ public class DPassword extends JDialog // implements Runnable
 			logging.warning(this, "containership error", ex);
 		}
 
-		/*
-		 * if (c.equals(saveCursor))
-		 * {
-		 * fieldHost.getCaret().setBlinkRate(defaultBlinkRate);
-		 * fieldUser.getCaret().setBlinkRate(defaultBlinkRate);
-		 * passwordField.getCaret().setBlinkRate(defaultBlinkRate);
-		 * }
-		 * else
-		 * {
-		 * fieldHost.getCaret().setBlinkRate(0);
-		 * fieldUser.getCaret().setBlinkRate(0);
-		 * passwordField.getCaret().setBlinkRate(0);
-		 * }
-		 */
-
 	}
 
 	public void ok_action() {
@@ -682,21 +623,6 @@ public class DPassword extends JDialog // implements Runnable
 		tryConnecting();
 
 	}
-	/*
-	 * public static PersistenceController producePersistenceController(String
-	 * server)
-	 * {
-	 * PersistenceController persis =
-	 * PersistenceControllerFactory.getNewPersistenceController(server, "", "");
-	 * persis.setConnectionState(new ConnectionState
-	 * (ConnectionState.STARTED_CONNECTING));
-	 * persis.makeConnection();
-	 * if ( persis.getConnectionState().getState() == ConnectionState.CONNECTED )
-	 * return persis;
-	 * 
-	 * return null;
-	 * }
-	 */
 
 	public void tryConnecting() {
 		logging.info(this, "started  tryConnecting");
@@ -707,9 +633,8 @@ public class DPassword extends JDialog // implements Runnable
 		ConfigedMain.HOST = (String) fieldHost.getSelectedItem();
 		ConfigedMain.USER = fieldUser.getText();
 		ConfigedMain.PASSWORD = String.valueOf(passwordField.getPassword());
-		logging.info(this, "invoking PersistenceControllerFactory host, user, " +
-		// .password " +
-				fieldHost.getSelectedItem() + ", " + fieldUser.getText()
+		logging.info(this, "invoking PersistenceControllerFactory host, user, " + fieldHost.getSelectedItem() + ", "
+				+ fieldUser.getText()
 
 		);
 
@@ -744,32 +669,6 @@ public class DPassword extends JDialog // implements Runnable
 							String.valueOf(passwordField.getPassword()));
 
 					logging.info(this, "got persis, == null " + (persis == null));
-					/*
-					 * long TIMEOUT = 100000; //ms
-					 * long interval = 2000;
-					 * long waited = 0;
-					 * 
-					 * while (
-					 * PersistenceControllerFactory.getConnectionState() ==
-					 * ConnectionState.ConnectionUndefined
-					 * &&
-					 * waited < TIMEOUT
-					 * )
-					 * {
-					 * try
-					 * {
-					 * Thread.sleep(interval);
-					 * waited = waited + interval;
-					 * logging.info(this, "waited for persis: " + waited);
-					 * }
-					 * catch (Exception waitException)
-					 * {}
-					 * }
-					 * 
-					 * if (waited >= TIMEOUT)
-					 * logging.error(" no connection");
-					 * 
-					 */
 
 					logging.info(this, "waitingTask can be set to ready");
 					waitingTask.setReady();
@@ -799,8 +698,6 @@ public class DPassword extends JDialog // implements Runnable
 
 			waitInfo.actAfterWaiting();
 		}
-
-		// de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setHost((String)
 
 		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setUser(fieldUser.getText());
 

@@ -54,21 +54,8 @@ public class DataChangedKeeper implements DataChangedObserver {
 		}
 	}
 
-	/*
-	 * public void actionOnChange( boolean condition, Object source, OnChangeExecute
-	 * )
-	 * {
-	 * if (condition)
-	 * {
-	 * JOptionPane.showMessageDialog(null, "" + source, "alert",
-	 * JOptionPane.INFORMATION_MESSAGE);
-	 * }
-	 * }
-	 */
-
 	public boolean isDataChanged() {
-		boolean b = dataChanged;
-		return b;
+		return dataChanged;
 	}
 
 	public void unsetDataChanged() {

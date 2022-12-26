@@ -23,6 +23,7 @@ import java.util.TreeSet;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import de.uib.configed.gui.FTextArea;
 import de.uib.messages.Messages;
@@ -65,7 +66,6 @@ public class configed {
 	 * "--version \t\t\t\t\t(Tell configed version)\n" +
 	 * "--help \t\t\t\t\t\t(Give this help)\n" +
 	 * "--loglevel L \t\t\t\t\t(Set logging level L, L is a number >= " +
-	 * logging.LEVEL_CRITICAL + ", <= " + logging.LEVEL_DEBUG + ") \n" ;
 	 */
 
 	public static final String[][] usageLines = new String[][] {
@@ -116,19 +116,11 @@ public class configed {
 							+ " . DEFAULT: " + logging.LOG_LEVEL_CONSOLE },
 			new String[] { "--halt", "", "Use  first occurring debug halt point that may be in the code" },
 
-			// implemented in PersistenceController "},
+			// implemented in PersistenceController,
 			new String[] { "--sqlgetrows", "", "Force use sql statements by getRawData" },
 			new String[] { "--nosqlrawdata", "", "Avoid getRawData" },
 
-			// "},
-
-			// database "},
-
-			// database after renewing it"},
-
-			// PersistenceController "}
-
-			// if possible in PersistenceController "},
+			// if possible in PersistenceController,
 			new String[] { "--localizationfile EXTRA_LOCALIZATION_FILENAME", "",
 					"For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: "
 							+ localizationFilenameRegex.replace("...*\\", "LOCALENAME") },
@@ -427,17 +419,6 @@ public class configed {
 	}
 
 	protected static void processArgs(String[] args) {
-
-		/*for (int i = 0; i < args.length; i++)
-			logging.debug();*/
-		/*
-		 * logging.debug("args:");
-		 * for (int i = 0; i < args.length; i++)
-		 * {
-		 * logging.debug(args[i]);
-		 * }
-		 */
-
 		logging.debug("args " + Arrays.toString(args));
 
 		de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
@@ -530,7 +511,6 @@ public class configed {
 
 					i = i + 2;
 				} else if (args[i].equals("--ssh-immediate-connect")) {
-					// de.uib.opsicommand.sshcommand.SSHConnectionInfo
 
 					i = i + 1;
 
@@ -601,32 +581,6 @@ public class configed {
 					de.uib.opsidatamodel.PersistenceControllerFactory.avoidSqlRawData = true;
 					i = i + 1;
 				}
-
-				/*
-				 * else if (args[i].equals("--dblocal"))
-				 * {
-				 * de.uib.opsidatamodel.PersistenceControllerFactory.localDB= true;
-				 * i=i+1;
-				 * }
-				 * 
-				 * else if (args[i].equals("--dblocalnew"))
-				 * {
-				 * de.uib.opsidatamodel.PersistenceControllerFactory.localDBResync= true;
-				 * i=i+1;
-				 * }
-				 * 
-				 * else if (args[i].equals("--synced"))
-				 * {
-				 * de.uib.opsidatamodel.PersistenceControllerFactory.synced= true;
-				 * i=i+1;
-				 * }
-				 * 
-				 * else if (args[i].equals("--sqldirect"))
-				 * {
-				 * de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect = true;
-				 * i=i+1;
-				 * }
-				 */
 
 				else if (args[i].equals("--sqldirect-cleanup-auditsoftware")) {
 					de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect = true;
@@ -878,28 +832,11 @@ public class configed {
 	 * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	 */
 
-	/**
-	 * private void configureUI() {
-	 * UIManager.put(Options.USE_SYSTEM_FONTS_APP_KEY, Boolean.TRUE);
-	 * Options.setDefaultIconSize(new Dimension(18, 18)); String lafName =
-	 * LookUtils.IS_OS_WINDOWS_XP ?
-	 * Options.getCrossPlatformLookAndFeelClassName() :
-	 * Options.getSystemLookAndFeelClassName(); try {
-	 * UIManager.setLookAndFeel(lafName); } catch (Exception e) {
-	 * logging.error("Can't set look & feel:" + e); } }
-	 */
-
 	public static void configureUI() {
 		boolean trynimbus = true;
 		boolean found = false;
 
 		try {
-
-			/*
-			 * UIManager.setLookAndFeel(
-			 * UIManager.getSystemLookAndFeelClassName());
-			 */
-
 			for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {
 					logging.info("setting Nimbus look&feel");
@@ -908,24 +845,14 @@ public class configed {
 
 					UIManager.put("Tree.selectionBackground", UIManager.get("controlHighlight"));
 
-					// UIManager.put("Tree[Enabled+Selected].collapsedIconPainter", new
-
 					UIManager.put("TreeUI", de.uib.configed.tree.ClientTreeUI.class.getName());
 
 					found = true;
 					break;
 				}
 			}
-		} catch (javax.swing.UnsupportedLookAndFeelException e) {
-			// handle exception
-			logging.error("Failed to configure ui " + e);
-		} catch (ClassNotFoundException e) {
-			// handle exception
-			logging.error("Failed to configure ui " + e);
-		} catch (InstantiationException e) {
-			// handle exception
-			logging.error("Failed to configure ui " + e);
-		} catch (IllegalAccessException e) {
+		} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException
+				| IllegalAccessException e) {
 			// handle exception
 			logging.error("Failed to configure ui " + e);
 		}
@@ -941,13 +868,6 @@ public class configed {
 				logging.debug("UIManager.setLookAndFeel('javax.swing.plaf.metal.MetalLookAndFeel')," + ex);
 			}
 		}
-
-		/*
-		 * UIManager.put("ProgressBar.background", Globals.backLightBlue);
-		 * UIManager.put("ProgressBar.foreground", Globals.backLightBlue);
-		 * UIManager.put("ProgressBar.selectionBackground", Color.red);
-		 * UIManager.put("ProgressBar.selectionForeground", Globals.backLightBlue);
-		 */
 
 		// destroys some popups, saves others
 	}
@@ -1046,14 +966,11 @@ public class configed {
 					false, // boolean notUsingDefaultUser,
 
 					host, // String configserver,
-					persist.getHostInfoCollections().getDepotNamesList(), // Collection<String> existingDepots,
-					persist.getHostGroupIds(), // Collection<String> existingHostgroups,
-					persist.getProductGroups().keySet(), // Collection<String> existingProductgroups,
+					persist.getHostInfoCollections().getDepotNamesList(), persist.getHostGroupIds(),
+					persist.getProductGroups().keySet(),
 
 					// data. on which changes are based
-					persist.getConfigDefaultValues(), // Map<String, List<Object>> serverconfigValuesMap,
-					persist.getConfigOptions()// Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap
-			);
+					persist.getConfigDefaultValues(), persist.getConfigOptions());
 
 			ArrayList<Object> newData = up.produce();
 			logging.debug("UserConfigProducing: newData " + newData);
