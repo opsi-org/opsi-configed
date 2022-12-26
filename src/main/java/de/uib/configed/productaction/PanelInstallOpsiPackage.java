@@ -232,13 +232,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 			fieldOpsiPackageName.setCaretPosition(opsiPackageGotPathS.length());
 
 		}
-		/*
-		 * else
-		 * {
-		 * opsiPackageGotPathS = null;
-		 * fieldOpsiPackageName.setText("");
-		 * }
-		 */
 	}
 
 	private void chooseServerpath() {
@@ -301,7 +294,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 	}
 
-	
 	// implements NameProducer
 	@Override
 	public String produceName() {
@@ -312,16 +304,11 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	public String getDefaultName() {
 		return packageShareS;
 	}
-	
 
 	private void initComponents() {
 		defineChoosers();
 
 		buildSambaTarget("" + comboChooseDepot.getSelectedItem());
-
-		// workbench = "\\\\" + comboChooseDepot.getSelectedItem() + "\\" +
-
-		// fieldServerPath = new JTextField("");
 
 		final JPanel panel = this;
 
@@ -335,26 +322,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		buttonCallChooserPackage.setToolTipText(configed.getResourceValue("InstallOpsiPackage.chooserPackage"));
 
 		buttonCallChooserPackage.addActionListener(actionEvent -> choosePackage());
-
-		/*
-		 * buttonMountShare = new JButton("",
-		 * Globals.createImageIcon("images/windows16.png", "" ));
-		 * buttonMountShare.setSelectedIcon(
-		 * Globals.createImageIcon("images/windows16.png", "" ) );
-		 * buttonMountShare.setPreferredSize(Globals.graphicButtonDimension);
-		 * buttonMountShare.setToolTipText(configed.getResourceValue(
-		 * "InstallOpsiPackage.mountShareDescription")) ;
-		 * 
-		 * buttonMountShare.setEnabled(isWindows);
-		 * 
-		 * buttonMountShare.addActionListener(new ActionListener(){
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * callMountWorkbench();
-		 * }
-		 * }
-		 * );
-		 */
 
 		buttonSelectTmpDir = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
 		buttonSelectTmpDir.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
@@ -434,12 +401,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		JLabel infoLabel = new JLabel(configed.getResourceValue("InstallOpsiPackage.info"));
 
 		JLabel serverLabel = new JLabel(configed.getResourceValue("InstallOpsiPackage.chooseDepot"));
-		// JLabel tmpdirLabel = new JLabel(
-
-		// mountShareLabel = new JLabel(
-
-		// mountShareLabel = new JLabel("");
-		// mountShareDescriptionLabel = new JLabel(
 
 		JLabel serverPathLabel = new JLabel(configed.getResourceValue("InstallOpsiPackage.serverpath"));
 
@@ -472,8 +433,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 										Globals.LINE_HEIGHT)
 								.addComponent(comboChooseDepot, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 										Globals.LINE_HEIGHT)
-						
-						
+
 						).addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(panelMountShare,
 								Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
@@ -486,19 +446,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 								.addComponent(fieldServerPath, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 										Globals.LINE_HEIGHT))
 
-						/*
-						 * .addGap(Globals.vGapSize/2, Globals.vGapSize/2, Globals.vGapSize/2)
-						 * .addGroup( layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						 * .addComponent(tmpdirLabel, Globals.lineHeight, Globals.lineHeight,
-						 * Globals.lineHeight)
-						 * .addComponent(buttonSelectTmpDir, Globals.lineHeight, Globals.lineHeight,
-						 * Globals.lineHeight)
-						 * .addComponent(fieldTmpDir, Globals.lineHeight, Globals.lineHeight,
-						 * Globals.lineHeight)
-						 * 
-						 * Globals.lineHeight)
-						 * )
-						 */
 						.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
 								buttonCallExecute, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
@@ -528,8 +475,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 								.addGap(hFirstGap, hFirstGap, hFirstGap)
 								.addComponent(comboChooseDepot, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 										Globals.BUTTON_WIDTH * 2)
-								
-								
+
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE))
 
 						.addGroup(layout.createSequentialGroup().addComponent(panelMountShare,
@@ -544,31 +490,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 								.addComponent(fieldServerPath, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 										Short.MAX_VALUE)
 								.addGap(5, 5, 5).addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE))
-						/*
-						 * .addGroup(layout.createSequentialGroup()
-						 * .addGap(hFirstGap, hFirstGap, hFirstGap)
-						 * .addComponent(tmpdirLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
-						 * .addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						 * .addComponent(buttonSelectTmpDir,Globals.graphicButtonWidth,
-						 * Globals.graphicButtonWidth, Globals.graphicButtonWidth)
-						 * .addGap(hFirstGap, hFirstGap, hFirstGap)
-						 * .addComponent(fieldTmpDir, Globals.buttonWidth *2 , Globals.buttonWidth*2,
-						 * Short.MAX_VALUE)
-						 * 
-						 * GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						 * .addGap(Globals.hGapSize, Globals.hGapSize*3, Short.MAX_VALUE)
-						 * )
-						 */
 
-						/*
-						 * links platziert
-						 * .addGroup(layout.createSequentialGroup()
-						 * .addGap(hFirstGap, hFirstGap, hFirstGap)
-						 * .addComponent(buttonCallExecute, GroupLayout.PREFERRED_SIZE,
-						 * GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						 * .addGap(hFirstGap, hFirstGap, Short.MAX_VALUE)
-						 * )
-						 */
 						.addGroup(
 								layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
 										.addGap(0, firstLabelWidth, firstLabelWidth)

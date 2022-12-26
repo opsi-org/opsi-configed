@@ -54,12 +54,9 @@ public class JSONReMapper {
 			for (String key : result0.keySet()) {
 				JSONObject jO = (JSONObject) (result0.get(key));
 				HashMapX response = new HashMapX(jO, true);
-				// String value = "";
 
 				if (response.get("error") == null) {
 					List list = (List) response.get("result");
-
-					// value = "" + list;
 
 					result.put(key, list);
 				} else {
@@ -103,27 +100,6 @@ public class JSONReMapper {
 			Object resultValue = null;
 
 			try {
-				/*
-				 * if ( ! retrieved.isNull("error") )
-				 * {
-				 * String logMessage = "Opsi service error: ";
-				 * JSONObject jOError = retrieved.optJSONObject("error");
-				 * 
-				 * if ( (jOError != null) && ( ! jOError.isNull("class") ) && ( !
-				 * jOError.isNull("message") ) )
-				 * {
-				 * 
-				 * logMessage = logMessage + " [" + jOError.get("class") + "] " +
-				 * jOError.get("message");
-				 * }
-				 * else
-				 * {
-				 * logMessage = logMessage + " " + retrieved.get("error");
-				 * }
-				 * logging.error(logMessage);
-				 * responseFound = false;
-				 * }
-				 */
 
 				String errorMessage = getErrorFromResponse(retrieved);
 
@@ -209,8 +185,8 @@ public class JSONReMapper {
 				Iterator iter1 = map1.keySet().iterator();
 				while (iter1.hasNext()) {
 					String key2 = (String) iter1.next(); // e.g. product
-					HashMap<String, Object> map2 = new HashMapX<>((JSONObject) map1.get(key2), true); // e.g.
-																										// product
+					HashMap<String, Object> map2 = new HashMapX<>(map1.get(key2), true); // e.g.
+																							// product
 
 					map1R.put(key2, map2);
 
@@ -251,8 +227,8 @@ public class JSONReMapper {
 					Iterator iter1 = map1.keySet().iterator();
 					while (iter1.hasNext()) {
 						String key2 = (String) iter1.next(); // e.g. product
-						HashMap<String, Object> map2 = new HashMapX<>((JSONObject) map1.get(key2), true); // e.g.
-																											// product
+						HashMap<String, Object> map2 = new HashMapX<>(map1.get(key2), true); // e.g.
+																								// product
 
 						map1R.put(key2, map2);
 
@@ -576,10 +552,6 @@ public class JSONReMapper {
 							else
 								put((String) key, (V) (jO.get((java.lang.String) key)));
 						}
-						/*
-						 * else
-						 * put((String) key, null);
-						 */
 					}
 				}
 			} catch (Exception ex) {

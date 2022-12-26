@@ -32,25 +32,6 @@ public class TextInputField extends JPanel
 
 	private InputType inputType;
 
-	/*
-	 * private class MyInputListener extends KeyAdapter
-	 * implements ActionListener
-	 * {
-	 * 
-	 * @Override
-	 * public void keyPressed(KeyEvent e)
-	 * {
-	 * logging.info(this, "key pressed " + e.getKeyChar());
-	 * }
-	 * 
-	 * @Override
-	 * public void actionPerformed(ActionEvent e)
-	 * {
-	 * logging.info(this, "action " + e);
-	 * }
-	 * }
-	 */
-
 	public TextInputField(String initialValue) {
 		this(initialValue, null);
 	}
@@ -132,8 +113,6 @@ public class TextInputField extends JPanel
 						if (!stop && i > 0)
 							ch = orderedBeginChars[i - 1];
 
-						// " + e.getKeyChar());
-
 						combo.selectWithKeyChar(ch);
 						// advance to last entry with ch??
 						if (e.getKeyChar() > ch) {
@@ -168,28 +147,8 @@ public class TextInputField extends JPanel
 					comboField.setText("");
 				}
 
-				/*
-				 * if (proposedValues != null)
-				 * {
-				 * for (String val : proposedValues)
-				 * {
-				 * if (val != null && val.length() > 0 && val.charAt(0) == e.getKeyChar() )
-				 * {
-				 * combo.setSelectedItem(val);
-				 * break;
-				 * }
-				 * }
-				 * }
-				 */
 			}
 		});
-
-		/*
-		 * if (inputType == InputType.DATE)
-		 * textfield = new JFormattedTextField(Globals.getToday());
-		 * 
-		 * else
-		 */
 
 		textfield = new JTextField(initValue);
 

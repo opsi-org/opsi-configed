@@ -127,10 +127,8 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String CONFIG_DHCPD_FILENAME = "clientconfig.dhcpd.filename";
 	public static final String EFI_DHCPD_FILENAME = "linux/pxelinux.cfg/elilo.efi";
 	// the current real value, but it is not necessary to configure it:
-	
 
 	// not more used:
-	
 
 	public static final String EFI_DHCPD_NOT = "";
 
@@ -179,10 +177,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 		PROPERTYCLASSES_SERVER.put("opsi-script", "<html>parameters for opsi-script on a client</html>");
 		PROPERTYCLASSES_SERVER.put("software-on-demand",
 				"<html>software on demand configuration,<br />not client specific</html>");
-		// PROPERTYCLASSES_SERVER.put( KEY_USER_ROOT, "<html>user privileges
-		// configuration,<br />not client specific</html>");
-		// PROPERTYCLASSES_SERVER.put( KEY_USER_ROLE_ROOT, "<html>user role
-		// configuration,<br />not client specific</html>");
 		PROPERTYCLASSES_SERVER.put(KEY_USER_ROOT,
 				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.userPrivilegesConfiguration.ToolTip"));
 		PROPERTYCLASSES_SERVER.put(KEY_USER_ROLE_ROOT,
@@ -194,17 +188,11 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 		PROPERTYCLASSES_CLIENT = new TreeMap<>();
 		PROPERTYCLASSES_CLIENT.put("", "general configuration items");
 		PROPERTYCLASSES_CLIENT.put("clientconfig", "network configuration");
-		// PROPERTYCLASSES_CLIENT.put( SavedSearch.CONFIG_KEY, "<html></p>saved search
-		// configurations ,<br />do not edit!</p></html>" );
-		// PROPERTYCLASSES_CLIENT.put( RemoteControl.CONFIG_KEY, "<html><p>remote
-		// control call,<br />not client specific</p></html>" );
 		PROPERTYCLASSES_CLIENT.put("opsiclientd", "<html>entries for the opsiclientd.conf</html>");
 		PROPERTYCLASSES_CLIENT.put("opsi-script", "<html>parameters for opsi-script on a client</html>");
 
 		PROPERTYCLASSES_CLIENT.put("software-on-demand",
 				"<html>software on demand configuration,<br />not client specific</html>");
-		// PROPERTYCLASSES_CLIENT.put( OpsiPermission.CONFIGKEY_STR_USER, "<html>user
-		// privileges configuration,<br />not client specific</html>");
 	}
 
 	public static TreeMap<String, String> PROPERTY_EDITOPTIONS_CLIENT;
@@ -376,8 +364,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract List<String> getClientsWithOtherProductVersion(String productId, String productVersion,
 			String packageVersion, boolean includeFailedInstallations);
 
-	
-
 	public abstract boolean areDepotsSynchronous(Set depots);
 
 	public abstract Boolean isInstallByShutdownConfigured(String host);
@@ -484,8 +470,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract boolean setProductGroup(String groupId, String description, Set<String> products);
 
 	public abstract List<String> getHostGroupIds();
-
-	
 
 	public abstract Map<String, List<String>> getHostSeparationByDepots(String[] hostIds);
 
@@ -640,7 +624,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract Map<String, List<Map<String, String>>> getMapOfProductStatesAndActions(String[] clientIds);
 
-	
 	// clientIds,
 
 	public abstract Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(String[] clientIds);
@@ -685,12 +668,9 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract Map<String, Object> getProductproperties(String pcname, String productname);
 
-	
 	// Map properties,
 
 	public abstract void setProductproperties(String pcname, String productname, Map properties);
-
-	
 
 	public abstract void setProductproperties();
 
@@ -720,8 +700,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract void setGlobalBooleanConfigValue(String key, Boolean val, String description);
 
 	protected abstract boolean setHostBooleanConfigValue(String key, String hostName, boolean val);
-
-	
 
 	public abstract Map<String, Map<String, Object>> getConfigs();
 
@@ -842,16 +820,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract boolean addWindowsSoftwareIds2LPool(String licensePoolId, List<String> softwareToAssign);
 
-	/*
-	 * returns the ID of the edited data record
-	 * public abstract String editRelationWindowsSoftwareId2LPool(
-	 * String windowsSoftwareId,
-	 * String licensePoolId {
-	 * 
-	 * );
-	 * 
-	 */
-
 	public abstract String editPool2AuditSoftware(String softwareID, String licensePoolID_old,
 			String licensePoolID_new);
 
@@ -897,7 +865,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract List<String> getOpsiclientdExtraEvents();
 
 	// table sources
-	
 
 	// opsi module information
 	public static int CLIENT_COUNT_WARNING_LIMIT = 10;

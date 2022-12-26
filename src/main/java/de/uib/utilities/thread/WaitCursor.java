@@ -58,30 +58,6 @@ public class WaitCursor {
 		logging.debug(this,
 				"adding instance " + objectNo + "-- call location at (" + callLocation + ") on component " + c);
 
-		/*
-		 * javax.swing.SwingUtilities.invokeLater(
-		 * new Thread(){
-		 * public void run()
-		 * {
-		 * ActivityPanel.setActing(true);
-		 * 
-		 * 
-		 * 
-		 * while (!ready && !allStopped)
-		 * {
-		 * try
-		 * {
-		 * Thread.sleep (200);
-		 * 
-		 * }
-		 * catch (InterruptedException ex)
-		 * {}
-		 * }
-		 * }
-		 * }
-		 * );
-		 */
-
 		if (java.awt.EventQueue.isDispatchThread()) {
 			new Thread() {
 				@Override
@@ -93,22 +69,21 @@ public class WaitCursor {
 							Thread.sleep(200);
 
 						} catch (InterruptedException ex) {
+							Thread.currentThread().interrupt();
 						}
 					}
 				}
 			}.start();
 		} else {
-			javax.swing.SwingUtilities.invokeLater(new Thread() {
-				@Override
-				public void run() {
-					ActivityPanel.setActing(true);
+			javax.swing.SwingUtilities.invokeLater(() -> {
+				ActivityPanel.setActing(true);
 
-					while (!ready && !allStopped) {
-						try {
-							Thread.sleep(200);
+				while (!ready && !allStopped) {
+					try {
+						Thread.sleep(200);
 
-						} catch (InterruptedException ex) {
-						}
+					} catch (InterruptedException ex) {
+						Thread.currentThread().interrupt();
 					}
 				}
 			});
@@ -120,61 +95,27 @@ public class WaitCursor {
 		logging.info(this, " stop wait cursor " + objectNo + ", was located at (" + callLocation + ")");
 		ready = true;
 
-		javax.swing.SwingUtilities.invokeLater(new Thread() {
-			@Override
-			public void run() {
+		javax.swing.SwingUtilities.invokeLater(() -> {
 
-				if (c != null)
-					c.setCursor(saveCursor);
+			if (c != null)
+				c.setCursor(saveCursor);
 
-				if (isStopped()) {
-					objectCounting.decrementAndGet();
-					logging.debug(this, "removing instance " + objectNo);
-					if (objectCounting.get() <= 0)
+			if (isStopped()) {
+				objectCounting.decrementAndGet();
+				logging.debug(this, "removing instance " + objectNo);
+				if (objectCounting.get() <= 0)
 
-					{
-						logging.info(this, "seemed to be last living instance");
-						ActivityPanel.setActing(false);
-					} else {
-						logging.debug(this, " stopped wait cursor " + " instance " + objectNo + ", " + " still active  "
-								+ objectCounting + " the stopped cursor was initiated from " + callLocation
-						// + getInstancesNumbers()
-						);
-					}
+				{
+					logging.info(this, "seemed to be last living instance");
+					ActivityPanel.setActing(false);
+				} else {
+					logging.debug(this, " stopped wait cursor " + " instance " + objectNo + ", " + " still active  "
+							+ objectCounting + " the stopped cursor was initiated from " + callLocation);
 				}
 			}
 		});
 
 	}
-
-	/*
-	 * public void stop()
-	 * {
-	 * logging.info(this, " stop wait cursor " + objectNo + ", was located at (" +
-	 * callLocation + ")");
-	 * ready = true;
-	 * 
-	 * if (c != null) c.setCursor(saveCursor);
-	 * 
-	 * objectCounting.decrementAndGet();
-	 * logging.debug(this, "removing instance " + objectNo);
-	 * if (objectCounting.get() == 0)
-	 * //if (instances.isEmpty())
-	 * {
-	 * logging.debug(this, "seemed to be last living instance");
-	 * ActivityPanel.setActing(false);
-	 * }
-	 * else
-	 * {
-	 * logging.info(this, " stopped wait cursor "
-	 * + " instance " + objectNo + ", "
-	 * + " still active  " + objectCounting
-	 * //+ getInstancesNumbers()
-	 * );
-	 * }
-	 * 
-	 * }
-	 */
 
 	public boolean isStopped() {
 		return ready;
@@ -183,31 +124,6 @@ public class WaitCursor {
 	public static void stopAll() {
 		allStopped = true;
 
-		/*
-		 * Vector<WaitCursor> instancesCopy = new Vector<>();
-		 * for (WaitCursor instance : instances)
-		 * {
-		 * instancesCopy.add(instance);
-		 * }
-		 * for (WaitCursor instance : instancesCopy)
-		 * {
-		 * instance.stop();
-		 * }
-		 */
 	}
 
-	/*
-	 * private static String getInstancesNumbers()
-	 * {
-	 * StringBuffer listing = new StringBuffer("[ ");
-	 * for (WaitCursor inst : instances)
-	 * {
-	 * listing.append(inst.getObjectNo());
-	 * listing.append(" ");
-	 * }
-	 * listing.append("]");
-	 * 
-	 * return listing.toString();
-	 * }
-	 */
 }

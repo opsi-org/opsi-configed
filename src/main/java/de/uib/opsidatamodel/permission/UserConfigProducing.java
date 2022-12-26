@@ -93,13 +93,6 @@ public class UserConfigProducing {
 		return readyObjects;
 	}
 
-	/*
-	 * public UserConfig getUserConfig()
-	 * {
-	 * return new UserConfig (userToAdd);
-	 * }
-	 */
-
 	private void produceRoleAndUserParts(java.util.Set<String> userNames, java.util.Set<String> roleNames) {
 		logging.info(this, "produceRoleAndUserParts for " + userNames + " resp. " + roleNames);
 
@@ -110,7 +103,6 @@ public class UserConfigProducing {
 			if (!(key.startsWith(UserConfig.KEY_USER_ROOT)))
 				continue;
 
-			// UserConfig.KEY_USER_ROOT " + key);
 			if (key.startsWith(roleBranchPart)) {
 				String rolenameBefore = key.substring(0, startRoleKey.length());
 				String rolename = key.substring(rolenameBefore.length());
@@ -468,65 +460,6 @@ public class UserConfigProducing {
 		logging.info(this,
 				"supplyPermissionEntriesForAUser UserConfig.getUserListKeys( " + UserConfig.getUserListKeys());
 
-		/*
-		 * for( String partkey : UserConfig.getUserListKeys() )
-		 * //handles for opsi permission keys the associated lists, i.e. the
-		 * selectedValues
-		 * //mulitvalue here true!
-		 * {
-		 * configKey = startkey + partkey;
-		 * // String configKey = startkey +
-		 * UserOpsipermission.PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY ;
-		 * 
-		 * 
-		 * List<Object> values = serverconfigValuesMap.get( configKey );
-		 * 
-		 * logging.info(this, "supplyPermissionEntriesForAUser list configKey " +
-		 * configKey + " -- partkey " + partkey);
-		 * logging.info(this,
-		 * "supplyPermissionEntriesForAUser list configKey has values " + values);
-		 * logging.info(this, "supplyPermissionEntriesForAUser list prototype values " +
-		 * prototypeConfig.getValues( partkey ) );
-		 * 
-		 * 
-		 * if (
-		 * values == null
-		 * 
-		 * || (prototypeObligatory && !( values.equals( prototypeConfig.getValues(
-		 * partkey ) ) )
-		 * )
-		 * 
-		 * )
-		 * 
-		 * {
-		 * logging.info(this,
-		 * "supplyPermissionEntriesForAUser. serverconfigValuesMap gives not valid value for key "
-		 * + configKey);
-		 * values = prototypeConfig.getValues( partkey );
-		 * 
-		 * item = PersistenceController.createJSONConfig(
-		 * ConfigOption.TYPE.UnicodeConfig,
-		 * configKey,
-		 * configKey, //description
-		 * false, //editable
-		 * true, //multivalue
-		 * values,
-		 * values //possibleValues
-		 * 
-		 * );
-		 * 
-		 * 
-		 * readyObjects.add( Executioner.jsonMap(item) ) ;
-		 * 
-		 * }
-		 * 
-		 * userConfig.setValues ( partkey, values );
-		 * 
-		 * configKey + " -- partkey " + partkey);
-		 * 
-		 * }
-		 */
-
 		logging.info(this, "supplyPermissionEntriesForAUser  user config " + userConfig);
 
 		logging.info(this,
@@ -735,17 +668,6 @@ public class UserConfigProducing {
 					+ ": " + (readyObjects.size() - 1));
 			List<Object> timeVal = Globals.getNowTimeListValue("set by role prototype");
 
-			/*
-			 * ConfigOption itemModifyTime = PersistenceController.createConfig(
-			 * ConfigOption.TYPE.UnicodeConfig,
-			 * startkey + UserConfig.MODIFICATION_INFO_KEY,
-			 * "last modification time for entries of this user",
-			 * false, false,
-			 * timeVal,
-			 * timeVal
-			 * );
-			 * 
-			 */
 			Map<String, Object> itemModifyTime = PersistenceController.createNOMitem(ConfigOption.UNICODE_TYPE);
 
 			itemModifyTime.put("ident", startkey + UserConfig.MODIFICATION_INFO_KEY);

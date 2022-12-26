@@ -92,7 +92,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		cursorrowObservable = new CursorrowObserved();
 
 		initColumns();
-		setRows((Vector<Vector<Object>>) dataProvider.getRows());
+		setRows(dataProvider.getRows());
 
 		addedRows = new Vector<>();
 		updatedRows = new Vector<>();
@@ -121,10 +121,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		emptyFilter = new TableModelFilter();
 		setFilter(chainedFilter);
 
-		// filterConditionShowOnlySelected = new DefaultTableModelFilterCondition(
-
-		// chainFilter( labelFilterConditionShowOnlySelected, new TableModelFilter(
-
 	}
 
 	public GenTableModel(de.uib.utilities.table.updates.TableUpdateItemFactory itemFactory,
@@ -150,17 +146,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	protected void initColumns() {
 		columnNames = tableProvider.getColumnNames();
 		logging.info(this, "initColumns " + columnNames);
-		/*
-		 * Vector<String> columnNames1 = tableProvider.getColumnNames();
-		 * logging.debug(this, "columnNames: " + columnNames1);
-		 * 
-		 * if (columnNames1 != null)
-		 * {
-		 * columnNames = new Vector<>();
-		 * for (int i = 0; i < columnNames1.size(); i++)
-		 * columnNames.add(columnNames1.get(i).toLowerCase());
-		 * }
-		 */
 
 		classNames = tableProvider.getClassNames();
 		logging.info(this, "initColumns  classNames " + classNames);
@@ -205,13 +190,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	public boolean isReloadRequested() {
 		return !modelDataValid;
 	}
-
-	/*
-	 * public void requestRefilter()
-	 * {
-	 * modelDataValid = false;
-	 * }
-	 */
 
 	public void requestReload() {
 		modelDataValid = false;
@@ -481,13 +459,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	@Override
 	public String getColumnName(int col) {
-		/*
-		 * if (col >= columnNames.size())
-		 * {
-		 * logging.warning(this, "not existing columnIndex " + col);
-		 * return "";
-		 * }
-		 */
+
 		return columnNames.get(col);
 	}
 
@@ -511,12 +483,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 			result = (rows.get(row)).get(col);
 		}
-
-		/*
-		 * if (col == colMarkCursorRow)
-		 * logging.info(this, "getValueAt row, col " + row + ", " + col +
-		 * " --  cursorrow " + cursorrow + " " + result);
-		 */
 
 		return result;
 	}
@@ -791,14 +757,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		Vector<Object> result = new Vector<>();
 
 		for (String col : columnNames) {
-
-			/*
-			 * if (col.equals("APO_PLZ"))
-			 * {
-			 * result.add(null);
-			 * continue;
-			 * }
-			 */
 
 			if (entries.get(col) != null)
 				result.add(entries.get(col));

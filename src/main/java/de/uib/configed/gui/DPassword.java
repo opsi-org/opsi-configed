@@ -123,8 +123,6 @@ public class DPassword extends JDialog // implements Runnable
 
 			waitingProgressBar = new JProgressBar();
 
-			// waitingProgressBar.setToolTipText(
-
 			waitingProgressBar.setValue(0);
 			waitingProgressBar.setEnabled(true);
 
@@ -500,13 +498,12 @@ public class DPassword extends JDialog // implements Runnable
 		gpl.setVerticalGroup(gpl.createSequentialGroup()
 				.addComponent(jLabelVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				
+
 				.addGroup(gpl.createParallelGroup()
 						.addComponent(jLabelLabelJavaVersion, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT)
 						.addComponent(jLabelJavaVersion, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
-				
-				
+
 				.addGap(Globals.LINE_HEIGHT)
 				.addComponent(jLabelHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -522,8 +519,7 @@ public class DPassword extends JDialog // implements Runnable
 				.addGap(Globals.LINE_HEIGHT)
 				.addComponent(jPanelParameters1, (int) (1.2 * Globals.LINE_HEIGHT), (int) (1.2 * Globals.LINE_HEIGHT),
 						(int) (1.2 * Globals.LINE_HEIGHT))
-				
-				
+
 				.addGap(Globals.LINE_HEIGHT).addComponent(jPanelButtons, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
@@ -534,7 +530,7 @@ public class DPassword extends JDialog // implements Runnable
 										GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE))
 						.addGroup(gpl.createSequentialGroup().addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE)
-								
+
 								.addComponent(jLabelLabelJavaVersion, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.HGAP_SIZE / 2)

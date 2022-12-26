@@ -279,10 +279,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private Map<String, Object> hwInfoClientmap;
 
-	
-
-	
-
 	protected String myServer;
 	protected String opsiDefaultDomain;
 	protected Vector<String> editableDomains;
@@ -357,7 +353,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected Map<LicencesTabStatus, String> licencesPanelsTabNames = new EnumMap<>(LicencesTabStatus.class);
 
-	
 	// TabController Interface
 	@Override
 	public Enum getStartTabState() {
@@ -408,8 +403,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 		return true;
 	}
-
-	
 
 	private boolean dataReady = false;
 
@@ -2093,8 +2086,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					Globals.createImageIcon("images/new_network-disconnect.png", ""),
 					Globals.createImageIcon("images/new_network-empty22.png", ""), false));
 
-			
-
 		}
 
 		if (persist.getHost_displayFields().get(HostInfo.clientUefiBoot_DISPLAY_FIELD_LABEL)) {
@@ -2984,7 +2975,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		freeMemoryFromSearchData();
 
 		try {
-			// waitCursor = new WaitCursor( mainFrame.retrieveBasePane(),
 
 			clearProductEditing();
 
@@ -3074,7 +3064,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				List value = (List) mergeIn.get(key);
 
 				if (mergedMap.get(key) == null)
-				
+
 				{
 					ListMerger merger = new ListMerger(value);
 					merger.setHavingNoCommonValue();

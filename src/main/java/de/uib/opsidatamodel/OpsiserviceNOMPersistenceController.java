@@ -3129,7 +3129,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Map info = exec
 				.getMapOfListsOfMaps(new OpsiMethodCall("getHardwareInformation_hash", new String[] { clientId }));
 		if (info.size() > 1) // the first element is a default scantime
-		
+
 		{
 			return info;
 		}
@@ -4294,7 +4294,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return retrieveListOfMapsNOM(callAttributes, callFilter, methodName);
 	}
 
-	
 	List<Map<String, Object>> retrieveListOfMapsNOM(String[] callAttributes, HashMap callFilter, String methodName) {
 		List<Map<String, Object>> retrieved = exec
 				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { callAttributes, callFilter }));
@@ -4373,8 +4372,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			logging.error("no product properties ");
 			return null;
 		} else {
-
-			// " + depot2product2properties.get(depotId) );
 
 			if (depot2product2properties.get(depotId) == null)
 				// initializing state
@@ -5111,7 +5108,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				List<Map<String, Object>> retrievedList = retrieveListOfMapsNOM("config_getObjects");
 
-				logging.info(this, "configOptions retrieved "); // : " + retrieved);
+				logging.info(this, "configOptions retrieved ");
 
 				for (Map<String, Object> configItem : retrievedList) {
 					// map to java type
@@ -6208,8 +6205,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			String licencePoolKEY = retrieved.get(LicencepoolEntry.idSERVICEKEY);
 			String swKEY = entry.getIdent();
 
-			// swKEY " + licencePoolKEY + ", " + swKEY);
-
 			// build row for software table
 			LinkedHashMap<String, String> row = new LinkedHashMap<>();
 
@@ -6958,7 +6953,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	@Override
 	public void addDeletionLicenceUsage(String hostId, String softwareLicenseId, String licensePoolId) {
 
-		// licensePoolId " + hostId + ", " + softwareLicenseId + ", " + licensePoolId);
 		if (itemsDeletionLicenceUsage == null)
 			itemsDeletionLicenceUsage = new ArrayList<>();
 

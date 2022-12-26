@@ -258,17 +258,10 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	private void initComponents() {
 		panelKeys = new PanelGenEditTable(
 				configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"), 0, true, 0, false,
-				new int[] {
-						// PanelGenEditTable.POPUP_DELETE_ROW,
-						// PanelGenEditTable.POPUP_SAVE,
-						// PanelGenEditTable.POPUP_CANCEL,
-						PanelGenEditTable.POPUP_RELOAD },
-				false // searchpane
+				new int[] { PanelGenEditTable.POPUP_RELOAD }, false // searchpane
 		);
 
 		panelKeys.setMasterFrame(Globals.frame1);
-
-		// SearchTargetModelFromTable.setFiltered
 
 		panelLicencepools = new PanelGenEditTable(
 				configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool"), maxHSize, false, 0,
@@ -277,8 +270,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		panelLicencepools.setMasterFrame(Globals.frame1);
 
-		// SearchTargetModelFromTable.setFiltered
-
 		panelLicencecontracts = new PanelGenEditTable(
 				configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), 0, true, 1, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
@@ -286,8 +277,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 				true // with tablesearchpane
 		);
 		panelLicencecontracts.setMasterFrame(Globals.frame1);
-
-		// SearchTargetModelFromTable.setFiltered
 
 		jLabelLicencePool = new javax.swing.JLabel();
 		jButtonCreateStandard = new javax.swing.JButton();
@@ -311,8 +300,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_licenceID = new javax.swing.JTextField();
 		jTextField_licenceType = new javax.swing.JTextField();
 		jTextField_maxInstallations = new javax.swing.JTextField();
-
-		// jTextField_maxInstallations.setInputVerifier(new
 
 		comboClient = new javax.swing.JComboBox();
 		comboClient.setFont(Globals.defaultFontBig);
@@ -397,18 +384,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 				configed.getResourceValue("ConfigedMain.Licences.EnterLicense.ConcurrentLicense.ToolTip"));
 		jButtonCreateConcurrent.addActionListener(this);
 
-		/*
-		 * jButtonCreateUserAtTime.setText("UserAtTime");
-		 * jButtonCreateUserAtTime.
-		 * setToolTipText("n Lizenzen, für max n gleichzeitige User nutzbar");
-		 * jButtonCreateUserAtTime.addActionListener(this);
-		 */
-
-		/*
-		 * jButtonCreateUserAtTime.setText("FixedUsers");
-		 * jButtonCreateUserAtTime.setToolTipText("n Lizenzen,n fixierte User nutzbar");
-		 * jButtonCreateUserAtTime.addActionListener(this);
-		 */
 		jButtonSend.setText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.Execute"));
 		jButtonSend.addActionListener(this);
 
@@ -427,15 +402,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jLabelSLid6.setText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid6"));
 
 		jLabelSLid3info.setText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid3info"));
-
-		/*
-		 * jTextField_licenceID.setText("jTextField_licenceID");
-		 * jTextField_licenceType.setText("jTextField_licenceType");
-		 * jTextField_maxInstallations.setText("jTextField_maxInstallations");
-		 * comboClient.setText("comboClient");
-		 * jTextField_endOfLicence.setText("jTextField_endOfLicence");
-		 * jTextField_licenceContract.setText("jTextField_licenceContract");
-		 */
 
 		de.uib.utilities.swing.Containership cs = new de.uib.utilities.swing.Containership(this);
 		cs.doForAllContainedCompisOfClass("setFont", new Object[] { Globals.defaultFont }, JTextField.class);
@@ -456,7 +422,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 								.addComponent(jLabelSLid1, javax.swing.GroupLayout.DEFAULT_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-						
+
 						.addGroup(panelLicenceModelLayout
 								.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, true)
 
@@ -484,7 +450,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 																		javax.swing.GroupLayout.PREFERRED_SIZE)
 																.addPreferredGap(
 																		javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-																
+
 																.addComponent(jTextField_licenceContract, minFieldWidth,
 																		200, javax.swing.GroupLayout.PREFERRED_SIZE))
 														.addGroup(panelLicenceModelLayout.createSequentialGroup()
@@ -493,10 +459,9 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 																		javax.swing.GroupLayout.PREFERRED_SIZE)
 																.addPreferredGap(
 																		javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-																
+
 																.addComponent(jTextField_endOfLicence, minFieldWidth,
 																		200, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-						// .addContainerGap()
 						.addContainerGap(10, Short.MAX_VALUE)));
 		panelLicenceModelLayout
 				.setVerticalGroup(panelLicenceModelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -540,7 +505,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 														javax.swing.GroupLayout.PREFERRED_SIZE)
 												.addComponent(comboClient, minFieldHeight, Globals.LINE_HEIGHT,
 														javax.swing.GroupLayout.PREFERRED_SIZE))
-						
+
 						));
 
 		panelEnterKey.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -579,11 +544,11 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 						.addGroup(layoutTask.createSequentialGroup()
 								.addGroup(layoutTask.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 										.addGroup(layoutTask.createSequentialGroup()
-												
+
 												.addGroup(layoutTask
 														.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 														.addComponent(panelLicencecontracts, 50, 300, maxHSize))))
-						
+
 						)
 						.addGroup(layoutTask.createSequentialGroup()
 								.addComponent(jButtonSend, javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -691,50 +656,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
-
-		/*
-		 * javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-		 * this.setLayout(layout);
-		 * 
-		 * layout.setHorizontalGroup(
-		 * layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-		 * .addGroup(layout.createSequentialGroup()
-		 * .addGap(10, 10, 10)
-		 * .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.
-		 * LEADING)
-		 * .addGroup(layout.createSequentialGroup()
-		 * .addComponent(panelLicencepools, javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, maxHSize)
-		 * .addGap(10, 10, 10)
-		 * )
-		 * .addGroup(layout.createSequentialGroup()
-		 * .addComponent(panelKeys, javax.swing.GroupLayout.DEFAULT_SIZE, maxHSize,
-		 * maxHSize)
-		 * .addGap(10, 10, 10)
-		 * )
-		 * .addGroup(layout.createSequentialGroup()
-		 * .addComponent(panelTask, javax.swing.GroupLayout.DEFAULT_SIZE, maxHSize,
-		 * Short.MAX_VALUE)
-		 * .addGap(10, 10, 10)
-		 * )
-		 * )
-		 * )
-		 * );
-		 * layout.setVerticalGroup(
-		 * layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-		 * .addGroup(layout.createSequentialGroup()
-		 * .addGap(5, 5, 5)
-		 * .addComponent(panelLicencepools, minVSize,
-		 * javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE )
-		 * .addGap(5, 5, 5)
-		 * .addComponent(panelTask, javax.swing.GroupLayout.PREFERRED_SIZE,
-		 * javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE )
-		 * .addGap(10, 10, 10)
-		 * .addComponent(panelKeys, minVSize, minVSize, Short.MAX_VALUE)
-		 * .addGap(5,5,5)
-		 * )
-		 * );
-		 */
 
 	}
 

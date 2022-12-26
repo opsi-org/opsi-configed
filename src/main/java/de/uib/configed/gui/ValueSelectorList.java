@@ -105,12 +105,6 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 		// colorize as hint that we have changed the depots selection
 
-		/*
-		 * buttonCommitChangedDepotSelection.setEnabled(active);
-		 * buttonCancelChangedDepotSelection.setEnabled(active);
-		 * popupCommitChangedDepotSelection.setEnabled(active);
-		 * popupCancelChangedDepotSelection.setEnabled(active);
-		 */
 	}
 
 	private void initComponents() {
@@ -137,13 +131,6 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		buttonSelectValuesAll.addActionListener(this);
 		buttonSelectValuesAll.setEnabled(multidepot);
 
-		/*
-		 * searchField = new JTextField("");
-		 * searchField.setFont(Globals.defaultFont);
-		 * searchField.setBackground( getMyColor() );
-		 * if (!multidepot) searchField.setVisible(false);
-		 */
-
 		searchPane.setFieldFont(Globals.defaultFont);
 		searchPane.setFieldBackground(getMyColor());
 		if (!multidepot)
@@ -163,88 +150,6 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		valueList.setFont(Globals.defaultFont);
 		valueList.setBackground(Globals.backgroundWhite);
 
-		/*
-		 * depotslist.addMouseListener(new utils.PopupMouseListener(popupDepotList));
-		 * popupDepotList.add(popupCommitChangedDepotSelection);
-		 * popupDepotList.add(popupCancelChangedDepotSelection);
-		 * 
-		 * popupCommitChangedDepotSelection.setText(de.uib.configed.configed.
-		 * getResourceValue("MainFrame.buttonChangeDepot") ) ;
-		 * popupCommitChangedDepotSelection.setToolTipText(
-		 * de.uib.configed.configed.getResourceValue(
-		 * "MainFrame.buttonChangeDepot.tooltip")
-		 * );
-		 * 
-		 * popupCommitChangedDepotSelection.addActionListener(new ActionListener()
-		 * {
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * logging.debug(this, "actionPerformed " + e);
-		 * main.changeDepotSelection();
-		 * }
-		 * });
-		 * 
-		 * popupCommitChangedDepotSelection.setEnabled(false);
-		 * 
-		 * popupCancelChangedDepotSelection.setText(de.uib.configed.configed.
-		 * getResourceValue("MainFrame.buttonCancelDepot") ) ;
-		 * popupCancelChangedDepotSelection.setToolTipText(
-		 * de.uib.configed.configed.getResourceValue(
-		 * "MainFrame.buttonCancelDepot.tooltip")
-		 * );
-		 * 
-		 * popupCancelChangedDepotSelection.addActionListener(new ActionListener()
-		 * {
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * logging.debug(this, "actionPerformed " + e);
-		 * main.cancelChangeDepotSelection();
-		 * 
-		 * }
-		 * });
-		 * 
-		 * popupCancelChangedDepotSelection.setEnabled(false);
-		 */
-
-		// must not be set (otherwise the embedding scrollpane does not scroll)
-
-		// labelDepotServer.setPreferredSize(new Dimension(widthColumnServer,
-
-		/*
-		 * buttonCommitChangedDepotSelection = new IconButton(
-		 * configed.getResourceValue("MainFrame.buttonChangeDepot.tooltip"),
-		 * "images/depot_activate.png",
-		 * "images/depot_activate_disabled.png",
-		 * "images/depot_activate_disabled.png",
-		 * false);
-		 * buttonCommitChangedDepotSelection.setPreferredSize(new
-		 * Dimension(Globals.squareButtonWidth, Globals.buttonHeight));
-		 * buttonCommitChangedDepotSelection.addActionListener(new ActionListener()
-		 * {
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * main.changeDepotSelection();
-		 * }
-		 * }
-		 * );
-		 * 
-		 * buttonCancelChangedDepotSelection = new IconButton(
-		 * configed.getResourceValue("MainFrame.buttonCancelDepot.tooltip"),
-		 * "images/cancel22_small.png",
-		 * "images/cancel22_small.png",
-		 * "images/cancel22_small.png",
-		 * false);
-		 * buttonCancelChangedDepotSelection.setPreferredSize(new
-		 * Dimension(Globals.squareButtonWidth, Globals.buttonHeight));
-		 * buttonCancelChangedDepotSelection.addActionListener(new ActionListener(){
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * main.cancelChangeDepotSelection();
-		 * }
-		 * }
-		 * );
-		 */
-
 	}
 
 	private void layouting() {
@@ -254,16 +159,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(5, 5, 10)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(labelValue,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
+
 				).addGap(5, 5, 10).addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(searchPane, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				.addGap(5, 5, 10));
@@ -271,16 +167,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 				.addGroup(layout.createSequentialGroup().addGap(10)
 						.addComponent(labelValue, 50, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
+
 						.addGap(10, 10, 10))
 				.addGroup(layout.createSequentialGroup().addGap(5, 5, 5)
 						.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(5, 5, 5)));

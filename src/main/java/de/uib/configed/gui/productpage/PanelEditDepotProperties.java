@@ -202,12 +202,6 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		}
 
 		logging.info(this, "setDepotListData for count depots " + depots.size());
-		/*
-		 * depots, selected, product, selectedDepots "
-		 * + depots +
-		 * ", " + selectedDepot + ", " + productEdited
-		 * + ", " + listSelectedDepots);
-		 */
 
 		this.productEdited = productEdited;
 		listDepots.setListData(new Vector<>(depots));
@@ -222,11 +216,6 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		if (e.getValueIsAdjusting())
 			return;
 
-		/*
-		 * if (listDepots.hasFocus())
-		 * listSelectedDepots = listDepots.getSelectedValuesList();
-		 */
-
 		Map<String, Object> visualData = mergeProperties(
 				mainController.getPersistenceController().getDepot2product2properties(),
 				listDepots.getSelectedValuesList(), productEdited);
@@ -236,12 +225,6 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 			// produce empty map
 			visualData = emptyVisualData;
 		}
-
-		/*
-		 * if (listDepots.getSelectedValuesList().isEmpty())
-		 * {
-		 * visualDats = emptyVisualDt
-		 */
 
 		if (!listDepots.getSelectedValuesList().isEmpty()) {
 			productPropertiesPanel.setEditableMap(
@@ -263,15 +246,6 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 					logging.info(this, " product2properties null for depot, product " + depot + ", " + productEdited);
 				} else
 					storableProperties.add(product2properties.get(productEdited));
-
-				;
-				/*
-				 * logging.info(this, "storeData for depot " + depot + ": " +
-				 * mainController.getPersistenceController()
-				 * .getDepot2product2properties().get(depot).get(productEdited)
-				 * )
-				 * ;
-				 */
 
 			}
 			productPropertiesPanel.setStoreData(storableProperties);

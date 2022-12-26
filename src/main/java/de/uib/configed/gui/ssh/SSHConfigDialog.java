@@ -537,7 +537,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 										.addComponent(tf_passphrase, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-								
+
 								// )
 								.addGap(Globals.VGAP_SIZE))
 						.addGroup(connectionPanelLayout.createSequentialGroup().addComponent(lbl_connectionState,
@@ -665,13 +665,9 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			tf_keyfile.setText("");
 		}
 
-		// de.uib.utilities.thread.WaitCursor waitCursor = new
-
 		SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
 
 		factory.testConnection(connectionInfo.getUser(), connectionInfo.getHost());
-
-		// factory.testConnection(tf_user.getText(), (String) cb_host.getSelectedItem())
 
 		SSHCommandFactory.ssh_colored_output = cb_useOutputColor.isSelected();
 		SSHCommandFactory.ssh_always_exec_in_background = cb_execInBackground.isSelected();

@@ -55,67 +55,9 @@ public class OpsiHwAuditDeviceClass {
 
 	}
 
-	/*
-	 * public boolean checkIn( String configKey, List valuesUsed)
-	 * //importing configs
-	 * {
-	 * if (!configKey.startsWith(CONFIG_KEY))
-	 * return false;
-	 * 
-	 * String hwdevicePartOfKey = configKey.substring( CONFIG_KEY.length() );
-	 * 
-	 * String tableType = null;
-	 * String hwClass = null;
-	 * 
-	 * if ( hwdevicePartOfKey.endsWith( OpsiHwAuditDeviceClass.hostAssignedTableType
-	 * ) )
-	 * {
-	 * tableType = hostAssignedTableType;
-	 * }
-	 * else if ( hwdevicePartOfKey.endsWith( hwItemAssignedTableType ) )
-	 * {
-	 * tableType = hwItemAssignedTableType;
-	 * }
-	 * 
-	 * int i = hwdevicePartOfKey.lastIndexOf("_");
-	 * if (i > 0)
-	 * hwClass = hwdevicePartOfKey.substring(0, i);
-	 * 
-	 * if (tableType == null || hwClass == null)
-	 * return false;
-	 * 
-	 * for( OpsiHwAuditDevicePropertyType propertyType : deviceHwItemProperties )
-	 * {
-	 * if (valuesUsed.indexOf( propertyType.getOpsiDbColumnName() ) >= 0)
-	 * usedHwItemColumns.add( propertyType.getOpsiDbColumnName() );
-	 * }
-	 * 
-	 * for( OpsiHwAuditDevicePropertyType propertyType : deviceHostProperties )
-	 * {
-	 * if (valuesUsed.indexOf( propertyType.getOpsiDbColumnName() ) >= 0)
-	 * usedHostColumns.add( propertyType.getOpsiDbColumnName() );
-	 * }
-	 * 
-	 * return true;
-	 * 
-	 * }
-	 */
-
 	public String getHwClassName() {
 		return hwClassName;
 	}
-
-	/*
-	 * public void setHostConfig( ConfigOption hostConfig )
-	 * {
-	 * this.hostConfig = hostConfig;
-	 * }
-	 * 
-	 * public ConfigOption getHostConfig()
-	 * {
-	 * return hostConfig;
-	 * }
-	 */
 
 	public void setHostConfigKey(String key) {
 		hostConfigKey = key;
@@ -159,18 +101,6 @@ public class OpsiHwAuditDeviceClass {
 
 	}
 
-	/*
-	 * public List<Object> getHostPossibleColumns()
-	 * {
-	 * return hostPossibleColumns;
-	 * }
-	 * 
-	 * public List<Object> getHwItemPossibleColumns()
-	 * {
-	 * return hwItemPossibleColumns;
-	 * }
-	 */
-
 	@Override
 	public String toString() {
 		return this.getClass().getName() + " hwclass name " + hwClassName + ", HOST:COLUMNS " + deviceHostProperties
@@ -185,26 +115,4 @@ public class OpsiHwAuditDeviceClass {
 		return deviceHwItemProperties;
 	}
 
-	/*
-	 * public void setUsedHostColumns(Vector<String> usedHostColumns )
-	 * {
-	 * this.usedHostColumns = usedHostColumns;
-	 * }
-	 * 
-	 * 
-	 * public Vector<String> getUsedHostColumns()
-	 * {
-	 * return usedHostColumns;
-	 * }
-	 * 
-	 * public void setUsedHwItemColumns( Vector<String> usedHwItemColumns )
-	 * {
-	 * this.usedHwItemColumns = usedHwItemColumns;
-	 * }
-	 * 
-	 * public Vector<String> getUsedHwItemColumns()
-	 * {
-	 * return usedHwItemColumns;
-	 * }
-	 */
 }

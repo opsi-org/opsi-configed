@@ -144,21 +144,6 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		logging.debug(this, "loadDocument ident " + ident);
 	}
 
-	/*
-	 * public void updateDocument(final String ident, final String s, final String
-	 * info)
-	 * {
-	 * final WaitCursor waitCursor = new WaitCursor(
-	 * Globals.mainContainer, "updateDocument");
-	 * SwingUtilities.invokeLater( new Runnable(){
-	 * public void run(){
-	 * setDocument(ident, s, info);
-	 * waitCursor.stop();
-	 * }
-	 * });
-	 * }
-	 */
-
 	private void setDocument(int i, final String document, final String info) {
 		logging.info(this, "setDocument " + i + " document == null " + (document == null));
 		if (i < 0 || i >= idents.length)

@@ -243,16 +243,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		) {
 			result = true;
 		}
-		/*
-		 * else
-		 * if
-		 * (
-		 * support.getUserDropAction() == TransferHandler.MOVE
-		 * )
-		 * {
-		 * result = true;
-		 * }
-		 */
 
 		logging.debug(this, "chooseMOVE  " + result);
 
@@ -322,40 +312,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 		// what is to be moved/copied
 
-		/*
-		 * instead of the following code which retrieves the data from the clipboard
-		 * we use the data from the source data
-		 * 
-		 * try
-		 * {
-		 * //java.security.AccessController.checkPermission(new
-		 * java.awt.AWTPermission("accessClipboard"));
-		 * transferData = (String)
-		 * transferable.getTransferData(DataFlavor.stringFlavor);
-		 * }
-		 * catch (IOException e) {
-		 * return false;
-		 * }
-		 * catch (UnsupportedFlavorException e) {
-		 * return false;
-		 * }
-		 * 
-		 * catch(java.security.AccessControlException ex)
-		 * {
-		 * logging.debug(this, "dropPath " + dropPath);
-		 * 
-		 * }
-		 * 
-		 * catch(Exception exx)
-		 * {
-		 * return false;
-		 * }
-		 * 
-		 * logging.debug(this, " transferData " + transferData.toString());
-		 * 
-		 * String[] values = transferData.split("\n");
-		 */
-
 		logging.debug(this, "importData. ++++++++++ getActivePaths(): " + tree.getActivePaths());
 
 		String[] values = tree.getSelectedClientsInTable().toArray(new String[] {});
@@ -400,13 +356,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 					importID = parts[parts.length - 1];
 
-					/*
-					 * if (parts.length > 1)
-					 * //probably our own transfer
-					 * sourceParentID = parts[parts.length-2];
-					 * 
-					 * sourceParentID);
-					 */
 				}
 
 			} catch (Exception ex) {
@@ -471,18 +420,4 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		super.exportToClipboard(comp, clip, action);
 	}
 
-	/*
-	 * @Override
-	 * protected void exportDone(JComponent c, Transferable data, int action)
-	 * {
-	 * 
-	 * }
-	 * 
-	 * //If the remove argument is true, the drop has been
-	 * //successful and it's time to remove the source node
-	 * protected void cleanup(JComponent c, boolean remove)
-	 * {
-	 * 
-	 * }
-	 */
 }

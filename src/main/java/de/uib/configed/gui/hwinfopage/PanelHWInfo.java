@@ -108,14 +108,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private String encodeString(String s) {
 		return s;
-		/*
-		 * logging.info(this, "encode: to encode " + s);
-		 * String result;
-		 * 
-		 * result = s;
-		 * logging.info(this, "encode: encoded " + result);
-		 * return result;
-		 */
+
 	}
 
 	protected void buildPanel() {
@@ -123,8 +116,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		panelByAuditInfo = new PanelHWByAuditDriver(title, main);
 
 		tree = new XTree(null);
-
-		// createRoot("");
 
 		jScrollPaneTree = new JScrollPane(tree);
 		jScrollPaneTree.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -177,7 +168,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(vGap / 2, vGap / 2, vGap / 2).addComponent(contentPane, javax.swing.GroupLayout.PREFERRED_SIZE,
 						javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-		
+
 		);
 
 		if (withPopup) {
@@ -216,15 +207,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						pdfExportTable.setPageSizeA4_Landscape();
 						pdfExportTable.execute(null, false); // create pdf // no filename, onlyselectedRows=false
 
-						/*
-						 * old pdf exporting
-						 * tableToPDF = new DocumentToPdf (null, metaData); // no filename, metadata
-						 * 
-						 * tableToPDF.createContentElement("table", CreateHWInfoTableModelComplete());
-						 * 
-						 * tableToPDF.setPageSizeA4_Landscape(); //
-						 * tableToPDF.toPDF(); //
-						 **/
 						break;
 					}
 				}
@@ -269,18 +251,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	/** Returns an ImageIcon, or null if the path was invalid. */
 	private ImageIcon createImageIcon(String path) {
 		return Globals.createImageIcon(path, "");
-		/*
-		 * java.net.URL imgURL = getClass().getResource(path);
-		 * if (imgURL != null)
-		 * {
-		 * return new ImageIcon(imgURL, null);
-		 * }
-		 * else
-		 * {
-		 * logging.debug("Couldn't find file: " + path);
-		 * return null;
-		 * }
-		 */
+
 	}
 
 	protected void createRoot(String name) {
@@ -730,7 +701,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					}
 
 					first = false;
-				} else { 
+				} else {
 					childValues = new Vector<>();
 					childValues.add(""); // first column empty
 					childValues.add(hm.get("displayName").toString());
