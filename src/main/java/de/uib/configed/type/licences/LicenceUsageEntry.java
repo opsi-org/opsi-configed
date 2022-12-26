@@ -12,7 +12,7 @@ import de.uib.utilities.logging.logging;
 
 public class LicenceUsageEntry extends StringValuedRelationElement {
 	/*
-	 * describe LICENSE_ON_CLIENT;
+	 * describe LICENSE_ON_CLIENT:
 	 * | Field | Type | Null | Key | Default | Extra
 	 * | license_on_client_id | int(11) | NO | PRI | NULL | auto_increment |
 	 * | softwareLicenseId | varchar(100) | NO | MUL | NULL |
@@ -88,12 +88,6 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 		for (String key : reducedEntrySet) {
 			put(key, "" + entry.get(key));
 		}
-
-		/*
-		 * if (get(idKEY) == null)
-		 * logging.warning(this, "missing primary key in " + entry);
-		 * the id key is not used in opsiconfd interface
-		 */
 
 		if (get(licenceIdKEY) == null || get(licencepoolIdKEY) == null)
 			logging.warning(this, "missing values " + entry);

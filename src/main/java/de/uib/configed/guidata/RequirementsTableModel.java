@@ -7,6 +7,7 @@ import java.util.Vector;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import de.uib.configed.Globals;
@@ -76,22 +77,19 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 			keySet = new TreeSet();
 			if (requMap != null && requMap.keySet() != null) {
-				keySet.addAll(new TreeSet(requMap.keySet()));
+				keySet.addAll(requMap.keySet());
 			}
 			if (requBeforeMap != null && requBeforeMap.keySet() != null) {
-				keySet.addAll(new TreeSet(requBeforeMap.keySet()));
+				keySet.addAll(requBeforeMap.keySet());
 			}
 			if (requAfterMap != null && requAfterMap.keySet() != null) {
-				keySet.addAll(new TreeSet(requAfterMap.keySet()));
+				keySet.addAll(requAfterMap.keySet());
 			}
 			if (requDeinstallMap != null && requDeinstallMap.keySet() != null) {
-				keySet.addAll(new TreeSet(requDeinstallMap.keySet()));
+				keySet.addAll(requDeinstallMap.keySet());
 			}
-			if (keySet != null) {
-				keyArray = keySet.toArray();
-			} else {
-				keyArray = zeroArray;
-			}
+			keyArray = keySet.toArray();
+
 		}
 
 		fireTableDataChanged();
@@ -115,12 +113,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 		case 0:
 			result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requiredProduct");
 			break;
-		/*
-		 * case 1 : result = "Benötigt (=on)"; break;
-		 * case 2 : result = "Vorher benötigt"; break;
-		 * case 3 : result = "Danach benötigt"; break;
-		 * case 4 : result = "Bei deinstall"; break;
-		 */
+
 		case 1:
 			result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeDefault");
 			break;
@@ -131,7 +124,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 			result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeAfter");
 			break;
 
-		};
+		}
 
 		return result;
 
@@ -243,7 +236,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 				((JLabel) cell).setIcon(Globals.createImageIcon("images/warning.png", "warning"));
 
-				((JLabel) cell).setHorizontalTextPosition(JLabel.LEADING);
+				((JLabel) cell).setHorizontalTextPosition(SwingConstants.LEADING);
 
 				((JLabel) cell).setToolTipText(configed.getResourceValue("ProductInfoPane.RequirementsTable.warning"));
 
@@ -285,21 +278,6 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 					break;
 				}
 			}
-			/*
-			 * else
-			 * 
-			 * {
-			 * switch( kindOfRow )
-			 * {
-			 * case 0 :
-			 * cell.setBackground( Globals.backgroundLightGrey); break;
-			 * case 1 :
-			 * cell.setBackground( Globals.backLightBlue); break;
-			 * case 2:
-			 * cell.setBackground( Globals.backVeryLightBlue); break;
-			 * }
-			 * }
-			 */
 
 			if (kindOfRow == 2 && col > 1)
 				cell.setBackground(Globals.backgroundGrey);

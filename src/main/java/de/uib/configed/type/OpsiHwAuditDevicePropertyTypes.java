@@ -47,32 +47,12 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 		logging.info(this, "checkIn auditDeviceClasses for keys " + hwAuditDeviceClasses.keySet());
 		put(key, auditDeviceClass);
 
-		if (tableType == OpsiHwAuditDeviceClass.hostAssignedTableType) {
-			/*
-			 * Vector<String> usedHostColumns = new Vector<>();
-			 * for (Object value : valuesSet )
-			 * {
-			 * usedHostColumns.add( (String) value );
-			 * }
-			 */
+		if (tableType.equals(OpsiHwAuditDeviceClass.hostAssignedTableType)) {
 
-			for (OpsiHwAuditDevicePropertyType deviceProperty : auditDeviceClass.getDeviceHostProperties()) {
-				if (valuesSet.contains(deviceProperty.getOpsiDbColumnName()))
-					deviceProperty.setDisplayed(true);
-				else
-					deviceProperty.setDisplayed(false);
-			}
+			for (OpsiHwAuditDevicePropertyType deviceProperty : auditDeviceClass.getDeviceHostProperties())
+				deviceProperty.setDisplayed(valuesSet.contains(deviceProperty.getOpsiDbColumnName()));
 
 		} else {
-			/*
-			 * Vector<String> usedHwItemColumns = new Vector<>();
-			 * for (Object value : valuesSet )
-			 * {
-			 * usedHwItemColumns.add( (String) value );
-			 * }
-			 * 
-			 * auditDeviceClass.setUsedHwItemColumns( usedHwItemColumns );
-			 */
 
 			for (OpsiHwAuditDevicePropertyType deviceProperty : auditDeviceClass.getDeviceHwItemProperties()) {
 

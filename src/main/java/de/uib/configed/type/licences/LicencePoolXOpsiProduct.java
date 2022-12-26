@@ -10,7 +10,7 @@ import de.uib.utilities.logging.logging;
 
 public class LicencePoolXOpsiProduct extends Relation {
 	/*
-	 * PRODUCT_ID_TO_LICENSE_POOL;
+	 * PRODUCT_ID_TO_LICENSE_POOL:
 	 * | licensePoolId | varchar(100) | NO | PRI | NULL | |
 	 * | productId | varchar(255) | NO | PRI | | |
 	 * 
@@ -43,21 +43,6 @@ public class LicencePoolXOpsiProduct extends Relation {
 	public LicencePoolXOpsiProduct() {
 		super(ATTRIBUTES);
 	}
-
-	/*
-	 * private String produceSWident(Map<String, Object> m)
-	 * {
-	 * return
-	 * Globals.pseudokey(new String[]{
-	 * Globals.getStringValue( m.get(SWAuditEntry.NAME ) ),
-	 * Globals.getStringValue( m.get(SWAuditEntry.VERSION ) ),
-	 * Globals.getStringValue( m.get(SWAuditEntry.SUBVERSION ) ),
-	 * Globals.getStringValue( m.get(SWAuditEntry.LANGUAGE ) ),
-	 * Globals.getStringValue( m.get (SWAuditEntry.ARCHITECTURE ) )
-	 * }
-	 * );
-	 * }
-	 */
 
 	public void integrateRawFromService(Map<String, Object> m) {
 		String licensePoolId = (String) m.get(idKEY);

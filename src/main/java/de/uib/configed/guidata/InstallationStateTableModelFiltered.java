@@ -35,10 +35,7 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 	}
 
 	private void saveFilterSet(Set<String> filterSet) {
-		/*
-		 * Set<String> testSet = new HashSet<>();
-		 * testSet.add("jedit");
-		 */
+
 		filterSaver.serialize(filterSet);
 
 		logging.info(this, "saveFilterSet " + filterSet);
@@ -47,7 +44,7 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 	public void resetFilter() {
 		Set<String> filterSaved = (Set<String>) filterSaver.deserialize();
 		if (filterSaved == null || filterSaved.isEmpty()) {
-			setFilterFrom((Set) null);
+			setFilterFrom((Set<String>) null);
 		} else {
 			Set<String> products_only_in_filterset = new HashSet<>(filterSaved);
 			products_only_in_filterset.removeAll(tsProductNames);
@@ -118,10 +115,6 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 		if (filter == null)
 			return i;
 
-		/*
-		 * if filter[i] > super.getRowCount()-1)
-		 * logging.warning("invalid filter");
-		 */
 		if (i >= filter.length) {
 			logging.info(this, "originRow, error cannot evaluate filter; i, filter.length " + i + ", " + filter.length);
 			return i;

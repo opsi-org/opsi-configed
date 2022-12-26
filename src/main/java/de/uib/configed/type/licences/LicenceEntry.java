@@ -12,7 +12,7 @@ public class LicenceEntry extends TreeMap<String, Object>
 // software license in opsi data base
 {
 	/*
-	 * desc SOFTWARE_LICENSE ;
+	 * desc SOFTWARE_LICENSE :
 	 * | Field | Type | Null | Key | Default | Extra
 	 * | softwareLicenseId | varchar(100) | NO | PRI | NULL
 	 * | licenseContractId | varchar(100) | NO | MUL | NULL
@@ -80,25 +80,6 @@ public class LicenceEntry extends TreeMap<String, Object>
 		logging.warning(this, "illlegal servicetype " + servicetype);
 		return "";
 	}
-
-	/*
-	 * @Override
-	 * public Object put(String key, Object value)
-	 * {
-	 * assert KEYS.indexOf(key) > -1 : "not valid key " + key;
-	 * 
-	 * if (KEYS.indexOf(key) > -1)
-	 * {
-	 * if (key.equals(typeKEY) && TYPE_LIST.indexOf(value) == -1)
-	 * logging.warning(this, "value " + value + " not possible for key " + key);
-	 * 
-	 * return super.put(key, value);
-	 * }
-	 * 
-	 * return null;
-	 * 
-	 * }
-	 */
 
 	public LicenceEntry(Map<String, Object> importedEntry) {
 		super(importedEntry);

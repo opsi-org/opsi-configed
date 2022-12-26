@@ -149,7 +149,6 @@ public class PanelMountShare extends JPanel {
 		String call;
 		call = "explorer.exe " + " \"" + np.produceName() + "\"";
 
-		// call = "cmd.exe /c start \"\" \"" + fileName +FileUtils "\"";
 		logging.info(this, "windows call: " + call);
 
 		try {
@@ -240,69 +239,5 @@ public class PanelMountShare extends JPanel {
 			}
 		}.start();
 	}
-
-	/*
-	 * class JButtonFlashing extends JButton
-	 * {
-	 * JButtonFlashing(Icon icon)
-	 * {
-	 * super("", icon);
-	 * }
-	 * 
-	 * final JButton theButton = this;
-	 * 
-	 * private boolean flashing = false;
-	 * 
-	 * private int maxDeciSeconds = 0;
-	 * 
-	 * public void setFlash(boolean b)
-	 * {
-	 * setFlash(b, 0);
-	 * }
-	 * 
-	 * public void setFlash(boolean b, int maxDeciSeconds)
-	 * {
-	 * this.maxDeciSeconds = maxDeciSeconds;
-	 * 
-	 * if (flashing == b)
-	 * return;
-	 * 
-	 * else
-	 * flashing = b;
-	 * 
-	 * 
-	 * //we changed the value and act correspondently
-	 * if (flashing)
-	 * {
-	 * new Thread(){
-	 * public void run()
-	 * {
-	 * int i = 0;
-	 * 
-	 * while (flashing)
-	 * {
-	 * 
-	 * try{
-	 * logging.info(this, "flashThread, count " + i);
-	 * sleep(100);
-	 * i++;
-	 * if (i % 10 == 0)
-	 * theButton.setBackground(Color.white);
-	 * else if (i % 5 == 0)
-	 * theButton.setBackground(Color.blue);
-	 * 
-	 * }
-	 * catch(Exception ex)
-	 * {
-	 * }
-	 * }
-	 * }
-	 * }.start();
-	 * 
-	 * }
-	 * 
-	 * }
-	 * }
-	 */
 
 }
