@@ -506,7 +506,7 @@ public class DPassword extends JDialog // implements Runnable
 								Globals.LINE_HEIGHT)
 						.addComponent(jLabelJavaVersion, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				
-				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				
 				.addGap(Globals.LINE_HEIGHT)
 				.addComponent(jLabelHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)

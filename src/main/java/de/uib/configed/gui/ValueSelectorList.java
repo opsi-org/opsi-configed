@@ -255,15 +255,15 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(labelValue,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				
-				// GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE,
-				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				
-				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				// GroupLayout.PREFERRED_SIZE)
 				
-				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				
-				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				
+				
+				
+				
+				
+				
 				).addGap(5, 5, 10).addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(searchPane, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				.addGap(5, 5, 10));
@@ -274,13 +274,13 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 						
 						
 						
-						// GroupLayout.PREFERRED_SIZE)
 						
-						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						
-						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						
-						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						
+						
+						
+						
 						.addGap(10, 10, 10))
 				.addGroup(layout.createSequentialGroup().addGap(5, 5, 5)
 						.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(5, 5, 5)));

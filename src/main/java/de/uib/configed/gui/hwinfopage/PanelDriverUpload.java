@@ -681,7 +681,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 										 */
 										.addGap(hGap, hGap, Short.MAX_VALUE)
 										
-										// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										
 										
 										
 										.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2)));

@@ -656,8 +656,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(sliderLevel, sliderH, sliderH, sliderH)
 						.addComponent(sliderLevel0, sliderH, sliderH, sliderH)
-				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				// GroupLayout.PREFERRED_SIZE )
+				
+				
 				).addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
 		add(commandpane, BorderLayout.SOUTH);

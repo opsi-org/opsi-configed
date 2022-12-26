@@ -432,7 +432,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE)
 								
-								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								
 								).addGap(Globals.MIN_GAP_SIZE).addComponent(tp_commands, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 						.addGap(Globals.GAP_SIZE * 3));
@@ -446,7 +446,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE)
 				
-				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				
 				).addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(tp_commands, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.GAP_SIZE * 1));

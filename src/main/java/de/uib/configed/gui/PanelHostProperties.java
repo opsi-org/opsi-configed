@@ -74,7 +74,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 				.addGap(5)
 				.addComponent(editMapPanel, Globals.LINE_HEIGHT * 2, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				
-				// GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE )
+				
 				.addGap(20));
 	}
 

@@ -810,8 +810,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 						
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-				// GroupLayout.PREFERRED_SIZE)
+				
+				
 				.addComponent(separatingPlace, 1, 1, 1)
 				.addGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(labelSelectedGroup, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -824,12 +824,12 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 								GroupLayout.PREFERRED_SIZE)
 
 						
-						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						
-						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						
 						
-						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						
+						
+						
+						
 
 						
 						
@@ -838,7 +838,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 						.addComponent(buttonEditDialog, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 				
-				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				
 				).addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2).addComponent(panelEdit,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
@@ -856,21 +856,21 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								
 								
-								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								
 								
 								.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.GAP_SIZE / 2)
 								
 								
-								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								
 								
 								.addComponent(surroundScrollChooseAction, minComboWidth, GroupLayout.PREFERRED_SIZE,
 										Short.MAX_VALUE)
 								
 								
-								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
 								
-								// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								
 								
 								.addComponent(labelSelectedGroup, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)

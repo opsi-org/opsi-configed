@@ -301,7 +301,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(2, 5, 5));
 
-		layoutBorder.setHorizontalGroup(layoutBorder.createSequentialGroup() // createParallelGroup(GroupLayout.Alignment.LEADING)
+		layoutBorder.setHorizontalGroup(layoutBorder.createSequentialGroup() 
 				.addGap(2, 5, 5).addComponent(panelRadiobuttonsDirectionOfAssignment, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(2, 5, 5));
@@ -530,7 +530,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 								.addGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 										// for testing purposes:
 										
-										// javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+										
 										// Short.MAX_VALUE)
 										.addComponent(panelLicencepools, javax.swing.GroupLayout.Alignment.LEADING,
 												javax.swing.GroupLayout.DEFAULT_SIZE,
@@ -542,7 +542,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		layoutTopPane.setVerticalGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(layoutTopPane.createSequentialGroup().addContainerGap()
 						
-						// javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE)
+						
 						.addComponent(panelLicencepools, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE,
 								tablesMaxHeight)
 						

@@ -58,7 +58,7 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
 								// for testing purposes:
 								
-								// javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+								
 								// Short.MAX_VALUE)
 								.addComponent(panelReconciliation, javax.swing.GroupLayout.Alignment.LEADING,
 										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
@@ -68,7 +68,7 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 						.addGroup(layout.createSequentialGroup().addContainerGap()
 								
-								// javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE)
+								
 								.addComponent(panelReconciliation, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE,
 										Short.MAX_VALUE)
 								.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE))

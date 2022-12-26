@@ -362,11 +362,11 @@ public class PanelSWInfo extends JPanel {
 								 * )
 								 */
 								
-								// javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								
 								.addComponent(subPanelTitle, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 								
-								// javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								
 								.addComponent(panelTable, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 						.addGap(hGap, hGap, hGap));
@@ -376,13 +376,13 @@ public class PanelSWInfo extends JPanel {
 				
 				
 				
-				// javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				
 				.addGap(vGap, vGap, vGap)
 				.addComponent(subPanelTitle, javax.swing.GroupLayout.PREFERRED_SIZE,
 						javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 				
-				// javax.swing.GroupLayout.PREFERRED_SIZE,
-				// javax.swing.GroupLayout.PREFERRED_SIZE)
+				
+				
 				.addComponent(panelTable, javax.swing.GroupLayout.PREFERRED_SIZE,
 						javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(vGap, vGap, vGap));

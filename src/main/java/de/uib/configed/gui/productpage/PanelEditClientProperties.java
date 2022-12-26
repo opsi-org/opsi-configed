@@ -84,11 +84,11 @@ public class PanelEditClientProperties extends DefaultPanelEditProperties {
 				.setVerticalGroup(layoutEditProperties.createSequentialGroup().addGap(minGapVSize, vGapSize, vGapSize)
 						.addGroup(layoutEditProperties.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
 						
-						// GroupLayout.PREFERRED_SIZE)
 						
-						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						
-						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						
+						
+						
 						).addGap(minGapVSize, minGapVSize, minGapVSize).addComponent(productPropertiesPanel,
 								minTableVSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}

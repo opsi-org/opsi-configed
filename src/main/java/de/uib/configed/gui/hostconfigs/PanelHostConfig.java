@@ -157,7 +157,7 @@ public class PanelHostConfig extends JPanel {
 		planeLayout.setVerticalGroup(planeLayout.createSequentialGroup()
 				
 				
-				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				
 				
 				.addComponent(editMapPanel, Globals.LINE_HEIGHT * 2, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 		

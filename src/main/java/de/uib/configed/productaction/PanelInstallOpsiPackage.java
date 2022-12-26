@@ -529,7 +529,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 								.addComponent(comboChooseDepot, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
 										Globals.BUTTON_WIDTH * 2)
 								
-								// GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE))
 
 						.addGroup(layout.createSequentialGroup().addComponent(panelMountShare,
