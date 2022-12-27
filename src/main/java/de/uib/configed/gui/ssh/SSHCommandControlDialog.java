@@ -235,7 +235,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			lbl_commands.setText(configed.getResourceValue("SSHConnection.CommandControl.commands"));
 
 			cb_parentMenuText.addItem(SSHCommandFactory.parentdefaultForOwnCommands); // parentNull
-			cb_menuText.addItem(factory.menuNew);
+			cb_menuText.addItem(SSHCommandFactory.menuNew);
 
 			cb_menuText.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.menuText.tooltip"));
 			tf_tooltipText
@@ -365,9 +365,9 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 					String menu = (String) cb_menuText.getSelectedItem();
 					factory.deleteSSHCommandByMenu(menu);
 
-					cb_menuText.setSelectedItem(factory.menuNew);
-					updateLists(true, factory.menuNew);
-					updateSelectedCommand(factory.menuNew);
+					cb_menuText.setSelectedItem(SSHCommandFactory.menuNew);
+					updateLists(true, SSHCommandFactory.menuNew);
+					updateSelectedCommand(SSHCommandFactory.menuNew);
 					factory.reloadServerMenu();
 				});
 		}
@@ -555,7 +555,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	 **/
 	public void updateSelectedCommand(String menuText) {
 		logging.info(this, "updateSelectedCommand menuText " + menuText);
-		if ((menuText != null) && (menuText.equals(factory.menuNew)))
+		if ((menuText != null) && (menuText.equals(SSHCommandFactory.menuNew)))
 			menuText = null;
 		if ((menuText != null) && (menuText.length() > 0)) {
 			SSHCommand_Template thiscommand = factory.getSSHCommandByMenu(menuText);
@@ -632,7 +632,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		if (command == null)
 			return;
 		if (command.getMenuText() == null)
-			command.setMenuText(factory.menuNew);
+			command.setMenuText(SSHCommandFactory.menuNew);
 		logging.debug(this, "doActionTestCommand buildCommand " + command.toString());
 		logging.debug(this, "doActionTestCommand buildCommand commandlist " + command.commandlistToString());
 
@@ -648,7 +648,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	private void checkAllTexts() {
 		if (!Globals.isGlobalReadOnly()) {
 			if (cb_menuText.getSelectedItem() != null) {
-				if (!((String) cb_menuText.getSelectedItem()).trim().equals(factory.menuNew)) {
+				if (!((String) cb_menuText.getSelectedItem()).trim().equals(SSHCommandFactory.menuNew)) {
 					logging.info(this, "checkAllTexts menuText " + cb_menuText.getSelectedItem());
 					SSHCommand_Template tmp_com = getCommandNow();
 					logging.debug(this, "checkAllTexts command " + tmp_com);
@@ -674,7 +674,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		logging.debug(this, "getCommandNow ");
 		String menuText = (String) cb_menuText.getSelectedItem();
 		if (!testing)
-			if (menuText.trim().equals(factory.menuNew))
+			if (menuText.trim().equals(SSHCommandFactory.menuNew))
 				return null;
 		String parent = (String) cb_parentMenuText.getSelectedItem();
 		int prio = 0;

@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.io.File;
+import java.util.Arrays;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
@@ -162,7 +163,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 					return false;
 				}
 
-				String pp = tf_passphrase.getPassword().toString();
+				String pp = Arrays.toString(tf_passphrase.getPassword());
 
 				if (!connectionInfo.getKeyfilePassphrase().equals(pp)) {
 					logging.debug(this, "compareStates 11");

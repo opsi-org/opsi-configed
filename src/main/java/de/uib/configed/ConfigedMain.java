@@ -3220,7 +3220,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				Map<String, de.uib.utilities.table.ListCellOptions> configOptions = persist.getConfigOptions();
 
-				removeKeysStartingWith(mergedVisualMap, persist.CONFIG_KEYSTARTERS_NOT_FOR_CLIENTS);
+				removeKeysStartingWith(mergedVisualMap, PersistenceController.CONFIG_KEYSTARTERS_NOT_FOR_CLIENTS);
 
 				mainFrame.panel_HostConfig.initEditing("  " + getSelectedClientsString(), // "",
 						mergedVisualMap, configOptions, additionalConfigs, additionalconfigurationUpdateCollection,
