@@ -1358,37 +1358,32 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private void setupIcons1() {
 		// buttonWindowStack = new
 
-		iconButtonReload = new IconButton(de.uib.configed.configed.getResourceValue("MainFrame.iconButtonReload"),
-				"images/reload.gif", "images/reload_over.gif", " ");
+		iconButtonReload = new IconButton(configed.getResourceValue("MainFrame.iconButtonReload"), "images/reload.gif",
+				"images/reload_over.gif", " ");
 
-		iconButtonReloadLicenses = new IconButton(
-				de.uib.configed.configed.getResourceValue("MainFrame.iconButtonReloadLicensesData"),
+		iconButtonReloadLicenses = new IconButton(configed.getResourceValue("MainFrame.iconButtonReloadLicensesData"),
 				"images/reload_licenses.png", "images/reload_licenses_over.png", " ", false);
 		iconButtonReloadLicenses.setVisible(false);
 
-		iconButtonNewClient = new IconButton(de.uib.configed.configed.getResourceValue("MainFrame.iconButtonNewClient"),
+		iconButtonNewClient = new IconButton(configed.getResourceValue("MainFrame.iconButtonNewClient"),
 				"images/newClient.gif", "images/newClient_over.gif", " ");
 
-		iconButtonSetGroup = new IconButton(de.uib.configed.configed.getResourceValue("MainFrame.iconButtonSetGroup"),
+		iconButtonSetGroup = new IconButton(configed.getResourceValue("MainFrame.iconButtonSetGroup"),
 				"images/setGroup.gif", "images/setGroup_over.gif", " ");
-		iconButtonSaveConfiguration = new IconButton(
-				de.uib.configed.configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
+		iconButtonSaveConfiguration = new IconButton(configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
 				"images/apply_over.gif", " ", "images/apply_disabled.gif", false);
 
-		iconButtonCancelChanges = new IconButton(
-				de.uib.configed.configed.getResourceValue("MainFrame.iconButtonCancelChanges"), "images/cancel-32.png",
-				"images/cancel_over-32.png", " ", false);
+		iconButtonCancelChanges = new IconButton(configed.getResourceValue("MainFrame.iconButtonCancelChanges"),
+				"images/cancel-32.png", "images/cancel_over-32.png", " ", false);
 
-		iconButtonReachableInfo = new IconButton(
-				de.uib.configed.configed.getResourceValue("MainFrame.iconButtonReachableInfo"),
+		iconButtonReachableInfo = new IconButton(configed.getResourceValue("MainFrame.iconButtonReachableInfo"),
 				"images/new_networkconnection.png", "images/new_networkconnection.png",
 				"images/new_networkconnection.png", main.host_displayFields.get("clientConnected"));
 
 		String[] waitingCircle = new String[] { "images/systemusers_sessioninfo_activitycircle/loading_01.png",
 				"images/systemusers_sessioninfo_activitycircle/loading_02.png" };
 
-		iconButtonSessionInfo = new IconButton(
-				de.uib.configed.configed.getResourceValue("MainFrame.iconButtonSessionInfo"),
+		iconButtonSessionInfo = new IconButton(configed.getResourceValue("MainFrame.iconButtonSessionInfo"),
 				"images/system-users-query.png", "images/system-users-query_over.png",
 				"images/system-users-query_over.png", waitingCircle,
 
@@ -1396,11 +1391,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		iconButtonSessionInfo.setEnabled(true);
 
 		iconButtonToggleClientFilter = new IconButton(
-				de.uib.configed.configed.getResourceValue("MainFrame.iconButtonToggleClientFilter"),
+				configed.getResourceValue("MainFrame.iconButtonToggleClientFilter"),
 				"images/view-filter_disabled-32.png", "images/view-filter_over-32.png", "images/view-filter-32.png",
 				true);
 
-		iconButtonSaveGroup = new IconButton(de.uib.configed.configed.getResourceValue("MainFrame.iconButtonSaveGroup"),
+		iconButtonSaveGroup = new IconButton(configed.getResourceValue("MainFrame.iconButtonSaveGroup"),
 				"images/saveGroup.gif", "images/saveGroup_over.gif", " ");
 
 		iconButtonReload.addActionListener((ActionEvent e) -> reloadAction());

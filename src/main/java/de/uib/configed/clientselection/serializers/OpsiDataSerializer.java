@@ -21,14 +21,14 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 	private JsonParser parser;
 	private SelectData.DataType lastDataType;
 	private Map<String, String> searches;
-	public static final int dataVersion = 2;
+	public static final int DATA_VERSION = 2;
 	private int searchDataVersion;
 
 	public OpsiDataSerializer(SelectionManager manager) {
 		super(manager);
 		controller = PersistenceControllerFactory.getPersistenceController();
 		searches = new HashMap<>();
-		searchDataVersion = dataVersion;
+		searchDataVersion = DATA_VERSION;
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		Map<String, Object> map = new HashMap<>();
 		parser = new JsonParser(serialization);
 		try {
-			if (!parser.next() || parser.getPositionType() != JsonParser.PositionType.ObjectBegin)
+			if (!parser.next() || parser.getPositionType() != JsonParser.PositionType.OBJECT_BEGIN)
 				return map;
 		} catch (IOException e) {
 			logging.error(this, e.getMessage(), e);
@@ -88,7 +88,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 	protected void saveData(String name, String description, Map<String, Object> data) {
 		String jsonString;
 		try {
-			jsonString = "{ \"version\" : \"" + dataVersion + "\", \"data\" : ";
+			jsonString = "{ \"version\" : \"" + DATA_VERSION + "\", \"data\" : ";
 			jsonString += createJsonRecursive(data);
 			jsonString += " }";
 		} catch (IllegalArgumentException e) {
@@ -138,12 +138,12 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		builder.append(objectToString(objects.get("element")));
 		builder.append(", ");
 
-		if (objects.containsKey(keySubelementName)) // compatibility with refinements
+		if (objects.containsKey(KEY_SUBELEMENT_NAME)) // compatibility with refinements
 		{
 			builder.append("\"");
-			builder.append(keySubelementName);
+			builder.append(KEY_SUBELEMENT_NAME);
 			builder.append("\" : ");
-			builder.append(objectToString(objects.get(keySubelementName)));
+			builder.append(objectToString(objects.get(KEY_SUBELEMENT_NAME)));
 			builder.append(", ");
 		}
 
@@ -180,20 +180,20 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		try {
 			while (parser.next()) {
 				switch (parser.getPositionType()) {
-				case ObjectBegin:
+				case OBJECT_BEGIN:
 					result.put(name, parseObject());
 					break;
-				case ObjectEnd:
+				case OBJECT_END:
 					return result;
-				case ListBegin:
+				case LIST_BEGIN:
 					result.put(name, parseList(name));
 					break;
-				case JsonName:
+				case JSON_NAME:
 					name = parser.getValue();
 					name = name.substring(1, name.length() - 1);
 					logging.debug(this, name);
 					break;
-				case JsonValue:
+				case JSON_VALUE:
 					result.put(name, stringToObject(parser.getValue(), name));
 					break;
 				default:
@@ -212,13 +212,13 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		try {
 			while (!done && parser.next()) {
 				switch (parser.getPositionType()) {
-				case ListEnd:
+				case LIST_END:
 					done = true;
 					break;
-				case ObjectBegin:
+				case OBJECT_BEGIN:
 					list.add(parseObject());
 					break;
-				case JsonValue:
+				case JSON_VALUE:
 					list.add(stringToObject(parser.getValue(), ""));
 					break;
 				default:
@@ -243,18 +243,18 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		if (name.equals("data")) {
 			value = value.substring(1, value.length() - 1);
 			switch (lastDataType) {
-			case NoneType:
+			case NONE_TYPE:
 				return null;
-			case TextType:
-			case EnumType:
+			case TEXT_TYPE:
+			case ENUM_TYPE:
 				return value;
-			case DoubleType:
+			case DOUBLE_TYPE:
 				return Double.valueOf(value);
-			case IntegerType:
+			case INTEGER_TYPE:
 				return Integer.valueOf(value);
-			case BigIntegerType:
+			case BIT_INTEGER_TYPE:
 				return Long.valueOf(value);
-			case DateType:
+			case DATE_TYPE:
 				return value;
 			default:
 				throw new IllegalArgumentException("Type " + lastDataType + " not expected here");

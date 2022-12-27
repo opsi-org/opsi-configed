@@ -39,6 +39,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Globals;
+import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 
@@ -98,9 +99,8 @@ public class FEditList extends FEditObject
 		// we define buttonRemove in a different way since it is used only to clear
 		// selection
 
-		buttonRemove = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("FEditObject.RemoveButtonTooltip"), "images/list-clear.png",
-				"images/list-clear.png", "images/list-clear_disabled.png", true);
+		buttonRemove = new de.uib.configed.gui.IconButton(configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
+				"images/list-clear.png", "images/list-clear.png", "images/list-clear_disabled.png", true);
 		buttonRemove.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 		buttonRemove.setVisible(false);
 	}
@@ -267,7 +267,6 @@ public class FEditList extends FEditObject
 		}
 	}
 
-	
 	// interface ActionListener
 	@Override
 	public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -279,9 +278,7 @@ public class FEditList extends FEditObject
 			visibleList.clearSelection();
 		}
 	}
-	
 
-	
 	// interface KeyListener
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -301,9 +298,7 @@ public class FEditList extends FEditObject
 	@Override
 	public void keyReleased(KeyEvent e) {
 	}
-	
 
-	
 	// interface MouseListener
 	@Override
 	public void mousePressed(MouseEvent e) {
@@ -327,7 +322,6 @@ public class FEditList extends FEditObject
 	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
-	
 
 	@Override
 	public boolean init() {
@@ -356,7 +350,6 @@ public class FEditList extends FEditObject
 		buttonRemove.setEnabled(true);
 	}
 
-	
 	// interface ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {

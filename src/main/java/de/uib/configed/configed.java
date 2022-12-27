@@ -37,15 +37,14 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.savedstates.SavedStates;
 
 public class configed {
-	public static boolean useHalt = false;
 
 	public static de.uib.utilities.swing.FLoadingWaiter fProgress;
 
-	private static final String localizationFilenameRegex = Messages.appname + "_...*\\.properties";
+	private static final String LOCALIZATION_FILENAME_REGEX = Messages.appname + "_...*\\.properties";
 
 	public static boolean sshconnect_onstart = false;
 
-	public static final String usageInfo = "\n" + "\tconfiged [OPTIONS] \n" + "\t\twhere an OPTION may be \n";
+	public static final String USAGE_INFO = "\n" + "\tconfiged [OPTIONS] \n" + "\t\twhere an OPTION may be \n";
 	/*
 	 * "-l LOC, \t--locale LOC \t\t\t(Set locale LOC (format: <language>_<country>)) \n"
 	 * +
@@ -123,7 +122,7 @@ public class configed {
 			// if possible in PersistenceController,
 			new String[] { "--localizationfile EXTRA_LOCALIZATION_FILENAME", "",
 					"For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: "
-							+ localizationFilenameRegex.replace("...*\\", "LOCALENAME") },
+							+ LOCALIZATION_FILENAME_REGEX.replace("...*\\", "LOCALENAME") },
 			new String[] { "--localizationstrings", "",
 					"For translation work, show internal labels together with the strings of selected localization" },
 			new String[] { "--swaudit-pdf FILE_WITH_CLIENT_IDS_EACH_IN_A_LINE [OUTPUT_PATH]", "",
@@ -136,10 +135,10 @@ public class configed {
 	};
 
 	public static final Charset serverCharset = Charset.forName("UTF-8");
-	public static final String javaVersion = System.getProperty("java.version");
-	public static final String javaVendor = System.getProperty("java.vendor", "");
+	public static final String JAVA_VERSION = System.getProperty("java.version");
+	public static final String JAVA_VENDOR = System.getProperty("java.vendor", "");
 	public static final LinkedHashMap<String, Object> javaSysExtraProperties = new LinkedHashMap<>();
-	public static final String systemSSLversion = System.getProperty("https.protocols");
+	public static final String SYSTEM_SSL_VERSION = System.getProperty("https.protocols");
 	public static String EXTRA_LOCALIZATION_FILENAME = null;
 	public static PropertiesStore extraLocalization;
 	public static boolean SHOW_LOCALIZATION_STRINGS = false;
@@ -219,7 +218,7 @@ public class configed {
 
 	protected static void usage() {
 		System.out.println("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
-		System.out.println(usageInfo);
+		System.out.println(USAGE_INFO);
 
 		final int tabWidth = 8;
 		int length0 = 0;
@@ -281,7 +280,7 @@ public class configed {
 		logging.info("system information: ");
 
 		logging.info(" configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
-		logging.info(" running by java version " + javaVersion);
+		logging.info(" running by java version " + JAVA_VERSION);
 
 		Properties sysProperties = System.getProperties();
 		Set<String> propNames = sysProperties.stringPropertyNames();
@@ -627,15 +626,15 @@ public class configed {
 						} else
 
 						{
-							logging.debug(" ok " + localizationFilenameRegex + "? "
+							logging.debug(" ok " + LOCALIZATION_FILENAME_REGEX + "? "
 									+ EXTRA_LOCALIZATION_FILENAME.matches("configed_...*\\.properties") + " --  "
-									+ EXTRA_LOCALIZATION_FILENAME.matches(localizationFilenameRegex));
+									+ EXTRA_LOCALIZATION_FILENAME.matches(LOCALIZATION_FILENAME_REGEX));
 
 							parts = EXTRA_LOCALIZATION_FILENAME.split("_");
 
 							logging.debug(" . " + parts[1] + " .. " + Arrays.toString(parts[1].split("\\.")));
 
-							if (!EXTRA_LOCALIZATION_FILENAME.matches(localizationFilenameRegex)) {
+							if (!EXTRA_LOCALIZATION_FILENAME.matches(LOCALIZATION_FILENAME_REGEX)) {
 								logging.debug("localization file does not have the expected format " + Messages.appname
 										+ "_LOCALE.properties");
 							} else {
@@ -674,7 +673,6 @@ public class configed {
 						i = i + 1;
 					}
 				} else if (args[i].equals("--halt")) {
-					useHalt = true;
 					i = i + 1;
 				} else {
 					logging.debug("an option is not valid: " + args[i]);

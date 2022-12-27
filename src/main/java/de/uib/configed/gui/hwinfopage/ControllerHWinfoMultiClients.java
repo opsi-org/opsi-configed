@@ -52,9 +52,9 @@ public class ControllerHWinfoMultiClients {
 	ConfigedMain main;
 	protected PersistenceController persist;
 
-	static final int keycol = 0;
-	static final String FILTER_SELECTED_CLIENTS = "visibleClients";
-	static final String DELETE_PREFIX = "HARDWARE_";
+	private static final int KEY_COL = 0;
+	private static final String FILTER_SELECTED_CLIENTS = "visibleClients";
+	private static final String DELETE_PREFIX = "HARDWARE_";
 
 	TableModelFilter tableModelFilter;
 
@@ -70,10 +70,10 @@ public class ControllerHWinfoMultiClients {
 
 		@Override
 		public boolean test(Vector<Object> row) {
-			if (filter == null || row == null || keycol >= row.size())
+			if (filter == null || row == null || KEY_COL >= row.size())
 				return true;
 
-			return filter.contains(row.get(keycol));
+			return filter.contains(row.get(KEY_COL));
 
 		}
 
@@ -177,7 +177,7 @@ public class ControllerHWinfoMultiClients {
 				0,
 
 				// final columns int array
-				new int[] { keycol },
+				new int[] { KEY_COL },
 
 				// table model listener
 				panel,

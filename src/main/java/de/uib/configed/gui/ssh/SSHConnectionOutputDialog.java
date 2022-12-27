@@ -11,11 +11,11 @@ import java.util.Map;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.WindowConstants;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -28,6 +28,7 @@ import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
 import de.uib.configed.Globals;
+import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.utilities.logging.logging;
@@ -116,7 +117,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 		initOutputGui();
 		this.setSize(700, 400);
 		this.centerOn(Globals.mainFrame);
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 
 	public void setStartAnsi(Color c) {
@@ -210,9 +211,8 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			jScrollPane.setViewportView(output);
 			output.setText("");
 
-			btn_close = new de.uib.configed.gui.IconButton(
-					de.uib.configed.configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
-					"images/cancel.png", "images/cancel.png", true);
+			btn_close = new de.uib.configed.gui.IconButton(configed.getResourceValue("SSHConnection.buttonClose"),
+					"images/cancel.png", "images/cancel.png", "images/cancel.png", true);
 
 			btn_close.setPreferredSize(btn_dim);
 

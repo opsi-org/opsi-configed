@@ -302,8 +302,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		saveHGroup.addGap(Globals.HGAP_SIZE / 2);
 		saveHGroup.addComponent(buttonRestart, 20, 20, 20);
 
-		
-
 		saveHGroup.addGap(Globals.HGAP_SIZE);
 		additionalLayout.setHorizontalGroup(saveHGroup);
 
@@ -315,7 +313,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		saveVGroup.addComponent(saveButton, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
 		saveVGroup.addComponent(buttonReload, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
 		saveVGroup.addComponent(buttonRestart, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
-		
 
 		additionalLayout.setVerticalGroup(saveVGroup);
 
@@ -376,7 +373,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		hGroupNegate.addComponent(negationLabel, GroupLayout.Alignment.CENTER);
 		hGroupElements.addComponent(nameLabel, GroupLayout.Alignment.CENTER);
-		
 
 		hGroupData.addComponent(dataLabel, GroupLayout.Alignment.CENTER);
 		hGroupConnections.addComponent(connectionLabel, GroupLayout.Alignment.CENTER);
@@ -733,34 +729,34 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		SelectData.DataType type = operation.getDataType();
 		switch (type) {
 		// Do the same for all three cases
-		case DoubleType:
-		case TextType:
-		case DateType:
+		case DOUBLE_TYPE:
+		case TEXT_TYPE:
+		case DATE_TYPE:
 			text = ((TextInputField) (group.dataComponent)).getText();
 			if (text.isEmpty())
 				return null;
 			data = text;
 			break;
-		case IntegerType:
+		case INTEGER_TYPE:
 			Integer value = (Integer) ((JSpinner) group.dataComponent).getValue();
 			if (value == 0)
 				return null;
 			data = value;
 			break;
-		case BigIntegerType:
+		case BIT_INTEGER_TYPE:
 			Long value2 = (Long) ((SpinnerWithExt) group.dataComponent).getValue();
 			if (value2 == 0)
 				return null;
 			data = value2;
 			break;
-		case EnumType:
+		case ENUM_TYPE:
 
 			String textEnum = ((TextInputField) group.dataComponent).getText();
 			if (textEnum.isEmpty())
 				return null;
 			data = textEnum;
 			break;
-		case NoneType:
+		case NONE_TYPE:
 		default:
 		}
 
@@ -799,14 +795,14 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		SelectionManager.ConnectionStatus conStatus;
 		if (andSelected) {
 			if (notSelected)
-				conStatus = SelectionManager.ConnectionStatus.AndNot;
+				conStatus = SelectionManager.ConnectionStatus.AND_NOT;
 			else
-				conStatus = SelectionManager.ConnectionStatus.And;
+				conStatus = SelectionManager.ConnectionStatus.AND;
 		} else {
 			if (notSelected)
-				conStatus = SelectionManager.ConnectionStatus.OrNot;
+				conStatus = SelectionManager.ConnectionStatus.OR_NOT;
 			else
-				conStatus = SelectionManager.ConnectionStatus.Or;
+				conStatus = SelectionManager.ConnectionStatus.OR;
 		}
 		return conStatus;
 	}
@@ -882,7 +878,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		if (operationIndex == -1)
 			return;
 		switch (sourceGroup.element.supportedOperations().get(operationIndex).getDataType()) {
-		case TextType:
+		case TEXT_TYPE:
 			TextInputField fieldText = new TextInputField("", sourceGroup.element.getEnumData());
 			fieldText.setEditable(true);
 			fieldText.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
@@ -896,7 +892,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			});
 			sourceGroup.dataComponent = fieldText;
 			break;
-		case DoubleType:
+		case DOUBLE_TYPE:
 
 			TextInputField fieldDouble = new TextInputField("");
 			fieldDouble.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
@@ -910,7 +906,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			});
 			sourceGroup.dataComponent = fieldDouble;
 			break;
-		case EnumType:
+		case ENUM_TYPE:
 
 			TextInputField box = new TextInputField("", sourceGroup.element.getEnumData());
 			box.setEditable(true);
@@ -923,7 +919,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			});
 			sourceGroup.dataComponent = box;
 			break;
-		case DateType:
+		case DATE_TYPE:
 			TextInputField fieldDate = new TextInputField(null);
 			fieldDate.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 			fieldDate.setToolTipText("yyyy-mm-dd");
@@ -936,7 +932,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			sourceGroup.dataComponent = fieldDate;
 			break;
 
-		case IntegerType:
+		case INTEGER_TYPE:
 			JSpinner spinner = new JSpinner();
 			spinner.addChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
 				@Override
@@ -946,7 +942,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			});
 			sourceGroup.dataComponent = spinner;
 			break;
-		case BigIntegerType:
+		case BIT_INTEGER_TYPE:
 			SpinnerWithExt swx = new SpinnerWithExt();
 			swx.addChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
 				@Override
@@ -957,7 +953,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 			sourceGroup.dataComponent = swx;
 			break;
-		case NoneType:
+		case NONE_TYPE:
 			return;
 		}
 		sourceGroup.dataComponent.setMaximumSize(new Dimension(sourceGroup.dataComponent.getMaximumSize().width,
@@ -1141,26 +1137,26 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			return;
 		if (component instanceof TextInputField)
 			((TextInputField) component).setText(data.getData().toString());
-		else if (component instanceof SpinnerWithExt && data.getType() == SelectData.DataType.BigIntegerType)
+		else if (component instanceof SpinnerWithExt && data.getType() == SelectData.DataType.BIT_INTEGER_TYPE)
 			((SpinnerWithExt) component).setValue((Long) data.getData());
-		else if (component instanceof JSpinner && data.getType() == SelectData.DataType.IntegerType)
+		else if (component instanceof JSpinner && data.getType() == SelectData.DataType.INTEGER_TYPE)
 			((JSpinner) component).setValue((Integer) data.getData());
 	}
 
 	private void setConnectionTypes(AndOrSelectButtonByIcon andOr, IconAsButton not,
 			SelectionManager.ConnectionStatus status) {
 		switch (status) {
-		case And:
+		case AND:
 			andOr.selectAnd();
 			break;
-		case Or:
+		case OR:
 			andOr.selectOr();
 			break;
-		case AndNot:
+		case AND_NOT:
 			andOr.selectAnd();
 			not.setActivated(true);
 			break;
-		case OrNot:
+		case OR_NOT:
 			andOr.selectOr();
 			not.setActivated(true);
 		}

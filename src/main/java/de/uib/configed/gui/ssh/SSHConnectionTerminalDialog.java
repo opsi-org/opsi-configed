@@ -13,7 +13,6 @@ import java.util.List;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -21,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
@@ -52,9 +52,8 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 			super();
 
 			setBackground(Globals.backLightBlue);
-			btn_close = new de.uib.configed.gui.IconButton(
-					de.uib.configed.configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
-					"images/cancel.png", "images/cancel.png", true);
+			btn_close = new de.uib.configed.gui.IconButton(configed.getResourceValue("SSHConnection.buttonClose"),
+					"images/cancel.png", "images/cancel.png", "images/cancel.png", true);
 			btn_close.addActionListener(closeListener);
 
 			btn_close.setPreferredSize(btn_dim);
@@ -113,7 +112,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		btn_close.setVisible(false); // in terminating panel, we place an extra button
 
 		initGUI();
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.centerOn(Globals.mainFrame);
 		this.setSize(this.thissize);
 		this.setMaximumSize(new Dimension(900, 700));
@@ -313,14 +312,14 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 					.addActionListener(actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel)
 							.doActionParamAdd(tf_command));
 		btn_killProcess = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("SSHConnection.buttonKillProcess"), "images/edit-delete.png",
+				configed.getResourceValue("SSHConnection.buttonKillProcess"), "images/edit-delete.png",
 				"images/edit-delete.png", "images/edit-delete.png", true);
 		btn_killProcess.setPreferredSize(btn_dim);
 		btn_killProcess.setToolTipText(configed.getResourceValue("SSHConnection.buttonKillProcess"));
 
 		btn_executeCommand = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("SSHConnection.CommandControl.btnExecuteCommand"),
-				"images/execute_blue.png", "images/execute_blue.png", "images/execute_blue.png", true);
+				configed.getResourceValue("SSHConnection.CommandControl.btnExecuteCommand"), "images/execute_blue.png",
+				"images/execute_blue.png", "images/execute_blue.png", true);
 		btn_executeCommand.setPreferredSize(btn_dim);
 		if (!(Globals.isGlobalReadOnly()))
 			btn_executeCommand.addActionListener(actionEvent -> {

@@ -16,11 +16,11 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -75,7 +75,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		configedMain = cmain;
 		connectionInfo = SSHConnectionInfo.getInstance();
 
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		init();
 
 		this.setSize(500, 535);
@@ -328,17 +328,15 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			});
 		}
 		{
-			btn_save = new IconButton(
-					de.uib.configed.configed.getResourceValue("SSHConnection.Config.SaveConfiguration"),
+			btn_save = new IconButton(configed.getResourceValue("SSHConnection.Config.SaveConfiguration"),
 					"images/apply.png", "images/apply.png", "images/apply_disabled.png", false);
 			btn_save.setPreferredSize(Globals.smallButtonDimension);
 
-			btn_close = new IconButton(
-					de.uib.configed.configed.getResourceValue("SSHConnection.Config.CancelConfiguration"),
+			btn_close = new IconButton(configed.getResourceValue("SSHConnection.Config.CancelConfiguration"),
 					"images/cancel.png", "images/cancel_over.png", " ", true);
 			btn_close.setPreferredSize(Globals.smallButtonDimension);
 
-			btn_kill = new IconButton(de.uib.configed.configed.getResourceValue("SSHConnection.Config.StopUsing"),
+			btn_kill = new IconButton(configed.getResourceValue("SSHConnection.Config.StopUsing"),
 					"images/edit-delete.png", "images/edit-delete.png", "images/edit-delete_disabled.png", false);
 			btn_kill.setPreferredSize(Globals.smallButtonDimension);
 
@@ -374,8 +372,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			}
 		}
 		{
-			btn_openChooser = new IconButton(
-					de.uib.configed.configed.getResourceValue("SSHConnection.Config.SelectKeyFile"),
+			btn_openChooser = new IconButton(configed.getResourceValue("SSHConnection.Config.SelectKeyFile"),
 					"images/folder_16.png", " ", "images/folder_16.png", true);
 			btn_openChooser.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH / 4, Globals.BUTTON_HEIGHT));
 			if (!(Globals.isGlobalReadOnly()))

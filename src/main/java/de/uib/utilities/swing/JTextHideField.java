@@ -11,6 +11,7 @@ import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
 import de.uib.configed.Globals;
+import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
 public class JTextHideField extends javax.swing.JPanel {
@@ -70,7 +71,7 @@ public class JTextHideField extends javax.swing.JPanel {
 			if (!multiValue)
 				toggleHidden();
 		});
-		button.setToolTipText(de.uib.configed.configed.getResourceValue("JTextHideField.toggleHide"));
+		button.setToolTipText(configed.getResourceValue("JTextHideField.toggleHide"));
 
 		setupPanel();
 		setEnabled(false);

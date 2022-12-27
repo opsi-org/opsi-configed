@@ -11,7 +11,7 @@ public class DateEqualsOperation extends SelectOperation {
 
 	@Override
 	public SelectData.DataType getDataType() {
-		return SelectData.DataType.DateType;
+		return SelectData.DataType.DATE_TYPE;
 	}
 
 	@Override

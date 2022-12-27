@@ -27,7 +27,7 @@ import de.uib.utilities.logging.logging;
  */
 public class SelectionManager {
 	public enum ConnectionStatus {
-		And, Or, AndNot, OrNot
+		AND, OR, AND_NOT, OR_NOT
 	}
 
 	private List<OperationWithStatus> groupWithStatusList;
@@ -281,7 +281,7 @@ public class SelectionManager {
 				currentInput = input.get(currentPos[0]);
 				currentInput.operation = operation;
 			}
-			if (currentInput.status == ConnectionStatus.Or || currentInput.status == ConnectionStatus.OrNot) {
+			if (currentInput.status == ConnectionStatus.OR || currentInput.status == ConnectionStatus.OR_NOT) {
 				if (!currentAnd) {
 					orConnections.add(parseNot(currentInput));
 				} else {
@@ -330,21 +330,21 @@ public class SelectionManager {
 		} else if (operation instanceof OrOperation && !((OrOperation) operation).getChildOperations().isEmpty()) {
 			for (SelectOperation op : ((OrOperation) operation).getChildOperations()) {
 				result.addAll(reverseBuild(op, false));
-				if (result.getLast().status == ConnectionStatus.And)
-					result.getLast().status = ConnectionStatus.Or;
+				if (result.getLast().status == ConnectionStatus.AND)
+					result.getLast().status = ConnectionStatus.OR;
 				else
-					result.getLast().status = ConnectionStatus.OrNot;
+					result.getLast().status = ConnectionStatus.OR_NOT;
 			}
-			if (result.getLast().status == ConnectionStatus.Or)
-				result.getLast().status = ConnectionStatus.And;
+			if (result.getLast().status == ConnectionStatus.OR)
+				result.getLast().status = ConnectionStatus.AND;
 			else
-				result.getLast().status = ConnectionStatus.AndNot;
+				result.getLast().status = ConnectionStatus.AND_NOT;
 			if (!isTopOperation) {
 				result.getFirst().parenthesisOpen = true;
 				result.getLast().parenthesisClose = true;
 			}
 		} else {
-			result.add(reverseParseNot(operation, ConnectionStatus.And));
+			result.add(reverseParseNot(operation, ConnectionStatus.AND));
 			result.getLast().parenthesisOpen = false;
 			result.getLast().parenthesisClose = false;
 		}
@@ -353,7 +353,7 @@ public class SelectionManager {
 
 	/* Add a NotOperation if necessary */
 	private SelectOperation parseNot(OperationWithStatus operation) {
-		if (operation.status == ConnectionStatus.And || operation.status == ConnectionStatus.Or)
+		if (operation.status == ConnectionStatus.AND || operation.status == ConnectionStatus.OR)
 			return operation.operation;
 
 		LinkedList<SelectOperation> arg = new LinkedList<>();
@@ -367,10 +367,10 @@ public class SelectionManager {
 		OperationWithStatus ows = new OperationWithStatus();
 		if (operation instanceof NotOperation) {
 			ows.operation = ((NotOperation) operation).getChildOperations().get(0);
-			if (status == ConnectionStatus.And)
-				ows.status = ConnectionStatus.AndNot;
+			if (status == ConnectionStatus.AND)
+				ows.status = ConnectionStatus.AND_NOT;
 			else
-				ows.status = ConnectionStatus.OrNot;
+				ows.status = ConnectionStatus.OR_NOT;
 		} else {
 			ows.operation = operation;
 			ows.status = status;

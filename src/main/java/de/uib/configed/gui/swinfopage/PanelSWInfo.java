@@ -185,7 +185,7 @@ public class PanelSWInfo extends JPanel {
 						Map<String, Map> tableData = persist.retrieveSoftwareAuditData(hostId);
 
 						if (tableData == null || tableData.keySet().isEmpty()) {
-							scanInfo = de.uib.configed.configed.getResourceValue("PanelSWInfo.noScanResult");
+							scanInfo = configed.getResourceValue("PanelSWInfo.noScanResult");
 							title = scanInfo;
 						} else {
 							logging.debug(this, "retrieved size  " + tableData.keySet().size());

@@ -107,13 +107,13 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		});
 
 		btn_test_param = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("SSHConnection.CommandControl.btnTestParamMethod"),
+				configed.getResourceValue("SSHConnection.CommandControl.btnTestParamMethod"),
 				"images/executing_command.png", "images/executing_command.png", "images/executing_command.png", true);
 		btn_test_param.setPreferredSize(btn_dim);
 
 		btn_add_param = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("SSHConnection.CommandControl.btnAddParamMethod"),
-				"images/list-add.png", "images/list-add.png", "images/list-add_disabled.png", true);
+				configed.getResourceValue("SSHConnection.CommandControl.btnAddParamMethod"), "images/list-add.png",
+				"images/list-add.png", "images/list-add_disabled.png", true);
 		btn_add_param.setSize(btn_dim);
 		btn_add_param.setPreferredSize(btn_dim);
 		setComponentsEnabled_RO();
@@ -190,7 +190,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 								Globals.BUTTON_HEIGHT)
 						.addComponent(lbl_empty, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
 				.addGap(uGap * 2)
-		
+
 		// correctly appear if not placed inside the frame
 		);
 		repaint();

@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Globals;
+import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
 public class FEdit extends javax.swing.JDialog implements ActionListener, KeyListener {
@@ -86,7 +87,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 		labelHint.setFont(Globals.defaultFontStandardBold);
 
 		buttonCommit = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip"), "images/apply.png",
+				configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip"), "images/apply.png",
 				"images/apply_over.png", "images/apply_disabled.png", true) {
 			@Override
 			public void setEnabled(boolean b) {
@@ -98,7 +99,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 		buttonCommit.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 
 		buttonCancel = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"), "images/cancel.png",
+				configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"), "images/cancel.png",
 				"images/cancel_over.png", "images/cancel_disabled.png", true);
 		buttonCancel.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 
@@ -130,7 +131,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 										.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
-										
+
 										.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE)))

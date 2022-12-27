@@ -203,7 +203,7 @@ public abstract class SWExporter {
 						Map<String, Map> tableData = persist.retrieveSoftwareAuditData(theHost);
 
 						if (tableData == null || tableData.keySet().isEmpty()) {
-							scanInfo = de.uib.configed.configed.getResourceValue("PanelSWInfo.noScanResult");
+							scanInfo = configed.getResourceValue("PanelSWInfo.noScanResult");
 						} else {
 							logging.debug(this, "retrieved size  " + tableData.keySet().size());
 							scanInfo = "Scan " + persist.getLastSoftwareAuditModification(theHost);

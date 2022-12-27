@@ -388,15 +388,14 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		saveNameEditor = new JTextField("");
 
 		saveNameEditor.setEditable(true);
-		saveNameEditor.setToolTipText(de.uib.configed.configed.getResourceValue("GroupPanel.GroupnameTooltip"));
+		saveNameEditor.setToolTipText(configed.getResourceValue("GroupPanel.GroupnameTooltip"));
 
 		setMembers();
 		setGroupEditing(false);
 	}
 
 	protected void initComponents() {
-		buttonCommit = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("GroupPanel.SaveButtonTooltip"), // desc
+		buttonCommit = new de.uib.configed.gui.IconButton(configed.getResourceValue("GroupPanel.SaveButtonTooltip"), // desc
 				"images/apply.png", // inactive
 				"images/apply_over.png", // over
 				"images/apply_disabled.png", // active
@@ -404,35 +403,31 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		buttonCommit.addActionListener(this);
 		buttonCommit.setPreferredSize(Globals.newSmallButton);
 
-		buttonCancel = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("GroupPanel.CancelButtonTooltip"), "images/cancel.png",
-				"images/cancel_over.png", "images/cancel_disabled.png");
+		buttonCancel = new de.uib.configed.gui.IconButton(configed.getResourceValue("GroupPanel.CancelButtonTooltip"),
+				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png");
 		buttonCancel.addActionListener(this);
 		buttonCancel.setPreferredSize(Globals.newSmallButton);
 
-		buttonDelete = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("GroupPanel.DeleteButtonTooltip"), "images/edit-delete.png",
-				"images/edit-delete_over.png", "images/edit-delete_disabled.png");
+		buttonDelete = new de.uib.configed.gui.IconButton(configed.getResourceValue("GroupPanel.DeleteButtonTooltip"),
+				"images/edit-delete.png", "images/edit-delete_over.png", "images/edit-delete_disabled.png");
 		buttonDelete.addActionListener(this);
 		buttonDelete.setPreferredSize(Globals.newSmallButton);
 
 		buttonReloadProductStates = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("GroupPanel.ReloadButtonTooltip"), "images/reload_blue16.png",
+				configed.getResourceValue("GroupPanel.ReloadButtonTooltip"), "images/reload_blue16.png",
 				"images/reload_blue16.png", " ", true);
 
-		buttonReloadProductStates
-				.setToolTipText(de.uib.configed.configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"));
+		buttonReloadProductStates.setToolTipText(configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"));
 
 		buttonReloadProductStates.addActionListener(this);
 		buttonReloadProductStates.setPreferredSize(Globals.newSmallButton);
 		buttonReloadProductStates.setVisible(true);
 
 		buttonSaveAndExecute = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("ConfigedMain.savePOCAndExecute"),
+				configed.getResourceValue("ConfigedMain.savePOCAndExecute"),
 				"images/executing_command_blue-grey_16.png", "images/executing_command_blue-grey_16.png", " ", true);
 
-		buttonSaveAndExecute
-				.setToolTipText(de.uib.configed.configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
+		buttonSaveAndExecute.setToolTipText(configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
 
 		buttonSaveAndExecute.addActionListener(this);
 		buttonSaveAndExecute.setPreferredSize(Globals.newSmallButton);
@@ -442,11 +437,10 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		labelCollectiveAction.setFont(Globals.defaultFont);
 
 		buttonCollectiveAction = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
+				configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
 				"images/execute16_lightblue.png", "images/execute16_lightblue.png", " ", true);
 
-		buttonCollectiveAction.setToolTipText(
-				de.uib.configed.configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"));
+		buttonCollectiveAction.setToolTipText(configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"));
 
 		buttonCollectiveAction.addActionListener(this);
 		buttonCollectiveAction.setPreferredSize(Globals.newSmallButton);
@@ -456,14 +450,14 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		Map<String, String> values = new LinkedHashMap<>();
 
-		values.put(de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"),
-				de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked.tooltip"));
+		values.put(configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"),
+				configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked.tooltip"));
 
-		values.put(de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked"),
-				de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked.tooltip"));
+		values.put(configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked"),
+				configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked.tooltip"));
 
-		values.put(de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked"),
-				de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked.tooltip"));
+		values.put(configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked"),
+				configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked.tooltip"));
 
 		DefaultListModel<String> modelChooseAction = new DefaultListModel<>(); // put values from hashmap into
 																				// list
@@ -496,8 +490,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		});
 		listChooseAction.setSelectedIndex(0);
 
-		JLabel labelStrip = new JLabel(
-				"  " + de.uib.configed.configed.getResourceValue("GroupPanel.labelAggregateProducts"));
+		JLabel labelStrip = new JLabel("  " + configed.getResourceValue("GroupPanel.labelAggregateProducts"));
 
 		labelStrip.setBackground(Globals.backLightBlue);
 		labelStrip.setOpaque(true);
@@ -526,13 +519,12 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		comboAggregatedEditing.setValues(values);
 		comboAggregatedEditing.setFont(Globals.defaultFont);
 
-		buttonEditDialog = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("GroupPanel.EditButtonTooltip"),
+		buttonEditDialog = new de.uib.configed.gui.IconButton(configed.getResourceValue("GroupPanel.EditButtonTooltip"),
 				"images/packagegroup_save.png", "images/packagegroup_save_over.png",
 				"images/packagegroup_save_disabled.png");
 
-		buttonEditDialog.setToolTips(de.uib.configed.configed.getResourceValue("GroupPanel.EditButtonTooltipInactive"),
-				de.uib.configed.configed.getResourceValue("GroupPanel.EditButtonTooltipActive"));
+		buttonEditDialog.setToolTips(configed.getResourceValue("GroupPanel.EditButtonTooltipInactive"),
+				configed.getResourceValue("GroupPanel.EditButtonTooltipActive"));
 		buttonEditDialog.addActionListener(this);
 		buttonEditDialog.setPreferredSize(Globals.newSmallButton);
 
@@ -877,7 +869,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		if (!insTableModel.infoIfNoClientsSelected()) {
 			insTableModel.initCollectiveChange();
 
-			if (selected == de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"))
+			if (selected == configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"))
 				actionType = ActionRequest.SETUP;
 
 			else if (selected == de.uib.configed.configed

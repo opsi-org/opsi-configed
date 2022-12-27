@@ -367,7 +367,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		addComponentListener(this);
 
 		buttonCommit = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip"), "images/apply.png",
+				configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip"), "images/apply.png",
 				"images/apply_over.png", "images/apply_disabled.png");
 
 		buttonCommit.setPreferredSize(Globals.smallButtonDimension);
@@ -375,7 +375,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			buttonCommit.setVisible(false);
 
 		buttonCancel = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"), "images/cancel.png",
+				configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"), "images/cancel.png",
 				"images/cancel_over.png", "images/cancel_disabled.png");
 
 		buttonCancel.setPreferredSize(Globals.smallButtonDimension);

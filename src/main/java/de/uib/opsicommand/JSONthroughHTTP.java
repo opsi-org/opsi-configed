@@ -248,7 +248,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 			logging.info(this, "retrieveJSONObject by connection " + connection);
 			logging.info(this, "retrieveJSONObject request properties " + connection.getRequestProperties());
 			logging.info(this, "retrieveJSONObject request method " + connection.getRequestMethod());
-			logging.info(this, "https protocols given by system " + configed.systemSSLversion);
+			logging.info(this, "https protocols given by system " + configed.SYSTEM_SSL_VERSION);
 
 			if (sessionId != null) {
 				connection.setRequestProperty("Cookie", sessionId);

@@ -14,14 +14,14 @@ import de.uib.utilities.logging.logging;
  */
 class JsonParser {
 	private StringReader reader;
-	private PositionType currentPosition = PositionType.JsonValue;
+	private PositionType currentPosition = PositionType.JSON_VALUE;
 	private String currentValue = null;
 	private boolean inList = false;
 	Deque<PositionType> stack;
 
 	public enum PositionType {
-		ObjectBegin, ObjectEnd, ListBegin, ListEnd, JsonName, JsonValue
-	};
+		OBJECT_BEGIN, OBJECT_END, LIST_BEGIN, LIST_END, JSON_NAME, JSON_VALUE
+	}
 
 	public JsonParser(String input) {
 		reader = new StringReader(input);
@@ -29,50 +29,52 @@ class JsonParser {
 	}
 
 	public boolean next() throws IOException {
-		while (true) {
-			int i = reader.read();
-			if (i == -1)
-				return false;
+		int i;
+
+		while ((i = reader.read()) != -1) {
+
 			logging.debug(this, (char) i + " " + currentPosition.toString());
 			managePosition();
 			char c = (char) i;
 			if (Character.isWhitespace(c))
 				continue;
-			if (c == ':' && currentPosition == PositionType.JsonName) {
-				currentPosition = PositionType.JsonValue;
+			if (c == ':' && currentPosition == PositionType.JSON_NAME) {
+				currentPosition = PositionType.JSON_VALUE;
 				continue;
 			}
-			if (c == ',' && currentPosition == PositionType.JsonValue) {
+			if (c == ',' && currentPosition == PositionType.JSON_VALUE) {
 				if (!inList)
-					currentPosition = PositionType.JsonName;
+					currentPosition = PositionType.JSON_NAME;
 				continue;
 			}
-			if (c == '{' && currentPosition == PositionType.JsonValue) {
-				currentPosition = PositionType.ObjectBegin;
+			if (c == '{' && currentPosition == PositionType.JSON_VALUE) {
+				currentPosition = PositionType.OBJECT_BEGIN;
 				inList = false;
 				return true;
 			}
-			if (c == '}' && currentPosition == PositionType.JsonValue) {
-				currentPosition = PositionType.ObjectEnd;
+			if (c == '}' && currentPosition == PositionType.JSON_VALUE) {
+				currentPosition = PositionType.OBJECT_END;
 				return true;
 			}
-			if (c == '[' && currentPosition == PositionType.JsonValue) {
-				currentPosition = PositionType.ListBegin;
+			if (c == '[' && currentPosition == PositionType.JSON_VALUE) {
+				currentPosition = PositionType.LIST_BEGIN;
 				inList = true;
 				return true;
 			}
-			if (c == ']' && currentPosition == PositionType.JsonValue) {
-				currentPosition = PositionType.ListEnd;
+			if (c == ']' && currentPosition == PositionType.JSON_VALUE) {
+				currentPosition = PositionType.LIST_END;
 				inList = false;
 				return true;
 			}
 			if ((c == '"' || Character.isLetter(c))
-					&& (currentPosition == PositionType.JsonValue || currentPosition == PositionType.JsonName)) {
+					&& (currentPosition == PositionType.JSON_VALUE || currentPosition == PositionType.JSON_NAME)) {
 				currentValue = getNextValue(c);
 				return true;
 			}
 			throw new IllegalArgumentException("Unexpected character: " + c);
 		}
+
+		return false;
 	}
 
 	public PositionType getPositionType() {
@@ -107,22 +109,22 @@ class JsonParser {
 	}
 
 	private void managePosition() {
-		if (currentPosition == PositionType.ObjectBegin) {
-			stack.push(PositionType.ObjectBegin);
-			currentPosition = PositionType.JsonName;
-		} else if (currentPosition == PositionType.ListBegin) {
-			stack.push(PositionType.ListBegin);
-			currentPosition = PositionType.JsonValue;
-		} else if (currentPosition == PositionType.ObjectEnd || currentPosition == PositionType.ListEnd) {
+		if (currentPosition == PositionType.OBJECT_BEGIN) {
+			stack.push(PositionType.OBJECT_BEGIN);
+			currentPosition = PositionType.JSON_NAME;
+		} else if (currentPosition == PositionType.LIST_BEGIN) {
+			stack.push(PositionType.LIST_BEGIN);
+			currentPosition = PositionType.JSON_VALUE;
+		} else if (currentPosition == PositionType.OBJECT_END || currentPosition == PositionType.LIST_END) {
 			stack.pop();
 			currentPosition = stack.peek();
 			logging.debug(this, "managePosition: " + currentPosition.toString());
-			if (currentPosition == PositionType.ObjectBegin) {
+			if (currentPosition == PositionType.OBJECT_BEGIN) {
 				inList = false;
 			} else {
 				inList = true;
 			}
-			currentPosition = PositionType.JsonValue;
+			currentPosition = PositionType.JSON_VALUE;
 		}
 	}
 }

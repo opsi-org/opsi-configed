@@ -24,16 +24,16 @@ import de.uib.utilities.logging.logging;
  * A serializer is able to save and load searches.
  */
 public abstract class Serializer {
-	public static final String elementNameGroup = "GroupElement";
-	public static final String elementNameGroupWithSubgroups = "GroupWithSubgroupsElement";
-	public static final String elementNameSoftwareNameElement = "SoftwareNameElement";
-	public static final String elementNameGeneric = "Generic";
+	public static final String ELEMENT_NAME_GROUP = "GroupElement";
+	public static final String ELEMENT_NAME_GROUP_WITH_SUBGROUPS = "GroupWithSubgroupsElement";
+	public static final String ELEMENT_NAME_SOFTWARE_NAME_ELEMENT = "SoftwareNameElement";
+	public static final String ELEMENT_NAME_GENERIC = "Generic";
 
-	public static final String keyElementName = "element";
-	public static final String keySubelementName = "refinedElement";
-	public static final String keyElementPath = "elementPath";
-	public static final String keyOperation = "operation";
-	public static final String keyDataType = "dataType";
+	public static final String KEY_ELEMENT_NAME = "element";
+	public static final String KEY_SUBELEMENT_NAME = "refinedElement";
+	public static final String KEY_ELEMENT_PATH = "elementPath";
+	public static final String KEY_OPERATION = "operation";
+	public static final String KEY_DATA_TYPE = "dataType";
 
 	protected SelectionManager manager;
 
@@ -66,7 +66,7 @@ public abstract class Serializer {
 
 		String jsonString;
 		try {
-			jsonString = "{ \"version\" : \"" + OpsiDataSerializer.dataVersion + "\", \"data\" : ";
+			jsonString = "{ \"version\" : \"" + OpsiDataSerializer.DATA_VERSION + "\", \"data\" : ";
 			jsonString += OpsiDataSerializer.createJsonRecursive(data);
 			jsonString += " }";
 		} catch (IllegalArgumentException e) {
@@ -85,8 +85,8 @@ public abstract class Serializer {
 			logging.warning(this, "data in Serializer.deserialize is null");
 
 		logging.info(this, "deserialize data " + data);
-		if (data.get(keyElementPath) != null) {
-			logging.info("deserialize, elementPath " + Arrays.toString((String[]) data.get(keyElementPath)));
+		if (data.get(KEY_ELEMENT_PATH) != null) {
+			logging.info("deserialize, elementPath " + Arrays.toString((String[]) data.get(KEY_ELEMENT_PATH)));
 		}
 
 		try {
@@ -163,36 +163,36 @@ public abstract class Serializer {
 		logging.info(this, "getOperation for map " + data + "; hardware " + hardware);
 
 		String elementPathS = null;
-		if (data.get(keyElementPath) != null) {
-			elementPathS = Arrays.toString((String[]) data.get(keyElementPath));
+		if (data.get(KEY_ELEMENT_PATH) != null) {
+			elementPathS = Arrays.toString((String[]) data.get(KEY_ELEMENT_PATH));
 			logging.info(this, "getOperation, elementPath in data " + elementPathS);
 		}
 		// Element
 		SelectElement element = null;
-		String elementName = (String) data.get(keyElementName);
+		String elementName = (String) data.get(KEY_ELEMENT_NAME);
 		logging.info(this, "Element name: " + elementName);
 
 		if (elementName != null && !(elementName.isEmpty())) {
-			String subelementName = (String) data.get(keySubelementName);
+			String subelementName = (String) data.get(KEY_SUBELEMENT_NAME);
 
-			String[] elementPath = (String[]) data.get(keyElementPath);
+			String[] elementPath = (String[]) data.get(KEY_ELEMENT_PATH);
 
-			if (elementName.equals(elementNameSoftwareNameElement))
+			if (elementName.equals(ELEMENT_NAME_SOFTWARE_NAME_ELEMENT))
 				element = manager.getNewSoftwareNameElement();
 
-			else if (elementName.equals(elementNameGroupWithSubgroups)) {
+			else if (elementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS)) {
 				element = new GroupWithSubgroupsElement(manager.getBackend().getGroups().toArray(new String[0]));
 			}
 
-			else if (elementName.equals(elementNameGroup)) {
+			else if (elementName.equals(ELEMENT_NAME_GROUP)) {
 				// constructing a compatibility with format without GroupWithSubgroupsElement
-				if (subelementName != null && subelementName.equals(elementNameGroupWithSubgroups))
+				if (subelementName != null && subelementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS))
 					element = new GroupWithSubgroupsElement(manager.getBackend().getGroups().toArray(new String[0]));
 				else
 					element = new GroupElement(manager.getBackend().getGroups().toArray(new String[0]));
 			}
 
-			else if (elementName.startsWith(elementNameGeneric)) {
+			else if (elementName.startsWith(ELEMENT_NAME_GENERIC)) {
 				if (hardware == null) {
 					hardware = manager.getBackend().getHardwareList();
 				}
@@ -231,7 +231,7 @@ public abstract class Serializer {
 				children.add(getOperation(child, hardware));
 
 		// Operation
-		String operationName = (String) data.get(keyOperation);
+		String operationName = (String) data.get(KEY_OPERATION);
 		logging.info(this, "getOperation Operation name: " + operationName);
 		SelectOperation operation;
 
@@ -254,7 +254,7 @@ public abstract class Serializer {
 		logging.info(this, "getOperation  " + operation);
 
 		// Data
-		SelectData.DataType dataType = (SelectData.DataType) data.get(keyDataType);
+		SelectData.DataType dataType = (SelectData.DataType) data.get(KEY_DATA_TYPE);
 		logging.info(this, "getOperation dataType " + dataType);
 		Object realData = data.get("data");
 		logging.info(this, "getOperation realData " + realData);
@@ -273,26 +273,26 @@ public abstract class Serializer {
 		Map<String, Object> map = new HashMap<>();
 		SelectElement element = operation.getElement();
 		if (element == null) {
-			map.put(keyElementName, null);
-			map.put(keyElementPath, null);
+			map.put(KEY_ELEMENT_NAME, null);
+			map.put(KEY_ELEMENT_PATH, null);
 		} else if (element instanceof GroupWithSubgroupsElement)
 		// producing compatibility for version without GroupWithSubgroupsElement
 		{
-			map.put(keyElementName, GroupElement.class.getSimpleName());
-			map.put(keySubelementName, GroupWithSubgroupsElement.class.getSimpleName());
-			map.put(keyElementPath, element.getPathArray());
+			map.put(KEY_ELEMENT_NAME, GroupElement.class.getSimpleName());
+			map.put(KEY_SUBELEMENT_NAME, GroupWithSubgroupsElement.class.getSimpleName());
+			map.put(KEY_ELEMENT_PATH, element.getPathArray());
 
 		} else {
-			map.put(keyElementName, element.getClassName());
-			map.put(keyElementPath, element.getPathArray());
+			map.put(KEY_ELEMENT_NAME, element.getClassName());
+			map.put(KEY_ELEMENT_PATH, element.getPathArray());
 		}
 
-		map.put(keyOperation, operation.getClassName());
+		map.put(KEY_OPERATION, operation.getClassName());
 		if (operation.getSelectData() == null) {
-			map.put(keyDataType, null);
+			map.put(KEY_DATA_TYPE, null);
 			map.put("data", null);
 		} else {
-			map.put(keyDataType, operation.getSelectData().getType());
+			map.put(KEY_DATA_TYPE, operation.getSelectData().getType());
 			map.put("data", operation.getSelectData().getData());
 		}
 		if (operation instanceof SelectGroupOperation) {

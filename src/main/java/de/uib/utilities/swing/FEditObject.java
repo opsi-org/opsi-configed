@@ -32,6 +32,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.uib.configed.Globals;
+import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.observer.RunningInstances;
 
@@ -55,7 +56,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	protected de.uib.configed.gui.IconButton buttonAdd;
 	protected de.uib.configed.gui.IconButton buttonRemove;
 
-	protected String tooltipCommit = de.uib.configed.configed.getResourceValue("FEditObject.SaveButtonTooltip");
+	protected String tooltipCommit = configed.getResourceValue("FEditObject.SaveButtonTooltip");
 
 	protected boolean dataChanged = false;
 	protected boolean editable = true;
@@ -94,26 +95,22 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
-		buttonCommit = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("FEditObject.SaveButtonTooltip"), "images/apply.png",
-				"images/apply_over.png", "images/apply_disabled.png", true);
+		buttonCommit = new de.uib.configed.gui.IconButton(configed.getResourceValue("FEditObject.SaveButtonTooltip"),
+				"images/apply.png", "images/apply_over.png", "images/apply_disabled.png", true);
 		buttonCommit.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 
-		buttonCancel = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("FEditObject.CancelButtonTooltip"), "images/cancel.png",
-				"images/cancel_over.png", "images/cancel_disabled.png", true);
+		buttonCancel = new de.uib.configed.gui.IconButton(configed.getResourceValue("FEditObject.CancelButtonTooltip"),
+				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png", true);
 		buttonCancel.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 		buttonCancel.setEnabled(true);
 
-		buttonRemove = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("FEditObject.RemoveButtonTooltip"), "images/list-remove.png",
-				"images/list-remove.png", "images/list-remove_disabled.png", true);
+		buttonRemove = new de.uib.configed.gui.IconButton(configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
+				"images/list-remove.png", "images/list-remove.png", "images/list-remove_disabled.png", true);
 		buttonRemove.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 		buttonRemove.setVisible(false);
 
-		buttonAdd = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("FEditObject.AddButtonTooltip"), "images/list-add.png",
-				"images/list-add.png", "images/list-add_disabled.png", true);
+		buttonAdd = new de.uib.configed.gui.IconButton(configed.getResourceValue("FEditObject.AddButtonTooltip"),
+				"images/list-add.png", "images/list-add.png", "images/list-add_disabled.png", true);
 		buttonAdd.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 		buttonAdd.setVisible(false);
 

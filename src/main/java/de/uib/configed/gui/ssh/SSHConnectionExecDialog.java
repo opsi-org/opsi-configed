@@ -8,8 +8,8 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
@@ -38,7 +38,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 			initGUI();
 
 			this.centerOn(Globals.mainFrame);
-			this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
 			this.setSize(900, 500);
 			logging.info(this, "SSHConnectionExecDialog built");
@@ -73,15 +73,14 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 	private void initGUI() {
 		try {
 			btn_killProcess = new de.uib.configed.gui.IconButton(
-					de.uib.configed.configed.getResourceValue("SSHConnection.buttonKillProcess"),
-					"images/edit-delete.png", "images/edit-delete.png", "images/edit-delete.png", true);
+					configed.getResourceValue("SSHConnection.buttonKillProcess"), "images/edit-delete.png",
+					"images/edit-delete.png", "images/edit-delete.png", true);
 			btn_killProcess
 					.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3));
 			btn_killProcess.setToolTipText(configed.getResourceValue("SSHConnection.buttonKillProcess"));
 
-			btn_clear = new de.uib.configed.gui.IconButton(
-					de.uib.configed.configed.getResourceValue("SSHConnection.btn_clear"), "images/user-trash.png",
-					"images/user-trash.png", "images/user-trash.png", true);
+			btn_clear = new de.uib.configed.gui.IconButton(configed.getResourceValue("SSHConnection.btn_clear"),
+					"images/user-trash.png", "images/user-trash.png", "images/user-trash.png", true);
 			btn_clear.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3));
 			btn_clear.setToolTipText(configed.getResourceValue("SSHConnection.btn_clear"));
 			btn_clear.addActionListener(actionEvent -> clear());

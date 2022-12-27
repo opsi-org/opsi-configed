@@ -62,7 +62,7 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 
 public class LogPane extends JPanel implements KeyListener, ActionListener {
-	public static final int defaultMaxShowLevel = 3;
+	public static final int DEFAULT_MAX_SHOW_LEVEL = 3;
 
 	protected JTextPane jTextPane;
 	protected JScrollPane scrollpane;
@@ -70,7 +70,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected JLabel labelSearch;
 
 	protected JComboBox jComboBoxSearch;
-	protected final int fieldH = Globals.LINE_HEIGHT;
+	protected static final int FIELD_H = Globals.LINE_HEIGHT;
 	protected JButton buttonSearch;
 	protected JCheckBox jCheckBoxCaseSensitive;
 	protected JButton buttonFontPlus;
@@ -78,8 +78,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected JLabel labelLevel;
 	protected AdaptingSlider sliderLevel;
 	protected AdaptingSlider sliderLevel0;
-	protected final int sliderH = 35;
-	protected final int sliderW = 180;
+	protected static final int SLIDER_H = 35;
+	protected static final int SLIDER_W = 180;
 	protected ChangeListener sliderListener;
 	protected JLabel labelDisplayRestriction;
 	protected JComboBox comboType;
@@ -115,7 +115,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected String info;
 
 	protected Integer displayFontSize = 11;
-	final int minDisplayFontSize = 10;
 	protected Font monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
 
 	public void setFontSize(String s) {
@@ -299,7 +298,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		if (savedMaxShownLogLevel > 0)
 			result = savedMaxShownLogLevel;
 		else
-			result = defaultMaxShowLevel;
+			result = DEFAULT_MAX_SHOW_LEVEL;
 
 		logging.info(this, "produceInitialMaxShowLevel " + result);
 
@@ -545,8 +544,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 						.addComponent(spinnerMinLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGroup(layoutCommandpane.createParallelGroup()
-								.addComponent(sliderLevel, sliderW, sliderW, sliderW)
-								.addComponent(sliderLevel0, sliderW, sliderW, sliderW))
+								.addComponent(sliderLevel, SLIDER_W, SLIDER_W, SLIDER_W)
+								.addComponent(sliderLevel0, SLIDER_W, SLIDER_W, SLIDER_W))
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)));
 
 		layoutCommandpane.setVerticalGroup(layoutCommandpane.createSequentialGroup()
@@ -554,7 +553,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				.addGroup(layoutCommandpane.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
 						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jComboBoxSearch, fieldH, fieldH, fieldH)
+						.addComponent(jComboBoxSearch, FIELD_H, FIELD_H, FIELD_H)
 						.addComponent(buttonSearch, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 						.addComponent(jCheckBoxCaseSensitive, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
@@ -568,8 +567,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 						.addComponent(labelLevel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(spinnerMinLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(sliderLevel, sliderH, sliderH, sliderH)
-						.addComponent(sliderLevel0, sliderH, sliderH, sliderH)
+						.addComponent(sliderLevel, SLIDER_H, SLIDER_H, SLIDER_H)
+						.addComponent(sliderLevel0, SLIDER_H, SLIDER_H, SLIDER_H)
 
 				).addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 

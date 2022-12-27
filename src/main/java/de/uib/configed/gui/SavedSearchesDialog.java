@@ -56,15 +56,13 @@ public class SavedSearchesDialog extends FEditList {
 		super.createComponents();
 
 		// redefine buttonCommit
-		buttonCommit
-				.setToolTipText(de.uib.configed.configed.getResourceValue("SavedSearchesDialog.ExecuteButtonTooltip"));
+		buttonCommit.setToolTipText(configed.getResourceValue("SavedSearchesDialog.ExecuteButtonTooltip"));
 		buttonCommit.setIcon(Globals.createImageIcon("images/executing_command_red_22.png", ""));
 		buttonCommit.setSelectedIcon(Globals.createImageIcon("images/executing_command_red_22.png", ""));
 		buttonCommit.setDisabledIcon(Globals.createImageIcon("images/execute_disabled.png", ""));
 		buttonCommit.setPreferredSize(new java.awt.Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 
-		buttonCancel
-				.setToolTipText(de.uib.configed.configed.getResourceValue("SavedSearchesDialog.CancelButtonTooltip"));
+		buttonCancel.setToolTipText(configed.getResourceValue("SavedSearchesDialog.CancelButtonTooltip"));
 
 	}
 
@@ -79,8 +77,7 @@ public class SavedSearchesDialog extends FEditList {
 				removeSelectedEntry();
 			}
 		});
-		buttonRemove
-				.setToolTipText(de.uib.configed.configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
+		buttonRemove.setToolTipText(configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
 
 		buttonAdd.setEnabled(true);
 		buttonAdd.addActionListener(new ActionListener() {
@@ -109,7 +106,7 @@ public class SavedSearchesDialog extends FEditList {
 		JMenuItem remove = new JMenuItemFormatted();
 
 		// find itscontext
-		remove.setText(de.uib.configed.configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
+		remove.setText(configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
 
 		remove.setFont(Globals.defaultFont);
 		remove.addActionListener(actionEvent -> {
@@ -119,7 +116,7 @@ public class SavedSearchesDialog extends FEditList {
 		popup.add(remove);
 
 		JMenuItem edit = new JMenuItemFormatted();
-		edit.setText(de.uib.configed.configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
+		edit.setText(configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
 		edit.setFont(Globals.defaultFont);
 		edit.addActionListener(actionEvent -> editSearch(visibleList.getSelectedValue().toString()));
 		popup.add(edit);

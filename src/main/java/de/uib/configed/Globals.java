@@ -201,7 +201,6 @@ public class Globals {
 	public static final Color defaultTableCellBgColor2 = backLightYellow;
 
 	// tableSelection
-	
 
 	public static final Color defaultTableSelectedRowDark = new Color(204, 220, 238);
 	public static final Color defaultTableSelectedRowBright = new Color(221, 233, 249);
@@ -368,10 +367,10 @@ public class Globals {
 		return buff.toString();
 	}
 
-	private static final String imageBase = "de/uib/configed/gui/";
+	private static final String IMAGE_BASE = "de/uib/configed/gui/";
 
 	public static java.net.URL getImageResourceURL(String relPath) {
-		String resourceS = imageBase + relPath;
+		String resourceS = IMAGE_BASE + relPath;
 
 		ClassLoader cl = Globals.class.getClassLoader();
 		java.net.URL imgURL = cl.getResource(resourceS);
@@ -384,7 +383,7 @@ public class Globals {
 	}
 
 	public static Image createImage(String path) {
-		String xPath = imageBase + path;
+		String xPath = IMAGE_BASE + path;
 		ClassLoader cl = Globals.class.getClassLoader();
 		// based on MainFrame
 
@@ -409,7 +408,7 @@ public class Globals {
 	}
 
 	public static ImageIcon createImageIcon(String path, String description) {
-		String xPath = imageBase + path;
+		String xPath = IMAGE_BASE + path;
 		ClassLoader cl = Globals.class.getClassLoader();
 		// based on MainFrame
 

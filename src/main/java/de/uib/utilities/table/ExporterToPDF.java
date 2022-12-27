@@ -246,9 +246,8 @@ public class ExporterToPDF extends ExportTable {
 			}
 		}
 
-		content.add(new Paragraph(
-				de.uib.configed.configed.getResourceValue("DocumentExport.summonedBy") + ": " + userInitial + ", " //$NON-NLS-3$
-						+ dateFormatter.format(new Date()), //$NON-NLS-2$ //$NON-NLS-3$
+		content.add(new Paragraph(configed.getResourceValue("DocumentExport.summonedBy") + ": " + userInitial + ", " //$NON-NLS-3$
+				+ dateFormatter.format(new Date()), //$NON-NLS-2$ //$NON-NLS-3$
 				smallBold));
 		content.add(addEmptyLines(1));
 		return content;

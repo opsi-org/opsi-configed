@@ -419,13 +419,13 @@ public class DPassword extends JDialog // implements Runnable
 		});
 
 		JCheckBox checkTrySSH = new JCheckBox(configed.getResourceValue("DPassword.checkTrySSH"),
-				de.uib.configed.configed.sshconnect_onstart);
-		logging.info(this, "checkTrySSH  " + de.uib.configed.configed.sshconnect_onstart);
+				configed.sshconnect_onstart);
+		logging.info(this, "checkTrySSH  " + configed.sshconnect_onstart);
 		checkTrySSH.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 
-				de.uib.configed.configed.sshconnect_onstart = (e.getStateChange() == ItemEvent.SELECTED);
+				configed.sshconnect_onstart = (e.getStateChange() == ItemEvent.SELECTED);
 
 				logging.info(this, "checkTrySSH itemStateChanged " + checkTrySSH);
 			}
@@ -573,7 +573,7 @@ public class DPassword extends JDialog // implements Runnable
 		jLabelVersion.setText(messageFormatVersion
 				.format(new Object[] { Globals.VERSION, "(" + Globals.VERDATE + ")", Globals.VERHASHTAG }));
 
-		jLabelJavaVersion.setText(configed.javaVendor + " " + configed.javaVersion);
+		jLabelJavaVersion.setText(configed.JAVA_VENDOR + " " + configed.JAVA_VERSION);
 
 		String strOS = System.getProperty("os.name");
 		String osVersion = System.getProperty("os.version");

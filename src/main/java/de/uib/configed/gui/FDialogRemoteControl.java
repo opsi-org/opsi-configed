@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.ListSelectionEvent;
 
+import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
 public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
@@ -40,13 +41,11 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 	protected void initComponents() {
 		super.initComponents();
 
-		buttonCommit.createIconButton(
-				de.uib.configed.configed.getResourceValue("FDialogRemoteControl.SaveButtonTooltip"),
+		buttonCommit.createIconButton(configed.getResourceValue("FDialogRemoteControl.SaveButtonTooltip"),
 				"images/executing_command_red_22.png", "images/executing_command_red_22_over.png",
 				"images/executing_command_22_disabled.png", true);
 
-		buttonCancel.createIconButton(
-				de.uib.configed.configed.getResourceValue("FDialogRemoteControl.CancelButtonTooltip"),
+		buttonCancel.createIconButton(configed.getResourceValue("FDialogRemoteControl.CancelButtonTooltip"),
 				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png", true);
 
 		extraField.getDocument().addDocumentListener(this);
@@ -93,7 +92,6 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 
 	}
 
-	
 	// interface ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
@@ -119,7 +117,6 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 			extraField.setEnabled(editable.get(selText));
 		}
 	}
-	
 
 	private void saveEditedText() {
 		if (extraField.isEditable() && selText != null && !selText.equals("") && meanings.get(selText) != null) {
@@ -128,7 +125,7 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 	}
 
 	// DocumentListener
-	
+
 	@Override
 	public void changedUpdate(DocumentEvent e) {
 
@@ -146,9 +143,7 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 
 		saveEditedText();
 	}
-	
 
-	
 	// interface ActionListener
 	@Override
 	public void actionPerformed(java.awt.event.ActionEvent e) {

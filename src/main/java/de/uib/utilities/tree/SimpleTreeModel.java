@@ -12,6 +12,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import de.uib.configed.Globals;
+import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
 public class SimpleTreeModel extends DefaultTreeModel
@@ -149,22 +150,21 @@ public class SimpleTreeModel extends DefaultTreeModel
 		logging.logDirectoryName = args[0];
 		logging.LOG_LEVEL_CONSOLE = logging.LEVEL_DEBUG;
 
-		de.uib.configed.configed.configureUI();
+		configed.configureUI();
 
-		Set<String> example = new HashSet<>(
-				(Arrays.asList(new String[] { "configed", "configed.saved_search", "opsiclientd" })));
+		Set<String> example = new HashSet<>((Arrays.asList("configed", "configed.saved_search", "opsiclientd")));
 
 		SimpleTreeModel model = new SimpleTreeModel(example);
 		model.produce();
 
-		example = new HashSet<>((Arrays.asList(new String[] { "", "configed.saved_search", "opsiclientd" })));
+		example = new HashSet<>((Arrays.asList("", "configed.saved_search", "opsiclientd")));
 		model = new SimpleTreeModel(example);
 		model.produce();
 
 		model = new SimpleTreeModel(example);
 		model.produce();
 
-		example = new HashSet<>((Arrays.asList(new String[] { "a1.b1.c1", "a1.b2.d1", "a2.b1" })));
+		example = new HashSet<>((Arrays.asList("a1.b1.c1", "a1.b2.d1", "a2.b1")));
 
 		model = new SimpleTreeModel(example);
 		model.produce();

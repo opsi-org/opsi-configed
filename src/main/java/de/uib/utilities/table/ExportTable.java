@@ -216,18 +216,15 @@ public abstract class ExportTable {
 
 					if (file.exists() && askForOverwrite) {
 						int option = JOptionPane.showConfirmDialog(Globals.frame1,
-								de.uib.configed.configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n"
-										+ file.getName(),
-								Globals.APPNAME + " "
-										+ de.uib.configed.configed.getResourceValue("DocumentExport.question"),
+								configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
+								Globals.APPNAME + " " + configed.getResourceValue("DocumentExport.question"),
 								JOptionPane.OK_CANCEL_OPTION);
 
 						if (option == JOptionPane.CANCEL_OPTION)
 							filename = null;
 					}
 				} catch (Exception fc_e) {
-					logging.error(de.uib.configed.configed.getResourceValue("DocumentExport.errorNoValidFilename")
-							+ "\n" + filename);
+					logging.error(configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename);
 				}
 			}
 		}

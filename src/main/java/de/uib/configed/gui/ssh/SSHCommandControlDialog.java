@@ -214,16 +214,15 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			// ,
 
 			btn_test_command = new de.uib.configed.gui.IconButton(
-					de.uib.configed.configed.getResourceValue("SSHConnection.CommandControl.btnTestCommand"),
+					configed.getResourceValue("SSHConnection.CommandControl.btnTestCommand"),
 					"images/executing_command_red_22.png", "images/executing_command_red_22.png",
 					"images/executing_command_red_22.png", true);
 			btn_del = new de.uib.configed.gui.IconButton(
-					de.uib.configed.configed.getResourceValue("SSHConnection.CommandControl.rm_menuText.tooltip"),
+					configed.getResourceValue("SSHConnection.CommandControl.rm_menuText.tooltip"),
 					"images/list-remove.png", "images/list-remove.png", "images/list-remove_disabled.png", true);
-			btn_save = new IconButton(
-					de.uib.configed.configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
+			btn_save = new IconButton(configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
 					"images/apply_over.gif", " ", "images/apply_disabled.gif", false);
-			btn_close = new IconButton(de.uib.configed.configed.getResourceValue("MainFrame.iconButtonCancelChanges"),
+			btn_close = new IconButton(configed.getResourceValue("MainFrame.iconButtonCancelChanges"),
 					"images/cancel-32.png", "images/cancel_over-32.png", " ", true);
 		}
 		{
