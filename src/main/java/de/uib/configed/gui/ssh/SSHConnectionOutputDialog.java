@@ -63,9 +63,8 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 		public void actionPerformed(ActionEvent e) {
 			logging.debug(this, "actionPerformed " + e);
 			cancel();
-
 		}
-	};
+	}
 
 	DialogCloseListener closeListener;
 

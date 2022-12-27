@@ -189,11 +189,11 @@ public class ExporterToPDF extends ExportTable {
 			document.addKeywords("Java, PDF, iText");
 		} else {
 			if (metaData.containsKey("title"))
-				document.addTitle(metaData.get("title").toString());
+				document.addTitle(metaData.get("title"));
 			if (metaData.containsKey("subject"))
-				document.addSubject(metaData.get("subject").toString());
+				document.addSubject(metaData.get("subject"));
 			if (metaData.containsKey("keywords"))
-				document.addKeywords(metaData.get("keywords").toString());
+				document.addKeywords(metaData.get("keywords"));
 		}
 		document.addAuthor(System.getProperty("user.name"));
 		document.addCreator(Globals.APPNAME);

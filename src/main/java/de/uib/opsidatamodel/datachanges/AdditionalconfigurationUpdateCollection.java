@@ -88,12 +88,6 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 		clear();
 	}
 
-	@Override
-	public boolean add(Object obj) {
-
-		return super.add(obj);
-	}
-
 	public void setDetermineConfigOptions(boolean b) {
 		determineConfigOptions = b;
 	}

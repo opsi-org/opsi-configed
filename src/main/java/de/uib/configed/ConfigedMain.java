@@ -436,7 +436,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		SSHConnectionInfo.getInstance().setHost(HOST);
 		SSHConnectionInfo.getInstance().setUser(USER);
 		SSHConnectionInfo.getInstance().setPassw(PASSWORD);
-		SSHConnectionInfo.getInstance().useKeyfile(SSHKEY != null ? true : false, SSHKEY != null ? SSHKEY : "",
+		SSHConnectionInfo.getInstance().useKeyfile(SSHKEY != null, SSHKEY != null ? SSHKEY : "",
 				SSHKEY != null ? SSHKEYPASS : "");
 		logging.registLogEventObserver(this);
 	}
@@ -1590,7 +1590,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			dpass.setPassword(PASSWORD);
 		}
 
-		if (((HOST != null && USER != null && PASSWORD != null))) {
+		if ((HOST != null && USER != null && PASSWORD != null)) {
 			// Auto login
 			logging.info(this, "start with given credentials");
 

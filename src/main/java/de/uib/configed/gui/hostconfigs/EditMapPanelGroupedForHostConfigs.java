@@ -34,7 +34,6 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.PopupMenuTrait;
-import de.uib.utilities.table.ListCellOptions;
 
 public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapanel.EditMapPanelGrouped
 
@@ -261,11 +260,6 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		};
 		tree.addMouseListener(popupListenerForRolepath);
 
-	}
-
-	@Override
-	public void setEditableMap(Map<String, Object> visualdata, Map<String, ListCellOptions> optionsMap) {
-		super.setEditableMap(visualdata, optionsMap);
 	}
 
 	@Override

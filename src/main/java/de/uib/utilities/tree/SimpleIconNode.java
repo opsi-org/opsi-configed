@@ -47,7 +47,7 @@ public class SimpleIconNode extends DefaultMutableTreeNode {
 	}
 
 	public void setEnabled(boolean aFlag) {
-		if (aFlag == false) {
+		if (!aFlag) {
 			// Lazy creation: avoids unneccessary objects if the tree
 			// could not have disabled state.
 			if ((closedIcon != null) & (disabledClosedIcon == null)) {

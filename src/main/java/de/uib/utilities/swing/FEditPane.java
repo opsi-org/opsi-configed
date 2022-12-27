@@ -199,17 +199,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {
-		super.keyReleased(e);
-
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		super.keyTyped(e);
-	}
-
-	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getSource() == textpane) {
 

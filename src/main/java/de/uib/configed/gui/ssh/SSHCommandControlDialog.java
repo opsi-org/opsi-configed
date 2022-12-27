@@ -693,12 +693,6 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		return tmp_com;
 	}
 
-	/* This method gets called when button 2 (cancel) is pressed */
-	@Override
-	public void doAction2() {
-		super.doAction2();
-	}
-
 	private void showPanel() {
 		logging.info(this, "showPanel helpPanelStatus always true");
 
@@ -707,9 +701,6 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			centerPanel.setSize(centerPanel.getWidth(), centerPanel.getHeight() + parameterPanel.getHeight());
 			this.setSize(this.getWidth(), this.getHeight() + parameterPanel.getHeight());
 		}
-		// else
-
-		// centerPanel.setSize(centerPanel.getWidth(),
 
 		repaint();
 		revalidate();

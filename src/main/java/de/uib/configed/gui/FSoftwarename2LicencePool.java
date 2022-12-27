@@ -386,13 +386,9 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 					),
 
-					0, new int[] {}, (TableModelListener) panelSWnames, updateCollection)
+					0, new int[] {}, panelSWnames, updateCollection)
 
 			{
-				@Override
-				protected void initColumns() {
-					super.initColumns();
-				}
 
 				@Override
 				public void produceRows() {
@@ -577,11 +573,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 					}
 				}, updateCollection));
 
-	}
-
-	@Override
-	public void doAction1() {
-		super.doAction1();
 	}
 
 	@Override

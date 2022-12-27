@@ -107,30 +107,17 @@ public class FShowList extends FTextArea {
 		super.doAction1();
 	}
 
-	@Override
-	public void doAction2() {
-
-		super.doAction2();
-	}
-
 	// KeyListener
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+		if (e.getKeyCode() == KeyEvent.VK_SHIFT)
 			shiftPressed = false;
 
-		}
+		else if (e.getKeyCode() == KeyEvent.VK_TAB && !shiftPressed && e.getSource() == jTextArea1)
+			jButton1.requestFocus();
 
-		if (e.getKeyCode() == KeyEvent.VK_TAB && !shiftPressed) {
-			if (e.getSource() == jTextArea1) {
-				jButton1.requestFocus();
-			}
-		}
-
-		if (e.getKeyCode() == KeyEvent.VK_TAB && shiftPressed) {
-			if (e.getSource() == jButton1) {
-				jTextArea1.requestFocus();
-			}
+		else if (e.getKeyCode() == KeyEvent.VK_TAB && shiftPressed && e.getSource() == jButton1) {
+			jTextArea1.requestFocus();
 		}
 	}
 

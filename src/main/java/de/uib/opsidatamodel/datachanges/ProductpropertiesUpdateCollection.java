@@ -111,11 +111,4 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 			}
 		}
 	}
-
-	@Override
-	public boolean add(Object obj) {
-
-		return super.add(obj);
-	}
-
 }

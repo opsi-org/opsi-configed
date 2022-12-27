@@ -115,13 +115,6 @@ public class SWAuditEntry extends TableEntry
 		return KEYS_FOR_GUI_TABLES;
 	}
 
-	@Override
-	public String put(String key, String value) {
-
-		return super.put(key, value);
-
-	}
-
 	private String lastseen = "";
 	private String ident;
 	private String identReduced;

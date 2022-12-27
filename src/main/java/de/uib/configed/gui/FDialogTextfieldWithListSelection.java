@@ -80,12 +80,11 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, Short.MAX_VALUE))
 				.addGroup(southLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE / 2)
-						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE)
-						.addGap(Globals.HGAP_SIZE / 2)));
+						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE).addGap(Globals.HGAP_SIZE / 2)));
 
 		southLayout.setVerticalGroup(southLayout.createSequentialGroup()
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-				
+
 				.addComponent(additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
@@ -99,7 +98,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 
 		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
 				.addComponent(centerPanel, 100, 200, Short.MAX_VALUE).addGap(Globals.HGAP_SIZE)
-				
+
 				.addComponent(southPanel, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.HGAP_SIZE));
 
@@ -153,7 +152,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 				.addGroup(theLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
 						.addComponent(labelField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						
+
 						.addGap(Globals.HGAP_SIZE).addGap(Globals.HGAP_SIZE)
 						.addComponent(theField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
 						.addGap(Globals.HGAP_SIZE).addGap(Globals.HGAP_SIZE))
@@ -175,15 +174,6 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 
 	}
 
-	@Override
-	public int getResult() {
-
-		// values are not got at this point
-		// override doAction for getting the values
-
-		return super.getResult();
-	}
-
 	public String getResultText() {
 		return resultingText;
 	}
@@ -192,13 +182,11 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		return selectedListElement;
 	}
 
-	
 	// interface ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 
 	}
-	
 
 	public static void main(String[] args) {
 		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, // owner frame

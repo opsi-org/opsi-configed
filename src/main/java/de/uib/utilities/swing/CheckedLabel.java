@@ -179,7 +179,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 					return;
 				super.keyPressed(e);
 				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-					if (selected == null || selected == true) {
+					if (selected == null || selected) {
 
 						ME.setSelected(false);
 						notifyActionListeners(new ActionEvent(ME, setCheckedOff, cmdSetCheckedOff,

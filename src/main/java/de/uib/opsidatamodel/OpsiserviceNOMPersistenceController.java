@@ -7240,7 +7240,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (KEY_USER_REGISTER_VALUE == null) {
 			KEY_USER_REGISTER_VALUE = isUserRegisterActivated();
 
-			if (KEY_USER_REGISTER_VALUE == true)
+			if (KEY_USER_REGISTER_VALUE)
 				KEY_USER_REGISTER_VALUE = checkUserRolesModule();
 
 		}

@@ -250,7 +250,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		case 1:
 			result = configed.getResourceValue("EditMapPanel.ColumnHeaderValue");
 			break;
-		};
+		}
 
 		return result;
 
@@ -281,7 +281,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 
 			// deliver the default value
 
-			if (result != null && result instanceof List) {
+			if (result instanceof List) {
 				List li = (List) result;
 				if (!li.isEmpty() && li.get(0) == null && optionsMap != null) {
 					result = defaultData.get(key);

@@ -64,20 +64,17 @@ public class LicenseDisplayer {
 	}
 
 	public void loadData() {
-		Platform.runLater(new Thread() {
-			@Override
-			public void run() {
-				message = "";
-				showInfo();
+		Platform.runLater(() -> {
+			message = "";
+			showInfo();
 
-				StringBuffer mess = new StringBuffer();
+			StringBuffer mess = new StringBuffer();
 
-				mess.append(showLicenceContractWarnings());
-				mess.append(calculateVariantLicencepools());
+			mess.append(showLicenceContractWarnings());
+			mess.append(calculateVariantLicencepools());
 
-				message = mess.toString();
-				showInfo();
-			}
+			message = mess.toString();
+			showInfo();
 		});
 	}
 
@@ -170,10 +167,6 @@ public class LicenseDisplayer {
 						() -> (Map) persist.getInstalledSoftwareName2SWinfo())),
 				0, new int[] {}, (TableModelListener) null, // panelSWnames ,
 				updateCollection) {
-			@Override
-			protected void initColumns() {
-				super.initColumns();
-			}
 
 			@Override
 			public void produceRows() {

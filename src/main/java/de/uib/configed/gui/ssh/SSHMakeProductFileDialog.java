@@ -89,7 +89,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	private void setComponentsEnabled(boolean value) {
 
 		btn_exec.setEnabled(value);
-		if (value == false) {
+		if (!value) {
 			tf_packageVersion.setEnabled(value);
 			tf_productVersion.setEnabled(value);
 		}

@@ -33,11 +33,6 @@ public class FDriverUpload extends SecondaryFrame {
 
 	}
 
-	@Override
-	public void start() {
-		super.start();
-	}
-
 	protected void define() {
 		panelDriverUpload = new PanelDriverUpload(main, persist, this);
 

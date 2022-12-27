@@ -53,11 +53,6 @@ public class FProductActions extends SecondaryFrame {
 
 	}
 
-	@Override
-	public void start() {
-		super.start();
-	}
-
 	protected void define() {
 		PanelInstallOpsiPackage panelInstallOpsiPackage = new PanelInstallOpsiPackage(main, persist, this);
 

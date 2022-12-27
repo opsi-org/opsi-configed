@@ -30,12 +30,6 @@ public class FEditRecord extends FEdit {
 	protected Map<String, Boolean> editable;
 
 	final ObservableSubject myObservable = new ObservableSubject() {
-		@Override
-		public void notifyObservers() {
-
-			super.notifyObservers();
-
-		}
 
 		@Override
 		public void setChanged() {
@@ -101,11 +95,6 @@ public class FEditRecord extends FEdit {
 
 	public void setObservableSubject(ObservableSubject editingNotifier) {
 		recordPane.setObservableSubject(editingNotifier);
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		super.keyPressed(e);
 	}
 
 	public static void main(String[] args) {

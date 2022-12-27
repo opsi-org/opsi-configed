@@ -11,7 +11,6 @@ package de.uib.utilities.swing.timeedit;
  */
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DateFormat;
@@ -22,7 +21,7 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.FEdit;
 
 public class FEditDate extends FEdit implements /* DateEventObserver, */
-		org.jdesktop.swingx.event.DateSelectionListener, MouseListener, KeyListener
+		org.jdesktop.swingx.event.DateSelectionListener, MouseListener
 
 {
 	public static final Dimension AREA_DIMENSION = new Dimension(380, 300);
@@ -47,12 +46,6 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 		dateEditor.addMonthViewMouseListener(this);
 
 		setStartText(this.initialText);
-
-	}
-
-	@Override
-	protected void createComponents() {
-		super.createComponents();
 
 	}
 
@@ -151,16 +144,6 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			commit();
 		}
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		super.keyTyped(e);
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		super.keyReleased(e);
 	}
 
 	// MouseListener
