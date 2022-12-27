@@ -1823,7 +1823,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				String sessionValue = "";
 				if (sessionInfo.get(key) != null)
-					sessionValue = "" + sessionInfo.get(key);;
+					sessionValue = "" + sessionInfo.get(key);
 
 				rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, sessionValue);
 				rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, (Boolean) reachableInfo.get(key));

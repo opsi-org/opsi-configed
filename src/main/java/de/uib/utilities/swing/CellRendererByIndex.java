@@ -159,7 +159,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 		} else {
 			background = Globals.nimbusBackground;
 			foreground = Globals.nimbusSelectionBackground;
-		} ;
+		}
 
 		setBackground(background);
 		setForeground(foreground);

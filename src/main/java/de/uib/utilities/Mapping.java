@@ -126,12 +126,12 @@ public class Mapping<K, V> {
 		Iterator iter = map.keySet().iterator();
 		while (iter.hasNext()) {
 			K k = (K) iter.next();
-			V v = (V) map.get(k);
+			V v = map.get(k);
 			if (v == null)
 				logging.info(this, " " + k + " mapped to null in map " + m);
 			else
 
-				addPair(k, v);;
+				addPair(k, v);
 		}
 	}
 

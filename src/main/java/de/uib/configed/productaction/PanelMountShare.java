@@ -204,7 +204,7 @@ public class PanelMountShare extends JPanel {
 		if (!smbMounted && found)
 			initialMount();
 
-		smbMounted = found;;
+		smbMounted = found;
 
 		return smbMounted;
 	}

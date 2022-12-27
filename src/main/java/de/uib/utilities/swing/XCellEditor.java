@@ -34,7 +34,7 @@ public class XCellEditor extends DefaultCellEditor {
 		} else {
 			background = Globals.nimbusBackground;
 			foreground = Color.black;
-		} ;
+		}
 
 		c.setBackground(background);
 		c.setForeground(foreground);

@@ -677,7 +677,7 @@ public class DataStubNOM extends DataStub {
 			HashMap callFilter = new HashMap<>();
 
 			List<Map<String, Object>> li = persist.retrieveListOfMapsNOM(callAttributes, callFilter,
-					"auditSoftware_getHashes");;
+					"auditSoftware_getHashes");
 
 			Iterator iter = li.iterator();
 

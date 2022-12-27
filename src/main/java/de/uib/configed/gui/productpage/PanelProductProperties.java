@@ -211,7 +211,7 @@ public class PanelProductProperties extends JSplitPane
 									"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
 									"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")),
 									depotsOfPackage.get(0));
-						} ;
+						}
 
 						panelEditProperties.setDepotListData(depotsOfPackage, productEdited);
 

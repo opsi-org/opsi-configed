@@ -166,7 +166,7 @@ public class ExporterToPDF extends ExportTable {
 				logging.error("file not found: " + fileName, exp);
 			}
 
-			if ((saveAction == false) && (temp.getAbsolutePath() != null)) {
+			if (!saveAction && (temp.getAbsolutePath() != null)) {
 				try {
 
 					Desktop.getDesktop().open(temp);
@@ -222,7 +222,7 @@ public class ExporterToPDF extends ExportTable {
 		return content;
 	}
 
-	public static Paragraph addTitleLines(Map<String, String> metaData) throws DocumentException {
+	public static Paragraph addTitleLines(Map<String, String> metaData) {
 		// TODO timezone
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd. MMMMM yyyy");
 		// Second parameter is the number of the chapter

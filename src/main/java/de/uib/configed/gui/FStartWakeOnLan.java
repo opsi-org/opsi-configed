@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -95,7 +94,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		centerOn(Globals.frame1);
 	}
 
-	public void setPredefinedDelays(LinkedHashMap<String, Integer> labelledDelays) {
+	public void setPredefinedDelays(Map<String, Integer> labelledDelays) {
 		this.labelledDelays = labelledDelays;
 		LinkedList<String> delays = new LinkedList<>(labelledDelays.keySet());
 
@@ -239,15 +238,10 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		JFormattedTextField textFieldMinute = (((JSpinner.DefaultEditor) spinnerMinute.getEditor()).getTextField());
 		textFieldMinute.setEditable(false);
 
-		try {
-			InternationalFormatter internationalFormatter = new InternationalFormatter(new DecimalFormat("00"));
+		InternationalFormatter internationalFormatter = new InternationalFormatter(new DecimalFormat("00"));
 
-			((DefaultFormatterFactory) textFieldHour.getFormatterFactory()).setDefaultFormatter(internationalFormatter);
-			((DefaultFormatterFactory) textFieldMinute.getFormatterFactory())
-					.setDefaultFormatter(internationalFormatter);
-
-		} catch (Exception e) {
-		} ;
+		((DefaultFormatterFactory) textFieldHour.getFormatterFactory()).setDefaultFormatter(internationalFormatter);
+		((DefaultFormatterFactory) textFieldMinute.getFormatterFactory()).setDefaultFormatter(internationalFormatter);
 
 		buttonSetNew = new IconButton(configed.getResourceValue("FStartWakeOnLan.buttonSetNew"), "images/reload16.png",
 				"images/reload16_over.png", "images/reload16_disabled.png");
@@ -255,6 +249,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		buttonSetNew.setToolTipText(configed.getResourceValue("FStartWakeOnLan.buttonSetNew.tooltip"));
 
 		buttonSetNew.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.debug(this, "actionPerformed");

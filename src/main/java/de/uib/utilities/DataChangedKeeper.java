@@ -22,7 +22,7 @@ public class DataChangedKeeper implements DataChangedObserver {
 		public void act(Object source) {
 			JOptionPane.showMessageDialog(null, "" + source, "alert", JOptionPane.INFORMATION_MESSAGE);
 		}
-	};
+	}
 
 	public DataChangedKeeper() {
 

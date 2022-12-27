@@ -254,7 +254,7 @@ public class SSHCommandFactory {
 	 * @return new SSHCommand_Template
 	 **/
 	public SSHCommand_Template buildSSHCommand(String id, String pmt, String mt, String ttt, int p, boolean ns,
-			LinkedList<String> c) {
+			List<String> c) {
 		SSHCommand_Template com = new SSHCommand_Template(id, c, // Achtung Reihenfolge der Elemente in Arrays c könnte sich ändern !" toList =
 				// ArrayList! JsonArray muss nicht sortiert sein!"
 				mt, ns, pmt, ttt, p);

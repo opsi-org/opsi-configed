@@ -71,7 +71,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	public enum Softwarename2LicencepoolRestriction {
 		SHOW_ALL_NAMES, SHOW_ONLY_NAMES_WITH_VARIANT_LICENCEPOOLS, SHOW_ONLY_NAMES_WITHOUT_ASSIGNED_LICENCEPOOL
-	};
+	}
 
 	public enum Softwarename2LicencepoolChangeOption {
 		NO_CHANGE, REMOVE_ALL_ASSIGNEMENTS, SET_ALL_TO_GLOBAL_SELECTED_LICENCEPOOL, SET_ALL_TO_SELECTED_LINE
@@ -90,7 +90,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	public FSoftwarename2LicencePool(JFrame owner, ControlPanelAssignToLPools myController) {
 		super(
-				
+
 				owner, configed.getResourceValue("FSoftwarename2LicencePool.title"), false, new String[] {
 
 						configed.getResourceValue("FSoftwarename2LicencePool.buttonClose") },

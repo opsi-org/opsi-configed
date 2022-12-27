@@ -15,7 +15,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandOpsiSetRights;
-import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.utilities.logging.logging;
@@ -96,13 +95,13 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	@Override
 	public void doAction1() {
 		try {
-			commandopsisetrights.setDir(completion.combobox_getStringItem());;
+			commandopsisetrights.setDir(completion.combobox_getStringItem());
 			logging.info(this, "doAction1 opsi-set-rights with path: " + commandopsisetrights.getDir());
 			// we are in the event queure
 			new Thread() {
 				@Override
 				public void run() {
-					new SSHConnectExec((SSHCommand) commandopsisetrights, btn_doAction);
+					new SSHConnectExec(commandopsisetrights, btn_doAction);
 				}
 			}.start();
 

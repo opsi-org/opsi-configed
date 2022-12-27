@@ -213,9 +213,6 @@ public abstract class SWExporter {
 						return tableData;
 					}
 				})), -1, finalColumns, null, null);
-
-		;
-
 	}
 
 	public abstract void export();

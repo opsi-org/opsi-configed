@@ -3,11 +3,7 @@ package de.uib.configed;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.text.Collator;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -774,27 +770,6 @@ public class Globals {
 		return b.toString();
 	}
 
-	private static Rectangle getMinDevice() {
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		GraphicsDevice[] gs = ge.getScreenDevices();
-		Rectangle result = new Rectangle(1600, 1200);
-		for (int j = 0; j < gs.length; j++) {
-			GraphicsDevice gd = gs[j];
-			GraphicsConfiguration[] gc = gd.getConfigurations();
-			for (int i = 0; i < gc.length; i++) {
-				int w = gc[i].getBounds().width;
-				int h = gc[i].getBounds().height;
-
-				if (w < result.width || h < result.height)
-					result = new Rectangle(w, h);
-			}
-		}
-
-		logging.info("minimalBounds: giving " + result);
-
-		return result;
-	}
-
 	public static String usedMemory() {
 		long total = Runtime.getRuntime().totalMemory();
 		long free = Runtime.getRuntime().freeMemory();
@@ -850,9 +825,6 @@ public class Globals {
 			forbidEditing
 
 					= !PersistenceControllerFactory.getPersistenceController().isServerFullPermission();
-
-			// PersistenceControllerFactory.getPersistenceController().checkDepotRestrictedPermission()
-			;
 		}
 
 		else {

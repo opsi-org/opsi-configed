@@ -579,7 +579,7 @@ public class JSONReMapper {
 
 			while (iter.hasNext()) {
 				String key = null;
-				Object value = null;;
+				Object value = null;
 
 				try {
 					key = (String) iter.next();

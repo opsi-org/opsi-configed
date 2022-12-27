@@ -60,7 +60,6 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 	public void setFilterFrom(Set<String> ids) {
 		saveFilterSet(ids);
 
-		;
 		Set<String> reducedIds = null;
 		if (ids != null) {
 			logging.info(this, "setFilterFrom, save set " + ids.size());

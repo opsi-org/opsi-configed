@@ -22,7 +22,7 @@ public class HostInfo {
 	private static Map<String, Integer> ID2InstanceNumber;
 
 	protected String depotOfClient;
-	protected String clientDescription;;
+	protected String clientDescription;
 	protected String clientInventoryNumber;
 	protected String clientOneTimePassword;
 	protected String clientNotes;
@@ -592,7 +592,7 @@ public class HostInfo {
 			if (col > -1)
 				selectionPanel.getTableModel().setValueAt(clientMacAddress, row, col);
 
-			mainFrame.setClientMacAddress(clientMacAddress);; // restoring old value
+			mainFrame.setClientMacAddress(clientMacAddress); // restoring old value
 
 			persist.setMacAddress(client, clientMacAddress);
 
@@ -608,7 +608,7 @@ public class HostInfo {
 			if (col > -1)
 				selectionPanel.getTableModel().setValueAt(clientIpAddress, row, col);
 
-			mainFrame.setClientIpAddress(clientIpAddress);; // restoring old value
+			mainFrame.setClientIpAddress(clientIpAddress); // restoring old value
 
 			persist.setIpAddress(client, clientIpAddress);
 

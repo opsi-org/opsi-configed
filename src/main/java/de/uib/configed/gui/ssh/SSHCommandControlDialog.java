@@ -682,8 +682,8 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			prio = Integer.valueOf(tf_priority.getText());
 		} catch (Exception e) {
 			logging.warning("Cannot get value from priority field Exception: " + e);
-		} ;
-		LinkedList<String> coms = new LinkedList<>();
+		}
+		List<String> coms = new LinkedList<>();
 		for (String c : tp_commands.getText().split("\n"))
 			if (!((c == null) || (c.trim().equals(""))))
 				coms.add(c);

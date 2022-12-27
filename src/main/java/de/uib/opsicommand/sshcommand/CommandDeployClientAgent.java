@@ -62,7 +62,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 
 	public enum FinalActionType {
 		START_OCD, REBOOT, SHUTDOWN
-	};
+	}
 
 	public void finish(FinalActionType actionType) {
 		switch (actionType) {

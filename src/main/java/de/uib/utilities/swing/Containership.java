@@ -7,6 +7,7 @@
 package de.uib.utilities.swing;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.lang.reflect.Method;
 
 import de.uib.utilities.logging.logging;
@@ -74,9 +75,9 @@ public class Containership {
 
 				}
 
-			} ;
+			}
 
-			if (java.awt.Container.class.isInstance(theComp))
+			if (theComp instanceof Container)
 			// theComp is an instance of Container
 			{
 				logging.debug("+++ recursion ");

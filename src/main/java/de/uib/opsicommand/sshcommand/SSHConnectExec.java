@@ -346,7 +346,7 @@ public class SSHConnectExec extends SSHConnect {
 		if (outputDialog != null)
 			if (s.length() > 0)
 				if (s != "\n") {
-					String t = outputDialog.ansiCodeInfo + s;;
+					String t = outputDialog.ansiCodeInfo + s;
 
 					return t;
 				}

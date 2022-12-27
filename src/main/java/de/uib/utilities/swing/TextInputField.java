@@ -28,7 +28,7 @@ public class TextInputField extends JPanel
 
 	public enum InputType {
 		TEXT, DATE, VALUELIST
-	};
+	}
 
 	private InputType inputType;
 
@@ -44,7 +44,7 @@ public class TextInputField extends JPanel
 		inputType = InputType.VALUELIST;
 
 		if (proposedValues == null) {
-			this.proposedValues = new Vector<>();;
+			this.proposedValues = new Vector<>();
 
 			if (initialValue == null) {
 				inputType = InputType.DATE;

@@ -76,7 +76,7 @@ public class FLoadingWaiter extends JFrame implements de.uib.utilities.observer.
 
 	public FLoadingWaiter(String title, String startMessage) {
 		this(title);
-		observingMesg = startMessage;;
+		observingMesg = startMessage;
 	}
 
 	public FLoadingWaiter(String title) {

@@ -56,7 +56,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 		popup.add(menuItemNow);
 
-		JMenuItem menuItemNull = new JMenuItem("Kein Datum");;
+		JMenuItem menuItemNull = new JMenuItem("Kein Datum");
 		menuItemNull.addActionListener(actionEvent -> {
 
 			monthView.getSelectionModel().clearSelection();
@@ -112,8 +112,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
 								.addComponent(buttonBack, buttonW, buttonW, buttonW)
 								.addComponent(buttonYearBack, buttonW, buttonW, buttonW))
-						
-						
+
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
 								.addComponent(timeSetter, GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE)
 								.addComponent(monthView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

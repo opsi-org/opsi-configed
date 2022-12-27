@@ -174,8 +174,9 @@ public class ActivityPanel extends JPanel implements Runnable {
 						try {
 							Thread.sleep(10000);
 							WaitCursor.stopAll();
-						} catch (Exception x) {
-						} ;
+						} catch (InterruptedException x) {
+							Thread.currentThread().interrupt();
+						}
 
 					}
 				}

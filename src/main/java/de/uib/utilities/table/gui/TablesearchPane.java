@@ -106,7 +106,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	public static enum SearchInputType {
 		LINE, PROGRESSIVE
-	};
+	}
 
 	protected SearchInputType searchInputType = SearchInputType.PROGRESSIVE;
 

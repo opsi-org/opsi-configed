@@ -175,7 +175,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 			panelProductSettings.reduceToSelected();
 
 		} else {
-			panelProductSettings.showAll();;
+			panelProductSettings.showAll();
 
 		}
 		filtered = b;

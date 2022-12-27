@@ -36,7 +36,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	private JLabel labelSelectedLicencePoolId;
 	public JLabel fieldSelectedLicencePoolId;
 
-	private JLabel labelCountAssignedStatus;;
+	private JLabel labelCountAssignedStatus;
 	public JLabel fieldCountAssignedStatus;
 	private JLabel labelCountAssignedInEditing;
 	public JLabel fieldCountAssignedInEditing;

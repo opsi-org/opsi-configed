@@ -441,8 +441,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 				);
 
-		;
-
 		// we prefer the simple behaviour:
 		theTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		theTable.getTableHeader().setReorderingAllowed(false);
@@ -1460,7 +1458,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 					partialkeys[j] = tableModel
 							.getValueAt(theTable.convertRowIndexToModel(viewrow), tableModel.getFinalCols().get(j))
 							.toString();
-				} ;
+				}
 
 				if (keyValue.equals(Globals.pseudokey(partialkeys)))
 					found = true;

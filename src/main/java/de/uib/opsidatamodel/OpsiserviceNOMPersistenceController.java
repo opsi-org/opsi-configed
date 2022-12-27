@@ -269,7 +269,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			remove(de.uib.configed.tree.ClientTree.DIRECTORY_PERSISTENT_NAME);
 		}
-	};
+	}
 
 	protected Map<String, Map<String, String>> productGroups;
 
@@ -2615,7 +2615,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	// to the group
 	{
 		String[] callAttributes = new String[] {};
-		HashMap callFilter = new HashMap<>();
+		Map callFilter = new HashMap<>();
 		callFilter.put("groupType", groupType);
 
 		Map<String, Map<String, String>> mappedRelations =
@@ -2625,7 +2625,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						"ident", new String[] { "objectId", "groupId" }, new String[] { memberIdName, "groupId" });
 
 		return projectToFunction(mappedRelations, "groupId", memberIdName);
-	};
+	}
 
 	public void fObject2ProductGroupsRequestRefresh() {
 		fObject2Groups = null;
@@ -3666,7 +3666,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			if (notSortedProducts == null)
 				notSortedProducts = new ArrayList<>();
 
-			logging.info(this, "not ordered " + (notSortedProducts.size() - sortedProducts.size()) + "");;
+			logging.info(this, "not ordered " + (notSortedProducts.size() - sortedProducts.size()) + "");
 
 			notSortedProducts.removeAll(sortedProducts);
 			logging.info(this, "missing: " + notSortedProducts);
@@ -8024,7 +8024,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (!defaultUserConfigsObsolete.isEmpty()) {
 			exec.doCall(new OpsiMethodCall("config_deleteObjects",
 					new Object[] { exec.jsonArray(defaultUserConfigsObsolete) }));
-		} ;
+		}
 
 		return true;
 	}

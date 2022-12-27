@@ -156,7 +156,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	public void refreshGroups() {
 		for (ComplexGroup complex : complexElements) {
-			if (complex.type == GroupType.HostGroup) {
+			if (complex.type == GroupType.HOST_GROUP) {
 				for (SimpleGroup group : complex.groupList) {
 					if (group.element instanceof GroupElement) {
 						JComboBox box = (JComboBox) group.dataComponent;
@@ -498,7 +498,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	private ComplexGroup createHostGroup() {
 		ComplexGroup result = createComplexGroup();
-		result.type = GroupType.HostGroup;
+		result.type = GroupType.HOST_GROUP;
 		result.topLabel.setText(configed.getResourceValue("ClientSelectionDialog.hostGroup") + ":");
 		result.topLabel.setIcon(Globals.createImageIcon("images/client_small.png",
 				configed.getResourceValue("ClientSelectionDialog.client")));
@@ -518,7 +518,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	private ComplexGroup createSoftwareGroup() {
 		ComplexGroup result = createComplexGroup();
-		result.type = GroupType.SoftwareGroup;
+		result.type = GroupType.SOFTWARE_GROUP;
 		result.topLabel.setText(configed.getResourceValue("ClientSelectionDialog.softwareGroup") + ":");
 		result.topLabel.setIcon(Globals.createImageIcon("images/package.png",
 				configed.getResourceValue("ClientSelectionDialog.softwareGroup")));
@@ -545,7 +545,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	private ComplexGroup createPropertiesGroup() {
 		ComplexGroup result = createComplexGroup();
-		result.type = GroupType.PropertiesGroup;
+		result.type = GroupType.PROPERTIES_GROUP;
 		result.topLabel.setText(configed.getResourceValue("ClientSelectionDialog.softwarepropertiesonlyGroup"));
 		result.topLabel.setIcon(Globals.createImageIcon("images/package.png",
 				configed.getResourceValue("ClientSelectionDialog.softwareGroup")));
@@ -574,7 +574,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	// Group with properties
 	private ComplexGroup createSoftwareWithPropertiesGroup() {
 		ComplexGroup result = createComplexGroup();
-		result.type = GroupType.SoftwareWithPropertiesGroup;
+		result.type = GroupType.SOFTWARE_WITH_PROPERTIES_GROUP;
 		result.topLabel.setText(configed.getResourceValue("ClientSelectionDialog.softwarewithpropertiesGroup"));
 		result.topLabel.setIcon(Globals.createImageIcon("images/package.png",
 				configed.getResourceValue("ClientSelectionDialog.softwareGroup")));
@@ -614,7 +614,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	private ComplexGroup createHardwareGroup(String hardware) {
 		ComplexGroup result = createComplexGroup();
-		result.type = GroupType.HardwareGroup;
+		result.type = GroupType.HARDWARE_GROUP;
 		result.topLabel.setText(hardware);
 		result.topLabel.setIcon(Globals.createImageIcon("images/hwaudit.png",
 				configed.getResourceValue("ClientSelectionDialog.hardwareName")));
@@ -633,7 +633,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	private ComplexGroup createSwAuditGroup() {
 		ComplexGroup result = createComplexGroup();
-		result.type = GroupType.SwAuditGroup;
+		result.type = GroupType.SW_AUDIT_GROUP;
 		result.topLabel.setText(configed.getResourceValue("ClientSelectionDialog.swAuditGroup") + ":");
 		result.topLabel.setIcon(Globals.createImageIcon("images/swaudit.png",
 				configed.getResourceValue("ClientSelectionDialog.swauditName")));
@@ -990,25 +990,25 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 			if (!childList.isEmpty()) {
 				switch (complex.type) {
-				case SoftwareGroup:
+				case SOFTWARE_GROUP:
 					manager.addGroupOperation("Software", groupStatus, childList);
 					break;
 
-				case PropertiesGroup:
+				case PROPERTIES_GROUP:
 					manager.addGroupOperation("Properties", groupStatus, childList);
 					break;
 
-				case SoftwareWithPropertiesGroup:
+				case SOFTWARE_WITH_PROPERTIES_GROUP:
 					manager.addGroupOperation("SoftwareWithProperties", groupStatus, childList);
 					break;
 
-				case SwAuditGroup:
+				case SW_AUDIT_GROUP:
 					manager.addGroupOperation("SwAudit", groupStatus, childList);
 					break;
-				case HardwareGroup:
+				case HARDWARE_GROUP:
 					manager.addGroupOperation("Hardware", groupStatus, childList);
 					break;
-				case HostGroup:
+				case HOST_GROUP:
 					manager.addGroupOperation("Host", groupStatus, childList);
 					break;
 				}
@@ -1175,8 +1175,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	private enum GroupType {
-		HostGroup, SoftwareGroup, PropertiesGroup, SoftwareWithPropertiesGroup, SwAuditGroup, HardwareGroup
-	};
+		HOST_GROUP, SOFTWARE_GROUP, PROPERTIES_GROUP, SOFTWARE_WITH_PROPERTIES_GROUP, SW_AUDIT_GROUP, HARDWARE_GROUP
+	}
 
 	private class ComplexGroup {
 		public GroupType type;

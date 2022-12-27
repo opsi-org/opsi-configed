@@ -1280,7 +1280,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private void setupMenuHelp() {
 		jMenuHelp.setText(configed.getResourceValue("MainFrame.jMenuHelp"));
 
-		jMenuHelpDoc.setText(configed.getResourceValue("MainFrame.jMenuDoc"));;
+		jMenuHelpDoc.setText(configed.getResourceValue("MainFrame.jMenuDoc"));
 		jMenuHelp.add(jMenuHelpDoc);
 
 		jMenuHelpForum.setText(configed.getResourceValue("MainFrame.jMenuForum"));
@@ -3046,32 +3046,32 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	@Override
 	public void windowOpened(WindowEvent e) {
-		;
+
 	}
 
 	@Override
 	public void windowClosed(WindowEvent e) {
-		;
+
 	}
 
 	@Override
 	public void windowActivated(WindowEvent e) {
-		;
+
 	}
 
 	@Override
 	public void windowDeactivated(WindowEvent e) {
-		;
+
 	}
 
 	@Override
 	public void windowIconified(WindowEvent e) {
-		;
+
 	}
 
 	@Override
 	public void windowDeiconified(WindowEvent e) {
-		;
+
 	}
 
 	private Map<String, String> getChangedClientInfoFor(String client) {

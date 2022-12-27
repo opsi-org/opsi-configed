@@ -259,7 +259,7 @@ public class DataStubRawData extends DataStubNOM {
 			columns = columns.substring(0, columns.length() - 1);
 
 			String query = "select " + columns + " from " + SWAuditClientEntry.DB_TABLE_NAME + " \n"
-					+ " where  state = 1 " + clientSelection + " order by clientId ";;
+					+ " where  state = 1 " + clientSelection + " order by clientId ";
 
 			logging.info(this, "retrieveSoftwareAuditOnClients, query " + query);
 

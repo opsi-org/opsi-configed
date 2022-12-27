@@ -15,9 +15,9 @@ import de.uib.utilities.logging.logging;
 
 public class Autocomplete implements DocumentListener {
 
-	private static enum Mode {
+	private enum Mode {
 		INSERT, COMPLETION
-	};
+	}
 
 	private JTextField textField;
 	private List<String> keywords;

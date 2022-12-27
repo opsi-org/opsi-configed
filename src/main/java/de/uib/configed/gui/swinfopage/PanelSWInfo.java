@@ -78,7 +78,7 @@ public class PanelSWInfo extends JPanel {
 
 	public enum KindOfExport {
 		PDF, CSV
-	};
+	}
 
 	protected KindOfExport kindOfExport;
 
