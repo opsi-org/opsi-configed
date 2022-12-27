@@ -22,6 +22,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.IllegalComponentStateException;
 import java.awt.Rectangle;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
@@ -130,7 +131,6 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.provider.RowsProvider;
 import de.uib.utilities.table.provider.TableProvider;
 import de.uib.utilities.thread.WaitCursor;
-import javafx.scene.input.InputEvent;
 
 public class ConfigedMain implements ListSelectionListener, TabController, LogEventObserver
 

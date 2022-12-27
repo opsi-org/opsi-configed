@@ -10,6 +10,7 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -61,7 +62,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.PopupMenuTrait;
-import javafx.scene.input.InputEvent;
 
 public class LogPane extends JPanel implements KeyListener, ActionListener {
 	public static final int DEFAULT_MAX_SHOW_LEVEL = 3;
