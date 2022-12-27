@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
@@ -95,7 +96,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			put("[0;47;40m", Globals.lightBlack);
 			put("[1;47;40m", Globals.lightBlack);
 		}
-	}
+	};
 
 	protected class DialogCloseListener implements ActionListener {
 		@Override

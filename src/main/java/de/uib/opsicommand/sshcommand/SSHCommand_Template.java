@@ -54,7 +54,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	 * @param p   (position): int
 	 * @return SSHCommand_Template instance
 	 */
-	public SSHCommand_Template(String id, LinkedList<String> c, String mt, boolean ns, String pmt, String ttt, int p) {
+	public SSHCommand_Template(String id, List<String> c, String mt, boolean ns, String pmt, String ttt, int p) {
 		position = SSHCommandFactory.getInstance().position_default;
 		setId(id);
 		setMenuText(mt);
@@ -67,7 +67,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 		logging.debug(this, "SSHCommand_Template commandlist" + this.commandlistToString());
 	}
 
-	public SSHCommand_Template(SSHCommand orig, LinkedList<String> commandlist) {
+	public SSHCommand_Template(SSHCommand orig, List<String> commandlist) {
 		this(orig.getId(), commandlist, orig.getMenuText(), orig.needSudo(), orig.getParentMenuText(),
 				orig.getToolTipText(), orig.getPriority());
 		logging.debug(this, "SSHCommand_Template this " + this.toString());
@@ -116,7 +116,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	 * 
 	 * @param c_list: LinkedList<String>
 	 **/
-	public void setCommands(LinkedList<String> c_list) {
+	public void setCommands(List<String> c_list) {
 		if (c_list != null) {
 			for (String c : c_list) {
 
@@ -387,9 +387,9 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	 */
 	@Override
 	public int compareTo(SSHCommand_Template compareCom) {
-		int dif = ((SSHCommand_Template) this).position - ((SSHCommand_Template) compareCom).getPriority();
+		int dif = this.position - compareCom.getPriority();
 		if (dif == 0)
-			return ((SSHCommand_Template) this).menuText.compareTo(((SSHCommand_Template) compareCom).getMenuText());
+			return this.menuText.compareTo(compareCom.getMenuText());
 		return dif;
 	}
 
