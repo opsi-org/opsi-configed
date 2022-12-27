@@ -13,6 +13,7 @@
 package de.uib.configed.type;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -42,7 +43,7 @@ public class OpsiPackage implements Comparable {
 	public static final String LOCALBOOT_PRODUCT_SERVER_STRING = "LocalbootProduct";
 	public static final String NETBOOT_PRODUCT_SERVER_STRING = "NetbootProduct";
 
-	public static final ArrayList<String> SERVICE_KEYS; // those which form the primary keys
+	public static final List<String> SERVICE_KEYS; // those which form the primary keys
 	static {
 		SERVICE_KEYS = new ArrayList<>();
 		SERVICE_KEYS.add(SERVICEkeyPRODUCT_ID0);

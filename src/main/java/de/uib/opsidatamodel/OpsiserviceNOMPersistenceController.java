@@ -754,7 +754,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			mapOfPCs = new HashMap<>();
 			mapPC_Infomap = new HashMap<>();
 
-			ArrayList<String> depotList = new ArrayList<>();
+			List<String> depotList = new ArrayList<>();
 			for (String depot : depots) {
 				if (getDepotPermission(depot))
 					depotList.add(depot);
@@ -792,7 +792,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// set config
 			if (getConfigs().get(clientName) == null)
 				getConfigs().put(clientName, new HashMap<>());
-			ArrayList<String> depotList = new ArrayList<>();
+			List<String> depotList = new ArrayList<>();
 			depotList.add(depotId);
 			getConfigs().get(clientName).put(CONFIG_DEPOT_ID, depotList);
 
@@ -818,7 +818,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			if (!getDepotPermission(depotId))
 				return;
 
-			ArrayList<String> depots = new ArrayList<>();
+			List<String> depots = new ArrayList<>();
 
 			ConfigName2ConfigValue config = new ConfigName2ConfigValue(null);
 			depots.add(depotId);
@@ -1029,7 +1029,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			KEY_USER_REGISTER_VALUE = checkUserRolesModule();
 
 		if (serverPropertyMap.get(KEY_USER_REGISTER) == null || setUserRegisterVal) {
-			ArrayList<Object> readyObjects = new ArrayList<>();
+			List<Object> readyObjects = new ArrayList<>();
 			Map<String, Object> item = createJSONBoolConfig(KEY_USER_REGISTER, KEY_USER_REGISTER_VALUE,
 					"without given values the primary value setting is false");
 			readyObjects.add(exec.jsonMap(item));
@@ -1668,7 +1668,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		notWanConfiguration = new HashMap<>();
 		wanConfiguration = new HashMap<>();
 
-		ArrayList<Object> values = null;
+		List<Object> values = null;
 
 		for (String key : notWanConfigOptions.keySet()) {
 			if (notWanConfigOptions.get(key).getType() != ConfigOption.TYPE.BoolConfig) {
@@ -2130,7 +2130,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	// hostControl methods
 	private List<String> collectErrorsFromResponsesByHost(Map responses, String callingMethodName) {
-		ArrayList<String> errors = new ArrayList<>();
+		List<String> errors = new ArrayList<>();
 
 		for (Object host : responses.keySet()) {
 			org.json.JSONObject jO = (org.json.JSONObject) responses.get(host);
@@ -2699,7 +2699,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (globalReadOnly)
 			return false;
 
-		ArrayList<Object> deleteItems = new ArrayList<>();
+		List<Object> deleteItems = new ArrayList<>();
 		for (Object2GroupEntry entry : entries) {
 
 			{
@@ -3422,7 +3422,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public boolean saveHwColumnConfig(Map<String, Map<String, Boolean>> updateItems) {
 		getConfigOptions();
 
-		ArrayList<Object> readyObjects = new ArrayList<>();
+		List<Object> readyObjects = new ArrayList<>();
 
 		for (String hwClass : hwAuditDeviceClasses.keySet()) {
 			OpsiHwAuditDeviceClass hwAuditDeviceClass = hwAuditDeviceClasses.get(hwClass);
@@ -4103,8 +4103,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		boolean result = true;
 
-		ArrayList<Object> deleteProductItems = new ArrayList<>();
-		ArrayList<Object> deletePropertyItems = new ArrayList<>();
+		List<Object> deleteProductItems = new ArrayList<>();
+		List<Object> deletePropertyItems = new ArrayList<>();
 
 		for (int i = 0; i < selectedClients.length; i++) {
 
@@ -4305,9 +4305,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 * Collects the common property values of some product for a client
 	 * collection,<br \> needed for local imaging handling <br \>
 	 * 
-	 * @param ArrayList<String> clients -
-	 * @param String            product
-	 * @param String            property
+	 * @param List<String> clients -
+	 * @param String       product
+	 * @param String       property
 	 */
 	public List<String> getCommonProductPropertyValues(List<String> clients, String product, String property) {
 		logging.info(this, "getCommonProductPropertyValues for product, property, clients " + product + ", " + property
@@ -5083,7 +5083,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (configListCellOptions == null || configOptions == null || configDefaultValues == null) {
 			logging.debug(this, "getConfigOptions() work");
 
-			ArrayList<Object> deleteItems = new ArrayList<>();
+			List<Object> deleteItems = new ArrayList<>();
 
 			boolean tryIt = true;
 
@@ -5292,7 +5292,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public void setGlobalBooleanConfigValue(String key, Boolean val, String description) {
-		ArrayList<Object> readyObjects = new ArrayList<>();
+		List<Object> readyObjects = new ArrayList<>();
 		Map<String, Object> configItem = createJSONBoolConfig(key, val, description);
 		readyObjects.add(exec.jsonMap(configItem));
 
@@ -5811,7 +5811,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	public void writeDomains(ArrayList<Object> domains) {
+	public void writeDomains(List<Object> domains) {
 
 		String key = configedGIVENDOMAINS_key;
 		Map<String, Object> item = createNOMitem("UnicodeConfig");
@@ -5823,7 +5823,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		item.put("editable", true);
 		item.put("multiValue", true);
 
-		ArrayList<Object> readyObjects = new ArrayList<>();
+		List<Object> readyObjects = new ArrayList<>();
 		readyObjects.add(exec.jsonMap(item));
 
 		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { exec.jsonArray(readyObjects) });
@@ -6498,7 +6498,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			if (licensePoolID_old != null && !licensePoolID_old.equals(FSoftwarename2LicencePool.valNoLicencepool)) {
 				// there was an association, we delete it)
 
-				ArrayList<String> swIds = new ArrayList<>();
+				List<String> swIds = new ArrayList<>();
 				swIds.add(softwareID);
 				ok = removeAssociations(licensePoolID_old, swIds);
 
@@ -6515,7 +6515,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			else {
 
-				ArrayList<Object> readyObjects = new ArrayList<>();
+				List<Object> readyObjects = new ArrayList<>();
 				Map<String, Object> item;
 
 				Map<String, String> swMap = AuditSoftwareXLicencePool.produceMapFromSWident(softwareID);
@@ -7079,7 +7079,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	private List<String> getPossibleValuesProductOnClientDisplayfields_localboot() {
-		ArrayList<String> possibleValues = new ArrayList<>();
+		List<String> possibleValues = new ArrayList<>();
 		possibleValues.add("productId");
 		possibleValues.add(ProductState.KEY_productName);
 		possibleValues.add(ProductState.KEY_installationStatus);
@@ -7157,14 +7157,14 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	private void addRoleAndUserConfig(String configkey, String rolename) {
-		ArrayList<Object> readyObjects = new ArrayList<>();
+		List<Object> readyObjects = new ArrayList<>();
 
 		String role = rolename;
 
 		if (role == null)
 			role = UserConfig.NONE_PROTOTYPE;
 
-		ArrayList<Object> selectedValuesRole = new ArrayList<>();
+		List<Object> selectedValuesRole = new ArrayList<>();
 		selectedValuesRole.add(role);
 
 		Map<String, Object> itemRole = PersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig,
@@ -7312,7 +7312,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public void deleteSavedSearch(String name) {
 		logging.debug(this, "deleteSavedSearch " + name);
 
-		ArrayList<Object> readyObjects = new ArrayList<>();
+		List<Object> readyObjects = new ArrayList<>();
 
 		Map<String, Object> item;
 
@@ -7334,7 +7334,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public void saveSearch(SavedSearch ob) {
 		logging.debug(this, "saveSearch " + ob);
 
-		ArrayList<Object> readyObjects = new ArrayList<>();
+		List<Object> readyObjects = new ArrayList<>();
 		// entry of serialization string
 		readyObjects.add(produceConfigEntry("UnicodeConfig", SavedSearch.CONFIG_KEY + "." + ob.getName(),
 				ob.getSerialization(), ob.getDescription(), false));
@@ -7349,7 +7349,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	private List<String> getPossibleValuesProductOnClientDisplayfields_netboot() {
-		ArrayList<String> possibleValues = new ArrayList<>();
+		List<String> possibleValues = new ArrayList<>();
 		possibleValues.add("productId");
 		possibleValues.add(ProductState.KEY_productName);
 		possibleValues.add(ProductState.KEY_installationStatus);
@@ -8315,7 +8315,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			opsiVersion = (String) opsiInformation.get("opsiVersion");
 			logging.info(this, "opsi version information " + opsiVersion);
 
-			final ArrayList<String> missingModulesPermissionInfo = new ArrayList<>();
+			final List<String> missingModulesPermissionInfo = new ArrayList<>();
 
 			// prepare the user info
 			opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("modules"));

@@ -24,7 +24,7 @@ public class Interpreter {
 	}
 
 	public static List<String> splitToList(String cmd) {
-		ArrayList<String> result = new ArrayList<>();
+		List<String> result = new ArrayList<>();
 
 		String blankDelims = " \t\n\r\f";
 		String citMarks = "'\"";

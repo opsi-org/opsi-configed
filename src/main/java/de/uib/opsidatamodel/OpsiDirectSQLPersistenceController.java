@@ -264,7 +264,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 		int sizeOfAllRemoves = swIdentsOnlyInSoftware.size();
 
-		ArrayList<String> removes = new ArrayList<>(swIdentsOnlyInSoftware);
+		List<String> removes = new ArrayList<>(swIdentsOnlyInSoftware);
 
 		final int portionSize = 10;
 

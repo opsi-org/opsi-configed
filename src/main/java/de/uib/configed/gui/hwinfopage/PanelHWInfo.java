@@ -43,7 +43,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	public static final String class_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
 	public static final String class_BASE_BOARD = "BASE_BOARD";
 
-	public static final ArrayList<String> hwClassesForByAudit = new ArrayList<>();
+	public static final List<String> hwClassesForByAudit = new ArrayList<>();
 	static {
 		hwClassesForByAudit.add(class_COMPUTER_SYSTEM);
 		hwClassesForByAudit.add(class_BASE_BOARD);

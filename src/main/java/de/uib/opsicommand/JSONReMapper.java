@@ -387,7 +387,7 @@ public class JSONReMapper {
 			for (Object ob1 : list1) {
 				JSONArray jA = (JSONArray) ob1;
 
-				ArrayList<String> row = null;
+				List<String> row = null;
 
 				if (jA != null) {
 					row = new ArrayList<>(jA.length());
@@ -431,7 +431,7 @@ public class JSONReMapper {
 	}
 
 	public static List<String> getJsonStringList(JSONObject jO, String key) {
-		ArrayList<String> result = new ArrayList<>();
+		List<String> result = new ArrayList<>();
 		try {
 			JSONArray jA = jO.optJSONArray(key);
 

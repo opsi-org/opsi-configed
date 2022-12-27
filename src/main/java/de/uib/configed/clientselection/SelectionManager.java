@@ -163,7 +163,7 @@ public class SelectionManager {
 		SelectOperation operation = getTopOperation();
 		String json = serializer.getJson(operation);
 
-		ArrayList<String> clientsSelected = new ArrayList<>();
+		List<String> clientsSelected = new ArrayList<>();
 
 		try {
 

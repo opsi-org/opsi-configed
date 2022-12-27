@@ -52,14 +52,14 @@ public class UserConfig {
 	public static final String HAS_ROLE_ATTRIBUT = "has_role";
 	public static final String MODIFICATION_INFO_KEY = "modified";
 
-	public static final ArrayList<Object> EMPTY_LIST = new ArrayList<>();
-	public static final ArrayList<Object> BOOLEAN_POSSIBLE_VALUES = new ArrayList<>();
+	public static final List<Object> EMPTY_LIST = new ArrayList<>();
+	public static final List<Object> BOOLEAN_POSSIBLE_VALUES = new ArrayList<>();
 	static {
 		BOOLEAN_POSSIBLE_VALUES.add(true);
 		BOOLEAN_POSSIBLE_VALUES.add(false);
 	}
 
-	public static final ArrayList<Object> ZERO_TIME;
+	public static final List<Object> ZERO_TIME;
 	static {
 		ZERO_TIME = new ArrayList<>();
 		ZERO_TIME.add("0000-00-00 00:00:00");
@@ -72,8 +72,6 @@ public class UserConfig {
 	protected LinkedHashMap<String, Boolean> booleanMap;
 	protected LinkedHashMap<String, List<Object>> valuesMap;
 	protected LinkedHashMap<String, List<Object>> possibleValuesMap;
-
-	
 
 	private static LinkedHashSet<String> USER_BOOL_KEYS;
 

@@ -92,7 +92,7 @@ public class DataStubNOM extends DataStub {
 		logging.debug(this, "retrieveProductInfos data == null " + (product2versionInfo2infos == null));
 
 		if (product2versionInfo2infos == null) {
-			ArrayList<String> attribs = new ArrayList<>();
+			List<String> attribs = new ArrayList<>();
 
 			for (String key : OpsiPackage.SERVICE_KEYS) {
 				attribs.add(key);

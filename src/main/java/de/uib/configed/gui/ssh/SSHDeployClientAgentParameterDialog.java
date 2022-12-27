@@ -2,7 +2,7 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -93,7 +93,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	private void getDefaultAuthData() {
 		Map<String, Object> configs = main.getPersistenceController()
 				.getConfig(main.getPersistenceController().getHostInfoCollections().getConfigServer());
-		ArrayList<Object> result_config_list = (ArrayList<Object>) configs
+		List<Object> result_config_list = (List<Object>) configs
 				.get(main.getPersistenceController().KEY_SSH_DEFAULTWINUSER);
 		if (result_config_list == null || result_config_list.isEmpty()) {
 
@@ -106,7 +106,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		}
 
-		result_config_list = (ArrayList<Object>) configs.get(main.getPersistenceController().KEY_SSH_DEFAULTWINPW);
+		result_config_list = (List<Object>) configs.get(main.getPersistenceController().KEY_SSH_DEFAULTWINPW);
 		if (result_config_list == null || result_config_list.isEmpty()) {
 
 			logging.info(this, "KEY_SSH_DEFAULTWINPW not existing");

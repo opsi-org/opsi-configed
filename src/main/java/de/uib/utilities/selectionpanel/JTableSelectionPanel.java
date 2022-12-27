@@ -443,7 +443,7 @@ public class JTableSelectionPanel extends JPanel
 	}
 
 	public List<String> getSelectedValues() {
-		ArrayList<String> valuesList = new ArrayList<>(table.getSelectedRowCount());
+		List<String> valuesList = new ArrayList<>(table.getSelectedRowCount());
 
 		for (int i = 0; i < table.getRowCount(); i++) {
 			if (selectionmodel.isSelectedIndex(i)) {
@@ -670,7 +670,7 @@ public class JTableSelectionPanel extends JPanel
 	}
 
 	private List<String> getWords(String line) {
-		ArrayList<String> result = new ArrayList<>();
+		List<String> result = new ArrayList<>();
 		String[] splitted = line.split("\\s+");
 		for (String s : splitted) {
 			if (!s.equals(" "))

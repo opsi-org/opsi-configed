@@ -733,7 +733,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract Vector<String> getDomains();
 
-	public abstract void writeDomains(ArrayList<Object> domains);
+	public abstract void writeDomains(List<Object> domains);
 
 	public abstract void setDepot(String depotId);
 

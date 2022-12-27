@@ -12,7 +12,7 @@ public class CopyrightInfos {
 	static String discard, major, minor, update, build;
 	static final String COMPLETE_VERSION_INFO = System.getProperty("java.runtime.version");
 
-	private static final ArrayList<String> infos;
+	private static final List<String> infos;
 	static {
 		infos = new ArrayList<>();
 

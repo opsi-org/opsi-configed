@@ -128,7 +128,7 @@ public class SSHCommandFactory {
 	public final String sshhst = "<<!sshhost!>>";
 
 	public final String confidential = "***confidential***";
-	ArrayList<String> createdProducts = new ArrayList<>();
+	List<String> createdProducts = new ArrayList<>();
 
 	SSHCommandParameterMethods pmethodHandler = null;
 	SSHConnectionInfo connectionInfo = null;

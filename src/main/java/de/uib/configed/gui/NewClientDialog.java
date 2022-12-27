@@ -482,8 +482,6 @@ public class NewClientDialog extends FGeneralDialog
 						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 		// localboot
 
-		
-
 		// )
 
 		);
@@ -659,7 +657,7 @@ public class NewClientDialog extends FGeneralDialog
 	 */
 	private void treatSelectedDomainForNewClient(final String selectedDomain) {
 		Vector<String> editableDomains = new Vector<>();
-		ArrayList<Object> saveDomains = new ArrayList<>();
+		List<Object> saveDomains = new ArrayList<>();
 		int order = 0;
 		saveDomains.add("" + order + ":" + selectedDomain);
 		editableDomains.add(selectedDomain);

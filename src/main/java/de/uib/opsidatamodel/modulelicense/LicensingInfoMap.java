@@ -444,7 +444,7 @@ public class LicensingInfoMap {
 	}
 
 	private List<String> produceDatesKeys() {
-		ArrayList<String> dates = new ArrayList<>();
+		List<String> dates = new ArrayList<>();
 
 		try {
 			JSONObject jsonDates = jOResult.getJSONObject(DATES);
@@ -460,7 +460,7 @@ public class LicensingInfoMap {
 
 			Date latest = findLatestChangeDate(dates);
 
-			ArrayList<String> reducedDatesKeys = new ArrayList<>();
+			List<String> reducedDatesKeys = new ArrayList<>();
 
 			if (reducedView) {
 
@@ -655,7 +655,7 @@ public class LicensingInfoMap {
 		return newest;
 	}
 
-	private Date findLatestChangeDate(ArrayList<String> dates) {
+	private Date findLatestChangeDate(List<String> dates) {
 		Date newest = new Date();
 		try {
 			LocalDate now = LocalDate.now();

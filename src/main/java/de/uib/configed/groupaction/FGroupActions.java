@@ -106,7 +106,7 @@ public class FGroupActions extends SecondaryFrame {
 
 		String image = (String) comboSelectImage.getSelectedItem();
 
-		ArrayList<String> values = new ArrayList<>();
+		List<String> values = new ArrayList<>();
 		values.add(image); // selected from common product property values
 
 		WaitCursor waitCursor = new WaitCursor(this);

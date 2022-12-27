@@ -734,7 +734,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 						new String[] { configed.getResourceValue("buttonYES"), configed.getResourceValue("buttonNO") },
 						450, 400);
 
-				ArrayList<String> outlines = new ArrayList<>();
+				List<String> outlines = new ArrayList<>();
 				outlines.add(configed.getResourceValue("GroupPanel,addAllDependentProducts"));
 				outlines.add("__________");
 				outlines.add("");

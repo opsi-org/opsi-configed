@@ -1830,7 +1830,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				rowmap.put(HostInfo.clientSessionInfo_DISPLAY_FIELD_LABEL, sessionValue);
 				rowmap.put(HostInfo.clientConnected_DISPLAY_FIELD_LABEL, (Boolean) reachableInfo.get(key));
 
-				ArrayList<Object> rowItems = new ArrayList<>();
+				List<Object> rowItems = new ArrayList<>();
 
 				for (String field : hostDisplayFields.keySet()) {
 
@@ -2832,7 +2832,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected List<String> getLocalbootProductDisplayFieldsList() {
-		ArrayList<String> result = new ArrayList<>();
+		List<String> result = new ArrayList<>();
 		Iterator iter = displayFieldsLocalbootProducts.keySet().iterator();
 		while (iter.hasNext()) {
 			String key = (String) iter.next();
@@ -2844,7 +2844,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected List<String> getNetbootProductDisplayFieldsList() {
-		ArrayList<String> result = new ArrayList<>();
+		List<String> result = new ArrayList<>();
 		Iterator iter = displayFieldsNetbootProducts.keySet().iterator();
 		while (iter.hasNext()) {
 			String key = (String) iter.next();
@@ -3659,7 +3659,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public List<String> getAccessedDepots() {
-		ArrayList<String> accessedDepots = new ArrayList<>();
+		List<String> accessedDepots = new ArrayList<>();
 		for (String depot : selectedDepotsV) {
 			if (persist.getDepotPermission(depot))
 				accessedDepots.add(depot);

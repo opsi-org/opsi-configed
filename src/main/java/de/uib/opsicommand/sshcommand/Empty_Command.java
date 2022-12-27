@@ -223,7 +223,7 @@ public class Empty_Command implements SSHCommand {
 	 */
 	@Override
 	public List<String> getParameterList() {
-		ArrayList<String> paramlist = new ArrayList<>();
+		List<String> paramlist = new ArrayList<>();
 		String tmp_1 = SSHCommandParameterMethods.replacement_default_1;
 		String tmp_2 = SSHCommandParameterMethods.replacement_default_2;
 		if (command != null)

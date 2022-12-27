@@ -30,7 +30,7 @@ public class UserConfigProducing {
 	Map<String, List<Object>> serverconfigValuesMap;
 	Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap;
 
-	ArrayList<Object> readyObjects;
+	List<Object> readyObjects;
 
 	public UserConfigProducing(
 			// command tools
@@ -193,7 +193,7 @@ public class UserConfigProducing {
 
 			logging.info(this,
 					"supplyPermissionList add to currentPossibleValuesListed " + currentPossibleValuesListed);
-			ArrayList<Object> listOptions = new ArrayList<>(currentPossibleValuesListed);
+			List<Object> listOptions = new ArrayList<>(currentPossibleValuesListed);
 
 			logging.info(this, "supplyPermissionList products arraylist " + listOptions);
 
@@ -297,7 +297,7 @@ public class UserConfigProducing {
 					" for user " + username + " followConfiguredRole " + followConfiguredRole + ": " + roleToPlay);
 
 			// update role selection
-			ArrayList<Object> selectedValuesRole = new ArrayList<>();
+			List<Object> selectedValuesRole = new ArrayList<>();
 			if (configuredRole != null)
 				selectedValuesRole.add(configuredRole);
 			else
@@ -308,7 +308,7 @@ public class UserConfigProducing {
 				possibleValuesSet.add(configuredRole);
 			possibleValuesSet.add(UserConfig.NONE_PROTOTYPE);
 
-			ArrayList<Object> possibleValuesRole = new ArrayList<>(possibleValuesSet);
+			List<Object> possibleValuesRole = new ArrayList<>(possibleValuesSet);
 
 			Map<String, Object> itemRole = PersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig,
 					roleKey, "which role should determine this users configuration", false, // editable
@@ -407,7 +407,7 @@ public class UserConfigProducing {
 			List<Object> values = serverconfigValuesMap.get(configKey);
 
 			if (values == null || values.isEmpty() || !((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE)) {
-				ArrayList<Object> selectedValuesRole = new ArrayList<>();
+				List<Object> selectedValuesRole = new ArrayList<>();
 				selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
 
 				Map<String, Object> itemRole = PersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig,

@@ -1584,7 +1584,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	}
 
 	private List<String> enumerateLeafNodes(DefaultMutableTreeNode node) {
-		ArrayList<String> result = new ArrayList<>();
+		List<String> result = new ArrayList<>();
 
 		Enumeration<TreeNode> e = node.breadthFirstEnumeration();
 

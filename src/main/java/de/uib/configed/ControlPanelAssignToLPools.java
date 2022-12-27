@@ -72,7 +72,6 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 	private SoftwareShowAllMeans softwareShowAllMeans = SoftwareShowAllMeans.ALL;
 	// //
 	private SoftwareDirectionOfAssignment softwareDirectionOfAssignment = SoftwareDirectionOfAssignment.POOL2SOFTWARE;
-	
 
 	Integer totalSWEntries;
 	Integer totalUnassignedSWEntries;
@@ -325,7 +324,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 			return;
 		}
 
-		ArrayList<String> cancelSelectionKeys = new ArrayList<>();
+		List<String> cancelSelectionKeys = new ArrayList<>();
 		removeKeysFromOtherLicencePool = new HashMap<>();
 
 		for (String key : selKeys) {

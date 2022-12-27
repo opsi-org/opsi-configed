@@ -183,8 +183,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	}
 
-	private static final ArrayList<String> giveMenuitemNames(List<Integer> popups) {
-		ArrayList<String> result = new ArrayList<>();
+	private static final List<String> giveMenuitemNames(List<Integer> popups) {
+		List<String> result = new ArrayList<>();
 
 		for (int el : popups) {
 			result.add(keyNames.get(el));
@@ -1324,7 +1324,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public List<String> getSelectedKeys() {
-		ArrayList<String> result = new ArrayList<>();
+		List<String> result = new ArrayList<>();
 
 		if (tableModel.getKeyCol() < 0)
 			return result;

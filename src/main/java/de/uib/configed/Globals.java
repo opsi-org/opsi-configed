@@ -525,7 +525,7 @@ public class Globals {
 	}
 
 	public static final List<Object> getNowTimeListValue(final String comment) {
-		ArrayList<Object> result = new ArrayList<>();
+		List<Object> result = new ArrayList<>();
 
 		String now = new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis()).toString();
 		now = now.substring(0, now.indexOf("."));

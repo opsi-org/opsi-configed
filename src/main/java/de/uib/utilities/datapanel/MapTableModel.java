@@ -204,7 +204,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	}
 
 	public void addEntry(String key) {
-		ArrayList<Object> newval = new ArrayList<>();
+		List<Object> newval = new ArrayList<>();
 		data.put(key, newval);
 		oridata.put(key, newval);
 
