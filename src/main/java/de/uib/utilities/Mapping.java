@@ -13,6 +13,7 @@ package de.uib.utilities;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.TreeSet;
 import java.util.Vector;
 
@@ -76,11 +77,11 @@ public class Mapping<K, V> {
 		return domain;
 	}
 
-	public TreeSet<K> getDomainNaturallyOrdered() {
+	public NavigableSet<K> getDomainNaturallyOrdered() {
 		return new TreeSet<>(domain);
 	}
 
-	public TreeSet<String> getDomainAsStringsCollated() {
+	public NavigableSet<String> getDomainAsStringsCollated() {
 		TreeSet<String> ts = new TreeSet<>(Globals.getCollator());
 		ts.addAll(mapOfStrings.keySet());
 		return ts;
@@ -90,11 +91,11 @@ public class Mapping<K, V> {
 		return range;
 	}
 
-	public TreeSet<V> getRangeNaturallyOrdered() {
+	public NavigableSet<V> getRangeNaturallyOrdered() {
 		return new TreeSet<>(range);
 	}
 
-	public TreeSet<String> getRangeAsStringsCollated() {
+	public NavigableSet<String> getRangeAsStringsCollated() {
 		TreeSet<String> ts = new TreeSet<>(Globals.getCollator());
 		ts.addAll(rangeAsStrings);
 		return ts;

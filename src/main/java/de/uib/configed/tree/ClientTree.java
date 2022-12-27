@@ -27,6 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -1600,7 +1601,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return result;
 	}
 
-	public TreeSet<String> collectLeafs(DefaultMutableTreeNode node) {
+	public NavigableSet<String> collectLeafs(DefaultMutableTreeNode node) {
 		TreeSet<String> clients = new TreeSet<>(enumerateLeafNodes(node));
 
 		return clients;

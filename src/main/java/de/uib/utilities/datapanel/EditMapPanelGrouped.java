@@ -56,7 +56,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	protected SimpleTreeModel treemodel;
 
 	protected TreeMap<String, String> givenClasses;
-	protected TreeSet<String> keyclasses;
+	protected NavigableSet<String> keyclasses;
 	protected Map<String, String> tooltips4Keys;
 	protected Map<String, AbstractEditMapPanel> partialPanels;
 	protected TreeMap<String, Map<String, Object>> virtualLines;
@@ -291,7 +291,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 	}
 
-	protected void classify(Map<String, Object> data, TreeSet<String> classIds) {
+	protected void classify(Map<String, Object> data, NavigableSet<String> classIds) {
 
 		virtualLines = new TreeMap<>();
 

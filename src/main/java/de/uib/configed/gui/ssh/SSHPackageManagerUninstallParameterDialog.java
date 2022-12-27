@@ -2,7 +2,7 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
 import java.util.List;
-import java.util.TreeSet;
+import java.util.NavigableSet;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -312,7 +312,7 @@ public class SSHPackageManagerUninstallParameterDialog
 		if (persist == null)
 			logging.error(this, "resetProducts PersistenceController null");
 		else {
-			TreeSet<String> productnames = persist.getProductIds();
+			NavigableSet<String> productnames = persist.getProductIds();
 			for (String item : productnames)
 				cb_opsiproducts.addItem(item);
 		}

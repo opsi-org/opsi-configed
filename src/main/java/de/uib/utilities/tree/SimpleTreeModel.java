@@ -3,6 +3,7 @@ package de.uib.utilities.tree;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -44,7 +45,7 @@ public class SimpleTreeModel extends DefaultTreeModel
 		generateFrom(dottedKeys);
 	}
 
-	public TreeSet<String> getGeneratedKeys() {
+	public NavigableSet<String> getGeneratedKeys() {
 		TreeSet<String> result = new TreeSet<>();
 
 		for (SimpleTreePath path : allPathes)

@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.TreeSet;
 
 import de.uib.utilities.logging.logging;
@@ -101,7 +102,7 @@ public class PropertiesStore
 		internalStore.put(key, value);
 	}
 
-	private TreeSet<String> formOutputLines() {
+	private NavigableSet<String> formOutputLines() {
 		TreeSet<String> orderedLines = new TreeSet<>();
 
 		for (String key : internalStore.keySet()) {

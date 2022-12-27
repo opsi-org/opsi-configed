@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -405,7 +406,7 @@ public class JTableSelectionPanel extends JPanel
 
 	}
 
-	public TreeSet<String> getInvertedSet() {
+	public NavigableSet<String> getInvertedSet() {
 		TreeSet<String> result = new TreeSet<>();
 
 		for (int i = 0; i < table.getRowCount(); i++) {

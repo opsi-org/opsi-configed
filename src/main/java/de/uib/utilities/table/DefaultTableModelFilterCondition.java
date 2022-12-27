@@ -1,11 +1,12 @@
 package de.uib.utilities.table;
 
+import java.util.NavigableSet;
 import java.util.TreeSet;
 import java.util.Vector;
 
 public class DefaultTableModelFilterCondition implements TableModelFilterCondition {
 
-	protected TreeSet<? extends Object> filterSet;
+	protected NavigableSet<? extends Object> filterSet;
 	protected int keyCol = -1;
 	protected String filterLabel = "";
 

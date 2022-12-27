@@ -3,7 +3,7 @@ package de.uib.configed.clientselection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
+import java.util.NavigableSet;
 
 import de.uib.utilities.logging.logging;
 
@@ -99,7 +99,7 @@ public abstract class Backend {
 	/**
 	 * Get a list of product IDs of the opsi products.
 	 */
-	public abstract TreeSet<String> getProductIDs();
+	public abstract NavigableSet<String> getProductIDs();
 
 	/**
 	 * Get a map, with the hardware as key and a list of properties as value.

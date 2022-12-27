@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -135,12 +136,11 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	// request
 
 	// for each product, we remember the visual action that is set
-	protected TreeSet<String> missingImplementationForAR;
+	protected NavigableSet<String> missingImplementationForAR;
 
 	protected Map<String, Map<String, Map<String, String>>> allClientsProductStates; // (clientId -> (productId ->
 																						// (product state key -> product
 																						// state value)))
-																						
 
 	protected PersistenceController persist;
 	protected Map<String, Map<String, Map<String, String>>> collectChangedStates;
@@ -148,7 +148,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	protected Map<String, List<String>> possibleActions; // product-->possibleActions
 	protected Map<String, Map<String, Object>> globalProductInfos;
 	protected String theClient;
-	protected TreeSet<String> tsProductNames;
+	protected NavigableSet<String> tsProductNames;
 	protected Vector<String> productNamesInDeliveryOrder;
 
 	protected ActionRequest actionInTreatment;

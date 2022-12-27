@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -96,7 +97,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		return thePanel;
 	}
 
-	private TreeSet<Object> getUnAssignedSoftwareIds() {
+	private NavigableSet<Object> getUnAssignedSoftwareIds() {
 		// the object is cached in persist
 		return persist.getSoftwareWithoutAssociatedLicencePool();
 	}

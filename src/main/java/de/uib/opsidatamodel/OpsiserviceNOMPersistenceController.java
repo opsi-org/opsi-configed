@@ -38,6 +38,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -192,7 +193,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	protected Map<String, List<String>> fLicencePool2UnknownSoftwareList; // function pool --> list of assigned software
 																			// which is not in software table
 
-	protected TreeSet<Object> softwareWithoutAssociatedLicencePool;
+	protected NavigableSet<Object> softwareWithoutAssociatedLicencePool;
 
 	protected Map<String, LicenceUsageEntry> rowsLicencesUsage; // map key -> rowmap
 
@@ -330,7 +331,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	protected Map<String, Map<String, Object>> hostUpdates;
 
-	protected TreeSet<String> productIds;
+	protected NavigableSet<String> productIds;
 	protected Map<String, Map<String, String>> productDefaultStates;
 
 	protected List< /* JSON */Object> licenceOnClientDeleteItems;
@@ -4197,7 +4198,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return dataStub.getProduct2VersionInfo2Depots();
 	}
 
-	public TreeSet<String> getProductIds() {
+	public NavigableSet<String> getProductIds() {
 		dataStub.getProduct2versionInfo2infos();
 
 		if (productIds == null) {
@@ -6250,7 +6251,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	}
 
-	public TreeSet<Object> getSoftwareWithoutAssociatedLicencePool() {
+	public NavigableSet<Object> getSoftwareWithoutAssociatedLicencePool() {
 		if (softwareWithoutAssociatedLicencePool == null)
 			retrieveRelationsAuditSoftwareToLicencePools();
 

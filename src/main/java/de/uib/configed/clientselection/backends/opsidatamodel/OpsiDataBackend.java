@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 import de.uib.configed.clientselection.Backend;
 import de.uib.configed.clientselection.Client;
@@ -400,7 +400,7 @@ public class OpsiDataBackend extends Backend {
 	}
 
 	@Override
-	public TreeSet<String> getProductIDs() {
+	public NavigableSet<String> getProductIDs() {
 		return controller.getProductIds();
 	}
 

@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -581,7 +582,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract Map<String, Map<String, List<String>>> getProduct2VersionInfo2Depots();
 
-	public abstract TreeSet<String> getProductIds();
+	public abstract NavigableSet<String> getProductIds();
 
 	public abstract Map<String, Map<String, String>> getProductDefaultStates();
 
@@ -805,7 +806,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract List<String> getUnknownSoftwareListForLicencePool(String licencePoolId);
 
-	public abstract TreeSet<Object> getSoftwareWithoutAssociatedLicencePool();
+	public abstract NavigableSet<Object> getSoftwareWithoutAssociatedLicencePool();
 
 	public abstract Map<String, String> getFSoftware2LicencePool();
 
