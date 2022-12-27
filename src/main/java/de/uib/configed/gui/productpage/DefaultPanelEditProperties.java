@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.jdesktop.swingx.JXPanel;
+import org.jdesktop.swingx.painter.AbstractPainter;
 
 /*
  * configed - configuration editor for client work stations in opsi
@@ -45,9 +46,9 @@ public abstract class DefaultPanelEditProperties extends JXPanel {
 		this.mainController = mainController;
 		this.productPropertiesPanel = productPropertiesPanel;
 
-		setBackgroundPainter(new org.jdesktop.swingx.painter.AbstractPainter() {
+		setBackgroundPainter(new AbstractPainter<DefaultPanelEditProperties>() {
 			@Override
-			public void doPaint(Graphics2D g, Object obj, int width, int height) {
+			public void doPaint(Graphics2D g, DefaultPanelEditProperties obj, int width, int height) {
 				g.setPaint(Globals.backLightBlue);
 				g.fillRect(0, 0, width, height);
 			}
