@@ -61,6 +61,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.PopupMenuTrait;
+import javafx.scene.input.InputEvent;
 
 public class LogPane extends JPanel implements KeyListener, ActionListener {
 	public static final int DEFAULT_MAX_SHOW_LEVEL = 3;
@@ -1011,13 +1012,13 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			}
 
 			else if (e.getSource() == jTextPane && (e.getKeyChar() == '+')
-					&& ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
+					&& ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
 				logging.info(this, "Ctrl-Plus");
 				setFontSize("+");
 			}
 
 			else if (e.getSource() == jTextPane && (e.getKeyChar() == '-')
-					&& ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
+					&& ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
 				logging.info(this, "Ctrl-Minus");
 				setFontSize("-");
 			}

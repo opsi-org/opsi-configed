@@ -164,8 +164,8 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 		if (persist.isDepotsFullPermission()) {
 			tf_selecteddepots.setEditable(true);
-			result.add(persist.DEPOT_SELECTION_NODEPOTS);
-			result.add(persist.DEPOT_SELECTION_ALL);
+			result.add(PersistenceController.DEPOT_SELECTION_NODEPOTS);
+			result.add(PersistenceController.DEPOT_SELECTION_ALL);
 		} else
 			tf_selecteddepots.setEditable(false);
 

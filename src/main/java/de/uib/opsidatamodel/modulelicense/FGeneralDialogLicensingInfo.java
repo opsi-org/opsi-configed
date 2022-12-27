@@ -203,12 +203,13 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 			@Override
 			public void reload() {
 
-				logging.info(this, " LicInfoPanelGenTable reload, reduced " + !ME.extendedView);
+				logging.info(this,
+						" LicInfoPanelGenTable reload, reduced " + !FGeneralDialogLicensingInfo.extendedView);
 				persist.configOptionsRequestRefresh();
 				persist.opsiLicensingInfoRequestRefresh();
 				LicensingInfoMap.requestRefresh();
 				licenseMap = LicensingInfoMap.getInstance(persist.getOpsiLicensingInfo(),
-						persist.getConfigDefaultValues(), !ME.extendedView);
+						persist.getConfigDefaultValues(), !FGeneralDialogLicensingInfo.extendedView);
 				retrieveData();
 
 				tableSource = new MapSource(columnNames, classNames, theSourceMap, false);

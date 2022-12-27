@@ -4786,7 +4786,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		productGlobalInfos.get(product).get("productVersion");
 
-		String result = (String) productGlobalInfos.get(product).get(OpsiProductInfo.SERVICEkeyPRODUCT_VERSION);
+		String result = (String) productGlobalInfos.get(product).get(OpsiPackage.SERVICEkeyPRODUCT_VERSION);
 
 		if (result == null)
 			result = EMPTYFIELD;
@@ -4799,12 +4799,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	public String getProductPackageVersion(String product) {
 
-		return (String) productGlobalInfos.get(product).get(OpsiProductInfo.SERVICEkeyPACKAGE_VERSION);
+		return (String) productGlobalInfos.get(product).get(OpsiPackage.SERVICEkeyPACKAGE_VERSION);
 	}
 
 	public String getProductLockedInfo(String product) {
 
-		return (String) productGlobalInfos.get(product).get(OpsiProductInfo.SERVICEkeyLOCKED);
+		return (String) productGlobalInfos.get(product).get(OpsiPackage.SERVICEkeyLOCKED);
 	}
 
 	public String getProductTimestamp(String product) {

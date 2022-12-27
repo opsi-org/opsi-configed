@@ -627,7 +627,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			if (!cb_useDefault_state)
 			// state has changed
 			{
-				connectionInfo.setUserData(configedMain.HOST, ConfigedMain.USER, ConfigedMain.PASSWORD,
+				connectionInfo.setUserData(ConfigedMain.HOST, ConfigedMain.USER, ConfigedMain.PASSWORD,
 						SSHConnect.portSSH);
 			}
 

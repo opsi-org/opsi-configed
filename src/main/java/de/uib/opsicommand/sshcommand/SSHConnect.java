@@ -108,9 +108,10 @@ public class SSHConnect {
 		}
 
 		logging.info(this, "isConnected session.isConnected " + result);
-		if (!result && factory.successfulConnectObservedCount > 0)
-			logging.info("No SSH connection after successful connections: " + factory.successfulConnectObservedCount
-					+ "\n" + "check server authentication configuration");
+		if (!result && SSHCommandFactory.successfulConnectObservedCount > 0)
+			logging.info("No SSH connection after successful connections: "
+					+ SSHCommandFactory.successfulConnectObservedCount + "\n"
+					+ "check server authentication configuration");
 		return result;
 	}
 
@@ -244,7 +245,7 @@ public class SSHConnect {
 			Properties config = new Properties();
 			config.put("StrictHostKeyChecking", "no");
 
-			jsch.setConfig(config);
+			JSch.setConfig(config);
 
 			// will prevent session ending
 			// cf
@@ -258,17 +259,17 @@ public class SSHConnect {
 			logging.info(this, "we did connect " + connectionInfo);
 			logging.info(this, "connect " + connectionInfo);
 
-			factory.successfulConnectObservedCount++;
+			SSHCommandFactory.successfulConnectObservedCount++;
 
 			return true;
 		} catch (com.jcraft.jsch.JSchException authfail) {
 			retriedTimes_auth = retry(retriedTimes_auth, authfail);
 			if (retriedTimes_auth >= 2) {
 				logging.warning(this, "connect Authentication failed. " + authfail);
-				if (factory.successfulConnectObservedCount > 0)
+				if (SSHCommandFactory.successfulConnectObservedCount > 0)
 
 					logging.error("authentication failed after successful authentifications: "
-							+ factory.successfulConnectObservedCount + "\n" + "\n"
+							+ SSHCommandFactory.successfulConnectObservedCount + "\n" + "\n"
 							+ "check server authentication configuration" + "\n" + "\n");
 
 				return false;

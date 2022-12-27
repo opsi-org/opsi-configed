@@ -130,6 +130,7 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.provider.RowsProvider;
 import de.uib.utilities.table.provider.TableProvider;
 import de.uib.utilities.thread.WaitCursor;
+import javafx.scene.input.InputEvent;
 
 public class ConfigedMain implements ListSelectionListener, TabController, LogEventObserver
 
@@ -2481,7 +2482,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					}
 
 					else {
-						if ((mouseEvent.getModifiersEx() & MouseEvent.SHIFT_DOWN_MASK) == MouseEvent.SHIFT_DOWN_MASK) {
+						if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
 
 							clearTree();
 
@@ -2497,7 +2498,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						}
 
 						else if ((mouseEvent.getModifiersEx()
-								& MouseEvent.CTRL_DOWN_MASK) == MouseEvent.CTRL_DOWN_MASK) {
+								& InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK) {
 
 						} else {
 

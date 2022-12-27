@@ -70,7 +70,7 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 
 		);
 
-		return (SSHConnectionExecDialog) exec.getDialog();
+		return exec.getDialog();
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 	public String getCommand() {
 		command = "opsi-package-manager -q " + verbosity + keepFiles + depots + freeInput + opsiproduct;
 		if (needSudo())
-			return SSHCommandFactory.getInstance().sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 

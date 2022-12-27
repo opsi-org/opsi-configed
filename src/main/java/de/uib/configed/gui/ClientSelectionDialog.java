@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.event.ChangeListener;
@@ -439,7 +440,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				box.addItem(op.getOperationString());
 			result.operationComponent = box;
 		} else
-			result.operationComponent = new JLabel(operations[0].getOperationString(), JLabel.CENTER);
+			result.operationComponent = new JLabel(operations[0].getOperationString(), SwingConstants.CENTER);
 		result.operationComponent.setMaximumSize(new Dimension(result.operationComponent.getMaximumSize().width,
 				result.operationComponent.getPreferredSize().height));
 		result.dataComponent = new JLabel(); // to reserve the place
