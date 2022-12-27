@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.Globals;
 import de.uib.utilities.swing.SurroundPanel;
@@ -132,8 +133,8 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 
 		textOut.setLineWrap(false);
 		textOut.setEditable(false);
-		panelContent.add(new SurroundPanel(new JScrollPane(textOut, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS)), BorderLayout.SOUTH);
+		panelContent.add(new SurroundPanel(new JScrollPane(textOut, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS)), BorderLayout.SOUTH);
 
 		add(panelContent);
 	}

@@ -27,6 +27,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -88,7 +89,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		scrollpaneL = new javax.swing.JScrollPane();
 		scrollpaneL.setViewportView(loggingArea);
-		scrollpaneL.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollpaneL.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		loggingPanel.add(scrollpaneL, BorderLayout.CENTER);
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);

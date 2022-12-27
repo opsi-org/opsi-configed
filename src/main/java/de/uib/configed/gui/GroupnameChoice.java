@@ -143,7 +143,7 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 		if (selIndex == -1)
 			return;
 
-		if (groupnameField.getText() == null || !groupnameField.getText().equals((String) groups.getSelectedValue())) {
+		if (groupnameField.getText() == null || !groupnameField.getText().equals(groups.getSelectedValue())) {
 			groupnameField.setText((String) groups.getSelectedValue());
 		}
 	}

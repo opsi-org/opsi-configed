@@ -85,7 +85,7 @@ public class FGroupActions extends SecondaryFrame {
 		Vector<String> imagesCollection = new Vector<>();
 
 		imagesCollection.addAll(new TreeSet<>(persist.getCommonProductPropertyValues(associatedClients,
-				persist.localImageRestoreProductKey, persist.localImagesListPropertyKey)));
+				PersistenceController.localImageRestoreProductKey, PersistenceController.localImagesListPropertyKey)));
 
 		comboSelectImage.setModel(new DefaultComboBoxModel<>(imagesCollection));
 	}
@@ -112,13 +112,14 @@ public class FGroupActions extends SecondaryFrame {
 		WaitCursor waitCursor = new WaitCursor(this);
 
 		persist.setCommonProductPropertyValue(main.getActivatedGroupModel().getAssociatedClients(),
-				persist.localImageRestoreProductKey, persist.localImageToRestorePropertyKey, values);
+				PersistenceController.localImageRestoreProductKey, PersistenceController.localImageToRestorePropertyKey,
+				values);
 
 		Map<String, String> changedValues = new HashMap<>();
 		changedValues.put(de.uib.opsidatamodel.productstate.ProductState.KEY_actionRequest, "setup");
 
 		persist.updateProductOnClients(main.getActivatedGroupModel().getAssociatedClients(),
-				persist.localImageRestoreProductKey, OpsiPackage.TYPE_NETBOOT, changedValues);
+				PersistenceController.localImageRestoreProductKey, OpsiPackage.TYPE_NETBOOT, changedValues);
 
 		waitCursor.stop();
 	}

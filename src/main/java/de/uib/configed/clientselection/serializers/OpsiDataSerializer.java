@@ -111,11 +111,11 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		if (object == null)
 			return "null";
 		if (object instanceof String)
-			return "\"" + (String) object + "\"";
+			return "\"" + object + "\"";
 		if (object instanceof Integer)
-			return "\"" + String.valueOf((Integer) object) + "\"";
+			return "\"" + object + "\"";
 		if (object instanceof Long)
-			return "\"" + String.valueOf((Long) object) + "\"";
+			return "\"" + object + "\"";
 		if (object instanceof SelectData.DataType)
 			return object.toString();
 		if (object instanceof String[]) {

@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -482,13 +483,13 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		listChooseAction.setFont(Globals.defaultFontSmallBold);
 
 		listChooseAction.setBackground(Globals.backgroundWhite);
-		JScrollPane scrollChooseAction = new JScrollPane(listChooseAction, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		JScrollPane scrollChooseAction = new JScrollPane(listChooseAction,
+				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		listChooseAction.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				if (e.getClickCount() > 1) {
-					String s = (String) listChooseAction.getSelectedValue();
+					String s = listChooseAction.getSelectedValue();
 					handleCollectiveAction(s, (IFInstallationStateTableModel) tableProducts.getModel());
 				}
 			}
@@ -586,8 +587,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		};
 		descriptionField.getDocument().addDocumentListener(descriptionFieldListener);
 
-		
-
 		panelEdit = new JPanel();
 
 		panelEdit.setBackground(Globals.backgroundWhite);
@@ -638,10 +637,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		setGroupEditing(false);
 
 		panelEdit.setBorder(Globals.createPanelBorder());
-
-		
-
-		
 
 		GroupLayout layoutMain = new GroupLayout(this);
 		this.setLayout(layoutMain);

@@ -423,13 +423,13 @@ public class OpsiDataBackend extends Backend {
 				String localizedName = (String) ((Map) valuesLocalized.get(j)).get("UI");
 				if (type.equals("int") || type.equals("tinyint"))
 					elementList.add(new GenericIntegerElement(new String[] { hardwareName, name },
-							new String[] { hardwareNameLocalized, localizedName }));
+							hardwareNameLocalized, localizedName));
 				else if (type.equals("bigint"))
 					elementList.add(new GenericBigIntegerElement(new String[] { hardwareName, name },
-							new String[] { hardwareNameLocalized, localizedName }));
+							hardwareNameLocalized, localizedName));
 				else
-					elementList.add(new GenericTextElement(new String[] { hardwareName, name },
-							new String[] { hardwareNameLocalized, localizedName }));
+					elementList.add(new GenericTextElement(new String[] { hardwareName, name }, hardwareNameLocalized,
+							localizedName));
 			}
 			result.put(hardwareName, elementList);
 
@@ -457,13 +457,13 @@ public class OpsiDataBackend extends Backend {
 				String localizedName = (String) ((Map) valuesLocalized.get(j)).get("UI");
 				if (type.equals("int") || type.equals("tinyint"))
 					elementList.add(new GenericIntegerElement(new String[] { hardwareName, name },
-							new String[] { hardwareNameLocalized, localizedName }));
+							hardwareNameLocalized, localizedName));
 				else if (type.equals("bigint"))
 					elementList.add(new GenericBigIntegerElement(new String[] { hardwareName, name },
-							new String[] { hardwareNameLocalized, localizedName }));
+							hardwareNameLocalized, localizedName));
 				else
-					elementList.add(new GenericTextElement(new String[] { hardwareName, name },
-							new String[] { hardwareNameLocalized, localizedName }));
+					elementList.add(new GenericTextElement(new String[] { hardwareName, name }, hardwareNameLocalized,
+							localizedName));
 			}
 			result.put(hardwareNameLocalized, elementList);
 
@@ -478,7 +478,7 @@ public class OpsiDataBackend extends Backend {
 		if (values != null) {
 			for (Object value : values) {
 				Map valueMap = (Map) value;
-				if (elementPath[1].equals((String) valueMap.get("UI")))
+				if (elementPath[1].equals(valueMap.get("UI")))
 					return (String) valueMap.get("Opsi");
 			}
 		}

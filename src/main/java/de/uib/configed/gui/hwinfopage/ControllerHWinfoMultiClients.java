@@ -135,9 +135,9 @@ public class ControllerHWinfoMultiClients {
 
 			@Override
 			protected Object modifyHeaderValue(Object s) {
-				if (s != null && s instanceof String && ((String) s).startsWith(DELETE_PREFIX)) {
-					String modified = ((String) s).substring(DELETE_PREFIX.length());
-					return modified;
+				if (s instanceof String && ((String) s).startsWith(DELETE_PREFIX)) {
+					return ((String) s).substring(DELETE_PREFIX.length());
+
 				}
 
 				return s;
@@ -166,7 +166,7 @@ public class ControllerHWinfoMultiClients {
 				null,
 
 				// tableProvider
-				
+
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
 					logging.info(this, "retrieveMap: getClient2HwRows");
 

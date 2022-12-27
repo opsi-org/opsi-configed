@@ -5208,7 +5208,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				new String[] { configed.getResourceValue("buttonNO"), configed.getResourceValue("buttonYES") }, 350,
 				400);
 
-		fConfirmActionForClients.setMessage(confirmInfo + "\n\n" + getSelectedClientsString().replaceAll(";", ""));
+		fConfirmActionForClients.setMessage(confirmInfo + "\n\n" + getSelectedClientsString().replace(";", ""));
 
 		fConfirmActionForClients.centerOn(Globals.mainContainer);
 		fConfirmActionForClients.setAlwaysOnTop(true);

@@ -159,13 +159,6 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			centerPanelLayout.setVerticalGroup(centerPanelLayout.createSequentialGroup().addComponent(commandlistPanel)
 					.addComponent(parameterPanel));
 		}
-		// else
-
-		// centerPanelLayout.setHorizontalGroup( centerPanelLayout.createParallelGroup()
-		
-
-		// centerPanelLayout.setVerticalGroup( centerPanelLayout.createSequentialGroup()
-		
 
 		parameterPanel.setVisible(true);
 	}
@@ -242,7 +235,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			lbl_needSudo.setText(configed.getResourceValue("SSHConnection.CommandControl.needSudo"));
 			lbl_commands.setText(configed.getResourceValue("SSHConnection.CommandControl.commands"));
 
-			cb_parentMenuText.addItem(factory.parentdefaultForOwnCommands); // parentNull
+			cb_parentMenuText.addItem(SSHCommandFactory.parentdefaultForOwnCommands); // parentNull
 			cb_menuText.addItem(factory.menuNew);
 
 			cb_menuText.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.menuText.tooltip"));
@@ -431,8 +424,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 										.addGap(Globals.GAP_SIZE).addComponent(btn_test_command,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE)
-								
-								
+
 								).addGap(Globals.MIN_GAP_SIZE).addComponent(tp_commands, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 						.addGap(Globals.GAP_SIZE * 3));
@@ -445,8 +437,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 						.addGap(Globals.MIN_GAP_SIZE).addComponent(btn_test_command, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE)
-				
-				
+
 				).addGap(Globals.MIN_GAP_SIZE)
 				.addComponent(tp_commands, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.GAP_SIZE * 1));
@@ -582,8 +573,8 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 						thiscommand.getPriority(), thiscommand.needSudo(), combuf.toString());
 			}
 		} else
-			updateComponents(factory.parentdefaultForOwnCommands/* parentNull */, "", factory.position_default, false,
-					"");
+			updateComponents(SSHCommandFactory.parentdefaultForOwnCommands/* parentNull */, "",
+					factory.position_default, false, "");
 	}
 
 	/**
@@ -598,7 +589,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	private void updateComponents(String parent, String tooltip, int prio, boolean ns, String coms) {
 		if ((parent == null) || (parent.trim() == "")) {
 
-			parent = factory.parentdefaultForOwnCommands;
+			parent = SSHCommandFactory.parentdefaultForOwnCommands;
 		}
 		cb_parentMenuText.setSelectedItem(parent);
 		tf_tooltipText.setText(tooltip);
@@ -657,7 +648,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 
 	private void checkAllTexts() {
 		if (!Globals.isGlobalReadOnly()) {
-			if (cb_menuText.getSelectedItem() != null)
+			if (cb_menuText.getSelectedItem() != null) {
 				if (!((String) cb_menuText.getSelectedItem()).trim().equals(factory.menuNew)) {
 					logging.info(this, "checkAllTexts menuText " + cb_menuText.getSelectedItem());
 					SSHCommand_Template tmp_com = getCommandNow();
@@ -671,7 +662,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 					btn_save.setEnabled(isNotSaved);
 				} else
 					btn_save.setEnabled(false);
-			else
+			} else
 				btn_save.setEnabled(false);
 		}
 	}
@@ -698,7 +689,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			if (!((c == null) || (c.trim().equals(""))))
 				coms.add(c);
 		SSHCommand_Template tmp_com = factory.buildSSHCommand(generateId((String) cb_menuText.getSelectedItem()),
-				parent, menuText, ((String) tf_tooltipText.getText()), prio, cb_needSudo.isSelected(), coms);
+				parent, menuText, (tf_tooltipText.getText()), prio, cb_needSudo.isSelected(), coms);
 		logging.debug(this, "getCommandNow command: " + tmp_com);
 		return tmp_com;
 	}

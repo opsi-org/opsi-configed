@@ -353,7 +353,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 				if (c instanceof JComponent && showToolTip) {
 					JComponent jc = (JComponent) c;
 
-					String propertyName = (String) names.get(rowIndex);
+					String propertyName = names.get(rowIndex);
 
 					String tooltip = null;
 

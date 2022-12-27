@@ -11,11 +11,11 @@ import java.util.Map;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -128,7 +128,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 	}
 
 	private String findAnsiCodeColor(Map.Entry entry, String key, String line) {
-		if (line.trim().replaceAll("\\t", "").replaceAll(" ", "").startsWith(key)) {
+		if (line.trim().replace("\\t", "").replace(" ", "").startsWith(key)) {
 			linecolor = (Color) entry.getValue();
 			line = line.replace(key, "");
 			logging.debug(this,
@@ -177,15 +177,15 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			mainPanel.setBackground(Globals.backLightBlue);
 			getContentPane().add(mainPanel, BorderLayout.CENTER);
 
-			mainPanelLayout = new GroupLayout((JComponent) mainPanel);
-			konsolePanelLayout = new GroupLayout((JComponent) inputPanel);
+			mainPanelLayout = new GroupLayout(mainPanel);
+			konsolePanelLayout = new GroupLayout(inputPanel);
 
 			inputPanel.setLayout(konsolePanelLayout);
 			mainPanel.setLayout(mainPanelLayout);
 
 			jScrollPane = new JScrollPane();
-			jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-			jScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			jScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+			jScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
 			output = new JTextPane();
 			output.setEditable(false);
