@@ -155,7 +155,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 		if (isSelected) {
 			background = Globals.nimbusSelectionBackground;
-			foreground = Color.WHITE;
+			foreground = Globals.CELL_RENDERER_BY_INDEX_SELECTED_FOREGROUND_COLOR;
 		} else {
 			background = Globals.nimbusBackground;
 			foreground = Globals.nimbusSelectionBackground;

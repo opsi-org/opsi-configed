@@ -30,10 +30,10 @@ public class XCellEditor extends DefaultCellEditor {
 
 		if (isSelected) {
 			background = Globals.nimbusSelectionBackground;
-			foreground = Color.WHITE;
+			foreground = Globals.X_CELL_EDITOR_SELECTED_FOREGROUND;
 		} else {
 			background = Globals.nimbusBackground;
-			foreground = Color.black;
+			foreground = Globals.X_CELL_EDITOR_NOT_SELECTED_FOREGROUND;
 		}
 
 		c.setBackground(background);

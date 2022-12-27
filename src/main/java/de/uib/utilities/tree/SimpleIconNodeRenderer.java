@@ -1,6 +1,5 @@
 package de.uib.utilities.tree;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -30,7 +29,7 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 		setFont(standard);
 		setForeground(Globals.lightBlack);
 		setTextSelectionColor(Globals.lightBlack);
-		setBackground(Color.white);
+		setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
 		setBorder(new javax.swing.border.EmptyBorder(new Insets(0, 0, 0, 0)));
 		setPreferredSize(preferred);
 	}
@@ -65,7 +64,7 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 				setBackground(Globals.backLightBlue);
 
 			} else {
-				setBackground(Color.white);
+				setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
 
 			}
 

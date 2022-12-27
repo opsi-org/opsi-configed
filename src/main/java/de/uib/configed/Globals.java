@@ -271,6 +271,24 @@ public class Globals {
 
 	public static final Color ICON_NODE_RENDERER_BACKGROUND_COLOR = Color.WHITE;
 
+	public static final Color EDIT_MAP_PANEL_GROUPED_BACKGROUND_COLOR = Color.RED;
+
+	public static final Color EDIT_MAP_PANEL_X_FOREGROUND_COLOR = Color.RED;
+	public static final Color EDIT_MAP_PANEL_X_GRID_COLOR = Color.WHITE;
+
+	public static final Color JTABLE_SELECTION_PANEL_GRID_COLOR = Color.WHITE;
+
+	public static final Color CELL_RENDERER_BY_INDEX_SELECTED_FOREGROUND_COLOR = Color.WHITE;
+
+	public static final Color F_EDIT_PANE_UNDERLINE_HIGHLIGHTER_PAINTER = Color.BLUE;
+
+	public static final Color X_CELL_EDITOR_SELECTED_FOREGROUND = Color.WHITE;
+	public static final Color X_CELL_EDITOR_NOT_SELECTED_FOREGROUND = Color.BLACK;
+
+	public static final Color PANEL_GEN_EDIT_TABLE_GRID_COLOR = Color.WHITE;
+
+	public static final Color SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR = Color.WHITE;
+
 	public static final int TOOLTIP_INITIAL_DELAY_MS = 1000;
 	public static final int TOOLTIP_DISMISS_DELAY_MS = 20000;
 	public static final int TOOLTIP_RESHOW_DELAY_MS = 0;

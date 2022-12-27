@@ -38,7 +38,7 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 			boolean hasFocus, int row, int column) {
 		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		if (c == null || !(c instanceof JComponent))
+		if (!(c instanceof JComponent))
 			return c;
 
 		JComponent jc = (JComponent) c;

@@ -1,6 +1,5 @@
 package de.uib.utilities.selectionpanel;
 
-import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -121,7 +120,7 @@ public class JTableSelectionPanel extends JPanel
 
 		table.setDragEnabled(true);
 		table.setShowGrid(true);
-		table.setGridColor(Color.white);
+		table.setGridColor(Globals.JTABLE_SELECTION_PANEL_GRID_COLOR);
 		table.setDefaultRenderer(Object.class, new StandardTableCellRenderer());
 		table.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 

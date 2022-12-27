@@ -8,7 +8,6 @@
 package de.uib.utilities.datapanel;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -379,7 +378,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 					Object gotValue = table.getValueAt(rowIndex, 1);
 
 					if (defaultValue == null) {
-						jc.setForeground(Color.red);
+						jc.setForeground(Globals.EDIT_MAP_PANEL_X_FOREGROUND_COLOR);
 						jc.setToolTipText(configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
 
 						java.awt.Font gotFont = jc.getFont();
@@ -412,7 +411,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		table.setDefaultRenderer(Object.class, colorized);
 		table.setRowHeight(Globals.LINE_HEIGHT);
 		table.setShowGrid(true);
-		table.setGridColor(Color.white);
+		table.setGridColor(Globals.EDIT_MAP_PANEL_X_GRID_COLOR);
 
 		table.addMouseWheelListener(mouseWheelEvent -> {
 

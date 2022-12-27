@@ -427,7 +427,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		theTable.addMouseListener(this);
 
 		theTable.setShowHorizontalLines(true);
-		theTable.setGridColor(Color.WHITE);
+		theTable.setGridColor(Globals.PANEL_GEN_EDIT_TABLE_GRID_COLOR);
 
 		theTable.getTableHeader()
 				.setDefaultRenderer(new ColorHeaderCellRenderer(theTable.getTableHeader().getDefaultRenderer()) {
