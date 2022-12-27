@@ -2940,8 +2940,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	private void showOpsiModules() {
-		if (main.getPersistenceController()
-				.getOpsiLicensingInfoVersion() == LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD) {
+		if (main.getPersistenceController().getOpsiLicensingInfoVersion()
+				.equals(LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD)) {
 
 			FTextArea f = new FTextArea(this, configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"),
 					true);

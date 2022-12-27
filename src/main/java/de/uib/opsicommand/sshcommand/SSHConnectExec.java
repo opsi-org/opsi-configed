@@ -22,6 +22,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
+import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.ssh.SSHOutputCollector;
 
@@ -342,13 +343,9 @@ public class SSHConnectExec extends SSHConnect {
 	}
 
 	protected String setAsInfoString(String s) {
-		if (outputDialog != null)
-			if (s.length() > 0)
-				if (s != "\n") {
-					String t = outputDialog.ANSI_CODE_INFO + s;
-
-					return t;
-				}
+		if (outputDialog != null && s.length() > 0 && !s.equals("\n")) {
+			return SSHConnectionOutputDialog.ANSI_CODE_INFO + s;
+		}
 		return s;
 	}
 

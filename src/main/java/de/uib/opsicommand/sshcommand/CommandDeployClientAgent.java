@@ -200,14 +200,14 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	}
 
 	public void setClient(String c) {
-		if (c != "")
+		if (!c.equals(""))
 			client = " " + c;
 		else
 			client = "";
 	}
 
 	public void setUser(String u) {
-		if (u != "")
+		if (!u.equals(""))
 			user = " -u " + u;
 		else
 			user = "";
@@ -223,7 +223,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	}
 
 	public void setPassw(String pw) {
-		if (pw != "")
+		if (!pw.equals(""))
 			passw = " -p " + pw;
 		else
 			passw = "";
@@ -237,10 +237,12 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	}
 
 	public boolean checkCommand() {
-		if (client == "")
+		if (client.equals(""))
 			return false;
-		if (passw == "")
+
+		if (passw.equals(""))
 			return false;
+
 		return true;
 	}
 

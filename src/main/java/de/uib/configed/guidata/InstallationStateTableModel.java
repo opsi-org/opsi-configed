@@ -333,7 +333,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				// build visual states
 				for (String colKey : ProductState.KEYS) {
 
-					if (colKey == ProductState.KEY_actionRequest) {
+					if (colKey.equals(ProductState.KEY_actionRequest)) {
 						logging.debug(this, " ------------before   mixtovisualstate " + "product " + productId
 								+ " value " + stateAndAction.get(colKey));
 					}
@@ -375,7 +375,8 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					while (iter.hasNext()) {
 						String key = (String) iter.next();
 
-						if (key == ProductState.KEY_productPriority || key == ProductState.KEY_actionSequence) {
+						if (key.equals(ProductState.KEY_productPriority)
+								|| key.equals(ProductState.KEY_actionSequence)) {
 							mixToVisualState(key, combinedVisualValues.get(key), productId, priority);
 						} else {
 							mixToVisualState(key, combinedVisualValues.get(key), productId,

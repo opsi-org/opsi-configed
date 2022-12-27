@@ -71,7 +71,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			} else
 				jc.setToolTipText("<html>" + "clients: " + value.toString() + "</html>");
 
-			if (columnName == latestChange) {
+			if (columnName.equals(latestChange)) {
 				jc.setBackground(Globals.checkGreenLight);
 
 				if (state.equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT)) {

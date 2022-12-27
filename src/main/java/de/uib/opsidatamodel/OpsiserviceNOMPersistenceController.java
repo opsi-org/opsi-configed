@@ -1619,7 +1619,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			if (value instanceof Boolean) {
 
-				if ((Boolean) value == (Boolean) expectValue)
+				if (((Boolean) value).equals(expectValue))
 					result = true;
 			} else if (value instanceof String) {
 				if (((String) value).equalsIgnoreCase("" + expectValue))
@@ -8121,7 +8121,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	private JSONObject retrieveJSONLicensingInfoReduced() {
 		retrieveOpsiLicensingInfoVersion();
-		if (licensingInfo == null && opsiLicensingInfoVersion != LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD) {
+		if (licensingInfo == null
+				&& !opsiLicensingInfoVersion.equals(LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD)) {
 			OpsiMethodCall omc = new OpsiMethodCall(backendLicensingInfoMethodname,
 					new Object[] { true, false, true, false });
 
@@ -8212,57 +8213,53 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		}
 
-		if (getOpsiLicensingInfoVersion() == LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD) {
+		if (getOpsiLicensingInfoVersion().equals(LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD)) {
 			// no action
-		} else {
-			if (licInfoMap.warningExists()) {
-				if (licInfoWarnings == null) {
-					licInfoWarnings = new FTextArea(Globals.mainFrame,
-							configed.getResourceValue("Permission.modules.title"), false,
-							new String[] { configed.getResourceValue("Dash.close"),
-									configed.getResourceValue("Permission.modules.buttonGoToValidationTable") },
-							new Icon[] { Globals.createImageIcon("images/cancel16_small.png", ""),
-									Globals.createImageIcon("images/edit-table-insert-row-under.png", "") },
+		} else if (licInfoMap.warningExists() && licInfoWarnings == null) {
+			licInfoWarnings = new FTextArea(Globals.mainFrame, configed.getResourceValue("Permission.modules.title"),
+					false,
+					new String[] { configed.getResourceValue("Dash.close"),
+							configed.getResourceValue("Permission.modules.buttonGoToValidationTable") },
+					new Icon[] { Globals.createImageIcon("images/cancel16_small.png", ""),
+							Globals.createImageIcon("images/edit-table-insert-row-under.png", "") },
 
-							550, 400) {
-						@Override
-						protected boolean wantToBeRegisteredWithRunningInstances() {
-							logging.info(this, "licInfoWarnings wantToBeRegisteredWithRunningInstances");
-							return true;
-						}
-
-						@Override
-						public void doAction2() {
-							((de.uib.configed.gui.MainFrame) Globals.mainFrame).callOpsiLicensingInfo();
-						}
-
-					};
-
-					StringBuilder mess = new StringBuilder(configed.getResourceValue("Permission.modules.infoheader"));
-
-					mess.append("_______________________________\n");
-
-					mess.append(modulesWithWarning(LicensingInfoMap.CURRENT_OVER_LIMIT,
-							configed.getResourceValue("Permission.modules.warning.currentOverLimit")));
-					mess.append(modulesWithWarning(LicensingInfoMap.CURRENT_CLOSE_TO_LIMIT,
-							configed.getResourceValue("Permission.modules.warning.currentCloseToLimit")));
-					mess.append(modulesWithWarning(LicensingInfoMap.CURRENT_TIME_WARNINGS,
-							configed.getResourceValue("Permission.modules.warning.currentTimeWarning")));
-					mess.append("\n\n");
-
-					mess.append(configed.getResourceValue("Permission.modules.check"));
-					mess.append(" ");
-					mess.append(configed.getResourceValue("MainFrame.jMenuHelp"));
-					mess.append(",\n");
-					mess.append(configed.getResourceValue("Permission.modules.check1"));
-					mess.append(" \"");
-					mess.append(configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
-					mess.append("\"\n");
-
-					licInfoWarnings.setMessage(mess.toString());
+					550, 400) {
+				@Override
+				protected boolean wantToBeRegisteredWithRunningInstances() {
+					logging.info(this, "licInfoWarnings wantToBeRegisteredWithRunningInstances");
+					return true;
 				}
 
-			}
+				@Override
+				public void doAction2() {
+					((de.uib.configed.gui.MainFrame) Globals.mainFrame).callOpsiLicensingInfo();
+				}
+
+			};
+
+			StringBuilder mess = new StringBuilder(configed.getResourceValue("Permission.modules.infoheader"));
+
+			mess.append("_______________________________\n");
+
+			mess.append(modulesWithWarning(LicensingInfoMap.CURRENT_OVER_LIMIT,
+					configed.getResourceValue("Permission.modules.warning.currentOverLimit")));
+			mess.append(modulesWithWarning(LicensingInfoMap.CURRENT_CLOSE_TO_LIMIT,
+					configed.getResourceValue("Permission.modules.warning.currentCloseToLimit")));
+			mess.append(modulesWithWarning(LicensingInfoMap.CURRENT_TIME_WARNINGS,
+					configed.getResourceValue("Permission.modules.warning.currentTimeWarning")));
+			mess.append("\n\n");
+
+			mess.append(configed.getResourceValue("Permission.modules.check"));
+			mess.append(" ");
+			mess.append(configed.getResourceValue("MainFrame.jMenuHelp"));
+			mess.append(",\n");
+			mess.append(configed.getResourceValue("Permission.modules.check1"));
+			mess.append(" \"");
+			mess.append(configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
+			mess.append("\"\n");
+
+			licInfoWarnings.setMessage(mess.toString());
+
 		}
 
 		Vector<String> availableModules = licInfoMap.getAvailableModules();

@@ -305,7 +305,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	public void setSorting(Integer sortCol, boolean sorting) {
-		if (this.sorting != sorting || this.sortCol != sortCol) {
+		if (this.sorting != sorting || !this.sortCol.equals(sortCol)) {
 			this.sortCol = sortCol;
 
 			if (sortCol == null || sortCol < 0 || sortCol >= getRowCount()) {

@@ -65,7 +65,7 @@ public class Containership {
 			// theComp is an instance of selClass
 			{
 
-				if (methodName != "") {
+				if (!methodName.equals("")) {
 					try {
 						theMethod = theCompClass.getMethod(methodName, theArgsTypes);
 						theMethod.invoke(theComp, args);

@@ -1,8 +1,8 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.Dimension;
-import java.util.HashMap;
-import java.util.TreeMap;
+import java.util.Map;
+import java.util.NavigableMap;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -68,19 +68,19 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 
 	protected void getRepositoriesFromConfigs(String depot) {
 		logging.info(this, "getRepositoriesFromConfigs depot " + depot);
-		TreeMap<String, HashMap<String, Object>> depotProperties = (TreeMap) persist.getHostInfoCollections()
+		NavigableMap<String, Map<String, Object>> depotProperties = (NavigableMap) persist.getHostInfoCollections()
 				.getAllDepots();
 		logging.info(this, "getRepositoriesFromConfigs depotProperties " + depotProperties);
 
-		HashMap<String, Object> firstDepot;
-		if ((depot == null) || (depot == defaultDepot) || (depot == "all"))
+		Map<String, Object> firstDepot;
+		if (depot == null || depot.equals(defaultDepot) || depot.equals("all"))
 			firstDepot = depotProperties.get(depotProperties.firstKey());
 		else
 			firstDepot = depotProperties.get(depot);
 		logging.info(this, "getRepositoriesFromConfigs firstDepot " + firstDepot);
 
 		String o_repo = ((String) firstDepot.get(configRepo)).replace("file://", "");
-		if ((o_repo != null) && (o_repo != "null") && (o_repo.trim() != ""))
+		if (o_repo != null && !o_repo.equals("null") && !o_repo.trim().equals(""))
 			opsiRepo = o_repo + "/";
 
 		logging.info(this, "getRepositoriesFromConfigs o_repo " + o_repo);

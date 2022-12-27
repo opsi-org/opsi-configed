@@ -137,7 +137,8 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		try {
 			command.setAction(command.getAction((String) cb_actions.getSelectedItem()));
 			String repo = (String) cb_repos.getSelectedItem();
-			if (repo == configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"))
+			if (repo.equals(
+					configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories")))
 				command.setRepo(null);
 			else
 				command.setRepo(repo);

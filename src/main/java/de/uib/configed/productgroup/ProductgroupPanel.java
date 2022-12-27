@@ -869,21 +869,21 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		if (!insTableModel.infoIfNoClientsSelected()) {
 			insTableModel.initCollectiveChange();
 
-			if (selected == configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"))
+			if (selected.equals(configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked")))
 				actionType = ActionRequest.SETUP;
 
-			else if (selected == de.uib.configed.configed
-					.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked"))
+			else if (selected.equals(
+					de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked")))
 				actionType = ActionRequest.UNINSTALL;
 
-			else if (selected == de.uib.configed.configed
-					.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked"))
+			else if (selected
+					.equals(de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked")))
 				actionType = ActionRequest.NONE;
 
 			else
 				actionType = ActionRequest.INVALID;
 
-			if (!(actionType == ActionRequest.INVALID)) {
+			if (actionType != ActionRequest.INVALID) {
 
 				associate.getSelectedRowsInModelTerms().stream()
 						.peek(x -> logging.info(" row id " + x + " product " + insTableModel.getValueAt(x, 0)))

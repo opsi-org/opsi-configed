@@ -254,7 +254,7 @@ public class SSHCompletionComboButton {
 						////// FUNKTIONIERT NUR WENN BERECHTIGUNGEN RICHTIG SIND.....
 						// Bricht nach nächster Bedingung ab und schreibt keinen result ---> try-catch
 						String tmp_result = ssh.exec(getFiles, false);
-						if ((tmp_result != null) || (tmp_result.trim() != "null"))
+						if ((tmp_result != null) || (tmp_result.trim().equals("null")))
 							result += tmp_result;
 					} catch (Exception ei) {
 						logging.warning(this, "Could not find .opsi files in directory " + curdir

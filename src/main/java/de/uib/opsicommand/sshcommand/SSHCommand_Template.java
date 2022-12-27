@@ -223,9 +223,9 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	 **/
 	@Override
 	public String getMenuText() {
-		if (menuText != null)
-			if (menuText.length() > 0)
-				return menuText.trim();
+		if (menuText != null && menuText.length() > 0)
+			return menuText.trim();
+
 		return menuText;
 	}
 
@@ -400,7 +400,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	 * @return the updated command (this)
 	 */
 	public SSHCommand_Template update(SSHCommand_Template com) {
-		if (this.id == com.getId()) {
+		if (this.id.equals(com.getId())) {
 			logging.debug(this, "update this (" + this.toString() + ") with (" + com.toString() + ")");
 			setCommands(com.getCommandsRaw());
 			setMenuText(com.getMenuText());

@@ -136,7 +136,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	@Override
 	public String getCommand() {
 		setCommandName();
-		if ((packageVersion != "") || (productVersion != ""))
+		if (!packageVersion.equals("") || !productVersion.equals(""))
 			keepVersions = "--keep-versions ";
 		command = "cd " + dir + " && " + baseName + " " + keepVersions + " " + packageVersion + " " + productVersion
 				+ " " + md5sum + " " + zsync + " ";
@@ -195,7 +195,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 		// command
 		// )
 		);
-		return (SSHConnectionExecDialog) exec.getDialog();
+		return exec.getDialog();
 	}
 
 	@Override
@@ -218,14 +218,14 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	}
 
 	public void setPackageVersion(String pav) {
-		if (pav != "")
+		if (!pav.equals(""))
 			packageVersion = "--package-version " + pav;
 		else
 			packageVersion = "";
 	}
 
 	public void setProductVersion(String prv) {
-		if (prv != "")
+		if (!prv.equals(""))
 			productVersion = "--product-version " + prv;
 		else
 			productVersion = "";

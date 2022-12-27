@@ -13,6 +13,7 @@ import com.jcraft.jsch.JSchException;
 
 import de.uib.configed.configed;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
+import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
 import de.uib.utilities.logging.logging;
 
 /***
@@ -333,10 +334,8 @@ public class SSHConnectSCP extends SSHConnectExec {
 		}
 
 		protected void publishError(String s) {
-			if (outputDialog != null)
-				if (s.length() > 0)
-					if (s != "\n")
-						s = outputDialog.ANSI_CODE_ERROR + s;
+			if (outputDialog != null && s.length() > 0 && !s.equals("\n"))
+				s = SSHConnectionOutputDialog.ANSI_CODE_ERROR + s;
 			publish(s);
 		}
 

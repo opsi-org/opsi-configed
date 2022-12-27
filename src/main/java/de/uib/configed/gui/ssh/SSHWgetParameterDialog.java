@@ -210,7 +210,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	}
 
 	private void changeFreeInput() {
-		if (tf_freeInput.getText().trim() != "")
+		if (!tf_freeInput.getText().trim().equals(""))
 			commandWget.setFreeInput(tf_freeInput.getText().trim());
 		else
 			commandWget.setFreeInput("");

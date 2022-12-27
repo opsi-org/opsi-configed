@@ -106,7 +106,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 
 	@Override
 	public String getCommand() {
-		if (freeInput != "")
+		if (!freeInput.equals(""))
 			command = "wget " + authentication + filename + freeInput + verbosity + dir + url + " " + additional_url;
 		else
 			command = "wget " + authentication + filename + verbosity + dir + url + " " + additional_url;
@@ -171,14 +171,14 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	}
 
 	public void setDir(String d) {
-		if (d != "")
+		if (!d.equals(""))
 			dir = " -P " + d;
 		else
 			dir = "";
 	}
 
 	public void setUrl(String u) {
-		if (u != "")
+		if (!u.equals(""))
 			url = " " + u;
 		else
 			url = "";
@@ -211,17 +211,12 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	}
 
 	public boolean checkCommand() {
-		if (dir == "")
-			return false;
-		if (url == "")
-			return false;
-		return true;
+		return dir.equals("") && url.equals("");
 	}
 
 	private String getFilenameFromUrl(String url) {
 		int p = url.lastIndexOf("/");
-		String e = url.substring(p + 1);
-		return e;
+		return url.substring(p + 1);
 	}
 
 	@Override

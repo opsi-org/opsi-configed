@@ -91,12 +91,12 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 	@Override
 	public String getCommand() {
-		if (action == "list") {
+		if (action.equals("list")) {
 			action = " list --repos ";
 			repo = " ";
 		}
 		setCommand(baseName + verbosity + repo + action);
-		if (needSudo() && action != "list")
+		if (needSudo() && !action.equals("list"))
 			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
 		return command + " 2>&1"; // the output redirection semms not to produce a jsch input
 	}
@@ -205,14 +205,11 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	}
 
 	public boolean checkCommand() {
-		if (action == "")
-			return false;
-		return true;
+		return !action.equals("");
 	}
 
 	@Override
 	public List<String> getParameterList() {
 		return null;
 	}
-
 }

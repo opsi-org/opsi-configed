@@ -452,17 +452,17 @@ public class HostInfo {
 
 		initialize(); // empty everything
 
-		if (clientWanConfig_save != secondInfo.clientWanConfig)
+		if (!clientWanConfig_save.equals(secondInfo.clientWanConfig))
 			clientWanConfig = null;
 		else
 			clientWanConfig = clientWanConfig_save;
 
-		if (clientUefiBoot_save != secondInfo.clientUefiBoot)
+		if (!clientUefiBoot_save.equals(secondInfo.clientUefiBoot))
 			clientUefiBoot = null;
 		else
 			clientUefiBoot = clientUefiBoot_save;
 
-		if (clientShutdownInstall_save != secondInfo.clientShutdownInstall)
+		if (!clientShutdownInstall_save.equals(secondInfo.clientShutdownInstall))
 			clientShutdownInstall = null;
 		else
 			clientShutdownInstall = clientShutdownInstall_save;

@@ -464,7 +464,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 				checkComponentStates();
 			});
 
-			if (connectionInfo.getKeyfilePath() != "")
+			if (!connectionInfo.getKeyfilePath().equals(""))
 				cb_useKeyfile.setSelected(true);
 
 			cb_useOutputColor = new JCheckBox();

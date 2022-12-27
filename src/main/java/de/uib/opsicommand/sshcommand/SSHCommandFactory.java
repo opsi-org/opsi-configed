@@ -300,7 +300,7 @@ public class SSHCommandFactory {
 
 			logging.info(this, "parent menu text " + parent);
 
-			if (parent == null || parent.equalsIgnoreCase("null") || parent == parentdefaultForOwnCommands)
+			if (parent == null || parent.equalsIgnoreCase("null") || parent.equals(parentdefaultForOwnCommands))
 				parent = parentdefaultForOwnCommands;
 			if (!list_knownParents.contains(parent))
 				list_knownParents.add(parent);

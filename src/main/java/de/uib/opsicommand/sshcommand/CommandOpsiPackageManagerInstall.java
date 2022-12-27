@@ -90,7 +90,7 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 	public SSHConnectionExecDialog startHelpDialog() {
 		SSHCommand command = new CommandHelp(this);
 		SSHConnectExec exec = new SSHConnectExec(command);
-		return (SSHConnectionExecDialog) exec.getDialog();
+		return exec.getDialog();
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 	}
 
 	public void setDepotForPInstall(String dep) {
-		if (dep != "")
+		if (!dep.equals(""))
 			depot = " -d " + dep;
 		else
 			depot = "";
@@ -124,9 +124,7 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 	}
 
 	public boolean checkCommand() {
-		if (opsiproduct == "")
-			return false;
-		return true;
+		return !opsiproduct.equals("");
 	}
 
 	public void setProperty(boolean keep_depot_defaults) {

@@ -565,7 +565,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 				StringBuilder combuf = new StringBuilder("");
 				for (SSHCommand c : thiscommand.getCommands()) {
 					String rawCommand = c.getCommandRaw();
-					if ((rawCommand != null) && (rawCommand != ""))
+					if ((rawCommand != null) && !rawCommand.equals(""))
 						combuf.append(rawCommand).append("\n");
 				}
 				updateComponents(thiscommand.getParentMenuText(), thiscommand.getToolTipText(),
@@ -586,7 +586,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	 * @param coms    The commands
 	 **/
 	private void updateComponents(String parent, String tooltip, int prio, boolean ns, String coms) {
-		if ((parent == null) || (parent.trim() == "")) {
+		if ((parent == null) || (parent.trim().equals(""))) {
 
 			parent = SSHCommandFactory.parentdefaultForOwnCommands;
 		}

@@ -234,7 +234,7 @@ public class CommandOpsiSetRights extends SSHCommand_Template
 	}
 
 	public void setDir(String d) {
-		if (d != "")
+		if (!d.equals(""))
 			dir = " " + d;
 		else
 			dir = "";

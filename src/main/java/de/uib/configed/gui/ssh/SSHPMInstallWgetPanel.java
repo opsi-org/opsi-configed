@@ -149,7 +149,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 		String wgetDir = ((String) cb_autocompletion.getSelectedItem());
 
 		String tmp_tf_dir = "<" + configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelDirectory") + ">";
-		if ((wgetDir != "") || (wgetDir != tmp_tf_dir))
+		if (!wgetDir.equals("") || !wgetDir.equals(tmp_tf_dir))
 			d = wgetDir;
 		else
 			return null;
@@ -158,7 +158,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 				+ configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetUrl")
 						.replace(":", "")
 				+ ">";
-		if ((tf_url.getText() != "") || (tf_url.getText() != tmp_tf_url))
+		if (!tf_url.getText().equals("") || !tf_url.getText().equals(tmp_tf_url))
 			u = tf_url.getText();
 		else
 			return null;
