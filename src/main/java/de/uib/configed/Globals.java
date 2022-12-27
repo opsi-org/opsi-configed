@@ -48,7 +48,6 @@ public class Globals {
 	public static final String BUNDLE_NAME = "de/uib/messages/configed";
 
 	public static final boolean SHOW_ICONS_IN_PRODUCT_TABLE = false;
-	public static final Color INVISIBLE = new Color(11, 13, 17); // some value which shall be interpreted as identical
 
 	public static final String CERTIFICATE_FILE_NAME = "opsi-ca-cert";
 	public static final String CERTIFICATE_FILE_EXTENSION = "pem";
@@ -141,6 +140,8 @@ public class Globals {
 
 		throw new IllegalArgumentException(" " + value + " cannot be interpreted as boolean");
 	}
+
+	public static final Color INVISIBLE = new Color(11, 13, 17); // some value which shall be interpreted as identical
 
 	public static final Color backgroundWhite = new Color(245, 245, 245);
 	public static final Color backgroundGrey = new Color(220, 220, 220);
@@ -289,21 +290,6 @@ public class Globals {
 
 	public static final Color SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR = Color.WHITE;
 
-	public static final int TOOLTIP_INITIAL_DELAY_MS = 1000;
-	public static final int TOOLTIP_DISMISS_DELAY_MS = 20000;
-	public static final int TOOLTIP_RESHOW_DELAY_MS = 0;
-
-	public static void formatButtonSmallText(javax.swing.JButton button) {
-		button.setFont(defaultFontSmall);
-		button.setPreferredSize(new Dimension(45, 20));
-		button.setForeground(lightBlack);
-		button.setBackground(backBlue);
-		button.setOpaque(false);
-
-		button.setBorderPainted(false);
-
-	}
-
 	public static final Color nimbusSelectionBackground = new Color(57, 105, 138);
 	public static final Color nimbusBackground = new Color(214, 217, 223);
 	public static final Color backNimbus = new Color(214, 219, 222);
@@ -327,22 +313,39 @@ public class Globals {
 	public static final Color defaultTableCellSelectedBgColor = new Color(206, 224, 235);
 	public static final Color defaultTableCellSelectedBgColorNotEditable = new Color(189, 207, 231);
 
-	public static final Color logColorEssential = new Color(0, 0, 0); // 1 - black
+	public static final Color logColorEssential = new Color(0, 0, 0);
 	public static final Color logColorCritical = new Color(255, 0, 0);
 	public static final Color logColorError = new Color(200, 100, 0);
 	public static final Color logColorWarning = new Color(20, 20, 200);
-	// //4 - blue
+
 	public static final Color logColorNotice = new Color(10, 150, 10);
-	public static final Color logColorInfo = new Color(50, 50, 50); // 6 - grey
-	public static final Color logColorDebug = new Color(150, 150, 150);// 7 - brighter grey
+	public static final Color logColorInfo = new Color(50, 50, 50);
+	public static final Color logColorDebug = new Color(150, 150, 150);
 	public static final Color logColorDebug2 = new Color(150, 150, 150);
 	public static final Color logColorConfidential = new Color(150, 150, 0);
 
 	public static final Color opsiLogoBlue = new Color(106, 128, 174);
 	public static final Color opsiLogoLightBlue = new Color(195, 200, 222);
 
+	public static final Color CONFLICT_STATE_CELL_COLOR = new Color(255, 180, 180);
+
+	public static final int TOOLTIP_INITIAL_DELAY_MS = 1000;
+	public static final int TOOLTIP_DISMISS_DELAY_MS = 20000;
+	public static final int TOOLTIP_RESHOW_DELAY_MS = 0;
+
 	public static javax.swing.border.Border createPanelBorder() {
 		return new javax.swing.border.LineBorder(Globals.backBlue, 2, true);
+	}
+
+	public static void formatButtonSmallText(javax.swing.JButton button) {
+		button.setFont(defaultFontSmall);
+		button.setPreferredSize(new Dimension(45, 20));
+		button.setForeground(lightBlack);
+		button.setBackground(backBlue);
+		button.setOpaque(false);
+
+		button.setBorderPainted(false);
+
 	}
 
 	public static final int GAP_SIZE = 10;
@@ -412,7 +415,6 @@ public class Globals {
 	public static Image mainIcon = null;
 
 	public static final String CONFLICT_STATE_STRING = "mixed";
-	public static final Color CONFLICT_STATE_CELL_COLOR = new Color(255, 180, 180);
 	public static final String NO_VALID_STATE_STRING = "";
 
 	private static Map<String, Object> objects;
@@ -652,18 +654,18 @@ public class Globals {
 	}
 
 	public static String pseudokey(String[] partialvalues) {
-		StringBuffer resultBuffer = new StringBuffer("");
+		StringBuilder resultBuilder = new StringBuilder("");
 
 		if (partialvalues.length > 0) {
-			resultBuffer.append(partialvalues[0]);
+			resultBuilder.append(partialvalues[0]);
 
 			for (int i = 1; i < partialvalues.length; i++) {
-				resultBuffer.append(";");
-				resultBuffer.append(partialvalues[i]);
+				resultBuilder.append(";");
+				resultBuilder.append(partialvalues[i]);
 			}
 		}
 
-		return resultBuffer.toString();
+		return resultBuilder.toString();
 	}
 
 	private static final int TOOLTIP_LINE_LENGTH = 50;
@@ -905,15 +907,6 @@ public class Globals {
 		}
 	}
 
-	public static Color brightenColor(java.awt.Color c)
-	// experimental
-	{
-		int r = min(255, c.getRed() + 10);
-		int g = min(255, c.getGreen() + 10);
-		int b = min(255, c.getBlue() + 10);
-		return new Color(r, g, b);
-	}
-
 	public static boolean isGlobalReadOnly() {
 		boolean result = PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly();
 
@@ -931,8 +924,6 @@ public class Globals {
 	}
 
 	public static boolean forbidEditingTargetSpecific() {
-		// boolean forbidEditing =
-
 		boolean forbidEditing = false;
 
 		logging.debug("forbidEditing for target " + ConfigedMain.getEditingTarget() + "?");
