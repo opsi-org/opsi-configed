@@ -133,8 +133,8 @@ public class CSVFormat {
 		HeaderDetector detector = new HeaderDetector(fileAsList.get(lineNumber));
 		hasHeader = detector.detect();
 		String header = detector.getHeader();
-		headers = Arrays.asList(
-				header.replaceAll(String.valueOf(stringSeparator), "").split(String.valueOf(getFieldSeparator())));
+		headers = Arrays
+				.asList(header.replace(String.valueOf(stringSeparator), "").split(String.valueOf(getFieldSeparator())));
 		headers.replaceAll(String::trim);
 	}
 

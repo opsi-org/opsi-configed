@@ -624,7 +624,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	 * @param name The command menu text
 	 **/
 	private String generateId(String name) {
-		return name.replaceAll(" ", "_").toLowerCase().trim();
+		return name.replace(" ", "_").toLowerCase().trim();
 	}
 
 	public void doActionTestCommand() {

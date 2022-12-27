@@ -347,9 +347,9 @@ public class SSHCompletionComboButton {
 				if ((!basicPath.equals("")) && (!getText.equals(""))) // könnte eigtl raus. funktiniert sonst aber nicht...
 				{
 					if (basicPath.contains("//"))
-						basicPath = basicPath.replaceAll("//", "/");
+						basicPath = basicPath.replace("//", "/");
 					if (getText.contains("//"))
-						getText = getText.replaceAll("//", "/");
+						getText = getText.replace("//", "/");
 
 					if (getText.equals(basicPath) || autocompletion.contains_in_defaults(getText)) {
 						logging.debug(this, "getListCellRendererComponent colorize(" + getText + ") = true");

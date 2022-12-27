@@ -98,7 +98,7 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 		if ((product == null) || (product.equals("")))
 			return null;
 		CommandOpsiPackageManagerInstall com = new CommandOpsiPackageManagerInstall();
-		com.setOpsiproduct(product.replaceAll("\n", ""));
+		com.setOpsiproduct(product.replace("\n", ""));
 		return com.checkCommand() ? com : null;
 	}
 }

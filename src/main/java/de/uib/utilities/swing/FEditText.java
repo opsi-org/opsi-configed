@@ -70,9 +70,9 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 
 	@Override
 	public String getText() {
-		textarea.setText(textarea.getText().replaceAll("\t", ""));
+		textarea.setText(textarea.getText().replace("\t", ""));
 		if (singleLine)
-			textarea.setText(textarea.getText().replaceAll("\n", ""));
+			textarea.setText(textarea.getText().replace("\n", ""));
 		initialText = textarea.getText(); // set new initial text for use in processWindowEvent
 		return initialText;
 	}

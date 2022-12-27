@@ -273,12 +273,12 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 
 	private String formatResult(String[] result, String format) {
 		String formated_result = "";
-		String f = format.replaceAll(" ", "");
+		String f = format.replace(" ", "");
 		logging.info(this, "callMethod format f " + f);
 		switch (f) {
 		case "xyz":
 		case "xyz...":
-			formated_result = Arrays.toString(result).replace("[", "").replaceAll(",", " ").replace("]", "");
+			formated_result = Arrays.toString(result).replace("[", "").replace(",", " ").replace("]", "");
 			break;
 		case "x,y,z":
 		case "x,y,z,...":
@@ -362,7 +362,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 				+ (strArrToReplace.length > 1));
 		if (strArrToReplace.length > 1) {
 			result = Arrays.toString(strArrToReplace).replace("[", begin_end_ofStr.split("x")[0])
-					.replaceAll(",", separator).replace("]", begin_end_ofStr.split("x")[1]);
+					.replace(",", separator).replace("]", begin_end_ofStr.split("x")[1]);
 		} else {
 			result = Arrays.toString(strArrToReplace).replace("[", begin_end_ofStr.split("x")[0]).replace("]",
 					begin_end_ofStr.split("x")[1]);
@@ -376,7 +376,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	}
 
 	public String arrayToString(Object[] list) {
-		return Arrays.toString(list).replace("[", "").replaceAll(",", " ").replace("]", "");
+		return Arrays.toString(list).replace("[", "").replace(",", " ").replace("]", "");
 	}
 
 	protected String getUserText(String text, Component dialog) {

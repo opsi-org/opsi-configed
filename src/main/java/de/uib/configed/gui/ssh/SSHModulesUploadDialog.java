@@ -43,7 +43,7 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 		cb_copy_to_modules_d.setSelected(false);
 
 		SSHConnectExec testFile = new SSHConnectExec();
-		testFile.exec(new Empty_Command(factory.str_command_fileexists_notremove.replaceAll(
+		testFile.exec(new Empty_Command(factory.str_command_fileexists_notremove.replace(
 				factory.str_replacement_filename, ((CommandModulesUpload) command).unofficial_modules_directory) // /etc/opsi/modules.d
 		), false);
 		{

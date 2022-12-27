@@ -422,7 +422,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 							+ ".Please check if directory exists and contains the file OPSI/control.\n"
 							+ "Please also check the rights of the file/s.");
 		} else {
-			String[] versions = result.replaceAll("version: ", "").split("\n");
+			String[] versions = result.replace("version: ", "").split("\n");
 			logging.info(this, "doActionGetVersions, getDirectories result " + java.util.Arrays.toString(versions));
 			if (versions.length < 1) {
 				logging.info(this,
@@ -504,7 +504,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			String command = "[ -f " + filename + " ] &&  rm " + filename + " && echo \"File " + filename
 					+ " removed\" || echo \"File did not exist\"";
 			// Empty_Command removeExistingPackage = new
-			// Empty_Command(str_command_fileexists.replaceAll(str_replacement_filename,
+			// Empty_Command(str_command_fileexists.replace(str_replacement_filename,
 
 			Empty_Command removeExistingPackage = new Empty_Command(command);
 			str2exec.addCommand(removeExistingPackage);
@@ -512,7 +512,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			command = "[ -f " + filename + ".zsync ] &&  rm " + filename + ".zsync && echo \"File " + filename
 					+ ".zsync removed\" || echo \"File  " + filename + ".zsync did not exist\"";
 			// removeExistingPackage = new
-			// Empty_Command(str_command_filezsyncExists.replaceAll(str_replacement_filename,
+			// Empty_Command(str_command_filezsyncExists.replace(str_replacement_filename,
 
 			removeExistingPackage = new Empty_Command(command);
 			str2exec.addCommand(removeExistingPackage);
@@ -521,7 +521,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 					+ ".md5 removed\" || echo \"File  " + filename + ".md5 did not exist\"";
 			removeExistingPackage = new Empty_Command(command);
 			// removeExistingPackage = new
-			// Empty_Command(str_command_filemd5Exists.replaceAll(str_replacement_filename,
+			// Empty_Command(str_command_filemd5Exists.replace(str_replacement_filename,
 
 			str2exec.addCommand(removeExistingPackage);
 		}
