@@ -25,7 +25,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 		setOpaque(true);
 		setForeground(Globals.lightBlack);
 		setTextSelectionColor(Globals.lightBlack);
-		setBackground(Color.white);
+		setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
 		setBorder(new javax.swing.border.EmptyBorder(new Insets(0, 0, 0, 0)));
 		setPreferredSize(new java.awt.Dimension(labelWidth, labelHeight));
 	}

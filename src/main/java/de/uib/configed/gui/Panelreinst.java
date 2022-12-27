@@ -1,7 +1,6 @@
 package de.uib.configed.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -77,7 +76,7 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 		labelSelectImage.setText("Image-Auswahl");
 		labelSelectImage.setBackground(Globals.backgroundWhite);
 		panelSurroundSelectImage.add(labelSelectImage);
-		comboImages.setBackground(Color.WHITE);
+		comboImages.setBackground(Globals.PANELREINST_BACKGROUND_COLOR);
 		comboImages.addActionListener(this);
 		panelSurroundSelectImage.add(comboImages);
 		panelSurroundSelectImage.setLayout(new FlowLayout(FlowLayout.LEFT));

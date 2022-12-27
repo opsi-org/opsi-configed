@@ -1,6 +1,5 @@
 package de.uib.configed.gui;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
@@ -96,7 +95,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		if (centerPanel == null)
 			centerPanel = new JPanel();
 
-		centerPanel.setBackground(Color.white);
+		centerPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 		centerPanel.setOpaque(true);
 
 		southPanel = createSouthPanel();
@@ -147,7 +146,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
 		southPanel.setOpaque(false);
-		southPanel.setBackground(Color.white);
+		southPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 		southPanel.setOpaque(true);
 
 		return southPanel;
@@ -359,7 +358,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 	private class HeaderOptionsPanel extends JPanel {
 		public HeaderOptionsPanel(ListModel<JCheckBox> model) {
-			setBackground(Color.WHITE);
+			setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
 			CheckBoxList list = new CheckBoxList(model);

@@ -18,7 +18,6 @@
 
 package de.uib.configed.gui.productpage;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -88,7 +87,7 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 				JLabel label = new JLabel(value.toString()); // (JLabel)
 
 				if (sel)
-					label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+					label.setBorder(BorderFactory.createLineBorder(Globals.DEPENDENCIES_TREE_PANEL_BORDER_COLOR, 1));
 				else
 					label.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 

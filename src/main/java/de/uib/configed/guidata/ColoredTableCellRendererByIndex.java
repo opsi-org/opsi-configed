@@ -44,7 +44,7 @@ public class ColoredTableCellRendererByIndex extends de.uib.utilities.table.gui.
 			c.setForeground(Globals.backgroundGrey);
 		} else {
 			if (mapOfTextColors != null && value instanceof String) {
-				Color textcolor = mapOfTextColors.get((String) value);
+				Color textcolor = mapOfTextColors.get(value);
 				if (textcolor != null) {
 					if (textcolor.equals(Globals.INVISIBLE))
 						c.setForeground(c.getBackground());

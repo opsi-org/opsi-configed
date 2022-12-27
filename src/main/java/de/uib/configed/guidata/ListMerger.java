@@ -10,11 +10,6 @@ public class ListMerger extends ArrayList {
 	boolean onlyPartiallyExisting;
 	boolean havingCommonValue;
 
-	public static Color noCommonValueTextcolor = Globals.backgroundGrey;
-	public static Color noCommonValueBackcolor = Globals.backgroundGrey;
-	public static Color noCommonKeyTextcolor = Globals.backBlue;
-	public static Color noCommonKeyBackcolor = Globals.backBlue;
-
 	public static final ListMerger NO_COMMON_VALUE = new ListMerger(new ArrayList<>());
 	static {
 		NO_COMMON_VALUE.setHavingNoCommonValue();
@@ -87,16 +82,16 @@ public class ListMerger extends ArrayList {
 
 	public Color getTextColor() {
 		if (!havingCommonValue) {
-			return noCommonValueTextcolor;
+			return Globals.LIST_MERGER_NO_COMMON_VALUE_TEXT_COLOR;
 		} else
-			return Color.BLACK;
+			return Globals.LIST_MERGER_NORMAL_VALUE_TEXT_COLOR;
 	}
 
 	public Color getBackgroundColor() {
 		if (!havingCommonValue) {
-			return noCommonValueBackcolor;
+			return Globals.LIST_MERGER_NO_COMMON_VALUE_BACKGROUND_COLOR;
 		} else
-			return Color.BLACK;
+			return Globals.LIST_MERGER_NORMAL_VALUE_BACKGROUND_COLOR;
 	}
 
 }

@@ -336,7 +336,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 			if (outputDialog != null)
 				if (s.length() > 0)
 					if (s != "\n")
-						s = outputDialog.ansiCodeError + s;
+						s = outputDialog.ANSI_CODE_ERROR + s;
 			publish(s);
 		}
 

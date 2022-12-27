@@ -1,6 +1,5 @@
 package de.uib.opsidatamodel.modulelicense;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
@@ -97,7 +96,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		if (centerPanel == null)
 			centerPanel = new JPanel();
 
-		centerPanel.setBackground(Color.white);
+		centerPanel.setBackground(Globals.F_GENERAL_DIALOG_LICENSING_INFO_BACKGROUND_COLOR);
 		centerPanel.setOpaque(true);
 
 		southPanel = new JPanel();
@@ -125,7 +124,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
 		southPanel.setOpaque(false);
-		southPanel.setBackground(Color.white);
+		southPanel.setBackground(Globals.F_GENERAL_DIALOG_LICENSING_INFO_BACKGROUND_COLOR);
 		southPanel.setOpaque(true);
 
 		GroupLayout allLayout = new GroupLayout(allpane);

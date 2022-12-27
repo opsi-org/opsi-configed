@@ -2,11 +2,9 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
@@ -47,56 +45,18 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 	protected GroupLayout konsolePanelLayout;
 	protected GroupLayout mainPanelLayout;
 
-	private Color linecolor = Globals.lightBlack;
-	private final String ansi_escape1 = "";
-	private final String ansi_escape2 = "\u001B";
+	private Color linecolor = Globals.SSH_CONNECTION_OUTPUT_DIALOG_START_LINE_COLOR;
+	private static final String ANSI_ESCAPE_1 = "";
+	private static final String ANSI_ESCAPE_2 = "\u001B";
 
-	public final String ansiCodeEnd = "[0;0;0m";
-	public final String ansiCodeEnd1 = "\u001B[0;0;0m";
-	public final String ansiCodeEnd2 = "[0;0;0m";
+	public static final String ANSI_CODE_END = "[0;0;0m";
+	public static final String ANSI_CODE_END_1 = "\u001B[0;0;0m";
+	public static final String ANSI_CODE_END_2 = "[0;0;0m";
 
-	public final String ansiCodeInfo = "[0;info;0m"; // user info not really ansi code !!
-	public final String ansiCodeError = "[0;error;0m";
+	public static final String ANSI_CODE_INFO = "[0;info;0m"; // user info not really ansi code !!
+	public static final String ANSI_CODE_ERROR = "[0;error;0m";
 
-	private final Map<String, Color> ansiCodeColors = new HashMap<>() {
-		{
-			put("[0;info;0m", Globals.greyed); // user info not really ansi code !!
-			put("[0;error;0m", Globals.actionRed);
-			put("[0;30;40m", Color.BLACK);
-
-			put("[1;30;40m", Color.BLACK);
-			put("[0;40;40m", Color.BLACK);
-			put("[1;40;40m", Color.BLACK);
-			put("[0;31;40m", Globals.actionRed);
-			put("[1;31;40m", Globals.actionRed);
-			put("[0;41;40m", Globals.actionRed);
-			put("[1;41;40m", Globals.actionRed);
-			put("[0;32;40m", Globals.okGreen);
-			put("[1;32;40m", Globals.okGreen);
-			put("[0;42;40m", Globals.okGreen);
-			put("[1;42;40m", Globals.okGreen);
-			put("[0;33;40m", Globals.darkOrange);
-			put("[1;33;40m", Globals.darkOrange);
-			put("[0;43;40m", Globals.darkOrange);
-			put("[1;43;40m", Globals.darkOrange);
-			put("[0;34;40m", Globals.blue);
-			put("[1;34;40m", Globals.blue);
-			put("[0;44;40m", Globals.blue);
-			put("[1;44;40m", Globals.blue);
-			put("[0;35;40m", Color.MAGENTA);
-			put("[1;35;40m", Color.MAGENTA);
-			put("[0;45;40m", Color.MAGENTA);
-			put("[1;45;40m", Color.MAGENTA);
-			put("[0;36;40m", Color.CYAN);
-			put("[1;36;40m", Color.CYAN);
-			put("[0;46;40m", Color.CYAN);
-			put("[1;46;40m", Color.CYAN);
-			put("[0;37;40m", Globals.lightBlack);
-			put("[1;37;40m", Globals.lightBlack);
-			put("[0;47;40m", Globals.lightBlack);
-			put("[1;47;40m", Globals.lightBlack);
-		}
-	};
+	private static final Map<String, Color> ansiCodeColors = Globals.SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS;
 
 	protected class DialogCloseListener implements ActionListener {
 		@Override
@@ -124,7 +84,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 		linecolor = c;
 	}
 
-	public void append(String line, Component focusedComponent) {
+	public void append(String line) {
 		append("", line);
 	}
 
@@ -135,13 +95,9 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			logging.debug(this,
 					"append parseAnsiCodes found color key " + key + " value " + ((Color) entry.getValue()).toString());
 
-			line = line.replace(ansi_escape1, "").replace(ansi_escape2, "");
+			line = line.replace(ANSI_ESCAPE_1, "").replace(ANSI_ESCAPE_2, "");
 		}
 		return line;
-	}
-
-	public void append(String line) {
-		append("", line);
 	}
 
 	public void append(String caller, String line) {
@@ -159,9 +115,9 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 
 		output.setCaretPosition(output.getDocument().getLength());
 		output.setCharacterAttributes(aset, false);
-		if ((line.contains(ansiCodeEnd)) || (line.contains(ansiCodeEnd1)) || (line.contains(ansiCodeEnd2))) {
-			line = line.replace(ansiCodeEnd, "").replace(ansiCodeEnd1, "").replace(ansiCodeEnd2, "");
-			linecolor = Color.BLACK;
+		if ((line.contains(ANSI_CODE_END)) || (line.contains(ANSI_CODE_END_1)) || (line.contains(ANSI_CODE_END_2))) {
+			line = line.replace(ANSI_CODE_END, "").replace(ANSI_CODE_END_1, "").replace(ANSI_CODE_END_2, "");
+			linecolor = Globals.SSH_CONNECTION_OUTPUT_DIALOG_DIFFERENT_LINE_COLOR;
 		}
 		try {
 			StyledDocument doc = output.getStyledDocument();
@@ -190,16 +146,16 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 
 			output = new JTextPane();
 			output.setEditable(false);
-			output.setBackground(Color.GREEN);
+			output.setBackground(Globals.SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR);
 			output.setContentType("text/rtf");
 			output.setPreferredSize(new Dimension(250, 200));
 			StyledDocument doc = (StyledDocument) output.getDocument();
 			Style defaultStyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
 			Style readonlyStyle = doc.addStyle("readonlyStyle", defaultStyle);
 
-			StyleConstants.setBackground(readonlyStyle, Color.GREEN);// Kein grün :(
+			StyleConstants.setBackground(readonlyStyle, Globals.SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR);// Kein grün :(
 
-			StyleConstants.setForeground(readonlyStyle, Color.RED); // Was ist rot?
+			StyleConstants.setForeground(readonlyStyle, Globals.SSH_CONNECTION_OUTPUT_INIT_FOREGROUND_COLOR); // Was ist rot?
 
 			SimpleAttributeSet readOnlyAttributeSet = new SimpleAttributeSet(doc.getStyle("readonlyStyle"));
 			readOnlyAttributeSet.addAttribute("readonly", true);

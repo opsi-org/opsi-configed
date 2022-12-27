@@ -314,7 +314,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		jTextPanel = new JPanel(new BorderLayout());
 		scrollpane = new JScrollPane();
 		jTextPane = new JTextPane();
-		jTextPane.setCaretColor(Color.RED);
+		jTextPane.setCaretColor(Globals.LOG_PANE_CARET_COLOR);
 		jTextPane.getCaret().setBlinkRate(0);
 
 		class LogStyleContext extends StyleContext {

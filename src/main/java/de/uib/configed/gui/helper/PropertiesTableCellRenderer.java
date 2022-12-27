@@ -16,6 +16,7 @@ import java.awt.Component;
 
 import javax.swing.JTable;
 
+import de.uib.configed.Globals;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
@@ -52,8 +53,8 @@ public class PropertiesTableCellRenderer extends ColorTableCellRenderer {
 		if // ( value instanceof ListMerger && !((ListMerger)value).hasCommonValue() )
 		(value == ListMerger.NO_COMMON_VALUE) {
 
-			comp.setBackground(ListMerger.noCommonValueBackcolor);
-			comp.setForeground(ListMerger.noCommonValueTextcolor);
+			comp.setBackground(Globals.LIST_MERGER_NO_COMMON_VALUE_BACKGROUND_COLOR);
+			comp.setForeground(Globals.LIST_MERGER_NO_COMMON_VALUE_TEXT_COLOR);
 		}
 
 	}

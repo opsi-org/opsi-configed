@@ -14,7 +14,6 @@
 
 package de.uib.configed.gui.productpage;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
@@ -250,10 +249,14 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 			isPanelProductDependenciesVisible = !isPanelProductDependenciesVisible;
 
 			dependenciesActivateButton.setText(isPanelProductDependenciesVisible ? "▼" : "▶");
-			dependenciesTextLabel.setForeground(isPanelProductDependenciesVisible ? Color.BLACK : Globals.greyed);
+			dependenciesTextLabel
+					.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
+							: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
 
 			panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
-			depotForDependenciesLabel.setForeground(isPanelProductDependenciesVisible ? Color.BLACK : Globals.greyed);
+			depotForDependenciesLabel
+					.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
+							: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
 		}
 
 		else if (event.getSource() == propertiesActivateButton) {

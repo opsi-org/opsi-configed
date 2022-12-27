@@ -77,7 +77,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		public void write(byte[] buf, int off, int len) {
 			try {
 				String str = new String(buf, off, len, "UTF-8");
-				theDialog.append(str, theDialog.getInputField());
+				theDialog.append(str);
 			} catch (UnsupportedEncodingException ue) {
 				logging.warning("UnsupportedEncodingException", ue);
 			}

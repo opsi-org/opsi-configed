@@ -173,6 +173,104 @@ public class Globals {
 	public static final Color checkGreen = new Color(174, 201, 143);
 	public static final Color checkGreenLight = new Color(198, 225, 171);
 
+	public static final Color ClientSelectionDialog_ELEMENT_FOREGROUND = Color.BLUE;
+
+	public static final Color CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR = Color.WHITE;
+
+	public static final Color DEPOTS_LIST_FOREGROUND_COLOR = Color.BLACK;
+
+	public static final Color F_DIALOG_BACKGROUND_COLOR = Color.WHITE;
+
+	public static final Color F_GENERAL_DIALOG_BACKGROUND_COLOR = Color.WHITE;
+
+	// also used for GlassPane...
+	public static final Color F_GENERAL_DIALOG_FADING_MIRROR_COLOR = new Color(230, 230, 250);
+
+	public static final Color LOG_PANE_CARET_COLOR = Color.RED;
+
+	public static final Color NEW_CLIENT_DIALOG_BORDER_COLOR = new Color(122, 138, 153);
+
+	public static final Color PANELREINST_BACKGROUND_COLOR = Color.WHITE;
+
+	public static final Color EDIT_MAP_PANEL_GROUPED_FOR_HOST_CONFIGS_BACKGROUND_COLOR = Color.YELLOW;
+
+	public static final Color DEPENDENCIES_TREE_PANEL_BORDER_COLOR = Color.BLACK;
+
+	public static final Color PANEL_PRODUCT_SETTINGS_TABLE_GRID_COLOR = Color.WHITE;
+
+	public static final Color PANEL_PRODUCT_SETTINGS_FAILED_COLOR = Color.RED;
+
+	public static final Color PANEL_PRODUCT_INFO_PANE_ACTIVE = Color.BLACK;
+	public static final Color PANEL_PRODUCT_INFO_PANE_INACTIVE = greyed;
+
+	public static final Color SSH_CONNECTION_OUTPUT_DIALOG_START_LINE_COLOR = Globals.lightBlack;
+	public static final Color SSH_CONNECTION_OUTPUT_DIALOG_DIFFERENT_LINE_COLOR = Color.BLACK;
+	public static final Color SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR = Color.GREEN;
+	public static final Color SSH_CONNECTION_OUTPUT_INIT_FOREGROUND_COLOR = Color.RED;
+	public static final Color SSH_CONNECTION_SET_START_ANSI = Color.BLACK;
+
+	public static final Color F_GENERAL_DIALOG_LICENSING_INFO_BACKGROUND_COLOR = Color.WHITE;
+
+	public static final Color ACTION_REQUEST_NONE_COLOR = INVISIBLE;
+	public static final Color ACTION_REQUEST_SETUP_COLOR = actionRed;
+	public static final Color ACTION_REQUEST_UPDATE_COLOR = actionRed;
+	public static final Color ACTION_REQUEST_UNINSTALL_COLOR = Color.BLUE;
+	public static final Color ACTION_REQUEST_ALWAYS_COLOR = actionRed;
+	public static final Color ACTION_REQUEST_ONCE_COLOR = actionRed;
+	public static final Color ACTION_REQUEST_CUSTOM_COLOR = actionRed;
+	public static final Color ACTION_REQUEST_LAST_COLOR = Color.BLACK;
+
+	public static final Color INSTALLATION_STATUS_NOT_INSTALLED_COLOR = INVISIBLE;
+	public static final Color INSTALLATION_STATUS_INSTALLED_COLOR = okGreen;
+	public static final Color INSTALLATION_STATUS_UNKNOWN_COLOR = unknownBlue;
+
+	public static final Map<String, Color> SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS = new HashMap<>() {
+		{
+			put("[0;info;0m", Globals.greyed); // user info not really ansi code !!
+			put("[0;error;0m", Globals.actionRed);
+			put("[0;30;40m", Color.BLACK);
+
+			put("[1;30;40m", Color.BLACK);
+			put("[0;40;40m", Color.BLACK);
+			put("[1;40;40m", Color.BLACK);
+			put("[0;31;40m", Globals.actionRed);
+			put("[1;31;40m", Globals.actionRed);
+			put("[0;41;40m", Globals.actionRed);
+			put("[1;41;40m", Globals.actionRed);
+			put("[0;32;40m", Globals.okGreen);
+			put("[1;32;40m", Globals.okGreen);
+			put("[0;42;40m", Globals.okGreen);
+			put("[1;42;40m", Globals.okGreen);
+			put("[0;33;40m", Globals.darkOrange);
+			put("[1;33;40m", Globals.darkOrange);
+			put("[0;43;40m", Globals.darkOrange);
+			put("[1;43;40m", Globals.darkOrange);
+			put("[0;34;40m", Globals.blue);
+			put("[1;34;40m", Globals.blue);
+			put("[0;44;40m", Globals.blue);
+			put("[1;44;40m", Globals.blue);
+			put("[0;35;40m", Color.MAGENTA);
+			put("[1;35;40m", Color.MAGENTA);
+			put("[0;45;40m", Color.MAGENTA);
+			put("[1;45;40m", Color.MAGENTA);
+			put("[0;36;40m", Color.CYAN);
+			put("[1;36;40m", Color.CYAN);
+			put("[0;46;40m", Color.CYAN);
+			put("[1;46;40m", Color.CYAN);
+			put("[0;37;40m", Globals.lightBlack);
+			put("[1;37;40m", Globals.lightBlack);
+			put("[0;47;40m", Globals.lightBlack);
+			put("[1;47;40m", Globals.lightBlack);
+		}
+	};
+
+	public static final Color LIST_MERGER_NO_COMMON_VALUE_TEXT_COLOR = Globals.backgroundGrey;
+	public static final Color LIST_MERGER_NO_COMMON_VALUE_BACKGROUND_COLOR = Globals.backgroundGrey;
+	public static final Color LIST_MERGER_NORMAL_VALUE_TEXT_COLOR = Color.BLACK;
+	public static final Color LIST_MERGER_NORMAL_VALUE_BACKGROUND_COLOR = Color.BLACK;
+
+	public static final Color ICON_NODE_RENDERER_BACKGROUND_COLOR = Color.WHITE;
+
 	public static final int TOOLTIP_INITIAL_DELAY_MS = 1000;
 	public static final int TOOLTIP_DISMISS_DELAY_MS = 20000;
 	public static final int TOOLTIP_RESHOW_DELAY_MS = 0;

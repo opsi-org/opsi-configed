@@ -30,16 +30,6 @@ public class ActionRequest {
 	public static final int CUSTOM = 11;
 	public static final int LAST = CUSTOM;
 
-	// textcolors
-	public static final Color NONEcolor = Globals.INVISIBLE;
-	public static final Color SETUPcolor = Globals.actionRed;
-	public static final Color UPDATEcolor = Globals.actionRed;
-	public static final Color UNINSTALLcolor = Color.blue;
-	public static final Color ALWAYScolor = Globals.actionRed;
-	public static final Color ONCEcolor = Globals.actionRed;
-	public static final Color CUSTOMcolor = Globals.actionRed;
-	public static final Color LASTcolor = Color.black;
-
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
 	private static Map<String, String> label2displayLabel;
@@ -167,13 +157,13 @@ public class ActionRequest {
 				label2displayLabel.get("once"), label2displayLabel.get("custom"), };
 
 		label2textColor = new HashMap<>();
-		label2textColor.put("none", NONEcolor);
-		label2textColor.put("setup", SETUPcolor);
-		label2textColor.put("update", UPDATEcolor);
-		label2textColor.put("uninstall", UNINSTALLcolor);
-		label2textColor.put("always", ALWAYScolor);
-		label2textColor.put("once", ONCEcolor);
-		label2textColor.put("custom", CUSTOMcolor);
+		label2textColor.put("none", Globals.ACTION_REQUEST_NONE_COLOR);
+		label2textColor.put("setup", Globals.ACTION_REQUEST_SETUP_COLOR);
+		label2textColor.put("update", Globals.ACTION_REQUEST_UPDATE_COLOR);
+		label2textColor.put("uninstall", Globals.ACTION_REQUEST_UNINSTALL_COLOR);
+		label2textColor.put("always", Globals.ACTION_REQUEST_ALWAYS_COLOR);
+		label2textColor.put("once", Globals.ACTION_REQUEST_ONCE_COLOR);
+		label2textColor.put("custom", Globals.ACTION_REQUEST_CUSTOM_COLOR);
 
 	}
 

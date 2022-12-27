@@ -7,7 +7,6 @@
 
 package de.uib.utilities.datapanel;
 
-import java.awt.Color;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -258,7 +257,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	protected void buildPanel() {
 		splitPane = new JSplitPane();
 
-		splitPane.setBackground(Color.red);
+		splitPane.setBackground(Globals.EDIT_MAP_PANEL_GROUPED_BACKGROUND_COLOR);
 		setBackground(Globals.backNimbus);
 
 		tree = new XTree();

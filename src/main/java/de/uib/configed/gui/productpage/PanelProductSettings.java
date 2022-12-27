@@ -209,7 +209,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		tableProducts.setBackground(Globals.backgroundWhite);
 		tableProducts.setShowHorizontalLines(true);
-		tableProducts.setGridColor(Color.WHITE);
+		tableProducts.setGridColor(Globals.PANEL_PRODUCT_SETTINGS_TABLE_GRID_COLOR);
 		tableProducts.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 
 		tableProducts.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -448,7 +448,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					String val = (String) value;
 					if (val.startsWith(
 							ActionResult.getLabel2DisplayLabel().get(ActionResult.getLabel(ActionResult.FAILED))))
-						c.setForeground(Color.red);
+						c.setForeground(Globals.PANEL_PRODUCT_SETTINGS_FAILED_COLOR);
 
 					else if (val.startsWith(
 							ActionResult.getLabel2DisplayLabel().get(ActionResult.getLabel(ActionResult.SUCCESSFUL))))

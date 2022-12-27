@@ -1,6 +1,5 @@
 package de.uib.configed.gui;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -306,7 +305,7 @@ public class NewClientDialog extends FGeneralDialog
 			}
 		});
 
-		jTextNotes.setBorder(BorderFactory.createLineBorder(new Color(122, 138, 153)));
+		jTextNotes.setBorder(BorderFactory.createLineBorder(Globals.NEW_CLIENT_DIALOG_BORDER_COLOR));
 
 		JLabel labelInfoMac = new JLabel(configed.getResourceValue("NewClientDialog.infoMac"));
 		labelInfoMac.setFont(Globals.defaultFontBig);
@@ -566,7 +565,7 @@ public class NewClientDialog extends FGeneralDialog
 		final GroupLayout northLayout = new GroupLayout(northPanel);
 		northPanel.setLayout(northLayout);
 		northPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6),
-				BorderFactory.createLineBorder(new Color(122, 138, 153))));
+				BorderFactory.createLineBorder(Globals.NEW_CLIENT_DIALOG_BORDER_COLOR)));
 
 		northLayout.setHorizontalGroup(northLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
 				.addGroup(northLayout.createSequentialGroup()

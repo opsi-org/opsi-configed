@@ -2,7 +2,6 @@ package de.uib.configed.gui;
 
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -501,7 +500,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		public void paintComponent(Graphics g) {
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) 0.5));
 
-			g.setColor(new Color(230, 230, 250));
+			g.setColor(Globals.F_GENERAL_DIALOG_FADING_MIRROR_COLOR);
 			g.fillRect(0, 0, getWidth(), getHeight());
 		}
 

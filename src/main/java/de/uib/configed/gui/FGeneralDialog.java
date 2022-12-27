@@ -2,7 +2,6 @@ package de.uib.configed.gui;
 
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -72,8 +71,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	protected String iconsLog;
 
 	protected int noOfButtons = 3;
-
-	Color myHintYellow = new java.awt.Color(255, 255, 230);
 
 	int result = 1;
 	int value1 = OK;
@@ -308,7 +305,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		southPanel = new JPanel();
 		southPanel.setOpaque(false);
 
-		scrollpane.setBackground(Color.white);
+		scrollpane.setBackground(Globals.F_GENERAL_DIALOG_BACKGROUND_COLOR);
 		scrollpane.setOpaque(false);
 
 		GroupLayout southLayout = new GroupLayout(southPanel);
@@ -675,7 +672,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		public void paintComponent(Graphics g) {
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 
-			g.setColor(new Color(230, 230, 250));
+			g.setColor(Globals.F_GENERAL_DIALOG_FADING_MIRROR_COLOR);
 			g.fillRect(0, 0, getWidth(), getHeight());
 		}
 	}

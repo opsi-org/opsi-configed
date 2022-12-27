@@ -2,7 +2,6 @@ package de.uib.configed.gui;
 
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -41,13 +40,9 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	protected int preferredWidth;
 	protected int preferredHeight;
 
-	
-
 	protected int noOfButtons = 1;
 	protected int result = -1;
 	protected int DEFAULT = 0;
-
-	Color myHintYellow = new java.awt.Color(255, 255, 230);
 
 	protected JPanel jPanelButtonGrid = new JPanel();
 	protected GridLayout gridLayout1 = new GridLayout();
@@ -239,7 +234,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 		public void paintComponent(Graphics g) {
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 
-			g.setColor(new Color(230, 230, 250));
+			g.setColor(Globals.F_GENERAL_DIALOG_FADING_MIRROR_COLOR);
 			g.fillRect(0, 0, getWidth(), getHeight());
 		}
 	}

@@ -1,6 +1,5 @@
 package de.uib.configed.gui;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -32,7 +31,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		this.persist = persist;
 		setBackground(Globals.backgroundWhite);
 		setSelectionBackground(Globals.defaultTableCellSelectedBgColor);
-		setSelectionForeground(Color.black);
+		setSelectionForeground(Globals.DEPOTS_LIST_FOREGROUND_COLOR);
 
 		setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		myListCellRenderer = new MyListCellRenderer(persist);

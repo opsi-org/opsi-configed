@@ -30,8 +30,6 @@ public class ColoredTableCellRenderer extends de.uib.utilities.table.gui.Standar
 			c.setForeground(Globals.backgroundGrey);
 		}
 
-		// de.uib.utilities.swing.CellAlternatingColorizer.colorize(c, isSelected, (row
-
 		return c;
 	}
 }

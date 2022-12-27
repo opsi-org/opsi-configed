@@ -7,7 +7,6 @@
 
 package de.uib.configed.gui.hostconfigs;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -490,7 +489,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		f.setCenterPaneInScrollpane(centerPanel);
 
 		JPanel addPanel = new JPanel();
-		addPanel.setBackground(Color.YELLOW);
+		addPanel.setBackground(Globals.EDIT_MAP_PANEL_GROUPED_FOR_HOST_CONFIGS_BACKGROUND_COLOR);
 
 		f.setCenterPane(centerPanel);
 
@@ -577,7 +576,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		f.setListVisible(false);
 
 		JPanel addPanel = new JPanel();
-		addPanel.setBackground(Color.YELLOW);
+		addPanel.setBackground(Globals.EDIT_MAP_PANEL_GROUPED_FOR_HOST_CONFIGS_BACKGROUND_COLOR);
 
 		f.setCenterPane(centerPanel);
 

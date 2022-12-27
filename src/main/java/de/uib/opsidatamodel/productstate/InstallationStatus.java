@@ -26,11 +26,6 @@ public class InstallationStatus {
 
 	// compatibility mode for older opsi data, not more necessary
 
-	// textcolors
-	public static final Color NOT_INSTALLEDcolor = Globals.INVISIBLE;
-	public static final Color INSTALLEDcolor = Globals.okGreen;
-	public static final Color UNKNOWNcolor = Globals.unknownBlue;
-
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
 	private static Map<String, String> label2displayLabel;
@@ -105,13 +100,12 @@ public class InstallationStatus {
 		choiceLabels = new String[] { label2displayLabel.get("not_installed"), label2displayLabel.get("installed"),
 				label2displayLabel.get("unknown")
 
-				
 		};
 
 		label2textColor = new HashMap<>();
-		label2textColor.put("not_installed", NOT_INSTALLEDcolor);
-		label2textColor.put("installed", INSTALLEDcolor);
-		label2textColor.put("unknown", UNKNOWNcolor);
+		label2textColor.put("not_installed", Globals.INSTALLATION_STATUS_NOT_INSTALLED_COLOR);
+		label2textColor.put("installed", Globals.INSTALLATION_STATUS_INSTALLED_COLOR);
+		label2textColor.put("unknown", Globals.INSTALLATION_STATUS_UNKNOWN_COLOR);
 
 	}
 

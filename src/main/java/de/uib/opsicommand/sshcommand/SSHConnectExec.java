@@ -1,6 +1,5 @@
 package de.uib.opsicommand.sshcommand;
 
-import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -346,7 +345,7 @@ public class SSHConnectExec extends SSHConnect {
 		if (outputDialog != null)
 			if (s.length() > 0)
 				if (s != "\n") {
-					String t = outputDialog.ansiCodeInfo + s;
+					String t = outputDialog.ANSI_CODE_INFO + s;
 
 					return t;
 				}
@@ -607,7 +606,7 @@ public class SSHConnectExec extends SSHConnect {
 			final SSHOutputCollector sshOutputCollector = SSHOutputCollector.getInstance();
 
 			if (outputDialog != null) {
-				outputDialog.setStartAnsi(Color.BLACK);
+				outputDialog.setStartAnsi(Globals.SSH_CONNECTION_SET_START_ANSI);
 
 				for (String line : chunks) {
 					logging.debug(this, "process " + line);
@@ -622,7 +621,7 @@ public class SSHConnectExec extends SSHConnect {
 		protected void publishInfo(String s) {
 			if (outputDialog != null) {
 
-				outputDialog.setStartAnsi(Color.BLACK);
+				outputDialog.setStartAnsi(Globals.SSH_CONNECTION_SET_START_ANSI);
 			}
 		}
 

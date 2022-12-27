@@ -1,6 +1,5 @@
 package de.uib.configed.guidata;
 
-import java.awt.Color;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,13 +88,6 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	public static final String CONFLICTstring = Globals.CONFLICT_STATE_STRING;
 
-	public static final Color backgroundGrey = new Color(220, 220, 220);
-	public static final Color conflictBackColor = backgroundGrey;
-	public static final Color conflictTextColor = backgroundGrey;
-	public static final Color defaultBackColor = Color.white;
-	public static final Color defaultTextColor = Color.black;
-
-	final String initString = "";
 	public static final String unequalAddstring = "≠ ";
 
 	protected static Map<String, String> columnDict;
