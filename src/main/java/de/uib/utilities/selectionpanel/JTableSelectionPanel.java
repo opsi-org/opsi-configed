@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
@@ -87,7 +88,7 @@ public class JTableSelectionPanel extends JPanel
 
 	private int lastCountOfSearchWords = 0;
 
-	private TreeMap<String, Integer> rowIndexMap;
+	private NavigableMap<String, Integer> rowIndexMap;
 
 	public JTableSelectionPanel(ConfigedMain main) {
 		super();

@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
@@ -37,16 +38,16 @@ public class SWAuditClientEntry
 
 {
 	public static final String CLIENT_ID = "clientId";
-	public static final String LICENCEkEY = "licenseKey";
+	public static final String LICENCE_KEY = "licenseKey";
 	public static final String LAST_MODIFICATION = "lastseen";
 	public static final String UNINSTALL_STRING = "uninstallString";
 
 	protected final Map<String, String> data;
 	protected List<String> software;
-	protected java.util.TreeMap<String, Integer> software2Number;
+	protected NavigableMap<String, Integer> software2Number;
 	private static List<String> notFoundSoftwareIDs;
 	private static Long lastUpdateTime;
-	private static final long msAfterThisAllowNextUpdate = 60000;
+	private static final long MS_AFTER_THIS_ALLOW_NEXT_UPDATE = 60000;
 	protected Integer swId;
 	protected String swIdent;
 	protected String lastModificationS;
@@ -69,7 +70,7 @@ public class SWAuditClientEntry
 		KEYS.add(SWAuditEntry.SUBVERSION);
 		KEYS.add(SWAuditEntry.ARCHITECTURE);
 		KEYS.add(SWAuditEntry.LANGUAGE);
-		KEYS.add(LICENCEkEY);
+		KEYS.add(LICENCE_KEY);
 		KEYS.add(SWAuditEntry.WINDOWSsOFTWAREid);
 	}
 
@@ -81,7 +82,7 @@ public class SWAuditClientEntry
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.VERSION);
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.ARCHITECTURE);
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.LANGUAGE);
-		KEYS_FOR_GUI_TABLES.add(LICENCEkEY);
+		KEYS_FOR_GUI_TABLES.add(LICENCE_KEY);
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.WINDOWSsOFTWAREid);
 	}
 
@@ -96,7 +97,7 @@ public class SWAuditClientEntry
 
 		locale.put(SWAuditEntry.ARCHITECTURE, configed.getResourceValue("PanelSWInfo.tableheader_architecture"));
 		locale.put(SWAuditEntry.LANGUAGE, configed.getResourceValue("PanelSWInfo.tableheader_displayLanguage"));
-		locale.put(LICENCEkEY, configed.getResourceValue("PanelSWInfo.tableheader_displayLicenseKey"));
+		locale.put(LICENCE_KEY, configed.getResourceValue("PanelSWInfo.tableheader_displayLicenseKey"));
 		locale.put(SWAuditEntry.WINDOWSsOFTWAREid, configed.getResourceValue("PanelSWInfo.tableheader_softwareId"));
 	}
 
@@ -110,7 +111,7 @@ public class SWAuditClientEntry
 		DB_COLUMNS.put(SWAuditEntry.SUBVERSION, DB_TABLE_NAME + "." + "subVersion");
 		DB_COLUMNS.put(SWAuditEntry.ARCHITECTURE, DB_TABLE_NAME + "." + "architecture");
 		DB_COLUMNS.put(SWAuditEntry.LANGUAGE, DB_TABLE_NAME + "." + "language");
-		DB_COLUMNS.put(LICENCEkEY, DB_TABLE_NAME + "." + "licenseKey");
+		DB_COLUMNS.put(LICENCE_KEY, DB_TABLE_NAME + "." + "licenseKey");
 		DB_COLUMNS.put(LAST_MODIFICATION, DB_TABLE_NAME + "." + "lastseen");
 
 	}
@@ -132,7 +133,7 @@ public class SWAuditClientEntry
 		data = new HashMap<>();
 
 		data.put(SWAuditEntry.id, values.get(keys.indexOf(DB_COLUMNS.get(CLIENT_ID))));
-		data.put(LICENCEkEY, values.get(keys.indexOf(DB_COLUMNS.get(LICENCEkEY))));
+		data.put(LICENCE_KEY, values.get(keys.indexOf(DB_COLUMNS.get(LICENCE_KEY))));
 
 		lastModificationS = values.get(keys.indexOf(DB_COLUMNS.get(LAST_MODIFICATION)));
 		swIdent = produceSWident(keys, values);
@@ -161,7 +162,7 @@ public class SWAuditClientEntry
 		this.software = controller.getSoftwareList();
 		this.software2Number = controller.getSoftware2Number();
 		produceSWid();
-		data.put(LICENCEkEY, Globals.produceNonNull(m.get(LICENCEkEY)));
+		data.put(LICENCE_KEY, Globals.produceNonNull(m.get(LICENCE_KEY)));
 		lastModificationS = Globals.produceNonNull(m.get(LAST_MODIFICATION));
 
 	}
@@ -207,7 +208,7 @@ public class SWAuditClientEntry
 
 	protected void updateSoftware() {
 		logging.info(this, "updateSoftware");
-		if (lastUpdateTime != null && (System.currentTimeMillis() - lastUpdateTime > msAfterThisAllowNextUpdate)) {
+		if (lastUpdateTime != null && (System.currentTimeMillis() - lastUpdateTime > MS_AFTER_THIS_ALLOW_NEXT_UPDATE)) {
 			controller.installedSoftwareInformationRequestRefresh();
 			software = controller.getSoftwareList();
 			lastUpdateTime = System.currentTimeMillis();
@@ -275,14 +276,12 @@ public class SWAuditClientEntry
 	}
 
 	public static String produceSWident(Map<String, Object> readMap) {
-		String result = Globals
-				.pseudokey(new String[] { (String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME)),
-						(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION)),
-						(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.SUBVERSION)),
-						(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE)),
-						(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.ARCHITECTURE)) });
+		return Globals.pseudokey(new String[] { (String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME)),
+				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION)),
+				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.SUBVERSION)),
+				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE)),
+				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.ARCHITECTURE)) });
 
-		return result;
 	}
 
 	public String getClientId() {
@@ -290,7 +289,7 @@ public class SWAuditClientEntry
 	}
 
 	public String getLicenceKey() {
-		return data.get(data.get(LICENCEkEY));
+		return data.get(data.get(LICENCE_KEY));
 	}
 
 	public String getLastModification() {

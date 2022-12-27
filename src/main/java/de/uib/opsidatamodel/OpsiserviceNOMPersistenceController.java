@@ -38,6 +38,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
@@ -134,10 +135,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	/* ------------------------------------------ */
 
-	public static final String nameRequirementTypeBefore = "before";
-	public static final String nameRequirementTypeAfter = "after";
-	public static final String nameRequirementTypeNeutral = "";
-	public static final String nameRequirementTypeOnDeinstall = "on_deinstall";
+	public static final String NAME_REQUIREMENT_TYPE_BEFORE = "before";
+	public static final String NAME_REQUIREMENT_TYPE_AFTER = "after";
+	public static final String NAME_REQUIREMENT_TYPE_NEUTRAL = "";
+	public static final String NAME_REQUIREMENT_TYPE_ON_DEINSTALL = "on_deinstall";
 
 	public static final String[] LICENSE_TYPES = new String[] { "VOLUME", "OEM", "RETAIL", "CONCURRENT" };
 
@@ -202,7 +203,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	protected Map<String, Map<String, Object>> rowsLicencesReconciliation;
 
-	protected TreeMap<String, LicenceStatisticsRow> rowsLicenceStatistics;
+	protected NavigableMap<String, LicenceStatisticsRow> rowsLicenceStatistics;
 
 	protected Map<String, Set<String>> swId2clients;
 
@@ -4295,7 +4296,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return retrieveListOfMapsNOM(callAttributes, callFilter, methodName);
 	}
 
-	List<Map<String, Object>> retrieveListOfMapsNOM(String[] callAttributes, HashMap callFilter, String methodName) {
+	List<Map<String, Object>> retrieveListOfMapsNOM(String[] callAttributes, Map callFilter, String methodName) {
 		List<Map<String, Object>> retrieved = exec
 				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { callAttributes, callFilter }));
 		logging.debug(this, "retrieveListOfMapsNOM " + retrieved);
@@ -4838,7 +4839,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			logging.debug(this, " dependency map : " + aDependency);
 
-			if (requirementType.equals(nameRequirementTypeOnDeinstall)
+			if (requirementType.equals(NAME_REQUIREMENT_TYPE_ON_DEINSTALL)
 					// we demand information for this type,
 					// this is not specified by type in the dependency map
 					// but only by the action value
@@ -4858,8 +4859,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				if (
 
-				(requirementType.equals(nameRequirementTypeNeutral) || requirementType.equals(nameRequirementTypeBefore)
-						|| requirementType.equals(nameRequirementTypeAfter))
+				(requirementType.equals(NAME_REQUIREMENT_TYPE_NEUTRAL)
+						|| requirementType.equals(NAME_REQUIREMENT_TYPE_BEFORE)
+						|| requirementType.equals(NAME_REQUIREMENT_TYPE_AFTER))
 
 						&& (((String) (aDependency.get("action"))).equals(ActionRequest.getLabel(ActionRequest.SETUP))
 								|| ((String) (aDependency.get("action")))
@@ -4890,19 +4892,19 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	public Map<String, String> getProductPreRequirements(String depotId, String productname) {
-		return getProductRequirements(depotId, productname, nameRequirementTypeBefore);
+		return getProductRequirements(depotId, productname, NAME_REQUIREMENT_TYPE_BEFORE);
 	}
 
 	public Map<String, String> getProductRequirements(String depotId, String productname) {
-		return getProductRequirements(depotId, productname, nameRequirementTypeNeutral);
+		return getProductRequirements(depotId, productname, NAME_REQUIREMENT_TYPE_NEUTRAL);
 	}
 
 	public Map<String, String> getProductPostRequirements(String depotId, String productname) {
-		return getProductRequirements(depotId, productname, nameRequirementTypeAfter);
+		return getProductRequirements(depotId, productname, NAME_REQUIREMENT_TYPE_AFTER);
 	}
 
 	public Map<String, String> getProductDeinstallRequirements(String depotId, String productname) {
-		return getProductRequirements(depotId, productname, nameRequirementTypeOnDeinstall);
+		return getProductRequirements(depotId, productname, NAME_REQUIREMENT_TYPE_ON_DEINSTALL);
 	}
 
 	public void productpropertiesRequestRefresh() {
@@ -5851,7 +5853,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return dataStub.getInstalledSoftwareInformation();
 	}
 
-	public TreeMap<String, Set<String>> getName2SWIdents() {
+	public NavigableMap<String, Set<String>> getName2SWIdents() {
 		return dataStub.getName2SWIdents();
 	}
 
@@ -5861,7 +5863,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	public TreeMap<String, Map<String, String>> getInstalledSoftwareName2SWinfo()
+	public NavigableMap<String, Map<String, String>> getInstalledSoftwareName2SWinfo()
 	// only software relevant of the items for licensing
 	{
 		return dataStub.getInstalledSoftwareName2SWinfo();
@@ -5881,7 +5883,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return dataStub.getSoftwareList();
 	}
 
-	public TreeMap<String, Integer> getSoftware2Number() {
+	public NavigableMap<String, Integer> getSoftware2Number() {
 		return dataStub.getSoftware2Number();
 	}
 
@@ -5893,13 +5895,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	public TreeMap<String, TreeSet<String>> getLicenceContractsExpired() {
+	public NavigableMap<String, NavigableSet<String>> getLicenceContractsExpired() {
 		dataStub.licenceContractsRequestRefresh();
 		return dataStub.getLicenceContractsToNotify();
 	}
 
 	@Override
-	public TreeMap<String, TreeSet<String>> getLicenceContractsToNotify()
+	public NavigableMap<String, NavigableSet<String>> getLicenceContractsToNotify()
 	// date in sql time format, contrad ID
 	{
 		dataStub.licenceContractsRequestRefresh();

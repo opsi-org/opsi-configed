@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -55,11 +56,11 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	protected JLabel labelForRightPane;
 	protected SimpleTreeModel treemodel;
 
-	protected TreeMap<String, String> givenClasses;
+	protected NavigableMap<String, String> givenClasses;
 	protected NavigableSet<String> keyclasses;
 	protected Map<String, String> tooltips4Keys;
 	protected Map<String, AbstractEditMapPanel> partialPanels;
-	protected TreeMap<String, Map<String, Object>> virtualLines;
+	protected NavigableMap<String, Map<String, Object>> virtualLines;
 
 	protected int hGap = Globals.HGAP_SIZE / 2;
 	protected int vGap = Globals.VGAP_SIZE / 2;

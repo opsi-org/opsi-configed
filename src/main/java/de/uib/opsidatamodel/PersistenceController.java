@@ -16,10 +16,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.Vector;
 
 import org.json.JSONObject;
@@ -478,7 +478,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	/* software info */
 	public abstract List<String> getSoftwareList();
 
-	public abstract TreeMap<String, Integer> getSoftware2Number();
+	public abstract NavigableMap<String, Integer> getSoftware2Number();
 
 	public abstract Map getSoftwareInfo(String clientId);
 
@@ -745,7 +745,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract Map<String, Map<String, String>> getInstalledSoftwareName2SWinfo();
 
-	public abstract TreeMap<String, Set<String>> getName2SWIdents();
+	public abstract NavigableMap<String, Set<String>> getName2SWIdents();
 
 	public abstract void installedSoftwareInformationRequestRefresh();
 
@@ -754,10 +754,10 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	/* licences */
 	public abstract Map<String, LicenceContractEntry> getLicenceContracts();
 
-	public abstract TreeMap<String, TreeSet<String>> getLicenceContractsExpired();
+	public abstract NavigableMap<String, NavigableSet<String>> getLicenceContractsExpired();
 	// date in sql time format, contrad ID
 
-	public abstract TreeMap<String, TreeSet<String>> getLicenceContractsToNotify();
+	public abstract NavigableMap<String, NavigableSet<String>> getLicenceContractsToNotify();
 	// date in sql time format, contrad ID
 
 	// returns the ID of the edited data record

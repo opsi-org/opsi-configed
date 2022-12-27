@@ -16,8 +16,9 @@ package de.uib.configed.dashboard;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.NavigableSet;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 
@@ -110,8 +111,8 @@ public class LicenseDisplayer {
 
 	protected String showLicenceContractWarnings() {
 		StringBuffer result = new StringBuffer();
-		TreeMap<String, TreeSet<String>> contractsExpired = persist.getLicenceContractsExpired();
-		TreeMap<String, TreeSet<String>> contractsToNotify = persist.getLicenceContractsToNotify();
+		NavigableMap<String, NavigableSet<String>> contractsExpired = persist.getLicenceContractsExpired();
+		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenceContractsToNotify();
 
 		logging.info(this, "contractsExpired " + contractsExpired);
 		logging.info(this, "contractsToNotify " + contractsToNotify);
@@ -120,7 +121,7 @@ public class LicenseDisplayer {
 		result.append(configed.getResourceValue("Dash.expiredContracts"));
 		result.append(":  \n");
 
-		for (Map.Entry<String, TreeSet<String>> entry : contractsExpired.entrySet()) {
+		for (Map.Entry<String, NavigableSet<String>> entry : contractsExpired.entrySet()) {
 			for (String ID : entry.getValue()) {
 				result.append(entry.getValue() + ": " + ID);
 				result.append("\n");
@@ -132,7 +133,7 @@ public class LicenseDisplayer {
 		result.append(configed.getResourceValue("Dash.contractsToNotify"));
 		result.append(":  \n");
 
-		for (Map.Entry<String, TreeSet<String>> entry : contractsToNotify.entrySet()) {
+		for (Map.Entry<String, NavigableSet<String>> entry : contractsToNotify.entrySet()) {
 			for (String ID : entry.getValue()) {
 				result.append(entry.getValue() + ": " + ID);
 				result.append("\n");

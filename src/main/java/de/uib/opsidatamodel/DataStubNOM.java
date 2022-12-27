@@ -17,6 +17,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -574,16 +576,16 @@ public class DataStubNOM extends DataStub {
 		return result;
 	}
 
-	protected TreeMap<String, List<HWAuditClientEntry>> client2hwAuditHostEntries;
-	protected TreeMap<String, Map<String, List<HWAuditClientEntry>>> client2hwType2hwAuditHostEntries;
+	protected NavigableMap<String, List<HWAuditClientEntry>> client2hwAuditHostEntries;
+	protected NavigableMap<String, Map<String, List<HWAuditClientEntry>>> client2hwType2hwAuditHostEntries;
 
-	protected TreeMap<String, SWAuditEntry> installedSoftwareInformation;
-	protected TreeMap<String, SWAuditEntry> installedSoftwareInformationForLicensing;
-	protected TreeMap<String, Set<String>> name2SWIdents; // giving the idents which have the name in their ident
-	protected TreeMap<String, Map<String, String>> installedSoftwareName2SWinfo;
-	protected TreeMap<String, Map<String, Map<String, String>>> name2ident2infoWithPool;
+	protected NavigableMap<String, SWAuditEntry> installedSoftwareInformation;
+	protected NavigableMap<String, SWAuditEntry> installedSoftwareInformationForLicensing;
+	protected NavigableMap<String, Set<String>> name2SWIdents; // giving the idents which have the name in their ident
+	protected NavigableMap<String, Map<String, String>> installedSoftwareName2SWinfo;
+	protected NavigableMap<String, Map<String, Map<String, String>>> name2ident2infoWithPool;
 	protected List<String> softwareList; // List of idents of software
-	protected TreeMap<String, Integer> software2Number; // the same with a numbering index
+	protected NavigableMap<String, Integer> software2Number; // the same with a numbering index
 
 	@Override
 	public void installedSoftwareInformationRequestRefresh() {
@@ -599,7 +601,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	@Override
-	public TreeMap<String, Integer> getSoftware2Number() {
+	public NavigableMap<String, Integer> getSoftware2Number() {
 		retrieveInstalledSoftwareInformation();
 		return software2Number;
 	}
@@ -638,25 +640,25 @@ public class DataStubNOM extends DataStub {
 	}
 
 	@Override
-	public TreeMap<String, SWAuditEntry> getInstalledSoftwareInformation() {
+	public NavigableMap<String, SWAuditEntry> getInstalledSoftwareInformation() {
 		retrieveInstalledSoftwareInformation();
 		return installedSoftwareInformation;
 	}
 
 	@Override
-	public TreeMap<String, SWAuditEntry> getInstalledSoftwareInformationForLicensing() {
+	public NavigableMap<String, SWAuditEntry> getInstalledSoftwareInformationForLicensing() {
 		retrieveInstalledSoftwareInformation();
 		return installedSoftwareInformationForLicensing;
 	}
 
 	@Override
-	public TreeMap<String, Map<String, String>> getInstalledSoftwareName2SWinfo() {
+	public NavigableMap<String, Map<String, String>> getInstalledSoftwareName2SWinfo() {
 		retrieveInstalledSoftwareInformation();
 		return installedSoftwareName2SWinfo;
 	}
 
 	@Override
-	public TreeMap<String, Set<String>> getName2SWIdents() {
+	public NavigableMap<String, Set<String>> getName2SWIdents() {
 		retrieveInstalledSoftwareInformation();
 		return name2SWIdents;
 	}
@@ -899,7 +901,7 @@ public class DataStubNOM extends DataStub {
 				logging.info(this, "retrieveSoftwareAuditOnClients, start a request");
 
 				String[] callAttributes = new String[] {};
-				HashMap callFilter = new HashMap<>();
+				Map callFilter = new HashMap<>();
 				callFilter.put("state", 1);
 				if (newClients != null)
 					callFilter.put("clientId", persist.exec.jsonArray(clientListForCall));
@@ -1061,7 +1063,7 @@ public class DataStubNOM extends DataStub {
 
 	}
 
-	protected TreeMap<String, LicencepoolEntry> licencepools;
+	protected NavigableMap<String, LicencepoolEntry> licencepools;
 
 	@Override
 	public void licencepoolsRequestRefresh() {
@@ -1100,9 +1102,9 @@ public class DataStubNOM extends DataStub {
 
 	protected java.util.Map<String, LicenceContractEntry> licenceContracts;
 
-	protected TreeMap<String, TreeSet<String>> contractsExpired;
+	protected NavigableMap<String, NavigableSet<String>> contractsExpired;
 	// date in sql time format, contrad ID
-	protected TreeMap<String, TreeSet<String>> contractsToNotify;
+	protected NavigableMap<String, NavigableSet<String>> contractsToNotify;
 	// date in sql time format, contrad ID
 
 	@Override
@@ -1121,7 +1123,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	@Override
-	public TreeMap<String, TreeSet<String>> getLicenceContractsExpired()
+	public NavigableMap<String, NavigableSet<String>> getLicenceContractsExpired()
 	// date in sql time format, contrad ID
 	{
 		retrieveLicenceContracts();
@@ -1129,7 +1131,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	@Override
-	public TreeMap<String, TreeSet<String>> getLicenceContractsToNotify()
+	public NavigableMap<String, NavigableSet<String>> getLicenceContractsToNotify()
 	// date in sql time format, contrad ID
 	{
 		retrieveLicenceContracts();
@@ -1159,7 +1161,7 @@ public class DataStubNOM extends DataStub {
 
 				String notiDate = entry.get(Table_LicenceContracts.notificationDateKEY);
 				if (notiDate != null && (notiDate.trim().length() > 0) && notiDate.compareTo(today) <= 0) {
-					TreeSet<String> contractSet = contractsToNotify.get(notiDate);
+					NavigableSet<String> contractSet = contractsToNotify.get(notiDate);
 
 					if (contractSet == null) {
 						contractSet = new TreeSet<>();
@@ -1171,7 +1173,7 @@ public class DataStubNOM extends DataStub {
 
 				String expireDate = entry.get(Table_LicenceContracts.expirationDateKEY);
 				if (expireDate != null && (expireDate.trim().length() > 0) && expireDate.compareTo(today) <= 0) {
-					TreeSet<String> contractSet = contractsExpired.get(expireDate);
+					NavigableSet<String> contractSet = contractsExpired.get(expireDate);
 
 					if (contractSet == null) {
 						contractSet = new TreeSet<>();

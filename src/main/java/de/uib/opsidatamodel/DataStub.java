@@ -30,8 +30,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.NavigableSet;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 
@@ -90,17 +91,17 @@ public abstract class DataStub {
 
 	public abstract List<String> getSoftwareList();
 
-	public abstract TreeMap<String, Integer> getSoftware2Number();
+	public abstract NavigableMap<String, Integer> getSoftware2Number();
 
 	public abstract String getSWident(Integer i);
 
-	public abstract TreeMap<String, SWAuditEntry> getInstalledSoftwareInformation();
+	public abstract NavigableMap<String, SWAuditEntry> getInstalledSoftwareInformation();
 
-	public abstract TreeMap<String, SWAuditEntry> getInstalledSoftwareInformationForLicensing();
+	public abstract NavigableMap<String, SWAuditEntry> getInstalledSoftwareInformationForLicensing();
 
-	public abstract TreeMap<String, Set<String>> getName2SWIdents();
+	public abstract NavigableMap<String, Set<String>> getName2SWIdents();
 
-	public abstract TreeMap<String, Map<String, String>> getInstalledSoftwareName2SWinfo();
+	public abstract NavigableMap<String, Map<String, String>> getInstalledSoftwareName2SWinfo();
 
 	public abstract void softwareAuditOnClientsRequestRefresh();
 
@@ -129,10 +130,10 @@ public abstract class DataStub {
 
 	public abstract Map<String, LicenceContractEntry> getLicenceContracts();
 
-	public abstract TreeMap<String, TreeSet<String>> getLicenceContractsExpired();
+	public abstract NavigableMap<String, NavigableSet<String>> getLicenceContractsExpired();
 	// date in sql time format, contrad ID
 
-	public abstract TreeMap<String, TreeSet<String>> getLicenceContractsToNotify();
+	public abstract NavigableMap<String, NavigableSet<String>> getLicenceContractsToNotify();
 	// date in sql time format, contrad ID
 
 	public abstract void licencesRequestRefresh();
