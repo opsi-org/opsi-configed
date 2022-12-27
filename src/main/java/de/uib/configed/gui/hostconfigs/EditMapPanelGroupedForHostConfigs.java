@@ -588,7 +588,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 			logging.info(this, "deleteUser path " + p);
 
 			int startComponentI = getUserStartIndex();
-			StringBuffer keyB = new StringBuffer(p.getPathComponent(startComponentI).toString());
+			StringBuilder keyB = new StringBuilder(p.getPathComponent(startComponentI).toString());
 			startComponentI++;
 			for (int i = startComponentI; i < p.getPathCount(); i++) {
 				keyB.append(".");

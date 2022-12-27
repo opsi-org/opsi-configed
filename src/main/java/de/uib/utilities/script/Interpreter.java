@@ -32,7 +32,7 @@ public class Interpreter {
 
 		StringTokenizer tok = new StringTokenizer(cmd, blankDelims + citMarks, true);
 
-		StringBuffer partBuff = null;
+		StringBuilder partBuff = null;
 
 		while (tok.hasMoreTokens()) {
 			String s = tok.nextToken();
@@ -40,7 +40,7 @@ public class Interpreter {
 			if (citMarks.indexOf(s) > -1) {
 				if (partBuff == null) {
 					// start of citation
-					partBuff = new StringBuffer();
+					partBuff = new StringBuilder();
 					lastCitMark = s;
 				} else {
 					if (s.equals(lastCitMark))

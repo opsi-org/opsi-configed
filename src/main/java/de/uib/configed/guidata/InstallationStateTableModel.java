@@ -730,7 +730,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 			logging.info(this, "required by product " + productId + " but missing " + missingProducts);
 
-			StringBuffer lines = new StringBuffer();
+			StringBuilder lines = new StringBuilder();
 
 			lines.append(configed.getResourceValue("InstallationStateTableModel.requiredByProduct"));
 			lines.append("\n");
@@ -764,7 +764,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		if (!missingImplementationForAR.isEmpty()) {
 
-			StringBuffer products = new StringBuffer("\n\n\n");
+			StringBuilder products = new StringBuilder("\n\n\n");
 			for (String prod : missingImplementationForAR) {
 				products.append(prod);
 				products.append("\n");

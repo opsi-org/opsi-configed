@@ -398,7 +398,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	public void doCopySelectedClients() {
 		String[] clients_list = main.getSelectedClients();
 		if (clients_list.length > 0) {
-			StringBuffer clients = new StringBuffer();
+			StringBuilder clients = new StringBuilder();
 			for (String c : clients_list) {
 				clients.append(c);
 				clients.append(" ");

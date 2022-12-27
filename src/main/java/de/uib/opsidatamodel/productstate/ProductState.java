@@ -176,7 +176,7 @@ public class ProductState extends HashMap<String, String> {
 	private void setTransforms() {
 
 		// transformed values
-		StringBuffer installationInfo = new StringBuffer();
+		StringBuilder installationInfo = new StringBuilder();
 		// the reverse will be found in in setInstallationInfo in
 		// InstallationStateTableModel
 

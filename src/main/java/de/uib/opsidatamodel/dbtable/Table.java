@@ -39,7 +39,7 @@ public class Table {
 	}
 
 	protected String valueAssertion(String key, String value) {
-		StringBuffer sb = new StringBuffer("");
+		StringBuilder sb = new StringBuilder("");
 		sb.append(key);
 		sb.append("=");
 		sb.append("'");
@@ -56,7 +56,7 @@ public class Table {
 		if (keys == null || keys.length == 0)
 			return null;
 
-		StringBuffer sb = new StringBuffer("(");
+		StringBuilder sb = new StringBuilder("(");
 		sb.append(valueAssertion(keys[0], rowMap.get(keys[0])));
 
 		for (int i = 1; i < keys.length; i++) {

@@ -333,7 +333,7 @@ public class Empty_Command implements SSHCommand {
 	 */
 	@Override
 	public String toString() {
-		StringBuffer com = new StringBuffer("{");
+		StringBuilder com = new StringBuilder("{");
 		com.append(factory.command_map_id).append(":").append(getId()).append(",");
 		com.append(factory.command_map_parentMenuText).append(":").append(getParentMenuText()).append(",");
 		com.append(factory.command_map_menuText).append(":").append(getMenuText()).append(",");

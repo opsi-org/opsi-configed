@@ -96,7 +96,7 @@ public class DataStubRawData extends DataStubNOM {
 		if (values == null || values.isEmpty())
 			return "true";
 
-		StringBuffer result = new StringBuffer(colName + " = '" + values.get(0) + "'");
+		StringBuilder result = new StringBuilder(colName + " = '" + values.get(0) + "'");
 
 		int lineCount = 0;
 
@@ -447,8 +447,8 @@ public class DataStubRawData extends DataStubNOM {
 		Vector<String> specificColumns = new Vector<>(); // columns specific for the class
 		specificColumns.add(Host.idColumn);
 
-		StringBuffer buf = new StringBuffer("select HOST.hostId, ");
-		StringBuffer cols = new StringBuffer("");
+		StringBuilder buf = new StringBuilder("select HOST.hostId, ");
+		StringBuilder cols = new StringBuilder("");
 
 		String deviceTable = persist.hwInfo_DEVICE + hwClass;
 		String configTable = persist.hwInfo_CONFIG + hwClass;

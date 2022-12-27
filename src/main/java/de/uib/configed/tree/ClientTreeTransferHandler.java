@@ -192,7 +192,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	@Override
 	protected Transferable createTransferable(JComponent c) {
 
-		StringBuffer buff = new StringBuffer();
+		StringBuilder buff = new StringBuilder();
 		Iterator iterPaths = tree.getActivePaths().iterator();
 
 		while (iterPaths.hasNext()) {

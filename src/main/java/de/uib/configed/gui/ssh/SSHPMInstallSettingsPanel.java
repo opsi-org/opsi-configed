@@ -199,7 +199,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 			} else if (selectedDepots.contains(PersistenceController.DEPOT_SELECTION_ALL)) {
 				depotParameter = "all";
 			} else {
-				StringBuffer sb = new StringBuffer();
+				StringBuilder sb = new StringBuilder();
 				for (String s : selectedDepots) {
 					sb.append(s);
 					sb.append(",");

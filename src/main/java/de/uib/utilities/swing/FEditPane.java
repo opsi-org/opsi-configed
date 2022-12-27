@@ -298,7 +298,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			f.init(new Dimension(300, 200));
 			f.setVisible(true);
 
-			StringBuffer buf = new StringBuffer();
+			StringBuilder buf = new StringBuilder();
 			for (int i = 0; i < args.length; i++) {
 				buf.append(args[i]);
 				buf.append("\n");

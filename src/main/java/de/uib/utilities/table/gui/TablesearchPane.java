@@ -860,7 +860,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		while (!found && viewrow < targetModel.getRowCount()) {
 			if (combineCols) // only fulltext
 			{
-				StringBuffer buffRow = new StringBuffer();
+				StringBuilder buffRow = new StringBuilder();
 
 				for (int j = 0; j < targetModel.getColumnCount(); j++) {
 

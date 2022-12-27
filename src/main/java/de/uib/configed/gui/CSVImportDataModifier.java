@@ -89,7 +89,7 @@ public class CSVImportDataModifier {
 			logging.error(this, "Failed to read CSV file");
 		} catch (CSVException ex) {
 			String title = "";
-			StringBuffer message = new StringBuffer("");
+			StringBuilder message = new StringBuilder("");
 
 			if (ex instanceof CSVParserException) {
 				title = configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.title");

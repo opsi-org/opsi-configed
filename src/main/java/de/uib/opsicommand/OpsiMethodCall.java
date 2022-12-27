@@ -105,7 +105,7 @@ public class OpsiMethodCall {
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer("{");
+		StringBuilder sb = new StringBuilder("{");
 		sb.append("rpcpath=");
 		sb.append(rpcPath);
 		sb.append(", ");
@@ -149,7 +149,7 @@ public class OpsiMethodCall {
 	}
 
 	public String getCommandLineString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append(methodname);
 		sb.append("(");
 		if (parameters.length > 0) {

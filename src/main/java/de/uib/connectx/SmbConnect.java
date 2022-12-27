@@ -54,7 +54,7 @@ public class SmbConnect {
 	}
 
 	public static String unixPath(String[] parts) {
-		StringBuffer buf = new StringBuffer("");
+		StringBuilder buf = new StringBuilder("");
 		if (parts != null) {
 			for (int i = 0; i < parts.length - 1; i++) {
 				buf.append(parts[i]);

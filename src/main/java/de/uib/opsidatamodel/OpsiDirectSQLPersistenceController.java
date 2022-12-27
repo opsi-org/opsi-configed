@@ -78,7 +78,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 		if (values == null || values.length == 0)
 			return "true";
 
-		StringBuffer result = new StringBuffer(colName + " = '" + values[0] + "'");
+		StringBuilder result = new StringBuilder(colName + " = '" + values[0] + "'");
 
 		int lineCount = 0;
 
@@ -280,7 +280,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 		while (goOn) {
 			logging.info(this, "cleanUpAuditSoftware remove entries from " + portionStart);
 
-			StringBuffer condition = new StringBuffer();
+			StringBuilder condition = new StringBuilder();
 
 			boolean logNext = true;
 

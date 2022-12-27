@@ -69,7 +69,7 @@ public class ControlDash {
 			message = "";
 			showInfo();
 
-			StringBuffer mess = new StringBuffer();
+			StringBuilder mess = new StringBuilder();
 
 			mess.append(configed.getResourceValue("Dash.topicLicences1"));
 			mess.append("\n");

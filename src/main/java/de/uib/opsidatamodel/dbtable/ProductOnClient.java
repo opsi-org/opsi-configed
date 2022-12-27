@@ -43,7 +43,7 @@ public class ProductOnClient extends Table {
 		primaryKey.add(PRODUCTid);
 		primaryKey.add(PRODUCTtype);
 
-		StringBuffer sb = new StringBuffer("");
+		StringBuilder sb = new StringBuilder("");
 		for (String key : primaryKey) {
 			sb.append(key);
 			sb.append(";");

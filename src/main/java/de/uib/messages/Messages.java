@@ -77,7 +77,7 @@ public class Messages {
 		if (s == null)
 			return -1;
 
-		StringBuffer allowed = new StringBuffer();
+		StringBuilder allowed = new StringBuilder();
 
 		for (int j = 0; j < 10; j++)
 			allowed.append("" + j);

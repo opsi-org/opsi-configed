@@ -471,7 +471,7 @@ public class Globals {
 		if (s.length() > len)
 			return s;
 
-		StringBuffer buff = new StringBuffer(len);
+		StringBuilder buff = new StringBuilder(len);
 		for (int i = 0; i < s.length(); i++)
 			buff.append(s.charAt(i));
 
@@ -672,7 +672,7 @@ public class Globals {
 	private static final int UNCERTAINTY = 20;
 
 	public static String wrapToHTML(String s) {
-		StringBuffer result = new StringBuffer("<html>");
+		StringBuilder result = new StringBuilder("<html>");
 		String remainder = s;
 		while (remainder.length() > 0) {
 			logging.debug("Globals, remainder " + remainder);
@@ -836,7 +836,7 @@ public class Globals {
 
 		final int maxLineLength = 80;
 
-		StringBuffer b = new StringBuffer("<html>");
+		StringBuilder b = new StringBuilder("<html>");
 		int charsInLine = 0;
 		boolean indentDone = false;
 		int lineIndent = 0;

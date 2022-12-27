@@ -68,7 +68,7 @@ public class LicenseDisplayer {
 			message = "";
 			showInfo();
 
-			StringBuffer mess = new StringBuffer();
+			StringBuilder mess = new StringBuilder();
 
 			mess.append(showLicenceContractWarnings());
 			mess.append(calculateVariantLicencepools());
@@ -107,7 +107,7 @@ public class LicenseDisplayer {
 	}
 
 	protected String showLicenceContractWarnings() {
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		NavigableMap<String, NavigableSet<String>> contractsExpired = persist.getLicenceContractsExpired();
 		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenceContractsToNotify();
 
@@ -141,7 +141,7 @@ public class LicenseDisplayer {
 	}
 
 	protected String calculateVariantLicencepools() {
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		GenTableModel modelSWnames;
 
 		Vector<String> columnNames;

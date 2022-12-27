@@ -46,7 +46,7 @@ public class FOpsiLicenseMissingText extends FTextArea {
 			messages.add(message);
 		}
 
-		StringBuffer combined = new StringBuffer("");
+		StringBuilder combined = new StringBuilder("");
 
 		for (String s : messages) {
 			combined.append("_____________________________\n");

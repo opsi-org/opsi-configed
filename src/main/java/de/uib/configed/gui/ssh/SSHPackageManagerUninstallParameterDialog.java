@@ -144,7 +144,7 @@ public class SSHPackageManagerUninstallParameterDialog
 			if (selectedDepots.contains(PersistenceController.DEPOT_SELECTION_NODEPOTS)) {
 				depotParameter = PersistenceController.DEPOT_SELECTION_NODEPOTS;
 			} else if (selectedDepots.contains(PersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED)) {
-				StringBuffer sb = new StringBuffer();
+				StringBuilder sb = new StringBuilder();
 				int startIndex = possibleDepots.indexOf(PersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
 
 				for (int i = startIndex + 1; i < possibleDepots.size() - 1; i++) {
@@ -155,7 +155,7 @@ public class SSHPackageManagerUninstallParameterDialog
 				sb.append(possibleDepots.get(possibleDepots.size() - 1));
 				depotParameter = sb.toString();
 			} else {
-				StringBuffer sb = new StringBuffer();
+				StringBuilder sb = new StringBuilder();
 				for (String s : selectedDepots) {
 					sb.append(s);
 					sb.append(",");

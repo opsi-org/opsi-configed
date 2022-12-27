@@ -18,7 +18,7 @@ public class CheckedDocument extends PlainDocument {
 		this.size = realSize;
 	}
 
-	public boolean appendCharIfAllowed(StringBuffer s, char c) {
+	public boolean appendCharIfAllowed(StringBuilder s, char c) {
 		char cCorrected = c;
 
 		if (allowedChars == null)
@@ -48,7 +48,7 @@ public class CheckedDocument extends PlainDocument {
 			return "";
 
 		char[] startchars = s.toCharArray();
-		StringBuffer textBuf = new StringBuffer();
+		StringBuilder textBuf = new StringBuilder();
 
 		for (int i = 0; i < startchars.length; i++) {
 			appendCharIfAllowed(textBuf, startchars[i]);

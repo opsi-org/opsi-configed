@@ -2264,7 +2264,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (getSelectedClients() == null || getSelectedClients().length == 0)
 			return "";
 
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		int stop = getSelectedClients().length;
 		if (max != null && stop > max)
 			stop = max;
@@ -4616,7 +4616,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		fChangeDepotForClients.setLineWrap(false);
 
-		StringBuffer messageBuffer = new StringBuffer(
+		StringBuilder messageBuffer = new StringBuilder(
 				"\n" + configed.getResourceValue("ConfigedMain.fChangeDepotForClients.Moving") + ": \n\n");
 
 		for (int i = 0; i < getSelectedClients().length; i++) {

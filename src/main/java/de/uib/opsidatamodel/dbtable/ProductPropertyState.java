@@ -32,7 +32,7 @@ public class ProductPropertyState extends Table {
 		primaryKey = new ArrayList<>();
 		primaryKey.add("product_property_state_id");
 
-		StringBuffer sb = new StringBuffer("");
+		StringBuilder sb = new StringBuilder("");
 		for (String key : primaryKey) {
 			sb.append(key);
 			sb.append(";");

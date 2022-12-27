@@ -210,7 +210,7 @@ public class logging implements LogEventSubject
 		if (s == null)
 			return null;
 
-		StringBuffer result = new StringBuffer("{");
+		StringBuilder result = new StringBuilder("{");
 
 		for (int j = 0; j < s.length; j++) {
 			result.append("\"");
@@ -254,7 +254,7 @@ public class logging implements LogEventSubject
 		if (s == null)
 			return null;
 
-		StringBuffer result = new StringBuffer("{");
+		StringBuilder result = new StringBuilder("{");
 
 		for (int j = 0; j < s.length; j++) {
 			result.append("\"");
@@ -468,7 +468,7 @@ public class logging implements LogEventSubject
 	}
 
 	public static String getErrorListAsLines() {
-		StringBuffer result = new StringBuffer("");
+		StringBuilder result = new StringBuilder("");
 		if (!errorList.isEmpty()) {
 			for (int i = 0; i < errorList.size(); i++) {
 				result.append("\n");

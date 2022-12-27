@@ -71,7 +71,7 @@ public class ChainedTableModelFilter extends TableModelFilter {
 	}
 
 	public String getActiveFilters() {
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 
 		for (String filterName : chain.keySet()) {
 			if (chain.get(filterName).isInUse()) {

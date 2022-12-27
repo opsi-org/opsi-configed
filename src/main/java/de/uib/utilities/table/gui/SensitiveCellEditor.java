@@ -216,7 +216,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				return "";
 
 			{
-				StringBuffer buf = new StringBuffer("");
+				StringBuilder buf = new StringBuilder("");
 
 				if (n == 0)
 					return "";

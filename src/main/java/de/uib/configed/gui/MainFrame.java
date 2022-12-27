@@ -2882,7 +2882,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		FTextArea info = new FTextArea(this, Globals.APPNAME + " Copyright Information", true, new String[] { "ok" },
 				700, 300);
 
-		StringBuffer message = new StringBuffer();
+		StringBuilder message = new StringBuilder();
 
 		for (String line : CopyrightInfos.get()) {
 			message.append("\n");
@@ -2923,7 +2923,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		};
 
-		StringBuffer message = new StringBuffer();
+		StringBuilder message = new StringBuilder();
 
 		message.append(configed.getResourceValue("MainFrame.showLogFileInfoText"));
 		message.append("\n\n");
@@ -2945,7 +2945,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 			FTextArea f = new FTextArea(this, configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"),
 					true);
-			StringBuffer message = new StringBuffer();
+			StringBuilder message = new StringBuilder();
 			Map<String, Object> modulesInfo = main.getPersistenceController().getOpsiModulesInfos();
 
 			int count = 0;

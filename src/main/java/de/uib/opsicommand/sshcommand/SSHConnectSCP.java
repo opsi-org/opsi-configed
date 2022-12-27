@@ -233,7 +233,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 
 		@Override
 		public String doInBackground() throws java.net.SocketException {
-			StringBuffer buf = new StringBuffer();
+			StringBuilder buf = new StringBuilder();
 			File sourcefile = new File(command.getFullSourcePath());
 			try (FileInputStream fis = new FileInputStream(sourcefile)) {
 				logging.info(this, "doInBackground getSession " + getSession());

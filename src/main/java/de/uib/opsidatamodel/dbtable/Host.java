@@ -44,7 +44,7 @@ public class Host extends Table {
 
 	public static String dbColumnsString;
 	static {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for (String col : columns) {
 			buf.append(tableName);
 			buf.append(".");

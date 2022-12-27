@@ -345,7 +345,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	 */
 	@Override
 	public String toString() {
-		StringBuffer com = new StringBuffer("{");
+		StringBuilder com = new StringBuilder("{");
 		com.append(factory.command_map_id).append(":").append(getId()).append(",");
 		com.append(factory.command_map_parentMenuText).append(":").append(getParentMenuText()).append(",");
 		com.append(factory.command_map_menuText).append(":").append(getMenuText()).append(",");
@@ -366,7 +366,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	}
 
 	public String commandlistToString() {
-		StringBuffer commandString = new StringBuffer("[");
+		StringBuilder commandString = new StringBuilder("[");
 		for (int i = 0; i < getCommands().size(); i++) {
 			String c = ((Empty_Command) getCommands().get(i)).commandToString();
 			if (i == getCommands().size() - 1)

@@ -69,7 +69,7 @@ public class ExporterToCSV extends ExportTable {
 					BufferedWriter bw = new BufferedWriter(osw)) {
 
 				// write header
-				StringBuffer line = new StringBuffer();
+				StringBuilder line = new StringBuilder();
 				for (int colI = 0; colI < theTable.getColumnCount(); colI++) { // i column
 					line.append(stringDelimiter);
 					line.append(theTable.getColumnName(colI));
@@ -87,7 +87,7 @@ public class ExporterToCSV extends ExportTable {
 							+ " selectedOnly " + selectedOnly);
 
 					if (!selectedOnly || theTable.isRowSelected(rowI)) {
-						line = new StringBuffer();
+						line = new StringBuilder();
 						for (int colI = 0; colI < theTable.getColumnCount(); colI++) { // i column
 							date1 = null; // reset
 

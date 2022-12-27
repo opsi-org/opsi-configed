@@ -557,7 +557,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				logging.info(this, "retrieveOpsiHost found masterDepots " + masterDepots.size());
 				if (configServer == null) {
-					StringBuffer messbuff = new StringBuffer();
+					StringBuilder messbuff = new StringBuilder();
 					final String baselabel = "PersistenceController.noData";
 
 					messbuff.append(configed.getResourceValue(baselabel + "0"));
@@ -941,7 +941,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 									(Icon) Globals.createImageIcon("images/edit-delete.png", ""),
 									(Icon) Globals.createImageIcon("images/executing_command_red_16.png", "") },
 							500, 200);
-					StringBuffer msg = new StringBuffer(
+					StringBuilder msg = new StringBuilder(
 
 							configed.getResourceValue("RegisterUserWarning.dialog.info1"));
 					msg.append("\n" + configed.getResourceValue("RegisterUserWarning.dialog.info2"));// At the moment,
@@ -4969,7 +4969,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		List list = exec.getListResult(omc);
 
-		StringBuffer buf = new StringBuffer("");
+		StringBuilder buf = new StringBuilder("");
 
 		Map backends = new HashMap<>();
 
@@ -7210,7 +7210,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			javax.swing.SwingUtilities.invokeLater(new Thread() {
 				public void run() {
-					StringBuffer info = new StringBuffer();
+					StringBuilder info = new StringBuilder();
 					info.append(configed.getResourceValue("Permission.modules.missing_user_roles") + "\n");
 					info.append(configed.getResourceValue("Permission.modules.missing_user_roles.1") + "\n");
 					info.append(configed.getResourceValue("Permission.modules.missing_user_roles.2") + "\n");
@@ -7783,9 +7783,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		// additional queries
 		String query;
-		StringBuffer qbuf;
+		StringBuilder qbuf;
 		key = "hosts_with_products";
-		qbuf = new StringBuffer("select");
+		qbuf = new StringBuilder("select");
 		qbuf.append(" hostId, productId, installationStatus from ");
 		qbuf.append(" HOST, PRODUCT_ON_CLIENT ");
 		qbuf.append(" WHERE HOST.hostId  = PRODUCT_ON_CLIENT.clientId ");
@@ -7847,7 +7847,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		key = "product_failed";
 
-		StringBuffer val = new StringBuffer();
+		StringBuilder val = new StringBuilder();
 		val.append("{ \"version\" : \"2\", ");
 		val.append("\"data\" : {");
 		val.append(" \"element\" : null, ");
@@ -8164,7 +8164,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (licInfoMap.getWarnings().get(typeOfMessage).isEmpty()) {
 			return "";
 		} else {
-			StringBuffer buf = new StringBuffer("\n");
+			StringBuilder buf = new StringBuilder("\n");
 			buf.append(configed.getResourceValue("Permission.modules.infoChanged"));
 			buf.append(" \"");
 			buf.append(header);
@@ -8238,7 +8238,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 					};
 
-					StringBuffer mess = new StringBuffer(configed.getResourceValue("Permission.modules.infoheader"));
+					StringBuilder mess = new StringBuilder(configed.getResourceValue("Permission.modules.infoheader"));
 
 					mess.append("_______________________________\n");
 
@@ -8535,7 +8535,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				javax.swing.SwingUtilities.invokeLater(new Thread() {
 					public void run() {
 
-						StringBuffer info = new StringBuffer("");
+						StringBuilder info = new StringBuilder("");
 
 						info.append(configed.getResourceValue("Permission.modules.clientcount.2"));
 						info.append(":\n");

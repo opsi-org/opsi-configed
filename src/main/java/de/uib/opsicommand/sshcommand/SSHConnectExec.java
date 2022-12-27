@@ -456,7 +456,7 @@ public class SSHConnectExec extends SSHConnect {
 
 		@Override
 		public String doInBackground() throws java.net.SocketException {
-			StringBuffer buf = new StringBuffer();
+			StringBuilder buf = new StringBuilder();
 			try {
 				logging.info(this, "doInBackground getSession " + getSession());
 
