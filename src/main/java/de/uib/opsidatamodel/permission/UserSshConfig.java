@@ -2,13 +2,13 @@ package de.uib.opsidatamodel.permission;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 
 import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
 public class UserSshConfig extends UserConfigModule {
 
-	
 	// not create new user specific ssh configs (use defaults)
 
 	public static final String KEY_SSH_MENU_ACTIVE = "ssh.menu_serverconsole.active";
@@ -22,8 +22,6 @@ public class UserSshConfig extends UserConfigModule {
 	public static final String KEY_SSH_COMMANDCONTROL_ACTIVE = "ssh.commandmanagement.active";
 	private static final String KEY_SSH_COMMANDCONTROL_ACTIVE_description = configed
 			.getResourceValue("PersistenceController.SSH_CONTROL_ACTIVE");
-
-	
 
 	public static final String KEY_SSH_COMMANDS_ACTIVE = "ssh.commands.active";
 	private static final String KEY_SSH_COMMANDS_ACTIVE_description = configed
@@ -47,7 +45,7 @@ public class UserSshConfig extends UserConfigModule {
 		LIST_KEYS = new LinkedHashSet<>();
 	}
 
-	public static HashMap<String, String> configDescription;
+	public static Map<String, String> configDescription;
 	static {
 		configDescription = new HashMap<>();
 		configDescription.put(KEY_SSH_MENU_ACTIVE, KEY_SSH_MENU_ACTIVE_description);

@@ -1084,7 +1084,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			selectedCols0.add(targetModel.findColumn((String) comboSearchFields.getSelectedItem()));
 		}
 
-		final HashSet<Integer> selectedCols = selectedCols0;
+		final Set<Integer> selectedCols = selectedCols0;
 
 		final boolean fulltextSearch = (comboSearchFieldsMode.getSelectedIndex() == FULL_TEXT_SEARCH);
 		final boolean regexSearch = (comboSearchFieldsMode.getSelectedIndex() == REGEX_SEARCH);

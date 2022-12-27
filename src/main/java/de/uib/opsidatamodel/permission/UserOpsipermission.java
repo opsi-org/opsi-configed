@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 import de.uib.utilities.logging.logging;
 
@@ -77,8 +79,8 @@ public class UserOpsipermission extends UserConfigModule {
 
 	}
 
-	public static final HashSet<String> LIST_KEYS;
-	public static final HashMap<String, String> CORRESPONDENCE_TO_LIST_KEYS;
+	public static final Set<String> LIST_KEYS;
+	public static final Map<String, String> CORRESPONDENCE_TO_LIST_KEYS;
 	static {
 		CORRESPONDENCE_TO_LIST_KEYS = new HashMap<>();
 		LIST_KEYS = new HashSet<>();

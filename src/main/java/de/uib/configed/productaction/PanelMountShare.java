@@ -16,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -31,7 +32,7 @@ import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.logging;
 
 public class PanelMountShare extends JPanel {
-	static ArrayList<PanelMountShare> instances = new ArrayList<>();
+	static List<PanelMountShare> instances = new ArrayList<>();
 
 	private static final int FIRST_LABEL_WIDTH = Globals.FIRST_LABEL_WIDTH;
 

@@ -155,7 +155,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	public static final int POPUP_PRINT = PopupMenuTrait.POPUP_PRINT; // 30
 
-	private static final HashMap<Integer, String> keyNames = new HashMap<Integer, String>() {
+	private static final Map<Integer, String> keyNames = new HashMap<Integer, String>() {
 		@Override
 		public String put(Integer key, String value)
 		// checking that not the same int key is used twice

@@ -10,6 +10,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -50,7 +51,7 @@ public class ExporterToPDF extends ExportTable {
 	protected String defaultFilename = "report.pdf";
 	protected boolean askForOverwrite = true;
 
-	protected static final String thisExtension = ".pdf";
+	protected static final String FILE_EXTENSION = ".pdf";
 
 	private static float mLeft = 36;
 	private static float mRight = 36;
@@ -63,13 +64,13 @@ public class ExporterToPDF extends ExportTable {
 	private static Font catFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
 	private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 	private static Font small = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
-	private static ArrayList<Integer> leftAlignmentlist = new ArrayList<>();
+	private static List<Integer> leftAlignmentlist = new ArrayList<>();
 
 	public ExporterToPDF(javax.swing.JTable table, Vector<String> classNames) {
 		super(table, classNames);
-		extension = thisExtension;
+		extension = FILE_EXTENSION;
 		writeToFile = defaultFilename;
-		document = new Document(PageSize.A4, mLeft, mRight, mTop, mBottom);
+		new Document(PageSize.A4, mLeft, mRight, mTop, mBottom);
 	}
 
 	public ExporterToPDF(PanelGenEditTable table, Vector<String> classNames) {
