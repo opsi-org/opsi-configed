@@ -153,7 +153,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	protected List<? extends RowSorter.SortKey> currentSortKeys;
 
-	protected List<String> selectedProducts;
+	protected ArrayList<String> selectedProducts;
 
 	JPopupMenu popup;
 	JMenu subOpsiclientdEvent;
@@ -1050,8 +1050,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		infoPane.setProductAdvice(productHint);
 
-		Globals.checkCollection(this, "initEditing", "editableProductProperties ", editableProductProperties);
-		Globals.checkCollection(this, "initEditing", "productpropertyOptionsMap", productpropertyOptionsMap);
+		Globals.checkCollection(this, "editableProductProperties ", editableProductProperties);
+		Globals.checkCollection(this, "productpropertyOptionsMap", productpropertyOptionsMap);
 
 		propertiesPanel.setEditableMap(
 

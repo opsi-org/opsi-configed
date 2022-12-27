@@ -203,11 +203,8 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 			if (pmInstallCom == null) {
 				logging.warning(this, "No opsi-package selected. 3");
 				return;
-			}
-			if (pmInstallCom != null)
+			} else
 				commands.addCommand(pmInstallCom);
-			else
-				logging.warning(this, "ERROR 1 command = null");
 		}
 
 		else {
@@ -227,11 +224,11 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 				logging.warning(this, "ERROR 3 command = null");
 		}
 
-		pmInstallCom = installSettingsPanel.updateCommand((CommandOpsiPackageManagerInstall) pmInstallCom);
+		installSettingsPanel.updateCommand(pmInstallCom);
 
 		try {
-			((SSHConnectExec) ssh).exec_template(commands, sequential);
-			((SSHConnectExec) ssh).getDialog().setVisible(true);
+			ssh.exec_template(commands, sequential);
+			ssh.getDialog().setVisible(true);
 			logging.info(this, "doAction1 end ");
 		} catch (Exception e) {
 			logging.error(this, "doAction1 Exception while exec_template", e);

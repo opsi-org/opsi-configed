@@ -176,12 +176,11 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		boolean found = false;
 		int i = 0;
 		int startIndex = 0;
-		int endIndex = startIndex;
 		String line = null;
 		String result = null;
 		while (!found && i < linesplits.length) {
 			line = linesplits[i];
-			endIndex = startIndex + line.length();
+			int endIndex = startIndex + line.length();
 			if (startIndex <= charpos && charpos <= endIndex && startOfMarkedString(line) >= 0) {
 				found = true;
 				result = line;
@@ -373,13 +372,12 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			linesplits = content.split("\n");
 
 			int startIndex = 0;
-			int endIndex = startIndex;
 			int lastFoundIndex = 0;
 
 			for (int i = 0; i < linesplits.length; i++) {
 				String line = linesplits[i];
 
-				endIndex = startIndex + line.length();
+				int endIndex = startIndex + line.length();
 
 				int posInLine = startOfMarkedString(line);
 				int len = line.trim().length();

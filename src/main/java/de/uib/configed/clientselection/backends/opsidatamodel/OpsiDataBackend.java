@@ -146,11 +146,11 @@ public class OpsiDataBackend extends Backend {
 		Object data = operation.getData();
 		String attributeTextHost = null;
 		if (element instanceof NameElement)
-			attributeTextHost = HostInfo.hostnameKEY;
+			attributeTextHost = HostInfo.HOSTNAME_KEY;
 		else if (element instanceof IPElement)
-			attributeTextHost = HostInfo.clientIpAddressKEY;
+			attributeTextHost = HostInfo.CLIENT_IP_ADDRESS_KEY;
 		else if (element instanceof DescriptionElement)
-			attributeTextHost = HostInfo.clientDescriptionKEY;
+			attributeTextHost = HostInfo.CLIENT_DESCRIPTION_KEY;
 		if (attributeTextHost != null) {
 			if (operation instanceof StringEqualsOperation)
 				return new OpsiDataStringEqualsOperation(OpsiDataClient.HOSTINFO_MAP, attributeTextHost,

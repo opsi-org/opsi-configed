@@ -617,8 +617,7 @@ public class DataStubNOM extends DataStub {
 			boolean infoFound = false;
 
 			// try reloading?
-			int returnedOption = javax.swing.JOptionPane.NO_OPTION;
-			returnedOption = javax.swing.JOptionPane.showOptionDialog(Globals.mainFrame,
+			int returnedOption = javax.swing.JOptionPane.showOptionDialog(Globals.mainFrame,
 					configed.getResourceValue("DataStub.reloadSoftwareInformation.text"),
 					configed.getResourceValue("DataStub.reloadSoftwareInformation.title"),
 					javax.swing.JOptionPane.YES_NO_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, null, null);

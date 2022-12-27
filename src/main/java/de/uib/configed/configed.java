@@ -365,7 +365,7 @@ public class configed {
 
 	/** construct the application */
 	public configed(String paramLocale, String paramHost, String paramUser, String paramPassword,
-			final String paramClient, final String paramClientgroup, final Integer paramTab, String paramLogdirectory) {
+			final String paramClient, final String paramClientgroup, final Integer paramTab) {
 
 		UncaughtExceptionHandler errorHandler = new UncaughtExceptionHandlerLocalized();
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
@@ -912,7 +912,7 @@ public class configed {
 			logging.debug("optionCLIQuerySearch");
 			de.uib.configed.clientselection.SavedSearchQuery query = new de.uib.configed.clientselection.SavedSearchQuery();
 
-			query.setArgs(host, user, password, savedSearch, null);
+			query.setArgs(host, user, password, savedSearch);
 			query.addMissingArgs();
 
 			query.runSearch(true);
@@ -927,7 +927,7 @@ public class configed {
 
 			de.uib.configed.clientselection.SavedSearchQuery query = new de.uib.configed.clientselection.SavedSearchQuery();
 
-			query.setArgs(host, user, password, savedSearch, group);
+			query.setArgs(host, user, password, savedSearch);
 			query.addMissingArgs();
 			List<String> newGroupMembers = query.runSearch(false);
 
@@ -1022,6 +1022,6 @@ public class configed {
 		fErrorOutOfMemory
 				.setMessage("The program will be terminated,\nsince more memory is required than was assigned.");
 
-		new configed(locale, host, user, password, client, clientgroup, tab, logdirectory);
+		new configed(locale, host, user, password, client, clientgroup, tab);
 	}
 }

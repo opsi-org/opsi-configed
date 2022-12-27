@@ -54,13 +54,13 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			return false;
 
 		if (!support.isDataFlavorSupported(DataFlavor.stringFlavor) || !support.isDrop()) {
-			return result = false;
+			return false;
 		}
 		JTree.DropLocation dropLocation = (JTree.DropLocation) support.getDropLocation();
 		logging.debug(this, "ClientTreeTransferHandler, dropLocation.getPath() " + dropLocation.getPath());
 
 		if (dropLocation.getPath() == null)
-			return result = false;
+			return false;
 
 		String transferData = null;
 

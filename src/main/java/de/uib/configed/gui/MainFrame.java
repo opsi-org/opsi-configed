@@ -788,24 +788,26 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuClients.setText(configed.getResourceValue("MainFrame.jMenuClients"));
 
 		jCheckBoxMenuItem_showCreatedColumn.setText(configed.getResourceValue("MainFrame.jMenuShowCreatedColumn"));
-		combinedMenuItemCreatedColumn.show(main.hostDisplayFields.get(HostInfo.created_DISPLAY_FIELD_LABEL));
+		combinedMenuItemCreatedColumn.show(main.hostDisplayFields.get(HostInfo.CREATED_DISPLAY_FIELD_LABEL));
 
 		jCheckBoxMenuItem_showCreatedColumn.addItemListener((ItemEvent e) -> main.toggleColumnCreated());
 
 		jCheckBoxMenuItem_showWANactiveColumn.setText(configed.getResourceValue("MainFrame.jMenuShowWanConfig"));
-		combinedMenuItemWANactiveColumn.show(main.hostDisplayFields.get(HostInfo.clientWanConfig_DISPLAY_FIELD_LABEL));
+		combinedMenuItemWANactiveColumn
+				.show(main.hostDisplayFields.get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
 
 		jCheckBoxMenuItem_showWANactiveColumn.addItemListener((ItemEvent e) -> main.toggleColumnWANactive());
 
 		jCheckBoxMenuItem_showIPAddressColumn.setText(configed.getResourceValue("MainFrame.jMenuShowIPAddressColumn"));
-		combinedMenuItemIPAddressColumn.show(main.hostDisplayFields.get(HostInfo.clientIpAddress_DISPLAY_FIELD_LABEL));
+		combinedMenuItemIPAddressColumn
+				.show(main.hostDisplayFields.get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
 
 		jCheckBoxMenuItem_showIPAddressColumn.addItemListener((ItemEvent e) -> main.toggleColumnIPAddress());
 
 		jCheckBoxMenuItem_showHardwareAddressColumn
 				.setText(configed.getResourceValue("MainFrame.jMenuShowHardwareAddressColumn"));
 		combinedMenuItemHardwareAddressColumn
-				.show(main.hostDisplayFields.get(HostInfo.clientMacAddress_DISPLAY_FIELD_LABEL));
+				.show(main.hostDisplayFields.get(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL));
 
 		jCheckBoxMenuItem_showHardwareAddressColumn
 				.addItemListener((ItemEvent e) -> main.toggleColumnHardwareAddress());
@@ -813,7 +815,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jCheckBoxMenuItem_showSessionInfoColumn
 				.setText(configed.getResourceValue("MainFrame.jMenuShowSessionInfoColumn"));
 		combinedMenuItemSessionInfoColumn
-				.show(main.hostDisplayFields.get(HostInfo.clientSessionInfo_DISPLAY_FIELD_LABEL));
+				.show(main.hostDisplayFields.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
 
 		jCheckBoxMenuItem_showSessionInfoColumn.addItemListener((ItemEvent e) -> {
 			logging.info(this, "toggleColumnSessionInfo by CheckBoxMenuItem");
@@ -824,26 +826,26 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jCheckBoxMenuItem_showInventoryNumberColumn
 				.setText(configed.getResourceValue("MainFrame.jMenuShowInventoryNumberColumn"));
 		combinedMenuItemInventoryNumberColumn
-				.show(main.hostDisplayFields.get(HostInfo.clientInventoryNumber_DISPLAY_FIELD_LABEL));
+				.show(main.hostDisplayFields.get(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL));
 
 		jCheckBoxMenuItem_showInventoryNumberColumn
 				.addItemListener((ItemEvent e) -> main.toggleColumnInventoryNumber());
 
 		jCheckBoxMenuItem_showUefiBoot.setText(configed.getResourceValue("MainFrame.jMenuShowUefiBoot"));
-		combinedMenuItemUefiBootColumn.show(main.hostDisplayFields.get(HostInfo.clientUefiBoot_DISPLAY_FIELD_LABEL));
+		combinedMenuItemUefiBootColumn.show(main.hostDisplayFields.get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL));
 
 		jCheckBoxMenuItem_showUefiBoot.addItemListener((ItemEvent e) -> main.toggleColumnUEFIactive());
 
 		jCheckBoxMenuItem_showInstallByShutdown
 				.setText(configed.getResourceValue("MainFrame.jMenuShowInstallByShutdown"));
 		combinedMenuItemUefiBootColumn
-				.show(main.hostDisplayFields.get(HostInfo.clientInstallByShutdown_DISPLAY_FIELD_LABEL));
+				.show(main.hostDisplayFields.get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
 
 		jCheckBoxMenuItem_showInstallByShutdown
 				.addItemListener((ItemEvent e) -> main.toggleColumnInstallByShutdownActive());
 
 		jCheckBoxMenuItem_showDepotColumn.setText(configed.getResourceValue("MainFrame.jMenuShowDepotOfClient"));
-		combinedMenuItemDepotColumn.show(main.hostDisplayFields.get(HostInfo.depotOfClient_DISPLAY_FIELD_LABEL));
+		combinedMenuItemDepotColumn.show(main.hostDisplayFields.get(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL));
 
 		jCheckBoxMenuItem_showDepotColumn.addItemListener((ItemEvent e) -> main.toggleColumnDepot());
 
@@ -1434,51 +1436,53 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private void setupPopupMenuClientsTab() {
 
 		popupShowCreatedColumn.setText(configed.getResourceValue("MainFrame.jMenuShowCreatedColumn"));
-		combinedMenuItemCreatedColumn.show(main.hostDisplayFields.get(HostInfo.created_DISPLAY_FIELD_LABEL));
+		combinedMenuItemCreatedColumn.show(main.hostDisplayFields.get(HostInfo.CREATED_DISPLAY_FIELD_LABEL));
 
 		popupShowCreatedColumn.addItemListener((ItemEvent e) -> main.toggleColumnCreated());
 
 		popupShowWANactiveColumn.setText(configed.getResourceValue("MainFrame.jMenuShowWanConfig"));
-		combinedMenuItemWANactiveColumn.show(main.hostDisplayFields.get(HostInfo.clientWanConfig_DISPLAY_FIELD_LABEL));
+		combinedMenuItemWANactiveColumn
+				.show(main.hostDisplayFields.get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
 
 		popupShowWANactiveColumn.addItemListener((ItemEvent e) -> main.toggleColumnWANactive());
 
 		popupShowIPAddressColumn.setText(configed.getResourceValue("MainFrame.jMenuShowIPAddressColumn"));
-		combinedMenuItemIPAddressColumn.show(main.hostDisplayFields.get(HostInfo.clientIpAddress_DISPLAY_FIELD_LABEL));
+		combinedMenuItemIPAddressColumn
+				.show(main.hostDisplayFields.get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
 
 		popupShowIPAddressColumn.addItemListener((ItemEvent e) -> main.toggleColumnIPAddress());
 
 		popupShowHardwareAddressColumn.setText(configed.getResourceValue("MainFrame.jMenuShowHardwareAddressColumn"));
 		combinedMenuItemHardwareAddressColumn
-				.show(main.hostDisplayFields.get(HostInfo.clientMacAddress_DISPLAY_FIELD_LABEL));
+				.show(main.hostDisplayFields.get(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL));
 
 		popupShowHardwareAddressColumn.addItemListener((ItemEvent e) -> main.toggleColumnHardwareAddress());
 
 		popupShowSessionInfoColumn.setText(configed.getResourceValue("MainFrame.jMenuShowSessionInfoColumn"));
 		combinedMenuItemSessionInfoColumn
-				.show(main.hostDisplayFields.get(HostInfo.clientSessionInfo_DISPLAY_FIELD_LABEL));
+				.show(main.hostDisplayFields.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
 
 		popupShowSessionInfoColumn.addItemListener((ItemEvent e) -> main.toggleColumnSessionInfo());
 
 		popupShowInventoryNumberColumn.setText(configed.getResourceValue("MainFrame.jMenuShowInventoryNumberColumn"));
 		combinedMenuItemInventoryNumberColumn
-				.show(main.hostDisplayFields.get(HostInfo.clientInventoryNumber_DISPLAY_FIELD_LABEL));
+				.show(main.hostDisplayFields.get(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL));
 
 		popupShowInventoryNumberColumn.addItemListener((ItemEvent e) -> main.toggleColumnInventoryNumber());
 
 		popupShowUefiBoot.setText(configed.getResourceValue("MainFrame.jMenuShowUefiBoot"));
-		combinedMenuItemUefiBootColumn.show(main.hostDisplayFields.get(HostInfo.clientUefiBoot_DISPLAY_FIELD_LABEL));
+		combinedMenuItemUefiBootColumn.show(main.hostDisplayFields.get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL));
 
 		popupShowUefiBoot.addItemListener((ItemEvent e) -> main.toggleColumnUEFIactive());
 
 		popupShowInstallByShutdownColumn.setText(configed.getResourceValue("MainFrame.jMenuShowInstallByShutdown"));
 		combinedMenuItemInstallByShutdownColumn
-				.show(main.hostDisplayFields.get(HostInfo.clientInstallByShutdown_DISPLAY_FIELD_LABEL));
+				.show(main.hostDisplayFields.get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
 
 		popupShowInstallByShutdownColumn.addItemListener((ItemEvent e) -> main.toggleColumnInstallByShutdownActive());
 
 		popupShowDepotColumn.setText(configed.getResourceValue("MainFrame.jMenuShowDepotOfClient"));
-		combinedMenuItemDepotColumn.show(main.hostDisplayFields.get(HostInfo.depotOfClient_DISPLAY_FIELD_LABEL));
+		combinedMenuItemDepotColumn.show(main.hostDisplayFields.get(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL));
 
 		popupShowDepotColumn.addItemListener((ItemEvent e) -> main.toggleColumnDepot());
 
@@ -3137,10 +3141,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				logging.info(this,
 						"key released on textfielddescription ischangedtext " + jTextFieldDescription.isChangedText());
 				if (jTextFieldDescription.isChangedText()) {
-					changedClientInfo.put(HostInfo.clientDescriptionKEY, jTextFieldDescription.getText());
+					changedClientInfo.put(HostInfo.CLIENT_DESCRIPTION_KEY, jTextFieldDescription.getText());
 					main.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 				} else {
-					changedClientInfo.remove(HostInfo.clientDescriptionKEY);
+					changedClientInfo.remove(HostInfo.CLIENT_DESCRIPTION_KEY);
 				}
 
 			}
@@ -3148,29 +3152,29 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			else if (e.getSource() == jTextFieldInventoryNumber) {
 
 				if (jTextFieldInventoryNumber.isChangedText()) {
-					changedClientInfo.put(HostInfo.clientInventoryNumberKEY, jTextFieldInventoryNumber.getText());
+					changedClientInfo.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, jTextFieldInventoryNumber.getText());
 					main.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 				} else
-					changedClientInfo.remove(HostInfo.clientInventoryNumberKEY);
+					changedClientInfo.remove(HostInfo.CLIENT_INVENTORY_NUMBER_KEY);
 
 			}
 
 			else if (e.getSource() == jTextFieldOneTimePassword) {
 				if (jTextFieldOneTimePassword.isChangedText()) {
-					changedClientInfo.put(HostInfo.clientOneTimePasswordKEY, jTextFieldOneTimePassword.getText());
+					changedClientInfo.put(HostInfo.CLIENT_ONE_TIME_PASSWORD_KEY, jTextFieldOneTimePassword.getText());
 					main.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 				} else {
-					changedClientInfo.remove(HostInfo.clientOneTimePasswordKEY);
+					changedClientInfo.remove(HostInfo.CLIENT_ONE_TIME_PASSWORD_KEY);
 				}
 
 			}
 
 			else if (e.getSource() == jTextAreaNotes) {
 				if (!jTextAreaNotes.getText().equals(oldNotes)) {
-					changedClientInfo.put(HostInfo.clientNotesKEY, jTextAreaNotes.getText());
+					changedClientInfo.put(HostInfo.CLIENT_NOTES_KEY, jTextAreaNotes.getText());
 					main.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 				} else {
-					changedClientInfo.remove(HostInfo.clientNotesKEY);
+					changedClientInfo.remove(HostInfo.CLIENT_NOTES_KEY);
 				}
 
 			}
@@ -3182,10 +3186,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				logging.debug(this, " keyPressed on macAddressField, text " + macAddressField.getText());
 
 				if (macAddressField.isChangedText()) {
-					changedClientInfo.put(HostInfo.clientMacAddressKEY, macAddressField.getText());
+					changedClientInfo.put(HostInfo.CLIENT_MAC_ADRESS_KEY, macAddressField.getText());
 					main.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 				} else {
-					changedClientInfo.remove(HostInfo.clientMacAddressKEY);
+					changedClientInfo.remove(HostInfo.CLIENT_MAC_ADRESS_KEY);
 
 				}
 
@@ -3198,10 +3202,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				logging.debug(this, " keyPressed on ipAddressField, text " + ipAddressField.getText());
 
 				if (ipAddressField.isChangedText()) {
-					changedClientInfo.put(HostInfo.clientIpAddressKEY, ipAddressField.getText());
+					changedClientInfo.put(HostInfo.CLIENT_IP_ADDRESS_KEY, ipAddressField.getText());
 					main.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 				} else {
-					changedClientInfo.remove(HostInfo.clientIpAddressKEY);
+					changedClientInfo.remove(HostInfo.CLIENT_IP_ADDRESS_KEY);
 
 				}
 
@@ -3262,7 +3266,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			for (String client : main.getSelectedClients()) {
 				Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
 
-				changedClientInfo.put(HostInfo.clientShutdownInstallKEY,
+				changedClientInfo.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY,
 						((Boolean) cbInstallByShutdown.isSelected()).toString());
 
 				main.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
@@ -3276,7 +3280,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			for (String client : main.getSelectedClients()) {
 				Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
 
-				changedClientInfo.put(HostInfo.clientUefiBootKEY, ((Boolean) cbUefiBoot.isSelected()).toString());
+				changedClientInfo.put(HostInfo.CLIENT_UEFI_BOOT_KEY, ((Boolean) cbUefiBoot.isSelected()).toString());
 
 				main.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 			}
@@ -3288,7 +3292,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			for (String client : main.getSelectedClients()) {
 				Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
 
-				changedClientInfo.put(HostInfo.clientWanConfigKEY, ((Boolean) cbWANConfig.isSelected()).toString());
+				changedClientInfo.put(HostInfo.CLIENT_WAN_CONFIG_KEY, ((Boolean) cbWANConfig.isSelected()).toString());
 				main.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 			}
 		} else if (e.getSource() == jButtonClientsConfiguration) {

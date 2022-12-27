@@ -400,7 +400,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		private Map<String, Object> hideOpsiHostKey(Map<String, Object> source) {
 			Map<String, Object> result = new HashMap<>(source);
-			result.put(HostInfo.hostKeyKEY, "****");
+			result.put(HostInfo.HOST_KEY_KEY, "****");
 			return result;
 		}
 
@@ -508,7 +508,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				// find opsi configserver and give it the top position
 				for (Map<String, Object> host : opsiHosts) {
-					String name = (String) host.get(HostInfo.hostnameKEY);
+					String name = (String) host.get(HostInfo.HOSTNAME_KEY);
 					opsiHostNames.add(name);
 
 					for (String key : host.keySet()) {
@@ -518,8 +518,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 					}
 
-					boolean isConfigserver = host.get(HostInfo.hostTypeKEY)
-							.equals(HostInfo.hostTypeVALUE_OpsiConfigserver);
+					boolean isConfigserver = host.get(HostInfo.HOST_TYPE_KEY)
+							.equals(HostInfo.HOST_TYPE_VALUE_OPSI_CONFIG_SERVER);
 
 					if (isConfigserver) {
 						logging.info(this, "retrieveOpsiHosts  type opsiconfigserver host " + hideOpsiHostKey(host));
@@ -531,14 +531,14 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						allDepots.put(name, host);
 						countClients--;
 
-						boolean isMasterDepot = interpretAsBoolean(host.get(HostInfo.isMasterDepotKEY), true);
+						boolean isMasterDepot = interpretAsBoolean(host.get(HostInfo.IS_MASTER_DEPOT_KEY), true);
 
 						if (isMasterDepot) {
 							Map<String, Object> hostMap = new HashMap<>(host);
 							masterDepots.put(name, hostMap);
 						}
 
-						Object val = host.get(HostInfo.depotWorkbenchKEY);
+						Object val = host.get(HostInfo.DEPOT_WORKBENCH_KEY);
 
 						if (val != null && !val.equals("")) {
 							try {
@@ -589,21 +589,21 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				// find depots and build entries for them
 				for (Map<String, Object> host : opsiHosts) {
-					String name = (String) host.get(HostInfo.hostnameKEY);
+					String name = (String) host.get(HostInfo.HOSTNAME_KEY);
 
 					if (name == null) {
 						logging.info(this, "retrieveOpsiHosts, host  " + host);
 
 					}
 
-					if (host.get(HostInfo.hostTypeKEY).equals(HostInfo.hostTypeVALUE_OpsiDepotserver))
+					if (host.get(HostInfo.HOST_TYPE_KEY).equals(HostInfo.HOST_TYPE_VALUE_OPSI_DEPOT_SERVER))
 
 					{
 
 						allDepots.put(name, host);
 						countClients--;
 
-						boolean isMasterDepot = interpretAsBoolean(host.get(HostInfo.isMasterDepotKEY), false);
+						boolean isMasterDepot = interpretAsBoolean(host.get(HostInfo.IS_MASTER_DEPOT_KEY), false);
 
 						if (isMasterDepot) {
 							Map<String, Object> hostMap = new HashMap<>(host);
@@ -615,8 +615,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				}
 
 				for (Map<String, Object> host : opsiHosts) {
-					String name = (String) host.get(HostInfo.hostnameKEY);
-					if (((String) host.get(HostInfo.hostTypeKEY)).equals(HostInfo.hostTypeVALUE_OpsiClient)) {
+					String name = (String) host.get(HostInfo.HOSTNAME_KEY);
+					if (((String) host.get(HostInfo.HOST_TYPE_KEY)).equals(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT)) {
 
 						boolean depotFound = false;
 						String depotId = null;
@@ -640,11 +640,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 						// Get Install by Shutdown
 
-						host.put(HostInfo.clientShutdownInstallKEY, isInstallByShutdownConfigured(name));
+						host.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, isInstallByShutdownConfigured(name));
 
 						// Get UEFI Boot
 
-						host.put(HostInfo.clientUefiBootKEY, isUefiConfigured(name));
+						host.put(HostInfo.CLIENT_UEFI_BOOT_KEY, isUefiConfigured(name));
 
 						// CHECK WAN STANDARD CONFIG
 						if (getConfig(name) != null) {
@@ -668,7 +668,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 							logging.debug(this, "host " + name + " wan config " + result);
 
-							host.put(HostInfo.clientWanConfigKEY, result);
+							host.put(HostInfo.CLIENT_WAN_CONFIG_KEY, result);
 
 						}
 
@@ -677,7 +677,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						String myDepot = null;
 
 						if (depotFound) {
-							host.put(HostInfo.depotOfClientKEY, depotId);
+							host.put(HostInfo.DEPOT_OF_CLIENT_KEY, depotId);
 							hostInfo = new HostInfo(host);
 							hostInfo.setInDepot(depotId);
 							myDepot = depotId;
@@ -685,7 +685,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 							// depot_restriction:
 
 						} else {
-							host.put(HostInfo.depotOfClientKEY, configServer);
+							host.put(HostInfo.DEPOT_OF_CLIENT_KEY, configServer);
 							hostInfo = new HostInfo(host);
 							hostInfo.setInDepot(configServer);
 							myDepot = configServer;
@@ -803,7 +803,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			logging.info(this, "setDepot, hostinfo for client " + clientName + " : " + mapPC_Infomap.get(clientName));
 
-			hostInfo.put(HostInfo.depotOfClientKEY, depotId);
+			hostInfo.put(HostInfo.DEPOT_OF_CLIENT_KEY, depotId);
 
 			String oldDepot = mapPcBelongsToDepot.get(clientName);
 			logging.info(this, "setDepot clientName, oldDepot " + clientName + ", " + oldDepot);
@@ -1083,7 +1083,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			return exec;
 		}
 
-		String password = (String) getHostInfoCollections().getDepots().get(depot).get(HostInfo.hostKeyKEY);
+		String password = (String) getHostInfoCollections().getDepots().get(depot).get(HostInfo.HOST_KEY_KEY);
 
 		Executioner exec1 = new JSONthroughHTTPS(depot, depot, password);
 
@@ -1849,12 +1849,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			String newClientId = hostname + "." + domainname;
 
 			Map<String, Object> hostItem = createNOMitem("OpsiClient");
-			hostItem.put(HostInfo.hostnameKEY, newClientId);
-			hostItem.put(HostInfo.clientDescriptionKEY, description);
-			hostItem.put(HostInfo.clientNotesKEY, notes);
-			hostItem.put(HostInfo.clientMacAddressKEY, macaddress);
-			hostItem.put(HostInfo.clientIpAddressKEY, ipaddress);
-			hostItem.put(HostInfo.clientInventoryNumberKEY, inventorynumber);
+			hostItem.put(HostInfo.HOSTNAME_KEY, newClientId);
+			hostItem.put(HostInfo.CLIENT_DESCRIPTION_KEY, description);
+			hostItem.put(HostInfo.CLIENT_NOTES_KEY, notes);
+			hostItem.put(HostInfo.CLIENT_MAC_ADRESS_KEY, macaddress);
+			hostItem.put(HostInfo.CLIENT_IP_ADDRESS_KEY, ipaddress);
+			hostItem.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, inventorynumber);
 
 			clientsJsonObject.add(Executioner.jsonMap(hostItem));
 
@@ -1982,12 +1982,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		String newClientId = hostname + "." + domainname;
 
 		Map<String, Object> hostItem = createNOMitem("OpsiClient");
-		hostItem.put(HostInfo.hostnameKEY, newClientId);
-		hostItem.put(HostInfo.clientDescriptionKEY, description);
-		hostItem.put(HostInfo.clientNotesKEY, notes);
-		hostItem.put(HostInfo.clientMacAddressKEY, macaddress);
-		hostItem.put(HostInfo.clientIpAddressKEY, ipaddress);
-		hostItem.put(HostInfo.clientInventoryNumberKEY, inventorynumber);
+		hostItem.put(HostInfo.HOSTNAME_KEY, newClientId);
+		hostItem.put(HostInfo.CLIENT_DESCRIPTION_KEY, description);
+		hostItem.put(HostInfo.CLIENT_NOTES_KEY, notes);
+		hostItem.put(HostInfo.CLIENT_MAC_ADRESS_KEY, macaddress);
+		hostItem.put(HostInfo.CLIENT_IP_ADDRESS_KEY, ipaddress);
+		hostItem.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, inventorynumber);
 
 		OpsiMethodCall omc = new OpsiMethodCall("host_createObjects", new Object[] { exec.jsonMap(hostItem) });
 		result = exec.doCall(omc);
@@ -2456,7 +2456,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		}
 
 		hostUpdateMap.put("ident", hostId);
-		hostUpdateMap.put(HostInfo.hostTypeKEY, "OpsiClient");
+		hostUpdateMap.put(HostInfo.HOST_TYPE_KEY, "OpsiClient");
 		hostUpdateMap.put(property, value);
 
 		hostUpdates.put(hostId, hostUpdateMap);
@@ -2464,32 +2464,32 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public void setHostDescription(String hostId, String description) {
-		updateHost(hostId, HostInfo.clientDescriptionKEY, description);
+		updateHost(hostId, HostInfo.CLIENT_DESCRIPTION_KEY, description);
 	}
 
 	@Override
 	public void setClientInventoryNumber(String hostId, String inventoryNumber) {
-		updateHost(hostId, HostInfo.clientInventoryNumberKEY, inventoryNumber);
+		updateHost(hostId, HostInfo.CLIENT_INVENTORY_NUMBER_KEY, inventoryNumber);
 	}
 
 	@Override
 	public void setClientOneTimePassword(String hostId, String oneTimePassword) {
-		updateHost(hostId, HostInfo.clientOneTimePasswordKEY, oneTimePassword);
+		updateHost(hostId, HostInfo.CLIENT_ONE_TIME_PASSWORD_KEY, oneTimePassword);
 	}
 
 	@Override
 	public void setHostNotes(String hostId, String notes) {
-		updateHost(hostId, HostInfo.clientNotesKEY, notes);
+		updateHost(hostId, HostInfo.CLIENT_NOTES_KEY, notes);
 	}
 
 	@Override
 	public void setMacAddress(String hostId, String address) {
-		updateHost(hostId, HostInfo.clientMacAddressKEY, address);
+		updateHost(hostId, HostInfo.CLIENT_MAC_ADRESS_KEY, address);
 	}
 
 	@Override
 	public void setIpAddress(String hostId, String address) {
-		updateHost(hostId, HostInfo.clientIpAddressKEY, address);
+		updateHost(hostId, HostInfo.CLIENT_IP_ADDRESS_KEY, address);
 	}
 
 	@Override
@@ -3048,8 +3048,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				if (i == -1 && withRetry) {
 					{
 						logging.info(this, "getSoftwareAudit,  not found client entry " + entry);
-						int returnedOption = javax.swing.JOptionPane.YES_OPTION;
-						returnedOption = javax.swing.JOptionPane.showOptionDialog(Globals.mainFrame,
+						int returnedOption = javax.swing.JOptionPane.showOptionDialog(Globals.mainFrame,
 
 								configed.getResourceValue("PersistenceController.reloadSoftwareInformation.message")
 										+ " " + entry.getSWident()
@@ -5422,7 +5421,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (globalReadOnly)
 			return;
 
-		if (Globals.checkCollection(this, "setAdditionalConfiguration", "configStateCollection", configStateCollection)
+		if (Globals.checkCollection(this, "configStateCollection", configStateCollection)
 				&& !configStateCollection.isEmpty()) {
 			boolean configsChanged = false;
 
@@ -7474,30 +7473,30 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		}
 
 		List<String> possibleValues = new ArrayList<>();
-		possibleValues.add(HostInfo.hostname_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.clientDescription_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.clientSessionInfo_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.clientConnected_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.lastSeen_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.clientWanConfig_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.clientIpAddress_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.clientMacAddress_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.clientInventoryNumber_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.clientUefiBoot_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.clientInstallByShutdown_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.created_DISPLAY_FIELD_LABEL);
-		possibleValues.add(HostInfo.depotOfClient_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.LAST_SEEN_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
 
 		if (givenPossibleValues == null || !givenPossibleValues.equals(possibleValues)) {
 			createOnServer = true;
 		}
 
 		List<String> defaultValues = new ArrayList<>();
-		defaultValues.add(HostInfo.hostname_DISPLAY_FIELD_LABEL);
-		defaultValues.add(HostInfo.clientDescription_DISPLAY_FIELD_LABEL);
-		defaultValues.add(HostInfo.clientConnected_DISPLAY_FIELD_LABEL);
-		defaultValues.add(HostInfo.lastSeen_DISPLAY_FIELD_LABEL);
-		defaultValues.add(HostInfo.clientIpAddress_DISPLAY_FIELD_LABEL);
+		defaultValues.add(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL);
+		defaultValues.add(HostInfo.CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL);
+		defaultValues.add(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL);
+		defaultValues.add(HostInfo.LAST_SEEN_DISPLAY_FIELD_LABEL);
+		defaultValues.add(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
 
 		if (givenList == null // no service property
 				|| givenList.isEmpty() // bad configuration
@@ -7538,7 +7537,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			configuredByService = produceHost_displayFields(configuredByService);
 
 			host_displayFields = new LinkedHashMap<>();
-			host_displayFields.put(HostInfo.hostname_DISPLAY_FIELD_LABEL, true);
+			host_displayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
 			// always shown, we put it here because of ordering and repeat the statement
 			// after the loop if it has been set to false
 
@@ -7546,7 +7545,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				host_displayFields.put(field, (configuredByService.indexOf(field) > -1));
 			}
 
-			host_displayFields.put(HostInfo.hostname_DISPLAY_FIELD_LABEL, true);
+			host_displayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
 
 		}
 
@@ -7958,8 +7957,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			possibleValues.add(OPSI_CLIENTD_EVENT_on_demand);
 			possibleValues.add(OPSI_CLIENTD_EVENT_silent_install);
-
-			item = createNOMitem("UnicodeConfig");
 
 			item = createNOMitem("UnicodeConfig");
 			item.put("id", key);

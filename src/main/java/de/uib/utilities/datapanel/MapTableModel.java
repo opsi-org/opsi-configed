@@ -10,7 +10,6 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -70,8 +69,6 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	public void setOptions(Map<String, ListCellOptions> optionsMap, Map<String, Object> defaultData) {
 		this.optionsMap = optionsMap;
 		this.defaultData = defaultData;
-		defaultData = new HashMap<>();
-
 	}
 
 	public Map<String, ListCellOptions> getOptionsMap() {

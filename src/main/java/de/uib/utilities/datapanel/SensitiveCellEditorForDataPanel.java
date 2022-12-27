@@ -49,9 +49,7 @@ public class SensitiveCellEditorForDataPanel extends de.uib.utilities.table.gui.
 					return null;
 				}
 
-				int returnedOption = JOptionPane.NO_OPTION;
-
-				returnedOption = JOptionPane.showOptionDialog(Globals.mainFrame,
+				int returnedOption = JOptionPane.showOptionDialog(Globals.mainFrame,
 						configed.getResourceValue("SensitiveCellEditor.editHiddenText.text"),
 						Globals.APPNAME + " " + configed.getResourceValue("SensitiveCellEditor.editHiddenText.title"),
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,

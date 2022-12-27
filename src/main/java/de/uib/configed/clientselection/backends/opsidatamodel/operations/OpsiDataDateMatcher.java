@@ -1,12 +1,11 @@
 package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 
-import de.uib.configed.clientselection.SelectElement;
 import de.uib.utilities.logging.logging;
 
 public abstract class OpsiDataDateMatcher extends OpsiDataMatcher {
 
-	public OpsiDataDateMatcher(String map, String key, String data, SelectElement element) {
-		super(map, key, data, element);
+	protected OpsiDataDateMatcher(String map, String key, String data) {
+		super(map, key, data);
 	}
 
 	@Override
@@ -36,7 +35,7 @@ public abstract class OpsiDataDateMatcher extends OpsiDataMatcher {
 			return false;
 		}
 
-		String realD = ((String) realdata).trim();
+		String realD = realdata.trim();
 
 		int posBlank = realD.indexOf(' ');
 		if (posBlank > 0) {

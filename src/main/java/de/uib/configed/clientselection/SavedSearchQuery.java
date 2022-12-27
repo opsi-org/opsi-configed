@@ -72,7 +72,7 @@ public class SavedSearchQuery {
 		logging.debug(USAGE);
 	}
 
-	public void setArgs(String host, String user, String password, String searchName, String group) {
+	public void setArgs(String host, String user, String password, String searchName) {
 		logging.info(this, "setArgs " + host + ", PASSWORD, " + searchName);
 		this.host = host;
 		this.user = user;

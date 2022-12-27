@@ -484,7 +484,6 @@ public class UserConfigProducing {
 				.getBooleanValue(UserOpsipermission.PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED);
 
 		logging.info(this, "configKeyUseList " + configKeyUseList + ", configKeyList " + configKeyList);
-		possibleValuesDepot = new ArrayList<>();
 		currentPossibleValuesDepotListed = new LinkedHashSet<>();
 
 		if (prototypeObligatory || serverconfigValuesMap.get(configKeyList) == null) {
@@ -538,7 +537,7 @@ public class UserConfigProducing {
 		List<Object> selectedValuesHostgroup = null;
 		List<Object> possibleValuesHostgroup = null;
 		Set<Object> oldPossibleValuesHostgroup = null;
-		LinkedHashSet<Object> currentPossibleValuesHostgroupListed = null;
+		Set<Object> currentPossibleValuesHostgroupListed = null;
 
 		configKeyUseList = startkey + UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED;
 		partkey = UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE;
@@ -549,7 +548,6 @@ public class UserConfigProducing {
 		defaultvalueForRestrictionUsage = prototypeConfig
 				.getBooleanValue(UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED);
 
-		currentPossibleValuesHostgroupListed = new LinkedHashSet<>();
 		possibleValuesHostgroup = new ArrayList<>();
 
 		if (prototypeObligatory || serverconfigValuesMap.get(configKeyList) == null) {
@@ -612,9 +610,6 @@ public class UserConfigProducing {
 
 		defaultvalueForRestrictionUsage = prototypeConfig
 				.getBooleanValue(UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED);
-
-		currentPossibleValuesProductgroupsListed = new LinkedHashSet<>();
-		possibleValuesProductgroups = new ArrayList<>();
 
 		if (prototypeObligatory || serverconfigValuesMap.get(configKeyList) == null) {
 			selectedValuesProductgroups = prototypeConfig.getValues(partkey);

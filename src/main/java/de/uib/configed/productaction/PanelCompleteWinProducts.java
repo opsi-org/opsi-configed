@@ -400,8 +400,6 @@ public class PanelCompleteWinProducts extends JPanel
 			waitCursor.stop();
 			logging.error("copy error:\n" + ex, ex);
 		}
-
-		waitCursor = null;
 	}
 
 	public void defineLayout() {

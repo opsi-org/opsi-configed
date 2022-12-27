@@ -386,9 +386,8 @@ public class LicensingInfoMap {
 
 		try {
 			if (jOResult.has(CONFIG)) {
-				JSONObject config = new JSONObject();
 
-				config = jOResult.getJSONObject(CONFIG);
+				JSONObject config = jOResult.getJSONObject(CONFIG);
 
 				percentClientLimitWarning = config.getInt(CLIENT_LIMIT_WARNING_PERCENT);
 				absolutClientLimitWarning = config.getInt(CLIENT_LIMIT_WARNING_ABSOLUTE);
@@ -430,12 +429,11 @@ public class LicensingInfoMap {
 	}
 
 	private String produceChecksum() {
-		String checksum = new String();
+		String checksum = "";
 
 		try {
 			checksum = jOResult.getString(CHECKSUM);
-			if (jOResult == null)
-				checksum = jOResult.get("licenses_checksum").toString();
+			checksum = jOResult.get("licenses_checksum").toString();
 		} catch (Exception ex) {
 			logging.error(CLASSNAME + " produceChecksum : " + ex);
 		}
@@ -449,9 +447,8 @@ public class LicensingInfoMap {
 		try {
 			JSONObject jsonDates = jOResult.getJSONObject(DATES);
 			JSONObjectX datesX = new JSONObjectX(jsonDates);
-			Map<String, Object> datesM = new HashMap<>();
 
-			datesM = (Map<String, Object>) datesX.getMap();
+			Map<String, Object> datesM = datesX.getMap();
 
 			for (Map.Entry<String, Object> entry : datesM.entrySet()) {
 				dates.add(entry.getKey());

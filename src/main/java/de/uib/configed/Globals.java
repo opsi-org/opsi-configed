@@ -617,7 +617,7 @@ public class Globals {
 		return result;
 	}
 
-	public static boolean checkCollection(Object source, String location, String cName, Object c) {
+	public static boolean checkCollection(Object source, String cName, Object c) {
 		boolean result = (c != null);
 		if (result) {
 			if (c instanceof Collection) {
@@ -793,87 +793,6 @@ public class Globals {
 		logging.info("minimalBounds: giving " + result);
 
 		return result;
-	}
-
-	public static Rectangle buildLocation(int intendedWidth, int intendedHeight, int placementX, int placementY) {
-		return buildLocation(null, intendedWidth, intendedHeight, placementX, placementY);
-	}
-
-	private static int bigFramesDistanceFromLeft = 60;
-	private static int bigFramesDistanceFromTop = 40;
-
-	public static Rectangle buildLocation(javax.swing.JFrame f, int intendedWidth, int intendedHeight, int placementX,
-			int placementY) {
-
-		int width = intendedWidth;
-		int height = intendedHeight;
-
-		logging.info("buildLocation startX, startY, startWidth, startHeight " + startX + ", " + startY + ", "
-				+ startWidth + ", " + startHeight);
-
-		if (startX != null && startY != null && startX != 0 && startY != 0)
-		// take given values which could e.g. be retrieved from a previous session
-		{
-			placementX = startX;
-			placementY = startY;
-
-			if (startWidth != null && startHeight != null && startWidth != 0 && startHeight != 0) {
-				width = startWidth;
-				height = startHeight;
-			}
-
-		} else {
-
-			Rectangle minBounds = getMinDevice();
-
-			if (intendedWidth + 2 * bigFramesDistanceFromLeft > minBounds.width) {
-				intendedWidth = minBounds.width - 2 * bigFramesDistanceFromLeft;
-			}
-
-			if (intendedHeight + 2 * bigFramesDistanceFromTop > minBounds.height) {
-				intendedHeight = minBounds.height - 2 * bigFramesDistanceFromTop;
-			}
-
-			if (f != null) {
-				f.setSize(intendedWidth, intendedHeight);
-				logging.info("buildLocation " + f);
-			}
-
-			width = intendedWidth;
-			height = intendedHeight;
-
-			if (width + placementX > minBounds.width) {
-				logging.info("buildLocation  width + placementX > minBounds.width " + width + ", " + placementX + ", "
-						+ minBounds.width);
-				placementX = bigFramesDistanceFromLeft;
-				width = minBounds.width - 2 * placementX;
-				logging.info("buildLocation  width , placementX " + width + ", " + placementX);
-			} else if (placementX == 0) {
-				// center in minBounds
-				logging.info("buildLocation  width, minBounds.width " + width + ", " + minBounds.width);
-
-				placementX = (minBounds.width - width) / 2;
-
-			}
-
-			logging.info("buildLocation placementX " + placementX);
-
-			if (height + placementY > minBounds.height) {
-				logging.info("buildLocation  height + placementY > minBounds.height " + height + ", " + placementY
-						+ ", " + minBounds.height);
-				placementY = bigFramesDistanceFromTop;
-				height = minBounds.height - 2 * placementY;
-				logging.info("buildLocation  height + placementY " + height + ", " + placementY);
-			} else if (placementY == 0) {
-				// center in minBounds
-				logging.info(" locate given minBounds.height, height  " + minBounds.width + ", " + height);
-				placementY = (minBounds.height - height) / 2;
-
-			}
-			logging.info("buildLocation placementY " + placementY);
-		}
-
-		return new Rectangle(placementX, placementY, width, height);
 	}
 
 	public static String usedMemory() {

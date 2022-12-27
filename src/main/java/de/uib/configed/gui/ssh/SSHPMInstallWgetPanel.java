@@ -143,7 +143,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 	}
 
 	private CommandWget getWgetCommand() {
-		String d = workbench;
+		String d;
 		String u = "";
 		String additionalProds = "";
 		String wgetDir = ((String) cb_autocompletion.getSelectedItem());
@@ -172,8 +172,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 			}
 		}
 
-		CommandWget wget = new CommandWget(d, u, additionalProds);
-		return wget;
+		return new CommandWget(d, u, additionalProds);
 	}
 
 	public String getProduct() {

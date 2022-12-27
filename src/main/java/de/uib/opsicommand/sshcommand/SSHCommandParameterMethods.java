@@ -355,7 +355,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	}
 
 	private String createStringOfArray(String[] strArrToReplace, String begin_end_ofStr, String separator) {
-		String result = "error";
+		String result;
 
 		logging.info(this, "createStringOfArray strArrToReplace " + strArrToReplace);
 		logging.info(this, "createStringOfArray strArrToReplace.length " + strArrToReplace.length + "if statement: "
@@ -473,7 +473,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		int counter = 0;
 		for (String name : depotnames) {
 			String depotip = ((String) main.getPersistenceController().getHostInfoCollections().getDepots().get(name)
-					.get(HostInfo.clientIpAddressKEY));
+					.get(HostInfo.CLIENT_IP_ADDRESS_KEY));
 			logging.info(this, "getSelected_depotIPs host " + name + " depotip " + depotip);
 			if (depotip != null) {
 				depotIPs[counter] = depotip;

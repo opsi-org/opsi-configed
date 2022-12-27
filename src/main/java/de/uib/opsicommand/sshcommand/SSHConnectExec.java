@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.JButton;
 import javax.swing.SwingUtilities;
@@ -290,12 +291,7 @@ public class SSHConnectExec extends SSHConnect {
 				if (!EventQueue.isDispatchThread())
 				// does this really occur anywhere?
 				{
-					SwingUtilities.invokeLater(new Thread() {
-						@Override
-						public void run() {
-							dialog.setVisible(true);
-						}
-					});
+					SwingUtilities.invokeLater(() -> dialog.setVisible(true));
 				} else
 					dialog.setVisible(true);
 
@@ -303,7 +299,7 @@ public class SSHConnectExec extends SSHConnect {
 				outputDialog = SSHConnectionExecDialog.getInstance();
 			}
 
-			if (SSHCommandFactory.getInstance(main).ssh_always_exec_in_background)
+			if (SSHCommandFactory.ssh_always_exec_in_background)
 				outputDialog.setVisible(false);
 
 			outputDialog.setTitle(configed.getResourceValue("SSHConnection.Exec.title") + " "
@@ -337,8 +333,11 @@ public class SSHConnectExec extends SSHConnect {
 				return task.get();
 		} catch (java.lang.NullPointerException npe) {
 			logging.error(this, "exec NullPointerException", npe);
-		} catch (Exception e) {
-			logging.error(this, "exec Exception", e);
+		} catch (InterruptedException e) {
+			logging.error(this, "exec InterruptedException", e);
+			Thread.currentThread().interrupt();
+		} catch (ExecutionException e) {
+			logging.error(this, "exec ExecutionException", e);
 		}
 		return null;
 	}
@@ -430,14 +429,6 @@ public class SSHConnectExec extends SSHConnect {
 					publishError(configed.getResourceValue("SSHConnection.Exec.exitError") + " "
 							+ configed.getResourceValue("SSHConnection.Exec.exitCode") + " " + exitCode);
 				}
-			} else if (exitCode == 0) {
-				logging.info(this, "exec exit code 0");
-				logging.debug(this, configed.getResourceValue("SSHConnection.Exec.exitNoError"));
-				logging.debug(this, configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
-				if (withGui) {
-					publishInfo(configed.getResourceValue("SSHConnection.Exec.exitNoError"));
-					publishInfo(configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
-				}
 			} else {
 				FOUND_ERROR = true;
 				logging.debug(this, configed.getResourceValue("SSHConnection.Exec.exitUnknown"));
@@ -455,7 +446,8 @@ public class SSHConnectExec extends SSHConnect {
 					interruptChannelWorker = true;
 					try {
 						Thread.sleep(50);
-					} catch (Exception ee) {
+					} catch (InterruptedException e) {
+						Thread.currentThread().interrupt();
 					}
 				}
 
@@ -635,11 +627,7 @@ public class SSHConnectExec extends SSHConnect {
 		}
 
 		protected void publishError(String s) {
-			if (outputDialog != null)
-				if (s.length() > 0)
-					if (s != "\n")
-						s = outputDialog.ansiCodeError + s;
-
+			// TODO what to do if publishError?
 		}
 
 		@Override

@@ -135,7 +135,7 @@ public class BackendMySQL {
 
 				case "SoftwareOperation": // PRODUCT
 
-					String where_clause = doJSONObject(jsonObject, true, MySQL.Type.NEW);
+					String where_clause = doJSONObject(jsonObject, MySQL.Type.NEW);
 					String inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
 
 					// Diese Abfrage liefert alle hostIds, die ein 'passendes' Produkt in
@@ -159,8 +159,7 @@ public class BackendMySQL {
 
 				case "PropertiesOperation":
 
-					where_clause = doJSONObject(jsonObject, true, MySQL.Type.NEW);
-					inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
+					where_clause = doJSONObject(jsonObject, MySQL.Type.NEW);
 
 					// Diese Abfrage liefert alle hostIds, die ein 'passendes' Produkt in
 					// PRODUCT_ON_CLIENT haben
@@ -188,7 +187,7 @@ public class BackendMySQL {
 
 				case "SoftwareWithPropertiesOperation":
 
-					where_clause = doJSONObject(jsonObject, true, MySQL.Type.NEW);
+					where_clause = doJSONObject(jsonObject, MySQL.Type.NEW);
 					inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
 
 					// Diese Abfrage liefert alle hostIds, die ein 'passendes' Produkt in
@@ -242,7 +241,7 @@ public class BackendMySQL {
 					return union(union(list1, list2), union(list3, list4));
 
 				case "HardwareOperation":
-					abfrage = doJSONObject(jsonObject, true, MySQL.Type.NEW);
+					abfrage = doJSONObject(jsonObject, MySQL.Type.NEW);
 
 					inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
 
@@ -252,7 +251,7 @@ public class BackendMySQL {
 					return getListFromSQL(abfrage);
 
 				case "SwAuditOperation":
-					abfrage = doJSONObject(jsonObject, true, MySQL.Type.NEW);
+					abfrage = doJSONObject(jsonObject, MySQL.Type.NEW);
 
 					inner_joins = mySQL_rekursion.getMySQL_INNERJOINS();
 
@@ -261,7 +260,7 @@ public class BackendMySQL {
 					return getListFromSQL(abfrage);
 
 				default:
-					JSONArray jsonArray = (JSONArray) jsonObject.getJSONArray("children");
+					JSONArray jsonArray = jsonObject.getJSONArray("children");
 					return getListFromJSONObject((JSONObject) jsonArray.get(0));
 				}
 			} else if (jsonObject.getJSONArray("elementPath").getString(0).equals("GroupWithSubgroups")) { // Group with
@@ -350,7 +349,7 @@ public class BackendMySQL {
 			JSONObject jsonObject = new JSONObject(abfrage);
 
 			if (jsonObject.has("data"))
-				return getListFromJSONObject((JSONObject) jsonObject.getJSONObject("data"));
+				return getListFromJSONObject(jsonObject.getJSONObject("data"));
 
 		} catch (JSONException e) {
 			logging.warning(this, "" + e);
@@ -359,7 +358,7 @@ public class BackendMySQL {
 		return null;
 	}
 
-	private String doJSONObject(JSONObject jsonObject, boolean first, MySQL.Type type) {
+	private String doJSONObject(JSONObject jsonObject, MySQL.Type type) {
 
 		if (jsonObject.isNull("element")) {
 			MySQL.Type newType = MySQL.getType(jsonObject);
@@ -392,7 +391,7 @@ public class BackendMySQL {
 						mysql += type;
 				}
 
-				mysql += doJSONObject(jsonObject, i == 0, MySQL.Type.NEW);
+				mysql += doJSONObject(jsonObject, MySQL.Type.NEW);
 			} catch (Exception e) {
 				logging.warning(this, "" + e);
 			}

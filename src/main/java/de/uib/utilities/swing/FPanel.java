@@ -79,8 +79,7 @@ public class FPanel extends SecondaryFrame {
 			PanelGenEditTable editPanel = (PanelGenEditTable) innerPanel;
 
 			if (editPanel.isDataChanged()) {
-				int returnedOption = JOptionPane.CANCEL_OPTION;
-				returnedOption = JOptionPane.showOptionDialog(masterFrame,
+				int returnedOption = JOptionPane.showOptionDialog(masterFrame,
 						configed.getResourceValue("ConfigedMain.saveBeforeCloseText"),
 						Globals.APPNAME + " " + configed.getResourceValue("ConfigedMain.saveBeforeCloseTitle"),
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
