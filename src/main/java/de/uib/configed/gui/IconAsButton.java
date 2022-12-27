@@ -18,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -48,7 +49,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 	protected boolean enabled;
 	protected boolean getAttention;
 	protected boolean mouseOver;
-	protected ArrayList<ActionListener> actionListeners;
+	protected List<ActionListener> actionListeners;
 	public String description;
 
 	/**
@@ -205,14 +206,14 @@ public class IconAsButton extends JPanel implements MouseListener {
 		return activated;
 	}
 
-	public ArrayList<ActionListener> getActionListeners() {
+	public List<ActionListener> getActionListeners() {
 		return actionListeners;
 	}
 
 	public void addActionListener(ActionListener l) {
 		boolean newListener = true;
 		for (int i = 0; i < actionListeners.size(); i++) {
-			if ((ActionListener) actionListeners.get(i) == l) {
+			if (actionListeners.get(i) == l) {
 				newListener = false;
 				break;
 			}
@@ -224,7 +225,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 
 	public void fireActionPerformed(ActionEvent e) {
 		for (int i = 0; i < actionListeners.size(); i++) {
-			((ActionListener) actionListeners.get(i)).actionPerformed(e);
+			(actionListeners.get(i)).actionPerformed(e);
 		}
 	}
 

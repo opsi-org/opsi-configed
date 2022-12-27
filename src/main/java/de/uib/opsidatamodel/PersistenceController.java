@@ -476,7 +476,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	// deprecated
 
 	/* software info */
-	public abstract ArrayList<String> getSoftwareList();
+	public abstract List<String> getSoftwareList();
 
 	public abstract TreeMap<String, Integer> getSoftware2Number();
 

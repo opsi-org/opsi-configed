@@ -153,7 +153,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	protected List<? extends RowSorter.SortKey> currentSortKeys;
 
-	protected ArrayList<String> selectedProducts;
+	protected List<String> selectedProducts;
 
 	JPopupMenu popup;
 	JMenu subOpsiclientdEvent;

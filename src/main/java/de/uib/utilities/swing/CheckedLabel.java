@@ -18,6 +18,7 @@ import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
@@ -53,7 +54,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 
 	protected Boolean selected;
 
-	protected ArrayList<ActionListener> myListeners;
+	protected List<ActionListener> myListeners;
 
 	protected class GeneralMouseListener extends MouseAdapter {
 		protected String source;
@@ -261,7 +262,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 		myListeners.add(al);
 	}
 
-	public ArrayList<ActionListener> getActionListeners() {
+	public List<ActionListener> getActionListeners() {
 		return myListeners;
 	}
 

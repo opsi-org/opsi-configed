@@ -1,6 +1,6 @@
 package de.uib.opsicommand.sshcommand;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
@@ -234,7 +234,7 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 	}
 
 	@Override
-	public ArrayList<String> getParameterList() {
+	public List<String> getParameterList() {
 		return null;
 	}
 

@@ -306,11 +306,11 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		tree.setSelectionInterval(row, row);
 	}
 
-	private ArrayList getDataForNode(IconNode node) {
+	private List getDataForNode(IconNode node) {
 		return getDataForNode(node, false);
 	}
 
-	private ArrayList getDataForNode(IconNode node, boolean reduceScanToByAuditClasses) {
+	private List getDataForNode(IconNode node, boolean reduceScanToByAuditClasses) {
 
 		if (node == null || !node.isLeaf())
 			return EMPTY;
@@ -595,7 +595,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	private class HWInfoTableModel extends AbstractTableModel {
-		private ArrayList data;
+		private List data;
 		private final String[] header = { "Name", "Wert" };
 
 		public HWInfoTableModel() {
@@ -603,7 +603,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			data = new ArrayList<>();
 		}
 
-		public void setData(ArrayList data) {
+		public void setData(List data) {
 			this.data = data;
 			fireTableDataChanged();
 		}

@@ -42,7 +42,7 @@ public class SWAuditClientEntry
 	public static final String UNINSTALL_STRING = "uninstallString";
 
 	protected final Map<String, String> data;
-	protected ArrayList<String> software;
+	protected List<String> software;
 	protected java.util.TreeMap<String, Integer> software2Number;
 	private static List<String> notFoundSoftwareIDs;
 	private static Long lastUpdateTime;

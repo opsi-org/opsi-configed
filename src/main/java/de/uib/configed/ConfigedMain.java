@@ -147,7 +147,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
 	// Dashboard disabled
-	public static final boolean DASH_ENABLED = true;
+	public static final boolean DASH_ENABLED = false;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
@@ -179,7 +179,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// we do not work with selection
 
 	protected Map<String, TreePath> activeTreeNodes;
-	protected ArrayList<TreePath> activePaths;
+	protected List<TreePath> activePaths;
 	// is nearly activeTreeNodes.values() , but there may be multiple paths where
 	// only one entry to activeTreeNode remains ----
 
@@ -305,7 +305,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private ReachableUpdater reachableUpdater = new ReachableUpdater(0);
 
-	private ArrayList<JFrame> allFrames;
+	private List<JFrame> allFrames;
 
 	public TabbedFrame licencesFrame;
 
@@ -330,7 +330,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private int clientCount = 0;
 	private boolean firstDepotListChange = true;
 
-	public final Dimension licencesInitDimension = new Dimension(1200, 800);
+	private final Dimension licencesInitDimension = new Dimension(1200, 800);
 
 	protected int viewIndex = VIEW_CLIENTS;
 	protected int saveClientsViewIndex = VIEW_CLIENTS;
@@ -342,7 +342,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected Map<String, String> logfiles;
 
-	public Map<String, Boolean> host_displayFields;
+	public Map<String, Boolean> hostDisplayFields;
 
 	public enum LicencesTabStatus {
 		LICENCEPOOL, ENTER_LICENCE, EDIT_LICENCE, USAGE, RECONCILIATION, STATISTICS
@@ -797,7 +797,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		persist.productGroupsRequestRefresh();
 
-		host_displayFields = persist.getHost_displayFields();
+		hostDisplayFields = persist.getHost_displayFields();
 		persist.getProductOnClients_displayFieldsNetbootProducts();
 		persist.getProductOnClients_displayFieldsLocalbootProducts();
 		persist.configOptionsRequestRefresh();
@@ -1552,8 +1552,16 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		licencesFrame.start();
 
 		licencesFrame.setSize(licencesInitDimension);
-		final Rectangle dim = Globals.buildLocation(licencesInitDimension.width, licencesInitDimension.height, 0, 0);
-		licencesFrame.setLocation(dim.x, dim.y);
+
+		Rectangle screenRectangle = mainFrame.getGraphicsConfiguration().getBounds();
+		logging.info(this, "set size and location of licencesFrame");
+
+		// weird formula for size
+		//mainFrame.setSize(screenRectangle.width * 19 / 20 - 100, screenRectangle.height * 19 / 20 - 100);
+
+		// Center mainFrame on screen of configed.fProgress
+		licencesFrame.setLocation((int) (screenRectangle.getCenterX() - licencesFrame.getSize().getWidth() / 2),
+				(int) (screenRectangle.getCenterY() - licencesFrame.getSize().getHeight() / 2));
 
 		waitCursor.stop();
 
@@ -1792,17 +1800,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Map<String, HostInfo> pcinfos = persist.getHostInfoCollections().getMapOfPCInfoMaps();
 
 		if (pclist != null) {
-			host_displayFields = persist.getHost_displayFields();
+			hostDisplayFields = persist.getHost_displayFields();
 
 			// test
 
-			for (Map.Entry<String, Boolean> entry : host_displayFields.entrySet()) {
+			for (Map.Entry<String, Boolean> entry : hostDisplayFields.entrySet()) {
 				if (Boolean.TRUE.equals(entry.getValue())) {
 					model.addColumn(configed.getResourceValue("ConfigedMain.pclistTableModel." + entry.getKey()));
 				}
 			}
 
-			logging.info(this, "buildPclistTableModel host_displayFields " + host_displayFields);
+			logging.info(this, "buildPclistTableModel host_displayFields " + hostDisplayFields);
 
 			Object[] pcs = pclist.entrySet().toArray();
 			for (int i = 0; i < pcs.length; i++) {
@@ -1824,16 +1832,16 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				ArrayList<Object> rowItems = new ArrayList<>();
 
-				for (String field : host_displayFields.keySet()) {
+				for (String field : hostDisplayFields.keySet()) {
 
-					if (Boolean.TRUE.equals(host_displayFields.get(field))) {
+					if (Boolean.TRUE.equals(hostDisplayFields.get(field))) {
 						rowItems.add(rowmap.get(field));
 					}
 				}
 
 				if (key.equals("fscnoteb1.uib.local")) {
-					logging.info(this, "*** host_displayFields size, content " + host_displayFields.size() + ": "
-							+ host_displayFields);
+					logging.info(this, "*** host_displayFields size, content " + hostDisplayFields.size() + ": "
+							+ hostDisplayFields);
 					logging.info(this, "*** rowmap size, content " + rowmap.size() + ": " + rowmap);
 					logging.info(this, "*** rowItems size, content " + rowItems.size() + ": " + rowItems);
 				}
@@ -2823,7 +2831,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return result;
 	}
 
-	protected ArrayList<String> getLocalbootProductDisplayFieldsList() {
+	protected List<String> getLocalbootProductDisplayFieldsList() {
 		ArrayList<String> result = new ArrayList<>();
 		Iterator iter = displayFieldsLocalbootProducts.keySet().iterator();
 		while (iter.hasNext()) {
@@ -2835,7 +2843,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return result;
 	}
 
-	protected ArrayList<String> getNetbootProductDisplayFieldsList() {
+	protected List<String> getNetbootProductDisplayFieldsList() {
 		ArrayList<String> result = new ArrayList<>();
 		Iterator iter = displayFieldsNetbootProducts.keySet().iterator();
 		while (iter.hasNext()) {
@@ -3814,7 +3822,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		WaitCursor.stopAll(); // stop all old waiting threads if there should be any left
 
-		ArrayList<String> selValuesList = selectionPanel.getSelectedValues();
+		List<String> selValuesList = selectionPanel.getSelectedValues();
 
 		logging.info(this, "reloadData, selValuesList.size " + selValuesList.size());
 

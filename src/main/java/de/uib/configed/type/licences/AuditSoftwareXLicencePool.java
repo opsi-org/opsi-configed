@@ -1,6 +1,5 @@
 package de.uib.configed.type.licences;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,7 +25,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 	 * 
 	 */
 
-	public ArrayList<String> registeredSoftware;
+	public List<String> registeredSoftware;
 
 	public static final String SwID = "swId";
 
@@ -53,7 +52,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 	public static final String[] SERVICE_ATTRIBUTES = new String[] { LicencepoolEntry.idSERVICEKEY, SWAuditEntry.NAME,
 			SWAuditEntry.VERSION, SWAuditEntry.SUBVERSION, SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE };
 
-	public AuditSoftwareXLicencePool(ArrayList<String> allRegisteredSoftware) {
+	public AuditSoftwareXLicencePool(List<String> allRegisteredSoftware) {
 		super(ATTRIBUTES);
 		registeredSoftware = allRegisteredSoftware;
 

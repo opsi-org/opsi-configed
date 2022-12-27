@@ -44,18 +44,18 @@ public class LicensingInfoMap {
 	private Vector<String> knownModulesVector;
 	private Vector<String> obsoleteModules;
 	private Vector<String> shownModules;
-	private ArrayList<String> datesKeys;
+	private List<String> datesKeys;
 	private Map<String, Map<String, Map<String, Object>>> datesMap;
 	private Vector<String> columnNames;
 	private Vector<String> classNames;
 	private Map<String, Map> tableMap;
 	private String latestDateString;
 	private String checksum;
-	private ArrayList<String> currentCloseToLimitModuleList;
-	private ArrayList<String> currentOverLimitModuleList;
-	private ArrayList<String> currentTimeWarningModuleList;
-	private ArrayList<String> futureOverLimitModuleList;
-	private ArrayList<String> futureCloseToLimitModuleList;
+	private List<String> currentCloseToLimitModuleList;
+	private List<String> currentOverLimitModuleList;
+	private List<String> currentTimeWarningModuleList;
+	private List<String> futureOverLimitModuleList;
+	private List<String> futureCloseToLimitModuleList;
 	private Set<String> allCloseToLimitModules;
 	private Set<String> allOverLimitModules;
 	private Integer daysClientLimitWarning;
@@ -443,7 +443,7 @@ public class LicensingInfoMap {
 		return checksum;
 	}
 
-	private ArrayList<String> produceDatesKeys() {
+	private List<String> produceDatesKeys() {
 		ArrayList<String> dates = new ArrayList<>();
 
 		try {
@@ -821,23 +821,23 @@ public class LicensingInfoMap {
 
 	}
 
-	public ArrayList<String> getCloseToLimitModuleList() {
+	public List<String> getCloseToLimitModuleList() {
 		return currentCloseToLimitModuleList;
 	}
 
-	public ArrayList<String> getCurrentOverLimitModuleList() {
+	public List<String> getCurrentOverLimitModuleList() {
 		return currentOverLimitModuleList;
 	}
 
-	public ArrayList<String> getCurrentDaysWarningModuleList() {
+	public List<String> getCurrentDaysWarningModuleList() {
 		return currentTimeWarningModuleList;
 	}
 
 	/**
 	 * @return list of modules for every possible warning state (4)
 	 */
-	public Map<String, ArrayList<String>> getWarnings() {
-		Map<String, ArrayList<String>> result = new HashMap<>();
+	public Map<String, List<String>> getWarnings() {
+		Map<String, List<String>> result = new HashMap<>();
 
 		if (currentCloseToLimitModuleList.isEmpty() && currentOverLimitModuleList.isEmpty()
 				&& currentTimeWarningModuleList.isEmpty() && futureCloseToLimitModuleList.isEmpty()

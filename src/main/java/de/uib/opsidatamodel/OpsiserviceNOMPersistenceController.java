@@ -108,7 +108,7 @@ import de.uib.utilities.table.ListCellOptions;
 public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	private static final String EMPTYFIELD = "-";
-	private static final ArrayList NONE_LIST = new ArrayList<>() {
+	private static final List NONE_LIST = new ArrayList<>() {
 		@Override
 		public int size() {
 			return -1;
@@ -281,9 +281,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	protected Map<String, String> logfiles;
 
-	private ArrayList updateProductOnClient_items;
+	private List updateProductOnClient_items;
 
-	private ArrayList<LicenceUsageEntry> itemsDeletionLicenceUsage;
+	private List<LicenceUsageEntry> itemsDeletionLicenceUsage;
 
 	protected Map<String, Object> opsiInformation;
 	protected JSONObject licensingInfo;
@@ -1042,7 +1042,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		applyUserSpecializedConfig();
 
-		ArrayList<Object> readyConfigObjects = new UserConfigProducing(applyUserSpecializedConfig(),
+		List<Object> readyConfigObjects = new UserConfigProducing(applyUserSpecializedConfig(),
 				getHostInfoCollections().getConfigServer(), getHostInfoCollections().getDepotNamesList(),
 				getHostGroupIds(), getProductGroups().keySet(),
 
@@ -1525,7 +1525,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
-	protected ArrayList<Object> buildWANConfigOptions(ArrayList<Object> readyObjects) {
+	protected List<Object> buildWANConfigOptions(List<Object> readyObjects) {
 		// NOT_WAN meta configs
 		Map<String, Object> item = createJSONBoolConfig(
 				MetaConfig.CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_GUISTARTUP, true,
@@ -5876,7 +5876,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return dataStub.getSWident(i);
 	}
 
-	public ArrayList<String> getSoftwareList() {
+	public List<String> getSoftwareList() {
 		return dataStub.getSoftwareList();
 	}
 
@@ -7609,7 +7609,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		List possibleValues;
 		Map<String, Object> item;
 		String key;
-		ArrayList<Object> readyObjects = new ArrayList<>();
+		List<Object> readyObjects = new ArrayList<>();
 
 		// list of domains for new clients
 		key = configedGIVENDOMAINS_key;

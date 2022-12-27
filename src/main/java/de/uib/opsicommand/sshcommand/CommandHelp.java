@@ -1,6 +1,6 @@
 package de.uib.opsicommand.sshcommand;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import de.uib.configed.gui.FGeneralDialog;
 
@@ -104,7 +104,7 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	}
 
 	@Override
-	public ArrayList<String> getParameterList() {
+	public List<String> getParameterList() {
 		return null;
 	}
 

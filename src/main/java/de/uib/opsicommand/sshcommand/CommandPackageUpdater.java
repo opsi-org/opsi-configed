@@ -2,6 +2,7 @@ package de.uib.opsicommand.sshcommand;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.configed;
@@ -21,7 +22,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 	private String action = " list --repos";
 	private String repo = "";
-	private ArrayList<String> actionlist = new ArrayList<>();
+	private List<String> actionlist = new ArrayList<>();
 	private HashMap<String, String> actionhash = new HashMap<>();
 	private HashMap<String, String> repohash = new HashMap<>();
 	private String verbosity = " -v ";
@@ -194,7 +195,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 		return actionhash.get(text);
 	}
 
-	public ArrayList getActions() {
+	public List getActions() {
 		return actionlist;
 	}
 
@@ -209,7 +210,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	}
 
 	@Override
-	public ArrayList<String> getParameterList() {
+	public List<String> getParameterList() {
 		return null;
 	}
 

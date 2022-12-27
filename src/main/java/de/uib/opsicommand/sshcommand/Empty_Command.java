@@ -15,6 +15,7 @@ package de.uib.opsicommand.sshcommand;
  * @version 1.0
  */
 import java.util.ArrayList;
+import java.util.List;
 
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.utilities.logging.logging;
@@ -221,7 +222,7 @@ public class Empty_Command implements SSHCommand {
 	 * @return ArrayList with placeholdern for parameter
 	 */
 	@Override
-	public ArrayList<String> getParameterList() {
+	public List<String> getParameterList() {
 		ArrayList<String> paramlist = new ArrayList<>();
 		String tmp_1 = SSHCommandParameterMethods.replacement_default_1;
 		String tmp_2 = SSHCommandParameterMethods.replacement_default_2;

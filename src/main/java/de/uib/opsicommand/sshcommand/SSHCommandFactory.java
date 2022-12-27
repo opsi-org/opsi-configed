@@ -202,7 +202,7 @@ public class SSHCommandFactory {
 
 	}
 
-	public ArrayList<String> getProductHistory() {
+	public List<String> getProductHistory() {
 		return createdProducts;
 	}
 

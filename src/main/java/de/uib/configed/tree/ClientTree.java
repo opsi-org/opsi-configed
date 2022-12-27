@@ -196,7 +196,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			return invertedSimpleClientPaths.keySet();
 		}
 
-		public ArrayList<SimpleTreePath> get(String k) {
+		public List<SimpleTreePath> get(String k) {
 			return invertedSimpleClientPaths.get(k);
 		}
 
@@ -219,7 +219,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			}
 		}
 
-		public ArrayList<SimpleTreePath> getSimpleTreePaths(String leafname) {
+		public List<SimpleTreePath> getSimpleTreePaths(String leafname) {
 			return invertedSimpleClientPaths.get(leafname);
 		}
 
@@ -1583,7 +1583,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		repaint();
 	}
 
-	private ArrayList<String> enumerateLeafNodes(DefaultMutableTreeNode node) {
+	private List<String> enumerateLeafNodes(DefaultMutableTreeNode node) {
 		ArrayList<String> result = new ArrayList<>();
 
 		Enumeration<TreeNode> e = node.breadthFirstEnumeration();
@@ -1611,7 +1611,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return collectParentIDs(nodeID);
 	}
 
-	public ArrayList<SimpleTreePath> getSimpleTreePaths(String leafname) {
+	public List<SimpleTreePath> getSimpleTreePaths(String leafname) {
 		return leafname2AllItsPaths.getSimpleTreePaths(leafname);
 	}
 

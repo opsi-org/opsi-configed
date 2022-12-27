@@ -582,7 +582,7 @@ public class DataStubNOM extends DataStub {
 	protected TreeMap<String, Set<String>> name2SWIdents; // giving the idents which have the name in their ident
 	protected TreeMap<String, Map<String, String>> installedSoftwareName2SWinfo;
 	protected TreeMap<String, Map<String, Map<String, String>>> name2ident2infoWithPool;
-	protected ArrayList<String> softwareList; // List of idents of software
+	protected List<String> softwareList; // List of idents of software
 	protected TreeMap<String, Integer> software2Number; // the same with a numbering index
 
 	@Override
@@ -593,7 +593,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	@Override
-	public ArrayList<String> getSoftwareList() {
+	public List<String> getSoftwareList() {
 		retrieveInstalledSoftwareInformation();
 		return softwareList;
 	}

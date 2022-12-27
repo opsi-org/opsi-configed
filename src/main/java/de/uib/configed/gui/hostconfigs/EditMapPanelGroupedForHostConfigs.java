@@ -11,7 +11,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -523,7 +522,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				persist.getConfigOptions()// Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap
 		);
 
-		ArrayList<Object> newData = up.produce();
+		List<Object> newData = up.produce();
 
 		if (newData == null) {
 			logging.warning(this, "readyObjects for userparts " + null);

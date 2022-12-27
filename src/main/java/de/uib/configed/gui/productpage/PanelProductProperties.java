@@ -65,7 +65,7 @@ public class PanelProductProperties extends JSplitPane
 
 	protected LinkedHashMap<String, Boolean> productDisplayFields;
 
-	protected ArrayList<String> selectedProducts;
+	protected List<String> selectedProducts;
 
 	JPopupMenu popup;
 

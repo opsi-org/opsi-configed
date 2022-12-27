@@ -1,9 +1,10 @@
 package de.uib.utilities.thread;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class WaitInfoString {
-	private ArrayList<String> waitInfoList;
+	private List<String> waitInfoList;
 	private int current = 0;
 	private String baseString;
 

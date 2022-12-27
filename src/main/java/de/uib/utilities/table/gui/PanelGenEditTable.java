@@ -596,8 +596,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		((PanelLinedComponents) titlePane).setComponents(components, height);
 	}
 
-	protected ArrayList<Integer> supplementBefore(int insertpoint, final int[] injectKeys,
-			final List<Integer> listOfKeys) {
+	protected List<Integer> supplementBefore(int insertpoint, final int[] injectKeys, final List<Integer> listOfKeys) {
 		ArrayList<Integer> augmentedList = new ArrayList<>();
 
 		boolean found = false;

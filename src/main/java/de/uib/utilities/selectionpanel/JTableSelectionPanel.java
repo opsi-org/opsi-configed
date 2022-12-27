@@ -442,7 +442,7 @@ public class JTableSelectionPanel extends JPanel
 		}
 	}
 
-	public ArrayList<String> getSelectedValues() {
+	public List<String> getSelectedValues() {
 		ArrayList<String> valuesList = new ArrayList<>(table.getSelectedRowCount());
 
 		for (int i = 0; i < table.getRowCount(); i++) {

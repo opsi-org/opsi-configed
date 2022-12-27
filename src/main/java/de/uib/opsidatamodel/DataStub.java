@@ -26,7 +26,6 @@ getServerIds_list()
 
 package de.uib.opsidatamodel;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -71,8 +70,6 @@ public abstract class DataStub {
 
 	public abstract Object2Product2VersionList getDepot2NetbootProducts();
 
-	
-
 	public abstract void productPropertyDefinitionsRequestRefresh();
 
 	public abstract Map<String, Map<String, Map<String, ListCellOptions>>> getDepot2Product2PropertyDefinitions();
@@ -87,13 +84,11 @@ public abstract class DataStub {
 
 	public abstract List<Map<String, Object>> getProductPropertyStates();
 
-	
-
 	public abstract List<Map<String, Object>> getProductPropertyDepotStates(java.util.Set<String> depots);
 
 	public abstract void installedSoftwareInformationRequestRefresh();
 
-	public abstract ArrayList<String> getSoftwareList();
+	public abstract List<String> getSoftwareList();
 
 	public abstract TreeMap<String, Integer> getSoftware2Number();
 
@@ -125,7 +120,6 @@ public abstract class DataStub {
 
 	public abstract Map<String, Map<String, Object>> getConfigs();
 	// host -> (key -> value)
-	
 
 	public abstract void licencepoolsRequestRefresh();
 

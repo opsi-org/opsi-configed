@@ -37,7 +37,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	public JButton btn_killProcess;
 	private JButton btn_executeCommand;
 	private final SSHConnectTerminal terminal;
-	private ArrayList<String> commandHistory = new ArrayList<>();
+	private List<String> commandHistory = new ArrayList<>();
 	private int historyAddIndex = 0;
 	private int historyGetIndex = 0;
 	private Autocomplete autoComplete;

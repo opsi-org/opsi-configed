@@ -2,6 +2,7 @@ package de.uib.opsicommand.sshcommand;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.configed;
@@ -163,7 +164,7 @@ public class CommandOpsiSetRights extends SSHCommand_Template
 	 * @return ArrayList with placeholdern for parameter
 	 */
 	@Override
-	public ArrayList<String> getParameterList() {
+	public List<String> getParameterList() {
 		ArrayList<String> paramlist = new ArrayList<>();
 		String tmp_1 = SSHCommandParameterMethods.replacement_default_1;
 		String tmp_2 = SSHCommandParameterMethods.replacement_default_2;

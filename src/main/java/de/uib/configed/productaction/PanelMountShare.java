@@ -33,7 +33,7 @@ import de.uib.utilities.logging.logging;
 public class PanelMountShare extends JPanel {
 	static ArrayList<PanelMountShare> instances = new ArrayList<>();
 
-	private final static int FIRST_LABEL_WIDTH = Globals.FIRST_LABEL_WIDTH;
+	private static final int FIRST_LABEL_WIDTH = Globals.FIRST_LABEL_WIDTH;
 
 	PersistenceController persist;
 	ConfigedMain main;

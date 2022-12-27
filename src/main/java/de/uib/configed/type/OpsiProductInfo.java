@@ -20,7 +20,7 @@ import de.uib.utilities.logging.logging;
 
 //data source product table
 public class OpsiProductInfo extends OpsiPackage {
-	protected ArrayList<String> possibleActions;
+	protected List<String> possibleActions;
 	protected String productName;
 	protected String description;
 	protected String advice;

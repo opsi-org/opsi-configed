@@ -1,6 +1,6 @@
 package de.uib.opsicommand.sshcommand;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.configed;
@@ -245,7 +245,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	}
 
 	@Override
-	public ArrayList<String> getParameterList() {
+	public List<String> getParameterList() {
 		return null;
 	}
 

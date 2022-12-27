@@ -62,7 +62,7 @@ public class UserConfigProducing {
 				+ " - " + existingHostgroups.size() + " - " + existingProductgroups.size());
 	}
 
-	public ArrayList<Object> produce() {
+	public List<Object> produce() {
 		readyObjects = new ArrayList<>();
 
 		java.util.Set<String> userparts = new TreeSet<>();
@@ -708,7 +708,7 @@ public class UserConfigProducing {
 
 		);
 
-		ArrayList<Object> newData = up.produce();
+		List<Object> newData = up.produce();
 		logging.debug("UserConfigProducing: newData " + newData);
 
 	}

@@ -9,7 +9,6 @@ import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.HashSet;
@@ -970,7 +969,7 @@ public class configed {
 					// data. on which changes are based
 					persist.getConfigDefaultValues(), persist.getConfigOptions());
 
-			ArrayList<Object> newData = up.produce();
+			List<Object> newData = up.produce();
 			logging.debug("UserConfigProducing: newData " + newData);
 
 			System.exit(0);
