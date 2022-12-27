@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -253,7 +252,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void setConnectionState(ConnectionState state);
 
-	public abstract LinkedHashMap<String, Map<String, Object>> getDepotPropertiesForPermittedDepots();
+	public abstract Map<String, Map<String, Object>> getDepotPropertiesForPermittedDepots();
 
 	public boolean hasUserPrivilegesData() {
 		// user has roles
@@ -853,11 +852,11 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract boolean deleteLicencesReconciliation(String clientId, String licensePoolId);
 
 	// configurations and algorithms
-	public abstract LinkedHashMap<String, Boolean> getProductOnClients_displayFieldsLocalbootProducts();
+	public abstract Map<String, Boolean> getProductOnClients_displayFieldsLocalbootProducts();
 
-	public abstract LinkedHashMap<String, Boolean> getProductOnClients_displayFieldsNetbootProducts();
+	public abstract Map<String, Boolean> getProductOnClients_displayFieldsNetbootProducts();
 
-	public abstract LinkedHashMap<String, Boolean> getHost_displayFields();
+	public abstract Map<String, Boolean> getHost_displayFields();
 
 	// menu configuration
 	public abstract List<String> getDisabledClientMenuEntries();

@@ -49,7 +49,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	public static RunningInstances<FStartWakeOnLan> runningInstances = new RunningInstances(FStartWakeOnLan.class,
 			configed.getResourceValue("RunningInstances.askStop.text"));
 	String scheduleTitleStarter;
-	private LinkedHashMap<String, Integer> labelledDelays;
+	private Map<String, Integer> labelledDelays;
 	JSpinner spinnerDelay;
 	JSpinner spinnerHour;
 	JSpinner spinnerMinute;

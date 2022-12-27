@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
@@ -37,9 +38,9 @@ public class PanelStateSwitch extends JPanel {
 	protected Enum startValue;
 	protected Class myenumClass;
 	protected Enum[] values;
-	protected LinkedHashMap<Enum, String> labels;
+	protected Map<Enum, String> labels;
 	protected String title;
-	protected LinkedHashMap<Enum, JRadioButton> groupedButtons;
+	protected Map<Enum, JRadioButton> groupedButtons;
 	protected Enumsetter enumSetter;
 	protected Font primaryFont;
 	protected int vGap;

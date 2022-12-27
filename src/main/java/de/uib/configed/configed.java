@@ -173,7 +173,7 @@ public class configed {
 
 	public static SavedStates savedStates;
 	public static String savedStatesLocationName;
-	public static final String savedStatesFilename = "configedStates.prop";
+	public static final String SAVED_STATES_FILENAME = "configedStates.prop";
 
 	public static Integer refreshMinutes = 0;
 

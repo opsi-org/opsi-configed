@@ -527,7 +527,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				savedStatesDir.setWritable(true, true);
 				logging.info(this, "writing saved states, set writable ");
 				configed.savedStates = new de.uib.utilities.savedstates.SavedStates(
-						new File(savedStatesDir.toString() + File.separator + configed.savedStatesFilename));
+						new File(savedStatesDir.toString() + File.separator + configed.SAVED_STATES_FILENAME));
 			} catch (Exception ex) {
 				logging.warning(this, "saved states exception " + ex);
 				success = false;
@@ -544,7 +544,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			savedStatesDir.mkdirs();
 			savedStatesDir.setWritable(true, true);
 			configed.savedStates = new de.uib.utilities.savedstates.SavedStates(
-					new File(savedStatesDir.toString() + File.separator + configed.savedStatesFilename));
+					new File(savedStatesDir.toString() + File.separator + configed.SAVED_STATES_FILENAME));
 		}
 
 		try {
@@ -595,7 +595,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			subdirs = savedStatesLocation.listFiles(File::isDirectory);
 
 			for (File folder : subdirs) {
-				File checkFile = new File(folder + File.separator + configed.savedStatesFilename);
+				File checkFile = new File(folder + File.separator + configed.SAVED_STATES_FILENAME);
 				String folderPath = folder.getPath();
 				String elementname = folderPath.substring(folderPath.lastIndexOf(File.separator) + 1);
 
@@ -3117,7 +3117,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		try {
 			if (editingTarget == EditingTarget.DEPOTS) {
 
-				LinkedHashMap<String, Map<String, Object>> depotPropertiesForPermittedDepots = persist
+				Map<String, Map<String, Object>> depotPropertiesForPermittedDepots = persist
 						.getDepotPropertiesForPermittedDepots();
 
 				if (hostUpdateCollection != null) {

@@ -127,8 +127,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 	protected DefaultComboBoxModel comboModel;
 
-	protected LinkedHashMap<String, String> namesAndDescriptions;
-	protected LinkedHashMap<String, String> namesAndDescriptionsSave;
+	protected Map<String, String> namesAndDescriptions;
+	protected Map<String, String> namesAndDescriptionsSave;
 	protected MapOfProductGroups productGroupMembers;
 	protected int editIndex;
 	protected String showKey;

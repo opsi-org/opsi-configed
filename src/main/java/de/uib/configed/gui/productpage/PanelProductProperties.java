@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JPopupMenu;
@@ -63,7 +64,7 @@ public class PanelProductProperties extends JSplitPane
 
 	protected TableCellRenderer propertiesTableCellRenderer;
 
-	protected LinkedHashMap<String, Boolean> productDisplayFields;
+	protected Map<String, Boolean> productDisplayFields;
 
 	protected List<String> selectedProducts;
 

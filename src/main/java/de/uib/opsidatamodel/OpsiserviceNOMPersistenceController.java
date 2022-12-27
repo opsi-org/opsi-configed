@@ -317,9 +317,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	protected RemoteControls remoteControls;
 	protected SavedSearches savedSearches;
 
-	protected LinkedHashMap<String, Boolean> productOnClients_displayFieldsNetbootProducts;
-	protected LinkedHashMap<String, Boolean> productOnClients_displayFieldsLocalbootProducts;
-	protected LinkedHashMap<String, Boolean> host_displayFields;
+	protected Map<String, Boolean> productOnClients_displayFieldsNetbootProducts;
+	protected Map<String, Boolean> productOnClients_displayFieldsLocalbootProducts;
+	protected Map<String, Boolean> host_displayFields;
 
 	protected List configStateCollection;
 	protected List deleteConfigStateItems;
@@ -1166,7 +1166,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	public LinkedHashMap<String, Map<String, Object>> getDepotPropertiesForPermittedDepots() {
+	public Map<String, Map<String, Object>> getDepotPropertiesForPermittedDepots() {
 
 		Map<String, Map<String, Object>> depotProperties = getHostInfoCollections().getAllDepots();
 		LinkedHashMap<String, Map<String, Object>> depotPropertiesForPermittedDepots = new LinkedHashMap<>();
@@ -7248,7 +7248,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return KEY_USER_REGISTER_VALUE;
 	}
 
-	public LinkedHashMap<String, Boolean> getProductOnClients_displayFieldsLocalbootProducts() {
+	public Map<String, Boolean> getProductOnClients_displayFieldsLocalbootProducts() {
 
 		if (productOnClients_displayFieldsLocalbootProducts == null) {
 			Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
@@ -7410,7 +7410,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
-	public LinkedHashMap<String, Boolean> getProductOnClients_displayFieldsNetbootProducts() {
+	public Map<String, Boolean> getProductOnClients_displayFieldsNetbootProducts() {
 		if (productOnClients_displayFieldsNetbootProducts == null) {
 			Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
 
@@ -7525,7 +7525,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
-	public LinkedHashMap<String, Boolean> getHost_displayFields() {
+	public Map<String, Boolean> getHost_displayFields() {
 		if (host_displayFields == null) {
 			Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
 

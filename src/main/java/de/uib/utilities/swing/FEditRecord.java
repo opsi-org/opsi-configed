@@ -66,7 +66,7 @@ public class FEditRecord extends FEdit {
 
 	}
 
-	public void setRecord(LinkedHashMap<String, String> data, Map<String, String> labels, Map<String, String> hints,
+	public void setRecord(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
 			Map<String, Boolean> editable) {
 		recordPane.setData(data, labels, hints, editable);
 
@@ -75,7 +75,7 @@ public class FEditRecord extends FEdit {
 		editingArea.add(recordPane, BorderLayout.CENTER);
 	}
 
-	public LinkedHashMap<String, String> getData() {
+	public Map<String, String> getData() {
 		return recordPane.getData();
 	}
 

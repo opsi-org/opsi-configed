@@ -11,7 +11,7 @@ import de.uib.utilities.logging.logging;
 //a very rough class for simple command interpreting
 public class Interpreter {
 
-	protected LinkedHashMap<String, Object> specialValues;
+	protected Map<String, Object> specialValues;
 
 	private String command;
 

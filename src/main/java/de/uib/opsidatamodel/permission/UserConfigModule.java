@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import de.uib.utilities.logging.logging;
 
@@ -13,9 +15,9 @@ public class UserConfigModule {
 	public LinkedHashSet<String> bool_keys;
 	public LinkedHashSet<String> list_keys;
 
-	public LinkedHashMap<String, Boolean> booleanMap;
-	public LinkedHashMap<String, List<Object>> valuesMap;
-	public LinkedHashMap<String, List<Object>> possibleValuesMap;
+	public Map<String, Boolean> booleanMap;
+	public Map<String, List<Object>> valuesMap;
+	public Map<String, List<Object>> possibleValuesMap;
 
 	protected UserConfigModule(String userName) {
 		this(userName, null);
@@ -88,7 +90,7 @@ public class UserConfigModule {
 
 	}
 
-	private void extractKeys(final LinkedHashMap<String, ? extends Object> map, LinkedHashSet<String> result) {
+	private void extractKeys(final Map<String, ? extends Object> map, Set<String> result) {
 		for (String key : map.keySet()) {
 			result.add(key);
 		}

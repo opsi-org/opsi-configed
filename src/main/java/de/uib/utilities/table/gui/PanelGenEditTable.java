@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
@@ -127,8 +128,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	private int oldrowcount = -1;
 
-	protected LinkedHashMap<Integer, SortOrder> sortDescriptor;
-	protected LinkedHashMap<Integer, SortOrder> specialSortDescriptor;
+	protected Map<Integer, SortOrder> sortDescriptor;
+	protected Map<Integer, SortOrder> specialSortDescriptor;
 
 	private ExportTable exportTable;
 
@@ -801,7 +802,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		return scrollpane;
 	}
 
-	public void setSortOrder(LinkedHashMap<Integer, SortOrder> sortDescriptor) {
+	public void setSortOrder(Map<Integer, SortOrder> sortDescriptor) {
 		this.sortDescriptor = sortDescriptor;
 
 	}

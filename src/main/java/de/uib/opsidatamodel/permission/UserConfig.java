@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 
 import de.uib.utilities.logging.logging;
 
@@ -69,9 +70,9 @@ public class UserConfig {
 
 	protected UserConfig prototypeConfig;
 
-	protected LinkedHashMap<String, Boolean> booleanMap;
-	protected LinkedHashMap<String, List<Object>> valuesMap;
-	protected LinkedHashMap<String, List<Object>> possibleValuesMap;
+	protected Map<String, Boolean> booleanMap;
+	protected Map<String, List<Object>> valuesMap;
+	protected Map<String, List<Object>> possibleValuesMap;
 
 	private static LinkedHashSet<String> USER_BOOL_KEYS;
 

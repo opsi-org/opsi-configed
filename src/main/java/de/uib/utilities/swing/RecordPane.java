@@ -50,7 +50,7 @@ public class RecordPane extends JPanel implements KeyListener {
 	protected Map<String, JTextFieldObserved> datafields;
 
 	// Data
-	protected LinkedHashMap<String, String> data;
+	protected Map<String, String> data;
 	protected Map<String, String> labels;
 	protected Map<String, String> hints;
 	protected Map<String, Boolean> editable;
@@ -59,7 +59,7 @@ public class RecordPane extends JPanel implements KeyListener {
 		// call of setData necessary
 	}
 
-	public RecordPane(LinkedHashMap<String, String> data, Map<String, String> labels, Map<String, String> hints,
+	public RecordPane(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
 			Map<String, Boolean> editable) {
 		init(data, labels, hints, editable);
 	}
@@ -75,12 +75,12 @@ public class RecordPane extends JPanel implements KeyListener {
 		}
 	}
 
-	public void setData(LinkedHashMap<String, String> data, Map<String, String> labels, Map<String, String> hints,
+	public void setData(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
 			Map<String, Boolean> editable) {
 		init(data, labels, hints, editable);
 	}
 
-	protected void init(LinkedHashMap<String, String> data, Map<String, String> labels, Map<String, String> hints,
+	protected void init(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
 			Map<String, Boolean> editable) {
 		this.data = data;
 		this.labels = labels;
@@ -168,7 +168,7 @@ public class RecordPane extends JPanel implements KeyListener {
 
 	}
 
-	public LinkedHashMap<String, String> getData() {
+	public Map<String, String> getData() {
 		for (String key : data.keySet()) {
 			data.put(key, datafields.get(key).getText());
 		}
