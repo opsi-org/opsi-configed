@@ -170,7 +170,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 			verbosity = "";
 	}
 
-	public void setRepos(HashMap r) {
+	public void setRepos(Map r) {
 		repohash = r;
 	}
 

@@ -198,7 +198,7 @@ public class LicensingInfoMap {
 	}
 
 	private Map<String, Object> produceClientNumbersMap() {
-		HashMap<String, Object> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<>();
 		try {
 			JSONObject client = jOResult.getJSONObject(CLIENT_NUMBERS_INFO);
 			JSONObjectX clientX = new JSONObjectX(client);
@@ -208,7 +208,7 @@ public class LicensingInfoMap {
 			} else {
 				logging.debug(CLASSNAME + " map retrieved");
 
-				result = (HashMap<String, Object>) clientX.getMap();
+				result = clientX.getMap();
 			}
 		} catch (Exception ex) {
 			logging.error(CLASSNAME + " getClientNumersMap : " + ex.toString());
@@ -713,7 +713,7 @@ public class LicensingInfoMap {
 		if (!moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER)
 				&& !moduleInfo.get(STATE).toString().equals(STATE_IGNORE_WARNING)) {
 
-			ArrayList lics = (ArrayList) moduleInfo.get(LICENSE_IDS);
+			List lics = (List) moduleInfo.get(LICENSE_IDS);
 			String validUntil;
 
 			for (int i = 0; i < lics.size(); i++) {

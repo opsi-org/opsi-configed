@@ -195,7 +195,7 @@ public class UserConfigProducing {
 					"supplyPermissionList add to currentPossibleValuesListed " + currentPossibleValuesListed);
 			List<Object> listOptions = new ArrayList<>(currentPossibleValuesListed);
 
-			logging.info(this, "supplyPermissionList products arraylist " + listOptions);
+			logging.info(this, "supplyPermissionList products List " + listOptions);
 
 			item = PersistenceController.createNOMitem(ConfigOption.UNICODE_TYPE);
 

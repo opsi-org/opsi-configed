@@ -3510,8 +3510,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		List<String> shutdown_valueX = null;
 		try {
-			shutdown_valueX = (ArrayList) main.getPersistenceController()
-					.getProductproperties(clientID, "opsi-client-agent").get("on_shutdown_install");
+			shutdown_valueX = (List) main.getPersistenceController().getProductproperties(clientID, "opsi-client-agent")
+					.get("on_shutdown_install");
 		} catch (Exception ex) {
 		}
 

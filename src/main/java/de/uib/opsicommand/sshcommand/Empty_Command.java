@@ -219,7 +219,7 @@ public class Empty_Command implements SSHCommand {
 	/**
 	 * Searches placeholders like <<<sth>>>
 	 * 
-	 * @return ArrayList with placeholdern for parameter
+	 * @return List with placeholdern for parameter
 	 */
 	@Override
 	public List<String> getParameterList() {

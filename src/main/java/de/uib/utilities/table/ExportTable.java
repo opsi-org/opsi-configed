@@ -3,7 +3,6 @@ package de.uib.utilities.table;
 import java.awt.HeadlessException;
 import java.io.File;
 import java.text.DecimalFormat;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
@@ -116,7 +115,7 @@ public abstract class ExportTable {
 		client = clientID;
 	}
 
-	public void setMetaData(HashMap<String, String> tableMetaData) {
+	public void setMetaData(Map<String, String> tableMetaData) {
 
 		metaData = tableMetaData;
 	}

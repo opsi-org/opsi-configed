@@ -262,7 +262,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	/**
 	 * Get the all commands in sshcommand
 	 * 
-	 * @return LinkedList of SSHCommand
+	 * @return List of SSHCommand
 	 **/
 	@Override
 	public LinkedList<SSHCommand> getCommands() {
@@ -300,7 +300,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	}
 
 	/**
-	 * Format the commands(LinkedList<SSHCommands>) to LinkedList<String>
+	 * Format the commands(List<SSHCommands>) to LinkedList<String>
 	 * 
 	 * @return LinkedList<String> with the commands
 	 **/

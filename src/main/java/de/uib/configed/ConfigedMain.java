@@ -2421,7 +2421,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				persist.getProductTimestamp(productEdited),
 
 				persist.getProductHavingClientSpecificProperties(), // persist.hasClientSpecificProperties(productname),
-				productProperties, // arraylist of the properties map of all selected clients
+				productProperties, // List of the properties map of all selected clients
 				mergedProductProperties, // these properties merged to one map
 
 				// editmappanelx
@@ -3045,7 +3045,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	}
 
-	private Map<String, Object> mergeMaps(ArrayList<Map<String, Object>> collection) {
+	private Map<String, Object> mergeMaps(List<Map<String, Object>> collection) {
 		HashMap<String, Object> mergedMap = new HashMap<>();
 		if (collection == null || collection.isEmpty())
 			return mergedMap;
@@ -3179,7 +3179,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			if (editingTarget == EditingTarget.SERVER) {
 
-				ArrayList additionalConfigs = new ArrayList<>(1);
+				List additionalConfigs = new ArrayList<>(1);
 
 				Map<String, List<Object>> defaultValuesMap = persist.getConfigDefaultValues();
 

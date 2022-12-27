@@ -4,6 +4,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -65,7 +66,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 
 		planeLayout.setHorizontalGroup(planeLayout.createSequentialGroup().addGap(20).addGroup(planeLayout
 				.createParallelGroup().addComponent(header, GroupLayout.Alignment.CENTER).addComponent(editMapPanel)
-		
+
 		).addGap(20));
 
 		planeLayout.setVerticalGroup(planeLayout.createSequentialGroup().addGap(20)
@@ -73,8 +74,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(5)
 				.addComponent(editMapPanel, Globals.LINE_HEIGHT * 2, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				
-				
+
 				.addGap(20));
 	}
 
@@ -133,7 +133,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 	}
 
 	protected void setMap(String selectedItem) {
-		ArrayList editedMaps = new ArrayList<>(1);
+		List editedMaps = new ArrayList<>(1);
 		editedMaps.add(multipleMaps.get(selectedItem));
 		logging.debug(this, "setMap " + multipleMaps.get(selectedItem));
 		editMapPanel.setEditableMap(multipleMaps.get(selectedItem), deriveOptionsMap(multipleMaps.get(selectedItem)));

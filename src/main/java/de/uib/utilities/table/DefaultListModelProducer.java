@@ -54,7 +54,7 @@ public class DefaultListModelProducer implements ListModelProducer {
 		if (value instanceof List)
 			return (List) value;
 
-		ArrayList list = new ArrayList<>();
+		List list = new ArrayList<>();
 		list.add(value);
 
 		return list;

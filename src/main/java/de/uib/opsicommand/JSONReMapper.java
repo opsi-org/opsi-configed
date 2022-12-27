@@ -411,7 +411,7 @@ public class JSONReMapper {
 	}
 
 	public static List getJsonList(JSONObject jO, String key) {
-		ArrayList result = new ArrayList<>();
+		List result = new ArrayList<>();
 		try {
 			JSONArray jA = jO.optJSONArray(key);
 
@@ -486,7 +486,7 @@ public class JSONReMapper {
 	// yields possibly JSON objects and arrays as values
 	// compare getMap_Object
 	{
-		HashMap result = new HashMap<>();
+		Map result = new HashMap<>();
 		try {
 			if (checkResponse(jO)) {
 				JSONObject jOResult = jO.optJSONObject("result");

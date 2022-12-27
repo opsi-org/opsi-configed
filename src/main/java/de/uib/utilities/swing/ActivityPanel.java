@@ -24,7 +24,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 	public static int h = 10;
 
 	private final int noOfParts = 4;
-	/** an arraylist for panels */
+	/** an List for panels */
 	ArrayList<JPanel> partPanels = new ArrayList<>();
 
 	public static int sleepingMS = 750;

@@ -3,6 +3,7 @@ package de.uib.utilities.swing.timeedit;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,8 +18,8 @@ public class TimeEditor extends JPanel {
 	JSpinner spinnerHour;
 	JSpinner spinnerMin;
 
-	ArrayList hours;
-	ArrayList mins;
+	List hours;
+	List mins;
 
 	public TimeEditor() {
 		this(0, 0);

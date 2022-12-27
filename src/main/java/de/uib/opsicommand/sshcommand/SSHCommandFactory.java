@@ -289,7 +289,7 @@ public class SSHCommandFactory {
 			if (map.get(command_map_commands) != null) {
 				// Achtung Reihenfolge könnte sich ändern !" toList = ArrayList! JsonArray muss
 				// nicht sortiert sein!"
-				LinkedList com_commands = new LinkedList<>(((JSONArray) map.get(command_map_commands)).toList());
+				List com_commands = new LinkedList<>(((JSONArray) map.get(command_map_commands)).toList());
 				com_commands.add("echo ... ");
 				com_commands.add("echo READY");
 				com.setCommands(com_commands);

@@ -459,7 +459,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		values.put(configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked"),
 				configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked.tooltip"));
 
-		DefaultListModel<String> modelChooseAction = new DefaultListModel<>(); // put values from hashmap into
+		DefaultListModel<String> modelChooseAction = new DefaultListModel<>(); // put values from Map into
 																				// list
 		for (String key : values.keySet()) {
 			modelChooseAction.addElement(key);
@@ -752,7 +752,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				result = true;
 
 				// modify internal model
-				HashMap group = new HashMap<>();
+				Map group = new HashMap<>();
 				group.put("description", newDescription);
 				theData.put(newGroupID, group);
 

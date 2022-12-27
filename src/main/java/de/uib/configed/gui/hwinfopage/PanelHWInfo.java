@@ -92,7 +92,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	protected boolean withPopup;
 
-	private final ArrayList EMPTY = new ArrayList<>();
+	private final List EMPTY = new ArrayList<>();
 
 	ConfigedMain main;
 
@@ -326,7 +326,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		if (hwClass != null && reduceScanToByAuditClasses && !hwClassesForByAudit.contains(hwClass))
 			return null;
 
-		ArrayList devices = (ArrayList) hwInfo.get(hwClass);
+		List devices = (List) hwInfo.get(hwClass);
 		Map deviceInfo = node.getDeviceInfo();
 		if ((devices == null) || (deviceInfo == null)) {
 			return EMPTY;
@@ -344,7 +344,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			} catch (NullPointerException ex) {
 			}
 		}
-		ArrayList data = new ArrayList<>();
+		List data = new ArrayList<>();
 		if (values != null) {
 			for (int j = 0; j < values.size(); j++) {
 				Map v = (Map) values.get(j);
@@ -517,7 +517,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			String hwClassUI = hwClassesUI[i];
 			String hwClass = (String) hwClassMapping.get(hwClassUI);
 
-			ArrayList devices = (ArrayList) hwInfo.get(hwClass);
+			List devices = (List) hwInfo.get(hwClass);
 			if (devices == null) {
 				logging.debug(this, "No devices of hwclass " + hwClass + " found");
 				continue;
@@ -535,10 +535,10 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			classNode.setOpenIcon(classIcon);
 			root.add(classNode);
 
-			HashMap displayNames = new HashMap<>();
+			Map displayNames = new HashMap<>();
 
 			for (int j = 0; j < devices.size(); j++) {
-				HashMap deviceInfo = (HashMap) devices.get(j);
+				Map deviceInfo = (Map) devices.get(j);
 				String displayName = (String) deviceInfo.get("name");
 				if ((displayName == null) || displayName.equals("")) {
 					displayName = hwClass + "_" + j;
@@ -547,7 +547,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				if (!displayNames.containsKey(displayName)) {
 					displayNames.put(displayName, new ArrayList<>());
 				}
-				((ArrayList) displayNames.get(displayName)).add(devices.get(j));
+				((List) displayNames.get(displayName)).add(devices.get(j));
 			}
 
 			int num = 0;
@@ -555,10 +555,10 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			Iterator iter = displayNames.keySet().iterator();
 			while (iter.hasNext()) {
 				String displayName = (String) iter.next();
-				ArrayList devs = (ArrayList) displayNames.get(displayName);
+				List devs = (List) displayNames.get(displayName);
 
 				for (int j = 0; j < devs.size(); j++) {
-					HashMap dev = (HashMap) devs.get(j);
+					Map dev = (Map) devs.get(j);
 					String dn = displayName;
 					if (devs.size() > 1)
 						dn += " (" + j + ")";
@@ -573,13 +573,13 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 			for (int j = 0; j < names.length; j++) {
 				for (int k = 0; k < devices.size(); k++) {
-					if (names[j].equals((String) ((HashMap) devices.get(k)).get("displayName"))) {
+					if (names[j].equals((String) ((Map) devices.get(k)).get("displayName"))) {
 						IconNode iconNode = new IconNode(
-								encodeString((String) ((HashMap) devices.get(k)).get("displayName")));
+								encodeString((String) ((Map) devices.get(k)).get("displayName")));
 						iconNode.setClosedIcon(classIcon);
 						iconNode.setLeafIcon(classIcon);
 						iconNode.setOpenIcon(classIcon);
-						iconNode.setDeviceInfo((HashMap) devices.get(k));
+						iconNode.setDeviceInfo((Map) devices.get(k));
 						classNode.add(iconNode);
 						scanNodes(iconNode);
 						break;
@@ -670,12 +670,12 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		for (int i = 0; i < treeModel.getChildCount(treeModel.getRoot()); i++) {
 			Object child = treeModel.getChild(treeModel.getRoot(), i);
 			// get ArrayList
-			ArrayList al = (ArrayList) hwInfo.get(hwClassMapping.get(child.toString()));
+			List al = (List) hwInfo.get(hwClassMapping.get(child.toString()));
 			Iterator<HashMap> al_itr = al.iterator();
 
 			boolean first = true;
 			while (al_itr.hasNext()) {
-				HashMap hm = al_itr.next();
+				Map hm = al_itr.next();
 				if (first) { // second column, first element
 					childValues = new Vector<>();
 					childValues.add(child.toString()); // first column
