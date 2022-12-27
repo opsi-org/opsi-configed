@@ -52,12 +52,12 @@ public class PanelDashControl extends JPanel {
 		});
 
 		dashLayout.setVerticalGroup(dashLayout.createSequentialGroup()
-				
+
 				.addComponent(showDashOnStartup, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 				.addComponent(showDashOnLicencesActivation, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 						Globals.BUTTON_HEIGHT));
 		dashLayout.setHorizontalGroup(dashLayout.createParallelGroup()
-				
+
 				.addComponent(showDashOnStartup, 100, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(showDashOnLicencesActivation, 100, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));

@@ -61,8 +61,6 @@ public abstract class SelectElement {
 		return false;
 	}
 
-	
-
 	@Override
 	public String toString() {
 		return "(" + getClassName() + ", path values " + " !!! " + getPath() + " !!! " + getLocalizedPath() + " !!! )";

@@ -2909,7 +2909,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-    public List<String> getHostGroupIds() {
+	public List<String> getHostGroupIds() {
 		Set<String> groups = getHostGroups().keySet();
 		groups.remove(de.uib.configed.tree.ClientTree.DIRECTORY_NAME);
 
@@ -2918,7 +2918,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-    public void hwAuditConfRequestRefresh() {
+	public void hwAuditConfRequestRefresh() {
 		hwAuditConf.clear();
 		hwAuditDeviceClasses = null;
 		client2HwRowsColumnNames = null;
@@ -2956,7 +2956,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-    public List<Map<String, Object>> getOpsiHWAuditConf() {
+	public List<Map<String, Object>> getOpsiHWAuditConf() {
 		if (hwAuditConf == null || !hwAuditConf.containsKey("")) {
 			hwAuditConf.put("", exec.getListOfMapsOfListsOfMaps(new OpsiMethodCall(
 
@@ -2970,7 +2970,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-    public List<Map<String, Object>> getOpsiHWAuditConf(String locale) {
+	public List<Map<String, Object>> getOpsiHWAuditConf(String locale) {
 		if (!hwAuditConf.containsKey(locale)) {
 			hwAuditConf.put(locale, exec.getListOfMapsOfListsOfMaps(new OpsiMethodCall(
 
@@ -3001,23 +3001,23 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-    public Map getSoftwareInfo(String clientId) {
+	public Map getSoftwareInfo(String clientId) {
 		return null;
 	}
 
 	@Override
-    public void softwareAuditOnClientsRequestRefresh() {
+	public void softwareAuditOnClientsRequestRefresh() {
 		logging.info(this, "softwareAuditOnClientsRequestRefresh");
 		dataStub.softwareAuditOnClientsRequestRefresh();
 	}
 
 	@Override
-    public void fillClient2Software(List<String> clients) {
+	public void fillClient2Software(List<String> clients) {
 		dataStub.fillClient2Software(clients);
 	}
 
 	@Override
-    public Map<String, List<SWAuditClientEntry>> getClient2Software() {
+	public Map<String, List<SWAuditClientEntry>> getClient2Software() {
 		return dataStub.getClient2Software();
 	}
 
@@ -3099,7 +3099,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-    public String getLastSoftwareAuditModification(String clientId) {
+	public String getLastSoftwareAuditModification(String clientId) {
 		String result = "";
 
 		if (clientId != null && !clientId.equals("") && dataStub.getClient2Software() != null
@@ -3136,7 +3136,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-    public Object getHardwareInfo(String clientId, boolean asHTMLtable) {
+	public Object getHardwareInfo(String clientId, boolean asHTMLtable) {
 		if (clientId == null)
 			return null;
 
@@ -3153,12 +3153,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-    public void auditHardwareOnHostRequestRefresh() {
+	public void auditHardwareOnHostRequestRefresh() {
 		relations_auditHardwareOnHost = null;
 	}
 
 	@Override
-    public List<Map<String, Object>> getHardwareOnClient() {
+	public List<Map<String, Object>> getHardwareOnClient() {
 		if (relations_auditHardwareOnHost == null) {
 			Map<String, String> filterMap = new HashMap<>();
 			filterMap.put("state", "1");
@@ -3892,6 +3892,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		}
 	}
 
+	@Override
 	public Map<String, List<String>> getPossibleActions(String depotId)
 	// map with key productId
 	{

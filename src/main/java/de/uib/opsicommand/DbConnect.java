@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import de.uib.utilities.logging.logging;
 
 public class DbConnect {
-	private final String driver = "com.mysql.jdbc.Driver";
+	private static final String DRIVER = "com.mysql.jdbc.Driver";
 
 	private String url = "jdbc:mysql://%s";
 	private static final String defaultDB = "opsi";
@@ -22,7 +22,7 @@ public class DbConnect {
 
 	private DbConnect() {
 		try {
-			Class.forName(driver).getDeclaredConstructor().newInstance();
+			Class.forName(DRIVER).getDeclaredConstructor().newInstance();
 
 		}
 

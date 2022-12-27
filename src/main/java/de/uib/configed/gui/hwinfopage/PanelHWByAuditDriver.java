@@ -104,7 +104,7 @@ public class PanelHWByAuditDriver extends JPanel {
 				).addGap(vGap, vGap, vGap));
 
 		layoutByAuditInfo.setHorizontalGroup(layoutByAuditInfo.createSequentialGroup()
-				
+
 				.addGroup(layoutByAuditInfo.createSequentialGroup().addGap(hGap * 2, hGap * 2, hGap * 2)
 						.addComponent(labelInfo, 5, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(2, hGap * 4, hGap * 4)
