@@ -443,8 +443,4 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 	}
 
-	public static void main(String[] args) {
-
-	}
-
 }

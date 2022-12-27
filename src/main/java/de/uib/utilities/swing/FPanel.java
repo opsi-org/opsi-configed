@@ -12,7 +12,6 @@ import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -139,15 +138,6 @@ public class FPanel extends SecondaryFrame {
 				setVisible(true);
 		}
 
-	}
-
-	public static void main(String[] args) {
-
-		JPanel testpanel = new JPanel();
-		testpanel.add(new JLabel("hallo 1 "));
-
-		FPanel testF = new FPanel("hardware classes / database columns", testpanel, true);
-		testF.setVisible(true);
 	}
 
 }

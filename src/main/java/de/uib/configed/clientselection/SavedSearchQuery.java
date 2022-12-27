@@ -168,16 +168,6 @@ public class SavedSearchQuery {
 
 	}
 
-	public static void main(String[] args) {
-		SavedSearchQuery query = new SavedSearchQuery(args);
-		if (!query.parseArgs()) {
-			query.showUsage();
-			System.exit(10);
-		}
-		query.addMissingArgs();
-		query.runSearch(true);
-	}
-
 	private void addInfo(String option, String value) {
 		if (option.equals("-h"))
 			host = value;

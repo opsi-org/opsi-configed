@@ -9,7 +9,6 @@
 package de.uib.utilities.swing;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -95,16 +94,6 @@ public class FEditRecord extends FEdit {
 
 	public void setObservableSubject(ObservableSubject editingNotifier) {
 		recordPane.setObservableSubject(editingNotifier);
-	}
-
-	public static void main(String[] args) {
-		FEditRecord instance = new FEditRecord();
-		instance.setModal(true);
-
-		instance.setRecord();
-		instance.init(new Dimension(300, 150));
-		instance.setVisible(true);
-
 	}
 
 }

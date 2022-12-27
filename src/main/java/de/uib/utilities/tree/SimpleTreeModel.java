@@ -1,7 +1,5 @@
 package de.uib.utilities.tree;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.NavigableSet;
 import java.util.Set;
@@ -13,7 +11,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
 public class SimpleTreeModel extends DefaultTreeModel
@@ -147,27 +144,4 @@ public class SimpleTreeModel extends DefaultTreeModel
 
 	}
 
-	public static void main(String[] args) {
-		logging.logDirectoryName = args[0];
-		logging.LOG_LEVEL_CONSOLE = logging.LEVEL_DEBUG;
-
-		configed.configureUI();
-
-		Set<String> example = new HashSet<>((Arrays.asList("configed", "configed.saved_search", "opsiclientd")));
-
-		SimpleTreeModel model = new SimpleTreeModel(example);
-		model.produce();
-
-		example = new HashSet<>((Arrays.asList("", "configed.saved_search", "opsiclientd")));
-		model = new SimpleTreeModel(example);
-		model.produce();
-
-		model = new SimpleTreeModel(example);
-		model.produce();
-
-		example = new HashSet<>((Arrays.asList("a1.b1.c1", "a1.b2.d1", "a2.b1")));
-
-		model = new SimpleTreeModel(example);
-		model.produce();
-	}
 }

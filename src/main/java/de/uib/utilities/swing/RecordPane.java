@@ -1,6 +1,5 @@
 package de.uib.utilities.swing;
 
-import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 /*
@@ -13,11 +12,9 @@ import java.awt.event.KeyListener;
 *
 */
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -190,29 +187,4 @@ public class RecordPane extends JPanel implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 	}
 
-	public static void main(String[] args) {
-		LinkedHashMap<String, String> testdata = new LinkedHashMap<>();
-		testdata.put("field1", "test1");
-		testdata.put("field2", "test2");
-		testdata.put("field3", "test3");
-
-		HashMap<String, String> labels = new HashMap<>();
-		labels.put("field1", "label1");
-		labels.put("field2", "label2");
-		labels.put("field3", "labelt3");
-
-		HashMap<String, Boolean> editable = new HashMap<>();
-		editable.put("field1", true);
-		editable.put("field2", true);
-		editable.put("field3", true);
-
-		RecordPane instance = new RecordPane(testdata, labels, null, editable);
-		instance.setObservableSubject(null);
-
-		JDialog f = new JDialog();
-		f.setSize(new Dimension(300, 300));
-		f.add(instance);
-		f.setModal(true);
-		f.setVisible(true);
-	}
 }

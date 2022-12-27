@@ -951,8 +951,4 @@ public class Globals {
 
 	public static final String STARRED_STRING = "*****";
 
-	public static void main(String[] args) {
-		createImageIcon("images/cancel.png", "");
-	}
-
 }

@@ -1332,8 +1332,4 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		checkmarkSearch.addActionListener(al);
 	}
 
-	public static void main(String[] args) {
-
-	}
-
 }

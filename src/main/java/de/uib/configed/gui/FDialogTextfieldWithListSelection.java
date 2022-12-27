@@ -188,28 +188,4 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 
 	}
 
-	public static void main(String[] args) {
-		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, // owner frame
-				"test FGeneralDialogTest", // title
-				false, // modal
-
-				new String[] { "ok", "cancel" },
-
-				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-						Globals.createImageIcon("images/cancel16_small.png", "") },
-				1, 600, 600, true, // lazylayout, i.e, we have a chance to define components and use them for the
-				// layout
-				null // addPanel predefined
-		);
-
-		JPanel centerPanel = f.initPanel();
-
-		f.setCenterPane(centerPanel);
-
-		f.setSize(new Dimension(500, 600));
-
-		f.setupLayout();
-		f.setVisible(true);
-	}
-
 }

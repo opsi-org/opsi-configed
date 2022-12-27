@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
@@ -200,12 +199,4 @@ public class ActivityPanel extends JPanel implements Runnable {
 		layout.setVerticalGroup(vGroup);
 	}
 
-	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		frame.setSize(new Dimension(100, 40));
-		ActivityPanel panel = new ActivityPanel();
-		frame.getContentPane().add(panel);
-		frame.setVisible(true);
-		panel.run();
-	}
 }

@@ -1,6 +1,5 @@
 package de.uib.configed.gui.swinfopage;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -11,7 +10,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -393,16 +391,4 @@ public class PanelSWMultiClientReport extends JPanel {
 				.addGap(3 * Globals.HGAP_SIZE, 3 * Globals.HGAP_SIZE, 3 * Globals.HGAP_SIZE));
 	}
 
-	public static void main(String[] args) {
-		try {
-			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-		} catch (Exception ex) {
-			logging.debug(" kein Nimbus " + ex);
-		}
-		JFrame f = new JFrame();
-		f.getContentPane().add(new PanelSWMultiClientReport());
-		f.setSize(new Dimension(700, 600));
-		f.setVisible(true);
-
-	}
 }

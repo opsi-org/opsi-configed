@@ -15,8 +15,6 @@ public abstract class Executioner {
 
 	public abstract JSONObject retrieveJSONObject(OpsiMethodCall omc);
 
-	
-
 	public static JSONObject jsonMap(Map m) {
 		return new JSONObject(m);
 	}

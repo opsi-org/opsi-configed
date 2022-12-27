@@ -121,8 +121,4 @@ public class FShowList extends FTextArea {
 		}
 	}
 
-	public static final void main(String[] args) {
-		new FShowList(null, "configed", "configed Ende", true).setVisible(true);
-	}
-
 }

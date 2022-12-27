@@ -12,13 +12,11 @@ package de.uib.utilities.swing;
  * @author roeder
  */
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -138,19 +136,6 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	public void removeUpdate(DocumentEvent e) {
 
 		setDataChanged(true);
-	}
-
-	public static void main(String[] args) {
-		logging.debug(" invoking " + FEditText.class);
-		SwingUtilities.invokeLater(() -> {
-			FEditText f = new FEditText(args[0], "");
-			f.init(new Dimension(300, 200));
-			f.setVisible(true);
-			f.setStartText(args[0]);
-			count++;
-			logging.debug("having " + count + " " + f.getText());
-		});
-
 	}
 
 }

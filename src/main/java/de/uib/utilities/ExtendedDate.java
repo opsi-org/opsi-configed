@@ -102,11 +102,4 @@ public class ExtendedDate {
 			return -1;
 	}
 
-	public static void main(String[] args) {
-		System.out.println(" given " + args[0]);
-		ExtendedDate myDate = new ExtendedDate(args[0]);
-		System.out.println("as extended date " + myDate);
-		System.out.println("as date " + myDate.getDate());
-	}
-
 }
