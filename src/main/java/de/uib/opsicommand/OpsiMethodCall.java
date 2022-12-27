@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import de.uib.utilities.logging.logging;
 
 public class OpsiMethodCall {
-	private HashMap theCall;
+	private Map theCall;
 	private String methodname;
 
 	private Object[] parameters;

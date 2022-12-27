@@ -214,7 +214,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected String productEdited = null; // null serves als marker that we were not editing products
 	protected Collection productProperties; // the properties for one product and all selected clients
 	protected de.uib.opsidatamodel.datachanges.UpdateCollection updateCollection = new UpdateCollection(new Vector<>());
-	protected HashMap clientProductpropertiesUpdateCollections;
+	protected Map clientProductpropertiesUpdateCollections;
 	/*
 	 * for each product:
 	 * a collection of all clients
@@ -1821,7 +1821,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				if (pcinfo == null)
 					pcinfo = new HostInfo();
 
-				HashMap<String, Object> rowmap = pcinfo.getDisplayRowMap0();
+				Map<String, Object> rowmap = pcinfo.getDisplayRowMap0();
 
 				String sessionValue = "";
 				if (sessionInfo.get(key) != null)

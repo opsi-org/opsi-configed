@@ -4,6 +4,7 @@ import java.awt.HeadlessException;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JFileChooser;
@@ -23,7 +24,7 @@ public abstract class ExportTable {
 	protected javax.swing.JTable theTable;
 
 	protected Vector<String> classNames;
-	protected HashMap<String, String> metaData;
+	protected Map<String, String> metaData;
 
 	protected javax.swing.filechooser.FileNameExtensionFilter extensionFilter;
 	protected String defaultExportFilename;

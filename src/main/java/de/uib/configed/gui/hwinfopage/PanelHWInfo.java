@@ -70,7 +70,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	protected DefaultTreeModel treeModel;
 	protected JTable table;
 	protected HWInfoTableModel tableModel;
-	protected HashMap hwClassMapping;
+	protected Map hwClassMapping;
 
 	protected static final String SCANPROPERTYNAME = "SCANPROPERTIES";
 	protected static final String SCANTIME = "scantime";

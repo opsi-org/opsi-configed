@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
 
 import de.uib.utilities.logging.logging;
@@ -21,7 +22,7 @@ public class PropertiesStore
 
 	protected static final String keySeparator = "=";
 
-	private HashMap<String, String> internalStore;
+	private Map<String, String> internalStore;
 
 	public PropertiesStore() {
 		this(null);

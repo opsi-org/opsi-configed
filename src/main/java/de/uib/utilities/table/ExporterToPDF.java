@@ -10,12 +10,11 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JTable;
 
-import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -182,7 +181,7 @@ public class ExporterToPDF extends ExportTable {
 
 	}
 
-	public void addMetaData(HashMap<String, String> metaData) {
+	public void addMetaData(Map<String, String> metaData) {
 		if (metaData == null) {
 			document.addTitle("Document as PDF");
 			document.addSubject("Using iText");
@@ -223,7 +222,7 @@ public class ExporterToPDF extends ExportTable {
 		return content;
 	}
 
-	public static Paragraph addTitleLines(HashMap<String, String> metaData) throws DocumentException {
+	public static Paragraph addTitleLines(Map<String, String> metaData) throws DocumentException {
 		// TODO timezone
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd. MMMMM yyyy");
 		// Second parameter is the number of the chapter
@@ -253,7 +252,7 @@ public class ExporterToPDF extends ExportTable {
 		return content;
 	}
 
-	protected PdfPTable createTableDataElement(JTable theTable) throws BadElementException {
+	protected PdfPTable createTableDataElement(JTable theTable) {
 		Boolean onlySelectedRows = false;
 
 		if (theTable.getSelectedRowCount() > 0)

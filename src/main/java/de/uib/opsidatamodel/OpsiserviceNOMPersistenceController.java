@@ -381,12 +381,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		protected Map<String, Map<String, HostInfo>> depot2_host2hostInfo;
 		protected java.util.LinkedList<String> depotNamesList;
 
-		protected HashMap<String, Boolean> mapOfPCs;
+		protected Map<String, Boolean> mapOfPCs;
 
-		protected HashMap<String, HostInfo> mapPC_Infomap; // for some depots
-		protected HashMap<String, HostInfo> host2hostInfo; // all hosts
+		protected Map<String, HostInfo> mapPC_Infomap; // for some depots
+		protected Map<String, HostInfo> host2hostInfo; // all hosts
 		protected Map<String, Set<String>> fNode2Treeparents; // essentially client --> all groups with it
-		protected HashMap<String, String> mapPcBelongsToDepot;
+		protected Map<String, String> mapPcBelongsToDepot;
 
 		private de.uib.configed.tree.ClientTree connectedTree;
 

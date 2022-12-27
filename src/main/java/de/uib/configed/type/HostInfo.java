@@ -196,7 +196,7 @@ public class HostInfo {
 		return instanceNumber == compareNumber;
 	}
 
-	public HashMap<String, Object> getDisplayRowMap0() {
+	public Map<String, Object> getDisplayRowMap0() {
 		HashMap<String, Object> unordered = new HashMap<>();
 
 		unordered.put(hostname_DISPLAY_FIELD_LABEL, clientName);
@@ -221,13 +221,13 @@ public class HostInfo {
 		return unordered;
 	}
 
-	public HashMap<String, Object> getDisplayRowMap() {
+	public Map<String, Object> getDisplayRowMap() {
 		HashMap<String, Object> unordered = new HashMap<>(getDisplayRowMap0());
 		unordered.put(hostname_DISPLAY_FIELD_LABEL, clientName);
 		return unordered;
 	}
 
-	public HashMap<String, Object> getMap() {
+	public Map<String, Object> getMap() {
 		HashMap<String, Object> unordered = new HashMap<>();
 
 		unordered.put(depotOfClientKEY, depotOfClient);

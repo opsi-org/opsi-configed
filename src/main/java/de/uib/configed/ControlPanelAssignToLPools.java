@@ -81,7 +81,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 	public final int windowsSoftwareId_KeyCol = 1;
 	int colMarkCursorRow = 0;
 
-	private HashMap<String, List<String>> removeKeysFromOtherLicencePool;
+	private Map<String, List<String>> removeKeysFromOtherLicencePool;
 
 	public ControlPanelAssignToLPools(PersistenceController persist, ConfigedMain mainController) {
 		thePanel = new PanelAssignToLPools(this);
