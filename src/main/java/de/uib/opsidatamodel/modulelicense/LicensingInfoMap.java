@@ -501,7 +501,7 @@ public class LicensingInfoMap {
 			JSONObject dates = jOResult.getJSONObject(DATES);
 
 			for (String key : datesKeys) {
-				Map<String, Object> moduleToDate = new HashMap<>();
+				Map<String, Object> moduleToDate;
 				Map<String, Map<String, Object>> modulesMapToDate = new HashMap<>();
 
 				// iterate over date entries

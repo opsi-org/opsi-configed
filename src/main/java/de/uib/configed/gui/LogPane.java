@@ -22,6 +22,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.DefaultComboBoxModel;
@@ -132,8 +133,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	protected class AdaptingSlider extends JSlider implements ChangeListener {
-		LinkedHashMap<Integer, JLabel> levelMap;
-		Hashtable<Integer, JLabel> levelDict;
+		private Map<Integer, JLabel> levelMap;
 
 		int min;
 		int max;
@@ -174,11 +174,10 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			for (int i = upTo + 1; i <= max; i++)
 				levelMap.put(i, new JLabel(" . "));
 
-			levelDict = new Hashtable<>(levelMap);
 			try {
-				setLabelTable(levelDict);
+				setLabelTable(new Hashtable<>(levelMap));
 			} catch (Exception ex) {
-				logging.info(this, "setLabelTable levelDict " + levelDict + " ex " + ex);
+				logging.info(this, "setLabelTable levelDict " + levelMap + " ex " + ex);
 			}
 		}
 	}
@@ -685,7 +684,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		logging.info(this, "activateShowLevel level, oldLevel, maxExistingLevel " + level + " , " + oldLevel + ", "
 				+ maxExistingLevel);
 
-		if (oldLevel != level && (level < maxExistingLevel || oldLevel < maxExistingLevel)) {
+		if (oldLevel.equals(level) && (level < maxExistingLevel || oldLevel < maxExistingLevel)) {
 
 			int caretPosition = jTextPane.getCaretPosition();
 

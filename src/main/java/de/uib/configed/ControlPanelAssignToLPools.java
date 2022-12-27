@@ -71,7 +71,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 	private SoftwareShowMode softwareShow = SoftwareShowMode.ALL;
 	private SoftwareShowAllMeans softwareShowAllMeans = SoftwareShowAllMeans.ALL;
-	// //
+
 	private SoftwareDirectionOfAssignment softwareDirectionOfAssignment = SoftwareDirectionOfAssignment.POOL2SOFTWARE;
 
 	Integer totalSWEntries;
@@ -79,7 +79,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 	Integer totalShownEntries;
 
 	// introducing a column for displaying the cursor row
-	public final int windowsSoftwareId_KeyCol = 1;
+	public static final int WINDOWS_SOFTWARE_ID_KEY_COL = 1;
 	int colMarkCursorRow = 0;
 
 	private Map<String, List<String>> removeKeysFromOtherLicencePool;
@@ -126,8 +126,6 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 				.isUsingFilter(GenTableModel.labelFilterConditionShowOnlySelected);
 		logging.info(this, "setSoftwareIdsFromLicencePool wasUsingSelectedFilter " + wasUsingSelectedFilter);
 		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.labelFilterConditionShowOnlySelected, false); // wasUsingSelectedFilter
-
-		// 
 
 		modelWindowsSoftwareIds.setUsingFilter(labelWindowsSoftwareFilterCondition_dontShowAssociatedToOtherPool,
 				false);
@@ -200,23 +198,20 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		}
 
 		thePanel.fieldCountAssignedStatus.setToolTipText(" <html><br /></html>");
-		if (softwareIdsForPool != null) {
-			thePanel.fieldCountAssignedStatus.setText(produceCount(softwareIdsForPool.size(), (poolID == null)));
 
-			StringBuilder b = new StringBuilder("<html>");
-			b.append(configed.getResourceValue("PanelAssignToLPools.assignedStatusListTitle"));
+		// softwareIdsForPool is guaranteed not null
+		thePanel.fieldCountAssignedStatus.setText(produceCount(softwareIdsForPool.size(), (poolID == null)));
+
+		StringBuilder b = new StringBuilder("<html>");
+		b.append(configed.getResourceValue("PanelAssignToLPools.assignedStatusListTitle"));
+		b.append("<br />");
+		b.append("<br />");
+		for (Object ident : softwareIdsForPool) {
+			b.append(ident.toString());
 			b.append("<br />");
-			b.append("<br />");
-			for (Object ident : softwareIdsForPool) {
-				b.append(ident.toString());
-				b.append("<br />");
-			}
-			b.append("</html>");
-			thePanel.fieldCountAssignedStatus.setToolTipText(b.toString());
 		}
-
-		if (softwareIdsForPool == null)
-			softwareIdsForPool = new ArrayList<>();
+		b.append("</html>");
+		thePanel.fieldCountAssignedStatus.setToolTipText(b.toString());
 
 		totalSWEntries = modelWindowsSoftwareIds.getRowCount();
 
@@ -256,11 +251,11 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		{
 			thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(false);
 			logging.debug(this, "setSoftwareIdsFromLicencePool  setSelectedValues " + selectKeys);
-			thePanel.panelRegisteredSoftware.setSelectedValues(selectKeys, windowsSoftwareId_KeyCol);
+			thePanel.panelRegisteredSoftware.setSelectedValues(selectKeys, WINDOWS_SOFTWARE_ID_KEY_COL);
 
 			if (!selectKeys.isEmpty())
 				thePanel.panelRegisteredSoftware.moveToValue(selectKeys.get(selectKeys.size() - 1).toString(),
-						windowsSoftwareId_KeyCol, false);
+						WINDOWS_SOFTWARE_ID_KEY_COL, false);
 
 			logging.debug(this, "setSoftwareIdsFromLicencePool  selectedKeys "
 					+ thePanel.panelRegisteredSoftware.getSelectedKeys());
@@ -393,7 +388,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		{
 			selKeys.removeAll(cancelSelectionKeys);
 			logging.info(this, "selKeys after removal " + selKeys);
-			thePanel.panelRegisteredSoftware.setSelectedValues(selKeys, windowsSoftwareId_KeyCol);
+			thePanel.panelRegisteredSoftware.setSelectedValues(selKeys, WINDOWS_SOFTWARE_ID_KEY_COL);
 		}
 
 		thePanel.fieldCountAssignedInEditing.setText("" + selKeys.size());
@@ -593,9 +588,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 					persist.installedSoftwareInformationRequestRefresh();
 					return (Map) persist.getInstalledSoftwareInformationForLicensing();
 
-				}, withRowCounter)
-				// ,
-				), windowsSoftwareId_KeyCol, // key column
+				}, withRowCounter)), WINDOWS_SOFTWARE_ID_KEY_COL, // key column
 				new int[] {}, thePanel.panelRegisteredSoftware, updateCollection);
 
 		logging.info(this, "modelWindowsSoftwareIds row count " + modelWindowsSoftwareIds.getRowCount());
@@ -622,7 +615,8 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		thePanel.panelRegisteredSoftware.setSearchColumns(searchCols);
 		thePanel.panelRegisteredSoftware.setSearchSelectMode(false);
 
-		windowsSoftwareFilterConditon_showOnlySelected = new DefaultTableModelFilterCondition(windowsSoftwareId_KeyCol);
+		windowsSoftwareFilterConditon_showOnlySelected = new DefaultTableModelFilterCondition(
+				WINDOWS_SOFTWARE_ID_KEY_COL);
 		modelWindowsSoftwareIds.chainFilter(GenTableModel.labelFilterConditionShowOnlySelected,
 				new TableModelFilter(windowsSoftwareFilterConditon_showOnlySelected));
 		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.labelFilterConditionShowOnlySelected, false);
@@ -631,7 +625,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 				configed.getResourceValue("PanelAssignToLPools.searchPane.filtermark.tooltip"));
 
 		windowsSoftwareFilterCondition_dontShowAssociatedToOtherPool = new DefaultTableModelFilterCondition(
-				windowsSoftwareId_KeyCol);
+				WINDOWS_SOFTWARE_ID_KEY_COL);
 		modelWindowsSoftwareIds.chainFilter(labelWindowsSoftwareFilterCondition_dontShowAssociatedToOtherPool,
 				new TableModelFilter(windowsSoftwareFilterCondition_dontShowAssociatedToOtherPool));
 		modelWindowsSoftwareIds.setUsingFilter(labelWindowsSoftwareFilterCondition_dontShowAssociatedToOtherPool,
@@ -682,7 +676,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 		}
 
-		col = thePanel.panelRegisteredSoftware.getColumnModel().getColumn(windowsSoftwareId_KeyCol);
+		col = thePanel.panelRegisteredSoftware.getColumnModel().getColumn(WINDOWS_SOFTWARE_ID_KEY_COL);
 		col.setMaxWidth(maxWidthIdColumnForRegisteredSoftware);
 		col.setHeaderValue("id ...");
 		col = thePanel.panelRegisteredSoftware.getColumnModel().getColumn(columnNames.indexOf("subVersion"));
@@ -880,10 +874,10 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 	private void setVisualSelection(List<String> keys) {
 		logging.debug(this, "setVisualSelection for panelRegisteredSoftware on keys " + keys);
-		thePanel.panelRegisteredSoftware.setSelectedValues(keys, windowsSoftwareId_KeyCol);
+		thePanel.panelRegisteredSoftware.setSelectedValues(keys, WINDOWS_SOFTWARE_ID_KEY_COL);
 
 		if (keys != null && !keys.isEmpty())
-			thePanel.panelRegisteredSoftware.moveToValue(keys.get(keys.size() - 1), windowsSoftwareId_KeyCol, false);
+			thePanel.panelRegisteredSoftware.moveToValue(keys.get(keys.size() - 1), WINDOWS_SOFTWARE_ID_KEY_COL, false);
 	}
 
 	private void produceFilter1(List<String> assignedWindowsSoftwareIds) {
@@ -892,10 +886,9 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		if (softwareShowAllMeans != SoftwareShowAllMeans.ALL)
 			filter1 = new TreeSet<>(getUnAssignedSoftwareIds());
 
-		if (filter1 != null && softwareShowAllMeans == SoftwareShowAllMeans.ASSIGNED_OR_ASSIGNED_TO_NOTHING) {
-			if (assignedWindowsSoftwareIds != null)
-				filter1.addAll(assignedWindowsSoftwareIds);
-		}
+		if (filter1 != null && softwareShowAllMeans == SoftwareShowAllMeans.ASSIGNED_OR_ASSIGNED_TO_NOTHING
+				&& assignedWindowsSoftwareIds != null)
+			filter1.addAll(assignedWindowsSoftwareIds);
 
 		String filterInfo = "null";
 		if (filter1 != null)

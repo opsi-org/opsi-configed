@@ -93,11 +93,11 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 
 		// --- panelLicencesUsage
 		columnNames = new Vector<>();
-		columnNames.add(LicenceUsageEntry.clientIdKEY);
-		columnNames.add(LicenceUsageEntry.licenceIdKEY);
-		columnNames.add(LicenceUsageEntry.licencepoolIdKEY);
-		columnNames.add(LicenceUsageEntry.licencekeyKEY);
-		columnNames.add(LicenceUsageEntry.notesKEY);
+		columnNames.add(LicenceUsageEntry.CLIENT_ID_KEY);
+		columnNames.add(LicenceUsageEntry.LICENCE_ID_KEY);
+		columnNames.add(LicenceUsageEntry.LICENCE_POOL_ID_KEY);
+		columnNames.add(LicenceUsageEntry.LICENCE_KEY_KEY);
+		columnNames.add(LicenceUsageEntry.NOTES_KEY);
 		classNames = new Vector<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
@@ -131,20 +131,20 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 				new MapItemsUpdateController(thePanel.panelUsage, modelLicencesUsage, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
-						return persist.editLicenceUsage((String) rowmap.get(LicenceUsageEntry.clientIdKEY),
-								(String) rowmap.get(LicenceUsageEntry.licenceIdKEY),
-								(String) rowmap.get(LicenceUsageEntry.licencepoolIdKEY),
-								(String) rowmap.get(LicenceUsageEntry.licencekeyKEY),
-								(String) rowmap.get(LicenceUsageEntry.notesKEY));
+						return persist.editLicenceUsage((String) rowmap.get(LicenceUsageEntry.CLIENT_ID_KEY),
+								(String) rowmap.get(LicenceUsageEntry.LICENCE_ID_KEY),
+								(String) rowmap.get(LicenceUsageEntry.LICENCE_POOL_ID_KEY),
+								(String) rowmap.get(LicenceUsageEntry.LICENCE_KEY_KEY),
+								(String) rowmap.get(LicenceUsageEntry.NOTES_KEY));
 
 					}
 
 					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencesUsage.requestReload();
-						return persist.deleteLicenceUsage((String) rowmap.get(LicenceUsageEntry.clientIdKEY),
-								(String) rowmap.get(LicenceUsageEntry.licenceIdKEY),
-								(String) rowmap.get(LicenceUsageEntry.licencepoolIdKEY));
+						return persist.deleteLicenceUsage((String) rowmap.get(LicenceUsageEntry.CLIENT_ID_KEY),
+								(String) rowmap.get(LicenceUsageEntry.LICENCE_ID_KEY),
+								(String) rowmap.get(LicenceUsageEntry.LICENCE_POOL_ID_KEY));
 					}
 				}, updateCollection));
 

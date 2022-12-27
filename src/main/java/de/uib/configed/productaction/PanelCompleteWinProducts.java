@@ -381,8 +381,7 @@ public class PanelCompleteWinProducts extends JPanel
 
 			if (!oldProductKey.equals(productKey)) {
 
-				int returnedOption = JOptionPane.NO_OPTION;
-				returnedOption = JOptionPane.showOptionDialog(rootFrame,
+				int returnedOption = JOptionPane.showOptionDialog(rootFrame,
 						configed.getResourceValue("CompleteWinProducts.setChangedProductKey"),
 						configed.getResourceValue("CompleteWinProducts.questionSetProductKey"),
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
