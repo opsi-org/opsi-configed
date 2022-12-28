@@ -1549,19 +1549,21 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			dpass.setPassword(PASSWORD);
 		}
 
-		if ((HOST != null && USER != null && PASSWORD != null)) {
-			// Auto login
-			logging.info(this, "start with given credentials");
-
-			dpass.tryConnecting();
-		}
-
 		if (persist == null || persist.getConnectionState().getState() != ConnectionState.CONNECTED) {
 			logging.info(this, "become interactive");
 
 			dpass.setAlwaysOnTop(true);
 			dpass.setVisible(true);
 			// dpass will give back control and call loadDataAndGo
+		}
+
+		// This must be called last, so that  loading frame for connection is called last
+		// and on top of the login-frame
+		if ((HOST != null && USER != null && PASSWORD != null)) {
+			// Auto login
+			logging.info(this, "start with given credentials");
+
+			dpass.tryConnecting();
 		}
 
 	}
