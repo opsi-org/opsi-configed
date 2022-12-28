@@ -2809,7 +2809,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		logging.debug(this, "setLocalbootProductsPage() with filter "
 				+ configed.savedStates.saveLocalbootproductFilter.deserialize());
 
-		Set<String> savedFilter = (Set<String>) configed.savedStates.saveLocalbootproductFilter.deserialize();
+		Set<String> savedFilter = configed.savedStates.saveLocalbootproductFilter.deserialize();
 
 		if (!setDepotRepresentative())
 			return false;
@@ -2897,7 +2897,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected boolean setNetbootProductsPage() {
 
-		Set<String> savedFilter = (Set<String>) configed.savedStates.saveNetbootproductFilter.deserialize();
+		Set<String> savedFilter = configed.savedStates.saveNetbootproductFilter.deserialize();
 
 		if (!setDepotRepresentative())
 			return false;

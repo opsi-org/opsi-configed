@@ -17,7 +17,7 @@ public class SessionSaveSet<T> extends SaveState {
 	}
 
 	@Override
-	public Object deserialize() {
+	public Set<T> deserialize() {
 		return saveObject;
 	}
 }

@@ -9,6 +9,7 @@ import javax.swing.ComboBoxModel;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.logging;
+import de.uib.utilities.savedstates.SessionSaveSet;
 
 public class InstallationStateTableModelFiltered extends InstallationStateTableModel
 
@@ -22,12 +23,13 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 
 	private int[] filterInverse;
 
-	private de.uib.utilities.savedstates.SessionSaveSet filterSaver;
+	private SessionSaveSet<String> filterSaver;
 
 	public InstallationStateTableModelFiltered(String[] selectedClients, ConfigedMain main,
-			Map<String, Map<String, Map<String, String>>> collectChangedStates, List listOfInstallableProducts,
-			Map statesAndActions, Map possibleActions, Map<String, Map<String, Object>> productGlobalInfos,
-			List<String> displayColumns, de.uib.utilities.savedstates.SessionSaveSet filterSaver) {
+			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
+			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
+			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns,
+			SessionSaveSet<String> filterSaver) {
 		super(selectedClients, main, collectChangedStates, listOfInstallableProducts, statesAndActions, possibleActions,
 				productGlobalInfos, displayColumns);
 
@@ -42,13 +44,13 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 	}
 
 	public void resetFilter() {
-		Set<String> filterSaved = (Set<String>) filterSaver.deserialize();
+		Set<String> filterSaved = filterSaver.deserialize();
 		if (filterSaved == null || filterSaved.isEmpty()) {
 			setFilterFrom((Set<String>) null);
 		} else {
-			Set<String> products_only_in_filterset = new HashSet<>(filterSaved);
-			products_only_in_filterset.removeAll(tsProductNames);
-			filterSaved.removeAll(products_only_in_filterset);
+			Set<String> productsOnlyInFilterSet = new HashSet<>(filterSaved);
+			productsOnlyInFilterSet.removeAll(tsProductNames);
+			filterSaved.removeAll(productsOnlyInFilterSet);
 			// A - (A - B) is the intersection
 
 			setFilterFrom(filterSaved);
