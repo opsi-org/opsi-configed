@@ -171,7 +171,6 @@ public class Globals {
 	public static final Color blue = new Color(30, 30, 100);
 	public static final Color blueGrey = new Color(180, 190, 190);
 	public static final Color greyed = new Color(150, 150, 150);
-	public static final Color OK_COLOR = new Color(20, 140, 20);
 	public static final Color unknownBlue = new Color(40, 17, 213);
 
 	public static final Color ClientSelectionDialog_ELEMENT_FOREGROUND = Color.BLUE;
