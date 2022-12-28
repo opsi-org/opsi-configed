@@ -17,9 +17,6 @@ package de.uib.configed;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.DisplayMode;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.IllegalComponentStateException;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
@@ -1353,44 +1350,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private void locateAndDisplay() {
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		GraphicsDevice[] gs = ge.getScreenDevices();
-
-		int wTaken = MainFrame.F_WIDTH;
-		int hTaken = MainFrame.F_HEIGHT;
-
-		for (int i = 0; i < gs.length; i++) {
-			DisplayMode dm = gs[i].getDisplayMode();
-			logging.info(this, "display width " + i + ": " + dm.getWidth());
-			if (dm.getWidth() > wTaken) {
-				wTaken = dm.getWidth();
-				hTaken = dm.getHeight();
-			}
-			logging.info(this, "display height " + i + ": " + dm.getHeight());
-		}
-
-		logging.info(this, "locateAndDisplay, startSizing with screen width, height " + wTaken + ", " + hTaken);
-
-		String savedX = configed.savedStates.saveMainLocationX.deserialize();
-		String savedY = configed.savedStates.saveMainLocationY.deserialize();
-
-		String savedWidth = configed.savedStates.saveMainLocationWidth.deserialize();
-		String savedHeight = configed.savedStates.saveMainLocationHeight.deserialize();
-
-		logging.info(this, "locateAndDisplay, call buildLocation startX, startY, startWidth, startHeight, got " + savedX
-				+ ", " + savedY + ", " + savedWidth + ", " + savedHeight);
-
-		Globals.startX = null;
-		Globals.startY = null;
-
-		if (savedX != null && savedY != null) {
-			Globals.startX = Integer.valueOf(savedX);
-			Globals.startY = Integer.valueOf(savedY);
-
-			Globals.startWidth = Integer.valueOf(savedWidth);
-			Globals.startHeight = Integer.valueOf(savedHeight);
-		}
-
 		Rectangle screenRectangle = configed.fProgress.getGraphicsConfiguration().getBounds();
 
 		logging.info(this, "set size and location of mainFrame");

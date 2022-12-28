@@ -3013,28 +3013,14 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	@Override
 	public void componentMoved(ComponentEvent e) {
-		saveLocation(e);
 	}
 
 	@Override
 	public void componentResized(ComponentEvent e) {
-		saveLocation(e);
 	}
 
 	@Override
 	public void componentShown(ComponentEvent e) {
-	}
-
-	private void saveLocation(ComponentEvent e) {
-		logging.debug(this, "componentEvent " + e + " saving active " + savingFramePosition);
-
-		if (savingFramePosition) {
-			configed.savedStates.saveMainLocationX.serialize(e.getComponent().getBounds().x, 0);
-			configed.savedStates.saveMainLocationY.serialize(e.getComponent().getBounds().y, 0);
-			configed.savedStates.saveMainLocationWidth.serialize(e.getComponent().getBounds().width, F_WIDTH);
-			configed.savedStates.saveMainLocationHeight.serialize(e.getComponent().getBounds().height, F_HEIGHT);
-		}
-
 	}
 
 	/* WindowListener implementation */

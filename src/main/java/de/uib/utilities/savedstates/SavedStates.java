@@ -12,10 +12,6 @@ import de.uib.utilities.logging.logging;
 public class SavedStates extends PropertiesStore {
 	public SaveInteger savedMaxShownLogLevel;
 	public SaveInteger saveUsageCount;
-	public SaveInteger saveMainLocationX;
-	public SaveInteger saveMainLocationY;
-	public SaveInteger saveMainLocationWidth;
-	public SaveInteger saveMainLocationHeight;
 	public SaveBoolean saveRegisterUser;
 
 	public SaveDepotSelection saveDepotSelection;
@@ -35,10 +31,6 @@ public class SavedStates extends PropertiesStore {
 		super(store);
 		savedMaxShownLogLevel = new SaveInteger("savedMaxShownLogLevel", 0, this);
 		saveUsageCount = new SaveInteger("saveUsageCount", 0, this);
-		saveMainLocationX = new SaveInteger("saveMainLocationX", 0, this);
-		saveMainLocationY = new SaveInteger("saveMainLocationY", 0, this);
-		saveMainLocationWidth = new SaveInteger("saveMainLocationWidth", 0, this);
-		saveMainLocationHeight = new SaveInteger("saveMainLocationHeight", 0, this);
 		saveDepotSelection = new SaveDepotSelection(this);
 		saveGroupSelection = new SaveString("groupname", this);
 		saveSWauditKindOfExport = new SaveString("swaudit_kind_of_export", this);
@@ -47,8 +39,8 @@ public class SavedStates extends PropertiesStore {
 
 		saveRegisterUser = new SaveBoolean(PersistenceController.KEY_USER_REGISTER, false, this);
 		// we memorize it locally in order to signal if the config has changed
-		saveLocalbootproductFilter = new SessionSaveSet();
-		saveNetbootproductFilter = new SessionSaveSet();
+		saveLocalbootproductFilter = new SessionSaveSet<>();
+		saveNetbootproductFilter = new SessionSaveSet<>();
 
 		saveServerConfigs = new HashMap<>();
 

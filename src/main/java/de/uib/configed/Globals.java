@@ -25,6 +25,9 @@ import de.uib.utilities.logging.logging;
  */
 
 public class Globals {
+	private Globals() {
+	}
+
 	public static final String VERSION = "4.2.20.1";
 	public static final String VERDATE = "2022-12-15";
 
@@ -147,31 +150,19 @@ public class Globals {
 	public static final Color backgroundGrey = new Color(220, 220, 220);
 	public static final Color backgroundLightGrey = new Color(230, 230, 230);
 	public static final Color backLightBlue = new Color(220, 228, 242);
-	public static final Color backLighterBlue = new Color(230, 230, 245);
 	public static final Color backVeryLightBlue = new Color(240, 240, 245);
 	public static final Color backBlue = new Color(200, 200, 250);
-	public static final Color backYellow = new java.awt.Color(255, 255, 182);
 	public static final Color backLightYellow = new java.awt.Color(250, 248, 221);
-	public static final Color backTabsColor = new java.awt.Color(206, 223, 247);
 	public static final Color darkOrange = new java.awt.Color(218, 180, 4);
 	public static final Color lightBlack = new Color(30, 30, 30);
 	public static final Color blue = new Color(30, 30, 100);
 	public static final Color blueGrey = new Color(180, 190, 190);
-	public static final Color violett = new Color(160, 170, 200);
 	public static final Color greyed = new Color(150, 150, 150);
 	public static final Color failedBackColor = new Color(100, 100, 100);
 	public static final Color okGreen = new Color(20, 140, 20);
 	public static final Color actionRed = new Color(239, 4, 4);
 	public static final Color warningRed = new Color(204, 51, 0);
 	public static final Color unknownBlue = new Color(40, 17, 213);
-	public static final Color verylightGreen = new Color(102, 255, 102);
-	public static final Color green = new Color(0, 170, 170);
-	public static final Color lightPink = new Color(255, 208, 233);
-	public static final Color lightPurple = new Color(212, 199, 255);
-	public static final Color purple = new Color(220, 185, 255);
-	public static final Color licensingIconPurple = new Color(141, 145, 230);
-	public static final Color licensingIconPurpleLight = new Color(164, 169, 235);
-	public static final Color checkGreen = new Color(174, 201, 143);
 	public static final Color checkGreenLight = new Color(198, 225, 171);
 
 	public static final Color ClientSelectionDialog_ELEMENT_FOREGROUND = Color.BLUE;
@@ -306,7 +297,7 @@ public class Globals {
 	// in table, change colors by row and column
 	public static final Color defaultTableCellBgColor00 = backLightYellow;
 	public static final Color defaultTableCellBgColor01 = new Color(236, 235, 214);
-	public static final Color defaultTableCellBgColor10 = Color.white;
+	public static final Color defaultTableCellBgColor10 = Color.WHITE;
 	public static final Color defaultTableCellBgColor11 = backgroundWhite;
 
 	public static final Color defaultTableHeaderBgColor = new Color(222, 231, 247);
@@ -393,11 +384,6 @@ public class Globals {
 	public static final int COMBOBOX_ROW_COUNT = 20;
 
 	public static final Dimension graphicButtonDimension = new Dimension(GRAPHIC_BUTTON_WIDTH, GRAPHIC_BUTTON_HEIGHT);
-
-	public static Integer startX;
-	public static Integer startY;
-	public static Integer startWidth;
-	public static Integer startHeight;
 
 	public static final int DATE_FORMAT_STYLE_PATTERN = DateFormat.LONG;
 
