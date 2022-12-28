@@ -482,7 +482,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		TreePath selectedPath = getSelectionPath();
 
 		if (selectedPath != null && getSelectionRows().length == 1) {
-			main.treeClients_selectAction(selectedPath);
+			main.treeClientsSelectAction(selectedPath);
 
 		}
 
@@ -538,7 +538,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		getRowForLocation(e.getX(), e.getY());
 
 		theTree.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-		main.treeClients_mouseAction(true, e);
+		main.treeClientsMouseAction(true, e);
 		theTree.setCursor(initialCursor);
 
 	}

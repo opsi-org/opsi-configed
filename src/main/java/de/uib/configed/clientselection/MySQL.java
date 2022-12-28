@@ -31,7 +31,7 @@ public class MySQL {
 		this.hwConfig = hwConfig;
 	}
 
-	public String getMySQL_INNERJOINS() {
+	public String getMySQLInnerJoins() {
 		String joins = "";
 
 		if (group)
@@ -132,7 +132,7 @@ public class MySQL {
 
 				case "SoftwareModificationTimeElement":
 					product = true;
-					return getMySQL_SoftwareModificationTime(json.getString("operation"), data);
+					return getMySQLSoftwareModificationTime(json.getString("operation"), data);
 
 				// Property
 				case "PropertyIdElement":
@@ -178,9 +178,9 @@ public class MySQL {
 				case "GenericTextElement":
 					hardware = true;
 
-					String abfrage = setHardware(json);
+					String query = setHardware(json);
 
-					return " (" + abfrage + " LIKE '" + data + "') ";
+					return " (" + query + " LIKE '" + data + "') ";
 
 				case "GenericBigIntegerElement":
 				case "GenericIntegerElement":
@@ -189,9 +189,9 @@ public class MySQL {
 					operation = json.getString("operation");
 					operation = getOperationFromElement(operation);
 
-					abfrage = setHardware(json);
+					query = setHardware(json);
 
-					return " (" + abfrage + " " + operation + " '" + data + "') ";
+					return " (" + query + " " + operation + " '" + data + "') ";
 
 				case "GenericDateElement":
 					break;
@@ -274,7 +274,7 @@ public class MySQL {
 	}
 
 	// // to opsi-Product
-	private String getMySQL_SoftwareModificationTime(String operation, String data) {
+	private String getMySQLSoftwareModificationTime(String operation, String data) {
 		String expression = "";
 		switch (operation) {
 		case "DateGreaterThanOperation":

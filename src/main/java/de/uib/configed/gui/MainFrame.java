@@ -159,8 +159,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	public SizeListeningPanel allPane;
 
-	private boolean savingFramePosition = false;
-
 	// menu system
 
 	public static final String ITEM_ADD_CLIENT = "add client";
@@ -3000,10 +2998,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	void jButtonSaveList_actionPerformed(ActionEvent e) {
 		main.checkSaveAll(false);
-	}
-
-	public void setSavingFramePosition(boolean b) {
-		savingFramePosition = b;
 	}
 
 	// ComponentListener
