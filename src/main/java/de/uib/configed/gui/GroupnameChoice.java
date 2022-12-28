@@ -15,13 +15,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-/**
- * GroupsManager
- * Copyright:     Copyright (c) 2006
- * Organisation:  uib
- * @author Rupert Röder
- */
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.utilities.swing.SurroundPanel;
@@ -39,7 +32,7 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 
 	JTextField groupnameField;
 
-	public GroupnameChoice(String extraTitle, ConfigedMain main, Vector v, int selectedIndex) {
+	public GroupnameChoice(String extraTitle, Vector v, int selectedIndex) {
 		super(null, extraTitle + " (" + Globals.APPNAME + ")", true, new String[] { "ok", "Close" }, 300, 200);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		try // in an applet context this is not possible without a security problem

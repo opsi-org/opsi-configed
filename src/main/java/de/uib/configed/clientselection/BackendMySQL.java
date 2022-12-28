@@ -131,7 +131,7 @@ public class BackendMySQL {
 
 			case "SoftwareOperation": // PRODUCT
 
-				String whereClause = doJSONObject(jsonObject, MySQL.Type.NEW);
+				String whereClause = doJSONObject(jsonObject);
 				String innerJoins = mySQLRecursion.getMySQLInnerJoins();
 
 				// This query gives all hostIds that have a 'fitting' product in PRODUCT_ON_CLIENT
@@ -154,7 +154,7 @@ public class BackendMySQL {
 
 			case "PropertiesOperation":
 
-				whereClause = doJSONObject(jsonObject, MySQL.Type.NEW);
+				whereClause = doJSONObject(jsonObject);
 
 				// Gives all hostIds that have a 'fitting' product in PRODUCT_ON_CLIENT
 				whereClause = whereClause.replace("d.productId", "h.productId");
@@ -181,7 +181,7 @@ public class BackendMySQL {
 
 			case "SoftwareWithPropertiesOperation":
 
-				whereClause = doJSONObject(jsonObject, MySQL.Type.NEW);
+				whereClause = doJSONObject(jsonObject);
 				innerJoins = mySQLRecursion.getMySQLInnerJoins();
 
 				// Gives all hostIds that have a 'fitting' product in PRODUCT_ON_CLIENT
@@ -234,7 +234,7 @@ public class BackendMySQL {
 				return union(union(list1, list2), union(list3, list4));
 
 			case "HardwareOperation":
-				query = doJSONObject(jsonObject, MySQL.Type.NEW);
+				query = doJSONObject(jsonObject);
 
 				innerJoins = mySQLRecursion.getMySQLInnerJoins();
 
@@ -244,7 +244,7 @@ public class BackendMySQL {
 				return getListFromSQL(query);
 
 			case "SwAuditOperation":
-				query = doJSONObject(jsonObject, MySQL.Type.NEW);
+				query = doJSONObject(jsonObject);
 
 				innerJoins = mySQLRecursion.getMySQLInnerJoins();
 
@@ -342,7 +342,7 @@ public class BackendMySQL {
 		return null;
 	}
 
-	private String doJSONObject(JSONObject jsonObject, MySQL.Type type) {
+	private String doJSONObject(JSONObject jsonObject) {
 
 		if (jsonObject.isNull("element")) {
 			MySQL.Type newType = MySQL.getType(jsonObject);
@@ -375,7 +375,7 @@ public class BackendMySQL {
 						mysql += type;
 				}
 
-				mysql += doJSONObject(jsonObject, MySQL.Type.NEW);
+				mysql += doJSONObject(jsonObject);
 			} catch (Exception e) {
 				logging.warning(this, "" + e);
 			}

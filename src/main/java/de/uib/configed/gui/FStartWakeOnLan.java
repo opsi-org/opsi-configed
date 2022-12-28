@@ -1,6 +1,5 @@
 package de.uib.configed.gui;
 
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
@@ -41,11 +40,11 @@ import de.uib.utilities.observer.RunningInstances;
 import de.uib.utilities.swing.ProgressBarPainter;
 import de.uib.utilities.thread.WaitingWorker;
 
-public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.thread.WaitingSleeper
-// implements PropertyChangeListener
-{
-	public static RunningInstances<FStartWakeOnLan> runningInstances = new RunningInstances(FStartWakeOnLan.class,
-			configed.getResourceValue("RunningInstances.askStop.text"));
+public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.thread.WaitingSleeper {
+
+	public static final RunningInstances<FStartWakeOnLan> runningInstances = new RunningInstances<>(
+			FStartWakeOnLan.class, configed.getResourceValue("RunningInstances.askStop.text"));
+
 	String scheduleTitleStarter;
 	private Map<String, Integer> labelledDelays;
 	JSpinner spinnerDelay;
@@ -82,7 +81,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 	ConfigedMain main;
 
-	public FStartWakeOnLan(Frame owner, String title, ConfigedMain main) {
+	public FStartWakeOnLan(String title, ConfigedMain main) {
 		super(null, title, false, new String[]
 
 		{ configed.getResourceValue("FStartWakeOnLan.start"), configed.getResourceValue("FStartWakeOnLan.cancel") },

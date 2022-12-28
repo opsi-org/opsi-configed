@@ -5121,11 +5121,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 * Starts the config dialog
 	 */
 	public void startSSHConfigDialog() {
-		SSHConfigDialog.getInstance(mainFrame, this);
+		SSHConfigDialog.getInstance(this);
 	}
 
 	public SSHConfigDialog getSSHConfigDialog() {
-		return SSHConfigDialog.getInstance(mainFrame, this);
+		return SSHConfigDialog.getInstance(this);
 	}
 
 	/** Starts the control dialog */
@@ -5219,7 +5219,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			i = 0;
 		}
 
-		GroupnameChoice choiceDialog = new GroupnameChoice(configed.getResourceValue("ConfigedMain.saveGroup"), this,
+		GroupnameChoice choiceDialog = new GroupnameChoice(configed.getResourceValue("ConfigedMain.saveGroup"),
 				groupSelectionIds, i);
 
 		if (choiceDialog.getResult() == 1 && !choiceDialog.getResultString().equals("")) {
@@ -5248,7 +5248,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		int i = groupSelectionIds.indexOf(groupname);
 
-		GroupnameChoice choiceDialog = new GroupnameChoice(configed.getResourceValue("ConfigedMain.deleteGroup"), this,
+		GroupnameChoice choiceDialog = new GroupnameChoice(configed.getResourceValue("ConfigedMain.deleteGroup"),
 				groupSelectionIds, i);
 
 		if (choiceDialog.getResult() == 1 && !choiceDialog.getResultString().equals("")) {

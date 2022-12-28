@@ -184,8 +184,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		retrieveData();
 
-		FGeneralDialogLicensingInfo ME = this;
-
 		thePanel = new LicensingInfoPanelGenEditTable("", // title
 				-1, // don't use a definite max table width
 				false, // editing

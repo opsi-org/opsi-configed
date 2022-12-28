@@ -442,10 +442,6 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 	}
 
 	protected void addUser() {
-		addUser("");
-	}
-
-	protected void addUser(String rolename) {
 
 		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, // owner frame
 				"add user", // title

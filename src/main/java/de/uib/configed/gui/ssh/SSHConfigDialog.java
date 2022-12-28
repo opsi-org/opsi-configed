@@ -2,7 +2,6 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -71,7 +70,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 	private static SSHConfigDialog instance;
 	private static SSHConnectionInfo connectionInfo = null;
 
-	private SSHConfigDialog(Frame owner, ConfigedMain cmain) {
+	private SSHConfigDialog(ConfigedMain cmain) {
 		super(null, configed.getResourceValue("MainFrame.jMenuSSHConfig"), false);
 		configedMain = cmain;
 		connectionInfo = SSHConnectionInfo.getInstance();
@@ -87,9 +86,9 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		}
 	}
 
-	public static SSHConfigDialog getInstance(Frame fr, ConfigedMain cmain) {
+	public static SSHConfigDialog getInstance( ConfigedMain cmain) {
 		if (instance == null)
-			instance = new SSHConfigDialog(fr, cmain);
+			instance = new SSHConfigDialog(cmain);
 		instance.setVisible(true);
 		checkComponents();
 		return instance;

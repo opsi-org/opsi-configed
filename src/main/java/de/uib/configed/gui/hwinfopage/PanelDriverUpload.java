@@ -666,7 +666,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 	}
 
-	public void makePath(File path, boolean ask) {
+	public void makePath(File path) {
 		logging.info(this, "makePath for " + path);
 
 		if (path != null && !path.exists()) {
@@ -699,7 +699,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 					logging.info(this, "copy  " + driverPath + " to " + targetPath);
 
-					makePath(targetPath, true);
+					makePath(targetPath);
 
 					stateServerPath = targetPath.exists();
 					serverPathChecked.setSelected(stateServerPath);
@@ -770,7 +770,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		String oldServerPath = fieldServerPath.getText();
 		File currentDirectory = new File(oldServerPath);
 
-		makePath(currentDirectory, true);
+		makePath(currentDirectory);
 		chooserServerpath.setCurrentDirectory(currentDirectory);
 
 		int returnVal = chooserServerpath.showOpenDialog(this);

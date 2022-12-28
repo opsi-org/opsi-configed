@@ -879,7 +879,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuNewScheduledWOL.setText(configed.getResourceValue("MainFrame.jMenuWakeOnLan.scheduler"));
 		final MainFrame f = this;
 		jMenuNewScheduledWOL.addActionListener((ActionEvent e) -> {
-			FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(f,
+			FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(
 					Globals.APPNAME + ": " + configed.getResourceValue("FStartWakeOnLan.title"), main);
 			fStartWakeOnLan.centerOn(f);
 
@@ -1516,7 +1516,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		final MainFrame f = this;
 		popupWakeOnLanScheduler.setText(configed.getResourceValue("MainFrame.jMenuWakeOnLan.scheduler"));
 		popupWakeOnLanScheduler.addActionListener((ActionEvent e) -> {
-			FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(f,
+			FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(
 					Globals.APPNAME + ": " + configed.getResourceValue("FStartWakeOnLan.title"), main);
 			fStartWakeOnLan.centerOn(f);
 
@@ -3332,15 +3332,14 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 			Platform.runLater(() -> {
 				try {
-					initFX(fxPanel);
+					initFX();
 				} catch (IOException ioE) {
-					ioE.printStackTrace();
 					logging.error(this, "Unable to open fxml file");
 				}
 			});
 		}
 
-		public void initFX(final JFXPanel fxPanel) throws IOException {
+		public void initFX() throws IOException {
 			try {
 				licenseDisplayer = new LicenseDisplayer();
 				licenseDisplayer.initAndShowGUI();

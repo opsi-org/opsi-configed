@@ -22,7 +22,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
@@ -480,12 +479,12 @@ public class DPassword extends JDialog // implements Runnable
 		jButtonCommit.setMaximumSize(new Dimension(100, 20));
 		jButtonCommit.setPreferredSize(new Dimension(100, 20));
 		jButtonCommit.setSelected(true);
-		jButtonCommit.addActionListener(this::jButtonCommit_actionPerformed);
+		jButtonCommit.addActionListener(this::jButtonCommitActionPerformed);
 
 		jButtonCancel.setText(configed.getResourceValue("DPassword.jButtonCancel"));
 		jButtonCancel.setMaximumSize(new Dimension(100, 20));
 		jButtonCancel.setPreferredSize(new Dimension(100, 20));
-		jButtonCancel.addActionListener(this::jButtonCancel_actionPerformed);
+		jButtonCancel.addActionListener(this::jButtonCancelActionPerformed);
 
 		jPanelButtons.add(jButtonCommit);
 		jPanelButtons.add(jButtonCancel);
@@ -703,29 +702,25 @@ public class DPassword extends JDialog // implements Runnable
 		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setHost((String) fieldHost.getSelectedItem());
 	}
 
-	void jButtonCommit_actionPerformed(ActionEvent e) {
+	void jButtonCommitActionPerformed(ActionEvent e) {
 		ok_action();
 	}
 
-	void end_program() {
+	void endProgram() {
 		main.finishApp(false, 0);
 	}
 
-	void jButtonCancel_actionPerformed(ActionEvent e) {
+	void jButtonCancelActionPerformed(ActionEvent e) {
 		if (waitCursor != null)
 			waitCursor.stop();
-		end_program();
-	}
-
-	void passwordField_componentShown(ComponentEvent e) {
-		passwordField.requestFocus();
+		endProgram();
 	}
 
 	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		super.processWindowEvent(e);
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-			end_program();
+			endProgram();
 		}
 	}
 
@@ -743,7 +738,7 @@ public class DPassword extends JDialog // implements Runnable
 				myHome.ok_action();
 			} else if (e.getKeyCode() == 27) // Escape
 			{
-				myHome.end_program();
+				myHome.endProgram();
 			}
 		}
 	}

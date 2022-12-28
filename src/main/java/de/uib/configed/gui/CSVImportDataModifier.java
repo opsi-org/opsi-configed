@@ -118,7 +118,7 @@ public class CSVImportDataModifier {
 		populateClassNames(classNames, columnNames);
 
 		Map<String, Map> theSourceMap = new HashMap<>();
-		populateSourceMap(theSourceMap, csvData, columnNames);
+		populateSourceMap(theSourceMap, csvData);
 
 		TableUpdateCollection updateCollection = new TableUpdateCollection();
 		TableSource source = new MapSource(columnNames, classNames, theSourceMap, false);
@@ -206,8 +206,7 @@ public class CSVImportDataModifier {
 		}
 	}
 
-	private void populateSourceMap(Map<String, Map> theSourceMap, List<Map<String, Object>> data,
-			Vector<String> columnNames) {
+	private void populateSourceMap(Map<String, Map> theSourceMap, List<Map<String, Object>> data) {
 		int id = 0;
 
 		for (Map<String, Object> line : data) {
@@ -216,7 +215,7 @@ public class CSVImportDataModifier {
 	}
 
 	private void populateClassNames(Vector<String> classNames, Vector<String> columnNames) {
-		if (classNames.size() != 0) {
+		if (!classNames.isEmpty()) {
 			classNames.clear();
 		}
 
