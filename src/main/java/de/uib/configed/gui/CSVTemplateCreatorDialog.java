@@ -215,17 +215,11 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			AbstractButton button = iter.nextElement();
 
 			button.addItemListener((ItemEvent e) -> {
-				if (e.getItem() == otherOption) {
-					otherSeparatorInput.setEnabled(true);
-				} else {
-					otherSeparatorInput.setEnabled(false);
-				}
+				otherSeparatorInput.setEnabled(e.getItem() == otherOption);
 
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					if (!button.getActionCommand().isEmpty()) {
-						format.setFieldSeparator(button.getActionCommand().charAt(0));
-					}
-				}
+				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty())
+					format.setFieldSeparator(button.getActionCommand().charAt(0));
+
 			});
 		}
 
