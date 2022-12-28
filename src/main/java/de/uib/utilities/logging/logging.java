@@ -73,11 +73,11 @@ public class logging implements LogEventSubject
 	public static boolean LogFileAvailable = false;
 
 	private static final int maxListedErrors = 20;
-	private static Vector<String> errorList;
+	private static Vector<String> errorList = new Vector<String>(maxListedErrors);
 
 	public static FShowList fErrors;
 
-	protected static Vector<LogEventObserver> logEventObservers;
+	protected static Vector<LogEventObserver> logEventObservers = new Vector<LogEventObserver>();
 
 	public static void setSuppressConsole(boolean b) {
 		setLogLevelConsole(LEVEL_NONE);
@@ -177,8 +177,6 @@ public class logging implements LogEventSubject
 	}
 
 	public static final synchronized void init() {
-		errorList = new Vector<>(maxListedErrors);
-		logEventObservers = new Vector<>();
 		initLogFile();
 	}
 

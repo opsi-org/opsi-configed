@@ -157,7 +157,6 @@ public class configed {
 	private static String client = null;
 	private static String clientgroup = null;
 	private static Integer tab = null;
-	private static String logdirectory = "";
 	private static boolean optionCLIQuerySearch = false;
 	private static String savedSearch = null;
 	private static boolean optionCLIDefineGroupBySearch = false;
@@ -393,9 +392,6 @@ public class configed {
 			logging.debug("imageHandled failed: " + ex.toString());
 		}
 
-		// Set directory for logging
-		logging.logDirectoryName = logdirectory;
-
 		// Set locale
 		List<String> existingLocales = Messages.getLocaleNames();
 		Messages.setLocale(paramLocale);
@@ -481,8 +477,7 @@ public class configed {
 					}
 					i = i + 2;
 				} else if (args[i].equals("-d") || args[i].equals("--logdirectory")) {
-					logdirectory = getArg(args, i);
-
+					logging.logDirectoryName = getArg(args, i);
 					i = i + 2;
 				} else if (args[i].equals("-s") || args[i].equals("--savedstates")) {
 					savedStatesLocationName = getArg(args, i);
@@ -987,7 +982,6 @@ public class configed {
 
 		if (de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect) {
 			logging.debug("de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect");
-			logging.logDirectoryName = logdirectory;
 
 			addMissingArgs();
 
