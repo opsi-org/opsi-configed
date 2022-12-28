@@ -90,7 +90,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		initGUI();
 		this.setSize(Globals.DIALOG_FRAME_DEFAULT_WIDTH, Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100);
 		this.centerOn(Globals.mainFrame);
-		this.setBackground(Globals.backLightBlue);
+		this.setBackground(Globals.BACKGROUND_COLOR_7);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		wgetAuthPanel.isOpen = true;
 		wgetAuthPanel.close();
@@ -104,8 +104,8 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	}
 
 	protected void init() {
-		inputPanel.setBackground(Globals.backLightBlue);
-		buttonPanel.setBackground(Globals.backLightBlue);
+		inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		getContentPane().add(inputPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
@@ -149,7 +149,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		});
 		tf_local_path = new JTextField();
 		tf_local_path.setEditable(false);
-		tf_local_path.setBackground(Globals.backLightYellow);
+		tf_local_path.setBackground(Globals.BACKGROUND_COLOR_9);
 
 		cb_setRights = new JCheckBox();
 		cb_setRights.setSelected(true);

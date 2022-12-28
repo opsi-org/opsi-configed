@@ -88,7 +88,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	protected void allLayout() {
 		logging.info(this, "allLayout");
 
-		allpane.setBackground(Globals.backLightBlue);
+		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 

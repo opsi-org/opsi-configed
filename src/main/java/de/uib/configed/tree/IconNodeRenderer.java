@@ -41,7 +41,7 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 			node.setEnabled(enabled);
 
 			if (sel) {
-				setBackground(Globals.backLightBlue);
+				setBackground(Globals.BACKGROUND_COLOR_7);
 
 			} else {
 				setBackground(Color.white);

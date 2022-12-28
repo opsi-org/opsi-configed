@@ -662,7 +662,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 										.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2)));
 
-		setBackground(Globals.backgroundLightGrey);
+		setBackground(Globals.BACKGROUND_COLOR_3);
 
 	}
 

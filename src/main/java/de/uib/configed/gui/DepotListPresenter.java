@@ -96,7 +96,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	 * @return java.awt.Color
 	 */
 	public Color getMyColor() {
-		return Globals.backgroundWhite;
+		return Globals.SECONDARY_BACKGROUND_COLOR;
 	}
 
 	/**
@@ -106,9 +106,9 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	 */
 	public void setChangedDepotSelectionActive(boolean active) {
 		if (active)
-			depotslist.setBackground(Globals.backLightYellow);
+			depotslist.setBackground(Globals.BACKGROUND_COLOR_9);
 		else
-			depotslist.setBackground(Globals.backgroundWhite);
+			depotslist.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		// colorize as hint that we have changed the depots selection
 
@@ -122,7 +122,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 			labelDepotServer.setText(configed.getResourceValue("DepotListPresenter.depot"));
 		labelDepotServer.setOpaque(false);
 
-		labelDepotServer.setBackground(Globals.backLightBlue);
+		labelDepotServer.setBackground(Globals.BACKGROUND_COLOR_7);
 		labelDepotServer.setFont(Globals.defaultFontStandardBold);
 
 		buttonSelectDepotsWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
@@ -155,7 +155,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		scrollpaneDepotslist.setPreferredSize(depotslist.getMaximumSize());
 
 		depotslist.setFont(Globals.defaultFont);
-		depotslist.setBackground(Globals.backgroundWhite);
+		depotslist.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 	}
 
 	private void layouting() {

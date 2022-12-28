@@ -207,7 +207,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		paneProducts.setPreferredSize(new Dimension(fwidth_lefthanded, fheight + 40));
 		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		tableProducts.setBackground(Globals.backgroundWhite);
+		tableProducts.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		tableProducts.setShowHorizontalLines(true);
 		tableProducts.setGridColor(Globals.PANEL_PRODUCT_SETTINGS_TABLE_GRID_COLOR);
 		tableProducts.setRowHeight(Globals.TABLE_ROW_HEIGHT);

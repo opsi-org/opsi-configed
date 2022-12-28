@@ -296,7 +296,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	protected void allLayout() {
-		allpane.setBackground(Globals.backLightBlue);
+		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 
 		northPanel = new JPanel();

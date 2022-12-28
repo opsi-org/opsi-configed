@@ -167,10 +167,10 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	private void init() {
 		logging.debug(this, "init setting up components ");
 
-		controlPanel.setBackground(Globals.backLightBlue);
-		centerPanel.setBackground(Globals.backLightBlue);
-		commandlistPanel.setBackground(Globals.backLightBlue);
-		buttonPanel.setBackground(Globals.backLightBlue);
+		controlPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		centerPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		commandlistPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		centerPanelLayout = new GroupLayout(centerPanel);
 		controlPanelLayout = new GroupLayout(controlPanel);

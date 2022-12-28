@@ -106,7 +106,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 	}
 
 	protected void initComponents() {
-		framingPanel.setBackground(Globals.backgroundWhite);
+		framingPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
 
 		setHint(hint);

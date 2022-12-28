@@ -567,7 +567,8 @@ public class DPassword extends JDialog // implements Runnable
 
 		Containership csPanel = new Containership(getContentPane());
 
-		csPanel.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.backLightBlue }, JPanel.class);
+		csPanel.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
+				JPanel.class);
 
 		MessageFormat messageFormatVersion = new MessageFormat(configed.getResourceValue("DPassword.jLabelVersion"));
 		jLabelVersion.setText(messageFormatVersion

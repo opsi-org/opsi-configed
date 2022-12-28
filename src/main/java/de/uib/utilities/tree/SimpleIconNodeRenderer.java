@@ -61,7 +61,7 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 
 			if (sel && row != 0) // assuming that row 0 contains sort of header
 			{
-				setBackground(Globals.backLightBlue);
+				setBackground(Globals.BACKGROUND_COLOR_7);
 
 			} else {
 				setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);

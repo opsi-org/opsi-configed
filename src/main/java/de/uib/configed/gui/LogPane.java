@@ -362,7 +362,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			jTextPane.setText(defaultText);
 
 		jTextPane.setOpaque(true);
-		jTextPane.setBackground(Globals.backgroundWhite);
+		jTextPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		jTextPane.setEditable(true);
 		jTextPane.setFont(Globals.defaultFont);
 		jTextPane.addKeyListener(this);
@@ -424,8 +424,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		JComponent editor = spinnerMinLevel.getEditor();
 		if (editor instanceof JSpinner.DefaultEditor) {
 			JTextField field = ((JSpinner.DefaultEditor) editor).getTextField();
-			field.setForeground(Globals.backLightBlue);
-			field.setBackground(Globals.backLightBlue);
+			field.setForeground(Globals.BACKGROUND_COLOR_7);
+			field.setBackground(Globals.BACKGROUND_COLOR_7);
 			logging.info(this, "spinnerMinLevel set textfield cols 0");
 
 		}

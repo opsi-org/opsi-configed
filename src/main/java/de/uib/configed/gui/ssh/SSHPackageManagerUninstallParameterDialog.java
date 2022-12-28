@@ -214,8 +214,8 @@ public class SSHPackageManagerUninstallParameterDialog
 	}
 
 	protected void init() {
-		uninstallPanel.setBackground(Globals.backLightBlue);
-		buttonPanel.setBackground(Globals.backLightBlue);
+		uninstallPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		getContentPane().add(uninstallPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
@@ -247,7 +247,7 @@ public class SSHPackageManagerUninstallParameterDialog
 					.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelProduct"));
 
 			tf_product = new JTextField();
-			tf_product.setBackground(Globals.backLightYellow);
+			tf_product.setBackground(Globals.BACKGROUND_COLOR_9);
 			tf_product.setEditable(false);
 
 			cb_opsiproducts = new JComboBoxSimpleToolTip();
@@ -263,7 +263,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 			buttonUpdateList = new IconAsButton("buttonUpdateList", "images/reload16.png", "images/reload16.png",
 					"images/reload16.png", "images/reload16.png");
-			buttonUpdateList.setBackground(Globals.backgroundLightGrey);
+			buttonUpdateList.setBackground(Globals.BACKGROUND_COLOR_3);
 			buttonUpdateList.setToolTipText(configed.getResourceValue(
 					"SSHConnection.ParameterDialog.opsipackagemanager_uninstall.JButtonUpdateList.tooltip"));
 

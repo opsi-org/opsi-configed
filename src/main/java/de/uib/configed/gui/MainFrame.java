@@ -1769,7 +1769,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jFieldInDepot = new JTextArea();
 		jFieldInDepot.setEditable(false);
 		jFieldInDepot.setFont(Globals.defaultFontBig);
-		jFieldInDepot.setBackground(Globals.backgroundLightGrey);
+		jFieldInDepot.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		jTextFieldDescription = new JTextEditorField("");
 		jTextFieldDescription.setEditable(true);
@@ -1993,7 +1993,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jCheckBoxSorted.setText(configed.getResourceValue("MainFrame.jCheckBoxSorted"));
 
 		jButtonSaveList.setText(configed.getResourceValue("MainFrame.jButtonSaveList"));
-		jButtonSaveList.setBackground(Globals.backBlue);
+		jButtonSaveList.setBackground(Globals.BACKGROUND_COLOR_6);
 		jButtonSaveList.addActionListener(this::jButtonSaveList_actionPerformed);
 
 		jRadioRequiredAll.setMargin(new Insets(0, 0, 0, 0));
@@ -2010,7 +2010,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		buttonGroupRequired.add(jRadioRequiredAll);
 		buttonGroupRequired.add(jRadioRequiredOff);
 
-		jComboBoxProductValues.setBackground(Globals.backBlue);
+		jComboBoxProductValues.setBackground(Globals.BACKGROUND_COLOR_6);
 
 		treeClients.setFont(Globals.defaultFont);
 
@@ -2405,7 +2405,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		showSoftwareLog_NotFound = new JPanel(new FlowLayout());
 		showSoftwareLog_NotFound.add(labelNoSoftware);
-		showSoftwareLog_NotFound.setBackground(Globals.backgroundLightGrey);
+		showSoftwareLog_NotFound.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		showSoftwareLog = showSoftwareLog_NotFound;
 
@@ -2479,26 +2479,26 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				new Class[] { boolean.class }, javax.swing.text.JTextComponent.class);
 
 		// set colors of panels
-		csjPanel_allContent.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.backLightBlue },
+		csjPanel_allContent.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
 				JPanel.class);
 
 		depotListPresenter.setBackground(depotListPresenter.getMyColor());
 
 		Containership cspanel_LocalbootProductsettings = new Containership(panel_LocalbootProductsettings);
 		cspanel_LocalbootProductsettings.doForAllContainedCompisOfClass("setBackground",
-				new Object[] { Globals.backgroundLightGrey }, VerticalPositioner.class);
-		panel_LocalbootProductsettings.setBackground(Globals.backgroundLightGrey);
+				new Object[] { Globals.BACKGROUND_COLOR_3 }, VerticalPositioner.class);
+		panel_LocalbootProductsettings.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		Containership cspanel_NetbootProductsettings = new Containership(panel_NetbootProductsettings);
 		cspanel_NetbootProductsettings.doForAllContainedCompisOfClass("setBackground",
-				new Object[] { Globals.backgroundLightGrey }, VerticalPositioner.class);
-		panel_NetbootProductsettings.setBackground(Globals.backgroundLightGrey);
+				new Object[] { Globals.BACKGROUND_COLOR_3 }, VerticalPositioner.class);
+		panel_NetbootProductsettings.setBackground(Globals.BACKGROUND_COLOR_3);
 
-		iconPane0.setBackground(Globals.backLightBlue);
-		iconBarPane.setBackground(Globals.backLightBlue);
-		iconPane1.setBackground(Globals.backLightBlue);
-		panelTreeClientSelection.setBackground(Globals.backLightBlue);
-		statusPane.setBackground(Globals.backLightBlue);
+		iconPane0.setBackground(Globals.BACKGROUND_COLOR_7);
+		iconBarPane.setBackground(Globals.BACKGROUND_COLOR_7);
+		iconPane1.setBackground(Globals.BACKGROUND_COLOR_7);
+		panelTreeClientSelection.setBackground(Globals.BACKGROUND_COLOR_7);
+		statusPane.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		glass.setVisible(true);
 		glass.setOpaque(true);
@@ -3436,7 +3436,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		if (showHardwareLog_NotFound == null || showHardwareLogParentOfNotFoundPanel == null) {
 			showHardwareLog_NotFound = new TitledPanel();
 			showHardwareLogParentOfNotFoundPanel = new JPanel();
-			showHardwareLog_NotFound.setBackground(Globals.backLightBlue);
+			showHardwareLog_NotFound.setBackground(Globals.BACKGROUND_COLOR_7);
 			showHardwareLogParentOfNotFoundPanel.setLayout(new BorderLayout());
 			showHardwareLogParentOfNotFoundPanel.add(showHardwareLog_NotFound);
 
@@ -3803,17 +3803,17 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			jTextFieldInventoryNumber.setToolTipText(null);
 			jTextFieldOneTimePassword.setToolTipText(null);
 			jTextAreaNotes.setToolTipText(null);
-			jTextFieldDescription.setBackground(Globals.backgroundWhite);
-			jTextFieldInventoryNumber.setBackground(Globals.backgroundWhite);
-			jTextFieldOneTimePassword.setBackground(Globals.backgroundWhite);
-			jTextAreaNotes.setBackground(Globals.backgroundWhite);
-			macAddressField.setBackground(Globals.backgroundWhite);
-			ipAddressField.setBackground(Globals.backgroundWhite);
+			jTextFieldDescription.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+			jTextFieldInventoryNumber.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+			jTextFieldOneTimePassword.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+			jTextAreaNotes.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+			macAddressField.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+			ipAddressField.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
-			cbUefiBoot.setBackground(Globals.backgroundWhite);
-			cbWANConfig.setBackground(Globals.backgroundWhite);
-			jTextFieldHostKey.setBackground(Globals.backgroundWhite);
-			cbInstallByShutdown.setBackground(Globals.backgroundWhite);
+			cbUefiBoot.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+			cbWANConfig.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+			jTextFieldHostKey.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+			cbInstallByShutdown.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		} else {
 			jTextFieldDescription
@@ -3823,17 +3823,17 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			jTextFieldOneTimePassword
 					.setToolTipText(configed.getResourceValue("MainFrame.Only_active_for_a_single_client"));
 			jTextAreaNotes.setToolTipText(configed.getResourceValue("MainFrame.Only_active_for_a_single_client"));
-			jTextFieldDescription.setBackground(Globals.backgroundLightGrey);
-			jTextFieldInventoryNumber.setBackground(Globals.backgroundLightGrey);
-			jTextFieldOneTimePassword.setBackground(Globals.backgroundLightGrey);
-			jTextAreaNotes.setBackground(Globals.backgroundLightGrey);
+			jTextFieldDescription.setBackground(Globals.BACKGROUND_COLOR_3);
+			jTextFieldInventoryNumber.setBackground(Globals.BACKGROUND_COLOR_3);
+			jTextFieldOneTimePassword.setBackground(Globals.BACKGROUND_COLOR_3);
+			jTextAreaNotes.setBackground(Globals.BACKGROUND_COLOR_3);
 
-			macAddressField.setBackground(Globals.backgroundLightGrey);
-			ipAddressField.setBackground(Globals.backgroundLightGrey);
-			cbUefiBoot.setBackground(Globals.backgroundLightGrey);
-			cbWANConfig.setBackground(Globals.backgroundLightGrey);
-			jTextFieldHostKey.setBackground(Globals.backgroundLightGrey);
-			cbInstallByShutdown.setBackground(Globals.backgroundLightGrey);
+			macAddressField.setBackground(Globals.BACKGROUND_COLOR_3);
+			ipAddressField.setBackground(Globals.BACKGROUND_COLOR_3);
+			cbUefiBoot.setBackground(Globals.BACKGROUND_COLOR_3);
+			cbWANConfig.setBackground(Globals.BACKGROUND_COLOR_3);
+			jTextFieldHostKey.setBackground(Globals.BACKGROUND_COLOR_3);
+			cbInstallByShutdown.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		}
 

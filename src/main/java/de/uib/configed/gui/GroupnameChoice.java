@@ -54,7 +54,7 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 		groups = new XList(v);
 		groups.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		groups.setFont(Globals.defaultFontBig);
-		groups.setBackground(Globals.backgroundLightGrey);
+		groups.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		groups.addListSelectionListener(this);
 

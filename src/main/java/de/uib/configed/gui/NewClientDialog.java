@@ -205,7 +205,7 @@ public class NewClientDialog extends FGeneralDialog
 		panel = new JPanel();
 		gpl = new GroupLayout(panel);
 		panel.setLayout(gpl);
-		panel.setBackground(Globals.backLightBlue);
+		panel.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		jCSVTemplateLabel = new JLabel(configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
 		jCSVTemplateButton = new JButton(configed.getResourceValue("NewClientDialog.csvTemplateButton"));

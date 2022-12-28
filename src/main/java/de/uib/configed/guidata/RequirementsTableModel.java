@@ -267,20 +267,20 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 			{
 				switch (kindOfRow) {
 				case 0:
-					cell.setBackground(Globals.backLightBlue);
+					cell.setBackground(Globals.BACKGROUND_COLOR_7);
 					break;
 				case 1:
-					cell.setBackground(Globals.backVeryLightBlue);
+					cell.setBackground(Globals.BACKGROUND_COLOR_8);
 					break;
 				case 2:
 
-					cell.setBackground(Globals.backVeryLightBlue);
+					cell.setBackground(Globals.BACKGROUND_COLOR_8);
 					break;
 				}
 			}
 
 			if (kindOfRow == 2 && col > 1)
-				cell.setBackground(Globals.backgroundGrey);
+				cell.setBackground(Globals.BACKGROUND_COLOR_4);
 
 		}
 	}

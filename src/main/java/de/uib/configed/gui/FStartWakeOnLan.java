@@ -182,7 +182,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		super.checkAdditionalPane();
 
 		JPanel contentPane = new JPanel();
-		contentPane.setBackground(Globals.backLightBlue);
+		contentPane.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		scrollpane.setViewportView(contentPane);
 

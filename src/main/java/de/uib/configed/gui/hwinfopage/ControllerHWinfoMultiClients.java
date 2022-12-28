@@ -254,7 +254,7 @@ public class ControllerHWinfoMultiClients {
 		panel.setTitlePane(new JComponent[] {
 
 				buttonReload, buttonCopySelection, new JLabel("       "), buttonConfigureColumns }, 20);
-		panel.setTitlePaneBackground(Globals.backLightBlue);
+		panel.setTitlePaneBackground(Globals.BACKGROUND_COLOR_7);
 
 		panel.addListSelectionListener(listSelectionEvent -> buttonCopySelection
 				.setEnabled(!((ListSelectionModel) listSelectionEvent.getSource()).isSelectionEmpty()));

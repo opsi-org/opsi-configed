@@ -363,7 +363,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	protected void initComponents() {
-		setBackground(Globals.backgroundWhite);
+		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		addComponentListener(this);
 
@@ -400,7 +400,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		titlePane = new PanelLinedComponents();
 		titlePane.setVisible(false);
-		titlePane.setBackground(Globals.backgroundWhite);
+		titlePane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		theTable = new de.uib.utilities.table.JTableWithToolTips();
 
@@ -457,14 +457,14 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		try {
 			scrollpane = new javax.swing.JScrollPane();
 			scrollpane.setViewportView(theTable);
-			scrollpane.getViewport().setBackground(Globals.backLightBlue);
+			scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 		} catch (ClassCastException ex) {
 			// a strange Nimbus exception which occurs sometimes here
 			logging.warning(this, "strange exception on creating scrollpane " + ex);
 
 			scrollpane = new javax.swing.JScrollPane();
 			scrollpane.setViewportView(theTable);
-			scrollpane.getViewport().setBackground(Globals.backLightBlue);
+			scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 
 		}
 
@@ -585,7 +585,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	public void setTitlePaneBackground(java.awt.Color c) {
 		if (c == null)
-			titlePane.setBackground(Globals.backgroundWhite);
+			titlePane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		else
 			titlePane.setBackground(c);
 	}

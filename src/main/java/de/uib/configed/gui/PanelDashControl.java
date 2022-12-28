@@ -20,20 +20,20 @@ public class PanelDashControl extends JPanel {
 
 	public PanelDashControl() {
 		super();
-		setBorder(BorderFactory.createLineBorder(Globals.backBlue, 1, true));
+		setBorder(BorderFactory.createLineBorder(Globals.BACKGROUND_COLOR_6, 1, true));
 		initComponents();
 	}
 
 	protected void initComponents() {
-		setBackground(Globals.backLightBlue);
+		setBackground(Globals.BACKGROUND_COLOR_7);
 
 		GroupLayout dashLayout = new GroupLayout(this);
 		this.setLayout(dashLayout);
 
 		messages = new JTextArea("testxxxxxxxxxxxxxtestyyyyyyyyyyyyyyyytest");
 		JScrollPane scrollpaneMessages = new JScrollPane(messages);
-		scrollpaneMessages.setBackground(Globals.backLightBlue);
-		messages.setBackground(Globals.backLightBlue);
+		scrollpaneMessages.setBackground(Globals.BACKGROUND_COLOR_7);
+		messages.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		showDashOnStartup = new JCheckBox(configed.getResourceValue("Dash.showOnProgramStart"), true);
 		showDashOnStartup.setFont(Globals.defaultFontSmall);

@@ -29,7 +29,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 	public DepotsList(PersistenceController persist) {
 		this.persist = persist;
-		setBackground(Globals.backgroundWhite);
+		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		setSelectionBackground(Globals.defaultTableCellSelectedBgColor);
 		setSelectionForeground(Globals.DEPOTS_LIST_FOREGROUND_COLOR);
 
@@ -152,7 +152,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 				String depot = (String) value;
 				if (!persist.getDepotPermission(depot)) {
-					((JLabel) jc).setBackground(Globals.backgroundLightGrey);
+					((JLabel) jc).setBackground(Globals.BACKGROUND_COLOR_3);
 					((JLabel) jc).setToolTipText(
 							"Depot " + depot + " " + configed.getResourceValue("Permission.depot.not_accessible"));
 				} else

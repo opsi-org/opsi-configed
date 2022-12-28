@@ -115,7 +115,7 @@ public class SSHCompletionComboButton {
 
 	private void initTextfield() {
 		textfield = new JTextField();
-		textfield.setBackground(Globals.backLightYellow);
+		textfield.setBackground(Globals.BACKGROUND_COLOR_9);
 	}
 
 	private void createInstances() {

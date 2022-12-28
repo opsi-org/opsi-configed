@@ -88,7 +88,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		// we could design an adapted layout and infuse it in guiInit
 
-		allpane.setBackground(Globals.backLightBlue);
+		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
@@ -315,7 +315,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		};
 
 		JPanel extraInfoPanel = new PanelLinedComponents(linedComponents);
-		extraInfoPanel.setBackground(Globals.backgroundWhite);
+		extraInfoPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		extraInfoPanel.setOpaque(true);
 
 		JPanel panel = new JPanel();
@@ -393,7 +393,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		JPanel xPanel = new JPanel();
 		GroupLayout xLayout = new GroupLayout(xPanel);
 		xPanel.setLayout(xLayout);
-		xPanel.setBackground(Globals.backgroundWhite);
+		xPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		xPanel.setOpaque(true);
 
 		xLayout.setHorizontalGroup(xLayout.createParallelGroup(GroupLayout.Alignment.LEADING)

@@ -250,7 +250,7 @@ public class ControllerHWinfoColumnConfiguration {
 		panel.setTitlePane(
 				new JComponent[] { new JLabel(configed.getResourceValue("HWinfoColumnConfiguration.infoTitle")) }, 20);
 
-		panel.setTitlePaneBackground(Globals.backLightBlue);
+		panel.setTitlePaneBackground(Globals.BACKGROUND_COLOR_7);
 
 		LinkedHashMap<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
 

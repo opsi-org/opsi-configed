@@ -90,7 +90,7 @@ public class RecordPane extends JPanel implements KeyListener {
 
 	protected void initComponents() {
 
-		setBackground(Globals.backgroundWhite);
+		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		labelfields = new HashMap<>();
 		datafields = new HashMap<>();

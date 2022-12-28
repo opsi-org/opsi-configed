@@ -27,7 +27,7 @@ public class SSHPMInstallPanel extends JPanel {
 	protected String workbench;
 
 	public SSHPMInstallPanel() {
-		this.setBackground(Globals.backLightBlue);
+		this.setBackground(Globals.BACKGROUND_COLOR_7);
 		additional_default_paths.addElement(factory.opsipathVarRepository);
 		persist = PersistenceControllerFactory.getPersistenceController();
 		if (persist == null)

@@ -28,7 +28,7 @@ public class TitledPanel extends JPanel {
 	}
 
 	protected void initGui() {
-		setBackground(Globals.backLightBlue);
+		setBackground(Globals.BACKGROUND_COLOR_7);
 
 		label1.setFont(Globals.defaultFontBig);
 		label2.setFont(Globals.defaultFontBig);

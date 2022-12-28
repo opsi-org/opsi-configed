@@ -148,7 +148,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 	public void initLayout() {
 		logging.debug(this, "initLayout ");
-		setBackground(Globals.backLightBlue);
+		setBackground(Globals.BACKGROUND_COLOR_7);
 		thisLayout = new GroupLayout((JComponent) this);
 		setLayout(thisLayout);
 		thisLayout.setHorizontalGroup(thisLayout.createSequentialGroup().addGap(lGap).addGroup(thisLayout

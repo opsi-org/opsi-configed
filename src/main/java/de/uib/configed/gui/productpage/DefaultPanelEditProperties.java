@@ -49,7 +49,7 @@ public abstract class DefaultPanelEditProperties extends JXPanel {
 		setBackgroundPainter(new AbstractPainter<DefaultPanelEditProperties>() {
 			@Override
 			public void doPaint(Graphics2D g, DefaultPanelEditProperties obj, int width, int height) {
-				g.setPaint(Globals.backLightBlue);
+				g.setPaint(Globals.BACKGROUND_COLOR_7);
 				g.fillRect(0, 0, width, height);
 			}
 		});

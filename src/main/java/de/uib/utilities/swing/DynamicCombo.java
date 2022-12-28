@@ -41,7 +41,7 @@ public class DynamicCombo extends javax.swing.JPanel {
 		tablemodel.addRow(new String[] { "" });
 
 		table.setModel(tablemodel);
-		table.setSelectionBackground(Globals.backgroundWhite);
+		table.setSelectionBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		table.setSelectionForeground(Globals.lightBlack);
 		table.setShowGrid(false);
 

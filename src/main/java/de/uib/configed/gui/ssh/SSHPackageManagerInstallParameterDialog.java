@@ -158,9 +158,9 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 	}
 
 	protected void init() {
-		radioPanel.setBackground(Globals.backLightBlue);
-		mainPanel.setBackground(Globals.backLightBlue);
-		buttonPanel.setBackground(Globals.backLightBlue);
+		radioPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		mainPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		getContentPane().add(mainPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);

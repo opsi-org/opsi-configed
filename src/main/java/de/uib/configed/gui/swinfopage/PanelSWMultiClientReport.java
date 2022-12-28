@@ -84,7 +84,7 @@ public class PanelSWMultiClientReport extends JPanel {
 
 	protected void setupPanel() {
 
-		setBackground(Globals.backLightBlue);
+		setBackground(Globals.BACKGROUND_COLOR_7);
 		GroupLayout glGlobal = new GroupLayout(this);
 		this.setLayout(glGlobal);
 
@@ -234,7 +234,7 @@ public class PanelSWMultiClientReport extends JPanel {
 		logging.info(this, "kindOfExport   " + kindOfExport);
 
 		JPanel subpanelPreConfig = new JPanel();
-		subpanelPreConfig.setBackground(Globals.backgroundWhite);
+		subpanelPreConfig.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		GroupLayout glPreConfig = new GroupLayout(subpanelPreConfig);
 		subpanelPreConfig.setLayout(glPreConfig);

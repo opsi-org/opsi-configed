@@ -73,7 +73,7 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		// Den Tree bauen
 		dependenciesTree = new JTree();
 		dependenciesTree.setToggleClickCount(0);
-		dependenciesTree.setBackground(Globals.backVeryLightBlue);
+		dependenciesTree.setBackground(Globals.BACKGROUND_COLOR_8);
 
 		dependenciesTree.addMouseListener(this);
 		dependenciesTree.addMouseMotionListener(this);
@@ -130,7 +130,7 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		dependenciesTreeScrollPanel = new JScrollPane();
 
 		dependenciesTreeScrollPanel.setViewportView(dependenciesTree);
-		dependenciesTreeScrollPanel.getViewport().setBackground(Globals.backLightBlue);
+		dependenciesTreeScrollPanel.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 
 		dependenciesNeedsButton = new JRadioButton(
 				configed.getResourceValue("DependenciesTree.dependenciesNeedsButton"));
@@ -144,7 +144,7 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		dependenciesTreePathLabel = new JLabel();
 		dependenciesTreePathLabel.setBorder(BorderFactory.createLineBorder(Globals.greyed, 1));
 		dependenciesTreePathLabel.setOpaque(true);
-		dependenciesTreePathLabel.setBackground(Globals.backVeryLightBlue);
+		dependenciesTreePathLabel.setBackground(Globals.BACKGROUND_COLOR_8);
 
 		dependenciesNeedsButton.addActionListener(this);
 		dependenciesNeededByButton.addActionListener(this);

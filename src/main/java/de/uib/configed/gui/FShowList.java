@@ -85,7 +85,7 @@ public class FShowList extends FTextArea {
 		jTextArea1.setWrapStyleWord(true);
 		jTextArea1.setOpaque(true);
 
-		jTextArea1.setBackground(Globals.backgroundWhite);
+		jTextArea1.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		jTextArea1.setText("          ");
 		jTextArea1.setEditable(false);
 		jTextArea1.setFont(new java.awt.Font("Dialog", 0, 14));

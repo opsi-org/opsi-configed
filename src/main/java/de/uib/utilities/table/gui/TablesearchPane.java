@@ -332,7 +332,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	protected void initComponents() {
-		setBackground(Globals.backgroundWhite);
+		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		navPane = new NavigationPanel() {
 			@Override
@@ -411,7 +411,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		fieldSearch.setPreferredSize(Globals.textfieldDimension);
 
 		fieldSearch.setFont(Globals.defaultFontBig);
-		fieldSearch.setBackground(Globals.backVeryLightBlue);
+		fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
 
 		fieldSearch.getCaret().setBlinkRate(blinkrate);
 		fieldSearch.setToolTipText(configed.getResourceValue("SearchPane.searchField.toolTip"));

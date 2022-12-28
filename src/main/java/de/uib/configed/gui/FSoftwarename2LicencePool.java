@@ -201,7 +201,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						setSWxColTo((String) panelSWxLicencepool.getValueAt(panelSWxLicencepool.getSelectedRow(), 1))));
 
 		JPanel panelAction = new JPanel();
-		panelAction.setBackground(Globals.backgroundWhite);
+		panelAction.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		GroupLayout panelActionLayout = new GroupLayout(panelAction);
 		panelAction.setLayout(panelActionLayout);
@@ -272,7 +272,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		setAdditionalPane(panelSWx);
 
-		additionalPane.setBackground(Globals.backgroundWhite);// Color.YELLOW
+		additionalPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);// Color.YELLOW
 
 		setCenterPane(panelSWnames);
 		additionalPane.setVisible(true);

@@ -147,9 +147,10 @@ public class FGroupActions extends SecondaryFrame {
 						.addComponent(imageActionPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		Containership cs_all = new Containership(getContentPane());
-		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.backLightBlue }, JPanel.class);
+		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
+				JPanel.class);
 
-		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.backgroundLightGrey },
+		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },
 				javax.swing.text.JTextComponent.class);
 
 	}
