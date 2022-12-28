@@ -39,7 +39,6 @@ import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.observer.RunningInstances;
 import de.uib.utilities.swing.ProgressBarPainter;
-import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 
 public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.thread.WaitingSleeper
@@ -429,8 +428,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		if (spinnerDelay.getValue() == nullDelayValue) {
 			main.wakeUp(currentlySelectedClients, scheduleTitle);
 		} else {
-			main.wakeUpWithDelay(labelledDelays.get((String) spinnerDelay.getValue()), currentlySelectedClients,
-					scheduleTitle);
+			main.wakeUpWithDelay(labelledDelays.get(spinnerDelay.getValue()), currentlySelectedClients, scheduleTitle);
 		}
 
 		leave();
@@ -443,7 +441,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		logging.info(this, "startWaiting " + runningInstances);
 		runningInstances.add(this, scheduleTitle);
 
-		waitingTask = new WaitingWorker((WaitingSleeper) this);
+		waitingTask = new WaitingWorker(this);
 
 		waitingTask.execute();
 

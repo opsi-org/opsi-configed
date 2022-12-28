@@ -744,7 +744,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			data = value;
 			break;
 		case BIT_INTEGER_TYPE:
-			Long value2 = (Long) ((SpinnerWithExt) group.dataComponent).getValue();
+			Long value2 = ((SpinnerWithExt) group.dataComponent).getValue();
 			if (value2 == 0)
 				return null;
 			data = value2;
@@ -1140,7 +1140,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		else if (component instanceof SpinnerWithExt && data.getType() == SelectData.DataType.BIT_INTEGER_TYPE)
 			((SpinnerWithExt) component).setValue((Long) data.getData());
 		else if (component instanceof JSpinner && data.getType() == SelectData.DataType.INTEGER_TYPE)
-			((JSpinner) component).setValue((Integer) data.getData());
+			((JSpinner) component).setValue(data.getData());
 	}
 
 	private void setConnectionTypes(AndOrSelectButtonByIcon andOr, IconAsButton not,

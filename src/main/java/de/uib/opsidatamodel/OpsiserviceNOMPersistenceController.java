@@ -6684,9 +6684,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						continue;
 
 					try {
-						for (Object client : swId2clients.get(softwareIdent)) {
-							listOfUsingClients.add((String) client);
-							setOfUsingClients.add((String) client);
+						for (String client : swId2clients.get(softwareIdent)) {
+							listOfUsingClients.add(client);
+							setOfUsingClients.add(client);
 						}
 					} catch (Exception ex) {
 						logging.warning(" swId2clients.get(softwareIdent) -" + ex);

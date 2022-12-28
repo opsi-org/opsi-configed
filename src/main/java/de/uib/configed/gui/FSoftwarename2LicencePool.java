@@ -16,7 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.TableModelListener;
 
 /**
  * FSoftwarename2LicencePool
@@ -537,7 +536,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 					}
 				})),
 
-				keyCol, new int[] {}, (TableModelListener) panelSWnames, updateCollection);
+				keyCol, new int[] {}, panelSWnames, updateCollection);
 		updateItemFactoySWxLicencepool.setSource(modelSWxLicencepool);
 		logging.info(this, "setTableModelSWxLicencepool, we reset the model");
 		modelSWxLicencepool.reset();

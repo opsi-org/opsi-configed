@@ -374,8 +374,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	@Override
 	public Enum reactToStateChangeRequest(Enum newState) {
-		logging.debug(this, "reactToStateChangeRequest( newState: " + (LicencesTabStatus) newState + "), current state "
-				+ licencesStatus);
+		logging.debug(this, "reactToStateChangeRequest( newState: " + newState + "), current state " + licencesStatus);
 		if (newState != licencesStatus) {
 			if (getClient(licencesStatus).mayLeave()) {
 				licencesStatus = (LicencesTabStatus) newState;
@@ -1786,7 +1785,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					sessionValue = "" + sessionInfo.get(key);
 
 				rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, sessionValue);
-				rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, (Boolean) reachableInfo.get(key));
+				rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, reachableInfo.get(key));
 
 				List<Object> rowItems = new ArrayList<>();
 
@@ -2473,8 +2472,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 							" treeClients_mouseAction getSelectedClients().length " + getSelectedClients().length);
 
 					if (getSelectedClients().length == 1) {
-						mainFrame.getHostsStatusInfo()
-								.setGroupName(((DefaultMutableTreeNode) mouseNode).getParent().toString());
+						mainFrame.getHostsStatusInfo().setGroupName(mouseNode.getParent().toString());
 					} else {
 						mainFrame.getHostsStatusInfo().setGroupName("");
 					}
@@ -3535,8 +3533,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			while (it0.hasNext()) {
 				String client = (String) it0.next();
-				Map<String, Map<String, String>> clientValues = (Map<String, Map<String, String>>) collectChangedLocalbootStates
-						.get(client);
+				Map<String, Map<String, String>> clientValues = collectChangedLocalbootStates.get(client);
 
 				logging.debug(this, "updateProductStates, collectChangedLocalbootStates , client " + client + " values "
 						+ clientValues);
@@ -3574,7 +3571,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				Iterator it1 = clientValues.keySet().iterator();
 				while (it1.hasNext()) {
 					String product = (String) it1.next();
-					Map productValues = (Map) clientValues.get(product);
+					Map<String, String> productValues = clientValues.get(product);
 
 					persist.updateProductOnClient(client, product, OpsiPackage.TYPE_NETBOOT, productValues);
 				}
@@ -3595,7 +3592,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		checkSaveAll(true);
 		preSaveSelectedClients = saveSelectedClients;
 		logging.debug(this, "initServer() preSaveSelectedClients " + preSaveSelectedClients);
-		setSelectedClients((List) null);
+		setSelectedClients((List<String>) null);
 		logging.debug(this, "set selected values in initServer()");
 
 	}
@@ -3761,9 +3758,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public void reload() {
 		if (mainFrame != null) {
 			mainFrame.setChangedDepotSelectionActive(false);
-			SwingUtilities.invokeLater(() -> {
-				reloadData();
-			});
+			SwingUtilities.invokeLater(this::reloadData);
 		} else
 			reloadData();
 	}
@@ -5109,7 +5104,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		dialogRemoteControl.resetValue();
 
-		dialogRemoteControl.setLocation((int) mainFrame.getX() + 40, (int) mainFrame.getY() + 40);
+		dialogRemoteControl.setLocation(mainFrame.getX() + 40, mainFrame.getY() + 40);
 		dialogRemoteControl.setSize(MainFrame.F_WIDTH, mainFrame.getHeight() / 2);
 
 		dialogRemoteControl.setVisible(true);

@@ -14,7 +14,7 @@ public class GenericEnumElement extends SelectElement {
 
 	public GenericEnumElement(String[] enumData, String[] name, String... localizedName) {
 		super(name, localizedName);
-		this.enumData = new Vector<>(Arrays.asList((String[]) enumData));
+		this.enumData = new Vector<>(Arrays.asList(enumData));
 
 	}
 

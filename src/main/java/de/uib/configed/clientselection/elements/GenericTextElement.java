@@ -22,7 +22,7 @@ public class GenericTextElement extends SelectElement {
 
 	public GenericTextElement(String[] proposedData, String[] name, String... localizedName) {
 		super(name, localizedName);
-		this.proposedData = new Vector<>(Arrays.asList((String[]) proposedData));
+		this.proposedData = new Vector<>(Arrays.asList(proposedData));
 	}
 
 	public GenericTextElement(String[] name, String... localizedName) {
