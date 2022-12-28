@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -97,7 +96,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	protected ConfigedMain main;
 
-	protected Vector productsV = null;
+	protected List productsV = null;
 
 	protected int onGoingCollectiveChangeEventCount = -1;
 
@@ -141,7 +140,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	protected Map<String, Map<String, Object>> globalProductInfos;
 	protected String theClient;
 	protected NavigableSet<String> tsProductNames;
-	protected Vector<String> productNamesInDeliveryOrder;
+	protected List<String> productNamesInDeliveryOrder;
 
 	protected ActionRequest actionInTreatment;
 
@@ -248,7 +247,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		myCollator.setStrength(Collator.SECONDARY);
 
-		productNamesInDeliveryOrder = new Vector<>();
+		productNamesInDeliveryOrder = new ArrayList<>();
 		if (listOfInstallableProducts != null) {
 			for (int i = 0; i < listOfInstallableProducts.size(); i++) {
 				String product = (String) listOfInstallableProducts.get(i);
@@ -258,7 +257,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		tsProductNames = new TreeSet<>(myCollator);
 		tsProductNames.addAll(productNamesInDeliveryOrder);
-		productsV = new Vector<>(tsProductNames);
+		productsV = new ArrayList<>(tsProductNames);
 
 		logging.debug(this, "tsProductNames " + tsProductNames);
 
@@ -1172,7 +1171,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 			values.addAll(InstallationInfo.defaultDisplayValues);
 
-			return new DefaultComboBoxModel<>(new Vector<>(values));
+			return new DefaultComboBoxModel<>(values.toArray());
 
 		}
 

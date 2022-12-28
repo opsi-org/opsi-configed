@@ -1,7 +1,7 @@
 package de.uib.configed.gui.ssh;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -34,7 +34,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	private JCheckBox checkb_setupInstalled;
 
 	public FDepotselectionList fDepotList;
-	private Vector<String> depots;
+	private List<String> depots;
 
 	public SSHPMInstallSettingsPanel() {
 		this(null);
@@ -89,9 +89,9 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	public void setFDepotList(JDialog dia) {
 		fDepotList = new FDepotselectionList(dia) {
 			@Override
-			public void setListData(Vector<? extends String> v) {
+			public void setListData(List<String> v) {
 				if (v == null || v.isEmpty()) {
-					setListData(new Vector<>());
+					setListData(new ArrayList<>());
 					jButton1.setEnabled(false);
 				} else {
 					super.setListData(v);
@@ -159,8 +159,8 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 				.addGap(Globals.GAP_SIZE));
 	}
 
-	protected Vector<String> getAllowedInstallTargets() {
-		Vector<String> result = new Vector<>();
+	protected List<String> getAllowedInstallTargets() {
+		List<String> result = new ArrayList<>();
 
 		if (persist.isDepotsFullPermission()) {
 			tf_selecteddepots.setEditable(true);

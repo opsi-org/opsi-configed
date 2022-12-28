@@ -34,7 +34,6 @@ import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
@@ -63,7 +62,7 @@ public abstract class DataStub {
 
 	public abstract Map<String, TreeSet<OpsiPackage>> getDepot2Packages();
 
-	public abstract Vector<Vector<Object>> getProductRows();
+	public abstract List<List<Object>> getProductRows();
 
 	public abstract Map<String, Map<String, List<String>>> getProduct2VersionInfo2Depots();
 

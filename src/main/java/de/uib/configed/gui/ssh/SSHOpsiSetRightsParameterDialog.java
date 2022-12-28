@@ -1,7 +1,8 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -30,7 +31,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	private JButton btn_doAction;
 	private JButton btn_close;
 	private CommandOpsiSetRights commandopsisetrights;
-	private Vector<String> additional_default_paths = new Vector<>();
+	private List<String> additional_default_paths = new ArrayList<>();
 	private SSHCompletionComboButton completion;
 
 	public SSHOpsiSetRightsParameterDialog() {
@@ -48,7 +49,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		additional_default_paths.addElement(SSHCommandFactory.getInstance().opsipathVarDepot);
+		additional_default_paths.add(SSHCommandFactory.getInstance().opsipathVarDepot);
 		completion = new SSHCompletionComboButton(additional_default_paths);
 
 		inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);

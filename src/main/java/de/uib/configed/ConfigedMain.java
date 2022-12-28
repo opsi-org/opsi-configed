@@ -45,7 +45,6 @@ import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Vector;
 import java.util.stream.Collectors;
 
 import javax.swing.DefaultComboBoxModel;
@@ -189,7 +188,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected String[] objectIds = new String[] {};
 	protected String[] selectedDepots = new String[] {};
 	protected String[] oldSelectedDepots;
-	protected Vector<String> selectedDepotsV = new Vector<>();
+	protected List<String> selectedDepotsV = new ArrayList<>();
 
 	protected boolean anyDataChanged = false;
 
@@ -212,7 +211,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected String productEdited = null; // null serves als marker that we were not editing products
 	protected Collection productProperties; // the properties for one product and all selected clients
-	protected de.uib.opsidatamodel.datachanges.UpdateCollection updateCollection = new UpdateCollection(new Vector<>());
+	protected de.uib.opsidatamodel.datachanges.UpdateCollection updateCollection = new UpdateCollection(
+			new ArrayList<>());
 	protected Map clientProductpropertiesUpdateCollections;
 	/*
 	 * for each product:
@@ -280,7 +280,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected String myServer;
 	protected String opsiDefaultDomain;
-	protected Vector<String> editableDomains;
+	protected List<String> editableDomains;
 	protected boolean multiDepot = false;
 
 	private WaitCursor waitCursorInitGui;
@@ -317,7 +317,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	ControlPanelLicencesUsage controlPanelLicencesUsage;
 	ControlPanelLicencesReconciliation controlPanelLicencesReconciliation;
 
-	Vector<ControlMultiTablePanel> allControlMultiTablePanels;
+	List<ControlMultiTablePanel> allControlMultiTablePanels;
 
 	private Dashboard dashboard;
 
@@ -554,8 +554,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		configed.savedStates.saveUsageCount.serialize(oldUsageCount + 1);
 	}
 
-	private Vector<String> readLocallySavedServerNames() {
-		Vector<String> result = new Vector<>();
+	private List<String> readLocallySavedServerNames() {
+		List<String> result = new ArrayList<>();
 		TreeMap<java.sql.Timestamp, String> sortingmap = new TreeMap<>();
 		File savedStatesLocation = null;
 		// the following is nearly a double of initSavedStates
@@ -725,7 +725,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		InstallationStateTableModel.restartColumnDict();
 		SWAuditEntry.setLocale();
 
-		Vector<String> savedServers = readLocallySavedServerNames();
+		List<String> savedServers = readLocallySavedServerNames();
 
 		login(savedServers);
 	}
@@ -736,12 +736,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		generalDataChangedKeeper = new GeneralDataChangedKeeper();
 		clientInfoDataChangedKeeper = new ClientInfoDataChangedKeeper();
 		hostConfigsDataChangedKeeper = new HostConfigsDataChangedKeeper();
-		allControlMultiTablePanels = new Vector<>();
+		allControlMultiTablePanels = new ArrayList<>();
 
 	}
 
 	protected void initSpecialTableProviders() {
-		Vector<String> columnNames = new Vector<>();
+		List<String> columnNames = new ArrayList<>();
 
 		columnNames.add("productId");
 		columnNames.add("productName");
@@ -752,7 +752,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		columnNames.add(OpsiPackage.SERVICEkeyPACKAGE_VERSION);
 		columnNames.add(OpsiPackage.SERVICEkeyLOCKED);
 
-		Vector<String> classNames = new Vector<>();
+		List<String> classNames = new ArrayList<>();
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
@@ -765,7 +765,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					}
 
 					@Override
-					public Vector<Vector<Object>> getRows() {
+					public List<List<Object>> getRows() {
 						return persist.getProductRows();
 					}
 				}));
@@ -1391,10 +1391,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		licencesStatus = (LicencesTabStatus) ((TabController) this).getStartTabState();
 
 		// global table providers
-		Vector<String> columnNames = new Vector<>();
+		List<String> columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
-		Vector<String> classNames = new Vector<>();
+		List<String> classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 
@@ -1403,11 +1403,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		persist.retrieveRelationsAuditSoftwareToLicencePools();
 
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add("softwareLicenseId");
 		columnNames.add("licensePoolId");
 		columnNames.add("licenseKey");
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
@@ -1415,14 +1415,14 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		licenceOptionsTableProvider = new DefaultTableProvider(
 				new RetrieverMapSource(columnNames, classNames, () -> persist.getRelationsSoftwareL2LPool()));
 
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add("licenseContractId");
 		columnNames.add("partner");
 		columnNames.add("conclusionDate");
 		columnNames.add("notificationDate");
 		columnNames.add("expirationDate");
 		columnNames.add("notes");
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
@@ -1433,7 +1433,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		licenceContractsTableProvider = new DefaultTableProvider(
 				new RetrieverMapSource(columnNames, classNames, () -> (Map) persist.getLicenceContracts()));
 
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add(LicenceEntry.idKEY);
 		columnNames.add(LicenceEntry.licenceContractIdKEY);
 		columnNames.add(LicenceEntry.typeKEY);
@@ -1441,7 +1441,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		columnNames.add(LicenceEntry.boundToHostKEY);
 		columnNames.add(LicenceEntry.expirationDateKEY);
 
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
@@ -1513,7 +1513,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		logging.info(this, "initLicencesFrame " + new Date(endmillis) + " diff " + (endmillis - startmillis));
 	}
 
-	protected void login(Vector<String> savedServers)
+	protected void login(List<String> savedServers)
 	// returns true if we have a PersistenceController and are connected
 	{
 
@@ -2040,7 +2040,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (persist.getHost_displayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL)) {
 
-			Vector<String> columns = new Vector<>();
+			List<String> columns = new ArrayList<>();
 			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
 				columns.add(selectionPanel.getTableModel().getColumnName(i));
 			}
@@ -2072,7 +2072,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (persist.getHost_displayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL)) {
 
-			Vector<String> columns = new Vector<>();
+			List<String> columns = new ArrayList<>();
 			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
 				columns.add(selectionPanel.getTableModel().getColumnName(i));
 			}
@@ -2102,7 +2102,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (persist.getHost_displayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL)) {
 
-			Vector<String> columns = new Vector<>();
+			List<String> columns = new ArrayList<>();
 
 			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
 				columns.add(selectionPanel.getTableModel().getColumnName(i));
@@ -2659,7 +2659,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		depotsOfSelectedClients = null;
 
 		selectedDepots = depotsList.getSelectedValuesList().toArray(new String[0]);
-		selectedDepotsV = new Vector<>(depotsList.getSelectedValuesList());
+		selectedDepotsV = new ArrayList<>(depotsList.getSelectedValuesList());
 
 		logging.debug(this, "--------------------  selectedDepotsV         " + selectedDepotsV);
 
@@ -3059,7 +3059,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				mainFrame.panel_HostProperties.initMultipleHostsEditing(
 						configed.getResourceValue("PanelHostProperties.SelectHost"),
-						new DefaultComboBoxModel<>(new Vector<>(depotPropertiesForPermittedDepots.keySet())),
+						new DefaultComboBoxModel<>(depotPropertiesForPermittedDepots.keySet().toArray(new String[0])),
 						depotPropertiesForPermittedDepots, hostUpdateCollection,
 						PersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT
 
@@ -3583,7 +3583,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return selectedDepots;
 	}
 
-	public Vector<String> getSelectedDepotsV() {
+	public List<String> getSelectedDepotsV() {
 		return selectedDepotsV;
 	}
 
@@ -3673,8 +3673,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	}
 
-	public Vector<String> getLinkedDepots() {
-		return new Vector<>(depotNamesLinked);
+	public List<String> getLinkedDepots() {
+		return new ArrayList<>(depotNamesLinked);
 	}
 
 	public String getConfigserver() {
@@ -4485,19 +4485,19 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	}
 
-	public void setEditableDomains(Vector<String> editableDomains) {
+	public void setEditableDomains(List<String> editableDomains) {
 		this.editableDomains = editableDomains;
 	}
 
 	public void callNewClientDialog() {
 
 		Collections.sort(localbootProductnames);
-		Vector<String> vLocalbootProducts = new Vector<>(localbootProductnames);
+		List<String> vLocalbootProducts = new ArrayList<>(localbootProductnames);
 		Collections.sort(netbootProductnames);
-		Vector<String> vNetbootProducts = new Vector<>(netbootProductnames);
+		List<String> vNetbootProducts = new ArrayList<>(netbootProductnames);
 
 		NewClientDialog.getInstance(this, getLinkedDepots()).setVisible(true);
-		NewClientDialog.getInstance().setGroupList(new Vector<>(persist.getHostGroupIds()));
+		NewClientDialog.getInstance().setGroupList(new ArrayList<>(persist.getHostGroupIds()));
 		NewClientDialog.getInstance().setProductNetbootList(vNetbootProducts);
 		NewClientDialog.getInstance().setProductLocalbootList(vLocalbootProducts);
 
@@ -4703,7 +4703,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
-	public void createClients(Vector<Vector<Object>> clients) {
+	public void createClients(List<List<Object>> clients) {
 		if (persist.createClients(clients)) {
 
 			logging.debug(this, "createClients" + clients);
@@ -5068,10 +5068,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			dialogRemoteControl.setMeanings(rcCommands);
 			dialogRemoteControl.setEditable(commandsEditable);
 
-			dialogRemoteControl
-					.setListModel(new DefaultComboBoxModel<>(new Vector<>(new TreeSet<>(remoteControls.keySet()))
-
-					));
+			dialogRemoteControl.setListModel(new DefaultComboBoxModel<>(remoteControls.keySet().toArray()));
 
 			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, null, -1, false, ""));
 
@@ -5210,12 +5207,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public void callSaveGroupDialog() {
 		List groupList = persist.getHostGroupIds();
 		Collections.sort(groupList);
-		Vector groupSelectionIds = new Vector<>(groupList);
+		List groupSelectionIds = new ArrayList<>(groupList);
 
 		int i = groupSelectionIds.indexOf(groupname);
 
 		if (i < 0) {
-			groupSelectionIds.insertElementAt(TEMPGROUPNAME, 0);
+			groupSelectionIds.add(0, TEMPGROUPNAME);
 			i = 0;
 		}
 
@@ -5244,7 +5241,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public void callDeleteGroupDialog() {
 		List<String> groupList = persist.getHostGroupIds();
 		Collections.sort(groupList);
-		Vector<String> groupSelectionIds = new Vector<>(groupList);
+		List<String> groupSelectionIds = new ArrayList<>(groupList);
 
 		int i = groupSelectionIds.indexOf(groupname);
 

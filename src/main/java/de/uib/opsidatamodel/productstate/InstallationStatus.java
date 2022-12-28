@@ -1,9 +1,10 @@
 package de.uib.opsidatamodel.productstate;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import de.uib.configed.Globals;
 
@@ -32,8 +33,8 @@ public class InstallationStatus {
 	private static Map<String, String> displayLabel2label;
 	private static Map<String, Color> label2textColor;
 
-	private static Vector<Integer> states;
-	private static Vector<String> labels;
+	private static List<Integer> states;
+	private static List<String> labels;
 	private static String[] choiceLabels;
 
 	// instance variable
@@ -43,7 +44,7 @@ public class InstallationStatus {
 		if (states != null)
 			return;
 
-		states = new Vector<>();
+		states = new ArrayList<>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(UNDEFINED);
@@ -52,7 +53,7 @@ public class InstallationStatus {
 
 		states.add(UNKNOWN);
 
-		labels = new Vector<>();
+		labels = new ArrayList<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);
 		labels.add(Globals.NO_VALID_STATE_STRING);
 		labels.add("undefined");
@@ -142,7 +143,7 @@ public class InstallationStatus {
 		return state2label.get(state);
 	}
 
-	public static Vector<String> getLabels() {
+	public static List<String> getLabels() {
 		checkCollections();
 
 		return labels;

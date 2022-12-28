@@ -8,17 +8,18 @@
 
 package de.uib.utilities.table.provider;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import de.uib.utilities.logging.logging;
 
 public class DefaultTableProvider implements TableProvider {
 	protected TableSource source;
-	protected Vector<String> columnNames;
-	protected Vector<String> classNames;
-	protected Vector<Vector<Object>> rows;
-	protected Vector<Vector<Object>> rowsCopy;
+	protected List<String> columnNames;
+	protected List<String> classNames;
+	protected List<List<Object>> rows;
+	protected List<List<Object>> rowsCopy;
 	private boolean isDecorated = false;
 
 	public DefaultTableProvider(TableSource source) {
@@ -31,7 +32,7 @@ public class DefaultTableProvider implements TableProvider {
 	}
 
 	@Override
-	public Vector<String> getColumnNames() {
+	public List<String> getColumnNames() {
 		if (columnNames == null)
 			columnNames = source.retrieveColumnNames();
 
@@ -39,7 +40,7 @@ public class DefaultTableProvider implements TableProvider {
 	}
 
 	@Override
-	public Vector<String> getClassNames() {
+	public List<String> getClassNames() {
 		if (classNames == null)
 			classNames = source.retrieveClassNames();
 
@@ -48,7 +49,7 @@ public class DefaultTableProvider implements TableProvider {
 
 	// should deliver a copy of the data
 	@Override
-	public Vector<Vector<Object>> getRows() {
+	public List<List<Object>> getRows() {
 		logging.info(this, " -- getRows()");
 
 		if (rowsCopy == null)
@@ -57,7 +58,7 @@ public class DefaultTableProvider implements TableProvider {
 		return rowsCopy;
 	}
 
-	protected void decorateRow(Vector<Object> row) {
+	protected void decorateRow(List<Object> row) {
 	}
 
 	// should set back the copy of the data to the original values
@@ -66,7 +67,7 @@ public class DefaultTableProvider implements TableProvider {
 		if (rowsCopy != null)
 			rowsCopy.clear();
 		else
-			rowsCopy = new Vector<>();
+			rowsCopy = new ArrayList<>();
 
 		if (rows == null) {
 			rows = source.retrieveRows();
@@ -90,7 +91,7 @@ public class DefaultTableProvider implements TableProvider {
 		}
 
 		for (int i = 0; i < rows.size(); i++) {
-			Vector<Object> row = (Vector<Object>) (rows.get(i).clone());
+			List<Object> row = new ArrayList<>(rows.get(i));
 			rowsCopy.add(row);
 		}
 
@@ -142,9 +143,9 @@ public class DefaultTableProvider implements TableProvider {
 		columnNames = null;
 	}
 
-	// yields a column as ordered vector
+	// yields a column as ordered List
 	@Override
-	public Vector<String> getOrderedColumn(int col, boolean empty_allowed) {
+	public List<String> getOrderedColumn(int col, boolean empty_allowed) {
 
 		TreeSet<String> set = new TreeSet<>();
 		for (int row = 0; row < rowsCopy.size(); row++) {
@@ -156,7 +157,7 @@ public class DefaultTableProvider implements TableProvider {
 			}
 		}
 
-		Vector<String> result = new Vector<>(set);
+		List<String> result = new ArrayList<>(set);
 
 		return result;
 	}

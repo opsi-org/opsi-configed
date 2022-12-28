@@ -1,6 +1,6 @@
 package de.uib.configed.gui.ssh;
 
-import java.util.Vector;
+import java.util.List;
 
 import javax.swing.ComboBoxEditor;
 import javax.swing.ComboBoxModel;
@@ -17,8 +17,8 @@ public class SSHCompletionComboBox<E> extends JComboBox {
 		super(v);
 	}
 
-	public SSHCompletionComboBox(Vector<E> v) {
-		super(v);
+	public SSHCompletionComboBox(List<E> v) {
+		super(v.toArray());
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 package de.uib.utilities.table;
 
+import java.util.List;
 import java.util.NavigableSet;
 import java.util.TreeSet;
-import java.util.Vector;
 
 public class DefaultTableModelFilterCondition implements TableModelFilterCondition {
 
@@ -34,7 +34,7 @@ public class DefaultTableModelFilterCondition implements TableModelFilterConditi
 	}
 
 	@Override
-	public boolean test(Vector<Object> row) {
+	public boolean test(List<Object> row) {
 
 		if (filterSet == null)
 			return true;
@@ -47,7 +47,7 @@ public class DefaultTableModelFilterCondition implements TableModelFilterConditi
 		return result;
 	}
 
-	public void setFilter(int[] rowNoFilter, final Vector<Vector<Object>> row) {
+	public void setFilter(int[] rowNoFilter, final List<List<Object>> row) {
 	}
 
 	@Override

@@ -15,7 +15,6 @@ package de.uib.configed.type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
@@ -52,9 +51,9 @@ public class OpsiPackage implements Comparable {
 		SERVICE_KEYS.add(SERVICEkeyPRODUCT_TYPE);
 	}
 
-	public static final Vector<String> COLUMN_NAMES;
+	public static final List<String> COLUMN_NAMES;
 	static {
-		COLUMN_NAMES = new Vector<>();
+		COLUMN_NAMES = new ArrayList<>();
 		COLUMN_NAMES.add(DBkeyPRODUCT_ID);
 		COLUMN_NAMES.add(SERVICEkeyPRODUCT_VERSION);
 		COLUMN_NAMES.add(SERVICEkeyPACKAGE_VERSION);
@@ -132,7 +131,7 @@ public class OpsiPackage implements Comparable {
 		return productType;
 	}
 
-	public Vector<Object> appendValues(Vector<Object> row) {
+	public List<Object> appendValues(List<Object> row) {
 
 		row.add(giveProductType(getProductType()));
 		row.add(getProductVersion());

@@ -25,7 +25,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.swing.DefaultRowSorter;
 import javax.swing.DropMode;
@@ -238,8 +237,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	JMenuItemFormatted menuItemFloatingCopy;
 	JMenuItemFormatted menuItemPDF;
 
-	protected Vector<JMenuItem> menuItemsRequesting1SelectedLine;
-	protected Vector<JMenuItem> menuItemsRequestingMultiSelectedLines;
+	protected List<JMenuItem> menuItemsRequesting1SelectedLine;
+	protected List<JMenuItem> menuItemsRequestingMultiSelectedLines;
 
 	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition, // if -1 dont
 			// use a
@@ -249,8 +248,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			boolean switchLineColors, int[] popupsWanted, boolean withTablesearchPane) {
 		this.withTablesearchPane = withTablesearchPane;
 
-		menuItemsRequesting1SelectedLine = new Vector<>();
-		menuItemsRequestingMultiSelectedLines = new Vector<>();
+		menuItemsRequesting1SelectedLine = new ArrayList<>();
+		menuItemsRequestingMultiSelectedLines = new ArrayList<>();
 
 		this.generalPopupPosition = generalPopupPosition;
 

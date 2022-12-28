@@ -12,10 +12,10 @@
 
 package de.uib.configed.gui.hwinfopage;
 
+import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -44,8 +44,8 @@ public class ControllerHWinfoMultiClients {
 	JButton buttonReload;
 	JButton buttonCopySelection;
 
-	Vector<String> columnNames;
-	Vector<String> classNames;
+	List<String> columnNames;
+	List<String> classNames;
 
 	TreeSet theFilterSet;
 
@@ -70,7 +70,7 @@ public class ControllerHWinfoMultiClients {
 		}
 
 		@Override
-		public boolean test(Vector<Object> row) {
+		public boolean test(List<Object> row) {
 			if (filter == null || row == null || KEY_COL >= row.size())
 				return true;
 

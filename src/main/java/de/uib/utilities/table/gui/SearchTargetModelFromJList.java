@@ -8,8 +8,9 @@
 
 package de.uib.utilities.table.gui;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.JList;
 import javax.swing.JTable;
@@ -22,14 +23,13 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	protected JList<String> jList;
 
 	protected AbstractTableModel tableModel;
-	protected Vector<String> theValues;
-	protected Vector<String> theDescriptions;
-	private Vector<String> unfilteredV;
-	private Vector<String> unfilteredD;
+	protected List<String> theValues;
+	protected List<String> theDescriptions;
+	private List<String> unfilteredV;
+	private List<String> unfilteredD;
 	protected int[] unfilteredSelection;
 
-	public SearchTargetModelFromJList(JList<String> jList, final Vector<String> values,
-			final Vector<String> descriptions) {
+	public SearchTargetModelFromJList(JList<String> jList, final List<String> values, final List<String> descriptions) {
 
 		this.jList = jList;
 		unfilteredV = values;
@@ -38,13 +38,13 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 		if (values == null || descriptions == null || values.size() != descriptions.size()) {
 			logging.error("missing data for List");
-			theValues = new Vector<>();
-			theDescriptions = new Vector<>();
-			unfilteredV = new Vector<>();
-			unfilteredD = new Vector<>();
+			theValues = new ArrayList<>();
+			theDescriptions = new ArrayList<>();
+			unfilteredV = new ArrayList<>();
+			unfilteredD = new ArrayList<>();
 		} else {
-			theValues = new Vector<>(values);
-			theDescriptions = new Vector<>(descriptions);
+			theValues = new ArrayList<>(values);
+			theDescriptions = new ArrayList<>(descriptions);
 		}
 
 		tableModel = setupTableModel(theValues, theDescriptions);
@@ -52,7 +52,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		super.setTable(new JTable(tableModel));
 	}
 
-	protected AbstractTableModel setupTableModel(Vector<String> values, Vector<String> descriptions) {
+	protected AbstractTableModel setupTableModel(List<String> values, List<String> descriptions) {
 
 		AbstractTableModel tableModel = new AbstractTableModel() {
 			@Override
@@ -190,8 +190,8 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		if (b) // && filtering)
 		{
 			unfilteredSelection = jList.getSelectedIndices();
-			theValues = new Vector<>();
-			theDescriptions = new Vector<>();
+			theValues = new ArrayList<>();
+			theDescriptions = new ArrayList<>();
 			for (Integer i : jList.getSelectedIndices()) {
 				theValues.add(unfilteredV.get(i));
 				theDescriptions.add(unfilteredD.get(i));
@@ -207,7 +207,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		tableModel.fireTableChanged(new javax.swing.event.TableModelEvent(tableModel));
 		tableModel.fireTableStructureChanged();
 
-		jList.setListData(theValues);
+		jList.setListData(theValues.toArray(new String[0]));
 		try {
 			if (filtered)
 			// we mark all since we just filtered the marked ones

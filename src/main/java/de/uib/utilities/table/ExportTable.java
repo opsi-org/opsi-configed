@@ -3,8 +3,8 @@ package de.uib.utilities.table;
 import java.awt.HeadlessException;
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -22,7 +22,7 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 public abstract class ExportTable {
 	protected javax.swing.JTable theTable;
 
-	protected Vector<String> classNames;
+	protected List<String> classNames;
 	protected Map<String, String> metaData;
 
 	protected javax.swing.filechooser.FileNameExtensionFilter extensionFilter;
@@ -30,7 +30,7 @@ public abstract class ExportTable {
 
 	protected File exportDirectory;
 
-	protected Vector<Integer> excludeCols;
+	protected List<Integer> excludeCols;
 
 	protected boolean askForOverwrite;
 
@@ -47,7 +47,7 @@ public abstract class ExportTable {
 
 	protected final String SHORT_APPNAME = Globals.APPNAME;
 
-	public ExportTable(javax.swing.JTable table, Vector<String> classNames) {
+	public ExportTable(javax.swing.JTable table, List<String> classNames) {
 		this.theTable = table;
 		this.classNames = classNames;
 		askForOverwrite = true;
@@ -57,12 +57,12 @@ public abstract class ExportTable {
 		this(table, null);
 	}
 
-	public void setTableAndClassNames(javax.swing.JTable table, Vector<String> classNames) {
+	public void setTableAndClassNames(javax.swing.JTable table, List<String> classNames) {
 		this.theTable = table;
 		this.classNames = classNames;
 	}
 
-	public void setClassNames(Vector<String> classNames) {
+	public void setClassNames(List<String> classNames) {
 		this.classNames = classNames;
 	}
 
@@ -70,7 +70,7 @@ public abstract class ExportTable {
 		askForOverwrite = b;
 	}
 
-	public void setExcludeCols(Vector<Integer> excludeCols)
+	public void setExcludeCols(List<Integer> excludeCols)
 	// only take into account for excel export at the moment
 	{
 		this.excludeCols = excludeCols;

@@ -1,6 +1,7 @@
 package de.uib.configed.gui.ssh;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
@@ -21,14 +22,14 @@ public class SSHPMInstallPanel extends JPanel {
 
 	protected SSHCommandFactory factory = SSHCommandFactory.getInstance();
 
-	protected Vector<String> additional_default_paths = new Vector<>();
+	protected List<String> additional_default_paths = new ArrayList<>();
 
 	PersistenceController persist;
 	protected String workbench;
 
 	public SSHPMInstallPanel() {
 		this.setBackground(Globals.BACKGROUND_COLOR_7);
-		additional_default_paths.addElement(factory.opsipathVarRepository);
+		additional_default_paths.add(factory.opsipathVarRepository);
 		persist = PersistenceControllerFactory.getPersistenceController();
 		if (persist == null)
 			logging.info(this, "init PersistenceController null");

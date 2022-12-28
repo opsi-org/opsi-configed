@@ -8,10 +8,10 @@
 
 package de.uib.utilities.table.updates;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Vector;
 
-public class TableUpdateCollection extends Vector<TableEditItem> {
+public class TableUpdateCollection extends ArrayList<TableEditItem> {
 
 	HashSet<de.uib.utilities.table.GenTableModel> modelsToReload = new HashSet<>();
 

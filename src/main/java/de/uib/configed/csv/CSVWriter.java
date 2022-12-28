@@ -4,7 +4,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 public class CSVWriter {
 	private static final CSVFormat DEFAULT_FORMAT = new CSVFormat();
@@ -26,7 +26,7 @@ public class CSVWriter {
 		writer.newLine();
 	}
 
-	public <T> void write(Vector<T> line) throws IOException {
+	public <T> void write(List<T> line) throws IOException {
 		char fieldSeparator = format.getFieldSeparator();
 		char stringSeparator = format.getStringSeparator();
 		Iterator<T> iter = line.iterator();

@@ -8,22 +8,22 @@
 
 package de.uib.utilities.table.updates;
 
-import java.util.Vector;
+import java.util.List;
 
 public class MapTableUpdateItemFactory extends TableUpdateItemFactory {
-	protected Vector<String> columnNames;
-	protected Vector<String> classNames;
+	protected List<String> columnNames;
+	protected List<String> classNames;
 	protected int keyCol;
 	protected Object source;
 
-	public MapTableUpdateItemFactory(Object source, Vector<String> columnNames, Vector<String> classNames, int keyCol) {
+	public MapTableUpdateItemFactory(Object source, List<String> columnNames, List<String> classNames, int keyCol) {
 		this.columnNames = columnNames;
 		this.classNames = classNames;
 		this.keyCol = keyCol;
 		this.source = source;
 	}
 
-	public MapTableUpdateItemFactory(Vector<String> columnNames, Vector<String> classNames, int keyCol) {
+	public MapTableUpdateItemFactory(List<String> columnNames, List<String> classNames, int keyCol) {
 		this(null, columnNames, classNames, keyCol);
 	}
 
@@ -32,17 +32,17 @@ public class MapTableUpdateItemFactory extends TableUpdateItemFactory {
 	}
 
 	@Override
-	public TableEditItem produceUpdateItem(Vector oldValues, Vector rowV) {
+	public TableEditItem produceUpdateItem(List oldValues, List rowV) {
 		return new MapDeliveryItem(source, keyCol, columnNames, classNames, oldValues, rowV);
 	}
 
 	@Override
-	public TableEditItem produceInsertItem(Vector rowV) {
+	public TableEditItem produceInsertItem(List rowV) {
 		return new MapDeliveryItem(source, keyCol, columnNames, classNames, rowV);
 	}
 
 	@Override
-	public TableEditItem produceDeleteItem(Vector rowV) {
+	public TableEditItem produceDeleteItem(List rowV) {
 		return new MapDeleteItem(source, keyCol, columnNames, classNames, rowV);
 	}
 

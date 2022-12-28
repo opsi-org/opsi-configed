@@ -33,7 +33,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.GregorianCalendar;
-import java.util.Vector;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -321,8 +321,8 @@ public class DPassword extends JDialog // implements Runnable
 
 	}
 
-	public void setServers(Vector<String> hosts) {
-		fieldHost.setModel(new DefaultComboBoxModel<>(hosts));
+	public void setServers(List<String> hosts) {
+		fieldHost.setModel(new DefaultComboBoxModel<>(hosts.toArray()));
 		((JTextField) fieldHost.getEditor().getEditorComponent())
 				.setCaretPosition(((String) (fieldHost.getSelectedItem())).length());
 	}

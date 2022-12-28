@@ -43,7 +43,6 @@ import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.Icon;
 
@@ -213,11 +212,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	protected java.util.Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses;
 	protected OpsiHwAuditDevicePropertyTypes hwAuditDevicePropertyTypes;
 
-	protected Vector<String> hostColumnNames;
-	protected Vector<String> client2HwRowsColumnNames;
-	protected Vector<String> client2HwRowsJavaclassNames;
-	protected Vector<String> hwInfoClassNames;
-	protected Vector<String> hwTableNames;
+	protected List<String> hostColumnNames;
+	protected List<String> client2HwRowsColumnNames;
+	protected List<String> client2HwRowsJavaclassNames;
+	protected List<String> hwInfoClassNames;
+	protected List<String> hwTableNames;
 
 	class HostGroups extends TreeMap<String, Map<String, String>> {
 		public HostGroups(Map source) {
@@ -226,7 +225,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		HostGroups addSpecialGroups() {
 			logging.debug(this, "addSpecialGroups check");
-			Vector<StringValuedRelationElement> groups = new Vector<>();
+			List<StringValuedRelationElement> groups = new ArrayList<>();
 
 			if (get(de.uib.configed.tree.ClientTree.DIRECTORY_PERSISTENT_NAME) == null)
 			// create
@@ -1825,13 +1824,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	public boolean createClients(Vector<Vector<Object>> clients) {
+	public boolean createClients(List<List<Object>> clients) {
 		List<Object> clientsJsonObject = new ArrayList<>();
 		List<Object> productsNetbootJsonObject = new ArrayList<>();
 		List<Object> groupsJsonObject = new ArrayList<>();
 		List<Object> configStatesJsonObject = new ArrayList<>();
 
-		for (Vector<Object> client : clients) {
+		for (List<Object> client : clients) {
 			String hostname = (String) client.get(0);
 			String domainname = (String) client.get(1);
 			String depotId = (String) client.get(2);
@@ -3172,19 +3171,19 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	/* multiclient hwinfo */
 
 	@Override
-	public Vector<String> getHostColumnNames() {
+	public List<String> getHostColumnNames() {
 		retrieveClient2HwRowsColumnNames();
 		return hostColumnNames;
 	}
 
 	@Override
-	public Vector<String> getClient2HwRowsColumnNames() {
+	public List<String> getClient2HwRowsColumnNames() {
 		retrieveClient2HwRowsColumnNames();
 		return client2HwRowsColumnNames;
 	}
 
 	@Override
-	public Vector<String> getClient2HwRowsJavaclassNames() {
+	public List<String> getClient2HwRowsJavaclassNames() {
 		retrieveClient2HwRowsColumnNames();
 		return client2HwRowsJavaclassNames;
 	}
@@ -3288,7 +3287,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	public Vector<String> getHwInfoClassNames() {
+	public List<String> getHwInfoClassNames() {
 		retrieveClient2HwRowsColumnNames();
 		logging.info(this, "getHwInfoClassNames " + hwInfoClassNames);
 		return hwInfoClassNames;
@@ -3321,7 +3320,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				+ (client2HwRowsColumnNames == null));
 		if (client2HwRowsColumnNames == null || client2HwRowsJavaclassNames == null || hwInfoClassNames == null) {
 
-			hostColumnNames = new Vector<>();
+			hostColumnNames = new ArrayList<>();
 
 			hostColumnNames.add(Host.idColumn);
 			hostColumnNames.add(Host.descriptionColumn);
@@ -3331,7 +3330,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			getConfigOptions();
 			// there is produced client2HwRowsColumnNames
 
-			client2HwRowsColumnNames = new Vector<>(hostColumnNames);
+			client2HwRowsColumnNames = new ArrayList<>(hostColumnNames);
 
 			for (String hwClassName : hwAuditDeviceClasses.keySet()) {
 				OpsiHwAuditDeviceClass hwAuditDeviceClass = hwAuditDeviceClasses.get(hwClassName);
@@ -3350,8 +3349,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					}
 				}
 			}
-			client2HwRowsJavaclassNames = new Vector<>();
-			Set<String> hwInfoClasses = new TreeSet<>();
+			client2HwRowsJavaclassNames = new ArrayList<>();
+			Set<String> hwInfoClasses = new HashSet<>();
 
 			for (String columnName : client2HwRowsColumnNames) {
 				logging.info(this, "retrieveClient2HwRowsColumnNames col " + columnName);
@@ -3361,7 +3360,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					hwInfoClasses.add(className);
 			}
 
-			hwInfoClassNames = new Vector<>(hwInfoClasses);
+			hwInfoClassNames = new ArrayList<>(hwInfoClasses);
 
 			logging.info(this, "retrieveClient2HwRowsColumnNames hwInfoClassNames " + hwInfoClassNames);
 		}
@@ -3763,8 +3762,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	public Vector<String> getWinProducts(String depotId, String depotProductDirectory) {
-		Vector<String> winProducts = new Vector<>();
+	public List<String> getWinProducts(String depotId, String depotProductDirectory) {
+		List<String> winProducts = new ArrayList<>();
 		if (depotProductDirectory == null)
 			return winProducts;
 
@@ -4206,7 +4205,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	public Vector<Vector<Object>> getProductRows() {
+	public List<List<Object>> getProductRows() {
 		return dataStub.getProductRows();
 	}
 
@@ -5776,8 +5775,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	public Vector<String> getDomains() {
-		Vector<String> result = new Vector<>();
+	public List<String> getDomains() {
+		List<String> result = new ArrayList<>();
 
 		if (configDefaultValues.get(configedGIVENDOMAINS_key) == null) {
 			logging.info(this, "no values found for   " + configedGIVENDOMAINS_key);
@@ -8287,7 +8286,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		}
 
-		Vector<String> availableModules = licInfoMap.getAvailableModules();
+		List<String> availableModules = licInfoMap.getAvailableModules();
 
 		for (String mod : licInfoMap.getModules()) {
 			if (availableModules.indexOf(mod) == -1)

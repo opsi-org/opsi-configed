@@ -1,9 +1,9 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NavigableSet;
-import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
@@ -56,7 +56,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 	FDepotselectionList fDepotList;
 
-	private Vector<String> possibleDepots;
+	private List<String> possibleDepots;
 
 	private CommandOpsiPackageManagerUninstall commandPMUninstall = new CommandOpsiPackageManagerUninstall();
 
@@ -79,9 +79,9 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		fDepotList = new FDepotselectionList(this) {
 			@Override
-			public void setListData(Vector<? extends String> v) {
+			public void setListData(List<String> v) {
 				if (v == null || v.isEmpty()) {
-					setListData(new Vector<>());
+					setListData(new ArrayList<>());
 					jButton1.setEnabled(false);
 				} else {
 					super.setListData(v);
@@ -170,10 +170,10 @@ public class SSHPackageManagerUninstallParameterDialog
 		return depotParameter;
 	}
 
-	protected Vector<String> getPossibleDepots() {
+	protected List<String> getPossibleDepots() {
 		String selectedProduct = (String) cb_opsiproducts.getSelectedItem();
 
-		Vector<String> result = new Vector<>();
+		List<String> result = new ArrayList<>();
 
 		if (persist.isDepotsFullPermission()) {
 			tf_selecteddepots.setEditable(true);

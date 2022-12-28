@@ -3,7 +3,6 @@ package de.uib.configed;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -88,17 +87,17 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 	public void init() {
 		updateCollection = new TableUpdateCollection();
 
-		Vector<String> columnNames;
-		Vector<String> classNames;
+		List<String> columnNames;
+		List<String> classNames;
 
 		// --- panelLicencesUsage
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add(LicenceUsageEntry.CLIENT_ID_KEY);
 		columnNames.add(LicenceUsageEntry.LICENCE_ID_KEY);
 		columnNames.add(LicenceUsageEntry.LICENCE_POOL_ID_KEY);
 		columnNames.add(LicenceUsageEntry.LICENCE_KEY_KEY);
 		columnNames.add(LicenceUsageEntry.NOTES_KEY);
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
@@ -149,10 +148,10 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 				}, updateCollection));
 
 		// --- panelLicencepools
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryLicencepools = new MapTableUpdateItemFactory(modelLicencepools,

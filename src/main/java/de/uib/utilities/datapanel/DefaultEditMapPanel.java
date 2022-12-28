@@ -10,8 +10,8 @@ package de.uib.utilities.datapanel;
 import java.awt.BorderLayout;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.JComboBox;
 import javax.swing.table.TableCellEditor;
@@ -28,7 +28,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 	JComboBox editorfield;
 	TableCellEditor defaultCellEditor;
 
-	Vector<String> names;
+	List<String> names;
 	Map<String, ListCellOptions> optionsMap;
 	Map<String, String> descriptionsMap;
 	Map<String, Object> defaultsMap;
@@ -105,7 +105,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 		mapTableModel.setMap(visualdata);
 		mapTableModel.fireTableDataChanged();
 
-		// from mapTableModel, we get back the sorted vector of property names:
+		// from mapTableModel, we get back the sorted List of property names:
 		names = mapTableModel.getKeys();
 
 		if (optionsMap == null) {

@@ -4,11 +4,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.JFrame;
 
@@ -73,11 +73,11 @@ public class logging implements LogEventSubject
 	public static boolean LogFileAvailable = false;
 
 	private static final int maxListedErrors = 20;
-	private static Vector<String> errorList = new Vector<String>(maxListedErrors);
+	private static List<String> errorList = new ArrayList<String>(maxListedErrors);
 
 	public static FShowList fErrors;
 
-	protected static Vector<LogEventObserver> logEventObservers = new Vector<LogEventObserver>();
+	protected static List<LogEventObserver> logEventObservers = new ArrayList<LogEventObserver>();
 
 	public static void setSuppressConsole(boolean b) {
 		setLogLevelConsole(LEVEL_NONE);
@@ -195,7 +195,7 @@ public class logging implements LogEventSubject
 
 	private static void addErrorToList(String mesg, String time) {
 		while (errorList.size() >= maxListedErrors) {
-			errorList.removeElementAt(0);
+			errorList.remove(0);
 		}
 		errorList.add(String.format("[%s] %s", time, mesg));
 

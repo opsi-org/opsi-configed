@@ -22,7 +22,6 @@ import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
@@ -152,7 +151,7 @@ public class DataStubNOM extends DataStub {
 
 	protected Object2Product2VersionList depot2LocalbootProducts;
 	protected Object2Product2VersionList depot2NetbootProducts;
-	protected Vector<Vector<Object>> productRows;
+	protected List<List<Object>> productRows;
 	protected Map<String, TreeSet<OpsiPackage>> depot2Packages;
 	protected Map<String, Map<String, List<String>>> product2VersionInfo2Depots;
 
@@ -168,7 +167,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	@Override
-	public Vector<Vector<Object>> getProductRows() {
+	public List<List<Object>> getProductRows() {
 		retrieveProductsAllDepots();
 		return productRows;
 	}
@@ -222,7 +221,7 @@ public class DataStubNOM extends DataStub {
 			depot2NetbootProducts = new Object2Product2VersionList();
 			product2VersionInfo2Depots = new HashMap<>();
 
-			productRows = new Vector<>();
+			productRows = new ArrayList<>();
 
 			depot2Packages = new HashMap<>();
 
@@ -265,7 +264,7 @@ public class DataStubNOM extends DataStub {
 				}
 				depotpackages.add(p);
 
-				Vector<Object> productRow = new Vector<>();
+				List<Object> productRow = new ArrayList<>();
 
 				productRow.add(p.getProductId());
 

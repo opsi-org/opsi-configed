@@ -5,9 +5,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -41,7 +41,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 
 	private TablesearchPane searchPane;
 
-	private Vector<? extends String> unfilteredV;
+	private List<String> unfilteredV;
 
 	private boolean multidepot;
 
@@ -55,8 +55,8 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		this.multidepot = multidepot;
 		this.persist = persist;
 
-		Vector<String> values = new Vector<>();
-		Vector<String> descriptions = new Vector<>();
+		List<String> values = new ArrayList<>();
+		List<String> descriptions = new ArrayList<>();
 		Map<String, Map<String, Object>> depotInfo = depotsList.getDepotInfo();
 
 		for (String depot : depotInfo.keySet()) {
@@ -193,7 +193,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 
 		if (!filtered) {
 			unfilteredV = depotslist.getListData();
-			depotslist.setListData(new Vector<>(depotslist.getSelectedValuesList()));
+			depotslist.setListData(new ArrayList<>(depotslist.getSelectedValuesList()));
 		} else
 			depotslist.setListData(unfilteredV);
 

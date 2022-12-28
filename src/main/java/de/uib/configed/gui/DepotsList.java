@@ -5,7 +5,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComponent;
@@ -21,7 +20,7 @@ import de.uib.utilities.logging.logging;
 public class DepotsList extends JList<String> implements ComponentListener {
 
 	MyListCellRenderer myListCellRenderer;
-	private Vector<? extends String> saveV;
+	private List<String> saveV;
 
 	Map<String, Map<String, Object>> depotInfo;
 
@@ -47,13 +46,12 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		return depotInfo;
 	}
 
-	@Override
-	public void setListData(Vector<? extends String> v) {
-		super.setListData(v);
+	public void setListData(List<String> v) {
+		super.setListData(v.toArray(new String[0]));
 		saveV = v;
 	}
 
-	public Vector<? extends String> getListData() {
+	public List<String> getListData() {
 		return saveV;
 	}
 

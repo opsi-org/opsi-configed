@@ -1,8 +1,9 @@
 package de.uib.opsidatamodel.productstate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import de.uib.configed.Globals;
 
@@ -28,8 +29,8 @@ public class ActionResult {
 	private static Map<String, String> label2displayLabel;
 	private static Map<String, String> displayLabel2label;
 
-	private static Vector<Integer> states;
-	private static Vector<String> labels;
+	private static List<Integer> states;
+	private static List<String> labels;
 
 	// instance variable
 	private int state = INVALID;
@@ -38,7 +39,7 @@ public class ActionResult {
 		if (states != null)
 			return;
 
-		states = new Vector<>();
+		states = new ArrayList<>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(NOT_AVAILABLE);
@@ -46,7 +47,7 @@ public class ActionResult {
 		states.add(FAILED);
 		states.add(SUCCESSFUL);
 
-		labels = new Vector<>();
+		labels = new ArrayList<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);
 		labels.add(Globals.NO_VALID_STATE_STRING);
 		labels.add("not_available");
@@ -115,7 +116,7 @@ public class ActionResult {
 		return state2label.get(state);
 	}
 
-	public static Vector<String> getLabels() {
+	public static List<String> getLabels() {
 		checkCollections();
 
 		return labels;

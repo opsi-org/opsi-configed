@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 public class CSVFormat {
 	private static final char DEFAULT_FIELD_SEPARATOR = ',';
@@ -175,7 +174,7 @@ public class CSVFormat {
 		}
 	}
 
-	public boolean hasExpectedHeaderNames(Vector<String> expectedHeaderNames) {
+	public boolean hasExpectedHeaderNames(List<String> expectedHeaderNames) {
 		return headers.stream().allMatch(header -> expectedHeaderNames.contains(header.trim()));
 	}
 }

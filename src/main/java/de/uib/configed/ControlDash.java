@@ -13,13 +13,14 @@
 
 package de.uib.configed;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.Icon;
 import javax.swing.SwingUtilities;
@@ -218,16 +219,16 @@ public class ControlDash {
 
 		GenTableModel modelSWnames;
 
-		Vector<String> columnNames;
-		Vector<String> classNames;
+		List<String> columnNames;
+		List<String> classNames;
 
 		TableUpdateCollection updateCollection;
 
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS)
 			columnNames.add(key);
 
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
@@ -272,7 +273,7 @@ public class ControlDash {
 		};
 		modelSWnames.produceRows();
 
-		Vector<Vector<Object>> specialrows = modelSWnames.getRows();
+		List<List<Object>> specialrows = modelSWnames.getRows();
 		if (specialrows != null) {
 			logging.info(this, "initDashInfo, modelSWnames.getRows() size " + specialrows.size());
 		}

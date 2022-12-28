@@ -10,11 +10,11 @@ package de.uib.configed.gui.hostconfigs;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.Icon;
 import javax.swing.JMenuItem;
@@ -472,7 +472,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		};
 
 		FramingTextfieldWithListselection defs = new FramingNewUser();
-		defs.setListData(new Vector<>(theRoles));
+		defs.setListData(new ArrayList<>(theRoles));
 
 		f.applyFraming(defs);
 
@@ -559,7 +559,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		};
 
 		FramingTextfieldWithListselection defs = new FramingNewRole();
-		defs.setListData(new Vector<>(theRoles));
+		defs.setListData(new ArrayList<>(theRoles));
 		f.applyFraming(defs);
 
 		JPanel centerPanel = f.initPanel();
@@ -594,7 +594,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 			String key = keyB.toString();
 			logging.info(this, "deleteUser, selected user key " + key);
 
-			Vector<String> propertyNames = partialPanels.get(key).getNames();
+			List<String> propertyNames = partialPanels.get(key).getNames();
 			logging.info(this, "deleteUser, property names " + propertyNames);
 			for (String name : propertyNames) {
 				((de.uib.utilities.datapanel.EditMapPanelX) partialPanels.get(key)).removeProperty(name);

@@ -86,7 +86,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		}
 	}
 
-	public static SSHConfigDialog getInstance( ConfigedMain cmain) {
+	public static SSHConfigDialog getInstance(ConfigedMain cmain) {
 		if (instance == null)
 			instance = new SSHConfigDialog(cmain);
 		instance.setVisible(true);

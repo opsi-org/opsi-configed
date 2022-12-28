@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Vector;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -204,7 +203,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		logging.info(this, "setDepotListData for count depots " + depots.size());
 
 		this.productEdited = productEdited;
-		listDepots.setListData(new Vector<>(depots));
+		listDepots.setListData(depots.toArray(new String[0]));
 
 		resetSelectedDepots(depots);
 

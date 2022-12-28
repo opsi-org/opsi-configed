@@ -10,7 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Vector;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -149,9 +149,9 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 
 	}
 
-	public void startFor(String pcName, Vector installImages) {
+	public void startFor(String pcName, List installImages) {
 		this.pcName = pcName;
-		comboImages.setModel(new DefaultComboBoxModel<>(installImages));
+		comboImages.setModel(new DefaultComboBoxModel<>(installImages.toArray()));
 		String installCommand = callReinstmgr;
 		fieldInstallCommand.setText(installCommand);
 		String unsetCommand = callReinstmgr + " unset " + pcName;

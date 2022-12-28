@@ -6,16 +6,17 @@
 
 package de.uib.utilities;
 
+import java.util.ArrayList;
 /**
  *
  * @author roeder
  */
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
@@ -25,9 +26,9 @@ public class Mapping<K, V> {
 	protected Map<String, V> mapOfStrings;
 	protected boolean invertible;
 	protected Map<V, K> inverseMap;
-	protected Vector<K> domain;
-	protected Vector<V> range;
-	protected Vector<String> rangeAsStrings;
+	protected List<K> domain;
+	protected List<V> range;
+	protected List<String> rangeAsStrings;
 
 	public Mapping() {
 		this(null);
@@ -36,10 +37,10 @@ public class Mapping<K, V> {
 	public Mapping(Map<K, V> definingMap) {
 		map = new HashMap<>();
 		inverseMap = new HashMap<>();
-		domain = new Vector<>();
-		range = new Vector<>();
+		domain = new ArrayList<>();
+		range = new ArrayList<>();
 		mapOfStrings = new HashMap<>();
-		rangeAsStrings = new Vector<>();
+		rangeAsStrings = new ArrayList<>();
 
 		defineBy(definingMap);
 	}
@@ -73,7 +74,7 @@ public class Mapping<K, V> {
 		return map.isEmpty();
 	}
 
-	public Vector<K> getDomain() {
+	public List<K> getDomain() {
 		return domain;
 	}
 
@@ -87,7 +88,7 @@ public class Mapping<K, V> {
 		return ts;
 	}
 
-	public Vector<V> getRange() {
+	public List<V> getRange() {
 		return range;
 	}
 

@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
@@ -91,7 +90,7 @@ public class PanelProductProperties extends JSplitPane
 		GenTableModel model = new GenTableModel(null, mainController.globalProductsTableProvider, -1,
 				(TableModelListener) paneProducts, updateCollection);
 
-		final Vector<String> columnNames = model.getColumnNames();
+		final List<String> columnNames = model.getColumnNames();
 
 		paneProducts = new PanelGenEditTable("", 0, false, 0, false, PanelGenEditTable.POPUPS_MINIMAL, true) {
 

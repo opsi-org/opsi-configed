@@ -8,9 +8,10 @@
 
 package de.uib.utilities.table.provider;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import de.uib.utilities.logging.logging;
 
@@ -27,13 +28,13 @@ public class MapSource implements TableSource
 
 	protected boolean rowCounting = false;
 
-	protected Vector<String> columnNames;
+	protected List<String> columnNames;
 
-	protected Vector<String> classNames;
+	protected List<String> classNames;
 
 	protected Map<String, Map> table;
 
-	protected Vector<Vector<Object>> rows;
+	protected List<List<Object>> rows;
 
 	protected boolean reloadRequested = true;
 
@@ -44,8 +45,7 @@ public class MapSource implements TableSource
 		class2defaultValue.put("java.lang.String", "");
 	}
 
-	public MapSource(Vector<String> columnNames, Vector<String> classNames, Map<String, Map> table,
-			boolean rowCounting) {
+	public MapSource(List<String> columnNames, List<String> classNames, Map<String, Map> table, boolean rowCounting) {
 		logging.info(this, "constructed with cols " + columnNames);
 		logging.info(this, "constructed with classes " + classNames);
 		this.columnNames = columnNames;
@@ -56,11 +56,11 @@ public class MapSource implements TableSource
 			logging.info(this, "completed to classes " + classNames);
 		}
 		this.table = table;
-		rows = new Vector<>();
+		rows = new ArrayList<>();
 
 	}
 
-	public MapSource(Vector<String> columnNames, Vector<String> classNames, Map<String, Map> table) {
+	public MapSource(List<String> columnNames, List<String> classNames, Map<String, Map> table) {
 		this(columnNames, classNames, table, false);
 	}
 
@@ -74,7 +74,7 @@ public class MapSource implements TableSource
 		int rowCount = 0;
 
 		for (String key : table.keySet()) {
-			Vector vRow = new Vector<>();
+			List vRow = new ArrayList<>();
 
 			Map mRow = table.get(key);
 
@@ -147,17 +147,17 @@ public class MapSource implements TableSource
 	}
 
 	@Override
-	public Vector<String> retrieveColumnNames() {
+	public List<String> retrieveColumnNames() {
 		return columnNames;
 	}
 
 	@Override
-	public Vector<String> retrieveClassNames() {
+	public List<String> retrieveClassNames() {
 		return classNames;
 	}
 
 	@Override
-	public Vector<Vector<Object>> retrieveRows() {
+	public List<List<Object>> retrieveRows() {
 		logging.info(this, " -- retrieveRows");
 		if (reloadRequested) {
 			fetchData();

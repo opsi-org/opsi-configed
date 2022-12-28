@@ -232,7 +232,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		jTextField_maxInstallations.setText("1");
 		jTextField_maxInstallations.setEditable(false);
-		comboClient.setModel(new DefaultComboBoxModel<>(enterLicenceController.getChoicesAllHosts()));
+		comboClient.setModel(new DefaultComboBoxModel<>(enterLicenceController.getChoicesAllHosts().toArray()));
 		comboClient.setEnabled(true);
 
 	}

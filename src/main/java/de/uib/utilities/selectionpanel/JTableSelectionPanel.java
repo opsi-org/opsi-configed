@@ -19,7 +19,6 @@ import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Vector;
 import java.util.regex.Pattern;
 
 import javax.swing.DefaultComboBoxModel;
@@ -422,7 +421,7 @@ public class JTableSelectionPanel extends JPanel
 	public void initColumnNames() {
 
 		Object oldSelected = comboSearch.getSelectedItem();
-		Vector<String> comboSearchItems = new Vector<>();
+		List<String> comboSearchItems = new ArrayList<>();
 		comboSearchItems.add(configed.getResourceValue("ConfigedMain.pclistTableModel.allfields"));
 
 		try {
@@ -434,7 +433,7 @@ public class JTableSelectionPanel extends JPanel
 				comboSearchItems.add(table.getColumnName(j));
 			}
 
-			comboSearch.setModel(new DefaultComboBoxModel<>(comboSearchItems));
+			comboSearch.setModel(new DefaultComboBoxModel<>(comboSearchItems.toArray()));
 
 			if (oldSelected != null)
 				comboSearch.setSelectedItem(oldSelected);

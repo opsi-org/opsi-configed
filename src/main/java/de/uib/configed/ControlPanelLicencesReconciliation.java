@@ -1,9 +1,9 @@
 package de.uib.configed;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import de.uib.configed.gui.licences.PanelLicencesReconciliation;
 import de.uib.opsidatamodel.PersistenceController;
@@ -45,15 +45,15 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 	public void init() {
 		updateCollection = new TableUpdateCollection();
 
-		Vector<String> columnNames;
-		Vector<String> classNames;
+		List<String> columnNames;
+		List<String> classNames;
 
 		List<String> extraHostFields = persist.getServerConfigStrings(
 				PersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PanelLicencesReconciliation);
 
 		// --- panelLicencesReconciliation
-		columnNames = new Vector<>();
-		classNames = new Vector<>();
+		columnNames = new ArrayList<>();
+		classNames = new ArrayList<>();
 
 		columnNames.add("hostId");
 
@@ -101,7 +101,7 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 			}
 
 			@Override
-			public boolean test(Vector<Object> row) {
+			public boolean test(List<Object> row) {
 				return ((Boolean) row.get(index_used_by_opsi)) || ((Boolean) row.get(index_SWinventory_used));
 			}
 		});

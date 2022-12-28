@@ -1,10 +1,11 @@
 package de.uib.opsidatamodel.modulelicense;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -40,8 +41,8 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 	TableSource tableSource;
 
-	Vector<String> columnNames = new Vector<>();
-	Vector<String> classNames = new Vector<>();
+	List<String> columnNames = new ArrayList<>();
+	List<String> classNames = new ArrayList<>();
 	Map<String, Map> theSourceMap = new HashMap<>();
 	Map<String, Map<String, Map<String, Object>>> datesMap = new HashMap<>();
 	Map<String, Object> clientNumbers;

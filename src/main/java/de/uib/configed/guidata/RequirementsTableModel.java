@@ -1,8 +1,9 @@
 package de.uib.configed.guidata;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -31,10 +32,10 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 	PersistenceController perCon;
 
-	protected static Vector<String> rowType;
+	protected static List<String> rowType;
 	protected static int noOfRowTypes;
 	static {
-		rowType = new Vector<>();
+		rowType = new ArrayList<>();
 		rowType.add("KEYROW");
 		rowType.add("SETUP REQUIREMENT");
 		rowType.add("UNINSTALL REQUIREMENT");
