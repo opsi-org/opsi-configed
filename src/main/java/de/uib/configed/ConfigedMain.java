@@ -1361,15 +1361,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		logging.info(this, "setting mainframe visible");
 		mainFrame.setVisible(true);
-
-		SwingUtilities.invokeLater(() -> {
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException ex) {
-				Thread.currentThread().interrupt();
-			}
-		});
-
 	}
 
 	protected void initLicencesFrame() {
@@ -3691,7 +3682,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			Iterator<ControlMultiTablePanel> iter = allControlMultiTablePanels.iterator();
 			while (iter.hasNext()) {
-				ControlMultiTablePanel cmtp =  iter.next();
+				ControlMultiTablePanel cmtp = iter.next();
 				if (cmtp != null) {
 					for (int i = 0; i < cmtp.getTablePanes().size(); i++) {
 						PanelGenEditTable p = cmtp.getTablePanes().get(i);
