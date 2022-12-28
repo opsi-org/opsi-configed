@@ -1,6 +1,5 @@
 package de.uib.configed.productgroup;
 
-import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -635,7 +634,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		JPanel separatingPlace = new JPanel();
 		separatingPlace.setForeground(Globals.BACKGROUND_COLOR_9);
-		separatingPlace.setBackground(Color.RED);
+		separatingPlace.setBackground(Globals.FAILED_COLOR);
 		separatingPlace.setOpaque(true);
 		separatingPlace.setBorder(new javax.swing.border.LineBorder(Globals.BACKGROUND_COLOR_6));
 

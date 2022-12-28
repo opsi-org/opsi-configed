@@ -1,6 +1,5 @@
 package de.uib.configed.tree;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Insets;
 import java.awt.font.TextAttribute;
@@ -33,7 +32,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
 			int row, boolean hasFocus) {
-		setBackground(Color.white);
+		setBackground(Globals.PRIMARY_BACKGROUND_COLOR);
 		if (value instanceof IconNode) {
 			String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
 

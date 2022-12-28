@@ -86,7 +86,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected JLabel labelDisplayRestriction;
 	protected JComboBox comboType;
 	protected DefaultComboBoxModel comboModelTypes;
-	protected final String defaultType = "(all)";
+	protected static final String DEFAULT_TYPE = "(all)";
 
 	protected JPanel jTextPanel;
 	protected WordSearcher searcher;
@@ -492,7 +492,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		comboType.addActionListener(actionEvent -> {
 			int oldSelTypeIndex = selTypeIndex;
 			Object selType = comboType.getSelectedItem();
-			if (selType == null || selType.equals(defaultType)) {
+			if (selType == null || selType.equals(DEFAULT_TYPE)) {
 				showTypeRestricted = false;
 				selTypeIndex = -1;
 			} else {
@@ -685,7 +685,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		logging.info(this, "activateShowLevel level, oldLevel, maxExistingLevel " + level + " , " + oldLevel + ", "
 				+ maxExistingLevel);
 
-		if (oldLevel.equals(level) && (level < maxExistingLevel || oldLevel < maxExistingLevel)) {
+		if (oldLevel.equals(level) && (level < maxExistingLevel)) {
 
 			int caretPosition = jTextPane.getCaretPosition();
 
@@ -913,7 +913,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		comboModelTypes.removeAllElements();
 
 		if (!typesList.isEmpty()) {
-			comboModelTypes.addElement(defaultType);
+			comboModelTypes.addElement(DEFAULT_TYPE);
 			for (String type : typesList) {
 				comboModelTypes.addElement(type);
 			}
@@ -1088,7 +1088,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		public WordSearcher(JTextComponent comp) {
 			this.comp = comp;
-			this.painter = new UnderlineHighlightPainter(Color.red);
+			this.painter = new UnderlineHighlightPainter(Globals.FAILED_COLOR);
 			this.lastReturnedOffset = -1;
 		}
 

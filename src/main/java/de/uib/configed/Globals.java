@@ -146,7 +146,9 @@ public class Globals {
 
 	public static final Color INVISIBLE = new Color(11, 13, 17); // some value which shall be interpreted as identical
 
-	public static final Color PRIMARY_BACKGROUND_COLOR = Color.BLACK;
+	public static final Color PRIMARY_FOREGROUND_COLOR = Color.BLACK;
+
+	public static final Color PRIMARY_BACKGROUND_COLOR = Color.WHITE;
 	public static final Color SECONDARY_BACKGROUND_COLOR = new Color(245, 245, 245);
 
 	public static final Color BACKGROUND_COLOR_3 = new Color(230, 230, 230);
@@ -161,55 +163,56 @@ public class Globals {
 
 	public static final Color FAILED_BACKGROUND_COLOR = new Color(100, 100, 100);
 
+	public static final Color FAILED_COLOR = Color.RED;
 	public static final Color ACTION_COLOR = new Color(239, 4, 4);
 	public static final Color WARNING_COLOR = new Color(204, 51, 0);
 	public static final Color CHECK_COLOR = new Color(198, 225, 171); // succesful? 
 	public static final Color OK_COLOR = new Color(20, 140, 20);
+	public static final Color UNKNOWN_COLOR = new Color(40, 17, 213);
 
 	public static final Color darkOrange = new java.awt.Color(218, 180, 4);
 	public static final Color lightBlack = new Color(30, 30, 30);
 	public static final Color blue = new Color(30, 30, 100);
 	public static final Color blueGrey = new Color(180, 190, 190);
 	public static final Color greyed = new Color(150, 150, 150);
-	public static final Color unknownBlue = new Color(40, 17, 213);
 
 	public static final Color ClientSelectionDialog_ELEMENT_FOREGROUND = Color.BLUE;
 
-	public static final Color CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR = Color.WHITE;
+	public static final Color CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR = PRIMARY_BACKGROUND_COLOR;
 
-	public static final Color DEPOTS_LIST_FOREGROUND_COLOR = PRIMARY_BACKGROUND_COLOR;
+	public static final Color DEPOTS_LIST_FOREGROUND_COLOR = PRIMARY_FOREGROUND_COLOR;
 
-	public static final Color F_DIALOG_BACKGROUND_COLOR = Color.WHITE;
+	public static final Color F_DIALOG_BACKGROUND_COLOR = PRIMARY_BACKGROUND_COLOR;
 
-	public static final Color F_GENERAL_DIALOG_BACKGROUND_COLOR = Color.WHITE;
+	public static final Color F_GENERAL_DIALOG_BACKGROUND_COLOR = PRIMARY_BACKGROUND_COLOR;
 
 	// also used for GlassPane...
 	public static final Color F_GENERAL_DIALOG_FADING_MIRROR_COLOR = new Color(230, 230, 250);
 
-	public static final Color LOG_PANE_CARET_COLOR = Color.RED;
+	public static final Color LOG_PANE_CARET_COLOR = FAILED_COLOR;
 
 	public static final Color NEW_CLIENT_DIALOG_BORDER_COLOR = new Color(122, 138, 153);
 
-	public static final Color PANELREINST_BACKGROUND_COLOR = Color.WHITE;
+	public static final Color PANELREINST_BACKGROUND_COLOR = PRIMARY_BACKGROUND_COLOR;
 
 	public static final Color EDIT_MAP_PANEL_GROUPED_FOR_HOST_CONFIGS_BACKGROUND_COLOR = Color.YELLOW;
 
-	public static final Color DEPENDENCIES_TREE_PANEL_BORDER_COLOR = PRIMARY_BACKGROUND_COLOR;
+	public static final Color DEPENDENCIES_TREE_PANEL_BORDER_COLOR = PRIMARY_FOREGROUND_COLOR;
 
-	public static final Color PANEL_PRODUCT_SETTINGS_TABLE_GRID_COLOR = Color.WHITE;
+	public static final Color PANEL_PRODUCT_SETTINGS_TABLE_GRID_COLOR = PRIMARY_BACKGROUND_COLOR;
 
-	public static final Color PANEL_PRODUCT_SETTINGS_FAILED_COLOR = Color.RED;
+	public static final Color PANEL_PRODUCT_SETTINGS_FAILED_COLOR = FAILED_COLOR;
 
-	public static final Color PANEL_PRODUCT_INFO_PANE_ACTIVE = PRIMARY_BACKGROUND_COLOR;
+	public static final Color PANEL_PRODUCT_INFO_PANE_ACTIVE = PRIMARY_FOREGROUND_COLOR;
 	public static final Color PANEL_PRODUCT_INFO_PANE_INACTIVE = greyed;
 
 	public static final Color SSH_CONNECTION_OUTPUT_DIALOG_START_LINE_COLOR = Globals.lightBlack;
-	public static final Color SSH_CONNECTION_OUTPUT_DIALOG_DIFFERENT_LINE_COLOR = PRIMARY_BACKGROUND_COLOR;
+	public static final Color SSH_CONNECTION_OUTPUT_DIALOG_DIFFERENT_LINE_COLOR = PRIMARY_FOREGROUND_COLOR;
 	public static final Color SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR = Color.GREEN;
-	public static final Color SSH_CONNECTION_OUTPUT_INIT_FOREGROUND_COLOR = Color.RED;
-	public static final Color SSH_CONNECTION_SET_START_ANSI = PRIMARY_BACKGROUND_COLOR;
+	public static final Color SSH_CONNECTION_OUTPUT_INIT_FOREGROUND_COLOR = FAILED_COLOR;
+	public static final Color SSH_CONNECTION_SET_START_ANSI = PRIMARY_FOREGROUND_COLOR;
 
-	public static final Color F_GENERAL_DIALOG_LICENSING_INFO_BACKGROUND_COLOR = Color.WHITE;
+	public static final Color F_GENERAL_DIALOG_LICENSING_INFO_BACKGROUND_COLOR = PRIMARY_BACKGROUND_COLOR;
 
 	public static final Color ACTION_REQUEST_NONE_COLOR = INVISIBLE;
 	public static final Color ACTION_REQUEST_SETUP_COLOR = ACTION_COLOR;
@@ -218,21 +221,21 @@ public class Globals {
 	public static final Color ACTION_REQUEST_ALWAYS_COLOR = ACTION_COLOR;
 	public static final Color ACTION_REQUEST_ONCE_COLOR = ACTION_COLOR;
 	public static final Color ACTION_REQUEST_CUSTOM_COLOR = ACTION_COLOR;
-	public static final Color ACTION_REQUEST_LAST_COLOR = PRIMARY_BACKGROUND_COLOR;
+	public static final Color ACTION_REQUEST_LAST_COLOR = PRIMARY_FOREGROUND_COLOR;
 
 	public static final Color INSTALLATION_STATUS_NOT_INSTALLED_COLOR = INVISIBLE;
 	public static final Color INSTALLATION_STATUS_INSTALLED_COLOR = OK_COLOR;
-	public static final Color INSTALLATION_STATUS_UNKNOWN_COLOR = unknownBlue;
+	public static final Color INSTALLATION_STATUS_UNKNOWN_COLOR = UNKNOWN_COLOR;
 
 	public static final Map<String, Color> SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS = new HashMap<>() {
 		{
 			put("[0;info;0m", Globals.greyed); // user info not really ansi code !!
 			put("[0;error;0m", Globals.ACTION_COLOR);
-			put("[0;30;40m", PRIMARY_BACKGROUND_COLOR);
+			put("[0;30;40m", PRIMARY_FOREGROUND_COLOR);
 
-			put("[1;30;40m", PRIMARY_BACKGROUND_COLOR);
-			put("[0;40;40m", PRIMARY_BACKGROUND_COLOR);
-			put("[1;40;40m", PRIMARY_BACKGROUND_COLOR);
+			put("[1;30;40m", PRIMARY_FOREGROUND_COLOR);
+			put("[0;40;40m", PRIMARY_FOREGROUND_COLOR);
+			put("[1;40;40m", PRIMARY_FOREGROUND_COLOR);
 			put("[0;31;40m", Globals.ACTION_COLOR);
 			put("[1;31;40m", Globals.ACTION_COLOR);
 			put("[0;41;40m", Globals.ACTION_COLOR);
@@ -266,35 +269,35 @@ public class Globals {
 
 	public static final Color LIST_MERGER_NO_COMMON_VALUE_TEXT_COLOR = Globals.BACKGROUND_COLOR_4;
 	public static final Color LIST_MERGER_NO_COMMON_VALUE_BACKGROUND_COLOR = Globals.BACKGROUND_COLOR_4;
-	public static final Color LIST_MERGER_NORMAL_VALUE_TEXT_COLOR = PRIMARY_BACKGROUND_COLOR;
-	public static final Color LIST_MERGER_NORMAL_VALUE_BACKGROUND_COLOR = PRIMARY_BACKGROUND_COLOR;
+	public static final Color LIST_MERGER_NORMAL_VALUE_TEXT_COLOR = PRIMARY_FOREGROUND_COLOR;
+	public static final Color LIST_MERGER_NORMAL_VALUE_BACKGROUND_COLOR = PRIMARY_FOREGROUND_COLOR;
 
-	public static final Color ICON_NODE_RENDERER_BACKGROUND_COLOR = Color.WHITE;
+	public static final Color ICON_NODE_RENDERER_BACKGROUND_COLOR = PRIMARY_BACKGROUND_COLOR;
 
-	public static final Color EDIT_MAP_PANEL_GROUPED_BACKGROUND_COLOR = Color.RED;
+	public static final Color EDIT_MAP_PANEL_GROUPED_BACKGROUND_COLOR = FAILED_COLOR;
 
-	public static final Color EDIT_MAP_PANEL_X_FOREGROUND_COLOR = Color.RED;
-	public static final Color EDIT_MAP_PANEL_X_GRID_COLOR = Color.WHITE;
+	public static final Color EDIT_MAP_PANEL_X_FOREGROUND_COLOR = FAILED_COLOR;
+	public static final Color EDIT_MAP_PANEL_X_GRID_COLOR = PRIMARY_BACKGROUND_COLOR;
 
-	public static final Color JTABLE_SELECTION_PANEL_GRID_COLOR = Color.WHITE;
+	public static final Color JTABLE_SELECTION_PANEL_GRID_COLOR = PRIMARY_BACKGROUND_COLOR;
 
-	public static final Color CELL_RENDERER_BY_INDEX_SELECTED_FOREGROUND_COLOR = Color.WHITE;
+	public static final Color CELL_RENDERER_BY_INDEX_SELECTED_FOREGROUND_COLOR = PRIMARY_BACKGROUND_COLOR;
 
 	public static final Color F_EDIT_PANE_UNDERLINE_HIGHLIGHTER_PAINTER = Color.BLUE;
 
-	public static final Color X_CELL_EDITOR_SELECTED_FOREGROUND = Color.WHITE;
-	public static final Color X_CELL_EDITOR_NOT_SELECTED_FOREGROUND = PRIMARY_BACKGROUND_COLOR;
+	public static final Color X_CELL_EDITOR_SELECTED_FOREGROUND = PRIMARY_BACKGROUND_COLOR;
+	public static final Color X_CELL_EDITOR_NOT_SELECTED_FOREGROUND = PRIMARY_FOREGROUND_COLOR;
 
-	public static final Color PANEL_GEN_EDIT_TABLE_GRID_COLOR = Color.WHITE;
+	public static final Color PANEL_GEN_EDIT_TABLE_GRID_COLOR = PRIMARY_BACKGROUND_COLOR;
 
-	public static final Color SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR = Color.WHITE;
+	public static final Color SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR = PRIMARY_BACKGROUND_COLOR;
 
 	public static final Color nimbusSelectionBackground = new Color(57, 105, 138);
 	public static final Color nimbusBackground = new Color(214, 217, 223);
 	public static final Color backNimbus = new Color(214, 219, 222);
 
 	// in table, change colors by row
-	public static final Color defaultTableCellBgColor1 = Color.white;
+	public static final Color defaultTableCellBgColor1 = PRIMARY_BACKGROUND_COLOR;
 	public static final Color defaultTableCellBgColor2 = BACKGROUND_COLOR_9;
 
 	// tableSelection
@@ -305,7 +308,7 @@ public class Globals {
 	// in table, change colors by row and column
 	public static final Color defaultTableCellBgColor00 = BACKGROUND_COLOR_9;
 	public static final Color defaultTableCellBgColor01 = new Color(236, 235, 214);
-	public static final Color defaultTableCellBgColor10 = Color.WHITE;
+	public static final Color defaultTableCellBgColor10 = PRIMARY_BACKGROUND_COLOR;
 	public static final Color defaultTableCellBgColor11 = SECONDARY_BACKGROUND_COLOR;
 
 	public static final Color defaultTableHeaderBgColor = new Color(222, 231, 247);

@@ -1,6 +1,5 @@
 package de.uib.configed.gui.productpage;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -423,7 +422,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 											.get(de.uib.opsidatamodel.productstate.ProductState.KEY_versionInfo);
 
 						if (!val.equals(serverProductVersion)) {
-							c.setForeground(Color.red);
+							c.setForeground(Globals.FAILED_COLOR);
 
 						}
 					}

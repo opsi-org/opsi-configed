@@ -994,7 +994,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				+ SSHConnectionInfo.getInstance().getHost();
 
 		jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.UNKNOWN);
-		jMenuSSHConnection.setForeground(Globals.unknownBlue);
+		jMenuSSHConnection.setForeground(Globals.UNKNOWN_COLOR);
 		if (status.equals(SSHCommandFactory.NOT_CONNECTED)) {
 
 			jMenuSSHConnection.setForeground(Globals.lightBlack);

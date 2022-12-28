@@ -1,6 +1,5 @@
 package de.uib.configed.tree;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Insets;
 
@@ -44,7 +43,7 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 				setBackground(Globals.BACKGROUND_COLOR_7);
 
 			} else {
-				setBackground(Color.white);
+				setBackground(Globals.PRIMARY_BACKGROUND_COLOR);
 
 			}
 
