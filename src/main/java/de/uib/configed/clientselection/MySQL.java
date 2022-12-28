@@ -217,8 +217,8 @@ public class MySQL {
 		List<Map<String, String>> values = (List<Map<String, String>>) element.get("Values");
 
 		Map<String, String> spalte = findSpalteInTabelle(column, values);
-		String spaltenName = (String) spalte.get("Opsi");
-		String scope = (String) spalte.get("Scope");
+		String spaltenName = spalte.get("Opsi");
+		String scope = spalte.get("Scope");
 
 		if (scope.equals("g"))
 			hardwareWithDevice = true;

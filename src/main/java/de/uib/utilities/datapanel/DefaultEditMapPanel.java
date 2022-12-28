@@ -174,8 +174,8 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 
 	@Override
 	public void setVoid() {
-		for (Object key : names) {
-			mapTableModel.removeEntryFromStoredMaps((String) key);
+		for (String key : names) {
+			mapTableModel.removeEntryFromStoredMaps(key);
 
 		}
 
