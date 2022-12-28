@@ -364,7 +364,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				if (stateAndAction == null) {
 
 					// build visual states
-					Iterator iter = ProductState.KEYS.iterator();
+					Iterator<String> iter = ProductState.KEYS.iterator();
 
 					String priority = "";
 
@@ -372,7 +372,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 						priority = "" + globalProductInfos.get(productId).get("priority");
 
 					while (iter.hasNext()) {
-						String key = (String) iter.next();
+						String key = iter.next();
 
 						if (key.equals(ProductState.KEY_productPriority)
 								|| key.equals(ProductState.KEY_actionSequence)) {
@@ -486,10 +486,10 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		indexPreparedColumns = new int[columnsToDisplay.size()];
 		columnTitles = new ArrayList<>();
 		{
-			Iterator iter = columnsToDisplay.iterator();
+			Iterator<String> iter = columnsToDisplay.iterator();
 			int j = 0;
 			while (iter.hasNext()) {
-				String column = (String) iter.next();
+				String column = iter.next();
 				logging.debug(this, " ------- treat column " + column);
 				int k = preparedColumns.indexOf(column);
 				if (k >= 0) {
@@ -1098,7 +1098,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 				{
 
-					Iterator iter = ((List) possibleActions.get(actualProduct)).iterator(); // we shall iterate throught
+					Iterator<String> iter = possibleActions.get(actualProduct).iterator(); // we shall iterate throught
 																							// all possible
 																							// actionRequest ID strings
 																							// for the actual product
@@ -1106,7 +1106,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					{
 
 						while (iter.hasNext()) {
-							String label = (String) iter.next();
+							String label = iter.next();
 							ActionRequest ar = ActionRequest.produceFromLabel(label);
 							actionList.add(ActionRequest.getDisplayLabel(ar.getVal()));
 						}

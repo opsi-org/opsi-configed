@@ -52,12 +52,12 @@ public abstract class SWExporter {
 	protected String title;
 
 	/* constructor for use in a initialized context */
-	public SWExporter(PersistenceController controller) {
+	protected SWExporter(PersistenceController controller) {
 		this.persist = controller;
 	}
 
 	/* constructor for standalone use */
-	public SWExporter() {
+	protected SWExporter() {
 	}
 
 	public void setArgs(String server, String user, String password, String clientsFile, String outDir) {

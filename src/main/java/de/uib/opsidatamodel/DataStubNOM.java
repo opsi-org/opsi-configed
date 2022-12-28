@@ -332,16 +332,16 @@ public class DataStubNOM extends DataStub {
 			List<Map<String, Object>> retrieved = persist.retrieveListOfMapsNOM(callAttributes, callFilter,
 					"productProperty_getObjects");
 
-			Iterator iter = retrieved.iterator();
+			Iterator<Map<String, Object>> iter = retrieved.iterator();
 
 			while (iter.hasNext()) {
 
-				Map<String, Object> retrievedMap = (Map) iter.next();
+				Map<String, Object> retrievedMap = iter.next();
 				Map<String, Object> adaptedMap = new HashMap<>(retrievedMap);
 				// rebuild JSON objects
-				Iterator iterInner = retrievedMap.keySet().iterator();
+				Iterator<String> iterInner = retrievedMap.keySet().iterator();
 				while (iterInner.hasNext()) {
-					String key = (String) iterInner.next();
+					String key = iterInner.next();
 					adaptedMap.put(key, JSONReMapper.deriveStandard(retrievedMap.get(key)));
 				}
 
@@ -679,7 +679,7 @@ public class DataStubNOM extends DataStub {
 			List<Map<String, Object>> li = persist.retrieveListOfMapsNOM(callAttributes, callFilter,
 					"auditSoftware_getHashes");
 
-			Iterator iter = li.iterator();
+			Iterator<Map<String, Object>> iter = li.iterator();
 
 			installedSoftwareInformation = new TreeMap<>();
 			installedSoftwareInformationForLicensing = new TreeMap<>();
@@ -692,7 +692,7 @@ public class DataStubNOM extends DataStub {
 
 			while (iter.hasNext()) {
 				i++;
-				Map retrievedEntry = (Map) iter.next();
+				Map<String, Object> retrievedEntry = iter.next();
 
 				SWAuditEntry entry = new SWAuditEntry(retrievedEntry);
 				String swName = entry.get(SWAuditEntry.NAME);

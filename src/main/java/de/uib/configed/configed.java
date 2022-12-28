@@ -24,6 +24,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import de.uib.configed.gui.FTextArea;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
+import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
@@ -103,7 +104,7 @@ public class configed {
 					"Passphrase for given sshkey used for authentication on ssh server" },
 			new String[] { "--version", "", "Tell configed version" },
 			new String[] { "--collect_queries_until_no N", "",
-					"Collect the first N queries; N = " + de.uib.opsicommand.OpsiMethodCall.maxCollectSize
+					"Collect the first N queries; N = " + OpsiMethodCall.maxCollectSize
 							+ " (DEFAULT).  -1 meaning 'no collect'. 0 meaning 'infinite' " },
 			new String[] { "--help", "", "Give this help" },
 			new String[] { "--loglevel L", "",

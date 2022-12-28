@@ -704,7 +704,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					childValues = new ArrayList<>();
 					childValues.add(""); // first column empty
 					childValues.add(hm.get("displayName").toString());
-					Iterator hm_iter = (Iterator) hm.keySet().iterator();
+					Iterator hm_iter = hm.keySet().iterator();
 					boolean firstValue = true;
 					while (hm_iter.hasNext()) {
 						String hm_key = (String) hm_iter.next();

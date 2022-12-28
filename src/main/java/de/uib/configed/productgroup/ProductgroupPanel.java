@@ -301,7 +301,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	}
 
 	public void findGroup(Set<String> set) {
-		Iterator iterNames;
+		Iterator<String> iterNames;
 
 		boolean theSetFound = false;
 
@@ -318,7 +318,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 			while (!theSetFound && iterNames.hasNext()) {
 
-				String name = (String) iterNames.next();
+				String name = iterNames.next();
 
 				if (productGroupMembers.get(name) != null && productGroupMembers.get(name).equals(checkSet)) {
 					// avoid selection events in groupsCombo

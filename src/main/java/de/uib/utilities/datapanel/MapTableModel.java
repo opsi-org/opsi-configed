@@ -383,20 +383,16 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		logging.debug(this, "putEntryIntoStoredMaps myKey, value: " + myKey + ", " + value);
 		logging.debug(this, "putEntryIntoStoredMaps storeData  counting " + storeData.size());
 		if (storeData != null) {
-			Iterator it = storeData.iterator();
+			Iterator<Map<String, Object>> it = storeData.iterator();
 			while (it.hasNext()) {
-				Object aStoreMap = it.next();
+				Map<String, Object> aStoreMap = it.next();
 
-				if (!(aStoreMap instanceof Map)) {
-					if (aStoreMap == null) {
-						logging.info(this, "EditMapPanel.setValueAt: we have some data null ");
-					} else {
-						logging.error(this,
-								"EditMapPanel.setValueAt: backendData " + aStoreMap + " is not null and not a Map ");
-					}
-				} else {
-					((Map) aStoreMap).put(myKey, value);
-				}
+				if (aStoreMap != null)
+					aStoreMap.put(myKey, value);
+
+				else
+					logging.info(this, "EditMapPanel.setValueAt: we have some data null ");
+
 			}
 
 			if (toStore)

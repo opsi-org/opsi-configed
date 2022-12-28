@@ -1353,10 +1353,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		Iterator iter = values.iterator();
+		Iterator<String> iter = values.iterator();
 
 		while (iter.hasNext()) {
-			int viewRow = findViewRowFromValue((String) iter.next(), col);
+			int viewRow = findViewRowFromValue(iter.next(), col);
 
 			getListSelectionModel().addSelectionInterval(viewRow, viewRow);
 		}

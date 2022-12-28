@@ -64,6 +64,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.opsicommand.ConnectionState;
+import de.uib.opsicommand.JSONthroughHTTP;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.logging;
@@ -85,7 +86,6 @@ public class DPassword extends JDialog // implements Runnable
 	private static final String TESTPASSWORD = "";
 	private static final int SECS_WAIT_FOR_CONNECTION = 100;
 	private static final long TIMEOUT_MS = SECS_WAIT_FOR_CONNECTION * 1000l; // 5000 reproducable error
-	private boolean localApp;
 
 	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
 
@@ -406,12 +406,12 @@ public class DPassword extends JDialog // implements Runnable
 		passwordField.setMargin(new Insets(0, 3, 0, 3));
 
 		JCheckBox checkCompression = new JCheckBox(configed.getResourceValue("DPassword.checkCompression"),
-				de.uib.opsicommand.JSONthroughHTTP.compressTransmission);
+				JSONthroughHTTP.compressTransmission);
 		checkCompression.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 
-				de.uib.opsicommand.JSONthroughHTTP.compressTransmission = (e.getStateChange() == ItemEvent.SELECTED);
+				JSONthroughHTTP.compressTransmission = (e.getStateChange() == ItemEvent.SELECTED);
 
 				logging.debug(this, "itemStateChanged " + de.uib.opsicommand.JSONthroughHTTP.gzipTransmission);
 			}
@@ -647,7 +647,7 @@ public class DPassword extends JDialog // implements Runnable
 
 		logging.info(this, "we are in EventDispatchThread " + SwingUtilities.isEventDispatchThread());
 		logging.info(this, "  Thread.currentThread() " + Thread.currentThread());
-		localApp = ("" + Thread.currentThread()).indexOf("main]") > -1;
+		boolean localApp = ("" + Thread.currentThread()).indexOf("main]") > -1;
 		logging.info(this, "is local app  " + localApp);
 		if (localApp) {
 

@@ -16,6 +16,7 @@ import java.awt.Component;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -50,32 +51,31 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 		if (mapOfStrings != null)
 		// Load the item values
 		{
-			Iterator iter = mapOfStrings.entrySet().iterator();
+			Iterator<Entry<String, String>> iter = mapOfStrings.entrySet().iterator();
 			while (iter.hasNext()) {
-				Map.Entry entry = (Map.Entry) iter.next();
-				String key = (String) entry.getKey();
-				String stringval = (String) entry.getValue();
+				Map.Entry<String, String> entry = iter.next();
+				String key = entry.getKey();
+				String stringval = entry.getValue();
 
 				ImageIcon image = null;
 
-				if (imagesBase != null) {
-					if (key != null && stringval != null) {
-						String imageFileString = imagesBase + "/" + key + ".png";
+				if (imagesBase != null && key != null && stringval != null) {
+					String imageFileString = imagesBase + "/" + key + ".png";
+
+					image = Globals.createImageIcon(imageFileString, stringval);
+
+					if (image == null)
+					// try with gif
+					{
+						imageFileString = imagesBase + "/" + stringval + ".gif";
 
 						image = Globals.createImageIcon(imageFileString, stringval);
 
-						if (image == null)
-						// try with gif
-						{
-							imageFileString = imagesBase + "/" + stringval + ".gif";
-
-							image = Globals.createImageIcon(imageFileString, stringval);
-
-						}
-
-						if (image != null)
-							mapOfImages.put(key, image);
 					}
+
+					if (image != null)
+						mapOfImages.put(key, image);
+
 				}
 			}
 		}

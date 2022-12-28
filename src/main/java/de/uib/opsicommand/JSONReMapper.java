@@ -164,27 +164,27 @@ public class JSONReMapper {
 
 	}
 
-	public static Map<String, Map<String, Map<String, Object>>> getMap3_Objects(Object retrieved) {
+	public static Map<String, Map<String, Map<String, Object>>> getMap3Objects(Object retrieved) {
 		HashMap<String, Map<String, Map<String, Object>>> result = new HashMap<>();
 		try {
 			JSONObject jO = (JSONObject) retrieved;
 			HashMap<String, JSONObject> map0 = new HashMapX<>(jO);
 
-			Iterator iter0 = map0.keySet().iterator();
+			Iterator<String> iter0 = map0.keySet().iterator();
 			while (iter0.hasNext()) {
-				String key1 = (String) iter0.next(); // e.g. client
-				HashMap<String, JSONObject> map1 = new HashMapX<>((JSONObject) map0.get(key1)); // e.g.
-																								// map
-																								// of
-																								// 1
-																								// client
-																								// values
+				String key1 = iter0.next(); // e.g. client
+				HashMap<String, JSONObject> map1 = new HashMapX<>(map0.get(key1)); // e.g.
+																					// map
+																					// of
+																					// 1
+																					// client
+																					// values
 
 				HashMap<String, Map<String, Object>> map1R = new HashMap<>(); // to produce
 
-				Iterator iter1 = map1.keySet().iterator();
+				Iterator<String> iter1 = map1.keySet().iterator();
 				while (iter1.hasNext()) {
-					String key2 = (String) iter1.next(); // e.g. product
+					String key2 = iter1.next(); // e.g. product
 					HashMap<String, Object> map2 = new HashMapX<>(map1.get(key2), true); // e.g.
 																							// product
 
@@ -211,9 +211,9 @@ public class JSONReMapper {
 
 				HashMap<String, JSONObject> map0 = new HashMapX<>(jOResult);
 
-				Iterator iter0 = map0.keySet().iterator();
+				Iterator<String> iter0 = map0.keySet().iterator();
 				while (iter0.hasNext()) {
-					String key1 = (String) iter0.next(); // e.g. client
+					String key1 = iter0.next(); // e.g. client
 					HashMap<String, JSONObject> map1 = new HashMapX<>((JSONObject) map0.get(key1)); // e.g.
 																									// map
 																									// of
@@ -224,9 +224,9 @@ public class JSONReMapper {
 					HashMap<String, Map<String, Object>> map1R = new HashMap<>(); // to
 																					// produce
 
-					Iterator iter1 = map1.keySet().iterator();
+					Iterator<String> iter1 = map1.keySet().iterator();
 					while (iter1.hasNext()) {
-						String key2 = (String) iter1.next(); // e.g. product
+						String key2 = iter1.next(); // e.g. product
 						HashMap<String, Object> map2 = new HashMapX<>(map1.get(key2), true); // e.g.
 																								// product
 
@@ -491,9 +491,9 @@ public class JSONReMapper {
 			if (checkResponse(jO)) {
 				JSONObject jOResult = jO.optJSONObject("result");
 				if (jOResult != null) {
-					Iterator iter = jOResult.keys();
+					Iterator<String> iter = jOResult.keys();
 					while (iter.hasNext()) {
-						String key = (String) iter.next();
+						String key = iter.next();
 						result.put(key, jOResult.get(key));
 					}
 				}
@@ -532,7 +532,7 @@ public class JSONReMapper {
 		return result;
 	}
 
-	private static class HashMapX<String, V> extends HashMap<String, V> {
+	private static class HashMapX<V> extends HashMap<String, V> {
 		HashMapX(JSONObject jO) {
 			this(jO, false);
 		}
@@ -542,15 +542,15 @@ public class JSONReMapper {
 
 			try {
 				if (jO != null) {
-					Iterator iter = jO.keys();
+					Iterator<String> iter = jO.keys();
 					while (iter.hasNext()) {
-						Object key = iter.next();
+						String key = iter.next();
 
-						if (!jO.isNull((java.lang.String) key)) {
+						if (!jO.isNull(key)) {
 							if (derive)
-								put((String) key, (V) (deriveStandard(jO.get((java.lang.String) key))));
+								put(key, (V) (deriveStandard(jO.get(key))));
 							else
-								put((String) key, (V) (jO.get((java.lang.String) key)));
+								put(key, (V) (jO.get(key)));
 						}
 					}
 				}
@@ -575,7 +575,7 @@ public class JSONReMapper {
 		else if (ob instanceof JSONObject) {
 			Map<String, Object> map = new HashMap<>();
 
-			Iterator iter = ((JSONObject) ob).keys();
+			Iterator<String> iter = ((JSONObject) ob).keys();
 
 			while (iter.hasNext()) {
 				String key = null;

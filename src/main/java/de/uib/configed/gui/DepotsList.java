@@ -126,7 +126,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 			Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-			if (c == null || !(c instanceof JComponent))
+			if (!(c instanceof JComponent))
 				return c;
 
 			JComponent jc = (JComponent) c;

@@ -2324,9 +2324,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		JSONObject jO = (JSONObject) licensingInfo.get("client_numbers");
 
 		try {
-			Iterator iter = jO.keys();
+			Iterator<String> iter = jO.keys();
 			while (iter.hasNext()) {
-				String key = (String) iter.next();
+				String key = iter.next();
 				map.put(key, (Integer) jO.get(key));
 			}
 		} catch (JSONException jex) {
@@ -2569,10 +2569,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			String originVar, String imageVar) {
 		Map<String, Set<String>> result = new TreeMap<>();
 
-		Iterator iter = mappedRelation.keySet().iterator();
+		Iterator<String> iter = mappedRelation.keySet().iterator();
 
 		while (iter.hasNext()) {
-			String key = (String) iter.next();
+			String key = iter.next();
 
 			Map<String, String> relation = (Map<String, String>) mappedRelation.get(key);
 			String originValue = relation.get(originVar);
@@ -4561,9 +4561,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			if (productPropertyDefinitions != null && productPropertyDefinitions.get(product) != null) {
 				ConfigName2ConfigValue productPropertyConfig = (ConfigName2ConfigValue) depotValues.get(product);
 
-				Iterator iterProperties = productPropertyDefinitions.get(product).keySet().iterator();
+				Iterator<String> iterProperties = productPropertyDefinitions.get(product).keySet().iterator();
 				while (iterProperties.hasNext()) {
-					String property = (String) iterProperties.next();
+					String property = iterProperties.next();
 
 					if (productPropertyConfig == null || productPropertyConfig.get(property) == null) {
 						((ListCellOptions) (productPropertyDefinitions.get(product).get(property)))
@@ -5404,16 +5404,16 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				}
 			}
 		}
-		Iterator iter = settings.keySet().iterator();
+		Iterator<String> iter = settings.keySet().iterator();
 		while (iter.hasNext()) {
-			String key = (String) iter.next();
+			String key = iter.next();
 
 			Map state = new HashMap<>();
 
 			state.put("type", "ConfigState");
 			state.put("objectId", objectId);
 			state.put("configId", key);
-			state.put("values", (List) (settings.get(key)));
+			state.put("values", settings.get(key));
 
 			Map retrievedConfig = ((RetrievedMap) settings).getRetrieved();
 			Object oldValue = null;

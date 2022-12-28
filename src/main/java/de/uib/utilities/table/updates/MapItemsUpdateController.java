@@ -42,7 +42,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 
 		List successfullInsertsWithNewKeys = new ArrayList<>();
 
-		Iterator iter = updateCollection.iterator();
+		Iterator<TableEditItem> iter = updateCollection.iterator();
 
 		String lastKeyValue = "";
 
@@ -124,7 +124,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 	@Override
 	public boolean cancelChanges() {
 
-		Iterator iter = updateCollection.iterator();
+		Iterator<TableEditItem> iter = updateCollection.iterator();
 		while (iter.hasNext()) {
 			MapBasedTableEditItem updateItem = (MapBasedTableEditItem) iter.next();
 			if (updateItem.getSource() == tablemodel) {

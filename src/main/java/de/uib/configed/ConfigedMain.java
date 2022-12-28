@@ -2257,10 +2257,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			if (productPropertiesFor1Client != null) {
 				productProperties.add(productPropertiesFor1Client);
 
-				Iterator iter = productPropertiesFor1Client.keySet().iterator();
+				Iterator<String> iter = productPropertiesFor1Client.keySet().iterator();
 				while (iter.hasNext()) {
 					// get next key - value - pair
-					String key = (String) iter.next();
+					String key = iter.next();
 
 					List value = (List) productPropertiesFor1Client.get(key);
 
@@ -2278,7 +2278,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					iter = productPropertiesFor1Client.keySet().iterator();
 
 					while (iter.hasNext()) {
-						String key = (String) iter.next();
+						String key = iter.next();
 						List value = (List) productPropertiesFor1Client.get(key);
 
 						if (mergedProductProperties.get(key) == null)
@@ -2764,9 +2764,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected List<String> getLocalbootProductDisplayFieldsList() {
 		List<String> result = new ArrayList<>();
-		Iterator iter = displayFieldsLocalbootProducts.keySet().iterator();
+		Iterator<String> iter = displayFieldsLocalbootProducts.keySet().iterator();
 		while (iter.hasNext()) {
-			String key = (String) iter.next();
+			String key = iter.next();
 			if (displayFieldsLocalbootProducts.get(key))
 				result.add(key);
 		}
@@ -2776,9 +2776,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected List<String> getNetbootProductDisplayFieldsList() {
 		List<String> result = new ArrayList<>();
-		Iterator iter = displayFieldsNetbootProducts.keySet().iterator();
+		Iterator<String> iter = displayFieldsNetbootProducts.keySet().iterator();
 		while (iter.hasNext()) {
-			String key = (String) iter.next();
+			String key = iter.next();
 			if (displayFieldsNetbootProducts.get(key))
 				result.add(key);
 		}
@@ -3505,10 +3505,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (collectChangedLocalbootStates != null && collectChangedLocalbootStates.keySet() != null
 				&& !collectChangedLocalbootStates.keySet().isEmpty()) {
 
-			Iterator it0 = collectChangedLocalbootStates.keySet().iterator();
+			Iterator<String> it0 = collectChangedLocalbootStates.keySet().iterator();
 
 			while (it0.hasNext()) {
-				String client = (String) it0.next();
+				String client = it0.next();
 				Map<String, Map<String, String>> clientValues = collectChangedLocalbootStates.get(client);
 
 				logging.debug(this, "updateProductStates, collectChangedLocalbootStates , client " + client + " values "
@@ -3517,9 +3517,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				if (clientValues.keySet() == null || clientValues.keySet().isEmpty())
 					continue;
 
-				Iterator it1 = clientValues.keySet().iterator();
+				Iterator<String> it1 = clientValues.keySet().iterator();
 				while (it1.hasNext()) {
-					String product = (String) it1.next();
+					String product = it1.next();
 
 					Map<String, String> productValues = clientValues.get(product);
 
@@ -3536,18 +3536,18 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		logging.debug(this, "collectChangedNetbootStates  " + collectChangedNetbootStates);
 		if (collectChangedNetbootStates != null && collectChangedNetbootStates.keySet() != null
 				&& !collectChangedNetbootStates.keySet().isEmpty()) {
-			Iterator it0 = collectChangedNetbootStates.keySet().iterator();
+			Iterator<String> it0 = collectChangedNetbootStates.keySet().iterator();
 
 			while (it0.hasNext()) {
-				String client = (String) it0.next();
+				String client = it0.next();
 				Map<String, Map<String, String>> clientValues = collectChangedNetbootStates.get(client);
 
 				if (clientValues.keySet() == null || clientValues.keySet().isEmpty())
 					continue;
 
-				Iterator it1 = clientValues.keySet().iterator();
+				Iterator<String> it1 = clientValues.keySet().iterator();
 				while (it1.hasNext()) {
-					String product = (String) it1.next();
+					String product = it1.next();
 					Map<String, String> productValues = clientValues.get(product);
 
 					persist.updateProductOnClient(client, product, OpsiPackage.TYPE_NETBOOT, productValues);
@@ -3618,7 +3618,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (depots == null)
 			return new String[] {};
 
-		return new ArrayList<>(depots.keySet()).toArray(new String[] {});
+		return new ArrayList<>(depots.keySet()).toArray(new String[0]);
 	}
 
 	protected void fetchDepots() {
@@ -3689,9 +3689,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			persist.relations_auditSoftwareToLicencePools_requestRefresh();
 			persist.reconciliationInfoRequestRefresh();
 
-			Iterator iter = allControlMultiTablePanels.iterator();
+			Iterator<ControlMultiTablePanel> iter = allControlMultiTablePanels.iterator();
 			while (iter.hasNext()) {
-				ControlMultiTablePanel cmtp = (ControlMultiTablePanel) iter.next();
+				ControlMultiTablePanel cmtp =  iter.next();
 				if (cmtp != null) {
 					for (int i = 0; i < cmtp.getTablePanes().size(); i++) {
 						PanelGenEditTable p = cmtp.getTablePanes().get(i);
@@ -4059,9 +4059,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		logging.info(this, "setDataChanged " + b + ", showing " + show);
 		anyDataChanged = b;
 
-		if (show)
-			if (mainFrame != null)
-				mainFrame.saveConfigurationsSetEnabled(b);
+		if (show && mainFrame != null)
+			mainFrame.saveConfigurationsSetEnabled(b);
 	}
 
 	public void cancelChanges() {
@@ -4070,34 +4069,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		generalDataChangedKeeper.cancel();
 	}
 
-	public int checkClose()
-	// 0 save changes
-	// 1 lose changes
-	// 2 cancel closing
-	{
+	public int checkClose() {
 		int result = 0;
 
 		if (anyDataChanged) {
-			int returnedOption = JOptionPane.showOptionDialog(mainFrame,
+			result = JOptionPane.showOptionDialog(mainFrame,
 					configed.getResourceValue("ConfigedMain.saveBeforeCloseText"),
 					Globals.APPNAME + " " + configed.getResourceValue("ConfigedMain.saveBeforeCloseTitle"),
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-			switch (returnedOption) {
-			case JOptionPane.YES_OPTION: {
-				result = 0;
-				break;
-			}
-
-			case JOptionPane.NO_OPTION: {
-				result = 1;
-				break;
-			}
-			case JOptionPane.CANCEL_OPTION: {
-				result = 2;
-				break;
-			}
-			}
 		}
 
 		logging.debug(this, "checkClose result " + result);
@@ -4691,16 +4671,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (status)
 			activate = "on";
 
-		{
-			persist.setCommonProductPropertyValue(new HashSet<>(Arrays.asList(clientNames)), product,
-					"on_shutdown_install", Arrays.asList(activate));
+		persist.setCommonProductPropertyValue(new HashSet<>(Arrays.asList(clientNames)), product, "on_shutdown_install",
+				Arrays.asList(activate));
 
-			Map<String, String> productValues = new HashMap<>();
-			productValues.put("actionRequest", setup);
+		Map<String, String> productValues = new HashMap<>();
+		productValues.put("actionRequest", setup);
 
-			persist.updateProductOnClient(clientNames, product, OpsiPackage.TYPE_LOCALBOOT, productValues);
-			persist.updateProductOnClients();
-		}
+		persist.updateProductOnClient(clientNames, product, OpsiPackage.TYPE_LOCALBOOT, productValues);
+		persist.updateProductOnClients();
+
 	}
 
 	public void createClients(List<List<Object>> clients) {
@@ -5500,13 +5479,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		boolean change = false;
 		boolean result = false;
-		Iterator iter = allControlMultiTablePanels.iterator();
+		Iterator<ControlMultiTablePanel> iter = allControlMultiTablePanels.iterator();
 		while (!change && iter.hasNext()) {
-			ControlMultiTablePanel cmtp = (ControlMultiTablePanel) iter.next();
+			ControlMultiTablePanel cmtp = iter.next();
 			if (cmtp != null) {
-				Iterator iterP = cmtp.tablePanes.iterator();
+				Iterator<PanelGenEditTable> iterP = cmtp.tablePanes.iterator();
 				while (!change && iterP.hasNext()) {
-					PanelGenEditTable p = (PanelGenEditTable) iterP.next();
+					PanelGenEditTable p = iterP.next();
 					change = p.isDataChanged();
 				}
 			}
@@ -5542,11 +5521,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (checkdirty) {
 			int closeCheckResult = checkClose();
-			result = (closeCheckResult < 2);
+			result = closeCheckResult == JOptionPane.YES_OPTION || closeCheckResult == JOptionPane.NO_OPTION;
 			if (!result)
 				return result;
 
-			if (closeCheckResult == 0)
+			if (closeCheckResult == JOptionPane.YES_OPTION)
 				checkSaveAll(false);
 		}
 

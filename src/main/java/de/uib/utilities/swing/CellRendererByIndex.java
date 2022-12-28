@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /*
@@ -119,11 +120,11 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 			super.setIconVisible(false);
 
 		else {
-			Iterator iter = mapOfStrings.entrySet().iterator();
+			Iterator<Entry<String, String>> iter = mapOfStrings.entrySet().iterator();
 			while (iter.hasNext()) {
-				Map.Entry entry = (Map.Entry) iter.next();
-				String key = (String) entry.getKey();
-				String stringval = (String) entry.getValue();
+				Entry<String, String> entry = iter.next();
+				String key = entry.getKey();
+				String stringval = entry.getValue();
 
 				ImageIcon image = null;
 

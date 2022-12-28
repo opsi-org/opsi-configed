@@ -32,7 +32,7 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 	@Override
 	public void clear() {
 		logging.debug(this, "clear()");
-		Iterator it = implementor.iterator();
+		Iterator<Object> it = implementor.iterator();
 		while (it.hasNext()) {
 			Object obj = it.next();
 			if (obj != null) {
@@ -61,7 +61,7 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 	// the implementors but does not remove the elements
 	{
 
-		Iterator it = implementor.iterator();
+		Iterator<Object> it = implementor.iterator();
 		while (it.hasNext()) {
 			Object obj = it.next();
 			if (obj != null) {
@@ -83,21 +83,16 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 	public void revert() {
 		logging.info(this, "revert()");
 
-		Iterator it = implementor.iterator();
+		Iterator<Object> it = implementor.iterator();
 		while (it.hasNext()) {
 			Object obj = it.next();
-			if (obj != null) {
+			if (obj instanceof UpdateCollection)
+			// a element of the collection is a collection, we do our best to clear
+			// recursively
+			{
 
-				if (obj instanceof UpdateCollection)
-				// a element of the collection is a collection, we do our best to clear
-				// recursively
-				{
-					try {
-						((UpdateCollection) obj).revert();
-					} catch (Exception ex) // perhaps not implemented
-					{
-					}
-				}
+				((UpdateCollection) obj).revert();
+
 			}
 		}
 	}
@@ -133,7 +128,7 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 	}
 
 	@Override
-	public Iterator iterator() {
+	public Iterator<Object> iterator() {
 		return implementor.iterator();
 	}
 
@@ -195,7 +190,7 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 
 		int result = 0;
 
-		Iterator it = implementor.iterator();
+		Iterator<Object> it = implementor.iterator();
 		while (it.hasNext()) {
 			Object obj = it.next();
 			if (obj != null) {
@@ -232,7 +227,7 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 		if (size() == 0)
 			return;
 
-		Iterator it = implementor.iterator();
+		Iterator<Object> it = implementor.iterator();
 		while (it.hasNext()) {
 			UpdateCommand theCommand = ((UpdateCommand) it.next());
 

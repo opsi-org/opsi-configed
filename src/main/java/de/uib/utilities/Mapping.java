@@ -124,9 +124,9 @@ public class Mapping<K, V> {
 			return;
 
 		map = m;
-		Iterator iter = map.keySet().iterator();
+		Iterator<K> iter = map.keySet().iterator();
 		while (iter.hasNext()) {
-			K k = (K) iter.next();
+			K k = iter.next();
 			V v = map.get(k);
 			if (v == null)
 				logging.info(this, " " + k + " mapped to null in map " + m);
