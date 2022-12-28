@@ -453,7 +453,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					else if (val.startsWith(
 							ActionResult.getLabel2DisplayLabel().get(ActionResult.getLabel(ActionResult.SUCCESSFUL))))
 
-						c.setForeground(Globals.okGreen);
+						c.setForeground(Globals.OK_COLOR);
 
 				}
 

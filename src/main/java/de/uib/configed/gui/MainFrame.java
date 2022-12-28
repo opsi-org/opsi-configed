@@ -1000,11 +1000,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			jMenuSSHConnection.setForeground(Globals.lightBlack);
 			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.NOT_CONNECTED);
 		} else if (status.equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED)) {
-			jMenuSSHConnection.setForeground(Globals.actionRed);
+			jMenuSSHConnection.setForeground(Globals.ACTION_COLOR);
 			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.CONNECTION_NOT_ALLOWED);
 
 		} else if (status.equals(SSHCommandFactory.CONNECTED)) {
-			jMenuSSHConnection.setForeground(Globals.okGreen);
+			jMenuSSHConnection.setForeground(Globals.OK_COLOR);
 			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.CONNECTED);
 		}
 	}

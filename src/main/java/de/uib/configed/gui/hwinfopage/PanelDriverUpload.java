@@ -498,7 +498,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 						+ fieldServerPath.getText());
 				final Color saveColor = buttonUploadDrivers.getBackground();
 
-				buttonUploadDrivers.setBackground(Globals.failedBackColor);
+				buttonUploadDrivers.setBackground(Globals.FAILED_BACKGROUND_COLOR);
 				execute();
 				buttonUploadDrivers.setBackground(saveColor);
 			}

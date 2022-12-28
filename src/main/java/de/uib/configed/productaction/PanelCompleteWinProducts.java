@@ -312,7 +312,7 @@ public class PanelCompleteWinProducts extends JPanel
 
 				final Color saveColor = buttonCallExecute.getBackground();
 
-				buttonCallExecute.setBackground(Globals.failedBackColor);
+				buttonCallExecute.setBackground(Globals.FAILED_BACKGROUND_COLOR);
 
 				execute();
 

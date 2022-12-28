@@ -148,6 +148,7 @@ public class Globals {
 
 	public static final Color PRIMARY_BACKGROUND_COLOR = Color.BLACK;
 	public static final Color SECONDARY_BACKGROUND_COLOR = new Color(245, 245, 245);
+
 	public static final Color BACKGROUND_COLOR_3 = new Color(230, 230, 230);
 	public static final Color BACKGROUND_COLOR_4 = new Color(220, 220, 220);
 	public static final Color BACKGROUND_COLOR_5 = new Color(200, 200, 250);
@@ -158,19 +159,20 @@ public class Globals {
 
 	public static final Color BACKGROUND_COLOR_9 = new Color(250, 248, 221);
 
+	public static final Color FAILED_BACKGROUND_COLOR = new Color(100, 100, 100);
+
 	public static final Color ACTION_COLOR = new Color(239, 4, 4);
+	public static final Color WARNING_COLOR = new Color(204, 51, 0);
+	public static final Color CHECK_COLOR = new Color(198, 225, 171); // succesful? 
+	public static final Color OK_COLOR = new Color(20, 140, 20);
 
 	public static final Color darkOrange = new java.awt.Color(218, 180, 4);
 	public static final Color lightBlack = new Color(30, 30, 30);
 	public static final Color blue = new Color(30, 30, 100);
 	public static final Color blueGrey = new Color(180, 190, 190);
 	public static final Color greyed = new Color(150, 150, 150);
-	public static final Color failedBackColor = new Color(100, 100, 100);
-	public static final Color okGreen = new Color(20, 140, 20);
-	public static final Color actionRed = new Color(239, 4, 4);
-	public static final Color warningRed = new Color(204, 51, 0);
+	public static final Color OK_COLOR = new Color(20, 140, 20);
 	public static final Color unknownBlue = new Color(40, 17, 213);
-	public static final Color checkGreenLight = new Color(198, 225, 171);
 
 	public static final Color ClientSelectionDialog_ELEMENT_FOREGROUND = Color.BLUE;
 
@@ -211,35 +213,35 @@ public class Globals {
 	public static final Color F_GENERAL_DIALOG_LICENSING_INFO_BACKGROUND_COLOR = Color.WHITE;
 
 	public static final Color ACTION_REQUEST_NONE_COLOR = INVISIBLE;
-	public static final Color ACTION_REQUEST_SETUP_COLOR = actionRed;
-	public static final Color ACTION_REQUEST_UPDATE_COLOR = actionRed;
+	public static final Color ACTION_REQUEST_SETUP_COLOR = ACTION_COLOR;
+	public static final Color ACTION_REQUEST_UPDATE_COLOR = ACTION_COLOR;
 	public static final Color ACTION_REQUEST_UNINSTALL_COLOR = Color.BLUE;
-	public static final Color ACTION_REQUEST_ALWAYS_COLOR = actionRed;
-	public static final Color ACTION_REQUEST_ONCE_COLOR = actionRed;
-	public static final Color ACTION_REQUEST_CUSTOM_COLOR = actionRed;
+	public static final Color ACTION_REQUEST_ALWAYS_COLOR = ACTION_COLOR;
+	public static final Color ACTION_REQUEST_ONCE_COLOR = ACTION_COLOR;
+	public static final Color ACTION_REQUEST_CUSTOM_COLOR = ACTION_COLOR;
 	public static final Color ACTION_REQUEST_LAST_COLOR = PRIMARY_BACKGROUND_COLOR;
 
 	public static final Color INSTALLATION_STATUS_NOT_INSTALLED_COLOR = INVISIBLE;
-	public static final Color INSTALLATION_STATUS_INSTALLED_COLOR = okGreen;
+	public static final Color INSTALLATION_STATUS_INSTALLED_COLOR = OK_COLOR;
 	public static final Color INSTALLATION_STATUS_UNKNOWN_COLOR = unknownBlue;
 
 	public static final Map<String, Color> SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS = new HashMap<>() {
 		{
 			put("[0;info;0m", Globals.greyed); // user info not really ansi code !!
-			put("[0;error;0m", Globals.actionRed);
+			put("[0;error;0m", Globals.ACTION_COLOR);
 			put("[0;30;40m", PRIMARY_BACKGROUND_COLOR);
 
 			put("[1;30;40m", PRIMARY_BACKGROUND_COLOR);
 			put("[0;40;40m", PRIMARY_BACKGROUND_COLOR);
 			put("[1;40;40m", PRIMARY_BACKGROUND_COLOR);
-			put("[0;31;40m", Globals.actionRed);
-			put("[1;31;40m", Globals.actionRed);
-			put("[0;41;40m", Globals.actionRed);
-			put("[1;41;40m", Globals.actionRed);
-			put("[0;32;40m", Globals.okGreen);
-			put("[1;32;40m", Globals.okGreen);
-			put("[0;42;40m", Globals.okGreen);
-			put("[1;42;40m", Globals.okGreen);
+			put("[0;31;40m", Globals.ACTION_COLOR);
+			put("[1;31;40m", Globals.ACTION_COLOR);
+			put("[0;41;40m", Globals.ACTION_COLOR);
+			put("[1;41;40m", Globals.ACTION_COLOR);
+			put("[0;32;40m", Globals.OK_COLOR);
+			put("[1;32;40m", Globals.OK_COLOR);
+			put("[0;42;40m", Globals.OK_COLOR);
+			put("[1;42;40m", Globals.OK_COLOR);
 			put("[0;33;40m", Globals.darkOrange);
 			put("[1;33;40m", Globals.darkOrange);
 			put("[0;43;40m", Globals.darkOrange);

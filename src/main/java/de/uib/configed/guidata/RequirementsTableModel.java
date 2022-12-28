@@ -287,7 +287,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 	protected class MyWarningColorizer {
 		public void colorize(java.awt.Component cell, boolean isSelected, int row, int col) {
-			cell.setBackground(Globals.actionRed);
+			cell.setBackground(Globals.ACTION_COLOR);
 		}
 	}
 

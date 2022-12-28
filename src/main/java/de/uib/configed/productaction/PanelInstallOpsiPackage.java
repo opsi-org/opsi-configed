@@ -381,7 +381,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 			public void actionPerformed(ActionEvent e) {
 				final Color saveColor = buttonCallExecute.getBackground();
 
-				buttonCallExecute.setBackground(Globals.failedBackColor);
+				buttonCallExecute.setBackground(Globals.FAILED_BACKGROUND_COLOR);
 
 				logging.info(this, "actionPerformed on buttonCallExecute opsiPackageGotPathS,  depot:  "
 						+ fieldOpsiPackageName.getText() + ", " + comboChooseDepot.getSelectedItem());
