@@ -49,12 +49,11 @@ import de.uib.utilities.swing.list.StandardListCellRenderer;
 
 public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		implements ListSelectionListener, ActionListener, MouseListener, KeyListener {
+
 	private javax.swing.JLabel jLabelEditDepotProductProperties;
-	private IconButton buttonSetValuesFromPackage;
 
 	private JList<String> listDepots;
-	List<String> listSelectedDepots;
-	private JPanel panelDepots;
+	private List<String> listSelectedDepots;
 	private JButton buttonSelectWithEqualProperties;
 	private JButton buttonSelectAll;
 	JPopupMenu popupDepot = new JPopupMenu();
@@ -72,7 +71,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 	protected void initComponents() {
 
-		panelDepots = new JPanel();
+		JPanel panelDepots = new JPanel();
 
 		listDepots = new JList<>();
 		listDepots.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -127,7 +126,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 				configed.getResourceValue("ProductInfoPane.jLabelEditDepotProductProperties"));
 		jLabelEditDepotProductProperties.setFont(Globals.defaultFontBold);
 
-		buttonSetValuesFromPackage = new IconButton(
+		IconButton buttonSetValuesFromPackage = new IconButton(
 				configed.getResourceValue("ProductInfoPane.buttonSetValuesFromPackage"),
 				"images/reset_network_defaults.png", "images/reset_network_defaults_over.png", " ", true);
 

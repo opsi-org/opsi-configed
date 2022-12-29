@@ -50,7 +50,6 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 
 	private DependenciesTreeModel dependenciesTreeModel;
 
-	private JScrollPane dependenciesTreeScrollPanel;
 	private JRadioButton dependenciesNeedsButton;
 	private JRadioButton dependenciesNeededByButton;
 	private JButton copyListButton;
@@ -127,7 +126,7 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 	}
 
 	private void initComponents() {
-		dependenciesTreeScrollPanel = new JScrollPane();
+		JScrollPane dependenciesTreeScrollPanel = new JScrollPane();
 
 		dependenciesTreeScrollPanel.setViewportView(dependenciesTree);
 		dependenciesTreeScrollPanel.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);

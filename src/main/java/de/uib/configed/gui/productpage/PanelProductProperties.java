@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.table.TableCellRenderer;
 
 /*
  *   class PanelProductProperties 
@@ -44,28 +41,11 @@ public class PanelProductProperties extends JSplitPane
 {
 
 	public PanelGenEditTable paneProducts;
-	protected OpsiPackage selectedOpsiPackage;
-	protected List<String> depotsOfPackage;
+	private List<String> depotsOfPackage;
 
 	private ProductInfoPane infoPane; // right pane
 	protected PanelEditDepotProperties panelEditProperties;
 	public AbstractEditMapPanel propertiesPanel;
-
-	protected int hMin = 200;
-
-	final int fwidth_lefthanded = 800;
-	final int fheight = 450;
-
-	final int fwidth_column_productname = 170;
-	final int fwidth_column_productcompletename = 170;
-
-	protected TableCellRenderer propertiesTableCellRenderer;
-
-	protected Map<String, Boolean> productDisplayFields;
-
-	protected List<String> selectedProducts;
-
-	JPopupMenu popup;
 
 	protected ConfigedMain mainController;
 
@@ -74,13 +54,10 @@ public class PanelProductProperties extends JSplitPane
 		this.mainController = mainController;
 		init();
 
-		setDividerLocation(fwidth_lefthanded);
 		setResizeWeight(0.7);
 	}
 
 	protected void init() {
-
-		selectedProducts = new ArrayList<>();
 
 		depotsOfPackage = new ArrayList<>();
 
@@ -153,7 +130,6 @@ public class PanelProductProperties extends JSplitPane
 					logging.info(this, "selected  row " + row);
 
 					if (row == -1) {
-						selectedOpsiPackage = null;
 						depotsOfPackage.clear();
 					} else {
 						String productEdited = "" + theTable.getValueAt(row, columnNames.indexOf("productId"));

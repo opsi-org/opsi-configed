@@ -144,8 +144,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	ColoredTableCellRenderer positionTableCellRenderer;
 	ColoredTableCellRenderer lastStateChangeTableCellRenderer;
 
-	TableCellRenderer propertiesTableCellRenderer;
-
 	protected Map<String, Boolean> productDisplayFields;
 
 	protected List<? extends RowSorter.SortKey> currentSortKeys;
@@ -153,7 +151,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	protected ArrayList<String> selectedProducts;
 
 	JPopupMenu popup;
-	JMenu subOpsiclientdEvent;
 	JMenuItem itemOnDemand;
 
 	JMenuItem itemSaveAndExecute;
@@ -694,9 +691,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		for (int i = 0; i < data.size(); i++) {
 			strippedData[i] = data.get(i);
 		}
-		JTable strippedTable = new JTable(strippedData, headers);
-
-		return strippedTable;
+		return new JTable(strippedData, headers);
 	}
 
 	protected void reloadAction() {
