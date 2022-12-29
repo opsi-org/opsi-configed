@@ -166,7 +166,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		this.productDisplayFields = productDisplayFields;
 		init();
 
-		setResizeWeight(0.7);
+		setResizeWeight(1);
 	}
 
 	protected void initTopPane() {

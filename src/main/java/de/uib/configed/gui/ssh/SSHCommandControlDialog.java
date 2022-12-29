@@ -68,38 +68,38 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	private GroupLayout commandlistPanelLayout;
 
 	/** Save Button instance **/
-	private JButton btn_save;
+	private JButton buttonSave;
 	/** Close Button instance **/
-	private JButton btn_close;
+	private JButton buttonClose;
 
 	/** JLabel menu text instance **/
-	private JLabel lbl_menuText = new JLabel();
+	private JLabel labelMenuText = new JLabel();
 	/** JLabel parent menu text instance **/
-	private JLabel lbl_parentMenuText = new JLabel();
-	/** JLabel tooltip text instance **/
-	private JLabel lbl_tooltipText = new JLabel();
+	private JLabel labelParentMenuText = new JLabel();
+	/** JLabel tolbl_parentMenuTextoltip text instance **/
+	private JLabel labelTooltipText = new JLabel();
 	/** JLabel priority instance **/
-	private JLabel lbl_priority = new JLabel();
+	private JLabel labelPriority = new JLabel();
 	/** JLabel need sudo instance **/
-	private JLabel lbl_needSudo = new JLabel();
+	private JLabel labelNeedSudo = new JLabel();
 	/** JLabel commands instance **/
-	private JLabel lbl_commands = new JLabel();
+	private JLabel labelCommands = new JLabel();
 
 	/** JComboBox menu text instance **/
-	private JComboBox cb_menuText;
+	private JComboBox<String> jComboBoxMenuText;
 	/** IconButton delete menu text instance **/
-	private de.uib.configed.gui.IconButton btn_del;
+	private de.uib.configed.gui.IconButton buttonDelete;
 
 	/** JComboBox parent menu text instance **/
-	private JComboBox cb_parentMenuText;
+	private JComboBox<String> jComboBoxParentMenuText;
 	/** JTextField tooltip text instance **/
-	private JTextField tf_tooltipText = new JTextField();
+	private JTextField jTextFieldTooltipText = new JTextField();
 	/** JTextField priority instance **/
-	private JTextField tf_priority = new JTextField();
+	private JTextField jTextFieldPriority = new JTextField();
 	/** JCheckBox need Sudo instance **/
-	private JCheckBox cb_needSudo = new JCheckBox("");
+	private JCheckBox jComboBoxNeedSudo = new JCheckBox("");
 	/** JTextPane commands instance **/
-	private JTextPane tp_commands = new JTextPane();
+	private JTextPane jTextPaneommands = new JTextPane();
 
 	/** MainFrame instance **/
 	private JFrame main;
@@ -109,7 +109,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	/** This instance / Design Patter: singelton **/
 	private static SSHCommandControlDialog instance;
 
-	private JButton btn_test_command;
+	private JButton buttonTestCommand;
 	/**
 	 * Graphical user interface for editing sshcommands.
 	 * 
@@ -153,12 +153,10 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		logging.debug(this, "setCenterLayout ");
 		centerPanelLayout.setAutoCreateGaps(true);
 
-		{
-			centerPanelLayout.setHorizontalGroup(centerPanelLayout.createParallelGroup().addComponent(commandlistPanel)
-					.addComponent(parameterPanel));
-			centerPanelLayout.setVerticalGroup(centerPanelLayout.createSequentialGroup().addComponent(commandlistPanel)
-					.addComponent(parameterPanel));
-		}
+		centerPanelLayout.setHorizontalGroup(
+				centerPanelLayout.createParallelGroup().addComponent(commandlistPanel).addComponent(parameterPanel));
+		centerPanelLayout.setVerticalGroup(
+				centerPanelLayout.createSequentialGroup().addComponent(commandlistPanel).addComponent(parameterPanel));
 
 		parameterPanel.setVisible(true);
 	}
@@ -190,200 +188,184 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 		setCenterLayout();
 
-		Dimension tf_dim = new Dimension(Globals.FIRST_LABEL_WIDTH - Globals.GRAPHIC_BUTTON_WIDTH,
+		Dimension dimensionJTextField = new Dimension(Globals.FIRST_LABEL_WIDTH - Globals.GRAPHIC_BUTTON_WIDTH,
 				Globals.BUTTON_HEIGHT);
-		Dimension tf_dim_long = new Dimension(Globals.FIRST_LABEL_WIDTH, Globals.BUTTON_HEIGHT);
-		Dimension btn_dim = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH, Globals.BUTTON_HEIGHT);
+		Dimension dimensionJTextFieldLong = new Dimension(Globals.FIRST_LABEL_WIDTH, Globals.BUTTON_HEIGHT);
+		Dimension dimensionButton = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH, Globals.BUTTON_HEIGHT);
 
-		{
-			lbl_parentMenuText = new JLabel();
-			cb_parentMenuText = new JComboBox<>();
-			lbl_menuText = new JLabel();
-			cb_menuText = new JComboBox<>();
-			lbl_tooltipText = new JLabel();
-			lbl_priority = new JLabel();
+		labelParentMenuText = new JLabel();
+		jComboBoxParentMenuText = new JComboBox<>();
+		labelMenuText = new JLabel();
+		jComboBoxMenuText = new JComboBox<>();
+		labelTooltipText = new JLabel();
+		labelPriority = new JLabel();
 
-			tf_priority = new JTextField(new CheckedDocument(/* allowedChars */
-					new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-' }, 5),
-					String.valueOf(factory.position_default), 1);
-			lbl_needSudo = new JLabel();
-			lbl_commands = new JLabel();
-			tp_commands = new JTextPane();
-			// btn_changeHelpPanelStatus= new de.uib.configed.gui.IconButton(
+		jTextFieldPriority = new JTextField(new CheckedDocument(/* allowedChars */
+				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-' }, 5),
+				String.valueOf(factory.position_default), 1);
+		labelNeedSudo = new JLabel();
+		labelCommands = new JLabel();
+		jTextPaneommands = new JTextPane();
+		// btn_changeHelpPanelStatus= new de.uib.configed.gui.IconButton(
 
-			// ,
+		// ,
 
-			btn_test_command = new de.uib.configed.gui.IconButton(
-					configed.getResourceValue("SSHConnection.CommandControl.btnTestCommand"),
-					"images/executing_command_red_22.png", "images/executing_command_red_22.png",
-					"images/executing_command_red_22.png", true);
-			btn_del = new de.uib.configed.gui.IconButton(
-					configed.getResourceValue("SSHConnection.CommandControl.rm_menuText.tooltip"),
-					"images/list-remove.png", "images/list-remove.png", "images/list-remove_disabled.png", true);
-			btn_save = new IconButton(configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
-					"images/apply_over.gif", " ", "images/apply_disabled.gif", false);
-			btn_close = new IconButton(configed.getResourceValue("MainFrame.iconButtonCancelChanges"),
-					"images/cancel-32.png", "images/cancel_over-32.png", " ", true);
-		}
-		{
+		buttonTestCommand = new de.uib.configed.gui.IconButton(
+				configed.getResourceValue("SSHConnection.CommandControl.btnTestCommand"),
+				"images/executing_command_red_22.png", "images/executing_command_red_22.png",
+				"images/executing_command_red_22.png", true);
+		buttonDelete = new de.uib.configed.gui.IconButton(
+				configed.getResourceValue("SSHConnection.CommandControl.rm_menuText.tooltip"), "images/list-remove.png",
+				"images/list-remove.png", "images/list-remove_disabled.png", true);
+		buttonSave = new IconButton(configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
+				"images/apply_over.gif", " ", "images/apply_disabled.gif", false);
+		buttonClose = new IconButton(configed.getResourceValue("MainFrame.iconButtonCancelChanges"),
+				"images/cancel-32.png", "images/cancel_over-32.png", " ", true);
 
-			lbl_menuText.setText(configed.getResourceValue("SSHConnection.CommandControl.menuText"));
-			lbl_parentMenuText.setText(configed.getResourceValue("SSHConnection.CommandControl.parentMenuText"));
-			lbl_tooltipText.setText(configed.getResourceValue("SSHConnection.CommandControl.tooltipText"));
-			lbl_priority.setText(configed.getResourceValue("SSHConnection.CommandControl.priority"));
-			lbl_needSudo.setText(configed.getResourceValue("SSHConnection.CommandControl.needSudo"));
-			lbl_commands.setText(configed.getResourceValue("SSHConnection.CommandControl.commands"));
+		labelMenuText.setText(configed.getResourceValue("SSHConnection.CommandControl.menuText"));
+		labelParentMenuText.setText(configed.getResourceValue("SSHConnection.CommandControl.parentMenuText"));
+		labelTooltipText.setText(configed.getResourceValue("SSHConnection.CommandControl.tooltipText"));
+		labelPriority.setText(configed.getResourceValue("SSHConnection.CommandControl.priority"));
+		labelNeedSudo.setText(configed.getResourceValue("SSHConnection.CommandControl.needSudo"));
+		labelCommands.setText(configed.getResourceValue("SSHConnection.CommandControl.commands"));
 
-			cb_parentMenuText.addItem(SSHCommandFactory.parentdefaultForOwnCommands); // parentNull
-			cb_menuText.addItem(SSHCommandFactory.menuNew);
+		jComboBoxParentMenuText.addItem(SSHCommandFactory.parentdefaultForOwnCommands); // parentNull
+		jComboBoxMenuText.addItem(SSHCommandFactory.menuNew);
 
-			cb_menuText.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.menuText.tooltip"));
-			tf_tooltipText
-					.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.tooltipText.tooltip"));
+		jComboBoxMenuText.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.menuText.tooltip"));
+		jTextFieldTooltipText
+				.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.tooltipText.tooltip"));
 
-			tf_priority.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.priority.tooltip"));
-			cb_needSudo.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.needSudo.tooltip"));
-			lbl_commands.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.commands.tooltip"));
-			tp_commands.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.commands.tooltip"));
+		jTextFieldPriority.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.priority.tooltip"));
+		jComboBoxNeedSudo.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.needSudo.tooltip"));
+		labelCommands.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.commands.tooltip"));
+		jTextPaneommands.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.commands.tooltip"));
 
-			lbl_menuText.setPreferredSize(tf_dim);
-			lbl_parentMenuText.setPreferredSize(tf_dim);
-			cb_parentMenuText.setPreferredSize(tf_dim);
-			cb_menuText.setPreferredSize(tf_dim);
-			lbl_tooltipText.setPreferredSize(tf_dim);
-			tf_tooltipText.setPreferredSize(tf_dim);
-			lbl_priority.setPreferredSize(tf_dim);
-			tf_priority.setPreferredSize(btn_dim);
-			cb_needSudo.setSize(btn_dim);
-			btn_del.setSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
-			lbl_needSudo.setPreferredSize(tf_dim);
-			cb_needSudo.setPreferredSize(btn_dim);
-			tp_commands.setPreferredSize(tf_dim_long);
-			// btn_changeHelpPanelStatus.setPreferredSize(new
+		labelMenuText.setPreferredSize(dimensionJTextField);
+		labelParentMenuText.setPreferredSize(dimensionJTextField);
+		jComboBoxParentMenuText.setPreferredSize(dimensionJTextField);
+		jComboBoxMenuText.setPreferredSize(dimensionJTextField);
+		labelTooltipText.setPreferredSize(dimensionJTextField);
+		jTextFieldTooltipText.setPreferredSize(dimensionJTextField);
+		labelPriority.setPreferredSize(dimensionJTextField);
+		jTextFieldPriority.setPreferredSize(dimensionButton);
+		jComboBoxNeedSudo.setSize(dimensionButton);
+		buttonDelete.setSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
+		labelNeedSudo.setPreferredSize(dimensionJTextField);
+		jComboBoxNeedSudo.setPreferredSize(dimensionButton);
+		jTextPaneommands.setPreferredSize(dimensionJTextFieldLong);
+		// btn_changeHelpPanelStatus.setPreferredSize(new
 
-			btn_test_command.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
-			btn_del.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
+		buttonTestCommand.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
+		buttonDelete.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
 
-			cb_menuText.setEditable(true);
-			cb_parentMenuText.setEditable(true);
-			tf_priority.setColumns(4);
+		jComboBoxMenuText.setEditable(true);
+		jComboBoxParentMenuText.setEditable(true);
+		jTextFieldPriority.setColumns(4);
 
-			final JTextComponent editor = (JTextComponent) cb_menuText.getEditor().getEditorComponent();
-			cb_menuText.addItemListener(itemEvent -> {
-				if (editor.getText().trim().equals(SSHCommandFactory.menuNew)) {
-					editor.setSelectionStart(0);
-					editor.setSelectionEnd(editor.getText().length());
-				}
-				updateSelectedCommand(editor.getText());
+		final JTextComponent editor = (JTextComponent) jComboBoxMenuText.getEditor().getEditorComponent();
+		jComboBoxMenuText.addItemListener(itemEvent -> {
+			if (editor.getText().trim().equals(SSHCommandFactory.menuNew)) {
+				editor.setSelectionStart(0);
+				editor.setSelectionEnd(editor.getText().length());
+			}
+			updateSelectedCommand(editor.getText());
+			checkAllTexts();
+		});
+		jComboBoxParentMenuText.addItemListener(itemEvent -> checkAllTexts());
+
+		jTextFieldTooltipText.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
 				checkAllTexts();
-			});
-			cb_parentMenuText.addItemListener(itemEvent -> checkAllTexts());
-		}
-		{
+			}
 
-			tf_tooltipText.getDocument().addDocumentListener(new DocumentListener() {
-				@Override
-				public void insertUpdate(DocumentEvent e) {
-					checkAllTexts();
-				}
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				checkAllTexts();
+			}
 
-				@Override
-				public void removeUpdate(DocumentEvent e) {
-					checkAllTexts();
-				}
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// Plain text components do not fire these events
+			}
+		});
 
-				@Override
-				public void changedUpdate(DocumentEvent e) {
-					// Plain text components do not fire these events
-				}
-			});
-		}
-		{
-			tf_priority.getDocument().addDocumentListener(new DocumentListener() {
-				@Override
-				public void insertUpdate(DocumentEvent e) {
-					checkAllTexts();
-				}
+		jTextFieldPriority.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				checkAllTexts();
+			}
 
-				@Override
-				public void removeUpdate(DocumentEvent e) {
-					checkAllTexts();
-				}
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				checkAllTexts();
+			}
 
-				@Override
-				public void changedUpdate(DocumentEvent e) {
-					// Plain text components do not fire these events
-				}
-			});
-		}
-		{
-			cb_needSudo.addItemListener(itemEvent -> checkAllTexts());
-		}
-		{
-			tp_commands.getDocument().addDocumentListener(new DocumentListener() {
-				@Override
-				public void insertUpdate(DocumentEvent e) {
-					checkAllTexts();
-				}
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// Plain text components do not fire these events
+			}
+		});
 
-				@Override
-				public void removeUpdate(DocumentEvent e) {
-					checkAllTexts();
-				}
+		jComboBoxNeedSudo.addItemListener(itemEvent -> checkAllTexts());
+		jTextPaneommands.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				checkAllTexts();
+			}
 
-				@Override
-				public void changedUpdate(DocumentEvent e) {
-					// Plain text components do not fire these events
-				}
-			});
-		}
-		{
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				checkAllTexts();
+			}
 
-			// btn_changeHelpPanelStatus.addActionListener(new ActionListener()
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// Plain text components do not fire these events
+			}
+		});
 
-			showPanel();
-			if (!(Globals.isGlobalReadOnly()))
-				btn_test_command.addActionListener(actionEvent -> doActionTestCommand());
+		// btn_changeHelpPanelStatus.addActionListener(new ActionListener()
 
-			final SSHCommandControlDialog caller = this;
-			if (!(Globals.isGlobalReadOnly()))
-				((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonTest()
-						.addActionListener(actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel)
-								.doActionTestParam(caller));
+		showPanel();
+		if (!(Globals.isGlobalReadOnly()))
+			buttonTestCommand.addActionListener(actionEvent -> doActionTestCommand());
 
-			if (!(Globals.isGlobalReadOnly()))
-				((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonAdd()
-						.addActionListener(actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel)
-								.doActionParamAdd(tp_commands));
-		}
+		final SSHCommandControlDialog caller = this;
+		if (!(Globals.isGlobalReadOnly()))
+			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonTest().addActionListener(
+					actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel).doActionTestParam(caller));
+
+		if (!(Globals.isGlobalReadOnly()))
+			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonAdd()
+					.addActionListener(actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel)
+							.doActionParamAdd(jTextPaneommands));
 
 		updateLists(true);
 		updateSelectedCommand();
-		{
-			if (!(Globals.isGlobalReadOnly()))
-				btn_del.addActionListener(actionEvent -> {
-					String menu = (String) cb_menuText.getSelectedItem();
-					factory.deleteSSHCommandByMenu(menu);
 
-					cb_menuText.setSelectedItem(SSHCommandFactory.menuNew);
-					updateLists(true, SSHCommandFactory.menuNew);
-					updateSelectedCommand(SSHCommandFactory.menuNew);
-					factory.reloadServerMenu();
-				});
-		}
-		{
-			if (!(Globals.isGlobalReadOnly()))
-				btn_save.addActionListener(actionEvent -> doAction1());
-		}
-		{
-			btn_close.addActionListener(actionEvent -> doAction2());
+		if (!(Globals.isGlobalReadOnly()))
+			buttonDelete.addActionListener(actionEvent -> {
+				String menu = (String) jComboBoxMenuText.getSelectedItem();
+				factory.deleteSSHCommandByMenu(menu);
 
-			buttonPanel.add(btn_save);
-			buttonPanel.add(btn_close);
-		}
+				jComboBoxMenuText.setSelectedItem(SSHCommandFactory.menuNew);
+				updateLists(true, SSHCommandFactory.menuNew);
+				updateSelectedCommand(SSHCommandFactory.menuNew);
+				factory.reloadServerMenu();
+			});
+
+		if (!(Globals.isGlobalReadOnly()))
+			buttonSave.addActionListener(actionEvent -> doAction1());
+		buttonClose.addActionListener(actionEvent -> doAction2());
+
+		buttonPanel.add(buttonSave);
+		buttonPanel.add(buttonClose);
+
 		initLayout();
 
-		setComponentsEnabled_RO(!Globals.isGlobalReadOnly());
+		setComponentsEnabledRO(!Globals.isGlobalReadOnly());
 	}
 
 	/**
@@ -391,24 +373,24 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	 * 
 	 * @param value False if mode is readonly - setEditable/setEnabled to false
 	 **/
-	private void setComponentsEnabled_RO(boolean value) {
-		logging.info(this, "setComponentsEnabled_RO value " + value);
-		cb_needSudo.setEnabled(value);
+	private void setComponentsEnabledRO(boolean value) {
+		logging.info(this, "setComponentsEnabledRO value " + value);
+		jComboBoxNeedSudo.setEnabled(value);
 
-		cb_parentMenuText.setEnabled(value);
-		cb_parentMenuText.setEditable(value);
+		jComboBoxParentMenuText.setEnabled(value);
+		jComboBoxParentMenuText.setEditable(value);
 
-		tf_tooltipText.setEnabled(value);
-		tf_tooltipText.setEditable(value);
+		jTextFieldTooltipText.setEnabled(value);
+		jTextFieldTooltipText.setEditable(value);
 
-		tf_priority.setEnabled(value);
-		tf_priority.setEditable(value);
+		jTextFieldPriority.setEnabled(value);
+		jTextFieldPriority.setEditable(value);
 
-		tp_commands.setEnabled(value);
-		tp_commands.setEditable(value);
+		jTextPaneommands.setEnabled(value);
+		jTextPaneommands.setEditable(value);
 
-		btn_del.setEnabled(value);
-		btn_test_command.setEnabled(value);
+		buttonDelete.setEnabled(value);
+		buttonTestCommand.setEnabled(value);
 	}
 
 	/** Init grouplayout **/
@@ -418,88 +400,89 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 				.setHorizontalGroup(commandlistPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
 						.addGroup(commandlistPanelLayout.createParallelGroup()
 								.addGroup(commandlistPanelLayout.createSequentialGroup()
-										.addComponent(lbl_commands, GroupLayout.PREFERRED_SIZE,
+										.addComponent(labelCommands, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-										.addGap(Globals.GAP_SIZE).addComponent(btn_test_command,
+										.addGap(Globals.GAP_SIZE).addComponent(buttonTestCommand,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE)
 
-								).addGap(Globals.MIN_GAP_SIZE).addComponent(tp_commands, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+								).addGap(Globals.MIN_GAP_SIZE).addComponent(jTextPaneommands,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 						.addGap(Globals.GAP_SIZE * 3));
 		commandlistPanelLayout.setVerticalGroup(commandlistPanelLayout.createSequentialGroup()
 				.addGap(Globals.GAP_SIZE * 2)
 				.addGroup(commandlistPanelLayout.createParallelGroup()
 						.addGroup(commandlistPanelLayout.createSequentialGroup().addGap(Globals.MIN_GAP_SIZE)
-								.addComponent(lbl_commands, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								.addComponent(labelCommands, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.MIN_GAP_SIZE).addComponent(btn_test_command, GroupLayout.PREFERRED_SIZE,
+						.addGap(Globals.MIN_GAP_SIZE).addComponent(buttonTestCommand, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_GAP_SIZE)
 
 				).addGap(Globals.MIN_GAP_SIZE)
-				.addComponent(tp_commands, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(jTextPaneommands, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.GAP_SIZE * 1));
 
 		controlPanelLayout.setHorizontalGroup(controlPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
 				.addGroup(controlPanelLayout.createParallelGroup()
-						.addComponent(lbl_tooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(labelTooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(lbl_menuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(labelMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(lbl_parentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(labelParentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(lbl_priority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(labelPriority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(lbl_needSudo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(labelNeedSudo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGroup(controlPanelLayout.createParallelGroup().addGroup(controlPanelLayout.createSequentialGroup()
-						.addComponent(cb_menuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addGroup(controlPanelLayout.createParallelGroup()
+						.addGroup(controlPanelLayout.createSequentialGroup()
+								.addComponent(jComboBoxMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										Short.MAX_VALUE)
+								.addGroup(controlPanelLayout.createParallelGroup()
+										.addComponent(jTextFieldPriority, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(jComboBoxNeedSudo, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(buttonDelete, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(jTextFieldTooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addGroup(controlPanelLayout.createParallelGroup()
-								.addComponent(tf_priority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(cb_needSudo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(btn_del, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)))
-						.addComponent(tf_tooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addComponent(cb_parentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jComboBoxParentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE))
 				.addGap(Globals.GAP_SIZE * 3));
 		controlPanelLayout.setVerticalGroup(controlPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
 				.addGroup(controlPanelLayout.createParallelGroup()
-						.addComponent(lbl_menuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(labelMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(cb_menuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jComboBoxMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(btn_del, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(buttonDelete, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(controlPanelLayout.createParallelGroup()
-						.addComponent(cb_parentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jComboBoxParentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(lbl_parentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(labelParentMenuText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(controlPanelLayout.createParallelGroup()
-						.addComponent(tf_tooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jTextFieldTooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(lbl_tooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(labelTooltipText, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(controlPanelLayout.createParallelGroup()
-						.addComponent(lbl_priority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(labelPriority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(tf_priority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jTextFieldPriority, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(controlPanelLayout.createParallelGroup()
-						.addComponent(lbl_needSudo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(labelNeedSudo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(cb_needSudo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jComboBoxNeedSudo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.MIN_GAP_SIZE).addGap(Globals.GAP_SIZE * 2));
 	}
@@ -523,24 +506,24 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	private void updateLists(boolean requestRefresh, String selectedCommand) {
 		logging.info(this, "updateLists requestRefresh " + requestRefresh + " selectedCommand " + selectedCommand);
 		if (requestRefresh) {
-			cb_menuText.removeAllItems();
-			cb_parentMenuText.removeAllItems();
+			jComboBoxMenuText.removeAllItems();
+			jComboBoxParentMenuText.removeAllItems();
 			factory.retrieveSSHCommandListRequestRefresh();
 		}
 
 		List<String> commandMenus = factory.getSSHCommandMenuNames();
 		List<String> commandParents = factory.getSSHCommandMenuParents();
 		for (String menu : commandMenus)
-			if (((DefaultComboBoxModel) cb_menuText.getModel()).getIndexOf(menu) == -1)
-				cb_menuText.addItem(menu);
+			if (((DefaultComboBoxModel<String>) jComboBoxMenuText.getModel()).getIndexOf(menu) == -1)
+				jComboBoxMenuText.addItem(menu);
 
 		for (String parent : commandParents)
-			if (((DefaultComboBoxModel) cb_parentMenuText.getModel()).getIndexOf(parent) == -1)
-				cb_parentMenuText.addItem(parent);
+			if (((DefaultComboBoxModel<String>) jComboBoxParentMenuText.getModel()).getIndexOf(parent) == -1)
+				jComboBoxParentMenuText.addItem(parent);
 
 		if ((selectedCommand == null) || (selectedCommand.trim().equals("")))
 			selectedCommand = SSHCommandFactory.menuNew;
-		cb_menuText.setSelectedItem(selectedCommand);
+		jComboBoxMenuText.setSelectedItem(selectedCommand);
 	}
 
 	/** Calls {@link updateSelectedCommand(null)} **/
@@ -590,18 +573,18 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 
 			parent = SSHCommandFactory.parentdefaultForOwnCommands;
 		}
-		cb_parentMenuText.setSelectedItem(parent);
-		tf_tooltipText.setText(tooltip);
-		tf_priority.setText(String.valueOf(prio));
-		cb_needSudo.setSelected(ns);
-		tp_commands.setText(coms);
+		jComboBoxParentMenuText.setSelectedItem(parent);
+		jTextFieldTooltipText.setText(tooltip);
+		jTextFieldPriority.setText(String.valueOf(prio));
+		jComboBoxNeedSudo.setSelected(ns);
+		jTextPaneommands.setText(coms);
 	}
 
 	/* This method is called when button 1 (save) is pressed */
 	@Override
 	public void doAction1() {
 		logging.info(this, "doAction1 savecommand ");
-		String menuText = (String) cb_menuText.getSelectedItem();
+		String menuText = (String) jComboBoxMenuText.getSelectedItem();
 		SSHCommand_Template command = getCommandNow();
 		if (command == null)
 			return;
@@ -647,22 +630,22 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 
 	private void checkAllTexts() {
 		if (!Globals.isGlobalReadOnly()) {
-			if (cb_menuText.getSelectedItem() != null) {
-				if (!((String) cb_menuText.getSelectedItem()).trim().equals(SSHCommandFactory.menuNew)) {
-					logging.info(this, "checkAllTexts menuText " + cb_menuText.getSelectedItem());
-					SSHCommand_Template tmp_com = getCommandNow();
-					logging.debug(this, "checkAllTexts command " + tmp_com);
-					if (tmp_com == null)
+			if (jComboBoxMenuText.getSelectedItem() != null) {
+				if (!((String) jComboBoxMenuText.getSelectedItem()).trim().equals(SSHCommandFactory.menuNew)) {
+					logging.info(this, "checkAllTexts menuText " + jComboBoxMenuText.getSelectedItem());
+					SSHCommand_Template tempCommand = getCommandNow();
+					logging.debug(this, "checkAllTexts command " + tempCommand);
+					if (tempCommand == null)
 						return;
-					boolean isNotSaved = !factory.isSSHCommandEqualSavedCommand(tmp_com);
+					boolean isNotSaved = !factory.isSSHCommandEqualSavedCommand(tempCommand);
 					logging.debug(this, "checkAllTexts factory.isSSHCommandEqualSavedCommand(tmp_com) "
-							+ factory.isSSHCommandEqualSavedCommand(tmp_com));
+							+ factory.isSSHCommandEqualSavedCommand(tempCommand));
 					logging.debug(this, "checkAllTexts isNotSaved " + isNotSaved);
-					btn_save.setEnabled(isNotSaved);
+					buttonSave.setEnabled(isNotSaved);
 				} else
-					btn_save.setEnabled(false);
+					buttonSave.setEnabled(false);
 			} else
-				btn_save.setEnabled(false);
+				buttonSave.setEnabled(false);
 		}
 	}
 
@@ -672,35 +655,33 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 
 	public SSHCommand_Template getCommandNow(boolean testing) {
 		logging.debug(this, "getCommandNow ");
-		String menuText = (String) cb_menuText.getSelectedItem();
-		if (!testing)
-			if (menuText.trim().equals(SSHCommandFactory.menuNew))
-				return null;
-		String parent = (String) cb_parentMenuText.getSelectedItem();
+		String menuText = (String) jComboBoxMenuText.getSelectedItem();
+		if (!testing && menuText.trim().equals(SSHCommandFactory.menuNew))
+			return null;
+		String parent = (String) jComboBoxParentMenuText.getSelectedItem();
 		int prio = 0;
 		try {
-			prio = Integer.valueOf(tf_priority.getText());
+			prio = Integer.valueOf(jTextFieldPriority.getText());
 		} catch (Exception e) {
 			logging.warning("Cannot get value from priority field Exception: " + e);
 		}
 		List<String> coms = new LinkedList<>();
-		for (String c : tp_commands.getText().split("\n"))
+		for (String c : jTextPaneommands.getText().split("\n"))
 			if (!((c == null) || (c.trim().equals(""))))
 				coms.add(c);
-		SSHCommand_Template tmp_com = factory.buildSSHCommand(generateId((String) cb_menuText.getSelectedItem()),
-				parent, menuText, (tf_tooltipText.getText()), prio, cb_needSudo.isSelected(), coms);
-		logging.debug(this, "getCommandNow command: " + tmp_com);
-		return tmp_com;
+		SSHCommand_Template tempCommand = factory.buildSSHCommand(
+				generateId((String) jComboBoxMenuText.getSelectedItem()), parent, menuText,
+				(jTextFieldTooltipText.getText()), prio, jComboBoxNeedSudo.isSelected(), coms);
+		logging.debug(this, "getCommandNow command: " + tempCommand);
+		return tempCommand;
 	}
 
 	private void showPanel() {
 		logging.info(this, "showPanel helpPanelStatus always true");
 
-		{
-			setCenterLayout();
-			centerPanel.setSize(centerPanel.getWidth(), centerPanel.getHeight() + parameterPanel.getHeight());
-			this.setSize(this.getWidth(), this.getHeight() + parameterPanel.getHeight());
-		}
+		setCenterLayout();
+		centerPanel.setSize(centerPanel.getWidth(), centerPanel.getHeight() + parameterPanel.getHeight());
+		this.setSize(this.getWidth(), this.getHeight() + parameterPanel.getHeight());
 
 		repaint();
 		revalidate();

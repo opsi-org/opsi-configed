@@ -563,6 +563,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		panelClientSelection.setDividerLocation(0.8);
 		panelLocalbootProductSettings.setDividerLocation(0.8);
 		panelNetbootProductSettings.setDividerLocation(0.8);
+		panelProductProperties.setDividerLocation(0.8);
 	}
 
 	public class SizeListeningPanel extends JPanel implements ComponentListener {
