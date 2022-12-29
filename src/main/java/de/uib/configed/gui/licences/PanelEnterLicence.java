@@ -232,7 +232,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		jTextField_maxInstallations.setText("1");
 		jTextField_maxInstallations.setEditable(false);
-		comboClient.setModel(new DefaultComboBoxModel<>(enterLicenceController.getChoicesAllHosts()));
+		comboClient.setModel(new DefaultComboBoxModel<>(enterLicenceController.getChoicesAllHosts().toArray()));
 		comboClient.setEnabled(true);
 
 	}
@@ -533,7 +533,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 						.addGap(0, 1, 5)));
 
 		panelTask = new JPanel();
-		panelTask.setBackground(Globals.backgroundWhite);
+		panelTask.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		javax.swing.GroupLayout layoutTask = new javax.swing.GroupLayout(panelTask);
 		panelTask.setLayout(layoutTask);
@@ -609,8 +609,8 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		bottomPane = new JPanel();
 		splitPane.setTopComponent(topPane);
 		splitPane.setBottomComponent(bottomPane);
-		topPane.setBackground(Globals.backgroundWhite);
-		bottomPane.setBackground(Globals.backgroundWhite);
+		topPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		bottomPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		javax.swing.GroupLayout layoutTopPane = new javax.swing.GroupLayout((JPanel) topPane);
 		topPane.setLayout(layoutTopPane);

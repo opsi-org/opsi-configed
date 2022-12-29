@@ -16,7 +16,6 @@ import de.uib.configed.configed;
 import de.uib.configed.type.ConfigOption;
 import de.uib.opsicommand.Executioner;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.logging;
 
 public class UserConfigProducing {
@@ -678,33 +677,6 @@ public class UserConfigProducing {
 
 			readyObjects.add(Executioner.jsonMap(itemModifyTime));
 		}
-
-	}
-
-	public static void main(String[] args) {
-		String theServer = "";
-
-		logging.setSuppressConsole(false);
-		logging.debug("UserConfigProducing");
-
-		PersistenceController persist = PersistenceControllerFactory.getNewPersistenceController(theServer, "user",
-				"test");
-
-		UserConfigProducing up = new UserConfigProducing(false, // boolean notUsingDefaultUser,
-
-				theServer, // String configserver,
-				persist.getHostInfoCollections().getDepotNamesList(), // Collection<String> existingDepots,
-				persist.getHostGroupIds(), // Collection<String> existingHostgroups,
-				persist.getProductGroups().keySet(), // Collection<String> existingProductgroups,
-
-				// data. on which changes are based
-				persist.getConfigDefaultValues(), // Map<String, List<Object>> serverconfigValuesMap,
-				persist.getConfigOptions()// Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap
-
-		);
-
-		List<Object> newData = up.produce();
-		logging.debug("UserConfigProducing: newData " + newData);
 
 	}
 

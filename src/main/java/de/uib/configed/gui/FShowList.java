@@ -85,7 +85,7 @@ public class FShowList extends FTextArea {
 		jTextArea1.setWrapStyleWord(true);
 		jTextArea1.setOpaque(true);
 
-		jTextArea1.setBackground(Globals.backgroundWhite);
+		jTextArea1.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		jTextArea1.setText("          ");
 		jTextArea1.setEditable(false);
 		jTextArea1.setFont(new java.awt.Font("Dialog", 0, 14));
@@ -119,10 +119,6 @@ public class FShowList extends FTextArea {
 		else if (e.getKeyCode() == KeyEvent.VK_TAB && shiftPressed && e.getSource() == jButton1) {
 			jTextArea1.requestFocus();
 		}
-	}
-
-	public static final void main(String[] args) {
-		new FShowList(null, "configed", "configed Ende", true).setVisible(true);
 	}
 
 }

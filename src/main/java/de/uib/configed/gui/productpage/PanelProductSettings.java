@@ -1,6 +1,5 @@
 package de.uib.configed.gui.productpage;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -18,7 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.swing.DefaultRowSorter;
 import javax.swing.GroupLayout;
@@ -110,8 +108,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	protected int hMin = 200;
 
-	final int fwidth_lefthanded = 800;
-	final int splitterLeftRight = 15;
+	final int fwidth_lefthanded = 1100;
 	final int fheight = 450;
 
 	final int fwidth_column_productname = 170;
@@ -147,8 +144,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	ColoredTableCellRenderer positionTableCellRenderer;
 	ColoredTableCellRenderer lastStateChangeTableCellRenderer;
 
-	TableCellRenderer propertiesTableCellRenderer;
-
 	protected Map<String, Boolean> productDisplayFields;
 
 	protected List<? extends RowSorter.SortKey> currentSortKeys;
@@ -156,7 +151,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	protected ArrayList<String> selectedProducts;
 
 	JPopupMenu popup;
-	JMenu subOpsiclientdEvent;
 	JMenuItem itemOnDemand;
 
 	JMenuItem itemSaveAndExecute;
@@ -172,9 +166,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		this.productDisplayFields = productDisplayFields;
 		init();
 
-		setDividerLocation(fwidth_lefthanded);
-		setResizeWeight(0.5);
-
+		setResizeWeight(1);
 	}
 
 	protected void initTopPane() {
@@ -207,7 +199,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		paneProducts.setPreferredSize(new Dimension(fwidth_lefthanded, fheight + 40));
 		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		tableProducts.setBackground(Globals.backgroundWhite);
+		tableProducts.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		tableProducts.setShowHorizontalLines(true);
 		tableProducts.setGridColor(Globals.PANEL_PRODUCT_SETTINGS_TABLE_GRID_COLOR);
 		tableProducts.setRowHeight(Globals.TABLE_ROW_HEIGHT);
@@ -423,7 +415,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 											.get(de.uib.opsidatamodel.productstate.ProductState.KEY_versionInfo);
 
 						if (!val.equals(serverProductVersion)) {
-							c.setForeground(Color.red);
+							c.setForeground(Globals.FAILED_COLOR);
 
 						}
 					}
@@ -453,7 +445,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					else if (val.startsWith(
 							ActionResult.getLabel2DisplayLabel().get(ActionResult.getLabel(ActionResult.SUCCESSFUL))))
 
-						c.setForeground(Globals.okGreen);
+						c.setForeground(Globals.OK_COLOR);
 
 				}
 
@@ -652,7 +644,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	protected JTable strippTable(JTable jTable) {
 		boolean dontStrippIt;
-		Vector<String[]> data = new Vector<>();
+		List<String[]> data = new ArrayList<>();
 		String[] headers = new String[jTable.getColumnCount()];
 		for (int i = 0; i < jTable.getColumnCount(); i++) {
 			headers[i] = jTable.getColumnName(i);
@@ -699,9 +691,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		for (int i = 0; i < data.size(); i++) {
 			strippedData[i] = data.get(i);
 		}
-		JTable strippedTable = new JTable(strippedData, headers);
-
-		return strippedTable;
+		return new JTable(strippedData, headers);
 	}
 
 	protected void reloadAction() {

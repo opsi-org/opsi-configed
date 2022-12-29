@@ -10,7 +10,6 @@ package de.uib.utilities.datapanel;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -96,7 +95,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 		return mapTableModel;
 	}
 
-	public Vector<String> getNames() {
+	public List<String> getNames() {
 		return mapTableModel.getKeys();
 	}
 

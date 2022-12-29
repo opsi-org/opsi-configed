@@ -1,7 +1,8 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.Component;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
@@ -27,7 +28,7 @@ public class SSHCompletionComboButton {
 	private JComboBox combobox;
 	private JButton button;
 	private JTextField textfield;
-	private Vector<String> defaultvalues;
+	private List<String> defaultvalues;
 	private String search_specific_files;
 	private String combobox_default_path;
 	private final String root = "/";
@@ -43,11 +44,11 @@ public class SSHCompletionComboButton {
 		this(null, null, null);
 	}
 
-	public SSHCompletionComboButton(Vector<String> values) {
+	public SSHCompletionComboButton(List<String> values) {
 		this(values, null, null);
 	}
 
-	public SSHCompletionComboButton(Vector<String> values, String search_specific_files, String combobox_default_path) {
+	public SSHCompletionComboButton(List<String> values, String search_specific_files, String combobox_default_path) {
 		logging.info(this, "instance created");
 		this.search_specific_files = search_specific_files;
 		this.combobox_default_path = combobox_default_path;
@@ -80,7 +81,7 @@ public class SSHCompletionComboButton {
 		return "";
 	}
 
-	private void init(Vector<String> defvalues) {
+	private void init(List<String> defvalues) {
 		if (persist == null)
 			logging.info(this, "init PersistenceController null");
 		else
@@ -88,34 +89,34 @@ public class SSHCompletionComboButton {
 		if (opsiRepo.charAt(opsiRepo.length() - 1) != '/')
 			opsiRepo = opsiRepo + "/";
 		if (combobox_default_path != null) {
-			defaultvalues = new Vector<>();
-			defaultvalues.addElement(combobox_default_path);
-			defaultvalues.addElement(root);
-			defaultvalues.addElement(opsiRepo);
+			defaultvalues = new ArrayList<>();
+			defaultvalues.add(combobox_default_path);
+			defaultvalues.add(root);
+			defaultvalues.add(opsiRepo);
 
 		} else {
-			defaultvalues = new Vector<>();
-			defaultvalues.addElement(opsiRepo);
-			defaultvalues.addElement(root);
+			defaultvalues = new ArrayList<>();
+			defaultvalues.add(opsiRepo);
+			defaultvalues.add(root);
 
 		}
 		// Is element in defaultValues?
 		if (defvalues != null)
 			for (String elem : defvalues)
 				if ((elem != null) && (!elem.trim().equals("")))
-					defaultvalues.addElement(elem);
+					defaultvalues.add(elem);
 		logging.info(this, "init =======================================");
 		for (String elem : defaultvalues)
 			logging.debug(this, "init defaultvalues contains " + elem);
 	}
 
-	public Vector getDefaultValues() {
+	public List getDefaultValues() {
 		return defaultvalues;
 	}
 
 	private void initTextfield() {
 		textfield = new JTextField();
-		textfield.setBackground(Globals.backLightYellow);
+		textfield.setBackground(Globals.BACKGROUND_COLOR_9);
 	}
 
 	private void createInstances() {

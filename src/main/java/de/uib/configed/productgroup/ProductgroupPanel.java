@@ -1,6 +1,5 @@
 package de.uib.configed.productgroup;
 
-import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -302,7 +301,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	}
 
 	public void findGroup(Set<String> set) {
-		Iterator iterNames;
+		Iterator<String> iterNames;
 
 		boolean theSetFound = false;
 
@@ -319,7 +318,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 			while (!theSetFound && iterNames.hasNext()) {
 
-				String name = (String) iterNames.next();
+				String name = iterNames.next();
 
 				if (productGroupMembers.get(name) != null && productGroupMembers.get(name).equals(checkSet)) {
 					// avoid selection events in groupsCombo
@@ -469,14 +468,14 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				null, // index is identical with the value
 				values, "");
 
-		renderActionList.setAlternatingColors(Globals.backLightBlue, Globals.backLightBlue, Globals.backgroundLightGrey,
-				Globals.backgroundWhite);
+		renderActionList.setAlternatingColors(Globals.BACKGROUND_COLOR_7, Globals.BACKGROUND_COLOR_7,
+				Globals.BACKGROUND_COLOR_3, Globals.SECONDARY_BACKGROUND_COLOR);
 
 		listChooseAction.setCellRenderer(renderActionList);
 		listChooseAction.setVisibleRowCount(2);
 		listChooseAction.setFont(Globals.defaultFontSmallBold);
 
-		listChooseAction.setBackground(Globals.backgroundWhite);
+		listChooseAction.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		JScrollPane scrollChooseAction = new JScrollPane(listChooseAction,
 				ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		listChooseAction.addMouseListener(new MouseAdapter() {
@@ -492,7 +491,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		JLabel labelStrip = new JLabel("  " + configed.getResourceValue("GroupPanel.labelAggregateProducts"));
 
-		labelStrip.setBackground(Globals.backLightBlue);
+		labelStrip.setBackground(Globals.BACKGROUND_COLOR_7);
 		labelStrip.setOpaque(true);
 		labelStrip.setFont(Globals.defaultFont);
 		labelStrip.setForeground(Globals.lightBlack);
@@ -513,7 +512,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		;
 
-		surroundScrollChooseAction.setBackground(Globals.backgroundLightGrey);
+		surroundScrollChooseAction.setBackground(Globals.BACKGROUND_COLOR_3);
 		surroundScrollChooseAction.setOpaque(true);
 
 		comboAggregatedEditing.setValues(values);
@@ -534,7 +533,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		groupsEditField = saveNameEditor;
 		groupsEditField.getCaret().setBlinkRate(0);
-		groupsEditField.setBackground(Globals.backgroundLightGrey);
+		groupsEditField.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		groupsEditFieldListener = new MyDocumentListener() {
 			@Override
@@ -558,7 +557,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		groupsCombo.setPreferredSize(Globals.buttonDimension);
 		saveNameEditor.setPreferredSize(Globals.buttonDimension);
-		groupsEditField.setBackground(Globals.backgroundLightGrey);
+		groupsEditField.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		labelSave = new JLabel();
 		labelSave.setText(TEXT_SAVE);
@@ -567,7 +566,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		descriptionField = new JTextField("");
 		descriptionField.setPreferredSize(Globals.buttonDimension);
 		descriptionField.setFont(Globals.defaultFont);
-		descriptionField.setBackground(Globals.backgroundLightGrey);
+		descriptionField.setBackground(Globals.BACKGROUND_COLOR_3);
 		descriptionField.getCaret().setBlinkRate(0);
 
 		descriptionFieldListener = new MyDocumentListener() {
@@ -581,7 +580,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		panelEdit = new JPanel();
 
-		panelEdit.setBackground(Globals.backgroundWhite);
+		panelEdit.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		GroupLayout layoutPanelEdit = new GroupLayout(panelEdit);
 		panelEdit.setLayout(layoutPanelEdit);
@@ -634,10 +633,10 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		this.setLayout(layoutMain);
 
 		JPanel separatingPlace = new JPanel();
-		separatingPlace.setForeground(Globals.backLightYellow);
-		separatingPlace.setBackground(Color.RED);
+		separatingPlace.setForeground(Globals.BACKGROUND_COLOR_9);
+		separatingPlace.setBackground(Globals.FAILED_COLOR);
 		separatingPlace.setOpaque(true);
-		separatingPlace.setBorder(new javax.swing.border.LineBorder(Globals.backBlue));
+		separatingPlace.setBorder(new javax.swing.border.LineBorder(Globals.BACKGROUND_COLOR_6));
 
 		layoutMain.setVerticalGroup(layoutMain.createSequentialGroup()
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)

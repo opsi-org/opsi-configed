@@ -1,10 +1,10 @@
 package de.uib.configed.clientselection.elements;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 
 import de.uib.configed.clientselection.SelectData;
 import de.uib.configed.clientselection.SelectElement;
@@ -13,16 +13,16 @@ import de.uib.configed.clientselection.operations.StringEqualsOperation;
 
 public class GenericTextElement extends SelectElement {
 
-	protected Vector<String> proposedData;
+	protected List<String> proposedData;
 
 	public GenericTextElement(Set<String> proposedData, String[] name, String... localizedName) {
 		super(name, localizedName);
-		this.proposedData = new Vector<>(proposedData);
+		this.proposedData = new ArrayList<>(proposedData);
 	}
 
 	public GenericTextElement(String[] proposedData, String[] name, String... localizedName) {
 		super(name, localizedName);
-		this.proposedData = new Vector<>(Arrays.asList((String[]) proposedData));
+		this.proposedData = new ArrayList<>(Arrays.asList(proposedData));
 	}
 
 	public GenericTextElement(String[] name, String... localizedName) {
@@ -43,7 +43,7 @@ public class GenericTextElement extends SelectElement {
 	}
 
 	@Override
-	public Vector<String> getEnumData() {
+	public List<String> getEnumData() {
 		return proposedData;
 	}
 

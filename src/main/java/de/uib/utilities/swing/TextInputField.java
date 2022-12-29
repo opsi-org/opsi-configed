@@ -10,8 +10,9 @@ package de.uib.utilities.swing;
 import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -23,7 +24,7 @@ public class TextInputField extends JPanel
 
 	protected JTextField textfield;
 	protected JComboBox combo;
-	protected Vector<String> proposedValues;
+	protected List<String> proposedValues;
 	private Character[] orderedBeginChars;
 
 	public enum InputType {
@@ -36,7 +37,7 @@ public class TextInputField extends JPanel
 		this(initialValue, null);
 	}
 
-	public TextInputField(String initialValue, final Vector<String> proposedValues) {
+	public TextInputField(String initialValue, final List<String> proposedValues) {
 		super(new BorderLayout());
 
 		String initValue = initialValue;
@@ -44,7 +45,7 @@ public class TextInputField extends JPanel
 		inputType = InputType.VALUELIST;
 
 		if (proposedValues == null) {
-			this.proposedValues = new Vector<>();
+			this.proposedValues = new ArrayList<>();
 
 			if (initialValue == null) {
 				inputType = InputType.DATE;
@@ -79,7 +80,7 @@ public class TextInputField extends JPanel
 			}
 		}
 
-		combo = new JComboBox<>(this.proposedValues);
+		combo = new JComboBox<>(this.proposedValues.toArray());
 
 		JTextField comboField = (JTextField) combo.getEditor().getEditorComponent();
 		comboField.getCaret().setBlinkRate(0);

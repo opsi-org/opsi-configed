@@ -10,7 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Vector;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -60,7 +60,7 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 	}
 
 	protected void guiInit() {
-		panelContent.setBackground(Globals.backgroundWhite);
+		panelContent.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		panelContent.setLayout(new BorderLayout());
 		panelContent.setOpaque(true);
@@ -74,7 +74,7 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 		panelVerticalGrid.add(new SurroundPanel(labelInstallation));
 
 		labelSelectImage.setText("Image-Auswahl");
-		labelSelectImage.setBackground(Globals.backgroundWhite);
+		labelSelectImage.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		panelSurroundSelectImage.add(labelSelectImage);
 		comboImages.setBackground(Globals.PANELREINST_BACKGROUND_COLOR);
 		comboImages.addActionListener(this);
@@ -94,14 +94,14 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 
 		fieldInstallCommand.setText(callReinstmgr);
 		fieldInstallCommand.setPreferredSize(new Dimension(350, fieldHeight));
-		fieldInstallCommand.setBackground(Globals.backgroundGrey);
+		fieldInstallCommand.setBackground(Globals.BACKGROUND_COLOR_4);
 		fieldInstallCommand.setEditable(true);
 		panelVerticalGrid.add(new SurroundPanel(fieldInstallCommand));
 
 		buttonStartReinstmgr.setText("Ausführen");
 		buttonStartReinstmgr.addActionListener(this);
 		buttonStartReinstmgr.setPreferredSize(new Dimension(100, fieldHeight));
-		buttonStartReinstmgr.setBackground(Globals.backBlue);
+		buttonStartReinstmgr.setBackground(Globals.BACKGROUND_COLOR_6);
 		panelVerticalGrid.add(new SurroundPanel(buttonStartReinstmgr));
 
 		panelVerticalGrid.add(new JLabel(""));
@@ -112,13 +112,13 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 
 		fieldUnsetCommand.setText(callReinstmgr);
 		fieldUnsetCommand.setPreferredSize(new Dimension(350, fieldHeight));
-		fieldUnsetCommand.setBackground(Globals.backgroundGrey);
+		fieldUnsetCommand.setBackground(Globals.BACKGROUND_COLOR_4);
 		fieldUnsetCommand.setEditable(true);
 		panelVerticalGrid.add(new SurroundPanel(fieldUnsetCommand));
 
 		buttonUnset.setText("Ausführen");
 		buttonUnset.addActionListener(this);
-		buttonUnset.setBackground(Globals.backBlue);
+		buttonUnset.setBackground(Globals.BACKGROUND_COLOR_6);
 		buttonUnset.setPreferredSize(new Dimension(100, fieldHeight));
 		panelVerticalGrid.add(new SurroundPanel(buttonUnset));
 
@@ -128,7 +128,7 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 
 		textOut.setColumns(70);
 		textOut.setRows(4);
-		textOut.setBackground(Globals.backgroundGrey);
+		textOut.setBackground(Globals.BACKGROUND_COLOR_4);
 
 		textOut.setLineWrap(false);
 		textOut.setEditable(false);
@@ -149,9 +149,9 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 
 	}
 
-	public void startFor(String pcName, Vector installImages) {
+	public void startFor(String pcName, List installImages) {
 		this.pcName = pcName;
-		comboImages.setModel(new DefaultComboBoxModel<>(installImages));
+		comboImages.setModel(new DefaultComboBoxModel<>(installImages.toArray()));
 		String installCommand = callReinstmgr;
 		fieldInstallCommand.setText(installCommand);
 		String unsetCommand = callReinstmgr + " unset " + pcName;

@@ -1,10 +1,10 @@
 package de.uib.configed.type;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
@@ -67,9 +67,9 @@ public class SWAuditEntry extends TableEntry
 		KEYS_FOR_GUI_TABLES.add(WINDOWSsOFTWAREid);
 	}
 
-	public static Vector<String> KEYS_FOR_IDENT;
+	public static List<String> KEYS_FOR_IDENT;
 	static {
-		KEYS_FOR_IDENT = new Vector<>();
+		KEYS_FOR_IDENT = new ArrayList<>();
 		KEYS_FOR_IDENT.add(NAME);
 		KEYS_FOR_IDENT.add(VERSION);
 		KEYS_FOR_IDENT.add("subversion");
@@ -77,9 +77,9 @@ public class SWAuditEntry extends TableEntry
 		KEYS_FOR_IDENT.add(ARCHITECTURE);
 	}
 
-	public static Vector<String> ID_VARIANTS_COLS;
+	public static List<String> ID_VARIANTS_COLS;
 	static {
-		ID_VARIANTS_COLS = new Vector<>();
+		ID_VARIANTS_COLS = new ArrayList<>();
 		ID_VARIANTS_COLS.add(NAME);
 		ID_VARIANTS_COLS.add(EXISTING_IDS);
 

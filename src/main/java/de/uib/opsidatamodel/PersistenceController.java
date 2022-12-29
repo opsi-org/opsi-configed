@@ -20,7 +20,6 @@ import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Vector;
 
 import org.json.JSONObject;
 
@@ -372,7 +371,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract Boolean isUefiConfigured(String host);
 
-	public abstract boolean createClients(Vector<Vector<Object>> clients);
+	public abstract boolean createClients(List<List<Object>> clients);
 
 	public abstract boolean createClient(String hostname, String domainname, String depotId, String description,
 			String inventorynumber, String notes, String ipaddress, String macaddress, boolean shutdownInstall,
@@ -513,13 +512,13 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	/* multiclient hwinfo */
 
-	public abstract Vector<String> getHwInfoClassNames();
+	public abstract List<String> getHwInfoClassNames();
 
-	public abstract Vector<String> getHostColumnNames();
+	public abstract List<String> getHostColumnNames();
 
-	public abstract Vector<String> getClient2HwRowsColumnNames();
+	public abstract List<String> getClient2HwRowsColumnNames();
 
-	public abstract Vector<String> getClient2HwRowsJavaclassNames();
+	public abstract List<String> getClient2HwRowsJavaclassNames();
 
 	public abstract void client2HwRowsRequestRefresh();
 
@@ -563,7 +562,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract List<String> getAllNetbootProductNames(String depotId);
 
-	public abstract Vector<String> getWinProducts(String depotId, String depotProductDirectory);
+	public abstract List<String> getWinProducts(String depotId, String depotProductDirectory);
 
 	public abstract void retrieveProducts();
 
@@ -578,7 +577,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract Map<String, Map<String, Object>> getProductGlobalInfos(String depotId); // (productId -> (infoKey ->
 																							// info))
 
-	public abstract Vector<Vector<Object>> getProductRows();
+	public abstract List<List<Object>> getProductRows();
 
 	public abstract Map<String, Map<String, List<String>>> getProduct2VersionInfo2Depots();
 
@@ -731,7 +730,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract String getOpsiDefaultDomain();
 
-	public abstract Vector<String> getDomains();
+	public abstract List<String> getDomains();
 
 	public abstract void writeDomains(List<Object> domains);
 

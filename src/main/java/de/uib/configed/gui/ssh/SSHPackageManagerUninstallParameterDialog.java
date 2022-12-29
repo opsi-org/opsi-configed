@@ -1,9 +1,9 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NavigableSet;
-import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
@@ -56,7 +56,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 	FDepotselectionList fDepotList;
 
-	private Vector<String> possibleDepots;
+	private List<String> possibleDepots;
 
 	private CommandOpsiPackageManagerUninstall commandPMUninstall = new CommandOpsiPackageManagerUninstall();
 
@@ -79,9 +79,9 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		fDepotList = new FDepotselectionList(this) {
 			@Override
-			public void setListData(Vector<? extends String> v) {
+			public void setListData(List<String> v) {
 				if (v == null || v.isEmpty()) {
-					setListData(new Vector<>());
+					setListData(new ArrayList<>());
 					jButton1.setEnabled(false);
 				} else {
 					super.setListData(v);
@@ -132,7 +132,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		if (selectedDepots.isEmpty()) {
 			if (persist.isDepotsFullPermission()) {
-				depotParameter = persist.DEPOT_SELECTION_NODEPOTS;
+				depotParameter = PersistenceController.DEPOT_SELECTION_NODEPOTS;
 			} else if (!possibleDepots.isEmpty()) {
 				depotParameter = possibleDepots.get(0);
 			} else
@@ -170,10 +170,10 @@ public class SSHPackageManagerUninstallParameterDialog
 		return depotParameter;
 	}
 
-	protected Vector<String> getPossibleDepots() {
+	protected List<String> getPossibleDepots() {
 		String selectedProduct = (String) cb_opsiproducts.getSelectedItem();
 
-		Vector<String> result = new Vector<>();
+		List<String> result = new ArrayList<>();
 
 		if (persist.isDepotsFullPermission()) {
 			tf_selecteddepots.setEditable(true);
@@ -214,8 +214,8 @@ public class SSHPackageManagerUninstallParameterDialog
 	}
 
 	protected void init() {
-		uninstallPanel.setBackground(Globals.backLightBlue);
-		buttonPanel.setBackground(Globals.backLightBlue);
+		uninstallPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		getContentPane().add(uninstallPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
@@ -247,7 +247,7 @@ public class SSHPackageManagerUninstallParameterDialog
 					.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelProduct"));
 
 			tf_product = new JTextField();
-			tf_product.setBackground(Globals.backLightYellow);
+			tf_product.setBackground(Globals.BACKGROUND_COLOR_9);
 			tf_product.setEditable(false);
 
 			cb_opsiproducts = new JComboBoxSimpleToolTip();
@@ -263,7 +263,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 			buttonUpdateList = new IconAsButton("buttonUpdateList", "images/reload16.png", "images/reload16.png",
 					"images/reload16.png", "images/reload16.png");
-			buttonUpdateList.setBackground(Globals.backgroundLightGrey);
+			buttonUpdateList.setBackground(Globals.BACKGROUND_COLOR_3);
 			buttonUpdateList.setToolTipText(configed.getResourceValue(
 					"SSHConnection.ParameterDialog.opsipackagemanager_uninstall.JButtonUpdateList.tooltip"));
 

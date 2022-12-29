@@ -2,11 +2,11 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.io.File;
+import java.util.Arrays;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
@@ -70,7 +70,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 	private static SSHConfigDialog instance;
 	private static SSHConnectionInfo connectionInfo = null;
 
-	private SSHConfigDialog(Frame owner, ConfigedMain cmain) {
+	private SSHConfigDialog(ConfigedMain cmain) {
 		super(null, configed.getResourceValue("MainFrame.jMenuSSHConfig"), false);
 		configedMain = cmain;
 		connectionInfo = SSHConnectionInfo.getInstance();
@@ -86,9 +86,9 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		}
 	}
 
-	public static SSHConfigDialog getInstance(Frame fr, ConfigedMain cmain) {
+	public static SSHConfigDialog getInstance(ConfigedMain cmain) {
 		if (instance == null)
-			instance = new SSHConfigDialog(fr, cmain);
+			instance = new SSHConfigDialog(cmain);
 		instance.setVisible(true);
 		checkComponents();
 		return instance;
@@ -162,7 +162,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 					return false;
 				}
 
-				String pp = tf_passphrase.getPassword().toString();
+				String pp = Arrays.toString(tf_passphrase.getPassword());
 
 				if (!connectionInfo.getKeyfilePassphrase().equals(pp)) {
 					logging.debug(this, "compareStates 11");
@@ -218,9 +218,9 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 
 	protected void init() {
 		logging.info(this, "init ");
-		connectionPanel.setBackground(Globals.backLightBlue);
-		settingsPanel.setBackground(Globals.backLightBlue);
-		buttonPanel.setBackground(Globals.backLightBlue);
+		connectionPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		settingsPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		getContentPane().add(connectionPanel, BorderLayout.NORTH);
 		getContentPane().add(settingsPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
@@ -626,7 +626,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			if (!cb_useDefault_state)
 			// state has changed
 			{
-				connectionInfo.setUserData(configedMain.HOST, ConfigedMain.USER, ConfigedMain.PASSWORD,
+				connectionInfo.setUserData(ConfigedMain.HOST, ConfigedMain.USER, ConfigedMain.PASSWORD,
 						SSHConnect.portSSH);
 			}
 

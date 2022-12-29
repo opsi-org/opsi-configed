@@ -1,8 +1,9 @@
 package de.uib.utilities.swing;
 
 import java.awt.Component;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
@@ -23,13 +24,13 @@ public class JComboBoxToolTip extends javax.swing.JComboBox {
 	public JComboBoxToolTip() {
 		super(); // as it is
 
-		listBackgroundColorSelected = Globals.backgroundWhite;
-		listBackgroundColorUnselected = Globals.backgroundLightGrey;
+		listBackgroundColorSelected = Globals.SECONDARY_BACKGROUND_COLOR;
+		listBackgroundColorUnselected = Globals.BACKGROUND_COLOR_3;
 		listForegroundColor = Globals.lightBlack;
 
 	}
 
-	Vector<String> tooltips = new Vector<>();
+	List<String> tooltips = new ArrayList<>();
 
 	protected class NewComboBoxRenderer extends BasicComboBoxRenderer {
 		@Override
@@ -74,7 +75,7 @@ public class JComboBoxToolTip extends javax.swing.JComboBox {
 
 		this.removeAllItems();
 
-		tooltips = new Vector<>();
+		tooltips = new ArrayList<>();
 
 		if (addE) {
 			addItem("");

@@ -1,6 +1,5 @@
 package de.uib.configed.gui;
 
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
@@ -39,14 +38,13 @@ import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.observer.RunningInstances;
 import de.uib.utilities.swing.ProgressBarPainter;
-import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 
-public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.thread.WaitingSleeper
-// implements PropertyChangeListener
-{
-	public static RunningInstances<FStartWakeOnLan> runningInstances = new RunningInstances(FStartWakeOnLan.class,
-			configed.getResourceValue("RunningInstances.askStop.text"));
+public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.thread.WaitingSleeper {
+
+	public static final RunningInstances<FStartWakeOnLan> runningInstances = new RunningInstances<>(
+			FStartWakeOnLan.class, configed.getResourceValue("RunningInstances.askStop.text"));
+
 	String scheduleTitleStarter;
 	private Map<String, Integer> labelledDelays;
 	JSpinner spinnerDelay;
@@ -83,7 +81,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 	ConfigedMain main;
 
-	public FStartWakeOnLan(Frame owner, String title, ConfigedMain main) {
+	public FStartWakeOnLan(String title, ConfigedMain main) {
 		super(null, title, false, new String[]
 
 		{ configed.getResourceValue("FStartWakeOnLan.start"), configed.getResourceValue("FStartWakeOnLan.cancel") },
@@ -182,7 +180,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		super.checkAdditionalPane();
 
 		JPanel contentPane = new JPanel();
-		contentPane.setBackground(Globals.backLightBlue);
+		contentPane.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		scrollpane.setViewportView(contentPane);
 
@@ -429,8 +427,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		if (spinnerDelay.getValue() == nullDelayValue) {
 			main.wakeUp(currentlySelectedClients, scheduleTitle);
 		} else {
-			main.wakeUpWithDelay(labelledDelays.get((String) spinnerDelay.getValue()), currentlySelectedClients,
-					scheduleTitle);
+			main.wakeUpWithDelay(labelledDelays.get(spinnerDelay.getValue()), currentlySelectedClients, scheduleTitle);
 		}
 
 		leave();
@@ -443,7 +440,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		logging.info(this, "startWaiting " + runningInstances);
 		runningInstances.add(this, scheduleTitle);
 
-		waitingTask = new WaitingWorker((WaitingSleeper) this);
+		waitingTask = new WaitingWorker(this);
 
 		waitingTask.execute();
 

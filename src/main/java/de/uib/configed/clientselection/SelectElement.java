@@ -1,7 +1,7 @@
 package de.uib.configed.clientselection;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * An Element is a property of clients. Each Element has a number of operations
@@ -53,15 +53,13 @@ public abstract class SelectElement {
 	 * Returns the enumerated data, if there is any. This can be used to get a
 	 * list of possible values for the user.
 	 */
-	public Vector<String> getEnumData() {
-		return new Vector<>();
+	public List<String> getEnumData() {
+		return new ArrayList<>();
 	}
 
 	public boolean hasEnumData() {
 		return false;
 	}
-
-	
 
 	@Override
 	public String toString() {

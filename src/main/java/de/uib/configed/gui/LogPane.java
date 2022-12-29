@@ -10,6 +10,7 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -85,7 +86,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected JLabel labelDisplayRestriction;
 	protected JComboBox comboType;
 	protected DefaultComboBoxModel comboModelTypes;
-	protected final String defaultType = "(all)";
+	protected static final String DEFAULT_TYPE = "(all)";
 
 	protected JPanel jTextPanel;
 	protected WordSearcher searcher;
@@ -361,7 +362,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			jTextPane.setText(defaultText);
 
 		jTextPane.setOpaque(true);
-		jTextPane.setBackground(Globals.backgroundWhite);
+		jTextPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		jTextPane.setEditable(true);
 		jTextPane.setFont(Globals.defaultFont);
 		jTextPane.addKeyListener(this);
@@ -423,8 +424,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		JComponent editor = spinnerMinLevel.getEditor();
 		if (editor instanceof JSpinner.DefaultEditor) {
 			JTextField field = ((JSpinner.DefaultEditor) editor).getTextField();
-			field.setForeground(Globals.backLightBlue);
-			field.setBackground(Globals.backLightBlue);
+			field.setForeground(Globals.BACKGROUND_COLOR_7);
+			field.setBackground(Globals.BACKGROUND_COLOR_7);
 			logging.info(this, "spinnerMinLevel set textfield cols 0");
 
 		}
@@ -491,7 +492,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		comboType.addActionListener(actionEvent -> {
 			int oldSelTypeIndex = selTypeIndex;
 			Object selType = comboType.getSelectedItem();
-			if (selType == null || selType.equals(defaultType)) {
+			if (selType == null || selType.equals(DEFAULT_TYPE)) {
 				showTypeRestricted = false;
 				selTypeIndex = -1;
 			} else {
@@ -684,7 +685,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		logging.info(this, "activateShowLevel level, oldLevel, maxExistingLevel " + level + " , " + oldLevel + ", "
 				+ maxExistingLevel);
 
-		if (oldLevel.equals(level) && (level < maxExistingLevel || oldLevel < maxExistingLevel)) {
+		if (oldLevel.equals(level) && (level < maxExistingLevel)) {
 
 			int caretPosition = jTextPane.getCaretPosition();
 
@@ -912,7 +913,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		comboModelTypes.removeAllElements();
 
 		if (!typesList.isEmpty()) {
-			comboModelTypes.addElement(defaultType);
+			comboModelTypes.addElement(DEFAULT_TYPE);
 			for (String type : typesList) {
 				comboModelTypes.addElement(type);
 			}
@@ -1011,13 +1012,13 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			}
 
 			else if (e.getSource() == jTextPane && (e.getKeyChar() == '+')
-					&& ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
+					&& ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
 				logging.info(this, "Ctrl-Plus");
 				setFontSize("+");
 			}
 
 			else if (e.getSource() == jTextPane && (e.getKeyChar() == '-')
-					&& ((e.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
+					&& ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
 				logging.info(this, "Ctrl-Minus");
 				setFontSize("-");
 			}
@@ -1087,7 +1088,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		public WordSearcher(JTextComponent comp) {
 			this.comp = comp;
-			this.painter = new UnderlineHighlightPainter(Color.red);
+			this.painter = new UnderlineHighlightPainter(Globals.FAILED_COLOR);
 			this.lastReturnedOffset = -1;
 		}
 

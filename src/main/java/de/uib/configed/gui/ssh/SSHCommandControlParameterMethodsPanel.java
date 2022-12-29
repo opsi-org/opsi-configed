@@ -30,6 +30,7 @@ import javax.swing.text.JTextComponent;
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
+import de.uib.opsicommand.sshcommand.SSHCommandParameterMethods;
 import de.uib.utilities.logging.logging;
 
 public class SSHCommandControlParameterMethodsPanel extends JPanel {
@@ -147,7 +148,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 	public void initLayout() {
 		logging.debug(this, "initLayout ");
-		setBackground(Globals.backLightBlue);
+		setBackground(Globals.BACKGROUND_COLOR_7);
 		thisLayout = new GroupLayout((JComponent) this);
 		setLayout(thisLayout);
 		thisLayout.setHorizontalGroup(thisLayout.createSequentialGroup().addGap(lGap).addGroup(thisLayout
@@ -200,19 +201,19 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	public void doActionTestParam(JDialog caller) {
 		String paramText = "";
 		if (((String) cb_parameter_methods.getSelectedItem())
-				.equals(factory.getParameterHandler().method_interactiveElement)
+				.equals(SSHCommandParameterMethods.method_interactiveElement)
 				|| ((String) cb_parameter_methods.getSelectedItem())
-						.equals(factory.getParameterHandler().method_optionSelection)) {
+						.equals(SSHCommandParameterMethods.method_optionSelection)) {
 			logging.debug("CREATING PARAM TEXT... ");
-			paramText = factory.getParameterHandler().replacement_default_1
+			paramText = SSHCommandParameterMethods.replacement_default_1
 					+ factory.getParameterHandler().getMethodFromName((String) cb_parameter_methods.getSelectedItem())
-					+ factory.getParameterHandler().replacement_default_2;
+					+ SSHCommandParameterMethods.replacement_default_2;
 			logging.debug("CREATED PARAM TEXT: " + paramText);
 		} else
-			paramText = factory.getParameterHandler().replacement_default_1
+			paramText = SSHCommandParameterMethods.replacement_default_1
 					+ factory.getParameterHandler().getMethodFromName((String) cb_parameter_methods.getSelectedItem())
-					+ factory.getParameterHandler().param_splitter_default + cb_parameter_formats.getSelectedItem()
-					+ factory.getParameterHandler().replacement_default_2;
+					+ SSHCommandParameterMethods.param_splitter_default + cb_parameter_formats.getSelectedItem()
+					+ SSHCommandParameterMethods.replacement_default_2;
 		logging.debug("PARAM TEXT: " + paramText);
 		try {
 			logging.info(this, "actionPerformed(testParamMethod) parameterText " + paramText);
@@ -234,17 +235,17 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	public void doActionParamAdd(JTextComponent component) {
 		String paramText = "";
 		if (((String) cb_parameter_methods.getSelectedItem())
-				.equals(factory.getParameterHandler().method_interactiveElement)
+				.equals(SSHCommandParameterMethods.method_interactiveElement)
 				|| ((String) cb_parameter_methods.getSelectedItem())
-						.equals(factory.getParameterHandler().method_optionSelection)) {
-			paramText = factory.getParameterHandler().replacement_default_1
+						.equals(SSHCommandParameterMethods.method_optionSelection)) {
+			paramText = SSHCommandParameterMethods.replacement_default_1
 					+ factory.getParameterHandler().getMethodFromName((String) cb_parameter_methods.getSelectedItem())
-					+ factory.getParameterHandler().replacement_default_2;
+					+ SSHCommandParameterMethods.replacement_default_2;
 		} else
-			paramText = factory.getParameterHandler().replacement_default_1
+			paramText = SSHCommandParameterMethods.replacement_default_1
 					+ factory.getParameterHandler().getMethodFromName((String) cb_parameter_methods.getSelectedItem())
-					+ factory.getParameterHandler().param_splitter_default + cb_parameter_formats.getSelectedItem()
-					+ factory.getParameterHandler().replacement_default_2;
+					+ SSHCommandParameterMethods.param_splitter_default + cb_parameter_formats.getSelectedItem()
+					+ SSHCommandParameterMethods.replacement_default_2;
 		try {
 			component.getDocument().insertString(component.getCaretPosition(), paramText, null);
 		} catch (BadLocationException ble) {

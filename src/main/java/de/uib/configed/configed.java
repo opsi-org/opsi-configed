@@ -1,11 +1,8 @@
 package de.uib.configed;
 
 import java.awt.Toolkit;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -27,6 +24,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import de.uib.configed.gui.FTextArea;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
+import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
@@ -106,7 +104,7 @@ public class configed {
 					"Passphrase for given sshkey used for authentication on ssh server" },
 			new String[] { "--version", "", "Tell configed version" },
 			new String[] { "--collect_queries_until_no N", "",
-					"Collect the first N queries; N = " + de.uib.opsicommand.OpsiMethodCall.maxCollectSize
+					"Collect the first N queries; N = " + OpsiMethodCall.maxCollectSize
 							+ " (DEFAULT).  -1 meaning 'no collect'. 0 meaning 'infinite' " },
 			new String[] { "--help", "", "Give this help" },
 			new String[] { "--loglevel L", "",
@@ -157,7 +155,6 @@ public class configed {
 	private static String client = null;
 	private static String clientgroup = null;
 	private static Integer tab = null;
-	private static String logdirectory = "";
 	private static boolean optionCLIQuerySearch = false;
 	private static String savedSearch = null;
 	private static boolean optionCLIDefineGroupBySearch = false;
@@ -393,9 +390,6 @@ public class configed {
 			logging.debug("imageHandled failed: " + ex.toString());
 		}
 
-		// Set directory for logging
-		logging.logDirectoryName = logdirectory;
-
 		// Set locale
 		List<String> existingLocales = Messages.getLocaleNames();
 		Messages.setLocale(paramLocale);
@@ -481,8 +475,7 @@ public class configed {
 					}
 					i = i + 2;
 				} else if (args[i].equals("-d") || args[i].equals("--logdirectory")) {
-					logdirectory = getArg(args, i);
-
+					logging.logDirectoryName = getArg(args, i);
 					i = i + 2;
 				} else if (args[i].equals("-s") || args[i].equals("--savedstates")) {
 					savedStatesLocationName = getArg(args, i);
@@ -703,33 +696,6 @@ public class configed {
 
 	public static boolean get_serverCharset_equals_vm_charset() {
 		return serverCharset_equals_vm_charset;
-	}
-
-	public static void showExternalInfo(String s) {
-		try {
-			File messagefile = File.createTempFile("configed", "html");
-
-			// try-with-resources so that writers will be closed and there's no leak
-			try (FileWriter fw = new FileWriter(messagefile);
-					BufferedWriter bw = new BufferedWriter(fw);
-					PrintWriter out = new PrintWriter(bw)) {
-
-				out.println("<HTML>");
-				out.println("<title>opsi-configed message</title>");
-				out.println("<body>");
-				out.println("<h1 center>opsi-configed</h1>");
-				out.println("<p center>opsi-configed closed</p>");
-				out.println("<p center>reason:</p>");
-				out.println("<p center>" + s + "</p>");
-				out.println("</body>");
-				out.println("</HTML>");
-
-				// //Linux, we assume that there is a firefox and it will handle the url
-
-			}
-		} catch (IOException ex) {
-			logging.debug("configed showExternalInfo " + s);
-		}
 	}
 
 	public static void endApp(int exitcode) {
@@ -987,7 +953,6 @@ public class configed {
 
 		if (de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect) {
 			logging.debug("de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect");
-			logging.logDirectoryName = logdirectory;
 
 			addMissingArgs();
 

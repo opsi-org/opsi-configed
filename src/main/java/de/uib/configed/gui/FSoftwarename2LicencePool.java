@@ -1,12 +1,13 @@
 package de.uib.configed.gui;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
@@ -16,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.TableModelListener;
 
 /**
  * FSoftwarename2LicencePool
@@ -50,13 +50,13 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	public PanelGenEditTable panelSWnames;
 	public GenTableModel modelSWnames;
 
-	private Vector<String> columnNames;
-	private Vector<String> classNames;
+	private List<String> columnNames;
+	private List<String> classNames;
 
 	public PanelGenEditTable panelSWxLicencepool;
 	public GenTableModel modelSWxLicencepool;
-	private Vector<String> columnNamesSWxLicencepool;
-	private Vector<String> classNamesSWxLicencepool;
+	private List<String> columnNamesSWxLicencepool;
+	private List<String> classNamesSWxLicencepool;
 
 	private TableModelFilterCondition showOnlyNamesWithVariantLicences;
 	private TableModelFilterCondition showOnlyNamesWithoutLicences;
@@ -201,7 +201,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						setSWxColTo((String) panelSWxLicencepool.getValueAt(panelSWxLicencepool.getSelectedRow(), 1))));
 
 		JPanel panelAction = new JPanel();
-		panelAction.setBackground(Globals.backgroundWhite);
+		panelAction.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		GroupLayout panelActionLayout = new GroupLayout(panelAction);
 		panelAction.setLayout(panelActionLayout);
@@ -272,7 +272,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		setAdditionalPane(panelSWx);
 
-		additionalPane.setBackground(Globals.backgroundWhite);// Color.YELLOW
+		additionalPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);// Color.YELLOW
 
 		setCenterPane(panelSWnames);
 		additionalPane.setVisible(true);
@@ -287,22 +287,22 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	}
 
 	protected void initDataStructure() {
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS)
 			columnNames.add(key);
 
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
 
 		updateCollection = new TableUpdateCollection();
 
-		columnNamesSWxLicencepool = new Vector<>();
+		columnNamesSWxLicencepool = new ArrayList<>();
 		columnNamesSWxLicencepool.add(AuditSoftwareXLicencePool.SwID);
 		columnNamesSWxLicencepool.add(LicencepoolEntry.idSERVICEKEY);
 
-		classNamesSWxLicencepool = new Vector<>();
+		classNamesSWxLicencepool = new ArrayList<>();
 		for (int i = 0; i < columnNamesSWxLicencepool.size(); i++) {
 			classNamesSWxLicencepool.add("java.lang.String");
 		}
@@ -314,7 +314,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			}
 
 			@Override
-			public boolean test(Vector<Object> row) {
+			public boolean test(List<Object> row) {
 
 				return getRangeSWxLicencepool((String) row.get(0)).size() > 1;
 			}
@@ -327,7 +327,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			}
 
 			@Override
-			public boolean test(Vector<Object> row) {
+			public boolean test(List<Object> row) {
 
 				return checkExistNamesWithVariantLicencepools((String) row.get(0));
 			}
@@ -537,7 +537,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 					}
 				})),
 
-				keyCol, new int[] {}, (TableModelListener) panelSWnames, updateCollection);
+				keyCol, new int[] {}, panelSWnames, updateCollection);
 		updateItemFactoySWxLicencepool.setSource(modelSWxLicencepool);
 		logging.info(this, "setTableModelSWxLicencepool, we reset the model");
 		modelSWxLicencepool.reset();

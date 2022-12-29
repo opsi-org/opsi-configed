@@ -65,7 +65,4 @@ public class FOpsiLicenseMissingText extends FTextArea {
 		messages.clear();
 	}
 
-	public static void main(String[] options) {
-		callInstanceWith("hallo ");
-	}
 }

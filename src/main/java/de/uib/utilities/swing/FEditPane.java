@@ -27,7 +27,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
@@ -287,29 +286,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			textpane.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		else
 			textpane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-	}
-
-	public static void main(String[] args) {
-		logging.debug(" invoking " + FEditPane.class);
-
-		SwingUtilities.invokeLater(() -> {
-			logging.setSuppressConsole(false);
-			FEditPane f = new FEditPane("abc", "");
-			f.init(new Dimension(300, 200));
-			f.setVisible(true);
-
-			StringBuilder buf = new StringBuilder();
-			for (int i = 0; i < args.length; i++) {
-				buf.append(args[i]);
-				buf.append("\n");
-			}
-
-			f.setStartText(buf.toString());
-
-			count++;
-
-		});
-
 	}
 
 	// A simple class that searches for a word in

@@ -2,8 +2,9 @@ package de.uib.configed.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -31,8 +32,8 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	public PanelGenEditTable panelGlobalSoftware;
 	private GenTableModel model;
 
-	public Vector<String> columnNames;
-	public Vector<String> classNames;
+	public List<String> columnNames;
+	public List<String> classNames;
 	TableUpdateCollection updateCollection;
 
 	protected int keyCol = 0;
@@ -43,7 +44,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 
 	public FGlobalSoftwareInfo(JFrame owner, ControlPanelAssignToLPools myController) {
 		super(
-				
+
 				owner, configed.getResourceValue("FGlobalSoftwareInfo.title"), false,
 				new String[] { configed.getResourceValue("FGlobalSoftwareInfo.buttonRemove"),
 						configed.getResourceValue("FGlobalSoftwareInfo.buttonClose") },
@@ -63,7 +64,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		allpane.add(panelGlobalSoftware, BorderLayout.CENTER);
 		JLabel infoLabel = new JLabel(configed.getResourceValue("FGlobalSoftwareInfo.info"));
 		additionalPane.add(infoLabel);
-		additionalPane.setBackground(Globals.backLightBlue);
+		additionalPane.setBackground(Globals.BACKGROUND_COLOR_7);
 		additionalPane.setVisible(true);
 
 		setSize(new Dimension(infoLabel.getPreferredSize().width + 100, 300));
@@ -83,12 +84,12 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	}
 
 	protected void initDataStructure() {
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add("ID");
 		for (String key : de.uib.configed.type.SWAuditEntry.KEYS_FOR_IDENT)
 			columnNames.add(key);
 
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}

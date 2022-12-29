@@ -7,6 +7,7 @@
 
 package de.uib.utilities.datapanel;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +16,6 @@ import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.GroupLayout;
 import javax.swing.JLabel;
@@ -212,12 +212,12 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	private JTable createJTableForPDF() {
 		DefaultTableModel tableModel = new DefaultTableModel();
 		JTable jTable = new JTable(tableModel);
-		Vector values;
+		List values;
 
 		tableModel.addColumn(configed.getResourceValue("EditMapPanelGrouped.createJTableForPDF.property_name"));
 		tableModel.addColumn(configed.getResourceValue("EditMapPanelGrouped.createJTableForPDF.property_value"));
 
-		Vector<String> keys = mapTableModel.getKeys();
+		List<String> keys = mapTableModel.getKeys();
 		logging.info(this, "createJTableForPDF keys " + keys);
 		for (String key : keys) {
 			String property = "";
@@ -226,13 +226,13 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 			if (!listelem.isEmpty())
 				property = listelem.get(0).toString();
 
-			values = new Vector<>();
+			values = new ArrayList<>();
 
 			// TODO search another possibility to exclude?
 			if (!key.contains("saved_search")) {
 				values.add(key);
 				values.add(property);
-				tableModel.addRow(values);
+				tableModel.addRow(values.toArray());
 			}
 		}
 		return jTable;

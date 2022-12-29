@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -88,7 +87,7 @@ public class PanelCompleteWinProducts extends JPanel
 	ConfigedMain main;
 	JFrame rootFrame;
 
-	Vector<String> winProducts;
+	List<String> winProducts;
 
 	public PanelCompleteWinProducts(ConfigedMain main, PersistenceController persist, JFrame root) {
 		this.main = main;
@@ -151,9 +150,9 @@ public class PanelCompleteWinProducts extends JPanel
 
 		smbMounted = new File(depotProductDirectory).exists();
 
-		Vector<String> winProducts = persist.getWinProducts(server, depotProductDirectory);
+		List<String> winProducts = persist.getWinProducts(server, depotProductDirectory);
 
-		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts));
+		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray()));
 	}
 
 	private void defineChoosers() {
@@ -171,7 +170,7 @@ public class PanelCompleteWinProducts extends JPanel
 		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.textfieldDimension);
 
-		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots()));
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray()));
 
 		comboChooseDepot.setEnabled(false);
 
@@ -312,7 +311,7 @@ public class PanelCompleteWinProducts extends JPanel
 
 				final Color saveColor = buttonCallExecute.getBackground();
 
-				buttonCallExecute.setBackground(Globals.failedBackColor);
+				buttonCallExecute.setBackground(Globals.FAILED_BACKGROUND_COLOR);
 
 				execute();
 

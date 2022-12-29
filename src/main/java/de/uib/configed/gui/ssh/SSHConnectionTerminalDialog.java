@@ -51,7 +51,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		TerminatingPanel(ActionListener closeListener) {
 			super();
 
-			setBackground(Globals.backLightBlue);
+			setBackground(Globals.BACKGROUND_COLOR_7);
 			btn_close = new de.uib.configed.gui.IconButton(configed.getResourceValue("SSHConnection.buttonClose"),
 					"images/cancel.png", "images/cancel.png", "images/cancel.png", true);
 			btn_close.addActionListener(closeListener);

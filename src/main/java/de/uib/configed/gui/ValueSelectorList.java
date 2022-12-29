@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -34,7 +34,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 	private TablesearchPane searchPane;
 
-	private Vector<? extends String> unfilteredV;
+	private List<String> unfilteredV;
 
 	private boolean multidepot;
 
@@ -48,8 +48,8 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		this.multidepot = multidepot;
 		this.persist = persist;
 
-		Vector<String> values = new Vector<>();
-		Vector<String> descriptions = new Vector<>();
+		List<String> values = new ArrayList<>();
+		List<String> descriptions = new ArrayList<>();
 		Map<String, Map<String, Object>> depotInfo = valueList.getDepotInfo();
 
 		for (String depot : depotInfo.keySet()) {
@@ -89,7 +89,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 	 * @return java.awt.Color
 	 */
 	public Color getMyColor() {
-		return Globals.backgroundWhite;
+		return Globals.SECONDARY_BACKGROUND_COLOR;
 	}
 
 	/**
@@ -99,9 +99,9 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 	 */
 	public void setChangedDepotSelectionActive(boolean active) {
 		if (active)
-			valueList.setBackground(Globals.backLightYellow);
+			valueList.setBackground(Globals.BACKGROUND_COLOR_9);
 		else
-			valueList.setBackground(Globals.backgroundWhite);
+			valueList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		// colorize as hint that we have changed the depots selection
 
@@ -115,7 +115,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 			labelValue.setText(configed.getResourceValue("ValueSelectorList.value"));
 		labelValue.setOpaque(false);
 
-		labelValue.setBackground(Globals.backLightBlue);
+		labelValue.setBackground(Globals.BACKGROUND_COLOR_7);
 		labelValue.setFont(Globals.defaultFontStandardBold);
 
 		buttonSelectValuesWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
@@ -148,7 +148,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		scrollPaneValueList.setPreferredSize(valueList.getMaximumSize());
 
 		valueList.setFont(Globals.defaultFont);
-		valueList.setBackground(Globals.backgroundWhite);
+		valueList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 	}
 
@@ -180,7 +180,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 		if (!filtered) {
 			unfilteredV = valueList.getListData();
-			valueList.setListData(new Vector<>(valueList.getSelectedValuesList()));
+			valueList.setListData(new ArrayList<>(valueList.getSelectedValuesList()));
 		} else
 			valueList.setListData(unfilteredV);
 

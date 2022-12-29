@@ -3,19 +3,21 @@ package de.uib.utilities.swing.tabbedpane;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.Icon;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 
 public class TabbedPaneX extends JPanel {
 	private javax.swing.JTabbedPane jTabbedPaneMain;
 
 	TabController controller;
 
-	Vector<Enum> tabOrder;
+	List<Enum> tabOrder;
 
 	Map globals;
 
@@ -34,14 +36,14 @@ public class TabbedPaneX extends JPanel {
 		setSize(600, 400);
 
 		setLayout(new BorderLayout());
-		jTabbedPaneMain = new JTabbedPane(JTabbedPane.TOP);
+		jTabbedPaneMain = new JTabbedPane(SwingConstants.TOP);
 
-		tabOrder = new Vector<>();
+		tabOrder = new ArrayList<>();
 
 		jTabbedPaneMain.addChangeListener(changeEvent -> {
 			int newVisualIndex = jTabbedPaneMain.getSelectedIndex();
 
-			Enum newS = tabOrder.elementAt(newVisualIndex);
+			Enum newS = tabOrder.get(newVisualIndex);
 
 			// report state change request to controller and look, what it produces
 			Enum s = controller.reactToStateChangeRequest(newS);

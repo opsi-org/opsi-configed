@@ -166,10 +166,10 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		// there can only be one group selected, and it can only be moved
 		// (for top groups the NONE handler was already returned)
 
-		Iterator iterPaths = tree.getActivePaths().iterator();
+		Iterator<TreePath> iterPaths = tree.getActivePaths().iterator();
 
 		while (iterPaths.hasNext()) {
-			TreePath path = (TreePath) iterPaths.next();
+			TreePath path = iterPaths.next();
 
 			if (tree.isChildOfALL((DefaultMutableTreeNode) path.getLastPathComponent())) {
 				logging.debug(this, "getSourceActions path " + path + " childOfALL, should be TransferHandler.COPY");
@@ -193,10 +193,10 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	protected Transferable createTransferable(JComponent c) {
 
 		StringBuilder buff = new StringBuilder();
-		Iterator iterPaths = tree.getActivePaths().iterator();
+		Iterator<TreePath> iterPaths = tree.getActivePaths().iterator();
 
 		while (iterPaths.hasNext()) {
-			TreePath path = (TreePath) iterPaths.next();
+			TreePath path = iterPaths.next();
 
 			// String id = ((DefaultMutableTreeNode)
 

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
@@ -96,7 +95,7 @@ public class PanelSWInfo extends JPanel {
 		}
 
 		@Override
-		public boolean test(Vector<Object> row) {
+		public boolean test(List<Object> row) {
 			String entry = (String) row.get(indexOfColWindowsSoftwareID);
 			boolean isKb = entry.startsWith("kb");
 
@@ -117,7 +116,7 @@ public class PanelSWInfo extends JPanel {
 		}
 
 		@Override
-		public boolean test(Vector<Object> row) {
+		public boolean test(List<Object> row) {
 			String entry = (String) row.get(indexOfColWindowsSoftwareID);
 			boolean isKb = (patternWithKB.matcher(entry)).matches();
 
@@ -165,12 +164,12 @@ public class PanelSWInfo extends JPanel {
 		panelTable.setSearchSelectMode(true);
 		panelTable.setSearchMode(TablesearchPane.FULL_TEXT_SEARCH);
 
-		Vector<String> columnNames;
-		Vector<String> classNames;
+		List<String> columnNames;
+		List<String> classNames;
 
-		columnNames = new Vector<>(SWAuditClientEntry.KEYS);
+		columnNames = new ArrayList<>(SWAuditClientEntry.KEYS);
 		columnNames.remove(0);
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		int[] finalColumns = new int[columnNames.size()];
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
@@ -226,7 +225,7 @@ public class PanelSWInfo extends JPanel {
 		JLabel labelWithMSUpdates = new JLabel(configed.getResourceValue("PanelSWInfo.withMsUpdates"));
 		JLabel labelWithMSUpdates2 = new JLabel(configed.getResourceValue("PanelSWInfo.withMsUpdates2"));
 
-		subPanelTitle.setBackground(Globals.backLightBlue);
+		subPanelTitle.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		GroupLayout layoutSubPanelTitle = new GroupLayout(subPanelTitle);
 		subPanelTitle.setLayout(layoutSubPanelTitle);
@@ -278,7 +277,7 @@ public class PanelSWInfo extends JPanel {
 	protected void buildPanel() {
 
 		labelSuperTitle.setOpaque(true);
-		labelSuperTitle.setBackground(Globals.backgroundLightGrey);
+		labelSuperTitle.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		jTable = new JTable(voidTableModel, null);
 
@@ -299,7 +298,7 @@ public class PanelSWInfo extends JPanel {
 		jTable.setRowSelectionAllowed(true);
 		jTable.setDragEnabled(true);
 		scrollPaneSWInfo = new JScrollPane(jTable);
-		scrollPaneSWInfo.getViewport().setBackground(Globals.backLightBlue);
+		scrollPaneSWInfo.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 
 		GroupLayout layoutEmbed = new GroupLayout(this);
 		setLayout(layoutEmbed);

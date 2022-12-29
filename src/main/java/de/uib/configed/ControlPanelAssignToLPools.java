@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -168,7 +167,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 				rowMap.put("ID", ID);
 
-				Vector<String> identKeys = de.uib.configed.type.SWAuditEntry.KEYS_FOR_IDENT;
+				List<String> identKeys = de.uib.configed.type.SWAuditEntry.KEYS_FOR_IDENT;
 				if (rowValues.length != identKeys.size())
 					logging.warning(this, "illegal ID " + ID);
 				else {
@@ -399,14 +398,14 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 	public void init() {
 		updateCollection = new TableUpdateCollection();
 
-		Vector<String> columnNames;
-		Vector<String> classNames;
+		List<String> columnNames;
+		List<String> classNames;
 
 		// --- panelLicencepools
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryLicencepools = new MapTableUpdateItemFactory(modelLicencepools,
@@ -453,8 +452,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 						boolean existsNewRow = (mainController.licencePoolTableProvider.getRows()
 								.size() < modelLicencepools.getRowCount());
 
-						if (existsNewRow
-								&& persist.getLicencepools().containsKey((String) rowmap.get("licensePoolId"))) {
+						if (existsNewRow && persist.getLicencepools().containsKey(rowmap.get("licensePoolId"))) {
 
 							// but we leave it until the service methods reflect the situation more
 							// accurately
@@ -485,10 +483,10 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 				}, updateCollection));
 
 		// --- panelProductId2LPool
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("productId");
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryProductId2LPool = new MapTableUpdateItemFactory(modelProductId2LPool,
@@ -543,7 +541,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		JComboBox<String> comboLP1 = new JComboBox<>();
 		comboLP1.setFont(Globals.defaultFontBig);
 		col.setCellEditor(new de.uib.utilities.table.gui.AdaptingCellEditor(comboLP1,
-				(row, column) -> new DefaultComboBoxModel<>(new Vector<>(persist.getProductIds()))));
+				(row, column) -> new DefaultComboBoxModel<>(persist.getProductIds().toArray())));
 
 		// updates
 		thePanel.panelProductId2LPool.setUpdateController(new MapItemsUpdateController(thePanel.panelProductId2LPool,
@@ -565,17 +563,17 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 		// --- panelRegisteredSoftware
 
-		columnNames = new Vector<>(de.uib.configed.type.SWAuditEntry.getDisplayKeys());
+		columnNames = new ArrayList<>(de.uib.configed.type.SWAuditEntry.getDisplayKeys());
 		columnNames.add(colMarkCursorRow, "CURSOR"); // introducing a column for displaying the cursor row
 
 		columnNames.remove("licenseKey");
 
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		for (int i = 0; i <= columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
-		classNames.setElementAt("java.lang.Boolean", colMarkCursorRow); // introducing a column for displaying the
-																		// cursor row
+		classNames.set(colMarkCursorRow, "java.lang.Boolean"); // introducing a column for displaying the
+																// cursor row
 
 		logging.info(this, "panelRegisteredSoftware constructed with (size) cols " + "(" + columnNames.size() + ") "
 				+ columnNames);

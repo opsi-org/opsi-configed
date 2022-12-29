@@ -89,8 +89,7 @@ public class PanelEditLicences extends MultiTablePanel {
 		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup().addGap(10, 10, 10).addGroup(layoutTopPane
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
 				// for testing purposes:
-				
-				
+
 				// Short.MAX_VALUE)
 				.addComponent(panelKeys, javax.swing.GroupLayout.Alignment.LEADING,
 						javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -99,8 +98,7 @@ public class PanelEditLicences extends MultiTablePanel {
 				.addGap(10, 10, 10));
 		layoutTopPane.setVerticalGroup(layoutTopPane.createSequentialGroup()
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
-				
-				
+
 				.addComponent(panelKeys, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addComponent(panelSoftwarelicences, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE));

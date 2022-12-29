@@ -98,13 +98,4 @@ public class AuditSoftwareXLicencePool extends Relation {
 		return rowmap;
 	}
 
-	public static void main(String[] args) {
-		if (args.length == 0) {
-			String sToSplit = "firefox;25.0-3.fc20;;;x64";
-			logging.debug(" no argument given, taken " + sToSplit);
-			logging.debug("getting map " + produceMapFromSWident(sToSplit));
-		} else
-			logging.debug("getting map " + produceMapFromSWident(args[0]));
-	}
-
 }

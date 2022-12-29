@@ -31,7 +31,6 @@ import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DropMode;
@@ -482,7 +481,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		TreePath selectedPath = getSelectionPath();
 
 		if (selectedPath != null && getSelectionRows().length == 1) {
-			main.treeClients_selectAction(selectedPath);
+			main.treeClientsSelectAction(selectedPath);
 
 		}
 
@@ -538,7 +537,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		getRowForLocation(e.getX(), e.getY());
 
 		theTree.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-		main.treeClients_mouseAction(true, e);
+		main.treeClientsMouseAction(true, e);
 		theTree.setCursor(initialCursor);
 
 	}
@@ -1396,7 +1395,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		if (groupSet.size() > 1) {
 
 			FEditList fList = new FEditList(null);
-			fList.setListModel(new DefaultComboBoxModel<GroupNode>(new Vector<>(groupSet)));
+			fList.setListModel(new DefaultComboBoxModel<>(groupSet.toArray()));
 			fList.setTitle(Globals.APPNAME + ":  " + configed.getResourceValue("ClientTree.DIRECTORYname") + " "
 					+ configed.getResourceValue("ClientTree.checkDIRECTORYAssignments"));
 			fList.setExtraLabel(configed.getResourceValue("ClientTree.severalLocationsAssigned") + " >> " + clientID

@@ -1,10 +1,11 @@
 package de.uib.opsidatamodel.modulelicense;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -40,8 +41,8 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 	TableSource tableSource;
 
-	Vector<String> columnNames = new Vector<>();
-	Vector<String> classNames = new Vector<>();
+	List<String> columnNames = new ArrayList<>();
+	List<String> classNames = new ArrayList<>();
 	Map<String, Map> theSourceMap = new HashMap<>();
 	Map<String, Map<String, Map<String, Object>>> datesMap = new HashMap<>();
 	Map<String, Object> clientNumbers;
@@ -88,7 +89,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		// we could design an adapted layout and infuse it in guiInit
 
-		allpane.setBackground(Globals.backLightBlue);
+		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
@@ -184,8 +185,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		retrieveData();
 
-		FGeneralDialogLicensingInfo ME = this;
-
 		thePanel = new LicensingInfoPanelGenEditTable("", // title
 				-1, // don't use a definite max table width
 				false, // editing
@@ -203,12 +202,13 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 			@Override
 			public void reload() {
 
-				logging.info(this, " LicInfoPanelGenTable reload, reduced " + !ME.extendedView);
+				logging.info(this,
+						" LicInfoPanelGenTable reload, reduced " + !FGeneralDialogLicensingInfo.extendedView);
 				persist.configOptionsRequestRefresh();
 				persist.opsiLicensingInfoRequestRefresh();
 				LicensingInfoMap.requestRefresh();
 				licenseMap = LicensingInfoMap.getInstance(persist.getOpsiLicensingInfo(),
-						persist.getConfigDefaultValues(), !ME.extendedView);
+						persist.getConfigDefaultValues(), !FGeneralDialogLicensingInfo.extendedView);
 				retrieveData();
 
 				tableSource = new MapSource(columnNames, classNames, theSourceMap, false);
@@ -314,7 +314,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		};
 
 		JPanel extraInfoPanel = new PanelLinedComponents(linedComponents);
-		extraInfoPanel.setBackground(Globals.backgroundWhite);
+		extraInfoPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		extraInfoPanel.setOpaque(true);
 
 		JPanel panel = new JPanel();
@@ -392,7 +392,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		JPanel xPanel = new JPanel();
 		GroupLayout xLayout = new GroupLayout(xPanel);
 		xPanel.setLayout(xLayout);
-		xPanel.setBackground(Globals.backgroundWhite);
+		xPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		xPanel.setOpaque(true);
 
 		xLayout.setHorizontalGroup(xLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -439,10 +439,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		updateItemFactory.setClassNames(classNames);
 
 		thePanel.setTableModel(theModel);
-
-	}
-
-	public static void main(String[] args) {
 
 	}
 

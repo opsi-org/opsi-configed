@@ -72,7 +72,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		initGUI();
 
 		this.centerOn(Globals.mainFrame);
-		this.setBackground(Globals.backLightBlue);
+		this.setBackground(Globals.BACKGROUND_COLOR_7);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		filename = "";
 
@@ -113,12 +113,12 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			workbenchpanel = new JPanel();
 			mainpanel = new JPanel();
 			buttonPanel = new JPanel();
-			workbenchpanel.setBackground(Globals.backLightBlue);
-			mainpanel.setBackground(Globals.backLightBlue);
-			buttonPanel.setBackground(Globals.backLightBlue);
+			workbenchpanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			mainpanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 
 			JPanel main_button_panel = new JPanel();
-			main_button_panel.setBackground(Globals.backLightBlue);
+			main_button_panel.setBackground(Globals.BACKGROUND_COLOR_7);
 			main_button_panel.setLayout(new BorderLayout());
 			main_button_panel.add(mainpanel, BorderLayout.NORTH);
 			main_button_panel.add(buttonPanel, BorderLayout.SOUTH);

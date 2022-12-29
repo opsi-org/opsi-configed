@@ -13,7 +13,6 @@ package de.uib.configed.type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utilities.logging.logging;
@@ -101,7 +100,7 @@ public class OpsiProductInfo extends OpsiPackage {
 	}
 
 	@Override
-	public Vector<Object> appendValues(Vector<Object> row) {
+	public List<Object> appendValues(List<Object> row) {
 		row.add(getProductName());
 		return row;
 	}

@@ -12,7 +12,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -71,19 +70,19 @@ public class NewClientDialog extends FGeneralDialog
 	protected JCheckBox jCheckUefi;
 	protected JCheckBox jCheckWan;
 	protected JCheckBox jCheckShutdownInstall;
-	protected Vector<String> depots;
+	protected List<String> depots;
 
 	protected JLabel jCSVTemplateLabel;
 	protected JButton jCSVTemplateButton;
 	protected JLabel jImportLabel;
 	protected JButton jImportButton;
 
-	protected Vector<String> groupList;
-	protected Vector<String> localbootProducts;
-	protected Vector<String> netbootProducts;
+	protected List<String> groupList;
+	protected List<String> localbootProducts;
+	protected List<String> netbootProducts;
 
 	private static NewClientDialog instance;
-	private Vector<String> domains;
+	private List<String> domains;
 	private boolean uefiboot;
 	private boolean uefibootIsDefault;
 	private boolean wanConfig;
@@ -95,7 +94,7 @@ public class NewClientDialog extends FGeneralDialog
 
 	protected int wLeftLabel = Globals.BUTTON_WIDTH + 20;
 
-	private NewClientDialog(ConfigedMain main, Vector<String> depots) {
+	private NewClientDialog(ConfigedMain main, List<String> depots) {
 		super(Globals.mainFrame, configed.getResourceValue("NewClientDialog.title") + " (" + Globals.APPNAME + ")",
 				false, new String[] { configed.getResourceValue("NewClientDialog.buttonCreate"),
 						configed.getResourceValue("NewClientDialog.buttonClose") },
@@ -119,7 +118,7 @@ public class NewClientDialog extends FGeneralDialog
 		pack();
 	}
 
-	public static NewClientDialog getInstance(ConfigedMain main, Vector<String> depots) {
+	public static NewClientDialog getInstance(ConfigedMain main, List<String> depots) {
 		if (instance == null) {
 			instance = new NewClientDialog(main, depots);
 			instance.init();
@@ -146,16 +145,16 @@ public class NewClientDialog extends FGeneralDialog
 	 * @param domains a LinkedList, the first will be taken in the beginning
 	 * @since 4.0.7.6.11
 	 */
-	public void setDomains(final Vector<String> domains) {
+	public void setDomains(final List<String> domains) {
 		this.domains = domains;
-		jComboDomain.setModel(new DefaultComboBoxModel<>(this.domains));
+		jComboDomain.setModel(new DefaultComboBoxModel<>(domains.toArray(new String[0])));
 	}
 
 	public void setHostNames(List<String> existingHostNames) {
 		this.existingHostNames = existingHostNames;
 	}
 
-	public void setGroupList(Vector<String> groupList) {
+	public void setGroupList(List<String> groupList) {
 		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) jComboPrimaryGroup.getModel();
 		model.removeAllElements();
 		model.addElement(null);
@@ -166,7 +165,7 @@ public class NewClientDialog extends FGeneralDialog
 
 	}
 
-	public void setProductNetbootList(Vector<String> productList) {
+	public void setProductNetbootList(List<String> productList) {
 		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) jComboNetboot.getModel();
 		model.removeAllElements();
 		model.addElement(null);
@@ -176,7 +175,7 @@ public class NewClientDialog extends FGeneralDialog
 		jComboNetboot.setSelectedIndex(0);
 	}
 
-	public void setProductLocalbootList(Vector<String> productList) {
+	public void setProductLocalbootList(List<String> productList) {
 		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) jComboLocalboot.getModel();
 		model.removeAllElements();
 		model.addElement(null);
@@ -205,7 +204,7 @@ public class NewClientDialog extends FGeneralDialog
 		panel = new JPanel();
 		gpl = new GroupLayout(panel);
 		panel.setLayout(gpl);
-		panel.setBackground(Globals.backLightBlue);
+		panel.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		jCSVTemplateLabel = new JLabel(configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
 		jCSVTemplateButton = new JButton(configed.getResourceValue("NewClientDialog.csvTemplateButton"));
@@ -237,7 +236,7 @@ public class NewClientDialog extends FGeneralDialog
 
 		JLabel jLabelDepot = new JLabel();
 		jLabelDepot.setText(configed.getResourceValue("NewClientDialog.belongsToDepot"));
-		jComboDepots = new JComboBox<>(depots);
+		jComboDepots = new JComboBox<>(depots.toArray(new String[0]));
 		jComboDepots.setFont(Globals.defaultFontBig);
 
 		JLabel labelPrimaryGroup = new JLabel(configed.getResourceValue("NewClientDialog.primaryGroup"));
@@ -597,12 +596,12 @@ public class NewClientDialog extends FGeneralDialog
 		centerOn(Globals.mainContainer);
 	}
 
-	private void createClients(Vector<Vector<Object>> clients) {
-		Iterator<Vector<Object>> iter = clients.iterator();
-		Vector<Vector<Object>> modifiedClients = new Vector<>();
+	private void createClients(List<List<Object>> clients) {
+		Iterator<List<Object>> iter = clients.iterator();
+		List<List<Object>> modifiedClients = new ArrayList<>();
 
 		while (iter.hasNext()) {
-			Vector<Object> client = iter.next();
+			List<Object> client = iter.next();
 
 			String hostname = (String) client.get(0);
 			String selectedDomain = (String) client.get(1);
@@ -655,7 +654,7 @@ public class NewClientDialog extends FGeneralDialog
 	 * client; Don't really know what's happening here (TODO)
 	 */
 	private void treatSelectedDomainForNewClient(final String selectedDomain) {
-		Vector<String> editableDomains = new Vector<>();
+		List<String> editableDomains = new ArrayList<>();
 		List<Object> saveDomains = new ArrayList<>();
 		int order = 0;
 		saveDomains.add("" + order + ":" + selectedDomain);
@@ -788,7 +787,7 @@ public class NewClientDialog extends FGeneralDialog
 
 			if (csvImportDataDialog.getResult() == 1) {
 				CSVImportDataModifier modifier = csvImportDataDialog.getModifier();
-				Vector<Vector<Object>> rows = modifier.getRows();
+				List<List<Object>> rows = modifier.getRows();
 
 				createClients(rows);
 			}
@@ -808,7 +807,7 @@ public class NewClientDialog extends FGeneralDialog
 			logging.error(this, "Unable to read CSV file");
 		}
 
-		Vector<String> columnNames = new Vector<>();
+		List<String> columnNames = new ArrayList<>();
 
 		columnNames.add("hostname");
 		columnNames.add("selectedDomain");
@@ -857,7 +856,7 @@ public class NewClientDialog extends FGeneralDialog
 	}
 
 	public void createCSVTemplate() {
-		Vector<String> columnNames = new Vector<>();
+		List<String> columnNames = new ArrayList<>();
 
 		columnNames.add("hostname");
 		columnNames.add("selectedDomain");

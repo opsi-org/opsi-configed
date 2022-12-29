@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
@@ -31,16 +30,16 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	protected int rowsLength;
 	protected int colsLength;
-	protected Vector<String> columnNames;
-	protected Vector<String> classNames;
-	private Vector<Vector<Object>> rows;
+	protected List<String> columnNames;
+	protected List<String> classNames;
+	private List<List<Object>> rows;
 
-	protected Vector<Integer> addedRows;
+	protected List<Integer> addedRows;
 	// rows which are added and not yet saved
-	protected Vector<Integer> updatedRows;
+	protected List<Integer> updatedRows;
 	// rows which are updated and not yet saved
 
-	protected Vector<Integer> finalCols;
+	protected List<Integer> finalCols;
 	// columns for which the values can only be entered and changed as long as the
 	// row is not saved
 
@@ -94,10 +93,10 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		initColumns();
 		setRows(dataProvider.getRows());
 
-		addedRows = new Vector<>();
-		updatedRows = new Vector<>();
+		addedRows = new ArrayList<>();
+		updatedRows = new ArrayList<>();
 
-		this.finalCols = new Vector<>();
+		this.finalCols = new ArrayList<>();
 		if (finalColumns == null) {
 			if (keyCol > -1)
 				this.finalCols.add(keyCol);
@@ -158,13 +157,13 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		colEditable = new boolean[colsLength];
 	}
 
-	public Vector<String> getColumnNames() {
+	public List<String> getColumnNames() {
 		columnNames = tableProvider.getColumnNames();
 		colsLength = columnNames.size();
 		return columnNames;
 	}
 
-	public Vector<String> getClassNames() {
+	public List<String> getClassNames() {
 		classNames = tableProvider.getClassNames();
 		return classNames;
 	}
@@ -177,7 +176,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		this.keyCol = keyCol;
 	}
 
-	public Vector<Integer> getFinalCols() {
+	public List<Integer> getFinalCols() {
 		return finalCols;
 	}
 
@@ -289,9 +288,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 		if (workingFilter != null && workingFilter.isInUse()) {
 			logging.info(this, " --- using workingfilter  " + workingFilter.getClass().getName());
-			Vector<Vector<Object>> filteredRows = new Vector<>();
+			List<List<Object>> filteredRows = new ArrayList<>();
 
-			for (Vector<Object> row : rows) {
+			for (List<Object> row : rows) {
 				if (workingFilter.test(row))
 					filteredRows.add(row);
 			}
@@ -320,11 +319,11 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		}
 	}
 
-	public Vector<Vector<Object>> getRows() {
+	public List<List<Object>> getRows() {
 		return rows;
 	}
 
-	protected void setRows(Vector<Vector<Object>> givenRows) {
+	protected void setRows(List<List<Object>> givenRows) {
 		logging.info(this, "setRows size " + givenRows.size());
 		if (!sorting)
 			rows = givenRows;
@@ -335,15 +334,15 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			// as capitalization
 			myCollator.setStrength(java.text.Collator.SECONDARY);
 
-			TreeMap<String, Vector<Object>> mapRows = new TreeMap<>(myCollator);
+			TreeMap<String, List<Object>> mapRows = new TreeMap<>(myCollator);
 
 			int col = sortCol;
 			int i = 0; // we use the index to get unique values in any col
-			for (Vector<Object> row : givenRows) {
+			for (List<Object> row : givenRows) {
 				mapRows.put(row.get(col).toString() + ":" + i, row);
 				i++;
 			}
-			rows = new Vector<>();
+			rows = new ArrayList<>();
 			for (String key : mapRows.keySet()) {
 				rows.add(mapRows.get(key));
 			}
@@ -495,7 +494,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			markCursorRow = false;
 	}
 
-	public Vector<Object> getRow(int row) {
+	public List<Object> getRow(int row) {
 		return rows.get(row);
 	}
 
@@ -525,20 +524,20 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		return result;
 	}
 
-	public Vector<Object> getColumn(int col) {
-		Vector<Object> result = new Vector<>();
+	public List<Object> getColumn(int col) {
+		List<Object> result = new ArrayList<>();
 		for (int row = 0; row < rowsLength; row++)
 			result.add(getValueAt(row, col));
 
 		return result;
 	}
 
-	public Vector<String> getOrderedColumn(int col) {
+	public List<String> getOrderedColumn(int col) {
 		TreeSet<String> set = new TreeSet<>();
 		for (int row = 0; row < rowsLength; row++)
 			set.add((String) getValueAt(row, col));
 
-		Vector<String> result = new Vector<>(set);
+		List<String> result = new ArrayList<>(set);
 
 		return result;
 	}
@@ -649,12 +648,12 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		if (valueChanged) {
 			if (addedRows.indexOf(row) == -1)
 			// we dont register updates for already registered rows, since there values are
-			// passed via the row vector
+			// passed via the row List
 			{
 				if (updatedRows.indexOf(row) == -1) {
-					Vector oldValues = (Vector) (rows.get(row)).clone();
+					List oldValues = new ArrayList<>(rows.get(row));
 
-					rows.get(row).setElementAt(value, col);
+					rows.get(row).set(col, value);
 
 					if (itemFactory == null)
 						logging.info("update item factory missing");
@@ -684,7 +683,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 				return;
 			}
 
-			rows.get(row).setElementAt(value, col); // in case of an updated row we did this already
+			rows.get(row).set(col, value); // in case of an updated row we did this already
 
 			fireTableCellUpdated(row, col);
 
@@ -716,7 +715,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		}
 	}
 
-	public void addRow(Vector<Object> rowV) {
+	public void addRow(List<Object> rowV) {
 		logging.debug(this, "--- addRow size, row " + rowV.size() + ", " + rowV);
 
 		rows.add(rowV);
@@ -738,7 +737,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	public void addRow(Object[] a) {
 
 		{
-			Vector rowV = new Vector<>();
+			List rowV = new ArrayList<>();
 			for (int i = 0; i < colsLength; i++) {
 				rowV.add(null);
 			}
@@ -751,10 +750,10 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		}
 	}
 
-	public Vector<Object> produceValueRowFromSomeEntries(RowMap entries) {
+	public List<Object> produceValueRowFromSomeEntries(RowMap entries) {
 		logging.debug(this, "produceValueRowFromSomeEntries " + entries);
 
-		Vector<Object> result = new Vector<>();
+		List<Object> result = new ArrayList<>();
 
 		for (String col : columnNames) {
 
@@ -805,7 +804,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 		// do with original row nums
 		for (int i = 0; i < selection.length; i++) {
-			Vector oldValues = (Vector) (rows.get(selection[i])).clone();
+			List oldValues = new ArrayList<>(rows.get(selection[i]));
 			logging.debug(this, "deleteRow values " + oldValues);
 			updates.add(itemFactory.produceDeleteItem(oldValues));
 
@@ -850,7 +849,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		if (!checkDeletionOfAddedRow(rowNum))
 			return;
 
-		Vector oldValues = (Vector) (rows.get(rowNum)).clone();
+		List oldValues = new ArrayList<>(rows.get(rowNum));
 		logging.debug(this, "deleteRow values " + oldValues);
 		updates.add(itemFactory.produceDeleteItem(oldValues));
 		// we have to delete the source values, not the possibly changed current row

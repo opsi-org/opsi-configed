@@ -75,7 +75,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 		btn_autocompletion = autocompletion.getButton();
 
 		tf_url = new JTextField(url_def_text);
-		tf_url.setBackground(Globals.backLightYellow);
+		tf_url.setBackground(Globals.BACKGROUND_COLOR_9);
 
 		tf_url.addFocusListener(new FocusAdapter() {
 			@Override
@@ -184,7 +184,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 	}
 
 	private void initLayout() {
-		this.setBackground(Globals.backLightBlue);
+		this.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);

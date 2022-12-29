@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Date;
-import java.util.Vector;
+import java.util.List;
 
 import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
@@ -18,7 +18,7 @@ public class ExporterToCSV extends ExportTable {
 	public static final Character stringDelimiter = '"';
 	protected static final String thisExtension = ".csv";
 
-	public ExporterToCSV(javax.swing.JTable table, Vector<String> classNames) {
+	public ExporterToCSV(javax.swing.JTable table, List<String> classNames) {
 		super(table, classNames);
 		extensionFilter = new javax.swing.filechooser.FileNameExtensionFilter("CSV", "csv");
 

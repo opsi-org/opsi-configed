@@ -2,7 +2,6 @@ package de.uib.configed.gui;
 
 import java.awt.Window;
 import java.util.List;
-import java.util.Vector;
 
 import javax.swing.JDialog;
 import javax.swing.ListSelectionModel;
@@ -19,7 +18,7 @@ public class FDepotselectionList extends FGeneralDialog {
 
 	public FDepotselectionList(JDialog masterWindow) {
 		super(
-				
+
 				masterWindow, configed.getResourceValue("FDepotselectionList.title"),
 				new String[] { configed.getResourceValue("FDepotselectionList.buttontake"),
 						configed.getResourceValue("FDepotselectionList.buttonclose") },
@@ -42,11 +41,11 @@ public class FDepotselectionList extends FGeneralDialog {
 		scrollpane.getViewport().add(depotsList);
 	}
 
-	public void setListData(Vector<? extends String> v) {
+	public void setListData(List<String> v) {
 		depotsList.setListData(v);
 	}
 
-	public Vector<? extends String> getListData() {
+	public List<String> getListData() {
 		logging.info(this, "getListData() : " + depotsList.getListData());
 		return depotsList.getListData();
 	}

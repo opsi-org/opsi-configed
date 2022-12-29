@@ -3,11 +3,11 @@ package de.uib.configed.gui;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
@@ -35,13 +35,13 @@ import de.uib.utilities.table.updates.TableUpdateCollection;
 public class CSVImportDataModifier {
 	private GenTableModel model;
 	private String csvFile;
-	private Vector<String> columnNames;
-	private Vector<String> hiddenColumns;
+	private List<String> columnNames;
+	private List<String> hiddenColumns;
 
-	public CSVImportDataModifier(String csvFile, Vector<String> columnNames) {
+	public CSVImportDataModifier(String csvFile, List<String> columnNames) {
 		this.csvFile = csvFile;
 		this.columnNames = columnNames;
-		this.hiddenColumns = new Vector<>();
+		this.hiddenColumns = new ArrayList<>();
 	}
 
 	public boolean updateTable(CSVParser parser, int startLine, PanelGenEditTable thePanel) {
@@ -113,12 +113,12 @@ public class CSVImportDataModifier {
 	}
 
 	private GenTableModel createModel(PanelGenEditTable thePanel, List<Map<String, Object>> csvData,
-			Vector<String> columnNames, CSVParser parser) {
-		Vector<String> classNames = new Vector<>();
+			List<String> columnNames, CSVParser parser) {
+		List<String> classNames = new ArrayList<>();
 		populateClassNames(classNames, columnNames);
 
 		Map<String, Map> theSourceMap = new HashMap<>();
-		populateSourceMap(theSourceMap, csvData, columnNames);
+		populateSourceMap(theSourceMap, csvData);
 
 		TableUpdateCollection updateCollection = new TableUpdateCollection();
 		TableSource source = new MapSource(columnNames, classNames, theSourceMap, false);
@@ -146,9 +146,9 @@ public class CSVImportDataModifier {
 		private String csvFile;
 		private GenTableModel model;
 		private CSVFormat format;
-		private Vector<String> hiddenColumns;
+		private List<String> hiddenColumns;
 
-		public CSVFileDataUpdater(GenTableModel model, String csvFile, CSVFormat format, Vector<String> hiddenColumns) {
+		public CSVFileDataUpdater(GenTableModel model, String csvFile, CSVFormat format, List<String> hiddenColumns) {
 			this.model = model;
 			this.csvFile = csvFile;
 			this.format = format;
@@ -162,16 +162,16 @@ public class CSVImportDataModifier {
 			try {
 				writer = new CSVWriter(new FileWriter(csvFile), format);
 
-				// Create a copy of columnNames Vector to avoid global modification
-				// of columnNames Vector, that exists in GenTableModel class.
-				Vector<String> columns = new Vector<>(model.getColumnNames());
+				// Create a copy of columnNames List to avoid global modification
+				// of columnNames List, that exists in GenTableModel class.
+				List<String> columns = new ArrayList<>(model.getColumnNames());
 				columns.removeAll(hiddenColumns);
 				writer.write(columns);
 
-				Vector<Vector<Object>> rows = model.getRows();
+				List<List<Object>> rows = model.getRows();
 
-				for (Vector<Object> originalRow : rows) {
-					Vector<Object> modifiedRow = modifyRowAccordingToHeaders(originalRow);
+				for (List<Object> originalRow : rows) {
+					List<Object> modifiedRow = modifyRowAccordingToHeaders(originalRow);
 					writer.write(modifiedRow);
 				}
 
@@ -183,8 +183,8 @@ public class CSVImportDataModifier {
 			return writer.toString();
 		}
 
-		private Vector<Object> modifyRowAccordingToHeaders(Vector<Object> row) {
-			Vector<Object> result = new Vector<>();
+		private List<Object> modifyRowAccordingToHeaders(List<Object> row) {
+			List<Object> result = new ArrayList<>();
 			Iterator<String> columnNameIter = model.getColumnNames().iterator();
 			Iterator<Object> rowIter = row.iterator();
 
@@ -206,8 +206,7 @@ public class CSVImportDataModifier {
 		}
 	}
 
-	private void populateSourceMap(Map<String, Map> theSourceMap, List<Map<String, Object>> data,
-			Vector<String> columnNames) {
+	private void populateSourceMap(Map<String, Map> theSourceMap, List<Map<String, Object>> data) {
 		int id = 0;
 
 		for (Map<String, Object> line : data) {
@@ -215,8 +214,8 @@ public class CSVImportDataModifier {
 		}
 	}
 
-	private void populateClassNames(Vector<String> classNames, Vector<String> columnNames) {
-		if (classNames.size() != 0) {
+	private void populateClassNames(List<String> classNames, List<String> columnNames) {
+		if (!classNames.isEmpty()) {
 			classNames.clear();
 		}
 
@@ -241,7 +240,7 @@ public class CSVImportDataModifier {
 
 	private boolean isColumnEmpty(int column, PanelGenEditTable thePanel) {
 		int emptyRows = 0;
-		Vector<Vector<Object>> rows = model.getRows();
+		List<List<Object>> rows = model.getRows();
 
 		for (int row = 0; row < rows.size(); row++) {
 			String value = thePanel.getTheTable().getValueAt(row, column).toString();
@@ -266,7 +265,7 @@ public class CSVImportDataModifier {
 		thePanel.getTheTable().setRowSorter(rowSorter);
 	}
 
-	private void makeColumnsEditable(GenTableModel model, Vector<String> columnNames) {
+	private void makeColumnsEditable(GenTableModel model, List<String> columnNames) {
 		int[] editableColumns = new int[columnNames.size()];
 
 		for (int i = 0; i < columnNames.size(); i++) {
@@ -276,7 +275,7 @@ public class CSVImportDataModifier {
 		model.setEditableColumns(editableColumns);
 	}
 
-	public Vector<Vector<Object>> getRows() {
+	public List<List<Object>> getRows() {
 		return model.getRows();
 	}
 }

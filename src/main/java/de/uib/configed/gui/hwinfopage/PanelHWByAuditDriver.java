@@ -51,15 +51,15 @@ public class PanelHWByAuditDriver extends JPanel {
 		jLabelTitle.setOpaque(true);
 
 		fieldVendor = new JTextShowField();
-		fieldVendor.setBackground(Globals.backgroundLightGrey);
+		fieldVendor.setBackground(Globals.BACKGROUND_COLOR_3);
 		fieldLabel = new JTextShowField();
-		fieldLabel.setBackground(Globals.backgroundLightGrey);
+		fieldLabel.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		fieldVendor2 = new JTextShowField();
-		fieldVendor2.setBackground(Globals.backgroundLightGrey);
+		fieldVendor2.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		fieldLabel2 = new JTextShowField();
-		fieldLabel2.setBackground(Globals.backgroundLightGrey);
+		fieldLabel2.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		JLabel labelInfo = new JLabel(configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabels"));
 
@@ -104,7 +104,7 @@ public class PanelHWByAuditDriver extends JPanel {
 				).addGap(vGap, vGap, vGap));
 
 		layoutByAuditInfo.setHorizontalGroup(layoutByAuditInfo.createSequentialGroup()
-				
+
 				.addGroup(layoutByAuditInfo.createSequentialGroup().addGap(hGap * 2, hGap * 2, hGap * 2)
 						.addComponent(labelInfo, 5, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(2, hGap * 4, hGap * 4)
@@ -135,7 +135,7 @@ public class PanelHWByAuditDriver extends JPanel {
 				.addGap(5 * hGap, 10 * hGap, 10 * hGap).addComponent(buttonUploadDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
 						Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
 				.addGap(2 * hGap, 4 * hGap, Short.MAX_VALUE));
-		setBackground(Globals.backLightBlue);
+		setBackground(Globals.BACKGROUND_COLOR_7);
 		setBorder(BorderFactory.createLineBorder(Globals.greyed));
 	}
 

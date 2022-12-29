@@ -1,6 +1,6 @@
 package de.uib.configed.gui;
 
-import java.util.Vector;
+import java.util.List;
 
 public interface FramingTextfieldWithListselection {
 
@@ -12,7 +12,7 @@ public interface FramingTextfieldWithListselection {
 
 	public String getListLabelToolTip();
 
-	public Vector<String> getListData();
+	public List<String> getListData();
 
-	public void setListData(Vector<String> v);
+	public void setListData(List<String> v);
 }

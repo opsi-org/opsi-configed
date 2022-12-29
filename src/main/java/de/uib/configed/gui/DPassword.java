@@ -22,7 +22,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
@@ -34,7 +33,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.GregorianCalendar;
-import java.util.Vector;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -65,6 +64,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.opsicommand.ConnectionState;
+import de.uib.opsicommand.JSONthroughHTTP;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.logging;
@@ -86,7 +86,6 @@ public class DPassword extends JDialog // implements Runnable
 	private static final String TESTPASSWORD = "";
 	private static final int SECS_WAIT_FOR_CONNECTION = 100;
 	private static final long TIMEOUT_MS = SECS_WAIT_FOR_CONNECTION * 1000l; // 5000 reproducable error
-	private boolean localApp;
 
 	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
 
@@ -322,8 +321,8 @@ public class DPassword extends JDialog // implements Runnable
 
 	}
 
-	public void setServers(Vector<String> hosts) {
-		fieldHost.setModel(new DefaultComboBoxModel<>(hosts));
+	public void setServers(List<String> hosts) {
+		fieldHost.setModel(new DefaultComboBoxModel<>(hosts.toArray()));
 		((JTextField) fieldHost.getEditor().getEditorComponent())
 				.setCaretPosition(((String) (fieldHost.getSelectedItem())).length());
 	}
@@ -407,12 +406,12 @@ public class DPassword extends JDialog // implements Runnable
 		passwordField.setMargin(new Insets(0, 3, 0, 3));
 
 		JCheckBox checkCompression = new JCheckBox(configed.getResourceValue("DPassword.checkCompression"),
-				de.uib.opsicommand.JSONthroughHTTP.compressTransmission);
+				JSONthroughHTTP.compressTransmission);
 		checkCompression.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 
-				de.uib.opsicommand.JSONthroughHTTP.compressTransmission = (e.getStateChange() == ItemEvent.SELECTED);
+				JSONthroughHTTP.compressTransmission = (e.getStateChange() == ItemEvent.SELECTED);
 
 				logging.debug(this, "itemStateChanged " + de.uib.opsicommand.JSONthroughHTTP.gzipTransmission);
 			}
@@ -480,12 +479,12 @@ public class DPassword extends JDialog // implements Runnable
 		jButtonCommit.setMaximumSize(new Dimension(100, 20));
 		jButtonCommit.setPreferredSize(new Dimension(100, 20));
 		jButtonCommit.setSelected(true);
-		jButtonCommit.addActionListener(this::jButtonCommit_actionPerformed);
+		jButtonCommit.addActionListener(this::jButtonCommitActionPerformed);
 
 		jButtonCancel.setText(configed.getResourceValue("DPassword.jButtonCancel"));
 		jButtonCancel.setMaximumSize(new Dimension(100, 20));
 		jButtonCancel.setPreferredSize(new Dimension(100, 20));
-		jButtonCancel.addActionListener(this::jButtonCancel_actionPerformed);
+		jButtonCancel.addActionListener(this::jButtonCancelActionPerformed);
 
 		jPanelButtons.add(jButtonCommit);
 		jPanelButtons.add(jButtonCancel);
@@ -567,7 +566,8 @@ public class DPassword extends JDialog // implements Runnable
 
 		Containership csPanel = new Containership(getContentPane());
 
-		csPanel.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.backLightBlue }, JPanel.class);
+		csPanel.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
+				JPanel.class);
 
 		MessageFormat messageFormatVersion = new MessageFormat(configed.getResourceValue("DPassword.jLabelVersion"));
 		jLabelVersion.setText(messageFormatVersion
@@ -647,7 +647,7 @@ public class DPassword extends JDialog // implements Runnable
 
 		logging.info(this, "we are in EventDispatchThread " + SwingUtilities.isEventDispatchThread());
 		logging.info(this, "  Thread.currentThread() " + Thread.currentThread());
-		localApp = ("" + Thread.currentThread()).indexOf("main]") > -1;
+		boolean localApp = ("" + Thread.currentThread()).indexOf("main]") > -1;
 		logging.info(this, "is local app  " + localApp);
 		if (localApp) {
 
@@ -702,29 +702,25 @@ public class DPassword extends JDialog // implements Runnable
 		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setHost((String) fieldHost.getSelectedItem());
 	}
 
-	void jButtonCommit_actionPerformed(ActionEvent e) {
+	void jButtonCommitActionPerformed(ActionEvent e) {
 		ok_action();
 	}
 
-	void end_program() {
+	void endProgram() {
 		main.finishApp(false, 0);
 	}
 
-	void jButtonCancel_actionPerformed(ActionEvent e) {
+	void jButtonCancelActionPerformed(ActionEvent e) {
 		if (waitCursor != null)
 			waitCursor.stop();
-		end_program();
-	}
-
-	void passwordField_componentShown(ComponentEvent e) {
-		passwordField.requestFocus();
+		endProgram();
 	}
 
 	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		super.processWindowEvent(e);
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-			end_program();
+			endProgram();
 		}
 	}
 
@@ -742,7 +738,7 @@ public class DPassword extends JDialog // implements Runnable
 				myHome.ok_action();
 			} else if (e.getKeyCode() == 27) // Escape
 			{
-				myHome.end_program();
+				myHome.endProgram();
 			}
 		}
 	}

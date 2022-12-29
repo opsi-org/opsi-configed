@@ -2,9 +2,9 @@ package de.uib.utilities.table;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.JTable;
 
@@ -24,7 +24,7 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 	public void setFilter(TreeSet<Object> filter) {
 	}
 
-	public void setFilter(int[] modelRowNoFilter, final Vector<Vector<Object>> rows) {
+	public void setFilter(int[] modelRowNoFilter, final List<List<Object>> rows) {
 		logging.info(this, "setFilter int[]  " + modelRowNoFilter);
 		if (modelRowNoFilter != null)
 			logging.info(this, "setFilter as string " + Arrays.toString(modelRowNoFilter));
@@ -47,12 +47,10 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 	}
 
 	@Override
-	public boolean test(Vector<Object> row) {
+	public boolean test(List<Object> row) {
 
 		if (selectionInfo == null)
 			return true;
-
-		
 
 		Boolean found = selectionInfo.get(row);
 

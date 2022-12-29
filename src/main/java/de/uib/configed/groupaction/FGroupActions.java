@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -81,12 +80,12 @@ public class FGroupActions extends SecondaryFrame {
 	}
 
 	protected void setImages() {
-		Vector<String> imagesCollection = new Vector<>();
+		List<String> imagesCollection = new ArrayList<>();
 
 		imagesCollection.addAll(new TreeSet<>(persist.getCommonProductPropertyValues(associatedClients,
 				PersistenceController.localImageRestoreProductKey, PersistenceController.localImagesListPropertyKey)));
 
-		comboSelectImage.setModel(new DefaultComboBoxModel<>(imagesCollection));
+		comboSelectImage.setModel(new DefaultComboBoxModel<>(imagesCollection.toArray()));
 	}
 
 	private void reload() {
@@ -147,9 +146,10 @@ public class FGroupActions extends SecondaryFrame {
 						.addComponent(imageActionPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		Containership cs_all = new Containership(getContentPane());
-		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.backLightBlue }, JPanel.class);
+		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
+				JPanel.class);
 
-		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.backgroundLightGrey },
+		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },
 				javax.swing.text.JTextComponent.class);
 
 	}

@@ -1,8 +1,9 @@
 package de.uib.configed.guidata;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -31,10 +32,10 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 	PersistenceController perCon;
 
-	protected static Vector<String> rowType;
+	protected static List<String> rowType;
 	protected static int noOfRowTypes;
 	static {
-		rowType = new Vector<>();
+		rowType = new ArrayList<>();
 		rowType.add("KEYROW");
 		rowType.add("SETUP REQUIREMENT");
 		rowType.add("UNINSTALL REQUIREMENT");
@@ -267,27 +268,27 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 			{
 				switch (kindOfRow) {
 				case 0:
-					cell.setBackground(Globals.backLightBlue);
+					cell.setBackground(Globals.BACKGROUND_COLOR_7);
 					break;
 				case 1:
-					cell.setBackground(Globals.backVeryLightBlue);
+					cell.setBackground(Globals.BACKGROUND_COLOR_8);
 					break;
 				case 2:
 
-					cell.setBackground(Globals.backVeryLightBlue);
+					cell.setBackground(Globals.BACKGROUND_COLOR_8);
 					break;
 				}
 			}
 
 			if (kindOfRow == 2 && col > 1)
-				cell.setBackground(Globals.backgroundGrey);
+				cell.setBackground(Globals.BACKGROUND_COLOR_4);
 
 		}
 	}
 
 	protected class MyWarningColorizer {
 		public void colorize(java.awt.Component cell, boolean isSelected, int row, int col) {
-			cell.setBackground(Globals.actionRed);
+			cell.setBackground(Globals.ACTION_COLOR);
 		}
 	}
 

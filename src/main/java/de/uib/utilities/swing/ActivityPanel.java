@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
@@ -59,7 +58,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 			partPanels.get(j).setBackground(colors[0]);
 			if (i == inactive) {
 				setBorder(lineBorderInactive);
-				partPanels.get(j).setBackground(Globals.backLightBlue);
+				partPanels.get(j).setBackground(Globals.BACKGROUND_COLOR_7);
 			} else {
 				setBorder(lineBorderActive);
 				partPanels.get(j).setBackground(Globals.backNimbus);
@@ -149,7 +148,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 	}
 
 	protected void initGui() {
-		lineBorderInactive = new javax.swing.border.LineBorder(Globals.backLightBlue, 1, true);
+		lineBorderInactive = new javax.swing.border.LineBorder(Globals.BACKGROUND_COLOR_7, 1, true);
 		lineBorderActive = new javax.swing.border.LineBorder(Globals.blueGrey, 1, true);
 		logging.debug(this, "starting");
 		setOpaque(true);
@@ -200,12 +199,4 @@ public class ActivityPanel extends JPanel implements Runnable {
 		layout.setVerticalGroup(vGroup);
 	}
 
-	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		frame.setSize(new Dimension(100, 40));
-		ActivityPanel panel = new ActivityPanel();
-		frame.getContentPane().add(panel);
-		frame.setVisible(true);
-		panel.run();
-	}
 }

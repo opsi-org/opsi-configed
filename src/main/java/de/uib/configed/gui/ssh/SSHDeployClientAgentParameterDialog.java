@@ -27,6 +27,7 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandDeployClientAgent;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
+import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.PanelStateSwitch;
 
@@ -82,7 +83,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		pack();
 		this.setSize(new Dimension(frameWidth, frameHight));
 		this.centerOn(Globals.mainFrame);
-		this.setBackground(Globals.backLightBlue);
+		this.setBackground(Globals.BACKGROUND_COLOR_7);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 		logging.info(this, "SSHDeployClientAgentParameterDialog build");
@@ -93,8 +94,8 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	private void getDefaultAuthData() {
 		Map<String, Object> configs = main.getPersistenceController()
 				.getConfig(main.getPersistenceController().getHostInfoCollections().getConfigServer());
-		List<Object> result_config_list = (List<Object>) configs
-				.get(main.getPersistenceController().KEY_SSH_DEFAULTWINUSER);
+		main.getPersistenceController();
+		List<Object> result_config_list = (List<Object>) configs.get(PersistenceController.KEY_SSH_DEFAULTWINUSER);
 		if (result_config_list == null || result_config_list.isEmpty()) {
 
 			logging.info(this, "KEY_SSH_DEFAULTWINUSER not existing");
@@ -106,7 +107,8 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		}
 
-		result_config_list = (List<Object>) configs.get(main.getPersistenceController().KEY_SSH_DEFAULTWINPW);
+		main.getPersistenceController();
+		result_config_list = (List<Object>) configs.get(PersistenceController.KEY_SSH_DEFAULTWINPW);
 		if (result_config_list == null || result_config_list.isEmpty()) {
 
 			logging.info(this, "KEY_SSH_DEFAULTWINPW not existing");
@@ -147,9 +149,9 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	}
 
 	protected void init() {
-		inputPanel.setBackground(Globals.backLightBlue);
-		buttonPanel.setBackground(Globals.backLightBlue);
-		winAuthPanel.setBackground(Globals.backLightBlue);
+		inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		winAuthPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		getContentPane().add(inputPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 

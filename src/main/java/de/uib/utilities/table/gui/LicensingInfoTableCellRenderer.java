@@ -72,7 +72,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 				jc.setToolTipText("<html>" + "clients: " + value.toString() + "</html>");
 
 			if (columnName.equals(latestChange)) {
-				jc.setBackground(Globals.checkGreenLight);
+				jc.setBackground(Globals.CHECK_COLOR);
 
 				if (state.equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT)) {
 					jc.setBackground(Globals.darkOrange);
@@ -81,7 +81,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 									+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 
 				} else if (state.equals(LicensingInfoMap.STATE_OVER_LIMIT)) {
-					jc.setBackground(Globals.warningRed);
+					jc.setBackground(Globals.WARNING_COLOR);
 					jc.setToolTipText("<html>" + configed.getResourceValue("LicensingInfo.warning.over_limit") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 

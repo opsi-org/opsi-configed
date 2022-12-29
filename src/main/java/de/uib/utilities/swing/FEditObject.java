@@ -86,7 +86,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 		loggingArea = new JTextArea("");
 		loggingArea.setEditable(false);
 
-		loggingArea.setBackground(Globals.backgroundWhite);
+		loggingArea.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		scrollpaneL = new javax.swing.JScrollPane();
 		scrollpaneL.setViewportView(loggingArea);
@@ -130,7 +130,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 	protected void initComponents() {
 
-		framingPanel.setBackground(Globals.backgroundWhite);
+		framingPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
 
 		editingArea.addKeyListener(this);

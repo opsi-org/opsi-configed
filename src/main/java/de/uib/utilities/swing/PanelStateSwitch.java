@@ -194,7 +194,7 @@ public class PanelStateSwitch extends JPanel {
 	}
 
 	protected void initLayout() {
-		setBackground(Globals.backgroundWhite);
+		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		JLabel labelTitle = new JLabel("");
 		if (title != null)

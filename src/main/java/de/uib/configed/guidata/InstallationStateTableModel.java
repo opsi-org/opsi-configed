@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -97,7 +96,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	protected ConfigedMain main;
 
-	protected Vector productsV = null;
+	protected List<String> productsV = null;
 
 	protected int onGoingCollectiveChangeEventCount = -1;
 
@@ -141,7 +140,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	protected Map<String, Map<String, Object>> globalProductInfos;
 	protected String theClient;
 	protected NavigableSet<String> tsProductNames;
-	protected Vector<String> productNamesInDeliveryOrder;
+	protected List<String> productNamesInDeliveryOrder;
 
 	protected ActionRequest actionInTreatment;
 
@@ -248,17 +247,17 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		myCollator.setStrength(Collator.SECONDARY);
 
-		productNamesInDeliveryOrder = new Vector<>();
+		productNamesInDeliveryOrder = new ArrayList<>();
 		if (listOfInstallableProducts != null) {
 			for (int i = 0; i < listOfInstallableProducts.size(); i++) {
-				String product = (String) listOfInstallableProducts.get(i);
+				String product = listOfInstallableProducts.get(i);
 				productNamesInDeliveryOrder.add(product);
 			}
 		}
 
 		tsProductNames = new TreeSet<>(myCollator);
 		tsProductNames.addAll(productNamesInDeliveryOrder);
-		productsV = new Vector<>(tsProductNames);
+		productsV = new ArrayList<>(tsProductNames);
 
 		logging.debug(this, "tsProductNames " + tsProductNames);
 
@@ -338,8 +337,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 								+ " value " + stateAndAction.get(colKey));
 					}
 
-					mixToVisualState(colKey, combinedVisualValues.get(colKey), productId, stateAndAction.get(colKey));
-
+					mixToVisualState(combinedVisualValues.get(colKey), productId, stateAndAction.get(colKey));
 				}
 
 			}
@@ -359,13 +357,13 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			// check if products for clients exist
 			for (int j = 0; j < productsV.size(); j++) {
 
-				String productId = (String) productsV.get(j);
+				String productId = productsV.get(j);
 				Map<String, String> stateAndAction = productStates.get(productId);
 
 				if (stateAndAction == null) {
 
 					// build visual states
-					Iterator iter = ProductState.KEYS.iterator();
+					Iterator<String> iter = ProductState.KEYS.iterator();
 
 					String priority = "";
 
@@ -373,13 +371,13 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 						priority = "" + globalProductInfos.get(productId).get("priority");
 
 					while (iter.hasNext()) {
-						String key = (String) iter.next();
+						String key = iter.next();
 
 						if (key.equals(ProductState.KEY_productPriority)
 								|| key.equals(ProductState.KEY_actionSequence)) {
-							mixToVisualState(key, combinedVisualValues.get(key), productId, priority);
+							mixToVisualState(combinedVisualValues.get(key), productId, priority);
 						} else {
-							mixToVisualState(key, combinedVisualValues.get(key), productId,
+							mixToVisualState(combinedVisualValues.get(key), productId,
 									ProductState.getDEFAULT().get(key));
 						}
 					}
@@ -389,9 +387,9 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		}
 	}
 
-	protected String mixToVisualState(final String columnName, Map<String, String> visualStates, final String productId,
+	protected String mixToVisualState(Map<String, String> visualStates, final String productId,
 			final String mixinValue) {
-		String oldValue = (String) visualStates.get(productId);
+		String oldValue = visualStates.get(productId);
 
 		String resultValue = oldValue;
 		if (oldValue == null) {
@@ -487,10 +485,10 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		indexPreparedColumns = new int[columnsToDisplay.size()];
 		columnTitles = new ArrayList<>();
 		{
-			Iterator iter = columnsToDisplay.iterator();
+			Iterator<String> iter = columnsToDisplay.iterator();
 			int j = 0;
 			while (iter.hasNext()) {
-				String column = (String) iter.next();
+				String column = iter.next();
 				logging.debug(this, " ------- treat column " + column);
 				int k = preparedColumns.indexOf(column);
 				if (k >= 0) {
@@ -540,14 +538,13 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		logging.debug(this,
 				"setInstallationInfo for product, client, value " + product + ", " + clientId + ", " + value);
 
-		Map<String, Map<String, String>> changedStatesForClient = (Map<String, Map<String, String>>) (collectChangedStates
-				.get(clientId));
+		Map<String, Map<String, String>> changedStatesForClient = collectChangedStates.get(clientId);
 		if (changedStatesForClient == null) {
 			changedStatesForClient = new HashMap<>();
 			collectChangedStates.put(clientId, changedStatesForClient);
 		}
 
-		Map<String, String> changedStatesForProduct = (Map<String, String>) changedStatesForClient.get(product);
+		Map<String, String> changedStatesForProduct = changedStatesForClient.get(product);
 		if (changedStatesForProduct == null) {
 			changedStatesForProduct = new HashMap<>();
 			changedStatesForClient.put(product, changedStatesForProduct);
@@ -850,38 +847,32 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 			// all clients " + ar + " for " + prod + " instead of " +
 
-			// selectedClients.length )
 			// -- not each client got a new action for this product
-			{
-				// String oldVal = combinedVisualValues.get(ProductState.KEY_actionRequest).get(
 
-				String newValUntilNow = null;
-				boolean started = false;
+			String newValUntilNow = null;
+			boolean started = false;
 
-				for (String clientId : selectedClients) {
+			for (String clientId : selectedClients) {
 
-					if (!started) {
-						started = true;
-						newValUntilNow = getChangedState(clientId, prod, ProductState.KEY_actionRequest);
+				if (!started) {
+					started = true;
+					newValUntilNow = getChangedState(clientId, prod, ProductState.KEY_actionRequest);
+				} else {
+					if (newValUntilNow == null) {
+						if (getChangedState(clientId, prod, ProductState.KEY_actionRequest) != null) {
+							newValUntilNow = Globals.CONFLICT_STATE_STRING;
+						}
 					} else {
-						if (newValUntilNow == null) {
-							if (getChangedState(clientId, prod, ProductState.KEY_actionRequest) != null) {
-								newValUntilNow = Globals.CONFLICT_STATE_STRING;
-							}
+						if (newValUntilNow.equals(getChangedState(clientId, prod, ProductState.KEY_actionRequest))) {
+							// it remains
 						} else {
-							if (newValUntilNow
-									.equals(getChangedState(clientId, prod, ProductState.KEY_actionRequest))) {
-								// it remains
-							} else {
-								newValUntilNow = Globals.CONFLICT_STATE_STRING;
-							}
+							newValUntilNow = Globals.CONFLICT_STATE_STRING;
 						}
 					}
-
 				}
-				combinedVisualValues.get(ProductState.KEY_actionRequest).put(prod, newValUntilNow);
 
 			}
+			combinedVisualValues.get(ProductState.KEY_actionRequest).put(prod, newValUntilNow);
 
 		}
 
@@ -1084,40 +1075,34 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	// interface ComboBoxModeller
 	@Override
-	public ComboBoxModel getComboBoxModel(int row, int column) {
-		actualProduct = (String) productsV.get(row);
+	public ComboBoxModel<String> getComboBoxModel(int row, int column) {
+		actualProduct = productsV.get(row);
 
 		if (column == displayColumns.indexOf(ActionRequest.KEY)) // selection of actions
 		{
 			logging.debug(this, " possible actions  " + possibleActions);
-			Object[] actionsForProduct = null;
+			String[] actionsForProduct = null;
 			if (possibleActions != null) {
-				List actionList = new ArrayList<>();
+				List<String> actionList = new ArrayList<>();
 
 				// actionList.addALL (List) possibleActions.get(actualProduct)
 				// instead of this we take the display strings:
 
-				{
+				Iterator<String> iter = possibleActions.get(actualProduct).iterator(); // we shall iterate throught
+																						// all possible
+																						// actionRequest ID strings
+																						// for the actual product
 
-					Iterator iter = ((List) possibleActions.get(actualProduct)).iterator(); // we shall iterate throught
-																							// all possible
-																							// actionRequest ID strings
-																							// for the actual product
-
-					{
-
-						while (iter.hasNext()) {
-							String label = (String) iter.next();
-							ActionRequest ar = ActionRequest.produceFromLabel(label);
-							actionList.add(ActionRequest.getDisplayLabel(ar.getVal()));
-						}
-
-						// add UNDEFINED string only to local copy but we dont want to set anything to
-						// UNDEFINED
-					}
+				while (iter.hasNext()) {
+					String label = iter.next();
+					ActionRequest ar = ActionRequest.produceFromLabel(label);
+					actionList.add(ActionRequest.getDisplayLabel(ar.getVal()));
 				}
 
-				actionsForProduct = actionList.toArray();
+				// add UNDEFINED string only to local copy but we dont want to set anything to
+				// UNDEFINED
+
+				actionsForProduct = actionList.toArray(new String[0]);
 
 				logging.debug("Possible actions as array  " + actionsForProduct);
 			}
@@ -1172,7 +1157,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 			values.addAll(InstallationInfo.defaultDisplayValues);
 
-			return new DefaultComboBoxModel<>(new Vector<>(values));
+			return new DefaultComboBoxModel<>(values.toArray(new String[0]));
 
 		}
 
@@ -1200,7 +1185,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	@Override
 	public String getLastStateChange(int row) {
-		String actualProduct = (String) productsV.get(row);
+		String actualProduct = productsV.get(row);
 
 		return combinedVisualValues.get(ProductState.KEY_lastStateChange).get(actualProduct);
 	}
@@ -1219,7 +1204,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	private Object retrieveValueAt(int row, int displayCol) {
 
 		Object result = null;
-		actualProduct = (String) productsV.get(row);
+		actualProduct = productsV.get(row);
 
 		if (displayCol >= indexPreparedColumns.length)
 			return "";
@@ -1289,10 +1274,10 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			String serverProductVersion = (String) getGlobalProductInfos().get(actualProduct)
 					.get(de.uib.opsidatamodel.productstate.ProductState.KEY_versionInfo);
 			result = combinedVisualValues.get(ProductState.KEY_versionInfo).get(actualProduct);
-			if (result != null && !(result.equals(""))) {
-				if (serverProductVersion != null && !(serverProductVersion.equals(result)))
-					result = unequalAddstring + result;
-			}
+			if (result != null && !(result.equals("")) && serverProductVersion != null
+					&& !(serverProductVersion.equals(result)))
+				result = unequalAddstring + result;
+
 			break;
 
 		case 13:
@@ -1319,7 +1304,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	 * then the last column would contain text
 	 */
 	@Override
-	public Class getColumnClass(int c) {
+	public Class<? extends Object> getColumnClass(int c) {
 		Object val = retrieveValueAt(0, c);
 		if (val == null)
 			return null;
@@ -1356,7 +1341,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		infoIfNoClientsSelected();
 
-		actualProduct = (String) productsV.get(row);
+		actualProduct = productsV.get(row);
 
 		if (combinedVisualValues.get(ProductState.KEY_installationStatus).get(actualProduct) == null)
 			return; // not a product in our depot

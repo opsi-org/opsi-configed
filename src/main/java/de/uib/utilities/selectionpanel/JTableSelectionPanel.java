@@ -19,7 +19,6 @@ import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Vector;
 import java.util.regex.Pattern;
 
 import javax.swing.DefaultComboBoxModel;
@@ -100,7 +99,7 @@ public class JTableSelectionPanel extends JPanel
 
 		scrollpane = new JScrollPane();
 
-		scrollpane.getViewport().setBackground(Globals.backLightBlue);
+		scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 
 		table = new JTable() {
 			@Override
@@ -164,7 +163,7 @@ public class JTableSelectionPanel extends JPanel
 		fieldSearch.setPreferredSize(Globals.textfieldDimension);
 		fieldSearch.setFont(Globals.defaultFont);
 
-		fieldSearch.setBackground(Globals.backVeryLightBlue);
+		fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
 		fieldSearch.getCaret().setBlinkRate(0);
 		fieldSearch.getDocument().addDocumentListener(this);
 
@@ -319,7 +318,7 @@ public class JTableSelectionPanel extends JPanel
 			JLabel missingData2 = new JLabel(configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
 
 			JPanel mdPanel = new JPanel();
-			mdPanel.setBackground(Globals.backLightBlue);
+			mdPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 
 			GroupLayout mdLayout = new GroupLayout(mdPanel);
 			mdPanel.setLayout(mdLayout);
@@ -422,7 +421,7 @@ public class JTableSelectionPanel extends JPanel
 	public void initColumnNames() {
 
 		Object oldSelected = comboSearch.getSelectedItem();
-		Vector<String> comboSearchItems = new Vector<>();
+		List<String> comboSearchItems = new ArrayList<>();
 		comboSearchItems.add(configed.getResourceValue("ConfigedMain.pclistTableModel.allfields"));
 
 		try {
@@ -434,7 +433,7 @@ public class JTableSelectionPanel extends JPanel
 				comboSearchItems.add(table.getColumnName(j));
 			}
 
-			comboSearch.setModel(new DefaultComboBoxModel<>(comboSearchItems));
+			comboSearch.setModel(new DefaultComboBoxModel<>(comboSearchItems.toArray()));
 
 			if (oldSelected != null)
 				comboSearch.setSelectedItem(oldSelected);

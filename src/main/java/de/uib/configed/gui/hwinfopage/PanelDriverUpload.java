@@ -13,7 +13,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
@@ -163,7 +164,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	RadioButtonIntegrationType buttonAdditional;
 	RadioButtonIntegrationType buttonByAudit;
 
-	Vector<RadioButtonIntegrationType> radioButtons;
+	List<RadioButtonIntegrationType> radioButtons;
 
 	JButton buttonCallSelectDriverFiles;
 	protected JTextShowField fieldDriverPath;
@@ -240,7 +241,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.textfieldDimension);
 
-		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots()));
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray()));
 
 		comboChooseDepot.setEnabled(false);
 
@@ -304,9 +305,9 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		logging.info(this, "retrieveWinProducts smbMounted " + smbMounted);
 
-		Vector<String> winProducts = persist.getWinProducts(server, depotProductDirectory);
+		List<String> winProducts = persist.getWinProducts(server, depotProductDirectory);
 
-		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts));
+		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray()));
 	}
 
 	protected void buildPanel() {
@@ -389,7 +390,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 				configed.getResourceValue("PanelDriverUpload.byAuditDriverLocationPath"));
 		JLabel labelDriverLocationType = new JLabel(configed.getResourceValue("PanelDriverUpload.type"));
 
-		radioButtons = new Vector<>();
+		radioButtons = new ArrayList<>();
 
 		buttonStandard = new RadioButtonIntegrationType(configed.getResourceValue("PanelDriverUpload.type.standard"),
 				FileX.getLocalsystemPath(SmbConnect.DIRECTORY_DRIVERS));
@@ -498,7 +499,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 						+ fieldServerPath.getText());
 				final Color saveColor = buttonUploadDrivers.getBackground();
 
-				buttonUploadDrivers.setBackground(Globals.failedBackColor);
+				buttonUploadDrivers.setBackground(Globals.FAILED_BACKGROUND_COLOR);
 				execute();
 				buttonUploadDrivers.setBackground(saveColor);
 			}
@@ -662,11 +663,11 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 										.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2)));
 
-		setBackground(Globals.backgroundLightGrey);
+		setBackground(Globals.BACKGROUND_COLOR_3);
 
 	}
 
-	public void makePath(File path, boolean ask) {
+	public void makePath(File path) {
 		logging.info(this, "makePath for " + path);
 
 		if (path != null && !path.exists()) {
@@ -699,7 +700,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 					logging.info(this, "copy  " + driverPath + " to " + targetPath);
 
-					makePath(targetPath, true);
+					makePath(targetPath);
 
 					stateServerPath = targetPath.exists();
 					serverPathChecked.setSelected(stateServerPath);
@@ -770,7 +771,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		String oldServerPath = fieldServerPath.getText();
 		File currentDirectory = new File(oldServerPath);
 
-		makePath(currentDirectory, true);
+		makePath(currentDirectory);
 		chooserServerpath.setCurrentDirectory(currentDirectory);
 
 		int returnVal = chooserServerpath.showOpenDialog(this);

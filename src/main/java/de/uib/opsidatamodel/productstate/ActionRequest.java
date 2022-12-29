@@ -1,10 +1,11 @@
 package de.uib.opsidatamodel.productstate;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import de.uib.configed.Globals;
 
@@ -37,12 +38,12 @@ public class ActionRequest {
 	private static Map<String, Color> label2textColor;
 	private static Map<String, Integer> serviceValue2state;
 
-	private static Vector<Integer> states;
-	private static Vector<Integer> possibleRequests;
-	private static Vector<String> labels;
+	private static List<Integer> states;
+	private static List<Integer> possibleRequests;
+	private static List<String> labels;
 	private static String[] choiceLabels;
-	private static Vector<String> serviceValues;
-	private static Vector<String> scriptKeys;
+	private static List<String> serviceValues;
+	private static List<String> scriptKeys;
 
 	private static Map<String, String> scriptKey2label;
 
@@ -53,7 +54,7 @@ public class ActionRequest {
 		if (states != null)
 			return;
 
-		states = new Vector<>();
+		states = new ArrayList<>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(NOT_AVAILABLE);
@@ -65,7 +66,7 @@ public class ActionRequest {
 		states.add(ONCE);
 		states.add(CUSTOM);
 
-		possibleRequests = new Vector<>();
+		possibleRequests = new ArrayList<>();
 		possibleRequests.add(SETUP);
 		possibleRequests.add(UPDATE);
 		possibleRequests.add(UNINSTALL);
@@ -73,7 +74,7 @@ public class ActionRequest {
 		possibleRequests.add(ONCE);
 		possibleRequests.add(CUSTOM);
 
-		labels = new Vector<>();
+		labels = new ArrayList<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);
 		labels.add(Globals.NO_VALID_STATE_STRING);
 		labels.add("not_available");
@@ -105,8 +106,8 @@ public class ActionRequest {
 		serviceValue2state.put("once", ONCE);
 		serviceValue2state.put("custom", CUSTOM);
 
-		serviceValues = new Vector<>(serviceValue2state.keySet());
-		scriptKeys = new Vector<>();
+		serviceValues = new ArrayList<>(serviceValue2state.keySet());
+		scriptKeys = new ArrayList<>();
 
 		scriptKey2label = new HashMap<>();
 
@@ -167,17 +168,17 @@ public class ActionRequest {
 
 	}
 
-	public static Vector<Integer> getPossibleRequests() {
+	public static List<Integer> getPossibleRequests() {
 		checkCollections();
 		return possibleRequests;
 	}
 
-	public static Vector<String> getServiceValues() {
+	public static List<String> getServiceValues() {
 		checkCollections();
 		return serviceValues;
 	}
 
-	public static Vector<String> getScriptKeys() {
+	public static List<String> getScriptKeys() {
 		checkCollections();
 		return scriptKeys;
 	}
@@ -225,7 +226,7 @@ public class ActionRequest {
 		return state2label.get(state);
 	}
 
-	public static Vector<String> getLabels() {
+	public static List<String> getLabels() {
 		checkCollections();
 
 		return labels;

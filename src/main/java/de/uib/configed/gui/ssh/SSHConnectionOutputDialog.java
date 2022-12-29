@@ -129,8 +129,8 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 	private void initOutputGui() {
 		try {
 			Dimension btn_dim = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3);
-			inputPanel.setBackground(Globals.backLightBlue);
-			mainPanel.setBackground(Globals.backLightBlue);
+			inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			mainPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			getContentPane().add(mainPanel, BorderLayout.CENTER);
 
 			mainPanelLayout = new GroupLayout(mainPanel);

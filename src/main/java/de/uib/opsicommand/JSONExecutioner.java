@@ -95,9 +95,9 @@ public abstract class JSONExecutioner extends Executioner {
 		Map result = new HashMap<>();
 		try {
 			if (jO != null) {
-				Iterator iter = jO.keys();
+				Iterator<String> iter = jO.keys();
 				while (iter.hasNext()) {
-					String key = (String) iter.next();
+					String key = iter.next();
 
 					result.put(key, JSONReMapper.getJsonList(jO, key));
 				}
@@ -120,9 +120,9 @@ public abstract class JSONExecutioner extends Executioner {
 					JSONObject jOResult = jO.optJSONObject("result");
 
 					if (jOResult != null) {
-						Iterator iter = jOResult.keys();
+						Iterator<String> iter = jOResult.keys();
 						while (iter.hasNext()) {
-							String key = (String) iter.next();
+							String key = iter.next();
 
 							result.put(key, JSONReMapper.getJsonList(jOResult, key));
 						}
@@ -149,15 +149,15 @@ public abstract class JSONExecutioner extends Executioner {
 				JSONObject jOResult = jO.optJSONObject("result");
 
 				if (jOResult != null) {
-					Iterator iter = jOResult.keys();
+					Iterator<String> iter = jOResult.keys();
 					while (iter.hasNext()) {
-						String key = (String) iter.next();
+						String key = iter.next();
 						Map inner = new HashMap<>();
 						JSONObject jsonInner = (JSONObject) jOResult.get(key);
 						if (jsonInner != null) {
-							Iterator iter2 = jsonInner.keys();
+							Iterator<String> iter2 = jsonInner.keys();
 							while (iter2.hasNext()) {
-								String key2 = (String) iter2.next();
+								String key2 = iter2.next();
 								if (!jsonInner.isNull(key2))
 									inner.put(key2, jsonInner.get(key2));
 							}
@@ -262,9 +262,9 @@ public abstract class JSONExecutioner extends Executioner {
 		if (resultlist != null) {
 			try {
 
-				Iterator iter = resultlist.iterator();
+				Iterator<JSONObject> iter = resultlist.iterator();
 				while (iter.hasNext()) {
-					JSONObject jO = (JSONObject) iter.next();
+					JSONObject jO = iter.next();
 
 					String keyOfItem = null;
 
@@ -283,37 +283,37 @@ public abstract class JSONExecutioner extends Executioner {
 					if (sourceVars == null) {
 						// take original keys
 
-						Iterator iterKeys = jO.keys();
+						Iterator<String> iterKeys = jO.keys();
 						while (iterKeys.hasNext()) {
-							String var = iterKeys.next().toString();
-							String val = jO.get(var).toString();
-							detailMap.put(var, val);
+							String value = iterKeys.next();
+							String val = jO.get(value).toString();
+							detailMap.put(value, val);
 						}
 					} else {
 						if (targetVars == null) {
 							for (int i = 0; i < sourceVars.length; i++) {
-								String var = sourceVars[i];
-								String val = jO.get(var).toString();
+								String value = sourceVars[i];
+								String val = jO.get(value).toString();
 
 								if (translateValues != null && translateValues.get(val) != null)
 									val = translateValues.get(val);
 
-								detailMap.put(var, val);
+								detailMap.put(value, val);
 							}
 						} else {
 							if (targetVars.length != sourceVars.length)
 								logging.warning(this, "getStringMappedObjectsByKey targetVars not assignable");
 
 							for (int i = 0; i < sourceVars.length; i++) {
-								String var = sourceVars[i];
-								String val = jO.get(var).toString();
+								String value = sourceVars[i];
+								String val = jO.get(value).toString();
 								if (i < targetVars.length) {
-									var = targetVars[i];
+									value = targetVars[i];
 
 									if (translateValues != null && translateValues.get(val) != null)
 										val = translateValues.get(val);
 
-									detailMap.put(var, val);
+									detailMap.put(value, val);
 
 								}
 							}
@@ -342,9 +342,9 @@ public abstract class JSONExecutioner extends Executioner {
 				JSONObject jOResult = jO.optJSONObject("result");
 
 				if (jOResult != null) {
-					Iterator iter = jOResult.keys();
+					Iterator<String> iter = jOResult.keys();
 					while (iter.hasNext()) {
-						String key = (String) iter.next();
+						String key = iter.next();
 
 						JSONArray jA = jOResult.optJSONArray(key);
 						List al = new ArrayList<>(jA.length());
@@ -353,9 +353,9 @@ public abstract class JSONExecutioner extends Executioner {
 							Map inner = new HashMap<>();
 							JSONObject jsonInner = (JSONObject) jA.get(i);
 							if (jsonInner != null) {
-								Iterator iter2 = jsonInner.keys();
+								Iterator<String> iter2 = jsonInner.keys();
 								while (iter2.hasNext()) {
-									String key2 = (String) iter2.next();
+									String key2 = iter2.next();
 									if (!jsonInner.isNull(key2))
 										inner.put(key2, jsonInner.get(key2));
 								}
@@ -399,9 +399,9 @@ public abstract class JSONExecutioner extends Executioner {
 						Map inner1 = new HashMap<>();
 						JSONObject jsonInner1 = (JSONObject) jA1.get(i);
 						if (jsonInner1 != null) {
-							Iterator iter = jsonInner1.keys();
+							Iterator<String> iter = jsonInner1.keys();
 							while (iter.hasNext()) {
-								String key = (String) iter.next();
+								String key = iter.next();
 								try {
 									JSONArray jA2 = jsonInner1.optJSONArray(key);
 									List al2 = new ArrayList<>(jA2.length());
@@ -409,9 +409,9 @@ public abstract class JSONExecutioner extends Executioner {
 										Map inner2 = new HashMap<>();
 										JSONObject jsonInner2 = (JSONObject) jA2.get(j);
 										if (jsonInner2 != null) {
-											Iterator iter2 = jsonInner2.keys();
+											Iterator<String> iter2 = jsonInner2.keys();
 											while (iter2.hasNext()) {
-												String key2 = (String) iter2.next();
+												String key2 = iter2.next();
 												if (!jsonInner2.isNull(key2))
 													inner2.put(key2, jsonInner2.get(key2));
 											}
@@ -423,9 +423,9 @@ public abstract class JSONExecutioner extends Executioner {
 									Map inner2 = new HashMap<>();
 									JSONObject jsonInner2 = (JSONObject) jsonInner1.get(key);
 									if (jsonInner2 != null) {
-										Iterator iter2 = jsonInner2.keys();
+										Iterator<String> iter2 = jsonInner2.keys();
 										while (iter2.hasNext()) {
-											String key2 = (String) iter2.next();
+											String key2 = iter2.next();
 											if (!jsonInner2.isNull(key2))
 												inner2.put(key2, jsonInner2.get(key2));
 										}
@@ -516,17 +516,15 @@ public abstract class JSONExecutioner extends Executioner {
 				}
 			}
 
-			if (wehavejO) {
+			if (wehavejO && jO != null && jO != JSONObject.NULL) {
 
-				if (jO != null && jO != JSONObject.NULL) {
+				Iterator<String> iter = jO.keys();
+				while (iter.hasNext()) {
+					String key = iter.next();
 
-					Iterator iter = jO.keys();
-					while (iter.hasNext()) {
-						String key = (String) iter.next();
-
-						result.put(key, jO.get(key));
-					}
+					result.put(key, jO.get(key));
 				}
+
 			}
 
 			if (!wehavejO || jO == JSONObject.NULL) {

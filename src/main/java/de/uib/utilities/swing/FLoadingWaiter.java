@@ -118,7 +118,7 @@ public class FLoadingWaiter extends JFrame implements de.uib.utilities.observer.
 		infoLabel = new JLabel();
 
 		JPanel panel = new JPanel();
-		panel.setBackground(Globals.backLightBlue);
+		panel.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);

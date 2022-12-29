@@ -22,7 +22,6 @@ import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
@@ -40,6 +39,7 @@ import de.uib.configed.type.licences.LicenceUsableForEntry;
 import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.configed.type.licences.Table_LicenceContracts;
+import de.uib.opsicommand.Executioner;
 import de.uib.opsicommand.JSONReMapper;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utilities.logging.TimeCheck;
@@ -151,7 +151,7 @@ public class DataStubNOM extends DataStub {
 
 	protected Object2Product2VersionList depot2LocalbootProducts;
 	protected Object2Product2VersionList depot2NetbootProducts;
-	protected Vector<Vector<Object>> productRows;
+	protected List<List<Object>> productRows;
 	protected Map<String, TreeSet<OpsiPackage>> depot2Packages;
 	protected Map<String, Map<String, List<String>>> product2VersionInfo2Depots;
 
@@ -167,7 +167,7 @@ public class DataStubNOM extends DataStub {
 	}
 
 	@Override
-	public Vector<Vector<Object>> getProductRows() {
+	public List<List<Object>> getProductRows() {
 		retrieveProductsAllDepots();
 		return productRows;
 	}
@@ -221,7 +221,7 @@ public class DataStubNOM extends DataStub {
 			depot2NetbootProducts = new Object2Product2VersionList();
 			product2VersionInfo2Depots = new HashMap<>();
 
-			productRows = new Vector<>();
+			productRows = new ArrayList<>();
 
 			depot2Packages = new HashMap<>();
 
@@ -264,7 +264,7 @@ public class DataStubNOM extends DataStub {
 				}
 				depotpackages.add(p);
 
-				Vector<Object> productRow = new Vector<>();
+				List<Object> productRow = new ArrayList<>();
 
 				productRow.add(p.getProductId());
 
@@ -332,16 +332,16 @@ public class DataStubNOM extends DataStub {
 			List<Map<String, Object>> retrieved = persist.retrieveListOfMapsNOM(callAttributes, callFilter,
 					"productProperty_getObjects");
 
-			Iterator iter = retrieved.iterator();
+			Iterator<Map<String, Object>> iter = retrieved.iterator();
 
 			while (iter.hasNext()) {
 
-				Map<String, Object> retrievedMap = (Map) iter.next();
+				Map<String, Object> retrievedMap = iter.next();
 				Map<String, Object> adaptedMap = new HashMap<>(retrievedMap);
 				// rebuild JSON objects
-				Iterator iterInner = retrievedMap.keySet().iterator();
+				Iterator<String> iterInner = retrievedMap.keySet().iterator();
 				while (iterInner.hasNext()) {
-					String key = (String) iterInner.next();
+					String key = iterInner.next();
 					adaptedMap.put(key, JSONReMapper.deriveStandard(retrievedMap.get(key)));
 				}
 
@@ -565,7 +565,7 @@ public class DataStubNOM extends DataStub {
 					configed.getResourceValue("LoadingObserver.loadtable") + " product property state");
 			String[] callAttributes = new String[] {};
 			Map callFilter = new HashMap<>();
-			callFilter.put("objectId", persist.exec.jsonArray(newClients));
+			callFilter.put("objectId", Executioner.jsonArray(newClients));
 
 			result = persist.retrieveListOfMapsNOM(callAttributes, callFilter, "productPropertyState_getObjects");
 
@@ -679,7 +679,7 @@ public class DataStubNOM extends DataStub {
 			List<Map<String, Object>> li = persist.retrieveListOfMapsNOM(callAttributes, callFilter,
 					"auditSoftware_getHashes");
 
-			Iterator iter = li.iterator();
+			Iterator<Map<String, Object>> iter = li.iterator();
 
 			installedSoftwareInformation = new TreeMap<>();
 			installedSoftwareInformationForLicensing = new TreeMap<>();
@@ -692,7 +692,7 @@ public class DataStubNOM extends DataStub {
 
 			while (iter.hasNext()) {
 				i++;
-				Map retrievedEntry = (Map) iter.next();
+				Map<String, Object> retrievedEntry = iter.next();
 
 				SWAuditEntry entry = new SWAuditEntry(retrievedEntry);
 				String swName = entry.get(SWAuditEntry.NAME);
@@ -903,7 +903,7 @@ public class DataStubNOM extends DataStub {
 				Map callFilter = new HashMap<>();
 				callFilter.put("state", 1);
 				if (newClients != null)
-					callFilter.put("clientId", persist.exec.jsonArray(clientListForCall));
+					callFilter.put("clientId", Executioner.jsonArray(clientListForCall));
 
 				List<Map<String, Object>> softwareAuditOnClients = persist.retrieveListOfMapsNOM(callAttributes,
 						callFilter, "auditSoftwareOnClient_getHashes");

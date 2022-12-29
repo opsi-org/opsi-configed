@@ -5,7 +5,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComponent;
@@ -21,7 +20,7 @@ import de.uib.utilities.logging.logging;
 public class DepotsList extends JList<String> implements ComponentListener {
 
 	MyListCellRenderer myListCellRenderer;
-	private Vector<? extends String> saveV;
+	private List<String> saveV;
 
 	Map<String, Map<String, Object>> depotInfo;
 
@@ -29,7 +28,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 	public DepotsList(PersistenceController persist) {
 		this.persist = persist;
-		setBackground(Globals.backgroundWhite);
+		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		setSelectionBackground(Globals.defaultTableCellSelectedBgColor);
 		setSelectionForeground(Globals.DEPOTS_LIST_FOREGROUND_COLOR);
 
@@ -47,13 +46,12 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		return depotInfo;
 	}
 
-	@Override
-	public void setListData(Vector<? extends String> v) {
-		super.setListData(v);
+	public void setListData(List<String> v) {
+		super.setListData(v.toArray(new String[0]));
 		saveV = v;
 	}
 
-	public Vector<? extends String> getListData() {
+	public List<String> getListData() {
 		return saveV;
 	}
 
@@ -128,7 +126,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 			Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-			if (c == null || !(c instanceof JComponent))
+			if (!(c instanceof JComponent))
 				return c;
 
 			JComponent jc = (JComponent) c;
@@ -152,7 +150,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 				String depot = (String) value;
 				if (!persist.getDepotPermission(depot)) {
-					((JLabel) jc).setBackground(Globals.backgroundLightGrey);
+					((JLabel) jc).setBackground(Globals.BACKGROUND_COLOR_3);
 					((JLabel) jc).setToolTipText(
 							"Depot " + depot + " " + configed.getResourceValue("Permission.depot.not_accessible"));
 				} else

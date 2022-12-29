@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.event.ChangeListener;
@@ -216,7 +217,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		GroupLayout additionalLayout = new GroupLayout(additionalPane);
 		additionalPane.setLayout(additionalLayout);
-		additionalPane.setBackground(Globals.backLightBlue);
+		additionalPane.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		saveNameField = new LowerCaseTextField();
 		saveNameField.setToolTipText(configed.getResourceValue("ClientSelectionDialog.searchnameFormat"));
@@ -236,7 +237,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				"images/reload16.png", "images/reload16_over.png", "images/reload16.png",
 				"images/reload16_disabled.png");
 
-		buttonReload.setBackground(Globals.backgroundLightGrey);
+		buttonReload.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		final ClientSelectionDialog dialog = this;
 		buttonReload.addActionListener(new ActionListener() {
@@ -262,7 +263,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				"images/reload16_red.png", "images/reload16_over.png", "images/reload16.png",
 				"images/reload16_disabled.png");
 
-		buttonRestart.setBackground(Globals.backgroundLightGrey);
+		buttonRestart.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		buttonRestart.addActionListener(new ActionListener() {
 			@Override
@@ -320,7 +321,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	private void init() {
 		contentPane = new JPanel();
-		contentPane.setBackground(Globals.backLightBlue);
+		contentPane.setBackground(Globals.BACKGROUND_COLOR_7);
 		layout = new GroupLayout(contentPane);
 		contentPane.setLayout(layout);
 
@@ -439,7 +440,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				box.addItem(op.getOperationString());
 			result.operationComponent = box;
 		} else
-			result.operationComponent = new JLabel(operations[0].getOperationString(), JLabel.CENTER);
+			result.operationComponent = new JLabel(operations[0].getOperationString(), SwingConstants.CENTER);
 		result.operationComponent.setMaximumSize(new Dimension(result.operationComponent.getMaximumSize().width,
 				result.operationComponent.getPreferredSize().height));
 		result.dataComponent = new JLabel(); // to reserve the place
@@ -743,7 +744,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			data = value;
 			break;
 		case BIT_INTEGER_TYPE:
-			Long value2 = (Long) ((SpinnerWithExt) group.dataComponent).getValue();
+			Long value2 = ((SpinnerWithExt) group.dataComponent).getValue();
 			if (value2 == 0)
 				return null;
 			data = value2;
@@ -1139,7 +1140,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		else if (component instanceof SpinnerWithExt && data.getType() == SelectData.DataType.BIT_INTEGER_TYPE)
 			((SpinnerWithExt) component).setValue((Long) data.getData());
 		else if (component instanceof JSpinner && data.getType() == SelectData.DataType.INTEGER_TYPE)
-			((JSpinner) component).setValue((Integer) data.getData());
+			((JSpinner) component).setValue(data.getData());
 	}
 
 	private void setConnectionTypes(AndOrSelectButtonByIcon andOr, IconAsButton not,

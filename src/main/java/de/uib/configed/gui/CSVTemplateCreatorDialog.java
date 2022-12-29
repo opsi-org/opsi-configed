@@ -13,7 +13,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Vector;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -69,10 +68,10 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	private JFormattedTextField otherSeparatorInput;
 	private JLabel stringSeparatorLabel;
 
-	private Vector<String> columnNames;
+	private List<String> columnNames;
 	private List<JCheckBox> headerButtons;
 
-	public CSVTemplateCreatorDialog(Vector<String> columnNames) {
+	public CSVTemplateCreatorDialog(List<String> columnNames) {
 		super(Globals.mainFrame, configed.getResourceValue("CSVTemplateCreatorDialog.title"), false,
 				new String[] { "ok", "cancel" },
 				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
@@ -88,7 +87,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	protected void allLayout() {
 		logging.info(this, "allLayout");
 
-		allpane.setBackground(Globals.backLightBlue);
+		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
@@ -216,17 +215,11 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			AbstractButton button = iter.nextElement();
 
 			button.addItemListener((ItemEvent e) -> {
-				if (e.getItem() == otherOption) {
-					otherSeparatorInput.setEnabled(true);
-				} else {
-					otherSeparatorInput.setEnabled(false);
-				}
+				otherSeparatorInput.setEnabled(e.getItem() == otherOption);
 
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					if (!button.getActionCommand().isEmpty()) {
-						format.setFieldSeparator(button.getActionCommand().charAt(0));
-					}
-				}
+				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty())
+					format.setFieldSeparator(button.getActionCommand().charAt(0));
+
 			});
 		}
 
@@ -460,7 +453,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	public void write(String csvFile) {
 		try {
 			CSVWriter writer = new CSVWriter(new FileWriter(csvFile), format);
-			Vector<String> headers = new Vector<>();
+			List<String> headers = new ArrayList<>();
 
 			headerButtons.forEach(header -> {
 				if (header.isSelected()) {

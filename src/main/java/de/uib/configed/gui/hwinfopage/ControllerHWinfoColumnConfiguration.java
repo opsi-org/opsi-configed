@@ -12,11 +12,11 @@
 
 package de.uib.configed.gui.hwinfopage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.Icon;
@@ -47,8 +47,8 @@ public class ControllerHWinfoColumnConfiguration {
 	private GenTableModel model;
 	TableUpdateCollection updateCollection;
 
-	Vector<String> columnNames;
-	Vector<String> classNames;
+	List<String> columnNames;
+	List<String> classNames;
 	public static final String COL_LINE_NO = configed.getResourceValue("HWinfoColumnConfiguration.colLineNo");
 	public static final String COL_HOST_VS_ITEM_ASSIGNED = configed
 			.getResourceValue("HWinfoColumnConfiguration.colHostVsItemAssigned");
@@ -186,7 +186,7 @@ public class ControllerHWinfoColumnConfiguration {
 	protected void initModel() {
 
 		updateCollection = new TableUpdateCollection();
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add(COL_LINE_NO);
 		columnNames.add(COL_HW_CLASS);
 		columnNames.add(COL_LINUX_QUERY);
@@ -196,7 +196,7 @@ public class ControllerHWinfoColumnConfiguration {
 		columnNames.add(COL_USE_IN_QUERY);
 		columnNames.add(COL_OPSI_DB_COLUMN_TYPE);
 
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
@@ -250,7 +250,7 @@ public class ControllerHWinfoColumnConfiguration {
 		panel.setTitlePane(
 				new JComponent[] { new JLabel(configed.getResourceValue("HWinfoColumnConfiguration.infoTitle")) }, 20);
 
-		panel.setTitlePaneBackground(Globals.backLightBlue);
+		panel.setTitlePaneBackground(Globals.BACKGROUND_COLOR_7);
 
 		LinkedHashMap<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
 

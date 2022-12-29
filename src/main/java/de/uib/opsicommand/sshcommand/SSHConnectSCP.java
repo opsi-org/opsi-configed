@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.SwingWorker;
 
@@ -76,16 +77,14 @@ public class SSHConnectSCP extends SSHConnectExec {
 			logging.info(this, "execute was called");
 
 			if (SSHCommandFactory.ssh_always_exec_in_background)
-				if (command.getShowOutputDialog())
-					outputDialog.setVisible(true);
-				else
-					outputDialog.setVisible(false);
+				outputDialog.setVisible(command.getShowOutputDialog());
 
 			return task.get();
-		} catch (java.lang.NullPointerException npe) {
-			logging.error(this, "exec NullPointerException", npe);
-		} catch (Exception e) {
+		} catch (ExecutionException e) {
 			logging.error(this, "exec Exception", e);
+		} catch (InterruptedException e) {
+			logging.error(this, "interrupted Exception", e);
+			Thread.currentThread().interrupt();
 		}
 		return null;
 	}
@@ -116,18 +115,16 @@ public class SSHConnectSCP extends SSHConnectExec {
 				return task.get();
 
 			if (SSHCommandFactory.ssh_always_exec_in_background)
+				dialog.setVisible(withGui);
 
-				if (withGui)
-					dialog.setVisible(true);
-				else
-					dialog.setVisible(false);
-
-			// else
 			return task.get();
 		} catch (java.lang.NullPointerException npe) {
 			logging.error(this, "exec NullPointerException", npe);
-		} catch (Exception e) {
+		} catch (ExecutionException e) {
 			logging.error(this, "exec Exception", e);
+		} catch (InterruptedException e) {
+			logging.error(this, "interrupted Exception", e);
+			Thread.currentThread().interrupt();
 		}
 		return "end of method";
 	}
@@ -141,11 +138,10 @@ public class SSHConnectSCP extends SSHConnectExec {
 		SSHConnectExec caller;
 
 		boolean withGui;
-		boolean rememberPw;
 		boolean interruptChannel = false;
 		int retriedTimes = 1;
-		int command_number = -1;
-		int max_command_number = -1;
+		int commandNumber = -1;
+		int maxCommandNumber = -1;
 
 		SshSFTPCommandWorker(SSHSFTPCommand command, SSHConnectionExecDialog outputDialog, boolean withGui) {
 			super();
@@ -161,15 +157,11 @@ public class SSHConnectSCP extends SSHConnectExec {
 		}
 
 		public void setMaxCommandNumber(int mc) {
-			this.max_command_number = mc;
+			this.maxCommandNumber = mc;
 		}
 
 		public void setCommandNumber(int cn) {
-			this.command_number = cn;
-		}
-
-		public boolean getInterruptedStatus() {
-			return interruptChannel;
+			this.commandNumber = cn;
 		}
 
 		private void checkExitCode(int exitCode, boolean withGui, Channel channel) {
@@ -177,10 +169,10 @@ public class SSHConnectSCP extends SSHConnectExec {
 			logging.debug(this, "publish " + s);
 			publishInfo(
 					"---------------------------------------------------------------------------------------------------------------------------------------------------");
-			if (this.command_number != -1 && this.max_command_number != -1)
+			if (this.commandNumber != -1 && this.maxCommandNumber != -1)
 				publishInfo(configed.getResourceValue("SSHConnection.Exec.commandcountertext")
-						.replace("xX0Xx", Integer.toString(this.command_number))
-						.replace("xX1Xx", Integer.toString(this.max_command_number)));
+						.replace("xX0Xx", Integer.toString(this.commandNumber))
+						.replace("xX1Xx", Integer.toString(this.maxCommandNumber)));
 			publishInfo(s.replace("-1", "0"));
 			if (exitCode == 127) {
 				logging.info(this, "exec exit code 127 (command does not exists).");
@@ -215,22 +207,19 @@ public class SSHConnectSCP extends SSHConnectExec {
 					publishError(configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
 				}
 			}
-			if (interruptChannel)
-				if (caller != null) {
-					interruptChannel(channel);
-					disconnect();
-					interruptChannel = true;
-					try {
-						Thread.sleep(50);
-					} catch (Exception ee) {
-					}
+			if (interruptChannel && caller != null) {
+				interruptChannel(channel);
+				disconnect();
+				interruptChannel = true;
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException ee) {
+					Thread.currentThread().interrupt();
 				}
+			}
 			publishInfo(
 					"---------------------------------------------------------------------------------------------------------------------------------------------------");
 		}
-
-		boolean pwsuccess = false;
-		int supw_retriedTimes = 0;
 
 		@Override
 		public String doInBackground() throws java.net.SocketException {
@@ -279,8 +268,6 @@ public class SSHConnectSCP extends SSHConnectExec {
 					return null;
 				}
 
-				if (fis != null)
-					fis.close();
 				setDialog(outputDialog);
 				logging.info(this, "exec ready (0)");
 			}
@@ -347,9 +334,9 @@ public class SSHConnectSCP extends SSHConnectExec {
 		private String getCommandName() {
 
 			String counterInfo = "";
-			if (this.command_number != -1 && this.max_command_number != -1)
-				counterInfo = "(" + Integer.toString(this.command_number) + "/"
-						+ Integer.toString(this.max_command_number) + ")";
+			if (this.commandNumber != -1 && this.maxCommandNumber != -1)
+				counterInfo = "(" + Integer.toString(this.commandNumber) + "/" + Integer.toString(this.maxCommandNumber)
+						+ ")";
 
 			String commandinfo = "[" + this.command.getId() + counterInfo + "]";
 			if ((commandInfoName != null) && (!commandInfoName.equals("")))

@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import de.uib.utilities.logging.logging;
-
 public class TreeSetBuddy extends TreeSet<String> {
 	public TreeSetBuddy(Collection<String> c) {
 		super(c);
@@ -80,37 +78,6 @@ public class TreeSetBuddy extends TreeSet<String> {
 
 		stest2 = new TreeSet<>(Arrays.asList("a", "b", "e"));
 		assert (!stest1.equals(stest2));
-	}
-
-	public static void main(String[] args) {
-		long startmillis = 0;
-		long endmillis = 0;
-
-		testWith();
-		testWithout();
-
-		logging.debug(" without knowledge");
-
-		startmillis = System.currentTimeMillis();
-		logging.debug(" startmillis " + startmillis);
-
-		for (int i = 0; i < 100; i++) {
-			testWithout();
-		}
-
-		endmillis = System.currentTimeMillis();
-
-		logging.debug("endmillis " + endmillis + " diff " + (endmillis - startmillis));
-
-		logging.debug(" withknowledge");
-		startmillis = System.currentTimeMillis();
-
-		for (int i = 0; i < 100; i++) {
-			testWith();
-		}
-		endmillis = System.currentTimeMillis();
-		logging.debug("endmillis " + endmillis + " diff " + (endmillis - startmillis));
-
 	}
 
 }

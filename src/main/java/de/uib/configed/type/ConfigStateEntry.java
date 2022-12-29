@@ -31,8 +31,6 @@ public class ConfigStateEntry extends HashMap<String, Object> {
 		}
 	}
 
-	
-
 	public ConfigStateEntry(String configId, String hostId, List values) {
 		super();
 		put(CONFIG_ID, configId);

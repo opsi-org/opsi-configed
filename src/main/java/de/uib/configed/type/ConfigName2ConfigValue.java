@@ -7,7 +7,7 @@ import java.util.Map;
 import de.uib.utilities.logging.logging;
 
 public class ConfigName2ConfigValue extends RetrievedMap {
-	Map<String, ConfigOption> configOptions;
+	private Map<String, ConfigOption> configOptions;
 
 	public ConfigName2ConfigValue(Map<String, Object> retrieved, Map<String, ConfigOption> configOptions) {
 		super(retrieved);

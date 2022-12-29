@@ -13,6 +13,7 @@ import java.awt.event.ComponentEvent;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.plaf.synth.Region;
 import javax.swing.plaf.synth.SynthConstants;
@@ -68,7 +69,7 @@ public class ClippedTitleTabbedPane extends JTabbedPane {
 	@Override
 	public void insertTab(String title, Icon icon, Component component, String tip, int index) {
 		super.insertTab(title, icon, component, tip == null ? title : tip, index);
-		JLabel label = new JLabel(title, JLabel.CENTER);
+		JLabel label = new JLabel(title, SwingConstants.CENTER);
 		Dimension dim = label.getPreferredSize();
 		Insets tabInsets = getTabInsets();
 		label.setPreferredSize(new Dimension(0, dim.height + tabInsets.top + tabInsets.bottom));

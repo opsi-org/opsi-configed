@@ -112,14 +112,14 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		jLabelProductVersion.setBackground(null);
 
 		jTextAreaProductInfo.setFont(Globals.defaultFont);
-		jTextAreaProductInfo.setBackground(Globals.backgroundLightGrey);
+		jTextAreaProductInfo.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		jScrollPaneProductInfo.setViewportView(jTextAreaProductInfo);
 		jScrollPaneProductInfo.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPaneProductInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		jTextAreaProductAdvice.setFont(Globals.defaultFont);
-		jTextAreaProductAdvice.setBackground(Globals.backgroundLightGrey);
+		jTextAreaProductAdvice.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		jScrollPaneProductAdvice.setViewportView(jTextAreaProductAdvice);
 		jScrollPaneProductAdvice.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -302,9 +302,9 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 	}
 
 	public void setGrey(boolean b) {
-		float alpha = (float) 1.0f;
+		float alpha = 1.0f;
 		if (b) {
-			alpha = (float) .1f;
+			alpha = .1f;
 		}
 
 		if (productDescriptionsPanel != null)

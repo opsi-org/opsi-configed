@@ -4,8 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
@@ -51,12 +52,12 @@ public abstract class SWExporter {
 	protected String title;
 
 	/* constructor for use in a initialized context */
-	public SWExporter(PersistenceController controller) {
+	protected SWExporter(PersistenceController controller) {
 		this.persist = controller;
 	}
 
 	/* constructor for standalone use */
-	public SWExporter() {
+	protected SWExporter() {
 	}
 
 	public void setArgs(String server, String user, String password, String clientsFile, String outDir) {
@@ -183,12 +184,12 @@ public abstract class SWExporter {
 		if (exportDirectory != null)
 			exportDirectoryS = exportDirectory.toString();
 
-		Vector<String> columnNames;
-		Vector<String> classNames;
+		List<String> columnNames;
+		List<String> classNames;
 
-		columnNames = new Vector<>(SWAuditClientEntry.KEYS);
+		columnNames = new ArrayList<>(SWAuditClientEntry.KEYS);
 		columnNames.remove(0);
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		int[] finalColumns = new int[columnNames.size()];
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");

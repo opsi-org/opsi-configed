@@ -25,7 +25,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.swing.DefaultRowSorter;
 import javax.swing.DropMode;
@@ -238,8 +237,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	JMenuItemFormatted menuItemFloatingCopy;
 	JMenuItemFormatted menuItemPDF;
 
-	protected Vector<JMenuItem> menuItemsRequesting1SelectedLine;
-	protected Vector<JMenuItem> menuItemsRequestingMultiSelectedLines;
+	protected List<JMenuItem> menuItemsRequesting1SelectedLine;
+	protected List<JMenuItem> menuItemsRequestingMultiSelectedLines;
 
 	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition, // if -1 dont
 			// use a
@@ -249,8 +248,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			boolean switchLineColors, int[] popupsWanted, boolean withTablesearchPane) {
 		this.withTablesearchPane = withTablesearchPane;
 
-		menuItemsRequesting1SelectedLine = new Vector<>();
-		menuItemsRequestingMultiSelectedLines = new Vector<>();
+		menuItemsRequesting1SelectedLine = new ArrayList<>();
+		menuItemsRequestingMultiSelectedLines = new ArrayList<>();
 
 		this.generalPopupPosition = generalPopupPosition;
 
@@ -363,7 +362,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	protected void initComponents() {
-		setBackground(Globals.backgroundWhite);
+		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		addComponentListener(this);
 
@@ -400,7 +399,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		titlePane = new PanelLinedComponents();
 		titlePane.setVisible(false);
-		titlePane.setBackground(Globals.backgroundWhite);
+		titlePane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		theTable = new de.uib.utilities.table.JTableWithToolTips();
 
@@ -457,14 +456,14 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		try {
 			scrollpane = new javax.swing.JScrollPane();
 			scrollpane.setViewportView(theTable);
-			scrollpane.getViewport().setBackground(Globals.backLightBlue);
+			scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 		} catch (ClassCastException ex) {
 			// a strange Nimbus exception which occurs sometimes here
 			logging.warning(this, "strange exception on creating scrollpane " + ex);
 
 			scrollpane = new javax.swing.JScrollPane();
 			scrollpane.setViewportView(theTable);
-			scrollpane.getViewport().setBackground(Globals.backLightBlue);
+			scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 
 		}
 
@@ -585,7 +584,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	public void setTitlePaneBackground(java.awt.Color c) {
 		if (c == null)
-			titlePane.setBackground(Globals.backgroundWhite);
+			titlePane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		else
 			titlePane.setBackground(c);
 	}
@@ -1354,10 +1353,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		Iterator iter = values.iterator();
+		Iterator<String> iter = values.iterator();
 
 		while (iter.hasNext()) {
-			int viewRow = findViewRowFromValue((String) iter.next(), col);
+			int viewRow = findViewRowFromValue(iter.next(), col);
 
 			getListSelectionModel().addSelectionInterval(viewRow, viewRow);
 		}

@@ -8,8 +8,9 @@
 
 package de.uib.utilities.table.updates;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.table.GenTableModel;
@@ -39,9 +40,9 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 
 		boolean success = true; // true until failure
 
-		Vector successfullInsertsWithNewKeys = new Vector<>();
+		List successfullInsertsWithNewKeys = new ArrayList<>();
 
-		Iterator iter = updateCollection.iterator();
+		Iterator<TableEditItem> iter = updateCollection.iterator();
 
 		String lastKeyValue = "";
 
@@ -123,7 +124,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 	@Override
 	public boolean cancelChanges() {
 
-		Iterator iter = updateCollection.iterator();
+		Iterator<TableEditItem> iter = updateCollection.iterator();
 		while (iter.hasNext()) {
 			MapBasedTableEditItem updateItem = (MapBasedTableEditItem) iter.next();
 			if (updateItem.getSource() == tablemodel) {

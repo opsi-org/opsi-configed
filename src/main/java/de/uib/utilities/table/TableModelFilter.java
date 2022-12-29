@@ -8,7 +8,7 @@
 
 package de.uib.utilities.table;
 
-import java.util.Vector;
+import java.util.List;
 
 import de.uib.utilities.logging.logging;
 
@@ -50,7 +50,7 @@ public class TableModelFilter {
 		inverted = b;
 	}
 
-	public boolean test(Vector<Object> row) {
+	public boolean test(List<Object> row) {
 		if (!inUse || condition == null)
 			return true;
 

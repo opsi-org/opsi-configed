@@ -20,7 +20,7 @@ public class FEditorPane extends FGeneralDialog {
 	private void init() {
 		editPane.setOpaque(true);
 
-		editPane.setBackground(Globals.backgroundGrey);
+		editPane.setBackground(Globals.BACKGROUND_COLOR_4);
 		editPane.setText("          ");
 		editPane.setEditable(false);
 		editPane.setFont(new java.awt.Font("Dialog", 0, 10));

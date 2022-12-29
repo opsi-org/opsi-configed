@@ -46,7 +46,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 
 		labelList.setToolTipText(defs.getListLabelToolTip());
 		theList = new JList<>();
-		theList.setListData(defs.getListData());
+		theList.setListData(defs.getListData().toArray(new String[0]));
 		if (defs.getListData() != null && !defs.getListData().isEmpty())
 			theList.setSelectedIndex(0);
 		theList.addListSelectionListener(this);
@@ -58,7 +58,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		// we could design an adapted layout and infuse it in guiInit
 		logging.info(this, "allLayout");
 
-		allpane.setBackground(Globals.backLightBlue);
+		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		// 
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
@@ -66,7 +66,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		if (centerPanel == null)
 			centerPanel = new JPanel();
 
-		centerPanel.setBackground(Globals.backLightBlue);
+		centerPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		southPanel = new JPanel();
 
@@ -91,7 +91,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
-		southPanel.setBackground(Globals.backLightBlue);
+		southPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		GroupLayout allLayout = new GroupLayout(allpane);
 		allpane.setLayout(allLayout);
@@ -123,7 +123,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 
 	public JPanel initPanel() {
 		JPanel thePanel = new JPanel();
-		thePanel.setBackground(Globals.backLightBlue);
+		thePanel.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		theList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		theList.addListSelectionListener(this);
@@ -186,30 +186,6 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 
-	}
-
-	public static void main(String[] args) {
-		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, // owner frame
-				"test FGeneralDialogTest", // title
-				false, // modal
-
-				new String[] { "ok", "cancel" },
-
-				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-						Globals.createImageIcon("images/cancel16_small.png", "") },
-				1, 600, 600, true, // lazylayout, i.e, we have a chance to define components and use them for the
-				// layout
-				null // addPanel predefined
-		);
-
-		JPanel centerPanel = f.initPanel();
-
-		f.setCenterPane(centerPanel);
-
-		f.setSize(new Dimension(500, 600));
-
-		f.setupLayout();
-		f.setVisible(true);
 	}
 
 }

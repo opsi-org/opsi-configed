@@ -5,9 +5,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -41,7 +41,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 
 	private TablesearchPane searchPane;
 
-	private Vector<? extends String> unfilteredV;
+	private List<String> unfilteredV;
 
 	private boolean multidepot;
 
@@ -55,8 +55,8 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		this.multidepot = multidepot;
 		this.persist = persist;
 
-		Vector<String> values = new Vector<>();
-		Vector<String> descriptions = new Vector<>();
+		List<String> values = new ArrayList<>();
+		List<String> descriptions = new ArrayList<>();
 		Map<String, Map<String, Object>> depotInfo = depotsList.getDepotInfo();
 
 		for (String depot : depotInfo.keySet()) {
@@ -96,7 +96,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	 * @return java.awt.Color
 	 */
 	public Color getMyColor() {
-		return Globals.backgroundWhite;
+		return Globals.SECONDARY_BACKGROUND_COLOR;
 	}
 
 	/**
@@ -106,9 +106,9 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	 */
 	public void setChangedDepotSelectionActive(boolean active) {
 		if (active)
-			depotslist.setBackground(Globals.backLightYellow);
+			depotslist.setBackground(Globals.BACKGROUND_COLOR_9);
 		else
-			depotslist.setBackground(Globals.backgroundWhite);
+			depotslist.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		// colorize as hint that we have changed the depots selection
 
@@ -122,7 +122,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 			labelDepotServer.setText(configed.getResourceValue("DepotListPresenter.depot"));
 		labelDepotServer.setOpaque(false);
 
-		labelDepotServer.setBackground(Globals.backLightBlue);
+		labelDepotServer.setBackground(Globals.BACKGROUND_COLOR_7);
 		labelDepotServer.setFont(Globals.defaultFontStandardBold);
 
 		buttonSelectDepotsWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
@@ -155,7 +155,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		scrollpaneDepotslist.setPreferredSize(depotslist.getMaximumSize());
 
 		depotslist.setFont(Globals.defaultFont);
-		depotslist.setBackground(Globals.backgroundWhite);
+		depotslist.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 	}
 
 	private void layouting() {
@@ -193,7 +193,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 
 		if (!filtered) {
 			unfilteredV = depotslist.getListData();
-			depotslist.setListData(new Vector<>(depotslist.getSelectedValuesList()));
+			depotslist.setListData(new ArrayList<>(depotslist.getSelectedValuesList()));
 		} else
 			depotslist.setListData(unfilteredV);
 

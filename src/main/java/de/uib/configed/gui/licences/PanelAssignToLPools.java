@@ -94,10 +94,10 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		// construct content panes
 		panelInfoWindowsSoftware = new JPanel();
-		panelInfoWindowsSoftware.setBackground(Globals.backgroundWhite);
+		panelInfoWindowsSoftware.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		panelInfoConfigWindowsSoftware = new JPanel();
-		panelInfoConfigWindowsSoftware.setBackground(Globals.backgroundWhite);
+		panelInfoConfigWindowsSoftware.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		titleWindowsSoftware = new JLabel(
 				configed.getResourceValue("PanelAssignToLPools.Licences.SectiontitleWindowsSoftware2LPool"));
@@ -233,7 +233,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		JPanel panelWorkNamebased = new JPanel();
 		panelWorkNamebased.setBorder(new javax.swing.border.LineBorder(Globals.blueGrey, 3, true));
-		panelWorkNamebased.setBackground(Globals.backgroundWhite);
+		panelWorkNamebased.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		panelWorkNamebased.setOpaque(true);
 		GroupLayout layoutNamebased = new GroupLayout(panelWorkNamebased);
 		panelWorkNamebased.setLayout(layoutNamebased);
@@ -295,11 +295,11 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(2, 5, 5));
 
-		panelRadiobuttonsDirectionOfAssignmentX.setBackground(Globals.backgroundWhite);
+		panelRadiobuttonsDirectionOfAssignmentX.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		GroupLayout layoutPanelInfo = new javax.swing.GroupLayout(panelInfoWindowsSoftware);
 		panelInfoWindowsSoftware.setLayout(layoutPanelInfo);
-		panelInfoWindowsSoftware.setBackground(Globals.backgroundWhite);
+		panelInfoWindowsSoftware.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		layoutPanelInfo.setHorizontalGroup(layoutPanelInfo.createSequentialGroup()
 				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
@@ -508,7 +508,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		javax.swing.GroupLayout layoutBottomPane = new javax.swing.GroupLayout((JPanel) bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
-		bottomPane.setBackground(Globals.backgroundWhite);
+		bottomPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		layoutBottomPane
 				.setHorizontalGroup(layoutBottomPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
