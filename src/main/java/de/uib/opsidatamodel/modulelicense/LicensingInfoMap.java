@@ -266,7 +266,7 @@ public class LicensingInfoMap {
 
 			for (int i = 0; i < licenses.length(); i++) {
 				JSONObject l = licenses.getJSONObject(i);
-				customerIDs.add(l.getString(CUSTOMER_ID));
+				customerIDs.add(l.get(CUSTOMER_ID).toString());
 			}
 
 		} catch (Exception ex) {
@@ -286,8 +286,8 @@ public class LicensingInfoMap {
 			for (int i = 0; i < licenses.length(); i++) {
 				JSONObject l = licenses.getJSONObject(i);
 				String customerName = l.getString(CUSTOMER_NAME);
-				if (!l.getString(CUSTOMER_UNIT).equals("null"))
-					customerNames.add(customerName + " - " + l.getString(CUSTOMER_UNIT));
+				if (!l.get(CUSTOMER_UNIT).toString().equals("null"))
+					customerNames.add(customerName + " - " + l.get(CUSTOMER_UNIT).toString());
 				else
 					customerNames.add(customerName);
 
