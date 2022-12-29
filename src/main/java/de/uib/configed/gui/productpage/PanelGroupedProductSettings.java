@@ -87,11 +87,6 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 	}
 
 	@Override
-	public void clearSelection() {
-		tableProducts.clearSelection();
-	}
-
-	@Override
 	public void setSelection(Set<String> selectedIDs) {
 		activatePacketSelectionHandling(false);
 		clearSelection();
@@ -151,7 +146,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 		InstallationStateTableModelFiltered tModel = (InstallationStateTableModelFiltered) tableProducts.getModel();
 
 		activatePacketSelectionHandling(false);
-		((InstallationStateTableModelFiltered) tModel).setFilterFrom((Set<String>) null);
+		tModel.setFilterFrom((Set<String>) null);
 		tableProducts.revalidate();
 		activatePacketSelectionHandling(true);
 	}

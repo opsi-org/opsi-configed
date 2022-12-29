@@ -11,7 +11,6 @@ import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.TableCellRenderer;
 
 /*
@@ -54,8 +53,7 @@ public class PanelProductProperties extends JSplitPane
 
 	protected int hMin = 200;
 
-	final int fwidth_lefthanded = 600;
-	final int splitterLeftRight = 15;
+	final int fwidth_lefthanded = 800;
 	final int fheight = 450;
 
 	final int fwidth_column_productname = 170;
@@ -77,7 +75,7 @@ public class PanelProductProperties extends JSplitPane
 		init();
 
 		setDividerLocation(fwidth_lefthanded);
-		setResizeWeight(0.5);
+		setResizeWeight(0.7);
 	}
 
 	protected void init() {
@@ -87,8 +85,8 @@ public class PanelProductProperties extends JSplitPane
 		depotsOfPackage = new ArrayList<>();
 
 		TableUpdateCollection updateCollection = new TableUpdateCollection();
-		GenTableModel model = new GenTableModel(null, mainController.globalProductsTableProvider, -1,
-				(TableModelListener) paneProducts, updateCollection);
+		GenTableModel model = new GenTableModel(null, mainController.globalProductsTableProvider, -1, paneProducts,
+				updateCollection);
 
 		final List<String> columnNames = model.getColumnNames();
 
@@ -160,9 +158,7 @@ public class PanelProductProperties extends JSplitPane
 					} else {
 						String productEdited = "" + theTable.getValueAt(row, columnNames.indexOf("productId"));
 
-						String depotId = ""
-
-						;
+						String depotId = "";
 
 						logging.info(this, "selected  depotId, product: " + depotId + ", " + productEdited);
 

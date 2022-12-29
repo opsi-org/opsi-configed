@@ -697,7 +697,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			public void run() {
 				initGui();
 
-				mainFrame.initFirstSplitPane();
+				mainFrame.initSplitPanes();
 
 				waitCursorInitGui.stop();
 				checkErrorList();
@@ -1361,6 +1361,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		logging.info(this, "setting mainframe visible");
 		mainFrame.setVisible(true);
+
+		mainFrame.panelLocalbootProductSettings.setDividerLocation(mainFrame.getSize().width - 600);
+		mainFrame.panelNetbootProductSettings.setDividerLocation(mainFrame.getSize().width - 600);
 	}
 
 	protected void initLicencesFrame() {
@@ -2295,13 +2298,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected void clearProductEditing() {
-		mainFrame.panel_LocalbootProductsettings.clearEditing();
-		mainFrame.panel_NetbootProductsettings.clearEditing();
+		mainFrame.panelLocalbootProductSettings.clearEditing();
+		mainFrame.panelNetbootProductSettings.clearEditing();
 	}
 
 	protected void clearListEditors() {
-		mainFrame.panel_LocalbootProductsettings.clearListEditors();
-		mainFrame.panel_NetbootProductsettings.clearListEditors();
+		mainFrame.panelLocalbootProductSettings.clearListEditors();
+		mainFrame.panelNetbootProductSettings.clearListEditors();
 	}
 
 	public void setProductEdited(String productname)
@@ -2344,7 +2347,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		logging.debug(this, "setProductEdited " + productname + " client specific properties "
 				+ persist.hasClientSpecificProperties(productname));
 
-		mainFrame.panel_LocalbootProductsettings.initEditing(productEdited, persist.getProductTitle(productEdited),
+		mainFrame.panelLocalbootProductSettings.initEditing(productEdited, persist.getProductTitle(productEdited),
 				persist.getProductInfo(productEdited), persist.getProductHint(productEdited),
 				persist.getProductVersion(productEdited) + Globals.ProductPackageVersionSeparator.forDisplay()
 						+ persist.getProductPackageVersion(productEdited) + "   "
@@ -2360,7 +2363,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				clientProductpropertiesUpdateCollection);
 
-		mainFrame.panel_NetbootProductsettings.initEditing(productEdited, persist.getProductTitle(productEdited),
+		mainFrame.panelNetbootProductSettings.initEditing(productEdited, persist.getProductTitle(productEdited),
 				persist.getProductInfo(productEdited), persist.getProductHint(productEdited),
 				persist.getProductVersion(productEdited) + Globals.ProductPackageVersionSeparator.forDisplay()
 						+ persist.getProductPackageVersion(productEdited) + "   "
@@ -2832,7 +2835,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 
 			clientProductpropertiesUpdateCollections = new HashMap<>();
-			mainFrame.panel_LocalbootProductsettings.initAllProperties();
+			mainFrame.panelLocalbootProductSettings.initAllProperties();
 
 			logging.debug(this, "setLocalbootProductsPage,  depotRepresentative:" + depotRepresentative);
 			possibleActions = persist.getPossibleActions(depotRepresentative);
@@ -2845,8 +2848,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			persist.retrieveProductproperties(selectionPanel.getSelectedValues());
 
-			Set<String> oldProductSelection = mainFrame.panel_LocalbootProductsettings.getSelectedIDs();
-			List<? extends RowSorter.SortKey> currentSortKeysLocalbootProducts = mainFrame.panel_LocalbootProductsettings
+			Set<String> oldProductSelection = mainFrame.panelLocalbootProductSettings.getSelectedIDs();
+			List<? extends RowSorter.SortKey> currentSortKeysLocalbootProducts = mainFrame.panelLocalbootProductSettings
 					.getSortKeys();
 
 			logging.info(this, "setLocalbootProductsPage: oldProductSelection " + oldProductSelection);
@@ -2866,19 +2869,19 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 
 			try {
-				mainFrame.panel_LocalbootProductsettings.setTableModel(istmForSelectedClientsLocalboot);
-				mainFrame.panel_LocalbootProductsettings.setSortKeys(currentSortKeysLocalbootProducts);
+				mainFrame.panelLocalbootProductSettings.setTableModel(istmForSelectedClientsLocalboot);
+				mainFrame.panelLocalbootProductSettings.setSortKeys(currentSortKeysLocalbootProducts);
 
-				mainFrame.panel_LocalbootProductsettings.setGroupsData(productGroups, productGroupMembers);
+				mainFrame.panelLocalbootProductSettings.setGroupsData(productGroups, productGroupMembers);
 
 				logging.info(this, "resetFilter " + configed.savedStates.saveLocalbootproductFilter.deserialize());
 
-				(mainFrame.panel_LocalbootProductsettings).reduceToSet(savedFilter);
+				(mainFrame.panelLocalbootProductSettings).reduceToSet(savedFilter);
 
 				logging.info(this, "setLocalbootProductsPage oldProductSelection -----------  " + oldProductSelection);
-				mainFrame.panel_LocalbootProductsettings.setSelection(oldProductSelection); // (*)
+				mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection); // (*)
 
-				mainFrame.panel_LocalbootProductsettings
+				mainFrame.panelLocalbootProductSettings
 						.setSearchFields(de.uib.configed.guidata.InstallationStateTableModel
 								.localizeColumns(getLocalbootProductDisplayFieldsList()));
 
@@ -2924,15 +2927,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					"setNetbootProductsPage, # getMapOfNetbootProductStatesAndActions(selectedClients)  end "
 							+ endmillis + " diff " + (endmillis - startmillis));
 
-			List<? extends RowSorter.SortKey> currentSortKeysNetbootProducts = mainFrame.panel_NetbootProductsettings
+			List<? extends RowSorter.SortKey> currentSortKeysNetbootProducts = mainFrame.panelNetbootProductSettings
 					.getSortKeys();
 
 			clientProductpropertiesUpdateCollections = new HashMap<>();
-			mainFrame.panel_LocalbootProductsettings.initAllProperties();
+			mainFrame.panelLocalbootProductSettings.initAllProperties();
 
 			possibleActions = persist.getPossibleActions(depotRepresentative);
 
-			Set<String> oldProductSelection = mainFrame.panel_NetbootProductsettings.getSelectedIDs();
+			Set<String> oldProductSelection = mainFrame.panelNetbootProductSettings.getSelectedIDs();
 
 			// we retrieve the properties for all clients and products
 
@@ -2948,17 +2951,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 
 			try {
-				mainFrame.panel_NetbootProductsettings.setTableModel(istmForSelectedClientsNetboot);
+				mainFrame.panelNetbootProductSettings.setTableModel(istmForSelectedClientsNetboot);
 
-				mainFrame.panel_NetbootProductsettings.setSortKeys(currentSortKeysNetbootProducts);
+				mainFrame.panelNetbootProductSettings.setSortKeys(currentSortKeysNetbootProducts);
 
-				mainFrame.panel_NetbootProductsettings.setGroupsData(productGroups, productGroupMembers);
+				mainFrame.panelNetbootProductSettings.setGroupsData(productGroups, productGroupMembers);
 
 				logging.info(this, "resetFilter " + configed.savedStates.saveLocalbootproductFilter.deserialize());
 
-				mainFrame.panel_NetbootProductsettings.reduceToSet(savedFilter);
+				mainFrame.panelNetbootProductSettings.reduceToSet(savedFilter);
 
-				mainFrame.panel_NetbootProductsettings.setSelection(oldProductSelection);
+				mainFrame.panelNetbootProductSettings.setSelection(oldProductSelection);
 
 			} catch (Exception ex) {
 				logging.error(" setNetbootInstallationStateTableModel,  exception Occurred", ex);
@@ -3016,15 +3019,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		logging.debug(this, "setProductPropertiesPage");
 
 		if (editingTarget == EditingTarget.DEPOTS) {
-			int saveSelectedRow = mainFrame.panel_ProductProperties.paneProducts.getSelectedRow();
-			mainFrame.panel_ProductProperties.paneProducts.reset();
+			int saveSelectedRow = mainFrame.panelProductProperties.paneProducts.getSelectedRow();
+			mainFrame.panelProductProperties.paneProducts.reset();
 
-			if (mainFrame.panel_ProductProperties.paneProducts.getTableModel().getRowCount() > 0) {
-				if (saveSelectedRow == -1 || mainFrame.panel_ProductProperties.paneProducts.getTableModel()
+			if (mainFrame.panelProductProperties.paneProducts.getTableModel().getRowCount() > 0) {
+				if (saveSelectedRow == -1 || mainFrame.panelProductProperties.paneProducts.getTableModel()
 						.getRowCount() <= saveSelectedRow) {
-					mainFrame.panel_ProductProperties.paneProducts.setSelectedRow(0);
+					mainFrame.panelProductProperties.paneProducts.setSelectedRow(0);
 				} else {
-					mainFrame.panel_ProductProperties.paneProducts.setSelectedRow(saveSelectedRow);
+					mainFrame.panelProductProperties.paneProducts.setSelectedRow(saveSelectedRow);
 				}
 			}
 
@@ -3048,7 +3051,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				hostUpdateCollection = new HostUpdateCollection(persist);
 				addToGlobalUpdateCollection(hostUpdateCollection);
 
-				mainFrame.panel_HostProperties.initMultipleHostsEditing(
+				mainFrame.panelHostProperties.initMultipleHostsEditing(
 						configed.getResourceValue("PanelHostProperties.SelectHost"),
 						new DefaultComboBoxModel<>(depotPropertiesForPermittedDepots.keySet().toArray(new String[0])),
 						depotPropertiesForPermittedDepots, hostUpdateCollection,
@@ -3112,7 +3115,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				additionalconfigurationUpdateCollection.setMasterConfig(true);
 
-				mainFrame.panel_HostConfig.initEditing(
+				mainFrame.panelHostConfig.initEditing(
 
 						"  " + myServer + " (configuration server)", (Map) additionalConfigs.get(0),
 						persist.getConfigOptions(), additionalConfigs, additionalconfigurationUpdateCollection, true,
@@ -3147,7 +3150,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				removeKeysStartingWith(mergedVisualMap, PersistenceController.CONFIG_KEYSTARTERS_NOT_FOR_CLIENTS);
 
-				mainFrame.panel_HostConfig.initEditing("  " + getSelectedClientsString(), // "",
+				mainFrame.panelHostConfig.initEditing("  " + getSelectedClientsString(), // "",
 						mergedVisualMap, configOptions, additionalConfigs, additionalconfigurationUpdateCollection,
 						false, // editableOptions
 						PersistenceController.PROPERTYCLASSES_CLIENT);
@@ -3777,7 +3780,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			logging.info(this, "reloadData _1");
 
 			// calls again persist.productDataRequestRefresh()
-			mainFrame.panel_ProductProperties.paneProducts.reload();
+			mainFrame.panelProductProperties.paneProducts.reload();
 			logging.info(this, "reloadData _2");
 
 			// if variable modelDataValid in GenTableModel has no function , the following

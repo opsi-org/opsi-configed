@@ -108,8 +108,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	protected int hMin = 200;
 
-	final int fwidth_lefthanded = 800;
-	final int splitterLeftRight = 15;
+	final int fwidth_lefthanded = 1100;
 	final int fheight = 450;
 
 	final int fwidth_column_productname = 170;
@@ -170,9 +169,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		this.productDisplayFields = productDisplayFields;
 		init();
 
-		setDividerLocation(fwidth_lefthanded);
-		setResizeWeight(0.5);
-
+		setResizeWeight(0.7);
 	}
 
 	protected void initTopPane() {

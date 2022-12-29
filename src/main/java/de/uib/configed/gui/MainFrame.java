@@ -137,7 +137,7 @@ import javafx.embed.swing.JFXPanel;
 public class MainFrame extends JFrame implements WindowListener, KeyListener, MouseListener, ActionListener,
 		RunningInstancesObserver<JDialog>, ComponentListener {
 
-	protected int dividerLocationCentralPane = 300;
+	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 300;
 	protected int minHSizeTreePanel = 150;
 
 	public static final int F_WIDTH = 800;
@@ -150,13 +150,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	protected String oldNotes;
 
-	protected Map<String, Map<String, String>> changedClientInfos;
+	private Map<String, Map<String, String>> changedClientInfos;
 
-	protected ExportTable exportTable;
+	private ExportTable exportTable;
 
-	ConfigedMain main;
+	private ConfigedMain main;
 
-	public SizeListeningPanel allPane;
+	private SizeListeningPanel allPane;
 
 	// menu system
 
@@ -207,15 +207,15 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	// JCheckBoxMenuItem jCheckBoxMenuItem_displayClientList = new
 
-	private JCheckBoxMenuItem jCheckBoxMenuItem_showCreatedColumn = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem jCheckBoxMenuItem_showWANactiveColumn = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem jCheckBoxMenuItem_showIPAddressColumn = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem jCheckBoxMenuItem_showInventoryNumberColumn = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem jCheckBoxMenuItem_showHardwareAddressColumn = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem jCheckBoxMenuItem_showSessionInfoColumn = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem jCheckBoxMenuItem_showUefiBoot = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem jCheckBoxMenuItem_showInstallByShutdown = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem jCheckBoxMenuItem_showDepotColumn = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem jCheckBoxMenuItemShowCreatedColumn = new JCheckBoxMenuItem();
+	JCheckBoxMenuItem jCheckBoxMenuItemShowWANactiveColumn = new JCheckBoxMenuItem();
+	JCheckBoxMenuItem jCheckBoxMenuItemShowIPAddressColumn = new JCheckBoxMenuItem();
+	JCheckBoxMenuItem jCheckBoxMenuItemShowInventoryNumberColumn = new JCheckBoxMenuItem();
+	JCheckBoxMenuItem jCheckBoxMenuItemShowHardwareAddressColumn = new JCheckBoxMenuItem();
+	JCheckBoxMenuItem jCheckBoxMenuItemShowSessionInfoColumn = new JCheckBoxMenuItem();
+	JCheckBoxMenuItem jCheckBoxMenuItemShowUefiBoot = new JCheckBoxMenuItem();
+	JCheckBoxMenuItem jCheckBoxMenuItemShowInstallByShutdown = new JCheckBoxMenuItem();
+	JCheckBoxMenuItem jCheckBoxMenuItemShowDepotColumn = new JCheckBoxMenuItem();
 	JMenuItem jMenuRemoteControl = new JMenuItem();
 
 	JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProductOnClientWithStates,
@@ -340,31 +340,31 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	public IconButton iconButtonReachableInfo;
 	public IconButton iconButtonSessionInfo;
 
-	public CombinedMenuItem combinedMenuItemCreatedColumn = new CombinedMenuItem(jCheckBoxMenuItem_showCreatedColumn,
+	public CombinedMenuItem combinedMenuItemCreatedColumn = new CombinedMenuItem(jCheckBoxMenuItemShowCreatedColumn,
 			popupShowCreatedColumn);
 
-	public CombinedMenuItem combinedMenuItemWANactiveColumn = new CombinedMenuItem(
-			jCheckBoxMenuItem_showWANactiveColumn, popupShowWANactiveColumn);
+	public CombinedMenuItem combinedMenuItemWANactiveColumn = new CombinedMenuItem(jCheckBoxMenuItemShowWANactiveColumn,
+			popupShowWANactiveColumn);
 
-	public CombinedMenuItem combinedMenuItemIPAddressColumn = new CombinedMenuItem(
-			jCheckBoxMenuItem_showIPAddressColumn, popupShowIPAddressColumn);
+	public CombinedMenuItem combinedMenuItemIPAddressColumn = new CombinedMenuItem(jCheckBoxMenuItemShowIPAddressColumn,
+			popupShowIPAddressColumn);
 
 	public CombinedMenuItem combinedMenuItemHardwareAddressColumn = new CombinedMenuItem(
-			jCheckBoxMenuItem_showHardwareAddressColumn, popupShowHardwareAddressColumn);
+			jCheckBoxMenuItemShowHardwareAddressColumn, popupShowHardwareAddressColumn);
 
 	public CombinedMenuItem combinedMenuItemSessionInfoColumn = new CombinedMenuItem(
-			jCheckBoxMenuItem_showSessionInfoColumn, popupShowSessionInfoColumn);
+			jCheckBoxMenuItemShowSessionInfoColumn, popupShowSessionInfoColumn);
 
 	public CombinedMenuItem combinedMenuItemInventoryNumberColumn = new CombinedMenuItem(
-			jCheckBoxMenuItem_showInventoryNumberColumn, popupShowInventoryNumberColumn);
+			jCheckBoxMenuItemShowInventoryNumberColumn, popupShowInventoryNumberColumn);
 
-	public CombinedMenuItem combinedMenuItemUefiBootColumn = new CombinedMenuItem(jCheckBoxMenuItem_showUefiBoot,
+	public CombinedMenuItem combinedMenuItemUefiBootColumn = new CombinedMenuItem(jCheckBoxMenuItemShowUefiBoot,
 			popupShowUefiBoot);
 
 	public CombinedMenuItem combinedMenuItemInstallByShutdownColumn = new CombinedMenuItem(
-			jCheckBoxMenuItem_showInstallByShutdown, popupShowInstallByShutdownColumn);
+			jCheckBoxMenuItemShowInstallByShutdown, popupShowInstallByShutdownColumn);
 
-	public CombinedMenuItem combinedMenuItemDepotColumn = new CombinedMenuItem(jCheckBoxMenuItem_showDepotColumn,
+	public CombinedMenuItem combinedMenuItemDepotColumn = new CombinedMenuItem(jCheckBoxMenuItemShowDepotColumn,
 			popupShowDepotColumn);
 
 	JPanel proceeding;
@@ -375,33 +375,33 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	BorderLayout borderLayout1 = new BorderLayout();
 	GroupLayout contentLayout;
 	JTabbedPane jTabbedPaneConfigPanes = new JTabbedPane();
-	public JSplitPane panel_Clientselection;
+	public JSplitPane panelClientSelection;
 
 	private HostsStatusPanel statusPane;
 
-	public PanelGroupedProductSettings panel_LocalbootProductsettings;
-	public PanelGroupedProductSettings panel_NetbootProductsettings;
-	public PanelHostConfig panel_HostConfig;
-	public PanelHostProperties panel_HostProperties;
-	public PanelProductProperties panel_ProductProperties;
+	public PanelGroupedProductSettings panelLocalbootProductSettings;
+	public PanelGroupedProductSettings panelNetbootProductSettings;
+	public PanelHostConfig panelHostConfig;
+	public PanelHostProperties panelHostProperties;
+	public PanelProductProperties panelProductProperties;
 
-	de.uib.configed.gui.hwinfopage.PanelHWInfo showHardwareLog_version2;
-	TitledPanel showHardwareLog_NotFound;
+	de.uib.configed.gui.hwinfopage.PanelHWInfo showHardwareLogVersion2;
+	TitledPanel showHardwareLogNotFound;
 	public ControllerHWinfoMultiClients controllerHWinfoMultiClients;
-	JPanel showHardwareLog_MultiClientReport;
+	JPanel showHardwareLogMultiClientReport;
 	JPanel showHardwareLogParentOfNotFoundPanel;
 	JPanel showHardwareLog;
 	JLabel labelNoSoftware;
 	Panelreinst panelReinstmgr = new Panelreinst();
 
 	PanelSWInfo panelSWInfo;
-	JPanel showSoftwareLog_NotFound;
-	PanelSWMultiClientReport showSoftwareLog_MultiClientReport;
+	JPanel showSoftwareLogNotFound;
+	PanelSWMultiClientReport showSoftwareLogMultiClientReport;
 	JPanel showSoftwareLog;
 
 	PanelTabbedDocuments showLogfiles;
 
-	JPanel jPanel_Schalterstellung;
+	JPanel jPanelSchalterstellung;
 
 	public de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo fDialogOpsiLicensingInfo;
 
@@ -411,11 +411,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	JCheckBox jCheckBoxSorted = new JCheckBox();
 	JButton jButtonSaveList = new JButton();
-	JPanel jPanel_ButtonSaveList = new JPanel();
+	JPanel jPanelButtonSaveList = new JPanel();
 	String[] options = new String[] { "off", "on", "setup" };
 	JComboBox<String> jComboBoxProductValues = new JComboBox<>(options);
 
-	JLabel jLabel_property = new JLabel();
+	JLabel jLabelproperty = new JLabel();
 	ButtonGroup buttonGroupRequired = new ButtonGroup();
 	JRadioButton jRadioRequiredAll = new JRadioButton();
 	JRadioButton jRadioRequiredOff = new JRadioButton();
@@ -425,7 +425,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JTableSelectionPanel panelClientlist;
 	boolean shiftpressed = false;
 
-	JLabel jLabel_Hostinfos = new JLabel();
+	JLabel jLabelHostinfos = new JLabel();
 
 	JLabel jLabelPath = new JLabel();
 
@@ -536,7 +536,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		UIManager.put("OptionPane.cancelButtonText", configed.getResourceValue("UIManager.cancelButtonText"));
 
 		FEditObject.runningInstances.addObserver(this);
-
 	}
 
 	@Override
@@ -559,40 +558,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		return baseContainer;
 	}
 
-	public void initFirstSplitPane() {
-		panel_Clientselection.setDividerLocation(0.8);
-	}
-
-	public void repairSizes() {
-		// repair sizes when the frame is resized
-
-		if (panel_Clientselection == null)
-			return;
-
-		splitterPanelClientSelection = panel_Clientselection.getSize().width - clientPaneW;
-
-		moveDivider1(panel_Clientselection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
-				(int) (F_WIDTH_RIGHTHANDED * 1.5));
-	}
-
-	private void moveDivider1(JSplitPane splitpane, JComponent rightpane, int min_right_width, int min_left_width,
-			int max_right_width) {
-		if (splitpane == null || rightpane == null)
-			return;
-
-		int dividerLocation = splitpane.getDividerLocation();
-
-		int sizeOfRightPanel = (int) rightpane.getSize().getWidth();
-		int missingSpace = min_right_width - sizeOfRightPanel;
-		if (missingSpace > 0 && dividerLocation > min_left_width) {
-			splitpane.setDividerLocation(dividerLocation - missingSpace);
-
-		}
-
-		if (sizeOfRightPanel > max_right_width) {
-			splitpane.setDividerLocation(dividerLocation + (sizeOfRightPanel - max_right_width));
-		}
-
+	// This shall be called after MainFrame is made visible
+	public void initSplitPanes() {
+		panelClientSelection.setDividerLocation(0.8);
+		panelLocalbootProductSettings.setDividerLocation(0.8);
+		panelNetbootProductSettings.setDividerLocation(0.8);
 	}
 
 	public class SizeListeningPanel extends JPanel implements ComponentListener {
@@ -649,12 +619,12 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		public void repairSizes() {
 			// repair sizes when the frame is resized
 
-			if (panel_Clientselection == null)
+			if (panelClientSelection == null)
 				return;
 
-			splitterPanelClientSelection = panel_Clientselection.getSize().width - clientPaneW;
+			splitterPanelClientSelection = panelClientSelection.getSize().width - clientPaneW;
 
-			moveDivider1(panel_Clientselection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
+			moveDivider1(panelClientSelection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
 					(int) (F_WIDTH_RIGHTHANDED * 1.5));
 		}
 
@@ -783,67 +753,65 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private void setupMenuClients() {
 		jMenuClients.setText(configed.getResourceValue("MainFrame.jMenuClients"));
 
-		jCheckBoxMenuItem_showCreatedColumn.setText(configed.getResourceValue("MainFrame.jMenuShowCreatedColumn"));
+		jCheckBoxMenuItemShowCreatedColumn.setText(configed.getResourceValue("MainFrame.jMenuShowCreatedColumn"));
 		combinedMenuItemCreatedColumn.show(main.hostDisplayFields.get(HostInfo.CREATED_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItem_showCreatedColumn.addItemListener((ItemEvent e) -> main.toggleColumnCreated());
+		jCheckBoxMenuItemShowCreatedColumn.addItemListener((ItemEvent e) -> main.toggleColumnCreated());
 
-		jCheckBoxMenuItem_showWANactiveColumn.setText(configed.getResourceValue("MainFrame.jMenuShowWanConfig"));
+		jCheckBoxMenuItemShowWANactiveColumn.setText(configed.getResourceValue("MainFrame.jMenuShowWanConfig"));
 		combinedMenuItemWANactiveColumn
 				.show(main.hostDisplayFields.get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItem_showWANactiveColumn.addItemListener((ItemEvent e) -> main.toggleColumnWANactive());
+		jCheckBoxMenuItemShowWANactiveColumn.addItemListener((ItemEvent e) -> main.toggleColumnWANactive());
 
-		jCheckBoxMenuItem_showIPAddressColumn.setText(configed.getResourceValue("MainFrame.jMenuShowIPAddressColumn"));
+		jCheckBoxMenuItemShowIPAddressColumn.setText(configed.getResourceValue("MainFrame.jMenuShowIPAddressColumn"));
 		combinedMenuItemIPAddressColumn
 				.show(main.hostDisplayFields.get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItem_showIPAddressColumn.addItemListener((ItemEvent e) -> main.toggleColumnIPAddress());
+		jCheckBoxMenuItemShowIPAddressColumn.addItemListener((ItemEvent e) -> main.toggleColumnIPAddress());
 
-		jCheckBoxMenuItem_showHardwareAddressColumn
+		jCheckBoxMenuItemShowHardwareAddressColumn
 				.setText(configed.getResourceValue("MainFrame.jMenuShowHardwareAddressColumn"));
 		combinedMenuItemHardwareAddressColumn
 				.show(main.hostDisplayFields.get(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItem_showHardwareAddressColumn
-				.addItemListener((ItemEvent e) -> main.toggleColumnHardwareAddress());
+		jCheckBoxMenuItemShowHardwareAddressColumn.addItemListener((ItemEvent e) -> main.toggleColumnHardwareAddress());
 
-		jCheckBoxMenuItem_showSessionInfoColumn
+		jCheckBoxMenuItemShowSessionInfoColumn
 				.setText(configed.getResourceValue("MainFrame.jMenuShowSessionInfoColumn"));
 		combinedMenuItemSessionInfoColumn
 				.show(main.hostDisplayFields.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItem_showSessionInfoColumn.addItemListener((ItemEvent e) -> {
+		jCheckBoxMenuItemShowSessionInfoColumn.addItemListener((ItemEvent e) -> {
 			logging.info(this, "toggleColumnSessionInfo by CheckBoxMenuItem");
 			main.toggleColumnSessionInfo();
 
 		});
 
-		jCheckBoxMenuItem_showInventoryNumberColumn
+		jCheckBoxMenuItemShowInventoryNumberColumn
 				.setText(configed.getResourceValue("MainFrame.jMenuShowInventoryNumberColumn"));
 		combinedMenuItemInventoryNumberColumn
 				.show(main.hostDisplayFields.get(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItem_showInventoryNumberColumn
-				.addItemListener((ItemEvent e) -> main.toggleColumnInventoryNumber());
+		jCheckBoxMenuItemShowInventoryNumberColumn.addItemListener((ItemEvent e) -> main.toggleColumnInventoryNumber());
 
-		jCheckBoxMenuItem_showUefiBoot.setText(configed.getResourceValue("MainFrame.jMenuShowUefiBoot"));
+		jCheckBoxMenuItemShowUefiBoot.setText(configed.getResourceValue("MainFrame.jMenuShowUefiBoot"));
 		combinedMenuItemUefiBootColumn.show(main.hostDisplayFields.get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItem_showUefiBoot.addItemListener((ItemEvent e) -> main.toggleColumnUEFIactive());
+		jCheckBoxMenuItemShowUefiBoot.addItemListener((ItemEvent e) -> main.toggleColumnUEFIactive());
 
-		jCheckBoxMenuItem_showInstallByShutdown
+		jCheckBoxMenuItemShowInstallByShutdown
 				.setText(configed.getResourceValue("MainFrame.jMenuShowInstallByShutdown"));
 		combinedMenuItemUefiBootColumn
 				.show(main.hostDisplayFields.get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItem_showInstallByShutdown
+		jCheckBoxMenuItemShowInstallByShutdown
 				.addItemListener((ItemEvent e) -> main.toggleColumnInstallByShutdownActive());
 
-		jCheckBoxMenuItem_showDepotColumn.setText(configed.getResourceValue("MainFrame.jMenuShowDepotOfClient"));
+		jCheckBoxMenuItemShowDepotColumn.setText(configed.getResourceValue("MainFrame.jMenuShowDepotOfClient"));
 		combinedMenuItemDepotColumn.show(main.hostDisplayFields.get(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL));
 
-		jCheckBoxMenuItem_showDepotColumn.addItemListener((ItemEvent e) -> main.toggleColumnDepot());
+		jCheckBoxMenuItemShowDepotColumn.addItemListener((ItemEvent e) -> main.toggleColumnDepot());
 
 		jMenuChangeDepot.setText(configed.getResourceValue("MainFrame.jMenuChangeDepot"));
 
@@ -974,15 +942,15 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		// --
 
-		jMenuClients.add(jCheckBoxMenuItem_showWANactiveColumn);
-		jMenuClients.add(jCheckBoxMenuItem_showIPAddressColumn);
-		jMenuClients.add(jCheckBoxMenuItem_showHardwareAddressColumn);
-		jMenuClients.add(jCheckBoxMenuItem_showSessionInfoColumn);
-		jMenuClients.add(jCheckBoxMenuItem_showInventoryNumberColumn);
-		jMenuClients.add(jCheckBoxMenuItem_showCreatedColumn);
-		jMenuClients.add(jCheckBoxMenuItem_showUefiBoot);
-		jMenuClients.add(jCheckBoxMenuItem_showInstallByShutdown);
-		jMenuClients.add(jCheckBoxMenuItem_showDepotColumn);
+		jMenuClients.add(jCheckBoxMenuItemShowWANactiveColumn);
+		jMenuClients.add(jCheckBoxMenuItemShowIPAddressColumn);
+		jMenuClients.add(jCheckBoxMenuItemShowHardwareAddressColumn);
+		jMenuClients.add(jCheckBoxMenuItemShowSessionInfoColumn);
+		jMenuClients.add(jCheckBoxMenuItemShowInventoryNumberColumn);
+		jMenuClients.add(jCheckBoxMenuItemShowCreatedColumn);
+		jMenuClients.add(jCheckBoxMenuItemShowUefiBoot);
+		jMenuClients.add(jCheckBoxMenuItemShowInstallByShutdown);
+		jMenuClients.add(jCheckBoxMenuItemShowDepotColumn);
 	}
 
 	public void updateSSHConnectedInfoMenu(String status) {
@@ -1067,11 +1035,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 			logging.debug(this, "setupMenuServer add commands to menu commands sortedComs " + sortedComs);
 			boolean firstParentGroup = true;
-			boolean commands_exists = false;
+			boolean commandsExist = false;
 			for (Map.Entry<String, List<SSHCommand_Template>> entry : sortedComs.entrySet()) {
 				String parentMenuName = entry.getKey();
-				LinkedList<SSHCommand_Template> list_com = new LinkedList<>(entry.getValue());
-				Collections.sort(list_com);
+				LinkedList<SSHCommand_Template> listCom = new LinkedList<>(entry.getValue());
+				Collections.sort(listCom);
 				JMenu parentMenu = new JMenu();
 				parentMenu.setText(parentMenuName);
 				logging.info(this, "ssh parent menu text " + parentMenuName);
@@ -1083,8 +1051,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				if (!(parentMenuName.equals(SSHCommandFactory.parentNull)))
 					firstParentGroup = false;
 
-				for (final SSHCommand_Template com : list_com) {
-					commands_exists = true;
+				for (final SSHCommand_Template com : listCom) {
+					commandsExist = true;
 					JMenuItem jMenuItem = new JMenuItem();
 					jMenuItem.setText(com.getMenuText());
 					logging.info(this, "ssh command menuitem text " + com.getMenuText());
@@ -1125,7 +1093,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 					if (commandsAreDeactivated)
 						jMenuItem.setEnabled(false);
 				}
-				if (firstParentGroup && commands_exists)
+				if (firstParentGroup && commandsExist)
 					jMenuServer.addSeparator();
 
 				firstParentGroup = false;
@@ -1354,7 +1322,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	// ------------------------------------------------------------------------------------------
 	// icon pane
 	private void setupIcons1() {
-		// buttonWindowStack = new
 
 		iconButtonReload = new IconButton(configed.getResourceValue("MainFrame.iconButtonReload"), "images/reload.gif",
 				"images/reload_over.gif", " ");
@@ -1741,7 +1708,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		GroupLayout layoutClientPane = new GroupLayout(clientPane);
 		clientPane.setLayout(layoutClientPane);
 
-		labelHost = new JLabel((Icon) Globals.createImageIcon("images/client.png", ""), SwingConstants.LEFT);
+		labelHost = new JLabel(Globals.createImageIcon("images/client.png", ""), SwingConstants.LEFT);
 		labelHost.setPreferredSize(Globals.buttonDimension);
 
 		labelHostID = new JLabel("");
@@ -2002,7 +1969,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jRadioRequiredOff.setToolTipText("");
 
 		jLabelPath.setText(configed.getResourceValue("MainFrame.jLabelPath"));
-		jLabel_Hostinfos.setText(configed.getResourceValue("MainFrame.jLabel_Hostinfos"));
+		jLabelHostinfos.setText(configed.getResourceValue("MainFrame.jLabel_Hostinfos"));
 
 		buttonGroupRequired.add(jRadioRequiredAll);
 		buttonGroupRequired.add(jRadioRequiredOff);
@@ -2289,7 +2256,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, panelTreeClientSelection,
 				jTabbedPaneConfigPanes);
-		centralPane.setDividerLocation(dividerLocationCentralPane);
+		centralPane.setDividerLocation(DIVIDER_LOCATION_CENTRAL_PANE);
 
 		// statusPane
 
@@ -2328,31 +2295,31 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		panelClientlist.addMouseListener(new utils.PopupMouseListener(popupClients));
 
-		panel_Clientselection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelClientlist, clientPane);
+		panelClientSelection = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelClientlist, clientPane);
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_Clientselection"),
-				Globals.createImageIcon("images/clientselection.png", ""), panel_Clientselection,
+				Globals.createImageIcon("images/clientselection.png", ""), panelClientSelection,
 				configed.getResourceValue("MainFrame.panel_Clientselection"), ConfigedMain.VIEW_CLIENTS);
 
-		panel_LocalbootProductsettings = new PanelGroupedProductSettings(
+		panelLocalbootProductSettings = new PanelGroupedProductSettings(
 				configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"), main,
 				main.getDisplayFieldsLocalbootProducts());
 
-		panel_NetbootProductsettings = new PanelGroupedProductSettings(
+		panelNetbootProductSettings = new PanelGroupedProductSettings(
 				configed.getResourceValue("MainFrame.panel_NetbootProductsettings"), main,
 				main.getDisplayFieldsNetbootProducts());
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
-				Globals.createImageIcon("images/package.png", ""), panel_LocalbootProductsettings,
+				Globals.createImageIcon("images/package.png", ""), panelLocalbootProductSettings,
 				configed.getResourceValue("MainFrame.panel_LocalbootProductsettings"),
 				ConfigedMain.VIEW_LOCALBOOT_PRODUCTS);
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
-				Globals.createImageIcon("images/bootimage.png", ""), panel_NetbootProductsettings,
+				Globals.createImageIcon("images/bootimage.png", ""), panelNetbootProductSettings,
 				configed.getResourceValue("MainFrame.panel_NetbootProductsettings"),
 				ConfigedMain.VIEW_NETBOOT_PRODUCTS);
 
-		panel_HostConfig = new PanelHostConfig() {
+		panelHostConfig = new PanelHostConfig() {
 			@Override
 			protected void reloadHostConfig() {
 				logging.info(this, "reloadHostConfig");
@@ -2374,10 +2341,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		};
 
-		panel_HostConfig.registerDataChangedObserver(main.getHostConfigsDataChangedKeeper());
+		panelHostConfig.registerDataChangedObserver(main.getHostConfigsDataChangedKeeper());
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_NetworkConfig"),
-				Globals.createImageIcon("images/config_pro.png", ""), panel_HostConfig,
+				Globals.createImageIcon("images/config_pro.png", ""), panelHostConfig,
 				configed.getResourceValue("MainFrame.jPanel_NetworkConfig"), ConfigedMain.VIEW_NETWORK_CONFIGURATION);
 
 		showHardwareLog = new JPanel();
@@ -2400,15 +2367,15 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		labelNoSoftware = new JLabel();
 		labelNoSoftware.setFont(Globals.defaultFontBig);
 
-		showSoftwareLog_NotFound = new JPanel(new FlowLayout());
-		showSoftwareLog_NotFound.add(labelNoSoftware);
-		showSoftwareLog_NotFound.setBackground(Globals.BACKGROUND_COLOR_3);
+		showSoftwareLogNotFound = new JPanel(new FlowLayout());
+		showSoftwareLogNotFound.add(labelNoSoftware);
+		showSoftwareLogNotFound.setBackground(Globals.BACKGROUND_COLOR_3);
 
-		showSoftwareLog = showSoftwareLog_NotFound;
+		showSoftwareLog = showSoftwareLogNotFound;
 
-		showSoftwareLog_MultiClientReport = new PanelSWMultiClientReport();
-		SwExporter swExporter = new SwExporter(showSoftwareLog_MultiClientReport, panelSWInfo);
-		showSoftwareLog_MultiClientReport.setActionListenerForStart(swExporter);
+		showSoftwareLogMultiClientReport = new PanelSWMultiClientReport();
+		SwExporter swExporter = new SwExporter(showSoftwareLogMultiClientReport, panelSWInfo);
+		showSoftwareLogMultiClientReport.setActionListenerForStart(swExporter);
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_softwareLog"),
 				Globals.createImageIcon("images/swaudit.png", ""), showSoftwareLog,
@@ -2443,11 +2410,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			}
 		});
 
-		panel_ProductProperties = new PanelProductProperties(main);
-		panel_ProductProperties.propertiesPanel.registerDataChangedObserver(main.getGeneralDataChangedKeeper());
+		panelProductProperties = new PanelProductProperties(main);
+		panelProductProperties.propertiesPanel.registerDataChangedObserver(main.getGeneralDataChangedKeeper());
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
-				Globals.createImageIcon("images/config_pro.png", ""), panel_ProductProperties,
+				Globals.createImageIcon("images/config_pro.png", ""), panelProductProperties,
 				configed.getResourceValue("MainFrame.panel_ProductGlobalProperties"),
 				ConfigedMain.VIEW_PRODUCT_PROPERTIES);
 
@@ -2456,11 +2423,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 						+ jTabbedPaneConfigPanes
 								.indexOfTab(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
 
-		panel_HostProperties = new PanelHostProperties();
-		panel_HostProperties.registerDataChangedObserver(main.getGeneralDataChangedKeeper());
+		panelHostProperties = new PanelHostProperties();
+		panelHostProperties.registerDataChangedObserver(main.getGeneralDataChangedKeeper());
 
 		jTabbedPaneConfigPanes.insertTab(configed.getResourceValue("MainFrame.jPanel_HostProperties"),
-				Globals.createImageIcon("images/config_pro.png", ""), panel_HostProperties,
+				Globals.createImageIcon("images/config_pro.png", ""), panelHostProperties,
 				configed.getResourceValue("MainFrame.jPanel_HostProperties"), ConfigedMain.VIEW_HOST_PROPERTIES);
 
 		logging.info(this, "added tab  " + configed.getResourceValue("MainFrame.jPanel_HostProperties") + " index "
@@ -2481,15 +2448,15 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		depotListPresenter.setBackground(depotListPresenter.getMyColor());
 
-		Containership cspanel_LocalbootProductsettings = new Containership(panel_LocalbootProductsettings);
+		Containership cspanel_LocalbootProductsettings = new Containership(panelLocalbootProductSettings);
 		cspanel_LocalbootProductsettings.doForAllContainedCompisOfClass("setBackground",
 				new Object[] { Globals.BACKGROUND_COLOR_3 }, VerticalPositioner.class);
-		panel_LocalbootProductsettings.setBackground(Globals.BACKGROUND_COLOR_3);
+		panelLocalbootProductSettings.setBackground(Globals.BACKGROUND_COLOR_3);
 
-		Containership cspanel_NetbootProductsettings = new Containership(panel_NetbootProductsettings);
+		Containership cspanel_NetbootProductsettings = new Containership(panelNetbootProductSettings);
 		cspanel_NetbootProductsettings.doForAllContainedCompisOfClass("setBackground",
 				new Object[] { Globals.BACKGROUND_COLOR_3 }, VerticalPositioner.class);
-		panel_NetbootProductsettings.setBackground(Globals.BACKGROUND_COLOR_3);
+		panelNetbootProductSettings.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		iconPane0.setBackground(Globals.BACKGROUND_COLOR_7);
 		iconBarPane.setBackground(Globals.BACKGROUND_COLOR_7);
@@ -2893,7 +2860,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	private void showLogfileLocationAction() {
 
-		FTextArea info = new FTextArea((MainFrame) this,
+		FTextArea info = new FTextArea(this,
 				Globals.APPNAME + " " + configed.getResourceValue("MainFrame.showLogFileInfoTitle"), false,
 				new String[] { configed.getResourceValue("MainFrame.showLogFileCopyToClipboard"),
 						configed.getResourceValue("MainFrame.showLogFileOpen"),
@@ -3258,7 +3225,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			for (String client : main.getSelectedClients()) {
 				Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
 
-				changedClientInfo.put(HostInfo.CLIENT_UEFI_BOOT_KEY, ((Boolean) cbUefiBoot.isSelected()).toString());
+				changedClientInfo.put(HostInfo.CLIENT_UEFI_BOOT_KEY, (cbUefiBoot.isSelected()).toString());
 
 				main.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 			}
@@ -3270,7 +3237,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			for (String client : main.getSelectedClients()) {
 				Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
 
-				changedClientInfo.put(HostInfo.CLIENT_WAN_CONFIG_KEY, ((Boolean) cbWANConfig.isSelected()).toString());
+				changedClientInfo.put(HostInfo.CLIENT_WAN_CONFIG_KEY, (cbWANConfig.isSelected()).toString());
 				main.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 			}
 		} else if (e.getSource() == jButtonClientsConfiguration) {
@@ -3397,8 +3364,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	public void initHardwareInfo(List config) {
-		if (showHardwareLog_version2 == null) {
-			showHardwareLog_version2 = new de.uib.configed.gui.hwinfopage.PanelHWInfo(main) {
+		if (showHardwareLogVersion2 == null) {
+			showHardwareLogVersion2 = new de.uib.configed.gui.hwinfopage.PanelHWInfo(main) {
 				@Override
 				protected void reload() {
 					super.reload();
@@ -3409,7 +3376,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				}
 			};
 		}
-		showHardwareLog_version2.setHardwareConfig(config);
+		showHardwareLogVersion2.setHardwareConfig(config);
 	}
 
 	private void showHardwareInfo() {
@@ -3425,30 +3392,30 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	public void setHardwareInfoNotPossible(String label1S, String label2S) {
 		logging.info(this, "setHardwareInfoNotPossible " + label1S);
 
-		if (showHardwareLog_NotFound == null || showHardwareLogParentOfNotFoundPanel == null) {
-			showHardwareLog_NotFound = new TitledPanel();
+		if (showHardwareLogNotFound == null || showHardwareLogParentOfNotFoundPanel == null) {
+			showHardwareLogNotFound = new TitledPanel();
 			showHardwareLogParentOfNotFoundPanel = new JPanel();
-			showHardwareLog_NotFound.setBackground(Globals.BACKGROUND_COLOR_7);
+			showHardwareLogNotFound.setBackground(Globals.BACKGROUND_COLOR_7);
 			showHardwareLogParentOfNotFoundPanel.setLayout(new BorderLayout());
-			showHardwareLogParentOfNotFoundPanel.add(showHardwareLog_NotFound);
+			showHardwareLogParentOfNotFoundPanel.add(showHardwareLogNotFound);
 
 		}
 
-		showHardwareLog_NotFound.setTitle(label1S, label2S);
+		showHardwareLogNotFound.setTitle(label1S, label2S);
 		showHardwareLog = showHardwareLogParentOfNotFoundPanel;
 		showHardwareInfo();
 	}
 
 	public void setHardwareInfoMultiClients(String[] clients) {
-		if (showHardwareLog_MultiClientReport == null || controllerHWinfoMultiClients == null) {
+		if (showHardwareLogMultiClientReport == null || controllerHWinfoMultiClients == null) {
 			controllerHWinfoMultiClients = new ControllerHWinfoMultiClients(main, main.getPersistenceController());
-			showHardwareLog_MultiClientReport = controllerHWinfoMultiClients.panel;
+			showHardwareLogMultiClientReport = controllerHWinfoMultiClients.panel;
 		}
 
 		logging.info(this, "setHardwareInfoMultiClients " + clients.length);
 
 		controllerHWinfoMultiClients.setFilter();
-		showHardwareLog = showHardwareLog_MultiClientReport;
+		showHardwareLog = showHardwareLogMultiClientReport;
 
 		showHardwareInfo();
 
@@ -3457,12 +3424,12 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	public void setHardwareInfo(Object hardwareInfo) {
 
 		if (hardwareInfo == null)
-			showHardwareLog_version2.setHardwareInfo(null,
+			showHardwareLogVersion2.setHardwareInfo(null,
 					configed.getResourceValue("MainFrame.NoHardwareConfiguration"));
 		else
-			showHardwareLog_version2.setHardwareInfo((Map) hardwareInfo, null);
+			showHardwareLogVersion2.setHardwareInfo((Map) hardwareInfo, null);
 
-		showHardwareLog = showHardwareLog_version2;
+		showHardwareLog = showHardwareLogVersion2;
 		showHardwareInfo();
 
 	}
@@ -3485,20 +3452,20 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		// for testing commented out
 
-		List<String> shutdown_valueX = null;
+		List<String> shutdownValueX = null;
 		try {
-			shutdown_valueX = (List) main.getPersistenceController().getProductproperties(clientID, "opsi-client-agent")
+			shutdownValueX = (List) main.getPersistenceController().getProductproperties(clientID, "opsi-client-agent")
 					.get("on_shutdown_install");
 		} catch (Exception ex) {
 		}
 
-		final List<String> shutdown_value = shutdown_valueX;
+		final List<String> shutdownValue = shutdownValueX;
 
 		// for testing defined with fixed values
 
 		final Boolean activate = wantActive;
 
-		if (shutdown_value == null) {
+		if (shutdownValue == null) {
 			logging.info(this, "product property on_shutdown_install does not exist");
 			return goOn;
 		} else {
@@ -3534,7 +3501,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				}
 
 				private void handle(boolean switchOn) {
-					logging.info(this, "handle " + switchOn + ", old value for one client " + shutdown_value);
+					logging.info(this, "handle " + switchOn + ", old value for one client " + shutdownValue);
 
 					main.setInstallByShutdownProductPropertyValue(switchOn);
 					main.requestReloadStatesAndActions();
@@ -3559,11 +3526,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	private class SwExporter implements ActionListener {
-		PanelSWMultiClientReport showSoftwareLog_MultiClientReport;
+		PanelSWMultiClientReport showSoftwareLogMultiClientReport;
 		PanelSWInfo panelSWInfo;
 
-		SwExporter(PanelSWMultiClientReport showSoftwareLog_MultiClientReport, PanelSWInfo panelSWInfo) {
-			this.showSoftwareLog_MultiClientReport = showSoftwareLog_MultiClientReport;
+		SwExporter(PanelSWMultiClientReport showSoftwareLogMultiClientReport, PanelSWInfo panelSWInfo) {
+			this.showSoftwareLogMultiClientReport = showSoftwareLogMultiClientReport;
 			this.panelSWInfo = panelSWInfo;
 		}
 
@@ -3571,25 +3538,25 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		public void actionPerformed(ActionEvent e) {
 
 			logging.info(this, "actionPerformed " + "  showSoftwareLog_MultiClientReport.wantsWithMsUpdates  "
-					+ showSoftwareLog_MultiClientReport.wantsWithMsUpdates());
+					+ showSoftwareLogMultiClientReport.wantsWithMsUpdates());
 
 			// save states now
 
 			configed.savedStates.saveSWauditExportFilePrefix
-					.serialize(showSoftwareLog_MultiClientReport.getExportfilePrefix());
+					.serialize(showSoftwareLogMultiClientReport.getExportfilePrefix());
 
-			String filepathStart = showSoftwareLog_MultiClientReport.getExportDirectory() + File.separator
-					+ showSoftwareLog_MultiClientReport.getExportfilePrefix();
+			String filepathStart = showSoftwareLogMultiClientReport.getExportDirectory() + File.separator
+					+ showSoftwareLogMultiClientReport.getExportfilePrefix();
 
-			String extension = "." + showSoftwareLog_MultiClientReport.wantsKindOfExport().toString().toLowerCase();
+			String extension = "." + showSoftwareLogMultiClientReport.wantsKindOfExport().toString().toLowerCase();
 
-			panelSWInfo.setWithMsUpdates(showSoftwareLog_MultiClientReport.wantsWithMsUpdates());
-			panelSWInfo.setWithMsUpdates2(showSoftwareLog_MultiClientReport.wantsWithMsUpdates2());
+			panelSWInfo.setWithMsUpdates(showSoftwareLogMultiClientReport.wantsWithMsUpdates());
+			panelSWInfo.setWithMsUpdates2(showSoftwareLogMultiClientReport.wantsWithMsUpdates2());
 
 			panelSWInfo.setAskingForKindOfAction(false);
-			panelSWInfo.setAskForOverwrite(showSoftwareLog_MultiClientReport.wantsAskForOverwrite());
+			panelSWInfo.setAskForOverwrite(showSoftwareLogMultiClientReport.wantsAskForOverwrite());
 
-			panelSWInfo.setKindOfExport(showSoftwareLog_MultiClientReport.wantsKindOfExport());
+			panelSWInfo.setKindOfExport(showSoftwareLogMultiClientReport.wantsKindOfExport());
 
 			List<String> clientsWithoutScan = new ArrayList<>();
 
@@ -3633,14 +3600,14 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		if (main.getSelectedClients() != null && main.getSelectedClients().length > 1) {
 			logging.info(this, "setSoftwareAudit for clients " + main.getSelectedClients().length);
 
-			showSoftwareLog = showSoftwareLog_MultiClientReport;
+			showSoftwareLog = showSoftwareLogMultiClientReport;
 			showSoftwareAudit();
 
 		} else
 		// handled by the following methos
 		{
 			labelNoSoftware.setText(configed.getResourceValue("MainFrame.TabRequiresClientSelected"));
-			showSoftwareLog = showSoftwareLog_NotFound;
+			showSoftwareLog = showSoftwareLogNotFound;
 			showSoftwareAudit();
 		}
 
@@ -3654,15 +3621,14 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	public void setSoftwareAudit(String hostId) {
 		labelNoSoftware.setText(configed.getResourceValue("MainFrame.NoSoftwareConfiguration"));
 
-		{
-			logging.debug(this, "setSoftwareAudit for " + hostId);
-			panelSWInfo.setAskingForKindOfAction(true);
-			panelSWInfo.setAskForOverwrite(true);
-			panelSWInfo.setHost(hostId);
-			panelSWInfo.updateModel();
+		logging.debug(this, "setSoftwareAudit for " + hostId);
+		panelSWInfo.setAskingForKindOfAction(true);
+		panelSWInfo.setAskForOverwrite(true);
+		panelSWInfo.setHost(hostId);
+		panelSWInfo.updateModel();
 
-			showSoftwareLog = panelSWInfo;
-		}
+		showSoftwareLog = panelSWInfo;
+
 		showSoftwareAudit();
 	}
 

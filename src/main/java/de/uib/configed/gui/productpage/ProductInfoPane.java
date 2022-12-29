@@ -302,9 +302,9 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 	}
 
 	public void setGrey(boolean b) {
-		float alpha = (float) 1.0f;
+		float alpha = 1.0f;
 		if (b) {
-			alpha = (float) .1f;
+			alpha = .1f;
 		}
 
 		if (productDescriptionsPanel != null)
