@@ -33,7 +33,7 @@ import de.uib.utilities.logging.logging;
 
 public class PanelProductDependencies extends JPanel implements DependenciesModel.DependenciesModelListener {
 
-	private ConfigedMain mainController;
+	private transient ConfigedMain mainController;
 
 	// The label shown on top of the dependencies-panel
 	private JLabel depotLabel;
