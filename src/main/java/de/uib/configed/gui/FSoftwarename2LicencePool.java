@@ -46,7 +46,7 @@ import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
 public class FSoftwarename2LicencePool extends FDialogSubTable {
-	public static final String valNoLicencepool = "---";
+	public static final String VALUE_NO_LICENCE_POOL = "---";
 	public PanelGenEditTable panelSWnames;
 	public GenTableModel modelSWnames;
 
@@ -146,7 +146,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 					val = getValueAt(selRow, 1);
 
 				if (val != null && isSingleSelection() && getTableModel().getRowCount() > 1
-						&& !((String) val).equals(valNoLicencepool)) {
+						&& !((String) val).equals(VALUE_NO_LICENCE_POOL)) {
 					buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(true);
 					labelSetAllAssignmentsToPoolFromSelectedRow
 							.setText(labelText + " " + getValueAt(getSelectedRow(), 1));
@@ -170,8 +170,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		buttonRemoveAllAssignments.setPreferredSize(Globals.shortButtonDimension);
 		labelRemoveAllAssignments = new JLabel(
 				configed.getResourceValue("FSoftwarename2LicencePool.labelRemoveAllAssignments"));
-		buttonRemoveAllAssignments
-				.addActionListener(actionEvent -> panelSWxLicencepool.setDataChanged(setSWxColTo(valNoLicencepool)));
+		buttonRemoveAllAssignments.addActionListener(
+				actionEvent -> panelSWxLicencepool.setDataChanged(setSWxColTo(VALUE_NO_LICENCE_POOL)));
 
 		buttonSetAllAssignmentsToGloballySelectedPool = new JButton();
 		buttonSetAllAssignmentsToGloballySelectedPool.setEnabled(false);
@@ -449,7 +449,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			String licpool = persist.getFSoftware2LicencePool(swID);
 
 			if (licpool == null)
-				range.add(valNoLicencepool);
+				range.add(VALUE_NO_LICENCE_POOL);
 			else
 				range.add(licpool);
 		}
@@ -459,7 +459,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	private boolean checkExistNamesWithVariantLicencepools(String name) {
 		java.util.Set<String> range = getRangeSWxLicencepool(name);
-		if (range.size() == 1 && range.contains(valNoLicencepool))
+		if (range.size() == 1 && range.contains(VALUE_NO_LICENCE_POOL))
 			return true;
 		return false;
 	}
@@ -508,7 +508,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			String licpool = persist.getFSoftware2LicencePool(swID);
 
 			if (licpool == null)
-				rowMap.put(LicencepoolEntry.idSERVICEKEY, valNoLicencepool);
+				rowMap.put(LicencepoolEntry.idSERVICEKEY, VALUE_NO_LICENCE_POOL);
 			else
 				rowMap.put(LicencepoolEntry.idSERVICEKEY, licpool);
 
@@ -556,7 +556,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						String licensePoolID_old = persist.getFSoftware2LicencePool(swID);
 						String licensePoolID_new = (String) rowmap.get(LicencepoolEntry.idSERVICEKEY);
 
-						if (!valNoLicencepool.equals(licensePoolID_new))
+						if (!VALUE_NO_LICENCE_POOL.equals(licensePoolID_new))
 							setSWInfo(swID, licensePoolID_new);
 
 						return persist.editPool2AuditSoftware(swID, licensePoolID_old, licensePoolID_new);

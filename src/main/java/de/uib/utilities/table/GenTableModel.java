@@ -1012,11 +1012,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	@Override
-	public void setKeyRepresenter(de.uib.utilities.table.KeyRepresenter kr) {
-		keyRepresenter = kr;
-	}
-
-	@Override
 	public java.util.Map<Integer, String> getPrimarykeyTranslation() {
 		if (keyCol < 0)
 			return null;

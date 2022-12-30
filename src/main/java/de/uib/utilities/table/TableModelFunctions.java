@@ -27,10 +27,6 @@ public interface TableModelFunctions {
 
 	java.util.Map<Integer, RowStringMap> getPrimarykey2Rowmap();
 
-	void setKeyRepresenter(de.uib.utilities.table.KeyRepresenter kr);
-	// must be set to get the following methods to work
-	// assumes that a keycol is set
-
 	java.util.Map<Integer, String> getPrimarykeyTranslation();
 	// the defining map for the Mapping of getPrimarykeyRepresentation
 

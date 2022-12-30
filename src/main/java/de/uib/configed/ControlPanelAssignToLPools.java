@@ -339,7 +339,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 			if (newAssociation != null && newAssociation) {
 				String otherPool = persist.getFSoftware2LicencePool(key);
 
-				if (otherPool.equals(FSoftwarename2LicencePool.valNoLicencepool)) {
+				if (otherPool.equals(FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL)) {
 					logging.info(this, "validateWindowsSoftwareKeys, assigned to valNoLicencepool");
 				} else {
 

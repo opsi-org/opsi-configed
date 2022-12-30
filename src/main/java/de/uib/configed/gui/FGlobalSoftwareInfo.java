@@ -112,9 +112,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 					new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
 						persist.installedSoftwareInformationRequestRefresh();
 						return (Map) persist.getInstalledSoftwareInformation();
-					})
-
-					),
+					})),
 
 					keyCol, new int[] {}, panelGlobalSoftware, updateCollection);
 		} else

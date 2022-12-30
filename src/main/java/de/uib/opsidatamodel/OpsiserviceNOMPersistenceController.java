@@ -6517,7 +6517,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		if (withLicenceManagement) {
 
-			if (licensePoolID_old != null && !licensePoolID_old.equals(FSoftwarename2LicencePool.valNoLicencepool)) {
+			if (licensePoolID_old != null
+					&& !licensePoolID_old.equals(FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL)) {
 				// there was an association, we delete it)
 
 				List<String> swIds = new ArrayList<>();
@@ -6530,7 +6531,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			}
 
-			if (FSoftwarename2LicencePool.valNoLicencepool.equals(licencePoolID_new)) {
+			if (FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL.equals(licencePoolID_new)) {
 				// nothing to do, we deleted the entry
 				ok = true;
 			}

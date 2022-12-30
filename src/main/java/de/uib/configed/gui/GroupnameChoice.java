@@ -26,13 +26,13 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 	protected int selIndex = -1;
 
 	protected XList groups;
-	private List dataList;
+	private List<String> dataList;
 
 	protected String resultString = "";
 
 	JTextField groupnameField;
 
-	public GroupnameChoice(String extraTitle, List v, int selectedIndex) {
+	public GroupnameChoice(String extraTitle, List<String> v, int selectedIndex) {
 		super(null, extraTitle + " (" + Globals.APPNAME + ")", true, new String[] { "ok", "Close" }, 300, 200);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		try // in an applet context this is not possible without a security problem
