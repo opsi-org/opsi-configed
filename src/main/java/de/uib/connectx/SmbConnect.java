@@ -27,9 +27,9 @@ public class SmbConnect {
 	public static final String[] directoryProducts = new String[] { "var", "lib", "opsi", "depot" };
 	public static final String PRODUCT_SHARE_RW = "opsi_depot_rw";
 
-	public static final String directoryPE = "winpe";
-	public static final String directoryI386 = "i386";
-	public static final String directoryInstallFiles = "installfiles";
+	public static final String DIRECTORY_PE = "winpe";
+	public static final String DIRECTORY_I368 = "i386";
+	public static final String DIRECTORY_INSTALL_FILES = "installfiles";
 
 	public static final String[] DIRECTORY_DRIVERS = new String[] { "drivers", "drivers" };
 	public static final String[] DIRECTORY_DRIVERS_PREFERRED = new String[] { "drivers", "drivers", "preferred" };

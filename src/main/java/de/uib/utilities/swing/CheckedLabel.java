@@ -34,10 +34,10 @@ public class CheckedLabel extends JPanel implements FocusListener
 // is an ObservedSubject for key and mouse actions
 
 {
-	static final int setCheckedOn = 1;
-	static final int setCheckedOff = 0;
-	static final String cmdSetCheckedOn = "cmdSetOn";
-	static final String cmdSetCheckedOff = "cmdSetOff";
+	private static final int SET_CHECKED_ON = 1;
+	private static final int SET_CHECKED_OFF = 0;
+	private static final String CMD_SET_CHECKED_ON = "cmdSetOn";
+	private static final String CMD_SET_CHECKED_OFF = "cmdSetOff";
 	protected boolean changeStateAutonomously = true;
 
 	protected JLabel selectedLabel;
@@ -140,7 +140,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 				if (changeStateAutonomously)
 					ME.setSelected(false);
 				notifyActionListeners(
-						new ActionEvent(ME, setCheckedOff, cmdSetCheckedOff, new java.util.Date().getTime(), 0));
+						new ActionEvent(ME, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF, new java.util.Date().getTime(), 0));
 			}
 		});
 
@@ -153,7 +153,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 				if (changeStateAutonomously)
 					ME.setSelected(true);
 				notifyActionListeners(
-						new ActionEvent(ME, setCheckedOn, cmdSetCheckedOn, new java.util.Date().getTime(), 0));
+						new ActionEvent(ME, SET_CHECKED_ON, CMD_SET_CHECKED_ON, new java.util.Date().getTime(), 0));
 			}
 		});
 
@@ -166,7 +166,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 				if (changeStateAutonomously)
 					ME.setSelected(false);
 				notifyActionListeners(
-						new ActionEvent(ME, setCheckedOff, cmdSetCheckedOff, new java.util.Date().getTime(), 0));
+						new ActionEvent(ME, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF, new java.util.Date().getTime(), 0));
 			}
 		});
 
@@ -182,11 +182,11 @@ public class CheckedLabel extends JPanel implements FocusListener
 					if (selected == null || selected) {
 
 						ME.setSelected(false);
-						notifyActionListeners(new ActionEvent(ME, setCheckedOff, cmdSetCheckedOff,
+						notifyActionListeners(new ActionEvent(ME, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF,
 								new java.util.Date().getTime(), 0));
 					} else {
 						ME.setSelected(true);
-						notifyActionListeners(new ActionEvent(ME, setCheckedOff, cmdSetCheckedOff,
+						notifyActionListeners(new ActionEvent(ME, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF,
 								new java.util.Date().getTime(), 0));
 					}
 				}

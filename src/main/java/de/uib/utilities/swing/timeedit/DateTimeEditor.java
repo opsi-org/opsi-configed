@@ -34,9 +34,8 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	protected JButton buttonForward;
 	protected JButton buttonYearBack;
 	protected JButton buttonYearForward;
-	protected final int buttonH = 25;
-	protected final int buttonW = 30;
-	private Date now;
+	protected static final int BUTTON_H = 25;
+	protected static final int BUTTON_W = 30;
 	protected boolean editable = true;
 	protected boolean withMovingSelectionDate = true;
 	protected boolean withTime = true;
@@ -110,26 +109,27 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGap(1, 1, Short.MAX_VALUE)
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-								.addComponent(buttonBack, buttonW, buttonW, buttonW)
-								.addComponent(buttonYearBack, buttonW, buttonW, buttonW))
+								.addComponent(buttonBack, BUTTON_W, BUTTON_W, BUTTON_W)
+								.addComponent(buttonYearBack, BUTTON_W, BUTTON_W, BUTTON_W))
 
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
 								.addComponent(timeSetter, GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE)
 								.addComponent(monthView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE))
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-								.addComponent(buttonForward, buttonW, buttonW, buttonW)
-								.addComponent(buttonYearForward, buttonW, buttonW, buttonW))
+								.addComponent(buttonForward, BUTTON_W, BUTTON_W, BUTTON_W)
+								.addComponent(buttonYearForward, BUTTON_W, BUTTON_W, BUTTON_W))
 						.addGap(1, 1, Short.MAX_VALUE)));
 		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(layout
 				.createSequentialGroup()
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addComponent(buttonBack, buttonH, buttonH, buttonH)
-								.addComponent(buttonYearBack, buttonH, buttonH, buttonH))
+						.addGroup(layout.createSequentialGroup().addComponent(buttonBack, BUTTON_H, BUTTON_H, BUTTON_H)
+								.addComponent(buttonYearBack, BUTTON_H, BUTTON_H, BUTTON_H))
 						.addComponent(monthView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGroup(layout.createSequentialGroup().addComponent(buttonForward, buttonH, buttonH, buttonH)
-								.addComponent(buttonYearForward, buttonH, buttonH, buttonH))
+						.addGroup(
+								layout.createSequentialGroup().addComponent(buttonForward, BUTTON_H, BUTTON_H, BUTTON_H)
+										.addComponent(buttonYearForward, BUTTON_H, BUTTON_H, BUTTON_H))
 						.addComponent(timeSetter, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))));
 
@@ -185,7 +185,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	}
 
 	public void setDate(boolean select) {
-		now = new Date();
+		Date now = new Date();
 		calendar.setTime(now);
 
 		if (!withTime) {
@@ -257,7 +257,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	}
 
 	@Override
-	public void addKeyListener(KeyListener listener) {
+	public synchronized void addKeyListener(KeyListener listener) {
 		monthView.addKeyListener(listener);
 	}
 

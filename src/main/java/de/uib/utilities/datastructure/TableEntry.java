@@ -11,7 +11,7 @@ public abstract class TableEntry extends LinkedHashMap<String, String> {
 	// static values and methods (resp. methods based on static values)
 	// must be defined in subclasses
 
-	public TableEntry(Map entry) {
+	protected TableEntry(Map entry) {
 		pureEntry = entry;
 		entryRetrieved = entry;
 	}

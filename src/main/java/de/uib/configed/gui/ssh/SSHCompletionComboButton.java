@@ -110,7 +110,7 @@ public class SSHCompletionComboButton {
 			logging.debug(this, "init defaultvalues contains " + elem);
 	}
 
-	public List getDefaultValues() {
+	public List<String> getDefaultValues() {
 		return defaultvalues;
 	}
 
@@ -121,7 +121,7 @@ public class SSHCompletionComboButton {
 
 	private void createInstances() {
 		button = new JButton();
-		combobox = new SSHCompletionComboBox(new DefaultComboBoxModel<>(defaultvalues.toArray()));
+		combobox = new SSHCompletionComboBox(new DefaultComboBoxModel<>(defaultvalues.toArray(new String[0])));
 	}
 
 	public void initCombobox() {

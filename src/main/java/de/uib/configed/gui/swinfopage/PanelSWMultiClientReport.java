@@ -29,7 +29,7 @@ public class PanelSWMultiClientReport extends JPanel {
 	boolean withMsUpdates2 = false;
 	boolean askForOverwrite = false;
 
-	public static final String filenamePrefixDefault = "report_";
+	public static final String FILENAME_PREFIX_DEFAULT = "report_";
 
 	protected PanelStateSwitch panelSelectExportType;
 	protected PanelSWInfo.KindOfExport kindOfExport;
@@ -105,7 +105,7 @@ public class PanelSWMultiClientReport extends JPanel {
 			filenamePrefix = configed.getResourceValue("PanelSWMultiClientReport.filenamePrefix");
 
 		if (filenamePrefix == null)
-			filenamePrefix = filenamePrefixDefault;
+			filenamePrefix = FILENAME_PREFIX_DEFAULT;
 
 		fieldFilenamePrefix = new JTextShowField(filenamePrefix);
 		fieldFilenamePrefix.setEditable(true);
@@ -217,9 +217,8 @@ public class PanelSWMultiClientReport extends JPanel {
 		});
 
 		panelSelectExportType = new PanelStateSwitch(
-				configed.getResourceValue("PanelSWMultiClientReport.selectExportType"),
-				(Enum) PanelSWInfo.KindOfExport.PDF, PanelSWInfo.KindOfExport.values(), PanelSWInfo.KindOfExport.class,
-				(val -> {
+				configed.getResourceValue("PanelSWMultiClientReport.selectExportType"), PanelSWInfo.KindOfExport.PDF,
+				PanelSWInfo.KindOfExport.values(), PanelSWInfo.KindOfExport.class, (val -> {
 					logging.info(this, "change to " + val);
 					kindOfExport = (PanelSWInfo.KindOfExport) val;
 					configed.savedStates.saveSWauditKindOfExport.serialize("" + val);

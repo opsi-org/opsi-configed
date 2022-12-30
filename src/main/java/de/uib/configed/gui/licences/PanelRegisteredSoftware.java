@@ -33,7 +33,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	public void reload() {
 		super.reload();
 		logging.info(this, "reload");
-		((ControlPanelAssignToLPools) controller).setSoftwareIdsFromLicencePool();
+		controller.setSoftwareIdsFromLicencePool();
 		saveRowSelection = theTable.getSelectedRows();
 	}
 
@@ -48,7 +48,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	public void commit() {
 		logging.info(this, "commit");
 		super.commit();
-		((ControlPanelAssignToLPools) controller).persist.relations_auditSoftwareToLicencePools_requestRefresh();
+		controller.persist.relations_auditSoftwareToLicencePools_requestRefresh();
 		super.reset();
 
 		if (controller.thePanel.fSoftwarename2LicencePool != null) {
@@ -65,7 +65,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 		logging.info(this, "cancel");
 		super.cancel();
 
-		((ControlPanelAssignToLPools) controller).setSoftwareIdsFromLicencePool();
+		controller.setSoftwareIdsFromLicencePool();
 	}
 
 	public void callName2Pool(int modelrow) {

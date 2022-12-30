@@ -37,7 +37,7 @@ public class configed {
 
 	public static de.uib.utilities.swing.FLoadingWaiter fProgress;
 
-	private static final String LOCALIZATION_FILENAME_REGEX = Messages.appname + "_...*\\.properties";
+	private static final String LOCALIZATION_FILENAME_REGEX = Messages.APPNAME + "_...*\\.properties";
 
 	public static boolean sshconnect_onstart = false;
 
@@ -627,7 +627,7 @@ public class configed {
 							logging.debug(" . " + parts[1] + " .. " + Arrays.toString(parts[1].split("\\.")));
 
 							if (!EXTRA_LOCALIZATION_FILENAME.matches(LOCALIZATION_FILENAME_REGEX)) {
-								logging.debug("localization file does not have the expected format " + Messages.appname
+								logging.debug("localization file does not have the expected format " + Messages.APPNAME
 										+ "_LOCALE.properties");
 							} else {
 								extraLocalization = new PropertiesStore(extraLocalizationFile);

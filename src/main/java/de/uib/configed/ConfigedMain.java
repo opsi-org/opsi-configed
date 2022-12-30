@@ -4733,7 +4733,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					part;
 		}
 
-		protected abstract List getErrors();
+		protected abstract List<String> getErrors();
 
 		@Override
 		public void run() {
@@ -4747,7 +4747,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			fListFeedback.setVisible(true);
 			fListFeedback.glassTransparency(true, 800, 200, 0.04f);
 
-			List errors = getErrors();
+			List<String> errors = getErrors();
 
 			if (!errors.isEmpty()) {
 
@@ -4774,7 +4774,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		new ErrorListProducer(configed.getResourceValue("ConfigedMain.infoWakeClients") + " " + startInfo) {
 			@Override
-			protected List getErrors() {
+			protected List<String> getErrors() {
 				return persist.wakeOnLan(clients);
 			}
 		}.start();
@@ -4815,7 +4815,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		new ErrorListProducer(configed.getResourceValue("ConfigedMain.infoDeletePackageCaches")) {
 			@Override
-			protected List getErrors() {
+			protected List<String> getErrors() {
 				return persist.deletePackageCaches(getSelectedClients());
 			}
 		}.start();
@@ -4830,7 +4830,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				"opsiclientd " + event) {
 			@Override
-			protected List getErrors() {
+			protected List<String> getErrors() {
 				return persist.fireOpsiclientdEventOnClients(event, getSelectedClients());
 			}
 		}.start();
@@ -4843,7 +4843,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		new ErrorListProducer(configed.getResourceValue("ConfigedMain.infoPopup") + " " + message) {
 			@Override
-			protected List getErrors() {
+			protected List<String> getErrors() {
 				return persist.showPopupOnClients(message, getSelectedClients(), seconds);
 			}
 
@@ -5121,10 +5121,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		fConfirmActionForClients.setAlwaysOnTop(true);
 		fConfirmActionForClients.setVisible(true);
 
-		if (fConfirmActionForClients.getResult() != 2)
-			return false;
-
-		return true;
+		return fConfirmActionForClients.getResult() == 2;
 	}
 
 	public void shutdownSelectedClients() {
@@ -5135,7 +5132,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				configed.getResourceValue("ConfigedMain.ConfirmShutdownClients.question"))) {
 			new ErrorListProducer(configed.getResourceValue("ConfigedMain.infoShutdownClients")) {
 				@Override
-				protected List getErrors() {
+				protected List<String> getErrors() {
 					return persist.shutdownClients(getSelectedClients());
 				}
 
@@ -5150,7 +5147,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (confirmActionForSelectedClients(configed.getResourceValue("ConfigedMain.ConfirmRebootClients.question"))) {
 			new ErrorListProducer(configed.getResourceValue("ConfigedMain.infoRebootClients")) {
 				@Override
-				protected List getErrors() {
+				protected List<String> getErrors() {
 					return persist.rebootClients(getSelectedClients());
 				}
 			}.start();
@@ -5178,9 +5175,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void callSaveGroupDialog() {
-		List groupList = persist.getHostGroupIds();
+		List<String> groupList = persist.getHostGroupIds();
 		Collections.sort(groupList);
-		List groupSelectionIds = new ArrayList<>(groupList);
+		List<String> groupSelectionIds = new ArrayList<>(groupList);
 
 		int i = groupSelectionIds.indexOf(groupname);
 

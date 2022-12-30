@@ -124,7 +124,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		};
 	}
 
-	public void setSubpanelClasses(TreeMap<String, String> classesMap) {
+	public void setSubpanelClasses(NavigableMap<String, String> classesMap) {
 		givenClasses = classesMap;
 	}
 
@@ -212,7 +212,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	private JTable createJTableForPDF() {
 		DefaultTableModel tableModel = new DefaultTableModel();
 		JTable jTable = new JTable(tableModel);
-		List values;
+		List<String> values;
 
 		tableModel.addColumn(configed.getResourceValue("EditMapPanelGrouped.createJTableForPDF.property_name"));
 		tableModel.addColumn(configed.getResourceValue("EditMapPanelGrouped.createJTableForPDF.property_value"));

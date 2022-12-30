@@ -335,7 +335,7 @@ public class PanelCompleteWinProducts extends JPanel
 			logging.debug(this, "copy  " + pathWinPE + " to " + targetDirectory);
 
 			if (!pathWinPE.equals("")) {
-				targetDirectory = new File(fieldTargetPath.getText() + File.separator + SmbConnect.directoryPE);
+				targetDirectory = new File(fieldTargetPath.getText() + File.separator + SmbConnect.DIRECTORY_PE);
 				FileUtils.copyDirectory(new File(pathWinPE), targetDirectory);
 			}
 
@@ -343,14 +343,14 @@ public class PanelCompleteWinProducts extends JPanel
 			logging.debug(this, "copy  " + pathInstallFiles + " to " + targetDirectory);
 			if (!pathInstallFiles.equals("")) {
 				targetDirectory = new File(
-						fieldTargetPath.getText() + File.separator + SmbConnect.directoryInstallFiles);
+						fieldTargetPath.getText() + File.separator + SmbConnect.DIRECTORY_INSTALL_FILES);
 				FileUtils.copyDirectory(new File(pathInstallFiles), targetDirectory);
 			}
 
 			persist.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
-					+ SmbConnect.directoryPE);
+					+ SmbConnect.DIRECTORY_PE);
 			persist.setRights("/" + SmbConnect.unixPath(de.uib.connectx.SmbConnect.directoryProducts) + "/" + winProduct
-					+ "/" + SmbConnect.directoryInstallFiles);
+					+ "/" + SmbConnect.DIRECTORY_INSTALL_FILES);
 			waitCursor.stop();
 
 			JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,

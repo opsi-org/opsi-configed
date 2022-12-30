@@ -305,7 +305,7 @@ public class ControlDash {
 			String licpool = persist.getFSoftware2LicencePool(swID);
 
 			if (licpool == null)
-				range.add(FSoftwarename2LicencePool.valNoLicencepool);
+				range.add(FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL);
 			else
 				range.add(licpool);
 		}

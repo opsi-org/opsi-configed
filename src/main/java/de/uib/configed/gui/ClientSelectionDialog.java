@@ -7,12 +7,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -159,7 +160,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			if (complex.type == GroupType.HOST_GROUP) {
 				for (SimpleGroup group : complex.groupList) {
 					if (group.element instanceof GroupElement) {
-						JComboBox box = (JComboBox) group.dataComponent;
+						JComboBox<String> box = (JComboBox<String>) group.dataComponent;
 						box.removeAllItems();
 						for (String data : group.element.getEnumData())
 							box.addItem(data);
@@ -852,7 +853,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	private void repairParentheses() {
-		Stack<ComplexGroup> stack = new Stack<>();
+		Deque<ComplexGroup> stack = new ArrayDeque<>();
 		for (ComplexGroup complex : complexElements) {
 			if (complex.openParenthesis.isActivated() && complex.closeParenthesis.isActivated()) {
 				complex.openParenthesis.setActivated(false);

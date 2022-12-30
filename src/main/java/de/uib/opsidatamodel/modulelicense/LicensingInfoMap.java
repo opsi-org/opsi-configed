@@ -36,8 +36,8 @@ public class LicensingInfoMap {
 	Map<String, List<Object>> configs;
 	private Map<String, Object> clientNumbersMap;
 	private List<List<String>> clientNumbersList;
-	private Set customerIDs;
-	private Set customerNames;
+	private Set<String> customerIDs;
+	private Set<String> customerNames;
 	private Map<String, Map<String, Object>> licenses;
 	private List<String> availableModules;
 	private List<String> knownModulesList;
@@ -257,7 +257,7 @@ public class LicensingInfoMap {
 		return result;
 	}
 
-	private Set produceCustomerIDSet() {
+	private Set<String> produceCustomerIDSet() {
 		Set<String> customerIDs = new LinkedHashSet<>();
 
 		try {
@@ -275,7 +275,7 @@ public class LicensingInfoMap {
 		return customerIDs;
 	}
 
-	private Set produceCustomerNameSet() {
+	private Set<String> produceCustomerNameSet() {
 		Set<String> customerNames = new LinkedHashSet<>();
 
 		try {
@@ -888,11 +888,11 @@ public class LicensingInfoMap {
 		return clientNumbersList;
 	}
 
-	public Set getCustomerIDSet() {
+	public Set<String> getCustomerIDSet() {
 		return customerIDs;
 	}
 
-	public Set getCustomerNamesSet() {
+	public Set<String> getCustomerNamesSet() {
 		return customerNames;
 	}
 

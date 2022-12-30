@@ -44,7 +44,7 @@ public class FGroupActions extends SecondaryFrame {
 	JTextField fieldGroupname;
 	JTextField fieldInvolvedClientsCount;
 
-	JComboBox comboSelectImage;
+	JComboBox<String> comboSelectImage;
 
 	List<String> associatedClients;
 
@@ -85,7 +85,7 @@ public class FGroupActions extends SecondaryFrame {
 		imagesCollection.addAll(new TreeSet<>(persist.getCommonProductPropertyValues(associatedClients,
 				PersistenceController.localImageRestoreProductKey, PersistenceController.localImagesListPropertyKey)));
 
-		comboSelectImage.setModel(new DefaultComboBoxModel<>(imagesCollection.toArray()));
+		comboSelectImage.setModel(new DefaultComboBoxModel<>(imagesCollection.toArray(new String[0])));
 	}
 
 	private void reload() {
@@ -114,7 +114,7 @@ public class FGroupActions extends SecondaryFrame {
 				values);
 
 		Map<String, String> changedValues = new HashMap<>();
-		changedValues.put(de.uib.opsidatamodel.productstate.ProductState.KEY_actionRequest, "setup");
+		changedValues.put(de.uib.opsidatamodel.productstate.ProductState.KEY_ACTION_REQUEST, "setup");
 
 		persist.updateProductOnClients(main.getActivatedGroupModel().getAssociatedClients(),
 				PersistenceController.localImageRestoreProductKey, OpsiPackage.TYPE_NETBOOT, changedValues);
@@ -145,11 +145,11 @@ public class FGroupActions extends SecondaryFrame {
 				layout.createParallelGroup().addComponent(topPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addComponent(imageActionPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		Containership cs_all = new Containership(getContentPane());
-		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
+		Containership csAll = new Containership(getContentPane());
+		csAll.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
 				JPanel.class);
 
-		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },
+		csAll.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },
 				javax.swing.text.JTextComponent.class);
 
 	}

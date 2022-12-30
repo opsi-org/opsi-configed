@@ -56,10 +56,10 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 	protected Map<String, String> mapOfStrings;
 	protected Map<String, String> mapOfTooltips;
 	protected Map<String, ImageIcon> mapOfImages;
-	static final int imageDefaultWidth = 30;
+	private static final int IMAGE_DEFAULT_WIDTH = 30;
 
 	public CellRendererByIndex(Map<String, String> mapOfStringValues, String imagesBase) {
-		this(mapOfStringValues, imagesBase, imageDefaultWidth);
+		this(mapOfStringValues, imagesBase, IMAGE_DEFAULT_WIDTH);
 	}
 
 	public CellRendererByIndex(Set<String> keySet, String imagesBase, int imageWidth) {
