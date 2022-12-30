@@ -3773,9 +3773,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			if (!smbMounted // probably not on Windows, take every product to correct path manually
 					|| new File(depotProductDirectory + File.separator + product + File.separator
-							+ de.uib.connectx.SmbConnect.directoryPE).exists() // win 6.x
+							+ de.uib.connectx.SmbConnect.DIRECTORY_PE).exists() // win 6.x
 					|| new File(depotProductDirectory + File.separator + product + File.separator
-							+ de.uib.connectx.SmbConnect.directoryI386).exists() // XP
+							+ de.uib.connectx.SmbConnect.DIRECTORY_I368).exists() // XP
 			)
 				winProducts.add(product);
 		}

@@ -99,7 +99,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		init();
 
-		btn_execute.setEnabled(false); // requires valid depot selection
+		jButtonExecute.setEnabled(false); // requires valid depot selection
 		tf_selecteddepots.setText("");
 
 		pack();
@@ -121,7 +121,7 @@ public class SSHPackageManagerUninstallParameterDialog
 		checkb_keepFiles.setEnabled(value);
 
 		btn_depotselection.setEnabled(value);
-		btn_execute.setEnabled(false);
+		jButtonExecute.setEnabled(false);
 	}
 
 	protected String produceDepotParameter() {
@@ -136,10 +136,10 @@ public class SSHPackageManagerUninstallParameterDialog
 			} else if (!possibleDepots.isEmpty()) {
 				depotParameter = possibleDepots.get(0);
 			} else
-				btn_execute.setEnabled(false);
+				jButtonExecute.setEnabled(false);
 
 		} else {
-			btn_execute.setEnabled(true);
+			jButtonExecute.setEnabled(true);
 
 			if (selectedDepots.contains(PersistenceController.DEPOT_SELECTION_NODEPOTS)) {
 				depotParameter = PersistenceController.DEPOT_SELECTION_NODEPOTS;
@@ -206,7 +206,7 @@ public class SSHPackageManagerUninstallParameterDialog
 		if (possibleDepots.isEmpty())
 		// probably no permission
 		{
-			btn_execute.setVisible(false);
+			jButtonExecute.setVisible(false);
 			tf_selecteddepots.setText("");
 		} else
 			tf_selecteddepots.setText("" + possibleDepots.get(0));
@@ -257,7 +257,7 @@ public class SSHPackageManagerUninstallParameterDialog
 			cb_opsiproducts.addItemListener(itemEvent -> {
 				tf_selecteddepots.setText("");
 
-				btn_execute.setEnabled(false);
+				jButtonExecute.setEnabled(false);
 				tf_product.setText((String) cb_opsiproducts.getSelectedItem());
 			});
 
@@ -451,7 +451,7 @@ public class SSHPackageManagerUninstallParameterDialog
 								.addGroup(uninstallPanelLayout.createSequentialGroup()
 										.addComponent(lbl_on, pref, pref, pref).addGap(5, 10, 10)
 										.addComponent(btn_depotselection, pref, pref, pref))
-								.addComponent(lbl_verbosity, pref, pref, pref)
+								.addComponent(jLabelVerbosity, pref, pref, pref)
 								.addComponent(lbl_keepFiles, pref, pref, pref))
 						.addGap(Globals.GAP_SIZE)
 						.addGroup(uninstallPanelLayout.createParallelGroup(leading)
@@ -486,7 +486,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 				.addGap(3 * Globals.GAP_SIZE)
 				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_verbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jLabelVerbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
 						.addComponent(cb_verbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))

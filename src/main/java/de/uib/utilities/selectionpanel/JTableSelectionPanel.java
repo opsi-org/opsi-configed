@@ -351,7 +351,7 @@ public class JTableSelectionPanel extends JPanel
 	}
 
 	@Override
-	public void addMouseListener(MouseListener l) {
+	public synchronized void addMouseListener(MouseListener l) {
 		scrollpane.addMouseListener(l);
 		table.addMouseListener(l);
 	}

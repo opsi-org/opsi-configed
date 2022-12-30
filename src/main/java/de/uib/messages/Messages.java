@@ -17,7 +17,7 @@ import de.uib.utilities.logging.logging;
 import utils.ResourceBundleUtf8;
 
 public class Messages {
-	public static final String appname = "configed";
+	public static final String APPNAME = "configed";
 	private static String BUNDLE_NAME = "de/uib/messages/configed";
 	private static String EXTRA_LOCALE = null;
 	private static final String LOCALISATIONS_CONF = "valid_localisations.conf";

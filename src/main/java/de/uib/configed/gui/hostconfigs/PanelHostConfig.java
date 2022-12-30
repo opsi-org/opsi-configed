@@ -2,7 +2,7 @@ package de.uib.configed.gui.hostconfigs;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.NavigableMap;
 
 import javax.swing.GroupLayout;
 import javax.swing.JLabel;
@@ -124,7 +124,7 @@ public class PanelHostConfig extends JPanel {
 	public void initEditing(String labeltext, Map configVisualMap,
 			Map<String, de.uib.utilities.table.ListCellOptions> configOptions, Collection collectionConfigStored,
 			AdditionalconfigurationUpdateCollection configurationUpdateCollection, boolean optionsEditable,
-			TreeMap<String, String> classesMap) {
+			NavigableMap<String, String> classesMap) {
 		label.setText(labeltext);
 
 		logging.info(this, "initEditing "
