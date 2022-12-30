@@ -163,39 +163,39 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		if (columnDict == null) {
 			columnDict = new HashMap<>();
 			columnDict.put("productId", configed.getResourceValue("InstallationStateTableModel.productId"));
-			columnDict.put(ProductState.KEY_productName,
+			columnDict.put(ProductState.KEY_PRODUCT_NAME,
 					configed.getResourceValue("InstallationStateTableModel.productName"));
-			columnDict.put(ProductState.KEY_targetConfiguration,
+			columnDict.put(ProductState.KEY_TARGET_CONFIGURATION,
 					configed.getResourceValue("InstallationStateTableModel.targetConfiguration"));
-			columnDict.put(ProductState.KEY_installationStatus,
+			columnDict.put(ProductState.KEY_INSTALLATION_STATUS,
 					configed.getResourceValue("InstallationStateTableModel.installationStatus"));
 
 			columnDict.put("installationInfo", configed.getResourceValue("InstallationStateTableModel.report"));
 			// combines the following three
-			columnDict.put(ProductState.KEY_actionProgress,
+			columnDict.put(ProductState.KEY_ACTION_PROGRESS,
 					configed.getResourceValue("InstallationStateTableModel.actionProgress"));
-			columnDict.put(ProductState.KEY_actionResult,
+			columnDict.put(ProductState.KEY_ACTION_RESULT,
 					configed.getResourceValue("InstallationStateTableModel.actionResult"));
-			columnDict.put(ProductState.KEY_lastAction,
+			columnDict.put(ProductState.KEY_LAST_ACTION,
 					configed.getResourceValue("InstallationStateTableModel.lastAction"));
 
-			columnDict.put(ProductState.KEY_actionRequest,
+			columnDict.put(ProductState.KEY_ACTION_REQUEST,
 					configed.getResourceValue("InstallationStateTableModel.actionRequest"));
-			columnDict.put(ProductState.KEY_productPriority,
+			columnDict.put(ProductState.KEY_PRODUCT_PRIORITY,
 					configed.getResourceValue("InstallationStateTableModel.priority"));
-			columnDict.put(ProductState.KEY_actionSequence, "actionSequence");
+			columnDict.put(ProductState.KEY_ACTION_SEQUENCE, "actionSequence");
 
-			columnDict.put(ProductState.KEY_position,
+			columnDict.put(ProductState.KEY_POSITION,
 					configed.getResourceValue("InstallationStateTableModel.position"));
 
-			columnDict.put(ProductState.KEY_versionInfo, "Version");
+			columnDict.put(ProductState.KEY_VERSION_INFO, "Version");
 			// combines the following two
-			columnDict.put(ProductState.KEY_productVersion,
+			columnDict.put(ProductState.KEY_PRODUCT_VERSION,
 					configed.getResourceValue("InstallationStateTableModel.productVersion"));
-			columnDict.put(ProductState.KEY_packageVersion,
+			columnDict.put(ProductState.KEY_PACKAGE_VERSION,
 					configed.getResourceValue("InstallationStateTableModel.packageVersion"));
 
-			columnDict.put(ProductState.KEY_lastStateChange,
+			columnDict.put(ProductState.KEY_LAST_STATE_CHANGE,
 					configed.getResourceValue("InstallationStateTableModel.lastStateChange"));
 
 		}
@@ -292,7 +292,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 				// deep copy, but seems to be not complete, therefore not used
 
-				String productId = stateAndAction.get(ProductState.KEY_productId);
+				String productId = stateAndAction.get(ProductState.KEY_PRODUCT_ID);
 				productRows.put(productId, stateAndAction);
 			}
 		}
@@ -317,22 +317,22 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				}
 
 				// change values for visual output
-				String targetConfiguration = stateAndAction.get(ProductState.KEY_targetConfiguration);
+				String targetConfiguration = stateAndAction.get(ProductState.KEY_TARGET_CONFIGURATION);
 				if (targetConfiguration == null || targetConfiguration.equals(""))
 					targetConfiguration = TargetConfiguration.getLabel(TargetConfiguration.UNDEFINED);
-				stateAndAction.put(ProductState.KEY_targetConfiguration, targetConfiguration);
+				stateAndAction.put(ProductState.KEY_TARGET_CONFIGURATION, targetConfiguration);
 
 				String priority = "";
 				if (globalProductInfos != null && globalProductInfos.get(productId) != null)
 					priority = "" + globalProductInfos.get(productId).get("priority");
-				stateAndAction.put(ProductState.KEY_productPriority, priority);
+				stateAndAction.put(ProductState.KEY_PRODUCT_PRIORITY, priority);
 
-				stateAndAction.put(ProductState.KEY_actionSequence, priority);
+				stateAndAction.put(ProductState.KEY_ACTION_SEQUENCE, priority);
 
 				// build visual states
 				for (String colKey : ProductState.KEYS) {
 
-					if (colKey.equals(ProductState.KEY_actionRequest)) {
+					if (colKey.equals(ProductState.KEY_ACTION_REQUEST)) {
 						logging.debug(this, " ------------before   mixtovisualstate " + "product " + productId
 								+ " value " + stateAndAction.get(colKey));
 					}
@@ -373,8 +373,8 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					while (iter.hasNext()) {
 						String key = iter.next();
 
-						if (key.equals(ProductState.KEY_productPriority)
-								|| key.equals(ProductState.KEY_actionSequence)) {
+						if (key.equals(ProductState.KEY_PRODUCT_PRIORITY)
+								|| key.equals(ProductState.KEY_ACTION_SEQUENCE)) {
 							mixToVisualState(combinedVisualValues.get(key), productId, priority);
 						} else {
 							mixToVisualState(combinedVisualValues.get(key), productId,
@@ -424,52 +424,52 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		preparedColumns = new ArrayList<>();
 		editablePreparedColumns = new boolean[16];
 
-		preparedColumns.add(0, ProductState.KEY_productId);
+		preparedColumns.add(0, ProductState.KEY_PRODUCT_ID);
 		editablePreparedColumns[0] = false;
 
-		preparedColumns.add(1, ProductState.KEY_productName);
+		preparedColumns.add(1, ProductState.KEY_PRODUCT_NAME);
 		editablePreparedColumns[1] = false;
 
-		preparedColumns.add(2, ProductState.KEY_targetConfiguration);
+		preparedColumns.add(2, ProductState.KEY_TARGET_CONFIGURATION);
 		editablePreparedColumns[2] = true;
 
-		preparedColumns.add(3, ProductState.KEY_installationStatus);
+		preparedColumns.add(3, ProductState.KEY_INSTALLATION_STATUS);
 		editablePreparedColumns[3] = true;
 
-		preparedColumns.add(4, ProductState.KEY_installationInfo);
+		preparedColumns.add(4, ProductState.KEY_INSTALLATION_INFO);
 		editablePreparedColumns[4] = true;
 
-		preparedColumns.add(5, ProductState.KEY_actionProgress);
+		preparedColumns.add(5, ProductState.KEY_ACTION_PROGRESS);
 		editablePreparedColumns[5] = false;
 
-		preparedColumns.add(6, ProductState.KEY_actionResult);
+		preparedColumns.add(6, ProductState.KEY_ACTION_RESULT);
 		editablePreparedColumns[6] = false;
 
-		preparedColumns.add(7, ProductState.KEY_lastAction);
+		preparedColumns.add(7, ProductState.KEY_LAST_ACTION);
 		editablePreparedColumns[7] = false;
 
-		preparedColumns.add(8, ProductState.KEY_actionRequest);
+		preparedColumns.add(8, ProductState.KEY_ACTION_REQUEST);
 		editablePreparedColumns[8] = true;
 
-		preparedColumns.add(9, ProductState.KEY_productPriority);
+		preparedColumns.add(9, ProductState.KEY_PRODUCT_PRIORITY);
 		editablePreparedColumns[9] = false;
 
-		preparedColumns.add(10, ProductState.KEY_actionSequence);
+		preparedColumns.add(10, ProductState.KEY_ACTION_SEQUENCE);
 		editablePreparedColumns[10] = false;
 
-		preparedColumns.add(11, ProductState.KEY_position);
+		preparedColumns.add(11, ProductState.KEY_POSITION);
 		editablePreparedColumns[11] = false;
 
-		preparedColumns.add(12, ProductState.KEY_versionInfo);
+		preparedColumns.add(12, ProductState.KEY_VERSION_INFO);
 		editablePreparedColumns[12] = false;
 
-		preparedColumns.add(13, ProductState.KEY_productVersion);
+		preparedColumns.add(13, ProductState.KEY_PRODUCT_VERSION);
 		editablePreparedColumns[13] = false;
 
-		preparedColumns.add(14, ProductState.KEY_packageVersion);
+		preparedColumns.add(14, ProductState.KEY_PACKAGE_VERSION);
 		editablePreparedColumns[14] = false;
 
-		preparedColumns.add(15, ProductState.KEY_lastStateChange);
+		preparedColumns.add(15, ProductState.KEY_LAST_STATE_CHANGE);
 		editablePreparedColumns[15] = false;
 
 		if (columnsToDisplay == null) {
@@ -527,7 +527,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	}
 
 	protected void setInstallationInfo(String product, String value) {
-		combinedVisualValues.get(ProductState.KEY_installationInfo).put(product, value);
+		combinedVisualValues.get(ProductState.KEY_INSTALLATION_INFO).put(product, value);
 
 		for (String clientId : selectedClients) {
 			setInstallationInfo(clientId, product, value);
@@ -556,22 +556,22 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				|| value.equals(InstallationInfo.NONEdisplayString) // this is asked only for formal independence of the
 																	// method
 		) {
-			changedStatesForProduct.put(ProductState.KEY_lastAction, LastAction.getLabel(ActionResult.NONE));
-			changedStatesForProduct.put(ProductState.KEY_actionResult, LastAction.getLabel(ActionResult.NONE));
-			changedStatesForProduct.put(ProductState.KEY_actionProgress, InstallationInfo.NONEstring);
+			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, LastAction.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, InstallationInfo.NONEstring);
 
 		} else if (value.equals(InstallationInfo.FAILEDdisplayString)) {
-			changedStatesForProduct.put(ProductState.KEY_lastAction, LastAction.getLabel(ActionResult.NONE));
-			changedStatesForProduct.put(ProductState.KEY_actionResult, ActionResult.getLabel(ActionResult.FAILED));
-			changedStatesForProduct.put(ProductState.KEY_actionProgress, InstallationInfo.MANUALLY);
+			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, ActionResult.getLabel(ActionResult.FAILED));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, InstallationInfo.MANUALLY);
 		} else if (value.equals(InstallationInfo.SUCCESSdisplayString)) {
-			changedStatesForProduct.put(ProductState.KEY_lastAction, LastAction.getLabel(ActionResult.NONE));
-			changedStatesForProduct.put(ProductState.KEY_actionResult, ActionResult.getLabel(ActionResult.SUCCESSFUL));
-			changedStatesForProduct.put(ProductState.KEY_actionProgress, InstallationInfo.MANUALLY);
+			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, ActionResult.getLabel(ActionResult.SUCCESSFUL));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, InstallationInfo.MANUALLY);
 		} else {
-			changedStatesForProduct.put(ProductState.KEY_lastAction, ActionResult.getLabel(ActionResult.NONE));
-			changedStatesForProduct.put(ProductState.KEY_actionResult, LastAction.getLabel(ActionResult.NONE));
-			changedStatesForProduct.put(ProductState.KEY_actionProgress, value);
+			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, ActionResult.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, LastAction.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, value);
 		}
 
 	}
@@ -801,7 +801,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			rowMapForaClient = new HashMap<>();
 			productStates.put(productId, rowMapForaClient);
 		}
-		rowMapForaClient.put(ProductState.KEY_actionRequest, ar.toString());
+		rowMapForaClient.put(ProductState.KEY_ACTION_REQUEST, ar.toString());
 
 	}
 
@@ -856,14 +856,14 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 				if (!started) {
 					started = true;
-					newValUntilNow = getChangedState(clientId, prod, ProductState.KEY_actionRequest);
+					newValUntilNow = getChangedState(clientId, prod, ProductState.KEY_ACTION_REQUEST);
 				} else {
 					if (newValUntilNow == null) {
-						if (getChangedState(clientId, prod, ProductState.KEY_actionRequest) != null) {
+						if (getChangedState(clientId, prod, ProductState.KEY_ACTION_REQUEST) != null) {
 							newValUntilNow = Globals.CONFLICT_STATE_STRING;
 						}
 					} else {
-						if (newValUntilNow.equals(getChangedState(clientId, prod, ProductState.KEY_actionRequest))) {
+						if (newValUntilNow.equals(getChangedState(clientId, prod, ProductState.KEY_ACTION_REQUEST))) {
 							// it remains
 						} else {
 							newValUntilNow = Globals.CONFLICT_STATE_STRING;
@@ -872,7 +872,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				}
 
 			}
-			combinedVisualValues.get(ProductState.KEY_actionRequest).put(prod, newValUntilNow);
+			combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).put(prod, newValUntilNow);
 
 		}
 
@@ -1119,7 +1119,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			if (possibleActions.get(actualProduct) == null)
 			// we dont have the product in our depot selection
 			{
-				String state = combinedVisualValues.get(ProductState.KEY_installationStatus).get(actualProduct);
+				String state = combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct);
 				if (state == null)
 					return new DefaultComboBoxModel<>(new String[] { "null" });
 
@@ -1135,7 +1135,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			if (possibleActions.get(actualProduct) == null)
 			// we dont have the product in our depot selection
 			{
-				String state = combinedVisualValues.get(ProductState.KEY_installationStatus).get(actualProduct);
+				String state = combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct);
 				if (state == null)
 					return new DefaultComboBoxModel<>(new String[] { "null" });
 
@@ -1145,7 +1145,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			return new DefaultComboBoxModel<>(TargetConfiguration.getDisplayLabelsForChoice());
 		}
 
-		else if (column == displayColumns.indexOf(ProductState.KEY_installationInfo)) {
+		else if (column == displayColumns.indexOf(ProductState.KEY_INSTALLATION_INFO)) {
 			String delivered = (String) getValueAt(row, column);
 			if (delivered == null)
 				delivered = "";
@@ -1187,7 +1187,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	public String getLastStateChange(int row) {
 		String actualProduct = productsV.get(row);
 
-		return combinedVisualValues.get(ProductState.KEY_lastStateChange).get(actualProduct);
+		return combinedVisualValues.get(ProductState.KEY_LAST_STATE_CHANGE).get(actualProduct);
 	}
 
 	protected void setOnGoingCollectiveChangeCount() {
@@ -1217,51 +1217,51 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			break;
 
 		case 1:
-			result = globalProductInfos.get(actualProduct).get(ProductState.KEY_productName);
+			result = globalProductInfos.get(actualProduct).get(ProductState.KEY_PRODUCT_NAME);
 
 			// there we have not got the value
 			break;
 
 		case 2:
-			result = combinedVisualValues.get(ProductState.KEY_targetConfiguration).get(actualProduct);
+			result = combinedVisualValues.get(ProductState.KEY_TARGET_CONFIGURATION).get(actualProduct);
 			break;
 
 		case 3:
-			InstallationStatus is = InstallationStatus
-					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_installationStatus).get(actualProduct));
+			InstallationStatus is = InstallationStatus.produceFromLabel(
+					combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct));
 			result = InstallationStatus.getDisplayLabel(is.getVal());
 			break;
 
 		case 4:
-			result = combinedVisualValues.get(ProductState.KEY_installationInfo).get(actualProduct);
+			result = combinedVisualValues.get(ProductState.KEY_INSTALLATION_INFO).get(actualProduct);
 			break;
 
 		case 5:
-			result = combinedVisualValues.get(ProductState.KEY_actionProgress).get(actualProduct);
+			result = combinedVisualValues.get(ProductState.KEY_ACTION_PROGRESS).get(actualProduct);
 			break;
 
 		case 6:
-			result = combinedVisualValues.get(ProductState.KEY_actionResult).get(actualProduct);
+			result = combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).get(actualProduct);
 			break;
 
 		case 7:
-			result = combinedVisualValues.get(ProductState.KEY_lastAction).get(actualProduct);
+			result = combinedVisualValues.get(ProductState.KEY_LAST_ACTION).get(actualProduct);
 			break;
 
 		case 8:
 
 			ActionRequest ar = ActionRequest
-					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_actionRequest).get(actualProduct));
+					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).get(actualProduct));
 			result = ActionRequest.getDisplayLabel(ar.getVal());
 
 			break;
 
 		case 9:
-			result = combinedVisualValues.get(ProductState.KEY_productPriority).get(actualProduct);
+			result = combinedVisualValues.get(ProductState.KEY_PRODUCT_PRIORITY).get(actualProduct);
 			break;
 
 		case 10:
-			result = combinedVisualValues.get(ProductState.KEY_actionSequence).get(actualProduct);
+			result = combinedVisualValues.get(ProductState.KEY_ACTION_SEQUENCE).get(actualProduct);
 
 			break;
 
@@ -1272,8 +1272,8 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		case 12:
 			String serverProductVersion = (String) getGlobalProductInfos().get(actualProduct)
-					.get(de.uib.opsidatamodel.productstate.ProductState.KEY_versionInfo);
-			result = combinedVisualValues.get(ProductState.KEY_versionInfo).get(actualProduct);
+					.get(de.uib.opsidatamodel.productstate.ProductState.KEY_VERSION_INFO);
+			result = combinedVisualValues.get(ProductState.KEY_VERSION_INFO).get(actualProduct);
 			if (result != null && !(result.equals("")) && serverProductVersion != null
 					&& !(serverProductVersion.equals(result)))
 				result = unequalAddstring + result;
@@ -1281,15 +1281,15 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			break;
 
 		case 13:
-			result = combinedVisualValues.get(ProductState.KEY_productVersion).get(actualProduct);
+			result = combinedVisualValues.get(ProductState.KEY_PRODUCT_VERSION).get(actualProduct);
 			break;
 
 		case 14:
-			result = combinedVisualValues.get(ProductState.KEY_packageVersion).get(actualProduct);
+			result = combinedVisualValues.get(ProductState.KEY_PACKAGE_VERSION).get(actualProduct);
 			break;
 
 		case 15:
-			result = combinedVisualValues.get(ProductState.KEY_lastStateChange).get(actualProduct);
+			result = combinedVisualValues.get(ProductState.KEY_LAST_STATE_CHANGE).get(actualProduct);
 
 			break;
 
@@ -1343,17 +1343,17 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		actualProduct = productsV.get(row);
 
-		if (combinedVisualValues.get(ProductState.KEY_installationStatus).get(actualProduct) == null)
+		if (combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct) == null)
 			return; // not a product in our depot
 
 		if (!((String) retrieveValueAt(row, col)).equals(value)) {
 			if (indexPreparedColumns[col] == preparedColumns.indexOf(InstallationStatus.KEY)) {
-				combinedVisualValues.get(ProductState.KEY_installationStatus).put(actualProduct, (String) value);
+				combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).put(actualProduct, (String) value);
 				registerStateChange(actualProduct, InstallationStatus.KEY, (String) value);
 			}
 
 			else if (indexPreparedColumns[col] == preparedColumns.indexOf(TargetConfiguration.KEY)) {
-				combinedVisualValues.get(ProductState.KEY_targetConfiguration).put(actualProduct, (String) value);
+				combinedVisualValues.get(ProductState.KEY_TARGET_CONFIGURATION).put(actualProduct, (String) value);
 				registerStateChange(actualProduct, TargetConfiguration.KEY, (String) value);
 			}
 
@@ -1366,7 +1366,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				finishCollectiveChange();
 			}
 
-			else if (indexPreparedColumns[col] == preparedColumns.indexOf(ProductState.KEY_installationInfo)) {
+			else if (indexPreparedColumns[col] == preparedColumns.indexOf(ProductState.KEY_INSTALLATION_INFO)) {
 				if (value.equals(InstallationInfo.NONEdisplayString))
 					value = InstallationInfo.NONEstring;
 

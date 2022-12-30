@@ -167,25 +167,25 @@ public class OpsiDataBackend extends Backend {
 		// Software
 		String attributeTextSoftware = null;
 		if (element instanceof SoftwareNameElement)
-			attributeTextSoftware = ProductState.KEY_productId;
+			attributeTextSoftware = ProductState.KEY_PRODUCT_ID;
 		else if (element instanceof SoftwareVersionElement)
-			attributeTextSoftware = ProductState.KEY_productVersion;
+			attributeTextSoftware = ProductState.KEY_PRODUCT_VERSION;
 		else if (element instanceof SoftwarePackageVersionElement)
-			attributeTextSoftware = ProductState.KEY_packageVersion;
+			attributeTextSoftware = ProductState.KEY_PACKAGE_VERSION;
 		else if (element instanceof SoftwareRequestElement)
-			attributeTextSoftware = ProductState.KEY_actionRequest;
+			attributeTextSoftware = ProductState.KEY_ACTION_REQUEST;
 		else if (element instanceof SoftwareTargetConfigurationElement)
-			attributeTextSoftware = ProductState.KEY_targetConfiguration;
+			attributeTextSoftware = ProductState.KEY_TARGET_CONFIGURATION;
 		else if (element instanceof SoftwareInstallationStatusElement)
-			attributeTextSoftware = ProductState.KEY_installationStatus;
+			attributeTextSoftware = ProductState.KEY_INSTALLATION_STATUS;
 		else if (element instanceof SoftwareActionProgressElement)
-			attributeTextSoftware = ProductState.KEY_actionProgress;
+			attributeTextSoftware = ProductState.KEY_ACTION_PROGRESS;
 		else if (element instanceof SoftwareActionResultElement)
-			attributeTextSoftware = ProductState.KEY_actionResult;
+			attributeTextSoftware = ProductState.KEY_ACTION_RESULT;
 		else if (element instanceof SoftwareLastActionElement)
-			attributeTextSoftware = ProductState.KEY_lastAction;
+			attributeTextSoftware = ProductState.KEY_LAST_ACTION;
 		else if (element instanceof SoftwareModificationTimeElement)
-			attributeTextSoftware = ProductState.KEY_lastStateChange;
+			attributeTextSoftware = ProductState.KEY_LAST_STATE_CHANGE;
 
 		if (attributeTextSoftware != null) {
 			if (operation instanceof StringEqualsOperation)

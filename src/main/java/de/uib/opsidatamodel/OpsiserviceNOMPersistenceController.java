@@ -1473,7 +1473,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			String clientProductVersion = (String) m.get(OpsiPackage.SERVICEkeyPRODUCT_VERSION);
 			String clientPackageVersion = (String) m.get(OpsiPackage.SERVICEkeyPACKAGE_VERSION);
 
-			Object clientProductState = m.get(ProductState.KEY_installationStatus);
+			Object clientProductState = m.get(ProductState.KEY_INSTALLATION_STATUS);
 
 			if (
 			// has state unknown, probably because of a failed installation)
@@ -1904,7 +1904,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				itemProducts.put(OpsiPackage.DBkeyPRODUCT_ID, productNetboot);
 				itemProducts.put(OpsiPackage.SERVICEkeyPRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 				itemProducts.put("clientId", newClientId);
-				itemProducts.put(ProductState.key2servicekey.get(ProductState.KEY_actionRequest), "setup");
+				itemProducts.put(ProductState.key2servicekey.get(ProductState.KEY_ACTION_REQUEST), "setup");
 				productsNetbootJsonObject.add(Executioner.jsonMap(itemProducts));
 			}
 
@@ -2055,7 +2055,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			itemProducts.put(OpsiPackage.DBkeyPRODUCT_ID, productNetboot);
 			itemProducts.put(OpsiPackage.SERVICEkeyPRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 			itemProducts.put("clientId", newClientId);
-			itemProducts.put(ProductState.key2servicekey.get(ProductState.KEY_actionRequest), "setup");
+			itemProducts.put(ProductState.key2servicekey.get(ProductState.KEY_ACTION_REQUEST), "setup");
 			jsonObjects.add(Executioner.jsonMap(itemProducts));
 			omc = new OpsiMethodCall("productOnClient_createObjects",
 					new Object[] { Executioner.jsonArray(jsonObjects) });
@@ -2069,7 +2069,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			itemProducts.put(OpsiPackage.DBkeyPRODUCT_ID, productLocalboot);
 			itemProducts.put(OpsiPackage.SERVICEkeyPRODUCT_TYPE, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 			itemProducts.put("clientId", newClientId);
-			itemProducts.put(ProductState.key2servicekey.get(ProductState.KEY_actionRequest), "setup");
+			itemProducts.put(ProductState.key2servicekey.get(ProductState.KEY_ACTION_REQUEST), "setup");
 			jsonObjects.add(Executioner.jsonMap(itemProducts));
 			omc = new OpsiMethodCall("productOnClient_createObjects",
 					new Object[] { Executioner.jsonArray(jsonObjects) });
@@ -3840,16 +3840,16 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 					aProductInfo.put("actions", productInfo.getPossibleActions());
 
-					aProductInfo.put(de.uib.opsidatamodel.productstate.ProductState.KEY_productId, productId
+					aProductInfo.put(de.uib.opsidatamodel.productstate.ProductState.KEY_PRODUCT_ID, productId
 					// productInfo.getProductId()
 					);
-					aProductInfo.put(de.uib.opsidatamodel.productstate.ProductState.KEY_versionInfo,
+					aProductInfo.put(de.uib.opsidatamodel.productstate.ProductState.KEY_VERSION_INFO,
 							Globals.ProductPackageVersionSeparator.formatKeyForDisplay(productInfo.getVersionInfo()));
 
-					aProductInfo.put(de.uib.opsidatamodel.productstate.ProductState.KEY_productPriority,
+					aProductInfo.put(de.uib.opsidatamodel.productstate.ProductState.KEY_PRODUCT_PRIORITY,
 							productInfo.getPriority());
 
-					aProductInfo.put(de.uib.opsidatamodel.productstate.ProductState.KEY_productName,
+					aProductInfo.put(de.uib.opsidatamodel.productstate.ProductState.KEY_PRODUCT_NAME,
 							// OpsiProductInfo.SERVICEkeyPRODUCT_NAME,
 							productInfo.getProductName());
 
@@ -3857,10 +3857,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 					aProductInfo.put(OpsiProductInfo.SERVICEkeyPRODUCT_ADVICE, productInfo.getAdvice());
 
-					aProductInfo.put(de.uib.opsidatamodel.productstate.ProductState.KEY_productVersion,
+					aProductInfo.put(de.uib.opsidatamodel.productstate.ProductState.KEY_PRODUCT_VERSION,
 							productInfo.getProductVersion());
 
-					aProductInfo.put(de.uib.opsidatamodel.productstate.ProductState.KEY_packageVersion,
+					aProductInfo.put(de.uib.opsidatamodel.productstate.ProductState.KEY_PACKAGE_VERSION,
 							productInfo.getPackageVersion());
 
 					aProductInfo.put(OpsiPackage.SERVICEkeyLOCKED, productInfo.getLockedInfo());
@@ -4772,7 +4772,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		logging.info(this, "getProductTitle for product " + product + " on depot " + theDepot);
 		logging.info(this, "getProductTitle for productGlobalsInfos found number " + productGlobalInfos.size());
 		logging.info(this, "getProductTitle, productInfos " + productGlobalInfos.get(product));
-		Object result = productGlobalInfos.get(product).get(ProductState.KEY_productName);
+		Object result = productGlobalInfos.get(product).get(ProductState.KEY_PRODUCT_NAME);
 		logging.info(this, "getProductTitle for product " + result);
 
 		String resultS = null;
@@ -7104,20 +7104,20 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	private List<String> getPossibleValuesProductOnClientDisplayfields_localboot() {
 		List<String> possibleValues = new ArrayList<>();
 		possibleValues.add("productId");
-		possibleValues.add(ProductState.KEY_productName);
-		possibleValues.add(ProductState.KEY_installationStatus);
-		possibleValues.add(ProductState.KEY_installationInfo);
+		possibleValues.add(ProductState.KEY_PRODUCT_NAME);
+		possibleValues.add(ProductState.KEY_INSTALLATION_STATUS);
+		possibleValues.add(ProductState.KEY_INSTALLATION_INFO);
 		// combines
 		// ProductState.KEY_actionProgress
 		// ProductState.KEY_actionResult
 		// ProductState.KEY_lastAction
-		possibleValues.add(ProductState.KEY_actionRequest);
-		possibleValues.add(ProductState.KEY_productPriority);
-		possibleValues.add(ProductState.KEY_position);
-		possibleValues.add(ProductState.KEY_lastStateChange);
+		possibleValues.add(ProductState.KEY_ACTION_REQUEST);
+		possibleValues.add(ProductState.KEY_PRODUCT_PRIORITY);
+		possibleValues.add(ProductState.KEY_POSITION);
+		possibleValues.add(ProductState.KEY_LAST_STATE_CHANGE);
 		// ProductState.KEY_actionSequence
-		possibleValues.add(ProductState.KEY_targetConfiguration);
-		possibleValues.add(ProductState.KEY_versionInfo);
+		possibleValues.add(ProductState.KEY_TARGET_CONFIGURATION);
+		possibleValues.add(ProductState.KEY_VERSION_INFO);
 		// combines
 		// ProductState.KEY_productVersion
 		// ProductState.KEY_packageVersion
@@ -7130,10 +7130,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		result.add("productId");
 
-		result.add(ProductState.KEY_installationStatus);
-		result.add(ProductState.KEY_installationInfo);
-		result.add(ProductState.KEY_actionRequest);
-		result.add(ProductState.KEY_versionInfo);
+		result.add(ProductState.KEY_INSTALLATION_STATUS);
+		result.add(ProductState.KEY_INSTALLATION_INFO);
+		result.add(ProductState.KEY_ACTION_REQUEST);
+		result.add(ProductState.KEY_VERSION_INFO);
 
 		return result;
 
@@ -7305,28 +7305,28 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// key names from de.uib.opsidatamodel.productstate.ProductState
 			productOnClients_displayFieldsLocalbootProducts.put("productId", true);
 
-			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_productName,
-					(configuredByService.indexOf(ProductState.KEY_productName) > -1));
+			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_PRODUCT_NAME,
+					(configuredByService.indexOf(ProductState.KEY_PRODUCT_NAME) > -1));
 
-			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_targetConfiguration,
-					(configuredByService.indexOf(ProductState.KEY_targetConfiguration) > -1));
+			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_TARGET_CONFIGURATION,
+					(configuredByService.indexOf(ProductState.KEY_TARGET_CONFIGURATION) > -1));
 
-			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_installationStatus, true);
+			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_INSTALLATION_STATUS, true);
 
-			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_installationInfo,
-					(configuredByService.indexOf(ProductState.KEY_installationInfo) > -1));
+			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_INSTALLATION_INFO,
+					(configuredByService.indexOf(ProductState.KEY_INSTALLATION_INFO) > -1));
 
-			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_actionRequest, true);
+			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_ACTION_REQUEST, true);
 
-			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_productPriority,
-					(configuredByService.indexOf(ProductState.KEY_productPriority) > -1));
-			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_position,
-					(configuredByService.indexOf(ProductState.KEY_position) > -1));
+			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_PRODUCT_PRIORITY,
+					(configuredByService.indexOf(ProductState.KEY_PRODUCT_PRIORITY) > -1));
+			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_POSITION,
+					(configuredByService.indexOf(ProductState.KEY_POSITION) > -1));
 
-			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_lastStateChange,
-					(configuredByService.indexOf(ProductState.KEY_lastStateChange) > -1));
+			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_LAST_STATE_CHANGE,
+					(configuredByService.indexOf(ProductState.KEY_LAST_STATE_CHANGE) > -1));
 
-			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_versionInfo, true);
+			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_VERSION_INFO, true);
 
 		}
 
@@ -7377,21 +7377,21 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	private List<String> getPossibleValuesProductOnClientDisplayfields_netboot() {
 		List<String> possibleValues = new ArrayList<>();
 		possibleValues.add("productId");
-		possibleValues.add(ProductState.KEY_productName);
-		possibleValues.add(ProductState.KEY_installationStatus);
-		possibleValues.add(ProductState.KEY_installationInfo);
+		possibleValues.add(ProductState.KEY_PRODUCT_NAME);
+		possibleValues.add(ProductState.KEY_INSTALLATION_STATUS);
+		possibleValues.add(ProductState.KEY_INSTALLATION_INFO);
 		// combines
 		// ProductState.KEY_actionProgress
 		// ProductState.KEY_actionResult
 		// ProductState.KEY_lastAction
-		possibleValues.add(ProductState.KEY_actionRequest);
-		possibleValues.add(ProductState.KEY_productPriority);
-		possibleValues.add(ProductState.KEY_position);
-		possibleValues.add(ProductState.KEY_lastStateChange);
+		possibleValues.add(ProductState.KEY_ACTION_REQUEST);
+		possibleValues.add(ProductState.KEY_PRODUCT_PRIORITY);
+		possibleValues.add(ProductState.KEY_POSITION);
+		possibleValues.add(ProductState.KEY_LAST_STATE_CHANGE);
 		// ProductState.KEY_actionSequence
 		// ProductState.KEY_actionSequence
-		possibleValues.add(ProductState.KEY_targetConfiguration);
-		possibleValues.add(ProductState.KEY_versionInfo);
+		possibleValues.add(ProductState.KEY_TARGET_CONFIGURATION);
+		possibleValues.add(ProductState.KEY_VERSION_INFO);
 		// combines
 		// ProductState.KEY_productVersion
 		// ProductState.KEY_packageVersion
@@ -7404,10 +7404,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		result.add("productId");
 
-		result.add(ProductState.KEY_installationStatus);
-		result.add(ProductState.KEY_installationInfo);
-		result.add(ProductState.KEY_actionRequest);
-		result.add(ProductState.KEY_versionInfo);
+		result.add(ProductState.KEY_INSTALLATION_STATUS);
+		result.add(ProductState.KEY_INSTALLATION_INFO);
+		result.add(ProductState.KEY_ACTION_REQUEST);
+		result.add(ProductState.KEY_VERSION_INFO);
 
 		return result;
 
@@ -7463,21 +7463,21 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// key names from de.uib.opsidatamodel.productstate.ProductState
 			productOnClients_displayFieldsNetbootProducts.put("productId", true);
 
-			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_productName,
-					(configuredByService.indexOf(ProductState.KEY_productName) > -1));
+			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_PRODUCT_NAME,
+					(configuredByService.indexOf(ProductState.KEY_PRODUCT_NAME) > -1));
 
-			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_targetConfiguration, false);
-			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_installationStatus, true);
+			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_TARGET_CONFIGURATION, false);
+			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_INSTALLATION_STATUS, true);
 
-			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_installationInfo,
-					(configuredByService.indexOf(ProductState.KEY_installationInfo) > -1));
+			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_INSTALLATION_INFO,
+					(configuredByService.indexOf(ProductState.KEY_INSTALLATION_INFO) > -1));
 
-			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_actionRequest, true);
+			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_ACTION_REQUEST, true);
 
-			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_lastStateChange,
-					(configuredByService.indexOf(ProductState.KEY_lastStateChange) > -1));
+			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_LAST_STATE_CHANGE,
+					(configuredByService.indexOf(ProductState.KEY_LAST_STATE_CHANGE) > -1));
 
-			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_versionInfo, true);
+			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_VERSION_INFO, true);
 
 		}
 

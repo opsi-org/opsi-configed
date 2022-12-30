@@ -84,8 +84,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected static final int SLIDER_W = 180;
 	protected ChangeListener sliderListener;
 	protected JLabel labelDisplayRestriction;
-	protected JComboBox comboType;
-	protected DefaultComboBoxModel comboModelTypes;
+	protected JComboBox<String> comboType;
+	protected DefaultComboBoxModel<String> comboModelTypes;
 	protected static final String DEFAULT_TYPE = "(all)";
 
 	protected JPanel jTextPanel;
@@ -633,10 +633,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 					show = true;
 				}
 
-				if (show && showTypeRestricted) {
-					if (lineTypes[i] != selTypeIndex)
-						show = false;
-				}
+				if (show && showTypeRestricted && lineTypes[i] != selTypeIndex)
+					show = false;
 
 				if (show) {
 
@@ -651,6 +649,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				i++;
 			}
 		} catch (BadLocationException e) {
+			logging.warning(this, "BadLocationException thrown in logging: " + e);
 		}
 		jTextPane.setDocument(document);
 		SwingUtilities.invokeLater(() -> jTextPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)));

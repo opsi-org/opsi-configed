@@ -151,5 +151,4 @@ public class Mapping<K, V> {
 	public String toString() {
 		return "de.uib.utilities.Mapping defined by Map " + map;
 	}
-
 }

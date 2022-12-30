@@ -29,7 +29,7 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
  * @author roeder
  */
 public class PanelAssignToLPools extends MultiTablePanel implements ChangeListener {
-	public JTextField testfield; // for test purposes
+	public JTextField testField; // for test purposes
 
 	private JLabel titleWindowsSoftware;
 	private JLabel titleWindowsSoftware2;
@@ -73,7 +73,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 	protected int minVSize = 80;
 
-	public static final int tablesMaxWidth = 1000;
+	public static final int TABLES_MAX_WIDTH = 1000;
 	protected int tablesMaxHeight = Short.MAX_VALUE;
 
 	/** Creates new form panelAssignToLPools */
@@ -90,7 +90,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		topPane = new JPanel();
 		bottomPane = new JPanel();
 
-		testfield = new JTextField("                     ");
+		testField = new JTextField("                     ");
 
 		// construct content panes
 		panelInfoWindowsSoftware = new JPanel();
@@ -456,7 +456,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				.addContainerGap());
 
 		panelLicencepools = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), tablesMaxWidth, true, 1, // position of general popups
+				configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), TABLES_MAX_WIDTH, true, 1, // position of general popups
 				false, // switchLineColors //does not matter
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
@@ -466,8 +466,8 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		panelLicencepools.setMasterFrame(Globals.frame1);
 
 		panelProductId2LPool = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleProductId2LPool"), tablesMaxWidth, true, 1,
-				false, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
+				configed.getResourceValue("ConfigedMain.Licences.SectiontitleProductId2LPool"), TABLES_MAX_WIDTH, true,
+				1, false, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true // with tablesearchpane
 		);
@@ -478,7 +478,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		panelRegisteredSoftware.setFiltering(true, false);
 		panelRegisteredSoftware.setMasterFrame(Globals.frame1);
 
-		javax.swing.GroupLayout layoutTopPane = new javax.swing.GroupLayout((JPanel) topPane);
+		javax.swing.GroupLayout layoutTopPane = new javax.swing.GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
 		layoutTopPane.setHorizontalGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
@@ -506,7 +506,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 						.addContainerGap())
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE));
 
-		javax.swing.GroupLayout layoutBottomPane = new javax.swing.GroupLayout((JPanel) bottomPane);
+		javax.swing.GroupLayout layoutBottomPane = new javax.swing.GroupLayout(bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
 		bottomPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
@@ -532,7 +532,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		add(splitPane);
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout((JPanel) this);
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(
 				layout.createSequentialGroup().addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin)

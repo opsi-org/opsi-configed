@@ -376,12 +376,9 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			}
 
 			else
-			// coming from table, replace!
-			{
+				// coming from table, replace!
 
-			}
-
-			logging.debug(this, "importData, sourceParentID " + sourceParentID);
+				logging.debug(this, "importData, sourceParentID " + sourceParentID);
 			logging.debug(this, "importData, sourceParentNode " + sourceParentNode);
 			logging.debug(this, "importData, groupNode " + groupNode);
 

@@ -78,7 +78,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	private javax.swing.JTextField jTextField_licenceType;
 
 	private javax.swing.JTextField jTextField_maxInstallations;
-	private javax.swing.JComboBox comboClient;
+	private javax.swing.JComboBox<String> comboClient;
 	private javax.swing.JTextField jTextField_endOfLicence;
 	private javax.swing.JTextField jTextField_licenceContract;
 	private javax.swing.JTextField jTextFieldLKey;
@@ -87,7 +87,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 	protected de.uib.configed.ControlPanelEnterLicence enterLicenceController;
 
-	private ComboBoxModel emptyComboBoxModel = new DefaultComboBoxModel<>(new String[] { "" });
+	private ComboBoxModel<String> emptyComboBoxModel = new DefaultComboBoxModel<>(new String[] { "" });
 
 	/** Creates new form PanelEnterLicence */
 	public PanelEnterLicence(de.uib.configed.ControlPanelEnterLicence enterLicenceController) {
@@ -95,7 +95,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		this.enterLicenceController = enterLicenceController;
 		initComponents();
 		defineListeners();
-		addSettings();
 
 		addComponentListener(new ComponentAdapter() {
 			@Override
@@ -103,10 +102,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 			}
 		});
-
-	}
-
-	protected void addSettings() {
 
 	}
 
@@ -232,7 +227,8 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		jTextField_maxInstallations.setText("1");
 		jTextField_maxInstallations.setEditable(false);
-		comboClient.setModel(new DefaultComboBoxModel<>(enterLicenceController.getChoicesAllHosts().toArray()));
+		comboClient.setModel(
+				new DefaultComboBoxModel<>(enterLicenceController.getChoicesAllHosts().toArray(new String[0])));
 		comboClient.setEnabled(true);
 
 	}
@@ -301,7 +297,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextField_licenceType = new javax.swing.JTextField();
 		jTextField_maxInstallations = new javax.swing.JTextField();
 
-		comboClient = new javax.swing.JComboBox();
+		comboClient = new javax.swing.JComboBox<>();
 		comboClient.setFont(Globals.defaultFontBig);
 
 		comboClient.setPreferredSize(new java.awt.Dimension(200, 20));
