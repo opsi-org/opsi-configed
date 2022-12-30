@@ -21,7 +21,7 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 
 	public SSHPMInstallServerPanel(String fullPathToPackage) {
 		super();
-		autocompletion = new SSHCompletionComboButton(additional_default_paths, ".opsi", fullPathToPackage);
+		autocompletion = new SSHCompletionComboButton(additionalDefaultPaths, ".opsi", fullPathToPackage);
 
 		initComponents();
 		setPackagePath(fullPathToPackage);

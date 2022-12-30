@@ -8,7 +8,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -117,17 +116,17 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			mainpanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 
-			JPanel main_button_panel = new JPanel();
-			main_button_panel.setBackground(Globals.BACKGROUND_COLOR_7);
-			main_button_panel.setLayout(new BorderLayout());
-			main_button_panel.add(mainpanel, BorderLayout.NORTH);
-			main_button_panel.add(buttonPanel, BorderLayout.SOUTH);
+			JPanel mainButtonPanel = new JPanel();
+			mainButtonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			mainButtonPanel.setLayout(new BorderLayout());
+			mainButtonPanel.add(mainpanel, BorderLayout.NORTH);
+			mainButtonPanel.add(buttonPanel, BorderLayout.SOUTH);
 
 			getContentPane().add(workbenchpanel, BorderLayout.CENTER);
-			getContentPane().add(main_button_panel, BorderLayout.SOUTH);
+			getContentPane().add(mainButtonPanel, BorderLayout.SOUTH);
 
-			GroupLayout mainpanelLayout = new GroupLayout((JComponent) mainpanel);
-			GroupLayout workbenchpanelLayout = new GroupLayout((JComponent) workbenchpanel);
+			GroupLayout mainpanelLayout = new GroupLayout(mainpanel);
+			GroupLayout workbenchpanelLayout = new GroupLayout(workbenchpanel);
 			workbenchpanel.setLayout(workbenchpanelLayout);
 			mainpanel.setLayout(mainpanelLayout);
 
@@ -136,125 +135,117 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 
 			lbl_dir = new JLabel(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.serverDir"));
-			{
-				autocompletion.setCombobox(new SSHCompletionComboBox(
-						new DefaultComboBoxModel<>(autocompletion.getDefaultValues().toArray())) {
-					@Override
-					public void setSelectedItem(Object item) {
-						super.setSelectedItem(item);
-						doSetActionGetVersions();
-					}
-				});
-				autocompletion.initCombobox();
-				cb_mainDir = autocompletion.getCombobox();
 
-				btn_searchDir = autocompletion.getButton();
-				btn_searchDir.removeActionListener(btn_searchDir.getActionListeners()[0]);
-				btn_searchDir.addActionListener(actionEvent -> {
-					autocompletion.doButtonAction();
+			autocompletion.setCombobox(new SSHCompletionComboBox<>(
+					new DefaultComboBoxModel<>(autocompletion.getDefaultValues().toArray(new String[0]))) {
+				@Override
+				public void setSelectedItem(Object item) {
+					super.setSelectedItem(item);
 					doSetActionGetVersions();
+				}
+			});
+			autocompletion.initCombobox();
+			cb_mainDir = autocompletion.getCombobox();
+
+			btn_searchDir = autocompletion.getButton();
+			btn_searchDir.removeActionListener(btn_searchDir.getActionListeners()[0]);
+			btn_searchDir.addActionListener(actionEvent -> {
+				autocompletion.doButtonAction();
+				doSetActionGetVersions();
+			});
+
+			lbl_packageVersion = new JLabel();
+			lbl_packageVersion.setText(
+					"    " + configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.packageVersion"));
+			lbl_productVersion = new JLabel();
+			lbl_productVersion.setText(
+					"    " + configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.productVersion"));
+			lbl_versions_controlfile = new JLabel();
+			lbl_versions = new JLabel();
+			lbl_versions_controlfile.setText(
+					configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.versions_controlfile"));
+			lbl_versions.setText(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.versions"));
+			lbl_setRights = new JLabel();
+			lbl_setRights.setText(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights"));
+			lbl_setRights_now = new JLabel();
+			lbl_setRights_now
+					.setText(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights_now"));
+			lbl_removeExistingPackage = new JLabel();
+			lbl_removeExistingPackage
+					.setText(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting"));
+			lbl_removeExistingPackage2 = new JLabel();
+			lbl_removeExistingPackage2.setText(
+					configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting2"));
+
+			lbl_productVersion_controlfile = new JLabel();
+			lbl_packageVersion_controlfile = new JLabel();
+			tf_packageVersion = new JTextField();
+
+			tf_productVersion = new JTextField();
+
+			enableTfVersions(false);
+
+			lbl_md5sum = new JLabel();
+			lbl_md5sum.setText(
+					configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createMd5sum"));
+			cb_md5sum = new JCheckBox();
+			cb_md5sum.setSelected(true);
+			lbl_zsync = new JLabel();
+			lbl_zsync.setText(
+					configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createZsync"));
+			cb_zsync = new JCheckBox();
+			cb_zsync.setSelected(true);
+			cb_overwrite = new JCheckBox();
+			cb_overwrite.setSelected(true);
+			cb_setRights = new JCheckBox();
+			cb_setRights.setSelected(true);
+
+			btn_advancedSettings = new JButton();
+			btn_advancedSettings.setText(
+					configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_advancedSettings"));
+
+			if (!(Globals.isGlobalReadOnly()))
+				btn_advancedSettings.addActionListener(actionEvent -> showAdvancedSettings());
+
+			btn_advancedSettings.setPreferredSize(btn_searchDir.getPreferredSize());
+			tf_productVersion.setPreferredSize(btn_searchDir.getPreferredSize());
+			tf_packageVersion.setPreferredSize(btn_searchDir.getPreferredSize());
+
+			btn_setRights = new JButton();
+			btn_setRights
+					.setText(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights"));
+			btn_setRights.setToolTipText(
+					configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights.tooltip"));
+			if (!(Globals.isGlobalReadOnly()))
+				btn_setRights.addActionListener(actionEvent -> doExecSetRights());
+
+			btn_toPackageManager = new JButton();
+			btn_toPackageManager.setEnabled(false);
+			btn_toPackageManager.setText(
+					configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager"));
+			btn_toPackageManager.setToolTipText(configed
+					.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager.tooltip"));
+
+			if (!(Globals.isGlobalReadOnly()))
+				btn_toPackageManager.addActionListener(actionEvent -> {
+					if (main != null)
+						new SSHPackageManagerInstallParameterDialog(main, filename);
 				});
-			}
-			{
-				lbl_packageVersion = new JLabel();
-				lbl_packageVersion.setText("    "
-						+ configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.packageVersion"));
-				lbl_productVersion = new JLabel();
-				lbl_productVersion.setText("    "
-						+ configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.productVersion"));
-				lbl_versions_controlfile = new JLabel();
-				lbl_versions = new JLabel();
-				lbl_versions_controlfile.setText(configed
-						.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.versions_controlfile"));
-				lbl_versions
-						.setText(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.versions"));
-				lbl_setRights = new JLabel();
-				lbl_setRights
-						.setText(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights"));
-				lbl_setRights_now = new JLabel();
-				lbl_setRights_now.setText(
-						configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights_now"));
-				lbl_removeExistingPackage = new JLabel();
-				lbl_removeExistingPackage.setText(
-						configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting"));
-				lbl_removeExistingPackage2 = new JLabel();
-				lbl_removeExistingPackage2.setText(
-						configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting2"));
-			}
-			{
-				lbl_productVersion_controlfile = new JLabel();
-				lbl_packageVersion_controlfile = new JLabel();
-				tf_packageVersion = new JTextField();
 
-				tf_productVersion = new JTextField();
+			btn_exec = new JButton();
+			btn_exec.setText(configed.getResourceValue("SSHConnection.buttonExec"));
+			btn_exec.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
+			btn_exec.setEnabled(false);
+			if (!(Globals.isGlobalReadOnly()))
+				btn_exec.addActionListener(actionEvent -> doAction1());
 
-				enableTfVersions(false);
-			}
-			{
-				lbl_md5sum = new JLabel();
-				lbl_md5sum.setText(
-						configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createMd5sum"));
-				cb_md5sum = new JCheckBox();
-				cb_md5sum.setSelected(true);
-				lbl_zsync = new JLabel();
-				lbl_zsync.setText(
-						configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createZsync"));
-				cb_zsync = new JCheckBox();
-				cb_zsync.setSelected(true);
-				cb_overwrite = new JCheckBox();
-				cb_overwrite.setSelected(true);
-				cb_setRights = new JCheckBox();
-				cb_setRights.setSelected(true);
-			}
-			{
-				btn_advancedSettings = new JButton();
-				btn_advancedSettings.setText(configed
-						.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_advancedSettings"));
-
-				if (!(Globals.isGlobalReadOnly()))
-					btn_advancedSettings.addActionListener(actionEvent -> showAdvancedSettings());
-
-				btn_advancedSettings.setPreferredSize(btn_searchDir.getPreferredSize());
-				tf_productVersion.setPreferredSize(btn_searchDir.getPreferredSize());
-				tf_packageVersion.setPreferredSize(btn_searchDir.getPreferredSize());
-
-				btn_setRights = new JButton();
-				btn_setRights.setText(
-						configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights"));
-				btn_setRights.setToolTipText(configed
-						.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights.tooltip"));
-				if (!(Globals.isGlobalReadOnly()))
-					btn_setRights.addActionListener(actionEvent -> doExecSetRights());
-			}
-			{
-				btn_toPackageManager = new JButton();
-				btn_toPackageManager.setEnabled(false);
-				btn_toPackageManager.setText(configed
-						.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager"));
-				btn_toPackageManager.setToolTipText(configed.getResourceValue(
-						"SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager.tooltip"));
-
-				if (!(Globals.isGlobalReadOnly()))
-					btn_toPackageManager.addActionListener(actionEvent -> {
-						if (main != null)
-							new SSHPackageManagerInstallParameterDialog(main, filename);
-					});
-
-				btn_exec = new JButton();
-				btn_exec.setText(configed.getResourceValue("SSHConnection.buttonExec"));
-				btn_exec.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
-				btn_exec.setEnabled(false);
-				if (!(Globals.isGlobalReadOnly()))
-					btn_exec.addActionListener(actionEvent -> doAction1());
-
-				btn_cancel = new JButton();
-				btn_cancel.setText(configed.getResourceValue("SSHConnection.buttonClose"));
-				btn_cancel.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
-				btn_cancel.addActionListener(actionEvent -> cancel());
-				buttonPanel.add(btn_exec);
-				buttonPanel.add(btn_toPackageManager);
-				buttonPanel.add(btn_cancel);
-			}
+			btn_cancel = new JButton();
+			btn_cancel.setText(configed.getResourceValue("SSHConnection.buttonClose"));
+			btn_cancel.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
+			btn_cancel.addActionListener(actionEvent -> cancel());
+			buttonPanel.add(btn_exec);
+			buttonPanel.add(btn_toPackageManager);
+			buttonPanel.add(btn_cancel);
 
 			workbenchpanelLayout
 					.setHorizontalGroup(workbenchpanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)

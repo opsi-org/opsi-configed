@@ -22,14 +22,14 @@ public class SSHPMInstallPanel extends JPanel {
 
 	protected SSHCommandFactory factory = SSHCommandFactory.getInstance();
 
-	protected List<String> additional_default_paths = new ArrayList<>();
+	protected List<String> additionalDefaultPaths = new ArrayList<>();
 
 	PersistenceController persist;
 	protected String workbench;
 
 	public SSHPMInstallPanel() {
 		this.setBackground(Globals.BACKGROUND_COLOR_7);
-		additional_default_paths.add(factory.opsipathVarRepository);
+		additionalDefaultPaths.add(factory.opsipathVarRepository);
 		persist = PersistenceControllerFactory.getPersistenceController();
 		if (persist == null)
 			logging.info(this, "init PersistenceController null");

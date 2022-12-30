@@ -96,7 +96,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	@Override
 	public void doAction1() {
 		try {
-			commandopsisetrights.setDir(completion.combobox_getStringItem());
+			commandopsisetrights.setDir(completion.comboBoxGetStringItem());
 			logging.info(this, "doAction1 opsi-set-rights with path: " + commandopsisetrights.getDir());
 			// we are in the event queure
 			new Thread() {

@@ -291,10 +291,10 @@ public class SSHConnectTerminal extends SSHConnect {
 				}
 
 				else if ((key == KeyEvent.VK_UP) || (key == KeyEvent.VK_KP_UP)) {
-					dialog.getInputField().setText(dialog.getPrevCommand_up());
+					dialog.getInputField().setText(dialog.getPrevCommandUp());
 					((Component) textField).requestFocusInWindow();
 				} else if ((key == KeyEvent.VK_DOWN) || (key == KeyEvent.VK_KP_DOWN)) {
-					dialog.getInputField().setText(dialog.getPrevCommand_down());
+					dialog.getInputField().setText(dialog.getPrevCommandDown());
 					((Component) textField).requestFocusInWindow();
 				}
 			}

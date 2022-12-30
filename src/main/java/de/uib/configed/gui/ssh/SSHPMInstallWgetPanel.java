@@ -43,7 +43,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 
 	public SSHPMInstallWgetPanel() {
 		super();
-		autocompletion = new SSHCompletionComboButton(additional_default_paths);
+		autocompletion = new SSHCompletionComboButton(additionalDefaultPaths);
 		wgetAuthPanel = new SSHWgetAuthenticationPanel();
 		url_def_text = configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url");
 		initComponents();

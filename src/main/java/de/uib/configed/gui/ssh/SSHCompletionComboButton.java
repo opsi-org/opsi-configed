@@ -121,7 +121,7 @@ public class SSHCompletionComboButton {
 
 	private void createInstances() {
 		button = new JButton();
-		combobox = new SSHCompletionComboBox(new DefaultComboBoxModel<>(defaultvalues.toArray(new String[0])));
+		combobox = new SSHCompletionComboBox<>(new DefaultComboBoxModel<>(defaultvalues.toArray(new String[0])));
 	}
 
 	public void initCombobox() {
@@ -197,7 +197,7 @@ public class SSHCompletionComboButton {
 		combobox = cb;
 	}
 
-	public String combobox_getStringItem() {
+	public String comboBoxGetStringItem() {
 		if (combobox.getEditor().getItem().toString().startsWith("/"))
 			return combobox.getEditor().getItem().toString();
 		else
@@ -254,9 +254,9 @@ public class SSHCompletionComboButton {
 					try {
 						////// FUNKTIONIERT NUR WENN BERECHTIGUNGEN RICHTIG SIND.....
 						// Bricht nach nächster Bedingung ab und schreibt keinen result ---> try-catch
-						String tmp_result = ssh.exec(getFiles, false);
-						if ((tmp_result != null) || (tmp_result.trim().equals("null")))
-							result += tmp_result;
+						String tempResult = ssh.exec(getFiles, false);
+						if ((tempResult != null) && !tempResult.trim().equals("null"))
+							result += tempResult;
 					} catch (Exception ei) {
 						logging.warning(this, "Could not find .opsi files in directory " + curdir
 								+ " (It may be the rights are setted wrong.)");

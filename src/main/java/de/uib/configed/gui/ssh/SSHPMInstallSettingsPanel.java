@@ -26,7 +26,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	private JLabel lbl_properties = new JLabel();
 	private JLabel lbl_verbosity = new JLabel();
 
-	private JComboBox cb_verbosity;
+	private JComboBox<Integer> cb_verbosity;
 	private JTextField tf_selecteddepots;
 	private JButton btn_depotselection;
 	private JCheckBox cb_properties;

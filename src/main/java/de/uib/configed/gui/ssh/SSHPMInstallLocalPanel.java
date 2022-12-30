@@ -27,7 +27,7 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 
 	public SSHPMInstallLocalPanel() {
 		super();
-		autocompletion = new SSHCompletionComboButton(additional_default_paths);
+		autocompletion = new SSHCompletionComboButton(additionalDefaultPaths);
 		initComponents();
 		initLayout();
 		instance = this;

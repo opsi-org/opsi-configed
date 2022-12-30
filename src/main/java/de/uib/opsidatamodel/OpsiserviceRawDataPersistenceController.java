@@ -53,15 +53,12 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 		// but are underlicensed
 		{
 
-			javax.swing.SwingUtilities.invokeLater(new Thread() {
-				@Override
-				public void run() {
+			javax.swing.SwingUtilities.invokeLater(() -> {
 
-					String warning = "limit for mysql backend reached";
+				String warning = "limit for mysql backend reached";
 
-					logging.info(this, "missingModules " + warning);
-					de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.callInstanceWith(warning);
-				}
+				logging.info(this, "missingModules " + warning);
+				de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.callInstanceWith(warning);
 			});
 		}
 		return true;

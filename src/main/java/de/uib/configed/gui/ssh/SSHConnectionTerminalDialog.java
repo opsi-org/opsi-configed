@@ -238,9 +238,9 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		}
 	}
 
-	public String getPrevCommand_up() {
+	public String getPrevCommandUp() {
 		logging.debug(this, "getPrevCommand_up historySize " + commandHistory.size() + " getIndex " + historyGetIndex);
-		if (commandHistory.size() <= 0)
+		if (commandHistory.isEmpty())
 			return "";
 		if (historyGetIndex - 1 < 0) {
 			historyGetIndex = 0;
@@ -253,7 +253,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		return commandHistory.get(historyGetIndex);
 	}
 
-	public String getPrevCommand_down() {
+	public String getPrevCommandDown() {
 		logging.debug(this,
 				"getPrevCommand_down historySize " + commandHistory.size() + " getIndex " + historyGetIndex);
 		if ((historyGetIndex + 1) >= commandHistory.size()) {

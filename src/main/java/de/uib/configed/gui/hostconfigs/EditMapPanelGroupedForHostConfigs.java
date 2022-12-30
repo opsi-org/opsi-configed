@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeSet;
 
 import javax.swing.Icon;
@@ -33,6 +34,7 @@ import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.permission.UserConfig;
+import de.uib.utilities.datapanel.AbstractEditMapPanel;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 
@@ -40,6 +42,8 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 // works on a map of pairs of type String - List
 {
+
+	private static final int USER_START_INDEX = 1;
 
 	protected JPopupMenu popupForUserpath;
 	protected JPopupMenu popupForUserpathes;
@@ -291,10 +295,10 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		logging.info(this, "theRoles found " + theRoles);
 		logging.info(this, "theUsers found " + theUsers);
 
-		for (String classkey : partialPanels.keySet()) {
-			(partialPanels.get(classkey)).setEditDenier(key -> {
+		for (Entry<String, AbstractEditMapPanel> entry : partialPanels.entrySet()) {
+			(entry.getValue()).setEditDenier(key -> {
 
-				logging.info(this, "classkey " + classkey + " key " + key);
+				logging.info(this, "entry " + entry + " key " + key);
 
 				Boolean result = false;
 
@@ -310,7 +314,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 					// we really are in a user branch
 					{
 
-						String rolekey = classkey + "." + UserConfig.HAS_ROLE_ATTRIBUT;
+						String rolekey = entry.getKey() + "." + UserConfig.HAS_ROLE_ATTRIBUT;
 
 						if (!(key.equals(rolekey)))
 						// rolekey may be edited
@@ -395,24 +399,14 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 	}
 
 	private boolean isUserRoot(TreePath path) {
-		if (path != null && path.getPathCount() == 2
-				&& path.getPathComponent(1).toString().equals(UserConfig.CONFIGKEY_STR_USER))
-			return true;
-
-		return false;
+		return path != null && path.getPathCount() == 2
+				&& path.getPathComponent(1).toString().equals(UserConfig.CONFIGKEY_STR_USER);
 	}
 
 	private boolean isUserPath(TreePath path) {
-		if (path != null && path.getPathCount() == 3
+		return path != null && path.getPathCount() == 3
 				&& path.getPathComponent(1).toString().equals(UserConfig.CONFIGKEY_STR_USER)
-				&& !path.getPathComponent(2).toString().equals(UserConfig.ROLE))
-			return true;
-
-		return false;
-	}
-
-	private int getUserStartIndex() {
-		return 1;
+				&& !path.getPathComponent(2).toString().equals(UserConfig.ROLE);
 	}
 
 	protected void rebuildTree() {
@@ -421,12 +415,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 		PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
-		setEditableMap(
-
-				(Map) persist.getConfigDefaultValues(),
-
-				persist.getConfigOptions());
-
+		setEditableMap((Map) persist.getConfigDefaultValues(), persist.getConfigOptions());
 	}
 
 	@Override
@@ -584,7 +573,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		if (p != null) {
 			logging.info(this, "deleteUser path " + p);
 
-			int startComponentI = getUserStartIndex();
+			int startComponentI = USER_START_INDEX;
 			StringBuilder keyB = new StringBuilder(p.getPathComponent(startComponentI).toString());
 			startComponentI++;
 			for (int i = startComponentI; i < p.getPathCount(); i++) {
