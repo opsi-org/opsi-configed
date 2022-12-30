@@ -115,29 +115,23 @@ public abstract class SWExporter {
 
 		logging.info(this, "starting");
 
-		try {
-			BufferedReader in = null;
-			try {
-				in = new BufferedReader(new FileReader(clientsFile));
-				logging.info(this, " in " + in);
-				String line = in.readLine();
-				while (line != null) {
-					// we assume that each line is a hostId
-					setHost(line);
-					updateModel();
+		try (BufferedReader in = new BufferedReader(new FileReader(clientsFile))) {
+			logging.info(this, " in " + in);
+			String line = in.readLine();
+			while (line != null) {
+				// we assume that each line is a hostId
+				setHost(line);
+				updateModel();
 
-					setWriteToFile(filepathStart + line + getExtension());
+				setWriteToFile(filepathStart + line + getExtension());
 
-					logging.debug(" outDir: " + outDir);
-					logging.debug(" filePath: " + filepathStart + line + getExtension());
-					export();
+				logging.debug(" outDir: " + outDir);
+				logging.debug(" filePath: " + filepathStart + line + getExtension());
+				export();
 
-					line = in.readLine();
-				}
-			} finally {
-				if (in != null)
-					in.close();
+				line = in.readLine();
 			}
+
 		} catch (IOException iox) {
 			logging.warning(this, "IOException " + iox);
 		}

@@ -159,7 +159,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			if (complex.type == GroupType.HOST_GROUP) {
 				for (SimpleGroup group : complex.groupList) {
 					if (group.element instanceof GroupElement) {
-						JComboBox box = (JComboBox) group.dataComponent;
+						JComboBox<String> box = (JComboBox<String>) group.dataComponent;
 						box.removeAllItems();
 						for (String data : group.element.getEnumData())
 							box.addItem(data);

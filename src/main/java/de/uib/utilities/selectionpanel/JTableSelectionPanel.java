@@ -216,7 +216,7 @@ public class JTableSelectionPanel extends JPanel
 
 		comboSearchMode = new JComboBoxToolTip();
 
-		Map tooltipsMap = new LinkedHashMap();
+		Map tooltipsMap = new LinkedHashMap<>();
 		tooltipsMap.put(configed.getResourceValue("SearchPane.SearchMode.fulltext_with_alternatives"),
 				configed.getResourceValue("SearchPane.SearchMode.fulltext_with_alternatives.tooltip"));
 
@@ -665,7 +665,7 @@ public class JTableSelectionPanel extends JPanel
 		return result;
 	}
 
-	protected int findViewRowFromValue(int startviewrow, Object value, Set colIndices) {
+	protected int findViewRowFromValue(int startviewrow, Object value, Set<Integer> colIndices) {
 		return findViewRowFromValue(startviewrow, value, colIndices, searchMode);
 	}
 
@@ -679,7 +679,7 @@ public class JTableSelectionPanel extends JPanel
 		return result;
 	}
 
-	protected int findViewRowFromValue(final int startviewrow, Object value, Set colIndices,
+	protected int findViewRowFromValue(final int startviewrow, Object value, Set<Integer> colIndices,
 			TablesearchPane.SearchMode searchMode) {
 
 		logging.info(this, "findViewRowFromValue(int startviewrow, Object value, Set colIndices, searchMode: "

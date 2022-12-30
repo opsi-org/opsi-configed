@@ -781,14 +781,14 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 	protected void setInternalGroupsData() {
 
-		namesAndDescriptionsSave = new LinkedHashMap();
+		namesAndDescriptionsSave = new LinkedHashMap<>();
 		namesAndDescriptionsSave.put(SAVE_GROUP_ID, NO_GROUP_DESCRIPTION);
 		for (String id : new TreeSet<>(theData.keySet())) {
 
 			namesAndDescriptionsSave.put(id, theData.get(id).get("description"));
 		}
 
-		namesAndDescriptions = new LinkedHashMap();
+		namesAndDescriptions = new LinkedHashMap<>();
 		namesAndDescriptions.put(NO_GROUP_ID, "");
 		for (String id : new TreeSet<>(theData.keySet())) {
 
