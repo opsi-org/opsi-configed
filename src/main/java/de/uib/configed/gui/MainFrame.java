@@ -561,9 +561,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	// This shall be called after MainFrame is made visible
 	public void initSplitPanes() {
 		panelClientSelection.setDividerLocation(0.8);
-		panelLocalbootProductSettings.setDividerLocation(0.8);
-		panelNetbootProductSettings.setDividerLocation(0.8);
-		panelProductProperties.setDividerLocation(0.8);
+		panelLocalbootProductSettings.setDividerLocation(0.75);
+		panelNetbootProductSettings.setDividerLocation(0.75);
+		panelProductProperties.setDividerLocation(0.75);
 	}
 
 	public class SizeListeningPanel extends JPanel implements ComponentListener {

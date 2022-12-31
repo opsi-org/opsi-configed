@@ -35,32 +35,32 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	private JPanel buttonPanel = new JPanel();
 	private JPanel winAuthPanel = new JPanel();
 
-	private JLabel lbl_client = new JLabel();
-	private JLabel lbl_user = new JLabel();
-	private JLabel lbl_passw = new JLabel();
-	private JLabel lbl_userdata = new JLabel();
-	private JLabel lbl_verbosity = new JLabel();
-	private JLabel lbl_fullCommand = new JLabel();
-	private JLabel lbl_applySudo = new JLabel();
-	private JLabel lbl_ignorePing = new JLabel();
-	private JLabel lbl_finalize = new JLabel();
+	private JLabel jLabelClient = new JLabel();
+	private JLabel jLabelUser = new JLabel();
+	private JLabel jLabelPassword = new JLabel();
+	private JLabel jLabelUserData = new JLabel();
+	private JLabel jLabelVerbosity = new JLabel();
+	private JLabel jLabelFullCommand = new JLabel();
+	private JLabel jLabelApplySudo = new JLabel();
+	private JLabel jLabelIgnorePing = new JLabel();
+	private JLabel jLabelFinalize = new JLabel();
 
-	private JButton btn_execute;
-	private JButton btn_copy_selected_clients;
-	private JButton btn_close;
-	private JButton btn_help;
+	private JButton jButtonExecute;
+	private JButton jButtonCopySelectedClients;
+	private JButton jButtonClose;
+	private JButton jButtonHelp;
 
-	private JTextField tf_client;
-	private JTextField tf_user;
-	private JPasswordField tf_passw;
+	private JTextField jTextFieldClient;
+	private JTextField jTextFieldUser;
+	private JPasswordField jTextFieldPassword;
 
 	protected CommandDeployClientAgent.FinalActionType finalAction;
 	protected PanelStateSwitch panelFinalAction;
 
-	private JButton btn_showPassw;
-	private JCheckBox cb_applySudo;
-	private JCheckBox cb_ignorePing;
-	private JComboBox<Integer> cb_verbosity;
+	private JButton jButtonShowPassword;
+	private JCheckBox jCheckBoxApplySudo;
+	private JCheckBox jCheckBoxIgnorePing;
+	private JComboBox<Integer> jCheckBoxVerbosity;
 
 	private String defaultWinUser = "";
 
@@ -115,36 +115,36 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 			// the config will be created in this run of configed
 		} else {
-			if (tf_passw == null) {
-				tf_passw = new JPasswordField("", 15);
-				tf_passw.setEchoChar('*');
+			if (jTextFieldPassword == null) {
+				jTextFieldPassword = new JPasswordField("", 15);
+				jTextFieldPassword.setEchoChar('*');
 			}
-			tf_passw.setText((String) resultConfigList.get(0));
+			jTextFieldPassword.setText((String) resultConfigList.get(0));
 			logging.info(this, "key_ssh_shell_active " + SSHCommandFactory.getInstance().confidential);
 
 		}
 	}
 
 	private void setComponentsEnabled(boolean value) {
-		tf_client.setEnabled(value);
-		tf_client.setEditable(value);
+		jTextFieldClient.setEnabled(value);
+		jTextFieldClient.setEditable(value);
 
-		tf_user.setEnabled(value);
-		tf_user.setEditable(value);
+		jTextFieldUser.setEnabled(value);
+		jTextFieldUser.setEditable(value);
 
-		tf_passw.setEnabled(value);
-		tf_passw.setEditable(value);
+		jTextFieldPassword.setEnabled(value);
+		jTextFieldPassword.setEditable(value);
 
-		btn_showPassw.setEnabled(value);
+		jButtonShowPassword.setEnabled(value);
 
-		cb_verbosity.setEnabled(value);
-		cb_verbosity.setEditable(value);
+		jCheckBoxVerbosity.setEnabled(value);
+		jCheckBoxVerbosity.setEditable(value);
 
-		btn_help.setEnabled(value);
-		btn_execute.setEnabled(value);
+		jButtonHelp.setEnabled(value);
+		jButtonExecute.setEnabled(value);
 
-		cb_ignorePing.setEnabled(value);
-		cb_applySudo.setEnabled(value);
+		jCheckBoxIgnorePing.setEnabled(value);
+		jCheckBoxApplySudo.setEnabled(value);
 
 	}
 
@@ -160,34 +160,36 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		winAuthPanel.setBorder(new LineBorder(Globals.blueGrey, 2, true));
 		inputPanel.setPreferredSize(new java.awt.Dimension(376, 220));
 
-		cb_applySudo = new JCheckBox("", commandDeployClientAgent.needSudo());
-		lbl_applySudo.setText(configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.applySudo"));
-		cb_applySudo.addItemListener(itemEvent -> {
+		jCheckBoxApplySudo = new JCheckBox("", commandDeployClientAgent.needSudo());
+		jLabelApplySudo
+				.setText(configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.applySudo"));
+		jCheckBoxApplySudo.addItemListener(itemEvent -> {
 			commandDeployClientAgent.setNeedingSudo(!commandDeployClientAgent.needSudo());
 			updateCommand();
 		});
 
-		cb_ignorePing = new JCheckBox("", !commandDeployClientAgent.isPingRequired());
-		lbl_ignorePing
+		jCheckBoxIgnorePing = new JCheckBox("", !commandDeployClientAgent.isPingRequired());
+		jLabelIgnorePing
 				.setText(configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.ignorePing"));
-		cb_ignorePing.addItemListener(itemEvent -> {
+		jCheckBoxIgnorePing.addItemListener(itemEvent -> {
 			commandDeployClientAgent.togglePingIsRequired();
 			updateCommand();
 		});
 
-		lbl_verbosity.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
-		cb_verbosity = new JComboBox<>();
-		cb_verbosity.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
+		jLabelVerbosity.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
+		jCheckBoxVerbosity = new JComboBox<>();
+		jCheckBoxVerbosity.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
 		for (int i = 0; i < 5; i++)
-			cb_verbosity.addItem(i);
-		cb_verbosity.setSelectedItem(1);
-		cb_verbosity.addItemListener(itemEvent -> changeVerbosity());
+			jCheckBoxVerbosity.addItem(i);
+		jCheckBoxVerbosity.setSelectedItem(1);
+		jCheckBoxVerbosity.addItemListener(itemEvent -> changeVerbosity());
 
-		lbl_client.setText(configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.jLabelClient"));
-		tf_client = new JTextField();
-		tf_client.setToolTipText(
+		jLabelClient
+				.setText(configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.jLabelClient"));
+		jTextFieldClient = new JTextField();
+		jTextFieldClient.setToolTipText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.tooltip.tf_client"));
-		tf_client.getDocument().addDocumentListener(new DocumentListener() {
+		jTextFieldClient.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent documentEvent) {
 				changeClient();
@@ -204,11 +206,11 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			}
 		});
 
-		lbl_user.setText(configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.jLabelUser"));
-		tf_user = new JTextField(defaultWinUser);
-		tf_user.setToolTipText(
+		jLabelUser.setText(configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.jLabelUser"));
+		jTextFieldUser = new JTextField(defaultWinUser);
+		jTextFieldUser.setToolTipText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.tooltip.tf_user"));
-		tf_user.getDocument().addDocumentListener(new DocumentListener() {
+		jTextFieldUser.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent documentEvent) {
 				changeUser();
@@ -225,18 +227,19 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			}
 		});
 
-		lbl_passw.setText(configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.jLabelPassword"));
-		tf_passw = new JPasswordField("nt123", 15);
-		tf_passw.setEchoChar('*');
+		jLabelPassword
+				.setText(configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.jLabelPassword"));
+		jTextFieldPassword = new JPasswordField("nt123", 15);
+		jTextFieldPassword.setEchoChar('*');
 
-		btn_showPassw = new JButton(Globals.createImageIcon("images/eye_blue_open.png", ""));
+		jButtonShowPassword = new JButton(Globals.createImageIcon("images/eye_blue_open.png", ""));
 
-		btn_showPassw.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
-		btn_showPassw.setToolTipText(
+		jButtonShowPassword.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT));
+		jButtonShowPassword.setToolTipText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.showPassword.tooltip"));
-		btn_showPassw.addActionListener(actionEvent -> changeEchoChar());
+		jButtonShowPassword.addActionListener(actionEvent -> changeEchoChar());
 
-		tf_passw.getDocument().addDocumentListener(new DocumentListener() {
+		jTextFieldPassword.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent documentEvent) {
 				changePassw();
@@ -253,9 +256,9 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 			}
 		});
 
-		lbl_userdata.setText(configed
+		jLabelUserData.setText(configed
 				.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.targetclient_authentication"));
-		lbl_finalize
+		jLabelFinalize
 				.setText(configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.lbl_finalize"));
 
 		panelFinalAction = new PanelStateSwitch(null, CommandDeployClientAgent.FinalActionType.START_OCD,
@@ -275,31 +278,31 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		panelFinalAction.setOpaque(false);
 
-		btn_copy_selected_clients = new JButton(configed
+		jButtonCopySelectedClients = new JButton(configed
 				.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.btn_copy_selected_clients"));
 
-		btn_copy_selected_clients.addActionListener(actionEvent -> doCopySelectedClients());
+		jButtonCopySelectedClients.addActionListener(actionEvent -> doCopySelectedClients());
 
-		btn_help = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
-		btn_help.setToolTipText(configed.getResourceValue("SSHConnection.buttonHelp"));
-		btn_help.setText(configed.getResourceValue("SSHConnection.buttonHelp"));
+		jButtonHelp = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
+		jButtonHelp.setToolTipText(configed.getResourceValue("SSHConnection.buttonHelp"));
+		jButtonHelp.setText(configed.getResourceValue("SSHConnection.buttonHelp"));
 
-		btn_help.addActionListener(actionEvent -> doActionHelp());
+		jButtonHelp.addActionListener(actionEvent -> doActionHelp());
 
-		btn_execute = new JButton();
-		buttonPanel.add(btn_execute);
-		btn_execute.setText(configed.getResourceValue("SSHConnection.buttonExec"));
-		btn_execute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
+		jButtonExecute = new JButton();
+		buttonPanel.add(jButtonExecute);
+		jButtonExecute.setText(configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly()))
-			btn_execute.addActionListener(actionEvent -> doAction1());
+			jButtonExecute.addActionListener(actionEvent -> doAction1());
 
-		btn_close = new JButton();
-		buttonPanel.add(btn_close);
-		btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
-		btn_close.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
-		btn_close.addActionListener(actionEvent -> cancel());
+		jButtonClose = new JButton();
+		buttonPanel.add(jButtonClose);
+		jButtonClose.setText(configed.getResourceValue("SSHConnection.buttonClose"));
+		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
+		jButtonClose.addActionListener(actionEvent -> cancel());
 
-		lbl_fullCommand.setText("opsi-deploy-client-agent ");
+		jLabelFullCommand.setText("opsi-deploy-client-agent ");
 		updateCommand();
 
 		doCopySelectedClients();
@@ -315,28 +318,28 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	}
 
 	private void updateCommand() {
-		lbl_fullCommand.setText(commandDeployClientAgent.getCommand());
+		jLabelFullCommand.setText(commandDeployClientAgent.getCommand());
 	}
 
 	private void changeVerbosity() {
-		commandDeployClientAgent.setVerbosity((int) cb_verbosity.getSelectedItem());
+		commandDeployClientAgent.setVerbosity((int) jCheckBoxVerbosity.getSelectedItem());
 	}
 
 	private void changeClient() {
-		commandDeployClientAgent.setClient(tf_client.getText().trim());
+		commandDeployClientAgent.setClient(jTextFieldClient.getText().trim());
 		updateCommand();
 	}
 
 	private void changeUser() {
-		if (!(tf_user.getText().equals(defaultWinUser)))
-			commandDeployClientAgent.setUser(tf_user.getText().trim());
+		if (!(jTextFieldUser.getText().equals(defaultWinUser)))
+			commandDeployClientAgent.setUser(jTextFieldUser.getText().trim());
 		else
 			commandDeployClientAgent.setUser("");
 		updateCommand();
 	}
 
 	private void changePassw() {
-		commandDeployClientAgent.setPassw(new String(tf_passw.getPassword()).trim());
+		commandDeployClientAgent.setPassw(new String(jTextFieldPassword.getPassword()).trim());
 		updateCommand();
 	}
 
@@ -345,16 +348,16 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	public void changeEchoChar() {
 		if (aktive) {
 			aktive = false;
-			tf_passw.setEchoChar('*');
+			jTextFieldPassword.setEchoChar('*');
 		} else {
 			aktive = true;
-			tf_passw.setEchoChar((char) 0);
+			jTextFieldPassword.setEchoChar((char) 0);
 		}
 	}
 
 	public void setComponentsEditable(boolean value) {
-		tf_user.setEnabled(value);
-		tf_passw.setEnabled(value);
+		jTextFieldUser.setEnabled(value);
+		jTextFieldPassword.setEnabled(value);
 	}
 
 	// /* This method gets called when button 2 is pressed */
@@ -368,7 +371,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	@Override
 	public void doAction1() {
 		logging.info(this, "doAction1 deploy-clientagent ");
-		if (tf_client.getText().equals("")) {
+		if (jTextFieldClient.getText().equals("")) {
 			logging.warning(this, "Client name(s) missing.");
 			return;
 		}
@@ -389,7 +392,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 				clients.append(c);
 				clients.append(" ");
 			}
-			tf_client.setText(clients.toString());
+			jTextFieldClient.setText(clients.toString());
 		}
 	}
 
@@ -405,106 +408,111 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		GroupLayout winAuthPanelLayout = new GroupLayout(winAuthPanel);
 		winAuthPanel.setLayout(winAuthPanelLayout);
 
-		winAuthPanelLayout
-				.setHorizontalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addGroup(winAuthPanelLayout
-								.createParallelGroup(
-										leading)
-								.addGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(lbl_user, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-												Globals.BUTTON_WIDTH)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(tf_user, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												Short.MAX_VALUE)
-										.addGap(Globals.GAP_SIZE).addGap(Globals.ICON_WIDTH).addGap(Globals.GAP_SIZE))
-								.addGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-										.addComponent(lbl_passw, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-												Globals.BUTTON_WIDTH)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(tf_passw, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-												Short.MAX_VALUE)
-										.addGap(Globals.GAP_SIZE)
-										.addComponent(btn_showPassw, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
-												Globals.ICON_WIDTH)
-										.addGap(Globals.GAP_SIZE)))
-						.addGap(Globals.GAP_SIZE));
-		winAuthPanelLayout.setVerticalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addGroup(winAuthPanelLayout.createParallelGroup(center)
-						.addComponent(lbl_user, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(tf_user, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(winAuthPanelLayout.createParallelGroup(center)
-						.addComponent(lbl_passw, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(tf_passw, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(btn_showPassw, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
+		winAuthPanelLayout.setHorizontalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addGroup(winAuthPanelLayout.createParallelGroup(leading).addGroup(winAuthPanelLayout
+						.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addComponent(jLabelUser, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(jTextFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addGap(Globals.GAP_SIZE).addGap(Globals.ICON_WIDTH).addGap(Globals.GAP_SIZE))
+						.addGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+								.addComponent(jLabelPassword, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+										Globals.BUTTON_WIDTH)
+								.addGap(Globals.GAP_SIZE)
+								.addComponent(jTextFieldPassword, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+										Short.MAX_VALUE)
+								.addGap(Globals.GAP_SIZE).addComponent(jButtonShowPassword, Globals.ICON_WIDTH,
+										Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+								.addGap(Globals.GAP_SIZE)))
 				.addGap(Globals.GAP_SIZE));
+		winAuthPanelLayout
+				.setVerticalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addGroup(winAuthPanelLayout.createParallelGroup(center)
+								.addComponent(jLabelUser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT)
+								.addComponent(jTextFieldUser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT))
+						.addGap(Globals.GAP_SIZE)
+						.addGroup(winAuthPanelLayout.createParallelGroup(center)
+								.addComponent(jLabelPassword, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT)
+								.addComponent(jTextFieldPassword, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT)
+								.addComponent(jButtonShowPassword, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT))
+						.addGap(Globals.GAP_SIZE));
 
 		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
 		inputPanel.setLayout(inputPanelLayout);
 		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup()
-						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(lbl_client, pref, pref, pref)
-								.addGap(Globals.GAP_SIZE).addComponent(tf_client, pref, pref, Short.MAX_VALUE))
+						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jLabelClient, pref, pref, pref)
+								.addGap(Globals.GAP_SIZE).addComponent(jTextFieldClient, pref, pref, Short.MAX_VALUE))
 						.addGap(Globals.GAP_SIZE)
-						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(lbl_userdata, pref, pref, pref))
-						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(btn_copy_selected_clients, pref,
-								pref, pref))
+						.addGroup(
+								inputPanelLayout.createSequentialGroup().addComponent(jLabelUserData, pref, pref, pref))
+						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jButtonCopySelectedClients,
+								pref, pref, pref))
 						.addComponent(winAuthPanel, pref, pref, Short.MAX_VALUE)
 
 						.addGroup(
 								inputPanelLayout.createSequentialGroup()
 										.addGroup(inputPanelLayout.createParallelGroup()
-												.addComponent(lbl_finalize, pref, pref, pref)
-												.addComponent(lbl_applySudo, pref, pref, pref)
-												.addComponent(lbl_verbosity, pref, pref, pref)
-												.addComponent(lbl_ignorePing, pref, pref, pref))
+												.addComponent(jLabelFinalize, pref, pref, pref)
+												.addComponent(jLabelApplySudo, pref, pref, pref)
+												.addComponent(jLabelVerbosity, pref, pref, pref)
+												.addComponent(jLabelIgnorePing, pref, pref, pref))
 										.addGap(2 * Globals.GAP_SIZE)
 										.addGroup(inputPanelLayout.createParallelGroup().addComponent(panelFinalAction)
-												.addComponent(cb_applySudo, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
-														Globals.ICON_WIDTH)
-												.addComponent(cb_ignorePing, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
-														Globals.ICON_WIDTH)
-												.addComponent(cb_verbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
-														Globals.ICON_WIDTH))
+												.addComponent(jCheckBoxApplySudo, Globals.ICON_WIDTH,
+														Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+												.addComponent(jCheckBoxIgnorePing, Globals.ICON_WIDTH,
+														Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+												.addComponent(jCheckBoxVerbosity, Globals.ICON_WIDTH,
+														Globals.ICON_WIDTH, Globals.ICON_WIDTH))
 
 						)));
 
-		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_client, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(tf_client, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
-						btn_copy_selected_clients, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-				.addGap(Globals.GAP_SIZE * 2)
-				.addGroup(inputPanelLayout.createParallelGroup(leading).addComponent(lbl_userdata,
-						Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-				.addGap(Globals.GAP_SIZE).addComponent(winAuthPanel, pref, pref, pref).addGap(Globals.GAP_SIZE * 2)
+		inputPanelLayout
+				.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(jLabelClient, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT)
+								.addComponent(jTextFieldClient, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT))
+						.addGap(Globals.GAP_SIZE)
+						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
+								jButtonCopySelectedClients, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
+						.addGap(Globals.GAP_SIZE * 2)
+						.addGroup(inputPanelLayout.createParallelGroup(leading).addComponent(jLabelUserData,
+								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+						.addGap(Globals.GAP_SIZE).addComponent(winAuthPanel, pref, pref, pref)
+						.addGap(Globals.GAP_SIZE * 2)
 
-				.addGroup(
-						inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(lbl_finalize, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(jLabelFinalize, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT)
 								.addComponent(panelFinalAction))
 
-				.addGap(Globals.GAP_SIZE / 2)
-				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_ignorePing, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(cb_ignorePing, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_applySudo, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(cb_applySudo, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_verbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(cb_verbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGap(Globals.GAP_SIZE));
+						.addGap(Globals.GAP_SIZE / 2)
+						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(jLabelIgnorePing, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT)
+								.addComponent(jCheckBoxIgnorePing, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT))
+						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(jLabelApplySudo, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT)
+								.addComponent(jCheckBoxApplySudo, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT))
+						.addGap(Globals.GAP_SIZE)
+						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(jLabelVerbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT)
+								.addComponent(jCheckBoxVerbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT))
+						.addGap(Globals.GAP_SIZE));
 	}
 }

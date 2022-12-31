@@ -31,8 +31,8 @@ public class SSHCompletionComboButton {
 	private List<String> defaultvalues;
 	private String search_specific_files;
 	private String combobox_default_path;
-	private final String root = "/";
-	private final String home = "~";
+	private static final String ROOT_DIRECTORY = "/";
+	private static final String HOME_DIRECTORY = "~";
 	private String opsiRepo = "/"; // will be overwritten with config
 
 	private String basic_search_path;
@@ -91,13 +91,13 @@ public class SSHCompletionComboButton {
 		if (combobox_default_path != null) {
 			defaultvalues = new ArrayList<>();
 			defaultvalues.add(combobox_default_path);
-			defaultvalues.add(root);
+			defaultvalues.add(ROOT_DIRECTORY);
 			defaultvalues.add(opsiRepo);
 
 		} else {
 			defaultvalues = new ArrayList<>();
 			defaultvalues.add(opsiRepo);
-			defaultvalues.add(root);
+			defaultvalues.add(ROOT_DIRECTORY);
 
 		}
 		// Is element in defaultValues?
@@ -157,10 +157,10 @@ public class SSHCompletionComboButton {
 
 		String strcbtext = combobox.getEditor().getItem().toString();
 		if ((strcbtext != null) && (!strcbtext.equals("")))
-			if (!strcbtext.substring(strcbtext.length() - 1).equals(root)) {
+			if (!strcbtext.substring(strcbtext.length() - 1).equals(ROOT_DIRECTORY)) {
 				combobox.removeItem(strcbtext);
 				logging.info(this, "doButtonAction combo.removeItem(" + strcbtext + ")");
-				strcbtext = strcbtext + root;
+				strcbtext = strcbtext + ROOT_DIRECTORY;
 				combobox.addItem(strcbtext);
 				logging.info(this, "doButtonAction combo.additem(" + strcbtext + ")");
 				combobox.setSelectedItem(strcbtext);
@@ -214,13 +214,13 @@ public class SSHCompletionComboButton {
 						/** Sets the command specific error text **/
 						@Override
 						public String get_ERROR_TEXT() {
-							return root;
+							return ROOT_DIRECTORY;
 						}
 					};
 					SSHConnectExec ssh = new SSHConnectExec();
 					String result = ssh.exec(getDirectories, false);
 					if (result == null || result.equals(""))
-						result = home;
+						result = HOME_DIRECTORY;
 
 					setItems(result, curdir);
 					enableComponents(true);
@@ -241,14 +241,14 @@ public class SSHCompletionComboButton {
 					SSHConnectExec ssh = new SSHConnectExec();
 					String result = ssh.exec(getFiles, false);
 					if (result == null || result.equals(""))
-						result = root;
+						result = ROOT_DIRECTORY;
 
 					getFiles = new Empty_Command(
 							factory.str_command_getOpsiFiles.replace(factory.str_replacement_dir, curdir)) {
 						/** Sets the command specific error text **/
 						@Override
 						public String get_ERROR_TEXT() {
-							return root; // no file found
+							return ROOT_DIRECTORY; // no file found
 						}
 					};
 					try {
@@ -270,7 +270,7 @@ public class SSHCompletionComboButton {
 		}.start();
 	}
 
-	private boolean contains_in_defaults(String other) {
+	private boolean containsInDefaults(String other) {
 		boolean contains = defaultvalues.contains(other);
 		logging.debug(this, "contains_in_defaults defaultvalues.contains_in_defaults(" + other + ") = " + contains);
 		return contains;
@@ -286,7 +286,7 @@ public class SSHCompletionComboButton {
 				logging.debug(this, "setItems add " + element);
 			}
 			String curDirLocated = new String(curdir);
-			if (!contains_in_defaults(curDirLocated))
+			if (!containsInDefaults(curDirLocated))
 				combobox.addItem(curDirLocated);
 			logging.debug(this, "setItems add " + curDirLocated);
 			for (String item : result.split("\n")) {
@@ -348,12 +348,13 @@ public class SSHCompletionComboButton {
 					if (getText.contains("//"))
 						getText = getText.replace("//", "/");
 
-					if (getText.equals(basicPath) || autocompletion.contains_in_defaults(getText)) {
+					if (getText.equals(basicPath) || autocompletion.containsInDefaults(getText)) {
 						logging.debug(this, "getListCellRendererComponent colorize(" + getText + ") = true");
 						CellAlternatingColorizer.colorize(jc, isSelected, true, true);
 					}
 
-					if ((getText.startsWith(basicPath)) && (!getText.equals(basicPath)) && (!basicPath.equals(root))) {
+					if ((getText.startsWith(basicPath)) && (!getText.equals(basicPath))
+							&& (!basicPath.equals(ROOT_DIRECTORY))) {
 						lbl.setText(getText.replace(basicPath, ""));
 					}
 					logging.debug(this, "(2) basicPath " + basicPath + " getText " + getText);

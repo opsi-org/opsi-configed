@@ -198,29 +198,27 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		GroupLayout layoutBottomComponent = new javax.swing.GroupLayout(bottomComponent);
 		bottomComponent.setLayout(layoutBottomComponent);
 
-		layoutBottomComponent
-				.setHorizontalGroup(
-						layoutBottomComponent.createParallelGroup()
-								.addGroup(layoutBottomComponent.createSequentialGroup()
-										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-										.addComponent(dependenciesActivateButton, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-										.addComponent(dependenciesTextLabel, Globals.MIN_HSIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(0, 0, Short.MAX_VALUE)
-										.addComponent(depotForDependenciesLabel, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE))
+		layoutBottomComponent.setHorizontalGroup(layoutBottomComponent.createParallelGroup()
+				.addGroup(layoutBottomComponent.createSequentialGroup()
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(dependenciesActivateButton, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(dependenciesTextLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE)
+						.addComponent(depotForDependenciesLabel, 0, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE))
 
-								.addComponent(panelProductDependencies)
+				.addComponent(panelProductDependencies)
 
-								.addGroup(layoutBottomComponent.createSequentialGroup()
-										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-										.addComponent(propertiesActivateButton)
-										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-										.addComponent(panelEditProperties.getTitlePanel()))
-								.addComponent(panelEditProperties));
+				.addGroup(layoutBottomComponent.createSequentialGroup()
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(propertiesActivateButton)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(panelEditProperties.getTitlePanel()))
+				.addComponent(panelEditProperties));
 
 		layoutBottomComponent.setVerticalGroup(layoutBottomComponent.createSequentialGroup()
 				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
@@ -253,10 +251,12 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 					.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
 							: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
 
-			panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
+			depotForDependenciesLabel.setEnabled(isPanelProductDependenciesVisible);
 			depotForDependenciesLabel
 					.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
 							: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
+
+			panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
 		}
 
 		else if (event.getSource() == propertiesActivateButton) {
@@ -301,11 +301,9 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		jLabelProductName.setText(s);
 	}
 
-	public void setGrey(boolean b) {
-		float alpha = 1.0f;
-		if (b) {
-			alpha = .1f;
-		}
+	public void setGrey(boolean grey) {
+
+		float alpha = grey ? 0.1f : 1f;
 
 		if (productDescriptionsPanel != null)
 			productDescriptionsPanel.setAlpha(alpha);
