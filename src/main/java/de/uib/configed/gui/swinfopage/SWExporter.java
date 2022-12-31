@@ -198,13 +198,14 @@ public abstract class SWExporter {
 						Map<String, Map> tableData = persist.retrieveSoftwareAuditData(theHost);
 
 						if (tableData == null || tableData.keySet().isEmpty()) {
+							logging.debug(this, "tableData is empty or null");
+
 							scanInfo = configed.getResourceValue("PanelSWInfo.noScanResult");
 						} else {
 							logging.debug(this, "retrieved size  " + tableData.keySet().size());
 							scanInfo = "Scan " + persist.getLastSoftwareAuditModification(theHost);
 						}
 
-						logging.info(this, "retrieved size  " + tableData.keySet().size());
 						return tableData;
 					}
 				})), -1, finalColumns, null, null);

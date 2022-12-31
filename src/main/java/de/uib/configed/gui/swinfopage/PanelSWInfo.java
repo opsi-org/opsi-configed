@@ -17,6 +17,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.ConfigedMain;
@@ -282,7 +283,7 @@ public class PanelSWInfo extends JPanel {
 		jTable = new JTable(voidTableModel, null);
 
 		jTable.setAutoCreateRowSorter(true);
-		TableRowSorter tableSorter = (TableRowSorter) jTable.getRowSorter();
+		TableRowSorter<? extends TableModel> tableSorter = (TableRowSorter<? extends TableModel>) jTable.getRowSorter();
 		ArrayList<RowSorter.SortKey> list = new ArrayList<>(1);
 		list.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 		tableSorter.setSortKeys(list);
