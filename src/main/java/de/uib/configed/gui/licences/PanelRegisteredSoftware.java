@@ -106,10 +106,8 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 	private boolean mouseInColumnOfMarkCursor(java.awt.Point p) {
 		int mouseCol = theTable.columnAtPoint(p);
-		if (mouseCol >= 0 && mouseCol == tableModel.getColMarkCursorRow())
-			return true;
 
-		return false;
+		return mouseCol >= 0 && mouseCol == tableModel.getColMarkCursorRow();
 	}
 
 	// MouseListener
@@ -142,7 +140,6 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 			}
 		}
-
 		super.mouseClicked(e);
 
 	}
