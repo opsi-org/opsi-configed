@@ -25,6 +25,7 @@ import java.util.TreeSet;
 
 import javax.swing.event.TableModelListener;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
@@ -103,7 +104,9 @@ public class LicenseDisplayer {
 	}
 
 	public void display() {
-		stage.show();
+		if (ConfigedMain.DASH_ENABLED)
+			stage.show();
+
 		loadData();
 	}
 
