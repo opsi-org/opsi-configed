@@ -43,7 +43,8 @@ public class CertificateManager {
 
 	public static List<File> getCertificates() {
 		File certificateDir = new File(configed.savedStatesLocationName);
-		File[] certificateFiles = certificateDir.listFiles((dir, filename) -> filename.endsWith(".pem"));
+		File[] certificateFiles = certificateDir
+				.listFiles((dir, filename) -> filename.endsWith("." + Globals.CERTIFICATE_FILE_EXTENSION));
 
 		if (certificateFiles.length == 0) {
 			return new ArrayList<>();
