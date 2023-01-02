@@ -12,5 +12,4 @@ public interface TabController {
 	public void removeClient(Enum state);
 
 	public TabClient getClient(Enum state);
-
 }

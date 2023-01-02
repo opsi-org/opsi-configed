@@ -122,7 +122,8 @@ public class NewClientDialog extends FGeneralDialog
 		if (instance == null) {
 			instance = new NewClientDialog(main, depots);
 			instance.init();
-		}
+		} else
+			instance.centerOn(Globals.mainFrame);
 
 		return instance;
 	}

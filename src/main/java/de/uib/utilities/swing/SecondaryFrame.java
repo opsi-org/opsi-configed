@@ -25,13 +25,14 @@ public class SecondaryFrame extends JFrame implements WindowListener {
 		addWindowListener(this);
 	}
 
-	public void setGlobals(Map globals) {
+	public void setGlobals(Map<String, Object> globals) {
 		setIconImage((Image) globals.get("mainIcon"));
 		setTitle((String) globals.get("APPNAME"));
 	}
 
 	public void start() {
 		setExtendedState(Frame.NORMAL);
+		centerOnParent();
 		setVisible(true);
 		logging.info(this, "started");
 	}

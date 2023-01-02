@@ -1373,7 +1373,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				"initLicencesFrame");
 		// general
 
-		licencesFrame = new TabbedFrame(mainFrame, this);
+		licencesFrame = new TabbedFrame(this);
 
 		Globals.frame1 = licencesFrame;
 		Globals.container1 = licencesFrame.getContentPane();
@@ -1382,7 +1382,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		licencesFrame.setTitle(
 				Globals.APPNAME + "  " + myServer + ":  " + configed.getResourceValue("ConfigedMain.Licences"));
 
-		licencesStatus = (LicencesTabStatus) ((TabController) this).getStartTabState();
+		licencesStatus = (LicencesTabStatus) getStartTabState();
 
 		// global table providers
 		List<String> columnNames = new ArrayList<>();

@@ -290,7 +290,7 @@ public class DPassword extends JDialog // implements Runnable
 	JLabel jLabelPassword = new JLabel();
 
 	JLabel jLabelHost = new JLabel();
-	JComboBox fieldHost = new JComboBox<>();
+	JComboBox<String> fieldHost = new JComboBox<>();
 
 	JPanel jPanelParameters1;
 	JPanel jPanelParameters2;
@@ -322,7 +322,7 @@ public class DPassword extends JDialog // implements Runnable
 	}
 
 	public void setServers(List<String> hosts) {
-		fieldHost.setModel(new DefaultComboBoxModel<>(hosts.toArray()));
+		fieldHost.setModel(new DefaultComboBoxModel<>(hosts.toArray(new String[0])));
 		((JTextField) fieldHost.getEditor().getEditorComponent())
 				.setCaretPosition(((String) (fieldHost.getSelectedItem())).length());
 	}

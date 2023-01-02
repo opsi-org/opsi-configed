@@ -537,7 +537,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.groupList.add(createSimpleGroup(new SoftwareLastActionElement()));
 		result.groupList.add(createSimpleGroup(new SoftwareVersionElement()));
 		result.groupList.add(createSimpleGroup(new SoftwarePackageVersionElement()));
-		result.groupList.add(createSimpleGroup(new SoftwareModificationTimeElement()));
+		// TODO, removed because it's not working (in MySQL)
+		//result.groupList.add(createSimpleGroup(new SoftwareModificationTimeElement()));
 		result.groupList.getLast().connectionType.setVisible(false);
 
 		createComplexBottom(result);

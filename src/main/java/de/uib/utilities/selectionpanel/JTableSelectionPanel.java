@@ -75,8 +75,8 @@ public class JTableSelectionPanel extends JPanel
 	JButton buttonInvertSelection;
 
 	JTextField fieldSearch;
-	JComboBox comboSearch;
-	JComboBox comboSearchMode;
+	JComboBox<String> comboSearch;
+	JComboBoxToolTip comboSearchMode;
 
 	TablesearchPane.SearchMode searchMode;
 
@@ -216,7 +216,7 @@ public class JTableSelectionPanel extends JPanel
 
 		comboSearchMode = new JComboBoxToolTip();
 
-		Map tooltipsMap = new LinkedHashMap<>();
+		Map<String, String> tooltipsMap = new LinkedHashMap<>();
 		tooltipsMap.put(configed.getResourceValue("SearchPane.SearchMode.fulltext_with_alternatives"),
 				configed.getResourceValue("SearchPane.SearchMode.fulltext_with_alternatives.tooltip"));
 
@@ -231,7 +231,7 @@ public class JTableSelectionPanel extends JPanel
 
 		logging.info(this, " comboSearchMode tooltipsMap " + tooltipsMap);
 
-		((JComboBoxToolTip) comboSearchMode).setValues(tooltipsMap);
+		comboSearchMode.setValues(tooltipsMap);
 		comboSearchMode.setSelectedIndex(searchMode.ordinal());
 
 		logging.info(this, "comboSearchMode set index to " + searchMode.ordinal());
@@ -420,7 +420,7 @@ public class JTableSelectionPanel extends JPanel
 
 	public void initColumnNames() {
 
-		Object oldSelected = comboSearch.getSelectedItem();
+		String oldSelected = (String) comboSearch.getSelectedItem();
 		List<String> comboSearchItems = new ArrayList<>();
 		comboSearchItems.add(configed.getResourceValue("ConfigedMain.pclistTableModel.allfields"));
 
@@ -433,7 +433,7 @@ public class JTableSelectionPanel extends JPanel
 				comboSearchItems.add(table.getColumnName(j));
 			}
 
-			comboSearch.setModel(new DefaultComboBoxModel<>(comboSearchItems.toArray()));
+			comboSearch.setModel(new DefaultComboBoxModel<>(comboSearchItems.toArray(new String[0])));
 
 			if (oldSelected != null)
 				comboSearch.setSelectedItem(oldSelected);
@@ -979,12 +979,6 @@ public class JTableSelectionPanel extends JPanel
 		if (e.getKeyCode() == KeyEvent.VK_F5) {
 			if (!fieldSearch.getText().equals(""))
 				markAll();
-		}
-
-		else if (e.getKeyCode() == KeyEvent.VK_F3) {
-
-			if (!fieldSearch.getText().equals(""))
-				searchTheNextRow();
 		}
 
 		else if (e.getKeyCode() == KeyEvent.VK_F3) {

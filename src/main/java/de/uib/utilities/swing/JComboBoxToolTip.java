@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
-public class JComboBoxToolTip extends javax.swing.JComboBox {
+public class JComboBoxToolTip extends JComboBox<String> {
 
 	private Map<String, String> selectValues;
 

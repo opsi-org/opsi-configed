@@ -31,8 +31,10 @@
 package utils;
 
 import java.io.File;
-import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.swing.filechooser.FileFilter;
 
@@ -51,7 +53,7 @@ import javax.swing.filechooser.FileFilter;
  */
 public class ExampleFileFilter extends FileFilter {
 
-	private Hashtable filters = null;
+	private Map<String, Object> filters = null;
 	private String description = null;
 	private String fullDescription = null;
 	private boolean useExtensionsInDescription = true;
@@ -63,7 +65,7 @@ public class ExampleFileFilter extends FileFilter {
 	 * @see #addExtension
 	 */
 	public ExampleFileFilter() {
-		this.filters = new Hashtable();
+		this.filters = new HashMap<>();
 	}
 
 	/**
@@ -168,7 +170,7 @@ public class ExampleFileFilter extends FileFilter {
 	 */
 	public void addExtension(String extension) {
 		if (filters == null) {
-			filters = new Hashtable(5);
+			filters = new Hashtable<>(5);
 		}
 		filters.put(extension.toLowerCase(), this);
 		fullDescription = null;
@@ -189,11 +191,11 @@ public class ExampleFileFilter extends FileFilter {
 			if (description == null || isExtensionListInDescription()) {
 				fullDescription = description == null ? "(" : description + " (";
 				// build the description from the extension list
-				Enumeration extensions = filters.keys();
+				Iterator<String> extensions = filters.keySet().iterator();
 				if (extensions != null) {
-					fullDescription += "." + (String) extensions.nextElement();
-					while (extensions.hasMoreElements()) {
-						fullDescription += ", " + (String) extensions.nextElement();
+					fullDescription += "." + extensions.next();
+					while (extensions.hasNext()) {
+						fullDescription += ", " + extensions.next();
 					}
 				}
 				fullDescription += ")";

@@ -53,8 +53,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	protected boolean filtering = false;
 
 	int blinkrate = 0;
-	JComboBox comboSearchFields;
-	JComboBox comboSearchFieldsMode;
+	JComboBox<String> comboSearchFields;
+	JComboBoxToolTip comboSearchFieldsMode;
 
 	CheckedLabel markReload;
 
@@ -519,7 +519,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			comboSearchFieldsMode.setFont(Globals.defaultFont);
 		}
 
-		((JComboBoxToolTip) comboSearchFieldsMode).setValues(tooltipsMap, false);
+		comboSearchFieldsMode.setValues(tooltipsMap, false);
 		comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
 
 		comboSearchFieldsMode.setPreferredSize(Globals.lowerButtonDimension);

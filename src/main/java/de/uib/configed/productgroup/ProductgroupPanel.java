@@ -73,16 +73,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 {
 	JComboBoxToolTip groupsCombo;
 
-	class JComboBoxToolTipX extends JComboBoxToolTip {
-		@Override
-		public void fireActionEvent()
-		// make public
-		{
-
-			super.fireActionEvent();
-		}
-	}
-
 	protected de.uib.utilities.table.gui.TablesearchPane searchPane;
 	protected JTable tableProducts;
 	protected IFInstallationStateTableModel insTableModel;
@@ -246,7 +236,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		}
 		descriptionFieldListener.setEnabled(true);
 
-		if ((!currentKey.equals(SAVE_GROUP_ID) && !currentKey.equals((String) groupsCombo.getSelectedItem()))) {
+		if ((!currentKey.equals(SAVE_GROUP_ID) && !currentKey.equals(groupsCombo.getSelectedItem()))) {
 			setDataChanged(true);
 		}
 
