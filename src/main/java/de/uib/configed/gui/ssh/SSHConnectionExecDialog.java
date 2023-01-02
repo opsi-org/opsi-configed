@@ -18,9 +18,9 @@ import de.uib.opsicommand.sshcommand.SSHConnect;
 import de.uib.utilities.logging.logging;
 
 public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
-	protected JButton btn_clear;
-	protected JButton btn_killProcess;
-	protected JButton btn_reload;
+	protected JButton jButtonClear;
+	protected JButton jButtonKillProcess;
+	protected JButton jButtonReload;
 
 	protected boolean withReload;
 	protected String reloadInfo;
@@ -37,10 +37,10 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 			buildFrame = false;
 			initGUI();
 
-			this.centerOn(Globals.mainFrame);
 			this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
 			this.setSize(900, 500);
+			this.centerOn(Globals.mainFrame);
 			logging.info(this, "SSHConnectionExecDialog built");
 
 			this.setVisible(!SSHCommandFactory.ssh_always_exec_in_background);
@@ -66,24 +66,27 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 		}
 
 		instance = new SSHConnectionExecDialog();
-		SwingUtilities.invokeLater(() -> instance.setVisible(true));
+		SwingUtilities.invokeLater(() -> {
+			instance.centerOn(Globals.mainFrame);
+			instance.setVisible(true);
+		});
 		return instance;
 	}
 
 	private void initGUI() {
 		try {
-			btn_killProcess = new de.uib.configed.gui.IconButton(
+			jButtonKillProcess = new de.uib.configed.gui.IconButton(
 					configed.getResourceValue("SSHConnection.buttonKillProcess"), "images/edit-delete.png",
 					"images/edit-delete.png", "images/edit-delete.png", true);
-			btn_killProcess
+			jButtonKillProcess
 					.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3));
-			btn_killProcess.setToolTipText(configed.getResourceValue("SSHConnection.buttonKillProcess"));
+			jButtonKillProcess.setToolTipText(configed.getResourceValue("SSHConnection.buttonKillProcess"));
 
-			btn_clear = new de.uib.configed.gui.IconButton(configed.getResourceValue("SSHConnection.btn_clear"),
+			jButtonClear = new de.uib.configed.gui.IconButton(configed.getResourceValue("SSHConnection.btn_clear"),
 					"images/user-trash.png", "images/user-trash.png", "images/user-trash.png", true);
-			btn_clear.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3));
-			btn_clear.setToolTipText(configed.getResourceValue("SSHConnection.btn_clear"));
-			btn_clear.addActionListener(actionEvent -> clear());
+			jButtonClear.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3));
+			jButtonClear.setToolTipText(configed.getResourceValue("SSHConnection.btn_clear"));
+			jButtonClear.addActionListener(actionEvent -> clear());
 			createLayout(konsolePanelLayout, jScrollPane, Globals.GAP_SIZE, Globals.GAP_SIZE, true);
 			createLayout(mainPanelLayout, inputPanel, 0, 0, false);
 		} catch (Exception e) {
@@ -102,11 +105,11 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 	}
 
 	public void addKillProcessListener(ActionListener l) {
-		btn_killProcess.addActionListener(l);
+		jButtonKillProcess.addActionListener(l);
 	}
 
 	public void removeKillProcessListener(ActionListener l) {
-		btn_killProcess.removeActionListener(l);
+		jButtonKillProcess.removeActionListener(l);
 	}
 
 	private void createLayout(GroupLayout layout, Component comp, int vgap, int hgap, boolean addInputField) {
@@ -118,7 +121,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 		verticalGroup.addGap(vgap).addComponent(comp);
 		if (addInputField)
 			verticalGroup.addGroup(layout.createParallelGroup().addGap(vgap, vgap, vgap)
-					.addComponent(btn_clear, pref, pref, pref).addComponent(btn_killProcess, pref, pref, pref)
+					.addComponent(jButtonClear, pref, pref, pref).addComponent(jButtonKillProcess, pref, pref, pref)
 					.addComponent(btn_close, pref, pref, pref).addGap(vgap));
 		verticalGroup.addGap(vgap);
 
@@ -126,8 +129,8 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 		horizontalGroup.addGroup(layout.createSequentialGroup().addGap(hgap).addComponent(comp).addGap(hgap));
 		if (addInputField)
 			horizontalGroup.addGroup(layout.createSequentialGroup().addGap(hgap, hgap, max)
-					.addComponent(btn_clear, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-					.addComponent(btn_killProcess, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+					.addComponent(jButtonClear, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+					.addComponent(jButtonKillProcess, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 					.addComponent(btn_close, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH).addGap(hgap));
 
 		layout.setVerticalGroup(verticalGroup);

@@ -225,7 +225,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		installSettingsPanel.updateCommand(pmInstallCom);
 
 		try {
-			ssh.exec_template(commands, sequential);
+			ssh.execTemplate(commands, sequential);
 			ssh.getDialog().setVisible(true);
 			logging.info(this, "doAction1 end ");
 		} catch (Exception e) {

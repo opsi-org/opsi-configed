@@ -127,8 +127,8 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 				Globals.GAP_SIZE * 2, 0);
 		init();
 		pack();
-		this.centerOn(owner);
 		this.setSize(thisWidth, thisHeight);
+		this.centerOn(owner);
 		this.setVisible(true);
 	}
 
@@ -145,6 +145,9 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	public static SSHCommandControlDialog getInstance(ConfigedMain cm, JFrame fr) {
 		if (instance == null)
 			instance = new SSHCommandControlDialog(cm, fr);
+		else
+			instance.centerOn(fr);
+
 		instance.setVisible(true);
 		return instance;
 	}

@@ -178,7 +178,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 		}
 	}
 
-	public boolean showResult = true;
+	private boolean showResult = true;
 
 	public void setStatusFinish(String s) {
 		if (showResult)
