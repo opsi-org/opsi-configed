@@ -478,8 +478,7 @@ public class JTableSelectionPanel extends JPanel
 
 		int lastAddedI = -1;
 
-		ListSelectionListener[] listeners = (ListSelectionListener[]) ((DefaultListSelectionModel) lsm)
-				.getListeners(ListSelectionListener.class);
+		ListSelectionListener[] listeners = ((DefaultListSelectionModel) lsm).getListeners(ListSelectionListener.class);
 
 		// remove all listeners
 		for (int l = 0; l < listeners.length; l++) {
@@ -794,10 +793,7 @@ public class JTableSelectionPanel extends JPanel
 
 		scrollRowToVisible(viewrow);
 
-		if (viewrow == -1)
-			return false;
-
-		return true;
+		return viewrow != -1;
 	}
 
 	public void scrollRowToVisible(int row) {

@@ -82,7 +82,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	JMenuItemFormatted popupMarkAndFilter;
 	JMenuItemFormatted popupEmptySearchfield;
 
-	public static enum SearchMode {
+	public enum SearchMode {
 		FULL_TEXT_SEARCHING_WITH_ALTERNATIVES, FULL_TEXT_SEARCHING_ONE_STRING, START_TEXT_SEARCHING, REGEX_SEARCHING
 	}
 

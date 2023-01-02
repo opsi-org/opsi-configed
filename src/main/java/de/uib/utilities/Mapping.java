@@ -144,7 +144,7 @@ public class Mapping<K, V> {
 			}
 		}
 
-		return new Mapping(restrictedMap);
+		return new Mapping<>(restrictedMap);
 	}
 
 	@Override

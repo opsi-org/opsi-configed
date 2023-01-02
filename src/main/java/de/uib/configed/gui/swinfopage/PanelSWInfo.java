@@ -43,9 +43,8 @@ import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 
 public class PanelSWInfo extends JPanel {
-	protected PanelGenEditTable panelTable;
-	protected ExporterToCSV csvExportTable;
-	protected ExporterToPDF pdfExportTable;
+	private PanelGenEditTable panelTable;
+	private ExporterToCSV csvExportTable;
 
 	protected JPanel subPanelTitle;
 
@@ -63,8 +62,6 @@ public class PanelSWInfo extends JPanel {
 	protected boolean withPopup;
 
 	protected String scanInfo = "";
-
-	private PopupMenuTrait popupTrait;
 
 	protected Boolean askingForKindOfAction;
 	protected boolean askForOverwrite = true;
@@ -326,7 +323,7 @@ public class PanelSWInfo extends JPanel {
 				.addGap(vGap, vGap, vGap));
 
 		if (withPopup) {
-			popupTrait = new PopupMenuTrait(
+			PopupMenuTrait popupTrait = new PopupMenuTrait(
 					new Integer[] { PopupMenuTrait.POPUP_EXPORT_CSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
 
 							PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,

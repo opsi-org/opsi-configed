@@ -94,7 +94,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 	protected JLabel labelCollectiveAction;
 	protected JComboBoxToolTip comboAggregatedEditing;
-	protected JList listChooseAction;
 
 	private int actionType = ActionRequest.INVALID;
 	protected JLabel labelSave;
@@ -114,7 +113,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 	protected Set<String> selectedIDs;
 
-	protected DefaultComboBoxModel comboModel;
+	protected DefaultComboBoxModel<String> comboModel;
 
 	protected Map<String, String> namesAndDescriptions;
 	protected Map<String, String> namesAndDescriptionsSave;
@@ -260,7 +259,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		if (namesAndDescriptions.get(currentKey) != null)
 		// case we have an old key
 		{
-			if (productGroupMembers.get(currentKey) == null || ((Set) productGroupMembers.get(currentKey)).isEmpty())
+			if (productGroupMembers.get(currentKey) == null || productGroupMembers.get(currentKey).isEmpty())
 			// there were no products assigned
 			{
 				if (!selectedIDs.isEmpty())
@@ -358,10 +357,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		if (isDescriptionChanged()) {
 			setDataChanged(true);
 		}
-	}
-
-	protected void updateKey() {
-
 	}
 
 	protected void initData() {
@@ -706,7 +701,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		} else {
 			String newGroupID = groupsEditField.getText();
 			String newDescription = descriptionField.getText();
-			Set selectedProducts = associate.getSelectedIDs();
+			Set<String> selectedProducts = associate.getSelectedIDs();
 
 			logging.debug(this, "save: set groupname, description, assigned_products " + newGroupID + ", "
 					+ newDescription + ", " + selectedProducts);
@@ -741,7 +736,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				result = true;
 
 				// modify internal model
-				Map group = new HashMap<>();
+				Map<String, String> group = new HashMap<>();
 				group.put("description", newDescription);
 				theData.put(newGroupID, group);
 
@@ -764,9 +759,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			return;
 		}
 
-		logging.debug(this, "group members " + productGroupMembers.get((String) groupsCombo.getSelectedItem()));
+		logging.debug(this, "group members " + productGroupMembers.get(groupsCombo.getSelectedItem()));
 
-		associate.setSelection((Set) productGroupMembers.get((String) groupsCombo.getSelectedItem()));
+		associate.setSelection(productGroupMembers.get(groupsCombo.getSelectedItem()));
 	}
 
 	protected void setInternalGroupsData() {
@@ -785,7 +780,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			namesAndDescriptions.put(id, theData.get(id).get("description"));
 		}
 		groupsCombo.setValues(namesAndDescriptions);
-		comboModel = (DefaultComboBoxModel) groupsCombo.getModel();
+		comboModel = (DefaultComboBoxModel<String>) groupsCombo.getModel();
 
 		// for reentry
 		clearChanges();
