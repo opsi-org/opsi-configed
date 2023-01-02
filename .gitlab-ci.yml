@@ -1,12 +1,10 @@
 image: docker.uib.gmbh/opsi/dev/pybuilder:uib-python-default
 
-
 stages:
   - set_variables
   - build_and_analyze
   - sign
   - make_opsiproduct
-
 
 set_variables:
   stage: set_variables
@@ -29,9 +27,11 @@ compile_and_package:
   script:
     - mvn package
     - jdeps --class-path target/$CONFIGED_JAR_NAME_WITH_DEPS --recursive --ignore-missing-deps --list-deps target/$CONFIGED_JAR_NAME > target/module.deps
+    # jdk.crypto.ec is needed for TLS (HTTPS)
+    - echo "   jdk.crypto.ec" >> target/module.deps
     - cat target/module.deps
   artifacts:
-    name: 'configed-build'
+    name: "configed-build"
     paths:
       - target/$CONFIGED_JAR_NAME_WITH_DEPS
       - target/module.deps
@@ -39,23 +39,20 @@ compile_and_package:
   needs:
     - set_variables
 
-
 sonarqube-check:
   stage: build_and_analyze
   image: maven:3.8.6-openjdk-18
   variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
   cache:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: 
-    - mvn verify sonar:sonar -Dsonar.projectKey=configed || true
+  script:
+    - mvn verify sonar:sonar -Dsonar.projectKey=configed
   only:
     - main # or the name of your main branch
-    - tags
-
 
 signandupload:
   stage: sign
@@ -74,10 +71,6 @@ signandupload:
       dotenv:
         - ci_job_id.env
     expire_in: 2 day
-  only:
-    - main
-    - tags
-
 
 trigger_opsiproduct_pipeline:
   stage: make_opsiproduct
@@ -89,6 +82,3 @@ trigger_opsiproduct_pipeline:
     - set_variables
     - compile_and_package
     - signandupload
-  only:
-    - main
-    - tags
