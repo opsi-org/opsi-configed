@@ -63,22 +63,6 @@ public class CertificateManager {
 		}
 	}
 
-	private static X509Certificate retrieveCertificate() {
-		String certificateContent = PersistenceControllerFactory.getPersistenceController().getOpsiCACert();
-		File certificateFile = null;
-		try {
-			certificateFile = File.createTempFile(Globals.CERTIFICATE_FILE_NAME,
-					"." + Globals.CERTIFICATE_FILE_EXTENSION);
-			FileWriter writer = new FileWriter(certificateFile);
-			writer.append(certificateContent);
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return instantiateCertificate(certificateFile);
-	}
-
 	public static void updateCertificate() {
 		File certificateDir = new File(configed.savedStatesLocationName);
 		File[] certificateFiles = certificateDir.listFiles((dir, filename) -> filename.endsWith(".pem"));
@@ -91,14 +75,32 @@ public class CertificateManager {
 				X509Certificate localCertificate = instantiateCertificate(certificateFile);
 
 				if (localCertificate != null && localCertificate.equals(tmpCertificate)) {
-					try (FileWriter writer = new FileWriter(certificateFile, false)) {
-						writer.write(certificateContent);
-						writer.flush();
-					} catch (IOException e) {
-						logging.error("unable to update certificate: " + certificateFile.getAbsolutePath());
-					}
+					writeToCertificate(certificateFile, certificateContent);
 				}
 			}
+		}
+	}
+
+	private static X509Certificate retrieveCertificate() {
+		String certificateContent = PersistenceControllerFactory.getPersistenceController().getOpsiCACert();
+		File certificateFile = null;
+		try {
+			certificateFile = File.createTempFile(Globals.CERTIFICATE_FILE_NAME,
+					"." + Globals.CERTIFICATE_FILE_EXTENSION);
+			writeToCertificate(certificateFile, certificateContent);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return instantiateCertificate(certificateFile);
+	}
+
+	private static void writeToCertificate(File certificateFile, String certificateContent) {
+		try (FileWriter writer = new FileWriter(certificateFile, false)) {
+			writer.write(certificateContent);
+			writer.flush();
+		} catch (IOException e) {
+			logging.error("unable to write to certificate: " + certificateFile.getAbsolutePath());
 		}
 	}
 }
