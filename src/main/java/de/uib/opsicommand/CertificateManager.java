@@ -67,7 +67,8 @@ public class CertificateManager {
 		String certificateContent = PersistenceControllerFactory.getPersistenceController().getOpsiCACert();
 		File certificateFile = null;
 		try {
-			certificateFile = File.createTempFile("opsi-ca-cert", ".pem");
+			certificateFile = File.createTempFile(Globals.CERTIFICATE_FILE_NAME,
+					"." + Globals.CERTIFICATE_FILE_EXTENSION);
 			FileWriter writer = new FileWriter(certificateFile);
 			writer.append(certificateContent);
 			writer.close();
