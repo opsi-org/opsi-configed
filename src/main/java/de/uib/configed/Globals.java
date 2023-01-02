@@ -58,9 +58,6 @@ public class Globals {
 
 	public static class ProductPackageVersionSeparator {
 
-		private ProductPackageVersionSeparator() {
-		}
-
 		public static String forDisplay() {
 			return "-";
 		}
@@ -860,29 +857,27 @@ public class Globals {
 				indentDone = true;
 				b.append(s.charAt(c));
 			}
-			if (charsInLine >= maxLineLength) {
-				if (c + 1 < s.length()) {
-					if ((s.charAt(c + 1) == ' ') || (s.charAt(c + 1) == '\t') || (s.charAt(c + 1) == '\n')) {
-						c++;
-						b.append("<br/>");
-						if (s.charAt(c) != '\n') {
-							while (lineIndent > 0) {
-								lineIndent--;
-								charsInLine++;
-								b.append("&nbsp;");
-							}
-						}
-						charsInLine = 0;
-						indentDone = false;
-						lineIndent = 0;
+			if ((charsInLine >= maxLineLength && c + 1 < s.length())
+					&& ((s.charAt(c + 1) == ' ') || (s.charAt(c + 1) == '\t') || (s.charAt(c + 1) == '\n'))) {
+				c++;
+				b.append("<br/>");
+				if (s.charAt(c) != '\n') {
+					while (lineIndent > 0) {
+						lineIndent--;
+						charsInLine++;
+						b.append("&nbsp;");
 					}
 				}
+				charsInLine = 0;
+				indentDone = false;
+				lineIndent = 0;
 			}
 		}
 
 		b.append("</html>");
 
 		return b.toString();
+
 	}
 
 	public static String usedMemory() {

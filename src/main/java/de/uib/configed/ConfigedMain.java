@@ -145,7 +145,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
 	// Dashboard disabled
-	public static final boolean DASH_ENABLED = false;
+	public static final boolean DASH_ENABLED = true;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
