@@ -13,5 +13,9 @@
     "java.codeAction.sortMembers.avoidVolatileChanges": false,
     "java.cleanup.actionsOnSave": [
         "addOverride"
-    ]
+    ],
+    "sonarlint.connectedMode.project": {
+        "connectionId": "sonarqube",
+        "projectKey": "configed"
+    },
 }

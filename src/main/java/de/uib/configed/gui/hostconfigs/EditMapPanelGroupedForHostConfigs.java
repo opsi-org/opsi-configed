@@ -21,7 +21,6 @@ import javax.swing.Icon;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.tree.TreePath;
 
@@ -45,10 +44,10 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 	private static final int USER_START_INDEX = 1;
 
-	protected JPopupMenu popupForUserpath;
-	protected JPopupMenu popupForUserpathes;
-	protected JPopupMenu popupForRolepath;
-	protected JPopupMenu popupForRolepathes;
+	protected PopupMenuTrait popupForUserpath;
+	protected PopupMenuTrait popupForUserpathes;
+	protected PopupMenuTrait popupForRolepath;
+	protected PopupMenuTrait popupForRolepathes;
 
 	protected JMenuItem popupItemDeleteEntry;
 
@@ -165,52 +164,52 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		};
 
 		// text for reload
-		((PopupMenuTrait) popupForUserpath).setText(PopupMenuTrait.POPUP_RELOAD,
+		popupForUserpath.setText(PopupMenuTrait.POPUP_RELOAD,
 				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.reconstructUsers"));
 
-		((PopupMenuTrait) popupForUserpathes).setText(PopupMenuTrait.POPUP_RELOAD,
+		popupForUserpathes.setText(PopupMenuTrait.POPUP_RELOAD,
 				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.reconstructUsers"));
 
-		((PopupMenuTrait) popupForRolepath).setText(PopupMenuTrait.POPUP_RELOAD,
+		popupForRolepath.setText(PopupMenuTrait.POPUP_RELOAD,
 				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.reconstructUsers"));
 
-		((PopupMenuTrait) popupForRolepathes).setText(PopupMenuTrait.POPUP_RELOAD,
+		popupForRolepathes.setText(PopupMenuTrait.POPUP_RELOAD,
 				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.reconstructUsers"));
 
-		((PopupMenuTrait) popupForUserpath).setText(PopupMenuTrait.POPUP_ADD,
+		popupForUserpath.setText(PopupMenuTrait.POPUP_ADD,
 				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser"));
 
-		((PopupMenuTrait) popupForUserpath).setToolTipText(PopupMenuTrait.POPUP_ADD,
+		popupForUserpath.setToolTipText(PopupMenuTrait.POPUP_ADD,
 				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser.ToolTip"));
 
-		((PopupMenuTrait) popupForUserpathes).setText(PopupMenuTrait.POPUP_DELETE,
+		popupForUserpathes.setText(PopupMenuTrait.POPUP_DELETE,
 				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForUser"));
 
-		((PopupMenuTrait) popupForUserpathes).setToolTipText(PopupMenuTrait.POPUP_DELETE,
+		popupForUserpathes.setToolTipText(PopupMenuTrait.POPUP_DELETE,
 				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForUser.ToolTip"));
 
-		((PopupMenuTrait) popupForRolepathes).setText(PopupMenuTrait.POPUP_DELETE,
+		popupForRolepathes.setText(PopupMenuTrait.POPUP_DELETE,
 				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForRole"));
 
-		((PopupMenuTrait) popupForRolepathes).setToolTipText(PopupMenuTrait.POPUP_DELETE,
+		popupForRolepathes.setToolTipText(PopupMenuTrait.POPUP_DELETE,
 				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForRole.ToolTip"));
 
-		((PopupMenuTrait) popupForUserpathes).setText(PopupMenuTrait.POPUP_ADD,
+		popupForUserpathes.setText(PopupMenuTrait.POPUP_ADD,
 				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser"));
 
-		((PopupMenuTrait) popupForUserpathes).setToolTipText(PopupMenuTrait.POPUP_ADD,
+		popupForUserpathes.setToolTipText(PopupMenuTrait.POPUP_ADD,
 				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser.ToolTip"));
 
-		((PopupMenuTrait) popupForRolepath).setText(PopupMenuTrait.POPUP_ADD,
+		popupForRolepath.setText(PopupMenuTrait.POPUP_ADD,
 				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole"));
 
-		((PopupMenuTrait) popupForRolepath).setToolTipText(PopupMenuTrait.POPUP_ADD,
+		popupForRolepath.setToolTipText(PopupMenuTrait.POPUP_ADD,
 				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole.ToolTip"));
 
-		((PopupMenuTrait) popupForRolepathes).setText(PopupMenuTrait.POPUP_ADD,
+		popupForRolepathes.setText(PopupMenuTrait.POPUP_ADD,
 				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole"));
 
-		((PopupMenuTrait) popupForRolepathes).setToolTipText(PopupMenuTrait.POPUP_ADD,
+		popupForRolepathes.setToolTipText(PopupMenuTrait.POPUP_ADD,
 				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole.ToolTip"));
 
 		MouseListener popupListenerForUserpathes = new utils.PopupMouseListener(popupForUserpathes) {
@@ -296,7 +295,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		logging.info(this, "theUsers found " + theUsers);
 
 		for (Entry<String, AbstractEditMapPanel> entry : partialPanels.entrySet()) {
-			(entry.getValue()).setEditDenier(key -> {
+			entry.getValue().setEditDenier(key -> {
 
 				logging.info(this, "entry " + entry + " key " + key);
 
