@@ -185,6 +185,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 
 			try {
 				peerName = session.getPeerPrincipal().getName();
+				System.out.println("peer name: " + peerName);
 			} catch (SSLPeerUnverifiedException e) {
 				logging.error(this, "peer's identity wasn't verified");
 			}
@@ -200,7 +201,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		try {
 			KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
 			ks.load(null, null);
-			loadCertificateToKeyStore(ks);
+			loadCertificatesToKeyStore(ks);
 
 			KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 			kmf.init(ks, new char[0]);
@@ -228,46 +229,38 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		return sslFactory;
 	}
 
-	private void loadCertificateToKeyStore(KeyStore ks) {
-		List<File> certificates = CertificateManager.getCertificates();
-
-		File certificateFile = null;
-		if (trustAlways) {
-			certificateFile = downloadCertificateFile();
-			CertificateManager.saveCertificate(certificateFile);
-		} else if (trustOnlyOnce) {
-			certificateFile = downloadCertificateFile();
-		}
-
-		if ((trustAlways || trustOnlyOnce) && certificateFile == null) {
-			return;
-		}
-
+	private void loadCertificatesToKeyStore(KeyStore ks) {
 		if (trustAlways || trustOnlyOnce) {
-			try {
-				X509Certificate certificate = CertificateManager.instantiateCertificate(certificateFile);
-				String alias = host;
-				if (certificateFile.exists()) {
-					alias = certificateFile.getName().substring(0, certificateFile.getName().indexOf("-"));
-				}
-				ks.setCertificateEntry(alias, certificate);
-			} catch (KeyStoreException e) {
-				logging.error(this, "unable to load certificate into a keystore");
+			File certificateFile = downloadCertificateFile();
+
+			if (certificateFile == null) {
+				return;
+			}
+
+			loadCertificateToKeyStore(ks, certificateFile);
+
+			if (trustAlways) {
+				CertificateManager.saveCertificate(certificateFile);
+			}
+		} else {
+			List<File> certificates = CertificateManager.getCertificates();
+
+			if (!certificates.isEmpty()) {
+				certificates.forEach(certificate -> loadCertificateToKeyStore(ks, certificate));
 			}
 		}
+	}
 
-		if (!certificates.isEmpty()) {
-			certificates.forEach(certificate -> {
-				try {
-					String alias = host;
-					if (certificate.exists()) {
-						alias = certificate.getName().substring(0, certificate.getName().indexOf("-"));
-					}
-					ks.setCertificateEntry(alias, CertificateManager.instantiateCertificate(certificate));
-				} catch (KeyStoreException e) {
-					logging.error(this, "unable to load certificate into a keystore");
-				}
-			});
+	private void loadCertificateToKeyStore(KeyStore ks, File certificateFile) {
+		try {
+			X509Certificate certificate = CertificateManager.instantiateCertificate(certificateFile);
+			String alias = host;
+			if (certificateFile.exists()) {
+				alias = certificateFile.getName().substring(0, certificateFile.getName().indexOf("-"));
+			}
+			ks.setCertificateEntry(alias, certificate);
+		} catch (KeyStoreException e) {
+			logging.error(this, "unable to load certificate into a keystore");
 		}
 	}
 

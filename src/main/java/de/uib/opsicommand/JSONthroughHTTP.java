@@ -351,26 +351,23 @@ public class JSONthroughHTTP extends JSONExecutioner {
 							configed.getResourceValue("JSONthroughHTTP.alwaysTrust"),
 							configed.getResourceValue("JSONthroughHTTP.trustOnlyOnce") },
 					420, 200);
+			StringBuilder message = new StringBuilder();
 
 			if (!certificateExists) {
-				StringBuilder message = new StringBuilder("");
 				message.append(configed.getResourceValue("JSONthroughHTTP.certificateIsUnverified") + "\n");
 				message.append(configed.getResourceValue("JSONthroughHTTP.stillConnectToServer"));
 				message.append("\n\n\n");
 				message.append(configed.getResourceValue("JSONthroughHTTP.noCertificateFound"));
-				fErrorMsg.setMessage(message.toString());
-				fErrorMsg.setAlwaysOnTop(true);
-				fErrorMsg.setVisible(true);
 			} else {
-				StringBuilder message = new StringBuilder("");
 				message.append(configed.getResourceValue("JSONthroughHTTP.certificateIsInvalid") + "\n");
 				message.append(configed.getResourceValue("JSONthroughHTTP.stillConnectToServer"));
 				message.append("\n\n\n");
 				message.append(configed.getResourceValue("JSONthroughHTTP.unableToVerify"));
-				fErrorMsg.setMessage(message.toString());
-				fErrorMsg.setAlwaysOnTop(true);
-				fErrorMsg.setVisible(true);
 			}
+
+			fErrorMsg.setMessage(message.toString());
+			fErrorMsg.setAlwaysOnTop(true);
+			fErrorMsg.setVisible(true);
 
 			if (fErrorMsg.getResult() == 1) {
 				conStat = new ConnectionState(ConnectionState.INTERRUPTED);
