@@ -185,7 +185,6 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 
 			try {
 				peerName = session.getPeerPrincipal().getName();
-				System.out.println("peer name: " + peerName);
 			} catch (SSLPeerUnverifiedException e) {
 				logging.error(this, "peer's identity wasn't verified");
 			}
