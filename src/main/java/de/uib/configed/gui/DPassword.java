@@ -29,9 +29,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.GregorianCalendar;
 import java.util.Vector;
@@ -186,8 +183,6 @@ public class DPassword extends JDialog // implements Runnable
 			if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED)
 			// if ( persis.getConnectionState().getState() == ConnectionState.CONNECTED )
 			{
-				updateCertificate();
-
 				// we can finish
 				logging.info(this, "connected with persis " + persis);
 				main.setPersistenceController(persis);
@@ -232,21 +227,6 @@ public class DPassword extends JDialog // implements Runnable
 
 			// Deactivate WaitInfo, because we finished waiting
 			setVisible(false);
-		}
-
-		private void updateCertificate() {
-			File certificateFile = new File(configed.savedStatesLocationName,
-					(String) fieldHost.getSelectedItem() + "-" + Globals.CERTIFICATE_FILE);
-
-			if (certificateFile.exists()) {
-				String certificateContent = persis.getOpsiCACert();
-				try (FileWriter writer = new FileWriter(certificateFile, false)) {
-					writer.write(certificateContent);
-					writer.flush();
-				} catch (IOException e) {
-					logging.error(this, "unable to update certificate: " + certificateFile.getAbsolutePath());
-				}
-			}
 		}
 
 		public JProgressBar getProgressBar() {

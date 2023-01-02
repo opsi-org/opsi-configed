@@ -1,8 +1,6 @@
 package de.uib.opsicommand;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -12,8 +10,6 @@ import java.net.Socket;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -21,9 +17,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,7 +35,6 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
 /**
@@ -236,12 +229,12 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 	}
 
 	private void loadCertificateToKeyStore(KeyStore ks) {
-		List<File> certificates = getCertificates();
+		List<File> certificates = CertificateManager.getCertificates();
 
 		File certificateFile = null;
 		if (trustAlways) {
 			certificateFile = downloadCertificateFile();
-			saveCertificate(certificateFile);
+			CertificateManager.saveCertificate(certificateFile);
 		} else if (trustOnlyOnce) {
 			certificateFile = downloadCertificateFile();
 		}
@@ -252,7 +245,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 
 		if (trustAlways || trustOnlyOnce) {
 			try {
-				X509Certificate certificate = instantiateCertificate(certificateFile);
+				X509Certificate certificate = CertificateManager.instantiateCertificate(certificateFile);
 				String alias = host;
 				if (certificateFile.exists()) {
 					alias = certificateFile.getName().substring(0, certificateFile.getName().indexOf("-"));
@@ -270,51 +263,12 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 					if (certificate.exists()) {
 						alias = certificate.getName().substring(0, certificate.getName().indexOf("-"));
 					}
-					ks.setCertificateEntry(alias, instantiateCertificate(certificate));
+					ks.setCertificateEntry(alias, CertificateManager.instantiateCertificate(certificate));
 				} catch (KeyStoreException e) {
 					logging.error(this, "unable to load certificate into a keystore");
 				}
 			});
 		}
-	}
-
-	private List<File> getCertificates() {
-		File certificateDir = new File(configed.savedStatesLocationName);
-		File[] certificateFiles = certificateDir.listFiles((dir, filename) -> filename.endsWith(".pem"));
-
-		if (certificateFiles.length == 0) {
-			certificateExists = false;
-			return new ArrayList<>();
-		}
-
-		return Arrays.asList(certificateFiles);
-	}
-
-	private void saveCertificate(File certificateFile) {
-		try {
-			Files.copy(certificateFile.toPath(),
-					new File(configed.savedStatesLocationName, host + "-" + Globals.CERTIFICATE_FILE).toPath(),
-					StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException e) {
-			logging.error(this, "unable to save certificate");
-		}
-	}
-
-	private X509Certificate instantiateCertificate(File certificateFile) {
-		X509Certificate cert = null;
-
-		try (FileInputStream is = new FileInputStream(certificateFile)) {
-			CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
-			cert = (X509Certificate) certFactory.generateCertificate(is);
-		} catch (CertificateException e) {
-			logging.error(this, "unable to parse certificate (format is invalid)");
-		} catch (FileNotFoundException e) {
-			logging.error(this, "unable to find certificate");
-		} catch (IOException e) {
-			logging.error(this, "unable to close certificate");
-		}
-
-		return cert;
 	}
 
 	private File downloadCertificateFile() {
