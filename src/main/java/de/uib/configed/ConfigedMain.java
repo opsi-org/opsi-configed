@@ -210,10 +210,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private FShowList fShowReachableInfo;
 
 	protected String productEdited = null; // null serves als marker that we were not editing products
-	protected Collection productProperties; // the properties for one product and all selected clients
+	protected Collection<Map<String, Object>> productProperties; // the properties for one product and all selected clients
 	protected de.uib.opsidatamodel.datachanges.UpdateCollection updateCollection = new UpdateCollection(
 			new ArrayList<>());
-	protected Map clientProductpropertiesUpdateCollections;
+	protected Map<String, ProductpropertiesUpdateCollection> clientProductpropertiesUpdateCollections;
 	/*
 	 * for each product:
 	 * a collection of all clients
@@ -226,10 +226,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected AdditionalconfigurationUpdateCollection additionalconfigurationUpdateCollection;
 
 	protected HostUpdateCollection hostUpdateCollection;
-
-	protected Map collectChangedStates = new HashMap<>(); // a map of clients, for each occurring client there is a map of
-															// products, where for each occurring product there may be an
-															// entry stateTypeKey - value
 
 	protected Map<String /* client */, Map<String /* product */, Map<String /* propertykey */, String/* propertyvalue */>>> collectChangedLocalbootStates = new HashMap<>();
 
@@ -256,12 +252,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// the
 	// depot
 
-	protected Map mergedProductProperties = null;
+	protected Map<String, ListMerger> mergedProductProperties = null;
 
-	public Map<String, Boolean> displayFieldsLocalbootProducts;
-	public Map<String, Boolean> displayFieldsNetbootProducts;
+	private Map<String, Boolean> displayFieldsLocalbootProducts;
+	private Map<String, Boolean> displayFieldsNetbootProducts;
 
-	protected Set depotsOfSelectedClients = null;
+	protected Set<String> depotsOfSelectedClients = null;
 	protected Set<String> allowedClients = null;
 
 	protected List<String> localbootProductnames;
@@ -2217,7 +2213,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return result.toString();
 	}
 
-	protected Set getDepotsOfSelectedClients() {
+	protected Set<String> getDepotsOfSelectedClients() {
 		if (depotsOfSelectedClients == null) {
 			depotsOfSelectedClients = new TreeSet<>();
 
@@ -2283,9 +2279,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 							merger.setHavingNoCommonValue();
 							mergedProductProperties.put(key, merger);
 						} else {
-							Object merger = mergedProductProperties.get(key);
+							ListMerger merger = mergedProductProperties.get(key);
 
-							ListMerger mergedValue = ((ListMerger) merger).merge(value);
+							ListMerger mergedValue = merger.merge(value);
 
 							// on merging we check if the value is the same as before
 							mergedProductProperties.put(key, mergedValue);
@@ -2334,8 +2330,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			addToGlobalUpdateCollection(clientProductpropertiesUpdateCollection);
 
 		} else {
-			clientProductpropertiesUpdateCollection = (ProductpropertiesUpdateCollection) clientProductpropertiesUpdateCollections
-					.get(productEdited);
+			clientProductpropertiesUpdateCollection = clientProductpropertiesUpdateCollections.get(productEdited);
 		}
 
 		collectTheProductProperties(productEdited);
@@ -2352,9 +2347,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				persist.getProductVersion(productEdited) + Globals.ProductPackageVersionSeparator.forDisplay()
 						+ persist.getProductPackageVersion(productEdited) + "   "
 						+ persist.getProductLockedInfo(productEdited),
-				persist.getProductTimestamp(productEdited),
-
-				persist.getProductHavingClientSpecificProperties(), // persist.hasClientSpecificProperties(productname),
 				productProperties, // List of the properties map of all selected clients
 				mergedProductProperties, // these properties merged to one map
 
@@ -2368,9 +2360,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				persist.getProductVersion(productEdited) + Globals.ProductPackageVersionSeparator.forDisplay()
 						+ persist.getProductPackageVersion(productEdited) + "   "
 						+ persist.getProductLockedInfo(productEdited),
-				persist.getProductTimestamp(productEdited),
-
-				persist.getProductHavingClientSpecificProperties(), // persist.hasClientSpecificProperties(productname),
 				productProperties, // array of the properties map of all selected clients
 				mergedProductProperties, // these properties merged to one map
 
@@ -2693,7 +2682,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			if (depotRepresentative == null)
 				depotRepresentative = myServer;
 		} else {
-			Set depots = getDepotsOfSelectedClients();
+			Set<String> depots = getDepotsOfSelectedClients();
 			logging.info(this, "depots of selected clients:" + depots);
 
 			String oldRepresentative = depotRepresentative;
@@ -2711,7 +2700,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				logging.info(this, "setDepotRepresentative depotsOfSelectedClients " + getDepotsOfSelectedClients());
 
-				Iterator depotsIterator = getDepotsOfSelectedClients().iterator();
+				Iterator<String> depotsIterator = getDepotsOfSelectedClients().iterator();
 
 				if (!depotsIterator.hasNext()) {
 					depotRepresentative = myServer;
@@ -2723,10 +2712,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				} else {
 
-					depotRepresentative = (String) depotsIterator.next();
+					depotRepresentative = depotsIterator.next();
 
 					while (!depotRepresentative.equals(myServer) && depotsIterator.hasNext()) {
-						String depot = (String) depotsIterator.next();
+						String depot = depotsIterator.next();
 						if (depot.equals(myServer)) {
 							depotRepresentative = myServer;
 						}
@@ -4532,8 +4521,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			messageBuffer.append(getSelectedClients()[i]);
 			messageBuffer.append("     (from: ");
 			try {
-				messageBuffer.append(persist.getHostInfoCollections().getMapPcBelongsToDepot()
-						.get(getSelectedClients()[i]).toString());
+				messageBuffer
+						.append(persist.getHostInfoCollections().getMapPcBelongsToDepot().get(getSelectedClients()[i]));
 			} catch (Exception e) {
 				logging.warning(this, "changeDepot for " + getSelectedClients()[i] + " " + e);
 			}
@@ -4644,18 +4633,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (newStatus)
 			activate = "on";
 
-		{
-			persist.setCommonProductPropertyValue(new HashSet<>(Arrays.asList(getSelectedClients())), product,
-					"on_shutdown_install", Arrays.asList(activate));
+		persist.setCommonProductPropertyValue(new HashSet<>(Arrays.asList(getSelectedClients())), product,
+				"on_shutdown_install", Arrays.asList(activate));
 
-			Map<String, String> productValues = new HashMap<>();
-			productValues.put("actionRequest", setup);
+		Map<String, String> productValues = new HashMap<>();
+		productValues.put("actionRequest", setup);
 
-			for (String clientNames : getSelectedClients()) {
-				persist.updateProductOnClient(clientNames, product, OpsiPackage.TYPE_LOCALBOOT, productValues);
-			}
-			persist.updateProductOnClients();
+		for (String clientNames : getSelectedClients()) {
+			persist.updateProductOnClient(clientNames, product, OpsiPackage.TYPE_LOCALBOOT, productValues);
 		}
+		persist.updateProductOnClients();
+
 	}
 
 	public void setInstallByShutdownProductPropertyValue(String clientNames, boolean status) {
