@@ -1501,7 +1501,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		popupShowPopupMessage.addActionListener((ActionEvent e) -> showPopupOnClientsAction());
 
 		popupRequestSessionInfo.setText(configed.getResourceValue("MainFrame.jMenuRequestSessionInfo"));
-		popupRequestSessionInfo.addActionListener((ActionEvent e) -> getSessionInfo());
+		popupRequestSessionInfo.addActionListener((ActionEvent e) -> {
+			main.setColumnSessionInfo(true);
+			getSessionInfo();
+		});
 
 		popupShutdownClient.setText(configed.getResourceValue("MainFrame.jMenuShutdownClient"));
 		popupShutdownClient.addActionListener((ActionEvent e) -> shutdownClientsAction());
