@@ -1243,16 +1243,34 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	private void setupMenuHelp() {
-		jMenuHelp.setText(configed.getResourceValue("MainFrame.jMenuHelp"));
+		jMenuHelp.setText( configed.getResourceValue("MainFrame.jMenuHelp") );
 
 		jMenuHelpDoc.setText(configed.getResourceValue("MainFrame.jMenuDoc"));
+		jMenuHelpDoc.addActionListener(new ActionListener(){
+			                               public void actionPerformed(ActionEvent e)
+			                               {
+				                               main.showExternalDocument(Globals.opsiDocpage);
+			                               }
+		                               });
 		jMenuHelp.add(jMenuHelpDoc);
 
+
 		jMenuHelpForum.setText(configed.getResourceValue("MainFrame.jMenuForum"));
+		jMenuHelpForum.addActionListener(new ActionListener(){
+			                                 public void actionPerformed(ActionEvent e)
+			                                 {
+				                                 main.showExternalDocument(Globals.opsiForumpage);
+			                                 }
+		                                 });
 		jMenuHelp.add(jMenuHelpForum);
 
 		jMenuHelpSupport.setText(configed.getResourceValue("MainFrame.jMenuSupport"));
-
+		jMenuHelpSupport.addActionListener(new ActionListener(){
+			                                   public void actionPerformed(ActionEvent e)
+			                                   {
+				                                   main.showExternalDocument(Globals.opsiSupportpage);
+			                                   }
+		                                   });
 		jMenuHelp.add(jMenuHelpSupport);
 
 		jMenuHelp.addSeparator();
