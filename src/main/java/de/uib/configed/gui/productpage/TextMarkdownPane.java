@@ -20,9 +20,8 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
-import javafx.application.Application;
-import javafx.stage.Stage;
 
 public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 
@@ -57,13 +56,7 @@ public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 		if (event.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
 
 			// Open Link in Browser
-			new Application() {
-
-				@Override
-				public void start(Stage primaryStage) throws Exception {
-					// Empty, because not needed
-				}
-			}.getHostServices().showDocument(link);
+			Globals.showExternalDocument(link);
 
 		} else if (event.getEventType().equals(HyperlinkEvent.EventType.ENTERED)) {
 			// Activate tooltip if mouse on link

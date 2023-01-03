@@ -24,6 +24,8 @@ import javax.swing.ImageIcon;
 
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.logging;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 /**
  * This class contains app constants (including some global functions) Copyright
@@ -663,6 +665,16 @@ public class Globals {
 		logging.info("getNowTimeListValue" + result);
 
 		return result;
+	}
+
+	public static void showExternalDocument(String link) {
+		new Application() {
+
+			@Override
+			public void start(Stage primaryStage) throws Exception {
+				// Empty, because not needed
+			}
+		}.getHostServices().showDocument(link);
 	}
 
 	public static String pseudokey(String[] partialvalues) {

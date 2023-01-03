@@ -823,7 +823,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		contentPane.repaint();
 	}
 
-	private void showParenthesesForGroup(LinkedList<SimpleGroup> groups) {
+	private void showParenthesesForGroup(Deque<SimpleGroup> groups) {
 		boolean inOr = false;
 		for (SimpleGroup group : groups) {
 			group.openParenthesis.setVisible(false);
@@ -1181,14 +1181,14 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	private class ComplexGroup {
-		public GroupType type;
-		public IconAsButton removeButton;
-		public IconAsButton negateButton;
-		public JLabel topLabel = null;
-		public AndOrSelectButtonByIcon connectionType;
-		public LinkedList<SimpleGroup> groupList;
-		public IconAsButton openParenthesis;
-		public IconAsButton closeParenthesis;
+		private GroupType type;
+		private IconAsButton removeButton;
+		private IconAsButton negateButton;
+		private JLabel topLabel = null;
+		private AndOrSelectButtonByIcon connectionType;
+		private Deque<SimpleGroup> groupList;
+		private IconAsButton openParenthesis;
+		private IconAsButton closeParenthesis;
 
 		@Override
 		public String toString() {
