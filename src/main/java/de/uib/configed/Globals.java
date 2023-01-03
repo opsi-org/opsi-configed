@@ -13,6 +13,8 @@ import javax.swing.ImageIcon;
 
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.logging;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 /**
  * This class contains app constants (including some global functions) Copyright
@@ -20,8 +22,8 @@ import de.uib.utilities.logging.logging;
  */
 
 public class Globals {
-	public static final String VERSION = "4.2.19.6";
-	public static final String VERDATE = "2022-12-21";
+	public static final String VERSION = "4.2.19.7";
+	public static final String VERDATE = "2023-01-03";
 
 	public static final String VERHASHTAG = "";
 
@@ -351,6 +353,16 @@ public class Globals {
 		}
 
 		return null;
+	}
+
+	public static void showExternalDocument(String link) {
+		new Application() {
+
+			@Override
+			public void start(Stage primaryStage) throws Exception {
+				// Empty, because not needed
+			}
+		}.getHostServices().showDocument(link);
 	}
 
 	public static ImageIcon createImageIcon(String path, String description) {
