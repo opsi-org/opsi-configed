@@ -4493,7 +4493,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		fEdit.init();
 		fEdit.setTitle(configed.getResourceValue("ConfigedMain.fChangeClientID.title") + " (" + Globals.APPNAME + ")");
-		fEdit.setSize(350, 200);
+		fEdit.setSize(Globals.WIDTH_FRAME_RENAME_CLIENT, Globals.HEIGHT_FRAME_RENAME_CLIENT);
 		fEdit.centerOn(Globals.mainContainer);
 		fEdit.setSingleLine(true);
 		fEdit.setModal(true);
