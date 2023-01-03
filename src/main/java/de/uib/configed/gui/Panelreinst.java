@@ -26,11 +26,12 @@ import de.uib.configed.Globals;
 import de.uib.utilities.swing.SurroundPanel;
 
 public class Panelreinst extends JPanel implements KeyListener, MouseListener, ActionListener {
-	final String callReinstmgr = "reinstmgr";
+	private static final String CALL_REINST_MANAGER = "reinstmgr";
 
 	String pcName = "";
 
-	final int fieldHeight = 21;
+	private static final int FIELD_HEIGHT = 21;
+
 	JPanel panelContent = new JPanel();
 	JPanel panelVerticalGrid = new JPanel();
 
@@ -85,22 +86,22 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 		labelEthernetAdress.setText("falls erforderlich, Ethernet-(MAC-) Adresse des PCs:");
 		fieldEthernetAddress.setText("  ");
 		fieldEthernetAddress.setColumns(18);
-		fieldEthernetAddress.setPreferredSize(new Dimension(100, fieldHeight));
+		fieldEthernetAddress.setPreferredSize(new Dimension(100, FIELD_HEIGHT));
 		fieldEthernetAddress.addKeyListener(this);
 		fieldEthernetAddress.addMouseListener(this);
 		panelSurroundEthernetAddress.add(labelEthernetAdress);
 		panelSurroundEthernetAddress.add(fieldEthernetAddress);
 		panelVerticalGrid.add(panelSurroundEthernetAddress);
 
-		fieldInstallCommand.setText(callReinstmgr);
-		fieldInstallCommand.setPreferredSize(new Dimension(350, fieldHeight));
+		fieldInstallCommand.setText(CALL_REINST_MANAGER);
+		fieldInstallCommand.setPreferredSize(new Dimension(350, FIELD_HEIGHT));
 		fieldInstallCommand.setBackground(Globals.BACKGROUND_COLOR_4);
 		fieldInstallCommand.setEditable(true);
 		panelVerticalGrid.add(new SurroundPanel(fieldInstallCommand));
 
 		buttonStartReinstmgr.setText("Ausführen");
 		buttonStartReinstmgr.addActionListener(this);
-		buttonStartReinstmgr.setPreferredSize(new Dimension(100, fieldHeight));
+		buttonStartReinstmgr.setPreferredSize(new Dimension(100, FIELD_HEIGHT));
 		buttonStartReinstmgr.setBackground(Globals.BACKGROUND_COLOR_6);
 		panelVerticalGrid.add(new SurroundPanel(buttonStartReinstmgr));
 
@@ -110,8 +111,8 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 		labelUnset.setFont(Globals.defaultFontBig);
 		panelVerticalGrid.add(new SurroundPanel(labelUnset));
 
-		fieldUnsetCommand.setText(callReinstmgr);
-		fieldUnsetCommand.setPreferredSize(new Dimension(350, fieldHeight));
+		fieldUnsetCommand.setText(CALL_REINST_MANAGER);
+		fieldUnsetCommand.setPreferredSize(new Dimension(350, FIELD_HEIGHT));
 		fieldUnsetCommand.setBackground(Globals.BACKGROUND_COLOR_4);
 		fieldUnsetCommand.setEditable(true);
 		panelVerticalGrid.add(new SurroundPanel(fieldUnsetCommand));
@@ -119,7 +120,7 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 		buttonUnset.setText("Ausführen");
 		buttonUnset.addActionListener(this);
 		buttonUnset.setBackground(Globals.BACKGROUND_COLOR_6);
-		buttonUnset.setPreferredSize(new Dimension(100, fieldHeight));
+		buttonUnset.setPreferredSize(new Dimension(100, FIELD_HEIGHT));
 		panelVerticalGrid.add(new SurroundPanel(buttonUnset));
 
 		panelVerticalGrid.add(new JLabel(""));
@@ -139,7 +140,7 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 	}
 
 	protected void buildInstallCommand() {
-		String installCommand = callReinstmgr + " " + (String) comboImages.getSelectedItem() + " " + pcName
+		String installCommand = CALL_REINST_MANAGER + " " + (String) comboImages.getSelectedItem() + " " + pcName
 				+ fieldEthernetAddress.getText();
 		fieldInstallCommand.setText(installCommand);
 		fieldInstallCommand.setCaretPosition(0);
@@ -152,9 +153,9 @@ public class Panelreinst extends JPanel implements KeyListener, MouseListener, A
 	public void startFor(String pcName, List installImages) {
 		this.pcName = pcName;
 		comboImages.setModel(new DefaultComboBoxModel<>(installImages.toArray()));
-		String installCommand = callReinstmgr;
+		String installCommand = CALL_REINST_MANAGER;
 		fieldInstallCommand.setText(installCommand);
-		String unsetCommand = callReinstmgr + " unset " + pcName;
+		String unsetCommand = CALL_REINST_MANAGER + " unset " + pcName;
 		fieldUnsetCommand.setText(unsetCommand);
 	}
 

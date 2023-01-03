@@ -17,7 +17,6 @@ package de.uib.configed;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.IllegalComponentStateException;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -4839,9 +4838,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private void initSavedSearchesDialog() {
 		if (savedSearchesDialog == null) {
 			logging.debug(this, "create SavedSearchesDialog");
-			savedSearchesDialog = new SavedSearchesDialog()
-
-			{
+			savedSearchesDialog = new SavedSearchesDialog() {
 				@Override
 				protected void commit() {
 					super.commit();
@@ -4887,13 +4884,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		logging.debug(this, "clientSelectionGetSavedSearch");
 		initSavedSearchesDialog();
 
-		try {
-			java.awt.Point pointField = Globals.container1.getLocationOnScreen();
-			savedSearchesDialog.setLocation((int) pointField.getX() + 30, (int) pointField.getY() + 20);
-		} catch (IllegalComponentStateException ex) {
-			logging.info(this, "clientSelectionGetSavedSearch " + ex);
-		}
-
+		savedSearchesDialog.centerOn(mainFrame);
 		savedSearchesDialog.setVisible(true);
 
 	}
