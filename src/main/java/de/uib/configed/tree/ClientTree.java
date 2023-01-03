@@ -1016,12 +1016,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return directlyAllowedGroups;
 	}
 
-	public void editGroupNode(DefaultMutableTreeNode node) {
-		if (!node.getAllowsChildren())
-			return;
-
-	}
-
 	protected void editGroupNode(TreePath path) {
 		DefaultMutableTreeNode node = null;
 

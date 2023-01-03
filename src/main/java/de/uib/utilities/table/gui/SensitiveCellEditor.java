@@ -100,9 +100,8 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		listeditor.init();
 
 		SwingUtilities.invokeLater(() -> {
+			// center on mainFrame
 			listeditor.setLocation(
-					// Center frame on mainFrame
-
 					Globals.mainFrame.getX() + Globals.mainFrame.getWidth() / 2 - listeditor.getWidth() / 2,
 					Globals.mainFrame.getY() + Globals.mainFrame.getHeight() / 2 - listeditor.getHeight() / 2);
 			listeditor.setVisible(true);
