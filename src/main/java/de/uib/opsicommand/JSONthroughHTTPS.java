@@ -208,7 +208,10 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			tmf.init(ks);
 
 			SSLContext sslContext = SSLContext.getInstance("TLS");
-			sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
+			X509TrustManager systemTrustManager = getSystemTrustManager(tmf);
+			sslContext.init(kmf.getKeyManagers(),
+					new X509TrustManager[] { new DefaultX509TrustManagerWrapper(systemTrustManager) },
+					new SecureRandom());
 
 			sslFactory = new SecureSSLSocketFactory(sslContext.getSocketFactory(), new MyHandshakeCompletedListener());
 		} catch (CertificateException e) {
@@ -226,6 +229,18 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		}
 
 		return sslFactory;
+	}
+
+	public static X509TrustManager getSystemTrustManager(TrustManagerFactory tmf) {
+		TrustManager[] trustManagers = tmf.getTrustManagers();
+		if (trustManagers.length != 1) {
+			throw new IllegalStateException("Unexpected default trust managers: " + Arrays.toString(trustManagers));
+		}
+		TrustManager trustManager = trustManagers[0];
+		if (trustManager instanceof X509TrustManager) {
+			return (X509TrustManager) trustManager;
+		}
+		throw new IllegalStateException("'" + trustManager + "' is not a X509TrustManager");
 	}
 
 	private void loadCertificatesToKeyStore(KeyStore ks) {
@@ -319,5 +334,40 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		}
 
 		return sslFactory;
+	}
+
+	// Wrapper of systems X509TrustManager. This does not change how X509Certificates
+	// are validated. It only wraps around the system's X509TrustManager to check if
+	// the certificate is locally available before it verifies the certificate.
+	private class DefaultX509TrustManagerWrapper implements X509TrustManager {
+		X509TrustManager delegate;
+
+		public DefaultX509TrustManagerWrapper(X509TrustManager delegate) {
+			this.delegate = delegate;
+		}
+
+		@Override
+		public void checkClientTrusted(X509Certificate[] certificates, String authType) throws CertificateException {
+			delegate.checkClientTrusted(certificates, authType);
+		}
+
+		@Override
+		public void checkServerTrusted(X509Certificate[] certificates, String authType) throws CertificateException {
+			List<File> certificateFiles = CertificateManager.getCertificates();
+			for (X509Certificate certificate : certificates) {
+				certificateFiles.forEach(certificateFile -> {
+					if (certificate.equals(CertificateManager.instantiateCertificate(certificateFile))) {
+						certificateExists = true;
+						return;
+					}
+				});
+			}
+			delegate.checkServerTrusted(certificates, authType);
+		}
+
+		@Override
+		public X509Certificate[] getAcceptedIssuers() {
+			return delegate.getAcceptedIssuers();
+		}
 	}
 }
