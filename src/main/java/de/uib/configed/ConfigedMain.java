@@ -4235,17 +4235,16 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			@Override
 			public void run() {
 
-				if (fShowReachableInfo == null) {
+				if (fShowReachableInfo == null)
 					fShowReachableInfo = new FShowList(null, Globals.APPNAME, false,
 							new String[] { configed.getResourceValue("ConfigedMain.reachableInfoCancel") }, 350, 100);
-					fShowReachableInfo.centerOn(Globals.mainContainer);
-				}
 
 				fShowReachableInfo.setMessage(configed.getResourceValue("ConfigedMain.reachableInfoRequested"));
 
 				fShowReachableInfo.setAlwaysOnTop(true);
+				fShowReachableInfo.setSize(Globals.REACHABLE_INFO_FRAME_WIDTH, Globals.REACHABLE_INFO_FRAME_HEIGHT);
+				fShowReachableInfo.centerOn(Globals.mainContainer);
 				fShowReachableInfo.setVisible(true);
-				fShowReachableInfo.glassTransparency(true, 200, 100, 0.005f);
 				fShowReachableInfo.toFront();
 				reachableInfo = new HashMap<>();
 
