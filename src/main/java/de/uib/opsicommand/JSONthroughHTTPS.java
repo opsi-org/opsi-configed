@@ -81,6 +81,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		}
 
 		@Override
+		@SuppressWarnings("squid:S1192")
 		public Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException {
 			SSLSocket socket = (SSLSocket) this.delegate.createSocket(s, host, port, autoClose);
 			logging.debug(this, "createSocket host, port: " + host + "," + port + " autoClose " + autoClose
@@ -292,6 +293,10 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			logging.error(this, "url is malformed: " + url);
 		} catch (IOException e) {
 			logging.error(this, "unable to create tmp certificate file");
+		}
+
+		if (url == null) {
+			return null;
 		}
 
 		try (ReadableByteChannel rbc = Channels.newChannel(url.openStream());
