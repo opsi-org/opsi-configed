@@ -9,5 +9,9 @@
         "source.organizeImports": true
     },
     "java.format.settings.url": ".vscode/java-formatter.xml",
-    "java.configuration.updateBuildConfiguration": "disabled"
+    "java.configuration.updateBuildConfiguration": "disabled",
+    "sonarlint.connectedMode.project": {
+        "connectionId": "https-sonarqube-uib-gmbh",
+        "projectKey": "configed"
+    }
 }
