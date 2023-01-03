@@ -109,7 +109,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 		terminatingPanel = new TerminatingPanel(closeListener);
 
-		btn_close.setVisible(false); // in terminating panel, we place an extra button
+		jButtonClose.setVisible(false); // in terminating panel, we place an extra button
 
 		initGUI();
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -117,7 +117,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		this.setSize(this.thissize);
 		this.setMaximumSize(new Dimension(900, 700));
 
-		setComponentsEnabled_RO(!Globals.isGlobalReadOnly());
+		setComponentsEnabledRO(!Globals.isGlobalReadOnly());
 		setCLfocus();
 		// ((JTextField) tf_command).setCaretPosition(((JTextField)
 
@@ -148,7 +148,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		this(title, true);
 	}
 
-	private void setComponentsEnabled_RO(boolean value) {
+	private void setComponentsEnabledRO(boolean value) {
 		logging.info(this, "setComponentsEnabled_RO value " + value);
 		tf_command.setEnabled(value);
 		btn_executeCommand.setEnabled(value);
@@ -181,25 +181,25 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 	private void setOutSize() {
 
-		double no_output_Height = (Globals.GAP_SIZE * 4) + tf_command.getHeight() + parameterPanel.getHeight()
+		double noOutputHeight = (Globals.GAP_SIZE * 4) + tf_command.getHeight() + parameterPanel.getHeight()
 				+ btn_dim.getHeight() + terminatingPanel.getHeight();
 
 		this.thissize = this.getSize();
 
 		double w = this.getSize().getWidth() - (Globals.GAP_SIZE * 4);
-		double h = this.getSize().getHeight() - no_output_Height;
+		double h = this.getSize().getHeight() - noOutputHeight;
 		if (w > 1500)
 			w = 810;
 		if (h > 1500)
 			h = 600;
-		Dimension output_size = new Dimension();
-		output_size.setSize(w, h);
+		Dimension outputSize = new Dimension();
+		outputSize.setSize(w, h);
 
-		this.output.setSize(output_size);
-		this.output.setPreferredSize(output_size);
-		this.output.setMaximumSize(output_size);
-		this.jScrollPane.setSize(output_size);
-		this.jScrollPane.setPreferredSize(output_size);
+		this.output.setSize(outputSize);
+		this.output.setPreferredSize(outputSize);
+		this.output.setMaximumSize(outputSize);
+		this.jScrollPane.setSize(outputSize);
+		this.jScrollPane.setPreferredSize(outputSize);
 
 		this.revalidate();
 
@@ -280,6 +280,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 				setCLfocus();
 			}
 		};
+
 		tf_command.setPreferredSize(new Dimension(Globals.FIRST_LABEL_WIDTH + Globals.GAP_SIZE, Globals.LINE_HEIGHT));
 
 		setCLfocus();
@@ -393,7 +394,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(btn_killProcess, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(btn_close, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jButtonClose, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(gap));
 
@@ -412,7 +413,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 						.addGap(gap)
 						.addComponent(btn_executeCommand, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 						.addComponent(btn_killProcess, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-						.addComponent(btn_close, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+						.addComponent(jButtonClose, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 						.addGap(gap)));
 		setCenterLayout();
 

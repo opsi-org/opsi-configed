@@ -35,7 +35,7 @@ import de.uib.utilities.logging.logging;
 
 public class DataStubRawData extends DataStubNOM {
 
-	final String stateIs1 = ".state = 1 ";
+	private static final String STATE_IS_1 = ".state = 1 ";
 	static final String CELL_SEPARATOR = "|";
 
 	public DataStubRawData(OpsiserviceNOMPersistenceController controller) {
@@ -526,7 +526,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		buf.append("\nAND ");
 		buf.append(configTable);
-		buf.append(stateIs1);
+		buf.append(STATE_IS_1);
 
 		String query = buf.toString();
 
@@ -639,13 +639,12 @@ public class DataStubRawData extends DataStubNOM {
 				for (String client : client2ClassInfos.keySet()) {
 					Map<String, Object> allInfosForAClient = client2HwRows.get(client);
 					// find max lastseen time as last scan time
-					{
-						String lastseen1 = (String) allInfosForAClient.get(persist.lastseenVisibleColName);
-						String lastseen2 = (String) client2ClassInfos.get(client).get(persist.lastseenVisibleColName);
-						if (lastseen1 != null && lastseen2 != null)
-							client2ClassInfos.get(client).put(persist.lastseenVisibleColName,
-									maxTime(lastseen1, lastseen2));
-					}
+
+					String lastseen1 = (String) allInfosForAClient.get(persist.lastseenVisibleColName);
+					String lastseen2 = (String) client2ClassInfos.get(client).get(persist.lastseenVisibleColName);
+					if (lastseen1 != null && lastseen2 != null)
+						client2ClassInfos.get(client).put(persist.lastseenVisibleColName,
+								maxTime(lastseen1, lastseen2));
 
 					allInfosForAClient.putAll(client2ClassInfos.get(client));
 				}

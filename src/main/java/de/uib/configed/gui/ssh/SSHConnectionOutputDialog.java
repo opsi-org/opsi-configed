@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -36,7 +37,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 	protected JTextPane output;
 	protected JScrollPane jScrollPane;
 
-	protected JButton btn_close;
+	protected JButton jButtonClose;
 	protected boolean buildFrame = false;
 
 	protected JPanel mainPanel = new JPanel();
@@ -87,12 +88,12 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 		append("", line);
 	}
 
-	private String findAnsiCodeColor(Map.Entry entry, String key, String line) {
+	private String findAnsiCodeColor(Entry<String, Color> entry, String key, String line) {
 		if (line.trim().replace("\\t", "").replace(" ", "").startsWith(key)) {
-			linecolor = (Color) entry.getValue();
+			linecolor = entry.getValue();
 			line = line.replace(key, "");
 			logging.debug(this,
-					"append parseAnsiCodes found color key " + key + " value " + ((Color) entry.getValue()).toString());
+					"append parseAnsiCodes found color key " + key + " value " + entry.getValue().toString());
 
 			line = line.replace(ANSI_ESCAPE_1, "").replace(ANSI_ESCAPE_2, "");
 		}
@@ -101,12 +102,11 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 
 	public void append(String caller, String line) {
 
-		if (SSHCommandFactory.ssh_colored_output) {
-			if ((line != null) && (!line.trim().replace("\\t", "").replace(" ", "").equals("")))
-				for (Map.Entry entry : ansiCodeColors.entrySet())
-					line = findAnsiCodeColor(entry, (String) entry.getKey(), line);
+		if (SSHCommandFactory.ssh_colored_output && (line != null)
+				&& (!line.trim().replace("\\t", "").replace(" ", "").equals("")))
+			for (Entry<String, Color> entry : ansiCodeColors.entrySet())
+				line = findAnsiCodeColor(entry, entry.getKey(), line);
 
-		}
 		logging.debug(this, "line " + line.replace("\n", "") + " color " + linecolor.toString());
 		StyleContext sc = StyleContext.getDefaultStyleContext();
 		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, linecolor);
@@ -128,7 +128,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 
 	private void initOutputGui() {
 		try {
-			Dimension btn_dim = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3);
+			Dimension jButtonDimension = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3);
 			inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			mainPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			getContentPane().add(mainPanel, BorderLayout.CENTER);
@@ -166,12 +166,12 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 			jScrollPane.setViewportView(output);
 			output.setText("");
 
-			btn_close = new de.uib.configed.gui.IconButton(configed.getResourceValue("SSHConnection.buttonClose"),
+			jButtonClose = new de.uib.configed.gui.IconButton(configed.getResourceValue("SSHConnection.buttonClose"),
 					"images/cancel.png", "images/cancel.png", "images/cancel.png", true);
 
-			btn_close.setPreferredSize(btn_dim);
+			jButtonClose.setPreferredSize(jButtonDimension);
 
-			btn_close.addActionListener(closeListener);
+			jButtonClose.addActionListener(closeListener);
 
 		} catch (Exception e) {
 			logging.warning(this, "initOutputGui, exception occurred", e);

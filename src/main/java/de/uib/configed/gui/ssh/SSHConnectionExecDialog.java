@@ -122,7 +122,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 		if (addInputField)
 			verticalGroup.addGroup(layout.createParallelGroup().addGap(vgap, vgap, vgap)
 					.addComponent(jButtonClear, pref, pref, pref).addComponent(jButtonKillProcess, pref, pref, pref)
-					.addComponent(btn_close, pref, pref, pref).addGap(vgap));
+					.addComponent(jButtonClose, pref, pref, pref).addGap(vgap));
 		verticalGroup.addGap(vgap);
 
 		ParallelGroup horizontalGroup = layout.createParallelGroup();
@@ -131,7 +131,8 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 			horizontalGroup.addGroup(layout.createSequentialGroup().addGap(hgap, hgap, max)
 					.addComponent(jButtonClear, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 					.addComponent(jButtonKillProcess, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-					.addComponent(btn_close, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH).addGap(hgap));
+					.addComponent(jButtonClose, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+					.addGap(hgap));
 
 		layout.setVerticalGroup(verticalGroup);
 		layout.setHorizontalGroup(horizontalGroup);
