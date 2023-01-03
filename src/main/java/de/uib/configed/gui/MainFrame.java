@@ -2553,7 +2553,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		fText.setTitle(configed.getResourceValue("MainFrame.popupFrameTitle"));
 		fText.init();
-		fText.centerOn(MainFrame.this);
+		fText.centerOn(this);
 		fText.setVisible(true);
 	}
 

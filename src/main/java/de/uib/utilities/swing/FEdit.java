@@ -11,9 +11,6 @@ import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
@@ -23,6 +20,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
@@ -31,7 +29,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
-public class FEdit extends javax.swing.JDialog implements ActionListener, KeyListener {
+public class FEdit extends JDialog implements ActionListener, KeyListener {
 	protected Dimension areaDimension = new Dimension(100, 40);
 
 	protected String initialText = "";
@@ -241,10 +239,6 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 		return init(areaDimension);
 	}
 
-	private int intHalf(double x) {
-		return (int) (x / 2);
-	}
-
 	public void associateTo(Point p, int xplus, int yplus) {
 		int startX = (int) p.getX() + xplus;
 		int startY = (int) p.getY() + yplus;
@@ -262,69 +256,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 	}
 
 	public void centerOn(Component master) {
-		int startX = 0;
-		int startY = 0;
-
-		Point masterOnScreen = null;
-
-		boolean centerOnMaster = (master != null);
-
-		if (centerOnMaster) {
-			try {
-				masterOnScreen = master.getLocationOnScreen();
-			} catch (Exception ex) {
-				logging.info(this, "centerOn " + master + " ex: " + ex);
-				centerOnMaster = false;
-			}
-		}
-
-		logging.info(this, "master, centerOnMaster " + master + ", " + centerOnMaster);
-
-		if (!centerOnMaster) {
-			// center on Screen
-			if (Globals.mainFrame != null) {
-				setLocation(Globals.mainFrame.getX() + Globals.LOCATION_DISTANCE_X,
-						Globals.mainFrame.getY() + Globals.LOCATION_DISTANCE_Y);
-				logging.info(this, " ============================ ");
-				logging.info(this,
-						"setLocation based on mainFrame.getX(), .. "
-								+ (Globals.mainFrame.getX() + Globals.LOCATION_DISTANCE_X) + ", "
-								+ +(Globals.mainFrame.getY() + Globals.LOCATION_DISTANCE_Y));
-			} else {
-				GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-				GraphicsConfiguration gc = gd.getDefaultConfiguration();
-
-				setLocation((gc.getBounds().width - getWidth()) / 2 + gc.getBounds().x,
-						(gc.getBounds().height - getHeight()) / 2 + gc.getBounds().y);
-
-				logging.info(this, " ============================ ");
-				logging.info(this, " !centerOnMaster, " + gc.getBounds());
-			}
-		} else {
-			logging.info(this, "centerOn  master.getX() " + (master.getX()));
-			logging.info(this, "centerOn  master.getY() " + (master.getY()));
-
-			logging.info(this, "centerOn (int) masterOnScreen.getX()  " + (int) masterOnScreen.getX());
-			logging.info(this, "centerOn (int) masterOnScreen.getY()  " + (int) masterOnScreen.getY());
-			logging.info(this, "centerOn master.getWidth()  " + master.getWidth() / 2);
-			logging.info(this, "centerOn master.getHeight()  " + master.getHeight() / 2);
-			logging.info(this, "centerOn this.getSize() " + getSize());
-
-			logging.info(this, "centerOn " + master.getClass() + ", " + master);
-
-			startX = (int) masterOnScreen.getX() + intHalf(master.getWidth()) - intHalf(getSize().getWidth());
-			startY = (int) masterOnScreen.getY() + intHalf(master.getHeight()) - intHalf(getSize().getHeight());
-
-			// problem: in applet in windows, we may leave the screen
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			logging.info(this, "centerOn screenSize " + screenSize);
-
-			setLocation(startX, startY);
-
-			logging.info(this, " ============================ ");
-			logging.info(this, " centerOnMaster, startX, startY " + startX + ", " + startY);
-		}
-
+		Globals.centerOn(this, master);
 	}
 
 	protected void enter() {

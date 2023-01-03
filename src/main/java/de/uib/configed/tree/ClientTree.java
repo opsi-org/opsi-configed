@@ -927,8 +927,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		}
 
-		List<String> membersOfDIRECTORY_NOT_ASSIGNED = new ArrayList<>();
-		group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, membersOfDIRECTORY_NOT_ASSIGNED);
+		List<String> membersOfDirectoryNotAssigned = new ArrayList<>();
+		group2Members.put(DIRECTORY_NOT_ASSIGNED_NAME, membersOfDirectoryNotAssigned);
 
 		// we build and link the groups
 		for (Entry<String, List<String>> entry : group2Members.entrySet()) {
@@ -959,7 +959,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 			if (hostingGroups.isEmpty()) // client is not in any DIRECTORY group
 			{
-				membersOfDIRECTORY_NOT_ASSIGNED.add(clientId);
+				membersOfDirectoryNotAssigned.add(clientId);
 
 				IconNode node = produceClientNode(clientId);
 				DIRECTORY_NOT_ASSIGNED.add(node);

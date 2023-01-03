@@ -1,9 +1,15 @@
 package de.uib.configed;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.text.Collator;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -889,6 +895,84 @@ public class Globals {
 		b.append("</html>");
 
 		return b.toString();
+
+	}
+
+	private static int intHalf(double x) {
+		return (int) (x / 2);
+	}
+
+	/**
+	 * A method to center a child component on a parent component The child
+	 * should already have / know its size
+	 * 
+	 * @param child  the Component to be centered
+	 * @param parent the component on which the child will be centered
+	 */
+	public static void centerOn(Component child, Component parent) {
+		int startX = 0;
+		int startY = 0;
+
+		Point parentPointTopLeft = null;
+
+		boolean centerOnParent = (parent != null);
+
+		if (centerOnParent) {
+			try {
+				parentPointTopLeft = parent.getLocationOnScreen();
+			} catch (Exception ex) {
+				logging.info(child, "centerOn " + child + " ex: " + ex);
+				centerOnParent = false;
+			}
+		}
+
+		logging.info(child, "master, centerOnParent " + parent + ", " + centerOnParent);
+
+		if (!centerOnParent) {
+			// center on Screen
+			if (Globals.mainFrame != null) {
+				child.setLocation(Globals.mainFrame.getX() + Globals.LOCATION_DISTANCE_X,
+						Globals.mainFrame.getY() + Globals.LOCATION_DISTANCE_Y);
+				logging.info(child, " ============================ ");
+				logging.info(child,
+						"setLocation based on mainFrame.getX(), .. "
+								+ (Globals.mainFrame.getX() + Globals.LOCATION_DISTANCE_X) + ", "
+								+ +(Globals.mainFrame.getY() + Globals.LOCATION_DISTANCE_Y));
+			} else {
+				GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+				GraphicsConfiguration gc = gd.getDefaultConfiguration();
+
+				child.setLocation((gc.getBounds().width - child.getWidth()) / 2 + gc.getBounds().x,
+						(gc.getBounds().height - child.getHeight()) / 2 + gc.getBounds().y);
+
+				logging.info(child, " ============================ ");
+				logging.info(child, " !centerOnParent, " + gc.getBounds());
+			}
+		} else {
+			logging.info(child, "centerOn  parent.getX() " + (parent.getX()));
+			logging.info(child, "centerOn  parent.getY() " + (parent.getY()));
+
+			logging.info(child, "centerOn (int) parentPointTopLeft.getX()  " + (int) parentPointTopLeft.getX());
+			logging.info(child, "centerOn (int) parentPointTopLeft.getY()  " + (int) parentPointTopLeft.getY());
+			logging.info(child, "centerOn parent.getWidth()  " + parent.getWidth() / 2);
+			logging.info(child, "centerOn parent.getHeight()  " + parent.getHeight() / 2);
+			logging.info(child, "centerOn child.getSize() " + child.getSize());
+
+			logging.info(child, "centerOn " + parent.getClass() + ", " + parent);
+
+			startX = (int) parentPointTopLeft.getX() + intHalf(parent.getWidth()) - intHalf(child.getSize().getWidth());
+			startY = (int) parentPointTopLeft.getY() + intHalf(parent.getHeight())
+					- intHalf(child.getSize().getHeight());
+
+			// problem: in applet in windows, we may leave the screen
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			logging.info(child, "centerOn screenSize " + screenSize);
+
+			child.setLocation(startX, startY);
+
+			logging.info(child, " ============================ ");
+			logging.info(child, " centerOnParent, startX, startY " + startX + ", " + startY);
+		}
 
 	}
 
