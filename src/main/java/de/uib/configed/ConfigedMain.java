@@ -3104,13 +3104,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				additionalconfigurationUpdateCollection.setMasterConfig(true);
 
-				mainFrame.panelHostConfig.initEditing(
-
-						"  " + myServer + " (configuration server)", (Map) additionalConfigs.get(0),
-						persist.getConfigOptions(), additionalConfigs, additionalconfigurationUpdateCollection, true,
+				mainFrame.panelHostConfig.initEditing("  " + myServer + " (configuration server)",
+						(Map) additionalConfigs.get(0), persist.getConfigOptions(), additionalConfigs,
+						additionalconfigurationUpdateCollection, true,
 						// editableOptions
 						PersistenceController.PROPERTYCLASSES_SERVER);
-
 			}
 
 			else {

@@ -209,9 +209,6 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		labelNeedSudo = new JLabel();
 		labelCommands = new JLabel();
 		jTextPaneommands = new JTextPane();
-		// btn_changeHelpPanelStatus= new de.uib.configed.gui.IconButton(
-
-		// ,
 
 		buttonTestCommand = new de.uib.configed.gui.IconButton(
 				configed.getResourceValue("SSHConnection.CommandControl.btnTestCommand"),

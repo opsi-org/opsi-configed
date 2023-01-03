@@ -18,6 +18,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.FEditList;
 import de.uib.utilities.table.DefaultListModelProducer;
@@ -75,7 +76,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 	}
 
-	public void re_init() {
+	public void reInit() {
 		listeditor.init();
 	}
 
@@ -99,9 +100,12 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		listeditor.init();
 
 		SwingUtilities.invokeLater(() -> {
+			listeditor.setLocation(
+					// Center frame on mainFrame
 
+					Globals.mainFrame.getX() + Globals.mainFrame.getWidth() / 2 - listeditor.getWidth() / 2,
+					Globals.mainFrame.getY() + Globals.mainFrame.getHeight() / 2 - listeditor.getHeight() / 2);
 			listeditor.setVisible(true);
-			listeditor.locateLeftTo(table);
 		});
 
 		usingListEditor = true;
@@ -247,12 +251,8 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	// MouseListener for textfield
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (e.getSource() == field && usingListEditor) {
-			if (e.getClickCount() > 1) {
-
-				listeditor.setVisible(true);
-			}
-		}
+		if (e.getSource() == field && usingListEditor && e.getClickCount() > 1)
+			listeditor.setVisible(true);
 	}
 
 	@Override

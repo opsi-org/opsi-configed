@@ -277,6 +277,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 		leaveOnCommit = b;
 	}
 
+	// TODO remove this method and center frames generally
 	public void locateLeftTo(Component master) {
 		int startX = 0;
 		int startY = 0;

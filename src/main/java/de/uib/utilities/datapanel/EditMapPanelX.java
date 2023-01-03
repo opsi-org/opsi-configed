@@ -67,7 +67,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 	ListModelProducer modelProducer;
 
 	MouseListener popupListener;
-	MouseListener popupEditOptionsListener;
 	MouseListener popupNoEditOptionsListener;
 
 	JMenuItem popupItemDeleteEntry0;
@@ -489,7 +488,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 
 			((SensitiveCellEditor) theCellEditor).setForbiddenValues(mapTableModel.getShowOnlyValues());
 
-			((SensitiveCellEditor) theCellEditor).re_init();
+			((SensitiveCellEditor) theCellEditor).reInit();
 		}
 
 		editableColumn.setCellEditor(theCellEditor);

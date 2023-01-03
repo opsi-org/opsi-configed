@@ -19,9 +19,7 @@ package de.uib.utilities.swing;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -43,8 +41,7 @@ import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 
-public class FEditList extends FEditObject
-		implements ListSelectionListener, ActionListener, KeyListener, MouseListener {
+public class FEditList extends FEditObject implements ListSelectionListener, MouseListener {
 	private javax.swing.JScrollPane scrollpane;
 	protected javax.swing.JList<Object> visibleList;
 
