@@ -55,9 +55,14 @@ public class CertificateManager {
 
 	public static void saveCertificate(File certificateFile) {
 		try {
+			String filename = ConfigedMain.HOST;
+
+			if (filename.contains(":")) {
+				filename = filename.replace(":", "_");
+			}
+
 			Files.copy(certificateFile.toPath(),
-					new File(configed.savedStatesLocationName, ConfigedMain.HOST + "-" + Globals.CERTIFICATE_FILE)
-							.toPath(),
+					new File(configed.savedStatesLocationName, filename + "-" + Globals.CERTIFICATE_FILE).toPath(),
 					StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			logging.error("unable to save certificate");
