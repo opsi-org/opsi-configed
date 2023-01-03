@@ -26,7 +26,7 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 
 	protected String tooltipPrefix = "";
 
-	protected int FILL_LENGTH = 20;
+	protected static final int FILL_LENGTH = 20;
 
 	protected java.awt.Color uniformColor = null;
 	protected java.awt.Color uniformSelectedColor = null;
@@ -53,7 +53,8 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 	{
 		Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-		if (c == null || !(c instanceof JComponent))
+		// condition true if c is null
+		if (!(c instanceof JComponent))
 			return c;
 
 		JComponent jc = (JComponent) c;

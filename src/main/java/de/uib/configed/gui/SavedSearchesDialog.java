@@ -24,7 +24,7 @@ import de.uib.utilities.thread.WaitCursor;
 public class SavedSearchesDialog extends FEditList {
 	private SelectionManager manager;
 	private List<String> result;
-	private DefaultListModel model;
+	private DefaultListModel<Object> model;
 
 	public SavedSearchesDialog() {
 		setTitle(configed.getResourceValue("SavedSearchesDialog.title") + " (" + Globals.APPNAME + ")");
@@ -33,7 +33,7 @@ public class SavedSearchesDialog extends FEditList {
 		manager = new SelectionManager(null);
 		result = new LinkedList<>();
 
-		model = new DefaultListModel();
+		model = new DefaultListModel<>();
 
 		setEditable(true);
 		setListModel(model);
@@ -77,6 +77,7 @@ public class SavedSearchesDialog extends FEditList {
 				removeSelectedEntry();
 			}
 		});
+
 		buttonRemove.setToolTipText(configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
 
 		buttonAdd.setEnabled(true);

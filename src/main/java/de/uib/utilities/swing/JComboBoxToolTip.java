@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.JComboBox;
 import javax.swing.JList;
@@ -84,9 +85,9 @@ public class JComboBoxToolTip extends JComboBox<String> {
 		}
 
 		if (selectValues != null) {
-			for (String key : selectValues.keySet()) {
-				addItem(key);
-				tooltips.add(selectValues.get(key));
+			for (Entry<String, String> selectEntry : selectValues.entrySet()) {
+				addItem(selectEntry.getKey());
+				tooltips.add(selectEntry.getValue());
 			}
 
 		}

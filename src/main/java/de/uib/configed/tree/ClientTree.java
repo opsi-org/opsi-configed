@@ -1396,7 +1396,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 					+ " <<, " + configed.getResourceValue("ClientTree.selectCorrectLocation"));
 			fList.init(new java.awt.Dimension(640, 60));
 
-			fList.locateLeftTo(Globals.mainContainer);
+			fList.centerOn(Globals.mainContainer);
 			fList.setModal(true);
 
 			if (preSelected != null) {

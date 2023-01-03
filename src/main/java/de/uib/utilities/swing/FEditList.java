@@ -43,11 +43,15 @@ import de.uib.utilities.swing.list.StandardListCellRenderer;
 
 public class FEditList extends FEditObject implements ListSelectionListener, MouseListener {
 	private javax.swing.JScrollPane scrollpane;
-	protected javax.swing.JList<Object> visibleList;
+
+	// The generic is Object here, because it could come from all kinds of objects,
+	// not only Strings
+	// TODO: Maybe make the class generic?
+	protected JList<Object> visibleList;
 
 	private JTextComponent tracker;
 
-	private ListModel initialModel;
+	private ListModel<Object> initialModel;
 	private List<Object> initiallySelected;
 
 	protected Object selValue = "";
@@ -113,7 +117,7 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 		visibleList.setCellRenderer(render);
 	}
 
-	public void setListModel(ListModel model) {
+	public void setListModel(ListModel<Object> model) {
 
 		visibleList.setModel(model);
 		initialModel = model;
@@ -160,7 +164,7 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 		if (toSelect == null)
 			return;
 
-		ListModel model = visibleList.getModel();
+		ListModel<Object> model = visibleList.getModel();
 
 		for (int i = 0; i < model.getSize(); i++) {
 			Object element = model.getElementAt(i);
@@ -206,11 +210,11 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 
 	protected void addElement(Object element) {
 
-		ListModel limo = visibleList.getModel();
+		ListModel<Object> limo = visibleList.getModel();
 		if (limo instanceof DefaultListModel) {
-			if (!((DefaultListModel) limo).contains(element)) {
-				((DefaultListModel) limo).addElement(element);
-				List list = new ArrayList<>();
+			if (!((DefaultListModel<Object>) limo).contains(element)) {
+				((DefaultListModel<Object>) limo).addElement(element);
+				List<Object> list = new ArrayList<>();
 				list.add(element);
 				addSelectedValues(list);
 			}

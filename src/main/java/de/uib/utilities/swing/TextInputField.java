@@ -23,7 +23,7 @@ public class TextInputField extends JPanel
 {
 
 	protected JTextField textfield;
-	protected JComboBox combo;
+	protected JComboBox<String> combo;
 	protected List<String> proposedValues;
 	private Character[] orderedBeginChars;
 
@@ -80,7 +80,7 @@ public class TextInputField extends JPanel
 			}
 		}
 
-		combo = new JComboBox<>(this.proposedValues.toArray());
+		combo = new JComboBox<>(this.proposedValues.toArray(new String[0]));
 
 		JTextField comboField = (JTextField) combo.getEditor().getEditorComponent();
 		comboField.getCaret().setBlinkRate(0);

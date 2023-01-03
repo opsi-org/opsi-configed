@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -104,7 +105,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	final Comparator comparator;
 	Map<String, Mapping<Integer, String>> mappedValues;
 
-	public static enum SearchInputType {
+	public enum SearchInputType {
 		LINE, PROGRESSIVE
 	}
 
@@ -428,6 +429,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			popupMarkAndFilter = new JMenuItemFormatted();
 			popupEmptySearchfield = new JMenuItemFormatted();
 		} catch (Exception ex) {
+			// TODO WHAT? WHY DOING EXACTLY THE SAME AGAIN?
 			// we often get a class cast error
 			popupSearch = new JMenuItemFormatted();
 			popupSearchNext = new JMenuItemFormatted();
@@ -637,9 +639,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private void buildMenuSearchfield() {
 		logging.info(this, "buildMenuSearchfield");
 		searchMenu = new JPopupMenu();
-		for (JMenuItemFormatted menuItem : searchMenuEntries.keySet()) {
-			if (searchMenuEntries.get(menuItem))
-				searchMenu.add(menuItem);
+		for (Entry<JMenuItemFormatted, Boolean> searchMenuEntry : searchMenuEntries.entrySet()) {
+			if (searchMenuEntry.getValue())
+				searchMenu.add(searchMenuEntry.getKey());
 		}
 		fieldSearch.setComponentPopupMenu(searchMenu);
 		logging.info(this, "buildMenuSearchfield " + searchMenu);
@@ -979,17 +981,15 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		targetModel.clearSelection();
 		searchTheRow(0, true);
 
-		{
-			int startFoundrow = foundrow;
+		int startFoundrow = foundrow;
 
-			foundrow = foundrow + 1;
+		foundrow = foundrow + 1;
 
-			while (foundrow > startFoundrow) {
-				getSelectedAndSearch(true, true); // adding the next row to selection
+		while (foundrow > startFoundrow) {
+			getSelectedAndSearch(true, true); // adding the next row to selection
 
-			}
-			targetModel.setValueIsAdjusting(false);
 		}
+		targetModel.setValueIsAdjusting(false);
 
 	}
 
@@ -1002,11 +1002,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		if (!filtering)
 			return;
 
-		if (!disabledSinceWeAreInFilteredMode()) {
-			if (!fieldSearch.getText().equals(""))
-				markAll();
-
-		}
+		if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().equals(""))
+			markAll();
 	}
 
 	/**
@@ -1094,31 +1091,26 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		// final de.uib.utilities.thread.WaitCursor waitCursor = new
 
-		{
-
-			if (value.toString().length() < 2) {
-				setRow(0, false, select);
-			}
-
-			else {
-				foundrow = findViewRowFromValue(startrow, value, selectedCols, fulltextSearch, regexSearch,
-						combineCols);
-
-				if (foundrow > -1) {
-					setRow(foundrow, addSelection, select);
-				} else {
-
-					if (startrow > 0) {
-
-						searchTheRow(0, addSelection, select);
-					} else
-						setRow(0, false, select);
-				}
-			}
-
-			fieldSearch.getCaret().setVisible(true);
-
+		if (value.length() < 2) {
+			setRow(0, false, select);
 		}
+
+		else {
+			foundrow = findViewRowFromValue(startrow, value, selectedCols, fulltextSearch, regexSearch, combineCols);
+
+			if (foundrow > -1) {
+				setRow(foundrow, addSelection, select);
+			} else {
+
+				if (startrow > 0) {
+
+					searchTheRow(0, addSelection, select);
+				} else
+					setRow(0, false, select);
+			}
+		}
+
+		fieldSearch.getCaret().setVisible(true);
 
 	}
 

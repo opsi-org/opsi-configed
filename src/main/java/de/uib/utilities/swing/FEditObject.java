@@ -13,8 +13,6 @@ package de.uib.utilities.swing;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -277,46 +275,8 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 		leaveOnCommit = b;
 	}
 
-	// TODO remove this method and center frames generally
-	public void locateLeftTo(Component master) {
-		int startX = 0;
-		int startY = 0;
-
-		if (master == null) {
-			// center on Screen
-
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
-			startX = (screenSize.width - getSize().width) / 2;
-
-			startY = (screenSize.height - getSize().height) / 2;
-
-		} else {
-			Point masterOnScreen = new Point(50, 50);
-
-			try {
-				masterOnScreen = master.getLocationOnScreen();
-			} catch (Exception ex) {
-				logging.info(this, "not located master " + master + " ex: " + ex);
-			}
-
-			logging.debug(this, "centerOn (int) masterOnScreen.getX()  " + (int) masterOnScreen.getX());
-			logging.debug(this, "centerOn (int) masterOnScreen.getY()  " + (int) masterOnScreen.getY());
-			logging.debug(this, "centerOn master.getWidth()  " + master.getWidth() / 2);
-			logging.debug(this, "centerOn master.getHeight()  " + master.getHeight() / 2);
-			logging.debug(this, "centerOn this.getSize() " + getSize());
-
-			logging.debug(this, "centerOn " + master.getClass() + ", " + master);
-
-			startX = (int) masterOnScreen.getX() - (int) (getSize().getWidth()) - Globals.MIN_HGAP_SIZE;
-			startY = (int) masterOnScreen.getY();
-
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			logging.debug(this, "centerOn screenSize " + screenSize);
-
-		}
-
-		setLocation(startX, startY);
+	public void centerOn(Component master) {
+		Globals.centerOn(this, master);
 	}
 
 	public boolean init(Dimension usableAreaSize) {
