@@ -394,6 +394,9 @@ public class Globals {
 	public static final int WIDTH_FRAME_RENAME_CLIENT = 350;
 	public static final int HEIGHT_FRAME_RENAME_CLIENT = 200;
 
+	public static final int WIDTH_INFO_LOG_FILE = 400;
+	public static final int HEIGHT_INFO_LOG_FILE = 200;
+
 	public static final Dimension graphicButtonDimension = new Dimension(GRAPHIC_BUTTON_WIDTH, GRAPHIC_BUTTON_HEIGHT);
 
 	public static final int DATE_FORMAT_STYLE_PATTERN = DateFormat.LONG;

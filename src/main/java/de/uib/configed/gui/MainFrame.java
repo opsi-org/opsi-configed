@@ -2871,11 +2871,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 						configed.getResourceValue("MainFrame.showLogFileClose") },
 				new Icon[] { null, Globals.createImageIcon("images/document-view16.png", ""),
 						Globals.createImageIcon("images/cancel16_small.png", "") },
-				500, 150) {
+				Globals.WIDTH_INFO_LOG_FILE, Globals.HEIGHT_INFO_LOG_FILE) {
 			@Override
 			public void doAction1() {
 				getTextComponent().copy();
-
 			}
 
 			@Override
