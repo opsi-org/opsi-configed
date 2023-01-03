@@ -400,6 +400,9 @@ public class Globals {
 	public static final int REACHABLE_INFO_FRAME_WIDTH = 300;
 	public static final int REACHABLE_INFO_FRAME_HEIGHT = 220; // Just enough so that the button is not hidden
 
+	public static final int POPUP_ON_CLIENTS_FRAME_WIDTH = 350;
+	public static final int POPUP_ON_CLIENTS_FRAME_HEIGHT = 120;
+
 	public static final Dimension graphicButtonDimension = new Dimension(GRAPHIC_BUTTON_WIDTH, GRAPHIC_BUTTON_HEIGHT);
 
 	public static final int DATE_FORMAT_STYLE_PATTERN = DateFormat.LONG;

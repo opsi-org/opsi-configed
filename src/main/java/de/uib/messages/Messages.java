@@ -18,10 +18,10 @@ import utils.ResourceBundleUtf8;
 
 public class Messages {
 	public static final String APPNAME = "configed";
-	private static String BUNDLE_NAME = "de/uib/messages/configed";
-	private static String EXTRA_LOCALE = null;
+	private static final String BUNDLE_NAME = "de/uib/messages/configed";
+	private static final String EXTRA_LOCALE = null;
 	private static final String LOCALISATIONS_CONF = "valid_localisations.conf";
-	private static Boolean UTF8_HACK = null;
+	private static Boolean utf8Hack = null;
 
 	static List<LocaleRepresentation> existingLocales;
 	static List<String> existingLocalesNames;
@@ -63,7 +63,7 @@ public class Messages {
 
 			if (selectedLocaleString == null) {
 				// default locale not found
-				produceLocale_enUS();
+				produceLocaleEnUS();
 				selectedLocaleString = findSelectedLocale(myLocale.getLanguage(), myLocale.getCountry());
 			}
 		}
@@ -97,7 +97,7 @@ public class Messages {
 	}
 
 	private static void checkUTF8() {
-		if (UTF8_HACK == null) {
+		if (utf8Hack == null) {
 			String javaVersionOnlyNumbers0 = System.getProperty("java.version");
 
 			logging.debug("java version " + javaVersionOnlyNumbers0);
@@ -108,8 +108,8 @@ public class Messages {
 
 			Integer differenceToJava9 = Globals.compareDottedNumberStrings("9", javaVersionOnlyNumbers);
 			logging.debug(" version difference to java 9 is: " + differenceToJava9);
-			UTF8_HACK = (differenceToJava9 > 0);
-			logging.debug(" we will use the UTF8 hack " + UTF8_HACK);
+			utf8Hack = (differenceToJava9 > 0);
+			logging.debug(" we will use the UTF8 hack " + utf8Hack);
 		}
 	}
 
@@ -118,7 +118,7 @@ public class Messages {
 
 		try {
 			logging.info("Messages, getResource from " + BUNDLE_NAME);
-			if (UTF8_HACK)
+			if (utf8Hack)
 				messages = ResourceBundleUtf8.getBundle(BUNDLE_NAME, myLocale);
 			else
 				messages = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
@@ -134,10 +134,12 @@ public class Messages {
 	public static ResourceBundle getResourceEN() throws MissingResourceException {
 		checkUTF8();
 
-		if (UTF8_HACK)
-			messagesEN = ResourceBundleUtf8.getBundle(BUNDLE_NAME, new Locale("en", "US"));
+		if (utf8Hack)
+			messagesEN = ResourceBundleUtf8.getBundle(BUNDLE_NAME,
+					new Locale.Builder().setLanguage("en").setRegion("US").build());
 		else
-			messagesEN = ResourceBundle.getBundle(BUNDLE_NAME, new Locale("en", "US"));
+			messagesEN = ResourceBundle.getBundle(BUNDLE_NAME,
+					new Locale.Builder().setLanguage("en").setRegion("US").build());
 		myLocaleCharacteristicsEN = new ArrayList<>();
 		myLocaleCharacteristicsEN.add("en_US");
 		myLocaleCharacteristicsEN.add("en");
@@ -155,17 +157,17 @@ public class Messages {
 	}
 
 	private static Locale produceLocale(String language) {
-		myLocale = new Locale(language);
+		myLocale = new Locale.Builder().setLanguage(language).build();
 		return giveLocale("language " + language);
 	}
 
 	private static Locale produceLocale(String language, String country) {
-		myLocale = new Locale(language, country);
+		myLocale = new Locale.Builder().setLanguage(language).setRegion(country).build();
 		return giveLocale("language " + language + ", country " + country);
 	}
 
-	private static Locale produceLocale_enUS() {
-		myLocale = new Locale("en", "US");
+	private static Locale produceLocaleEnUS() {
+		myLocale = new Locale.Builder().setLanguage("en").setRegion("US").build();
 		return giveLocale("fallback (en_US)");
 	}
 

@@ -2552,10 +2552,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		};
 
 		fText.setTitle(configed.getResourceValue("MainFrame.popupFrameTitle"));
-		fText.setAreaDimension(new Dimension(350, 130));
 		fText.init();
-		fText.setVisible(true);
+		fText.setSize(Globals.POPUP_ON_CLIENTS_FRAME_WIDTH, Globals.POPUP_ON_CLIENTS_FRAME_HEIGHT);
 		fText.centerOn(this);
+		fText.setVisible(true);
 	}
 
 	public void shutdownClientsAction() {

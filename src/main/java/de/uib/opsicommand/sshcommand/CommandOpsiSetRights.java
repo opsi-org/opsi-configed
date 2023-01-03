@@ -11,10 +11,10 @@ import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHOpsiSetRightsParameterDialog;
 import de.uib.utilities.logging.logging;
 
-public class CommandOpsiSetRights extends SSHCommand_Template
-		implements SSHCommand, SSHMultiCommand, SSHCommandNeedParameter {
-	private String baseName = "opsi-set-rights ";
-	private String command = "opsi-set-rights ";
+public class CommandOpsiSetRights extends SSHCommand_Template implements SSHCommandNeedParameter {
+	private static final String BASE_NAME = "opsi-set-rights ";
+	private String command = BASE_NAME;
+
 	protected FGeneralDialog dialog = null;
 	private boolean needSudo = true;
 	private boolean needParameter = true;
@@ -34,7 +34,7 @@ public class CommandOpsiSetRights extends SSHCommand_Template
 
 	public CommandOpsiSetRights(String d) {
 		setDir(d);
-		command = baseName + dir;
+		command = BASE_NAME + dir;
 		if (d.length() > 0)
 			if (d.charAt(d.length() - 1) != '/')
 				d = d + "/";
@@ -61,7 +61,7 @@ public class CommandOpsiSetRights extends SSHCommand_Template
 
 	@Override
 	public String getBasicName() {
-		return baseName;
+		return BASE_NAME;
 	}
 
 	@Override
