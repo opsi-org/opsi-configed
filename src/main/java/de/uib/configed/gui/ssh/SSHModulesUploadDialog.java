@@ -18,10 +18,6 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 	private static String title = configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.title");
 
 	public SSHModulesUploadDialog() {
-		this(null);
-	}
-
-	public SSHModulesUploadDialog(CommandModulesUpload com) {
 		super(title, new CommandModulesUpload());
 		this.setVisible(true);
 		logging.info(this, "SSHModulesUploadDialog build");
@@ -43,23 +39,14 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 		cb_copy_to_modules_d.setSelected(false);
 
 		SSHConnectExec testFile = new SSHConnectExec();
-		String result = testFile.exec(new Empty_Command(factory.str_command_fileexists_notremove.replaceAll(
+		testFile.exec(new Empty_Command(factory.str_command_fileexists_notremove.replace(
 				factory.str_replacement_filename, ((CommandModulesUpload) command).unofficial_modules_directory) // /etc/opsi/modules.d
 		), false);
-		/*
-		 * if (result.trim().equals(factory.str_file_exists))
-		 * {
-		 * lbl_copy_to_modules_d.setVisible(true);
-		 * cb_copy_to_modules_d.setVisible(true);
-		 * cb_copy_to_modules_d.setSelected(true);
-		 * }
-		 * else
-		 */
-		{
-			lbl_copy_to_modules_d.setVisible(false);
-			cb_copy_to_modules_d.setVisible(false);
-			cb_copy_to_modules_d.setSelected(false);
-		}
+
+		lbl_copy_to_modules_d.setVisible(false);
+		cb_copy_to_modules_d.setVisible(false);
+		cb_copy_to_modules_d.setSelected(false);
+
 	}
 
 	/**
@@ -85,16 +72,16 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 
 	@Override
 	protected String doAction1_additional_setPath() {
-		String modules_server_path = ((CommandModulesUpload) command).actually_modules_directory;
+		String modulesServerPath = ((CommandModulesUpload) command).actually_modules_directory;
 		if (cb_copy_to_modules_d.isVisible() && cb_copy_to_modules_d.isSelected()) {
-			modules_server_path = ((CommandModulesUpload) command).unofficial_modules_directory;
-			command.setTargetPath(modules_server_path);
+			modulesServerPath = ((CommandModulesUpload) command).unofficial_modules_directory;
+			command.setTargetPath(modulesServerPath);
 			command.setTargetFilename(filechooser_local.getSelectedFile().getName());
 		} else {
 			command.setTargetPath(((CommandModulesUpload) command).actually_modules_directory);
-			command.setTargetFilename(((CommandModulesUpload) command).DEFAULT_FILENAME);
+			command.setTargetFilename(CommandModulesUpload.DEFAULT_FILENAME);
 		}
-		return modules_server_path;
+		return modulesServerPath;
 	}
 
 	@Override

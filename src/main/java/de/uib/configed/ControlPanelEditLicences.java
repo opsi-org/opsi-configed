@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
-import java.util.Vector;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
@@ -50,22 +48,24 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 
 	}
 
+	@Override
 	public TabClientAdapter getTabClient() {
 		return thePanel;
 	}
 
+	@Override
 	public void init() {
 		updateCollection = new TableUpdateCollection();
 
-		Vector<String> columnNames;
-		Vector<String> classNames;
+		List<String> columnNames;
+		List<String> classNames;
 
 		// panelKeys
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add("softwareLicenseId");
 		columnNames.add("licensePoolId");
 		columnNames.add("licenseKey");
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
@@ -119,6 +119,7 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 		// updates
 		thePanel.panelKeys.setUpdateController(
 				new MapItemsUpdateController(thePanel.panelKeys, modelLicencekeys, new MapBasedUpdater() {
+					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
 						logging.info(this, "sendUpdate " + rowmap);
 
@@ -126,6 +127,7 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 								(String) rowmap.get("licensePoolId"), (String) rowmap.get("licenseKey"));
 					}
 
+					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						logging.info(this, "sendDelete " + rowmap);
 						modelLicencekeys.requestReload();
@@ -135,14 +137,14 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 				}, updateCollection));
 
 		// panelSoftwarelicences
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add(LicenceEntry.idKEY);
 		columnNames.add(LicenceEntry.licenceContractIdKEY);
 		columnNames.add(LicenceEntry.typeKEY);
 		columnNames.add(LicenceEntry.maxInstallationsKEY);
 		columnNames.add(LicenceEntry.boundToHostKEY);
 		columnNames.add(LicenceEntry.expirationDateKEY);
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
@@ -165,23 +167,24 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 
 		// --- special treatment of columns
 
-		// "license type"
 		col = thePanel.panelSoftwarelicences.getColumnModel().getColumn(2);
 		JComboBox<String> comboLicenceTypes = new JComboBox<>(LicenceEntry.LICENCE_TYPES);
 		comboLicenceTypes.setFont(Globals.defaultFontBig);
 		col.setCellEditor(new DefaultCellEditor(comboLicenceTypes));
 
-		// "bound to host"
 		col = thePanel.panelSoftwarelicences.getColumnModel().getColumn(4);
 		JComboBox<String> combo = new JComboBox<>();
 		combo.setFont(Globals.defaultFontBig);
 
-		col.setCellEditor(new AdaptingCellEditor(combo, (row, column) -> {
-			List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(persist.getHostInfoCollections()
-					.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))
-							.keySet());
-			choicesAllHosts.set(0, "");
-			return new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
+		col.setCellEditor(new AdaptingCellEditor(comboLP0, (row, column) -> {
+			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
+					mainController.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
+
+			if (poolIds.size() <= 1)
+				poolIds.add("");
+			// hack, since combo box shows nothing otherwise
+
+			return new DefaultComboBoxModel<>(poolIds.toArray(String[]::new));
 		}));
 
 		col = thePanel.panelSoftwarelicences.getColumnModel().getColumn(5);
@@ -250,6 +253,7 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 
 		thePanel.panelSoftwarelicences.setUpdateController(new MapItemsUpdateController(thePanel.panelSoftwarelicences,
 				modelSoftwarelicences, new MapBasedUpdater() {
+					@Override
 					public String sendUpdate(Map<String, Object> m) {
 
 						return persist.editSoftwareLicence((String) m.get("softwareLicenseId"),
@@ -258,6 +262,7 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 								(String) m.get("boundToHost"), (String) m.get("expirationDate"));
 					}
 
+					@Override
 					public boolean sendDelete(Map<String, Object> m) {
 						modelSoftwarelicences.requestReload();
 						return persist.deleteSoftwareLicence((String) m.get("softwareLicenseId"));
@@ -265,14 +270,14 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 				}, updateCollection));
 
 		// panelLicencecontracts
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add("licenseContractId");
 		columnNames.add("partner");
 		columnNames.add("conclusionDate");
 		columnNames.add("notificationDate");
 		columnNames.add("expirationDate");
 		columnNames.add("notes");
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
@@ -396,6 +401,7 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 
 		thePanel.panelLicencecontracts.setUpdateController(new MapItemsUpdateController(thePanel.panelLicencecontracts,
 				modelLicencecontracts, new MapBasedUpdater() {
+					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
 						return persist.editLicenceContract((String) rowmap.get("licenseContractId"),
 								(String) rowmap.get("partner"), (String) rowmap.get("conclusionDate"),
@@ -403,6 +409,7 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 								(String) rowmap.get("notes"));
 					}
 
+					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencecontracts.requestReload();
 						return persist.deleteLicenceContract((String) rowmap.get("licenseContractId"));

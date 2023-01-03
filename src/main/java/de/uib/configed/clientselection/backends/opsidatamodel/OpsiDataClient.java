@@ -11,7 +11,6 @@ import java.util.Set;
 
 import de.uib.configed.clientselection.Client;
 import de.uib.configed.type.SWAuditClientEntry;
-import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.logging.logging;
 
 public class OpsiDataClient implements Client {
@@ -27,7 +26,6 @@ public class OpsiDataClient implements Client {
 	private List productList; // The products (a list of maps)
 	private List<String> productNames; // Like above, but just the productIDs
 	private List<SWAuditClientEntry> swauditList;
-	private PersistenceController controller;
 
 	private Map softwareValue; // current software to be checked
 	private Map swauditValue; // current swaudit to be checked
@@ -36,12 +34,11 @@ public class OpsiDataClient implements Client {
 
 	public OpsiDataClient(String id) {
 		hostId = id;
-		groupsSet = new HashSet();
-		productList = new LinkedList();
-		productNames = new ArrayList<String>();
-		swauditList = new LinkedList<SWAuditClientEntry>();
-		hardwareInfo = new LinkedList<Map<String, Object>>();
-		controller = null;
+		groupsSet = new HashSet<>();
+		productList = new LinkedList<>();
+		productNames = new ArrayList<>();
+		swauditList = new LinkedList<>();
+		hardwareInfo = new LinkedList<>();
 	}
 
 	/** Set the map with the information about hosts */
@@ -76,11 +73,6 @@ public class OpsiDataClient implements Client {
 		this.swauditList = swauditList;
 	}
 
-	/** Set the controller (to get the information) */
-	public void setController(PersistenceController controller) {
-		this.controller = controller;
-	}
-
 	/** Get a map by name */
 	public Map getMap(String map) {
 		if (map.equals(HOSTINFO_MAP))
@@ -94,10 +86,12 @@ public class OpsiDataClient implements Client {
 	}
 
 	/** Get the ID of this client */
+	@Override
 	public String getId() {
 		return hostId;
 	}
 
+	@Override
 	public String toString() {
 		return hostId + " ( " + this.getClass() + " )";
 	}
@@ -162,9 +156,9 @@ public class OpsiDataClient implements Client {
 		if (hardwareIterator == null) {
 			logging.debug(this, "getHardwareMap key " + key);
 			logging.debug(this, "getHardwareMap hardwareInfo " + hardwareInfo);
-			HashSet<Map<String, Object>> values = new HashSet<Map<String, Object>>();
+			HashSet<Map<String, Object>> values = new HashSet<>();
 			for (Map<String, Object> map : hardwareInfo)
-				if (key.equals((String) map.get("hardwareClass")))
+				if (key.equals(map.get("hardwareClass")))
 					values.add(map);
 			logging.debug(this, values.toString());
 
@@ -175,6 +169,6 @@ public class OpsiDataClient implements Client {
 		if (hardwareValue != null) {
 			return hardwareValue;
 		}
-		return new HashMap();
+		return new HashMap<>();
 	}
 }

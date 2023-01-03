@@ -26,10 +26,12 @@ public class CommandModulesUpload extends CommandSFTPUpload
 		this("");
 	}
 
+	@Override
 	public String getTitle() {
 		return title;
 	}
 
+	@Override
 	public String getDescription() {
 		if (description.equals(""))
 			description = "copy " + sourcePath + sourceFilename + " to " + targetPath + targetFilename
@@ -59,7 +61,7 @@ public class CommandModulesUpload extends CommandSFTPUpload
 
 	@Override
 	public void startParameterGui(ConfigedMain main) {
-		// dialog = new SSHModulesUploadDialog(main);
+
 		dialog = new SSHModulesUploadDialog();
 	}
 

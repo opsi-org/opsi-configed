@@ -1,6 +1,7 @@
 package de.uib.configed.type.licences;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import de.uib.utilities.datastructure.Relation;
@@ -9,7 +10,7 @@ import de.uib.utilities.datastructure.StringValuedRelationElement;
 public class Table_LicenceContracts extends Relation {
 
 	/*
-	 * describe LICENSE_CONTRACT ;
+	 * describe LICENSE_CONTRACT 
 	 * | Field | Type | Null | Key | Default | Extra
 	 * | licenseContractId | varchar(100) | NO | PRI | NULL |
 	 * | partner | varchar(100) | YES | | NULL |
@@ -35,10 +36,10 @@ public class Table_LicenceContracts extends Relation {
 	public static final String opsiNOMtype = "LicenseContract";
 	public static final String typeKEY = "type";
 
-	public static final java.util.List<String> DB_ATTRIBUTES;
-	// public static final String[] ATTRIBUTES_asArray;
+	public static final List<String> DB_ATTRIBUTES;
+
 	static {
-		DB_ATTRIBUTES = new LinkedList<String>();
+		DB_ATTRIBUTES = new LinkedList<>();
 		DB_ATTRIBUTES.add(idDBKEY);
 		DB_ATTRIBUTES.add(partnerKEY);
 		DB_ATTRIBUTES.add(conclusionDateKEY);
@@ -48,22 +49,22 @@ public class Table_LicenceContracts extends Relation {
 		DB_ATTRIBUTES.add(descriptionKEY);
 	}
 
-	public static final java.util.List<String> INTERFACED_ATTRIBUTES;
+	public static final List<String> INTERFACED_ATTRIBUTES;
 	static {
-		INTERFACED_ATTRIBUTES = new LinkedList<String>();
+		INTERFACED_ATTRIBUTES = new LinkedList<>();
 		INTERFACED_ATTRIBUTES.add(idDBKEY);
 		INTERFACED_ATTRIBUTES.add(partnerKEY);
 		INTERFACED_ATTRIBUTES.add(conclusionDateKEY);
 		INTERFACED_ATTRIBUTES.add(notificationDateKEY);
 		INTERFACED_ATTRIBUTES.add(expirationDateKEY);
 		INTERFACED_ATTRIBUTES.add(notesKEY);
-		// INTERFACED_ATTRIBUTES.add(descriptionKEY);
+
 	}
 
-	public static final java.util.List<String> ALLOWED_ATTRIBUTES;
-	// public static final String[] ATTRIBUTES_asArray;
+	public static final List<String> ALLOWED_ATTRIBUTES;
+
 	static {
-		ALLOWED_ATTRIBUTES = new LinkedList<String>(DB_ATTRIBUTES);
+		ALLOWED_ATTRIBUTES = new LinkedList<>(DB_ATTRIBUTES);
 		ALLOWED_ATTRIBUTES.add(idKEY);
 		ALLOWED_ATTRIBUTES.add(identKEY);
 		ALLOWED_ATTRIBUTES.add(typeKEY);
@@ -73,7 +74,7 @@ public class Table_LicenceContracts extends Relation {
 		super(INTERFACED_ATTRIBUTES);
 	}
 
-	// @Override
+	@Override
 	public StringValuedRelationElement integrateRaw(Map<String, Object> m) {
 		StringValuedRelationElement rowmap = new StringValuedRelationElement();
 		rowmap.setAllowedAttributes(INTERFACED_ATTRIBUTES);

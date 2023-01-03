@@ -3,7 +3,7 @@ package de.uib.configed.clientselection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
+import java.util.NavigableSet;
 
 import de.uib.utilities.logging.logging;
 
@@ -13,7 +13,6 @@ import de.uib.utilities.logging.logging;
  * implementation may differ between the data sources.
  */
 public abstract class Backend {
-	private static Backend currentBackend = null;
 
 	/*
 	 * These variables tell you which data you have to fetch. E.g. if hasSoftware is
@@ -38,11 +37,11 @@ public abstract class Backend {
 		List<Client> clients = getClients();
 		logging.debug(this, "Number of clients to filter: " + clients.size());
 
-		List<String> matchingClients = new LinkedList<String>();
+		List<String> matchingClients = new LinkedList<>();
 		for (Client client : clients) {
-			// logging.debug( this, "Checking client " +client.getId()+"..." );
+
 			if (operation.doesMatch(client)) {
-				// logging.debug( this, "Client did match!" );
+
 				matchingClients.add(client.getId());
 			}
 		}
@@ -59,7 +58,7 @@ public abstract class Backend {
 
 		if (operation instanceof SelectGroupOperation) {
 			SelectGroupOperation groupOperation = (SelectGroupOperation) operation;
-			List<SelectOperation> children = new LinkedList<SelectOperation>();
+			List<SelectOperation> children = new LinkedList<>();
 			for (SelectOperation child : groupOperation.getChildOperations())
 				children.add((SelectOperation) createExecutableOperation(child));
 			return (ExecutableOperation) createGroupOperation(groupOperation, children);
@@ -100,7 +99,7 @@ public abstract class Backend {
 	/**
 	 * Get a list of product IDs of the opsi products.
 	 */
-	public abstract TreeSet<String> getProductIDs();
+	public abstract NavigableSet<String> getProductIDs();
 
 	/**
 	 * Get a map, with the hardware as key and a list of properties as value.

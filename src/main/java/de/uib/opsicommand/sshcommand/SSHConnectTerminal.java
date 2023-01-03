@@ -3,6 +3,7 @@ package de.uib.opsicommand.sshcommand;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FilterInputStream;
@@ -11,6 +12,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JTextField;
 
@@ -32,7 +34,7 @@ public class SSHConnectTerminal extends SSHConnect {
 	private KeyListener inputKeyListener = null;
 	private ActionListener connectionKeyListener = null;
 	private OutputStream out = null;
-	public static final String SOME_COMMAND = "/bin/bash"; // "opsi-admin --version";
+	public static final String SOME_COMMAND = "/bin/bash";
 	String currentDirectory = "";
 	boolean getCurrentDirectorySilent = false;
 
@@ -75,7 +77,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		public void write(byte[] buf, int off, int len) {
 			try {
 				String str = new String(buf, off, len, "UTF-8");
-				theDialog.append(str, theDialog.getInputField());
+				theDialog.append(str);
 			} catch (UnsupportedEncodingException ue) {
 				logging.warning("UnsupportedEncodingException", ue);
 			}
@@ -86,7 +88,7 @@ public class SSHConnectTerminal extends SSHConnect {
 	public void connect() {
 		if (!isConnectionAllowed()) {
 			logging.error(this, "connection forbidden.");
-			// return null;
+
 		} else {
 
 			logging.info(this, "connect ...");
@@ -99,7 +101,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				logging.info(this, "connect user@host " + SSHConnectionInfo.getInstance().getUser() + "@"
 						+ SSHConnectionInfo.getInstance().getHost());
 				if (SSHConnectionInfo.getInstance().usesKeyfile()) {
-					if (SSHConnectionInfo.getInstance().getKeyfilePassphrase() != "")
+					if (!SSHConnectionInfo.getInstance().getKeyfilePassphrase().equals(""))
 						jsch.addIdentity(SSHConnectionInfo.getInstance().getKeyfilePath(),
 								SSHConnectionInfo.getInstance().getKeyfilePassphrase());
 					jsch.addIdentity(SSHConnectionInfo.getInstance().getKeyfilePath());
@@ -118,42 +120,23 @@ public class SSHConnectTerminal extends SSHConnect {
 							"connect useKeyfile " + SSHConnectionInfo.getInstance().usesKeyfile() + " use password …");
 				}
 				// Do not use StrictHostKeyChecking=no. See JSch SFTP security with
-				// session.setConfig(“StrictHostKeyChecking”, “no”);.
+
 				// http://stackoverflow.com/questions/30178936/jsch-sftp-security-with-session-setconfigstricthostkeychecking-no
 				session.setConfig("StrictHostKeyChecking", "no"); // otherwise exception if not in knwon_hosts or
 																	// unknown fingerprint
 				session.connect();
 				channel = (ChannelShell) session.openChannel("shell");
 
-				// dialog.append("\n");
 				// naechste zeile activiert den Hinweis, falls die nicht die standard bash
 				// verwendet wird, soll der befehl bash ausgefuehrt werden..
-				// dialog.append(configed.getResourceValue("SSHConnection.Terminal.note") +
-				// "\n\n", dialog.getInputField());
+
 				logging.info(this, "Connect");
 
-				// channel.setInputStream(new FilterInputStream(System.in));
 				// a hack for MS-DOS prompt on Windows.
-				// channel.setInputStream(new FilterInputStream(System.in){
-				// public int read(byte[] b, int off, int len)throws IOException{
-				// return in.read(b, off, (len>124?124:len));
-				// }
-				// });
 
-				// channel.setOutputStream(new MyOutputPrinter(dialog, System.out));
-				// out = channel.getOutputStream();
-				// channel = setChannels(new FilterInputStream(System.in){
-				// public int read(byte[] b, int off, int len)throws IOException{
-				// return in.read(b, off, (len>124?124:len));
-				// }
-				// }),
-				// new MyOutputPrinter(dialog, System.out)
-				// );
 				channel = setStreams(channel);
 
 				channel.setPtyType("dumb");
-				// channel.setPty(false);
-				// ((ChannelShell)channel).setPty(false);
 
 				channel.connect();
 				logging.info(this, "connect " + SSHConnectionInfo.getInstance().getUser() + "@"
@@ -173,6 +156,8 @@ public class SSHConnectTerminal extends SSHConnect {
 				exec(SOME_COMMAND + "\n");
 			} catch (Exception e) {
 				logging.error(this, "SSHConnectTerminal connect exception", e);
+				if (e instanceof InterruptedException)
+					Thread.currentThread().interrupt();
 			}
 		}
 	}
@@ -180,7 +165,7 @@ public class SSHConnectTerminal extends SSHConnect {
 	public final void exec(String text) {
 		if (!isConnectionAllowed()) {
 			logging.warning(this, "connection forbidden.");
-			// return null;
+
 		} else {
 
 			try {
@@ -203,7 +188,7 @@ public class SSHConnectTerminal extends SSHConnect {
 					dialog.setLastHistoryIndex();
 					out.flush();
 				}
-				// else logging.info(this, "empty input text");
+
 			} catch (IOException ioe) {
 				logging.error(this, "SSHConnectTerminal exec ioexception", ioe);
 			} catch (Exception e) {
@@ -220,6 +205,7 @@ public class SSHConnectTerminal extends SSHConnect {
 
 	private ChannelShell setStreams(ChannelShell ch, boolean silent) throws IOException {
 		ch.setInputStream(new FilterInputStream(System.in) {
+			@Override
 			public int read(byte[] b, int off, int len) throws IOException {
 				return in.read(b, off, (len > 1024 ? 1024 : len));
 			}
@@ -227,37 +213,16 @@ public class SSHConnectTerminal extends SSHConnect {
 
 		PrintStream myOut = System.out;
 
-		/*
-		 * does not help; nevertheless we need a terminal from which the configed is
-		 * started
-		 * PrintStream myOut = null;
-		 * 
-		 * try
-		 * {
-		 * logging.debug("starting");
-		 * logging.info(this, "have we got System.out ? " + System.out.checkError());
-		 * File f = File.createTempFile("configedout_", ".tmp");
-		 * myOut = new PrintStream(f);
-		 * logging.info(this, "temp file created for SSH terminal:" + f);
-		 * }
-		 * catch(Exception ex)
-		 * {
-		 * logging.info(this, "no temp file created, taking System.out");
-		 * myOut = System.out;
-		 * }
-		 */
-
 		ch.setOutputStream(new MyOutputPrinter(dialog, myOut));
 		out = ch.getOutputStream();
 		return ch;
 	}
 
 	private void initKillProcessButtonFromDialog() {
-		final SSHConnectionTerminalDialog fdia = dialog;
 		logging.info(this, "initKillProcessButtonFromDialog ");
 		initListeners();
-		((SSHConnectionTerminalDialog) this.dialog).btn_killProcess.removeActionListener(connectionKeyListener);
-		((SSHConnectionTerminalDialog) this.dialog).btn_killProcess.addActionListener(connectionKeyListener);
+		this.dialog.btn_killProcess.removeActionListener(connectionKeyListener);
+		this.dialog.btn_killProcess.addActionListener(connectionKeyListener);
 	}
 
 	public void initInputFieldFromDialog() {
@@ -283,6 +248,7 @@ public class SSHConnectTerminal extends SSHConnect {
 
 	private void initListeners() {
 		connectionKeyListener = new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.info(this, "interrupt with btn ");
 				exec(new String(new byte[] { 3 }) + "\n");
@@ -295,7 +261,7 @@ public class SSHConnectTerminal extends SSHConnect {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if ((e.getKeyCode() == KeyEvent.VK_C) && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+				if ((e.getKeyCode() == KeyEvent.VK_C) && ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
 					logging.info(this, "interrupt with keys ");
 					exec(new String(new byte[] { 3 }) + "\n");
 				}
@@ -305,128 +271,61 @@ public class SSHConnectTerminal extends SSHConnect {
 			public void keyReleased(KeyEvent e) {
 				int key = e.getKeyCode();
 				JTextField textField = (JTextField) e.getSource();
-				// if (textField.getText().trim().toLowerCase().equals("exit")) { //
-				// if(key==KeyEvent.VK_ENTER) dialog.cancel(); // ((Component)
-				// textField).requestFocusInWindow(); // } // else
+
 				if (key == KeyEvent.VK_ENTER) {
 					logging.info(this, "initInputFieldFromDialog keyReleased ENTER ");
 					logging.info(this, "initInputFieldFromDialog inputfield " + textField);
 					logging.info(this, "initInputFieldFromDialog dialog " + dialog);
-					if (textField.getText().trim().toLowerCase().equals("clear")) {
-						if (key == KeyEvent.VK_ENTER)
-							clear();
+					if (textField.getText().trim().equalsIgnoreCase("clear")) {
+						clear();
 						((Component) textField).requestFocusInWindow();
 					}
-					// else if (textField.getText().trim().toLowerCase().equals("kill")) {
-					// exec(new String(new byte[] {3}) +"\n");
-					// ((Component) textField).requestFocusInWindow();
-					// dialog.getInputField().setText("");
-					// }
-					else {
-						// String text = textField.getText() + "\n";
-						exec(textField.getText() + "\n");
-						// if (textField.getText().contains(" cd ") || textField.getText().contains("cd
-						// "))
-						// {
-						// java.util.List dirs = getList(getCompletionList(false, true));
-						// if (commands_compgen != null)
-						// if (dirs != null)
-						// {
-						// if (dirs.addAll(commands_compgen))
-						// dialog.setAutocompleteList(dirs);
-						// }
-						// else
-						// dialog.setAutocompleteList(commands_compgen);
 
-						// else dialog.setAutocompleteList(getList(getCompletionList(true, true)));
-						// dialog.setAutocompleteList(getList(getCompletionList(true, false)));
-						// }
+					else {
+
+						exec(textField.getText() + "\n");
+
 						((Component) textField).requestFocusInWindow();
 						dialog.getInputField().setText("");
 					}
 				}
-				// else if (key == KeyEvent.VK_TAB)
-				// {
 
-				// }
 				else if ((key == KeyEvent.VK_UP) || (key == KeyEvent.VK_KP_UP)) {
-					dialog.getInputField().setText(dialog.getPrevCommand_up());
+					dialog.getInputField().setText(dialog.getPrevCommandUp());
 					((Component) textField).requestFocusInWindow();
 				} else if ((key == KeyEvent.VK_DOWN) || (key == KeyEvent.VK_KP_DOWN)) {
-					dialog.getInputField().setText(dialog.getPrevCommand_down());
+					dialog.getInputField().setText(dialog.getPrevCommandDown());
 					((Component) textField).requestFocusInWindow();
 				}
 			}
 		};
 	}
 
-	public ArrayList<String> commands_compgen;
+	public List<String> commands_compgen;
 
 	private String getCompletionList(boolean newCommands, boolean dirchanged) {
 		SSHConnectExec ssh = new SSHConnectExec();
 		String result = "";
 		if (newCommands) {
-			// result = ssh.exec(new Empty_Command("compgen -c" ), false, null, true,
-			// false);
+
 			result = ssh.exec(new Empty_Command(
 					// http://stackoverflow.com/questions/948008/linux-command-to-list-all-available-commands-and-aliases
 					SSHCommandFactory.getInstance().str_command_getLinuxCommands), false, null, true, false);
 			if (result == null)
 				logging.warning(this, "no commands could be found for autocompletion");
 
-			commands_compgen = (ArrayList) getList(result);
+			commands_compgen = getList(result);
 			logging.debug(this, "getCompletionList commands compgen -c " + result);
 		}
 
-		// if (dirchanged)
-		// {
-		// // String pwd = ssh.exec(new Empty_Command("pwd" ), false, null, true,
-		// false).replace("\n", "");
-		// try {
-		// getCurrentDirectorySilent = true;
-		// // exec("pwd\n");
-		// if (out != null)
-		// {
-		// out.write("pwd\n".getBytes());
-		// logging.debug(this, " exec getPrivateStatus " + dialog.getPrivateStatus());
-		// out.flush();
-		// }
-		// try{Thread.sleep(50);} catch(Exception ee){}
-		// // }
-		// // catch (IOException ioe)
-
-		// if (currentDirectory == null) return result;
-
-		// currentDirectory = currentDirectory.replace("\n", "") + "/";
-		// String com = "ls -aldU " + currentDirectory + "./*";
-		// logging.debug("\n\nCommand: " + com);
-		// String result_ls = ssh.exec( new Empty_Command(com ),
-		// false, null, true, false);
-		// logging.debug("\ncurrentDirectory: " + currentDirectory + "./");
-		// logging.debug("result_ls: " + result_ls);
-		// String[] arr_result_dir = result_ls.split("\n");
-		// String result_dir = "";
-
-		// for (String l : arr_result_dir)
-		// {
-		// String line = l; //.replace("\\","\\\\");
-		// logging.debug("line: " + line);
-		// String dir = "" + line.split(currentDirectory + "/",2)[1];
-		// logging.debug("DIR: " + dir);
-		// result_dir = result_dir + dir + "\n";
-		// }
-		// result = result + "\n" + result_dir;
-		// }
-		// catch (Exception ioe)
-		// }
 		return result;
 	}
 
-	private java.util.List getList(String str) {
+	private List<String> getList(String str) {
 		if (str.equals(""))
 			return null;
 		String[] arr = str.split("\n");
-		ArrayList<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 		for (String s : arr)
 			result.add(s);
 		return result;

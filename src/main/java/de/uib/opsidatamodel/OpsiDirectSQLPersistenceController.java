@@ -24,15 +24,19 @@
 
 package de.uib.opsidatamodel;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsicommand.DbConnect;
@@ -56,14 +60,14 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 	}
 
 	@Override
-	public java.util.List<Map<java.lang.String, java.lang.Object>> HOST_read() {
+	public List<Map<java.lang.String, java.lang.Object>> HOST_read() {
 
 		logging.info(this, "HOST_read ");
 		String query = "select *  from HOST";
 		TimeCheck timer = new TimeCheck(this, "HOST_read").start();
 
 		logging.notice(this, "HOST_read");
-		java.util.List<Map<java.lang.String, java.lang.Object>> opsiHosts = exec
+		List<Map<java.lang.String, java.lang.Object>> opsiHosts = exec
 				.getListOfMaps(new OpsiMethodCall("getData", new Object[] { query }));
 		timer.stop();
 
@@ -74,7 +78,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 		if (values == null || values.length == 0)
 			return "true";
 
-		StringBuffer result = new StringBuffer(colName + " = '" + values[0] + "'");
+		StringBuilder result = new StringBuilder(colName + " = '" + values[0] + "'");
 
 		int lineCount = 0;
 
@@ -95,9 +99,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 	}
 
 	@Override
-	protected Map<String, java.util.List<Map<String, String>>> getLocalBootProductStatesNOM(String[] clientIds) {
-
-		java.util.List clients = java.util.Arrays.asList(clientIds);
+	protected Map<String, List<Map<String, String>>> getLocalBootProductStatesNOM(String[] clientIds) {
 
 		String columns = Arrays.toString((ProductState.DB_COLUMN_NAMES).toArray(new String[] {}));
 		columns = columns.substring(1);
@@ -108,32 +110,24 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 		String query = "select " + columns + " from PRODUCT_ON_CLIENT " + " where  productType = 'LocalbootProduct'"
 				+ " AND \n" + " ( " + giveWhereOR("clientId", clientIds) + ") ";
 
-		// logging.debug(query);
-		// System.exit(0);
+		Map<String, List<Map<String, String>>> result = new HashMap<>();
 
-		// TimeCheck timer= new TimeCheck(this, "getLocalBootProductStatesNOM").start();
+		Connection sqlConn = DbConnect.getConnection();
 
-		Map<String, java.util.List<Map<String, String>>> result = new HashMap<String, java.util.List<Map<String, String>>>();
-
-		java.sql.Connection sqlConn = DbConnect.getConnection();
-
-		try {
-
-			java.sql.Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY);
+		try (Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
 
 			ResultSet rs = stat.executeQuery(query);
 
 			while (rs.next()) {
 				String client = rs.getString("clientId");
 
-				java.util.List<Map<String, String>> states1Client = result.get(client);
+				List<Map<String, String>> states1Client = result.get(client);
 				if (states1Client == null) {
-					states1Client = new ArrayList<Map<String, String>>();
+					states1Client = new ArrayList<>();
 					result.put(client, states1Client);
 				}
 
-				Map<String, String> rowMap = new HashMap<String, String>();
+				Map<String, String> rowMap = new HashMap<>();
 
 				for (String col : ProductState.DB_COLUMN_NAMES) {
 					if (rs.getString(col) == null)
@@ -151,19 +145,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			logging.error("getLocalBootProductStatesNOM sql Error " + e.toString());
 		}
 
-		// timer.stop();
-
 		return result;
-	}
-
-	private String produceNotNull(Map<String, String> m, String k) {
-		if (m.get(k) == null) {
-			logging.warning(this, " null value for key " + k);
-
-			return "";
-		}
-
-		return m.get(k);
 	}
 
 	private String sqlQuote(String r) {
@@ -176,7 +158,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 	public void cleanUpAuditSoftware() {
 		java.sql.Connection sqlConn = DbConnect.getConnection();
 
-		TreeMap<String, Map<String, String>> rowsSOFTWARE_ON_CLIENTS = new TreeMap<String, Map<String, String>>();
+		TreeMap<String, Map<String, String>> rowsSOFTWARE_ON_CLIENTS = new TreeMap<>();
 
 		String columns = SWAuditClientEntry.DB_COLUMN_NAMES.toString();
 		columns = columns.substring(1);
@@ -185,10 +167,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 		String query = "select " + columns + " from " + SWAuditClientEntry.DB_TABLE_NAME + " \n" + " where  state = 1 ";
 		logging.info(this, "cleanUpAuditSoftware query " + query);
 
-		try {
-
-			java.sql.Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY);
+		try (Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
 
 			ResultSet rs = stat.executeQuery(query);
 
@@ -198,7 +177,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			while (rs.next()) {
 				counter++;
 
-				String ident = de.uib.utilities.Globals
+				String ident = Globals
 						.pseudokey(new String[] { rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.NAME)),
 								rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.VERSION)),
 								rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.SUBVERSION)),
@@ -206,7 +185,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 								rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE)) });
 
 				if (rowsSOFTWARE_ON_CLIENTS.get(ident) == null) {
-					Map<String, String> rowmap = new HashMap<String, String>();
+					Map<String, String> rowmap = new HashMap<>();
 
 					rowmap.put("name", rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.NAME)));
 
@@ -230,8 +209,6 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			logging.info(this, "retrieveSoftwareAuditOnClients, entries read " + counter);
 			logging.info(this, "retrieveSoftwareAuditOnClients, idents  " + rowsSOFTWARE_ON_CLIENTS.size());
 
-			stat.close();
-
 		}
 
 		catch (SQLException e) {
@@ -240,15 +217,13 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 		java.util.Set<String> swIdentsOnClients = rowsSOFTWARE_ON_CLIENTS.keySet();
 
-		TreeMap<String, Map<String, String>> rowsSOFTWARE = new TreeMap<String, Map<String, String>>();
+		TreeMap<String, Map<String, String>> rowsSOFTWARE = new TreeMap<>();
 
 		query = "select  name, version, subVersion, language, architecture from SOFTWARE";
 
 		logging.info(this, "cleanUpAuditSoftware, select from SOFTWARE " + " using query: " + query);
 
-		try {
-			java.sql.Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_READ_ONLY);
+		try (Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
 
 			ResultSet rs = stat.executeQuery(query);
 
@@ -257,12 +232,11 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			while (rs.next()) {
 				counter++;
 
-				String ident = de.uib.utilities.Globals
-						.pseudokey(new String[] { rs.getString("name"), rs.getString("version"),
-								rs.getString("subversion"), rs.getString("language"), rs.getString("architecture") });
+				String ident = Globals.pseudokey(new String[] { rs.getString("name"), rs.getString("version"),
+						rs.getString("subversion"), rs.getString("language"), rs.getString("architecture") });
 
 				if (rowsSOFTWARE.get(ident) == null) {
-					Map<String, String> rowmap = new HashMap<String, String>();
+					Map<String, String> rowmap = new HashMap<>();
 
 					rowmap.put("name", rs.getString("name"));
 					rowmap.put("version", rs.getString("version"));
@@ -276,9 +250,6 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			}
 			logging.info(this, "retrieveSoftware, entries read " + counter);
 			logging.info(this, "retrieveSoftware, idents size " + rowsSOFTWARE.size());
-
-			stat.close();
-
 		}
 
 		catch (SQLException e) {
@@ -290,12 +261,10 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 		swIdentsOnlyInSoftware.removeAll(swIdentsOnClients);
 
 		logging.info(this, "cleanUpAuditSoftware  idents in SOFTWARE not on CLIENTS " + swIdentsOnlyInSoftware.size());
-		// logging.info(this, "cleanUpAuditSoftware idents in SOFTWARE not on CLIENTS "
-		// + rowsSOFTWARE_ON_CLIENTS.get("LHCommon.NET 9.60;9.60.344;;;x86"));
 
 		int sizeOfAllRemoves = swIdentsOnlyInSoftware.size();
 
-		ArrayList<String> removes = new ArrayList<String>(swIdentsOnlyInSoftware);
+		List<String> removes = new ArrayList<>(swIdentsOnlyInSoftware);
 
 		final int portionSize = 10;
 
@@ -311,7 +280,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 		while (goOn) {
 			logging.info(this, "cleanUpAuditSoftware remove entries from " + portionStart);
 
-			StringBuffer condition = new StringBuffer();
+			StringBuilder condition = new StringBuilder();
 
 			boolean logNext = true;
 
@@ -338,18 +307,12 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 			condition.append(" false ");
 
-			// logging.debug(this, "cleanUpAuditSoftware idents in SOFTWARE not on CLIENTS
-			// cleaning condition " + condition);
-
 			logging.info(this, "cleanUpAuditSoftware, delete SOFTWARE records");
 			query = "delete  from SOFTWARE where " + condition.toString();
 			logging.debug(this, "cleanUpAuditSoftware, delete SOFTWARE records  by query: \n" + query);
 
-			try {
-
-				java.sql.Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-						ResultSet.CONCUR_READ_ONLY);
-
+			try (Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY)) {
 				int affectedRows = stat.executeUpdate(query);
 
 				logging.info(this, "cleanUpAuditSoftware, deleted " + affectedRows + " in Table SOFTWARE");
@@ -371,77 +334,6 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			logging.info(this, "cleanUpAuditSoftware removed entries up to (not including) " + portionStart);
 
 		}
-
-		/*
-		 * 
-		 * logging.info(this, "retrieveSoftwareAuditOnClients, idents  " +
-		 * rowsSOFTWARE.keySet());
-		 * 
-		 * 
-		 * try
-		 * {
-		 * 
-		 * java.sql.Statement stat = sqlConn.createStatement(
-		 * ResultSet.TYPE_SCROLL_INSENSITIVE,
-		 * ResultSet.CONCUR_READ_ONLY
-		 * );
-		 * 
-		 * int affectedRows = 0;
-		 * 
-		 * int count = 0;
-		 * 
-		 * for (String ident : rowsSOFTWARE.keySet())
-		 * {
-		 * count++;
-		 * Map<String, String> rowmap = rowsSOFTWARE.get(ident);
-		 * 
-		 * query = "insert into SOFTWARE "
-		 * + "("
-		 * + "name" + ", "
-		 * + "version" + ", "
-		 * + "subVersion" + ", "
-		 * + "language" + ", "
-		 * + "architecture"
-		 * + ")"
-		 * + "VALUES ("
-		 * + "'" + rowmap.get( SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.NAME) ) +
-		 * "'" + ", "
-		 * + "'" + rowmap.get( SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.VERSION) )
-		 * + "'" + ", "
-		 * + "'" + rowmap.get(
-		 * SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.SUBVERSION) ) + "'" + ", "
-		 * + "'" + rowmap.get( SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.LANGUAGE)
-		 * ) + "'" + ", "
-		 * + "'" + rowmap.get(
-		 * SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE) )+ "'"
-		 * + ")"
-		 * ;
-		 * 
-		 * logging.info(this, "cleanUpAuditSoftware,  insert by query: \n" + query);
-		 * 
-		 * 
-		 * int newly = stat.executeUpdate(query);
-		 * 
-		 * logging.info(this, "cleanUpAuditSoftware,  inserted  " + newly);
-		 * 
-		 * affectedRows = affectedRows + newly;
-		 * 
-		 * if (count > 2) break;
-		 * 
-		 * }
-		 * 
-		 * stat.close();
-		 * 
-		 * logging.info(this, "cleanUpAuditSoftware,  inserted " + rowsSOFTWARE.keySet()
-		 * + " in Table SOFTWARE");
-		 * 
-		 * 
-		 * }
-		 * catch( SQLException e )
-		 * {
-		 * logging.error("cleanUpAuditSoftware sql Error " +e.toString());
-		 * }
-		 */
 
 	}
 

@@ -10,14 +10,14 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.Vector;
 import java.util.function.Function;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.DataChangedSubject;
@@ -26,18 +26,18 @@ import de.uib.utilities.table.ListCellOptions;
 
 public class MapTableModel extends javax.swing.table.AbstractTableModel implements DataChangedSubject {
 
-	protected Vector<DataChangedObserver> observers;
+	protected List<DataChangedObserver> observers;
 
 	protected Collection updateCollection;
 	protected Collection<Map<String, Object>> storeData;
 	protected boolean datachanged;
 
-	private java.util.List<Object> showOnlyValues; // values set cannot be set for any key
+	private List<Object> showOnlyValues; // values set cannot be set for any key
 	private java.util.Set<String> keysOfReadOnlyEntries; // keys which identify readonly entries
 
 	private Function<String, Boolean> editDenier;
 
-	public static final java.util.List nullLIST = new java.util.ArrayList();
+	public static final List nullLIST = new ArrayList<>();
 	static {
 		nullLIST.add(null);
 	}
@@ -47,7 +47,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	private SortedMap<String, Object> data; // shall be sorted
 	private Map<String, Object> oridata; // we keep the original data for writing back changed values
 	private Map<String, Object> defaultData; // the shadow default values of all data
-	private Vector<String> keys;
+	private List<String> keys;
 	private String modifiedKey;
 	private int rowModiTime;
 
@@ -56,36 +56,18 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	private boolean writeData = true;
 
 	public MapTableModel() {
-		observers = new Vector();
+		observers = new ArrayList<>();
 
-		/*
-		 * editDenier
-		 * =
-		 * key -> {
-		 * logging.info(this, "key denied ?" + key );
-		 * Boolean result = key.endsWith( "modified");
-		 * if (result)
-		 * JOptionPane.showMessageDialog(de.uib.configed.Globals.mainFrame,
-		 * "this entry cannot be edited manually",
-		 * "information", JOptionPane.INFORMATION_MESSAGE
-		 * );
-		 * return result;
-		 * }
-		 * ;
-		 */
 	}
 
 	public void setModelProducer(ListModelProducerForVisualDatamap modelProducer) {
-		// logging.info(this, "setModelProducer " + modelProducer.getClass() + " value
-		// at 0,0 " + modelProducer.getClass(0,0));
+
 		this.modelProducer = modelProducer;
 	}
 
 	public void setOptions(Map<String, ListCellOptions> optionsMap, Map<String, Object> defaultData) {
 		this.optionsMap = optionsMap;
 		this.defaultData = defaultData;
-		defaultData = new HashMap<String, Object>();
-
 	}
 
 	public Map<String, ListCellOptions> getOptionsMap() {
@@ -93,7 +75,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	}
 
 	public void setMap(Map<String, Object> data) {
-		// if (data != null) Logging.debug(this, "### has class " + data.getClass());
+
 		this.data = null;
 		resetModifiedKey();
 
@@ -102,7 +84,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			myCollator.setStrength(Collator.PRIMARY);
 			this.data = Collections.synchronizedSortedMap(new TreeMap(myCollator));
 			this.data.putAll(data);
-			keys = new Vector<String>(this.data.keySet());
+			keys = new ArrayList<>(this.data.keySet());
 
 		}
 		oridata = data;
@@ -133,13 +115,6 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		return modifiedKey;
 	}
 
-	/*
-	 * private Map<String, Object> getDefaultData()
-	 * {
-	 * return defaultData;
-	 * }
-	 */
-
 	@Override
 	public String toString() {
 		return getClass().getName() + ": " + data;
@@ -149,7 +124,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		datachanged = false; // starting with a new set of data
 	}
 
-	public Vector<String> getKeys() {
+	public List<String> getKeys() {
 		return keys;
 	}
 
@@ -163,7 +138,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		if (data == null)
 			logging.debug(this, "setStoreData null ");
 		else {
-			// logging.info(this, "setStoreData size " + data.size());
+
 		}
 
 		setNew();
@@ -201,11 +176,11 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		editDenier = disallow;
 	}
 
-	public void setShowOnlyValues(java.util.List<Object> showOnly) {
+	public void setShowOnlyValues(List<Object> showOnly) {
 		showOnlyValues = showOnly;
 	}
 
-	public java.util.List<Object> getShowOnlyValues() {
+	public List<Object> getShowOnlyValues() {
 		return showOnlyValues;
 	}
 
@@ -213,7 +188,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		data.put(key, newval);
 		oridata.put(key, newval);
 		logging.debug(this, " keys " + keys);
-		keys = new Vector(data.keySet());
+		keys = new ArrayList<>(data.keySet());
 		logging.debug(this, " new keys  " + keys);
 		if (toStore)
 			putEntryIntoStoredMaps(key, newval, toStore);
@@ -225,13 +200,12 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	}
 
 	public void addEntry(String key) {
-		ArrayList<Object> newval = new ArrayList();
+		List<Object> newval = new ArrayList<>();
 		data.put(key, newval);
 		oridata.put(key, newval);
 
-		// Logging.debug(this, " keys " + keys);
-		keys = new Vector<String>(data.keySet());
-		// logging.debug(this, " new keys " + keys);
+		keys = new ArrayList<>(data.keySet());
+
 		putEntryIntoStoredMaps(key, newval);
 		fireTableDataChanged();
 	}
@@ -239,9 +213,9 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	public void removeEntry(String key) {
 		data.remove(key);
 		oridata.remove(key);
-		// logging.debug(this, "removeEntry, keys " + keys);
-		keys = new Vector(data.keySet());
-		// logging.debug(this, "removeEntry, new keys " + keys);
+
+		keys = new ArrayList<>(data.keySet());
+
 		removeEntryFromStoredMaps(key);
 		fireTableDataChanged();
 
@@ -251,23 +225,13 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		return data.containsKey(key);
 	}
 
-	/*
-	 * public void setDataChanged (boolean b)
-	 * {
-	 * dataChanged = b;
-	 * }
-	 * 
-	 * public boolean isDataChanged ()
-	 * {
-	 * return dataChanged;
-	 * }
-	 */
-
 	// table model
+	@Override
 	public int getColumnCount() {
 		return 2;
 	}
 
+	@Override
 	public int getRowCount() {
 		int result = 0;
 		if (data != null)
@@ -275,6 +239,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		return result;
 	}
 
+	@Override
 	public String getColumnName(int col) {
 		String result = "";
 		switch (col) {
@@ -284,19 +249,16 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		case 1:
 			result = configed.getResourceValue("EditMapPanel.ColumnHeaderValue");
 			break;
-		};
+		}
 
 		return result;
 
 	}
 
+	@Override
 	public Object getValueAt(int row, int col) {
 		if (data == null)
 			return "";
-
-		// logging.info(this, "getValueAt based on keys " + keys);
-		// logging.info(this, "getValueAt: " + row + ", " + col);
-		// logging.info(this, "getValueAt storeData " + storeData);
 
 		String key = null;
 		Object result = null;
@@ -315,35 +277,12 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			break;
 		case 1:
 			result = data.get(key);
-			/*
-			 * if (key.equals ("test456"))
-			 * {
-			 * logging.info(this, " result for " + key + ": " + result + " is null  " +
-			 * (result == null)
-			 * + " class " + result.getClass() + " equals null " + result.equals( null )
-			 * + " String value equals \"null\" " + (result.toString()).equals("null"));
-			 * if (result != null && result instanceof java.util.List)
-			 * {
-			 * logging.info(this, " result size for " + key + " " +
-			 * ((java.util.List)(result)).size());
-			 * if ( ((java.util.List)(result)).size() > 0)
-			 * logging.info(this, " result.get(0) for " + key + " is null " +
-			 * (((java.util.List)(result)).get(0) == null));
-			 * }
-			 * 
-			 * logging.info(this, " optionsMap for " + key + ": " + optionsMap.get(key) );
-			 * logging.info(this, " optionsMap for " + key + ": " +
-			 * optionsMap.get(key).getDefaultValues() );
-			 * }
-			 */
 
-			// if there is no true result left (probably because of eliminating the key) we
 			// deliver the default value
-			// logging.info(this, "getValueAt " + row + ", " + col + " result was " + result
-			// );
-			if (result != null && result instanceof java.util.List) {
-				java.util.List li = (java.util.List) result;
-				if (li.size() > 0 && li.get(0) == null && optionsMap != null) {
+
+			if (result instanceof List) {
+				List li = (List) result;
+				if (!li.isEmpty() && li.get(0) == null && optionsMap != null) {
 					result = defaultData.get(key);
 					logging.info(this,
 							"getValueAt " + row + ", " + col + " result corrected for key  " + key + ": " + result);
@@ -351,7 +290,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			}
 
 			break;
-		// data.get (keys.get(row)).toString(); break;
+
 		}
 
 		if (result == null)
@@ -364,21 +303,23 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	 * JTable uses this method to determine the default renderer/
 	 * editor for each cell.
 	 */
+	@Override
 	public Class getColumnClass(int c) {
 		switch (c) {
 		case 0:
 			return "".getClass();
 		case 1:
-			return java.util.List.class;
+			return List.class;
 		}
 		return Object.class;
-		// return getValueAt(0, c).getClass();
+
 	}
 
 	/*
 	 * We implement this method since the table is partially
 	 * editable.
 	 */
+	@Override
 	public boolean isCellEditable(int row, int col) {
 		// The data/cell address is constant,
 		// no matter where the cell appears onscreen.
@@ -390,7 +331,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			return false;
 		} else {
 			if (keysOfReadOnlyEntries != null && keysOfReadOnlyEntries.contains(keys.get(row)) ||
-			// (keys.get(row)).endsWith("modified")
+
 					editDenier != null && editDenier.apply(keys.get(row)))
 				return false;
 			else
@@ -399,12 +340,12 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	}
 
 	void weHaveChangedStoredMaps() {
-		if (!datachanged || updateCollection.size() == 0 // updateCollection has been emptied since last change
+		if (!datachanged || updateCollection.isEmpty() // updateCollection has been emptied since last change
 		) {
 			datachanged = true;
 			// tell it to all registered DataChangedObservers
 			notifyChange();
-			// logging.debug(this, "weHaveChangedStoredMap, storeData: " + storeData);
+
 			// we add the reference to the changed backend data only once to the
 			// updateCollection
 
@@ -421,11 +362,10 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	public void removeEntryFromStoredMaps(String myKey) {
 		if (storeData != null) {
 			for (Map<String, Object> aStoreMap : storeData) {
-				// ( (Map) aStoreMap ).remove(myKey);
+
 				aStoreMap.put(myKey, nullLIST);
 			}
 
-			// logging.debug(this, " --- datachanged : " + datachanged );
 			logging.debug(this,
 					"remove entry --  updateCollection: " + updateCollection + "  has size " + updateCollection.size());
 			weHaveChangedStoredMaps();
@@ -443,25 +383,17 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		logging.debug(this, "putEntryIntoStoredMaps myKey, value: " + myKey + ", " + value);
 		logging.debug(this, "putEntryIntoStoredMaps storeData  counting " + storeData.size());
 		if (storeData != null) {
-			Iterator it = storeData.iterator();
+			Iterator<Map<String, Object>> it = storeData.iterator();
 			while (it.hasNext()) {
-				Object aStoreMap = it.next();
+				Map<String, Object> aStoreMap = it.next();
 
-				if (!(aStoreMap instanceof Map)) {
-					if (aStoreMap == null) {
-						logging.info(this, "EditMapPanel.setValueAt: we have some data null ");
-					} else {
-						logging.error(this,
-								"EditMapPanel.setValueAt: backendData " + aStoreMap + " is not null and not a Map ");
-					}
-				} else {
-					((Map) aStoreMap).put(myKey, value);
-				}
+				if (aStoreMap != null)
+					aStoreMap.put(myKey, value);
+
+				else
+					logging.info(this, "EditMapPanel.setValueAt: we have some data null ");
+
 			}
-
-			// logging.debug(this, " --- datachanged : " + datachanged );
-			// logging.debug(this, " --- updateCollection: " + updateCollection + " has size
-			// " + updateCollection.size());
 
 			if (toStore)
 				weHaveChangedStoredMaps();
@@ -480,6 +412,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	 * We need to implement this method since the table's
 	 * data can change.
 	 */
+	@Override
 	public void setValueAt(Object value, int row, int col) {
 		if (value == null) {
 			logging.debug(this, "call set value in table at " + row + "," + col + " to null");
@@ -488,30 +421,23 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 
 		logging.info(this, "Setting value in table at " + row + "," + col + " to " + value + " (an instance of "
 				+ value.getClass() + ")");
-		// data[row][col] = value; //this is the trivial version
-		// actualPropName = (String) value;
 
-		// logging.debug(this, " oldValue " + getValueAt (row, col) + " class , " +
-		// getValueAt (row, col).getClass() );
 		if (getValueAt(row, col).equals(value) || getValueAt(row, col).toString().equals(value.toString())) {
-			// logging.debug(this, " ------------ nothing changed, nothing to do ");
+
 		} else {
-			// logging.debug(this, " ------------ something changed ");
+
 			if (col == 1)
 			// check not necessary since, by virtue of the method isCellEditable (int,int),
 			// we can only have come to here in this case
 			{
 				if (keys == null) // perhaps everything has changed to null in the meantime
 				{
-					// logging.debug(this, "---------- keys has vanished");
+
 				} else {
-					String myKey = (String) keys.get(row);
-					// StringvaluedObject o = new StringvaluedObject ( "" + value );
+					String myKey = keys.get(row);
 					Object o = value;
-					// Logging.debug(this, " data.get(myKey) has type " +
+
 					// data.get(myKey).getClass().getName()
-					// + " and value " + data.get(myKey));
-					// logging.debug(this, "the new o is " + value);
 
 					// the internal view data:
 					data.put(myKey, o);
@@ -529,12 +455,8 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 						modifiedKey = getModifiedKey();
 						// produces as well rowModiTime
 
-						// logging.info(this, "setting value, modifiedKey, rowModiTime, row: "
-						// + value + ", " + modifiedKey
-						// + ", " + rowModiTime + ", " + row);
-
 						if (rowModiTime > -1 && row != rowModiTime) {
-							setValueAt(de.uib.configed.Globals.getNowTimeListValue(), rowModiTime, 1);
+							setValueAt(Globals.getNowTimeListValue(), rowModiTime, 1);
 						}
 
 					}
@@ -553,7 +475,6 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	 * @param Object value
 	 */
 	public void setValue(String key, Object value) {
-		// logging.info(this, "setValue key, value " + key + ", " + value);
 
 		int row = keys.indexOf(key);
 
@@ -562,11 +483,11 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			return;
 		}
 
-		if (optionsMap.get(key) != null && (optionsMap.get(key)) instanceof java.util.List) {
-			java.util.List valuelist = (java.util.List) optionsMap.get(key);
+		if (optionsMap.get(key) != null && (optionsMap.get(key)) instanceof List) {
+			List valuelist = (List) optionsMap.get(key);
 
-			if (valuelist.size() > 0 && valuelist.indexOf(value) == -1) {
-				// logging.debug("optionsMap.get(key) " + optionsMap.get(key));
+			if (!valuelist.isEmpty() && valuelist.indexOf(value) == -1) {
+
 				logging.error("EditMapPanel: value not allowed: " + value);
 				return;
 			}
@@ -576,24 +497,25 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	}
 
 	// implementation of DataChangedSubject
+	@Override
 	public void registerDataChangedObserver(DataChangedObserver o) {
-		observers.addElement(o);
+		observers.add(o);
 	}
 
 	// for transport between a class family
-	Vector<DataChangedObserver> getObservers() {
+	List<DataChangedObserver> getObservers() {
 		return observers;
 	}
 
-	void setObservers(Vector<DataChangedObserver> observers) {
+	void setObservers(List<DataChangedObserver> observers) {
 		this.observers = observers;
 	}
 
 	public void notifyChange() {
-		// logging.debug(this, " -- we notify our observers ");
+
 		logging.debug(this, "notifyChange, notify observers " + observers.size());
 		for (int i = 0; i < observers.size(); i++) {
-			(observers.elementAt(i)).dataHaveChanged(this);
+			(observers.get(i)).dataHaveChanged(this);
 		}
 
 	}

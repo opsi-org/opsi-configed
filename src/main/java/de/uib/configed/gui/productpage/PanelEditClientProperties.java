@@ -70,12 +70,12 @@ public class PanelEditClientProperties extends DefaultPanelEditProperties {
 						.addGroup(layoutEditProperties.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 								.addGroup(layoutEditProperties.createSequentialGroup()
 										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-										// .addComponent(jLabelProductProperties, minHSize, prefHSize,
+
 										// Short.MAX_VALUE)
 										.addGap(hGapSize, hGapSize, hGapSize)
-										// .addComponent(buttonSetValuesFromServerDefaults, 20, 20, 20)
+
 										.addGap(2, 2, 2)
-								// .addComponent(buttonRemoveSpecificValues, 20, 20, 20)
+
 								).addComponent(productPropertiesPanel, minHSize, GroupLayout.PREFERRED_SIZE,
 										Short.MAX_VALUE))
 						.addGap(0, hGapSize, hGapSize));
@@ -83,12 +83,7 @@ public class PanelEditClientProperties extends DefaultPanelEditProperties {
 		layoutEditProperties
 				.setVerticalGroup(layoutEditProperties.createSequentialGroup().addGap(minGapVSize, vGapSize, vGapSize)
 						.addGroup(layoutEditProperties.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-						// .addComponent(jLabelProductProperties, 0, GroupLayout.PREFERRED_SIZE,
-						// GroupLayout.PREFERRED_SIZE)
-						// .addComponent(buttonSetValuesFromServerDefaults, GroupLayout.PREFERRED_SIZE,
-						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						// .addComponent(buttonRemoveSpecificValues, GroupLayout.PREFERRED_SIZE,
-						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+
 						).addGap(minGapVSize, minGapVSize, minGapVSize).addComponent(productPropertiesPanel,
 								minTableVSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
@@ -133,7 +128,7 @@ public class PanelEditClientProperties extends DefaultPanelEditProperties {
 	}
 
 	protected void setPropertyResetActivated(boolean b) {
-		// logging.debug(this, " setPropertyResetActivated " + b);
+
 		buttonRemoveSpecificValues.setEnabled(b);
 	}
 }

@@ -1,7 +1,6 @@
 package de.uib.utilities.script;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.util.List;
 
 import de.uib.utilities.logging.logging;
 
@@ -19,10 +18,7 @@ public class CmdLauncher {
 
 	public void launch(final String s) {
 		String cmd = cmdPrefix + " " + s;
-		java.util.List<String> parts = de.uib.utilities.script.Interpreter.splitToList(cmd);
-
-		// logging.info(this, "" + values);
-		// System.exit(0);
+		List<String> parts = de.uib.utilities.script.Interpreter.splitToList(cmd);
 
 		try {
 			logging.debug(this, "start OS call cmd: " + cmd + " splitted to " + parts);
@@ -30,17 +26,8 @@ public class CmdLauncher {
 			ProcessBuilder pb = new ProcessBuilder(parts);
 			pb.redirectErrorStream(true);
 
-			Process proc = pb.start();
+			pb.start();
 
-			BufferedReader br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-
-			String line = null;
-			while ((line = br.readLine()) != null) {
-				// logging.debug(getSelectedClients()[J] + " >" + line);
-				// appendLog( ">" + line + "\n");
-			}
-			// logging.debug(getSelectedClients()[J] + " process exitValue " +
-			// proc.exitValue());
 		} catch (Exception ex) {
 			logging.error("Runtime error for command >>" + cmd + "<<, : " + ex, ex);
 		}

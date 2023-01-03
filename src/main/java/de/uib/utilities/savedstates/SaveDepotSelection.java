@@ -9,8 +9,7 @@ public class SaveDepotSelection extends SaveState {
 
 	@Override
 	public void serialize(Object selectedDepots) {
-		states.setProperty(key, Arrays.toString(
-				(String[]) selectedDepots));
+		states.setProperty(key, Arrays.toString((String[]) selectedDepots));
 		states.store();
 	}
 

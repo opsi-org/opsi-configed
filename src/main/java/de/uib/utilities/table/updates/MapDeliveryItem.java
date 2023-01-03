@@ -8,37 +8,31 @@
 
 package de.uib.utilities.table.updates;
 
-import java.util.Vector;
+import java.util.List;
 
 public class MapDeliveryItem extends MapBasedTableEditItem {
-	Vector<String> columnNames;
-	Vector<String> classNames;
-	Vector<Object> oldValues;
-	Vector<Object> rowV;
+	List<String> columnNames;
+	List<String> classNames;
+	List<Object> oldValues;
+	List<Object> rowV;
 
-	public MapDeliveryItem(Object source, int keyCol, Vector<String> columnNames, Vector<String> classNames,
-			Vector<Object> oldValues, Vector<Object> rowV) {
+	public MapDeliveryItem(Object source, int keyCol, List<String> columnNames, List<String> classNames,
+			List<Object> oldValues, List<Object> rowV) {
 		super(source, keyCol, columnNames, classNames, oldValues, rowV);
 	}
 
-	public MapDeliveryItem(Object source, int keyCol, Vector<String> columnNames, Vector<String> classNames,
-			Vector<Object> rowV) {
+	public MapDeliveryItem(Object source, int keyCol, List<String> columnNames, List<String> classNames,
+			List<Object> rowV) {
 		this(source, keyCol, columnNames, classNames, null, rowV);
 	}
 
+	@Override
 	public boolean keyChanged() {
 		if (keyCol < 0)
 			return false;
 
-		// logging.debug (" keyChanged? oldValues " + oldValues);
-
 		if (oldValues == null)
 			return true;
-
-		// logging.debug(" keyChanged? oldValues.get(keyCol).toString() " +
-		// oldValues.get(keyCol).toString());
-		// logging.debug(" =? rowV.get(keyCol).toString() " +
-		// rowV.get(keyCol).toString());
 
 		if (oldValues.get(keyCol).toString().equals(rowV.get(keyCol).toString())) {
 			return true;

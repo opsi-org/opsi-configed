@@ -45,7 +45,6 @@ public class DependenciesTreeModel {
 	private String productId = "";
 
 	private boolean graphIsInitialized;
-	// private boolean isCyclic;
 
 	private PersistenceController pc;
 
@@ -54,7 +53,7 @@ public class DependenciesTreeModel {
 		this.pc = pc;
 
 		graphIsInitialized = false;
-		// isCyclic = false;
+
 	}
 
 	private void initGraph(String depotId) {
@@ -63,8 +62,7 @@ public class DependenciesTreeModel {
 			depotId = pc.getDepot();
 
 		// Erstmal die Dependencies laden
-		Map<String, java.util.List<Map<String, String>>> dependencies = pc.getProductDependencies(depotId);
-		// <productId> requiredProductId, '"Lösung"'
+		Map<String, List<Map<String, String>>> dependencies = pc.getProductDependencies(depotId);
 
 		productList = new LinkedList<>(dependencies.keySet());
 
@@ -75,13 +73,6 @@ public class DependenciesTreeModel {
 		}
 
 		// productList wird benötigt für die Zuordnung
-
-		/*
-		 * productList = new LinkedList<>();
-		 * //productList.addAll(dependencies.keySet());
-		 * if(pc.getDepot2LocalbootProducts().get(depotId) != null)
-		 * productList.addAll(pc.getDepot2LocalbootProducts().get(depotId).keySet());
-		 */
 
 		// Die Map zur productList
 		productMap = new HashMap<>();
@@ -162,52 +153,13 @@ public class DependenciesTreeModel {
 				adj.add(new LinkedList<>());
 		}
 
-		/*
-		 * private boolean isCyclicUtil(int i, boolean[] visited,
-		 * boolean[] recStack) {
-		 * 
-		 * if (recStack[i])
-		 * return true;
-		 * 
-		 * if (visited[i])
-		 * return false;
-		 * 
-		 * visited[i] = true;
-		 * 
-		 * recStack[i] = true;
-		 * List<Integer> children = adj.get(i);
-		 * 
-		 * for (Integer c: children)
-		 * if (isCyclicUtil(c, visited, recStack))
-		 * return true;
-		 * 
-		 * recStack[i] = false;
-		 * 
-		 * return false;
-		 * }
-		 * 
-		 * // Testet, ob der Graph einen Zykel enthält
-		 * private boolean isCyclic() {
-		 * 
-		 * boolean[] visited = new boolean[V];
-		 * boolean[] recStack = new boolean[V];
-		 * 
-		 * for (int i = 0; i < V; i++)
-		 * if (isCyclicUtil(i, visited, recStack))
-		 * return true;
-		 * 
-		 * return false;
-		 * }
-		 */
-
 		// Fügt eine (gerichtete) Kante an den Graphen hinzu
 		private void addEdge(int source, int dest) {
 			adj.get(source).add(dest);
 		}
 
-		public void addEdges(Map<String, java.util.List<Map<String, String>>> dependencies,
-				Map<String, Integer> productMap) {
-			for (Map.Entry<String, java.util.List<Map<String, String>>> entry : dependencies.entrySet()) {
+		public void addEdges(Map<String, List<Map<String, String>>> dependencies, Map<String, Integer> productMap) {
+			for (Map.Entry<String, List<Map<String, String>>> entry : dependencies.entrySet()) {
 				Object fst = productMap.get(entry.getKey());
 
 				if (fst == null)
@@ -225,17 +177,6 @@ public class DependenciesTreeModel {
 
 					addEdge(first, second);
 
-					/*
-					 * switch(requirementType) {
-					 * case "before":
-					 * addEdge(first, second);
-					 * break;
-					 * 
-					 * case "after":
-					 * addEdge(second, first);
-					 * break;
-					 * }
-					 */
 				}
 			}
 		}

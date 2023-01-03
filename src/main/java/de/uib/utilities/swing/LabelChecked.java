@@ -3,11 +3,13 @@ package de.uib.utilities.swing;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 
+import de.uib.configed.Globals;
+
 public class LabelChecked extends JLabel {
 
-	Icon iconChecked = de.uib.configed.Globals.createImageIcon("images/checked_box_blue_14.png", "");
-	Icon iconUnchecked = de.uib.configed.Globals.createImageIcon("images/checked_box_blue_empty_14.png", "");
-	Icon iconEmpty = de.uib.configed.Globals.createImageIcon("images/checked_void.png", "");
+	Icon iconChecked = Globals.createImageIcon("images/checked_box_blue_14.png", "");
+	Icon iconUnchecked = Globals.createImageIcon("images/checked_box_blue_empty_14.png", "");
+	Icon iconEmpty = Globals.createImageIcon("images/checked_void.png", "");
 
 	public LabelChecked() {
 		this(false);

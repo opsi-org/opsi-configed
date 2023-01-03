@@ -1,14 +1,13 @@
 package de.uib.configed.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
@@ -18,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.TableModelListener;
 
 /**
  * FSoftwarename2LicencePool
@@ -48,17 +46,17 @@ import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
 public class FSoftwarename2LicencePool extends FDialogSubTable {
-	public static final String valNoLicencepool = "---";
+	public static final String VALUE_NO_LICENCE_POOL = "---";
 	public PanelGenEditTable panelSWnames;
 	public GenTableModel modelSWnames;
 
-	private Vector<String> columnNames;
-	private Vector<String> classNames;
+	private List<String> columnNames;
+	private List<String> classNames;
 
 	public PanelGenEditTable panelSWxLicencepool;
 	public GenTableModel modelSWxLicencepool;
-	private Vector<String> columnNamesSWxLicencepool;
-	private Vector<String> classNamesSWxLicencepool;
+	private List<String> columnNamesSWxLicencepool;
+	private List<String> classNamesSWxLicencepool;
 
 	private TableModelFilterCondition showOnlyNamesWithVariantLicences;
 	private TableModelFilterCondition showOnlyNamesWithoutLicences;
@@ -73,7 +71,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	public enum Softwarename2LicencepoolRestriction {
 		SHOW_ALL_NAMES, SHOW_ONLY_NAMES_WITH_VARIANT_LICENCEPOOLS, SHOW_ONLY_NAMES_WITHOUT_ASSIGNED_LICENCEPOOL
-	};
+	}
 
 	public enum Softwarename2LicencepoolChangeOption {
 		NO_CHANGE, REMOVE_ALL_ASSIGNEMENTS, SET_ALL_TO_GLOBAL_SELECTED_LICENCEPOOL, SET_ALL_TO_SELECTED_LINE
@@ -92,22 +90,20 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	public FSoftwarename2LicencePool(JFrame owner, ControlPanelAssignToLPools myController) {
 		super(
-				// de.uib.configed.Globals.mainFrame,
+
 				owner, configed.getResourceValue("FSoftwarename2LicencePool.title"), false, new String[] {
-						// "save",
-						// "cancel",
+
 						configed.getResourceValue("FSoftwarename2LicencePool.buttonClose") },
 				new Icon[] {
-						// "save",
-						// "cancel",
+
 						Globals.createImageIcon("images/cancel16_small.png", "") },
 				1, 700, 800);
 
 		this.myController = myController;
 		persist = PersistenceControllerFactory.getPersistenceController();
 
-		panelSWnames = new PanelGenEditTable("", // "software assigned, but not existing",
-				// configed.getResourceValue("ConfigedMain.LicenctiontitleWindowsSoftware2LPool"),
+		panelSWnames = new PanelGenEditTable("",
+
 				0, false, // editing,
 				0, true // switchLineColors
 				, new int[] { PanelGenEditTable.POPUP_RELOAD },
@@ -121,14 +117,13 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			}
 		};
 
-		panelSWxLicencepool = new PanelGenEditTable("", // "software assigned, but not existing",
-				// configed.getResourceValue("ConfigedMain.LicenctiontitleWindowsSoftware2LPool"),
+		panelSWxLicencepool = new PanelGenEditTable("",
+
 				0, // width
 				true, // editing,
 				0, true // switchLineColors
 				, new int[] { PanelGenEditTable.POPUP_RELOAD },
-				// PanelGenEditTable.POPUP_SAVE, PanelGenEditTable.POPUP_CANCEL },
-				// PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF,
+
 				false // searchpane
 		) {
 			@Override
@@ -151,7 +146,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 					val = getValueAt(selRow, 1);
 
 				if (val != null && isSingleSelection() && getTableModel().getRowCount() > 1
-						&& !((String) val).equals(valNoLicencepool)) {
+						&& !((String) val).equals(VALUE_NO_LICENCE_POOL)) {
 					buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(true);
 					labelSetAllAssignmentsToPoolFromSelectedRow
 							.setText(labelText + " " + getValueAt(getSelectedRow(), 1));
@@ -168,56 +163,29 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		owner.setVisible(true);
 
-		/*
-		 * jButton1 = new de.uib.configed.gui.IconButton (
-		 * de.uib.configed.configed.getResourceValue(
-		 * "PanelGenEditTable.SaveButtonTooltip") ,
-		 * "images/apply.png",
-		 * "images/apply_over.png",
-		 * "images/apply_disabled.png");
-		 * 
-		 * jButton2 = new de.uib.configed.gui.IconButton(
-		 * de.uib.configed.configed.getResourceValue(
-		 * "PanelGenEditTable.CancelButtonTooltip") ,
-		 * "images/cancel.png",
-		 * "images/cancel_over.png",
-		 * "images/cancel_disabled.png");
-		 */
-
 		initDataStructure();
-		// setTableModel(null);
 
 		buttonRemoveAllAssignments = new JButton();
-		buttonRemoveAllAssignments.setIcon(de.uib.configed.Globals.createImageIcon("images/list-remove-14.png", ""));
+		buttonRemoveAllAssignments.setIcon(Globals.createImageIcon("images/list-remove-14.png", ""));
 		buttonRemoveAllAssignments.setPreferredSize(Globals.shortButtonDimension);
 		labelRemoveAllAssignments = new JLabel(
 				configed.getResourceValue("FSoftwarename2LicencePool.labelRemoveAllAssignments"));
-		buttonRemoveAllAssignments.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// panelSWxLicencepool.cancel();
-				panelSWxLicencepool.setDataChanged(setSWxColTo(valNoLicencepool));
-			}
-		});
+		buttonRemoveAllAssignments.addActionListener(
+				actionEvent -> panelSWxLicencepool.setDataChanged(setSWxColTo(VALUE_NO_LICENCE_POOL)));
 
 		buttonSetAllAssignmentsToGloballySelectedPool = new JButton();
 		buttonSetAllAssignmentsToGloballySelectedPool.setEnabled(false);
 		buttonSetAllAssignmentsToGloballySelectedPool.setPreferredSize(Globals.shortButtonDimension);
-		buttonSetAllAssignmentsToGloballySelectedPool
-				.setIcon(de.uib.configed.Globals.createImageIcon("images/list-add-14.png", ""));
+		buttonSetAllAssignmentsToGloballySelectedPool.setIcon(Globals.createImageIcon("images/list-add-14.png", ""));
 		labelSetAllAssignmentsToGloballySelectedPool = new JLabel(
 				configed.getResourceValue("FSoftwarename2LicencePool.labelSetAllAssignmentsToGloballySelectedPool"));
-		buttonSetAllAssignmentsToGloballySelectedPool.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// panelSWxLicencepool.cancel();
-				panelSWxLicencepool.setDataChanged(setSWxColTo(globalLicencePool));
-			}
-		});
+		buttonSetAllAssignmentsToGloballySelectedPool
+				.addActionListener(actionEvent -> panelSWxLicencepool.setDataChanged(setSWxColTo(globalLicencePool)));
 
 		buttonSetAllAssignmentsToPoolFromSelectedRow = new JButton();
 		buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(false);
 		buttonSetAllAssignmentsToPoolFromSelectedRow.setPreferredSize(Globals.shortButtonDimension);
-		buttonSetAllAssignmentsToPoolFromSelectedRow
-				.setIcon(de.uib.configed.Globals.createImageIcon("images/list-add-14.png", ""));
+		buttonSetAllAssignmentsToPoolFromSelectedRow.setIcon(Globals.createImageIcon("images/list-add-14.png", ""));
 		labelSetAllAssignmentsToPoolFromSelectedRow = new JLabel(
 				configed.getResourceValue("FSoftwarename2LicencePool.labelSetAllAssignmentsToPoolFromSelectedRow")); // assign
 																																												// each
@@ -227,17 +195,13 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 																																												// selected
 																																												// row:
 																																												// ")
-																																												// ;
-		buttonSetAllAssignmentsToPoolFromSelectedRow.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// panelSWxLicencepool.cancel();
-				panelSWxLicencepool.setDataChanged(
-						setSWxColTo((String) panelSWxLicencepool.getValueAt(panelSWxLicencepool.getSelectedRow(), 1)));
-			}
-		});
+
+		buttonSetAllAssignmentsToPoolFromSelectedRow
+				.addActionListener(actionEvent -> panelSWxLicencepool.setDataChanged(
+						setSWxColTo((String) panelSWxLicencepool.getValueAt(panelSWxLicencepool.getSelectedRow(), 1))));
 
 		JPanel panelAction = new JPanel();
-		panelAction.setBackground(Globals.backgroundWhite);
+		panelAction.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		GroupLayout panelActionLayout = new GroupLayout(panelAction);
 		panelAction.setLayout(panelActionLayout);
@@ -307,16 +271,13 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						.addGap(Globals.HGAP_SIZE)));
 
 		setAdditionalPane(panelSWx);
-		// setTableModelSWxLicencepool( "zypper" );
-		additionalPane.setBackground(de.uib.configed.Globals.backgroundWhite);// Color.YELLOW
-																				// );//de.uib.configed.Globals.backLightBlue
-																				// );
+
+		additionalPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);// Color.YELLOW
+
 		setCenterPane(panelSWnames);
 		additionalPane.setVisible(true);
-		// additionalPane.setBackground( Color.RED );
-		// additionalPane.setPreferredSize( new Dimension( 400, 400) );
+
 		setupLayout();
-		// setSize( new Dimension( 800, 400 ) );
 
 	}
 
@@ -326,44 +287,48 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	}
 
 	protected void initDataStructure() {
-		columnNames = new Vector<String>();
+		columnNames = new ArrayList<>();
 		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS)
 			columnNames.add(key);
 
-		classNames = new Vector<String>();
+		classNames = new ArrayList<>();
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
 
 		updateCollection = new TableUpdateCollection();
 
-		columnNamesSWxLicencepool = new Vector<String>();
+		columnNamesSWxLicencepool = new ArrayList<>();
 		columnNamesSWxLicencepool.add(AuditSoftwareXLicencePool.SwID);
 		columnNamesSWxLicencepool.add(LicencepoolEntry.idSERVICEKEY);
 
-		classNamesSWxLicencepool = new Vector<String>();
+		classNamesSWxLicencepool = new ArrayList<>();
 		for (int i = 0; i < columnNamesSWxLicencepool.size(); i++) {
 			classNamesSWxLicencepool.add("java.lang.String");
 		}
 
 		showOnlyNamesWithVariantLicences = new DefaultTableModelFilterCondition(
 				"" + Softwarename2LicencepoolRestriction.SHOW_ONLY_NAMES_WITH_VARIANT_LICENCEPOOLS) {
+			@Override
 			public void setFilter(TreeSet<Object> filter) {
 			}
 
-			public boolean test(Vector<Object> row) {
-				// logging.info(this, "showOnlyNamesWithVariantLicences testing row " + row);
+			@Override
+			public boolean test(List<Object> row) {
+
 				return getRangeSWxLicencepool((String) row.get(0)).size() > 1;
 			}
 		};
 
 		showOnlyNamesWithoutLicences = new DefaultTableModelFilterCondition(
 				"" + Softwarename2LicencepoolRestriction.SHOW_ONLY_NAMES_WITHOUT_ASSIGNED_LICENCEPOOL) {
+			@Override
 			public void setFilter(TreeSet<Object> filter) {
 			}
 
-			public boolean test(Vector<Object> row) {
-				// logging.info(this, "showOnlyNamesWithoutLicences testing row " + row);
+			@Override
+			public boolean test(List<Object> row) {
+
 				return checkExistNamesWithVariantLicencepools((String) row.get(0));
 			}
 		};
@@ -371,6 +336,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		panelSWnames.setListSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		panelSWnames.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (e.getValueIsAdjusting())
 					return;
@@ -385,10 +351,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 					setTableModelSWxLicencepool(swName);
 
 				}
-
-				// setTableModelSWxLicencepool
-
-				// jButton1.setEnabled( panelSWnames.getTheTable().getSelectedRowCount() > 0 );
 			}
 		});
 
@@ -402,7 +364,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			modelSWxLicencepool.setValueAt(newVal, i, 1);
 		}
 
-		return updateCollection.size() > 0;
+		return !updateCollection.isEmpty();
 
 	}
 
@@ -419,37 +381,14 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			logging.info(this, "init modelSWnames");
 			this.modelSWnames = new GenTableModel(null, // no updates
 					new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-							// new MapRetriever(){
-							// public Map retrieveMap()
-							// {
-							// persist.installedSoftwareInformationRequestRefresh();
-							// return persist.getInstalledSoftwareName2SWinfo();
-							// }
-							// }
+
 							() -> (Map) persist.getInstalledSoftwareName2SWinfo())
-					// ,
 
 					),
 
-					0, new int[] {}, (TableModelListener) panelSWnames, updateCollection)
-
-			/*
-			 * {
-			 * 
-			 * @Override
-			 * public Object getValueAt( int row , int col)
-			 * {
-			 * logging.info("modelSWnames getValueAt row, col " + row + ", " + col);
-			 * return super.getValueAt( row, col);
-			 * }
-			 * }
-			 */
+					0, new int[] {}, panelSWnames, updateCollection)
 
 			{
-				@Override
-				protected void initColumns() {
-					super.initColumns();
-				}
 
 				@Override
 				public void produceRows() {
@@ -479,21 +418,13 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		panelSWnames.setTableModel(this.modelSWnames);
 
-		// modelSWnames.setFilterCondition( showOnlyNamesWithVariantLicences );
-		// modelSWnames.setFilterCondition( showOnlyNamesWithoutLicences );
-		// panelSWnames.setFiltering( true );
-		// modelSWnames.reset();
-		// logging.info(this, "we did a reset for modelSWnames");
-
 	}
 
 	public void setPreselectionForName2Pool(Softwarename2LicencepoolRestriction val) {
-		boolean filtering = true;
 
 		switch (val) {
 		case SHOW_ALL_NAMES:
 			modelSWnames.clearFilter();
-			filtering = false;
 			break;
 		case SHOW_ONLY_NAMES_WITH_VARIANT_LICENCEPOOLS:
 			modelSWnames.setFilterCondition(showOnlyNamesWithVariantLicences);
@@ -504,7 +435,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		}
 
 		modelSWnames.reset();
-		// modelSWnames.requestReload();
 
 		logging.info(this, "setPreselectionForName2Pool, we did a reset for modelSWnames with " + val);
 	}
@@ -513,13 +443,13 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	// nearly done in produceModelSWxLicencepool, but we collect the range of the
 	// model-map
 	{
-		Set<String> range = new HashSet<String>();
+		Set<String> range = new HashSet<>();
 
 		for (String swID : persist.getName2SWIdents().get(swName)) {
 			String licpool = persist.getFSoftware2LicencePool(swID);
 
 			if (licpool == null)
-				range.add(valNoLicencepool);
+				range.add(VALUE_NO_LICENCE_POOL);
 			else
 				range.add(licpool);
 		}
@@ -529,7 +459,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	private boolean checkExistNamesWithVariantLicencepools(String name) {
 		java.util.Set<String> range = getRangeSWxLicencepool(name);
-		if (range.size() == 1 && range.contains(valNoLicencepool))
+		if (range.size() == 1 && range.contains(VALUE_NO_LICENCE_POOL))
 			return true;
 		return false;
 	}
@@ -570,15 +500,15 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	private Map<String, Map<String, String>> produceModelSWxLicencepool(String swName) {
 		logging.info(this, "produceModelSWxLicencepool for swName: " + swName);
 
-		TreeMap<String, Map<String, String>> result = new TreeMap<String, Map<String, String>>();
+		TreeMap<String, Map<String, String>> result = new TreeMap<>();
 
 		for (String swID : persist.getName2SWIdents().get(swName)) {
-			LinkedHashMap<String, String> rowMap = new LinkedHashMap<String, String>();
+			LinkedHashMap<String, String> rowMap = new LinkedHashMap<>();
 			rowMap.put(AuditSoftwareXLicencePool.SwID, swID);
 			String licpool = persist.getFSoftware2LicencePool(swID);
 
 			if (licpool == null)
-				rowMap.put(LicencepoolEntry.idSERVICEKEY, valNoLicencepool);
+				rowMap.put(LicencepoolEntry.idSERVICEKEY, VALUE_NO_LICENCE_POOL);
 			else
 				rowMap.put(LicencepoolEntry.idSERVICEKEY, licpool);
 
@@ -605,14 +535,9 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						logging.info(this, "retrieveMap for swName " + swName);
 						return (Map) produceModelSWxLicencepool(swName);
 					}
-				}
-				// () -> (Map) produceModelSWxLicencepool( swName )
-				)
-		// ,
+				})),
 
-		),
-
-				keyCol, new int[] {}, (TableModelListener) panelSWnames, updateCollection);
+				keyCol, new int[] {}, panelSWnames, updateCollection);
 		updateItemFactoySWxLicencepool.setSource(modelSWxLicencepool);
 		logging.info(this, "setTableModelSWxLicencepool, we reset the model");
 		modelSWxLicencepool.reset();
@@ -622,24 +547,23 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		// updates
 		panelSWxLicencepool.setUpdateController(
 				new MapItemsUpdateController(panelSWxLicencepool, modelSWxLicencepool, new MapBasedUpdater() {
+					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
 						logging.info(this, "sendUpdate " + rowmap);
-						// update with new value "---" == valNoLicencepool is interpreted as deleting
 
-						// modelSWxLicencepool.requestReload();
-						// myController.thePanel.panelRegisteredSoftware.requestReload();
 						// reloads local data (which are not yet updated)
 						String swID = (String) rowmap.get(AuditSoftwareXLicencePool.SwID);
 						String licensePoolID_old = persist.getFSoftware2LicencePool(swID);
 						String licensePoolID_new = (String) rowmap.get(LicencepoolEntry.idSERVICEKEY);
 
-						if (!valNoLicencepool.equals(licensePoolID_new))
+						if (!VALUE_NO_LICENCE_POOL.equals(licensePoolID_new))
 							setSWInfo(swID, licensePoolID_new);
 
 						return persist.editPool2AuditSoftware(swID, licensePoolID_old, licensePoolID_new);
 
 					}
 
+					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						logging.info(this, "sendDelete " + rowmap);
 						// deleting not activated in panel
@@ -648,43 +572,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 					}
 				}, updateCollection));
-		// panelSWxLicencepool.setDataChanged ( true );
 
-	}
-
-	@Override
-	public void doAction1() {
-		super.doAction1();
-		/*
-		 * logging.debug(this, "doAction1");
-		 * 
-		 * logging.info(this, "removeAssociations for "
-		 * + " licencePool " + myController.getSelectedLicencePool()
-		 * + " selected SW keys " + panelSWnames.getSelectedKeys());
-		 * 
-		 * 
-		 * 
-		 * boolean success = persist.removeAssociations(
-		 * myController.getSelectedLicencePool(),
-		 * panelSWnames.getSelectedKeys()
-		 * );
-		 * 
-		 * if (success)
-		 * {
-		 * for (String key : panelSWnames.getSelectedKeys())
-		 * {
-		 * int row = panelSWnames.findViewRowFromValue(key, keyCol);
-		 * logging.info(this, "doAction1 key, " + key + ", row " + row);
-		 * logging.info(this, "doAction1 model row " +
-		 * panelSWnames.getTheTable().convertRowIndexToModel( row ) );
-		 * panelSWnames.getTableModel().deleteRow(
-		 * panelSWnames.getTheTable().convertRowIndexToModel( row ) );
-		 * }
-		 * result = 1;
-		 * }
-		 * //owner.setVisible(true);
-		 * //leave();
-		 */
 	}
 
 	@Override
@@ -699,7 +587,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	public void leave() {
 		setVisible(false);
 		// we dont dispose the window, dispose it in the enclosing class
-		// setEnabled(false);
 	}
 
 	public void exit() {

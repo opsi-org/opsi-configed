@@ -5,8 +5,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -38,10 +39,9 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	private JButton buttonSelectDepotsWithEqualProperties;
 	private JButton buttonSelectDepotsAll;
 
-	// private JTextField searchField;
 	private TablesearchPane searchPane;
 
-	private Vector<? extends String> unfilteredV;
+	private List<String> unfilteredV;
 
 	private boolean multidepot;
 
@@ -55,8 +55,8 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		this.multidepot = multidepot;
 		this.persist = persist;
 
-		Vector<String> values = new Vector<String>();
-		Vector<String> descriptions = new Vector<String>();
+		List<String> values = new ArrayList<>();
+		List<String> descriptions = new ArrayList<>();
 		Map<String, Map<String, Object>> depotInfo = depotsList.getDepotInfo();
 
 		for (String depot : depotInfo.keySet()) {
@@ -96,7 +96,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	 * @return java.awt.Color
 	 */
 	public Color getMyColor() {
-		return Globals.backgroundWhite;
+		return Globals.SECONDARY_BACKGROUND_COLOR;
 	}
 
 	/**
@@ -106,18 +106,12 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	 */
 	public void setChangedDepotSelectionActive(boolean active) {
 		if (active)
-			depotslist.setBackground(Globals.backLightYellow);
+			depotslist.setBackground(Globals.BACKGROUND_COLOR_9);
 		else
-			depotslist.setBackground(Globals.backgroundWhite);
+			depotslist.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		// colorize as hint that we have changed the depots selection
 
-		/*
-		 * buttonCommitChangedDepotSelection.setEnabled(active);
-		 * buttonCancelChangedDepotSelection.setEnabled(active);
-		 * popupCommitChangedDepotSelection.setEnabled(active);
-		 * popupCancelChangedDepotSelection.setEnabled(active);
-		 */
 	}
 
 	private void initComponents() {
@@ -127,10 +121,9 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		else
 			labelDepotServer.setText(configed.getResourceValue("DepotListPresenter.depot"));
 		labelDepotServer.setOpaque(false);
-		// labelDepotServer.setBackground(Globals.backgroundWhite); //backTabsColor);
-		labelDepotServer.setBackground(Globals.backLightBlue);
+
+		labelDepotServer.setBackground(Globals.BACKGROUND_COLOR_7);
 		labelDepotServer.setFont(Globals.defaultFontStandardBold);
-		// labelDepotServer.setFont(Globals.defaultFont);
 
 		buttonSelectDepotsWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
 		buttonSelectDepotsWithEqualProperties
@@ -144,13 +137,6 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		Globals.formatButtonSmallText(buttonSelectDepotsAll);
 		buttonSelectDepotsAll.addActionListener(this);
 		buttonSelectDepotsAll.setEnabled(multidepot);
-
-		/*
-		 * searchField = new JTextField("");
-		 * searchField.setFont(Globals.defaultFont);
-		 * searchField.setBackground( getMyColor() );
-		 * if (!multidepot) searchField.setVisible(false);
-		 */
 
 		searchPane.setFieldFont(Globals.defaultFont);
 		searchPane.setFieldBackground(getMyColor());
@@ -169,96 +155,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		scrollpaneDepotslist.setPreferredSize(depotslist.getMaximumSize());
 
 		depotslist.setFont(Globals.defaultFont);
-		depotslist.setBackground(Globals.backgroundWhite);
-
-		/*
-		 * depotslist.addMouseListener(new utils.PopupMouseListener(popupDepotList));
-		 * popupDepotList.add(popupCommitChangedDepotSelection);
-		 * popupDepotList.add(popupCancelChangedDepotSelection);
-		 * 
-		 * popupCommitChangedDepotSelection.setText(de.uib.configed.configed.
-		 * getResourceValue("MainFrame.buttonChangeDepot") ) ;
-		 * popupCommitChangedDepotSelection.setToolTipText(
-		 * de.uib.configed.configed.getResourceValue(
-		 * "MainFrame.buttonChangeDepot.tooltip")
-		 * );
-		 * 
-		 * popupCommitChangedDepotSelection.addActionListener(new ActionListener()
-		 * {
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * logging.debug(this, "actionPerformed " + e);
-		 * main.changeDepotSelection();
-		 * }
-		 * });
-		 * 
-		 * popupCommitChangedDepotSelection.setEnabled(false);
-		 * 
-		 * popupCancelChangedDepotSelection.setText(de.uib.configed.configed.
-		 * getResourceValue("MainFrame.buttonCancelDepot") ) ;
-		 * popupCancelChangedDepotSelection.setToolTipText(
-		 * de.uib.configed.configed.getResourceValue(
-		 * "MainFrame.buttonCancelDepot.tooltip")
-		 * );
-		 * 
-		 * popupCancelChangedDepotSelection.addActionListener(new ActionListener()
-		 * {
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * logging.debug(this, "actionPerformed " + e);
-		 * main.cancelChangeDepotSelection();
-		 * 
-		 * }
-		 * });
-		 * 
-		 * popupCancelChangedDepotSelection.setEnabled(false);
-		 */
-
-		// setChangedDepotSelectionActive(false); is not initialized
-		// must not be set (otherwise the embedding scrollpane does not scroll)
-		// depotslist.setPreferredSize(new Dimension(widthColumnServer, line_height));
-		// depotslist.setFont(Globals.defaultFont);
-		// labelDepotServer.setPreferredSize(new Dimension(widthColumnServer,
-		// line_height));
-
-		// popupDepots = new JPopupMenu();
-		// depotslist.setComponentPopupMenu(popupDepots);
-
-		/*
-		 * buttonCommitChangedDepotSelection = new IconButton(
-		 * configed.getResourceValue("MainFrame.buttonChangeDepot.tooltip"),
-		 * "images/depot_activate.png",
-		 * "images/depot_activate_disabled.png",
-		 * "images/depot_activate_disabled.png",
-		 * false);
-		 * buttonCommitChangedDepotSelection.setPreferredSize(new
-		 * Dimension(Globals.squareButtonWidth, Globals.buttonHeight));
-		 * buttonCommitChangedDepotSelection.addActionListener(new ActionListener()
-		 * {
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * main.changeDepotSelection();
-		 * }
-		 * }
-		 * );
-		 * 
-		 * buttonCancelChangedDepotSelection = new IconButton(
-		 * configed.getResourceValue("MainFrame.buttonCancelDepot.tooltip"),
-		 * "images/cancel22_small.png",
-		 * "images/cancel22_small.png",
-		 * "images/cancel22_small.png",
-		 * false);
-		 * buttonCancelChangedDepotSelection.setPreferredSize(new
-		 * Dimension(Globals.squareButtonWidth, Globals.buttonHeight));
-		 * buttonCancelChangedDepotSelection.addActionListener(new ActionListener(){
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * main.cancelChangeDepotSelection();
-		 * }
-		 * }
-		 * );
-		 */
-
+		depotslist.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 	}
 
 	private void layouting() {
@@ -272,12 +169,8 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 						.addComponent(buttonSelectDepotsWithEqualProperties, GroupLayout.Alignment.TRAILING,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonSelectDepotsAll, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				// .addComponent(buttonCommitChangedDepotSelection, GroupLayout.PREFERRED_SIZE,
-				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				// .addComponent(buttonCancelChangedDepotSelection, GroupLayout.PREFERRED_SIZE,
-				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				).addGap(5, 5, 10).addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGap(5, 5, 10).addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(searchPane, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				.addGap(5, 5, 10));
 
@@ -288,10 +181,6 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonSelectDepotsAll, Globals.SQUARE_BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						// .addComponent(buttonCommitChangedDepotSelection, GroupLayout.PREFERRED_SIZE,
-						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						// .addComponent(buttonCancelChangedDepotSelection, GroupLayout.PREFERRED_SIZE,
-						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGap(10, 10, 10))
 				.addGroup(layout.createSequentialGroup().addGap(5, 5, 5)
 						.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(5, 5, 5)));
@@ -304,7 +193,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 
 		if (!filtered) {
 			unfilteredV = depotslist.getListData();
-			depotslist.setListData(new Vector<String>(depotslist.getSelectedValuesList()));
+			depotslist.setListData(new ArrayList<>(depotslist.getSelectedValuesList()));
 		} else
 			depotslist.setListData(unfilteredV);
 
@@ -313,11 +202,11 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	}
 
 	// ActionListener implementation
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == buttonSelectDepotsAll) {
 			logging.info(this, "action on buttonSelectDepotsAll");
-			// filterOnSelect();
-			// depotslist.setSelectionInterval(0, depotslist.getModel().getSize() - 1);
+
 			depotslist.selectAll();
 		}
 
@@ -325,9 +214,8 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 			logging.info(this, "action on buttonSelectDepotsWithEqualProperties");
 
 			if (depotslist.getSelectedIndex() > -1) {
-				String depotSelected = (String) depotslist.getSelectedValue();
-				java.util.List<String> depotsWithEqualStock = persist
-						.getAllDepotsWithIdenticalProductStock(depotSelected);
+				String depotSelected = depotslist.getSelectedValue();
+				List<String> depotsWithEqualStock = persist.getAllDepotsWithIdenticalProductStock(depotSelected);
 				depotslist.addToSelection(depotsWithEqualStock);
 
 			}

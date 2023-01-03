@@ -3,8 +3,6 @@ package de.uib.configed;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
-import java.util.Vector;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -17,7 +15,6 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
@@ -66,7 +63,7 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 
 		if (result != null) {
 			thePanel.panelUsage.reload();
-			// thePanel.panelUsage.moveToValue(clientId, 0, true);
+
 			thePanel.panelUsage.moveToKeyValue(result);
 		} else {
 			thePanel.panelUsage.moveToValue(clientId, 0, true);
@@ -76,42 +73,31 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 
 	}
 
+	@Override
 	public TabClientAdapter getTabClient() {
 		return thePanel;
 	}
-
-	/*
-	 * protected Vector getChoicesAllHosts()
-	 * {
-	 * TreeSet set = new TreeSet();
-	 * set.add("");
-	 * set.addAll(new TreeMap(
-	 * persist.getHostInfoCollections().getPcListForDepots(
-	 * mainController.getSelectedDepots() )
-	 * ).keySet());
-	 * return new Vector(set);
-	 * }
-	 */
 
 	@Override
 	public void initializeVisualSettings() {
 		thePanel.setDivider();
 	}
 
+	@Override
 	public void init() {
 		updateCollection = new TableUpdateCollection();
 
-		Vector<String> columnNames;
-		Vector<String> classNames;
+		List<String> columnNames;
+		List<String> classNames;
 
 		// --- panelLicencesUsage
-		columnNames = new Vector<>();
-		columnNames.add(LicenceUsageEntry.clientIdKEY);
-		columnNames.add(LicenceUsageEntry.licenceIdKEY);
-		columnNames.add(LicenceUsageEntry.licencepoolIdKEY);
-		columnNames.add(LicenceUsageEntry.licencekeyKEY);
-		columnNames.add(LicenceUsageEntry.notesKEY);
-		classNames = new Vector<>();
+		columnNames = new ArrayList<>();
+		columnNames.add(LicenceUsageEntry.CLIENT_ID_KEY);
+		columnNames.add(LicenceUsageEntry.LICENCE_ID_KEY);
+		columnNames.add(LicenceUsageEntry.LICENCE_POOL_ID_KEY);
+		columnNames.add(LicenceUsageEntry.LICENCE_KEY_KEY);
+		columnNames.add(LicenceUsageEntry.NOTES_KEY);
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
@@ -120,11 +106,9 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 		MapTableUpdateItemFactory updateItemFactoryLicencesUsage = new MapTableUpdateItemFactory(modelLicencesUsage,
 				columnNames, classNames, 0);
 		modelLicencesUsage = new GenTableModel(updateItemFactoryLicencesUsage,
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
-					public Map retrieveMap() {
-						persist.licencesUsageRequestRefresh();
-						return persist.getLicencesUsage();
-					}
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
+					persist.licencesUsageRequestRefresh();
+					return (Map) persist.getLicencesUsage();
 				})), -1, new int[] { 0, 1, 2 }, thePanel.panelUsage, updateCollection);
 		updateItemFactoryLicencesUsage.setSource(modelLicencesUsage);
 
@@ -136,50 +120,6 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 		modelLicencesUsage.setEditableColumns(new int[] { 3, 4 });
 		thePanel.panelUsage.setEmphasizedColumns(new int[] { 3, 4 });
 
-		// --- PopupMenu
-		/*
-		 * JMenuItemFormatted menuItemAddUsage = new
-		 * JMenuItemFormatted("add Usage");//configed.getResourceValue(
-		 * "ConfigedMain.Licences.NewLicencecontract"));
-		 * menuItemAddUsage.addActionListener(new ActionListener(){
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * }
-		 * });
-		 * 
-		 * thePanel.panelUsage.addPopupItem(menuItemAddUsage);
-		 * 
-		 * 
-		 * JMenuItemFormatted menuItemDeleteRelationLicenceUsage = new
-		 * JMenuItemFormatted("delete usage");//configed.getResourceValue(
-		 * "ConfigedMain.Licences.NewLicencecontract"));
-		 * menuItemDeleteRelationLicenceUsage.addActionListener(new ActionListener(){
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * 
-		 * int selRowsCount = thePanel.panelUsage.getSelectedRowCount();
-		 * 
-		 * if (selRowsCount == 0)
-		 * {
-		 * JOptionPane.showMessageDialog( mainController.licencesFrame,
-		 * "keine Zeile ausgewählt",
-		 * //configed.getResourceValue("ConfigedMain.Licences.noRowSelected"),
-		 * configed.getResourceValue("ConfigedMain.Licences.hint.title"),
-		 * JOptionPane.OK_OPTION);
-		 * 
-		 * return;
-		 * }
-		 * else
-		 * {
-		 * modelLicencesUsage.deleteRow(thePanel.panelUsage.getSelectedRowInModelTerms()
-		 * );
-		 * }
-		 * }
-		 * });
-		 * 
-		 * thePanel.panelUsage.addPopupItem(menuItemDeleteRelationLicenceUsage);
-		 */
-
 		// special treatment of columns
 		javax.swing.table.TableColumn col;
 		col = thePanel.panelUsage.getColumnModel().getColumn(4);
@@ -188,30 +128,30 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 		// updates
 		thePanel.panelUsage.setUpdateController(
 				new MapItemsUpdateController(thePanel.panelUsage, modelLicencesUsage, new MapBasedUpdater() {
+					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
-						return persist.editLicenceUsage((String) rowmap.get(LicenceUsageEntry.clientIdKEY), // "hostId"),
-								(String) rowmap.get(LicenceUsageEntry.licenceIdKEY), // "softwareLicenseId"),
-								(String) rowmap.get(LicenceUsageEntry.licencepoolIdKEY), // "licensePoolId"),
-								(String) rowmap.get(LicenceUsageEntry.licencekeyKEY), // "licenseKey"),
-								(String) rowmap.get(LicenceUsageEntry.notesKEY) // "notes")
-						);
+						return persist.editLicenceUsage((String) rowmap.get(LicenceUsageEntry.CLIENT_ID_KEY),
+								(String) rowmap.get(LicenceUsageEntry.LICENCE_ID_KEY),
+								(String) rowmap.get(LicenceUsageEntry.LICENCE_POOL_ID_KEY),
+								(String) rowmap.get(LicenceUsageEntry.LICENCE_KEY_KEY),
+								(String) rowmap.get(LicenceUsageEntry.NOTES_KEY));
 
 					}
 
+					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencesUsage.requestReload();
-						return persist.deleteLicenceUsage((String) rowmap.get(LicenceUsageEntry.clientIdKEY), // ""hostId"),
-								(String) rowmap.get(LicenceUsageEntry.licenceIdKEY), // "softwareLicenseId"),
-								(String) rowmap.get(LicenceUsageEntry.licencepoolIdKEY) // "licensePoolId")
-						);
+						return persist.deleteLicenceUsage((String) rowmap.get(LicenceUsageEntry.CLIENT_ID_KEY),
+								(String) rowmap.get(LicenceUsageEntry.LICENCE_ID_KEY),
+								(String) rowmap.get(LicenceUsageEntry.LICENCE_POOL_ID_KEY));
 					}
 				}, updateCollection));
 
 		// --- panelLicencepools
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryLicencepools = new MapTableUpdateItemFactory(modelLicencepools,
@@ -228,10 +168,11 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 
 		// combo clients
 		thePanel.setClientsSource(new de.uib.utilities.ComboBoxModeller() {
+			@Override
 			public ComboBoxModel<String> getComboBoxModel(int row, int column) {
-				List<String> choicesAllHosts = new ArrayList<>(new TreeMap<>(persist.getHostInfoCollections()
-						.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))
-								.keySet());
+				List<String> choicesAllHosts = new ArrayList<>(persist.getHostInfoCollections()
+						.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients())
+						.keySet());
 
 				choicesAllHosts.set(0, "");
 

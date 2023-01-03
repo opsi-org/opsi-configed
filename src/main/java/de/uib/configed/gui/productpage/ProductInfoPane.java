@@ -14,7 +14,6 @@
 
 package de.uib.configed.gui.productpage;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
@@ -113,14 +112,14 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		jLabelProductVersion.setBackground(null);
 
 		jTextAreaProductInfo.setFont(Globals.defaultFont);
-		jTextAreaProductInfo.setBackground(Globals.backgroundLightGrey);
+		jTextAreaProductInfo.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		jScrollPaneProductInfo.setViewportView(jTextAreaProductInfo);
 		jScrollPaneProductInfo.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPaneProductInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		jTextAreaProductAdvice.setFont(Globals.defaultFont);
-		jTextAreaProductAdvice.setBackground(Globals.backgroundLightGrey);
+		jTextAreaProductAdvice.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		jScrollPaneProductAdvice.setViewportView(jTextAreaProductAdvice);
 		jScrollPaneProductAdvice.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -199,29 +198,27 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		GroupLayout layoutBottomComponent = new javax.swing.GroupLayout(bottomComponent);
 		bottomComponent.setLayout(layoutBottomComponent);
 
-		layoutBottomComponent
-				.setHorizontalGroup(
-						layoutBottomComponent.createParallelGroup()
-								.addGroup(layoutBottomComponent.createSequentialGroup()
-										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-										.addComponent(dependenciesActivateButton, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-										.addComponent(dependenciesTextLabel, Globals.MIN_HSIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(0, 0, Short.MAX_VALUE)
-										.addComponent(depotForDependenciesLabel, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE))
+		layoutBottomComponent.setHorizontalGroup(layoutBottomComponent.createParallelGroup()
+				.addGroup(layoutBottomComponent.createSequentialGroup()
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(dependenciesActivateButton, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(dependenciesTextLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE)
+						.addComponent(depotForDependenciesLabel, 0, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE))
 
-								.addComponent(panelProductDependencies)
+				.addComponent(panelProductDependencies)
 
-								.addGroup(layoutBottomComponent.createSequentialGroup()
-										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-										.addComponent(propertiesActivateButton)
-										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-										.addComponent(panelEditProperties.getTitlePanel()))
-								.addComponent(panelEditProperties));
+				.addGroup(layoutBottomComponent.createSequentialGroup()
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(propertiesActivateButton)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(panelEditProperties.getTitlePanel()))
+				.addComponent(panelEditProperties));
 
 		layoutBottomComponent.setVerticalGroup(layoutBottomComponent.createSequentialGroup()
 				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
@@ -241,7 +238,6 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 
 		this.setTopComponent(productDescriptionsPanel);
 		this.setBottomComponent(bottomComponent);
-		// setDividerLocation(250);
 
 	}
 
@@ -251,10 +247,16 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 			isPanelProductDependenciesVisible = !isPanelProductDependenciesVisible;
 
 			dependenciesActivateButton.setText(isPanelProductDependenciesVisible ? "▼" : "▶");
-			dependenciesTextLabel.setForeground(isPanelProductDependenciesVisible ? Color.BLACK : Globals.greyed);
+			dependenciesTextLabel
+					.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
+							: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
+
+			depotForDependenciesLabel.setEnabled(isPanelProductDependenciesVisible);
+			depotForDependenciesLabel
+					.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
+							: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
 
 			panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
-			depotForDependenciesLabel.setForeground(isPanelProductDependenciesVisible ? Color.BLACK : Globals.greyed);
 		}
 
 		else if (event.getSource() == propertiesActivateButton) {
@@ -299,11 +301,9 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		jLabelProductName.setText(s);
 	}
 
-	public void setGrey(boolean b) {
-		float alpha = (float) 1.0f;
-		if (b) {
-			alpha = (float) .1f;
-		}
+	public void setGrey(boolean grey) {
+
+		float alpha = grey ? 0.1f : 1f;
 
 		if (productDescriptionsPanel != null)
 			productDescriptionsPanel.setAlpha(alpha);
@@ -349,8 +349,9 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 
 	//
 	// DataChangedObserver
+	@Override
 	public void dataHaveChanged(Object source) {
-		// logging.debug(this, "dataHaveChanged " + source );
+
 		if (source instanceof de.uib.utilities.datapanel.EditMapPanelX) {
 			specificPropertiesExisting.put(productName, true);
 		}

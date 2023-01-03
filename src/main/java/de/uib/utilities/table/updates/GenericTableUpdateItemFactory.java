@@ -8,32 +8,26 @@
 
 package de.uib.utilities.table.updates;
 
-import java.util.Vector;
+import java.util.List;
 
 public class GenericTableUpdateItemFactory extends TableUpdateItemFactory {
-	protected Vector<String> columnNames;
-	protected Vector<String> classNames;
+	protected List<String> columnNames;
+	protected List<String> classNames;
 	protected int keyCol;
 	protected Object source;
 
-	public GenericTableUpdateItemFactory(
-			Object source,
-			Vector<String> columnNames, Vector<String> classNames,
-			int keyCol) {
+	public GenericTableUpdateItemFactory(Object source, List<String> columnNames, List<String> classNames, int keyCol) {
 		this.columnNames = columnNames;
 		this.classNames = classNames;
 		this.keyCol = keyCol;
 		this.source = source;
 	}
 
-	public GenericTableUpdateItemFactory(
-			Vector<String> columnNames, Vector<String> classNames,
-			int keyCol) {
+	public GenericTableUpdateItemFactory(List<String> columnNames, List<String> classNames, int keyCol) {
 		this(null, columnNames, classNames, keyCol);
 	}
 
-	public GenericTableUpdateItemFactory(
-			int keyCol) {
+	public GenericTableUpdateItemFactory(int keyCol) {
 		this(null, null, null, keyCol);
 	}
 
@@ -41,27 +35,27 @@ public class GenericTableUpdateItemFactory extends TableUpdateItemFactory {
 		this.source = source;
 	}
 
-	public void setClassNames(Vector<String> classNames) {
+	public void setClassNames(List<String> classNames) {
 		this.classNames = classNames;
 	}
 
-	public void setColumnNames(Vector<String> columnNames) {
+	public void setColumnNames(List<String> columnNames) {
 		this.columnNames = columnNames;
 	}
 
-	public TableEditItem produceUpdateItem(Vector oldValues, Vector rowV) {
-		return new GenericTableUpdateItem(
-				source, keyCol, columnNames, classNames, oldValues, rowV);
+	@Override
+	public TableEditItem produceUpdateItem(List oldValues, List rowV) {
+		return new GenericTableUpdateItem(source, keyCol, columnNames, classNames, oldValues, rowV);
 	}
 
-	public TableEditItem produceInsertItem(Vector rowV) {
-		return new GenericTableInsertItem(
-				source, keyCol, columnNames, classNames, rowV);
+	@Override
+	public TableEditItem produceInsertItem(List rowV) {
+		return new GenericTableInsertItem(source, keyCol, columnNames, classNames, rowV);
 	}
 
-	public TableEditItem produceDeleteItem(Vector rowV) {
-		return new GenericTableDeleteItem(
-				source, keyCol, columnNames, classNames, rowV);
+	@Override
+	public TableEditItem produceDeleteItem(List rowV) {
+		return new GenericTableDeleteItem(source, keyCol, columnNames, classNames, rowV);
 	}
 
 }

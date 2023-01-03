@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.jdesktop.swingx.JXPanel;
+import org.jdesktop.swingx.painter.AbstractPainter;
 
 /*
  * configed - configuration editor for client work stations in opsi
@@ -20,6 +21,7 @@ import org.jdesktop.swingx.JXPanel;
  *
  */
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 
 public abstract class DefaultPanelEditProperties extends JXPanel {
 	protected de.uib.utilities.datapanel.AbstractEditMapPanel productPropertiesPanel;
@@ -43,11 +45,11 @@ public abstract class DefaultPanelEditProperties extends JXPanel {
 		super();
 		this.mainController = mainController;
 		this.productPropertiesPanel = productPropertiesPanel;
-		// initComponents();
-		setBackgroundPainter(new org.jdesktop.swingx.painter.AbstractPainter() {
+
+		setBackgroundPainter(new AbstractPainter<DefaultPanelEditProperties>() {
 			@Override
-			public void doPaint(Graphics2D g, Object obj, int width, int height) {
-				g.setPaint(de.uib.configed.Globals.backLightBlue);
+			public void doPaint(Graphics2D g, DefaultPanelEditProperties obj, int width, int height) {
+				g.setPaint(Globals.BACKGROUND_COLOR_7);
 				g.fillRect(0, 0, width, height);
 			}
 		});

@@ -6,12 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.logging;
 
 public class LicenceUsageEntry extends StringValuedRelationElement {
 	/*
-	 * describe LICENSE_ON_CLIENT;
+	 * describe LICENSE_ON_CLIENT:
 	 * | Field | Type | Null | Key | Default | Extra
 	 * | license_on_client_id | int(11) | NO | PRI | NULL | auto_increment |
 	 * | softwareLicenseId | varchar(100) | NO | MUL | NULL |
@@ -21,28 +22,28 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 	 * | notes | varchar(1024) | YES | | NULL |
 	 */
 
-	public static final String identKEY = "ident";
-	public static final String idKEY = "license_on_client_id";
-	public static final String licencepoolIdKEY = "licensePoolId";
-	public static final String licenceIdKEY = "softwareLicenseId";
-	public static final String clientIdKEY = "clientId";
-	public static final String licencekeyKEY = "licenseKey";
-	public static final String notesKEY = "notes";
+	public static final String IDENT_KEY = "ident";
+	public static final String ID_KEY = "license_on_client_id";
+	public static final String LICENCE_POOL_ID_KEY = "licensePoolId";
+	public static final String LICENCE_ID_KEY = "softwareLicenseId";
+	public static final String CLIENT_ID_KEY = "clientId";
+	public static final String LICENCE_KEY_KEY = "licenseKey";
+	public static final String NOTES_KEY = "notes";
 
-	public static final String opsiNOMtype = "LicenseOnClient";
+	public static final String OPSI_NOM_TYPE = "LicenseOnClient";
 
 	private String lic4pool;
 
 	private static List<String> KEYS;
 	static {
-		KEYS = new ArrayList<String>();
-		KEYS.add(idKEY);
+		KEYS = new ArrayList<>();
+		KEYS.add(ID_KEY);
 
-		KEYS.add(licencepoolIdKEY);
-		KEYS.add(licenceIdKEY);
-		KEYS.add(clientIdKEY);
-		KEYS.add(licencekeyKEY);
-		KEYS.add(notesKEY);
+		KEYS.add(LICENCE_POOL_ID_KEY);
+		KEYS.add(LICENCE_ID_KEY);
+		KEYS.add(CLIENT_ID_KEY);
+		KEYS.add(LICENCE_KEY_KEY);
+		KEYS.add(NOTES_KEY);
 	}
 
 	public LicenceUsageEntry(String hostId, String softwareLicenceId, String licencePoolId, String licenceKey,
@@ -51,31 +52,31 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 		setAllowedAttributes(KEYS);
 
 		if (hostId == null)
-			put(clientIdKEY, "");
+			put(CLIENT_ID_KEY, "");
 		else
-			put(clientIdKEY, hostId);
+			put(CLIENT_ID_KEY, hostId);
 
 		if (softwareLicenceId == null)
-			put(licenceIdKEY, "");
+			put(LICENCE_ID_KEY, "");
 		else
-			put(licenceIdKEY, softwareLicenceId);
+			put(LICENCE_ID_KEY, softwareLicenceId);
 
 		if (licencePoolId == null)
-			put(licencepoolIdKEY, "");
+			put(LICENCE_POOL_ID_KEY, "");
 		else
-			put(licencepoolIdKEY, licencePoolId);
+			put(LICENCE_POOL_ID_KEY, licencePoolId);
 
 		if (licenceKey == null)
-			put(licencekeyKEY, "");
+			put(LICENCE_KEY_KEY, "");
 		else
-			put(licencekeyKEY, licenceKey);
+			put(LICENCE_KEY_KEY, licenceKey);
 
 		if (notes == null)
-			put(notesKEY, "");
+			put(NOTES_KEY, "");
 		else
-			put(notesKEY, notes);
+			put(NOTES_KEY, notes);
 
-		lic4pool = de.uib.configed.Globals.pseudokey(new String[] { get(licenceIdKEY), get(licencepoolIdKEY) });
+		lic4pool = Globals.pseudokey(new String[] { get(LICENCE_ID_KEY), get(LICENCE_POOL_ID_KEY) });
 	}
 
 	public LicenceUsageEntry(Map<String, Object> entry) {
@@ -83,41 +84,35 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 		setAllowedAttributes(KEYS);
 
 		Set<String> reducedEntrySet = entry.keySet();
-		reducedEntrySet.remove(identKEY);
+		reducedEntrySet.remove(IDENT_KEY);
 		for (String key : reducedEntrySet) {
 			put(key, "" + entry.get(key));
 		}
 
-		/*
-		 * if (get(idKEY) == null)
-		 * logging.warning(this, "missing primary key in " + entry);
-		 * the id key is not used in opsiconfd interface
-		 */
-
-		if (get(licenceIdKEY) == null || get(licencepoolIdKEY) == null)
+		if (get(LICENCE_ID_KEY) == null || get(LICENCE_POOL_ID_KEY) == null)
 			logging.warning(this, "missing values " + entry);
 
-		lic4pool = de.uib.configed.Globals.pseudokey(new String[] { get(licenceIdKEY), get(licencepoolIdKEY) });
+		lic4pool = Globals.pseudokey(new String[] { get(LICENCE_ID_KEY), get(LICENCE_POOL_ID_KEY) });
 	}
 
 	public String getId() {
-		return get(idKEY);
+		return get(ID_KEY);
 	}
 
 	public String getClientId() {
-		return get(clientIdKEY);
+		return get(CLIENT_ID_KEY);
 	}
 
 	public String getLicencekey() {
-		return get(licencekeyKEY);
+		return get(LICENCE_KEY_KEY);
 	}
 
 	public String getLicencepool() {
-		return get(licencepoolIdKEY);
+		return get(LICENCE_POOL_ID_KEY);
 	}
 
 	public String getLicenceId() {
-		return get(licenceIdKEY);
+		return get(LICENCE_ID_KEY);
 	}
 
 	public String getLic4pool() {
@@ -125,16 +120,16 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 	}
 
 	public Map<String, Object> getNOMobject() {
-		Map<String, Object> m = new HashMap<String, Object>();
-		m.put(clientIdKEY, getClientId());
-		m.put(licenceIdKEY, getLicenceId());
-		m.put(licencepoolIdKEY, getLicencepool());
-		m.put("type", opsiNOMtype);
+		Map<String, Object> m = new HashMap<>();
+		m.put(CLIENT_ID_KEY, getClientId());
+		m.put(LICENCE_ID_KEY, getLicenceId());
+		m.put(LICENCE_POOL_ID_KEY, getLicencepool());
+		m.put("type", OPSI_NOM_TYPE);
 		return m;
 	}
 
 	public static String produceKey(String hostId, String licencePoolId, String licenceId) {
-		return de.uib.configed.Globals.pseudokey(new String[] { hostId, licencePoolId, licenceId });
+		return Globals.pseudokey(new String[] { hostId, licencePoolId, licenceId });
 	}
 
 	public String getPseudoKey() {

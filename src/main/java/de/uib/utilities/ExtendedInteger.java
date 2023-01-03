@@ -6,7 +6,7 @@ public class ExtendedInteger implements Comparable {
 
 	static final String infiniteImport = "infinite";
 	static final String sINFINITE = "INFINITE";
-	static final String displayInfinite = "\u221E";// "INF";
+	static final String displayInfinite = "\u221E";
 
 	public static final ExtendedInteger INFINITE = new ExtendedInteger(sINFINITE);
 	public static final ExtendedInteger ZERO = new ExtendedInteger(0);
@@ -26,7 +26,7 @@ public class ExtendedInteger implements Comparable {
 	}
 
 	public ExtendedInteger(int intVal) {
-		number = new Integer(intVal);
+		number = Integer.valueOf(intVal);
 		value = "" + intVal;
 	}
 
@@ -36,15 +36,12 @@ public class ExtendedInteger implements Comparable {
 	}
 
 	public ExtendedInteger(String s) {
-		// logging.info(this, "construct for >>" + s + "<<");
 
 		number = null;
 		value = null;
 
 		if (s.equals(sINFINITE) || s.equals(infiniteImport) || s.equals(displayInfinite)) {
 			value = sINFINITE;
-
-			// logging.info(this, "value >>" + value + "<<");
 
 		} else {
 			try {
@@ -92,11 +89,11 @@ public class ExtendedInteger implements Comparable {
 		if (ei.equals(INFINITE) || this.equals(INFINITE)) {
 			result = new ExtendedInteger(INFINITE);
 		} else {
-			// logging.info(this, " adding " + getNumber() + " + " + ei.getNumber());
+
 			int sum = this.getNumber() + ei.getNumber();
-			result = new ExtendedInteger(new Integer(sum), "" + sum);
+			result = new ExtendedInteger(Integer.valueOf(sum), "" + sum);
 		}
-		// logging.info(this, " add giving " + result);
+
 		return result;
 	}
 
@@ -113,6 +110,7 @@ public class ExtendedInteger implements Comparable {
 	}
 
 	// Interface Comparable
+	@Override
 	public int compareTo(Object o) // throws NotComparableException
 	{
 		ExtendedInteger comparedWithMe = null;
@@ -123,12 +121,9 @@ public class ExtendedInteger implements Comparable {
 		else if (o instanceof Integer)
 			comparedWithMe = new ExtendedInteger((Integer) o);
 
-		// if (o == null)
-		// throw new NotComparableException();
-
 		if (this.equals(INFINITE)) {
 			if (comparedWithMe.equals(INFINITE))
-				return 0; // throw new NotComparableException();
+				return 0;
 			else
 				return -1;
 		} else {
@@ -152,74 +147,6 @@ public class ExtendedInteger implements Comparable {
 	@Override
 	public String toString() {
 		return getString();
-	}
-
-	public static void main(String[] args) {
-		int result;
-
-		try {
-			logging.debug(" INFINITE.compareTo( INFINITE ) ");
-			result = INFINITE.compareTo(INFINITE);
-			logging.debug("" + result);
-		} catch (Exception ex) {
-			logging.debug("" + ex);
-		}
-
-		try {
-			logging.debug(" INFINITE.compareTo( new ExtendedInteger( 20) ) ");
-			result = INFINITE.compareTo(new ExtendedInteger(20));
-			logging.debug("" + result);
-		} catch (Exception ex) {
-			logging.debug("" + ex);
-		}
-
-		try {
-			logging.debug(" INFINITE.compareTo( new ExtendedInteger( -20) ) ");
-			result = INFINITE.compareTo(new ExtendedInteger(-20));
-			logging.debug("" + result);
-		} catch (Exception ex) {
-			logging.debug("" + ex);
-		}
-
-		try {
-			logging.debug(" new ExtendedInteger( -20).compareTo( INFINITE)  ");
-			result = new ExtendedInteger(-20).compareTo(INFINITE);
-			logging.debug("" + result);
-		} catch (Exception ex) {
-			logging.debug("" + ex);
-		}
-
-		try {
-			logging.debug(" new ExtendedInteger( 20).new ExtendedInteger( 20) ) ");
-			result = new ExtendedInteger(20).compareTo(new ExtendedInteger(20));
-			logging.debug("" + result);
-		} catch (Exception ex) {
-			logging.debug("" + ex);
-		}
-
-		try {
-			logging.debug(" new ExtendedInteger( 20).new ExtendedInteger( -20) ) ");
-			result = new ExtendedInteger(20).compareTo(new ExtendedInteger(-20));
-			logging.debug("" + result);
-		} catch (Exception ex) {
-			logging.debug("" + ex);
-		}
-
-		try {
-			logging.debug(" new ExtendedInteger( 20).new ExtendedInteger( -20) ) ");
-			result = new ExtendedInteger(20).compareTo(new ExtendedInteger(-20));
-			logging.debug("" + result);
-		} catch (Exception ex) {
-			logging.debug("" + ex);
-		}
-
-		try {
-			logging.debug(" new ExtendedInteger( 20).compareTo( INFINITE) ");
-			result = new ExtendedInteger(20).compareTo(INFINITE);
-			logging.debug("" + result);
-		} catch (Exception ex) {
-			logging.debug("" + ex);
-		}
 	}
 
 }

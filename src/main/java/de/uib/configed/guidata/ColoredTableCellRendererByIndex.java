@@ -30,24 +30,21 @@ public class ColoredTableCellRendererByIndex extends de.uib.utilities.table.gui.
 		this.mapOfTextColors = mapOfTextColors;
 	}
 
-	public Component getTableCellRendererComponent(
-			JTable table,
-			Object value, // value to display
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 			boolean isSelected, // is the cell selected
-			boolean hasFocus,
-			int row,
-			int column) {
+			boolean hasFocus, int row, int column) {
 		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		if (value == null)
 			return c;
 
 		if (value.equals(InstallationStateTableModel.CONFLICTstring)) {
-			c.setBackground(Globals.backgroundGrey); // result.setForeground (lightBlack);
-			c.setForeground(Globals.backgroundGrey);
+			c.setBackground(Globals.BACKGROUND_COLOR_4);
+			c.setForeground(Globals.BACKGROUND_COLOR_4);
 		} else {
 			if (mapOfTextColors != null && value instanceof String) {
-				Color textcolor = mapOfTextColors.get((String) value);
+				Color textcolor = mapOfTextColors.get(value);
 				if (textcolor != null) {
 					if (textcolor.equals(Globals.INVISIBLE))
 						c.setForeground(c.getBackground());

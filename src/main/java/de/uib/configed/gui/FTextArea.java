@@ -9,13 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.text.JTextComponent;
 
-/**
- * FTextArea
- * Copyright:     Copyright (c) 2001-2005,2018,2021
- * Organisation:  uib
-- * @author Rupert Röder, Naglis Vidziunas
- * @version
- */
 import de.uib.configed.Globals;
 
 public class FTextArea extends FGeneralDialog {
@@ -83,7 +76,7 @@ public class FTextArea extends FGeneralDialog {
 		jTextArea1.setLineWrap(true);
 		jTextArea1.setWrapStyleWord(true);
 		jTextArea1.setOpaque(true);
-		jTextArea1.setBackground(Globals.backgroundWhite);
+		jTextArea1.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		jTextArea1.setText("          ");
 		jTextArea1.setEditable(false);
 		jTextArea1.setFont(Globals.defaultFontBig);
@@ -102,7 +95,7 @@ public class FTextArea extends FGeneralDialog {
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
-			// logging.debug ("shift released");
+
 		}
 
 		if (!shiftPressed && e.getSource() == jTextArea1 && e.getKeyCode() == KeyEvent.VK_TAB)

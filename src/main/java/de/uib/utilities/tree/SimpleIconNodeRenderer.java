@@ -1,12 +1,9 @@
 package de.uib.utilities.tree;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
-import java.awt.font.TextAttribute;
-import java.util.HashMap;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -20,60 +17,30 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 	protected Font standard;
 	public static Dimension preferred = new Dimension(labelWidth, labelHeight);
 
-	private Font deriveFont0(Font font) {
-		HashMap<TextAttribute, Object> map = new HashMap<TextAttribute, Object>();
-		return font.deriveFont(map);
-	}
-
-	private Font deriveFont1(Font font) {
-		HashMap<TextAttribute, Object> map = new HashMap<TextAttribute, Object>();
-		// map.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-		// map.put(TextAttribute.INPUT_METHOD_UNDERLINE,
-		// TextAttribute.UNDERLINE_LOW_TWO_PIXEL);
-		// map.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
-		return font.deriveFont(map);
-	}
-
 	public SimpleIconNodeRenderer() {
 		super();
-		// setHorizontalTextPosition(SwingConstants.LEFT);
+
 		setOpaque(true);
 
-		// standard = deriveFont0(Globals.defaultFontBig);
-		// emphasized = deriveFont1(Globals.defaultFontBig);
 		standard = Globals.defaultFontBig;
-		// emphasized = deriveFont1(standard); //
+
 		emphasized = Globals.defaultFontStandardBold;
 
 		setFont(standard);
 		setForeground(Globals.lightBlack);
 		setTextSelectionColor(Globals.lightBlack);
-		setBackground(Color.white);
+		setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
 		setBorder(new javax.swing.border.EmptyBorder(new Insets(0, 0, 0, 0)));
 		setPreferredSize(preferred);
 	}
 
-	public Component getTreeCellRendererComponent(JTree tree, Object value,
-			boolean sel,
-			boolean expanded,
-			boolean leaf,
-			int row,
-			boolean hasFocus) {
-
-		/*
-		 * if (row == 0)
-		 * setPreferredSize(new java.awt.Dimension(labelWidth, 50));
-		 * else
-		 * setPreferredSize(preferred);
-		 */
+	@Override
+	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
+			int row, boolean hasFocus) {
 
 		if (value instanceof SimpleIconNode) {
 
-			String stringValue =
-					// configed.encodeStringFromService (
-					tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus)
-			// )
-			;
+			String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
 
 			setText(stringValue);
 			setToolTipText(((SimpleIconNode) value).getToolTipText());
@@ -94,14 +61,11 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 
 			if (sel && row != 0) // assuming that row 0 contains sort of header
 			{
-				setBackground(Globals.backLightBlue);
-				// setFont(emphasized);
-				// setForeground(Color.blue);//Globals.unknownBlue);
+				setBackground(Globals.BACKGROUND_COLOR_7);
+
 			} else {
-				setBackground(Color.white);
-				// setBackground(Globals.backgroundWhite);
-				// setFont(standard);
-				// setForeground(Globals.lightBlack);
+				setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
+
 			}
 
 			if (leaf) {
@@ -125,21 +89,6 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 		}
 
 		return this;
-
-		/*
-		 * Component c = super.getTreeCellRendererComponent(
-		 * tree,
-		 * value,
-		 * sel,
-		 * expanded,
-		 * leaf,
-		 * row,
-		 * hasFocus);
-		 * 
-		 * //c.setBackground(Globals.backLightBlue);
-		 * 
-		 * return c;
-		 */
 
 	}
 }

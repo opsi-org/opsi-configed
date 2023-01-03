@@ -1,17 +1,11 @@
 package de.uib.configed.gui;
 
 import java.awt.Window;
-import java.util.Vector;
+import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.ListSelectionModel;
 
-/**
- * FDepotSelectionList
- * Copyright:     Copyright (c) 2017
- * Organisation:  uib
- * @author Rupert Röder
- */
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
@@ -24,13 +18,10 @@ public class FDepotselectionList extends FGeneralDialog {
 
 	public FDepotselectionList(JDialog masterWindow) {
 		super(
-				// de.uib.configed.Globals.mainFrame,
-				masterWindow,
-				configed.getResourceValue("FDepotselectionList.title"),
-				new String[] {
-						configed.getResourceValue("FDepotselectionList.buttontake"),
-						configed.getResourceValue("FDepotselectionList.buttonclose")
-				},
+
+				masterWindow, configed.getResourceValue("FDepotselectionList.title"),
+				new String[] { configed.getResourceValue("FDepotselectionList.buttontake"),
+						configed.getResourceValue("FDepotselectionList.buttonclose") },
 				500, 300);
 		depotsList = new DepotsList(PersistenceControllerFactory.getPersistenceController());
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -50,16 +41,16 @@ public class FDepotselectionList extends FGeneralDialog {
 		scrollpane.getViewport().add(depotsList);
 	}
 
-	public void setListData(Vector<? extends String> v) {
+	public void setListData(List<String> v) {
 		depotsList.setListData(v);
 	}
 
-	public Vector<? extends String> getListData() {
+	public List<String> getListData() {
 		logging.info(this, "getListData() : " + depotsList.getListData());
 		return depotsList.getListData();
 	}
 
-	public java.util.List<String> getSelectedDepots() {
+	public List<String> getSelectedDepots() {
 		return depotsList.getSelectedValuesList();
 	}
 
@@ -87,7 +78,7 @@ public class FDepotselectionList extends FGeneralDialog {
 	public void leave() {
 		setVisible(false);
 		// we dont dispose the window, dispose it in the enclosing class
-		// setEnabled(false);
+
 	}
 
 	public void exit() {

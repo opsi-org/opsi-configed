@@ -13,12 +13,14 @@
 
 package de.uib.configed;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.NavigableSet;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.Icon;
 import javax.swing.SwingUtilities;
@@ -64,30 +66,26 @@ public class ControlDash {
 
 	public void loadData() {
 
-		SwingUtilities.invokeLater(new Thread() {
-			@Override
-			public void run() {
-				message = "";
-				showInfo();
+		SwingUtilities.invokeLater(() -> {
+			message = "";
+			showInfo();
 
-				StringBuffer mess = new StringBuffer();
+			StringBuilder mess = new StringBuilder();
 
-				mess.append(configed.getResourceValue("Dash.topicLicences1"));
-				mess.append("\n");
-				mess.append("\n");
+			mess.append(configed.getResourceValue("Dash.topicLicences1"));
+			mess.append("\n");
+			mess.append("\n");
 
-				if (!persist.isWithLicenceManagement())
-					mess.append(configed.getResourceValue("ConfigedMain.LicencemanagementNotActive"));
-				else {
-					mess.append(showLicenceContractWarnings());
-					mess.append(calculateVariantLicencepools());
-				}
-
-				message = mess.toString();
-				showInfo();
+			if (!persist.isWithLicenceManagement())
+				mess.append(configed.getResourceValue("ConfigedMain.LicencemanagementNotActive"));
+			else {
+				mess.append(showLicenceContractWarnings());
+				mess.append(calculateVariantLicencepools());
 			}
+
+			message = mess.toString();
+			showInfo();
 		});
-		// .start();
 	}
 
 	public void showInfo() {
@@ -153,7 +151,7 @@ public class ControlDash {
 				public void setVisible(boolean b) {
 					super.setVisible(b);
 					jButton1.requestFocus();
-					// registerWithRunningInstances();
+
 				}
 
 				@Override
@@ -163,9 +161,8 @@ public class ControlDash {
 				}
 
 			};
-			// fDash.setAdditionalPane( new PanelDashInfo() );
+
 			fDash.checkAdditionalPane();
-			// fDash.setSize( new Dimension( 400, 500 ) );
 
 			if (Globals.mainFrame != null) {
 				fDash.setLocation(Globals.mainFrame.getX() + Globals.LOCATION_DISTANCE_X,
@@ -182,9 +179,9 @@ public class ControlDash {
 
 		StringBuilder result = new StringBuilder();
 
-		TreeMap<String, TreeSet<String>> contractsExpired = persist.getLicenceContractsExpired();
+		NavigableMap<String, NavigableSet<String>> contractsExpired = persist.getLicenceContractsExpired();
 
-		TreeMap<String, TreeSet<String>> contractsToNotify = persist.getLicenceContractsToNotify();
+		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenceContractsToNotify();
 
 		logging.info(this, "contractsExpired " + contractsExpired);
 
@@ -222,23 +219,23 @@ public class ControlDash {
 
 		GenTableModel modelSWnames;
 
-		Vector<String> columnNames;
-		Vector<String> classNames;
+		List<String> columnNames;
+		List<String> classNames;
 
 		TableUpdateCollection updateCollection;
 
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS)
 			columnNames.add(key);
 
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
 
 		updateCollection = new TableUpdateCollection();
 
-		final TreeSet<String> namesWithVariantPools = new TreeSet<String>();
+		final TreeSet<String> namesWithVariantPools = new TreeSet<>();
 
 		modelSWnames = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
@@ -264,7 +261,7 @@ public class ControlDash {
 
 					i++;
 				}
-				// myController.thePanel.setDisplaySimilarExist( foundVariantLicencepools );
+
 				logging.info(this, "produced rows, foundVariantLicencepools " + foundVariantLicencepools);
 			}
 
@@ -276,9 +273,7 @@ public class ControlDash {
 		};
 		modelSWnames.produceRows();
 
-		// modelSWnames.requestReload();
-
-		Vector<Vector<Object>> specialrows = modelSWnames.getRows();
+		List<List<Object>> specialrows = modelSWnames.getRows();
 		if (specialrows != null) {
 			logging.info(this, "initDashInfo, modelSWnames.getRows() size " + specialrows.size());
 		}
@@ -310,7 +305,7 @@ public class ControlDash {
 			String licpool = persist.getFSoftware2LicencePool(swID);
 
 			if (licpool == null)
-				range.add(FSoftwarename2LicencePool.valNoLicencepool);
+				range.add(FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL);
 			else
 				range.add(licpool);
 		}

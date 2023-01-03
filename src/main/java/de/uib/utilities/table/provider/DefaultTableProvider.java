@@ -8,35 +8,39 @@
 
 package de.uib.utilities.table.provider;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import de.uib.utilities.logging.logging;
 
 public class DefaultTableProvider implements TableProvider {
 	protected TableSource source;
-	protected Vector<String> columnNames;
-	protected Vector<String> classNames;
-	protected Vector<Vector<Object>> rows;
-	protected Vector<Vector<Object>> rowsCopy;
+	protected List<String> columnNames;
+	protected List<String> classNames;
+	protected List<List<Object>> rows;
+	protected List<List<Object>> rowsCopy;
 	private boolean isDecorated = false;
 
 	public DefaultTableProvider(TableSource source) {
 		this.source = source;
 	}
 
+	@Override
 	public void setTableSource(TableSource source) {
 		this.source = source;
 	}
 
-	public Vector<String> getColumnNames() {
+	@Override
+	public List<String> getColumnNames() {
 		if (columnNames == null)
 			columnNames = source.retrieveColumnNames();
 
 		return columnNames;
 	}
 
-	public Vector<String> getClassNames() {
+	@Override
+	public List<String> getClassNames() {
 		if (classNames == null)
 			classNames = source.retrieveClassNames();
 
@@ -44,17 +48,17 @@ public class DefaultTableProvider implements TableProvider {
 	}
 
 	// should deliver a copy of the data
-	public Vector<Vector<Object>> getRows() {
+	@Override
+	public List<List<Object>> getRows() {
 		logging.info(this, " -- getRows()");
 
-		// logging.debug( " rowsCopy == null " + (rowsCopy == null) );
 		if (rowsCopy == null)
 			resetRows();
 
 		return rowsCopy;
 	}
 
-	protected void decorateRow(Vector<Object> row) {
+	protected void decorateRow(List<Object> row) {
 	}
 
 	// should set back the copy of the data to the original values
@@ -63,7 +67,7 @@ public class DefaultTableProvider implements TableProvider {
 		if (rowsCopy != null)
 			rowsCopy.clear();
 		else
-			rowsCopy = new Vector<Vector<Object>>();
+			rowsCopy = new ArrayList<>();
 
 		if (rows == null) {
 			rows = source.retrieveRows();
@@ -81,28 +85,24 @@ public class DefaultTableProvider implements TableProvider {
 			isDecorated = true;
 		}
 
-		// logging.debug (" rows.size() " + rows.size());
-
 		if (rows == null) {
 			logging.info(" no data rows retrieved ");
 			return;
 		}
 
 		for (int i = 0; i < rows.size(); i++) {
-			Vector<Object> row = (Vector<Object>) (rows.get(i).clone());
+			List<Object> row = new ArrayList<>(rows.get(i));
 			rowsCopy.add(row);
 		}
 
-		// logging.debug (" rowsCopy.size() " + rowsCopy.size());
 	}
 
 	// should set the working copy as new original values
+	@Override
 	public void setWorkingCopyAsNewOriginalRows() {
-		/// logging.debug(" setWorkingCopyAsNewOriginalRows() ");
-		// "deep" rows = rowsCopy:
 
 		if (rows == null) {
-			// logging.debug(" --- original rows null ");
+
 			// in the following reset, we request a reload
 		}
 
@@ -121,11 +121,13 @@ public class DefaultTableProvider implements TableProvider {
 	}
 
 	// should initiate returning to the original data
+	@Override
 	public void requestReturnToOriginal() {
 		rowsCopy = null;
 	}
 
 	// should initiate reloading the original data
+	@Override
 	public void requestReloadRows() {
 		rows = null;
 		rowsCopy = null;
@@ -134,30 +136,28 @@ public class DefaultTableProvider implements TableProvider {
 	}
 
 	// should initiate reloading the metadata
+	@Override
 	public void structureChanged() {
 		source.structureChanged();
 		classNames = null;
 		columnNames = null;
 	}
 
-	// yields a column as ordered vector
-	public Vector<String> getOrderedColumn(int col, boolean empty_allowed) {
-		// logging.debug(this, "getOrderedColumn " + col + ", empty_allowed " +
-		// empty_allowed);
+	// yields a column as ordered List
+	@Override
+	public List<String> getOrderedColumn(int col, boolean empty_allowed) {
 
-		TreeSet<String> set = new TreeSet<String>();
+		TreeSet<String> set = new TreeSet<>();
 		for (int row = 0; row < rowsCopy.size(); row++) {
 			String val = (String) rowsCopy.get(row).get(col);
-			// logging.debug(this, "getOrderedColumn(" + col + ") row " + row + ": " +val );
+
 			if (empty_allowed || val != null && !val.equals("")) {
-				// logging.debug(this, "getOrderedColumn, added " +val );
+
 				set.add((String) rowsCopy.get(row).get(col));
 			}
 		}
 
-		Vector<String> result = new Vector<String>(set);
-
-		// logging.debug(this, "getOrderedColumn, result " +result);
+		List<String> result = new ArrayList<>(set);
 
 		return result;
 	}

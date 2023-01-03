@@ -10,16 +10,11 @@ public class ListMerger extends ArrayList {
 	boolean onlyPartiallyExisting;
 	boolean havingCommonValue;
 
-	public static Color noCommonValueTextcolor = Globals.backgroundGrey;
-	public static Color noCommonValueBackcolor = Globals.backgroundGrey;
-	public static Color noCommonKeyTextcolor = Globals.backBlue;
-	public static Color noCommonKeyBackcolor = Globals.backBlue;
-
-	public static final ListMerger NO_COMMON_VALUE = new ListMerger(new ArrayList<String>());
+	public static final ListMerger NO_COMMON_VALUE = new ListMerger(new ArrayList<>());
 	static {
 		NO_COMMON_VALUE.setHavingNoCommonValue();
 	}
-	// static{ NO_COMMON_VALUE.add("NO COMMON VALUE"); } // setting a String
+
 	// prevents correct recognition
 
 	// building the merger:
@@ -37,7 +32,7 @@ public class ListMerger extends ArrayList {
 	}
 
 	private boolean equals(List list1, List list2) {
-		// logging.debug(this, "equals list1, list2: " + list1 + ", " + list2);
+
 		if (list1 == null && list2 == null)
 			return true;
 
@@ -58,9 +53,6 @@ public class ListMerger extends ArrayList {
 		{
 			if (!equals(listValue, listToMergeIn)) {
 				havingCommonValue = false;
-
-				// logging.debug(this, "merge first list " + listToMergeIn + " to " + listValue
-				// + " havingCommonValue " + havingCommonValue);
 
 				listValue = NO_COMMON_VALUE;
 			}
@@ -90,16 +82,16 @@ public class ListMerger extends ArrayList {
 
 	public Color getTextColor() {
 		if (!havingCommonValue) {
-			return noCommonValueTextcolor;
+			return Globals.LIST_MERGER_NO_COMMON_VALUE_TEXT_COLOR;
 		} else
-			return Color.BLACK;
+			return Globals.LIST_MERGER_NORMAL_VALUE_TEXT_COLOR;
 	}
 
 	public Color getBackgroundColor() {
 		if (!havingCommonValue) {
-			return noCommonValueBackcolor;
+			return Globals.LIST_MERGER_NO_COMMON_VALUE_BACKGROUND_COLOR;
 		} else
-			return Color.BLACK;
+			return Globals.LIST_MERGER_NORMAL_VALUE_BACKGROUND_COLOR;
 	}
 
 }

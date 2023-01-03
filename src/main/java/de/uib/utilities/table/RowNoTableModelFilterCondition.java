@@ -2,17 +2,16 @@ package de.uib.utilities.table;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.JTable;
 
 import de.uib.utilities.logging.logging;
 
-public class RowNoTableModelFilterCondition
-		implements TableModelFilterCondition {
-	// protected Map<String, Boolean> selectionInfo;
+public class RowNoTableModelFilterCondition implements TableModelFilterCondition {
+
 	protected Map<Object, Boolean> selectionInfo;
 
 	protected JTable table;
@@ -21,10 +20,11 @@ public class RowNoTableModelFilterCondition
 		this.table = table;
 	}
 
+	@Override
 	public void setFilter(TreeSet<Object> filter) {
 	}
 
-	public void setFilter(int[] modelRowNoFilter, final Vector<Vector<Object>> rows) {
+	public void setFilter(int[] modelRowNoFilter, final List<List<Object>> rows) {
 		logging.info(this, "setFilter int[]  " + modelRowNoFilter);
 		if (modelRowNoFilter != null)
 			logging.info(this, "setFilter as string " + Arrays.toString(modelRowNoFilter));
@@ -34,30 +34,26 @@ public class RowNoTableModelFilterCondition
 			return;
 		}
 
-		// selectionInfo = new HashMap<String, Boolean>();
-		selectionInfo = new HashMap<Object, Boolean>();
+		selectionInfo = new HashMap<>();
 
 		for (int i : modelRowNoFilter) {
 			if (i >= rows.size())
 				logging.warning(this, "setFilter: impossible selection index " + i);
 			else
-				// selectionInfo.put( de.uib.utilities.Globals.pseudokey( rows.get(i) ), true );
+
 				selectionInfo.put(rows.get(i), true);
 		}
 
-		// logging.info(this, "setFilter we have got selectionInfo " + selectionInfo);
 	}
 
-	public boolean test(Vector<Object> row) {
-		// logging.info(this, "row " + row + " selectionInfo " + selectionInfo );
+	@Override
+	public boolean test(List<Object> row) {
 
 		if (selectionInfo == null)
 			return true;
 
-		// Boolean found = selectionInfo.get( de.uib.utilities.Globals.pseudokey(row) )
-		// ;
 		Boolean found = selectionInfo.get(row);
-		// logging.info(this, "row " + row + " selectionInfo found row " + found);
+
 		if (found == null)
 			return false;
 

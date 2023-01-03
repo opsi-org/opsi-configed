@@ -5,11 +5,11 @@ import de.uib.utilities.logging.logging;
 
 public class SSHConnectionInfo {
 	private boolean sshenabled = true;
-	private String ssh_connection_user = "";
-	private String ssh_connection_passw = "";
-	private String ssh_connection_host = "";
+	private String sshConnectionUser = "";
+	private String sshConnectionPassword = "";
+	private String sshConnectionHost = "";
 	/** Port for server to connected as **/
-	private String ssh_connection_port = SSHConnect.portSSH;
+	private String sshConnectionPost = SSHConnect.portSSH;
 	private boolean useKeyfile;
 	private String keyfilepath = "";
 	private String keyfilepassphrase = "";
@@ -27,26 +27,26 @@ public class SSHConnectionInfo {
 
 	public String getHost() {
 
-		return ssh_connection_host;
+		return sshConnectionHost;
 	}
 
 	public String getUser() {
-		return ssh_connection_user;
+		return sshConnectionUser;
 	}
 
 	public String getPassw() {
-		return ssh_connection_passw;
+		return sshConnectionPassword;
 	}
 
 	public String getShortPassw() {
 		String shortened = "x";
-		if (ssh_connection_passw.length() > 2)
-			shortened = ssh_connection_passw.charAt(0) + "...";
+		if (sshConnectionPassword.length() > 2)
+			shortened = sshConnectionPassword.charAt(0) + "...";
 		return shortened;
 	}
 
 	public String getPort() {
-		return ssh_connection_port;
+		return sshConnectionPost;
 	}
 
 	public boolean usesKeyfile() {
@@ -71,19 +71,19 @@ public class SSHConnectionInfo {
 
 	public void setHost(String host) {
 		logging.info(this, "setHost, instance is " + instance);
-		ssh_connection_host = getHostnameFromOpsihost(host);
+		sshConnectionHost = getHostnameFromOpsihost(host);
 	}
 
 	public void setUser(String user) {
-		ssh_connection_user = user;
+		sshConnectionUser = user;
 	}
 
 	public void setPassw(String pass) {
-		ssh_connection_passw = pass;
+		sshConnectionPassword = pass;
 	}
 
 	public void setPort(String port) {
-		ssh_connection_port = port;
+		sshConnectionPost = port;
 	}
 
 	public void useKeyfile(boolean v) {
@@ -118,7 +118,7 @@ public class SSHConnectionInfo {
 		if (getHost() == null)
 			// setHost(allowedHostsContainsSubstring(
 			// SSHCommandFactory.getInstance().getAllowedHosts(),
-			// ConfigedMain.HOST));
+
 			setHost(ConfigedMain.HOST);
 		// for SSH ConfigedMain.HOST always allowed
 
@@ -146,7 +146,7 @@ public class SSHConnectionInfo {
 
 	@Override
 	public String toString() {
-		String tmp_ssh = usesKeyfile() ? (keyfilepath + "-" + keyfilepassphrase) : "no sshkey";
-		return getUser() + "@" + getHost() + ":" + getPort() + "|" + tmp_ssh;
+		String tempSSH = usesKeyfile() ? (keyfilepath + "-" + keyfilepassphrase) : "no sshkey";
+		return getUser() + "@" + getHost() + ":" + getPort() + "|" + tempSSH;
 	}
 }

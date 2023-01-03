@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -26,51 +27,41 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 		super(tooltipPrefix);
 		this.showOnlyIcon = showOnlyIcon;
 		mapOfStrings = mapOfStringValues;
-		mapOfImages = new HashMap<String, ImageIcon>();
+		mapOfImages = new HashMap<>();
 		// Load the item values
 		{
-			Iterator iter = mapOfStrings.entrySet().iterator();
+			Iterator<Entry<String, String>> iter = mapOfStrings.entrySet().iterator();
 			while (iter.hasNext()) {
-				Map.Entry entry = (Map.Entry) iter.next();
-				String key = (String) entry.getKey();
-				String stringval = (String) entry.getValue();
+				Entry<String, String> entry = iter.next();
+				String key = entry.getKey();
+				String stringval = entry.getValue();
 
 				ImageIcon image = null;
 
-				if (imagesBase != null) {
-					if (key != null && stringval != null) {
-						String imageFileString = imagesBase + "/" + key + ".png";
-						// logging.info(this, "key " + key + ", image file " + imageFileString);
+				if (imagesBase != null && key != null && stringval != null) {
+					String imageFileString = imagesBase + "/" + key + ".png";
 
-						image = de.uib.configed.Globals.createImageIcon(imageFileString, stringval);
-						// logging.info(this, "image found " + (image != null));
+					image = Globals.createImageIcon(imageFileString, stringval);
 
-						if (image == null)
-						// try with gif
-						{
-							imageFileString = imagesBase + "/" + stringval + ".gif";
-							// logging.info(this, " image file " + imageFileString);
+					if (image == null)
+					// try with gif
+					{
+						imageFileString = imagesBase + "/" + stringval + ".gif";
 
-							image = de.uib.configed.Globals.createImageIcon(imageFileString, stringval);
-							// logging.info(this, "image found " + (image != null));
-						}
+						image = Globals.createImageIcon(imageFileString, stringval);
 
-						if (image != null)
-							mapOfImages.put(key, image);
 					}
+
+					if (image != null)
+						mapOfImages.put(key, image);
+
 				}
 			}
 		}
 
 	}
 
-	/*
-	 * public void setBackgroundColor(Color c)
-	 * {
-	 * backgroundColor = c;
-	 * }
-	 */
-
+	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 			boolean isSelected, // is the cell selected
 			boolean hasFocus, int row, int column) {
@@ -81,38 +72,11 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 
 		if (value != null) {
 
-			// logging.debug(this, " :1 value is " + value + " value class is " +
-			// value.getClass());
 			if (mapOfStrings != null)
 				selectedString = mapOfStrings.get("" + value);
-			// logging.debug(this, " :1 selectedString is " + selectedString);
-			// logging.debug(this, " :2 value is " + value + " value class is " +
-			// value.getClass());
+
 			if (mapOfImages != null)
 				selectedIcon = mapOfImages.get("" + value);
-
-			/*
-			 * if (value instanceof String)
-			 * {
-			 * try
-			 * {
-			 * selectedIndex = Integer.decode(((String)value).trim());
-			 * }
-			 * catch (Exception ex)
-			 * { logging.debug(this, "TableCellRendererByIndex " + ex); }
-			 * }
-			 * else
-			 * {
-			 * try
-			 * {
-			 * selectedIndex = ((Integer)value).intValue();
-			 * }
-			 * catch (Exception ex)
-			 * {
-			 * logging.debug(this, "TableCellRendererByIndex " + ex);
-			 * }
-			 * }
-			 */
 
 		}
 
@@ -127,13 +91,8 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 			((JLabel) result).setIcon(selectedIcon);
 			((JLabel) result).setToolTipText(
 					Globals.fillStringToLength(tooltipPrefix + " " + selectedString + " ", FILL_LENGTH));
-			// logging.debug("------ tooltip " + ((JLabel)result).getToolTipText());
+
 		}
-
-		// if (backgroundColor != null) result.setBackground (backgroundColor);
-		// result.setForeground (lightBlack);
-
-		// CellAlternatingColorizer.colorize(result, isSelected, (row % 2 == 0), true);
 
 		return result;
 	}

@@ -27,7 +27,7 @@ import de.uib.utilities.logging.logging;
  */
 public class SelectionManager {
 	public enum ConnectionStatus {
-		And, Or, AndNot, OrNot
+		AND, OR, AND_NOT, OR_NOT
 	}
 
 	private List<OperationWithStatus> groupWithStatusList;
@@ -47,7 +47,7 @@ public class SelectionManager {
 		this.backend = OpsiDataBackend.getInstance();
 
 		serializer = new OpsiDataSerializer(this);
-		groupWithStatusList = new LinkedList<OperationWithStatus>();
+		groupWithStatusList = new LinkedList<>();
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class SelectionManager {
 			List<OperationWithStatus> operationsWithStatuses) {
 		logging.debug(this, "Adding group operation " + name + " with " + operationsWithStatuses.toString());
 
-		LinkedList<SelectOperation> tmpList = new LinkedList<SelectOperation>();
+		LinkedList<SelectOperation> tmpList = new LinkedList<>();
 		tmpList.add(build(operationsWithStatuses, new int[] { 0 }));
 		logging.debug(this, "addGroupOperation: " + name + " " + tmpList.size() + " " + tmpList.get(0));
 		if (name.equals("Software"))
@@ -117,12 +117,10 @@ public class SelectionManager {
 	 * class
 	 */
 	public List<OperationWithStatus> operationsAsList(SelectOperation top) {
-		List<OperationWithStatus> owsList = new LinkedList<OperationWithStatus>();
 		if (top == null)
-			owsList = groupWithStatusList;
+			return groupWithStatusList;
 		else
-			owsList = reverseBuild(top, true);
-		return owsList;
+			return reverseBuild(top, true);
 	}
 
 	/** Clear all temporary data storage */
@@ -165,7 +163,7 @@ public class SelectionManager {
 		SelectOperation operation = getTopOperation();
 		String json = serializer.getJson(operation);
 
-		ArrayList<String> clientsSelected = new ArrayList<String>();
+		List<String> clientsSelected = new ArrayList<>();
 
 		try {
 
@@ -266,8 +264,8 @@ public class SelectionManager {
 		if (input.isEmpty())
 			return null;
 
-		LinkedList<SelectOperation> orConnections = new LinkedList<SelectOperation>();
-		LinkedList<SelectOperation> andConnections = new LinkedList<SelectOperation>();
+		LinkedList<SelectOperation> orConnections = new LinkedList<>();
+		LinkedList<SelectOperation> andConnections = new LinkedList<>();
 		boolean currentAnd = false;
 
 		while (currentPos[0] < input.size()) {
@@ -283,7 +281,7 @@ public class SelectionManager {
 				currentInput = input.get(currentPos[0]);
 				currentInput.operation = operation;
 			}
-			if (currentInput.status == ConnectionStatus.Or || currentInput.status == ConnectionStatus.OrNot) {
+			if (currentInput.status == ConnectionStatus.OR || currentInput.status == ConnectionStatus.OR_NOT) {
 				if (!currentAnd) {
 					orConnections.add(parseNot(currentInput));
 				} else {
@@ -320,7 +318,7 @@ public class SelectionManager {
 	 * there are no parentheses around the whole list
 	 */
 	private List<OperationWithStatus> reverseBuild(SelectOperation operation, boolean isTopOperation) {
-		LinkedList<OperationWithStatus> result = new LinkedList<OperationWithStatus>();
+		LinkedList<OperationWithStatus> result = new LinkedList<>();
 		if (operation instanceof AndOperation) {
 			for (SelectOperation op : ((AndOperation) operation).getChildOperations()) {
 				result.addAll(reverseBuild(op, false));
@@ -332,21 +330,21 @@ public class SelectionManager {
 		} else if (operation instanceof OrOperation && !((OrOperation) operation).getChildOperations().isEmpty()) {
 			for (SelectOperation op : ((OrOperation) operation).getChildOperations()) {
 				result.addAll(reverseBuild(op, false));
-				if (result.getLast().status == ConnectionStatus.And)
-					result.getLast().status = ConnectionStatus.Or;
+				if (result.getLast().status == ConnectionStatus.AND)
+					result.getLast().status = ConnectionStatus.OR;
 				else
-					result.getLast().status = ConnectionStatus.OrNot;
+					result.getLast().status = ConnectionStatus.OR_NOT;
 			}
-			if (result.getLast().status == ConnectionStatus.Or)
-				result.getLast().status = ConnectionStatus.And;
+			if (result.getLast().status == ConnectionStatus.OR)
+				result.getLast().status = ConnectionStatus.AND;
 			else
-				result.getLast().status = ConnectionStatus.AndNot;
+				result.getLast().status = ConnectionStatus.AND_NOT;
 			if (!isTopOperation) {
 				result.getFirst().parenthesisOpen = true;
 				result.getLast().parenthesisClose = true;
 			}
 		} else {
-			result.add(reverseParseNot(operation, ConnectionStatus.And));
+			result.add(reverseParseNot(operation, ConnectionStatus.AND));
 			result.getLast().parenthesisOpen = false;
 			result.getLast().parenthesisClose = false;
 		}
@@ -355,10 +353,10 @@ public class SelectionManager {
 
 	/* Add a NotOperation if necessary */
 	private SelectOperation parseNot(OperationWithStatus operation) {
-		if (operation.status == ConnectionStatus.And || operation.status == ConnectionStatus.Or)
+		if (operation.status == ConnectionStatus.AND || operation.status == ConnectionStatus.OR)
 			return operation.operation;
 
-		LinkedList<SelectOperation> arg = new LinkedList<SelectOperation>();
+		LinkedList<SelectOperation> arg = new LinkedList<>();
 		arg.add(operation.operation);
 
 		return new NotOperation(arg);
@@ -369,10 +367,10 @@ public class SelectionManager {
 		OperationWithStatus ows = new OperationWithStatus();
 		if (operation instanceof NotOperation) {
 			ows.operation = ((NotOperation) operation).getChildOperations().get(0);
-			if (status == ConnectionStatus.And)
-				ows.status = ConnectionStatus.AndNot;
+			if (status == ConnectionStatus.AND)
+				ows.status = ConnectionStatus.AND_NOT;
 			else
-				ows.status = ConnectionStatus.OrNot;
+				ows.status = ConnectionStatus.OR_NOT;
 		} else {
 			ows.operation = operation;
 			ows.status = status;

@@ -1,15 +1,13 @@
 package de.uib.opsidatamodel.productstate;
 
-//import de.uib.utilities.logging.*;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
 
 public class ActionRequest {
 	public static final String KEY = "actionRequest";
@@ -33,16 +31,6 @@ public class ActionRequest {
 	public static final int CUSTOM = 11;
 	public static final int LAST = CUSTOM;
 
-	// textcolors
-	public static final Color NONEcolor = Globals.INVISIBLE;
-	public static final Color SETUPcolor = Globals.actionRed;
-	public static final Color UPDATEcolor = Globals.actionRed;
-	public static final Color UNINSTALLcolor = Color.blue;
-	public static final Color ALWAYScolor = Globals.actionRed;
-	public static final Color ONCEcolor = Globals.actionRed;
-	public static final Color CUSTOMcolor = Globals.actionRed;
-	public static final Color LASTcolor = Color.black;
-
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
 	private static Map<String, String> label2displayLabel;
@@ -50,12 +38,12 @@ public class ActionRequest {
 	private static Map<String, Color> label2textColor;
 	private static Map<String, Integer> serviceValue2state;
 
-	private static Vector<Integer> states;
-	private static Vector<Integer> possibleRequests;
-	private static Vector<String> labels;
+	private static List<Integer> states;
+	private static List<Integer> possibleRequests;
+	private static List<String> labels;
 	private static String[] choiceLabels;
-	private static Vector<String> serviceValues;
-	private static Vector<String> scriptKeys;
+	private static List<String> serviceValues;
+	private static List<String> scriptKeys;
 
 	private static Map<String, String> scriptKey2label;
 
@@ -66,7 +54,7 @@ public class ActionRequest {
 		if (states != null)
 			return;
 
-		states = new Vector<Integer>();
+		states = new ArrayList<>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(NOT_AVAILABLE);
@@ -78,7 +66,7 @@ public class ActionRequest {
 		states.add(ONCE);
 		states.add(CUSTOM);
 
-		possibleRequests = new Vector<Integer>();
+		possibleRequests = new ArrayList<>();
 		possibleRequests.add(SETUP);
 		possibleRequests.add(UPDATE);
 		possibleRequests.add(UNINSTALL);
@@ -86,7 +74,7 @@ public class ActionRequest {
 		possibleRequests.add(ONCE);
 		possibleRequests.add(CUSTOM);
 
-		labels = new Vector<String>();
+		labels = new ArrayList<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);
 		labels.add(Globals.NO_VALID_STATE_STRING);
 		labels.add("not_available");
@@ -98,7 +86,7 @@ public class ActionRequest {
 		labels.add("once");
 		labels.add("custom");
 
-		state2label = new HashMap<Integer, String>();
+		state2label = new HashMap<>();
 		state2label.put(CONFLICT, Globals.CONFLICT_STATE_STRING);
 		state2label.put(INVALID, Globals.NO_VALID_STATE_STRING);
 		state2label.put(NOT_AVAILABLE, "not_available");
@@ -110,7 +98,7 @@ public class ActionRequest {
 		state2label.put(ONCE, "once");
 		state2label.put(CUSTOM, "custom");
 
-		serviceValue2state = new LinkedHashMap<String, Integer>();
+		serviceValue2state = new LinkedHashMap<>();
 		serviceValue2state.put("setup", SETUP);
 		serviceValue2state.put("update", UPDATE);
 		serviceValue2state.put("uninstall", UNINSTALL);
@@ -118,18 +106,18 @@ public class ActionRequest {
 		serviceValue2state.put("once", ONCE);
 		serviceValue2state.put("custom", CUSTOM);
 
-		serviceValues = new Vector<String>(serviceValue2state.keySet());
-		scriptKeys = new Vector<String>();
-		// scriptKey2state = new HashMap<String, Integer>();
-		scriptKey2label = new HashMap<String, String>();
+		serviceValues = new ArrayList<>(serviceValue2state.keySet());
+		scriptKeys = new ArrayList<>();
+
+		scriptKey2label = new HashMap<>();
 
 		for (String request : serviceValues) {
 			scriptKeys.add(request + "Script");
-			// scriptKey2state.put(request + "Script", serviceValue2state.get(request));
+
 			scriptKey2label.put(request + "Script", state2label.get(serviceValue2state.get(request)));
 		}
 
-		label2state = new HashMap<String, Integer>();
+		label2state = new HashMap<>();
 		label2state.put(Globals.CONFLICT_STATE_STRING, CONFLICT);
 		label2state.put(Globals.NO_VALID_STATE_STRING, INVALID);
 		label2state.put("not_available", NOT_AVAILABLE);
@@ -141,7 +129,7 @@ public class ActionRequest {
 		label2state.put("once", ONCE);
 		label2state.put("custom", CUSTOM);
 
-		label2displayLabel = new HashMap<String, String>();
+		label2displayLabel = new HashMap<>();
 		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
 		label2displayLabel.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		label2displayLabel.put("not_available", "not_available");
@@ -153,7 +141,7 @@ public class ActionRequest {
 		label2displayLabel.put("once", "once");
 		label2displayLabel.put("custom", "custom");
 
-		displayLabel2label = new HashMap<String, String>();
+		displayLabel2label = new HashMap<>();
 		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
 		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		displayLabel2label.put("not_available", "not_available");
@@ -169,28 +157,28 @@ public class ActionRequest {
 				label2displayLabel.get("update"), label2displayLabel.get("uninstall"), label2displayLabel.get("always"),
 				label2displayLabel.get("once"), label2displayLabel.get("custom"), };
 
-		label2textColor = new HashMap<String, Color>();
-		label2textColor.put("none", NONEcolor);
-		label2textColor.put("setup", SETUPcolor);
-		label2textColor.put("update", UPDATEcolor);
-		label2textColor.put("uninstall", UNINSTALLcolor);
-		label2textColor.put("always", ALWAYScolor);
-		label2textColor.put("once", ONCEcolor);
-		label2textColor.put("custom", CUSTOMcolor);
+		label2textColor = new HashMap<>();
+		label2textColor.put("none", Globals.ACTION_REQUEST_NONE_COLOR);
+		label2textColor.put("setup", Globals.ACTION_REQUEST_SETUP_COLOR);
+		label2textColor.put("update", Globals.ACTION_REQUEST_UPDATE_COLOR);
+		label2textColor.put("uninstall", Globals.ACTION_REQUEST_UNINSTALL_COLOR);
+		label2textColor.put("always", Globals.ACTION_REQUEST_ALWAYS_COLOR);
+		label2textColor.put("once", Globals.ACTION_REQUEST_ONCE_COLOR);
+		label2textColor.put("custom", Globals.ACTION_REQUEST_CUSTOM_COLOR);
 
 	}
 
-	public static Vector<Integer> getPossibleRequests() {
+	public static List<Integer> getPossibleRequests() {
 		checkCollections();
 		return possibleRequests;
 	}
 
-	public static Vector<String> getServiceValues() {
+	public static List<String> getServiceValues() {
 		checkCollections();
 		return serviceValues;
 	}
 
-	public static Vector<String> getScriptKeys() {
+	public static List<String> getScriptKeys() {
 		checkCollections();
 		return scriptKeys;
 	}
@@ -238,7 +226,7 @@ public class ActionRequest {
 		return state2label.get(state);
 	}
 
-	public static Vector<String> getLabels() {
+	public static List<String> getLabels() {
 		checkCollections();
 
 		return labels;
@@ -275,17 +263,7 @@ public class ActionRequest {
 		checkCollections();
 
 		return choiceLabels;
-		/*
-		 * ArrayList<String> list = new ArrayList<String>();
-		 * 
-		 * for (int i = NONE; i <= LAST; i++)
-		 * {
-		 * if (states.indexOf(i) >= 0 )
-		 * list.add(getDisplayLabel(i));
-		 * }
-		 * 
-		 * return list;
-		 */
+
 	}
 
 	// instance methods
@@ -297,6 +275,7 @@ public class ActionRequest {
 		return getLabel(state);
 	}
 
+	@Override
 	public String toString() {
 		return getLabel(state);
 	}
@@ -310,7 +289,7 @@ public class ActionRequest {
 		checkCollections();
 
 		if (label == null)
-			return new ActionRequest(NONE); // NOT_AVAILABLE);
+			return new ActionRequest(NONE);
 
 		if (!labels.contains(label))
 			return new ActionRequest(INVALID);
@@ -327,21 +306,6 @@ public class ActionRequest {
 			state = t;
 		else
 			state = NOT_AVAILABLE;
-	}
-
-	public static void main(String[] args) {
-		logging.debug(" test ActionRequest.java");
-		checkCollections();
-		Iterator iter = states.iterator();
-
-		int i = 0;
-
-		while (iter.hasNext()) {
-			i++;
-			int state = (Integer) iter.next();
-			// logging.debug("state " + i + " : " + state + " label " +
-			// getLabel(state));
-		}
 	}
 
 }

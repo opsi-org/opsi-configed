@@ -4,9 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.messages.Messages;
@@ -27,11 +29,6 @@ public abstract class SWExporter {
 	File exportDirectory;
 	String exportDirectoryS;
 	String filepathStart;
-	/*
-	 * private String server;
-	 * private String user;
-	 * private String password;
-	 */
 
 	protected Boolean askingForKindOfAction = false;
 	protected boolean askForOverwrite = false;
@@ -55,12 +52,12 @@ public abstract class SWExporter {
 	protected String title;
 
 	/* constructor for use in a initialized context */
-	public SWExporter(PersistenceController controller) {
+	protected SWExporter(PersistenceController controller) {
 		this.persist = controller;
 	}
 
 	/* constructor for standalone use */
-	public SWExporter() {
+	protected SWExporter() {
 	}
 
 	public void setArgs(String server, String user, String password, String clientsFile, String outDir) {
@@ -73,21 +70,20 @@ public abstract class SWExporter {
 
 	public void addMissingArgs() {
 		if (server == null)
-			server = de.uib.utilities.Globals.getCLIparam("Host (default: localhost): ", false);
+			server = Globals.getCLIparam("Host (default: localhost): ", false);
 		if (server.equals(""))
 			server = "localhost";
 
 		if (user == null)
-			user = de.uib.utilities.Globals.getCLIparam("User (default: " + System.getProperty("user.name") + ") : ",
-					false);
+			user = Globals.getCLIparam("User (default: " + System.getProperty("user.name") + ") : ", false);
 		if (user.equals(""))
 			user = System.getProperty("user.name");
 
 		if (password == null)
-			password = de.uib.utilities.Globals.getCLIparam("Password: ", true);
+			password = Globals.getCLIparam("Password: ", true);
 
 		if (clientsFile == null)
-			clientsFile = de.uib.utilities.Globals.getCLIparam("File with client names: ", false);
+			clientsFile = Globals.getCLIparam("File with client names: ", false);
 		if (clientsFile.equals("")) {
 			finish(de.uib.configed.ErrorCode.CLIENTNAMES_FILENAME_MISSING);
 		}
@@ -96,7 +92,7 @@ public abstract class SWExporter {
 		String userHomeS = userHome.toString();
 
 		if (outDir == null)
-			outDir = de.uib.utilities.Globals.getCLIparam("Export directory (default: " + userHomeS + "): ", false);
+			outDir = Globals.getCLIparam("Export directory (default: " + userHomeS + "): ", false);
 		if (outDir.equals(""))
 			outDir = userHomeS;
 
@@ -119,29 +115,23 @@ public abstract class SWExporter {
 
 		logging.info(this, "starting");
 
-		try {
-			BufferedReader in = null;
-			try {
-				in = new BufferedReader(new FileReader(clientsFile));
-				logging.info(this, " in " + in);
-				String line = in.readLine();
-				while (line != null) {
-					// we assume that each line is a hostId
-					setHost(line);
-					updateModel();
+		try (BufferedReader in = new BufferedReader(new FileReader(clientsFile))) {
+			logging.info(this, " in " + in);
+			String line = in.readLine();
+			while (line != null) {
+				// we assume that each line is a hostId
+				setHost(line);
+				updateModel();
 
-					setWriteToFile(filepathStart + line + getExtension());
+				setWriteToFile(filepathStart + line + getExtension());
 
-					logging.debug(" outDir: " + outDir);
-					logging.debug(" filePath: " + filepathStart + line + getExtension());
-					export();
+				logging.debug(" outDir: " + outDir);
+				logging.debug(" filePath: " + filepathStart + line + getExtension());
+				export();
 
-					line = in.readLine();
-				}
-			} finally {
-				if (in != null)
-					in.close();
+				line = in.readLine();
 			}
+
 		} catch (IOException iox) {
 			logging.warning(this, "IOException " + iox);
 		}
@@ -151,10 +141,6 @@ public abstract class SWExporter {
 	public void finish(int exitcode) {
 		logging.error(de.uib.configed.ErrorCode.tell(exitcode));
 		configed.endApp(exitcode);
-	}
-
-	private void showUsage() {
-		logging.debug(usage);
 	}
 
 	public void setWriteToFile(String path) {
@@ -170,8 +156,7 @@ public abstract class SWExporter {
 		else {
 			theHost = hostId;
 			updateModel();
-			// modelSWInfo.requestReload();
-			// smodelSWInfo.reset();
+
 		}
 
 		setWriteToFile(filepathStart + hostId + ".pdf");
@@ -193,17 +178,12 @@ public abstract class SWExporter {
 		if (exportDirectory != null)
 			exportDirectoryS = exportDirectory.toString();
 
-		String prefix = "report_swinventory_";
+		List<String> columnNames;
+		List<String> classNames;
 
-		// filepathStart = exportDirectoryS + File.separator + prefix;
-		// setWriteToFile( filepathStart + hostId + ".pdf");
-
-		Vector<String> columnNames;
-		Vector<String> classNames;
-
-		columnNames = new Vector<String>(SWAuditClientEntry.KEYS);
+		columnNames = new ArrayList<>(SWAuditClientEntry.KEYS);
 		columnNames.remove(0);
-		classNames = new Vector<String>();
+		classNames = new ArrayList<>();
 		int[] finalColumns = new int[columnNames.size()];
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
@@ -212,24 +192,23 @@ public abstract class SWExporter {
 
 		modelSWInfo = new GenTableModel(null, // no updates
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
+					@Override
 					public Map<String, Map> retrieveMap() {
 						logging.info(this, "retrieving data for " + theHost);
 						Map<String, Map> tableData = persist.retrieveSoftwareAuditData(theHost);
 
-						if (tableData == null || tableData.keySet().size() == 0) {
-							scanInfo = de.uib.configed.configed.getResourceValue("PanelSWInfo.noScanResult");
+						if (tableData == null || tableData.keySet().isEmpty()) {
+							logging.debug(this, "tableData is empty or null");
+
+							scanInfo = configed.getResourceValue("PanelSWInfo.noScanResult");
 						} else {
 							logging.debug(this, "retrieved size  " + tableData.keySet().size());
 							scanInfo = "Scan " + persist.getLastSoftwareAuditModification(theHost);
 						}
 
-						logging.info(this, "retrieved size  " + tableData.keySet().size());
 						return tableData;
 					}
 				})), -1, finalColumns, null, null);
-
-		;
-
 	}
 
 	public abstract void export();
@@ -239,14 +218,11 @@ public abstract class SWExporter {
 	public void updateModel() {
 		logging.info(this, "update++");
 
-		// logging.info(this, "update+++++ voidTableModel.getRowCount() "
-		// +voidTableModel.getRowCount() );
 		logging.info(this, "update++++ modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
 
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
 		logging.info(this, "update++++++ modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
-		// panelTable.reload();
 
 	}
 

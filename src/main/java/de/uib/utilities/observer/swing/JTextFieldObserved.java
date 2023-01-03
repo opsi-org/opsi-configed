@@ -9,8 +9,7 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.observer.DataEditListener;
 import de.uib.utilities.observer.ObservableSubject;
 
-public class JTextFieldObserved extends JTextField
-		implements KeyListener {
+public class JTextFieldObserved extends JTextField implements KeyListener {
 	protected String startText = "";
 
 	protected ObservableSubject globalEditingSubject;
@@ -38,7 +37,7 @@ public class JTextFieldObserved extends JTextField
 
 	@Override
 	public void setText(String s) {
-		// logging.debug(this, "setText " + s);
+
 		super.setText(s);
 		startText = s;
 		setCaretPosition(0);
@@ -46,9 +45,10 @@ public class JTextFieldObserved extends JTextField
 	}
 
 	// KeyListener
+	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-			// logging.debug(this, "escape");
+
 			setText(startText);
 			setCaretPosition(startText.length());
 		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -57,9 +57,11 @@ public class JTextFieldObserved extends JTextField
 
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 	}
 

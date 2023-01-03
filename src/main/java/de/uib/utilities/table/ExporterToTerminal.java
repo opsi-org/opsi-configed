@@ -1,9 +1,10 @@
 package de.uib.utilities.table;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ExporterToTerminal extends ExportTable {
-	public ExporterToTerminal(javax.swing.JTable table, Vector<String> classNames) {
+	public ExporterToTerminal(javax.swing.JTable table, List<String> classNames) {
 		super(table, classNames);
 	}
 
@@ -12,21 +13,22 @@ public class ExporterToTerminal extends ExportTable {
 
 	}
 
+	@Override
 	public void execute(String fileName, boolean onlySelectedRows) {
-		// logging.debug("onlySelectedRows: "+ onlySelectedRows);
+
 		Boolean selectedOnly = checkSelection(onlySelectedRows);
 		if (selectedOnly == null)
 			return;
 
 		for (int rowI = 0; rowI < theTable.getRowCount(); rowI++) {
-			// logging.debug("selected? " + theTable.isRowSelected(rowI));
+
 			if (!selectedOnly || theTable.isRowSelected(rowI)) {
-				Vector<String> rowV = new Vector<String>();
+				List<String> rowV = new ArrayList<>();
 				for (int colI = 0; colI < theTable.getColumnCount(); colI++) {
 					if (theTable.getValueAt(rowI, colI) != null) {
-						if (classNames == null || classNames.size() == 0) {
+						if (classNames == null || classNames.isEmpty()) {
 							if (theTable.getValueAt(rowI, colI) instanceof String) {
-								// logging.debug(theTable.getValueAt(rowI, colI));
+
 								rowV.add((String) theTable.getValueAt(rowI, colI));
 
 							}
@@ -34,7 +36,7 @@ public class ExporterToTerminal extends ExportTable {
 					}
 				}
 				for (int i = 0; i < rowV.size(); i++) {
-					if (rowV.get(i) != " ") {
+					if (!rowV.get(i).equals(" ")) {
 						System.out.print(rowV.get(i));
 						if (i != rowV.size() - 1)
 							System.out.print(", ");

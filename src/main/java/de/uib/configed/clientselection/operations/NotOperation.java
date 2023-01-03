@@ -16,6 +16,7 @@ public class NotOperation extends SelectGroupOperation implements ExecutableOper
 		registerChildOperation(operations.get(0));
 	}
 
+	@Override
 	public boolean doesMatch(Client client) {
 		return !((ExecutableOperation) getChildOperations().get(0)).doesMatch(client);
 	}

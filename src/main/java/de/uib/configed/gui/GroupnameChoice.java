@@ -3,7 +3,7 @@ package de.uib.configed.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.util.Vector;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,13 +15,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-/**
- * GroupsManager
- * Copyright:     Copyright (c) 2006
- * Organisation:  uib
- * @author Rupert Röder
- */
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.utilities.swing.SurroundPanel;
@@ -30,18 +23,16 @@ import de.uib.utilities.swing.XList;
 
 public class GroupnameChoice extends FGeneralDialog implements DocumentListener, ListSelectionListener {
 
-	private ConfigedMain main;
-
 	protected int selIndex = -1;
 
 	protected XList groups;
-	private Vector dataVector;
+	private List<String> dataList;
 
 	protected String resultString = "";
 
 	JTextField groupnameField;
 
-	public GroupnameChoice(String extraTitle, ConfigedMain main, Vector v, int selectedIndex) {
+	public GroupnameChoice(String extraTitle, List<String> v, int selectedIndex) {
 		super(null, extraTitle + " (" + Globals.APPNAME + ")", true, new String[] { "ok", "Close" }, 300, 200);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		try // in an applet context this is not possible without a security problem
@@ -50,14 +41,13 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 		} catch (Exception ex) {
 			toFront();
 		}
-		this.main = main;
 
-		dataVector = v;
+		dataList = v;
 
 		groups = new XList(v);
 		groups.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		groups.setFont(Globals.defaultFontBig);
-		groups.setBackground(Globals.backgroundLightGrey);
+		groups.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		groups.addListSelectionListener(this);
 
@@ -113,7 +103,7 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 
 	protected void textvalueChanged() {
 
-		if (dataVector.contains(groupnameField.getText())) {
+		if (dataList.contains(groupnameField.getText())) {
 			groups.setSelectedValue(groupnameField.getText(), true);
 			selIndex = groups.getSelectedIndex();
 		} else {
@@ -121,30 +111,32 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 			selIndex = -1;
 		}
 
-		// logging.debug ("text value changed selIndex " + selIndex + " ?? " +
-		// groups.getSelectedIndex());
 	}
 
 	// DocumentListener for Document in groupnameField
+	@Override
 	public void insertUpdate(DocumentEvent e) {
 		textvalueChanged();
 	}
 
+	@Override
 	public void removeUpdate(DocumentEvent e) {
 		textvalueChanged();
 	}
 
+	@Override
 	public void changedUpdate(DocumentEvent e) {
 	}
 
 	// ListSelectionListener
+	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		selIndex = groups.getSelectedIndex();
 
 		if (selIndex == -1)
 			return;
 
-		if (groupnameField.getText() == null || !groupnameField.getText().equals((String) groups.getSelectedValue())) {
+		if (groupnameField.getText() == null || !groupnameField.getText().equals(groups.getSelectedValue())) {
 			groupnameField.setText((String) groups.getSelectedValue());
 		}
 	}

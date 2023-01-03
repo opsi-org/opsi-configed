@@ -7,12 +7,12 @@ import de.uib.configed.clientselection.SelectOperation;
 public class StringEqualsOperation extends SelectOperation {
 	public StringEqualsOperation(SelectElement element) {
 		super(element);
-		// logging.info(this, " element " + element);
+
 	}
 
 	@Override
 	public SelectData.DataType getDataType() {
-		return SelectData.DataType.TextType;
+		return SelectData.DataType.TEXT_TYPE;
 	}
 
 	@Override

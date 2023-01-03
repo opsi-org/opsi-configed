@@ -8,12 +8,12 @@ import java.sql.SQLException;
 import de.uib.utilities.logging.logging;
 
 public class DbConnect {
-	private final String driver = "com.mysql.jdbc.Driver";
-	// private String url = "jdbc:mysql://%s/opsi";
+	private static final String DRIVER = "com.mysql.jdbc.Driver";
+
 	private String url = "jdbc:mysql://%s";
 	private static final String defaultDB = "opsi";
 	private static final String defaultUser = "opsi";
-	private static final String defaultPassword = "linux123"; // "opsi";
+	private static final String defaultPassword = "linux123";
 	private static Connection con = null;
 
 	private static String server;
@@ -22,12 +22,10 @@ public class DbConnect {
 
 	private DbConnect() {
 		try {
-			Class.forName(driver).newInstance();
-			// new Driver();
+			Class.forName(DRIVER).getDeclaredConstructor().newInstance();
+
 		}
-		// catch ( ClassNotFoundException e ) {
-		// System.exit(1);
-		// }
+
 		catch (Exception e) {
 			logging.error("Error", e);
 			return;
@@ -99,8 +97,7 @@ public class DbConnect {
 
 	public static boolean checkForExistence(String sql) {
 		logging.debug("DbConnect: " + sql);
-		try {
-			ResultSet reply = getConnection().createStatement().executeQuery(sql);
+		try (ResultSet reply = getConnection().createStatement().executeQuery(sql)) {
 			if (reply.next())
 				return true;
 		} catch (Exception e) {

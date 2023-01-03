@@ -4,18 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 import de.uib.utilities.logging.logging;
 
 public class UserOpsipermission extends UserConfigModule {
-	// public enum HostTypeOfPrivilege{ ALL, CLIENT, DEPOT, SERVER }
-	// permit restrictable action
-	// public java.util.List<Object> reduceList( java.util.List<Object> checkList )
-	// public String getInfo();
-	// public String signalCause();
 
-	// public ActionPrivilege allowsAction();
-	// public HostTypeOfPrivilege isFor();
+	// permit restrictable action
 
 	public enum ActionPrivilege {
 		READ_ONLY, READ_WRITE
@@ -47,7 +43,7 @@ public class UserOpsipermission extends UserConfigModule {
 
 	public static final String PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED = CONFIGKEY_STR_PRIVILEGE + "."
 			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_DEPOT + "." + CONFIGKEY_STR_ACCESSCONTROLLED;
-	// privilege.host.depotaccess.configured; //boolean
+
 	public static final String PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE = CONFIGKEY_STR_PRIVILEGE + "."
 			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_DEPOT + "." + CONFIGKEY_STR_DEPOTLIST;
 	// privilege.host.depotaccess.depots : multivalue
@@ -57,7 +53,6 @@ public class UserOpsipermission extends UserConfigModule {
 
 	public static final String PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED = CONFIGKEY_STR_PRIVILEGE + "."
 			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_HOSTGROUP + "." + CONFIGKEY_STR_ACCESSCONTROLLED;
-	// privilege.host.groupaccess.configured; //boolean
 
 	public static final String PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE = CONFIGKEY_STR_PRIVILEGE + "."
 			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_HOSTGROUP + "." + CONFIGKEY_STR_HOSTGROUPLIST;
@@ -65,7 +60,6 @@ public class UserOpsipermission extends UserConfigModule {
 
 	public static final String PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED = CONFIGKEY_STR_PRIVILEGE
 			+ "." + CONFIGKEY_STR_PRODUCT + "." + CONFIGKEY_STR_PRODUCTGROUP + "." + CONFIGKEY_STR_ACCESSCONTROLLED;
-	// privilege.product.groupaccess.configured; //boolean
 
 	public static final String PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE = CONFIGKEY_STR_PRIVILEGE + "."
 			+ CONFIGKEY_STR_PRODUCT + "." + CONFIGKEY_STR_PRODUCTGROUP + "." + CONFIGKEY_STR_PRODUCTGROUPLIST;
@@ -73,7 +67,7 @@ public class UserOpsipermission extends UserConfigModule {
 
 	public static final LinkedHashSet<String> BOOL_KEYS;
 	static {
-		BOOL_KEYS = new LinkedHashSet<String>();
+		BOOL_KEYS = new LinkedHashSet<>();
 		BOOL_KEYS.add(PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY);
 		BOOL_KEYS.add(PARTKEY_USER_PRIVILEGE_SERVER_READWRITE);
 		BOOL_KEYS.add(PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED);
@@ -85,11 +79,11 @@ public class UserOpsipermission extends UserConfigModule {
 
 	}
 
-	public static final HashSet<String> LIST_KEYS;
-	public static final HashMap<String, String> CORRESPONDENCE_TO_LIST_KEYS;
+	public static final Set<String> LIST_KEYS;
+	public static final Map<String, String> CORRESPONDENCE_TO_LIST_KEYS;
 	static {
-		CORRESPONDENCE_TO_LIST_KEYS = new HashMap<String, String>();
-		LIST_KEYS = new HashSet<String>();
+		CORRESPONDENCE_TO_LIST_KEYS = new HashMap<>();
+		LIST_KEYS = new HashSet<>();
 
 		CORRESPONDENCE_TO_LIST_KEYS.put(PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED,
 				PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE);
@@ -113,20 +107,18 @@ public class UserOpsipermission extends UserConfigModule {
 		logging.info("init ARCHEO for UserOpsipermission");
 		DEFAULT = new UserOpsipermission(UserConfig.ARCHEO_ROLE_NAME);
 
-		// logging.info(" PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY " +
-		// PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY);
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY, false);
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_SERVER_READWRITE, true);
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED, false);
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED, false);
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED, false);
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_CREATECLIENT, true);
-		DEFAULT.setValues(PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE, new ArrayList<Object>());
-		DEFAULT.setValues(PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE, new ArrayList<Object>());
-		DEFAULT.setValues(PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE, new ArrayList<Object>());
-		DEFAULT.setPossibleValues(PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE, new ArrayList<Object>());
-		DEFAULT.setPossibleValues(PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE, new ArrayList<Object>());
-		DEFAULT.setPossibleValues(PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE, new ArrayList<Object>());
+		DEFAULT.setValues(PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE, new ArrayList<>());
+		DEFAULT.setValues(PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE, new ArrayList<>());
+		DEFAULT.setValues(PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE, new ArrayList<>());
+		DEFAULT.setPossibleValues(PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE, new ArrayList<>());
+		DEFAULT.setPossibleValues(PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE, new ArrayList<>());
+		DEFAULT.setPossibleValues(PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE, new ArrayList<>());
 	}
 
 	public UserOpsipermission(String uname) {

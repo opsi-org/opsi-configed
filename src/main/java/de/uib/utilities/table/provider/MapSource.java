@@ -8,44 +8,44 @@
 
 package de.uib.utilities.table.provider;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import de.uib.utilities.logging.logging;
 
 public class MapSource implements TableSource
 // based on a regular map (rows indexed by a String key)
 // of maps (representing the rows as pairs columnname - value)
-// "regular" means that all rows have identical structure (missing
+
 // columns may represent null values)
 // column 0 of the table is the key of the outer map (therefore the first
 // classname
 // has to be String)
 {
-	protected final String rowCounterName = "rowcounter";
+	protected static final String ROW_COUNTER_NAME = "rowcounter";
 
 	protected boolean rowCounting = false;
 
-	protected Vector<String> columnNames;
+	protected List<String> columnNames;
 
-	protected Vector<String> classNames;
+	protected List<String> classNames;
 
 	protected Map<String, Map> table;
 
-	protected Vector<Vector<Object>> rows;
+	protected List<List<Object>> rows;
 
 	protected boolean reloadRequested = true;
 
 	static final Map<String, Object> class2defaultValue;
 	static {
-		class2defaultValue = new HashMap<String, Object>();
+		class2defaultValue = new HashMap<>();
 		class2defaultValue.put("java.lang.Boolean", false);
 		class2defaultValue.put("java.lang.String", "");
 	}
 
-	public MapSource(Vector<String> columnNames, Vector<String> classNames, Map<String, Map> table,
-			boolean rowCounting) {
+	public MapSource(List<String> columnNames, List<String> classNames, Map<String, Map> table, boolean rowCounting) {
 		logging.info(this, "constructed with cols " + columnNames);
 		logging.info(this, "constructed with classes " + classNames);
 		this.columnNames = columnNames;
@@ -56,11 +56,11 @@ public class MapSource implements TableSource
 			logging.info(this, "completed to classes " + classNames);
 		}
 		this.table = table;
-		rows = new Vector();
+		rows = new ArrayList<>();
 
 	}
 
-	public MapSource(Vector<String> columnNames, Vector<String> classNames, Map<String, Map> table) {
+	public MapSource(List<String> columnNames, List<String> classNames, Map<String, Map> table) {
 		this(columnNames, classNames, table, false);
 	}
 
@@ -70,19 +70,14 @@ public class MapSource implements TableSource
 
 	protected void fetchData() {
 		rows.clear();
-		// logging.debug(this, "MapSource fetchData() : " + table);
 
-		// logging.info(this, "fetchData , columns " + columnNames);
 		int rowCount = 0;
 
 		for (String key : table.keySet()) {
-			Vector vRow = new Vector();
+			List vRow = new ArrayList<>();
 
 			Map mRow = table.get(key);
 
-			// logging.debug ( " -------- key '" + key + "', mRow = " + mRow );
-
-			// vRow.add(key);
 			// previously we assumed that column 0 hold the key
 
 			for (int i = 0; i < columnNames.size(); i++) {
@@ -92,19 +87,15 @@ public class MapSource implements TableSource
 					logging.debug(this, "fetchData for A-key " + key + " col  " + columnNames.get(i) + " index " + i
 							+ " val " + ob);
 
-				// logging.debug(this, " getting ob to column " + i + ", " + columnNames.get(i)
-				// + " ob:" + ob);
-
 				if (ob != null) {
 					vRow.add(ob);
 
 					try {
-						// logging.debug( "??? is " + ob + " dyninstance class of " +
-						// classNames.get(i));
+
 						Class cl = Class.forName(classNames.get(i));
 						if (!dynInstanceOf(ob, cl)) {
 							// Class.forName( classNames.get(i) ) ).isAssignableFrom ( ob.getClass() ) )
-							// e.g. java.lang.String valueInColumnI = ob; works!
+
 							logging.warning(this, "MapSource fetchData(): data type does not fit");
 							logging.info(this, " ob " + ob + " class " + ob.getClass().getName());
 							logging.info(this, "class should be " + cl);
@@ -124,15 +115,13 @@ public class MapSource implements TableSource
 					} else {
 						String className = classNames.get(i);
 
-						// if (className.equals("java.lang.Integer"))
-						if (columnNames.get(i).equals(rowCounterName)) {
+						if (columnNames.get(i).equals(ROW_COUNTER_NAME)) {
 							vRow.add("" + rowCount);
-							// vRow.add( rowCount );
+
 						} else {
 							if (class2defaultValue.get(className) != null) {
 								vRow.add(class2defaultValue.get(className));
-								// logging.info(this, "fetchData row " + mRow + " ob == null, setting default
-								// for " + className );
+
 							}
 
 							else {
@@ -157,15 +146,18 @@ public class MapSource implements TableSource
 		}
 	}
 
-	public Vector<String> retrieveColumnNames() {
+	@Override
+	public List<String> retrieveColumnNames() {
 		return columnNames;
 	}
 
-	public Vector<String> retrieveClassNames() {
+	@Override
+	public List<String> retrieveClassNames() {
 		return classNames;
 	}
 
-	public Vector<Vector<Object>> retrieveRows() {
+	@Override
+	public List<List<Object>> retrieveRows() {
 		logging.info(this, " -- retrieveRows");
 		if (reloadRequested) {
 			fetchData();
@@ -175,13 +167,14 @@ public class MapSource implements TableSource
 		return rows;
 	}
 
+	@Override
 	public void requestReload() {
 		reloadRequested = true;
 	}
 
 	@Override
 	public String getRowCounterName() {
-		return rowCounterName;
+		return ROW_COUNTER_NAME;
 	}
 
 	@Override
@@ -193,10 +186,10 @@ public class MapSource implements TableSource
 	public void setRowCounting(boolean b) {
 		if (!rowCounting && b) {
 			rowCounting = true;
-			// classNames.add( "java.lang.String" );
+
 			classNames.add("java.lang.Integer");
 			// has the effect that IntComparatorForStrings is applied
-			columnNames.add(rowCounterName);
+			columnNames.add(ROW_COUNTER_NAME);
 			structureChanged();
 		}
 	}

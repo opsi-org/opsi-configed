@@ -8,20 +8,19 @@
 
 package de.uib.utilities.table.provider;
 
-import java.util.Vector;
+import java.util.List;
 
 public interface TableSource {
 	public static int ROW_COUNT_START = 1;
 
-	Vector<String> retrieveColumnNames();
+	List<String> retrieveColumnNames();
 
-	Vector<String> retrieveClassNames();
+	List<String> retrieveClassNames();
 
 	// we get a new version
-	Vector<Vector<Object>> retrieveRows();
+	List<List<Object>> retrieveRows();
 
-	// Map<String, java.util.List<String>> getFunction(Integer defIndex, Integer
-	// valIndex);
+	// Map<String, List<String>> getFunction(Integer defIndex, Integer
 
 	void setRowCounting(boolean b);
 

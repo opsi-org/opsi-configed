@@ -27,7 +27,7 @@ public class ConnectionState {
 		myState = state;
 		this.message = message;
 		instancesCount++;
-		// logging.debug("Setting connection state to: "+toString());
+
 	}
 
 	/**
@@ -86,6 +86,7 @@ public class ConnectionState {
 	 * 
 	 * @return Connection State
 	 */
+	@Override
 	public String toString() {
 		switch (myState) {
 		case UNDEFINED:

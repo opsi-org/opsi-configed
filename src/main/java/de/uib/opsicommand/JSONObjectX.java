@@ -32,6 +32,7 @@ public class JSONObjectX extends JSONObject {
 		return map;
 	}
 
+	@Override
 	public boolean isEmpty() {
 		return !hasElements;
 	}
@@ -53,17 +54,16 @@ public class JSONObjectX extends JSONObject {
 		beingList = true;
 		hasElements = true;
 
-		map = new HashMap<String, Object>();
+		map = new HashMap<>();
 		try {
-			Iterator iter = master.keys();
-			// logging.debug(this, "keys " + master.keys());
+			Iterator<String> iter = master.keys();
+
 			if (!iter.hasNext()) {
 				hasElements = false;
 			}
 
 			while (iter.hasNext()) {
-				String key = (String) iter.next();
-				// logging.debug(this, "got key " +key);
+				String key = iter.next();
 
 				if (master.get(key) != null)
 					beingList = false;
@@ -72,18 +72,15 @@ public class JSONObjectX extends JSONObject {
 					beingMap = false;
 
 				if (!master.isNull(key)) {
-					Object value = master.get(key);
+					Object masterValue = master.get(key);
 
-					if (value instanceof java.lang.Boolean
-							||
-							value instanceof java.lang.String
-							||
-							value instanceof java.lang.Integer) {
-						map.put(key, value);
-					} else if (value instanceof org.json.JSONArray) {
-						map.put(key, ((JSONArray) value).toList());
-					} else if (value instanceof org.json.JSONObject) {
-						map.put(key, value); // should only occur on the last level
+					if (masterValue instanceof java.lang.Boolean || masterValue instanceof java.lang.String
+							|| masterValue instanceof java.lang.Integer) {
+						map.put(key, masterValue);
+					} else if (masterValue instanceof org.json.JSONArray) {
+						map.put(key, ((JSONArray) masterValue).toList());
+					} else if (masterValue instanceof org.json.JSONObject) {
+						map.put(key, masterValue); // should only occur on the last level
 					}
 				}
 			}
@@ -102,7 +99,7 @@ public class JSONObjectX extends JSONObject {
 	}
 
 	public void produceString() {
-		if (list.size() == 0) {
+		if (list.isEmpty()) {
 			value = "";
 			beingString = true;
 		}

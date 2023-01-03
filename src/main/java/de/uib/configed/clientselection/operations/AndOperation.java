@@ -10,14 +10,13 @@ import de.uib.configed.clientselection.SelectOperation;
 
 /**
  * Connects two or more operations with a logical and, i.e. this Operation only
- * matches
- * if all child operations match.
+ * matches if all child operations match.
  */
 public class AndOperation extends SelectGroupOperation implements ExecutableOperation {
 	private List<SelectOperation> operations;
 
 	public AndOperation(List<SelectOperation> operations) {
-		this.operations = new LinkedList<SelectOperation>();
+		this.operations = new LinkedList<>();
 		for (SelectOperation operation : operations) {
 			this.operations.add(operation);
 			registerChildOperation(operation);

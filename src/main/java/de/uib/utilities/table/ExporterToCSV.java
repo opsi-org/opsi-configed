@@ -5,20 +5,20 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Date;
-import java.util.Vector;
+import java.util.List;
 
 import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
 public class ExporterToCSV extends ExportTable {
 	protected String CSVencoding = "UTF8";
-	// public String CSVseparator = "\t";
+
 	public static final Character CSVseparator = ';';
 	protected static final String csvSep = "" + CSVseparator;
 	public static final Character stringDelimiter = '"';
 	protected static final String thisExtension = ".csv";
 
-	public ExporterToCSV(javax.swing.JTable table, Vector<String> classNames) {
+	public ExporterToCSV(javax.swing.JTable table, List<String> classNames) {
 		super(table, classNames);
 		extensionFilter = new javax.swing.filechooser.FileNameExtensionFilter("CSV", "csv");
 
@@ -36,27 +36,21 @@ public class ExporterToCSV extends ExportTable {
 		if (value == null)
 			return "";
 
-		String result = ((String) value).replace(stringDelimiter, '\'');
-
-		// result = result.replace(CSVseparator, " ");
-		return result;
+		return ((String) value).replace(stringDelimiter, '\'');
 	}
 
 	private String removeSeparatorChar(Object value) {
 		if (value == null)
 			return "";
 
-		String result = ((String) value).replace(csvSep, "\\" + csvSep);
-
-		return result;
+		return ((String) value).replace(csvSep, "\\" + csvSep);
 	}
 
 	@Override
 	public void execute(String fileName, boolean onlySelectedRows) {
 
-		// logging.info(this, "toCSV classNames " + classNames );
-		logging.info(this, "toCSV fileName, onlySelectedRows, csvSep " +
-				"\"" + fileName + "\", " + onlySelectedRows + "\", " + "\"" + csvSep + "\"");
+		logging.info(this, "toCSV fileName, onlySelectedRows, csvSep " + "\"" + fileName + "\", " + onlySelectedRows
+				+ "\", " + "\"" + csvSep + "\"");
 
 		Boolean selectedOnly = checkSelection(onlySelectedRows);
 		if (selectedOnly == null)
@@ -69,14 +63,13 @@ public class ExporterToCSV extends ExportTable {
 		fileName = checkFile(fileName, extensionFilter);
 
 		if (fileName != null) {
-			try {
-				OutputStream os = (OutputStream) new FileOutputStream(fileName);
-				OutputStreamWriter osw = new OutputStreamWriter(os); // , CSVencoding);
-				BufferedWriter bw = new BufferedWriter(osw);
-				// logging.debugOut(logging.LEVEL_WARNING,"BufferedWriter created");
+
+			try (OutputStream os = new FileOutputStream(fileName);
+					OutputStreamWriter osw = new OutputStreamWriter(os);
+					BufferedWriter bw = new BufferedWriter(osw)) {
 
 				// write header
-				StringBuffer line = new StringBuffer();
+				StringBuilder line = new StringBuilder();
 				for (int colI = 0; colI < theTable.getColumnCount(); colI++) { // i column
 					line.append(stringDelimiter);
 					line.append(theTable.getColumnName(colI));
@@ -89,30 +82,17 @@ public class ExporterToCSV extends ExportTable {
 				bw.write(line.toString());
 				bw.flush();
 				// write rows
-
 				for (int rowI = 0; rowI < theTable.getRowCount(); rowI++) {
-					logging.debug(this, "toCsv, handle row " + rowI + " selected "
-							+ theTable.isRowSelected(rowI)
+					logging.debug(this, "toCsv, handle row " + rowI + " selected " + theTable.isRowSelected(rowI)
 							+ " selectedOnly " + selectedOnly);
 
 					if (!selectedOnly || theTable.isRowSelected(rowI)) {
-						line = new StringBuffer();
+						line = new StringBuilder();
 						for (int colI = 0; colI < theTable.getColumnCount(); colI++) { // i column
 							date1 = null; // reset
 
-							/*
-							 * logging.debug(this, "toCsv, handle row, col, value: " + rowI + ", " + colI +
-							 * ", " + theTable.getValueAt(rowI, colI));
-							 * if (theTable.getValueAt(rowI, colI) == null)
-							 * logging.debug(this, "toCsv, handle row, col, value: " + rowI + ", " + colI +
-							 * ",  null (will be ignored)");
-							 * else
-							 * logging.debug(this, "toCsv, handle row, col, class: " + rowI + ", " + colI +
-							 * ", " + theTable.getValueAt(rowI, colI).getClass());
-							 */
-
 							if (theTable.getValueAt(rowI, colI) != null) {
-								if (classNames == null || classNames.size() == 0) {
+								if (classNames == null || classNames.isEmpty()) {
 									if (theTable.getValueAt(rowI, colI) instanceof String) {
 										String val = "" + theTable.getValueAt(rowI, colI);
 										val = removeStringDelimiter(val);
@@ -132,18 +112,7 @@ public class ExporterToCSV extends ExportTable {
 
 									if (classNames.get(colI).equals("java.lang.String")) {
 
-										String inString = new String();
-										inString = removeStringDelimiter(theTable.getValueAt(rowI, colI));
-
-										/*
-										 * if (inString.matches("\\d{2}.\\d{2}.\\d{4}") ||
-										 * inString.matches("\\d{1}.\\d{2}.\\d{4}")
-										 * || inString.matches("\\d{1}.\\d{1}.\\d{4}")
-										 * || inString.matches("\\d{2}.\\d{1}.\\d{4}")) {
-										 * date1 = dateParser.parse(inString);
-										 * line.append(dateFormatter.format(date1));
-										 * } else
-										 */
+										String inString = removeStringDelimiter(theTable.getValueAt(rowI, colI));
 
 										{
 											line.append(stringDelimiter);
@@ -206,13 +175,8 @@ public class ExporterToCSV extends ExportTable {
 					}
 				}
 
-				bw.close();
-				osw.close();
-				os.close();
-
 			} catch (Exception ex) {
-				logging.error(configed.getResourceValue("ExportTable.error")
-						+ " " + ex.toString());
+				logging.error(configed.getResourceValue("ExportTable.error") + " " + ex.toString());
 			}
 		}
 

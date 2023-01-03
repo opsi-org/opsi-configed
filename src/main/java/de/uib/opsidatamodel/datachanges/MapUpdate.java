@@ -15,13 +15,13 @@ public abstract class MapUpdate implements UpdateCommand {
 		setController(persis);
 	}
 
+	@Override
 	public void setController(Object obj) {
 		this.persis = (PersistenceController) obj;
 	}
 
+	@Override
 	public Object getController() {
 		return persis;
 	}
-
-	public abstract void doCall();
 }

@@ -25,6 +25,7 @@ public class TableCellRendererCurrency extends ColorTableCellRenderer {
 		decimalFormat = NumberFormat.getCurrencyInstance();
 	}
 
+	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 			boolean isSelected, // is the cell selected
 			boolean hasFocus, int row, int column) {
@@ -50,7 +51,7 @@ public class TableCellRendererCurrency extends ColorTableCellRenderer {
 			((JLabel) result).setText(selectedString);
 			((JLabel) result).setIcon(selectedIcon);
 			((JLabel) result).setToolTipText(selectedString);
-			// ((JLabel)result).setHorizontalAlignment(CENTER);
+
 		}
 
 		return result;

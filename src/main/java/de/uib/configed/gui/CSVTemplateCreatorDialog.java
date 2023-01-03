@@ -1,6 +1,5 @@
 package de.uib.configed.gui;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
@@ -13,7 +12,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Vector;
+import java.util.List;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -49,12 +48,10 @@ import de.uib.configed.configed;
 import de.uib.configed.csv.CSVFormat;
 import de.uib.configed.csv.CSVWriter;
 import de.uib.utilities.logging.logging;
-import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	protected int wLeftLabel = Globals.BUTTON_WIDTH + 20;
 
-	private PanelGenEditTable thePanel;
 	private CSVFormat format;
 
 	private ButtonGroup fieldSeparatorOptions;
@@ -68,15 +65,13 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 	private JLabel importOptionsLabel;
 	private JLabel splittingOptionsLabel;
-	private JLabel startLineLabel;
-	private JFormattedTextField startLineInput;
 	private JFormattedTextField otherSeparatorInput;
 	private JLabel stringSeparatorLabel;
 
-	private Vector<String> columnNames;
-	private java.util.List<JCheckBox> headerButtons;
+	private List<String> columnNames;
+	private List<JCheckBox> headerButtons;
 
-	public CSVTemplateCreatorDialog(Vector<String> columnNames) {
+	public CSVTemplateCreatorDialog(List<String> columnNames) {
 		super(Globals.mainFrame, configed.getResourceValue("CSVTemplateCreatorDialog.title"), false,
 				new String[] { "ok", "cancel" },
 				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
@@ -92,14 +87,14 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	protected void allLayout() {
 		logging.info(this, "allLayout");
 
-		allpane.setBackground(de.uib.configed.Globals.backLightBlue);
+		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
 		if (centerPanel == null)
 			centerPanel = new JPanel();
 
-		centerPanel.setBackground(Color.white);
+		centerPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 		centerPanel.setOpaque(true);
 
 		southPanel = createSouthPanel();
@@ -150,7 +145,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
 		southPanel.setOpaque(false);
-		southPanel.setBackground(Color.white);
+		southPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 		southPanel.setOpaque(true);
 
 		return southPanel;
@@ -169,9 +164,6 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		NumberFormatter formatter = new NumberFormatter(numberFormat);
 		formatter.setAllowsInvalid(false);
 		formatter.setCommitsOnValidEdit(true);
-
-		startLineLabel = new JLabel(configed.getResourceValue("CSVImportDataDialog.startLineLabel"));
-		startLineInput = new JFormattedTextField(formatter);
 
 		tabsOption = new JRadioButton(configed.getResourceValue("CSVImportDataDialog.tabsOption"));
 		tabsOption.setActionCommand("\t");
@@ -223,17 +215,11 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			AbstractButton button = iter.nextElement();
 
 			button.addItemListener((ItemEvent e) -> {
-				if (e.getItem() == otherOption) {
-					otherSeparatorInput.setEnabled(true);
-				} else {
-					otherSeparatorInput.setEnabled(false);
-				}
+				otherSeparatorInput.setEnabled(e.getItem() == otherOption);
 
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					if (!button.getActionCommand().isEmpty()) {
-						format.setFieldSeparator(button.getActionCommand().charAt(0));
-					}
-				}
+				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty())
+					format.setFieldSeparator(button.getActionCommand().charAt(0));
+
 			});
 		}
 
@@ -365,7 +351,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 	private class HeaderOptionsPanel extends JPanel {
 		public HeaderOptionsPanel(ListModel<JCheckBox> model) {
-			setBackground(Color.WHITE);
+			setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
 			CheckBoxList list = new CheckBoxList(model);
@@ -386,6 +372,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 				setCellRenderer(new CellRenderer());
 
 				addMouseListener(new MouseAdapter() {
+					@Override
 					public void mousePressed(MouseEvent e) {
 						int index = locationToIndex(e.getPoint());
 
@@ -404,6 +391,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			}
 
 			protected class CellRenderer implements ListCellRenderer {
+				@Override
 				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
 						boolean cellHasFocus) {
 					JCheckBox checkbox = (JCheckBox) value;
@@ -415,7 +403,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 					checkbox.setBorderPainted(true);
 					checkbox.setBorder(noFocusBorder);
 					// checkbox.setBorder(isSelected ?
-					// UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder);
+
 					return checkbox;
 				}
 			}
@@ -465,7 +453,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	public void write(String csvFile) {
 		try {
 			CSVWriter writer = new CSVWriter(new FileWriter(csvFile), format);
-			Vector<String> headers = new Vector<>();
+			List<String> headers = new ArrayList<>();
 
 			headerButtons.forEach(header -> {
 				if (header.isSelected()) {

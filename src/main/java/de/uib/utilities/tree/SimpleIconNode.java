@@ -47,7 +47,7 @@ public class SimpleIconNode extends DefaultMutableTreeNode {
 	}
 
 	public void setEnabled(boolean aFlag) {
-		if (aFlag == false) {
+		if (!aFlag) {
 			// Lazy creation: avoids unneccessary objects if the tree
 			// could not have disabled state.
 			if ((closedIcon != null) & (disabledClosedIcon == null)) {
@@ -75,7 +75,7 @@ public class SimpleIconNode extends DefaultMutableTreeNode {
 	 * Try to create grayed icon from aIcon and return it, or return null.
 	 */
 	private Icon createDisabledIcon(Icon anIcon) {
-		// logging.debug("lazy creation");
+
 		// copied from your example: e601. Creating a Gray Version of an Icon
 		if (anIcon instanceof ImageIcon) {
 			Image grayImage = GrayFilter.createDisabledImage(((ImageIcon) anIcon).getImage());
@@ -169,37 +169,4 @@ public class SimpleIconNode extends DefaultMutableTreeNode {
 		return emphasized;
 	}
 
-	/*
-	 * 
-	 * this tip from http://tech.chitgoks.com/2009/11/15/sort-jtree/
-	 * has the effect that "true" nodes dont any more appear before leaves;
-	 * we would have to modify the comparator
-	 * 
-	 * @Override
-	 * public void insert(MutableTreeNode newChild, int childIndex) {
-	 * super.insert(newChild, childIndex);
-	 * Collections.sort(this.children, nodeComparator);
-	 * }
-	 * 
-	 * protected Comparator nodeComparator = new Comparator () {
-	 * 
-	 * @Override
-	 * public int compare(Object o1, Object o2) {
-	 * return o1.toString().compareToIgnoreCase(o2.toString());
-	 * }
-	 * 
-	 * @Override
-	 * 
-	 * @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
-	 * public boolean equals(Object obj) {
-	 * return false;
-	 * }
-	 * 
-	 * @Override
-	 * public int hashCode() {
-	 * int hash = 7;
-	 * return hash;
-	 * }
-	 * };
-	 */
 }

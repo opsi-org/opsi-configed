@@ -11,7 +11,7 @@ import de.uib.utilities.logging.logging;
 //a very rough class for simple command interpreting
 public class Interpreter {
 
-	protected LinkedHashMap<String, Object> specialValues;
+	protected Map<String, Object> specialValues;
 
 	private String command;
 
@@ -24,7 +24,7 @@ public class Interpreter {
 	}
 
 	public static List<String> splitToList(String cmd) {
-		ArrayList<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 
 		String blankDelims = " \t\n\r\f";
 		String citMarks = "'\"";
@@ -32,21 +32,21 @@ public class Interpreter {
 
 		StringTokenizer tok = new StringTokenizer(cmd, blankDelims + citMarks, true);
 
-		StringBuffer partBuff = null;
+		StringBuilder partBuff = null;
 
 		while (tok.hasMoreTokens()) {
 			String s = tok.nextToken();
-			// logging.debug(s);
+
 			if (citMarks.indexOf(s) > -1) {
 				if (partBuff == null) {
 					// start of citation
-					partBuff = new StringBuffer();
+					partBuff = new StringBuilder();
 					lastCitMark = s;
 				} else {
 					if (s.equals(lastCitMark))
 					// end of citation
 					{
-						// logging.debug( partBuff.toString() );
+
 						result.add(partBuff.toString());
 						partBuff = null;
 					} else
@@ -65,14 +65,14 @@ public class Interpreter {
 			if (partBuff == null)
 			// no buff started
 			{
-				// logging.debug(s);
+
 				result.add(s);
 			} else
 				partBuff.append(s);
 		}
 
 		if (partBuff != null) {
-			// logging.debug("String not closed: " + partBuff);
+
 			result.add(partBuff.toString());
 		}
 
@@ -84,7 +84,7 @@ public class Interpreter {
 	}
 
 	protected void initSpecialValues(String[] specials) {
-		specialValues = new LinkedHashMap<String, Object>();
+		specialValues = new LinkedHashMap<>();
 		for (int i = 0; i < specials.length; i++)
 			specialValues.put(specials[i], "");
 	}

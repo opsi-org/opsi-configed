@@ -1,34 +1,26 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-// import javax.swing.border.*;
-// import javax.swing.event.*;
-// import java.io.*;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
-// import java.nio.charset.Charset;
-// import java.util.regex.*;
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandOpsiSetRights;
-import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.utilities.logging.logging;
 
 public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
-	private GroupLayout layout;
 	private JPanel inputPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
 
@@ -39,7 +31,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	private JButton btn_doAction;
 	private JButton btn_close;
 	private CommandOpsiSetRights commandopsisetrights;
-	private Vector<String> additional_default_paths = new Vector();
+	private List<String> additional_default_paths = new ArrayList<>();
 	private SSHCompletionComboButton completion;
 
 	public SSHOpsiSetRightsParameterDialog() {
@@ -57,11 +49,11 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		additional_default_paths.addElement(SSHCommandFactory.getInstance().opsipathVarDepot);
+		additional_default_paths.add(SSHCommandFactory.getInstance().opsipathVarDepot);
 		completion = new SSHCompletionComboButton(additional_default_paths);
 
-		inputPanel.setBackground(Globals.backLightBlue);
-		buttonPanel.setBackground(Globals.backLightBlue);
+		inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		getContentPane().add(inputPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
@@ -74,27 +66,21 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 		btn_doAction.setText(configed.getResourceValue("SSHConnection.buttonExec"));
 		btn_doAction.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly()))
-			btn_doAction.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					logging.info(this, "btn_doAction pressed");
-					doAction1();
-				}
+			btn_doAction.addActionListener(actionEvent -> {
+				logging.info(this, "btn_doAction pressed");
+				doAction1();
 			});
 
 		btn_close = new JButton();
 		buttonPanel.add(btn_close);
 		btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 		btn_close.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
-		btn_close.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				cancel();
-			}
-		});
+		btn_close.addActionListener(actionEvent -> cancel());
 		setComponentsEnabled(!Globals.isGlobalReadOnly());
 
 		btn_searchDir = completion.getButton();
 		cb_autocompletion = completion.getCombobox();
-		// completion.doButtonAction();
+
 		cb_autocompletion.setEnabled(true);
 		cb_autocompletion.addItem("");
 		cb_autocompletion.setSelectedItem("");
@@ -107,19 +93,19 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	}
 
 	/* This method is called when button 1 is pressed */
+	@Override
 	public void doAction1() {
 		try {
-			commandopsisetrights.setDir(completion.combobox_getStringItem());;
+			commandopsisetrights.setDir(completion.comboBoxGetStringItem());
 			logging.info(this, "doAction1 opsi-set-rights with path: " + commandopsisetrights.getDir());
 			// we are in the event queure
 			new Thread() {
+				@Override
 				public void run() {
-					new SSHConnectExec((SSHCommand) commandopsisetrights, btn_doAction);
+					new SSHConnectExec(commandopsisetrights, btn_doAction);
 				}
 			}.start();
 
-			// SSHConnectExec ssh = new SSHConnectExec((SSHCommand) commandopsisetrights );
-			// cancel();
 		} catch (Exception e) {
 			logging.warning(this, "doAction1, exception occurred", e);
 		}
@@ -159,9 +145,9 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 				.addGap(Globals.GAP_SIZE));
 
 		this.setSize(600, 200);
-		this.centerOn(de.uib.configed.Globals.mainFrame);
-		this.setBackground(Globals.backLightBlue);
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.centerOn(Globals.mainFrame);
+		this.setBackground(Globals.BACKGROUND_COLOR_7);
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 	}
 }

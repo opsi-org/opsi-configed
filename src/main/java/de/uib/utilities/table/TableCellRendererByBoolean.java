@@ -8,12 +8,10 @@ package de.uib.utilities.table;
 
 import java.awt.Component;
 
-//import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 
-//import de.uib.utilities.swing.CellAlternatingColorizer;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
 public class TableCellRendererByBoolean extends ColorTableCellRenderer {
@@ -29,13 +27,10 @@ public class TableCellRendererByBoolean extends ColorTableCellRenderer {
 		booleanString.setText("");
 	}
 
-	public Component getTableCellRendererComponent(
-			JTable table,
-			Object value, // value to display
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 			boolean isSelected, // is the cell selected
-			boolean hasFocus,
-			int row,
-			int column) {
+			boolean hasFocus, int row, int column) {
 		Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		String selectedString = "";
@@ -59,10 +54,8 @@ public class TableCellRendererByBoolean extends ColorTableCellRenderer {
 			((JLabel) result).setText(selectedString);
 			((JLabel) result).setIcon(selectedIcon);
 			((JLabel) result).setToolTipText(selectedString);
-			// ((JLabel)result).setHorizontalAlignment(CENTER);
-		}
 
-		// CellAlternatingColorizer.colorize(result, isSelected, (row % 2 == 0) , true);
+		}
 
 		return result;
 	}

@@ -1,11 +1,10 @@
 package de.uib.utilities.table;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.HeadlessException;
 import java.io.File;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Vector;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -13,26 +12,25 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.FTextArea;
-import de.uib.utilities.Globals;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public abstract class ExportTable {
 	protected javax.swing.JTable theTable;
-	// protected JFrame ancestorOfTable;
-	// protected String sheetLabel = "Page 1";//must not be empty!
-	protected Vector<String> classNames;
-	protected HashMap<String, String> metaData;
+
+	protected List<String> classNames;
+	protected Map<String, String> metaData;
 
 	protected javax.swing.filechooser.FileNameExtensionFilter extensionFilter;
 	protected String defaultExportFilename;
 
 	protected File exportDirectory;
 
-	protected Vector<Integer> excludeCols;
+	protected List<Integer> excludeCols;
 
 	protected boolean askForOverwrite;
 
@@ -47,9 +45,9 @@ public abstract class ExportTable {
 
 	DecimalFormat f = new DecimalFormat("#0.00");
 
-	protected final String SHORT_APPNAME = de.uib.configed.Globals.APPNAME;
+	protected final String SHORT_APPNAME = Globals.APPNAME;
 
-	public ExportTable(javax.swing.JTable table, Vector<String> classNames) {
+	public ExportTable(javax.swing.JTable table, List<String> classNames) {
 		this.theTable = table;
 		this.classNames = classNames;
 		askForOverwrite = true;
@@ -59,12 +57,12 @@ public abstract class ExportTable {
 		this(table, null);
 	}
 
-	public void setTableAndClassNames(javax.swing.JTable table, Vector<String> classNames) {
+	public void setTableAndClassNames(javax.swing.JTable table, List<String> classNames) {
 		this.theTable = table;
 		this.classNames = classNames;
 	}
 
-	public void setClassNames(Vector<String> classNames) {
+	public void setClassNames(List<String> classNames) {
 		this.classNames = classNames;
 	}
 
@@ -72,7 +70,7 @@ public abstract class ExportTable {
 		askForOverwrite = b;
 	}
 
-	public void setExcludeCols(Vector<Integer> excludeCols)
+	public void setExcludeCols(List<Integer> excludeCols)
 	// only take into account for excel export at the moment
 	{
 		this.excludeCols = excludeCols;
@@ -80,18 +78,12 @@ public abstract class ExportTable {
 
 	protected abstract void execute(String fileName, boolean onlySelectedRows);
 
-	// protected abstract void determineClasses();
-
 	public JMenuItemFormatted getMenuItemExport() {
 		JMenuItemFormatted menuItem = new JMenuItemFormatted(
 				configed.getResourceValue("PanelGenEditTable.exportTableAsCSV")
-		// , de.uib.configed.Globals.createImageIcon("images/acrobat_reader16.png", "")
+
 		);
-		menuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				execute(null, false);
-			}
-		});
+		menuItem.addActionListener(actionEvent -> execute(null, false));
 		return menuItem;
 
 	}
@@ -104,14 +96,12 @@ public abstract class ExportTable {
 	public JMenuItemFormatted getMenuItemExportSelected() {
 		JMenuItemFormatted menuItem = new JMenuItemFormatted(
 				configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV")
-		// , de.uib.configed.Globals.createImageIcon("images/acrobat_reader16.png", "")
+
 		);
-		menuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				boolean onlySelected = true;
-				logging.debug(this, "menuItemExportSelectedCSV " + onlySelected);
-				execute(null, onlySelected);
-			}
+		menuItem.addActionListener(actionEvent -> {
+			boolean onlySelected = true;
+			logging.debug(this, "menuItemExportSelectedCSV " + onlySelected);
+			execute(null, onlySelected);
 		});
 		return menuItem;
 	}
@@ -125,7 +115,7 @@ public abstract class ExportTable {
 		client = clientID;
 	}
 
-	public void setMetaData(HashMap<String, String> tableMetaData) {
+	public void setMetaData(Map<String, String> tableMetaData) {
 
 		metaData = tableMetaData;
 	}
@@ -147,25 +137,6 @@ public abstract class ExportTable {
 		if (onlySelectedRows) {
 			logging.debug("selectedRows: " + theTable.getSelectedRows().length);
 			if (theTable.getRowCount() > 0 && theTable.getSelectedRows().length == 0) {
-
-				/*
-				 * alternative component:
-				 * 
-				 * int answer = JOptionPane.showOptionDialog(null,
-				 * "No rows selected!\n" +
-				 * "Export only header?\n" +
-				 * "Export complete table=?\n",
-				 * 
-				 * "configed",
-				 * JOptionPane.YES_NO_OPTION,
-				 * JOptionPane.QUESTION_MESSAGE,
-				 * null,
-				 * new String[]{"Header only", "Complete", "Cancel"},
-				 * "Header only"
-				 * );
-				 * answer++;
-				 * 
-				 */
 
 				FTextArea fChoice = new FTextArea(null,
 						SHORT_APPNAME + " " + configed.getResourceValue("ExportTable.title"), true,
@@ -208,11 +179,9 @@ public abstract class ExportTable {
 		if (filename == null) {
 			JFileChooser chooser = new JFileChooser(exportDirectory);
 			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-			// javax.swing.filechooser.FileNameExtensionFilter filter = new
-			// javax.swing.filechooser.FileNameExtensionFilter(
-			// "CSV", "csv");
+
 			chooser.addChoosableFileFilter(exFilter);
-			chooser.setPreferredSize(de.uib.utilities.Globals.filechooserSize);
+			chooser.setPreferredSize(Globals.filechooserSize);
 
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 			chooser.setDialogTitle(SHORT_APPNAME + "    " + configed.getResourceValue("DocumentExport.chooser"));
@@ -223,18 +192,10 @@ public abstract class ExportTable {
 			UIManager.put("FileChooser.cancelButtonToolTipText", "");
 
 			UIManager.put("FileChooser.lookInLabelText", "Suchen in:");
-			/*
-			 * UIManager.put("FileChooser.upFolderToolTipText",
-			 * "Einen Ordner aufwärts in der Hierarchie");
-			 * UIManager.put("FileChooser.newFolderToolTipText", "Neuen Ordner anlegen");
-			 * UIManager.put("FileChooser.fileNameLabelText", "Dateiname:");
-			 * UIManager.put("FileChooser.filesOfTypeLabelText", "Dateityp:");
-			 * UIManager.put("FileChooser.cancelButtonText", "Abbrechen");
-			 * UIManager.put("FileChooser.cancelButtonToolTipText ", "Aktion abbrechen");
-			 */
+
 			SwingUtilities.updateComponentTreeUI(chooser);
 
-			int returnVal = chooser.showDialog(de.uib.configed.Globals.frame1, null);
+			int returnVal = chooser.showDialog(Globals.frame1, null);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				try {
 					filename = chooser.getSelectedFile().getAbsolutePath();
@@ -254,84 +215,19 @@ public abstract class ExportTable {
 					file = new File(filename);
 
 					if (file.exists() && askForOverwrite) {
-						int option = JOptionPane.showConfirmDialog(de.uib.configed.Globals.frame1,
-								de.uib.configed.configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n"
-										+ file.getName(),
-								de.uib.configed.Globals.APPNAME + " "
-										+ de.uib.configed.configed.getResourceValue("DocumentExport.question"),
+						int option = JOptionPane.showConfirmDialog(Globals.frame1,
+								configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
+								Globals.APPNAME + " " + configed.getResourceValue("DocumentExport.question"),
 								JOptionPane.OK_CANCEL_OPTION);
 
 						if (option == JOptionPane.CANCEL_OPTION)
 							filename = null;
 					}
 				} catch (Exception fc_e) {
-					logging.error(de.uib.configed.configed.getResourceValue("DocumentExport.errorNoValidFilename")
-							+ "\n" + filename);
+					logging.error(configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename);
 				}
 			}
 		}
-
-		/*
-		 * 
-		 * if (filename==null)
-		 * {
-		 * JFileChooser chooser = new JFileChooser(exportDirectory);
-		 * chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		 * 
-		 * chooser.addChoosableFileFilter(exFilter);
-		 * 
-		 * chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-		 * chooser.setDialogTitle(SHORT_APPNAME);
-		 * 
-		 * chooser.setApproveButtonText("ok");
-		 * 
-		 * 
-		 * int returnVal = chooser.showDialog( de.uib.configed.Globals.frame1, null);
-		 * if(returnVal == JFileChooser.APPROVE_OPTION)
-		 * {
-		 * try
-		 * {
-		 * filename = chooser.getSelectedFile().getAbsolutePath();
-		 * 
-		 * File file = new File(filename);
-		 * 
-		 * if (file.isDirectory())
-		 * filename = filename + File.separator + "export.csv";
-		 * 
-		 * else
-		 * {
-		 * if (!filename.toLowerCase().endsWith(".csv"))
-		 * filename = filename + ".csv";
-		 * }
-		 * 
-		 * logging.debug(this, "filename " + filename);
-		 * 
-		 * file = new File(filename);
-		 * 
-		 * if ( file.exists() )
-		 * {
-		 * int option = JOptionPane.showConfirmDialog( de.uib.configed.Globals.frame1,
-		 * de.uib.configed.configed.getResourceValue("DocumentExport.showConfirmDialog")
-		 * + "\n"
-		 * + file.getName(),
-		 * de.uib.configed.Globals.APPNAME + " " +
-		 * de.uib.configed.configed.getResourceValue("DocumentExport.question"),
-		 * JOptionPane.OK_CANCEL_OPTION );
-		 * 
-		 * if (option == JOptionPane.CANCEL_OPTION)
-		 * filename = null;
-		 * }
-		 * }
-		 * catch (Exception fc_e)
-		 * {
-		 * logging.error(
-		 * de.uib.configed.configed.getResourceValue(
-		 * "DocumentExport.errorNoValidFilename")
-		 * + "\n" + filename);
-		 * }
-		 * }
-		 * }
-		 */
 
 		if (filename != null) {
 			try {
@@ -353,18 +249,17 @@ public abstract class ExportTable {
 		logging.info(this, "getFileLocation with writeToFile " + writeToFile);
 
 		File defaultFile = new File(writeToFile);
-		// logging.info(this, "getFileLocation with defaultFile " + defaultFile);
 
 		chooser = new JFileChooser(exportDirectory);
-		chooser.setPreferredSize(de.uib.utilities.Globals.filechooserSize);
+		chooser.setPreferredSize(Globals.filechooserSize);
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("PDF", "pdf"));
-		// chooser.setApproveButtonText("ok");
+
 		chooser.setSelectedFile(defaultFile);
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setDialogTitle(Globals.APPNAME + " " + configed.getResourceValue("DocumentExport.chooser"));
 
-		int returnVal = chooser.showDialog(de.uib.utilities.Globals.masterFrame, "OK");
+		int returnVal = chooser.showDialog(Globals.mainContainer, "OK");
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			fileName = chooser.getSelectedFile().getAbsolutePath();
 
@@ -395,7 +290,7 @@ public abstract class ExportTable {
 			if (!fileExists)
 				return filename;
 
-			int option = JOptionPane.showConfirmDialog(de.uib.utilities.Globals.masterFrame,
+			int option = JOptionPane.showConfirmDialog(Globals.mainContainer,
 					configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
 					Globals.APPNAME + " " + configed.getResourceValue("DocumentExport.question"),
 					JOptionPane.OK_CANCEL_OPTION);
@@ -404,7 +299,7 @@ public abstract class ExportTable {
 				result = null;
 			else
 				result = filename;
-		} catch (Exception fc_e) {
+		} catch (HeadlessException ex) {
 			logging.error(configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename);
 
 		}

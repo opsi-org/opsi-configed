@@ -21,18 +21,14 @@ public class AdaptingCellEditor extends DefaultCellEditor {
 		super(cc);
 		this.cc = cc;
 		this.cbm = cbm;
-		nullModel = new DefaultComboBoxModel(new String[] { "" });
-		// cc.getEditor().getEditorComponent().setBackground(java.awt.Color.blue);
+		nullModel = new DefaultComboBoxModel<>(new String[] { "" });
 
 		cc.setRenderer(new ColoredListCellRenderer());
 
 	}
 
-	public Component getTableCellEditorComponent(JTable table,
-			Object value,
-			boolean isSelected,
-			int row,
-			int column) {
+	@Override
+	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 
 		int modelRow = table.convertRowIndexToModel(row);
 		int modelColumn = table.convertColumnIndexToModel(column);
@@ -44,11 +40,8 @@ public class AdaptingCellEditor extends DefaultCellEditor {
 		} else
 			cc.setModel(cbm.getComboBoxModel(modelRow, modelColumn));
 
-		// cc.setToolTipText("hallo");
+		return super.getTableCellEditorComponent(table, value, isSelected, row, column);
 
-		Component c = super.getTableCellEditorComponent(table, value, isSelected, row, column);
-
-		return c;
 	}
 
 }

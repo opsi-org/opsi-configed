@@ -9,7 +9,6 @@
 package de.uib.utilities.swing;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -30,17 +29,10 @@ public class FEditRecord extends FEdit {
 	protected Map<String, Boolean> editable;
 
 	final ObservableSubject myObservable = new ObservableSubject() {
-		@Override
-		public void notifyObservers() {
-			// logging.debug(this, "notifyObservers ");
-			super.notifyObservers();
-			// logging.debug("notifyObservers ");
-		}
 
 		@Override
 		public void setChanged() {
-			// logging.debug(this, "setChanged");
-			// logging.debug("setChanged");
+
 			super.setChanged();
 			setDataChanged(true);
 		}
@@ -55,7 +47,7 @@ public class FEditRecord extends FEdit {
 		recordPane = new RecordPane() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				// logging.debug(this, " key event " + e);
+
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					commit();
 				} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -67,7 +59,7 @@ public class FEditRecord extends FEdit {
 
 	}
 
-	public void setRecord(LinkedHashMap<String, String> data, Map<String, String> labels, Map<String, String> hints,
+	public void setRecord(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
 			Map<String, Boolean> editable) {
 		recordPane.setData(data, labels, hints, editable);
 
@@ -76,23 +68,23 @@ public class FEditRecord extends FEdit {
 		editingArea.add(recordPane, BorderLayout.CENTER);
 	}
 
-	public LinkedHashMap<String, String> getData() {
+	public Map<String, String> getData() {
 		return recordPane.getData();
 	}
 
 	// test version
 	public void setRecord() {
-		LinkedHashMap<String, String> testdata = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> testdata = new LinkedHashMap<>();
 		testdata.put("field1", "test1");
 		testdata.put("field2", "test2");
 		testdata.put("field3", "test3");
 
-		HashMap<String, String> labels = new HashMap<String, String>();
+		HashMap<String, String> labels = new HashMap<>();
 		labels.put("field1", "label1");
 		labels.put("field2", "label2");
 		labels.put("field3", "labelt3");
 
-		HashMap<String, Boolean> editable = new HashMap<String, Boolean>();
+		HashMap<String, Boolean> editable = new HashMap<>();
 		editable.put("field1", true);
 		editable.put("field2", true);
 		editable.put("field3", true);
@@ -102,21 +94,6 @@ public class FEditRecord extends FEdit {
 
 	public void setObservableSubject(ObservableSubject editingNotifier) {
 		recordPane.setObservableSubject(editingNotifier);
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		super.keyPressed(e);
-	}
-
-	public static void main(String[] args) {
-		FEditRecord instance = new FEditRecord();
-		instance.setModal(true);
-
-		instance.setRecord();
-		instance.init(new Dimension(300, 150));
-		instance.setVisible(true);
-
 	}
 
 }

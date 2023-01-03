@@ -5,13 +5,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 
-/**
- * FEditorPane
- * Copyright:     Copyright (c) 2001-2005, 2016
- * Organisation:  uib
- * @author Rupert Röder
- * @version
- */
 import de.uib.configed.Globals;
 
 public class FEditorPane extends FGeneralDialog {
@@ -26,8 +19,8 @@ public class FEditorPane extends FGeneralDialog {
 
 	private void init() {
 		editPane.setOpaque(true);
-		// editPane.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
-		editPane.setBackground(Globals.backgroundGrey);
+
+		editPane.setBackground(Globals.BACKGROUND_COLOR_4);
 		editPane.setText("          ");
 		editPane.setEditable(false);
 		editPane.setFont(new java.awt.Font("Dialog", 0, 10));
@@ -101,22 +94,19 @@ public class FEditorPane extends FGeneralDialog {
 
 	// KeyListener
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
-			// logging.debug ("shift released");
 		}
 
-		if (e.getKeyCode() == KeyEvent.VK_TAB && !shiftPressed) {
-			if (e.getSource() == editPane) {
-				jButton1.requestFocus();
-			}
+		if (e.getKeyCode() == KeyEvent.VK_TAB && !shiftPressed && e.getSource() == editPane) {
+			jButton1.requestFocus();
 		}
 
-		if (e.getKeyCode() == KeyEvent.VK_TAB && shiftPressed) {
-			if (e.getSource() == jButton1) {
-				editPane.requestFocus();
-			}
+		if (e.getKeyCode() == KeyEvent.VK_TAB && shiftPressed && e.getSource() == jButton1) {
+			editPane.requestFocus();
+
 		}
 	}
 

@@ -23,7 +23,7 @@ public class CharReader {
 		return item;
 	}
 
-	public char peek() throws IOException {
+	public char peek() {
 		if (!peeked) {
 			peekedItem = get();
 		}

@@ -29,6 +29,8 @@ compile_and_package:
   script:
     - mvn package
     - jdeps --class-path target/$CONFIGED_JAR_NAME_WITH_DEPS --recursive --ignore-missing-deps --list-deps target/$CONFIGED_JAR_NAME > target/module.deps
+    # jdk.crypto.ec is needed for TLS (HTTPS)
+    - echo "   jdk.crypto.ec" >> target/module.deps
     - cat target/module.deps
   artifacts:
     name: 'configed-build'
@@ -50,8 +52,8 @@ sonarqube-check:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: 
-    - mvn verify sonar:sonar -Dsonar.projectKey=configed || true
+  script:
+    - mvn verify sonar:sonar -Dsonar.projectKey=configed
   only:
     - main # or the name of your main branch
 

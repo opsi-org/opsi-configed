@@ -24,6 +24,7 @@
 
 package de.uib.opsidatamodel;
 
+import java.util.List;
 import java.util.Map;
 
 import de.uib.opsicommand.OpsiMethodCall;
@@ -52,39 +53,19 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 		// but are underlicensed
 		{
 
-			javax.swing.SwingUtilities.invokeLater(new Thread() {
-				public void run() {
-					/*
-					 * StringBuffer info = new StringBuffer("");
-					 * info.append(configed.getResourceValue("Permission.modules.clientcount.2"));
-					 * info.append(":\n");
-					 * for (String moduleInfo : missingModulesPermissionInfo)
-					 * {
-					 * info.append(moduleInfo);
-					 * info.append("\n");
-					 * }
-					 */
-					String warning = "limit for mysql backend reached";
+			javax.swing.SwingUtilities.invokeLater(() -> {
 
-					/*
-					 * String.format(
-					 * //locale.
-					 * configed.getResourceValue("Permission.modules.clientcount.error"),
-					 * "" + countClientsInThisBlock , "" + key, "" +
-					 * maxAllowedClientsForThisModule.getNumber()
-					 * );
-					 */
+				String warning = "limit for mysql backend reached";
 
-					logging.info(this, "missingModules " + warning);
-					de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.callInstanceWith(warning);
-				}
+				logging.info(this, "missingModules " + warning);
+				de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.callInstanceWith(warning);
 			});
 		}
 		return true;
 	}
 
 	@Override
-	public java.util.List<Map<java.lang.String, java.lang.Object>> HOST_read() {
+	public List<Map<java.lang.String, java.lang.Object>> HOST_read() {
 
 		logging.debug(this, "HOST_read ");
 		String query = "select *  from HOST";
@@ -92,28 +73,19 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 		// test for depot_restriction:
 		// SELECT CONFIG_VALUE.configId, CONFIG_STATE.objectId, CONFIG_STATE.values from
 		// CONFIG_VALUE, CONFIG_STATE where CONFIG_STATE.configId =
-		// CONFIG_VALUE.configId and CONFIG_STATE.configId = 'clientconfig.depot.id';
 
 		TimeCheck timer = new TimeCheck(this, "HOST_read").start();
 
 		logging.notice(this, "HOST_read, query " + query);
-		java.util.List<Map<java.lang.String, java.lang.Object>> opsiHosts = exec
+		List<Map<java.lang.String, java.lang.Object>> opsiHosts = exec
 				.getListOfMaps(new OpsiMethodCall("getData", new Object[] { query }));
 		timer.stop();
 
 		for (Map<java.lang.String, java.lang.Object> entry : opsiHosts) {
-			// logging.info(this, "HOST_read " + entry);
+
 			Host.db2ServiceRowMap(entry);
-			// logging.info(this, "HOST_read " + entry);
+
 		}
-
-		// logging.info(this, "OpsiserviceRawDataPersistenceController opsiHosts " +
-		// opsiHosts);
-
-		// opsiHosts = super.HOST_read(); //test
-
-		// logging.info(this, "OpsiserviceNOMPersistenceController opsiHosts " +
-		// opsiHosts);
 
 		return opsiHosts;
 	}

@@ -23,12 +23,10 @@ public class JTableWithToolTips extends JTable {
 		super(tm);
 	}
 
+	@Override
 	public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int colIndex) {
 		Component c = super.prepareRenderer(renderer, rowIndex, colIndex);
 
-		// logging.debug("row, col: " + rowIndex +","+ colIndex + "c: " +
-		// c.getClass());
-		// logging.debug("test: " + (c instanceof JComponent));
 		if (c != null && c instanceof JComponent) {
 			JComponent jc = (JComponent) c;
 			String valstr = "";

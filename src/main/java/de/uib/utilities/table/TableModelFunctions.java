@@ -8,9 +8,11 @@
 
 package de.uib.utilities.table;
 
+import java.util.List;
+
 import de.uib.utilities.Mapping;
 
-public interface TableModelFunctions<K> {
+public interface TableModelFunctions {
 	public class PairOfInt {
 		public final int col1;
 		public final int col2;
@@ -21,13 +23,9 @@ public interface TableModelFunctions<K> {
 		}
 	}
 
-	java.util.Map<Object, java.util.List<Object>> getFunction(int col1, int col2);
+	java.util.Map<Object, List<Object>> getFunction(int col1, int col2);
 
 	java.util.Map<Integer, RowStringMap> getPrimarykey2Rowmap();
-
-	void setKeyRepresenter(de.uib.utilities.table.KeyRepresenter kr);
-	// must be set to get the following methods to work
-	// assumes that a keycol is set
 
 	java.util.Map<Integer, String> getPrimarykeyTranslation();
 	// the defining map for the Mapping of getPrimarykeyRepresentation

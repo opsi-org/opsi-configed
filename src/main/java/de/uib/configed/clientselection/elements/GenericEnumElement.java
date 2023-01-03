@@ -1,31 +1,32 @@
 package de.uib.configed.clientselection.elements;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 
 import de.uib.configed.clientselection.SelectElement;
 import de.uib.configed.clientselection.SelectOperation;
 import de.uib.configed.clientselection.operations.StringEqualsOperation;
 
 public class GenericEnumElement extends SelectElement {
-	protected Vector<String> enumData;
+	protected List<String> enumData;
 
 	public GenericEnumElement(String[] enumData, String[] name, String... localizedName) {
 		super(name, localizedName);
-		this.enumData = new Vector<String>(Arrays.asList((String[]) enumData));
-		// this.enumData.add(0, "*");
+		this.enumData = new ArrayList<>(Arrays.asList(enumData));
+
 	}
 
+	@Override
 	public List<SelectOperation> supportedOperations() {
-		List<SelectOperation> result = new LinkedList<SelectOperation>();
+		List<SelectOperation> result = new LinkedList<>();
 		result.add(new StringEqualsOperation(this));
 		return result;
 	}
 
 	@Override
-	public Vector<String> getEnumData() {
+	public List<String> getEnumData() {
 		return enumData;
 	}
 
@@ -33,11 +34,6 @@ public class GenericEnumElement extends SelectElement {
 	public boolean hasEnumData() {
 		return true;
 	}
-
-	// public SelectOperation createOperation( String operation, SelectData data )
-	// {
-	// return Backend.getBackend().createOperation( operation, data, this );
-	// }
 
 	protected static String[] removeFirst(int n, String[] data) {
 		return Arrays.copyOfRange(data, n, data.length);

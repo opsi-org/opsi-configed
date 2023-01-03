@@ -8,7 +8,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.MainFrame;
 import de.uib.opsidatamodel.PersistenceController;
-//import de.uib.utilities.*;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.SecondaryFrame;
@@ -20,17 +19,6 @@ public class FDriverUpload extends SecondaryFrame {
 	PersistenceController persist;
 	ConfigedMain main;
 	MainFrame mainframe;
-
-	/*
-	 * public FDriverUpload()
-	 * {
-	 * define();
-	 * setGlobals(Globals.getMap());
-	 * setTitle(Globals.APPNAME + " " +
-	 * configed.getResourceValue("FDriverUpload.title"));
-	 * 
-	 * }
-	 */
 
 	public FDriverUpload(ConfigedMain main, PersistenceController persist, MainFrame mainframe) {
 		super();
@@ -45,15 +33,8 @@ public class FDriverUpload extends SecondaryFrame {
 
 	}
 
-	@Override
-	public void start() {
-		super.start();
-	}
-
 	protected void define() {
 		panelDriverUpload = new PanelDriverUpload(main, persist, this);
-
-		// main, persist, this);
 
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
@@ -67,9 +48,10 @@ public class FDriverUpload extends SecondaryFrame {
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		Containership cs_all = new Containership(getContentPane());
-		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.backLightBlue }, JPanel.class);
+		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
+				JPanel.class);
 
-		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.backgroundLightGrey },
+		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },
 				javax.swing.text.JTextComponent.class);
 
 	}

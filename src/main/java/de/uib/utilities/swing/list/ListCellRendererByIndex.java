@@ -16,6 +16,7 @@ import java.awt.Component;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -45,46 +46,43 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 		this.showOnlyIcon = showOnlyIcon;
 		mapOfStrings = mapOfStringValues;
 		mapOfTooltips = mapOfDescriptions;
-		mapOfImages = new HashMap<String, ImageIcon>();
+		mapOfImages = new HashMap<>();
 
 		if (mapOfStrings != null)
 		// Load the item values
 		{
-			Iterator iter = mapOfStrings.entrySet().iterator();
+			Iterator<Entry<String, String>> iter = mapOfStrings.entrySet().iterator();
 			while (iter.hasNext()) {
-				Map.Entry entry = (Map.Entry) iter.next();
-				String key = (String) entry.getKey();
-				String stringval = (String) entry.getValue();
+				Map.Entry<String, String> entry = iter.next();
+				String key = entry.getKey();
+				String stringval = entry.getValue();
 
 				ImageIcon image = null;
 
-				if (imagesBase != null) {
-					if (key != null && stringval != null) {
-						String imageFileString = imagesBase + "/" + key + ".png";
-						// logging.info(this, "key " + key + ", image file " + imageFileString);
+				if (imagesBase != null && key != null && stringval != null) {
+					String imageFileString = imagesBase + "/" + key + ".png";
 
-						image = de.uib.configed.Globals.createImageIcon(imageFileString, stringval);
-						// logging.info(this, "image found " + (image != null));
+					image = Globals.createImageIcon(imageFileString, stringval);
 
-						if (image == null)
-						// try with gif
-						{
-							imageFileString = imagesBase + "/" + stringval + ".gif";
-							// logging.info(this, " image file " + imageFileString);
+					if (image == null)
+					// try with gif
+					{
+						imageFileString = imagesBase + "/" + stringval + ".gif";
 
-							image = de.uib.configed.Globals.createImageIcon(imageFileString, stringval);
-							// logging.info(this, "image found " + (image != null));
-						}
+						image = Globals.createImageIcon(imageFileString, stringval);
 
-						if (image != null)
-							mapOfImages.put(key, image);
 					}
+
+					if (image != null)
+						mapOfImages.put(key, image);
+
 				}
 			}
 		}
 
 	}
 
+	@Override
 	public Component getListCellRendererComponent(JList list, Object value, // value to display
 			int index, // cell index
 			boolean isSelected, // is the cell selected

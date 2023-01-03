@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 import de.uib.configed.clientselection.Backend;
 import de.uib.configed.clientselection.Client;
@@ -132,7 +132,7 @@ public class OpsiDataBackend extends Backend {
 		if (controller == null)
 			logging.warning(this, "Warning, controller is null!");
 		getHardwareConfig();
-		// setReloadRequested(); //trigger initial loading
+
 	}
 
 	@Override
@@ -146,11 +146,11 @@ public class OpsiDataBackend extends Backend {
 		Object data = operation.getData();
 		String attributeTextHost = null;
 		if (element instanceof NameElement)
-			attributeTextHost = HostInfo.hostnameKEY; // "id", has been "hostId";
+			attributeTextHost = HostInfo.HOSTNAME_KEY;
 		else if (element instanceof IPElement)
-			attributeTextHost = HostInfo.clientIpAddressKEY; // "ipAddress";
+			attributeTextHost = HostInfo.CLIENT_IP_ADDRESS_KEY;
 		else if (element instanceof DescriptionElement)
-			attributeTextHost = HostInfo.clientDescriptionKEY; // "description";
+			attributeTextHost = HostInfo.CLIENT_DESCRIPTION_KEY;
 		if (attributeTextHost != null) {
 			if (operation instanceof StringEqualsOperation)
 				return new OpsiDataStringEqualsOperation(OpsiDataClient.HOSTINFO_MAP, attributeTextHost,
@@ -167,25 +167,25 @@ public class OpsiDataBackend extends Backend {
 		// Software
 		String attributeTextSoftware = null;
 		if (element instanceof SoftwareNameElement)
-			attributeTextSoftware = ProductState.KEY_productId;
+			attributeTextSoftware = ProductState.KEY_PRODUCT_ID;
 		else if (element instanceof SoftwareVersionElement)
-			attributeTextSoftware = ProductState.KEY_productVersion;
+			attributeTextSoftware = ProductState.KEY_PRODUCT_VERSION;
 		else if (element instanceof SoftwarePackageVersionElement)
-			attributeTextSoftware = ProductState.KEY_packageVersion;
+			attributeTextSoftware = ProductState.KEY_PACKAGE_VERSION;
 		else if (element instanceof SoftwareRequestElement)
-			attributeTextSoftware = ProductState.KEY_actionRequest;
+			attributeTextSoftware = ProductState.KEY_ACTION_REQUEST;
 		else if (element instanceof SoftwareTargetConfigurationElement)
-			attributeTextSoftware = ProductState.KEY_targetConfiguration;
+			attributeTextSoftware = ProductState.KEY_TARGET_CONFIGURATION;
 		else if (element instanceof SoftwareInstallationStatusElement)
-			attributeTextSoftware = ProductState.KEY_installationStatus;
+			attributeTextSoftware = ProductState.KEY_INSTALLATION_STATUS;
 		else if (element instanceof SoftwareActionProgressElement)
-			attributeTextSoftware = ProductState.KEY_actionProgress;
+			attributeTextSoftware = ProductState.KEY_ACTION_PROGRESS;
 		else if (element instanceof SoftwareActionResultElement)
-			attributeTextSoftware = ProductState.KEY_actionResult;
+			attributeTextSoftware = ProductState.KEY_ACTION_RESULT;
 		else if (element instanceof SoftwareLastActionElement)
-			attributeTextSoftware = ProductState.KEY_lastAction;
+			attributeTextSoftware = ProductState.KEY_LAST_ACTION;
 		else if (element instanceof SoftwareModificationTimeElement)
-			attributeTextSoftware = ProductState.KEY_lastStateChange; // "lastStateChange" ??;
+			attributeTextSoftware = ProductState.KEY_LAST_STATE_CHANGE;
 
 		if (attributeTextSoftware != null) {
 			if (operation instanceof StringEqualsOperation)
@@ -211,19 +211,12 @@ public class OpsiDataBackend extends Backend {
 		}
 
 		// this would need the package version to be an integer
-		// if( element instanceof SoftwarePackageVersionElement )
-		// {
-		// if( operation instanceof IntEqualsOperation )
+
 		// return new OpsiDataIntEqualsOperation( OpsiDataClient.SOFTWARE_MAP,
-		// ProductState.KEY_packageVersion, (Integer) operation.getData(), element );
-		// if( operation instanceof IntLessThanOperation )
+
 		// return new OpsiDataIntLessThanOperation( OpsiDataClient.SOFTWARE_MAP,
-		// ProductState.KEY_packageVersion, (Integer) operation.getData(), element );
-		// if( operation instanceof IntGreaterThanOperation )
+
 		// return new OpsiDataIntGreaterThanOperation( OpsiDataClient.SOFTWARE_MAP,
-		// ProductState.KEY_packageVersion, (Integer) operation.getData(), element );
-		// throw new IllegalArgumentException("Wrong operation for this element.");
-		// }
 
 		// SwAudit
 		String swauditAttributeText = null;
@@ -249,8 +242,7 @@ public class OpsiDataBackend extends Backend {
 
 		// hardware
 		if (element instanceof GenericTextElement || element instanceof GenericIntegerElement
-				|| element instanceof GenericBigIntegerElement
-				|| element instanceof GenericEnumElement) {
+				|| element instanceof GenericBigIntegerElement || element instanceof GenericEnumElement) {
 			String map = hwUiToOpsi.get(elementPath[0]);
 			String attr = getKey(elementPath);
 			if (operation instanceof StringEqualsOperation)
@@ -280,23 +272,16 @@ public class OpsiDataBackend extends Backend {
 		throw new IllegalArgumentException("The operation " + operation + " was not found on " + element);
 	}
 
+	@Override
 	protected SelectGroupOperation createGroupOperation(SelectGroupOperation operation,
 			List<SelectOperation> operations) {
-		/*
-		 * if (operation.equals("Software"))
-		 * {
-		 * logging.info(this, "IllegalArgument: The group operation " +operation);
-		 * System.exit(0);
-		 * }
-		 */
 		if (operation instanceof AndOperation && operations.size() >= 2)
 			return new AndOperation(operations);
 		if (operation instanceof OrOperation && operations.size() >= 2)
 			return new OrOperation(operations);
 		if (operation instanceof NotOperation && operations.size() == 1)
 			return new NotOperation(operations.get(0));
-		// if( operation.equals(de.uib.opsidatamodel.OpsiProduct.NAME) &&
-		// operations.size() == 1 )
+
 		if (operation instanceof SoftwareOperation && operations.size() == 1)
 			return new OpsiDataSoftwareOperation(operations.get(0));
 		if (operation instanceof SwAuditOperation && operations.size() == 1)
@@ -313,6 +298,7 @@ public class OpsiDataBackend extends Backend {
 
 	}
 
+	@Override
 	public void setReloadRequested() {
 		logging.info(this, "setReloadRequested");
 		super.setReloadRequested();
@@ -327,8 +313,6 @@ public class OpsiDataBackend extends Backend {
 
 		hardwareOnClient = null;
 		clientToHardware = null;
-		System.gc();
-		// checkInitData();
 
 	}
 
@@ -336,15 +320,12 @@ public class OpsiDataBackend extends Backend {
 		logging.info(this, "checkInitData ");
 
 		// gets current data which should be in cache already
-		// reloadRequested " + reloadRequested);
 
-		// if (clientMaps == null || reloadRequested)
 		// take always the current host infos
 		{
 			clientMaps = controller.getHostInfoCollections().getMapOfPCInfoMaps();
 			logging.info(this, "client maps size " + clientMaps.size());
 		}
-		// System.exit(0);
 
 		if (groups == null || reloadRequested) {
 			groups = controller.getFObject2Groups();
@@ -358,30 +339,22 @@ public class OpsiDataBackend extends Backend {
 		String[] clientNames = clientMaps.keySet().toArray(new String[0]);
 
 		if (hasSoftware) {
-			// if (reloadRequested || softwareMap == null)
+
 			{
 				softwareMap = controller.getMapOfProductStatesAndActions(clientNames);
 				logging.debug(this, "getClients softwareMap ");
-				// + softwareMap );
+
 			}
 		}
-		// else
-		// softwareMap = null; //dont use older data after a reload request
 
-		// if ( reloadRequested || swauditMap == null )
 		{
 			swauditMap = getSwAuditOnClients();
 		}
-		// else
-		// swauditMap = null; //dont use older data after a reload request
-
-		// if ( reloadRequested || hwConfig == null || hwConfigLocalized == null ||
-		// hwUiToOpsi == null || hwClassToValues == null )
 		getHardwareConfig();
 
 		logging.debug(this, "getClients hasHardware " + hasHardware);
 		if (hasHardware) {
-			// if (reloadRequested || hardwareOnClient == null || clientToHardware == null )
+
 			getHardwareOnClient(clientNames);
 		} else
 			hardwareOnClient = null; // dont use older data after a reload request
@@ -390,8 +363,9 @@ public class OpsiDataBackend extends Backend {
 
 	}
 
+	@Override
 	protected List<Client> getClients() {
-		List<Client> clients = new LinkedList<Client>();
+		List<Client> clients = new LinkedList<>();
 
 		checkInitData();
 
@@ -399,13 +373,6 @@ public class OpsiDataBackend extends Backend {
 		logging.info(this, "getClients hasHardware " + hasHardware);
 		logging.info(this, "getClients hasSoftware " + hasSoftware);
 		logging.info(this, "getClients swauditMap != null  " + (swauditMap != null));
-		/*
-		 * if (swauditMap != null)
-		 * logging.info(this, "getClients swauditMap.keySet()   " +
-		 * (swauditMap.keySet()) );
-		 */
-
-		// logging.info(this, "getClients softwareMap " + softwareMap);
 
 		for (String clientName : clientMaps.keySet()) {
 			OpsiDataClient client = new OpsiDataClient(clientName);
@@ -427,23 +394,26 @@ public class OpsiDataBackend extends Backend {
 		return clients;
 	}
 
+	@Override
 	public List<String> getGroups() {
 		return controller.getHostGroupIds();
 	}
 
-	public TreeSet<String> getProductIDs() {
+	@Override
+	public NavigableSet<String> getProductIDs() {
 		return controller.getProductIds();
 	}
 
+	@Override
 	public Map<String, List<SelectElement>> getHardwareList() {
-		Map<String, List<SelectElement>> result = new HashMap<String, List<SelectElement>>();
+		Map<String, List<SelectElement>> result = new HashMap<>();
 
 		for (int i = 0; i < hwConfig.size(); i++) {
 			Map hardwareMap = (Map) hwConfig.get(i);
 			Map hardwareMapLocalized = (Map) hwConfigLocalized.get(i);
 			String hardwareName = (String) ((Map) hardwareMap.get("Class")).get("UI");
 			String hardwareNameLocalized = (String) ((Map) hardwareMapLocalized.get("Class")).get("UI");
-			List<SelectElement> elementList = new LinkedList<SelectElement>();
+			List<SelectElement> elementList = new LinkedList<>();
 			List values = (List) hardwareMap.get("Values");
 			List valuesLocalized = (List) hardwareMapLocalized.get("Values");
 			for (int j = 0; j < values.size(); j++) {
@@ -453,30 +423,31 @@ public class OpsiDataBackend extends Backend {
 				String localizedName = (String) ((Map) valuesLocalized.get(j)).get("UI");
 				if (type.equals("int") || type.equals("tinyint"))
 					elementList.add(new GenericIntegerElement(new String[] { hardwareName, name },
-							new String[] { hardwareNameLocalized, localizedName }));
+							hardwareNameLocalized, localizedName));
 				else if (type.equals("bigint"))
 					elementList.add(new GenericBigIntegerElement(new String[] { hardwareName, name },
-							new String[] { hardwareNameLocalized, localizedName }));
+							hardwareNameLocalized, localizedName));
 				else
-					elementList.add(new GenericTextElement(new String[] { hardwareName, name },
-							new String[] { hardwareNameLocalized, localizedName }));
+					elementList.add(new GenericTextElement(new String[] { hardwareName, name }, hardwareNameLocalized,
+							localizedName));
 			}
 			result.put(hardwareName, elementList);
-			// result.put( hardwareName, elementList );
+
 			logging.debug(this, "" + elementList);
 		}
 		return result;
 	}
 
+	@Override
 	public Map<String, List<SelectElement>> getLocalizedHardwareList() {
-		Map<String, List<SelectElement>> result = new HashMap<String, List<SelectElement>>();
+		Map<String, List<SelectElement>> result = new HashMap<>();
 
 		for (int i = 0; i < hwConfig.size(); i++) {
 			Map hardwareMap = (Map) hwConfig.get(i);
 			Map hardwareMapLocalized = (Map) hwConfigLocalized.get(i);
 			String hardwareName = (String) ((Map) hardwareMap.get("Class")).get("UI");
 			String hardwareNameLocalized = (String) ((Map) hardwareMapLocalized.get("Class")).get("UI");
-			List<SelectElement> elementList = new LinkedList<SelectElement>();
+			List<SelectElement> elementList = new LinkedList<>();
 			List values = (List) hardwareMap.get("Values");
 			List valuesLocalized = (List) hardwareMapLocalized.get("Values");
 			for (int j = 0; j < values.size(); j++) {
@@ -486,16 +457,16 @@ public class OpsiDataBackend extends Backend {
 				String localizedName = (String) ((Map) valuesLocalized.get(j)).get("UI");
 				if (type.equals("int") || type.equals("tinyint"))
 					elementList.add(new GenericIntegerElement(new String[] { hardwareName, name },
-							new String[] { hardwareNameLocalized, localizedName }));
+							hardwareNameLocalized, localizedName));
 				else if (type.equals("bigint"))
 					elementList.add(new GenericBigIntegerElement(new String[] { hardwareName, name },
-							new String[] { hardwareNameLocalized, localizedName }));
+							hardwareNameLocalized, localizedName));
 				else
-					elementList.add(new GenericTextElement(new String[] { hardwareName, name },
-							new String[] { hardwareNameLocalized, localizedName }));
+					elementList.add(new GenericTextElement(new String[] { hardwareName, name }, hardwareNameLocalized,
+							localizedName));
 			}
 			result.put(hardwareNameLocalized, elementList);
-			// result.put( hardwareName, elementList );
+
 			logging.debug(this, "" + elementList);
 		}
 		return result;
@@ -507,7 +478,7 @@ public class OpsiDataBackend extends Backend {
 		if (values != null) {
 			for (Object value : values) {
 				Map valueMap = (Map) value;
-				if (elementPath[1].equals((String) valueMap.get("UI")))
+				if (elementPath[1].equals(valueMap.get("UI")))
 					return (String) valueMap.get("Opsi");
 			}
 		}
@@ -517,9 +488,9 @@ public class OpsiDataBackend extends Backend {
 
 	private void getHardwareOnClient(String[] clientNames) {
 		hardwareOnClient = controller.getHardwareOnClient();
-		clientToHardware = new HashMap<String, List<Map<String, Object>>>();
+		clientToHardware = new HashMap<>();
 		for (int i = 0; i < clientNames.length; i++)
-			clientToHardware.put(clientNames[i], new LinkedList<Map<String, Object>>());
+			clientToHardware.put(clientNames[i], new LinkedList<>());
 		for (Map<String, Object> map : hardwareOnClient) {
 			String name = (String) map.get(HWAuditClientEntry.hostKEY);
 			if (!clientToHardware.containsKey(name)) {
@@ -531,29 +502,13 @@ public class OpsiDataBackend extends Backend {
 	}
 
 	private Map<String, List<SWAuditClientEntry>> getSwAuditOnClients() {
-		Map<String, List<SWAuditClientEntry>> result = new HashMap<String, List<SWAuditClientEntry>>();
+		Map<String, List<SWAuditClientEntry>> result = new HashMap<>();
 		if (!hasSwAudit)
 			return result;
 
-		controller.fillClient2Software(new ArrayList<String>(clientMaps.keySet()));
+		controller.fillClient2Software(new ArrayList<>(clientMaps.keySet()));
 		result = controller.getClient2Software();
-		/*
-		 * for( Object obj: controller.getSoftwareAuditOnClients() )
-		 * {
-		 * if( !(obj instanceof Map) )
-		 * {
-		 * logging.warning(this, "SwAudit element is no map: " + obj + " " +
-		 * obj.getClass() );
-		 * continue;
-		 * }
-		 * 
-		 * Map map = (Map) obj;
-		 * String name = (String) map.get("clientId");
-		 * if( !result.containsKey(name) )
-		 * result.put( name, new LinkedList<Map>() );
-		 * result.get(name).add(map);
-		 * }
-		 */
+
 		return result;
 	}
 
@@ -563,8 +518,8 @@ public class OpsiDataBackend extends Backend {
 		hwConfig = controller.getOpsiHWAuditConf("en_");
 		hwConfigLocalized = controller.getOpsiHWAuditConf(locale);
 		logging.debug(this, "" + hwConfig);
-		hwUiToOpsi = new HashMap<String, String>();
-		hwClassToValues = new HashMap<String, List>();
+		hwUiToOpsi = new HashMap<>();
+		hwClassToValues = new HashMap<>();
 
 		for (Object obj : hwConfig) {
 			Map hardwareMap = (Map) obj;
@@ -574,9 +529,5 @@ public class OpsiDataBackend extends Backend {
 			hwUiToOpsi.put(hardwareName, hardwareOpsi);
 			hwClassToValues.put(hardwareOpsi, values);
 		}
-	}
-
-	private String getHardwareTableName(String name) {
-		return hwUiToOpsi.get(name);
 	}
 }

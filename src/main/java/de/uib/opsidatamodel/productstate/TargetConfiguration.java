@@ -1,9 +1,9 @@
 package de.uib.opsidatamodel.productstate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import de.uib.configed.Globals;
 
@@ -32,8 +32,8 @@ public class TargetConfiguration {
 	private static Map<String, String> label2displayLabel;
 	private static Map<String, String> displayLabel2label;
 
-	private static Vector<Integer> states;
-	private static Vector<String> labels;
+	private static List<Integer> states;
+	private static List<String> labels;
 	private static String[] choiceLabels;
 
 	// instance variable
@@ -43,7 +43,7 @@ public class TargetConfiguration {
 		if (states != null)
 			return;
 
-		states = new Vector<Integer>();
+		states = new ArrayList<>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(UNDEFINED);
@@ -51,7 +51,7 @@ public class TargetConfiguration {
 		states.add(ALWAYS);
 		states.add(FORBIDDEN);
 
-		labels = new Vector<String>();
+		labels = new ArrayList<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);
 		labels.add(Globals.NO_VALID_STATE_STRING);
 		labels.add("undefined");
@@ -59,7 +59,7 @@ public class TargetConfiguration {
 		labels.add("always");
 		labels.add("forbidden");
 
-		state2label = new HashMap<Integer, String>();
+		state2label = new HashMap<>();
 		state2label.put(CONFLICT, Globals.CONFLICT_STATE_STRING);
 		state2label.put(INVALID, Globals.NO_VALID_STATE_STRING);
 		state2label.put(UNDEFINED, "undefined");
@@ -67,7 +67,7 @@ public class TargetConfiguration {
 		state2label.put(ALWAYS, "always");
 		state2label.put(FORBIDDEN, "forbidden");
 
-		label2state = new HashMap<String, Integer>();
+		label2state = new HashMap<>();
 		label2state.put(Globals.CONFLICT_STATE_STRING, CONFLICT);
 		label2state.put(Globals.NO_VALID_STATE_STRING, INVALID);
 		label2state.put("undefined", UNDEFINED);
@@ -75,7 +75,7 @@ public class TargetConfiguration {
 		label2state.put("always", ALWAYS);
 		label2state.put("forbidden", FORBIDDEN);
 
-		label2displayLabel = new HashMap<String, String>();
+		label2displayLabel = new HashMap<>();
 		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
 		label2displayLabel.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		label2displayLabel.put("undefined", "undefined");
@@ -83,7 +83,7 @@ public class TargetConfiguration {
 		label2displayLabel.put("always", "always");
 		label2displayLabel.put("forbidden", "forbidden");
 
-		displayLabel2label = new HashMap<String, String>();
+		displayLabel2label = new HashMap<>();
 		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
 		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		displayLabel2label.put("undefined", "undefined");
@@ -122,7 +122,7 @@ public class TargetConfiguration {
 		return state2label.get(state);
 	}
 
-	public static Vector<String> getLabels() {
+	public static List<String> getLabels() {
 		checkCollections();
 
 		return labels;
@@ -148,8 +148,6 @@ public class TargetConfiguration {
 
 	public static final String[] getDisplayLabelsForChoice() {
 		checkCollections();
-		// logging.debug("TargetConfiguration.getDisplayLabelsForChoice() " +
-		// logging.getStrings(choiceLabels));
 
 		return choiceLabels;
 	}
@@ -164,6 +162,7 @@ public class TargetConfiguration {
 		return getLabel(state);
 	}
 
+	@Override
 	public String toString() {
 		return getLabel(state);
 	}
@@ -182,10 +181,6 @@ public class TargetConfiguration {
 		if (!labels.contains(label))
 			return new TargetConfiguration(INVALID);
 
-		// logging.debug(" -------- label " + label + " --- val " + getVal(label));
-		// logging.debug(" -------- display " + new
-		// TargetConfiguration(getVal(label)));
-
 		return new TargetConfiguration(getVal(label));
 	}
 
@@ -199,20 +194,4 @@ public class TargetConfiguration {
 		else
 			state = INVALID;
 	}
-
-	public static void main(String[] args) {
-		// logging.debug(" test TargetConfiguration.java");
-		checkCollections();
-		Iterator iter = states.iterator();
-
-		int i = 0;
-
-		while (iter.hasNext()) {
-			i++;
-			int state = (Integer) iter.next();
-			// logging.debug("state " + i + " : " + state + " label " +
-			// getLabel(state));
-		}
-	}
-
 }

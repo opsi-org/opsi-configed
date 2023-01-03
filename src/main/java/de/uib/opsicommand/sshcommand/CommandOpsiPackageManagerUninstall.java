@@ -10,9 +10,8 @@ import de.uib.utilities.logging.logging;
 public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManager implements SSHCommandNeedParameter {
 	protected FGeneralDialog dialog = null;
 	private String command;
-	private boolean install;
 	private int priority = 10;
-	// private boolean isMultiCommand = false;
+
 	String opsiproduct;
 	String depots;
 	String verbosity = " -vvv ";
@@ -35,7 +34,7 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 
 	@Override
 	public String getParentMenuText() {
-		// return "Package-Manager";
+
 		return super.getMenuText();
 	}
 
@@ -67,22 +66,14 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 	@Override
 	public SSHConnectionExecDialog startHelpDialog() {
 		SSHCommand command = new CommandHelp(this);
-		SSHConnectExec exec = new SSHConnectExec(
-				command
-		// SSHConnectionExecDialog.getInstance(
-		// configed.getResourceValue("SSHConnection.Exec.title") + "
-		// \""+command.getCommand() + "\" ",
-		// command
-		// )
+		SSHConnectExec exec = new SSHConnectExec(command
+
 		);
 
-		// SSHConnectExec exec = new SSHConnectExec();
-		// exec.exec(command, true, new SSHConnectionExecDialog(command,
-		// configed.getResourceValue("SSHConnection.Exec.title") + "
-		// \""+command.getCommand() + "\" "));
-		return (SSHConnectionExecDialog) exec.getDialog();
+		return exec.getDialog();
 	}
 
+	@Override
 	public int getPriority() {
 		return priority;
 	}
@@ -91,7 +82,7 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 	public String getCommand() {
 		command = "opsi-package-manager -q " + verbosity + keepFiles + depots + freeInput + opsiproduct;
 		if (needSudo())
-			return SSHCommandFactory.getInstance().sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 

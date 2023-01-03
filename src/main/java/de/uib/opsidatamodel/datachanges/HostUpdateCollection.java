@@ -1,9 +1,9 @@
 package de.uib.opsidatamodel.datachanges;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Vector;
 
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.logging.logging;
@@ -14,14 +14,16 @@ public class HostUpdateCollection extends UpdateCollection {
 	PersistenceController persis;
 
 	public HostUpdateCollection(Object persis) {
-		super(new Vector(0));
+		super(new ArrayList<>(0));
 		setController(persis);
 	}
 
+	@Override
 	public void setController(Object obj) {
 		this.persis = (PersistenceController) obj;
 	}
 
+	@Override
 	public boolean addAll(Collection c) {
 		boolean result = true;
 
@@ -35,7 +37,6 @@ public class HostUpdateCollection extends UpdateCollection {
 			}
 
 			catch (ClassCastException ccex) {
-				result = false;
 				logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map");
 			}
 
@@ -44,6 +45,7 @@ public class HostUpdateCollection extends UpdateCollection {
 		return result;
 	}
 
+	@Override
 	public void clearElements() {
 		logging.debug(this, "clearElements()");
 		clear();

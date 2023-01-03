@@ -1,5 +1,6 @@
 package de.uib.utilities.datastructure;
 
+import java.util.List;
 import java.util.Map;
 
 //very similar to TableEntry
@@ -15,20 +16,13 @@ public class StringValuedRelationElement extends RelationElement<String, String>
 		super(rowmap);
 	}
 
-	public StringValuedRelationElement(java.util.List<String> allowedAttributes, Map<String, ? extends Object> map) {
+	public StringValuedRelationElement(List<String> allowedAttributes, Map<String, ? extends Object> map) {
 		this();
-		// logging.debug("" +map);
+
 		this.allowedAttributes = allowedAttributes;
 		produceFrom(map);
-		// logging.debug("" + this);
-	}
 
-	/*
-	 * public String getString(String key)
-	 * {
-	 * return super.get(key);
-	 * }
-	 */
+	}
 
 	protected void produceFrom(Map<String, ? extends Object> map) {
 		for (String attribute : allowedAttributes) {

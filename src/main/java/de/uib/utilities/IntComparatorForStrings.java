@@ -4,9 +4,9 @@ import java.util.Comparator;
 
 import de.uib.utilities.logging.logging;
 
-public class IntComparatorForStrings
-		implements Comparator<String> {
+public class IntComparatorForStrings implements Comparator<String> {
 
+	@Override
 	public int compare(String o1, String o2) {
 		int result = 0;
 		int i1 = Integer.MAX_VALUE;

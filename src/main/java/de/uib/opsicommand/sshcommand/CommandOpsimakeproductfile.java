@@ -1,6 +1,6 @@
 package de.uib.opsicommand.sshcommand;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.configed;
@@ -13,13 +13,11 @@ import de.uib.utilities.logging.logging;
 public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedParameter {
 	private String baseName = "opsi-makeproductfile ";
 	private String command = "opsi-makeproductfile ";
-	// private String baseName41 = "opsi-makepackage ";
-	// private String command = "opsi-makepackage ";
+
 	protected FGeneralDialog dialog = null;
 	private boolean needSudo = false;
 	private boolean needParameter = true;
 	private boolean isMultiCommand = false;
-	private int helpColumns = 2;
 	private int priority = 110;
 
 	private String dir = " ";
@@ -55,9 +53,8 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	}
 
 	/**
-	 * check persistenceController opsi version
-	 * and set Command name dependend on this version
-	 * to 'opsi-makeproductfile' or 'opsi-makepackage'
+	 * check persistenceController opsi version and set Command name dependend
+	 * on this version to 'opsi-makeproductfile' or 'opsi-makepackage'
 	 */
 	private void setCommandName() {
 		if (!PersistenceControllerFactory.getPersistenceController().handleVersionOlderThan("4.1")) {
@@ -139,12 +136,12 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	@Override
 	public String getCommand() {
 		setCommandName();
-		if ((packageVersion != "") || (productVersion != ""))
+		if (!packageVersion.equals("") || !productVersion.equals(""))
 			keepVersions = "--keep-versions ";
 		command = "cd " + dir + " && " + baseName + " " + keepVersions + " " + packageVersion + " " + productVersion
 				+ " " + md5sum + " " + zsync + " ";
 		if (needSudo())
-			return SSHCommandFactory.getInstance().sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 
@@ -153,6 +150,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	 * 
 	 * @param c (command): String
 	 **/
+	@Override
 	public void setCommand(String c) {
 		command = c;
 	}
@@ -190,15 +188,14 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	@Override
 	public SSHConnectionExecDialog startHelpDialog() {
 		SSHCommand command = new CommandHelp(this);
-		SSHConnectExec exec = new SSHConnectExec(
-				command
+		SSHConnectExec exec = new SSHConnectExec(command
 		// SSHConnectionExecDialog.getInstance(
-		// configed.getResourceValue("SSHConnection.Exec.title") + "
+
 		// \""+command.getCommand() + "\" ",
 		// command
 		// )
 		);
-		return (SSHConnectionExecDialog) exec.getDialog();
+		return exec.getDialog();
 	}
 
 	@Override
@@ -221,21 +218,21 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	}
 
 	public void setPackageVersion(String pav) {
-		if (pav != "")
+		if (!pav.equals(""))
 			packageVersion = "--package-version " + pav;
 		else
 			packageVersion = "";
 	}
 
 	public void setProductVersion(String prv) {
-		if (prv != "")
+		if (!prv.equals(""))
 			productVersion = "--product-version " + prv;
 		else
 			productVersion = "";
 	}
 
 	@Override
-	public ArrayList<String> getParameterList() {
+	public List<String> getParameterList() {
 		return null;
 	}
 }

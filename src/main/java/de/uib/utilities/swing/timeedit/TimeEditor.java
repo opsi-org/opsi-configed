@@ -3,13 +3,14 @@ package de.uib.utilities.swing.timeedit;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 
-import de.uib.utilities.Globals;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 public class TimeEditor extends JPanel {
@@ -17,8 +18,8 @@ public class TimeEditor extends JPanel {
 	JSpinner spinnerHour;
 	JSpinner spinnerMin;
 
-	ArrayList hours;
-	ArrayList mins;
+	List hours;
+	List mins;
 
 	public TimeEditor() {
 		this(0, 0);
@@ -52,14 +53,14 @@ public class TimeEditor extends JPanel {
 		labelTime = new JLabel(" hh:mm");
 		labelTime.setFont(Globals.defaultFontBig);
 
-		hours = new java.util.ArrayList<String>();
+		hours = new ArrayList<>();
 		for (int i = 0; i < 24; i++) {
 			hours.add(fillTo2Chars(i));
 		}
 
 		spinnerHour = new JSpinner(new SpinnerListModel(hours));
 
-		mins = new java.util.ArrayList<String>();
+		mins = new ArrayList<>();
 		for (int i = 0; i < 60; i++) {
 			mins.add(fillTo2Chars(i));
 		}
@@ -69,7 +70,7 @@ public class TimeEditor extends JPanel {
 		add(labelTime);
 		add(spinnerHour);
 		add(spinnerMin);
-		// add(new JLabel());
+
 	}
 
 	public void setHour(int h) {

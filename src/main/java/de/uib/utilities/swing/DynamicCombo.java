@@ -9,8 +9,9 @@ package de.uib.utilities.swing;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
+import de.uib.configed.Globals;
+
 /**
- *
  * @author roeder
  */
 public class DynamicCombo extends javax.swing.JPanel {
@@ -35,76 +36,45 @@ public class DynamicCombo extends javax.swing.JPanel {
 
 		table = new javax.swing.JTable();
 
-		tablemodel = new javax.swing.table.DefaultTableModel(
-				new String[] {
-						"column 0"
-				},
-				0);
+		tablemodel = new javax.swing.table.DefaultTableModel(new String[] { "column 0" }, 0);
 
 		tablemodel.addRow(new String[] { "" });
-		// tablemodel.addRow (new String[] {""});
 
 		table.setModel(tablemodel);
-		table.setSelectionBackground(de.uib.configed.Globals.backgroundWhite);
-		table.setSelectionForeground(de.uib.configed.Globals.lightBlack);
+		table.setSelectionBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		table.setSelectionForeground(Globals.lightBlack);
 		table.setShowGrid(false);
 
 		col = table.getColumnModel().getColumn(0);
 		col.setHeaderRenderer(null);
 
 		combo = new javax.swing.JComboBox();
-		// org.jdesktop.swingx.autocomplete.AutoCompleteDecorator.decorate(combo);
-		// combo.setRenderer ();
+
 		combo.setBorder(null);
 
 		combo.addPopupMenuListener(new PopupMenuListener() {
+			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {
-				// logging.debug(this, "popupMenuCanceled, value>>" + combo.getSelectedItem() +
-				// "<<");
+
 			}
 
+			@Override
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-				// logging.debug(this, "popupMenuWillBecomeInvisible , value>>" +
-				// combo.getSelectedItem() + "<<");
+
 				combo.setSelectedItem(combo.getSelectedItem());
 				// ensures that we leave the combo box completely when we set the focus
 				// somewhere else
 			}
 
+			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				// logging.debug(this, "popupMenuWillBecomeVisible, value>>" +
-				// combo.getSelectedItem() + "<<");
+
 			}
 		});
 
-		/*
-		 * combo.addItemListener(new ItemListener()
-		 * {
-		 * public void itemStateChanged(ItemEvent e)
-		 * {
-		 * logging.debug(this, "itemStateChanged ");
-		 * }
-		 * 
-		 * }
-		 * );
-		 * 
-		 * combo.addActionListener(new ActionListener()
-		 * {
-		 * public void actionPerformed(ActionEvent e)
-		 * {
-		 * logging.debug(this, "action event ");
-		 * combo.setSelectedItem("");
-		 * }
-		 * 
-		 * }
-		 * );
-		 */
-
 		col.setCellEditor(
 
-				new de.uib.utilities.table.gui.AdaptingCellEditor(
-						combo,
-						modelsource));
+				new de.uib.utilities.table.gui.AdaptingCellEditor(combo, modelsource));
 
 		setLayout(new java.awt.BorderLayout());
 
@@ -112,6 +82,7 @@ public class DynamicCombo extends javax.swing.JPanel {
 
 	}
 
+	@Override
 	public void setFont(java.awt.Font font) {
 		if (combo != null)
 			combo.setFont(font);
@@ -122,9 +93,7 @@ public class DynamicCombo extends javax.swing.JPanel {
 
 		col.setCellEditor(
 
-				new de.uib.utilities.table.gui.AdaptingCellEditor(
-						combo,
-						modelsource));
+				new de.uib.utilities.table.gui.AdaptingCellEditor(combo, modelsource));
 
 	}
 

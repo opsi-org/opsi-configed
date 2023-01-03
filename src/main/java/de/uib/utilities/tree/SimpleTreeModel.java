@@ -1,8 +1,7 @@
 package de.uib.utilities.tree;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -11,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 public class SimpleTreeModel extends DefaultTreeModel
@@ -23,7 +23,6 @@ public class SimpleTreeModel extends DefaultTreeModel
 
 	Set<SimpleTreePath> allPathes;
 	Map<SimpleTreePath, SimpleIconNode> path2Node;
-	// Map<SimpleTreePath, String> path2DottedString;
 
 	Map<String, String> tooltips;
 
@@ -33,20 +32,18 @@ public class SimpleTreeModel extends DefaultTreeModel
 
 	public SimpleTreeModel(java.util.Set<String> dottedKeys, Map<String, String> tooltips) {
 		super(new SimpleIconNode(""));
-		// setRootLabel(" (selected client/s)");
+
 		logging.debug(this, "SimpleTreeModel created for " + dottedKeys);
 		setAsksAllowsChildren(true);
 
 		ROOT = (SimpleIconNode) getRoot();
-		// ROOT.setIcon(de.uib.configed.Globals.createImageIcon("images/system-config.png","open
-		// table"));
-		// logging.info(this, "tooltips " + tooltips);
+
 		this.tooltips = tooltips;
 		generateFrom(dottedKeys);
 	}
 
-	public TreeSet<String> getGeneratedKeys() {
-		TreeSet<String> result = new TreeSet<String>();
+	public NavigableSet<String> getGeneratedKeys() {
+		TreeSet<String> result = new TreeSet<>();
 
 		for (SimpleTreePath path : allPathes)
 			result.add(path.dottedString(0, path.size()));
@@ -59,14 +56,12 @@ public class SimpleTreeModel extends DefaultTreeModel
 	}
 
 	protected void generateFrom(java.util.Set<String> dottedKeys) {
-		allPathes = new TreeSet<SimpleTreePath>();
-		path2Node = new TreeMap<SimpleTreePath, SimpleIconNode>();
-		// path2DottedString = new TreeMap<SimpleTreePath, String>();
+		allPathes = new TreeSet<>();
+		path2Node = new TreeMap<>();
 
 		if (dottedKeys != null) {
 			for (String key : dottedKeys) {
-				// logging.debug(this, "generateFrom key ------- " + key);
-				String partialKey = "";
+
 				String remainder = key;
 
 				int j = -1;
@@ -77,22 +72,14 @@ public class SimpleTreeModel extends DefaultTreeModel
 					String componentKey = key.substring(j + 1, k);
 					path.add(componentKey);
 					allPathes.add(new SimpleTreePath(path));
-					// logging.debug(this, "add " + path);
 
-					partialKey = key.substring(0, k);
 					remainder = key.substring(k + 1);
-
-					// logging.debug(this, "generateFrom partial " + partialKey);
-					// logging.debug(this, "generateFrom remainder " + remainder);
-
-					// path2DottedString.put(path, partialKey);
 
 					j = k;
 					k = j + 1 + remainder.indexOf('.');
 				}
 				path.add(remainder);
 				allPathes.add(path);
-				// logging.debug(this, "add " + path);
 
 			}
 		}
@@ -113,9 +100,8 @@ public class SimpleTreeModel extends DefaultTreeModel
 				// node must be created
 				{
 					node = new SimpleIconNode(path.get(i - 1));
-					node.setIcon(de.uib.configed.Globals.createImageIcon("images/opentable_small.png", "open table"));
-					node.setNonSelectedIcon(
-							de.uib.configed.Globals.createImageIcon("images/closedtable_small.png", "closed table"));
+					node.setIcon(Globals.createImageIcon("images/opentable_small.png", "open table"));
+					node.setNonSelectedIcon(Globals.createImageIcon("images/closedtable_small.png", "closed table"));
 
 					if (tooltips != null) {
 						String key = partialPath.dottedString(0, partialPath.size());
@@ -142,24 +128,11 @@ public class SimpleTreeModel extends DefaultTreeModel
 	// test method
 	{
 
-		/*
-		 * java 1.7
-		 * javax.swing.plaf.nimbus.NimbusLookAndFeel laf = new
-		 * javax.swing.plaf.nimbus.NimbusLookAndFeel();
-		 * UIManager.setLookAndFeel(laf);
-		 * UIDefaults nimbUID = laf.getDefaults();
-		 * nimbUID.put("Tree.drawHorizontalLines", true);
-		 * nimbUID.put("Tree.drawVerticalLines", true);
-		 * 
-		 */
-
 		XTree tree = new XTree(this);
-		// tree.putClientProperty("JTree.lineStyle", "Horizontal");
 
 		tree.setCellRenderer(new SimpleIconNodeRenderer());
 
 		tree.expandAll();
-		// tree.setRootVisible(false);
 
 		JFrame frame = new JFrame();
 		frame.getContentPane().add(tree);
@@ -171,28 +144,4 @@ public class SimpleTreeModel extends DefaultTreeModel
 
 	}
 
-	public static void main(String[] args) {
-		logging.logDirectoryName = args[0];
-		logging.LOG_LEVEL_CONSOLE = logging.LEVEL_DEBUG;
-
-		de.uib.configed.configed.configureUI();
-
-		Set<String> example = new HashSet<String>(
-				(Arrays.asList(new String[] { "configed", "configed.saved_search", "opsiclientd" })));
-
-		SimpleTreeModel model = new SimpleTreeModel(example);
-		model.produce();
-
-		example = new HashSet<String>((Arrays.asList(new String[] { "", "configed.saved_search", "opsiclientd" })));
-		model = new SimpleTreeModel(example);
-		model.produce();
-
-		model = new SimpleTreeModel(example);
-		model.produce();
-
-		example = new HashSet<String>((Arrays.asList(new String[] { "a1.b1.c1", "a1.b2.d1", "a2.b1" })));
-
-		model = new SimpleTreeModel(example);
-		model.produce();
-	}
 }

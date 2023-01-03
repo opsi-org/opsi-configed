@@ -11,27 +11,28 @@ import java.util.Map;
 
 import javax.swing.JFrame;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
-public class SecondaryFrame extends JFrame
-		implements WindowListener {
+public class SecondaryFrame extends JFrame implements WindowListener {
 
 	protected Container masterFrame;
 
 	public SecondaryFrame() {
-		this.masterFrame = de.uib.utilities.Globals.masterFrame;
+		this.masterFrame = Globals.mainContainer;
 		if (masterFrame == null)
 			logging.warning(this, "masterFrame yet null");
 		addWindowListener(this);
 	}
 
-	public void setGlobals(Map globals) {
+	public void setGlobals(Map<String, Object> globals) {
 		setIconImage((Image) globals.get("mainIcon"));
 		setTitle((String) globals.get("APPNAME"));
 	}
 
 	public void start() {
 		setExtendedState(Frame.NORMAL);
+		centerOnParent();
 		setVisible(true);
 		logging.info(this, "started");
 	}
@@ -75,9 +76,9 @@ public class SecondaryFrame extends JFrame
 		setVisible(false);
 	}
 
+	@Override
 	protected void processWindowEvent(WindowEvent e) {
-		// logging.info(this, "--------processWindowEvent " + e);
-		// super.processWindowEvent(e);
+
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			callExit();
 		}
@@ -85,33 +86,40 @@ public class SecondaryFrame extends JFrame
 	}
 
 	/* WindowListener implementation */
+	@Override
 	public void windowClosing(WindowEvent e) {
-		// logging.info(this, "-------windowClosing " + e);
+
 		callExit();
 	}
 
+	@Override
 	public void windowOpened(WindowEvent e) {
-		;
+
 	}
 
+	@Override
 	public void windowClosed(WindowEvent e) {
-		;
+
 	}
 
+	@Override
 	public void windowActivated(WindowEvent e) {
-		;
+
 	}
 
+	@Override
 	public void windowDeactivated(WindowEvent e) {
-		;
+
 	}
 
+	@Override
 	public void windowIconified(WindowEvent e) {
-		;
+
 	}
 
+	@Override
 	public void windowDeiconified(WindowEvent e) {
-		;
+
 	}
 
 }

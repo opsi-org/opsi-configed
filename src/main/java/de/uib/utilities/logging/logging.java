@@ -4,11 +4,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.JFrame;
 
@@ -73,11 +73,11 @@ public class logging implements LogEventSubject
 	public static boolean LogFileAvailable = false;
 
 	private static final int maxListedErrors = 20;
-	private static Vector<String> errorList;
+	private static List<String> errorList = new ArrayList<String>(maxListedErrors);
 
 	public static FShowList fErrors;
 
-	protected static Vector<LogEventObserver> logEventObservers;
+	protected static List<LogEventObserver> logEventObservers = new ArrayList<LogEventObserver>();
 
 	public static void setSuppressConsole(boolean b) {
 		setLogLevelConsole(LEVEL_NONE);
@@ -177,8 +177,6 @@ public class logging implements LogEventSubject
 	}
 
 	public static final synchronized void init() {
-		errorList = new Vector<>(maxListedErrors);
-		logEventObservers = new Vector<>();
 		initLogFile();
 	}
 
@@ -191,13 +189,13 @@ public class logging implements LogEventSubject
 	}
 
 	private static String now() {
-		// return new GregorianCalendar().getTime().toString();
-		return loggingDateFormat.format(new java.util.Date());// + " ";
+
+		return loggingDateFormat.format(new java.util.Date());
 	}
 
 	private static void addErrorToList(String mesg, String time) {
 		while (errorList.size() >= maxListedErrors) {
-			errorList.removeElementAt(0);
+			errorList.remove(0);
 		}
 		errorList.add(String.format("[%s] %s", time, mesg));
 
@@ -210,7 +208,7 @@ public class logging implements LogEventSubject
 		if (s == null)
 			return null;
 
-		StringBuffer result = new StringBuffer("{");
+		StringBuilder result = new StringBuilder("{");
 
 		for (int j = 0; j < s.length; j++) {
 			result.append("\"");
@@ -254,7 +252,7 @@ public class logging implements LogEventSubject
 		if (s == null)
 			return null;
 
-		StringBuffer result = new StringBuffer("{");
+		StringBuilder result = new StringBuilder("{");
 
 		for (int j = 0; j < s.length; j++) {
 			result.append("\"");
@@ -426,7 +424,7 @@ public class logging implements LogEventSubject
 	}
 
 	public static void clearErrorList() {
-		// warning("clear error list");
+
 		errorList.clear();
 	}
 
@@ -434,13 +432,9 @@ public class logging implements LogEventSubject
 		return errorList;
 	}
 
-	private static void checkErrorList() {
-		checkErrorList(null);
-	}
-
 	public static void checkErrorList(JFrame parentFrame) {
 		// if errors Occurred show a window with the logged errors
-		// logging.debug("checkErrorList");
+
 		final JFrame f;
 		if (parentFrame == null)
 			f = Globals.mainFrame;
@@ -457,11 +451,11 @@ public class logging implements LogEventSubject
 		if (fErrors == null) {
 			WaitCursor.stopAll();
 
-			// logging.debug(" start fErrors");
 			fErrors = new FShowList(f, Globals.APPNAME + ": problems Occurred", false, new String[] { "ok" }, 400, 300);
 		}
 
 		new Thread() {
+			@Override
 			public void run() {
 				fErrors.setMessage(logging.getErrorListAsLines());
 				fErrors.setAlwaysOnTop(true);
@@ -469,12 +463,11 @@ public class logging implements LogEventSubject
 			}
 		}.start();
 
-		// parentFrame.setVisible(true);
 	}
 
 	public static String getErrorListAsLines() {
-		StringBuffer result = new StringBuffer("");
-		if (errorList.size() > 0) {
+		StringBuilder result = new StringBuilder("");
+		if (!errorList.isEmpty()) {
 			for (int i = 0; i < errorList.size(); i++) {
 				result.append("\n");
 				result.append(errorList.get(i));
@@ -508,6 +501,7 @@ public class logging implements LogEventSubject
 	}
 
 	// interface LogEventSubject
+	@Override
 	public void registerLogEventObserver(LogEventObserver o) {
 		// not implemented since static method is needed
 	}

@@ -1,5 +1,7 @@
 package de.uib.utilities.table;
 
+import java.util.List;
+
 import javax.swing.ListModel;
 
 public interface ListModelProducer {
@@ -11,13 +13,13 @@ public interface ListModelProducer {
 
 	public boolean getEditable(int row, int column);
 
-	public java.util.List getSelectedValues(int row, int column);
+	public List getSelectedValues(int row, int column);
 
-	public void setSelectedValues(java.util.List newValues, int row, int column);
+	public void setSelectedValues(List newValues, int row, int column);
 
 	public String getCaption(int row, int column);
 
-	public java.util.List toList(Object value);
+	public List toList(Object value);
 
 	public Class getClass(int row, int column);
 

@@ -1,51 +1,60 @@
 package de.uib.utilities.table;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
-public class DefaultListModelProducer
-		implements ListModelProducer {
+public class DefaultListModelProducer implements ListModelProducer {
+	@Override
 	public ListModel getListModel(int row, int column) {
 		return null;
 	}
 
+	@Override
 	public int getSelectionMode(int row, int column) {
 		return ListSelectionModel.SINGLE_SELECTION;
 	}
 
+	@Override
 	public boolean getNullable(int row, int column) {
 		return true;
 	}
 
+	@Override
 	public boolean getEditable(int row, int column) {
 		return false;
 	}
 
-	public java.util.List getSelectedValues(int row, int column) {
-		return new ArrayList();
+	@Override
+	public List getSelectedValues(int row, int column) {
+		return new ArrayList<>();
 	}
 
-	public void setSelectedValues(java.util.List newValues, int row, int column) {
+	@Override
+	public void setSelectedValues(List newValues, int row, int column) {
 	}
 
+	@Override
 	public String getCaption(int row, int column) {
 		return "";
 	}
 
+	@Override
 	public Class getClass(int row, int column) {
 		return Object.class;
 	}
 
-	public java.util.List toList(Object value) {
+	@Override
+	public List toList(Object value) {
 		if (value == null)
 			return null;
 
-		if (value instanceof java.util.List)
-			return (java.util.List) value;
+		if (value instanceof List)
+			return (List) value;
 
-		ArrayList list = new ArrayList();
+		List list = new ArrayList<>();
 		list.add(value);
 
 		return list;

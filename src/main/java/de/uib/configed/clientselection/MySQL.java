@@ -13,9 +13,13 @@ public class MySQL {
 
 	public enum Type {
 		OR, AND, NOT, NEW
-	};
+	}
 
-	boolean group, product, property, software, hardware = false;
+	private boolean group = false;
+	private boolean product = false;
+	private boolean property = false;
+	private boolean software = false;
+	private boolean hardware = false;
 
 	private boolean hardwareWithDevice = false;
 	private String hardwareTableName = "";
@@ -27,7 +31,7 @@ public class MySQL {
 		this.hwConfig = hwConfig;
 	}
 
-	public String getMySQL_INNERJOINS() {
+	public String getMySQLInnerJoins() {
 		String joins = "";
 
 		if (group)
@@ -75,122 +79,122 @@ public class MySQL {
 
 				switch (json.getString("element")) {
 
-					// HOST
-					case "GroupElement":
-						group = true;
-						String operation = json.getString("elementPath");
-						if (operation.equals("Group"))
-							return " a.groupId LIKE '" + data + "' ";
-
+				// HOST
+				case "GroupElement":
+					group = true;
+					String operation = json.getString("elementPath");
+					if (operation.equals("Group"))
 						return " a.groupId LIKE '" + data + "' ";
 
-					case "IPElement":
-						return " HOST.ipAddress LIKE '" + data + "' ";
+					return " a.groupId LIKE '" + data + "' ";
 
-					case "NameElement":
-						return " HOST.hostId LIKE '" + data + "' ";
+				case "IPElement":
+					return " HOST.ipAddress LIKE '" + data + "' ";
 
-					case "DescriptionElement":
-						return " HOST.description LIKE '" + data + "' ";
+				case "NameElement":
+					return " HOST.hostId LIKE '" + data + "' ";
 
-					// opsi-Product
-					case "SoftwareNameElement":
-						product = true;
-						return " d.productId LIKE '" + data + "' ";
+				case "DescriptionElement":
+					return " HOST.description LIKE '" + data + "' ";
 
-					case "SoftwareInstallationStatusElement":
-						product = true;
-						return " IFNULL(d.installationStatus, '') LIKE '" + data + "' ";
+				// opsi-Product
+				case "SoftwareNameElement":
+					product = true;
+					return " d.productId LIKE '" + data + "' ";
 
-					case "SoftwareActionResultElement":
-						product = true;
-						return " IFNULL(d.actionResult, '') LIKE '" + data + "' ";
+				case "SoftwareInstallationStatusElement":
+					product = true;
+					return " IFNULL(d.installationStatus, '') LIKE '" + data + "' ";
 
-					case "SoftwareRequestElement":
-						product = true;
-						return " IFNULL(d.actionRequest, '') LIKE '" + data + "' ";
+				case "SoftwareActionResultElement":
+					product = true;
+					return " IFNULL(d.actionResult, '') LIKE '" + data + "' ";
 
-					case "SoftwareActionProgressElement":
-						product = true;
-						return " IFNULL(d.actionProgress, '') LIKE '" + data + "' ";
+				case "SoftwareRequestElement":
+					product = true;
+					return " IFNULL(d.actionRequest, '') LIKE '" + data + "' ";
 
-					case "SoftwareLastActionElement":
-						product = true;
-						return " IFNULL(d.lastAction, '') LIKE '" + data + "' ";
+				case "SoftwareActionProgressElement":
+					product = true;
+					return " IFNULL(d.actionProgress, '') LIKE '" + data + "' ";
 
-					case "SoftwareVersionElement":
-						product = true;
-						return " IFNULL(d.productVersion, '') LIKE '" + data + "' ";
+				case "SoftwareLastActionElement":
+					product = true;
+					return " IFNULL(d.lastAction, '') LIKE '" + data + "' ";
 
-					case "SoftwarePackageVersionElement":
-						product = true;
-						return " IFNULL(d.packageVersion, '') LIKE '" + data + "' ";
+				case "SoftwareVersionElement":
+					product = true;
+					return " IFNULL(d.productVersion, '') LIKE '" + data + "' ";
 
-					case "SoftwareModificationTimeElement":
-						product = true;
-						return getMySQL_SoftwareModificationTime(json.getString("operation"), data);
+				case "SoftwarePackageVersionElement":
+					product = true;
+					return " IFNULL(d.packageVersion, '') LIKE '" + data + "' ";
 
-					// Property
-					case "PropertyIdElement":
-						product = property = true;
-						return " h.propertyId LIKE '" + data + "' ";
+				case "SoftwareModificationTimeElement":
+					product = true;
+					return getMySQLSoftwareModificationTime(json.getString("operation"), data);
 
-					case "PropertyValueElement":
-						product = property = true;
+				// Property
+				case "PropertyIdElement":
+					product = property = true;
+					return " h.propertyId LIKE '" + data + "' ";
 
-						// In der Datenbank sind die 'values' immer in Anführungszeichen,
-						// Außnahme: true, false
-						if (data.equals("false") || data.equals("true"))
-							return " (h.values LIKE '%" + data + "%' OR h.values LIKE '\"%" + data + "\"%') ";
+				case "PropertyValueElement":
+					product = property = true;
 
-						return " h.values LIKE '%\"" + data + "\"%' "; // 'data' should be part of the array
+					// In der Datenbank sind die 'values' immer in Anführungszeichen,
+					// Außnahme: true, false
+					if (data.equals("false") || data.equals("true"))
+						return " (h.values LIKE '%" + data + "%' OR h.values LIKE '\"%" + data + "\"%') ";
 
-					// Software-Inventur-Data
-					case "SwAuditNameElement":
-						software = true;
-						return " f.name LIKE '" + data + "' ";
+					return " h.values LIKE '%\"" + data + "\"%' "; // 'data' should be part of the array
 
-					case "SwAuditVersionElement":
-						software = true;
-						return " f.version LIKE '" + data + "' ";
+				// Software-Inventur-Data
+				case "SwAuditNameElement":
+					software = true;
+					return " f.name LIKE '" + data + "' ";
 
-					case "SwAuditSubversionElement":
-						software = true;
-						return " f.subVersion LIKE '" + data + "' ";
+				case "SwAuditVersionElement":
+					software = true;
+					return " f.version LIKE '" + data + "' ";
 
-					case "SwAuditArchitectureElement":
-						software = true;
-						return " f.architecture LIKE '" + data + "' ";
+				case "SwAuditSubversionElement":
+					software = true;
+					return " f.subVersion LIKE '" + data + "' ";
 
-					case "SwAuditLanguageElement":
-						software = true;
-						return " f.language LIKE '" + data + "' ";
+				case "SwAuditArchitectureElement":
+					software = true;
+					return " f.architecture LIKE '" + data + "' ";
 
-					case "SwAuditSoftwareIdElement":
-						software = true;
-						return " g.WindowsSoftwareId LIKE '" + data + "' ";
+				case "SwAuditLanguageElement":
+					software = true;
+					return " f.language LIKE '" + data + "' ";
 
-					// Hardware
-					case "GenericTextElement":
-						hardware = true;
+				case "SwAuditSoftwareIdElement":
+					software = true;
+					return " g.WindowsSoftwareId LIKE '" + data + "' ";
 
-						String abfrage = setHardware(json);
+				// Hardware
+				case "GenericTextElement":
+					hardware = true;
 
-						return " (" + abfrage + " LIKE '" + data + "') ";
+					String query = setHardware(json);
 
-					case "GenericBigIntegerElement":
-					case "GenericIntegerElement":
-						hardware = true;
+					return " (" + query + " LIKE '" + data + "') ";
 
-						operation = json.getString("operation");
-						operation = getOperationFromElement(operation);
+				case "GenericBigIntegerElement":
+				case "GenericIntegerElement":
+					hardware = true;
 
-						abfrage = setHardware(json);
+					operation = json.getString("operation");
+					operation = getOperationFromElement(operation);
 
-						return " (" + abfrage + " " + operation + " '" + data + "') ";
+					query = setHardware(json);
 
-					case "GenericDateElement":
-						break;
+					return " (" + query + " " + operation + " '" + data + "') ";
+
+				case "GenericDateElement":
+					break;
 				}
 
 			}
@@ -213,8 +217,8 @@ public class MySQL {
 		List<Map<String, String>> values = (List<Map<String, String>>) element.get("Values");
 
 		Map<String, String> spalte = findSpalteInTabelle(column, values);
-		String spaltenName = (String) spalte.get("Opsi");
-		String scope = (String) spalte.get("Scope");
+		String spaltenName = spalte.get("Opsi");
+		String scope = spalte.get("Scope");
 
 		if (scope.equals("g"))
 			hardwareWithDevice = true;
@@ -244,54 +248,54 @@ public class MySQL {
 	private String getOperationFromElement(String operation) {
 
 		switch (operation) {
-			case "BigIntLessThanOperation":
-			case "IntLessThanOperation":
-				return "<";
+		case "BigIntLessThanOperation":
+		case "IntLessThanOperation":
+			return "<";
 
-			case "BigIntLessOrEqualOperation":
-			case "IntLessOrEqualOperation":
-				return "<=";
+		case "BigIntLessOrEqualOperation":
+		case "IntLessOrEqualOperation":
+			return "<=";
 
-			case "BigIntEqualsOperation":
-			case "IntEqualsOperation":
-				return "=";
+		case "BigIntEqualsOperation":
+		case "IntEqualsOperation":
+			return "=";
 
-			case "BigIntGreaterThanOperation":
-			case "IntGreaterThanOperation":
-				return ">";
+		case "BigIntGreaterThanOperation":
+		case "IntGreaterThanOperation":
+			return ">";
 
-			case "BigIntGreaterOrEqualOperation":
-			case "IntGreaterOrEqualOperation":
-				return ">=";
+		case "BigIntGreaterOrEqualOperation":
+		case "IntGreaterOrEqualOperation":
+			return ">=";
 
-			default:
-				return null;
+		default:
+			return null;
 		}
 	}
 
 	// // to opsi-Product
-	private String getMySQL_SoftwareModificationTime(String operation, String data) {
+	private String getMySQLSoftwareModificationTime(String operation, String data) {
 		String expression = "";
 		switch (operation) {
-			case "DateGreaterThanOperation":
-				expression = ">";
-				break;
+		case "DateGreaterThanOperation":
+			expression = ">";
+			break;
 
-			case "DateGreaterOrEqualOperation":
-				expression = ">=";
-				break;
+		case "DateGreaterOrEqualOperation":
+			expression = ">=";
+			break;
 
-			case "DateEqualsOperation":
-				expression = "=";
-				break;
+		case "DateEqualsOperation":
+			expression = "=";
+			break;
 
-			case "DateLessOrEqualOperation":
-				expression = "<=";
-				break;
+		case "DateLessOrEqualOperation":
+			expression = "<=";
+			break;
 
-			case "DateLessThanOperation":
-				expression = "<";
-				break;
+		case "DateLessThanOperation":
+			expression = "<";
+			break;
 		}
 
 		return " DATE(d.modificationTime)" + expression + "'" + data + "'";
@@ -300,12 +304,12 @@ public class MySQL {
 	public static Type getType(JSONObject json) {
 		try {
 			switch (json.getString("operation")) {
-				case "OrOperation":
-					return Type.OR;
-				case "AndOperation":
-					return Type.AND;
-				case "NotOperation":
-					return Type.NOT;
+			case "OrOperation":
+				return Type.OR;
+			case "AndOperation":
+				return Type.AND;
+			case "NotOperation":
+				return Type.NOT;
 			}
 		} catch (Exception e) {
 			logging.warning("we did get type of operation from " + json);

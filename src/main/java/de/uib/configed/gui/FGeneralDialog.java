@@ -2,7 +2,6 @@ package de.uib.configed.gui;
 
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -33,14 +32,6 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 
-/**
- * FGeneralDialog
- * Copyright:     Copyright (c) 2001-2017,2020-2022
- * Organisation:  uib
- * @author Rupert Röder, Nils Otto
- * 
- *  // TODO UNITE THE CONSTRUCTORS ?
- */
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
@@ -80,8 +71,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	protected String iconsLog;
 
 	protected int noOfButtons = 3;
-
-	Color myHintYellow = new java.awt.Color(255, 255, 230);
 
 	int result = 1;
 	int value1 = OK;
@@ -307,7 +296,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	protected void allLayout() {
-		allpane.setBackground(Globals.backLightBlue);
+		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 
 		northPanel = new JPanel();
@@ -316,7 +305,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		southPanel = new JPanel();
 		southPanel.setOpaque(false);
 
-		scrollpane.setBackground(Color.white);
+		scrollpane.setBackground(Globals.F_GENERAL_DIALOG_BACKGROUND_COLOR);
 		scrollpane.setOpaque(false);
 
 		GroupLayout southLayout = new GroupLayout(southPanel);
@@ -524,6 +513,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	// KeyListener
+	@Override
 	public void keyPressed(KeyEvent e) {
 		logging.debug(this, "key event " + e);
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
@@ -531,9 +521,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		} else {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER || e.getKeyCode() == KeyEvent.VK_SPACE) {
 				if (e.getSource() == jButton1) {
-					// logging.debug (".... on Button1. ");
-					// preAction1(); integrated in doAction1
-					// doAction1();
+
 					// comment out, Mon Sep 16 16:35:39 CEST 2019 @649 /Internet Time/
 					// since otherwise doAction1 is called twice on Enter
 				} else if (e.getSource() == jButton2) {
@@ -545,6 +533,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		}
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
@@ -552,29 +541,35 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 	}
 
 	// MouseListener
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		logging.debug(this, "mouseClicked");
 
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) {
 		logging.debug(this, "mouseEntered");
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e) {
 		logging.debug(this, "mouseExited");
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 		logging.debug(this, "mousePressed");
 
 		preAction1();
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		logging.debug(this, "mouseReleased");
 	}
@@ -590,6 +585,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	// ActionListener
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == jButton1) {
 			preAction1();
@@ -645,6 +641,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			fadeTimer.start();
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (vanishing) {
 				opacity -= step;
@@ -675,7 +672,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		public void paintComponent(Graphics g) {
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 
-			g.setColor(new Color(230, 230, 250));
+			g.setColor(Globals.F_GENERAL_DIALOG_FADING_MIRROR_COLOR);
 			g.fillRect(0, 0, getWidth(), getHeight());
 		}
 	}

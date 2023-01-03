@@ -45,7 +45,7 @@ public class JSONReMapper {
 	}
 
 	public static Map<String, Object> getResponses(JSONObject retrieved) {
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 
 		Map<String, Object> result0 = getMapResult(retrieved);
 
@@ -54,21 +54,17 @@ public class JSONReMapper {
 			for (String key : result0.keySet()) {
 				JSONObject jO = (JSONObject) (result0.get(key));
 				HashMapX response = new HashMapX(jO, true);
-				// String value = "";
 
 				if (response.get("error") == null) {
-					java.util.List list = (java.util.List) response.get("result");
-
-					// logging.debug("JSONReMapper getResponses " + list);
-					// value = "" + list;
+					List list = (List) response.get("result");
 
 					result.put(key, list);
 				} else {
-					// value = (String) response.get("error");
+
 					String str = "" + response.get("error");
 					result.put(key, str);
 				}
-				// result.put(key, value);
+
 			}
 		}
 
@@ -82,8 +78,7 @@ public class JSONReMapper {
 	}
 
 	public static boolean checkForNotValidOpsiMethod(JSONObject retrieved) {
-		// logging.debug("JSONReMapper: checkForNotValidOpsiMethod " +
-		// getErrorFromResponse(retrieved));
+
 		if (retrieved != null && getErrorFromResponse(retrieved) != null
 				&& getErrorFromResponse(retrieved).indexOf("Opsi rpc error: Method") > -1
 				&& getErrorFromResponse(retrieved).endsWith("is not valid")) {
@@ -98,7 +93,6 @@ public class JSONReMapper {
 		boolean responseFound = true;
 
 		logging.debug(CLASSNAME + ".checkResponse " + logging.LEVEL_DEBUG);
-		// "retrieved JSONObject " + retrieved);
 
 		if (retrieved == null) {
 			responseFound = false;
@@ -106,38 +100,16 @@ public class JSONReMapper {
 			Object resultValue = null;
 
 			try {
-				/*
-				 * if ( ! retrieved.isNull("error") )
-				 * {
-				 * String logMessage = "Opsi service error: ";
-				 * JSONObject jOError = retrieved.optJSONObject("error");
-				 * 
-				 * if ( (jOError != null) && ( ! jOError.isNull("class") ) && ( !
-				 * jOError.isNull("message") ) )
-				 * {
-				 * 
-				 * logMessage = logMessage + " [" + jOError.get("class") + "] " +
-				 * jOError.get("message");
-				 * }
-				 * else
-				 * {
-				 * logMessage = logMessage + " " + retrieved.get("error");
-				 * }
-				 * logging.error(logMessage);
-				 * responseFound = false;
-				 * }
-				 */
 
 				String errorMessage = getErrorFromResponse(retrieved);
 
 				if (errorMessage != null) {
-					// responseFound = false;
+
 					String logMessage = "Opsi service error: " + errorMessage;
 					logging.error(logMessage);
 				} else {
 					resultValue = retrieved.get("result");
-					// logging.debug (" checkResponse resultValue ------------- " +
-					// resultValue);
+
 				}
 			} catch (JSONException jex) {
 				logging.error("JSON Error on retrieving result value,  " + jex.toString());
@@ -153,8 +125,8 @@ public class JSONReMapper {
 	}
 
 	public static Map<String, Map<String, Object>> getMap2_Object(Object retrieved) {
-		HashMap<String, Map<String, Object>> result = new HashMap<String, Map<String, Object>>();
-		HashMap<String, Map<String, Object>> resultNull = new HashMap<String, Map<String, Object>>();
+		HashMap<String, Map<String, Object>> result = new HashMap<>();
+		HashMap<String, Map<String, Object>> resultNull = new HashMap<>();
 
 		try {
 			JSONObject jO = (JSONObject) retrieved;
@@ -166,7 +138,7 @@ public class JSONReMapper {
 					logging.error(CLASSNAME + "map expected " + jOX);
 				} else {
 					logging.debug(CLASSNAME + "map retrieved ");
-					// + jOX.getMap());
+
 					Map map0 = jOX.getMap();
 
 					Iterator iter0 = map0.keySet().iterator();
@@ -192,34 +164,32 @@ public class JSONReMapper {
 
 	}
 
-	public static Map<String, Map<String, Map<String, Object>>> getMap3_Objects(Object retrieved) {
-		HashMap<String, Map<String, Map<String, Object>>> result = new HashMap<String, Map<String, Map<String, Object>>>();
+	public static Map<String, Map<String, Map<String, Object>>> getMap3Objects(Object retrieved) {
+		HashMap<String, Map<String, Map<String, Object>>> result = new HashMap<>();
 		try {
 			JSONObject jO = (JSONObject) retrieved;
-			HashMap<String, JSONObject> map0 = new HashMapX<String, JSONObject>(jO);
-			// logging.debug(this, " map0: " + map0);
+			HashMap<String, JSONObject> map0 = new HashMapX<>(jO);
 
-			Iterator iter0 = map0.keySet().iterator();
+			Iterator<String> iter0 = map0.keySet().iterator();
 			while (iter0.hasNext()) {
-				String key1 = (String) iter0.next(); // e.g. client
-				HashMap<String, JSONObject> map1 = new HashMapX<String, JSONObject>((JSONObject) map0.get(key1)); // e.g.
-																													// map
-																													// of
-																													// 1
-																													// client
-																													// values
-																													// logging.debug(this, " key1 " + key1 + " value " + map1);
-				HashMap<String, Map<String, Object>> map1R = new HashMap<String, Map<String, Object>>(); // to produce
+				String key1 = iter0.next(); // e.g. client
+				HashMap<String, JSONObject> map1 = new HashMapX<>(map0.get(key1)); // e.g.
+																					// map
+																					// of
+																					// 1
+																					// client
+																					// values
 
-				Iterator iter1 = map1.keySet().iterator();
+				HashMap<String, Map<String, Object>> map1R = new HashMap<>(); // to produce
+
+				Iterator<String> iter1 = map1.keySet().iterator();
 				while (iter1.hasNext()) {
-					String key2 = (String) iter1.next(); // e.g. product
-					HashMap<String, Object> map2 = new HashMapX<String, Object>((JSONObject) map1.get(key2), true); // e.g.
-																													// product
-																													// values;
-																													// logging.debug(this, " key2 " + key2 + " value " + map2);
+					String key2 = iter1.next(); // e.g. product
+					HashMap<String, Object> map2 = new HashMapX<>(map1.get(key2), true); // e.g.
+																							// product
+
 					map1R.put(key2, map2);
-					// logging.debug(this, " map1R.get(key2) " + map1R.get(key2));
+
 				}
 
 				result.put(key1, map1R);
@@ -233,37 +203,35 @@ public class JSONReMapper {
 	}
 
 	public static Map<String, Map<String, Map<String, Object>>> getMap3_Object(Object retrieved) {
-		HashMap<String, Map<String, Map<String, Object>>> result = new HashMap<String, Map<String, Map<String, Object>>>();
+		HashMap<String, Map<String, Map<String, Object>>> result = new HashMap<>();
 		try {
 			JSONObject jO = (JSONObject) retrieved;
 			if (checkResponse(jO)) {
 				JSONObject jOResult = jO.optJSONObject("result");
 
-				HashMap<String, JSONObject> map0 = new HashMapX<String, JSONObject>(jOResult);
-				// logging.debug(this, " map0: " + map0);
+				HashMap<String, JSONObject> map0 = new HashMapX<>(jOResult);
 
-				Iterator iter0 = map0.keySet().iterator();
+				Iterator<String> iter0 = map0.keySet().iterator();
 				while (iter0.hasNext()) {
-					String key1 = (String) iter0.next(); // e.g. client
-					HashMap<String, JSONObject> map1 = new HashMapX<String, JSONObject>((JSONObject) map0.get(key1)); // e.g.
-																														// map
-																														// of
-																														// 1
-																														// client
-																														// values
-																														// logging.debug(this, " key1 " + key1 + " value " + map1);
-					HashMap<String, Map<String, Object>> map1R = new HashMap<String, Map<String, Object>>(); // to
-																												// produce
+					String key1 = iter0.next(); // e.g. client
+					HashMap<String, JSONObject> map1 = new HashMapX<>((JSONObject) map0.get(key1)); // e.g.
+																									// map
+																									// of
+																									// 1
+																									// client
+																									// values
 
-					Iterator iter1 = map1.keySet().iterator();
+					HashMap<String, Map<String, Object>> map1R = new HashMap<>(); // to
+																					// produce
+
+					Iterator<String> iter1 = map1.keySet().iterator();
 					while (iter1.hasNext()) {
-						String key2 = (String) iter1.next(); // e.g. product
-						HashMap<String, Object> map2 = new HashMapX<String, Object>((JSONObject) map1.get(key2), true); // e.g.
-																														// product
-																														// values;
-																														// logging.debug(this, " key2 " + key2 + " value " + map2);
+						String key2 = iter1.next(); // e.g. product
+						HashMap<String, Object> map2 = new HashMapX<>(map1.get(key2), true); // e.g.
+																								// product
+
 						map1R.put(key2, map2);
-						// logging.debug(this, " map1R.get(key2) " + map1R.get(key2));
+
 					}
 
 					result.put(key1, map1R);
@@ -278,7 +246,7 @@ public class JSONReMapper {
 	}
 
 	public static List<Map<String, String>> getListOfStringMaps(Object retrieved) {
-		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+		List<Map<String, String>> result = new ArrayList<>();
 		List jsonList = null;
 		try {
 			JSONObject jO = (JSONObject) retrieved;
@@ -295,9 +263,7 @@ public class JSONReMapper {
 
 			Iterator iter = jsonList.iterator();
 
-			int count = 0;
 			while (iter.hasNext()) {
-				count++;
 				item = (JSONObject) iter.next();
 				Map<String, String> mapItem = (Map<String, String>) JSONReMapper.deriveStandard(item);
 				result.add(mapItem);
@@ -313,22 +279,20 @@ public class JSONReMapper {
 	}
 
 	public static List<Map<String, Object>> getListOfMaps(JSONArray retrieved) {
-		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> result = new ArrayList<>();
 		List jsonList = null;
 
 		try {
 			JSONArray jA = retrieved;
-			jsonList = new ArrayList();
+			jsonList = new ArrayList<>();
 
 			if (jA != null) {
 				for (int i = 0; i < jA.length(); i++) {
-					// logging.debug(this, "getJSONList, add item ---- " + jA.get(i));
+
 					jsonList.add(jA.get(i));
 				}
 			}
 
-			// logging.debug(this, "getJSONList, JSONArray " + jA);
-			// logging.debug(this, "getJSONList, produced size " + result.size());
 		} catch (JSONException jex) {
 			logging.error("JSONReMapper: Exception on getting list " + jex.toString());
 		}
@@ -339,9 +303,7 @@ public class JSONReMapper {
 
 			Iterator iter = jsonList.iterator();
 
-			int count = 0;
 			while (iter.hasNext()) {
-				count++;
 				item = (JSONObject) iter.next();
 				Map<String, Object> mapItem = (Map<String, Object>) JSONReMapper.deriveStandard(item);
 				result.add(mapItem);
@@ -357,7 +319,7 @@ public class JSONReMapper {
 	}
 
 	public static List<Map<String, Object>> getListOfMaps(Object retrieved) {
-		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> result = new ArrayList<>();
 		List jsonList = null;
 
 		try {
@@ -375,9 +337,7 @@ public class JSONReMapper {
 
 			Iterator iter = jsonList.iterator();
 
-			int count = 0;
 			while (iter.hasNext()) {
-				count++;
 				item = (JSONObject) iter.next();
 				Map<String, Object> mapItem = (Map<String, Object>) JSONReMapper.deriveStandard(item);
 				result.add(mapItem);
@@ -392,19 +352,8 @@ public class JSONReMapper {
 		return result;
 	}
 
-	public static List<JSONObject> getListOfJSONObjects(JSONObject jO, String key) {
-		ArrayList<JSONObject> result = new ArrayList<JSONObject>();
-		JSONArray jA = jO.optJSONArray(key);
-
-		if (jA != null) {
-			result = jA.toList();
-		}
-
-		return result;
-	}
-
 	public static List<List<String>> getListOfListsOfStrings(JSONObject jO, String key) {
-		List<List<String>> list0 = new ArrayList<List<String>>();
+		List<List<String>> list0 = new ArrayList<>();
 		JSONArray jA = jO.optJSONArray(key);
 
 		int size0 = jA.length();
@@ -413,10 +362,10 @@ public class JSONReMapper {
 				JSONArray element0 = jA.getJSONArray(i);
 				int size1 = element0.length();
 
-				List<String> list1 = new ArrayList<String>();
+				List<String> list1 = new ArrayList<>();
 
 				for (int j = 0; j < size1; j++) {
-					// logging.debug("element1 " + element0.get(j));
+
 					list1.add("" + element0.get(j));
 				}
 
@@ -430,7 +379,7 @@ public class JSONReMapper {
 	}
 
 	public static List<List<String>> getJsonListOfStringLists(JSONObject jO, String key) {
-		ArrayList<List<String>> result = new ArrayList<List<String>>();
+		ArrayList<List<String>> result = new ArrayList<>();
 
 		List<Object> list1 = getJsonList(jO, key);
 
@@ -438,12 +387,11 @@ public class JSONReMapper {
 			for (Object ob1 : list1) {
 				JSONArray jA = (JSONArray) ob1;
 
-				ArrayList<String> row = null;
+				List<String> row = null;
 
 				if (jA != null) {
-					row = new ArrayList(jA.length());
+					row = new ArrayList<>(jA.length());
 					for (int i = 0; i < jA.length(); i++) {
-						// logging.debug(this, "getJSONList, add item ---- " + jA.get(i));
 
 						if (isNull(jA.get(i)))
 							row.add("");
@@ -459,27 +407,22 @@ public class JSONReMapper {
 			logging.error("JSONReMapper: Exception on getting list of stringlists " + jex.toString());
 		}
 
-		// logging.debug( " getJsonListOfStringLists " + result);
-		// System.exit(0);
-
 		return result;
 	}
 
 	public static List getJsonList(JSONObject jO, String key) {
-		ArrayList result = new ArrayList();
+		List result = new ArrayList<>();
 		try {
 			JSONArray jA = jO.optJSONArray(key);
 
 			if (jA != null) {
-				result = new ArrayList(jA.length());
+				result = new ArrayList<>(jA.length());
 				for (int i = 0; i < jA.length(); i++) {
-					// logging.debug(this, "getJSONList, add item ---- " + jA.get(i));
+
 					result.add(jA.get(i));
 				}
 			}
 
-			// logging.debug(this, "getJSONList, JSONArray " + jA);
-			// logging.debug(this, "getJSONList, produced size " + result.size());
 		} catch (JSONException jex) {
 			logging.error("JSONReMapper: Exception on getting list " + jex.toString());
 		}
@@ -488,19 +431,17 @@ public class JSONReMapper {
 	}
 
 	public static List<String> getJsonStringList(JSONObject jO, String key) {
-		ArrayList<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 		try {
 			JSONArray jA = jO.optJSONArray(key);
 
-			// logging.debug ("jA is " + jA.toString());
 			if (jA != null) {
-				result = new ArrayList(jA.length());
+				result = new ArrayList<>(jA.length());
 				for (int i = 0; i < jA.length(); i++) {
 					result.add("" + jA.get(i));
 				}
 			}
 
-			// logging.debug ("result is" + result.toString());
 		} catch (JSONException jex) {
 			logging.error("JSONReMapper: Exception on getting list " + jex.toString());
 		}
@@ -509,7 +450,7 @@ public class JSONReMapper {
 	}
 
 	public static List getListResult(JSONObject jO) {
-		List result = new ArrayList();
+		List result = new ArrayList<>();
 		try {
 			if (checkResponse(jO)) {
 				result = JSONReMapper.getJsonList(jO, "result");
@@ -524,7 +465,7 @@ public class JSONReMapper {
 	public static Map<String, Object> getMap_Object(JSONObject jo)
 	// this method tries to return Java lists in comparison with getMapResult
 	{
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 
 		try {
 			JSONObjectX jOX = new JSONObjectX(jo);
@@ -545,14 +486,14 @@ public class JSONReMapper {
 	// yields possibly JSON objects and arrays as values
 	// compare getMap_Object
 	{
-		HashMap result = new HashMap();
+		Map result = new HashMap<>();
 		try {
 			if (checkResponse(jO)) {
 				JSONObject jOResult = jO.optJSONObject("result");
 				if (jOResult != null) {
-					Iterator iter = jOResult.keys();
+					Iterator<String> iter = jOResult.keys();
 					while (iter.hasNext()) {
-						String key = (String) iter.next();
+						String key = iter.next();
 						result.put(key, jOResult.get(key));
 					}
 				}
@@ -564,7 +505,7 @@ public class JSONReMapper {
 	}
 
 	public static List<String> getStringListResult(JSONObject jO) {
-		List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 		try {
 			if (checkResponse(jO)) {
 				result = JSONReMapper.getJsonStringList(jO, "result");
@@ -578,7 +519,7 @@ public class JSONReMapper {
 	}
 
 	public static List<List<String>> getListOfStringLists(JSONObject jO) {
-		List<List<String>> result = new ArrayList<List<String>>();
+		List<List<String>> result = new ArrayList<>();
 		try {
 			if (checkResponse(jO)) {
 				result = JSONReMapper.getJsonListOfStringLists(jO, "result");
@@ -591,30 +532,26 @@ public class JSONReMapper {
 		return result;
 	}
 
-	private static class HashMapX<String, V> extends HashMap<String, V> {
+	private static class HashMapX<V> extends HashMap<String, V> {
 		HashMapX(JSONObject jO) {
 			this(jO, false);
 		}
 
 		HashMapX(JSONObject jO, boolean derive) {
 			super();
-			// logging.debug("got JSONObject " + jO);
+
 			try {
 				if (jO != null) {
-					Iterator iter = jO.keys();
+					Iterator<String> iter = jO.keys();
 					while (iter.hasNext()) {
-						Object key = iter.next();
-						// logging.debug("got key " +key);
-						if (!jO.isNull((java.lang.String) key)) {
+						String key = iter.next();
+
+						if (!jO.isNull(key)) {
 							if (derive)
-								put((String) key, (V) (deriveStandard(jO.get((java.lang.String) key))));
+								put(key, (V) (deriveStandard(jO.get(key))));
 							else
-								put((String) key, (V) (jO.get((java.lang.String) key)));
+								put(key, (V) (jO.get(key)));
 						}
-						/*
-						 * else
-						 * put((String) key, null);
-						 */
 					}
 				}
 			} catch (Exception ex) {
@@ -636,13 +573,13 @@ public class JSONReMapper {
 		}
 
 		else if (ob instanceof JSONObject) {
-			Map<String, Object> map = new HashMap();
+			Map<String, Object> map = new HashMap<>();
 
-			Iterator iter = ((JSONObject) ob).keys();
+			Iterator<String> iter = ((JSONObject) ob).keys();
 
 			while (iter.hasNext()) {
 				String key = null;
-				Object value = null;;
+				Object value = null;
 
 				try {
 					key = (String) iter.next();
@@ -698,15 +635,15 @@ public class JSONReMapper {
 	}
 
 	public static Map<String, String> giveEmptyForNull(Map<String, Object> m) {
-		// logging.info("giveEmptyForNull " + m);
-		HashMap<String, String> result = new HashMap<String, String>();
+
+		HashMap<String, String> result = new HashMap<>();
 		for (String key : m.keySet()) {
 			if (isNull(m.get(key)))
 				result.put(key, "");
 			else
 				result.put(key, "" + m.get(key));
 		}
-		// logging.info("giveEmptyForNull " + result );
+
 		return result;
 	}
 

@@ -1,6 +1,5 @@
 package de.uib.configed.gui;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -12,7 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -54,7 +53,7 @@ public class NewClientDialog extends FGeneralDialog
 	protected JPanel panel;
 	protected GroupLayout gpl;
 	protected JTextField jTextHostname;
-	// protected JTextField jTextDomainname;
+
 	protected JComboBox<String> jComboDomain;
 	protected JComboBox<String> jComboDepots;
 	protected JTextField jTextDescription;
@@ -71,19 +70,19 @@ public class NewClientDialog extends FGeneralDialog
 	protected JCheckBox jCheckUefi;
 	protected JCheckBox jCheckWan;
 	protected JCheckBox jCheckShutdownInstall;
-	protected Vector<String> depots;
+	protected List<String> depots;
 
 	protected JLabel jCSVTemplateLabel;
 	protected JButton jCSVTemplateButton;
 	protected JLabel jImportLabel;
 	protected JButton jImportButton;
 
-	protected Vector<String> groupList;
-	protected Vector<String> localbootProducts;
-	protected Vector<String> netbootProducts;
+	protected List<String> groupList;
+	protected List<String> localbootProducts;
+	protected List<String> netbootProducts;
 
 	private static NewClientDialog instance;
-	private Vector<String> domains;
+	private List<String> domains;
 	private boolean uefiboot;
 	private boolean uefibootIsDefault;
 	private boolean wanConfig;
@@ -91,14 +90,11 @@ public class NewClientDialog extends FGeneralDialog
 	private boolean shutdownInstall;
 	protected boolean multidepot;
 
-	private java.util.List<String> existingHostNames;
-
-	// private static boolean macAddressFieldVisible = false;
-	// private static boolean macAddressFieldVisibleSet = false;
+	private List<String> existingHostNames;
 
 	protected int wLeftLabel = Globals.BUTTON_WIDTH + 20;
 
-	private NewClientDialog(ConfigedMain main, Vector<String> depots) {
+	private NewClientDialog(ConfigedMain main, List<String> depots) {
 		super(Globals.mainFrame, configed.getResourceValue("NewClientDialog.title") + " (" + Globals.APPNAME + ")",
 				false, new String[] { configed.getResourceValue("NewClientDialog.buttonCreate"),
 						configed.getResourceValue("NewClientDialog.buttonClose") },
@@ -110,9 +106,7 @@ public class NewClientDialog extends FGeneralDialog
 		jButton1.addKeyListener(this);
 		jButton1.setDefaultIcon("images/client_small.png");
 		jButton1.setIcon(jButton1.getDefaultIcon());
-		// jButton1.setRolloverIcon( Globals.createImageIcon( "images/checked_box.png",
-		// "Client" ) );
-		// jButton1.setRunningActionIcon( "images/client_small_executing.png" );
+
 		jButton1.setRunningActionIcon("images/waitingcircle_16.png");
 
 		if (depots != null && depots.size() > 1) {
@@ -124,18 +118,18 @@ public class NewClientDialog extends FGeneralDialog
 		pack();
 	}
 
-	public static NewClientDialog getInstance(ConfigedMain main, Vector<String> depots) {
+	public static NewClientDialog getInstance(ConfigedMain main, List<String> depots) {
 		if (instance == null) {
 			instance = new NewClientDialog(main, depots);
 			instance.init();
-		} else {
-			// instance.init();
-		}
+		} else
+			instance.centerOn(Globals.mainFrame);
+
 		return instance;
 	}
 
 	public static NewClientDialog getInstance() {
-		// instance.init();
+
 		return instance;
 	}
 
@@ -145,21 +139,6 @@ public class NewClientDialog extends FGeneralDialog
 		}
 	}
 
-	/*
-	 * public boolean macAddressFieldIsSet()
-	 * {
-	 * return macAddressFieldVisibleSet;
-	 * }
-	 * 
-	 * 
-	 * public void setMacAddressFieldVisible(boolean b)
-	 * {
-	 * macAddressFieldVisibleSet = true; //we do this once
-	 * macAddressFieldVisible = b;
-	 * repaint();
-	 * }
-	 */
-
 	/**
 	 * Sets the given domain configuration for new clients It expects that
 	 * domains is not empty and the
@@ -167,16 +146,16 @@ public class NewClientDialog extends FGeneralDialog
 	 * @param domains a LinkedList, the first will be taken in the beginning
 	 * @since 4.0.7.6.11
 	 */
-	public void setDomains(final Vector<String> domains) {
+	public void setDomains(final List<String> domains) {
 		this.domains = domains;
-		jComboDomain.setModel(new DefaultComboBoxModel(this.domains));
+		jComboDomain.setModel(new DefaultComboBoxModel<>(domains.toArray(new String[0])));
 	}
 
-	public void setHostNames(java.util.List<String> existingHostNames) {
+	public void setHostNames(List<String> existingHostNames) {
 		this.existingHostNames = existingHostNames;
 	}
 
-	public void setGroupList(Vector<String> groupList) {
+	public void setGroupList(List<String> groupList) {
 		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) jComboPrimaryGroup.getModel();
 		model.removeAllElements();
 		model.addElement(null);
@@ -187,7 +166,7 @@ public class NewClientDialog extends FGeneralDialog
 
 	}
 
-	public void setProductNetbootList(Vector<String> productList) {
+	public void setProductNetbootList(List<String> productList) {
 		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) jComboNetboot.getModel();
 		model.removeAllElements();
 		model.addElement(null);
@@ -197,7 +176,7 @@ public class NewClientDialog extends FGeneralDialog
 		jComboNetboot.setSelectedIndex(0);
 	}
 
-	public void setProductLocalbootList(Vector<String> productList) {
+	public void setProductLocalbootList(List<String> productList) {
 		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) jComboLocalboot.getModel();
 		model.removeAllElements();
 		model.addElement(null);
@@ -222,12 +201,11 @@ public class NewClientDialog extends FGeneralDialog
 	}
 
 	protected void init() {
-		// int width = 300;
 
 		panel = new JPanel();
 		gpl = new GroupLayout(panel);
 		panel.setLayout(gpl);
-		panel.setBackground(Globals.backLightBlue);
+		panel.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		jCSVTemplateLabel = new JLabel(configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
 		jCSVTemplateButton = new JButton(configed.getResourceValue("NewClientDialog.csvTemplateButton"));
@@ -248,7 +226,6 @@ public class NewClientDialog extends FGeneralDialog
 		jLabelDomainname.setText(configed.getResourceValue("NewClientDialog.domain"));
 		jComboDomain = new JComboBox<>();
 		jComboDomain.setEditable(true);
-		// jTextDomainname = new JTextField(defaultDomain);
 
 		JLabel jLabelDescription = new JLabel();
 		jLabelDescription.setText(configed.getResourceValue("NewClientDialog.description"));
@@ -260,7 +237,7 @@ public class NewClientDialog extends FGeneralDialog
 
 		JLabel jLabelDepot = new JLabel();
 		jLabelDepot.setText(configed.getResourceValue("NewClientDialog.belongsToDepot"));
-		jComboDepots = new JComboBox<>(depots);
+		jComboDepots = new JComboBox<>(depots.toArray(new String[0]));
 		jComboDepots.setFont(Globals.defaultFontBig);
 
 		JLabel labelPrimaryGroup = new JLabel(configed.getResourceValue("NewClientDialog.primaryGroup"));
@@ -285,6 +262,7 @@ public class NewClientDialog extends FGeneralDialog
 		jLabelNotes.setText(configed.getResourceValue("NewClientDialog.notes"));
 		jTextNotes = new JTextArea();
 		jTextNotes.addFocusListener(new FocusListener() {
+			@Override
 			public void focusGained(FocusEvent e) {
 				jTextNotes.setText(jTextNotes.getText().trim());
 				// remove tab at end of text, inserted by navigating while in the panel
@@ -302,19 +280,19 @@ public class NewClientDialog extends FGeneralDialog
 		// handle backtab (below)
 
 		jTextNotes.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
 			public void changedUpdate(DocumentEvent e) {
 			}
 
+			@Override
 			public void insertUpdate(DocumentEvent e) {
 				try {
-					// logging.debug (" --------->" + e.getDocString newPiece =
-					// e.getDocument().getText(e.getOffset(), e.getLength());
+
 					String newPiece = e.getDocument().getText(e.getOffset(), e.getLength());
 					logging.debug(this, " --------->" + newPiece + "<");
 
-					// if ( (e.getDocument().getText(e.getOffset(), e.getLength()) ).equals ("\t") )
 					if (newPiece.equals("\t")) {
-						// logging.debug ("tab");
+
 						macAddressField.requestFocus();
 					}
 				} catch (javax.swing.text.BadLocationException ex) {
@@ -322,11 +300,12 @@ public class NewClientDialog extends FGeneralDialog
 
 			}
 
+			@Override
 			public void removeUpdate(DocumentEvent e) {
 			}
 		});
 
-		jTextNotes.setBorder(BorderFactory.createLineBorder(new Color(122, 138, 153)));
+		jTextNotes.setBorder(BorderFactory.createLineBorder(Globals.NEW_CLIENT_DIALOG_BORDER_COLOR));
 
 		JLabel labelInfoMac = new JLabel(configed.getResourceValue("NewClientDialog.infoMac"));
 		labelInfoMac.setFont(Globals.defaultFontBig);
@@ -355,7 +334,7 @@ public class NewClientDialog extends FGeneralDialog
 		labelUefiDefault = new LabelChecked();
 		labelUefiDefault.setText(configed.getResourceValue("NewClientDialog.boottype") + " "
 				+ configed.getResourceValue("NewClientDialog.serverDefault"));
-		// labelUefiDefault.setBackground( Color.WHITE );
+
 		if (!main.getPersistenceController().isWithUEFI()) {
 			labelUefiDefault.setText(configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			labelUefiDefault.setEnabled(false);
@@ -377,7 +356,7 @@ public class NewClientDialog extends FGeneralDialog
 		labelWanDefault = new LabelChecked();
 		labelWanDefault.setText(configed.getResourceValue("NewClientDialog.wanConfig") + " "
 				+ configed.getResourceValue("NewClientDialog.serverDefault"));
-		// labelWanDefault.setBackground( Color.WHITE );
+
 		if (!main.getPersistenceController().isWithWAN()) {
 			labelWanDefault.setText(configed.getResourceValue("NewClientDialog.wan_not_activated"));
 		}
@@ -501,13 +480,7 @@ public class NewClientDialog extends FGeneralDialog
 								2 * Globals.BUTTON_WIDTH)
 						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 		// localboot
-		// .addGroup( gpl.createSequentialGroup()
-		// .addGap(Globals.hGapSize,Globals.hGapSize,Globals.hGapSize)
-		// .addComponent(jLabelLocalboot, wLeftLabel , wLeftLabel, wLeftLabel)
-		// .addGap(Globals.hGapSize,Globals.hGapSize,Globals.hGapSize)
-		// .addComponent(jComboLocalboot, Globals.buttonWidth, Globals.buttonWidth,
-		// 2*Globals.buttonWidth)
-		// .addGap(Globals.minVGapSize,Globals.minVGapSize,Globals.minVGapSize)
+
 		// )
 
 		);
@@ -586,21 +559,13 @@ public class NewClientDialog extends FGeneralDialog
 								.addComponent(jComboNetboot, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT))
 		/////// localboot
-		// .addGap(Globals.vGapSize/2,Globals.vGapSize/2,Globals.vGapSize/2)
-		// .addGroup( gpl.createParallelGroup(GroupLayout.Alignment.CENTER )
-		// .addComponent(jLabelLocalboot,
-		/////// Globals.lineHeight,Globals.lineHeight,Globals.lineHeight)
-		// .addComponent(jComboLocalboot,
-		/////// Globals.lineHeight,Globals.lineHeight,Globals.lineHeight)
-		// )
-		// .addGap(Globals.vGapSize,Globals.vGapSize,Globals.vGapSize)
 
 		);
 
 		final GroupLayout northLayout = new GroupLayout(northPanel);
 		northPanel.setLayout(northLayout);
 		northPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6),
-				BorderFactory.createLineBorder(new Color(122, 138, 153))));
+				BorderFactory.createLineBorder(Globals.NEW_CLIENT_DIALOG_BORDER_COLOR)));
 
 		northLayout.setHorizontalGroup(northLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
 				.addGroup(northLayout.createSequentialGroup()
@@ -632,12 +597,12 @@ public class NewClientDialog extends FGeneralDialog
 		centerOn(Globals.mainContainer);
 	}
 
-	private void createClients(Vector<Vector<Object>> clients) {
-		Iterator<Vector<Object>> iter = clients.iterator();
-		Vector<Vector<Object>> modifiedClients = new Vector<>();
+	private void createClients(List<List<Object>> clients) {
+		Iterator<List<Object>> iter = clients.iterator();
+		List<List<Object>> modifiedClients = new ArrayList<>();
 
 		while (iter.hasNext()) {
-			Vector<Object> client = iter.next();
+			List<Object> client = iter.next();
 
 			String hostname = (String) client.get(0);
 			String selectedDomain = (String) client.get(1);
@@ -690,8 +655,8 @@ public class NewClientDialog extends FGeneralDialog
 	 * client; Don't really know what's happening here (TODO)
 	 */
 	private void treatSelectedDomainForNewClient(final String selectedDomain) {
-		Vector<String> editableDomains = new Vector<String>();
-		ArrayList<Object> saveDomains = new ArrayList<Object>();
+		List<String> editableDomains = new ArrayList<>();
+		List<Object> saveDomains = new ArrayList<>();
 		int order = 0;
 		saveDomains.add("" + order + ":" + selectedDomain);
 		editableDomains.add(selectedDomain);
@@ -823,7 +788,7 @@ public class NewClientDialog extends FGeneralDialog
 
 			if (csvImportDataDialog.getResult() == 1) {
 				CSVImportDataModifier modifier = csvImportDataDialog.getModifier();
-				Vector<Vector<Object>> rows = modifier.getRows();
+				List<List<Object>> rows = modifier.getRows();
 
 				createClients(rows);
 			}
@@ -843,7 +808,7 @@ public class NewClientDialog extends FGeneralDialog
 			logging.error(this, "Unable to read CSV file");
 		}
 
-		Vector<String> columnNames = new Vector<>();
+		List<String> columnNames = new ArrayList<>();
 
 		columnNames.add("hostname");
 		columnNames.add("selectedDomain");
@@ -892,7 +857,7 @@ public class NewClientDialog extends FGeneralDialog
 	}
 
 	public void createCSVTemplate() {
-		Vector<String> columnNames = new Vector<>();
+		List<String> columnNames = new ArrayList<>();
 
 		columnNames.add("hostname");
 		columnNames.add("selectedDomain");
@@ -921,7 +886,7 @@ public class NewClientDialog extends FGeneralDialog
 	protected void preAction1() {
 		super.preAction1();
 		jButton1.setIcon(jButton1.getRunningActionIcon());
-		// Globals.createImageIcon( "images/checked_box.png", "Client" ) );
+
 	}
 
 	@Override
@@ -936,9 +901,6 @@ public class NewClientDialog extends FGeneralDialog
 		logging.info(this, "doAction1");
 
 		result = 1;
-
-		// FTextArea fText = new FTextArea(Globals.mainFrame, "waiting", false, 0);
-		// fText.setVisible(true);
 
 		String hostname = jTextHostname.getText();
 		String selectedDomain = (String) jComboDomain.getSelectedItem();
@@ -988,16 +950,14 @@ public class NewClientDialog extends FGeneralDialog
 				&& (e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
 				&& e.getKeyCode() == KeyEvent.VK_TAB) {
 			jTextDescription.requestFocusInWindow();
-			// e.consume();
+
 		}
 
 		else {
 			logging.info(this, "keyPressed source " + e.getSource());
-			// if (e.getSource() == jButton1)
-			// preAction1();
+
 			if (e.getSource() == jButton1) {
-				// jButton1.setIcon( Globals.createImageIcon(
-				// "images/client_small_executing.png", "Client" ) );
+
 			}
 
 			super.keyPressed(e);

@@ -33,17 +33,12 @@ import de.uib.utilities.logging.logging;
 
 public class PanelProductDependencies extends JPanel implements DependenciesModel.DependenciesModelListener {
 
-	private ConfigedMain mainController;
+	private transient ConfigedMain mainController;
 
 	// The label shown on top of the dependencies-panel
 	private JLabel depotLabel;
-
-	private JLabel labelInfoProductDependenciesTable;
-	private JLabel labelInfoProductDependenciesTree;
-
 	private DependenciesTreePanel dependenciesTreePanel;
 
-	private JScrollPane dependenciesPanel;
 	protected JTable dependenciesTable;
 
 	private DependenciesModel dependenciesModel;
@@ -57,20 +52,20 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 
 	public void initComponents() {
 
-		labelInfoProductDependenciesTable = new JLabel(
+		JLabel labelInfoProductDependenciesTable = new JLabel(
 				configed.getResourceValue("PanelProductDependencies.labelInfoProductDependenciesTable"));
-		labelInfoProductDependenciesTree = new JLabel(
+		JLabel labelInfoProductDependenciesTree = new JLabel(
 				configed.getResourceValue("PanelProductDependencies.labelInfoProductDependenciesTree"));
-		dependenciesPanel = new javax.swing.JScrollPane();
+		JScrollPane dependenciesPanel = new JScrollPane();
 		dependenciesTable = new JTable();
 
 		dependenciesTreePanel = new DependenciesTreePanel();
 
-		dependenciesTable.setBackground(Globals.backLightBlue);
+		dependenciesTable.setBackground(Globals.BACKGROUND_COLOR_7);
 		dependenciesPanel.setViewportView(dependenciesTable);
-		dependenciesPanel.getViewport().setBackground(Globals.backLightBlue);
+		dependenciesPanel.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 
-		GroupLayout layout = new javax.swing.GroupLayout(this);
+		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)

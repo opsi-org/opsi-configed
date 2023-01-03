@@ -25,25 +25,20 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.IOException;
-import java.io.Reader;
 
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Document;
 import javax.swing.text.Highlighter;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.LayeredHighlighter;
 import javax.swing.text.Position;
 import javax.swing.text.View;
-import javax.swing.text.html.HTMLEditorKit;
-import javax.swing.text.html.parser.ParserDelegator;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 public class FEditPane extends FEdit implements DocumentListener, MouseListener, MouseMotionListener {
@@ -53,10 +48,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	private javax.swing.JScrollPane scrollpane;
 	private javax.swing.JTextPane textpane;
 
-	private DefaultStyledDocument doc;
-	// private javax.swing.text.html.HTMLDocument doc;
-	// protected Html2Text html2text = new Html2Text();
-
 	protected LinkSearcher searcher;
 	protected Highlighter highlighter;
 	protected de.uib.utilities.script.CmdLauncher cmdLauncher;
@@ -64,14 +55,10 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	protected String[] linesplits;
 
 	private boolean singleLine;
-	private final boolean standalone = true;
-	private boolean editingStarted = false;
 	static int count = 0;
 
-	// static final Pattern linkpattern = Pattern.compile(".*.*");
-
 	public FEditPane(String initialText, String hint) {
-		super(initialText, hint);;
+		super(initialText, hint);
 		logging.info(this, " FEdit constructed for >>" + initialText + "<< title " + hint);
 
 		initFEditText();
@@ -90,21 +77,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		editingArea.add(scrollpane, BorderLayout.CENTER);
 
-		// editingArea.setLayout(new FlowLayout());
-		// editingArea.add(scrollpane);
-
-		/*
-		 * editingLayout.setHorizontalGroup(
-		 * editingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-		 * .addComponent( scrollpane, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-		 * );
-		 * editingLayout.setVerticalGroup(
-		 * editingLayout.createSequentialGroup()
-		 * .addComponent( scrollpane, 0, GroupLayout.PREFERRED_SIZE,Short.MAX_VALUE)
-		 * );
-		 */
-
-		// textpane.setContentType( "text/html" );
 		textpane.setContentType("text/plain");
 
 		textpane.setEditable(true);
@@ -113,38 +85,33 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		textpane.addMouseListener(this);
 		textpane.addMouseMotionListener(this);
 
-		// textpane.getDocument().addDocumentListener(this);
 		// we only register changes after loading the initial document
 
 		searcher = new LinkSearcher(textpane);
-		searcher.setCaseSensitivity(true);// false);
+		searcher.setCaseSensitivity(true);
 		highlighter = new UnderlineHighlighter(null);
 		textpane.setHighlighter(highlighter);
 		setDataChanged(false);
 
 		cmdLauncher = new de.uib.utilities.script.CmdLauncher();
-		if (de.uib.utilities.Globals.isWindows())
+		if (Globals.isWindows())
 			cmdLauncher.setPrefix(WINDOWS_LINK_INTERPRETER);
 		else
 			cmdLauncher.setPrefix(LINUX_LINK_INTERPRETER);
 
 		// HyperlinkListener hyperlinkListener = new
-		// ActivatedHyperlinkListener(textpane);
-		// textpane.addHyperlinkListener(hyperlinkListener);
+
 	}
 
 	protected void setSingleLine(boolean b) {
 		singleLine = b;
-		// textpane.setLineWrap(!singleLine);
-		// textpane.setWrapStyleWord(!singleLine);
+
 	}
 
 	@Override
 	public void setStartText(String s) {
 		logging.debug(this, " FEeditPane setStartText: " + s);
 		super.setStartText(s);
-
-		// logging.info(this, " setStartText after super class call "+s);
 
 		textpane.setText(s);
 
@@ -158,13 +125,11 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	}
 
 	private void searchAndHighlight() {
-		// textpane.requestFocus();
-		// searcher.comp.setCaretPosition(0);
+
 		searcher.searchLinks();
 	}
 
 	public boolean isLink(String s0) {
-		// logging.info(this, "isLink " + s0);
 
 		if (s0 == null)
 			return false;
@@ -184,15 +149,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 		return true;
 
-		/*
-		 * if ( linkpattern.matcher( s0 ).matches( ) )
-		 * {
-		 * logging.info(this, "link found in " + s0);
-		 * return true;
-		 * }
-		 * 
-		 * return false;
-		 */
 	}
 
 	private int startOfMarkedString(String s)
@@ -219,12 +175,11 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		boolean found = false;
 		int i = 0;
 		int startIndex = 0;
-		int endIndex = startIndex;
 		String line = null;
 		String result = null;
 		while (!found && i < linesplits.length) {
 			line = linesplits[i];
-			endIndex = startIndex + line.length();
+			int endIndex = startIndex + line.length();
 			if (startIndex <= charpos && charpos <= endIndex && startOfMarkedString(line) >= 0) {
 				found = true;
 				result = line;
@@ -237,34 +192,14 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	@Override
 	public String getText() {
-		// textpane.setText(textpane.getText().replaceAll("\t",""));
-		// if (singleLine) textpane.setText(textpane.getText().replaceAll("\n",""));
+
 		initialText = textpane.getText(); // set new initial text for use in processWindowEvent
 		return initialText;
-	}
-
-	/*
-	 * public void select(int selectionStart, int selectionEnd)
-	 * {
-	 * textpane.select(selectionStart, selectionEnd);
-	 * }
-	 */
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		super.keyReleased(e);
-		// markLinks();
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		super.keyTyped(e);
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getSource() == textpane) {
-			// logging.debug(this, " key event on textpane " + e);
 
 			if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
 					&& e.getKeyCode() == KeyEvent.VK_TAB)
@@ -278,95 +213,42 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	}
 
 	// DocumentListener interface
+	@Override
 	public void changedUpdate(DocumentEvent e) {
-		/*
-		 * try{
-		 * logging.info(this, "changedUpdate " + e.getDocument().getText(0,
-		 * e.getDocument().getLength()));
-		 * } catch( BadLocationException ex) {}
-		 */
 
 		setDataChanged(true);
 
 	}
 
+	@Override
 	public void insertUpdate(DocumentEvent e) {
-		/*
-		 * try{
-		 * logging.info(this, "insertUpdate " + e.getDocument().getText(0,
-		 * e.getDocument().getLength()));
-		 * } catch( BadLocationException ex) {}
-		 */
 
 		setDataChanged(true);
 	}
 
+	@Override
 	public void removeUpdate(DocumentEvent e) {
-		/*
-		 * try{
-		 * logging.info(this, "removeUpdate, current text >>" +
-		 * e.getDocument().getText(0, e.getDocument().getLength()) + "<<");
-		 * } catch( BadLocationException ex) {}
-		 */
 
 		setDataChanged(true);
 	}
 
 	@Override
 	public void setDataChanged(boolean b) {
-		String currentText = null;
-		try {
-			currentText = textpane.getDocument().getText(0, textpane.getDocument().getLength());
-			// logging.info(this, "editingStarted " + editingStarted + " current text " +
-			// currentText);
-		} catch (Exception ex) {
-			logging.info(this, " setDataChanged " + b + " " + ex);
-		}
-
-		// logging.info(this, "FEditPane setDataChanged " + b);
-
-		// logging.debug(this, "initialText " + initialText);
-		// logging.debug(this, "currentText " + currentText );
 
 		super.setDataChanged(b);
 		searchAndHighlight();
 
 	}
 
-	private String getLineForPos(int charpos) {
-		String result = "";
-		String[] linesplits = textpane.getText().split("\n");
-
-		// logging.info(this, "linesplits " + java.util.Arrays.toString( linesplits ));
-
-		int pos = 0;
-		int i = 0;
-		boolean hit = false;
-		while (!hit && i < linesplits.length) {
-			result = linesplits[i];
-			// logging.info(this, "line " + i + " starting with charpos " + pos + " is " +
-			// result);
-			pos = pos + result.length();
-			if (pos >= charpos)
-				hit = true;
-			i++;
-		}
-		// logging.info(this, "line for charpos " + charpos + " is " + result);
-		return result;
-	}
-
 	// MouseListener
+	@Override
 	public void mouseClicked(MouseEvent e) {
-		// logging.info(this, "caret " + textpane.getCaretPosition());
-		// logging.info(this, " line clicked " + getLineForPos(
-		// textpane.getCaretPosition() ) );//+ "\n" + e);
-		// if (e.getClickCount() > 1) searchAndHighlight();
 
 		if (e.getClickCount() > 1) {
 			Point p = e.getPoint();
-			// logging.info(this, "mouse " + p + " " + textpane.viewToModel( p ) );
-			String line = getMarkedLine(textpane.viewToModel(p));
-			// logging.info(this, " got line " + line );
+
+			String line = getMarkedLine(textpane.viewToModel2D(p));
+
 			if (line != null) {
 				logging.info(this, " got link " + line);
 				cmdLauncher.launch("\"" + line + "\"");
@@ -375,78 +257,35 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) {
-		editingStarted = true;
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e) {
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
 
 	// MouseMotionListener
+	@Override
 	public void mouseDragged(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseMoved(MouseEvent e) {
 		Point p = e.getPoint();
-		// logging.info(this, "mouse " + p + " " + textpane.viewToModel( p ) );
-		// logging.info(this, "got line " + getMarkedLine (textpane.viewToModel( p )) );
 
-		if (getMarkedLine(textpane.viewToModel(p)) != null)
+		if (getMarkedLine(textpane.viewToModel2D(p)) != null)
 			textpane.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		else
 			textpane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-	}
-
-	protected static class Html2Text extends HTMLEditorKit.ParserCallback {
-		StringBuffer s;
-
-		public Html2Text() {
-		}
-
-		public void parse(Reader in) throws IOException {
-			s = new StringBuffer();
-			ParserDelegator delegator = new ParserDelegator();
-			// the third parameter is TRUE to ignore charset directive
-			delegator.parse(in, this, Boolean.TRUE);
-		}
-
-		public void handleText(char[] text, int pos) {
-			s.append(text);
-		}
-
-		public String getText() {
-			return s.toString();
-		}
-	}
-
-	public static void main(String[] args) {
-		logging.debug(" invoking " + FEditPane.class);
-		final Html2Text html2t = new Html2Text();
-
-		SwingUtilities.invokeLater(() -> {
-			logging.setSuppressConsole(false);
-			FEditPane f = new FEditPane("abc", "");
-			f.init(new Dimension(300, 200));
-			f.setVisible(true);
-
-			StringBuffer buf = new StringBuffer();
-			for (int i = 0; i < args.length; i++) {
-				buf.append(args[i]);
-				buf.append("\n");
-			}
-
-			f.setStartText(buf.toString());
-
-			count++;
-			// logging.debug( "having " + count + " " + f.getText( ) );
-		});
-
 	}
 
 	// A simple class that searches for a word in
@@ -459,7 +298,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 		public LinkSearcher(JTextComponent comp) {
 			this.comp = comp;
-			this.painter = new UnderlineHighlightPainter(Color.BLUE);
+			this.painter = new UnderlineHighlightPainter(Globals.F_EDIT_PANE_UNDERLINE_HIGHLIGHTER_PAINTER);
 			this.lastReturnedOffset = -1;
 		}
 
@@ -472,9 +311,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		// next occurrence. Highlights are added for all
 		// occurrences found.
 		public int searchLinks() {
-			// logging.info(this, "searchLinks");
-			int firstOffset = -1;
-			int returnOffset = 0;
 			Highlighter highlighter = comp.getHighlighter();
 
 			// Remove any existing highlights for last word
@@ -485,13 +321,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 					highlighter.removeHighlight(h);
 				}
 			}
-
-			/*
-			 * if (word == null || word.equals("")) {
-			 * return -1;
-			 * }
-			 * 
-			 */
 
 			String content = null;
 			try {
@@ -508,14 +337,12 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			linesplits = content.split("\n");
 
 			int startIndex = 0;
-			int endIndex = startIndex;
 			int lastFoundIndex = 0;
 
 			for (int i = 0; i < linesplits.length; i++) {
 				String line = linesplits[i];
-				// logging.info(this, "line " + line);
-				endIndex = startIndex + line.length();
-				// logging.info(this, "line " + startIndex + " - " + endIndex);
+
+				int endIndex = startIndex + line.length();
 
 				int posInLine = startOfMarkedString(line);
 				int len = line.trim().length();
@@ -530,8 +357,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 				startIndex = endIndex + 1;
 			}
 
-			// logging.info(this, "content length " + content.length() + " last index " +
-			// startIndex);
 			return lastFoundIndex;
 		}
 	}
@@ -544,10 +369,12 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			color = c;
 		}
 
+		@Override
 		public void paint(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c) {
 			// Do nothing: this method will never be called
 		}
 
+		@Override
 		public Shape paintLayer(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c, View view) {
 			g.setColor(color == null ? c.getSelectionColor() : color);
 
@@ -594,9 +421,10 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			return addHighlight(p0, p1, painter);
 		}
 
+		@Override
 		public void setDrawsLayeredHighlights(boolean newValue) {
 			// Illegal if false - we only support layered highlights
-			if (newValue == false) {
+			if (!newValue) {
 				throw new IllegalArgumentException("UnderlineHighlighter only draws layered highlights");
 			}
 			super.setDrawsLayeredHighlights(true);

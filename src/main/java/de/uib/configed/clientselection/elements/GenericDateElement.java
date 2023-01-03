@@ -16,8 +16,9 @@ public class GenericDateElement extends SelectElement {
 		super(name, localizedName);
 	}
 
+	@Override
 	public List<SelectOperation> supportedOperations() {
-		List<SelectOperation> result = new LinkedList<SelectOperation>();
+		List<SelectOperation> result = new LinkedList<>();
 
 		result.add(new DateGreaterThanOperation(this));
 		result.add(new DateGreaterOrEqualOperation(this));
@@ -28,8 +29,4 @@ public class GenericDateElement extends SelectElement {
 		return result;
 	}
 
-	// public SelectOperation createOperation( String operation, SelectData data )
-	// {
-	// return Backend.getBackend().createOperation( operation, data, this );
-	// }
 }

@@ -13,9 +13,8 @@ import java.awt.event.ComponentEvent;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.plaf.synth.Region;
 import javax.swing.plaf.synth.SynthConstants;
 import javax.swing.plaf.synth.SynthContext;
@@ -42,12 +41,7 @@ public class ClippedTitleTabbedPane extends JTabbedPane {
 				initTabWidth();
 			}
 		});
-		addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				initTabWidth();
-			}
-		});
+		addChangeListener(changeEvent -> initTabWidth());
 	}
 
 	private Insets getTabInsets() {
@@ -75,7 +69,7 @@ public class ClippedTitleTabbedPane extends JTabbedPane {
 	@Override
 	public void insertTab(String title, Icon icon, Component component, String tip, int index) {
 		super.insertTab(title, icon, component, tip == null ? title : tip, index);
-		JLabel label = new JLabel(title, JLabel.CENTER);
+		JLabel label = new JLabel(title, SwingConstants.CENTER);
 		Dimension dim = label.getPreferredSize();
 		Insets tabInsets = getTabInsets();
 		label.setPreferredSize(new Dimension(0, dim.height + tabInsets.top + tabInsets.bottom));
@@ -89,21 +83,21 @@ public class ClippedTitleTabbedPane extends JTabbedPane {
 		Insets insets = getInsets();
 		int areaWidth = calcWidth() - tabAreaInsets.left - tabAreaInsets.right - insets.left - insets.right;
 		int tabCount = getTabCount();
-		int tabWidth = 0; // = tabInsets.left + tabInsets.right + 3;
+		int tabWidth = 0;
 		int gap = 0;
 		switch (getTabPlacement()) {
-			case LEFT:
-			case RIGHT:
-				tabWidth = areaWidth / 4;
-				gap = 0;
-				break;
-			case BOTTOM:
-			case TOP:
-			default:
-				tabWidth = areaWidth / tabCount;
-				gap = areaWidth - (tabWidth * tabCount);
+		case LEFT:
+		case RIGHT:
+			tabWidth = areaWidth / 4;
+			gap = 0;
+			break;
+		case BOTTOM:
+		case TOP:
+		default:
+			tabWidth = areaWidth / tabCount;
+			gap = areaWidth - (tabWidth * tabCount);
 		}
-		// "3" is magic number @see BasicTabbedPaneUI#calculateTabWidth
+
 		tabWidth = tabWidth - tabInsets.left - tabInsets.right - 3;
 		for (int i = 0; i < tabCount; i++) {
 			JLabel l = (JLabel) getTabComponentAt(i);

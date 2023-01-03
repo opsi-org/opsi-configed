@@ -1,13 +1,12 @@
 package de.uib.opsicommand.sshcommand;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 
-public class CommandSFTPUpload
-		implements SSHCommandNeedParameter, SSHSFTPCommand, SSHCommand {
+public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPCommand, SSHCommand {
 	protected FGeneralDialog dialog;
 	private boolean needParameter = true;
 	private boolean isMultiCommand = false;
@@ -36,78 +35,95 @@ public class CommandSFTPUpload
 	public CommandSFTPUpload() {
 	}
 
+	@Override
 	public boolean getShowOutputDialog() {
 		return showOutputDialog;
 	}
 
+	@Override
 	public String getTitle() {
 		return title;
 	}
 
+	@Override
 	public String getDescription() {
 		if (description.equals(""))
-			description = "copy " + sourcePath + sourceFilename
-					+ " to " + targetPath + targetFilename
+			description = "copy " + sourcePath + sourceFilename + " to " + targetPath + targetFilename
 					+ " on connected server";
 		return description;
 	}
 
+	@Override
 	public String getFullTargetPath() {
 		return getTargetPath() + getTargetFilename();
 	}
 
+	@Override
 	public String getTargetPath() {
 		return targetPath;
 	}
 
+	@Override
 	public String getTargetFilename() {
 		return targetFilename;
 	}
 
+	@Override
 	public String getFullSourcePath() {
 		return fullSourcePath;
 	}
 
+	@Override
 	public String getSourcePath() {
 		return sourcePath;
 	}
 
+	@Override
 	public String getSourceFilename() {
 		return sourceFilename;
 	}
 
+	@Override
 	public boolean getOverwriteMode() {
 		return overwriteMode;
 	}
 
+	@Override
 	public void setTitle(String t) {
 		title = t;
 	}
 
+	@Override
 	public void setDescription(String d) {
 		description = d;
 	}
 
+	@Override
 	public void setTargetPath(String p) {
 		targetPath = p;
 	}
 
+	@Override
 	public void setTargetFilename(String f) {
 		targetFilename = f;
 	}
 
+	@Override
 	public void setSourcePath(String p) {
 		sourcePath = p;
 	}
 
+	@Override
 	public void setSourceFilename(String f) {
 		sourceFilename = f;
 	}
 
+	@Override
 	public void setFullSourcePath(String f) {
 		fullSourcePath = f;
 	}
 
+	@Override
 	public void setOverwriteMode(boolean o) {
 		overwriteMode = o;
 	}
@@ -137,7 +153,7 @@ public class CommandSFTPUpload
 
 	@Override
 	public String getMenuText() {
-		// return configed.getResourceValue("SSHConnection.command.modulesupload");
+
 		return "File Upload";
 	}
 
@@ -163,7 +179,7 @@ public class CommandSFTPUpload
 	@Override
 	public String getToolTipText() {
 		// return
-		// configed.getResourceValue("SSHConnection.command.modulesupload.tooltip");
+
 		return "";
 	}
 
@@ -199,13 +215,12 @@ public class CommandSFTPUpload
 
 	@Override
 	public void startParameterGui() {
-		// dialog = new SSHModulesUploadDialog();
+
 	}
 
 	@Override
 	public void startParameterGui(ConfigedMain main) {
-		// dialog = new SSHModulesUploadDialog(main);
-		// dialog = new SSHModulesUploadDialog();
+
 	}
 
 	@Override
@@ -219,10 +234,11 @@ public class CommandSFTPUpload
 	}
 
 	@Override
-	public ArrayList<String> getParameterList() {
+	public List<String> getParameterList() {
 		return null;
 	}
 
+	@Override
 	public String toString() {
 		return "cp " + getSourcePath() + getSourceFilename() + " " + getTargetPath() + getTargetFilename();
 	}

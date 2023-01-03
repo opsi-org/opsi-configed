@@ -10,11 +10,10 @@ package de.uib.utilities.datapanel;
 import java.awt.BorderLayout;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
@@ -29,7 +28,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 	JComboBox editorfield;
 	TableCellEditor defaultCellEditor;
 
-	Vector<String> names;
+	List<String> names;
 	Map<String, ListCellOptions> optionsMap;
 	Map<String, String> descriptionsMap;
 	Map<String, Object> defaultsMap;
@@ -72,9 +71,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 		this(tableCellRenderer, keylistExtendible, keylistEditable, false);
 	}
 
-	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer,
-			boolean keylistExtendible,
-			boolean keylistEditable,
+	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
 			boolean reloadable) {
 		super(keylistExtendible, keylistEditable, reloadable);
 		this.tableCellRenderer = tableCellRenderer;
@@ -97,8 +94,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 	}
 
 	/**
-	 * setting all data for displaying and editing
-	 * <br />
+	 * setting all data for displaying and editing <br />
 	 * 
 	 * @param Map visualdata - the source for the table model
 	 * @param Map optionsMap - the description for producing cell editors
@@ -109,20 +105,11 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 		mapTableModel.setMap(visualdata);
 		mapTableModel.fireTableDataChanged();
 
-		// logging.info(this, " setEditableMap: visualdata " + visualdata);
-		// logging.info(this, " setEditableMap: optionsMap " + optionsMap);
-
-		// from mapTableModel, we get back the sorted vector of property names:
+		// from mapTableModel, we get back the sorted List of property names:
 		names = mapTableModel.getKeys();
 
-		// logging.debug(this, " +++++++ visualdata " + visualdata);
-		// logging.debugMap(this, visualdata);
-		// logging.debug(this, " +++++++ optionsMap " + optionsMap);
-		// logging.debugMap(this, optionsMap);
-		// logging.debug(this, " +++++++ descriptionsMap started " + descriptionsMap);
-
 		if (optionsMap == null) {
-			this.optionsMap = new HashMap<String, ListCellOptions>();
+			this.optionsMap = new HashMap<>();
 			// we introduce an empty Map since otherwise we use two cell editors, and they
 			// dont come always when they should
 		} else {
@@ -131,30 +118,17 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 
 		// derive from optionsMap, opsi 4.0
 		{
-			descriptionsMap = new HashMap<String, String>();
-			defaultsMap = new HashMap<String, Object>();
+			descriptionsMap = new HashMap<>();
+			defaultsMap = new HashMap<>();
 
 			if (optionsMap != null) {
 				for (String key : optionsMap.keySet()) {
-					// logging.debug(this, "optionsMap.get(key) is " + optionsMap.get(key));
+
 					String description = optionsMap.get(key).getDescription();
 					Object defaultvalue = optionsMap.get(key).getDefaultValues();
 
 					descriptionsMap.put(key, description);
 					defaultsMap.put(key, defaultvalue);
-
-					/*
-					 * logging.info(this, "key  " + key + " optionsMap.get(key)  "
-					 * + " class " + optionsMap.get(key).getClass()
-					 * + " optionsMap.get(key) instanceof Map " + ((optionsMap.get(key)) instanceof
-					 * Map)
-					 * + " optionsMap.get(key) instanceof ListCellOptions " + ((optionsMap.get(key))
-					 * instanceof ListCellOptions)
-					 * + " optionsMap.get(key) instanceof DefaultListCellOptions " +
-					 * ((optionsMap.get(key)) instanceof DefaultListCellOptions)
-					 * + " value " + optionsMap.get(key));
-					 * System.exit(0);
-					 */
 
 				}
 			}
@@ -166,47 +140,23 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 
 		cancelOldCellEditing();
 
-		// setNew();
-		// mapTableModel.fireTableDataChanged();
 	}
 
+	@Override
 	public void setLabel(String s) {
 	}
 
 	public void cancelOldCellEditing() {
 
-		if (theCellEditor != null) // && data != null)
-		{
+		if (theCellEditor != null) {
 			theCellEditor.cancelCellEditing(); // don't shift the old editing state to a new product
-			// theCellEditor.stopCellEditing(); //here we get null value errors since the
-			// state "hangs"
-		}
-
-	}
-
-	private boolean checkKey(String s) {
-		boolean ok = false;
-
-		if (s != null && !s.equals("")) {
-			ok = true;
-
-			if (names.indexOf(s) > -1) {
-				ok =
-
-						(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(
-								de.uib.configed.Globals.mainContainer,
-								"Ein Eintrag mit diesem Namen existiert bereits. Überschreiben des bisherigen Eintrags?",
-								de.uib.utilities.Globals.APPNAME,
-								JOptionPane.OK_CANCEL_OPTION));
-			}
 
 		}
 
-		return ok;
 	}
 
 	public void setValues(Map data) {
-		// logging.debug(this, "setData: " + data);
+
 		if (data == null)
 			return;
 
@@ -224,9 +174,9 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 
 	@Override
 	public void setVoid() {
-		for (Object key : names) {
-			mapTableModel.removeEntryFromStoredMaps((String) key);
-			// mapTableModel.removeEntry((String) key);
+		for (String key : names) {
+			mapTableModel.removeEntryFromStoredMaps(key);
+
 		}
 
 		mapTableModel.unsetWrite();

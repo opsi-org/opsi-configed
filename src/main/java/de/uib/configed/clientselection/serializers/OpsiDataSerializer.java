@@ -21,23 +21,25 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 	private JsonParser parser;
 	private SelectData.DataType lastDataType;
 	private Map<String, String> searches;
-	public static final int dataVersion = 2;
+	public static final int DATA_VERSION = 2;
 	private int searchDataVersion;
 
 	public OpsiDataSerializer(SelectionManager manager) {
 		super(manager);
 		controller = PersistenceControllerFactory.getPersistenceController();
-		searches = new HashMap<String, String>();
-		searchDataVersion = dataVersion;
+		searches = new HashMap<>();
+		searchDataVersion = DATA_VERSION;
 	}
 
+	@Override
 	public List<String> getSaved() {
-		HashSet<String> set = new HashSet<String>();
+		HashSet<String> set = new HashSet<>();
 		set.addAll(searches.keySet());
 		set.addAll(controller.getSavedSearches().keySet());
-		return new LinkedList<String>(set);
+		return new LinkedList<>(set);
 	}
 
+	@Override
 	public SavedSearches getSavedSearches() {
 		return controller.getSavedSearches();
 	}
@@ -51,10 +53,10 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 
 	@Override
 	protected Map<String, Object> decipher(String serialization) throws WrongVersionException {
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		parser = new JsonParser(serialization);
 		try {
-			if (!parser.next() || parser.getPositionType() != JsonParser.PositionType.ObjectBegin)
+			if (!parser.next() || parser.getPositionType() != JsonParser.PositionType.OBJECT_BEGIN)
 				return map;
 		} catch (IOException e) {
 			logging.error(this, e.getMessage(), e);
@@ -72,17 +74,11 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 
 	@Override
 	protected Map<String, Object> getData(String name) throws WrongVersionException {
-		// logging.info(this, "getData , we have savedSearches " +
-		// controller.getSavedSearches());
 
-		// if( !searches.containsKey(name) )
 		// we take version from server and not the (possibly edited own version! )
 		searches.put(name, controller.getSavedSearches().get(name).getSerialization());
 
-		// logging.info(this, "getData for name " + name + " " +
 		// controller.getSavedSearches().get(name)
-		// + " this gives the value for serialization " +
-		// controller.getSavedSearches().get(name).getSerialization() );
 
 		String serialization = searches.get(name);
 		return decipher(serialization);
@@ -92,7 +88,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 	protected void saveData(String name, String description, Map<String, Object> data) {
 		String jsonString;
 		try {
-			jsonString = "{ \"version\" : \"" + dataVersion + "\", \"data\" : ";
+			jsonString = "{ \"version\" : \"" + DATA_VERSION + "\", \"data\" : ";
 			jsonString += createJsonRecursive(data);
 			jsonString += " }";
 		} catch (IllegalArgumentException e) {
@@ -115,11 +111,11 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		if (object == null)
 			return "null";
 		if (object instanceof String)
-			return "\"" + (String) object + "\"";
+			return "\"" + object + "\"";
 		if (object instanceof Integer)
-			return "\"" + String.valueOf((Integer) object) + "\"";
+			return "\"" + object + "\"";
 		if (object instanceof Long)
-			return "\"" + String.valueOf((Long) object) + "\"";
+			return "\"" + object + "\"";
 		if (object instanceof SelectData.DataType)
 			return object.toString();
 		if (object instanceof String[]) {
@@ -142,12 +138,12 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		builder.append(objectToString(objects.get("element")));
 		builder.append(", ");
 
-		if (objects.containsKey(keySubelementName)) // compatibility with refinements
+		if (objects.containsKey(KEY_SUBELEMENT_NAME)) // compatibility with refinements
 		{
 			builder.append("\"");
-			builder.append(keySubelementName);
+			builder.append(KEY_SUBELEMENT_NAME);
 			builder.append("\" : ");
-			builder.append(objectToString(objects.get(keySubelementName)));
+			builder.append(objectToString(objects.get(KEY_SUBELEMENT_NAME)));
 			builder.append(", ");
 		}
 
@@ -179,29 +175,29 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 	}
 
 	private Map<String, Object> parseObject() {
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 		String name = null;
 		try {
 			while (parser.next()) {
 				switch (parser.getPositionType()) {
-					case ObjectBegin:
-						result.put(name, parseObject());
-						break;
-					case ObjectEnd:
-						return result;
-					case ListBegin:
-						result.put(name, parseList(name));
-						break;
-					case JsonName:
-						name = parser.getValue();
-						name = name.substring(1, name.length() - 1);
-						logging.debug(this, name);
-						break;
-					case JsonValue:
-						result.put(name, stringToObject(parser.getValue(), name));
-						break;
-					default:
-						throw new IllegalArgumentException("Type " + parser.getPositionType() + " not expected here");
+				case OBJECT_BEGIN:
+					result.put(name, parseObject());
+					break;
+				case OBJECT_END:
+					return result;
+				case LIST_BEGIN:
+					result.put(name, parseList(name));
+					break;
+				case JSON_NAME:
+					name = parser.getValue();
+					name = name.substring(1, name.length() - 1);
+					logging.debug(this, name);
+					break;
+				case JSON_VALUE:
+					result.put(name, stringToObject(parser.getValue(), name));
+					break;
+				default:
+					throw new IllegalArgumentException("Type " + parser.getPositionType() + " not expected here");
 				}
 			}
 		} catch (IOException e) {
@@ -211,22 +207,22 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 	}
 
 	private Object parseList(String name) {
-		List<Object> list = new LinkedList<Object>();
+		List<Object> list = new LinkedList<>();
 		boolean done = false;
 		try {
 			while (!done && parser.next()) {
 				switch (parser.getPositionType()) {
-					case ListEnd:
-						done = true;
-						break;
-					case ObjectBegin:
-						list.add(parseObject());
-						break;
-					case JsonValue:
-						list.add(stringToObject(parser.getValue(), ""));
-						break;
-					default:
-						throw new IllegalArgumentException("Type " + parser.getPositionType() + " not expected here");
+				case LIST_END:
+					done = true;
+					break;
+				case OBJECT_BEGIN:
+					list.add(parseObject());
+					break;
+				case JSON_VALUE:
+					list.add(stringToObject(parser.getValue(), ""));
+					break;
+				default:
+					throw new IllegalArgumentException("Type " + parser.getPositionType() + " not expected here");
 				}
 			}
 		} catch (IOException e) {
@@ -247,21 +243,21 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		if (name.equals("data")) {
 			value = value.substring(1, value.length() - 1);
 			switch (lastDataType) {
-				case NoneType:
-					return null;
-				case TextType:
-				case EnumType:
-					return value;
-				case DoubleType:
-					return Double.valueOf(value);
-				case IntegerType:
-					return Integer.valueOf(value);
-				case BigIntegerType:
-					return Long.valueOf(value);
-				case DateType:
-					return value;
-				default:
-					throw new IllegalArgumentException("Type " + lastDataType + " not expected here");
+			case NONE_TYPE:
+				return null;
+			case TEXT_TYPE:
+			case ENUM_TYPE:
+				return value;
+			case DOUBLE_TYPE:
+				return Double.valueOf(value);
+			case INTEGER_TYPE:
+				return Integer.valueOf(value);
+			case BIT_INTEGER_TYPE:
+				return Long.valueOf(value);
+			case DATE_TYPE:
+				return value;
+			default:
+				throw new IllegalArgumentException("Type " + lastDataType + " not expected here");
 			}
 		}
 		if (value.startsWith("\""))

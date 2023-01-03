@@ -14,13 +14,11 @@ package de.uib.configed.gui;
  */
 
 import java.awt.BorderLayout;
-//import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
-//import java.io.BufferedInputStream;
-//import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -51,7 +49,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 	protected boolean enabled;
 	protected boolean getAttention;
 	protected boolean mouseOver;
-	protected ArrayList<ActionListener> actionListeners;
+	protected List<ActionListener> actionListeners;
 	public String description;
 
 	/**
@@ -83,7 +81,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 		setLayout(new BorderLayout());
 		label.addMouseListener((MouseListener) this);
 		add(label);
-		// logging.debug(this, "IconAsButton " + description + " created: " + this);
+
 	}
 
 	public IconAsButton(String desc, String imageRelPath) {
@@ -128,24 +126,6 @@ public class IconAsButton extends JPanel implements MouseListener {
 			label.setToolTipText(desc);
 
 	}
-
-	/*
-	 * public IconAsButton(String desc, String inactive, String active) {
-	 * this(desc, inactive, active, null, null);
-	 * }
-	 * 
-	 * public IconAsButton(String desc, String inactive, String active, Color bg) {
-	 * this(desc, inactive, active, null, bg);
-	 * }
-	 * 
-	 * public IconAsButton(String desc, String inactive, Color bg) {
-	 * this(desc, inactive, null, null, bg);
-	 * }
-	 * 
-	 * public IconAsButton(String desc, String inactive) {
-	 * this(desc, inactive, null, null, null);
-	 * }
-	 */
 
 	@Override
 	public void setToolTipText(String s) {
@@ -197,12 +177,12 @@ public class IconAsButton extends JPanel implements MouseListener {
 					label.setIcon(iconInactive);
 				}
 			} else {
-				// logging.debug(this, "iconActive == null " + (iconActive == null));
+
 				if (activated && iconActive != null) {
-					// logging.debug(this, "setIcon iconActive");
+
 					label.setIcon(iconActive);
 				} else {
-					// logging.debug(this, "setIcon iconInactive");
+
 					label.setIcon(iconInactive);
 				}
 			}
@@ -226,14 +206,14 @@ public class IconAsButton extends JPanel implements MouseListener {
 		return activated;
 	}
 
-	public ArrayList<ActionListener> getActionListeners() {
+	public List<ActionListener> getActionListeners() {
 		return actionListeners;
 	}
 
 	public void addActionListener(ActionListener l) {
 		boolean newListener = true;
 		for (int i = 0; i < actionListeners.size(); i++) {
-			if ((ActionListener) actionListeners.get(i) == l) {
+			if (actionListeners.get(i) == l) {
 				newListener = false;
 				break;
 			}
@@ -245,7 +225,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 
 	public void fireActionPerformed(ActionEvent e) {
 		for (int i = 0; i < actionListeners.size(); i++) {
-			((ActionListener) actionListeners.get(i)).actionPerformed(e);
+			(actionListeners.get(i)).actionPerformed(e);
 		}
 	}
 
@@ -253,6 +233,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 	 * implementing MouseListener *
 	 *****************************/
 
+	@Override
 	public void mouseClicked(java.awt.event.MouseEvent e) {
 
 		if (isEnabled()) {
@@ -261,14 +242,17 @@ public class IconAsButton extends JPanel implements MouseListener {
 		}
 	}
 
+	@Override
 	public void mousePressed(java.awt.event.MouseEvent e) {
 
 	}
 
+	@Override
 	public void mouseReleased(java.awt.event.MouseEvent e) {
 
 	}
 
+	@Override
 	public void mouseEntered(java.awt.event.MouseEvent e) {
 		if (enabled && !mouseOver) {
 			mouseOver = true;
@@ -276,6 +260,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 		}
 	}
 
+	@Override
 	public void mouseExited(java.awt.event.MouseEvent e) {
 		if (enabled && mouseOver) {
 			mouseOver = false;

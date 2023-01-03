@@ -171,8 +171,7 @@ public class ProductView implements View {
 
 		view.setItems(filteredData);
 
-		filteredData.predicateProperty()
-				.bind(Bindings.createObjectBinding(() -> productDataFilter.get(), productDataFilter));
+		filteredData.predicateProperty().bind(Bindings.createObjectBinding(productDataFilter::get, productDataFilter));
 	}
 
 	@Override

@@ -18,8 +18,9 @@ public class NameElement extends SelectElement {
 		super(new String[] { "Name" }, configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
 	}
 
+	@Override
 	public List<SelectOperation> supportedOperations() {
-		List<SelectOperation> result = new LinkedList<SelectOperation>();
+		List<SelectOperation> result = new LinkedList<>();
 		result.add(new StringEqualsOperation(this));
 		return result;
 	}

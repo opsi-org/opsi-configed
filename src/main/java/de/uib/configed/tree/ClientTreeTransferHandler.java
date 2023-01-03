@@ -14,6 +14,7 @@ import javax.swing.TransferHandler;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 public class ClientTreeTransferHandler extends TransferHandler {
@@ -22,7 +23,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	public ClientTreeTransferHandler(ClientTree tree) {
 		super();
 		this.tree = tree;
-		// logging.debug(this, "transfer handler constructed");
 
 	}
 
@@ -33,8 +33,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			return null;
 
 		String[] parts = treeRepresentation.split(",");
-
-		// logging.debug(this, "transferRepresentsGroup : " + Arrays.toString(parts));
 
 		if (parts.length == 1)
 			return null;
@@ -52,17 +50,17 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		boolean result = true;
 		logging.debug(this, "----------- can import ??");
 
-		if (de.uib.configed.Globals.isGlobalReadOnly())
+		if (Globals.isGlobalReadOnly())
 			return false;
 
 		if (!support.isDataFlavorSupported(DataFlavor.stringFlavor) || !support.isDrop()) {
-			return result = false;
+			return false;
 		}
 		JTree.DropLocation dropLocation = (JTree.DropLocation) support.getDropLocation();
 		logging.debug(this, "ClientTreeTransferHandler, dropLocation.getPath() " + dropLocation.getPath());
 
 		if (dropLocation.getPath() == null)
-			return result = false;
+			return false;
 
 		String transferData = null;
 
@@ -84,15 +82,13 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 		DefaultMutableTreeNode dropOnThis = (DefaultMutableTreeNode) dropLocation.getPath().getLastPathComponent();
 		String id = dropOnThis.getUserObject().toString();
-		GroupNode targetNode = (GroupNode) tree.getGroupNode(id);
-		TreePath dropPath = tree.getActiveTreePath(id);
+		GroupNode targetNode = tree.getGroupNode(id);
 		Object[] dropObjectPath = new Object[0];
 		if (targetNode != null)
 			dropObjectPath = targetNode.getUserObjectPath();
 
 		// debugging the if clause
-		// logging.info(this, "canImport, dropOnThis as node " + targetNode + " class "
-		// + targetNode);
+
 		if (targetNode != null) {
 			logging.debug(this, "canImport targetNode.isImmutable() " + targetNode.isImmutable());
 		}
@@ -131,14 +127,10 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 	@Override
 	public int getSourceActions(JComponent c) {
-		// logging.debug(this," --- ClientTreeTransferHandler , getSourceActions, "
-		// + "JComponent " + c + " getSourceActions " + TransferHandler.COPY_OR_MOVE);
-		// logging.debug(this, "getSourceActions, selectedRows " +
-		// logging.getIntegers(tree.getSelectionRows() ));
 
 		logging.debug(this, "getSourceActions,  activePaths " + tree.getActivePaths());
 
-		if (tree.getActivePaths() == null || tree.getActivePaths().size() == 0) {
+		if (tree.getActivePaths() == null || tree.getActivePaths().isEmpty()) {
 			logging.debug(this, "getSourceActions no active pathes, TransferHandler.NONE");
 			return TransferHandler.NONE;
 		}
@@ -174,10 +166,10 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		// there can only be one group selected, and it can only be moved
 		// (for top groups the NONE handler was already returned)
 
-		Iterator iterPaths = tree.getActivePaths().iterator();
+		Iterator<TreePath> iterPaths = tree.getActivePaths().iterator();
 
 		while (iterPaths.hasNext()) {
-			TreePath path = (TreePath) iterPaths.next();
+			TreePath path = iterPaths.next();
 
 			if (tree.isChildOfALL((DefaultMutableTreeNode) path.getLastPathComponent())) {
 				logging.debug(this, "getSourceActions path " + path + " childOfALL, should be TransferHandler.COPY");
@@ -188,7 +180,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			if (tree.isInDIRECTORY(path)) {
 				logging.debug(this, "getSourceActions , isInDIRECTORY true");
 				// action depends additionally from target
-				// return TransferHandler.COPY;
+
 			}
 		}
 
@@ -200,14 +192,13 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	@Override
 	protected Transferable createTransferable(JComponent c) {
 
-		StringBuffer buff = new StringBuffer();
-		Iterator iterPaths = tree.getActivePaths().iterator();
+		StringBuilder buff = new StringBuilder();
+		Iterator<TreePath> iterPaths = tree.getActivePaths().iterator();
 
 		while (iterPaths.hasNext()) {
-			TreePath path = (TreePath) iterPaths.next();
+			TreePath path = iterPaths.next();
 
 			// String id = ((DefaultMutableTreeNode)
-			// path.getLastPathComponent()).getUserObject().toString();
 
 			int len = path.getPath().length;
 			for (int j = 0; j < len; j++) {
@@ -216,8 +207,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 					buff.append(",");
 			}
 
-			// buff.append(path.toString());
-
 			if (iterPaths.hasNext())
 				buff.append("\n");
 		}
@@ -225,9 +214,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		return new StringSelection(buff.toString());
 
 	}
-
-	// @Override
-	// public Icon getVisualRepresentation(Transferable t)
 
 	private boolean chooseMOVE(TransferHandler.TransferSupport support, String sourceGroupName, TreePath dropPath,
 			boolean isLeaf) {
@@ -255,16 +241,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		) {
 			result = true;
 		}
-		/*
-		 * else
-		 * if
-		 * (
-		 * support.getUserDropAction() == TransferHandler.MOVE
-		 * )
-		 * {
-		 * result = true;
-		 * }
-		 */
 
 		logging.debug(this, "chooseMOVE  " + result);
 
@@ -291,7 +267,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		{
 			String firstDIRECTORYgroupname = null;
 			java.util.Set<GroupNode> locations = tree.getLocationsInDIRECTORY(importID);
-			if (locations != null && locations.size() > 0) {
+			if (locations != null && !locations.isEmpty()) {
 				logging.debug(this, "handleClientID tree.getLocationsInDIRECTORY 1");
 				Iterator<GroupNode> iter = tree.getLocationsInDIRECTORY(importID).iterator();
 				firstDIRECTORYgroupname = iter.next().toString();
@@ -333,45 +309,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		logging.debug(this, "dropPath " + dropPath);
 
 		// what is to be moved/copied
-		Transferable transferable = support.getTransferable();
-		String transferData = null;
 
-		/*
-		 * instead of the following code which retrieves the data from the clipboard
-		 * we use the data from the source data
-		 * 
-		 * try
-		 * {
-		 * //java.security.AccessController.checkPermission(new
-		 * java.awt.AWTPermission("accessClipboard"));
-		 * transferData = (String)
-		 * transferable.getTransferData(DataFlavor.stringFlavor);
-		 * }
-		 * catch (IOException e) {
-		 * return false;
-		 * }
-		 * catch (UnsupportedFlavorException e) {
-		 * return false;
-		 * }
-		 * 
-		 * catch(java.security.AccessControlException ex)
-		 * {
-		 * logging.debug(this, "dropPath " + dropPath);
-		 * 
-		 * }
-		 * 
-		 * catch(Exception exx)
-		 * {
-		 * return false;
-		 * }
-		 * 
-		 * logging.debug(this, " transferData " + transferData.toString());
-		 * 
-		 * String[] values = transferData.split("\n");
-		 */
-
-		// logging.debug(this, "importData, getSelectedClientsInTable(): " +
-		// tree.getSelectedClientsInTable());
 		logging.debug(this, "importData. ++++++++++ getActivePaths(): " + tree.getActivePaths());
 
 		String[] values = tree.getSelectedClientsInTable().toArray(new String[] {});
@@ -403,18 +341,8 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 			String importID = null;
 			String sourceParentID = null;
-			String sourceParentID_in_tree = null;
-			TreePath oldPath = null;
 			try {
 				// if values not got from transferable, the following reduces
-				// to setting importId = value;
-
-				// logging.debug(this, "transferData split by tab:" +
-				// logging.getStrings(value.split("\t")));
-				// logging.debug(this, "transferData split by ,:" +
-				// logging.getStrings(value.split(",")));
-				// logging.debug(this, "transferData split by ' ' " +
-				// logging.getStrings(value.split(" ")));
 
 				if ((value.split("\t").length > 1))
 				// probably an import from the JTable
@@ -423,26 +351,14 @@ public class ClientTreeTransferHandler extends TransferHandler {
 					importID = value.split("\t")[0];
 				} else {
 					String[] parts = value.split(",");
-					// oldPath = new TreePath(parts);
+
 					importID = parts[parts.length - 1];
 
-					/*
-					 * if (parts.length > 1)
-					 * //probably our own transfer
-					 * sourceParentID = parts[parts.length-2];
-					 * //logging.debug(this, "got importID " + importID + ", sourceParentID " +
-					 * sourceParentID);
-					 */
 				}
 
 			} catch (Exception ex) {
 				logging.info(this, " no tree parts got " + ex);
 			}
-
-			// importID; //= values[i].split("\t")[0]; for table lines
-
-			// if (oldPath == null)
-			// continue;
 
 			logging.debug(this, "importData  ----------------   " + i + " values[i] " + importID);
 
@@ -460,13 +376,9 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			}
 
 			else
-			// coming from table, replace!
-			{
-				// sourceParentID = tree.ALL_NAME;
-				// sourceParentNode = tree.ALL;
-			}
+				// coming from table, replace!
 
-			logging.debug(this, "importData, sourceParentID " + sourceParentID);
+				logging.debug(this, "importData, sourceParentID " + sourceParentID);
 			logging.debug(this, "importData, sourceParentNode " + sourceParentNode);
 			logging.debug(this, "importData, groupNode " + groupNode);
 
@@ -503,18 +415,4 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		super.exportToClipboard(comp, clip, action);
 	}
 
-	/*
-	 * @Override
-	 * protected void exportDone(JComponent c, Transferable data, int action)
-	 * {
-	 * //cleanup(c, action == TransferHandler.MOVE);
-	 * }
-	 * 
-	 * //If the remove argument is true, the drop has been
-	 * //successful and it's time to remove the source node
-	 * protected void cleanup(JComponent c, boolean remove)
-	 * {
-	 * 
-	 * }
-	 */
 }

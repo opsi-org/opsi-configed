@@ -1,6 +1,5 @@
 package de.uib.configed.tree;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Insets;
 
@@ -18,24 +17,17 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 		setOpaque(true);
 		setForeground(Globals.lightBlack);
 		setTextSelectionColor(Globals.lightBlack);
-		setBackground(Color.white);
+		setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
 		setBorder(new javax.swing.border.EmptyBorder(new Insets(0, 0, 0, 0)));
 		setPreferredSize(new java.awt.Dimension(labelWidth, labelHeight));
 	}
 
-	public Component getTreeCellRendererComponent(JTree tree, Object value,
-			boolean sel,
-			boolean expanded,
-			boolean leaf,
-			int row,
-			boolean hasFocus) {
+	@Override
+	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
+			int row, boolean hasFocus) {
 		if (value instanceof IconNode) {
 
-			String stringValue =
-					// configed.encodeStringFromService (
-					tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus)
-			// )
-			;
+			String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
 
 			setText(stringValue);
 
@@ -48,14 +40,11 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 			node.setEnabled(enabled);
 
 			if (sel) {
-				setBackground(Globals.backLightBlue);
-				// setFont(Globals.defaultFontBold);
-				// setForeground(Color.blue);//Globals.unknownBlue);
+				setBackground(Globals.BACKGROUND_COLOR_7);
+
 			} else {
-				setBackground(Color.white);
-				// setBackground(Globals.backgroundWhite);
-				// setFont(Globals.defaultFontBig);
-				// setForeground(Globals.lightBlack);
+				setBackground(Globals.PRIMARY_BACKGROUND_COLOR);
+
 			}
 
 			if (leaf) {
@@ -72,20 +61,5 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 
 		return this;
 
-		/*
-		 * Component c = super.getTreeCellRendererComponent(
-		 * tree,
-		 * value,
-		 * sel,
-		 * expanded,
-		 * leaf,
-		 * row,
-		 * hasFocus);
-		 * 
-		 * //c.setBackground(Globals.backLightBlue);
-		 * 
-		 * return c;
-		 * 
-		 */
 	}
 }

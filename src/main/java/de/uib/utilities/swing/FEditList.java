@@ -25,6 +25,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.CellEditor;
 import javax.swing.DefaultListModel;
@@ -38,20 +39,19 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Globals;
+import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 
 public class FEditList extends FEditObject
-		implements ListSelectionListener,
-		ActionListener, KeyListener,
-		MouseListener {
+		implements ListSelectionListener, ActionListener, KeyListener, MouseListener {
 	private javax.swing.JScrollPane scrollpane;
 	protected javax.swing.JList<Object> visibleList;
 
 	private JTextComponent tracker;
 
 	private ListModel initialModel;
-	private java.util.List<Object> initiallySelected;
+	private List<Object> initiallySelected;
 
 	protected Object selValue = "";
 
@@ -75,7 +75,7 @@ public class FEditList extends FEditObject
 		this.tracker = tracker;
 		this.celleditor = celleditor;
 
-		visibleList = new JList(); // new String[]{"a","b","c"});
+		visibleList = new JList<>();
 		visibleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		visibleList.addListSelectionListener(this);
 		visibleList.setCellRenderer(new StandardListCellRenderer());
@@ -99,10 +99,9 @@ public class FEditList extends FEditObject
 		// we define buttonRemove in a different way since it is used only to clear
 		// selection
 
-		buttonRemove = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
+		buttonRemove = new de.uib.configed.gui.IconButton(configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
 				"images/list-clear.png", "images/list-clear.png", "images/list-clear_disabled.png", true);
-		buttonRemove.setPreferredSize(new Dimension(buttonWidth, de.uib.utilities.Globals.buttonHeight));
+		buttonRemove.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 		buttonRemove.setVisible(false);
 	}
 
@@ -118,13 +117,13 @@ public class FEditList extends FEditObject
 	}
 
 	public void setListModel(ListModel model) {
-		// logging.debug(this, "setListModel " + model);
+
 		visibleList.setModel(model);
 		initialModel = model;
 	}
 
 	public void setSelectionMode(int selectionMode) {
-		// logging.debug(this, "setSelectionMode " + selectionMode);
+
 		visibleList.setSelectionMode(selectionMode);
 		singleSelectionMode = (selectionMode == ListSelectionModel.SINGLE_SELECTION);
 	}
@@ -139,31 +138,28 @@ public class FEditList extends FEditObject
 		nullable = b;
 	}
 
+	@Override
 	public void setEditable(boolean b) {
-		// logging.debug(this, "setEditable " + b);
+
 		super.setEditable(b);
 		extraField.setVisible(b);
-		buttonRemove.setVisible(
-				b && !singleSelectionMode);
-		// buttonRemove.setEnabled(b);
+		buttonRemove.setVisible(b && !singleSelectionMode);
+
 		buttonAdd.setVisible(b);
 	}
 
 	protected Object getValueAt(Point location) {
-		return visibleList.getModel().getElementAt(
-				visibleList.locationToIndex(location));
+		return visibleList.getModel().getElementAt(visibleList.locationToIndex(location));
 	}
 
 	protected void setExtraFieldToListValueAt(Point location) {
 		String txt = "" + getValueAt(location);
-		// visibleList.getModel().getElementAt( visibleList.locationToIndex( location )
-		// );
-		// logging.debug(this, " location has text " + txt);
+
 		extraField.setText(txt);
 		extraFieldChanged(false);
 	}
 
-	protected void addSelectedValues(java.util.List<Object> toSelect) {
+	protected void addSelectedValues(List<Object> toSelect) {
 		if (toSelect == null)
 			return;
 
@@ -171,18 +167,15 @@ public class FEditList extends FEditObject
 
 		for (int i = 0; i < model.getSize(); i++) {
 			Object element = model.getElementAt(i);
-			// logging.debug(this, "addSelectedValues, check element " + element + " no " +
-			// i);
 
 			if (toSelect.contains(element)) {
-				// logging.debug(this, "setSelectedValues, adding " + element);
+
 				visibleList.addSelectionInterval(i, i);
 			}
 		}
 
 		visibleList.ensureIndexIsVisible(visibleList.getMaxSelectionIndex());
 
-		// buttonRemove.setEnabled(toSelect.size() > 0);
 	}
 
 	public void initSelection() {
@@ -190,41 +183,37 @@ public class FEditList extends FEditObject
 			visibleList.setSelectedIndex(0);
 	}
 
-	public void setSelectedValues(java.util.List<Object> toSelect) {
-		// logging.debug(this, "setSelectedValues " + toSelect);
+	public void setSelectedValues(List<Object> toSelect) {
+
 		initiallySelected = toSelect;
 
 		visibleList.clearSelection();
-		// logging.debug(this, "setSelectedValues , selection cleared");
+
 		addSelectedValues(toSelect);
 
-		// buttonRemove.setEnabled(toSelect.size() > 0);
-		// logging.debug(this, "setSelectedValues , selected values added");
 	}
 
 	public void setSelectedValue(Object ob) {
-		// logging.debug(this, "setSelectedValue " + ob);
+
 		visibleList.setSelectedValue(ob, true);
 	}
 
 	private void addElementFromExtraField(Object element) {
-		// logging.debug(this, "requested addElementFromExtraField >" + element + "<");
+
 		addElement(element);
 
-		// extraField.removeActionListener(this);
-		// extraField.setText(""); //an empty list value will always be created by what
 		// ever event
-		// extraField.addActionListener(this);
+
 		extraFieldChanged(false);
 	}
 
 	protected void addElement(Object element) {
-		// logging.debug(this, "requested addElement >" + element + "<");
+
 		ListModel limo = visibleList.getModel();
 		if (limo instanceof DefaultListModel) {
 			if (!((DefaultListModel) limo).contains(element)) {
 				((DefaultListModel) limo).addElement(element);
-				java.util.List list = new ArrayList(); // getSelectedList();
+				List list = new ArrayList<>();
 				list.add(element);
 				addSelectedValues(list);
 			}
@@ -246,7 +235,7 @@ public class FEditList extends FEditObject
 
 	@Override
 	public void setStartValue(Object s) {
-		// logging.debug(this, "setStartValue " + s);
+
 		super.setStartValue(s);
 		setTracker(s);
 	}
@@ -273,15 +262,11 @@ public class FEditList extends FEditObject
 			if (celleditor != null)
 				celleditor.stopCellEditing();
 
-			// JOptionPane.showMessageDialog(null, " new val " + getValue() + " .. old " +
-			// initialValue , "alert", JOptionPane.INFORMATION_MESSAGE);
-
 			if (leaveOnCommit)
 				leave();
 		}
 	}
 
-	// ======================
 	// interface ActionListener
 	@Override
 	public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -293,9 +278,7 @@ public class FEditList extends FEditObject
 			visibleList.clearSelection();
 		}
 	}
-	// ======================
 
-	// ======================
 	// interface KeyListener
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -315,28 +298,30 @@ public class FEditList extends FEditObject
 	@Override
 	public void keyReleased(KeyEvent e) {
 	}
-	// ======================
 
-	// ======================
 	// interface MouseListener
+	@Override
 	public void mousePressed(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getClickCount() > 1)
 			setExtraFieldToListValueAt(e.getPoint());
 
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
-	// ======================
 
 	@Override
 	public boolean init() {
@@ -344,8 +329,8 @@ public class FEditList extends FEditObject
 		return super.init();
 	}
 
-	public java.util.List getSelectedList() {
-		java.util.List result = new ArrayList();
+	public List getSelectedList() {
+		List result = new ArrayList<>();
 
 		ListModel model = visibleList.getModel();
 
@@ -365,14 +350,12 @@ public class FEditList extends FEditObject
 		buttonRemove.setEnabled(true);
 	}
 
-	// ======================
 	// interface ListSelectionListener
+	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		java.util.List selectedList = getSelectedList();
-		// logging.info(this, "FEditList valueChanged , selected " + selectedList + "
-		// nullable? " + nullable);
-		if (!nullable &&
-				selectedList.size() == 0) {
+		List selectedList = getSelectedList();
+
+		if (!nullable && selectedList.isEmpty()) {
 			// reset to some value
 			initSelection();
 		}
@@ -380,8 +363,7 @@ public class FEditList extends FEditObject
 
 		setTracker(selectedList);
 
-		buttonRemove.setEnabled(selectedList.size() > 0);
+		buttonRemove.setEnabled(!selectedList.isEmpty());
 	}
-	// ======================
 
 }

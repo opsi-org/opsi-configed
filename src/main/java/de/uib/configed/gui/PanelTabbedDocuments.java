@@ -5,12 +5,14 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import javax.swing.JFileChooser;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.ClippedTitleTabbedPane;
@@ -18,7 +20,7 @@ import de.uib.utilities.swing.ClippedTitleTabbedPane;
 public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	LogPane[] textPanes;
 	String[] idents;
-	final java.util.List<String> identsList;
+	final List<String> identsList;
 
 	protected JFileChooser chooser;
 	protected File chooserDirectory;
@@ -31,13 +33,9 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 		setProportionOfTotalWidth(0.5);
 
-		setForeground(de.uib.utilities.Globals.blue);
-		// setFont(Globals.defaultFont);
+		setForeground(Globals.blue);
 
 		textPanes = new LogPane[idents.length];
-
-		// logging.debug ( " ------------------------------ idents.length " +
-		// idents.length);
 
 		for (int i = 0; i < idents.length; i++) {
 			final String ident = idents[i];
@@ -58,7 +56,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 					String pathname = openFile(filename + ".log");
 					if (pathname != null && !pathname.equals(""))
 						saveToFile(pathname, lines);
-					// showLogfile.setTitle(fn);
+
 				}
 
 				@Override
@@ -104,14 +102,6 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 							}
 						}
 
-						/*
-						 * for (int logNo = 0; logNo < idents.length; logNo++)
-						 * {
-						 * logging.info(this, "saveAllAsZip textPanes[" + logNo +
-						 * "].lines.length " + textPanes[logNo].lines.length);
-						 * }
-						 */
-
 						saveAllToZipFile(pathname);
 					}
 
@@ -123,19 +113,6 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 			addTab(ident, textPanes[i]);
 
-			/*
-			 * LogPane LogPane = new LogPane(defaultText)
-			 * {
-			 * 
-			 * @Override
-			 * protected void reload()
-			 * {
-			 * super.reload();
-			 * loadDocument(ident);
-			 * }
-			 * };
-			 */
-
 		}
 
 	}
@@ -145,21 +122,6 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	{
 		logging.debug(this, "loadDocument ident " + ident);
 	}
-
-	/*
-	 * public void updateDocument(final String ident, final String s, final String
-	 * info)
-	 * {
-	 * final WaitCursor waitCursor = new WaitCursor(
-	 * de.uib.configed.Globals.mainContainer, "updateDocument");
-	 * SwingUtilities.invokeLater( new Runnable(){
-	 * public void run(){
-	 * setDocument(ident, s, info);
-	 * waitCursor.stop();
-	 * }
-	 * });
-	 * }
-	 */
 
 	private void setDocument(int i, final String document, final String info) {
 		logging.info(this, "setDocument " + i + " document == null " + (document == null));
@@ -194,15 +156,15 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	private void setFileChooser(String fn) {
 		if (chooser == null) {
 			chooser = new JFileChooser(fn);
-			chooser.setPreferredSize(de.uib.utilities.Globals.filechooserSize);
-			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY); // AND_DIRECTORIES);
+			chooser.setPreferredSize(Globals.filechooserSize);
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z",
 					"log", "zip", "gz", "7z"));
-			// chooser.setFileHidingEnabled(false);
+
 			chooser.setApproveButtonText("O.K.");
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-			chooser.setDialogTitle(de.uib.configed.Globals.APPNAME + " "
-					+ configed.getResourceValue("PanelTabbedDocument.saveFileChooser"));
+			chooser.setDialogTitle(
+					Globals.APPNAME + " " + configed.getResourceValue("PanelTabbedDocument.saveFileChooser"));
 		}
 	}
 
@@ -217,14 +179,14 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		File f = new File(chooserDirectory, typename);
 		chooser.setSelectedFile(f);
 
-		int returnVal = chooser.showSaveDialog(de.uib.configed.Globals.frame1);
+		int returnVal = chooser.showSaveDialog(Globals.frame1);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			if (chooser != null) {
 				fileName = chooser.getSelectedFile().getAbsolutePath();
 				chooserDirectory = chooser.getCurrentDirectory();
 			} else {
 				logging.error("Not a valid filename: " + fileName);
-				// showDialog("Not a valid filename: \n" + fileName);
+
 			}
 		}
 
@@ -242,7 +204,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		while (i < lines.length) {
 			try {
 				fWriter.write(lines[i] + "\n");
-				// setTitle(de.uib.configed.Globals.APPNAME + " : " + fn);
+
 			} catch (IOException ex) {
 				logging.error("Error writing file: " + fn + "\n --- " + ex);
 			}

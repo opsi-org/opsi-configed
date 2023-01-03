@@ -1,6 +1,6 @@
 package de.uib.opsicommand.sshcommand;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.configed;
@@ -62,7 +62,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 
 	public enum FinalActionType {
 		START_OCD, REBOOT, SHUTDOWN
-	};
+	}
 
 	public void finish(FinalActionType actionType) {
 		switch (actionType) {
@@ -121,7 +121,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 		command = baseName + " " + verbosity + user + passw + finishAction + keepClientOnFailure + getPingOption()
 				+ client;
 		if (needSudo())
-			return SSHCommandFactory.getInstance().sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 
@@ -130,6 +130,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	 * 
 	 * @param c (command): String
 	 **/
+	@Override
 	public void setCommand(String c) {
 		command = c;
 	}
@@ -187,38 +188,26 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	public SSHConnectionExecDialog startHelpDialog() {
 		SSHCommand command = new CommandHelp(this);
 		SSHConnectExec exec = new SSHConnectExec(command
-		/*
-		 * new SSHConnectionExecDialog(
-		 * configed.getResourceValue("SSHConnection.Exec.title") +
-		 * " \""+command.getCommand() + "\" ",
-		 * command)
-		 */
+
 		);
-		// exec.exec(command, true, new SSHConnectionExecDialog(command,
-		// configed.getResourceValue("SSHConnection.Exec.title") + "
-		// \""+command.getCommand() + "\" "));
-		return (SSHConnectionExecDialog) exec.getDialog();
+
+		return exec.getDialog();
 	}
 
 	@Override
 	public FGeneralDialog getDialog() {
 		return dialog;
 	}
-	// @Override
-	// public int getHelpColumns()
-	// {
-	// return helpColumns;
-	// }
 
 	public void setClient(String c) {
-		if (c != "")
+		if (!c.equals(""))
 			client = " " + c;
 		else
 			client = "";
 	}
 
 	public void setUser(String u) {
-		if (u != "")
+		if (!u.equals(""))
 			user = " -u " + u;
 		else
 			user = "";
@@ -234,7 +223,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	}
 
 	public void setPassw(String pw) {
-		if (pw != "")
+		if (!pw.equals(""))
 			passw = " -p " + pw;
 		else
 			passw = "";
@@ -248,15 +237,17 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	}
 
 	public boolean checkCommand() {
-		if (client == "")
+		if (client.equals(""))
 			return false;
-		if (passw == "")
+
+		if (passw.equals(""))
 			return false;
+
 		return true;
 	}
 
 	@Override
-	public ArrayList<String> getParameterList() {
+	public List<String> getParameterList() {
 		return null;
 	}
 

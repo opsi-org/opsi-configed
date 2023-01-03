@@ -1,13 +1,13 @@
 package de.uib.opsicommand.sshcommand;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 
 public class CommandOpsiPackageManager implements SSHCommand {
-	// private String baseName = "opsi-package-manager";
+
 	protected LinkedList<Object> helpLinesSplitted;
 	protected FGeneralDialog dialog = null;
 	protected boolean needSudo = false;
@@ -46,11 +46,6 @@ public class CommandOpsiPackageManager implements SSHCommand {
 		return "CommandOpsiPackageManager";
 	}
 
-	// @Override
-	// public String getBasicName()
-	// {
-	// return "opsi-package-manager";
-	// }
 	@Override
 	public String getMenuText() {
 		return configed.getResourceValue("SSHConnection.command.opsipackagemanager");
@@ -91,6 +86,7 @@ public class CommandOpsiPackageManager implements SSHCommand {
 	 * 
 	 * @param c (command): String
 	 **/
+	@Override
 	public void setCommand(String c) {
 	}
 
@@ -110,7 +106,7 @@ public class CommandOpsiPackageManager implements SSHCommand {
 	}
 
 	@Override
-	public ArrayList<String> getParameterList() {
+	public List<String> getParameterList() {
 		return null;
 	}
 }

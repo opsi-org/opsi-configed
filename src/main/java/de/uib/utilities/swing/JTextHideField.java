@@ -1,8 +1,5 @@
 package de.uib.utilities.swing;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -13,7 +10,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
-import de.uib.utilities.Globals;
+import de.uib.configed.Globals;
+import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
 public class JTextHideField extends javax.swing.JPanel {
@@ -23,7 +21,6 @@ public class JTextHideField extends javax.swing.JPanel {
 	JButton button;
 	boolean hiddenMode;
 	boolean multiValue;
-	// static protected final String hiddenS = "****";
 
 	class FixedDocument extends PlainDocument {
 
@@ -42,8 +39,6 @@ public class JTextHideField extends javax.swing.JPanel {
 			super.remove(0, super.getLength());
 
 			super.insertString(0, fixed, a);
-
-			// logging.info(this, "inserted " + str);
 
 		}
 
@@ -66,24 +61,17 @@ public class JTextHideField extends javax.swing.JPanel {
 
 		hiddenMode = true;
 		multiValue = true;
-		visibleField.setVisible(true);// !hiddenMode );
+		visibleField.setVisible(true);
 		invisibleField.setVisible(true);
 		visibleField.setEnabled(true);
 		invisibleField.setEnabled(false);
 
-		button = new JButton(de.uib.configed.Globals.createImageIcon("images/eye_blue_open.png", "show"));
-		button.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (!multiValue)
-					toggleHidden();
-			}
+		button = new JButton(Globals.createImageIcon("images/eye_blue_open.png", "show"));
+		button.addActionListener(actionEvent -> {
+			if (!multiValue)
+				toggleHidden();
 		});
-		button.setToolTipText(de.uib.configed.configed.getResourceValue("JTextHideField.toggleHide"));
-
-		// button.setEnabled( true );
-		// button.setBackground( Color.BLUE );
-		// visibleField.setEditable(false);
+		button.setToolTipText(configed.getResourceValue("JTextHideField.toggleHide"));
 
 		setupPanel();
 		setEnabled(false);
@@ -93,19 +81,18 @@ public class JTextHideField extends javax.swing.JPanel {
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addGroup(layout.createSequentialGroup()
-						.addGroup(layout.createParallelGroup()
-								.addComponent(invisibleField, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE)
-								.addComponent(visibleField, Globals.buttonWidth, Globals.buttonWidth, Short.MAX_VALUE))
-						.addComponent(button, Globals.iconWidth, Globals.iconWidth, Globals.iconWidth)
-						.addGap(0, Globals.iconWidth, Globals.buttonWidth)));
+		layout.setHorizontalGroup(layout.createParallelGroup().addGroup(layout.createSequentialGroup()
+				.addGroup(layout.createParallelGroup()
+						.addComponent(invisibleField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
+						.addComponent(visibleField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE))
+				.addComponent(button, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+				.addGap(0, Globals.ICON_WIDTH, Globals.BUTTON_WIDTH)));
 
 		layout.setVerticalGroup(layout.createParallelGroup()
 				.addGroup(layout.createParallelGroup()
-						.addComponent(invisibleField, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight)
-						.addComponent(visibleField, Globals.lineHeight, Globals.lineHeight, Globals.lineHeight))
-				.addComponent(button, Globals.lineHeight / 2, Globals.lineHeight / 2, Globals.lineHeight / 2));
+						.addComponent(invisibleField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(visibleField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+				.addComponent(button, Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2));
 	}
 
 	public void setHidden() {
@@ -113,6 +100,7 @@ public class JTextHideField extends javax.swing.JPanel {
 			toggleHidden();
 	}
 
+	@Override
 	public void setEnabled(boolean b) {
 		visibleField.setEnabled(b);
 		button.setEnabled(b);
@@ -137,6 +125,7 @@ public class JTextHideField extends javax.swing.JPanel {
 
 	}
 
+	@Override
 	public void setBackground(java.awt.Color c) {
 		if (visibleField != null)
 			visibleField.setBackground(c);

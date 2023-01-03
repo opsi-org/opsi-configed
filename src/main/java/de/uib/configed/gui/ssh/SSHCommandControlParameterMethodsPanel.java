@@ -15,8 +15,6 @@ package de.uib.configed.gui.ssh;
  */
 
 import java.awt.Dimension;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -32,6 +30,7 @@ import javax.swing.text.JTextComponent;
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
+import de.uib.opsicommand.sshcommand.SSHCommandParameterMethods;
 import de.uib.utilities.logging.logging;
 
 public class SSHCommandControlParameterMethodsPanel extends JPanel {
@@ -46,7 +45,6 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	private JComboBox cb_parameter_formats;
 	private JButton btn_add_param;
 	private JButton btn_test_param;
-	private JButton btn_test_command;
 
 	public SSHCommandControlParameterMethodsPanel(JDialog owner, int lg, int rg, int ug, int og) {
 		super();
@@ -55,7 +53,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		init();
 		setGapSize(lg, rg, ug, og);
 		initLayout();
-		// setComponentsEnabled_RO();
+
 	}
 
 	public SSHCommandControlParameterMethodsPanel(JDialog owner) {
@@ -64,7 +62,6 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		main = owner;
 		init();
 
-		// initLayout();
 	}
 
 	public JPanel getPanel() {
@@ -78,52 +75,46 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	/** Init components **/
 	private void init() {
 		logging.debug(this, "init setting up components ");
-		Dimension tf_dim = new Dimension(Globals.FIRST_LABEL_WIDTH - Globals.GRAPHIC_BUTTON_WIDTH,
-				Globals.BUTTON_HEIGHT);
 		Dimension tf_dim_long = new Dimension(Globals.FIRST_LABEL_WIDTH + Globals.GAP_SIZE, Globals.BUTTON_HEIGHT);
 		Dimension btn_dim = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT);
 
 		lbl_empty.setPreferredSize(tf_dim_long);
 		lbl_paramMethods.setText(configed.getResourceValue("SSHConnection.CommandControl.parameterMethods"));
-		// lbl_paramMethods.setPreferredSize(tf_dim);
+
 		lbl_paramFormats.setText(configed.getResourceValue("SSHConnection.CommandControl.parameterFormats"));
-		// lbl_paramFormats.setPreferredSize(tf_dim);
-		cb_parameter_formats = new JComboBox(factory.getParameterHandler().getParameterFormats());
+
+		cb_parameter_formats = new JComboBox<>(factory.getParameterHandler().getParameterFormats());
 		logging.info(this, "cb_parameter_formats lightweight " + cb_parameter_formats.isLightWeightPopupEnabled());
-		// cb_parameter_formats.setLightWeightPopupEnabled(false);
+
 		cb_parameter_formats.setPreferredSize(tf_dim_long);
 		cb_parameter_formats.setMaximumRowCount(5); // we have to delimit it so that is constrained to the component (in
-													// Windows) //Globals.comboBoxRowCount);
-		cb_parameter_methods = new JComboBox(factory.getParameterHandler().getParameterMethodLocalNames());
+													// Windows) 
+		cb_parameter_methods = new JComboBox<>(factory.getParameterHandler().getParameterMethodLocalNames());
 		cb_parameter_methods
 				.setSelectedItem(configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"));
 		cb_parameter_methods.setPreferredSize(tf_dim_long);
-		cb_parameter_methods.setMaximumRowCount(5); // Globals.comboBoxRowCount);
-		// cb_parameter_methods.setLightWeightPopupEnabled(false);
+		cb_parameter_methods.setMaximumRowCount(5);
+
 		cb_parameter_formats.setEnabled(false);
 
-		cb_parameter_methods.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if (((String) cb_parameter_methods.getSelectedItem())
-						.equals(configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"))
-						|| ((String) cb_parameter_methods.getSelectedItem()).equals(
-								configed.getResourceValue("SSHConnection.CommandControl.method.optionSelection"))) {
-					cb_parameter_formats.setEnabled(false);
-				} else {
-					cb_parameter_formats.setEnabled(true);
-				}
-			}
+		cb_parameter_methods.addItemListener(itemEvent -> {
+			boolean enabled = ((String) cb_parameter_methods.getSelectedItem())
+					.equals(configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"))
+					|| ((String) cb_parameter_methods.getSelectedItem())
+							.equals(configed.getResourceValue("SSHConnection.CommandControl.method.optionSelection"));
+
+			cb_parameter_formats.setEnabled(enabled);
+
 		});
 
 		btn_test_param = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("SSHConnection.CommandControl.btnTestParamMethod"),
+				configed.getResourceValue("SSHConnection.CommandControl.btnTestParamMethod"),
 				"images/executing_command.png", "images/executing_command.png", "images/executing_command.png", true);
 		btn_test_param.setPreferredSize(btn_dim);
 
 		btn_add_param = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("SSHConnection.CommandControl.btnAddParamMethod"),
-				"images/list-add.png", "images/list-add.png", "images/list-add_disabled.png", true);
+				configed.getResourceValue("SSHConnection.CommandControl.btnAddParamMethod"), "images/list-add.png",
+				"images/list-add.png", "images/list-add_disabled.png", true);
 		btn_add_param.setSize(btn_dim);
 		btn_add_param.setPreferredSize(btn_dim);
 		setComponentsEnabled_RO();
@@ -157,7 +148,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 	public void initLayout() {
 		logging.debug(this, "initLayout ");
-		setBackground(Globals.backLightBlue);
+		setBackground(Globals.BACKGROUND_COLOR_7);
 		thisLayout = new GroupLayout((JComponent) this);
 		setLayout(thisLayout);
 		thisLayout.setHorizontalGroup(thisLayout.createSequentialGroup().addGap(lGap).addGroup(thisLayout
@@ -176,10 +167,8 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 						.addGap(Globals.MIN_GAP_SIZE * 3, Globals.MIN_GAP_SIZE * 3, Short.MAX_VALUE))
 
 				.addGroup(thisLayout.createSequentialGroup().addComponent(lbl_empty, 10, 10, Short.MAX_VALUE)
-						.addComponent(btn_test_param, de.uib.configed.Globals.ICON_WIDTH,
-								de.uib.configed.Globals.ICON_WIDTH, de.uib.configed.Globals.ICON_WIDTH)
-						.addComponent(btn_add_param, de.uib.configed.Globals.ICON_WIDTH,
-								de.uib.configed.Globals.ICON_WIDTH, de.uib.configed.Globals.ICON_WIDTH))
+						.addComponent(btn_test_param, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+						.addComponent(btn_add_param, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH))
 
 		).addGap(rGap));
 		thisLayout.setVerticalGroup(thisLayout.createSequentialGroup().addGap(oGap * 2)
@@ -196,14 +185,13 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(thisLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(btn_add_param, de.uib.configed.Globals.BUTTON_HEIGHT,
-								de.uib.configed.Globals.BUTTON_HEIGHT, de.uib.configed.Globals.BUTTON_HEIGHT)
-						.addComponent(btn_test_param, de.uib.configed.Globals.BUTTON_HEIGHT,
-								de.uib.configed.Globals.BUTTON_HEIGHT, de.uib.configed.Globals.BUTTON_HEIGHT)
-						.addComponent(lbl_empty, de.uib.configed.Globals.BUTTON_HEIGHT,
-								de.uib.configed.Globals.BUTTON_HEIGHT, de.uib.configed.Globals.BUTTON_HEIGHT))
+						.addComponent(btn_add_param, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(btn_test_param, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(lbl_empty, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
 				.addGap(uGap * 2)
-		// .addGap(50) //we add space for the combo box popup which does not always
+
 		// correctly appear if not placed inside the frame
 		);
 		repaint();
@@ -213,19 +201,19 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	public void doActionTestParam(JDialog caller) {
 		String paramText = "";
 		if (((String) cb_parameter_methods.getSelectedItem())
-				.equals(factory.getParameterHandler().method_interactiveElement)
+				.equals(SSHCommandParameterMethods.method_interactiveElement)
 				|| ((String) cb_parameter_methods.getSelectedItem())
-						.equals(factory.getParameterHandler().method_optionSelection)) {
+						.equals(SSHCommandParameterMethods.method_optionSelection)) {
 			logging.debug("CREATING PARAM TEXT... ");
-			paramText = factory.getParameterHandler().replacement_default_1
+			paramText = SSHCommandParameterMethods.replacement_default_1
 					+ factory.getParameterHandler().getMethodFromName((String) cb_parameter_methods.getSelectedItem())
-					+ factory.getParameterHandler().replacement_default_2;
+					+ SSHCommandParameterMethods.replacement_default_2;
 			logging.debug("CREATED PARAM TEXT: " + paramText);
 		} else
-			paramText = factory.getParameterHandler().replacement_default_1
+			paramText = SSHCommandParameterMethods.replacement_default_1
 					+ factory.getParameterHandler().getMethodFromName((String) cb_parameter_methods.getSelectedItem())
-					+ factory.getParameterHandler().param_splitter_default + cb_parameter_formats.getSelectedItem()
-					+ factory.getParameterHandler().replacement_default_2;
+					+ SSHCommandParameterMethods.param_splitter_default + cb_parameter_formats.getSelectedItem()
+					+ SSHCommandParameterMethods.replacement_default_2;
 		logging.debug("PARAM TEXT: " + paramText);
 		try {
 			logging.info(this, "actionPerformed(testParamMethod) parameterText " + paramText);
@@ -245,20 +233,19 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	}
 
 	public void doActionParamAdd(JTextComponent component) {
-		String text = (String) component.getText();
 		String paramText = "";
 		if (((String) cb_parameter_methods.getSelectedItem())
-				.equals(factory.getParameterHandler().method_interactiveElement)
+				.equals(SSHCommandParameterMethods.method_interactiveElement)
 				|| ((String) cb_parameter_methods.getSelectedItem())
-						.equals(factory.getParameterHandler().method_optionSelection)) {
-			paramText = factory.getParameterHandler().replacement_default_1
+						.equals(SSHCommandParameterMethods.method_optionSelection)) {
+			paramText = SSHCommandParameterMethods.replacement_default_1
 					+ factory.getParameterHandler().getMethodFromName((String) cb_parameter_methods.getSelectedItem())
-					+ factory.getParameterHandler().replacement_default_2;
+					+ SSHCommandParameterMethods.replacement_default_2;
 		} else
-			paramText = factory.getParameterHandler().replacement_default_1
+			paramText = SSHCommandParameterMethods.replacement_default_1
 					+ factory.getParameterHandler().getMethodFromName((String) cb_parameter_methods.getSelectedItem())
-					+ factory.getParameterHandler().param_splitter_default + cb_parameter_formats.getSelectedItem()
-					+ factory.getParameterHandler().replacement_default_2;
+					+ SSHCommandParameterMethods.param_splitter_default + cb_parameter_formats.getSelectedItem()
+					+ SSHCommandParameterMethods.replacement_default_2;
 		try {
 			component.getDocument().insertString(component.getCaretPosition(), paramText, null);
 		} catch (BadLocationException ble) {

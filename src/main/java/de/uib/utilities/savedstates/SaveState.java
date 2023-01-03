@@ -8,7 +8,7 @@ public abstract class SaveState {
 	SaveState() {
 	}
 
-	public SaveState(String key, Object defaultValue, SavedStates states) {
+	protected SaveState(String key, Object defaultValue, SavedStates states) {
 		this.key = key;
 		this.defaultValue = defaultValue;
 		this.states = states;

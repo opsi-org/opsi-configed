@@ -9,6 +9,7 @@ import javax.swing.ComboBoxModel;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.logging;
+import de.uib.utilities.savedstates.SessionSaveSet;
 
 public class InstallationStateTableModelFiltered extends InstallationStateTableModel
 
@@ -22,36 +23,34 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 
 	private int[] filterInverse;
 
-	private de.uib.utilities.savedstates.SessionSaveSet filterSaver;
+	private SessionSaveSet<String> filterSaver;
 
 	public InstallationStateTableModelFiltered(String[] selectedClients, ConfigedMain main,
-			Map<String, Map<String, Map<String, String>>> collectChangedStates, List listOfInstallableProducts,
-			Map statesAndActions, Map possibleActions, Map<String, Map<String, Object>> productGlobalInfos,
-			List<String> displayColumns, de.uib.utilities.savedstates.SessionSaveSet filterSaver) {
+			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
+			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
+			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns,
+			SessionSaveSet<String> filterSaver) {
 		super(selectedClients, main, collectChangedStates, listOfInstallableProducts, statesAndActions, possibleActions,
 				productGlobalInfos, displayColumns);
-		// test setFilter(new int[]{4,8,9});
+
 		this.filterSaver = filterSaver;
 	}
 
 	private void saveFilterSet(Set<String> filterSet) {
-		/*
-		 * Set<String> testSet = new HashSet<String>();
-		 * testSet.add("jedit");
-		 */
+
 		filterSaver.serialize(filterSet);
-		// filterSaver.serialize(testSet);
+
 		logging.info(this, "saveFilterSet " + filterSet);
 	}
 
 	public void resetFilter() {
-		Set<String> filterSaved = (Set<String>) filterSaver.deserialize();
+		Set<String> filterSaved = filterSaver.deserialize();
 		if (filterSaved == null || filterSaved.isEmpty()) {
-			setFilterFrom((Set) null);
+			setFilterFrom((Set<String>) null);
 		} else {
-			Set<String> products_only_in_filterset = new HashSet<String>(filterSaved);
-			products_only_in_filterset.removeAll(tsProductNames);
-			filterSaved.removeAll(products_only_in_filterset);
+			Set<String> productsOnlyInFilterSet = new HashSet<>(filterSaved);
+			productsOnlyInFilterSet.removeAll(tsProductNames);
+			filterSaved.removeAll(productsOnlyInFilterSet);
 			// A - (A - B) is the intersection
 
 			setFilterFrom(filterSaved);
@@ -63,11 +62,10 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 	public void setFilterFrom(Set<String> ids) {
 		saveFilterSet(ids);
 
-		;
 		Set<String> reducedIds = null;
 		if (ids != null) {
 			logging.info(this, "setFilterFrom, save set " + ids.size());
-			reducedIds = new HashSet<String>(productsV);
+			reducedIds = new HashSet<>(productsV);
 			reducedIds.retainAll(ids);
 		}
 
@@ -118,10 +116,6 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 		if (filter == null)
 			return i;
 
-		/*
-		 * if filter[i] > super.getRowCount()-1)
-		 * logging.warning("invalid filter");
-		 */
 		if (i >= filter.length) {
 			logging.info(this, "originRow, error cannot evaluate filter; i, filter.length " + i + ", " + filter.length);
 			return i;
@@ -140,6 +134,7 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 	}
 
 	// table model
+	@Override
 	public int getRowCount() {
 		if (filter == null)
 			return super.getRowCount();
@@ -147,20 +142,24 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 			return filter.length;
 	}
 
+	@Override
 	public Object getValueAt(int row, int displayCol) {
 		return super.getValueAt(originRow(row), displayCol);
 	}
 
+	@Override
 	public boolean isCellEditable(int row, int col) {
 		return super.isCellEditable(originRow(row), col);
 	}
 
+	@Override
 	public void setValueAt(Object value, int row, int col) {
 		super.changeValueAt(value, originRow(row), col);
 		fireTableCellUpdated(row, col);
 	}
 
 	// ComboBoxModeller
+	@Override
 	public ComboBoxModel getComboBoxModel(int row, int column) {
 		return super.getComboBoxModel(originRow(row), column);
 	}

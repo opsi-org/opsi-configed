@@ -1,12 +1,13 @@
 package de.uib.utilities.datastructure;
 
 import java.util.HashMap;
+import java.util.List;
 
 //very similar to TableEntry
 public class RelationElement<S, O> extends HashMap<S, O> {
 
-	protected java.util.List<S> allowedAttributes;
-	protected java.util.List<S> minimalAttributes;
+	protected List<S> allowedAttributes;
+	protected List<S> minimalAttributes;
 
 	public RelationElement() {
 		super();
@@ -16,7 +17,7 @@ public class RelationElement<S, O> extends HashMap<S, O> {
 		super(rowmap);
 	}
 
-	public void setAllowedAttributes(java.util.List<S> allowedAttributes) {
+	public void setAllowedAttributes(List<S> allowedAttributes) {
 		this.allowedAttributes = allowedAttributes;
 	}
 
@@ -29,7 +30,7 @@ public class RelationElement<S, O> extends HashMap<S, O> {
 		return super.get(key);
 	}
 
-	public java.util.List<S> getAllowedAttributes() {
+	public List<S> getAllowedAttributes() {
 		return allowedAttributes;
 	}
 

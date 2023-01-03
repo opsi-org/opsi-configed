@@ -1,6 +1,5 @@
 package de.uib.utilities.swing;
 
-import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 /*
@@ -13,11 +12,9 @@ import java.awt.event.KeyListener;
 *
 */
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -38,7 +35,7 @@ public class RecordPane extends JPanel implements KeyListener {
 	protected class TheObservableSubject extends ObservableSubject {
 		@Override
 		public void notifyObservers() {
-			// logging.debug(this, "notifyObservers ");
+
 			logging.debug("RecordPane: notifyObservers ");
 		}
 	}
@@ -50,17 +47,16 @@ public class RecordPane extends JPanel implements KeyListener {
 	protected Map<String, JTextFieldObserved> datafields;
 
 	// Data
-	protected LinkedHashMap<String, String> data;
+	protected Map<String, String> data;
 	protected Map<String, String> labels;
 	protected Map<String, String> hints;
 	protected Map<String, Boolean> editable;
-	// protected Component parent;
 
 	public RecordPane() {
 		// call of setData necessary
 	}
 
-	public RecordPane(LinkedHashMap<String, String> data, Map<String, String> labels, Map<String, String> hints,
+	public RecordPane(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
 			Map<String, Boolean> editable) {
 		init(data, labels, hints, editable);
 	}
@@ -76,12 +72,12 @@ public class RecordPane extends JPanel implements KeyListener {
 		}
 	}
 
-	public void setData(LinkedHashMap<String, String> data, Map<String, String> labels, Map<String, String> hints,
+	public void setData(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
 			Map<String, Boolean> editable) {
 		init(data, labels, hints, editable);
 	}
 
-	protected void init(LinkedHashMap<String, String> data, Map<String, String> labels, Map<String, String> hints,
+	protected void init(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
 			Map<String, Boolean> editable) {
 		this.data = data;
 		this.labels = labels;
@@ -94,10 +90,10 @@ public class RecordPane extends JPanel implements KeyListener {
 
 	protected void initComponents() {
 
-		setBackground(Globals.backgroundWhite);
+		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
-		labelfields = new HashMap<String, JLabel>();
-		datafields = new HashMap<String, JTextFieldObserved>();
+		labelfields = new HashMap<>();
+		datafields = new HashMap<>();
 
 		javax.swing.GroupLayout baseLayout = new javax.swing.GroupLayout(this);
 		this.setLayout(baseLayout);
@@ -138,12 +134,8 @@ public class RecordPane extends JPanel implements KeyListener {
 
 			jTextField.addKeyListener(this);
 
-			// logging.debug(jTextField.getText() + " " + jTextField.isEditable());
-
 			datafields.put(key, jTextField);
 		}
-
-		Map<String, GroupLayout.SequentialGroup> vGroups = new HashMap<String, GroupLayout.SequentialGroup>();
 
 		GroupLayout.ParallelGroup hGroup = baseLayout.createParallelGroup();
 
@@ -173,7 +165,7 @@ public class RecordPane extends JPanel implements KeyListener {
 
 	}
 
-	public LinkedHashMap<String, String> getData() {
+	public Map<String, String> getData() {
 		for (String key : data.keySet()) {
 			data.put(key, datafields.get(key).getText());
 		}
@@ -182,39 +174,17 @@ public class RecordPane extends JPanel implements KeyListener {
 
 	// interface
 	// KeyListener
+	@Override
 	public void keyPressed(KeyEvent e) {
-		// logging.debug(this, " key event " + e);
+
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 	}
 
-	public static void main(String[] args) {
-		LinkedHashMap<String, String> testdata = new LinkedHashMap<String, String>();
-		testdata.put("field1", "test1");
-		testdata.put("field2", "test2");
-		testdata.put("field3", "test3");
-
-		HashMap<String, String> labels = new HashMap<String, String>();
-		labels.put("field1", "label1");
-		labels.put("field2", "label2");
-		labels.put("field3", "labelt3");
-
-		HashMap<String, Boolean> editable = new HashMap<String, Boolean>();
-		editable.put("field1", true);
-		editable.put("field2", true);
-		editable.put("field3", true);
-
-		RecordPane instance = new RecordPane(testdata, labels, null, editable);
-		instance.setObservableSubject(null);
-
-		JDialog f = new JDialog();
-		f.setSize(new Dimension(300, 300));
-		f.add(instance);
-		f.setModal(true);
-		f.setVisible(true);
-	}
 }

@@ -1,11 +1,10 @@
 package de.uib.opsidatamodel.productstate;
 
-//import de.uib.utilities.logging.*;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import de.uib.configed.Globals;
 
@@ -27,14 +26,6 @@ public class InstallationStatus {
 	public static final int UNKNOWN = 2;
 
 	// compatibility mode for older opsi data, not more necessary
-	// public static final int FAILED = 4;
-
-	// public static final int INSTALLING = 3;
-
-	// textcolors
-	public static final Color NOT_INSTALLEDcolor = Globals.INVISIBLE;
-	public static final Color INSTALLEDcolor = Globals.okGreen;
-	public static final Color UNKNOWNcolor = Globals.unknownBlue;
 
 	private static Map<Integer, String> state2label;
 	private static Map<String, Integer> label2state;
@@ -42,8 +33,8 @@ public class InstallationStatus {
 	private static Map<String, String> displayLabel2label;
 	private static Map<String, Color> label2textColor;
 
-	private static Vector<Integer> states;
-	private static Vector<String> labels;
+	private static List<Integer> states;
+	private static List<String> labels;
 	private static String[] choiceLabels;
 
 	// instance variable
@@ -53,78 +44,69 @@ public class InstallationStatus {
 		if (states != null)
 			return;
 
-		states = new Vector<Integer>();
+		states = new ArrayList<>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(UNDEFINED);
 		states.add(INSTALLED);
 		states.add(NOT_INSTALLED);
-		// states.add(FAILED);
+
 		states.add(UNKNOWN);
 
-		// states.add(INSTALLING);
-
-		labels = new Vector<String>();
+		labels = new ArrayList<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);
 		labels.add(Globals.NO_VALID_STATE_STRING);
 		labels.add("undefined");
 		labels.add("installed");
 		labels.add("not_installed");
-		// labels.add("failed");
-		labels.add("unknown");
-		// labels.add("installing");
 
-		state2label = new HashMap<Integer, String>();
+		labels.add("unknown");
+
+		state2label = new HashMap<>();
 		state2label.put(CONFLICT, Globals.CONFLICT_STATE_STRING);
 		state2label.put(INVALID, Globals.NO_VALID_STATE_STRING);
 		state2label.put(UNDEFINED, "undefined");
 		state2label.put(INSTALLED, "installed");
 		state2label.put(NOT_INSTALLED, "not_installed");
-		// state2label.put(FAILED, "failed");
+
 		state2label.put(UNKNOWN, "unknown");
 
-		// state2label.put(INSTALLING, "installing");
-
-		label2state = new HashMap<String, Integer>();
+		label2state = new HashMap<>();
 		label2state.put(Globals.CONFLICT_STATE_STRING, CONFLICT);
 		label2state.put(Globals.NO_VALID_STATE_STRING, INVALID);
 		label2state.put("undefined", UNDEFINED);
 		label2state.put("installed", INSTALLED);
 		label2state.put("not_installed", NOT_INSTALLED);
-		// label2state.put("failed", FAILED);
-		label2state.put("unknown", UNKNOWN);
-		// label2state.put("installing", INSTALLING);
 
-		label2displayLabel = new HashMap<String, String>();
+		label2state.put("unknown", UNKNOWN);
+
+		label2displayLabel = new HashMap<>();
 		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
 		label2displayLabel.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		label2displayLabel.put("undefined", "undefined");
 		label2displayLabel.put("installed", "installed");
 		label2displayLabel.put("not_installed", "not_installed");
-		// label2displayLabel.put("failed", "failed");
-		label2displayLabel.put("unknown", "unknown");
-		// label2displayLabel.put("installing", "installing");
 
-		displayLabel2label = new HashMap<String, String>();
+		label2displayLabel.put("unknown", "unknown");
+
+		displayLabel2label = new HashMap<>();
 		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
 		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		displayLabel2label.put("undefined", "undefined");
 		displayLabel2label.put("installed", "installed");
 		displayLabel2label.put("not_installed", "not_installed");
-		// displayLabel2label.put("failed", "failed");
+
 		displayLabel2label.put("unknown", "unknown");
-		// displayLabel2label.put("installing", "installing");
 
 		choiceLabels = new String[] { label2displayLabel.get("not_installed"), label2displayLabel.get("installed"),
 				label2displayLabel.get("unknown")
-				// label2displayLabel.get("failed"),
-				// label2displayLabel.get(Globals.NOVALIDSTATEstring)
+
 		};
 
-		label2textColor = new HashMap<String, Color>();
-		label2textColor.put("not_installed", NOT_INSTALLEDcolor);
-		label2textColor.put("installed", INSTALLEDcolor);
-		label2textColor.put("unknown", UNKNOWNcolor);
+		label2textColor = new HashMap<>();
+		label2textColor.put("not_installed", Globals.INSTALLATION_STATUS_NOT_INSTALLED_COLOR);
+		label2textColor.put("installed", Globals.INSTALLATION_STATUS_INSTALLED_COLOR);
+		label2textColor.put("unknown", Globals.INSTALLATION_STATUS_UNKNOWN_COLOR);
 
 	}
 
@@ -161,7 +143,7 @@ public class InstallationStatus {
 		return state2label.get(state);
 	}
 
-	public static Vector<String> getLabels() {
+	public static List<String> getLabels() {
 		checkCollections();
 
 		return labels;
@@ -171,7 +153,7 @@ public class InstallationStatus {
 		checkCollections();
 
 		if (label == null || label.equals(""))
-			// return NOT_INSTALLED; produces false results when recursively following
+
 			// action requests
 			return UNKNOWN;
 
@@ -203,6 +185,7 @@ public class InstallationStatus {
 		return getLabel(state);
 	}
 
+	@Override
 	public String toString() {
 		return getLabel(state);
 	}
@@ -221,10 +204,6 @@ public class InstallationStatus {
 		if (!labels.contains(label))
 			return new InstallationStatus(INVALID);
 
-		// logging.debug(" -------- label " + label + " --- val " + getVal(label));
-		// logging.debug(" -------- display " + new
-		// InstallationStatus(getVal(label)));
-
 		return new InstallationStatus(getVal(label));
 	}
 
@@ -238,20 +217,4 @@ public class InstallationStatus {
 		else
 			state = INVALID;
 	}
-
-	public static void main(String[] args) {
-		// logging.debug(" test InstallationStatus.java");
-		checkCollections();
-		Iterator iter = states.iterator();
-
-		int i = 0;
-
-		while (iter.hasNext()) {
-			i++;
-			int state = (Integer) iter.next();
-			// logging.debug("state " + i + " : " + state + " label " +
-			// getLabel(state));
-		}
-	}
-
 }

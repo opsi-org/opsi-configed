@@ -13,6 +13,7 @@ public class OrOperation extends SelectGroupOperation implements ExecutableOpera
 			registerChildOperation(operation);
 	}
 
+	@Override
 	public boolean doesMatch(Client client) {
 		for (SelectOperation operation : getChildOperations()) {
 			if (operation instanceof ExecutableOperation && ((ExecutableOperation) operation).doesMatch(client))

@@ -3,6 +3,7 @@ package de.uib.opsidatamodel.dbtable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Host extends Table {
@@ -11,9 +12,9 @@ public class Host extends Table {
 	public static final String hwAddressColumn = tableName + ".hardwareAdress";
 	public static final String descriptionColumn = tableName + ".description";
 
-	public static java.util.List<String> columns;
+	public static List<String> columns;
 	static {
-		columns = new ArrayList<String>();
+		columns = new ArrayList<>();
 		columns.add("hostId");
 		columns.add("type");
 		columns.add("description");
@@ -43,7 +44,7 @@ public class Host extends Table {
 
 	public static String dbColumnsString;
 	static {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for (String col : columns) {
 			buf.append(tableName);
 			buf.append(".");
@@ -53,15 +54,15 @@ public class Host extends Table {
 		dbColumnsString = buf.toString().substring(0, columnsString.length() - 1);
 	}
 
-	public static java.util.List<String> primaryKey;
+	public static List<String> primaryKey;
 	public static String primaryKeyString;
 	static {
-		primaryKey = new ArrayList<String>();
+		primaryKey = new ArrayList<>();
 		primaryKey.add("hostId");
 		primaryKeyString = primaryKey.get(0);
 	}
 
-	private static Map<String, String> key2servicekey = new HashMap<String, String>();
+	private static Map<String, String> key2servicekey = new HashMap<>();
 	static {
 		for (String key : columns) {
 			key2servicekey.put(key, key);

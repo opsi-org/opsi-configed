@@ -35,10 +35,11 @@ public class AndOrSelectButtonByIcon extends IconAsButton {
 	}
 
 	private class ButtonActionListener implements ActionListener {
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			logging.debug(this, "actionPerformed  " + e + " activated " + activated);
 			setActivated(!activated);
-			// createActionEvents();
+
 		}
 	}
 }

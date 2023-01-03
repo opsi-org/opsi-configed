@@ -21,12 +21,14 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 
 	public SSHPMInstallServerPanel(String fullPathToPackage) {
 		super();
-		autocompletion = new SSHCompletionComboButton(additional_default_paths, ".opsi", fullPathToPackage);
+		autocompletion = new SSHCompletionComboButton(additionalDefaultPaths, ".opsi", fullPathToPackage);
 
 		initComponents();
 		setPackagePath(fullPathToPackage);
 		initLayout();
-		enable(true);
+
+		cb_autocompletion.setEnabled(true);
+		btn_autocompletion.setEnabled(true);
 		cb_autocompletion.setSelectedItem(workbench);
 	}
 
@@ -37,17 +39,12 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 		}
 	}
 
-	public void enable(boolean e) {
-		cb_autocompletion.setEnabled(e);
-		btn_autocompletion.setEnabled(e);
-	}
-
 	private void initComponents() {
 
 		lbl_opsi_product.setText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelOtherPath"));
 		tf_product = autocompletion.getTextField();
-		// tf_product.setEditable(false);
+
 		cb_autocompletion = autocompletion.getCombobox();
 		cb_autocompletion.setToolTipText(configed
 				.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button_andopsipackage.combo.tooltip"));
@@ -61,7 +58,7 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 	}
 
 	private void initLayout() {
-		this.setBackground(Globals.backLightBlue);
+		this.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		GroupLayout layout = new GroupLayout(this);
 
@@ -93,15 +90,15 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 	}
 
 	public CommandOpsiPackageManagerInstall getCommand() {
-		return SSHPMInstallServerPanel.getCommand((String) tf_product.getText());
+		return SSHPMInstallServerPanel.getCommand(tf_product.getText());
 	}
 
 	public static CommandOpsiPackageManagerInstall getCommand(String product) {
-		// logging.error("product " + product);
+
 		if ((product == null) || (product.equals("")))
 			return null;
 		CommandOpsiPackageManagerInstall com = new CommandOpsiPackageManagerInstall();
-		com.setOpsiproduct(product.replaceAll("\n", ""));
+		com.setOpsiproduct(product.replace("\n", ""));
 		return com.checkCommand() ? com : null;
 	}
 }

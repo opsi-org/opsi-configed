@@ -12,13 +12,11 @@ package de.uib.utilities.swing;
  * @author roeder
  */
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -70,9 +68,9 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 
 	@Override
 	public String getText() {
-		textarea.setText(textarea.getText().replaceAll("\t", ""));
+		textarea.setText(textarea.getText().replace("\t", ""));
 		if (singleLine)
-			textarea.setText(textarea.getText().replaceAll("\n", ""));
+			textarea.setText(textarea.getText().replace("\n", ""));
 		initialText = textarea.getText(); // set new initial text for use in processWindowEvent
 		return initialText;
 	}
@@ -84,7 +82,6 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getSource() == textarea) {
-			// logging.debug(this, " key event on textarea " + e);
 
 			if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
 					&& e.getKeyCode() == KeyEvent.VK_TAB)
@@ -98,69 +95,47 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	}
 
 	// DocumentListener interface
+	@Override
 	public void changedUpdate(DocumentEvent e) {
-		// logging.debug(this, "changedUpdate");
+
 		setDataChanged(true);
 
 	}
 
+	@Override
 	public void insertUpdate(DocumentEvent e) {
-		// logging.debug(this, "insertUpdate");
-		/*
-		 * //catch tabs and in case returns
-		 * try
-		 * {
-		 * String newPiece = e.getDocument().getText(e.getOffset(), e.getLength());
-		 * logging.debug(this, " --------->" + newPiece + "<");
-		 * if ( newPiece.equals ("\t") )
-		 * {
-		 * //logging.debug(this, "tab");
-		 * buttonCommit.requestFocus();
-		 * }e
-		 * 
-		 * }
-		 * catch(javax.swing.text.BadLocationException ex)
-		 * {
-		 * }
-		 */
+
 		setDataChanged(true);
 	}
 
 	// MouseListener
+	@Override
 	public void mouseClicked(MouseEvent e) {
-		// logging.error(this, " " + textarea.getCaretPosition()+ "\n" + e);
+
 		if (standalone)
 			logging.debug(getText());
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e) {
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
 
+	@Override
 	public void removeUpdate(DocumentEvent e) {
-		// logging.debug(this, "removeUpdate");
+
 		setDataChanged(true);
-	}
-
-	public static void main(String[] args) {
-		logging.debug(" invoking " + FEditText.class);
-		SwingUtilities.invokeLater(() -> {
-			FEditText f = new FEditText(args[0], "");
-			f.init(new Dimension(300, 200));
-			f.setVisible(true);
-			f.setStartText(args[0]);
-			count++;
-			logging.debug("having " + count + " " + f.getText());
-		});
-
 	}
 
 }

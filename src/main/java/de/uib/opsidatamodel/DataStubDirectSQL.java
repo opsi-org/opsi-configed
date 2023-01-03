@@ -13,12 +13,16 @@
 
 package de.uib.opsidatamodel;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.opsicommand.DbConnect;
@@ -35,14 +39,13 @@ public class DataStubDirectSQL extends DataStubRawData
 	}
 
 	@Override
-	protected void retrieveSoftwareAuditOnClients(final java.util.List<String> clients) {
-		logging.info(this,
-				"retrieveSoftwareAuditOnClients used memory on start " + de.uib.utilities.Globals.usedMemory());
+	protected void retrieveSoftwareAuditOnClients(final List<String> clients) {
+		logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
 		retrieveInstalledSoftwareInformation();
 		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  clients count ======  " + clients.size());
 
-		java.util.List<String> newClients = new ArrayList<String>(clients);
+		List<String> newClients = new ArrayList<>(clients);
 
 		if (client2software != null) {
 			logging.info(this, "retrieveSoftwareAuditOnClients client2Software.keySet size " + "   +++  "
@@ -54,7 +57,7 @@ public class DataStubDirectSQL extends DataStubRawData
 		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  new clients count  ====== " + newClients.size());
 
-		if (client2software == null || newClients.size() > 0) {
+		if (client2software == null || !newClients.isEmpty()) {
 
 			String clientSelection = null;
 
@@ -64,16 +67,11 @@ public class DataStubDirectSQL extends DataStubRawData
 				clientSelection = " AND ( " + giveWhereOR("clientId", newClients) + ") ";
 			}
 
-			// logging.info(this, "retrieveSoftwareAuditOnClients for " +
-			// clientListForCall.size() + " clients " + clientListForCall);
-
-			// client2software = new HashMap<String, java.util.List<String>>();
 			if (client2software == null)
-				client2software = new HashMap<String, java.util.List<SWAuditClientEntry>>();
+				client2software = new HashMap<>();
 
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " softwareConfig ");
-			// , step " + step);
 
 			logging.info(this, "retrieveSoftwareAuditOnClients/ SOFTWARE_CONFIG, start a request");
 
@@ -86,14 +84,12 @@ public class DataStubDirectSQL extends DataStubRawData
 
 			logging.info(this, "retrieveSoftwareAuditOnClients, query " + query);
 
-			java.sql.Connection sqlConn = DbConnect.getConnection();
+			Connection sqlConn = DbConnect.getConnection();
 
-			try {
+			try (Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_READ_ONLY)) {
 				TimeCheck timeCheck = new TimeCheck(this, "execute Query   " + query);
 				timeCheck.start();
-
-				java.sql.Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-						ResultSet.CONCUR_READ_ONLY);
 
 				ResultSet rs = stat.executeQuery(query);
 
@@ -103,23 +99,17 @@ public class DataStubDirectSQL extends DataStubRawData
 
 					String clientId = rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditClientEntry.CLIENT_ID));
 
-					java.util.List<SWAuditClientEntry> entries = client2software.get(clientId);
+					List<SWAuditClientEntry> entries = client2software.get(clientId);
 					if (entries == null) {
-						entries = new LinkedList<SWAuditClientEntry>();
+						entries = new LinkedList<>();
 						client2software.put(clientId, entries);
 					}
 
-					row = new LinkedList<String>();
+					row = new LinkedList<>();
 
 					for (int i = 0; i < SWAuditClientEntry.DB_COLUMN_NAMES.size(); i++) {
 						row.add(rs.getString(i + 1));
 					}
-					/*
-					 * for (String col : SWAuditClientEntry.DB_COLUMN_NAMES)
-					 * {
-					 * row.add(rs.getString(col));
-					 * }
-					 */
 
 					SWAuditClientEntry clientEntry = new SWAuditClientEntry(SWAuditClientEntry.DB_COLUMN_NAMES, row,
 							persist);
@@ -128,7 +118,7 @@ public class DataStubDirectSQL extends DataStubRawData
 						logging.info("Missing auditSoftware entry for swIdent " + SWAuditClientEntry.DB_COLUMN_NAMES
 								+ "for values"
 								+ SWAuditClientEntry.produceSWident(SWAuditClientEntry.DB_COLUMN_NAMES, row));
-						// item.put(SWAuditEntry.WINDOWSsOFTWAREid, "MISSING");
+
 					} else {
 						entries.add(clientEntry);
 					}
@@ -142,7 +132,7 @@ public class DataStubDirectSQL extends DataStubRawData
 				// the remaining clients are without software entry
 
 				for (String clientId : newClients) {
-					client2software.put(clientId, new LinkedList<SWAuditClientEntry>());
+					client2software.put(clientId, new LinkedList<>());
 				}
 
 			}
@@ -152,15 +142,7 @@ public class DataStubDirectSQL extends DataStubRawData
 				logging.error("retrieveSoftwareAuditOnClients sql Error " + e.toString());
 			}
 
-			// logging.info(this, "retrieveSoftwareAuditOnClients client2software " +
-			// client2software);
-
-			logging.info(this,
-					"retrieveSoftwareAuditOnClients used memory on end " + de.uib.utilities.Globals.usedMemory());
-			// System.gc();
-			// logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " +
-			// de.uib.utilities.Globals.usedMemory());
-			// step++;
+			logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
 
 			persist.notifyDataRefreshedObservers("softwareConfig");
 		}

@@ -12,19 +12,16 @@
 
 package de.uib.configed.groupaction;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -47,18 +44,18 @@ public class FGroupActions extends SecondaryFrame {
 	JTextField fieldGroupname;
 	JTextField fieldInvolvedClientsCount;
 
-	JComboBox comboSelectImage;
+	JComboBox<String> comboSelectImage;
 
-	java.util.List<String> associatedClients;
+	List<String> associatedClients;
 
 	PersistenceController persist;
 	ConfigedMain main;
 
 	int hFirstGap = Globals.HFIRST_GAP;
 
-	int firstLabelWidth = Globals.BUTTON_WIDTH; // Globals.firstLabelWidth;
+	int firstLabelWidth = Globals.BUTTON_WIDTH;
 
-	public FGroupActions(ConfigedMain main, PersistenceController persist, JFrame mainframe) {
+	public FGroupActions(ConfigedMain main, PersistenceController persist) {
 		super();
 
 		this.main = main;
@@ -83,20 +80,19 @@ public class FGroupActions extends SecondaryFrame {
 	}
 
 	protected void setImages() {
-		Vector<String> imagesCollection = new Vector<String>();
-		// imagesCollection.add("");
+		List<String> imagesCollection = new ArrayList<>();
 
-		imagesCollection.addAll(new TreeSet<String>(persist.getCommonProductPropertyValues(associatedClients,
-				persist.localImageRestoreProductKey, persist.localImagesListPropertyKey)));
+		imagesCollection.addAll(new TreeSet<>(persist.getCommonProductPropertyValues(associatedClients,
+				PersistenceController.localImageRestoreProductKey, PersistenceController.localImagesListPropertyKey)));
 
-		comboSelectImage.setModel(new DefaultComboBoxModel(imagesCollection));
+		comboSelectImage.setModel(new DefaultComboBoxModel<>(imagesCollection.toArray(new String[0])));
 	}
 
 	private void reload() {
 		setGroupLabelling(main.getActivatedGroupModel().getLabel(),
 				"" + main.getActivatedGroupModel().getNumberOfClients());
 
-		associatedClients = new ArrayList<String>(main.getActivatedGroupModel().getAssociatedClients());
+		associatedClients = new ArrayList<>(main.getActivatedGroupModel().getAssociatedClients());
 		setImages();
 	}
 
@@ -108,31 +104,26 @@ public class FGroupActions extends SecondaryFrame {
 
 		String image = (String) comboSelectImage.getSelectedItem();
 
-		ArrayList<String> values = new ArrayList<String>();
+		List<String> values = new ArrayList<>();
 		values.add(image); // selected from common product property values
 
 		WaitCursor waitCursor = new WaitCursor(this);
 
 		persist.setCommonProductPropertyValue(main.getActivatedGroupModel().getAssociatedClients(),
-				persist.localImageRestoreProductKey, persist.localImageToRestorePropertyKey, values);
+				PersistenceController.localImageRestoreProductKey, PersistenceController.localImageToRestorePropertyKey,
+				values);
 
-		Map<String, String> changedValues = new HashMap<String, String>();
-		changedValues.put(de.uib.opsidatamodel.productstate.ProductState.KEY_actionRequest, "setup");
-		// ActionRequest.getLabel(ActionRequest.SETUP);
+		Map<String, String> changedValues = new HashMap<>();
+		changedValues.put(de.uib.opsidatamodel.productstate.ProductState.KEY_ACTION_REQUEST, "setup");
 
-		persist.updateProductOnClients(
-				// associatedClients,
-				main.getActivatedGroupModel().getAssociatedClients(), persist.localImageRestoreProductKey,
-				OpsiPackage.TYPE_NETBOOT, changedValues);
+		persist.updateProductOnClients(main.getActivatedGroupModel().getAssociatedClients(),
+				PersistenceController.localImageRestoreProductKey, OpsiPackage.TYPE_NETBOOT, changedValues);
 
 		waitCursor.stop();
-		// if (comboSelectImage
-		// String selectedImage = comboSelectImage
 	}
 
 	protected void define() {
 		topPanel = new JPanel();
-		// topPanel.setBorder( Globals.createPanelBorder() );
 
 		defineTopPanel(topPanel);
 
@@ -154,45 +145,31 @@ public class FGroupActions extends SecondaryFrame {
 				layout.createParallelGroup().addComponent(topPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addComponent(imageActionPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		Containership cs_all = new Containership(getContentPane());
-		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.backLightBlue }, JPanel.class);
+		Containership csAll = new Containership(getContentPane());
+		csAll.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
+				JPanel.class);
 
-		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.backgroundLightGrey },
+		csAll.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },
 				javax.swing.text.JTextComponent.class);
 
 	}
 
 	private void defineImageActionPanel(JPanel panel) {
 		JLabel labelCombo = new JLabel(configed.getResourceValue("FGroupAction.existingImages"));
-		// labelCombo.setPreferredSize(new Dimension(200, Globals.lineHeight));
-		comboSelectImage = new JComboBox();
-		// comboSelectImage.setPreferredSize(new Dimension(200, Globals.lineHeight));
+
+		comboSelectImage = new JComboBox<>();
 
 		JLabel topicLabel = new JLabel(configed.getResourceValue("FGroupAction.replayImage"));
 
 		JButton buttonSetup = new JButton(configed.getResourceValue("FGroupAction.buttonSetup"));
 		buttonSetup.setToolTipText(configed.getResourceValue("FGroupAction.buttonSetup.tooltip"));
 
-		buttonSetup.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// logging.info(this, "actionPerformed");
-				replay();
-			}
-		});
+		buttonSetup.addActionListener(actionEvent -> replay());
 
 		IconButton buttonReload = new IconButton(configed.getResourceValue("FGroupAction.buttonReload"),
 				"images/reload16.png", "images/reload16_over.png", "images/reload16_disabled.png", true);
-		// buttonReload.setPreferredSize(new Dimension(60, 40));
-		// buttonReload.setBackground(de.uib.utilities.Globals.backgroundLightGrey);
 
-		buttonReload.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// logging.info(this, "actionPerformed");
-				reload();
-			}
-		}
-
-		);
+		buttonReload.addActionListener(actionEvent -> reload());
 
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
@@ -226,70 +203,16 @@ public class FGroupActions extends SecondaryFrame {
 						.addGap(Globals.HGAP_SIZE * 2, Globals.HGAP_SIZE * 4, Globals.HGAP_SIZE * 4)
 						.addComponent(buttonSetup, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
 						.addGap(Globals.HGAP_SIZE * 2, Globals.HGAP_SIZE * 2, Globals.HGAP_SIZE * 2)
-						.addComponent(buttonReload, de.uib.utilities.Globals.iconWidth,
-								de.uib.utilities.Globals.iconWidth, de.uib.utilities.Globals.iconWidth)
+						.addComponent(buttonReload, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 						.addGap(Globals.HGAP_SIZE, Globals.HFIRST_GAP, Short.MAX_VALUE))
 		//////////////////////////////////////////////////////////////////////
 		);
-
-		/*
-		 * imageActionPanel = new PanelLinedComponents(new JComponent[]{
-		 * new JLabel(" "),
-		 * labelCombo,
-		 * new JLabel(" "),
-		 * comboSelectImage,
-		 * new JLabel(" "),
-		 * buttonSetup,
-		 * new JLabel(" "),
-		 * new JLabel(" "),
-		 * buttonReload
-		 * });
-		 */
-
-		/*
-		 * persist.getCommonProductPropertyValues(
-		 * new ArrayList<String> (
-		 * main.getActivatedGroupModel().getAssociatedClients()
-		 * ),
-		 * persist.localImageRestoreProductKey,
-		 * persist.localImagesListPropertyKey
-		 * );
-		 * 
-		 * 
-		 * 
-		 * //set common property
-		 * ArrayList<String> values = new ArrayList<String>();
-		 * values.add("win2000"); //selected from common product property values
-		 * 
-		 * persist.setCommonProductPropertyValue(
-		 * main.getActivatedGroupModel().getAssociatedClients(),
-		 * persist.localImageRestoreProductKey,
-		 * persist.localImageToRestorePropertyKey,
-		 * values
-		 * );
-		 * 
-		 * 
-		 * //set to update
-		 * 
-		 * 
-		 * Map<String, String> changedValues = new HashMap<String, String>();
-		 * changedValues.put(de.uib.opsidatamodel.productstate.ProductState.
-		 * KEY_actionRequest, "setup");
-		 * //ActionRequest.getLabel(ActionRequest.SETUP);
-		 * 
-		 * persist.updateProductOnClients(
-		 * main.getActivatedGroupModel().getAssociatedClients(),
-		 * persist.localImageRestoreProductKey,
-		 * OpsiPackage.TYPE_NETBOOT,
-		 * changedValues);
-		 * 
-		 */
 
 	}
 
 	private void defineTopPanel(JPanel panel) {
 		JLabel groupNameLabel = new JLabel(configed.getResourceValue("FGroupAction.groupname"));
-		// JLabel clientsLabel = new JLabel("clients");
+
 		JLabel clientsCountLabel = new JLabel(configed.getResourceValue("FGroupAction.clientcounter"));
 
 		fieldGroupname = new JTextField();

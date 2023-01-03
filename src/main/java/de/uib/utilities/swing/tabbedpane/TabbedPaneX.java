@@ -3,23 +3,23 @@ package de.uib.utilities.swing.tabbedpane;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.Icon;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 
 public class TabbedPaneX extends JPanel {
 	private javax.swing.JTabbedPane jTabbedPaneMain;
 
 	TabController controller;
 
-	Vector<Enum> tabOrder;
+	List<Enum> tabOrder;
 
 	Map globals;
-
-	private int oldVisualIndex = -1;
 
 	public TabbedPaneX(TabController controller) {
 		this.controller = controller;
@@ -36,33 +36,25 @@ public class TabbedPaneX extends JPanel {
 		setSize(600, 400);
 
 		setLayout(new BorderLayout());
-		jTabbedPaneMain = new JTabbedPane(JTabbedPane.TOP);
+		jTabbedPaneMain = new JTabbedPane(SwingConstants.TOP);
 
-		tabOrder = new Vector<Enum>();
+		tabOrder = new ArrayList<>();
 
-		jTabbedPaneMain.addChangeListener(new javax.swing.event.ChangeListener() {
-			public void stateChanged(javax.swing.event.ChangeEvent e) {
-				int newVisualIndex = jTabbedPaneMain.getSelectedIndex();
+		jTabbedPaneMain.addChangeListener(changeEvent -> {
+			int newVisualIndex = jTabbedPaneMain.getSelectedIndex();
 
-				// logging.debug(" new visual tab index " + newVisualIndex);
+			Enum newS = tabOrder.get(newVisualIndex);
 
-				Enum newS = tabOrder.elementAt(newVisualIndex);
+			// report state change request to controller and look, what it produces
+			Enum s = controller.reactToStateChangeRequest(newS);
 
-				// logging.debug(" new tab state " + newS);
+			// if the controller did not accept the new index set it back
+			// observe that we get a recursion since we initiate another state change
+			// the recursion breaks since newVisualIndex is identical with
+			// the old and does not yield a different value
+			if (newS != s) {
 
-				// report state change request to controller and look, what it produces
-				Enum s = controller.reactToStateChangeRequest(newS);
-
-				// logging.debug(" controlled new tab state " + s);
-
-				// if the controller did not accept the new index set it back
-				// observe that we get a recursion since we initiate another state change
-				// the recursion breaks since newVisualIndex is identical with
-				// the old and does not yield a different value
-				if (newS != s) {
-					// logging.debug(" new tab index " + s);
-					jTabbedPaneMain.setSelectedIndex(tabOrder.indexOf(s));
-				}
+				jTabbedPaneMain.setSelectedIndex(tabOrder.indexOf(s));
 			}
 		});
 
@@ -71,7 +63,7 @@ public class TabbedPaneX extends JPanel {
 	}
 
 	public void callExit() {
-		// logging.debug(" we want to close ");
+
 		controller.exit();
 	}
 

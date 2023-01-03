@@ -13,8 +13,7 @@ public class SoftwareNameElement extends GenericTextElement {
 	}
 
 	public SoftwareNameElement(Set<String> proposedData) {
-		super(proposedData,
-				new String[] { de.uib.opsidatamodel.OpsiProduct.NAME, "Name" },
+		super(proposedData, new String[] { de.uib.opsidatamodel.OpsiProduct.NAME, "Name" },
 				new String[] { configed.getResourceValue("ClientSelectionDialog.softwareName"),
 						configed.getResourceValue("InstallationStateTableModel.productId") });
 

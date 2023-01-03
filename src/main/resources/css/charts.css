@@ -1,23 +1,66 @@
 .chart-bar {
-	-fx-background-color: rgba(0,168,355,0.05);
-	-fx-border-color: rgba(0,168,355,0.3) rgba(0,168,355,0.3) transparent rgba(0,168,355,0.3);
+	-fx-background-color: rgba(0, 168, 355, 0.05);
+	-fx-border-color: rgba(0, 168, 355, 0.3) rgba(0, 168, 355, 0.3) transparent rgba(0, 168, 355, 0.3);
 	-fx-background-radius: 0;
 	-fx-background-position: left center;
 }
 
-.data0.chart-bar { -fx-background-color: rgb(0,168,355); }
-.data1.chart-bar { -fx-background-color: rgb(0,168,355); }
-.data2.chart-bar { -fx-background-color: rgb(0,168,355); }
+.data0.chart-bar {
+	-fx-background-color: rgb(0, 168, 355);
+}
 
-.data0.chart-pie { -fx-pie-color: turquoise; }
-.data1.chart-pie { -fx-pie-color: aquamarine; }
-.data2.chart-pie { -fx-pie-color: cornflowerblue; }
-.data3.chart-pie { -fx-pie-color: blue; }
-.data4.chart-pie { -fx-pie-color: cadetblue; }
-.data5.chart-pie { -fx-pie-color: navy; }
-.data6.chart-pie { -fx-pie-color: deepskyblue; }
-.data7.chart-pie { -fx-pie-color: cyan; }
-.data8.chart-pie { -fx-pie-color: steelblue; }
-.data9.chart-pie { -fx-pie-color: teal; }
-.data10.chart-pie { -fx-pie-color: royalblue; }
-.data11.chart-pie { -fx-pie-color: dodgerblue; }
+.data1.chart-bar {
+	-fx-background-color: rgb(0, 168, 355);
+}
+
+.data2.chart-bar {
+	-fx-background-color: rgb(0, 168, 355);
+}
+
+.data0.chart-pie {
+	-fx-pie-color: turquoise;
+}
+
+.data1.chart-pie {
+	-fx-pie-color: aquamarine;
+}
+
+.data2.chart-pie {
+	-fx-pie-color: cornflowerblue;
+}
+
+.data3.chart-pie {
+	-fx-pie-color: blue;
+}
+
+.data4.chart-pie {
+	-fx-pie-color: cadetblue;
+}
+
+.data5.chart-pie {
+	-fx-pie-color: navy;
+}
+
+.data6.chart-pie {
+	-fx-pie-color: deepskyblue;
+}
+
+.data7.chart-pie {
+	-fx-pie-color: cyan;
+}
+
+.data8.chart-pie {
+	-fx-pie-color: steelblue;
+}
+
+.data9.chart-pie {
+	-fx-pie-color: teal;
+}
+
+.data10.chart-pie {
+	-fx-pie-color: royalblue;
+}
+
+.data11.chart-pie {
+	-fx-pie-color: dodgerblue;
+}

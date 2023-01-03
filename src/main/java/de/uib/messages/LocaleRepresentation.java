@@ -34,6 +34,7 @@ public class LocaleRepresentation
 		return "";
 	}
 
+	@Override
 	public String toString() {
 		return value;
 	}

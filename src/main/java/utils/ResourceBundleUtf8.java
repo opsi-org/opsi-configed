@@ -12,8 +12,7 @@ import java.util.ResourceBundle;
 
 /**
  * Same as {@link ResourceBundle} but is target for UTF-8 property file
- * resources.
- * May not be used with 8-bit ASCII - only with UTF-8.
+ * resources. May not be used with 8-bit ASCII - only with UTF-8.
  *
  * @author Marc Neumann
  */
@@ -21,7 +20,7 @@ public class ResourceBundleUtf8 {
 
 	private static class PropertyResourceBundleUtf8 extends ResourceBundle {
 
-		private final Map<String, String> valueByKey = new HashMap<String, String>();
+		private final Map<String, String> valueByKey = new HashMap<>();
 
 		private PropertyResourceBundleUtf8(PropertyResourceBundle pBundle) {
 			loadEntries(pBundle, valueByKey);
@@ -30,6 +29,7 @@ public class ResourceBundleUtf8 {
 		/**
 		 * @see java.util.ResourceBundle#getKeys()
 		 */
+		@Override
 		public Enumeration<String> getKeys() {
 			return Collections.enumeration(valueByKey.keySet());
 		}
@@ -57,12 +57,13 @@ public class ResourceBundleUtf8 {
 		/**
 		 * @see java.util.ResourceBundle#handleGetObject(java.lang.String)
 		 */
+		@Override
 		protected Object handleGetObject(String pKey) {
 			return valueByKey.get(pKey);
 		}
 	}
 
-	private static Map<ClassLoader, Map<String, Map<Locale, ResourceBundle>>> bundleByClassLoaderByBaseNameByLocale = new HashMap<ClassLoader, Map<String, Map<Locale, ResourceBundle>>>();
+	private static Map<ClassLoader, Map<String, Map<Locale, ResourceBundle>>> bundleByClassLoaderByBaseNameByLocale = new HashMap<>();
 
 	/**
 	 * @see ResourceBundle#getBundle(String)
@@ -92,7 +93,7 @@ public class ResourceBundleUtf8 {
 		synchronized (bundleByClassLoaderByBaseNameByLocale) {
 			bundleByBaseNameByLocale = bundleByClassLoaderByBaseNameByLocale.get(pLoader);
 			if (bundleByBaseNameByLocale == null) {
-				bundleByBaseNameByLocale = new HashMap<String, Map<Locale, ResourceBundle>>();
+				bundleByBaseNameByLocale = new HashMap<>();
 				bundleByClassLoaderByBaseNameByLocale.put(pLoader, bundleByBaseNameByLocale);
 			}
 		}
@@ -100,7 +101,7 @@ public class ResourceBundleUtf8 {
 		synchronized (bundleByBaseNameByLocale) {
 			bundleByLocale = bundleByBaseNameByLocale.get(pBaseName);
 			if (bundleByLocale == null) {
-				bundleByLocale = new HashMap<Locale, ResourceBundle>();
+				bundleByLocale = new HashMap<>();
 				bundleByBaseNameByLocale.put(pBaseName, bundleByLocale);
 			}
 		}

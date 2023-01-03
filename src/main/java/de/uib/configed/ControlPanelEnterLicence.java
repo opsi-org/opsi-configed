@@ -1,8 +1,9 @@
 package de.uib.configed;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
 
 import de.uib.configed.gui.licences.PanelEnterLicence;
 import de.uib.configed.type.licences.LicenceEntry;
@@ -38,8 +39,8 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 		init();
 	}
 
-	public Vector<String> getChoicesAllHosts() {
-		return new Vector<>(new TreeMap<>(persist.getHostInfoCollections()
+	public List<String> getChoicesAllHosts() {
+		return new ArrayList<>(new TreeMap<>(persist.getHostInfoCollections()
 				.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))
 						.keySet());
 	}
@@ -63,22 +64,24 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 		mainController.checkErrorList();
 	}
 
+	@Override
 	public TabClientAdapter getTabClient() {
 		return thePanel;
 	}
 
+	@Override
 	public void init() {
 		updateCollection = new TableUpdateCollection();
 
-		Vector<String> columnNames;
-		Vector<String> classNames;
+		List<String> columnNames;
+		List<String> classNames;
 
 		// panelKeys
-		columnNames = new Vector<String>();
+		columnNames = new ArrayList<>();
 		columnNames.add("softwareLicenseId");
 		columnNames.add("licensePoolId");
 		columnNames.add("licenseKey");
-		classNames = new Vector<String>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
@@ -98,11 +101,13 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 
 		thePanel.panelKeys.setUpdateController(
 				new MapItemsUpdateController(thePanel.panelKeys, modelLicencekeys, new MapBasedUpdater() {
+					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
 						return persist.editRelationSoftwareL2LPool((String) rowmap.get("softwareLicenseId"),
 								(String) rowmap.get("licensePoolId"), (String) rowmap.get("licenseKey"));
 					}
 
+					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencekeys.requestReload();
 						return persist.deleteRelationSoftwareL2LPool((String) rowmap.get("softwareLicenseId"),
@@ -111,10 +116,10 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 				}, updateCollection));
 
 		// panelLicencepools
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add("licensePoolId");
 		columnNames.add("description");
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryLicencepools = new MapTableUpdateItemFactory(modelLicencepools,
@@ -130,14 +135,14 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 		thePanel.panelLicencepools.setTableModel(modelLicencepools);
 
 		// panelLicencecontracts
-		columnNames = new Vector<>();
+		columnNames = new ArrayList<>();
 		columnNames.add("licenseContractId");
 		columnNames.add("partner");
 		columnNames.add("conclusionDate");
 		columnNames.add("notificationDate");
 		columnNames.add("expirationDate");
 		columnNames.add("notes");
-		classNames = new Vector<>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
@@ -223,6 +228,7 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 		// updates
 		thePanel.panelLicencecontracts.setUpdateController(new MapItemsUpdateController(thePanel.panelLicencecontracts,
 				modelLicencecontracts, new MapBasedUpdater() {
+					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
 						return persist.editLicenceContract((String) rowmap.get("licenseContractId"),
 								(String) rowmap.get("partner"), (String) rowmap.get("conclusionDate"),
@@ -230,6 +236,7 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 								(String) rowmap.get("notes"));
 					}
 
+					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencecontracts.requestReload();
 						return persist.deleteLicenceContract((String) rowmap.get("licenseContractId"));

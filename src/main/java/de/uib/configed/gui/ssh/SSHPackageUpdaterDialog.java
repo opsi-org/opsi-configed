@@ -1,30 +1,21 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-// import javax.swing.border.*;
-// import javax.swing.event.*;
-// import java.io.*;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
-// import java.nio.charset.Charset;
-// import java.util.regex.*;
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandPackageUpdater;
-import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.utilities.logging.logging;
 
@@ -57,7 +48,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		SSHConnectExec ssh = new SSHConnectExec();
 		String result = "";
 		try {
-			result = ssh.exec((SSHCommand) command, false /* =>without gui */ );
+			result = ssh.exec(command, false /* =>without gui */ );
 		} catch (Exception e) {
 			logging.error(this, "ssh execution error", e);
 
@@ -68,12 +59,12 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 			command.setRepos(null);
 		} else {
 			String[] lines = result.split("\n");
-			HashMap<String, String> repos = new HashMap<String, String>();
+			HashMap<String, String> repos = new HashMap<>();
 			for (int i = 1; i < lines.length; i++) {
 				String repostatus = lines[i].split(":")[0];
 
 				// escaping ansicodes
-				repostatus = repostatus.replaceAll("\\[[0-9];[0-9][0-9];[0-9][0-9]m", "");
+				repostatus = repostatus.replace("\\[[0-9];[0-9][0-9];[0-9][0-9]m", "");
 				repostatus = repostatus.replace("", "").replace("\u001B", "");
 
 				String[] repo_status = repostatus.split("\\(");
@@ -86,8 +77,8 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		inputPanel.setBackground(Globals.backLightBlue);
-		buttonPanel.setBackground(Globals.backLightBlue);
+		inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		getContentPane().add(inputPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
@@ -103,49 +94,35 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		btn_doAction.setText(configed.getResourceValue("SSHConnection.buttonExec"));
 		btn_doAction.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly()))
-			btn_doAction.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					logging.info(this, "btn_doAction pressed");
-					doAction1();
-				}
+			btn_doAction.addActionListener(actionEvent -> {
+				logging.info(this, "btn_doAction pressed");
+				doAction1();
 			});
 
 		btn_close = new JButton();
 		buttonPanel.add(btn_close);
 		btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 		btn_close.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
-		btn_close.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				cancel();
-			}
-		});
+		btn_close.addActionListener(actionEvent -> cancel());
 		setComponentsEnabled(!Globals.isGlobalReadOnly());
 
-		cb_actions = new JComboBox(command.getActionsText());
-		cb_actions.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				if ((String) e.getItem() == configed
-						.getResourceValue("SSHConnection.command.opsipackageupdater.action.list")) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						cb_repos.setEnabled(false);
-					} else {
-						cb_repos.setEnabled(true);
-					}
-				}
-			}
+		cb_actions = new JComboBox<>(command.getActionsText());
+		cb_actions.addItemListener(itemEvent -> {
+			if (((String) itemEvent.getItem())
+					.equals(configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.list")))
+				cb_repos.setEnabled(itemEvent.getStateChange() != ItemEvent.SELECTED);
 		});
 
 		if (command.getRepos() != null) {
-			cb_repos = new JComboBox(command.getRepos().keySet().toArray());
+			cb_repos = new JComboBox<>(command.getRepos().keySet().toArray());
 		} else {
-			cb_repos = new JComboBox();
+			cb_repos = new JComboBox<>();
 		}
 
 		cb_repos.addItem(configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"));
 		cb_repos.setSelectedItem(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"));
 		cb_actions.setEnabled(true);
-		// cb_actions.addItem("");
 		inputPanel.add(cb_actions);
 		inputPanel.add(cb_repos);
 	}
@@ -155,17 +132,19 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	}
 
 	/* This method is called when button 1 is pressed */
+	@Override
 	public void doAction1() {
 		try {
 			command.setAction(command.getAction((String) cb_actions.getSelectedItem()));
 			String repo = (String) cb_repos.getSelectedItem();
-			if (repo == configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"))
+			if (repo.equals(
+					configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories")))
 				command.setRepo(null);
 			else
 				command.setRepo(repo);
 			logging.info(this, "doAction1 opsi-package-updater: " + command.toString());
-			new SSHConnectExec((SSHCommand) command);
-			// cancel();
+			new SSHConnectExec(command);
+
 		} catch (Exception e) {
 			logging.warning(this, "doAction1, exception occurred", e);
 		}
@@ -203,9 +182,9 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 				.addGap(2 * Globals.GAP_SIZE));
 
 		this.setSize(600, 210);
-		this.centerOn(de.uib.configed.Globals.mainFrame);
-		this.setBackground(Globals.backLightBlue);
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.centerOn(Globals.mainFrame);
+		this.setBackground(Globals.BACKGROUND_COLOR_7);
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 	}
 }

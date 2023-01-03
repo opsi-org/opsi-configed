@@ -1,6 +1,5 @@
 package de.uib.configed.gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
@@ -9,12 +8,6 @@ import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-/**
- * FDialogSubTable
- * Copyright:     Copyright (c) 2020-2021
- * Organisation:  uib
- * @author Rupert Röder
- */
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
@@ -29,17 +22,17 @@ public class FDialogSubTable extends FGeneralDialog {
 
 	@Override
 	protected void allLayout() {
-		// super.allLayout(); we define an adapted layout
+
 		logging.info(this, "allLayout");
-		allpane.setBackground(de.uib.configed.Globals.backLightBlue); // Globals.nimbusBackground);///Globals.backgroundWhite);
-																		// //Globals.backLighter);//Globals.backgroundWhite);//(myHintYellow);
+		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
+		// 
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
 		if (centerPanel == null)
 			centerPanel = new JPanel();
 
-		centerPanel.setBackground(Color.white);
+		centerPanel.setBackground(Globals.F_DIALOG_BACKGROUND_COLOR);
 		centerPanel.setOpaque(true);
 
 		southPanel = new JPanel();
@@ -55,8 +48,7 @@ public class FDialogSubTable extends FGeneralDialog {
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, Short.MAX_VALUE))
 				.addGroup(southLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE / 2)
-						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE)// GroupLayout.PREFERRED_SIZE)//Short.MAX_VALUE)
-						.addGap(Globals.HGAP_SIZE / 2)));
+						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE).addGap(Globals.HGAP_SIZE / 2)));
 
 		southLayout.setVerticalGroup(southLayout.createSequentialGroup()
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
@@ -65,9 +57,8 @@ public class FDialogSubTable extends FGeneralDialog {
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
-		// southPanel = new JPanel();
 		southPanel.setOpaque(false);
-		southPanel.setBackground(Color.white); // Color.YELLOW );
+		southPanel.setBackground(Globals.F_DIALOG_BACKGROUND_COLOR);
 		southPanel.setOpaque(true);
 
 		GroupLayout allLayout = new GroupLayout(allpane);

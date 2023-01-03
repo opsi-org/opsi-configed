@@ -27,10 +27,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.uib.configed.Globals;
+import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.observer.RunningInstances;
 
@@ -49,14 +51,12 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	protected JSplitPane splitPane;
 	private int splitPaneHMargin = 1;
 
-	// private javax.swing.JButton cancelbutton;
-	// private javax.swing.JButton buttonCommit;
 	protected de.uib.configed.gui.IconButton buttonCommit;
 	protected de.uib.configed.gui.IconButton buttonCancel;
 	protected de.uib.configed.gui.IconButton buttonAdd;
 	protected de.uib.configed.gui.IconButton buttonRemove;
 
-	protected String tooltipCommit = de.uib.configed.configed.getResourceValue("FEditObject.SaveButtonTooltip");
+	protected String tooltipCommit = configed.getResourceValue("FEditObject.SaveButtonTooltip");
 
 	protected boolean dataChanged = false;
 	protected boolean editable = true;
@@ -68,9 +68,8 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	protected JTextArea loggingArea;
 
 	public FEditObject(Object initialValue) {
-		// runningInstances.add(this, "");
 		setIconImage(Globals.mainIcon);
-		// initComponents();
+
 		if (initialValue != null)
 			this.initialValue = initialValue;
 
@@ -86,50 +85,41 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		loggingArea = new JTextArea("");
 		loggingArea.setEditable(false);
-		// loggingArea.setPreferredSize(new Dimension(100, 50));
 
-		loggingArea.setBackground(Globals.backgroundWhite);
+		loggingArea.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		scrollpaneL = new javax.swing.JScrollPane();
 		scrollpaneL.setViewportView(loggingArea);
-		scrollpaneL.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollpaneL.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		loggingPanel.add(scrollpaneL, BorderLayout.CENTER);
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
-		// editingArea.addFocusListener(this);
+		buttonCommit = new de.uib.configed.gui.IconButton(configed.getResourceValue("FEditObject.SaveButtonTooltip"),
+				"images/apply.png", "images/apply_over.png", "images/apply_disabled.png", true);
+		buttonCommit.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 
-		buttonCommit = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("FEditObject.SaveButtonTooltip"), "images/apply.png",
-				"images/apply_over.png", "images/apply_disabled.png", true);
-		buttonCommit.setPreferredSize(new Dimension(buttonWidth, de.uib.utilities.Globals.buttonHeight));
-
-		buttonCancel = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("FEditObject.CancelButtonTooltip"), "images/cancel.png",
-				"images/cancel_over.png", "images/cancel_disabled.png", true);
-		buttonCancel.setPreferredSize(new Dimension(buttonWidth, de.uib.utilities.Globals.buttonHeight));
+		buttonCancel = new de.uib.configed.gui.IconButton(configed.getResourceValue("FEditObject.CancelButtonTooltip"),
+				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png", true);
+		buttonCancel.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 		buttonCancel.setEnabled(true);
 
-		buttonRemove = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("FEditObject.RemoveButtonTooltip"), "images/list-remove.png",
-				"images/list-remove.png", "images/list-remove_disabled.png", true);
-		buttonRemove.setPreferredSize(new Dimension(buttonWidth, de.uib.utilities.Globals.buttonHeight));
+		buttonRemove = new de.uib.configed.gui.IconButton(configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
+				"images/list-remove.png", "images/list-remove.png", "images/list-remove_disabled.png", true);
+		buttonRemove.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 		buttonRemove.setVisible(false);
 
-		buttonAdd = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("FEditObject.AddButtonTooltip"), "images/list-add.png",
-				"images/list-add.png", "images/list-add_disabled.png", true);
-		buttonAdd.setPreferredSize(new Dimension(buttonWidth, de.uib.utilities.Globals.buttonHeight));
+		buttonAdd = new de.uib.configed.gui.IconButton(configed.getResourceValue("FEditObject.AddButtonTooltip"),
+				"images/list-add.png", "images/list-add.png", "images/list-add_disabled.png", true);
+		buttonAdd.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 		buttonAdd.setVisible(false);
 
 		extraField = new JTextField("");
-		extraField.setPreferredSize(
-				new Dimension(de.uib.utilities.Globals.buttonWidth, de.uib.utilities.Globals.lineHeight));
+		extraField.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		extraField.setVisible(false);
 
 		extraLabel = new JLabel("");
-		extraLabel.setPreferredSize(
-				new Dimension(de.uib.utilities.Globals.buttonWidth, de.uib.utilities.Globals.lineHeight));
+		extraLabel.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 		extraLabel.setVisible(false);
 
 	}
@@ -140,15 +130,10 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 	protected void initComponents() {
 
-		framingPanel.setBackground(Globals.backgroundWhite);
+		framingPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
 
 		editingArea.addKeyListener(this);
-
-		// okbutton = new javax.swing.JButton();
-		// cancelbutton = new javax.swing.JButton();
-		// okbutton.setText("ok");
-		// cancelbutton.setText("cancel");
 
 		buttonCommit.addActionListener(this);
 		buttonCancel.addActionListener(this);
@@ -163,14 +148,6 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 		buttonAdd.addKeyListener(this);
 
 		extraField.getDocument().addDocumentListener(this);
-
-		// scrollpane = new javax.swing.JScrollPane();
-
-		// textarea = new javax.swing.JTextArea();
-
-		// textarea.setColumns(20);
-		// textarea.setRows(5);
-		// scrollpane.setViewportView(textarea);
 
 		javax.swing.GroupLayout layout1 = new javax.swing.GroupLayout(framingPanel);
 		framingPanel.setLayout(layout1);
@@ -267,6 +244,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 		editable = b;
 	}
 
+	@Override
 	public void setModal(boolean b) {
 		super.setModal(b);
 		logging.debug(this, "setModal " + b);
@@ -282,25 +260,21 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		dataChanged = b;
 		buttonCommit.setEnabled(b);
-		// buttonCancel.setEnabled(b);
+
 	}
 
 	public void setStartValue(Object s) {
-		// logging.debug("FEditObject.setStartText(): " + s);
+
 		initialValue = s;
 	}
 
 	public Object getValue() {
-		// logging.debug("FEditObject.getText()");
+
 		return initialValue;
 	}
 
 	public void setLeaveOnCommit(boolean b) {
 		leaveOnCommit = b;
-	}
-
-	private int intHalf(double x) {
-		return (int) (x / 2);
 	}
 
 	public void locateLeftTo(Component master) {
@@ -333,26 +307,11 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 			logging.debug(this, "centerOn " + master.getClass() + ", " + master);
 
-			// startX = (int) masterOnScreen.getX() + intHalf ( master.getWidth() ) -
-			// intHalf( getSize().getWidth() );
-			// startY = (int) masterOnScreen.getY() + intHalf ( master.getHeight() ) -
-			// intHalf( getSize().getHeight() );
 			startX = (int) masterOnScreen.getX() - (int) (getSize().getWidth()) - Globals.MIN_HGAP_SIZE;
 			startY = (int) masterOnScreen.getY();
 
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			logging.debug(this, "centerOn screenSize " + screenSize);
-			// logging.info(this, "startX + getSize().width " + (startX + getSize().width));
-			// logging.info(this, "(startY + getSize().height " + (startY +
-			// getSize().height));
-
-			/*
-			 * if (startX + getSize().width > screenSize.width)
-			 * startX = screenSize.width - getSize().width;
-			 * 
-			 * if (startY + getSize().height > screenSize.height)
-			 * startY = screenSize.height - getSize().height;
-			 */
 
 		}
 
@@ -364,8 +323,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 			logging.error(" editing area not filled with component");
 			return false;
 		}
-		// logging.debug(" editingArea used by " +
-		// editingArea.getComponent(0).getClass());
+
 		editingArea.getComponent(0).setPreferredSize(usableAreaSize);
 		initComponents();
 		initEditing();
@@ -399,7 +357,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 	public void enter() {
 		logging.debug(this, "enter");
-		// initEditing();
+
 	}
 
 	public void deactivate() {
@@ -407,12 +365,10 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	}
 
 	protected void leave() {
-		// logging.debug(this, "FEditObject.leave()");
 
 		setVisible(false);
 		finished = true;
-		// runningInstances.forget(this);
-		// deactivate(); //no effect probably because of reentering the field
+
 	}
 
 	@Override
@@ -424,20 +380,16 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 		super.setVisible(b);
 	}
 
+	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-			/*
-			 * setStartValue(initialValue);
-			 * leave();
-			 */
+
 			cancel();
-			// logging.debug(" window closing, text " + getText());
+
 		} else if (e.getID() == WindowEvent.WINDOW_ACTIVATED) {
-			// logging.debug(" window activated");
+
 			enter();
 		} else if (e.getID() == WindowEvent.WINDOW_DEACTIVATED) {
-			// logging.debug(" window deactivated");
-			// deactivate();
 
 		}
 
@@ -457,21 +409,21 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	}
 
 	protected void cancel() {
-		// logging.debug(this, "cancel, resetting ---------- initialValue " +
-		// initialValue);
+
 		setStartValue(initialValue);
 		leave();
 	}
 
 	// -------------
 	// interface ActionListener
+	@Override
 	public void actionPerformed(java.awt.event.ActionEvent e) {
 		logging.debug(this, "actionPerformed");
-		// commit1();
+
 		if (e.getSource() == buttonCommit) {
 			commit();
 		} else if (e.getSource() == buttonCancel) {
-			// logging.debug (" -------- buttonCancel " + e);
+
 			cancel();
 		}
 	}
@@ -479,9 +431,9 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 	// -------------
 	// interface KeyListener
+	@Override
 	public void keyPressed(KeyEvent e) {
-		// loggig.debug(this, " key event " + e);
-		// if (e.getSource() == buttonCommit)
+
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			commit();
 		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -489,9 +441,11 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 		}
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 	}
 	// -------------
@@ -502,14 +456,17 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 	// -------------
 	// interface DocumentListener
+	@Override
 	public void changedUpdate(DocumentEvent e) {
 		extraFieldChanged(true);
 	}
 
+	@Override
 	public void insertUpdate(DocumentEvent e) {
 		extraFieldChanged(true);
 	}
 
+	@Override
 	public void removeUpdate(DocumentEvent e) {
 		extraFieldChanged(true);
 	}

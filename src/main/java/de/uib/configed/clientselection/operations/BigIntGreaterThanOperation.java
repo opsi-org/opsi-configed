@@ -11,7 +11,7 @@ public class BigIntGreaterThanOperation extends SelectOperation {
 
 	@Override
 	public SelectData.DataType getDataType() {
-		return SelectData.DataType.BigIntegerType;
+		return SelectData.DataType.BIT_INTEGER_TYPE;
 	}
 
 	@Override

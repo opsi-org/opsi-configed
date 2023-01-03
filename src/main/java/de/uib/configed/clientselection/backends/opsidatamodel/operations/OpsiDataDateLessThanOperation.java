@@ -11,7 +11,7 @@ public class OpsiDataDateLessThanOperation extends DateLessThanOperation impleme
 	public OpsiDataDateLessThanOperation(String map, String key, String data, SelectElement element) {
 		super(element);
 
-		matcher = new OpsiDataDateMatcher(map, key, data, element) {
+		matcher = new OpsiDataDateMatcher(map, key, data) {
 			@Override
 			protected boolean compare(java.sql.Date date, java.sql.Date realdate) {
 				return realdate.before(date);
@@ -19,6 +19,7 @@ public class OpsiDataDateLessThanOperation extends DateLessThanOperation impleme
 		};
 	}
 
+	@Override
 	public boolean doesMatch(Client client) {
 		return matcher.doesMatch(client);
 	}

@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /*
@@ -55,20 +56,19 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 	protected Map<String, String> mapOfStrings;
 	protected Map<String, String> mapOfTooltips;
 	protected Map<String, ImageIcon> mapOfImages;
-	static final int imageDefaultWidth = 30;
+	private static final int IMAGE_DEFAULT_WIDTH = 30;
 
 	public CellRendererByIndex(Map<String, String> mapOfStringValues, String imagesBase) {
-		this(mapOfStringValues, imagesBase, imageDefaultWidth);
+		this(mapOfStringValues, imagesBase, IMAGE_DEFAULT_WIDTH);
 	}
 
 	public CellRendererByIndex(Set<String> keySet, String imagesBase, int imageWidth) {
 		super(imageWidth);
-		// logging.debug(" ------------- font " + getFont() );
+
 		setOpaque(true);
-		// setHorizontalAlignment(LEFT);
-		// setVerticalAlignment(CENTER);
-		mapOfImages = new HashMap<String, ImageIcon>();
-		mapOfStrings = new HashMap<String, String>();
+
+		mapOfImages = new HashMap<>();
+		mapOfStrings = new HashMap<>();
 
 		// Load the item images
 		if (imagesBase == null)
@@ -83,14 +83,12 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 				ImageIcon image = null;
 
-				if (imagesBase != null) {
-					String imageFileString = imagesBase + "/" + stringval + ".png";
-					// logging.debug (" image file " + imageFileString);
+				String imageFileString = imagesBase + "/" + stringval + ".png";
 
-					image = de.uib.configed.Globals.createImageIcon(imageFileString, stringval);
-					if (image != null)
-						mapOfImages.put(key, image);
-				}
+				image = Globals.createImageIcon(imageFileString, stringval);
+				if (image != null)
+					mapOfImages.put(key, image);
+
 			}
 		}
 		mapOfTooltips = mapOfStrings;
@@ -110,32 +108,30 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 	{
 		super(imageWidth);
-		// logging.debug(" ------------- font " + getFont() );
+
 		setOpaque(true);
-		// setHorizontalAlignment(LEFT);
-		// setVerticalAlignment(CENTER);
+
 		mapOfStrings = mapOfStringValues;
 		mapOfTooltips = mapOfDescriptions;
-		mapOfImages = new HashMap<String, ImageIcon>();
+		mapOfImages = new HashMap<>();
 
 		// Load the item images
 		if (imagesBase == null)
 			super.setIconVisible(false);
 
 		else {
-			Iterator iter = mapOfStrings.entrySet().iterator();
+			Iterator<Entry<String, String>> iter = mapOfStrings.entrySet().iterator();
 			while (iter.hasNext()) {
-				Map.Entry entry = (Map.Entry) iter.next();
-				String key = (String) entry.getKey();
-				String stringval = (String) entry.getValue();
+				Entry<String, String> entry = iter.next();
+				String key = entry.getKey();
+				String stringval = entry.getValue();
 
 				ImageIcon image = null;
 
 				if (key != null && stringval != null) {
 					String imageFileString = imagesBase + "/" + stringval + ".png";
-					// logging.debug (" image file " + imageFileString);
 
-					image = de.uib.configed.Globals.createImageIcon(imageFileString, stringval);
+					image = Globals.createImageIcon(imageFileString, stringval);
 					if (image != null)
 						mapOfImages.put(key, image);
 				}
@@ -149,33 +145,22 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 	 * to the selected value and returns the label, set up
 	 * to display the text and image.
 	 */
+	@Override
 	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
 			boolean cellHasFocus) {
 		// Get the selected index. (The index param isn't
 		// always valid, so just use the value.)
 
-		/*
-		 * if (isSelected) {
-		 * setBackground(list.getSelectionBackground());
-		 * setForeground(list.getSelectionForeground());
-		 * //setForeground(java.awt.Color.black);
-		 * } else {
-		 * setBackground(list.getBackground());
-		 * setForeground(list.getForeground());
-		 * //setForeground(java.awt.Color.black);
-		 * }
-		 */
-
 		Color background;
 		Color foreground;
 
 		if (isSelected) {
-			background = de.uib.configed.Globals.nimbusSelectionBackground;
-			foreground = Color.WHITE;
+			background = Globals.nimbusSelectionBackground;
+			foreground = Globals.CELL_RENDERER_BY_INDEX_SELECTED_FOREGROUND_COLOR;
 		} else {
-			background = de.uib.configed.Globals.nimbusBackground;
-			foreground = de.uib.configed.Globals.nimbusSelectionBackground; // Color.WHITE; // Color.black;
-		} ;
+			background = Globals.nimbusBackground;
+			foreground = Globals.nimbusSelectionBackground;
+		}
 
 		setBackground(background);
 		setForeground(foreground);
@@ -185,7 +170,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 		String selectedTooltip = "";
 
 		if (uhOhFont == null) { // lazily create this font
-			uhOhFont = list.getFont().deriveFont((float) 10); // list.getFont().getSize() - 3); // Font.ITALIC);
+			uhOhFont = list.getFont().deriveFont((float) 10);
 		}
 		setFont(uhOhFont);
 
@@ -208,30 +193,8 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 		setToolTipText(selectedTooltip);
 
 		setFont(Globals.defaultFont);
-		// de.uib.utilities.swing.CellAlternatingColorizer.colorize(this, isSelected,
-		// (index % 2 == 0), true);
-
-		/*
-		 * if (icon != null) {
-		 * setText(item);
-		 * setFont(list.getFont());
-		 * } else {
-		 * setUhOhText(item + " (no image available)", list.getFont());
-		 * 
-		 * }
-		 */
 
 		return this;
 	}
 
-	/*
-	 * //Set the font and text when no image was found.
-	 * protected void setUhOhText(String uhOhText, Font normalFont) {
-	 * if (uhOhFont == null) { //lazily create this font
-	 * uhOhFont = normalFont.deriveFont(Font.ITALIC);
-	 * }
-	 * setFont(uhOhFont);
-	 * setText(uhOhText);
-	 * }
-	 */
 }

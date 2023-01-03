@@ -11,15 +11,15 @@
 package de.uib.configed.type;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utilities.logging.logging;
 
 //data source product table
 public class OpsiProductInfo extends OpsiPackage {
-	protected ArrayList<String> possibleActions;
+	protected List<String> possibleActions;
 	protected String productName;
 	protected String description;
 	protected String advice;
@@ -38,7 +38,7 @@ public class OpsiProductInfo extends OpsiPackage {
 	public OpsiProductInfo(Map<String, Object> m) {
 		super(m);
 
-		possibleActions = new ArrayList<String>();
+		possibleActions = new ArrayList<>();
 		possibleActions.add(ActionRequest.getState2Label().get(ActionRequest.NONE));
 		// keys are the possible script types
 		for (String scriptKey : ActionRequest.getScriptKeys()) {
@@ -54,13 +54,9 @@ public class OpsiProductInfo extends OpsiPackage {
 		if (m.get(SERVICEkeyPRODUCT_DESCRIPTION) != null)
 			description = "" + m.get(SERVICEkeyPRODUCT_DESCRIPTION);
 
-		// logging.info(this, " description " + description);
-
 		advice = "";
 		if (m.get(SERVICEkeyPRODUCT_ADVICE) != null)
 			advice = "" + m.get(SERVICEkeyPRODUCT_ADVICE);
-
-		// logging.info(this, " advice " + advice);
 
 		try {
 			priority = Integer.valueOf("" + m.get(SERVICEkeyPRIORITY));
@@ -69,17 +65,14 @@ public class OpsiProductInfo extends OpsiPackage {
 		}
 
 		hasUserLoginScript = (m.get(SERVICEkeyUSER_LOGIN_SCRIPT) != null
-				&&
-				!("" + m.get(SERVICEkeyUSER_LOGIN_SCRIPT)).equals(""));
+				&& !("" + m.get(SERVICEkeyUSER_LOGIN_SCRIPT)).equals(""));
 
-		logging.debug(this, "created with description " + description + "\n,"
-				+ " possible actions " + possibleActions
+		logging.debug(this, "created with description " + description + "\n," + " possible actions " + possibleActions
 				+ ", hasUserLoginScript " + hasUserLoginScript);
-		// System.exit(0);
 
 	}
 
-	public java.util.List getPossibleActions() {
+	public List getPossibleActions() {
 		return possibleActions;
 	}
 
@@ -106,20 +99,16 @@ public class OpsiProductInfo extends OpsiPackage {
 			return priority;
 	}
 
-	public Vector<Object> appendValues(Vector<Object> row) {
+	@Override
+	public List<Object> appendValues(List<Object> row) {
 		row.add(getProductName());
 		return row;
 	}
 
 	@Override
 	public String toString() {
-		return getClass().getName()
-				+ "{productId=" + productId
-				+ ";productName=" + productName + ";description=" + description
-				+ ";possibleActions" + possibleActions + ";hasUserLoginScript=" + hasUserLoginScript
-				+ ";priority=" + priority
-				+ ";description=" + description
-				+ ";advice=" + advice
-				+ "}";
+		return getClass().getName() + "{productId=" + productId + ";productName=" + productName + ";description="
+				+ description + ";possibleActions" + possibleActions + ";hasUserLoginScript=" + hasUserLoginScript
+				+ ";priority=" + priority + ";description=" + description + ";advice=" + advice + "}";
 	}
 }

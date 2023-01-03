@@ -10,6 +10,7 @@
 package de.uib.utilities.observer;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,10 +31,7 @@ import de.uib.utilities.logging.logging;
  */
 
 public class RunningInstances<T> {
-	// private static AtomicInteger objectCounting = new AtomicInteger();
-	// private static boolean allStopped = false;
 
-	private Boolean reallyLeave = null;
 	private String classname;
 	private String askForLeave;
 
@@ -41,14 +39,14 @@ public class RunningInstances<T> {
 	private ConcurrentHashMap<T, String> instances;
 
 	// the observers
-	private java.util.List<RunningInstancesObserver<T>> observers;
+	private List<RunningInstancesObserver<T>> observers;
 
 	public RunningInstances(Class type, String askForLeave) {
 		this.classname = type.getName();
 		this.askForLeave = askForLeave;
 		logging.info(this, "created for class " + classname);
-		instances = new ConcurrentHashMap<T, String>();
-		observers = new ArrayList<RunningInstancesObserver<T>>();
+		instances = new ConcurrentHashMap<>();
+		observers = new ArrayList<>();
 
 	}
 
@@ -77,18 +75,11 @@ public class RunningInstances<T> {
 	}
 
 	public boolean askStop() {
-		reallyLeave = false;
-		int returnedOption = JOptionPane.NO_OPTION;
-		returnedOption = JOptionPane.showOptionDialog(de.uib.configed.Globals.mainFrame, askForLeave,
+		int returnedOption = JOptionPane.showOptionDialog(Globals.mainFrame, askForLeave,
 				Globals.APPNAME + " " + configed.getResourceValue("ConfigedMain.Licences.AllowLeaveApp.title"),
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-		if (returnedOption == JOptionPane.YES_OPTION)
-			reallyLeave = true;
-		else
-			reallyLeave = false;
-
-		return reallyLeave;
+		return returnedOption == JOptionPane.YES_OPTION;
 	}
 
 	@Override

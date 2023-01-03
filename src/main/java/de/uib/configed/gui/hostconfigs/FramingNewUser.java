@@ -1,6 +1,7 @@
 package de.uib.configed.gui.hostconfigs;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -11,10 +12,9 @@ import java.util.Vector;
 import de.uib.configed.configed;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
 
-public class FramingNewUser
-		implements FramingTextfieldWithListselection {
+public class FramingNewUser implements FramingTextfieldWithListselection {
 
-	Vector<String> list;
+	List<String> list;
 	String title;
 	String textfieldLabel;
 	String listLabel;
@@ -47,6 +47,7 @@ public class FramingNewUser
 		return listLabel;
 	}
 
+	@Override
 	public String getListLabelToolTip() {
 		listLabelToolTip = configed.getResourceValue("FramingNewUser.listLabel.ToolTip");
 
@@ -54,14 +55,14 @@ public class FramingNewUser
 	}
 
 	@Override
-	public void setListData(Vector<String> v) {
+	public void setListData(List<String> v) {
 		list = v;
 	}
 
 	@Override
-	public Vector<String> getListData() {
+	public List<String> getListData() {
 		if (list == null) {
-			list = new Vector<String>();
+			list = new ArrayList<>();
 			list.add("B1");
 			list.add("B2");
 			list.add("B1");

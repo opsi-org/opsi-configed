@@ -2,8 +2,6 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -63,7 +61,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 
 		pack();
 		this.setSize(new Dimension(frameWidth, frameHeight));
-		this.centerOn(de.uib.configed.Globals.mainFrame);
+		this.centerOn(Globals.mainFrame);
 		this.setVisible(true);
 		waitCursor.stop();
 	}
@@ -102,29 +100,20 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		installWgetPanel.isOpen = true;
 		installWgetPanel.close();
 
-		rb_local.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				installLocalPanel.open();
-				installServerPanel.close();
-				installWgetPanel.close();
-			}
+		rb_local.addActionListener(actionEvent -> {
+			installLocalPanel.open();
+			installServerPanel.close();
+			installWgetPanel.close();
 		});
-		rb_server.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				installLocalPanel.close();
-				installServerPanel.open();
-				installWgetPanel.close();
-			}
+		rb_server.addActionListener(actionEvent -> {
+			installLocalPanel.close();
+			installServerPanel.open();
+			installWgetPanel.close();
 		});
-		rb_wget.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				installLocalPanel.close();
-				installServerPanel.close();
-				installWgetPanel.open();
-			}
+		rb_wget.addActionListener(actionEvent -> {
+			installLocalPanel.close();
+			installServerPanel.close();
+			installWgetPanel.open();
 		});
 	}
 
@@ -152,7 +141,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
 		mainPanel.setLayout(mainPanelLayout);
 		mainPanelLayout.setHorizontalGroup(mainPanelLayout.createParallelGroup()
-				// .addGap(3*Globals.gapSize)
+
 				.addGroup(mainPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
 						.addComponent(lbl_install, PREF, PREF, PREF).addGap(Globals.GAP_SIZE))
 				.addGap(Globals.GAP_SIZE)
@@ -160,7 +149,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 						.addComponent(radioPanel, PREF, PREF, MAX).addGap(Globals.GAP_SIZE))
 				.addGap(Globals.GAP_SIZE).addGroup(mainPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(installSettingsPanel, PREF, PREF, PREF).addGap(Globals.GAP_SIZE))
-		// .addGap(3*Globals.gapSize)
+
 		);
 
 		mainPanelLayout.setVerticalGroup(mainPanelLayout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
@@ -169,9 +158,9 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 	}
 
 	protected void init() {
-		radioPanel.setBackground(Globals.backLightBlue);
-		mainPanel.setBackground(Globals.backLightBlue);
-		buttonPanel.setBackground(Globals.backLightBlue);
+		radioPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		mainPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		getContentPane().add(mainPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
@@ -201,12 +190,10 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 			pmInstallCom = SSHPMInstallServerPanel.getCommand(sftpcom.getFullTargetPath());
 			if (pmInstallCom == null) {
 				logging.warning(this, "No url given. 2");
-				return;
-			}
-			if (pmInstallCom != null)
-				commands.addCommand(pmInstallCom);
-			else
 				logging.warning(this, "ERROR 0 command = null");
+				return;
+			} else
+				commands.addCommand(pmInstallCom);
 		}
 
 		else if (rb_server.isSelected()) {
@@ -214,14 +201,11 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 			if (pmInstallCom == null) {
 				logging.warning(this, "No opsi-package selected. 3");
 				return;
-			}
-			if (pmInstallCom != null)
+			} else
 				commands.addCommand(pmInstallCom);
-			else
-				logging.warning(this, "ERROR 1 command = null");
 		}
 
-		else { // if (rb_wget.isSelected()) {
+		else {
 			sequential = true;
 
 			commands = installWgetPanel.getCommand(commands);
@@ -238,11 +222,11 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 				logging.warning(this, "ERROR 3 command = null");
 		}
 
-		pmInstallCom = installSettingsPanel.updateCommand((CommandOpsiPackageManagerInstall) pmInstallCom);
+		installSettingsPanel.updateCommand(pmInstallCom);
 
 		try {
-			((SSHConnectExec) ssh).exec_template(commands, sequential);
-			((SSHConnectExec) ssh).getDialog().setVisible(true);
+			ssh.execTemplate(commands, sequential);
+			ssh.getDialog().setVisible(true);
 			logging.info(this, "doAction1 end ");
 		} catch (Exception e) {
 			logging.error(this, "doAction1 Exception while exec_template", e);

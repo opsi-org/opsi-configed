@@ -35,14 +35,13 @@ public class LicenceStatisticsRow extends HashMap<String, String> {
 
 	public void setAllowedUsagesCount(ExtendedInteger count) {
 		if (count != null) {
-			// if (count == ExtendedInteger.INFINITE)
-			// logging.info(this, " count " + count);
+
 			String value = count.getDisplay();
 			allowedUsages = count;
 			put(licenseOptionsKEY, value);
 			put(remainingOpsiKEY, value);
 			put(swinventoryRemainingKEY, value);
-			// logging.info(this, " we have " + this);
+
 		}
 	}
 

@@ -1,11 +1,10 @@
 package de.uib.configed.gui;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComponent;
@@ -13,12 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
-/**
- * DepotList
- * Copyright:     Copyright (c) 2012-2017
- * Organisation:  uib
- * @author Rupert Röder
- */
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.opsidatamodel.PersistenceController;
@@ -27,7 +20,7 @@ import de.uib.utilities.logging.logging;
 public class DepotsList extends JList<String> implements ComponentListener {
 
 	MyListCellRenderer myListCellRenderer;
-	private Vector<? extends String> saveV;
+	private List<String> saveV;
 
 	Map<String, Map<String, Object>> depotInfo;
 
@@ -35,10 +28,10 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 	public DepotsList(PersistenceController persist) {
 		this.persist = persist;
-		setBackground(Globals.backgroundWhite);
+		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		setSelectionBackground(Globals.defaultTableCellSelectedBgColor);
-		setSelectionForeground(Color.black);
-		// setPreferredSize(new Dimension(200, 300));
+		setSelectionForeground(Globals.DEPOTS_LIST_FOREGROUND_COLOR);
+
 		setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		myListCellRenderer = new MyListCellRenderer(persist);
 		setCellRenderer(myListCellRenderer);
@@ -53,27 +46,30 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		return depotInfo;
 	}
 
-	@Override
-	public void setListData(Vector<? extends String> v) {
-		super.setListData(v);
+	public void setListData(List<String> v) {
+		super.setListData(v.toArray(new String[0]));
 		saveV = v;
 	}
 
-	public Vector<? extends String> getListData() {
+	public List<String> getListData() {
 		return saveV;
 	}
 
 	// interface ComponentListene
+	@Override
 	public void componentHidden(ComponentEvent e) {
 	}
 
+	@Override
 	public void componentMoved(ComponentEvent e) {
 	}
 
+	@Override
 	public void componentResized(ComponentEvent e) {
 		ensureIndexIsVisible(getSelectedIndex());
 	}
 
+	@Override
 	public void componentShown(ComponentEvent e) {
 		ensureIndexIsVisible(getSelectedIndex());
 	}
@@ -89,19 +85,11 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		getSelectionModel().setValueIsAdjusting(false);
 	}
 
-	public void addToSelection(java.util.List<String> depots) {
-		if (depots == null || depots.size() == 0)
+	public void addToSelection(List<String> depots) {
+		if (depots == null || depots.isEmpty())
 			return;
 
 		getSelectionModel().setValueIsAdjusting(true);
-		/*
-		 * javax.swing.event.ListSelectionListener[] listeners =
-		 * getListSelectionListeners();
-		 * for (int l = 0; l < listeners.length; l++)
-		 * {
-		 * removeListSelectionListener(listeners[l]);
-		 * }
-		 */
 
 		for (String depot : depots) {
 			int i = getIndexOf(depot);
@@ -110,25 +98,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		}
 		getSelectionModel().setValueIsAdjusting(false);
 
-		/*
-		 * for (int l = 0; l< listeners.length; l++)
-		 * {
-		 * addListSelectionListener(listeners[l]);
-		 * }
-		 * 
-		 * int i = getIndexOf(depots.get(0));
-		 * addSelectionInterval(i, i);
-		 */
-
 	}
-
-	/*
-	 * public void setSelectedValue(Object value, boolean shouldScroll)
-	 * {
-	 * logging.debug(this, "setSelectedValue " + value);
-	 * super.setSelectedValue(value, shouldScroll);
-	 * }
-	 */
 
 	class MyListCellRenderer extends DefaultListCellRenderer {
 		protected int FILL_LENGTH = 30;
@@ -147,6 +117,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 			this.extendedInfo = extendedInfo;
 		}
 
+		@Override
 		public Component getListCellRendererComponent(JList list, Object value, // value to display
 				int index, // cell index
 				boolean isSelected, // is the cell selected
@@ -155,12 +126,10 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 			Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-			if (c == null || !(c instanceof JComponent))
+			if (!(c instanceof JComponent))
 				return c;
 
 			JComponent jc = (JComponent) c;
-			// CellAlternatingColorizer.colorize(jc, isSelected, (row % 2 == 0), (column % 2
-			// == 0), true);
 
 			if (jc instanceof JLabel) {
 				String tooltipText = null;
@@ -181,7 +150,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 				String depot = (String) value;
 				if (!persist.getDepotPermission(depot)) {
-					((JLabel) jc).setBackground(de.uib.configed.Globals.backgroundLightGrey);
+					((JLabel) jc).setBackground(Globals.BACKGROUND_COLOR_3);
 					((JLabel) jc).setToolTipText(
 							"Depot " + depot + " " + configed.getResourceValue("Permission.depot.not_accessible"));
 				} else
@@ -191,57 +160,5 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 			return jc;
 		}
-
 	}
-
-	/*
-	 * class MyListCellRenderer extends JLabel implements ListCellRenderer
-	 * {
-	 * protected int FILL_LENGTH = 30;
-	 * 
-	 * public MyListCellRenderer()
-	 * {
-	 * super();
-	 * }
-	 * 
-	 * public Component getListCellRendererComponent(
-	 * JList list,
-	 * Object value, // value to display
-	 * int index, // cell index
-	 * boolean isSelected, // is the cell selected
-	 * boolean cellHasFocus // the list and the cell have the focus
-	 * )
-	 * {
-	 * String s = "";
-	 * if (value != null)
-	 * s = value.toString();
-	 * 
-	 * setText(s);
-	 * 
-	 * if (isSelected)
-	 * {
-	 * setBackground(list.getSelectionBackground());
-	 * setForeground(list.getSelectionForeground());
-	 * }
-	 * {
-	 * setBackground(list.getBackground());
-	 * setForeground(list.getForeground());
-	 * }
-	 * 
-	 * setEnabled(list.isEnabled());
-	 * setFont(list.getFont());
-	 * setOpaque(true);
-	 * 
-	 * String info = "";
-	 * if (extendedInfo.get(value) != null)
-	 * info = "" + extendedInfo.get(value).get("description");
-	 * 
-	 * //setToolTipText(Globals.fillStringToLength(info + " ", FILL_LENGTH));
-	 * 
-	 * return this;
-	 * }
-	 * 
-	 * }
-	 */
-
 }

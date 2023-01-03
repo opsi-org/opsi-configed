@@ -6,10 +6,9 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import de.uib.utilities.Globals;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.thread.WaitCursor;
 
@@ -24,8 +23,8 @@ public class ActivityPanel extends JPanel implements Runnable {
 	public static int h = 10;
 
 	private final int noOfParts = 4;
-	/** an arraylist for panels */
-	ArrayList<JPanel> partPanels = new ArrayList<JPanel>();
+	/** an List for panels */
+	ArrayList<JPanel> partPanels = new ArrayList<>();
 
 	public static int sleepingMS = 750;
 
@@ -59,7 +58,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 			partPanels.get(j).setBackground(colors[0]);
 			if (i == inactive) {
 				setBorder(lineBorderInactive);
-				partPanels.get(j).setBackground(Globals.backLightBlue);
+				partPanels.get(j).setBackground(Globals.BACKGROUND_COLOR_7);
 			} else {
 				setBorder(lineBorderActive);
 				partPanels.get(j).setBackground(Globals.backNimbus);
@@ -71,16 +70,12 @@ public class ActivityPanel extends JPanel implements Runnable {
 
 		}
 		try {
-			// logging.info(this, "paintImmediately i " + i);
-			// if (SwingUtilities.isEventDispatchThread())
+
 			{
-				// logging.info(this, "event dispatch thread");
+
 				paintImmediately(0, 0, w, h); // class cast exceptions mit sleepingMS = 50 if not event dispatch thread
 			}
-			// else
-			// logging.info(this, "not event dispatch thread");
 
-			// repaint();
 		} catch (Exception strange) {
 			logging.warning(this, "strange exception " + strange);
 			setState(inactive);
@@ -101,6 +96,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 	/**
 	 * endless loop
 	 */
+	@Override
 	public void run() {
 		int i = 0;
 		boolean finalizing = false;
@@ -108,10 +104,11 @@ public class ActivityPanel extends JPanel implements Runnable {
 		try {
 			while (true) {
 				try {
-					// logging.info(this, "sleep " + sleepingMS);
+
 					Thread.sleep(sleepingMS);
 
 				} catch (InterruptedException ignore) {
+					Thread.currentThread().interrupt();
 				}
 
 				if (acting) {
@@ -137,40 +134,31 @@ public class ActivityPanel extends JPanel implements Runnable {
 					try {
 						Thread.sleep((long) 2 * sleepingMS);
 					} catch (InterruptedException ignore) {
+						Thread.currentThread().interrupt();
 					}
 				}
 			}
 		} catch (Exception anyException) {
 			logging.warning(this, "on running, caught some exception", anyException);
+
+			if (anyException instanceof InterruptedException)
+				Thread.currentThread().interrupt();
 		}
 
 	}
 
-	/*
-	 * @Override public void paint(Graphics g
-	 * {
-	 * try{
-	 * super.paintBorder(g);
-	 * }
-	 * catch(java.lang.ClassCastException ex)
-	 * {
-	 * logging.info(this, "the well known exception " + ex);
-	 * }
-	 * }
-	 */
-
 	protected void initGui() {
-		lineBorderInactive = new javax.swing.border.LineBorder(Globals.backLightBlue, 1, true);
+		lineBorderInactive = new javax.swing.border.LineBorder(Globals.BACKGROUND_COLOR_7, 1, true);
 		lineBorderActive = new javax.swing.border.LineBorder(Globals.blueGrey, 1, true);
 		logging.debug(this, "starting");
 		setOpaque(true);
 		setBorder(lineBorderInactive);
 		colors = new Color[2];
-		colors[1] = Globals.opsiLogoBlue; // Globals.backgroundLightGrey;
+		colors[1] = Globals.opsiLogoBlue;
 		colors[0] = Globals.opsiLogoLightBlue;
 		setPreferredSize(new Dimension(w, h));
 
-		partPanels = new ArrayList<JPanel>();
+		partPanels = new ArrayList<>();
 
 		for (int j = 0; j < noOfParts; j++) {
 			partPanels.add(new JPanel() {
@@ -185,9 +173,10 @@ public class ActivityPanel extends JPanel implements Runnable {
 						try {
 							Thread.sleep(10000);
 							WaitCursor.stopAll();
-						} catch (Exception x) {
-						} ;
-						// WaitCursor.stopAll();
+						} catch (InterruptedException x) {
+							Thread.currentThread().interrupt();
+						}
+
 					}
 				}
 
@@ -210,12 +199,4 @@ public class ActivityPanel extends JPanel implements Runnable {
 		layout.setVerticalGroup(vGroup);
 	}
 
-	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		frame.setSize(new Dimension(100, 40));
-		ActivityPanel panel = new ActivityPanel();
-		frame.getContentPane().add(panel);
-		frame.setVisible(true);
-		panel.run();
-	}
 }

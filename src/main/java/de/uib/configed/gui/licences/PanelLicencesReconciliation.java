@@ -19,7 +19,7 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
  * @author rupert roeder
  */
 public class PanelLicencesReconciliation extends MultiTablePanel {
-	// public JTextField testfield;
+
 	public PanelGenEditTable panelReconciliation;
 
 	protected int minVSize = 50;
@@ -45,7 +45,7 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 				, null // default popups
 				, true // searchpane
 		);
-		panelReconciliation.setMasterFrame(de.uib.configed.Globals.frame1);
+		panelReconciliation.setMasterFrame(Globals.frame1);
 		panelReconciliation.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panelReconciliation.showFilterIcon(true); // supply implementation of SearchTargetModelFromTable.setFiltered
@@ -57,8 +57,7 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup().addContainerGap()
 						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
 								// for testing purposes:
-								// .addComponent(testfield, javax.swing.GroupLayout.Alignment.LEADING,
-								// javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+
 								// Short.MAX_VALUE)
 								.addComponent(panelReconciliation, javax.swing.GroupLayout.Alignment.LEADING,
 										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
@@ -67,8 +66,7 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 		layout.setVerticalGroup(
 				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 						.addGroup(layout.createSequentialGroup().addContainerGap()
-								// .addComponent(testfield, javax.swing.GroupLayout.DEFAULT_SIZE,
-								// javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE)
+
 								.addComponent(panelReconciliation, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE,
 										Short.MAX_VALUE)
 								.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE))

@@ -9,17 +9,17 @@
 package de.uib.utilities.table.updates;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 public class MapBasedTableEditItem extends TableEditItem {
-	Vector<String> columnNames;
-	Vector<String> classNames;
-	Vector<Object> oldValues;
-	Vector<Object> rowV;
+	List<String> columnNames;
+	List<String> classNames;
+	List<Object> oldValues;
+	List<Object> rowV;
 
-	public MapBasedTableEditItem(Object source, int keyCol, Vector<String> columnNames, Vector<String> classNames,
-			Vector<Object> oldValues, Vector<Object> rowV) {
+	public MapBasedTableEditItem(Object source, int keyCol, List<String> columnNames, List<String> classNames,
+			List<Object> oldValues, List<Object> rowV) {
 		this.columnNames = columnNames;
 		this.classNames = classNames;
 		this.oldValues = oldValues;
@@ -28,18 +28,17 @@ public class MapBasedTableEditItem extends TableEditItem {
 		this.keyCol = keyCol;
 	}
 
-	public MapBasedTableEditItem(Object source, int keyCol, Vector<String> columnNames, Vector<String> classNames,
-			Vector<Object> rowV) {
+	public MapBasedTableEditItem(Object source, int keyCol, List<String> columnNames, List<String> classNames,
+			List<Object> rowV) {
 		this(source, keyCol, columnNames, classNames, null, rowV);
 	}
 
 	public Map<String, Object> getRowAsMap() {
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 
 		for (int i = 0; i < columnNames.size(); i++) {
 			result.put(columnNames.get(i), rowV.get(i));
-			// logging.debug( "MapBasedTableEditItem.getRowAsMap(): " +
-			// columnNames.get(i) + ", " + rowV.get(i) );
+
 		}
 
 		return result;
@@ -52,6 +51,7 @@ public class MapBasedTableEditItem extends TableEditItem {
 		return (rowV.get(keyCol).toString());
 	}
 
+	@Override
 	public String toString() {
 		return getRowAsMap().toString() + " keyCol " + keyCol + " source " + source;
 	}

@@ -9,7 +9,6 @@ import de.uib.utilities.logging.logging;
 
 public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager implements SSHCommandNeedParameter {
 	private String command;
-	private boolean install;
 	private int priority = 8;
 	protected FGeneralDialog dialog;
 	private boolean isMultiCommand = false;
@@ -63,7 +62,7 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 				+ freeInput + opsiproduct;
 		logging.info(this, "got command " + command);
 		if (needSudo())
-			return SSHCommandFactory.getInstance().sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 
@@ -91,7 +90,7 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 	public SSHConnectionExecDialog startHelpDialog() {
 		SSHCommand command = new CommandHelp(this);
 		SSHConnectExec exec = new SSHConnectExec(command);
-		return (SSHConnectionExecDialog) exec.getDialog();
+		return exec.getDialog();
 	}
 
 	@Override
@@ -107,7 +106,7 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 	}
 
 	public void setDepotForPInstall(String dep) {
-		if (dep != "")
+		if (!dep.equals(""))
 			depot = " -d " + dep;
 		else
 			depot = "";
@@ -125,9 +124,7 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 	}
 
 	public boolean checkCommand() {
-		if (opsiproduct == "")
-			return false;
-		return true;
+		return !opsiproduct.equals("");
 	}
 
 	public void setProperty(boolean keep_depot_defaults) {

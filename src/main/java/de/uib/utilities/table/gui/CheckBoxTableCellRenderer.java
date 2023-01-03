@@ -8,9 +8,7 @@ import javax.swing.table.TableCellRenderer;
 
 import de.uib.configed.Globals;
 
-public class CheckBoxTableCellRenderer
-		extends JCheckBox
-		implements TableCellRenderer
+public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRenderer
 
 {
 	javax.swing.border.Border noFocusBorder;
@@ -24,10 +22,9 @@ public class CheckBoxTableCellRenderer
 		setVerticalAlignment(SwingConstants.CENTER);
 	}
 
-	public java.awt.Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected,
-			boolean hasFocus,
-			int row, int column) {
+	@Override
+	public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+			boolean hasFocus, int row, int column) {
 
 		setForeground(Globals.lightBlack);
 
@@ -38,17 +35,6 @@ public class CheckBoxTableCellRenderer
 		} else {
 			setBackground(Globals.defaultTableCellBgColor1);
 		}
-
-		/*
-		 * if (isSelected) {
-		 * setForeground(table.getSelectionForeground());
-		 * setBackground(table.getSelectionBackground());
-		 * }
-		 * else {
-		 * setForeground(table.getForeground());
-		 * setBackground(table.getBackground());
-		 * }
-		 */
 
 		if (hasFocus) {
 			if (focusBorder == null) {

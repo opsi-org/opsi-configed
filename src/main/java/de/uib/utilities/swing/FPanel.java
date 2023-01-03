@@ -12,7 +12,6 @@ import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -36,9 +35,9 @@ public class FPanel extends SecondaryFrame {
 	public FPanel(String title, JPanel panel, boolean checkLeave, int initialWidth, int initialHeight) {
 		super();
 		this.checkLeave = checkLeave;
-		setIconImage(de.uib.configed.Globals.mainIcon);
-		setTitle(de.uib.configed.Globals.APPNAME + " " + title);
-		// registerWithRunningInstances();
+		setIconImage(Globals.mainIcon);
+		setTitle(Globals.APPNAME + " " + title);
+
 		setSize(new Dimension(initialWidth, initialHeight));
 		innerPanel = panel;
 		getContentPane().add(innerPanel);
@@ -79,25 +78,22 @@ public class FPanel extends SecondaryFrame {
 			PanelGenEditTable editPanel = (PanelGenEditTable) innerPanel;
 
 			if (editPanel.isDataChanged()) {
-				int returnedOption = JOptionPane.CANCEL_OPTION;
-				returnedOption = JOptionPane.showOptionDialog(masterFrame,
+				int returnedOption = JOptionPane.showOptionDialog(masterFrame,
 						configed.getResourceValue("ConfigedMain.saveBeforeCloseText"),
 						Globals.APPNAME + " " + configed.getResourceValue("ConfigedMain.saveBeforeCloseTitle"),
-						JOptionPane.YES_NO_CANCEL_OPTION,
-						JOptionPane.QUESTION_MESSAGE,
-						null, null, null);
+						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 				switch (returnedOption) {
-					case JOptionPane.YES_OPTION:
-						editPanel.commit();
-						result = true;
-						break;
-					case JOptionPane.NO_OPTION:
-						editPanel.cancel();
-						result = true;
-						break;
-					case JOptionPane.CANCEL_OPTION:
-						break;
+				case JOptionPane.YES_OPTION:
+					editPanel.commit();
+					result = true;
+					break;
+				case JOptionPane.NO_OPTION:
+					editPanel.cancel();
+					result = true;
+					break;
+				case JOptionPane.CANCEL_OPTION:
+					break;
 				}
 			}
 
@@ -122,10 +118,8 @@ public class FPanel extends SecondaryFrame {
 		return left;
 	}
 
+	@Override
 	protected void processWindowEvent(WindowEvent e) {
-
-		// logging.info(this, " FPanel --------processWindowEvent " + e);
-		// super.processWindowEvent(e);
 
 		boolean leaving = true;
 
@@ -140,23 +134,10 @@ public class FPanel extends SecondaryFrame {
 
 				leave();
 
-				// super.processWindowEvent(e);
 			} else
 				setVisible(true);
 		}
 
-	}
-
-	public static void main(String[] args) {
-
-		JPanel testpanel = new JPanel();
-		testpanel.add(new JLabel("hallo 1 "));
-
-		FPanel testF = new FPanel(
-				"hardware classes / database columns",
-				testpanel,
-				true);
-		testF.setVisible(true);
 	}
 
 }

@@ -75,7 +75,6 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 		logging.debug(this, "checkAccepted clickNode.getParent() " + clickNode.getParent());
 
 		DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) (clickNode.getParent());
-		String parentName = parentNode.getUserObject().toString();
 
 		if (
 		// nodeName.equals(ClientTree.FAILED_NAME)
@@ -96,7 +95,7 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 		int countVisibleItems = 0;
 
 		if (clickNode.getAllowsChildren()) {
-			// logging.info(this, "checkAccepted " + clickNode + " is GroupNode " +
+
 			// (clickNode instanceof GroupNode) )
 
 			if (((GroupNode) clickNode).allowsSubGroups()) {
@@ -119,7 +118,6 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 				countVisibleItems++;
 			}
 
-			// if ( ((GroupNode)clickNode).allowsSubGroups() )
 			if (!(((GroupNode) clickNode).isFixed())) {
 				((JMenuItem) myMenu.getSubElements()[removeElementsPosition]).setVisible(true); // delete non-groupnode
 																								// elements
@@ -133,10 +131,10 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 			}
 		}
 
-		// return true;
 		return (countVisibleItems > 0);
 	}
 
+	@Override
 	protected void maybeShowPopup(MouseEvent e) {
 		if (checkAccepted(e))
 			super.maybeShowPopup(e);

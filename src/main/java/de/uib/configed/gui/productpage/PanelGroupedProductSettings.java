@@ -2,6 +2,7 @@ package de.uib.configed.gui.productpage;
 
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -46,7 +47,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 			tableProducts.getSelectionModel().removeListSelectionListener(groupPanel);
 	}
 
-	public void setSearchFields(java.util.List<String> fieldList) {
+	public void setSearchFields(List<String> fieldList) {
 		groupPanel.setSearchFields(fieldList);
 	}
 
@@ -86,11 +87,6 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 	}
 
 	@Override
-	public void clearSelection() {
-		tableProducts.clearSelection();
-	}
-
-	@Override
 	public void setSelection(Set<String> selectedIDs) {
 		activatePacketSelectionHandling(false);
 		clearSelection();
@@ -126,8 +122,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 
 	public void reduceToSet(Set<String> filter) {
 		activatePacketSelectionHandling(false);
-		// Set<String> testSet = new HashSet<String>();
-		// testSet.add("jedit");
+
 		InstallationStateTableModelFiltered tModel = (InstallationStateTableModelFiltered) tableProducts.getModel();
 		tModel.setFilterFrom(filter);
 
@@ -151,7 +146,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 		InstallationStateTableModelFiltered tModel = (InstallationStateTableModelFiltered) tableProducts.getModel();
 
 		activatePacketSelectionHandling(false);
-		((InstallationStateTableModelFiltered) tModel).setFilterFrom((Set<String>) null);
+		tModel.setFilterFrom((Set<String>) null);
 		tableProducts.revalidate();
 		activatePacketSelectionHandling(true);
 	}

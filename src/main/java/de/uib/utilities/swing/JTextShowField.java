@@ -19,6 +19,7 @@ public class JTextShowField extends javax.swing.JTextField {
 		this("");
 	}
 
+	@Override
 	public void setText(String s) {
 		super.setText(s);
 		setCaretPosition(0);

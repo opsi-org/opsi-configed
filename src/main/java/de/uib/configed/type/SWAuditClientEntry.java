@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
@@ -37,16 +38,16 @@ public class SWAuditClientEntry
 
 {
 	public static final String CLIENT_ID = "clientId";
-	public static final String LICENCEkEY = "licenseKey";
+	public static final String LICENCE_KEY = "licenseKey";
 	public static final String LAST_MODIFICATION = "lastseen";
 	public static final String UNINSTALL_STRING = "uninstallString";
 
 	protected final Map<String, String> data;
-	protected java.util.ArrayList<String> software;
-	protected java.util.TreeMap<String, Integer> software2Number;
-	private static java.util.List<String> notFoundSoftwareIDs;
+	protected List<String> software;
+	protected NavigableMap<String, Integer> software2Number;
+	private static List<String> notFoundSoftwareIDs;
 	private static Long lastUpdateTime;
-	private static final long msAfterThisAllowNextUpdate = 60000;
+	private static final long MS_AFTER_THIS_ALLOW_NEXT_UPDATE = 60000;
 	protected Integer swId;
 	protected String swIdent;
 	protected String lastModificationS;
@@ -62,47 +63,47 @@ public class SWAuditClientEntry
 
 	public static List<String> KEYS;
 	static {
-		KEYS = new LinkedList<String>();
+		KEYS = new LinkedList<>();
 		KEYS.add(SWAuditEntry.id);
 		KEYS.add(SWAuditEntry.NAME);
 		KEYS.add(SWAuditEntry.VERSION);
 		KEYS.add(SWAuditEntry.SUBVERSION);
 		KEYS.add(SWAuditEntry.ARCHITECTURE);
 		KEYS.add(SWAuditEntry.LANGUAGE);
-		KEYS.add(LICENCEkEY);
+		KEYS.add(LICENCE_KEY);
 		KEYS.add(SWAuditEntry.WINDOWSsOFTWAREid);
 	}
 
 	private static List<String> KEYS_FOR_GUI_TABLES;
 	static {
-		KEYS_FOR_GUI_TABLES = new LinkedList<String>();
+		KEYS_FOR_GUI_TABLES = new LinkedList<>();
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.id);
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.NAME);
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.VERSION);
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.ARCHITECTURE);
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.LANGUAGE);
-		KEYS_FOR_GUI_TABLES.add(LICENCEkEY);
+		KEYS_FOR_GUI_TABLES.add(LICENCE_KEY);
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.WINDOWSsOFTWAREid);
 	}
 
 	protected static Map<String, String> locale = new StringIdentityMap(KEYS);
 
 	public static void setLocale() {
-		// locale = new HashMap<String, String>();
+
 		locale.put(SWAuditEntry.id, "ID");
 		locale.put(SWAuditEntry.NAME, configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
 		locale.put(SWAuditEntry.VERSION, configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
 		// locale.put(subversion,
-		// configed.getResourceValue("PanelSWInfo.tableheader_displaySubVersion"));
+
 		locale.put(SWAuditEntry.ARCHITECTURE, configed.getResourceValue("PanelSWInfo.tableheader_architecture"));
 		locale.put(SWAuditEntry.LANGUAGE, configed.getResourceValue("PanelSWInfo.tableheader_displayLanguage"));
-		locale.put(LICENCEkEY, configed.getResourceValue("PanelSWInfo.tableheader_displayLicenseKey"));
+		locale.put(LICENCE_KEY, configed.getResourceValue("PanelSWInfo.tableheader_displayLicenseKey"));
 		locale.put(SWAuditEntry.WINDOWSsOFTWAREid, configed.getResourceValue("PanelSWInfo.tableheader_softwareId"));
 	}
 
 	public static final String DB_TABLE_NAME = "SOFTWARE_CONFIG";
 
-	public static final LinkedHashMap<String, String> DB_COLUMNS = new LinkedHashMap<String, String>();
+	public static final LinkedHashMap<String, String> DB_COLUMNS = new LinkedHashMap<>();
 	static {
 		DB_COLUMNS.put(CLIENT_ID, DB_TABLE_NAME + "." + "clientId");
 		DB_COLUMNS.put(SWAuditEntry.NAME, DB_TABLE_NAME + "." + "name");
@@ -110,31 +111,12 @@ public class SWAuditClientEntry
 		DB_COLUMNS.put(SWAuditEntry.SUBVERSION, DB_TABLE_NAME + "." + "subVersion");
 		DB_COLUMNS.put(SWAuditEntry.ARCHITECTURE, DB_TABLE_NAME + "." + "architecture");
 		DB_COLUMNS.put(SWAuditEntry.LANGUAGE, DB_TABLE_NAME + "." + "language");
-		DB_COLUMNS.put(LICENCEkEY, DB_TABLE_NAME + "." + "licenseKey");
+		DB_COLUMNS.put(LICENCE_KEY, DB_TABLE_NAME + "." + "licenseKey");
 		DB_COLUMNS.put(LAST_MODIFICATION, DB_TABLE_NAME + "." + "lastseen");
-		// DB_COLUMNS.put(SWAuditEntry.WINDOWSsOFTWAREid);
 
 	}
 
-	/*
-	 * public static final LinkedHashMap<String, String> DB_COLUMNS = new
-	 * LinkedHashMap<String, String>();
-	 * static {
-	 * DB_COLUMNS.put("config_id", "INTEGER");
-	 * //DB_COLUMNS.put("clientId", "VARCHAR(255)");
-	 * DB_COLUMNS.put("name", "VARCHAR(100)");
-	 * 
-	 * DB_COLUMNS.put("version", "VARCHAR(100)");
-	 * DB_COLUMNS.put("subVersion", "VARCHAR(100)");
-	 * DB_COLUMNS.put("architecture", "VARCHAR(3)");
-	 * DB_COLUMNS.put("language", "VARCHAR(10)");
-	 * DB_COLUMNS.put("licenseKey", "VARCHAR(255)");
-	 * 
-	 * DB_COLUMNS.put("lastseen", "TIMESTAMP"); //lastStateChange");
-	 * }
-	 */
-
-	public static final List<String> DB_COLUMN_NAMES = new ArrayList<String>();
+	public static final List<String> DB_COLUMN_NAMES = new ArrayList<>();
 	static {
 		for (String key : DB_COLUMNS.keySet()) {
 			DB_COLUMN_NAMES.add(DB_COLUMNS.get(key));
@@ -143,23 +125,16 @@ public class SWAuditClientEntry
 
 	public static final int columnIndexLastStateChange = DB_COLUMN_NAMES.indexOf("modificationTime");
 
-	public SWAuditClientEntry(final java.util.List<String> keys, final java.util.List<String> values,
+	public SWAuditClientEntry(final List<String> keys, final List<String> values,
 			de.uib.opsidatamodel.PersistenceController controller) {
-		// logging.debug(this, "create, keys/values constructor");
 
 		startmillis1stPartOfConstructor = System.currentTimeMillis();
 
-		data = new HashMap<String, String>();
-		/*
-		 * for (int i = 0; i < keys.size(); i++)
-		 * {
-		 * data.put(keys.get(i), values.get(i));
-		 * }
-		 */
+		data = new HashMap<>();
+
 		data.put(SWAuditEntry.id, values.get(keys.indexOf(DB_COLUMNS.get(CLIENT_ID))));
-		data.put(LICENCEkEY, values.get(keys.indexOf(DB_COLUMNS.get(LICENCEkEY))));
-		// data.put(SWAuditEntry.SUBVERSION,
-		// values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.SUBVERSION))));
+		data.put(LICENCE_KEY, values.get(keys.indexOf(DB_COLUMNS.get(LICENCE_KEY))));
+
 		lastModificationS = values.get(keys.indexOf(DB_COLUMNS.get(LAST_MODIFICATION)));
 		swIdent = produceSWident(keys, values);
 		this.controller = controller;
@@ -176,35 +151,29 @@ public class SWAuditClientEntry
 		summillis2ndPartOfConstructor = summillis2ndPartOfConstructor
 				+ (endmillis2ndPartOfConstructor - startmillis2ndPartOfConstructor);
 
-		// logging.info(this, " swId " + swId + " from values " + values);
 	}
 
 	public SWAuditClientEntry(final Map<String, Object> m, de.uib.opsidatamodel.PersistenceController controller) {
-		// logging.info(this, "create, map constructor");
-		data = new HashMap<String, String>();
+
+		data = new HashMap<>();
 		data.put(SWAuditEntry.id, Globals.produceNonNull(m.get(CLIENT_ID)));
 		swIdent = produceSWident(m);
 		this.controller = controller;
 		this.software = controller.getSoftwareList();
 		this.software2Number = controller.getSoftware2Number();
 		produceSWid();
-		data.put(LICENCEkEY, Globals.produceNonNull(m.get(LICENCEkEY)));
+		data.put(LICENCE_KEY, Globals.produceNonNull(m.get(LICENCE_KEY)));
 		lastModificationS = Globals.produceNonNull(m.get(LAST_MODIFICATION));
-		// uninstallString = Globals.produceNonNull(m.get(UNINSTALL_STRING));
 
 	}
 
-	public static String produceSWident(java.util.List<String> keys, java.util.List<String> values)
+	public static String produceSWident(List<String> keys, List<String> values)
 	// from db columns
 	{
-		// logging.info("SWAuditClientEntry:: produceSWident keys -- value : " + keys +
-		// " -- " + values);
+
 		String result = "";
 		try {
-			result = de.uib.utilities.Globals.pseudokey(new String[] {
-					// (values.get( keys.indexOf( DB_COLUMNS.get(SWAuditEntry.NAME) )
-					// )).toLowerCase(),
-					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.NAME))),
+			result = Globals.pseudokey(new String[] { values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.NAME))),
 					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.VERSION))),
 					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.SUBVERSION))),
 					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.LANGUAGE))),
@@ -234,52 +203,29 @@ public class SWAuditClientEntry
 
 		}
 
-		// return result.toLowerCase();
 		return result;
 	}
 
 	protected void updateSoftware() {
 		logging.info(this, "updateSoftware");
-		if (lastUpdateTime != null && (System.currentTimeMillis() - lastUpdateTime > msAfterThisAllowNextUpdate)) {
+		if (lastUpdateTime != null && (System.currentTimeMillis() - lastUpdateTime > MS_AFTER_THIS_ALLOW_NEXT_UPDATE)) {
 			controller.installedSoftwareInformationRequestRefresh();
 			software = controller.getSoftwareList();
 			lastUpdateTime = System.currentTimeMillis();
-			notFoundSoftwareIDs = new ArrayList<String>();
+			notFoundSoftwareIDs = new ArrayList<>();
 		} else
 			logging.warning(this, "updateSoftware: doing nothing since we just updated");
 	}
 
-	private Integer getIndex(java.util.List<String> list, String element) {
-		/*
-		 * int result = -1;
-		 * if (list == null || element == null)
-		 * return result;
-		 * 
-		 * int i = 0;
-		 * while (result == -1 && i < list.size())
-		 * {
-		 * if (list.get(i).equalsIgnoreCase( element ) )
-		 * {
-		 * result = i;
-		 * logging.info(this, "indexOfIgnoreCase found equality of " + element +
-		 * " to entry \n" + i + " : " + list.get(i));
-		 * }
-		 * i++;
-		 * }
-		 * 
-		 * return result;
-		 */
+	private Integer getIndex(List<String> list, String element) {
 
 		int result = -1;
 
 		if (!swIdent.equals(element))
 			logging.warning(this,
 					"getIndex gobal swIdent was assumed to be equal to element " + swIdent + ". " + element);
-		// int result = software.indexOf( swIdent );
+
 		Integer j = software2Number.get(element);
-		// if (j != null && result != -1 && result != j) logging.warning(this,
-		// "getIndex, for swIdent " + swIdent + " differs indexOf " + result + " from
-		// mapped value " + j);
 
 		if (j == null) {
 			logging.info(this,
@@ -288,8 +234,7 @@ public class SWAuditClientEntry
 			result = j;
 
 		if (result == -1 && list != null) {
-			// logging.info(this, "current listsize " + list.size() + " indexOfIgnoreCase
-			// for " + swIdent );
+
 			int i = 0;
 			while (result == -1 && i < list.size()) {
 				if (list.get(i).equalsIgnoreCase(element)) {
@@ -319,11 +264,10 @@ public class SWAuditClientEntry
 				swId = getIndex(software, swIdent);
 			}
 
-			// logging.info(this, "software with ident " + swIdent + " has index " + swId);
 			if (swId == -1) {
 				logging.warning(this, "swIdent not found in softwarelist: " + swIdent);
 				if (notFoundSoftwareIDs == null)
-					notFoundSoftwareIDs = new ArrayList<String>();
+					notFoundSoftwareIDs = new ArrayList<>();
 				notFoundSoftwareIDs.add(swIdent);
 			}
 		}
@@ -332,17 +276,12 @@ public class SWAuditClientEntry
 	}
 
 	public static String produceSWident(Map<String, Object> readMap) {
-		String result = de.uib.utilities.Globals.pseudokey(new String[] {
-				// ((String)
-				// readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME))).toLowerCase(),
-				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME)),
+		return Globals.pseudokey(new String[] { (String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.SUBVERSION)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.ARCHITECTURE)) });
 
-		// return result.toLowerCase();
-		return result;
 	}
 
 	public String getClientId() {
@@ -350,12 +289,12 @@ public class SWAuditClientEntry
 	}
 
 	public String getLicenceKey() {
-		return data.get(data.get(LICENCEkEY));
+		return data.get(data.get(LICENCE_KEY));
 	}
 
 	public String getLastModification() {
 		return lastModificationS;
-		// Globals.produceNonNull(readMap.get(LAST_MODIFICATION));
+
 	}
 
 	public Integer getSWid() {
@@ -366,28 +305,6 @@ public class SWAuditClientEntry
 		return swIdent;
 	}
 
-	/*
-	 * public String[] getData()
-	 * {
-	 * logging.info(this, "getData " + data);
-	 * String[] values = new String[KEYS.size()];
-	 * 
-	 * for (int i = 0; i < KEYS.size(); i++)
-	 * {
-	 * values[i] = data.get(KEYS.get(i));
-	 * }
-	 * 
-	 * return values;
-	 * }
-	 */
-
-	/*
-	 * public String getUninstallString()
-	 * {
-	 * return uninstallString;
-	 * }
-	 */
-
 	public static List<String> getDisplayKeys() {
 		return KEYS_FOR_GUI_TABLES;
 	}
@@ -397,9 +314,9 @@ public class SWAuditClientEntry
 	}
 
 	public Map<String, String> getExpandedMap(Map<String, SWAuditEntry> installedSoftwareInformation, String swIdent) {
-		Map<String, String> dataMap = new HashMap<String, String>(data);
+		Map<String, String> dataMap = new HashMap<>(data);
 		dataMap.putAll(installedSoftwareInformation.get(swIdent));
-		// logging.info( this, " getExpandedMap " + dataMap);
+
 		return dataMap;
 	}
 

@@ -5,13 +5,13 @@ public class TimeCheck {
 	String mesg;
 	long startmillis;
 	static int loglevel = logging.LEVEL_NOTICE;
-	static final int maxShown = 500;
+	static final int MAX_SHOWN = 500;
 
 	private static String shorten(String s) {
 		String result = "";
 		if (s != null) {
-			if (s.length() >= maxShown && loglevel < logging.LEVEL_DEBUG) {
-				result = s.substring(0, maxShown);
+			if (s.length() >= MAX_SHOWN && loglevel < logging.LEVEL_DEBUG) {
+				result = s.substring(0, MAX_SHOWN);
 				result = result + " ... ";
 			} else
 				result = s;
@@ -23,7 +23,7 @@ public class TimeCheck {
 	private TimeCheck(Object caller, int loglevel, String mesg) {
 		this.caller = caller;
 		this.mesg = shorten(mesg);
-		this.loglevel = loglevel;
+		TimeCheck.loglevel = loglevel;
 	}
 
 	public TimeCheck(Object caller, String mesg) {
@@ -32,7 +32,7 @@ public class TimeCheck {
 
 	public TimeCheck start() {
 		startmillis = System.currentTimeMillis();
-		logging.log(caller, loglevel, " ------  started: " + mesg + " "); // + startmillis);
+		logging.log(caller, loglevel, " ------  started: " + mesg + " ");
 		return this;
 	}
 
@@ -45,7 +45,7 @@ public class TimeCheck {
 		if (stopMessage == null)
 			info = mesg;
 		long endmillis = System.currentTimeMillis();
-		logging.log(caller, loglevel, " ------  stopped: " + info + " "); // + endmillis);
+		logging.log(caller, loglevel, " ------  stopped: " + info + " ");
 		logging.log(caller, loglevel, " ======  diff " + (endmillis - startmillis) + " ms  (" + info + ")");
 	}
 }

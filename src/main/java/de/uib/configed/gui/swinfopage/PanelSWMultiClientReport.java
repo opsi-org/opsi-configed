@@ -1,6 +1,5 @@
 package de.uib.configed.gui.swinfopage;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -11,7 +10,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -31,7 +29,7 @@ public class PanelSWMultiClientReport extends JPanel {
 	boolean withMsUpdates2 = false;
 	boolean askForOverwrite = false;
 
-	public static final String filenamePrefixDefault = "report_";
+	public static final String FILENAME_PREFIX_DEFAULT = "report_";
 
 	protected PanelStateSwitch panelSelectExportType;
 	protected PanelSWInfo.KindOfExport kindOfExport;
@@ -86,17 +84,17 @@ public class PanelSWMultiClientReport extends JPanel {
 
 	protected void setupPanel() {
 
-		setBackground(Globals.backLightBlue);
+		setBackground(Globals.BACKGROUND_COLOR_7);
 		GroupLayout glGlobal = new GroupLayout(this);
 		this.setLayout(glGlobal);
 
 		JLabel labelSwauditMultiClientReport1 = new JLabel(
 				configed.getResourceValue("PanelSWMultiClientReport.title1"));
-		labelSwauditMultiClientReport1.setFont(de.uib.utilities.Globals.defaultFontBig);
+		labelSwauditMultiClientReport1.setFont(Globals.defaultFontBig);
 
 		JLabel labelSwauditMultiClientReport2 = new JLabel(
 				configed.getResourceValue("PanelSWMultiClientReport.title2"));
-		labelSwauditMultiClientReport2.setFont(de.uib.utilities.Globals.defaultFontBold);
+		labelSwauditMultiClientReport2.setFont(Globals.defaultFontBold);
 
 		JLabel labelFilenamePrefix = new JLabel(
 				configed.getResourceValue("PanelSWMultiClientReport.labelFilenamePrefix"));
@@ -107,7 +105,7 @@ public class PanelSWMultiClientReport extends JPanel {
 			filenamePrefix = configed.getResourceValue("PanelSWMultiClientReport.filenamePrefix");
 
 		if (filenamePrefix == null)
-			filenamePrefix = filenamePrefixDefault;
+			filenamePrefix = FILENAME_PREFIX_DEFAULT;
 
 		fieldFilenamePrefix = new JTextShowField(filenamePrefix);
 		fieldFilenamePrefix.setEditable(true);
@@ -151,12 +149,11 @@ public class PanelSWMultiClientReport extends JPanel {
 		}
 
 		chooserDirectory = new JFileChooser();
-		chooserDirectory.setPreferredSize(de.uib.utilities.Globals.filechooserSize);
+		chooserDirectory.setPreferredSize(Globals.filechooserSize);
 		chooserDirectory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooserDirectory.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserDirectory);
-		// chooserDirectory.setControlButtonsAreShown(false);
 
 		fieldExportDirectory = new JTextShowField(exportDirectoryS);
 
@@ -166,11 +163,9 @@ public class PanelSWMultiClientReport extends JPanel {
 				configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
 		exportDirectoryS = "";
 
-		JButton buttonCallSelectExportDirectory = new JButton("",
-				de.uib.configed.Globals.createImageIcon("images/folder_16.png", ""));
-		buttonCallSelectExportDirectory
-				.setSelectedIcon(de.uib.configed.Globals.createImageIcon("images/folder_16.png", ""));
-		buttonCallSelectExportDirectory.setPreferredSize(de.uib.configed.Globals.graphicButtonDimension);
+		JButton buttonCallSelectExportDirectory = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
+		buttonCallSelectExportDirectory.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
+		buttonCallSelectExportDirectory.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallSelectExportDirectory
 				.setToolTipText(configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
 
@@ -190,7 +185,7 @@ public class PanelSWMultiClientReport extends JPanel {
 					}
 
 					fieldExportDirectory.setText(exportDirectoryS);
-					// getFilepathStart();
+
 					configed.savedStates.saveSWauditExportDir.serialize(exportDirectoryS);
 
 				}
@@ -222,15 +217,12 @@ public class PanelSWMultiClientReport extends JPanel {
 		});
 
 		panelSelectExportType = new PanelStateSwitch(
-				configed.getResourceValue("PanelSWMultiClientReport.selectExportType"),
-				(Enum) PanelSWInfo.KindOfExport.PDF, PanelSWInfo.KindOfExport.values(), PanelSWInfo.KindOfExport.class,
-				(val -> {
+				configed.getResourceValue("PanelSWMultiClientReport.selectExportType"), PanelSWInfo.KindOfExport.PDF,
+				PanelSWInfo.KindOfExport.values(), PanelSWInfo.KindOfExport.class, (val -> {
 					logging.info(this, "change to " + val);
 					kindOfExport = (PanelSWInfo.KindOfExport) val;
 					configed.savedStates.saveSWauditKindOfExport.serialize("" + val);
 				}));
-
-		// configed.savedStates.saveSWauditKindOfExport.serialize("CSV");
 
 		String koe = configed.savedStates.saveSWauditKindOfExport.deserialize();
 		panelSelectExportType.setValueByString(koe);
@@ -240,10 +232,8 @@ public class PanelSWMultiClientReport extends JPanel {
 		logging.info(this, "kindOfExport set from savedStates  " + koe);
 		logging.info(this, "kindOfExport   " + kindOfExport);
 
-		// System.exit(0);
-
 		JPanel subpanelPreConfig = new JPanel();
-		subpanelPreConfig.setBackground(Globals.backgroundWhite);// Globals.backNimbusLight);
+		subpanelPreConfig.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		GroupLayout glPreConfig = new GroupLayout(subpanelPreConfig);
 		subpanelPreConfig.setLayout(glPreConfig);
@@ -297,16 +287,15 @@ public class PanelSWMultiClientReport extends JPanel {
 
 				.addGroup(glPreConfig.createSequentialGroup()
 						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
-						.addComponent(labelExportDirectory, de.uib.configed.Globals.BUTTON_WIDTH,
-								de.uib.configed.Globals.BUTTON_WIDTH * 2, de.uib.configed.Globals.BUTTON_WIDTH * 2)
+						.addComponent(labelExportDirectory, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2,
+								Globals.BUTTON_WIDTH * 2)
 
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 
 						.addComponent(buttonCallSelectExportDirectory, Globals.GRAPHIC_BUTTON_WIDTH,
 								Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-						.addComponent(fieldExportDirectory, 40, de.uib.configed.Globals.BUTTON_WIDTH * 2,
-								Short.MAX_VALUE)
+						.addComponent(fieldExportDirectory, 40, Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
 						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE))
 
 				.addGroup(glPreConfig.createSequentialGroup()
@@ -316,17 +305,17 @@ public class PanelSWMultiClientReport extends JPanel {
 
 				.addGroup(glPreConfig.createSequentialGroup()
 						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
-						.addComponent(labelFilenamePrefix, de.uib.configed.Globals.BUTTON_WIDTH,
-								de.uib.configed.Globals.BUTTON_WIDTH * 2, de.uib.configed.Globals.BUTTON_WIDTH * 2)
+						.addComponent(labelFilenamePrefix, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2,
+								Globals.BUTTON_WIDTH * 2)
 
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 
 						.addGap(Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH,
 								Globals.GRAPHIC_BUTTON_WIDTH)
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-						.addComponent(fieldFilenamePrefix, de.uib.configed.Globals.BUTTON_WIDTH / 2,
-								de.uib.configed.Globals.BUTTON_WIDTH, Short.MAX_VALUE / 2)
-						.addGap(20, de.uib.configed.Globals.BUTTON_WIDTH, Short.MAX_VALUE / 2)
+						.addComponent(fieldFilenamePrefix, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
+								Short.MAX_VALUE / 2)
+						.addGap(20, Globals.BUTTON_WIDTH, Short.MAX_VALUE / 2)
 						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE))
 				.addGroup(glPreConfig.createSequentialGroup()
 						.addGap(2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
@@ -401,16 +390,4 @@ public class PanelSWMultiClientReport extends JPanel {
 				.addGap(3 * Globals.HGAP_SIZE, 3 * Globals.HGAP_SIZE, 3 * Globals.HGAP_SIZE));
 	}
 
-	public static void main(String[] args) {
-		try {
-			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-		} catch (Exception ex) {
-			logging.debug(" kein Nimbus " + ex);
-		}
-		JFrame f = new JFrame();
-		f.getContentPane().add(new PanelSWMultiClientReport());
-		f.setSize(new Dimension(700, 600));
-		f.setVisible(true);
-
-	}
 }

@@ -3,8 +3,8 @@ package de.uib.configed.dashboard.collector;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.NavigableMap;
+import java.util.NavigableSet;
 import java.util.stream.Collectors;
 
 import de.uib.configed.type.licences.LicenceContractEntry;
@@ -69,14 +69,14 @@ public class LicenseData {
 
 		expiredLicenses.clear();
 
-		TreeMap<String, TreeSet<String>> expiredLicenceContracts = persist.getLicenceContractsExpired();
+		NavigableMap<String, NavigableSet<String>> expiredLicenceContracts = persist.getLicenceContractsExpired();
 
 		if (expiredLicenceContracts.isEmpty()) {
 			return;
 		}
 
-		for (Map.Entry<String, TreeSet<String>> entry : expiredLicenceContracts.entrySet()) {
-			TreeSet<String> expiredLicenceContractSet = entry.getValue();
+		for (Map.Entry<String, NavigableSet<String>> entry : expiredLicenceContracts.entrySet()) {
+			NavigableSet<String> expiredLicenceContractSet = entry.getValue();
 
 			for (String expiredLicence : expiredLicenceContractSet) {
 				expiredLicenses.add(expiredLicence);

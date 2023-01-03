@@ -1,8 +1,5 @@
 package de.uib.configed.gui.hwinfopage;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
@@ -13,15 +10,16 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.utilities.swing.JTextShowField;
 
 public class PanelHWByAuditDriver extends JPanel {
 	protected JLabel jLabelTitle;
 
-	protected int hGap = de.uib.utilities.Globals.hGapSize / 2;
-	protected int vGap = de.uib.utilities.Globals.vGapSize / 2;
-	protected int hLabel = de.uib.utilities.Globals.buttonHeight;
+	protected int hGap = Globals.HGAP_SIZE / 2;
+	protected int vGap = Globals.VGAP_SIZE / 2;
+	protected int hLabel = Globals.BUTTON_HEIGHT;
 
 	protected String byAuditPath;
 
@@ -53,33 +51,28 @@ public class PanelHWByAuditDriver extends JPanel {
 		jLabelTitle.setOpaque(true);
 
 		fieldVendor = new JTextShowField();
-		fieldVendor.setBackground(de.uib.utilities.Globals.backgroundLightGrey);
+		fieldVendor.setBackground(Globals.BACKGROUND_COLOR_3);
 		fieldLabel = new JTextShowField();
-		fieldLabel.setBackground(de.uib.utilities.Globals.backgroundLightGrey);
+		fieldLabel.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		fieldVendor2 = new JTextShowField();
-		fieldVendor2.setBackground(de.uib.utilities.Globals.backgroundLightGrey);
+		fieldVendor2.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		fieldLabel2 = new JTextShowField();
-		fieldLabel2.setBackground(de.uib.utilities.Globals.backgroundLightGrey);
+		fieldLabel2.setBackground(Globals.BACKGROUND_COLOR_3);
 
 		JLabel labelInfo = new JLabel(configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabels"));
-		JLabel labelInfo2 = new JLabel(configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabels2"));
 
 		JLabel labelSeparator = new JLabel(" / ");
 		JLabel labelSeparator2 = new JLabel(" / ");
 		JLabel labelVendor = new JLabel(configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsVendor"));
 		JLabel labelProduct = new JLabel(configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsProduct"));
 
-		buttonUploadDrivers = new JButton("", de.uib.configed.Globals.createImageIcon("images/upload2product.png", ""));
-		buttonUploadDrivers.setSelectedIcon(de.uib.configed.Globals.createImageIcon("images/upload2product.png", ""));
+		buttonUploadDrivers = new JButton("", Globals.createImageIcon("images/upload2product.png", ""));
+		buttonUploadDrivers.setSelectedIcon(Globals.createImageIcon("images/upload2product.png", ""));
 		buttonUploadDrivers.setToolTipText(configed.getResourceValue("PanelHWInfo.uploadDrivers"));
 
-		buttonUploadDrivers.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				startDriverUploadFrame();
-			}
-		});
+		buttonUploadDrivers.addActionListener(actionEvent -> startDriverUploadFrame());
 
 		selectionCOMPUTER_SYSTEN = new JRadioButton("", true);
 		selectionBASE_BOARD = new JRadioButton("");
@@ -87,16 +80,13 @@ public class PanelHWByAuditDriver extends JPanel {
 		selectionGroup.add(selectionCOMPUTER_SYSTEN);
 		selectionGroup.add(selectionBASE_BOARD);
 
-		// JPanel panelByAuditInfo = new PanelLinedComponents(compis);
-		// JPanel panelByAuditInfo= new JPanel();
 		GroupLayout layoutByAuditInfo = new GroupLayout(this);
 		this.setLayout(layoutByAuditInfo);
-		int lh = de.uib.utilities.Globals.lineHeight - 4;
+		int lh = Globals.LINE_HEIGHT - 4;
 		layoutByAuditInfo.setVerticalGroup(layoutByAuditInfo.createSequentialGroup().addGap(vGap, vGap, vGap)
 				.addGroup(layoutByAuditInfo.createParallelGroup().addComponent(labelInfo, lh, lh, lh)
 						.addComponent(labelVendor, lh, lh, lh).addComponent(labelProduct, lh, lh, lh)
 						.addGap(hGap, hGap, hGap).addComponent(buttonUploadDrivers, lh, lh, lh))
-				// .addGap(vGap, vGap, vGap)
 				.addGroup(layoutByAuditInfo.createParallelGroup()
 						.addGroup(layoutByAuditInfo.createSequentialGroup()
 								.addGap(hGap / 2 + 1, hGap / 2 + 1, hGap / 2 + 1)
@@ -114,7 +104,7 @@ public class PanelHWByAuditDriver extends JPanel {
 				).addGap(vGap, vGap, vGap));
 
 		layoutByAuditInfo.setHorizontalGroup(layoutByAuditInfo.createSequentialGroup()
-				// .addGap(hGap, hGap, hGap)
+
 				.addGroup(layoutByAuditInfo.createSequentialGroup().addGap(hGap * 2, hGap * 2, hGap * 2)
 						.addComponent(labelInfo, 5, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(2, hGap * 4, hGap * 4)
@@ -125,31 +115,28 @@ public class PanelHWByAuditDriver extends JPanel {
 				.addGap(hGap, hGap, hGap)
 				.addGroup(layoutByAuditInfo.createParallelGroup()
 						.addGroup(layoutByAuditInfo.createSequentialGroup().addGap(2, 2, 2).addComponent(labelVendor,
-								de.uib.utilities.Globals.buttonWidth / 2, de.uib.utilities.Globals.buttonWidth,
-								de.uib.utilities.Globals.buttonWidth * 2))
-						.addComponent(fieldVendor, de.uib.utilities.Globals.buttonWidth / 2,
-								de.uib.utilities.Globals.buttonWidth, de.uib.utilities.Globals.buttonWidth * 2)
-						.addComponent(fieldVendor2, de.uib.utilities.Globals.buttonWidth / 2,
-								de.uib.utilities.Globals.buttonWidth, de.uib.utilities.Globals.buttonWidth * 2))
+								Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2))
+						.addComponent(fieldVendor, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
+								Globals.BUTTON_WIDTH * 2)
+						.addComponent(fieldVendor2, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
+								Globals.BUTTON_WIDTH * 2))
 				.addGap(hGap, hGap, hGap)
 				.addGroup(layoutByAuditInfo
 						.createParallelGroup().addComponent(labelSeparator).addComponent(labelSeparator2))
 				.addGap(hGap, hGap, hGap)
 				.addGroup(layoutByAuditInfo.createParallelGroup()
 						.addGroup(layoutByAuditInfo.createSequentialGroup().addGap(2, 2, 2).addComponent(labelProduct,
-								de.uib.utilities.Globals.buttonWidth / 2, de.uib.utilities.Globals.buttonWidth,
-								de.uib.utilities.Globals.buttonWidth * 2))
-						.addComponent(fieldLabel, de.uib.utilities.Globals.buttonWidth / 2,
-								de.uib.utilities.Globals.buttonWidth, de.uib.utilities.Globals.buttonWidth * 2)
-						.addComponent(fieldLabel2, de.uib.utilities.Globals.buttonWidth / 2,
-								de.uib.utilities.Globals.buttonWidth, de.uib.utilities.Globals.buttonWidth * 2))
+								Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2))
+						.addComponent(fieldLabel, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
+								Globals.BUTTON_WIDTH * 2)
+						.addComponent(fieldLabel2, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH,
+								Globals.BUTTON_WIDTH * 2))
 
-				.addGap(5 * hGap, 10 * hGap, 10 * hGap)
-				.addComponent(buttonUploadDrivers, de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH,
-						de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH, de.uib.configed.Globals.GRAPHIC_BUTTON_WIDTH)
+				.addGap(5 * hGap, 10 * hGap, 10 * hGap).addComponent(buttonUploadDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
+						Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
 				.addGap(2 * hGap, 4 * hGap, Short.MAX_VALUE));
-		setBackground(de.uib.configed.Globals.backLightBlue);
-		setBorder(BorderFactory.createLineBorder(de.uib.utilities.Globals.greyed));
+		setBackground(Globals.BACKGROUND_COLOR_7);
+		setBorder(BorderFactory.createLineBorder(Globals.greyed));
 	}
 
 	public void setTitle(String s) {
@@ -162,9 +149,7 @@ public class PanelHWByAuditDriver extends JPanel {
 		fieldLabel.setText("");
 		fieldVendor2.setText("");
 		fieldLabel2.setText("");
-		// selectionGroup.clearSelection();
 
-		// fieldByAuditPath.setText("");
 		if (fDriverUpload != null)
 			fDriverUpload.setUploadParameters("");
 	}
@@ -200,15 +185,14 @@ public class PanelHWByAuditDriver extends JPanel {
 
 		if (fDriverUpload != null)
 			fDriverUpload.setUploadParameters(byAuditPath);
-		// fieldByAuditPath.setText(byAuditPath);
+
 	}
 
 	private void startDriverUploadFrame() {
 		if (selectionBASE_BOARD.isSelected()) {
 			byAuditPath = eliminateIllegalPathChars(fieldVendor2.getText()) + "/"
 					+ eliminateIllegalPathChars(fieldLabel2.getText());
-		} else // if (selectionCOMPUTER_SYSTEN.isSelected())
-		{
+		} else {
 			byAuditPath = eliminateIllegalPathChars(fieldVendor.getText()) + "/"
 					+ eliminateIllegalPathChars(fieldLabel.getText());
 		}
@@ -217,7 +201,7 @@ public class PanelHWByAuditDriver extends JPanel {
 			fDriverUpload = new FDriverUpload(main, main.getPersistenceController(), null);
 		}
 
-		fDriverUpload.setSize(de.uib.configed.Globals.helperFormDimension);
+		fDriverUpload.setSize(Globals.helperFormDimension);
 		fDriverUpload.setVisible(true);
 		fDriverUpload.centerOnParent();
 

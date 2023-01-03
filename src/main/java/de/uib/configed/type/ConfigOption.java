@@ -1,6 +1,7 @@
 package de.uib.configed.type;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.ListSelectionModel;
@@ -16,7 +17,7 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 
 	public enum TYPE {
 		BoolConfig, UnicodeConfig, UndefinedConfig
-	};
+	}
 	// UndefinedConfig should not occur
 
 	public static final String BOOL_TYPE = TYPE.BoolConfig.toString();
@@ -34,12 +35,12 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 	protected void build() {
 		// overwrite values
 		if (retrieved == null || retrieved.get("possibleValues") == null)
-			put("possibleValues", new ArrayList<Object>());
+			put("possibleValues", new ArrayList<>());
 		else
 			put("possibleValues", retrieved.get("possibleValues"));
 
 		if (retrieved == null || retrieved.get("defaultValues") == null)
-			put("defaultValues", new ArrayList<Object>());
+			put("defaultValues", new ArrayList<>());
 		else {
 			if (retrieved.get("defaultValues") instanceof org.json.JSONArray) {
 
@@ -48,13 +49,6 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 				put("defaultValues", ((org.json.JSONArray) retrieved.get("defaultValues")).toList());
 			} else
 				put("defaultValues", retrieved.get("defaultValues"));
-
-			/*
-			 * if (retrieved.get("defaultValues") instanceof org.json.JSONArray)
-			 * {
-			 * logging.error("defaultValues instanceof org.jsonArrayList");
-			 * }
-			 */
 
 		}
 
@@ -76,7 +70,6 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 			else
 				put("type", retrieved.get("type"));
 
-			// logging.info(this, "type found " + get("type"));
 			if (get("type").equals(BOOL_TYPE) || get("type").equals("BoolProductProperty"))
 				type = TYPE.BoolConfig;
 			else
@@ -96,13 +89,7 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 				put("selectionMode", ListSelectionModel.SINGLE_SELECTION);
 		}
 
-		// if (retrieved.get("type") == null )
-		// put("classname", "java.lang.String");
-		// else if (retrieved.get("type").equals("BoolConfig"))
-		// put("classname", "java.lang.Boolean");
-		// else
-
-		put("classname", "java.util.List");
+		put("classname", "List");
 
 		if (retrieved == null)
 			put("editable", true);
@@ -117,32 +104,38 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 			put("nullable", false);
 	}
 
-	// ======================
 	// interface de.uib.utilities.table.ListCellOptions
-	public java.util.List getPossibleValues() {
-		return (java.util.List) get("possibleValues");
+	@Override
+	public List getPossibleValues() {
+		return (List) get("possibleValues");
 	}
 
-	public java.util.List getDefaultValues() {
-		return (java.util.List) get("defaultValues");
+	@Override
+	public List getDefaultValues() {
+		return (List) get("defaultValues");
 	}
 
-	public void setDefaultValues(java.util.List values) {
+	@Override
+	public void setDefaultValues(List values) {
 		put("defaultValues", values);
 	}
 
+	@Override
 	public int getSelectionMode() {
 		return (Integer) get("selectionMode");
 	}
 
+	@Override
 	public boolean isNullable() {
 		return (!type.equals(TYPE.BoolConfig)); // until we extend the data structure
 	}
 
+	@Override
 	public boolean isEditable() {
 		return (Boolean) get("editable");
 	}
 
+	@Override
 	public String getDescription() {
 		return (String) get("description");
 	}
@@ -151,5 +144,4 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 		return type;
 	}
 
-	// ======================
 }

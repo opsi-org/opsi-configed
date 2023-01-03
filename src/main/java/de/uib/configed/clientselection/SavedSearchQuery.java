@@ -3,6 +3,7 @@ package de.uib.configed.clientselection;
 import java.util.List;
 import java.util.Map;
 
+import de.uib.configed.Globals;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsidatamodel.PersistenceController;
@@ -14,7 +15,7 @@ import de.uib.utilities.logging.logging;
  * This class is a little command line tool which can execute saved searches.
  */
 public class SavedSearchQuery {
-	private final String usage = "\n" + "configed_savedsearch [OPTIONS] [NAME]\n\n"
+	private static final String USAGE = "\n" + "configed_savedsearch [OPTIONS] [NAME]\n\n"
 			+ "Runs the given search NAME and returns the matching clients. "
 			+ "If NAME is not set, list all available searches.\n\n" + "OPTIONS:\n"
 			+ "  -h\tConfiguration server to connect to\n" + "  -u\tUsername for authentication\n"
@@ -25,7 +26,6 @@ public class SavedSearchQuery {
 	private String user;
 	private String password;
 	private String searchName;
-	private String group;
 
 	private PersistenceController controller;
 
@@ -69,26 +69,24 @@ public class SavedSearchQuery {
 	}
 
 	public void showUsage() {
-		logging.debug(usage);
+		logging.debug(USAGE);
 	}
 
-	public void setArgs(String host, String user, String password, String searchName, String group) {
-		logging.info(this, "setArgs " + host + ", PASSWORD, " + searchName + ", " + group);
+	public void setArgs(String host, String user, String password, String searchName) {
+		logging.info(this, "setArgs " + host + ", PASSWORD, " + searchName);
 		this.host = host;
 		this.user = user;
 		this.password = password;
 		this.searchName = searchName;
-		this.group = group;
-		// System.exit(0);
 	}
 
 	public void addMissingArgs() {
 		if (host == null)
-			host = de.uib.utilities.Globals.getCLIparam("Host: ", false);
+			host = Globals.getCLIparam("Host: ", false);
 		if (user == null)
-			user = de.uib.utilities.Globals.getCLIparam("User: ", false);
+			user = Globals.getCLIparam("User: ", false);
 		if (password == null)
-			password = de.uib.utilities.Globals.getCLIparam("Password: ", true);
+			password = Globals.getCLIparam("Password: ", true);
 	}
 
 	public List<String> runSearch(boolean printing) {
@@ -113,13 +111,11 @@ public class SavedSearchQuery {
 		controller.getHostInfoCollections().getClientListForDepots(depots.keySet().toArray(new String[0]), null);
 
 		SelectionManager manager = new SelectionManager(null);
-		java.util.List<String> searches = manager.getSavedSearchesNames();
+		List<String> searches = manager.getSavedSearchesNames();
 		if (searchName == null && printing) {
 			printResult(searches);
 			return null;
 		}
-
-		// logging.debug("searches, searchName " + searches + ", " + searchName);
 
 		if (!searches.contains(searchName)) {
 			logging.error("Search not found.");
@@ -133,7 +129,7 @@ public class SavedSearchQuery {
 		return result;
 	}
 
-	public void populateHostGroup(java.util.List<String> hosts, String groupName) {
+	public void populateHostGroup(List<String> hosts, String groupName) {
 		if (controller == null) {
 			logging.error("controller not initialized");
 			System.exit(3);
@@ -146,14 +142,12 @@ public class SavedSearchQuery {
 
 		Map<String, Map<String, String>> hostGroups = controller.getHostGroups();
 
-		// logging.debug(" hostGroups " + hostGroups);
-
 		if (!hostGroups.keySet().contains(groupName)) {
 			logging.error("group not found");
 			System.exit(5);
 		}
 
-		java.util.List<String> groupAttributes = new de.uib.configed.type.HostGroupRelation().getAttributes();
+		List<String> groupAttributes = new de.uib.configed.type.HostGroupRelation().getAttributes();
 		StringValuedRelationElement saveGroupRelation = new StringValuedRelationElement(groupAttributes,
 				hostGroups.get(groupName));
 
@@ -161,20 +155,6 @@ public class SavedSearchQuery {
 			logging.error("delete group error, groupName " + groupName);
 			System.exit(6);
 		}
-
-		/*
-		 * removes group and therefore the memberships of hosts in this group
-		 * subgroups become root subgroups
-		 * 
-		 * 
-		 * try{
-		 * logging.debug(" ......... waiting ");
-		 * Thread.sleep(10000);
-		 * }
-		 * catch(Exception ex)
-		 * {
-		 * }
-		 */
 
 		if (!controller.addGroup(saveGroupRelation)) {
 			logging.error("add group error, group " + saveGroupRelation);
@@ -186,16 +166,6 @@ public class SavedSearchQuery {
 			System.exit(8);
 		}
 
-	}
-
-	public static void main(String[] args) {
-		SavedSearchQuery query = new SavedSearchQuery(args);
-		if (!query.parseArgs()) {
-			query.showUsage();
-			System.exit(10);
-		}
-		query.addMissingArgs();
-		query.runSearch(true);
 	}
 
 	private void addInfo(String option, String value) {

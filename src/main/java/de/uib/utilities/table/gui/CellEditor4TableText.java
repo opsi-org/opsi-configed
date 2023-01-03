@@ -47,8 +47,7 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 		this.initSize = initSize;
 
 		editorContent.setEditable(false);
-		// editorContent.setFont(editorContent.getFont().deriveFont(Font.ITALIC));
-		// editorContent.addActionListener(this);
+
 		editorContent.addMouseListener(this);
 		editorContent.addKeyListener(this);
 		editorContent.addFocusListener(this);
@@ -63,7 +62,7 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 	// ActionListener
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == editorContent) {
-			// logging.debug("action event occurred on editorContent");
+
 			fireEditingStopped();
 		}
 
@@ -71,32 +70,38 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 
 	// interface
 	// MouseListener
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getSource() == editorContent) {
 			if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
-				// logging.debug("double clicked");
+
 				fEdit.setVisible(true);
 			}
 
 		}
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e) {
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
 
 	// interface
 	// KeyListener
+	@Override
 	public void keyPressed(KeyEvent e) {
-		// logging.debug("key event " + e);
+
 		if (e.getSource() == editorContent) {
 			if (e.getKeyCode() == 32)
 				fEdit.setVisible(true);
@@ -104,25 +109,30 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 	}
 
 	// interface
 	// FocusListener
+	@Override
 	public void focusGained(FocusEvent e) {
 		if (e.getSource() == editorContent) {
-			// logging.info(this, "focusGained, getText ");
+
 			editorContent.setText(fEdit.getText());
 		}
 	}
 
+	@Override
 	public void focusLost(FocusEvent e) {
 	}
 
 	// Implement the one CellEditor method that AbstractCellEditor doesn't.
+	@Override
 	public Object getCellEditorValue() {
 		currentValue = fEdit.getText();
 		fEdit.setVisible(false);
@@ -133,6 +143,7 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 	}
 
 	// Implement the one method defined by TableCellEditor.
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		oldValue = (String) value;
 		fEdit.setCaller(editorContent);
@@ -160,18 +171,19 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 		fEdit.setLocation((int) (loc.getX() + rec.getX() + 30), (int) (loc.getY() + rec.getY() + 20));
 
 		fEdit.setTitle(" (" + Globals.APPNAME + ")  '" + table.getColumnName(column) + "'");
-		// fEdit.setDataChanged( false );
 
 		currentValue = oldValue;
 		return editorContent;
 	}
 
+	@Override
 	public boolean stopCellEditing() {
 		logging.debug(this, "stopCellEditing");
 
 		return super.stopCellEditing();
 	}
 
+	@Override
 	public void cancelCellEditing() {
 		logging.debug(this, "cancelCellEditing");
 		super.cancelCellEditing();

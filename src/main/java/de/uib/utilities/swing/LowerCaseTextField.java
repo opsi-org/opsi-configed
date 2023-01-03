@@ -23,8 +23,8 @@ public class LowerCaseTextField extends javax.swing.JTextField {
 
 	private static class LowerCaseDocument extends PlainDocument {
 
-		public void insertString(int offs, String str, AttributeSet a)
-				throws BadLocationException {
+		@Override
+		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
 
 			if (str == null) {
 				return;

@@ -18,9 +18,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -53,17 +53,15 @@ public class PanelCompleteWinProducts extends JPanel
 
 {
 
-	// ============== file name conventions
+	// file name conventions
 
 	String winProduct = "";
 	String server = "";
 	String selectedDepot = null;
-	Set<String> depots = new HashSet<String>();
-	// String standardProductDirectory;
+	Set<String> depots = new HashSet<>();
+
 	String depotProductDirectory;
 	boolean smbMounted;
-
-	// ==============
 
 	int firstLabelWidth = Globals.FIRST_LABEL_WIDTH;
 
@@ -89,7 +87,7 @@ public class PanelCompleteWinProducts extends JPanel
 	ConfigedMain main;
 	JFrame rootFrame;
 
-	Vector<String> winProducts;
+	List<String> winProducts;
 
 	public PanelCompleteWinProducts(ConfigedMain main, PersistenceController persist, JFrame root) {
 		this.main = main;
@@ -127,8 +125,6 @@ public class PanelCompleteWinProducts extends JPanel
 
 		defineLayout();
 
-		// evaluateWinProducts();
-
 		persist.registerDataRefreshedObserver(this);
 
 	}
@@ -141,6 +137,7 @@ public class PanelCompleteWinProducts extends JPanel
 	}
 
 	// implementation of DataRefreshedObserver
+	@Override
 	public void gotNotification(Object mesg) {
 		evaluateWinProducts();
 	}
@@ -153,52 +150,45 @@ public class PanelCompleteWinProducts extends JPanel
 
 		smbMounted = new File(depotProductDirectory).exists();
 
-		Vector<String> winProducts = persist.getWinProducts(server, depotProductDirectory);
+		List<String> winProducts = persist.getWinProducts(server, depotProductDirectory);
 
-		comboChooseWinProduct.setModel(new DefaultComboBoxModel(winProducts));
+		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray()));
 	}
 
 	private void defineChoosers() {
 		chooserFolder = new JFileChooser();
-		chooserFolder.setPreferredSize(de.uib.utilities.Globals.filechooserSize);
-		chooserFolder.setPreferredSize(de.uib.utilities.Globals.filechooserSize);
+		chooserFolder.setPreferredSize(Globals.filechooserSize);
+		chooserFolder.setPreferredSize(Globals.filechooserSize);
 		chooserFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooserFolder.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserFolder);
-		// chooserFolder.setControlButtonsAreShown(false);
 
 		chooserFolder.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooserFolder.setDialogTitle(Globals.APPNAME + " " + configed.getResourceValue("CompleteWinProducts.chooser"));
 
-		comboChooseDepot = new JComboBox();
+		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.textfieldDimension);
 
-		comboChooseDepot.setModel(new DefaultComboBoxModel(main.getLinkedDepots()));
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray()));
 
 		comboChooseDepot.setEnabled(false);
 
-		comboChooseDepot.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				selectedDepot = "" + comboChooseDepot.getSelectedItem();
-				logging.info(this, "actionPerformed  depot selected " + selectedDepot);
-				depots.clear();
-				depots.add(selectedDepot);
-				SmbConnect.getInstance().buildSambaTarget(selectedDepot, de.uib.connectx.SmbConnect.PRODUCT_SHARE_RW);
-				evaluateWinProducts();
-			}
+		comboChooseDepot.addActionListener(actionEvent -> {
+			selectedDepot = "" + comboChooseDepot.getSelectedItem();
+			logging.info(this, "actionPerformed  depot selected " + selectedDepot);
+			depots.clear();
+			depots.add(selectedDepot);
+			SmbConnect.getInstance().buildSambaTarget(selectedDepot, de.uib.connectx.SmbConnect.PRODUCT_SHARE_RW);
+			evaluateWinProducts();
 		});
 
-		comboChooseWinProduct = new JComboBox();
+		comboChooseWinProduct = new JComboBox<>();
 		comboChooseWinProduct.setSize(Globals.textfieldDimension);
-		comboChooseWinProduct.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				winProduct = "" + comboChooseWinProduct.getSelectedItem();
-				produceTarget();
-			}
+		comboChooseWinProduct.addActionListener(actionEvent -> {
+			winProduct = "" + comboChooseWinProduct.getSelectedItem();
+			produceTarget();
 		});
-
-		// logging.debug(this, "defineChoosers, depots: " + persist.getWinProducts());
 
 	}
 
@@ -219,8 +209,8 @@ public class PanelCompleteWinProducts extends JPanel
 
 	}
 
-	// =======
 	// implements NameProducer
+	@Override
 	public String produceName() {
 		logging.info(this, "produceName ? fieldTargetPath , depotProductDirectory " + fieldTargetPath + " , "
 				+ depotProductDirectory);
@@ -231,23 +221,25 @@ public class PanelCompleteWinProducts extends JPanel
 		return fieldTargetPath.getText();
 	}
 
+	@Override
 	public String getDefaultName() {
 		return de.uib.connectx.SmbConnect.PRODUCT_SHARE_RW;
 	}
 
-	// =======
-
 	private void initComponentsForNameProducer() {
 		fieldTargetPath = new JTextField("");
 		fieldTargetPath.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
 			public void changedUpdate(DocumentEvent e) {
 				checkButtonCallExecute();
 			}
 
+			@Override
 			public void insertUpdate(DocumentEvent e) {
 				checkButtonCallExecute();
 			}
 
+			@Override
 			public void removeUpdate(DocumentEvent e) {
 				checkButtonCallExecute();
 			}
@@ -258,33 +250,26 @@ public class PanelCompleteWinProducts extends JPanel
 
 	private void initComponents() {
 
-		// fieldServerPath = new JTextField("");
-
 		final JPanel panel = this;
 
 		fieldProductKey = new JTextField("");
 		fieldProductKey.setPreferredSize(Globals.textfieldDimension);
-
-		// fieldTargetPath.setForeground(Globals.greyed);
 
 		buttonCallSelectFolderWinPE = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectFolderWinPE.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectFolderWinPE.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallSelectFolderWinPE.setToolTipText(configed.getResourceValue("CompleteWinProducts.chooserFolderPE"));
 
-		buttonCallSelectFolderWinPE.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		buttonCallSelectFolderWinPE.addActionListener(actionEvent -> {
 
-				int returnVal = chooserFolder.showOpenDialog(panel);
+			int returnVal = chooserFolder.showOpenDialog(panel);
 
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					String pathWinPE = chooserFolder.getSelectedFile().getPath();
-					fieldPathWinPE.setText(pathWinPE);
-					fieldPathWinPE.setCaretPosition(pathWinPE.length());
-				} else {
-					fieldPathWinPE.setText("");
-				}
-
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				String pathWinPE = chooserFolder.getSelectedFile().getPath();
+				fieldPathWinPE.setText(pathWinPE);
+				fieldPathWinPE.setCaretPosition(pathWinPE.length());
+			} else {
+				fieldPathWinPE.setText("");
 			}
 		});
 
@@ -296,19 +281,16 @@ public class PanelCompleteWinProducts extends JPanel
 
 		fieldPathInstallFiles = new JTextField();
 
-		buttonCallSelectFolderInstallFiles.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		buttonCallSelectFolderInstallFiles.addActionListener(actionEvent -> {
 
-				int returnVal = chooserFolder.showOpenDialog(panel);
+			int returnVal = chooserFolder.showOpenDialog(panel);
 
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					String pathInstallFiles = chooserFolder.getSelectedFile().getPath();
-					fieldPathInstallFiles.setText(pathInstallFiles);
-					fieldPathInstallFiles.setCaretPosition(pathInstallFiles.length());
-				} else {
-					fieldPathInstallFiles.setText("");
-				}
-
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				String pathInstallFiles = chooserFolder.getSelectedFile().getPath();
+				fieldPathInstallFiles.setText(pathInstallFiles);
+				fieldPathInstallFiles.setCaretPosition(pathInstallFiles.length());
+			} else {
+				fieldPathInstallFiles.setText("");
 			}
 		});
 
@@ -320,6 +302,7 @@ public class PanelCompleteWinProducts extends JPanel
 		buttonCallExecute.setEnabled(false);
 
 		buttonCallExecute.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.debug(this,
 						"actionPerformed on buttonCallExecute pathWinPE, pathInstallFiles, productKey, winproduct "
@@ -327,8 +310,8 @@ public class PanelCompleteWinProducts extends JPanel
 								+ fieldProductKey.getText() + ", " + comboChooseWinProduct.getSelectedItem());
 
 				final Color saveColor = buttonCallExecute.getBackground();
-				// final Icon saveIcon = buttonCallExecute.getIcon();
-				buttonCallExecute.setBackground(Globals.failedBackColor);
+
+				buttonCallExecute.setBackground(Globals.FAILED_BACKGROUND_COLOR);
 
 				execute();
 
@@ -352,7 +335,7 @@ public class PanelCompleteWinProducts extends JPanel
 			logging.debug(this, "copy  " + pathWinPE + " to " + targetDirectory);
 
 			if (!pathWinPE.equals("")) {
-				targetDirectory = new File(fieldTargetPath.getText() + File.separator + SmbConnect.directoryPE);
+				targetDirectory = new File(fieldTargetPath.getText() + File.separator + SmbConnect.DIRECTORY_PE);
 				FileUtils.copyDirectory(new File(pathWinPE), targetDirectory);
 			}
 
@@ -360,20 +343,20 @@ public class PanelCompleteWinProducts extends JPanel
 			logging.debug(this, "copy  " + pathInstallFiles + " to " + targetDirectory);
 			if (!pathInstallFiles.equals("")) {
 				targetDirectory = new File(
-						fieldTargetPath.getText() + File.separator + SmbConnect.directoryInstallFiles);
+						fieldTargetPath.getText() + File.separator + SmbConnect.DIRECTORY_INSTALL_FILES);
 				FileUtils.copyDirectory(new File(pathInstallFiles), targetDirectory);
 			}
 
 			persist.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
-					+ SmbConnect.directoryPE);
+					+ SmbConnect.DIRECTORY_PE);
 			persist.setRights("/" + SmbConnect.unixPath(de.uib.connectx.SmbConnect.directoryProducts) + "/" + winProduct
-					+ "/" + SmbConnect.directoryInstallFiles);
+					+ "/" + SmbConnect.DIRECTORY_INSTALL_FILES);
 			waitCursor.stop();
 
 			JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,
 					configed.getResourceValue("CompleteWinProduct.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
 
-			java.util.List<String> values = new ArrayList<String>();
+			List<String> values = new ArrayList<>();
 
 			String productKey = fieldProductKey.getText().trim();
 			values.add(productKey);
@@ -384,11 +367,10 @@ public class PanelCompleteWinProducts extends JPanel
 
 			String oldProductKey = null;
 
-			if (propsMap != null && propsMap.get("productkey") != null
-					&& propsMap.get("productkey") instanceof java.util.List
-					&& (((java.util.List) propsMap.get("productkey")).size() > 0)
-					&& !(((java.util.List) propsMap.get("productkey")).get(0).equals("")))
-				oldProductKey = (String) ((java.util.List) propsMap.get("productkey")).get(0);
+			if (propsMap != null && propsMap.get("productkey") != null && propsMap.get("productkey") instanceof List
+					&& !((List) propsMap.get("productkey")).isEmpty()
+					&& !((List) propsMap.get("productkey")).get(0).equals(""))
+				oldProductKey = (String) ((List) propsMap.get("productkey")).get(0);
 
 			if (oldProductKey == null)
 				oldProductKey = "";
@@ -396,13 +378,9 @@ public class PanelCompleteWinProducts extends JPanel
 			depots.clear();
 			depots.add((String) comboChooseDepot.getSelectedItem());
 
-			// logging.info(this, "setCommonProductPropertyValue " + depots + ", " +
-			// winProduct + ", " + values);
-
 			if (!oldProductKey.equals(productKey)) {
 
-				int returnedOption = JOptionPane.NO_OPTION;
-				returnedOption = JOptionPane.showOptionDialog(rootFrame,
+				int returnedOption = JOptionPane.showOptionDialog(rootFrame,
 						configed.getResourceValue("CompleteWinProducts.setChangedProductKey"),
 						configed.getResourceValue("CompleteWinProducts.questionSetProductKey"),
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
@@ -420,8 +398,6 @@ public class PanelCompleteWinProducts extends JPanel
 			waitCursor.stop();
 			logging.error("copy error:\n" + ex, ex);
 		}
-
-		waitCursor = null;
 	}
 
 	public void defineLayout() {

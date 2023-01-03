@@ -2,7 +2,6 @@ package de.uib.configed.gui;
 
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -24,12 +23,6 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-/**
- * FGeneralDialog
- * Copyright:     Copyright (c) 2001-2013
- * Organisation:  uib
- * @author Rupert Röder
- */
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
@@ -41,27 +34,20 @@ public class GeneralFrame extends JDialog implements ActionListener {
 
 	protected JPanel topPane = new JPanel();
 	protected JPanel southPanel = new JPanel();
-	// JTextArea jTextArea1 = new JTextArea();
+
 	protected JButton jButton1 = new JButton();
-	// protected String button1Text = "close";
 
 	protected int preferredWidth;
 	protected int preferredHeight;
-
-	// protected String button0Text =
-	// configed.getResourceValue("FGeneralDialog.close");
 
 	protected int noOfButtons = 1;
 	protected int result = -1;
 	protected int DEFAULT = 0;
 
-	Color myHintYellow = new java.awt.Color(255, 255, 230);
-
 	protected JPanel jPanelButtonGrid = new JPanel();
 	protected GridLayout gridLayout1 = new GridLayout();
 	protected BorderLayout borderLayout1 = new BorderLayout();
 	protected FlowLayout flowLayout1 = new FlowLayout();
-	// JLabel jLabel1 = new JLabel();
 
 	protected JPanel additionalPane;
 
@@ -74,7 +60,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	}
 
 	public void setup() {
-		// guiInit();
+
 		pack();
 	}
 
@@ -85,7 +71,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	}
 
 	public void addPanel(JPanel pane) {
-		// additionalPane.add(pane);
+
 		getContentPane().add(pane);
 	}
 
@@ -114,9 +100,6 @@ public class GeneralFrame extends JDialog implements ActionListener {
 
 		if (!centerOnMaster) {
 			// center on Screen
-			// Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			// startX = (screenSize.width - getSize().width)/ 2;
-			// startY = (screenSize.height - getSize().height)/2;
 
 			GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 			GraphicsConfiguration gc = gd.getDefaultConfiguration();
@@ -125,23 +108,12 @@ public class GeneralFrame extends JDialog implements ActionListener {
 					(gc.getBounds().height - getHeight()) / 2 + gc.getBounds().y);
 
 		} else {
-			// logging.debug(this, "centerOn (int) masterOnScreen.getX() " + (int)
-			// masterOnScreen.getX());
-			// logging.debug(this, "centerOn (int) masterOnScreen.getY() " + (int)
-			// masterOnScreen.getY());
-			// logging.debug(this, "centerOn master.getWidth() " + master.getWidth() / 2);
-			// logging.debug(this, "centerOn master.getHeight() " + master.getHeight() / 2)
-			// ;
-			// logging.debug(this, "centerOn this.getSize() " + getSize());
-
-			// logging.debug(this, "centerOn " + master.getClass() + ", " + master);
 
 			startX = (int) masterOnScreen.getX() + intHalf(master.getWidth()) - intHalf(getSize().getWidth());
 			startY = (int) masterOnScreen.getY() + intHalf(master.getHeight()) - intHalf(getSize().getHeight());
 
 			// problem: in applet in windows, we may leave the screen
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			// logging.debug(this, "centerOn screenSize " + screenSize);
 
 			if (startX + getSize().width > screenSize.width)
 				startX = screenSize.width - getSize().width;
@@ -185,10 +157,11 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	}
 
 	// ActionListener
+	@Override
 	public void actionPerformed(ActionEvent e) {
-		// logging.debug ("ActionEvent ...... ");
+
 		if (e.getSource() == jButton1) {
-			// logging.debug (".... on Button1. ");
+
 			doAction1();
 		}
 	}
@@ -234,8 +207,8 @@ public class GeneralFrame extends JDialog implements ActionListener {
 			fadeTimer.start();
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
-			// logging.debug(this, "fade, opacity " + opacity);
 
 			if (vanishing) {
 				opacity -= step;
@@ -261,7 +234,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 		public void paintComponent(Graphics g) {
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 
-			g.setColor(new Color(230, 230, 250));
+			g.setColor(Globals.F_GENERAL_DIALOG_FADING_MIRROR_COLOR);
 			g.fillRect(0, 0, getWidth(), getHeight());
 		}
 	}

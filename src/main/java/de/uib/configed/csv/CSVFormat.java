@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 public class CSVFormat {
 	private static final char DEFAULT_FIELD_SEPARATOR = ',';
@@ -133,8 +132,8 @@ public class CSVFormat {
 		HeaderDetector detector = new HeaderDetector(fileAsList.get(lineNumber));
 		hasHeader = detector.detect();
 		String header = detector.getHeader();
-		headers = Arrays.asList(
-				header.replaceAll(String.valueOf(stringSeparator), "").split(String.valueOf(getFieldSeparator())));
+		headers = Arrays
+				.asList(header.replace(String.valueOf(stringSeparator), "").split(String.valueOf(getFieldSeparator())));
 		headers.replaceAll(String::trim);
 	}
 
@@ -152,7 +151,7 @@ public class CSVFormat {
 
 		private boolean containsEmptyFields() {
 			String tmp = line.replace(String.valueOf(stringSeparator), "");
-			return Arrays.stream(tmp.split(String.valueOf(fieldSeparator))).anyMatch(field -> field.isEmpty());
+			return Arrays.stream(tmp.split(String.valueOf(fieldSeparator))).anyMatch(String::isEmpty);
 		}
 
 		private boolean containsFieldsWithEmbeddedQuotes() {
@@ -166,13 +165,7 @@ public class CSVFormat {
 		public boolean detect() {
 			hasHeader = true;
 
-			if (containsDigits()) {
-				hasHeader = false;
-				return hasHeader;
-			} else if (containsEmptyFields()) {
-				hasHeader = false;
-				return hasHeader;
-			} else if (containsFieldsWithEmbeddedQuotes()) {
+			if (containsDigits() || containsEmptyFields() || containsFieldsWithEmbeddedQuotes()) {
 				hasHeader = false;
 				return hasHeader;
 			}
@@ -181,7 +174,7 @@ public class CSVFormat {
 		}
 	}
 
-	public boolean hasExpectedHeaderNames(Vector<String> expectedHeaderNames) {
+	public boolean hasExpectedHeaderNames(List<String> expectedHeaderNames) {
 		return headers.stream().allMatch(header -> expectedHeaderNames.contains(header.trim()));
 	}
 }

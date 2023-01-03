@@ -9,9 +9,7 @@ public class CombinedMenuItem {
 	JCheckBoxMenuItem standardMenuItem;
 	JCheckBoxMenuItem popupItem;
 
-	CombinedMenuItem(
-			JCheckBoxMenuItem menuItem,
-			JCheckBoxMenuItem popupItem) {
+	CombinedMenuItem(JCheckBoxMenuItem menuItem, JCheckBoxMenuItem popupItem) {
 		this.standardMenuItem = menuItem;
 		this.popupItem = popupItem;
 	}

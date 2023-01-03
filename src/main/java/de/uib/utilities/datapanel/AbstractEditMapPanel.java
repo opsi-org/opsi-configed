@@ -8,8 +8,8 @@
 package de.uib.utilities.datapanel;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -65,19 +65,12 @@ public abstract class AbstractEditMapPanel extends JPanel {
 			return s;
 		}
 
-		/*
-		 * @Override
-		 * public String toString()
-		 * {
-		 * return this.getClass().getName();
-		 * }
-		 */
 	}
 
 	public AbstractEditMapPanel() {
 		actor = new Actor();
 		mapTableModel = new MapTableModel();
-		// mapTableModel.setData(null);
+
 	}
 
 	public AbstractEditMapPanel(boolean keylistExtendible, boolean keylistEditable, boolean reloadable) {
@@ -85,7 +78,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 		this.keylistExtendible = keylistExtendible;
 		this.keylistEditable = keylistEditable;
 		this.reloadable = reloadable;
-		// mapTableModel.setData(null);
+
 	}
 
 	public void setActor(Actor actor) {
@@ -102,7 +95,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 		return mapTableModel;
 	}
 
-	public Vector<String> getNames() {
+	public List<String> getNames() {
 		return mapTableModel.getKeys();
 	}
 
@@ -138,7 +131,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 		mapTableModel.setReadOnlyEntries(keys);
 	}
 
-	public void setShowOnlyValues(java.util.List<Object> showOnly) {
+	public void setShowOnlyValues(List<Object> showOnly) {
 		mapTableModel.setShowOnlyValues(showOnly);
 	}
 
@@ -150,62 +143,8 @@ public abstract class AbstractEditMapPanel extends JPanel {
 		MenuElement[] popupElements = popupmenuAtRow.getSubElements();
 		int size = popupElements.length;
 		logging.debug(this, "logPopupElements " + size);
-		/*
-		 * for (int i = 0; i < size; i++)
-		 * {
-		 * logging.info(this, "logPopupElements " + ((JMenuItem)
-		 * popupElements[i]).getText());
-		 * }
-		 */
-	}
 
-	/*
-	 * private void removeOldPopupElements()
-	 * {
-	 * MenuElement[] popupElements = popupmenuAtRow.getSubElements();
-	 * int size = popupElements.length;
-	 * logging.info(this, "removeOldPopupElements " +size);
-	 * for (int i = size-1; i >=0; i--)
-	 * {
-	 * logging.info(this, "removeOldPopupElements " + ((JMenuItem)
-	 * popupElements[i]).getText());
-	 * popupmenuAtRow.remove(i);
-	 * }
-	 * }
-	 * 
-	 * public void setPopupConfiguration(LinkedList<JMenuItem>menuItems)
-	 * {
-	 * logPopupElements();
-	 * //removePopupElements();
-	 * 
-	 * 
-	 * logging.info(this, "setPopupConfiguration, set menuitems " +menuItems.size()
-	 * );
-	 * for (JMenuItem item : menuItems)
-	 * {
-	 * logging.info(this, "setPopupConfiguration, set " + item.getText());
-	 * //popupmenuAtRow.add( item );
-	 * }
-	 * 
-	 * }
-	 * 
-	 * public void setPopupConfiguration(JPopupMenu menu)
-	 * {
-	 * logPopupElements();
-	 * //removePopupElements();
-	 * 
-	 * 
-	 * MenuElement[] menuElements = menu.getSubElements();
-	 * logging.info(this, "setPopupConfiguration, set menu " +menuElements.length);
-	 * for (int i = 0; i < menuElements.length; i++)
-	 * {
-	 * logging.info(this, "setPopupConfiguration, set menu " + ((JMenuItem)
-	 * menuElements[i]).getText());
-	 * //popupmenuAtRow.add( (JMenuItem) menuElements[i] );
-	 * }
-	 * 
-	 * }
-	 */
+	}
 
 	public void setOptionsEditable(boolean b) {
 		logging.debug(this, "AbstractEditMapPanel.setOptionsEditable " + b);

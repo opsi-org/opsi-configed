@@ -14,8 +14,7 @@ public class OpsiDataSuperGroupEqualsOperation extends OpsiDataStringEqualsOpera
 
 	@Override
 	public boolean doesMatch(Client client) {
-		// logging.debug( " ------------ ");
-		// logging.debug( " client " + client );
+
 		OpsiDataClient oClient = (OpsiDataClient) client;
 		if (oClient.getSuperGroups() == null) {
 			if (!issuedTreeError) {

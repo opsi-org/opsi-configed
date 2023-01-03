@@ -1,0 +1,53 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/java
+{
+    "name": "opsi-configed",
+    "dockerFile": "Dockerfile",
+    "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "java.jdt.ls.java.home": "/usr/lib/jvm/java-19-openjdk-amd64"
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/java:1": {
+            "version": "none",
+            "installMaven": "true",
+            "installGradle": "false"
+        },
+        "ghcr.io/devcontainers/features/git:1": {}
+    },
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    // "forwardPorts": [],
+    // Use 'postCreateCommand' to run commands after the container is created.
+    // "postCreateCommand": "java -version",
+    // Configure tool-specific properties.
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                // Java specific tooling
+                "redhat.java",
+                "vscjava.vscode-java-pack",
+                // Linting
+                "sonarsource.sonarlint-vscode",
+                // Maven specific tooling 
+                "dhruv.maven-dependency-explorer",
+                // Dependency analytics
+                "redhat.fabric8-analytics",
+                // Code autorship
+                "eamodio.gitlens"
+            ]
+        }
+    },
+    "containerEnv": {
+        "DISPLAY": ":0", // Linux
+        // "DISPLAY": "docker.for.mac.host.internal:0", // Mac
+        // "DISPLAY": "host.docker.internal:0", // Windows
+        "JAVA_HOME": "/usr/lib/jvm/java-19-openjdk-amd64"
+    },
+    "mounts": [
+        "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached"
+    ],
+    "remoteUser": "vscode",
+    "runArgs": [
+        "--privileged"
+    ]
+}

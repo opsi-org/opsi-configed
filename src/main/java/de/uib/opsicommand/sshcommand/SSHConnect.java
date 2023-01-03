@@ -27,6 +27,7 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
@@ -63,8 +64,7 @@ public class SSHConnect {
 	public SSHConnect(ConfigedMain main) {
 		this.main = main;
 		connectionInfo = SSHConnectionInfo.getInstance();
-		// if (main.SSHKEY != null)
-		// useKeyfile = true;
+
 	}
 
 	public static boolean isConnectionAllowed() {
@@ -108,9 +108,10 @@ public class SSHConnect {
 		}
 
 		logging.info(this, "isConnected session.isConnected " + result);
-		if (!result && factory.successfulConnectObservedCount > 0)
-			logging.info("No SSH connection after successful connections: " + factory.successfulConnectObservedCount
-					+ "\n" + "check server authentication configuration");
+		if (!result && SSHCommandFactory.successfulConnectObservedCount > 0)
+			logging.info("No SSH connection after successful connections: "
+					+ SSHCommandFactory.successfulConnectObservedCount + "\n"
+					+ "check server authentication configuration");
 		return result;
 	}
 
@@ -146,7 +147,7 @@ public class SSHConnect {
 			return "";
 		}
 		if (dialog == null)
-			dialog = de.uib.configed.Globals.mainFrame;
+			dialog = Globals.mainFrame;
 		logging.debug(this, "getSudoPass dialog " + dialog);
 		final JPasswordField passwordField = new JPasswordField(10);
 		passwordField.setEchoChar('*');
@@ -222,7 +223,7 @@ public class SSHConnect {
 			logging.info(this, "connect user " + connectionInfo.getUser());
 
 			if (connectionInfo.usesKeyfile()) {
-				if (connectionInfo.getKeyfilePassphrase() != "")
+				if (!connectionInfo.getKeyfilePassphrase().equals(""))
 					jsch.addIdentity(connectionInfo.getKeyfilePath(), connectionInfo.getKeyfilePassphrase());
 				jsch.addIdentity(connectionInfo.getKeyfilePath());
 				logging.info(this, "connect this.keyfilepath " + connectionInfo.getKeyfilePath());
@@ -234,25 +235,22 @@ public class SSHConnect {
 				session = jsch.getSession(connectionInfo.getUser(), connectionInfo.getHost(),
 						Integer.valueOf(connectionInfo.getPort()));
 				logging.info(this, "connect this.password "
-						// + connectionInfo.getPassw() + " "
+
 						+ SSHCommandFactory.getInstance().confidential);
 
 				session.setPassword(connectionInfo.getPassw());
 				logging.info(this, "connect useKeyfile " + connectionInfo.usesKeyfile() + " use password …");
 			}
-			// session.setTimeout(10000);
-			// session.setConfig("StrictHostKeyChecking", "no");
 
 			Properties config = new Properties();
 			config.put("StrictHostKeyChecking", "no");
-			// config.put("PreferredAuthentications", "password");
-			jsch.setConfig(config);
 
-			// session.setConfig("kex", "diffie-hellman-group1-sha1"); //hope, that this
+			JSch.setConfig(config);
+
 			// will prevent session ending
 			// cf
 			// https://stackoverflow.com/questions/37280442/jsch-0-1-53-session-connect-throws-end-of-io-stream-read
-			// int timeo = 4000;
+
 			int timeo = 10000;
 
 			logging.info(this, "we try to connect with timeout " + timeo);
@@ -261,17 +259,17 @@ public class SSHConnect {
 			logging.info(this, "we did connect " + connectionInfo);
 			logging.info(this, "connect " + connectionInfo);
 
-			factory.successfulConnectObservedCount++;
+			SSHCommandFactory.successfulConnectObservedCount++;
 
 			return true;
 		} catch (com.jcraft.jsch.JSchException authfail) {
 			retriedTimes_auth = retry(retriedTimes_auth, authfail);
 			if (retriedTimes_auth >= 2) {
 				logging.warning(this, "connect Authentication failed. " + authfail);
-				if (factory.successfulConnectObservedCount > 0)
+				if (SSHCommandFactory.successfulConnectObservedCount > 0)
 
 					logging.error("authentication failed after successful authentifications: "
-							+ factory.successfulConnectObservedCount + "\n" + "\n"
+							+ SSHCommandFactory.successfulConnectObservedCount + "\n" + "\n"
 							+ "check server authentication configuration" + "\n" + "\n");
 
 				return false;
@@ -292,7 +290,7 @@ public class SSHConnect {
 	private int retry(int retriedTimes, Exception e) {
 		if (retriedTimes >= 3) {
 			retriedTimes = 1;
-			// logging.error(this, "connect Exception " + e);
+
 			logging.warning(this, "Error", e);
 		} else {
 			logging.warning(this, "[" + retriedTimes + "] seems to be a session exception " + e);

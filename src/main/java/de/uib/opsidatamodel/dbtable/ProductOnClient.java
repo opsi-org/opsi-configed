@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.uib.opsidatamodel.productstate.ProductState;
@@ -19,12 +20,10 @@ public class ProductOnClient extends Table {
 	public static final String PRODUCTtype = "productType";
 
 	private static final String localFilename = "productstates.configed";
-	// public static final String version = class.getName() + " " +
-	// de.uib.configed.Globals.VERSION;
 
-	public static java.util.List<String> columns;
+	public static List<String> columns;
 	static {
-		columns = new ArrayList<String>(ProductState.DB_COLUMN_NAMES);
+		columns = new ArrayList<>(ProductState.DB_COLUMN_NAMES);
 		columns.add("clientId");
 		columns.add("productType");
 	}
@@ -36,15 +35,15 @@ public class ProductOnClient extends Table {
 		columnsString = columnsString.substring(0, columnsString.length() - 1);
 	}
 
-	public static java.util.List<String> primaryKey;
+	public static List<String> primaryKey;
 	public static String primaryKeyString;
 	static {
-		primaryKey = new ArrayList<String>();
+		primaryKey = new ArrayList<>();
 		primaryKey.add(CLIENTid);
 		primaryKey.add(PRODUCTid);
 		primaryKey.add(PRODUCTtype);
 
-		StringBuffer sb = new StringBuffer("");
+		StringBuilder sb = new StringBuilder("");
 		for (String key : primaryKey) {
 			sb.append(key);
 			sb.append(";");
@@ -52,7 +51,7 @@ public class ProductOnClient extends Table {
 		primaryKeyString = sb.toString();
 	}
 
-	private static Map<String, String> key2servicekeyX = new HashMap<String, String>(ProductState.key2servicekey);
+	private static Map<String, String> key2servicekeyX = new HashMap<>(ProductState.key2servicekey);
 	static {
 		key2servicekeyX.put("clientId", "clientId");
 	}

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.opsidatamodel.PersistenceController;
@@ -14,7 +14,7 @@ import de.uib.utilities.logging.logging;
 /**
 */
 public class ProductpropertiesUpdateCollection extends UpdateCollection {
-	java.util.List<String> clients;
+	List<String> clients;
 	String productname;
 	PersistenceController persis;
 	ConfigedMain mainController;
@@ -24,11 +24,11 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 		this(mainController, persis, Arrays.asList(clients), productname);
 	}
 
-	public ProductpropertiesUpdateCollection(ConfigedMain mainController, Object persis, java.util.List<String> clients,
+	public ProductpropertiesUpdateCollection(ConfigedMain mainController, Object persis, List<String> clients,
 			String productname) {
-		super(new Vector<Object>(0));
+		super(new ArrayList<>(0));
 		if (clients == null) {
-			this.clients = new ArrayList<String>();
+			this.clients = new ArrayList<>();
 		} else {
 			this.clients = clients;
 		}
@@ -37,6 +37,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 		this.mainController = mainController;
 	}
 
+	@Override
 	public void setController(Object obj) {
 		this.persis = (PersistenceController) obj;
 	}
@@ -45,7 +46,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 	public boolean addAll(Collection c) {
 		boolean result = true;
 
-		if (c.size() > 0) {
+		if (!c.isEmpty()) {
 			Iterator it = c.iterator();
 			Object ob = it.next();
 			logging.info(this, "addAll on collection of size " + c.size() + " of type " + ob.getClass()
@@ -74,7 +75,6 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 				}
 
 				catch (ClassCastException ccex) {
-					result = false;
 					logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map");
 				}
 
@@ -98,8 +98,6 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 		logging.debug(this, "doCall, after recursion");
 		persis.setProductproperties();
 
-		// mainController.requestReloadStatesAndActions();
-		// mainController.resetView(mainController.getViewIndex());
 	}
 
 	@Override
@@ -112,12 +110,4 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 			}
 		}
 	}
-
-	@Override
-	public boolean add(Object obj) {
-		// logging.debug ("----------- adding to ProductPropertiesCollection " +
-		// obj + " of class " + obj.getClass().getName());
-		return super.add(obj);
-	}
-
 }

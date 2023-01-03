@@ -20,6 +20,7 @@ public class XCellEditor extends DefaultCellEditor {
 		super(combo);
 	}
 
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 
 		Component c = super.getTableCellEditorComponent(table, value, isSelected, row, column);
@@ -29,16 +30,15 @@ public class XCellEditor extends DefaultCellEditor {
 
 		if (isSelected) {
 			background = Globals.nimbusSelectionBackground;
-			foreground = Color.WHITE;
+			foreground = Globals.X_CELL_EDITOR_SELECTED_FOREGROUND;
 		} else {
 			background = Globals.nimbusBackground;
-			foreground = Color.black;
-		} ;
+			foreground = Globals.X_CELL_EDITOR_NOT_SELECTED_FOREGROUND;
+		}
 
 		c.setBackground(background);
 		c.setForeground(foreground);
 
-		// logging.debug("XCellEditor active");
 		return c;
 	}
 

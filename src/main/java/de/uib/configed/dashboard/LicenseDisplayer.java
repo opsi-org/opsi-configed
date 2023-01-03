@@ -13,27 +13,41 @@
 
 package de.uib.configed.dashboard;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.NavigableMap;
+import java.util.NavigableSet;
+import java.util.Set;
+import java.util.TreeSet;
 
-import javax.swing.event.*;
+import javax.swing.event.TableModelListener;
 
-import javafx.application.*;
-import javafx.collections.*;
-import javafx.embed.swing.*;
-import javafx.fxml.*;
-import javafx.scene.*;
-import javafx.scene.control.*;
-import javafx.scene.text.*;
-import javafx.stage.*;
-
-import de.uib.configed.*;
-import de.uib.configed.gui.*;
-import de.uib.opsidatamodel.*;
-import de.uib.utilities.logging.*;
-import de.uib.utilities.table.*;
-import de.uib.utilities.table.provider.*;
-import de.uib.utilities.table.updates.*;
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
+import de.uib.configed.configed;
+import de.uib.configed.gui.FSoftwarename2LicencePool;
+import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.utilities.logging.logging;
+import de.uib.utilities.table.GenTableModel;
+import de.uib.utilities.table.provider.DefaultTableProvider;
+import de.uib.utilities.table.provider.RetrieverMapSource;
+import de.uib.utilities.table.updates.TableUpdateCollection;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 
 public class LicenseDisplayer {
 	@FXML
@@ -52,22 +66,18 @@ public class LicenseDisplayer {
 	}
 
 	public void loadData() {
-		Platform.runLater(
-				new Thread() {
-					@Override
-					public void run() {
-						message = "";
-						showInfo();
+		Platform.runLater(() -> {
+			message = "";
+			showInfo();
 
-						StringBuffer mess = new StringBuffer();
+			StringBuilder mess = new StringBuilder();
 
-						mess.append(showLicenceContractWarnings());
-						mess.append(calculateVariantLicencepools());
+			mess.append(showLicenceContractWarnings());
+			mess.append(calculateVariantLicencepools());
 
-						message = mess.toString();
-						showInfo();
-					}
-				});
+			message = mess.toString();
+			showInfo();
+		});
 	}
 
 	private void showInfo() {
@@ -94,14 +104,16 @@ public class LicenseDisplayer {
 	}
 
 	public void display() {
-		stage.show();
+		if (ConfigedMain.DASH_ENABLED)
+			stage.show();
+
 		loadData();
 	}
 
 	protected String showLicenceContractWarnings() {
-		StringBuffer result = new StringBuffer();
-		TreeMap<String, TreeSet<String>> contractsExpired = persist.getLicenceContractsExpired();
-		TreeMap<String, TreeSet<String>> contractsToNotify = persist.getLicenceContractsToNotify();
+		StringBuilder result = new StringBuilder();
+		NavigableMap<String, NavigableSet<String>> contractsExpired = persist.getLicenceContractsExpired();
+		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenceContractsToNotify();
 
 		logging.info(this, "contractsExpired " + contractsExpired);
 		logging.info(this, "contractsToNotify " + contractsToNotify);
@@ -110,7 +122,7 @@ public class LicenseDisplayer {
 		result.append(configed.getResourceValue("Dash.expiredContracts"));
 		result.append(":  \n");
 
-		for (Map.Entry<String, TreeSet<String>> entry : contractsExpired.entrySet()) {
+		for (Map.Entry<String, NavigableSet<String>> entry : contractsExpired.entrySet()) {
 			for (String ID : entry.getValue()) {
 				result.append(entry.getValue() + ": " + ID);
 				result.append("\n");
@@ -122,7 +134,7 @@ public class LicenseDisplayer {
 		result.append(configed.getResourceValue("Dash.contractsToNotify"));
 		result.append(":  \n");
 
-		for (Map.Entry<String, TreeSet<String>> entry : contractsToNotify.entrySet()) {
+		for (Map.Entry<String, NavigableSet<String>> entry : contractsToNotify.entrySet()) {
 			for (String ID : entry.getValue()) {
 				result.append(entry.getValue() + ": " + ID);
 				result.append("\n");
@@ -133,40 +145,32 @@ public class LicenseDisplayer {
 	}
 
 	protected String calculateVariantLicencepools() {
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		GenTableModel modelSWnames;
 
-		Vector<String> columnNames;
-		Vector<String> classNames;
+		List<String> columnNames;
+		List<String> classNames;
 
 		TableUpdateCollection updateCollection;
 
-		columnNames = new Vector<String>();
+		columnNames = new ArrayList<>();
 		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS)
 			columnNames.add(key);
 
-		classNames = new Vector<String>();
+		classNames = new ArrayList<>();
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
 
 		updateCollection = new TableUpdateCollection();
 
-		final TreeSet<String> namesWithVariantPools = new TreeSet<String>();
+		final TreeSet<String> namesWithVariantPools = new TreeSet<>();
 
-		modelSWnames = new GenTableModel(
-				null, // no updates
-				new DefaultTableProvider(
-						new RetrieverMapSource(columnNames, classNames,
-								() -> (Map) persist.getInstalledSoftwareName2SWinfo())),
-				0,
-				new int[] {},
-				(TableModelListener) null, // panelSWnames ,
+		modelSWnames = new GenTableModel(null, // no updates
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
+						() -> (Map) persist.getInstalledSoftwareName2SWinfo())),
+				0, new int[] {}, (TableModelListener) null, // panelSWnames ,
 				updateCollection) {
-			@Override
-			protected void initColumns() {
-				super.initColumns();
-			}
 
 			@Override
 			public void produceRows() {
@@ -181,14 +185,14 @@ public class LicenseDisplayer {
 					String swName = (String) getValueAt(i, 0);
 
 					if (checkExistNamesWithVariantLicencepools(swName)) {
-						// logging.info(this, "foundVariantLicencepoold for " + swName);
+
 						namesWithVariantPools.add(swName);
 						foundVariantLicencepools++;
 					}
 
 					i++;
 				}
-				// myController.thePanel.setDisplaySimilarExist( foundVariantLicencepools );
+
 				logging.info(this, "produced rows, foundVariantLicencepools " + foundVariantLicencepools);
 			}
 
@@ -201,9 +205,7 @@ public class LicenseDisplayer {
 
 		modelSWnames.produceRows();
 
-		// modelSWnames.requestReload();
-
-		Vector<Vector<Object>> specialrows = modelSWnames.getRows();
+		List<List<Object>> specialrows = modelSWnames.getRows();
 		if (specialrows != null) {
 			logging.info(this, "initDashInfo, modelSWnames.getRows() size " + specialrows.size());
 		}
@@ -228,13 +230,13 @@ public class LicenseDisplayer {
 	// nearly done in produceModelSWxLicencepool, but we collect the range of the
 	// model-map
 	{
-		Set<String> range = new HashSet<String>();
+		Set<String> range = new HashSet<>();
 
 		for (String swID : persist.getName2SWIdents().get(swName)) {
 			String licpool = persist.getFSoftware2LicencePool(swID);
 
 			if (licpool == null)
-				range.add(FSoftwarename2LicencePool.valNoLicencepool);
+				range.add(FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL);
 			else
 				range.add(licpool);
 		}

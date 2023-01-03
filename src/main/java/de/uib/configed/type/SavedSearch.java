@@ -46,6 +46,7 @@ public class SavedSearch {
 		return description;
 	}
 
+	@Override
 	public String toString() {
 		return getName() + " ( " + getDescription() + "): " + getSerialization();
 	}

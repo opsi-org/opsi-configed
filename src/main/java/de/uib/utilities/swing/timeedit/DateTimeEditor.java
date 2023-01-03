@@ -1,7 +1,6 @@
 package de.uib.utilities.swing.timeedit;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
@@ -35,14 +34,11 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	protected JButton buttonForward;
 	protected JButton buttonYearBack;
 	protected JButton buttonYearForward;
-	protected final int buttonH = 25;
-	protected final int buttonW = 30;
-	private Date now;
+	protected static final int BUTTON_H = 25;
+	protected static final int BUTTON_W = 30;
 	protected boolean editable = true;
 	protected boolean withMovingSelectionDate = true;
 	protected boolean withTime = true;
-
-	// protected Vector<DateEventObserver> dateEventObservers;
 
 	public DateTimeEditor() {
 		this(true);
@@ -51,30 +47,19 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	public DateTimeEditor(boolean withTime) {
 		super();
 		this.withTime = withTime;
-		// setBorder(new javax.swing.border.EtchedBorder());
-
-		// dateEventObservers = new Vector<DateEventObserver>();
 
 		JPopupMenu popup = new JPopupMenu();
 
 		JMenuItem menuItemNow = new JMenuItem("Jetzt");
-		menuItemNow.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setDate();
-			}
-
-		});
+		menuItemNow.addActionListener(actionEvent -> setDate());
 
 		popup.add(menuItemNow);
 
-		JMenuItem menuItemNull = new JMenuItem("Kein Datum");;
-		menuItemNull.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// logging.debug( " action menu null ");
-				monthView.getSelectionModel().clearSelection();
-				monthView.commitSelection();
-			}
+		JMenuItem menuItemNull = new JMenuItem("Kein Datum");
+		menuItemNull.addActionListener(actionEvent -> {
 
+			monthView.getSelectionModel().clearSelection();
+			monthView.commitSelection();
 		});
 
 		popup.add(menuItemNull);
@@ -87,7 +72,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		hourDateFormat = new java.text.SimpleDateFormat("dd.MM.yyyy HH:mm");
 
 		monthView = new JXMonthView();
-		// monthView.setAntialiased(true); old jxswing version
+
 		monthView.setSelectionMode(DateSelectionModel.SelectionMode.SINGLE_SELECTION);
 
 		addDateSelectionListener(this); // observe monthview
@@ -100,44 +85,23 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 		monthView.addMouseListener(new utils.PopupMouseListener(popup));
 
-		// monthSpinnerModel = new SpinnerDateModel(); //new Date(), null, null,
-		// Calendar.MONTH);
-		// monthSpinnerModel.setCalendarField(Calendar.MONTH);
-		// String[] monthStrings = getMonthStrings();
-
 		monthSpinnerModel = new SpinnerListModel();
 		monthSpinner = new JSpinner(monthSpinnerModel);
 		monthSpinner.setPreferredSize(new Dimension(17, 27));
 
 		buttonBack = new JButton("<");
 		buttonBack.setBorder(new javax.swing.border.EmptyBorder(1, 1, 1, 1));
-		buttonBack.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				switchMonth(-1);
-			}
-		});
+		buttonBack.addActionListener(actionEvent -> switchMonth(-1));
 		buttonForward = new JButton(">");
 		buttonForward.setBorder(new javax.swing.border.EmptyBorder(1, 1, 1, 1));
-		buttonForward.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				switchMonth(+1);
-			}
-		});
+		buttonForward.addActionListener(actionEvent -> switchMonth(+1));
 
 		buttonYearBack = new JButton("<<");
 		buttonYearBack.setBorder(new javax.swing.border.EmptyBorder(1, 1, 1, 1));
-		buttonYearBack.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				switchYear(-1);
-			}
-		});
+		buttonYearBack.addActionListener(actionEvent -> switchYear(-1));
 		buttonYearForward = new JButton(">>");
 		buttonYearForward.setBorder(new javax.swing.border.EmptyBorder(1, 1, 1, 1));
-		buttonYearForward.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				switchYear(+1);
-			}
-		});
+		buttonYearForward.addActionListener(actionEvent -> switchYear(+1));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		setLayout(layout);
@@ -145,64 +109,29 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGap(1, 1, Short.MAX_VALUE)
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-								.addComponent(buttonBack, buttonW, buttonW, buttonW)
-								.addComponent(buttonYearBack, buttonW, buttonW, buttonW))
-						// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						// GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonBack, BUTTON_W, BUTTON_W, BUTTON_W)
+								.addComponent(buttonYearBack, BUTTON_W, BUTTON_W, BUTTON_W))
+
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
 								.addComponent(timeSetter, GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE)
 								.addComponent(monthView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE))
 						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-								.addComponent(buttonForward, buttonW, buttonW, buttonW)
-								.addComponent(buttonYearForward, buttonW, buttonW, buttonW))
+								.addComponent(buttonForward, BUTTON_W, BUTTON_W, BUTTON_W)
+								.addComponent(buttonYearForward, BUTTON_W, BUTTON_W, BUTTON_W))
 						.addGap(1, 1, Short.MAX_VALUE)));
 		layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(layout
 				.createSequentialGroup()
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addComponent(buttonBack, buttonH, buttonH, buttonH)
-								.addComponent(buttonYearBack, buttonH, buttonH, buttonH))
+						.addGroup(layout.createSequentialGroup().addComponent(buttonBack, BUTTON_H, BUTTON_H, BUTTON_H)
+								.addComponent(buttonYearBack, BUTTON_H, BUTTON_H, BUTTON_H))
 						.addComponent(monthView, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGroup(layout.createSequentialGroup().addComponent(buttonForward, buttonH, buttonH, buttonH)
-								.addComponent(buttonYearForward, buttonH, buttonH, buttonH))
+						.addGroup(
+								layout.createSequentialGroup().addComponent(buttonForward, BUTTON_H, BUTTON_H, BUTTON_H)
+										.addComponent(buttonYearForward, BUTTON_H, BUTTON_H, BUTTON_H))
 						.addComponent(timeSetter, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))));
-
-		/*
-		 * layout.setHorizontalGroup(
-		 * layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-		 * .addGroup(layout.createSequentialGroup()
-		 * .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-		 * //.addComponent(monthSpinner, GroupLayout.PREFERRED_SIZE,
-		 * GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-		 * .addGroup(layout.createSequentialGroup()(
-		 * .addComponent(buttonBack, GroupLayout.PREFERRED_SIZE,
-		 * GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-		 * .addComponent(timeSetter, GroupLayout.PREFERRED_SIZE,
-		 * GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-		 * .addComponent(buttonForwared, GroupLayout.PREFERRED_SIZE,
-		 * GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-		 * )
-		 * .addComponent(monthView, GroupLayout.PREFERRED_SIZE,
-		 * GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-		 * )
-		 * );
-		 * layout.setVerticalGroup(
-		 * layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-		 * .addGroup(layout.createSequentialGroup()
-		 * //.addComponent(monthSpinner, GroupLayout.PREFERRED_SIZE,
-		 * GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-		 * .addGroup(layout.createParallelGroup(
-		 * 
-		 * .addComponent(monthView, GroupLayout.PREFERRED_SIZE,
-		 * GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-		 * .addComponent(timeSetter, GroupLayout.PREFERRED_SIZE,
-		 * GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-		 * )
-		 * );
-		 * 
-		 */
 
 	}
 
@@ -215,7 +144,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	}
 
 	protected void switchMonth(int d) {
-		// calendar.setTime(monthView.getFirstDisplayedDay());
+
 		calendar.add(Calendar.MONTH, d);
 
 		Date newDate = calendar.getTime();
@@ -223,12 +152,12 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 		if (withMovingSelectionDate) {
 			setSelectionDate(newDate);
-			// communicateDateEvent(new DateEvent(this, newDate));
+
 		}
 	}
 
 	protected void switchYear(int d) {
-		// calendar.setTime(monthView.getFirstDisplayedDay());
+
 		calendar.add(Calendar.YEAR, d);
 
 		Date newDate = calendar.getTime();
@@ -236,16 +165,16 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 		if (withMovingSelectionDate) {
 			setSelectionDate(newDate);
-			// communicateDateEvent(new DateEvent(this, newDate));
+
 		}
 	}
 
 	public void setEditable(boolean b) {
 		editable = b;
-		// timeSetter.setEditable(b);
-		// monthView.setEditable(b);
+
 	}
 
+	@Override
 	public void requestFocus() {
 		logging.debug(this, "requestFocus");
 		monthView.requestFocus();
@@ -256,7 +185,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	}
 
 	public void setDate(boolean select) {
-		now = new Date();
+		Date now = new Date();
 		calendar.setTime(now);
 
 		if (!withTime) {
@@ -274,7 +203,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 				+ calendar.get(Calendar.MINUTE));
 		timeSetter.setHour(calendar.get(Calendar.HOUR_OF_DAY));
 		timeSetter.setMin(calendar.get(Calendar.MINUTE));
-		// communicateDateEvent(new DateEvent(this, now));
+
 	}
 
 	public void setHour(int h) {
@@ -293,7 +222,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		monthView.setSelectionDate(d);
 		timeSetter.setHour(calendar.get(Calendar.HOUR_OF_DAY));
 		timeSetter.setMin(calendar.get(Calendar.MINUTE));
-		// monthView.repaint();
+
 	}
 
 	public int getHour() {
@@ -327,7 +256,8 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		monthView.addActionListener(listener);
 	}
 
-	public void addKeyListener(KeyListener listener) {
+	@Override
+	public synchronized void addKeyListener(KeyListener listener) {
 		monthView.addKeyListener(listener);
 	}
 
@@ -336,38 +266,18 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	}
 
 	// DateSelectionListener
+	@Override
 	public void valueChanged(org.jdesktop.swingx.event.DateSelectionEvent ev) {
 		if (withMovingSelectionDate) {
 			if (calendar.getTime().equals(monthView.getFirstSelectionDate())) {
 				// avoid recursion
-				// logging.debug(" new time equal old time ");
+
 			} else {
 				if (monthView.getFirstSelectionDate() != null)
 					calendar.setTime(monthView.getFirstSelectionDate());
 			}
 		}
 	}
-
-	/*
-	 * public void registerDateEventObserver(DateEventObserver o)
-	 * {
-	 * dateEventObservers.add(o);
-	 * }
-	 * 
-	 * public void communicateDateEvent(DateEvent e)
-	 * {
-	 * 
-	 * if (dateEventObservers == null)
-	 * return;
-	 * 
-	 * for (int i = 0; i < dateEventObservers.size(); i++)
-	 * {
-	 * dateEventObservers.get(i).dateChanged(e);
-	 * }
-	 * 
-	 * 
-	 * }
-	 */
 
 	/**
 	 * DateFormatSymbols returns an extra, empty value at the end of the array

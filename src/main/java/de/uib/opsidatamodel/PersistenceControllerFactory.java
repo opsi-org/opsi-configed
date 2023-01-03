@@ -21,8 +21,7 @@ import de.uib.utilities.logging.logging;
 
 public class PersistenceControllerFactory {
 	private static PersistenceController staticPersistControl;
-	// public static boolean sqlLocally = false;
-	// public static boolean sqlLocallyResync = false;
+
 	public static boolean localDB = false;
 	public static boolean localDBResync = false;
 
@@ -51,12 +50,10 @@ public class PersistenceControllerFactory {
 		}
 
 		PersistenceController persistControl;
-		// PersistenceController persistControl1;
 
 		if (sqlAndGetRows) {
 			// have a try
-			// persistControl = new OpsiserviceSQLgetrowsPersistenceController (server,
-			// user, password);
+
 			persistControl = new OpsiserviceRawDataPersistenceController(server, user, password);
 			logging.info("a PersistenceController initiated by option sqlAndGetRows got " + (persistControl == null));
 		} else if (avoidSqlRawData) {
@@ -65,24 +62,6 @@ public class PersistenceControllerFactory {
 			logging.info("a PersistenceController initiated by option avoidSqlRawData got " + (persistControl == null));
 		}
 
-		/*
-		 * else if (localDB)
-		 * persistControl = new OpsiserviceLocalDBPersistenceController (server, user,
-		 * password);
-		 * 
-		 * else if (localDBResync)
-		 * {
-		 * persistControl = new OpsiserviceLocalDBPersistenceController (server, user,
-		 * password, true);
-		 * }
-		 * else if (synced)
-		 * persistControl = new OpsiserviceSyncedPersistenceController (server, user,
-		 * password);
-		 * 
-		 * else if (sqlAndGetHashes)
-		 * persistControl = new OpsiserviceSQLgetdataPersistenceController (server,
-		 * user, password);
-		 */
 		else if (sqlDirect) {
 			persistControl = new OpsiDirectSQLPersistenceController(server, user, password);
 			if (directmethodcall.equals(directmethodcall_cleanupAuditsoftware)) {
@@ -115,11 +94,9 @@ public class PersistenceControllerFactory {
 					persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
 				}
 
-				// String savePath = de.uib.opsicommand.OpsiMethodCall.standardRpcPath;
 				// de.uib.opsicommand.OpsiMethodCall.standardRpcPath = ""; //for compatibility
-				// with older versions;
 
-				if (persistControl.getOpsiVersion().compareTo(de.uib.configed.Globals.REQUIRED_SERVICE_VERSION) < 0) {
+				if (persistControl.getOpsiVersion().compareTo(Globals.REQUIRED_SERVICE_VERSION) < 0) {
 					String errorInfo = configed.getResourceValue("PersistenceControllerFactory.requiredServiceVersion")
 							+ " " + Globals.REQUIRED_SERVICE_VERSION + ", " + "\n( "
 							+ configed.getResourceValue("PersistenceControllerFactory.foundServiceVersion") + " "
@@ -132,23 +109,14 @@ public class PersistenceControllerFactory {
 
 					return null;
 
-					// persistControl = new OpsiservicePersistenceController (server, user,
-					// password);
 				}
 
 				if (persistControl.getOpsiVersion().compareTo(Globals.MIN_SUPPORTED_OPSI_VERSION) < 0) {
 					String errorInfo = configed
 							.getResourceValue("PersistenceControllerFactory.supportEndedForThisVersion")
-							// + " " + Globals.MIN_SUPPORTED_OPSI_VERSION
+
 							+ "\n( " + configed.getResourceValue("PersistenceControllerFactory.foundServiceVersion")
 							+ " " + persistControl.getOpsiVersion() + " ) ";
-
-					/*
-					 * javax.swing.JOptionPane.showMessageDialog( Globals.mainContainer,
-					 * errorInfo,
-					 * Globals.APPNAME,
-					 * javax.swing.JOptionPane.INFORMATION_MESSAGE);
-					 */
 
 					new Thread() {
 
@@ -156,6 +124,7 @@ public class PersistenceControllerFactory {
 							boolean value;
 						}
 
+						@Override
 						public void run() {
 							final Continuing continuing = new Continuing();
 							continuing.value = true;
@@ -191,7 +160,7 @@ public class PersistenceControllerFactory {
 
 									infodialog.centerOn(Globals.mainFrame);
 								}
-								// result = (infodialog.getResult() == 1);
+
 							}
 
 						}
@@ -205,9 +174,6 @@ public class PersistenceControllerFactory {
 				persistControl.retrieveOpsiModules();
 				// retrieves host infos because of client counting
 
-				// de.uib.opsicommand.OpsiMethodCall.standardRpcPath = savePath;
-
-				// persistControl.retrieveOpsiModules();
 				// retrieves host infos because of client counting
 
 				if (sqlAndGetRows && !persistControl.isWithMySQL()) {

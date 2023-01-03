@@ -1,24 +1,22 @@
 package de.uib.opsicommand.sshcommand;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import de.uib.configed.gui.FGeneralDialog;
 
 public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeedParameter
 
 {
-	private String command;
-	// private String baseName = "";
-	// private LinkedList<CommandHelp_Row> helpLinesSplitted = null;
+
 	private boolean needSudo = false;
-	// private boolean needRoot = false;
+
 	private boolean needParameter = false;
 	private SSHCommand basicCommand;
 	protected FGeneralDialog dialog = null;
 
 	public CommandHelp(SSHCommand basicCommand) {
 		this.basicCommand = basicCommand;
-		// command = this.basicCommand.getBasicName() + " --help";
+
 		this.dialog = this.basicCommand.getDialog();
 	}
 
@@ -55,12 +53,6 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 		return "ERROR";
 	}
 
-	// @Override
-	// public String getBasicName()
-	// {
-	// return basicCommand.getBasicName();
-	// }
-
 	@Override
 	public String getMenuText() {
 		return null;
@@ -81,13 +73,9 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 		return ((SSHCommandNeedParameter) this.basicCommand).getBasicName() + " --help";
 	}
 
-	/**
-	 * Sets the given command
-	 * 
-	 * @param c (command): String
-	 **/
+	@Override
 	public void setCommand(String c) {
-		command = c;
+		// Leave empty, never used actually and never needed
 	}
 
 	@Override
@@ -116,38 +104,8 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	}
 
 	@Override
-	public ArrayList<String> getParameterList() {
+	public List<String> getParameterList() {
 		return null;
 	}
-	// public void startParameterGui();
-	// public void startParameterGui(ConfigedMain main);
-	// public SSHConnectionExecDialog startHelpDialog();
-	// public String getBasicName()
-
-	// public LinkedList<CommandHelp_Row> getHelpLines()
-	// {
-	// return helpLinesSplitted;
-	// }
-	// public void setHelpLines(LinkedList<CommandHelp_Row> lines)
-	// {
-	// helpLinesSplitted = lines;
-	// }
-	// @Override
-	// public int getHelpColumns()
-	// {
-	// // if (packageManager)
-	// // return ((CommandOpsiPackageManager)basicCommand).getHelpColumns;
-	// // return 0;
-	// return basicCommand.getHelpColumns();
-	// }
-	// public String[] getRegexes()
-	// {
-	// final String[] regexes = new String[2];
-	// regexes[0] = "(-[\\w*],[
-	// ])|(--[\\w*]*-[\\w*]*-[\\w*]*)|(--[\\w*]*-[\\w*]*)|(--[\\w*]*)";
-	// regexes[1] = "((<[\\w*]*>)|(<[\\w*]*-[\\w*]*>)|(<[\\w*]*-[\\w*]*-[\\w*]*>)) |
-	// ((<[\\w*]*>\\s\\.{3})|(<[\\w*]*-[\\w*]*>\\s\\.{3})|(<[\\w*]*-[\\w*]*-[\\w*]*>\\s\\.{3}))";
-	// return regexes;
-	// }
 
 }

@@ -18,6 +18,7 @@ import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
@@ -25,6 +26,7 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 //a class similar to JCheckBox
@@ -32,10 +34,10 @@ public class CheckedLabel extends JPanel implements FocusListener
 // is an ObservedSubject for key and mouse actions
 
 {
-	static final int setCheckedOn = 1;
-	static final int setCheckedOff = 0;
-	static final String cmdSetCheckedOn = "cmdSetOn";
-	static final String cmdSetCheckedOff = "cmdSetOff";
+	private static final int SET_CHECKED_ON = 1;
+	private static final int SET_CHECKED_OFF = 0;
+	private static final String CMD_SET_CHECKED_ON = "cmdSetOn";
+	private static final String CMD_SET_CHECKED_OFF = "cmdSetOff";
 	protected boolean changeStateAutonomously = true;
 
 	protected JLabel selectedLabel;
@@ -45,7 +47,6 @@ public class CheckedLabel extends JPanel implements FocusListener
 
 	protected java.awt.Font textFont;
 
-	// protected Map<TextAttribute, ? > defaultTextAttributes;
 	// I didn't get work this, couldn't fix the Generics issues
 
 	protected Map defaultTextAttributes;
@@ -53,7 +54,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 
 	protected Boolean selected;
 
-	protected ArrayList<ActionListener> myListeners;
+	protected List<ActionListener> myListeners;
 
 	protected class GeneralMouseListener extends MouseAdapter {
 		protected String source;
@@ -95,11 +96,10 @@ public class CheckedLabel extends JPanel implements FocusListener
 
 		setFocusable(true);
 		setRequestFocusEnabled(true);
-		// requestFocus();
 
 		addFocusListener(this);
 
-		myListeners = new ArrayList<ActionListener>();
+		myListeners = new ArrayList<>();
 
 		textLabel = null;
 		try {
@@ -110,7 +110,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 
 		textFont = textLabel.getFont();
 		defaultTextAttributes = textFont.getAttributes();
-		focusedTextAttributes = new HashMap(defaultTextAttributes);
+		focusedTextAttributes = new HashMap<>(defaultTextAttributes);
 		focusedTextAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
 		selectedLabel = new JLabel(selectedIcon);
 		unselectedLabel = new JLabel(unselectedIcon);
@@ -140,29 +140,9 @@ public class CheckedLabel extends JPanel implements FocusListener
 				if (changeStateAutonomously)
 					ME.setSelected(false);
 				notifyActionListeners(
-						new ActionEvent(ME, setCheckedOff, cmdSetCheckedOff, new java.util.Date().getTime(), 0));
+						new ActionEvent(ME, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF, new java.util.Date().getTime(), 0));
 			}
 		});
-
-		/*
-		 * selectedLabel.addKeyListener(new KeyAdapter(){
-		 * 
-		 * public void keyPressed(KeyEvent e)
-		 * {
-		 * //logging.info(this, "event " + e);
-		 * super.keyPressed(e);
-		 * if (e.getKeyCode() == KeyEvent.VK_SPACE)
-		 * {
-		 * ME.setSelected(false);
-		 * notifyActionListeners(
-		 * new ActionEvent(ME, setCheckedOff, cmdSetCheckedOff, new
-		 * java.util.Date().getTime(), 0)
-		 * );
-		 * }
-		 * }
-		 * }
-		 * );
-		 */
 
 		unselectedLabel.addMouseListener(new GeneralMouseListener("unselectedLabel") {
 			@Override
@@ -173,29 +153,9 @@ public class CheckedLabel extends JPanel implements FocusListener
 				if (changeStateAutonomously)
 					ME.setSelected(true);
 				notifyActionListeners(
-						new ActionEvent(ME, setCheckedOn, cmdSetCheckedOn, new java.util.Date().getTime(), 0));
+						new ActionEvent(ME, SET_CHECKED_ON, CMD_SET_CHECKED_ON, new java.util.Date().getTime(), 0));
 			}
 		});
-
-		/*
-		 * unselectedLabel.addKeyListener(new KeyAdapter(){
-		 * 
-		 * public void keyPressed(KeyEvent e)
-		 * {
-		 * //logging.info(this, "event " + e);
-		 * super.keyPressed(e);
-		 * if (e.getKeyCode() == KeyEvent.VK_SPACE)
-		 * {
-		 * ME.setSelected(true);
-		 * notifyActionListeners(
-		 * new ActionEvent(ME, setCheckedOn, cmdSetCheckedOn, new
-		 * java.util.Date().getTime(), 0)
-		 * );
-		 * }
-		 * }
-		 * }
-		 * );
-		 */
 
 		nullLabel.addMouseListener(new GeneralMouseListener("nullLabel") {
 			@Override
@@ -206,46 +166,27 @@ public class CheckedLabel extends JPanel implements FocusListener
 				if (changeStateAutonomously)
 					ME.setSelected(false);
 				notifyActionListeners(
-						new ActionEvent(ME, setCheckedOff, cmdSetCheckedOff, new java.util.Date().getTime(), 0));
+						new ActionEvent(ME, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF, new java.util.Date().getTime(), 0));
 			}
 		});
 
-		/*
-		 * nullLabel.addKeyListener(new KeyAdapter(){
-		 * 
-		 * public void keyPressed(KeyEvent e)
-		 * {
-		 * //logging.info(this, "event " + e);
-		 * super.keyPressed(e);
-		 * if (e.getKeyCode() == KeyEvent.VK_SPACE)
-		 * {
-		 * ME.setSelected(true);
-		 * notifyActionListeners(
-		 * new ActionEvent(ME, setCheckedOn, cmdSetCheckedOn, new
-		 * java.util.Date().getTime(), 0)
-		 * );
-		 * }
-		 * }
-		 * }
-		 * );
-		 */
-
 		addKeyListener(new KeyAdapter() {
 
+			@Override
 			public void keyPressed(KeyEvent e) {
 				logging.info(this, "event " + e);
 				if (!isEnabled())
 					return;
 				super.keyPressed(e);
 				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-					if (selected == null || selected == true) {
+					if (selected == null || selected) {
 
 						ME.setSelected(false);
-						notifyActionListeners(new ActionEvent(ME, setCheckedOff, cmdSetCheckedOff,
+						notifyActionListeners(new ActionEvent(ME, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF,
 								new java.util.Date().getTime(), 0));
 					} else {
 						ME.setSelected(true);
-						notifyActionListeners(new ActionEvent(ME, setCheckedOff, cmdSetCheckedOff,
+						notifyActionListeners(new ActionEvent(ME, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF,
 								new java.util.Date().getTime(), 0));
 					}
 				}
@@ -257,6 +198,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 		textLabel.setText(s);
 	}
 
+	@Override
 	public void setToolTipText(String s) {
 		super.setToolTipText(s);
 		nullLabel.setToolTipText(s);
@@ -281,14 +223,10 @@ public class CheckedLabel extends JPanel implements FocusListener
 		setLayout(layout);
 
 		layout.setVerticalGroup(layout.createParallelGroup()
-				.addComponent(textLabel, de.uib.utilities.Globals.lineHeight, de.uib.utilities.Globals.lineHeight,
-						de.uib.utilities.Globals.lineHeight)
-				.addComponent(selectedLabel, de.uib.utilities.Globals.lineHeight, de.uib.utilities.Globals.lineHeight,
-						de.uib.utilities.Globals.lineHeight)
-				.addComponent(unselectedLabel, de.uib.utilities.Globals.lineHeight, de.uib.utilities.Globals.lineHeight,
-						de.uib.utilities.Globals.lineHeight)
-				.addComponent(nullLabel, de.uib.utilities.Globals.lineHeight, de.uib.utilities.Globals.lineHeight,
-						de.uib.utilities.Globals.lineHeight));
+				.addComponent(textLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(selectedLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(unselectedLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addComponent(nullLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT));
 
 		layout.setHorizontalGroup(layout.createSequentialGroup()
 				.addComponent(textLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -314,6 +252,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 		return selected;
 	}
 
+	@Override
 	public void setEnabled(boolean b) {
 		super.setEnabled(b);
 		textLabel.setEnabled(b);
@@ -323,7 +262,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 		myListeners.add(al);
 	}
 
-	public ArrayList<ActionListener> getActionListeners() {
+	public List<ActionListener> getActionListeners() {
 		return myListeners;
 	}
 
@@ -339,7 +278,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 		for (ActionListener al : myListeners) {
 			al.actionPerformed(ae);
 		}
-		// logging.info(this, "notifed action listeners about " + ae);
+
 	}
 
 }

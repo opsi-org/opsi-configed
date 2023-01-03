@@ -1,6 +1,7 @@
 package de.uib.utilities.thread;
 
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
@@ -48,22 +49,14 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 	public Void doInBackground() {
 
 		// startAnotherProcess()
-		// int progress = 0;
-		// setProgress( progress );
-
-		// int noOfSteps = 100;
-		// long timeStepMillis = (long) (waitingMillis / noOfSteps );
 
 		long timeStepMillis = (long) 500;
-
-		// long noOfSteps = (long) (waitingMillis/ timeStepMillis);
 
 		logging.debug(this, " doInBackground waitingMillis " + waitingSleeper.getWaitingMillis());
 
 		long elapsedMillis = 0;
 		long elapsedMins = 0;
 
-		// while (progress < 100 && !stopped)
 		timeoutReached = (elapsedMillis >= waitingSleeper.getWaitingMillis());
 		while (!ready && !timeoutReached && !stopped) {
 			try {
@@ -74,7 +67,6 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 			}
 
 			long nowMillis = new GregorianCalendar().getTimeInMillis();
-			// elapsedMillis = timeStepMillis * progress;;
 
 			elapsedMillis = nowMillis - startActionMillis;
 			elapsedMins = (elapsedMillis / 1000) / 60;
@@ -86,12 +78,6 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 			timeoutReached = (elapsedMillis >= waitingSleeper.getWaitingMillis());
 
-			// firePropertyChange("elapsedMins", 0, elapsedMins);
-
-			// progress++;
-			// setProgress( progress );
-
-			// setElapsedMins(elapsedMins);
 		}
 
 		logging.info(this,
@@ -108,39 +94,28 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 	// Executed in event dispatching thread
 	//
 	@Override
-	protected void process(java.util.List<Long> listOfMillis) {
+	protected void process(List<Long> listOfMillis) {
 		// update the steps which are done
 		logging.debug(this, "process, we have got list " + listOfMillis);
 
 		long millis = listOfMillis.get(listOfMillis.size() - 1);
-		// logging.info(this, "process :: millis " + millis);
+
 		statusLabel.setText(
-				// "passed " + giveTimeSpan( millis) +
+
 				waitingSleeper.setLabellingStrategy(millis));
-		// " " + configed .getResourceValue("FStartWakeOnLan.timeLeft") + " " +
-		// de.uib.utilities.Globals.giveTimeSpan( waitingSleeper.getWaitingMillis() -
-		// millis ) );
 
 		int barLength = progressBar.getMaximum() - progressBar.getMinimum();
-
-		// logging.info(this, "progressBar.getMaximum() " + progressBar.getMaximum() +
-		// ":: progressBar.getMinimum() " + progressBar.getMinimum()
-		// + ":: millis " + millis + " :: waitingMillis " + waitingMillis + " :: min + "
-		// + ((int) ((barLength * millis) / waitingMillis)));
 
 		logging.debug(this, "process, millis " + millis);
 		double proportion = ((double) millis) / (double) waitingSleeper.getOneProgressBarLengthWaitingMillis();
 		logging.info(this, "process, millis/estimatedTotalWaitMillis  " + proportion);
-		// double portion = (barLength * millis) / waitingSleeper.getWaitingMillis();
+
 		int portion = (int) (barLength * proportion);
 		portion = portion % barLength;
 
 		logging.debug(this, "portion " + portion + " barLength  " + barLength);
 
 		progressBar.setValue(progressBar.getMinimum() + portion);
-
-		// progressBar.setValue( ( int ) (progressBar.getMinimum() + (int) ( (barLength
-		// * millis) / waitingSleeper.getWaitingMillis() )) ) ;
 
 	}
 

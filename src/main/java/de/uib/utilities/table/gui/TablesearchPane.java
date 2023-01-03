@@ -16,6 +16,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -33,8 +34,8 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
-import de.uib.utilities.Globals;
 import de.uib.utilities.Mapping;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.savedstates.SaveInteger;
@@ -44,7 +45,7 @@ import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.NavigationPanel;
 
 public class TablesearchPane extends JPanel implements DocumentListener, KeyListener, ActionListener {
-	javax.swing.JFrame masterFrame = de.uib.configed.Globals.mainFrame;
+	javax.swing.JFrame masterFrame = Globals.mainFrame;
 
 	JTextField fieldSearch;
 
@@ -52,8 +53,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	protected boolean filtering = false;
 
 	int blinkrate = 0;
-	JComboBox comboSearchFields;
-	JComboBox comboSearchFieldsMode;
+	JComboBox<String> comboSearchFields;
+	JComboBoxToolTip comboSearchFieldsMode;
 
 	CheckedLabel markReload;
 
@@ -81,7 +82,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	JMenuItemFormatted popupMarkAndFilter;
 	JMenuItemFormatted popupEmptySearchfield;
 
-	public static enum SearchMode {
+	public enum SearchMode {
 		FULL_TEXT_SEARCHING_WITH_ALTERNATIVES, FULL_TEXT_SEARCHING_ONE_STRING, START_TEXT_SEARCHING, REGEX_SEARCHING
 	}
 
@@ -89,14 +90,14 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	public static final int START_TEXT_SEARCH = 1;
 	public static final int REGEX_SEARCH = 2;
 
-	protected int preferredColumnIndex = 0; // real column index + 1, since for index 0 "all columns" entry is placed
+	protected int preferredColumnIndex = 0;
 
 	protected boolean withRegEx = true;
 	protected boolean selectMode = true;
 	protected boolean resetFilterModeOnNewSearch = true;
 
 	private int foundrow = -1;
-	// private int lastSearchTextLength = 0;
+
 	protected SearchTargetModel targetModel;
 	protected PanelGenEditTable associatedTable;
 
@@ -105,7 +106,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	public static enum SearchInputType {
 		LINE, PROGRESSIVE
-	};
+	}
 
 	protected SearchInputType searchInputType = SearchInputType.PROGRESSIVE;
 
@@ -126,11 +127,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	public TablesearchPane(SearchTargetModel targetModel, boolean withRegEx, int prefColNo,
 			String savedStatesObjectTag) {
 		comparator = Globals.getCollator();
-		mappedValues = new HashMap<String, Mapping<Integer, String>>();
+		mappedValues = new HashMap<>();
 		this.withRegEx = withRegEx;
 		this.preferredColumnIndex = prefColNo;
 
-		// if (targetModel instanceof SearchTargetModelFromJList)
 		filtering = true;
 
 		initSavedStates(savedStatesObjectTag);
@@ -140,8 +140,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		setNarrow(false);
 
 		this.targetModel = targetModel;
-
-		// setSearchFieldsAll();
 
 	}
 
@@ -252,7 +250,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	public void setMapping(String columnName, Mapping<Integer, String> mapping) {
 		mappedValues.put(columnName, mapping);
-		// logging.debug(this, "mappedValues " + mappedValues);
+
 	}
 
 	public void setSelectMode(boolean select) {
@@ -268,6 +266,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		fieldSearch.setBackground(color);
 	}
 
+	@Override
 	public void setEnabled(boolean b) {
 		super.setEnabled(b);
 		checkmarkAllColumns.setEnabled(b);
@@ -305,7 +304,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		filteredMode = b;
 		popupSearch.setEnabled(!b);
 		popupSearchNext.setEnabled(!b);
-		// popupNewSearch.setEnabled(!b);
+
 		popupMarkHits.setEnabled(!b);
 		popupMarkAndFilter.setEnabled(!b);
 		popupEmptySearchfield.setEnabled(!b);
@@ -317,7 +316,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	public void setNarrow(boolean b) {
-		// labelSearch0.setVisible(b);
+
 		showFilterIcon(b);
 		checkmarkSearchProgressive.setVisible(b);
 		checkmarkAllColumns.setVisible(b);
@@ -333,7 +332,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	protected void initComponents() {
-		setBackground(Globals.backgroundWhite);
+		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		navPane = new NavigationPanel() {
 			@Override
@@ -345,39 +344,39 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			@Override
 			public void next() {
 				associatedPanel.advanceCursor(+1);
-				// associatedPanel.moveRowBy(+1);
+
 			}
 
 			@Override
 			public void previous() {
 				associatedPanel.advanceCursor(-1);
-				// associatedPanel.moveRowBy(-1);
+
 			}
 
 			@Override
 			public void first() {
 				associatedPanel.setCursorToFirstRow();
-				// associatedPanel.moveToFirstRow();
+
 			}
 
 			@Override
 			public void last() {
 				associatedPanel.setCursorToLastRow();
-				// associatedPanel.moveToLastRow();
+
 			}
 		};
 
 		navPane.setVisible(false);
 
-		Icon iconReload = de.uib.configed.Globals.createImageIcon("images/reload_blue16.png", "");
+		Icon iconReload = Globals.createImageIcon("images/reload_blue16.png", "");
 		markReload = new CheckedLabel(iconReload, true);
 		markReload.setVisible(false); // in the moment, it's a proof of concept
 
 		labelSearch = new JLabel(configed.getResourceValue("SearchPane.search"));
 		labelSearch.setFont(Globals.defaultFont);
 
-		Icon unselectedIconSearch = de.uib.configed.Globals.createImageIcon("images/loupe_light_16.png", "");
-		Icon selectedIconSearch = de.uib.configed.Globals.createImageIcon("images/loupe_light_16_x.png", "");
+		Icon unselectedIconSearch = Globals.createImageIcon("images/loupe_light_16.png", "");
+		Icon selectedIconSearch = Globals.createImageIcon("images/loupe_light_16_x.png", "");
 
 		try {
 			checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
@@ -390,14 +389,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		checkmarkSearch.addActionListener(this);
 		checkmarkSearch.setChangeStateAutonomously(false);
 
-		/*
-		 * checkmarkSearch.addActionListener(
-		 * (ActionEvent ae )-> logging.info(this, " test test we got event " + ae)
-		 * );
-		 */
-
-		selectedIconSearch = de.uib.configed.Globals.createImageIcon("images/loupe_light_16_progressiveselect.png", "");
-		unselectedIconSearch = de.uib.configed.Globals.createImageIcon("images/loupe_light_16_blockselect.png", "");
+		selectedIconSearch = Globals.createImageIcon("images/loupe_light_16_progressiveselect.png", "");
+		unselectedIconSearch = Globals.createImageIcon("images/loupe_light_16_blockselect.png", "");
 
 		boolean active = true;
 
@@ -414,28 +407,12 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		checkmarkSearchProgressive
 				.setToolTipText(configed.getResourceValue("SearchPane.checkmarkSearchProgressive.tooltip"));
 
-		/*
-		 * configed.getResourceValue("SearchPane.announceSearch") ){
-		 * 
-		 * @Override
-		 * public void setText(String s)
-		 * {
-		 * super.setText("" + s + "  "); //adding some space for left handed label
-		 * }
-		 * };
-		 * labelSearch0.setFont(Globals.defaultFont);
-		 */
-
-		// JLabel labelSearch = new JLabel("Suche");
-		// labelSearch.setFont(Globals.defaultFontStandardBold);
-		// labelSearch.setPreferredSize(Globals.labelDimension);
-
 		fieldSearch = new JTextField("");
 		fieldSearch.setPreferredSize(Globals.textfieldDimension);
-		// fieldSearch.setPreferredSize(Globals.buttonDimension);
+
 		fieldSearch.setFont(Globals.defaultFontBig);
-		fieldSearch.setBackground(Globals.backVeryLightBlue); // Globals.backLightYellow);
-		// blinkrate = fieldSearch.getCaret().getBlinkRate(); //save default blinkrate
+		fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
+
 		fieldSearch.getCaret().setBlinkRate(blinkrate);
 		fieldSearch.setToolTipText(configed.getResourceValue("SearchPane.searchField.toolTip"));
 
@@ -460,7 +437,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			popupEmptySearchfield = new JMenuItemFormatted();
 		}
 
-		searchMenuEntries = new LinkedHashMap<JMenuItemFormatted, Boolean>();
+		searchMenuEntries = new LinkedHashMap<>();
 		searchMenuEntries.put(popupSearch, true);
 		searchMenuEntries.put(popupSearchNext, true);
 		searchMenuEntries.put(popupNewSearch, true);
@@ -471,93 +448,56 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		buildMenuSearchfield();
 
 		popupSearch.setText("Suchen");
-		popupSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				searchTheRow(selectMode);
-			}
-		});
+		popupSearch.addActionListener(actionEvent -> searchTheRow(selectMode));
 
-		// popupSearchNext.setText("Zum nächsten Treffer ( F3 ) ");
 		popupSearchNext.setText(configed.getResourceValue("SearchPane.popup.searchnext"));
 
-		popupSearchNext.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				searchNextRow(selectMode);
-			}
-		});
+		popupSearchNext.addActionListener(actionEvent -> searchNextRow(selectMode));
 
-		// popupNewSearch.setText("Suche neu starten");
 		popupNewSearch.setText(configed.getResourceValue("SearchPane.popup.searchnew"));
 
-		popupNewSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// filtermark.setSelected(null);
-				targetModel.setFiltered(false);
-				if (resetFilterModeOnNewSearch)
-					setFilteredMode(false);
-				searchTheRow(0, selectMode);
-			}
+		popupNewSearch.addActionListener(actionEvent -> {
+
+			targetModel.setFiltered(false);
+			if (resetFilterModeOnNewSearch)
+				setFilteredMode(false);
+			searchTheRow(0, selectMode);
 		});
 
-		// popupMarkHits.setText("Mark all hits ( F5 ) ");
 		popupMarkHits.setText(configed.getResourceValue("SearchPane.popup.markall"));
 
-		popupMarkHits.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (!fieldSearch.getText().equals(""))
-					markAll();
-			}
+		popupMarkHits.addActionListener(actionEvent -> {
+			if (!fieldSearch.getText().equals(""))
+				markAll();
 		});
 
-		// popupMarkAndFilter.setText("Mark and filter ( F8 ) ");
 		popupMarkAndFilter.setText(configed.getResourceValue("SearchPane.popup.markAndFilter"));
 
-		popupMarkAndFilter.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				switchFilterOff();
-				markAllAndFilter();
-				switchFilterOn();
-			}
+		popupMarkAndFilter.addActionListener(actionEvent -> {
+			switchFilterOff();
+			markAllAndFilter();
+			switchFilterOn();
 		});
 
-		// popupEmptySearchfield.setText("Suchfeld leeren");
 		popupEmptySearchfield.setText(configed.getResourceValue("SearchPane.popup.empty"));
 
-		popupEmptySearchfield.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				fieldSearch.setText("");
-			}
+		popupEmptySearchfield.addActionListener(actionEvent -> fieldSearch.setText(""));
+
+		fieldSearch.addActionListener(actionEvent -> {
+			if (searchInputType == SearchInputType.PROGRESSIVE)
+				searchNextRow(selectMode);
 		});
 
-		// fieldSearch.setComponentPopupMenu(searchMenu);
-
-		fieldSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (searchInputType == SearchInputType.PROGRESSIVE)
-					searchNextRow(selectMode);
-			}
-		});
-
-		// comboSearchFields = new JComboBox(new String[]{"alle Felder"});
-
-		comboSearchFields = new JComboBox(new String[] { configed.getResourceValue("SearchPane.search.allfields") });
+		comboSearchFields = new JComboBox<>(new String[] { configed.getResourceValue("SearchPane.search.allfields") });
 		comboSearchFields.setPreferredSize(Globals.lowerButtonDimension);
 		comboSearchFields.setFont(Globals.defaultFont);
 
 		setSearchFieldsAll();
 
-		// JLabel labelSearchMode = new JLabel("Modus");
-		// labelSearchMode.setFont(Globals.defaultFontStandardBold);
 		labelSearchMode = new JLabel(configed.getResourceValue("SearchPane.searchmode.searchmode"));
 		labelSearchMode.setFont(Globals.defaultFont);
 
-		LinkedHashMap tooltipsMap = new LinkedHashMap();
-		/*
-		 * tooltipsMap.put("Volltext", "Suchzeichenfolge irgendwo im Text finden");
-		 * tooltipsMap.put("Anfangstext", "Suchzeichenfolge am Textbeginn finden");
-		 * if (withRegEx) tooltipsMap.put("Schema",
-		 * "Suchausdruck mit symbolischen Zeichen" );
-		 */
+		Map<String, String> tooltipsMap = new LinkedHashMap<>();
 
 		tooltipsMap.put(configed.getResourceValue("SearchPane.searchmode.fulltext"), // Index FULL_TEXT_SEARCH
 				configed.getResourceValue("SearchPane.mode.fulltext.tooltip"));
@@ -579,15 +519,14 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			comboSearchFieldsMode.setFont(Globals.defaultFont);
 		}
 
-		((JComboBoxToolTip) comboSearchFieldsMode).setValues(tooltipsMap, false);
+		comboSearchFieldsMode.setValues(tooltipsMap, false);
 		comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
 
-		// comboSearchFieldsMode.setModel(new DefaultComboBoxModel(searchModes));
 		comboSearchFieldsMode.setPreferredSize(Globals.lowerButtonDimension);
 
-		Icon unselectedIconFilter = de.uib.configed.Globals.createImageIcon("images/filter_14x14_open.png", "");
-		Icon selectedIconFilter = de.uib.configed.Globals.createImageIcon("images/filter_14x14_closed.png", "");
-		Icon nullIconFilter = de.uib.configed.Globals.createImageIcon("images/filter_14x14_inwork.png", "");
+		Icon unselectedIconFilter = Globals.createImageIcon("images/filter_14x14_open.png", "");
+		Icon selectedIconFilter = Globals.createImageIcon("images/filter_14x14_closed.png", "");
+		Icon nullIconFilter = Globals.createImageIcon("images/filter_14x14_inwork.png", "");
 
 		filtermark = new CheckedLabel("", selectedIconFilter, unselectedIconFilter, nullIconFilter, false);
 		filtermark.setToolTipText(configed.getResourceValue("SearchPane.filtermark.tooltip"));
@@ -600,15 +539,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		Icon unselectedIcon;
 		Icon selectedIcon;
 
-		// unselectedIcon =
-		// de.uib.configed.Globals.createImageIcon("images/checked_blue_empty_withoutbox.png",
-		// "");
-		// selectedIcon =
-		// de.uib.configed.Globals.createImageIcon("images/checked_blue_withoutbox.png",
-		// "");
-
-		unselectedIcon = de.uib.configed.Globals.createImageIcon("images/loupe_light_16_singlecolumnsearch.png", "");
-		selectedIcon = de.uib.configed.Globals.createImageIcon("images/loupe_light_16_multicolumnsearch.png", "");
+		unselectedIcon = Globals.createImageIcon("images/loupe_light_16_singlecolumnsearch.png", "");
+		selectedIcon = Globals.createImageIcon("images/loupe_light_16_multicolumnsearch.png", "");
 
 		active = true;
 		if (saveSearchpaneAllColumnsSearch != null)
@@ -619,25 +551,14 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		checkmarkAllColumns.setToolTipText(configed.getResourceValue("SearchPane.checkmarkAllColumns.tooltip"));
 		checkmarkAllColumns.addActionListener(this);
 
-		// setSearchFieldsAll() is to called to synchronize with select == true
-
-		// unselectedIcon =
-		// de.uib.configed.Globals.createImageIcon("images/checked_blue_empty_withoutbox.png",
-		// "");
-		// selectedIcon =
-		// de.uib.configed.Globals.createImageIcon("images/checked_blue_withoutbox.png",
-		// "");
-
-		unselectedIcon = de.uib.configed.Globals.createImageIcon("images/loupe_light_16_starttextsearch.png", "");
-		selectedIcon = de.uib.configed.Globals.createImageIcon("images/loupe_light_16_fulltextsearch.png", "");
+		unselectedIcon = Globals.createImageIcon("images/loupe_light_16_starttextsearch.png", "");
+		selectedIcon = Globals.createImageIcon("images/loupe_light_16_fulltextsearch.png", "");
 
 		active = true;
 		if (saveSearchpaneFullTextSearch != null)
 			active = (saveSearchpaneFullTextSearch.deserializeAsInt() == 0);
 
-		checkmarkFullText = new CheckedLabel(selectedIcon, unselectedIcon, active
-		// true
-		);
+		checkmarkFullText = new CheckedLabel(selectedIcon, unselectedIcon, active);
 
 		if (active)
 			comboSearchFieldsMode.setSelectedIndex(FULL_TEXT_SEARCH);
@@ -654,41 +575,41 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		layoutTablesearchPane.setHorizontalGroup(layoutTablesearchPane
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(layoutTablesearchPane.createSequentialGroup()
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(markReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 						.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 						.addComponent(checkmarkSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
-						.addComponent(fieldSearch, Globals.iconWidth, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(fieldSearch, Globals.ICON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 						.addComponent(filtermark, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
-						.addComponent(labelFilterMarkGap, Globals.hGapSize / 2, Globals.hGapSize / 2,
-								Globals.hGapSize / 2)
+						.addComponent(labelFilterMarkGap, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2,
+								Globals.HGAP_SIZE / 2)
 						.addComponent(checkmarkSearchProgressive, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(checkmarkAllColumns, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
 						.addComponent(checkmarkFullText, checkedLabelWidth, checkedLabelWidth, checkedLabelWidth)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 						.addComponent(comboSearchFields, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(labelSearchMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 						.addComponent(comboSearchFieldsMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize, Globals.hGapSize, Globals.hGapSize)));
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)));
 
 		layoutTablesearchPane.setVerticalGroup(layoutTablesearchPane.createSequentialGroup()
-				// .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+
 				.addGroup(layoutTablesearchPane.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
 						.addComponent(markReload, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -708,7 +629,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 						.addComponent(comboSearchFieldsMode, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(comboSearchFields, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-		// .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+
 		);
 
 	}
@@ -738,7 +659,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			for (int i = 0; i < targetModel.getColumnCount(); i++) {
 				String colname = targetModel.getColumnName(i);
 				comboSearchFields.addItem(colname);
-				// logging.info(this, "setSearchFieldsAll, adding colname " + colname);
+
 			}
 
 			if ((saveSearchpaneAllColumnsSearch == null) || saveSearchpaneAllColumnsSearch.deserializeAsInt() == 0
@@ -750,7 +671,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	}
 
-	public void setSearchFields(java.util.List<String> fieldList) {
+	public void setSearchFields(List<String> fieldList) {
 		for (String fieldName : fieldList) {
 			if (((DefaultComboBoxModel) comboSearchFields.getModel()).getIndexOf(fieldName) == -1)
 				comboSearchFields.addItem(fieldName);
@@ -775,26 +696,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		fieldSearch.requestFocus();
 	}
 
-	// search functions
-	// ----------------------------------
-	/*
-	 * protected int findViewRowFromValue(int startviewrow, Object value, Set
-	 * colIndices)
-	 * {
-	 * return findViewRowFromValue(startviewrow, value, colIndices, false, true);
-	 * }
-	 * 
-	 * protected int findViewRowFromValue(int startviewrow, Object value, Set
-	 * colIndices, boolean fulltext)
-	 * {
-	 * return findViewRowFromValue(startviewrow, value, colIndices, fulltext, false,
-	 * true);
-	 * }
-	 */
-
 	private class Finding {
 		boolean success = false;
-		int startChar = -1;
 		int endChar = -1;
 	}
 
@@ -826,10 +729,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		int i = 0;
 		boolean searching = true;
-		Finding partSearch = new Finding();
+		Finding partSearch;
 
 		while (searching) {
-			// logging.debug(this, "remainder " + remainder + " searching for " + parts[i]);
+
 			partSearch = stringContains(remainder, parts[i]);
 			if (partSearch.success) {
 				i++;
@@ -872,8 +775,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		if (colname != null && mappedValues.get(colname) != null)
 			realS = mappedValues.get(colname).getMapOfStrings().get(s);
 
-		// logging.debug(this, " realS " + realS);
-
 		if (realS == null || part.length() > realS.length())
 			return result;
 
@@ -886,12 +787,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		result.success = false;
 
 		int i = 0;
-		result.startChar = 0;
 
 		int end = realS.length() - part.length() + 1;
 
 		while (!result.success && i < end) {
-			result.startChar = i;
 			result.success = (comparator.compare(realS.substring(i, i + part.length()), part) == 0);
 			result.endChar = i + part.length() - 1;
 			i++;
@@ -939,8 +838,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		String[] valParts = val.split(" ");
 
-		// String valLower = val.toLowerCase();
-
 		boolean found = false;
 
 		int viewrow = 0;
@@ -963,7 +860,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		while (!found && viewrow < targetModel.getRowCount()) {
 			if (combineCols) // only fulltext
 			{
-				StringBuffer buffRow = new StringBuffer();
+				StringBuilder buffRow = new StringBuilder();
 
 				for (int j = 0; j < targetModel.getColumnCount(); j++) {
 
@@ -1006,7 +903,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 					if (colIndices != null // we dont compare all values (comparing all values is default)
 							&& !colIndices.contains(j))
 
-						// if (j != 0) //test
 						continue;
 
 					int colJ = targetModel.getColForVisualCol(j);
@@ -1017,9 +913,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 					);
 
-					// logging.info(this, "findViewRowFromValue compare colJ " + colJ + " value " +
-					// value + " to " + compareValue);
-
 					if (compareValue == null) {
 						if (val.equals(""))
 							found = true;
@@ -1029,11 +922,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 						String compareVal = ("" + compareValue).toLowerCase();
 
 						if (regex) {
-							// logging.info(this, " try to match " + value + " with " + compareVal);
+
 							if (pattern.matcher(compareVal).matches())
 								found = true;
-							// logging.info(this, " try to match " + value + " with " + compareVal + " found
-							// " + found);
+
 						}
 
 						else {
@@ -1041,42 +933,17 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 								found = stringContainsParts(targetModel.getColumnName(colJ), compareVal,
 										valParts).success;
 
-							/*
-							 * if (fulltext)
-							 * found = stringContains(
-							 * targetModel.getColumnName(colJ),
-							 * compareVal, val);
-							 */
-
 							else {
-								// logging.info(this, "findViewRowFromValue not fullltext, startsWith ");
+
 								found = stringStartsWith(targetModel.getColumnName(colJ), compareVal, val);
-								// logging.info(this, "findViewRowFromValue not fullltext, found " + found);
+
 							}
 
-							/*
-							 * without collator based comparison
-							 * compareVal = compareVal.toLowerCase();
-							 * 
-							 * if (fulltext)
-							 * {
-							 * 
-							 * if (compareVal.indexOf(val.toLowerCase()) >= 0)
-							 * found = true;
-							 * }
-							 * 
-							 * else
-							 * {
-							 * 
-							 * if (compareVal.startsWith(valLower))
-							 * found = true;
-							 * }
-							 */
 						}
 					}
 
 					if (found) {
-						// logging.info(this, "findViewRowFromValue identified " + value );
+
 						break;
 					}
 				}
@@ -1088,17 +955,11 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		}
 
-		// logging.debug(this, " findViewRowFromValue, found " + found);
-
 		if (found) {
 			return viewrow;
 		}
 
 		return -1;
-	}
-
-	private void getSelectedAndSearch(boolean select) {
-		getSelectedAndSearch(false, select);
 	}
 
 	public boolean isSearchActive() {
@@ -1118,22 +979,17 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		targetModel.clearSelection();
 		searchTheRow(0, true);
 
-		// new Thread(){
-		// public void run()
 		{
 			int startFoundrow = foundrow;
-			// logging.info(this, "markAll foundrow (first) " + foundrow);
+
 			foundrow = foundrow + 1;
 
 			while (foundrow > startFoundrow) {
 				getSelectedAndSearch(true, true); // adding the next row to selection
-				// logging.info(this, "markAll foundrow (next) " + foundrow);
-				// logging.info(this, "markAll current selection " + Arrays.toString(
-				// targetModel.getSelectedRows() ));
+
 			}
 			targetModel.setValueIsAdjusting(false);
 		}
-		// }.start();
 
 	}
 
@@ -1150,10 +1006,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			if (!fieldSearch.getText().equals(""))
 				markAll();
 
-			// switchFilterOn();
-
-			// targetModel.setFilter(true);
-			// setFilteredMode(true);
 		}
 	}
 
@@ -1206,8 +1058,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void setRow(int row, boolean addSelection, boolean select) {
-		// logging.info(this, "setRow row, addSelection, select " + row + ", " +
-		// addSelection + ", " +select);
+
 		if (select) {
 			if (addSelection)
 				addSelectedRow(row);
@@ -1220,7 +1071,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		targetModel.setCursorRow(row);
 
-		// targetModel.setRenderAsCurrentRow( row );
 	}
 
 	private void searchTheRow(final int startrow, final boolean addSelection, final boolean select) {
@@ -1230,27 +1080,20 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		HashSet<Integer> selectedCols0 = null;
 
 		if (comboSearchFields.getSelectedIndex() > 0) {
-			selectedCols0 = new HashSet<Integer>();
+			selectedCols0 = new HashSet<>();
 			selectedCols0.add(targetModel.findColumn((String) comboSearchFields.getSelectedItem()));
 		}
 
-		final HashSet<Integer> selectedCols = selectedCols0;
-
-		// logging.info(this, "searchTheRow startrow " + startrow);
+		final Set<Integer> selectedCols = selectedCols0;
 
 		final boolean fulltextSearch = (comboSearchFieldsMode.getSelectedIndex() == FULL_TEXT_SEARCH);
 		final boolean regexSearch = (comboSearchFieldsMode.getSelectedIndex() == REGEX_SEARCH);
 		final boolean combineCols = fulltextSearch;
 
-		// setCursor(new java.awt.Cursor( java.awt.Cursor.WAIT_CURSOR));
-		// fieldSearch.setCursor(new java.awt.Cursor( java.awt.Cursor.WAIT_CURSOR));
 		fieldSearch.getCaret().setVisible(false);
 
 		// final de.uib.utilities.thread.WaitCursor waitCursor = new
-		// de.uib.utilities.thread.WaitCursor(fieldSearch, "TablesearchPane");
 
-		// new Thread(){ //destroys search of all
-		// public void run()
 		{
 
 			if (value.toString().length() < 2) {
@@ -1261,28 +1104,21 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				foundrow = findViewRowFromValue(startrow, value, selectedCols, fulltextSearch, regexSearch,
 						combineCols);
 
-				// logging.info(this, "searchTheRow foundrow " + foundrow);
-
 				if (foundrow > -1) {
 					setRow(foundrow, addSelection, select);
 				} else {
 
 					if (startrow > 0) {
-						// setRow(0, false, select);
+
 						searchTheRow(0, addSelection, select);
 					} else
 						setRow(0, false, select);
 				}
 			}
 
-			// waitCursor.stop();
-
-			// fieldSearch.setCursor(new java.awt.Cursor( java.awt.Cursor.TEXT_CURSOR));
-
 			fieldSearch.getCaret().setVisible(true);
-			// fieldSearch.getCaret().setBlinkRate(0);
+
 		}
-		// }.start();
 
 	}
 
@@ -1302,7 +1138,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void switchFilterOff() {
 		if (targetModel.isFiltered()) {
-			// filtermark.setSelected(null);
+
 			targetModel.setFiltered(false);
 			setFilteredMode(false);
 
@@ -1311,7 +1147,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void switchFilterOn() {
 		if (!targetModel.isFiltered()) {
-			// filtermark.setSelected(null);
+
 			targetModel.setFiltered(true);
 			setFilteredMode(true);
 
@@ -1319,8 +1155,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	// DocumentListener interface
+	@Override
 	public void changedUpdate(DocumentEvent e) {
-		// logging.info(this, "changedUpdate searchInputType " + searchInputType);
+
 		if (e.getDocument() == fieldSearch.getDocument()) {
 
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
@@ -1333,8 +1170,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	}
 
+	@Override
 	public void insertUpdate(DocumentEvent e) {
-		// logging.info(this, "insertUpdate searchInputType " + searchInputType);
+
 		if (e.getDocument() == fieldSearch.getDocument()) {
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
 
@@ -1346,8 +1184,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	}
 
+	@Override
 	public void removeUpdate(DocumentEvent e) {
-		// logging.info(this, "removeUpdate searchInputType " + searchInputType);
+
 		if (e.getDocument() == fieldSearch.getDocument()) {
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
 
@@ -1356,24 +1195,13 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			setRow(0, false, selectMode);
 			// go back to start when editing is restarted
 
-			/*
-			 * if (fieldSearch.getText().equals(""))
-			 * //setSelectedRow(0);
-			 * setRow(0, false, selectMode);
-			 * 
-			 * else
-			 * {
-			 * setRow(0, false, selectMode);
-			 * searchTheRow(0, selectMode);
-			 * }
-			 */
 		}
 
 	}
 
 	// KeyListener interface
+	@Override
 	public void keyPressed(KeyEvent e) {
-		// logging.info(this, "keyEvent " + e);
 
 		if (e.getKeyCode() == KeyEvent.VK_F5) {
 			if (!disabledSinceWeAreInFilteredMode()) {
@@ -1398,7 +1226,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			logging.debug(this, "key pressed ENTER on fieldSearch, with content " + fieldSearch.getText()
 					+ " searchInputType " + searchInputType);
-			// e.consume(); would prevent the actionlistener on fieldSearch to act
+
 			if (searchInputType == SearchInputType.LINE) {
 				if (!fieldSearch.getText().equals("")) {
 					switchFilterOff();
@@ -1411,15 +1239,17 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 	}
 
 	// ActionListener implementation
+	@Override
 	public void actionPerformed(ActionEvent e) {
-		// logging.info(this, "ActionEvent " + e);
 
 		if (e.getSource() == checkmarkAllColumns) {
 			logging.debug(this, "actionPerformed on checkmarkAllColumns");
@@ -1455,11 +1285,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			logging.info(this, "actionPerformed on filtermark, targetModel.isFiltered " + targetModel.isFiltered());
 
 			if (targetModel.isFiltered()) {
-				// filtermark.setSelected(null);
 
 				int[] unfilteredSelection = targetModel.getUnfilteredSelection();
-				// logging.info(this, "actionPerformed on filtermark, unfilteredSelection" +
-				// unfilteredSelection);
 
 				targetModel.setFiltered(false);
 				setFilteredMode(false);
@@ -1469,7 +1296,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				}
 
 			} else {
-				// filtermark.setSelected(null);
+
 				switchFilterOn();
 			}
 
@@ -1479,7 +1306,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			logging.debug(this,
 					"actionPerformed on checkmarkSearch, targetModel.isFiltered " + targetModel.isFiltered());
 
-			// if (checkmarkSearch.isSelected())
 			fieldSearch.setText("");
 		}
 
@@ -1504,20 +1330,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	public void setReloadActionHandler(ActionListener al) {
 		checkmarkSearch.addActionListener(al);
-	}
-
-	public static void main(String[] args) {
-		/*
-		 * logging.debug(" abc   contains äb " + stringContains("abc", "äb"));
-		 * logging.debug(" abcde  contains  è " + stringContains("abcde", "é"));
-		 * logging.debug(" abc  contains  c " + stringContains("abc", "'"));
-		 * 
-		 * 
-		 * logging.debug(" abc  starts with  ab " + stringStartsWith("abc", "ab"));
-		 * logging.debug(" abc  starts with  a " + stringStartsWith("abc", "a"));
-		 * logging.debug(" abc  starts with abc " + stringStartsWith("abc",
-		 * "abc"));
-		 */
 	}
 
 }

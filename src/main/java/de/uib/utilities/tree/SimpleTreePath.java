@@ -6,8 +6,7 @@ import java.util.HashSet;
 
 import javax.swing.tree.TreePath;
 
-public class SimpleTreePath extends ArrayList<String>
-		implements Comparable<SimpleTreePath> {
+public class SimpleTreePath extends ArrayList<String> implements Comparable<SimpleTreePath> {
 
 	public SimpleTreePath() {
 		super();
@@ -25,7 +24,7 @@ public class SimpleTreePath extends ArrayList<String>
 	}
 
 	public java.util.Set<String> collectNodeNames() {
-		HashSet<String> set = new HashSet<String>();
+		HashSet<String> set = new HashSet<>();
 
 		for (String nodename : this) {
 			set.add(nodename);
@@ -34,12 +33,13 @@ public class SimpleTreePath extends ArrayList<String>
 		return set;
 	}
 
+	@Override
 	public SimpleTreePath subList(int j, int i) {
 		return new SimpleTreePath(super.subList(j, i));
 	}
 
 	public String dottedString(int j, int i) {
-		StringBuffer buf = new StringBuffer("");
+		StringBuilder buf = new StringBuilder("");
 
 		for (int k = j; k < i - 1; k++) {
 			buf.append(get(k));
@@ -56,7 +56,7 @@ public class SimpleTreePath extends ArrayList<String>
 		if (parts.length <= startNodeNo)
 			return "";
 
-		StringBuffer res = new StringBuffer(parts[startNodeNo].toString());
+		StringBuilder res = new StringBuilder(parts[startNodeNo].toString());
 
 		for (int i = startNodeNo + 1; i < parts.length; i++) {
 			res.append(".");
@@ -66,36 +66,8 @@ public class SimpleTreePath extends ArrayList<String>
 		return res.toString();
 	}
 
-	/*
-	 * public boolean equals(Object o)
-	 * {
-	 * boolean result = true;
-	 * 
-	 * if (o == null)
-	 * result = false;
-	 * 
-	 * if (o instanceof SimpleTreePath)
-	 * result = false;
-	 * 
-	 * if (result)
-	 * {
-	 * SimpleTreePath ob = (SimpleTreePath) o;
-	 * 
-	 * if (size()!= ob.size())
-	 * result = false;
-	 * 
-	 * int i = 0;
-	 * while (result && i < size())
-	 * {
-	 * result = (get(i) == ob.get(i));
-	 * }
-	 * }
-	 * 
-	 * return result;
-	 * }
-	 */
-
 	// interface Comparable
+	@Override
 	public int compareTo(SimpleTreePath o) {
 		int result = 0;
 		int i = 0;

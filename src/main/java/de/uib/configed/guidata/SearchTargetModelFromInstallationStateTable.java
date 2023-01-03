@@ -42,100 +42,75 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 		return (AbstractTableModel) table.getModel();
 	}
 
+	@Override
 	public String getColumnName(int col) {
 		return getTableModel().getColumnName(col);
 	}
 
+	@Override
 	public int findColumn(String name) {
 		return getTableModel().findColumn(name);
 	}
 
+	@Override
 	public int getColumnCount() {
-		// logging.info(this, "getColumnCount retrieves model " + getTableModel());
-		// if (getTableModel() == null)
-		// return 0;
 
 		return getTableModel().getColumnCount();
 	}
 
+	@Override
 	public int getRowCount() {
 		return getTableModel().getRowCount();
 	}
 
+	@Override
 	public Object getValueAt(int row, int col) {
 		return getTableModel().getValueAt(row, col);
 	}
 
+	@Override
 	public int getColForVisualCol(int visualCol) {
 		return table.convertColumnIndexToModel(visualCol);
 	}
 
+	@Override
 	public int getRowForVisualRow(int visualRow) {
 		return table.convertRowIndexToModel(visualRow);
 	}
 
+	@Override
 	public void setRenderAsCurrentRow(int row) {
-		/*
-		 * logging.info(this, "setRenderAsCurrentRow " + row);
-		 * 
-		 * for (int i = 0; i < table.getColumnModel().getColumnCount(); i++)
-		 * {
-		 * logging.info(this, "setRenderAsCurrentRow looking for col " + i);
-		 * TableColumn col = table.getColumnModel().getColumn(i);
-		 * logging.info(this, "setRenderAsCurrentRow col cell renderer is " +
-		 * col.getCellRenderer() );
-		 * 
-		 * if (
-		 * col.getCellRenderer() instanceof StandardTableCellRenderer
-		 * //||
-		 * //col.getCellRenderer() instanceof TableCellRendererConfigured
-		 * )
-		 * {
-		 * ((StandardTableCellRenderer)(col.getCellRenderer())).setCurrentRow ( row );
-		 * logging.info(this, "setRenderAsCurrentRow setting for col " + i);
-		 * }
-		 * }
-		 */
+
 	}
 
+	@Override
 	public void clearSelection() {
 		table.clearSelection();
 	}
 
+	@Override
 	public int getSelectedRow() {
 		return table.getSelectedRow();
 	}
 
+	@Override
 	public int[] getSelectedRows() {
 		return table.getSelectedRows();
 	}
 
+	@Override
 	public void ensureRowIsVisible(int row) {
-		// int viewrow = table.convertRowIndexToView(row);
-		// int modelrow = table.convertRowIndexToModel(row);
+
 		table.scrollRectToVisible(table.getCellRect(row, 0, false));
 
-		// setCursorRow( row );
 	}
 
+	@Override
 	public void setCursorRow(int row) {
-		int viewrow = table.convertRowIndexToView(row);
-		int modelrow = table.convertRowIndexToModel(row);
-
 		logging.debug(this, "setCursorRow row, produced modelrow, produced viewrow, not implemented ");
-		// + row + ", " + modelrow + ", " + viewrow);
-
-		/*
-		 * if (table.getModel() instanceof de.uib.utilities.table.GenTableModel)
-		 * {
-		 * //int row = table.convertRowIndexToModel( viewrow );
-		 * ( (de.uib.utilities.table.GenTableModel) table.getModel() ).setCursorRow(
-		 * modelrow );
-		 * }
-		 */
-
 	}
 
+	@Override
 	public void setSelectedRow(int row) {
 		if (table.getRowCount() == 0)
 			return;
@@ -146,10 +121,11 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 		}
 
 		table.setRowSelectionInterval(row, row);
-		// logging.debug(" --- view row selected " + row);
+
 		ensureRowIsVisible(row);
 	}
 
+	@Override
 	public void addSelectedRow(int row) {
 		logging.debug(this, "addSelectedRow " + row);
 
@@ -157,18 +133,21 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 			return;
 
 		table.addRowSelectionInterval(row, row);
-		// logging.debug(" --- view row selected " + row);
+
 		ensureRowIsVisible(row);
 	}
 
+	@Override
 	public int[] getUnfilteredSelection() {
 		return viewRowfilter;
 	}
 
+	@Override
 	public void setValueIsAdjusting(boolean b) {
 		table.getSelectionModel().setValueIsAdjusting(b);
 	}
 
+	@Override
 	public void setSelection(int[] selection) {
 		logging.info(this, "setSelection --- " + java.util.Arrays.toString(selection));
 		table.getSelectionModel().clearSelection();
@@ -181,18 +160,9 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	@Override
 	public void setFiltered(boolean b) {
-		// logging.info(this, "setFiltered " + b + " it was filtered " + filtered);
-
-		// if (b == filtered)
-		// return;
-
-		InstallationStateTableModel model = (InstallationStateTableModel) (table.getModel());
 
 		if (!filtered)
 			viewRowfilter = table.getSelectedRows();
-
-		// logging.info(this, "setFiltered " + b + " viewRowfilter "
-		// + java.util.Arrays.toString( viewRowfilter ));
 
 		if (b && viewRowfilter.length > 0) {
 			int[] modelRowFilter = new int[viewRowfilter.length];
@@ -204,26 +174,8 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 			panelProductSettings.reduceToSelected();
 
-			/*
-			 * 
-			 * (( de.uib.utilities.table.RowNoTableModelFilterCondition)
-			 * (model.getFilter( FILTER_BY_SELECTION ).getCondition()))
-			 * .setFilter( modelRowFilter, model.getRows() );
-			 * 
-			 * model.setUsingFilter( FILTER_BY_SELECTION, true);
-			 * model.reset();
-			 * //setSelection( viewRowfilter );
-			 * table.getSelectionModel().setSelectionInterval(0, model.getRowCount());
-			 */
-
 		} else {
-			panelProductSettings.showAll();;
-
-			/*
-			 * model.setUsingFilter( FILTER_BY_SELECTION, false);
-			 * //((AbstractTableModel) table.getModel()).fireTableDataChanged();
-			 * setSelection( viewRowfilter ); //restore the original selection
-			 */
+			panelProductSettings.showAll();
 		}
 		filtered = b;
 

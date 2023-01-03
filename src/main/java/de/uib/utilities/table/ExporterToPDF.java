@@ -10,23 +10,18 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Vector;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JTable;
 
-import com.itextpdf.text.Anchor;
-import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chapter;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.ExceptionConverter;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
-import com.itextpdf.text.List;
-import com.itextpdf.text.ListItem;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
@@ -55,7 +50,7 @@ public class ExporterToPDF extends ExportTable {
 	protected String defaultFilename = "report.pdf";
 	protected boolean askForOverwrite = true;
 
-	protected static final String thisExtension = ".pdf";
+	protected static final String FILE_EXTENSION = ".pdf";
 
 	private static float mLeft = 36;
 	private static float mRight = 36;
@@ -66,19 +61,18 @@ public class ExporterToPDF extends ExportTable {
 
 	private static BaseFont bf;
 	private static Font catFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
-	private static Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
 	private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 	private static Font small = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
-	private static ArrayList<Integer> leftAlignmentlist = new ArrayList<Integer>();
+	private static List<Integer> leftAlignmentlist = new ArrayList<>();
 
-	public ExporterToPDF(javax.swing.JTable table, Vector<String> classNames) {
+	public ExporterToPDF(javax.swing.JTable table, List<String> classNames) {
 		super(table, classNames);
-		extension = thisExtension;
+		extension = FILE_EXTENSION;
 		writeToFile = defaultFilename;
-		document = new Document(PageSize.A4, mLeft, mRight, mTop, mBottom);
+		new Document(PageSize.A4, mLeft, mRight, mTop, mBottom);
 	}
 
-	public ExporterToPDF(PanelGenEditTable table, Vector<String> classNames) {
+	public ExporterToPDF(PanelGenEditTable table, List<String> classNames) {
 		this(table.getTheTable(), classNames);
 	}
 
@@ -172,12 +166,11 @@ public class ExporterToPDF extends ExportTable {
 				logging.error("file not found: " + fileName, exp);
 			}
 
-			if ((saveAction == false) && (temp.getAbsolutePath() != null)) {
+			if (!saveAction && (temp.getAbsolutePath() != null)) {
 				try {
-					// logging.info(this, "is supported OPEN: " +
-					// Desktop.getDesktop().isSupported(Desktop.Action.OPEN));
-					Desktop.getDesktop().open(temp); // new File(temp.getAbsolutePath()));
-					// Desktop.getDesktop().browse(new java.net.URI( temp.getAbsolutePath() ) );
+
+					Desktop.getDesktop().open(temp);
+
 				} catch (Exception e) {
 					logging.error("cannot show: " + temp.getAbsolutePath() + " : " + e);
 				}
@@ -188,18 +181,18 @@ public class ExporterToPDF extends ExportTable {
 
 	}
 
-	public void addMetaData(HashMap<String, String> metaData) {
+	public void addMetaData(Map<String, String> metaData) {
 		if (metaData == null) {
 			document.addTitle("Document as PDF");
 			document.addSubject("Using iText");
 			document.addKeywords("Java, PDF, iText");
 		} else {
 			if (metaData.containsKey("title"))
-				document.addTitle(metaData.get("title").toString());
+				document.addTitle(metaData.get("title"));
 			if (metaData.containsKey("subject"))
-				document.addSubject(metaData.get("subject").toString());
+				document.addSubject(metaData.get("subject"));
 			if (metaData.containsKey("keywords"))
-				document.addKeywords(metaData.get("keywords").toString());
+				document.addKeywords(metaData.get("keywords"));
 		}
 		document.addAuthor(System.getProperty("user.name"));
 		document.addCreator(Globals.APPNAME);
@@ -229,12 +222,12 @@ public class ExporterToPDF extends ExportTable {
 		return content;
 	}
 
-	public static Paragraph addTitleLines(HashMap<String, String> metaData) throws DocumentException {
+	public static Paragraph addTitleLines(Map<String, String> metaData) {
 		// TODO timezone
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd. MMMMM yyyy");
 		// Second parameter is the number of the chapter
 		Paragraph content = new Paragraph();
-		// addEmptyLine(content, 1);
+
 		if (metaData.containsKey("title"))
 			content.add(new Paragraph(metaData.get("title"), catFont));
 		if (metaData.containsKey("subtitle"))
@@ -252,15 +245,14 @@ public class ExporterToPDF extends ExportTable {
 			}
 		}
 
-		content.add(new Paragraph(
-				de.uib.configed.configed.getResourceValue("DocumentExport.summonedBy") + ": " + userInitial + ", " //$NON-NLS-3$
-						+ dateFormatter.format(new Date()), //$NON-NLS-2$ //$NON-NLS-3$
+		content.add(new Paragraph(configed.getResourceValue("DocumentExport.summonedBy") + ": " + userInitial + ", " //$NON-NLS-3$
+				+ dateFormatter.format(new Date()), //$NON-NLS-2$ //$NON-NLS-3$
 				smallBold));
 		content.add(addEmptyLines(1));
 		return content;
 	}
 
-	protected PdfPTable createTableDataElement(JTable theTable) throws BadElementException {
+	protected PdfPTable createTableDataElement(JTable theTable) {
 		Boolean onlySelectedRows = false;
 
 		if (theTable.getSelectedRowCount() > 0)
@@ -360,6 +352,7 @@ public class ExporterToPDF extends ExportTable {
 		 * @see com.itextpdf.text.pdf.PdfPageEventHelper#onOpenDocument(
 		 *      com.itextpdf.text.pdf.PdfWriter, com.itextpdf.text.Document)
 		 */
+		@Override
 		public void onOpenDocument(PdfWriter writer, Document document) {
 			total = writer.getDirectContent().createTemplate(30, 16);
 		}
@@ -370,12 +363,12 @@ public class ExporterToPDF extends ExportTable {
 		 * @see com.itextpdf.text.pdf.PdfPageEventHelper#onEndPage(
 		 *      com.itextpdf.text.pdf.PdfWriter, com.itextpdf.text.Document)
 		 */
+		@Override
 		public void onEndPage(PdfWriter writer, Document document) {
 			PdfPTable table = new PdfPTable(3);
 			// TODO: logo, create String from Globals
-			// String url = Globals.BUNDLE_NAME + ... ;
-			// String url = "classes/de/uib/configed/gui/images/opsi_full.png";
-			java.net.URL opsi_image_URL = de.uib.configed.Globals.getImageResourceURL("images/opsi_full.png");
+
+			java.net.URL opsi_image_URL = Globals.getImageResourceURL("images/opsi_full.png");
 			try {
 				// add header table with page number
 				table.setWidths(new int[] { 24, 24, 2 });
@@ -408,106 +401,11 @@ public class ExporterToPDF extends ExportTable {
 		 * @see com.itextpdf.text.pdf.PdfPageEventHelper#onCloseDocument(
 		 *      com.itextpdf.text.pdf.PdfWriter, com.itextpdf.text.Document)
 		 */
+		@Override
 		public void onCloseDocument(PdfWriter writer, Document document) {
 			ColumnText.showTextAligned(total, Element.ALIGN_LEFT,
 					new Phrase(String.valueOf(writer.getPageNumber() - 1)), 2, 2, 0);
 		}
-	}
-
-	public static PdfPTable createElement(javax.swing.table.AbstractTableModel tablemodel) throws BadElementException {
-
-		PdfPTable table = new PdfPTable(tablemodel.getColumnCount());
-		PdfPCell h;
-		PdfPCell value = null;
-
-		table.setWidthPercentage(98);
-
-		BaseColor headerBackground = new BaseColor(150, 150, 150);
-		BaseColor evenBackground = new BaseColor(230, 230, 230);
-		BaseColor oddBackground = new BaseColor(250, 250, 250);
-		Font symbol_font;
-		try {
-			bf = BaseFont.createFont(BaseFont.SYMBOL, BaseFont.SYMBOL, BaseFont.EMBEDDED);
-			symbol_font = new Font(bf, 11);
-		} catch (Exception e) {
-			logging.warning("ExporterToPDF::createTableDataElement", " BaseFont can't be created :" + e);
-			symbol_font = small;
-		}
-		PdfPCell defaultCell = table.getDefaultCell();
-		defaultCell.setBackgroundColor(new BaseColor(100, 100, 100));
-
-		for (int i = 0; i < tablemodel.getColumnCount(); i++) {
-			h = new PdfPCell(new Phrase(tablemodel.getColumnName(i)));
-			h.setHorizontalAlignment(Element.ALIGN_CENTER);
-			h.setBackgroundColor(headerBackground);
-			table.addCell(h);
-		}
-		table.setHeaderRows(1);
-
-		for (int j = 0; j < tablemodel.getRowCount(); j++)
-			for (int i = 0; i < tablemodel.getColumnCount(); i++) {
-				value = new PdfPCell(new Phrase(" ")); // reset
-				String s = "";
-				try {
-					s = tablemodel.getValueAt(j, i).toString();
-				} catch (Exception ex) { // nullPointerException, cell empty
-					s = "";
-				}
-				// div. symbols: http://severinghaus.org/projects/html-entities#LetSym
-				switch (s) {
-				case "∞":
-					value = new PdfPCell(new Phrase("\u221e", symbol_font));
-					break;
-				case "true":
-					value = new PdfPCell(new Phrase("\u221a", symbol_font)); // radic
-					// tests mit 2713 ; 22A8
-					break;
-				case "false":
-					break;
-				default:
-					value = new PdfPCell(new Phrase(s, small));
-				}
-				if (j % 2 == 0)
-					value.setBackgroundColor(evenBackground);
-				else
-					value.setBackgroundColor(oddBackground);
-				// if (leftAlignmentlist.isEmpty()){
-				// value.setHorizontalAlignment(Element.ALIGN_CENTER);
-				// } else {
-				if (leftAlignmentlist.contains(i)) {
-					// logging.debug(" column " + i + "leftAlignmentList " +
-					// leftAlignmentlist);
-					value.setHorizontalAlignment(Element.ALIGN_LEFT);
-				} else {
-					value.setHorizontalAlignment(Element.ALIGN_CENTER);
-				}
-				// }
-				value.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				table.addCell(value);
-			}
-
-		return table;
-
-	}
-
-	public static Paragraph createElement(String[] listOfStrings) {
-		Paragraph contentElement = new Paragraph();
-		for (int i = 0; i < listOfStrings.length; i++)
-			contentElement.add(new ListItem(listOfStrings[i]));
-		return contentElement;
-	}
-
-	private static List createElement(boolean numbered, boolean lettered, float symbolIndent, String[] listOfStrings) {
-		List list = new List(numbered, lettered, symbolIndent); // f.e.: (true, false, 10)
-		for (int i = 0; i < listOfStrings.length; i++)
-			list.add(new ListItem(listOfStrings[i]));
-		return list;
-	}
-
-	public static Chapter createElement(String text, int number) {
-		Anchor anchor = new Anchor(text, catFont);
-		anchor.setName(text);
-		return new Chapter(new Paragraph(anchor), number);
 	}
 
 	public static Image createElement(URL imageSource, float posx, float posy)
@@ -517,19 +415,5 @@ public class ExporterToPDF extends ExportTable {
 		// no scaling
 		img.setAbsolutePosition(posx, posy);
 		return img;
-	}
-
-	public static Image createElement(String imageSource, float posx, float posy)
-			// http://kievan.hubpages.com/hub/How-to-Create-a-Basic-iText-PDF-Document
-			throws DocumentException, IOException {
-		Image img = com.itextpdf.text.Image.getInstance(imageSource);
-		// no scaling
-		img.setAbsolutePosition(posx, posy);
-		return img;
-	}
-
-	private static PdfPCell createElement(String imageSource) throws DocumentException, IOException {
-		Image img = com.itextpdf.text.Image.getInstance(imageSource);
-		return new PdfPCell(img);
 	}
 }

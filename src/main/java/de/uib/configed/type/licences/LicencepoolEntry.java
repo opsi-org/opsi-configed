@@ -1,7 +1,6 @@
 package de.uib.configed.type.licences;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,15 +14,9 @@ public class LicencepoolEntry extends TableEntry {
 
 	private static List<String> KEYS;
 	static {
-		KEYS = new ArrayList<String>();
+		KEYS = new ArrayList<>();
 		KEYS.add(idSERVICEKEY);
 		KEYS.add(descriptionKEY);
-	}
-
-	private static Map<String, String> locale;
-
-	static {
-		locale = new HashMap<String, String>();
 	}
 
 	public static List<String> getKeys() {

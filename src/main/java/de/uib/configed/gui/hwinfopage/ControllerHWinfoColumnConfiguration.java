@@ -12,10 +12,11 @@
 
 package de.uib.configed.gui.hwinfopage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.Icon;
@@ -26,6 +27,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
@@ -34,7 +36,6 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
@@ -46,25 +47,23 @@ public class ControllerHWinfoColumnConfiguration {
 	private GenTableModel model;
 	TableUpdateCollection updateCollection;
 
-	Vector<String> columnNames;
-	Vector<String> classNames;
-	public static final String colLineNo = configed.getResourceValue("HWinfoColumnConfiguration.colLineNo");
-	public static final String colHostVsItemAssigned = configed
+	List<String> columnNames;
+	List<String> classNames;
+	public static final String COL_LINE_NO = configed.getResourceValue("HWinfoColumnConfiguration.colLineNo");
+	public static final String COL_HOST_VS_ITEM_ASSIGNED = configed
 			.getResourceValue("HWinfoColumnConfiguration.colHostVsItemAssigned");
-	public static final String valAssignedToHost = configed
+	public static final String VAL_ASSIGNED_TO_HOST = configed
 			.getResourceValue("HWinfoColumnConfiguration.valAssignedToHost");
-	public static final String valAssignedToHwItem = configed
+	public static final String VAL_ASSIGNED_TO_HW_ITEM = configed
 			.getResourceValue("HWinfoColumnConfiguration.valAssignedToHwItem");
-	public static final String colUseInQuery = configed.getResourceValue("HWinfoColumnConfiguration.colUseInQuery");
-	public static final String colOpsiColumnName = configed
+	public static final String COL_USE_IN_QUERY = configed.getResourceValue("HWinfoColumnConfiguration.colUseInQuery");
+	public static final String COL_OPSI_COLUMN_NAME = configed
 			.getResourceValue("HWinfoColumnConfiguration.colOpsiColumnName");
-	public static final String colOpsiDbColumnType = configed
+	public static final String COL_OPSI_DB_COLUMN_TYPE = configed
 			.getResourceValue("HWinfoColumnConfiguration.colOpsiDbColumnType");
-	public static final String colHwClass = configed.getResourceValue("HWinfoColumnConfiguration.colHwClass");
-	public static final String colLinuxQuery = configed.getResourceValue("HWinfoColumnConfiguration.colLinuxQuery");
-	public static final String colWMIQuery = configed.getResourceValue("HWinfoColumnConfiguration.colWMIQuery");
-	// public static final String colTellAgainHardwareClass =
-	// configed.getResourceValue("HWinfoColumnConfiguration.colTellAgainHardwareClass");
+	public static final String COL_HW_CLASS = configed.getResourceValue("HWinfoColumnConfiguration.colHwClass");
+	public static final String COL_LINUX_QUERY = configed.getResourceValue("HWinfoColumnConfiguration.colLinuxQuery");
+	public static final String COL_WMI_QUERY = configed.getResourceValue("HWinfoColumnConfiguration.colWMIQuery");
 
 	private Map<String, Map<String, Boolean>> updateItems;
 
@@ -130,7 +129,7 @@ public class ControllerHWinfoColumnConfiguration {
 	ConfigedMain main;
 	protected PersistenceController persist;
 
-	static final int keycol = 0;
+	private static final int KEY_COL = 0;
 
 	public ControllerHWinfoColumnConfiguration(ConfigedMain main, PersistenceController persist) {
 		this.main = main;
@@ -138,17 +137,12 @@ public class ControllerHWinfoColumnConfiguration {
 
 		initPanel();
 		initModel();
-		updateItems = new HashMap<String, Map<String, Boolean>>();
+		updateItems = new HashMap<>();
 
 	}
 
 	protected void initPanel() {
-		panel = new PanelGenEditTable("", // configed.getResourceValue("HardwareList"),
-				0, // maxTableWidth
-				true, // editing
-				0, // generalPopupPosition
-				false,
-				// PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF,
+		panel = new PanelGenEditTable("", 0, true, 0, false,
 				new int[] { PanelGenEditTable.POPUP_RELOAD, PanelGenEditTable.POPUP_PDF }, true) {
 
 			@Override
@@ -171,87 +165,55 @@ public class ControllerHWinfoColumnConfiguration {
 
 				persist.getConfigOptions();
 
-				// super.reload();
-
 				model.reset();
 				setDataChanged(false);
 
-				panel.moveToValue("true", columnNames.indexOf(colUseInQuery), true);
+				panel.moveToValue("true", columnNames.indexOf(COL_USE_IN_QUERY), true);
 
 			}
 
-			/*
-			 * @Override
-			 * protected Object modifyHeaderValue(Object s)
-			 * {
-			 * if (s != null && s instanceof String && ((String)
-			 * s).startsWith(DELETE_PREFIX))
-			 * {
-			 * String modified = ((String) s).substring(DELETE_PREFIX.length());
-			 * return modified;
-			 * }
-			 * 
-			 * return s;
-			 * }
-			 */
-
 		};
 
-		panel.setMasterFrame(de.uib.configed.Globals.mainFrame);
+		panel.setMasterFrame(Globals.mainFrame);
 		panel.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panel.showFilterIcon(true); // supply implementation of SearchTargetModelFromTable.setFiltered
 		panel.setFiltering(true);
 		panel.setDeleteAllowed(false);
-		// panel.getTheTable().setRowSorter(null);
 
 	}
 
 	protected void initModel() {
 
 		updateCollection = new TableUpdateCollection();
-		columnNames = new Vector<String>();
-		columnNames.add(colLineNo);
-		columnNames.add(colHwClass);
-		columnNames.add(colLinuxQuery);
-		columnNames.add(colWMIQuery);
-		columnNames.add(colHostVsItemAssigned);
-		columnNames.add(colOpsiColumnName);
-		columnNames.add(colUseInQuery);
-		columnNames.add(colOpsiDbColumnType);
-		// columnNames.add( "UI Name");
-		// columnNames.add( "display type");
-		// columnNames.add( "report function");
-		// columnNames.add( colTellAgainHardwareClass );
+		columnNames = new ArrayList<>();
+		columnNames.add(COL_LINE_NO);
+		columnNames.add(COL_HW_CLASS);
+		columnNames.add(COL_LINUX_QUERY);
+		columnNames.add(COL_WMI_QUERY);
+		columnNames.add(COL_HOST_VS_ITEM_ASSIGNED);
+		columnNames.add(COL_OPSI_COLUMN_NAME);
+		columnNames.add(COL_USE_IN_QUERY);
+		columnNames.add(COL_OPSI_DB_COLUMN_TYPE);
 
-		classNames = new Vector<String>();
+		classNames = new ArrayList<>();
 
-		// classNames.add("java.lang.Integer");
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
 
-		// GenericTableUpdateItemFactory updateItemFactory = new
-		// GenericTableUpdateItemFactory(0);
-
-		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, classNames, keycol);
+		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, classNames, KEY_COL);
 
 		model = new GenTableModel(updateItemFactory,
 
 				// tableProvider
-				// new de.uib.utilities.table.provider.DefaultTableProvider(sqlSource),
-				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
-					public Map retrieveMap() {
-						Map<String, Map<String, Object>> hwColumnConfig = getHwColumnConfig();
 
-						return hwColumnConfig;
-					}
-				})),
+				new DefaultTableProvider(
+						new RetrieverMapSource(columnNames, classNames, () -> (Map) getHwColumnConfig())),
 
-				keycol,
+				KEY_COL,
 
-				// final columns int array
-				new int[] { keycol },
+				new int[] { KEY_COL },
 
 				// table model listener
 				panel,
@@ -278,60 +240,38 @@ public class ControllerHWinfoColumnConfiguration {
 
 		updateItemFactory.setSource(model);
 
-		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = persist.getHwAuditDeviceClasses();
-
-		// for (String hwClass : hwAuditDeviceClasses.keySet() )
-
-		// updateItemFactory.setSource(model);
-
-		// model.reset();
 		// we got metadata:
 
-		// columnNames = model.getColumnNames();
-		// classNames = model.getClassNames();
-
-		// updateItemFactory.setColumnNames(columnNames);
-		// updateItemFactory.setClassNames(classNames);
-
-		model.setEditableColumns(new int[] {
-				// columnNames.indexOf ( colOpsiColumnName ),
-				columnNames.indexOf(colUseInQuery) });
+		model.setEditableColumns(new int[] { columnNames.indexOf(COL_USE_IN_QUERY) });
 
 		panel.setTableModel(model);
-		panel.setEmphasizedColumns(new int[] {
-				// columnNames.indexOf ( colOpsiColumnName ),
-				columnNames.indexOf(colUseInQuery) });
-
-		// panel.setTitle( "" );//configed.getResourceValue("PanelHWInfo.overview") );
-
-		// Icon iconConfigure =
-		// de.uib.configed.Globals.createImageIcon("images/config_pro.png", "");
+		panel.setEmphasizedColumns(new int[] { columnNames.indexOf(COL_USE_IN_QUERY) });
 
 		panel.setTitlePane(
 				new JComponent[] { new JLabel(configed.getResourceValue("HWinfoColumnConfiguration.infoTitle")) }, 20);
 
-		panel.setTitlePaneBackground(de.uib.utilities.Globals.backLightBlue);
+		panel.setTitlePaneBackground(Globals.BACKGROUND_COLOR_7);
 
-		LinkedHashMap<Integer, SortOrder> sortDescriptor = new LinkedHashMap<Integer, SortOrder>();
+		LinkedHashMap<Integer, SortOrder> sortDescriptor = new LinkedHashMap<>();
 
-		sortDescriptor.put(keycol, SortOrder.ASCENDING);
+		sortDescriptor.put(KEY_COL, SortOrder.ASCENDING);
 		panel.setSortOrder(sortDescriptor);
 
-		panel.setComparator(colLineNo, new de.uib.utilities.IntComparatorForObjects());
+		panel.setComparator(COL_LINE_NO, new de.uib.utilities.IntComparatorForObjects());
 
 		panel.reload();// now sorted
 
 		javax.swing.table.TableColumn col;
-		col = panel.getColumnModel().getColumn(columnNames.indexOf(colLineNo));
+		col = panel.getColumnModel().getColumn(columnNames.indexOf(COL_LINE_NO));
 		col.setMaxWidth(80);
 		col.setHeaderValue("");
 
-		col = panel.getColumnModel().getColumn(columnNames.indexOf(colUseInQuery));
+		col = panel.getColumnModel().getColumn(columnNames.indexOf(COL_USE_IN_QUERY));
 		col.setMaxWidth(80);
 
-		Icon iconChecked = de.uib.configed.Globals.createImageIcon("images/checked_box_blue_14.png", "");
-		Icon iconUnchecked = de.uib.configed.Globals.createImageIcon("images/checked_box_blue_empty_14.png", "");
-		Icon iconEmpty = de.uib.configed.Globals.createImageIcon("images/checked_void.png", "");
+		Icon iconChecked = Globals.createImageIcon("images/checked_box_blue_14.png", "");
+		Icon iconUnchecked = Globals.createImageIcon("images/checked_box_blue_empty_14.png", "");
+		Icon iconEmpty = Globals.createImageIcon("images/checked_void.png", "");
 
 		col.setCellRenderer(new de.uib.utilities.table.gui.BooleanIconTableCellRenderer(iconChecked, iconUnchecked,
 				iconEmpty, true));
@@ -344,19 +284,20 @@ public class ControllerHWinfoColumnConfiguration {
 		// this is not correct for keys, therefore we set the void icon
 
 		panel.setUpdateController(new MapItemsUpdateController(panel, model, new MapBasedUpdater() {
+			@Override
 			public String sendUpdate(Map<String, Object> rowmap) {
-				// panel.sortAgainAsConfigured();
-				// we reset the original sorting because we need information from lines "above"
 
 				logging.info(this, "within MapItemsUpdateController sendUpdate " + rowmap);
 
 				buildUpdateItem(
 
-						new ColumnIdent((String) rowmap.get(colOpsiColumnName)), (Boolean) rowmap.get(colUseInQuery));
+						new ColumnIdent((String) rowmap.get(COL_OPSI_COLUMN_NAME)),
+						(Boolean) rowmap.get(COL_USE_IN_QUERY));
 
 				return "";
 			}
 
+			@Override
 			public boolean sendDelete(Map<String, Object> rowmap) {
 				logging.info(this, "within MapItemsUpdateController sendDelete " + rowmap);
 				// method is not used since we don*t delete rows
@@ -377,7 +318,7 @@ public class ControllerHWinfoColumnConfiguration {
 		logging.info(this, "add this item to items for configIdent " + col.configIdent);
 
 		if (tableConfigUpdates == null) {
-			tableConfigUpdates = new HashMap<String, Boolean>();
+			tableConfigUpdates = new HashMap<>();
 			updateItems.put(col.configIdent, tableConfigUpdates);
 		}
 		tableConfigUpdates.put(col.dbColumnName, use);
@@ -388,7 +329,7 @@ public class ControllerHWinfoColumnConfiguration {
 	}
 
 	protected Map<String, Map<String, Object>> getHwColumnConfig() {
-		Map<String, Map<String, Object>> result = new LinkedHashMap<String, Map<String, Object>>();
+		Map<String, Map<String, Object>> result = new LinkedHashMap<>();
 
 		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = persist.getHwAuditDeviceClasses();
 		int id = 0;
@@ -396,89 +337,77 @@ public class ControllerHWinfoColumnConfiguration {
 		for (String hwClass : hwAuditDeviceClasses.keySet()) {
 
 			OpsiHwAuditDeviceClass hwAuditDeviceClass = hwAuditDeviceClasses.get(hwClass);
-			java.util.List<OpsiHwAuditDevicePropertyType> deviceHostProperties = hwAuditDeviceClass
-					.getDeviceHostProperties();
-			java.util.List<OpsiHwAuditDevicePropertyType> deviceHwItemProperties = hwAuditDeviceClass
-					.getDeviceHwItemProperties();
+			List<OpsiHwAuditDevicePropertyType> deviceHostProperties = hwAuditDeviceClass.getDeviceHostProperties();
+			List<OpsiHwAuditDevicePropertyType> deviceHwItemProperties = hwAuditDeviceClass.getDeviceHwItemProperties();
 
 			// hw class line
-			Map<String, Object> lineMap = new LinkedHashMap<String, Object>();
-			lineMap.put(colLineNo, formatLineNo(id));
-			lineMap.put(colHwClass, hwClass);
-			lineMap.put(colLinuxQuery, hwAuditDeviceClass.getLinuxQuery());
-			lineMap.put(colWMIQuery, hwAuditDeviceClass.getWmiQuery());
+			Map<String, Object> lineMap = new LinkedHashMap<>();
+			lineMap.put(COL_LINE_NO, formatLineNo(id));
+			lineMap.put(COL_HW_CLASS, hwClass);
+			lineMap.put(COL_LINUX_QUERY, hwAuditDeviceClass.getLinuxQuery());
+			lineMap.put(COL_WMI_QUERY, hwAuditDeviceClass.getWmiQuery());
 
 			result.put(formatLineNo(id), lineMap);
 			id++;
 
 			// colHostVsItemAssigned line
-			lineMap = new LinkedHashMap<String, Object>();
-			lineMap.put(colLineNo, formatLineNo(id));
-			// lineMap.put(colTellAgainHardwareClass, hwClass);
+			lineMap = new LinkedHashMap<>();
+			lineMap.put(COL_LINE_NO, formatLineNo(id));
 
-			lineMap.put(colHostVsItemAssigned, valAssignedToHost);
+			lineMap.put(COL_HOST_VS_ITEM_ASSIGNED, VAL_ASSIGNED_TO_HOST);
 
 			result.put(formatLineNo(id), lineMap);
 			id++;
 
 			for (OpsiHwAuditDevicePropertyType deviceProperty : deviceHostProperties) {
 
-				lineMap = new LinkedHashMap<String, Object>();
-				lineMap.put(colLineNo, formatLineNo(id));
-				// lineMap.put(colTellAgainHardwareClass, hwClass);
+				lineMap = new LinkedHashMap<>();
+				lineMap.put(COL_LINE_NO, formatLineNo(id));
 
 				ColumnIdent columnIdent = new ColumnIdent(hwClass, OpsiHwAuditDeviceClass.hostAssignedTableType,
 						deviceProperty.getOpsiDbColumnName());
 
-				lineMap.put(colOpsiColumnName, columnIdent.produceColumnCellValue());
-				lineMap.put(colOpsiDbColumnType, deviceProperty.getOpsiDbColumnType());
+				lineMap.put(COL_OPSI_COLUMN_NAME, columnIdent.produceColumnCellValue());
+				lineMap.put(COL_OPSI_DB_COLUMN_TYPE, deviceProperty.getOpsiDbColumnType());
 
 				if (deviceProperty.getDisplayed() == null)
-					lineMap.put(colUseInQuery, "" + false);
+					lineMap.put(COL_USE_IN_QUERY, "" + false);
 				else
-					lineMap.put(colUseInQuery, "" + deviceProperty.getDisplayed());
+					lineMap.put(COL_USE_IN_QUERY, "" + deviceProperty.getDisplayed());
 
 				result.put(formatLineNo(id), lineMap);
 				id++;
 			}
 
-			lineMap = new LinkedHashMap<String, Object>();
-			lineMap.put(colLineNo, formatLineNo(id));
-			lineMap.put(colHostVsItemAssigned, valAssignedToHwItem);
+			lineMap = new LinkedHashMap<>();
+			lineMap.put(COL_LINE_NO, formatLineNo(id));
+			lineMap.put(COL_HOST_VS_ITEM_ASSIGNED, VAL_ASSIGNED_TO_HW_ITEM);
 
 			result.put(formatLineNo(id), lineMap);
-			// lineMap.put(colTellAgainHardwareClass, hwClass);
+
 			id++;
 
 			for (OpsiHwAuditDevicePropertyType deviceProperty : deviceHwItemProperties) {
-				lineMap = new LinkedHashMap<String, Object>();
-				lineMap.put(colLineNo, formatLineNo(id));
+				lineMap = new LinkedHashMap<>();
+				lineMap.put(COL_LINE_NO, formatLineNo(id));
 
 				ColumnIdent columnIdent = new ColumnIdent(hwClass, OpsiHwAuditDeviceClass.hwItemAssignedTableType,
 						deviceProperty.getOpsiDbColumnName());
 
-				lineMap.put(colOpsiColumnName, columnIdent.produceColumnCellValue());
+				lineMap.put(COL_OPSI_COLUMN_NAME, columnIdent.produceColumnCellValue());
 
-				lineMap.put(colOpsiDbColumnType, deviceProperty.getOpsiDbColumnType());
+				lineMap.put(COL_OPSI_DB_COLUMN_TYPE, deviceProperty.getOpsiDbColumnType());
 
 				if (deviceProperty.getDisplayed() == null)
-					lineMap.put(colUseInQuery, "" + false);
+					lineMap.put(COL_USE_IN_QUERY, "" + false);
 				else
-					lineMap.put(colUseInQuery, "" + deviceProperty.getDisplayed());
+					lineMap.put(COL_USE_IN_QUERY, "" + deviceProperty.getDisplayed());
 
 				result.put(formatLineNo(id), lineMap);
 				id++;
 			}
 
 		}
-
-		/*
-		 * for (String lineNo : result.keySet())
-		 * {
-		 * logging.info(this, "getHwColumnConfig " + lineNo + ": " + result.get(lineNo)
-		 * );
-		 * }
-		 */
 
 		return result;
 

@@ -1,32 +1,15 @@
 package de.uib.opsicommand.sshcommand;
 
-/*
- * configed - configuration editor for client work stations in opsi
- * (open pc server integration) www.opsi.org
- *
- * Copyright (C) 2016 uib.de
- *
- * This program is free software; you can redistribute it 
- * and / or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * @author Anna Sucher
- * @version 1.0
- */
-import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
-// import de.uib.configed.*;
 import de.uib.configed.gui.FGeneralDialog;
-// import de.uib.configed.gui.ssh.*;
 import de.uib.utilities.logging.logging;
 
 /**
  * This class represent a ssh-command
  **/
-public class SSHCommand_Template implements SSHCommand,
-		Comparable<SSHCommand_Template>, SSHMultiCommand {
+public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Template>, SSHMultiCommand {
 	/** boolean needParameter = false **/
 	private boolean needParameter = false;
 	/** boolean isMultiCommand = true **/
@@ -36,8 +19,8 @@ public class SSHCommand_Template implements SSHCommand,
 	/** String unique menu text **/
 	private String menuText;
 	/** LinkedList<SSHCommand> ssh_command **/
-	private LinkedList<SSHCommand> ssh_command = new LinkedList<SSHCommand>();
-	private LinkedList<SSHCommand> ssh_command_original = new LinkedList<SSHCommand>();
+	private LinkedList<SSHCommand> ssh_command = new LinkedList<>();
+	private LinkedList<SSHCommand> ssh_command_original = new LinkedList<>();
 	/** boolean needSudo state **/
 	private boolean needSudo = false;
 	/** String parent menu text **/
@@ -71,8 +54,7 @@ public class SSHCommand_Template implements SSHCommand,
 	 * @param p   (position): int
 	 * @return SSHCommand_Template instance
 	 */
-	public SSHCommand_Template(String id, LinkedList<String> c, String mt,
-			boolean ns, String pmt, String ttt, int p) {
+	public SSHCommand_Template(String id, List<String> c, String mt, boolean ns, String pmt, String ttt, int p) {
 		position = SSHCommandFactory.getInstance().position_default;
 		setId(id);
 		setMenuText(mt);
@@ -85,7 +67,7 @@ public class SSHCommand_Template implements SSHCommand,
 		logging.debug(this, "SSHCommand_Template commandlist" + this.commandlistToString());
 	}
 
-	public SSHCommand_Template(SSHCommand orig, LinkedList<String> commandlist) {
+	public SSHCommand_Template(SSHCommand orig, List<String> commandlist) {
 		this(orig.getId(), commandlist, orig.getMenuText(), orig.needSudo(), orig.getParentMenuText(),
 				orig.getToolTipText(), orig.getPriority());
 		logging.debug(this, "SSHCommand_Template this " + this.toString());
@@ -134,10 +116,10 @@ public class SSHCommand_Template implements SSHCommand,
 	 * 
 	 * @param c_list: LinkedList<String>
 	 **/
-	public void setCommands(LinkedList<String> c_list) {
+	public void setCommands(List<String> c_list) {
 		if (c_list != null) {
 			for (String c : c_list) {
-				// c_list.add("echo READY");
+
 				SSHCommand sshc = new Empty_Command(getId(), c, getMenuText(), needSudo());
 				ssh_command.add(sshc);
 				if (firstInitCommands)
@@ -152,6 +134,7 @@ public class SSHCommand_Template implements SSHCommand,
 	 * 
 	 * @param c (command): String
 	 **/
+	@Override
 	public void setCommand(String c) {
 	}
 
@@ -167,7 +150,7 @@ public class SSHCommand_Template implements SSHCommand,
 
 	@Override
 	public String getSecureInfoInCommand() {
-		return confidential_information; // usually null;
+		return confidential_information;
 	}
 
 	@Override
@@ -240,9 +223,9 @@ public class SSHCommand_Template implements SSHCommand,
 	 **/
 	@Override
 	public String getMenuText() {
-		if (menuText != null)
-			if (menuText.length() > 0)
-				return menuText.trim();
+		if (menuText != null && menuText.length() > 0)
+			return menuText.trim();
+
 		return menuText;
 	}
 
@@ -279,7 +262,7 @@ public class SSHCommand_Template implements SSHCommand,
 	/**
 	 * Get the all commands in sshcommand
 	 * 
-	 * @return LinkedList of SSHCommand
+	 * @return List of SSHCommand
 	 **/
 	@Override
 	public LinkedList<SSHCommand> getCommands() {
@@ -317,21 +300,18 @@ public class SSHCommand_Template implements SSHCommand,
 	}
 
 	/**
-	 * Format the commands(LinkedList<SSHCommands>) to LinkedList<String>
+	 * Format the commands(List<SSHCommands>) to LinkedList<String>
 	 * 
 	 * @return LinkedList<String> with the commands
 	 **/
 	@Override
 	public LinkedList<String> getCommandsRaw() {
-		LinkedList<String> commands_string_list = new LinkedList<String>();
+		LinkedList<String> commands_string_list = new LinkedList<>();
 		for (SSHCommand c : ssh_command) {
 			String comstr = c.getCommandRaw();
 			if (!((comstr == null) || (comstr.trim().equals(""))))
 				commands_string_list.add(c.getCommandRaw());
 		}
-
-		// commands_string_list.add("echo ... ");
-		// commands_string_list.add("echo READY");
 
 		return commands_string_list;
 	}
@@ -365,7 +345,7 @@ public class SSHCommand_Template implements SSHCommand,
 	 */
 	@Override
 	public String toString() {
-		StringBuffer com = new StringBuffer("{");
+		StringBuilder com = new StringBuilder("{");
 		com.append(factory.command_map_id).append(":").append(getId()).append(",");
 		com.append(factory.command_map_parentMenuText).append(":").append(getParentMenuText()).append(",");
 		com.append(factory.command_map_menuText).append(":").append(getMenuText()).append(",");
@@ -386,7 +366,7 @@ public class SSHCommand_Template implements SSHCommand,
 	}
 
 	public String commandlistToString() {
-		StringBuffer commandString = new StringBuffer("[");
+		StringBuilder commandString = new StringBuilder("[");
 		for (int i = 0; i < getCommands().size(); i++) {
 			String c = ((Empty_Command) getCommands().get(i)).commandToString();
 			if (i == getCommands().size() - 1)
@@ -407,9 +387,9 @@ public class SSHCommand_Template implements SSHCommand,
 	 */
 	@Override
 	public int compareTo(SSHCommand_Template compareCom) {
-		int dif = ((SSHCommand_Template) this).position - ((SSHCommand_Template) compareCom).getPriority();
+		int dif = this.position - compareCom.getPriority();
 		if (dif == 0)
-			return ((SSHCommand_Template) this).menuText.compareTo(((SSHCommand_Template) compareCom).getMenuText());
+			return this.menuText.compareTo(compareCom.getMenuText());
 		return dif;
 	}
 
@@ -420,7 +400,7 @@ public class SSHCommand_Template implements SSHCommand,
 	 * @return the updated command (this)
 	 */
 	public SSHCommand_Template update(SSHCommand_Template com) {
-		if (this.id == com.getId()) {
+		if (this.id.equals(com.getId())) {
 			logging.debug(this, "update this (" + this.toString() + ") with (" + com.toString() + ")");
 			setCommands(com.getCommandsRaw());
 			setMenuText(com.getMenuText());
@@ -482,7 +462,7 @@ public class SSHCommand_Template implements SSHCommand,
 	 * @return null
 	 */
 	@Override
-	public ArrayList<String> getParameterList() {
+	public List<String> getParameterList() {
 		return null;
 	}
 }

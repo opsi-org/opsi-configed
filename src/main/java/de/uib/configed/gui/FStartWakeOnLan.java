@@ -1,13 +1,12 @@
 package de.uib.configed.gui;
 
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,23 +33,20 @@ import javax.swing.text.InternationalFormatter;
  * @author Rupert Röder
  */
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.observer.RunningInstances;
 import de.uib.utilities.swing.ProgressBarPainter;
-import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 
-//import java.beans.PropertyChangeEvent;
-//import java.beans.PropertyChangeListener;
+public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.thread.WaitingSleeper {
 
-public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.thread.WaitingSleeper
-// implements PropertyChangeListener
-{
-	public static RunningInstances<FStartWakeOnLan> runningInstances = new RunningInstances(FStartWakeOnLan.class,
-			configed.getResourceValue("RunningInstances.askStop.text"));
+	public static final RunningInstances<FStartWakeOnLan> runningInstances = new RunningInstances<>(
+			FStartWakeOnLan.class, configed.getResourceValue("RunningInstances.askStop.text"));
+
 	String scheduleTitleStarter;
-	private LinkedHashMap<String, Integer> labelledDelays;
+	private Map<String, Integer> labelledDelays;
 	JSpinner spinnerDelay;
 	JSpinner spinnerHour;
 	JSpinner spinnerMinute;
@@ -66,8 +62,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	Calendar cal;
 	long startActionMillis;
 	long waitingMillis;
-	// int waitingSeconds;
-	// int sleepingIntervalCount;
+
 	int stepsTotal;
 	boolean waitingMode = false;
 
@@ -75,7 +70,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	LinkedList<String> minutes;
 	String nullDelayValue;
 
-	Map<String, java.util.List<String>> hostSeparationByDepots;
+	Map<String, List<String>> hostSeparationByDepots;
 	Set<String> usedDepots;
 	int clientCount;
 	String[] currentlySelectedClients;
@@ -86,22 +81,21 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 	ConfigedMain main;
 
-	public FStartWakeOnLan(Frame owner, String title, ConfigedMain main) {
+	public FStartWakeOnLan(String title, ConfigedMain main) {
 		super(null, title, false, new String[]
-		// {"start", "cancel"},
+
 		{ configed.getResourceValue("FStartWakeOnLan.start"), configed.getResourceValue("FStartWakeOnLan.cancel") },
 				750, 310);
 		this.main = main;
-		// scheduleTitleStarter = configed.getResourceValue("FStartWakeOnLan.creation");
+
 		setCalToNow();
-		centerOn(de.uib.configed.Globals.frame1);
+		centerOn(Globals.frame1);
 	}
 
-	public void setPredefinedDelays(LinkedHashMap<String, Integer> labelledDelays) {
+	public void setPredefinedDelays(Map<String, Integer> labelledDelays) {
 		this.labelledDelays = labelledDelays;
-		LinkedList<String> delays = new LinkedList<String>(labelledDelays.keySet());
-		// comboDelay.setModel(new DefaultComboBoxModel(new
-		// Vector<String>(labelledDelays.keySet() ) ) );
+		LinkedList<String> delays = new LinkedList<>(labelledDelays.keySet());
+
 		spinnerDelay.setModel(new SpinnerListModel(delays));
 		nullDelayValue = delays.get(0);
 		((JSpinner.ListEditor) spinnerDelay.getEditor()).getTextField().setEditable(false);
@@ -186,28 +180,24 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		super.checkAdditionalPane();
 
 		JPanel contentPane = new JPanel();
-		contentPane.setBackground(de.uib.configed.Globals.backLightBlue);
-		// scrollpane = new JScrollPane();
+		contentPane.setBackground(Globals.BACKGROUND_COLOR_7);
+
 		scrollpane.setViewportView(contentPane);
 
-		labelTimeYetToWait = new JLabel(de.uib.utilities.Globals.giveTimeSpan(0), SwingConstants.RIGHT);
+		labelTimeYetToWait = new JLabel(Globals.giveTimeSpan(0), SwingConstants.RIGHT);
 		labelTimeYetToWait.setToolTipText(configed.getResourceValue("FStartWakeOnLan.timeLeft.toolTip"));
 
 		waitingProgressBar = new JProgressBar();
 		waitingProgressBar.setToolTipText(configed.getResourceValue("FStartWakeOnLan.timeElapsed.toolTip"));
 		waitingProgressBar.setValue(0);
 		waitingProgressBar.setEnabled(true);
-		// waitingProgressBar.setMaximum(max);
 
 		UIDefaults defaults = new UIDefaults();
-		defaults.put("ProgressBar[Enabled].foregroundPainter",
-				new ProgressBarPainter(de.uib.configed.Globals.opsiLogoBlue));
-		defaults.put("ProgressBar[Enabled].backgroundPainter",
-				new ProgressBarPainter(de.uib.configed.Globals.opsiLogoLightBlue));
+		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
+		defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.opsiLogoLightBlue));
 		waitingProgressBar.putClientProperty("Nimbus.Overrides", defaults);
 
 		fieldTaskname = new JTextField();
-		// JTextField fieldStartTime = new CheckedTimeField("");
 		fieldTaskname.getDocument().addDocumentListener(new DocumentListener() {
 
 			private void actOnChange() {
@@ -215,14 +205,17 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 			}
 
+			@Override
 			public void changedUpdate(DocumentEvent e) {
 				actOnChange();
 			}
 
+			@Override
 			public void insertUpdate(DocumentEvent e) {
 				actOnChange();
 			}
 
+			@Override
 			public void removeUpdate(DocumentEvent e) {
 				actOnChange();
 			}
@@ -236,44 +229,40 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		int clientCountWidth = 100;
 
 		spinnerHour = new JSpinner();
-		JFormattedTextField textFieldHour = ((JFormattedTextField) ((JSpinner.DefaultEditor) spinnerHour.getEditor())
-				.getTextField());
+		JFormattedTextField textFieldHour = (((JSpinner.DefaultEditor) spinnerHour.getEditor()).getTextField());
 		textFieldHour.setEditable(false);
 
 		spinnerMinute = new JSpinner();
-		JFormattedTextField textFieldMinute = ((JFormattedTextField) ((JSpinner.DefaultEditor) spinnerMinute
-				.getEditor()).getTextField());
+		JFormattedTextField textFieldMinute = (((JSpinner.DefaultEditor) spinnerMinute.getEditor()).getTextField());
 		textFieldMinute.setEditable(false);
 
-		try {
-			InternationalFormatter internationalFormatter = new InternationalFormatter(new DecimalFormat("00"));
+		InternationalFormatter internationalFormatter = new InternationalFormatter(new DecimalFormat("00"));
 
-			((DefaultFormatterFactory) textFieldHour.getFormatterFactory()).setDefaultFormatter(internationalFormatter);
-			((DefaultFormatterFactory) textFieldMinute.getFormatterFactory())
-					.setDefaultFormatter(internationalFormatter);
-
-		} catch (Exception e) {
-		} ;
+		((DefaultFormatterFactory) textFieldHour.getFormatterFactory()).setDefaultFormatter(internationalFormatter);
+		((DefaultFormatterFactory) textFieldMinute.getFormatterFactory()).setDefaultFormatter(internationalFormatter);
 
 		buttonSetNew = new IconButton(configed.getResourceValue("FStartWakeOnLan.buttonSetNew"), "images/reload16.png",
 				"images/reload16_over.png", "images/reload16_disabled.png");
-		// buttonSetNew.setBackground(de.uib.utilities.de.uib.configed.Globals.backgroundLightGrey);
+
 		buttonSetNew.setToolTipText(configed.getResourceValue("FStartWakeOnLan.buttonSetNew.tooltip"));
 
 		buttonSetNew.addActionListener(new ActionListener() {
+
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.debug(this, "actionPerformed");
 				setClients();
-				// setNowTimeAsTarget();
+
 			}
 		});
 
 		buttonRefreshTime = new IconButton(configed.getResourceValue("FStartWakeOnLan.buttonRefreshTime"),
 				"images/clock16.png", "images/clock16.png", "images/clock16.png");
-		// buttonRefreshTime.setBackground(de.uib.utilities.de.uib.configed.Globals.backgroundLightGrey);
+
 		buttonRefreshTime.setToolTipText("Zeit neu setzen");
 
 		buttonRefreshTime.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				logging.debug(this, "actionPerformed");
 				setNowTimeAsTarget();
@@ -291,11 +280,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		JLabel labelDepotCount = new JLabel(configed.getResourceValue("FStartWakeOnLan.countOfDepots"));
 
 		labelStarttime = new JLabel(readTime(cal));
-		// labelStarttime.setFont(de.uib.configed.Globals.defaultFont);
-		// labelStarttime.setEditable(false);
-		// labelStarttime.setEnabled(false);
 
-		// = new JLabel("delay between triggering WOL events (per depot)");
 		spinnerDelay = new JSpinner();
 
 		JPanel panelTimeSelection = new JPanel();
@@ -306,44 +291,23 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		panelTimeSelection.setLayout(lPanelTimeSelection);
 
 		lPanelTimeSelection.setVerticalGroup(lPanelTimeSelection.createParallelGroup(GroupLayout.Alignment.CENTER)
-				.addComponent(spinnerHour, de.uib.configed.Globals.BUTTON_HEIGHT, de.uib.configed.Globals.BUTTON_HEIGHT,
-						de.uib.configed.Globals.BUTTON_HEIGHT)
-				.addComponent(labelColon, de.uib.configed.Globals.BUTTON_HEIGHT, de.uib.configed.Globals.BUTTON_HEIGHT,
-						de.uib.configed.Globals.BUTTON_HEIGHT)
-				.addComponent(spinnerMinute, de.uib.configed.Globals.BUTTON_HEIGHT,
-						de.uib.configed.Globals.BUTTON_HEIGHT, de.uib.configed.Globals.BUTTON_HEIGHT));
+				.addComponent(spinnerHour, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(labelColon, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(spinnerMinute, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT));
 
 		lPanelTimeSelection.setHorizontalGroup(lPanelTimeSelection.createSequentialGroup()
-				.addComponent(spinnerHour, de.uib.configed.Globals.TIME_SPINNER_WIDTH,
-						de.uib.configed.Globals.TIME_SPINNER_WIDTH, de.uib.configed.Globals.TIME_SPINNER_WIDTH)
-				.addGap(de.uib.configed.Globals.HGAP_SIZE, de.uib.configed.Globals.HGAP_SIZE,
-						de.uib.configed.Globals.HGAP_SIZE)
-				.addComponent(labelColon, de.uib.configed.Globals.HGAP_SIZE, de.uib.configed.Globals.HGAP_SIZE,
-						de.uib.configed.Globals.HGAP_SIZE)
-				.addComponent(spinnerMinute, de.uib.configed.Globals.TIME_SPINNER_WIDTH,
-						de.uib.configed.Globals.TIME_SPINNER_WIDTH, de.uib.configed.Globals.TIME_SPINNER_WIDTH));
+				.addComponent(spinnerHour, Globals.TIME_SPINNER_WIDTH, Globals.TIME_SPINNER_WIDTH,
+						Globals.TIME_SPINNER_WIDTH)
+				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+				.addComponent(labelColon, Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+				.addComponent(spinnerMinute, Globals.TIME_SPINNER_WIDTH, Globals.TIME_SPINNER_WIDTH,
+						Globals.TIME_SPINNER_WIDTH));
 
-		spinnerHour.addChangeListener(new javax.swing.event.ChangeListener() {
-			@Override
-			public void stateChanged(javax.swing.event.ChangeEvent e) {
-				// logging.info(this, "stateChanged " + spinnerHour.getValue() + " " +
-				// spinnerHour.getValue().getClass().getName());
+		spinnerHour.addChangeListener(changeEvent -> produceTargetTime(Calendar.HOUR_OF_DAY,
+				Integer.valueOf(spinnerHour.getValue().toString())));
 
-				produceTargetTime(Calendar.HOUR_OF_DAY, Integer.valueOf(spinnerHour.getValue().toString()));
-
-			}
-		});
-
-		spinnerMinute.addChangeListener(new javax.swing.event.ChangeListener() {
-			@Override
-			public void stateChanged(javax.swing.event.ChangeEvent e) {
-				// logging.info(this, "stateChanged " + spinnerMinute.getValue() + " " +
-				// spinnerMinute.getValue().getClass().getName());
-
-				produceTargetTime(Calendar.MINUTE, Integer.valueOf(spinnerMinute.getValue().toString()));
-
-			}
-		});
+		spinnerMinute.addChangeListener(changeEvent -> produceTargetTime(Calendar.MINUTE,
+				Integer.valueOf(spinnerMinute.getValue().toString())));
 
 		JPanel panelSpinnerDelay = new JPanel();
 		panelSpinnerDelay.setOpaque(false);
@@ -351,132 +315,107 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		panelSpinnerDelay.setLayout(lPanelSpinnerDelay);
 
 		lPanelSpinnerDelay.setVerticalGroup(lPanelSpinnerDelay.createParallelGroup().addComponent(spinnerDelay,
-				de.uib.configed.Globals.BUTTON_HEIGHT, de.uib.configed.Globals.BUTTON_HEIGHT,
-				de.uib.configed.Globals.BUTTON_HEIGHT));
+				Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT));
 		lPanelSpinnerDelay.setHorizontalGroup(lPanelSpinnerDelay.createSequentialGroup().addComponent(spinnerDelay,
-				2 * de.uib.configed.Globals.TIME_SPINNER_WIDTH, 2 * de.uib.configed.Globals.TIME_SPINNER_WIDTH,
-				2 * de.uib.configed.Globals.TIME_SPINNER_WIDTH));
-
-		// contentPane.setBackground( java.awt.Color.BLUE );
+				2 * Globals.TIME_SPINNER_WIDTH, 2 * Globals.TIME_SPINNER_WIDTH, 2 * Globals.TIME_SPINNER_WIDTH));
 
 		GroupLayout lPanel = new GroupLayout(contentPane);
 		contentPane.setLayout(lPanel);
 
-		lPanel.setVerticalGroup(lPanel.createSequentialGroup().addGap(de.uib.configed.Globals.VGAP_SIZE)
+		lPanel.setVerticalGroup(lPanel.createSequentialGroup().addGap(Globals.VGAP_SIZE)
 				.addGroup(lPanel.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(fieldTaskname,
-						de.uib.configed.Globals.BUTTON_HEIGHT, de.uib.configed.Globals.BUTTON_HEIGHT,
-						de.uib.configed.Globals.BUTTON_HEIGHT))
+						Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
 				.addGroup(lPanel.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(buttonRefreshTime, de.uib.configed.Globals.BUTTON_HEIGHT,
-								de.uib.configed.Globals.BUTTON_HEIGHT, de.uib.configed.Globals.BUTTON_HEIGHT)
-						.addComponent(buttonSetNew, de.uib.configed.Globals.BUTTON_HEIGHT,
-								de.uib.configed.Globals.BUTTON_HEIGHT, de.uib.configed.Globals.BUTTON_HEIGHT))
-				.addGap(de.uib.configed.Globals.VGAP_SIZE)
+						.addComponent(buttonRefreshTime, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(buttonSetNew, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
+				.addGap(Globals.VGAP_SIZE)
 				.addGroup(lPanel.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelDelay, de.uib.configed.Globals.LINE_HEIGHT,
-								de.uib.configed.Globals.LINE_HEIGHT, de.uib.configed.Globals.LINE_HEIGHT)
-						.addComponent(panelSpinnerDelay, de.uib.configed.Globals.LINE_HEIGHT,
-								de.uib.configed.Globals.LINE_HEIGHT, de.uib.configed.Globals.LINE_HEIGHT))
-				.addGap(de.uib.configed.Globals.VGAP_SIZE)
+						.addComponent(labelDelay, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(panelSpinnerDelay, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+				.addGap(Globals.VGAP_SIZE)
 				.addGroup(lPanel.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(panelTimeSelection, de.uib.configed.Globals.LINE_HEIGHT,
-								de.uib.configed.Globals.LINE_HEIGHT, de.uib.configed.Globals.LINE_HEIGHT)
-						.addComponent(labelStartdelay, de.uib.configed.Globals.LINE_HEIGHT,
-								de.uib.configed.Globals.LINE_HEIGHT, de.uib.configed.Globals.LINE_HEIGHT))
+						.addComponent(panelTimeSelection, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(labelStartdelay, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				.addGroup(lPanel.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelStartAt, de.uib.configed.Globals.LINE_HEIGHT,
-								de.uib.configed.Globals.LINE_HEIGHT, de.uib.configed.Globals.LINE_HEIGHT)
-						.addComponent(labelStarttime, de.uib.configed.Globals.LINE_HEIGHT,
-								de.uib.configed.Globals.LINE_HEIGHT, de.uib.configed.Globals.LINE_HEIGHT))
-				.addGap(de.uib.configed.Globals.VGAP_SIZE)
+						.addComponent(labelStartAt, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(labelStarttime, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+				.addGap(Globals.VGAP_SIZE)
 				.addGroup(lPanel.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(labelClientCount, de.uib.configed.Globals.LINE_HEIGHT,
-								de.uib.configed.Globals.LINE_HEIGHT, de.uib.configed.Globals.LINE_HEIGHT)
-						.addComponent(fieldClientCount, de.uib.configed.Globals.LINE_HEIGHT,
-								de.uib.configed.Globals.LINE_HEIGHT, de.uib.configed.Globals.LINE_HEIGHT)
-						.addComponent(labelDepotCount, de.uib.configed.Globals.LINE_HEIGHT,
-								de.uib.configed.Globals.LINE_HEIGHT, de.uib.configed.Globals.LINE_HEIGHT)
-						.addComponent(fieldInvolvedDepotsCount, de.uib.configed.Globals.LINE_HEIGHT,
-								de.uib.configed.Globals.LINE_HEIGHT, de.uib.configed.Globals.LINE_HEIGHT))
-				.addGap(de.uib.configed.Globals.VGAP_SIZE)
+						.addComponent(labelClientCount, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(fieldClientCount, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(labelDepotCount, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(fieldInvolvedDepotsCount, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT))
+				.addGap(Globals.VGAP_SIZE)
 
 				.addGroup(lPanel.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(waitingProgressBar, de.uib.configed.Globals.PROGRESS_BAR_HEIGHT,
-								de.uib.configed.Globals.PROGRESS_BAR_HEIGHT,
-								de.uib.configed.Globals.PROGRESS_BAR_HEIGHT)
-						.addComponent(labelTimeYetToWait, de.uib.configed.Globals.LINE_HEIGHT,
-								de.uib.configed.Globals.LINE_HEIGHT, de.uib.configed.Globals.LINE_HEIGHT)));
+						.addComponent(waitingProgressBar, Globals.PROGRESS_BAR_HEIGHT, Globals.PROGRESS_BAR_HEIGHT,
+								Globals.PROGRESS_BAR_HEIGHT)
+						.addComponent(labelTimeYetToWait, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT)));
 
-		lPanel.setHorizontalGroup(lPanel.createParallelGroup().addGroup(lPanel.createSequentialGroup()
-				.addGap(de.uib.configed.Globals.MIN_HGAP_SIZE, de.uib.configed.Globals.HGAP_SIZE, Short.MAX_VALUE)
-				.addComponent(fieldTaskname, 2 * de.uib.configed.Globals.BUTTON_WIDTH,
-						3 * de.uib.configed.Globals.BUTTON_WIDTH, 3 * de.uib.configed.Globals.BUTTON_WIDTH)
-				.addGap(de.uib.configed.Globals.MIN_HGAP_SIZE, de.uib.configed.Globals.HGAP_SIZE, Short.MAX_VALUE))
-				.addGroup(lPanel.createSequentialGroup()
-						.addGap(de.uib.configed.Globals.MIN_HGAP_SIZE, de.uib.configed.Globals.HGAP_SIZE,
-								Short.MAX_VALUE)
-						.addGap(2 * de.uib.configed.Globals.BUTTON_WIDTH, 3 * de.uib.configed.Globals.BUTTON_WIDTH,
-								3 * de.uib.configed.Globals.BUTTON_WIDTH)
-						.addComponent(buttonSetNew, de.uib.configed.Globals.BUTTON_WIDTH / 2,
-								de.uib.configed.Globals.BUTTON_WIDTH / 2, de.uib.configed.Globals.BUTTON_WIDTH / 2)
-						.addComponent(buttonRefreshTime, de.uib.configed.Globals.BUTTON_WIDTH / 2,
-								de.uib.configed.Globals.BUTTON_WIDTH / 2, de.uib.configed.Globals.BUTTON_WIDTH / 2)
-						.addGap(de.uib.configed.Globals.MIN_HGAP_SIZE, de.uib.configed.Globals.HGAP_SIZE,
-								Short.MAX_VALUE))
-				.addGroup(lPanel.createSequentialGroup()
-						.addGap(de.uib.configed.Globals.HGAP_SIZE, de.uib.configed.Globals.HGAP_SIZE,
-								de.uib.configed.Globals.HGAP_SIZE)
-						.addComponent(panelSpinnerDelay, de.uib.configed.Globals.BUTTON_WIDTH,
-								de.uib.configed.Globals.BUTTON_WIDTH, de.uib.configed.Globals.BUTTON_WIDTH)
-						.addGap(de.uib.configed.Globals.HGAP_SIZE, de.uib.configed.Globals.HGAP_SIZE,
-								de.uib.configed.Globals.HGAP_SIZE)
-						.addComponent(labelDelay, 2 * de.uib.configed.Globals.BUTTON_WIDTH,
-								2 * de.uib.configed.Globals.BUTTON_WIDTH, 3 * de.uib.configed.Globals.BUTTON_WIDTH)
-						.addGap(de.uib.configed.Globals.HGAP_SIZE, de.uib.configed.Globals.HGAP_SIZE, Short.MAX_VALUE))
-				.addGroup(lPanel.createSequentialGroup()
-						.addGap(de.uib.configed.Globals.HGAP_SIZE, de.uib.configed.Globals.HGAP_SIZE,
-								de.uib.configed.Globals.HGAP_SIZE)
-						.addComponent(panelTimeSelection, de.uib.configed.Globals.BUTTON_WIDTH,
-								de.uib.configed.Globals.BUTTON_WIDTH, de.uib.configed.Globals.BUTTON_WIDTH)
-						.addGap(de.uib.configed.Globals.HGAP_SIZE, de.uib.configed.Globals.HGAP_SIZE,
-								de.uib.configed.Globals.HGAP_SIZE)
-						.addComponent(labelStartdelay, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-				.addGroup(lPanel.createSequentialGroup()
-						.addGap(de.uib.configed.Globals.HGAP_SIZE, de.uib.configed.Globals.HGAP_SIZE,
-								de.uib.configed.Globals.HGAP_SIZE)
-						.addGap(de.uib.configed.Globals.BUTTON_WIDTH, de.uib.configed.Globals.BUTTON_WIDTH,
-								de.uib.configed.Globals.BUTTON_WIDTH)
-						.addGap(de.uib.configed.Globals.HGAP_SIZE, de.uib.configed.Globals.HGAP_SIZE,
-								de.uib.configed.Globals.HGAP_SIZE)
-						.addComponent(labelStartAt, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(de.uib.configed.Globals.HGAP_SIZE, de.uib.configed.Globals.HGAP_SIZE,
-								de.uib.configed.Globals.HGAP_SIZE)
-						.addComponent(labelStarttime, 1 * de.uib.configed.Globals.BUTTON_WIDTH,
-								2 * de.uib.configed.Globals.BUTTON_WIDTH, 2 * de.uib.configed.Globals.BUTTON_WIDTH)
-						.addGap(de.uib.configed.Globals.HGAP_SIZE, de.uib.configed.Globals.HGAP_SIZE, Short.MAX_VALUE))
-				.addGroup(lPanel.createSequentialGroup().addGap(de.uib.configed.Globals.HGAP_SIZE)
-						.addGap(de.uib.configed.Globals.BUTTON_WIDTH).addGap(de.uib.configed.Globals.HGAP_SIZE)
-						.addComponent(labelClientCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(de.uib.configed.Globals.HGAP_SIZE / 2)
-						.addComponent(fieldClientCount, clientCountWidth, clientCountWidth, Short.MAX_VALUE)
-						.addGap(de.uib.configed.Globals.HGAP_SIZE, de.uib.configed.Globals.HGAP_SIZE,
-								de.uib.configed.Globals.HGAP_SIZE)
-						.addComponent(labelDepotCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(de.uib.configed.Globals.HGAP_SIZE / 2)
-						.addComponent(fieldInvolvedDepotsCount, clientCountWidth, clientCountWidth, Short.MAX_VALUE)
-						.addGap(de.uib.configed.Globals.HGAP_SIZE))
+		lPanel.setHorizontalGroup(
+				lPanel.createParallelGroup()
+						.addGroup(lPanel.createSequentialGroup()
+								.addGap(Globals.MIN_HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE)
+								.addComponent(fieldTaskname, 2 * Globals.BUTTON_WIDTH, 3 * Globals.BUTTON_WIDTH,
+										3 * Globals.BUTTON_WIDTH)
+								.addGap(Globals.MIN_HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE))
+						.addGroup(lPanel.createSequentialGroup()
+								.addGap(Globals.MIN_HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE)
+								.addGap(2 * Globals.BUTTON_WIDTH, 3 * Globals.BUTTON_WIDTH, 3 * Globals.BUTTON_WIDTH)
+								.addComponent(buttonSetNew, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH / 2,
+										Globals.BUTTON_WIDTH / 2)
+								.addComponent(buttonRefreshTime, Globals.BUTTON_WIDTH / 2, Globals.BUTTON_WIDTH / 2,
+										Globals.BUTTON_WIDTH / 2)
+								.addGap(Globals.MIN_HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE))
+						.addGroup(lPanel.createSequentialGroup()
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addComponent(panelSpinnerDelay, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+										Globals.BUTTON_WIDTH)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addComponent(labelDelay, 2 * Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH,
+										3 * Globals.BUTTON_WIDTH)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE))
+						.addGroup(lPanel.createSequentialGroup()
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addComponent(panelTimeSelection, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+										Globals.BUTTON_WIDTH)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addComponent(labelStartdelay, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addGroup(lPanel.createSequentialGroup()
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addGap(Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addComponent(labelStartAt, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addComponent(labelStarttime, 1 * Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH,
+										2 * Globals.BUTTON_WIDTH)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE))
+						.addGroup(lPanel.createSequentialGroup().addGap(Globals.HGAP_SIZE).addGap(Globals.BUTTON_WIDTH)
+								.addGap(Globals.HGAP_SIZE)
+								.addComponent(labelClientCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.HGAP_SIZE / 2)
+								.addComponent(fieldClientCount, clientCountWidth, clientCountWidth, Short.MAX_VALUE)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addComponent(labelDepotCount, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.HGAP_SIZE / 2)
+								.addComponent(fieldInvolvedDepotsCount, clientCountWidth, clientCountWidth,
+										Short.MAX_VALUE)
+								.addGap(Globals.HGAP_SIZE))
 
-				.addGroup(lPanel.createSequentialGroup().addGap(de.uib.configed.Globals.HGAP_SIZE)
-						.addComponent(waitingProgressBar, de.uib.configed.Globals.BUTTON_WIDTH * 2,
-								de.uib.configed.Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
-						.addGap(de.uib.configed.Globals.HGAP_SIZE)
-						.addComponent(labelTimeYetToWait, de.uib.configed.Globals.BUTTON_WIDTH,
-								de.uib.configed.Globals.BUTTON_WIDTH, de.uib.configed.Globals.BUTTON_WIDTH)
-						.addGap(de.uib.configed.Globals.HGAP_SIZE))
+						.addGroup(lPanel.createSequentialGroup().addGap(Globals.HGAP_SIZE)
+								.addComponent(waitingProgressBar, Globals.BUTTON_WIDTH * 2, Globals.BUTTON_WIDTH * 2,
+										Short.MAX_VALUE)
+								.addGap(Globals.HGAP_SIZE).addComponent(labelTimeYetToWait, Globals.BUTTON_WIDTH,
+										Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
+								.addGap(Globals.HGAP_SIZE))
 
 		);
 
@@ -488,8 +427,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		if (spinnerDelay.getValue() == nullDelayValue) {
 			main.wakeUp(currentlySelectedClients, scheduleTitle);
 		} else {
-			main.wakeUpWithDelay(labelledDelays.get((String) spinnerDelay.getValue()), currentlySelectedClients,
-					scheduleTitle);
+			main.wakeUpWithDelay(labelledDelays.get(spinnerDelay.getValue()), currentlySelectedClients, scheduleTitle);
 		}
 
 		leave();
@@ -501,48 +439,54 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		waitingMode = true;
 		logging.info(this, "startWaiting " + runningInstances);
 		runningInstances.add(this, scheduleTitle);
-		// setCalToNowAsStart(); //update start time values
-		waitingTask = new WaitingWorker((WaitingSleeper) this);
-		// waitingTask.addPropertyChangeListener(this);
+
+		waitingTask = new WaitingWorker(this);
+
 		waitingTask.execute();
 
 	}
 
 	// implementing WaitingSleeper
+	@Override
 	public void actAfterWaiting() {
 		startAction();
 	}
 
+	@Override
 	public JProgressBar getProgressBar() {
 		return waitingProgressBar;
 	}
 
+	@Override
 	public JLabel getLabel() {
 		return labelTimeYetToWait;
 	}
 
+	@Override
 	public long getStartActionMillis() {
 		return startActionMillis;
 	}
 
+	@Override
 	public long getWaitingMillis() {
 		return waitingMillis;
 	}
 
+	@Override
 	public long getOneProgressBarLengthWaitingMillis() {
 		return waitingMillis;
 	}
 
+	@Override
 	public String setLabellingStrategy(long millisLevel) {
 		return " " + configed.getResourceValue("FStartWakeOnLan.timeLeft") + "  "
-				+ de.uib.utilities.Globals.giveTimeSpan(getWaitingMillis() - millisLevel);
+				+ Globals.giveTimeSpan(getWaitingMillis() - millisLevel);
 	}
 
 	@Override
 	public void doAction1() {
 
 		logging.info(this, "doAction1");
-		// super.doAction1(); //includes leave()
 
 		if (currentlySelectedClients == null || currentlySelectedClients.length == 0) {
 			JOptionPane.showMessageDialog(this, configed.getResourceValue("FStartWakeOnLan.noClientsSelected.text"),
@@ -559,14 +503,11 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 		scheduleTitle = "  scheduler" + scheduleTitle;
 		startActionMillis = new GregorianCalendar().getTimeInMillis();
-		// logging.info(this, "doAction1 calTimeMillis " + calTimeMillis);
-		// logging.info(this, "doAction1 startActionMillis " + startActionMillis);
+
 		waitingMillis = cal.getTimeInMillis() - startActionMillis;
-		// logging.info(this, "doAction1 waitingMillis " + waitingMillis);
+
 		if (waitingMillis < 0)
 			waitingMillis = 0;
-		// waitingSeconds = (int) (waitingMillis / 1000);
-		// logging.info(this, "doAction1 " + waitingSeconds);
 
 		if (waitingMillis < 100) {
 			startAction();
@@ -583,8 +524,8 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		logging.info(this, "leave  waitingMode  " + waitingMode);
 
 		if (waitingMode) {
-			int returnedOption = JOptionPane.NO_OPTION;
-			returnedOption = JOptionPane.showOptionDialog(this, configed.getResourceValue("FStartWakeOnLan.allowClose"),
+			int returnedOption = JOptionPane.showOptionDialog(this,
+					configed.getResourceValue("FStartWakeOnLan.allowClose"),
 					configed.getResourceValue("FStartWakeOnLan.allowClose.title"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE, null, null, null);
 
@@ -613,144 +554,4 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		logging.info(this, "doAction2");
 		leave();
 	}
-
-	/*
-	 * PropertyChangeListener
-	 * public void propertyChange(PropertyChangeEvent evt)
-	 * {
-	 * logging.info(this, "propertyChange event " + evt);
-	 * if ("progress" == evt.getPropertyName())
-	 * {
-	 * int progress = (Integer) evt.getNewValue();
-	 * 
-	 * logging.info(this, "propertyChange  waitingProgressBar max " +
-	 * waitingProgressBar.getMaximum() + " value " + waitingProgressBar.getValue());
-	 * 
-	 * waitingProgressBar.setValue(progress);
-	 * }
-	 * }
-	 * 
-	 */
-
-	/*
-	 * class WaitingTask extends SwingWorker<Void, Long> {
-	 * //
-	 * // Main task. Executed in background thread.
-	 * //
-	 * 
-	 * private boolean stopped = false;
-	 * private final JLabel statusLabel;
-	 * private final JProgressBar progressBar;
-	 * 
-	 * WaitingTask(JProgressBar progressBar, JLabel statusLabel)
-	 * {
-	 * this.progressBar = progressBar;
-	 * this.statusLabel = statusLabel;
-	 * }
-	 * 
-	 * 
-	 * public void stop()
-	 * {
-	 * logging.info(this, "stop");
-	 * stopped = true;
-	 * cancel(true);
-	 * }
-	 * 
-	 * 
-	 * @Override
-	 * public Void doInBackground() {
-	 * 
-	 * int progress = 0;
-	 * setProgress( progress );
-	 * 
-	 * //int noOfSteps = 100;
-	 * //long timeStepMillis = (long) (waitingMillis / noOfSteps );
-	 * 
-	 * long timeStepMillis = (long) 1000;
-	 * 
-	 * //long noOfSteps = (long) (waitingMillis/ timeStepMillis);
-	 * 
-	 * //logging.info(this, " doInBackground waitingMillis " + waitingMillis );
-	 * 
-	 * 
-	 * long elapsedMillis = 0;
-	 * long elapsedMins = 0;
-	 * 
-	 * 
-	 * 
-	 * 
-	 * //while (progress < 100 && !stopped)
-	 * while (elapsedMillis < waitingMillis && !stopped)
-	 * {
-	 * try {
-	 * Thread.sleep( timeStepMillis );
-	 * }
-	 * catch (InterruptedException ignore)
-	 * {
-	 * logging.info(this, "InterruptedException");
-	 * }
-	 * 
-	 * long nowMillis = new GregorianCalendar().getTimeInMillis();
-	 * //elapsedMillis = timeStepMillis * progress;;
-	 * 
-	 * elapsedMillis = nowMillis - startActionMillis;
-	 * elapsedMins = (elapsedMillis / 1000) / 60;
-	 * 
-	 * //logging.info(this, " doInBackground progress elapsedMillis " +
-	 * elapsedMillis);
-	 * //logging.info(this, " doInBackground progress " + progress +
-	 * " totalTimeElapsed  [min] " + elapsedMins );
-	 * 
-	 * publish(elapsedMillis);
-	 * 
-	 * //firePropertyChange("elapsedMins", 0, elapsedMins);
-	 * 
-	 * 
-	 * 
-	 * //progress++;
-	 * //setProgress( progress );
-	 * 
-	 * //setElapsedMins(elapsedMins);
-	 * }
-	 * return null;
-	 * }
-	 * 
-	 * 
-	 * @Override
-	 * protected void process( java.util.List<Long> listOfMillis )
-	 * {
-	 * //update the steps which are done
-	 * //logging.info(this, "process, we have got list " + listOfMillis);
-	 * 
-	 * long millis = listOfMillis.get( listOfMillis.size() - 1);
-	 * //logging.info(this, "process :: millis " + millis);
-	 * statusLabel.setText(
-	 * //"passed " + giveTimeSpan( millis) +
-	 * " " + configed .getResourceValue("FStartWakeOnLan.timeLeft") + "  " +
-	 * giveTimeSpan( waitingMillis - millis ) );
-	 * 
-	 * int barLength = progressBar.getMaximum() - progressBar.getMinimum();
-	 * 
-	 * //logging.info(this, "progressBar.getMaximum() " + progressBar.getMaximum() +
-	 * ":: progressBar.getMinimum() " + progressBar.getMinimum()
-	 * // + ":: millis " + millis + " :: waitingMillis " + waitingMillis +
-	 * " :: min + " + ((int) ((barLength * millis) / waitingMillis)));
-	 * 
-	 * progressBar.setValue( ( int ) (progressBar.getMinimum() + (int) ( (barLength
-	 * * millis) / waitingMillis)) ) ;
-	 * 
-	 * }
-	 * 
-	 * //
-	 * // Executed in event dispatching thread
-	 * //
-	 * 
-	 * @Override
-	 * public void done() {
-	 * logging.info(this, "done,  stopped is " + stopped );
-	 * if (!stopped) startAction();
-	 * }
-	 * }
-	 * 
-	 */
 }

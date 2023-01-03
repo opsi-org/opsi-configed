@@ -16,6 +16,8 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
@@ -27,7 +29,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.uib.utilities.Globals;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 public class PanelStateSwitch extends JPanel {
@@ -36,30 +38,20 @@ public class PanelStateSwitch extends JPanel {
 	protected Enum startValue;
 	protected Class myenumClass;
 	protected Enum[] values;
-	protected LinkedHashMap<Enum, String> labels;
+	protected Map<Enum, String> labels;
 	protected String title;
-	protected LinkedHashMap<Enum, JRadioButton> groupedButtons;
+	protected Map<Enum, JRadioButton> groupedButtons;
 	protected Enumsetter enumSetter;
 	protected Font primaryFont;
 	protected int vGap;
 	protected int hGap;
 
-	protected java.util.List<ChangeListener> changeListeners;
+	protected List<ChangeListener> changeListeners;
 
 	@FunctionalInterface
 	public interface Enumsetter {
 		public void setValue(Enum val);
 	}
-
-	/*
-	 * 
-	 * public PanelStateSwitch(Enum startValue, Enum[]values)
-	 * {
-	 * 
-	 * this( startValue, values, null);
-	 * 
-	 * }
-	 */
 
 	public PanelStateSwitch(Enum startValue, Enum[] values, Class myenum, Enumsetter enumSetter) {
 		this(null, startValue, values, null, myenum, enumSetter);
@@ -84,12 +76,12 @@ public class PanelStateSwitch extends JPanel {
 		this.hGap = hGap;
 		this.vGap = vGap;
 
-		changeListeners = new ArrayList<ChangeListener>();
+		changeListeners = new ArrayList<>();
 
 		if (labels != null && labels.length < values.length)
 			logging.warning(this, "missing label");
 
-		this.labels = new LinkedHashMap<Enum, String>();
+		this.labels = new LinkedHashMap<>();
 
 		for (int i = 0; i < values.length; i++) {
 			if (labels == null || i > labels.length - 1)
@@ -120,10 +112,8 @@ public class PanelStateSwitch extends JPanel {
 		}
 
 		this.startValue = startValue;
-		// logging.info(this, " class of start Value " + startValue.getClass());
-		// logging.info(this, " declaring class " + startValue.getDeclaringClass());
+
 		logging.info(this, " string val of start value " + startValue.toString());
-		// logging.info(this, " class " + (values instanceof Object[]) );
 
 		initComponents();
 
@@ -151,11 +141,10 @@ public class PanelStateSwitch extends JPanel {
 	protected void initComponents() {
 		primaryFont = Globals.defaultFont;
 		ButtonGroup buttonGroup = new ButtonGroup();
-		groupedButtons = new LinkedHashMap<Enum, JRadioButton>();
+		groupedButtons = new LinkedHashMap<>();
 
-		ImageIcon activatedIcon = de.uib.configed.Globals.createImageIcon("images/checked_withoutbox.png", "");
-		ImageIcon deactivatedIcon = de.uib.configed.Globals.createImageIcon("images/checked_empty_withoutbox.png", "");
-		final PanelStateSwitch THIS = this;
+		ImageIcon activatedIcon = Globals.createImageIcon("images/checked_withoutbox.png", "");
+		ImageIcon deactivatedIcon = Globals.createImageIcon("images/checked_empty_withoutbox.png", "");
 
 		for (Enum val : values) {
 			JRadioButton button = new JRadioButton(labels.get(val));
@@ -168,34 +157,35 @@ public class PanelStateSwitch extends JPanel {
 			buttonGroup.add(button);
 
 			groupedButtons.put(val, button);
-			button.addActionListener(
-					(ActionEvent ae) -> {
-						producedValue = val;
-						if (enumSetter != null)
-							enumSetter.setValue(val);
-						logging.debug(this, "actionEvent with result " + val);
-						notifyChangeListeners(new ChangeEvent(this));
-					})
+			button.addActionListener((ActionEvent ae) -> {
+				producedValue = val;
+				if (enumSetter != null)
+					enumSetter.setValue(val);
+				logging.debug(this, "actionEvent with result " + val);
+				notifyChangeListeners(new ChangeEvent(this));
+			})
 
 			;
 
 			// hack to get the icons behaving as expected
-			button.addMouseListener(
-					new MouseAdapter() {
-						public void mouseEntered(MouseEvent e) {
-							// logging.info(this, "mouse entered");
-							if (!button.isSelected())
-								button.setSelectedIcon(deactivatedIcon);
-						}
+			button.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseEntered(MouseEvent e) {
 
-						public void mouseClicked(MouseEvent e) {
-							button.setSelectedIcon(activatedIcon);
-						}
+					if (!button.isSelected())
+						button.setSelectedIcon(deactivatedIcon);
+				}
 
-						public void mouseExited(MouseEvent e) {
-							button.setSelectedIcon(activatedIcon);
-						}
-					});
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					button.setSelectedIcon(activatedIcon);
+				}
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+					button.setSelectedIcon(activatedIcon);
+				}
+			});
 		}
 
 		producedValue = startValue;
@@ -204,7 +194,7 @@ public class PanelStateSwitch extends JPanel {
 	}
 
 	protected void initLayout() {
-		setBackground(Globals.backgroundWhite);
+		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		JLabel labelTitle = new JLabel("");
 		if (title != null)
@@ -215,7 +205,6 @@ public class PanelStateSwitch extends JPanel {
 		GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
 		// this.setBorder(new
-		// javax.swing.border.LineBorder(de.uib.configed.Globals.blueGrey, 1, true));
 
 		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
 		layout.setVerticalGroup(vGroup);
@@ -223,16 +212,12 @@ public class PanelStateSwitch extends JPanel {
 		vGroup.addGap(vGap);
 
 		if (title != null)
-			vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-					.addComponent(labelTitle, de.uib.utilities.Globals.smallHeight,
-							de.uib.utilities.Globals.smallHeight, de.uib.utilities.Globals.smallHeight));
-
-		// vGroup.addContainerGap();
+			vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(labelTitle,
+					Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT));
 
 		for (Enum val : values) {
-			vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-					.addComponent(groupedButtons.get(val), de.uib.utilities.Globals.smallHeight,
-							de.uib.utilities.Globals.smallHeight, de.uib.utilities.Globals.smallHeight)
+			vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(
+					groupedButtons.get(val), Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT)
 
 			);
 		}
@@ -243,14 +228,11 @@ public class PanelStateSwitch extends JPanel {
 		layout.setHorizontalGroup(hGroup);
 
 		if (title != null)
-			hGroup.addGroup(layout.createSequentialGroup()
-					.addGap(hGap)
-					.addComponent(labelTitle, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(hGap));
+			hGroup.addGroup(layout.createSequentialGroup().addGap(hGap)
+					.addComponent(labelTitle, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE).addGap(hGap));
 
 		for (Enum val : values) {
-			hGroup.addGroup(layout.createSequentialGroup()
-					.addGap(hGap)
+			hGroup.addGroup(layout.createSequentialGroup().addGap(hGap)
 					.addComponent(groupedButtons.get(val), 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGap(hGap));
 		}

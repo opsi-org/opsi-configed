@@ -310,14 +310,17 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		// Create a new trust manager that trust all certificates
 		@SuppressWarnings("squid:S4830")
 		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+			@Override
 			public X509Certificate[] getAcceptedIssuers() {
 				return new X509Certificate[0];
 			}
 
+			@Override
 			public void checkClientTrusted(X509Certificate[] certs, String authType) {
 				// we skip certificate verification.
 			}
 
+			@Override
 			public void checkServerTrusted(X509Certificate[] certs, String authType) {
 				// we skip certificate verification.
 			}

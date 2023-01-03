@@ -1,9 +1,10 @@
 package de.uib.opsicommand;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -11,7 +12,7 @@ import org.json.JSONObject;
 import de.uib.utilities.logging.logging;
 
 public class OpsiMethodCall {
-	private HashMap theCall;
+	private Map theCall;
 	private String methodname;
 
 	private Object[] parameters;
@@ -21,23 +22,10 @@ public class OpsiMethodCall {
 	protected static final int defaultJsonId = 1;
 
 	public static String extendRpcPath = "extend/configed";
-	private String rpcPath = "";// extendRpcPath;
+	private String rpcPath = "";
 
-	public static final Vector<String> collectedCalls = new Vector<String>();
+	public static final List<String> collectedCalls = new ArrayList<>();
 	public static int maxCollectSize = -1;
-
-	/*
-	 * public OpsiMethodCall(String methodname, Object[] parameters)
-	 * {
-	 * this(standardRpcPath, methodname, parameters);
-	 * }
-	 * 
-	 * public OpsiMethodCall (String methodname, Object[] parameters, boolean
-	 * background)
-	 * {
-	 * this(standardRpcPath, methodname, parameters, background);
-	 * }
-	 */
 
 	/**
 	 * @param rpcPath    subpath for the rpc call (not including "/rpc/")
@@ -48,7 +36,7 @@ public class OpsiMethodCall {
 	public OpsiMethodCall(String methodname, Object[] parameters, boolean background) {
 		this.methodname = methodname;
 		this.parameters = parameters;
-		theCall = new HashMap();
+		theCall = new HashMap<>();
 		theCall.put("method", methodname);
 		theCall.put("params", parameters);
 		theCall.put("rpcpath", rpcPath);
@@ -64,7 +52,7 @@ public class OpsiMethodCall {
 	public OpsiMethodCall(String methodname, Object[] parameters) {
 		this.methodname = methodname;
 		this.parameters = parameters;
-		theCall = new HashMap();
+		theCall = new HashMap<>();
 		theCall.put("method", methodname);
 		theCall.put("params", parameters);
 		theCall.put("rpcpath", rpcPath);
@@ -115,20 +103,10 @@ public class OpsiMethodCall {
 	public boolean isBackground() {
 		return background;
 	}
-	/*
-	 * private String resolveToString(Object element)
-	 * {
-	 * if (element == null)
-	 * return null;
-	 * else if (element instanceof Object[])
-	 * return Arrays.toString( (Object[]) element);
-	 * else
-	 * return element.toString();
-	 * }
-	 */
 
+	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer("{");
+		StringBuilder sb = new StringBuilder("{");
 		sb.append("rpcpath=");
 		sb.append(rpcPath);
 		sb.append(", ");
@@ -165,15 +143,6 @@ public class OpsiMethodCall {
 
 			}
 
-			/*
-			 * sb.append( resolveToString(parameters[0] ) ) ;
-			 * for (int i = 1; i < parameters.length; i++)
-			 * {
-			 * sb.append(",");
-			 * sb.append( resolveToString( parameters[i] ) );
-			 * }
-			 */
-
 		}
 		sb.append("]");
 		sb.append("}");
@@ -181,21 +150,13 @@ public class OpsiMethodCall {
 	}
 
 	public String getCommandLineString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append(methodname);
 		sb.append("(");
 		if (parameters.length > 0) {
 			sb.append(parameters[0].toString());
 			for (int i = 1; i < parameters.length; i++) {
 				sb.append("&");
-				/*
-				 * String p = parameters[i].toString();
-				 * if (p.length() > 0 && p.charAt(0) = '[')
-				 * {
-				 * sb.append('[');
-				 * sb.append('parameters[i].toString());
-				 * }
-				 */
 
 				sb.append(parameters[i].toString());
 			}
@@ -212,12 +173,6 @@ public class OpsiMethodCall {
 
 			JSONArray joParams = new JSONArray();
 
-			/*
-			 * Vector v = new Vector();
-			 * for (int i = 0; i<parameters.length; i++)
-			 * { v.add (parameters[i]);
-			 * }
-			 */
 			for (int i = 0; i < parameters.length; i++) {
 				if (parameters[i] instanceof Object[]) {
 					Object[] obs = (Object[]) parameters[i];
@@ -244,7 +199,7 @@ public class OpsiMethodCall {
 			jO.put("method", methodname);
 			jO.put("params", joParams);
 			result = jO.toString();
-			// logging.debug(this, "a JSONObject as String>> " + result);
+
 		} catch (org.json.JSONException jex) {
 			logging.error(this, "Exception while producing a JSONObject, " + jex.toString());
 		}

@@ -22,7 +22,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
@@ -31,7 +30,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.MessageFormat;
 import java.util.GregorianCalendar;
-import java.util.Vector;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -62,6 +61,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.opsicommand.ConnectionState;
+import de.uib.opsicommand.JSONthroughHTTP;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.logging;
@@ -83,7 +83,6 @@ public class DPassword extends JDialog // implements Runnable
 	private static final String TESTPASSWORD = "";
 	private static final int SECS_WAIT_FOR_CONNECTION = 100;
 	private static final long TIMEOUT_MS = SECS_WAIT_FOR_CONNECTION * 1000l; // 5000 reproducable error
-	private boolean localApp;
 
 	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
 
@@ -113,25 +112,19 @@ public class DPassword extends JDialog // implements Runnable
 				}
 			});
 
-			// setSize (350,100);
 			setTitle(Globals.APPNAME + " login");
 			waitLabel = new JLabel();
-			// waitLabel.setPreferredSize (new Dimension (200, 25));
+
 			waitLabel.setText(configed.getResourceValue("DPassword.WaitInfo.label"));
 
 			waitingProgressBar = new JProgressBar();
-			// waitingProgressBar.setPreferredSize (new Dimension (100, 10));
-			// waitingProgressBar.setToolTipText(
-			// configed.getResourceValue("FStartWakeOnLan.timeElapsed.toolTip") );
+
 			waitingProgressBar.setValue(0);
 			waitingProgressBar.setEnabled(true);
-			// waitingProgressBar.setMaximum(max);
 
 			UIDefaults defaults = new UIDefaults();
-			defaults.put("ProgressBar[Enabled].foregroundPainter",
-					new ProgressBarPainter(de.uib.configed.Globals.opsiLogoBlue));
-			defaults.put("ProgressBar[Enabled].backgroundPainter",
-					new ProgressBarPainter(de.uib.configed.Globals.opsiLogoLightBlue));
+			defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
+			defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.opsiLogoLightBlue));
 			waitingProgressBar.putClientProperty("Nimbus.Overrides", defaults);
 
 			JPanel cPanel = new JPanel();
@@ -163,12 +156,6 @@ public class DPassword extends JDialog // implements Runnable
 
 			getContentPane().add(cPanel);
 
-			/*
-			 * getContentPane().setLayout(new FlowLayout());
-			 * getContentPane().add(waitingProgressBar);
-			 * getContentPane().add(waitLabel);
-			 */
-
 			pack();
 
 			setLocationRelativeTo(DPassword.this);
@@ -176,12 +163,13 @@ public class DPassword extends JDialog // implements Runnable
 
 		// interface WaitingSleeper
 
+		@Override
 		public void actAfterWaiting() {
-			// setCursor(saveCursor);
+
 			waitCursor.stop();
 
 			if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED)
-			// if ( persis.getConnectionState().getState() == ConnectionState.CONNECTED )
+
 			{
 				// we can finish
 				logging.info(this, "connected with persis " + persis);
@@ -229,26 +217,32 @@ public class DPassword extends JDialog // implements Runnable
 			setVisible(false);
 		}
 
+		@Override
 		public JProgressBar getProgressBar() {
 			return waitingProgressBar;
 		}
 
+		@Override
 		public JLabel getLabel() {
 			return waitLabel;
 		}
 
+		@Override
 		public long getStartActionMillis() {
 			return new GregorianCalendar().getTimeInMillis();
 		}
 
+		@Override
 		public long getWaitingMillis() {
 			return timeOutMillis;
 		}
 
+		@Override
 		public long getOneProgressBarLengthWaitingMillis() {
 			return ESTIMATED_TOTAL_WAIT_MILLIS;
 		}
 
+		@Override
 		public String setLabellingStrategy(long millisLevel) {
 			return waitLabel.getText();
 		}
@@ -276,7 +270,7 @@ public class DPassword extends JDialog // implements Runnable
 	JLabel jLabelPassword = new JLabel();
 
 	JLabel jLabelHost = new JLabel();
-	JComboBox fieldHost = new JComboBox();
+	JComboBox<String> fieldHost = new JComboBox<>();
 
 	JPanel jPanelParameters1;
 	JPanel jPanelParameters2;
@@ -291,12 +285,11 @@ public class DPassword extends JDialog // implements Runnable
 
 	JPanel jPanelRadioButtons = new JPanel();
 	FlowLayout flowLayoutRadioButtons = new FlowLayout();
-	// JRadioButton jRadioButton_ssh = new JRadioButton();
+
 	JRadioButton jRadioButton_ssh2 = new JRadioButton();
-	// JRadioButton jRadioButton_ftp = new JRadioButton();
+
 	JRadioButton jRadioButton_localfs = new JRadioButton();
 
-	// myAuthenticator myAuth = new myAuthenticator();
 	MyKeyListener myKeyListener = new MyKeyListener(this);
 	ButtonGroup buttonGroup1 = new ButtonGroup();
 
@@ -308,8 +301,8 @@ public class DPassword extends JDialog // implements Runnable
 
 	}
 
-	public void setServers(Vector<String> hosts) {
-		fieldHost.setModel(new DefaultComboBoxModel(hosts));
+	public void setServers(List<String> hosts) {
+		fieldHost.setModel(new DefaultComboBoxModel<>(hosts.toArray(new String[0])));
 		((JTextField) fieldHost.getEditor().getEditorComponent())
 				.setCaretPosition(((String) (fieldHost.getSelectedItem())).length());
 	}
@@ -365,19 +358,9 @@ public class DPassword extends JDialog // implements Runnable
 		titledBorder1 = new TitledBorder("");
 
 		panel = new JPanel();
-		//panel.setEnabled(false);
 
 		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 		panel.setBorder(padding);
-
-		// center
-		// Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		// this.setLocation((screenSize.width - 450) / 2, 200);
-
-		/*final Rectangle dim = de.uib.utilities.Globals.buildLocationOnDefaultDisplay(getSize().width, getSize().height,
-				de.uib.utilities.Globals.smallFramesDistanceFromLeft,
-				de.uib.utilities.Globals.smallFramesDistanceFromTop);
-		this.setLocation(dim.x, dim.y);*/
 
 		jLabelHost.setText(configed.getResourceValue("DPassword.jLabelHost"));
 
@@ -385,7 +368,6 @@ public class DPassword extends JDialog // implements Runnable
 
 		defaultBlinkRate = fieldUser.getCaret().getBlinkRate();
 
-		// fieldHost.setMargin(new Insets(0, 3, 0, 3));
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
 		fieldHost.addKeyListener(myKeyListener);
@@ -394,8 +376,7 @@ public class DPassword extends JDialog // implements Runnable
 
 		fieldUser.setText(TESTUSER);
 		fieldUser.addKeyListener(myKeyListener);
-		// fieldUser.setText(System.getProperty("user.name"));
-		// logging.debug(passwordField.getPassword());
+
 		fieldUser.setMargin(new Insets(0, 3, 0, 3));
 
 		jLabelPassword.setText(configed.getResourceValue("DPassword.jLabelPassword"));
@@ -403,38 +384,27 @@ public class DPassword extends JDialog // implements Runnable
 		passwordField.setText(TESTPASSWORD);
 		passwordField.addKeyListener(myKeyListener);
 		passwordField.setMargin(new Insets(0, 3, 0, 3));
-		/*
-		 * passwordField.addComponentListener(new java.awt.event.ComponentAdapter()
-		 * {
-		 * public void componentShown(ComponentEvent e)
-		 * {
-		 * passwordField_componentShown(e);
-		 * }
-		 * });
-		 */
 
-		// JCheckBox checkGzip = new
-		// JCheckBox(configed.getResourceValue("DPassword.checkGzip") ,
-		// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission);
 		JCheckBox checkCompression = new JCheckBox(configed.getResourceValue("DPassword.checkCompression"),
-				de.uib.opsicommand.JSONthroughHTTP.compressTransmission);
+				JSONthroughHTTP.compressTransmission);
 		checkCompression.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
-				// logging.debug(this, "itemStateChanged " + e);
-				// de.uib.opsicommand.JSONthroughHTTP.gzipTransmission =
-				de.uib.opsicommand.JSONthroughHTTP.compressTransmission = (e.getStateChange() == ItemEvent.SELECTED);
 
-				logging.debug(this, "itemStateChanged " + de.uib.opsicommand.JSONthroughHTTP.gzipTransmission);;
+				JSONthroughHTTP.compressTransmission = (e.getStateChange() == ItemEvent.SELECTED);
+
+				logging.debug(this, "itemStateChanged " + de.uib.opsicommand.JSONthroughHTTP.gzipTransmission);
 			}
 		});
 
 		JCheckBox checkTrySSH = new JCheckBox(configed.getResourceValue("DPassword.checkTrySSH"),
-				de.uib.configed.configed.sshconnect_onstart);
-		logging.info(this, "checkTrySSH  " + de.uib.configed.configed.sshconnect_onstart);
+				configed.sshconnect_onstart);
+		logging.info(this, "checkTrySSH  " + configed.sshconnect_onstart);
 		checkTrySSH.addItemListener(new ItemListener() {
+			@Override
 			public void itemStateChanged(ItemEvent e) {
-				// logging.debug(this, "itemStateChanged " + e);
-				de.uib.configed.configed.sshconnect_onstart = (e.getStateChange() == ItemEvent.SELECTED);
+
+				configed.sshconnect_onstart = (e.getStateChange() == ItemEvent.SELECTED);
 
 				logging.info(this, "checkTrySSH itemStateChanged " + checkTrySSH);
 			}
@@ -457,18 +427,21 @@ public class DPassword extends JDialog // implements Runnable
 				}
 			}
 
+			@Override
 			public void changedUpdate(DocumentEvent e) {
-				// logging.debug(this, "++ changedUpdate on " );
+
 				setRefreshMinutes();
 			}
 
+			@Override
 			public void insertUpdate(DocumentEvent e) {
-				// logging.debug(this, "++ insertUpdate on " );
+
 				setRefreshMinutes();
 			}
 
+			@Override
 			public void removeUpdate(DocumentEvent e) {
-				// logging.debug(this, "++ removeUpdate on " );
+
 				setRefreshMinutes();
 			}
 		});
@@ -486,19 +459,15 @@ public class DPassword extends JDialog // implements Runnable
 		jButtonCommit.setMaximumSize(new Dimension(100, 20));
 		jButtonCommit.setPreferredSize(new Dimension(100, 20));
 		jButtonCommit.setSelected(true);
-		jButtonCommit.addActionListener(this::jButtonCommit_actionPerformed);
+		jButtonCommit.addActionListener(this::jButtonCommitActionPerformed);
 
 		jButtonCancel.setText(configed.getResourceValue("DPassword.jButtonCancel"));
 		jButtonCancel.setMaximumSize(new Dimension(100, 20));
 		jButtonCancel.setPreferredSize(new Dimension(100, 20));
-		jButtonCancel.addActionListener(this::jButtonCancel_actionPerformed);
+		jButtonCancel.addActionListener(this::jButtonCancelActionPerformed);
 
 		jPanelButtons.add(jButtonCommit);
 		jPanelButtons.add(jButtonCancel);
-
-		// jPanelRadioButtons.setLayout(flowLayoutRadioButtons);
-		// jPanelRadioButtons.add(jRadioButton_ssh2);
-		// jPanelRadioButtons.add(jRadioButton_localfs);
 
 		// x y w h wx wy
 
@@ -508,13 +477,12 @@ public class DPassword extends JDialog // implements Runnable
 		gpl.setVerticalGroup(gpl.createSequentialGroup()
 				.addComponent(jLabelVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				// .addGap(Globals.lineHeight/2)
+
 				.addGroup(gpl.createParallelGroup()
 						.addComponent(jLabelLabelJavaVersion, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT)
 						.addComponent(jLabelJavaVersion, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
-				// .addComponent(jLabelJavaVersion, GroupLayout.PREFERRED_SIZE,
-				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+
 				.addGap(Globals.LINE_HEIGHT)
 				.addComponent(jLabelHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
@@ -530,8 +498,7 @@ public class DPassword extends JDialog // implements Runnable
 				.addGap(Globals.LINE_HEIGHT)
 				.addComponent(jPanelParameters1, (int) (1.2 * Globals.LINE_HEIGHT), (int) (1.2 * Globals.LINE_HEIGHT),
 						(int) (1.2 * Globals.LINE_HEIGHT))
-				// .addComponent(jPanelParameters2, (int) (1.2 * Globals.lineHeight), (int) (1.2
-				// * Globals.lineHeight), (int) (1.2 * Globals.lineHeight))
+
 				.addGap(Globals.LINE_HEIGHT).addComponent(jPanelButtons, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
@@ -542,7 +509,7 @@ public class DPassword extends JDialog // implements Runnable
 										GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE))
 						.addGroup(gpl.createSequentialGroup().addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE)
-								// .addGap(Globals.hGapSize)
+
 								.addComponent(jLabelLabelJavaVersion, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.HGAP_SIZE / 2)
@@ -579,52 +546,22 @@ public class DPassword extends JDialog // implements Runnable
 
 		Containership csPanel = new Containership(getContentPane());
 
-		csPanel.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.backLightBlue }, JPanel.class);
-
-		/*
-		 * csPanel.doForAllContainedCompis
-		 * ("setBackground", new Object[]{ java.awt.Color.yellow
-		 * });//Globals.backLightBlue});
-		 */
-		// myAuth.setDefault(myAuth);
-		// Authenticator.setDefault(myAuth);
-
-		// fieldUser.setText(System.getProperty("user.name"));
-		// jLabelVersion.setText("opsi configuration editor, version " + Globals.VERSION
-		// + " date " + Globals.VERDATE);
-		// jLabelVersion.setText( sprintf(
-		// configed.getResourceValue("DPassword.jLabelVersion"), Globals.VERSION,
-		// Globals.VERDATE) );
+		csPanel.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
+				JPanel.class);
 
 		MessageFormat messageFormatVersion = new MessageFormat(configed.getResourceValue("DPassword.jLabelVersion"));
 		jLabelVersion.setText(messageFormatVersion
 				.format(new Object[] { Globals.VERSION, "(" + Globals.VERDATE + ")", Globals.VERHASHTAG }));
 
-		jLabelJavaVersion.setText(configed.javaVendor + " " + configed.javaVersion);
+		jLabelJavaVersion.setText(configed.JAVA_VENDOR + " " + configed.JAVA_VERSION);
 
 		String strOS = System.getProperty("os.name");
 		String osVersion = System.getProperty("os.version");
 		logging.notice(" OS " + strOS + "  Version " + osVersion);
 		String host = TESTSERVER; // ""
-		/*
-		 * if (strOS.startsWith("Windows") && (osVersion.compareToIgnoreCase("4.0") >=
-		 * 0))
-		 * {
-		 * Process process = Runtime.getRuntime().exec("cmd.exe /q /c echo %HOST%");
-		 * BufferedReader br = new BufferedReader( new
-		 * InputStreamReader(process.getInputStream()));
-		 * host = br.readLine();
-		 * br.close();
-		 * }
-		 */
-
-		// process = Runtime.getRuntime().exec("cmd.exe /c echo %UNAME%");
-		// br = new BufferedReader( new InputStreamReader(process.getInputStream()));
-		// String uname = br.readLine();
 
 		pack();
 
-		// logging.debug(" ---- host:" + host + "--");
 		if (host.equals("")) {
 			setHost("localhost");
 			fieldHost.requestFocus();
@@ -647,21 +584,6 @@ public class DPassword extends JDialog // implements Runnable
 			logging.warning(this, "containership error", ex);
 		}
 
-		/*
-		 * if (c.equals(saveCursor))
-		 * {
-		 * fieldHost.getCaret().setBlinkRate(defaultBlinkRate);
-		 * fieldUser.getCaret().setBlinkRate(defaultBlinkRate);
-		 * passwordField.getCaret().setBlinkRate(defaultBlinkRate);
-		 * }
-		 * else
-		 * {
-		 * fieldHost.getCaret().setBlinkRate(0);
-		 * fieldUser.getCaret().setBlinkRate(0);
-		 * passwordField.getCaret().setBlinkRate(0);
-		 * }
-		 */
-
 	}
 
 	public void ok_action() {
@@ -672,46 +594,24 @@ public class DPassword extends JDialog // implements Runnable
 		if (waitCursor != null)
 			waitCursor.stop(); // we want only one running instance
 
-		// waitCursor = new WaitCursor(this, "ok_action");
-		// ??we dont need this wait cursor instance; and it seems not to finish
 		// correctly
 
 		tryConnecting();
-		// waitInfo.toFront();
+
 	}
-	/*
-	 * public static PersistenceController producePersistenceController(String
-	 * server)
-	 * {
-	 * PersistenceController persis =
-	 * PersistenceControllerFactory.getNewPersistenceController(server, "", "");
-	 * persis.setConnectionState(new ConnectionState
-	 * (ConnectionState.STARTED_CONNECTING));
-	 * persis.makeConnection();
-	 * if ( persis.getConnectionState().getState() == ConnectionState.CONNECTED )
-	 * return persis;
-	 * 
-	 * return null;
-	 * }
-	 */
 
 	public void tryConnecting() {
 		logging.info(this, "started  tryConnecting");
 		setActivated(false);
-		//jButtonCommit.setEnabled(false);
-
-		// saveCursor = getCursor();
-		// setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
 		waitCursor = new WaitCursor(this, "ok_action");
 
 		ConfigedMain.HOST = (String) fieldHost.getSelectedItem();
 		ConfigedMain.USER = fieldUser.getText();
 		ConfigedMain.PASSWORD = String.valueOf(passwordField.getPassword());
-		logging.info(this, "invoking PersistenceControllerFactory host, user, " +
-		// .password " +
-				fieldHost.getSelectedItem() + ", " + fieldUser.getText()
-		// + ", " + String.valueOf( passwordField.getPassword())
+		logging.info(this, "invoking PersistenceControllerFactory host, user, " + fieldHost.getSelectedItem() + ", "
+				+ fieldUser.getText()
+
 		);
 
 		if (waitingTask != null && !waitingTask.isReady()) {
@@ -727,14 +627,13 @@ public class DPassword extends JDialog // implements Runnable
 
 		logging.info(this, "we are in EventDispatchThread " + SwingUtilities.isEventDispatchThread());
 		logging.info(this, "  Thread.currentThread() " + Thread.currentThread());
-		localApp = ("" + Thread.currentThread()).indexOf("main]") > -1;
+		boolean localApp = ("" + Thread.currentThread()).indexOf("main]") > -1;
 		logging.info(this, "is local app  " + localApp);
 		if (localApp) {
 
-			//waitInfo.setAlwaysOnTop(true);
 			logging.info(this, "start WaitingWorker");
 			waitingTask = new de.uib.utilities.thread.WaitingWorker(waitInfo);
-			// waitingTask.addPropertyChangeListener(this);
+
 			waitingTask.execute();
 
 			new Thread() {
@@ -744,36 +643,8 @@ public class DPassword extends JDialog // implements Runnable
 					persis = PersistenceControllerFactory.getNewPersistenceController(
 							(String) fieldHost.getSelectedItem(), fieldUser.getText(),
 							String.valueOf(passwordField.getPassword()));
-					// logging.checkErrorList(null);
-					logging.info(this, "got persis, == null " + (persis == null));
-					/*
-					 * long TIMEOUT = 100000; //ms
-					 * long interval = 2000;
-					 * long waited = 0;
-					 * 
-					 * while (
-					 * PersistenceControllerFactory.getConnectionState() ==
-					 * ConnectionState.ConnectionUndefined
-					 * &&
-					 * waited < TIMEOUT
-					 * )
-					 * {
-					 * try
-					 * {
-					 * Thread.sleep(interval);
-					 * waited = waited + interval;
-					 * logging.info(this, "waited for persis: " + waited);
-					 * }
-					 * catch (Exception waitException)
-					 * {}
-					 * }
-					 * 
-					 * if (waited >= TIMEOUT)
-					 * logging.error(" no connection");
-					 * 
-					 */
 
-					// stopWaitInfo();
+					logging.info(this, "got persis, == null " + (persis == null));
 
 					logging.info(this, "waitingTask can be set to ready");
 					waitingTask.setReady();
@@ -804,40 +675,32 @@ public class DPassword extends JDialog // implements Runnable
 			waitInfo.actAfterWaiting();
 		}
 
-		// de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setHost(HOST);
-		// de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setHost((String)
-		// fieldHost.getSelectedItem());
-		// de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setUser(USER);
 		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setUser(fieldUser.getText());
-		// de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setPassw(PASSWORD);
+
 		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance()
 				.setPassw(String.valueOf(passwordField.getPassword()));
 		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setHost((String) fieldHost.getSelectedItem());
 	}
 
-	void jButtonCommit_actionPerformed(ActionEvent e) {
+	void jButtonCommitActionPerformed(ActionEvent e) {
 		ok_action();
 	}
 
-	void end_program() {
+	void endProgram() {
 		main.finishApp(false, 0);
 	}
 
-	void jButtonCancel_actionPerformed(ActionEvent e) {
+	void jButtonCancelActionPerformed(ActionEvent e) {
 		if (waitCursor != null)
 			waitCursor.stop();
-		end_program();
-	}
-
-	void passwordField_componentShown(ComponentEvent e) {
-		passwordField.requestFocus();
+		endProgram();
 	}
 
 	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		super.processWindowEvent(e);
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-			end_program();
+			endProgram();
 		}
 	}
 
@@ -855,7 +718,7 @@ public class DPassword extends JDialog // implements Runnable
 				myHome.ok_action();
 			} else if (e.getKeyCode() == 27) // Escape
 			{
-				myHome.end_program();
+				myHome.endProgram();
 			}
 		}
 	}

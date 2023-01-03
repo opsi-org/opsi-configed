@@ -24,7 +24,6 @@ public class FileX {
 		return getPath(parts, false, File.separator);
 	}
 
-	// public static String getRemotePath(String protocol, String server, String
 	// share, String[] parts)
 	public static String getRemotePath(String server, String share, String[] parts) {
 		if (parts == null || parts.length == 0)

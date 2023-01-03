@@ -3,7 +3,6 @@ package de.uib.configed.gui.ssh;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -44,21 +43,18 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 
 	public SSHPMInstallWgetPanel() {
 		super();
-		autocompletion = new SSHCompletionComboButton(additional_default_paths);
+		autocompletion = new SSHCompletionComboButton(additionalDefaultPaths);
 		wgetAuthPanel = new SSHWgetAuthenticationPanel();
 		url_def_text = configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url");
 		initComponents();
 		initLayout();
-		enable(true);
+
+		cb_autocompletion.setEnabled(true);
+		btn_autocompletion.setEnabled(true);
 
 		cb_autocompletion.setSelectedItem(workbench);
 		wgetAuthPanel.isOpen = true;
 		wgetAuthPanel.close();
-	}
-
-	public void enable(boolean e) {
-		cb_autocompletion.setEnabled(e);
-		btn_autocompletion.setEnabled(e);
 	}
 
 	private void initComponents() {
@@ -79,9 +75,10 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 		btn_autocompletion = autocompletion.getButton();
 
 		tf_url = new JTextField(url_def_text);
-		tf_url.setBackground(Globals.backLightYellow);
-		// tf_url.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_url"));
+		tf_url.setBackground(Globals.BACKGROUND_COLOR_9);
+
 		tf_url.addFocusListener(new FocusAdapter() {
+			@Override
 			public void focusGained(FocusEvent e) {
 				if (tf_url.getText().equals(url_def_text)) {
 					tf_url.setSelectionStart(0);
@@ -97,21 +94,18 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 		cb_includeZsync.setSelected(true);
 		cb_includeZsync.setToolTipText(configed.getResourceValue(
 				"SSHConnection.ParameterDialog.opsipackagemanager_install.jCheckBoxIncludeZsync.tooltip"));
-		cb_includeZsync.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					cb_compareMD5.setSelected(true);
-					cb_compareMD5.setEnabled(true);
-				} else {
-					cb_compareMD5.setSelected(false);
-					cb_compareMD5.setEnabled(false);
-				}
+		cb_includeZsync.addItemListener(itemEvent -> {
+			if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
+				cb_compareMD5.setSelected(true);
+				cb_compareMD5.setEnabled(true);
+			} else {
+				cb_compareMD5.setSelected(false);
+				cb_compareMD5.setEnabled(false);
 			}
 		});
 
 		cb_compareMD5 = new JCheckBox();
-		cb_compareMD5.setSelected(true);;
+		cb_compareMD5.setSelected(true);
 		cb_compareMD5.setToolTipText(configed.getResourceValue(
 				"SSHConnection.ParameterDialog.opsipackagemanager_install.jCheckBoxCompareMD5.tooltip"));
 	}
@@ -135,7 +129,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 			String product = mainDir + "/" + getFilenameFromUrl(mainProduct);
 			// ToDo: Folgender Parameter String (befehl) muss noch in die klasse
 			// sshcommandfactory ausgelagert werden
-			// if (commands != null)
+
 			commands.addCommand(new Empty_Command("md5_vergleich", " if [ -z $((cat " + product + ".md5" + ") | "
 					+ "grep $(md5sum " + product + "  | head -n1 | cut -d \" \" -f1)) ] ; " + " then echo \""
 					+ configed.getResourceValue(
@@ -149,13 +143,13 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 	}
 
 	private CommandWget getWgetCommand() {
-		String d = workbench;
+		String d;
 		String u = "";
 		String additionalProds = "";
 		String wgetDir = ((String) cb_autocompletion.getSelectedItem());
 
 		String tmp_tf_dir = "<" + configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelDirectory") + ">";
-		if ((wgetDir != "") || (wgetDir != tmp_tf_dir))
+		if (!wgetDir.equals("") || !wgetDir.equals(tmp_tf_dir))
 			d = wgetDir;
 		else
 			return null;
@@ -164,7 +158,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 				+ configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetUrl")
 						.replace(":", "")
 				+ ">";
-		if ((tf_url.getText() != "") || (tf_url.getText() != tmp_tf_url))
+		if (!tf_url.getText().equals("") || !tf_url.getText().equals(tmp_tf_url))
 			u = tf_url.getText();
 		else
 			return null;
@@ -178,8 +172,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 			}
 		}
 
-		CommandWget wget = new CommandWget(d, u, additionalProds);
-		return wget;
+		return new CommandWget(d, u, additionalProds);
 	}
 
 	public String getProduct() {
@@ -191,7 +184,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 	}
 
 	private void initLayout() {
-		this.setBackground(Globals.backLightBlue);
+		this.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);

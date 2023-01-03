@@ -25,14 +25,13 @@ public class MarkLatestDateBoldHeaderCellRenderer extends DefaultTableCellRender
 	}
 
 	@Override
-	public Component getTableCellRendererComponent(
-			JTable table, Object value, boolean isSelected,
-			boolean hasFocus, int row, int column) {
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+			int row, int column) {
 		Component cell = rend.getTableCellRendererComponent(table, modifyValue(value), isSelected, hasFocus, row,
 				column);
 
 		// java.awt.Component cell = super.getTableCellRendererComponent
-		// (table, value, isSelected, hasFocus, row, column);
+
 		cell.setBackground(Globals.defaultTableHeaderBgColor);
 
 		JComponent jc = (JComponent) cell;

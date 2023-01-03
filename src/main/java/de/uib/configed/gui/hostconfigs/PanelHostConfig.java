@@ -2,12 +2,13 @@ package de.uib.configed.gui.hostconfigs;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.NavigableMap;
 
 import javax.swing.GroupLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
@@ -27,23 +28,18 @@ public class PanelHostConfig extends JPanel {
 	protected boolean entryRemovable = true;
 	protected boolean reloadable = true;
 
-	// static Integer classcounter = 0;
 	public final String propertyClassUser = UserConfig.KEY_USER_ROOT;
 	public final String propertyClassRole = UserConfig.KEY_USER_ROLE_ROOT;
 
 	public PanelHostConfig() {
-		/*
-		 * classcounter++;
-		 * if (classcounter > 1)
-		 * System.exit(0);
-		 */
+
 		buildPanel();
 	}
 
 	// overwrite in subclasses
 	protected void reloadHostConfig() {
 		logging.info(this, " in PanelHostConfig: reloadHostConfig");
-		// putUsersToPropertyclassesTreeMap();
+
 	}
 
 	// overwrite in subclasses
@@ -55,18 +51,6 @@ public class PanelHostConfig extends JPanel {
 		logging.info(this, "handleUserInPropertyClass " + user + " in class " + superclass);
 
 		String newpropertyclass = superclass + "." + user;
-
-		/*
-		 * if (! PersistenceControllerFactory.getPersistenceController().
-		 * PROPERTYCLASSES_SERVER.containsKey(newpropertyclass))
-		 * {
-		 * logging.debug(this,
-		 * "putUsersToPropertyclassesTreeMap found another user named " + user + " [" +
-		 * newpropertyclass +"]");
-		 * PersistenceControllerFactory.getPersistenceController().
-		 * PROPERTYCLASSES_SERVER.put(newpropertyclass, "");
-		 * }
-		 */
 
 		if (!de.uib.opsidatamodel.PersistenceController.PROPERTYCLASSES_SERVER.containsKey(newpropertyclass)) {
 			logging.debug(this, "putUsersToPropertyclassesTreeMap found another user named " + user + " ["
@@ -80,7 +64,7 @@ public class PanelHostConfig extends JPanel {
 				PersistenceControllerFactory.getPersistenceController().getHostInfoCollections().getConfigServer());
 
 		for (Map.Entry<String, Object> entry : configs.entrySet()) {
-			String key = (String) entry.getKey();
+			String key = entry.getKey();
 
 			if (key.startsWith(propertyClassRole + ".")) {
 				String user = key.split("\\.")[2];
@@ -99,18 +83,15 @@ public class PanelHostConfig extends JPanel {
 
 	protected void buildPanel() {
 		// boolean serverEditing = (ConfigedMain.getEditingTarget() ==
-		// ConfigedMain.EditingTarget.SERVER);
+
 		label = new JLabel(configed.getResourceValue("MainFrame.jLabel_Config"));
-		// putUsersToPropertyclassesTreeMap();
+
 		PersistenceControllerFactory.getPersistenceController().checkConfiguration();
 		putUsersToPropertyclassesTreeMap();
 
 		editMapPanel = new EditMapPanelGroupedForHostConfigs(
 				new de.uib.configed.gui.helper.PropertiesTableCellRenderer(), keylistExtendible, entryRemovable,
-				reloadable,
-				// serverEditing, serverEditing, true,
-				// PersistenceControllerFactory.getPersistenceController().PROPERTYCLASSES,
-				new AbstractEditMapPanel.Actor() {
+				reloadable, new AbstractEditMapPanel.Actor() {
 					@Override
 					protected void reloadData() {
 						reloadHostConfig();
@@ -122,60 +103,32 @@ public class PanelHostConfig extends JPanel {
 					}
 				});
 
-		/*
-		 * JPanel header =new JPanel();
-		 * 
-		 * GroupLayout headerLayout = new GroupLayout(header);
-		 * header.setLayout(headerLayout);
-		 * 
-		 * headerLayout.setHorizontalGroup(
-		 * headerLayout.createSequentialGroup()
-		 * .addGap(de.uib.utilities.Globals.hGapSize)
-		 * .addComponent(label, 10, GroupLayout.PREFERRED_SIZE,
-		 * GroupLayout.PREFERRED_SIZE)
-		 * .addGap(de.uib.utilities.Globals.hGapSize)
-		 * )
-		 * ;
-		 * 
-		 * headerLayout.setVerticalGroup(
-		 * headerLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-		 * .addComponent(label)
-		 * )
-		 * ;
-		 */
 		GroupLayout planeLayout = new GroupLayout(this);
 		this.setLayout(planeLayout);
 
 		planeLayout.setHorizontalGroup(planeLayout.createSequentialGroup()
-				// .addGap(de.uib.utilities.Globals.vGapSize)
+
 				.addGroup(planeLayout.createParallelGroup()
-						// .addComponent( header, GroupLayout.Alignment.CENTER )
+
 						.addComponent(editMapPanel))
-		// .addGap(de.uib.utilities.Globals.vGapSize)
+
 		);
 
 		planeLayout.setVerticalGroup(planeLayout.createSequentialGroup()
-				// .addGap(20)
-				// .addComponent( header, GroupLayout.PREFERRED_SIZE,
-				// GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				// .addGap(5)
-				.addComponent(editMapPanel, de.uib.configed.Globals.LINE_HEIGHT * 2, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE)
-		// .addGap(20)
+
+				.addComponent(editMapPanel, Globals.LINE_HEIGHT * 2, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+
 		);
 	}
 
 	public void initEditing(String labeltext, Map configVisualMap,
 			Map<String, de.uib.utilities.table.ListCellOptions> configOptions, Collection collectionConfigStored,
 			AdditionalconfigurationUpdateCollection configurationUpdateCollection, boolean optionsEditable,
-			TreeMap<String, String> classesMap) {
+			NavigableMap<String, String> classesMap) {
 		label.setText(labeltext);
 
-		// configed.getResourceValue("MainFrame.jLabel_Config") + ": " + hostId);
-
 		logging.info(this, "initEditing "
-				// + " configVisualMap " + (configVisualMap)
-				// + " configOptions " + (configOptions)
+
 				+ " optionsEditable " + optionsEditable);
 		editMapPanel.setSubpanelClasses(classesMap);
 		editMapPanel.setEditableMap(configVisualMap, configOptions);
@@ -185,8 +138,6 @@ public class PanelHostConfig extends JPanel {
 		editMapPanel.setLabel(labeltext);
 
 		editMapPanel.setOptionsEditable(optionsEditable);
-		// ((EditMapPanelGrouped)editMapPanel).setPropertyHandlerType(
-		// propertyHandlerType ); // if null then defaultPropertyHandler is set
 
 	}
 

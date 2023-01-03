@@ -8,8 +8,8 @@ public abstract class SelectOperation {
 	private SelectData data;
 
 	/**
-	 * Create a new SelectOperation, with this element as the property to operate
-	 * on.
+	 * Create a new SelectOperation, with this element as the property to
+	 * operate on.
 	 */
 	public SelectOperation(SelectElement element) {
 		this.element = element;
@@ -59,7 +59,7 @@ public abstract class SelectOperation {
 	 */
 	@Override
 	public String toString() {
-		return getClass().getName() + "; data " + data + ", type " + getDataType()
-				+ ", operation " + getOperationString() + ", element " + getElement();
+		return getClass().getName() + "; data " + data + ", type " + getDataType() + ", operation "
+				+ getOperationString() + ", element " + getElement();
 	}
 }

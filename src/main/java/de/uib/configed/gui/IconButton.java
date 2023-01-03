@@ -1,5 +1,7 @@
 package de.uib.configed.gui;
 
+import java.util.List;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -9,8 +11,7 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.thread.WaitingCycle;
 
 /**
- * Creates a button with an icon
- * <br>
+ * Creates a button with an icon <br>
  * <br>
  * 
  * @version 1.0
@@ -31,13 +32,17 @@ public class IconButton extends JButton {
 	/** The url for the image displayed if active */
 	protected String imageURLActive;
 
-	/** The url for the image displayed if the cursor is hovering over the button */
+	/**
+	 * The url for the image displayed if the cursor is hovering over the button
+	 */
 	protected String imageURLOver;
 
 	/** The url for the disabled image */
 	protected String imageURLDisabled;
 
-	/** Default image (if change between default image and special image is used) */
+	/**
+	 * Default image (if change between default image and special image is used)
+	 */
 	protected Icon defaultIcon;
 
 	/** Running action icon */
@@ -49,7 +54,9 @@ public class IconButton extends JButton {
 	/** the sequence of images for animation */
 	protected ImageIcon[] imagesForAnimation;
 
-	/** we make a composition to a WaitingCycle for implementing a waiting state */
+	/**
+	 * we make a composition to a WaitingCycle for implementing a waiting state
+	 */
 	protected WaitingCycle waitingCycle;
 
 	/** timeout for the waitingCycle **/
@@ -63,12 +70,8 @@ public class IconButton extends JButton {
 	}
 
 	/**
-	 * Calling super constructor with text and icon
-	 * 
-	 * public IconButton()
-	 * {
-	 * super(String text, Icon icon);
-	 * }
+	 * Calling super constructor with text and icon public IconButton() {
+	 * super(String text, Icon icon); }
 	 */
 
 	/**
@@ -76,19 +79,17 @@ public class IconButton extends JButton {
 	 * "createIconButton" method
 	 *
 	 * @param desc                     a description used for tooltips
-	 * @param imageURLOver             the url for the image displayed if the cursor
-	 *                                 is hovering over the button
+	 * @param imageURLOver             the url for the image displayed if the
+	 *                                 cursor is hovering over the button
 	 * @param imageURLActive           the url for the image displayed if active
 	 * @param imageURLDisabled         the url for the disabled image
 	 * @param imagesForAnimatedWaiting the chain of images for animation when
 	 *                                 waiting
-	 * @param enabled                  if true, sets the iconButton enabled status
-	 *                                 true; otherwise false
+	 * @param enabled                  if true, sets the iconButton enabled
+	 *                                 status true; otherwise false
 	 */
-	public IconButton(String desc,
-			String imageURLActive, String imageURLOver, String imageURLDisabled,
-			String[] imageURLsForAnimatedWaiting, int maxWaitSecs,
-			boolean enabled) {
+	public IconButton(String desc, String imageURLActive, String imageURLOver, String imageURLDisabled,
+			String[] imageURLsForAnimatedWaiting, int maxWaitSecs, boolean enabled) {
 		super();
 		this.tooltipActive = desc;
 		this.tooltipInactive = desc;
@@ -196,12 +197,12 @@ public class IconButton extends JButton {
 	}
 
 	/**
-	 * Sets an image for active icon button
-	 * and an image if the curser is hovering over the button
+	 * Sets an image for active icon button and an image if the curser is
+	 * hovering over the button
 	 * 
 	 * @param imageURLActive the new url for the image displayed if active
-	 * @param imageURLOver   the new url for the image displayed if the cursor is
-	 *                       hovering over the button
+	 * @param imageURLOver   the new url for the image displayed if the cursor
+	 *                       is hovering over the button
 	 */
 	public void setNewImage(String imageURLActive, String imageURLOver) {
 		setIcon(Globals.createImageIcon(imageURLActive, ""));
@@ -277,8 +278,7 @@ public class IconButton extends JButton {
 	 * waiting state
 	 */
 	public void setWaitingState(boolean b) {
-		logging.info(this, "setWaitingState " + b
-				+ " (imagesForAnimation == null)  " + (imagesForAnimation == null));
+		logging.info(this, "setWaitingState " + b + " (imagesForAnimation == null)  " + (imagesForAnimation == null));
 		if (imagesForAnimation == null)
 			return;
 
@@ -287,7 +287,7 @@ public class IconButton extends JButton {
 
 			waitingCycle = new WaitingCycle(maxWaitSecs) {
 				@Override
-				protected void process(java.util.List<Integer> chunks) {
+				protected void process(List<Integer> chunks) {
 					workWithWaitingSignals(chunks);
 				}
 			};
@@ -301,7 +301,7 @@ public class IconButton extends JButton {
 
 	}
 
-	private void workWithWaitingSignals(java.util.List<Integer> chunks) {
+	private void workWithWaitingSignals(List<Integer> chunks) {
 		if (imagesForAnimation == null)
 			return;
 

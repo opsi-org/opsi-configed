@@ -10,7 +10,6 @@ import de.uib.utilities.logging.logging;
 public class ModulePermissionValue {
 	de.uib.opsicommand.Executioner exec;
 
-	// private String moduleKey;
 	private ExtendedInteger maxClients;
 	private ExtendedDate expiresDate;
 	private Boolean booleanValue;
@@ -21,7 +20,7 @@ public class ModulePermissionValue {
 	public static final Map<String, Boolean> MODULE_CHECKED;
 	// the modules which are known and should be checked
 	static {
-		MODULE_CHECKED = new LinkedHashMap<String, Boolean>();
+		MODULE_CHECKED = new LinkedHashMap<>();
 		MODULE_CHECKED.put("license_management", true);
 		MODULE_CHECKED.put("local_imaging", true);
 		MODULE_CHECKED.put("monitoring", true);
@@ -38,19 +37,9 @@ public class ModulePermissionValue {
 		MODULE_CHECKED.put("win-vhd", true);
 		MODULE_CHECKED.put("os_install_by_wlan", true);
 	}
-	/*
-	 * public static final Map<String, Boolean> MODULE_PERMITTED;
-	 * static {
-	 * MODULE_PERMITTED = new LinkedHashMap<String, Boolean>();
-	 * for (String key : MODULE_CHECKED.keySet() )
-	 * {
-	 * MODULE_PERMITTED.put(key, true);
-	 * }
-	 * }
-	 */
 
 	private Boolean checkBoolean(Object ob) {
-		// logging.info(this, "checkBoolean " + ob);
+
 		Boolean result = null;
 
 		if (ob instanceof Boolean) {
@@ -59,14 +48,10 @@ public class ModulePermissionValue {
 
 		else if (ob instanceof String) {
 			String sValue = ((String) ob).trim();
-			boolean checked = sValue.equalsIgnoreCase("yes")
-					||
-					sValue.equalsIgnoreCase("true");
+			boolean checked = sValue.equalsIgnoreCase("yes") || sValue.equalsIgnoreCase("true");
 			if (checked)
 				result = sValue.equalsIgnoreCase("yes");
 		}
-
-		// logging.info(this, "checkBoolean " +result);
 
 		return result;
 	}
@@ -126,7 +111,7 @@ public class ModulePermissionValue {
 	private Map<String, Object> interpretAsJson(Object ob) {
 		Map<String, Object> result = exec.getMapFromItem(ob);
 
-		if (result.entrySet().size() == 0)
+		if (result.entrySet().isEmpty())
 			return null;
 
 		return result;

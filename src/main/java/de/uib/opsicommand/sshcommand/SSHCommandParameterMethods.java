@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Window;
-import java.awt.event.HierarchyEvent;
-import java.awt.event.HierarchyListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,7 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Vector;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -24,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.ValueSelectorList;
@@ -44,7 +42,6 @@ import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
  */
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-// import org.json.*;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.ssh.SSHOutputCollector;
 
@@ -61,7 +58,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 
 	private ConfigedMain main;
 	private static SSHCommandParameterMethods instance;
-	// private String[] methods;
+
 	public static final String method_interactiveElement = configed
 			.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv");
 	public static final String method_getSelectedClientNames = configed
@@ -156,8 +153,8 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 			outputDia = ((SSHConnectExec) caller).getDialog();
 		else if (caller instanceof SSHConnectTerminal)
 			outputDia = ((SSHConnectTerminal) caller).getDialog();
-		ArrayList<String> params = command.getParameterList();
-		if ((params != null) && (params.size() > 0))
+		List<String> params = command.getParameterList();
+		if ((params != null) && (!params.isEmpty()))
 			for (String param : params) {
 				if (command.getCommandRaw().contains(param)) {
 					String[] splitted_parameter = splitParameter(param);
@@ -168,7 +165,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 						logging.debug(this, "parseParameter command " + command.getCommandRaw());
 						logging.debug(this, "parseParameter param " + param);
 						logging.debug(this, "parseParameter result " + result);
-						((SSHCommand) command).setCommand(command.getCommandRaw().replace(param, result));
+						(command).setCommand(command.getCommandRaw().replace(param, result));
 						logging.debug(this, "parseParameter command " + command.getCommandRaw());
 					}
 				}
@@ -219,7 +216,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		if (m.contains(param_splitter_default)) {
 			splitted[0] = m.split(param_splitter_default)[0];
 			logging.info(this, "splitParameter method " + splitted[0]);
-			// splitted[0] = getTranslatedMethod(splitted[0]);
+
 			logging.info(this, "splitParameter method " + splitted[0]);
 			splitted[1] = m.split(param_splitter_default)[1];
 			logging.info(this, "splitParameter format " + splitted[1]);
@@ -275,12 +272,12 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 
 	private String formatResult(String[] result, String format) {
 		String formated_result = "";
-		String f = format.replaceAll(" ", "");
+		String f = format.replace(" ", "");
 		logging.info(this, "callMethod format f " + f);
 		switch (f) {
 		case "xyz":
 		case "xyz...":
-			formated_result = Arrays.toString(result).replace("[", "").replaceAll(",", " ").replace("]", "");
+			formated_result = Arrays.toString(result).replace("[", "").replace(",", " ").replace("]", "");
 			break;
 		case "x,y,z":
 		case "x,y,z,...":
@@ -357,15 +354,14 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	}
 
 	private String createStringOfArray(String[] strArrToReplace, String begin_end_ofStr, String separator) {
-		String result = "error";
-		// String beginStr = begin_end_ofStr.split("x")[0];
-		// String endStr = begin_end_ofStr.split("x")[1];
+		String result;
+
 		logging.info(this, "createStringOfArray strArrToReplace " + strArrToReplace);
 		logging.info(this, "createStringOfArray strArrToReplace.length " + strArrToReplace.length + "if statement: "
 				+ (strArrToReplace.length > 1));
 		if (strArrToReplace.length > 1) {
 			result = Arrays.toString(strArrToReplace).replace("[", begin_end_ofStr.split("x")[0])
-					.replaceAll(",", separator).replace("]", begin_end_ofStr.split("x")[1]);
+					.replace(",", separator).replace("]", begin_end_ofStr.split("x")[1]);
 		} else {
 			result = Arrays.toString(strArrToReplace).replace("[", begin_end_ofStr.split("x")[0]).replace("]",
 					begin_end_ofStr.split("x")[1]);
@@ -379,15 +375,15 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	}
 
 	public String arrayToString(Object[] list) {
-		return Arrays.toString(list).replace("[", "").replaceAll(",", " ").replace("]", "");
+		return Arrays.toString(list).replace("[", "").replace(",", " ").replace("]", "");
 	}
 
 	protected String getUserText(String text, Component dialog) {
 		if (dialog == null)
-			dialog = de.uib.configed.Globals.mainFrame;
+			dialog = Globals.mainFrame;
 		logging.debug(this, "getUserText text " + text);
 		final JTextField field = new JTextField();
-		// field.setEchoChar('*');
+
 		final JOptionPane opPane = new JOptionPane(new Object[] { new JLabel(text), field },
 				JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION) {
 			@Override
@@ -396,8 +392,8 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 				((Component) field).requestFocusInWindow();
 			}
 		};
-		final JDialog jdialog = opPane.createDialog(dialog, de.uib.configed.Globals.APPNAME + " "
-				+ configed.getResourceValue("SSHConnection.ParameterDialog.Input"));
+		final JDialog jdialog = opPane.createDialog(dialog,
+				Globals.APPNAME + " " + configed.getResourceValue("SSHConnection.ParameterDialog.Input"));
 		jdialog.setSize(400, 150);
 		jdialog.setVisible(true);
 
@@ -406,22 +402,22 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		return null;
 	}
 
+	@Override
 	public String getConfig_serverName() {
 		List<String> depots = main.getPersistenceController().getHostInfoCollections().getDepotNamesList();
 		for (String depot : depots)
-			if (depot.startsWith(main.HOST)) {
-				logging.debug(this, "getConfig_serverName " + main.HOST);
+			if (depot.startsWith(ConfigedMain.HOST)) {
+				logging.debug(this, "getConfig_serverName " + ConfigedMain.HOST);
 				return depot;
 			}
 
-		logging.debug(this, "getConfig_serverName " + main.HOST);
+		logging.debug(this, "getConfig_serverName " + ConfigedMain.HOST);
 		//// peristancecontroller methods for depot :
-		// public Map<String, Map<String, Object>> getDepots()
-		// public LinkedList<String> getDepotNamesList()
-		// public Map<String, Map<String, Object>> getAllDepots()
-		return main.HOST;
+
+		return ConfigedMain.HOST;
 	}
 
+	@Override
 	public String getConfig_sshserverName() {
 		logging.debug(this, "getConfig_sshserverName " + SSHConnectionInfo.getInstance().getHost());
 		return SSHConnectionInfo.getInstance().getHost();
@@ -450,6 +446,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		return clientIPs;
 	}
 
+	@Override
 	public String[] getSelected_clientnames() {
 		logging.debug(this, "getSelected_clientnames  " + Arrays.toString(main.getSelectedClients()));
 		String[] clientnames = new String[main.getSelectedClients().length];
@@ -457,6 +454,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		return clientnames;
 	}
 
+	@Override
 	public String[] getSelected_depotnames() {
 		logging.debug(this, "getSelected_depotnames  " + main.getSelectedDepots());
 		return main.getSelectedDepots();
@@ -474,7 +472,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		int counter = 0;
 		for (String name : depotnames) {
 			String depotip = ((String) main.getPersistenceController().getHostInfoCollections().getDepots().get(name)
-					.get(HostInfo.clientIpAddressKEY));
+					.get(HostInfo.CLIENT_IP_ADDRESS_KEY));
 			logging.info(this, "getSelected_depotIPs host " + name + " depotip " + depotip);
 			if (depotip != null) {
 				depotIPs[counter] = depotip;
@@ -489,7 +487,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		valueList.setVisible(true);
 		final Map<String, Object> extendedInfo = new TreeMap<>();
 		final Map<String, Map<String, Object>> info = new TreeMap<>();
-		final Vector<String> data = new Vector<>();
+		final List<String> data = new ArrayList<>();
 
 		for (final String val : values) {
 			extendedInfo.put(val, val);
@@ -523,19 +521,17 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 			}
 		};
 
-		opPane.addHierarchyListener(new HierarchyListener() {
-			public void hierarchyChanged(HierarchyEvent e) {
-				Window window = SwingUtilities.getWindowAncestor(opPane);
-				if (window instanceof Dialog) {
-					Dialog dialog = (Dialog) window;
-					if (!dialog.isResizable()) {
-						dialog.setResizable(true);
-					}
+		opPane.addHierarchyListener(hierarchyEvent -> {
+			Window window = SwingUtilities.getWindowAncestor(opPane);
+			if (window instanceof Dialog) {
+				Dialog dialog = (Dialog) window;
+				if (!dialog.isResizable()) {
+					dialog.setResizable(true);
 				}
 			}
 		});
 
-		final JDialog jdialog = opPane.createDialog(opPane, de.uib.configed.Globals.APPNAME);
+		final JDialog jdialog = opPane.createDialog(opPane, Globals.APPNAME);
 		jdialog.setSize(400, 250);
 		jdialog.setVisible(true);
 

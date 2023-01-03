@@ -2,6 +2,8 @@ package de.uib.opsicommand.sshcommand;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.configed;
@@ -15,33 +17,25 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	private String baseName = "opsi-package-updater";
 	protected FGeneralDialog dialog = null;
 	public boolean needSudo = false;
-	private boolean needRoot = false;
 	private boolean needParameter = true;
 	private boolean isMultiCommand = false;
-	private int helpColumns = 2;
 	private int priority = 105;
 
 	private String action = " list --repos";
 	private String repo = "";
-	private ArrayList<String> actionlist = new ArrayList<String>();
-	private HashMap<String, String> actionhash = new HashMap<String, String>();
-	private HashMap<String, String> repohash = new HashMap<String, String>();
+	private List<String> actionlist = new ArrayList<>();
+	private Map<String, String> actionhash = new HashMap<>();
+	private Map<String, String> repohash = new HashMap<>();
 	private String verbosity = " -v ";
 
 	public CommandPackageUpdater() {
 		command = baseName;
 		actionlist.add("list");
-		actionhash.put(
-				configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.list"),
-				"list");
+		actionhash.put(configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.list"), "list");
 		actionlist.add("install");
-		actionhash.put(
-				configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.install"),
-				"install");
+		actionhash.put(configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.install"), "install");
 		actionlist.add("update");
-		actionhash.put(
-				configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.update"),
-				"update");
+		actionhash.put(configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.update"), "update");
 	}
 
 	@Override
@@ -97,13 +91,13 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 	@Override
 	public String getCommand() {
-		if (action == "list") {
+		if (action.equals("list")) {
 			action = " list --repos ";
 			repo = " ";
 		}
 		setCommand(baseName + verbosity + repo + action);
-		if (needSudo() && action != "list")
-			return SSHCommandFactory.getInstance().sudo_text + " " + command + " 2>&1";
+		if (needSudo() && !action.equals("list"))
+			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
 		return command + " 2>&1"; // the output redirection semms not to produce a jsch input
 	}
 
@@ -112,6 +106,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	 * 
 	 * @param c (command): String
 	 **/
+	@Override
 	public void setCommand(String c) {
 		command = c;
 	}
@@ -138,9 +133,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 	@Override
 	public void startParameterGui() {
-		// if (main.getOpsiVersion().length() == 0 || main.getOpsiVersion().charAt(0) ==
-		// '<' || main.getOpsiVersion().compareTo("4.1") < 0){}
-		// else dialog = new SSHPackageUpdaterDialog();
+
 	}
 
 	@Override
@@ -151,24 +144,15 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 			logging.error(this, configed.getResourceValue("OpsiConfdVersionError").replace("{0}", "4.1.0"));
 		} else
 			dialog = new SSHPackageUpdaterDialog();
-		// dialog = new SSHPackageUpdaterDialog(main);
+
 	}
 
 	@Override
 	public SSHConnectionExecDialog startHelpDialog() {
 		SSHCommand command = new CommandHelp(this);
-		SSHConnectExec exec = new SSHConnectExec(
-				command
-		/*
-		 * new SSHConnectionExecDialog(
-		 * configed.getResourceValue("SSHConnection.Exec.title") +
-		 * " \""+command.getCommand() + "\" ",
-		 * command)
-		 */
+		SSHConnectExec exec = new SSHConnectExec(command
+
 		);
-		// exec.exec(command, true, new SSHConnectionExecDialog(command,
-		// configed.getResourceValue("SSHConnection.Exec.title") + "
-		// \""+command.getCommand() + "\" "));
 		return (SSHConnectionExecDialog) exec.getDialog();
 	}
 
@@ -186,7 +170,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 			verbosity = "";
 	}
 
-	public void setRepos(HashMap r) {
+	public void setRepos(Map r) {
 		repohash = r;
 	}
 
@@ -197,7 +181,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 			repo = " --repo " + r + " ";
 	}
 
-	public HashMap getRepos() {
+	public Map getRepos() {
 		return repohash;
 	}
 
@@ -212,7 +196,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 		return actionhash.get(text);
 	}
 
-	public ArrayList getActions() {
+	public List getActions() {
 		return actionlist;
 	}
 
@@ -221,14 +205,11 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	}
 
 	public boolean checkCommand() {
-		if (action == "")
-			return false;
-		return true;
+		return !action.equals("");
 	}
 
 	@Override
-	public ArrayList<String> getParameterList() {
+	public List<String> getParameterList() {
 		return null;
 	}
-
 }

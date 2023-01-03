@@ -15,8 +15,9 @@ public class SoftwareVersionElement extends SelectElement {
 						configed.getResourceValue("ClientSelectionDialog.softwareProductVersion") });
 	}
 
+	@Override
 	public List<SelectOperation> supportedOperations() {
-		List<SelectOperation> result = new LinkedList<SelectOperation>();
+		List<SelectOperation> result = new LinkedList<>();
 		result.add(new StringEqualsOperation(this));
 		return result;
 	}

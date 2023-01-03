@@ -3,16 +3,11 @@ package de.uib.configed.gui;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
-/**
- * FShowList
- * Copyright:     Copyright (c) 2001-2012
- * Organisation:  uib
- * @author Rupert Röder
- */
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
@@ -48,6 +43,7 @@ public class FShowList extends FTextArea {
 		init(preferredWidth, preferredHeight);
 	}
 
+	@Override
 	public void setMessage(String message) {
 		jTextArea1.setText(message);
 	}
@@ -61,14 +57,15 @@ public class FShowList extends FTextArea {
 		jTextArea1.setCaretPosition(jTextArea1.getText().length());
 	}
 
-	public void setLines(java.util.List<String> lines) {
+	public void setLines(List<String> lines) {
 		for (String line : lines)
 			appendLine(line);
 	}
 
+	@Override
 	public void setFont(Font f) {
 		if (jTextArea1 == null) {
-			// logging.debug (" set Font called too early ");
+
 		} else {
 			jTextArea1.setFont(f);
 		}
@@ -87,8 +84,8 @@ public class FShowList extends FTextArea {
 		jTextArea1.setLineWrap(true);
 		jTextArea1.setWrapStyleWord(true);
 		jTextArea1.setOpaque(true);
-		// jTextArea1.setBackground(myHintYellow);
-		jTextArea1.setBackground(Globals.backgroundWhite);
+
+		jTextArea1.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		jTextArea1.setText("          ");
 		jTextArea1.setEditable(false);
 		jTextArea1.setFont(new java.awt.Font("Dialog", 0, 14));
@@ -101,42 +98,27 @@ public class FShowList extends FTextArea {
 
 	}
 
+	@Override
 	public void doAction1() {
-		// logging.debug ("action2");
+
 		logging.clearErrorList();
 		if (owner != null)
 			owner.toFront();
 		super.doAction1();
 	}
 
-	public void doAction2() {
-		// logging.debug ("action2");
-		// logging. clearErrorList();
-		super.doAction2();
-	}
-
 	// KeyListener
+	@Override
 	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+		if (e.getKeyCode() == KeyEvent.VK_SHIFT)
 			shiftPressed = false;
-			// logging.debug ("shift released");
-		}
 
-		if (e.getKeyCode() == KeyEvent.VK_TAB && !shiftPressed) {
-			if (e.getSource() == jTextArea1) {
-				jButton1.requestFocus();
-			}
-		}
+		else if (e.getKeyCode() == KeyEvent.VK_TAB && !shiftPressed && e.getSource() == jTextArea1)
+			jButton1.requestFocus();
 
-		if (e.getKeyCode() == KeyEvent.VK_TAB && shiftPressed) {
-			if (e.getSource() == jButton1) {
-				jTextArea1.requestFocus();
-			}
+		else if (e.getKeyCode() == KeyEvent.VK_TAB && shiftPressed && e.getSource() == jButton1) {
+			jTextArea1.requestFocus();
 		}
-	}
-
-	public static final void main(String[] args) {
-		new FShowList(null, "configed", "configed Ende", true).setVisible(true);
 	}
 
 }

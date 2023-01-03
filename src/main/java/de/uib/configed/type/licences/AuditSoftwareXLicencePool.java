@@ -1,10 +1,11 @@
 package de.uib.configed.type.licences;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
+import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.utilities.datastructure.Relation;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
@@ -24,16 +25,15 @@ public class AuditSoftwareXLicencePool extends Relation {
 	 * 
 	 */
 
-	public ArrayList<String> registeredSoftware;
+	public List<String> registeredSoftware;
 
 	public static final String SwID = "swId";
 
-	public static final java.util.List<String> ATTRIBUTES;
-	// public static final String[] ATTRIBUTES_asArray;
+	public static final List<String> ATTRIBUTES;
+
 	static {
-		ATTRIBUTES = new LinkedList<String>();
+		ATTRIBUTES = new LinkedList<>();
 		ATTRIBUTES.add(LicencepoolEntry.idSERVICEKEY);
-		// ATTRIBUTES.add(SwID);
 
 		ATTRIBUTES.add(SWAuditEntry.NAME);
 		ATTRIBUTES.add(SWAuditEntry.VERSION);
@@ -41,95 +41,33 @@ public class AuditSoftwareXLicencePool extends Relation {
 		ATTRIBUTES.add(SWAuditEntry.LANGUAGE);
 		ATTRIBUTES.add(SWAuditEntry.ARCHITECTURE);
 
-		// ATTRIBUTES_asArray = ATTRIBUTES.toArray(new String[0]);
 	}
 
-	public static final java.util.List<String> INTERFACED_ATTRIBUTES;
+	public static final List<String> INTERFACED_ATTRIBUTES;
 	static {
-		INTERFACED_ATTRIBUTES = new LinkedList<String>(ATTRIBUTES);
+		INTERFACED_ATTRIBUTES = new LinkedList<>(ATTRIBUTES);
 		INTERFACED_ATTRIBUTES.add(SwID);
 	}
 
 	public static final String[] SERVICE_ATTRIBUTES = new String[] { LicencepoolEntry.idSERVICEKEY, SWAuditEntry.NAME,
 			SWAuditEntry.VERSION, SWAuditEntry.SUBVERSION, SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE };
 
-	public AuditSoftwareXLicencePool(ArrayList<String> allRegisteredSoftware) {
+	public AuditSoftwareXLicencePool(List<String> allRegisteredSoftware) {
 		super(ATTRIBUTES);
 		registeredSoftware = allRegisteredSoftware;
-		// logging.info(this, "registeredSoftware");
-		// for (String sw : registeredSoftware) logging.info(this, sw);
 
 	}
 
-	/*
-	 * private String produceSWident(Map<String, String> m)
-	 * {
-	 * String result = de.uib.utilities.Globals.pseudokey(new String[]{
-	 * de.uib.utilities.Globals.getStringValue( m.get(SWAuditEntry.NAME) ),
-	 * de.uib.utilities.Globals.getStringValue( m.get(SWAuditEntry.VERSION) ),
-	 * de.uib.utilities.Globals.getStringValue( m.get(SWAuditEntry.SUBVERSION) ) ,
-	 * de.uib.utilities.Globals.getStringValue( m.get(SWAuditEntry.LANGUAGE) ),
-	 * de.uib.utilities.Globals.getStringValue (m.get (SWAuditEntry.ARCHITECTURE) )
-	 * }
-	 * );
-	 * 
-	 * return result;
-	 * }
-	 */
-
-	/*
-	 * private Integer produceSWidRaw(Map<String, Object> m)
-	 * {
-	 * return produceSWid(new RelationElement(m));
-	 * }
-	 * 
-	 * private Integer produceSWid(Map<String, String> m)
-	 * {
-	 * String swIdent = produceSWident(m);
-	 * 
-	 * int result = -1;
-	 * 
-	 * boolean newEntry = false;
-	 * 
-	 * 
-	 * logging.info(this, "produceSWid for " + swIdent);
-	 * 
-	 * int swId = registeredSoftware.indexOf(swIdent);
-	 * 
-	 * 
-	 * if (swId > -1)
-	 * result = swId;
-	 * else
-	 * {
-	 * //logging.error("no software entry for " + swIdent);
-	 * registeredSoftware.add(swIdent);
-	 * result = registeredSoftware.size();
-	 * newEntry = true;
-	 * }
-	 * 
-	 * String info = "";
-	 * if (m.get(LicencepoolEntry.idSERVICEKEY) != null)
-	 * info = " " + m.get(LicencepoolEntry.idSERVICEKEY) + " ";
-	 * 
-	 * //logging.info(this, "registeredSoftware " + registeredSoftware);
-	 * logging.info(this, "swident  " + swIdent + " for " + info + "  ==== id (new "
-	 * + newEntry +") " + result);
-	 * 
-	 * return result;
-	 * }
-	 */
-
 	private String produceSWident(Map<String, Object> m) {
-		return de.uib.utilities.Globals
-				.pseudokey(new String[] { de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.NAME)),
-						de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.VERSION)),
-						de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.SUBVERSION)),
-						de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.LANGUAGE)),
-						de.uib.utilities.Globals.getStringValue(m.get(SWAuditEntry.ARCHITECTURE)) });
+		return Globals.pseudokey(new String[] { Globals.getStringValue(m.get(SWAuditEntry.NAME)),
+				Globals.getStringValue(m.get(SWAuditEntry.VERSION)),
+				Globals.getStringValue(m.get(SWAuditEntry.SUBVERSION)),
+				Globals.getStringValue(m.get(SWAuditEntry.LANGUAGE)),
+				Globals.getStringValue(m.get(SWAuditEntry.ARCHITECTURE)) });
 	}
 
 	public static Map<String, String> produceMapFromSWident(String ident) {
-		Map<String, String> m = new HashMap<String, String>();
+		Map<String, String> m = new HashMap<>();
 		if (ident == null) {
 			logging.warning("produceMapFromSWident, ident null ");
 			return null;
@@ -154,27 +92,10 @@ public class AuditSoftwareXLicencePool extends Relation {
 		String swIdent = "" + produceSWident(m);
 		rowmap.put(SwID, swIdent);
 
-		/*
-		 * if (swIdent.indexOf("55375-337") > -1 || swIdent.indexOf("55375-640") > -1)
-		 * logging.info(this, "integrateRaw " + m);
-		 */
-
-		rowmap.put(LicencepoolEntry.idSERVICEKEY,
-				de.uib.utilities.Globals.getStringValue(m.get(LicencepoolEntry.idSERVICEKEY)));
+		rowmap.put(LicencepoolEntry.idSERVICEKEY, Globals.getStringValue(m.get(LicencepoolEntry.idSERVICEKEY)));
 		add(rowmap);
 
-		// logging.info(this, " StringValuedRelationElement " + rowmap);
-
 		return rowmap;
-	}
-
-	public static void main(String[] args) {
-		if (args.length == 0) {
-			String sToSplit = "firefox;25.0-3.fc20;;;x64";
-			logging.debug(" no argument given, taken " + sToSplit);
-			logging.debug("getting map " + produceMapFromSWident(sToSplit));
-		} else
-			logging.debug("getting map " + produceMapFromSWident(args[0]));
 	}
 
 }

@@ -1,9 +1,9 @@
 package de.uib.opsidatamodel.productstate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import de.uib.configed.Globals;
 
@@ -29,9 +29,8 @@ public class ActionProgress {
 	private static Map<String, String> label2displayLabel;
 	private static Map<String, String> displayLabel2label;
 
-	private static Vector<Integer> states;
-	private static Vector<String> labels;
-	private static String[] choiceLabels;
+	private static List<Integer> states;
+	private static List<String> labels;
 
 	// instance variable
 	private int state = INVALID;
@@ -40,7 +39,7 @@ public class ActionProgress {
 		if (states != null)
 			return;
 
-		states = new Vector<Integer>();
+		states = new ArrayList<>();
 		states.add(CONFLICT);
 		states.add(INVALID);
 		states.add(NOT_AVAILABLE);
@@ -48,7 +47,7 @@ public class ActionProgress {
 		states.add(INSTALLING);
 		states.add(CACHED);
 
-		labels = new Vector<String>();
+		labels = new ArrayList<>();
 		labels.add(Globals.CONFLICT_STATE_STRING);
 		labels.add(Globals.NO_VALID_STATE_STRING);
 		labels.add("not_available");
@@ -56,7 +55,7 @@ public class ActionProgress {
 		labels.add("installing");
 		labels.add("cached");
 
-		state2label = new HashMap<Integer, String>();
+		state2label = new HashMap<>();
 		state2label.put(CONFLICT, Globals.CONFLICT_STATE_STRING);
 		state2label.put(INVALID, Globals.NO_VALID_STATE_STRING);
 		state2label.put(NOT_AVAILABLE, "not_available");
@@ -64,7 +63,7 @@ public class ActionProgress {
 		state2label.put(INSTALLING, "installing");
 		state2label.put(CACHED, "cached");
 
-		label2state = new HashMap<String, Integer>();
+		label2state = new HashMap<>();
 		label2state.put(Globals.CONFLICT_STATE_STRING, CONFLICT);
 		label2state.put(Globals.NO_VALID_STATE_STRING, INVALID);
 		label2state.put("not_available", NOT_AVAILABLE);
@@ -72,26 +71,23 @@ public class ActionProgress {
 		label2state.put("installing", INSTALLING);
 		label2state.put("cached", CACHED);
 
-		label2displayLabel = new HashMap<String, String>();
+		label2displayLabel = new HashMap<>();
 		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
 		label2displayLabel.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		label2displayLabel.put("not_available", "not_available");
 		label2displayLabel.put("none", "no process reported");
-		// abel2displayLabel.put("none", "none");
+
 		label2displayLabel.put("installing", "installing");
 		label2displayLabel.put("cached", "cached");
 
-		displayLabel2label = new HashMap<String, String>();
+		displayLabel2label = new HashMap<>();
 		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
 		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		displayLabel2label.put("not_available", "not_available");
 		displayLabel2label.put("no process reported", "none");
-		// displayLabel2label.put("none", "none");
+
 		displayLabel2label.put("installing", "installing");
 		displayLabel2label.put("cached", "cached");
-
-		choiceLabels = new String[] { label2displayLabel.get("none") };
-
 	}
 
 	public static Map<String, String> getLabel2DisplayLabel() {
@@ -121,7 +117,7 @@ public class ActionProgress {
 		return state2label.get(state);
 	}
 
-	public static Vector<String> getLabels() {
+	public static List<String> getLabels() {
 		checkCollections();
 
 		return labels;
@@ -155,6 +151,7 @@ public class ActionProgress {
 		return getLabel(state);
 	}
 
+	@Override
 	public String toString() {
 		return getLabel(state);
 	}
@@ -186,20 +183,4 @@ public class ActionProgress {
 		else
 			state = NOT_AVAILABLE;
 	}
-
-	public static void main(String[] args) {
-		System.out.println(" test ActionProgress.java");
-		checkCollections();
-		Iterator iter = states.iterator();
-
-		int i = 0;
-
-		while (iter.hasNext()) {
-			i++;
-			int state = (Integer) iter.next();
-			// System.out.println("state " + i + " : " + state + " label " +
-			// getLabel(state));
-		}
-	}
-
 }

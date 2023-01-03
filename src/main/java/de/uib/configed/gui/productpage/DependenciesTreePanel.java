@@ -18,7 +18,6 @@
 
 package de.uib.configed.gui.productpage;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -51,7 +50,6 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 
 	private DependenciesTreeModel dependenciesTreeModel;
 
-	private JScrollPane dependenciesTreeScrollPanel;
 	private JRadioButton dependenciesNeedsButton;
 	private JRadioButton dependenciesNeededByButton;
 	private JButton copyListButton;
@@ -74,7 +72,7 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		// Den Tree bauen
 		dependenciesTree = new JTree();
 		dependenciesTree.setToggleClickCount(0);
-		dependenciesTree.setBackground(Globals.backVeryLightBlue);
+		dependenciesTree.setBackground(Globals.BACKGROUND_COLOR_8);
 
 		dependenciesTree.addMouseListener(this);
 		dependenciesTree.addMouseMotionListener(this);
@@ -86,26 +84,16 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 					boolean leaf, int row, boolean hasFocus) {
 
 				JLabel label = new JLabel(value.toString()); // (JLabel)
-																// super.getTreeCellRendererComponent(tree,value,sel,expanded,leaf,row,hasFocus);
 
 				if (sel)
-					label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+					label.setBorder(BorderFactory.createLineBorder(Globals.DEPENDENCIES_TREE_PANEL_BORDER_COLOR, 1));
 				else
 					label.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
-
-				if (((DefaultMutableTreeNode) value).isRoot())
-					label.setIcon(null);
-				else
-					label.setIcon(null);
 
 				return label;
 			}
 		};
 
-		// Icon productIcon = Globals.createImageIcon("images/package.png", "" );
-		// renderer.setLeafIcon(null);//productIcon);
-		// renderer.setOpenIcon(null);
-		// renderer.setClosedIcon(null);
 		dependenciesTree.setCellRenderer(renderer);
 
 		DefaultTreeSelectionModel selectionModel = new DefaultTreeSelectionModel() {
@@ -138,10 +126,10 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 	}
 
 	private void initComponents() {
-		dependenciesTreeScrollPanel = new JScrollPane();
+		JScrollPane dependenciesTreeScrollPanel = new JScrollPane();
 
 		dependenciesTreeScrollPanel.setViewportView(dependenciesTree);
-		dependenciesTreeScrollPanel.getViewport().setBackground(Globals.backLightBlue);
+		dependenciesTreeScrollPanel.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 
 		dependenciesNeedsButton = new JRadioButton(
 				configed.getResourceValue("DependenciesTree.dependenciesNeedsButton"));
@@ -155,7 +143,7 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		dependenciesTreePathLabel = new JLabel();
 		dependenciesTreePathLabel.setBorder(BorderFactory.createLineBorder(Globals.greyed, 1));
 		dependenciesTreePathLabel.setOpaque(true);
-		dependenciesTreePathLabel.setBackground(Globals.backVeryLightBlue);
+		dependenciesTreePathLabel.setBackground(Globals.BACKGROUND_COLOR_8);
 
 		dependenciesNeedsButton.addActionListener(this);
 		dependenciesNeededByButton.addActionListener(this);
@@ -171,13 +159,20 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		// Grouplayout
 		dependenciesTreeGroupLayout.setHorizontalGroup(dependenciesTreeGroupLayout.createSequentialGroup()
 				.addGroup(dependenciesTreeGroupLayout.createParallelGroup()
-						.addComponent(dependenciesNeedsButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(dependenciesNeededByButton, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(copyListButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
+						.addGroup(dependenciesTreeGroupLayout.createSequentialGroup()
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addComponent(dependenciesNeedsButton, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(dependenciesTreeGroupLayout.createSequentialGroup()
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addComponent(dependenciesNeededByButton, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(dependenciesTreeGroupLayout.createSequentialGroup()
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addComponent(copyListButton, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)))
 				.addComponent(dependenciesTreeScrollPanel));
+
 		dependenciesTreeGroupLayout.setVerticalGroup(dependenciesTreeGroupLayout.createParallelGroup()
 				.addGroup(dependenciesTreeGroupLayout.createSequentialGroup().addComponent(dependenciesNeedsButton)
 						.addComponent(dependenciesNeededByButton).addGap(0, 0, Short.MAX_VALUE).addComponent(

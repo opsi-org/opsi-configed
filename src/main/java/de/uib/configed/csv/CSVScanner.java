@@ -15,8 +15,6 @@ public class CSVScanner {
 	private StringBuilder field = new StringBuilder();
 	private List<List<CSVToken>> tokens = new ArrayList<>();
 	private boolean inQuotes = false;
-	private boolean isMultiLine = false;
-	private boolean isFieldWithEmbeddedDoubleQuotes = false;
 
 	public CSVScanner(Reader reader) {
 		this(reader, DEFAULT_FORMAT);

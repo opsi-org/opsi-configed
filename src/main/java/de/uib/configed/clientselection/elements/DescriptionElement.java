@@ -14,14 +14,11 @@ public class DescriptionElement extends SelectElement {
 				/* "Description" */configed.getResourceValue("NewClientDialog.description"));
 	}
 
+	@Override
 	public List<SelectOperation> supportedOperations() {
-		List<SelectOperation> result = new LinkedList<SelectOperation>();
+		List<SelectOperation> result = new LinkedList<>();
 		result.add(new StringEqualsOperation(this));
 		return result;
 	}
 
-	// public SelectOperation createOperation( String operation, SelectData data )
-	// {
-	// return Backend.getBackend().createOperation( operation, data, this );
-	// }
 }

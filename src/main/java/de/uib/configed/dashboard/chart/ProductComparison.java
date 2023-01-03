@@ -42,8 +42,7 @@ public class ProductComparison extends StackPane implements DataChangeListener {
 		List<String> netbootProducts = ProductData.getNetbootProducts();
 		List<String> localbootProducts = ProductData.getLocalbootProducts();
 
-		if (netbootProducts.isEmpty() &&
-				localbootProducts.isEmpty()) {
+		if (netbootProducts.isEmpty() && localbootProducts.isEmpty()) {
 			productsNoDataText.setVisible(true);
 			productComparisonPieChart.setLabelsVisible(false);
 		} else {

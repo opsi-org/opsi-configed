@@ -1,18 +1,15 @@
 package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 
-import de.uib.configed.clientselection.SelectElement;
 import de.uib.utilities.logging.logging;
 
 public abstract class OpsiDataDateMatcher extends OpsiDataMatcher {
 
-	public OpsiDataDateMatcher(String map, String key, String data, SelectElement element) {
-		super(map, key, data, element);
+	protected OpsiDataDateMatcher(String map, String key, String data) {
+		super(map, key, data);
 	}
 
 	@Override
 	protected boolean checkData(final String realdata) {
-		// logging.debug(this, "OpsiDataDateMatcher checkData " + realdata + " compare
-		// to " +data);
 
 		java.sql.Date date = null;
 		java.sql.Date realdate = null;
@@ -38,15 +35,12 @@ public abstract class OpsiDataDateMatcher extends OpsiDataMatcher {
 			return false;
 		}
 
-		String realD = ((String) realdata).trim();
+		String realD = realdata.trim();
 
 		int posBlank = realD.indexOf(' ');
 		if (posBlank > 0) {
 			realD = realD.substring(0, posBlank);
 		}
-
-		// logging.debug(this, "OpsiDataDateMatcher checkData " + realD + " compare to "
-		// +data);
 
 		// check if we have to interpret variables
 

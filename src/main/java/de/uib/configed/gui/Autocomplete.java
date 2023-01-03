@@ -15,9 +15,9 @@ import de.uib.utilities.logging.logging;
 
 public class Autocomplete implements DocumentListener {
 
-	private static enum Mode {
+	private enum Mode {
 		INSERT, COMPLETION
-	};
+	}
 
 	private JTextField textField;
 	private List<String> keywords;
@@ -30,23 +30,22 @@ public class Autocomplete implements DocumentListener {
 	}
 
 	public void setKeywordsList(List<String> l) {
-		// keywords = new List<String>();
+
 		this.keywords = l;
 	}
 
 	@Override
 	public void changedUpdate(DocumentEvent ev) {
-		// logging.info(this,"changedUpdate " + ev);
+
 	}
 
 	@Override
 	public void removeUpdate(DocumentEvent ev) {
-		// logging.info(this,"removeUpdate " + ev);
+
 	}
 
 	@Override
 	public void insertUpdate(DocumentEvent ev) {
-		// logging.info(this,"insertUpdate " + ev);
 
 		if (ev.getLength() != 1)
 			return;
@@ -62,7 +61,7 @@ public class Autocomplete implements DocumentListener {
 		// Find where the word starts
 		int w;
 		for (w = pos; w >= 0; w--) {
-			// if (!Character.isLetter(content.charAt(w)))
+
 			if (content.charAt(w) == ' ')
 				break;
 		}
@@ -93,7 +92,7 @@ public class Autocomplete implements DocumentListener {
 		public void actionPerformed(ActionEvent ev) {
 			if (mode == Mode.COMPLETION) {
 				int pos = textField.getSelectionEnd();
-				StringBuffer sb = new StringBuffer(textField.getText());
+				StringBuilder sb = new StringBuilder(textField.getText());
 				sb.insert(pos, " ");
 				textField.setText(sb.toString());
 				textField.setCaretPosition(pos + 1);
@@ -113,8 +112,9 @@ public class Autocomplete implements DocumentListener {
 			this.position = position;
 		}
 
+		@Override
 		public void run() {
-			StringBuffer sb = new StringBuffer(textField.getText());
+			StringBuilder sb = new StringBuilder(textField.getText());
 			sb.insert(position, completion);
 			textField.setText(sb.toString());
 			textField.setCaretPosition(position + completion.length());

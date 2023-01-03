@@ -1,5 +1,8 @@
 package de.uib.configed;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * configed - configuration editor for client work stations in opsi (open pc
  * server integration) www.opsi.org CopyrightInfos 2017
@@ -9,16 +12,16 @@ public class CopyrightInfos {
 	static String discard, major, minor, update, build;
 	static final String COMPLETE_VERSION_INFO = System.getProperty("java.runtime.version");
 
-	private static final java.util.ArrayList<String> infos;
+	private static final List<String> infos;
 	static {
-		infos = new java.util.ArrayList<>();
+		infos = new ArrayList<>();
 
-		infos.add(de.uib.configed.Globals.APPNAME + "  Version " + de.uib.configed.Globals.VERSION + " ("
-				+ de.uib.configed.Globals.VERDATE + ") " + de.uib.configed.Globals.VERHASHTAG);
+		infos.add(
+				Globals.APPNAME + "  Version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
 		infos.add("_________________________________________________________________________________");
 		infos.add("");
-		infos.add(de.uib.configed.Globals.COPYRIGHT1);
-		infos.add(de.uib.configed.Globals.COPYRIGHT2);
+		infos.add(Globals.COPYRIGHT1);
+		infos.add(Globals.COPYRIGHT2);
 		infos.add("");
 		infos.add("running on java version " + COMPLETE_VERSION_INFO);
 		infos.add("");
@@ -53,7 +56,7 @@ public class CopyrightInfos {
 	private CopyrightInfos() {
 	}
 
-	public static java.util.List<String> get() {
+	public static List<String> get() {
 		return infos;
 	}
 }

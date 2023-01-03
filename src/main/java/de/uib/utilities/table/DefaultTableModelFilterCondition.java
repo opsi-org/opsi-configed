@@ -1,12 +1,12 @@
 package de.uib.utilities.table;
 
+import java.util.List;
+import java.util.NavigableSet;
 import java.util.TreeSet;
-import java.util.Vector;
 
-public class DefaultTableModelFilterCondition
-		implements TableModelFilterCondition {
+public class DefaultTableModelFilterCondition implements TableModelFilterCondition {
 
-	protected TreeSet<? extends Object> filterSet;
+	protected NavigableSet<? extends Object> filterSet;
 	protected int keyCol = -1;
 	protected String filterLabel = "";
 
@@ -28,12 +28,13 @@ public class DefaultTableModelFilterCondition
 			this.filterLabel = label;
 	}
 
+	@Override
 	public void setFilter(TreeSet<Object> filterParam) {
 		filterSet = filterParam;
 	}
 
-	public boolean test(Vector<Object> row) {
-		// logging.info(this, "test " + row);
+	@Override
+	public boolean test(List<Object> row) {
 
 		if (filterSet == null)
 			return true;
@@ -42,14 +43,14 @@ public class DefaultTableModelFilterCondition
 			return true;
 
 		boolean result = filterSet.contains(row.get(keyCol));
-		// if (result) logging.info(this, "test: " + row.get(keyCol) + " " + result);
 
 		return result;
 	}
 
-	public void setFilter(int[] rowNoFilter, final Vector<Vector<Object>> row) {
+	public void setFilter(int[] rowNoFilter, final List<List<Object>> row) {
 	}
 
+	@Override
 	public String toString() {
 		return filterLabel;
 	}

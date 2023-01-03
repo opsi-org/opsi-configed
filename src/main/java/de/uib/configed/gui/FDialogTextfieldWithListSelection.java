@@ -15,12 +15,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-/**
- * FDialogTextfieldWithListSelectio
- * Copyright:     Copyright (c) 2022
- * Organisation:  uib
- * @author Rupert Röder
- */
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
@@ -46,35 +40,33 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 	public void applyFraming(FramingTextfieldWithListselection defs) {
 		setTitle(defs.getTitle());
 
-		// theField = new JTextField("user1");
 		labelField = new JLabel(defs.getTextfieldLabel());
-		// labelField.setText( defs.getTextfieldLabel() );
+
 		labelList = new JLabel(defs.getListLabel());
-		// labelList.setText( defs.getListLabel() );
+
 		labelList.setToolTipText(defs.getListLabelToolTip());
-		theList = new JList();
-		theList.setListData(defs.getListData());
-		if (defs.getListData() != null && defs.getListData().size() > 0)
+		theList = new JList<>();
+		theList.setListData(defs.getListData().toArray(new String[0]));
+		if (defs.getListData() != null && !defs.getListData().isEmpty())
 			theList.setSelectedIndex(0);
 		theList.addListSelectionListener(this);
 	}
 
 	@Override
 	protected void allLayout() {
-		// super.allLayout();
+
 		// we could design an adapted layout and infuse it in guiInit
 		logging.info(this, "allLayout");
 
-		allpane.setBackground(de.uib.configed.Globals.backLightBlue); // Globals.nimbusBackground);///Globals.backgroundWhite);
-																		// //Globals.backLighter);//Globals.backgroundWhite);//(myHintYellow);
+		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
+		// 
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
 		if (centerPanel == null)
 			centerPanel = new JPanel();
 
-		centerPanel.setBackground(Globals.backLightBlue);// Color.white);
-		// centerPanel.setOpaque(true);
+		centerPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		southPanel = new JPanel();
 
@@ -88,27 +80,25 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, Short.MAX_VALUE))
 				.addGroup(southLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE / 2)
-						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE)// GroupLayout.PREFERRED_SIZE)//Short.MAX_VALUE)
-						.addGap(Globals.HGAP_SIZE / 2)));
+						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE).addGap(Globals.HGAP_SIZE / 2)));
 
 		southLayout.setVerticalGroup(southLayout.createSequentialGroup()
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-				// .addComponent(additionalPane, 300, 300, Short.MAX_VALUE )
+
 				.addComponent(additionalPane, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
-		// southPanel.setOpaque(true);
-		southPanel.setBackground(Globals.backLightBlue);// Color.white );
+		southPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		GroupLayout allLayout = new GroupLayout(allpane);
 		allpane.setLayout(allLayout);
 
 		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
 				.addComponent(centerPanel, 100, 200, Short.MAX_VALUE).addGap(Globals.HGAP_SIZE)
-				// .addComponent(southPanel,300, 300, Short.MAX_VALUE)
+
 				.addComponent(southPanel, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.HGAP_SIZE));
 
@@ -133,8 +123,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 
 	public JPanel initPanel() {
 		JPanel thePanel = new JPanel();
-		thePanel.setBackground(Globals.backLightBlue);
-		// thePanel.setOpaque( true );
+		thePanel.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		theList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		theList.addListSelectionListener(this);
@@ -144,7 +133,6 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 
 		scrollpaneForList = new javax.swing.JScrollPane();
 		scrollpaneForList.setViewportView(theList);
-		// scrollpaneForList.getViewport().setBackground(Globals.backLightBlue );
 
 		GroupLayout theLayout = new GroupLayout(thePanel);
 		thePanel.setLayout(theLayout);
@@ -163,8 +151,8 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		theLayout.setHorizontalGroup(theLayout.createParallelGroup()
 				.addGroup(theLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
 						.addComponent(labelField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)// Globals.labelWidth, Globals.labelWidth *2,
-						// Globals.labelWidth *2 )
+								GroupLayout.PREFERRED_SIZE)
+
 						.addGap(Globals.HGAP_SIZE).addGap(Globals.HGAP_SIZE)
 						.addComponent(theField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
 						.addGap(Globals.HGAP_SIZE).addGap(Globals.HGAP_SIZE))
@@ -184,18 +172,6 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		resultingText = theField.getText();
 		selectedListElement = theList.getSelectedValue();
 
-		// logging.info(this, "preAction1 resultingText, selectedListElement " +
-		// resultingText + ", " + selectedListElement);
-	}
-
-	@Override
-	public int getResult() {
-		// logging.info(this, "got result resultingText, selectedListElement "
-		// + theField.getText() + ", " + theList.getSelectedValue());
-		// values are not got at this point
-		// override doAction for getting the values
-
-		return super.getResult();
 	}
 
 	public String getResultText() {
@@ -206,42 +182,10 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		return selectedListElement;
 	}
 
-	// ======================
 	// interface ListSelectionListener
+	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		// logging.info(this, "valueChanged " + e);
-		// selectedListElement = theList.getSelectedValue();
-	}
-	// ======================
 
-	public static void main(String[] args) {
-		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, // owner frame
-				"test FGeneralDialogTest", // title
-				false, // modal
-
-				new String[] { "ok", "cancel" },
-
-				new Icon[] { de.uib.configed.Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-						de.uib.configed.Globals.createImageIcon("images/cancel16_small.png", "") },
-				1, // lastButtonNo,with "1" we get only the first button
-				600, 600, true, // lazylayout, i.e, we have a chance to define components and use them for the
-				// layout
-				null // addPanel predefined
-		);
-
-		JPanel centerPanel = f.initPanel();
-		// JPanel addPanel = new JPanel();
-		// addPanel.setBackground( Color.BLUE );
-
-		// f.setCenterPaneInScrollpane( centerPanel );
-		f.setCenterPane(centerPanel);
-
-		// f.setAdditionalPane( addPanel );
-
-		f.setSize(new Dimension(500, 600));
-
-		f.setupLayout();
-		f.setVisible(true);
 	}
 
 }

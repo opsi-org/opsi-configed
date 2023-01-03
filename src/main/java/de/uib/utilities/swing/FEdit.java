@@ -28,8 +28,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
 
-//import de.uib.configed.Globals;
-import de.uib.utilities.Globals;
+import de.uib.configed.Globals;
+import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
 public class FEdit extends javax.swing.JDialog implements ActionListener, KeyListener {
@@ -42,8 +42,6 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 	protected JComponent editingArea;
 	protected JLabel labelHint;
 
-	// private javax.swing.JButton cancelbutton;
-	// private javax.swing.JButton buttonCommit;
 	protected de.uib.configed.gui.IconButton buttonCommit;
 	protected de.uib.configed.gui.IconButton buttonCancel;
 
@@ -65,7 +63,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 		logging.debug(this, " FEdit constructed for >>" + initialText + "<< title " + hint);
 		setIconImage(Globals.mainIcon);
-		// initComponents();
+
 		if (initialText != null)
 			this.initialText = initialText;
 
@@ -84,39 +82,34 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 	protected void createComponents() {
 		framingPanel = new JPanel();
 		editingArea = new JPanel(new BorderLayout());
-		// editingArea.addFocusListener(this);
+
 		labelHint = new JLabel();
 		labelHint.setFont(Globals.defaultFontStandardBold);
 
 		buttonCommit = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip"), "images/apply.png",
+				configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip"), "images/apply.png",
 				"images/apply_over.png", "images/apply_disabled.png", true) {
+			@Override
 			public void setEnabled(boolean b) {
 				super.setEnabled(b);
 				logging.debug(this, "setEnabled " + b);
 			}
 		};
-		// buttonCommit.setEnabled( false );
-		buttonCommit.setPreferredSize(new Dimension(40, de.uib.utilities.Globals.buttonHeight));
+
+		buttonCommit.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 
 		buttonCancel = new de.uib.configed.gui.IconButton(
-				de.uib.configed.configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"), "images/cancel.png",
+				configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"), "images/cancel.png",
 				"images/cancel_over.png", "images/cancel_disabled.png", true);
-		buttonCancel.setPreferredSize(new Dimension(40, de.uib.utilities.Globals.buttonHeight));
+		buttonCancel.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 
-		// buttonCancel.setEnabled( false );
 	}
 
 	protected void initComponents() {
-		framingPanel.setBackground(Globals.backgroundWhite);
+		framingPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
 
 		setHint(hint);
-
-		// okbutton = new javax.swing.JButton();
-		// cancelbutton = new javax.swing.JButton();
-		// okbutton.setText("ok");
-		// cancelbutton.setText("cancel");
 
 		buttonCommit.addActionListener(this);
 		buttonCancel.addActionListener(this);
@@ -124,19 +117,11 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 		buttonCommit.addKeyListener(this);
 		buttonCancel.addKeyListener(this);
 
-		// scrollpane = new javax.swing.JScrollPane();
-
-		// textarea = new javax.swing.JTextArea();
-
-		// textarea.setColumns(20);
-		// textarea.setRows(5);
-		// scrollpane.setViewportView(textarea);
-
 		javax.swing.GroupLayout layout1 = new javax.swing.GroupLayout(framingPanel);
 		framingPanel.setLayout(layout1);
 		layout1.setHorizontalGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(layout1.createSequentialGroup()
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 								.addComponent(labelHint, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
@@ -146,25 +131,25 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 										.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
-										// .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
+
 										.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE)))
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 		layout1.setVerticalGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(layout1.createSequentialGroup()
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize, Globals.vGapSize)
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 						.addComponent(labelHint, javax.swing.GroupLayout.PREFERRED_SIZE,
 								javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addComponent(editingArea, 20, 80, Short.MAX_VALUE)
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
@@ -184,12 +169,11 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 	}
 
 	public void setDataChanged(boolean b) {
-		// logging.info(this, " FEdit dataChanged ẃas " + dataChanged +
-		// " button enabled " + buttonCommit.isEnabled() + " set to " + b);
+
 		dataChanged = b;
 		buttonCommit.setEnabled(b);
 		buttonCancel.setEnabled(true);
-		// buttonCancel.setEnabled(b);
+
 	}
 
 	protected boolean isDataChenged() {
@@ -242,20 +226,19 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 	}
 
 	public boolean init(Dimension usableAreaSize) {
-		// logging.info(this, "init usableAreaSize " + usableAreaSize);
+
 		if (editingArea.getComponentCount() != 1) {
 			logging.info(this, " editing area not filled with component");
-			// return false;
+
 		}
-		// logging.debug(" editingArea used by " +
-		// editingArea.getComponent(0).getClass());
+
 		editingArea.getComponent(0).setPreferredSize(usableAreaSize);
 		initComponents();
 		return true;
 	}
 
 	public boolean init() {
-		// logging.info(this, "init areaDimension " + areaDimension);
+
 		return init(areaDimension);
 	}
 
@@ -269,7 +252,6 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 		// problem: in applet in windows, we may leave the screen
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		// logging.debug(this, "centerOn screenSize " + screenSize);
 
 		if (startX + getSize().width > screenSize.width)
 			startX = screenSize.width - getSize().width;
@@ -307,23 +289,12 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 			startY = (screenSize.height - getSize().height) / 2;
 
 		} else {
-			// logging.debug(this, "centerOn (int) masterOnScreen.getX() " + (int)
-			// masterOnScreen.getX());
-			// logging.debug(this, "centerOn (int) masterOnScreen.getY() " + (int)
-			// masterOnScreen.getY());
-			// logging.debug(this, "centerOn master.getWidth() " + master.getWidth() / 2);
-			// logging.debug(this, "centerOn master.getHeight() " + master.getHeight() / 2)
-			// ;
-			// logging.debug(this, "centerOn this.getSize() " + getSize());
-
-			// logging.debug(this, "centerOn " + master.getClass() + ", " + master);
 
 			startX = (int) masterOnScreen.getX() + intHalf(master.getWidth()) - intHalf(getSize().getWidth());
 			startY = (int) masterOnScreen.getY() + intHalf(master.getHeight()) - intHalf(getSize().getHeight());
 
 			// problem: in applet in windows, we may leave the screen
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			// logging.debug(this, "centerOn screenSize " + screenSize);
 
 			if (startX + getSize().width > screenSize.width)
 				startX = screenSize.width - getSize().width;
@@ -340,13 +311,13 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 		if (caller != null) {
 			callerFont = caller.getFont();
 			caller.setFont(callerFont.deriveFont(Font.ITALIC));
-			// logging.debug("set derived font");
+
 		}
 	}
 
 	public void deactivate() {
 		if (caller != null) {
-			// logging.debug(" reset font ");
+
 			caller.setFont(callerFont);
 			caller.validate();
 		}
@@ -360,16 +331,15 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 		deactivate(); // no effect probably because of reentering the field
 	}
 
+	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			cancel();
-			// logging.debug(" window closing, text " + getText());
+
 		} else if (e.getID() == WindowEvent.WINDOW_ACTIVATED) {
-			// logging.debug(" window activated");
+
 			enter();
 		} else if (e.getID() == WindowEvent.WINDOW_DEACTIVATED) {
-			// logging.debug(" window deactivated");
-			// deactivate();
 
 		}
 
@@ -390,7 +360,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 		logging.info(this, "cancel, go back to " + initialText);
 		setStartText(initialText); // sets cancelled = false
 		cancelled = true;
-		// if (servedCellEditor != null) servedCellEditor.cancelCellEditing();
+
 		if (servedCellEditor != null)
 			servedCellEditor.stopCellEditing();
 
@@ -403,11 +373,12 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 	// interface
 	// ActionListener
+	@Override
 	public void actionPerformed(java.awt.event.ActionEvent e) {
 		if (e.getSource() == buttonCommit) {
 			commit();
 		} else if (e.getSource() == buttonCancel) {
-			// logging.debug (" -------- buttonCancel " + e);
+
 			cancel();
 		}
 
@@ -415,6 +386,7 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 	// interface
 	// KeyListener
+	@Override
 	public void keyPressed(KeyEvent e) {
 		logging.debug(this, " key event " + e);
 		if (e.getSource() == buttonCommit) {
@@ -425,9 +397,11 @@ public class FEdit extends javax.swing.JDialog implements ActionListener, KeyLis
 
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 	}
 

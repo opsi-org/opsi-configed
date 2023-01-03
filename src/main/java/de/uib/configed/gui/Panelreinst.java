@@ -1,7 +1,6 @@
 package de.uib.configed.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -11,7 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Vector;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -21,16 +20,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.Globals;
-//import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.swing.SurroundPanel;
 
-public class Panelreinst extends JPanel
-		implements KeyListener, MouseListener, ActionListener {
+public class Panelreinst extends JPanel implements KeyListener, MouseListener, ActionListener {
 	final String callReinstmgr = "reinstmgr";
-	// private String unsetCommand = "";
-	// private String installCommand = "";
 
 	String pcName = "";
 
@@ -42,7 +38,7 @@ public class Panelreinst extends JPanel
 	JPanel panelSurroundSelectImage = new SurroundPanel();
 
 	JLabel labelSelectImage = new JLabel();
-	JComboBox comboImages = new JComboBox();
+	JComboBox comboImages = new JComboBox<>();
 	JLabel labelEthernetAdress = new JLabel();
 	JTextField fieldEthernetAddress = new JTextField();
 	JPanel panelSurroundEthernetAddress = new SurroundPanel();
@@ -57,8 +53,6 @@ public class Panelreinst extends JPanel
 
 	JTextArea textOut = new JTextArea();
 
-	// ByteArrayOutputStream execOut;
-
 	public Panelreinst() {
 
 		guiInit();
@@ -66,7 +60,7 @@ public class Panelreinst extends JPanel
 	}
 
 	protected void guiInit() {
-		panelContent.setBackground(Globals.backgroundWhite);
+		panelContent.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		panelContent.setLayout(new BorderLayout());
 		panelContent.setOpaque(true);
@@ -80,9 +74,9 @@ public class Panelreinst extends JPanel
 		panelVerticalGrid.add(new SurroundPanel(labelInstallation));
 
 		labelSelectImage.setText("Image-Auswahl");
-		labelSelectImage.setBackground(Globals.backgroundWhite);
+		labelSelectImage.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		panelSurroundSelectImage.add(labelSelectImage);
-		comboImages.setBackground(Color.WHITE);
+		comboImages.setBackground(Globals.PANELREINST_BACKGROUND_COLOR);
 		comboImages.addActionListener(this);
 		panelSurroundSelectImage.add(comboImages);
 		panelSurroundSelectImage.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -100,14 +94,14 @@ public class Panelreinst extends JPanel
 
 		fieldInstallCommand.setText(callReinstmgr);
 		fieldInstallCommand.setPreferredSize(new Dimension(350, fieldHeight));
-		fieldInstallCommand.setBackground(Globals.backgroundGrey);
+		fieldInstallCommand.setBackground(Globals.BACKGROUND_COLOR_4);
 		fieldInstallCommand.setEditable(true);
 		panelVerticalGrid.add(new SurroundPanel(fieldInstallCommand));
 
 		buttonStartReinstmgr.setText("Ausführen");
 		buttonStartReinstmgr.addActionListener(this);
 		buttonStartReinstmgr.setPreferredSize(new Dimension(100, fieldHeight));
-		buttonStartReinstmgr.setBackground(Globals.backBlue);
+		buttonStartReinstmgr.setBackground(Globals.BACKGROUND_COLOR_6);
 		panelVerticalGrid.add(new SurroundPanel(buttonStartReinstmgr));
 
 		panelVerticalGrid.add(new JLabel(""));
@@ -118,13 +112,13 @@ public class Panelreinst extends JPanel
 
 		fieldUnsetCommand.setText(callReinstmgr);
 		fieldUnsetCommand.setPreferredSize(new Dimension(350, fieldHeight));
-		fieldUnsetCommand.setBackground(Globals.backgroundGrey);
+		fieldUnsetCommand.setBackground(Globals.BACKGROUND_COLOR_4);
 		fieldUnsetCommand.setEditable(true);
 		panelVerticalGrid.add(new SurroundPanel(fieldUnsetCommand));
 
 		buttonUnset.setText("Ausführen");
 		buttonUnset.addActionListener(this);
-		buttonUnset.setBackground(Globals.backBlue);
+		buttonUnset.setBackground(Globals.BACKGROUND_COLOR_6);
 		buttonUnset.setPreferredSize(new Dimension(100, fieldHeight));
 		panelVerticalGrid.add(new SurroundPanel(buttonUnset));
 
@@ -134,15 +128,12 @@ public class Panelreinst extends JPanel
 
 		textOut.setColumns(70);
 		textOut.setRows(4);
-		textOut.setBackground(Globals.backgroundGrey);
+		textOut.setBackground(Globals.BACKGROUND_COLOR_4);
 
 		textOut.setLineWrap(false);
 		textOut.setEditable(false);
-		panelContent.add(new SurroundPanel(
-				new JScrollPane(textOut,
-						JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-						JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS)),
-				BorderLayout.SOUTH);
+		panelContent.add(new SurroundPanel(new JScrollPane(textOut, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS)), BorderLayout.SOUTH);
 
 		add(panelContent);
 	}
@@ -156,24 +147,11 @@ public class Panelreinst extends JPanel
 
 	protected void executeReinstmgr(String command) {
 
-		/*
-		 * textOut.append ( PersistenceController.getPersistenceController().execRemote
-		 * (command) );
-		 * 
-		 * if
-		 * (!PersistenceController.getPersistenceController().getLastError().equals(""))
-		 * {
-		 * JOptionPane.showMessageDialog(this,
-		 * PersistenceController.getPersistenceController().getLastError(), "Warnung",
-		 * JOptionPane.WARNING_MESSAGE);
-		 * }
-		 */
-
 	}
 
-	public void startFor(String pcName, Vector installImages) {
+	public void startFor(String pcName, List installImages) {
 		this.pcName = pcName;
-		comboImages.setModel(new DefaultComboBoxModel(installImages));
+		comboImages.setModel(new DefaultComboBoxModel<>(installImages.toArray()));
 		String installCommand = callReinstmgr;
 		fieldInstallCommand.setText(installCommand);
 		String unsetCommand = callReinstmgr + " unset " + pcName;
@@ -181,6 +159,7 @@ public class Panelreinst extends JPanel
 	}
 
 	// implementation of ActionListener
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == comboImages) {
 			buildInstallCommand();
@@ -193,30 +172,38 @@ public class Panelreinst extends JPanel
 	}
 
 	// implementation of KeyListener
+	@Override
 	public void keyPressed(KeyEvent e) {
 	}
 
+	@Override
 	public void keyReleased(KeyEvent e) {
 	}
 
+	@Override
 	public void keyTyped(KeyEvent e) {
 		buildInstallCommand();
 	}
 
 	// implementation of MouseListener
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		buildInstallCommand();
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e) {
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 
 	}

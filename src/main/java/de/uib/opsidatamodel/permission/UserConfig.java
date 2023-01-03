@@ -3,6 +3,8 @@ package de.uib.opsidatamodel.permission;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 
 import de.uib.utilities.logging.logging;
 
@@ -32,7 +34,7 @@ import de.uib.utilities.logging.logging;
 	*/
 
 public class UserConfig {
-	public static String CONFIGKEY_STR_USER = "user"; // de.uib.opsidatamodel.PersistenceController.KEY_USER_ROOT;
+	public static String CONFIGKEY_STR_USER = "user";
 
 	public static final String ROLE = "role";
 
@@ -45,23 +47,22 @@ public class UserConfig {
 	public static final String DEFAULT_ROLE_NAME = "default";
 	public static final String ARCHEO_ROLE_NAME = "archeo";
 	public static final String NONE_PROTOTYPE = "";
-	// public static final String RESTRICTED_ROLE_NAME = "restricted";
 
 	public static final String roleBranchPart = KEY_USER_ROLE_ROOT;
 
 	public static final String HAS_ROLE_ATTRIBUT = "has_role";
 	public static final String MODIFICATION_INFO_KEY = "modified";
 
-	public static final ArrayList<Object> EMPTY_LIST = new ArrayList<Object>();
-	public static final ArrayList<Object> BOOLEAN_POSSIBLE_VALUES = new ArrayList<Object>();
+	public static final List<Object> EMPTY_LIST = new ArrayList<>();
+	public static final List<Object> BOOLEAN_POSSIBLE_VALUES = new ArrayList<>();
 	static {
 		BOOLEAN_POSSIBLE_VALUES.add(true);
 		BOOLEAN_POSSIBLE_VALUES.add(false);
 	}
 
-	public static final ArrayList<Object> ZERO_TIME;
+	public static final List<Object> ZERO_TIME;
 	static {
-		ZERO_TIME = new ArrayList<Object>();
+		ZERO_TIME = new ArrayList<>();
 		ZERO_TIME.add("0000-00-00 00:00:00");
 	}
 
@@ -69,17 +70,15 @@ public class UserConfig {
 
 	protected UserConfig prototypeConfig;
 
-	protected LinkedHashMap<String, Boolean> booleanMap;
-	protected LinkedHashMap<String, java.util.List<Object>> valuesMap;
-	protected LinkedHashMap<String, java.util.List<Object>> possibleValuesMap;
-
-	// ============================================================================================
+	protected Map<String, Boolean> booleanMap;
+	protected Map<String, List<Object>> valuesMap;
+	protected Map<String, List<Object>> possibleValuesMap;
 
 	private static LinkedHashSet<String> USER_BOOL_KEYS;
 
 	public static LinkedHashSet<String> getUserBoolKeys() {
 		if (USER_BOOL_KEYS == null) {
-			USER_BOOL_KEYS = new LinkedHashSet<String>();
+			USER_BOOL_KEYS = new LinkedHashSet<>();
 
 			logging.info("addAll ssh bool keys");
 			USER_BOOL_KEYS.addAll(UserSshConfig.BOOL_KEYS);
@@ -99,7 +98,7 @@ public class UserConfig {
 
 	public static LinkedHashSet<String> getUserStringValueKeys() {
 		if (USER_STRINGVALUE_KEYS == null) {
-			USER_STRINGVALUE_KEYS = new LinkedHashSet<String>(getUserStringValueKeys_withoutRole());
+			USER_STRINGVALUE_KEYS = new LinkedHashSet<>(getUserStringValueKeys_withoutRole());
 			USER_STRINGVALUE_KEYS.add(HAS_ROLE_ATTRIBUT);
 		}
 
@@ -108,7 +107,7 @@ public class UserConfig {
 
 	public static LinkedHashSet<String> getUserStringValueKeys_withoutRole() {
 		if (USER_STRINGVALUE_KEYS_WITHOUT_ROLE == null) {
-			USER_STRINGVALUE_KEYS_WITHOUT_ROLE = new LinkedHashSet<String>();
+			USER_STRINGVALUE_KEYS_WITHOUT_ROLE = new LinkedHashSet<>();
 			USER_STRINGVALUE_KEYS_WITHOUT_ROLE.add(MODIFICATION_INFO_KEY);
 		}
 
@@ -117,14 +116,13 @@ public class UserConfig {
 	}
 
 	public static LinkedHashSet<String> getUserListKeys() {
-		// logging.info("getUserListKeys " + USER_LIST_KEYS);
+
 		if (USER_LIST_KEYS == null) {
-			USER_LIST_KEYS = new LinkedHashSet<String>();
+			USER_LIST_KEYS = new LinkedHashSet<>();
 
 			USER_LIST_KEYS.addAll(UserSshConfig.LIST_KEYS);
 			USER_LIST_KEYS.addAll(UserOpsipermission.LIST_KEYS);
 		}
-		// logging.info("getUserListKeys " + USER_LIST_KEYS);
 
 		return USER_LIST_KEYS;
 	}
@@ -156,9 +154,9 @@ public class UserConfig {
 	public UserConfig(String userName) {
 		logging.info(this, "create for " + userName);
 		this.username = userName;
-		booleanMap = new LinkedHashMap<String, Boolean>();
-		valuesMap = new LinkedHashMap<String, java.util.List<Object>>();
-		possibleValuesMap = new LinkedHashMap<String, java.util.List<Object>>();
+		booleanMap = new LinkedHashMap<>();
+		valuesMap = new LinkedHashMap<>();
+		possibleValuesMap = new LinkedHashMap<>();
 	}
 
 	public String getUserName() {
@@ -181,25 +179,13 @@ public class UserConfig {
 		booleanMap.put(key, val);
 	}
 
-	public void setValues(String key, java.util.List<Object> values) {
-		/*
-		 * if ( !getUserListKeys().contains( key ) )
-		 * {
-		 * logging.error("UserConfig.USER_LIST_KEYS " + UserConfig.USER_LIST_KEYS);
-		 * logging.error("UserSshConfig : illegal key " + key);
-		 * }
-		 */
+	public void setValues(String key, List<Object> values) {
+
 		valuesMap.put(key, values);
 	}
 
-	public void setPossibleValues(String key, java.util.List<Object> possibleValues) {
-		/*
-		 * if ( !getUserListKeys().contains( key ) )
-		 * {
-		 * logging.error("UserConfig.USER_LIST_KEYS " + UserConfig.USER_LIST_KEYS);
-		 * logging.error("UserSshConfig : illegal key " + key);
-		 * }
-		 */
+	public void setPossibleValues(String key, List<Object> possibleValues) {
+
 		possibleValuesMap.put(key, possibleValues);
 	}
 
@@ -232,19 +218,19 @@ public class UserConfig {
 		return booleanMap.get(key);
 	}
 
-	public java.util.List<Object> getValues(String key) {
+	public List<Object> getValues(String key) {
 		if (valuesMap.get(key) == null)
-			return new ArrayList<Object>();
+			return new ArrayList<>();
 
 		return valuesMap.get(key);
 	}
 
-	public java.util.List<Object> getPossibleValues(String key) {
+	public List<Object> getPossibleValues(String key) {
 		if (hasBooleanConfig(key))
 			return BOOLEAN_POSSIBLE_VALUES;
 
 		if (possibleValuesMap.get(key) == null)
-			return new ArrayList<Object>();
+			return new ArrayList<>();
 
 		return possibleValuesMap.get(key);
 	}

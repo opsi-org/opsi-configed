@@ -2,12 +2,9 @@ package de.uib.utilities;
 
 import java.util.Date;
 
-//import de.uib.utilities.logging.*;
-
 public class ExtendedDate {
 	static final String infiniteImport = "never";
 	static final String sINFINITE = "INFINITE";
-	// static final String displayInfinite = "\u221E";//"INF";
 
 	public static final ExtendedDate INFINITE = new ExtendedDate(sINFINITE);
 	public static final ExtendedDate ZERO = new ExtendedDate("1900-01-01 00:00:0");
@@ -18,12 +15,6 @@ public class ExtendedDate {
 	public ExtendedDate(Object value) {
 		interpretAsTimestamp(value);
 
-		/*
-		 * catch( DateParseException ex )
-		 * {
-		 * logging.warning(this, " " + ex);
-		 * }
-		 */
 	}
 
 	private void setFromDate(Date d) {
@@ -45,7 +36,7 @@ public class ExtendedDate {
 			if (value.equalsIgnoreCase(infiniteImport) || value.equalsIgnoreCase(sINFINITE)) {
 				sDate = sINFINITE;
 			} else {
-				// date = new java.sql.Timestamp(new Date().getTime());
+
 				// extend
 
 				if (value.indexOf(' ') == -1) {
@@ -84,7 +75,7 @@ public class ExtendedDate {
 		if (equals(INFINITE))
 			return 1;
 
-		else if (equals(compareDate.getDate()))
+		else if (getDate().equals(compareDate))
 			return 0;
 
 		else if (getDate().after(compareDate))
@@ -109,13 +100,6 @@ public class ExtendedDate {
 
 		else
 			return -1;
-	}
-
-	public static void main(String[] args) {
-		System.out.println(" given " + args[0]);
-		ExtendedDate myDate = new ExtendedDate(args[0]);
-		System.out.println("as extended date " + myDate);
-		System.out.println("as date " + myDate.getDate());
 	}
 
 }

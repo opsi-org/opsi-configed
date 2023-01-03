@@ -9,24 +9,15 @@ public class CellAlternatingColorizer {
 	static java.awt.Color unselectedUneven = Globals.defaultTableCellBgColor1;
 
 	public static void colorize(java.awt.Component cell, boolean isSelected, boolean isEven, boolean textColoring) {
-		colorize(cell, isSelected, isEven, textColoring,
-				selectedEven, selectedUneven, unselectedEven, unselectedUneven);
+		colorize(cell, isSelected, isEven, textColoring, selectedEven, selectedUneven, unselectedEven,
+				unselectedUneven);
 	}
 
 	public static void colorize(java.awt.Component cell, boolean isSelected, boolean isEven, boolean textColoring,
-			java.awt.Color selectedEvenColor, java.awt.Color selectedUnevenColor,
-			java.awt.Color unselectedEvenColor, java.awt.Color unselectedUnevenColor) {
+			java.awt.Color selectedEvenColor, java.awt.Color selectedUnevenColor, java.awt.Color unselectedEvenColor,
+			java.awt.Color unselectedUnevenColor) {
 		if (textColoring)
 			cell.setForeground(Globals.lightBlack);
-
-		/*
-		 * if (isSelected)
-		 * {
-		 * cell.setBackground( Globals.defaultTableSelectedRowDark );
-		 * }
-		 */
-		// logging.debug("CellAlternating colorize selection, even " + isSelected + ", "
-		// + isEven);
 
 		if (isSelected) {
 			if (isEven)

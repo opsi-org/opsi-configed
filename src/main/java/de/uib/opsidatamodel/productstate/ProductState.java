@@ -18,9 +18,9 @@ public class ProductState extends HashMap<String, String> {
 		return DEFAULT;
 	}
 
-	public static final List<String> SERVICE_KEYS = new ArrayList<String>();
+	public static final List<String> SERVICE_KEYS = new ArrayList<>();
 	static {// from 30_configed.conf
-		SERVICE_KEYS.add("modificationTime"); // lastStateChange");
+		SERVICE_KEYS.add("modificationTime");
 		SERVICE_KEYS.add("productId");
 		SERVICE_KEYS.add("productVersion");
 		SERVICE_KEYS.add("packageVersion");
@@ -34,7 +34,7 @@ public class ProductState extends HashMap<String, String> {
 		SERVICE_KEYS.add("actionSequence");
 	}
 
-	public static final LinkedHashMap<String, String> DB_COLUMNS = new LinkedHashMap<String, String>();
+	public static final Map<String, String> DB_COLUMNS = new LinkedHashMap<>();
 	static {
 		DB_COLUMNS.put("productId", "VARCHAR(50)");
 		DB_COLUMNS.put("productVersion", "VARCHAR(32)");
@@ -47,131 +47,123 @@ public class ProductState extends HashMap<String, String> {
 		DB_COLUMNS.put("actionProgress", "VARCHAR(255)");
 		DB_COLUMNS.put("actionResult", "VARCHAR(16)");
 
-		DB_COLUMNS.put("modificationTime", "TIMESTAMP"); // lastStateChange");
+		DB_COLUMNS.put("modificationTime", "TIMESTAMP");
 	}
 
-	public static final List<String> DB_COLUMN_NAMES = new ArrayList<String>(DB_COLUMNS.keySet());
+	public static final List<String> DB_COLUMN_NAMES = new ArrayList<>(DB_COLUMNS.keySet());
 
-	public static final int columnIndexLastStateChange = DB_COLUMN_NAMES.indexOf("modificationTime");
+	public static final int COLUMN_INDEX_LAST_STATE_CHANGE = DB_COLUMN_NAMES.indexOf("modificationTime");
 
 	// directly taken values
-	public static final String KEY_lastStateChange = "stateChange";
-	public static final String KEY_productVersion = "productVersion";
-	public static final String KEY_packageVersion = "packageVersion";
-	public static final String KEY_targetConfiguration = TargetConfiguration.KEY;
-	public static final String KEY_lastAction = LastAction.KEY;
-	public static final String KEY_installationStatus = InstallationStatus.KEY;
-	public static final String KEY_actionRequest = ActionRequest.KEY;
-	public static final String KEY_actionProgress = ActionProgress.KEY;
-	public static final String KEY_actionResult = ActionResult.KEY;
-	public static final String KEY_productId = "productId";
+	public static final String KEY_LAST_STATE_CHANGE = "stateChange";
+	public static final String KEY_PRODUCT_VERSION = "productVersion";
+	public static final String KEY_PACKAGE_VERSION = "packageVersion";
+	public static final String KEY_TARGET_CONFIGURATION = TargetConfiguration.KEY;
+	public static final String KEY_LAST_ACTION = LastAction.KEY;
+	public static final String KEY_INSTALLATION_STATUS = InstallationStatus.KEY;
+	public static final String KEY_ACTION_REQUEST = ActionRequest.KEY;
+	public static final String KEY_ACTION_PROGRESS = ActionProgress.KEY;
+	public static final String KEY_ACTION_RESULT = ActionResult.KEY;
+	public static final String KEY_PRODUCT_ID = "productId";
 
-	public static final String KEY_productPriority = "priority";
-	public static final String KEY_actionSequence = ActionSequence.KEY;
+	public static final String KEY_PRODUCT_PRIORITY = "priority";
+	public static final String KEY_ACTION_SEQUENCE = ActionSequence.KEY;
 
 	// transformed values
-	public static final String KEY_installationInfo = InstallationInfo.KEY;
-	public static final String KEY_versionInfo = "versionInfo";
+	public static final String KEY_INSTALLATION_INFO = InstallationInfo.KEY;
+	public static final String KEY_VERSION_INFO = "versionInfo";
 
 	// additional values
-	public static final String KEY_position = "position";
-	public static final String KEY_productName = "productName";
+	public static final String KEY_POSITION = "position";
+	public static final String KEY_PRODUCT_NAME = "productName";
 
-	protected final Map retrieved;
+	protected final Map<String, String> retrieved;
 
-	public static final List<String> KEYS = new ArrayList<String>();
+	public static final List<String> KEYS = new ArrayList<>();
 	static {
-		KEYS.add(KEY_productId);
-		KEYS.add(KEY_productName);
+		KEYS.add(KEY_PRODUCT_ID);
+		KEYS.add(KEY_PRODUCT_NAME);
 
-		KEYS.add(KEY_targetConfiguration);
-		KEYS.add(KEY_installationStatus);
+		KEYS.add(KEY_TARGET_CONFIGURATION);
+		KEYS.add(KEY_INSTALLATION_STATUS);
 
-		KEYS.add(KEY_installationInfo);
+		KEYS.add(KEY_INSTALLATION_INFO);
 
-		KEYS.add(KEY_actionResult);
-		KEYS.add(KEY_actionProgress);
-		KEYS.add(KEY_lastAction);
+		KEYS.add(KEY_ACTION_RESULT);
+		KEYS.add(KEY_ACTION_PROGRESS);
+		KEYS.add(KEY_LAST_ACTION);
 
-		KEYS.add(KEY_productPriority);
-		KEYS.add(KEY_actionSequence);
-		KEYS.add(KEY_actionRequest);
+		KEYS.add(KEY_PRODUCT_PRIORITY);
+		KEYS.add(KEY_ACTION_SEQUENCE);
+		KEYS.add(KEY_ACTION_REQUEST);
 
-		KEYS.add(KEY_versionInfo);
+		KEYS.add(KEY_VERSION_INFO);
 
-		KEYS.add(KEY_productVersion);
-		KEYS.add(KEY_packageVersion);
+		KEYS.add(KEY_PRODUCT_VERSION);
+		KEYS.add(KEY_PACKAGE_VERSION);
 
-		KEYS.add(KEY_position);
+		KEYS.add(KEY_POSITION);
 
-		KEYS.add(KEY_lastStateChange);
+		KEYS.add(KEY_LAST_STATE_CHANGE);
 	}
 
-	public static final Map<String, String> key2servicekey = new HashMap<String, String>();
+	public static final Map<String, String> key2servicekey = new HashMap<>();
 	static {
-		key2servicekey.put(KEY_productId, "productId");
-		// key2servicekey.put(KEY_productName
+		key2servicekey.put(KEY_PRODUCT_ID, "productId");
 
-		key2servicekey.put(KEY_targetConfiguration, "targetConfiguration");
-		key2servicekey.put(KEY_installationStatus, "installationStatus");
+		key2servicekey.put(KEY_TARGET_CONFIGURATION, "targetConfiguration");
+		key2servicekey.put(KEY_INSTALLATION_STATUS, "installationStatus");
 
-		// key2servicekey.put(KEY_installationInfo
+		key2servicekey.put(KEY_ACTION_RESULT, "actionResult");
+		key2servicekey.put(KEY_ACTION_PROGRESS, "actionProgress");
+		key2servicekey.put(KEY_LAST_ACTION, "lastAction");
 
-		key2servicekey.put(KEY_actionResult, "actionResult");
-		key2servicekey.put(KEY_actionProgress, "actionProgress");
-		key2servicekey.put(KEY_lastAction, "lastAction");
+		key2servicekey.put(KEY_POSITION, "priority");
+		key2servicekey.put(KEY_ACTION_SEQUENCE, "actionSequence");
+		key2servicekey.put(KEY_ACTION_REQUEST, "actionRequest");
 
-		key2servicekey.put(KEY_position, "priority");
-		key2servicekey.put(KEY_actionSequence, "actionSequence");
-		key2servicekey.put(KEY_actionRequest, "actionRequest");
+		key2servicekey.put(KEY_PRODUCT_VERSION, "productVersion");
+		key2servicekey.put(KEY_PACKAGE_VERSION, "packageVersion");
 
-		// key2servicekey.put(KEY_versionInfo
-
-		key2servicekey.put(KEY_productVersion, "productVersion");
-		key2servicekey.put(KEY_packageVersion, "packageVersion");
-
-		// key2servicekey.put(KEY_position
-
-		key2servicekey.put(KEY_lastStateChange, "modificationTime");
+		key2servicekey.put(KEY_LAST_STATE_CHANGE, "modificationTime");
 	}
 
 	private void readRetrieved() {
-		// logging.debug(this, "retrieved " + retrievedState);
 
-		put(KEY_productId, getRetrievedValue(key2servicekey.get(KEY_productId)));
+		put(KEY_PRODUCT_ID, getRetrievedValue(key2servicekey.get(KEY_PRODUCT_ID)));
 
-		put(KEY_targetConfiguration, getRetrievedValue(key2servicekey.get(KEY_targetConfiguration)));
-		put(KEY_installationStatus, getRetrievedValue(key2servicekey.get(KEY_installationStatus)));
+		put(KEY_TARGET_CONFIGURATION, getRetrievedValue(key2servicekey.get(KEY_TARGET_CONFIGURATION)));
+		put(KEY_INSTALLATION_STATUS, getRetrievedValue(key2servicekey.get(KEY_INSTALLATION_STATUS)));
 
-		put(KEY_actionResult, getRetrievedValue(key2servicekey.get(KEY_actionResult)));
-		put(KEY_actionProgress, getRetrievedValue(key2servicekey.get(KEY_actionProgress)));
-		put(KEY_lastAction, getRetrievedValue(key2servicekey.get(KEY_lastAction)));
+		put(KEY_ACTION_RESULT, getRetrievedValue(key2servicekey.get(KEY_ACTION_RESULT)));
+		put(KEY_ACTION_PROGRESS, getRetrievedValue(key2servicekey.get(KEY_ACTION_PROGRESS)));
+		put(KEY_LAST_ACTION, getRetrievedValue(key2servicekey.get(KEY_LAST_ACTION)));
 
-		put(KEY_actionRequest, getRetrievedValue(key2servicekey.get(KEY_actionRequest)));
+		put(KEY_ACTION_REQUEST, getRetrievedValue(key2servicekey.get(KEY_ACTION_REQUEST)));
 
-		put(KEY_productPriority, getRetrievedValue(key2servicekey.get(KEY_position)));
-		put(KEY_actionSequence, getRetrievedValue(key2servicekey.get(KEY_actionSequence)));
+		put(KEY_PRODUCT_PRIORITY, getRetrievedValue(key2servicekey.get(KEY_POSITION)));
+		put(KEY_ACTION_SEQUENCE, getRetrievedValue(key2servicekey.get(KEY_ACTION_SEQUENCE)));
 
-		put(KEY_productVersion, getRetrievedValue(key2servicekey.get(KEY_productVersion)));
-		put(KEY_packageVersion, getRetrievedValue(key2servicekey.get(KEY_packageVersion)));
+		put(KEY_PRODUCT_VERSION, getRetrievedValue(key2servicekey.get(KEY_PRODUCT_VERSION)));
+		put(KEY_PACKAGE_VERSION, getRetrievedValue(key2servicekey.get(KEY_PACKAGE_VERSION)));
 
-		put(KEY_lastStateChange, getRetrievedValue(key2servicekey.get(KEY_lastStateChange)));
+		put(KEY_LAST_STATE_CHANGE, getRetrievedValue(key2servicekey.get(KEY_LAST_STATE_CHANGE)));
 	}
 
-	public ProductState(Map retrievedState, boolean transform) {
+	public ProductState(Map<String, String> retrievedState, boolean transform) {
 		super();
 		this.retrieved = retrievedState;
 		if (retrieved == null) {
 			setDefaultValues();
 		} else {
-			readRetrieved();// retrievedState);
+			readRetrieved();
 		}
 
 		if (transform)
 			setTransforms();
 	}
 
-	public ProductState(Map retrievedState) {
+	public ProductState(Map<String, String> retrievedState) {
 		this(retrievedState, true);
 	}
 
@@ -182,41 +174,21 @@ public class ProductState extends HashMap<String, String> {
 	}
 
 	private void setTransforms() {
-		// logging.debug(this, "setTransforms on " + this);
-
-		// format
-		/*
-		 * String stateChange = get(KEY_lastStateChange);
-		 * logging.debug(this, "setTransforms stateChange " + stateChange);
-		 * if (!stateChange.equals("null") &!stateChange.equals(""))
-		 * {
-		 * String[] sc = stateChange.split("");
-		 * 
-		 * logging.debug(this, "setTransforms stateChange " + Arrays.toString(sc));
-		 * 
-		 * if (sc.length >= 15)
-		 * stateChange = sc[1]+sc[2]+sc[3]+sc[4]+'-'+sc[5]+sc[6]+'-'+sc[7]+sc[8]+'
-		 * '+sc[9]+sc[10]+':'+sc[11]+sc[12]+':'+sc[13]+sc[14];
-		 * 
-		 * logging.debug(this, "setTransforms stateChange " + Arrays.toString(sc));
-		 * }
-		 * put(KEY_lastStateChange, stateChange);
-		 */
 
 		// transformed values
-		StringBuffer installationInfo = new StringBuffer();
+		StringBuilder installationInfo = new StringBuilder();
 		// the reverse will be found in in setInstallationInfo in
 		// InstallationStateTableModel
 
-		LastAction lastAction = LastAction.produceFromLabel(get(KEY_lastAction));
+		LastAction lastAction = LastAction.produceFromLabel(get(KEY_LAST_ACTION));
 
-		if (!get(KEY_actionProgress).equals("")) {
-			ActionResult result = ActionResult.produceFromLabel(get(KEY_actionResult));
+		if (!get(KEY_ACTION_PROGRESS).equals("")) {
+			ActionResult result = ActionResult.produceFromLabel(get(KEY_ACTION_RESULT));
 			if (result.getVal() == ActionResult.FAILED) {
 				installationInfo.append(ActionResult.getDisplayLabel(result.getVal()));
 				installationInfo.append(": ");
 			}
-			installationInfo.append(get(KEY_actionProgress));
+			installationInfo.append(get(KEY_ACTION_PROGRESS));
 			installationInfo.append(" ( ");
 			if (lastAction.getVal() > 0)
 				installationInfo.append(ActionRequest.getDisplayLabel(lastAction.getVal()));
@@ -228,13 +200,12 @@ public class ProductState extends HashMap<String, String> {
 			}
 
 		} else {
-			ActionResult result = ActionResult.produceFromLabel(get(KEY_actionResult));
+			ActionResult result = ActionResult.produceFromLabel(get(KEY_ACTION_RESULT));
 			if (result.getVal() == ActionResult.SUCCESSFUL || result.getVal() == ActionResult.FAILED) {
 				installationInfo.append("");
 				installationInfo.append(ActionResult.getDisplayLabel(result.getVal()));
 			}
 			// else
-			// installationInfo.append(" ");
 
 			if (lastAction.getVal() > 0) {
 				installationInfo.append(" (");
@@ -243,80 +214,50 @@ public class ProductState extends HashMap<String, String> {
 			}
 		}
 
-		put(KEY_installationInfo, installationInfo.toString());
+		put(KEY_INSTALLATION_INFO, installationInfo.toString());
 
 		String versionInfo = "";
-		// logging.debug(this, "setTransforms get(KEY_productVersion) "
-		// +get(KEY_productVersion));
-		if (!get(KEY_productVersion).equals(""))
-			versionInfo = get(KEY_productVersion) + Globals.ProductPackageVersionSeparator.forDisplay()
-					+ get(KEY_packageVersion);
-		// logging.debug(this, "setTransforms version info " + versionInfo);
-		put(KEY_versionInfo, versionInfo);
+
+		if (!get(KEY_PRODUCT_VERSION).equals(""))
+			versionInfo = get(KEY_PRODUCT_VERSION) + Globals.ProductPackageVersionSeparator.forDisplay()
+					+ get(KEY_PACKAGE_VERSION);
+
+		put(KEY_VERSION_INFO, versionInfo);
 
 	}
 
 	private void setDefaultValues() {
-		put(KEY_productId, "");
-		put(KEY_productName, "");
+		put(KEY_PRODUCT_ID, "");
+		put(KEY_PRODUCT_NAME, "");
 
-		put(KEY_targetConfiguration, TargetConfiguration.getLabel(TargetConfiguration.UNDEFINED));
-		put(KEY_installationStatus, InstallationStatus.getLabel(InstallationStatus.NOT_INSTALLED));
+		put(KEY_TARGET_CONFIGURATION, TargetConfiguration.getLabel(TargetConfiguration.UNDEFINED));
+		put(KEY_INSTALLATION_STATUS, InstallationStatus.getLabel(InstallationStatus.NOT_INSTALLED));
 
-		put(KEY_actionResult, LastAction.getLabel(ActionResult.NONE));
-		put(KEY_actionProgress, "");
-		put(KEY_lastAction, LastAction.getLabel(LastAction.NONE));
+		put(KEY_ACTION_RESULT, LastAction.getLabel(ActionResult.NONE));
+		put(KEY_ACTION_PROGRESS, "");
+		put(KEY_LAST_ACTION, LastAction.getLabel(LastAction.NONE));
 
-		put(KEY_actionRequest, ActionRequest.getLabel(ActionRequest.NONE));
+		put(KEY_ACTION_REQUEST, ActionRequest.getLabel(ActionRequest.NONE));
 
-		put(KEY_productPriority, "");
-		put(KEY_actionSequence, "");
+		put(KEY_PRODUCT_PRIORITY, "");
+		put(KEY_ACTION_SEQUENCE, "");
 
-		put(KEY_productVersion, "");
-		put(KEY_packageVersion, "");
+		put(KEY_PRODUCT_VERSION, "");
+		put(KEY_PACKAGE_VERSION, "");
 
-		put(KEY_lastStateChange, "");
+		put(KEY_LAST_STATE_CHANGE, "");
 
 	}
 
 	private String getRetrievedValue(String key) {
 
 		assert !(SERVICE_KEYS.indexOf(key) < 0) : "service key " + key + " not known";
-		/*
-		 * if (retrieved.get(key) != null)
-		 * logging.info(this, "getRetrievedValue key" + key
-		 * + " value  " + retrieved.get(key) + " class " +
-		 * retrieved.get(key).getClass());;
-		 */
+
 		if (retrieved.get(key) == null || (retrieved.get(key) instanceof String && retrieved.get(key).equals("null")))
 			return "";
 
-		String value = retrieved.get(key).toString();
-		String predefValue = null;
+		return retrieved.get(key);
 
-		/*
-		 * //we reduce the result to the predefined static strings if possible
-		 * 
-		 * switch (key)
-		 * {
-		 * case KEY_installationStatus:
-		 * {
-		 * 
-		 * 
-		 * break;
-		 * }
-		 * case KEY_actionRequest:
-		 * {
-		 * predefValue = ActionRequest.getStaticString(value);
-		 * break;
-		 * }
-		 * case KEY_lastAction
-		 */
-
-		if (predefValue != null)
-			return predefValue;
-
-		return value;
 	}
 
 }

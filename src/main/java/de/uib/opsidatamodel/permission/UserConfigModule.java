@@ -3,6 +3,9 @@ package de.uib.opsidatamodel.permission;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import de.uib.utilities.logging.logging;
 
@@ -12,9 +15,9 @@ public class UserConfigModule {
 	public LinkedHashSet<String> bool_keys;
 	public LinkedHashSet<String> list_keys;
 
-	public LinkedHashMap<String, Boolean> booleanMap;
-	public LinkedHashMap<String, java.util.List<Object>> valuesMap;
-	public LinkedHashMap<String, java.util.List<Object>> possibleValuesMap;
+	public Map<String, Boolean> booleanMap;
+	public Map<String, List<Object>> valuesMap;
+	public Map<String, List<Object>> possibleValuesMap;
 
 	protected UserConfigModule(String userName) {
 		this(userName, null);
@@ -25,19 +28,19 @@ public class UserConfigModule {
 
 		logging.info(this, "create UserConfigModule for user named " + username + " with prototype  " + prototype);
 
-		booleanMap = new LinkedHashMap<String, Boolean>();
-		bool_keys = new LinkedHashSet<String>();
-		valuesMap = new LinkedHashMap<String, java.util.List<Object>>();
-		possibleValuesMap = new LinkedHashMap<String, java.util.List<Object>>();
-		list_keys = new LinkedHashSet<String>();
+		booleanMap = new LinkedHashMap<>();
+		bool_keys = new LinkedHashSet<>();
+		valuesMap = new LinkedHashMap<>();
+		possibleValuesMap = new LinkedHashMap<>();
+		list_keys = new LinkedHashSet<>();
 
 		if (prototype != null) {
 			booleanMap.putAll(prototype.booleanMap);
-			// bool_keys = (LinkedHashSet<String>) booleanMap.keySet();
+
 			extractKeys(prototype.booleanMap, bool_keys);
 
 			valuesMap.putAll(prototype.valuesMap);
-			// list_keys = (LinkedHashSet<String>) valuesMap.keySet();
+
 			extractKeys(prototype.valuesMap, list_keys);
 		}
 
@@ -66,35 +69,34 @@ public class UserConfigModule {
 		return UserConfig.getArcheoConfig().getBooleanValue(key);
 	}
 
-	public java.util.List<Object> getValues(String key) {
+	public List<Object> getValues(String key) {
 		if (valuesMap.get(key) == null)
-			return new ArrayList<Object>();
+			return new ArrayList<>();
 
 		return valuesMap.get(key);
 	}
 
-	public java.util.List<Object> getPossibleValues(String key) {
+	public List<Object> getPossibleValues(String key) {
 		if (possibleValuesMap.get(key) == null)
-			return new ArrayList<Object>();
+			return new ArrayList<>();
 
 		return valuesMap.get(key);
 	}
 
 	public void setBooleanValue(String key, Boolean val) {
-		// if ( !bool_keys.contains( key ) )
-		// logging.error("UserConfigModule : illegal key " + key);
+
 		logging.info(this, "for user " + username + " setBooleanValue " + key + " : " + val);
 		booleanMap.put(key, val);
 
 	}
 
-	private void extractKeys(final LinkedHashMap<String, ? extends Object> map, LinkedHashSet<String> result) {
+	private void extractKeys(final Map<String, ? extends Object> map, Set<String> result) {
 		for (String key : map.keySet()) {
 			result.add(key);
 		}
 	}
 
-	public void setValues(String key, java.util.List<Object> values) {
+	public void setValues(String key, List<Object> values) {
 		logging.info(this, "for user " + username + ", key " + key + " setValues " + values);
 		logging.info(this, "we have list_keys " + list_keys);
 		logging.info(this, "we have bool_keys " + bool_keys);
@@ -106,7 +108,7 @@ public class UserConfigModule {
 
 	}
 
-	public void setPossibleValues(String key, java.util.List<Object> possibleValues) {
+	public void setPossibleValues(String key, List<Object> possibleValues) {
 		logging.info(this, "for user " + username + ", key " + key + " setPossibleValues " + possibleValues);
 		logging.info(this, "we have list_keys " + list_keys);
 		logging.info(this, "we have bool_keys " + bool_keys);

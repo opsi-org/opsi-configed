@@ -38,38 +38,21 @@ public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
 		this.falseIcon = falseIcon;
 	}
 
-	public Component getTableCellRendererComponent(
-			JTable table,
-			Object value, // value to display
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
 			boolean isSelected, // is the cell selected
-			boolean hasFocus,
-			int row,
-			int column) {
+			boolean hasFocus, int row, int column) {
 		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		/*
-		 * logging.info(this, "getTableCellRendererComponent "
-		 * + "value, isSelected, hasFocus, row, column "
-		 * + value + ", " + isSelected + ", " + hasFocus + ", " + row + ", " + column );
-		 */
-
-		if (c == null || !(c instanceof JLabel))
+		if (!(c instanceof JLabel))
 			return c;
 
 		JLabel label = (JLabel) c;
 
-		if (value != null
-				&&
-				!(value instanceof Boolean)
-				&&
-				!(value instanceof String))
+		if (value != null && !(value instanceof Boolean) && !(value instanceof String))
 			return c;
 
-		if (value != null
-				&&
-				!allowingString
-				&&
-				!(value instanceof Boolean))
+		if (value != null && !allowingString && !(value instanceof Boolean))
 			return c;
 
 		label.setText("");
@@ -92,7 +75,7 @@ public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
 		}
 
 		if (val == null) {
-			// logging.info(this, "val is null " + nullIcon);
+
 			if (nullIcon != null)
 				label.setIcon(nullIcon);
 		} else {

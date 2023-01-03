@@ -1,6 +1,7 @@
 package de.uib.utilities.thread;
 
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.swing.SwingWorker;
 
@@ -26,9 +27,7 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 		startActionMillis = new GregorianCalendar().getTimeInMillis();
 		logging.info(this, " doInBackground start " + startActionMillis);
 
-		while (!ready
-				&& !timeoutReached
-				&& !stopped) {
+		while (!ready && !timeoutReached && !stopped) {
 			logging.debug(this, " WaitingCycle waits signal " + waitSecs);
 			// === serves like an external task
 			waitSecs++;
@@ -39,7 +38,7 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 			}
 
 			setProgress(100 * waitSecs / maxWaitSecs);
-			// ==========
+
 			publish(waitSecs);
 
 			timeoutReached = (waitSecs > maxWaitSecs);
@@ -48,8 +47,8 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 
 		logging.info(this, " doInBackground finish time in millis " + new GregorianCalendar().getTimeInMillis());
 
-		logging.info(this, " doInBackground finished: ready, stopped, waitSecs "
-				+ ready + ", " + stopped + ", " + waitSecs);
+		logging.info(this,
+				" doInBackground finished: ready, stopped, waitSecs " + ready + ", " + stopped + ", " + waitSecs);
 
 		if (timeoutReached)
 			logging.warning(this, " doInBackground finished, timeoutReached");
@@ -62,17 +61,8 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 	// Executed in event dispatching thread, override it
 	//
 	@Override
-	protected void process(java.util.List<Integer> chunks) {
-		/*
-		 * for (int number : chunks)
-		 * {
-		 * logging.info(this, "WaitingCycle waitSecs " + chunks);
-		 * }
-		 * 
-		 * mainFrame.iconButtonSessionInfo.setEnabled(
-		 * (chunks.get( chunks.size() - 1) % 2 == 0)
-		 * );
-		 */
+	protected void process(List<Integer> chunks) {
+
 	}
 
 	//

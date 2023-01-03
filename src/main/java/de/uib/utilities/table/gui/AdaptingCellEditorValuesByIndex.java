@@ -25,12 +25,13 @@ public class AdaptingCellEditorValuesByIndex extends DefaultCellEditor {
 		super(cc);
 		this.cc = cc;
 		this.cbm = cbm;
-		nullModel = new DefaultComboBoxModel(new String[] { "" });
+		nullModel = new DefaultComboBoxModel<>(new String[] { "" });
 
 		cc.setRenderer(new CellRendererByIndex(universalMapOfStrings, imagesBase));
 
 	}
 
+	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 
 		int modelRow = table.convertRowIndexToModel(row);
@@ -45,15 +46,10 @@ public class AdaptingCellEditorValuesByIndex extends DefaultCellEditor {
 		} else
 			cc.setModel(cbm.getComboBoxModel(modelRow, modelColumn));
 
-		// cc.setToolTipText("hello");
-		// cc.setSize(100,20); has no effect
-
 		Component c = super.getTableCellEditorComponent(table, value, isSelected, row, column);
 		if (c instanceof JComponent)
 			((JComponent) c).setToolTipText("" + value);
 
-		// c.setSize(100,20); has no effect
-		// logging.debug("this component active");
 		return c;
 	}
 

@@ -9,13 +9,13 @@
 package de.uib.utilities.table;
 
 import java.util.LinkedHashMap;
-import java.util.Vector;
+import java.util.List;
 
 public class ChainedTableModelFilter extends TableModelFilter {
 	LinkedHashMap<String, TableModelFilter> chain;
 
 	public ChainedTableModelFilter() {
-		chain = new LinkedHashMap<String, TableModelFilter>();
+		chain = new LinkedHashMap<>();
 	}
 
 	public ChainedTableModelFilter set(String filterName, TableModelFilter filter) {
@@ -50,7 +50,7 @@ public class ChainedTableModelFilter extends TableModelFilter {
 	}
 
 	@Override
-	public boolean test(Vector<Object> row) {
+	public boolean test(List<Object> row) {
 		if (!inUse)
 			return true;
 
@@ -60,8 +60,7 @@ public class ChainedTableModelFilter extends TableModelFilter {
 			if (chain.get(filterName).isInUse()) {
 				testresult = testresult && chain.get(filterName).test(row);
 			}
-			// logging.info(this, "test result, filtered by " + filterName + ", " +
-			// testresult);
+
 		}
 
 		if (inverted) {
@@ -72,7 +71,7 @@ public class ChainedTableModelFilter extends TableModelFilter {
 	}
 
 	public String getActiveFilters() {
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 
 		for (String filterName : chain.keySet()) {
 			if (chain.get(filterName).isInUse()) {

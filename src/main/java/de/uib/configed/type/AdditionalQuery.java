@@ -47,6 +47,7 @@ public class AdditionalQuery {
 		return editable;
 	}
 
+	@Override
 	public String toString() {
 		return getName() + ": " + " ( " + getDescription() + ") editable " + getEditable() + getQuery();
 	}

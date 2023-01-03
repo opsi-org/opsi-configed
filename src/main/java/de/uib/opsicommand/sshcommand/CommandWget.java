@@ -1,6 +1,6 @@
 package de.uib.opsicommand.sshcommand;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.configed;
@@ -14,10 +14,8 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	private String command = "wget ";
 	protected FGeneralDialog dialog = null;
 	private boolean needSudo = false;
-	private boolean needRoot = false;
 	private boolean needParameter = true;
 	private boolean isMultiCommand = false;
-	private int helpColumns = 2;
 	private int priority = 110;
 
 	private String url = " ";
@@ -108,12 +106,12 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 
 	@Override
 	public String getCommand() {
-		if (freeInput != "")
+		if (!freeInput.equals(""))
 			command = "wget " + authentication + filename + freeInput + verbosity + dir + url + " " + additional_url;
 		else
 			command = "wget " + authentication + filename + verbosity + dir + url + " " + additional_url;
 		if (needSudo())
-			return SSHCommandFactory.getInstance().sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 
@@ -173,14 +171,14 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	}
 
 	public void setDir(String d) {
-		if (d != "")
+		if (!d.equals(""))
 			dir = " -P " + d;
 		else
 			dir = "";
 	}
 
 	public void setUrl(String u) {
-		if (u != "")
+		if (!u.equals(""))
 			url = " " + u;
 		else
 			url = "";
@@ -207,26 +205,22 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 		return product;
 	}
 
+	@Override
 	public void setCommand(String c) {
 		command = c;
 	}
 
 	public boolean checkCommand() {
-		if (dir == "")
-			return false;
-		if (url == "")
-			return false;
-		return true;
+		return dir.equals("") && url.equals("");
 	}
 
 	private String getFilenameFromUrl(String url) {
 		int p = url.lastIndexOf("/");
-		String e = url.substring(p + 1);
-		return e;
+		return url.substring(p + 1);
 	}
 
 	@Override
-	public ArrayList<String> getParameterList() {
+	public List<String> getParameterList() {
 		return null;
 	}
 }

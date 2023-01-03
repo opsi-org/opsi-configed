@@ -1,7 +1,5 @@
 package de.uib.configed.gui.ssh;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.nio.file.Paths;
 
 import javax.swing.GroupLayout;
@@ -29,7 +27,7 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 
 	public SSHPMInstallLocalPanel() {
 		super();
-		autocompletion = new SSHCompletionComboButton(additional_default_paths);
+		autocompletion = new SSHCompletionComboButton(additionalDefaultPaths);
 		initComponents();
 		initLayout();
 		instance = this;
@@ -49,34 +47,32 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 		btn_autocompletion = autocompletion.getButton();
 
 		filechooser = new JFileChooser();
-		filechooser.setPreferredSize(de.uib.utilities.Globals.filechooserSize);
+		filechooser.setPreferredSize(Globals.filechooserSize);
 		filechooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		filechooser.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
 		filechooser.setDialogType(JFileChooser.OPEN_DIALOG);
-		filechooser.setDialogTitle(de.uib.configed.Globals.APPNAME);
+		filechooser.setDialogTitle(Globals.APPNAME);
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("opsi-paket (*.opsi) ", "opsi");
 		filechooser.setFileFilter(filter);
 
-		btn_filechooser = new JButton("", de.uib.configed.Globals.createImageIcon("images/folder_16.png", ""));
-		btn_filechooser.setSelectedIcon(de.uib.configed.Globals.createImageIcon("images/folder_16.png", ""));
-		btn_filechooser.setPreferredSize(de.uib.configed.Globals.smallButtonDimension);
+		btn_filechooser = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
+		btn_filechooser.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
+		btn_filechooser.setPreferredSize(Globals.smallButtonDimension);
 		btn_filechooser.setToolTipText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.filechooser.tooltip"));
-		btn_filechooser.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int returnVal = filechooser.showOpenDialog(instance);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					String path_modules = filechooser.getSelectedFile().getPath();
-					tf_path.setText(path_modules);
-				} else {
-					tf_path.setText("");
-				}
+		btn_filechooser.addActionListener(actionEvent -> {
+			int returnVal = filechooser.showOpenDialog(instance);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				String path_modules = filechooser.getSelectedFile().getPath();
+				tf_path.setText(path_modules);
+			} else {
+				tf_path.setText("");
 			}
 		});
 	}
 
 	private void initLayout() {
-		this.setBackground(Globals.backLightBlue);
+		this.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		GroupLayout layout = new GroupLayout(this);
 

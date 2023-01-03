@@ -1,6 +1,5 @@
 package de.uib.configed.guidata;
 
-import java.awt.Color;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,9 +8,9 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -85,28 +84,19 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		implements ComboBoxModeller, IFInstallationStateTableModel {
 
 	public static final String EMPTYFIELD = "_";
-	// public static final String NOT_AVAILABLEstring = "--";
+
 	public static final String CONFLICTstring = Globals.CONFLICT_STATE_STRING;
 
-	public static final Color backgroundGrey = new Color(220, 220, 220);
-	public static final Color conflictBackColor = backgroundGrey;
-	public static final Color conflictTextColor = backgroundGrey;
-	public static final Color defaultBackColor = Color.white;
-	public static final Color defaultTextColor = Color.black;
-	// public static final Color notUpdatedTextColor = defaultTextColor; // new
-	// Color(250, 30, 0); // needed for update_version_display
-
-	final String initString = "";
 	public static final String unequalAddstring = "≠ ";
 
 	protected static Map<String, String> columnDict;
-	protected static java.util.List<String> columnsLocalized;
+	protected static List<String> columnsLocalized;
 
 	protected String actualProduct = "";
 
 	protected ConfigedMain main;
 
-	protected Vector productsV = null;
+	protected List<String> productsV = null;
 
 	protected int onGoingCollectiveChangeEventCount = -1;
 
@@ -135,28 +125,26 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	protected Map<String, Set<String>> product2setOfClientsWithNewAction;
 	// for each product, we shall collect the clients that have a changed action
 	// request
-	// protected Map<String, ActionRequest> product2AR;
+
 	// for each product, we remember the visual action that is set
-	protected java.util.TreeSet<String> missingImplementationForAR;
+	protected NavigableSet<String> missingImplementationForAR;
 
 	protected Map<String, Map<String, Map<String, String>>> allClientsProductStates; // (clientId -> (productId ->
 																						// (product state key -> product
 																						// state value)))
-																						// protected final Map<String, java.util.List<Map<String, String>>>
-																						// allClientsProductlistsSaved;//clientId -> (productrows)
 
 	protected PersistenceController persist;
 	protected Map<String, Map<String, Map<String, String>>> collectChangedStates;
 	protected final String[] selectedClients;
-	protected Map<String, java.util.List<String>> possibleActions; // product-->possibleActions
+	protected Map<String, List<String>> possibleActions; // product-->possibleActions
 	protected Map<String, Map<String, Object>> globalProductInfos;
 	protected String theClient;
-	protected TreeSet<String> tsProductNames;
-	protected Vector<String> productNamesInDeliveryOrder;
+	protected NavigableSet<String> tsProductNames;
+	protected List<String> productNamesInDeliveryOrder;
 
 	protected ActionRequest actionInTreatment;
-	// protected boolean changeActionIsSet = false;
-	protected java.util.Set<String> missingProducts = new HashSet<String>();
+
+	protected java.util.Set<String> missingProducts = new HashSet<>();
 
 	protected List<String> displayColumns;
 	protected int numberOfColumns;
@@ -173,41 +161,41 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	public static String getColumnTitle(String column) {
 		if (columnDict == null) {
-			columnDict = new HashMap<String, String>();
+			columnDict = new HashMap<>();
 			columnDict.put("productId", configed.getResourceValue("InstallationStateTableModel.productId"));
-			columnDict.put(ProductState.KEY_productName,
+			columnDict.put(ProductState.KEY_PRODUCT_NAME,
 					configed.getResourceValue("InstallationStateTableModel.productName"));
-			columnDict.put(ProductState.KEY_targetConfiguration,
+			columnDict.put(ProductState.KEY_TARGET_CONFIGURATION,
 					configed.getResourceValue("InstallationStateTableModel.targetConfiguration"));
-			columnDict.put(ProductState.KEY_installationStatus,
+			columnDict.put(ProductState.KEY_INSTALLATION_STATUS,
 					configed.getResourceValue("InstallationStateTableModel.installationStatus"));
 
 			columnDict.put("installationInfo", configed.getResourceValue("InstallationStateTableModel.report"));
 			// combines the following three
-			columnDict.put(ProductState.KEY_actionProgress,
+			columnDict.put(ProductState.KEY_ACTION_PROGRESS,
 					configed.getResourceValue("InstallationStateTableModel.actionProgress"));
-			columnDict.put(ProductState.KEY_actionResult,
+			columnDict.put(ProductState.KEY_ACTION_RESULT,
 					configed.getResourceValue("InstallationStateTableModel.actionResult"));
-			columnDict.put(ProductState.KEY_lastAction,
+			columnDict.put(ProductState.KEY_LAST_ACTION,
 					configed.getResourceValue("InstallationStateTableModel.lastAction"));
 
-			columnDict.put(ProductState.KEY_actionRequest,
+			columnDict.put(ProductState.KEY_ACTION_REQUEST,
 					configed.getResourceValue("InstallationStateTableModel.actionRequest"));
-			columnDict.put(ProductState.KEY_productPriority,
+			columnDict.put(ProductState.KEY_PRODUCT_PRIORITY,
 					configed.getResourceValue("InstallationStateTableModel.priority"));
-			columnDict.put(ProductState.KEY_actionSequence, "actionSequence");
+			columnDict.put(ProductState.KEY_ACTION_SEQUENCE, "actionSequence");
 
-			columnDict.put(ProductState.KEY_position,
+			columnDict.put(ProductState.KEY_POSITION,
 					configed.getResourceValue("InstallationStateTableModel.position"));
 
-			columnDict.put(ProductState.KEY_versionInfo, "Version");
+			columnDict.put(ProductState.KEY_VERSION_INFO, "Version");
 			// combines the following two
-			columnDict.put(ProductState.KEY_productVersion,
+			columnDict.put(ProductState.KEY_PRODUCT_VERSION,
 					configed.getResourceValue("InstallationStateTableModel.productVersion"));
-			columnDict.put(ProductState.KEY_packageVersion,
+			columnDict.put(ProductState.KEY_PACKAGE_VERSION,
 					configed.getResourceValue("InstallationStateTableModel.packageVersion"));
 
-			columnDict.put(ProductState.KEY_lastStateChange,
+			columnDict.put(ProductState.KEY_LAST_STATE_CHANGE,
 					configed.getResourceValue("InstallationStateTableModel.lastStateChange"));
 
 		}
@@ -218,8 +206,8 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		return columnDict.get(column);
 	}
 
-	public static java.util.List<String> localizeColumns(java.util.List<String> cols) {
-		java.util.List<String> result = new ArrayList<String>();
+	public static List<String> localizeColumns(List<String> cols) {
+		List<String> result = new ArrayList<>();
 
 		if (columnDict != null) {
 			for (String col : cols) {
@@ -232,8 +220,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	public InstallationStateTableModel(String[] selectedClients, ConfigedMain main,
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
-			Map<String, java.util.List<Map<String, String>>> statesAndActions,
-			Map<String, java.util.List<String>> possibleActions, // product-->possibleActions
+			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions, // product-->possibleActions
 			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
 		logging.info(this, "creating an InstallationStateTableModel ");
 		if (statesAndActions == null)
@@ -252,51 +239,48 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		initColumnNames(displayColumns);
 		initChangedStates();
 
-		missingImplementationForAR = new java.util.TreeSet<String>();
-		product2setOfClientsWithNewAction = new HashMap<String, Set<String>>();
+		missingImplementationForAR = new TreeSet<>();
+		product2setOfClientsWithNewAction = new HashMap<>();
 
 		persist = main.getPersistenceController();
 		Collator myCollator = Collator.getInstance();
-		// myCollator.setStrength(Collator.PRIMARY); //ignores hyphens
+
 		myCollator.setStrength(Collator.SECONDARY);
 
-		// logging.info(this, "listOfInstallableProducts " + listOfInstallableProducts);
-		productNamesInDeliveryOrder = new Vector<String>();
+		productNamesInDeliveryOrder = new ArrayList<>();
 		if (listOfInstallableProducts != null) {
 			for (int i = 0; i < listOfInstallableProducts.size(); i++) {
-				String product = (String) listOfInstallableProducts.get(i);
+				String product = listOfInstallableProducts.get(i);
 				productNamesInDeliveryOrder.add(product);
 			}
 		}
 
-		tsProductNames = new TreeSet<String>(myCollator);
+		tsProductNames = new TreeSet<>(myCollator);
 		tsProductNames.addAll(productNamesInDeliveryOrder);
-		productsV = new Vector(tsProductNames);
+		productsV = new ArrayList<>(tsProductNames);
 
 		logging.debug(this, "tsProductNames " + tsProductNames);
 
-		// allClientsProductlistsSaved = statesAndActions; trying to start a deep copy
 		initalizeProductStates(statesAndActions);
 	}
 
-	private void initalizeProductStates(Map<String, java.util.List<Map<String, String>>> client2listProductState) {
-		allClientsProductStates = new HashMap<String, Map<String, Map<String, String>>>();
+	private void initalizeProductStates(Map<String, List<Map<String, String>>> client2listProductState) {
+		allClientsProductStates = new HashMap<>();
 		remaptoClient2Product2Rowmap(client2listProductState);
 
 		produceVisualStatesFromExistingEntries();
 		completeVisualStatesByDefaults();
 	}
 
-	private void remaptoClient2Product2Rowmap(Map<String, java.util.List<Map<String, String>>> clientAllProductRows) {
+	private void remaptoClient2Product2Rowmap(Map<String, List<Map<String, String>>> clientAllProductRows) {
 		if (clientAllProductRows == null)
 			return;
 
 		// iterate through all clients for which a list of
 		// products/states/actionrequests exist
-		// logging.debug(this, "" + clientAllProductRows);
 
 		for (String clientId : clientAllProductRows.keySet()) {
-			Map<String, Map<String, String>> productRows = new HashMap<String, Map<String, String>>();
+			Map<String, Map<String, String>> productRows = new HashMap<>();
 
 			allClientsProductStates.put(clientId, productRows);
 			// for each client we build the productstates map
@@ -305,45 +289,20 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 			for (int i = 0; i < productRowsList1client.size(); i++) {
 				Map<String, String> stateAndAction = productRowsList1client.get(i);
-				// new HashMap<String, String>(productRowsList1client.get(i));
-				// deep copy, but seems to be not complete, therefore not used
-				// if (clientId.equals("vbrupertwin7-64.uib.local"))
-				// logging.info(this, "stateAndAction " + stateAndAction);
 
-				String productId = stateAndAction.get(ProductState.KEY_productId);
+				// deep copy, but seems to be not complete, therefore not used
+
+				String productId = stateAndAction.get(ProductState.KEY_PRODUCT_ID);
 				productRows.put(productId, stateAndAction);
 			}
 		}
 	}
 
-	/*
-	 * 
-	 * private void rebuildVisualStatesFromExistingEntries()
-	 * {
-	 * 
-	 * for (String clientId : allClientsProductStates.keySet())
-	 * {
-	 * for (String productId : allClientsProductStates.get( clientId).keySet() )
-	 * {
-	 * Map<String, String> stateAndAction =
-	 * allClientsProductStates.get(clientId).get( productId );
-	 * 
-	 * if (!stateAndAction.get("actionRequest").equalsIgnoreCase("none"))
-	 * logging.info(this,
-	 * "rebuildVisualStatesFromExistingEntries stateAndAction for client " +
-	 * clientId + " product " + productId
-	 * + " action " + stateAndAction.get("actionRequest") );
-	 * }
-	 * 
-	 * }
-	 * }
-	 */
-
 	private void produceVisualStatesFromExistingEntries() {
 
-		combinedVisualValues = new HashMap<String, Map<String, String>>();
+		combinedVisualValues = new HashMap<>();
 		for (String key : ProductState.KEYS) {
-			HashMap<String, String> combinedVisualValuesForOneColumn = new HashMap<String, String>();
+			HashMap<String, String> combinedVisualValuesForOneColumn = new HashMap<>();
 			combinedVisualValues.put(key, combinedVisualValuesForOneColumn);
 		}
 
@@ -358,43 +317,27 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				}
 
 				// change values for visual output
-				String targetConfiguration = stateAndAction.get(ProductState.KEY_targetConfiguration);
+				String targetConfiguration = stateAndAction.get(ProductState.KEY_TARGET_CONFIGURATION);
 				if (targetConfiguration == null || targetConfiguration.equals(""))
 					targetConfiguration = TargetConfiguration.getLabel(TargetConfiguration.UNDEFINED);
-				stateAndAction.put(ProductState.KEY_targetConfiguration, targetConfiguration);
+				stateAndAction.put(ProductState.KEY_TARGET_CONFIGURATION, targetConfiguration);
 
 				String priority = "";
 				if (globalProductInfos != null && globalProductInfos.get(productId) != null)
-					priority = "" + globalProductInfos.get(productId).get("priority");// aProduct.get(ActionSequence.KEY);
-				stateAndAction.put(ProductState.KEY_productPriority, priority);
+					priority = "" + globalProductInfos.get(productId).get("priority");
+				stateAndAction.put(ProductState.KEY_PRODUCT_PRIORITY, priority);
 
-				stateAndAction.put(ProductState.KEY_actionSequence, priority);
-
-				// stateAndAction.put(ProductState.KEY_lastStateChange, "test");
+				stateAndAction.put(ProductState.KEY_ACTION_SEQUENCE, priority);
 
 				// build visual states
 				for (String colKey : ProductState.KEYS) {
-					// logging.debug(this, "produceVisualStates, clientId " + clientId + ",
-					// productMap " + productMapAsRetrieved);
-					// logging.debug(this, "produceVisualStates, clientId " + clientId + ",
-					// combinedVisualValues.get(colKey) " + combinedVisualValues.get(colKey));
 
-					// if (stateAndAction.get(ProductState.KEY_actionRequest).equals("setup"))
-					// logging.info(this, "produceVisualStatesFromExistingEntries clientId " +
-					// clientId + ", stateAndAction " + stateAndAction);
-
-					if (colKey == ProductState.KEY_actionRequest) {
+					if (colKey.equals(ProductState.KEY_ACTION_REQUEST)) {
 						logging.debug(this, " ------------before   mixtovisualstate " + "product " + productId
 								+ " value " + stateAndAction.get(colKey));
 					}
 
-					mixToVisualState(colKey, combinedVisualValues.get(colKey), productId, stateAndAction.get(colKey));
-					// logging.info(this, "produceVisualStates, clientId " + clientId + ",
-					// lastStateChange " + stateAndAction.get(ProductState.KEY_lastStateChange));
-					// logging.info(this, "produceVisualStates, clientId " + clientId + ",
-					// lastStateChange " +
-					// combinedVisualValues.get(ProductState.KEY_lastStateChange));
-
+					mixToVisualState(combinedVisualValues.get(colKey), productId, stateAndAction.get(colKey));
 				}
 
 			}
@@ -407,98 +350,50 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			// check if productstates exist
 			Map<String, Map<String, String>> productStates = allClientsProductStates.get(clientId);
 			if (productStates == null) {
-				productStates = new HashMap<String, Map<String, String>>();
+				productStates = new HashMap<>();
 				allClientsProductStates.put(clientId, productStates);
 			}
 
 			// check if products for clients exist
 			for (int j = 0; j < productsV.size(); j++) {
 
-				String productId = (String) productsV.get(j);
+				String productId = productsV.get(j);
 				Map<String, String> stateAndAction = productStates.get(productId);
 
 				if (stateAndAction == null) {
 
-					/*
-					 * stateAndAction = new ProductState(null);
-					 * //ProductState.getDEFAULT(); //for testing
-					 * //defaults for the product
-					 * productStates.put( productId, stateAndAction);
-					 * 
-					 * stateAndAction.put(ProductState.KEY_productId, productId);
-					 * 
-					 * 
-					 * 
-					 * String priority = "";
-					 * if (globalProductInfos != null && globalProductInfos.get(productId) != null)
-					 * priority = "" +
-					 * globalProductInfos.get(productId).get("priority");//aProduct.get(
-					 * ActionSequence.KEY);
-					 * stateAndAction.put(ProductState.KEY_productPriority, priority);
-					 * 
-					 * stateAndAction.put(ProductState.KEY_actionSequence, priority);
-					 * 
-					 */
-
 					// build visual states
-					Iterator iter = ProductState.KEYS.iterator();
+					Iterator<String> iter = ProductState.KEYS.iterator();
 
 					String priority = "";
 
 					if (globalProductInfos != null && globalProductInfos.get(productId) != null)
-						priority = "" + globalProductInfos.get(productId).get("priority");// aProduct.get(ActionSequence.KEY);
+						priority = "" + globalProductInfos.get(productId).get("priority");
 
 					while (iter.hasNext()) {
-						String key = (String) iter.next();
+						String key = iter.next();
 
-						if (key == ProductState.KEY_productPriority || key == ProductState.KEY_actionSequence) {
-							mixToVisualState(key, combinedVisualValues.get(key), productId, priority);
+						if (key.equals(ProductState.KEY_PRODUCT_PRIORITY)
+								|| key.equals(ProductState.KEY_ACTION_SEQUENCE)) {
+							mixToVisualState(combinedVisualValues.get(key), productId, priority);
 						} else {
-							mixToVisualState(key, combinedVisualValues.get(key), productId,
+							mixToVisualState(combinedVisualValues.get(key), productId,
 									ProductState.getDEFAULT().get(key));
 						}
 					}
 
-					/*
-					 * 
-					 * mixToVisualState (actions, productId, actionRequest);
-					 * mixToVisualState (states, productId, installationStatus);
-					 * mixToVisualState (productVersions, productId, productVersion);
-					 * mixToVisualState (packageVersions, productId, packageVersion);
-					 * mixToVisualState(progresses, productId, actionProgress);
-					 * 
-					 * mixToVisualState(targets, productId, targetConfiguration);
-					 * mixToVisualState(results, productId, actionResult);
-					 * //logging.debug(this, "results " + results + ", actionResult mixed in: " +
-					 * actionResult);
-					 * mixToVisualState(lastActions, productId, lastAction);
-					 * mixToVisualState(priorities, productId, priority);
-					 */
 				}
 			}
 		}
 	}
 
-	// protected String mixToVisualState (final String columnName, Map<String,
-	// String> visualStates, final String productId, final String mixinValue,
-	// boolean initial)
-
-	protected String mixToVisualState(final String columnName, Map<String, String> visualStates, final String productId,
+	protected String mixToVisualState(Map<String, String> visualStates, final String productId,
 			final String mixinValue) {
-		String oldValue = (String) visualStates.get(productId);
-		// logging.info(this, " ------------------- mixtovisualstates, columnName " +
-		// columnName + " productId " + productId + " oldValue " + oldValue + "
-		// mixinValue " + mixinValue);
+		String oldValue = visualStates.get(productId);
 
 		String resultValue = oldValue;
-		if (oldValue == null)
-		// ! states.containsKey(productId)
-		{
+		if (oldValue == null) {
 
-			// if (columnName.equals("actionRequest"))
-			// logging.info(this, " ------------------- mixtovisualstates, columnName " +
-			// columnName + " productId " + productId + " oldValue null " + " mixinValue " +
-			// mixinValue);
 			resultValue = mixinValue;
 			visualStates.put(productId, resultValue);
 		} else {
@@ -508,15 +403,6 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			}
 		}
 
-		/*
-		 * if (columnName == ActionRequest.KEY && mixinValue.equals("setup"))
-		 * {
-		 * logging.info(this, "mixtovisualstate visualStates " + visualStates);
-		 * logging.info(this, "mixtovisualstate result " + resultValue);
-		 * logging.info(this, "mixtovisualstate oldValue " + oldValue);
-		 * logging.info(this, "mixtovisualstate mixinValue " + mixinValue);
-		 * }
-		 */
 		return resultValue;
 	}
 
@@ -535,55 +421,55 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	// builds index of the currently displayed columns in terms of the prepared
 	// columns (indexPreparedColumns)
 	private void initColumnNames(List<String> columnsToDisplay) {
-		preparedColumns = new ArrayList<String>();
+		preparedColumns = new ArrayList<>();
 		editablePreparedColumns = new boolean[16];
 
-		preparedColumns.add(0, ProductState.KEY_productId);
+		preparedColumns.add(0, ProductState.KEY_PRODUCT_ID);
 		editablePreparedColumns[0] = false;
 
-		preparedColumns.add(1, ProductState.KEY_productName);
+		preparedColumns.add(1, ProductState.KEY_PRODUCT_NAME);
 		editablePreparedColumns[1] = false;
 
-		preparedColumns.add(2, ProductState.KEY_targetConfiguration);
+		preparedColumns.add(2, ProductState.KEY_TARGET_CONFIGURATION);
 		editablePreparedColumns[2] = true;
 
-		preparedColumns.add(3, ProductState.KEY_installationStatus);
+		preparedColumns.add(3, ProductState.KEY_INSTALLATION_STATUS);
 		editablePreparedColumns[3] = true;
 
-		preparedColumns.add(4, ProductState.KEY_installationInfo);
-		editablePreparedColumns[4] = true; // false;
+		preparedColumns.add(4, ProductState.KEY_INSTALLATION_INFO);
+		editablePreparedColumns[4] = true;
 
-		preparedColumns.add(5, ProductState.KEY_actionProgress);
+		preparedColumns.add(5, ProductState.KEY_ACTION_PROGRESS);
 		editablePreparedColumns[5] = false;
 
-		preparedColumns.add(6, ProductState.KEY_actionResult);
+		preparedColumns.add(6, ProductState.KEY_ACTION_RESULT);
 		editablePreparedColumns[6] = false;
 
-		preparedColumns.add(7, ProductState.KEY_lastAction);
+		preparedColumns.add(7, ProductState.KEY_LAST_ACTION);
 		editablePreparedColumns[7] = false;
 
-		preparedColumns.add(8, ProductState.KEY_actionRequest);
+		preparedColumns.add(8, ProductState.KEY_ACTION_REQUEST);
 		editablePreparedColumns[8] = true;
 
-		preparedColumns.add(9, ProductState.KEY_productPriority);
+		preparedColumns.add(9, ProductState.KEY_PRODUCT_PRIORITY);
 		editablePreparedColumns[9] = false;
 
-		preparedColumns.add(10, ProductState.KEY_actionSequence);
+		preparedColumns.add(10, ProductState.KEY_ACTION_SEQUENCE);
 		editablePreparedColumns[10] = false;
 
-		preparedColumns.add(11, ProductState.KEY_position);
+		preparedColumns.add(11, ProductState.KEY_POSITION);
 		editablePreparedColumns[11] = false;
 
-		preparedColumns.add(12, ProductState.KEY_versionInfo);
+		preparedColumns.add(12, ProductState.KEY_VERSION_INFO);
 		editablePreparedColumns[12] = false;
 
-		preparedColumns.add(13, ProductState.KEY_productVersion);
+		preparedColumns.add(13, ProductState.KEY_PRODUCT_VERSION);
 		editablePreparedColumns[13] = false;
 
-		preparedColumns.add(14, ProductState.KEY_packageVersion);
+		preparedColumns.add(14, ProductState.KEY_PACKAGE_VERSION);
 		editablePreparedColumns[14] = false;
 
-		preparedColumns.add(15, ProductState.KEY_lastStateChange);
+		preparedColumns.add(15, ProductState.KEY_LAST_STATE_CHANGE);
 		editablePreparedColumns[15] = false;
 
 		if (columnsToDisplay == null) {
@@ -597,12 +483,12 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		logging.info(this, "columnsToDisplay: " + columnsToDisplay);
 
 		indexPreparedColumns = new int[columnsToDisplay.size()];
-		columnTitles = new ArrayList<String>();
+		columnTitles = new ArrayList<>();
 		{
-			Iterator iter = columnsToDisplay.iterator();
+			Iterator<String> iter = columnsToDisplay.iterator();
 			int j = 0;
 			while (iter.hasNext()) {
-				String column = (String) iter.next();
+				String column = iter.next();
 				logging.debug(this, " ------- treat column " + column);
 				int k = preparedColumns.indexOf(column);
 				if (k >= 0) {
@@ -622,25 +508,26 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	}
 
+	@Override
 	public int getColumnIndex(String columnName) {
 		return displayColumns.indexOf(columnName);
 	}
 
 	private void initChangedStates() {
 		for (String clientId : selectedClients) {
-			Map<String, Map<String, String>> changedStates = new HashMap<String, Map<String, String>>();
+			Map<String, Map<String, String>> changedStates = new HashMap<>();
 			collectChangedStates.put(clientId, changedStates);
 		}
 	}
 
+	@Override
 	public void clearCollectChangedStates() {
 		collectChangedStates.clear();
-		// changeActionIsSet = false;
-		// initChangedStates();
+
 	}
 
 	protected void setInstallationInfo(String product, String value) {
-		combinedVisualValues.get(ProductState.KEY_installationInfo).put(product, value);
+		combinedVisualValues.get(ProductState.KEY_INSTALLATION_INFO).put(product, value);
 
 		for (String clientId : selectedClients) {
 			setInstallationInfo(clientId, product, value);
@@ -651,16 +538,15 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		logging.debug(this,
 				"setInstallationInfo for product, client, value " + product + ", " + clientId + ", " + value);
 
-		Map<String, Map<String, String>> changedStatesForClient = (Map<String, Map<String, String>>) (collectChangedStates
-				.get(clientId));
+		Map<String, Map<String, String>> changedStatesForClient = collectChangedStates.get(clientId);
 		if (changedStatesForClient == null) {
-			changedStatesForClient = new HashMap<String, Map<String, String>>();
+			changedStatesForClient = new HashMap<>();
 			collectChangedStates.put(clientId, changedStatesForClient);
 		}
 
-		Map<String, String> changedStatesForProduct = (Map<String, String>) changedStatesForClient.get(product);
+		Map<String, String> changedStatesForProduct = changedStatesForClient.get(product);
 		if (changedStatesForProduct == null) {
-			changedStatesForProduct = new HashMap<String, String>();
+			changedStatesForProduct = new HashMap<>();
 			changedStatesForClient.put(product, changedStatesForProduct);
 		}
 
@@ -670,34 +556,34 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				|| value.equals(InstallationInfo.NONEdisplayString) // this is asked only for formal independence of the
 																	// method
 		) {
-			changedStatesForProduct.put(ProductState.KEY_lastAction, LastAction.getLabel(ActionResult.NONE));
-			changedStatesForProduct.put(ProductState.KEY_actionResult, LastAction.getLabel(ActionResult.NONE));
-			changedStatesForProduct.put(ProductState.KEY_actionProgress, InstallationInfo.NONEstring);
+			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, LastAction.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, InstallationInfo.NONEstring);
 
 		} else if (value.equals(InstallationInfo.FAILEDdisplayString)) {
-			changedStatesForProduct.put(ProductState.KEY_lastAction, LastAction.getLabel(ActionResult.NONE));
-			changedStatesForProduct.put(ProductState.KEY_actionResult, ActionResult.getLabel(ActionResult.FAILED));
-			changedStatesForProduct.put(ProductState.KEY_actionProgress, InstallationInfo.MANUALLY);
+			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, ActionResult.getLabel(ActionResult.FAILED));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, InstallationInfo.MANUALLY);
 		} else if (value.equals(InstallationInfo.SUCCESSdisplayString)) {
-			changedStatesForProduct.put(ProductState.KEY_lastAction, LastAction.getLabel(ActionResult.NONE));
-			changedStatesForProduct.put(ProductState.KEY_actionResult, ActionResult.getLabel(ActionResult.SUCCESSFUL));
-			changedStatesForProduct.put(ProductState.KEY_actionProgress, InstallationInfo.MANUALLY);
+			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, ActionResult.getLabel(ActionResult.SUCCESSFUL));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, InstallationInfo.MANUALLY);
 		} else {
-			changedStatesForProduct.put(ProductState.KEY_lastAction, ActionResult.getLabel(ActionResult.NONE));
-			changedStatesForProduct.put(ProductState.KEY_actionResult, LastAction.getLabel(ActionResult.NONE));
-			changedStatesForProduct.put(ProductState.KEY_actionProgress, value);
+			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, ActionResult.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, LastAction.getLabel(ActionResult.NONE));
+			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, value);
 		}
 
 	}
 
 	private void checkForContradictingAssignments(String clientId, String product, String stateType, String state) {
 		if (changeEventCount2product2request == null)
-			changeEventCount2product2request = new HashMap<Integer, Map<String, String>>();
+			changeEventCount2product2request = new HashMap<>();
 
 		Map<String, String> product2request = changeEventCount2product2request.get(onGoingCollectiveChangeEventCount);
 
 		if (product2request == null) {
-			product2request = new HashMap<String, String>();
+			product2request = new HashMap<>();
 			changeEventCount2product2request.put(onGoingCollectiveChangeEventCount, product2request);
 
 		}
@@ -729,8 +615,9 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 							configed.getResourceValue("InstallationStateTableModel.contradictingProductRequirements3"),
 							actualProduct, existingRequest, state);
 					new Thread() {
+						@Override
 						public void run() {
-							javax.swing.JOptionPane.showMessageDialog(de.uib.configed.Globals.mainFrame, infoOfChange,
+							javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame, infoOfChange,
 									configed.getResourceValue(
 											"InstallationStateTableModel.contradictingProductRequirements.title"),
 									javax.swing.JOptionPane.WARNING_MESSAGE);
@@ -758,8 +645,9 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 									existingRequest);
 
 					new Thread() {
+						@Override
 						public void run() {
-							javax.swing.JOptionPane.showMessageDialog(de.uib.configed.Globals.mainFrame, errorInfo,
+							javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame, errorInfo,
 									configed.getResourceValue(
 											"InstallationStateTableModel.contradictingProductRequirements.title"),
 									javax.swing.JOptionPane.WARNING_MESSAGE);
@@ -771,25 +659,20 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		}
 
-		// logging.info(this, "checkForContradictingAssignments === " + info + " client
-		// " + clientId + ", actualproduct " + actualProduct + ", product " + product +
-		// ", stateType " + stateType + ", state " + state);
-
 		logging.info(this, "checkForContradictingAssignments === onGoingCollectiveChangeEventCount: product2request "
 				+ onGoingCollectiveChangeEventCount + ": " + product2request);
 	}
 
 	private void setChangedState(String clientId, String product, String stateType, String state) {
-		Map<String, Map<String, String>> changedStatesForClient = (Map<String, Map<String, String>>) (collectChangedStates
-				.get(clientId));
+		Map<String, Map<String, String>> changedStatesForClient = collectChangedStates.get(clientId);
 		if (changedStatesForClient == null) {
-			changedStatesForClient = new HashMap<String, Map<String, String>>();
+			changedStatesForClient = new HashMap<>();
 			collectChangedStates.put(clientId, changedStatesForClient);
 		}
 
-		Map<String, String> changedStatesForProduct = (Map<String, String>) changedStatesForClient.get(product);
+		Map<String, String> changedStatesForProduct = changedStatesForClient.get(product);
 		if (changedStatesForProduct == null) {
-			changedStatesForProduct = new HashMap<String, String>();
+			changedStatesForProduct = new HashMap<>();
 			changedStatesForClient.put(product, changedStatesForProduct);
 		}
 
@@ -797,9 +680,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		checkForContradictingAssignments(clientId, product, stateType, state);
 
 		changedStatesForProduct.put(stateType, state);
-		// test testes setValueAt("None", 2, 6);
-		// if (!product.equals( actualProduct)) setValueAt( state, productsV.indexOf (
-		// product ), 3 );
+
 		main.getGeneralDataChangedKeeper().dataHaveChanged(this);
 	}
 
@@ -815,10 +696,11 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		return changedStatesForProduct.get(stateType);
 	}
 
+	@Override
 	public boolean infoIfNoClientsSelected() {
 
 		if (selectedClients.length == 0) {
-			javax.swing.JOptionPane.showMessageDialog(de.uib.configed.Globals.mainFrame,
+			javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame,
 					configed.getResourceValue("InstallationStateTableModel.noClientsSelected"),
 					configed.getResourceValue("InstallationStateTableModel.noClientsSelected.title"),
 					javax.swing.JOptionPane.INFORMATION_MESSAGE);
@@ -834,6 +716,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		}
 	}
 
+	@Override
 	public void initCollectiveChange() {
 		logging.debug(this, "initCollectiveChange");
 		setOnGoingCollectiveChangeCount();
@@ -841,11 +724,11 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	}
 
 	private void tellAndClearMissingProducts(String productId) {
-		if (missingProducts.size() > 0) {
+		if (!missingProducts.isEmpty()) {
 
 			logging.info(this, "required by product " + productId + " but missing " + missingProducts);
 
-			StringBuffer lines = new StringBuffer();
+			StringBuilder lines = new StringBuilder();
 
 			lines.append(configed.getResourceValue("InstallationStateTableModel.requiredByProduct"));
 			lines.append("\n");
@@ -867,48 +750,25 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			fMissingProducts.setAlwaysOnTop(true);
 			fMissingProducts.setVisible(true);
 
-			/*
-			 * 
-			 * 
-			 * javax.swing.JOptionPane.showMessageDialog( de.uib.configed.Globals.mainFrame,
-			 * configed.getResourceValue("InstallationStateTableModel.requiredByProduct") +
-			 * "\n"
-			 * + productId + "\n\n"
-			 * + configed.getResourceValue("InstallationStateTableModel.missingProducts") +
-			 * "\n"
-			 * + lines,
-			 * configed.getResourceValue("InstallationStateTableModel.missingProducts.title"
-			 * ),
-			 * javax.swing.JOptionPane.INFORMATION_MESSAGE
-			 * );
-			 */
 		}
 
-		// missingProducts.clear();
 	}
 
+	@Override
 	public void finishCollectiveChange() {
 		logging.info(this, "finishCollectiveChange");
 
-		// produceVisualStatesFromExistingEntries();
-		// completeVisualStatesByDefaults();
-
-		// changeValueAt
-		// changeActionRequest
-		// registerStateChange
-		// fireTableDataChanged();
-
 		logging.debug(this, "finishCollectiveChange, changes " + collectChangedStates);
 
-		if (missingImplementationForAR.size() > 0) {
+		if (!missingImplementationForAR.isEmpty()) {
 
-			StringBuffer products = new StringBuffer("\n\n\n");
+			StringBuilder products = new StringBuilder("\n\n\n");
 			for (String prod : missingImplementationForAR) {
 				products.append(prod);
 				products.append("\n");
 			}
 
-			javax.swing.JOptionPane.showMessageDialog(de.uib.configed.Globals.mainFrame,
+			javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame,
 					configed.getResourceValue("InstallationStateTableModel.missingImplementationForActionRequest")
 							+ products,
 					configed.getResourceValue(
@@ -919,49 +779,29 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	}
 
 	protected void initChangeActionRequests() {
-		// changeActionIsSet = true;
+
 		product2setOfClientsWithNewAction.clear();
 
 		// for each product, we shall collect the clients that have a changed action
 		// request
 		missingProducts.clear();
 
-		// if (product2AR == null) product2AR = new HashMap<String, ActionRequest>();
-
-		// return missingProducts;
 	}
-
-	/*
-	 * protected void setVisualActionRequest( ActionRequest ar, String productId )
-	 * {
-	 * combinedVisualValues.get(ProductState.KEY_actionRequest).put( productId,
-	 * ar.toString() );
-	 * 
-	 * int row = productsV.indexOf( productId );
-	 * int col = displayColumns.indexOf( ProductState.KEY_actionRequest);
-	 * logging.info(this, "setVisualActionRequest " + ar + " row " + row + " col " +
-	 * col);
-	 * 
-	 * fireTableCellUpdated(row, col);
-	 * }
-	 */
 
 	protected void setActionRequest(ActionRequest ar, String productId, String clientId) {
 
 		Map<String, Map<String, String>> productStates = allClientsProductStates.get(clientId);
 		if (productStates == null) {
-			productStates = new HashMap<String, Map<String, String>>();
+			productStates = new HashMap<>();
 			allClientsProductStates.put(clientId, productStates);
 		}
 
 		Map<String, String> rowMapForaClient = productStates.get(productId);
 		if (rowMapForaClient == null) {
-			rowMapForaClient = new HashMap<String, String>();
+			rowMapForaClient = new HashMap<>();
 			productStates.put(productId, rowMapForaClient);
 		}
-		rowMapForaClient.put(ProductState.KEY_actionRequest, ar.toString());
-
-		// setChangedState( clientId, productId, ActionRequest.KEY, ar.toString() );
+		rowMapForaClient.put(ProductState.KEY_ACTION_REQUEST, ar.toString());
 
 	}
 
@@ -974,6 +814,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		return true;
 	}
 
+	@Override
 	public void collectiveChangeActionRequest(String productId, ActionRequest ar) {
 
 		logging.info(this, "collectiveChangeActionRequest for product " + productId + " to " + ar);
@@ -1004,168 +845,43 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					+ " changed product for client number : " + product2setOfClientsWithNewAction.get(prod).size());
 			logging.debug(this, "collectiveChangeActionRequest we have selected clients  " + selectedClients.length);
 
-			// logging.info(this, "collectiveChangeActionRequest, set value valid if set for
 			// all clients " + ar + " for " + prod + " instead of " +
-			// combinedVisualValues.get(ProductState.KEY_actionRequest).get(prod));
 
-			// if ( ( product2setOfClientsWithNewAction.get(prod) ).size() <
-			// selectedClients.length )
 			// -- not each client got a new action for this product
-			{
-				// String oldVal = combinedVisualValues.get(ProductState.KEY_actionRequest).get(
-				// prod );
-				String newValUntilNow = null;
-				boolean started = false;
 
-				for (String clientId : selectedClients) {
-					// String mixInVal = ar.toString();
+			String newValUntilNow = null;
+			boolean started = false;
 
-					if (!started) {
-						started = true;
-						newValUntilNow = getChangedState(clientId, prod, ProductState.KEY_actionRequest);
+			for (String clientId : selectedClients) {
+
+				if (!started) {
+					started = true;
+					newValUntilNow = getChangedState(clientId, prod, ProductState.KEY_ACTION_REQUEST);
+				} else {
+					if (newValUntilNow == null) {
+						if (getChangedState(clientId, prod, ProductState.KEY_ACTION_REQUEST) != null) {
+							newValUntilNow = Globals.CONFLICT_STATE_STRING;
+						}
 					} else {
-						if (newValUntilNow == null) {
-							if (!(getChangedState(clientId, prod, ProductState.KEY_actionRequest) == null)) {
-								newValUntilNow = de.uib.configed.Globals.CONFLICT_STATE_STRING;
-							}
+						if (newValUntilNow.equals(getChangedState(clientId, prod, ProductState.KEY_ACTION_REQUEST))) {
+							// it remains
 						} else {
-							if (newValUntilNow
-									.equals(getChangedState(clientId, prod, ProductState.KEY_actionRequest))) {
-								// it remains
-							} else {
-								newValUntilNow = de.uib.configed.Globals.CONFLICT_STATE_STRING;
-							}
+							newValUntilNow = Globals.CONFLICT_STATE_STRING;
 						}
 					}
-
 				}
-				combinedVisualValues.get(ProductState.KEY_actionRequest).put(prod, newValUntilNow);
 
 			}
+			combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).put(prod, newValUntilNow);
 
-			/*
-			 * else
-			 * {
-			 * 
-			 * String mixInVal = null;
-			 * 
-			 * for (String clientId : selectedClients)
-			 * {
-			 * if (mixInVal == null)
-			 * // set initial value for the clients
-			 * mixInVal = getChangedState(clientId, prod, ProductState.KEY_actionRequest);
-			 * 
-			 * else
-			 * // mix in the value of this client to the value until now
-			 * {
-			 * if (!mixInVal.equals( getChangedState(clientId, prod,
-			 * ProductState.KEY_actionRequest) ))
-			 * mixInVal = de.uib.configed.Globals.CONFLICTSTATEstring;
-			 * }
-			 * 
-			 * logging.info(this, "collectiveChangeActionRequest, set " + ar + " for " +
-			 * prod + " instead of " +
-			 * combinedVisualValues.get(ProductState.KEY_actionRequest).get(prod) +
-			 * ", or perhaps "
-			 * + getChangedState(clientId, prod, ProductState.KEY_actionRequest) +
-			 * " giving mixin "
-			 * + mixInVal);
-			 * 
-			 * }
-			 * //combinedVisualValues.get(ProductState.KEY_actionRequest).put (prod,
-			 * ar.toString() );
-			 * 
-			 * 
-			 * if (mixInVal != null)
-			 * combinedVisualValues.get(ProductState.KEY_actionRequest).put (prod, mixInVal
-			 * );
-			 * 
-			 * }
-			 */
 		}
 
 		fireTableDataChanged(); // removes the selection
-		// fireTableRowsUpdated(0, productsV.size()-1); //does not trigger a new
+
 		// ordering command
 		tellAndClearMissingProducts(productId);
 
 	}
-
-	/*
-	 * protected void changeActionRequest (String product, String
-	 * theActionRequestString)
-	 * {
-	 * //logging.info(this, "changeActionRequest called");
-	 * ActionRequest actionInTreatment =
-	 * ActionRequest.produceFromDisplayLabel(theActionRequestString);
-	 * 
-	 * initChangeActionRequests();
-	 * 
-	 * //changedStatesForClient.get(product);
-	 * // by recursion, we find all new settings
-	 * for (String clientId : selectedClients)
-	 * {
-	 * 
-	 * recursivelyChangeActionRequest (clientId, product, actionInTreatment);
-	 * }
-	 * 
-	 * 
-	 * // show the new settings
-	 * for (String productId : product2setOfClientsWithNewAction.keySet())
-	 * {
-	 * if ( ( product2setOfClientsWithNewAction.get(productId) ).size() <
-	 * selectedClients.length )
-	 * // not each client got a new action for this product
-	 * {
-	 * //mixToVisualActions(actions, productId, actionInTreatment.toString());
-	 * String mixedValue = mixToVisualState(ProductState.KEY_actionRequest,
-	 * combinedVisualValues.get(ProductState.KEY_actionRequest), productId,
-	 * (product2AR.get(productId)).toString());
-	 * if (mixedValue.equals("mixed"))
-	 * {
-	 * logging.info(this, "changeActionRequest result mixed for product " +
-	 * productId );
-	 * }
-	 * 
-	 * }
-	 * else
-	 * {
-	 * combinedVisualValues.get(ProductState.KEY_actionRequest).put (productId,
-	 * (product2AR.get(productId)).toString() );
-	 * }
-	 * }
-	 * 
-	 * if (missingProducts.size() > 0)
-	 * {
-	 * logging.info(this, "required by product " + product + " but missing " +
-	 * missingProducts);
-	 * 
-	 * StringBuffer lines = new StringBuffer();
-	 * for (String p : missingProducts)
-	 * {
-	 * lines.append("\n   ");
-	 * lines.append(p);
-	 * }
-	 * 
-	 * 
-	 * javax.swing.JOptionPane.showMessageDialog( de.uib.configed.Globals.mainFrame,
-	 * configed.getResourceValue("InstallationStateTableModel.requiredByProduct") +
-	 * "\n"
-	 * + product + "\n\n"
-	 * + configed.getResourceValue("InstallationStateTableModel.missingProducts") +
-	 * "\n"
-	 * + lines,
-	 * configed.getResourceValue("InstallationStateTableModel.missingProducts.title"
-	 * ),
-	 * javax.swing.JOptionPane.INFORMATION_MESSAGE
-	 * );
-	 * }
-	 * 
-	 * 
-	 * 
-	 * 
-	 * }
-	 */
 
 	protected void recursivelyChangeActionRequest(String clientId, String product, ActionRequest ar)
 	// adds the new value to the collection of changed states
@@ -1178,28 +894,22 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		Set<String> aSetOfClients = product2setOfClientsWithNewAction.get(product);
 
 		if (aSetOfClients == null) {
-			aSetOfClients = new HashSet<String>();
+			aSetOfClients = new HashSet<>();
 			product2setOfClientsWithNewAction.put(product, aSetOfClients);
 		}
 
 		aSetOfClients.add(clientId);
 
-		// product2AR.put (product, ar);
-
-		// actions.put (product, actionInTreatment.toString()); // if necessary change
 		// of visible action in combined actions
 
-		// logging.debug(this, "productsV.indexOf must be calculated in a different way
-		// in subclass " + productsV.indexOf(actualProduct));
-		// int modelRow = getRowFromProductID(actualProduct);
 		int modelRow = getRowFromProductID(product);
 		logging.debug(this, "recursivelyChangeActionRequest product " + product + " modelRow " + modelRow);
 		if (modelRow > -1) {
 			logging.debug(this, "recursivelyChangeActionRequest fire update for row  " + modelRow);
-			// fireTableCellUpdated(modelRow, displayColumns.indexOf(ActionRequest.KEY)); //
+
 			// tell the table model listeners where a change occurred
 			fireTableRowsUpdated(modelRow, modelRow);
-			// displayColumns.indexOf(ActionRequest.KEY)); // tell the table model listeners
+
 			// where a change occurred
 		}
 
@@ -1208,12 +918,12 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			// don't follow
 		} else if (ar.getVal() == ActionRequest.UNINSTALL) {
 			logging.debug(this, " follow requirements for ActionRequest.UNINSTALL, product " + product);
-			// setChangedState(clientId, product, ActionRequest.KEY, ar.toString());
+
 			Map<String, String> requirements = persist.getProductDeinstallRequirements(null, product);
 			logging.debug(this, "ProductRequirements for uninstall for " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 		} else {
-			// setChangedState(clientId, product, ActionRequest.KEY, ar.toString());
+
 			Map<String, String> requirements = persist.getProductPreRequirements(null, product);
 			logging.debug(this, "ProductPreRequirements for  " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
@@ -1257,18 +967,13 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				logging.warning("followRequirements: required product: '" + requiredProduct + "' not installable");
 				missingProducts.add(requiredProduct);
 			} else {
-				boolean recursionStop = false;
 				if (getChangedState(clientId, requiredProduct, ActionRequest.KEY) != null) {
 					logging.debug(this,
 							"required product: '" + requiredProduct + "'  has already been treated - stop recursion");
-					recursionStop = true;
-
 				}
 
 				// check required product
 
-				// logging.debug(this, "---- requiredProduct " + requiredProduct + ", client " +
-				// clientId);
 				// retrieving the actual state and actionRequest of the required product
 				Map<String, Map<String, String>> productStates = allClientsProductStates.get(clientId);
 				if (productStates != null) {
@@ -1313,23 +1018,12 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 									.getInstance().requiredActionForStatus.get(requiredStatusS);
 							logging.debug(this, " needed action therefore " + neededAction);
 
-							requiredAR // = ActionRequest.leadingTo(requiredIS);
-									= ActionRequest.getVal(neededAction);
+							requiredAR = ActionRequest.getVal(neededAction);
 						}
-
-						// logging.debug(this,"resulting requiredAction " +
-						// ActionRequest.getLabel(requiredAR));
 
 						// handle resulting action requests
 						if (requiredAR > ActionRequest.NONE)
-						/*
-						 * requiredAR == ActionRequest.SETUP
-						 * || requiredAR == ActionRequest.ALWAYS
-						 * || requiredAR == ActionRequest.ONCE
-						 * || requiredAR == ActionRequest.CUSTOM
-						 * || requiredAR == ActionRequest.UNINSTALL
-						 * )
-						 */
+
 						{
 
 							checkForContradictingAssignments(clientId, requiredProduct, ActionRequest.KEY,
@@ -1351,10 +1045,8 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 											"required product: '" + requiredProduct + "'  has already been treated");
 									logging.info(this, "new action was " + alreadyExistingNewActionRequest);
 
-									// logging.error(this, "recursion stop, setting " + requiredAction + " but
 									// already set for clientId, product "
-									// + clientId + "," + requiredProduct + " : " +
-									// alreadyExistingNewActionRequest);
+
 								} else {
 
 									logging.info(this, "ar:   ===== recursion into " + requiredProduct);
@@ -1376,62 +1068,41 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		return productsV.indexOf(id);
 	}
 
+	@Override
 	public Map<String, Map<String, Object>> getGlobalProductInfos() {
 		return globalProductInfos;
 	}
 
 	// interface ComboBoxModeller
-	public ComboBoxModel getComboBoxModel(int row, int column) {
-		actualProduct = (String) productsV.get(row); // products[row];
-		// logging.debug(this, "getComboBoxModel(), actualproduct " + actualProduct + "
-		// row " + row + " col " + column);
+	@Override
+	public ComboBoxModel<String> getComboBoxModel(int row, int column) {
+		actualProduct = productsV.get(row);
 
 		if (column == displayColumns.indexOf(ActionRequest.KEY)) // selection of actions
 		{
 			logging.debug(this, " possible actions  " + possibleActions);
-			Object[] actionsForProduct = null;
+			String[] actionsForProduct = null;
 			if (possibleActions != null) {
-				ArrayList actionList = new ArrayList();
+				List<String> actionList = new ArrayList<>();
 
 				// actionList.addALL (List) possibleActions.get(actualProduct)
 				// instead of this we take the display strings:
 
-				/*
-				 * if (possibleActions.get(actualProduct) == null)
-				 * {
-				 * actionList.add( ActionRequest.getDisplayLabel( ActionRequest.NOT_AVAILABLE )
-				 * );
-				 * }
-				 * else
-				 */
-				{
+				Iterator<String> iter = possibleActions.get(actualProduct).iterator(); // we shall iterate throught
+																						// all possible
+																						// actionRequest ID strings
+																						// for the actual product
 
-					Iterator iter = ((List) possibleActions.get(actualProduct)).iterator(); // we shall iterate throught
-																							// all possible
-																							// actionRequest ID strings
-																							// for the actual product
-
-					/*
-					 * if (!iter.hasNext())
-					 * actionList.add( ActionRequest.getDisplayLabel( ActionRequest.NOT_AVAILABLE
-					 * ));
-					 * else
-					 */
-					{
-
-						while (iter.hasNext()) {
-							String label = (String) iter.next();
-							ActionRequest ar = ActionRequest.produceFromLabel(label);
-							actionList.add(ActionRequest.getDisplayLabel(ar.getVal()));
-						}
-
-						// actionList.add(ActionRequest.UNDEFINEDstring);
-						// add UNDEFINED string only to local copy but we dont want to set anything to
-						// UNDEFINED
-					}
+				while (iter.hasNext()) {
+					String label = iter.next();
+					ActionRequest ar = ActionRequest.produceFromLabel(label);
+					actionList.add(ActionRequest.getDisplayLabel(ar.getVal()));
 				}
 
-				actionsForProduct = actionList.toArray();
+				// add UNDEFINED string only to local copy but we dont want to set anything to
+				// UNDEFINED
+
+				actionsForProduct = actionList.toArray(new String[0]);
 
 				logging.debug("Possible actions as array  " + actionsForProduct);
 			}
@@ -1439,69 +1110,54 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			if (actionsForProduct == null)
 				actionsForProduct = new String[] { "null" };
 
-			return new DefaultComboBoxModel(actionsForProduct);
+			return new DefaultComboBoxModel<>(actionsForProduct);
 		}
 
 		else if (column == displayColumns.indexOf(InstallationStatus.KEY)) // selection of status
 		{
-			// logging.debug(this,"return InstallationStatus.allStates " +
-			// InstallationStatus.allStates);
+
 			if (possibleActions.get(actualProduct) == null)
 			// we dont have the product in our depot selection
 			{
-				String state = (String) combinedVisualValues.get(ProductState.KEY_installationStatus)
-						.get(actualProduct);
+				String state = combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct);
 				if (state == null)
-					return new DefaultComboBoxModel(new String[] { "null" });
+					return new DefaultComboBoxModel<>(new String[] { "null" });
 
-				return new DefaultComboBoxModel(new String[] {});
+				return new DefaultComboBoxModel<>(new String[] {});
 			}
 
-			return new DefaultComboBoxModel(InstallationStatus.getDisplayLabelsForChoice());
+			return new DefaultComboBoxModel<>(InstallationStatus.getDisplayLabelsForChoice());
 		}
 
 		else if (column == displayColumns.indexOf(TargetConfiguration.KEY)) // selection of status
 		{
-			// logging.debug(this,"return InstallationStatus.allStates " +
-			// InstallationStatus.allStates);
+
 			if (possibleActions.get(actualProduct) == null)
 			// we dont have the product in our depot selection
 			{
-				String state = (String) combinedVisualValues.get(ProductState.KEY_installationStatus)
-						.get(actualProduct);
+				String state = combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct);
 				if (state == null)
-					return new DefaultComboBoxModel(new String[] { "null" });
+					return new DefaultComboBoxModel<>(new String[] { "null" });
 
-				return new DefaultComboBoxModel(new String[] {});
+				return new DefaultComboBoxModel<>(new String[] {});
 			}
 
-			return new DefaultComboBoxModel(TargetConfiguration.getDisplayLabelsForChoice());
+			return new DefaultComboBoxModel<>(TargetConfiguration.getDisplayLabelsForChoice());
 		}
 
-		else if (column == displayColumns.indexOf(ProductState.KEY_installationInfo)) {
+		else if (column == displayColumns.indexOf(ProductState.KEY_INSTALLATION_INFO)) {
 			String delivered = (String) getValueAt(row, column);
 			if (delivered == null)
 				delivered = "";
 
-			LinkedHashSet<String> values = new LinkedHashSet<String>();
+			LinkedHashSet<String> values = new LinkedHashSet<>();
 
 			if (!InstallationInfo.defaultDisplayValues.contains(delivered))
 				values.add(delivered);
 
 			values.addAll(InstallationInfo.defaultDisplayValues);
 
-			/*
-			 * if (!delivered.equals(""))
-			 * values.add(InstallationInfo.NONEdisplayString);
-			 * 
-			 * if (!delivered.startsWith(ActionResult.getLabel(ActionResult.SUCCESSFUL ) ) )
-			 * values.add(InstallationInfo.SUCCESSdisplayString);
-			 * 
-			 * if (!delivered.startsWith(ActionResult.getLabel(ActionResult.FAILED ) ) )
-			 * values.add(InstallationInfo.FAILEDdisplayString);
-			 */
-
-			return new DefaultComboBoxModel(new Vector(values));
+			return new DefaultComboBoxModel<>(values.toArray(new String[0]));
 
 		}
 
@@ -1511,50 +1167,27 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	// table model
 
+	@Override
 	public int getColumnCount() {
-		return numberOfColumns; // 3;
+		return numberOfColumns;
 	}
 
+	@Override
 	public int getRowCount() {
 		return productsV.size();
 	}
 
+	@Override
 	public String getColumnName(int col) {
 		return columnTitles.get(col);
-		/*
-		 * switch (col)
-		 * {
-		 * case 0 : result = " "; break;
-		 * case 1 : result =
-		 * configed.getResourceValue("InstallationStateTableModel.installationStatus");
-		 * break;
-		 * case 2 : result =
-		 * configed.getResourceValue("InstallationStateTableModel.productActionProgress"
-		 * ); break;
-		 * case 3 : result =
-		 * configed.getResourceValue("InstallationStateTableModel.actionRequest");
-		 * break;
-		 * case 4 : result =
-		 * configed.getResourceValue("InstallationStateTableModel.productVersion");
-		 * break;
-		 * case 5 : result =
-		 * configed.getResourceValue("InstallationStateTableModel.packageVersion");
-		 * break;
-		 * };
-		 * 
-		 * return result;
-		 */
+
 	}
 
+	@Override
 	public String getLastStateChange(int row) {
-		String actualProduct = (String) productsV.get(row);
-		// logging.debug(this,
-		// "combinedVisualValues.get(ProductState.KEY_lastStateChange) " +
-		// combinedVisualValues.get(ProductState.KEY_lastStateChange));
-		// logging.debug(this, " actualProduct, ..get(actualProduct) " + actualProduct +
-		// ", " +
-		// combinedVisualValues.get(ProductState.KEY_lastStateChange).get(actualProduct));
-		return combinedVisualValues.get(ProductState.KEY_lastStateChange).get(actualProduct);
+		String actualProduct = productsV.get(row);
+
+		return combinedVisualValues.get(ProductState.KEY_LAST_STATE_CHANGE).get(actualProduct);
 	}
 
 	protected void setOnGoingCollectiveChangeCount() {
@@ -1563,33 +1196,20 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	// this method may be overwritten e.g.for row filtering but retrieveValue
 	// continues to work
+	@Override
 	public Object getValueAt(int row, int displayCol) {
 		return retrieveValueAt(row, displayCol);
 	}
 
 	private Object retrieveValueAt(int row, int displayCol) {
-		// logging.debug (this, "retrieveValueAt, displayCol " + displayCol + " value "
-		// +
-		// combinedVisualValues.get(ProductState.KEY_lastStateChange).get(actualProduct));
-
-		// if (productsV == null || productsV.size() == 0) return "";
 
 		Object result = null;
-		actualProduct = (String) productsV.get(row); // products[row];
-
-		/*
-		 * boolean productExistsForClient = (states.get(actualProduct) != null);
-		 * if (!productExistsForClient)
-		 * return NOT_AVAILABLEstring;
-		 */
+		actualProduct = productsV.get(row);
 
 		if (displayCol >= indexPreparedColumns.length)
 			return "";
 
 		int col = indexPreparedColumns[displayCol];
-
-		// logging.debug (this, "retrieveValueAt, displayCol " + displayCol + "
-		// --------- corresponding preparedCol " + col );
 
 		switch (col) {
 		case 0:
@@ -1597,89 +1217,80 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			break;
 
 		case 1:
-			result = globalProductInfos.get(actualProduct).get(ProductState.KEY_productName);
-			// combinedVisualValues.get(ProductState.KEY_productName).get(actualProduct);
+			result = globalProductInfos.get(actualProduct).get(ProductState.KEY_PRODUCT_NAME);
+
 			// there we have not got the value
 			break;
 
 		case 2:
-			result = combinedVisualValues.get(ProductState.KEY_targetConfiguration).get(actualProduct);
+			result = combinedVisualValues.get(ProductState.KEY_TARGET_CONFIGURATION).get(actualProduct);
 			break;
 
 		case 3:
-			// result = "" + states.get(actualProduct);
-			InstallationStatus is = InstallationStatus
-					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_installationStatus).get(actualProduct));
+			InstallationStatus is = InstallationStatus.produceFromLabel(
+					combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct));
 			result = InstallationStatus.getDisplayLabel(is.getVal());
 			break;
 
 		case 4:
-			result = combinedVisualValues.get(ProductState.KEY_installationInfo).get(actualProduct);
+			result = combinedVisualValues.get(ProductState.KEY_INSTALLATION_INFO).get(actualProduct);
 			break;
 
 		case 5:
-			result = combinedVisualValues.get(ProductState.KEY_actionProgress).get(actualProduct);
+			result = combinedVisualValues.get(ProductState.KEY_ACTION_PROGRESS).get(actualProduct);
 			break;
 
 		case 6:
-			result = combinedVisualValues.get(ProductState.KEY_actionResult).get(actualProduct);
+			result = combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).get(actualProduct);
 			break;
 
 		case 7:
-			result = combinedVisualValues.get(ProductState.KEY_lastAction).get(actualProduct);
+			result = combinedVisualValues.get(ProductState.KEY_LAST_ACTION).get(actualProduct);
 			break;
 
 		case 8:
-			// result = (String) actions.get(actualProduct) ;
-			// if (actualProduct.equals("firefox"))
-			// logging.info(this, "value for firefox is " +
-			// combinedVisualValues.get(ProductState.KEY_actionRequest).get(actualProduct));
+
 			ActionRequest ar = ActionRequest
-					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_actionRequest).get(actualProduct));
+					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).get(actualProduct));
 			result = ActionRequest.getDisplayLabel(ar.getVal());
 
-			// logging.debug(this," --------- row, col " + row + ", " + col + " result " +
-			// result);
 			break;
 
 		case 9:
-			result = combinedVisualValues.get(ProductState.KEY_productPriority).get(actualProduct);
+			result = combinedVisualValues.get(ProductState.KEY_PRODUCT_PRIORITY).get(actualProduct);
 			break;
 
 		case 10:
-			result = combinedVisualValues.get(ProductState.KEY_actionSequence).get(actualProduct);
-			// logging.info(this, " actualProduct " + actualProduct + " , actionSequence " +
-			// result);
+			result = combinedVisualValues.get(ProductState.KEY_ACTION_SEQUENCE).get(actualProduct);
+
 			break;
 
 		case 11:
 			result = productNamesInDeliveryOrder.indexOf(actualProduct); // ProductState.KEY_position
-			// logging.info(this, " actualProduct " + actualProduct + " , position " +
-			// result);
+
 			break;
 
 		case 12:
 			String serverProductVersion = (String) getGlobalProductInfos().get(actualProduct)
-					.get(de.uib.opsidatamodel.productstate.ProductState.KEY_versionInfo);
-			result = combinedVisualValues.get(ProductState.KEY_versionInfo).get(actualProduct);
-			if (!(result == null) && !(result.equals(""))) {
-				if (!(serverProductVersion == null) && !(serverProductVersion.equals(result)))
-					result = unequalAddstring + result;
-			}
+					.get(de.uib.opsidatamodel.productstate.ProductState.KEY_VERSION_INFO);
+			result = combinedVisualValues.get(ProductState.KEY_VERSION_INFO).get(actualProduct);
+			if (result != null && !(result.equals("")) && serverProductVersion != null
+					&& !(serverProductVersion.equals(result)))
+				result = unequalAddstring + result;
+
 			break;
 
 		case 13:
-			result = combinedVisualValues.get(ProductState.KEY_productVersion).get(actualProduct);
+			result = combinedVisualValues.get(ProductState.KEY_PRODUCT_VERSION).get(actualProduct);
 			break;
 
 		case 14:
-			result = combinedVisualValues.get(ProductState.KEY_packageVersion).get(actualProduct);
+			result = combinedVisualValues.get(ProductState.KEY_PACKAGE_VERSION).get(actualProduct);
 			break;
 
 		case 15:
-			result = combinedVisualValues.get(ProductState.KEY_lastStateChange).get(actualProduct);
-			// logging.debug(this, " -------(lastStateChange)-- row, col " + row + ", " +
-			// col + " result " + result);
+			result = combinedVisualValues.get(ProductState.KEY_LAST_STATE_CHANGE).get(actualProduct);
+
 			break;
 
 		}
@@ -1692,7 +1303,8 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	 * editor for each cell. If we didn't implement this method,
 	 * then the last column would contain text
 	 */
-	public Class getColumnClass(int c) {
+	@Override
+	public Class<? extends Object> getColumnClass(int c) {
 		Object val = retrieveValueAt(0, c);
 		if (val == null)
 			return null;
@@ -1703,37 +1315,21 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	/*
 	 * editable columns
 	 */
+	@Override
 	public boolean isCellEditable(int row, int col) {
-		if (preparedColumnIsEditable(indexPreparedColumns[col])) {
-			return true;
-		}
-
-		return false;
+		return preparedColumnIsEditable(indexPreparedColumns[col]);
 	}
 
 	/*
 	 * change method for edited cells
 	 */
+	@Override
 	public void setValueAt(Object value, int row, int col) {
 		logging.debug(this, " actualProduct " + actualProduct + ", set value at " + row + ", " + col);
 		changeValueAt(value, row, col);
 		fireTableCellUpdated(row, col);
-		// logging.debug(this, "set value at " + row + ", " + col);
-	}
 
-	/*
-	 * public interface RowCondition
-	 * {
-	 * boolean accept( int row );
-	 * }
-	 * 
-	 * public void setValueAt(Object value, int row, RowCondition rowCondition, int
-	 * col)
-	 * {
-	 * if (rowCondition.accept( row ))
-	 * logging.debug(this, "row accepted");
-	 * }
-	 */
+	}
 
 	protected void changeValueAt(Object value, int row, int col) {
 		String cl = "nul";
@@ -1745,20 +1341,19 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		infoIfNoClientsSelected();
 
-		// data[row][col] = value; //this is the trivial version
-		actualProduct = (String) productsV.get(row);
+		actualProduct = productsV.get(row);
 
-		if (combinedVisualValues.get(ProductState.KEY_installationStatus).get(actualProduct) == null)
+		if (combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct) == null)
 			return; // not a product in our depot
 
-		if (!((String) retrieveValueAt(row, col)).equals((String) value)) {
+		if (!((String) retrieveValueAt(row, col)).equals(value)) {
 			if (indexPreparedColumns[col] == preparedColumns.indexOf(InstallationStatus.KEY)) {
-				combinedVisualValues.get(ProductState.KEY_installationStatus).put(actualProduct, (String) value);
+				combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).put(actualProduct, (String) value);
 				registerStateChange(actualProduct, InstallationStatus.KEY, (String) value);
 			}
 
 			else if (indexPreparedColumns[col] == preparedColumns.indexOf(TargetConfiguration.KEY)) {
-				combinedVisualValues.get(ProductState.KEY_targetConfiguration).put(actualProduct, (String) value);
+				combinedVisualValues.get(ProductState.KEY_TARGET_CONFIGURATION).put(actualProduct, (String) value);
 				registerStateChange(actualProduct, TargetConfiguration.KEY, (String) value);
 			}
 
@@ -1766,13 +1361,12 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				// an action has changed
 				// change recursively visible action changes and collect the changes for saving
 
-				// changeActionRequest (actualProduct, (String) value) ;
 				initCollectiveChange();
 				collectiveChangeActionRequest(actualProduct, ActionRequest.produceFromLabel((String) value));
 				finishCollectiveChange();
 			}
 
-			else if (indexPreparedColumns[col] == preparedColumns.indexOf(ProductState.KEY_installationInfo)) {
+			else if (indexPreparedColumns[col] == preparedColumns.indexOf(ProductState.KEY_INSTALLATION_INFO)) {
 				if (value.equals(InstallationInfo.NONEdisplayString))
 					value = InstallationInfo.NONEstring;
 
@@ -1787,49 +1381,5 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	protected void clearUpdates() {
 		main.getGeneralDataChangedKeeper().cancel();
 	}
-
-	/**
-	 * sets data to the original values clears update collection
-	 */
-	// it would require the existence of a complete deep copy of the original loaded
-	// data
-	/*
-	 * public void reset()
-	 * {
-	 * logging.info(this, "reset()");
-	 * clearUpdates();
-	 * initalizeProductStates( allClientsProductlistsSaved );
-	 * fireTableDataChanged();
-	 * }
-	 */
-
-	/*
-	 * only an example for a possible IntPredicate usage
-	 * public void setActionRequestWithCondition(ActionRequest ar, IntPredicate
-	 * rowCondition)
-	 * {
-	 * logging.info(this, "setActionRequestWithCondition " + ar + " for " +
-	 * getRowCount());
-	 * 
-	 * if (rowCondition == null)
-	 * {
-	 * logging.info(this, "setActionRequestWithCondition null");
-	 * return;
-	 * }
-	 * 
-	 * 
-	 * for (int i = 0; i < getRowCount(); i++)
-	 * {
-	 * if ( rowCondition.test(i) )
-	 * {
-	 * logging.info(this, "setAction " + ar + " i " + i);
-	 * logging.info(this, "we have product " + getValueAt( i, 0 ));
-	 * }
-	 * 
-	 * }
-	 * // table grouppanel
-	 * 
-	 * }
-	 */
 
 }

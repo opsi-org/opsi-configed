@@ -9,7 +9,7 @@ public class DatedRowList {
 	protected String dateS;
 
 	public DatedRowList() {
-		rowList = new ArrayList<String[]>();
+		rowList = new ArrayList<>();
 		dateS = "";
 	}
 

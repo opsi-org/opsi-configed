@@ -11,7 +11,7 @@ public abstract class SelectGroupOperation extends SelectOperation {
 
 	public SelectGroupOperation() {
 		super(null);
-		childOperations = new LinkedList<SelectOperation>();
+		childOperations = new LinkedList<>();
 	}
 
 	/** Register an operation as child of this operation. */
@@ -26,7 +26,7 @@ public abstract class SelectGroupOperation extends SelectOperation {
 
 	@Override
 	public SelectData.DataType getDataType() {
-		return SelectData.DataType.NoneType;
+		return SelectData.DataType.NONE_TYPE;
 	}
 
 	@Override

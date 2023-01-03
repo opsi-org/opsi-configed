@@ -6,13 +6,12 @@ import de.uib.utilities.logging.logging;
 
 public class DateExtendedByVars extends java.sql.Date {
 
-	public static String MINUS = "minus";
-	public static char varDelimiter = '%';
-
-	// we use only the public function
-	private DateExtendedByVars(long date) {
+	public DateExtendedByVars(long date) {
 		super(date);
 	}
+
+	public static String MINUS = "minus";
+	public static char varDelimiter = '%';
 
 	private static String stripTimeFromDay(String datetime) {
 
@@ -37,8 +36,7 @@ public class DateExtendedByVars extends java.sql.Date {
 		i++;
 
 		if (i > s.length()) {
-			logging.info("OpsiDataDateMatcher interpretVar \"" + varDelimiter
-					+ "\" found at end of string");
+			logging.info("OpsiDataDateMatcher interpretVar \"" + varDelimiter + "\" found at end of string");
 			return s;
 		}
 

@@ -8,8 +8,9 @@
 
 package de.uib.utilities.table.updates;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 import de.uib.utilities.logging.logging;
 import de.uib.utilities.table.GenTableModel;
@@ -30,34 +31,28 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 		this.updateCollection = updateCollection;
 	}
 
+	@Override
 	public boolean saveChanges() {
-		// logging.debug (" ------- update controller called ");
+
 		logging.debug(this, "saveChanges");
 
-		WaitCursor waitCursor = new WaitCursor(); // licencesFrame, licencesFrame.getCursor() );
+		WaitCursor waitCursor = new WaitCursor();
 
 		boolean success = true; // true until failure
 
-		Vector successfullInsertsWithNewKeys = new Vector<MapBasedTableEditItem>();
+		List successfullInsertsWithNewKeys = new ArrayList<>();
 
-		Iterator iter = updateCollection.iterator();
+		Iterator<TableEditItem> iter = updateCollection.iterator();
 
-		String lastKeyValue = new String("");
-
-		boolean goOn = true;
+		String lastKeyValue = "";
 
 		while (iter.hasNext() && success) {
 
 			MapBasedTableEditItem updateItem = (MapBasedTableEditItem) iter.next();
 
 			logging.debug(this, " handling updateItem " + updateItem);
-			// logging.info(this, " handling updateItem compare source to " +
-			// this.tablemodel);
-			// logging.info(this, " handling updateItem with source " +
-			// updateItem.getSource());
 
 			if (updateItem.getSource() == this.tablemodel) {
-				// logging.info(this, " handling updateItem " + updateItem);
 
 				if (updateItem instanceof MapDeliveryItem) {
 					String result = updater.sendUpdate(updateItem.getRowAsMap());
@@ -65,7 +60,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 					success = (result != null);
 					if (success && updateItem.keyChanged()) {
 						successfullInsertsWithNewKeys.add(updateItem);
-						// lastKeyValue = updateItem.getKeyColumnStringValue();
+
 						lastKeyValue = result;
 					}
 				}
@@ -102,7 +97,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 
 			waitCursor.stop();
 		} else {
-			if (successfullInsertsWithNewKeys.size() > 0) {
+			if (!successfullInsertsWithNewKeys.isEmpty()) {
 				// we have to remove all update items ...
 				while (iter.hasNext()) {
 					MapBasedTableEditItem updateItem = (MapBasedTableEditItem) iter.next();
@@ -126,9 +121,10 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 		return success;
 	}
 
+	@Override
 	public boolean cancelChanges() {
 
-		Iterator iter = updateCollection.iterator();
+		Iterator<TableEditItem> iter = updateCollection.iterator();
 		while (iter.hasNext()) {
 			MapBasedTableEditItem updateItem = (MapBasedTableEditItem) iter.next();
 			if (updateItem.getSource() == tablemodel) {

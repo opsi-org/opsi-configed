@@ -12,8 +12,7 @@ import javax.swing.JOptionPane;
 
 import de.uib.utilities.logging.logging;
 
-public class DataChangedKeeper
-		implements DataChangedObserver {
+public class DataChangedKeeper implements DataChangedObserver {
 	protected boolean dataChanged = false;
 
 	protected ActUpon actUpon;
@@ -23,10 +22,9 @@ public class DataChangedKeeper
 		public void act(Object source) {
 			JOptionPane.showMessageDialog(null, "" + source, "alert", JOptionPane.INFORMATION_MESSAGE);
 		}
-	};
+	}
 
 	public DataChangedKeeper() {
-		// actUpon = new TellWhat();
 
 	}
 
@@ -40,6 +38,7 @@ public class DataChangedKeeper
 		public void act(Object source);
 	}
 
+	@Override
 	public void dataHaveChanged(Object source) {
 		logging.debug(this, "dataHaveChanged " + source);
 		dataChanged = true;
@@ -47,7 +46,6 @@ public class DataChangedKeeper
 		if (actUpon != null)
 			actUpon.act(source);
 
-		// actionOnChange( true, source);
 	}
 
 	public void actionOnChangeXXX(boolean condition, Object source) {
@@ -56,21 +54,8 @@ public class DataChangedKeeper
 		}
 	}
 
-	/*
-	 * public void actionOnChange( boolean condition, Object source, OnChangeExecute
-	 * )
-	 * {
-	 * if (condition)
-	 * {
-	 * JOptionPane.showMessageDialog(null, "" + source, "alert",
-	 * JOptionPane.INFORMATION_MESSAGE);
-	 * }
-	 * }
-	 */
-
 	public boolean isDataChanged() {
-		boolean b = dataChanged;
-		return b;
+		return dataChanged;
 	}
 
 	public void unsetDataChanged() {

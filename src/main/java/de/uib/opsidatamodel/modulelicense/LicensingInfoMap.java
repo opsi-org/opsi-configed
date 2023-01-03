@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
@@ -36,34 +35,32 @@ public class LicensingInfoMap {
 	private JSONObject jOResult;
 	Map<String, List<Object>> configs;
 	private Map<String, Object> clientNumbersMap;
-	private Vector<Vector<String>> clientNumbersVector;
-	private Set customerIDs;
-	private Set customerNames;
+	private List<List<String>> clientNumbersList;
+	private Set<String> customerIDs;
+	private Set<String> customerNames;
 	private Map<String, Map<String, Object>> licenses;
-	private Vector<String> availableModules;
-	private Vector<String> knownModulesVector;
-	private Vector<String> obsoleteModules;
-	private Vector<String> shownModules;
-	private ArrayList<String> datesKeys;
+	private List<String> availableModules;
+	private List<String> knownModulesList;
+	private List<String> obsoleteModules;
+	private List<String> shownModules;
+	private List<String> datesKeys;
 	private Map<String, Map<String, Map<String, Object>>> datesMap;
-	private Vector<String> columnNames;
-	private Vector<String> classNames;
+	private List<String> columnNames;
+	private List<String> classNames;
 	private Map<String, Map> tableMap;
 	private String latestDateString;
 	private String checksum;
-	private Boolean closeToLimitWarning = false;
-	private Boolean overLimitWarning = false;
-	private ArrayList<String> currentCloseToLimitModuleList;
-	private ArrayList<String> currentOverLimitModuleList;
-	private ArrayList<String> currentTimeWarningModuleList;
-	private ArrayList<String> futureOverLimitModuleList;
-	private ArrayList<String> futureCloseToLimitModuleList;
+	private List<String> currentCloseToLimitModuleList;
+	private List<String> currentOverLimitModuleList;
+	private List<String> currentTimeWarningModuleList;
+	private List<String> futureOverLimitModuleList;
+	private List<String> futureCloseToLimitModuleList;
 	private Set<String> allCloseToLimitModules;
 	private Set<String> allOverLimitModules;
 	private Integer daysClientLimitWarning;
 	private Integer absolutClientLimitWarning;
 	private Integer percentClientLimitWarning;
-	private Vector<String> disabledWarningModules;
+	private List<String> disabledWarningModules;
 
 	public static final String RESULT = "result";
 	public static final String CLIENT_NUMBERS_INFO = "client_numbers";
@@ -113,7 +110,6 @@ public class LicensingInfoMap {
 
 	public static final String CONFIG_KEY = "licensing";
 
-	private boolean checked = false;
 	private static LicensingInfoMap instance;
 	private static LicensingInfoMap instanceComplete;
 	private static LicensingInfoMap instanceReduced;
@@ -178,16 +174,16 @@ public class LicensingInfoMap {
 		} catch (Exception ex) {
 			logging.error(CLASSNAME + " constructor " + ex);
 		}
-		datesKeys = new ArrayList<String>();
+		datesKeys = new ArrayList<>();
 		configs = configVals;
 		produceConfigs();
 		checksum = produceChecksum();
 		clientNumbersMap = produceClientNumbersMap();
-		clientNumbersVector = produceVectorFromClientNumbersMap();
+		clientNumbersList = produceListFromClientNumbersMap();
 		licenses = produceLicenses();
 		obsoleteModules = produceObsoleteModules();
 		availableModules = produceAvailableModules();
-		knownModulesVector = produceKnownModules();
+		knownModulesList = produceKnownModules();
 		shownModules = produceShownModules();
 		datesKeys = produceDatesKeys();
 		latestDateString = findLatestChangeDateString();
@@ -201,7 +197,7 @@ public class LicensingInfoMap {
 	}
 
 	private Map<String, Object> produceClientNumbersMap() {
-		HashMap<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 		try {
 			JSONObject client = jOResult.getJSONObject(CLIENT_NUMBERS_INFO);
 			JSONObjectX clientX = new JSONObjectX(client);
@@ -211,7 +207,7 @@ public class LicensingInfoMap {
 			} else {
 				logging.debug(CLASSNAME + " map retrieved");
 
-				result = (HashMap<String, Object>) clientX.getMap();
+				result = clientX.getMap();
 			}
 		} catch (Exception ex) {
 			logging.error(CLASSNAME + " getClientNumersMap : " + ex.toString());
@@ -220,17 +216,17 @@ public class LicensingInfoMap {
 		return result;
 	}
 
-	private Vector<Vector<String>> produceVectorFromClientNumbersMap() {
-		Vector<Vector<String>> result = new Vector<>();
+	private List<List<String>> produceListFromClientNumbersMap() {
+		List<List<String>> result = new ArrayList<>();
 
 		for (Map.Entry<String, Object> entry : clientNumbersMap.entrySet()) {
-			Vector<String> line = new Vector<>();
+			List<String> line = new ArrayList<>();
 			line.add(entry.getKey());
 			line.add(entry.getValue().toString());
 
 			result.add(line);
 		}
-		Vector<String> line1 = new Vector<>();
+		List<String> line1 = new ArrayList<>();
 		line1.add(CHECKSUM);
 		line1.add(checksum);
 		result.add(line1);
@@ -257,11 +253,11 @@ public class LicensingInfoMap {
 		} catch (Exception ex) {
 			logging.error(CLASSNAME + " produceLicenses " + ex.toString());
 		}
-		// logging.info( " licenses result: " + result);
+
 		return result;
 	}
 
-	private Set produceCustomerIDSet() {
+	private Set<String> produceCustomerIDSet() {
 		Set<String> customerIDs = new LinkedHashSet<>();
 
 		try {
@@ -269,7 +265,7 @@ public class LicensingInfoMap {
 
 			for (int i = 0; i < licenses.length(); i++) {
 				JSONObject l = licenses.getJSONObject(i);
-				customerIDs.add(l.getString(CUSTOMER_ID));
+				customerIDs.add(l.get(CUSTOMER_ID).toString());
 			}
 
 		} catch (Exception ex) {
@@ -279,7 +275,7 @@ public class LicensingInfoMap {
 		return customerIDs;
 	}
 
-	private Set produceCustomerNameSet() {
+	private Set<String> produceCustomerNameSet() {
 		Set<String> customerNames = new LinkedHashSet<>();
 
 		try {
@@ -289,8 +285,8 @@ public class LicensingInfoMap {
 			for (int i = 0; i < licenses.length(); i++) {
 				JSONObject l = licenses.getJSONObject(i);
 				String customerName = l.getString(CUSTOMER_NAME);
-				if (!l.getString(CUSTOMER_UNIT).equals("null"))
-					customerNames.add(customerName + " - " + l.getString(CUSTOMER_UNIT));
+				if (!l.get(CUSTOMER_UNIT).toString().equals("null"))
+					customerNames.add(customerName + " - " + l.get(CUSTOMER_UNIT).toString());
 				else
 					customerNames.add(customerName);
 
@@ -303,8 +299,8 @@ public class LicensingInfoMap {
 		return customerNames;
 	}
 
-	private Vector<String> produceAvailableModules() {
-		Vector<String> result = new Vector<>();
+	private List<String> produceAvailableModules() {
+		List<String> result = new ArrayList<>();
 		JSONArray jsResult = new JSONArray();
 
 		try {
@@ -323,9 +319,9 @@ public class LicensingInfoMap {
 
 	}
 
-	private Vector<String> produceKnownModules() {
+	private List<String> produceKnownModules() {
 		JSONArray jsResult = new JSONArray();
-		Vector<String> result = new Vector<>();
+		List<String> result = new ArrayList<>();
 
 		try {
 			if (jOResult.has(KNOWN_MODULES)) {
@@ -346,9 +342,9 @@ public class LicensingInfoMap {
 		return result;
 	}
 
-	private Vector<String> produceObsoleteModules() {
+	private List<String> produceObsoleteModules() {
 		JSONArray jsResult = new JSONArray();
-		Vector<String> result = new Vector<>();
+		List<String> result = new ArrayList<>();
 
 		try {
 			if (jOResult.has(OBSOLETE_MODULES)) {
@@ -369,13 +365,13 @@ public class LicensingInfoMap {
 		return result;
 	}
 
-	private Vector<String> produceShownModules() {
+	private List<String> produceShownModules() {
 		if (!jOResult.has(OBSOLETE_MODULES))
 			return produceKnownModules();
 
-		Vector<String> result = new Vector<>();
+		List<String> result = new ArrayList<>();
 
-		for (String mod : knownModulesVector) {
+		for (String mod : knownModulesList) {
 			if (!obsoleteModules.contains(mod))
 				result.add(mod);
 		}
@@ -389,16 +385,15 @@ public class LicensingInfoMap {
 
 		try {
 			if (jOResult.has(CONFIG)) {
-				JSONObject config = new JSONObject();
 
-				config = jOResult.getJSONObject(CONFIG);
+				JSONObject config = jOResult.getJSONObject(CONFIG);
 
 				percentClientLimitWarning = config.getInt(CLIENT_LIMIT_WARNING_PERCENT);
 				absolutClientLimitWarning = config.getInt(CLIENT_LIMIT_WARNING_ABSOLUTE);
 				daysClientLimitWarning = config.getInt(CLIENT_LIMIT_WARNING_DAYS);
 
 				JSONArray tmp = config.getJSONArray(DISABLE_WARNING_FOR_MODULES);
-				Vector<String> result = new Vector<>();
+				List<String> result = new ArrayList<>();
 
 				for (int i = 0; i < tmp.length(); i++) {
 					result.add(tmp.getString(i));
@@ -433,12 +428,11 @@ public class LicensingInfoMap {
 	}
 
 	private String produceChecksum() {
-		String checksum = new String();
+		String checksum = "";
 
 		try {
 			checksum = jOResult.getString(CHECKSUM);
-			if (jOResult == null)
-				checksum = jOResult.get("licenses_checksum").toString();
+			checksum = jOResult.get("licenses_checksum").toString();
 		} catch (Exception ex) {
 			logging.error(CLASSNAME + " produceChecksum : " + ex);
 		}
@@ -446,26 +440,23 @@ public class LicensingInfoMap {
 		return checksum;
 	}
 
-	private ArrayList<String> produceDatesKeys() {
-		ArrayList<String> dates = new ArrayList<String>();
+	private List<String> produceDatesKeys() {
+		List<String> dates = new ArrayList<>();
 
 		try {
 			JSONObject jsonDates = jOResult.getJSONObject(DATES);
 			JSONObjectX datesX = new JSONObjectX(jsonDates);
-			Map<String, Object> datesM = new HashMap<String, Object>();
 
-			datesM = (Map<String, Object>) datesX.getMap();
+			Map<String, Object> datesM = datesX.getMap();
 
 			for (Map.Entry<String, Object> entry : datesM.entrySet()) {
 				dates.add(entry.getKey());
 			}
 			Collections.sort(dates);
 
-			// logging.info(this, " dates keys: " + dates);
-
 			Date latest = findLatestChangeDate(dates);
 
-			ArrayList<String> reducedDatesKeys = new ArrayList<String>();
+			List<String> reducedDatesKeys = new ArrayList<>();
 
 			if (reducedView) {
 
@@ -473,14 +464,14 @@ public class LicensingInfoMap {
 					if ((sdf.parse(key)).compareTo(latest) >= 0)
 						reducedDatesKeys.add(key);
 				}
-				// if(reducedDatesKeys != null)
+
 				dates = reducedDatesKeys;
 			}
 
 		} catch (Exception ex) {
 			logging.error(CLASSNAME + " produceDatesKeys : " + ex.toString() + ", ");
 		}
-		// logging.info(this, " dates keys: " + dates);
+
 		return dates;
 	}
 
@@ -497,11 +488,11 @@ public class LicensingInfoMap {
 		if (futureOverLimitModuleList == null)
 			futureOverLimitModuleList = new ArrayList<>();
 		if (allCloseToLimitModules == null)
-			allCloseToLimitModules = new LinkedHashSet<String>();
+			allCloseToLimitModules = new LinkedHashSet<>();
 		if (allOverLimitModules == null)
-			allOverLimitModules = new LinkedHashSet<String>();
+			allOverLimitModules = new LinkedHashSet<>();
 
-		Map<String, Map<String, Map<String, Object>>> resultMap = new HashMap<String, Map<String, Map<String, Object>>>();
+		Map<String, Map<String, Map<String, Object>>> resultMap = new HashMap<>();
 
 		try {
 			JSONObject modulesJSOb;
@@ -509,7 +500,7 @@ public class LicensingInfoMap {
 			JSONObject dates = jOResult.getJSONObject(DATES);
 
 			for (String key : datesKeys) {
-				Map<String, Object> moduleToDate = new HashMap<String, Object>();
+				Map<String, Object> moduleToDate;
 				Map<String, Map<String, Object>> modulesMapToDate = new HashMap<>();
 
 				// iterate over date entries
@@ -517,10 +508,9 @@ public class LicensingInfoMap {
 				modulesJSObX = new JSONObjectX(modulesJSOb);
 				moduleToDate = modulesJSObX.getMap();
 				// iterate over module entries to every date entry
-				// new: iterate over all known modules and fill empty ones with 0
+
 				// also warning state should be none
 				for (String currentModule : shownModules) {
-					// JSONObject moduleInfo = (JSONObject) moduleToDate.get(currentModule);
 
 					JSONObject moduleInfo;
 					boolean available = availableModules.contains(currentModule);
@@ -591,17 +581,15 @@ public class LicensingInfoMap {
 	 * and modules as rows
 	 */
 	private Map<String, Map> produceTableMapFromDatesMap(Map<String, Map<String, Map<String, Object>>> datesM) {
-		Map<String, Map> resultMap = new HashMap<String, Map>();
+		Map<String, Map> resultMap = new HashMap<>();
 
-		columnNames = new Vector<String>();
+		columnNames = new ArrayList<>();
 		columnNames.add(configed.getResourceValue("LicensingInfo.modules"));
 		columnNames.add(configed.getResourceValue("LicensingInfo.available"));
-		// columnNames.add(configed.getResourceValue("LicensingInfo.info"));
 
-		classNames = new Vector<String>();
+		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");
-		// classNames.add("java.lang.String");
 
 		try {
 
@@ -611,15 +599,12 @@ public class LicensingInfoMap {
 			}
 
 			for (String currentModule : shownModules) {
-				Map<String, Object> line = new HashMap<String, Object>();
-				// String currentModule = availableModules.get(i).toString();
+				Map<String, Object> line = new HashMap<>();
 
 				// 1st column
 				line.put(configed.getResourceValue("LicensingInfo.modules"), currentModule);
 
 				// 2nd column
-				// line.put(configed.getResourceValue("LicensingInfo.info"),
-				// configed.getResourceValue("LicensingInfo.info"));
 
 				// 3rd column
 				line.put(configed.getResourceValue("LicensingInfo.available"),
@@ -646,11 +631,11 @@ public class LicensingInfoMap {
 		String newest = null;
 		try {
 			LocalDate now = LocalDate.now();
-			// Date dateNow = sdf.parse("2022-04-06");
+
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 			for (String key : datesKeys) {
-				// logging.debug("key " + key);
+
 				Date thisDate = sdf.parse(key);
 				if (dateNow.compareTo(thisDate) >= 0)
 					newest = key;
@@ -666,15 +651,15 @@ public class LicensingInfoMap {
 		return newest;
 	}
 
-	private Date findLatestChangeDate(ArrayList<String> dates) {
+	private Date findLatestChangeDate(List<String> dates) {
 		Date newest = new Date();
 		try {
 			LocalDate now = LocalDate.now();
-			// Date dateNow = sdf.parse("2022-04-06");
+
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 			for (String key : dates) {
-				// logging.debug("key " + key);
+
 				Date thisDate = sdf.parse(key);
 				if (dateNow.compareTo(thisDate) >= 0)
 					newest = thisDate;
@@ -709,8 +694,7 @@ public class LicensingInfoMap {
 		try {
 			LocalDate now = LocalDate.now();
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
-			// dateNow = sdf.parse("2023-05-01");
-			// Date nextChange = sdf.parse(findNextChangeDate());
+
 			Date date = sdf.parse(d);
 
 			long diffInMillies = Math.abs(date.getTime() - dateNow.getTime());
@@ -728,7 +712,7 @@ public class LicensingInfoMap {
 		if (!moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER)
 				&& !moduleInfo.get(STATE).toString().equals(STATE_IGNORE_WARNING)) {
 
-			ArrayList lics = (ArrayList) moduleInfo.get(LICENSE_IDS);
+			List lics = (List) moduleInfo.get(LICENSE_IDS);
 			String validUntil;
 
 			for (int i = 0; i < lics.size(); i++) {
@@ -780,7 +764,6 @@ public class LicensingInfoMap {
 					Integer clientNum = Integer.parseInt(cNum);
 
 					Integer diff = futureNum - clientNum;
-					Long daysLeft = getDaysLeftUntil(findNextChangeDate());
 
 					if (diff < 0)
 						return STATE_OVER_LIMIT;
@@ -788,11 +771,6 @@ public class LicensingInfoMap {
 					if (diff <= absolutClientLimitWarning
 							| (futureNum != 0 && (clientNum * 100) / futureNum >= percentClientLimitWarning))
 						return STATE_CLOSE_TO_LIMIT;
-
-					/*
-					 * if(daysLeft <= daysClientLimitWarning)
-					 * return STATE_DAYS_WARNING;
-					 */
 
 					return STATE_FUTURE_OKAY;
 				}
@@ -837,31 +815,29 @@ public class LicensingInfoMap {
 		if (configs.get(key) != null)
 			percentClientLimitWarning = Integer.parseInt((String) configs.get(key).get(0));
 
-		// logging.debug("warning levels: " + absolutClientLimitWarning + ", " +
-		// percentClientLimitWarning);
 	}
 
-	public ArrayList<String> getCloseToLimitModuleList() {
+	public List<String> getCloseToLimitModuleList() {
 		return currentCloseToLimitModuleList;
 	}
 
-	public ArrayList<String> getCurrentOverLimitModuleList() {
+	public List<String> getCurrentOverLimitModuleList() {
 		return currentOverLimitModuleList;
 	}
 
-	public ArrayList<String> getCurrentDaysWarningModuleList() {
+	public List<String> getCurrentDaysWarningModuleList() {
 		return currentTimeWarningModuleList;
 	}
 
 	/**
 	 * @return list of modules for every possible warning state (4)
 	 */
-	public Map<String, ArrayList<String>> getWarnings() {
-		Map<String, ArrayList<String>> result = new HashMap<>();
+	public Map<String, List<String>> getWarnings() {
+		Map<String, List<String>> result = new HashMap<>();
 
-		if (currentCloseToLimitModuleList.size() == 0 && currentOverLimitModuleList.size() == 0
-				&& currentTimeWarningModuleList.size() == 0 && futureCloseToLimitModuleList.size() == 0
-				&& futureOverLimitModuleList.size() == 0)
+		if (currentCloseToLimitModuleList.isEmpty() && currentOverLimitModuleList.isEmpty()
+				&& currentTimeWarningModuleList.isEmpty() && futureCloseToLimitModuleList.isEmpty()
+				&& futureOverLimitModuleList.isEmpty())
 			return null;
 
 		result.put(CURRENT_OVER_LIMIT, currentOverLimitModuleList);
@@ -870,7 +846,6 @@ public class LicensingInfoMap {
 		result.put(FUTURE_OVER_LIMIT, futureOverLimitModuleList);
 		result.put(FUTURE_CLOSE_TO_LIMIT, futureCloseToLimitModuleList);
 
-		// System.exit(0);
 		return result;
 	}
 
@@ -885,13 +860,8 @@ public class LicensingInfoMap {
 		logging.info(this, "warnings futureOverLimitModuleList? " + futureOverLimitModuleList.size());
 		logging.info(this, "warnings futureOverLimitModuleList? " + futureOverLimitModuleList.size());
 
-		result = currentOverLimitModuleList.size() > 0 || currentCloseToLimitModuleList.size() > 0
-				|| currentTimeWarningModuleList.size() > 0
-		// ||
-		// futureOverLimitModuleList.size() > 0
-		// ||
-		// futureOverLimitModuleList.size() > 0
-		;
+		result = !currentOverLimitModuleList.isEmpty() || !currentCloseToLimitModuleList.isEmpty()
+				|| !currentTimeWarningModuleList.isEmpty();
 
 		logging.info(this, "warning exists " + result);
 
@@ -914,15 +884,15 @@ public class LicensingInfoMap {
 		return clientNumbersMap;
 	}
 
-	public Vector<Vector<String>> getClientNumbersVector() {
-		return clientNumbersVector;
+	public List<List<String>> getClientNumbersList() {
+		return clientNumbersList;
 	}
 
-	public Set getCustomerIDSet() {
+	public Set<String> getCustomerIDSet() {
 		return customerIDs;
 	}
 
-	public Set getCustomerNamesSet() {
+	public Set<String> getCustomerNamesSet() {
 		return customerNames;
 	}
 
@@ -930,11 +900,11 @@ public class LicensingInfoMap {
 		return tableMap;
 	}
 
-	public Vector<String> getColumnNames() {
+	public List<String> getColumnNames() {
 		return columnNames;
 	}
 
-	public Vector<String> getClassNames() {
+	public List<String> getClassNames() {
 		return classNames;
 	}
 
@@ -942,11 +912,11 @@ public class LicensingInfoMap {
 		return datesMap;
 	}
 
-	public Vector<String> getModules() {
+	public List<String> getModules() {
 		return shownModules;
 	}
 
-	public Vector<String> getAvailableModules() {
+	public List<String> getAvailableModules() {
 		return availableModules;
 	}
 

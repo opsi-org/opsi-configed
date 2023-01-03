@@ -7,14 +7,15 @@
 
 package de.uib.utilities.datapanel;
 
-import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.GroupLayout;
 import javax.swing.JLabel;
@@ -30,6 +31,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.utilities.logging.logging;
@@ -53,14 +55,14 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	protected JLabel labelForRightPane;
 	protected SimpleTreeModel treemodel;
 
-	protected TreeMap<String, String> givenClasses;
-	protected TreeSet<String> keyclasses;
+	protected NavigableMap<String, String> givenClasses;
+	protected NavigableSet<String> keyclasses;
 	protected Map<String, String> tooltips4Keys;
 	protected Map<String, AbstractEditMapPanel> partialPanels;
-	protected TreeMap<String, Map<String, Object>> virtualLines;
+	protected NavigableMap<String, Map<String, Object>> virtualLines;
 
-	protected int hGap = de.uib.utilities.Globals.hGapSize / 2;
-	protected int vGap = de.uib.utilities.Globals.vGapSize / 2;
+	protected int hGap = Globals.HGAP_SIZE / 2;
+	protected int vGap = Globals.VGAP_SIZE / 2;
 
 	public EditMapPanelGrouped() {
 		this(null);
@@ -103,13 +105,14 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		givenClasses = classesMap;
 
 		popupmenuAtRow = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD }) {
+			@Override
 			public void action(int p) {
 				logging.debug(this, "( EditMapPanelGrouped ) popup " + p);
 
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-					// actor.reloadData();
+
 					break;
 
 				case PopupMenuTrait.POPUP_SAVE:
@@ -120,10 +123,8 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 			}
 		};
 	}
-	// else
-	// popup = new JPopupMenu();
 
-	public void setSubpanelClasses(TreeMap<String, String> classesMap) {
+	public void setSubpanelClasses(NavigableMap<String, String> classesMap) {
 		givenClasses = classesMap;
 	}
 
@@ -134,15 +135,12 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 	protected void generateParts() {
 		tooltips4Keys = givenClasses;
-		partialPanels = new HashMap<String, AbstractEditMapPanel>();
+		partialPanels = new HashMap<>();
 
 		for (String key : keyclasses) {
-			// if (key.startsWith("user"))
-			// continue;
 
 			EditMapPanelX editMapPanel = new EditMapPanelX(tableCellRenderer, keylistExtendible, keylistEditable,
 					reloadable) {
-				// @Override
 				protected void reload() {
 					javax.swing.tree.TreePath p = tree.getSelectionPath();
 					int row = tree.getRowForPath(p);
@@ -150,51 +148,37 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 					actor.reloadData();
 					logging.info(this, "reloaded, return to " + p);
 					if (p != null) {
-						// logging.info(this, "reloaded, return to " + row);
+
 						tree.setExpandsSelectedPaths(true);
 						tree.setSelectionInterval(row, row);
 						tree.scrollRowToVisible(row);
 					}
 				}
 
-				// @Override
+				@Override
 				protected JPopupMenu definePopup() {
 					logging.debug(this, " (EditMapPanelGrouped) definePopup ");
-					JPopupMenu result
+					return new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD,
+							PopupMenuTrait.POPUP_PDF })
 
-							= new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD,
-									// PopupMenuTrait.POPUP_DELETE,
-									PopupMenuTrait.POPUP_PDF })
+					{
+						@Override
+						public void action(int p) {
+							switch (p) {
+							case PopupMenuTrait.POPUP_RELOAD:
+								reload();
+								break;
 
-							{
-								public void action(int p) {
-									switch (p) {
-									case PopupMenuTrait.POPUP_RELOAD:
-										reload();
-										break;
-									/*
-									 * case PopupMenuTrait.POPUP_DELETE:
-									 * actor.deleteData();
-									 * break;
-									 */
-									case PopupMenuTrait.POPUP_SAVE:
-										actor.saveData();
-										break;
-									case PopupMenuTrait.POPUP_PDF:
-										createPDF();
-										break;
-									}
+							case PopupMenuTrait.POPUP_SAVE:
+								actor.saveData();
+								break;
+							case PopupMenuTrait.POPUP_PDF:
+								createPDF();
+								break;
+							}
 
-								}
-							};
-
-					// result.addSeparator();
-					/*
-					 * result.addSeparator();
-					 * JMenuItem popupRemoveClientEntry = new JMenuItem("remove client entry");
-					 * result.add( popupRemoveClientEntry );
-					 */
-					return result;
+						}
+					};
 				}
 			};
 
@@ -211,7 +195,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		client = tree.getSelectionPath().getPathComponent(0).toString().trim(); // client name
 		// TODO get Depotname
 		logging.info(this, "------------- create report");
-		HashMap<String, String> metaData = new HashMap<String, String>();
+		HashMap<String, String> metaData = new HashMap<>();
 		metaData.put("header", configed.getResourceValue("EditMapPanelGrouped.createPDF.title"));
 		metaData.put("title", configed.getResourceValue("Client: " + client));
 		metaData.put("subject", "report of table");
@@ -223,56 +207,32 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		pdfExportTable.setPageSizeA4();
 		pdfExportTable.execute(null, false);
 
-		/*
-		 * old pdf exporting
-		 * tableToPDF = new DocumentToPdf (null, metaData); // no filename, metadata
-		 * 
-		 * tableToPDF.createContentElement("table", createJTableForPDF());
-		 * 
-		 * tableToPDF.setPageSizeA4(); //
-		 * tableToPDF.toPDF(); // create Pdf
-		 **/
 	}
 
 	private JTable createJTableForPDF() {
 		DefaultTableModel tableModel = new DefaultTableModel();
 		JTable jTable = new JTable(tableModel);
-		Vector values;
+		List<String> values;
 
-		tableModel.addColumn(configed.getResourceValue("EditMapPanelGrouped.createJTableForPDF.property_name")); // "Property-Name");
-		tableModel.addColumn(configed.getResourceValue("EditMapPanelGrouped.createJTableForPDF.property_value")); // "Property-Wert");
+		tableModel.addColumn(configed.getResourceValue("EditMapPanelGrouped.createJTableForPDF.property_name"));
+		tableModel.addColumn(configed.getResourceValue("EditMapPanelGrouped.createJTableForPDF.property_value"));
 
-		Vector<String> keys = mapTableModel.getKeys();
+		List<String> keys = mapTableModel.getKeys();
 		logging.info(this, "createJTableForPDF keys " + keys);
 		for (String key : keys) {
 			String property = "";
-			// logging.info(this, "createJTableForPDF key " + key);
-			// logging.info(this, "createJTableForPDF mapTableModel.getData().get(key) " +
-			// mapTableModel.getData().get(key));
-			// logging.info(this, "createJTableForPDF mapTableModel.getData() " +
-			// mapTableModel.getData());
-			// logging.info(this, "createJTableForPDF mapTableModel.getData() " +
-			// mapTableModel.getData().getClass());
-			// logging.info(this, "createJTableForPDF mapTableModel.getData().get( key ) " +
-			// mapTableModel.getData().get(key).getClass());
-			/*
-			 * ListMerger listelem = (ListMerger) mapTableModel.getData().get(key);
-			 * if (!listelem.isEmpty())
-			 * property = listelem.getValue().get(0).toString();
-			 * 
-			 */
 
-			java.util.List listelem = ListMerger.getMergedList((java.util.List) mapTableModel.getData().get(key));
+			List listelem = ListMerger.getMergedList((List) mapTableModel.getData().get(key));
 			if (!listelem.isEmpty())
 				property = listelem.get(0).toString();
 
-			values = new Vector();
-			// logging.debug(key + " :: " + property);
+			values = new ArrayList<>();
+
 			// TODO search another possibility to exclude?
 			if (!key.contains("saved_search")) {
 				values.add(key);
 				values.add(property);
-				tableModel.addRow(values);
+				tableModel.addRow(values.toArray());
 			}
 		}
 		return jTable;
@@ -286,7 +246,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		actor.reloadData();
 		logging.debug(this, "reloaded, return to " + p);
 		if (p != null) {
-			// logging.info(this, "reloaded, return to " + row);
+
 			tree.setExpandsSelectedPaths(true);
 			tree.setSelectionInterval(row, row);
 			tree.scrollRowToVisible(row);
@@ -297,23 +257,20 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	protected void buildPanel() {
 		splitPane = new JSplitPane();
 
-		splitPane.setBackground(Color.red);
-		setBackground(de.uib.utilities.Globals.backNimbus);
+		splitPane.setBackground(Globals.EDIT_MAP_PANEL_GROUPED_BACKGROUND_COLOR);
+		setBackground(Globals.backNimbus);
 
 		tree = new XTree();
-		// tree.setToolTipText("help");
+
 		ToolTipManager.sharedInstance().registerComponent(tree);
 
-		// tree.putClientProperty("JTree.lineStyle", "Horizontal");
 		tree.setCellRenderer(new SimpleIconNodeRenderer());
 		tree.expandAll();
-		// tree.setRootVisible(false);
 
 		tree.addTreeSelectionListener(this);
 
 		JScrollPane jScrollPaneTree = new JScrollPane(tree);
 		jScrollPaneTree.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		// jScrollPaneTree.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 		rightPane = new JPanel();
 		labelForRightPane = new JLabel("");
@@ -322,8 +279,6 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		splitPane.setLeftComponent(jScrollPaneTree);
 		splitPane.setRightComponent(rightPane);
 		splitPane.setDividerLocation(initialSplitLoc);
-
-		// splitPane.add(jScrollPaneTree);
 
 		GroupLayout layout = new GroupLayout(this);
 		setLayout(layout);
@@ -336,27 +291,22 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 	}
 
-	protected void classify(Map<String, Object> data, TreeSet<String> classIds) {
+	protected void classify(Map<String, Object> data, NavigableSet<String> classIds) {
 
-		TreeMap<String, Object> mydata = new TreeMap<String, Object>(data);
-
-		virtualLines = new TreeMap<String, Map<String, Object>>();
+		virtualLines = new TreeMap<>();
 
 		for (String id : classIds.descendingSet()) {
-			virtualLines.put(id, new TreeMap<String, Object>());
+			virtualLines.put(id, new TreeMap<>());
 		}
 
-		virtualLines.put("", new TreeMap<String, Object>());
-
-		String noValue = "NONE";
+		virtualLines.put("", new TreeMap<>());
 
 		if (data == null)
 			return;
 
-		// Iterator<String> iterCollect = classIds.descendingSet().iterator();
 		NavigableSet<String> classIdsDescending = classIds.descendingSet();
 
-		for (String key : new TreeSet<String>(data.keySet()).descendingSet()) {
+		for (String key : new TreeSet<>(data.keySet()).descendingSet()) {
 			logging.debug(this, "classify key ------- " + key);
 			boolean foundClass = false;
 			for (String idCollect : classIdsDescending) {
@@ -372,30 +322,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 				virtualLines.get("").put(key, data.get(key));
 			}
 
-			/*
-			 * String partialKey = "";
-			 * String remainder = key;
-			 * 
-			 * int j = -1;
-			 * int k = remainder.indexOf('.');
-			 * while (k > j && !foundClass)
-			 * {
-			 * //componentKey = key.substring(j+1, k);
-			 * partialKey = key.substring(0, k);
-			 * remainder = key.substring(k+1);
-			 * 
-			 * logging.debug(this, "classify partial " + partialKey);
-			 * 
-			 * 
-			 * //logging.debug(this, "classify remainder " + remainder);
-			 * j = k;
-			 * k = j + 1 + remainder.indexOf('.');
-			 * }
-			 */
-
 		}
-
-		// logging.info(this, "classify virtualLines " + virtualLines);
 
 	}
 
@@ -410,15 +337,12 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		super.setEditableMap(visualdata, optionsMap);
 		logging.debug(this, " setEditableMap, visualdata keys " + visualdata);
 		if (visualdata != null) {
-			// logging.info(this, " setEditableMap, visualdata keys " +
-			// visualdata.keySet());
 
 			treemodel = new SimpleTreeModel(givenClasses.keySet(), tooltips4Keys);
-			// treemodel.produce();
+
 			tree.setModel(treemodel);
 			tree.expandAll();
 
-			// logging.info(this, "generated keys " + treemodel.getGeneratedKeys());
 			keyclasses = treemodel.getGeneratedKeys();
 
 			generateParts();
@@ -426,8 +350,6 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 			classify(visualdata, keyclasses);
 
 			for (String key : keyclasses) {
-				// if (key.startsWith("user"))
-				// continue;
 
 				partialPanels.get(key).setEditableMap(virtualLines.get(key), optionsMap);
 
@@ -445,8 +367,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		super.setOptionsEditable(b);
 
 		for (String key : keyclasses) {
-			// if (key.startsWith("user"))
-			// continue;
+
 			partialPanels.get(key).setOptionsEditable(b);
 		}
 	}
@@ -455,11 +376,9 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	@Override
 	public void setStoreData(Collection data) {
 		super.setStoreData(data);
-		// meaning mapTableModel.setStoreData(data);
 
 		for (String key : keyclasses) {
-			// if (key.startsWith("user"))
-			// continue;
+
 			partialPanels.get(key).setStoreData(data);
 		}
 	}
@@ -468,25 +387,14 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	@Override
 	public void setUpdateCollection(Collection updateCollection) {
 		super.setUpdateCollection(updateCollection);
-		// meaning mapTableModel.setUpdateCollection( updateCollection );
 
 		for (String key : keyclasses) {
-			// if (key.startsWith("user"))
-			// continue;
+
 			partialPanels.get(key).setUpdateCollection(updateCollection);
 		}
 	}
 
-	/*
-	 * public void setPropertyHandlerType(EditMapPanelX.PropertyHandlerType t)
-	 * {
-	 * for (String key : keyclasses)
-	 * {
-	 * ((EditMapPanelX)partialPanels.get(key)).setPropertyHandlerType(t);
-	 * }
-	 * }
-	 */
-
+	@Override
 	public void setLabel(String s) {
 		if (treemodel == null)
 			return;
@@ -509,9 +417,9 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	}
 
 	// TreeSelectionListener
+	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 		javax.swing.tree.TreePath p = tree.getSelectionPath();
-		// logging.info(this, "valueChanged TreeSelectionEvent, path " + p);
 
 		int divLoc = splitPane.getDividerLocation();
 
@@ -529,7 +437,6 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		else {
 
 			String key = SimpleTreePath.dottedString(1, p); // we start at 1 since we eliminate the root node
-			// logging.info(this, "valueChanged TreeSelectionEvent, key " + key);
 
 			if (partialPanels.get(key) == null)
 				splitPane.setRightComponent(rightPane);
@@ -541,7 +448,6 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 		splitPane.setDividerLocation(divLoc);
 
-		// labelForRightPane.setText(key);
 	}
 
 }

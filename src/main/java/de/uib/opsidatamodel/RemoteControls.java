@@ -6,8 +6,6 @@ import de.uib.configed.type.RemoteControl;
 import de.uib.utilities.logging.logging;
 
 public class RemoteControls extends HashMap<String, RemoteControl> {
-	public RemoteControls() {
-	}
 
 	public void checkIn(String key, Object value) {
 		if (!key.startsWith(RemoteControl.CONFIG_KEY))
@@ -40,8 +38,6 @@ public class RemoteControls extends HashMap<String, RemoteControl> {
 				RemoteControl rc = retrieveRC(name);
 
 				String remainder = rcPartOfKey.substring(i + 1);
-
-				// logging.debug(this, "checkIn, remainder " + remainder);
 
 				i = nextPartAt(remainder);
 

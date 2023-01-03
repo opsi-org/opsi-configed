@@ -1,10 +1,7 @@
 package de.uib.configed.gui.ssh;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -18,6 +15,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.FDepotselectionList;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
+import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.logging.logging;
 
 public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
@@ -25,11 +23,10 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	private JLabel lbl_on = new JLabel();
 	private JLabel lbl_updateInstalled = new JLabel();
 	private JLabel lbl_setupInstalled = new JLabel();
-	private JLabel lbl_overwriteExisting = new JLabel();
 	private JLabel lbl_properties = new JLabel();
 	private JLabel lbl_verbosity = new JLabel();
 
-	private JComboBox cb_verbosity;
+	private JComboBox<Integer> cb_verbosity;
 	private JTextField tf_selecteddepots;
 	private JButton btn_depotselection;
 	private JCheckBox cb_properties;
@@ -37,14 +34,14 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	private JCheckBox checkb_setupInstalled;
 
 	public FDepotselectionList fDepotList;
-	private Vector<String> depots;
+	private List<String> depots;
 
 	public SSHPMInstallSettingsPanel() {
 		this(null);
 	}
 
 	public SSHPMInstallSettingsPanel(JDialog dia) {
-		// super();
+
 		if (dia != null)
 			setFDepotList(dia);
 		initComponents();
@@ -61,60 +58,40 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 		btn_depotselection = new JButton(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager.depotselection"));
-		btn_depotselection.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				initDepots();
-				if (btn_depotselection != null)
-					fDepotList.centerOn(btn_depotselection);
-				fDepotList.setVisible(true);
-			}
+		btn_depotselection.addActionListener(actionEvent -> {
+			initDepots();
+			if (btn_depotselection != null)
+				fDepotList.centerOn(btn_depotselection);
+			fDepotList.setVisible(true);
 		});
 
 		tf_selecteddepots = new JTextField();
 		tf_selecteddepots.setEditable(false);
 
-		cb_verbosity = new JComboBox();
+		cb_verbosity = new JComboBox<>();
 		cb_verbosity.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
 		for (int i = 0; i < 5; i++)
 			cb_verbosity.addItem(i);
 		cb_verbosity.setSelectedItem(1);
-		cb_verbosity.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				// changeVerbosity();
-			}
-		});
 
 		cb_properties = new JCheckBox();
 		cb_properties.setSelected(true);
 		lbl_updateInstalled.setText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.updateInstalled"));
 		checkb_updateInstalled = new JCheckBox();
-		checkb_updateInstalled.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				// changeUpdateInstalled();
-			}
-		});
 
 		lbl_setupInstalled.setText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.setupInstalled"));
 		checkb_setupInstalled = new JCheckBox();
-		checkb_setupInstalled.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				// changeSetupInstalled();
-			}
-		});
+
 	}
 
 	public void setFDepotList(JDialog dia) {
 		fDepotList = new FDepotselectionList(dia) {
 			@Override
-			public void setListData(Vector<? extends String> v) {
-				if (v == null || v.size() == 0) {
-					setListData(new Vector<String>());
+			public void setListData(List<String> v) {
+				if (v == null || v.isEmpty()) {
+					setListData(new ArrayList<>());
 					jButton1.setEnabled(false);
 				} else {
 					super.setListData(v);
@@ -131,8 +108,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	}
 
 	private void initLayout() {
-		this.setBackground(Globals.backLightBlue);
-		// this.setBorder(new LineBorder(de.uib.configed.Globals.blueGrey));
+		this.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		GroupLayout layout = new GroupLayout(this);
 
@@ -145,9 +121,8 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 						.addComponent(lbl_verbosity, PREF, PREF, PREF).addComponent(lbl_properties, PREF, PREF, PREF)
 						.addComponent(lbl_setupInstalled, PREF, PREF, PREF)
 						.addComponent(lbl_updateInstalled, PREF, PREF, PREF)).addGap(Globals.GAP_SIZE)
-						.addGroup(layout.createParallelGroup().addComponent(btn_depotselection, PREF, PREF, PREF) // Globals.iconWidth,
-								// Globals.iconWidth,
-								// Globals.iconWidth)
+						.addGroup(layout.createParallelGroup().addComponent(btn_depotselection, PREF, PREF, PREF)
+
 								.addComponent(cb_verbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 								.addComponent(cb_properties, PREF, PREF, PREF)
 								.addComponent(checkb_setupInstalled, PREF, PREF, PREF)
@@ -184,13 +159,13 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 				.addGap(Globals.GAP_SIZE));
 	}
 
-	protected Vector<String> getAllowedInstallTargets() {
-		Vector<String> result = new java.util.Vector<String>();
+	protected List<String> getAllowedInstallTargets() {
+		List<String> result = new ArrayList<>();
 
 		if (persist.isDepotsFullPermission()) {
 			tf_selecteddepots.setEditable(true);
-			result.add(persist.DEPOT_SELECTION_NODEPOTS);
-			result.add(persist.DEPOT_SELECTION_ALL);
+			result.add(PersistenceController.DEPOT_SELECTION_NODEPOTS);
+			result.add(PersistenceController.DEPOT_SELECTION_ALL);
 		} else
 			tf_selecteddepots.setEditable(false);
 
@@ -206,25 +181,25 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 	protected String produceDepotParameter() {
 		String depotParameter = "";
-		java.util.List<String> selectedDepots = fDepotList.getSelectedDepots();
+		List<String> selectedDepots = fDepotList.getSelectedDepots();
 
-		if (selectedDepots.size() == 0) {
+		if (selectedDepots.isEmpty()) {
 			if (persist.isDepotsFullPermission()) {
-				depotParameter = persist.DEPOT_SELECTION_NODEPOTS;
-			} else if (depots.size() > 0) {
+				depotParameter = PersistenceController.DEPOT_SELECTION_NODEPOTS;
+			} else if (!depots.isEmpty()) {
 				depotParameter = depots.get(0);
 			}
 		} else {
 			if (selectedDepots.contains(
-					// configed.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS")
-					persist.DEPOT_SELECTION_NODEPOTS)
+
+					PersistenceController.DEPOT_SELECTION_NODEPOTS)
 
 			) {
-				depotParameter = "";// persist.DEPOT_SELECTION_NODEPOTS;
-			} else if (selectedDepots.contains(persist.DEPOT_SELECTION_ALL)) {
+				depotParameter = "";
+			} else if (selectedDepots.contains(PersistenceController.DEPOT_SELECTION_ALL)) {
 				depotParameter = "all";
 			} else {
-				StringBuffer sb = new StringBuffer();
+				StringBuilder sb = new StringBuilder();
 				for (String s : selectedDepots) {
 					sb.append(s);
 					sb.append(",");
@@ -242,7 +217,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		depots = getAllowedInstallTargets();
 		logging.info(this, "depots: " + depots.toString());
 		fDepotList.setListData(depots);
-		if (depots.size() == 0)
+		if (depots.isEmpty())
 		// probably no permission
 		{
 			// To DO:

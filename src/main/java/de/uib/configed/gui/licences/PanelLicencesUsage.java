@@ -7,8 +7,6 @@ package de.uib.configed.gui.licences;
 
 import java.awt.event.ActionListener;
 
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
@@ -45,8 +43,6 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 	protected int buttonWidth = 140;
 	protected int lPoolHeight = 100;
 
-	private ComboBoxModel emptyComboBoxModel = new DefaultComboBoxModel(new String[] { "" });
-
 	protected de.uib.configed.ControlPanelLicencesUsage licencesUsageController;
 	private int initialSplit = 0;
 
@@ -80,7 +76,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 		panelGetAndAssignSL = new javax.swing.JPanel();
 		labelGetAndAssignSL = new javax.swing.JLabel(
 				configed.getResourceValue("ConfigedMain.Licences.Usage.LabelAssignLicense"));
-		// comboClient = new javax.swing.JComboBox();
+
 		comboClient = new de.uib.utilities.swing.DynamicCombo();
 		comboClient.setFont(Globals.defaultFontBig);
 		comboClient.setPreferredSize(new java.awt.Dimension(200, 20));
@@ -121,28 +117,16 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 
 	private void initComponents() {
 
-		// testfield = new JTextField(" ");
-
-		// logging.debug( "--------- init PanelLicencesUsage");
-
 		panelUsage = new PanelGenEditTable(configed.getResourceValue("ConfigedMain.Licences.SectiontitleUsage"), 0,
 				true, 0, false, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true // searchpane
 		);
-		panelUsage.setMasterFrame(de.uib.configed.Globals.frame1);
+		panelUsage.setMasterFrame(Globals.frame1);
 		panelUsage.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panelUsage.setFiltering(true);
 		panelUsage.showFilterIcon(true);
-
-		// panelKeys = new
-		// PanelGenEditTable(configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceUsable"),
-		// 0, false, 0);
-
-		// panelWindowsSoftwareIds = new
-		// PanelGenEditTable(configed.getResourceValue("ConfigedMain.Licences.SectiontitleWindowsSoftwareIDs"),
-		// 0, false, -1);
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
@@ -163,76 +147,14 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 		splitPane.setBottomComponent(panelGetAndAssignSL);
 		setupSplit();
 
-		/*
-		 * 
-		 * javax.swing.GroupLayout layout = new javax.swing.GroupLayout((JPanel) this);
-		 * this.setLayout(layout);
-		 * layout.setHorizontalGroup(
-		 * layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-		 * .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-		 * layout.createSequentialGroup()
-		 * .addContainerGap()
-		 * .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.
-		 * TRAILING)
-		 * // for testing purposes:
-		 * //.addComponent(testfield, javax.swing.GroupLayout.Alignment.LEADING,
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * Short.MAX_VALUE)
-		 * .addComponent(panelUsage, javax.swing.GroupLayout.Alignment.LEADING,
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * Short.MAX_VALUE)
-		 * //.addComponent(panelKeys, javax.swing.GroupLayout.Alignment.LEADING,
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * Short.MAX_VALUE)
-		 * //.addComponent(panelWindowsSoftwareIds,
-		 * javax.swing.GroupLayout.Alignment.LEADING,
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * Short.MAX_VALUE)
-		 * .addComponent(panelGetAndAssignSL, javax.swing.GroupLayout.Alignment.LEADING,
-		 * javax.swing.GroupLayout.PREFERRED_SIZE,
-		 * javax.swing.GroupLayout.PREFERRED_SIZE,
-		 * javax.swing.GroupLayout.PREFERRED_SIZE)
-		 * )
-		 * .addContainerGap())
-		 * );
-		 * layout.setVerticalGroup(
-		 * layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-		 * .addGroup(layout.createSequentialGroup()
-		 * .addContainerGap()
-		 * //.addComponent(testfield, javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE)
-		 * .addComponent(panelUsage, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * Short.MAX_VALUE)
-		 * .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-		 * //.addComponent(panelKeys, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE,
-		 * 150)
-		 * //.addComponent(panelWindowsSoftwareIds, minVSize,
-		 * javax.swing.GroupLayout.DEFAULT_SIZE, 120)
-		 * .addComponent(panelGetAndAssignSL, javax.swing.GroupLayout.PREFERRED_SIZE,
-		 * javax.swing.GroupLayout.PREFERRED_SIZE, 150)
-		 * .addGap(Globals.vGapSize, Globals.vGapSize, Globals.vGapSize)
-		 * )
-		 * 
-		 * );
-		 */
 	}
-
-	/*
-	 * public void setClientsList(ComboBoxModel m)
-	 * {
-	 * if (m == null)
-	 * comboClient.setModel(emptyComboBoxModel);
-	 * else
-	 * comboClient.setModel(m);
-	 * 
-	 * }
-	 */
 
 	public void setClientsSource(de.uib.utilities.ComboBoxModeller modelsource) {
 		comboClient.setModelSource(modelsource);
 	}
 
 	// ActionListener
+	@Override
 	public void actionPerformed(java.awt.event.ActionEvent evt) {
 		if (evt.getSource() == buttonGet) {
 			licencesUsageController.getSoftwareLicenceReservation((String) comboClient.getSelectedItem());

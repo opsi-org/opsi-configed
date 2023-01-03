@@ -8,10 +8,12 @@
 
 package de.uib.utilities.table;
 
+import java.util.HashSet;
+
 import de.uib.utilities.logging.logging;
 
 public class CursorrowObserved {
-	java.util.Set<CursorrowObserver> observers = new java.util.HashSet<CursorrowObserver>();
+	java.util.Set<CursorrowObserver> observers = new HashSet<>();
 
 	public void setChanged() {
 
