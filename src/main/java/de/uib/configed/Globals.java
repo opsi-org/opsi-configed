@@ -36,9 +36,9 @@ public class Globals {
 	public static final String APPNAME = "opsi config editor";
 	public static final String iconresourcename = "opsi.gif";
 
-	public static final String opsiDocpage = "http://www.opsi.org";
-	public static final String opsiSupportpage = "http://opsi.org/support";
-	public static final String opsiForumpage = "http://forum.opsi.org";
+	public static final String OPSI_DOC_PAGE = "http://www.opsi.org";
+	public static final String OPSI_SUPPORT_PAGE = "http://opsi.org/support";
+	public static final String OPSI_FORUM_PAGE = "http://forum.opsi.org";
 
 	public static final String BUNDLE_NAME = "de/uib/messages/configed";
 
