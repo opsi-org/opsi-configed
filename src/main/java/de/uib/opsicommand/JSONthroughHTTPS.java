@@ -269,10 +269,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 	private void loadCertificateToKeyStore(KeyStore ks, File certificateFile) {
 		try {
 			X509Certificate certificate = CertificateManager.instantiateCertificate(certificateFile);
-			String alias = host;
-			if (certificateFile.exists()) {
-				alias = certificateFile.getName().substring(0, certificateFile.getName().indexOf("-"));
-			}
+			String alias = certificateFile.getParentFile().getName();
 			ks.setCertificateEntry(alias, certificate);
 		} catch (KeyStoreException e) {
 			logging.error(this, "unable to load certificate into a keystore");

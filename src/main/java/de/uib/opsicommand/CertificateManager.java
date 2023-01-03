@@ -5,13 +5,19 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import de.uib.configed.ConfigedMain;
@@ -42,15 +48,25 @@ public class CertificateManager {
 	}
 
 	public static List<File> getCertificates() {
-		File certificateDir = new File(configed.savedStatesLocationName);
-		File[] certificateFiles = certificateDir
-				.listFiles((dir, filename) -> filename.endsWith("." + Globals.CERTIFICATE_FILE_EXTENSION));
+		final PathMatcher matcher = FileSystems.getDefault()
+				.getPathMatcher("glob:**." + Globals.CERTIFICATE_FILE_EXTENSION);
+		final List<File> certificateFiles = new ArrayList<>();
 
-		if (certificateFiles.length == 0) {
-			return new ArrayList<>();
+		try {
+			Files.walkFileTree(Paths.get(configed.savedStatesLocationName), new SimpleFileVisitor<Path>() {
+				@Override
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+					if (matcher.matches(file)) {
+						certificateFiles.add(file.toFile());
+					}
+					return FileVisitResult.CONTINUE;
+				}
+			});
+		} catch (IOException ex) {
+			ex.printStackTrace();
 		}
 
-		return Arrays.asList(certificateFiles);
+		return certificateFiles;
 	}
 
 	public static void saveCertificate(File certificateFile) {
@@ -62,7 +78,8 @@ public class CertificateManager {
 			}
 
 			Files.copy(certificateFile.toPath(),
-					new File(configed.savedStatesLocationName, filename + "-" + Globals.CERTIFICATE_FILE).toPath(),
+					new File(configed.savedStatesLocationName, filename + File.separator + Globals.CERTIFICATE_FILE)
+							.toPath(),
 					StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			logging.error("unable to save certificate");
@@ -70,10 +87,9 @@ public class CertificateManager {
 	}
 
 	public static void updateCertificate() {
-		File certificateDir = new File(configed.savedStatesLocationName);
-		File[] certificateFiles = certificateDir.listFiles((dir, filename) -> filename.endsWith(".pem"));
+		List<File> certificateFiles = getCertificates();
 
-		if (certificateFiles.length != 0) {
+		if (!certificateFiles.isEmpty()) {
 			String certificateContent = PersistenceControllerFactory.getPersistenceController().getOpsiCACert();
 			X509Certificate tmpCertificate = retrieveCertificate();
 
