@@ -1249,7 +1249,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuHelpDoc.addActionListener(new ActionListener(){
 			                               public void actionPerformed(ActionEvent e)
 			                               {
-				                               main.showExternalDocument(Globals.opsiDocpage);
+				                               main.showExternalDocument(Globals.OPSI);
 			                               }
 		                               });
 		jMenuHelp.add(jMenuHelpDoc);
