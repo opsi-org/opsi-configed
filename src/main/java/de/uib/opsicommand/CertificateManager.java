@@ -71,14 +71,14 @@ public class CertificateManager {
 
 	public static void saveCertificate(File certificateFile) {
 		try {
-			String filename = ConfigedMain.HOST;
+			String dirname = ConfigedMain.HOST;
 
-			if (filename.contains(":")) {
-				filename = filename.replace(":", "_");
+			if (dirname.contains(":")) {
+				dirname = dirname.replace(":", "_");
 			}
 
 			Files.copy(certificateFile.toPath(),
-					new File(configed.savedStatesLocationName, filename + File.separator + Globals.CERTIFICATE_FILE)
+					new File(configed.savedStatesLocationName, dirname + File.separator + Globals.CERTIFICATE_FILE)
 							.toPath(),
 					StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
