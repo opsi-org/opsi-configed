@@ -50,7 +50,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 		// startAnotherProcess()
 
-		long timeStepMillis = (long) 500;
+		long timeStepMillis = 500;
 
 		logging.debug(this, " doInBackground waitingMillis " + waitingSleeper.getWaitingMillis());
 

@@ -64,12 +64,12 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	protected JTextShowField fieldByAuditPath;
 	protected JTextShowField fieldClientname;
 
-	JComboBox comboChooseDepot;
-	JComboBox comboChooseWinProduct;
+	JComboBox<String> comboChooseDepot;
+	JComboBox<String> comboChooseWinProduct;
 	JButton btnShowDrivers;
 	JButton btnCreateDrivers;
 
-	JLabel label_driverToIntegrate;
+	JLabel labelDriverToIntegrate;
 	PanelMountShare panelMountShare;
 
 	String depotProductDirectory = "";
@@ -81,7 +81,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	boolean stateServerPath = false;
 	CheckedLabel serverPathChecked;
 
-	JLabel label_uploading;
+	JLabel jLabelUploading;
 	ImagePanel waitingImage;
 
 	class RadioButtonIntegrationType extends JRadioButton {
@@ -199,7 +199,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		defineChoosers();
 
-		selectedDepot = "" + comboChooseDepot.getSelectedItem();
+		selectedDepot = (String) comboChooseDepot.getSelectedItem();
 		depotProductDirectory = SmbConnect.getInstance().buildSambaTarget(selectedDepot,
 				de.uib.connectx.SmbConnect.PRODUCT_SHARE_RW);
 		logging.info(this, "depotProductDirectory " + depotProductDirectory);
@@ -207,9 +207,9 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		label_topic = new JLabel(configed.getResourceValue("PanelDriverUpload.topic"));
 		wLeftText = label_topic.getPreferredSize().width;
 
-		label_driverToIntegrate = new JLabel(configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
+		labelDriverToIntegrate = new JLabel(configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
 
-		panelMountShare = new PanelMountShare(this, main, root, label_driverToIntegrate.getPreferredSize().width + hGap)
+		panelMountShare = new PanelMountShare(this, main, root, labelDriverToIntegrate.getPreferredSize().width + hGap)
 
 		{
 			@Override
@@ -224,7 +224,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			}
 		};
 
-		label_uploading = new JLabel("uploading");
+		jLabelUploading = new JLabel("uploading");
 
 		initComponents();
 
@@ -241,12 +241,12 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.textfieldDimension);
 
-		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray()));
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray(new String[0])));
 
 		comboChooseDepot.setEnabled(false);
 
 		comboChooseDepot.addActionListener(actionEvent -> {
-			selectedDepot = "" + comboChooseDepot.getSelectedItem();
+			selectedDepot = (String) comboChooseDepot.getSelectedItem();
 			logging.info(this, "actionPerformed  depot selected " + selectedDepot);
 		});
 
@@ -289,7 +289,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	private void evaluateWinProducts() {
 		retrieveWinProducts();
 
-		winProduct = "" + comboChooseWinProduct.getSelectedItem();
+		winProduct = (String) comboChooseWinProduct.getSelectedItem();
 		produceTarget();
 	}
 
@@ -307,7 +307,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		List<String> winProducts = persist.getWinProducts(server, depotProductDirectory);
 
-		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray()));
+		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray(new String[0])));
 	}
 
 	protected void buildPanel() {
@@ -529,7 +529,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 						.addComponent(btnCreateDrivers, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				.addGap(2 * vGap, 3 * vGap, 3 * vGap)
 				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(label_driverToIntegrate, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+						.addComponent(labelDriverToIntegrate, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT)
 						.addComponent(buttonCallSelectDriverFiles, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT)
@@ -606,7 +606,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 																		Globals.GRAPHIC_BUTTON_WIDTH,
 																		Globals.GRAPHIC_BUTTON_WIDTH))
 														.addGroup(layoutByAuditInfo.createSequentialGroup()
-																.addComponent(label_driverToIntegrate,
+																.addComponent(labelDriverToIntegrate,
 																		GroupLayout.PREFERRED_SIZE,
 																		GroupLayout.PREFERRED_SIZE,
 																		GroupLayout.PREFERRED_SIZE)
@@ -626,12 +626,9 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 																		GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 														.addGroup(layoutByAuditInfo.createSequentialGroup()
 																.addComponent(labelTargetPath,
-																		label_driverToIntegrate
-																				.getPreferredSize().width,
-																		label_driverToIntegrate
-																				.getPreferredSize().width,
-																		label_driverToIntegrate
-																				.getPreferredSize().width)
+																		labelDriverToIntegrate.getPreferredSize().width,
+																		labelDriverToIntegrate.getPreferredSize().width,
+																		labelDriverToIntegrate.getPreferredSize().width)
 																.addGap(hGap, hGap, hGap)
 																.addComponent(buttonCallChooserServerpath,
 																		Globals.GRAPHIC_BUTTON_WIDTH,
