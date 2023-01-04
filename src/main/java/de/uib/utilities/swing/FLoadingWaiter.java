@@ -33,16 +33,13 @@ import de.uib.utilities.thread.WaitingWorker;
 public class FLoadingWaiter extends JFrame implements de.uib.utilities.observer.DataLoadingObserver, WaitingSleeper {
 
 	private static final long WAITING_MILLIS_FOR_LOADING = 50000;
-	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
+	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 6000;
 	JProgressBar progressBar;
 	JLabel infoLabel;
 	protected String info;
 	protected static WaitInfoString waitInfoString;
 
 	protected Object observingMesg = configed.getResourceValue("LoadingObserver.start");
-
-	String[] waitStrings;
-	int waitStringsIndex = -1;
 
 	int max = 200;
 

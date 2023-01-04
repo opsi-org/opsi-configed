@@ -22,6 +22,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.text.MessageFormat;
 import java.util.GregorianCalendar;
@@ -77,7 +78,7 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 	private static final int SECS_WAIT_FOR_CONNECTION = 100;
 	private static final long TIMEOUT_MS = SECS_WAIT_FOR_CONNECTION * 1000l; // 5000 reproduceable error
 
-	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 5000;
+	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 6000;
 
 	private ConfigedMain main; // controller
 	private PersistenceController persis;
@@ -111,7 +112,18 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 	private JButton jButtonCommit = new JButton();
 	private JButton jButtonCancel = new JButton();
 
-	private MyKeyListener myKeyListener = new MyKeyListener(this);
+	private KeyListener newKeyListener = new KeyAdapter() {
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				okAction();
+			} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+				endProgram();
+			}
+		}
+
+	};
 
 	public void setHost(String host) {
 		if (host == null)
@@ -155,7 +167,6 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 		jProgressBar.setValue(0);
 
 		waitLabel.setText(active ? "" : configed.getResourceValue("DPassword.WaitInfo.label"));
-		//waitLabel.setVisible(!active);
 		setEnabled(active);
 	}
 
@@ -176,19 +187,19 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
-		fieldHost.addKeyListener(myKeyListener);
+		fieldHost.addKeyListener(newKeyListener);
 
 		jLabelUser.setText(configed.getResourceValue("DPassword.jLabelUser"));
 
 		fieldUser.setText(TESTUSER);
-		fieldUser.addKeyListener(myKeyListener);
+		fieldUser.addKeyListener(newKeyListener);
 
 		fieldUser.setMargin(new Insets(0, 3, 0, 3));
 
 		jLabelPassword.setText(configed.getResourceValue("DPassword.jLabelPassword"));
 
 		passwordField.setText(TESTPASSWORD);
-		passwordField.addKeyListener(myKeyListener);
+		passwordField.addKeyListener(newKeyListener);
 		passwordField.setMargin(new Insets(0, 3, 0, 3));
 
 		JCheckBox checkCompression = new JCheckBox(configed.getResourceValue("DPassword.checkCompression"),
@@ -586,25 +597,6 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 		super.processWindowEvent(e);
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			endProgram();
-		}
-	}
-
-	private class MyKeyListener extends KeyAdapter {
-		DPassword myHome;
-
-		MyKeyListener(DPassword home) {
-			myHome = home;
-		}
-
-		@Override
-		public void keyPressed(KeyEvent e) {
-			if (e.getKeyCode() == 10) // Return
-			{
-				myHome.okAction();
-			} else if (e.getKeyCode() == 27) // Escape
-			{
-				myHome.endProgram();
-			}
 		}
 	}
 
