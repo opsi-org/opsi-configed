@@ -108,6 +108,7 @@ public class FLoadingWaiter extends JFrame implements de.uib.utilities.observer.
 		progressBar = new JProgressBar();
 
 		progressBar.setEnabled(true);
+		progressBar.setValue(0);
 		progressBar.setMaximum(max);
 
 		UIDefaults defaults = new UIDefaults();
