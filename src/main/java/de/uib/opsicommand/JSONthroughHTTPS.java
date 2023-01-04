@@ -1,8 +1,6 @@
 package de.uib.opsicommand;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -12,8 +10,6 @@ import java.net.Socket;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -21,9 +17,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,7 +35,6 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.utilities.logging.logging;
 
 /**
@@ -49,7 +42,7 @@ import de.uib.utilities.logging.logging;
  */
 
 public class JSONthroughHTTPS extends JSONthroughHTTP {
-	private static final boolean DISABLE_CERTIFICATE_VERIFICATION = true;
+	private static final boolean DISABLE_CERTIFICATE_VERIFICATION = false;
 
 	public JSONthroughHTTPS(String host, String username, String password) {
 		super(host, username, password);
@@ -88,6 +81,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		}
 
 		@Override
+		@SuppressWarnings("squid:S1192")
 		public Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException {
 			SSLSocket socket = (SSLSocket) this.delegate.createSocket(s, host, port, autoClose);
 			logging.debug(this, "createSocket host, port: " + host + "," + port + " autoClose " + autoClose
@@ -207,7 +201,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		try {
 			KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
 			ks.load(null, null);
-			loadCertificateToKeyStore(ks);
+			loadCertificatesToKeyStore(ks);
 
 			KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 			kmf.init(ks, new char[0]);
@@ -215,7 +209,10 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			tmf.init(ks);
 
 			SSLContext sslContext = SSLContext.getInstance("TLS");
-			sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), new SecureRandom());
+			X509TrustManager systemTrustManager = getSystemTrustManager(tmf);
+			sslContext.init(kmf.getKeyManagers(),
+					new X509TrustManager[] { new DefaultX509TrustManagerWrapper(systemTrustManager) },
+					new SecureRandom());
 
 			sslFactory = new SecureSSLSocketFactory(sslContext.getSocketFactory(), new MyHandshakeCompletedListener());
 		} catch (CertificateException e) {
@@ -235,86 +232,48 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		return sslFactory;
 	}
 
-	private void loadCertificateToKeyStore(KeyStore ks) {
-		List<File> certificates = getCertificates();
-
-		File certificateFile = null;
-		if (trustAlways) {
-			certificateFile = downloadCertificateFile();
-			saveCertificate(certificateFile);
-		} else if (trustOnlyOnce) {
-			certificateFile = downloadCertificateFile();
+	public static X509TrustManager getSystemTrustManager(TrustManagerFactory tmf) {
+		TrustManager[] trustManagers = tmf.getTrustManagers();
+		if (trustManagers.length != 1) {
+			throw new IllegalStateException("Unexpected default trust managers: " + Arrays.toString(trustManagers));
 		}
-
-		if ((trustAlways || trustOnlyOnce) && certificateFile == null) {
-			return;
+		TrustManager trustManager = trustManagers[0];
+		if (trustManager instanceof X509TrustManager) {
+			return (X509TrustManager) trustManager;
 		}
+		throw new IllegalStateException("'" + trustManager + "' is not a X509TrustManager");
+	}
 
+	private void loadCertificatesToKeyStore(KeyStore ks) {
 		if (trustAlways || trustOnlyOnce) {
-			try {
-				X509Certificate certificate = instantiateCertificate(certificateFile);
-				String alias = host;
-				if (certificateFile.exists()) {
-					alias = certificateFile.getName().substring(0, certificateFile.getName().indexOf("-"));
-				}
-				ks.setCertificateEntry(alias, certificate);
-			} catch (KeyStoreException e) {
-				logging.error(this, "unable to load certificate into a keystore");
+			File certificateFile = downloadCertificateFile();
+
+			if (certificateFile == null) {
+				return;
+			}
+
+			loadCertificateToKeyStore(ks, certificateFile);
+
+			if (trustAlways) {
+				CertificateManager.saveCertificate(certificateFile);
+			}
+		} else {
+			List<File> certificates = CertificateManager.getCertificates();
+
+			if (!certificates.isEmpty()) {
+				certificates.forEach(certificate -> loadCertificateToKeyStore(ks, certificate));
 			}
 		}
-
-		if (!certificates.isEmpty()) {
-			certificates.forEach(certificate -> {
-				try {
-					String alias = host;
-					if (certificate.exists()) {
-						alias = certificate.getName().substring(0, certificate.getName().indexOf("-"));
-					}
-					ks.setCertificateEntry(alias, instantiateCertificate(certificate));
-				} catch (KeyStoreException e) {
-					logging.error(this, "unable to load certificate into a keystore");
-				}
-			});
-		}
 	}
 
-	private List<File> getCertificates() {
-		File certificateDir = new File(configed.savedStatesLocationName);
-		File[] certificateFiles = certificateDir.listFiles((dir, filename) -> filename.endsWith(".pem"));
-
-		if (certificateFiles.length == 0) {
-			certificateExists = false;
-			return new ArrayList<>();
-		}
-
-		return Arrays.asList(certificateFiles);
-	}
-
-	private void saveCertificate(File certificateFile) {
+	private void loadCertificateToKeyStore(KeyStore ks, File certificateFile) {
 		try {
-			Files.copy(certificateFile.toPath(),
-					new File(configed.savedStatesLocationName, host + "-" + Globals.CERTIFICATE_FILE).toPath(),
-					StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException e) {
-			logging.error(this, "unable to save certificate");
+			X509Certificate certificate = CertificateManager.instantiateCertificate(certificateFile);
+			String alias = certificateFile.getParentFile().getName();
+			ks.setCertificateEntry(alias, certificate);
+		} catch (KeyStoreException e) {
+			logging.error(this, "unable to load certificate into a keystore");
 		}
-	}
-
-	private X509Certificate instantiateCertificate(File certificateFile) {
-		X509Certificate cert = null;
-
-		try (FileInputStream is = new FileInputStream(certificateFile)) {
-			CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
-			cert = (X509Certificate) certFactory.generateCertificate(is);
-		} catch (CertificateException e) {
-			logging.error(this, "unable to parse certificate (format is invalid)");
-		} catch (FileNotFoundException e) {
-			logging.error(this, "unable to find certificate");
-		} catch (IOException e) {
-			logging.error(this, "unable to close certificate");
-		}
-
-		return cert;
 	}
 
 	private File downloadCertificateFile() {
@@ -331,6 +290,10 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			logging.error(this, "url is malformed: " + url);
 		} catch (IOException e) {
 			logging.error(this, "unable to create tmp certificate file");
+		}
+
+		if (url == null) {
+			return null;
 		}
 
 		try (ReadableByteChannel rbc = Channels.newChannel(url.openStream());
@@ -376,5 +339,40 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		}
 
 		return sslFactory;
+	}
+
+	// Wrapper of systems X509TrustManager. This does not change how X509Certificates
+	// are validated. It only wraps around the system's X509TrustManager to check if
+	// the certificate is locally available before it verifies the certificate.
+	private class DefaultX509TrustManagerWrapper implements X509TrustManager {
+		X509TrustManager delegate;
+
+		public DefaultX509TrustManagerWrapper(X509TrustManager delegate) {
+			this.delegate = delegate;
+		}
+
+		@Override
+		public void checkClientTrusted(X509Certificate[] certificates, String authType) throws CertificateException {
+			delegate.checkClientTrusted(certificates, authType);
+		}
+
+		@Override
+		public void checkServerTrusted(X509Certificate[] certificates, String authType) throws CertificateException {
+			List<File> certificateFiles = CertificateManager.getCertificates();
+			for (X509Certificate certificate : certificates) {
+				certificateFiles.forEach(certificateFile -> {
+					if (certificate.equals(CertificateManager.instantiateCertificate(certificateFile))) {
+						certificateExists = true;
+						return;
+					}
+				});
+			}
+			delegate.checkServerTrusted(certificates, authType);
+		}
+
+		@Override
+		public X509Certificate[] getAcceptedIssuers() {
+			return delegate.getAcceptedIssuers();
+		}
 	}
 }

@@ -15,6 +15,7 @@ package de.uib.opsidatamodel;
 
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
+import de.uib.opsicommand.CertificateManager;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.utilities.logging.logging;
 
@@ -202,6 +203,10 @@ public class PersistenceControllerFactory {
 		}
 
 		staticPersistControl = persistControl;
+
+		if (persistControl.getConnectionState().getState() == ConnectionState.CONNECTED) {
+			CertificateManager.updateCertificate();
+		}
 
 		return staticPersistControl;
 	}
