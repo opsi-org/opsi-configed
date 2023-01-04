@@ -25,19 +25,19 @@ public class WaitCursor {
 		this(null, new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
-	public WaitCursor(Component c_calling) {
-		this(c_calling, new Cursor(Cursor.DEFAULT_CURSOR));
+	public WaitCursor(Component componentCalling) {
+		this(componentCalling, new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
-	public WaitCursor(Component c_calling, String callLocation) {
-		this(c_calling, new Cursor(Cursor.DEFAULT_CURSOR), callLocation);
+	public WaitCursor(Component componentCalling, String callLocation) {
+		this(componentCalling, new Cursor(Cursor.DEFAULT_CURSOR), callLocation);
 	}
 
-	public WaitCursor(Component c_calling, Cursor saveCursor) {
-		this(c_calling, saveCursor, "(not specified)");
+	public WaitCursor(Component componentCalling, Cursor saveCursor) {
+		this(componentCalling, saveCursor, "(not specified)");
 	}
 
-	public WaitCursor(Component c_calling, Cursor saveCursor, String callLocation) {
+	public WaitCursor(Component componentCalling, Cursor saveCursor, String callLocation) {
 
 		objectNo = objectCounting.addAndGet(1);
 		allStopped = false;
@@ -45,7 +45,7 @@ public class WaitCursor {
 		this.saveCursor = saveCursor;
 		this.callLocation = callLocation;
 
-		if (c_calling == null) {
+		if (componentCalling == null) {
 			try {
 				c = Globals.mainContainer;
 			} catch (Exception ex) {
@@ -53,7 +53,7 @@ public class WaitCursor {
 				c = null;
 			}
 		} else
-			c = c_calling;
+			c = componentCalling;
 
 		logging.debug(this,
 				"adding instance " + objectNo + "-- call location at (" + callLocation + ") on component " + c);

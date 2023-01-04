@@ -22,14 +22,12 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.MessageFormat;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -37,19 +35,16 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JProgressBar;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -82,171 +77,41 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 	private static final int SECS_WAIT_FOR_CONNECTION = 100;
 	private static final long TIMEOUT_MS = SECS_WAIT_FOR_CONNECTION * 1000l; // 5000 reproduceable error
 
-	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
+	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 5000;
 
-	ConfigedMain main; // controller
-	PersistenceController persis;
-	Cursor saveCursor;
-
-	private class WaitInfo extends JFrame implements WaitingSleeper {
-		JLabel waitLabel;
-		JProgressBar waitingProgressBar;
-		long timeOutMillis;
-
-		private WaitInfo(long timeOutMillis) {
-			logging.info(this, "created with timeout " + timeOutMillis);
-			this.timeOutMillis = timeOutMillis;
-
-			setIconImage(Globals.mainIcon);
-
-			addWindowListener(new WindowAdapter() {
-				@Override
-				public void windowClosing(WindowEvent e) {
-					if (persis != null && persis.getConnectionState().getState() == ConnectionState.STARTED_CONNECTING)
-						// we stop the connect thread as well
-						persis.setConnectionState(new ConnectionState(ConnectionState.INTERRUPTED));
-
-					setCursor(saveCursor);
-				}
-			});
-
-			setTitle(Globals.APPNAME + " login");
-			waitLabel = new JLabel();
-
-			waitLabel.setText(configed.getResourceValue("DPassword.WaitInfo.label"));
-
-			waitingProgressBar = new JProgressBar();
-
-			waitingProgressBar.setValue(0);
-			waitingProgressBar.setEnabled(true);
-
-			UIDefaults defaults = new UIDefaults();
-			defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
-			defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.opsiLogoLightBlue));
-			waitingProgressBar.putClientProperty("Nimbus.Overrides", defaults);
-
-			JPanel cPanel = new JPanel();
-			GroupLayout cLayout = new GroupLayout(cPanel);
-			cPanel.setLayout(cLayout);
-			cLayout.setVerticalGroup(cLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE)
-					.addGroup(cLayout.createSequentialGroup()
-							.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
-							.addComponent(waitingProgressBar, Globals.PROGRESS_BAR_HEIGHT, Globals.PROGRESS_BAR_HEIGHT,
-									Globals.PROGRESS_BAR_HEIGHT)
-							.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
-							.addComponent(waitLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-									GroupLayout.PREFERRED_SIZE)
-							.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE, Globals.VGAP_SIZE))
-					.addGap(Globals.VGAP_SIZE / 2));
-			cLayout.setHorizontalGroup(cLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE / 2)
-					.addGroup(cLayout.createParallelGroup()
-							.addGroup(cLayout.createSequentialGroup()
-									.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE)
-									.addComponent(waitingProgressBar, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE))
-							.addGroup(cLayout.createSequentialGroup()
-									.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE)
-									.addComponent(waitLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-											GroupLayout.PREFERRED_SIZE)
-									.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE)))
-					.addGap(Globals.HGAP_SIZE / 2));
-
-			getContentPane().add(cPanel);
-
-			pack();
-
-			setLocationRelativeTo(DPassword.this);
-		}
-
-		// interface WaitingSleeper
-
-		@Override
-		public void actAfterWaiting() {
-
-			// Empty, will be removed
-		}
-
-		@Override
-		public JProgressBar getProgressBar() {
-			return waitingProgressBar;
-		}
-
-		@Override
-		public JLabel getLabel() {
-			return waitLabel;
-		}
-
-		@Override
-		public long getStartActionMillis() {
-			return new GregorianCalendar().getTimeInMillis();
-		}
-
-		@Override
-		public long getWaitingMillis() {
-			return timeOutMillis;
-		}
-
-		@Override
-		public long getOneProgressBarLengthWaitingMillis() {
-			return ESTIMATED_TOTAL_WAIT_MILLIS;
-		}
-
-		@Override
-		public String setLabellingStrategy(long millisLevel) {
-			return waitLabel.getText();
-		}
-	}
+	private ConfigedMain main; // controller
+	private PersistenceController persis;
 
 	private WaitCursor waitCursor;
-	boolean connected = false;
 
-	//WaitingWorker waitingTask;
-	WaitingWorker waitingTask2;
+	private WaitingWorker waitingWorker;
 
-	JPanel panel;
+	private Containership containership;
 
-	Containership containership;
-
-	int defaultBlinkRate;
-
-	JLabel jLabelVersion = new JLabel();
-	JLabel jLabelJavaVersion = new JLabel();
-	JLabel jLabelLabelJavaVersion = new JLabel(configed.getResourceValue("DPassword.jdkVersionBased"));
+	private JLabel jLabelVersion = new JLabel();
+	private JLabel jLabelJavaVersion = new JLabel();
+	private JLabel jLabelLabelJavaVersion = new JLabel(configed.getResourceValue("DPassword.jdkVersionBased"));
 
 	private JLabel jLabelUser = new JLabel();
 	private JTextField fieldUser = new JTextField();
 
-	JPasswordField passwordField = new JPasswordField();
-	JLabel jLabelPassword = new JLabel();
+	private JPasswordField passwordField = new JPasswordField();
+	private JLabel jLabelPassword = new JLabel();
 
-	JLabel jLabelHost = new JLabel();
-	JComboBox<String> fieldHost = new JComboBox<>();
+	private JLabel jLabelHost = new JLabel();
+	private JComboBox<String> fieldHost = new JComboBox<>();
 
-	JPanel jPanelParameters1;
-	JPanel jPanelParameters2;
+	private JPanel jPanelButtons = new JPanel();
+	private FlowLayout flowLayoutButtons = new FlowLayout();
 
-	JPanel jPanelButtons = new JPanel();
-	FlowLayout flowLayoutButtons = new FlowLayout();
+	private JProgressBar jProgressBar = new JProgressBar();
+	private JLabel waitLabel = new JLabel();
+	private long timeOutMillis = TIMEOUT_MS;
 
-	JProgressBar jProgressBar = new JProgressBar();
-	JLabel waitLabel = new JLabel(configed.getResourceValue("DPassword.WaitInfo.label"));
-	long timeOutMillis = TIMEOUT_MS;
+	private JButton jButtonCommit = new JButton();
+	private JButton jButtonCancel = new JButton();
 
-	JButton jButtonCommit = new JButton();
-	JButton jButtonCancel = new JButton();
-
-	TitledBorder titledBorder1;
-
-	JPanel jPanelRadioButtons = new JPanel();
-	FlowLayout flowLayoutRadioButtons = new FlowLayout();
-
-	JRadioButton jRadioButtonSSH2 = new JRadioButton();
-
-	JRadioButton jRadioButtonLocalFS = new JRadioButton();
-
-	MyKeyListener myKeyListener = new MyKeyListener(this);
-	ButtonGroup buttonGroup1 = new ButtonGroup();
+	private MyKeyListener myKeyListener = new MyKeyListener(this);
 
 	public void setHost(String host) {
 		if (host == null)
@@ -284,21 +149,23 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 		setVisible(true);
 	}
 
-	public void setActivated(boolean active) {
+	private void setActivated(boolean active) {
 		logging.info(this, "------------ activate");
 
+		jProgressBar.setValue(0);
+
+		waitLabel.setText(active ? "" : configed.getResourceValue("DPassword.WaitInfo.label"));
+		//waitLabel.setVisible(!active);
 		setEnabled(active);
 	}
 
-	void guiInit() {
+	private void guiInit() {
 		MessageFormat messageFormatTitle = new MessageFormat(configed.getResourceValue("DPassword.title"));
 		setTitle(messageFormatTitle.format(new Object[] { Globals.APPNAME }));
 
 		setIconImage(Globals.mainIcon);
 
-		titledBorder1 = new TitledBorder("");
-
-		panel = new JPanel();
+		JPanel panel = new JPanel();
 
 		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 		panel.setBorder(padding);
@@ -306,8 +173,6 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 		jLabelHost.setText(configed.getResourceValue("DPassword.jLabelHost"));
 
 		containership = new Containership(panel);
-
-		defaultBlinkRate = fieldUser.getCaret().getBlinkRate();
 
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
@@ -387,12 +252,14 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 			}
 		});
 
-		jPanelParameters1 = new PanelLinedComponents(new JComponent[] {
+		JPanel jPanelParameters = new PanelLinedComponents(new JComponent[] {
 				// checkTrySSH, checkGzip
 				checkTrySSH, checkCompression });
-		jPanelParameters2 = new PanelLinedComponents(new JComponent[] {
-				new JLabel(configed.getResourceValue("DPassword.pullReachableInfo")), fieldRefreshMinutes,
-				new JLabel(configed.getResourceValue("DPassword.pullReachableInfoMinutes")) });
+
+		UIDefaults defaults = new UIDefaults();
+		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
+		defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.opsiLogoLightBlue));
+		jProgressBar.putClientProperty("Nimbus.Overrides", defaults);
 
 		jPanelButtons.setLayout(flowLayoutButtons);
 
@@ -435,12 +302,18 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(2).addComponent(passwordField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 
-				.addComponent(jPanelParameters1, (int) (1.2 * Globals.LINE_HEIGHT), (int) (1.2 * Globals.LINE_HEIGHT),
+				.addComponent(jPanelParameters, (int) (1.2 * Globals.LINE_HEIGHT), (int) (1.2 * Globals.LINE_HEIGHT),
 						(int) (1.2 * Globals.LINE_HEIGHT))
-				.addGap(Globals.LINE_HEIGHT).addComponent(waitLabel).addComponent(jProgressBar)
 
-				.addGap(Globals.LINE_HEIGHT).addComponent(jPanelButtons, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+				.addComponent(waitLabel, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+
+				.addComponent(jProgressBar, Globals.PROGRESS_BAR_HEIGHT, Globals.PROGRESS_BAR_HEIGHT,
+						Globals.PROGRESS_BAR_HEIGHT)
+
+				.addGap(Globals.LINE_HEIGHT / 2)
+
+				.addComponent(jPanelButtons, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 
 		groupLayout
 				.setHorizontalGroup(groupLayout.createParallelGroup()
@@ -470,14 +343,14 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 						.addGroup(groupLayout.createSequentialGroup().addComponent(passwordField,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 						.addGroup(groupLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE)
-								.addComponent(jPanelParameters1, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								.addComponent(jPanelParameters, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										Short.MAX_VALUE)
 								.addGap(Globals.VGAP_SIZE))
 
+						.addComponent(jProgressBar)
+
 						.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE)
 								.addComponent(waitLabel).addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE))
-
-						.addComponent(waitLabel).addComponent(jProgressBar)
 
 						.addGroup(groupLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE).addComponent(
 								jPanelButtons, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -510,8 +383,6 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 					.setCaretPosition(((String) (fieldHost.getSelectedItem())).length());
 		}
 
-		saveCursor = getCursor();
-
 		// Sets the window on the main screen
 		setLocationRelativeTo(null);
 	}
@@ -542,7 +413,7 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 				MessageFormat messageFormatDialogContent = new MessageFormat(
 						configed.getResourceValue("DPassword.noConnectionMessageDialog.content"));
 
-				if (waitingTask2 != null && waitingTask2.isTimeoutReached())
+				if (waitingWorker != null && waitingWorker.isTimeoutReached())
 					messageFormatDialogContent = new MessageFormat("Timeout in connecting");
 
 				JOptionPane.showMessageDialog(this,
@@ -563,6 +434,7 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 			}
 
 			setActivated(true);
+
 		}
 	}
 
@@ -607,7 +479,7 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 
 	}
 
-	public void okAction() {
+	private void okAction() {
 		logging.info(this, "ok_action");
 
 		// we make first a waitCursor and a waitInfo window
@@ -635,16 +507,11 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 
 		);
 
-		if (waitingTask2 != null && !waitingTask2.isReady()) {
+		if (waitingWorker != null && !waitingWorker.isReady()) {
 
 			logging.info(this, "old waiting task not ready");
 			return;
 		}
-
-		//WaitInfo waitInfo = new WaitInfo(TIMEOUT_MS);
-		setActivated(false);
-		//waitInfo.setAlwaysOnTop(true);
-		//waitInfo.setVisible(true);
 
 		logging.info(this, "we are in EventDispatchThread " + SwingUtilities.isEventDispatchThread());
 		logging.info(this, "  Thread.currentThread() " + Thread.currentThread());
@@ -653,10 +520,8 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 		if (localApp) {
 
 			logging.info(this, "start WaitingWorker");
-			//waitingTask = new de.uib.utilities.thread.WaitingWorker(waitInfo);
-			waitingTask2 = new WaitingWorker(this);
-			//waitingTask.execute();
-			waitingTask2.execute();
+			waitingWorker = new WaitingWorker(this);
+			waitingWorker.execute();
 
 			new Thread() {
 				@Override
@@ -669,8 +534,7 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 					logging.info(this, "got persis, == null " + (persis == null));
 
 					logging.info(this, "waitingTask can be set to ready");
-					//waitingTask.setReady();
-					waitingTask2.setReady();
+					waitingWorker.setReady();
 
 				}
 			}.start();
@@ -694,8 +558,6 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 
 			if (waited >= TIMEOUT_MS)
 				logging.error(" no connection");
-
-			//waitInfo.actAfterWaiting();
 		}
 
 		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setUser(fieldUser.getText());
@@ -705,15 +567,15 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setHost((String) fieldHost.getSelectedItem());
 	}
 
-	void jButtonCommitActionPerformed(ActionEvent e) {
+	private void jButtonCommitActionPerformed(ActionEvent e) {
 		okAction();
 	}
 
-	void endProgram() {
+	private void endProgram() {
 		main.finishApp(false, 0);
 	}
 
-	void jButtonCancelActionPerformed(ActionEvent e) {
+	private void jButtonCancelActionPerformed(ActionEvent e) {
 		if (waitCursor != null)
 			waitCursor.stop();
 		endProgram();
@@ -727,7 +589,7 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 		}
 	}
 
-	class MyKeyListener extends KeyAdapter {
+	private class MyKeyListener extends KeyAdapter {
 		DPassword myHome;
 
 		MyKeyListener(DPassword home) {
