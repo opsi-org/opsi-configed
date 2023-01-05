@@ -149,7 +149,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	}
 
 	private void setComponentsEnabledRO(boolean value) {
-		logging.info(this, "setComponentsEnabled_RO value " + value);
+		logging.info(this, "setComponentsEnabledRO value " + value);
 		tf_command.setEnabled(value);
 		btn_executeCommand.setEnabled(value);
 		btn_killProcess.setEnabled(value);

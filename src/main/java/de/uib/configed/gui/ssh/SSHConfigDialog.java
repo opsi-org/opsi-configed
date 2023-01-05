@@ -82,7 +82,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		this.setVisible(true);
 		cb_useDefault_state = cb_useDefault.isSelected();
 		if (Globals.isGlobalReadOnly()) {
-			setComponentsEnabled_RO(false);
+			setComponentsEnabledRO(false);
 		}
 	}
 
@@ -588,7 +588,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 						GroupLayout.PREFERRED_SIZE));
 	}
 
-	private void setComponentsEnabled_RO(boolean value) {
+	private void setComponentsEnabledRO(boolean value) {
 		cb_useDefault.setEnabled(value);
 		cb_useOutputColor.setEnabled(value);
 		cb_execInBackground.setEnabled(value);

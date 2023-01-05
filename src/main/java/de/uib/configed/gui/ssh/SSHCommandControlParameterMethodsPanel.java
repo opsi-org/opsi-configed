@@ -37,13 +37,13 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	private JDialog main;
 	private final SSHCommandFactory factory = SSHCommandFactory.getInstance();
 
-	private JLabel lbl_paramMethods = new JLabel();
-	private JLabel lbl_paramFormats = new JLabel();
-	private JLabel lbl_empty = new JLabel();
-	private JComboBox cb_parameter_methods;
-	private JComboBox cb_parameter_formats;
-	private JButton btn_add_param;
-	private JButton btn_test_param;
+	private JLabel jLabelParamMethods = new JLabel();
+	private JLabel jLabelParamFormats = new JLabel();
+	private JLabel jLabelEmpty = new JLabel();
+	private JComboBox<String> jComboBoxParameterMethods;
+	private JComboBox<String> jComboBoxParameterFormats;
+	private JButton jButtonAddParam;
+	private JButton jButtonTestParam;
 
 	public SSHCommandControlParameterMethodsPanel(JDialog owner, int lg, int rg, int ug, int og) {
 		super();
@@ -74,62 +74,62 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	/** Init components **/
 	private void init() {
 		logging.debug(this, "init setting up components ");
-		Dimension tf_dim_long = new Dimension(Globals.FIRST_LABEL_WIDTH + Globals.GAP_SIZE, Globals.BUTTON_HEIGHT);
-		Dimension btn_dim = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT);
+		Dimension jComboBoxDim = new Dimension(Globals.FIRST_LABEL_WIDTH + Globals.GAP_SIZE, Globals.BUTTON_HEIGHT);
+		Dimension jButtonDim = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT);
 
-		lbl_empty.setPreferredSize(tf_dim_long);
-		lbl_paramMethods.setText(configed.getResourceValue("SSHConnection.CommandControl.parameterMethods"));
+		jLabelEmpty.setPreferredSize(jComboBoxDim);
+		jLabelParamMethods.setText(configed.getResourceValue("SSHConnection.CommandControl.parameterMethods"));
 
-		lbl_paramFormats.setText(configed.getResourceValue("SSHConnection.CommandControl.parameterFormats"));
+		jLabelParamFormats.setText(configed.getResourceValue("SSHConnection.CommandControl.parameterFormats"));
 
-		cb_parameter_formats = new JComboBox<>(factory.getParameterHandler().getParameterFormats());
-		logging.info(this, "cb_parameter_formats lightweight " + cb_parameter_formats.isLightWeightPopupEnabled());
+		jComboBoxParameterFormats = new JComboBox<>(factory.getParameterHandler().getParameterFormats());
+		logging.info(this, "cb_parameter_formats lightweight " + jComboBoxParameterFormats.isLightWeightPopupEnabled());
 
-		cb_parameter_formats.setPreferredSize(tf_dim_long);
-		cb_parameter_formats.setMaximumRowCount(5); // we have to delimit it so that is constrained to the component (in
-													// Windows) 
-		cb_parameter_methods = new JComboBox<>(factory.getParameterHandler().getParameterMethodLocalNames());
-		cb_parameter_methods
+		jComboBoxParameterFormats.setPreferredSize(jComboBoxDim);
+		jComboBoxParameterFormats.setMaximumRowCount(5); // we have to delimit it so that is constrained to the component (in
+		// Windows) 
+		jComboBoxParameterMethods = new JComboBox<>(factory.getParameterHandler().getParameterMethodLocalNames());
+		jComboBoxParameterMethods
 				.setSelectedItem(configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"));
-		cb_parameter_methods.setPreferredSize(tf_dim_long);
-		cb_parameter_methods.setMaximumRowCount(5);
+		jComboBoxParameterMethods.setPreferredSize(jComboBoxDim);
+		jComboBoxParameterMethods.setMaximumRowCount(5);
 
-		cb_parameter_formats.setEnabled(false);
+		jComboBoxParameterFormats.setEnabled(false);
 
-		cb_parameter_methods.addItemListener(itemEvent -> {
-			boolean enabled = ((String) cb_parameter_methods.getSelectedItem())
+		jComboBoxParameterMethods.addItemListener(itemEvent -> {
+			boolean enabled = ((String) jComboBoxParameterMethods.getSelectedItem())
 					.equals(configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"))
-					|| ((String) cb_parameter_methods.getSelectedItem())
+					|| ((String) jComboBoxParameterMethods.getSelectedItem())
 							.equals(configed.getResourceValue("SSHConnection.CommandControl.method.optionSelection"));
 
-			cb_parameter_formats.setEnabled(enabled);
+			jComboBoxParameterFormats.setEnabled(enabled);
 
 		});
 
-		btn_test_param = new de.uib.configed.gui.IconButton(
+		jButtonTestParam = new de.uib.configed.gui.IconButton(
 				configed.getResourceValue("SSHConnection.CommandControl.btnTestParamMethod"),
 				"images/executing_command.png", "images/executing_command.png", "images/executing_command.png", true);
-		btn_test_param.setPreferredSize(btn_dim);
+		jButtonTestParam.setPreferredSize(jButtonDim);
 
-		btn_add_param = new de.uib.configed.gui.IconButton(
+		jButtonAddParam = new de.uib.configed.gui.IconButton(
 				configed.getResourceValue("SSHConnection.CommandControl.btnAddParamMethod"), "images/list-add.png",
 				"images/list-add.png", "images/list-add_disabled.png", true);
-		btn_add_param.setSize(btn_dim);
-		btn_add_param.setPreferredSize(btn_dim);
-		setComponentsEnabled_RO();
+		jButtonAddParam.setSize(jButtonDim);
+		jButtonAddParam.setPreferredSize(jButtonDim);
+		setComponentsEnabledRO();
 	}
 
-	public void setComponentsEnabled_RO() {
-		btn_test_param.setEnabled(!Globals.isGlobalReadOnly());
-		btn_add_param.setEnabled(!Globals.isGlobalReadOnly());
+	public void setComponentsEnabledRO() {
+		jButtonTestParam.setEnabled(!Globals.isGlobalReadOnly());
+		jButtonAddParam.setEnabled(!Globals.isGlobalReadOnly());
 	}
 
 	public JButton getButtonAdd() {
-		return btn_add_param;
+		return jButtonAddParam;
 	}
 
 	public JButton getButtonTest() {
-		return btn_test_param;
+		return jButtonTestParam;
 	}
 
 	int lGap = Globals.GAP_SIZE;
@@ -153,42 +153,42 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		thisLayout.setHorizontalGroup(thisLayout.createSequentialGroup().addGap(lGap).addGroup(thisLayout
 				.createParallelGroup()
 				.addGroup(thisLayout.createSequentialGroup().addGroup(thisLayout.createParallelGroup()
-						.addComponent(lbl_paramMethods, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jLabelParamMethods, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(lbl_paramFormats, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jLabelParamFormats, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.MIN_GAP_SIZE * 2)
 						.addGroup(thisLayout.createParallelGroup()
-								.addComponent(cb_parameter_methods, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+								.addComponent(jComboBoxParameterMethods, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 										3 * Globals.BUTTON_WIDTH)
-								.addComponent(cb_parameter_formats, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+								.addComponent(jComboBoxParameterFormats, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 										3 * Globals.BUTTON_WIDTH))
 						.addGap(Globals.MIN_GAP_SIZE * 3, Globals.MIN_GAP_SIZE * 3, Short.MAX_VALUE))
 
-				.addGroup(thisLayout.createSequentialGroup().addComponent(lbl_empty, 10, 10, Short.MAX_VALUE)
-						.addComponent(btn_test_param, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-						.addComponent(btn_add_param, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH))
+				.addGroup(thisLayout.createSequentialGroup().addComponent(jLabelEmpty, 10, 10, Short.MAX_VALUE)
+						.addComponent(jButtonTestParam, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+						.addComponent(jButtonAddParam, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH))
 
 		).addGap(rGap));
 		thisLayout.setVerticalGroup(thisLayout.createSequentialGroup().addGap(oGap * 2)
 				.addGroup(thisLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(cb_parameter_methods, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jComboBoxParameterMethods, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGroup(thisLayout.createSequentialGroup().addComponent(lbl_paramMethods,
+						.addGroup(thisLayout.createSequentialGroup().addComponent(jLabelParamMethods,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(thisLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(cb_parameter_formats, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jComboBoxParameterFormats, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGroup(thisLayout.createSequentialGroup().addComponent(lbl_paramFormats,
+						.addGroup(thisLayout.createSequentialGroup().addComponent(jLabelParamFormats,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(thisLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(btn_add_param, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jButtonAddParam, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(btn_test_param, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jButtonTestParam, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(lbl_empty, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+						.addComponent(jLabelEmpty, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
 				.addGap(uGap * 2)
 
 		// correctly appear if not placed inside the frame
@@ -199,19 +199,21 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 	public void doActionTestParam(JDialog caller) {
 		String paramText = "";
-		if (((String) cb_parameter_methods.getSelectedItem())
+		if (((String) jComboBoxParameterMethods.getSelectedItem())
 				.equals(SSHCommandParameterMethods.method_interactiveElement)
-				|| ((String) cb_parameter_methods.getSelectedItem())
+				|| ((String) jComboBoxParameterMethods.getSelectedItem())
 						.equals(SSHCommandParameterMethods.method_optionSelection)) {
 			logging.debug("CREATING PARAM TEXT... ");
 			paramText = SSHCommandParameterMethods.replacement_default_1
-					+ factory.getParameterHandler().getMethodFromName((String) cb_parameter_methods.getSelectedItem())
+					+ factory.getParameterHandler()
+							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
 					+ SSHCommandParameterMethods.replacement_default_2;
 			logging.debug("CREATED PARAM TEXT: " + paramText);
 		} else
 			paramText = SSHCommandParameterMethods.replacement_default_1
-					+ factory.getParameterHandler().getMethodFromName((String) cb_parameter_methods.getSelectedItem())
-					+ SSHCommandParameterMethods.param_splitter_default + cb_parameter_formats.getSelectedItem()
+					+ factory.getParameterHandler()
+							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
+					+ SSHCommandParameterMethods.param_splitter_default + jComboBoxParameterFormats.getSelectedItem()
 					+ SSHCommandParameterMethods.replacement_default_2;
 		logging.debug("PARAM TEXT: " + paramText);
 		try {
@@ -233,17 +235,19 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 	public void doActionParamAdd(JTextComponent component) {
 		String paramText = "";
-		if (((String) cb_parameter_methods.getSelectedItem())
+		if (((String) jComboBoxParameterMethods.getSelectedItem())
 				.equals(SSHCommandParameterMethods.method_interactiveElement)
-				|| ((String) cb_parameter_methods.getSelectedItem())
+				|| ((String) jComboBoxParameterMethods.getSelectedItem())
 						.equals(SSHCommandParameterMethods.method_optionSelection)) {
 			paramText = SSHCommandParameterMethods.replacement_default_1
-					+ factory.getParameterHandler().getMethodFromName((String) cb_parameter_methods.getSelectedItem())
+					+ factory.getParameterHandler()
+							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
 					+ SSHCommandParameterMethods.replacement_default_2;
 		} else
 			paramText = SSHCommandParameterMethods.replacement_default_1
-					+ factory.getParameterHandler().getMethodFromName((String) cb_parameter_methods.getSelectedItem())
-					+ SSHCommandParameterMethods.param_splitter_default + cb_parameter_formats.getSelectedItem()
+					+ factory.getParameterHandler()
+							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
+					+ SSHCommandParameterMethods.param_splitter_default + jComboBoxParameterFormats.getSelectedItem()
 					+ SSHCommandParameterMethods.replacement_default_2;
 		try {
 			component.getDocument().insertString(component.getCaretPosition(), paramText, null);

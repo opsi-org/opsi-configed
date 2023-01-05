@@ -67,11 +67,11 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 		if (Globals.isGlobalReadOnly())
-			setComponentsEnabled_RO(false);
+			setComponentsEnabledRO(false);
 		cb_dir.setEnabled(true);
 	}
 
-	private void setComponentsEnabled_RO(boolean value) {
+	private void setComponentsEnabledRO(boolean value) {
 		tf_url.setEnabled(value);
 		tf_url.setEditable(value);
 		tf_dir.setEnabled(value);

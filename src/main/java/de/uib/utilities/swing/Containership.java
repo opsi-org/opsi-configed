@@ -61,17 +61,12 @@ public class Containership {
 
 			logging.debug("  " + i + " " + theComp.getClass().getName() + "\n" + theComp.toString() + "\n");
 
-			if (selClass.isInstance(theComp)) // (selClass == theComp.getClass())
-			// theComp is an instance of selClass
-			{
-
-				if (!methodName.equals("")) {
-					try {
-						theMethod = theCompClass.getMethod(methodName, theArgsTypes);
-						theMethod.invoke(theComp, args);
-					} catch (Exception ex) {
-						logging.debug(methodName + ": not found >>>>> " + ex.toString() + "\n");
-					}
+			if (selClass.isInstance(theComp) && !methodName.equals("")) {
+				try {
+					theMethod = theCompClass.getMethod(methodName, theArgsTypes);
+					theMethod.invoke(theComp, args);
+				} catch (Exception ex) {
+					logging.debug(methodName + ": not found >>>>> " + ex.toString() + "\n");
 
 				}
 
