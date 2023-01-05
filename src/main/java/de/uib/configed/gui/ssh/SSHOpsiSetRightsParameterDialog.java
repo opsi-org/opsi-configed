@@ -24,14 +24,14 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	private JPanel inputPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
 
-	private JLabel lbl_info;
-	private JComboBox cb_autocompletion;
-	private JButton btn_searchDir;
+	private JLabel jLabelInfo;
+	private JComboBox<String> jComboBoxAutoCompletion;
+	private JButton jButtonSearchDir;
 
-	private JButton btn_doAction;
-	private JButton btn_close;
+	private JButton jButtonDoAction;
+	private JButton jButtonClose;
 	private CommandOpsiSetRights commandopsisetrights;
-	private List<String> additional_default_paths = new ArrayList<>();
+	private List<String> additionalDefaultPaths = new ArrayList<>();
 	private SSHCompletionComboButton completion;
 
 	public SSHOpsiSetRightsParameterDialog() {
@@ -49,8 +49,8 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		additional_default_paths.add(SSHCommandFactory.getInstance().opsipathVarDepot);
-		completion = new SSHCompletionComboButton(additional_default_paths);
+		additionalDefaultPaths.add(SSHCommandFactory.getInstance().opsipathVarDepot);
+		completion = new SSHCompletionComboButton(additionalDefaultPaths);
 
 		inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
@@ -59,37 +59,37 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
-		lbl_info = new JLabel(configed.getResourceValue("SSHConnection.command.opsisetrights.additionalPath"));
-		inputPanel.add(lbl_info);
-		btn_doAction = new JButton();
-		buttonPanel.add(btn_doAction);
-		btn_doAction.setText(configed.getResourceValue("SSHConnection.buttonExec"));
-		btn_doAction.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
+		jLabelInfo = new JLabel(configed.getResourceValue("SSHConnection.command.opsisetrights.additionalPath"));
+		inputPanel.add(jLabelInfo);
+		jButtonDoAction = new JButton();
+		buttonPanel.add(jButtonDoAction);
+		jButtonDoAction.setText(configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonDoAction.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly()))
-			btn_doAction.addActionListener(actionEvent -> {
+			jButtonDoAction.addActionListener(actionEvent -> {
 				logging.info(this, "btn_doAction pressed");
 				doAction1();
 			});
 
-		btn_close = new JButton();
-		buttonPanel.add(btn_close);
-		btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
-		btn_close.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
-		btn_close.addActionListener(actionEvent -> cancel());
+		jButtonClose = new JButton();
+		buttonPanel.add(jButtonClose);
+		jButtonClose.setText(configed.getResourceValue("SSHConnection.buttonClose"));
+		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
+		jButtonClose.addActionListener(actionEvent -> cancel());
 		setComponentsEnabled(!Globals.isGlobalReadOnly());
 
-		btn_searchDir = completion.getButton();
-		cb_autocompletion = completion.getCombobox();
+		jButtonSearchDir = completion.getButton();
+		jComboBoxAutoCompletion = completion.getCombobox();
 
-		cb_autocompletion.setEnabled(true);
-		cb_autocompletion.addItem("");
-		cb_autocompletion.setSelectedItem("");
-		inputPanel.add(cb_autocompletion);
-		inputPanel.add(btn_searchDir);
+		jComboBoxAutoCompletion.setEnabled(true);
+		jComboBoxAutoCompletion.addItem("");
+		jComboBoxAutoCompletion.setSelectedItem("");
+		inputPanel.add(jComboBoxAutoCompletion);
+		inputPanel.add(jButtonSearchDir);
 	}
 
 	private void setComponentsEnabled(boolean value) {
-		btn_doAction.setEnabled(value);
+		jButtonDoAction.setEnabled(value);
 	}
 
 	/* This method is called when button 1 is pressed */
@@ -102,7 +102,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 			new Thread() {
 				@Override
 				public void run() {
-					new SSHConnectExec(commandopsisetrights, btn_doAction);
+					new SSHConnectExec(commandopsisetrights, jButtonDoAction);
 				}
 			}.start();
 
@@ -122,25 +122,25 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 		inputPanel.setLayout(inputPanelLayout);
 		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup()
-						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(lbl_info,
+						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jLabelInfo,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.GAP_SIZE)
 						.addGroup(inputPanelLayout.createSequentialGroup()
-								.addComponent(cb_autocompletion, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+								.addComponent(jComboBoxAutoCompletion, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 										Short.MAX_VALUE)
-								.addComponent(btn_searchDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.GAP_SIZE))
 				.addGap(Globals.GAP_SIZE));
 
 		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_info, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+						.addComponent(jLabelInfo, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(cb_autocompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jComboBoxAutoCompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(btn_searchDir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jButtonSearchDir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGap(Globals.GAP_SIZE));
 

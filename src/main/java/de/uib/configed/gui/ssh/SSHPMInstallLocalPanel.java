@@ -15,14 +15,13 @@ import de.uib.configed.configed;
 import de.uib.opsicommand.sshcommand.CommandSFTPUpload;
 
 public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
-	private JLabel lbl_uploadFrom;
-	private JLabel lbl_uploadTo;
-	private JTextField tf_path;
-	private JFileChooser filechooser;
-	private JButton btn_filechooser;
+	private JLabel jLabelUploadFrom;
+	private JLabel jLabelUploadTo;
+	private JTextField jTextFieldPath;
+	private JButton jButtonFileChooser;
 	private static SSHPMInstallLocalPanel instance;
-	private JComboBox cb_autocompletion;
-	private JButton btn_autocompletion;
+	private JComboBox<String> jComboBoxAutoCompletion;
+	private JButton jButtonAutoCompletion;
 	SSHCompletionComboButton autocompletion;
 
 	public SSHPMInstallLocalPanel() {
@@ -34,39 +33,39 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 	}
 
 	private void initComponents() {
-		lbl_uploadFrom = new JLabel(
+		jLabelUploadFrom = new JLabel(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelLocalFrom"));
-		lbl_uploadTo = new JLabel(
+		jLabelUploadTo = new JLabel(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelLocalTo"));
-		tf_path = new JTextField();
-		tf_path.setPreferredSize(Globals.textfieldDimension);
+		jTextFieldPath = new JTextField();
+		jTextFieldPath.setPreferredSize(Globals.textfieldDimension);
 
-		cb_autocompletion = autocompletion.getCombobox();
-		cb_autocompletion.setSelectedItem(workbench);
-		cb_autocompletion.setEnabled(true);
-		btn_autocompletion = autocompletion.getButton();
+		jComboBoxAutoCompletion = autocompletion.getCombobox();
+		jComboBoxAutoCompletion.setSelectedItem(workbench);
+		jComboBoxAutoCompletion.setEnabled(true);
+		jButtonAutoCompletion = autocompletion.getButton();
 
-		filechooser = new JFileChooser();
-		filechooser.setPreferredSize(Globals.filechooserSize);
-		filechooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		filechooser.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
-		filechooser.setDialogType(JFileChooser.OPEN_DIALOG);
-		filechooser.setDialogTitle(Globals.APPNAME);
+		JFileChooser jFileChooser = new JFileChooser();
+		jFileChooser.setPreferredSize(Globals.filechooserSize);
+		jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		jFileChooser.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
+		jFileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+		jFileChooser.setDialogTitle(Globals.APPNAME);
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("opsi-paket (*.opsi) ", "opsi");
-		filechooser.setFileFilter(filter);
+		jFileChooser.setFileFilter(filter);
 
-		btn_filechooser = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
-		btn_filechooser.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
-		btn_filechooser.setPreferredSize(Globals.smallButtonDimension);
-		btn_filechooser.setToolTipText(
+		jButtonFileChooser = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
+		jButtonFileChooser.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
+		jButtonFileChooser.setPreferredSize(Globals.smallButtonDimension);
+		jButtonFileChooser.setToolTipText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.filechooser.tooltip"));
-		btn_filechooser.addActionListener(actionEvent -> {
-			int returnVal = filechooser.showOpenDialog(instance);
+		jButtonFileChooser.addActionListener(actionEvent -> {
+			int returnVal = jFileChooser.showOpenDialog(instance);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				String path_modules = filechooser.getSelectedFile().getPath();
-				tf_path.setText(path_modules);
+				String path_modules = jFileChooser.getSelectedFile().getPath();
+				jTextFieldPath.setText(path_modules);
 			} else {
-				tf_path.setText("");
+				jTextFieldPath.setText("");
 			}
 		});
 	}
@@ -79,38 +78,40 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 		this.setLayout(layout);
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE).addGroup(layout
 				.createParallelGroup(center)
-				.addComponent(lbl_uploadFrom, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-				.addComponent(tf_path, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-				.addComponent(btn_filechooser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addComponent(jLabelUploadFrom, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(jTextFieldPath, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(jButtonFileChooser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
 				.addGroup(layout.createParallelGroup(center)
-						.addComponent(lbl_uploadTo, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(cb_autocompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jLabelUploadTo, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(btn_autocompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jComboBoxAutoCompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(jButtonAutoCompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGap(2 * Globals.GAP_SIZE));
 
 		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
 
-				.addGroup(layout.createParallelGroup().addComponent(lbl_uploadFrom, PREF, PREF, PREF)
-						.addComponent(lbl_uploadTo, PREF, PREF, PREF))
+				.addGroup(layout.createParallelGroup().addComponent(jLabelUploadFrom, PREF, PREF, PREF)
+						.addComponent(jLabelUploadTo, PREF, PREF, PREF))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(layout.createParallelGroup()
-						.addGroup(layout.createSequentialGroup().addComponent(tf_path, PREF, PREF, MAX).addComponent(
-								btn_filechooser, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH))
-						.addGroup(layout.createSequentialGroup().addComponent(cb_autocompletion, PREF, PREF, MAX)
-								.addComponent(btn_autocompletion, PREF, PREF, PREF)))
+						.addGroup(layout.createSequentialGroup().addComponent(jTextFieldPath, PREF, PREF, MAX)
+								.addComponent(jButtonFileChooser, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+										Globals.BUTTON_WIDTH))
+						.addGroup(layout.createSequentialGroup().addComponent(jComboBoxAutoCompletion, PREF, PREF, MAX)
+								.addComponent(jButtonAutoCompletion, PREF, PREF, PREF)))
 				.addGap(2 * Globals.GAP_SIZE));
 
 	}
 
 	public CommandSFTPUpload getCommand() {
-		if ((tf_path.getText() == null) || (tf_path.getText().equals("")))
+		if ((jTextFieldPath.getText() == null) || (jTextFieldPath.getText().equals("")))
 			return null;
 		CommandSFTPUpload com1 = new CommandSFTPUpload("PackegeUpload");
 		com1.setCommand("SFTP local file to server");
-		com1.setFullSourcePath(tf_path.getText());
-		com1.setTargetPath((String) cb_autocompletion.getSelectedItem());
+		com1.setFullSourcePath(jTextFieldPath.getText());
+		com1.setTargetPath((String) jComboBoxAutoCompletion.getSelectedItem());
 		com1.setTargetFilename(getFilename(com1.getFullSourcePath()));
 		return com1;
 	}

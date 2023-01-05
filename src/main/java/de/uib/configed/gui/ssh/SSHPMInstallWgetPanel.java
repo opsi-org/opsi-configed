@@ -19,69 +19,69 @@ import de.uib.opsicommand.sshcommand.SSHCommand_Template;
 import de.uib.utilities.logging.logging;
 
 public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
-	private JLabel lbl_url = new JLabel();
-	private JTextField tf_url;
+	private JLabel jLabelURL = new JLabel();
+	private JTextField jTextFieldURL;
 
-	private JLabel lbl_dir = new JLabel();
-	private JComboBox<String> cb_autocompletion;
-	private JButton btn_autocompletion;
+	private JLabel jLabelDir = new JLabel();
+	private JComboBox<String> jComboBoxAutoCompletion;
+	private JButton jButtonAutoCompletion;
 
-	private JLabel lbl_includeZsync = new JLabel();
-	private JCheckBox cb_includeZsync;
-	private JLabel lbl_includeZsync2 = new JLabel();
+	private JLabel jLabelIncludeZsync = new JLabel();
+	private JCheckBox jCheckBoxIncludeZSync;
+	private JLabel jLabelIncludeZSync2 = new JLabel();
 
-	private JLabel lbl_compareMd5Sum = new JLabel();
-	private JCheckBox cb_compareMD5;
+	private JLabel jLabelCompareMD5Sum = new JLabel();
+	private JCheckBox jCheckBoxCompareMD5;
 	SSHCompletionComboButton autocompletion;
 
 	SSHWgetAuthenticationPanel wgetAuthPanel;
 
 	private String mainProduct;
 	private String mainDir;
-	private String url_def_text;
+	private String urlDefText;
 
 	public SSHPMInstallWgetPanel() {
 		super();
 		autocompletion = new SSHCompletionComboButton(additionalDefaultPaths);
 		wgetAuthPanel = new SSHWgetAuthenticationPanel();
-		url_def_text = configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url");
+		urlDefText = configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url");
 		initComponents();
 		initLayout();
 
-		cb_autocompletion.setEnabled(true);
-		btn_autocompletion.setEnabled(true);
+		jComboBoxAutoCompletion.setEnabled(true);
+		jButtonAutoCompletion.setEnabled(true);
 
-		cb_autocompletion.setSelectedItem(workbench);
+		jComboBoxAutoCompletion.setSelectedItem(workbench);
 		wgetAuthPanel.isOpen = true;
 		wgetAuthPanel.close();
 	}
 
 	private void initComponents() {
-		lbl_dir.setText(
+		jLabelDir.setText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetDir"));
-		lbl_url.setText(
+		jLabelURL.setText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetUrl"));
-		lbl_includeZsync.setText(configed
+		jLabelIncludeZsync.setText(configed
 				.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetIncludeZsync"));
-		lbl_includeZsync2.setText(configed
+		jLabelIncludeZSync2.setText(configed
 				.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetIncludeZsync2"));
-		lbl_compareMd5Sum.setText(configed
+		jLabelCompareMD5Sum.setText(configed
 				.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetCompareMD5Sum"));
 
-		cb_autocompletion = autocompletion.getCombobox();
-		cb_autocompletion.addItem(workbench);
-		cb_autocompletion.setSelectedItem(workbench);
-		btn_autocompletion = autocompletion.getButton();
+		jComboBoxAutoCompletion = autocompletion.getCombobox();
+		jComboBoxAutoCompletion.addItem(workbench);
+		jComboBoxAutoCompletion.setSelectedItem(workbench);
+		jButtonAutoCompletion = autocompletion.getButton();
 
-		tf_url = new JTextField(url_def_text);
-		tf_url.setBackground(Globals.BACKGROUND_COLOR_9);
+		jTextFieldURL = new JTextField(urlDefText);
+		jTextFieldURL.setBackground(Globals.BACKGROUND_COLOR_9);
 
-		tf_url.addFocusListener(new FocusAdapter() {
+		jTextFieldURL.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				if (tf_url.getText().equals(url_def_text)) {
-					tf_url.setSelectionStart(0);
-					tf_url.setSelectionEnd(tf_url.getText().length());
+				if (jTextFieldURL.getText().equals(urlDefText)) {
+					jTextFieldURL.setSelectionStart(0);
+					jTextFieldURL.setSelectionEnd(jTextFieldURL.getText().length());
 				}
 			}
 		});
@@ -89,29 +89,29 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 		// perfekt für PMInstall
 		wgetAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH * 2, Globals.BUTTON_HEIGHT);
 
-		cb_includeZsync = new JCheckBox();
-		cb_includeZsync.setSelected(true);
-		cb_includeZsync.setToolTipText(configed.getResourceValue(
+		jCheckBoxIncludeZSync = new JCheckBox();
+		jCheckBoxIncludeZSync.setSelected(true);
+		jCheckBoxIncludeZSync.setToolTipText(configed.getResourceValue(
 				"SSHConnection.ParameterDialog.opsipackagemanager_install.jCheckBoxIncludeZsync.tooltip"));
-		cb_includeZsync.addItemListener(itemEvent -> {
+		jCheckBoxIncludeZSync.addItemListener(itemEvent -> {
 			if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
-				cb_compareMD5.setSelected(true);
-				cb_compareMD5.setEnabled(true);
+				jCheckBoxCompareMD5.setSelected(true);
+				jCheckBoxCompareMD5.setEnabled(true);
 			} else {
-				cb_compareMD5.setSelected(false);
-				cb_compareMD5.setEnabled(false);
+				jCheckBoxCompareMD5.setSelected(false);
+				jCheckBoxCompareMD5.setEnabled(false);
 			}
 		});
 
-		cb_compareMD5 = new JCheckBox();
-		cb_compareMD5.setSelected(true);
-		cb_compareMD5.setToolTipText(configed.getResourceValue(
+		jCheckBoxCompareMD5 = new JCheckBox();
+		jCheckBoxCompareMD5.setSelected(true);
+		jCheckBoxCompareMD5.setToolTipText(configed.getResourceValue(
 				"SSHConnection.ParameterDialog.opsipackagemanager_install.jCheckBoxCompareMD5.tooltip"));
 	}
 
 	public SSHCommand_Template getCommand(SSHCommand_Template commands) {
-		if ((tf_url.getText() == null) || (tf_url.getText().trim().equals(""))
-				|| (tf_url.getText().trim().equals(url_def_text)))
+		if ((jTextFieldURL.getText() == null) || (jTextFieldURL.getText().trim().equals(""))
+				|| (jTextFieldURL.getText().trim().equals(urlDefText)))
 			return null;
 
 		CommandWget wget = getWgetCommand();
@@ -124,7 +124,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 			commands.addCommand(wget);
 			logging.info(this, "doAction1 wget " + wget);
 		}
-		if (cb_compareMD5.isSelected()) {
+		if (jCheckBoxCompareMD5.isSelected()) {
 			String product = mainDir + "/" + getFilenameFromUrl(mainProduct);
 			// ToDo: Folgender Parameter String (befehl) muss noch in die klasse
 			// sshcommandfactory ausgelagert werden
@@ -145,37 +145,37 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 		String d;
 		String u = "";
 		String additionalProds = "";
-		String wgetDir = ((String) cb_autocompletion.getSelectedItem());
+		String wgetDir = ((String) jComboBoxAutoCompletion.getSelectedItem());
 
-		String tmp_tf_dir = "<" + configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelDirectory") + ">";
-		if (!wgetDir.equals("") || !wgetDir.equals(tmp_tf_dir))
+		String tempTextFieldDir = "<" + configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelDirectory")
+				+ ">";
+		if (!wgetDir.equals("") || !wgetDir.equals(tempTextFieldDir))
 			d = wgetDir;
 		else
 			return null;
 
-		String tmp_tf_url = "<"
+		String tempTextFieldURL = "<"
 				+ configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetUrl")
 						.replace(":", "")
 				+ ">";
-		if (!tf_url.getText().equals("") || !tf_url.getText().equals(tmp_tf_url))
-			u = tf_url.getText();
+		if (!jTextFieldURL.getText().equals("") || !jTextFieldURL.getText().equals(tempTextFieldURL))
+			u = jTextFieldURL.getText();
 		else
 			return null;
 
 		mainProduct = u;
 		mainDir = d;
-		if (cb_includeZsync.isSelected()) {
-			if (additionalProds.contains(".opsi")) {
-				additionalProds = " " + u.replace(".opsi", ".opsi.zsync");
-				additionalProds = additionalProds + " " + u.replace(".opsi", ".opsi.md5");
-			}
+
+		if (jCheckBoxIncludeZSync.isSelected() && additionalProds.contains(".opsi")) {
+			additionalProds = " " + u.replace(".opsi", ".opsi.zsync");
+			additionalProds = additionalProds + " " + u.replace(".opsi", ".opsi.md5");
 		}
 
 		return new CommandWget(d, u, additionalProds);
 	}
 
 	public String getProduct() {
-		return (String) cb_autocompletion.getSelectedItem() + getFilenameFromUrl(tf_url.getText());
+		return (String) jComboBoxAutoCompletion.getSelectedItem() + getFilenameFromUrl(jTextFieldURL.getText());
 	}
 
 	private static String getFilenameFromUrl(String url) {
@@ -188,56 +188,58 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 
-		layout.setVerticalGroup(layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup(baseline)
-						.addComponent(lbl_url, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(tf_url, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-				.addGroup(layout.createParallelGroup(baseline)
-						.addComponent(lbl_dir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(cb_autocompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(btn_autocompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGroup(layout.createParallelGroup(baseline)
-						.addComponent(lbl_includeZsync, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(cb_includeZsync, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(lbl_includeZsync2, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGroup(layout.createParallelGroup(baseline)
-						.addComponent(lbl_compareMd5Sum, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT)
-						.addComponent(cb_compareMD5, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGroup(layout.createParallelGroup(baseline)
-						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH), Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH), Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-				.addGroup(layout.createParallelGroup(baseline).addComponent(wgetAuthPanel, PREF, PREF, PREF))
-				.addGap(2 * Globals.GAP_SIZE));
+		layout.setVerticalGroup(
+				layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
+						.addGroup(layout.createParallelGroup(baseline)
+								.addComponent(jLabelURL, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT)
+								.addComponent(jTextFieldURL, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT))
+						.addGroup(layout.createParallelGroup(baseline)
+								.addComponent(jLabelDir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT)
+								.addComponent(jComboBoxAutoCompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT)
+								.addComponent(jButtonAutoCompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT))
+						.addGroup(layout.createParallelGroup(baseline)
+								.addComponent(jLabelIncludeZsync, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT)
+								.addComponent(jCheckBoxIncludeZSync, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT)
+								.addComponent(jLabelIncludeZSync2, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT))
+						.addGroup(layout.createParallelGroup(baseline)
+								.addComponent(jLabelCompareMD5Sum, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT)
+								.addComponent(jCheckBoxCompareMD5, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT))
+						.addGroup(layout.createParallelGroup(baseline)
+								.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
+										Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+								.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
+										Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+						.addGroup(layout.createParallelGroup(baseline).addComponent(wgetAuthPanel, PREF, PREF, PREF))
+						.addGap(2 * Globals.GAP_SIZE));
 
 		layout.setHorizontalGroup(layout.createParallelGroup().addGroup(layout.createSequentialGroup()
 				.addGap(2 * Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup().addComponent(lbl_url, PREF, PREF, PREF)
-						.addComponent(lbl_dir, PREF, PREF, PREF).addComponent(lbl_includeZsync, PREF, PREF, PREF)
-						.addComponent(lbl_compareMd5Sum, PREF, PREF, PREF)
+				.addGroup(layout.createParallelGroup().addComponent(jLabelURL, PREF, PREF, PREF)
+						.addComponent(jLabelDir, PREF, PREF, PREF).addComponent(jLabelIncludeZsync, PREF, PREF, PREF)
+						.addComponent(jLabelCompareMD5Sum, PREF, PREF, PREF)
 						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH), PREF, PREF, PREF))
 				.addGap(Globals.GAP_SIZE)
-				.addGroup(
-						layout.createParallelGroup()
-								.addGroup(layout.createSequentialGroup().addComponent(tf_url, Globals.BUTTON_WIDTH,
-										Globals.BUTTON_WIDTH, MAX))
-								.addGroup(layout.createSequentialGroup()
-										.addComponent(cb_autocompletion, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-												MAX)
-										.addComponent(btn_autocompletion, PREF, PREF, PREF))
-								.addGroup(layout.createSequentialGroup().addComponent(cb_includeZsync, PREF, PREF, PREF)
-										.addGap(Globals.GAP_SIZE).addComponent(lbl_includeZsync2, PREF, PREF, PREF))
-								.addGroup(layout.createSequentialGroup().addComponent(cb_compareMD5, PREF, PREF, PREF))
-								.addGroup(layout.createSequentialGroup().addComponent(
-										wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH), PREF, PREF, PREF)))
+				.addGroup(layout.createParallelGroup()
+						.addGroup(layout.createSequentialGroup().addComponent(jTextFieldURL, Globals.BUTTON_WIDTH,
+								Globals.BUTTON_WIDTH, MAX))
+						.addGroup(layout.createSequentialGroup()
+								.addComponent(jComboBoxAutoCompletion, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, MAX)
+								.addComponent(jButtonAutoCompletion, PREF, PREF, PREF))
+						.addGroup(layout.createSequentialGroup().addComponent(jCheckBoxIncludeZSync, PREF, PREF, PREF)
+								.addGap(Globals.GAP_SIZE).addComponent(jLabelIncludeZSync2, PREF, PREF, PREF))
+						.addGroup(layout.createSequentialGroup().addComponent(jCheckBoxCompareMD5, PREF, PREF, PREF))
+						.addGroup(layout.createSequentialGroup().addComponent(
+								wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH), PREF, PREF, PREF)))
 				.addGap(Globals.GAP_SIZE))
 				.addGroup(layout.createSequentialGroup().addComponent(wgetAuthPanel, PREF, PREF, MAX))
 				.addGap(Globals.GAP_SIZE));

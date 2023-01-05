@@ -11,12 +11,12 @@ import de.uib.configed.configed;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
 
 public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
-	private JLabel lbl_server_dir = new JLabel();
-	private JLabel lbl_opsi_product = new JLabel();
-	private JTextField tf_product;
+	private JLabel jLabelServerDir = new JLabel();
+	private JLabel jLabelOpsiProduct = new JLabel();
+	private JTextField jTextFieldProduct;
 
-	private JComboBox cb_autocompletion;
-	private JButton btn_autocompletion;
+	private JComboBox<String> jComboBoxAutoCompletion;
+	private JButton jButtonAutoCompletion;
 	SSHCompletionComboButton autocompletion;
 
 	public SSHPMInstallServerPanel(String fullPathToPackage) {
@@ -27,33 +27,33 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 		setPackagePath(fullPathToPackage);
 		initLayout();
 
-		cb_autocompletion.setEnabled(true);
-		btn_autocompletion.setEnabled(true);
-		cb_autocompletion.setSelectedItem(workbench);
+		jComboBoxAutoCompletion.setEnabled(true);
+		jButtonAutoCompletion.setEnabled(true);
+		jComboBoxAutoCompletion.setSelectedItem(workbench);
 	}
 
 	public void setPackagePath(String pPath) {
 		if (!(pPath.equals(""))) {
-			cb_autocompletion.addItem(pPath);
-			cb_autocompletion.setSelectedItem(pPath);
+			jComboBoxAutoCompletion.addItem(pPath);
+			jComboBoxAutoCompletion.setSelectedItem(pPath);
 		}
 	}
 
 	private void initComponents() {
 
-		lbl_opsi_product.setText(
+		jLabelOpsiProduct.setText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelOtherPath"));
-		tf_product = autocompletion.getTextField();
+		jTextFieldProduct = autocompletion.getTextField();
 
-		cb_autocompletion = autocompletion.getCombobox();
-		cb_autocompletion.setToolTipText(configed
+		jComboBoxAutoCompletion = autocompletion.getCombobox();
+		jComboBoxAutoCompletion.setToolTipText(configed
 				.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button_andopsipackage.combo.tooltip"));
 
-		cb_autocompletion.setEnabled(true);
-		btn_autocompletion = autocompletion.getButton();
-		btn_autocompletion.setText(
+		jComboBoxAutoCompletion.setEnabled(true);
+		jButtonAutoCompletion = autocompletion.getButton();
+		jButtonAutoCompletion.setText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button_andopsipackage"));
-		btn_autocompletion.setToolTipText(configed
+		jButtonAutoCompletion.setToolTipText(configed
 				.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button_andopsipackage.tooltip"));
 	}
 
@@ -65,32 +65,33 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 		this.setLayout(layout);
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE).addGroup(layout
 				.createParallelGroup(center)
-				.addComponent(lbl_server_dir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-				.addComponent(cb_autocompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-				.addComponent(btn_autocompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addComponent(jLabelServerDir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(jComboBoxAutoCompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						Globals.BUTTON_HEIGHT)
+				.addComponent(jButtonAutoCompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						Globals.BUTTON_HEIGHT))
 				.addGroup(layout.createParallelGroup(center)
-						.addComponent(lbl_opsi_product, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jLabelOpsiProduct, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(tf_product, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+						.addComponent(jTextFieldProduct, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT))
 				.addGap(2 * Globals.GAP_SIZE));
 
-		layout.setHorizontalGroup(
-				layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
-						.addGroup(layout.createParallelGroup().addComponent(lbl_server_dir, PREF, PREF, PREF).addGroup(
-								layout.createSequentialGroup().addComponent(lbl_opsi_product, PREF, PREF, PREF)))
-						.addGap(Globals.GAP_SIZE)
-						.addGroup(layout.createParallelGroup()
-								.addGroup(layout.createSequentialGroup()
-										.addComponent(cb_autocompletion, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-												MAX)
-										.addComponent(btn_autocompletion, PREF, PREF, PREF))
-								.addGroup(layout.createSequentialGroup().addComponent(tf_product, Globals.BUTTON_WIDTH,
-										Globals.BUTTON_WIDTH, MAX)))
-						.addGap(2 * Globals.GAP_SIZE));
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
+				.addGroup(layout.createParallelGroup().addComponent(jLabelServerDir, PREF, PREF, PREF)
+						.addGroup(layout.createSequentialGroup().addComponent(jLabelOpsiProduct, PREF, PREF, PREF)))
+				.addGap(Globals.GAP_SIZE)
+				.addGroup(layout.createParallelGroup()
+						.addGroup(layout.createSequentialGroup()
+								.addComponent(jComboBoxAutoCompletion, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, MAX)
+								.addComponent(jButtonAutoCompletion, PREF, PREF, PREF))
+						.addGroup(layout.createSequentialGroup().addComponent(jTextFieldProduct, Globals.BUTTON_WIDTH,
+								Globals.BUTTON_WIDTH, MAX)))
+				.addGap(2 * Globals.GAP_SIZE));
 	}
 
 	public CommandOpsiPackageManagerInstall getCommand() {
-		return SSHPMInstallServerPanel.getCommand(tf_product.getText());
+		return SSHPMInstallServerPanel.getCommand(jTextFieldProduct.getText());
 	}
 
 	public static CommandOpsiPackageManagerInstall getCommand(String product) {

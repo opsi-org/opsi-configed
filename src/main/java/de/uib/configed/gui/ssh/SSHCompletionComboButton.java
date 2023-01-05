@@ -29,13 +29,11 @@ public class SSHCompletionComboButton {
 	private JButton button;
 	private JTextField textfield;
 	private List<String> defaultvalues;
-	private String search_specific_files;
-	private String combobox_default_path;
+	private String searchSpecificFiles;
+	private String comboboxDefaultPath;
 	private static final String ROOT_DIRECTORY = "/";
 	private static final String HOME_DIRECTORY = "~";
 	private String opsiRepo = "/"; // will be overwritten with config
-
-	private String basic_search_path;
 
 	private SSHCommandFactory factory = SSHCommandFactory.getInstance();
 	private PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
@@ -48,25 +46,25 @@ public class SSHCompletionComboButton {
 		this(values, null, null);
 	}
 
-	public SSHCompletionComboButton(List<String> values, String search_specific_files, String combobox_default_path) {
+	public SSHCompletionComboButton(List<String> values, String searchSpecificFiles, String comboboxDefaultPath) {
 		logging.info(this, "instance created");
-		this.search_specific_files = search_specific_files;
-		this.combobox_default_path = combobox_default_path;
+		this.searchSpecificFiles = searchSpecificFiles;
+		this.comboboxDefaultPath = comboboxDefaultPath;
 		init(values);
 		createInstances();
 		initTextfield();
-		if (combobox_default_path != null)
-			textfield.setText(combobox_default_path);
+		if (comboboxDefaultPath != null)
+			textfield.setText(comboboxDefaultPath);
 		initCombobox();
 		initButton();
 	}
 
-	public SSHCompletionComboButton(String search_specific_files, String combobox_default_path) {
-		this(null, search_specific_files, combobox_default_path);
+	public SSHCompletionComboButton(String searchSpecificFiles, String comboboxDefaultPath) {
+		this(null, searchSpecificFiles, comboboxDefaultPath);
 	}
 
-	public SSHCompletionComboButton(String search_specific_files) {
-		this(null, search_specific_files, null);
+	public SSHCompletionComboButton(String searchSpecificFiles) {
+		this(null, searchSpecificFiles, null);
 	}
 
 	private final void enableComponents(boolean value) {
@@ -75,9 +73,9 @@ public class SSHCompletionComboButton {
 	}
 
 	public String getBasicPath() {
-		basic_search_path = (String) combobox.getSelectedItem();
-		if (basic_search_path != null)
-			return basic_search_path.trim();
+		String basicSearchPath = (String) combobox.getSelectedItem();
+		if (basicSearchPath != null)
+			return basicSearchPath.trim();
 		return "";
 	}
 
@@ -88,9 +86,9 @@ public class SSHCompletionComboButton {
 			opsiRepo = PersistenceController.configedWORKBENCH_defaultvalue;
 		if (opsiRepo.charAt(opsiRepo.length() - 1) != '/')
 			opsiRepo = opsiRepo + "/";
-		if (combobox_default_path != null) {
+		if (comboboxDefaultPath != null) {
 			defaultvalues = new ArrayList<>();
-			defaultvalues.add(combobox_default_path);
+			defaultvalues.add(comboboxDefaultPath);
 			defaultvalues.add(ROOT_DIRECTORY);
 			defaultvalues.add(opsiRepo);
 
@@ -131,13 +129,13 @@ public class SSHCompletionComboButton {
 				configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.cb_serverDir.tooltip"));
 		combobox.setEditable(true);
 
-		if (combobox_default_path != null)
-			combobox.setSelectedItem(combobox_default_path);
+		if (comboboxDefaultPath != null)
+			combobox.setSelectedItem(comboboxDefaultPath);
 
-		if (search_specific_files != null && (!search_specific_files.equals("")))
+		if (searchSpecificFiles != null && (!searchSpecificFiles.equals("")))
 			combobox.addActionListener(actionEvent -> {
 				if (combobox.getSelectedItem() != null
-						&& ((String) combobox.getSelectedItem()).endsWith(search_specific_files))
+						&& ((String) combobox.getSelectedItem()).endsWith(searchSpecificFiles))
 					textfield.setText((String) combobox.getSelectedItem());
 				else
 					textfield.setText("");
@@ -156,29 +154,30 @@ public class SSHCompletionComboButton {
 		enableComponents(false);
 
 		String strcbtext = combobox.getEditor().getItem().toString();
-		if ((strcbtext != null) && (!strcbtext.equals("")))
-			if (!strcbtext.substring(strcbtext.length() - 1).equals(ROOT_DIRECTORY)) {
-				combobox.removeItem(strcbtext);
-				logging.info(this, "doButtonAction combo.removeItem(" + strcbtext + ")");
-				strcbtext = strcbtext + ROOT_DIRECTORY;
-				combobox.addItem(strcbtext);
-				logging.info(this, "doButtonAction combo.additem(" + strcbtext + ")");
-				combobox.setSelectedItem(strcbtext);
-			}
+		if ((strcbtext != null) && (!strcbtext.equals(""))
+				&& !strcbtext.substring(strcbtext.length() - 1).equals(ROOT_DIRECTORY)) {
+			combobox.removeItem(strcbtext);
+			logging.info(this, "doButtonAction combo.removeItem(" + strcbtext + ")");
+			strcbtext = strcbtext + ROOT_DIRECTORY;
+			combobox.addItem(strcbtext);
+			logging.info(this, "doButtonAction combo.additem(" + strcbtext + ")");
+			combobox.setSelectedItem(strcbtext);
+		}
 
-		if (search_specific_files != null && (!search_specific_files.equals("")))
+		if (searchSpecificFiles != null && (!searchSpecificFiles.equals("")))
 			getDirectoriesAndFilesIn(strcbtext);
 		else
 			getDirectoriesIn(strcbtext);
+
 		setComboDefault(null);
 	}
 
-	public void setSearchSpecificFiles(String file_end_str) {
-		search_specific_files = file_end_str;
+	public void setSearchSpecificFiles(String fileEndString) {
+		searchSpecificFiles = fileEndString;
 	}
 
 	public void setComboDefault(String value) {
-		combobox_default_path = value;
+		comboboxDefaultPath = value;
 	}
 
 	public JTextField getTextField() {
@@ -189,7 +188,7 @@ public class SSHCompletionComboButton {
 		return button;
 	}
 
-	public JComboBox getCombobox() {
+	public JComboBox<String> getCombobox() {
 		return combobox;
 	}
 
@@ -285,7 +284,7 @@ public class SSHCompletionComboButton {
 				combobox.addItem(element);
 				logging.debug(this, "setItems add " + element);
 			}
-			String curDirLocated = new String(curdir);
+			String curDirLocated = curdir;
 			if (!containsInDefaults(curDirLocated))
 				combobox.addItem(curDirLocated);
 			logging.debug(this, "setItems add " + curDirLocated);
@@ -298,23 +297,18 @@ public class SSHCompletionComboButton {
 			}
 			combobox.setSelectedItem(curdir);
 		}
-		if (combobox_default_path != null && !combobox_default_path.equals("")) {
-			combobox.setSelectedItem(combobox_default_path);
+		if (comboboxDefaultPath != null && !comboboxDefaultPath.equals("")) {
+			combobox.setSelectedItem(comboboxDefaultPath);
 			setComboDefault(null);
 		}
 	}
 
 	public class ItemElementListener extends DefaultListCellRenderer {
-		protected int FILL_LENGTH = 20;
 		protected SSHCompletionComboButton autocompletion;
 
 		public ItemElementListener(SSHCompletionComboButton autocompletion) {
 			super();
 			this.autocompletion = autocompletion;
-		}
-
-		public ItemElementListener() {
-			super();
 		}
 
 		@Override

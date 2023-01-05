@@ -29,46 +29,46 @@ import de.uib.opsicommand.sshcommand.SSHConnectTerminal;
 import de.uib.utilities.logging.logging;
 
 public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
-	private JTextField tf_command;
-	private JLabel lbl_command;
-	private JCheckBox cb_privat;
+	private JTextField jTextFieldCommand;
+	private JLabel jLabelCommand;
+	private JCheckBox jComboBoxPrivat;
 	private JPanel parameterPanel;
 	private JPanel terminatingPanel;
-	public JButton btn_killProcess;
-	private JButton btn_executeCommand;
+	public JButton jButtonKillProcess;
+	private JButton jButtonExecuteCommand;
 	private final SSHConnectTerminal terminal;
 	private List<String> commandHistory = new ArrayList<>();
 	private int historyAddIndex = 0;
 	private int historyGetIndex = 0;
 	private Autocomplete autoComplete;
 	private boolean passwordMode = false;
-	private Dimension btn_dim = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH_X, Globals.BUTTON_HEIGHT);
+	private Dimension jButtonDimension = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH_X, Globals.BUTTON_HEIGHT);
 	private Dimension thissize = new Dimension(810, 600);
 
 	private class TerminatingPanel extends JPanel {
-		JButton btn_close;
+		JButton jButtonClose;
 
 		TerminatingPanel(ActionListener closeListener) {
 			super();
 
 			setBackground(Globals.BACKGROUND_COLOR_7);
-			btn_close = new de.uib.configed.gui.IconButton(configed.getResourceValue("SSHConnection.buttonClose"),
+			jButtonClose = new de.uib.configed.gui.IconButton(configed.getResourceValue("SSHConnection.buttonClose"),
 					"images/cancel.png", "images/cancel.png", "images/cancel.png", true);
-			btn_close.addActionListener(closeListener);
+			jButtonClose.addActionListener(closeListener);
 
-			btn_close.setPreferredSize(btn_dim);
+			jButtonClose.setPreferredSize(jButtonDimension);
 
 			GroupLayout layout = new GroupLayout(this);
 			setLayout(layout);
 
 			layout.setVerticalGroup(layout
-					.createSequentialGroup().addGap(Globals.VGAP_SIZE).addComponent(btn_close,
+					.createSequentialGroup().addGap(Globals.VGAP_SIZE).addComponent(jButtonClose,
 							GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGap(3 * Globals.VGAP_SIZE));
 
 			layout.setHorizontalGroup(
 					layout.createSequentialGroup().addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
-							.addComponent(btn_close, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+							.addComponent(jButtonClose, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 							.addGap(Globals.GAP_SIZE));
 
 		}
@@ -150,25 +150,25 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 	private void setComponentsEnabledRO(boolean value) {
 		logging.info(this, "setComponentsEnabledRO value " + value);
-		tf_command.setEnabled(value);
-		btn_executeCommand.setEnabled(value);
-		btn_killProcess.setEnabled(value);
+		jTextFieldCommand.setEnabled(value);
+		jButtonExecuteCommand.setEnabled(value);
+		jButtonKillProcess.setEnabled(value);
 	}
 
 	private void setCLfocus() {
 		logging.info(this, "setCLfocus");
 
-		tf_command.setCaretPosition(tf_command.getText().length());
-		tf_command.requestFocus();
+		jTextFieldCommand.setCaretPosition(jTextFieldCommand.getText().length());
+		jTextFieldCommand.requestFocus();
 
 		// some thread seems to prevent setting it directly
 		SwingUtilities.invokeLater(() -> {
 			int timeoutRuns = 2;
 			int counter = 0;
-			while (!tf_command.hasFocus() && counter < timeoutRuns) {
+			while (!jTextFieldCommand.hasFocus() && counter < timeoutRuns) {
 				counter++;
 				Globals.threadSleep(this, 100);
-				tf_command.requestFocus();
+				jTextFieldCommand.requestFocus();
 				logging.info(this, "repeated requestFocus " + counter + " times");
 			}
 		});
@@ -177,8 +177,8 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 	private void setOutSize() {
 
-		double noOutputHeight = (Globals.GAP_SIZE * 4) + tf_command.getHeight() + parameterPanel.getHeight()
-				+ btn_dim.getHeight() + terminatingPanel.getHeight();
+		double noOutputHeight = (Globals.GAP_SIZE * 4) + jTextFieldCommand.getHeight() + parameterPanel.getHeight()
+				+ jButtonDimension.getHeight() + terminatingPanel.getHeight();
 
 		this.thissize = this.getSize();
 
@@ -202,9 +202,9 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	}
 
 	public JTextField getInputField() {
-		if (tf_command == null)
+		if (jTextFieldCommand == null)
 			return null;
-		return tf_command;
+		return jTextFieldCommand;
 	}
 
 	public boolean getPrivateStatus() {
@@ -268,7 +268,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 	private void initGUI() {
 		logging.info(this, "initGUI ");
-		tf_command = new JPasswordField() {
+		jTextFieldCommand = new JPasswordField() {
 			@Override
 			public void addNotify() {
 				super.addNotify();
@@ -277,14 +277,15 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 			}
 		};
 
-		tf_command.setPreferredSize(new Dimension(Globals.FIRST_LABEL_WIDTH + Globals.GAP_SIZE, Globals.LINE_HEIGHT));
+		jTextFieldCommand
+				.setPreferredSize(new Dimension(Globals.FIRST_LABEL_WIDTH + Globals.GAP_SIZE, Globals.LINE_HEIGHT));
 
 		setCLfocus();
 
-		cb_privat = new JCheckBox(configed.getResourceValue("SSHConnection.passwordButtonText"));
-		cb_privat.setPreferredSize(btn_dim);
+		jComboBoxPrivat = new JCheckBox(configed.getResourceValue("SSHConnection.passwordButtonText"));
+		jComboBoxPrivat.setPreferredSize(jButtonDimension);
 		if (!(Globals.isGlobalReadOnly()))
-			cb_privat.addItemListener(itemEvent -> {
+			jComboBoxPrivat.addItemListener(itemEvent -> {
 				if (passwordMode) {
 					changeEchoChar('*');
 					removeAutocompleteListener();
@@ -307,19 +308,19 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		if (!(Globals.isGlobalReadOnly()))
 			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonAdd()
 					.addActionListener(actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel)
-							.doActionParamAdd(tf_command));
-		btn_killProcess = new de.uib.configed.gui.IconButton(
+							.doActionParamAdd(jTextFieldCommand));
+		jButtonKillProcess = new de.uib.configed.gui.IconButton(
 				configed.getResourceValue("SSHConnection.buttonKillProcess"), "images/edit-delete.png",
 				"images/edit-delete.png", "images/edit-delete.png", true);
-		btn_killProcess.setPreferredSize(btn_dim);
-		btn_killProcess.setToolTipText(configed.getResourceValue("SSHConnection.buttonKillProcess"));
+		jButtonKillProcess.setPreferredSize(jButtonDimension);
+		jButtonKillProcess.setToolTipText(configed.getResourceValue("SSHConnection.buttonKillProcess"));
 
-		btn_executeCommand = new de.uib.configed.gui.IconButton(
+		jButtonExecuteCommand = new de.uib.configed.gui.IconButton(
 				configed.getResourceValue("SSHConnection.CommandControl.btnExecuteCommand"), "images/execute_blue.png",
 				"images/execute_blue.png", "images/execute_blue.png", true);
-		btn_executeCommand.setPreferredSize(btn_dim);
+		jButtonExecuteCommand.setPreferredSize(jButtonDimension);
 		if (!(Globals.isGlobalReadOnly()))
-			btn_executeCommand.addActionListener(actionEvent -> {
+			jButtonExecuteCommand.addActionListener(actionEvent -> {
 				String text = getInputField().getText() + "\n";
 				if (terminal != null) {
 					terminal.exec(text);
@@ -349,23 +350,23 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 			return;
 		final String COMMIT_ACTION = "commit";
 		// Without this, cursor always leaves text field
-		tf_command.setFocusTraversalKeysEnabled(false);
+		jTextFieldCommand.setFocusTraversalKeysEnabled(false);
 		if (autoComplete != null)
-			tf_command.getDocument().removeDocumentListener(autoComplete);
+			jTextFieldCommand.getDocument().removeDocumentListener(autoComplete);
 
-		autoComplete = new Autocomplete(tf_command, list);
-		tf_command.getDocument().addDocumentListener(autoComplete);
+		autoComplete = new Autocomplete(jTextFieldCommand, list);
+		jTextFieldCommand.getDocument().addDocumentListener(autoComplete);
 
 		// Maps the tab key to the commit action, which finishes the autocomplete
 		// when given a suggestion
-		tf_command.getInputMap().put(KeyStroke.getKeyStroke("TAB"), COMMIT_ACTION);
-		tf_command.getActionMap().put(COMMIT_ACTION, autoComplete.new CommitAction());
+		jTextFieldCommand.getInputMap().put(KeyStroke.getKeyStroke("TAB"), COMMIT_ACTION);
+		jTextFieldCommand.getActionMap().put(COMMIT_ACTION, autoComplete.new CommitAction());
 
 	}
 
 	public void removeAutocompleteListener() {
 		if (autoComplete != null)
-			tf_command.getDocument().removeDocumentListener(autoComplete);
+			jTextFieldCommand.getDocument().removeDocumentListener(autoComplete);
 	}
 
 	protected void createLayout() {
@@ -374,21 +375,21 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 		int gap = Globals.GAP_SIZE;
 
-		lbl_command = new JLabel(configed.getResourceValue("SSHConnection.commandLine"));
+		jLabelCommand = new JLabel(configed.getResourceValue("SSHConnection.commandLine"));
 
 		konsolePanelLayout.setVerticalGroup(konsolePanelLayout.createSequentialGroup().addGap(gap)
 				.addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(gap)
 				.addGroup(konsolePanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_command, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jLabelCommand, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(cb_privat, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jComboBoxPrivat, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(tf_command, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jTextFieldCommand, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(btn_executeCommand, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jButtonExecuteCommand, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(btn_killProcess, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jButtonKillProcess, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jButtonClose, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
@@ -400,15 +401,15 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 								Short.MAX_VALUE)
 						.addGap(gap))
 				.addGroup(konsolePanelLayout.createSequentialGroup().addGap(gap)
-						.addComponent(lbl_command, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jLabelCommand, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(cb_privat, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jComboBoxPrivat, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(gap)
-						.addComponent(tf_command, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
+						.addComponent(jTextFieldCommand, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
 						.addGap(gap)
-						.addComponent(btn_executeCommand, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-						.addComponent(btn_killProcess, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+						.addComponent(jButtonExecuteCommand, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+						.addComponent(jButtonKillProcess, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 						.addComponent(jButtonClose, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 						.addGap(gap)));
 		setCenterLayout();
@@ -434,8 +435,8 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	public void changeEchoChar(char c) {
 
 		logging.debug(this, "changeEchoChar char " + c);
-		((JPasswordField) tf_command).setEchoChar(c);
+		((JPasswordField) jTextFieldCommand).setEchoChar(c);
 		logging.debug(this, "changeEchoChar checkbox set Selected " + passwordMode);
-		cb_privat.setSelected(passwordMode);
+		jComboBoxPrivat.setSelected(passwordMode);
 	}
 }
