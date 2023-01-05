@@ -436,11 +436,7 @@ public class SSHConnectExec extends SSHConnect {
 				disconnect();
 				interruptChannel = true;
 				interruptChannelWorker = true;
-				try {
-					Thread.sleep(50);
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
-				}
+				Globals.threadSleep(this, 50);
 			}
 
 		}
@@ -467,11 +463,7 @@ public class SSHConnectExec extends SSHConnect {
 					disconnect();
 					interruptChannel = true;
 					interruptChannelWorker = true;
-					try {
-						Thread.sleep(50);
-					} catch (Exception ee) {
-						Thread.currentThread().interrupt();
-					}
+					Globals.threadSleep(this, 50);
 				};
 
 				logging.info(this, "doInBackground start waiting for answer");
@@ -492,12 +484,7 @@ public class SSHConnectExec extends SSHConnect {
 						logging.info(this, "doInBackground i " + i);
 
 						int timeStepMillis = 1000;
-						try {
-							Thread.sleep(timeStepMillis);
-						} catch (InterruptedException ignore) {
-							logging.info(this, "InterruptedException");
-							Thread.currentThread().interrupt();
-						}
+						Globals.threadSleep(this, timeStepMillis);
 
 						if (i < 0)
 							break;
@@ -527,13 +514,9 @@ public class SSHConnectExec extends SSHConnect {
 							for (String line : str.split("\n")) {
 
 								logging.debug(this, " doInBackground publish " + progress + ": " + line);
-								publish(new String(line));
+								publish(line);
 								progress++;
-								try {
-									Thread.sleep(50);
-								} catch (InterruptedException ee) {
-									Thread.currentThread().interrupt();
-								}
+								Globals.threadSleep(this, timeStepMillis);
 							}
 						} else {
 
@@ -557,11 +540,8 @@ public class SSHConnectExec extends SSHConnect {
 						break;
 					}
 				}
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException ee) {
-					Thread.currentThread().interrupt();
-				}
+				Globals.threadSleep(this, 1000);
+
 				if (outputDialog != null)
 					setDialog(outputDialog);
 				logging.info(this, "exec ready (0)");
@@ -585,6 +565,8 @@ public class SSHConnectExec extends SSHConnect {
 			} catch (Exception e) {
 				logging.warning(this, "SSH Exception", e);
 				publishError(e.getMessage());
+				if (e instanceof InterruptedException)
+					Thread.currentThread().interrupt();
 			}
 			if (outputDialog != null && !multiCommand)
 				outputDialog.setStatusFinish();

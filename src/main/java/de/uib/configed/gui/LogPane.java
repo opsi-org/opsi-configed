@@ -418,7 +418,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			}
 		});
 
-		JSpinner spinnerMinLevel = new JSpinner(new SpinnerNumberModel(valL, minL, maxL, (int) 1));
+		JSpinner spinnerMinLevel = new JSpinner(new SpinnerNumberModel(valL, minL, maxL, 1));
 
 		spinnerMinLevel.setVisible(false); // to develop
 		JComponent editor = spinnerMinLevel.getEditor();

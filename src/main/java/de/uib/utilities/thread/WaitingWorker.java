@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 public class WaitingWorker extends SwingWorker<Void, Long> {
@@ -59,19 +60,14 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 		timeoutReached = (elapsedMillis >= waitingSleeper.getWaitingMillis());
 		while (!ready && !timeoutReached && !stopped) {
-			try {
-				Thread.sleep(timeStepMillis);
-			} catch (InterruptedException ignore) {
-				logging.info(this, "InterruptedException");
-				Thread.currentThread().interrupt();
-			}
+			Globals.threadSleep(this, timeStepMillis);
 
 			long nowMillis = new GregorianCalendar().getTimeInMillis();
 
 			elapsedMillis = nowMillis - startActionMillis;
 			elapsedMins = (elapsedMillis / 1000) / 60;
 
-			logging.debug(this, " doInBackground progress  elapsedMillis " + elapsedMillis);
+			logging.debug(this, " doInBackgroudnd progress  elapsedMillis " + elapsedMillis);
 			logging.debug(this, " doInBackground progress totalTimeElapsed  [min] " + elapsedMins);
 
 			publish(elapsedMillis);

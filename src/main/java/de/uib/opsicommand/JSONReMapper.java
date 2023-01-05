@@ -214,12 +214,12 @@ public class JSONReMapper {
 				Iterator<String> iter0 = map0.keySet().iterator();
 				while (iter0.hasNext()) {
 					String key1 = iter0.next(); // e.g. client
-					HashMap<String, JSONObject> map1 = new HashMapX<>((JSONObject) map0.get(key1)); // e.g.
-																									// map
-																									// of
-																									// 1
-																									// client
-																									// values
+					HashMap<String, JSONObject> map1 = new HashMapX<>(map0.get(key1)); // e.g.
+																						// map
+																						// of
+																						// 1
+																						// client
+																						// values
 
 					HashMap<String, Map<String, Object>> map1R = new HashMap<>(); // to
 																					// produce
@@ -582,7 +582,7 @@ public class JSONReMapper {
 				Object value = null;
 
 				try {
-					key = (String) iter.next();
+					key = iter.next();
 
 					if (((JSONObject) ob).isNull(key))
 						map.put(key, null);
@@ -602,16 +602,9 @@ public class JSONReMapper {
 	}
 
 	public static boolean isNull(Object ob) {
-		if (ob == null)
-			return true;
+		return ob == null || (ob instanceof String && ((String) ob).equalsIgnoreCase("null"))
+				|| ((ob instanceof JSONObject) && (JSONObject.NULL.equals(ob)));
 
-		if (ob instanceof String && ((String) ob).equalsIgnoreCase("null"))
-			return true;
-
-		if ((ob instanceof JSONObject) && (JSONObject.NULL.equals((JSONObject) ob)))
-			return true;
-
-		return false;
 	}
 
 	public static boolean equalsNull(String ob) {

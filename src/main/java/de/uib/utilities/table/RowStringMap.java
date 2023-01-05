@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class RowStringMap extends HashMap<String, Object> {
 	@Override
 	public String get(Object key) {
-		String result = (String) super.get((String) key);
+		String result = (String) super.get(key);
 
 		if (result == null)
 			result = (String) super.get(((String) key).toUpperCase());

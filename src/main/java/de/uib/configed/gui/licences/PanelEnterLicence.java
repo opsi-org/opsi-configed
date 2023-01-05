@@ -608,7 +608,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		topPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		bottomPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
-		javax.swing.GroupLayout layoutTopPane = new javax.swing.GroupLayout((JPanel) topPane);
+		javax.swing.GroupLayout layoutTopPane = new javax.swing.GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
 		layoutTopPane.setHorizontalGroup(layoutTopPane
 				.createSequentialGroup().addGap(10, 10, 10).addComponent(panelLicencepools,
@@ -619,7 +619,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 						.addComponent(panelLicencepools, minPanelTableHeight, minPanelTableHeight, Short.MAX_VALUE)
 						.addGap(5, 5, 5)));
 
-		javax.swing.GroupLayout layoutBottomPane = new javax.swing.GroupLayout((JPanel) bottomPane);
+		javax.swing.GroupLayout layoutBottomPane = new javax.swing.GroupLayout(bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
 		layoutBottomPane
 				.setHorizontalGroup(
@@ -642,7 +642,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 						minPanelTableHeight - 2 * Globals.LINE_HEIGHT, Short.MAX_VALUE)
 				.addGap(5, 5, 5));
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout((JPanel) this);
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(
 				layout.createSequentialGroup().addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin)

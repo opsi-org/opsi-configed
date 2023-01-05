@@ -5,7 +5,6 @@
 
 package de.uib.configed.gui.licences;
 
-import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
 import de.uib.configed.ControlMultiTablePanel;
@@ -44,7 +43,7 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 		panelStatistics.showFilterIcon(true); // supply implementation of SearchTargetModelFromTable.setFiltered
 		panelStatistics.setFiltering(true);
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout((JPanel) this);
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup().addContainerGap()

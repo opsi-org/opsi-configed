@@ -10,7 +10,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,7 +25,6 @@ import de.uib.opsicommand.sshcommand.CommandOpsiSetRights;
 import de.uib.opsicommand.sshcommand.CommandSFTPUpload;
 import de.uib.opsicommand.sshcommand.CommandWget;
 import de.uib.opsicommand.sshcommand.Empty_Command;
-import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommand_Template;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
@@ -228,7 +226,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 
 	protected void initGUI() {
 		try {
-			inputPanelLayout = new GroupLayout((JComponent) inputPanel);
+			inputPanelLayout = new GroupLayout(inputPanel);
 			getContentPane().add(inputPanel, BorderLayout.CENTER);
 			getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 			inputPanel.setLayout(inputPanelLayout);
@@ -341,14 +339,14 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 							+ wgetAuthPanel.getPw() + " ");
 				} else
 					wget.setAuthentication(" ");
-				fullcommand.addCommand((SSHCommand) wget);
+				fullcommand.addCommand(wget);
 			} else {
 				command.setOverwriteMode(cb_overwriteExisting.isSelected());
-				fullcommand.addCommand((SSHCommand) command);
+				fullcommand.addCommand(command);
 			}
 
 			if (cb_setRights.isSelected())
-				fullcommand.addCommand(((SSHCommand) new CommandOpsiSetRights("")));
+				fullcommand.addCommand((new CommandOpsiSetRights("")));
 			new SSHConnectExec(fullcommand);
 		} catch (Exception e) {
 			logging.warning(this, "doAction1, exception occurred", e);

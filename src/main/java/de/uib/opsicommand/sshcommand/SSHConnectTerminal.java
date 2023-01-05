@@ -21,6 +21,7 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
 import de.uib.configed.gui.ssh.SSHConnectionTerminalDialog;
@@ -152,12 +153,11 @@ public class SSHConnectTerminal extends SSHConnect {
 				initInputFieldFromDialog();
 				initKillProcessButtonFromDialog();
 
-				Thread.sleep(1000);
+				Globals.threadSleep(this, 1000);
+
 				exec(SOME_COMMAND + "\n");
 			} catch (Exception e) {
 				logging.error(this, "SSHConnectTerminal connect exception", e);
-				if (e instanceof InterruptedException)
-					Thread.currentThread().interrupt();
 			}
 		}
 	}

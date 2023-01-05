@@ -602,6 +602,15 @@ public class Globals {
 			return "" + n;
 	}
 
+	public static void threadSleep(Object caller, long millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException ie) {
+			logging.info(caller, "sleeping interrupted: " + ie);
+			Thread.currentThread().interrupt();
+		}
+	}
+
 	public static String giveTimeSpan(final long millis) {
 		long seconds;
 		long remseconds;

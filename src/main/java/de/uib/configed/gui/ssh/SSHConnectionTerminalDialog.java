@@ -167,11 +167,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 			int counter = 0;
 			while (!tf_command.hasFocus() && counter < timeoutRuns) {
 				counter++;
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException ex) {
-					Thread.currentThread().interrupt();
-				}
+				Globals.threadSleep(this, 100);
 				tf_command.requestFocus();
 				logging.info(this, "repeated requestFocus " + counter + " times");
 			}

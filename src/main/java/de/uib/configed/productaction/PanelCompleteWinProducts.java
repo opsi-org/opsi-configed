@@ -102,7 +102,7 @@ public class PanelCompleteWinProducts extends JPanel
 		depotProductDirectory = SmbConnect.getInstance().buildSambaTarget(selectedDepot,
 				de.uib.connectx.SmbConnect.PRODUCT_SHARE_RW);
 
-		panelMountShare = new PanelMountShare((NameProducer) this, main, root)
+		panelMountShare = new PanelMountShare(this, main, root)
 
 		{
 			@Override

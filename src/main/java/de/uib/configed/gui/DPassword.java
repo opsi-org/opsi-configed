@@ -559,12 +559,9 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 
 			while ((PersistenceControllerFactory.getConnectionState() == ConnectionState.ConnectionUndefined)
 					&& waited < TIMEOUT_MS) {
-				try {
-					Thread.sleep(interval);
-					waited = waited + interval;
-				} catch (InterruptedException waitException) {
-					Thread.currentThread().interrupt();
-				}
+				Globals.threadSleep(this, interval);
+				waited = waited + interval;
+
 			}
 
 			if (waited >= TIMEOUT_MS)

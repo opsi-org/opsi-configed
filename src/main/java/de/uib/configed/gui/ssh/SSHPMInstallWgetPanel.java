@@ -15,7 +15,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.opsicommand.sshcommand.CommandWget;
 import de.uib.opsicommand.sshcommand.Empty_Command;
-import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommand_Template;
 import de.uib.utilities.logging.logging;
 
@@ -24,7 +23,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 	private JTextField tf_url;
 
 	private JLabel lbl_dir = new JLabel();
-	private JComboBox cb_autocompletion;
+	private JComboBox<String> cb_autocompletion;
 	private JButton btn_autocompletion;
 
 	private JLabel lbl_includeZsync = new JLabel();
@@ -122,7 +121,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 						+ wgetAuthPanel.getPw() + " ");
 			} else
 				wget.setAuthentication(" ");
-			commands.addCommand((SSHCommand) wget);
+			commands.addCommand(wget);
 			logging.info(this, "doAction1 wget " + wget);
 		}
 		if (cb_compareMD5.isSelected()) {

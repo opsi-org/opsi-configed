@@ -138,7 +138,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		DefaultMutableTreeNode dropThis = (DefaultMutableTreeNode) tree.getActivePaths().get(0).getLastPathComponent();
 
 		if (dropThis instanceof GroupNode) {
-			GroupNode dropThisVariant = (GroupNode) (tree.getGroupNode(dropThis.toString()));
+			GroupNode dropThisVariant = tree.getGroupNode(dropThis.toString());
 
 			if (dropThis != dropThisVariant) {
 				logging.warning(this, "getSourceActions,  dropThis != dropThisVariant");

@@ -149,17 +149,12 @@ public class PersistenceControllerFactory {
 
 							while (continuing.value) {
 								count++;
-								if (infodialog != null) {
-									infodialog.setVisible(true);
-									try {
-										Thread.sleep(3000);
-									} catch (InterruptedException x) {
-									}
 
-									logging.info("== repeating info " + count);
+								infodialog.setVisible(true);
+								Globals.threadSleep(this, 3000);
+								logging.info("== repeating info " + count);
 
-									infodialog.centerOn(Globals.mainFrame);
-								}
+								infodialog.centerOn(Globals.mainFrame);
 
 							}
 

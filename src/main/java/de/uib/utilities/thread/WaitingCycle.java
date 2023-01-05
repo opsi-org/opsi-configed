@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.swing.SwingWorker;
 
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
 public class WaitingCycle extends SwingWorker<Void, Integer> {
@@ -31,11 +32,7 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 			logging.debug(this, " WaitingCycle waits signal " + waitSecs);
 			// === serves like an external task
 			waitSecs++;
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException iex) {
-				logging.info(this, " WaitingCycle interrupt at " + waitSecs);
-			}
+			Globals.threadSleep(this, 1000);
 
 			setProgress(100 * waitSecs / maxWaitSecs);
 

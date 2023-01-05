@@ -8,7 +8,6 @@ package de.uib.configed.gui.licences;
 
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 import de.uib.configed.ControlMultiTablePanel;
@@ -20,14 +19,10 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
  * @author roeder
  */
 public class PanelEditLicences extends MultiTablePanel {
-	public JTextField testfield;
 	public PanelGenEditTable panelKeys;
 	public PanelGenEditTable panelSoftwarelicences;
 	public PanelGenEditTable panelLicencecontracts;
 
-	private JSplitPane splitPane;
-	private JPanel topPane;
-	private JPanel bottomPane;
 	private int splitPaneHMargin = 1;
 
 	protected int minVSize = 100;
@@ -76,11 +71,11 @@ public class PanelEditLicences extends MultiTablePanel {
 		panelLicencecontracts.setFiltering(true);
 		panelLicencecontracts.setAwareOfTableChangedListener(true);
 
-		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setResizeWeight(0.5f);
 
-		topPane = new JPanel();
-		bottomPane = new JPanel();
+		JPanel topPane = new JPanel();
+		JPanel bottomPane = new JPanel();
 		splitPane.setTopComponent(topPane);
 		splitPane.setBottomComponent(bottomPane);
 
@@ -103,7 +98,7 @@ public class PanelEditLicences extends MultiTablePanel {
 				.addComponent(panelSoftwarelicences, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE));
 
-		javax.swing.GroupLayout layoutBottomPane = new javax.swing.GroupLayout((JPanel) bottomPane);
+		javax.swing.GroupLayout layoutBottomPane = new javax.swing.GroupLayout(bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
 		layoutBottomPane.setHorizontalGroup(layoutBottomPane.createSequentialGroup().addGap(10, 10, 10)
 				.addGroup(layoutBottomPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
@@ -115,7 +110,7 @@ public class PanelEditLicences extends MultiTablePanel {
 				.addComponent(panelLicencecontracts, minVSize, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE));
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout((JPanel) this);
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(
 				layout.createSequentialGroup().addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin)

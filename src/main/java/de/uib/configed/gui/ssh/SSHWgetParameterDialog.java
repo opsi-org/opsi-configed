@@ -9,7 +9,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -98,111 +97,105 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
 		inputPanel.setPreferredSize(new java.awt.Dimension(376, 220));
-		{
-			lbl_url.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelUrl"));
-			tf_url = new JTextField();
-			tf_url.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"));
-			tf_url.getDocument().addDocumentListener(new DocumentListener() {
-				@Override
-				public void changedUpdate(DocumentEvent documentEvent) {
-					changeUrl();
+
+		lbl_url.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelUrl"));
+		tf_url = new JTextField();
+		tf_url.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"));
+		tf_url.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void changedUpdate(DocumentEvent documentEvent) {
+				changeUrl();
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent documentEvent) {
+				changeUrl();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent documentEvent) {
+				changeUrl();
+			}
+		});
+		tf_url.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (tf_url.getText()
+						.equals(configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"))) {
+					tf_url.setSelectionStart(0);
+					tf_url.setSelectionEnd(tf_url.getText().length());
 				}
+			}
+		});
 
-				@Override
-				public void insertUpdate(DocumentEvent documentEvent) {
-					changeUrl();
-				}
+		lbl_dir.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelDirectory"));
+		tf_dir = new JTextField();
 
-				@Override
-				public void removeUpdate(DocumentEvent documentEvent) {
-					changeUrl();
-				}
-			});
-			tf_url.addFocusListener(new FocusAdapter() {
-				@Override
-				public void focusGained(FocusEvent e) {
-					if (tf_url.getText().equals(
-							configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"))) {
-						tf_url.setSelectionStart(0);
-						tf_url.setSelectionEnd(tf_url.getText().length());
-					}
-				}
-			});
+		cb_dir = completion.getCombobox();
+		btn_searchDir = completion.getButton();
 
-			lbl_dir.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelDirectory"));
-			tf_dir = new JTextField();
+		lbl_verbosity.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
+		cb_verbosity = new JComboBox<>();
+		cb_verbosity.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
+		for (int i = 0; i < 5; i++)
+			cb_verbosity.addItem(i);
+		cb_verbosity.setSelectedItem(1);
+		cb_verbosity.addItemListener(itemEvent -> {
+			commandWget.setVerbosity(((int) cb_verbosity.getSelectedItem()));
+			updateCommand();
+		});
 
-			cb_dir = completion.getCombobox();
-			btn_searchDir = completion.getButton();
-		}
-		{
-			lbl_verbosity.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
-			cb_verbosity = new JComboBox<>();
-			cb_verbosity.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
-			for (int i = 0; i < 5; i++)
-				cb_verbosity.addItem(i);
-			cb_verbosity.setSelectedItem(1);
-			cb_verbosity.addItemListener(itemEvent -> {
-				commandWget.setVerbosity(((int) cb_verbosity.getSelectedItem()));
-				updateCommand();
-			});
-		}
-		{
-			lbl_freeInput.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelFreeInput"));
-			tf_freeInput = new JTextField();
-			tf_freeInput.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.freeInput"));
-			tf_freeInput.getDocument().addDocumentListener(new DocumentListener() {
-				@Override
-				public void changedUpdate(DocumentEvent documentEvent) {
-					changeFreeInput();
-				}
+		lbl_freeInput.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelFreeInput"));
+		tf_freeInput = new JTextField();
+		tf_freeInput.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.freeInput"));
+		tf_freeInput.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void changedUpdate(DocumentEvent documentEvent) {
+				changeFreeInput();
+			}
 
-				@Override
-				public void insertUpdate(DocumentEvent documentEvent) {
-					changeFreeInput();
-				}
+			@Override
+			public void insertUpdate(DocumentEvent documentEvent) {
+				changeFreeInput();
+			}
 
-				@Override
-				public void removeUpdate(DocumentEvent documentEvent) {
-					changeFreeInput();
-				}
-			});
-		}
-		{
-			((JCheckBox) wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH)).setSelected(false);
-			wgetAuthPanel.isOpen = true;
-			wgetAuthPanel.close();
-			wgetAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH + 67, Globals.BUTTON_HEIGHT);
-		}
-		{
+			@Override
+			public void removeUpdate(DocumentEvent documentEvent) {
+				changeFreeInput();
+			}
+		});
 
-			btn_help = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
-			btn_help.setText(configed.getResourceValue("SSHConnection.buttonParameterInfo"));
-			btn_help.setToolTipText(configed.getResourceValue("SSHConnection.buttonParameterInfo.tooltip"));
-			buttonPanel.add(btn_help);
-			btn_help.addActionListener(actionEvent -> doActionHelp());
+		((JCheckBox) wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH)).setSelected(false);
+		wgetAuthPanel.isOpen = true;
+		wgetAuthPanel.close();
+		wgetAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH + 67, Globals.BUTTON_HEIGHT);
 
-			btn_execute = new JButton();
-			buttonPanel.add(btn_execute);
-			btn_execute.setText(configed.getResourceValue("SSHConnection.buttonExec"));
-			btn_execute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
-			btn_execute.addActionListener(actionEvent -> {
-				if (!(Globals.isGlobalReadOnly()))
-					doAction1();
-			});
+		btn_help = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
+		btn_help.setText(configed.getResourceValue("SSHConnection.buttonParameterInfo"));
+		btn_help.setToolTipText(configed.getResourceValue("SSHConnection.buttonParameterInfo.tooltip"));
+		buttonPanel.add(btn_help);
+		btn_help.addActionListener(actionEvent -> doActionHelp());
 
-			btn_close = new JButton();
-			buttonPanel.add(btn_close);
-			btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
-			btn_close.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
-			btn_close.addActionListener(actionEvent -> cancel());
-		}
-		{
-			lbl_fullCommand.setText("wget ");
+		btn_execute = new JButton();
+		buttonPanel.add(btn_execute);
+		btn_execute.setText(configed.getResourceValue("SSHConnection.buttonExec"));
+		btn_execute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
+		btn_execute.addActionListener(actionEvent -> {
+			if (!(Globals.isGlobalReadOnly()))
+				doAction1();
+		});
 
-			changeUrl();
-			changeFreeInput();
-		}
+		btn_close = new JButton();
+		buttonPanel.add(btn_close);
+		btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
+		btn_close.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
+		btn_close.addActionListener(actionEvent -> cancel());
+
+		lbl_fullCommand.setText("wget ");
+
+		changeUrl();
+		changeFreeInput();
+
 	}
 
 	private void updateCommand() {
@@ -270,7 +263,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	}
 
 	private void initLayout() {
-		GroupLayout inputPanelLayout = new GroupLayout((JComponent) inputPanel);
+		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
 		inputPanel.setLayout(inputPanelLayout);
 		int PREF = GroupLayout.PREFERRED_SIZE;
 		int MAX = Short.MAX_VALUE;

@@ -103,13 +103,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 		boolean forward = true;
 		try {
 			while (true) {
-				try {
-
-					Thread.sleep(sleepingMS);
-
-				} catch (InterruptedException ignore) {
-					Thread.currentThread().interrupt();
-				}
+				Globals.threadSleep(this, sleepingMS);
 
 				if (acting) {
 					finalizing = true;
@@ -131,11 +125,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 					i = inactive;
 					setState(i);
 					i = 0;
-					try {
-						Thread.sleep((long) 2 * sleepingMS);
-					} catch (InterruptedException ignore) {
-						Thread.currentThread().interrupt();
-					}
+					Globals.threadSleep(this, 2 * sleepingMS);
 				}
 			}
 		} catch (Exception anyException) {

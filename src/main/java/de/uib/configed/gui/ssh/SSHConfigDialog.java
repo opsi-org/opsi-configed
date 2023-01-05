@@ -14,7 +14,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -229,9 +228,9 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		getContentPane().add(settingsPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-		GroupLayout connectionPanelLayout = new GroupLayout((JComponent) connectionPanel);
+		GroupLayout connectionPanelLayout = new GroupLayout(connectionPanel);
 		connectionPanel.setLayout(connectionPanelLayout);
-		GroupLayout settingsPanelLayout = new GroupLayout((JComponent) settingsPanel);
+		GroupLayout settingsPanelLayout = new GroupLayout(settingsPanel);
 		settingsPanel.setLayout(settingsPanelLayout);
 
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
@@ -242,249 +241,239 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 
 		settingsPanel.setBorder(
 				BorderFactory.createTitledBorder(configed.getResourceValue("SSHConnection.Config.settingsPanelTitle")));
-		{
-			lbl_host = new JLabel();
-			lbl_host.setText(configed.getResourceValue("SSHConnection.Config.jLabelHost"));
 
-			cb_host = new JComboBox<>();
-			String host = connectionInfo.getHost();
-			if (host == null)
-				host = ConfigedMain.HOST;
-			cb_host.addItem(host);
+		lbl_host = new JLabel();
+		lbl_host.setText(configed.getResourceValue("SSHConnection.Config.jLabelHost"));
 
-			PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
-			Set<String> depots = persist.getDepotPropertiesForPermittedDepots().keySet();
-			depots.remove(host); // remove login host name if identical with depot fqdn
-			for (String depot : depots) {
-				cb_host.addItem(depot);
+		cb_host = new JComboBox<>();
+		String host = connectionInfo.getHost();
+		if (host == null)
+			host = ConfigedMain.HOST;
+		cb_host.addItem(host);
+
+		PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+		Set<String> depots = persist.getDepotPropertiesForPermittedDepots().keySet();
+		depots.remove(host); // remove login host name if identical with depot fqdn
+		for (String depot : depots) {
+			cb_host.addItem(depot);
+		}
+
+		logging.debug(this, "init host " + host);
+		cb_host.setSelectedItem(host);
+
+		cb_host.addItemListener(itemEvent -> checkComponentStates());
+
+		lbl_port = new JLabel();
+		lbl_port.setText(configed.getResourceValue("SSHConnection.Config.jLabelPort"));
+		tf_port = new JTextField(new CheckedDocument(/* allowedChars */
+				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', }, 5), String.valueOf("22"), 1);
+		tf_port.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				checkComponentStates();
 			}
 
-			logging.debug(this, "init host " + host);
-			cb_host.setSelectedItem(host);
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				checkComponentStates();
+			}
 
-			cb_host.addItemListener(itemEvent -> checkComponentStates());
-		}
-		{
-			lbl_port = new JLabel();
-			lbl_port.setText(configed.getResourceValue("SSHConnection.Config.jLabelPort"));
-			tf_port = new JTextField(new CheckedDocument(/* allowedChars */
-					new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', }, 5), String.valueOf("22"), 1);
-			tf_port.getDocument().addDocumentListener(new DocumentListener() {
-				@Override
-				public void insertUpdate(DocumentEvent e) {
-					checkComponentStates();
-				}
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// Plain text components do not fire these events
+			}
+		});
 
-				@Override
-				public void removeUpdate(DocumentEvent e) {
-					checkComponentStates();
-				}
+		lbl_user = new JLabel();
+		lbl_user.setText(configed.getResourceValue("SSHConnection.Config.jLabelUser"));
+		tf_user = new JTextField();
+		tf_user.setText(connectionInfo.getUser());
+		tf_user.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				checkComponentStates();
+			}
 
-				@Override
-				public void changedUpdate(DocumentEvent e) {
-					// Plain text components do not fire these events
-				}
-			});
-		}
-		{
-			lbl_user = new JLabel();
-			lbl_user.setText(configed.getResourceValue("SSHConnection.Config.jLabelUser"));
-			tf_user = new JTextField();
-			tf_user.setText(connectionInfo.getUser());
-			tf_user.getDocument().addDocumentListener(new DocumentListener() {
-				@Override
-				public void insertUpdate(DocumentEvent e) {
-					checkComponentStates();
-				}
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				checkComponentStates();
+			}
 
-				@Override
-				public void removeUpdate(DocumentEvent e) {
-					checkComponentStates();
-				}
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// Plain text components do not fire these events
+			}
+		});
 
-				@Override
-				public void changedUpdate(DocumentEvent e) {
-					// Plain text components do not fire these events
-				}
-			});
-		}
-		{
-			lbl_passw = new JLabel();
-			lbl_passw.setText(configed.getResourceValue("SSHConnection.Config.jLabelPassword"));
-			tf_passw = new JPasswordField();
-			tf_passw.setText(connectionInfo.getPassw());
+		lbl_passw = new JLabel();
+		lbl_passw.setText(configed.getResourceValue("SSHConnection.Config.jLabelPassword"));
+		tf_passw = new JPasswordField();
+		tf_passw.setText(connectionInfo.getPassw());
 
-			tf_passw.getDocument().addDocumentListener(new DocumentListener() {
-				@Override
-				public void insertUpdate(DocumentEvent e) {
-					checkComponentStates();
-				}
+		tf_passw.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				checkComponentStates();
+			}
 
-				@Override
-				public void removeUpdate(DocumentEvent e) {
-					checkComponentStates();
-				}
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				checkComponentStates();
+			}
 
-				@Override
-				public void changedUpdate(DocumentEvent e) {
-					// Plain text components do not fire these events
-				}
-			});
-		}
-		{
-			btn_save = new IconButton(configed.getResourceValue("SSHConnection.Config.SaveConfiguration"),
-					"images/apply.png", "images/apply.png", "images/apply_disabled.png", false);
-			btn_save.setPreferredSize(Globals.smallButtonDimension);
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// Plain text components do not fire these events
+			}
+		});
 
-			btn_close = new IconButton(configed.getResourceValue("SSHConnection.Config.CancelConfiguration"),
-					"images/cancel.png", "images/cancel_over.png", " ", true);
-			btn_close.setPreferredSize(Globals.smallButtonDimension);
+		btn_save = new IconButton(configed.getResourceValue("SSHConnection.Config.SaveConfiguration"),
+				"images/apply.png", "images/apply.png", "images/apply_disabled.png", false);
+		btn_save.setPreferredSize(Globals.smallButtonDimension);
 
-			btn_kill = new IconButton(configed.getResourceValue("SSHConnection.Config.StopUsing"),
-					"images/edit-delete.png", "images/edit-delete.png", "images/edit-delete_disabled.png", false);
-			btn_kill.setPreferredSize(Globals.smallButtonDimension);
+		btn_close = new IconButton(configed.getResourceValue("SSHConnection.Config.CancelConfiguration"),
+				"images/cancel.png", "images/cancel_over.png", " ", true);
+		btn_close.setPreferredSize(Globals.smallButtonDimension);
 
-			btn_kill.addActionListener(new ActionListener() {
+		btn_kill = new IconButton(configed.getResourceValue("SSHConnection.Config.StopUsing"), "images/edit-delete.png",
+				"images/edit-delete.png", "images/edit-delete_disabled.png", false);
+		btn_kill.setPreferredSize(Globals.smallButtonDimension);
+
+		btn_kill.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btn_kill.setEnabled(false);
+
+				logging.info(this,
+						"actionPerformed on btn_kill " + SSHCommandFactory.getInstance().getConnectionState());
+
+				SSHCommandFactory.getInstance().unsetConnection();
+
+				// there seems to be nothing got disconnect
+				setSSHState();
+			}
+		});
+
+		buttonPanel.add(btn_save);
+		buttonPanel.add(btn_kill);
+
+		buttonPanel.add(new JLabel("            "));
+
+		logging.info(this, "actionlistener for button1 " + Globals.isGlobalReadOnly());
+		if (!(Globals.isGlobalReadOnly())) {
+			btn_save.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					btn_kill.setEnabled(false);
-
-					logging.info(this,
-							"actionPerformed on btn_kill " + SSHCommandFactory.getInstance().getConnectionState());
-
-					SSHCommandFactory.getInstance().unsetConnection();
-
-					// there seems to be nothing got disconnect
-					setSSHState();
+					logging.debug(this, "actionPerformed on button1");
+					doAction1();
 				}
 			});
+		}
 
-			buttonPanel.add(btn_save);
-			buttonPanel.add(btn_kill);
+		btn_openChooser = new IconButton(configed.getResourceValue("SSHConnection.Config.SelectKeyFile"),
+				"images/folder_16.png", " ", "images/folder_16.png", true);
+		btn_openChooser.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH / 4, Globals.BUTTON_HEIGHT));
+		if (!(Globals.isGlobalReadOnly()))
+			btn_openChooser.addActionListener(actionEvent -> doActionOeffnen());
 
-			buttonPanel.add(new JLabel("            "));
+		buttonPanel.add(btn_close);
+		btn_close.addActionListener(actionEvent -> doAction2());
 
-			logging.info(this, "actionlistener for button1 " + Globals.isGlobalReadOnly());
-			if (!(Globals.isGlobalReadOnly())) {
-				btn_save.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						logging.debug(this, "actionPerformed on button1");
-						doAction1();
-					}
-				});
+		lbl_keyfile = new JLabel();
+		lbl_keyfile.setText(configed.getResourceValue("SSHConnection.Config.jLabelKeyfile"));
+		tf_keyfile = new JTextField();
+		tf_keyfile.setText(connectionInfo.getKeyfilePath());
+		tf_keyfile.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				checkComponentStates();
 			}
-		}
-		{
-			btn_openChooser = new IconButton(configed.getResourceValue("SSHConnection.Config.SelectKeyFile"),
-					"images/folder_16.png", " ", "images/folder_16.png", true);
-			btn_openChooser.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH / 4, Globals.BUTTON_HEIGHT));
-			if (!(Globals.isGlobalReadOnly()))
-				btn_openChooser.addActionListener(actionEvent -> doActionOeffnen());
-		}
-		{
-			buttonPanel.add(btn_close);
-			btn_close.addActionListener(actionEvent -> doAction2());
-		}
-		{
-			lbl_keyfile = new JLabel();
-			lbl_keyfile.setText(configed.getResourceValue("SSHConnection.Config.jLabelKeyfile"));
-			tf_keyfile = new JTextField();
-			tf_keyfile.setText(connectionInfo.getKeyfilePath());
-			tf_keyfile.getDocument().addDocumentListener(new DocumentListener() {
-				@Override
-				public void insertUpdate(DocumentEvent e) {
-					checkComponentStates();
-				}
 
-				@Override
-				public void removeUpdate(DocumentEvent e) {
-					checkComponentStates();
-				}
-
-				@Override
-				public void changedUpdate(DocumentEvent e) {
-					// Plain text components do not fire these events
-				}
-			});
-		}
-		{
-			lbl_passphrase = new JLabel();
-			lbl_passphrase.setText(configed.getResourceValue("SSHConnection.Config.jLabelPassphrase"));
-			tf_passphrase = new JPasswordField();
-			tf_passphrase.setEnabled(false);
-			tf_passphrase.setText(connectionInfo.getKeyfilePassphrase());
-			tf_passphrase.getDocument().addDocumentListener(new DocumentListener() {
-				@Override
-				public void insertUpdate(DocumentEvent e) {
-					checkComponentStates();
-				}
-
-				@Override
-				public void removeUpdate(DocumentEvent e) {
-					checkComponentStates();
-				}
-
-				@Override
-				public void changedUpdate(DocumentEvent e) {
-					// Plain text components do not fire these events
-				}
-			});
-		}
-		{
-			cb_useKeyfile = new JCheckBox();
-			cb_useKeyfile.setText(configed.getResourceValue("SSHConnection.Config.useKeyfile"));
-			cb_useKeyfile.setSelected(false);
-			tf_passw.setEnabled(false);
-			tf_keyfile.setEnabled(false);
-			cb_useKeyfile.addItemListener(itemEvent -> {
-				Boolean value = false;
-				if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
-					value = true;
-				}
-				if (!cb_useDefault.isSelected())
-					tf_passw.setEnabled(!value);
-				btn_openChooser.setEnabled(value);
-				tf_keyfile.setEnabled(value);
-				tf_passphrase.setEnabled(value);
+			@Override
+			public void removeUpdate(DocumentEvent e) {
 				checkComponentStates();
-			});
-		}
-		{
-			cb_useDefault = new JCheckBox();
-			cb_useDefault.setText(configed.getResourceValue("SSHConnection.Config.useDefaultAuthentication"));
-			cb_useDefault.setSelected(true);
+			}
 
-			setComponentsEditable(false);
-			cb_useDefault.addItemListener(itemEvent -> {
-				if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
-					setComponentsEditable(false);
-					cb_host.setSelectedItem(connectionInfo.getHost());
-					tf_user.setText(connectionInfo.getUser());
-					tf_passw.setText(connectionInfo.getPassw());
-					tf_port.setText(connectionInfo.getPort());
-				} else
-					setComponentsEditable(true);
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// Plain text components do not fire these events
+			}
+		});
+
+		lbl_passphrase = new JLabel();
+		lbl_passphrase.setText(configed.getResourceValue("SSHConnection.Config.jLabelPassphrase"));
+		tf_passphrase = new JPasswordField();
+		tf_passphrase.setEnabled(false);
+		tf_passphrase.setText(connectionInfo.getKeyfilePassphrase());
+		tf_passphrase.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
 				checkComponentStates();
-			});
+			}
 
-			if (!connectionInfo.getKeyfilePath().equals(""))
-				cb_useKeyfile.setSelected(true);
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				checkComponentStates();
+			}
 
-			cb_useOutputColor = new JCheckBox();
-			cb_useOutputColor.setText(configed.getResourceValue("SSHConnection.Config.coloredOutput"));
-			cb_useOutputColor.setToolTipText(configed.getResourceValue("SSHConnection.Config.coloredOutput.tooltip"));
-			cb_useOutputColor.setSelected(true);
-			SSHCommandFactory.ssh_colored_output = true;
-			cb_useOutputColor.addItemListener(itemEvent -> checkComponentStates());
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// Plain text components do not fire these events
+			}
+		});
 
-			cb_execInBackground = new JCheckBox();
-			cb_execInBackground.setText(configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground"));
-			cb_execInBackground
-					.setToolTipText(configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground.tooltip"));
-			cb_execInBackground.setSelected(SSHCommandFactory.ssh_always_exec_in_background);
-			cb_execInBackground.addItemListener(itemEvent -> checkComponentStates());
-		}
+		cb_useKeyfile = new JCheckBox();
+		cb_useKeyfile.setText(configed.getResourceValue("SSHConnection.Config.useKeyfile"));
+		cb_useKeyfile.setSelected(false);
+		tf_passw.setEnabled(false);
+		tf_keyfile.setEnabled(false);
+		cb_useKeyfile.addItemListener(itemEvent -> {
+			Boolean value = false;
+			if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
+				value = true;
+			}
+			if (!cb_useDefault.isSelected())
+				tf_passw.setEnabled(!value);
+			btn_openChooser.setEnabled(value);
+			tf_keyfile.setEnabled(value);
+			tf_passphrase.setEnabled(value);
+			checkComponentStates();
+		});
+
+		cb_useDefault = new JCheckBox();
+		cb_useDefault.setText(configed.getResourceValue("SSHConnection.Config.useDefaultAuthentication"));
+		cb_useDefault.setSelected(true);
+
+		setComponentsEditable(false);
+		cb_useDefault.addItemListener(itemEvent -> {
+			if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
+				setComponentsEditable(false);
+				cb_host.setSelectedItem(connectionInfo.getHost());
+				tf_user.setText(connectionInfo.getUser());
+				tf_passw.setText(connectionInfo.getPassw());
+				tf_port.setText(connectionInfo.getPort());
+			} else
+				setComponentsEditable(true);
+			checkComponentStates();
+		});
+
+		if (!connectionInfo.getKeyfilePath().equals(""))
+			cb_useKeyfile.setSelected(true);
+
+		cb_useOutputColor = new JCheckBox();
+		cb_useOutputColor.setText(configed.getResourceValue("SSHConnection.Config.coloredOutput"));
+		cb_useOutputColor.setToolTipText(configed.getResourceValue("SSHConnection.Config.coloredOutput.tooltip"));
+		cb_useOutputColor.setSelected(true);
+		SSHCommandFactory.ssh_colored_output = true;
+		cb_useOutputColor.addItemListener(itemEvent -> checkComponentStates());
+
+		cb_execInBackground = new JCheckBox();
+		cb_execInBackground.setText(configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground"));
+		cb_execInBackground
+				.setToolTipText(configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground.tooltip"));
+		cb_execInBackground.setSelected(SSHCommandFactory.ssh_always_exec_in_background);
+		cb_execInBackground.addItemListener(itemEvent -> checkComponentStates());
+
 		logging.debug(this, "sshConfigDialog building layout ");
 		connectionPanelLayout.setHorizontalGroup(connectionPanelLayout.createSequentialGroup()
 				.addGroup(connectionPanelLayout.createParallelGroup()

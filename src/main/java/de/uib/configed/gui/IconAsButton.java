@@ -79,7 +79,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 		actionListeners = new ArrayList<>();
 
 		setLayout(new BorderLayout());
-		label.addMouseListener((MouseListener) this);
+		label.addMouseListener(this);
 		add(label);
 
 	}

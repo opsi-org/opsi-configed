@@ -153,7 +153,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 		SSHConnectExec exec = new SSHConnectExec(command
 
 		);
-		return (SSHConnectionExecDialog) exec.getDialog();
+		return exec.getDialog();
 	}
 
 	@Override

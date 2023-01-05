@@ -525,8 +525,6 @@ public class PanelSWInfo extends JPanel {
 			timeS = parts[0] + ":" + parts[1];
 
 		scanInfo = " (no software audit data, checked at time:  " + timeS + ")";
-
-		return;
 	}
 
 	public void setHost(String hostId) {
@@ -566,7 +564,7 @@ public class PanelSWInfo extends JPanel {
 
 		@Override
 		public Object getValueAt(int row, int col) {
-			return (/* encodeString */ (String[]) data.get(row))[col + 1];
+			return (/* encodeString */ data.get(row))[col + 1];
 		}
 	}
 

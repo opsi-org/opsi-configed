@@ -2676,7 +2676,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		logging.debug(this, "fList getSelectedValue " + fList.getSelectedList());
 
-		return (List<String>) fList.getSelectedList();
+		return fList.getSelectedList();
 	}
 
 	private void groupByNotCurrentProductVersion() {
@@ -3216,7 +3216,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
 
 				changedClientInfo.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY,
-						((Boolean) cbInstallByShutdown.isSelected()).toString());
+						(cbInstallByShutdown.isSelected()).toString());
 
 				main.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 			}
@@ -3474,7 +3474,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			return goOn;
 		} else {
 
-			FTextArea fObsolete = new FTextArea((JFrame) Globals.frame1,
+			FTextArea fObsolete = new FTextArea(Globals.frame1,
 					configed.getResourceValue("NewClientDialog.installByShutdown"), true,
 					new String[] { "ok", "cancel" }, 300, 200) {
 				@Override

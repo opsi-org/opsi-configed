@@ -12,6 +12,7 @@ import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSchException;
 
+import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
@@ -211,11 +212,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 				interruptChannel(channel);
 				disconnect();
 				interruptChannel = true;
-				try {
-					Thread.sleep(50);
-				} catch (InterruptedException ee) {
-					Thread.currentThread().interrupt();
-				}
+				Globals.threadSleep(this, 50);
 			}
 			publishInfo(
 					"---------------------------------------------------------------------------------------------------------------------------------------------------");
@@ -248,12 +245,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 				publish("Set target filename … " + command.getTargetFilename());
 				publish("Set overwrite mode … " + command.getOverwriteMode());
 				publish(" ");
-				try {
-					Thread.sleep(2000);
-				} catch (Exception ee) {
-					logging.error("Error", ee);
-					Thread.currentThread().interrupt();
-				}
+				Globals.threadSleep(this, 2000);
 
 				publish("Copying finish ");
 				channel.disconnect();

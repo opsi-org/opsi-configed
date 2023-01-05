@@ -65,12 +65,7 @@ public class WaitCursor {
 					ActivityPanel.setActing(true);
 
 					while (!ready && !allStopped) {
-						try {
-							Thread.sleep(200);
-
-						} catch (InterruptedException ex) {
-							Thread.currentThread().interrupt();
-						}
+						Globals.threadSleep(this, 200);
 					}
 				}
 			}.start();
@@ -79,12 +74,7 @@ public class WaitCursor {
 				ActivityPanel.setActing(true);
 
 				while (!ready && !allStopped) {
-					try {
-						Thread.sleep(200);
-
-					} catch (InterruptedException ex) {
-						Thread.currentThread().interrupt();
-					}
+					Globals.threadSleep(this, 200);
 				}
 			});
 		}

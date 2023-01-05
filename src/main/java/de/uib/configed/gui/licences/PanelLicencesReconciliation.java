@@ -5,7 +5,6 @@
 
 package de.uib.configed.gui.licences;
 
-import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
 import de.uib.configed.ControlPanelLicencesReconciliation;
@@ -51,7 +50,7 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 		panelReconciliation.showFilterIcon(true); // supply implementation of SearchTargetModelFromTable.setFiltered
 		panelReconciliation.setFiltering(true);
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout((JPanel) this);
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup().addContainerGap()

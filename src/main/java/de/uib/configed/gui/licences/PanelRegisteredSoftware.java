@@ -128,7 +128,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 			if (isAwareOfSelectionListener()) {
 				logging.info(this, "mouse click in table. outside colMarkCursorRow, aware of selectionlistener");
 
-				((ControlPanelAssignToLPools) controller).validateWindowsSoftwareKeys();
+				controller.validateWindowsSoftwareKeys();
 
 				if (controller.thePanel.fSoftwarename2LicencePool.isVisible()) {
 					logging.info(this, "selectionListener valueChanged,fSoftwarename2LicencePool.isVisible ");
@@ -162,7 +162,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 	@Override
 	public void setDataChanged(boolean b) {
-		if (b && ((ControlPanelAssignToLPools) controller).acknowledgeChangeForSWList()) {
+		if (b && controller.acknowledgeChangeForSWList()) {
 			int col = theTable.getEditingColumn();
 			logging.info(this, "setDataChanged col " + col);
 			if (tableModel.gotMarkCursorRow() && col != tableModel.getColMarkCursorRow()) {

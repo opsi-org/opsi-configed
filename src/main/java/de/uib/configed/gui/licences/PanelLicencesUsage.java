@@ -7,9 +7,7 @@ package de.uib.configed.gui.licences;
 
 import java.awt.event.ActionListener;
 
-import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 import de.uib.configed.ControlPanelLicencesUsage;
@@ -26,10 +24,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 	private JSplitPane splitPane;
 	private int splitPaneHMargin = 1;
 
-	public JTextField testfield;
 	public PanelGenEditTable panelUsage;
-	public PanelGenEditTable panelKeys;
-	public PanelGenEditTable panelWindowsSoftwareIds;
 	public PanelGenEditTable panelLicencepools;
 
 	private javax.swing.JButton buttonGet;
@@ -130,7 +125,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout((JPanel) this);
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(
 				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

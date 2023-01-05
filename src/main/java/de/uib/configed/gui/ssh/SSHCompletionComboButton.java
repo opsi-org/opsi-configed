@@ -25,7 +25,7 @@ import de.uib.utilities.swing.CellAlternatingColorizer;
 
 // Verwendung in Beisspielsweise SSHOpsiSetRightsDialog.java
 public class SSHCompletionComboButton {
-	private JComboBox combobox;
+	private JComboBox<String> combobox;
 	private JButton button;
 	private JTextField textfield;
 	private List<String> defaultvalues;
@@ -193,7 +193,7 @@ public class SSHCompletionComboButton {
 		return combobox;
 	}
 
-	public void setCombobox(JComboBox cb) {
+	public void setCombobox(JComboBox<String> cb) {
 		combobox = cb;
 	}
 

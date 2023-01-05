@@ -40,8 +40,8 @@ public class CommandOpsiSetRights extends SSHCommand_Template implements SSHComm
 				d = d + "/";
 
 		logging.info(this, "CommandOpsiSetRights dir " + dir);
-		ssh_command.add((SSHCommand) this);
-		ssh_command_original.add((SSHCommand) this);
+		ssh_command.add(this);
+		ssh_command_original.add(this);
 	}
 
 	@Override

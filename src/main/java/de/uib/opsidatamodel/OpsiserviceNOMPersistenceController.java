@@ -5172,10 +5172,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 							logging.warning(this,
 									"repeat loading the values , we repeated  " + tryOnceMoreCounter + " times");
 
-							try {
-								Thread.sleep(1000);
-							} catch (InterruptedException iex) {
-							}
+							Globals.threadSleep(this, 1000);
 							break;
 						}
 					}

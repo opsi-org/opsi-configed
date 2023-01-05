@@ -336,7 +336,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		for (int j = 0; j < hwConfig.size(); j++) {
 			try {
 				Map whc = (Map) hwConfig.get(j);
-				if (((String) ((Map) whc.get("Class")).get("Opsi")).equals(hwClass)) {
+				if (((Map) whc.get("Class")).get("Opsi").equals(hwClass)) {
 					values = (List) whc.get("Values");
 					break;
 				}
@@ -572,7 +572,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 			for (int j = 0; j < names.length; j++) {
 				for (int k = 0; k < devices.size(); k++) {
-					if (names[j].equals((String) ((Map) devices.get(k)).get("displayName"))) {
+					if (names[j].equals(((Map) devices.get(k)).get("displayName"))) {
 						IconNode iconNode = new IconNode(
 								encodeString((String) ((Map) devices.get(k)).get("displayName")));
 						iconNode.setClosedIcon(classIcon);
@@ -670,7 +670,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			Object child = treeModel.getChild(treeModel.getRoot(), i);
 			// get ArrayList
 			List al = (List) hwInfo.get(hwClassMapping.get(child.toString()));
-			Iterator<HashMap> al_itr = al.iterator();
+			Iterator<Map> al_itr = al.iterator();
 
 			boolean first = true;
 			while (al_itr.hasNext()) {
@@ -679,7 +679,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					childValues = new ArrayList<>();
 					childValues.add(child.toString()); // first column
 					childValues.add(hm.get("displayName").toString());
-					Iterator hm_iter = (Iterator) hm.keySet().iterator();
+					Iterator hm_iter = hm.keySet().iterator();
 					boolean firstValue = true;
 					while (hm_iter.hasNext()) {
 						String hm_key = (String) hm_iter.next();

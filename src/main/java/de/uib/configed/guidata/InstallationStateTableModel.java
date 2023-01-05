@@ -689,7 +689,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		if (changedStatesForClient == null)
 			return null;
 
-		Map<String, String> changedStatesForProduct = (Map<String, String>) changedStatesForClient.get(product);
+		Map<String, String> changedStatesForProduct = changedStatesForClient.get(product);
 		if (changedStatesForProduct == null)
 			return null;
 

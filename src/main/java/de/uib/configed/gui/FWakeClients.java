@@ -82,12 +82,7 @@ public class FWakeClients extends FShowList {
 
 			persist.wakeOnLan(hostsToWakeOnThisTurn, hostSeparationByDepots, executionerForDepots);
 
-			try {
-				Thread.sleep(1000 * delaySecs);
-			} catch (InterruptedException ies) {
-				Thread.currentThread().interrupt();
-			}
-
+			Globals.threadSleep(this, 1000 * delaySecs);
 			turn++;
 		}
 

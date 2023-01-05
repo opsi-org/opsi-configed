@@ -19,7 +19,6 @@ import java.awt.Dimension;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -149,7 +148,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	public void initLayout() {
 		logging.debug(this, "initLayout ");
 		setBackground(Globals.BACKGROUND_COLOR_7);
-		thisLayout = new GroupLayout((JComponent) this);
+		thisLayout = new GroupLayout(this);
 		setLayout(thisLayout);
 		thisLayout.setHorizontalGroup(thisLayout.createSequentialGroup().addGap(lGap).addGroup(thisLayout
 				.createParallelGroup()

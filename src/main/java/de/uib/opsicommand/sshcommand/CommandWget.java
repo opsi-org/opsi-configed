@@ -162,7 +162,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	public SSHConnectionExecDialog startHelpDialog() {
 		SSHCommand command = new CommandHelp(this);
 		SSHConnectExec exec = new SSHConnectExec(command);
-		return (SSHConnectionExecDialog) exec.getDialog();
+		return exec.getDialog();
 	}
 
 	@Override

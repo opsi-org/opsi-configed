@@ -126,6 +126,8 @@ public class ConnectionState {
 						+ " " + this.toString());
 				secsWaited = countWait / divisorSeconds;
 			} catch (InterruptedException ex) {
+				logging.info(this, "Thread interrupted exception: " + ex);
+				Thread.currentThread().interrupt();
 			}
 		}
 	}
