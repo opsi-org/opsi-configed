@@ -180,9 +180,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	// key --> rowmap for auditSoftware
 
-	protected List<Map<String, Object>> relations_auditHardwareOnHost;
+	protected List<Map<String, Object>> relationsAuditHardwareOnHost;
 
-	protected AuditSoftwareXLicencePool relations_auditSoftwareToLicencePools;
+	protected AuditSoftwareXLicencePool relationsAuditSoftwareToLicencePools;
 
 	protected Map<String, Map> rowmapAuditSoftware;
 
@@ -282,7 +282,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	protected Map<String, String> logfiles;
 
-	private List updateProductOnClient_items;
+	private List updateProductOnClientItems;
 
 	private List<LicenceUsageEntry> itemsDeletionLicenceUsage;
 
@@ -2705,15 +2705,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		List<Object> deleteItems = new ArrayList<>();
 		for (Object2GroupEntry entry : entries) {
+			Map<String, Object> deleteItem = createNOMitem(Object2GroupEntry.TYPE_NAME);
+			deleteItem.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
+			deleteItem.put(Object2GroupEntry.GROUP_ID_KEY, entry.getGroupId());
+			deleteItem.put(Object2GroupEntry.MEMBER_KEY, entry.getMember());
 
-			{
-				Map<String, Object> deleteItem = createNOMitem(Object2GroupEntry.TYPE_NAME);
-				deleteItem.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
-				deleteItem.put(Object2GroupEntry.GROUP_ID_KEY, entry.getGroupId());
-				deleteItem.put(Object2GroupEntry.MEMBER_KEY, entry.getMember());
+			deleteItems.add(Executioner.jsonMap(deleteItem));
 
-				deleteItems.add(Executioner.jsonMap(deleteItem));
-			}
 		}
 
 		boolean result = true;
@@ -2725,7 +2723,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				deleteItems.clear();
 			} else
 				result = false;
-
 		}
 
 		return result;
@@ -3153,19 +3150,19 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public void auditHardwareOnHostRequestRefresh() {
-		relations_auditHardwareOnHost = null;
+		relationsAuditHardwareOnHost = null;
 	}
 
 	@Override
 	public List<Map<String, Object>> getHardwareOnClient() {
-		if (relations_auditHardwareOnHost == null) {
+		if (relationsAuditHardwareOnHost == null) {
 			Map<String, String> filterMap = new HashMap<>();
 			filterMap.put("state", "1");
-			relations_auditHardwareOnHost = exec.getListOfMaps(
+			relationsAuditHardwareOnHost = exec.getListOfMaps(
 					new OpsiMethodCall("auditHardwareOnHost_getHashes", new Object[] { new String[0], filterMap }));
 		}
 
-		return relations_auditHardwareOnHost;
+		return relationsAuditHardwareOnHost;
 	}
 
 	/* multiclient hwinfo */
@@ -4062,10 +4059,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	public boolean updateProductOnClient(String pcname, String productname, int producttype, Map updateValues) {
-		if (updateProductOnClient_items == null)
-			updateProductOnClient_items = new ArrayList<>();
+		if (updateProductOnClientItems == null)
+			updateProductOnClientItems = new ArrayList<>();
 
-		return updateProductOnClient(pcname, productname, producttype, updateValues, updateProductOnClient_items);
+		return updateProductOnClient(pcname, productname, producttype, updateValues, updateProductOnClientItems);
 	}
 
 	public boolean updateProductOnClients(List updateItems)
@@ -4094,7 +4091,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	public boolean updateProductOnClients() {
-		return updateProductOnClients(updateProductOnClient_items);
+		return updateProductOnClients(updateProductOnClientItems);
 	}
 
 	public boolean updateProductOnClients(Set<String> clients, String productName, int productType,
@@ -6196,15 +6193,15 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	public void retrieveRelationsAuditSoftwareToLicencePools() {
 
-		logging.info(this, "retrieveRelationsAuditSoftwareToLicencePools start "
-				+ (relations_auditSoftwareToLicencePools != null));
+		logging.info(this,
+				"retrieveRelationsAuditSoftwareToLicencePools start " + (relationsAuditSoftwareToLicencePools != null));
 
-		if (relations_auditSoftwareToLicencePools == null)
+		if (relationsAuditSoftwareToLicencePools == null)
 			dataStub.auditSoftwareXLicencePoolRequestRefresh();
 		else
 			return;
 
-		relations_auditSoftwareToLicencePools = dataStub.getAuditSoftwareXLicencePool();
+		relationsAuditSoftwareToLicencePools = dataStub.getAuditSoftwareXLicencePool();
 
 		rowmapAuditSoftware = new TreeMap<>();
 		fSoftware2LicencePool = new HashMap<>(); // function softwareIdent --> pool
@@ -6217,9 +6214,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (!withLicenceManagement)
 			return;
 
-		for (StringValuedRelationElement retrieved : relations_auditSoftwareToLicencePools) {
+		for (StringValuedRelationElement retrieved : relationsAuditSoftwareToLicencePools) {
 
-			SWAuditEntry entry = new SWAuditEntry(retrieved, relations_auditSoftwareToLicencePools);
+			SWAuditEntry entry = new SWAuditEntry(retrieved, relationsAuditSoftwareToLicencePools);
 			String licencePoolKEY = retrieved.get(LicencepoolEntry.idSERVICEKEY);
 			String swKEY = entry.getIdent();
 
@@ -6278,7 +6275,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	public void relations_auditSoftwareToLicencePools_requestRefresh() {
 
-		relations_auditSoftwareToLicencePools = null;
+		relationsAuditSoftwareToLicencePools = null;
 		softwareWithoutAssociatedLicencePool = null;
 		fLicencePool2SoftwareList = null;
 		fLicencePool2UnknownSoftwareList = null;
@@ -7074,7 +7071,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		logging.info(this, "reconciliationInfoRequestRefresh installedSoftwareInformationRequestRefresh()");
 		dataStub.installedSoftwareInformationRequestRefresh();
 
-		relations_auditSoftwareToLicencePools = null;
+		relationsAuditSoftwareToLicencePools = null;
 
 		dataStub.softwareAuditOnClientsRequestRefresh();
 		dataStub.licencepoolsRequestRefresh();

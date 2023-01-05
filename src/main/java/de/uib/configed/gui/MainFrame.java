@@ -2454,13 +2454,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		depotListPresenter.setBackground(depotListPresenter.getMyColor());
 
-		Containership cspanel_LocalbootProductsettings = new Containership(panelLocalbootProductSettings);
-		cspanel_LocalbootProductsettings.doForAllContainedCompisOfClass("setBackground",
+		Containership containershipPanelLocalbootProductsettings = new Containership(panelLocalbootProductSettings);
+		containershipPanelLocalbootProductsettings.doForAllContainedCompisOfClass("setBackground",
 				new Object[] { Globals.BACKGROUND_COLOR_3 }, VerticalPositioner.class);
 		panelLocalbootProductSettings.setBackground(Globals.BACKGROUND_COLOR_3);
 
-		Containership cspanel_NetbootProductsettings = new Containership(panelNetbootProductSettings);
-		cspanel_NetbootProductsettings.doForAllContainedCompisOfClass("setBackground",
+		Containership containershipPanelNetbootProductsettings = new Containership(panelNetbootProductSettings);
+		containershipPanelNetbootProductsettings.doForAllContainedCompisOfClass("setBackground",
 				new Object[] { Globals.BACKGROUND_COLOR_3 }, VerticalPositioner.class);
 		panelNetbootProductSettings.setBackground(Globals.BACKGROUND_COLOR_3);
 

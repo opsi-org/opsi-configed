@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.swing.ComboBoxModel;
@@ -29,7 +30,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 	// delegate
 	protected AbstractEditMapPanel editMapPanel;
 	protected JLabel label;
-	protected JComboBox combo;
+	protected JComboBox<String> combo;
 	protected Map<String, Map<String, Object>> multipleMaps;
 	protected UpdateCollection updateCollection;
 
@@ -46,7 +47,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 		logging.info(this, "buildPanel, produce editMapPanel");
 		editMapPanel = new EditMapPanelX(cellRenderer, false, false);
 		((EditMapPanelX) editMapPanel)
-				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName().toString()));
+				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
 		editMapPanel.setShowToolTip(false);
 
 		JPanel header = new JPanel();
@@ -78,7 +79,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 				.addGap(20));
 	}
 
-	public void initMultipleHostsEditing(String labeltext, ComboBoxModel comboModel,
+	public void initMultipleHostsEditing(String labeltext, ComboBoxModel<String> comboModel,
 			Map<String, Map<String, Object>> multipleMaps, UpdateCollection updateCollection,
 			Set<String> keysOfReadOnlyEntries) {
 		label.setText(labeltext);
@@ -95,7 +96,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 		editMapPanel.setReadOnlyEntries(keysOfReadOnlyEntries);
 
 		if (comboModel != null && comboModel.getSize() > 0) {
-			setMap((String) comboModel.getElementAt(0));
+			setMap(comboModel.getElementAt(0));
 		}
 	}
 
@@ -104,21 +105,21 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 		editMapPanel.registerDataChangedObserver(o);
 	}
 
-	public void activateCombo(ComboBoxModel model) {
+	public void activateCombo(ComboBoxModel<String> model) {
 		if (model != null)
 			combo.setModel(model);
 		combo.setEnabled((model != null));
 		combo.setVisible((model != null));
 	}
 
-	protected Map<String, ListCellOptions> deriveOptionsMap(Map m) {
+	protected Map<String, ListCellOptions> deriveOptionsMap(Map<String, Object> m) {
 		Map<String, ListCellOptions> result = new HashMap<>();
 
-		for (Object key : m.keySet()) {
+		for (Entry<String, Object> entry : m.entrySet()) {
 
 			ListCellOptions cellOptions = null;
 
-			if ((m.get(key)) instanceof java.lang.Boolean)
+			if ((entry.getValue()) instanceof java.lang.Boolean)
 				cellOptions = DefaultListCellOptions.getNewBooleanListCellOptions();
 
 			else
@@ -126,7 +127,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 
 			logging.debug(this, "cellOptions: " + cellOptions);
 
-			result.put((String) key, cellOptions);
+			result.put(entry.getKey(), cellOptions);
 		}
 		return result;
 
