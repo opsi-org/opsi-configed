@@ -18,12 +18,12 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 	public static final String LBLNEEDAUTH = "lbl_needAuthentication";
 	public static final String CBNEEDAUTH = "cb_needAuthentication";
 
-	private JCheckBox cb_needAuthentication;
-	private JLabel lbl_user = new JLabel();
-	private JLabel lbl_needAuthentication = new JLabel();
-	private JTextField tf_user = new JTextField();
-	private JTextField tf_pswd = new JPasswordField();
-	private JLabel lbl_pswd = new JLabel();
+	private JCheckBox jCheckBoxNeedAuthentication;
+	private JLabel jLabeluser = new JLabel();
+	private JLabel jLabelNeedAuthentication = new JLabel();
+	private JTextField jTextFieldUser = new JTextField();
+	private JTextField jTextFieldPassword = new JPasswordField();
+	private JLabel jLabelPassword = new JLabel();
 	private SSHWgetAuthenticationPanel instance;
 
 	public SSHWgetAuthenticationPanel() {
@@ -36,28 +36,28 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 	}
 
 	private void initComponents() {
-		lbl_needAuthentication
+		jLabelNeedAuthentication
 				.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.needAuthentication"));
-		lbl_needAuthentication.setToolTipText(
+		jLabelNeedAuthentication.setToolTipText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.wget.needAuthentication.tooltip"));
-		cb_needAuthentication = new JCheckBox();
-		cb_needAuthentication.addItemListener(itemEvent -> {
+		jCheckBoxNeedAuthentication = new JCheckBox();
+		jCheckBoxNeedAuthentication.addItemListener(itemEvent -> {
 			if (itemEvent.getStateChange() == ItemEvent.SELECTED)
 				instance.open();
 			else
 				instance.close();
 		});
-		lbl_user.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.username"));
-		lbl_pswd.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.password"));
-		((JPasswordField) tf_pswd).setEchoChar('*');
-		tf_user.setText("");
-		tf_pswd.setText("");
+		jLabeluser.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.username"));
+		jLabelPassword.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.password"));
+		((JPasswordField) jTextFieldPassword).setEchoChar('*');
+		jTextFieldUser.setText("");
+		jTextFieldPassword.setText("");
 
 	}
 
 	public void setLabelNeedAuthenticationSize(Dimension size) {
-		lbl_needAuthentication.setSize(size);
-		lbl_needAuthentication.setPreferredSize(size);
+		jLabelNeedAuthentication.setSize(size);
+		jLabelNeedAuthentication.setPreferredSize(size);
 	}
 
 	public void setLabelNeedAuthenticationSize(int width, int height) {
@@ -70,26 +70,26 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 	}
 
 	public void setLabelSizes(Dimension size) {
-		lbl_user.setPreferredSize(size);
-		lbl_pswd.setPreferredSize(size);
+		jLabeluser.setPreferredSize(size);
+		jLabelPassword.setPreferredSize(size);
 	}
 
 	public JComponent get(String comp) {
 		if (comp.equals(LBLNEEDAUTH))
-			return lbl_needAuthentication;
+			return jLabelNeedAuthentication;
 		if (comp.equals(CBNEEDAUTH))
-			return cb_needAuthentication;
+			return jCheckBoxNeedAuthentication;
 		if (comp.equals(LBLUSER))
-			return lbl_user;
+			return jLabeluser;
 		return null;
 	}
 
 	public String getUser() {
-		return tf_user.getText();
+		return jTextFieldUser.getText();
 	}
 
 	public String getPw() {
-		return new String(((JPasswordField) tf_pswd).getPassword());
+		return new String(((JPasswordField) jTextFieldPassword).getPassword());
 	}
 
 	private void initLayout() {
@@ -101,23 +101,27 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(layout.createParallelGroup()
 						.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
-								.addComponent(lbl_user, PREF, PREF, PREF).addGap(Globals.GAP_SIZE))
+								.addComponent(jLabeluser, PREF, PREF, PREF).addGap(Globals.GAP_SIZE))
 						.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
-								.addComponent(lbl_pswd, PREF, PREF, PREF).addGap(Globals.GAP_SIZE)))
+								.addComponent(jLabelPassword, PREF, PREF, PREF).addGap(Globals.GAP_SIZE)))
 				.addGroup(layout.createParallelGroup()
-						.addComponent(tf_user, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2)
-						.addComponent(tf_pswd, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2)));
+						.addComponent(jTextFieldUser, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+								Globals.BUTTON_WIDTH * 2)
+						.addComponent(jTextFieldPassword, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+								Globals.BUTTON_WIDTH * 2)));
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(layout.createParallelGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(lbl_user, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(jLabeluser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 						.addGap(Globals.GAP_SIZE)
-						.addComponent(tf_user, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(jTextFieldUser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
 						.addGap(Globals.GAP_SIZE))
 				.addGroup(layout.createParallelGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(lbl_pswd, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(tf_pswd, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(jLabelPassword, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addGap(Globals.GAP_SIZE).addComponent(jTextFieldPassword, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 						.addGap(Globals.GAP_SIZE)));
 	}
 }

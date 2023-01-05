@@ -41,30 +41,22 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 	private JPanel settingsPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
 
-	private static JCheckBox cb_useDefault;
-	private static JCheckBox cb_useKeyfile;
-	private JCheckBox cb_useOutputColor;
-	private JCheckBox cb_execInBackground;
-	private JButton btn_save;
-	private JButton btn_openChooser;
-	private JButton btn_close;
-	private JButton btn_kill;
+	private static JCheckBox jCheckBoxDefault;
+	private static JCheckBox jCheckBoxUseKeyFile;
+	private JCheckBox jCheckBoxUseOutputColor;
+	private JCheckBox jCheckBoxExecInBackground;
+	private JButton jButtonSave;
+	private JButton jButtonKill;
 
-	private JLabel lbl_keyfile = new JLabel();
-	private JLabel lbl_passphrase = new JLabel();
-	private JLabel lbl_host = new JLabel();
-	private JLabel lbl_user = new JLabel();
-	private JLabel lbl_passw = new JLabel();
-	private JLabel lbl_port = new JLabel();
-	private JLabel lbl_connectionState = new JLabel();
+	private JLabel jLabelConnectionState = new JLabel();
 
-	private static JComboBox<String> cb_host;
-	private static JTextField tf_keyfile;
-	private static JPasswordField tf_passphrase;
-	private static JTextField tf_user;
-	private static JTextField tf_port;
-	private static JPasswordField tf_passw;
-	private static boolean cb_useDefault_state;
+	private static JComboBox<String> jComboBoxHost;
+	private static JTextField jTextFieldKeyFile;
+	private static JPasswordField jTextFieldPassphrase;
+	private static JTextField jTextFieldUser;
+	private static JTextField jTextFieldPort;
+	private static JPasswordField jTextFieldPassword;
+	private static boolean jComboBoxUseDefaultState;
 	private ConfigedMain configedMain;
 	private static SSHConfigDialog instance;
 	private static SSHConnectionInfo connectionInfo = null;
@@ -80,7 +72,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		this.setSize(500, 535);
 		setLocationRelativeTo(Globals.mainFrame);
 		this.setVisible(true);
-		cb_useDefault_state = cb_useDefault.isSelected();
+		jComboBoxUseDefaultState = jCheckBoxDefault.isSelected();
 		if (Globals.isGlobalReadOnly()) {
 			setComponentsEnabledRO(false);
 		}
@@ -112,22 +104,22 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			return false;
 		}
 
-		if (!cb_useDefault.isSelected()) {
-			if (!connectionInfo.getHost().equals(cb_host.getSelectedItem())) {
+		if (!jCheckBoxDefault.isSelected()) {
+			if (!connectionInfo.getHost().equals(jComboBoxHost.getSelectedItem())) {
 				logging.debug(this, "compareStates 1");
 				return false;
 			}
-			if (!connectionInfo.getUser().equals(tf_user.getText())) {
+			if (!connectionInfo.getUser().equals(jTextFieldUser.getText())) {
 				logging.debug(this, "compareStates 2");
 				return false;
 			}
-			if (!connectionInfo.getPassw().equals(new String(tf_passw.getPassword()))) {
+			if (!connectionInfo.getPassw().equals(new String(jTextFieldPassword.getPassword()))) {
 				logging.debug(this, "compareStates 3");
 				logging.debug(this, "connection.getPW " + connectionInfo.getPassw());
-				logging.debug(this, "tf.getPW " + new String(tf_passw.getPassword()));
+				logging.debug(this, "tf.getPW " + new String(jTextFieldPassword.getPassword()));
 				return false;
 			}
-			if ((!connectionInfo.getPort().equals(tf_port.getText())) && (!connectionInfo.usesKeyfile())) {
+			if ((!connectionInfo.getPort().equals(jTextFieldPort.getText())) && (!connectionInfo.usesKeyfile())) {
 				logging.debug(this, "compareStates 4");
 				return false;
 			}
@@ -138,7 +130,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 						"compareStates 5 >" + connectionInfo.getHost() + "<     <>    >" + ConfigedMain.HOST + "<");
 				return false;
 			}
-			if (!connectionInfo.getPort().equals(tf_port.getText())) {
+			if (!connectionInfo.getPort().equals(jTextFieldPort.getText())) {
 				logging.debug(this, "compareStates 6");
 				return false;
 			}
@@ -154,18 +146,18 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 
 		logging.debug(this, "compareStates until now == ");
 
-		if (connectionInfo.usesKeyfile() != (cb_useKeyfile.isSelected())) {
+		if (connectionInfo.usesKeyfile() != (jCheckBoxUseKeyFile.isSelected())) {
 			logging.info(this, "compareStates 9");
 			return false;
-		} else if (cb_useKeyfile.isSelected()) {
+		} else if (jCheckBoxUseKeyFile.isSelected()) {
 			try {
 
-				if (!connectionInfo.getKeyfilePath().equals(tf_keyfile.getText())) {
+				if (!connectionInfo.getKeyfilePath().equals(jTextFieldKeyFile.getText())) {
 					logging.debug(this, "compareStates 10");
 					return false;
 				}
 
-				String pp = Arrays.toString(tf_passphrase.getPassword());
+				String pp = Arrays.toString(jTextFieldPassphrase.getPassword());
 
 				if (!connectionInfo.getKeyfilePassphrase().equals(pp)) {
 					logging.debug(this, "compareStates 11");
@@ -176,23 +168,23 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			}
 		}
 
-		if (cb_useOutputColor != null) {
+		if (jCheckBoxUseOutputColor != null) {
 			SSHCommandFactory.getInstance();
 			logging.debug(this, "compareStates  (factory.ssh_colored_output != cb_useOutputColor.isSelected()) "
-					+ SSHCommandFactory.ssh_colored_output + " != " + cb_useOutputColor.isSelected());
+					+ SSHCommandFactory.ssh_colored_output + " != " + jCheckBoxUseOutputColor.isSelected());
 			SSHCommandFactory.getInstance();
-			if (SSHCommandFactory.ssh_colored_output != cb_useOutputColor.isSelected()) {
+			if (SSHCommandFactory.ssh_colored_output != jCheckBoxUseOutputColor.isSelected()) {
 				logging.debug(this, "compareStates 12");
 				return false;
 			}
 		}
-		if (cb_execInBackground != null) {
+		if (jCheckBoxExecInBackground != null) {
 			logging.debug(this,
 					"compareStates  (factory.ssh_always_exec_in_background != cb_execInBackground.isSelected()) "
 							+ SSHCommandFactory.ssh_always_exec_in_background + " != "
-							+ cb_execInBackground.isSelected());
+							+ jCheckBoxExecInBackground.isSelected());
 			SSHCommandFactory.getInstance();
-			if (SSHCommandFactory.ssh_always_exec_in_background != cb_execInBackground.isSelected()) {
+			if (SSHCommandFactory.ssh_always_exec_in_background != jCheckBoxExecInBackground.isSelected()) {
 				logging.debug(this, "compareStates 13");
 				return false;
 			}
@@ -206,8 +198,8 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		logging.info(this, "setSSHState " + str);
 		String labeltext = "<html><font color='blue'>" + str + "</font></html>";
 
-		btn_save.setEnabled(!str.equals(SSHCommandFactory.CONNECTED));
-		btn_kill.setEnabled(str.equals(SSHCommandFactory.CONNECTED));
+		jButtonSave.setEnabled(!str.equals(SSHCommandFactory.CONNECTED));
+		jButtonKill.setEnabled(str.equals(SSHCommandFactory.CONNECTED));
 
 		if (str.equals(SSHCommandFactory.CONNECTED)) {
 			labeltext = "<html><font color='green'>" + str + "</font></html>";
@@ -215,7 +207,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			if (str.equals(SSHCommandFactory.NOT_CONNECTED))
 				labeltext = "<html><font color='red'>" + str + "</font></html>";
 		}
-		lbl_connectionState.setText(labeltext);
+		jLabelConnectionState.setText(labeltext);
 		logging.debug(this, "setSSHState setText " + labeltext);
 	}
 
@@ -242,32 +234,32 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		settingsPanel.setBorder(
 				BorderFactory.createTitledBorder(configed.getResourceValue("SSHConnection.Config.settingsPanelTitle")));
 
-		lbl_host = new JLabel();
-		lbl_host.setText(configed.getResourceValue("SSHConnection.Config.jLabelHost"));
+		JLabel jLabelHost = new JLabel();
+		jLabelHost.setText(configed.getResourceValue("SSHConnection.Config.jLabelHost"));
 
-		cb_host = new JComboBox<>();
+		jComboBoxHost = new JComboBox<>();
 		String host = connectionInfo.getHost();
 		if (host == null)
 			host = ConfigedMain.HOST;
-		cb_host.addItem(host);
+		jComboBoxHost.addItem(host);
 
 		PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 		Set<String> depots = persist.getDepotPropertiesForPermittedDepots().keySet();
 		depots.remove(host); // remove login host name if identical with depot fqdn
 		for (String depot : depots) {
-			cb_host.addItem(depot);
+			jComboBoxHost.addItem(depot);
 		}
 
 		logging.debug(this, "init host " + host);
-		cb_host.setSelectedItem(host);
+		jComboBoxHost.setSelectedItem(host);
 
-		cb_host.addItemListener(itemEvent -> checkComponentStates());
+		jComboBoxHost.addItemListener(itemEvent -> checkComponentStates());
 
-		lbl_port = new JLabel();
-		lbl_port.setText(configed.getResourceValue("SSHConnection.Config.jLabelPort"));
-		tf_port = new JTextField(new CheckedDocument(/* allowedChars */
+		JLabel jLabelPort = new JLabel();
+		jLabelPort.setText(configed.getResourceValue("SSHConnection.Config.jLabelPort"));
+		jTextFieldPort = new JTextField(new CheckedDocument(/* allowedChars */
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', }, 5), String.valueOf("22"), 1);
-		tf_port.getDocument().addDocumentListener(new DocumentListener() {
+		jTextFieldPort.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				checkComponentStates();
@@ -284,11 +276,11 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			}
 		});
 
-		lbl_user = new JLabel();
-		lbl_user.setText(configed.getResourceValue("SSHConnection.Config.jLabelUser"));
-		tf_user = new JTextField();
-		tf_user.setText(connectionInfo.getUser());
-		tf_user.getDocument().addDocumentListener(new DocumentListener() {
+		JLabel jLabelUser = new JLabel();
+		jLabelUser.setText(configed.getResourceValue("SSHConnection.Config.jLabelUser"));
+		jTextFieldUser = new JTextField();
+		jTextFieldUser.setText(connectionInfo.getUser());
+		jTextFieldUser.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				checkComponentStates();
@@ -305,12 +297,13 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			}
 		});
 
-		lbl_passw = new JLabel();
-		lbl_passw.setText(configed.getResourceValue("SSHConnection.Config.jLabelPassword"));
-		tf_passw = new JPasswordField();
-		tf_passw.setText(connectionInfo.getPassw());
+		JLabel jLabelPassword = new JLabel();
+		jLabelPassword.setText(configed.getResourceValue("SSHConnection.Config.jLabelPassword"));
 
-		tf_passw.getDocument().addDocumentListener(new DocumentListener() {
+		jTextFieldPassword = new JPasswordField();
+		jTextFieldPassword.setText(connectionInfo.getPassw());
+
+		jTextFieldPassword.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				checkComponentStates();
@@ -327,22 +320,22 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			}
 		});
 
-		btn_save = new IconButton(configed.getResourceValue("SSHConnection.Config.SaveConfiguration"),
+		jButtonSave = new IconButton(configed.getResourceValue("SSHConnection.Config.SaveConfiguration"),
 				"images/apply.png", "images/apply.png", "images/apply_disabled.png", false);
-		btn_save.setPreferredSize(Globals.smallButtonDimension);
+		jButtonSave.setPreferredSize(Globals.smallButtonDimension);
 
-		btn_close = new IconButton(configed.getResourceValue("SSHConnection.Config.CancelConfiguration"),
+		IconButton jButtonClose = new IconButton(configed.getResourceValue("SSHConnection.Config.CancelConfiguration"),
 				"images/cancel.png", "images/cancel_over.png", " ", true);
-		btn_close.setPreferredSize(Globals.smallButtonDimension);
+		jButtonClose.setPreferredSize(Globals.smallButtonDimension);
 
-		btn_kill = new IconButton(configed.getResourceValue("SSHConnection.Config.StopUsing"), "images/edit-delete.png",
-				"images/edit-delete.png", "images/edit-delete_disabled.png", false);
-		btn_kill.setPreferredSize(Globals.smallButtonDimension);
+		jButtonKill = new IconButton(configed.getResourceValue("SSHConnection.Config.StopUsing"),
+				"images/edit-delete.png", "images/edit-delete.png", "images/edit-delete_disabled.png", false);
+		jButtonKill.setPreferredSize(Globals.smallButtonDimension);
 
-		btn_kill.addActionListener(new ActionListener() {
+		jButtonKill.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				btn_kill.setEnabled(false);
+				jButtonKill.setEnabled(false);
 
 				logging.info(this,
 						"actionPerformed on btn_kill " + SSHCommandFactory.getInstance().getConnectionState());
@@ -354,14 +347,14 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			}
 		});
 
-		buttonPanel.add(btn_save);
-		buttonPanel.add(btn_kill);
+		buttonPanel.add(jButtonSave);
+		buttonPanel.add(jButtonKill);
 
 		buttonPanel.add(new JLabel("            "));
 
 		logging.info(this, "actionlistener for button1 " + Globals.isGlobalReadOnly());
 		if (!(Globals.isGlobalReadOnly())) {
-			btn_save.addActionListener(new ActionListener() {
+			jButtonSave.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					logging.debug(this, "actionPerformed on button1");
@@ -370,20 +363,21 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			});
 		}
 
-		btn_openChooser = new IconButton(configed.getResourceValue("SSHConnection.Config.SelectKeyFile"),
-				"images/folder_16.png", " ", "images/folder_16.png", true);
-		btn_openChooser.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH / 4, Globals.BUTTON_HEIGHT));
+		IconButton iconButtonOpenChooser = new IconButton(
+				configed.getResourceValue("SSHConnection.Config.SelectKeyFile"), "images/folder_16.png", " ",
+				"images/folder_16.png", true);
+		iconButtonOpenChooser.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH / 4, Globals.BUTTON_HEIGHT));
 		if (!(Globals.isGlobalReadOnly()))
-			btn_openChooser.addActionListener(actionEvent -> doActionOeffnen());
+			iconButtonOpenChooser.addActionListener(actionEvent -> doActionOeffnen());
 
-		buttonPanel.add(btn_close);
-		btn_close.addActionListener(actionEvent -> doAction2());
+		buttonPanel.add(jButtonClose);
+		jButtonClose.addActionListener(actionEvent -> doAction2());
 
-		lbl_keyfile = new JLabel();
-		lbl_keyfile.setText(configed.getResourceValue("SSHConnection.Config.jLabelKeyfile"));
-		tf_keyfile = new JTextField();
-		tf_keyfile.setText(connectionInfo.getKeyfilePath());
-		tf_keyfile.getDocument().addDocumentListener(new DocumentListener() {
+		JLabel jLabelKeyFile = new JLabel();
+		jLabelKeyFile.setText(configed.getResourceValue("SSHConnection.Config.jLabelKeyfile"));
+		jTextFieldKeyFile = new JTextField();
+		jTextFieldKeyFile.setText(connectionInfo.getKeyfilePath());
+		jTextFieldKeyFile.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				checkComponentStates();
@@ -400,12 +394,12 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			}
 		});
 
-		lbl_passphrase = new JLabel();
-		lbl_passphrase.setText(configed.getResourceValue("SSHConnection.Config.jLabelPassphrase"));
-		tf_passphrase = new JPasswordField();
-		tf_passphrase.setEnabled(false);
-		tf_passphrase.setText(connectionInfo.getKeyfilePassphrase());
-		tf_passphrase.getDocument().addDocumentListener(new DocumentListener() {
+		JLabel jLabelPassphrase = new JLabel();
+		jLabelPassphrase.setText(configed.getResourceValue("SSHConnection.Config.jLabelPassphrase"));
+		jTextFieldPassphrase = new JPasswordField();
+		jTextFieldPassphrase.setEnabled(false);
+		jTextFieldPassphrase.setText(connectionInfo.getKeyfilePassphrase());
+		jTextFieldPassphrase.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				checkComponentStates();
@@ -422,190 +416,190 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 			}
 		});
 
-		cb_useKeyfile = new JCheckBox();
-		cb_useKeyfile.setText(configed.getResourceValue("SSHConnection.Config.useKeyfile"));
-		cb_useKeyfile.setSelected(false);
-		tf_passw.setEnabled(false);
-		tf_keyfile.setEnabled(false);
-		cb_useKeyfile.addItemListener(itemEvent -> {
+		jCheckBoxUseKeyFile = new JCheckBox();
+		jCheckBoxUseKeyFile.setText(configed.getResourceValue("SSHConnection.Config.useKeyfile"));
+		jCheckBoxUseKeyFile.setSelected(false);
+		jTextFieldPassword.setEnabled(false);
+		jTextFieldKeyFile.setEnabled(false);
+		jCheckBoxUseKeyFile.addItemListener(itemEvent -> {
 			Boolean value = false;
 			if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
 				value = true;
 			}
-			if (!cb_useDefault.isSelected())
-				tf_passw.setEnabled(!value);
-			btn_openChooser.setEnabled(value);
-			tf_keyfile.setEnabled(value);
-			tf_passphrase.setEnabled(value);
+			if (!jCheckBoxDefault.isSelected())
+				jTextFieldPassword.setEnabled(!value);
+			iconButtonOpenChooser.setEnabled(value);
+			jTextFieldKeyFile.setEnabled(value);
+			jTextFieldPassphrase.setEnabled(value);
 			checkComponentStates();
 		});
 
-		cb_useDefault = new JCheckBox();
-		cb_useDefault.setText(configed.getResourceValue("SSHConnection.Config.useDefaultAuthentication"));
-		cb_useDefault.setSelected(true);
+		jCheckBoxDefault = new JCheckBox();
+		jCheckBoxDefault.setText(configed.getResourceValue("SSHConnection.Config.useDefaultAuthentication"));
+		jCheckBoxDefault.setSelected(true);
 
 		setComponentsEditable(false);
-		cb_useDefault.addItemListener(itemEvent -> {
+		jCheckBoxDefault.addItemListener(itemEvent -> {
 			if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
 				setComponentsEditable(false);
-				cb_host.setSelectedItem(connectionInfo.getHost());
-				tf_user.setText(connectionInfo.getUser());
-				tf_passw.setText(connectionInfo.getPassw());
-				tf_port.setText(connectionInfo.getPort());
+				jComboBoxHost.setSelectedItem(connectionInfo.getHost());
+				jTextFieldUser.setText(connectionInfo.getUser());
+				jTextFieldPassword.setText(connectionInfo.getPassw());
+				jTextFieldPort.setText(connectionInfo.getPort());
 			} else
 				setComponentsEditable(true);
 			checkComponentStates();
 		});
 
 		if (!connectionInfo.getKeyfilePath().equals(""))
-			cb_useKeyfile.setSelected(true);
+			jCheckBoxUseKeyFile.setSelected(true);
 
-		cb_useOutputColor = new JCheckBox();
-		cb_useOutputColor.setText(configed.getResourceValue("SSHConnection.Config.coloredOutput"));
-		cb_useOutputColor.setToolTipText(configed.getResourceValue("SSHConnection.Config.coloredOutput.tooltip"));
-		cb_useOutputColor.setSelected(true);
+		jCheckBoxUseOutputColor = new JCheckBox();
+		jCheckBoxUseOutputColor.setText(configed.getResourceValue("SSHConnection.Config.coloredOutput"));
+		jCheckBoxUseOutputColor.setToolTipText(configed.getResourceValue("SSHConnection.Config.coloredOutput.tooltip"));
+		jCheckBoxUseOutputColor.setSelected(true);
 		SSHCommandFactory.ssh_colored_output = true;
-		cb_useOutputColor.addItemListener(itemEvent -> checkComponentStates());
+		jCheckBoxUseOutputColor.addItemListener(itemEvent -> checkComponentStates());
 
-		cb_execInBackground = new JCheckBox();
-		cb_execInBackground.setText(configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground"));
-		cb_execInBackground
+		jCheckBoxExecInBackground = new JCheckBox();
+		jCheckBoxExecInBackground.setText(configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground"));
+		jCheckBoxExecInBackground
 				.setToolTipText(configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground.tooltip"));
-		cb_execInBackground.setSelected(SSHCommandFactory.ssh_always_exec_in_background);
-		cb_execInBackground.addItemListener(itemEvent -> checkComponentStates());
+		jCheckBoxExecInBackground.setSelected(SSHCommandFactory.ssh_always_exec_in_background);
+		jCheckBoxExecInBackground.addItemListener(itemEvent -> checkComponentStates());
 
 		logging.debug(this, "sshConfigDialog building layout ");
 		connectionPanelLayout.setHorizontalGroup(connectionPanelLayout.createSequentialGroup()
 				.addGroup(connectionPanelLayout.createParallelGroup()
-						.addComponent(cb_useDefault, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jCheckBoxDefault, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
 						.addGroup(connectionPanelLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE * 2)
 								.addGroup(connectionPanelLayout.createParallelGroup()
-										.addComponent(lbl_host, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(lbl_port, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(lbl_user, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(lbl_passw, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.PREFERRED_SIZE))
+										.addComponent(jLabelHost, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(jLabelPort, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(jLabelUser, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(jLabelPassword, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 								.addGap(Globals.VGAP_SIZE)
 								.addGroup(connectionPanelLayout.createParallelGroup()
-										.addComponent(cb_host, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												Short.MAX_VALUE)
-										.addComponent(tf_port, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												Short.MAX_VALUE)
-										.addComponent(tf_user, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												Short.MAX_VALUE)
-										.addComponent(tf_passw, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-												Short.MAX_VALUE))
+										.addComponent(jComboBoxHost, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+										.addComponent(jTextFieldPort, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+										.addComponent(jTextFieldUser, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+										.addComponent(jTextFieldPassword, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 								.addGap(Globals.VGAP_SIZE))
 						.addGap(Globals.VGAP_SIZE)
-						.addComponent(cb_useKeyfile, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jCheckBoxUseKeyFile, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
 						.addGroup(connectionPanelLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE * 2)
 								.addGroup(connectionPanelLayout.createParallelGroup()
-										.addComponent(lbl_keyfile, GroupLayout.PREFERRED_SIZE,
+										.addComponent(jLabelKeyFile, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lbl_passphrase, GroupLayout.PREFERRED_SIZE,
+										.addComponent(jLabelPassphrase, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 								.addGap(Globals.VGAP_SIZE)
 								.addGroup(connectionPanelLayout.createParallelGroup()
 										.addGroup(connectionPanelLayout.createSequentialGroup()
-												.addComponent(tf_keyfile, GroupLayout.PREFERRED_SIZE,
+												.addComponent(jTextFieldKeyFile, GroupLayout.PREFERRED_SIZE,
 														GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-												.addComponent(btn_openChooser, GroupLayout.PREFERRED_SIZE,
+												.addComponent(iconButtonOpenChooser, GroupLayout.PREFERRED_SIZE,
 														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-										.addComponent(tf_passphrase, GroupLayout.PREFERRED_SIZE,
+										.addComponent(jTextFieldPassphrase, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 
 								// )
 								.addGap(Globals.VGAP_SIZE))
-						.addGroup(connectionPanelLayout.createSequentialGroup().addComponent(lbl_connectionState,
+						.addGroup(connectionPanelLayout.createSequentialGroup().addComponent(jLabelConnectionState,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
 				.addContainerGap());
 
 		connectionPanelLayout.setVerticalGroup(connectionPanelLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE)
-				.addComponent(cb_useDefault, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(jCheckBoxDefault, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.VGAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(cb_host, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jComboBoxHost, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lbl_host, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jLabelHost, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.VGAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(tf_port, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jTextFieldPort, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lbl_port, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jLabelPort, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.VGAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(tf_user, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jTextFieldUser, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lbl_user, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jLabelUser, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.VGAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(tf_passw, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jTextFieldPassword, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lbl_passw, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jLabelPassword, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.VGAP_SIZE)
-				.addComponent(cb_useKeyfile, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(jCheckBoxUseKeyFile, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.VGAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(btn_openChooser, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(iconButtonOpenChooser, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(tf_keyfile, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jTextFieldKeyFile, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lbl_keyfile, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jLabelKeyFile, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.VGAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(tf_passphrase, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jTextFieldPassphrase, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lbl_passphrase, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jLabelPassphrase, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.VGAP_SIZE)
 				.addGroup(connectionPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(
-						lbl_connectionState, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						jLabelConnectionState, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.VGAP_SIZE).addContainerGap(70, 70));
 
 		settingsPanelLayout.setHorizontalGroup(settingsPanelLayout.createSequentialGroup()
 				.addGroup(settingsPanelLayout.createParallelGroup()
-						.addComponent(cb_useOutputColor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jCheckBoxUseOutputColor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
-						.addComponent(cb_execInBackground, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jCheckBoxExecInBackground, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)));
 		settingsPanelLayout.setVerticalGroup(settingsPanelLayout.createSequentialGroup()
-				.addComponent(cb_useOutputColor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(jCheckBoxUseOutputColor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(10).addComponent(cb_execInBackground, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+				.addGap(10).addComponent(jCheckBoxExecInBackground, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 	}
 
 	private void setComponentsEnabledRO(boolean value) {
-		cb_useDefault.setEnabled(value);
-		cb_useOutputColor.setEnabled(value);
-		cb_execInBackground.setEnabled(value);
+		jCheckBoxDefault.setEnabled(value);
+		jCheckBoxUseOutputColor.setEnabled(value);
+		jCheckBoxExecInBackground.setEnabled(value);
 		setComponentsEditable(value);
 	}
 
 	public void setComponentsEditable(boolean value) {
-		cb_host.setEnabled(value);
-		tf_port.setEnabled(value);
-		tf_user.setEnabled(value);
-		if (cb_useKeyfile.isSelected())
-			tf_passw.setEnabled(false);
+		jComboBoxHost.setEnabled(value);
+		jTextFieldPort.setEnabled(value);
+		jTextFieldUser.setEnabled(value);
+		if (jCheckBoxUseKeyFile.isSelected())
+			jTextFieldPassword.setEnabled(false);
 		else {
-			tf_passw.setEnabled(value);
+			jTextFieldPassword.setEnabled(value);
 		}
-		if (cb_useDefault.isSelected())
-			tf_passw.setEnabled(false);
+		if (jCheckBoxDefault.isSelected())
+			jTextFieldPassword.setEnabled(false);
 	}
 
 	/* This method is called when button 1 is pressed */
@@ -614,45 +608,47 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		logging.info(this, "doAction1  ");
 		setSSHState();
 
-		if (cb_useDefault.isSelected()) {
+		if (jCheckBoxDefault.isSelected()) {
 			logging.info(this, "doAction1  cb_useDefault.isSelected true");
-			if (!cb_useDefault_state)
+			if (!jComboBoxUseDefaultState)
 			// state has changed
 			{
 				connectionInfo.setUserData(ConfigedMain.HOST, ConfigedMain.USER, ConfigedMain.PASSWORD,
 						SSHConnect.portSSH);
 			}
 
-			cb_host.setSelectedItem(connectionInfo.getHost());
-			tf_user.setText(connectionInfo.getUser());
-			tf_port.setText(connectionInfo.getPort());
-			tf_passw.setText(connectionInfo.getPassw());
+			jComboBoxHost.setSelectedItem(connectionInfo.getHost());
+			jTextFieldUser.setText(connectionInfo.getUser());
+			jTextFieldPort.setText(connectionInfo.getPort());
+			jTextFieldPassword.setText(connectionInfo.getPassw());
 		} else {
 			logging.info(this, "doAction1  cb_useDefault.isSelected false");
-			String host = (String) cb_host.getSelectedItem();
+			String host = (String) jComboBoxHost.getSelectedItem();
 			logging.info(this, "doAction1 host " + host);
 
-			connectionInfo.setUserData(host, tf_user.getText(), new String(tf_passw.getPassword()), tf_port.getText());
+			connectionInfo.setUserData(host, jTextFieldUser.getText(), new String(jTextFieldPassword.getPassword()),
+					jTextFieldPort.getText());
 		}
 		connectionInfo.useKeyfile(false);
-		if (cb_useKeyfile.isSelected()) {
+		if (jCheckBoxUseKeyFile.isSelected()) {
 			logging.info(this, "doAction1  cb_useKeyfile.isSelected true");
-			logging.info(this, "set keyfile true keyfile " + tf_keyfile.getText());
-			connectionInfo.useKeyfile(true, tf_keyfile.getText(), new String(tf_passphrase.getPassword()));
-			tf_passw.setText("");
+			logging.info(this, "set keyfile true keyfile " + jTextFieldKeyFile.getText());
+			connectionInfo.useKeyfile(true, jTextFieldKeyFile.getText(),
+					new String(jTextFieldPassphrase.getPassword()));
+			jTextFieldPassword.setText("");
 			connectionInfo.setPassw("");
 		} else {
-			tf_passphrase.setText("");
-			tf_keyfile.setText("");
+			jTextFieldPassphrase.setText("");
+			jTextFieldKeyFile.setText("");
 		}
 
 		SSHCommandFactory factory = SSHCommandFactory.getInstance(configedMain);
 
 		factory.testConnection(connectionInfo.getUser(), connectionInfo.getHost());
 
-		SSHCommandFactory.ssh_colored_output = cb_useOutputColor.isSelected();
-		SSHCommandFactory.ssh_always_exec_in_background = cb_execInBackground.isSelected();
-		cb_useDefault_state = cb_useDefault.isSelected();
+		SSHCommandFactory.ssh_colored_output = jCheckBoxUseOutputColor.isSelected();
+		SSHCommandFactory.ssh_always_exec_in_background = jCheckBoxExecInBackground.isSelected();
+		jComboBoxUseDefaultState = jCheckBoxDefault.isSelected();
 		checkComponentStates();
 		logging.info(this, "request focus");
 	}
@@ -660,7 +656,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 	/* This method gets called when button 2 is pressed */
 	@Override
 	public void doAction2() {
-		logging.info(this, "doAction2 cb_host.getSelectedItem() " + cb_host.getSelectedItem());
+		logging.info(this, "doAction2 cb_host.getSelectedItem() " + jComboBoxHost.getSelectedItem());
 
 		super.doAction2();
 	}
@@ -684,23 +680,23 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		if (result == JFileChooser.APPROVE_OPTION) {
 			File inputVerzFile = chooser.getSelectedFile();
 			String inputVerzStr = inputVerzFile.getPath();
-			tf_keyfile.setText(inputVerzStr);
+			jTextFieldKeyFile.setText(inputVerzStr);
 		}
 		logging.info(this, "doActionOeffnen canceled");
 		chooser.setVisible(false);
 	}
 
 	private static void checkComponents() {
-		if (cb_useDefault.isSelected()) {
+		if (jCheckBoxDefault.isSelected()) {
 			connectionInfo.setUserData(
 
 					ConfigedMain.HOST, // persist.getHostInfoCollections().getConfigServer(),
 					ConfigedMain.USER, ConfigedMain.PASSWORD, SSHConnect.portSSH);
 
 		}
-		cb_host.setSelectedItem(connectionInfo.getHost());
-		tf_user.setText(connectionInfo.getUser());
-		tf_passw.setText(connectionInfo.getPassw());
-		tf_port.setText(connectionInfo.getPort());
+		jComboBoxHost.setSelectedItem(connectionInfo.getHost());
+		jTextFieldUser.setText(connectionInfo.getUser());
+		jTextFieldPassword.setText(connectionInfo.getPassw());
+		jTextFieldPort.setText(connectionInfo.getPort());
 	}
 }

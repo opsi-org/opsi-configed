@@ -47,7 +47,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 	private JButton jButtonExecute;
 	private JButton jButtonCopySelectedClients;
-	private JButton jButtonClose;
 	private JButton jButtonHelp;
 
 	private JTextField jTextFieldClient;
@@ -296,7 +295,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		if (!(Globals.isGlobalReadOnly()))
 			jButtonExecute.addActionListener(actionEvent -> doAction1());
 
-		jButtonClose = new JButton();
+		JButton jButtonClose = new JButton();
 		buttonPanel.add(jButtonClose);
 		jButtonClose.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));

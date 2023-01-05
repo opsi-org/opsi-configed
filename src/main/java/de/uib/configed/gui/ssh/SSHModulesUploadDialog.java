@@ -13,8 +13,8 @@ import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.utilities.logging.logging;
 
 public class SSHModulesUploadDialog extends SSHFileUploadDialog {
-	private JLabel lbl_copy_to_modules_d;
-	private JCheckBox cb_copy_to_modules_d;
+	private JLabel jLabelCopyToModulesD;
+	private JCheckBox jComboBoxCopyToModulesD;
 	private static String title = configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.title");
 
 	public SSHModulesUploadDialog() {
@@ -30,22 +30,22 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 	 * are needed in this dialog
 	 */
 	@Override
-	protected void init_additional() {
-		lbl_copy_to_modules_d = new JLabel();
-		lbl_copy_to_modules_d.setText(
+	protected void initAdditional() {
+		jLabelCopyToModulesD = new JLabel();
+		jLabelCopyToModulesD.setText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.lbl_copy_to_modules_d"));
 
-		cb_copy_to_modules_d = new JCheckBox();
-		cb_copy_to_modules_d.setSelected(false);
+		jComboBoxCopyToModulesD = new JCheckBox();
+		jComboBoxCopyToModulesD.setSelected(false);
 
 		SSHConnectExec testFile = new SSHConnectExec();
 		testFile.exec(new Empty_Command(factory.str_command_fileexists_notremove.replace(
 				factory.str_replacement_filename, ((CommandModulesUpload) command).unofficial_modules_directory) // /etc/opsi/modules.d
 		), false);
 
-		lbl_copy_to_modules_d.setVisible(false);
-		cb_copy_to_modules_d.setVisible(false);
-		cb_copy_to_modules_d.setSelected(false);
+		jLabelCopyToModulesD.setVisible(false);
+		jComboBoxCopyToModulesD.setVisible(false);
+		jComboBoxCopyToModulesD.setSelected(false);
 
 	}
 
@@ -54,29 +54,30 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 	 * layout, which are needed in this dialog
 	 */
 	@Override
-	protected void initGUI_additional() {
-		h_parallelGroup = inputPanelLayout.createSequentialGroup().addGroup(inputPanelLayout.createParallelGroup()
-				.addGroup(inputPanelLayout.createSequentialGroup().addComponent(lbl_modules_from, PREF, PREF, PREF))
-				.addComponent(lbl_set_rights, PREF, PREF, PREF).addComponent(lbl_overwriteExisting, PREF, PREF, PREF)
-				.addComponent(lbl_copy_to_modules_d, PREF, PREF, PREF)).addGap(Globals.GAP_SIZE).addGroup(
-						inputPanelLayout.createParallelGroup()
-								.addComponent(cb_setRights, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-								.addComponent(cb_overwriteExisting, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
-										Globals.ICON_WIDTH)
-								.addComponent(cb_copy_to_modules_d, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
-										Globals.ICON_WIDTH));
-		v_parallelGroup = inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-				.addComponent(lbl_copy_to_modules_d, PREF, PREF, PREF)
-				.addComponent(cb_copy_to_modules_d, PREF, PREF, PREF);
+	protected void initGUIAdditional() {
+		horizontalParallelGroup = inputPanelLayout.createSequentialGroup().addGroup(inputPanelLayout
+				.createParallelGroup()
+				.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jLabelmodulesFrom, PREF, PREF, PREF))
+				.addComponent(jLabelSetRights, PREF, PREF, PREF).addComponent(jLabelOverwriteExisting, PREF, PREF, PREF)
+				.addComponent(jLabelCopyToModulesD, PREF, PREF, PREF)).addGap(Globals.GAP_SIZE)
+				.addGroup(inputPanelLayout.createParallelGroup()
+						.addComponent(jComboBoxSetRights, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+						.addComponent(jCheckBoxOverwriteExisting, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+								Globals.ICON_WIDTH)
+						.addComponent(jComboBoxCopyToModulesD, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+								Globals.ICON_WIDTH));
+		verticalParallelGroup = inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+				.addComponent(jLabelCopyToModulesD, PREF, PREF, PREF)
+				.addComponent(jComboBoxCopyToModulesD, PREF, PREF, PREF);
 	}
 
 	@Override
-	protected String doAction1_additional_setPath() {
+	protected String doAction1AdditionalSetPath() {
 		String modulesServerPath = ((CommandModulesUpload) command).actually_modules_directory;
-		if (cb_copy_to_modules_d.isVisible() && cb_copy_to_modules_d.isSelected()) {
+		if (jComboBoxCopyToModulesD.isVisible() && jComboBoxCopyToModulesD.isSelected()) {
 			modulesServerPath = ((CommandModulesUpload) command).unofficial_modules_directory;
 			command.setTargetPath(modulesServerPath);
-			command.setTargetFilename(filechooser_local.getSelectedFile().getName());
+			command.setTargetFilename(jFileChooserLocal.getSelectedFile().getName());
 		} else {
 			command.setTargetPath(((CommandModulesUpload) command).actually_modules_directory);
 			command.setTargetFilename(CommandModulesUpload.DEFAULT_FILENAME);
@@ -85,8 +86,8 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 	}
 
 	@Override
-	protected CommandWget doAction1_additional_setWget(CommandWget c, String path) {
-		if (cb_copy_to_modules_d.isVisible() && cb_copy_to_modules_d.isSelected())
+	protected CommandWget doAction1AdditionalSetWget(CommandWget c, String path) {
+		if (jComboBoxCopyToModulesD.isVisible() && jComboBoxCopyToModulesD.isSelected())
 			c.setDir(path + command.getTargetFilename());
 		else
 			c.setFilename(path + command.getTargetFilename());

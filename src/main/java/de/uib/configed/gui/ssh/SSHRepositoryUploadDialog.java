@@ -8,10 +8,6 @@ public class SSHRepositoryUploadDialog extends SSHFileUploadDialog {
 	private static String title = configed.getResourceValue("SSHConnection.ParameterDialog.repoupload.title");
 
 	public SSHRepositoryUploadDialog() {
-		this(null);
-	}
-
-	public SSHRepositoryUploadDialog(CommandRepositoryUpload com) {
 		super(title, new CommandRepositoryUpload());
 		this.setVisible(true);
 		logging.info(this, "SSHRepositoryUploadDialog build");
@@ -20,9 +16,9 @@ public class SSHRepositoryUploadDialog extends SSHFileUploadDialog {
 	}
 
 	@Override
-	protected String doAction1_additional_setPath() {
-		String modules_server_path = command.getTargetPath() + command.getTargetFilename();
-		command.setTargetFilename(filechooser_local.getSelectedFile().getName());
-		return modules_server_path;
+	protected String doAction1AdditionalSetPath() {
+		String modulesServerPath = command.getTargetPath() + command.getTargetFilename();
+		command.setTargetFilename(jFileChooserLocal.getSelectedFile().getName());
+		return modulesServerPath;
 	}
 }

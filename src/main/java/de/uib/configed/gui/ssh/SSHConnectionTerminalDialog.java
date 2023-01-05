@@ -30,7 +30,6 @@ import de.uib.utilities.logging.logging;
 
 public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	private JTextField jTextFieldCommand;
-	private JLabel jLabelCommand;
 	private JCheckBox jComboBoxPrivat;
 	private JPanel parameterPanel;
 	private JPanel terminatingPanel;
@@ -375,7 +374,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 		int gap = Globals.GAP_SIZE;
 
-		jLabelCommand = new JLabel(configed.getResourceValue("SSHConnection.commandLine"));
+		JLabel jLabelCommand = new JLabel(configed.getResourceValue("SSHConnection.commandLine"));
 
 		konsolePanelLayout.setVerticalGroup(konsolePanelLayout.createSequentialGroup().addGap(gap)
 				.addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)

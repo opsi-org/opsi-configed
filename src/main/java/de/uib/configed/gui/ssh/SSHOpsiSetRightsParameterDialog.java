@@ -29,7 +29,6 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	private JButton jButtonSearchDir;
 
 	private JButton jButtonDoAction;
-	private JButton jButtonClose;
 	private CommandOpsiSetRights commandopsisetrights;
 	private List<String> additionalDefaultPaths = new ArrayList<>();
 	private SSHCompletionComboButton completion;
@@ -71,7 +70,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 				doAction1();
 			});
 
-		jButtonClose = new JButton();
+		JButton jButtonClose = new JButton();
 		buttonPanel.add(jButtonClose);
 		jButtonClose.setText(configed.getResourceValue("SSHConnection.buttonClose"));
 		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));

@@ -29,22 +29,21 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	private JPanel inputPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
 
-	private JLabel lbl_url = new JLabel();
-	private JLabel lbl_dir = new JLabel();
-	private JLabel lbl_verbosity = new JLabel();
-	private JLabel lbl_freeInput = new JLabel();
-	private JLabel lbl_fullCommand = new JLabel();
+	private JLabel jLabelURL = new JLabel();
+	private JLabel jLabelDir = new JLabel();
+	private JLabel jLabelVerbosity = new JLabel();
+	private JLabel jLabelFreeInput = new JLabel();
+	private JLabel jLabelFullCommand = new JLabel();
 
-	private JButton btn_help;
-	private JButton btn_execute;
-	private JButton btn_close;
-	private JButton btn_searchDir;
+	private JButton jButtonHelp;
+	private JButton jButtonExecute;
+	private JButton jButtonSearchDir;
 
-	private JTextField tf_url;
-	private JTextField tf_dir;
-	private JComboBox cb_dir;
-	private JComboBox cb_verbosity;
-	private JTextField tf_freeInput;
+	private JTextField jTextFieldURL;
+	private JTextField jTextFieldDir;
+	private JComboBox<String> jComboBoxDir;
+	private JComboBox jComboBoxVerbosity;
+	private JTextField jTextFieldFreeInput;
 
 	CommandWget commandWget = new CommandWget();
 	SSHCompletionComboButton completion = new SSHCompletionComboButton();
@@ -68,23 +67,23 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		this.setVisible(true);
 		if (Globals.isGlobalReadOnly())
 			setComponentsEnabledRO(false);
-		cb_dir.setEnabled(true);
+		jComboBoxDir.setEnabled(true);
 	}
 
 	private void setComponentsEnabledRO(boolean value) {
-		tf_url.setEnabled(value);
-		tf_url.setEditable(value);
-		tf_dir.setEnabled(value);
-		tf_dir.setEditable(value);
-		cb_dir.setEnabled(value);
-		cb_dir.setEditable(value);
-		cb_verbosity.setEnabled(value);
+		jTextFieldURL.setEnabled(value);
+		jTextFieldURL.setEditable(value);
+		jTextFieldDir.setEnabled(value);
+		jTextFieldDir.setEditable(value);
+		jComboBoxDir.setEnabled(value);
+		jComboBoxDir.setEditable(value);
+		jComboBoxVerbosity.setEnabled(value);
 
-		tf_freeInput.setEnabled(value);
-		tf_freeInput.setEditable(value);
+		jTextFieldFreeInput.setEnabled(value);
+		jTextFieldFreeInput.setEditable(value);
 
-		btn_execute.setEnabled(value);
-		btn_help.setEnabled(value);
+		jButtonExecute.setEnabled(value);
+		jButtonHelp.setEnabled(value);
 
 	}
 
@@ -98,10 +97,10 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
 		inputPanel.setPreferredSize(new java.awt.Dimension(376, 220));
 
-		lbl_url.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelUrl"));
-		tf_url = new JTextField();
-		tf_url.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"));
-		tf_url.getDocument().addDocumentListener(new DocumentListener() {
+		jLabelURL.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelUrl"));
+		jTextFieldURL = new JTextField();
+		jTextFieldURL.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"));
+		jTextFieldURL.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent documentEvent) {
 				changeUrl();
@@ -117,38 +116,39 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 				changeUrl();
 			}
 		});
-		tf_url.addFocusListener(new FocusAdapter() {
+		jTextFieldURL.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				if (tf_url.getText()
+				if (jTextFieldURL.getText()
 						.equals(configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"))) {
-					tf_url.setSelectionStart(0);
-					tf_url.setSelectionEnd(tf_url.getText().length());
+					jTextFieldURL.setSelectionStart(0);
+					jTextFieldURL.setSelectionEnd(jTextFieldURL.getText().length());
 				}
 			}
 		});
 
-		lbl_dir.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelDirectory"));
-		tf_dir = new JTextField();
+		jLabelDir.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelDirectory"));
+		jTextFieldDir = new JTextField();
 
-		cb_dir = completion.getCombobox();
-		btn_searchDir = completion.getButton();
+		jComboBoxDir = completion.getCombobox();
+		jButtonSearchDir = completion.getButton();
 
-		lbl_verbosity.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
-		cb_verbosity = new JComboBox<>();
-		cb_verbosity.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
+		jLabelVerbosity.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
+		jComboBoxVerbosity = new JComboBox<>();
+		jComboBoxVerbosity.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
 		for (int i = 0; i < 5; i++)
-			cb_verbosity.addItem(i);
-		cb_verbosity.setSelectedItem(1);
-		cb_verbosity.addItemListener(itemEvent -> {
-			commandWget.setVerbosity(((int) cb_verbosity.getSelectedItem()));
+			jComboBoxVerbosity.addItem(i);
+		jComboBoxVerbosity.setSelectedItem(1);
+		jComboBoxVerbosity.addItemListener(itemEvent -> {
+			commandWget.setVerbosity(((int) jComboBoxVerbosity.getSelectedItem()));
 			updateCommand();
 		});
 
-		lbl_freeInput.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelFreeInput"));
-		tf_freeInput = new JTextField();
-		tf_freeInput.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.freeInput"));
-		tf_freeInput.getDocument().addDocumentListener(new DocumentListener() {
+		jLabelFreeInput.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelFreeInput"));
+		jTextFieldFreeInput = new JTextField();
+		jTextFieldFreeInput
+				.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.freeInput"));
+		jTextFieldFreeInput.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent documentEvent) {
 				changeFreeInput();
@@ -170,28 +170,28 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		wgetAuthPanel.close();
 		wgetAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH + 67, Globals.BUTTON_HEIGHT);
 
-		btn_help = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
-		btn_help.setText(configed.getResourceValue("SSHConnection.buttonParameterInfo"));
-		btn_help.setToolTipText(configed.getResourceValue("SSHConnection.buttonParameterInfo.tooltip"));
-		buttonPanel.add(btn_help);
-		btn_help.addActionListener(actionEvent -> doActionHelp());
+		jButtonHelp = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
+		jButtonHelp.setText(configed.getResourceValue("SSHConnection.buttonParameterInfo"));
+		jButtonHelp.setToolTipText(configed.getResourceValue("SSHConnection.buttonParameterInfo.tooltip"));
+		buttonPanel.add(jButtonHelp);
+		jButtonHelp.addActionListener(actionEvent -> doActionHelp());
 
-		btn_execute = new JButton();
-		buttonPanel.add(btn_execute);
-		btn_execute.setText(configed.getResourceValue("SSHConnection.buttonExec"));
-		btn_execute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
-		btn_execute.addActionListener(actionEvent -> {
+		jButtonExecute = new JButton();
+		buttonPanel.add(jButtonExecute);
+		jButtonExecute.setText(configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
+		jButtonExecute.addActionListener(actionEvent -> {
 			if (!(Globals.isGlobalReadOnly()))
 				doAction1();
 		});
 
-		btn_close = new JButton();
-		buttonPanel.add(btn_close);
-		btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
-		btn_close.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
-		btn_close.addActionListener(actionEvent -> cancel());
+		JButton jButtonClose = new JButton();
+		buttonPanel.add(jButtonClose);
+		jButtonClose.setText(configed.getResourceValue("SSHConnection.buttonClose"));
+		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
+		jButtonClose.addActionListener(actionEvent -> cancel());
 
-		lbl_fullCommand.setText("wget ");
+		jLabelFullCommand.setText("wget ");
 
 		changeUrl();
 		changeFreeInput();
@@ -199,20 +199,20 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	}
 
 	private void updateCommand() {
-		lbl_fullCommand.setText(commandWget.getCommand());
+		jLabelFullCommand.setText(commandWget.getCommand());
 	}
 
 	private void changeFreeInput() {
-		if (!tf_freeInput.getText().trim().equals(""))
-			commandWget.setFreeInput(tf_freeInput.getText().trim());
+		if (!jTextFieldFreeInput.getText().trim().equals(""))
+			commandWget.setFreeInput(jTextFieldFreeInput.getText().trim());
 		else
 			commandWget.setFreeInput("");
 		updateCommand();
 	}
 
 	private void changeUrl() {
-		if (!(tf_url.getText().equals("")))
-			commandWget.setUrl(tf_url.getText().trim());
+		if (!(jTextFieldURL.getText().equals("")))
+			commandWget.setUrl(jTextFieldURL.getText().trim());
 		else
 			commandWget.setUrl("");
 		updateCommand();
@@ -221,14 +221,14 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	/* This method is called when button 1 is pressed */
 	@Override
 	public void doAction1() {
-		if ((tf_url.getText()
+		if ((jTextFieldURL.getText()
 				.equals(configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url")))
-				|| (tf_url.getText().equals(""))) {
+				|| (jTextFieldURL.getText().equals(""))) {
 			logging.warning(this, "Please enter url.");
 			return;
 		}
 
-		commandWget.setDir((String) cb_dir.getSelectedItem());
+		commandWget.setDir((String) jComboBoxDir.getSelectedItem());
 		if (((JCheckBox) wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
 			commandWget.setAuthentication(" --no-check-certificate --user=" + wgetAuthPanel.getUser() + " --password="
 					+ wgetAuthPanel.getPw() + " ");
@@ -242,7 +242,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 				public void run() {
 					try {
 						logging.info(this, "doAction1 wget ");
-						new SSHConnectExec(commandWget, btn_execute);
+						new SSHConnectExec(commandWget, jButtonExecute);
 						// btn_execute.setEnabled( true ) transferred to SwingWorker.done()
 
 					} catch (Exception e) {
@@ -272,43 +272,45 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 				.addGap(Globals.GAP_SIZE)
 
 				.addGroup(inputPanelLayout.createParallelGroup().addGroup(inputPanelLayout.createSequentialGroup()
-						.addGroup(inputPanelLayout.createParallelGroup().addComponent(lbl_url, PREF, PREF, PREF)
-								.addComponent(lbl_dir, PREF, PREF, PREF).addComponent(lbl_verbosity, PREF, PREF, PREF)
+						.addGroup(inputPanelLayout.createParallelGroup().addComponent(jLabelURL, PREF, PREF, PREF)
+								.addComponent(jLabelDir, PREF, PREF, PREF)
+								.addComponent(jLabelVerbosity, PREF, PREF, PREF)
 								.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH), PREF, PREF,
 										PREF)
-								.addComponent(lbl_freeInput, PREF, PREF, PREF))
+								.addComponent(jLabelFreeInput, PREF, PREF, PREF))
 						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 						.addGroup(inputPanelLayout.createParallelGroup()
-								.addGroup(inputPanelLayout.createSequentialGroup().addComponent(tf_url, PREF, PREF,
-										Short.MAX_VALUE))
+								.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jTextFieldURL, PREF,
+										PREF, Short.MAX_VALUE))
 								.addGroup(inputPanelLayout.createSequentialGroup()
-										.addComponent(cb_dir, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+										.addComponent(jComboBoxDir, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 												Short.MAX_VALUE)
-										.addComponent(btn_searchDir, PREF, PREF, PREF))
-								.addComponent(cb_verbosity, GroupLayout.Alignment.LEADING, Globals.ICON_WIDTH,
+										.addComponent(jButtonSearchDir, PREF, PREF, PREF))
+								.addComponent(jComboBoxVerbosity, GroupLayout.Alignment.LEADING, Globals.ICON_WIDTH,
 										Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 								.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
 										GroupLayout.Alignment.LEADING, PREF, PREF, PREF)
-								.addComponent(tf_freeInput, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+								.addComponent(jTextFieldFreeInput, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 										Short.MAX_VALUE)))
 						.addComponent(wgetAuthPanel, PREF, PREF, MAX))
 				.addGap(Globals.GAP_SIZE));
 
 		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(tf_url, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(lbl_url, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(btn_searchDir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jTextFieldURL, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(cb_dir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(lbl_dir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+						.addComponent(jLabelURL, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(cb_verbosity, GroupLayout.Alignment.LEADING, Globals.BUTTON_HEIGHT,
+						.addComponent(jButtonSearchDir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(jComboBoxDir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(jLabelDir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGap(Globals.GAP_SIZE)
+				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(jComboBoxVerbosity, GroupLayout.Alignment.LEADING, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(lbl_verbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jLabelVerbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -321,8 +323,9 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(tf_freeInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(lbl_freeInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jTextFieldFreeInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT)
+						.addComponent(jLabelFreeInput, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGap(Globals.GAP_SIZE).addContainerGap(70, 70));
 	}

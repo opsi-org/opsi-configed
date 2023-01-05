@@ -20,20 +20,20 @@ import de.uib.utilities.logging.logging;
 
 public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
-	private JLabel lbl_on = new JLabel();
-	private JLabel lbl_updateInstalled = new JLabel();
-	private JLabel lbl_setupInstalled = new JLabel();
-	private JLabel lbl_properties = new JLabel();
-	private JLabel lbl_verbosity = new JLabel();
+	private JLabel jLabelOn = new JLabel();
+	private JLabel jLabelUpdateInstalled = new JLabel();
+	private JLabel jLabelSetupInstalled = new JLabel();
+	private JLabel jLabelProperties = new JLabel();
+	private JLabel jLabelVerbosity = new JLabel();
 
-	private JComboBox<Integer> cb_verbosity;
-	private JTextField tf_selecteddepots;
-	private JButton btn_depotselection;
-	private JCheckBox cb_properties;
-	private JCheckBox checkb_updateInstalled;
-	private JCheckBox checkb_setupInstalled;
+	private JComboBox<Integer> jComboBoxVerbosity;
+	private JTextField jTextFieldSelecteddepots;
+	private JButton jButtonDepotselection;
+	private JCheckBox jCheckBoxProperties;
+	private JCheckBox jCheckBoxUpdateInstalled;
+	private JCheckBox jCheckBoxSetupInstalled;
 
-	public FDepotselectionList fDepotList;
+	private FDepotselectionList fDepotList;
 	private List<String> depots;
 
 	public SSHPMInstallSettingsPanel() {
@@ -51,38 +51,39 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 	private void initComponents() {
 
-		lbl_on.setText(configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelOn"));
-		lbl_verbosity.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
-		lbl_properties.setText(
+		jLabelOn.setText(
+				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelOn"));
+		jLabelVerbosity.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
+		jLabelProperties.setText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.lbl_properties"));
 
-		btn_depotselection = new JButton(
+		jButtonDepotselection = new JButton(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager.depotselection"));
-		btn_depotselection.addActionListener(actionEvent -> {
+		jButtonDepotselection.addActionListener(actionEvent -> {
 			initDepots();
-			if (btn_depotselection != null)
-				fDepotList.setLocationRelativeTo(btn_depotselection);
+			if (jButtonDepotselection != null)
+				fDepotList.setLocationRelativeTo(jButtonDepotselection);
 			fDepotList.setVisible(true);
 		});
 
-		tf_selecteddepots = new JTextField();
-		tf_selecteddepots.setEditable(false);
+		jTextFieldSelecteddepots = new JTextField();
+		jTextFieldSelecteddepots.setEditable(false);
 
-		cb_verbosity = new JComboBox<>();
-		cb_verbosity.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
+		jComboBoxVerbosity = new JComboBox<>();
+		jComboBoxVerbosity.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
 		for (int i = 0; i < 5; i++)
-			cb_verbosity.addItem(i);
-		cb_verbosity.setSelectedItem(1);
+			jComboBoxVerbosity.addItem(i);
+		jComboBoxVerbosity.setSelectedItem(1);
 
-		cb_properties = new JCheckBox();
-		cb_properties.setSelected(true);
-		lbl_updateInstalled.setText(
+		jCheckBoxProperties = new JCheckBox();
+		jCheckBoxProperties.setSelected(true);
+		jLabelUpdateInstalled.setText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.updateInstalled"));
-		checkb_updateInstalled = new JCheckBox();
+		jCheckBoxUpdateInstalled = new JCheckBox();
 
-		lbl_setupInstalled.setText(
+		jLabelSetupInstalled.setText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.setupInstalled"));
-		checkb_setupInstalled = new JCheckBox();
+		jCheckBoxSetupInstalled = new JCheckBox();
 
 	}
 
@@ -101,7 +102,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 			@Override
 			public void doAction1() {
-				tf_selecteddepots.setText(produceDepotParameter());
+				jTextFieldSelecteddepots.setText(produceDepotParameter());
 				super.doAction1();
 			}
 		};
@@ -113,48 +114,55 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		GroupLayout layout = new GroupLayout(this);
 
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE).addGroup(layout
-				.createParallelGroup(center)
-				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup()
-						.addGroup(layout.createSequentialGroup().addComponent(lbl_on, PREF, PREF, PREF)
-								.addGap(Globals.GAP_SIZE).addComponent(tf_selecteddepots, PREF, PREF, Short.MAX_VALUE))
-						.addComponent(lbl_verbosity, PREF, PREF, PREF).addComponent(lbl_properties, PREF, PREF, PREF)
-						.addComponent(lbl_setupInstalled, PREF, PREF, PREF)
-						.addComponent(lbl_updateInstalled, PREF, PREF, PREF)).addGap(Globals.GAP_SIZE)
-						.addGroup(layout.createParallelGroup().addComponent(btn_depotselection, PREF, PREF, PREF)
+		layout.setHorizontalGroup(
+				layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+						.addGroup(layout.createParallelGroup(center)
+								.addGroup(layout.createSequentialGroup()
+										.addGroup(layout.createParallelGroup().addGroup(layout.createSequentialGroup()
+												.addComponent(jLabelOn, PREF, PREF, PREF).addGap(Globals.GAP_SIZE)
+												.addComponent(jTextFieldSelecteddepots, PREF, PREF, Short.MAX_VALUE))
+												.addComponent(jLabelVerbosity, PREF, PREF, PREF)
+												.addComponent(jLabelProperties, PREF, PREF, PREF)
+												.addComponent(jLabelSetupInstalled, PREF, PREF, PREF)
+												.addComponent(jLabelUpdateInstalled, PREF, PREF, PREF))
+										.addGap(Globals.GAP_SIZE)
+										.addGroup(layout.createParallelGroup()
+												.addComponent(jButtonDepotselection, PREF, PREF, PREF)
 
-								.addComponent(cb_verbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-								.addComponent(cb_properties, PREF, PREF, PREF)
-								.addComponent(checkb_setupInstalled, PREF, PREF, PREF)
-								.addComponent(checkb_updateInstalled, PREF, PREF, PREF))
-						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, MAX)))
-				.addGap(Globals.GAP_SIZE));
+												.addComponent(jComboBoxVerbosity, Globals.ICON_WIDTH,
+														Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+												.addComponent(jCheckBoxProperties, PREF, PREF, PREF)
+												.addComponent(jCheckBoxSetupInstalled, PREF, PREF, PREF)
+												.addComponent(jCheckBoxUpdateInstalled, PREF, PREF, PREF))
+										.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, MAX)))
+						.addGap(Globals.GAP_SIZE));
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(layout.createParallelGroup(center)
-						.addComponent(lbl_on, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(tf_selecteddepots, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(btn_depotselection, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jLabelOn, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(jTextFieldSelecteddepots, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+								Globals.LINE_HEIGHT)
+						.addComponent(jButtonDepotselection, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGroup(layout.createParallelGroup(center)
-						.addComponent(lbl_verbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jLabelVerbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(cb_verbosity, leading, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jComboBoxVerbosity, leading, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGroup(layout.createParallelGroup(center)
-						.addComponent(lbl_properties, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jLabelProperties, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(cb_properties, leading, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jCheckBoxProperties, leading, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGroup(layout.createParallelGroup(center)
-						.addComponent(lbl_setupInstalled, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jLabelSetupInstalled, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(checkb_setupInstalled, leading, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jCheckBoxSetupInstalled, leading, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGroup(layout.createParallelGroup(center)
-						.addComponent(lbl_updateInstalled, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jLabelUpdateInstalled, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(checkb_updateInstalled, leading, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jCheckBoxUpdateInstalled, leading, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGap(Globals.GAP_SIZE));
 	}
@@ -163,11 +171,11 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		List<String> result = new ArrayList<>();
 
 		if (persist.isDepotsFullPermission()) {
-			tf_selecteddepots.setEditable(true);
+			jTextFieldSelecteddepots.setEditable(true);
 			result.add(PersistenceController.DEPOT_SELECTION_NODEPOTS);
 			result.add(PersistenceController.DEPOT_SELECTION_ALL);
 		} else
-			tf_selecteddepots.setEditable(false);
+			jTextFieldSelecteddepots.setEditable(false);
 
 		for (String depot : persist.getHostInfoCollections().getDepotNamesList()) {
 			if (persist.getDepotPermission(depot))
@@ -221,22 +229,22 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		// probably no permission
 		{
 			// To DO:
-			btn_depotselection.setVisible(false);
+			jButtonDepotselection.setVisible(false);
 		}
-		tf_selecteddepots.setText("" + depots.get(0));
+		jTextFieldSelecteddepots.setText("" + depots.get(0));
 	}
 
 	public CommandOpsiPackageManagerInstall updateCommand(CommandOpsiPackageManagerInstall basicCommand) {
 		// settings for command c:
-		basicCommand.setVerbosity((int) cb_verbosity.getSelectedItem());
-		basicCommand.setProperty(cb_properties.isSelected());
-		basicCommand.setUpdateInstalled(checkb_updateInstalled.isSelected());
-		basicCommand.setSetupInstalled(checkb_setupInstalled.isSelected());
-		if (tf_selecteddepots.getText().contains(
+		basicCommand.setVerbosity((int) jComboBoxVerbosity.getSelectedItem());
+		basicCommand.setProperty(jCheckBoxProperties.isSelected());
+		basicCommand.setUpdateInstalled(jCheckBoxUpdateInstalled.isSelected());
+		basicCommand.setSetupInstalled(jCheckBoxSetupInstalled.isSelected());
+		if (jTextFieldSelecteddepots.getText().contains(
 				configed.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS")))
 			basicCommand.setDepotForPInstall("");
 		else
-			basicCommand.setDepotForPInstall(tf_selecteddepots.getText());
+			basicCommand.setDepotForPInstall(jTextFieldSelecteddepots.getText());
 		return basicCommand;
 	}
 }

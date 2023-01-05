@@ -27,11 +27,11 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 	private SSHPMInstallServerPanel installServerPanel;
 	private SSHPMInstallWgetPanel installWgetPanel;
 	private SSHPMInstallSettingsPanel installSettingsPanel;
-	private JLabel lbl_install = new JLabel();
+	private JLabel jLabelInstall = new JLabel();
 
-	private JRadioButton rb_local;
-	private JRadioButton rb_server;
-	private JRadioButton rb_wget;
+	private JRadioButton jRadioButtonLocal;
+	private JRadioButton jRadioButtonServer;
+	private JRadioButton jRadioButtonWGet;
 	private String fromMakeProductfile;
 
 	public SSHPackageManagerInstallParameterDialog() {
@@ -69,18 +69,18 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 	private void initInstances() {
 		ButtonGroup group = new ButtonGroup();
 
-		rb_local = new JRadioButton(
+		jRadioButtonLocal = new JRadioButton(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelFromLocal"));
-		rb_server = new JRadioButton(
+		jRadioButtonServer = new JRadioButton(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelFromServer"));
-		rb_wget = new JRadioButton(
+		jRadioButtonWGet = new JRadioButton(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetFrom"));
-		group.add(rb_local);
-		group.add(rb_server);
-		group.add(rb_wget);
+		group.add(jRadioButtonLocal);
+		group.add(jRadioButtonServer);
+		group.add(jRadioButtonWGet);
 
 		if ((fromMakeProductfile != null) && (!fromMakeProductfile.equals(""))) {
-			rb_server.setSelected(true);
+			jRadioButtonServer.setSelected(true);
 			installLocalPanel.isOpen = true; // if true, it can be closed
 			installLocalPanel.close();
 
@@ -90,7 +90,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 			installServerPanel.setPackagePath(fromMakeProductfile);
 		} else {
 
-			rb_local.setSelected(true);
+			jRadioButtonLocal.setSelected(true);
 			installLocalPanel.isOpen = false; // if false it can be opened
 			installLocalPanel.open();
 
@@ -100,17 +100,17 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		installWgetPanel.isOpen = true;
 		installWgetPanel.close();
 
-		rb_local.addActionListener(actionEvent -> {
+		jRadioButtonLocal.addActionListener(actionEvent -> {
 			installLocalPanel.open();
 			installServerPanel.close();
 			installWgetPanel.close();
 		});
-		rb_server.addActionListener(actionEvent -> {
+		jRadioButtonServer.addActionListener(actionEvent -> {
 			installLocalPanel.close();
 			installServerPanel.open();
 			installWgetPanel.close();
 		});
-		rb_wget.addActionListener(actionEvent -> {
+		jRadioButtonWGet.addActionListener(actionEvent -> {
 			installLocalPanel.close();
 			installServerPanel.close();
 			installWgetPanel.open();
@@ -124,18 +124,18 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		GroupLayout radioPanelLayout = new GroupLayout(radioPanel);
 		radioPanel.setLayout(radioPanelLayout);
 
-		radioPanelLayout.setHorizontalGroup(
-				radioPanelLayout.createParallelGroup().addGap(Globals.GAP_SIZE).addComponent(rb_local, PREF, PREF, PREF)
-						.addComponent(installLocalPanel, PREF, PREF, MAX).addComponent(rb_server, PREF, PREF, PREF)
-						.addComponent(installServerPanel, PREF, PREF, MAX).addComponent(rb_wget, PREF, PREF, PREF)
-						.addComponent(installWgetPanel, PREF, PREF, MAX).addGap(2 * Globals.GAP_SIZE));
+		radioPanelLayout.setHorizontalGroup(radioPanelLayout.createParallelGroup().addGap(Globals.GAP_SIZE)
+				.addComponent(jRadioButtonLocal, PREF, PREF, PREF).addComponent(installLocalPanel, PREF, PREF, MAX)
+				.addComponent(jRadioButtonServer, PREF, PREF, PREF).addComponent(installServerPanel, PREF, PREF, MAX)
+				.addComponent(jRadioButtonWGet, PREF, PREF, PREF).addComponent(installWgetPanel, PREF, PREF, MAX)
+				.addGap(2 * Globals.GAP_SIZE));
 
 		radioPanelLayout.setVerticalGroup(radioPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addComponent(rb_local, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(jRadioButtonLocal, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 				.addComponent(installLocalPanel, PREF, PREF, PREF).addGap(Globals.GAP_SIZE)
-				.addComponent(rb_server, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(jRadioButtonServer, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 				.addComponent(installServerPanel, PREF, PREF, PREF).addGap(Globals.GAP_SIZE)
-				.addComponent(rb_wget, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+				.addComponent(jRadioButtonWGet, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 				.addComponent(installWgetPanel, PREF, PREF, PREF).addGap(Globals.GAP_SIZE));
 
 		GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
@@ -143,7 +143,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		mainPanelLayout.setHorizontalGroup(mainPanelLayout.createParallelGroup()
 
 				.addGroup(mainPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
-						.addComponent(lbl_install, PREF, PREF, PREF).addGap(Globals.GAP_SIZE))
+						.addComponent(jLabelInstall, PREF, PREF, PREF).addGap(Globals.GAP_SIZE))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(mainPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 						.addComponent(radioPanel, PREF, PREF, MAX).addGap(Globals.GAP_SIZE))
@@ -153,7 +153,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		);
 
 		mainPanelLayout.setVerticalGroup(mainPanelLayout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
-				.addComponent(lbl_install).addGap(Globals.GAP_SIZE).addComponent(radioPanel).addGap(Globals.GAP_SIZE)
+				.addComponent(jLabelInstall).addGap(Globals.GAP_SIZE).addComponent(radioPanel).addGap(Globals.GAP_SIZE)
 				.addComponent(installSettingsPanel).addGap(2 * Globals.GAP_SIZE));
 	}
 
@@ -166,7 +166,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 		radioPanel.setBorder(BorderFactory.createTitledBorder(""));
-		lbl_install.setText(
+		jLabelInstall.setText(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelInstall"));
 	}
 
@@ -179,7 +179,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		commands.setMainName("PackageInstallation");
 		CommandOpsiPackageManagerInstall pmInstallCom;
 
-		if (rb_local.isSelected()) {
+		if (jRadioButtonLocal.isSelected()) {
 			sequential = true;
 			CommandSFTPUpload sftpcom = installLocalPanel.getCommand();
 			if (sftpcom == null) {
@@ -196,16 +196,14 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 				commands.addCommand(pmInstallCom);
 		}
 
-		else if (rb_server.isSelected()) {
+		else if (jRadioButtonServer.isSelected()) {
 			pmInstallCom = installServerPanel.getCommand();
 			if (pmInstallCom == null) {
 				logging.warning(this, "No opsi-package selected. 3");
 				return;
 			} else
 				commands.addCommand(pmInstallCom);
-		}
-
-		else {
+		} else {
 			sequential = true;
 
 			commands = installWgetPanel.getCommand(commands);

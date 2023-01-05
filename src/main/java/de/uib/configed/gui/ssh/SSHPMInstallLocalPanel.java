@@ -62,8 +62,8 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 		jButtonFileChooser.addActionListener(actionEvent -> {
 			int returnVal = jFileChooser.showOpenDialog(instance);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				String path_modules = jFileChooser.getSelectedFile().getPath();
-				jTextFieldPath.setText(path_modules);
+				String pathModules = jFileChooser.getSelectedFile().getPath();
+				jTextFieldPath.setText(pathModules);
 			} else {
 				jTextFieldPath.setText("");
 			}
