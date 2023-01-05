@@ -34,7 +34,8 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.observer.RunningInstances;
 
 public class FEditObject extends javax.swing.JDialog implements ActionListener, KeyListener, DocumentListener {
-	public static RunningInstances<JDialog> runningInstances = new RunningInstances(JDialog.class, "leaving dialog");
+	public static final RunningInstances<JDialog> runningInstances = new RunningInstances<>(JDialog.class,
+			"leaving dialog");
 
 	public Dimension areaDimension = new Dimension(300, 240);
 
@@ -343,10 +344,9 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 			cancel();
 
 		} else if (e.getID() == WindowEvent.WINDOW_ACTIVATED) {
-
 			enter();
 		} else if (e.getID() == WindowEvent.WINDOW_DEACTIVATED) {
-
+			// TODO: add cancel()?
 		}
 
 		super.processWindowEvent(e);

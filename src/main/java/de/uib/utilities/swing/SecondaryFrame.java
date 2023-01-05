@@ -56,7 +56,6 @@ public class SecondaryFrame extends JFrame implements WindowListener {
 	/* WindowListener implementation */
 	@Override
 	public void windowClosing(WindowEvent e) {
-
 		callExit();
 	}
 

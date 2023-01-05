@@ -22,7 +22,8 @@ import de.uib.utilities.observer.RunningInstances;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public class FPanel extends SecondaryFrame {
-	public static RunningInstances<JFrame> runningInstances = new RunningInstances(JFrame.class, "edit panel dialog");
+	public static final RunningInstances<JFrame> runningInstances = new RunningInstances<>(JFrame.class,
+			"edit panel dialog");
 
 	JPanel innerPanel;
 	boolean checkLeave;
