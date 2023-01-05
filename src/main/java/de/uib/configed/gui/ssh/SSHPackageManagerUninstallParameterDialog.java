@@ -35,22 +35,21 @@ public class SSHPackageManagerUninstallParameterDialog
 
 	private JPanel uninstallPanel = new JPanel();
 
-	private JLabel lbl_uninstall = new JLabel();
-	private JLabel lbl_product = new JLabel();
-	private JLabel lbl_on = new JLabel();
-	private JLabel lbl_fullCommand = new JLabel();
-	private JLabel lbl_keepFiles = new JLabel();
+	private JLabel jLabelUninstall = new JLabel();
+	private JLabel jLabelProduct = new JLabel();
+	private JLabel jLabelOn = new JLabel();
+	private JLabel jLabelFullCommand = new JLabel();
+	private JLabel jLabelKeepFiles = new JLabel();
 
-	private JComboBox cb_opsiproducts;
-	private JComboBox cb_verbosity;
+	private JComboBox<String> jComboBoxOpsiProducts;
+	private JComboBox<Integer> jComboBoxVerbosity;
 
-	private JCheckBox checkb_keepFiles;
+	private JCheckBox checkBoxKeepFiles;
 
-	private JTextField tf_product;
-	private JTextField tf_selecteddepots;
+	private JTextField textFieldProduct;
+	private JTextField textFieldSelectedDepots;
 
-	private IconAsButton buttonUpdateList;
-	private JButton btn_depotselection;
+	private JButton jButtonDepotSelection;
 
 	PersistenceController persist;
 
@@ -92,7 +91,7 @@ public class SSHPackageManagerUninstallParameterDialog
 			@Override
 			public void doAction1() {
 
-				tf_selecteddepots.setText(produceDepotParameter());
+				textFieldSelectedDepots.setText(produceDepotParameter());
 				super.doAction1();
 			}
 		};
@@ -100,7 +99,7 @@ public class SSHPackageManagerUninstallParameterDialog
 		init();
 
 		jButtonExecute.setEnabled(false); // requires valid depot selection
-		tf_selecteddepots.setText("");
+		textFieldSelectedDepots.setText("");
 
 		pack();
 		this.setSize(frameWidth, frameHeight);
@@ -113,14 +112,14 @@ public class SSHPackageManagerUninstallParameterDialog
 	@Override
 	protected void setComponentsEnabled(boolean value) {
 		super.setComponentsEnabled(value);
-		cb_opsiproducts.setEnabled(true);
-		cb_opsiproducts.setEditable(false);
-		cb_verbosity.setEnabled(value);
-		cb_verbosity.setEditable(value);
+		jComboBoxOpsiProducts.setEnabled(true);
+		jComboBoxOpsiProducts.setEditable(false);
+		jComboBoxVerbosity.setEnabled(value);
+		jComboBoxVerbosity.setEditable(value);
 
-		checkb_keepFiles.setEnabled(value);
+		checkBoxKeepFiles.setEnabled(value);
 
-		btn_depotselection.setEnabled(value);
+		jButtonDepotSelection.setEnabled(value);
 		jButtonExecute.setEnabled(false);
 	}
 
@@ -171,16 +170,16 @@ public class SSHPackageManagerUninstallParameterDialog
 	}
 
 	protected List<String> getPossibleDepots() {
-		String selectedProduct = (String) cb_opsiproducts.getSelectedItem();
+		String selectedProduct = (String) jComboBoxOpsiProducts.getSelectedItem();
 
 		List<String> result = new ArrayList<>();
 
 		if (persist.isDepotsFullPermission()) {
-			tf_selecteddepots.setEditable(true);
+			textFieldSelectedDepots.setEditable(true);
 			result.add(PersistenceController.DEPOT_SELECTION_NODEPOTS);
 			result.add(PersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
 		} else
-			tf_selecteddepots.setEditable(false);
+			textFieldSelectedDepots.setEditable(false);
 
 		for (String depot : persist.getHostInfoCollections().getDepotNamesList()) {
 			if (persist.getDepotPermission(depot)) {
@@ -207,9 +206,9 @@ public class SSHPackageManagerUninstallParameterDialog
 		// probably no permission
 		{
 			jButtonExecute.setVisible(false);
-			tf_selecteddepots.setText("");
+			textFieldSelectedDepots.setText("");
 		} else
-			tf_selecteddepots.setText("" + possibleDepots.get(0));
+			textFieldSelectedDepots.setText("" + possibleDepots.get(0));
 
 	}
 
@@ -221,75 +220,65 @@ public class SSHPackageManagerUninstallParameterDialog
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 		uninstallPanel.setBorder(BorderFactory.createTitledBorder(""));
 		uninstallPanel.setPreferredSize(new java.awt.Dimension(376, 220));
-		{
-			lbl_uninstall.setText(configed
-					.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelUninstall"));
-		}
-		{
-			cb_verbosity = new JComboBox<>();
-			cb_verbosity.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
-			for (int i = 0; i < 5; i++)
-				cb_verbosity.addItem(i);
-			cb_verbosity.setSelectedItem(1);
-			cb_verbosity.addItemListener(itemEvent -> changeVerbosity());
-		}
-		{
 
-			lbl_keepFiles.setText(configed
-					.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelKeepFiles"));
-			checkb_keepFiles = new JCheckBox();
-			checkb_keepFiles.addItemListener(itemEvent -> changeKeepFiles());
-		}
+		jLabelUninstall.setText(configed
+				.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelUninstall"));
 
-		{
+		jComboBoxVerbosity = new JComboBox<>();
+		jComboBoxVerbosity.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
+		for (int i = 0; i < 5; i++)
+			jComboBoxVerbosity.addItem(i);
+		jComboBoxVerbosity.setSelectedItem(1);
+		jComboBoxVerbosity.addItemListener(itemEvent -> changeVerbosity());
 
-			lbl_product.setText(configed
-					.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelProduct"));
+		jLabelKeepFiles.setText(configed
+				.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelKeepFiles"));
+		checkBoxKeepFiles = new JCheckBox();
+		checkBoxKeepFiles.addItemListener(itemEvent -> changeKeepFiles());
 
-			tf_product = new JTextField();
-			tf_product.setBackground(Globals.BACKGROUND_COLOR_9);
-			tf_product.setEditable(false);
+		jLabelProduct.setText(
+				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelProduct"));
 
-			cb_opsiproducts = new JComboBoxSimpleToolTip();
-			cb_opsiproducts.setRenderer(new DefaultListCellRenderer());
-			cb_opsiproducts.setMaximumRowCount(Globals.COMBOBOX_ROW_COUNT);
+		textFieldProduct = new JTextField();
+		textFieldProduct.setBackground(Globals.BACKGROUND_COLOR_9);
+		textFieldProduct.setEditable(false);
 
-			cb_opsiproducts.addItemListener(itemEvent -> {
-				tf_selecteddepots.setText("");
+		jComboBoxOpsiProducts = new JComboBoxSimpleToolTip();
+		jComboBoxOpsiProducts.setRenderer(new DefaultListCellRenderer());
+		jComboBoxOpsiProducts.setMaximumRowCount(Globals.COMBOBOX_ROW_COUNT);
 
-				jButtonExecute.setEnabled(false);
-				tf_product.setText((String) cb_opsiproducts.getSelectedItem());
-			});
+		jComboBoxOpsiProducts.addItemListener(itemEvent -> {
+			textFieldSelectedDepots.setText("");
 
-			buttonUpdateList = new IconAsButton("buttonUpdateList", "images/reload16.png", "images/reload16.png",
-					"images/reload16.png", "images/reload16.png");
-			buttonUpdateList.setBackground(Globals.BACKGROUND_COLOR_3);
-			buttonUpdateList.setToolTipText(configed.getResourceValue(
-					"SSHConnection.ParameterDialog.opsipackagemanager_uninstall.JButtonUpdateList.tooltip"));
+			jButtonExecute.setEnabled(false);
+			textFieldProduct.setText((String) jComboBoxOpsiProducts.getSelectedItem());
+		});
 
-			buttonUpdateList.addActionListener(actionEvent -> {
-				logging.info(this, "actionPerformed");
-				resetProducts();
-			});
+		IconAsButton iconButtonUpdateList = new IconAsButton("buttonUpdateList", "images/reload16.png",
+				"images/reload16.png", "images/reload16.png", "images/reload16.png");
+		iconButtonUpdateList.setBackground(Globals.BACKGROUND_COLOR_3);
+		iconButtonUpdateList.setToolTipText(configed.getResourceValue(
+				"SSHConnection.ParameterDialog.opsipackagemanager_uninstall.JButtonUpdateList.tooltip"));
 
-		}
+		iconButtonUpdateList.addActionListener(actionEvent -> {
+			logging.info(this, "actionPerformed");
+			resetProducts();
+		});
 
-		{
-			lbl_on.setText(
-					configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelOn"));
+		jLabelOn.setText(
+				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelOn"));
 
-			btn_depotselection = new JButton(
-					configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager.depotselection"));
-			btn_depotselection.addActionListener(actionEvent -> {
-				initDepots();
-				if (btn_depotselection != null)
-					fDepotList.setLocationRelativeTo(btn_depotselection);
-				fDepotList.setVisible(true);
-			});
+		jButtonDepotSelection = new JButton(
+				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager.depotselection"));
+		jButtonDepotSelection.addActionListener(actionEvent -> {
+			initDepots();
+			if (jButtonDepotSelection != null)
+				fDepotList.setLocationRelativeTo(jButtonDepotSelection);
+			fDepotList.setVisible(true);
+		});
 
-			tf_selecteddepots = new JTextField();
-			tf_selecteddepots.setEditable(false);
-		}
+		textFieldSelectedDepots = new JTextField();
+		textFieldSelectedDepots.setEditable(false);
 
 		initLabels();
 		initButtons(this);
@@ -308,41 +297,41 @@ public class SSHPackageManagerUninstallParameterDialog
 
 	private void resetProducts() {
 		logging.info(this, "resetProducts in cb_opsiproducts");
-		cb_opsiproducts.removeAllItems();
+		jComboBoxOpsiProducts.removeAllItems();
 		if (persist == null)
 			logging.error(this, "resetProducts PersistenceController null");
 		else {
 			NavigableSet<String> productnames = persist.getProductIds();
 			for (String item : productnames)
-				cb_opsiproducts.addItem(item);
+				jComboBoxOpsiProducts.addItem(item);
 		}
 	}
 
 	private void updateCommand() {
-		lbl_fullCommand.setText(commandPMUninstall.getCommand());
+		jLabelFullCommand.setText(commandPMUninstall.getCommand());
 	}
 
 	private void changeKeepFiles() {
-		commandPMUninstall.setKeepFiles(checkb_keepFiles.isSelected());
+		commandPMUninstall.setKeepFiles(checkBoxKeepFiles.isSelected());
 		updateCommand();
 	}
 
 	private void changeDepot() {
-		if (tf_selecteddepots.getText()
+		if (textFieldSelectedDepots.getText()
 				.equals(configed.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS")))
 			commandPMUninstall.setDepot(null);
-		else if (tf_selecteddepots.getText().equals(configed
+		else if (textFieldSelectedDepots.getText().equals(configed
 				.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL_WHERE_INSTALLED")))
 			commandPMUninstall.setDepot("all");
 		else
-			commandPMUninstall.setDepot(tf_selecteddepots.getText());
+			commandPMUninstall.setDepot(textFieldSelectedDepots.getText());
 
 		updateCommand();
 	}
 
 	private void changeVerbosity() {
-		logging.info(this, "changeVerbosity , selected " + cb_verbosity.getSelectedItem());
-		commandPMUninstall.setVerbosity((int) cb_verbosity.getSelectedItem());
+		logging.info(this, "changeVerbosity , selected " + jComboBoxVerbosity.getSelectedItem());
+		commandPMUninstall.setVerbosity((int) jComboBoxVerbosity.getSelectedItem());
 		updateCommand();
 	}
 
@@ -363,26 +352,23 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		fConfirmAction.setMessage(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.confirm") + "\n"
-						+ tf_product.getText() + "\n\n"
+						+ textFieldProduct.getText() + "\n\n"
 						+ configed
 								.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelOn")
 
-						+ "\n\n" + tf_selecteddepots.getText());
+						+ "\n\n" + textFieldSelectedDepots.getText());
 
 		fConfirmAction.setLocationRelativeTo(this);
 		fConfirmAction.setAlwaysOnTop(true);
 		fConfirmAction.setVisible(true);
 
-		if (fConfirmAction.getResult() != 2)
-			return false;
-
-		return true;
+		return fConfirmAction.getResult() == 2;
 	}
 
 	@Override
 	public void doAction1() {
 		changeDepot();
-		final String prod = tf_product.getText();
+		final String prod = textFieldProduct.getText();
 		logging.info(this, "doAction1 uninstall  " + prod);
 
 		changeProduct(prod);
@@ -438,28 +424,29 @@ public class SSHPackageManagerUninstallParameterDialog
 		GroupLayout uninstallPanelLayout = new GroupLayout(uninstallPanel);
 		uninstallPanel.setLayout(uninstallPanelLayout);
 		uninstallPanelLayout.setHorizontalGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(lbl_uninstall, pref, pref, max).addGap(Globals.GAP_SIZE * 2)
+				.addComponent(jLabelUninstall, pref, pref, max).addGap(Globals.GAP_SIZE * 2)
 				.addGroup(uninstallPanelLayout
 						.createSequentialGroup().addGroup(uninstallPanelLayout.createParallelGroup()
 
 								.addGroup(uninstallPanelLayout.createSequentialGroup().addGap(5, 10, 20)
-										.addComponent(cb_opsiproducts, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+										.addComponent(jComboBoxOpsiProducts, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 												2 * Globals.BUTTON_WIDTH)
 										.addGap(5, 5, 5)
 
 										.addGap(5, 10, 20))
 								.addGroup(uninstallPanelLayout.createSequentialGroup()
-										.addComponent(lbl_on, pref, pref, pref).addGap(5, 10, 10)
-										.addComponent(btn_depotselection, pref, pref, pref))
+										.addComponent(jLabelOn, pref, pref, pref).addGap(5, 10, 10)
+										.addComponent(jButtonDepotSelection, pref, pref, pref))
 								.addComponent(jLabelVerbosity, pref, pref, pref)
-								.addComponent(lbl_keepFiles, pref, pref, pref))
+								.addComponent(jLabelKeepFiles, pref, pref, pref))
 						.addGap(Globals.GAP_SIZE)
 						.addGroup(uninstallPanelLayout.createParallelGroup(leading)
-								.addComponent(tf_product, pref, pref, max)
-								.addComponent(tf_selecteddepots, pref, pref, max)
-								.addComponent(cb_verbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+								.addComponent(textFieldProduct, pref, pref, max)
+								.addComponent(textFieldSelectedDepots, pref, pref, max)
+								.addComponent(jComboBoxVerbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+										Globals.ICON_WIDTH)
 
-								.addComponent(checkb_keepFiles, pref, pref, pref)
+								.addComponent(checkBoxKeepFiles, pref, pref, pref)
 
 						)
 
@@ -467,35 +454,35 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		);
 
-		uninstallPanelLayout.setVerticalGroup(uninstallPanelLayout.createSequentialGroup().addComponent(lbl_uninstall)
+		uninstallPanelLayout.setVerticalGroup(uninstallPanelLayout.createSequentialGroup().addComponent(jLabelUninstall)
 				.addGap(Globals.GAP_SIZE)
 
 				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(cb_opsiproducts, pref, pref, pref)
+						.addComponent(jComboBoxOpsiProducts, pref, pref, pref)
 
-						.addComponent(tf_product, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+						.addComponent(textFieldProduct, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 
 				.addGap(3 * Globals.GAP_SIZE)
 
 				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_on, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(btn_depotselection, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jLabelOn, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(jButtonDepotSelection, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(tf_selecteddepots, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(textFieldSelectedDepots, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 
 				.addGap(3 * Globals.GAP_SIZE)
 				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(jLabelVerbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(cb_verbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jComboBoxVerbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGap(Globals.MIN_GAP_SIZE)
 				.addGroup(uninstallPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_keepFiles, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(jLabelKeepFiles, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
 
-						.addComponent(checkb_keepFiles, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+						.addComponent(checkBoxKeepFiles, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 				.addGap(Globals.GAP_SIZE)
 

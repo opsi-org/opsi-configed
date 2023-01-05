@@ -32,8 +32,7 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.utilities.logging.logging;
 
-public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JDialog */ GeneralFrame
-{
+public class SSHConnectionOutputDialog extends FGeneralDialog {
 	protected JTextPane output;
 	protected JScrollPane jScrollPane;
 

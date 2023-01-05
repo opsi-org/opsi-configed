@@ -23,12 +23,11 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	private JPanel inputPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
 
-	private JLabel lbl_info;
-	private JLabel lbl_repos;
-	private JComboBox cb_actions;
-	private JComboBox cb_repos;
-	private JButton btn_doAction;
-	private JButton btn_close;
+	private JLabel jLabelInfo;
+	private JLabel jLabelRepos;
+	private JComboBox<String> jComboBoxActions;
+	private JComboBox<String> jComboBoxRepos;
+	private JButton jButtonDoAction;
 	private CommandPackageUpdater command;
 
 	public SSHPackageUpdaterDialog() {
@@ -39,12 +38,12 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		super(null, configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.title"), false);
 		this.command = command;
 		logging.info(this, "with command");
-		retrieve_repos();
+		retrieveRepos();
 		init();
 		initLayout();
 	}
 
-	private void retrieve_repos() {
+	private void retrieveRepos() {
 		SSHConnectExec ssh = new SSHConnectExec();
 		String result = "";
 		try {
@@ -67,9 +66,9 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 				repostatus = repostatus.replace("\\[[0-9];[0-9][0-9];[0-9][0-9]m", "");
 				repostatus = repostatus.replace("", "").replace("\u001B", "");
 
-				String[] repo_status = repostatus.split("\\(");
-				repo_status[1] = repo_status[1].split("\\)")[0];
-				repos.put(repo_status[0], repo_status[1]);
+				String[] repoStatus = repostatus.split("\\(");
+				repoStatus[1] = repoStatus[1].split("\\)")[0];
+				repos.put(repoStatus[0], repoStatus[1]);
 				command.setRepos(repos);
 			}
 		}
@@ -85,58 +84,59 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
 
-		lbl_info = new JLabel(configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.info"));
-		lbl_repos = new JLabel(configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.repos"));
-		inputPanel.add(lbl_info);
-		inputPanel.add(lbl_repos);
-		btn_doAction = new JButton();
-		buttonPanel.add(btn_doAction);
-		btn_doAction.setText(configed.getResourceValue("SSHConnection.buttonExec"));
-		btn_doAction.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
+		jLabelInfo = new JLabel(configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.info"));
+		jLabelRepos = new JLabel(configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.repos"));
+		inputPanel.add(jLabelInfo);
+		inputPanel.add(jLabelRepos);
+		jButtonDoAction = new JButton();
+		buttonPanel.add(jButtonDoAction);
+		jButtonDoAction.setText(configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonDoAction.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly()))
-			btn_doAction.addActionListener(actionEvent -> {
+			jButtonDoAction.addActionListener(actionEvent -> {
 				logging.info(this, "btn_doAction pressed");
 				doAction1();
 			});
 
-		btn_close = new JButton();
-		buttonPanel.add(btn_close);
-		btn_close.setText(configed.getResourceValue("SSHConnection.buttonClose"));
-		btn_close.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
-		btn_close.addActionListener(actionEvent -> cancel());
+		JButton jButtonClose = new JButton();
+		buttonPanel.add(jButtonClose);
+		jButtonClose.setText(configed.getResourceValue("SSHConnection.buttonClose"));
+		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
+		jButtonClose.addActionListener(actionEvent -> cancel());
 		setComponentsEnabled(!Globals.isGlobalReadOnly());
 
-		cb_actions = new JComboBox<>(command.getActionsText());
-		cb_actions.addItemListener(itemEvent -> {
+		jComboBoxActions = new JComboBox<>(command.getActionsText());
+		jComboBoxActions.addItemListener(itemEvent -> {
 			if (((String) itemEvent.getItem())
 					.equals(configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.list")))
-				cb_repos.setEnabled(itemEvent.getStateChange() != ItemEvent.SELECTED);
+				jComboBoxRepos.setEnabled(itemEvent.getStateChange() != ItemEvent.SELECTED);
 		});
 
 		if (command.getRepos() != null) {
-			cb_repos = new JComboBox<>(command.getRepos().keySet().toArray());
+			jComboBoxRepos = new JComboBox<>(command.getRepos().keySet().toArray(new String[0]));
 		} else {
-			cb_repos = new JComboBox<>();
+			jComboBoxRepos = new JComboBox<>();
 		}
 
-		cb_repos.addItem(configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"));
-		cb_repos.setSelectedItem(
+		jComboBoxRepos
+				.addItem(configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"));
+		jComboBoxRepos.setSelectedItem(
 				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"));
-		cb_actions.setEnabled(true);
-		inputPanel.add(cb_actions);
-		inputPanel.add(cb_repos);
+		jComboBoxActions.setEnabled(true);
+		inputPanel.add(jComboBoxActions);
+		inputPanel.add(jComboBoxRepos);
 	}
 
 	private void setComponentsEnabled(boolean value) {
-		btn_doAction.setEnabled(value);
+		jButtonDoAction.setEnabled(value);
 	}
 
 	/* This method is called when button 1 is pressed */
 	@Override
 	public void doAction1() {
 		try {
-			command.setAction(command.getAction((String) cb_actions.getSelectedItem()));
-			String repo = (String) cb_repos.getSelectedItem();
+			command.setAction(command.getAction((String) jComboBoxActions.getSelectedItem()));
+			String repo = (String) jComboBoxRepos.getSelectedItem();
 			if (repo.equals(
 					configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories")))
 				command.setRepo(null);
@@ -161,25 +161,30 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		inputPanel.setLayout(inputPanelLayout);
 		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup()
-						.addComponent(lbl_info, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jLabelInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(lbl_repos, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						.addComponent(jLabelRepos, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup()
-						.addComponent(cb_actions, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
-						.addComponent(cb_repos, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE))
+						.addComponent(jComboBoxActions, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
+						.addComponent(jComboBoxRepos, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE))
 				.addGap(Globals.GAP_SIZE));
 
-		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
-				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_info, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(cb_actions, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-				.addGap(Globals.GAP_SIZE)
-				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(lbl_repos, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
-						.addComponent(cb_repos, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-				.addGap(2 * Globals.GAP_SIZE));
+		inputPanelLayout
+				.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
+						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(jLabelInfo, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT)
+								.addComponent(jComboBoxActions, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT))
+						.addGap(Globals.GAP_SIZE)
+						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(jLabelRepos, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT)
+								.addComponent(jComboBoxRepos, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
+										Globals.BUTTON_HEIGHT))
+						.addGap(2 * Globals.GAP_SIZE));
 
 		this.setSize(600, 210);
 		this.setLocationRelativeTo(Globals.mainFrame);

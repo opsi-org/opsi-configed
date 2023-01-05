@@ -7,7 +7,7 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 import de.uib.configed.Globals;
 
-public class JComboBoxSimpleToolTip extends javax.swing.JComboBox {
+public class JComboBoxSimpleToolTip extends javax.swing.JComboBox<String> {
 
 	protected int FILL_LENGTH = 40;
 

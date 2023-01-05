@@ -161,16 +161,16 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 		return dialog;
 	}
 
-	public void setVerbosity(int v_sum) {
+	public void setVerbosity(int vSum) {
 		String v = "";
-		for (int i = 0; i < v_sum; i++)
+		for (int i = 0; i < vSum; i++)
 			v = v + "v";
 		verbosity = " -" + v + " ";
-		if (v_sum == 0)
+		if (vSum == 0)
 			verbosity = "";
 	}
 
-	public void setRepos(Map r) {
+	public void setRepos(Map<String, String> r) {
 		repohash = r;
 	}
 
@@ -181,7 +181,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 			repo = " --repo " + r + " ";
 	}
 
-	public Map getRepos() {
+	public Map<String, String> getRepos() {
 		return repohash;
 	}
 
@@ -196,12 +196,8 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 		return actionhash.get(text);
 	}
 
-	public List getActions() {
-		return actionlist;
-	}
-
-	public Object[] getActionsText() {
-		return actionhash.keySet().toArray();
+	public String[] getActionsText() {
+		return actionhash.keySet().toArray(new String[0]);
 	}
 
 	public boolean checkCommand() {
