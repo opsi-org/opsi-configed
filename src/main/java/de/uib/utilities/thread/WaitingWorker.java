@@ -112,7 +112,6 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 		logging.debug(this, "portion " + portion + " barLength  " + barLength);
 
 		progressBar.setValue(progressBar.getMinimum() + portion);
-
 	}
 
 	//

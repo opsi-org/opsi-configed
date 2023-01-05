@@ -116,18 +116,17 @@ public class SSHConnectionInfo {
 
 	public void checkUserData() {
 		if (getHost() == null)
-			// setHost(allowedHostsContainsSubstring(
-			// SSHCommandFactory.getInstance().getAllowedHosts(),
-
 			setHost(ConfigedMain.HOST);
-		// for SSH ConfigedMain.HOST always allowed
 
 		if (getPort() == null)
 			setPort(SSHConnect.portSSH);
+
 		if (getUser() == null)
 			setUser(ConfigedMain.USER);
+
 		if ((getPassw() == null) && (!usesKeyfile()))
 			setPassw(ConfigedMain.PASSWORD);
+
 		else if (getPassw() == null)
 			setPassw("");
 

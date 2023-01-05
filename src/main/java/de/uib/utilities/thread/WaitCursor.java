@@ -113,7 +113,6 @@ public class WaitCursor {
 
 	public static void stopAll() {
 		allStopped = true;
-
 	}
 
 }

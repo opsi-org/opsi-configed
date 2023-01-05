@@ -402,9 +402,7 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 	public void actAfterWaiting() {
 		waitCursor.stop();
 
-		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED)
-
-		{
+		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED) {
 			// we can finish
 			logging.info(this, "connected with persis " + persis);
 			main.setPersistenceController(persis);
