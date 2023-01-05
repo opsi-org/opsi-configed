@@ -2668,6 +2668,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		fList.setTitle(Globals.APPNAME + ": " + configed.getResourceValue("MainFrame.productSelection"));
 		fList.init();
 
+		// TODO should this location remain here?
 		fList.setLocation(this.getX() + 40, this.getY() + 40);
 		fList.setSize(F_WIDTH / 2, this.getHeight());
 

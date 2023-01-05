@@ -1485,16 +1485,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		licencesFrame.start();
 
-		licencesFrame.setSize(licencesInitDimension);
-
-		Rectangle screenRectangle = mainFrame.getGraphicsConfiguration().getBounds();
 		logging.info(this, "set size and location of licencesFrame");
 
-		// weird formula for size
+		licencesFrame.setSize(licencesInitDimension);
 
-		// Center mainFrame on screen of configed.fProgress
-		licencesFrame.setLocation((int) (screenRectangle.getCenterX() - licencesFrame.getSize().getWidth() / 2),
-				(int) (screenRectangle.getCenterY() - licencesFrame.getSize().getHeight() / 2));
+		// Center on mainFrame
+		licencesFrame.setLocationRelativeTo(mainFrame);
 
 		waitCursor.stop();
 
@@ -5030,8 +5026,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		dialogRemoteControl.resetValue();
 
-		dialogRemoteControl.setLocation(mainFrame.getX() + 40, mainFrame.getY() + 40);
 		dialogRemoteControl.setSize(MainFrame.F_WIDTH, mainFrame.getHeight() / 2);
+		dialogRemoteControl.setLocationRelativeTo(mainFrame);
 
 		dialogRemoteControl.setVisible(true);
 		dialogRemoteControl.setDividerLocation(0.8);

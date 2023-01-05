@@ -183,7 +183,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	String selectedDepot = null;
 	String winProduct = "";
 
-	JLabel label_topic;
+	JLabel jLabelTopic;
 	int wLeftText;
 
 	PersistenceController persist;
@@ -204,8 +204,8 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 				de.uib.connectx.SmbConnect.PRODUCT_SHARE_RW);
 		logging.info(this, "depotProductDirectory " + depotProductDirectory);
 
-		label_topic = new JLabel(configed.getResourceValue("PanelDriverUpload.topic"));
-		wLeftText = label_topic.getPreferredSize().width;
+		jLabelTopic = new JLabel(configed.getResourceValue("PanelDriverUpload.topic"));
+		wLeftText = jLabelTopic.getPreferredSize().width;
 
 		labelDriverToIntegrate = new JLabel(configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
 
@@ -316,8 +316,8 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		fieldClientname = new JTextShowField();
 
-		JLabel label_DepotServer = new JLabel(configed.getResourceValue("PanelDriverUpload.DepotServer"));
-		JLabel label_winProduct = new JLabel(configed.getResourceValue("PanelDriverUpload.labelWinProduct"));
+		JLabel jLabelDepotServer = new JLabel(configed.getResourceValue("PanelDriverUpload.DepotServer"));
+		JLabel jLabelWinProduct = new JLabel(configed.getResourceValue("PanelDriverUpload.labelWinProduct"));
 
 		buttonCallSelectDriverFiles = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectDriverFiles.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
@@ -337,7 +337,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		buttonCallChooserServerpath.addActionListener(actionEvent -> chooseServerpath());
 
-		JLabel label_showDrivers = new JLabel(configed.getResourceValue("PanelDriverUpload.labelShowDrivers"));
+		JLabel jLabelShowDrivers = new JLabel(configed.getResourceValue("PanelDriverUpload.labelShowDrivers"));
 		btnShowDrivers = new JButton("", Globals.createImageIcon("images/show-menu.png", ""));
 		btnShowDrivers.setToolTipText(configed.getResourceValue("PanelDriverUpload.btnShowDrivers.tooltip"));
 		btnShowDrivers.addActionListener(actionEvent -> new Thread() {
@@ -354,7 +354,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			}
 		}.start());
 
-		JLabel label_createDrivers = new JLabel(configed.getResourceValue("PanelDriverUpload.labelCreateDriverLinks"));
+		JLabel jLabelCreateDrivers = new JLabel(configed.getResourceValue("PanelDriverUpload.labelCreateDriverLinks"));
 		btnCreateDrivers = new JButton("", Globals.createImageIcon("images/run-build-file.png", ""));
 		btnCreateDrivers.setToolTipText(configed.getResourceValue("PanelDriverUpload.btnCreateDrivers.tooltip"));
 		btnCreateDrivers.addActionListener(actionEvent -> new SSHConnectExec(main,
@@ -386,7 +386,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			}
 		});
 
-		JLabel label_byAuditDriverLocationPath = new JLabel(
+		JLabel jLabelByAuditDriverLocationPath = new JLabel(
 				configed.getResourceValue("PanelDriverUpload.byAuditDriverLocationPath"));
 		JLabel labelDriverLocationType = new JLabel(configed.getResourceValue("PanelDriverUpload.type"));
 
@@ -444,7 +444,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 				.addComponent(buttonAdditional, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addComponent(buttonByAudit, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGroup(layoutButtonGroup.createParallelGroup()
-						.addComponent(label_byAuditDriverLocationPath, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+						.addComponent(jLabelByAuditDriverLocationPath, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT)
 						.addComponent(fieldByAuditPath, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				.addGap(vGap, vGap, vGap));
@@ -466,7 +466,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 										.addComponent(buttonByAudit, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addGroup(layoutButtonGroup.createSequentialGroup().addGap(50, 50, 50)
-												.addComponent(label_byAuditDriverLocationPath, 10,
+												.addComponent(jLabelByAuditDriverLocationPath, 10,
 														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 												.addGap(hGap, hGap, hGap)
 												.addComponent(fieldByAuditPath, Globals.BUTTON_WIDTH,
@@ -510,21 +510,21 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		int lh = Globals.LINE_HEIGHT - 4;
 		layoutByAuditInfo.setVerticalGroup(layoutByAuditInfo.createSequentialGroup().addGap(vGap, vGap * 2, vGap * 2)
 				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(label_topic, lh, lh, lh).addComponent(fieldClientname, lh, lh, lh))
+						.addComponent(jLabelTopic, lh, lh, lh).addComponent(fieldClientname, lh, lh, lh))
 				.addGap(2 * vGap, 3 * vGap, 3 * vGap)
 				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(label_DepotServer, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(jLabelDepotServer, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(comboChooseDepot, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(label_winProduct, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(jLabelWinProduct, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(comboChooseWinProduct, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT))
 				.addGap(2 * vGap, 3 * vGap, 3 * vGap)
 				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(label_showDrivers, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(jLabelShowDrivers, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(btnShowDrivers, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				.addGap(2 * vGap, 3 * vGap, 3 * vGap)
 				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(label_createDrivers, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+						.addComponent(jLabelCreateDrivers, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT)
 						.addComponent(btnCreateDrivers, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				.addGap(2 * vGap, 3 * vGap, 3 * vGap)
@@ -567,7 +567,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 												.addGap(hFirstGap, hFirstGap, hFirstGap)
 												.addGroup(layoutByAuditInfo.createParallelGroup()
 														.addGroup(layoutByAuditInfo.createSequentialGroup()
-																.addComponent(label_topic, 5, wLeftText, wLeftText)
+																.addComponent(jLabelTopic, 5, wLeftText, wLeftText)
 																.addGap(hFirstGap, hFirstGap, hFirstGap)
 
 																.addComponent(fieldClientname, Globals.BUTTON_WIDTH,
@@ -578,12 +578,12 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 																		GroupLayout.PREFERRED_SIZE,
 																		GroupLayout.PREFERRED_SIZE))
 														.addGroup(layoutByAuditInfo.createSequentialGroup()
-																.addComponent(label_DepotServer)
+																.addComponent(jLabelDepotServer)
 																.addGap(hGap, hGap, hGap)
 																.addComponent(comboChooseDepot, Globals.BUTTON_WIDTH,
 																		Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2)
 																.addGap(hGap, hGap, hGap)
-																.addComponent(label_winProduct,
+																.addComponent(jLabelWinProduct,
 																		GroupLayout.PREFERRED_SIZE,
 																		GroupLayout.PREFERRED_SIZE,
 																		GroupLayout.PREFERRED_SIZE)
@@ -592,14 +592,14 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 																		Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH * 2,
 																		Globals.BUTTON_WIDTH * 3))
 														.addGroup(layoutByAuditInfo.createSequentialGroup()
-																.addComponent(label_showDrivers, Globals.BUTTON_WIDTH,
+																.addComponent(jLabelShowDrivers, Globals.BUTTON_WIDTH,
 																		Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
 																.addGap(hGap, hGap, hGap).addComponent(
 																		btnShowDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
 																		Globals.GRAPHIC_BUTTON_WIDTH,
 																		Globals.GRAPHIC_BUTTON_WIDTH))
 														.addGroup(layoutByAuditInfo.createSequentialGroup()
-																.addComponent(label_createDrivers, Globals.BUTTON_WIDTH,
+																.addComponent(jLabelCreateDrivers, Globals.BUTTON_WIDTH,
 																		Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
 																.addGap(hGap, hGap, hGap).addComponent(
 																		btnCreateDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
@@ -684,7 +684,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 	protected void execute() {
 
-		final FLoadingWaiter waiter = new FLoadingWaiter(Globals.APPNAME,
+		final FLoadingWaiter waiter = new FLoadingWaiter(this, Globals.APPNAME,
 				configed.getResourceValue("PanelDriverUpload.execute.running"));
 		waiter.startWaiting();
 

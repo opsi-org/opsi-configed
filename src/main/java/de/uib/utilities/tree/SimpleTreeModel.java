@@ -6,29 +6,21 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import javax.swing.JFrame;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.logging;
 
-public class SimpleTreeModel extends DefaultTreeModel
-
-{
+public class SimpleTreeModel extends DefaultTreeModel {
 	java.util.LinkedHashMap<String, Object> virtualLines;
-	static final String noValue = "NONE";
 
-	public final SimpleIconNode ROOT;
+	public final SimpleIconNode rootNode;
 
 	Set<SimpleTreePath> allPathes;
 	Map<SimpleTreePath, SimpleIconNode> path2Node;
 
 	Map<String, String> tooltips;
-
-	public SimpleTreeModel(java.util.Set<String> dottedKeys) {
-		this(dottedKeys, null);
-	}
 
 	public SimpleTreeModel(java.util.Set<String> dottedKeys, Map<String, String> tooltips) {
 		super(new SimpleIconNode(""));
@@ -36,7 +28,7 @@ public class SimpleTreeModel extends DefaultTreeModel
 		logging.debug(this, "SimpleTreeModel created for " + dottedKeys);
 		setAsksAllowsChildren(true);
 
-		ROOT = (SimpleIconNode) getRoot();
+		rootNode = (SimpleIconNode) getRoot();
 
 		this.tooltips = tooltips;
 		generateFrom(dottedKeys);
@@ -87,7 +79,7 @@ public class SimpleTreeModel extends DefaultTreeModel
 		logging.debug(this, "generateFrom allPathes " + allPathes);
 
 		for (SimpleTreePath path : allPathes) {
-			SimpleIconNode parent = ROOT;
+			SimpleIconNode parent = rootNode;
 
 			for (int i = 1; i <= path.size(); i++) {
 				if (i > 1)
@@ -120,28 +112,4 @@ public class SimpleTreeModel extends DefaultTreeModel
 
 		logging.debug(this, "generateFrom allPathes ready");
 	}
-
-	private static int startX = 10;
-	private static int startY = 20;
-
-	public void produce()
-	// test method
-	{
-
-		XTree tree = new XTree(this);
-
-		tree.setCellRenderer(new SimpleIconNodeRenderer());
-
-		tree.expandAll();
-
-		JFrame frame = new JFrame();
-		frame.getContentPane().add(tree);
-		frame.setSize(240, 240);
-		frame.setLocation(startX, startY);
-		frame.setVisible(true);
-		startX = startX + 20;
-		startY = startY + 20;
-
-	}
-
 }

@@ -11,8 +11,6 @@ import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -237,22 +235,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	public boolean init() {
 
 		return init(areaDimension);
-	}
-
-	public void associateTo(Point p, int xplus, int yplus) {
-		int startX = (int) p.getX() + xplus;
-		int startY = (int) p.getY() + yplus;
-
-		// problem: in applet in windows, we may leave the screen
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
-		if (startX + getSize().width > screenSize.width)
-			startX = screenSize.width - getSize().width;
-
-		if (startY + getSize().height > screenSize.height)
-			startY = screenSize.height - getSize().height;
-
-		setLocation(startX, startY);
 	}
 
 	public void centerOn(Component master) {

@@ -122,9 +122,9 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		List<String> selectKeys = thePanel.panelRegisteredSoftware.getSelectedKeys();
 
 		boolean wasUsingSelectedFilter = modelWindowsSoftwareIds
-				.isUsingFilter(GenTableModel.labelFilterConditionShowOnlySelected);
+				.isUsingFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED);
 		logging.info(this, "setSoftwareIdsFromLicencePool wasUsingSelectedFilter " + wasUsingSelectedFilter);
-		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.labelFilterConditionShowOnlySelected, false); // wasUsingSelectedFilter
+		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED, false); // wasUsingSelectedFilter
 
 		modelWindowsSoftwareIds.setUsingFilter(labelWindowsSoftwareFilterCondition_dontShowAssociatedToOtherPool,
 				false);
@@ -217,8 +217,8 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		produceFilterSets(softwareIdsForPool);
 
 		logging.info(this, "setSoftwareIdsFromLicencePool setUsingFilter "
-				+ GenTableModel.labelFilterConditionShowOnlySelected + " to " + wasUsingSelectedFilter);
-		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.labelFilterConditionShowOnlySelected,
+				+ GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED + " to " + wasUsingSelectedFilter);
+		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED,
 				wasUsingSelectedFilter);
 		thePanel.panelRegisteredSoftware.showFiltered(wasUsingSelectedFilter);
 
@@ -615,9 +615,9 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 		windowsSoftwareFilterConditon_showOnlySelected = new DefaultTableModelFilterCondition(
 				WINDOWS_SOFTWARE_ID_KEY_COL);
-		modelWindowsSoftwareIds.chainFilter(GenTableModel.labelFilterConditionShowOnlySelected,
+		modelWindowsSoftwareIds.chainFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED,
 				new TableModelFilter(windowsSoftwareFilterConditon_showOnlySelected));
-		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.labelFilterConditionShowOnlySelected, false);
+		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED, false);
 		thePanel.panelRegisteredSoftware.showFilterIcon(true);
 		thePanel.panelRegisteredSoftware.setFiltermarkToolTipText(
 				configed.getResourceValue("PanelAssignToLPools.searchPane.filtermark.tooltip"));
@@ -932,7 +932,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		thePanel.panelRegisteredSoftware.setAwareOfTableChangedListener(
 				softwareDirectionOfAssignment == SoftwareDirectionOfAssignment.POOL2SOFTWARE);
 
-		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.labelFilterConditionShowOnlySelected,
+		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED,
 				usingShowSelectedFilter);
 
 		thePanel.panelRegisteredSoftware.showFiltered(usingShowSelectedFilter);

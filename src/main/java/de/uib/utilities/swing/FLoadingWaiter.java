@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 /**
  * FLoadingWaiter
  * Copyright:     Copyright (c) 2016
@@ -64,29 +63,27 @@ public class FLoadingWaiter extends JFrame implements de.uib.utilities.observer.
 		this(title);
 
 		logging.info(this, "set Loction of FLoadingWaiter in center of screen of owner");
-		Rectangle screenRectangle = owner.getGraphicsConfiguration().getBounds();
-		setLocation((int) (screenRectangle.getCenterX() - getSize().getWidth() / 2),
-				(int) (screenRectangle.getCenterY() - getSize().getHeight() / 2));
 
+		setLocationRelativeTo(owner);
 		setAlwaysOnTop(true);
+		setVisible(true);
+
+		logging.info(this, "should be visible now");
 	}
 
-	public FLoadingWaiter(String title, String startMessage) {
-		this(title);
+	public FLoadingWaiter(Component owner, String title, String startMessage) {
+		this(owner, title);
 		observingMesg = startMessage;
 	}
 
-	public FLoadingWaiter(String title) {
+	private FLoadingWaiter(String title) {
 		super(title);
 
 		createGUI();
-		setVisible(true);
-		logging.info(this, "should be visible ");
 		if (waitInfoString == null)
 			waitInfoString = new WaitInfoString();
 
 		worker = new WaitingWorker(this);
-
 	}
 
 	public void stopWaiting() {

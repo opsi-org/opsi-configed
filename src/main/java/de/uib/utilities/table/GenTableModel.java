@@ -61,7 +61,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	private TableModelFilter workingFilter;
 	public static final String DEFAULT_FILTER_NAME = "default";
 
-	public static final String labelFilterConditionShowOnlySelected = "showOnlySelected";
+	public static final String LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED = "showOnlySelected";
 
 	// maps for TableModelFunctions
 	protected KeyRepresenter<Integer> keyRepresenter;
@@ -343,8 +343,8 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 				i++;
 			}
 			rows = new ArrayList<>();
-			for (String key : mapRows.keySet()) {
-				rows.add(mapRows.get(key));
+			for (List<Object> value : mapRows.values()) {
+				rows.add(value);
 			}
 		}
 
@@ -537,9 +537,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		for (int row = 0; row < rowsLength; row++)
 			set.add((String) getValueAt(row, col));
 
-		List<String> result = new ArrayList<>(set);
-
-		return result;
+		return new ArrayList<>(set);
 	}
 
 	@Override
@@ -548,10 +546,8 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			// we cannot edit a key column but when it is not saved in the data backend
 			return false;
 
-		if (colEditable[col])
-			return true;
-
-		return false;
+		else
+			return colEditable[col];
 	}
 
 	public void addCursorrowObserver(CursorrowObserver o) {
@@ -736,18 +732,16 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	public void addRow(Object[] a) {
 
-		{
-			List rowV = new ArrayList<>();
-			for (int i = 0; i < colsLength; i++) {
-				rowV.add(null);
-			}
-			for (int j = 0; j < a.length; j++) {
-
-				rowV.set(j, a[j]);
-			}
-
-			addRow(rowV);
+		List rowV = new ArrayList<>();
+		for (int i = 0; i < colsLength; i++) {
+			rowV.add(null);
 		}
+		for (int j = 0; j < a.length; j++) {
+
+			rowV.set(j, a[j]);
+		}
+
+		addRow(rowV);
 	}
 
 	public List<Object> produceValueRowFromSomeEntries(RowMap entries) {
