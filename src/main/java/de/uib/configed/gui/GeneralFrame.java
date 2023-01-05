@@ -2,7 +2,6 @@ package de.uib.configed.gui;
 
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -67,10 +66,6 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	public void addPanel(JPanel pane) {
 
 		getContentPane().add(pane);
-	}
-
-	public void centerOn(Component master) {
-		Globals.centerOn(this, master);
 	}
 
 	@Override

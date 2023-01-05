@@ -11,7 +11,6 @@ package de.uib.utilities.swing;
  * @author roeder
  */
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -273,10 +272,6 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 	public void setLeaveOnCommit(boolean b) {
 		leaveOnCommit = b;
-	}
-
-	public void centerOn(Component master) {
-		Globals.centerOn(this, master);
 	}
 
 	public boolean init(Dimension usableAreaSize) {

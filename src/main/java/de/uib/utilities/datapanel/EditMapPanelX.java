@@ -580,7 +580,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 			}
 		}
 		if (!located)
-			fed.centerOn(Globals.mainContainer);
+			fed.setLocationRelativeTo(Globals.mainContainer);
 
 		fed.setVisible(true);
 	}

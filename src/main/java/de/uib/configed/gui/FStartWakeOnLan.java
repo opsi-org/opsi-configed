@@ -89,7 +89,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		this.main = main;
 
 		setCalToNow();
-		centerOn(Globals.frame1);
+		setLocationRelativeTo(Globals.frame1);
 	}
 
 	public void setPredefinedDelays(Map<String, Integer> labelledDelays) {

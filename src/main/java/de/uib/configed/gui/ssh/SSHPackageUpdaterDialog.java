@@ -182,7 +182,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 				.addGap(2 * Globals.GAP_SIZE));
 
 		this.setSize(600, 210);
-		this.centerOn(Globals.mainFrame);
+		this.setLocationRelativeTo(Globals.mainFrame);
 		this.setBackground(Globals.BACKGROUND_COLOR_7);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setVisible(true);

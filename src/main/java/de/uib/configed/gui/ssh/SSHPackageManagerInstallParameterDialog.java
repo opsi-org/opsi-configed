@@ -61,7 +61,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 
 		pack();
 		this.setSize(new Dimension(frameWidth, frameHeight));
-		this.centerOn(Globals.mainFrame);
+		this.setLocationRelativeTo(Globals.mainFrame);
 		this.setVisible(true);
 		waitCursor.stop();
 	}

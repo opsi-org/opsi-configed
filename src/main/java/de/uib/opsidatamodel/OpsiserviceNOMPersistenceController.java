@@ -8206,7 +8206,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public void showLicInfoWarnings() {
 		if (licInfoMap != null && licInfoMap.warningExists() && licInfoWarnings != null) {
 			licInfoWarnings.setVisible(true);
-			licInfoWarnings.centerOn(Globals.mainFrame);
+			licInfoWarnings.setLocationRelativeTo(Globals.mainFrame);
 		}
 	}
 

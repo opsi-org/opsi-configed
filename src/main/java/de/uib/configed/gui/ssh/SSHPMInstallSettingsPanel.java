@@ -61,7 +61,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		btn_depotselection.addActionListener(actionEvent -> {
 			initDepots();
 			if (btn_depotselection != null)
-				fDepotList.centerOn(btn_depotselection);
+				fDepotList.setLocationRelativeTo(btn_depotselection);
 			fDepotList.setVisible(true);
 		});
 

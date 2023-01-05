@@ -1045,7 +1045,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		fEdit.setTitle(configed.getResourceValue("ClientTree.editNode.title") + " (" + Globals.APPNAME + ")");
 		fEdit.init();
 		fEdit.setSize(450, 250);
-		fEdit.centerOn(Globals.mainContainer);
+		fEdit.setLocationRelativeTo(Globals.mainContainer);
 
 		fEdit.setModal(true);
 
@@ -1109,7 +1109,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			fEdit.setTitle(configed.getResourceValue("ClientTree.addNode.title") + " (" + Globals.APPNAME + ")");
 			fEdit.init();
 			fEdit.setSize(450, 250);
-			fEdit.centerOn(Globals.mainContainer);
+			fEdit.setLocationRelativeTo(Globals.mainContainer);
 
 			fEdit.setModal(true);
 
@@ -1396,7 +1396,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 					+ " <<, " + configed.getResourceValue("ClientTree.selectCorrectLocation"));
 			fList.init(new java.awt.Dimension(640, 60));
 
-			fList.centerOn(Globals.mainContainer);
+			fList.setLocationRelativeTo(Globals.mainContainer);
 			fList.setModal(true);
 
 			if (preSelected != null) {

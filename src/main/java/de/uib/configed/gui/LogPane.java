@@ -253,7 +253,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());
-		externalView.centerOn(Globals.mainFrame);
+		externalView.setLocationRelativeTo(Globals.mainFrame);
 
 		copyOfMe.setLevelWithoutAction(showLevel);
 		copyOfMe.setParsedText(lines, lineLevels, lineStyles, lineTypes, typesList, showTypeRestricted, selTypeIndex,

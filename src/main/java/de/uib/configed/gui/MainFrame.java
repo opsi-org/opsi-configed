@@ -849,7 +849,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuNewScheduledWOL.addActionListener((ActionEvent e) -> {
 			FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(
 					Globals.APPNAME + ": " + configed.getResourceValue("FStartWakeOnLan.title"), main);
-			fStartWakeOnLan.centerOn(f);
+			fStartWakeOnLan.setLocationRelativeTo(f);
 
 			fStartWakeOnLan.setVisible(true);
 			fStartWakeOnLan.setPredefinedDelays(labelledDelays);
@@ -1487,7 +1487,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		popupWakeOnLanScheduler.addActionListener((ActionEvent e) -> {
 			FStartWakeOnLan fStartWakeOnLan = new FStartWakeOnLan(
 					Globals.APPNAME + ": " + configed.getResourceValue("FStartWakeOnLan.title"), main);
-			fStartWakeOnLan.centerOn(f);
+			fStartWakeOnLan.setLocationRelativeTo(f);
 
 			fStartWakeOnLan.setVisible(true);
 			fStartWakeOnLan.setPredefinedDelays(labelledDelays);
@@ -2555,7 +2555,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		fText.setTitle(configed.getResourceValue("MainFrame.popupFrameTitle"));
 		fText.init();
-		fText.centerOn(this);
+		fText.setLocationRelativeTo(this);
 		fText.setVisible(true);
 	}
 

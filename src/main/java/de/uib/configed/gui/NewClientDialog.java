@@ -123,7 +123,7 @@ public class NewClientDialog extends FGeneralDialog
 			instance = new NewClientDialog(main, depots);
 			instance.init();
 		} else
-			instance.centerOn(Globals.mainFrame);
+			instance.setLocationRelativeTo(Globals.mainFrame);
 
 		return instance;
 	}
@@ -594,7 +594,7 @@ public class NewClientDialog extends FGeneralDialog
 
 		scrollpane.getViewport().add(panel);
 		pack();
-		centerOn(Globals.mainContainer);
+		setLocationRelativeTo(Globals.mainContainer);
 	}
 
 	private void createClients(List<List<Object>> clients) {
@@ -713,7 +713,7 @@ public class NewClientDialog extends FGeneralDialog
 			message.append("\" \n");
 			message.append(configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message1"));
 			fQuestion.setMessage(message.toString());
-			fQuestion.centerOn(this);
+			fQuestion.setLocationRelativeTo(this);
 			fQuestion.setAlwaysOnTop(true);
 			fQuestion.setVisible(true);
 
@@ -731,7 +731,7 @@ public class NewClientDialog extends FGeneralDialog
 			StringBuilder message = new StringBuilder("");
 			message.append(configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Message"));
 			fQuestion.setMessage(message.toString());
-			fQuestion.centerOn(this);
+			fQuestion.setLocationRelativeTo(this);
 			fQuestion.setAlwaysOnTop(true);
 			fQuestion.setVisible(true);
 
@@ -757,7 +757,7 @@ public class NewClientDialog extends FGeneralDialog
 			StringBuilder message = new StringBuilder("");
 			message.append(configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Message"));
 			fQuestion.setMessage(message.toString());
-			fQuestion.centerOn(this);
+			fQuestion.setLocationRelativeTo(this);
 			fQuestion.setAlwaysOnTop(true);
 			fQuestion.setVisible(true);
 
@@ -834,7 +834,7 @@ public class NewClientDialog extends FGeneralDialog
 			message.append(configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.message") + " "
 					+ columnNames.toString().replace("[", "").replace("]", ""));
 			fInfo.setMessage(message.toString());
-			fInfo.centerOn(this);
+			fInfo.setLocationRelativeTo(this);
 			fInfo.setAlwaysOnTop(true);
 			fInfo.setVisible(true);
 			return null;

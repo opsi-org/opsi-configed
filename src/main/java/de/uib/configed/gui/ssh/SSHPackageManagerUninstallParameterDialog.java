@@ -283,7 +283,7 @@ public class SSHPackageManagerUninstallParameterDialog
 			btn_depotselection.addActionListener(actionEvent -> {
 				initDepots();
 				if (btn_depotselection != null)
-					fDepotList.centerOn(btn_depotselection);
+					fDepotList.setLocationRelativeTo(btn_depotselection);
 				fDepotList.setVisible(true);
 			});
 
@@ -369,7 +369,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 						+ "\n\n" + tf_selecteddepots.getText());
 
-		fConfirmAction.centerOn(this);
+		fConfirmAction.setLocationRelativeTo(this);
 		fConfirmAction.setAlwaysOnTop(true);
 		fConfirmAction.setVisible(true);
 

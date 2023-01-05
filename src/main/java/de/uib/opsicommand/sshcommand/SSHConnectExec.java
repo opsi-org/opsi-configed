@@ -201,7 +201,7 @@ public class SSHConnectExec extends SSHConnect {
 				FOUND_ERROR = false;
 
 				if (!SSHCommandFactory.ssh_always_exec_in_background) {
-					final_dia.centerOn(Globals.mainFrame);
+					final_dia.setLocationRelativeTo(Globals.mainFrame);
 					final_dia.setVisible(true);
 				}
 
@@ -289,7 +289,7 @@ public class SSHConnectExec extends SSHConnect {
 				{
 					SwingUtilities.invokeLater(() -> dialog.setVisible(true));
 				} else {
-					dialog.centerOn(Globals.mainFrame);
+					dialog.setLocationRelativeTo(Globals.mainFrame);
 					dialog.setVisible(true);
 				}
 

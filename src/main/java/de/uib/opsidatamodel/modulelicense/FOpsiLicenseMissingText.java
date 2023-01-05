@@ -58,7 +58,7 @@ public class FOpsiLicenseMissingText extends FTextArea {
 		getInstance().setMessage(combined.toString());
 		getInstance().setVisible(true);
 
-		getInstance().centerOn(Globals.mainFrame);
+		getInstance().setLocationRelativeTo(Globals.mainFrame);
 	}
 
 	public static void reset() {

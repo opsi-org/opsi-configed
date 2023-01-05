@@ -76,7 +76,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog/// *javax.swing.JD
 		closeListener = new DialogCloseListener();
 		initOutputGui();
 		this.setSize(700, 400);
-		this.centerOn(Globals.mainFrame);
+		this.setLocationRelativeTo(Globals.mainFrame);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 

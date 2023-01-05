@@ -4236,7 +4236,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				fShowReachableInfo.setAlwaysOnTop(true);
 				fShowReachableInfo.setSize(Globals.REACHABLE_INFO_FRAME_WIDTH, Globals.REACHABLE_INFO_FRAME_HEIGHT);
-				fShowReachableInfo.centerOn(Globals.mainContainer);
+				fShowReachableInfo.setLocationRelativeTo(Globals.mainContainer);
 				fShowReachableInfo.setVisible(true);
 				fShowReachableInfo.toFront();
 				reachableInfo = new HashMap<>();
@@ -4486,7 +4486,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		fEdit.init();
 		fEdit.setTitle(configed.getResourceValue("ConfigedMain.fChangeClientID.title") + " (" + Globals.APPNAME + ")");
 		fEdit.setSize(Globals.WIDTH_FRAME_RENAME_CLIENT, Globals.HEIGHT_FRAME_RENAME_CLIENT);
-		fEdit.centerOn(Globals.mainContainer);
+		fEdit.setLocationRelativeTo(Globals.mainContainer);
 		fEdit.setSingleLine(true);
 		fEdit.setModal(true);
 		fEdit.setAlwaysOnTop(true);
@@ -4880,7 +4880,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		logging.debug(this, "clientSelectionGetSavedSearch");
 		initSavedSearchesDialog();
 
-		savedSearchesDialog.centerOn(mainFrame);
+		savedSearchesDialog.setLocationRelativeTo(mainFrame);
 		savedSearchesDialog.setVisible(true);
 
 	}
@@ -5089,7 +5089,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		fConfirmActionForClients.setMessage(confirmInfo + "\n\n" + getSelectedClientsString().replace(";", ""));
 
-		fConfirmActionForClients.centerOn(Globals.mainContainer);
+		fConfirmActionForClients.setLocationRelativeTo(Globals.mainContainer);
 		fConfirmActionForClients.setAlwaysOnTop(true);
 		fConfirmActionForClients.setVisible(true);
 
@@ -5227,7 +5227,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			clientSelectionDialog = new ClientSelectionDialog(this, selectionPanel, savedSearchesDialog);
 		}
 
-		clientSelectionDialog.centerOn(Globals.mainContainer);
+		clientSelectionDialog.setLocationRelativeTo(Globals.mainContainer);
 		clientSelectionDialog.setVisible(true);
 
 	}

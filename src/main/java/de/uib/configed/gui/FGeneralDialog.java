@@ -2,7 +2,6 @@ package de.uib.configed.gui;
 
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -90,7 +89,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		setTitle(title);
 		setFont(Globals.defaultFont);
 		checkAdditionalPane();
-		centerOn(owner);
+		setLocationRelativeTo(owner);
 	}
 
 	public FGeneralDialog(JFrame owner, String title, boolean modal) {
@@ -184,7 +183,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			// else we have to call setupLayout later explicitly
 			guiInit();
 		}
-		centerOn(owner);
+		setLocationRelativeTo(owner);
 	}
 
 	public FGeneralDialog(java.awt.Window owner, String title, String[] buttonList, int preferredWidth,
@@ -384,11 +383,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		getContentPane().add(allpane);
 
 		pack();
-		centerOn(owner);
-	}
-
-	public void centerOn(Component master) {
-		Globals.centerOn(this, master);
+		setLocationRelativeTo(owner);
 	}
 
 	@Override

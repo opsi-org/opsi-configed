@@ -53,7 +53,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		setIconImage(Globals.mainIcon);
 
 		this.setSize(new Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH, frameHeight));
-		this.centerOn(Globals.mainFrame);
+		this.setLocationRelativeTo(Globals.mainFrame);
 		this.setBackground(Globals.BACKGROUND_COLOR_7);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 

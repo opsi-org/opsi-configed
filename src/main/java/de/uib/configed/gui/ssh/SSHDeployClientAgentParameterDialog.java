@@ -82,7 +82,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		init();
 		pack();
 		this.setSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
-		this.centerOn(Globals.mainFrame);
+		this.setLocationRelativeTo(Globals.mainFrame);
 		this.setBackground(Globals.BACKGROUND_COLOR_7);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setVisible(true);

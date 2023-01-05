@@ -113,7 +113,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 		initGUI();
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		this.centerOn(Globals.mainFrame);
+		this.setLocationRelativeTo(Globals.mainFrame);
 		this.setSize(this.thissize);
 		this.setMaximumSize(new Dimension(900, 700));
 

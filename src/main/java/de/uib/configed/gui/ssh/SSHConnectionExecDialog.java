@@ -40,7 +40,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 			this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
 			this.setSize(900, 500);
-			this.centerOn(Globals.mainFrame);
+			this.setLocationRelativeTo(Globals.mainFrame);
 			logging.info(this, "SSHConnectionExecDialog built");
 
 			this.setVisible(!SSHCommandFactory.ssh_always_exec_in_background);
@@ -67,7 +67,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 
 		instance = new SSHConnectionExecDialog();
 		SwingUtilities.invokeLater(() -> {
-			instance.centerOn(Globals.mainFrame);
+			instance.setLocationRelativeTo(Globals.mainFrame);
 			instance.setVisible(true);
 		});
 		return instance;

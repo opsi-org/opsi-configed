@@ -78,7 +78,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		init();
 
 		this.setSize(500, 535);
-		centerOn(Globals.mainFrame);
+		setLocationRelativeTo(Globals.mainFrame);
 		this.setVisible(true);
 		cb_useDefault_state = cb_useDefault.isSelected();
 		if (Globals.isGlobalReadOnly()) {
@@ -90,7 +90,7 @@ public class SSHConfigDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 		if (instance == null)
 			instance = new SSHConfigDialog(cmain);
 		else
-			instance.centerOn(Globals.mainFrame);
+			instance.setLocationRelativeTo(Globals.mainFrame);
 
 		instance.setVisible(true);
 		checkComponents();

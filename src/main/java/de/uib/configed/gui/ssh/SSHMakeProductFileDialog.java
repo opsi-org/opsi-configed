@@ -70,7 +70,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		main = m;
 		initGUI();
 
-		this.centerOn(Globals.mainFrame);
+		this.setLocationRelativeTo(Globals.mainFrame);
 		this.setBackground(Globals.BACKGROUND_COLOR_7);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		filename = "";

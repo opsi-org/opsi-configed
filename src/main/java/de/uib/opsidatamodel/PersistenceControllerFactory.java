@@ -141,7 +141,7 @@ public class PersistenceControllerFactory {
 								}
 							};
 
-							infodialog.centerOn(Globals.mainFrame);
+							infodialog.setLocationRelativeTo(Globals.mainFrame);
 							infodialog.setMessage(errorInfo);
 							infodialog.setVisible(true);
 
@@ -154,7 +154,7 @@ public class PersistenceControllerFactory {
 								Globals.threadSleep(this, 3000);
 								logging.info("== repeating info " + count);
 
-								infodialog.centerOn(Globals.mainFrame);
+								infodialog.setLocationRelativeTo(Globals.mainFrame);
 
 							}
 

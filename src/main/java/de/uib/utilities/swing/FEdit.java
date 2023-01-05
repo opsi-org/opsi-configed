@@ -7,7 +7,6 @@
 package de.uib.utilities.swing;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -235,10 +234,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	public boolean init() {
 
 		return init(areaDimension);
-	}
-
-	public void centerOn(Component master) {
-		Globals.centerOn(this, master);
 	}
 
 	protected void enter() {

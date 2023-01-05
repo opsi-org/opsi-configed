@@ -167,7 +167,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				.setToolTipText(configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing.tooltip"));
 		buttonShowAssignedNotExisting.setFont(Globals.defaultFont);
 		buttonShowAssignedNotExisting.addActionListener(actionEvent -> {
-			fMissingSoftwareInfo.centerOn(Globals.frame1);
+			fMissingSoftwareInfo.setLocationRelativeTo(Globals.frame1);
 			fMissingSoftwareInfo.setVisible(true);
 		});
 
@@ -190,7 +190,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 			public void actionPerformed(ActionEvent e) {
 
 				if (!fSoftwarename2LicencePool.isVisible())
-					fSoftwarename2LicencePool.centerOn(Globals.frame1);
+					fSoftwarename2LicencePool.setLocationRelativeTo(Globals.frame1);
 
 				logging.info(this, "buttonSupplementSimilar actionPerformed, we have selected "
 						+ panelRadiobuttonsPreselectionForName2Pool.getValue());

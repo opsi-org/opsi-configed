@@ -497,7 +497,7 @@ public class PanelSWInfo extends JPanel {
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());
-		externalView.centerOn(Globals.mainFrame);
+		externalView.setLocationRelativeTo(Globals.mainFrame);
 
 		externalView.setVisible(true);
 	}
