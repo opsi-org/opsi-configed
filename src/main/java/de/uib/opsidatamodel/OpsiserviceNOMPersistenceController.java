@@ -4115,8 +4115,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		boolean result = true;
 
-		List<Object> deleteProductItems = new ArrayList<>();
-		List<Object> deletePropertyItems = new ArrayList<>();
+		List<Map<String, Object>> deleteProductItems = new ArrayList<>();
 
 		for (int i = 0; i < selectedClients.length; i++) {
 			for (String product : localbootProductNames) {
@@ -4125,23 +4124,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				productOnClientItem.put("clientId", selectedClients[i]);
 				productOnClientItem.put("productId", product);
 
-				deleteProductItems.add(Executioner.jsonMap(productOnClientItem));
-
-				Map<String, Object> propertyStateItem = createNOMitem("ProductPropertyState");
-
-				if (withDependencies) {
-					propertyStateItem.put("objectId", selectedClients[i]);
-					propertyStateItem.put("productId", product);
-					propertyStateItem.put("propertyId", "*");
-
-					deletePropertyItems.add(Executioner.jsonMap(propertyStateItem));
-				}
+				deleteProductItems.add(productOnClientItem);
 			}
 		}
 
 		logging.info(this, "resetLocalbootProducts deleteProductItems.size " + deleteProductItems.size());
 
-		result = resetProducts(deleteProductItems, deletePropertyItems);
+		result = resetProducts(deleteProductItems, withDependencies);
 
 		logging.debug(this, "resetLocalbootProducts result " + result);
 
@@ -4154,8 +4143,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		boolean result = true;
 
-		List<Object> deleteProductItems = new ArrayList<>();
-		List<Object> deletePropertyItems = new ArrayList<>();
+		List<Map<String, Object>> deleteProductItems = new ArrayList<>();
 
 		for (int i = 0; i < selectedClients.length; i++) {
 			for (String product : netbootProductNames) {
@@ -4164,59 +4152,42 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				productOnClientItem.put("clientId", selectedClients[i]);
 				productOnClientItem.put("productId", product);
 
-				deleteProductItems.add(Executioner.jsonMap(productOnClientItem));
-
-				Map<String, Object> propertyStateItem = createNOMitem("ProductPropertyState");
-
-				if (withDependencies) {
-					propertyStateItem.put("objectId", selectedClients[i]);
-					propertyStateItem.put("productId", product);
-					propertyStateItem.put("propertyId", "*");
-
-					deletePropertyItems.add(Executioner.jsonMap(propertyStateItem));
-				}
+				deleteProductItems.add(productOnClientItem);
 			}
 		}
 
 		logging.info(this, "resetNetbootProducts deleteProductItems.size " + deleteProductItems.size());
 
-		result = resetProducts(deleteProductItems, deletePropertyItems);
+		result = resetProducts(deleteProductItems, withDependencies);
 
 		logging.debug(this, "resetNetbootProducts result " + result);
 
 		return result;
 	}
 
-	public boolean resetProducts(List<Object> productItems, List<Object> propertyItems) {
+	public boolean resetProducts(List<Map<String, Object>> productItems, boolean withDependencies) {
 		if (globalReadOnly)
 			return false;
 
 		boolean result = true;
+
+		logging.info(this, "resetProducts productItems.size " + productItems.size());
 
 		if (!productItems.isEmpty()) {
 			OpsiMethodCall omc = new OpsiMethodCall("productOnClient_deleteObjects",
 					new Object[] { productItems.toArray() });
 
 			result = exec.doCall(omc);
-		}
 
-		logging.debug(this, "resetProducts result " + result);
+			logging.debug(this, "resetProducts result " + result);
 
-		logging.info(this, "resetProducts propertyItems.size " + propertyItems.size());
-		if (result && !propertyItems.isEmpty()) {
-			// OpsiMethodCall omc = new OpsiMethodCall("productPropertyState_deleteObjects",
-			// 		new Object[] { propertyItems.toArray() });
+			if (result && withDependencies) {
+				omc = new OpsiMethodCall("productPropertyState_delete",
+						new Object[] { productItems.stream().map(p -> p.get("productId")).toArray(), "*",
+								productItems.stream().map(p -> p.get("clientId")).toArray() });
 
-			// result = exec.doCall(omc);
-
-			propertyItems.forEach(propertyItem -> {
-				Map<String, Object> propertyItemMap = exec.getMapFromItem(propertyItem);
-				OpsiMethodCall omc = new OpsiMethodCall("productPropertyState_delete",
-						new Object[] { propertyItemMap.get("productId"), propertyItemMap.get("propertyId"),
-								propertyItemMap.get("objectId") });
-
-				exec.doCall(omc);
-			});
+				result = exec.doCall(omc);
+			}
 		}
 
 		logging.debug(this, "resetProducts result " + result);

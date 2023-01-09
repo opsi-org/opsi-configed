@@ -643,7 +643,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract boolean resetNetbootProducts(String[] selectedClients, boolean withDependencies);
 
-	public abstract boolean resetProducts(List<Object> productItems, List<Object> propertyItems);
+	public abstract boolean resetProducts(List<Map<String, Object>> productItems, boolean withDependencies);
 
 	public abstract Map<String, String> getProductPreRequirements(String depotId, String productname);
 
