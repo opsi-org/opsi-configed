@@ -177,6 +177,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JMenu jMenuClients = new JMenu();
 	JMenuItem jMenuResetProductOnClientWithStates = new JMenuItem();
 	JMenuItem jMenuResetProductOnClient = new JMenuItem();
+	JMenuItem jMenuResetLocalbootProductOnClientWithStates = new JMenuItem();
+	JMenuItem jMenuResetLocalbootProductOnClient = new JMenuItem();
+	JMenuItem jMenuResetNetbootProductOnClientWithStates = new JMenuItem();
+	JMenuItem jMenuResetNetbootProductOnClient = new JMenuItem();
 	JMenuItem jMenuAddClient = new JMenuItem();
 	JMenuItem jMenuDeleteClient = new JMenuItem();
 	JMenuItem jMenuFreeLicences = new JMenuItem();
@@ -219,8 +223,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JMenuItem jMenuRemoteControl = new JMenuItem();
 
 	JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProductOnClientWithStates,
-			jMenuResetProductOnClient, jMenuAddClient, jMenuDeleteClient, jMenuFreeLicences, jMenuChangeDepot,
-			jMenuChangeClientID, };
+			jMenuResetProductOnClient, jMenuResetLocalbootProductOnClientWithStates, jMenuResetLocalbootProductOnClient,
+			jMenuResetNetbootProductOnClientWithStates, jMenuResetNetbootProductOnClient, jMenuAddClient,
+			jMenuDeleteClient, jMenuFreeLicences, jMenuChangeDepot, jMenuChangeClientID, };
 
 	JMenu jMenuClientselection = new JMenu();
 	JMenuItem jMenuClientselectionGetGroup = new JMenuItem();
@@ -257,6 +262,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JPopupMenu popupClients = new JPopupMenu();
 	JMenuItemFormatted popupResetProductOnClientWithStates = new JMenuItemFormatted();
 	JMenuItemFormatted popupResetProductOnClient = new JMenuItemFormatted();
+	JMenuItemFormatted popupResetLocalbootProductOnClientWithStates = new JMenuItemFormatted();
+	JMenuItemFormatted popupResetLocalbootProductOnClient = new JMenuItemFormatted();
+	JMenuItemFormatted popupResetNetbootProductOnClientWithStates = new JMenuItemFormatted();
+	JMenuItemFormatted popupResetNetbootProductOnClient = new JMenuItemFormatted();
 	JMenuItemFormatted popupAddClient = new JMenuItemFormatted();
 	JMenuItemFormatted popupDeleteClient = new JMenuItemFormatted();
 	JMenuItemFormatted popupFreeLicences = new JMenuItemFormatted();
@@ -825,12 +834,37 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuResetProductOnClientWithStates
 				.setText(configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithStates"));
 
-		jMenuResetProductOnClientWithStates.addActionListener((ActionEvent e) -> resetProductOnClientAction(true));
+		jMenuResetProductOnClientWithStates
+				.addActionListener((ActionEvent e) -> resetProductOnClientAction(true, true, true));
 
 		jMenuResetProductOnClient
 				.setText(configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithoutStates"));
 
-		jMenuResetProductOnClient.addActionListener((ActionEvent e) -> resetProductOnClientAction(false));
+		jMenuResetProductOnClient.addActionListener((ActionEvent e) -> resetProductOnClientAction(false, true, true));
+
+		jMenuResetLocalbootProductOnClientWithStates
+				.setText(configed.getResourceValue("MainFrame.jMenuResetLocalbootProductOnClientWithStates"));
+
+		jMenuResetLocalbootProductOnClientWithStates
+				.addActionListener((ActionEvent e) -> resetProductOnClientAction(true, true, false));
+
+		jMenuResetLocalbootProductOnClient
+				.setText(configed.getResourceValue("MainFrame.jMenuResetLocalbootProductOnClientWithoutStates"));
+
+		jMenuResetLocalbootProductOnClient
+				.addActionListener((ActionEvent e) -> resetProductOnClientAction(false, true, false));
+
+		jMenuResetNetbootProductOnClientWithStates
+				.setText(configed.getResourceValue("MainFrame.jMenuResetNetbootProductOnClientWithStates"));
+
+		jMenuResetNetbootProductOnClientWithStates
+				.addActionListener((ActionEvent e) -> resetProductOnClientAction(true, false, true));
+
+		jMenuResetNetbootProductOnClient
+				.setText(configed.getResourceValue("MainFrame.jMenuResetNetbootProductOnClientWithoutStates"));
+
+		jMenuResetNetbootProductOnClient
+				.addActionListener((ActionEvent e) -> resetProductOnClientAction(false, false, true));
 
 		jMenuAddClient.setText(configed.getResourceValue("MainFrame.jMenuAddClient"));
 		jMenuAddClient.addActionListener((ActionEvent e) -> addClientAction());
@@ -933,6 +967,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		// --
 		jMenuClients.add(jMenuDeleteClient);
 		jMenuClients.add(jMenuAddClient);
+		jMenuClients.add(jMenuResetLocalbootProductOnClientWithStates);
+		jMenuClients.add(jMenuResetLocalbootProductOnClient);
+		jMenuClients.add(jMenuResetNetbootProductOnClientWithStates);
+		jMenuClients.add(jMenuResetNetbootProductOnClient);
 		jMenuClients.add(jMenuResetProductOnClientWithStates);
 		jMenuClients.add(jMenuResetProductOnClient);
 		jMenuClients.add(jMenuChangeClientID);
@@ -1463,12 +1501,37 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		popupResetProductOnClientWithStates
 				.setText(configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithStates"));
 
-		popupResetProductOnClientWithStates.addActionListener((ActionEvent e) -> resetProductOnClientAction(true));
+		popupResetProductOnClientWithStates
+				.addActionListener((ActionEvent e) -> resetProductOnClientAction(true, true, true));
 
 		popupResetProductOnClient
 				.setText(configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithoutStates"));
 
-		popupResetProductOnClient.addActionListener((ActionEvent e) -> resetProductOnClientAction(false));
+		popupResetProductOnClient.addActionListener((ActionEvent e) -> resetProductOnClientAction(false, true, true));
+
+		popupResetLocalbootProductOnClientWithStates
+				.setText(configed.getResourceValue("MainFrame.jMenuResetLocalbootProductOnClientWithStates"));
+
+		popupResetLocalbootProductOnClientWithStates
+				.addActionListener((ActionEvent e) -> resetProductOnClientAction(true, true, false));
+
+		popupResetLocalbootProductOnClient
+				.setText(configed.getResourceValue("MainFrame.jMenuResetLocalbootProductOnClientWithoutStates"));
+
+		popupResetLocalbootProductOnClient
+				.addActionListener((ActionEvent e) -> resetProductOnClientAction(false, true, false));
+
+		popupResetNetbootProductOnClientWithStates
+				.setText(configed.getResourceValue("MainFrame.jMenuResetNetbootProductOnClientWithStates"));
+
+		popupResetNetbootProductOnClientWithStates
+				.addActionListener((ActionEvent e) -> resetProductOnClientAction(true, false, true));
+
+		popupResetNetbootProductOnClient
+				.setText(configed.getResourceValue("MainFrame.jMenuResetNetbootProductOnClientWithoutStates"));
+
+		popupResetNetbootProductOnClient
+				.addActionListener((ActionEvent e) -> resetProductOnClientAction(false, false, true));
 
 		popupAddClient.setText(configed.getResourceValue("MainFrame.jMenuAddClient"));
 
@@ -1580,6 +1643,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		// --
 		popupClients.add(popupAddClient);
 		popupClients.add(popupDeleteClient);
+		popupClients.add(popupResetLocalbootProductOnClientWithStates);
+		popupClients.add(popupResetLocalbootProductOnClient);
+		popupClients.add(popupResetNetbootProductOnClientWithStates);
+		popupClients.add(popupResetNetbootProductOnClient);
 		popupClients.add(popupResetProductOnClientWithStates);
 		popupClients.add(popupResetProductOnClient);
 		popupClients.add(popupFreeLicences);
@@ -2822,8 +2889,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	// -------------------
 
-	public void resetProductOnClientAction(boolean withProductProperties) {
-		main.resetProductsForSelectedClients(withProductProperties);
+	public void resetProductOnClientAction(boolean withProductProperties, boolean resetLocalbootProducts,
+			boolean resetNetbootProducts) {
+		main.resetProductsForSelectedClients(withProductProperties, resetLocalbootProducts, resetNetbootProducts);
 	}
 
 	public void addClientAction() {

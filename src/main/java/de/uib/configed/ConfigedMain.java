@@ -4403,17 +4403,33 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return persist.getRemoteControls();
 	}
 
-	public void resetProductsForSelectedClients(boolean withDependencies) {
+	public void resetProductsForSelectedClients(boolean withDependencies, boolean resetLocalbootProducts,
+			boolean resetNetbootProducts) {
 		if (getSelectedClients() == null || getSelectedClients().length == 0)
 			return;
 
-		if (!confirmActionForSelectedClients(configed.getResourceValue("ConfigedMain.confirmResetProducts.question")))
+		String confirmInfo = "";
+
+		if (resetLocalbootProducts && resetNetbootProducts) {
+			confirmInfo = configed.getResourceValue("ConfigedMain.confirmResetProducts.question");
+		} else if (resetLocalbootProducts) {
+			confirmInfo = configed.getResourceValue("ConfigedMain.confirmResetLocalbootProducts.question");
+		} else if (resetNetbootProducts) {
+			confirmInfo = configed.getResourceValue("ConfigedMain.confirmResetNetbootProducts.question");
+		}
+
+		if (!confirmActionForSelectedClients(confirmInfo))
 			return;
 
-		persist.resetLocalbootProducts(getSelectedClients(), withDependencies);
+		if (resetLocalbootProducts) {
+			persist.resetLocalbootProducts(getSelectedClients(), withDependencies);
+		}
+
+		if (resetNetbootProducts) {
+			persist.resetNetbootProducts(getSelectedClients(), withDependencies);
+		}
 
 		requestReloadStatesAndActions(true);
-
 	}
 
 	public boolean freeAllPossibleLicencesForSelectedClients() {

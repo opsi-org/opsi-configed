@@ -4109,9 +4109,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result && updateProductOnClients(updateCollection);
 	}
 
-	public boolean resetLocalbootProducts(String[] selectedClients, boolean withDependencies)
-	// hopefully we get only updateItems for allowed clients
-	{
+	public boolean resetLocalbootProducts(String[] selectedClients, boolean withDependencies) {
 		if (globalReadOnly)
 			return false;
 
@@ -4121,9 +4119,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		List<Object> deletePropertyItems = new ArrayList<>();
 
 		for (int i = 0; i < selectedClients.length; i++) {
-
 			for (String product : localbootProductNames) {
-
 				Map<String, Object> productOnClientItem = createNOMitem("ProductOnClient");
 				productOnClientItem.put("productType", OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 				productOnClientItem.put("clientId", selectedClients[i]);
@@ -4134,46 +4130,96 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				Map<String, Object> propertyStateItem = createNOMitem("ProductPropertyState");
 
 				if (withDependencies) {
-
 					propertyStateItem.put("objectId", selectedClients[i]);
 					propertyStateItem.put("productId", product);
 					propertyStateItem.put("propertyId", "*");
 
 					deletePropertyItems.add(Executioner.jsonMap(propertyStateItem));
-
 				}
-
 			}
 		}
 
 		logging.info(this, "resetLocalbootProducts deleteProductItems.size " + deleteProductItems.size());
 
-		if (!deleteProductItems.isEmpty()) {
-			if (deleteProductItems.size() > 10) {
-				logging.info(this, "productOnClient_deleteObjects ");
-				for (Object item : deleteProductItems) {
-					logging.debug(this, "delete " + item);
+		result = resetProducts(deleteProductItems, deletePropertyItems);
+
+		logging.debug(this, "resetLocalbootProducts result " + result);
+
+		return result;
+	}
+
+	public boolean resetNetbootProducts(String[] selectedClients, boolean withDependencies) {
+		if (globalReadOnly)
+			return false;
+
+		boolean result = true;
+
+		List<Object> deleteProductItems = new ArrayList<>();
+		List<Object> deletePropertyItems = new ArrayList<>();
+
+		for (int i = 0; i < selectedClients.length; i++) {
+			for (String product : netbootProductNames) {
+				Map<String, Object> productOnClientItem = createNOMitem("ProductOnClient");
+				productOnClientItem.put("productType", OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
+				productOnClientItem.put("clientId", selectedClients[i]);
+				productOnClientItem.put("productId", product);
+
+				deleteProductItems.add(Executioner.jsonMap(productOnClientItem));
+
+				Map<String, Object> propertyStateItem = createNOMitem("ProductPropertyState");
+
+				if (withDependencies) {
+					propertyStateItem.put("objectId", selectedClients[i]);
+					propertyStateItem.put("productId", product);
+					propertyStateItem.put("propertyId", "*");
+
+					deletePropertyItems.add(Executioner.jsonMap(propertyStateItem));
 				}
 			}
+		}
 
+		logging.info(this, "resetNetbootProducts deleteProductItems.size " + deleteProductItems.size());
+
+		result = resetProducts(deleteProductItems, deletePropertyItems);
+
+		logging.debug(this, "resetNetbootProducts result " + result);
+
+		return result;
+	}
+
+	public boolean resetProducts(List<Object> productItems, List<Object> propertyItems) {
+		if (globalReadOnly)
+			return false;
+
+		boolean result = true;
+
+		if (!productItems.isEmpty()) {
 			OpsiMethodCall omc = new OpsiMethodCall("productOnClient_deleteObjects",
-					new Object[] { deleteProductItems.toArray() });
-
-			result = exec.doCall(omc);
-
-		}
-
-		logging.debug(this, "resetLocalbootProducts result " + result);
-
-		logging.info(this, "resetLocalbootProducts deletePropertyItems.size " + deletePropertyItems.size());
-		if (result && !deletePropertyItems.isEmpty() && withDependencies) {
-			OpsiMethodCall omc = new OpsiMethodCall("productPropertyState_deleteObjects",
-					new Object[] { deletePropertyItems.toArray() });
+					new Object[] { productItems.toArray() });
 
 			result = exec.doCall(omc);
 		}
 
-		logging.debug(this, "resetLocalbootProducts result " + result);
+		logging.debug(this, "resetProducts result " + result);
+
+		logging.info(this, "resetProducts propertyItems.size " + propertyItems.size());
+		if (result && !propertyItems.isEmpty()) {
+			// OpsiMethodCall omc = new OpsiMethodCall("productPropertyState_deleteObjects",
+			// 		new Object[] { propertyItems.toArray() });
+
+			// result = exec.doCall(omc);
+
+			propertyItems.forEach(propertyItem -> {
+				Map<String, Object> propertyItemMap = exec.getMapFromItem(propertyItem);
+				OpsiMethodCall omc = new OpsiMethodCall("productPropertyState_delete",
+						new Object[] { propertyItemMap.get("productId"), propertyItemMap.get("propertyId"),
+								propertyItemMap.get("objectId") });
+
+				exec.doCall(omc);
+			});
+		}
+
+		logging.debug(this, "resetProducts result " + result);
 
 		return result;
 	}
