@@ -1133,7 +1133,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 			targetModel.setFiltered(false);
 			setFilteredMode(false);
-
 		}
 	}
 
@@ -1149,7 +1148,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	// DocumentListener interface
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-
 		if (e.getDocument() == fieldSearch.getDocument()) {
 
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
@@ -1159,12 +1157,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				searchTheRow(selectMode);
 			}
 		}
-
 	}
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-
 		if (e.getDocument() == fieldSearch.getDocument()) {
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
 
@@ -1173,7 +1169,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				searchTheRow(selectMode);
 			}
 		}
-
 	}
 
 	@Override
@@ -1186,9 +1181,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 			setRow(0, false, selectMode);
 			// go back to start when editing is restarted
-
 		}
-
 	}
 
 	// KeyListener interface
@@ -1220,9 +1213,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				markAllAndFilter();
 				switchFilterOn();
 			}
-
 		}
-
 	}
 
 	@Override
@@ -1264,7 +1255,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				if (saveSearchpaneFullTextSearch != null)
 					saveSearchpaneFullTextSearch.serialize(1);
 			}
-
 		}
 
 		else if (e.getSource() == filtermark) {
@@ -1285,7 +1275,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 				switchFilterOn();
 			}
-
 		}
 
 		else if (e.getSource() == checkmarkSearch) {
@@ -1311,11 +1300,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			logging.debug(this,
 					"actionPerformed on checkmarkSearchProgressiv, searchInputType set to " + searchInputType);
 		}
-
 	}
 
 	public void setReloadActionHandler(ActionListener al) {
 		checkmarkSearch.addActionListener(al);
 	}
-
 }

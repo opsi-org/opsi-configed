@@ -765,7 +765,7 @@ public class DataStubNOM extends DataStub {
 					String licencePoolAssigned = "x " + i;
 
 					infoWithPool.put(SWAuditEntry.id, entry.getIdent());
-					infoWithPool.put(LicencepoolEntry.idSERVICEKEY, licencePoolAssigned);
+					infoWithPool.put(LicencepoolEntry.ID_SERVICE_KEY, licencePoolAssigned);
 
 				}
 
@@ -1083,7 +1083,7 @@ public class DataStubNOM extends DataStub {
 		licencepools = new TreeMap<>();
 
 		if (persist.withLicenceManagement) {
-			String[] attributes = new String[] { LicencepoolEntry.idKEY, LicencepoolEntry.descriptionKEY };
+			String[] attributes = new String[] { LicencepoolEntry.ID_KEY, LicencepoolEntry.DESCRIPTION_KEY };
 
 			persist.notifyDataLoadingObservers(
 					configed.getResourceValue("LoadingObserver.loadtable") + " licence pool");
@@ -1158,7 +1158,7 @@ public class DataStubNOM extends DataStub {
 				LicenceContractEntry entry = new LicenceContractEntry(importedEntry);
 				licenceContracts.put(entry.getId(), entry);
 
-				String notiDate = entry.get(Table_LicenceContracts.notificationDateKEY);
+				String notiDate = entry.get(Table_LicenceContracts.NOTIFICATION_DATE_KEY);
 				if (notiDate != null && (notiDate.trim().length() > 0) && notiDate.compareTo(today) <= 0) {
 					NavigableSet<String> contractSet = contractsToNotify.get(notiDate);
 
@@ -1170,7 +1170,7 @@ public class DataStubNOM extends DataStub {
 					contractSet.add(entry.getId());
 				}
 
-				String expireDate = entry.get(Table_LicenceContracts.expirationDateKEY);
+				String expireDate = entry.get(Table_LicenceContracts.EXPIRATION_DATE_KEY);
 				if (expireDate != null && (expireDate.trim().length() > 0) && expireDate.compareTo(today) <= 0) {
 					NavigableSet<String> contractSet = contractsExpired.get(expireDate);
 

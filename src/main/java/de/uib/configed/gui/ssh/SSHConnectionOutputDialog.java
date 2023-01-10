@@ -101,7 +101,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 
 	public void append(String caller, String line) {
 
-		if (SSHCommandFactory.ssh_colored_output && (line != null)
+		if (SSHCommandFactory.sshColoredOutput && (line != null)
 				&& (!line.trim().replace("\\t", "").replace(" ", "").equals("")))
 			for (Entry<String, Color> entry : ansiCodeColors.entrySet())
 				line = findAnsiCodeColor(entry, entry.getKey(), line);

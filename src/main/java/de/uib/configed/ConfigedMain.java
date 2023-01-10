@@ -1168,19 +1168,19 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			mainFrame.setClientInfoediting(getSelectedClients().length == 1);
 
 			depotsOfSelectedClients = null; // initialize the following method
-			Set depots = getDepotsOfSelectedClients();
-			Iterator iter = depots.iterator();
+			Set<String> depots = getDepotsOfSelectedClients();
+			Iterator<String> iter = depots.iterator();
 			StringBuilder depotsAdded = new StringBuilder("");
 
 			String singleDepot = "";
 
 			if (iter.hasNext()) {
-				singleDepot = (String) iter.next();
+				singleDepot = iter.next();
 				depotsAdded.append(singleDepot);
 			}
 
 			while (iter.hasNext()) {
-				String appS = (String) iter.next();
+				String appS = iter.next();
 				depotsAdded.append(";\n");
 				depotsAdded.append(appS);
 			}
@@ -5022,7 +5022,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			dialogRemoteControl.setListModel(new DefaultComboBoxModel<>(remoteControls.keySet().toArray()));
 
-			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, null, -1, false, ""));
+			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, null, false, ""));
 
 			dialogRemoteControl
 					.setTitle(Globals.APPNAME + ":  " + configed.getResourceValue("MainFrame.jMenuRemoteControl"));

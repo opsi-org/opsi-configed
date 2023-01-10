@@ -300,7 +300,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		columnNamesSWxLicencepool = new ArrayList<>();
 		columnNamesSWxLicencepool.add(AuditSoftwareXLicencePool.SwID);
-		columnNamesSWxLicencepool.add(LicencepoolEntry.idSERVICEKEY);
+		columnNamesSWxLicencepool.add(LicencepoolEntry.ID_SERVICE_KEY);
 
 		classNamesSWxLicencepool = new ArrayList<>();
 		for (int i = 0; i < columnNamesSWxLicencepool.size(); i++) {
@@ -508,9 +508,9 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			String licpool = persist.getFSoftware2LicencePool(swID);
 
 			if (licpool == null)
-				rowMap.put(LicencepoolEntry.idSERVICEKEY, VALUE_NO_LICENCE_POOL);
+				rowMap.put(LicencepoolEntry.ID_SERVICE_KEY, VALUE_NO_LICENCE_POOL);
 			else
-				rowMap.put(LicencepoolEntry.idSERVICEKEY, licpool);
+				rowMap.put(LicencepoolEntry.ID_SERVICE_KEY, licpool);
 
 			result.put(swID, rowMap);
 		}
@@ -554,7 +554,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						// reloads local data (which are not yet updated)
 						String swID = (String) rowmap.get(AuditSoftwareXLicencePool.SwID);
 						String licensePoolID_old = persist.getFSoftware2LicencePool(swID);
-						String licensePoolID_new = (String) rowmap.get(LicencepoolEntry.idSERVICEKEY);
+						String licensePoolID_new = (String) rowmap.get(LicencepoolEntry.ID_SERVICE_KEY);
 
 						if (!VALUE_NO_LICENCE_POOL.equals(licensePoolID_new))
 							setSWInfo(swID, licensePoolID_new);

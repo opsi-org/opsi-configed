@@ -36,7 +36,7 @@ public class TableCellRendererDate extends ColorTableCellRenderer {
 		String selectedString = "";
 		ImageIcon selectedIcon = null;
 
-		if (value != null && value instanceof String && !((String) value).equals("")) {
+		if (value instanceof String && !((String) value).equals("")) {
 
 			try {
 				java.util.Date d = java.sql.Timestamp.valueOf((String) value);
@@ -53,7 +53,6 @@ public class TableCellRendererDate extends ColorTableCellRenderer {
 			((JLabel) result).setText(selectedString);
 			((JLabel) result).setIcon(selectedIcon);
 			((JLabel) result).setToolTipText(selectedString);
-
 		}
 
 		return result;

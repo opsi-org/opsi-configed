@@ -39,7 +39,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	 * @return SSHCommand_Template instance
 	 */
 	public SSHCommand_Template() {
-		position = factory.position_default;
+		position = factory.POSITION_DEFAULT;
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	 * @return SSHCommand_Template instance
 	 */
 	public SSHCommand_Template(String id, List<String> c, String mt, boolean ns, String pmt, String ttt, int p) {
-		position = SSHCommandFactory.getInstance().position_default;
+		position = SSHCommandFactory.getInstance().POSITION_DEFAULT;
 		setId(id);
 		setMenuText(mt);
 		setNeedSudo(ns);
@@ -156,7 +156,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	@Override
 	public String getSecuredCommand() {
 		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().equals("")))
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().confidential);
+			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().CONFIDENTIAL);
 		else
 			return getCommand();
 	}
@@ -346,13 +346,13 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	@Override
 	public String toString() {
 		StringBuilder com = new StringBuilder("{");
-		com.append(factory.command_map_id).append(":").append(getId()).append(",");
-		com.append(factory.command_map_parentMenuText).append(":").append(getParentMenuText()).append(",");
-		com.append(factory.command_map_menuText).append(":").append(getMenuText()).append(",");
-		com.append(factory.command_map_tooltipText).append(":").append(getToolTipText()).append(",");
-		com.append(factory.command_map_needSudo).append(":").append(needSudo()).append(",");
-		com.append(factory.command_map_position).append(":").append(getPriority()).append(", ");
-		com.append(factory.command_map_commands).append(":").append("[");
+		com.append(factory.COMMAND_MAP_ID).append(":").append(getId()).append(",");
+		com.append(factory.COMMAND_MAP_PARENT_MENU_TEXT).append(":").append(getParentMenuText()).append(",");
+		com.append(factory.COMMAND_MAP_MENU_TEXT).append(":").append(getMenuText()).append(",");
+		com.append(factory.COMMAND_MAP_TOOLTIP_TEXT).append(":").append(getToolTipText()).append(",");
+		com.append(factory.COMMAND_MAP_NEED_SUDO).append(":").append(needSudo()).append(",");
+		com.append(factory.COMMAND_MAP_POSITION).append(":").append(getPriority()).append(", ");
+		com.append(factory.COMMAND_MAP_COMMANDS).append(":").append("[");
 		for (int i = 0; i < getCommandsRaw().size(); i++) {
 			String c = getCommandsRaw().get(i);
 			if (i == getCommandsRaw().size() - 1)

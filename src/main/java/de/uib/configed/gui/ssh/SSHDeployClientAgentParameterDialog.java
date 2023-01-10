@@ -119,7 +119,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 				jTextFieldPassword.setEchoChar('*');
 			}
 			jTextFieldPassword.setText((String) resultConfigList.get(0));
-			logging.info(this, "key_ssh_shell_active " + SSHCommandFactory.getInstance().confidential);
+			logging.info(this, "key_ssh_shell_active " + SSHCommandFactory.getInstance().CONFIDENTIAL);
 
 		}
 	}

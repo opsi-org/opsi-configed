@@ -67,131 +67,7 @@ public class PanelProductProperties extends JSplitPane
 
 		final List<String> columnNames = model.getColumnNames();
 
-		paneProducts = new PanelGenEditTable("", 0, false, 0, false, PanelGenEditTable.POPUPS_MINIMAL, true) {
-
-			@Override
-			public void reload() {
-				logging.info(this, "reload()");
-
-				mainController.getPersistenceController().productPropertyDefinitionsRequestRefresh();
-				mainController.getPersistenceController().productpropertiesRequestRefresh();
-				super.reload();
-			}
-
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				super.valueChanged(e);
-
-				logging.debug(this, "valueChanged in paneProducts " + e);
-
-				if (e.getValueIsAdjusting())
-					return;
-
-				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-				lsm.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
-				if (lsm.isSelectionEmpty()) {
-
-					logging.info(this, "selected  no row ");
-
-				}
-
-				if (lsm.isSelectionEmpty() || lsm.getMinSelectionIndex() != lsm.getMaxSelectionIndex()) {
-					infoPane.clearEditing();
-					infoPane.setGrey(true);
-				} else
-					infoPane.setGrey(false);
-
-				// otherweise selectedRowChanged() works
-			}
-
-			@Override
-			public void selectedRowChanged()
-			// if we got a new selection
-			{
-				super.selectedRowChanged();
-
-				logging.debug(this, "selectedRowChanged in paneProducts ");
-
-				ListSelectionModel lsm = getListSelectionModel();
-
-				if (lsm.isSelectionEmpty() || lsm.getMinSelectionIndex() != lsm.getMaxSelectionIndex()) {
-					logging.info(this, "selected not a unique row ");
-					infoPane.clearEditing();
-					((EditMapPanelX) propertiesPanel).init();
-					panelEditProperties.clearDepotListData();
-				}
-
-				else {
-
-					infoPane.setGrey(false);
-					int row = lsm.getMinSelectionIndex();
-
-					logging.info(this, "selected  row " + row);
-
-					if (row == -1) {
-						depotsOfPackage.clear();
-					} else {
-						String productEdited = "" + theTable.getValueAt(row, columnNames.indexOf("productId"));
-
-						String depotId = "";
-
-						logging.info(this, "selected  depotId, product: " + depotId + ", " + productEdited);
-
-						List<String> depotsOfPackageAsRetrieved = new ArrayList<>();
-
-						String versionInfo = "";
-						boolean retrieval = true;
-
-						try {
-							versionInfo = OpsiPackage.produceVersionInfo(
-									"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
-									"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")));
-
-							depotsOfPackageAsRetrieved = mainController.getPersistenceController()
-									.getProduct2VersionInfo2Depots()
-									.get(theTable.getValueAt(row, columnNames.indexOf("productId"))).get(versionInfo);
-
-							logging.info(this, "valueChanged  versionInfo (depotsOfPackageAsRetrieved == null)  "
-									+ versionInfo + " " + (depotsOfPackageAsRetrieved == null));
-
-						} catch (Exception ex) {
-							retrieval = false;
-						}
-
-						if (retrieval // no exception
-								&& (depotsOfPackageAsRetrieved == null))
-							retrieval = false;
-
-						depotsOfPackage = new LinkedList<>();
-
-						if (retrieval) {
-							for (String depot : mainController.getPersistenceController().getHostInfoCollections()
-									.getDepots().keySet()) {
-								if (depotsOfPackageAsRetrieved.indexOf(depot) > -1)
-									depotsOfPackage.add(depot);
-							}
-						}
-
-						logging.debug(this, "selectedRowChanged depotsOfPackage " + depotsOfPackage);
-
-						infoPane.clearEditing();
-						if (depotsOfPackage != null && !depotsOfPackage.isEmpty()) {
-
-							infoPane.setEditValues(productEdited,
-									"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
-									"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")),
-									depotsOfPackage.get(0));
-						}
-
-						panelEditProperties.setDepotListData(depotsOfPackage, productEdited);
-
-					}
-				}
-
-			}
-
-		};
+		paneProducts = new PaneProducts(columnNames);
 
 		paneProducts.setTableModel(model);
 
@@ -210,7 +86,7 @@ public class PanelProductProperties extends JSplitPane
 
 		logging.info(this, " created properties Panel, is  EditMapPanelX instance No. " + EditMapPanelX.objectCounter);
 		((EditMapPanelX) propertiesPanel)
-				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName().toString()));
+				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
 		propertiesPanel.registerDataChangedObserver(mainController.getGeneralDataChangedKeeper());
 		propertiesPanel.setStoreData(null);
 		propertiesPanel.setUpdateCollection(null);
@@ -221,7 +97,136 @@ public class PanelProductProperties extends JSplitPane
 		infoPane.getPanelProductDependencies().setDependenciesModel(mainController.getDependenciesModel());
 
 		setRightComponent(infoPane);
-
 	}
 
+	private class PaneProducts extends PanelGenEditTable {
+
+		private List<String> columnNames;
+
+		public PaneProducts(List<String> columnNames) {
+			super("", 0, false, 0, false, PanelGenEditTable.POPUPS_MINIMAL, true);
+
+			this.columnNames = columnNames;
+		}
+
+		@Override
+		public void reload() {
+			logging.info(this, "reload()");
+
+			mainController.getPersistenceController().productPropertyDefinitionsRequestRefresh();
+			mainController.getPersistenceController().productpropertiesRequestRefresh();
+			super.reload();
+		}
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			super.valueChanged(e);
+
+			logging.debug(this, "valueChanged in paneProducts " + e);
+
+			if (e.getValueIsAdjusting())
+				return;
+
+			ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+			lsm.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+			if (lsm.isSelectionEmpty()) {
+
+				logging.info(this, "selected  no row ");
+
+			}
+
+			if (lsm.isSelectionEmpty() || lsm.getMinSelectionIndex() != lsm.getMaxSelectionIndex()) {
+				infoPane.clearEditing();
+				infoPane.setGrey(true);
+			} else
+				infoPane.setGrey(false);
+
+			// otherweise selectedRowChanged() works
+		}
+
+		@Override
+		public void selectedRowChanged()
+		// if we got a new selection
+		{
+			super.selectedRowChanged();
+
+			logging.debug(this, "selectedRowChanged in paneProducts ");
+
+			ListSelectionModel lsm = getListSelectionModel();
+
+			if (lsm.isSelectionEmpty() || lsm.getMinSelectionIndex() != lsm.getMaxSelectionIndex()) {
+				logging.info(this, "selected not a unique row ");
+				infoPane.clearEditing();
+				((EditMapPanelX) propertiesPanel).init();
+				panelEditProperties.clearDepotListData();
+			}
+
+			else {
+
+				infoPane.setGrey(false);
+				int row = lsm.getMinSelectionIndex();
+
+				logging.info(this, "selected  row " + row);
+
+				if (row == -1) {
+					depotsOfPackage.clear();
+				} else {
+					String productEdited = "" + theTable.getValueAt(row, columnNames.indexOf("productId"));
+
+					String depotId = "";
+
+					logging.info(this, "selected  depotId, product: " + depotId + ", " + productEdited);
+
+					List<String> depotsOfPackageAsRetrieved = new ArrayList<>();
+
+					String versionInfo = "";
+					boolean retrieval = true;
+
+					try {
+						versionInfo = OpsiPackage.produceVersionInfo(
+								"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
+								"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")));
+
+						depotsOfPackageAsRetrieved = mainController.getPersistenceController()
+								.getProduct2VersionInfo2Depots()
+								.get(theTable.getValueAt(row, columnNames.indexOf("productId"))).get(versionInfo);
+
+						logging.info(this, "valueChanged  versionInfo (depotsOfPackageAsRetrieved == null)  "
+								+ versionInfo + " " + (depotsOfPackageAsRetrieved == null));
+
+					} catch (Exception ex) {
+						retrieval = false;
+					}
+
+					if (retrieval // no exception
+							&& (depotsOfPackageAsRetrieved == null))
+						retrieval = false;
+
+					depotsOfPackage = new LinkedList<>();
+
+					if (retrieval) {
+						for (String depot : mainController.getPersistenceController().getHostInfoCollections()
+								.getDepots().keySet()) {
+							if (depotsOfPackageAsRetrieved.indexOf(depot) > -1)
+								depotsOfPackage.add(depot);
+						}
+					}
+
+					logging.debug(this, "selectedRowChanged depotsOfPackage " + depotsOfPackage);
+
+					infoPane.clearEditing();
+					if (depotsOfPackage != null && !depotsOfPackage.isEmpty()) {
+
+						infoPane.setEditValues(productEdited,
+								"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
+								"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")),
+								depotsOfPackage.get(0));
+					}
+
+					panelEditProperties.setDepotListData(depotsOfPackage, productEdited);
+				}
+			}
+		}
+	}
 }

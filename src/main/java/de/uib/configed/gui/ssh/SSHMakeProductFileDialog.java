@@ -401,7 +401,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		String dir = cb_mainDir.getEditor().getItem().toString() + "/OPSI/control";
 		logging.info(this, "doActionGetVersions, dir " + dir);
 		EmptyCommand getVersions = new EmptyCommand(
-				factory.str_command_getVersions.replace(factory.str_replacement_dir, dir));
+				factory.STRING_COMMAND_GET_VERSIONS.replace(factory.STRING_REPLACEMENT_DIRECTORY, dir));
 		SSHConnectExec ssh = new SSHConnectExec();
 		logging.info(this, "doActionGetVersions, command " + getVersions);
 		String result = ssh.exec(getVersions, false);
@@ -539,7 +539,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	private String getPackageID(String dir) {
 		// cat " + dir + "OPSI/control | grep "id: "
 		EmptyCommand getPackageId = new EmptyCommand(
-				factory.str_command_catDir.replace(factory.str_replacement_dir, dir));
+				factory.STRING_COMMAND_CAT_DIRECTORY.replace(factory.STRING_REPLACEMENT_DIRECTORY, dir));
 		SSHConnectExec ssh = new SSHConnectExec();
 		String result = ssh.exec(getPackageId, false);
 		logging.debug(this, "getPackageID result " + result);

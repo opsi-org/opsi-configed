@@ -86,7 +86,7 @@ public class CommandOpsiSetRights extends SSHCommand_Template implements SSHComm
 	@Override
 	public String getSecuredCommand() {
 		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().confidential);
+			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().CONFIDENTIAL);
 		else
 			return getCommand();
 	}
@@ -97,7 +97,7 @@ public class CommandOpsiSetRights extends SSHCommand_Template implements SSHComm
 			command = "opsi-set-rights " + dir;
 
 		if (needSudo())
-			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 

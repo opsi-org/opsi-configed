@@ -1029,10 +1029,10 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		factory.setMainFrame(this);
 		JMenu menuOpsi = new JMenu();
-		menuOpsi.setText(SSHCommandFactory.parentOpsi);
+		menuOpsi.setText(SSHCommandFactory.PARENT_OPSI);
 
 		jMenuServer.removeAll();
-		jMenuServer.setText(SSHCommandFactory.parentNull);
+		jMenuServer.setText(SSHCommandFactory.PARENT_NULL);
 		boolean isReadOnly = Globals.isGlobalReadOnly();
 		boolean methodsExists = factory.checkSSHCommandMethod();
 
@@ -1082,12 +1082,12 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				JMenu parentMenu = new JMenu();
 				parentMenu.setText(parentMenuName);
 				logging.info(this, "ssh parent menu text " + parentMenuName);
-				if (parentMenuName.equals(SSHCommandFactory.parentdefaultForOwnCommands)) {
+				if (parentMenuName.equals(SSHCommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS)) {
 					parentMenu.setText("");
 					parentMenu.setIcon(Globals.createImageIcon("images/burger_menu_09.png", "..."));
 				}
 
-				if (!(parentMenuName.equals(SSHCommandFactory.parentNull)))
+				if (!(parentMenuName.equals(SSHCommandFactory.PARENT_NULL)))
 					firstParentGroup = false;
 
 				for (final SSHCommand_Template com : listCom) {
@@ -1117,11 +1117,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 						}
 					});
 
-					if (parentMenuName.equals(SSHCommandFactory.parentNull)) {
+					if (parentMenuName.equals(SSHCommandFactory.PARENT_NULL)) {
 						jMenuServer.add(jMenuItem);
 					} else {
 						parentMenu.add(jMenuItem);
-						if (parentMenuName.equals(SSHCommandFactory.parentOpsi)) {
+						if (parentMenuName.equals(SSHCommandFactory.PARENT_OPSI)) {
 							menuOpsi = parentMenu;
 							jMenuServer.add(menuOpsi);
 						} else

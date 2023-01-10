@@ -46,7 +46,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	@Override
 	public String getSecuredCommand() {
 		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().confidential);
+			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().CONFIDENTIAL);
 		else
 			return getCommand();
 	}
@@ -97,7 +97,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 		}
 		setCommand(baseName + verbosity + repo + action);
 		if (needSudo() && !action.equals("list"))
-			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
 		return command + " 2>&1"; // the output redirection semms not to produce a jsch input
 	}
 

@@ -16,23 +16,23 @@ public class LicencePoolXOpsiProduct extends Relation {
 	 * 
 	 */
 
-	public static final String licencepoolKEY = LicencepoolEntry.idSERVICEKEY;
-	public static final String productIdKEY = "productId";
-	public static final String idKEY = "id";
-	public static final String productsKEY = "productIds";
+	public static final String LICENCE_POOL_KEY = LicencepoolEntry.ID_SERVICE_KEY;
+	public static final String PRODUCT_ID_KEY = "productId";
+	public static final String ID_KEY = "id";
+	public static final String PRODUCTS_KEY = "productIds";
 
 	public static final List<String> ATTRIBUTES;
 	static {
 		ATTRIBUTES = new LinkedList<>();
-		ATTRIBUTES.add(licencepoolKEY);
-		ATTRIBUTES.add(productIdKEY);
+		ATTRIBUTES.add(LICENCE_POOL_KEY);
+		ATTRIBUTES.add(PRODUCT_ID_KEY);
 	}
 
 	public static final List<String> SERVICE_ATTRIBUTES;
 	static {
 		SERVICE_ATTRIBUTES = new LinkedList<>();
-		SERVICE_ATTRIBUTES.add(idKEY);
-		SERVICE_ATTRIBUTES.add(productsKEY);
+		SERVICE_ATTRIBUTES.add(ID_KEY);
+		SERVICE_ATTRIBUTES.add(PRODUCTS_KEY);
 	}
 
 	public static final String[] SERVICE_ATTRIBUTES_asArray;
@@ -45,23 +45,21 @@ public class LicencePoolXOpsiProduct extends Relation {
 	}
 
 	public void integrateRawFromService(Map<String, Object> m) {
-		String licensePoolId = (String) m.get(idKEY);
+		String licensePoolId = (String) m.get(ID_KEY);
 		try {
 
-			List<Object> productList = ((org.json.JSONArray) m.get(productsKEY)).toList();
+			List<Object> productList = ((org.json.JSONArray) m.get(PRODUCTS_KEY)).toList();
 
 			for (Object p : productList) {
 				String productId = (String) p;
 				StringValuedRelationElement rowmap = new StringValuedRelationElement();
 				rowmap.setAllowedAttributes(ATTRIBUTES);
-				rowmap.put(LicencepoolEntry.idSERVICEKEY, licensePoolId);
-				rowmap.put(productIdKEY, productId);
+				rowmap.put(LicencepoolEntry.ID_SERVICE_KEY, licensePoolId);
+				rowmap.put(PRODUCT_ID_KEY, productId);
 				add(rowmap);
-
 			}
 		} catch (Exception ex) {
 			logging.error("integrateRawFromService " + m + " exception " + ex);
 		}
 	}
-
 }

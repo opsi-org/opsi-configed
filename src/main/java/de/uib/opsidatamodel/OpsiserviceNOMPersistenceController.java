@@ -513,7 +513,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					for (String key : host.keySet()) {
 						if (de.uib.opsicommand.JSONReMapper.isNull(host.get(key)))
 
-							host.put(key, de.uib.opsicommand.JSONReMapper.NullRepresenter);
+							host.put(key, de.uib.opsicommand.JSONReMapper.NULL_REPRESENTER);
 
 					}
 
@@ -2925,8 +2925,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		List<String> result = new ArrayList<>();
 
 		for (Map<String, Object> hwAuditClass : hwAuditConf) {
-			if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) == null
-					|| !(hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) instanceof Map)) {
+			if (!(hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) instanceof Map)) {
 				logging.warning(this, "getAllHwClassNames illegal hw config item, having hwAuditClass.get Class "
 						+ hwAuditClass.get(hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY)));
 				if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) != null)
@@ -5366,7 +5365,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Map corrected = new HashMap<>();
 		for (Object key : settings.keySet()) {
 			if (settings.get(key) instanceof String
-					&& ((String) settings.get(key)).trim().equals(de.uib.opsicommand.JSONReMapper.NullRepresenter))
+					&& ((String) settings.get(key)).trim().equals(de.uib.opsicommand.JSONReMapper.NULL_REPRESENTER))
 				corrected.put(key, org.json.JSONObject.NULL);
 			else
 				corrected.put(key, settings.get(key));
@@ -6149,8 +6148,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			for (StringValuedRelationElement element : dataStub.getLicencePoolXOpsiProduct()) {
 				rowsLicencePoolXOpsiProduct
-						.put(Globals.pseudokey(new String[] { element.get(LicencePoolXOpsiProduct.licencepoolKEY),
-								element.get(LicencePoolXOpsiProduct.productIdKEY) }), element);
+						.put(Globals.pseudokey(new String[] { element.get(LicencePoolXOpsiProduct.LICENCE_POOL_KEY),
+								element.get(LicencePoolXOpsiProduct.PRODUCT_ID_KEY) }), element);
 			}
 
 		}
@@ -6223,7 +6222,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		for (StringValuedRelationElement retrieved : relationsAuditSoftwareToLicencePools) {
 
 			SWAuditEntry entry = new SWAuditEntry(retrieved, relationsAuditSoftwareToLicencePools);
-			String licencePoolKEY = retrieved.get(LicencepoolEntry.idSERVICEKEY);
+			String licencePoolKEY = retrieved.get(LicencepoolEntry.ID_SERVICE_KEY);
 			String swKEY = entry.getIdent();
 
 			// build row for software table
@@ -6542,7 +6541,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				Map<String, Object> item;
 
 				Map<String, String> swMap = AuditSoftwareXLicencePool.produceMapFromSWident(softwareID);
-				swMap.put(LicencepoolEntry.idSERVICEKEY, licencePoolID_new);
+				swMap.put(LicencepoolEntry.ID_SERVICE_KEY, licencePoolID_new);
 
 				item = createNOMitem("AuditSoftwareToLicensePool");
 				item.putAll(swMap);
@@ -6808,7 +6807,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			logging.debug(this, " retrieveStatistics1 relationElement  " + swXpool);
 
-			String pool = swXpool.get(LicencepoolEntry.idSERVICEKEY);
+			String pool = swXpool.get(LicencepoolEntry.ID_SERVICE_KEY);
 
 			TreeSet<String> clientsServedByPool = pool2clients.get(pool);
 

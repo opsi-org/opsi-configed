@@ -194,8 +194,8 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		jButtonClose.addActionListener(actionEvent -> cancel());
 		enableComponents(jRadioButtonFromServer.isSelected());
 
-		new SSHConnectExec().exec(new EmptyCommand(factory.str_command_fileexists_notremove
-				.replace(factory.str_replacement_filename, command.getTargetPath()) // /etc/opsi/modules.d
+		new SSHConnectExec().exec(new EmptyCommand(factory.STRING_COMMAND_FILE_EXISTS_NOT_REMOVE
+				.replace(factory.STRING_REPLACEMENT_FILENAME, command.getTargetPath()) // /etc/opsi/modules.d
 		), false);
 
 		initAdditional();

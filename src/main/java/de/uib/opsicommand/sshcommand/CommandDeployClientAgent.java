@@ -37,7 +37,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	@Override
 	public String getSecuredCommand() {
 		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().confidential);
+			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().CONFIDENTIAL);
 		else
 			return getCommand();
 	}
@@ -121,7 +121,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 		command = baseName + " " + verbosity + user + passw + finishAction + keepClientOnFailure + getPingOption()
 				+ client;
 		if (needSudo())
-			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 

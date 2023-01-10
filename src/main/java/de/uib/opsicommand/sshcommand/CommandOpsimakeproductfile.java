@@ -74,7 +74,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	@Override
 	public String getSecuredCommand() {
 		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().confidential);
+			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().CONFIDENTIAL);
 		else
 			return getCommand();
 	}
@@ -141,7 +141,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 		command = "cd " + dir + " && " + baseName + " " + keepVersions + " " + packageVersion + " " + productVersion
 				+ " " + md5sum + " " + zsync + " ";
 		if (needSudo())
-			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 

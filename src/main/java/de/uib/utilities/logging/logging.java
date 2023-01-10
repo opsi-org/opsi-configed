@@ -51,10 +51,10 @@ public class logging implements LogEventSubject
 			LEVEL_WARNING, "\033[1;33m", LEVEL_ERROR, "\033[0;31m", LEVEL_CRITICAL, "\033[1;31m", LEVEL_ESSENTIAL,
 			"\033[1;36m");
 
-	public static String LOG_FORMAT = "[%d] [%s] [%-15s] %s";
-	public static String COLORED_LOG_FORMAT = "{color}[%d] [%s]{reset} [%-15s] %s";
+	private static final String COLORED_LOG_FORMAT = "{color}[%d] [%s]{reset} [%-15s] %s";
 
-	public static boolean COLOR_LOG = true;
+	private static String logFormat = "[%d] [%s] [%-15s] %s";
+
 	public static Integer LOG_LEVEL_CONSOLE = LEVEL_WARNING;
 	public static Integer LOG_LEVEL_FILE = LEVEL_WARNING;
 
@@ -73,11 +73,11 @@ public class logging implements LogEventSubject
 	public static boolean LogFileAvailable = false;
 
 	private static final int maxListedErrors = 20;
-	private static List<String> errorList = new ArrayList<String>(maxListedErrors);
+	private static List<String> errorList = new ArrayList<>(maxListedErrors);
 
 	public static FShowList fErrors;
 
-	protected static List<LogEventObserver> logEventObservers = new ArrayList<LogEventObserver>();
+	protected static List<LogEventObserver> logEventObservers = new ArrayList<>();
 
 	public static void setSuppressConsole(boolean b) {
 		setLogLevelConsole(LEVEL_NONE);
@@ -286,10 +286,9 @@ public class logging implements LogEventSubject
 		}
 
 		if (level <= LOG_LEVEL_CONSOLE) {
-			String format = LOG_FORMAT;
-			if (COLOR_LOG) {
-				format = COLORED_LOG_FORMAT.replace("{color}", LEVEL_TO_COLOR.get(level)).replace("{reset}", "\033[0m");
-			}
+			String format = COLORED_LOG_FORMAT.replace("{color}", LEVEL_TO_COLOR.get(level)).replace("{reset}",
+					"\033[0m");
+
 			System.err.println(String.format(format, level, curTime, context, mesg) + exMesg);
 		}
 		if (level <= LOG_LEVEL_FILE) {
@@ -297,7 +296,7 @@ public class logging implements LogEventSubject
 				initLogFile();
 			}
 			if (logFileWriter != null) {
-				logFileWriter.println(String.format(LOG_FORMAT, level, curTime, context, mesg) + exMesg);
+				logFileWriter.println(String.format(logFormat, level, curTime, context, mesg) + exMesg);
 				logFileWriter.flush();
 			}
 		}

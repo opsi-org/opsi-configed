@@ -27,7 +27,7 @@ public class JTableWithToolTips extends JTable {
 	public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int colIndex) {
 		Component c = super.prepareRenderer(renderer, rowIndex, colIndex);
 
-		if (c != null && c instanceof JComponent) {
+		if (c instanceof JComponent) {
 			JComponent jc = (JComponent) c;
 			String valstr = "";
 

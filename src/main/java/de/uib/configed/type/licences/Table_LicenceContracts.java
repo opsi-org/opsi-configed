@@ -23,41 +23,40 @@ public class Table_LicenceContracts extends Relation {
 	 * 
 	 */
 
-	public static final String idKEY = "id";
-	public static final String identKEY = "ident";
-	public static final String idDBKEY = "licenseContractId";
-	public static final String partnerKEY = "partner";
-	public static final String conclusionDateKEY = "conclusionDate";
-	public static final String notificationDateKEY = "notificationDate";
-	public static final String expirationDateKEY = "expirationDate";
-	public static final String notesKEY = "notes";
-	public static final String descriptionKEY = "description";
+	public static final String ID_KEY = "id";
+	public static final String IDENT_KEY = "ident";
+	public static final String ID_DB_KEY = "licenseContractId";
+	public static final String PARTNER_KEY = "partner";
+	public static final String CONCLUSION_DATE_KEY = "conclusionDate";
+	public static final String NOTIFICATION_DATE_KEY = "notificationDate";
+	public static final String EXPIRATION_DATE_KEY = "expirationDate";
+	public static final String NOTES_KEY = "notes";
+	public static final String DESCRIPTION_KEY = "description";
 
-	public static final String opsiNOMtype = "LicenseContract";
-	public static final String typeKEY = "type";
+	public static final String TYPE_KEY = "type";
 
 	public static final List<String> DB_ATTRIBUTES;
 
 	static {
 		DB_ATTRIBUTES = new LinkedList<>();
-		DB_ATTRIBUTES.add(idDBKEY);
-		DB_ATTRIBUTES.add(partnerKEY);
-		DB_ATTRIBUTES.add(conclusionDateKEY);
-		DB_ATTRIBUTES.add(notificationDateKEY);
-		DB_ATTRIBUTES.add(expirationDateKEY);
-		DB_ATTRIBUTES.add(notesKEY);
-		DB_ATTRIBUTES.add(descriptionKEY);
+		DB_ATTRIBUTES.add(ID_DB_KEY);
+		DB_ATTRIBUTES.add(PARTNER_KEY);
+		DB_ATTRIBUTES.add(CONCLUSION_DATE_KEY);
+		DB_ATTRIBUTES.add(NOTIFICATION_DATE_KEY);
+		DB_ATTRIBUTES.add(EXPIRATION_DATE_KEY);
+		DB_ATTRIBUTES.add(NOTES_KEY);
+		DB_ATTRIBUTES.add(DESCRIPTION_KEY);
 	}
 
 	public static final List<String> INTERFACED_ATTRIBUTES;
 	static {
 		INTERFACED_ATTRIBUTES = new LinkedList<>();
-		INTERFACED_ATTRIBUTES.add(idDBKEY);
-		INTERFACED_ATTRIBUTES.add(partnerKEY);
-		INTERFACED_ATTRIBUTES.add(conclusionDateKEY);
-		INTERFACED_ATTRIBUTES.add(notificationDateKEY);
-		INTERFACED_ATTRIBUTES.add(expirationDateKEY);
-		INTERFACED_ATTRIBUTES.add(notesKEY);
+		INTERFACED_ATTRIBUTES.add(ID_DB_KEY);
+		INTERFACED_ATTRIBUTES.add(PARTNER_KEY);
+		INTERFACED_ATTRIBUTES.add(CONCLUSION_DATE_KEY);
+		INTERFACED_ATTRIBUTES.add(NOTIFICATION_DATE_KEY);
+		INTERFACED_ATTRIBUTES.add(EXPIRATION_DATE_KEY);
+		INTERFACED_ATTRIBUTES.add(NOTES_KEY);
 
 	}
 
@@ -65,9 +64,9 @@ public class Table_LicenceContracts extends Relation {
 
 	static {
 		ALLOWED_ATTRIBUTES = new LinkedList<>(DB_ATTRIBUTES);
-		ALLOWED_ATTRIBUTES.add(idKEY);
-		ALLOWED_ATTRIBUTES.add(identKEY);
-		ALLOWED_ATTRIBUTES.add(typeKEY);
+		ALLOWED_ATTRIBUTES.add(ID_KEY);
+		ALLOWED_ATTRIBUTES.add(IDENT_KEY);
+		ALLOWED_ATTRIBUTES.add(TYPE_KEY);
 	}
 
 	public Table_LicenceContracts() {
@@ -79,10 +78,10 @@ public class Table_LicenceContracts extends Relation {
 		StringValuedRelationElement rowmap = new StringValuedRelationElement();
 		rowmap.setAllowedAttributes(INTERFACED_ATTRIBUTES);
 		{
-			rowmap.put(idDBKEY, rowmap.get(idKEY));
+			rowmap.put(ID_DB_KEY, rowmap.get(ID_KEY));
 		}
-		rowmap.remove(typeKEY);
-		rowmap.remove(identKEY);
+		rowmap.remove(TYPE_KEY);
+		rowmap.remove(IDENT_KEY);
 
 		return rowmap;
 	}

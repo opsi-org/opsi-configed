@@ -38,7 +38,7 @@ import de.uib.utilities.table.updates.StrList2BooleanFunction;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
 public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
-	private final int maxWidthIdColumnForRegisteredSoftware = 300;
+	private static final int MAX_WIDTH_ID_COLUMN_FOR_REGISTERED_SOFTWARE = 300;
 	public PanelAssignToLPools thePanel;
 
 	GenTableModel modelLicencepools;
@@ -247,23 +247,21 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 			thePanel.fieldCountAssignedInEditing.setText(produceCount(count));
 		}
 
-		{
-			thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(false);
-			logging.debug(this, "setSoftwareIdsFromLicencePool  setSelectedValues " + selectKeys);
-			thePanel.panelRegisteredSoftware.setSelectedValues(selectKeys, WINDOWS_SOFTWARE_ID_KEY_COL);
+		thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(false);
+		logging.debug(this, "setSoftwareIdsFromLicencePool  setSelectedValues " + selectKeys);
+		thePanel.panelRegisteredSoftware.setSelectedValues(selectKeys, WINDOWS_SOFTWARE_ID_KEY_COL);
 
-			if (!selectKeys.isEmpty())
-				thePanel.panelRegisteredSoftware.moveToValue(selectKeys.get(selectKeys.size() - 1).toString(),
-						WINDOWS_SOFTWARE_ID_KEY_COL, false);
+		if (!selectKeys.isEmpty())
+			thePanel.panelRegisteredSoftware.moveToValue(selectKeys.get(selectKeys.size() - 1),
+					WINDOWS_SOFTWARE_ID_KEY_COL, false);
 
-			logging.debug(this, "setSoftwareIdsFromLicencePool  selectedKeys "
-					+ thePanel.panelRegisteredSoftware.getSelectedKeys());
-			if (wasUsingSelectedFilter) {
-				setVisualSelection(thePanel.panelRegisteredSoftware.getSelectedKeys());
-			}
-			thePanel.panelRegisteredSoftware.setDataChanged(false);
-			thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(true);
+		logging.debug(this,
+				"setSoftwareIdsFromLicencePool  selectedKeys " + thePanel.panelRegisteredSoftware.getSelectedKeys());
+		if (wasUsingSelectedFilter) {
+			setVisualSelection(thePanel.panelRegisteredSoftware.getSelectedKeys());
 		}
+		thePanel.panelRegisteredSoftware.setDataChanged(false);
+		thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(true);
 
 	}
 
@@ -471,8 +469,8 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 						if (existsNewRow)
 							modelLicencepools.requestReload();
 
-						return persist.editLicencePool((String) rowmap.get(LicencepoolEntry.idSERVICEKEY),
-								(String) rowmap.get(LicencepoolEntry.descriptionKEY));
+						return persist.editLicencePool((String) rowmap.get(LicencepoolEntry.ID_SERVICE_KEY),
+								(String) rowmap.get(LicencepoolEntry.DESCRIPTION_KEY));
 					}
 
 					@Override
@@ -675,7 +673,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		}
 
 		col = thePanel.panelRegisteredSoftware.getColumnModel().getColumn(WINDOWS_SOFTWARE_ID_KEY_COL);
-		col.setMaxWidth(maxWidthIdColumnForRegisteredSoftware);
+		col.setMaxWidth(MAX_WIDTH_ID_COLUMN_FOR_REGISTERED_SOFTWARE);
 		col.setHeaderValue("id ...");
 		col = thePanel.panelRegisteredSoftware.getColumnModel().getColumn(columnNames.indexOf("subVersion"));
 		col.setHeaderValue("OS variant");

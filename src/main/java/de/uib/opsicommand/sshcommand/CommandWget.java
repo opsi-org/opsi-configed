@@ -111,7 +111,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 		else
 			command = "wget " + authentication + filename + verbosity + dir + url + " " + additional_url;
 		if (needSudo())
-			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 
@@ -123,7 +123,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	@Override
 	public String getSecuredCommand() {
 		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().confidential);
+			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().CONFIDENTIAL);
 		else
 			return getCommand();
 	}

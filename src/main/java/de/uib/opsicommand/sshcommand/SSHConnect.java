@@ -230,7 +230,7 @@ public class SSHConnect {
 						Integer.valueOf(connectionInfo.getPort()));
 				logging.info(this, "connect this.password "
 
-						+ SSHCommandFactory.getInstance().confidential);
+						+ SSHCommandFactory.getInstance().CONFIDENTIAL);
 
 				session.setPassword(connectionInfo.getPassw());
 				logging.info(this, "connect useKeyfile " + connectionInfo.usesKeyfile() + " use password …");

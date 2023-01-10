@@ -62,7 +62,7 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 				+ freeInput + opsiproduct;
 		logging.info(this, "got command " + command);
 		if (needSudo())
-			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 

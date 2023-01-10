@@ -19,12 +19,12 @@ public class OpsiMethodCall {
 	public static final boolean BACKGROUND = true;
 	private boolean background;
 
-	protected static final int defaultJsonId = 1;
+	protected static final int DEFAULT_JSON_ID = 1;
 
-	public static String extendRpcPath = "extend/configed";
+	private static String extendRpcPath = "extend/configed";
 	private String rpcPath = "";
 
-	public static final List<String> collectedCalls = new ArrayList<>();
+	private static final List<String> collectedCalls = new ArrayList<>();
 	public static int maxCollectSize = -1;
 
 	/**
@@ -195,7 +195,7 @@ public class OpsiMethodCall {
 
 			}
 
-			jO.put("id", defaultJsonId);
+			jO.put("id", DEFAULT_JSON_ID);
 			jO.put("method", methodname);
 			jO.put("params", joParams);
 			result = jO.toString();

@@ -48,7 +48,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		additionalDefaultPaths.add(SSHCommandFactory.getInstance().opsipathVarDepot);
+		additionalDefaultPaths.add(SSHCommandFactory.getInstance().OPSI_PATH_VAR_DEPOT);
 		completion = new SSHCompletionComboButton(additionalDefaultPaths);
 
 		inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);

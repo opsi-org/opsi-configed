@@ -33,7 +33,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 
 	static {
 		ATTRIBUTES = new LinkedList<>();
-		ATTRIBUTES.add(LicencepoolEntry.idSERVICEKEY);
+		ATTRIBUTES.add(LicencepoolEntry.ID_SERVICE_KEY);
 
 		ATTRIBUTES.add(SWAuditEntry.NAME);
 		ATTRIBUTES.add(SWAuditEntry.VERSION);
@@ -49,7 +49,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 		INTERFACED_ATTRIBUTES.add(SwID);
 	}
 
-	public static final String[] SERVICE_ATTRIBUTES = new String[] { LicencepoolEntry.idSERVICEKEY, SWAuditEntry.NAME,
+	public static final String[] SERVICE_ATTRIBUTES = new String[] { LicencepoolEntry.ID_SERVICE_KEY, SWAuditEntry.NAME,
 			SWAuditEntry.VERSION, SWAuditEntry.SUBVERSION, SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE };
 
 	public AuditSoftwareXLicencePool(List<String> allRegisteredSoftware) {
@@ -92,7 +92,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 		String swIdent = "" + produceSWident(m);
 		rowmap.put(SwID, swIdent);
 
-		rowmap.put(LicencepoolEntry.idSERVICEKEY, Globals.getStringValue(m.get(LicencepoolEntry.idSERVICEKEY)));
+		rowmap.put(LicencepoolEntry.ID_SERVICE_KEY, Globals.getStringValue(m.get(LicencepoolEntry.ID_SERVICE_KEY)));
 		add(rowmap);
 
 		return rowmap;

@@ -205,7 +205,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 
 		jTextFieldPriority = new JTextField(new CheckedDocument(/* allowedChars */
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-' }, 5),
-				String.valueOf(factory.position_default), 1);
+				String.valueOf(factory.POSITION_DEFAULT), 1);
 		labelNeedSudo = new JLabel();
 		labelCommands = new JLabel();
 		jTextPaneommands = new JTextPane();
@@ -229,8 +229,8 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		labelNeedSudo.setText(configed.getResourceValue("SSHConnection.CommandControl.needSudo"));
 		labelCommands.setText(configed.getResourceValue("SSHConnection.CommandControl.commands"));
 
-		jComboBoxParentMenuText.addItem(SSHCommandFactory.parentdefaultForOwnCommands); // parentNull
-		jComboBoxMenuText.addItem(SSHCommandFactory.menuNew);
+		jComboBoxParentMenuText.addItem(SSHCommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS); // parentNull
+		jComboBoxMenuText.addItem(SSHCommandFactory.MENU_NEW);
 
 		jComboBoxMenuText.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.menuText.tooltip"));
 		jTextFieldTooltipText
@@ -265,7 +265,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 
 		final JTextComponent editor = (JTextComponent) jComboBoxMenuText.getEditor().getEditorComponent();
 		jComboBoxMenuText.addItemListener(itemEvent -> {
-			if (editor.getText().trim().equals(SSHCommandFactory.menuNew)) {
+			if (editor.getText().trim().equals(SSHCommandFactory.MENU_NEW)) {
 				editor.setSelectionStart(0);
 				editor.setSelectionEnd(editor.getText().length());
 			}
@@ -350,9 +350,9 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 				String menu = (String) jComboBoxMenuText.getSelectedItem();
 				factory.deleteSSHCommandByMenu(menu);
 
-				jComboBoxMenuText.setSelectedItem(SSHCommandFactory.menuNew);
-				updateLists(true, SSHCommandFactory.menuNew);
-				updateSelectedCommand(SSHCommandFactory.menuNew);
+				jComboBoxMenuText.setSelectedItem(SSHCommandFactory.MENU_NEW);
+				updateLists(true, SSHCommandFactory.MENU_NEW);
+				updateSelectedCommand(SSHCommandFactory.MENU_NEW);
 				factory.reloadServerMenu();
 			});
 
@@ -522,7 +522,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 				jComboBoxParentMenuText.addItem(parent);
 
 		if ((selectedCommand == null) || (selectedCommand.trim().equals("")))
-			selectedCommand = SSHCommandFactory.menuNew;
+			selectedCommand = SSHCommandFactory.MENU_NEW;
 		jComboBoxMenuText.setSelectedItem(selectedCommand);
 	}
 
@@ -538,7 +538,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	 **/
 	public void updateSelectedCommand(String menuText) {
 		logging.info(this, "updateSelectedCommand menuText " + menuText);
-		if ((menuText != null) && (menuText.equals(SSHCommandFactory.menuNew)))
+		if ((menuText != null) && (menuText.equals(SSHCommandFactory.MENU_NEW)))
 			menuText = null;
 		if ((menuText != null) && (menuText.length() > 0)) {
 			SSHCommand_Template thiscommand = factory.getSSHCommandByMenu(menuText);
@@ -555,8 +555,8 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 						thiscommand.getPriority(), thiscommand.needSudo(), combuf.toString());
 			}
 		} else
-			updateComponents(SSHCommandFactory.parentdefaultForOwnCommands/* parentNull */, "",
-					factory.position_default, false, "");
+			updateComponents(SSHCommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS/* parentNull */, "",
+					factory.POSITION_DEFAULT, false, "");
 	}
 
 	/**
@@ -571,7 +571,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	private void updateComponents(String parent, String tooltip, int prio, boolean ns, String coms) {
 		if ((parent == null) || (parent.trim().equals(""))) {
 
-			parent = SSHCommandFactory.parentdefaultForOwnCommands;
+			parent = SSHCommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS;
 		}
 		jComboBoxParentMenuText.setSelectedItem(parent);
 		jTextFieldTooltipText.setText(tooltip);
@@ -615,7 +615,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		if (command == null)
 			return;
 		if (command.getMenuText() == null)
-			command.setMenuText(SSHCommandFactory.menuNew);
+			command.setMenuText(SSHCommandFactory.MENU_NEW);
 		logging.debug(this, "doActionTestCommand buildCommand " + command.toString());
 		logging.debug(this, "doActionTestCommand buildCommand commandlist " + command.commandlistToString());
 
@@ -631,7 +631,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	private void checkAllTexts() {
 		if (!Globals.isGlobalReadOnly()) {
 			if (jComboBoxMenuText.getSelectedItem() != null) {
-				if (!((String) jComboBoxMenuText.getSelectedItem()).trim().equals(SSHCommandFactory.menuNew)) {
+				if (!((String) jComboBoxMenuText.getSelectedItem()).trim().equals(SSHCommandFactory.MENU_NEW)) {
 					logging.info(this, "checkAllTexts menuText " + jComboBoxMenuText.getSelectedItem());
 					SSHCommand_Template tempCommand = getCommandNow();
 					logging.debug(this, "checkAllTexts command " + tempCommand);
@@ -656,7 +656,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	public SSHCommand_Template getCommandNow(boolean testing) {
 		logging.debug(this, "getCommandNow ");
 		String menuText = (String) jComboBoxMenuText.getSelectedItem();
-		if (!testing && menuText.trim().equals(SSHCommandFactory.menuNew))
+		if (!testing && menuText.trim().equals(SSHCommandFactory.MENU_NEW))
 			return null;
 		String parent = (String) jComboBoxParentMenuText.getSelectedItem();
 		int prio = 0;

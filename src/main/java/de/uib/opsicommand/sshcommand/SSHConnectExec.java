@@ -187,7 +187,7 @@ public class SSHConnectExec extends SSHConnect {
 				final_dia.appendLater("\n\n\n" + new Date());
 				final_dia.appendLater("\n[" + configed.getResourceValue("SSHConnection.Exec.dialog.commandlist").trim()
 						+ "]\n" + defaultCommandsString + "\n\n");
-				if (SSHCommandFactory.ssh_always_exec_in_background) {
+				if (SSHCommandFactory.sshAlwaysExecInBackground) {
 					multiDialog.setVisible(false);
 					final_dia.setVisible(false);
 				}
@@ -200,7 +200,7 @@ public class SSHConnectExec extends SSHConnect {
 				final SSHConnectExec caller = this;
 				FOUND_ERROR = false;
 
-				if (!SSHCommandFactory.ssh_always_exec_in_background) {
+				if (!SSHCommandFactory.sshAlwaysExecInBackground) {
 					final_dia.setLocationRelativeTo(Globals.mainFrame);
 					final_dia.setVisible(true);
 				}
@@ -297,7 +297,7 @@ public class SSHConnectExec extends SSHConnect {
 				outputDialog = SSHConnectionExecDialog.getInstance();
 			}
 
-			if (SSHCommandFactory.ssh_always_exec_in_background)
+			if (SSHCommandFactory.sshAlwaysExecInBackground)
 				outputDialog.setVisible(false);
 
 			outputDialog.setTitle(configed.getResourceValue("SSHConnection.Exec.title") + " "
@@ -320,7 +320,7 @@ public class SSHConnectExec extends SSHConnect {
 			if (sequential)
 				return task.get();
 
-			if (SSHCommandFactory.ssh_always_exec_in_background && withGui)
+			if (SSHCommandFactory.sshAlwaysExecInBackground && withGui)
 				outputDialog.setVisible(false);
 
 			if (withGui)
@@ -490,7 +490,7 @@ public class SSHConnectExec extends SSHConnect {
 							break;
 						String str = new String(tmp, 0, i, "UTF-8");
 
-						if ((command.needSudo()) && (str.contains(SSHCommandFactory.sudo_failed_text))) {
+						if ((command.needSudo()) && (str.contains(SSHCommandFactory.SUDO_FAILED_TEXT))) {
 							String pw = "";
 							if (supwRetriedTimes >= 1)
 								pw = getSudoPass(outputDialog);

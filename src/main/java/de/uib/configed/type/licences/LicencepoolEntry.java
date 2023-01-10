@@ -8,15 +8,15 @@ import de.uib.utilities.datastructure.TableEntry;
 
 public class LicencepoolEntry extends TableEntry {
 
-	public static final String idSERVICEKEY = "licensePoolId";
-	public static final String idKEY = "id";
-	public static final String descriptionKEY = "description";
+	public static final String ID_SERVICE_KEY = "licensePoolId";
+	public static final String ID_KEY = "id";
+	public static final String DESCRIPTION_KEY = "description";
 
 	private static List<String> KEYS;
 	static {
 		KEYS = new ArrayList<>();
-		KEYS.add(idSERVICEKEY);
-		KEYS.add(descriptionKEY);
+		KEYS.add(ID_SERVICE_KEY);
+		KEYS.add(DESCRIPTION_KEY);
 	}
 
 	public static List<String> getKeys() {
@@ -37,15 +37,15 @@ public class LicencepoolEntry extends TableEntry {
 
 	public LicencepoolEntry(Map entry) {
 		super(entry);
-		remap(idSERVICEKEY, idKEY);
-		remap(descriptionKEY, descriptionKEY);
+		remap(ID_SERVICE_KEY, ID_KEY);
+		remap(DESCRIPTION_KEY, DESCRIPTION_KEY);
 	}
 
 	public String getLicencepoolId() {
-		if (get(idSERVICEKEY) != null)
-			return get(idSERVICEKEY);
+		if (get(ID_SERVICE_KEY) != null)
+			return get(ID_SERVICE_KEY);
 
-		return get(idKEY);
+		return get(ID_KEY);
 	}
 
 }

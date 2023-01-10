@@ -92,7 +92,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 		while (iter.hasNext()) {
 			model.addElement(iter.next());
 		}
-		if (currentData.get(key) != null && currentData.get(key) instanceof List) {
+		if (currentData.get(key) instanceof List) {
 			iter = ((List) currentData.get(key)).iterator();
 
 			while (iter.hasNext()) {
