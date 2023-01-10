@@ -71,7 +71,6 @@ import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.LastAction;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.productstate.TargetConfiguration;
-import de.uib.utilities.ComboBoxModeller;
 import de.uib.utilities.logging.logging;
 
 /**
@@ -80,14 +79,13 @@ import de.uib.utilities.logging.logging;
  * getting cell editors.
  */
 public class InstallationStateTableModel extends javax.swing.table.AbstractTableModel
-
-		implements ComboBoxModeller, IFInstallationStateTableModel {
+		implements IFInstallationStateTableModel {
 
 	public static final String EMPTYFIELD = "_";
 
-	public static final String CONFLICTstring = Globals.CONFLICT_STATE_STRING;
+	public static final String CONFLICT_STRING = Globals.CONFLICT_STATE_STRING;
 
-	public static final String unequalAddstring = "≠ ";
+	public static final String UNEQUAL_ADD_STRING = "≠ ";
 
 	protected static Map<String, String> columnDict;
 	protected static List<String> columnsLocalized;
@@ -398,7 +396,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			visualStates.put(productId, resultValue);
 		} else {
 			if (!oldValue.equalsIgnoreCase(mixinValue)) {
-				resultValue = CONFLICTstring;
+				resultValue = CONFLICT_STRING;
 				visualStates.put(productId, resultValue);
 			}
 		}
@@ -484,25 +482,25 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		indexPreparedColumns = new int[columnsToDisplay.size()];
 		columnTitles = new ArrayList<>();
-		{
-			Iterator<String> iter = columnsToDisplay.iterator();
-			int j = 0;
-			while (iter.hasNext()) {
-				String column = iter.next();
-				logging.debug(this, " ------- treat column " + column);
-				int k = preparedColumns.indexOf(column);
-				if (k >= 0) {
-					indexPreparedColumns[j] = k;
-					logging.debug(this, "indexPreparedColumns of displayColumn " + j + " is " + k);
-					columnTitles.add(getColumnTitle(column));
-				} else {
-					logging.info(this, "column " + column + " is not prepared");
-					columnTitles.add(column);
-				}
 
-				j++;
+		Iterator<String> iter = columnsToDisplay.iterator();
+		int j = 0;
+		while (iter.hasNext()) {
+			String column = iter.next();
+			logging.debug(this, " ------- treat column " + column);
+			int k = preparedColumns.indexOf(column);
+			if (k >= 0) {
+				indexPreparedColumns[j] = k;
+				logging.debug(this, "indexPreparedColumns of displayColumn " + j + " is " + k);
+				columnTitles.add(getColumnTitle(column));
+			} else {
+				logging.info(this, "column " + column + " is not prepared");
+				columnTitles.add(column);
 			}
+
+			j++;
 		}
+
 		numberOfColumns = displayColumns.size();
 		logging.info(this, " -------- numberOfColumns " + numberOfColumns);
 
@@ -1276,7 +1274,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			result = combinedVisualValues.get(ProductState.KEY_VERSION_INFO).get(actualProduct);
 			if (result != null && !(result.equals("")) && serverProductVersion != null
 					&& !(serverProductVersion.equals(result)))
-				result = unequalAddstring + result;
+				result = UNEQUAL_ADD_STRING + result;
 
 			break;
 

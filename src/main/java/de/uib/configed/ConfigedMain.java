@@ -1204,7 +1204,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					+ " as well as " + selectionPanel.getSelectedValues().size());
 
 			mainFrame.getHostsStatusInfo().updateValues(clientCount, getSelectedClients().length,
-					getSelectedClientsStringWithMaxLength(HostsStatusPanel.maxClientnamesInField), clientInDepot);
+					getSelectedClientsStringWithMaxLength(HostsStatusPanel.MAX_CLIENT_NAMES_IN_FIELD), clientInDepot);
 
 			activatedGroupModel.setActive(getSelectedClients().length <= 0);
 

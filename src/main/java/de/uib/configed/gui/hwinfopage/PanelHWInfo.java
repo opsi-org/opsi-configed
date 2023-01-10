@@ -39,18 +39,18 @@ import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import de.uib.utilities.tree.XTree;
 
 public class PanelHWInfo extends JPanel implements TreeSelectionListener {
-	public static final String class_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
-	public static final String class_BASE_BOARD = "BASE_BOARD";
+	private static final String CLASS_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
+	private static final String CLASS_BASE_BOARD = "BASE_BOARD";
 
-	public static final List<String> hwClassesForByAudit = new ArrayList<>();
+	private static final List<String> hwClassesForByAudit = new ArrayList<>();
 	static {
-		hwClassesForByAudit.add(class_COMPUTER_SYSTEM);
-		hwClassesForByAudit.add(class_BASE_BOARD);
+		hwClassesForByAudit.add(CLASS_COMPUTER_SYSTEM);
+		hwClassesForByAudit.add(CLASS_BASE_BOARD);
 	}
 
-	public static final String key_VENDOR = "vendor";
-	public static final String key_MODEL = "model";
-	public static final String key_PRODUCT = "product";
+	private static final String KEY_VENDOR = "vendor";
+	private static final String KEY_MODEL = "model";
+	private static final String KEY_PRODUCT = "product";
 
 	protected Map hwInfo;
 	protected String treeRootTitle;
@@ -74,8 +74,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	protected static final String SCANPROPERTYNAME = "SCANPROPERTIES";
 	protected static final String SCANTIME = "scantime";
 
-	protected String vendorStringCOMPUTER_SYSTEM;
-	protected String vendorStringBASE_BOARD;
+	protected String vendorStringComputerSystem;
+	protected String vendorStringBaseBoard;
 	protected String modelString;
 	protected String productString;
 
@@ -369,19 +369,19 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						if (reduceScanToByAuditClasses && hwClass != null) {
 							logging.debug(this, "key " + opsi);
 
-							if (hwClass.equals(class_COMPUTER_SYSTEM)) {
-								if (opsi.equalsIgnoreCase(key_VENDOR)) {
-									vendorStringCOMPUTER_SYSTEM = cv;
+							if (hwClass.equals(CLASS_COMPUTER_SYSTEM)) {
+								if (opsi.equalsIgnoreCase(KEY_VENDOR)) {
+									vendorStringComputerSystem = cv;
 
-								} else if (opsi.equalsIgnoreCase(key_MODEL)) {
+								} else if (opsi.equalsIgnoreCase(KEY_MODEL)) {
 									modelString = cv;
 
 								}
-							} else if (hwClass.equals(class_BASE_BOARD)) {
-								if (opsi.equalsIgnoreCase(key_VENDOR)) {
-									vendorStringBASE_BOARD = cv;
+							} else if (hwClass.equals(CLASS_BASE_BOARD)) {
+								if (opsi.equalsIgnoreCase(KEY_VENDOR)) {
+									vendorStringBaseBoard = cv;
 
-								} else if (opsi.equalsIgnoreCase(key_PRODUCT)) {
+								} else if (opsi.equalsIgnoreCase(KEY_PRODUCT)) {
 									productString = cv;
 
 								}
@@ -446,11 +446,11 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			String hwClassUI = path[1].toString();
 			String hwClass = (String) hwClassMapping.get(hwClassUI);
 
-			if (hwClass != null && (hwClass.equals(class_COMPUTER_SYSTEM) || hwClass.equals(class_BASE_BOARD))) {
+			if (hwClass != null && (hwClass.equals(CLASS_COMPUTER_SYSTEM) || hwClass.equals(CLASS_BASE_BOARD))) {
 				logging.debug(this, "scanNode found  class_COMPUTER_SYSTEM or class_BASE_BOARD");
 				getDataForNode(node, true);
 
-				panelByAuditInfo.setByAuditFields(vendorStringCOMPUTER_SYSTEM, vendorStringBASE_BOARD, modelString,
+				panelByAuditInfo.setByAuditFields(vendorStringComputerSystem, vendorStringBaseBoard, modelString,
 						productString);
 			}
 
@@ -458,8 +458,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	protected void initByAuditStrings() {
-		vendorStringCOMPUTER_SYSTEM = "";
-		vendorStringBASE_BOARD = "";
+		vendorStringComputerSystem = "";
+		vendorStringBaseBoard = "";
 		modelString = "";
 		productString = "";
 	}
