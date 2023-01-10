@@ -23,7 +23,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>de.uib.configed.configed</mainClass>
+                            <mainClass>de.uib.configed.Configed</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
