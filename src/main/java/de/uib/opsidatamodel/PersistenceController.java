@@ -973,7 +973,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 		possibleValues.add(true);
 		possibleValues.add(false);
 
-		return createConfig(ConfigOption.TYPE.BOOL_CONFIG, key, description, false, false, defaultValues,
+		return createConfig(ConfigOption.TYPE.BoolConfig, key, description, false, false, defaultValues,
 				possibleValues);
 	}
 
@@ -985,7 +985,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 		possibleValues.add(true);
 		possibleValues.add(false);
 
-		return createJSONConfig(ConfigOption.TYPE.BOOL_CONFIG, key, description, false, false, defaultValues,
+		return createJSONConfig(ConfigOption.TYPE.BoolConfig, key, description, false, false, defaultValues,
 				possibleValues);
 	}
 
