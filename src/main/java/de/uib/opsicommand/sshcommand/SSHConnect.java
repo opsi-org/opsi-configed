@@ -41,15 +41,14 @@ public class SSHConnect {
 	/** Username for server to connected as **/
 	protected String user;
 	/** Port for server to connected as **/
-	public static final String default_port = "22";
-	public static String portSSH = default_port;
+	public static final String DEFAULT_PORT = "22";
+	public static final String PORT_SSH = DEFAULT_PORT;
 	/** Password for server and username **/
 	protected String password;
 	/** If needed the sudo password **/
-	protected String pw_sudo;
+	protected String pwSudo;
 	/** If needed the root password **/
-	protected String pw_root;
-	private JSch jsch = null;
+	protected String pwRoot;
 	protected static Session session = null;
 	protected ConfigedMain main;
 
@@ -131,8 +130,8 @@ public class SSHConnect {
 	 **/
 	protected String getSudoPass(Component dialog, boolean rememberPw) {
 		logging.debug(this, "getSudoPass dialog " + dialog + " newConfirmDialog " + rememberPw);
-		if ((rememberPw) && (pw_sudo != null))
-			return pw_sudo;
+		if ((rememberPw) && (pwSudo != null))
+			return pwSudo;
 		return getSudoPass(dialog);
 	}
 
@@ -167,8 +166,8 @@ public class SSHConnect {
 		logging.debug(this, "getSudoPass joptiontype value " + opPane.getValue());
 		logging.debug(this, "getSudoPass joptiontype ok option " + JOptionPane.OK_OPTION);
 		if (((Integer) opPane.getValue()) == JOptionPane.OK_OPTION) {
-			pw_sudo = String.valueOf(passwordField.getPassword());
-			return pw_sudo;
+			pwSudo = String.valueOf(passwordField.getPassword());
+			return pwSudo;
 		}
 
 		return null;
@@ -195,7 +194,7 @@ public class SSHConnect {
 	}
 
 	public boolean connectTest() {
-		return connect(new Empty_Command(Empty_Command.TESTCOMMAND, Empty_Command.TESTCOMMAND, "", false));
+		return connect(new EmptyCommand(EmptyCommand.TESTCOMMAND, EmptyCommand.TESTCOMMAND, "", false));
 	}
 
 	/**
@@ -215,7 +214,7 @@ public class SSHConnect {
 		else
 			logging.info(this, "connect command null");
 		try {
-			jsch = new JSch();
+			JSch jsch = new JSch();
 			connectionInfo.checkUserData();
 			logging.info(this, "connect user@host " + connectionInfo.getUser() + "@" + connectionInfo.getHost());
 			logging.debug(this, "connect with password log version " + connectionInfo.getShortPassw());

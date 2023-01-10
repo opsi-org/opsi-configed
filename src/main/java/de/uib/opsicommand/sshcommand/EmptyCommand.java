@@ -23,7 +23,7 @@ import de.uib.utilities.logging.logging;
 /**
  * This class represent a simple single command
  **/
-public class Empty_Command implements SSHCommand {
+public class EmptyCommand implements SSHCommand {
 	public static final String TESTCOMMAND = "pwd";
 	/** boolean needParameter = false **/
 	private boolean needParameter = false;
@@ -43,7 +43,7 @@ public class Empty_Command implements SSHCommand {
 	private String tooltipText = "";
 	/** integer position **/
 	private int position;
-	private String confidential_information = null;
+	private String confidentialInformation = null;
 
 	private SSHCommandFactory factory = SSHCommandFactory.getInstance();
 
@@ -57,7 +57,7 @@ public class Empty_Command implements SSHCommand {
 
 	@Override
 	public String getSecureInfoInCommand() {
-		return confidential_information;
+		return confidentialInformation;
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class Empty_Command implements SSHCommand {
 	 * 
 	 * @return SSHCommand_Template instance
 	 */
-	public Empty_Command(String id, String c, String mt, boolean ns) {
+	public EmptyCommand(String id, String c, String mt, boolean ns) {
 		position = factory.position_default;
 		setId(id);
 		setCommand(c);
@@ -82,7 +82,7 @@ public class Empty_Command implements SSHCommand {
 		setNeedSudo(ns);
 	}
 
-	public Empty_Command(String c) {
+	public EmptyCommand(String c) {
 
 		setCommand(c);
 		getParameterList();
@@ -92,7 +92,7 @@ public class Empty_Command implements SSHCommand {
 	/**
 	 * Empty constuctor for creatiing empty instances
 	 */
-	public Empty_Command() {
+	public EmptyCommand() {
 	}
 
 	/**
@@ -224,18 +224,17 @@ public class Empty_Command implements SSHCommand {
 	@Override
 	public List<String> getParameterList() {
 		List<String> paramlist = new ArrayList<>();
-		String tmp_1 = SSHCommandParameterMethods.replacement_default_1;
-		String tmp_2 = SSHCommandParameterMethods.replacement_default_2;
-		if (command != null)
-			if ((command.contains(tmp_1)) && (command.contains(tmp_2))) {
-				myTmpCommand = getCommandRaw();
-				logging.debug(this, "getParameterList myCommand_tmp " + myTmpCommand);
-				for (int i = 0; i < counterString(getCommandRaw(), tmp_1); i++) {
-					String plHolder = searchPlaceholder();
-					if (!paramlist.contains(plHolder))
-						paramlist.add(plHolder);
-				}
+		String temp1 = SSHCommandParameterMethods.replacement_default_1;
+		String temp2 = SSHCommandParameterMethods.replacement_default_2;
+		if (command != null && command.contains(temp1) && command.contains(temp2)) {
+			myTmpCommand = getCommandRaw();
+			logging.debug(this, "getParameterList myCommand_tmp " + myTmpCommand);
+			for (int i = 0; i < counterString(getCommandRaw(), temp1); i++) {
+				String plHolder = searchPlaceholder();
+				if (!paramlist.contains(plHolder))
+					paramlist.add(plHolder);
 			}
+		}
 		logging.debug(this, "getParameterList command " + command + " placeholders " + paramlist);
 		return paramlist;
 	}
@@ -246,15 +245,15 @@ public class Empty_Command implements SSHCommand {
 	 * @return String with and between "<<<" and ">>>"
 	 */
 	private String searchPlaceholder() {
-		String tmp_1 = SSHCommandParameterMethods.replacement_default_1;
-		String tmp_2 = SSHCommandParameterMethods.replacement_default_2;
+		String temp1 = SSHCommandParameterMethods.replacement_default_1;
+		String temp2 = SSHCommandParameterMethods.replacement_default_2;
 
-		String splitted_text = myTmpCommand.split(tmp_1, 2)[1].split(tmp_2, 2)[0];
-		logging.debug(this, "searchPlaceholder found " + tmp_1 + splitted_text + tmp_2);
-		myTmpCommand = myTmpCommand.replace(tmp_1 + splitted_text + tmp_2, "");
+		String splittedText = myTmpCommand.split(temp1, 2)[1].split(temp2, 2)[0];
+		logging.debug(this, "searchPlaceholder found " + temp1 + splittedText + temp2);
+		myTmpCommand = myTmpCommand.replace(temp1 + splittedText + temp2, "");
 		logging.debug(this, "searchPlaceholder myCommand_tmp " + myTmpCommand);
 
-		return tmp_1 + splitted_text + tmp_2;
+		return temp1 + splittedText + temp2;
 	}
 
 	/**

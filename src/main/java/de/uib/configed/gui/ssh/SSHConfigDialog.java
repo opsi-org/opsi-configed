@@ -614,7 +614,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 			// state has changed
 			{
 				connectionInfo.setUserData(ConfigedMain.HOST, ConfigedMain.USER, ConfigedMain.PASSWORD,
-						SSHConnect.portSSH);
+						SSHConnect.PORT_SSH);
 			}
 
 			jComboBoxHost.setSelectedItem(connectionInfo.getHost());
@@ -691,7 +691,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 			connectionInfo.setUserData(
 
 					ConfigedMain.HOST, // persist.getHostInfoCollections().getConfigServer(),
-					ConfigedMain.USER, ConfigedMain.PASSWORD, SSHConnect.portSSH);
+					ConfigedMain.USER, ConfigedMain.PASSWORD, SSHConnect.PORT_SSH);
 
 		}
 		jComboBoxHost.setSelectedItem(connectionInfo.getHost());

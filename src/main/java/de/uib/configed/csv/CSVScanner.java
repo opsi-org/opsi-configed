@@ -42,16 +42,14 @@ public class CSVScanner {
 					continue;
 				}
 
-				if (cReader.peek() == format.getFieldSeparator()) {
-					if (!field.toString().trim().isEmpty()) {
-						if (c != format.getStringSeparator() && c != format.getFieldSeparator()) {
-							field.append(c);
-							c = '\0';
-						}
-						CSVToken fieldToken = new CSVToken(CSVToken.FIELD, field.toString());
-						lineOfTokens.add(fieldToken);
-						field.setLength(0);
+				if (cReader.peek() == format.getFieldSeparator() && !field.toString().trim().isEmpty()) {
+					if (c != format.getStringSeparator() && c != format.getFieldSeparator()) {
+						field.append(c);
+						c = '\0';
 					}
+					CSVToken fieldToken = new CSVToken(CSVToken.FIELD, field.toString());
+					lineOfTokens.add(fieldToken);
+					field.setLength(0);
 				}
 
 				if (c == format.getStringSeparator()) {

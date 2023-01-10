@@ -234,11 +234,10 @@ public class OpsiDataBackend extends Backend {
 			swauditAttributeText = "subVersion";
 		else if (element instanceof SwAuditSoftwareIdElement)
 			swauditAttributeText = "windowsSoftwareID";
-		if (swauditAttributeText != null) {
-			if (operation instanceof StringEqualsOperation)
-				return new OpsiDataStringEqualsOperation(OpsiDataClient.SWAUDIT_MAP, swauditAttributeText,
-						(String) operation.getData(), element);
-		}
+
+		if (swauditAttributeText != null && operation instanceof StringEqualsOperation)
+			return new OpsiDataStringEqualsOperation(OpsiDataClient.SWAUDIT_MAP, swauditAttributeText,
+					(String) operation.getData(), element);
 
 		// hardware
 		if (element instanceof GenericTextElement || element instanceof GenericIntegerElement

@@ -371,15 +371,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	@Override
 	public Enum reactToStateChangeRequest(Enum newState) {
 		logging.debug(this, "reactToStateChangeRequest( newState: " + newState + "), current state " + licencesStatus);
-		if (newState != licencesStatus) {
-			if (getClient(licencesStatus).mayLeave()) {
-				licencesStatus = (LicencesTabStatus) newState;
+		if (newState != licencesStatus && getClient(licencesStatus).mayLeave()) {
+			licencesStatus = (LicencesTabStatus) newState;
 
-				if (getClient(licencesStatus) != null) {
-					licencesPanels.get(licencesStatus).reset();
-				}
+			if (getClient(licencesStatus) != null) {
+				licencesPanels.get(licencesStatus).reset();
 			}
-
 			// otherwise we return the old status
 
 		}
@@ -2967,31 +2964,31 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		Map<String, Object> mergeIn = collection.get(0);
 
-		for (String key : mergeIn.keySet()) {
-			List value = (List) mergeIn.get(key);
+		for (Entry<String, Object> entry : mergeIn.entrySet()) {
+			List value = (List) entry.getValue();
 			ListMerger merger = new ListMerger(value);
-			mergedMap.put(key, merger);
+			mergedMap.put(entry.getKey(), merger);
 		}
 
 		// merge the other maps
 		for (int i = 1; i < collection.size(); i++) {
 			mergeIn = collection.get(i);
 
-			for (String key : mergeIn.keySet()) {
-				List value = (List) mergeIn.get(key);
+			for (Entry<String, Object> mergeInEntry : mergeIn.entrySet()) {
+				List value = (List) mergeInEntry.getValue();
 
-				if (mergedMap.get(key) == null)
+				if (mergedMap.get(mergeInEntry.getKey()) == null)
 
 				{
 					ListMerger merger = new ListMerger(value);
 					merger.setHavingNoCommonValue();
-					mergedMap.put(key, merger);
+					mergedMap.put(mergeInEntry.getKey(), merger);
 				}
 
 				else {
-					ListMerger merger = (ListMerger) mergedMap.get(key);
+					ListMerger merger = (ListMerger) mergedMap.get(mergeInEntry.getKey());
 					ListMerger mergedValue = merger.merge(value);
-					mergedMap.put(key, mergedValue);
+					mergedMap.put(mergeInEntry.getKey(), mergedValue);
 				}
 			}
 		}
@@ -3397,27 +3394,21 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// we will only leave view 0 if a PC is selected
 
 		// check if change of view index to the value of visualViewIndex can be allowed
-		if (visualViewIndex != VIEW_CLIENTS) {
+		if (visualViewIndex != VIEW_CLIENTS && (!((visualViewIndex == VIEW_CLIENTS)
+				|| ((visualViewIndex == VIEW_NETWORK_CONFIGURATION) && (editingTarget == EditingTarget.SERVER))
+				|| ((visualViewIndex == VIEW_HOST_PROPERTIES) && (editingTarget == EditingTarget.DEPOTS))))) {
+			logging.debug(this, " selected clients " + logging.getStrings(getSelectedClients()));
 
-			if (!((visualViewIndex == VIEW_CLIENTS)
-					|| ((visualViewIndex == VIEW_NETWORK_CONFIGURATION) && (editingTarget == EditingTarget.SERVER))
-					|| ((visualViewIndex == VIEW_HOST_PROPERTIES) && (editingTarget == EditingTarget.DEPOTS)))) {
-				logging.debug(this, " selected clients " + logging.getStrings(getSelectedClients()));
+			if (getSelectedClients() == null)
+			// should not occur
+			{
+				logging.debug(this, " getSelectedClients()  null");
 
-				if (getSelectedClients() == null)
-				// should not occur
-				{
-					logging.debug(this, " getSelectedClients()  null");
-
-					problem = true;
-					JOptionPane.showMessageDialog(mainFrame,
-							configed.getResourceValue("ConfigedMain.pleaseSelectPc.text"),
-							configed.getResourceValue("ConfigedMain.pleaseSelectPc.title"), JOptionPane.OK_OPTION);
-					viewIndex = VIEW_CLIENTS;
-				}
-
+				problem = true;
+				JOptionPane.showMessageDialog(mainFrame, configed.getResourceValue("ConfigedMain.pleaseSelectPc.text"),
+						configed.getResourceValue("ConfigedMain.pleaseSelectPc.title"), JOptionPane.OK_OPTION);
+				viewIndex = VIEW_CLIENTS;
 			}
-
 		}
 
 		if (!problem && dataReady) // we have loaded the data
@@ -3960,8 +3951,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			if (source == null)
 				logging.info(this, "dataHaveChanged null");
 			else {
-				for (String client : source.keySet()) {
-					logging.debug(this, "dataHaveChanged for client " + client + source.get(client));
+				for (Entry<String, Map<String, String>> clientEntry : source.entrySet()) {
+					logging.debug(this, "dataHaveChanged for client " + clientEntry.getKey() + " with values"
+							+ clientEntry.getValue());
 				}
 			}
 
@@ -5012,18 +5004,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Map<String, String> rcCommands = new HashMap<>();
 			Map<String, Boolean> commandsEditable = new HashMap<>();
 
-			for (String key : remoteControls.keySet()) {
-				entries.put(key, key);
-				RemoteControl rc = remoteControls.get(key);
+			for (Entry<String, RemoteControl> entry : remoteControls.entrySet()) {
+				entries.put(entry.getKey(), entry.getKey());
+				RemoteControl rc = entry.getValue();
 				if (rc.getDescription() != null && rc.getDescription().length() > 0)
-					tooltips.put(key, rc.getDescription());
+					tooltips.put(entry.getKey(), rc.getDescription());
 				else
-					tooltips.put(key, rc.getCommand());
-				rcCommands.put(key, rc.getCommand());
+					tooltips.put(entry.getKey(), rc.getCommand());
+				rcCommands.put(entry.getKey(), rc.getCommand());
 				Boolean editable = Boolean.valueOf(rc.getEditable());
 
-				commandsEditable.put(key, editable);
-
+				commandsEditable.put(entry.getKey(), editable);
 			}
 
 			dialogRemoteControl.setMeanings(rcCommands);

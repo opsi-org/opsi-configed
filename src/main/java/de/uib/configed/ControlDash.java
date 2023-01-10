@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Set;
@@ -191,9 +192,9 @@ public class ControlDash {
 		result.append(configed.getResourceValue("Dash.expiredContracts"));
 		result.append(":  \n");
 
-		for (String date : contractsExpired.keySet()) {
-			for (String ID : contractsExpired.get(date)) {
-				result.append(date + ": " + ID);
+		for (Entry<String, NavigableSet<String>> entry : contractsExpired.entrySet()) {
+			for (String ID : entry.getValue()) {
+				result.append(entry.getKey() + ": " + ID);
 				result.append("\n");
 			}
 		}
@@ -203,9 +204,9 @@ public class ControlDash {
 		result.append(configed.getResourceValue("Dash.contractsToNotify"));
 		result.append(":  \n");
 
-		for (String date : contractsToNotify.keySet()) {
-			for (String ID : contractsToNotify.get(date)) {
-				result.append(date + ": " + ID);
+		for (Entry<String, NavigableSet<String>> entry : contractsToNotify.entrySet()) {
+			for (String ID : entry.getValue()) {
+				result.append(entry.getKey() + ": " + ID);
 				result.append("\n");
 			}
 		}

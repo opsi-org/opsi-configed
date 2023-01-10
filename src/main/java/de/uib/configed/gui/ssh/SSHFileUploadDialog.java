@@ -24,7 +24,7 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandOpsiSetRights;
 import de.uib.opsicommand.sshcommand.CommandSFTPUpload;
 import de.uib.opsicommand.sshcommand.CommandWget;
-import de.uib.opsicommand.sshcommand.Empty_Command;
+import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommand_Template;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
@@ -194,7 +194,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		jButtonClose.addActionListener(actionEvent -> cancel());
 		enableComponents(jRadioButtonFromServer.isSelected());
 
-		new SSHConnectExec().exec(new Empty_Command(factory.str_command_fileexists_notremove
+		new SSHConnectExec().exec(new EmptyCommand(factory.str_command_fileexists_notremove
 				.replace(factory.str_replacement_filename, command.getTargetPath()) // /etc/opsi/modules.d
 		), false);
 

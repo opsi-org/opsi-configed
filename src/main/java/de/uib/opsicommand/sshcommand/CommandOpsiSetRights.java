@@ -19,8 +19,8 @@ public class CommandOpsiSetRights extends SSHCommand_Template implements SSHComm
 	private boolean needSudo = true;
 	private boolean needParameter = true;
 	private boolean isMultiCommand = true;
-	private LinkedList<SSHCommand> ssh_command = new LinkedList<>();
-	private LinkedList<SSHCommand> ssh_command_original = new LinkedList<>();
+	private LinkedList<SSHCommand> sshCommand = new LinkedList<>();
+	private LinkedList<SSHCommand> sshCommandOriginal = new LinkedList<>();
 	private int priority = 110;
 	private String mainName = "";
 	private String dir = null;
@@ -29,19 +29,18 @@ public class CommandOpsiSetRights extends SSHCommand_Template implements SSHComm
 	public CommandOpsiSetRights() {
 		command = "opsi-set-rights " + configed.getResourceValue("SSHConnection.command.opsisetrights.additionalPath")
 				+ " ";
-		ssh_command.add(this);
+		sshCommand.add(this);
 	}
 
 	public CommandOpsiSetRights(String d) {
 		setDir(d);
 		command = BASE_NAME + dir;
-		if (d.length() > 0)
-			if (d.charAt(d.length() - 1) != '/')
-				d = d + "/";
+		if (d.length() > 0 && d.charAt(d.length() - 1) != '/')
+			d = d + "/";
 
 		logging.info(this, "CommandOpsiSetRights dir " + dir);
-		ssh_command.add(this);
-		ssh_command_original.add(this);
+		sshCommand.add(this);
+		sshCommandOriginal.add(this);
 	}
 
 	@Override
@@ -109,23 +108,23 @@ public class CommandOpsiSetRights extends SSHCommand_Template implements SSHComm
 
 	@Override
 	public LinkedList<String> getCommandsRaw() {
-		LinkedList<String> commands_string_list = new LinkedList<>();
-		for (SSHCommand c : ssh_command) {
+		LinkedList<String> commandsStringList = new LinkedList<>();
+		for (SSHCommand c : sshCommand) {
 			String comstr = c.getCommandRaw();
 			if (!((comstr == null) || (comstr.trim().equals(""))))
-				commands_string_list.add(c.getCommandRaw());
+				commandsStringList.add(c.getCommandRaw());
 		}
-		return commands_string_list;
+		return commandsStringList;
 	}
 
 	@Override
 	public LinkedList<SSHCommand> getOriginalCommands() {
-		return ssh_command_original;
+		return sshCommandOriginal;
 	}
 
 	@Override
 	public LinkedList<SSHCommand> getCommands() {
-		return ssh_command;
+		return sshCommand;
 	}
 
 	@Override
@@ -166,18 +165,17 @@ public class CommandOpsiSetRights extends SSHCommand_Template implements SSHComm
 	@Override
 	public List<String> getParameterList() {
 		List<String> paramlist = new ArrayList<>();
-		String tmp_1 = SSHCommandParameterMethods.replacement_default_1;
-		String tmp_2 = SSHCommandParameterMethods.replacement_default_2;
-		if (command != null)
-			if ((command.contains(tmp_1)) && (command.contains(tmp_2))) {
-				myTmpCommand = getCommandRaw();
-				logging.debug(this, "getParameterList myCommand_tmp " + myTmpCommand);
-				for (int i = 0; i < counterString(getCommandRaw(), tmp_1); i++) {
-					String plHolder = searchPlaceholder();
-					if (!paramlist.contains(plHolder))
-						paramlist.add(plHolder);
-				}
+		String temp1 = SSHCommandParameterMethods.replacement_default_1;
+		String temp2 = SSHCommandParameterMethods.replacement_default_2;
+		if (command != null && command.contains(temp1) && command.contains(temp2)) {
+			myTmpCommand = getCommandRaw();
+			logging.debug(this, "getParameterList myCommand_tmp " + myTmpCommand);
+			for (int i = 0; i < counterString(getCommandRaw(), temp1); i++) {
+				String plHolder = searchPlaceholder();
+				if (!paramlist.contains(plHolder))
+					paramlist.add(plHolder);
 			}
+		}
 		logging.debug(this, "getParameterList command " + command + " placeholders " + paramlist);
 		return paramlist;
 	}
@@ -188,15 +186,15 @@ public class CommandOpsiSetRights extends SSHCommand_Template implements SSHComm
 	 * @return String with and between "<<<" and ">>>"
 	 */
 	private String searchPlaceholder() {
-		String tmp_1 = SSHCommandParameterMethods.replacement_default_1;
-		String tmp_2 = SSHCommandParameterMethods.replacement_default_2;
+		String temp1 = SSHCommandParameterMethods.replacement_default_1;
+		String temp2 = SSHCommandParameterMethods.replacement_default_2;
 
-		String splitted_text = myTmpCommand.split(tmp_1, 2)[1].split(tmp_2, 2)[0];
-		logging.debug(this, "searchPlaceholder found " + tmp_1 + splitted_text + tmp_2);
-		myTmpCommand = myTmpCommand.replace(tmp_1 + splitted_text + tmp_2, "");
+		String splittedText = myTmpCommand.split(temp1, 2)[1].split(temp2, 2)[0];
+		logging.debug(this, "searchPlaceholder found " + temp1 + splittedText + temp2);
+		myTmpCommand = myTmpCommand.replace(temp1 + splittedText + temp2, "");
 		logging.debug(this, "searchPlaceholder myCommand_tmp " + myTmpCommand);
 
-		return tmp_1 + splitted_text + tmp_2;
+		return temp1 + splittedText + temp2;
 	}
 
 	/**

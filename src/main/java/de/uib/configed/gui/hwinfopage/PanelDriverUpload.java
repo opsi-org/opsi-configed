@@ -39,7 +39,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.configed.productaction.PanelMountShare;
 import de.uib.connectx.SmbConnect;
-import de.uib.opsicommand.sshcommand.Empty_Command;
+import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.FileX;
@@ -345,7 +345,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			public void run() {
 				new SSHConnectExec(main,
 						// Empty_Command(String id, String c, String mt, boolean ns)
-						(new Empty_Command("show_drivers.py", // id not needed
+						(new EmptyCommand("show_drivers.py", // id not needed
 								"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem() + "/show_drivers.py "
 										+ fieldClientname.getText(),
 								"show_drivers.py", // menuText - not needed
@@ -359,7 +359,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		btnCreateDrivers.setToolTipText(configed.getResourceValue("PanelDriverUpload.btnCreateDrivers.tooltip"));
 		btnCreateDrivers.addActionListener(actionEvent -> new SSHConnectExec(main,
 				// Empty_Command(String id, String c, String mt, boolean ns)
-				new Empty_Command("create_driver_links.py", // id not needed
+				new EmptyCommand("create_driver_links.py", // id not needed
 						"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem() + "/create_driver_links.py ",
 						"create_driver_links.py", // menutext - not needed
 						true // need sudo ?

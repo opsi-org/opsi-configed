@@ -19,7 +19,7 @@ import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandOpsiSetRights;
 import de.uib.opsicommand.sshcommand.CommandOpsimakeproductfile;
-import de.uib.opsicommand.sshcommand.Empty_Command;
+import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommand_Template;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
@@ -400,7 +400,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	private String doActionGetVersions() {
 		String dir = cb_mainDir.getEditor().getItem().toString() + "/OPSI/control";
 		logging.info(this, "doActionGetVersions, dir " + dir);
-		Empty_Command getVersions = new Empty_Command(
+		EmptyCommand getVersions = new EmptyCommand(
 				factory.str_command_getVersions.replace(factory.str_replacement_dir, dir));
 		SSHConnectExec ssh = new SSHConnectExec();
 		logging.info(this, "doActionGetVersions, command " + getVersions);
@@ -454,7 +454,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 	public void doExecSetRights() {
 		String dir = cb_mainDir.getEditor().getItem().toString() + "";
-		Empty_Command setRights = new Empty_Command("set-rights", "opsi-set-rights " + dir, "set-rights", true);
+		EmptyCommand setRights = new EmptyCommand("set-rights", "opsi-set-rights " + dir, "set-rights", true);
 		SSHConnectExec ssh = new SSHConnectExec();
 		SSHConnectionExecDialog.getInstance().setVisible(true);
 		ssh.exec(setRights);
@@ -497,7 +497,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			// Empty_Command removeExistingPackage = new
 			// Empty_Command(str_command_fileexists.replace(str_replacement_filename,
 
-			Empty_Command removeExistingPackage = new Empty_Command(command);
+			EmptyCommand removeExistingPackage = new EmptyCommand(command);
 			str2exec.addCommand(removeExistingPackage);
 
 			command = "[ -f " + filename + ".zsync ] &&  rm " + filename + ".zsync && echo \"File " + filename
@@ -505,12 +505,12 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			// removeExistingPackage = new
 			// Empty_Command(str_command_filezsyncExists.replace(str_replacement_filename,
 
-			removeExistingPackage = new Empty_Command(command);
+			removeExistingPackage = new EmptyCommand(command);
 			str2exec.addCommand(removeExistingPackage);
 
 			command = "[ -f " + filename + ".md5 ] &&  rm " + filename + ".md5 && echo \"File " + filename
 					+ ".md5 removed\" || echo \"File  " + filename + ".md5 did not exist\"";
-			removeExistingPackage = new Empty_Command(command);
+			removeExistingPackage = new EmptyCommand(command);
 			// removeExistingPackage = new
 			// Empty_Command(str_command_filemd5Exists.replace(str_replacement_filename,
 
@@ -538,7 +538,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 	private String getPackageID(String dir) {
 		// cat " + dir + "OPSI/control | grep "id: "
-		Empty_Command getPackageId = new Empty_Command(
+		EmptyCommand getPackageId = new EmptyCommand(
 				factory.str_command_catDir.replace(factory.str_replacement_dir, dir));
 		SSHConnectExec ssh = new SSHConnectExec();
 		String result = ssh.exec(getPackageId, false);

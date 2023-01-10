@@ -8,7 +8,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.opsicommand.sshcommand.CommandModulesUpload;
 import de.uib.opsicommand.sshcommand.CommandWget;
-import de.uib.opsicommand.sshcommand.Empty_Command;
+import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.utilities.logging.logging;
 
@@ -39,7 +39,7 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 		jComboBoxCopyToModulesD.setSelected(false);
 
 		SSHConnectExec testFile = new SSHConnectExec();
-		testFile.exec(new Empty_Command(factory.str_command_fileexists_notremove.replace(
+		testFile.exec(new EmptyCommand(factory.str_command_fileexists_notremove.replace(
 				factory.str_replacement_filename, ((CommandModulesUpload) command).unofficial_modules_directory) // /etc/opsi/modules.d
 		), false);
 

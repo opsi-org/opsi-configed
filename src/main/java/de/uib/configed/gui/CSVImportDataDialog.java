@@ -37,7 +37,6 @@ public class CSVImportDataDialog extends FGeneralDialog {
 	private CSVFormat format;
 	private CSVParser parser;
 
-	private ButtonGroup fieldSeparatorOptions;
 	private JRadioButton tabsOption;
 	private JRadioButton commaOption;
 	private JRadioButton semicolonOption;
@@ -45,8 +44,6 @@ public class CSVImportDataDialog extends FGeneralDialog {
 	private JRadioButton otherOption;
 	private JComboBox<Character> stringSeparatorOptions;
 
-	private JLabel importOptionsLabel;
-	private JLabel splittingOptionsLabel;
 	private JLabel startLineLabel;
 	private JFormattedTextField startLineInput;
 	private JFormattedTextField otherSeparatorInput;
@@ -118,9 +115,10 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		northPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 		northPanel.setOpaque(true);
 
-		importOptionsLabel = new JLabel(configed.getResourceValue("CSVImportDataDialog.importOptionsLabel"));
+		JLabel importOptionsLabel = new JLabel(configed.getResourceValue("CSVImportDataDialog.importOptionsLabel"));
 		importOptionsLabel.setFont(Globals.defaultFontBold);
-		splittingOptionsLabel = new JLabel(configed.getResourceValue("CSVImportDataDialog.splittingOptionsLabel"));
+		JLabel splittingOptionsLabel = new JLabel(
+				configed.getResourceValue("CSVImportDataDialog.splittingOptionsLabel"));
 		splittingOptionsLabel.setFont(Globals.defaultFontBold);
 
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
@@ -148,7 +146,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		otherOption = new JRadioButton(configed.getResourceValue("CSVImportDataDialog.otherOption"));
 		otherOption.setActionCommand("");
 
-		fieldSeparatorOptions = new ButtonGroup();
+		ButtonGroup fieldSeparatorOptions = new ButtonGroup();
 		fieldSeparatorOptions.add(tabsOption);
 		fieldSeparatorOptions.add(commaOption);
 		fieldSeparatorOptions.add(semicolonOption);

@@ -120,7 +120,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 		if (c_list != null) {
 			for (String c : c_list) {
 
-				SSHCommand sshc = new Empty_Command(getId(), c, getMenuText(), needSudo());
+				SSHCommand sshc = new EmptyCommand(getId(), c, getMenuText(), needSudo());
 				ssh_command.add(sshc);
 				if (firstInitCommands)
 					ssh_command_original.add(sshc);
@@ -368,7 +368,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	public String commandlistToString() {
 		StringBuilder commandString = new StringBuilder("[");
 		for (int i = 0; i < getCommands().size(); i++) {
-			String c = ((Empty_Command) getCommands().get(i)).commandToString();
+			String c = ((EmptyCommand) getCommands().get(i)).commandToString();
 			if (i == getCommands().size() - 1)
 				commandString.append(c);
 			else

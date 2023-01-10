@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
-import de.uib.opsicommand.sshcommand.Empty_Command;
+import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.PersistenceController;
@@ -208,7 +208,7 @@ public class SSHCompletionComboButton {
 			@Override
 			public void run() {
 				try {
-					Empty_Command getDirectories = new Empty_Command(
+					EmptyCommand getDirectories = new EmptyCommand(
 							factory.str_command_getDirectories.replace(factory.str_replacement_dir, curdir)) {
 						/** Sets the command specific error text **/
 						@Override
@@ -235,14 +235,14 @@ public class SSHCompletionComboButton {
 			@Override
 			public void run() {
 				try {
-					Empty_Command getFiles = new Empty_Command(
+					EmptyCommand getFiles = new EmptyCommand(
 							factory.str_command_getDirectories.replace(factory.str_replacement_dir, curdir));
 					SSHConnectExec ssh = new SSHConnectExec();
 					String result = ssh.exec(getFiles, false);
 					if (result == null || result.equals(""))
 						result = ROOT_DIRECTORY;
 
-					getFiles = new Empty_Command(
+					getFiles = new EmptyCommand(
 							factory.str_command_getOpsiFiles.replace(factory.str_replacement_dir, curdir)) {
 						/** Sets the command specific error text **/
 						@Override

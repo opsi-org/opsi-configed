@@ -64,12 +64,9 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 
 		String nodeName = clickNode.getUserObject().toString();
 
-		if (tree.getGroupNode(nodeName) != null) {
-
-			if (clickNode != tree.getGroupNode(nodeName)) {
-				logging.warning(this, "checkAccepted clickNode != tree.getGroupNode(nodeName)");
-				clickNode = tree.getGroupNode(nodeName);
-			}
+		if (tree.getGroupNode(nodeName) != null && clickNode != tree.getGroupNode(nodeName)) {
+			logging.warning(this, "checkAccepted clickNode != tree.getGroupNode(nodeName)");
+			clickNode = tree.getGroupNode(nodeName);
 		}
 
 		logging.debug(this, "checkAccepted clickNode.getParent() " + clickNode.getParent());
@@ -113,10 +110,8 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 				countVisibleItems++;
 			}
 
-			{
-				((JMenuItem) myMenu.getSubElements()[activateElementsPosition]).setVisible(true); // activate elements
-				countVisibleItems++;
-			}
+			((JMenuItem) myMenu.getSubElements()[activateElementsPosition]).setVisible(true); // activate elements
+			countVisibleItems++;
 
 			if (!(((GroupNode) clickNode).isFixed())) {
 				((JMenuItem) myMenu.getSubElements()[removeElementsPosition]).setVisible(true); // delete non-groupnode

@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 import de.uib.configed.Globals;
 import de.uib.configed.configed;
 import de.uib.opsicommand.sshcommand.CommandWget;
-import de.uib.opsicommand.sshcommand.Empty_Command;
+import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHCommand_Template;
 import de.uib.utilities.logging.logging;
 
@@ -129,7 +129,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 			// ToDo: Folgender Parameter String (befehl) muss noch in die klasse
 			// sshcommandfactory ausgelagert werden
 
-			commands.addCommand(new Empty_Command("md5_vergleich", " if [ -z $((cat " + product + ".md5" + ") | "
+			commands.addCommand(new EmptyCommand("md5_vergleich", " if [ -z $((cat " + product + ".md5" + ") | "
 					+ "grep $(md5sum " + product + "  | head -n1 | cut -d \" \" -f1)) ] ; " + " then echo \""
 					+ configed.getResourceValue(
 							"SSHConnection.ParameterDialog.opsipackagemanager_install.md5sumsAreNotEqual")

@@ -182,21 +182,19 @@ public class SSHPackageManagerUninstallParameterDialog
 			textFieldSelectedDepots.setEditable(false);
 
 		for (String depot : persist.getHostInfoCollections().getDepotNamesList()) {
-			if (persist.getDepotPermission(depot)) {
-
-				if ((persist.getDepot2LocalbootProducts().get(depot) != null
-						&& persist.getDepot2LocalbootProducts().get(depot).keySet().contains(selectedProduct))
-						|| (persist.getDepot2NetbootProducts().get(depot) != null
-								&& persist.getDepot2NetbootProducts().get(depot).keySet().contains(selectedProduct))) {
-					logging.info(this, "taking this depot " + depot);
-					result.add(depot);
-				}
+			if (persist.getDepotPermission(depot) && ((persist.getDepot2LocalbootProducts().get(depot) != null
+					&& persist.getDepot2LocalbootProducts().get(depot).keySet().contains(selectedProduct))
+					|| (persist.getDepot2NetbootProducts().get(depot) != null
+							&& persist.getDepot2NetbootProducts().get(depot).keySet().contains(selectedProduct)))) {
+				logging.info(this, "taking this depot " + depot);
+				result.add(depot);
 			}
 		}
 
 		logging.info(this, "getPossibleDepots " + result);
 
 		return result;
+
 	}
 
 	protected void initDepots() {

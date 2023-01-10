@@ -9,7 +9,7 @@ public class SSHConnectionInfo {
 	private String sshConnectionPassword = "";
 	private String sshConnectionHost = "";
 	/** Port for server to connected as **/
-	private String sshConnectionPost = SSHConnect.portSSH;
+	private String sshConnectionPost = SSHConnect.PORT_SSH;
 	private boolean useKeyfile;
 	private String keyfilepath = "";
 	private String keyfilepassphrase = "";
@@ -111,7 +111,7 @@ public class SSHConnectionInfo {
 	}
 
 	public void setDefaultPort() {
-		setPort(SSHConnect.portSSH);
+		setPort(SSHConnect.PORT_SSH);
 	}
 
 	public void checkUserData() {
@@ -119,7 +119,7 @@ public class SSHConnectionInfo {
 			setHost(ConfigedMain.HOST);
 
 		if (getPort() == null)
-			setPort(SSHConnect.portSSH);
+			setPort(SSHConnect.PORT_SSH);
 
 		if (getUser() == null)
 			setUser(ConfigedMain.USER);

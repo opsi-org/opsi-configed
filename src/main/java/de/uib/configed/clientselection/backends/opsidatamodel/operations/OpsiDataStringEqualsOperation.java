@@ -25,7 +25,7 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 		this.data = data.toLowerCase();
 		if (data.contains("*")) {
 			dataSplitted = (this.data).split("\\*");
-			logging.debug(this, "OpsiDataStringEqualsOperation " + String.valueOf(dataSplitted.length));
+			logging.debug(this, "OpsiDataStringEqualsOperation " + dataSplitted.length);
 		}
 		startsWith = data.startsWith("*");
 		endsWith = data.endsWith("*");
@@ -55,22 +55,17 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 
 		if (dataSplitted == null) // simple case: no '*'
 		{
-
 			return rData.equals(data);
 		}
 
 		else if (dataSplitted.length == 0) // the only chars are '*'
 		{
-
-			if (realData.length() > 0)
-				return true;
-			else
-				return false;
+			return realData.length() > 0;
 		} else {
 
-			if (!startsWith)
-				if (!rData.startsWith(dataSplitted[0]))
-					return false;
+			if (!startsWith && !rData.startsWith(dataSplitted[0]))
+				return false;
+
 			int index = 0;
 			int i = 0;
 			while (i < dataSplitted.length && index >= 0) {
@@ -83,12 +78,7 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 
 				i++;
 			}
-			if (index < 0)
-				return false;
-			if (!endsWith)
-				if (!rData.endsWith(dataSplitted[dataSplitted.length - 1]))
-					return false;
-			return true;
+			return index >= 0 && (endsWith || rData.endsWith(dataSplitted[dataSplitted.length - 1]));
 		}
 	}
 }

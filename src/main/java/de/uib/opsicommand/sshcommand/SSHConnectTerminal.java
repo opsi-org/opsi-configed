@@ -172,7 +172,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				logging.info(this, "exec out " + out);
 				logging.info(this, "exec text " + text);
 				if ((out != null) && (text.trim().length() >= 0)) {
-					SSHCommand command = new Empty_Command(text);
+					SSHCommand command = new EmptyCommand(text);
 					String ntext = SSHCommandFactory.getInstance(main).getParameterHandler()
 							.parseParameterToString(command, this);
 					out.write(ntext.getBytes());
@@ -308,7 +308,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		String result = "";
 		if (newCommands) {
 
-			result = ssh.exec(new Empty_Command(
+			result = ssh.exec(new EmptyCommand(
 					// http://stackoverflow.com/questions/948008/linux-command-to-list-all-available-commands-and-aliases
 					SSHCommandFactory.getInstance().str_command_getLinuxCommands), false, null, true, false);
 			if (result == null)

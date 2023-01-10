@@ -534,7 +534,7 @@ public class SSHCommandFactory {
 	}
 
 	public void testConnection(String user, String host) {
-		SSHCommand command = new Empty_Command(Empty_Command.TESTCOMMAND, Empty_Command.TESTCOMMAND, "", false);
+		SSHCommand command = new EmptyCommand(EmptyCommand.TESTCOMMAND, EmptyCommand.TESTCOMMAND, "", false);
 		connectionState = UNKNOWN;
 		try {
 			if (connection.connect(command)) {
